@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FD4CC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 19:12:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9743AC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 19:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1FB3441516;
-	Sun, 24 Apr 2022 19:12:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3457B82628;
+	Sun, 24 Apr 2022 19:22:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cnxi0EmHhKBH; Sun, 24 Apr 2022 19:12:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hYzY7BAPw9XR; Sun, 24 Apr 2022 19:22:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B516F40880;
-	Sun, 24 Apr 2022 19:12:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8FCF51BF348
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 19:12:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A08BA825BF;
+	Sun, 24 Apr 2022 19:22:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A1E8A1BF348
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 19:22:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79FCC40880
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 19:12:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9F3F9825BF
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 19:22:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qZ51gZS3eG-Q for <buildroot@lists.busybox.net>;
- Sun, 24 Apr 2022 19:12:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vNixIaABVbgv for <buildroot@lists.busybox.net>;
+ Sun, 24 Apr 2022 19:22:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 33C1940873
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 19:12:40 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id x18so18087484wrc.0
- for <buildroot@buildroot.org>; Sun, 24 Apr 2022 12:12:40 -0700 (PDT)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 52AC1825E8
+ for <buildroot@buildroot.org>; Sun, 24 Apr 2022 19:22:04 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ u17-20020a05600c211100b0038eaf4cdaaeso11261395wml.1
+ for <buildroot@buildroot.org>; Sun, 24 Apr 2022 12:22:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=vAuklGnp104mK0eftFjD4r5SdQ+sYDHH2wRl2jDDACc=;
- b=dotNJxC284TQU7XQl/7LghpzUZcWnVnLhVtuzzMAnAgNfQEMh5esCb8MU3xyXX/BoW
- x9bqHm1l5JAuMniRP5MB12LiS+ERCd+HyegcqPW5KfRZ7mrMhPZw4H5FeVXVzKaCMVNP
- ZT/Xhacpk18nrAN7Pryozf5mMOK14pawH1T2XyjzdY3crbXr0Xpj0L8Aia5Eov/3vGJh
- 53GW6XRlHOzxJ3Blir4TxsFdVj9cAdgfcVmurCArqiO1Gkvz/p+MOyG3kSP3thGqdv1O
- Nj5zXz2Xx6JwsNVTLk9G3xDWBjoInDYGnX19qk76HPh9mM0ZMZsuIrDfNgaFXeWo3/T1
- bxAw==
+ bh=rMDpdNiZAbzq97AOF42QV8sWz4RfksGCMi8sd7HwoJk=;
+ b=XU7aobitq49diYBvziGf0uLCjtP6XBtv9QItdh5fGOKFnWZpO5qPKGHsA7+vPB4sLV
+ M0BnV1RGw6S7iWyt13d2+ZiKsUtnGvRPZ9/PdXNQ4cWDGvt7aGeyN1c+xI0iWz1XiB24
+ GYwcCs+WmsK45wU8JrEFyPMbrQymLPtZKyEu3fNWVvI0iPhDiDLxXLxj4UxNjnTZkraj
+ QTbI/m6eQLILo/CW+l9YzQYX8o0SgY4WvckS1P929jpuZIujx6JTCbBfD0YX86QnXI3+
+ KZ8jViXn10jaucDzyWe3EL+1oJV0urAcsT4aPM46H8eG7X8RZhygb18HSGPFOM0OvFNS
+ D9NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=vAuklGnp104mK0eftFjD4r5SdQ+sYDHH2wRl2jDDACc=;
- b=GWLYdfxAd5hyu68iN52vQbp2iPP0iswmQ8W/J7PsgejUA838YKIxxEL6kf56sJ9AA8
- U20ZqGegLWZkBJFWesHwRJK8aBgPqiYCXIBceNjgBJbvCM/m8XfUW5NfCMTWr6LlZyhB
- EyU02Fu9C6kAsK5hSSegAbcFGLtHSKGg7wlqfjQavYDgyKuaFLDKxnf73fpfJ8dWNeUT
- wr+CGxvZ+YSiJSRglydBWwLpR8Mdi7T+bKTBWemsrSwgUd1H9VRqyihl0Rxsy2ItId+m
- xeqw3ltUrxt375AZNLzz/GKbEgNbvkaYA0vb1gnz6s/Wo1TeSbBVt+hlQYdjRDZOQZPn
- /c9Q==
-X-Gm-Message-State: AOAM533H/LKX5uKepDLuyVY0BUxjIAjuQKOULIsGhzqYI+o8b/p68vfs
- mz49ZQlwhdIiwyIa/2C+bidjGByuLCI=
-X-Google-Smtp-Source: ABdhPJw1Tudaj/SFHCuBkVDDi4PFnknkb5AmhlHQhcjeJiEp63lQxToOgvIo/5rOBQbp5ixzRAoaJw==
-X-Received: by 2002:a05:6000:86:b0:20a:d7be:e09b with SMTP id
- m6-20020a056000008600b0020ad7bee09bmr3680560wrx.398.1650827558057; 
- Sun, 24 Apr 2022 12:12:38 -0700 (PDT)
+ bh=rMDpdNiZAbzq97AOF42QV8sWz4RfksGCMi8sd7HwoJk=;
+ b=klRRJmWJWlyttHU5B+28TlrjCllQ2EbQF6g0D7rjzfWlFof5THZ8O7vfTXJEvylVhV
+ 6pVZKf9tpPM2CmP8Sqfdff6j8fUhLNmw9h0fFxkoWZBh11bN1ynKTmxztb+fpjxi2j36
+ GVmgDHtqzF0IdJ8/ypCKYyi5ruZM3SdJWqLOCy962fUacCwpPQkXlKmZhHPg9iaOTzU9
+ Ayg4jES9CPPFfWlGKR4OIlJ1rJh7n/eOv8k62cuxkKKZF0oi4F+CeiyZXigP5eOZsqAb
+ JdO/CELJRaTyBZyBxTXd2HiQsGT2yB+Ya4YJdwAxoU5vhg4eWEXpcJ814JdzZpdhR7N8
+ 9Dlg==
+X-Gm-Message-State: AOAM530199feDFkgEAW+fK1R1lNX3nqlhFKzK6aayvTKuXBGLK8TFA8x
+ 2ZpZ0EcTZ5M/YP17jR5ARmRMlyVNFrU=
+X-Google-Smtp-Source: ABdhPJzvDV4C8CRI8qbTW5fYrFf1pOARq6Lf48kbdmLvfLy67+deo858AEkR3XwOnZVjAWqCWWfLTA==
+X-Received: by 2002:a05:600c:34ce:b0:392:9cf:4e25 with SMTP id
+ d14-20020a05600c34ce00b0039209cf4e25mr22602010wmq.193.1650828122364; 
+ Sun, 24 Apr 2022 12:22:02 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- p125-20020a1c2983000000b0038e5ca446bcsm9905215wmp.5.2022.04.24.12.12.36
+ l20-20020adfa394000000b0020ad1210f9dsm4927072wrb.74.2022.04.24.12.22.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Apr 2022 12:12:37 -0700 (PDT)
+ Sun, 24 Apr 2022 12:22:02 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Apr 2022 21:10:32 +0200
-Message-Id: <20220424191032.3222587-1-fontaine.fabrice@gmail.com>
+Date: Sun, 24 Apr 2022 21:19:57 +0200
+Message-Id: <20220424191957.435337-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/cryptsetup: fix build with
- argp-standalone
+Subject: [Buildroot] [PATCH 1/1] package/libeXosip2: fix build with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,90 +86,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+Cc: Gilles Talis <gilles.talis@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since bump of argp-standalone to
-version 1.4.1 in commit 0fe85041bc9e0b4ade4d71dd10b61c3b9ec8945d and
-https://github.com/ericonr/argp-standalone/commit/e7ff8d9787d2641e55f6ac4afb777da60ef98043:
+Fix the following build failure with libressl >= 3.4.1 raised since
+commit 25ef2c26dabaf1553f1724214a4fa5e3ce48dfc8:
 
-/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `parse_opt':
-cryptsetup-ssh.c:(.text+0x14c): undefined reference to `argp_state_help'
-/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `main':
-cryptsetup-ssh.c:(.text+0x7db): undefined reference to `argp_parse'
+In file included from eXtl_dtls.c:82:
+/home/autobuild/autobuild/instance-4/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/openssl/ssl.h:1272:6: note: previous declaration of 'SSL_set0_rbio' was here
+ 1272 | void SSL_set0_rbio(SSL *s, BIO *rbio);
+      |      ^~~~~~~~~~~~~
+eXtl_dtls.c: In function 'SSL_set0_rbio':
+eXtl_dtls.c:108:17: error: invalid use of incomplete typedef 'SSL' {aka 'struct ssl_st'}
+  108 |   BIO_free_all(s->rbio);
+      |                 ^~
 
 Fixes:
- - http://autobuild.buildroot.org/results/cb3fdae4e0da603f304501f65127800346cb3915
+ - http://autobuild.buildroot.org/results/dfafdbf71b31fbda1b5ba491ac35239af4a20aa2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...onfigure.ac-replace-argp_usage-check.patch | 40 +++++++++++++++++++
- package/cryptsetup/cryptsetup.mk              |  1 +
- 2 files changed, 41 insertions(+)
- create mode 100644 package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
+ ...dtls.c-fix-build-with-libressl-3.4.1.patch | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/libeXosip2/0001-src-eXtl_dtls.c-fix-build-with-libressl-3.4.1.patch
 
-diff --git a/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch b/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
+diff --git a/package/libeXosip2/0001-src-eXtl_dtls.c-fix-build-with-libressl-3.4.1.patch b/package/libeXosip2/0001-src-eXtl_dtls.c-fix-build-with-libressl-3.4.1.patch
 new file mode 100644
-index 0000000000..66e3be350c
+index 0000000000..0b4be43b6c
 --- /dev/null
-+++ b/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
-@@ -0,0 +1,40 @@
-+From 21515ad7a3b000ee6038f82bbb428ab527002bbd Mon Sep 17 00:00:00 2001
++++ b/package/libeXosip2/0001-src-eXtl_dtls.c-fix-build-with-libressl-3.4.1.patch
+@@ -0,0 +1,43 @@
++From 4201c0ff3fd75e09025d515c427f85f9fec89621 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 24 Apr 2022 19:47:53 +0200
-+Subject: [PATCH] configure.ac: replace argp_usage check
++Date: Tue, 5 Apr 2022 22:27:35 +0200
++Subject: [PATCH] src/eXtl_dtls.c: fix build with libressl >= 3.4.1
 +
-+Replace check for argp_usage by argp_parse as argp_usage is not used by
-+cryptsetup. Moreover, this will fix the following build failure raised
-+with argp-standalone in version 1.4.0 and
-+https://github.com/ericonr/argp-standalone/commit/e7ff8d9787d2641e55f6ac4afb777da60ef98043:
++Fix the following build failure with libressl >= 3.4.1 which provides
++SSL_set0_rbio() since
++https://github.com/libressl-portable/openbsd/commit/c99939f9665a9c3c648682b4987df46600b70efc:
 +
-+/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `parse_opt':
-+cryptsetup-ssh.c:(.text+0x14c): undefined reference to `argp_state_help'
-+/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `main':
-+cryptsetup-ssh.c:(.text+0x7db): undefined reference to `argp_parse'
++In file included from eXtl_dtls.c:82:
++/home/autobuild/autobuild/instance-4/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/openssl/ssl.h:1272:6: note: previous declaration of 'SSL_set0_rbio' was here
++ 1272 | void SSL_set0_rbio(SSL *s, BIO *rbio);
++      |      ^~~~~~~~~~~~~
++eXtl_dtls.c: In function 'SSL_set0_rbio':
++eXtl_dtls.c:108:17: error: invalid use of incomplete typedef 'SSL' {aka 'struct ssl_st'}
++  108 |   BIO_free_all(s->rbio);
++      |                 ^~
 +
 +Fixes:
-+ - http://autobuild.buildroot.org/results/cb3fdae4e0da603f304501f65127800346cb3915
++ - http://autobuild.buildroot.org/results/dfafdbf71b31fbda1b5ba491ac35239af4a20aa2
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://gitlab.com/cryptsetup/cryptsetup/-/issues/737]
++[Upstream status: sent to amoizard@antisip.com]
 +---
-+ configure.ac | 2 +-
++ src/eXtl_dtls.c | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index d31fb0a7..e47179f2 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -413,7 +413,7 @@ if test "x$enable_ssh_token" = "xyes"; then
-+ 	AC_CHECK_DECLS([ssh_session_is_known_server], [], [], [#include <libssh/libssh.h>])
-+ 	AC_CHECK_HEADER([argp.h], [], AC_MSG_ERROR([You need argp library.]))
-+ 	saved_LIBS=$LIBS
-+-	AC_SEARCH_LIBS([argp_usage],[argp])
-++	AC_SEARCH_LIBS([argp_parse],[argp])
-+ 	AC_SUBST(ARGP_LIBS, $LIBS)
-+ 	LIBS=$saved_LIBS
-+ fi
++diff --git a/src/eXtl_dtls.c b/src/eXtl_dtls.c
++index 07c0dc2..d0bd7dc 100644
++--- a/src/eXtl_dtls.c
+++++ b/src/eXtl_dtls.c
++@@ -102,7 +102,7 @@
++ #define RANDOM "random.pem"
++ #define DHFILE "dh1024.pem"
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x3040100L)
++ 
++ static void SSL_set0_rbio(SSL *s, BIO *rbio) {
++   BIO_free_all(s->rbio);
 +-- 
 +2.35.1
 +
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index ddb10f1da3..20cf5d6346 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -19,6 +19,7 @@ CRYPTSETUP_CPE_ID_VENDOR = cryptsetup_project
- CRYPTSETUP_INSTALL_STAGING = YES
- 
- # 0001-Add-check-program-for-symver-attribute.patch
-+# 0002-configure.ac-replace-argp_usage-check.patch
- CRYPTSETUP_AUTORECONF = YES
- 
- CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
 -- 
 2.35.1
 
