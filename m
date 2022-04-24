@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAD92C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 15:53:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D88BC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Apr 2022 15:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 718D060B9F;
-	Sun, 24 Apr 2022 15:53:37 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u4oYYIu7myYy; Sun, 24 Apr 2022 15:53:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6054160B77;
-	Sun, 24 Apr 2022 15:53:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E578C1BF383
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CD7E5400E2
- for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 064C640156;
+	Sun, 24 Apr 2022 15:53:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xZTXky7Klup1 for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2rCs_on36jUE; Sun, 24 Apr 2022 15:53:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 142AE4018F;
+	Sun, 24 Apr 2022 15:53:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E7B121BF962
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D1DF460B78
+ for <buildroot@lists.busybox.net>; Sun, 24 Apr 2022 15:53:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YK-_ihwdSBRG for <buildroot@lists.busybox.net>;
  Sun, 24 Apr 2022 15:53:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B96FE40158
+ by smtp3.osuosl.org (Postfix) with ESMTP id D198F60B77
  for <buildroot@buildroot.org>; Sun, 24 Apr 2022 15:53:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 31E988421E; Sun, 24 Apr 2022 15:43:21 +0000 (UTC)
+ id 4BF838421A; Sun, 24 Apr 2022 15:43:21 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Apr 2022 16:53:42 +0200
+Date: Sun, 24 Apr 2022 16:53:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cdfe7d17b395813f66e231ed183a7b75afb14b8f
-X-Git-Newrev: f7744aba7bcc7f4ad38ff4bba3d0c37969544fce
+X-Git-Oldrev: dfb42ab91b7b1f58bc89362403321ed7063dda9f
+X-Git-Newrev: 5a8ad464b328dcff95e89052abfc8196e6ade996
 X-Patchwork-Hint: ignore
-Message-Id: <20220424154321.31E988421E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/clamav: doesn't build with zlib-ng
+Message-Id: <20220424154321.4BF838421A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/quazip: force libzlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,40 +58,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7744aba7bcc7f4ad38ff4bba3d0c37969544fce
+commit: https://git.buildroot.net/buildroot/commit/?id=5a8ad464b328dcff95e89052abfc8196e6ade996
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-clamav doesn't build with zlib-ng since bump to version 1.9.9-b1 in
-commit 1f7b12a0b4572d7e763c431a63c22cfb912b8b14 and the removal of FAR:
-https://github.com/zlib-ng/zlib-ng/commit/0db1040667b13c0f9405af810f669857a487b08e:
-
-In file included from nsis/nsis_zlib.h:32,
-                 from nsis/nulsft.c:38:
-nsis/nsis_zutil.h:36:17: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'uchf'
-   36 | typedef uch FAR uchf;
-      |                 ^~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/524ee31face8be6a813829b036c4d6134ee5ca98
+Force libzlib instead of depending on it
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/clamav/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/quazip/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/clamav/Config.in b/package/clamav/Config.in
-index 990a818b5c..2857f9cbf4 100644
---- a/package/clamav/Config.in
-+++ b/package/clamav/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_CLAMAV
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
+diff --git a/package/quazip/Config.in b/package/quazip/Config.in
+index a670ed458c..bba5eddf3d 100644
+--- a/package/quazip/Config.in
++++ b/package/quazip/Config.in
+@@ -1,13 +1,11 @@
+ config BR2_PACKAGE_QUAZIP
+ 	bool "quazip"
+-	depends on BR2_PACKAGE_LIBZLIB
+ 	depends on BR2_PACKAGE_QT5
++	select BR2_PACKAGE_ZLIB
 +	select BR2_PACKAGE_ZLIB_FORCE_LIBZLIB
  	help
- 	  ClamAV is an open source antivirus engine for detecting
- 	  trojans, viruses, malware & other malicious threats.
+ 	  QuaZIP is a simple C++ wrapper over Gilles Vollant's
+ 	  ZIP/UNZIP package that can be used to access ZIP
+ 	  archives. It uses the Qt toolkit.
+ 
+ 	  http://quazip.sourceforge.net
+-
+-comment "quazip needs libzlib"
+-	depends on !BR2_PACKAGE_LIBZLIB
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
