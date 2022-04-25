@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA615C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 20:27:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A14BDC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 20:27:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8ADFB82BC4;
-	Mon, 25 Apr 2022 20:27:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6645D82BF4;
+	Mon, 25 Apr 2022 20:27:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WniEz9eNB2ql; Mon, 25 Apr 2022 20:27:23 +0000 (UTC)
+	with ESMTP id isLUSojYIxzq; Mon, 25 Apr 2022 20:27:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DA0182B1E;
-	Mon, 25 Apr 2022 20:27:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A06C82B51;
+	Mon, 25 Apr 2022 20:27:35 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 417331BF982
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 20:25:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 202A61BF2AB
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 20:25:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E472860F72
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF58860F9A
  for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 20:25:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GklAr3nXepN1 for <buildroot@lists.busybox.net>;
+ with ESMTP id 3O_TXN_JpeKl for <buildroot@lists.busybox.net>;
  Mon, 25 Apr 2022 20:25:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D3FE60F87
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59F9C60F8D
  for <buildroot@buildroot.org>; Mon, 25 Apr 2022 20:25:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 126628448B; Mon, 25 Apr 2022 20:15:32 +0000 (UTC)
+ id 1C64F8448B; Mon, 25 Apr 2022 20:15:32 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Mon, 25 Apr 2022 22:19:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e21a7931c7afc6f8740775c03c29a8bc03afa16b
-X-Git-Newrev: f5e4bb185a2694c180ba1c51efab4e5a6c8b3975
+X-Git-Oldrev: f5e4bb185a2694c180ba1c51efab4e5a6c8b3975
+X-Git-Newrev: 4e9d17a929a418d5e798869b61c72c8903ca8671
 X-Patchwork-Hint: ignore
-Message-Id: <20220425201532.126628448B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/clamav: fix libxml2 build
+Message-Id: <20220425201532.1C64F8448B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libhtp: bump to version 0.5.40
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,42 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5e4bb185a2694c180ba1c51efab4e5a6c8b3975
+commit: https://git.buildroot.net/buildroot/commit/?id=4e9d17a929a418d5e798869b61c72c8903ca8671
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pass ac_cv_path_xmlconfig to fix the following build failure with
-libxml2 raised since bump to version 0.102.0 in commit
-007f49962a961f96ff87795217758ec3786d03ac and
-https://github.com/Cisco-Talos/clamav/commit/083ca38727b0ebd3979cf1ebc7b31148f6d5e7f7:
-
-aarch64-none-linux-gnu-gcc: WARNING: unsafe header/library path used in cross-compilation: '-I/usr/include/libxml2'
-In file included from /usr/include/libxml2/libxml/parser.h:810,
-                 from others.c:62:
-/usr/include/libxml2/libxml/encoding.h:31:10: fatal error: unicode/ucnv.h: No such file or directory
-   31 | #include <unicode/ucnv.h>
-      |          ^~~~~~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/5bb3bea6d13ac8d497f6862374d65a59bea7ed09
+https://github.com/OISF/libhtp/releases/tag/0.5.40
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/clamav/clamav.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libhtp/libhtp.hash | 2 +-
+ package/libhtp/libhtp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index cd2d06e6b3..e2ee99d02b 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -69,6 +69,7 @@ CLAMAV_CONF_OPTS += --without-libjson
- endif
+diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
+index eae3009c76..8759823e16 100644
+--- a/package/libhtp/libhtp.hash
++++ b/package/libhtp/libhtp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  d5956b49314fc6a058864130fbcf040a12584ee1e38f3b6ea52aedfa99d4c14a  libhtp-0.5.39.tar.gz
++sha256  0afaff837c295c868db8c967b87b1b5e21c0386c15c3b5ead474799724c54ef8  libhtp-0.5.40.tar.gz
+ sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
+diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
+index 532eaa340b..bb8aa73b42 100644
+--- a/package/libhtp/libhtp.mk
++++ b/package/libhtp/libhtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
-+CLAMAV_CONF_ENV += ac_cv_path_xmlconfig=$(STAGING_DIR)/usr/bin/xml2-config
- CLAMAV_CONF_OPTS += --with-xml=$(STAGING_DIR)/usr
- CLAMAV_DEPENDENCIES += libxml2
- else
+-LIBHTP_VERSION = 0.5.39
++LIBHTP_VERSION = 0.5.40
+ LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
+ LIBHTP_LICENSE = BSD-3-Clause
+ LIBHTP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
