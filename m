@@ -1,47 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EF44C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 21:26:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 779BAC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 21:26:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EF9440B14;
-	Mon, 25 Apr 2022 21:26:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BD04416DE;
+	Mon, 25 Apr 2022 21:26:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qteGvPcM9WTU; Mon, 25 Apr 2022 21:26:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sBfej-jWkIo3; Mon, 25 Apr 2022 21:26:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2562940119;
-	Mon, 25 Apr 2022 21:26:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF89E41674;
+	Mon, 25 Apr 2022 21:26:34 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0F3CB1BF3A6
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 21:25:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A3AA81BF3A6
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 21:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5FDC54027A
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 21:25:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F1DE4167B
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 21:26:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RsCCuePZn_gv for <buildroot@lists.busybox.net>;
- Mon, 25 Apr 2022 21:25:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58BD44028E
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 21:25:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0530B844C1; Mon, 25 Apr 2022 21:15:13 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ with ESMTP id r6OMYDOZhDMF for <buildroot@lists.busybox.net>;
+ Mon, 25 Apr 2022 21:26:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 68EC44160B
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 21:26:18 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id w4so22638749wrg.12
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 14:26:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Xk9IrWI1x81GUjBLNkrBEzfxe++jWp61kUAU8DXl9P4=;
+ b=JG5Y6Db3RI2zkDPFBjD+yF+Q71DkzBeoJAGb2Hli7tqJWMr4KiZW4QPHLpei0UTnBY
+ iRab1S/Jx3H4bCenNJExFaZLJ331WgmkWh7nsAUt2/EJdNCjBwH6YFXhkHZMAEZ9E3/v
+ cAW+mBogRL7vB+04RBjy2BVlH2RFppH2FRQe9LyGuY2t8oYauh4Qyb/r0Us0vqtWh4mU
+ vSbyjVn+hyt4JD8lRWh8NgYZJIp2N5UJxBct3yVjDRx6LqxYkm+yCXYJ7J4eWuwIStJq
+ wiP+4UutCjjc+pu9V0awP5b2cOT8KbGwwAPWDWxxbWUncUdtAlxdSaIHxshQnKz5kE2q
+ 5N0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Xk9IrWI1x81GUjBLNkrBEzfxe++jWp61kUAU8DXl9P4=;
+ b=ogIu5uyfgwCLBGTbghxxGVjhVfnboh6+xEOES3fbJOzYX3NiSVzMZLpFwv5ymUf4AG
+ 7i3nQ77JBJ8TA0VIRv8Aeb2ErgltHuX3Z4YIgTcV/k40ERMcQBgJqZ3VEP3HBrZyOXH8
+ Iq3CgtqNdeYOv5fWuc6E1VuSnDFTWk8X7k/MuK02g5D9UmvwN8+GJmR/NDDRogtyr30G
+ Z663pCxrqC5bC4kFeTwY1iJuMYcx8GpW98Klswo2+kbtDWLw2KwQZ1b9Jvm8ersA95cU
+ iogFntOajVJMc4L3ZZhsIujy1RH6E0wxQHFosDcuAhVey++hGs+S5nh1GvlOFaAcsPBy
+ jV8A==
+X-Gm-Message-State: AOAM531axbMOq4KFMpF7imejfgpRd8Hn//C6Y3AMioSqnsjNQ3QYRsZq
+ 2VIpwm9PlDC9OiBiaI/rM5zRTwGwP6U=
+X-Google-Smtp-Source: ABdhPJxVF3OQqgu80whrqXHS+R/orE9oGkZVu3W3wFtKKkTCnOP873zovwtJVPriUaNkZ6zpHjHvdw==
+X-Received: by 2002:a5d:448e:0:b0:20a:de9a:a7f3 with SMTP id
+ j14-20020a5d448e000000b0020ade9aa7f3mr4056506wrq.129.1650921976301; 
+ Mon, 25 Apr 2022 14:26:16 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ s10-20020adf978a000000b0020ae0154f1esm2023731wrb.5.2022.04.25.14.26.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 25 Apr 2022 14:26:15 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Apr 2022 23:23:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e22dca48c9d8d677bea11c6dbee8e027681ee5b
-X-Git-Newrev: 2e49ff10202e28a8dc942bfe11d7a623aca0bf6c
-X-Patchwork-Hint: ignore
-Message-Id: <20220425211513.0530B844C1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyparsing: bump to version
- 3.0.8
+Date: Mon, 25 Apr 2022 23:23:38 +0200
+Message-Id: <20220425212338.1105933-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] Revert "package/pure-ftpd: doesn't build
+ with libressl"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,59 +86,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e49ff10202e28a8dc942bfe11d7a623aca0bf6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This reverts commit e87e6fd085b8a4965b9dc84635fd36e380da4dde as
+pure-ftpd can be built with libressl since bump to version 3.5.2 in
+commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2 and
+https://github.com/libressl-portable/openbsd/commit/f5674b4e2330b382bacefd3393affc8eb2ee2ba8.
 
-This package now requires flit and must use the flit-bootstrap setup
-type for the host build since it is a dependency of
-host-python-pypa-build.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-pyparsing/python-pyparsing.hash | 4 ++--
- package/python-pyparsing/python-pyparsing.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/pure-ftpd/pure-ftpd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-index 1e56e878a1..e7137d55c9 100644
---- a/package/python-pyparsing/python-pyparsing.hash
-+++ b/package/python-pyparsing/python-pyparsing.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyparsing/json
--md5  9d38774991175444e21a3dfa865876cc  pyparsing-3.0.7.tar.gz
--sha256  18ee9022775d270c55187733956460083db60b37d0d0fb357445f3094eed3eea  pyparsing-3.0.7.tar.gz
-+md5  971252e99e1e02a4c27f001894e0422d  pyparsing-3.0.8.tar.gz
-+sha256  7bf433498c016c4314268d95df76c81b842a4cb2b276fa3312cfb1e1d85f6954  pyparsing-3.0.8.tar.gz
- # Locally computed sha256 checksums
- sha256  10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index 2fb705bc7a..7e458042f5 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -4,12 +4,13 @@
- #
- ################################################################################
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index 0354949e28..f3cbef84b9 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -45,7 +45,7 @@ else
+ PURE_FTPD_CONF_OPTS += --without-ldap
+ endif
  
--PYTHON_PYPARSING_VERSION = 3.0.7
-+PYTHON_PYPARSING_VERSION = 3.0.8
- PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
--PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/d6/60/9bed18f43275b34198eb9720d4c1238c68b3755620d20df0afd89424d32b
-+PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/31/df/789bd0556e65cf931a5b87b603fcf02f79ff04d5379f3063588faaf9c1e4
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
--PYTHON_PYPARSING_SETUP_TYPE = setuptools
-+PYTHON_PYPARSING_SETUP_TYPE = flit
-+HOST_PYTHON_PYPARSING_SETUP_TYPE = flit-bootstrap
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
+-ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ PURE_FTPD_CONF_OPTS += --with-tls
+ PURE_FTPD_DEPENDENCIES += host-pkgconf openssl
+ PURE_FTPD_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
