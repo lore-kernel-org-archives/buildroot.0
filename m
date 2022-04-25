@@ -1,87 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 294F3C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:35:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D006EC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:35:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C992941608;
-	Mon, 25 Apr 2022 19:34:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 851FD60B59;
+	Mon, 25 Apr 2022 19:35:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0PE-4X__qzDn; Mon, 25 Apr 2022 19:34:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8s643vy5OlKg; Mon, 25 Apr 2022 19:35:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9910A41545;
-	Mon, 25 Apr 2022 19:34:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 051B51BF2CD
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:34:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 883B960AC9;
+	Mon, 25 Apr 2022 19:35:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 70EEE1BF2CD
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:35:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0283F41545
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:34:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6DD4E8125B
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:35:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 56Jq-F02fz-r for <buildroot@lists.busybox.net>;
- Mon, 25 Apr 2022 19:34:54 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x6djcKCzC2Tx for <buildroot@lists.busybox.net>;
+ Mon, 25 Apr 2022 19:35:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7E7DA41520
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 19:34:54 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id u15so31565752ejf.11
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 12:34:54 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1ACE381254
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 19:35:13 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id y21so12807014edo.2
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 12:35:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=jsS370ay67XPlTkMjmxzclijd6lSVh1UqRA8GwBsNyE=;
- b=CGbVGGV6REYSHmLuG2Gle+AugPb9sxHg+1rNGPRqtE9rHfHpLMnJyO80Fa7v/4phJ4
- 3ZX9OaLBv/GeX6k5VSJwrZPlDBosq88X9GcS2uIwnCipktXjAJnc//N6DQoDmdXztrhT
- pGyz54hOdzkgwAz16E2qKBib4HQVu0wi5jaFVL8+MLtJ/c1VmsGXEjVSSda9pWwR/9lK
- D9LlmMLOvWfLYl8y2uIBB4rsRFHypiUtssW3omviEQb9QJ7lDNqyZX/H8+bbQAkW4pzs
- qO1F60kv23SaxWlIPLHFi2FJ3OwVBYoXZ0giCNCrB5WNTEQSYz5gcCd6ffHiS/3HsmA6
- SUbg==
+ bh=xMiwq2zFazDYpyMWqhq7093u+VoJYKWVFR+vgwyzU4Q=;
+ b=C9HTc6hpvuHybe6yLsxSzh70d0MFD3OJdXF/elsnOXSrlqs+AUtMl3GNJC/yjItjEG
+ EcG/UDpvckvgtWVgswhbEEB08QU2BAmG9u+BEdn2mmbnRnhYSuD9uEsc/Nn6RV0syLGj
+ o7oYPvziHaM00rBzoB1fRdMc9VWEMWzqa5OziGW22iVKW7r/8ZAo3fYKt2bNZI543MPc
+ j0u+TqUyNmMvEFGTZFSVunhulEXpcH7Rx7SAnNrdUyIcKjQGXm8lqEZMqNlGDj7WkZOw
+ KMPFP6SOVHKa7I1HR80/Jx6F013l4enQVxxNWhVsDuDoNpLJLEYLAE6b06cYz0Vpy+sw
+ 7Q0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=jsS370ay67XPlTkMjmxzclijd6lSVh1UqRA8GwBsNyE=;
- b=GmSbZ60JkwBg0o+roISmjgqND4Y3o4c+vOSG0absfJTJhdTio+BotP1FVNytNK5aKx
- xPy6cE+bAwHwcstBn973HQXSL2WBVoJBP0xOw5sVDtg3uMLBGtMB3VC9kkm/IJ+CRhz4
- 1lZLdlR5zuuBtfN2xSgtM0usu2Y4F1ReCgY5gS3EHpBqh9b0nGRzt1IzLwK3akXs7MVU
- Fyag+iansfiMmc9MIqsCJD/2qP3luuU11AKoOFBW/AfJCgLahIoFOzUdeQuJhObBCD8T
- DXI9fraDfG/y4GPvBpa8wJTZR7qzwIw7zCDl5MRINgNg0lebgMg+0nKiYePwl6cIS8R+
- jtEg==
-X-Gm-Message-State: AOAM5326b1EEkGl1fyd3DSgu5Bq+JNRZcc4ZM7hpnZ/JNu1Wbx1lap5y
- 8M++Qb0xGG8cx1MMMzVjYghptDCg+LR+Nw==
-X-Google-Smtp-Source: ABdhPJx0ukT5vFuuUU/z1SNq0Pk727AmZWj9206ypZQMjbf7EBR6AcAqfScD93QQ3LIKoKIUpZ3MkQ==
-X-Received: by 2002:a17:907:3e13:b0:6f3:8e47:4b44 with SMTP id
- hp19-20020a1709073e1300b006f38e474b44mr7819381ejc.571.1650915292673; 
- Mon, 25 Apr 2022 12:34:52 -0700 (PDT)
+ bh=xMiwq2zFazDYpyMWqhq7093u+VoJYKWVFR+vgwyzU4Q=;
+ b=TTGPdxupPNARXUMCVi5BsJL0xzTntA3W7PaHrzruxzNMKkkolX3Fti+grM2LFGJn+K
+ IclBExpi9Z637WnoX2t+3E0qayBDwez9AOaoVxrilKYdpU5swT9T8VHY6Bhft7E0eXDJ
+ Fvcw0T7caTbwWwW+eTvP5qZA9RDfYEFGWES6zCjn9EI86gXNaaTLR5ZPWiOoMbCaduYd
+ 4wDf+E6ZwuOmpXSdagkHJ4ByYCw5r0YNEYvoain+qG6zBXM++B5iFjqodgNgSbUtnIA0
+ BSCR/JLwA71NNQgVDGLnHo37+pnsbol3iIM7ZxXO8tbsj9CU3nP2o9uIPqPCGQjqd1cw
+ Y0ZA==
+X-Gm-Message-State: AOAM532rjAMsfo0/daEnpJT8p0iOs/0rxhQDrBfSwOdSvVuwHCXuMR4U
+ qzg0IynixUKw9762QdCNXySjEA==
+X-Google-Smtp-Source: ABdhPJzWXoh5fASmdpBNcBA2+8XuHSPSJ4ZyTuJ5s9WyqabyrgqKcXsqMnyCoGoNSLaZxwVNG/gOhA==
+X-Received: by 2002:a50:eb87:0:b0:425:c3e2:17a9 with SMTP id
+ y7-20020a50eb87000000b00425c3e217a9mr17628182edr.109.1650915312285; 
+ Mon, 25 Apr 2022 12:35:12 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- l17-20020a056402231100b0041d98ed7ad8sm5055672eda.46.2022.04.25.12.34.51
+ t19-20020a056402525300b00425cd5973efsm3768247edd.24.2022.04.25.12.35.11
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Apr 2022 12:34:51 -0700 (PDT)
-Message-ID: <efb82515-66c4-67ec-dd71-e9c10d8920ab@mind.be>
-Date: Mon, 25 Apr 2022 21:34:50 +0200
+ Mon, 25 Apr 2022 12:35:11 -0700 (PDT)
+Message-ID: <cc3a6965-017e-27ee-33aa-79db8bfa0805@mind.be>
+Date: Mon, 25 Apr 2022 21:35:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220422215931.2712013-1-fontaine.fabrice@gmail.com>
+References: <20220422220408.3173274-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220422215931.2712013-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-good:
- fix build with gcc 4.8
+In-Reply-To: <20220422220408.3173274-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/imagemagick: SVG support needs
+ host gcc >= 4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,17 +102,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 22/04/2022 23:59, Fabrice Fontaine wrote:
-> Fix the following build failure with gcc 4.8 raised since bump to
-> version 1.20.0 in commit 34317969278d7b6d923d4889fb4235f112b2b201:
+On 23/04/2022 00:04, Fabrice Fontaine wrote:
+> SVG support needs host gcc >= 4.9 since bump of harfbuzz to version
+> 3.1.2 in commit 6861933d22006fbe8c961a41506beac826881f33:
 > 
-> ../ext/soup/gstsouploader.c: In function 'gst_soup_load_library':
-> ../ext/soup/gstsouploader.c:219:3: error: 'for' loop initial declarations are only allowed in C99 mode
->     for (guint i = 0; i < len; i++) {
->     ^
+> In file included from ../src/hb.hh:473:0,
+>                   from ../src/hb-buffer-serialize.cc:27:
+> ../src/hb-vector.hh:206:20: error: 'is_trivially_copy_assignable' is not a member of 'std'
+>        hb_enable_if (std::is_trivially_copy_assignable<T>::value)>
+>                      ^
 > 
 > Fixes:
->   - http://autobuild.buildroot.org/results/21792a9839d9722815075569123df8747fc450e3
+>   - http://autobuild.buildroot.org/results/7b2430c5ae4eed51685ec12bf778c07a0a8b1701
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -120,21 +123,30 @@ On 22/04/2022 23:59, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 1 +
->   1 file changed, 1 insertion(+)
+>   package/imagemagick/Config.in.host | 5 +++++
+>   1 file changed, 5 insertions(+)
 > 
-> diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> index 1168feb293..2b6cf769aa 100644
-> --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> @@ -10,6 +10,7 @@ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
->   GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
->   GST1_PLUGINS_GOOD_LICENSE = LGPL-2.1+
+> diff --git a/package/imagemagick/Config.in.host b/package/imagemagick/Config.in.host
+> index 671b0995dc..5055101e23 100644
+> --- a/package/imagemagick/Config.in.host
+> +++ b/package/imagemagick/Config.in.host
+> @@ -17,6 +17,7 @@ if BR2_PACKAGE_HOST_IMAGEMAGICK
+>   config BR2_PACKAGE_HOST_IMAGEMAGICK_SVG
+>   	bool "SVG support"
+>   	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # host-librsvg
+> +	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-pango -> host-harfbuzz
+>   	help
+>   	  Say 'y' here is you need ImageMagick tools (like convert)
+>   	  to support SVG.
+> @@ -24,4 +25,8 @@ config BR2_PACKAGE_HOST_IMAGEMAGICK_SVG
+>   	  This is not enabled by default, as it brings quite a few
+>   	  extra dependencies, and thus extra build time.
 >   
-> +GST1_PLUGINS_GOOD_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
->   GST1_PLUGINS_GOOD_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
->   
->   GST1_PLUGINS_GOOD_CONF_OPTS = \
+> +comment "SVG support needs host gcc >= 4.9"
+> +	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+> +	depends on !BR2_HOST_GCC_AT_LEAST_4_9
+> +
+>   endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
