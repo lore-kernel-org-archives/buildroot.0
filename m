@@ -4,44 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 090A4C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:08:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB6A4C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:08:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE69A4167C;
-	Mon, 25 Apr 2022 19:08:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7928416B7;
+	Mon, 25 Apr 2022 19:08:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lSKvKbqZzjHV; Mon, 25 Apr 2022 19:08:43 +0000 (UTC)
+	with ESMTP id W2Vd12YgVoB3; Mon, 25 Apr 2022 19:08:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6896C41655;
-	Mon, 25 Apr 2022 19:08:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0F9E41BF2CD
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 416844169E;
+	Mon, 25 Apr 2022 19:08:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0189F1BF2CD
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB06E41655
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E421760BDE
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UQc3LeQG9gqN for <buildroot@lists.busybox.net>;
- Mon, 25 Apr 2022 19:07:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8xD02osmd7qI for <buildroot@lists.busybox.net>;
+ Mon, 25 Apr 2022 19:07:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C2094167A
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 19:07:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 4F3238426A; Mon, 25 Apr 2022 18:56:54 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4387D605E0
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 19:07:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 26A05842F5; Mon, 25 Apr 2022 18:57:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 25 Apr 2022 20:33:04 +0200
+Date: Mon, 25 Apr 2022 21:07:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b2fa94b093517b147c04be2660d6f1310ecefa54
-X-Git-Newrev: 30641fd54ca387f814078fbc0c17f45bb1fce315
+X-Git-Oldrev: a2b04d4e096b912cf9a5165d2a35651e82a87e89
+X-Git-Newrev: 9315eb7ede87e072c121985d2ab67ccb973f20ac
 X-Patchwork-Hint: ignore
-Message-Id: <20220425185654.4F3238426A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-libwww-perl: bump to version
- 6.62
+Message-Id: <20220425185738.26A05842F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pcre2: fix legal info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,48 +51,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30641fd54ca387f814078fbc0c17f45bb1fce315
+commit: https://git.buildroot.net/buildroot/commit/?id=9315eb7ede87e072c121985d2ab67ccb973f20ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
- package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Commit 10648db92bc5c4bfd49b58ce4f1c213defdfc7de forgot to update hash of
+LICENCE file (update in year:
+https://github.com/PCRE2Project/pcre2/commit/3103b8f20a3b9944b177e812fde29fbfb8b90558):
 
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
-index e32258050c..25b6675ec7 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.hash
-+++ b/package/perl-libwww-perl/perl-libwww-perl.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  ce5180358d9279b2843a6518bf2de200  libwww-perl-6.60.tar.gz
--sha256  cdd28b9237b9c6791725b9099695c7c3c720b33881606fd6cc7635a5495bb07c  libwww-perl-6.60.tar.gz
-+md5  3cc193bbddb1dc9e867e88582b440a92  libwww-perl-6.62.tar.gz
-+sha256  569ac15eb69d54b2a8d932403610690b89c68d6a987eab2f627c0639bae7de18  libwww-perl-6.62.tar.gz
- 
- # computed by scancpan
- sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENSE
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
-index aa15ebb594..43bd4db783 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.mk
-+++ b/package/perl-libwww-perl/perl-libwww-perl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_LIBWWW_PERL_VERSION = 6.60
-+PERL_LIBWWW_PERL_VERSION = 6.62
- PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
- PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+ >>> pcre2 10.40 Collecting legal info
+ ERROR: LICENCE has wrong sha256 hash:
+ ERROR: expected: 15bc778a1f7e1f857d57abab4181749a06ad1d1f9420d5c9e3c23ef8c991b025
+ ERROR: got     : 87d884eceb7fc54611470ce9f74280d28612b0c877adfc767e9676892a638987
+
+Fixes:
+ - http://autobuild.buildroot.org/results/275c5478d63d3d4016d440870e96f04230df69d6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pcre2/pcre2.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
+index e4f7980749..e3fe6b2d53 100644
+--- a/package/pcre2/pcre2.hash
++++ b/package/pcre2/pcre2.hash
+@@ -2,4 +2,4 @@
+ # https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.40/pcre2-10.40.tar.bz2.sig
+ sha256  14e4b83c4783933dc17e964318e6324f7cae1bc75d8f3c79bc6969f00c159d68  pcre2-10.40.tar.bz2
+ # Locally computed
+-sha256  15bc778a1f7e1f857d57abab4181749a06ad1d1f9420d5c9e3c23ef8c991b025  LICENCE
++sha256  87d884eceb7fc54611470ce9f74280d28612b0c877adfc767e9676892a638987  LICENCE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
