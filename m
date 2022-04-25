@@ -1,89 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C9A6C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D242C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:34:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB8DE60B61;
-	Mon, 25 Apr 2022 19:33:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4216C41608;
+	Mon, 25 Apr 2022 19:34:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fkkf1ExMbdXR; Mon, 25 Apr 2022 19:33:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CIS2CUPkAPbB; Mon, 25 Apr 2022 19:34:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E96F460B3D;
-	Mon, 25 Apr 2022 19:33:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B80B21BF2CD
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:33:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0618341545;
+	Mon, 25 Apr 2022 19:34:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 90DB51BF2CD
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:34:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B50F881756
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:33:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 87BB241545
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:34:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rz0xW9vx0Qsg for <buildroot@lists.busybox.net>;
- Mon, 25 Apr 2022 19:33:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2li-shNeUapY for <buildroot@lists.busybox.net>;
+ Mon, 25 Apr 2022 19:34:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B945980D8C
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 19:33:43 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id z99so19686315ede.5
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 12:33:43 -0700 (PDT)
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2BB5541520
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 19:34:10 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id w16so10369426ejb.13
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 12:34:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=jRaVl8ynJEUNqyg0BtCPrcSomNpOHFnxeJGQ5WXQLpA=;
- b=GR048Mni6/zWIrqxPnbG+4cBDpYM9Kaq4VywHnXxFwbvwnv80k5ivPudUR1WH1VIyM
- xA1Tf1tSX2DNCvG9i/kONsgAheJTwF7xxyOfZ1yWbt0f7eZMNnq5Z9b9PJ+Caym5Zdb/
- khrCqa4w/NChc0iSYnqIT43ekIASojufacDtOdcgrwx2rHQrhg38QKqLaJPQD6Tq+yd3
- SehMTK8RtJbezsypykkIysyFFeNiHkxBP+Fbe/iZed4Uajpvxk0PY72DbTOjxMVMl1AA
- AAjefLjHv52oHFQ9NfRnKWz4vO1dDYv31dbnVKgE+NI08Eq5FmHsHN/yBksiMfpDxnYx
- BLOg==
+ bh=0yLFGD/eNplH9fpJ8wbl5dL9R7u4HcOULE+BP43Ev4Y=;
+ b=YrqWGfcwG3ZKsrsKDAZWUesm8baLZsPuKLIqICxm3ABaHsJpeFX5hPOc/sBaFa6tTI
+ pukrQFKTOR45Uy8JK2jJU4agXHRT+XhwcMmZ4ZCQDzh/t6zy1yzgvtTMGBlw/AhL0jfd
+ jWKabF+vaOwzhlyLXkC/N5whhzZnvwSnjb078Gf7pJKMOFLLO1HFwULd+aTVttTv6BSq
+ EiGrO5RTcLeDhh0eD9VzG6yTpidXNJiGZMACn3/i8QfV04yrn793HEeVL6QH4KL968LX
+ iH1ZdE0u5EiCjaH0tJgtB30W5SpJv2tbGYOvnJiFABqIc97aoP8howcAKZbKvxKPLZW7
+ HdpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=jRaVl8ynJEUNqyg0BtCPrcSomNpOHFnxeJGQ5WXQLpA=;
- b=1qZODisye+O6eggHXvV+BwyNcmH5ZDeDV14w9BeFCBjSzUg8a9O5qWGh1S4cRJHDBb
- SsFIJL4N+tLpoMwuxIvr890r6tGg+0cXejE36k7R/OiBMRUHHX1LpE4kvc5D/7raB5K7
- +nCZbSAHm7TJ4nZR7E/F49suox4/XnDQstpUZBSWkqrBKWBmE6U0Rq97ezSqEIbvn3kv
- BXRVWNJ/+PnZzWfpSykALdMIeNxNQVYM2ldHhKxWaMUBTBKMHytAFKqeu9mWP9bUxsVJ
- FiGvprmQ0gk/Oqyzy1D9WHbuPjBLNGS92SU/bVFTxE4H+chhPicQP1JTVmfYps0wkrV+
- xoSw==
-X-Gm-Message-State: AOAM531ZYZKsvLCxl5thX+2WnmY7zxvpkDUxigrn8x0DtDij48jHV9Qg
- 4TOjuMEOMK0Dcs/gMl+XkO2GJg==
-X-Google-Smtp-Source: ABdhPJzCqaqhkCjPT94GuXEJ/DRK5XfyUmE1z5SB+tHx05NmGAz9glz8c+0YYIjhDZsnWlwicSRrrA==
-X-Received: by 2002:aa7:c9ce:0:b0:425:c396:dde with SMTP id
- i14-20020aa7c9ce000000b00425c3960ddemr17465363edt.397.1650915221927; 
- Mon, 25 Apr 2022 12:33:41 -0700 (PDT)
+ bh=0yLFGD/eNplH9fpJ8wbl5dL9R7u4HcOULE+BP43Ev4Y=;
+ b=g4jn0I/WANtXfW2aXsZu1qYyPPF46Jt6vdXuoHbxZf58lGEm3hwXP3Rw2a6E8DB3m8
+ yZen4uTK60ZggpzAK4L3HjpG2nKMyf3OC9OchvRHdN/c3Hn5Cho2rkPxeK0Bw8UjUYh5
+ wMQXM16mYM4FAuMOFjEytTNk+5SYenDLbJmu+ooOp4xPJc7Cly8iPGLhct8eVwrjaQ4q
+ aJGWhk5fvpRWGVY0q3YNgyFvzvWDGKFdkEL7mtM4mb58a73sNgoS5UHuuLvu56/+UwCt
+ CJuoMJjgmIKxYS+OPnmZVc9FVrobuX+UL0u7+lDdqZpxjBpjX91zd1ZoJBYlx08jkUhl
+ tXUg==
+X-Gm-Message-State: AOAM532y0Nnex8DypsfvrpMMoDIMdyp3FGyN1ewTl3d/na2RJ+OP6/yi
+ f/IJkoccGvwQSg3bOMo6qgUxHQ==
+X-Google-Smtp-Source: ABdhPJzej5OyM3GxTf1rH4TagenMUi74IceSimolw3ackLZcn0mUEBL7Gr/GUqkPuT24oTv29OxP8Q==
+X-Received: by 2002:a17:907:62a1:b0:6da:7952:d4d2 with SMTP id
+ nd33-20020a17090762a100b006da7952d4d2mr17773185ejc.260.1650915248367; 
+ Mon, 25 Apr 2022 12:34:08 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- b25-20020a056402139900b0041904036ab1sm5051229edv.5.2022.04.25.12.33.41
+ v20-20020a056402349400b00425a5ea1bb7sm5135767edc.57.2022.04.25.12.34.07
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Apr 2022 12:33:41 -0700 (PDT)
-Message-ID: <5d9780b7-3579-c9b8-f2ce-ec5efc9f187f@mind.be>
-Date: Mon, 25 Apr 2022 21:33:40 +0200
+ Mon, 25 Apr 2022 12:34:07 -0700 (PDT)
+Message-ID: <3f3dfe0e-0086-0f47-ce50-2d1085a24272@mind.be>
+Date: Mon, 25 Apr 2022 21:34:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 References: <20220422212117.1291718-1-fontaine.fabrice@gmail.com>
+ <20220422212117.1291718-2-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220422212117.1291718-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220422212117.1291718-2-fontaine.fabrice@gmail.com>
 Subject: Re: [Buildroot] [PATCH v2,
- 1/2] package/netsurf: fix build with BR2_OPTIMIZE_FAST
+ 2/2] package/netsurf: fix build with ccache
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,65 +102,49 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 22/04/2022 23:21, Fabrice Fontaine wrote:
-> Disable duktape with BR2_OPTIMIZE_FAST to fix the following build
-> failure:
+> Update second patch to fix the following build failure with ccache:
 > 
-> In file included from content/handlers/javascript/duktape/duktape.h:195,
->                   from build/Linux-framebuffer/duktape/application_cache.c:21:
-> content/handlers/javascript/duktape/duk_config.h:2861:2: error: #error __FAST_MATH__ defined, refusing to compile
->   2861 | #error __FAST_MATH__ defined, refusing to compile
->        |  ^~~~~
+> /home/autobuild/autobuild/instance-11/output-1/build/netsurf-3.10/tmpusr/share/netsurf-buildsystem/makefiles/Makefile.tools:413: *** Unable to detect toolchain.  Stop.
 > 
 > Fixes:
->   - http://autobuild.buildroot.org/results/2f1b42e2be3aa76cbacd84f3d0ad8b13edce6982
+>   - http://autobuild.buildroot.org/results/b4ba19d7dcff1b0ee2b1546598b5ae6e9257a16d
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->   package/netsurf/netsurf.mk | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
-> diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
-> index 1064698c12..574c1423df 100644
-> --- a/package/netsurf/netsurf.mk
-> +++ b/package/netsurf/netsurf.mk
-> @@ -14,6 +14,17 @@ NETSURF_CPE_ID_VENDOR = netsurf-browser
->   NETSURF_DEPENDENCIES = expat jpeg libpng \
->   	host-bison host-flex host-gperf host-pkgconf host-vim
->   
-> +# internal duktape doesn't build with BR2_OPTIMIZE_FAST
-> +ifeq ($(BR2_OPTIMIZE_FAST),y)
-> +define NETSURF_DUKTAPE_CONFIGURE_CMDS
-> +	echo "override NETSURF_USE_DUKTAPE := NO"       >> $(@D)/netsurf/Makefile.config
-> +endef
-> +else
-> +define NETSURF_DUKTAPE_CONFIGURE_CMDS
-> +	echo "override NETSURF_USE_DUKTAPE := YES"      >> $(@D)/netsurf/Makefile.config
-> +endef
-> +endif
 
-  Ideally we'd unbundle duktape of course. I took a look, doesn't look doable.
-
-  Thing is, with this, based on optimisation option, you have netsurf with or 
-without javascript support. Not exactly ideal. I think this should be a 
-user-visible option then.
-
-  Anyway, for now, applied to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
-> +
->   ifeq ($(BR2_PACKAGE_NETSURF_GTK),y)
->   NETSURF_DEPENDENCIES += libgtk2
->   NETSURF_FRONTEND = gtk2
-> @@ -77,6 +88,7 @@ endef
->   endif
+> ---
+> Changes v1 -> v2 (after review of Arnout Vandecappelle):
+>   - Update patch instead of using HOST_NOCCACHE)
+> 
+>   package/netsurf/0002-do-not-cross-compile-nsgenbind.patch | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/netsurf/0002-do-not-cross-compile-nsgenbind.patch b/package/netsurf/0002-do-not-cross-compile-nsgenbind.patch
+> index 2d4637511e..7caad47a20 100644
+> --- a/package/netsurf/0002-do-not-cross-compile-nsgenbind.patch
+> +++ b/package/netsurf/0002-do-not-cross-compile-nsgenbind.patch
+> @@ -8,6 +8,8 @@ the build, so it should not be built with the cross-compiler, but with
+>   the native compiler.
 >   
->   define NETSURF_CONFIGURE_CMDS
-> +	$(NETSURF_DUKTAPE_CONFIGURE_CMDS)
->   	$(NETSURF_ICONV_CONFIGURE_CMDS)
->   	$(NETSURF_SVG_CONFIGURE_CMDS)
->   	$(NETSURF_FONTLIB_CONFIGURE_CMDS)
+>   Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> +[Fabrice: add quotes around BUILD_CC to fix build with ccache]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>   ---
+>    Makefile | 2 +-
+>    1 file changed, 1 insertion(+), 1 deletion(-)
+> @@ -21,7 +23,7 @@ index f279f01..5698c87 100644
+>    # prefixed install macro for each host sub target
+>    define do_build_prefix_install
+>   -	$(MAKE) install --directory=$1 HOST=$(BUILD) PREFIX=$(TMP_PREFIX) Q=$(Q) DESTDIR=
+> -+	$(MAKE) install --directory=$1 HOST=$(BUILD) CC=$(BUILD_CC) PREFIX=$(TMP_PREFIX) Q=$(Q) DESTDIR=
+> ++	$(MAKE) install --directory=$1 HOST=$(BUILD) CC="$(BUILD_CC)" PREFIX=$(TMP_PREFIX) Q=$(Q) DESTDIR=
+>    
+>    endef
+>    
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
