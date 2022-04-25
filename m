@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2CADC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:07:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7438C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:08:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B8AB40ABF;
-	Mon, 25 Apr 2022 19:07:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 645CC4167B;
+	Mon, 25 Apr 2022 19:08:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x4CSCcL1i9PV; Mon, 25 Apr 2022 19:07:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id W4MME9E9HMm0; Mon, 25 Apr 2022 19:08:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F5B540AC1;
-	Mon, 25 Apr 2022 19:07:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3901A41621;
+	Mon, 25 Apr 2022 19:08:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0A9BD1BF2CD
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 381DA1BF2CD
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3825F4167B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B872415FE
  for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nkm3fn3AWrqL for <buildroot@lists.busybox.net>;
+ with ESMTP id 0TIG5w6h5p_J for <buildroot@lists.busybox.net>;
  Mon, 25 Apr 2022 19:07:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 388EB415A0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 61FD141655
  for <buildroot@buildroot.org>; Mon, 25 Apr 2022 19:07:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 105DF842E8; Mon, 25 Apr 2022 18:56:54 +0000 (UTC)
+ id 445F9842EA; Mon, 25 Apr 2022 18:56:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 25 Apr 2022 20:24:19 +0200
+Date: Mon, 25 Apr 2022 20:25:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 663b2edcd2be99638842edaf0406f4c984f32918
-X-Git-Newrev: 0d6b874d94576f8b46153398c859f7831c08bb5f
+X-Git-Oldrev: 9f0c67179e55d967ae54d000d8d58dbc52cb1de3
+X-Git-Newrev: b2fa94b093517b147c04be2660d6f1310ecefa54
 X-Patchwork-Hint: ignore
-Message-Id: <20220425185654.105DF842E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sam-ba: update link
+Message-Id: <20220425185654.445F9842EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-crypt-openssl-guess: bump to
+ version 0.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,28 +59,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d6b874d94576f8b46153398c859f7831c08bb5f
+commit: https://git.buildroot.net/buildroot/commit/?id=b2fa94b093517b147c04be2660d6f1310ecefa54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The link to at91.com is outdated and redirects to linux4sam.org
-
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/sam-ba/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash | 4 ++--
+ package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sam-ba/Config.in.host b/package/sam-ba/Config.in.host
-index b96e377e79..1967f33ab3 100644
---- a/package/sam-ba/Config.in.host
-+++ b/package/sam-ba/Config.in.host
-@@ -7,5 +7,5 @@ config BR2_PACKAGE_HOST_SAM_BA
- 	  programming the Atmel SAM3, SAM7 and SAM9 ARM-based
- 	  microcontrollers.
+diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+index e6d19cb681..b4795ed3dd 100644
+--- a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
++++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  9e86baf96828a38c967003a5e66f0c39  Crypt-OpenSSL-Guess-0.12.tar.gz
+-sha256  0a18d18768cf42b49b15c9dea626199dc74346bbbc76acd3d817b9c1d2bd471d  Crypt-OpenSSL-Guess-0.12.tar.gz
++md5  e07f470dd25023730cf8536e0cefbabd  Crypt-OpenSSL-Guess-0.15.tar.gz
++sha256  1c5033381819fdb4c9087dd291b90ec70e7810d31d57eade9b388eccfd70386d  Crypt-OpenSSL-Guess-0.15.tar.gz
  
--	  http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools
-+	  https://www.linux4sam.org/bin/view/Linux4SAM/SoftwareTools
- 	  https://www.microchip.com/en-us/development-tool/SAM-BA-IN-SYSTEM-PROGRAMMER
+ # computed by scancpan
+ sha256  5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072  LICENSE
+diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+index 4f0898cf53..56ff79d845 100644
+--- a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
++++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.12
++PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.15
+ PERL_CRYPT_OPENSSL_GUESS_SOURCE = Crypt-OpenSSL-Guess-$(PERL_CRYPT_OPENSSL_GUESS_VERSION).tar.gz
+ PERL_CRYPT_OPENSSL_GUESS_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AK/AKIYM
+ PERL_CRYPT_OPENSSL_GUESS_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
