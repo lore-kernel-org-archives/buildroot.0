@@ -1,81 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEE5DC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 15:41:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D36B7C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 16:44:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FA8A60E71;
-	Mon, 25 Apr 2022 15:41:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BD36415A4;
+	Mon, 25 Apr 2022 16:44:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z6muuHBzWM-X; Mon, 25 Apr 2022 15:41:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LKrdE1sskCYa; Mon, 25 Apr 2022 16:44:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65D9860761;
-	Mon, 25 Apr 2022 15:41:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EDED71BF295
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 15:41:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2FDE41504;
+	Mon, 25 Apr 2022 16:44:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 765D91BF31C
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 16:44:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB9EA813E8
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 15:41:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6BC354022C
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 16:44:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MCojxTBhpXDN for <buildroot@lists.busybox.net>;
- Mon, 25 Apr 2022 15:41:03 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 71BEF813CC
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 15:41:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1650901259;
- bh=qeTB+gnYbJ4Bqn2HR8rQqzXzaDIpVP0tr7e0XDUUr7g=;
- h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
- b=fpwbTExDpWsijrLuvhOhDbsCOrovt3UwpIXNDYsZk+PMv7nepYW/Lrr7p8v2KjZI+
- ZRkEGlVCJhz3U/QWMvpOwGE5jVnGPjJy9QWx8a5VzOhqtsccD7oM068q1XYP64Nj41
- qZ0f65Qw5vyOTo8pNQAy8gbBzwZWazgXyOk5IAbE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.101] ([84.133.21.31]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MD9T7-1naWOA30gD-0097oL for
- <buildroot@buildroot.org>; Mon, 25 Apr 2022 17:40:59 +0200
-Message-ID: <fbd06f4f-2d2e-1ab0-d635-60bbd3aca262@gmx.de>
-Date: Mon, 25 Apr 2022 17:40:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=linux.microsoft.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9pYwGKZtZWbZ for <buildroot@lists.busybox.net>;
+ Mon, 25 Apr 2022 16:44:06 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E7C14017A
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 16:44:06 +0000 (UTC)
+Received: from pwmachine.home (unknown [92.186.13.154])
+ by linux.microsoft.com (Postfix) with ESMTPSA id CFAB220E61D4;
+ Mon, 25 Apr 2022 09:44:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CFAB220E61D4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+ s=default; t=1650905045;
+ bh=j/i0Gv95kmPS2voyk61+Ajibi78llga7VUgelRED5dw=;
+ h=From:To:Cc:Subject:Date:From;
+ b=IVprfENntGGKSdNVz8ODoPxbZSl6v9qNJauB9oPjI7DX8hWARkqKwiE0akEdqDppV
+ LN7cM5Jw3fL7pHrXLWjnh3Xdpn1/h+vxHPna4J5xXw79BeYzhpt0mL6rf03L3HMUHn
+ S9KeAz0OokH25SilRkO6a1S5X/Q633WkrVnBWXII=
+From: Francis Laniel <flaniel@linux.microsoft.com>
 To: buildroot@buildroot.org
-References: <20220128145103.3422-1-universeiii@gmx.de>
-From: Andreas Ehmanns <universeiii@gmx.de>
-In-Reply-To: <20220128145103.3422-1-universeiii@gmx.de>
-X-Provags-ID: V03:K1:fXH7W5uytmPnMLH3bG6BSHwP2qC5f1zb+y+0KMFavOS5sDmHNGe
- S/P8hJ/0CFIR+hiTZMx+8P85IB0Olp8JUTShBuuzU7kAa0vy/OU6gbCGXttNwNvDOox9sVX
- d4T7wc3e+RE8WVo9+rC/QhdKqKayMyeQY3D8CNUHSVwhgJ6gBZX9msHUOXx6WG6xNSJp5h8
- jPB9A2bcrRkET8HciWuWw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1Y40JYRycys=:SXp4808wJkTLSiAZvdi/Ig
- MpHYVpWkfjC9WO+d/9eFFnX7qWEAIF9HxU9wGNlyGhOBwComB8NZ95DRqvjrpU1JR1296ht0L
- Gl4vPLQYFC6eYTatieIKOnXNSJwEsjus+ScTsK3b+3/fg0AbnbzhaYF/9IeeJYGVfAvuJbuwo
- MEh1rqPvf58pLQcpLQ+TKtV7DKhkaQUVe7t0NPKnLtX2eksRkHIlu5u/guUfSeFONsUW7yK5k
- aZJk502VQ7CkgnUrqttakTDu5sJEWUGMh9fHT3ZmF+CfisWpb/BqR7FwdHCn3jZcYoAeod+ii
- th2La13qdQkIshRoau85FqCz7yT7dS3Q/iyjiSn8VbJTvMqxzFzvINbQjIoqL/0DFIWkjvefn
- 0WKw+WIdbAyBEj3Wc3NpH3CA31qBQd1G0XqYkNe3IIX7FEFpCSxv77zy21XqJNG+M4TxFaTiR
- +TBwiz3e8dM9ZP7bH/ZkY0w+t3sWVw6lBywXBAtPzhV3YJhNkN1cF/G9fZ+msl0ddcXvtrxQx
- ZWZ7qlm1ar5bmwoCLmWZznORXGsxtQFjIWs9Bz5A+Bv2xM+2caSHDx1kQlgbu6FGQUbQFs0Ll
- A473zkgkeJuMMKje04hP6XyMAz5ZDeouikDDKXQCpB2z7v2MJ1EVMFPKgbLtqtPvPRglTwEQh
- mutVaYQJXT8/c17eRLs0Uh43mOMUdDjbKCrXDlp/Mt+UeNz0S3ctsbwjkLs9rvMmoeL1fBgz8
- i7AslpSWsFpj/OtJ59cngYrDux7Yef/3iJvqVnzT3HTdMbbD+mBr6esQTJ48QXkQf9fbaMrLn
- fCXdFnqumQ9h9sADAEdeY4XiB41So1EWVRnKyXKUaU+zcvyUMVlS00e2sG9ibqRDvU/EEbDo4
- Ghtg0C/hIXVgyq7rg9EA1ZuhfdJ3FyqoBmlnlAwOhcXQFVieV93IaWllWeetuqUBDdHCnlQpd
- N+WBdkupFgDZgpE+WW43P/fJo97fsOegoTbp5Vh6YhtaaJGPxZYFuHtTb7zNLytto9nBkx1ug
- sZetsCjhQWadz353ZXWkXdQ52Uog+tpwHyquMPyKsQbzfjdYDeqsL0LlcSnq1HmyANAiCuXKr
- QIB1KRzAs8jbe4=
-Subject: [Buildroot] Enable missing security options for ISC dhcp server
+Date: Mon, 25 Apr 2022 17:43:17 +0100
+Message-Id: <20220425164319.24788-1-flaniel@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [RFC PATCH v4 0/2] Bump sysdig to 0.29.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,153 +62,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4837581575334758362=="
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ Francis Laniel <flaniel@linux.microsoft.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
---===============4837581575334758362==
-Content-Type: multipart/alternative;
- boundary="------------nCBkUnirf9pW7nSbL12sQWYX"
-Content-Language: en-US
-
-This is a multi-part message in MIME format.
---------------nCBkUnirf9pW7nSbL12sQWYX
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-
-Dear all,
-I was trying to make the ISC dhcp daemon more secure by using the -user
-and -group option to let dhcp server run as non-root user.
-Unfortunately these options are not available when building ISC dhcp
-server with buildroot.
-The reason is, that the configure script must be called with the
-additional option --enable-paranoia to activate these options.
-But this option is not set in the dhcp.mk file.
-
-To be backward compatible I added a new option to the dhcp's Config.in
-to enable this feature when desired.
-
-If you are interested in this feature and can create a patch and send it
-this list to make the change available to all buildroot users.
-Let me know what you think. Below are some details.
-
-Regards,
-Andreas
-
-1) Add this to Config.in:
-config BR2_PACKAGE_DHCP_SERVER_ENABLE_PARANOIA
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool "Enable paranoia options"
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 depends on BR2_PACKAGE_DHCP_SE=
-RVER
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 help
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Add option --enabl=
-e-paranoia to configure script. This activates
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 additional server =
-options (-user, -group and -chroot) to make
-dhcp server more secure.
-
-2) And to dhcp.mk:
-ifeq ($(BR2_PACKAGE_DHCP_SERVER_ENABLE_PARANOIA),y)
-DHCP_CONF_OPTS +=3D --enable-paranoia
-endif
-
---------------nCBkUnirf9pW7nSbL12sQWYX
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-  <head>
-    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-=
-8">
-  </head>
-  <body>
-    <div class=3D"moz-text-flowed" style=3D"font-family: -moz-fixed;
-      font-size: 12px;" lang=3D"x-unicode">Dear all,
-      <br>
-      I was trying to make the ISC dhcp daemon more secure by using the
-      -user
-      and -group option to let dhcp server run as non-root user.
-      <br>
-      Unfortunately these options are not available when building ISC
-      dhcp
-      server with buildroot.
-      <br>
-      The reason is, that the configure script must be called with the
-      additional option --enable-paranoia to activate these options.
-      <br>
-      But this option is not set in the dhcp.mk file.<br>
-    </div>
-    <div class=3D"moz-text-flowed" style=3D"font-family: -moz-fixed;
-      font-size: 12px;" lang=3D"x-unicode"><br>
-    </div>
-    <div class=3D"moz-text-flowed" style=3D"font-family: -moz-fixed;
-      font-size: 12px;" lang=3D"x-unicode">To be backward compatible I
-      added a new option to the dhcp's Config.in
-      <br>
-      to enable
-      this feature when desired.
-      <br>
-      <br>
-      If you are interested in this feature and can create a patch and
-      send it
-      this list to make the change available to all buildroot users.
-      <br>
-      Let me know what you think. Below are some details.
-      <br>
-      <br>
-      Regards,
-      <br>
-      Andreas</div>
-    <div class=3D"moz-text-flowed" style=3D"font-family: -moz-fixed;
-      font-size: 12px;" lang=3D"x-unicode">
-      <br>
-      1) Add this to Config.in:<br>
-      config BR2_PACKAGE_DHCP_SERVER_ENABLE_PARANOIA
-      <br>
-      =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool "Enable paranoia opt=
-ions"
-      <br>
-      =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 depends on BR2_PACKAGE_DH=
-CP_SERVER
-      <br>
-      =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 help
-      <br>
-      =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Add option --=
-enable-paranoia to configure script. This
-      activates
-      <br>
-      =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 additional se=
-rver options (-user, -group and -chroot) to
-      make
-      <br>
-      dhcp server more secure.
-      <br>
-      <br>
-      2) And to dhcp.mk:<br>
-      ifeq ($(BR2_PACKAGE_DHCP_SERVER_ENABLE_PARANOIA),y)
-      <br>
-      DHCP_CONF_OPTS +=3D --enable-paranoia
-      <br>
-      endif
-      <br>
-    </div>
-  </body>
-</html>
-
---------------nCBkUnirf9pW7nSbL12sQWYX--
+Hi.
 
 
---===============4837581575334758362==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+In this contribution, I bumped sysdig version to 0.29.1.
+Indeed, following this discussion [1], Arnout Vandecappelle noted sysdig 0.27.1
+cannot be cross-compiled to, e.g., aarch64 because it uses the open() syscall.
+
+To fix this, I bumped sysdig to 0.29.1.
+Sadly, some components of sysdig, like libsinsp, libscap and the kernel modules,
+were moved to falcosecurity/libs.
+So, I added the falcosecurity-libs package.
+A new patch was added to sysdig recipe to avoid compiling again
+falcosecurity-libs.
+Nonetheless, this patch is a bit big, so I prefered to keep the RFC tag to
+gather your opinion about it.
+
+I was nonetheless able to build and run sysdig with start-qemu.sh:
+Welcome to Buildroot
+buildroot login: root
+# scap: loading out-of-tree module taints kernel.
+scap: driver loading, scap 0.1.1dev
+scap: adding new consumer (____ptrval____)
+scap: initializing ring buffer for CPU 0
+scap: CPU buffer initialized, size=8388608
+scap: starting capture
+2 14:29:14.500045202 0 <NA> (113) > switch next=10 pgft_maj=212 pgft_min=1175 vm_size=45204 vm_rss=18256 vm_swap=0
+...
+97 14:29:14.514272929 0 <NA> (113) > switch next=114 pgft_maj=213 pgft_min=1180 vm_size=45204 vm_rss=18256 vm_swap=
+scap: deallocating consumer (____ptrval____)
+scap: no more consumers, stopping capture
+
+So, if you see a particular way to fix the problem I described above or any
+problem with this contribution, feel free to share it!
+
+Changes since:
+ v3:
+  - Make falcosecurity-libs a generic-package and a kernel-package.
+  The generic-package will download us the libraries (libscap and libsinsp)
+  which will be built by sysdig.mk.
+  The kernel-package will build the kernel module.
+  This permitted to simplify the overall contribution architecture by removing
+  some patches.
+ v2:
+  - Add linux CONFIG_ option to execute falcosecurity-libs kernel module.
+  - falcosecurity-libs driver name was set so sysdig automatically loads it.
+
+Francis Laniel (2):
+  falcosecurity-libs: add new package
+  package/sysdig: bump to 0.29.1
+
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...cmake-Permit-setting-GRPC_CPP_PLUGIN.patch | 34 ++++++++
+ package/falcosecurity-libs/Config.in          | 38 +++++++++
+ .../falcosecurity-libs.hash                   |  5 ++
+ .../falcosecurity-libs/falcosecurity-libs.mk  | 75 +++++++++++++++++
+ ...BUNDLED_DEPS-before-getting-nlohmann.patch | 51 ++++++++++++
+ ...ATCH_COMMAND-to-fix-lua-types-and-fu.patch | 82 -------------------
+ ...gainst-libabseil-cpp-which-grpc-uses.patch | 47 -----------
+ ...e-Add-libsinsp.a-as-IMPORTED-library.patch | 59 +++++++++++++
+ package/sysdig/Config.in                      | 31 ++-----
+ package/sysdig/sysdig.hash                    |  4 +-
+ package/sysdig/sysdig.mk                      | 55 ++++++-------
+ 13 files changed, 295 insertions(+), 188 deletions(-)
+ create mode 100644 package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch
+ create mode 100644 package/falcosecurity-libs/Config.in
+ create mode 100644 package/falcosecurity-libs/falcosecurity-libs.hash
+ create mode 100644 package/falcosecurity-libs/falcosecurity-libs.mk
+ create mode 100644 package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
+ delete mode 100644 package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch
+ delete mode 100644 package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch
+ create mode 100644 package/sysdig/0002-cmake-Add-libsinsp.a-as-IMPORTED-library.patch
+
+
+Best regards and thank you in advance.
+---
+[1] https://marc.info/?l=buildroot&m=164951521629400
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4837581575334758362==--
-
