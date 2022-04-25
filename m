@@ -1,60 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7E51C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 08:15:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53046C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 08:16:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 83D0140339;
-	Mon, 25 Apr 2022 08:15:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4E5260A92;
+	Mon, 25 Apr 2022 08:16:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NGPgNfLJJnMf; Mon, 25 Apr 2022 08:15:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZGmmI6KUXbut; Mon, 25 Apr 2022 08:16:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 61A38402F7;
-	Mon, 25 Apr 2022 08:15:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CDE031BF3D7
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 08:15:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0809260A89;
+	Mon, 25 Apr 2022 08:16:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B2751BF3D7
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 08:16:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9D05402F7
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 08:15:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3981580C2C
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 08:16:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7dUK6Y1H3uGQ for <buildroot@lists.busybox.net>;
- Mon, 25 Apr 2022 08:15:27 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=heine.tech
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jbNVoh2pxXe8 for <buildroot@lists.busybox.net>;
+ Mon, 25 Apr 2022 08:16:23 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7F5B440022
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 08:15:27 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 35B05440862;
- Mon, 25 Apr 2022 11:14:39 +0300 (IDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1650874479;
- bh=heYRHoQ9Zft5T6II+5KmJwQkiAbBrkJvjTKQouFBBZw=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=isP4wQJEVvlomTyIMte50PwTSYE5k9KKa/5DbeyZil0XpCbJI14p3Z+6hC0MuxQBc
- O10GMoCZ5MVRomjJ5uPtsZunMO6HtQW+9DScekaebdE0r0dm7Gg/hdX4WSL2gD3mgr
- unFePxsOHOGdhLsE88xsSBUUCwCpWVLxnkxbojzUtxn/XuDD/g6cfXzlnHN5mXmmks
- G0OSac3VP2EcRZ/VtwYnzDYqxk1FZUYpPI+3NGrhRZdChWHQFjjGmXr+/JKCwh70kT
- /V3ndrQC3aZefJ4LFF6UPdXA3KYrdYIEVHgjiuJm+kVDuaVyJauIn0G8MoEUshPtzA
- WH9l10JIS8K6w==
-References: <20220425080503.769954-1-buildroot@heine.tech>
-User-agent: mu4e 1.6.10; emacs 27.1
-To: Michael Nosthoff <buildroot@heine.tech>
-Date: Mon, 25 Apr 2022 11:14:28 +0300
-In-reply-to: <20220425080503.769954-1-buildroot@heine.tech>
-Message-ID: <87o80p1sv8.fsf@tarshish>
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3285F80BF3
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 08:16:23 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id C6C4D1814B9; Mon, 25 Apr 2022 10:06:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
+ t=1650873982; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=b/1+XQ+J+GXOBfQSmPAag596QWd9wA8+tmAcN1lXrCE=;
+ b=YBg2xPJ+lHJJp6UMTbWHixFmzQBuoRaNh0fOBUh0SsH5GTuBxxxz9qt9A7y92i6qR9XJ5a
+ BydsxVheFRrv+UJKUm1CZ/cOKTB+k3Sl95YmJphjl442CgUF1w9d8U2fRKrZjgcIaewiPJ
+ GsYt867LJc2d2Hhq6Bh70O4S67+lL6A=
+To: buildroot@buildroot.org
+Date: Mon, 25 Apr 2022 10:05:44 +0200
+Message-Id: <20220425080544.770047-1-buildroot@heine.tech>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/{python-}protobuf: bump to
- version 3.20.1
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: [Buildroot] [PATCH 1/1] package/grpc: bump to version 1.45.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,71 +58,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: 2dad10f61914960b2bc05a650450d7fe2b8aa211@osuosl.org, Sep@osuosl.org,
- 17@osuosl.org, Asaf Kahlon <asafka7@gmail.com>, Mon@osuosl.org, rom@osuosl.org,
- 2001@osuosl.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot@buildroot.org, Matt Weber <matthew.weber@collins.com>,
- "00:00:00"@osuosl.org
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Robert Rose <robertroyrose@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Michael,
+grpc now requires gcc >= 5.1
+see https://groups.google.com/g/grpc-io/c/Plvp29818BE
 
-On Mon, Apr 25 2022, Michael Nosthoff via buildroot wrote:
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/grpc/Config.in |  6 +++---
+ package/grpc/grpc.hash |  2 +-
+ package/grpc/grpc.mk   | 10 +---------
+ 3 files changed, 5 insertions(+), 13 deletions(-)
 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> ---
->  package/protobuf/protobuf.hash               | 2 +-
->  package/protobuf/protobuf.mk                 | 2 +-
->  package/python-protobuf/python-protobuf.hash | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-> index 60e64f54d4..f37b2dee40 100644
-> --- a/package/protobuf/protobuf.hash
-> +++ b/package/protobuf/protobuf.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
->  sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-> -sha256  645192532f28254152b51c01868efdf9b766b1dbe49c77cccd6efcdb2d7c7bc2  protobuf-cpp-3.19.1.tar.gz
-> +sha256  dddd73664306d7d895a95e1cf18925b31b52785e468727e4635b45edae5166f9  protobuf-cpp-3.20.1.tar.gz
-> diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-> index 80764f0216..c4c33ba7da 100644
-> --- a/package/protobuf/protobuf.mk
-> +++ b/package/protobuf/protobuf.mk
-> @@ -7,7 +7,7 @@
->  # When bumping this package, make sure to also verify if the
->  # python-protobuf package still works and to update its hash,
->  # as they share the same version/site variables.
-> -PROTOBUF_VERSION = 3.19.1
-> +PROTOBUF_VERSION = 3.20.1
->  PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
->  PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
->  PROTOBUF_LICENSE = BSD-3-Clause
-> diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-> index 2bfef96676..ddfa48b491 100644
-> --- a/package/python-protobuf/python-protobuf.hash
-> +++ b/package/python-protobuf/python-protobuf.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  2286615a3ae3e24c3524d171b6728b77b72cd2f3aab905f6a8d3fcaf6209dd00  protobuf-python-3.19.1.tar.gz
-> +sha256  d3449b4df32ca155f8cd71051db916b2bf74cc925760e269c0acf09b48ec1cb8  protobuf-python-3.20.1.tar.gz
-
-The version update in python-protobuf.mk is missing.
-
-baruch
-
->  sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-
-
+diff --git a/package/grpc/Config.in b/package/grpc/Config.in
+index ad3ddbcf19..adba1cea52 100644
+--- a/package/grpc/Config.in
++++ b/package/grpc/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_GRPC
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # protobuf, re2, libabseil-cpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5_1
+ 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+@@ -19,9 +19,9 @@ config BR2_PACKAGE_GRPC
+ 
+ 	  http://github.com/grpc/grpc
+ 
+-comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9"
++comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 5.1"
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_5_1
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 6db2acd759..9e3a225a51 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8c05641b9f91cbc92f51cc4a5b3a226788d7a63f20af4ca7aaca50d92cc94a0d  grpc-1.44.0.tar.gz
++sha256  e18b16f7976aab9a36c14c38180f042bb0fd196b75c9fd6a20a2b5f934876ad6  grpc-1.45.2.tar.gz
+ sha256  277adcc1dcef8359b1efb48e628635f88b40be8fbd64e82fd0169930d135d7a5  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 9138b4ea59..2f037b5d59 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GRPC_VERSION = 1.44.0
++GRPC_VERSION = 1.45.2
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
+ GRPC_LICENSE_FILES = LICENSE
+@@ -63,14 +63,6 @@ GRPC_CFLAGS += -O0
+ GRPC_CXXFLAGS += -O0
+ endif
+ 
+-# Toolchains older than gcc5 will fail to compile with -0s due to:
+-# error: failure memory model cannot be stronger than success memory model for
+-# '__atomic_compare_exchange', so we use -O2 in these cases
+-ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5):$(BR2_OPTIMIZE_S),:y)
+-GRPC_CFLAGS += -O2
+-GRPC_CXXFLAGS += -O2
+-endif
+-
+ GRPC_CONF_OPTS += \
+ 	-DCMAKE_C_FLAGS="$(GRPC_CFLAGS)" \
+ 	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
