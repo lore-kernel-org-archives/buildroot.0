@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D242C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:34:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9044C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4216C41608;
-	Mon, 25 Apr 2022 19:34:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DC7360BF2;
+	Mon, 25 Apr 2022 19:34:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CIS2CUPkAPbB; Mon, 25 Apr 2022 19:34:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RXuX2kSLmxm1; Mon, 25 Apr 2022 19:34:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0618341545;
-	Mon, 25 Apr 2022 19:34:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B29A060B43;
+	Mon, 25 Apr 2022 19:34:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 90DB51BF2CD
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:34:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 88F621BF2CD
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:34:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 87BB241545
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:34:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 760C8415FB
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:34:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2li-shNeUapY for <buildroot@lists.busybox.net>;
- Mon, 25 Apr 2022 19:34:10 +0000 (UTC)
+ with ESMTP id hxhjCxVEqJbO for <buildroot@lists.busybox.net>;
+ Mon, 25 Apr 2022 19:34:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2BB5541520
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 19:34:10 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id w16so10369426ejb.13
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 12:34:09 -0700 (PDT)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 44C8541545
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 19:34:34 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id l18so5006752ejc.7
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 12:34:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=0yLFGD/eNplH9fpJ8wbl5dL9R7u4HcOULE+BP43Ev4Y=;
- b=YrqWGfcwG3ZKsrsKDAZWUesm8baLZsPuKLIqICxm3ABaHsJpeFX5hPOc/sBaFa6tTI
- pukrQFKTOR45Uy8JK2jJU4agXHRT+XhwcMmZ4ZCQDzh/t6zy1yzgvtTMGBlw/AhL0jfd
- jWKabF+vaOwzhlyLXkC/N5whhzZnvwSnjb078Gf7pJKMOFLLO1HFwULd+aTVttTv6BSq
- EiGrO5RTcLeDhh0eD9VzG6yTpidXNJiGZMACn3/i8QfV04yrn793HEeVL6QH4KL968LX
- iH1ZdE0u5EiCjaH0tJgtB30W5SpJv2tbGYOvnJiFABqIc97aoP8howcAKZbKvxKPLZW7
- HdpQ==
+ bh=LeQeEVzC0QLq0hYJuyS/tXhOhv5zZccO63UGSPcWl0c=;
+ b=g8N5qqlwjsrBMPSnCfNlHLaukyzCnwiC2uKBqfaC2n1tVMGbzd3huy0+dgbQQ96JqD
+ iLn2XcctzM588BFgvnxQ7UHWzBnEkbOKLo7e5P77ICgqjT/xvap0jmi+UY8joKQqvPv2
+ BQsQaesrjHEyYwWiJ+aEERbjCXvdQ7JVO8g6p54i2Y7EsSNi56/dZfXPLB9VvtnrXXEA
+ AfM/GlJbb6zEkGEZByZ+HPQmSr4yPqbrBWKTe9l+Q1hf3o3P0oxRRNzptDCMY8o9wD0v
+ VbFEj0Fl0i9wsWaD1hnhsDvIzIkOMfHa9Ux2tVf3T53LIzfx3YUgNh6dM7YdaP8SeGYn
+ S/pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=0yLFGD/eNplH9fpJ8wbl5dL9R7u4HcOULE+BP43Ev4Y=;
- b=g4jn0I/WANtXfW2aXsZu1qYyPPF46Jt6vdXuoHbxZf58lGEm3hwXP3Rw2a6E8DB3m8
- yZen4uTK60ZggpzAK4L3HjpG2nKMyf3OC9OchvRHdN/c3Hn5Cho2rkPxeK0Bw8UjUYh5
- wMQXM16mYM4FAuMOFjEytTNk+5SYenDLbJmu+ooOp4xPJc7Cly8iPGLhct8eVwrjaQ4q
- aJGWhk5fvpRWGVY0q3YNgyFvzvWDGKFdkEL7mtM4mb58a73sNgoS5UHuuLvu56/+UwCt
- CJuoMJjgmIKxYS+OPnmZVc9FVrobuX+UL0u7+lDdqZpxjBpjX91zd1ZoJBYlx08jkUhl
- tXUg==
-X-Gm-Message-State: AOAM532y0Nnex8DypsfvrpMMoDIMdyp3FGyN1ewTl3d/na2RJ+OP6/yi
- f/IJkoccGvwQSg3bOMo6qgUxHQ==
-X-Google-Smtp-Source: ABdhPJzej5OyM3GxTf1rH4TagenMUi74IceSimolw3ackLZcn0mUEBL7Gr/GUqkPuT24oTv29OxP8Q==
-X-Received: by 2002:a17:907:62a1:b0:6da:7952:d4d2 with SMTP id
- nd33-20020a17090762a100b006da7952d4d2mr17773185ejc.260.1650915248367; 
- Mon, 25 Apr 2022 12:34:08 -0700 (PDT)
+ bh=LeQeEVzC0QLq0hYJuyS/tXhOhv5zZccO63UGSPcWl0c=;
+ b=3co4YwYo9uPecJyc884+xOxnRqsT8HCbQe7fOTwajOpxn8/JHOmDYUQHJbGmvApqwa
+ JPUN9yGE9wfgcln4W8/57MwfgJQopRE0/666iB2l1f4WUIAHhWpCbvOWoQdvrcD/MBMb
+ NogHsV625ZjqlC3IykHMW91dyLUm3yZ+P+yboLmHu7ESIdEyP63I/aWgPcbXIXgiCvrI
+ 4sR2UtftMFqmMSSRrzuhwAsZaly4ILkAZZxHW4Lp4s7VEXFgDJOSrLBCFPflNO1S0yVa
+ gAVqAZppM7EVdKQRsaCK2yUEB7SWWpL8e1OwwdTiv+X34vI2k37CMgjK3m00jp7j5IAv
+ IO2A==
+X-Gm-Message-State: AOAM5324C/0ujZZChwDQiskwkMDtOOizmoT/chtGwAuRwoN5EFP/fuct
+ 759j6EUR5nH83agrJq+HpW42D/n2ls1NbA==
+X-Google-Smtp-Source: ABdhPJxm8Drf4TIDX6b9KWVI5nKWWCIj92OwHhoVWL/fGqJaA80Np7KWRXujc4FTlfc/SFUR6YoOqQ==
+X-Received: by 2002:a17:907:168a:b0:6e8:d125:1d24 with SMTP id
+ hc10-20020a170907168a00b006e8d1251d24mr17478383ejc.508.1650915272434; 
+ Mon, 25 Apr 2022 12:34:32 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- v20-20020a056402349400b00425a5ea1bb7sm5135767edc.57.2022.04.25.12.34.07
+ wh24-20020a170906fd1800b006f3a0a8efd0sm810872ejb.110.2022.04.25.12.34.31
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Apr 2022 12:34:07 -0700 (PDT)
-Message-ID: <3f3dfe0e-0086-0f47-ce50-2d1085a24272@mind.be>
-Date: Mon, 25 Apr 2022 21:34:07 +0200
+ Mon, 25 Apr 2022 12:34:32 -0700 (PDT)
+Message-ID: <ddb2ea53-d41b-69fa-503d-a7130b1e9520@mind.be>
+Date: Mon, 25 Apr 2022 21:34:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220422212117.1291718-1-fontaine.fabrice@gmail.com>
- <20220422212117.1291718-2-fontaine.fabrice@gmail.com>
+To: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
+References: <20220422214919.367067-1-aperez@igalia.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220422212117.1291718-2-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH v2,
- 2/2] package/netsurf: fix build with ccache
+In-Reply-To: <20220422214919.367067-1-aperez@igalia.com>
+Subject: Re: [Buildroot] [PATCH 0/3] Update wlroots to the latest release
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,50 +101,47 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 22/04/2022 23:21, Fabrice Fontaine wrote:
-> Update second patch to fix the following build failure with ccache:
+On 22/04/2022 23:49, Adrian Perez de Castro wrote:
+> Hi,
 > 
-> /home/autobuild/autobuild/instance-11/output-1/build/netsurf-3.10/tmpusr/share/netsurf-buildsystem/makefiles/Makefile.tools:413: *** Unable to detect toolchain.  Stop.
+> This is a small patch set which brings wlroots library to its most recent
+> version, fixing the cage compositor with a backported patch (as there is
+> no newer release yet). I am adding one additional patch that enables the
+> new Vulkan renderer when any of Mesa's Vulkan drivers is selected, too.
 > 
-> Fixes:
->   - http://autobuild.buildroot.org/results/b4ba19d7dcff1b0ee2b1546598b5ae6e9257a16d
+> I don't expect the two first patches of the set to be controversial, but
+> dunno about the Vulkan one. If there are doubts, I suppose the first two
+> could be merged anyway, leaving the other out for further discussion.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> One more thing: With wlroots 0.15.x it is finally possible to disable building
+> the accelerated renderers (GLESv2, Vulkan) and have only the software based
+> one (Pixman) built into wlroots. Currently I do not have the need for such a
+> configuration, and therefore I am not planning to send a patch to allow that
+> for now. On the other hand, if anyone wanted to try writing the patch, I would
+> be more than happy to review it :-)
+> 
+> Cheers,
+> -Adrian
+> 
+> 
+> Adrian Perez de Castro (3):
+>    package/wlroots: bump to version 0.15.1
+>    package/cage: add upstream patch for wlroots 0.15.x
+>    package/wlroots: enable vulkan renderer if possible
 
-  Applied to master, thanks.
+  Series applied to master, thanks.
 
   Regards,
   Arnout
 
-> ---
-> Changes v1 -> v2 (after review of Arnout Vandecappelle):
->   - Update patch instead of using HOST_NOCCACHE)
 > 
->   package/netsurf/0002-do-not-cross-compile-nsgenbind.patch | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+>   .../cage/0001-Upgrade-to-wlroots-0.15.patch   | 312 ++++++++++++++++++
+>   package/wlroots/Config.in                     |   2 +-
+>   package/wlroots/wlroots.hash                  |   4 +-
+>   package/wlroots/wlroots.mk                    |  29 +-
+>   4 files changed, 332 insertions(+), 15 deletions(-)
+>   create mode 100644 package/cage/0001-Upgrade-to-wlroots-0.15.patch
 > 
-> diff --git a/package/netsurf/0002-do-not-cross-compile-nsgenbind.patch b/package/netsurf/0002-do-not-cross-compile-nsgenbind.patch
-> index 2d4637511e..7caad47a20 100644
-> --- a/package/netsurf/0002-do-not-cross-compile-nsgenbind.patch
-> +++ b/package/netsurf/0002-do-not-cross-compile-nsgenbind.patch
-> @@ -8,6 +8,8 @@ the build, so it should not be built with the cross-compiler, but with
->   the native compiler.
->   
->   Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> +[Fabrice: add quotes around BUILD_CC to fix build with ccache]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->   ---
->    Makefile | 2 +-
->    1 file changed, 1 insertion(+), 1 deletion(-)
-> @@ -21,7 +23,7 @@ index f279f01..5698c87 100644
->    # prefixed install macro for each host sub target
->    define do_build_prefix_install
->   -	$(MAKE) install --directory=$1 HOST=$(BUILD) PREFIX=$(TMP_PREFIX) Q=$(Q) DESTDIR=
-> -+	$(MAKE) install --directory=$1 HOST=$(BUILD) CC=$(BUILD_CC) PREFIX=$(TMP_PREFIX) Q=$(Q) DESTDIR=
-> ++	$(MAKE) install --directory=$1 HOST=$(BUILD) CC="$(BUILD_CC)" PREFIX=$(TMP_PREFIX) Q=$(Q) DESTDIR=
->    
->    endef
->    
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
