@@ -1,90 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42837C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 20:08:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F07EC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 20:09:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E647C404F9;
-	Mon, 25 Apr 2022 20:08:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D72FF82864;
+	Mon, 25 Apr 2022 20:09:05 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qsdzk9Mtb_Pd; Mon, 25 Apr 2022 20:09:05 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D49BC814B8;
+	Mon, 25 Apr 2022 20:09:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E7EA61BF2AB
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 20:09:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E43724014E
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 20:09:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sB_eIdbuHqEg; Mon, 25 Apr 2022 20:08:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E76C34014D;
-	Mon, 25 Apr 2022 20:08:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 120101BF2AB
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 20:08:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D92FD4159D
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 20:08:19 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mJ8A0b6TGIK7 for <buildroot@lists.busybox.net>;
- Mon, 25 Apr 2022 20:08:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AB8DC41609
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 20:08:17 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id m20so11063381ejj.10
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 13:08:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=dE19xohOnOZk6/2clNb4bFEWq91Tq9EEmkYov1GUc6s=;
- b=b40NFt6Xfl8QWC80SH/G4bLcFcZJqk8mfZEutulVh+MPANSLgcaCZ3ELhMF3IY/eHJ
- 8cckXhplV0Je2m5N/ofHaXOPHdhkpFiSl8rT3uByuAvcZwXW87G8NoE9nWXnMWttZYf1
- a4o9796I8aVvJu8qs/TN+WDZ6+ZSJvRla/33G3zxOIAl9u1rxHWldIMyzJxWj0zN8Phe
- xLpspPi9GXRIQRYzwdDG3c9nHsTJgxUyd0xRCl16hhNjZHj0aa0buWT7TNljGn58Bc/E
- CKHwZ2CkwTxMRZ8aL5ii/0a1lFaof0anpr4znTptKHGFGLXp35pXyx2vIj9GYfke0cEN
- jzxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=dE19xohOnOZk6/2clNb4bFEWq91Tq9EEmkYov1GUc6s=;
- b=QVrF0JEDF5gCrUx2J4L6sOaUa3eQh3sh7KXpPQVvKO/ScAMqvHp2aRjn9ong+y4A/9
- lGw1LMbucd2qSlXXFPL3mFSMR8RF3lClE/CWYOar3jGcoZQij/RO6FpdAqqAPimMmR9a
- ArwtVQdgplHipsgo9PUJsOYJ3uGK014cnBaNhoSX5TICAZsEq1ymaJO7P3wCsJ+V/uYg
- imVqFBqFDBjCiVHOJK7zmyi+U6bcbPSF5TOGNMqpbGb/i42260eGEwN4nT3hXSEFoj8P
- aot5L85NXVlIv8Woeqj289KcNYfVN5n7RdBywdbFmw/pC1ty4NhW6bUGbZsfKGVZtTZ4
- 3Ssw==
-X-Gm-Message-State: AOAM533epJTlQv0mXbk/9wthK3r/3hKCDGnQJ7Yx941tjOeovCkayU/R
- opI+hWuPqe4eKNsn/NIItw5AIQoy9ls2rg==
-X-Google-Smtp-Source: ABdhPJzrSneuEoBGR/S35NYOU73deeueEkNoi+RHjbVAto8Z4S1uRpwNXIMeasaUjJlfpwYYH3PQHA==
-X-Received: by 2002:a17:907:da7:b0:6df:9ff4:10c7 with SMTP id
- go39-20020a1709070da700b006df9ff410c7mr17481089ejc.106.1650917295902; 
- Mon, 25 Apr 2022 13:08:15 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- h23-20020a0564020e9700b00420fff23180sm4898513eda.41.2022.04.25.13.08.15
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Apr 2022 13:08:15 -0700 (PDT)
-Message-ID: <bd22fe79-3af6-a1c6-d941-58265f715ac4@mind.be>
-Date: Mon, 25 Apr 2022 22:08:14 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-GB
-To: Kris Bahnsen <kris@embeddedTS.com>, buildroot@buildroot.org
-References: <20220422223611.10443-1-kris@embeddedTS.com>
- <20220422223611.10443-5-kris@embeddedTS.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220422223611.10443-5-kris@embeddedTS.com>
-Subject: Re: [Buildroot] [PATCH v2 4/4] package/wilc-driver: new package
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V0VHThn1J2ZC for <buildroot@lists.busybox.net>;
+ Mon, 25 Apr 2022 20:09:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 339334014D
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 20:09:01 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id F1509843C9; Mon, 25 Apr 2022 19:58:46 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Mon, 25 Apr 2022 21:53:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7663482d22d1fc69ede0617845085420143bbad0
+X-Git-Newrev: 244f607f4c4a2e0609d1fb8e8b62c4ae751b8136
+X-Patchwork-Hint: ignore
+Message-Id: <20220425195846.F1509843C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wilc-firmware: rename from
+ wilc1000-firmware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,75 +53,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eugen Hristev <eugen.hristev@microchip.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Mark Featherston <mark@embeddedTS.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=244f607f4c4a2e0609d1fb8e8b62c4ae751b8136
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Separates out WILC1000 and WILC3000 in to individual config options
+since in reality only one or the other set would be needed.
 
-On 23/04/2022 00:36, Kris Bahnsen via buildroot wrote:
-> WILC1000/3000 driver pulled from at91-linux tree set-up to be built
-> as an external module. Upstream Linux kernel does not support
-> WILC3000 features at this time. This package is intended to bridge
-> that gap until WILC1000/3000 is fully supported in kernel.
-> 
-> Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
-[snip]
-> diff --git a/package/wilc-driver/wilc-driver.hash b/package/wilc-driver/wilc-driver.hash
-> new file mode 100644
-> index 0000000000..b51591e8d8
-> --- /dev/null
-> +++ b/package/wilc-driver/wilc-driver.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256  4796b1a53781f8702a335b0146d488a9422b71dab39f6f154f955b0ad1711199  wilc-driver-linux4microchip-2021.10-1.tar.gz
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ DEVELOPERS                                         |  5 ++++-
+ package/Config.in                                  |  2 +-
+ .../{wilc1000-firmware => wilc-firmware}/Config.in |  9 +++++++--
+ .../wilc-firmware.hash}                            |  2 +-
+ .../wilc-firmware.mk}                              | 22 +++++++++++-----------
+ 5 files changed, 24 insertions(+), 16 deletions(-)
 
-  Hash for license file missing again.
-  Applied to master with that fixed, thanks.
-
-  Regards,
-  Arnout
-
-> diff --git a/package/wilc-driver/wilc-driver.mk b/package/wilc-driver/wilc-driver.mk
-> new file mode 100644
-> index 0000000000..a89af30e29
-> --- /dev/null
-> +++ b/package/wilc-driver/wilc-driver.mk
-> @@ -0,0 +1,29 @@
-> +################################################################################
-> +#
-> +# wilc-driver
-> +#
-> +################################################################################
-> +
-> +WILC_DRIVER_VERSION = linux4microchip-2021.10-1
-> +WILC_DRIVER_SITE = $(call github,embeddedTS,wilc3000-external-module,$(WILC_DRIVER_VERSION))
-> +
-> +WILC_DRIVER_LICENSE = GPL-2.0
-> +WILC_DRIVER_LICENSE_FILES = LICENSE
-> +
-> +ifeq ($(BR2_PACKAGE_WILC_DRIVER_SPI),y)
-> +WILC_DRIVER_MODULE_MAKE_OPTS += \
-> +	CONFIG_WILC_SPI=m
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WILC_DRIVER_SDIO),y)
-> +WILC_DRIVER_MODULE_MAKE_OPTS += \
-> +	CONFIG_WILC_SDIO=m
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WILC_DRIVER_SDIO_OOB),y)
-> +WILC_DRIVER_MODULE_MAKE_OPTS += \
-> +	CONFIG_WILC_HW_OOB_INTR=y
-> +endif
-> +
-> +$(eval $(kernel-module))
-> +$(eval $(generic-package))
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1bb90f8f33..ff9f787e9c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1662,6 +1662,9 @@ F:	board/octavo/osd32mp1-red/
+ F:	configs/octavo_osd32mp1_brk_defconfig
+ F:	configs/octavo_osd32mp1_red_defconfig
+ 
++N:	Kris Bahnsen <kris@embeddedTS.com>
++F:	package/wilc-firmware/
++
+ N:	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+ F:	package/bcusdk/
+ F:	package/libpthsem/
+@@ -1759,7 +1762,7 @@ F:	package/python-json-schema-validator/
+ F:	package/python-keyring/
+ F:	package/python-simplejson/
+ F:	package/python-versiontools/
+-F:	package/wilc1000-firmware/
++F:	package/wilc-firmware/
+ 
+ N:	Maeva Manuel <maeva.manuel@oss.nxp.com>
+ F:	board/freescale/imx8qmmek/
+diff --git a/package/Config.in b/package/Config.in
+index bee1590e85..7d03bc51d7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -432,7 +432,7 @@ menu "Firmware"
+ 	source "package/sunxi-boards/Config.in"
+ 	source "package/ts4900-fpga/Config.in"
+ 	source "package/ux500-firmware/Config.in"
+-	source "package/wilc1000-firmware/Config.in"
++	source "package/wilc-firmware/Config.in"
+ 	source "package/wilink-bt-firmware/Config.in"
+ 	source "package/zd1211-firmware/Config.in"
+ endmenu
+diff --git a/package/wilc1000-firmware/Config.in b/package/wilc-firmware/Config.in
+similarity index 82%
+rename from package/wilc1000-firmware/Config.in
+rename to package/wilc-firmware/Config.in
+index 0734c7ad99..72a9c73206 100644
+--- a/package/wilc1000-firmware/Config.in
++++ b/package/wilc-firmware/Config.in
+@@ -1,5 +1,11 @@
++config BR2_PACKAGE_WILC_FIRMWARE
++	bool
++	help
++	  Provider package for WILC1000_FIRMWARE & WILC3000_FIRMWARE
++
+ config BR2_PACKAGE_WILC1000_FIRMWARE
+ 	bool "wilc1000-firmware"
++	select BR2_PACKAGE_WILC_FIRMWARE
+ 	help
+ 	  Firmware for Microchip WILC1000 wireless device
+ 
+@@ -12,9 +18,9 @@ config BR2_PACKAGE_WILC1000_FIRMWARE
+ 
+ 	  https://github.com/linux4wilc/firmware
+ 
+-if BR2_PACKAGE_WILC1000_FIRMWARE
+ config BR2_PACKAGE_WILC3000_FIRMWARE
+ 	bool "wilc3000-firmware"
++	select BR2_PACKAGE_WILC_FIRMWARE
+ 	help
+ 	  Firmware for Microchip WILC3000 wireless device
+ 
+@@ -26,4 +32,3 @@ config BR2_PACKAGE_WILC3000_FIRMWARE
+ 	  These will be installed to /lib/firmware/mchp/
+ 
+ 	  https://github.com/linux4wilc/firmware
+-endif
+diff --git a/package/wilc1000-firmware/wilc1000-firmware.hash b/package/wilc-firmware/wilc-firmware.hash
+similarity index 77%
+rename from package/wilc1000-firmware/wilc1000-firmware.hash
+rename to package/wilc-firmware/wilc-firmware.hash
+index ef82dcdc45..874766aec0 100644
+--- a/package/wilc1000-firmware/wilc1000-firmware.hash
++++ b/package/wilc-firmware/wilc-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  29bb5739136cdb4088cb52af59badce05cc7e562bca40e9f29fef7f8f7c19cb8  wilc1000-firmware-wilc_linux_15_6.tar.gz
++sha256  29bb5739136cdb4088cb52af59badce05cc7e562bca40e9f29fef7f8f7c19cb8  wilc-firmware-wilc_linux_15_6.tar.gz
+ sha256  71355eee947a312594dbdaac039827544f93d23949b65c356b7b0ce09e2600fb  LICENSE.wilc_fw
+diff --git a/package/wilc1000-firmware/wilc1000-firmware.mk b/package/wilc-firmware/wilc-firmware.mk
+similarity index 51%
+rename from package/wilc1000-firmware/wilc1000-firmware.mk
+rename to package/wilc-firmware/wilc-firmware.mk
+index a071272129..1a7ceca18e 100644
+--- a/package/wilc1000-firmware/wilc1000-firmware.mk
++++ b/package/wilc-firmware/wilc-firmware.mk
+@@ -1,35 +1,35 @@
+ ################################################################################
+ #
+-# wilc1000-firmware
++# wilc-firmware
+ #
+ ################################################################################
+ 
+-WILC1000_FIRMWARE_VERSION = wilc_linux_15_6
+-WILC1000_FIRMWARE_SITE = $(call github,linux4wilc,firmware,$(WILC1000_FIRMWARE_VERSION))
++WILC_FIRMWARE_VERSION = wilc_linux_15_6
++WILC_FIRMWARE_SITE = $(call github,linux4wilc,firmware,$(WILC_FIRMWARE_VERSION))
+ 
+-WILC1000_FIRMWARE_LICENSE = PROPRIETARY
+-WILC1000_FIRMWARE_LICENSE_FILES = LICENSE.wilc_fw
++WILC_FIRMWARE_LICENSE = PROPRIETARY
++WILC_FIRMWARE_LICENSE_FILES = LICENSE.wilc_fw
+ 
+ ifeq ($(BR2_PACKAGE_WILC1000_FIRMWARE),y)
+-WILC1000_FIRMWARE_FILES += \
++WILC_FIRMWARE_FILES += \
+ 	wilc1000_wifi_firmware.bin
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WILC3000_FIRMWARE),y)
+-WILC1000_FIRMWARE_FILES += \
++WILC_FIRMWARE_FILES += \
+ 	wilc3000_ble_firmware.bin \
+ 	wilc3000_wifi_firmware.bin
+ endif
+ 
+-define WILC1000_FIRMWARE_INSTALL_FILES
++define WILC_FIRMWARE_INSTALL_FILES
+ 	cd $(@D) && \
+-		$(TAR) cf install.tar $(sort $(WILC1000_FIRMWARE_FILES)) && \
++		$(TAR) cf install.tar $(sort $(WILC_FIRMWARE_FILES)) && \
+ 		$(TAR) xf install.tar -C $(TARGET_DIR)/lib/firmware/mchp
+ endef
+ 
+-define WILC1000_FIRMWARE_INSTALL_TARGET_CMDS
++define WILC_FIRMWARE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib/firmware/mchp/
+-	$(WILC1000_FIRMWARE_INSTALL_FILES)
++	$(WILC_FIRMWARE_INSTALL_FILES)
+ endef
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
