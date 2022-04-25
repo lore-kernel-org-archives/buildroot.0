@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD43EC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6F49C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:07:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 809B682A2E;
-	Mon, 25 Apr 2022 19:07:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B9C540A95;
+	Mon, 25 Apr 2022 19:07:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XcyF-uFCBu_E; Mon, 25 Apr 2022 19:07:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4cwsehf8_5Ts; Mon, 25 Apr 2022 19:07:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9A7D982974;
-	Mon, 25 Apr 2022 19:07:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 23E6B1BF982
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 729514052E;
+	Mon, 25 Apr 2022 19:07:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D3BA1BF2CD
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 210574167B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36846605DB
  for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UhymNY22g0PL for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M-LV-UYzRSEb for <buildroot@lists.busybox.net>;
  Mon, 25 Apr 2022 19:07:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3DC94415FE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 845B460F4A
  for <buildroot@buildroot.org>; Mon, 25 Apr 2022 19:07:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 1BEC78426A; Mon, 25 Apr 2022 18:56:54 +0000 (UTC)
+ id 660F7842E8; Mon, 25 Apr 2022 18:56:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 25 Apr 2022 20:25:07 +0200
+Date: Mon, 25 Apr 2022 20:33:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d6b874d94576f8b46153398c859f7831c08bb5f
-X-Git-Newrev: f8e1b912697731c216688b3d3002f4ab00ad9835
+X-Git-Oldrev: a96f893ed6683e31bf691b69ee007eddeeacfcae
+X-Git-Newrev: a2b04d4e096b912cf9a5165d2a35651e82a87e89
 X-Patchwork-Hint: ignore
-Message-Id: <20220425185654.1BEC78426A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xmrig: bump version to 6.17.0
+Message-Id: <20220425185654.660F7842E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-peripheral-xarcade: bump
+ version to 19.0.3-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,38 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8e1b912697731c216688b3d3002f4ab00ad9835
+commit: https://git.buildroot.net/buildroot/commit/?id=a2b04d4e096b912cf9a5165d2a35651e82a87e89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/xmrig/xmrig.hash | 2 +-
- package/xmrig/xmrig.mk   | 2 +-
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash | 2 +-
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
-index ff5f80a67b..7863c0319d 100644
---- a/package/xmrig/xmrig.hash
-+++ b/package/xmrig/xmrig.hash
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+index 5cb774fe26..3ceabd4759 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  245ba47a6b8ae8e9a9df1c055e90f22f944a7d1219416cb30268881d0c0d377b  xmrig-6.16.4.tar.gz
-+sha256  748a989390202ba2d1ccbd9d9a6b8cbd6551149cbab63b347fd1ed6df0254faa  xmrig-6.17.0.tar.gz
- sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
-diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
-index 1feab499fc..6e21e550a4 100644
---- a/package/xmrig/xmrig.mk
-+++ b/package/xmrig/xmrig.mk
+ # Locally computed
+-sha256  27f592e07c788067c97f7bbcac8a2c6803954730e6f0f66f2047a1d939e6648d  kodi-peripheral-xarcade-19.0.1-Matrix.tar.gz
++sha256  589b5355bf9b0b5183ecf2d93a4a80ca1ae317a9fdf4efb9c14eb7114b4ec13a  kodi-peripheral-xarcade-19.0.3-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+index fd8b1af38c..ef3cc6fef1 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XMRIG_VERSION = 6.16.4
-+XMRIG_VERSION = 6.17.0
- XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
- XMRIG_LICENSE = GPL-3.0+
- XMRIG_LICENSE_FILES = LICENSE
+-KODI_PERIPHERAL_XARCADE_VERSION = 19.0.1-Matrix
++KODI_PERIPHERAL_XARCADE_VERSION = 19.0.3-Matrix
+ KODI_PERIPHERAL_XARCADE_SITE = $(call github,kodi-game,peripheral.xarcade,$(KODI_PERIPHERAL_XARCADE_VERSION))
+ KODI_PERIPHERAL_XARCADE_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_XARCADE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
