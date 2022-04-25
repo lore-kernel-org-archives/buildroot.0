@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8403EC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD43EC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 19:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37702415A0;
-	Mon, 25 Apr 2022 19:07:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 809B682A2E;
+	Mon, 25 Apr 2022 19:07:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XcyF-uFCBu_E; Mon, 25 Apr 2022 19:07:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A7D982974;
+	Mon, 25 Apr 2022 19:07:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 23E6B1BF982
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 210574167B
+ for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KhhStISz45C8; Mon, 25 Apr 2022 19:07:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB34A4167A;
-	Mon, 25 Apr 2022 19:07:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1285D1BF2CD
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 00C9560F6F
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 19:07:09 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ltQWBuuKe0nQ for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UhymNY22g0PL for <buildroot@lists.busybox.net>;
  Mon, 25 Apr 2022 19:07:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4AC75605DB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3DC94415FE
  for <buildroot@buildroot.org>; Mon, 25 Apr 2022 19:07:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 2A6E0842EE; Mon, 25 Apr 2022 18:56:54 +0000 (UTC)
+ id 1BEC78426A; Mon, 25 Apr 2022 18:56:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 25 Apr 2022 20:25:08 +0200
+Date: Mon, 25 Apr 2022 20:25:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f8e1b912697731c216688b3d3002f4ab00ad9835
-X-Git-Newrev: 0b1a58f9a68440fa87596f8ad7ba09b9afaf13f7
+X-Git-Oldrev: 0d6b874d94576f8b46153398c859f7831c08bb5f
+X-Git-Newrev: f8e1b912697731c216688b3d3002f4ab00ad9835
 X-Patchwork-Hint: ignore
-Message-Id: <20220425185654.2A6E0842EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-skin-confluence: bump version
+Message-Id: <20220425185654.1BEC78426A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xmrig: bump version to 6.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,38 +58,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b1a58f9a68440fa87596f8ad7ba09b9afaf13f7
+commit: https://git.buildroot.net/buildroot/commit/?id=f8e1b912697731c216688b3d3002f4ab00ad9835
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
- package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
+ package/xmrig/xmrig.hash | 2 +-
+ package/xmrig/xmrig.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-index e3d1ff73f4..c840e5b161 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
+index ff5f80a67b..7863c0319d 100644
+--- a/package/xmrig/xmrig.hash
++++ b/package/xmrig/xmrig.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  49ba4dcf4b512ac0a97bd1a4ebf14685d294d89a7a07c26ddda0fe730c8aa047  kodi-skin-confluence-37a196cdb58c0da87b5b22b047a5d44dc447f1ae.tar.gz
-+sha256  c57b9a303ad1ebf14ad487901e5da15eba7b3a40304046974fad1d64fb7b8b57  kodi-skin-confluence-e6d31bc84eea73a04b2a23358929d5276be832b8.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-index fcae506d1e..c32718fd10 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+ # Locally calculated
+-sha256  245ba47a6b8ae8e9a9df1c055e90f22f944a7d1219416cb30268881d0c0d377b  xmrig-6.16.4.tar.gz
++sha256  748a989390202ba2d1ccbd9d9a6b8cbd6551149cbab63b347fd1ed6df0254faa  xmrig-6.17.0.tar.gz
+ sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
+index 1feab499fc..6e21e550a4 100644
+--- a/package/xmrig/xmrig.mk
++++ b/package/xmrig/xmrig.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SKIN_CONFLUENCE_VERSION = 37a196cdb58c0da87b5b22b047a5d44dc447f1ae
-+KODI_SKIN_CONFLUENCE_VERSION = e6d31bc84eea73a04b2a23358929d5276be832b8
- KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
- KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
- KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
+-XMRIG_VERSION = 6.16.4
++XMRIG_VERSION = 6.17.0
+ XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
+ XMRIG_LICENSE = GPL-3.0+
+ XMRIG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
