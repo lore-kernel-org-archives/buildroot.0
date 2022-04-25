@@ -4,56 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DA11C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 08:16:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07732C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 08:16:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E20B580D5E;
-	Mon, 25 Apr 2022 08:16:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1A4681819;
+	Mon, 25 Apr 2022 08:16:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X2MwYdhlGDjW; Mon, 25 Apr 2022 08:16:39 +0000 (UTC)
+	with ESMTP id IwqmjNBMYk8D; Mon, 25 Apr 2022 08:16:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF83880C2C;
-	Mon, 25 Apr 2022 08:16:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 59A1A1BF3D7
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA2118133A;
+	Mon, 25 Apr 2022 08:16:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B3E3A1BF3D7
  for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 08:16:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 48C0680C2C
+ by smtp3.osuosl.org (Postfix) with ESMTP id A23A660A89
  for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 08:16:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vrgmci6EeT3k for <buildroot@lists.busybox.net>;
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (3072-bit key) header.d=samba.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YmVDW58342rV for <buildroot@lists.busybox.net>;
  Mon, 25 Apr 2022 08:16:31 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7852680BF3
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 92FAA60675
  for <buildroot@buildroot.org>; Mon, 25 Apr 2022 08:16:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org; 
  s=42; h=Message-Id:Date:Cc:To:From;
- bh=aFvQKManYHAbs6LSimrbU5vUnJ+oLWP6jIqNoILp/SU=; b=EIWjmdBe3idP17jPgQoVje8+i3
- P5CH7sLSwRkpxGodAaeZrWdxjNLICfy9cx6k+oFyFvLk/YtfJLeMSA86YZ84IGZJea3Kjn51pwTU0
- cZpnuNYFrV6RIqVEEzD9NtRWUyJi1Gx8kJh4AURqeMWIc8KkV3NqMGb13I/jp9gxevqlUc0xSuBWN
- iWJE75b7C4gt7sXl7F22HZr9uK+dHt663ZDY9rCpfIN2IYE0gUNtG0lDdWGCG7544mnGAR9POCpb8
- rbMAUBdHDuMW3HyjXLwy6AY9P2zYYXX+ztBbx0R7JU/X25aIrH0xT7JMD7OYiNVrYM9zR7yOGlsdj
- Wq2h1ZS35vWAjN6BDr8KXgr1QrjISAtK3KGv/CfnJtReOWzDKrM0aRgIvbmU+d4cWBtLfhOX8vwW7
- L4locO4cFnTzSwH2dyuMyvsO+5KlcX45RUldCd/q7m2b/KtQ+ZZ3jwv3BgxWs+iF9LBD2Q4dHVWlC
- nLw247LMW1C0MW54bnNLG0ol;
+ bh=uK0u2eRW2YWb7VcNFArzivaLzhktCK2Ff0ieSUk2Jo0=; b=cJnPSUdwt3yxgPdAMjUptSjG2X
+ VGWEBnqlT+yJoNHTnyMpNhS3lKcpJESsB3cwy+IJFOk8YugE/tfX+vsdmKnclis/8rxV7QURBBW0z
+ lj4HZw0YoW1uS91XyoCtIzha6ybwVSS2kdf37V01Mj8LYhe/sVbwHXGFb0g1xYXlckWF10xfVCK9+
+ /LHw/3mNgXvacjOSz5mI0m2uHawHuV+yy7u5yJBGUN8+55lsXX488mbYtep2iV2MyA7wlyw6tP0+X
+ 72g9rwrjqxo3EWT541A9aIdVVU9rw5YAjorNhfP7zIKejyT/hY4jezOLzebm1DzY1S8lNlP0YnNL9
+ BsvUZ+yOmAsk83dqFYvcfPVD9EvKuA6Y8WhBq/WtxC5O0Pby2ltA/mGtns4QWj45fRJmLQh2UbpTE
+ Yf8RGoeG3K2PsYiKvGaVpe0CF6qBdabfk4yBSVyI2Hc8HOaGdeqrNv7hfU+OSnDJYnqCJGpQgeLBW
+ PqbGhlckBH6X+eu4HSTEB2Pm;
 Received: from [127.0.0.2] (localhost [127.0.0.1])
  by hr2.samba.org with esmtpsa
  (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
- (Exim) id 1nittT-002CzX-SJ; Mon, 25 Apr 2022 08:16:27 +0000
+ (Exim) id 1nittT-002CzX-Le; Mon, 25 Apr 2022 08:16:27 +0000
 To: buildroot@buildroot.org
-Date: Mon, 25 Apr 2022 10:16:26 +0200
-Message-Id: <20220425081626.80691-2-ambi@samba.org>
+Date: Mon, 25 Apr 2022 10:16:25 +0200
+Message-Id: <20220425081626.80691-1-ambi@samba.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220425081626.80691-1-ambi@samba.org>
+In-Reply-To: <afc126a1-3afc-44e8-710c-69e9be5dd1ed@mind.be>
 References: <afc126a1-3afc-44e8-710c-69e9be5dd1ed@mind.be>
- <20220425081626.80691-1-ambi@samba.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/openjdk: enable for host
+Subject: [Buildroot] [PATCH 1/2] package/openjdk-bin: add support for host
  architecture aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -78,21 +79,47 @@ From: Christian Ambach <ambi@samba.org>
 
 Signed-off-by: Christian Ambach <ambi@samba.org>
 ---
- package/openjdk/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/openjdk-bin/openjdk-bin.hash |  2 ++
+ package/openjdk-bin/openjdk-bin.mk   | 10 +++++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-index 8b7fd4653e..8fbe51a27f 100644
---- a/package/openjdk/Config.in
-+++ b/package/openjdk/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_HOSTARCH = "x86_64"
-+	default y if BR2_HOSTARCH = "aarch64"
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 62691ed6f0..4d3942125f 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,8 +1,10 @@
+ # https://github.com/adoptium/temurin17-binaries/releases
+ sha256  288f34e3ba8a4838605636485d0365ce23e57d5f2f68997ac4c2e4c01967cd48  OpenJDK17U-jdk_x64_linux_hotspot_17.0.2_8.tar.gz
++sha256  302caf29f73481b2b914ba2b89705036010c65eb9bc8d7712b27d6e9bedf6200  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.2_8.tar.gz
  
- # Taken from make/autoconf/platform.m4
- config BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
+ # From https://github.com/adoptium/temurin11-binaries/releases
+ sha256  43fb84f8063ad9bf6b6d694a67b8f64c8827552b920ec5ce794dfe5602edffe7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
++sha256  79572f5172c6a040591d34632f98a20ed148702bbce2f57649e8ac01c0d2e3db  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.14.1_1.tar.gz
+ 
+ # Locally calculated
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 3d1ebd7429..5cb6e3ba6a 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -11,8 +11,16 @@ else
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 11
+ HOST_OPENJDK_BIN_VERSION_MINOR = 0.14.1_1
+ endif
++
++ifeq ($(HOSTARCH),x86_64)
++HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME = x64
++endif
++ifeq ($(HOSTARCH),aarch64)
++HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME = aarch64
++endif
++
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
+-HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
++HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_$(HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME)_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+ HOST_OPENJDK_BIN_SITE = https://github.com/adoptium/temurin$(HOST_OPENJDK_BIN_VERSION_MAJOR)-binaries/releases/download/jdk-$(subst _,%2B,$(HOST_OPENJDK_BIN_VERSION))
+ 
+ HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
 -- 
 2.25.1
 
