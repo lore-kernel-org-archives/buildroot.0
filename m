@@ -1,79 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F81CC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 16:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F15A0C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 16:40:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC28782FA5;
-	Tue, 26 Apr 2022 16:40:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 78027610FA;
+	Tue, 26 Apr 2022 16:40:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xp04dYnA_tlP; Tue, 26 Apr 2022 16:40:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BHR0jWnwJ5d8; Tue, 26 Apr 2022 16:40:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBC3C82F84;
-	Tue, 26 Apr 2022 16:40:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4E4561100;
+	Tue, 26 Apr 2022 16:40:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 10AA31BF94D
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 16:39:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9B4021BF94D
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 16:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F30A382F84
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 16:39:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8A0D18348C
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 16:40:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S-KCTuk-HwVi for <buildroot@lists.busybox.net>;
- Tue, 26 Apr 2022 16:39:58 +0000 (UTC)
+ with ESMTP id TlHna2M98qkH for <buildroot@lists.busybox.net>;
+ Tue, 26 Apr 2022 16:40:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 115E382F80
- for <buildroot@busybox.net>; Tue, 26 Apr 2022 16:39:57 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id g6so14406720ejw.1
- for <buildroot@busybox.net>; Tue, 26 Apr 2022 09:39:57 -0700 (PDT)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A636F82F9B
+ for <buildroot@busybox.net>; Tue, 26 Apr 2022 16:40:16 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id dk23so13928129ejb.8
+ for <buildroot@busybox.net>; Tue, 26 Apr 2022 09:40:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=5lzpOetNba5ONWnL9M575bcIfalDcwazgjJWftTtcVM=;
- b=ZiPhvYtvI/gIbf6qFM6CH0DzLugLZcm+k9hJs4W5uXMf0dg0Wi7+Fq3X05owFEmHP+
- 4Yhw2YQMsDjY/+q8TSReS/CVe+2oQtwMSfKaffnr45TnI2aLmgiS5HySEtM3VLzWpm7g
- DEqvmyYDN4pc76S36spgFy+WYuzjvsvfrfG+a7Vqhx0hgWRqDFfwLH2eQghfaFqZIiho
- zp7CLcMU4cnqkg4BanGmdqCHKP3wKS8f941HhkXfd3TxaPvBK879Js2gBMzgMuJewJOW
- 7G1aVO3jIcLK81FJd2vx+5zg7uH4Y2TisTWCpdl6EkqwMmnPpA2PKLRX4OhM72C4/v3q
- 8Xrg==
+ bh=CMvf3xwZKcRddL8uI3P0L7QGc62TURib+rx9h+xkuo4=;
+ b=WflmIywGIzSI9+XDRN07Y6qN9fiLZ8Um+0XXWtnLt9vFl5sUSUVuNQlQFxMJbbLQQn
+ Gquq/5hYigudxY6WjF3D7fOsPV46LsIVDBvwHY6W7iiSCbjs6gIIWu3ac6hIkp8T8htH
+ qg3mi1JnV9qbIhgVOiHm2VaIhMY16NbklDGhSi7KMGy5DppsAOsj7jjm15zgyXUEntCt
+ OP3W2wJCzXzjD7ZLnW5JqydNmq8M/OdJNfM4ITIfgRhD2WXn9p5WleuT7dzkqZs1NA3m
+ 1XeOvW4k4C9V/3ZeRGi4dlQpTVPl8QkzZNHWsV4YDKsPHPwHe2X0QbcPKImBl0o0EB1j
+ ppLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=5lzpOetNba5ONWnL9M575bcIfalDcwazgjJWftTtcVM=;
- b=NzdWZTFgN6xOw1UkfMFgi+TWW+3GpQ6y9cZkeiY4i4nHlEx++D2BYBkAvbaaUH8gNg
- +8cIoNl7/fLqxzyn7srr4cjRT2LC9t1vfNEiIaccAxzEDUF+vLh3F+qXxbW9KniHp7oe
- +Uj8+D6N+m8RQIMPIoSvtr/hMqFB1ulWBai3hrNbLhaxmwIRc6VE3ba+h5oYF+hVT+qD
- Eq3iK/Ss4XwQy45naNhU3y64PcFVjknlYJCbZi1LJOBv73Y/k4qtcwQfedAnEkYA/L+B
- 3HqGFgXN/F9wHKNWRzND6tjRDulcqIhM6bQuAOmuV4FaQQdYvkebUbQr+B+Jra12tYNs
- Vdqg==
-X-Gm-Message-State: AOAM533sF6RxfyjH8aRZKghp9ffdqFbVNAUDZwtQQSURoct8I1Ql2mOl
- zpYs3qnv8exsSH977P/tcIClQ2OdSos=
-X-Google-Smtp-Source: ABdhPJxQomBQjLYMNQcLMytNQsyP3a5dkpUe3cqtn7lgXjD08xV++eyYRoqebA/NGmz6k423H4DjBA==
-X-Received: by 2002:a17:907:d26:b0:6f0:2a0:d3d5 with SMTP id
- gn38-20020a1709070d2600b006f002a0d3d5mr21000148ejc.608.1650991196222; 
- Tue, 26 Apr 2022 09:39:56 -0700 (PDT)
+ bh=CMvf3xwZKcRddL8uI3P0L7QGc62TURib+rx9h+xkuo4=;
+ b=w+hAdUsk8gjvI+3teHKI3a2Kw9B/ztaKzaxM2ES467BcYA74YAPJdD0ogpMxg6268o
+ AKatKO16iEIHvOUrdY/fAGjQZkrn/1v8tXj0NPJGOwtxsZFP8f2vb3UOmk8r7Znpyu1z
+ ZI1hGMny0KwmgeWa6NjP3razJyhu2q7Lps+dlqeCSSHcminGy7U7RXkNZvq8t/1j8RPh
+ 9kPo+Ymg+6FvcxM36r7LWnkck9KxBMU6jrK5byVo+WfD0m2SwGsccAb6M6iRDSmeUIk+
+ rhd5IXZxDQxVmycVNyfnBEwk05dEiUWIdsc5RV9u9OcpvPgQWiod2YalyOCiUoyxMn8g
+ fAkg==
+X-Gm-Message-State: AOAM532EO23dPrTp0ObD6mxJjCy2QphSHYwL6tppbah2kyrBsUsbkKPC
+ QZkshXP05CgM/bdqzlIXLeaU2CRN2Xg=
+X-Google-Smtp-Source: ABdhPJzUqH4jbAxr/rA1wFG65on0IB+U6Pzvrz6xA5rISEU4JWJ5DX0dSR4wefzsi2g4zCOe4YDiFw==
+X-Received: by 2002:a17:907:d16:b0:6d6:e3b6:9cd8 with SMTP id
+ gn22-20020a1709070d1600b006d6e3b69cd8mr21794846ejc.94.1650991214883; 
+ Tue, 26 Apr 2022 09:40:14 -0700 (PDT)
 Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- hb44-20020a170907162c00b006f3bd744275sm530486ejc.181.2022.04.26.09.39.55
+ wh24-20020a170906fd1800b006f3a0a8efd0sm2043844ejb.110.2022.04.26.09.40.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Apr 2022 09:39:55 -0700 (PDT)
+ Tue, 26 Apr 2022 09:40:14 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Tue, 26 Apr 2022 13:37:24 +0200
-Message-Id: <20220426113724.3544523-1-francois.perrad@gadz.org>
+Date: Tue, 26 Apr 2022 13:37:45 +0200
+Message-Id: <20220426113745.3544578-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/ethtool: bump to version 5.17
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 4.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,34 +94,46 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/harfbuzz/0001-meson.build-check-for-pthread.h.patch | 2 +-
+ package/harfbuzz/harfbuzz.hash                              | 2 +-
+ package/harfbuzz/harfbuzz.mk                                | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 59c657e86..f317a1fb1 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256  686fd6110389d49c2a120f00c3cd5dfe43debada8e021e4270d74bbe452a116d  ethtool-5.15.tar.xz
-+sha256  64ab914b9c6b45047245d91f40b8760b2728992a9e5af22717c644238e889133  ethtool-5.17.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index c4bb9bdd9..10f0c802a 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
+diff --git a/package/harfbuzz/0001-meson.build-check-for-pthread.h.patch b/package/harfbuzz/0001-meson.build-check-for-pthread.h.patch
+index 9fa09863c..102f9ff49 100644
+--- a/package/harfbuzz/0001-meson.build-check-for-pthread.h.patch
++++ b/package/harfbuzz/0001-meson.build-check-for-pthread.h.patch
+@@ -26,7 +26,7 @@ diff --git a/meson.build b/meson.build
+ index bf3925db..6d263d48 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -281,7 +281,9 @@ endif
++@@ -270,7 +270,9 @@ endif
+  # threads
+  thread_dep = null_dep
+  if host_machine.system() != 'windows'
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 1576824a5..f3ba22835 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f2200f177768bdc21445aa09703326f3bbe8114ac083d081fe1a79d305c7ae73  harfbuzz-4.2.0.tar.xz
++sha256  bd17916513829aeff961359a5ccebba6de2f4bf37a91faee3ac29c120e3d7ee1  harfbuzz-4.2.1.tar.xz
+ sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 551277a78..38ed34ab7 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ETHTOOL_VERSION = 5.15
-+ETHTOOL_VERSION = 5.17
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+-HARFBUZZ_VERSION = 4.2.0
++HARFBUZZ_VERSION = 4.2.1
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
 2.32.0
 
