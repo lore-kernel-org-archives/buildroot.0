@@ -1,60 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01C8EC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 21:53:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 829E8C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 21:54:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D5C84195E;
-	Tue, 26 Apr 2022 21:53:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C08683E88;
+	Tue, 26 Apr 2022 21:54:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ho3HEgyjqOWy; Tue, 26 Apr 2022 21:53:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SWrvuH03g4LR; Tue, 26 Apr 2022 21:54:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA96C41957;
-	Tue, 26 Apr 2022 21:53:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7524983E7B;
+	Tue, 26 Apr 2022 21:54:01 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9EA281BF3A6
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 21:53:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4ECAD1BF3A6
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 21:53:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D94883E46
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 21:53:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 428BD83E46
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 21:53:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qpIY8og24boT for <buildroot@lists.busybox.net>;
- Tue, 26 Apr 2022 21:53:31 +0000 (UTC)
+ with ESMTP id 9f_9tVsxlQQp for <buildroot@lists.busybox.net>;
+ Tue, 26 Apr 2022 21:53:32 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C2ECB83E81
- for <buildroot@buildroot.org>; Tue, 26 Apr 2022 21:53:30 +0000 (UTC)
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F2ABB83E41
+ for <buildroot@buildroot.org>; Tue, 26 Apr 2022 21:53:31 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 34FF460008;
- Tue, 26 Apr 2022 21:53:27 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id B701C60006;
+ Tue, 26 Apr 2022 21:53:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1651010007;
+ t=1651010010;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=07cDWKwlE7ojwlA51+u9q2sOy128b9BCSw7ygik48ds=;
- b=APxD3A4Esry1zZG1GWfq+WHV3mZ2pl36BlDctm4mdVbGggPg5JvLzH54Cs6LXWjSwk5N72
- NQU1xzYd1VJ5v6RbkZUcqMR5kCoLRzzNQF8h94zs5SO0JSNgfrzbh0jiGEWK4Mp0ttwR4l
- V0morzZiFho6Nx6D8pmA0nHjwLwn1bdiEY3C9Zw5yPcV2kth1fLImpGVnteXTCoaHhZ6YZ
- cjVM+YZx24BrXqk7w+hpH1fIO078/utYV51n7MF19CdMDKSGHwsi2d4l+6A79z6kSmJcZQ
- CzJyUghY3qIcfPq5JK5jbgAV7y43YVxVUXsmAQFwR3FbAmhMJbvvrtnjfR7g2A==
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=9yCIJD0rzhNUl/ZdCSXu5g+EepsfMmrqbnYLQbaojFI=;
+ b=kLuT5Y0skqkmpwDrYy+RQVXO2jLId2/dWXAlRIUp7aNfUlmf9n9Z7D9Yz+ZGNHNAyWhdWH
+ xm0cPCGPXhmKd4Ul1JGdHnc2adQCvD/UpGGbyXyeFOjGjDzPJZR1UTXHBglmz9fJ34pbYa
+ gyGM3YKSukau6YPrq3fZGrwMQ8ok35KJW/Rl02Vt1Fj/7Nn1V89vNw54G49+5NfSmvncJ+
+ uFjbgERvTbCmFbttbFOTyj5q29NS7FFFO/vct+XfJHP7hNzqdAznPiDXeFcjSC1Is+OrcR
+ lLbVlTHz9BN8ieZgL9OOo9vcHYYF5HpKbpaAPwUNJWyel7MtwHr6I+8jQvzZVw==
 To: Buildroot List <buildroot@buildroot.org>
-Date: Tue, 26 Apr 2022 23:53:12 +0200
-Message-Id: <20220426215315.381964-1-thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Apr 2022 23:53:14 +0200
+Message-Id: <20220426215315.381964-3-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220426215315.381964-1-thomas.petazzoni@bootlin.com>
+References: <20220426215315.381964-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/3] package/elf2flt: update to version
- 2021.08
+Subject: [Buildroot] [PATCH v2 3/3] package/binutils: drop version 2.32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,764 +69,2693 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-It contains several fixes and improvements compared to our current
-version, and two of our patches have been accepted upstream. Most
-notably, it fixes the issue we had in using elf2flt with recent
-versions of binutils (upstream commit
-ba379d08bb78c9300e84351c11080c26ddcc36b3).
-
-Patch 0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
-is upstream as of commit 1c9b454336eaf38f7d037917a3120fae04193fbe
-
-Patch 0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch is
-upstream as of commit d7eb73163bcea31168c438fc132a0967ac172e3d
-
-The other two patches are refreshed to apply properly on 2021.08.
+Now that recent versions of binutils work with FLAT binaries, we can
+drop the old 2.32 version, which was kept only to keep support FLAT
+binaries.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
 Changes since v1:
-- Drop patch numbering, as pointed by Baruch
+- Drop binutils 2.32 hash in binutils.hash
 ---
- ...> 0001-elf2flt-handle-binutils-2.34.patch} |  78 ++++----
- ...e-properly-when-called-with-a-name-d.patch |  79 --------
- ...2-elf2flt-add-riscv-64-bits-support.patch} |  38 ++--
- ...-add-new-relocation-types-for-xtensa.patch | 188 ------------------
- package/elf2flt/elf2flt.hash                  |   2 +-
- package/elf2flt/elf2flt.mk                    |   4 +-
- 6 files changed, 57 insertions(+), 332 deletions(-)
- rename package/elf2flt/{0003-elf2flt-handle-binutils-2.34.patch => 0001-elf2flt-handle-binutils-2.34.patch} (89%)
- delete mode 100644 package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
- rename package/elf2flt/{0004-elf2flt-add-riscv-64-bits-support.patch => 0002-elf2flt-add-riscv-64-bits-support.patch} (83%)
- delete mode 100644 package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch
+ Config.in.legacy                              |   6 +
+ package/binutils/2.32/0001-sh-conf.patch      |  48 --
+ .../2.32/0002-poison-system-directories.patch | 306 -----------
+ ...hrink_dynamic_reloc_sections-for-exp.patch |  41 --
+ ...s-const16-for-xtensa-loop-relaxation.patch | 294 ----------
+ ...t-.literal_position-at-section-start.patch |  96 ----
+ ...ct-value-in-PLT-GOT-entries-causing-.patch |  46 --
+ .../0007-bfd-xtensa-fix-PR-ld-25630.patch     |  37 --
+ .../2.32/0008-xtensa-fix-PR-ld-25861.patch    | 432 ---------------
+ ...TENSA_NDIFF-handling-for-PR-ld-25861.patch | 128 -----
+ ...ith-plt-link-failure-for-local-calls.patch |  59 ---
+ ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 ---------
+ ...K_GOT16-overflow-failures-in-presenc.patch |  61 ---
+ ...ge-plt_relocs-when-generating-plt-en.patch | 500 ------------------
+ ...or1k-fix-building-with-gcc-version-5.patch |  50 --
+ ...tive-relocation-against-dynamic-on-P.patch |  59 ---
+ ...K_GOT16-signed-overflow-by-using-spe.patch |  75 ---
+ package/binutils/Config.in.host               |   5 -
+ package/binutils/binutils.hash                |   1 -
+ 19 files changed, 6 insertions(+), 2494 deletions(-)
+ delete mode 100644 package/binutils/2.32/0001-sh-conf.patch
+ delete mode 100644 package/binutils/2.32/0002-poison-system-directories.patch
+ delete mode 100644 package/binutils/2.32/0003-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
+ delete mode 100644 package/binutils/2.32/0004-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+ delete mode 100644 package/binutils/2.32/0005-xtensa-gas-put-.literal_position-at-section-start.patch
+ delete mode 100644 package/binutils/2.32/0006-or1k-Fix-incorrect-value-in-PLT-GOT-entries-causing-.patch
+ delete mode 100644 package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
+ delete mode 100644 package/binutils/2.32/0008-xtensa-fix-PR-ld-25861.patch
+ delete mode 100644 package/binutils/2.32/0009-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+ delete mode 100644 package/binutils/2.32/0010-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+ delete mode 100644 package/binutils/2.32/0011-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+ delete mode 100644 package/binutils/2.32/0012-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+ delete mode 100644 package/binutils/2.32/0013-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+ delete mode 100644 package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+ delete mode 100644 package/binutils/2.32/0015-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+ delete mode 100644 package/binutils/2.32/0016-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
 
-diff --git a/package/elf2flt/0003-elf2flt-handle-binutils-2.34.patch b/package/elf2flt/0001-elf2flt-handle-binutils-2.34.patch
-similarity index 89%
-rename from package/elf2flt/0003-elf2flt-handle-binutils-2.34.patch
-rename to package/elf2flt/0001-elf2flt-handle-binutils-2.34.patch
-index 16d5633385..4aa473c244 100644
---- a/package/elf2flt/0003-elf2flt-handle-binutils-2.34.patch
-+++ b/package/elf2flt/0001-elf2flt-handle-binutils-2.34.patch
-@@ -1,4 +1,4 @@
--From 26165906f85d82f0a4456f34b5c60fcaaef48535 Mon Sep 17 00:00:00 2001
-+From d78acba6510527aaa01a41eaf4c931f7a57e5f44 Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@smile.fr>
- Date: Wed, 5 Feb 2020 10:31:32 +0100
- Subject: [PATCH] elf2flt: handle binutils >= 2.34
-@@ -30,7 +30,7 @@ Signed-off-by: Romain Naour <romain.naour@smile.fr>
-  2 files changed, 61 insertions(+), 36 deletions(-)
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 387653f45d..6d2c82ab7f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
- diff --git a/configure.ac b/configure.ac
--index e82eb1d..cf7dea8 100644
-+index b7db2cb..fdc0876 100644
- --- a/configure.ac
- +++ b/configure.ac
- @@ -229,6 +229,22 @@ AC_CHECK_FUNCS([ \
-@@ -57,7 +57,7 @@ index e82eb1d..cf7dea8 100644
-  	CFLAGS="-Wall $CFLAGS"
-  	if test "$werror" = 1 ; then
- diff --git a/elf2flt.c b/elf2flt.c
--index b93aecd..3bcf4fe 100644
-+index 7ac0617..ea6b5a1 100644
- --- a/elf2flt.c
- +++ b/elf2flt.c
- @@ -149,6 +149,17 @@ const char *elf2flt_progname;
-@@ -100,7 +100,7 @@ index b93aecd..3bcf4fe 100644
-  
-  	if (verbose)
-  		printf("SECTION: %s [%p]: flags=0x%x vma=0x%"PRIx32"\n",
--@@ -442,7 +451,7 @@ output_relocs (
-+@@ -443,7 +452,7 @@ output_relocs (
-  	  continue;
-  	if (verbose)
-  	  printf(" RELOCS: %s [%p]: flags=0x%x vma=0x%"BFD_VMA_FMT"x\n",
-@@ -109,7 +109,7 @@ index b93aecd..3bcf4fe 100644
-    	if ((r->flags & SEC_RELOC) == 0)
-    	  continue;
-  	relsize = bfd_get_reloc_upper_bound(rel_bfd, r);
--@@ -694,7 +703,7 @@ output_relocs (
-+@@ -695,7 +704,7 @@ output_relocs (
-  				case R_BFIN_RIMM16:
-  				case R_BFIN_LUIMM16:
-  				case R_BFIN_HUIMM16:
-@@ -118,7 +118,7 @@ index b93aecd..3bcf4fe 100644
-  				    sym_addr += sym_vma + q->addend;
-  
-  				    if (weak_und_symbol(sym_section->name, (*(q->sym_ptr_ptr))))
--@@ -727,7 +736,7 @@ output_relocs (
-+@@ -728,7 +737,7 @@ output_relocs (
-  				    break;
-  
-  				case R_BFIN_BYTE4_DATA:
-@@ -127,7 +127,7 @@ index b93aecd..3bcf4fe 100644
-  				    sym_addr += sym_vma + q->addend;
-  
-  				    if (weak_und_symbol (sym_section->name, (*(q->sym_ptr_ptr))))
--@@ -885,7 +894,7 @@ output_relocs (
-+@@ -886,7 +895,7 @@ output_relocs (
-  #if defined(TARGET_m68k)
-  				case R_68K_32:
-  					relocation_needed = 1;
-@@ -136,7 +136,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					break;
-  				case R_68K_PC16:
--@@ -910,7 +919,7 @@ output_relocs (
-+@@ -911,7 +920,7 @@ output_relocs (
-  							q->address, sym_addr,
-  							(*p)->howto->rightshift,
-  							*(uint32_t *)r_mem);
-@@ -145,7 +145,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					break;
-  				case R_ARM_GOT32:
--@@ -938,7 +947,7 @@ output_relocs (
-+@@ -939,7 +948,7 @@ output_relocs (
-  #ifdef TARGET_v850
-  				case R_V850_ABS32:
-  					relocation_needed = 1;
-@@ -154,7 +154,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					break;
-  				case R_V850_ZDA_16_16_OFFSET:
--@@ -960,7 +969,7 @@ output_relocs (
-+@@ -961,7 +970,7 @@ output_relocs (
-  					sym_addr = (*(q->sym_ptr_ptr))->value;
-  					q->address -= 1;
-  					r_mem -= 1; /* tracks q->address */
-@@ -163,7 +163,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					sym_addr |= (*(unsigned char *)r_mem<<24);
-  					break;
--@@ -973,7 +982,7 @@ output_relocs (
-+@@ -974,7 +983,7 @@ output_relocs (
-  					/* Absolute symbol done not relocation */
-  					relocation_needed = !bfd_is_abs_section(sym_section);
-  					sym_addr = (*(q->sym_ptr_ptr))->value;
-@@ -172,7 +172,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					break;
-  				case R_H8_DIR32:
--@@ -986,7 +995,7 @@ output_relocs (
-+@@ -987,7 +996,7 @@ output_relocs (
-  					}
-  					relocation_needed = 1;
-  					sym_addr = (*(q->sym_ptr_ptr))->value;
-@@ -181,7 +181,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					break;
-  				case R_H8_PCREL16:
--@@ -1012,7 +1021,7 @@ output_relocs (
-+@@ -1013,7 +1022,7 @@ output_relocs (
-  #ifdef TARGET_microblaze
-  				case R_MICROBLAZE_64:
-  					/* work out the relocation */
-@@ -190,7 +190,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					/* Write relocated pointer back */
-  					r_mem[2] = (sym_addr >> 24) & 0xff;
--@@ -1026,7 +1035,7 @@ output_relocs (
-+@@ -1027,7 +1036,7 @@ output_relocs (
-  					pflags = 0x80000000;
-  					break;
-  				case R_MICROBLAZE_32:
-@@ -199,7 +199,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					relocation_needed = 1;
-  					break;
--@@ -1058,7 +1067,7 @@ output_relocs (
-+@@ -1059,7 +1068,7 @@ output_relocs (
-  				case R_NIOS2_BFD_RELOC_32:
-  					relocation_needed = 1;
-  					pflags = (FLAT_NIOS2_R_32 << 28);
-@@ -208,25 +208,25 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					/* modify target, in target order */
-  					*(unsigned long *)r_mem = htoniosl(sym_addr);
--@@ -1068,7 +1077,7 @@ output_relocs (
-+@@ -1069,7 +1078,7 @@ output_relocs (
-  					unsigned long exist_val;
-  					relocation_needed = 1;
-  					pflags = (FLAT_NIOS2_R_CALL26 << 28);
- -					sym_vma = bfd_section_vma(abs_bfd, sym_section);
- +					sym_vma = elf2flt_bfd_section_vma(sym_section);
-  					sym_addr += sym_vma + q->addend;
-- 					
-+ 
-  					/* modify target, in target order */
--@@ -1099,7 +1108,7 @@ output_relocs (
-+@@ -1100,7 +1109,7 @@ output_relocs (
-  								? FLAT_NIOS2_R_HIADJ_LO : FLAT_NIOS2_R_HI_LO;
-  							pflags <<= 28;
-- 						
-+ 
- -							sym_vma = bfd_section_vma(abs_bfd, sym_section);
--+							sym_vma = elf2flt_bfd_section_vma(sym_section);
-++							sym_vma = elf2flt_bfd_section_vma(abs_bfd, sym_section);
-  							sym_addr += sym_vma + q->addend;
-  
-  							/* modify high 16 bits, in target order */
--@@ -1132,7 +1141,7 @@ output_relocs (
-+@@ -1133,7 +1142,7 @@ output_relocs (
-  						goto NIOS2_RELOC_ERR;
-  					}
-  					/* _gp holds a absolute value, otherwise the ld cannot generate correct code */
-@@ -235,7 +235,7 @@ index b93aecd..3bcf4fe 100644
-  					//printf("sym=%x, %d, _gp=%x, %d\n", sym_addr+sym_vma, sym_addr+sym_vma, gp, gp);
-  					sym_addr += sym_vma + q->addend;
-  					sym_addr -= gp;
--@@ -1213,7 +1222,7 @@ NIOS2_RELOC_ERR:
-+@@ -1214,7 +1223,7 @@ NIOS2_RELOC_ERR:
-  				case R_SPARC_32:
-  				case R_SPARC_UA32:
-  					relocation_needed = 1;
-@@ -244,7 +244,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					break;
-  				case R_SPARC_PC22:
--@@ -1232,7 +1241,7 @@ NIOS2_RELOC_ERR:
-+@@ -1233,7 +1242,7 @@ NIOS2_RELOC_ERR:
-  				case R_SPARC_HI22:
-  					relocation_needed = 1;
-  					pflags = 0x80000000;
-@@ -253,7 +253,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					sym_addr |= (
-  						htonl(*(uint32_t *)r_mem)
--@@ -1242,7 +1251,7 @@ NIOS2_RELOC_ERR:
-+@@ -1243,7 +1252,7 @@ NIOS2_RELOC_ERR:
-  				case R_SPARC_LO10:
-  					relocation_needed = 1;
-  					pflags = 0x40000000;
-@@ -262,7 +262,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					sym_addr &= 0x000003ff;
-  					sym_addr |= (
--@@ -1256,7 +1265,7 @@ NIOS2_RELOC_ERR:
-+@@ -1257,7 +1266,7 @@ NIOS2_RELOC_ERR:
-  #ifdef TARGET_sh
-  				case R_SH_DIR32:
-  					relocation_needed = 1;
-@@ -271,7 +271,7 @@ index b93aecd..3bcf4fe 100644
-  					sym_addr += sym_vma + q->addend;
-  					break;
-  				case R_SH_REL32:
--@@ -1288,7 +1297,7 @@ NIOS2_RELOC_ERR:
-+@@ -1289,7 +1298,7 @@ NIOS2_RELOC_ERR:
-  				case R_E1_CONST31:
-  						relocation_needed = 1;
-  						DBG_E1("Handling Reloc <CONST31>\n");
-@@ -280,7 +280,7 @@ index b93aecd..3bcf4fe 100644
-  						DBG_E1("sec_vma : [0x%x], sym_addr : [0x%x], q->address : [0x%x]\n",
-  										sec_vma, sym_addr, q->address);
-  						sym_addr = sec_vma + sym_addr;
--@@ -1303,7 +1312,7 @@ NIOS2_RELOC_ERR:
-+@@ -1304,7 +1313,7 @@ NIOS2_RELOC_ERR:
-  						relocation_needed = 0;
-  						DBG_E1("Handling Reloc <CONST31_PCREL>\n");
-  						DBG_E1("DONT RELOCATE AT LOADING\n");
-@@ -289,7 +289,7 @@ index b93aecd..3bcf4fe 100644
-  						DBG_E1("sec_vma : [0x%x], sym_addr : [0x%x], q->address : [0x%x]\n",
-  										sec_vma, sym_addr, q->address);
-  						sym_addr =  sec_vma + sym_addr;
--@@ -1330,7 +1339,7 @@ NIOS2_RELOC_ERR:
-+@@ -1331,7 +1340,7 @@ NIOS2_RELOC_ERR:
-  						relocation_needed = 0;
-  						DBG_E1("Handling Reloc <DIS29W_PCREL>\n");
-  						DBG_E1("DONT RELOCATE AT LOADING\n");
-@@ -298,7 +298,7 @@ index b93aecd..3bcf4fe 100644
-  						DBG_E1("sec_vma : [0x%x], sym_addr : [0x%x], q->address : [0x%x]\n",
-  										sec_vma, sym_addr, q->address);
-  						sym_addr =  sec_vma + sym_addr;
--@@ -1363,7 +1372,7 @@ NIOS2_RELOC_ERR:
-+@@ -1364,7 +1373,7 @@ NIOS2_RELOC_ERR:
-  						DBG_E1("Handling Reloc <DIS29B>\n");
-  DIS29_RELOCATION:
-  						relocation_needed = 1;
-@@ -307,7 +307,7 @@ index b93aecd..3bcf4fe 100644
-  						DBG_E1("sec_vma : [0x%x], sym_addr : [0x%08x]\n",
-  										sec_vma, sym_addr);
-  						sym_addr =  sec_vma + sym_addr;
--@@ -1380,7 +1389,7 @@ DIS29_RELOCATION:
-+@@ -1381,7 +1390,7 @@ DIS29_RELOCATION:
-  						relocation_needed = 0;
-  						DBG_E1("Handling Reloc <IMM32_PCREL>\n");
-  						DBG_E1("DONT RELOCATE AT LOADING\n");
-@@ -316,7 +316,7 @@ index b93aecd..3bcf4fe 100644
-  						DBG_E1("sec_vma : [0x%x], sym_addr : [0x%x]\n",
-  										sec_vma, sym_addr);
-  						sym_addr =  sec_vma + sym_addr;
--@@ -1406,7 +1415,7 @@ DIS29_RELOCATION:
-+@@ -1407,7 +1416,7 @@ DIS29_RELOCATION:
-  				case R_E1_IMM32:
-  						relocation_needed = 1;
-  						DBG_E1("Handling Reloc <IMM32>\n");
-@@ -325,7 +325,7 @@ index b93aecd..3bcf4fe 100644
-  						DBG_E1("sec_vma : [0x%x], sym_addr : [0x%x]\n",
-  										sec_vma, sym_addr);
-  						sym_addr =  sec_vma + sym_addr;
--@@ -1422,7 +1431,7 @@ DIS29_RELOCATION:
-+@@ -1423,7 +1432,7 @@ DIS29_RELOCATION:
-  				case R_E1_WORD:
-  						relocation_needed = 1;
-  						DBG_E1("Handling Reloc <WORD>\n");
-@@ -334,7 +334,7 @@ index b93aecd..3bcf4fe 100644
-  						DBG_E1("sec_vma : [0x%x], sym_addr : [0x%x]\n",
-  										sec_vma, sym_addr);
-  						sym_addr =  sec_vma + sym_addr;
--@@ -1449,7 +1458,7 @@ DIS29_RELOCATION:
-+@@ -1450,7 +1459,7 @@ DIS29_RELOCATION:
-  			}
-  
-  			sprintf(&addstr[0], "+0x%lx", sym_addr - (*(q->sym_ptr_ptr))->value -
-@@ -343,7 +343,7 @@ index b93aecd..3bcf4fe 100644
-  
-  
-  			/*
--@@ -1887,8 +1896,8 @@ int main(int argc, char *argv[])
-+@@ -1890,8 +1899,8 @@ int main(int argc, char *argv[])
-      } else
-        continue;
-  
-@@ -354,8 +354,8 @@ index b93aecd..3bcf4fe 100644
-  
-      if (sec_vma < *vma) {
-        if (*len > 0)
--@@ -1913,7 +1922,7 @@ int main(int argc, char *argv[])
--     if (s->flags & SEC_CODE) 
-+@@ -1920,7 +1929,7 @@ int main(int argc, char *argv[])
-+                     (SEC_DATA | SEC_READONLY | SEC_RELOC)))
-        if (!bfd_get_section_contents(abs_bfd, s,
-  				   text + (s->vma - text_vma), 0,
- -				   bfd_section_size(abs_bfd, s)))
-@@ -363,8 +363,8 @@ index b93aecd..3bcf4fe 100644
-        {
-  	fatal("read error section %s", s->name);
-        }
--@@ -1939,7 +1948,7 @@ int main(int argc, char *argv[])
--     if (s->flags & SEC_DATA) 
-+@@ -1950,7 +1959,7 @@ int main(int argc, char *argv[])
-+                     (SEC_READONLY | SEC_RELOC)))
-        if (!bfd_get_section_contents(abs_bfd, s,
-  				   data + (s->vma - data_vma), 0,
- -				   bfd_section_size(abs_bfd, s)))
-@@ -373,5 +373,5 @@ index b93aecd..3bcf4fe 100644
-  	fatal("read error section %s", s->name);
-        }
- -- 
--2.25.4
-+2.35.1
+ comment "Legacy options removed in 2022.05"
  
-diff --git a/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch b/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
++config BR2_BINUTILS_VERSION_2_32_X
++	bool "binutils 2.32.x has been removed"
++	select BR2_LEGACY
++	help
++	  binutils 2.32 has been removed, use a newer version.
++
+ config BR2_sh2a
+ 	bool "sh2a architecture support removed"
+ 	select BR2_LEGACY
+diff --git a/package/binutils/2.32/0001-sh-conf.patch b/package/binutils/2.32/0001-sh-conf.patch
 deleted file mode 100644
-index a27c4913fb..0000000000
---- a/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
+index fff91ae35c..0000000000
+--- a/package/binutils/2.32/0001-sh-conf.patch
 +++ /dev/null
-@@ -1,79 +0,0 @@
--From b31e9b1bff6832063816b972395179859d1d4619 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sun, 13 Aug 2017 16:03:20 +0200
--Subject: [PATCH] ld-elf2flt: behave properly when called with a name different
-- from TARGET_ALIAS
+@@ -1,48 +0,0 @@
+-From 98b2acf2bd3a527d114a9f8931083c2617a2daa9 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Fri, 25 Dec 2015 11:38:13 +0100
+-Subject: [PATCH] sh-conf
 -
--ld-elf2flt currently handles two cases:
+-Likewise, binutils has no idea about any of these new targets either, so we
+-fix that up too.. now we're able to actually build a real toolchain for
+-sh2a_nofpu- and other more ineptly named toolchains (and yes, there are more
+-inept targets than that one, really. Go look, I promise).
 -
-- 1 It is called as the wrapper for <TARGET_ALIAS>-ld, generally
--   installed in the bin/ directory of a toolchain.
--
-- 2 It is called as the wrapper for "ld", generally installed in the
--   TARGET_ALIAS/bin/ directory of a toolchain.
--
--Unfortunately, if for some reason it gets called using a FOOBAR-ld
--name that is different from <TARGET_ALIAS>-ld, it assumes it is in
--case (2), while it really is in case (1). Due to this, the path
--mangling logic doesn't work, and it doesn't find ld.real.
--
--This happens for example when the binary program in bin/ is named
--arm-buildroot-uclinux-uclibcgnueabi-ld, but also has a simpler symlink
--named arm-linux-ld. In this case,
--arm-buildroot-uclinux-uclibcgnueabi-ld is recognized by ld-elf2flt as
--containing TARGET_ALIAS, and therefore the proper logic to find
--ld.real is applied. However, when arm-linux-ld is used, ld-elf2flt
--doesn't find TARGET_ALIAS, and therefore assumes we're being called as
--TARGET_ALIAS/bin/ld.. and searches for a program called ld.real in
--bin/, which doesn't exist.
--
--See:
--
--$ ./output/host/bin/arm-buildroot-uclinux-uclibcgnueabi-ld
--/home/thomas/buildroot/buildroot/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
--
--$ ./output/host/bin/arm-linux-ld
--arm-linux-ld (ld-elf2flt): error trying to exec '/home/thomas/buildroot/buildroot/output/host/bin/ld.real': execvp: No such file or directory
--
--$ ./output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld
--/home/thomas/buildroot/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
--
--This commit fixes that by inverting the logic: if we're being called
--as just "ld", then we assume it's the program in
--TARGET_ALIAS/bin/. Otherwise, we're called through some variant of
--TARGET-ld.
--
+-[Romain: rebase on top of 2.32]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-[Thomas: rebase on top of 2.29, in which sh64 support was removed.]
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Submitted-upstream: https://github.com/uclinux-dev/elf2flt/pull/8
 ----
-- ld-elf2flt.c | 10 +++++-----
-- 1 file changed, 5 insertions(+), 5 deletions(-)
+- configure    | 2 +-
+- configure.ac | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
 -
--diff --git a/ld-elf2flt.c b/ld-elf2flt.c
--index de39fe0..c187c2e 100644
----- a/ld-elf2flt.c
--+++ b/ld-elf2flt.c
--@@ -506,15 +506,15 @@ int main(int argc, char *argv[])
-- 	   the host while those in <TARGET_ALIAS>/lib are for the target.
-- 	   Make bindir point to the bin dir for bin/<TARGET_ALIAS>-foo.
-- 	   Make tooldir point to the bin dir for <TARGET_ALIAS>/bin/foo.  */
---	if (streqn(elf2flt_progname, TARGET_ALIAS)) {
---		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
--+	if (streqn(elf2flt_progname, "ld")) {
--+		tmp = concat(argv0_dir, "../../bin", NULL);
-- 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
---			tooldir = concat(tmp, "/", NULL);
--+			bindir = concat(tmp, "/", NULL);
-- 		}
-- 	} else {
---		tmp = concat(argv0_dir, "../../bin", NULL);
--+		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
-- 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
---			bindir = concat(tmp, "/", NULL);
--+			tooldir = concat(tmp, "/", NULL);
-- 		}
-- 	}
-- 
---- 
--2.9.4
--
-diff --git a/package/elf2flt/0004-elf2flt-add-riscv-64-bits-support.patch b/package/elf2flt/0002-elf2flt-add-riscv-64-bits-support.patch
-similarity index 83%
-rename from package/elf2flt/0004-elf2flt-add-riscv-64-bits-support.patch
-rename to package/elf2flt/0002-elf2flt-add-riscv-64-bits-support.patch
-index 4b00758446..c530bc020d 100644
---- a/package/elf2flt/0004-elf2flt-add-riscv-64-bits-support.patch
-+++ b/package/elf2flt/0002-elf2flt-add-riscv-64-bits-support.patch
-@@ -1,4 +1,4 @@
--From 1dea576eac4289602adc4a37f48c80330bf82e63 Mon Sep 17 00:00:00 2001
-+From 3879965dfda08a24e7d44ed76bbcc2f4a41df1fa Mon Sep 17 00:00:00 2001
- From: Damien Le Moal <damien.lemoal@wdc.com>
- Date: Wed, 9 Sep 2020 17:31:33 +0900
- Subject: [PATCH] elf2flt: add riscv 64-bits support
-@@ -26,15 +26,15 @@ This patch is based on earlier work by Christoph Hellwig <hch@lst.de>.
- Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
- ---
-  elf2flt.c     | 23 +++++++++++++++++++++++
-- elf2flt.ld.in |  9 +++++----
-+ elf2flt.ld.in |  1 +
-  ld-elf2flt.c  | 16 ++++++++++++++++
-- 3 files changed, 44 insertions(+), 4 deletions(-)
-+ 3 files changed, 40 insertions(+)
- 
- diff --git a/elf2flt.c b/elf2flt.c
--index f87f1fc..dbce467 100644
-+index ea6b5a1..7100c20 100644
- --- a/elf2flt.c
- +++ b/elf2flt.c
--@@ -80,6 +80,8 @@ const char *elf2flt_progname;
-+@@ -81,6 +81,8 @@ const char *elf2flt_progname;
-  #include <elf/v850.h>
-  #elif defined(TARGET_xtensa)
-  #include <elf/xtensa.h>
-@@ -43,7 +43,7 @@ index f87f1fc..dbce467 100644
-  #endif
-  
-  #if defined(__MINGW32__)
--@@ -122,6 +124,8 @@ const char *elf2flt_progname;
-+@@ -123,6 +125,8 @@ const char *elf2flt_progname;
-  #define ARCH	"nios2"
-  #elif defined(TARGET_xtensa)
-  #define ARCH	"xtensa"
-@@ -52,7 +52,7 @@ index f87f1fc..dbce467 100644
-  #else
-  #error "Don't know how to support your CPU architecture??"
-  #endif
--@@ -797,6 +801,16 @@ output_relocs (
-+@@ -821,6 +825,16 @@ output_relocs (
-  					goto good_32bit_resolved_reloc;
-  				default:
-  					goto bad_resolved_reloc;
-@@ -69,7 +69,7 @@ index f87f1fc..dbce467 100644
-  #else
-  				default:
-  					/* The default is to assume that the
--@@ -1806,6 +1820,15 @@ int main(int argc, char *argv[])
-+@@ -1841,6 +1855,15 @@ int main(int argc, char *argv[])
-    if (!load_to_ram && !pfile)
-      load_to_ram = 1;
-  
-@@ -86,27 +86,19 @@ index f87f1fc..dbce467 100644
-  
-    if (pfile) {
- diff --git a/elf2flt.ld.in b/elf2flt.ld.in
--index ec1fe6f..c0c44b8 100644
-+index 0df999d..f1eed1f 100644
- --- a/elf2flt.ld.in
- +++ b/elf2flt.ld.in
--@@ -70,10 +70,11 @@ W_RODAT		*(.gnu.linkonce.r*)
-+@@ -109,6 +109,7 @@ W_RODAT:	*(.gnu.linkonce.r*)
-  		. = ALIGN(0x20) ;
-  		LONG(-1)
-  		. = ALIGN(0x20) ;
---R_RODAT		*(.rodata)
---R_RODAT		*(.rodata1)
---R_RODAT		*(.rodata.*)
---R_RODAT		*(.gnu.linkonce.r*)
- +RISCV_GP:	__global_pointer$ = . + 0x800 ;
--+R_RODAT 	*(.rodata)
--+R_RODAT 	*(.rodata1)
--+R_RODAT 	*(.rodata.*)
--+R_RODAT 	*(.gnu.linkonce.r*)
-- 		*(.data)
-- 		*(.data1)
-- 		*(.data.*)
-+ R_RODAT:	*(.rodata)
-+ R_RODAT:	*(.rodata1)
-+ R_RODAT:	*(.rodata.*)
- diff --git a/ld-elf2flt.c b/ld-elf2flt.c
--index e5de506..31b565f 100644
-+index 7cb02d5..1a503dd 100644
- --- a/ld-elf2flt.c
- +++ b/ld-elf2flt.c
- @@ -324,6 +324,22 @@ static int do_final_link(void)
-@@ -133,5 +125,5 @@ index e5de506..31b565f 100644
-  	if (!linker_script)
-  		linker_script = concat(ldscriptpath, "/elf2flt.ld", NULL);
- -- 
--2.31.1
-+2.35.1
- 
-diff --git a/package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch b/package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch
-deleted file mode 100644
-index 953bd79ccf..0000000000
---- a/package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch
-+++ /dev/null
-@@ -1,188 +0,0 @@
--From d7eb73163bcea31168c438fc132a0967ac172e3d Mon Sep 17 00:00:00 2001
--From: Max Filippov <jcmvbkbc@gmail.com>
--Date: Thu, 7 May 2020 21:11:43 -0700
--Subject: [PATCH] elf2flt.c: add new relocation types for xtensa
--
--Xtensa have added new relocation types R_XTENSA_[NP]DIFF{8,16,32} with
--the same properties as the existing types R_XTENSA_DIFF{8,16,32}.
--Add them to the list of ignored relocation types.
--
--This fixes the following error when invoking elf2flt on xtensa binaries
--built with the recent binutils:
--
--  ERROR: reloc type R_XTENSA_PDIFF32 unsupported in this context
--
--Reported-by: Romain Naour <romain.naour@gmail.com>
--Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
--Backported from: d7eb73163bcea31168c438fc132a0967ac172e3d
-----
-- Makefile.in  |  3 ++-
-- configure    | 64 ++++++++++++++++++++++++++++++++++++++++++++++++++++
-- configure.ac | 14 ++++++++++++
-- elf2flt.c    |  8 +++++++
-- 4 files changed, 88 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile.in b/Makefile.in
--index 52b3347d7f43..0529c7f0a25a 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -30,7 +30,8 @@ DEFS = @DEFS@ \
-- 	-DNO_GOT_CHECK=@got_check@ \
-- 	-DUSE_EMIT_RELOCS=@emit_relocs@ \
-- 	-DEMIT_CTOR_DTOR=@emit_ctor_dtor@ \
---	-DALWAYS_RELOC_TEXT=@always_reloc_text@
--+	-DALWAYS_RELOC_TEXT=@always_reloc_text@ \
--+	-DHAVE_BFD_XTENSA_PDIFF_RELOCS=@HAVE_BFD_XTENSA_PDIFF_RELOCS@
-- EXEEXT = @EXEEXT@
-- OBJEXT = @OBJEXT@
-- 
 -diff --git a/configure b/configure
--index bb8e33f9cb28..bca38c34247e 100755
+-index 37476459612..66fbc19f9ff 100755
 ---- a/configure
 -+++ b/configure
--@@ -621,6 +621,7 @@ ac_includes_default="\
+-@@ -3861,7 +3861,7 @@ case "${target}" in
+-   nvptx*-*-*)
+-     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
+-     ;;
+--  sh-*-*)
+-+  sh*-*-*)
+-     case "${target}" in
+-       sh*-*-elf)
+-          ;;
+-diff --git a/configure.ac b/configure.ac
+-index 46501c28826..6c731930884 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1158,7 +1158,7 @@ case "${target}" in
+-   nvptx*-*-*)
+-     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
+-     ;;
+--  sh-*-*)
+-+  sh*-*-*)
+-     case "${target}" in
+-       sh*-*-elf)
+-          ;;
+--- 
+-2.14.5
+-
+diff --git a/package/binutils/2.32/0002-poison-system-directories.patch b/package/binutils/2.32/0002-poison-system-directories.patch
+deleted file mode 100644
+index 98f41e87f3..0000000000
+--- a/package/binutils/2.32/0002-poison-system-directories.patch
++++ /dev/null
+@@ -1,306 +0,0 @@
+-From f559402ea868d370ddf25089c68cda2600db3bfa Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Fri, 25 Dec 2015 11:45:38 +0100
+-Subject: [PATCH] poison-system-directories
+-
+-Patch adapted to binutils 2.23.2 and extended to use
+-BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
+-
+-[Romain: rebase on top of 2.32]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-[Gustavo: adapt to binutils 2.25]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-Upstream-Status: Inappropriate [distribution: codesourcery]
+-
+-Patch originally created by Mark Hatle, forward-ported to
+-binutils 2.21 by Scott Garman.
+-
+-purpose:  warn for uses of system directories when cross linking
+-
+-Code Merged from Sourcery G++ binutils 2.19 - 4.4-277
+-
+-2008-07-02  Joseph Myers  <joseph@codesourcery.com>
+-
+-    ld/
+-    * ld.h (args_type): Add error_poison_system_directories.
+-    * ld.texinfo (--error-poison-system-directories): Document.
+-    * ldfile.c (ldfile_add_library_path): Check
+-    command_line.error_poison_system_directories.
+-    * ldmain.c (main): Initialize
+-    command_line.error_poison_system_directories.
+-    * lexsup.c (enum option_values): Add
+-    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES.
+-    (ld_options): Add --error-poison-system-directories.
+-    (parse_args): Handle new option.
+-
+-2007-06-13  Joseph Myers  <joseph@codesourcery.com>
+-
+-    ld/
+-    * config.in: Regenerate.
+-    * ld.h (args_type): Add poison_system_directories.
+-    * ld.texinfo (--no-poison-system-directories): Document.
+-    * ldfile.c (ldfile_add_library_path): Check
+-    command_line.poison_system_directories.
+-    * ldmain.c (main): Initialize
+-    command_line.poison_system_directories.
+-    * lexsup.c (enum option_values): Add
+-    OPTION_NO_POISON_SYSTEM_DIRECTORIES.
+-    (ld_options): Add --no-poison-system-directories.
+-    (parse_args): Handle new option.
+-
+-2007-04-20  Joseph Myers  <joseph@codesourcery.com>
+-
+-    Merge from Sourcery G++ binutils 2.17:
+-
+-    2007-03-20  Joseph Myers  <joseph@codesourcery.com>
+-    Based on patch by Mark Hatle <mark.hatle@windriver.com>.
+-    ld/
+-    * configure.ac (--enable-poison-system-directories): New option.
+-    * configure, config.in: Regenerate.
+-    * ldfile.c (ldfile_add_library_path): If
+-    ENABLE_POISON_SYSTEM_DIRECTORIES defined, warn for use of /lib,
+-    /usr/lib, /usr/local/lib or /usr/X11R6/lib.
+-
+-Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
+-Signed-off-by: Scott Garman <scott.a.garman@intel.com>
+----
+- ld/config.in    |  3 +++
+- ld/configure    | 14 ++++++++++++++
+- ld/configure.ac | 10 ++++++++++
+- ld/ld.h         |  8 ++++++++
+- ld/ld.texi      | 12 ++++++++++++
+- ld/ldfile.c     | 17 +++++++++++++++++
+- ld/ldlex.h      |  2 ++
+- ld/ldmain.c     |  2 ++
+- ld/lexsup.c     | 21 +++++++++++++++++++++
+- 9 files changed, 89 insertions(+)
+-
+-diff --git a/ld/config.in b/ld/config.in
+-index d93c9b08300..5da2742beac 100644
+---- a/ld/config.in
+-+++ b/ld/config.in
+-@@ -31,6 +31,9 @@
+-    language is requested. */
+- #undef ENABLE_NLS
 - 
-- ac_subst_vars='LTLIBOBJS
-- LIBOBJS
--+HAVE_BFD_XTENSA_PDIFF_RELOCS
-- SYMBOL_PREFIX
-- always_reloc_text
-- emit_ctor_dtor
--@@ -1729,6 +1730,52 @@ fi
+-+/* Define to warn for use of native system library directories */
+-+#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+
+- /* Additional extension a shared object might have. */
+- #undef EXTRA_SHLIB_EXTENSION
 - 
-- } # ac_fn_c_try_link
-- 
--+# ac_fn_c_check_decl LINENO SYMBOL VAR INCLUDES
--+# ---------------------------------------------
--+# Tests whether SYMBOL is declared in INCLUDES, setting cache variable VAR
--+# accordingly.
--+ac_fn_c_check_decl ()
--+{
--+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
--+  as_decl_name=`echo $2|sed 's/ *(.*//'`
--+  as_decl_use=`echo $2|sed -e 's/(/((/' -e 's/)/) 0&/' -e 's/,/) 0& (/g'`
--+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $as_decl_name is declared" >&5
--+$as_echo_n "checking whether $as_decl_name is declared... " >&6; }
--+if eval \${$3+:} false; then :
--+  $as_echo_n "(cached) " >&6
--+else
--+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
--+/* end confdefs.h.  */
--+$4
--+int
--+main ()
--+{
--+#ifndef $as_decl_name
--+#ifdef __cplusplus
--+  (void) $as_decl_use;
--+#else
--+  (void) $as_decl_name;
--+#endif
--+#endif
--+
--+  ;
--+  return 0;
--+}
--+_ACEOF
--+if ac_fn_c_try_compile "$LINENO"; then :
--+  eval "$3=yes"
--+else
--+  eval "$3=no"
--+fi
--+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
--+fi
--+eval ac_res=\$$3
--+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
--+$as_echo "$ac_res" >&6; }
--+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
--+
--+} # ac_fn_c_check_decl
--+
-- # ac_fn_c_check_func LINENO FUNC VAR
-- # ----------------------------------
-- # Tests whether FUNC exists, setting the cache variable VAR accordingly
--@@ -4272,6 +4319,22 @@ $as_echo "#define const /**/" >>confdefs.h
+-diff --git a/ld/configure b/ld/configure
+-index 18ada7808f5..7e7d2f97809 100755
+---- a/ld/configure
+-+++ b/ld/configure
+-@@ -822,6 +822,7 @@ with_lib_path
+- enable_targets
+- enable_64_bit_bfd
+- with_sysroot
+-+enable_poison_system_directories
+- enable_gold
+- enable_got
+- enable_compressed_debug_sections
+-@@ -1486,6 +1487,8 @@ Optional Features:
+-   --disable-largefile     omit support for large files
+-   --enable-targets        alternative target configurations
+-   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
+-+  --enable-poison-system-directories
+-+                          warn for use of native system library directories
+-   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
+-   --enable-got=<type>     GOT handling scheme (target, single, negative,
+-                           multigot)
+-@@ -15803,7 +15806,18 @@ else
 - fi
 - 
 - 
--+HAVE_BFD_XTENSA_PDIFF_RELOCS=0
--+case $target in
--+	xtensa*)
--+		OLD_CPPFLAGS=$CPPFLAGS
--+		CPPFLAGS="-I$bfd_include_dir -I$binutils_include_dir $CPPFLAGS"
--+		ac_fn_c_check_decl "$LINENO" "R_XTENSA_PDIFF8" "ac_cv_have_decl_R_XTENSA_PDIFF8" "#include \"bfd.h\"
--+			       #include \"elf/xtensa.h\"
--+"
--+if test "x$ac_cv_have_decl_R_XTENSA_PDIFF8" = xyes; then :
--+  HAVE_BFD_XTENSA_PDIFF_RELOCS=1
+-+# Check whether --enable-poison-system-directories was given.
+-+if test "${enable_poison_system_directories+set}" = set; then :
+-+  enableval=$enable_poison_system_directories;
+-+else
+-+  enable_poison_system_directories=no
 -+fi
 -+
--+		CPPFLAGS=$OLD_CPPFLAGS
--+		;;
--+esac
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+- 
+-+$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
 -+
-- for ac_func in vprintf
-- do :
--   ac_fn_c_check_func "$LINENO" "vprintf" "ac_cv_func_vprintf"
--@@ -4333,6 +4396,7 @@ fi
+-+fi
 - 
+- # Check whether --enable-got was given.
+- if test "${enable_got+set}" = set; then :
+-diff --git a/ld/configure.ac b/ld/configure.ac
+-index d335f210917..7f692d93873 100644
+---- a/ld/configure.ac
+-+++ b/ld/configure.ac
+-@@ -94,6 +94,16 @@ AC_SUBST(use_sysroot)
+- AC_SUBST(TARGET_SYSTEM_ROOT)
+- AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
 - 
-- 
+-+AC_ARG_ENABLE([poison-system-directories],
+-+         AS_HELP_STRING([--enable-poison-system-directories],
+-+                [warn for use of native system library directories]),,
+-+         [enable_poison_system_directories=no])
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+-+       [1],
+-+       [Define to warn for use of native system library directories])
+-+fi
 -+
-- ac_config_files="$ac_config_files ld-elf2flt.sh:ld-elf2flt.in Makefile elf2flt.ld"
+- dnl Use --enable-gold to decide if this linker should be the default.
+- dnl "install_as_default" is set to false if gold is the default linker.
+- dnl "installed_linker" is the installed BFD linker name.
+-diff --git a/ld/ld.h b/ld/ld.h
+-index b97d977f37b..f3bbd2d55d4 100644
+---- a/ld/ld.h
+-+++ b/ld/ld.h
+-@@ -180,6 +180,14 @@ typedef struct
+-      in the linker script.  */
+-   bfd_boolean force_group_allocation;
 - 
-- cat >confcache <<\_ACEOF
--diff --git a/configure.ac b/configure.ac
--index d6b4119eb18a..19969b1045f6 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -202,6 +202,19 @@ AC_CHECK_HEADERS(fcntl.h unistd.h bfd.h)
-- dnl Checks for typedefs, structures, and compiler characteristics.
-- AC_C_CONST
-- 
--+HAVE_BFD_XTENSA_PDIFF_RELOCS=0
--+case $target in
--+	xtensa*)
--+		AS_VAR_COPY([OLD_CPPFLAGS], [CPPFLAGS])
--+		AS_VAR_SET([CPPFLAGS], ["-I$bfd_include_dir -I$binutils_include_dir $CPPFLAGS"])
--+		AC_CHECK_DECL([R_XTENSA_PDIFF8],
--+			      [HAVE_BFD_XTENSA_PDIFF_RELOCS=1],,
--+			      [#include "bfd.h"
--+			       #include "elf/xtensa.h"])
--+		AS_VAR_COPY([CPPFLAGS], [OLD_CPPFLAGS])
--+		;;
--+esac
+-+  /* If TRUE (the default) warn for uses of system directories when
+-+     cross linking.  */
+-+  bfd_boolean poison_system_directories;
 -+
-- dnl Checks for library functions.
-- AC_FUNC_VPRINTF
+-+  /* If TRUE (default FALSE) give an error for uses of system
+-+     directories when cross linking instead of a warning.  */
+-+  bfd_boolean error_poison_system_directories;
+-+
+-   /* Big or little endian as set on command line.  */
+-   enum endian_enum endian;
 - 
--@@ -235,6 +248,7 @@ AC_SUBST(emit_relocs)
-- AC_SUBST(emit_ctor_dtor)
-- AC_SUBST(always_reloc_text)
-- AC_SUBST(SYMBOL_PREFIX)
--+AC_SUBST(HAVE_BFD_XTENSA_PDIFF_RELOCS)
+-diff --git a/ld/ld.texi b/ld/ld.texi
+-index 5179af3e0e1..f78bf746822 100644
+---- a/ld/ld.texi
+-+++ b/ld/ld.texi
+-@@ -2524,6 +2524,18 @@ string identifying the original linked file does not change.
 - 
-- AC_OUTPUT(ld-elf2flt.sh:ld-elf2flt.in Makefile elf2flt.ld)
+- Passing @code{none} for @var{style} disables the setting from any
+- @code{--build-id} options earlier on the command line.
+-+
+-+@kindex --no-poison-system-directories
+-+@item --no-poison-system-directories
+-+Do not warn for @option{-L} options using system directories such as
+-+@file{/usr/lib} when cross linking.  This option is intended for use
+-+in chroot environments when such directories contain the correct
+-+libraries for the target system rather than the host.
+-+
+-+@kindex --error-poison-system-directories
+-+@item --error-poison-system-directories
+-+Give an error instead of a warning for @option{-L} options using
+-+system directories when cross linking.
+- @end table
 - 
--diff --git a/elf2flt.c b/elf2flt.c
--index b7c4a490df02..961534973f56 100644
----- a/elf2flt.c
--+++ b/elf2flt.c
--@@ -776,6 +776,14 @@ output_relocs (
-- 				case R_XTENSA_DIFF8:
-- 				case R_XTENSA_DIFF16:
-- 				case R_XTENSA_DIFF32:
--+#if HAVE_BFD_XTENSA_PDIFF_RELOCS
--+				case R_XTENSA_PDIFF8:
--+				case R_XTENSA_PDIFF16:
--+				case R_XTENSA_PDIFF32:
--+				case R_XTENSA_NDIFF8:
--+				case R_XTENSA_NDIFF16:
--+				case R_XTENSA_NDIFF32:
+- @c man end
+-diff --git a/ld/ldfile.c b/ld/ldfile.c
+-index fcadc08c73f..63e295ce8ae 100644
+---- a/ld/ldfile.c
+-+++ b/ld/ldfile.c
+-@@ -116,6 +116,23 @@ ldfile_add_library_path (const char *name, bfd_boolean cmdline)
+-     new_dirs->name = concat (ld_sysroot, name + strlen ("$SYSROOT"), (const char *) NULL);
+-   else
+-     new_dirs->name = xstrdup (name);
+-+
+-+#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+  if (command_line.poison_system_directories
+-+  && ((!strncmp (name, "/lib", 4))
+-+      || (!strncmp (name, "/usr/lib", 8))
+-+      || (!strncmp (name, "/usr/local/lib", 14))
+-+      || (!strncmp (name, "/usr/X11R6/lib", 14))))
+-+   {
+-+     if (command_line.error_poison_system_directories)
+-+       einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
+-+            "cross-compilation\n"), name);
+-+     else
+-+       einfo (_("%P: warning: library search path \"%s\" is unsafe for "
+-+            "cross-compilation\n"), name);
+-+   }
 -+#endif
-- 				case R_XTENSA_32_PCREL:
-- 					continue;
-- 				case R_XTENSA_32:
+-+
+- }
+- 
+- /* Try to open a BFD for a lang_input_statement.  */
+-diff --git a/ld/ldlex.h b/ld/ldlex.h
+-index 32853debe45..8135361c498 100644
+---- a/ld/ldlex.h
+-+++ b/ld/ldlex.h
+-@@ -148,6 +148,8 @@ enum option_values
+-   OPTION_REQUIRE_DEFINED_SYMBOL,
+-   OPTION_ORPHAN_HANDLING,
+-   OPTION_FORCE_GROUP_ALLOCATION,
+-+  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
+-+  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
+- };
+- 
+- /* The initial parser states.  */
+-diff --git a/ld/ldmain.c b/ld/ldmain.c
+-index 77cdbd0dd29..725512f1260 100644
+---- a/ld/ldmain.c
+-+++ b/ld/ldmain.c
+-@@ -269,6 +269,8 @@ main (int argc, char **argv)
+-   command_line.warn_mismatch = TRUE;
+-   command_line.warn_search_mismatch = TRUE;
+-   command_line.check_section_addresses = -1;
+-+  command_line.poison_system_directories = TRUE;
+-+  command_line.error_poison_system_directories = FALSE;
+- 
+-   /* We initialize DEMANGLING based on the environment variable
+-      COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
+-diff --git a/ld/lexsup.c b/ld/lexsup.c
+-index 88e85c73f49..be4cd492d14 100644
+---- a/ld/lexsup.c
+-+++ b/ld/lexsup.c
+-@@ -543,6 +543,14 @@ static const struct ld_option ld_options[] =
+-   { {"orphan-handling", required_argument, NULL, OPTION_ORPHAN_HANDLING},
+-     '\0', N_("=MODE"), N_("Control how orphan sections are handled."),
+-     TWO_DASHES },
+-+  { {"no-poison-system-directories", no_argument, NULL,
+-+    OPTION_NO_POISON_SYSTEM_DIRECTORIES},
+-+    '\0', NULL, N_("Do not warn for -L options using system directories"),
+-+    TWO_DASHES },
+-+  { {"error-poison-system-directories", no_argument, NULL,
+-+    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
+-+    '\0', NULL, N_("Give an error for -L options using system directories"),
+-+    TWO_DASHES },
+- };
+- 
+- #define OPTION_COUNT ARRAY_SIZE (ld_options)
+-@@ -555,6 +563,7 @@ parse_args (unsigned argc, char **argv)
+-   int ingroup = 0;
+-   char *default_dirlist = NULL;
+-   char *shortopts;
+-+  char *BR_paranoid_env;
+-   struct option *longopts;
+-   struct option *really_longopts;
+-   int last_optind;
+-@@ -1543,6 +1552,14 @@ parse_args (unsigned argc, char **argv)
+- 	  }
+- 	  break;
+- 
+-+	case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
+-+	  command_line.poison_system_directories = FALSE;
+-+	  break;
+-+
+-+	case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
+-+	  command_line.error_poison_system_directories = TRUE;
+-+	  break;
+-+
+- 	case OPTION_PUSH_STATE:
+- 	  input_flags.pushed = xmemdup (&input_flags,
+- 					sizeof (input_flags),
+-@@ -1586,6 +1603,10 @@ parse_args (unsigned argc, char **argv)
+-       command_line.soname = NULL;
+-     }
+- 
+-+  BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+-+  if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
+-+    command_line.error_poison_system_directories = TRUE;
+-+
+-   while (ingroup)
+-     {
+-       lang_leave_group ();
+--- 
+-2.14.5
+-
+diff --git a/package/binutils/2.32/0003-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch b/package/binutils/2.32/0003-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
+deleted file mode 100644
+index b80e1fa7ce..0000000000
+--- a/package/binutils/2.32/0003-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 278989f23735aa501be1052e085540c75c126dbb Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Thu, 28 Mar 2019 17:03:57 -0700
+-Subject: [PATCH] bfd: xtensa: fix shrink_dynamic_reloc_sections for
+- export-dynamic
+-
+-shrink_dynamic_reloc_sections must remove PLT entry that was created for
+-an undefined weak symbol in the presence of --export-dynamic option when
+-relaxation coalesces literals pointing to that symbol. This fixes the
+-following assertion:
+-
+-  ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
+-  elf32-xtensa.c:3292 in elf_xtensa_finish_dynamic_sections
+-
+-2019-03-28  Max Filippov  <jcmvbkbc@gmail.com>
+-bfd/
+-	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Add
+-	info->export_dynamic to the conditional.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- bfd/elf32-xtensa.c                                         |  3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index c3df3d6db756..37ea200eea74 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -10083,7 +10083,8 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
+-       && (input_section->flags & SEC_ALLOC) != 0
+-       && (dynamic_symbol || bfd_link_pic (info))
+-       && (!h || h->root.type != bfd_link_hash_undefweak
+--	  || (dynamic_symbol && bfd_link_dll (info))))
+-+	  || (dynamic_symbol
+-+	      && (bfd_link_dll (info) || info->export_dynamic))))
+-     {
+-       asection *srel;
+-       bfd_boolean is_plt = FALSE;
+--- 
+-2.11.0
+-
+diff --git a/package/binutils/2.32/0004-gas-use-literals-const16-for-xtensa-loop-relaxation.patch b/package/binutils/2.32/0004-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+deleted file mode 100644
+index ed617bcaf7..0000000000
+--- a/package/binutils/2.32/0004-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
++++ /dev/null
+@@ -1,294 +0,0 @@
+-From 0dbdfb7918d0b0cfcb8883b24c1291574bf5bb7c Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Tue, 2 Apr 2019 14:32:42 -0700
+-Subject: [PATCH] gas: use literals/const16 for xtensa loop relaxation
+-
+-Loop opcode relaxation that uses addi/addmi doesn't work well with other
+-relaxations that may cause code movement. Instead of encoding fixed loop
+-end offset in the relaxed sequence use l32r or a pair of const16 to load
+-loop end address. This way the address of the loop end gets a relocation
+-record and it gets updated appropriately.
+-
+-gas/
+-2019-04-02  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* config/tc-xtensa.c (convert_frag_immed): Drop
+-	convert_frag_immed_finish_loop invocation.
+-	(convert_frag_immed_finish_loop): Drop declaration and
+-	definition.
+-	* config/xtensa-relax.c (widen_spec_list): Replace loop
+-	widening that uses addi/addmi with widening that uses l32r
+-	and const16.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- gas/config/tc-xtensa.c    | 120 ----------------------------------------------
+- gas/config/xtensa-relax.c |  77 ++++++++++++++++++++---------
+- 2 files changed, 55 insertions(+), 142 deletions(-)
+-
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index 3bdbbc931cfc..0cc06361cf6f 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -10668,7 +10668,6 @@ convert_frag_fill_nop (fragS *fragP)
+- static fixS *fix_new_exp_in_seg
+-   (segT, subsegT, fragS *, int, int, expressionS *, int,
+-    bfd_reloc_code_real_type);
+--static void convert_frag_immed_finish_loop (segT, fragS *, TInsn *);
+- 
+- static void
+- convert_frag_immed (segT segP,
+-@@ -10910,9 +10909,6 @@ convert_frag_immed (segT segP,
+- 	}
+-     }
+- 
+--  if (expanded && xtensa_opcode_is_loop (isa, orig_tinsn.opcode) == 1)
+--    convert_frag_immed_finish_loop (segP, fragP, &orig_tinsn);
+--
+-   if (expanded && is_direct_call_opcode (orig_tinsn.opcode))
+-     {
+-       /* Add an expansion note on the expanded instruction.  */
+-@@ -10949,122 +10945,6 @@ fix_new_exp_in_seg (segT new_seg,
+- }
+- 
+- 
+--/* Relax a loop instruction so that it can span loop >256 bytes.
+--
+--                  loop    as, .L1
+--          .L0:
+--                  rsr     as, LEND
+--                  wsr     as, LBEG
+--                  addi    as, as, lo8 (label-.L1)
+--                  addmi   as, as, mid8 (label-.L1)
+--                  wsr     as, LEND
+--                  isync
+--                  rsr     as, LCOUNT
+--                  addi    as, as, 1
+--          .L1:
+--                  <<body>>
+--          label:
+--*/
+--
+--static void
+--convert_frag_immed_finish_loop (segT segP, fragS *fragP, TInsn *tinsn)
+--{
+--  TInsn loop_insn;
+--  TInsn addi_insn;
+--  TInsn addmi_insn;
+--  unsigned long target;
+--  static xtensa_insnbuf insnbuf = NULL;
+--  unsigned int loop_length, loop_length_hi, loop_length_lo;
+--  xtensa_isa isa = xtensa_default_isa;
+--  addressT loop_offset;
+--  addressT addi_offset = 9;
+--  addressT addmi_offset = 12;
+--  fragS *next_fragP;
+--  int target_count;
+--
+--  if (!insnbuf)
+--    insnbuf = xtensa_insnbuf_alloc (isa);
+--
+--  /* Get the loop offset.  */
+--  loop_offset = get_expanded_loop_offset (tinsn->opcode);
+--
+--  /* Validate that there really is a LOOP at the loop_offset.  Because
+--     loops are not bundleable, we can assume that the instruction will be
+--     in slot 0.  */
+--  tinsn_from_chars (&loop_insn, fragP->fr_opcode + loop_offset, 0);
+--  tinsn_immed_from_frag (&loop_insn, fragP, 0);
+--
+--  gas_assert (xtensa_opcode_is_loop (isa, loop_insn.opcode) == 1);
+--  addi_offset += loop_offset;
+--  addmi_offset += loop_offset;
+--
+--  gas_assert (tinsn->ntok == 2);
+--  if (tinsn->tok[1].X_op == O_constant)
+--    target = tinsn->tok[1].X_add_number;
+--  else if (tinsn->tok[1].X_op == O_symbol)
+--    {
+--      /* Find the fragment.  */
+--      symbolS *sym = tinsn->tok[1].X_add_symbol;
+--      gas_assert (S_GET_SEGMENT (sym) == segP
+--	      || S_GET_SEGMENT (sym) == absolute_section);
+--      target = (S_GET_VALUE (sym) + tinsn->tok[1].X_add_number);
+--    }
+--  else
+--    {
+--      as_bad (_("invalid expression evaluation type %d"), tinsn->tok[1].X_op);
+--      target = 0;
+--    }
+--
+--  loop_length = target - (fragP->fr_address + fragP->fr_fix);
+--  loop_length_hi = loop_length & ~0x0ff;
+--  loop_length_lo = loop_length & 0x0ff;
+--  if (loop_length_lo >= 128)
+--    {
+--      loop_length_lo -= 256;
+--      loop_length_hi += 256;
+--    }
+--
+--  /* Because addmi sign-extends the immediate, 'loop_length_hi' can be at most
+--     32512.  If the loop is larger than that, then we just fail.  */
+--  if (loop_length_hi > 32512)
+--    as_bad_where (fragP->fr_file, fragP->fr_line,
+--		  _("loop too long for LOOP instruction"));
+--
+--  tinsn_from_chars (&addi_insn, fragP->fr_opcode + addi_offset, 0);
+--  gas_assert (addi_insn.opcode == xtensa_addi_opcode);
+--
+--  tinsn_from_chars (&addmi_insn, fragP->fr_opcode + addmi_offset, 0);
+--  gas_assert (addmi_insn.opcode == xtensa_addmi_opcode);
+--
+--  set_expr_const (&addi_insn.tok[2], loop_length_lo);
+--  tinsn_to_insnbuf (&addi_insn, insnbuf);
+--
+--  fragP->tc_frag_data.is_insn = TRUE;
+--  xtensa_insnbuf_to_chars
+--    (isa, insnbuf, (unsigned char *) fragP->fr_opcode + addi_offset, 0);
+--
+--  set_expr_const (&addmi_insn.tok[2], loop_length_hi);
+--  tinsn_to_insnbuf (&addmi_insn, insnbuf);
+--  xtensa_insnbuf_to_chars
+--    (isa, insnbuf, (unsigned char *) fragP->fr_opcode + addmi_offset, 0);
+--
+--  /* Walk through all of the frags from here to the loop end
+--     and mark them as no_transform to keep them from being modified
+--     by the linker.  If we ever have a relocation for the
+--     addi/addmi of the difference of two symbols we can remove this.  */
+--
+--  target_count = 0;
+--  for (next_fragP = fragP; next_fragP != NULL;
+--       next_fragP = next_fragP->fr_next)
+--    {
+--      next_fragP->tc_frag_data.is_no_transform = TRUE;
+--      if (next_fragP->tc_frag_data.is_loop_target)
+--	target_count++;
+--      if (target_count == 2)
+--	break;
+--    }
+--}
+--
+- 
+- /* A map that keeps information on a per-subsegment basis.  This is
+-    maintained during initial assembly, but is invalid once the
+-diff --git a/gas/config/xtensa-relax.c b/gas/config/xtensa-relax.c
+-index cb296ed85ed2..daf15d52c259 100644
+---- a/gas/config/xtensa-relax.c
+-+++ b/gas/config/xtensa-relax.c
+-@@ -87,13 +87,7 @@
+-    when the first and second operands are not the same as specified
+-    by the "| %at!=%as" precondition clause.
+-    {"l32i %at,%as,%imm | %at!=%as",
+--   "LITERAL %imm; l32r %at,%LITERAL; add %at,%at,%as; l32i %at,%at,0"}
+--
+--   There is special case for loop instructions here, but because we do
+--   not currently have the ability to represent the difference of two
+--   symbols, the conversion requires special code in the assembler to
+--   write the operands of the addi/addmi pair representing the
+--   difference of the old and new loop end label.  */
+-+   "LITERAL %imm; l32r %at,%LITERAL; add %at,%at,%as; l32i %at,%at,0"}  */
+- 
+- #include "as.h"
+- #include "xtensa-isa.h"
+-@@ -306,44 +300,83 @@ static string_pattern_pair widen_spec_list[] =
+-   {"l32i %at,%as,%imm | %at!=%as ? IsaUseConst16",
+-    "const16 %at,HI16U(%imm); const16 %at,LOW16U(%imm); add %at,%at,%as; l32i %at,%at,0"},
+- 
+--  /* This is only PART of the loop instruction.  In addition,
+--     hardcoded into its use is a modification of the final operand in
+--     the instruction in bytes 9 and 12.  */
+--  {"loop %as,%label | %as!=1 ? IsaUseLoops",
+-+  /* Widening loops with literals.  */
+-+  {"loop %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+-+   "loop %as,%LABEL;"
+-+   "rsr.lend    %as;"		/* LEND */
+-+   "wsr.lbeg    %as;"		/* LBEG */
+-+   "LITERAL     %label;"
+-+   "l32r        %as, %LITERAL;"
+-+   "nop;"
+-+   "wsr.lend    %as;"
+-+   "isync;"
+-+   "rsr.lcount    %as;"		/* LCOUNT */
+-+   "addi    %as, %as, 1;"
+-+   "LABEL"},
+-+  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+-+   "beqz    %as,%label;"
+-+   "bltz    %as,%label;"
+-+   "loopgtz %as,%LABEL;"
+-+   "rsr.lend    %as;"		/* LEND */
+-+   "wsr.lbeg    %as;"		/* LBEG */
+-+   "LITERAL     %label;"
+-+   "l32r        %as, %LITERAL;"
+-+   "nop;"
+-+   "wsr.lend    %as;"
+-+   "isync;"
+-+   "rsr.lcount    %as;"		/* LCOUNT */
+-+   "addi    %as, %as, 1;"
+-+   "LABEL"},
+-+  {"loopnez %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+-+   "beqz     %as,%label;"
+-+   "loopnez %as,%LABEL;"
+-+   "rsr.lend    %as;"		/* LEND */
+-+   "wsr.lbeg    %as;"		/* LBEG */
+-+   "LITERAL     %label;"
+-+   "l32r        %as, %LITERAL;"
+-+   "nop;"
+-+   "wsr.lend    %as;"
+-+   "isync;"
+-+   "rsr.lcount    %as;"		/* LCOUNT */
+-+   "addi    %as, %as, 1;"
+-+   "LABEL"},
+-+
+-+  /* Widening loops with const16.  */
+-+  {"loop %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
+-    "loop %as,%LABEL;"
+-    "rsr.lend    %as;"		/* LEND */
+-    "wsr.lbeg    %as;"		/* LBEG */
+--   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
+--   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+-+   "const16     %as,HI16U(%label);"
+-+   "const16     %as,LOW16U(%label);"
+-    "wsr.lend    %as;"
+-    "isync;"
+-    "rsr.lcount    %as;"		/* LCOUNT */
+--   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+-+   "addi    %as, %as, 1;"
+-    "LABEL"},
+--  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops",
+-+  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
+-    "beqz    %as,%label;"
+-    "bltz    %as,%label;"
+-    "loopgtz %as,%LABEL;"
+-    "rsr.lend    %as;"		/* LEND */
+-    "wsr.lbeg    %as;"		/* LBEG */
+--   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
+--   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+-+   "const16     %as,HI16U(%label);"
+-+   "const16     %as,LOW16U(%label);"
+-    "wsr.lend    %as;"
+-    "isync;"
+-    "rsr.lcount    %as;"		/* LCOUNT */
+--   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+-+   "addi    %as, %as, 1;"
+-    "LABEL"},
+--  {"loopnez %as,%label | %as!=1 ? IsaUseLoops",
+-+  {"loopnez %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
+-    "beqz     %as,%label;"
+-    "loopnez %as,%LABEL;"
+-    "rsr.lend    %as;"		/* LEND */
+-    "wsr.lbeg    %as;"		/* LBEG */
+--   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
+--   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+-+   "const16     %as,HI16U(%label);"
+-+   "const16     %as,LOW16U(%label);"
+-    "wsr.lend    %as;"
+-    "isync;"
+-    "rsr.lcount    %as;"		/* LCOUNT */
+--   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+-+   "addi    %as, %as, 1;"
+-    "LABEL"},
+- 
+-   /* Relaxing to wide branches.  Order is important here.  With wide
+--- 
+-2.11.0
+-
+diff --git a/package/binutils/2.32/0005-xtensa-gas-put-.literal_position-at-section-start.patch b/package/binutils/2.32/0005-xtensa-gas-put-.literal_position-at-section-start.patch
+deleted file mode 100644
+index b4bbc27b37..0000000000
+--- a/package/binutils/2.32/0005-xtensa-gas-put-.literal_position-at-section-start.patch
++++ /dev/null
+@@ -1,96 +0,0 @@
+-From 471702ac4a57878a06e8167f063274cf413e548d Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Mon, 8 Apr 2019 13:47:18 -0700
+-Subject: [PATCH] xtensa: gas: put .literal_position at section start
+-
+-Provide literal position at the beginning of each section for literal
+-space reserved by relaxations when text-section-literals or
+-auto-litpools options are used. Remove code that adds fill frag to the
+-literal section for every .literal_position directive to avoid creation
+-of empty literal sections.
+-
+-Fix auto-litpools tests that got literal pool address changes.
+-
+-gas/
+-2019-04-11  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* config/tc-xtensa.c (xtensa_is_init_fini): Add declaration.
+-	(xtensa_mark_literal_pool_location): Don't add fill frag to literal
+-	section that records literal pool location.
+-	(md_begin): Call xtensa_mark_literal_pool_location when text
+-	section literals or auto litpools are used.
+-	(xtensa_elf_section_change_hook): Call
+-	xtensa_mark_literal_pool_location when text section literals or
+-	auto litpools are used, there's no literal pool location defined
+-	for the current section and it's not .init or .fini.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- gas/config/tc-xtensa.c                          | 22 +++++++++-------------
+- 1 file changed, 9 insertions(+), 13 deletions(-)
+-
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index 0cc06361cf6f..6a80e76fed8c 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -497,6 +497,7 @@ static fixS *xg_append_jump (fragS *fragP, symbolS *sym, offsetT offset);
+- static void xtensa_maybe_create_literal_pool_frag (bfd_boolean, bfd_boolean);
+- static bfd_boolean auto_litpools = FALSE;
+- static int auto_litpool_limit = 0;
+-+static bfd_boolean xtensa_is_init_fini (segT seg);
+- 
+- /* Alignment Functions.  */
+- 
+-@@ -4797,7 +4798,6 @@ xtensa_mark_literal_pool_location (void)
+- {
+-   /* Any labels pointing to the current location need
+-      to be adjusted to after the literal pool.  */
+--  emit_state s;
+-   fragS *pool_location;
+- 
+-   if (use_literal_section)
+-@@ -4818,19 +4818,7 @@ xtensa_mark_literal_pool_location (void)
+- 		RELAX_LITERAL_POOL_END, NULL, 0, NULL);
+-   xtensa_set_frag_assembly_state (frag_now);
+- 
+--  /* Now put a frag into the literal pool that points to this location.  */
+-   set_literal_pool_location (now_seg, pool_location);
+--  xtensa_switch_to_non_abs_literal_fragment (&s);
+--  frag_align (2, 0, 0);
+--  record_alignment (now_seg, 2);
+--
+--  /* Close whatever frag is there.  */
+--  frag_variant (rs_fill, 0, 0, 0, NULL, 0, NULL);
+--  xtensa_set_frag_assembly_state (frag_now);
+--  frag_now->tc_frag_data.literal_frag = pool_location;
+--  frag_variant (rs_fill, 0, 0, 0, NULL, 0, NULL);
+--  xtensa_restore_emit_state (&s);
+--  xtensa_set_frag_assembly_state (frag_now);
+- }
+- 
+- 
+-@@ -5334,6 +5322,9 @@ md_begin (void)
+-   /* Set up the assembly state.  */
+-   if (!frag_now->tc_frag_data.is_assembly_state_set)
+-     xtensa_set_frag_assembly_state (frag_now);
+-+
+-+  if (!use_literal_section)
+-+    xtensa_mark_literal_pool_location ();
+- }
+- 
+- 
+-@@ -5933,6 +5924,11 @@ xtensa_elf_section_change_hook (void)
+-   /* Set up the assembly state.  */
+-   if (!frag_now->tc_frag_data.is_assembly_state_set)
+-     xtensa_set_frag_assembly_state (frag_now);
+-+
+-+  if (!use_literal_section
+-+      && seg_info (now_seg)->tc_segment_info_data.literal_pool_loc == NULL
+-+      && !xtensa_is_init_fini (now_seg))
+-+    xtensa_mark_literal_pool_location ();
+- }
+- 
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/binutils/2.32/0006-or1k-Fix-incorrect-value-in-PLT-GOT-entries-causing-.patch b/package/binutils/2.32/0006-or1k-Fix-incorrect-value-in-PLT-GOT-entries-causing-.patch
+deleted file mode 100644
+index 8527b66733..0000000000
+--- a/package/binutils/2.32/0006-or1k-Fix-incorrect-value-in-PLT-GOT-entries-causing-.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From b17678f639f953d687d96cd52690e7cbfae50f91 Mon Sep 17 00:00:00 2001
+-From: Stafford Horne <shorne@gmail.com>
+-Date: Fri, 23 Aug 2019 22:25:55 +0900
+-Subject: [PATCH] or1k: Fix incorrect value in PLT GOT entries, causing
+- infinite loop
+-
+-The PLT GOT entry should point to the first PLT entry which contains the
+-runtime linker function.  It was pointing back to the symbol PLT entry
+-causing an infinite loop.
+-
+-I found this when testing the OpenRISC glibc port which uses the runtime
+-dynamic linker.  It seems other libc's we use so far have not been
+-making use of the initial PLT GOT entries.
+-
+-bfd/ChangeLog:
+-
+-	* elf32-or1k.c (or1k_elf_finish_dynamic_symbol): Use correct value for
+-	PLT GOT entries.
+-
+-(cherry picked from commit 09f7b0de537d465fc8ed9f9433e348c1bc78aab2)
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- bfd/elf32-or1k.c | 7 +++++--
+- 1 file changed, 5 insertions(+), 2 deletions(-)
+-
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index 2f200b197b8..32839cfa7b6 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -2379,8 +2379,11 @@ or1k_elf_finish_dynamic_symbol (bfd *output_bfd,
+-       or1k_write_plt_entry (output_bfd, splt->contents + h->plt.offset,
+- 			    plt0, plt1, plt2, OR1K_JR(12));
+- 
+--      /* Fill in the entry in the global offset table.  */
+--      bfd_put_32 (output_bfd, plt_addr, sgot->contents + got_offset);
+-+      /* Fill in the entry in the global offset table.  We initialize it to
+-+	 point to the top of the plt.  This is done to lazy lookup the actual
+-+	 symbol as the first plt entry will be setup by libc to call the
+-+	 runtime dynamic linker.  */
+-+      bfd_put_32 (output_bfd, plt_base_addr, sgot->contents + got_offset);
+- 
+-       /* Fill in the entry in the .rela.plt section.  */
+-       rela.r_offset = got_addr;
+--- 
+-2.23.0
+-
+diff --git a/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
+deleted file mode 100644
+index f499426b70..0000000000
+--- a/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Wed, 4 Mar 2020 14:54:27 -0800
+-Subject: [PATCH] bfd: xtensa: fix PR ld/25630
+-
+-bfd/
+-2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
+-	relocation sections for any removed reference to a dynamic symbol.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- bfd/elf32-xtensa.c | 7 +++----
+- 1 file changed, 3 insertions(+), 4 deletions(-)
+-
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index 12ff9f772aaf..65e14d87940c 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
+- 
+-   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
+-       && (input_section->flags & SEC_ALLOC) != 0
+--      && (dynamic_symbol || bfd_link_pic (info))
+--      && (!h || h->root.type != bfd_link_hash_undefweak
+--	  || (dynamic_symbol
+--	      && (bfd_link_dll (info) || info->export_dynamic))))
+-+      && (dynamic_symbol
+-+	  || (bfd_link_pic (info)
+-+	      && (!h || h->root.type != bfd_link_hash_undefweak))))
+-     {
+-       asection *srel;
+-       bfd_boolean is_plt = FALSE;
 --- 
 -2.20.1
 -
-diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
-index c4b0697fcd..c576f65cdb 100644
---- a/package/elf2flt/elf2flt.hash
-+++ b/package/elf2flt/elf2flt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d63baae6fe0d7fcc50a635be151a6f9e1e83dba30568046a869a395c15bf6284  elf2flt-7e33f28df198c46764021ed14408bd262751e148.tar.gz
-+sha256  6637432ed58dee2d42d09e3b9a902a0dd3b9975acba0c0b24ef9e4e9253159a9  elf2flt-2021.08.tar.gz
- sha256  f20bc5007904094e3a4e9fbcc3526cdd40893f91d458c3139b308e5c4c0899c6  LICENSE.TXT
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index 3239af1b9a..11cacaf9e0 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/binutils/2.32/0008-xtensa-fix-PR-ld-25861.patch b/package/binutils/2.32/0008-xtensa-fix-PR-ld-25861.patch
+deleted file mode 100644
+index 2df46c6526..0000000000
+--- a/package/binutils/2.32/0008-xtensa-fix-PR-ld-25861.patch
++++ /dev/null
+@@ -1,432 +0,0 @@
+-From c7a1d1f656c717394937a92cb970f0f4cecce128 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Sun, 19 Apr 2020 19:04:41 -0700
+-Subject: [PATCH] xtensa: fix PR ld/25861
+-
+-Introduce new relaxations XTENSA_PDIFF{8,16,32} for positive differences
+-(subtracted symbol precedes diminished symbol) and XTENSA_NDIFF{8,16,32}
+-for negative differences (subtracted symbol follows diminished symbol).
+-Don't generate XTENSA_DIFF relocations in the assembler, generate
+-XTENSA_PDIFF or XTENSA_NDIFF based on relative symbol position.
+-
+-Handle XTENSA_DIFF in BFD for compatibility with old object files.
+-Handle XTENSA_PDIFF and XTENSA_NDIFF in BFD, treating difference value
+-as unsigned.
+-
+-2020-04-22  Max Filippov  <jcmvbkbc@gmail.com>
+-bfd/
+-	* bfd-in2.h: Regenerated.
+-	* elf32-xtensa.c (elf_howto_table): New entries for
+-	R_XTENSA_PDIFF{8,16,32} and R_XTENSA_NDIFF{8,16,32}.
+-	(elf_xtensa_reloc_type_lookup, elf_xtensa_do_reloc)
+-	(relax_section): Add cases for R_XTENSA_PDIFF{8,16,32} and
+-	R_XTENSA_NDIFF{8,16,32}.
+-	* libbfd.h (bfd_reloc_code_real_names): Add names for
+-	BFD_RELOC_XTENSA_PDIFF{8,16,32} and
+-	BFD_RELOC_XTENSA_NDIFF{8,16,32}.
+-	* reloc.c: Add documentation for BFD_RELOC_XTENSA_PDIFF{8,16,32}
+-	and BFD_RELOC_XTENSA_NDIFF{8,16,32}.
+-
+-binutils/
+-	* readelf.c (is_none_reloc): Recognize
+-	BFD_RELOC_XTENSA_PDIFF{8,16,32} and
+-	BFD_RELOC_XTENSA_NDIFF{8,16,32}.
+-
+-gas/
+-	* config/tc-xtensa.c (md_apply_fix): Replace
+-	BFD_RELOC_XTENSA_DIFF{8,16,32} generation with
+-	BFD_RELOC_XTENSA_PDIFF{8,16,32} and
+-	BFD_RELOC_XTENSA_NDIFF{8,16,32} generation.
+-	* testsuite/gas/xtensa/loc.d: Replace BFD_RELOC_XTENSA_DIFF16
+-	with BFD_RELOC_XTENSA_PDIFF16 in the expected output.
+-
+-include/
+-	* elf/xtensa.h (elf_xtensa_reloc_type): New entries for
+-	R_XTENSA_PDIFF{8,16,32} and R_XTENSA_NDIFF{8,16,32}.
+-
+-ld/
+-	* testsuite/ld-xtensa/relax-loc.d: New test definition.
+-	* testsuite/ld-xtensa/relax-loc.s: New test source.
+-	* testsuite/ld-xtensa/xtensa.exp (relax-loc): New test.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Backported from: 30ce8e47fad9b057b6d7af9e1d43061126d34d20
+-
+- bfd/bfd-in2.h                      | 20 ++++++-
+- bfd/elf32-xtensa.c                 | 89 +++++++++++++++++++++++++++++-
+- bfd/libbfd.h                       |  6 ++
+- bfd/reloc.c                        | 24 ++++++++
+- binutils/readelf.c                 |  8 ++-
+- gas/config/tc-xtensa.c             | 12 +++-
+- gas/testsuite/gas/xtensa/loc.d     |  2 +-
+- include/elf/xtensa.h               |  6 ++
+- ld/testsuite/ld-xtensa/relax-loc.d |  7 +++
+- ld/testsuite/ld-xtensa/relax-loc.s | 15 +++++
+- ld/testsuite/ld-xtensa/xtensa.exp  |  1 +
+- 11 files changed, 183 insertions(+), 7 deletions(-)
+- create mode 100644 ld/testsuite/ld-xtensa/relax-loc.d
+- create mode 100644 ld/testsuite/ld-xtensa/relax-loc.s
+-
+-diff --git a/bfd/bfd-in2.h b/bfd/bfd-in2.h
+-index 37114607b515..be6a30f57955 100644
+---- a/bfd/bfd-in2.h
+-+++ b/bfd/bfd-in2.h
+-@@ -5217,7 +5217,9 @@ to one of its own internal functions or data structures.  */
+- PLT entries.  Otherwise, this is just a generic 32-bit relocation.  */
+-   BFD_RELOC_XTENSA_PLT,
+- 
+--/* Xtensa relocations to mark the difference of two local symbols.
+-+/* Xtensa relocations for backward compatibility.  These have been replaced
+-+by BFD_RELOC_XTENSA_PDIFF and BFD_RELOC_XTENSA_NDIFF.
+-+Xtensa relocations to mark the difference of two local symbols.
+- These are only needed to support linker relaxation and can be ignored
+- when not relaxing.  The field is set to the value of the difference
+- assuming no relaxation.  The relocation encodes the position of the
+-@@ -5291,6 +5293,22 @@ BFD_RELOC_XTENSA_ASM_EXPAND.  */
+-   BFD_RELOC_XTENSA_TLS_ARG,
+-   BFD_RELOC_XTENSA_TLS_CALL,
+- 
+-+/* Xtensa relocations to mark the difference of two local symbols.
+-+These are only needed to support linker relaxation and can be ignored
+-+when not relaxing.  The field is set to the value of the difference
+-+assuming no relaxation.  The relocation encodes the position of the
+-+subtracted symbol so the linker can determine whether to adjust the field
+-+value.  PDIFF relocations are used for positive differences, NDIFF
+-+relocations are used for negative differences.  The difference value
+-+is treated as unsigned with these relocation types, giving full
+-+8/16 value ranges.  */
+-+  BFD_RELOC_XTENSA_PDIFF8,
+-+  BFD_RELOC_XTENSA_PDIFF16,
+-+  BFD_RELOC_XTENSA_PDIFF32,
+-+  BFD_RELOC_XTENSA_NDIFF8,
+-+  BFD_RELOC_XTENSA_NDIFF16,
+-+  BFD_RELOC_XTENSA_NDIFF32,
+-+
+- /* 8 bit signed offset in (ix+d) or (iy+d).  */
+-   BFD_RELOC_Z80_DISP8,
+- 
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index 473a9d76f289..fded42d52a9a 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -325,6 +325,20 @@ static reloc_howto_type elf_howto_table[] =
+-   HOWTO (R_XTENSA_TLS_CALL, 0, 0, 0, FALSE, 0, complain_overflow_dont,
+- 	 bfd_elf_xtensa_reloc, "R_XTENSA_TLS_CALL",
+- 	 FALSE, 0, 0, FALSE),
+-+
+-+  HOWTO (R_XTENSA_PDIFF8, 0, 0, 8, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_PDIFF8", FALSE, 0, 0xff, FALSE),
+-+  HOWTO (R_XTENSA_PDIFF16, 0, 1, 16, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_PDIFF16", FALSE, 0, 0xffff, FALSE),
+-+  HOWTO (R_XTENSA_PDIFF32, 0, 2, 32, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_PDIFF32", FALSE, 0, 0xffffffff, FALSE),
+-+
+-+  HOWTO (R_XTENSA_NDIFF8, 0, 0, 8, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_NDIFF8", FALSE, 0, 0xff, FALSE),
+-+  HOWTO (R_XTENSA_NDIFF16, 0, 1, 16, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_NDIFF16", FALSE, 0, 0xffff, FALSE),
+-+  HOWTO (R_XTENSA_NDIFF32, 0, 2, 32, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_NDIFF32", FALSE, 0, 0xffffffff, FALSE),
+- };
+- 
+- #if DEBUG_GEN_RELOC
+-@@ -364,6 +378,30 @@ elf_xtensa_reloc_type_lookup (bfd *abfd ATTRIBUTE_UNUSED,
+-       TRACE ("BFD_RELOC_XTENSA_DIFF32");
+-       return &elf_howto_table[(unsigned) R_XTENSA_DIFF32 ];
+- 
+-+    case BFD_RELOC_XTENSA_PDIFF8:
+-+      TRACE ("BFD_RELOC_XTENSA_PDIFF8");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_PDIFF8 ];
+-+
+-+    case BFD_RELOC_XTENSA_PDIFF16:
+-+      TRACE ("BFD_RELOC_XTENSA_PDIFF16");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_PDIFF16 ];
+-+
+-+    case BFD_RELOC_XTENSA_PDIFF32:
+-+      TRACE ("BFD_RELOC_XTENSA_PDIFF32");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_PDIFF32 ];
+-+
+-+    case BFD_RELOC_XTENSA_NDIFF8:
+-+      TRACE ("BFD_RELOC_XTENSA_NDIFF8");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_NDIFF8 ];
+-+
+-+    case BFD_RELOC_XTENSA_NDIFF16:
+-+      TRACE ("BFD_RELOC_XTENSA_NDIFF16");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_NDIFF16 ];
+-+
+-+    case BFD_RELOC_XTENSA_NDIFF32:
+-+      TRACE ("BFD_RELOC_XTENSA_NDIFF32");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_NDIFF32 ];
+-+
+-     case BFD_RELOC_XTENSA_RTLD:
+-       TRACE ("BFD_RELOC_XTENSA_RTLD");
+-       return &elf_howto_table[(unsigned) R_XTENSA_RTLD ];
+-@@ -1851,6 +1889,12 @@ elf_xtensa_do_reloc (reloc_howto_type *howto,
+-     case R_XTENSA_DIFF8:
+-     case R_XTENSA_DIFF16:
+-     case R_XTENSA_DIFF32:
+-+    case R_XTENSA_PDIFF8:
+-+    case R_XTENSA_PDIFF16:
+-+    case R_XTENSA_PDIFF32:
+-+    case R_XTENSA_NDIFF8:
+-+    case R_XTENSA_NDIFF16:
+-+    case R_XTENSA_NDIFF32:
+-     case R_XTENSA_TLS_FUNC:
+-     case R_XTENSA_TLS_ARG:
+-     case R_XTENSA_TLS_CALL:
+-@@ -9604,7 +9648,13 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 
+- 	      if (r_type == R_XTENSA_DIFF8
+- 		  || r_type == R_XTENSA_DIFF16
+--		  || r_type == R_XTENSA_DIFF32)
+-+		  || r_type == R_XTENSA_DIFF32
+-+		  || r_type == R_XTENSA_PDIFF8
+-+		  || r_type == R_XTENSA_PDIFF16
+-+		  || r_type == R_XTENSA_PDIFF32
+-+		  || r_type == R_XTENSA_NDIFF8
+-+		  || r_type == R_XTENSA_NDIFF16
+-+		  || r_type == R_XTENSA_NDIFF32)
+- 		{
+- 		  bfd_signed_vma diff_value = 0;
+- 		  bfd_vma new_end_offset, diff_mask = 0;
+-@@ -9631,8 +9681,27 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		      diff_value =
+- 			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
+- 		      break;
+-+		    case R_XTENSA_PDIFF8:
+-+		    case R_XTENSA_NDIFF8:
+-+		      diff_value =
+-+			bfd_get_8 (abfd, &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF16:
+-+		    case R_XTENSA_NDIFF16:
+-+		      diff_value =
+-+			bfd_get_16 (abfd, &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF32:
+-+		    case R_XTENSA_NDIFF32:
+-+		      diff_value =
+-+			bfd_get_32 (abfd, &contents[old_source_offset]);
+-+		      break;
+- 		    }
+- 
+-+		  if (r_type >= R_XTENSA_NDIFF8
+-+		      && r_type <= R_XTENSA_NDIFF32)
+-+		    diff_value = -diff_value;
+-+
+- 		  new_end_offset = offset_with_removed_text_map
+- 		    (&target_relax_info->action_list,
+- 		     r_rel.target_offset + diff_value);
+-@@ -9655,6 +9724,24 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		      bfd_put_signed_32 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+-+		    case R_XTENSA_PDIFF8:
+-+		    case R_XTENSA_NDIFF8:
+-+		      diff_mask = 0xff;
+-+		      bfd_put_8 (abfd, diff_value,
+-+				 &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF16:
+-+		    case R_XTENSA_NDIFF16:
+-+		      diff_mask = 0xffff;
+-+		      bfd_put_16 (abfd, diff_value,
+-+				  &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF32:
+-+		    case R_XTENSA_NDIFF32:
+-+		      diff_mask = 0xffffffff;
+-+		      bfd_put_32 (abfd, diff_value,
+-+				  &contents[old_source_offset]);
+-+		      break;
+- 		    }
+- 
+- 		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+-diff --git a/bfd/libbfd.h b/bfd/libbfd.h
+-index 3c184fcadadf..989f4bc0b595 100644
+---- a/bfd/libbfd.h
+-+++ b/bfd/libbfd.h
+-@@ -2919,6 +2919,12 @@ static const char *const bfd_reloc_code_real_names[] = { "@@uninitialized@@",
+-   "BFD_RELOC_XTENSA_TLS_FUNC",
+-   "BFD_RELOC_XTENSA_TLS_ARG",
+-   "BFD_RELOC_XTENSA_TLS_CALL",
+-+  "BFD_RELOC_XTENSA_PDIFF8",
+-+  "BFD_RELOC_XTENSA_PDIFF16",
+-+  "BFD_RELOC_XTENSA_PDIFF32",
+-+  "BFD_RELOC_XTENSA_NDIFF8",
+-+  "BFD_RELOC_XTENSA_NDIFF16",
+-+  "BFD_RELOC_XTENSA_NDIFF32",
+-   "BFD_RELOC_Z80_DISP8",
+-   "BFD_RELOC_Z80_BYTE0",
+-   "BFD_RELOC_Z80_BYTE1",
+-diff --git a/bfd/reloc.c b/bfd/reloc.c
+-index c4dec86d1d46..f5df8e2ab3eb 100644
+---- a/bfd/reloc.c
+-+++ b/bfd/reloc.c
+-@@ -6556,6 +6556,8 @@ ENUMX
+- ENUMX
+-   BFD_RELOC_XTENSA_DIFF32
+- ENUMDOC
+-+  Xtensa relocations for backward compatibility.  These have been replaced
+-+  by BFD_RELOC_XTENSA_PDIFF and BFD_RELOC_XTENSA_NDIFF.
+-   Xtensa relocations to mark the difference of two local symbols.
+-   These are only needed to support linker relaxation and can be ignored
+-   when not relaxing.  The field is set to the value of the difference
+-@@ -6668,6 +6670,28 @@ ENUMX
+-   BFD_RELOC_XTENSA_TLS_CALL
+- ENUMDOC
+-   Xtensa TLS relocations.
+-+ENUM
+-+  BFD_RELOC_XTENSA_PDIFF8
+-+ENUMX
+-+  BFD_RELOC_XTENSA_PDIFF16
+-+ENUMX
+-+  BFD_RELOC_XTENSA_PDIFF32
+-+ENUMX
+-+  BFD_RELOC_XTENSA_NDIFF8
+-+ENUMX
+-+  BFD_RELOC_XTENSA_NDIFF16
+-+ENUMX
+-+  BFD_RELOC_XTENSA_NDIFF32
+-+ENUMDOC
+-+  Xtensa relocations to mark the difference of two local symbols.
+-+  These are only needed to support linker relaxation and can be ignored
+-+  when not relaxing.  The field is set to the value of the difference
+-+  assuming no relaxation.  The relocation encodes the position of the
+-+  subtracted symbol so the linker can determine whether to adjust the field
+-+  value.  PDIFF relocations are used for positive differences, NDIFF
+-+  relocations are used for negative differences.  The difference value
+-+  is treated as unsigned with these relocation types, giving full
+-+  8/16 value ranges.
+- 
+- ENUM
+-   BFD_RELOC_Z80_DISP8
+-diff --git a/binutils/readelf.c b/binutils/readelf.c
+-index d4756c93b345..800918f901c8 100644
+---- a/binutils/readelf.c
+-+++ b/binutils/readelf.c
+-@@ -13262,7 +13262,13 @@ is_none_reloc (Filedata * filedata, unsigned int reloc_type)
+-       return (reloc_type == 0      /* R_XTENSA_NONE.  */
+- 	      || reloc_type == 17  /* R_XTENSA_DIFF8.  */
+- 	      || reloc_type == 18  /* R_XTENSA_DIFF16.  */
+--	      || reloc_type == 19  /* R_XTENSA_DIFF32.  */);
+-+	      || reloc_type == 19  /* R_XTENSA_DIFF32.  */
+-+	      || reloc_type == 57  /* R_XTENSA_PDIFF8.  */
+-+	      || reloc_type == 58  /* R_XTENSA_PDIFF16.  */
+-+	      || reloc_type == 59  /* R_XTENSA_PDIFF32.  */
+-+	      || reloc_type == 60  /* R_XTENSA_NDIFF8.  */
+-+	      || reloc_type == 61  /* R_XTENSA_NDIFF16.  */
+-+	      || reloc_type == 62  /* R_XTENSA_NDIFF32.  */);
+-     }
+-   return FALSE;
+- }
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index 71d4d94a8d7d..ee75c13548ff 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -5974,18 +5974,24 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg)
+-     case BFD_RELOC_8:
+-       if (fixP->fx_subsy)
+- 	{
+-+	  bfd_boolean neg = S_GET_VALUE (fixP->fx_addsy) + fixP->fx_offset
+-+	    < S_GET_VALUE (fixP->fx_subsy);
+-+
+- 	  switch (fixP->fx_r_type)
+- 	    {
+- 	    case BFD_RELOC_8:
+--	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF8;
+-+	      fixP->fx_r_type = neg
+-+		? BFD_RELOC_XTENSA_NDIFF8 : BFD_RELOC_XTENSA_PDIFF8;
+- 	      fixP->fx_signed = 0;
+- 	      break;
+- 	    case BFD_RELOC_16:
+--	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF16;
+-+	      fixP->fx_r_type = neg
+-+		? BFD_RELOC_XTENSA_NDIFF16 : BFD_RELOC_XTENSA_PDIFF16;
+- 	      fixP->fx_signed = 0;
+- 	      break;
+- 	    case BFD_RELOC_32:
+--	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF32;
+-+	      fixP->fx_r_type = neg
+-+		? BFD_RELOC_XTENSA_NDIFF32 : BFD_RELOC_XTENSA_PDIFF32;
+- 	      fixP->fx_signed = 0;
+- 	      break;
+- 	    default:
+-diff --git a/gas/testsuite/gas/xtensa/loc.d b/gas/testsuite/gas/xtensa/loc.d
+-index 71983cc90055..8fb3425999d5 100644
+---- a/gas/testsuite/gas/xtensa/loc.d
+-+++ b/gas/testsuite/gas/xtensa/loc.d
+-@@ -6,5 +6,5 @@
+- 
+- RELOCATION RECORDS FOR \[\.debug_line\]:
+- #...
+--.*R_XTENSA_DIFF16.*\.text\+0x00009c42
+-+.*R_XTENSA_PDIFF16.*\.text\+0x00009c42
+- #...
+-diff --git a/include/elf/xtensa.h b/include/elf/xtensa.h
+-index 2eb5e4e52941..bd5c80d13777 100644
+---- a/include/elf/xtensa.h
+-+++ b/include/elf/xtensa.h
+-@@ -87,6 +87,12 @@ START_RELOC_NUMBERS (elf_xtensa_reloc_type)
+-      RELOC_NUMBER (R_XTENSA_TLS_FUNC, 54)
+-      RELOC_NUMBER (R_XTENSA_TLS_ARG, 55)
+-      RELOC_NUMBER (R_XTENSA_TLS_CALL, 56)
+-+     RELOC_NUMBER (R_XTENSA_PDIFF8, 57)
+-+     RELOC_NUMBER (R_XTENSA_PDIFF16, 58)
+-+     RELOC_NUMBER (R_XTENSA_PDIFF32, 59)
+-+     RELOC_NUMBER (R_XTENSA_NDIFF8, 60)
+-+     RELOC_NUMBER (R_XTENSA_NDIFF16, 61)
+-+     RELOC_NUMBER (R_XTENSA_NDIFF32, 62)
+- END_RELOC_NUMBERS (R_XTENSA_max)
+- 
+- /* Processor-specific flags for the ELF header e_flags field.  */
+-diff --git a/ld/testsuite/ld-xtensa/relax-loc.d b/ld/testsuite/ld-xtensa/relax-loc.d
+-new file mode 100644
+-index 000000000000..3c8d673732ff
+---- /dev/null
+-+++ b/ld/testsuite/ld-xtensa/relax-loc.d
+-@@ -0,0 +1,7 @@
+-+#as: --text-section-literals
+-+#ld:
+-+#objdump: --dwarf=decodedline
+-+#...
+-+relax-loc.s[ 	]+1[ 	]+0x400054[ 	]+.*
+-+relax-loc.s[ 	]+2[ 	]+0x40005c[ 	]+.*
+-+#...
+-diff --git a/ld/testsuite/ld-xtensa/relax-loc.s b/ld/testsuite/ld-xtensa/relax-loc.s
+-new file mode 100644
+-index 000000000000..d768470e287a
+---- /dev/null
+-+++ b/ld/testsuite/ld-xtensa/relax-loc.s
+-@@ -0,0 +1,15 @@
+-+	.file	1 "relax-loc.s"
+-+	.globl	_start
+-+	.globl	_ResetVector
+-+	.text
+-+_ResetVector:
+-+_start:
+-+	.loc	1 1
+-+	j	1f
+-+	.literal_position
+-+1:
+-+	.loc	1 2
+-+
+-+	.rep	10000
+-+	movi	a2, 0x12345678
+-+	.endr
+-diff --git a/ld/testsuite/ld-xtensa/xtensa.exp b/ld/testsuite/ld-xtensa/xtensa.exp
+-index 9b2235b2151b..de39887936ad 100644
+---- a/ld/testsuite/ld-xtensa/xtensa.exp
+-+++ b/ld/testsuite/ld-xtensa/xtensa.exp
+-@@ -27,6 +27,7 @@ run_dump_test "call_overflow"
+- run_dump_test "coalesce"
+- run_dump_test "diff_overflow"
+- run_dump_test "lcall"
+-+run_dump_test "relax-loc"
+- 
+- run_dump_test "relax-static-pie"
+- run_dump_test "relax-static-local-pie"
+--- 
+-2.20.1
+-
+diff --git a/package/binutils/2.32/0009-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch b/package/binutils/2.32/0009-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+deleted file mode 100644
+index 28f17d7c56..0000000000
+--- a/package/binutils/2.32/0009-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
++++ /dev/null
+@@ -1,128 +0,0 @@
+-From 735321812435ae278d3766a3371f55937dc776d6 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Sat, 25 Apr 2020 00:40:25 -0700
+-Subject: [PATCH] xtensa: fix XTENSA_NDIFF handling for PR ld/25861
+-
+-Fields marked with XTENSA_NDIFF relocations are not negated, they only
+-have sign bits removed. Don't negate their values when relaxation is
+-performed. Don't add sign bits when the value is zero. Report overflow
+-when the result has negative sign but all significant bits are zero.
+-
+-2020-04-29  Max Filippov  <jcmvbkbc@gmail.com>
+-bfd/
+-	* elf32-xtensa.c (relax_section): Don't negate diff_value for
+-	XTENSA_NDIFF relocations. Don't add sign bits whe diff_value
+-	equals 0. Report overflow when the result has negative sign but
+-	all significant bits are zero.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+-Backported from: d548f47df4d2e3d117d504a4c9977982c78a0556
+----
+-
+- bfd/elf32-xtensa.c                   | 26 +++++++++++++++-----------
+- 1 file changed, 15 insertions(+), 11 deletions(-)
+-
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index fded42d52a9a..4327b027911f 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -9670,37 +9670,44 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		  switch (r_type)
+- 		    {
+- 		    case R_XTENSA_DIFF8:
+-+		      diff_mask = 0x7f;
+- 		      diff_value =
+- 			bfd_get_signed_8 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF16:
+-+		      diff_mask = 0x7fff;
+- 		      diff_value =
+- 			bfd_get_signed_16 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF32:
+-+		      diff_mask = 0x7fffffff;
+- 		      diff_value =
+- 			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF8:
+- 		    case R_XTENSA_NDIFF8:
+-+		      diff_mask = 0xff;
+- 		      diff_value =
+- 			bfd_get_8 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF16:
+- 		    case R_XTENSA_NDIFF16:
+-+		      diff_mask = 0xffff;
+- 		      diff_value =
+- 			bfd_get_16 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF32:
+- 		    case R_XTENSA_NDIFF32:
+-+		      diff_mask = 0xffffffff;
+- 		      diff_value =
+- 			bfd_get_32 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    }
+- 
+- 		  if (r_type >= R_XTENSA_NDIFF8
+--		      && r_type <= R_XTENSA_NDIFF32)
+--		    diff_value = -diff_value;
+-+		      && r_type <= R_XTENSA_NDIFF32
+-+		      && diff_value)
+-+		    diff_value |= ~diff_mask;
+- 
+- 		  new_end_offset = offset_with_removed_text_map
+- 		    (&target_relax_info->action_list,
+-@@ -9710,43 +9717,40 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		  switch (r_type)
+- 		    {
+- 		    case R_XTENSA_DIFF8:
+--		      diff_mask = 0x7f;
+- 		      bfd_put_signed_8 (abfd, diff_value,
+- 				 &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF16:
+--		      diff_mask = 0x7fff;
+- 		      bfd_put_signed_16 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF32:
+--		      diff_mask = 0x7fffffff;
+- 		      bfd_put_signed_32 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF8:
+- 		    case R_XTENSA_NDIFF8:
+--		      diff_mask = 0xff;
+- 		      bfd_put_8 (abfd, diff_value,
+- 				 &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF16:
+- 		    case R_XTENSA_NDIFF16:
+--		      diff_mask = 0xffff;
+- 		      bfd_put_16 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF32:
+- 		    case R_XTENSA_NDIFF32:
+--		      diff_mask = 0xffffffff;
+- 		      bfd_put_32 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    }
+- 
+--		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+--		  if ((diff_value & ~diff_mask) != 0 &&
+--		      (diff_value & ~diff_mask) != (-1 & ~diff_mask))
+-+		  /* Check for overflow. Sign bits must be all zeroes or
+-+		     all ones.  When sign bits are all ones diff_value
+-+		     may not be zero.  */
+-+		  if (((diff_value & ~diff_mask) != 0
+-+		       && (diff_value & ~diff_mask) != ~diff_mask)
+-+		      || (diff_value && (bfd_vma) diff_value == ~diff_mask))
+- 		    {
+- 		      (*link_info->callbacks->reloc_dangerous)
+- 			(link_info, _("overflow after relaxation"),
+--- 
+-2.20.1
+-
+diff --git a/package/binutils/2.32/0010-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch b/package/binutils/2.32/0010-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+deleted file mode 100644
+index a67d12789e..0000000000
+--- a/package/binutils/2.32/0010-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 788cda9f9447e0fe67e582e8fb5adafd678d08b2 Mon Sep 17 00:00:00 2001
+-From: Stafford Horne <shorne@gmail.com>
+-Date: Sun, 2 May 2021 06:02:14 +0900
+-Subject: [PATCH] or1k: Fix issue with plt link failure for local calls
+-
+-When building protobuf we were seeing the assert failure:
+-
+-    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
+-    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
+-    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
+-    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
+-    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
+-    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
+-    collect2: error: ld returned 1 exit status
+-
+-This failure happens while writing out PLT entries, there is a check
+-"BFD_ASSERT (h->dynindx != -1)" to confirm all plt entries have dynamic
+-symbol attributes.  This was failing for symbols that were
+-"forced_local" in previous linking code.
+-
+-The fix adds logic to or1k_elf_adjust_dynamic_symbol to identify
+-"forced_local" symbols and exclude them from the the PLT.
+-
+-bfd/ChangeLog:
+-
+-	PR 27624
+-	* elf32-or1k.c (or1k_elf_adjust_dynamic_symbol): Change
+-	condition used to cleanup plt entries to cleanup forced local
+-	entries.
+-
+-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- bfd/elf32-or1k.c | 9 ++++-----
+- 1 file changed, 4 insertions(+), 5 deletions(-)
+-
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index 2f200b197b8..1f2c88b0b3a 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -2535,11 +2535,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
+-   if (h->type == STT_FUNC
+-       || h->needs_plt)
+-     {
+--      if (! bfd_link_pic (info)
+--	  && !h->def_dynamic
+--	  && !h->ref_dynamic
+--	  && h->root.type != bfd_link_hash_undefweak
+--	  && h->root.type != bfd_link_hash_undefined)
+-+      if (h->plt.refcount <= 0
+-+	  || (SYMBOL_CALLS_LOCAL (info, h)
+-+	  || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+-+	      && h->root.type == bfd_link_hash_undefweak)))
+- 	{
+- 	  /* This case can occur if we saw a PLT reloc in an input
+- 	     file, but the symbol was never referred to by a dynamic
+--- 
+-2.25.1
+-
+diff --git a/package/binutils/2.32/0011-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch b/package/binutils/2.32/0011-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+deleted file mode 100644
+index 5a2b91fe8e..0000000000
+--- a/package/binutils/2.32/0011-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
++++ /dev/null
+@@ -1,256 +0,0 @@
+-From b10e6230dea0015bf3b7748580b82c551f9a3a4a Mon Sep 17 00:00:00 2001
+-From: Stafford Horne <shorne@gmail.com>
+-Date: Sun, 2 May 2021 06:02:15 +0900
+-Subject: [PATCH] or1k: Implement relocation R_OR1K_GOT_AHI16 for gotha()
+-
+-The gotha() relocation mnemonic will be outputted by OpenRISC GCC when
+-using the -mcmodel=large option.  This relocation is used along with
+-got() to generate 32-bit GOT offsets.  This increases the previous GOT
+-offset limit from the previous 16-bit (64K) limit.
+-
+-This is needed on large binaries where the GOT grows larger than 64k.
+-
+-bfd/ChangeLog:
+-
+-	PR 21464
+-	* bfd-in2.h: Add BFD_RELOC_OR1K_GOT_AHI16 relocation.
+-	* elf32-or1k.c (or1k_elf_howto_table, or1k_reloc_map): Likewise.
+-	(or1k_final_link_relocate, or1k_elf_relocate_section,
+-	or1k_elf_check_relocs): Likewise.
+-	* libbfd.h (bfd_reloc_code_real_names): Likewise.
+-	* reloc.c: Likewise.
+-
+-cpu/ChangeLog:
+-
+-	PR 21464
+-	* or1k.opc (or1k_imm16_relocs, parse_reloc): Define parse logic
+-	for gotha() relocation.
+-
+-include/ChangeLog:
+-
+-	PR 21464
+-	* elf/or1k.h (elf_or1k_reloc_type): Define R_OR1K_GOT_AHI16 number.
+-
+-opcodes/ChangeLog:
+-
+-	PR 21464
+-	* or1k-asm.c: Regenerate.
+-
+-gas/ChangeLog:
+-
+-	PR 21464
+-	* testsuite/gas/or1k/reloc-1.s: Add test for new relocation.
+-	* testsuite/gas/or1k/reloc-1.d: Add test result for new
+-	relocation.
+-
+-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-
+-fixup reloc, add tests
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- bfd/bfd-in2.h                    |  1 +
+- bfd/elf32-or1k.c                 | 21 ++++++++++++++++++++-
+- bfd/libbfd.h                     |  1 +
+- bfd/reloc.c                      |  2 ++
+- cpu/or1k.opc                     |  7 ++++++-
+- gas/testsuite/gas/or1k/reloc-1.d |  4 +++-
+- gas/testsuite/gas/or1k/reloc-1.s |  4 ++++
+- include/elf/or1k.h               |  1 +
+- opcodes/or1k-asm.c               |  7 ++++++-
+- 9 files changed, 44 insertions(+), 4 deletions(-)
+-
+-diff --git a/bfd/bfd-in2.h b/bfd/bfd-in2.h
+-index e25da50aafb..530a41fca43 100644
+---- a/bfd/bfd-in2.h
+-+++ b/bfd/bfd-in2.h
+-@@ -5517,6 +5517,7 @@ then it may be truncated to 8 bits.  */
+-   BFD_RELOC_OR1K_TLS_TPOFF,
+-   BFD_RELOC_OR1K_TLS_DTPOFF,
+-   BFD_RELOC_OR1K_TLS_DTPMOD,
+-+  BFD_RELOC_OR1K_GOT_AHI16,
+- 
+- /* H8 elf Relocations.  */
+-   BFD_RELOC_H8_DIR16A8,
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index 1f2c88b0b3a..a4a64f73b7c 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -808,6 +808,20 @@ static reloc_howto_type or1k_elf_howto_table[] =
+- 	 0,			/* Source Mask.  */
+- 	 0x03ffffff,		/* Dest Mask.  */
+- 	 TRUE),			/* PC relative offset?  */
+-+
+-+  HOWTO (R_OR1K_GOT_AHI16,     /* type */
+-+	16,                    /* rightshift */
+-+	2,                     /* size (0 = byte, 1 = short, 2 = long) */
+-+	16,                    /* bitsize */
+-+	FALSE,                 /* pc_relative */
+-+	0,                     /* bitpos */
+-+	complain_overflow_signed, /* complain_on_overflow */
+-+	bfd_elf_generic_reloc, /* special_function */
+-+	"R_OR1K_GOT_AHI16",    /* name */
+-+	FALSE,                 /* partial_inplace */
+-+	0,                     /* src_mask */
+-+	0xffff,                /* dst_mask */
+-+	FALSE),                /* pcrel_offset */
+- };
+- 
+- /* Map BFD reloc types to Or1k ELF reloc types.  */
+-@@ -871,6 +885,7 @@ static const struct or1k_reloc_map or1k_reloc_map[] =
+-   { BFD_RELOC_OR1K_TLS_IE_LO13,	R_OR1K_TLS_IE_LO13 },
+-   { BFD_RELOC_OR1K_SLO13,	R_OR1K_SLO13 },
+-   { BFD_RELOC_OR1K_PLTA26,	R_OR1K_PLTA26 },
+-+  { BFD_RELOC_OR1K_GOT_AHI16,	R_OR1K_GOT_AHI16 },
+- };
+- 
+- #define TLS_UNKNOWN    0
+-@@ -1080,6 +1095,7 @@ or1k_final_link_relocate (reloc_howto_type *howto, bfd *input_bfd,
+-   switch (howto->type)
+-     {
+-     case R_OR1K_AHI16:
+-+    case R_OR1K_GOT_AHI16:
+-     case R_OR1K_GOTOFF_AHI16:
+-     case R_OR1K_TLS_IE_AHI16:
+-     case R_OR1K_TLS_LE_AHI16:
+-@@ -1344,6 +1360,7 @@ or1k_elf_relocate_section (bfd *output_bfd,
+- 	    }
+- 	  break;
+- 
+-+	case R_OR1K_GOT_AHI16:
+- 	case R_OR1K_GOT16:
+- 	case R_OR1K_GOT_PG21:
+- 	case R_OR1K_GOT_LO13:
+-@@ -1435,7 +1452,8 @@ or1k_elf_relocate_section (bfd *output_bfd,
+- 	    /* The GOT_PG21 and GOT_LO13 relocs are pc-relative,
+- 	       while the GOT16 reloc is GOT relative.  */
+- 	    relocation = got_base + off;
+--	    if (r_type == R_OR1K_GOT16)
+-+	    if (r_type == R_OR1K_GOT16
+-+		|| r_type == R_OR1K_GOT_AHI16)
+- 	      relocation -= got_sym_value;
+- 
+- 	  /* Addend should be zero.  */
+-@@ -1945,6 +1963,7 @@ or1k_elf_check_relocs (bfd *abfd,
+- 	    }
+- 	  break;
+- 
+-+	case R_OR1K_GOT_AHI16:
+- 	case R_OR1K_GOT16:
+- 	case R_OR1K_GOT_PG21:
+- 	case R_OR1K_GOT_LO13:
+-diff --git a/bfd/libbfd.h b/bfd/libbfd.h
+-index 36284d71a9b..6e9e3190bb8 100644
+---- a/bfd/libbfd.h
+-+++ b/bfd/libbfd.h
+-@@ -2702,6 +2702,7 @@ static const char *const bfd_reloc_code_real_names[] = { "@@uninitialized@@",
+-   "BFD_RELOC_OR1K_TLS_TPOFF",
+-   "BFD_RELOC_OR1K_TLS_DTPOFF",
+-   "BFD_RELOC_OR1K_TLS_DTPMOD",
+-+  "BFD_RELOC_OR1K_GOT_AHI16",
+-   "BFD_RELOC_H8_DIR16A8",
+-   "BFD_RELOC_H8_DIR16R8",
+-   "BFD_RELOC_H8_DIR24A8",
+-diff --git a/bfd/reloc.c b/bfd/reloc.c
+-index e6446a78098..b0003ab1175 100644
+---- a/bfd/reloc.c
+-+++ b/bfd/reloc.c
+-@@ -6164,6 +6164,8 @@ ENUMX
+-   BFD_RELOC_OR1K_GOTPC_HI16
+- ENUMX
+-   BFD_RELOC_OR1K_GOTPC_LO16
+-+ENUMX
+-+  BFD_RELOC_OR1K_GOT_AHI16
+- ENUMX
+-   BFD_RELOC_OR1K_GOT16
+- ENUMX
+-diff --git a/cpu/or1k.opc b/cpu/or1k.opc
+-index 5082a30cee1..85163fc96c9 100644
+---- a/cpu/or1k.opc
+-+++ b/cpu/or1k.opc
+-@@ -173,7 +173,7 @@ static const bfd_reloc_code_real_type or1k_imm16_relocs[][6] = {
+-     BFD_RELOC_OR1K_GOT_LO13,
+-     BFD_RELOC_UNUSED,
+-     BFD_RELOC_UNUSED,
+--    BFD_RELOC_UNUSED },
+-+    BFD_RELOC_OR1K_GOT_AHI16 },
+-   { BFD_RELOC_OR1K_GOTPC_LO16,
+-     BFD_RELOC_UNUSED,
+-     BFD_RELOC_UNUSED,
+-@@ -276,6 +276,11 @@ parse_reloc (const char **strp)
+- 	str += 5;
+- 	cls = RCLASS_TPOFF;
+-       }
+-+    else if (strncasecmp (str, "got", 3) == 0)
+-+      {
+-+	str += 3;
+-+	cls = RCLASS_GOT;
+-+      }
+- 
+-     if (strncasecmp (str, "hi(", 3) == 0)
+-       {
+-diff --git a/gas/testsuite/gas/or1k/reloc-1.d b/gas/testsuite/gas/or1k/reloc-1.d
+-index d1bcf5608bb..3a001c4ed99 100644
+---- a/gas/testsuite/gas/or1k/reloc-1.d
+-+++ b/gas/testsuite/gas/or1k/reloc-1.d
+-@@ -68,5 +68,7 @@ OFFSET   TYPE              VALUE
+- 000000ec R_OR1K_LO13       x
+- 000000f0 R_OR1K_GOT_LO13   x
+- 000000f4 R_OR1K_SLO13      x
+--
+-+000000f8 R_OR1K_GOT_AHI16  x
+-+000000fc R_OR1K_GOT_AHI16  x
+-+00000100 R_OR1K_GOT_AHI16  x
+- 
+-diff --git a/gas/testsuite/gas/or1k/reloc-1.s b/gas/testsuite/gas/or1k/reloc-1.s
+-index e76abef6532..562609aa869 100644
+---- a/gas/testsuite/gas/or1k/reloc-1.s
+-+++ b/gas/testsuite/gas/or1k/reloc-1.s
+-@@ -74,3 +74,7 @@
+- 	l.lbz	r5,po(x)(r3)
+- 	l.lbz	r5,gotpo(x)(r3)
+- 	l.sb	po(x)(r3),r6
+-+
+-+	l.movhi	r4,gotha(x)
+-+	l.ori	r3,r4,gotha(x)
+-+	l.addi	r3,r4,gotha(x)
+-diff --git a/include/elf/or1k.h b/include/elf/or1k.h
+-index 0abef046202..7db3cad18eb 100644
+---- a/include/elf/or1k.h
+-+++ b/include/elf/or1k.h
+-@@ -77,6 +77,7 @@ START_RELOC_NUMBERS (elf_or1k_reloc_type)
+-   RELOC_NUMBER (R_OR1K_TLS_IE_LO13,   51)
+-   RELOC_NUMBER (R_OR1K_SLO13,         52)
+-   RELOC_NUMBER (R_OR1K_PLTA26,        53)
+-+  RELOC_NUMBER (R_OR1K_GOT_AHI16,     54)
+- END_RELOC_NUMBERS (R_OR1K_max)
+- 
+- #define EF_OR1K_NODELAY (1UL << 0)
+-diff --git a/opcodes/or1k-asm.c b/opcodes/or1k-asm.c
+-index 7d058d03f5f..332f4b7a9b5 100644
+---- a/opcodes/or1k-asm.c
+-+++ b/opcodes/or1k-asm.c
+-@@ -177,7 +177,7 @@ static const bfd_reloc_code_real_type or1k_imm16_relocs[][6] = {
+-     BFD_RELOC_OR1K_GOT_LO13,
+-     BFD_RELOC_UNUSED,
+-     BFD_RELOC_UNUSED,
+--    BFD_RELOC_UNUSED },
+-+    BFD_RELOC_OR1K_GOT_AHI16 },
+-   { BFD_RELOC_OR1K_GOTPC_LO16,
+-     BFD_RELOC_UNUSED,
+-     BFD_RELOC_UNUSED,
+-@@ -280,6 +280,11 @@ parse_reloc (const char **strp)
+- 	str += 5;
+- 	cls = RCLASS_TPOFF;
+-       }
+-+    else if (strncasecmp (str, "got", 3) == 0)
+-+      {
+-+	str += 3;
+-+	cls = RCLASS_GOT;
+-+      }
+- 
+-     if (strncasecmp (str, "hi(", 3) == 0)
+-       {
+--- 
+-2.25.1
+-
+diff --git a/package/binutils/2.32/0012-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch b/package/binutils/2.32/0012-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+deleted file mode 100644
+index adc6f5f8b9..0000000000
+--- a/package/binutils/2.32/0012-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-From 0f61f76454a9420f158f626cb09a4fbc08c3709e Mon Sep 17 00:00:00 2001
+-From: Stafford Horne <shorne@gmail.com>
+-Date: Sun, 2 May 2021 06:02:16 +0900
+-Subject: [PATCH] or1k: Avoid R_OR1K_GOT16 overflow failures in presence
+- of R_OR1K_GOT_AHI16
+-
+-Now that we support R_OR1K_GOT_AHI16 we can relax the R_OR1K_GOT16
+-overflow validation check if the section has R_OR1K_GOT_AHI16.
+-
+-We cannot simple disable R_OR1K_GOT16 overflow validation as there will
+-still be binaries that will have only R_OR1K_GOT16.  The
+-R_OR1K_GOT_AHI16 relocation will only be added by GCC when building with
+-the option -mcmodel=large.
+-
+-This assumes that R_OR1K_GOT_AHI16 will come before R_OR1K_GOT16, which
+-is the code pattern that will be emitted by GCC.
+-
+-bfd/ChangeLog:
+-
+-	PR 21464
+-	* elf32-or1k.c (or1k_elf_relocate_section): Relax R_OR1K_GOT16
+-	overflow check if we have R_OR1K_GOT_AHI16 followed by
+-	R_OR1K_GOT16.
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- bfd/elf32-or1k.c | 11 +++++++++++
+- 1 file changed, 11 insertions(+)
+-
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index a4a64f73b7c..07fff3602a3 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -1248,6 +1248,7 @@ or1k_elf_relocate_section (bfd *output_bfd,
+-   asection *sgot, *splt;
+-   bfd_vma plt_base, got_base, got_sym_value;
+-   bfd_boolean ret_val = TRUE;
+-+  bfd_boolean saw_gotha = FALSE;
+- 
+-   if (htab == NULL)
+-     return FALSE;
+-@@ -1456,6 +1457,16 @@ or1k_elf_relocate_section (bfd *output_bfd,
+- 		|| r_type == R_OR1K_GOT_AHI16)
+- 	      relocation -= got_sym_value;
+- 
+-+	    if (r_type == R_OR1K_GOT_AHI16)
+-+	      saw_gotha = TRUE;
+-+
+-+	    /* If we have a R_OR1K_GOT16 followed by a R_OR1K_GOT_AHI16
+-+	       relocation we assume the code is doing the right thing to avoid
+-+	       overflows.  Here we mask the lower 16-bit of the relocation to
+-+	       avoid overflow validation failures.  */
+-+	    if (r_type == R_OR1K_GOT16 && saw_gotha)
+-+	      relocation &= 0xffff;
+-+
+- 	  /* Addend should be zero.  */
+- 	  if (rel->r_addend != 0)
+- 	    {
+--- 
+-2.25.1
+-
+diff --git a/package/binutils/2.32/0013-or1k-Support-large-plt_relocs-when-generating-plt-en.patch b/package/binutils/2.32/0013-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+deleted file mode 100644
+index dc0431e0af..0000000000
+--- a/package/binutils/2.32/0013-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
++++ /dev/null
+@@ -1,500 +0,0 @@
+-From 36c7de7ef77ab0c30cb33e2c7ea7a6f4e3052c73 Mon Sep 17 00:00:00 2001
+-From: Stafford Horne <shorne@gmail.com>
+-Date: Sun, 2 May 2021 06:02:17 +0900
+-Subject: [PATCH] or1k: Support large plt_relocs when generating plt
+- entries
+-
+-The current PLT generation code will generate invalid code when the PLT
+-relocation offset exceeds 64k.  This fixes the issue by detecting large
+-plt_reloc offsets and generare code sequences to create larger plt
+-relocations.
+-
+-The "large" plt code needs 2 extra instructions to create 32-bit offsets.
+-
+-bfd/ChangeLog:
+-
+-	PR 27746
+-	* elf32-or1k.c (PLT_ENTRY_SIZE_LARGE, PLT_MAX_INSN_COUNT,
+-	OR1K_ADD, OR1K_ORI): New macros to help with plt creation.
+-	(elf_or1k_link_hash_table): New field plt_count.
+-	(elf_or1k_link_hash_entry): New field plt_index.
+-	(elf_or1k_plt_entry_size): New function.
+-	(or1k_write_plt_entry): Update to support variable size PLTs.
+-	(or1k_elf_finish_dynamic_sections): Use new or1k_write_plt_entry
+-	API.
+-	(or1k_elf_finish_dynamic_symbol): Update to write large PLTs
+-	when needed.
+-	(allocate_dynrelocs): Use elf_or1k_plt_entry_size to account for
+-	PLT size.
+-
+-ld/ChangeLog:
+-
+-	PR 27746
+-	testsuite/ld-or1k/or1k.exp (or1kplttests): Add tests for linking
+-	along with gotha() relocations.
+-	testsuite/ld-or1k/gotha1.dd: New file.
+-	testsuite/ld-or1k/gotha1.s: New file.
+-	testsuite/ld-or1k/gotha2.dd: New file.
+-	testsuite/ld-or1k/gotha2.s: New file
+-	testsuite/ld-or1k/pltlib.s (x): Define size to avoid link
+-	failure.
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- bfd/elf32-or1k.c               | 149 ++++++++++++++++++++++++---------
+- ld/testsuite/ld-or1k/gotha1.dd |  34 ++++++++
+- ld/testsuite/ld-or1k/gotha1.s  |  24 ++++++
+- ld/testsuite/ld-or1k/gotha2.dd |  21 +++++
+- ld/testsuite/ld-or1k/gotha2.s  |  22 +++++
+- ld/testsuite/ld-or1k/or1k.exp  |   8 ++
+- ld/testsuite/ld-or1k/pltlib.s  |   1 +
+- 7 files changed, 220 insertions(+), 39 deletions(-)
+- create mode 100644 ld/testsuite/ld-or1k/gotha1.dd
+- create mode 100644 ld/testsuite/ld-or1k/gotha1.s
+- create mode 100644 ld/testsuite/ld-or1k/gotha2.dd
+- create mode 100644 ld/testsuite/ld-or1k/gotha2.s
+-
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index 07fff3602a3..fcebbe5f23a 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -30,10 +30,14 @@
+- #define N_ONES(X)	(((bfd_vma)2 << (X)) - 1)
+- 
+- #define PLT_ENTRY_SIZE 16
+-+#define PLT_ENTRY_SIZE_LARGE (6*4)
+-+#define PLT_MAX_INSN_COUNT 6
+- 
+- #define OR1K_MOVHI(D)		(0x18000000 | (D << 21))
+- #define OR1K_ADRP(D)		(0x08000000 | (D << 21))
+- #define OR1K_LWZ(D,A)		(0x84000000 | (D << 21) | (A << 16))
+-+#define OR1K_ADD(D,A,B)		(0xE0000000 | (D << 21) | (A << 16) | (B << 11))
+-+#define OR1K_ORI(D,A)		(0xA8000000 | (D << 21) | (A << 16))
+- #define OR1K_ORI0(D)		(0xA8000000 | (D << 21))
+- #define OR1K_JR(B)		(0x44000000 | (B << 11))
+- #define OR1K_NOP		0x15000000
+-@@ -903,6 +907,8 @@ struct elf_or1k_link_hash_entry
+-   /* Track dynamic relocs copied for this symbol.  */
+-   struct elf_dyn_relocs *dyn_relocs;
+- 
+-+  /* For calculating PLT size.  */
+-+  bfd_vma plt_index;
+-   /* Track type of TLS access.  */
+-   unsigned char tls_type;
+- };
+-@@ -930,9 +936,20 @@ struct elf_or1k_link_hash_table
+-   /* Small local sym to section mapping cache.  */
+-   struct sym_cache sym_sec;
+- 
+-+  bfd_vma plt_count;
+-   bfd_boolean saw_plta;
+- };
+- 
+-+static size_t
+-+elf_or1k_plt_entry_size (bfd_vma plt_index)
+-+{
+-+  bfd_vma plt_reloc;
+-+
+-+  plt_reloc = plt_index * sizeof (Elf32_External_Rela);
+-+
+-+  return (plt_reloc > 0xffff) ? PLT_ENTRY_SIZE_LARGE : PLT_ENTRY_SIZE;
+-+}
+-+
+- /* Get the ELF linker hash table from a link_info structure.  */
+- #define or1k_elf_hash_table(p) \
+-   (elf_hash_table_id ((struct elf_link_hash_table *) ((p)->hash)) \
+-@@ -2176,33 +2193,46 @@ or1k_elf_check_relocs (bfd *abfd,
+- }
+- 
+- static void
+--or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insn1,
+--		      unsigned insn2, unsigned insn3, unsigned insnj)
+-+or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
+-+		      unsigned insns[], size_t insn_count)
+- {
+-   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
+--  unsigned insn4;
+-+  unsigned output_insns[PLT_MAX_INSN_COUNT];
+-+
+-+  /* Copy instructions into the output buffer.  */
+-+  for (size_t i = 0; i < insn_count; i++)
+-+    output_insns[i] = insns[i];
+- 
+-   /* Honor the no-delay-slot setting.  */
+--  if (insn3 == OR1K_NOP)
+-+  if (insns[insn_count-1] == OR1K_NOP)
+-     {
+--      insn4 = insn3;
+-+      unsigned slot1, slot2;
+-+
+-       if (nodelay)
+--	insn3 = insnj;
+-+	slot1 = insns[insn_count-2], slot2 = insnj;
+-       else
+--	insn3 = insn2, insn2 = insnj;
+-+	slot1 = insnj, slot2 = insns[insn_count-2];
+-+
+-+      output_insns[insn_count-2] = slot1;
+-+      output_insns[insn_count-1] = slot2;
+-+      output_insns[insn_count]   = OR1K_NOP;
+-     }
+-   else
+-     {
+-+      unsigned slot1, slot2;
+-+
+-       if (nodelay)
+--	insn4 = insnj;
+-+	slot1 = insns[insn_count-1], slot2 = insnj;
+-       else
+--	insn4 = insn3, insn3 = insnj;
+-+	slot1 = insnj, slot2 = insns[insn_count-1];
+-+
+-+      output_insns[insn_count-1] = slot1;
+-+      output_insns[insn_count]   = slot2;
+-     }
+- 
+--  bfd_put_32 (output_bfd, insn1, contents);
+--  bfd_put_32 (output_bfd, insn2, contents + 4);
+--  bfd_put_32 (output_bfd, insn3, contents + 8);
+--  bfd_put_32 (output_bfd, insn4, contents + 12);
+-+  /* Write out the output buffer.  */
+-+  for (size_t i = 0; i < (insn_count+1); i++)
+-+    bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
+- }
+- 
+- /* Finish up the dynamic sections.  */
+-@@ -2269,7 +2299,8 @@ or1k_elf_finish_dynamic_sections (bfd *output_bfd,
+-       splt = htab->root.splt;
+-       if (splt && splt->size > 0)
+- 	{
+--	  unsigned plt0, plt1, plt2;
+-+	  unsigned plt[PLT_MAX_INSN_COUNT];
+-+	  size_t plt_insn_count = 3;
+- 	  bfd_vma got_addr = sgot->output_section->vma + sgot->output_offset;
+- 
+- 	  /* Note we force 16 byte alignment on the .got, so that
+-@@ -2280,27 +2311,27 @@ or1k_elf_finish_dynamic_sections (bfd *output_bfd,
+- 	      bfd_vma pc = splt->output_section->vma + splt->output_offset;
+- 	      unsigned pa = ((got_addr >> 13) - (pc >> 13)) & 0x1fffff;
+- 	      unsigned po = got_addr & 0x1fff;
+--	      plt0 = OR1K_ADRP(12) | pa;
+--	      plt1 = OR1K_LWZ(15,12) | (po + 8);
+--	      plt2 = OR1K_LWZ(12,12) | (po + 4);
+-+	      plt[0] = OR1K_ADRP(12) | pa;
+-+	      plt[1] = OR1K_LWZ(15,12) | (po + 8);
+-+	      plt[2] = OR1K_LWZ(12,12) | (po + 4);
+- 	    }
+- 	  else if (bfd_link_pic (info))
+- 	    {
+--	      plt0 = OR1K_LWZ(15, 16) | 8;	/* .got+8 */
+--	      plt1 = OR1K_LWZ(12, 16) | 4;	/* .got+4 */
+--	      plt2 = OR1K_NOP;
+-+	      plt[0] = OR1K_LWZ(15, 16) | 8;	/* .got+8 */
+-+	      plt[1] = OR1K_LWZ(12, 16) | 4;	/* .got+4 */
+-+	      plt[2] = OR1K_NOP;
+- 	    }
+- 	  else
+- 	    {
+- 	      unsigned ha = ((got_addr + 0x8000) >> 16) & 0xffff;
+- 	      unsigned lo = got_addr & 0xffff;
+--	      plt0 = OR1K_MOVHI(12) | ha;
+--	      plt1 = OR1K_LWZ(15,12) | (lo + 8);
+--	      plt2 = OR1K_LWZ(12,12) | (lo + 4);
+-+	      plt[0] = OR1K_MOVHI(12) | ha;
+-+	      plt[1] = OR1K_LWZ(15,12) | (lo + 8);
+-+	      plt[2] = OR1K_LWZ(12,12) | (lo + 4);
+- 	    }
+- 
+--	  or1k_write_plt_entry (output_bfd, splt->contents,
+--				plt0, plt1, plt2, OR1K_JR(15));
+-+	  or1k_write_plt_entry (output_bfd, splt->contents, OR1K_JR(15),
+-+				plt, plt_insn_count);
+- 
+- 	  elf_section_data (splt->output_section)->this_hdr.sh_entsize = 4;
+- 	}
+-@@ -2343,7 +2374,8 @@ or1k_elf_finish_dynamic_symbol (bfd *output_bfd,
+- 
+-   if (h->plt.offset != (bfd_vma) -1)
+-     {
+--      unsigned int plt0, plt1, plt2;
+-+      unsigned int plt[PLT_MAX_INSN_COUNT];
+-+      size_t plt_insn_count = 3;
+-       asection *splt;
+-       asection *sgot;
+-       asection *srela;
+-@@ -2355,6 +2387,7 @@ or1k_elf_finish_dynamic_symbol (bfd *output_bfd,
+-       bfd_vma got_offset;
+-       bfd_vma got_addr;
+-       Elf_Internal_Rela rela;
+-+      bfd_boolean large_plt_entry;
+- 
+-       /* This symbol has an entry in the procedure linkage table.  Set
+- 	 it up.  */
+-@@ -2372,10 +2405,13 @@ or1k_elf_finish_dynamic_symbol (bfd *output_bfd,
+- 	 corresponds to this symbol.  This is the index of this symbol
+- 	 in all the symbols for which we are making plt entries.  The
+- 	 first entry in the procedure linkage table is reserved.  */
+--      plt_index = h->plt.offset / PLT_ENTRY_SIZE - 1;
+-+      plt_index = ((struct elf_or1k_link_hash_entry *) h)->plt_index;
+-       plt_addr = plt_base_addr + h->plt.offset;
+-       plt_reloc = plt_index * sizeof (Elf32_External_Rela);
+- 
+-+      large_plt_entry = (elf_or1k_plt_entry_size (plt_index)
+-+			 == PLT_ENTRY_SIZE_LARGE);
+-+
+-       /* Get the offset into the .got table of the entry that
+- 	corresponds to this function.  Each .got entry is 4 bytes.
+- 	The first three are reserved.  */
+-@@ -2387,27 +2423,57 @@ or1k_elf_finish_dynamic_symbol (bfd *output_bfd,
+- 	{
+- 	  unsigned pa = ((got_addr >> 13) - (plt_addr >> 13)) & 0x1fffff;
+- 	  unsigned po = (got_addr & 0x1fff);
+--	  plt0 = OR1K_ADRP(12) | pa;
+--	  plt1 = OR1K_LWZ(12,12) | po;
+--	  plt2 = OR1K_ORI0(11) | plt_reloc;
+-+	  plt[0] = OR1K_ADRP(12) | pa;
+-+	  plt[1] = OR1K_LWZ(12,12) | po;
+-+	  plt[2] = OR1K_ORI0(11) | plt_reloc;
+- 	}
+-       else if (bfd_link_pic (info))
+- 	{
+--	  plt0 = OR1K_LWZ(12,16) | got_offset;
+--	  plt1 = OR1K_ORI0(11) | plt_reloc;
+--	  plt2 = OR1K_NOP;
+-+	  if (large_plt_entry)
+-+	    {
+-+	      unsigned gotha = ((got_offset + 0x8000) >> 16) & 0xffff;
+-+	      unsigned got = got_offset & 0xffff;
+-+	      unsigned pltrelhi = (plt_reloc >> 16) & 0xffff;
+-+	      unsigned pltrello = plt_reloc & 0xffff;
+-+
+-+	      plt[0] = OR1K_MOVHI(12) | gotha;
+-+	      plt[1] = OR1K_ADD(12,12,16);
+-+	      plt[2] = OR1K_LWZ(12,12) | got;
+-+	      plt[3] = OR1K_MOVHI(11) | pltrelhi;
+-+	      plt[4] = OR1K_ORI(11,11) | pltrello;
+-+	      plt_insn_count = 5;
+-+	    }
+-+	  else
+-+	    {
+-+	      plt[0] = OR1K_LWZ(12,16) | got_offset;
+-+	      plt[1] = OR1K_ORI0(11) | plt_reloc;
+-+	      plt[2] = OR1K_NOP;
+-+	    }
+- 	}
+-       else
+- 	{
+- 	  unsigned ha = ((got_addr + 0x8000) >> 16) & 0xffff;
+- 	  unsigned lo = got_addr & 0xffff;
+--	  plt0 = OR1K_MOVHI(12) | ha;
+--	  plt1 = OR1K_LWZ(12,12) | lo;
+--	  plt2 = OR1K_ORI0(11) | plt_reloc;
+-+	  plt[0] = OR1K_MOVHI(12) | ha;
+-+	  plt[1] = OR1K_LWZ(12,12) | lo;
+-+	  plt[2] = OR1K_ORI0(11) | plt_reloc;
+-+	}
+-+
+-+      /* For large code model we fixup the non-PIC PLT relocation instructions
+-+	 here.  */
+-+      if (large_plt_entry && !bfd_link_pic (info))
+-+	{
+-+	  unsigned pltrelhi = (plt_reloc >> 16) & 0xffff;
+-+	  unsigned pltrello = plt_reloc & 0xffff;
+-+
+-+	  plt[2] = OR1K_MOVHI(11) | pltrelhi;
+-+	  plt[3] = OR1K_ORI(11,11) | pltrello;
+-+	  plt[4] = OR1K_NOP;
+-+	  plt_insn_count = 5;
+- 	}
+- 
+-       or1k_write_plt_entry (output_bfd, splt->contents + h->plt.offset,
+--			    plt0, plt1, plt2, OR1K_JR(12));
+-+			    OR1K_JR(12), plt, plt_insn_count);
+- 
+-       /* Fill in the entry in the global offset table.  */
+-       bfd_put_32 (output_bfd, plt_addr, sgot->contents + got_offset);
+-@@ -2699,11 +2765,16 @@ allocate_dynrelocs (struct elf_link_hash_entry *h, void * inf)
+-       if (WILL_CALL_FINISH_DYNAMIC_SYMBOL (1, bfd_link_pic (info), h))
+- 	{
+- 	  asection *s = htab->root.splt;
+-+	  bfd_vma plt_index;
+-+
+-+	  /* Track the index of our plt entry for use in calculating size.  */
+-+	  plt_index = htab->plt_count++;
+-+	  ((struct elf_or1k_link_hash_entry *) h)->plt_index = plt_index;
+- 
+- 	  /* If this is the first .plt entry, make room for the special
+- 	     first entry.  */
+- 	  if (s->size == 0)
+--	    s->size = PLT_ENTRY_SIZE;
+-+	    s->size = elf_or1k_plt_entry_size (plt_index);
+- 
+- 	  h->plt.offset = s->size;
+- 
+-@@ -2720,7 +2791,7 @@ allocate_dynrelocs (struct elf_link_hash_entry *h, void * inf)
+- 	    }
+- 
+- 	  /* Make room for this entry.  */
+--	  s->size += PLT_ENTRY_SIZE;
+-+	  s->size += elf_or1k_plt_entry_size (plt_index);
+- 
+- 	  /* We also need to make an entry in the .got.plt section, which
+- 	     will be placed in the .got section by the linker script.  */
+-diff --git a/ld/testsuite/ld-or1k/gotha1.dd b/ld/testsuite/ld-or1k/gotha1.dd
+-new file mode 100644
+-index 00000000000..0ad1f8f5399
+---- /dev/null
+-+++ b/ld/testsuite/ld-or1k/gotha1.dd
+-@@ -0,0 +1,34 @@
+-+
+-+.*\.x:     file format elf32-or1k
+-+
+-+
+-+Disassembly of section \.plt:
+-+
+-+[0-9a-f]+ <\.plt>:
+-+ +[0-9a-f]+:	19 80 00 00 	l\.movhi r12,0x0
+-+ +[0-9a-f]+:	85 ec [0-9a-f]+ [0-9a-f]+ 	l\.lwz r15,[0-9]+\(r12\)
+-+ +[0-9a-f]+:	44 00 78 00 	l\.jr r15
+-+ +[0-9a-f]+:	85 8c [0-9a-f]+ [0-9a-f]+ 	l\.lwz r12,[0-9]+\(r12\)
+-+ +[0-9a-f]+:	19 80 00 00 	l\.movhi r12,0x0
+-+ +[0-9a-f]+:	85 8c [0-9a-f]+ [0-9a-f]+ 	l\.lwz r12,[0-9]+\(r12\)
+-+ +[0-9a-f]+:	44 00 60 00 	l\.jr r12
+-+ +[0-9a-f]+:	a9 60 00 00 	l\.ori r11,r0,0x0
+-+
+-+Disassembly of section \.text:
+-+
+-+[0-9a-f]+ <_start>:
+-+ +[0-9a-f]+:	9c 21 ff fc 	l\.addi r1,r1,-4
+-+ +[0-9a-f]+:	d4 01 48 00 	l\.sw 0\(r1\),r9
+-+ +[0-9a-f]+:	04 00 00 02 	l\.jal [0-9a-f]+ <_start\+0x10>
+-+ +[0-9a-f]+:	1a 60 00 00 	l\.movhi r19,0x0
+-+ +[0-9a-f]+:	aa 73 [0-9a-f]+ [0-9a-f]+ 	l\.ori r19,r19,0x[0-9a-f]+
+-+ +[0-9a-f]+:	e2 73 48 00 	l\.add r19,r19,r9
+-+ +[0-9a-f]+:	1a 20 00 00 	l\.movhi r17,0x0
+-+ +[0-9a-f]+:	e2 31 98 00 	l\.add r17,r17,r19
+-+ +[0-9a-f]+:	86 31 00 10 	l\.lwz r17,16\(r17\)
+-+ +[0-9a-f]+:	84 71 00 00 	l\.lwz r3,0\(r17\)
+-+ +[0-9a-f]+:	07 ff ff f2 	l\.jal [0-9a-f]+ <\.plt\+0x10>
+-+ +[0-9a-f]+:	15 00 00 00 	l\.nop 0x0
+-+ +[0-9a-f]+:	85 21 00 00 	l\.lwz r9,0\(r1\)
+-+ +[0-9a-f]+:	44 00 48 00 	l\.jr r9
+-+ +[0-9a-f]+:	9c 21 00 04 	l\.addi r1,r1,4
+-diff --git a/ld/testsuite/ld-or1k/gotha1.s b/ld/testsuite/ld-or1k/gotha1.s
+-new file mode 100644
+-index 00000000000..42b16db425c
+---- /dev/null
+-+++ b/ld/testsuite/ld-or1k/gotha1.s
+-@@ -0,0 +1,24 @@
+-+	.data
+-+	.p2align 16
+-+
+-+	.text
+-+	.globl	_start
+-+_start:
+-+	l.addi	r1, r1, -4
+-+	l.sw	0(r1), r9
+-+
+-+	l.jal	8
+-+	 l.movhi	r19, gotpchi(_GLOBAL_OFFSET_TABLE_-4)
+-+	l.ori	r19, r19, gotpclo(_GLOBAL_OFFSET_TABLE_+0)
+-+	l.add	r19, r19, r9
+-+
+-+	l.movhi	r17, gotha(x)
+-+	l.add	r17, r17, r19
+-+	l.lwz	r17, got(x)(r17)
+-+	l.lwz	r3, 0(r17)
+-+
+-+	l.jal	plt(func)
+-+	 l.nop
+-+	l.lwz	r9, 0(r1)
+-+	l.jr	r9
+-+	 l.addi	r1, r1, 4
+-diff --git a/ld/testsuite/ld-or1k/gotha2.dd b/ld/testsuite/ld-or1k/gotha2.dd
+-new file mode 100644
+-index 00000000000..fe09da5466b
+---- /dev/null
+-+++ b/ld/testsuite/ld-or1k/gotha2.dd
+-@@ -0,0 +1,21 @@
+-+
+-+.*\.x:     file format elf32-or1k
+-+
+-+
+-+Disassembly of section \.text:
+-+
+-+[0-9a-f]+ <test>:
+-+ +[0-9a-f]+:	9c 21 ff f8 	l\.addi r1,r1,-8
+-+ +[0-9a-f]+:	d4 01 80 00 	l\.sw 0\(r1\),r16
+-+ +[0-9a-f]+:	d4 01 48 04 	l\.sw 4\(r1\),r9
+-+ +[0-9a-f]+:	04 00 [0-9a-f]+ [0-9a-f]+ 	l\.jal [0-9a-f]+ <test\+0x14>
+-+ +[0-9a-f]+:	1a 00 00 00 	l\.movhi r16,0x0
+-+ +[0-9a-f]+:	aa 10 [0-9a-f]+ [0-9a-f]+ 	l\.ori r16,r16,0x[0-9a-f]+
+-+ +[0-9a-f]+:	e2 10 48 00 	l\.add r16,r16,r9
+-+ +[0-9a-f]+:	1a 20 00 00 	l\.movhi r17,0x0
+-+ +[0-9a-f]+:	e2 31 80 00 	l\.add r17,r17,r16
+-+ +[0-9a-f]+:	86 31 00 0c 	l\.lwz r17,12\(r17\)
+-+ +[0-9a-f]+:	85 21 00 04 	l\.lwz r9,4\(r1\)
+-+ +[0-9a-f]+:	86 01 00 00 	l\.lwz r16,0\(r1\)
+-+ +[0-9a-f]+:	44 00 48 00 	l\.jr r9
+-+ +[0-9a-f]+:	9c 21 00 08 	l\.addi r1,r1,8
+-diff --git a/ld/testsuite/ld-or1k/gotha2.s b/ld/testsuite/ld-or1k/gotha2.s
+-new file mode 100644
+-index 00000000000..164b282f2dd
+---- /dev/null
+-+++ b/ld/testsuite/ld-or1k/gotha2.s
+-@@ -0,0 +1,22 @@
+-+	.section	.text
+-+	.align 4
+-+	.global	test
+-+	.type	test, @function
+-+test:
+-+	l.addi	r1, r1, -8
+-+	l.sw	0(r1), r16
+-+	l.sw	4(r1), r9
+-+
+-+	l.jal	8
+-+	 l.movhi	r16, gotpchi(_GLOBAL_OFFSET_TABLE_-4)
+-+	l.ori	r16, r16, gotpclo(_GLOBAL_OFFSET_TABLE_+0)
+-+	l.add	r16, r16, r9
+-+
+-+	l.movhi	r17, gotha(i)
+-+	l.add	r17, r17, r16
+-+	l.lwz	r17, got(i)(r17)
+-+
+-+	l.lwz	r9, 4(r1)
+-+	l.lwz	r16, 0(r1)
+-+	l.jr	r9
+-+	 l.addi	r1, r1, 8
+-diff --git a/ld/testsuite/ld-or1k/or1k.exp b/ld/testsuite/ld-or1k/or1k.exp
+-index 24cdbe5fbf3..9cebc49b946 100644
+---- a/ld/testsuite/ld-or1k/or1k.exp
+-+++ b/ld/testsuite/ld-or1k/or1k.exp
+-@@ -53,6 +53,14 @@ set or1kplttests {
+-      "" {plt1.s}
+-      {{objdump -dr plt1.x.dd}}
+-      "plt1.x"}
+-+    {"gotha exec plt" "tmpdir/libpltlib.so" ""
+-+     "" {gotha1.s}
+-+     {{objdump -dr gotha1.dd}}
+-+     "gotha1.x"}
+-+    {"gotha -fpic -shared" "-fpic -shared" ""
+-+     "" {gotha2.s}
+-+     {{objdump -dr gotha2.dd}}
+-+     "gotha2.x"}
+- }
+- 
+- # Not implemented yet
+-diff --git a/ld/testsuite/ld-or1k/pltlib.s b/ld/testsuite/ld-or1k/pltlib.s
+-index baf76ca1af7..8b4d7ba48fd 100644
+---- a/ld/testsuite/ld-or1k/pltlib.s
+-+++ b/ld/testsuite/ld-or1k/pltlib.s
+-@@ -1,5 +1,6 @@
+- 	.section .data
+- 	.globl x, y
+-+	.size x, 4
+- x:	.long 33
+- y:	.long 44
+- 
+--- 
+-2.25.1
+-
+diff --git a/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+deleted file mode 100644
+index c3978e22fa..0000000000
+--- a/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Wed, 9 Jun 2021 17:28:27 +0200
+-Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
+-
+-Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
+-an old compiler(i.e. gcc 4.9) build fails on:
+-```
+-elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
+-C99 or C11 mode
+-    for (size_t i = 0; i < insn_count; i++)
+-    ^
+-```
+-
+-So let's declare `size_t i` at the top of the function instead of inside
+-for loop.
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- bfd/elf32-or1k.c | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index 4ae7f324d33..32063ab0289 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
+- {
+-   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
+-   unsigned output_insns[PLT_MAX_INSN_COUNT];
+-+  size_t i;
+- 
+-   /* Copy instructions into the output buffer.  */
+--  for (size_t i = 0; i < insn_count; i++)
+-+  for (i = 0; i < insn_count; i++)
+-     output_insns[i] = insns[i];
+- 
+-   /* Honor the no-delay-slot setting.  */
+-@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
+-     }
+- 
+-   /* Write out the output buffer.  */
+--  for (size_t i = 0; i < (insn_count+1); i++)
+-+  for (i = 0; i < (insn_count+1); i++)
+-     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
+- }
+- 
+--- 
+-2.25.1
+-
+diff --git a/package/binutils/2.32/0015-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch b/package/binutils/2.32/0015-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+deleted file mode 100644
+index 585b97b2af..0000000000
+--- a/package/binutils/2.32/0015-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 9af93e143a7fbdb75aa1ed37277f9250eb111628 Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Sat, 10 Jul 2021 17:57:34 +0200
+-Subject: [PATCH] or1k: fix pc-relative relocation against dynamic on PC
+- relative 26 bit relocation
+-
+-When building openal we were seeing the assert failure:
+-
+-/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+-pc-relative relocation against dynamic symbol alSourcePausev
+-/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+-pc-relative relocation against dynamic symbol alSourceStopv
+-/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+-pc-relative relocation against dynamic symbol alSourceRewindv
+-/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+-pc-relative relocation against dynamic symbol alSourcePlayv
+-collect2: error: ld returned 1 exit status
+-
+-This happens because in R_OR1K_INSN_REL_26 case we can't reference local
+-symbol as previously done but we need to make sure that calls to actual
+-symbol always call the version of current object.
+-
+-bfd/Changelog:
+-
+-	* elf32-or1k.c (or1k_elf_relocate_section): use a separate entry
+-	  in switch case R_OR1K_INSN_REL_26 where we need to check for
+-	  !SYMBOL_CALLS_LOCAL() instead of !SYMBOL_REFERENCES_LOCAL().
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- bfd/elf32-or1k.c | 12 ++++++++++++
+- 1 file changed, 12 insertions(+)
+-
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index 4ae7f324d33..4f9092539f5 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -1543,6 +1543,18 @@ or1k_elf_relocate_section (bfd *output_bfd,
+- 	  break;
+- 
+- 	case R_OR1K_INSN_REL_26:
+-+	  /* For a non-shared link, these will reference plt or call the
+-+	     version of actual object.  */
+-+	  if (bfd_link_pic (info) && !SYMBOL_CALLS_LOCAL (info, h))
+-+	    {
+-+	      _bfd_error_handler
+-+		(_("%pB: pc-relative relocation against dynamic symbol %s"),
+-+		 input_bfd, name);
+-+	      ret_val = FALSE;
+-+	      bfd_set_error (bfd_error_bad_value);
+-+	    }
+-+	  break;
+-+
+- 	case R_OR1K_PCREL_PG21:
+- 	case R_OR1K_LO13:
+- 	case R_OR1K_SLO13:
+--- 
+-2.25.1
+-
+diff --git a/package/binutils/2.32/0016-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch b/package/binutils/2.32/0016-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
+deleted file mode 100644
+index 7e92e2bfd8..0000000000
+--- a/package/binutils/2.32/0016-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
++++ /dev/null
+@@ -1,75 +0,0 @@
+-From 51def3dc6a168d03d28e0d4e2935d9ddb2929192 Mon Sep 17 00:00:00 2001
+-From: Stafford Horne <shorne@gmail.com>
+-Date: Sun, 2 Jan 2022 09:03:28 +0900
+-Subject: [PATCH] or1k: Avoid R_OR1K_GOT16 signed overflow by using special
+- howto
+-
+-Previously when fixing PR 21464 we masked out upper bits of the
+-relocation value in order to avoid overflow complaints when acceptable.
+-It turns out this does not work when the relocation value ends up being
+-signed.
+-
+-To fix this this patch introduces a special howto with
+-complain_on_overflow set to complain_overflow_dont.  This is used in
+-place of the normal R_OR1K_GOT16 howto when we detect R_OR1K_GOT_AHI16
+-relocations.
+-
+-bfd/ChangeLog:
+-
+-	PR 28735
+-	* elf32-or1k.c (or1k_elf_got16_no_overflow_howto): Define.
+-	(or1k_elf_relocate_section): Use new howto instead of trying to
+-	mask out relocation bits.
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- bfd/elf32-or1k.c | 24 ++++++++++++++++++++----
+- 1 file changed, 20 insertions(+), 4 deletions(-)
+-
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index cfa292f0032..ecb70753b6a 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -828,6 +828,23 @@ static reloc_howto_type or1k_elf_howto_table[] =
+- 	FALSE),                /* pcrel_offset */
+- };
+- 
+-+/* A copy of the R_OR1K_GOT16 used in the presense of R_OR1K_GOT_AHI16
+-+   relocations when we know we can ignore overflows.  */
+-+static reloc_howto_type or1k_elf_got16_no_overflow_howto =
+-+  HOWTO (R_OR1K_GOT16,		/* type */
+-+	 0,			/* rightshift */
+-+	 2,			/* size (0 = byte, 1 = short, 2 = long) */
+-+	 16,			/* bitsize */
+-+	 FALSE,			/* pc_relative */
+-+	 0,			/* bitpos */
+-+	 complain_overflow_dont, /* complain_on_overflow */
+-+	 bfd_elf_generic_reloc, /* special_function */
+-+	 "R_OR1K_GOT16",	/* name */
+-+	 FALSE,			/* partial_inplace */
+-+	 0,			/* src_mask */
+-+	 0xffff,		/* dst_mask */
+-+	 FALSE);		/* pcrel_offset */
+-+
+- /* Map BFD reloc types to Or1k ELF reloc types.  */
+- 
+- struct or1k_reloc_map
+-@@ -1477,12 +1494,11 @@ or1k_elf_relocate_section (bfd *output_bfd,
+- 	    if (r_type == R_OR1K_GOT_AHI16)
+- 	      saw_gotha = TRUE;
+- 
+--	    /* If we have a R_OR1K_GOT16 followed by a R_OR1K_GOT_AHI16
+-+	    /* If we have a R_OR1K_GOT16 following a R_OR1K_GOT_AHI16
+- 	       relocation we assume the code is doing the right thing to avoid
+--	       overflows.  Here we mask the lower 16-bit of the relocation to
+--	       avoid overflow validation failures.  */
+-+	       overflows.  */
+- 	    if (r_type == R_OR1K_GOT16 && saw_gotha)
+--	      relocation &= 0xffff;
+-+	      howto = &or1k_elf_got16_no_overflow_howto;
+- 
+- 	  /* Addend should be zero.  */
+- 	  if (rel->r_addend != 0)
+--- 
+-2.25.1
+-
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 4382b32237..ef1b2a94db 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -12,10 +12,6 @@ choice
+ 	help
+ 	  Select the version of binutils you wish to use.
  
--ELF2FLT_VERSION = 7e33f28df198c46764021ed14408bd262751e148
--ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,$(ELF2FLT_VERSION))
-+ELF2FLT_VERSION = 2021.08
-+ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,v$(ELF2FLT_VERSION))
- ELF2FLT_LICENSE = GPL-2.0+
- ELF2FLT_LICENSE_FILES = LICENSE.TXT
- 
+-config BR2_BINUTILS_VERSION_2_32_X
+-	bool "binutils 2.32"
+-	depends on !BR2_csky
+-
+ config BR2_BINUTILS_VERSION_2_36_X
+ 	bool "binutils 2.36.1"
+ 	depends on !BR2_csky
+@@ -35,7 +31,6 @@ endchoice
+ config BR2_BINUTILS_VERSION
+ 	string
+ 	default "arc-2020.09-release"	if BR2_BINUTILS_VERSION_ARC
+-	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
+ 	default "2.36.1"	if BR2_BINUTILS_VERSION_2_36_X
+ 	default "2.37"		if BR2_BINUTILS_VERSION_2_37_X
+ 	default "2.38"		if BR2_BINUTILS_VERSION_2_38_X
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index 4141e0c5f2..e98cb85275 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -1,5 +1,4 @@
+ # From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
+-sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
+ sha512  cc24590bcead10b90763386b6f96bb027d7594c659c2d95174a6352e8b98465a50ec3e4088d0da038428abe059bbc4ae5f37b269f31a40fc048072c8a234f4e9  binutils-2.36.1.tar.xz
+ sha512  5c11aeef6935860a6819ed3a3c93371f052e52b4bdc5033da36037c1544d013b7f12cb8d561ec954fe7469a68f1b66f1a3cd53d5a3af7293635a90d69edd15e7  binutils-2.37.tar.xz
+ sha512  8bf0b0d193c9c010e0518ee2b2e5a830898af206510992483b427477ed178396cd210235e85fd7bd99a96fc6d5eedbeccbd48317a10f752b7336ada8b2bb826d  binutils-2.38.tar.xz
 -- 
 2.35.1
 
