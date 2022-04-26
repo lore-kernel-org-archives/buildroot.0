@@ -1,82 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8403C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Apr 2022 22:08:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9352C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 01:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43ECA60F43;
-	Mon, 25 Apr 2022 22:08:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 51E5E4038D;
+	Tue, 26 Apr 2022 01:23:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TiQmVPIKzbga; Mon, 25 Apr 2022 22:08:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H1V-hHF77WSn; Tue, 26 Apr 2022 01:23:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5129D60F35;
-	Mon, 25 Apr 2022 22:08:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B13891BF314
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 22:08:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 568AF401D6;
+	Tue, 26 Apr 2022 01:23:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 255CF1BF37A
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 01:23:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F6494161F
- for <buildroot@lists.busybox.net>; Mon, 25 Apr 2022 22:08:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 21FA282AA7
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 01:23:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id maN_Jiqjw-hD for <buildroot@lists.busybox.net>;
- Mon, 25 Apr 2022 22:08:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8yna-rKeSD3U for <buildroot@lists.busybox.net>;
+ Tue, 26 Apr 2022 01:23:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7E6C8415E0
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 22:08:12 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- k36-20020a05600c1ca400b00393f18c8fc5so400343wms.4
- for <buildroot@buildroot.org>; Mon, 25 Apr 2022 15:08:12 -0700 (PDT)
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
+ [IPv6:2607:f8b0:4864:20::129])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 41EC282A83
+ for <buildroot@buildroot.org>; Tue, 26 Apr 2022 01:23:18 +0000 (UTC)
+Received: by mail-il1-x129.google.com with SMTP id o5so10499734ils.11
+ for <buildroot@buildroot.org>; Mon, 25 Apr 2022 18:23:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=o3bbAfx/UcFxyq23Df1GqwLcU5ScFXD0nwCnVE/DW3U=;
- b=jpEEgLgaBHkSHq33aL7v/U1w26m0uMwpoHMNW2Yc+DPDCrn1FcDY5IP1DgHLE8KimT
- v8cV5o86jui2CHIGGFiX6stCSskpW61iUQuJqgeSRpV+ufQoOdAh3G1Q9oARw1416Z6y
- xFSfVUlKHxIK5JK0I7xUMzRiw4fRj6p6vAFXEIjut09M+EjZulsbe5KRa4S5SzvhXOS0
- WKAvB383zeyc0njyuFJzbPXbvb20E6FNbUXzoXjce7WsO6tIoIon7UtiHazR+7ZQhVnh
- k2qWOkZlSGb9Mt4DCTSWLVvF3PcPqgBZDC6YIsLYwpZ53mGFMB7ETNVLCOezjaTXh8CN
- rtww==
+ bh=zYwPMuwgsDcuQvKbAtOYrIoGQQclePF7JAXBMAABsdU=;
+ b=VOMTeLlICG/riSjjzS2uww5cknGxnbbBoLO/TA5muIdzHzRaQ0CxEeteo2kpj58cVG
+ g4RVc+oG7E+ucn556impbgDttVA0oxMSd+axx2YvNvKrHQV6OuD7wj0L2sSaovDlnPiL
+ 4w/6gd8ydR8oqwbVYOlMnXYTuFziSxaXhZV4jeNn7vLd6jdXX3mc/VH34pC0VmBIpyPx
+ ey5GCXgtj4fRIE+/63EJpnWdlPcPR+tfn31gYYedDt5+Hr3D8XvKkRxEGFaSFlQB+WSn
+ OaomTGFI3QzC5/kmntNgqZpkjVdsJxfNN126quE2U3/4t6iJ/Ac6Qd+EecgNwNAJDfDG
+ kcOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=o3bbAfx/UcFxyq23Df1GqwLcU5ScFXD0nwCnVE/DW3U=;
- b=b/yHCagOwO6jKENO9N7f/SOcZNI3Q5vDPxZ9LAGBDSK9wsV7g5pzTcuQw5sfCUz+Nk
- +mz9S9qb+n0w55e5P6qKXZak1TOULOnDIo4zP3rxdIp6tJ6X6CY0Eflemgn7gp2QSDBd
- am2CBFUNWzi1vokkPyRToE0UY/jbTOz2vNCo6MYwkW2uR53Vrg4UAQDUdaweEbBt4LVC
- +CU9+/IwHMLTKt/c6krDQNd2DBvRxZ9pdg0Iunbwee9T6p4oAmOMSEnACzstUGZ3jQtq
- huWT6MK7p7NRJeEe1Zbb8A3i2pGt7wCraQGZT9RLwSnoL7CwmkpbmKY8CVxMGNvUDhXF
- 1q2Q==
-X-Gm-Message-State: AOAM533S3ydklcQk8SHAmVjNLy2bwAB9fAE1JzhyusxkwnxutiU0p6eC
- V05eFRCglzzNLIuV1nMJ6Vd2Pcc2y9Q=
-X-Google-Smtp-Source: ABdhPJyyohQY4j6D5hfvz4sfSa/OX4Srab+0DSL10qvyLA/Qa7r1FnwEcnmiW7t8oSZS5IMN/14rIA==
-X-Received: by 2002:a05:600c:4e4f:b0:392:ae18:2347 with SMTP id
- e15-20020a05600c4e4f00b00392ae182347mr25735100wmq.45.1650924490515; 
- Mon, 25 Apr 2022 15:08:10 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- h9-20020adfa4c9000000b0020ae2a771fdsm1067819wrb.72.2022.04.25.15.08.09
+ bh=zYwPMuwgsDcuQvKbAtOYrIoGQQclePF7JAXBMAABsdU=;
+ b=FdwZeeOItat/XywWPY1qNch5tdof3aZ+unEAq4kAZxuSGxNs7rLTxugr7cyGgKqgpI
+ x6oAQvafUN8WQ1QO/EKIy46o6MbG4pN4gb9qQ7UcmGkTmQ2SfgckhUbhJfrxPD9tJ0WU
+ JVtwq4ePM9HWN25hoc92ne9aVaiwX0RKOsuhFXj4lfPaRxyjVJw1S7FX2mfJanLyPwM0
+ /xhcKHe0ZNgBQCZPNyTJrNVyVjxkcnkwfFbMvIFWtzsVSalf3ABSsJPNDHEMTD4m788G
+ VqwmEgR0hgJ/jcEmfJjX0xP24g8vdTSEWkhIZD35EJt02Cb3884ope7Pcy5j0Yw6x+yF
+ jg7Q==
+X-Gm-Message-State: AOAM530+o3jokTKH1kAON/n+V8paogXjg/5vjx17plHqHoMCVFZxcOnj
+ 9jIqVAtYraTrYVg0bL+ylr8EeYednoZheQ==
+X-Google-Smtp-Source: ABdhPJxDR1s7ED7/ZD1/TFYPAtrNVq/RPFCe53KRW3+rg3MD7N6bbZm5wrz7rDMHvHgDFaAZZYHFMA==
+X-Received: by 2002:a05:6e02:12ef:b0:2cd:94ed:885 with SMTP id
+ l15-20020a056e0212ef00b002cd94ed0885mr3123695iln.173.1650936196910; 
+ Mon, 25 Apr 2022 18:23:16 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
+ [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
+ f15-20020a056e020c6f00b002cbc9935527sm7016073ilj.83.2022.04.25.18.23.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 25 Apr 2022 15:08:10 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Mon, 25 Apr 2022 18:23:16 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Apr 2022 00:06:02 +0200
-Message-Id: <20220425220602.1077854-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Mon, 25 Apr 2022 19:23:11 -0600
+Message-Id: <20220426012311.1738027-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wtfutil: add CPE variables
+Subject: [Buildroot] [PATCH 1/1] package/python-pep517: migrate setup type
+ to flit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,36 +87,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:wtfutil:wtf is a valid CPE identifier for this package:
+This package is moving to flit, we need to use flit-bootstrap
+since host-python-pypa-build depends on host-python-pep517.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awtfutil%3Awtf
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/wtfutil/wtfutil.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-pep517/python-pep517.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wtfutil/wtfutil.mk b/package/wtfutil/wtfutil.mk
-index 6e841411a9..54fea09574 100644
---- a/package/wtfutil/wtfutil.mk
-+++ b/package/wtfutil/wtfutil.mk
-@@ -8,5 +8,7 @@ WTFUTIL_VERSION = 0.41.0
- WTFUTIL_SITE = $(call github,wtfutil,wtf,v$(WTFUTIL_VERSION))
- WTFUTIL_LICENSE = MPL-2.0
- WTFUTIL_LICENSE_FILES = LICENSE.md
-+WTFUTIL_CPE_ID_VENDOR = wtfutil
-+WTFUTIL_CPE_ID_PRODUCT = wtf
+diff --git a/package/python-pep517/python-pep517.mk b/package/python-pep517/python-pep517.mk
+index 99aa62d51d..45c4f8dd39 100644
+--- a/package/python-pep517/python-pep517.mk
++++ b/package/python-pep517/python-pep517.mk
+@@ -9,7 +9,7 @@ PYTHON_PEP517_SOURCE = pep517-$(PYTHON_PEP517_VERSION).tar.gz
+ PYTHON_PEP517_SITE = https://files.pythonhosted.org/packages/0a/65/6e656d49c679136edfba25f25791f45ffe1ea4ae2ec1c59fe9c35e061cd1
+ PYTHON_PEP517_LICENSE = MIT
+ PYTHON_PEP517_LICENSE_FILES = LICENSE
+-PYTHON_PEP517_SETUP_TYPE = distutils
++PYTHON_PEP517_SETUP_TYPE = flit-bootstrap
+ HOST_PYTHON_PEP517_DEPENDENCIES = host-python-tomli
  
- $(eval $(golang-package))
+ $(eval $(host-python-package))
 -- 
-2.35.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
