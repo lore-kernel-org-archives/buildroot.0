@@ -1,84 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A258C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 17:18:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56F09C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 17:23:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB0DE40B59;
-	Tue, 26 Apr 2022 17:18:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E9ED4610FC;
+	Tue, 26 Apr 2022 17:23:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v3uhsj_B7fKC; Tue, 26 Apr 2022 17:18:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EF51940B60;
-	Tue, 26 Apr 2022 17:18:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BB5A31BF5AD
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:18:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A7A69610FD
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:18:37 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UtaayH74Jazk for <buildroot@lists.busybox.net>;
- Tue, 26 Apr 2022 17:18:35 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MQrUMWwoGblR; Tue, 26 Apr 2022 17:23:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B68960EBA;
+	Tue, 26 Apr 2022 17:23:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 793F41BF9A4
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:23:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 76D9A83E47
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:23:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X4dZ0NRtjhiz for <buildroot@lists.busybox.net>;
+ Tue, 26 Apr 2022 17:23:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8301F60EBA
- for <buildroot@buildroot.org>; Tue, 26 Apr 2022 17:18:35 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- n126-20020a1c2784000000b0038e8af3e788so2013853wmn.1
- for <buildroot@buildroot.org>; Tue, 26 Apr 2022 10:18:35 -0700 (PDT)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 67CCD83E46
+ for <buildroot@buildroot.org>; Tue, 26 Apr 2022 17:23:30 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ o12-20020a1c4d0c000000b00393fbe2973dso1014227wmh.2
+ for <buildroot@buildroot.org>; Tue, 26 Apr 2022 10:23:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=Qk6aV3LJODNXYxi/U2D/xxvaqMnJI1fw6bCPT8rswIc=;
- b=PIfWnevohXAGFiusgIWAq0N246Qz5tMSHk4vT563ubYEMD6O2NqKEYnrNgk4cpCdhn
- o+2EcWuj5sfzh9BJVp5kPu669WUhom+40v3CMAOcNqgSrjmVgwRZSkJmfXLXfdXMRo57
- 3iWRh3XQANK6S0Olc6xsYfyer1MpJIKf1bsDX2Jg8DnWQnUrWD48rRBMU+JNKp/IAa2l
- BMsKvY0Ty6sTW+VSzP/5D/+dQ71CvyyO7GNzbnaAMLxUE8orb+cwvSARO0ytrBNGwZtD
- dZBdObh9xuoswtgXIz1sFmMZYP1xbAo7lihYq2VHbDDRbnTssjkIskVM1h2h8YVz53je
- IbcQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Ao6UMxI54TIY3kDFrOXOhsNTw0vIto7xOzX7cIRvkw8=;
+ b=g0pkYCN4FD9uQJ+Whpl7rsmBCbcglSPGYVqTwKHn4bJx9QNJ4YLdTqIeJ4UxHfXNmd
+ p+ky8lfbTvXN9Iuj3D0soGijg12fSBF50bj7lLZEvbtIhqCGIj4UJsPkPHqcHa9zXAOv
+ gu4hoorCDKLrh1Ov5Z/xsDZH/rsVPgkKDvSemKJKYZ1Qs3cQGMYZkVmcD2o8CyOT5JPi
+ AJwYB7pC0GlWYldB/CY5qo9acuU2i8I5gETLQkq/IunaDsA3fXrtazs8HERIC2xkYdrN
+ U/QbVb3tX0OC+LpHdWyXtdfWyBWH8dZdinrmYE4IFPz9bFNgsicRaJ3gUGYQNTJnTShw
+ TNdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=Qk6aV3LJODNXYxi/U2D/xxvaqMnJI1fw6bCPT8rswIc=;
- b=ZeU8ZjHj42FzcYoOOC5SqA4ckEKiov48UZVka86mBOof2qKbAltOeCTZ2L+yKJDqz0
- W1BYOuwy58uPkXQFunXXtu0OBGuviy0FDv089IyroL2cbXzUQ2gAkoj9kBPxC9X/8NWz
- PDPsn0ONNc0T4ecxwKPXdUElGNwnlSK/wbz0YMyX7ootvD8w0xBRKHCAHzshublVfB07
- zBlgVrou+fiEz7p39qFtdItd06Gynpf7athsjvt9zjN+1hNtPFUOI9hNvCu8qPlk0W8a
- GLddX6EEOs/vlJF2ECEf0vC/WHMLwY7KSksdChMXoceuqREjKFKrwBpEuh5v5BTSEa9j
- FAwQ==
-X-Gm-Message-State: AOAM531fUheq/9ytPPPu2Kb7l3+YA+frVIFxFOPxNDb9d8hOdUNhkq8J
- 2/msnfQJ7htnF8w0xThQfbxMiltSLoU=
-X-Google-Smtp-Source: ABdhPJxlr+PB5AB8f043TLYJyO+e4frXMRMaH0hhEOVTG+z4Do4pGWwT1sy9JnBiwrTQwnbd9XA7NA==
-X-Received: by 2002:a1c:38c6:0:b0:392:a4f2:20b1 with SMTP id
- f189-20020a1c38c6000000b00392a4f220b1mr22378843wma.7.1650993513450; 
- Tue, 26 Apr 2022 10:18:33 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Ao6UMxI54TIY3kDFrOXOhsNTw0vIto7xOzX7cIRvkw8=;
+ b=Kby7dG7NbFYAGjs37FWwQ+E9qWb7yl14aeOvRrVlVU/D9dLBIV6Ylld6XMPmtQHZzW
+ PW2VNRNpH5Yzz3m+P855Sy+oz4RpwfZAZVvIx5F1PYFXKOiY+wamjy8gYWpY8iYCZgYr
+ Scy3ASkFki82iuP2qw08IxCX8FFupuzXykKVbAmprt+caRaDNwb/albYNrQK1DPTArfg
+ VOlOz/xjj9rse3Zme3UN8RWAxdMLoRuQ4ewemyY1G9bpD4Aw/sqFpu8vHuNSWIXe8DBy
+ oKCfHscuDwawfas1zEex157neZUSMMyZjshZCvKQJWytQhhqekpS3q8cOdgcjqjYB0Mp
+ R1Sw==
+X-Gm-Message-State: AOAM531gGAbgPNz/I9VVW5Vujo2eGpwBPaZTtslGUiccVJeipNDHW7Ny
+ A87sfnNqHz93FIWquNaVzkzwRXrdF8g=
+X-Google-Smtp-Source: ABdhPJw+/2l1FPsiI4wANxZzqI4l97P6kiaQx0Cu0lyG9FyZ5fBgzNIaFMbUsZ1xNX/Wq0P/yP0/Hg==
+X-Received: by 2002:a7b:cc17:0:b0:38d:af7:3848 with SMTP id
+ f23-20020a7bcc17000000b0038d0af73848mr22598843wmh.41.1650993808392; 
+ Tue, 26 Apr 2022 10:23:28 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- i11-20020a5d584b000000b0020a8d859e5fsm12582352wrf.10.2022.04.26.10.18.32
+ o6-20020adfca06000000b0020ae96f6ba8sm1152731wrh.65.2022.04.26.10.23.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Apr 2022 10:18:33 -0700 (PDT)
+ Tue, 26 Apr 2022 10:23:28 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Apr 2022 19:16:00 +0200
-Message-Id: <20220426171600.2552919-2-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Apr 2022 19:21:29 +0200
+Message-Id: <20220426172129.3189250-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220426171600.2552919-1-fontaine.fabrice@gmail.com>
-References: <20220426171600.2552919-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/libpri: bump to version 1.6.0
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,49 +88,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update indentation in hash file (two spaces)
+Fix the following static build failure:
 
-http://downloads.asterisk.org/pub/telephony/libpri/releases/libpri-1.6.0-summary.html
+/nvmedata/autobuild/instance-15/output-1/per-package/ltp-testsuite/host/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/10.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-15/output-1/per-package/ltp-testsuite/host/bin/../mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(syslog.os): in function `openlog':
+syslog.c:(.text+0x6b8): multiple definition of `openlog'; /tmp/ccvRnqfT.o:/nvmedata/autobuild/instance-15/output-1/build/ltp-testsuite-20220121/testcases/kernel/fs/fs-bench/random-access.c:14: first defined here
+
+Fixes:
+ - http://autobuild.buildroot.org/results/bfd0d906a05564a4f323db604f3b908abf552b20
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libpri/libpri.hash | 4 ++--
- package/libpri/libpri.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...nel-fs-declare-int-openlog-as-static.patch | 77 +++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100644 package/ltp-testsuite/0002-testcases-kernel-fs-declare-int-openlog-as-static.patch
 
-diff --git a/package/libpri/libpri.hash b/package/libpri/libpri.hash
-index 47c4a00307..77985df96a 100644
---- a/package/libpri/libpri.hash
-+++ b/package/libpri/libpri.hash
-@@ -1,6 +1,6 @@
- # sha1 and sha256 from http://downloads.asterisk.org/pub/telephony/libpri/releases/
--sha1    63536f3300fb007dfd5fe8064406992ca938bd9a                          libpri-1.5.0.tar.gz
--sha256  ee224bc4aa65c54546bd09675c3f0b71817ce9e277332bce86989d8dcd556a24  libpri-1.5.0.tar.gz
-+sha1  8440007477ebf131020afb00f57672b108b4db2c  libpri-1.6.0.tar.gz
-+sha256  7225ea7ec334a115f9dc08e71f55589c38cb4e00b13964cd2f08cc4e6123e3f6  libpri-1.6.0.tar.gz
- 
- # License files, locally calculated
- sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  LICENSE
-diff --git a/package/libpri/libpri.mk b/package/libpri/libpri.mk
-index 34d84393c4..48a1019210 100644
---- a/package/libpri/libpri.mk
-+++ b/package/libpri/libpri.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPRI_VERSION = 1.5.0
-+LIBPRI_VERSION = 1.6.0
- LIBPRI_SITE = http://downloads.asterisk.org/pub/telephony/libpri/releases
- 
- LIBPRI_LICENSE = GPL-2.0 with OpenH323 exception
+diff --git a/package/ltp-testsuite/0002-testcases-kernel-fs-declare-int-openlog-as-static.patch b/package/ltp-testsuite/0002-testcases-kernel-fs-declare-int-openlog-as-static.patch
+new file mode 100644
+index 0000000000..ae10bfcfdd
+--- /dev/null
++++ b/package/ltp-testsuite/0002-testcases-kernel-fs-declare-int-openlog-as-static.patch
+@@ -0,0 +1,77 @@
++From 002ca0320cd2c5e1515bf202f470d4becdf01532 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 24 Apr 2022 21:56:36 +0200
++Subject: [PATCH] testcases/kernel/fs: declare int openlog as static
++
++Declare int openlog as static to avoid the following build failure when
++building statically (e.g. on buildroot):
++
++/nvmedata/autobuild/instance-15/output-1/per-package/ltp-testsuite/host/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/10.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-15/output-1/per-package/ltp-testsuite/host/bin/../mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(syslog.os): in function `openlog':
++syslog.c:(.text+0x6b8): multiple definition of `openlog'; /tmp/ccvRnqfT.o:/nvmedata/autobuild/instance-15/output-1/build/ltp-testsuite-20220121/testcases/kernel/fs/fs-bench/random-access.c:14: first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/bfd0d906a05564a4f323db604f3b908abf552b20
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
++[Retrieved from:
++https://github.com/linux-test-project/ltp/commit/002ca0320cd2c5e1515bf202f470d4becdf01532]
++---
++ testcases/kernel/fs/fs-bench/random-access-del-create.c | 2 --
++ testcases/kernel/fs/fs-bench/random-access.c            | 2 +-
++ testcases/kernel/fs/fs-bench/random-del-create.c        | 2 +-
++ testcases/kernel/fs/scsi/ltpfs/main.c                   | 2 +-
++ 4 files changed, 3 insertions(+), 5 deletions(-)
++
++diff --git a/testcases/kernel/fs/fs-bench/random-access-del-create.c b/testcases/kernel/fs/fs-bench/random-access-del-create.c
++index 1f62a76b5e..1878fd78b5 100644
++--- a/testcases/kernel/fs/fs-bench/random-access-del-create.c
+++++ b/testcases/kernel/fs/fs-bench/random-access-del-create.c
++@@ -11,8 +11,6 @@
++ #define FAIL 0
++ #define SUCCESS 1
++ 
++-int openlog[2] = { 0, 0 };
++-
++ #define MAXNUM 0x100000
++ 
++ #define  MAXERROR 1024
++diff --git a/testcases/kernel/fs/fs-bench/random-access.c b/testcases/kernel/fs/fs-bench/random-access.c
++index cf41d6e81c..c2f32b86e7 100644
++--- a/testcases/kernel/fs/fs-bench/random-access.c
+++++ b/testcases/kernel/fs/fs-bench/random-access.c
++@@ -11,7 +11,7 @@
++ #define FAIL 0
++ #define SUCCESS 1
++ 
++-int openlog[2] = { 0, 0 };
+++static int openlog[2] = { 0, 0 };
++ 
++ #define MAXNUM 0x100000
++ 
++diff --git a/testcases/kernel/fs/fs-bench/random-del-create.c b/testcases/kernel/fs/fs-bench/random-del-create.c
++index 0a86f976f3..345031f283 100644
++--- a/testcases/kernel/fs/fs-bench/random-del-create.c
+++++ b/testcases/kernel/fs/fs-bench/random-del-create.c
++@@ -11,7 +11,7 @@
++ #define FAIL 0
++ #define SUCCESS 1
++ 
++-int openlog[2] = { 0, 0 };
+++static int openlog[2] = { 0, 0 };
++ 
++ #define MAXNUM 0x100000
++ 
++diff --git a/testcases/kernel/fs/scsi/ltpfs/main.c b/testcases/kernel/fs/scsi/ltpfs/main.c
++index 2c67c7a478..90a5531ac3 100644
++--- a/testcases/kernel/fs/scsi/ltpfs/main.c
+++++ b/testcases/kernel/fs/scsi/ltpfs/main.c
++@@ -38,7 +38,7 @@ int startc = 0;
++ int showchar[] = { 124, 47, 45, 92, 124, 47, 45, 92 };
++ 
++ int nullFileHandle;
++-int openlog[2] = { 0, 0 };
+++static int openlog[2] = { 0, 0 };
++ 
++ int cFileCount, dFileCount, errorCount;
++ static int disk_space_pool = 0;
 -- 
 2.35.1
 
