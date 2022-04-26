@@ -4,76 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6455C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 16:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02D5EC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 17:15:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92F5583E3B;
-	Tue, 26 Apr 2022 16:41:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7500083E41;
+	Tue, 26 Apr 2022 17:15:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sh-cGF2EPxOl; Tue, 26 Apr 2022 16:41:52 +0000 (UTC)
+	with ESMTP id LoB23M3_vbR5; Tue, 26 Apr 2022 17:15:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B277F83E38;
-	Tue, 26 Apr 2022 16:41:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8AB321BF94D
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 16:41:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 831BE832E8;
+	Tue, 26 Apr 2022 17:15:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 890F51BF5AD
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7936383E38
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 16:41:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7695F60BF5
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:15:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RPjJAUxsAgPw for <buildroot@lists.busybox.net>;
- Tue, 26 Apr 2022 16:41:49 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1F03C83DF1
- for <buildroot@busybox.net>; Tue, 26 Apr 2022 16:41:48 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id e23so2043142eda.11
- for <buildroot@busybox.net>; Tue, 26 Apr 2022 09:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=RbKysAftQOcFEI8u+pom0wZ/WaZbFhicplIoKL/C5VY=;
- b=Fm6FjakhjRy1ZEtqwjkEpxYX/38O/LhXFUPKm2WGx1fQ6laBzVqoOpJeXarMjizpSY
- WdAXy+NhyXV0HaKPRRarlz+z8jFyIaU827++d0SY3kPiVWeGu8kkguc3s9cipq3zwZ4C
- 4k/4EB+I9Qgeto4KNIV0AbnUGzrIXQ5yeMqHixnABFM2h7kWpXmzGF53vCR5fzpoUihb
- xYryeh/3J8TVcEzoOg0rb8HgK//fxVK9mJVH5Ujl77HT/exHfkgQqwcw7S0wGBn3TAMl
- c5O31cYv+80lQRECvPyrDCtQS+VdNkuGdJulsrnWlOJZlDKita/PfJwasc+ahZMwnJ0W
- /EPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=RbKysAftQOcFEI8u+pom0wZ/WaZbFhicplIoKL/C5VY=;
- b=q+P2NWz+T+Rj6Bk8yqOzqYAYYfda813vhyXhjqQDHf5N3LKGoRG3x3nBSxboG7AjR8
- YPy9vrU08rZjzAtgmYhwpKh/8ZG8nzC3dcJFLKkRot5Ynnm695rn7SvfBmSN5QgB8T5c
- ZxOlyUYieQK/UgA7YLhe1LYaKec016n//zOqthBBHjz3ooOUV4YIMnOXQAdHKZBmk+Is
- nF3ylyWeQHD4/TNARPneZPPjAyKyRmkrvJqZ3CKvkYkKugBTvzn3AIAHqX66LbkGWxuB
- BPYP7ywiyp5y/jtAp4xsU70HMGKvbZtK4yqmIReMBKEUUCtUFlc2PwxlvzrsjCn3OOq5
- A3fQ==
-X-Gm-Message-State: AOAM531LPPmYx9b8MW+ADPyVRJM/vfoMoCDEfgMa+VCQGDwR0R62OdFI
- E9pEc2AAtpHIPESfoBgmCN9fohSOrrI=
-X-Google-Smtp-Source: ABdhPJwEVLFsUkjgQoM9TlMs7Y5s5tbRaGDxcQQw6dTu2RAh7Yk98CcR6QdWwUk22AwcJidsCvHo+w==
-X-Received: by 2002:a05:6402:1a34:b0:425:ca01:58ec with SMTP id
- be20-20020a0564021a3400b00425ca0158ecmr20124066edb.373.1650991307382; 
- Tue, 26 Apr 2022 09:41:47 -0700 (PDT)
-Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- hf3-20020a1709072c4300b006f392c2bf71sm2753841ejc.175.2022.04.26.09.41.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Apr 2022 09:41:47 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Tue, 26 Apr 2022 13:39:20 +0200
-Message-Id: <20220426113920.3544925-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.32.0
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=tkos.co.il
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QR0Mgrw-9cbK for <buildroot@lists.busybox.net>;
+ Tue, 26 Apr 2022 17:15:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D399460B52
+ for <buildroot@buildroot.org>; Tue, 26 Apr 2022 17:15:43 +0000 (UTC)
+Received: from tarshish (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 5A2634403CD;
+ Tue, 26 Apr 2022 20:14:53 +0300 (IDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+ s=default; t=1650993294;
+ bh=0iN3bYRnWbGih6JLSdSNi0ydnIEi8LqXoV3ECyxpa5Q=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=DHMSvYdxIoyie/uLit6GfxcdEpGnZrp9kHeZhml5JaMJv0Q6MQO01Ez41PiO7w9PO
+ vQeqQZVtix8/VTl4wJEY7EBMOSAScTBLSj9rv6J+t7DasyEPBldpUB8hSYSPg7KHP+
+ QYWmKXstf11srsvoyghZvKOaQMqMjnLv4v/k3hOr/RSJCDFySKT0HRaMjQbgQymZ5N
+ k/kAdDm5LDrmwrAotS1Ezxvha5NCQtzxiYFE01CytSLFUUEcyYT1B/ZlcJy/+y8VcB
+ Z6eyaUXrCzqV2Ddtf4TGjKy23ddrOq0dl37hfH4lDJXCzSAGrlAPnnggSk6pjXQ0oB
+ VxNUZnKzXV/VQ==
+References: <20220426153726.312870-1-thomas.petazzoni@bootlin.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Apr 2022 20:14:17 +0300
+In-reply-to: <20220426153726.312870-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87fslz22br.fsf@tarshish>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/strace: bump to version 5.17
+Subject: Re: [Buildroot] [PATCH 1/3] package/elf2flt: update to version
+ 2021.08
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,45 +68,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Thomas,
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 30c90e8e3..f3567db63 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/5.16/strace-5.16.tar.xz.asc
--sha256  dc7db230ff3e57c249830ba94acab2b862da1fcaac55417e9b85041a833ca285  strace-5.16.tar.xz
-+# https://strace.io/files/5.17/strace-5.17.tar.xz.asc
-+sha256  5fb298dbd1331fd1e1bc94c5c32395860d376101b87c6cd3d1ba9f9aa15c161f  strace-5.17.tar.xz
- sha256  d92f973d08c8466993efff1e500453add0c038c20b4d2cbce3297938a296aea9  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index c8c3590f6..cbd737e12 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRACE_VERSION = 5.16
-+STRACE_VERSION = 5.17
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+On Tue, Apr 26 2022, Thomas Petazzoni via buildroot wrote:
+> diff --git a/package/elf2flt/0003-elf2flt-handle-binutils-2.34.patch b/package/elf2flt/0001-elf2flt-handle-binutils-2.34.patch
+> similarity index 88%
+> rename from package/elf2flt/0003-elf2flt-handle-binutils-2.34.patch
+> rename to package/elf2flt/0001-elf2flt-handle-binutils-2.34.patch
+> index 16d5633385..ba72afa85c 100644
+> --- a/package/elf2flt/0003-elf2flt-handle-binutils-2.34.patch
+> +++ b/package/elf2flt/0001-elf2flt-handle-binutils-2.34.patch
+> @@ -1,7 +1,7 @@
+> -From 26165906f85d82f0a4456f34b5c60fcaaef48535 Mon Sep 17 00:00:00 2001
+> +From d78acba6510527aaa01a41eaf4c931f7a57e5f44 Mon Sep 17 00:00:00 2001
+>  From: Romain Naour <romain.naour@smile.fr>
+>  Date: Wed, 5 Feb 2020 10:31:32 +0100
+> -Subject: [PATCH] elf2flt: handle binutils >= 2.34
+> +Subject: [PATCH 1/2] elf2flt: handle binutils >= 2.34
+
+We usually don't like in-patch numbering.
+
+baruch
+
 -- 
-2.32.0
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
