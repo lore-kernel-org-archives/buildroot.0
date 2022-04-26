@@ -1,78 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50029C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 17:41:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FBE6C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 17:48:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3F0860EA2;
-	Tue, 26 Apr 2022 17:41:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9CC3D405E5;
+	Tue, 26 Apr 2022 17:48:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PoLAfHybYleh; Tue, 26 Apr 2022 17:41:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5GGxK-mOtvTS; Tue, 26 Apr 2022 17:48:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE17960E73;
-	Tue, 26 Apr 2022 17:41:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE74940499;
+	Tue, 26 Apr 2022 17:48:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C7B011BF5AD
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:41:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0FF201BF5AD
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:48:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B572D60E73
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:41:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C3A260EC2
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:48:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=embeddedts.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Zl42TZVA9zE8 for <buildroot@lists.busybox.net>;
- Tue, 26 Apr 2022 17:41:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D725660E38
- for <buildroot@buildroot.org>; Tue, 26 Apr 2022 17:41:40 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id r12so21083235iod.6
- for <buildroot@buildroot.org>; Tue, 26 Apr 2022 10:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=LAM6nQQ/SJtRc0H1WE4y+YldUl91qwdGRzZF3maBvgE=;
- b=cOd1vygXBEk4pebMTIDiddprDAcLe/2hLqlSIYmIO0zEmdeY7C3IBCZE0ecK3dUnGb
- 49jA3xVT8b7bqLj9DYtxOh/ffw64PgOoGkOoWrfSnv8EbEnOJI+s+o8kiyCsSbew6MJw
- JNZVg7YYlxzX3k0oLw2KdOqFDFKAqPyCQzkIc2oHhuGLc54Nt0DC8UusJ270Sq6fCBna
- L4FBCcMv0mMeBXuwR0wRoxo1zyVn34YSQwuicqUyiHp3BPXx7Y07viu2T7F/I/wW6Nrx
- Gatlx1kW83fB+0cgzyAybz6f+OYfm7OwPxkLYqX4/OO4pcCywJUKphpIIiFgtbZI3UT6
- afCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=LAM6nQQ/SJtRc0H1WE4y+YldUl91qwdGRzZF3maBvgE=;
- b=HX+X6S+5qKp7jSCqxg4fowRTlRUbDazFyAsuVkgUtVukajInKZ6T4OjKdQIlXnSGIa
- /F5dPWWm6SllHZOIuIhQVOkpxxvW3UxC/B2VEHphlY5xDhfeRJpZ0ULgbxD+Rjmm8XOe
- keanPlNQKJOsd4igE/MciVnU9fnT1Sd6LaC/hvjwN/gMEJvtDAf9uSHSngcWh+NCqVic
- CoqBh12j4REj5SbgzZbdOuZJS20uXVZeLTYi3k5agWq7eCnUb4WmRWzUMT387qqrdLGh
- N0cyIi3k3rEPSuwKRPSwuJAYrZ3vO+s4GyBbP4imCTqymXj5UOPm4Nqg148akEgng4MF
- ++yg==
-X-Gm-Message-State: AOAM533fld14f9QNzQxCHCOsHWiMNomnKl3HZ+vFjeUbx7MeRWlMHNXA
- FAyPifohjVCkokQ9MGSorUCroaolPiR3kg==
-X-Google-Smtp-Source: ABdhPJz+PEy6jPD9V40CU3/MLjdRPLI9LFJHVoSm0WYr0vWU/GT00nTZkqE2u0mxt/pTFp6u0Tx6cQ==
-X-Received: by 2002:a05:6638:6a7:b0:32b:1019:46e with SMTP id
- d7-20020a05663806a700b0032b1019046emr776158jad.112.1650994899719; 
- Tue, 26 Apr 2022 10:41:39 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
- [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- a2-20020a5d9ec2000000b00645ab33390dsm9452833ioe.9.2022.04.26.10.41.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Apr 2022 10:41:39 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 26 Apr 2022 11:41:37 -0600
-Message-Id: <20220426174137.3014322-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wilc-driver: add missing
+ with ESMTP id 4j8W8wsaUXao for <buildroot@lists.busybox.net>;
+ Tue, 26 Apr 2022 17:48:09 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.188])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4093760E38
+ for <buildroot@buildroot.org>; Tue, 26 Apr 2022 17:48:09 +0000 (UTC)
+Received: from 1njPIF-0009I0-Uu by out3d.electric.net with emc1-ok (Exim
+ 4.94.2) (envelope-from <kris@embeddedTS.com>)
+ id 1njPIG-0009Lj-U0; Tue, 26 Apr 2022 10:48:08 -0700
+Received: by emcmailer; Tue, 26 Apr 2022 10:48:08 -0700
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+ by out3d.electric.net with esmtps (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2)
+ (envelope-from <kris@embeddedTS.com>)
+ id 1njPIF-0009I0-Uu; Tue, 26 Apr 2022 10:48:07 -0700
+Received: from tsdebian (unknown [75.164.70.254])
+ by mail.embeddedts.com (Postfix) with ESMTPSA id 0395844E3C;
+ Tue, 26 Apr 2022 10:48:06 -0700 (MST)
+Message-ID: <1650995276.4452.1.camel@embeddedTS.com>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+Date: Tue, 26 Apr 2022 10:47:56 -0700
+In-Reply-To: <20220426174137.3014322-1-james.hilliard1@gmail.com>
+References: <20220426174137.3014322-1-james.hilliard1@gmail.com>
+Organization: embeddedTS
+X-Mailer: Evolution 3.22.6-1+deb9u2 
+Mime-Version: 1.0
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS: TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
+X-Authenticated_ID: 
+X-Virus-Status: Scanned by VirusSMART (c)
+X-Virus-Status: Scanned by VirusSMART (b)
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=embeddedTS.com; s=mailanyone20220121;
+ h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID;
+ bh=5+0OS8XxlS7Cpv/bSBy38KwIk+rquHOYqg43nJ3FHAA=;
+ b=emSaqox9k/fVLtYcfInYVPHHCgTs1KhaN7BWIkzmNm27I67ImuhrX022l0JapvSWJnrNIXrrktQuPUmtj676PSrNxaUY6NdhGv7/sWrl263JJdryufCfDCoVd6MFJzPAAsxF3FzkGH2YyV23F9AsCBbGimOSNzcVUYoAdGkEcUNxdE6hSaTsmdE8jktN0Q5Q13NObzXpTyMchHuGza6pJ7gBdvIni2JfbT+/+rynXSNc64254cSwbQ4tqoQD2JI9iflSASvLQp53eFzvrrY4GNzXjB4CCy6jrqvnHoYUNFeHz1incdQQZimOScWLbRFT4I4Hv8NW8YWlNtTzgS0gGQ==;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+Subject: Re: [Buildroot] [PATCH 1/1] package/wilc-driver: add missing
  BR2_LINUX_KERNEL dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -85,35 +84,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Kris Bahnsen <kris@embeddedTS.com>
+From: Kris Bahnsen via buildroot <buildroot@buildroot.org>
+Reply-To: kris@embeddedTS.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
- - http://autobuild.buildroot.net/results/40b/40b8aa0c19917f64c3f272f5479068e7631ffcc3
+On Tue, 2022-04-26 at 11:41 -0600, James Hilliard wrote:
+> Fixes:
+>  - http://autobuild.buildroot.net/results/40b/40b8aa0c19917f64c3f272f5479068e7631ffcc3
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/wilc-driver/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/wilc-driver/Config.in b/package/wilc-driver/Config.in
+> index caf46ae281..6b93a23a47 100644
+> --- a/package/wilc-driver/Config.in
+> +++ b/package/wilc-driver/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_WILC_DRIVER
+>  	bool "wilc kernel module"
+> +	depends on BR2_LINUX_KERNEL
+>  	help
+>  	  External kernel module for WILC1000/3000 devices.
+>  
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/wilc-driver/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/wilc-driver/Config.in b/package/wilc-driver/Config.in
-index caf46ae281..6b93a23a47 100644
---- a/package/wilc-driver/Config.in
-+++ b/package/wilc-driver/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_WILC_DRIVER
- 	bool "wilc kernel module"
-+	depends on BR2_LINUX_KERNEL
- 	help
- 	  External kernel module for WILC1000/3000 devices.
- 
--- 
-2.25.1
-
+Reviewed-by: Kris Bahnsen <kris@embeddedTS.com>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
