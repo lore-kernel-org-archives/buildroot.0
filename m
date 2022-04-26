@@ -1,45 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D60D3C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 21:54:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C078C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 21:54:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95BF94195B;
-	Tue, 26 Apr 2022 21:54:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CB7EA40B8B;
+	Tue, 26 Apr 2022 21:54:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nyPLVjUYry1Z; Tue, 26 Apr 2022 21:54:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sfjQJtMOj4z5; Tue, 26 Apr 2022 21:54:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AB284193B;
-	Tue, 26 Apr 2022 21:54:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4BF940B86;
+	Tue, 26 Apr 2022 21:54:29 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 725D71BF3A6
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 21:54:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C14051BF3A6
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 21:54:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6039A60FEC
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 21:54:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AFDF160A71
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 21:54:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9Wc7bnfarilq for <buildroot@lists.busybox.net>;
- Tue, 26 Apr 2022 21:54:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9598B606F9
- for <buildroot@buildroot.org>; Tue, 26 Apr 2022 21:54:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EA0E9844FE; Tue, 26 Apr 2022 21:43:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 26 Apr 2022 23:53:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2e49ff10202e28a8dc942bfe11d7a623aca0bf6c
-X-Git-Newrev: b3f42bf1005e3395f03ac4db0a0583306c9467b0
-X-Patchwork-Hint: ignore
-Message-Id: <20220426214347.EA0E9844FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/htpdate: bump to version 1.3.4
+ with ESMTP id 5z2tdYY5S6lj for <buildroot@lists.busybox.net>;
+ Tue, 26 Apr 2022 21:54:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9D7E4606F9
+ for <buildroot@buildroot.org>; Tue, 26 Apr 2022 21:54:20 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7836DC0002;
+ Tue, 26 Apr 2022 21:54:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1651010057;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=1sg55RRXGoDUXF9HiTCXTawLk2v3iXpATyUw0baXBeQ=;
+ b=OOZx8HH/H4njvahOPzkEoK5guNLMIIIpAajV+As2ec6ljXOxTh6kZXGqlmp4t9e5mLpG36
+ /pRPKQ9z3d3mp5gsQNKDSk4+b25mzx+dmPKFhSbo/QfHLtgT8t3ujtwLMTiZBKUw34L4e7
+ W4ruZL4L1KCSdMBxpYM7CHjlpaPzn1vBCyAT3KtV+468zCmzVXpJ6AAdMrtshAr3TeW+DW
+ 7vMVx6iRJhFZZjYvsTpdi2cDrvkhLPb2zzQDZB9792/rP3Zhmyz3J4fPQjfnVwvNPolnZD
+ ZVlhp5amcbw8vbUJd62gv67EBCdNeFGMHHhmNnmZJNmiY0otFSFZanRwMljQEA==
+Date: Tue, 26 Apr 2022 23:54:16 +0200
+To: Angelo Compagnucci <angelo@amarulasolutions.com>
+Message-ID: <20220426235416.3906ebfb@windsurf>
+In-Reply-To: <20220426210128.127336-1-angelo@amarulasolutions.com>
+References: <20220426210128.127336-1-angelo@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/htpdate: bump to version 1.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,90 +71,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3f42bf1005e3395f03ac4db0a0583306c9467b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 26 Apr 2022 23:01:28 +0200
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-Removing also the upstreamed patch.
+> Removing also the upstreamed patch.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  ...BS-to-be-configured-from-environment.patch | 37 -------------------
+>  package/htpdate/htpdate.hash                  |  2 +-
+>  package/htpdate/htpdate.mk                    |  2 +-
+>  3 files changed, 2 insertions(+), 39 deletions(-)
+>  delete mode 100644 package/htpdate/0001-Allow-SSL_LIBS-to-be-configured-from-environment.patch
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...SL_LIBS-to-be-configured-from-environment.patch | 37 ----------------------
- package/htpdate/htpdate.hash                       |  2 +-
- package/htpdate/htpdate.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 39 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/htpdate/0001-Allow-SSL_LIBS-to-be-configured-from-environment.patch b/package/htpdate/0001-Allow-SSL_LIBS-to-be-configured-from-environment.patch
-deleted file mode 100644
-index 6dca2babab..0000000000
---- a/package/htpdate/0001-Allow-SSL_LIBS-to-be-configured-from-environment.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 4ba90fedd553c3b06c925fb6ff5245a5dcabace9 Mon Sep 17 00:00:00 2001
--From: Eddy Vervest <eddy@vervest.org>
--Date: Sat, 29 Jan 2022 10:58:13 +0100
--Subject: [PATCH] Allow SSL_LIBS to be configured from environment
--
--[Retrieved from:
--https://github.com/twekkel/htpdate/commit/4ba90fedd553c3b06c925fb6ff5245a5dcabace9]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- Makefile | 7 ++++---
-- 1 file changed, 4 insertions(+), 3 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 4796efa..cf077e6 100644
----- a/Makefile
--+++ b/Makefile
--@@ -2,8 +2,9 @@ prefix = $(DESTDIR)/usr
-- bindir = ${prefix}/sbin
-- mandir = ${prefix}/share/man
-- 
---CC     ?= gcc
---CFLAGS += -Wall -std=c11 -pedantic -O2
--+CC       ?= gcc
--+CFLAGS   += -Wall -std=c11 -pedantic -O2
--+SSL_LIBS ?= -lssl
-- 
-- INSTALL ?= install -c
-- STRIP   ?= strip -s
--@@ -14,7 +15,7 @@ htpdate: htpdate.c
-- 	$(CC) $(CFLAGS) -o htpdate htpdate.c
-- 
-- https: htpdate.c
---	$(CC) $(CFLAGS) -DENABLE_HTTPS -o htpdate htpdate.c -lssl
--+	$(CC) $(CFLAGS) -DENABLE_HTTPS -o htpdate htpdate.c $(SSL_LIBS)
-- 
-- install: all
-- 	$(STRIP) htpdate
-diff --git a/package/htpdate/htpdate.hash b/package/htpdate/htpdate.hash
-index b56522ea99..11e743c569 100644
---- a/package/htpdate/htpdate.hash
-+++ b/package/htpdate/htpdate.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  74f34b013eba6f99369819fa4b3d48e9ab5e531ad04f6af59cc04e8777c76ed7  htpdate-1.3.3.tar.gz
-+sha256  744f9200cfd3b008a5516c5eb6da727af532255a329126a7b8f49a5623985642  htpdate-1.3.4.tar.gz
- sha256  7989949df09a0489434723c571541604cd3f2e0418c6a6aa9179bfaf8ec807cc  LICENSE
-diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
-index e32480fc85..35ae25929c 100644
---- a/package/htpdate/htpdate.mk
-+++ b/package/htpdate/htpdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HTPDATE_VERSION = 1.3.3
-+HTPDATE_VERSION = 1.3.4
- HTPDATE_SITE = $(call github,twekkel,htpdate,v$(HTPDATE_VERSION))
- HTPDATE_LICENSE = GPL-2.0+
- HTPDATE_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
