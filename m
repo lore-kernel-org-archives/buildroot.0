@@ -1,79 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 778B4C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 17:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A258C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 26 Apr 2022 17:18:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1502460EBA;
-	Tue, 26 Apr 2022 17:18:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EB0DE40B59;
+	Tue, 26 Apr 2022 17:18:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 957SF0VNbcbH; Tue, 26 Apr 2022 17:18:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v3uhsj_B7fKC; Tue, 26 Apr 2022 17:18:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2602861104;
-	Tue, 26 Apr 2022 17:18:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF51940B60;
+	Tue, 26 Apr 2022 17:18:48 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 976661BF5AD
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:18:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BB5A31BF5AD
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:18:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 84E6560EBA
- for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:18:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A7A69610FD
+ for <buildroot@lists.busybox.net>; Tue, 26 Apr 2022 17:18:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xcFFZg7PfKsd for <buildroot@lists.busybox.net>;
- Tue, 26 Apr 2022 17:18:33 +0000 (UTC)
+ with ESMTP id UtaayH74Jazk for <buildroot@lists.busybox.net>;
+ Tue, 26 Apr 2022 17:18:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 75CDD60B52
- for <buildroot@buildroot.org>; Tue, 26 Apr 2022 17:18:33 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id x18so26461252wrc.0
- for <buildroot@buildroot.org>; Tue, 26 Apr 2022 10:18:33 -0700 (PDT)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8301F60EBA
+ for <buildroot@buildroot.org>; Tue, 26 Apr 2022 17:18:35 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ n126-20020a1c2784000000b0038e8af3e788so2013853wmn.1
+ for <buildroot@buildroot.org>; Tue, 26 Apr 2022 10:18:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6AAQ6ql8FrHbJQlKfA8mS0eVSboUdD+Mrrv1OvrgOBs=;
- b=EkuU2YQQmXq+e1jVXzkHQLVha+zx4WEIN/jDjg2jMGCiFB187UU99sWlMx1621NX4M
- DNFiI6eItWdxRasfMCUTgwDrisy5izXl5KfBty4mWNoRg7K6q5q9eM7xWOB0Le1vGxsH
- upc7P+gZT0PRL7S9wV3BblrzV3oa4qPGcTF9pmCXjTeCW+zAbqAcFeoLBMZSbWHoDncz
- ZX555rJUejJeJSQN4A+wxnpjLCYocJTFvEdaw2/egb3SkqP3YJJbewJeRWgFHLCqoDyI
- omGNf9YuIXhecJYLrYUBTRYIeGmOkbd987hXEbBiMdK/hws5xm1pKTILfJO+wKpWF5fd
- RTJw==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=Qk6aV3LJODNXYxi/U2D/xxvaqMnJI1fw6bCPT8rswIc=;
+ b=PIfWnevohXAGFiusgIWAq0N246Qz5tMSHk4vT563ubYEMD6O2NqKEYnrNgk4cpCdhn
+ o+2EcWuj5sfzh9BJVp5kPu669WUhom+40v3CMAOcNqgSrjmVgwRZSkJmfXLXfdXMRo57
+ 3iWRh3XQANK6S0Olc6xsYfyer1MpJIKf1bsDX2Jg8DnWQnUrWD48rRBMU+JNKp/IAa2l
+ BMsKvY0Ty6sTW+VSzP/5D/+dQ71CvyyO7GNzbnaAMLxUE8orb+cwvSARO0ytrBNGwZtD
+ dZBdObh9xuoswtgXIz1sFmMZYP1xbAo7lihYq2VHbDDRbnTssjkIskVM1h2h8YVz53je
+ IbcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6AAQ6ql8FrHbJQlKfA8mS0eVSboUdD+Mrrv1OvrgOBs=;
- b=IxzK6az7101Drhrqy+i0muhG1IaeMKy4jTL2YjbIFWHQSgvnJa7kQn2oZoRWf13OFV
- pD1kFhihbnAvX9GrV7GSY6FFEv8rdJME/FuHOmH6qmoZp03vr2Pm28Sw5eT5qvphzyy9
- kZOrlSXDvPhs+1YWUgmTprHnUwNsa1459xurDPrHhUCVK1m2UU0jU4ykruYGYZhhbg1B
- /n0fdGSUiLsdtnZLs83sEnRiI2NEehDzm4kly70TQB2o9XdJnQ0fS+zRUmOS2Gn0/MDw
- Sl0i5VMls3HOVEnf6vJoDklVhrQUK3voElbdBcgQD8t5F7TUY59AG3Gzh9ZiNrbnSdBV
- PtOA==
-X-Gm-Message-State: AOAM531Nh8FKb15PcoxZtj0rFJaBzqCs8MPe5GjAn1qOSh+MrMKsNsg0
- 4D67IK7Dxqf7NXRamPCafDb3MUX/F3g=
-X-Google-Smtp-Source: ABdhPJy5cz4Y67XIkfH2UfGImbwc1BBdml2iDIf4sU98Racbmzt0vK2Ue3oqwBrNW+3638gNCw1faw==
-X-Received: by 2002:a05:6000:1c0b:b0:20a:855e:1272 with SMTP id
- ba11-20020a0560001c0b00b0020a855e1272mr19480208wrb.261.1650993511392; 
- Tue, 26 Apr 2022 10:18:31 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=Qk6aV3LJODNXYxi/U2D/xxvaqMnJI1fw6bCPT8rswIc=;
+ b=ZeU8ZjHj42FzcYoOOC5SqA4ckEKiov48UZVka86mBOof2qKbAltOeCTZ2L+yKJDqz0
+ W1BYOuwy58uPkXQFunXXtu0OBGuviy0FDv089IyroL2cbXzUQ2gAkoj9kBPxC9X/8NWz
+ PDPsn0ONNc0T4ecxwKPXdUElGNwnlSK/wbz0YMyX7ootvD8w0xBRKHCAHzshublVfB07
+ zBlgVrou+fiEz7p39qFtdItd06Gynpf7athsjvt9zjN+1hNtPFUOI9hNvCu8qPlk0W8a
+ GLddX6EEOs/vlJF2ECEf0vC/WHMLwY7KSksdChMXoceuqREjKFKrwBpEuh5v5BTSEa9j
+ FAwQ==
+X-Gm-Message-State: AOAM531fUheq/9ytPPPu2Kb7l3+YA+frVIFxFOPxNDb9d8hOdUNhkq8J
+ 2/msnfQJ7htnF8w0xThQfbxMiltSLoU=
+X-Google-Smtp-Source: ABdhPJxlr+PB5AB8f043TLYJyO+e4frXMRMaH0hhEOVTG+z4Do4pGWwT1sy9JnBiwrTQwnbd9XA7NA==
+X-Received: by 2002:a1c:38c6:0:b0:392:a4f2:20b1 with SMTP id
+ f189-20020a1c38c6000000b00392a4f220b1mr22378843wma.7.1650993513450; 
+ Tue, 26 Apr 2022 10:18:33 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- i11-20020a5d584b000000b0020a8d859e5fsm12582352wrf.10.2022.04.26.10.18.30
+ i11-20020a5d584b000000b0020a8d859e5fsm12582352wrf.10.2022.04.26.10.18.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Apr 2022 10:18:31 -0700 (PDT)
+ Tue, 26 Apr 2022 10:18:33 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Apr 2022 19:15:59 +0200
-Message-Id: <20220426171600.2552919-1-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Apr 2022 19:16:00 +0200
+Message-Id: <20220426171600.2552919-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220426171600.2552919-1-fontaine.fabrice@gmail.com>
+References: <20220426171600.2552919-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/libpri: fix static build
+Subject: [Buildroot] [PATCH 2/2] package/libpri: bump to version 1.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,52 +97,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-pritest, rosetest and testprilib needs a static library and pridump
-needs a dynamic library resulting in the following static build failure
-since the addition of the package in commit
-a77f356b78f9134227f9702a1eb09c3203c42d88:
+Update indentation in hash file (two spaces)
 
-/home/autobuild/autobuild/instance-15/output-1/host/bin/aarch64_be-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0  -static -fPIC -MD -MT pridump.o -MF .pridump.o.d -MP -c -o pridump.o pridump.c
-/home/autobuild/autobuild/instance-15/output-1/host/bin/aarch64_be-buildroot-linux-uclibc-gcc -static -shared -Wl,-hlibpri.so.1.4  -o libpri.so.1.4 copy_string.o pri.o q921.o prisched.o q931.o pri_aoc.o pri_cc.o pri_facility.o asn1_primitive.o rose.o rose_address.o rose_etsi_aoc.o rose_etsi_cc.o rose_etsi_diversion.o rose_etsi_ect.o rose_etsi_mwi.o rose_other.o rose_q931.o rose_qsig_aoc.o rose_qsig_cc.o rose_qsig_ct.o rose_qsig_diversion.o rose_qsig_mwi.o rose_qsig_name.o version.o
-/home/autobuild/autobuild/instance-15/output-1/host/lib/gcc/aarch64_be-buildroot-linux-uclibc/10.3.0/../../../../aarch64_be-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-15/output-1/host/aarch64_be-buildroot-linux-uclibc/sysroot/lib/../lib64/libc.a(__uClibc_main.os): in function `__uClibc_fini':
-__uClibc_main.c:(.text+0xd0): undefined reference to `__fini_array_start'
-
-Fixes:
- - http://autobuild.buildroot.org/results/1217922af3a72646ae242c2c4dec22ead7883b91
+http://downloads.asterisk.org/pub/telephony/libpri/releases/libpri-1.6.0-summary.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libpri/libpri.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libpri/libpri.hash | 4 ++--
+ package/libpri/libpri.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/libpri/libpri.hash b/package/libpri/libpri.hash
+index 47c4a00307..77985df96a 100644
+--- a/package/libpri/libpri.hash
++++ b/package/libpri/libpri.hash
+@@ -1,6 +1,6 @@
+ # sha1 and sha256 from http://downloads.asterisk.org/pub/telephony/libpri/releases/
+-sha1    63536f3300fb007dfd5fe8064406992ca938bd9a                          libpri-1.5.0.tar.gz
+-sha256  ee224bc4aa65c54546bd09675c3f0b71817ce9e277332bce86989d8dcd556a24  libpri-1.5.0.tar.gz
++sha1  8440007477ebf131020afb00f57672b108b4db2c  libpri-1.6.0.tar.gz
++sha256  7225ea7ec334a115f9dc08e71f55589c38cb4e00b13964cd2f08cc4e6123e3f6  libpri-1.6.0.tar.gz
+ 
+ # License files, locally calculated
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  LICENSE
 diff --git a/package/libpri/libpri.mk b/package/libpri/libpri.mk
-index e1fa2abcf5..34d84393c4 100644
+index 34d84393c4..48a1019210 100644
 --- a/package/libpri/libpri.mk
 +++ b/package/libpri/libpri.mk
-@@ -17,6 +17,7 @@ LIBPRI_INSTALL_STAGING = YES
- # So we need to explicitly build only what we can.
- ifneq ($(BR2_SHARED_LIBS),y)
- LIBPRI_LIBS = libpri.a
-+LIBPRI_UTILS += pritest rosetest testprilib
- define LIBPRI_INSTALL_A
- 	$(INSTALL) -D -m 0644 $(@D)/libpri.a $(1)/usr/lib/libpri.a
- endef
-@@ -24,14 +25,13 @@ endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifneq ($(BR2_STATIC_LIBS),y)
- LIBPRI_LIBS += libpri.so.1.4
-+LIBPRI_UTILS += pridump
- define LIBPRI_INSTALL_SO
- 	$(INSTALL) -D -m 0644 $(@D)/libpri.so.1.4 $(1)/usr/lib/libpri.so.1.4
- 	ln -sf libpri.so.1.4 $(1)/usr/lib/libpri.so
- endef
- endif
+-LIBPRI_VERSION = 1.5.0
++LIBPRI_VERSION = 1.6.0
+ LIBPRI_SITE = http://downloads.asterisk.org/pub/telephony/libpri/releases
  
--LIBPRI_UTILS = pridump pritest rosetest testprilib
--
- define LIBPRI_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS) -fPIC" -C $(@D) \
+ LIBPRI_LICENSE = GPL-2.0 with OpenH323 exception
 -- 
 2.35.1
 
