@@ -1,90 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 158B1C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 17:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3830CC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 17:13:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 208C541A32;
-	Wed, 27 Apr 2022 17:12:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3389408E2;
+	Wed, 27 Apr 2022 17:13:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dbr9JEgaXIoA; Wed, 27 Apr 2022 17:12:37 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B311D41A19;
-	Wed, 27 Apr 2022 17:12:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AE4651BF420
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:12:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA7DC404F3
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:12:33 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gzrUmIU7rjFi for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 17:12:33 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rXSg402vmPv6; Wed, 27 Apr 2022 17:13:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B4A8F4049B;
+	Wed, 27 Apr 2022 17:12:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B79C1BF420
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:12:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8932241A19
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:12:57 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8DfQR59b6g8Y for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 17:12:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
  [IPv6:2a00:1450:4864:20::62b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C8D64403FF
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 17:12:32 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id m20so4675452ejj.10
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 10:12:32 -0700 (PDT)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6D79641A0A
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 17:12:53 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id gh6so4800365ejb.0
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 10:12:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=VjO0lzHvolJheMStqzFHvztn9I/oOcJLjfMfP1/i6x0=;
- b=SGNUvXR87vF4uwIr7Sy8XrFl6l5Dga2WiNTQ+CJ06lGUNSBfNJlj0haGGkyKpg7xoj
- rvbyqSrH85/fn3qsOJ/Vo6UvViqnhk5uV6sBoqtTJGuvXMIYX5IBZIwJcru3SCczlMKc
- WVYdQMTUj+FcldaYrXwR9VX1FunQzXotEQFQf3fnK0nRcAFa5VqUJDIcVb68jFCYZF4y
- ZLkT3M355S39fhA1wNj1RMSjdAH7VaE+YiEZarAgp9j3TFVtDFq5bzgCiR00sfHc1TlG
- r320daVQIORK/Uk7B54iJV3aepdljk9yFwYJh+2HcENmGOF9KkQYRGGN22E1mubb4G66
- 70xw==
+ bh=hSNaoiJKDhb2auocR7G8jEF7FXHpo1/awFFc5h2Fc+E=;
+ b=KGYDX8whMZRIdv7NcLXmEgj077HtgoORogv1OKn3HnaqxpVPH3N0S+8yiRDqnmq86D
+ 4/BsBP6TdR8WWR18BCQ165JBvl0Cvwn7cT29eR30xA0o3gL6cMVwXNdsNDP4v9RS9bY1
+ uKvXw2aaDd1DVabYtzTnerzWwpmOHPayO4dXTBqldVucB+NVhf/czAhVAz2tMBI3Xfg0
+ 0XJu7+TV3NvS+QZm9Y6CSCPCmopYiGbmoqHLwv11Ig5OgHPQ7VjOtIXl9Xk56iWzI+RE
+ qKPJH9AQZe9PJRcThoGfYexshWF1cWU0fh3xYcgP7cOXPWh0Q+ClzzFxc9e3JPieECv0
+ 3dig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=VjO0lzHvolJheMStqzFHvztn9I/oOcJLjfMfP1/i6x0=;
- b=sS+6FfSOhJ/aYY1fAmMqKwig5FlYAEX3I0Cs9eKoz7qJFQUxs2bJf01cXBGCLf0eR2
- DLvUzmhVEa2CEeOyliMSDQmjztSiGOB8urUcisSdhWjj4FNyO222ng5Mz8PK6GsSNwKQ
- vctbjY/fA6sWReVXumpHkk/WHhI+POyJfDQ66JbUxylXodbq6im6gyC+WCir1u5pcpbU
- lRf3N0+BtqbDXfoASpf7AsfCLUPSkR4Rbey21tg4x31LTKz3NFYE9l83YY+D/pSKDYc1
- 6vDrwmt8oVAipDW9hSh26zp+NgJLrCX0RyFOoF6taLiweavfe3Q3bGFmQrl1q7BOe6Xo
- E8BQ==
-X-Gm-Message-State: AOAM531dOSxn1cXMcn7T0PgyPhHdozZQNMLJ0nTPMEYQfjJSBwSwsen0
- N0y39tItdENjN0+8DALx0klFdw==
-X-Google-Smtp-Source: ABdhPJycUEu3WoEScSj+2V1XJGmobvHuEmASWE/4yZa7RZmvGDCPKr92Qb5KBXZKdlczjClFQHLUxw==
-X-Received: by 2002:a17:907:7f19:b0:6ef:fe0b:71aa with SMTP id
- qf25-20020a1709077f1900b006effe0b71aamr27148523ejc.493.1651079551031; 
- Wed, 27 Apr 2022 10:12:31 -0700 (PDT)
+ bh=hSNaoiJKDhb2auocR7G8jEF7FXHpo1/awFFc5h2Fc+E=;
+ b=mkAUsdIgIdEIhPhv7tcCB9PfaeAbZwmAunQLqUEPR7lBgEULupKyp4x72DlzEK0M/u
+ sc5vBEPL3YqQqvMIMKeWjXAgPrwHTldQF+Lurq2oU9dnta5ZNdCHbyHxva8pAasch3Xu
+ XjZI13Z3zIFlFxYsC5lCWnKhUtJbbE6AgndORFKKIU6Qi0QpGWYVGTC/KWgH47V7W3IF
+ coXrRBWs3PfW9+KKqA1g6zmvRXmTuBCuQQrCxRgJXUFCL0WjePN5jMNbwJOiQOlbC7Qg
+ Hsu+gs/ADPyIqe5ublhxvNqP0tDkU5p/Qr4sOFgAttsXXCubqjVftS3b4dDKxjAamKgq
+ O36A==
+X-Gm-Message-State: AOAM5336za2PDAPNWe3dZrQF+EO7sUvOIp4V30xsiY7M5hWjgfeZc4uM
+ PPAAhm0Bh/+LbY3ONjeJDstBqSrZZbLLLA==
+X-Google-Smtp-Source: ABdhPJzmdL/JYNGJvSBM69tfjWEV48/3BOg1lZASpTsfkA6LdKf+osbXvC8K9XLOtLbytAHLxhStBA==
+X-Received: by 2002:a17:907:9958:b0:6e7:f67a:a1e7 with SMTP id
+ kl24-20020a170907995800b006e7f67aa1e7mr26519292ejc.400.1651079571565; 
+ Wed, 27 Apr 2022 10:12:51 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- s15-20020a1709066c8f00b006f38d5651e5sm5067917ejr.174.2022.04.27.10.12.29
+ g12-20020a170906c18c00b006f3b99d29e0sm2686945ejz.223.2022.04.27.10.12.50
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Apr 2022 10:12:30 -0700 (PDT)
-Message-ID: <1304a657-da69-7a04-4368-baa16040fedb@mind.be>
-Date: Wed, 27 Apr 2022 19:12:28 +0200
+ Wed, 27 Apr 2022 10:12:51 -0700 (PDT)
+Message-ID: <cbf4b541-01eb-23c9-b403-ca0e89704f83@mind.be>
+Date: Wed, 27 Apr 2022 19:12:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220424081903.3535909-1-fontaine.fabrice@gmail.com>
+References: <20220424191032.3222587-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220424081903.3535909-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/qpdf: link with -latomic if
- needed
+In-Reply-To: <20220424191032.3222587-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/cryptsetup: fix build with
+ argp-standalone
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +96,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Olivier Schonken <olivier.schonken@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,17 +104,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 24/04/2022 10:19, Fabrice Fontaine wrote:
-> Link with -latomic if needed to avoid the following build failure since
-> bump to version 10.5.0 in commit
-> b5352c2177011ca389cbb7c68e78447549cbdaaa and
-> https://github.com/qpdf/qpdf/commit/c5c1a028cdd3cf345046c46963fb0fdacfb2c33c:
+On 24/04/2022 21:10, Fabrice Fontaine wrote:
+> Fix the following build failure raised since bump of argp-standalone to
+> version 1.4.1 in commit 0fe85041bc9e0b4ade4d71dd10b61c3b9ec8945d and
+> https://github.com/ericonr/argp-standalone/commit/e7ff8d9787d2641e55f6ac4afb777da60ef98043:
 > 
-> /nvmedata/autobuild/instance-20/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-20/output-1/build/qpdf-10.5.0/libqpdf/build/.libs/libqpdf.a(QPDF.o): in function `QPDF::QPDF()':
-> QPDF.cc:(.text+0x4e44): undefined reference to `__atomic_fetch_add_8'
+> /home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `parse_opt':
+> cryptsetup-ssh.c:(.text+0x14c): undefined reference to `argp_state_help'
+> /home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `main':
+> cryptsetup-ssh.c:(.text+0x7db): undefined reference to `argp_parse'
 > 
 > Fixes:
->    - http://autobuild.buildroot.org/results/b69e6e380c47bc64c6555899c2f61f57bdae7ecc
+>   - http://autobuild.buildroot.org/results/cb3fdae4e0da603f304501f65127800346cb3915
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -124,22 +125,69 @@ On 24/04/2022 10:19, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/qpdf/qpdf.mk | 4 ++++
->   1 file changed, 4 insertions(+)
+>   ...onfigure.ac-replace-argp_usage-check.patch | 40 +++++++++++++++++++
+>   package/cryptsetup/cryptsetup.mk              |  1 +
+>   2 files changed, 41 insertions(+)
+>   create mode 100644 package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
 > 
-> diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-> index 8e0769059d..a58781f4f1 100644
-> --- a/package/qpdf/qpdf.mk
-> +++ b/package/qpdf/qpdf.mk
-> @@ -32,4 +32,8 @@ else
->   QPDF_CONF_OPTS += --disable-crypto-openssl
->   endif
->   
-> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> +QPDF_CONF_ENV += LIBS=-latomic
-> +endif
+> diff --git a/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch b/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
+> new file mode 100644
+> index 0000000000..66e3be350c
+> --- /dev/null
+> +++ b/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
+> @@ -0,0 +1,40 @@
+> +From 21515ad7a3b000ee6038f82bbb428ab527002bbd Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sun, 24 Apr 2022 19:47:53 +0200
+> +Subject: [PATCH] configure.ac: replace argp_usage check
 > +
->   $(eval $(autotools-package))
+> +Replace check for argp_usage by argp_parse as argp_usage is not used by
+> +cryptsetup. Moreover, this will fix the following build failure raised
+> +with argp-standalone in version 1.4.0 and
+> +https://github.com/ericonr/argp-standalone/commit/e7ff8d9787d2641e55f6ac4afb777da60ef98043:
+> +
+> +/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `parse_opt':
+> +cryptsetup-ssh.c:(.text+0x14c): undefined reference to `argp_state_help'
+> +/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `main':
+> +cryptsetup-ssh.c:(.text+0x7db): undefined reference to `argp_parse'
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/cb3fdae4e0da603f304501f65127800346cb3915
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://gitlab.com/cryptsetup/cryptsetup/-/issues/737]
+> +---
+> + configure.ac | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index d31fb0a7..e47179f2 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -413,7 +413,7 @@ if test "x$enable_ssh_token" = "xyes"; then
+> + 	AC_CHECK_DECLS([ssh_session_is_known_server], [], [], [#include <libssh/libssh.h>])
+> + 	AC_CHECK_HEADER([argp.h], [], AC_MSG_ERROR([You need argp library.]))
+> + 	saved_LIBS=$LIBS
+> +-	AC_SEARCH_LIBS([argp_usage],[argp])
+> ++	AC_SEARCH_LIBS([argp_parse],[argp])
+> + 	AC_SUBST(ARGP_LIBS, $LIBS)
+> + 	LIBS=$saved_LIBS
+> + fi
+> +--
+> +2.35.1
+> +
+> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+> index ddb10f1da3..20cf5d6346 100644
+> --- a/package/cryptsetup/cryptsetup.mk
+> +++ b/package/cryptsetup/cryptsetup.mk
+> @@ -19,6 +19,7 @@ CRYPTSETUP_CPE_ID_VENDOR = cryptsetup_project
+>   CRYPTSETUP_INSTALL_STAGING = YES
+>   
+>   # 0001-Add-check-program-for-symver-attribute.patch
+> +# 0002-configure.ac-replace-argp_usage-check.patch
+>   CRYPTSETUP_AUTORECONF = YES
+>   
+>   CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
