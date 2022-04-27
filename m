@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C468C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:01:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A195C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:01:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15062409EF;
-	Wed, 27 Apr 2022 19:01:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1934C41A54;
+	Wed, 27 Apr 2022 19:01:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t6tN3voQiYjz; Wed, 27 Apr 2022 19:01:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BN-LDpPfITYo; Wed, 27 Apr 2022 19:01:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EBC55409BC;
-	Wed, 27 Apr 2022 19:01:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D69AE41A49;
+	Wed, 27 Apr 2022 19:01:26 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 227501BF322
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:57:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 428D01BF322
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 300B483163
+ by smtp1.osuosl.org (Postfix) with ESMTP id 40D7D8316A
  for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:57:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4461uo3afqNo for <buildroot@lists.busybox.net>;
+ with ESMTP id HBANpAgMnQdP for <buildroot@lists.busybox.net>;
  Wed, 27 Apr 2022 18:57:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5998E8316A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 690A7831C1
  for <buildroot@buildroot.org>; Wed, 27 Apr 2022 18:57:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B3A7584602; Wed, 27 Apr 2022 18:47:26 +0000 (UTC)
+ id C561E845FF; Wed, 27 Apr 2022 18:47:26 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Wed, 27 Apr 2022 20:50:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 987988cee5aa6e934df7bee0d58ec5a23fffcc5f
-X-Git-Newrev: c932b7bb9092d6004837a38c6e3562c1b10bba23
+X-Git-Oldrev: e47efc9b90e8ecfe5b0b21f967001748fc111fbc
+X-Git-Newrev: f698cbc2235a6362399cf76acdf54e0bdb0b4664
 X-Patchwork-Hint: ignore
-Message-Id: <20220427184726.B3A7584602@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libpri: bump to version 1.6.0
+Message-Id: <20220427184726.C561E845FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/Config.in: add
+ BR2_TOOLCHAIN_GCC_AT_LEAST_12 blind option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,46 +59,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c932b7bb9092d6004837a38c6e3562c1b10bba23
+commit: https://git.buildroot.net/buildroot/commit/?id=f698cbc2235a6362399cf76acdf54e0bdb0b4664
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+In order to add gcc 12 support for internal and external toolchain
+in follow-up commits, introduce BR2_TOOLCHAIN_GCC_AT_LEAST_12 symbol.
 
-http://downloads.asterisk.org/pub/telephony/libpri/releases/libpri-1.6.0-summary.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libpri/libpri.hash | 4 ++--
- package/libpri/libpri.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/Config.in | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpri/libpri.hash b/package/libpri/libpri.hash
-index 47c4a00307..77985df96a 100644
---- a/package/libpri/libpri.hash
-+++ b/package/libpri/libpri.hash
-@@ -1,6 +1,6 @@
- # sha1 and sha256 from http://downloads.asterisk.org/pub/telephony/libpri/releases/
--sha1    63536f3300fb007dfd5fe8064406992ca938bd9a                          libpri-1.5.0.tar.gz
--sha256  ee224bc4aa65c54546bd09675c3f0b71817ce9e277332bce86989d8dcd556a24  libpri-1.5.0.tar.gz
-+sha1  8440007477ebf131020afb00f57672b108b4db2c  libpri-1.6.0.tar.gz
-+sha256  7225ea7ec334a115f9dc08e71f55589c38cb4e00b13964cd2f08cc4e6123e3f6  libpri-1.6.0.tar.gz
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index d2c81217c8..b572a89f2f 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -117,7 +117,8 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_43744
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
+ 		BR2_TOOLCHAIN_GCC_AT_LEAST_9 || \
+ 		BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
+-		BR2_TOOLCHAIN_GCC_AT_LEAST_11
++		BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
++		BR2_TOOLCHAIN_GCC_AT_LEAST_12
  
- # License files, locally calculated
- sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  LICENSE
-diff --git a/package/libpri/libpri.mk b/package/libpri/libpri.mk
-index 34d84393c4..48a1019210 100644
---- a/package/libpri/libpri.mk
-+++ b/package/libpri/libpri.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261. This bug no
+ # longer exists in gcc 8.x.
+@@ -150,7 +151,8 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_68485
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_83143
+ 	bool
+ 	default y if BR2_sh
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10 || BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10 || BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
++		   BR2_TOOLCHAIN_GCC_AT_LEAST_12
  
--LIBPRI_VERSION = 1.5.0
-+LIBPRI_VERSION = 1.6.0
- LIBPRI_SITE = http://downloads.asterisk.org/pub/telephony/libpri/releases
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. This bug no
+ # longer exists in gcc 8.x.
+@@ -698,10 +700,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	bool
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
  
- LIBPRI_LICENSE = GPL-2.0 with OpenH323 exception
++config BR2_TOOLCHAIN_GCC_AT_LEAST_12
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_GCC_AT_LEAST
+ 	string
++	default "12"	if BR2_TOOLCHAIN_GCC_AT_LEAST_12
+ 	default "11"	if BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	default "10"	if BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	default "9"	if BR2_TOOLCHAIN_GCC_AT_LEAST_9
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
