@@ -1,91 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C00F8C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 07:19:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A318CC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 07:21:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7857660F05;
-	Wed, 27 Apr 2022 07:19:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C9054051D;
+	Wed, 27 Apr 2022 07:21:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R2DHbS6kI1EH; Wed, 27 Apr 2022 07:19:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R1WJ2YRpAxQk; Wed, 27 Apr 2022 07:21:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EF2C60EDE;
-	Wed, 27 Apr 2022 07:19:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4DC7D1BF48C
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:19:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4CF5B40192;
+	Wed, 27 Apr 2022 07:21:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C88071BF48C
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:21:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3AF2F41920
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:19:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B602140192
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:21:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id flS-n6WrcplT for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 07:19:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dHJzgJANOXH4 for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 07:21:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DA32A41730
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 07:19:11 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id j6so1533620ejc.13
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 00:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=BFakUbRW510RAMDc9+GFaw6Xd9RfkrecrvVI3il8xzk=;
- b=Q8suSNBGbs9nLu3rHoOQhvktlfDyk6Cxsm5d78f1olJCuQ6pbqwq2YMj4rqQL3Y4+k
- 61kvUmSlOoqh57bjswjIJF3jtOIUPgu0AwbkdmL5sWKcwaPkkrY35iOBFgJN5NHzX/LK
- 32W64vGFhj0gi/sYrV93XEqmpiv3uywxUNmYGV+m48vl7DRgk0R+gstgGqBTlLwOESeu
- pwyrtvpA1IkSXazYx7VxLzDjkKPHbbBTVWavSWz9YDU52k6jmX95OjDIgdDD/OsEC56L
- W5DayMM2+cj+2wCkhQ7dVB1e+YS7U4VyBk+pZD5+5CtKJBW41X8GFXzRCm6vQXd8mmFt
- O3+g==
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com
+ [IPv6:2001:4860:4864:20::33])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 36A0440102
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 07:21:17 +0000 (UTC)
+Received: by mail-oa1-x33.google.com with SMTP id
+ 586e51a60fabf-e922e68b0fso1098780fac.1
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 00:21:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=ELm8HLx1LH8+X0SIRUKbspZ2DfZPrP+EWI7YHONHXlQ=;
+ b=NAUss5a/Tkq7+vUWll3mlwk+OVDgDw/V8KoOZjh7ckf3CV2BOumYcpno0kIsI/42Vb
+ fFK2qaVZCPHU9Uti2fPVLy62dV3Yl1GQwg0fwzk+kJ1lZinT9TFq/2wxnfW1eWrsDsEe
+ Pl6aPiW3pgP/qpfPkaFRp9yzD1I40Z/Fk0tcl1IfWRazT42VfSZtdHVQbRok9+SnZ4DH
+ LbYlRz8hDmHeAnnCtZEJ4E9GIP8fL3WTee1y1YKFE4Z2LM+aGu+aqHLSSuo/TuQN282B
+ LZfHl0gmaOLX+qAi0uEte9yuRTDos2Q78LH2kX/OFBIpQv3wJymHf6x67okeIBTSdI9F
+ QwkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=BFakUbRW510RAMDc9+GFaw6Xd9RfkrecrvVI3il8xzk=;
- b=haW8d3h2+YPMa9tvX7avxJn0llRGrQC5mm1ZzfyJlvllfOOHlPRVYfUJ31iQRW7qQ6
- YZ78LAIQb8mNK8GAC8WBIz5APTFEb8bp5J6LxshSvA+OKaPeg3eI1TZ+TjRyLLgFnZrJ
- mkF9lhx7qrUS2oQAia665mw2+CgCgN8GKKnCEjhVRFP39u59aCF5ulOSx3qIjC4yT5qp
- IS0EjMrFsxiEPbMb7SZnHPjmafRI2wOmUQweEpX7IQrSeC5Atc/92rouX6naFBj0hMdS
- 741KZdD+4k9SRzpYW337EIpDA8hwRm0zHJ4Zqqb7lBKzn42nlq/qJKPU0c601GtRS+cr
- +9Dg==
-X-Gm-Message-State: AOAM533uxB957XW5598XEeoQH+85M+UBrTN0OaTotYaoluR84x7c0g8F
- vREhBnqtQ9ZakT4+JV3HeBgi3g==
-X-Google-Smtp-Source: ABdhPJwpKEN6Vzawj4LOnfYLK6ZEgbXgBOxUVmL5rA+f3h8VMuwmKvm45yO8OHhoBnp0omtWJo3QcA==
-X-Received: by 2002:a17:907:2d1e:b0:6f3:6717:5f38 with SMTP id
- gs30-20020a1709072d1e00b006f367175f38mr21590845ejc.732.1651043950078; 
- Wed, 27 Apr 2022 00:19:10 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- 22-20020a508e16000000b00425c9d1704bsm6727509edw.4.2022.04.27.00.19.09
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Apr 2022 00:19:09 -0700 (PDT)
-Message-ID: <3cb2c8da-dcb7-3898-c73f-b6e919cf857c@mind.be>
-Date: Wed, 27 Apr 2022 09:19:09 +0200
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=ELm8HLx1LH8+X0SIRUKbspZ2DfZPrP+EWI7YHONHXlQ=;
+ b=ZZubOazk2AJEM/W/11m8JDm/1bQe4edhhqdlCVeR5bClZp4gu5hd3AKBKUxYDdSS2z
+ XTt3DhPFFcA3bO4sQmUeMUkVCOVIh+6FalzqVaa50kz83QSwR2WHzHBcMHODh+X0sZiU
+ TEt8wGfzKmAB3a2yqvHTwC5jk2a7aTPUG7HjkEM8rkGk6zkWuxtEzH09SuoWipAAarBC
+ A3WEhR6fQ7zNyXOilpqclnqygP1qd4VOiE+wGhVW147gj7ro04H6En445djl75GT106u
+ S7LUe1YUtbbzmAAxP74asDKe/MfzjkRrOd5CBoVerjp8KZw6vAPp6JqAZVyhH8Nl5jng
+ iJbg==
+X-Gm-Message-State: AOAM532rzhjAhMMjDGF0J6bI81bfgwo35Ofrr7XX+rNSJ5vslcXle/AG
+ tT2l/MwwYo8A/kIx0e8l3fqldEu9pbjqsOjmj4g=
+X-Google-Smtp-Source: ABdhPJx6X4ScV7K9u9Vxf4jQhht6aafaPi1UBPEmjuVS88SapNYRA/p3/7jCSYkEALsqFT354hiMxsWciz67aedVSO0=
+X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
+ v29-20020a056870311d00b000de9b6c362bmr14423965oaa.200.1651044076165; Wed, 27
+ Apr 2022 00:21:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-GB
-To: Peter Korsgaard <peter@korsgaard.com>
-References: <20220406172934.4009018-1-fontaine.fabrice@gmail.com>
- <9406710d-ed6f-d0cd-4a7a-60480a4d4872@mind.be>
- <87bkwnk1tp.fsf@dell.be.48ers.dk>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <87bkwnk1tp.fsf@dell.be.48ers.dk>
-Subject: Re: [Buildroot] [PATCH 1/1] package/boost: drop versioned layout
+References: <20220426012311.1738027-1-james.hilliard1@gmail.com>
+ <69c6a8fb-0d05-0ae9-4c7d-b76e388f2958@mind.be>
+In-Reply-To: <69c6a8fb-0d05-0ae9-4c7d-b76e388f2958@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 27 Apr 2022 01:21:05 -0600
+Message-ID: <CADvTj4qhrD61q9cEDRE-xdoL3ewoERk=j-gVGAPJyRpQKX7wJg@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pep517: migrate setup
+ type to flit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,47 +82,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Wed, Apr 27, 2022 at 1:10 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 26/04/2022 03:23, James Hilliard wrote:
+> > This package is moving to flit, we need to use flit-bootstrap
+> > since host-python-pypa-build depends on host-python-pep517.
+>
+>   But that only becomes relevant when we bump the version to something which
+> drops distutils support, right?
 
+Yeah, it will be required soon though it seems:
+https://github.com/pypa/pep517/blob/v0.12.0/pyproject.toml#L2
 
-On 26/04/2022 22:49, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
->   > On 06/04/2022 19:29, Fabrice Fontaine wrote:
->   >> boost.m4 embedded by cc-tool is not able to find boost libraries when
->   >> they are versionned (e.g. libboost_program_options-gcc9-mt-sd-1_78.a):
->   >> configure: error: cannot find the flags to link with Boost
->   >> program_options
->   >> azmq and i2pd also have the same issue:
->   >> CMake Error at
->   >> /nvmedata/autobuild/instance-8/output-1/host/share/cmake-3.18/Modules/FindPackageHandleStandardArgs.cmake:165
->   >> (message):
->   >> Could NOT find Boost (missing: Boost_INCLUDE_DIR system date_time thread
->   >> chrono random) (Required is at least version "1.48")
->   >> So drop versioned layout option
-> 
->   >  This is probably going to cause problems for some custom packages
->   >  that have a simple build system that assumes the versioned layout. Oh
->   > well, bad luck.
-> 
-> So what do we do for 2022.02.x? We presumably have the same issue
-> there. Drop it as well?
+The distutils support in pep517 is coming from the deprecated flit distutils
+generator compatibility feature.
 
-  I wouldn't do that. People already using the option now apparently don't have 
-a problem with it, so we're not fixing anything for them. People who don't use 
-the option will not run into the problem either.
+>
+>   Of course, we can merge this patch now already, that's not what I'm saying.
+> But the commit message says "we need to" which is not entirely correct. It's
+> more like "we'll have to". Right?
 
-  So the only problem is for people who are starting a new project based on the 
-LTS branch. For them, perhaps we can just update the prompt with " (broken, do 
-not use!)" ?
+The "we need to" part was referring to having to use the special flit-bootstrap
+setup type instead of the regular flit setup type, not that this is immediately
+needed by pep517, I may not have worded that clearly I guess.
 
-  Regards,
-  Arnout
+>
+>   Regards,
+>   Arnout
+>
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >   package/python-pep517/python-pep517.mk | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/package/python-pep517/python-pep517.mk b/package/python-pep517/python-pep517.mk
+> > index 99aa62d51d..45c4f8dd39 100644
+> > --- a/package/python-pep517/python-pep517.mk
+> > +++ b/package/python-pep517/python-pep517.mk
+> > @@ -9,7 +9,7 @@ PYTHON_PEP517_SOURCE = pep517-$(PYTHON_PEP517_VERSION).tar.gz
+> >   PYTHON_PEP517_SITE = https://files.pythonhosted.org/packages/0a/65/6e656d49c679136edfba25f25791f45ffe1ea4ae2ec1c59fe9c35e061cd1
+> >   PYTHON_PEP517_LICENSE = MIT
+> >   PYTHON_PEP517_LICENSE_FILES = LICENSE
+> > -PYTHON_PEP517_SETUP_TYPE = distutils
+> > +PYTHON_PEP517_SETUP_TYPE = flit-bootstrap
+> >   HOST_PYTHON_PEP517_DEPENDENCIES = host-python-tomli
+> >
+> >   $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
