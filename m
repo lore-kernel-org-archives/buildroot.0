@@ -4,63 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA91CC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 21:45:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76A4AC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 22:56:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E6F640B4A;
-	Wed, 27 Apr 2022 21:45:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E17CF40B39;
+	Wed, 27 Apr 2022 22:56:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NDG9RZKH8tgd; Wed, 27 Apr 2022 21:45:42 +0000 (UTC)
+	with ESMTP id CkBhzgfmWUYU; Wed, 27 Apr 2022 22:56:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5393A40A19;
-	Wed, 27 Apr 2022 21:45:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B19BD1BF5A6
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 21:45:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0972D40ADE;
+	Wed, 27 Apr 2022 22:56:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A8041BF844
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 22:56:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F51361043
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 21:45:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2875140ADE
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 22:56:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S-uI89HFPgNe for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 21:45:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pADIOVsXNwrD for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 22:56:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 073BF6100E
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 21:45:37 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:8d9a:c8d:7cf:ba48])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 3B705780316;
- Wed, 27 Apr 2022 23:45:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1651095934;
- bh=D2tKDTacHQNDKm2eHJ+Rqukf/8lrd5MxHxl11IpXc6Y=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=myrXUnpe/X9uAlPRNQCspcvm5y5Je7klxvfP109qUX0qBbUHR26J7rXYQZHruhe01
- yfiQrV0OQ2wLmdqBO+NE/cC84Ox4rSxhNWH7odMGObfo+WIifx3epnPqVw7K1qCMw0
- TZFRPSwK9Cq2+VHLc6dm7Fm+vdukkCY8udpnZ0EgIBmEsxUAx6Gm075jxkT+d8vXOG
- 9rNQuGFcdeFR5rb+hgKHG8xKQ8A1ejARRtfZNQpzsQBmSX28xIHC+Tf81Bco0u2fOJ
- jpbPF8BQ7CP6LSuzZK97ZclM6qE7ENgcsy8uL60CYDnZ67356yQcbuCn3Krmfme/Sd
- 3MJuzwhvyEhLA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 27 Apr 2022 23:45:29 +0200
-Date: Wed, 27 Apr 2022 23:45:29 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220427214529.GC3624965@scaer>
-References: <20220426215315.381964-1-thomas.petazzoni@bootlin.com>
- <20220426215315.381964-3-thomas.petazzoni@bootlin.com>
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 53582402E8
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 22:56:10 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id r28so4848333iot.1
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 15:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=lgcw2yckiyQJ1bbuLWEoUXr67Z0VclV8iYNGJy9yjHE=;
+ b=kc/HMCbidD1mcqc2cYreAFV+iVyRgrpbERoB/adNZ2AClEyzmvVOK4TvIe0gjWVo8g
+ 6ebQ4KcrcffxtNPvpkGYIH3UGCnBO6Qm088C8zepsdrvfp6u+7OZiHf9O0cID6gPVUbi
+ XodW66Y+7cvCixDJ8LM3iAGClmnkXbDdsgurOQX9fcSXhXvPTTpdCmbDCeo6+ivM6Pmj
+ j0sRUXmkO4izJY5/VpOAxvYFibs3lHgutcOkg1x5htBMve9BKKQFwXBquI/c3/Nazpkz
+ oyZ9fzu4CpFhquGJEEB+4BBJdcvhODR/KdksPNgngt+JM4G68TekGISNaeA0Yn/731/5
+ CqLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=lgcw2yckiyQJ1bbuLWEoUXr67Z0VclV8iYNGJy9yjHE=;
+ b=ioau+QRs5lVNn9gHQJnqAAwNy2SuSv+9Igrz5/WDjd8BFFo9XkhRBbs8VKTLyw4jDh
+ Hs/wHDQTtAcUzKVJm+Jwn7fYQXB9YPXVUpwJe86f6wOuBu9DeSLVRFH706eMBqWwOIf4
+ 0R7jDOzC2h6cKUYjmxHzeNEkBhAmLCuLZ2U/q83rAMfs5c8Ll4KE3g55HbVNsit4LlPS
+ WsVaxwkj9bFhq9lsZ4YMZ2+x94xKN/da7zLvZnlwXiptPYMHkFQd9mVuUGkr9OFqIzq5
+ a+FMJioGcUrzr7rwC2f8gEZc2Om4PMyfqrjRQTe+Ba8iSLpi/pcSjrcN4oJ4bDlOC9E0
+ 8K4w==
+X-Gm-Message-State: AOAM533InnAZp/lmc3lhgaYQJ0bLU0/gNCIZLcT1IYn//0Fxgr1cwuJR
+ XrL5gI82Q0kt4OM8rejfEqss7FfgVk1fdbz4i4sB5CPF5eR7WBo3
+X-Google-Smtp-Source: ABdhPJxHp/vwDwAZ/v0vkTZ5JNdlnwd7Ze3Folq+C6W4sDn910kwz7lnI4PYJ96bocpSv+s76VzsKcfUTqk5iBt9ELQ=
+X-Received: by 2002:a05:6638:d06:b0:326:ba0:347 with SMTP id
+ q6-20020a0566380d0600b003260ba00347mr12905291jaj.68.1651100169321; Wed, 27
+ Apr 2022 15:56:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220426215315.381964-3-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v2 3/3] package/binutils: drop version 2.32
+References: <20220427131400.223113-1-noahhuetter@gmail.com>
+In-Reply-To: <20220427131400.223113-1-noahhuetter@gmail.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Thu, 28 Apr 2022 08:55:43 +1000
+Message-ID: <CAKmqyKPcAFNmd5tz=JTZZVcUKKZeTpQsockEDL66pfjJM2FhKQ@mail.gmail.com>
+To: Noah Huetter <noahhuetter@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] boot/opensbi: introduce
+ BR2_TARGET_OPENSBI_CUSTOM_MAKEOPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,62 +80,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Buildroot List <buildroot@buildroot.org>
+Cc: Alistair Francis <alistair@alistair23.me>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-p
-Thomas, All,
+On Wed, Apr 27, 2022 at 11:14 PM Noah Huetter <noahhuetter@gmail.com> wrote:
+>
+> Signed-off-by: Noah Huetter <noahhuetter@gmail.com>
 
-On 2022-04-26 23:53 +0200, Thomas Petazzoni via buildroot spake thusly:
-> Now that recent versions of binutils work with FLAT binaries, we can
-> drop the old 2.32 version, which was kept only to keep support FLAT
-> binaries.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 
-As seen on IRC: binutils-2.32 is the latest version that can still build
-afboot-stm32. binutils-2.36.1 onward break the build.
+Alistair
 
-As you noticed, this is because of:
-    https://github.com/mcoquelin-stm32/afboot-stm32/commit/0f3e61c9dd48fd8b4248ce4672c044c2562e4de1
-
-That change is wrong: -nostartfiles is a gcc option, not an ld option.
-
-Older ld version seemed to somehow ignore it, while at least since
-2.36.1 it is now an error:
-
-    ...ld.real: Error: unable to disambiguate: -nostartfiles (did you mean --nostartfiles ?)
-
-This is because, starting with binutils 2.36, ld got an improved flag
-parsing that now generates that error (but that's incorrect too, as
---nostartfiles does not exist either). -nostartfiles is a gcc option,
-but afboot-stm32 directly calls the linker...
-
-A similar issue was raised fot at91bootstrap, and fixed by removing
--nostarfiles:
-
-    https://github.com/linux4sam/at91bootstrap/issues/127
-    https://github.com/linux4sam/at91bootstrap/pull/129
-
-So, as you said on IRC that you'd send a followup eries with a fix to
-afboot-stm32, I've marked this series as changes requested in the
-meantime.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> ---
+>  boot/opensbi/Config.in  | 6 ++++++
+>  boot/opensbi/opensbi.mk | 3 ++-
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+> index f1443498d9..ff095ea800 100644
+> --- a/boot/opensbi/Config.in
+> +++ b/boot/opensbi/Config.in
+> @@ -119,4 +119,10 @@ config BR2_TARGET_OPENSBI_FW_FDT_PATH
+>           must be set in the U-Boot configuration for this file to be
+>           produced.
+>
+> +config BR2_TARGET_OPENSBI_CUSTOM_MAKEOPTS
+> +       string "Custom make options"
+> +       help
+> +         List of custom make options passed at build time. Can be
+> +         used for example to pass a BUILD_INFO= value.
+> +
+>  endif
+> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> index 8e055633a8..d007ae1299 100644
+> --- a/boot/opensbi/opensbi.mk
+> +++ b/boot/opensbi/opensbi.mk
+> @@ -31,7 +31,8 @@ BR_NO_CHECK_HASH_FOR += $(OPENSBI_SOURCE)
+>  endif
+>
+>  OPENSBI_MAKE_ENV = \
+> -       CROSS_COMPILE=$(TARGET_CROSS)
+> +       CROSS_COMPILE=$(TARGET_CROSS) \
+> +       $(call qstrip,$(BR2_TARGET_OPENSBI_CUSTOM_MAKEOPTS))
+>
+>  OPENSBI_PLAT = $(call qstrip,$(BR2_TARGET_OPENSBI_PLAT))
+>  ifneq ($(OPENSBI_PLAT),)
+> --
+> 2.35.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
