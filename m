@@ -4,81 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02234C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 20:45:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2FD5C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 20:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 941104089E;
-	Wed, 27 Apr 2022 20:45:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88CC840270;
+	Wed, 27 Apr 2022 20:53:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8PUbi2QCdtzY; Wed, 27 Apr 2022 20:45:14 +0000 (UTC)
+	with ESMTP id 4K91jdpUrdy4; Wed, 27 Apr 2022 20:53:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6453340891;
-	Wed, 27 Apr 2022 20:45:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1BF5D1BF869
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:45:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51E0E400A5;
+	Wed, 27 Apr 2022 20:53:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A51E1BF869
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:53:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18E3040A19
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:45:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37604400A5
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:53:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0q76mul8WWEQ for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 20:45:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FTbcGlmcJFpj for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 20:52:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3316640360
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 20:45:01 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id e24so4077241wrc.9
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 13:45:01 -0700 (PDT)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D1ED240088
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 20:52:58 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ p7-20020a05600c358700b00393e80c59daso3139875wmq.0
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 13:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=ku4/qJ2YQrW5SWKyxkQI8Dms88tJ9BjmuJBFk4bQjvE=;
- b=TDIdrm5/RXLcCkFJgXNZX6y0xbXDOAKIDn/rChDEV3v90czanyOUT9LzxBVLGTaS5v
- y4ol5iOzehxgGEDDXDkT32M6Ns0hMkdFXMtH9+/BpDMbIAGSdglyNf6RjwXMrsS0t6G6
- Xq6bssk+OngV3pVxc93o8Sezxsb6tFXiDBROqT8sQ2DUrywNgPUXkDzvSUOI1IWtolb8
- wAOCYAxdoiLVox5Ehk1+UrXu4sYfgOIkc4UEiFHZmynF7Asmt467eHfdKYV5XPe7OS1T
- BC/RI3iAeo59hUnQiBTthkLCQcW728cQxMo0Y9bbl/T6LAaVGrbvQeNYrPA9GLcr7jJb
- 13ig==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ktmgbgV7RfzLA9reVWy/418t1+dWcsHI5NTe5pZ9AWQ=;
+ b=DVIRk4Ip14dKRauYVo9yF93isoP8gge1sSHzjhE11uthpH+z5+6bc+HSGsnRrE5UaL
+ /Br16jXmkChI/CMHr9BInc6DV0lM93BdkohrrUjF16uL9k/RRZFIiEB8bb4JDSXQ8xOC
+ bmREdWFx0HBVSVpCKtPuX6AN6rNpP4AriYgp81CyQuur6wiKhwfLHzRNClVAPt7+Zlp3
+ Gg+1EXsKQzXOGf/PU66fWNxNoDyDrnC4ZUo/D9aYfqTV1+CW/beIwgpM0HfLWf3SLLbD
+ oImlJjM8FC6WlmKKLNhYXVeCpMoC8PrMbULKUk4FDbJELPUAK3vTP8Ritw4vHQbDLuPI
+ VYpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=ku4/qJ2YQrW5SWKyxkQI8Dms88tJ9BjmuJBFk4bQjvE=;
- b=xodv5eBFfGAq86rFkVF4ZciCJ60ztEe6II6fLBWJYOCDFqgkPoiJjbWBBWZDPGVGAx
- J9e0rf2HRk+H8NoYbNAzHUCZ/sayDLzsnH1CAqaZDff4wJ2e4+wh258DIN0RyMD8DKT3
- a9PEzogqUvPfWSaUubHkF7+y04+WRM2tXJzcXVlN3d1SwHaXzZXZC8ngb26rXep86jrz
- beKn1hLUT5F1MHMiHoFV0u+sNJe8QamaaPV8HqXWuMF6aukbUYsxYiF3muiwo8u5WL4p
- +efxi8mFz4JfAMS6SfhJSW17rp/iZzCVS87mLHhb3sd/478oWAvM+oIZhtwAT0/L8/ab
- giAA==
-X-Gm-Message-State: AOAM532o0qMIfUQZTUzNTN0k5u055qiSuLi501QDfZUlMLOzdRQDpgue
- D6TFMIuvwHmBy4dAlVtEHBP/i+js9r0=
-X-Google-Smtp-Source: ABdhPJw/qTqfS5sfnVNuEIVmvddTEXA+AOyzc/W3KZevLa6X6T3BGMCShCfI/uJmFGQpcdO6M3VG1A==
-X-Received: by 2002:a5d:64ce:0:b0:20a:e723:da71 with SMTP id
- f14-20020a5d64ce000000b0020ae723da71mr7663357wri.350.1651092299076; 
- Wed, 27 Apr 2022 13:44:59 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ktmgbgV7RfzLA9reVWy/418t1+dWcsHI5NTe5pZ9AWQ=;
+ b=wX80yLrGuOb370tLIC5xE/QT73YkQq4uvVkuXhp+XPjOcHmAiwQgLpoNTTLXAqNfnM
+ Nt9neSfqHhTdWlAqavMWbwQyVj6w5y3mTRG7aiOh7hu9sIM/6OK19HfcZTEFmPbvV7A/
+ xKxhzKs5s5fbIxe6lr6d1Qje2vI+3kjQXDhmIG/u40IVHKXBigx74bG9ydX+eq/MpcGW
+ HzojF83VYDZc4dRypkoLe7A6fyn9cGf+dWouFn7i0+7NRkP1t2wD2xTBENBttafNotYG
+ oAJpBdlOSuioUnm4iq5Y2yVd511tBz04UE7SsTlnLa56rJzkcL+jLoKmZJcURl6nS4pf
+ FCmA==
+X-Gm-Message-State: AOAM531aZG05S4ffUJ4tLuHVkstQL/gpVSEy1HvUQy9p1tpSq4+c7E3K
+ /Sza7R2Pi7/ajbcGUlWdcROu3hThIkE=
+X-Google-Smtp-Source: ABdhPJwmWMmjIPVgW5nclW5SZH/beEBhrkekop1ObrUmwZKQZlnoEdLEEmTWwHg8QcJauSGrLR1Z4Q==
+X-Received: by 2002:a1c:35c1:0:b0:38e:c4f6:1931 with SMTP id
+ c184-20020a1c35c1000000b0038ec4f61931mr27391645wma.161.1651092776459; 
+ Wed, 27 Apr 2022 13:52:56 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- d4-20020a05600c3ac400b0039082eeff53sm2283909wms.22.2022.04.27.13.44.58
+ e9-20020a056000178900b0020a9f995a3csm15341784wrg.24.2022.04.27.13.52.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Apr 2022 13:44:58 -0700 (PDT)
+ Wed, 27 Apr 2022 13:52:56 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Apr 2022 22:42:49 +0200
-Message-Id: <20220427204249.3207448-2-fontaine.fabrice@gmail.com>
+Date: Wed, 27 Apr 2022 22:50:57 +0200
+Message-Id: <20220427205057.4044072-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220427204249.3207448-1-fontaine.fabrice@gmail.com>
-References: <20220427204249.3207448-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/libv4l: fix build with
- argp-standalone and NLS
+Subject: [Buildroot] [PATCH 1/1] package/numactl: needs atomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,46 +86,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with argp-standalone and NLS raised
-since commit 5430c8fedd0392e79e0c011825b056fea129980a:
+numactl unconditionally uses __atomic_fetch_and resulting in the
+following build failure on microblaze since commit
+4ed540ddf59bec4b389be44d7f42820d2466904f:
 
-configure:19923: /home/giuliobenetti/autobuild/run/instance-2/output-1/host/bin/i686-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -largp  -largp >&5
-/home/giuliobenetti/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: /home/giuliobenetti/autobuild/run/instance-2/output-1/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/libargp.a(argp-parse.o): in function `argp_version_parser':
-/home/giuliobenetti/autobuild/run/instance-2/output-1/build/argp-standalone-1.4.1/argp-parse.c:181: undefined reference to `libintl_dgettext'
-
-[...]
-
-checking for library containing argp_parse... no
-configure: error: unable to find the argp_parse() function
+/nvmedata/autobuild/instance-5/output-1/host/lib/gcc/microblaze-buildroot-linux-uclibc/10.3.0/../../../../microblaze-buildroot-linux-uclibc/bin/ld: ./.libs/libnuma.a(libnuma.o): in function `numa_node_to_cpus_v1':
+(.text+0x2a34): undefined reference to `__atomic_fetch_and_1'
 
 Fixes:
- - http://autobuild.buildroot.org/results/b7b2253ac902b441cc6ff12500b56bd15c413d71
+ - http://autobuild.buildroot.org/results/e225cb83dae390d9dc543d4da85c52180efbd40a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libv4l/libv4l.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/numactl/Config.in  | 1 +
+ package/rt-tests/Config.in | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index a781ffcd5d..fd69b7ac7a 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -27,7 +27,8 @@ LIBV4L_DEPENDENCIES += alsa-lib
- endif
+diff --git a/package/numactl/Config.in b/package/numactl/Config.in
+index 23cf7facb0..325a05d609 100644
+--- a/package/numactl/Config.in
++++ b/package/numactl/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_NUMACTL
+ 	bool "numactl"
+ 	depends on BR2_USE_MMU # madvise()
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	help
+ 	  numactl allows you to run your application on specific cpus
+ 	  and memory nodes. It does this by supplying a NUMA memory
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index 8efa3d194e..ccfa040d70 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_RT_TESTS
+ 	bool "rt-tests"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC # numactl
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+ 	depends on BR2_USE_MMU # fork(), numactl
+@@ -32,6 +33,7 @@ comment "rt-tests may not work on MIPS with an external uClibc toolchain"
  
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
--LIBV4L_DEPENDENCIES += argp-standalone
-+LIBV4L_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
-+LIBV4L_CONF_ENV += LIBS=$(TARGET_NLS_LIBS)
- endif
- 
- LIBV4L_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 4.5, dynamic library"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+ 		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+ 	depends on BR2_USE_MMU
 -- 
 2.35.1
 
