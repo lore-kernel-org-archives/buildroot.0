@@ -4,85 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 055E6C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 07:15:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 075D8C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 07:16:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE1C960EB8;
-	Wed, 27 Apr 2022 07:15:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5B5060EDE;
+	Wed, 27 Apr 2022 07:16:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nDBPxNES87lX; Wed, 27 Apr 2022 07:15:48 +0000 (UTC)
+	with ESMTP id NBKsCo15c0w7; Wed, 27 Apr 2022 07:16:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD05F60E0B;
-	Wed, 27 Apr 2022 07:15:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6FB551BF48C
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:15:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9AB0961007;
+	Wed, 27 Apr 2022 07:16:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A0AF1BF48C
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:15:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5DB8160E0B
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:15:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 66843415A9
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:15:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5NqGLJrM9PCf for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 07:15:44 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ndbxEZfiuIeq for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 07:15:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 295E9605AC
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 07:15:43 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id g6so1609248ejw.1
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 00:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=sNLXSVLRHqbhhQQya90vqy5by9HLBTNJ8KPARnIX7QQ=;
- b=IEMydYgUR2HXraq529bydUhroJruKoVe//P/oufYdVC6oRBwDj3dU+qSIRDvn7lFbn
- kxf/i8hl37iAJGLDPtlkk732aVHEFmDQrBelznmQmtoJzJW/Fp7qQpLNJi9+YcrBtKrB
- m9cqJw3dPlOFkB5jHsoI7Tov75K1n6pa+jCi90+SP9Lg88r+G/TrxG6J5fNWInW7QO0m
- AvmBN1pqZYGEYY6GaQqesM2GA58TA3FLhiYnWDaFP5nFF/0/ZW8Wv9UJUpzOTKnFbrjG
- BP9IkqKN/06B5SYtAPjhIDhN24wHgDO+HdAKdg023w6s8wm+Pf9+zvuQoY7dHIPobyI7
- EcSw==
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
+ [IPv6:2607:f8b0:4864:20::22f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 13DB44092B
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 07:15:46 +0000 (UTC)
+Received: by mail-oi1-x22f.google.com with SMTP id v65so1048574oig.10
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 00:15:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=xwmEAi0AMGQiRt8AF5bQtkMk3aZ4qDDdJGTvelz1W38=;
+ b=Xfnrivs8RD0VPj+V/QNOxCPYYGGyQvYHMO26ylQ9pUaeXyonY///xHRxRYh7ITU+8R
+ 2DPPMI/mg5V6/p4I3PoG7U5jYZ6iInMPs1Msb+RlTW5EyaJYCKQDrOOUFxwW/XfgrFQS
+ CpUBgiUbHI/Th7KH61gL8FVuz3n5G8Qov5rMrA2hqRDe7oIzhA5Lh2lTVgm+VZuTh2Gv
+ MmiYfG9GH0fCsM/cFR1b6JKEqUlufStGDfupmT9v1Ny9MLPbpXY3veTAOUApsi1m51vp
+ Ge1zKjy0vMZTQXleNgWTUfGU/A18u3XpLlG/MSxqtaRQItCzRTMnHCOhsqWhWZU4klsZ
+ NGgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=sNLXSVLRHqbhhQQya90vqy5by9HLBTNJ8KPARnIX7QQ=;
- b=zr/ZLiAkznFxq8x9T8ffzp+befEMeE4veZJTbxgwLfBs3/cy7GiNtnFKDXdlDieIbj
- fasx1yNBisgvmqmoKyoSyA3hXxEkJj2UJFBYjgPJMwQRvevFMr7nTI46kPJ3O0669DAL
- b67Uusu35u8GJy59puuVaTaCkUc9GRxMRpXrsm5bvbOG9tZVNYFBOkLhzpAwvCdDbdwB
- 6AYxvDzd8jTNiUJlxhzudiU6sqbvp84ZjavLEAwLZmXLNZfUPWwfMXzn8+Al9qSHBs1C
- Sm3VZZrXjSV/2nQKrU12B7EPMExyC7Ew+Sm0BsiH4PmeTqIlJY3P7kJRe/NZ+iKHrG6P
- MbKg==
-X-Gm-Message-State: AOAM531wos2GecRiJYjZJayR0Mc90iiyk+7XsreQvxX/ysLNnXjFvk8Q
- bF0IYqCmMx+T+x0zlUmNVSONn0zYnca1Ng==
-X-Google-Smtp-Source: ABdhPJx0V55U7oi05CruKH6UZwGQi8VFVyJ8S0Z5rAOCSAc8E4sGh7myGnlHxfUnPoreOTBLf1VuMQ==
-X-Received: by 2002:a17:907:2bde:b0:6f3:8e91:3a60 with SMTP id
- gv30-20020a1709072bde00b006f38e913a60mr14432152ejc.434.1651043742334; 
- Wed, 27 Apr 2022 00:15:42 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- z19-20020a1709067e5300b006f39880d8e5sm3543299ejr.78.2022.04.27.00.15.41
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Apr 2022 00:15:41 -0700 (PDT)
-Message-ID: <d4340fa0-13b9-9a78-a785-0d257edf1a24@mind.be>
-Date: Wed, 27 Apr 2022 09:15:41 +0200
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=xwmEAi0AMGQiRt8AF5bQtkMk3aZ4qDDdJGTvelz1W38=;
+ b=fmjv9IU3h6v63IZ2bupnbKjG2q2QxORc0bESJhekq1k1AcavXjyXEcs/hUcrEerfK0
+ FF/pdwh4UTgHWrJPrSur8GtnghAKtQvbMywJlDxkSJdKQ5NxL1tUeKqftjltWorxKYxy
+ boTdINwgpM2oeGEDeDsC+uEM+xmkakGurnjKbNo2VjnGM/YRCEPT3d6hZlIM+JZ6Z4Ti
+ vdIIBmuwjnSWEd9fdTWRvy0zbeyqib+iUbsQfQE/jYnG9mZwCvW0YOR3x9WvmW+csg6W
+ Qdi52KePO0+jzM7AuDkM50rLZbZKfB7J9HlBizbpH7at/qhkfyX6k/dYl4gONBXnrETU
+ L0eQ==
+X-Gm-Message-State: AOAM532MyUYsYDZ5AJlkSG8VPQMoIwG0qy93BNLp999kFxe3q4SbeArB
+ RukYdHdlG7ijUunNX5XWtQv+NfWm34LyZvi4DgQXA+m9hQE=
+X-Google-Smtp-Source: ABdhPJyrnkKTP5DQAXcnfZLPmJ4F36zutpB2A+zS/QGQzGnAe8KoE2/VcL/1QxVJpQV1Dteu3o+pN/acZRRTA1wkmwQ=
+X-Received: by 2002:a05:6808:10c9:b0:322:b09e:a077 with SMTP id
+ s9-20020a05680810c900b00322b09ea077mr12597947ois.99.1651043745889; Wed, 27
+ Apr 2022 00:15:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220426174137.3014322-1-james.hilliard1@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220426174137.3014322-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/wilc-driver: add missing
- BR2_LINUX_KERNEL dependency
+References: <20220424213958.1747120-1-james.hilliard1@gmail.com>
+ <20220424213958.1747120-4-james.hilliard1@gmail.com>
+ <f2289739-57a7-268c-ebc1-1ba41d8c2d41@mind.be>
+ <CADvTj4qJwS=qwt=ce0JX0UHEeZ04BJoSsuV=2kvqxAiA+2OvYw@mail.gmail.com>
+ <57660639-2f34-4068-793a-ce82fc881b47@mind.be>
+In-Reply-To: <57660639-2f34-4068-793a-ce82fc881b47@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 27 Apr 2022 01:15:34 -0600
+Message-ID: <CADvTj4qGOxNqc3jwrv=1OgE2VZJcypHKrUgmZK5gC9yV-YucmQ@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH v7 4/5] package/python-tomli: bump to
+ version 2.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,39 +86,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kris Bahnsen <kris@embeddedTS.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Wed, Apr 27, 2022 at 1:07 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 26/04/2022 03:35, James Hilliard wrote:
+> > On Mon, Apr 25, 2022 at 4:37 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+> >>
+> >>
+> >>
+> >> On 24/04/2022 23:39, James Hilliard wrote:
+> >>> This package now requires flit and must use the flit-bootstrap setup
+> >>> type for the host build since it is a dependency of
+> >>> host-python-pypa-build.
+> >>>
+> >>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >>
+> >>
+> >>    Applied to master, thanks.
+> >>
+> >>    While testing this series, I noticed that the following gives an error (this
+> >> was already the case in the original series; I haven't checked how it was before
+> >> your series was applied - for tomli, it certainly wouldn't happen because it
+> >> would still be using setuptools, but maybe for other flit packages, I don't know).
+> >>
+> >> make python-tomli
+> >> make python-tomli-dirclean
+> >> make python-tomli
+> >> ...
+> >> FileExistsError: File already exists:
+> >> /home/arnout/src/buildroot/output/target/usr/lib/python3.10/site-packages/tomli/__init__.py
+> >
+> > I think it happens only when building across version bumps, probably a bug
+> > with installer(https://github.com/pypa/installer) upstream.
+>
+>   No, it's exactly the sequence of commands that I wrote above that triggers it.
 
+Oh, yeah, I see what's happening, I was testing with per-package directories
+which prevents one from hitting that issue in most cases since it clears out
+the conflicting/old artifacts with dirclean.
 
-On 26/04/2022 19:41, James Hilliard wrote:
-> Fixes:
->   - http://autobuild.buildroot.net/results/40b/40b8aa0c19917f64c3f272f5479068e7631ffcc3
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->   package/wilc-driver/Config.in | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/wilc-driver/Config.in b/package/wilc-driver/Config.in
-> index caf46ae281..6b93a23a47 100644
-> --- a/package/wilc-driver/Config.in
-> +++ b/package/wilc-driver/Config.in
-> @@ -1,5 +1,6 @@
->   config BR2_PACKAGE_WILC_DRIVER
->   	bool "wilc kernel module"
-> +	depends on BR2_LINUX_KERNEL
->   	help
->   	  External kernel module for WILC1000/3000 devices.
->   
+>
+>   I haven't checked if this is the case for flit/pep517 packages in general, or
+> just for flit-bootstrap.
 
-  You should also add a comment.
+Likely affects all flit/flit-bootstrap and pep517 packages if I had to
+guess, seems
+due to stale build artifacts lying around combined with installer not wanting to
+overwrite artifacts in general, might need to upstream some way to enable
+artifact overwrites, I'll look into that.
 
-  Regards,
-  Arnout
+>
+>   Regards,
+>   Arnout
+>
+> >
+> >>
+> >>    Would be nice to get that fixed...
+> >
+> > Yeah, I'll see if I can track that issue down.
+> >
+> >>
+> >>    Regards,
+> >>    Arnout
+> >>
+> >>> ---
+> >>> Changes v6 -> v7:
+> >>>     - only use flit-boostrap for host-python-tomli
+> >>> ---
+> >>>    package/python-tomli/python-tomli.hash | 4 ++--
+> >>>    package/python-tomli/python-tomli.mk   | 7 ++++---
+> >>>    2 files changed, 6 insertions(+), 5 deletions(-)
+> >>>
+> >>> diff --git a/package/python-tomli/python-tomli.hash b/package/python-tomli/python-tomli.hash
+> >>> index 1a274c8a40..8368f9ee13 100644
+> >>> --- a/package/python-tomli/python-tomli.hash
+> >>> +++ b/package/python-tomli/python-tomli.hash
+> >>> @@ -1,5 +1,5 @@
+> >>>    # md5, sha256 from https://pypi.org/pypi/tomli/json
+> >>> -md5  2ecbc7a23b8c8dc2fe96f588f88463d9  tomli-1.2.0.tar.gz
+> >>> -sha256  d60e681734099207a6add7a10326bc2ddd1fdc36c1b0f547d00ef73ac63739c2  tomli-1.2.0.tar.gz
+> >>> +md5  d4341621d423a7ca6822e23d6d52bb9a  tomli-2.0.1.tar.gz
+> >>> +sha256  de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f  tomli-2.0.1.tar.gz
+> >>>    # Locally computed sha256 checksums
+> >>>    sha256  b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe  LICENSE
+> >>> diff --git a/package/python-tomli/python-tomli.mk b/package/python-tomli/python-tomli.mk
+> >>> index b8c20ca736..b803d67466 100644
+> >>> --- a/package/python-tomli/python-tomli.mk
+> >>> +++ b/package/python-tomli/python-tomli.mk
+> >>> @@ -4,12 +4,13 @@
+> >>>    #
+> >>>    ################################################################################
+> >>>
+> >>> -PYTHON_TOMLI_VERSION = 1.2.0
+> >>> +PYTHON_TOMLI_VERSION = 2.0.1
+> >>>    PYTHON_TOMLI_SOURCE = tomli-$(PYTHON_TOMLI_VERSION).tar.gz
+> >>> -PYTHON_TOMLI_SITE = https://files.pythonhosted.org/packages/ec/38/8eccdc662c61aed187d5f5b168c18b1d2de3827976c3691e4da8be7375aa
+> >>> -PYTHON_TOMLI_SETUP_TYPE = distutils
+> >>> +PYTHON_TOMLI_SITE = https://files.pythonhosted.org/packages/c0/3f/d7af728f075fb08564c5949a9c95e44352e23dee646869fa104a3b2060a3
+> >>>    PYTHON_TOMLI_LICENSE = MIT
+> >>>    PYTHON_TOMLI_LICENSE_FILES = LICENSE
+> >>> +PYTHON_TOMLI_SETUP_TYPE = flit
+> >>> +HOST_PYTHON_TOMLI_SETUP_TYPE = flit-bootstrap
+> >>>
+> >>>    $(eval $(python-package))
+> >>>    $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
