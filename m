@@ -4,87 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87E40C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:37:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80410C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:37:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17BA582EA2;
-	Wed, 27 Apr 2022 19:37:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 386A782FA5;
+	Wed, 27 Apr 2022 19:37:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R0fAPF6pQP1O; Wed, 27 Apr 2022 19:37:18 +0000 (UTC)
+	with ESMTP id 0BG79RNICi3X; Wed, 27 Apr 2022 19:37:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0169282D14;
-	Wed, 27 Apr 2022 19:37:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E387B1BF2EA
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:37:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46DC282F80;
+	Wed, 27 Apr 2022 19:37:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A81D91BF2EA
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D0F5060B3D
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:37:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 967E1418A4
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:37:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GWZKCmt5uJtI for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 19:37:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XuBFDu2r8fwy for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 19:37:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A093760A75
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 19:37:12 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id y21so3139567edo.2
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 12:37:12 -0700 (PDT)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 67A934189E
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 19:37:32 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id g6so5442314ejw.1
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 12:37:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=NyQizRuQDeWtSjv3OcPx+J2yPRY1Su2S+qaYj+AOsuE=;
- b=iFp2Bmq02vMVZO0f41HB299w22vXY8Rd2x/BwOMJiqaSD0wWki2rKaaWHCx4CQhzv1
- 0zm9KVIu+w4PtQCfJHmT45YdDu2sJd4vKADDUVRIFEv86ZEySAR8JGQAv0wb5b11qHGa
- FGFESE+myUtRWMvy0BYwMXi+hUYc9neWHzQYJlWyy0p6SaPJ1ST8mZGd9c5T/5aXEjAa
- gndlS9m1v9tlnKI672+hudp+qz6NISoaKdlxYdMniaFs07TaUKPqLK8Q5NEqEq9dR/KI
- 6EIws0qXKNNPB+4X4uWGlVT8SHwFROIlX54GJkXTR6mUsgMp2dvOPJjW7S1C3Sg9kXvm
- eV5g==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=E+YV7Ja63rEPNfWKh+7Q91mcOicYZq9IhvdgrgGwayc=;
+ b=ZzUH6TV8lTZA3UlIDgTe/T1MrLzROfodDySH6X0G3NtxVTdby35FcvYBej5lH879MP
+ wiXrOWF66X/XsbAO9AO6g+6KysttdQVH+rJ/1OeXJIYAuuz5clgKwphDBwdxtsmm65S1
+ DqhUYoib8BpqpMeJD9xGfDSpjgzQf2N7Acn4X9po+umi59xf4znZlTSur7rG/uOY++Lc
+ 4TetDxA36MatvHOGsoz0/DxYGqqy9FlVWDlwBwc2SX+fmIWNxUxt1naPr1xpLByKohxl
+ CHnOU0bWnuEwsnAV+81O/kLVkix2vFFQUOGivq4ELPvkXqHO5ZhqJw3w+sGOsWuXif0f
+ +9aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=NyQizRuQDeWtSjv3OcPx+J2yPRY1Su2S+qaYj+AOsuE=;
- b=MzgRCgZzyeGxD61+sYFIy8dPtFr1YHKKAiwCnEaWK05p9a2h27iyUI+XVEEqrhFEcM
- nfWBiSg+nUn1X+3wPRMImUZsf4GzBRqQNv+B3/gllmOASYM9hg/4bu2rcjWh5mTkd0qH
- Zq/QaeOhMrTIsi9hgSQ/qWjrBGBZu8HzFer5hAZL5ybnKsxOAy9UQIu4qgMl7QVPFBAr
- J8LkwILKpxwW6J0TYe7F3bfhS7RwPiVHKHOpOy4qTYUteSwgel7nphx0Tiv0RcrE38Gi
- 0GF1ik+dHGcmNlPfdsQo+KKMel7WyMXn6du8865TR901eW0doK7Io98RqkW+5sIMkPhw
- bXCg==
-X-Gm-Message-State: AOAM5315+VcalH26YmgTAOauGHcJs5wbcwDgl0lJ7kwpoF5/LdXZPIPu
- 1F4vhwGIh00c3zc/SKqoP5Xtrw==
-X-Google-Smtp-Source: ABdhPJzbxOs4AEMYgcJtfGCHHfUK7ifB3Xm2/rjkFyo8Dcz3PjaDfd0M57xEFl7daPOkXIFn9JW/jQ==
-X-Received: by 2002:a05:6402:3496:b0:425:ece9:1a99 with SMTP id
- v22-20020a056402349600b00425ece91a99mr17265016edc.319.1651088230833; 
- Wed, 27 Apr 2022 12:37:10 -0700 (PDT)
+ bh=E+YV7Ja63rEPNfWKh+7Q91mcOicYZq9IhvdgrgGwayc=;
+ b=Xkp3tlOkpi0ngrT0LtzxHLF9EsoJU4ssn2PxmiF1k5bX/buFwPEZx1qNriKT9SF2Te
+ IxFTPqTfkEkiZ+B0dlfa7ZZBtkH+YV4JBgGHbPMGjV9jXg0N9P2QI9bLcMC7sDz9/8AW
+ N1vKq/1mN6iiOH20Za4HGjQkIp1U26TKt3SkfFzuNOV/d/6m32AaH8eziiYIBbErCA6y
+ 37xw8zOsUhiZfQa1bZ5ECIt/yklbsEGRzXq94+lkMlVn4Tn+/tlomAFWX7EVgQt3bLOp
+ PhG31ydUbiLd4lnuL5npMnOPpk6BMbBmEfnjnxaXaUGYKOW7gkRZNiJAENq83x869V0l
+ HR7g==
+X-Gm-Message-State: AOAM532Fq57JhZv18pO7sK0NbyJtfbiLmf3r5QXV1R5hnNafxQgpQ32g
+ ID+HJHxY2QkhHxT7ciDwHDVhvA==
+X-Google-Smtp-Source: ABdhPJxUkA+ettDc3c4gQ0UveaJb+xNhFry8/9P3EmtDtOd+D41SuD3Ub5i5PIHKdRNYxOfAQUtQYQ==
+X-Received: by 2002:a17:906:a05a:b0:6ef:a44d:2f46 with SMTP id
+ bg26-20020a170906a05a00b006efa44d2f46mr28708245ejb.192.1651088250618; 
+ Wed, 27 Apr 2022 12:37:30 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- lb18-20020a170907785200b006efe7bb40b0sm7199996ejc.74.2022.04.27.12.37.10
+ bm13-20020a0564020b0d00b0042617ba63cfsm87814edb.89.2022.04.27.12.37.30
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Apr 2022 12:37:10 -0700 (PDT)
-Message-ID: <7d0d7166-68c5-f227-b036-9f4743d1007f@mind.be>
-Date: Wed, 27 Apr 2022 21:37:09 +0200
+ Wed, 27 Apr 2022 12:37:30 -0700 (PDT)
+Message-ID: <18d4c59c-8e52-20b1-51b5-87d6af969ebf@mind.be>
+Date: Wed, 27 Apr 2022 21:37:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220426223517.997019-1-james.hilliard1@gmail.com>
+References: <20220426224220.1940185-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220426223517.997019-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/wayland: don't rely on implicit
- GNU extensions
+In-Reply-To: <20220426224220.1940185-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/valgrind: bump to version 3.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,8 +94,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -105,12 +101,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 27/04/2022 00:35, James Hilliard wrote:
-> Backport a patch so that we don't rely on implicit GNU extensions.
-> 
-> Fixes:
->   - http://autobuild.buildroot.net/results/c22/c227166c2825ae4e884936fbe627f3997e0e19b7
-> 
+On 27/04/2022 00:42, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
@@ -119,124 +110,37 @@ On 27/04/2022 00:35, James Hilliard wrote:
   Arnout
 
 > ---
->   ...on-t-rely-on-implicit-GNU-extensions.patch | 108 ++++++++++++++++++
->   1 file changed, 108 insertions(+)
->   create mode 100644 package/wayland/0002-build-don-t-rely-on-implicit-GNU-extensions.patch
+>   package/valgrind/valgrind.hash | 4 ++--
+>   package/valgrind/valgrind.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/wayland/0002-build-don-t-rely-on-implicit-GNU-extensions.patch b/package/wayland/0002-build-don-t-rely-on-implicit-GNU-extensions.patch
-> new file mode 100644
-> index 0000000000..fcafa98f46
-> --- /dev/null
-> +++ b/package/wayland/0002-build-don-t-rely-on-implicit-GNU-extensions.patch
-> @@ -0,0 +1,108 @@
-> +From 0d314c4a04ef1b86a1ea66107b2d1a8d1bcd93b9 Mon Sep 17 00:00:00 2001
-> +From: Simon Ser <contact@emersion.fr>
-> +Date: Mon, 10 Jan 2022 14:51:55 +0100
-> +Subject: [PATCH] build: don't rely on implicit GNU extensions
-> +
-> +Currently libwayland assumes GNU extensions will be available, but
-> +doesn't define the C standard to use. Instead, let's unconditionally
-> +enable POSIX extensions, and enable GNU extensions on a case-by-case
-> +basis as needed.
-> +
-> +Signed-off-by: Simon Ser <contact@emersion.fr>
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +[james.hilliard1@gmail.com: backport from upstream commit
-> +0d314c4a04ef1b86a1ea66107b2d1a8d1bcd93b9]
-> +---
-> + cursor/xcursor.c        |  1 +
-> + meson.build             | 10 ++++++++--
-> + tests/display-test.c    |  1 +
-> + tests/event-loop-test.c |  1 +
-> + tests/fixed-test.c      |  1 +
-> + 5 files changed, 12 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/cursor/xcursor.c b/cursor/xcursor.c
-> +index 0506680..188be7c 100644
-> +--- a/cursor/xcursor.c
-> ++++ b/cursor/xcursor.c
-> +@@ -23,6 +23,7 @@
-> +  * SOFTWARE.
-> +  */
-> +
-> ++#define _GNU_SOURCE
-> + #include "xcursor.h"
-> + #include <stdio.h>
-> + #include <stdlib.h>
-> +diff --git a/meson.build b/meson.build
-> +index 07bbd29..cab267e 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -14,6 +14,12 @@ config_h = configuration_data()
-> + config_h.set_quoted('PACKAGE', meson.project_name())
-> + config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
-> +
-> ++cc_args = []
-> ++if host_machine.system() != 'freebsd'
-> ++	cc_args += ['-D_POSIX_C_SOURCE=200809L']
-> ++endif
-> ++add_project_arguments(cc_args, language: 'c')
-> ++
-> + compiler_flags = [
-> + 	'-Wno-unused-parameter',
-> + 	'-Wstrict-prototypes',
-> +@@ -79,7 +85,7 @@ if get_option('libraries')
-> + 	]
-> +
-> + 	foreach d: decls
-> +-		if not cc.has_header_symbol(d['header'], d['symbol'], dependencies: epoll_dep)
-> ++		if not cc.has_header_symbol(d['header'], d['symbol'], dependencies: epoll_dep, args: cc_args)
-> + 			error('@0@ is needed to compile Wayland libraries'.format(d['symbol']))
-> + 		endif
-> + 	endforeach
-> +@@ -87,7 +93,7 @@ if get_option('libraries')
-> + 	rt_dep = []
-> + 	if not cc.has_function('clock_gettime', prefix: '#include <time.h>')
-> + 		rt_dep = cc.find_library('rt')
-> +-		if not cc.has_function('clock_gettime', prefix: '#include <time.h>', dependencies: rt_dep)
-> ++		if not cc.has_function('clock_gettime', prefix: '#include <time.h>', dependencies: rt_dep, args: cc_args)
-> + 			error('clock_gettime not found')
-> + 		endif
-> + 	endif
-> +diff --git a/tests/display-test.c b/tests/display-test.c
-> +index 763adc9..a6f410d 100644
-> +--- a/tests/display-test.c
-> ++++ b/tests/display-test.c
-> +@@ -24,6 +24,7 @@
-> +  * SOFTWARE.
-> +  */
-> +
-> ++#define _GNU_SOURCE
-> + #include <stdbool.h>
-> + #include <stdio.h>
-> + #include <stdlib.h>
-> +diff --git a/tests/event-loop-test.c b/tests/event-loop-test.c
-> +index 9d43c91..a51ba8f 100644
-> +--- a/tests/event-loop-test.c
-> ++++ b/tests/event-loop-test.c
-> +@@ -24,6 +24,7 @@
-> +  * SOFTWARE.
-> +  */
-> +
-> ++#define _GNU_SOURCE
-> + #include <stdlib.h>
-> + #include <stdint.h>
-> + #include <assert.h>
-> +diff --git a/tests/fixed-test.c b/tests/fixed-test.c
-> +index 47a4dae..0b58797 100644
-> +--- a/tests/fixed-test.c
-> ++++ b/tests/fixed-test.c
-> +@@ -23,6 +23,7 @@
-> +  * SOFTWARE.
-> +  */
-> +
-> ++#define _GNU_SOURCE
-> + #include <stdlib.h>
-> + #include <stdio.h>
-> + #include <assert.h>
-> +--
-> +2.25.1
-> +
+> diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
+> index 748fc3eb82..8487c07e42 100644
+> --- a/package/valgrind/valgrind.hash
+> +++ b/package/valgrind/valgrind.hash
+> @@ -1,7 +1,7 @@
+>   # From https://valgrind.org/downloads/current.html
+> -md5  de56a5532b0c81781db677ca712c585a  valgrind-3.18.1.tar.bz2
+> +md5  4687a4990585a038c52f842448ef4e63  valgrind-3.19.0.tar.bz2
+>   # locally computed
+> -sha256  00859aa13a772eddf7822225f4b46ee0d39afbe071d32778da4d99984081f7f5  valgrind-3.18.1.tar.bz2
+> +sha256  dd5e34486f1a483ff7be7300cc16b4d6b24690987877c3278d797534d6738f02  valgrind-3.19.0.tar.bz2
+>   
+>   # License files
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+> index a3eabec9fe..b4c4b8b5a2 100644
+> --- a/package/valgrind/valgrind.mk
+> +++ b/package/valgrind/valgrind.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -VALGRIND_VERSION = 3.18.1
+> +VALGRIND_VERSION = 3.19.0
+>   VALGRIND_SITE = https://sourceware.org/pub/valgrind
+>   VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
+>   VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
