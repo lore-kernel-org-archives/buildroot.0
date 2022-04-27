@@ -1,87 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4515C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:01:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08ADDC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:26:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83A0941A63;
-	Wed, 27 Apr 2022 19:01:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A96A581B10;
+	Wed, 27 Apr 2022 19:26:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TpxNdpnLwRSd; Wed, 27 Apr 2022 19:01:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EFYF8gWEN9wi; Wed, 27 Apr 2022 19:26:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E6FE41A62;
-	Wed, 27 Apr 2022 19:01:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 98C1C1BF322
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:00:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9ABF1819B8;
+	Wed, 27 Apr 2022 19:26:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E53D11BF2EA
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:26:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8679F418DB
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:00:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D3FAA60B52
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:26:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xNYVdndjH5BS for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 19:00:49 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4Rycshj4FD8h for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 19:26:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
  [IPv6:2a00:1450:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 621FD41881
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 19:00:49 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id g6so5271762ejw.1
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 12:00:49 -0700 (PDT)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7B15560A70
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 19:26:52 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id j6so5307580ejc.13
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 12:26:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=DyZPTu1jHd7Y3InWws74voIO0fbW19Y2YArSl29dRa0=;
- b=LwUP8xEqiHovbxU2h0Gh84VeXeo6noU/KsR8NXV4j61rU/xWctIUqeY0Ua4Z/rH1tb
- 2EoSYiJB+OahdHqROh537MiYBMFYhyNG38nOhS6DHNJpmfIWH6NT4xj7OLa+1FvtKyTX
- XPta+Owd5OOiCpMDKtmz8OrbwudbDa0AIxkeXqHB2u/36Syxt0UjdL5YSHYBeoSEuY2B
- 9oZcEnSlGF3E7SbDt2d4PE7pPpFjthaifXcGr8xaBlVTz+MSxrcVSIKQewgbG6/m/oD8
- lt8y0o/X00/7ejBgyGyiwbl+orjQoyoFKZvWPZogaDm+Yo7Z0c2zESa//aQPAX6vy+Vl
- s/eg==
+ bh=PJFn5gQp1uciG937RGrrnhgoFyoTBrg69aFePvZN/n4=;
+ b=gUymxFEMDXd12AxKbfgWTMRbQQdSnndqo2ZsMC3HSSWN9XHFQYRMdQEIbfGd24Dym1
+ OSL3Nk8x++BShrLfqmTcryZ54xM2QMF0/UXXlmw397to77dVrlfQDIbQeFWy726hFeRt
+ UTCwvCCDVyUcPkYwjiVvcBBwuEoIHzpS/K4ca1GvDytckhSoD8RKmNtlWPfrW2oa9F9K
+ bybE67UF1UzSHr0Yy8QK9ySRJaIi2gprl51oZNoMNMO7Ul2VlzUCdCBWqo0Y9uyuTuOx
+ J3YF2ZDda4nKuy4jD5eQkBSAINqYDK2xs5kqvQtq7prOm97x3LlThVmocdpI55zH1xXo
+ gVug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=DyZPTu1jHd7Y3InWws74voIO0fbW19Y2YArSl29dRa0=;
- b=z08MklJdtlsj2WTwffkZoHuYakTu2wZl2kWfdzSiGR40KpS3yVgHBU+ljt/tibCbNt
- /c++VJb0wF9IZvADAc8eLXOVM79+nugmzHEFPk2CGSZUlezF4gGdDo6nfHHVNwnDQ2UQ
- 5vzAvDGzrMEcVJiz679ACOEgz+iF+8xINvhOavWkg6X6zEcEbptQQNAU03J8dc/2B8KR
- VvDrTn4iiV8lPdAEb9p2EtW1n4IaWqIFsVGfouWtQcjUqjfYgtIYDzgSfYeCB1aJWM+M
- CunWtNYjkrvarXijQ7LZGGBo6DJmofTnWsQW9Xtgz0xTHYRtIGxLK4Lm0wrR3bnLOzL+
- JQmA==
-X-Gm-Message-State: AOAM533+D8lbak5Gh1p9uqJnI5+ZwYl0QBaehZG9ITc46fIpMQOi0Cbf
- Ctk1qo72hzOrnKP5qsgTw3ebJw==
-X-Google-Smtp-Source: ABdhPJweVq1+1sMdC/nxDBjjCRx1gBw34uRyL3NhB3pRZHi1tf88Z5nowoprSShXR+EBkpR7AV/yTA==
-X-Received: by 2002:a17:907:7f01:b0:6f3:d38b:1d1 with SMTP id
- qf1-20020a1709077f0100b006f3d38b01d1mr2150669ejc.142.1651086047636; 
- Wed, 27 Apr 2022 12:00:47 -0700 (PDT)
+ bh=PJFn5gQp1uciG937RGrrnhgoFyoTBrg69aFePvZN/n4=;
+ b=3yF11GFaFK234hp8KBrdht6h15uhPomSXJYRv6SIR+dLfx63MFJeUm/BgtygRrZyxA
+ vygcfwTUkpLQM3jWAFoDBAFaGAeEM9oCuCmsG1XGj8QV0gQTkHegDQA7m94/t5cWnOfQ
+ qReM3b2GMQjoU/hpjF8MrIb8bS5N2RDfsV19Y7u4QjPFB3b2uSDSgIbqKgDqrdx5y69l
+ 0p5L+letW/0VUxSOtNyFlsT0Z6xPhjRzubXqMSibdj+AhxdUfocmeN82xTFt700baV6k
+ pJwSxGpBqFLazLdRMoHO2J99Gi4JICmCDqQI+JlFUl/p6saBJI/oT9NF36C5gaMGNgij
+ cLvA==
+X-Gm-Message-State: AOAM531ihEidPOzU1j6XXogr+U9rb6OtUUG2y+WYT29pqR58PNvXx+F1
+ Aa50OyVgDEeBvVL/sBqn6T3C+cmSZZMZ2Q==
+X-Google-Smtp-Source: ABdhPJzIr/xYhBKsAx/MdRQ3YRdm1v0Jp00C7v8ZGREzKSqWWIQlhlvnULP1JoKAr/ilNKnNcHdx1Q==
+X-Received: by 2002:a17:907:6286:b0:6da:6e24:5e43 with SMTP id
+ nd6-20020a170907628600b006da6e245e43mr27875435ejc.449.1651087610533; 
+ Wed, 27 Apr 2022 12:26:50 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- o15-20020a50fd8f000000b0042617ba63b0sm31523edt.58.2022.04.27.12.00.46
+ hb44-20020a170907162c00b006f3bd744275sm2755477ejc.181.2022.04.27.12.26.49
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Apr 2022 12:00:47 -0700 (PDT)
-Message-ID: <dc06a171-ed10-eedf-1654-12dd1dd164bb@mind.be>
-Date: Wed, 27 Apr 2022 21:00:46 +0200
+ Wed, 27 Apr 2022 12:26:50 -0700 (PDT)
+Message-ID: <fa4889f5-77f6-2406-5495-df83fb9fee48@mind.be>
+Date: Wed, 27 Apr 2022 21:26:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Florian Fainelli <f.fainelli@gmail.com>, buildroot@buildroot.org
-References: <20220426173211.64840-1-f.fainelli@gmail.com>
+To: Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
+References: <20220427052715.7642-1-br015@umbiko.net>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220426173211.64840-1-f.fainelli@gmail.com>
-Subject: Re: [Buildroot] [PATCH v2 0/2] External GCC12 toolchain support
+In-Reply-To: <20220427052715.7642-1-br015@umbiko.net>
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: fix iconv detection w/
+ libiconv installed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,8 +96,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: opendmb@gmail.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- mmayer@broadcom.com, "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: =?UTF-8?Q?J=c3=b6rg_Krause?= <joerg.krause@embedded.rocks>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,40 +104,115 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 26/04/2022 19:32, Florian Fainelli wrote:
-> This patch series allows us to use Linaro's GCC12 snapshot that can be
-> downloaded from here:
+On 27/04/2022 07:27, Andreas Ziegler wrote:
+> Fix build failures caused by meson failing to properly detect iconv() when
+> libiconv is installed and a missing link dependency.
 > 
-> https://snapshots.linaro.org/gnu-toolchain/12.0-2021.10-1/aarch64-linux-gnu/
+> Upstream pull request:
+> https://github.com/MusicPlayerDaemon/MPD/pull/1515
 > 
-> Changes in v2:
+> Fixes the following build failures:
+> http://autobuild.buildroot.net/results/7a0/7a0fe4e9248ed96a5c4934361de16e0b59a51d50/
 > 
-> - rebased against master
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+> ---
+>   ...detection-when-libiconv-is-installed.patch | 71 +++++++++++++++++++
+>   1 file changed, 71 insertions(+)
+>   create mode 100644 package/mpd/0002-fix-iconv-detection-when-libiconv-is-installed.patch
 > 
-> Florian Fainelli (2):
->    toolchain/Config.in: add BR2_TOOLCHAIN_GCC_AT_LEAST_12 blind option
->    toolchain/toolchain-external/toolchain-external-custom: add gcc 12
->      version selection
+> diff --git a/package/mpd/0002-fix-iconv-detection-when-libiconv-is-installed.patch b/package/mpd/0002-fix-iconv-detection-when-libiconv-is-installed.patch
+> new file mode 100644
+> index 0000000000..6121bc9740
+> --- /dev/null
+> +++ b/package/mpd/0002-fix-iconv-detection-when-libiconv-is-installed.patch
+> @@ -0,0 +1,71 @@
+> +From 3882a5a263caa681778a21b1f5f13a1b64536796 Mon Sep 17 00:00:00 2001
+> +From: aeolio <git@aeolio.de>
+> +Date: Wed, 20 Apr 2022 16:10:39 +0200
+> +Subject: [PATCH 1/2] src/lib/icu: fix iconv() detection when libiconv is
 
-  Series applied to master, thanks.
+  Remove the N/M (git format-patch -N).
 
-  I was thinking that it would be useful to add an option 
-BR2_TOOLCHAIN_GCC_NEWER and BR2_TOOLCHAIN_EXTERNAL_GCC_12_PLUS that selects it. 
-That way, you can use newer GCC without changing Buildroot. Same for linux-headers.
+> + installed
+> +
 
-  Note that the blind option can simply be _NEWER, but the user-visible option 
-has to have the version explicit in it, so legacy handling can force the user to 
-use the correct version when Buildroot is updated.
+  Add a Signed-off-by line for yourself.  This is a short way for you to
+assert that you are entitled to contribute the patch under the upstream 
+project's license.  See  http://elinux.org/Developer_Certificate_Of_Origin
+for more details.
+
+> +---
+> + src/lib/icu/meson.build | 11 +++++++++--
+> + 1 file changed, 9 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/src/lib/icu/meson.build b/src/lib/icu/meson.build
+> +index 59215e704b..972c1fda3f 100644
+> +--- a/src/lib/icu/meson.build
+> ++++ b/src/lib/icu/meson.build
+> +@@ -12,17 +12,23 @@ if is_windows
+> +   icu_sources += 'Win32.cxx'
+> + endif
+> +
+> ++iconv_dep = []
+> + if icu_dep.found()
+> +   icu_sources += [
+> +     'Util.cxx',
+> +     'Init.cxx',
+> +   ]
+> + elif not get_option('iconv').disabled()
+> +-  have_iconv = compiler.has_function('iconv', prefix : '#include <iconv.h>')
+> +-  conf.set('HAVE_ICONV', have_iconv)
+> ++  # an installed iconv library will make the builtin iconf() unavailable,
+> ++  # so search for the library first and pass it as (possible) dependency
+> ++  iconv_dep = compiler.find_library('libiconv', required: false)
+> ++  have_iconv = compiler.has_function('iconv',
+> ++    dependencies: iconv_dep,
+> ++    prefix : '#include <iconv.h>')
+> +   if not have_iconv and get_option('iconv').enabled()
+> +     error('iconv() not available')
+> +   endif
+> ++  conf.set('HAVE_ICONV', have_iconv)
+> + endif
+> +
+> + icu = static_library(
+> +@@ -31,6 +37,7 @@ icu = static_library(
+> +   include_directories: inc,
+> +   dependencies: [
+> +     icu_dep,
+> ++    iconv_dep,
+> +     fmt_dep,
+> +   ],
+> + )
+> +
+> +From ee39af34199aa875e109f7002a401d6ebbd66c22 Mon Sep 17 00:00:00 2001
+> +From: aeolio <git@aeolio.de>
+> +Date: Sun, 24 Apr 2022 04:14:17 +0000
+> +Subject: [PATCH 2/2] fix typo in comment
+
+  Only one patch per patch file please. Though I don't see why you even need 
+this patch.
 
   Regards,
   Arnout
 
-
-> 
->   toolchain/Config.in                                   | 11 +++++++++--
->   .../toolchain-external-custom/Config.in.options       |  4 ++++
->   2 files changed, 13 insertions(+), 2 deletions(-)
-> 
+> +
+> +---
+> + src/lib/icu/meson.build | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/lib/icu/meson.build b/src/lib/icu/meson.build
+> +index 972c1fda3f..6e489876b8 100644
+> +--- a/src/lib/icu/meson.build
+> ++++ b/src/lib/icu/meson.build
+> +@@ -19,7 +19,7 @@ if icu_dep.found()
+> +     'Init.cxx',
+> +   ]
+> + elif not get_option('iconv').disabled()
+> +-  # an installed iconv library will make the builtin iconf() unavailable,
+> ++  # an installed iconv library will make the builtin iconv() unavailable,
+> +   # so search for the library first and pass it as (possible) dependency
+> +   iconv_dep = compiler.find_library('libiconv', required: false)
+> +   have_iconv = compiler.has_function('iconv',
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
