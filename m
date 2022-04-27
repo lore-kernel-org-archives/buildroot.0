@@ -1,78 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAE88C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 20:17:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AFEBC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 20:20:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96F0640906;
-	Wed, 27 Apr 2022 20:17:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D130161020;
+	Wed, 27 Apr 2022 20:20:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OnQ5R6ZhSxOU; Wed, 27 Apr 2022 20:17:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 84D3E40635;
-	Wed, 27 Apr 2022 20:17:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 431651BF869
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:17:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E67C60E3E
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:17:43 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XrxMX99vr64a for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 20:17:42 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id layPDTZg9BOv; Wed, 27 Apr 2022 20:20:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF3D861022;
+	Wed, 27 Apr 2022 20:20:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 637D51BF869
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:20:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FE024089B
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:20:15 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bJGgAZgHgcpf for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 20:20:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com
- [IPv6:2607:f8b0:4864:20::233])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4F55860E2A
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 20:17:41 +0000 (UTC)
-Received: by mail-oi1-x233.google.com with SMTP id r1so3048795oie.4
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 13:17:41 -0700 (PDT)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4DE77403ED
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 20:20:14 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ o12-20020a1c4d0c000000b00393fbe2973dso3168866wmh.2
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 13:20:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=91xU47N+ew7Ed2NAORuVv3G60fv/jiepIAtCgPX/80s=;
- b=LibB+2jfxTkCsjD3zusSoCU84gHBkaa7dawSSyyI3feIBlsC4hsxkHOcovMwXYIlGp
- ecU5o48Fj3vWceR1GWBE+ASUo8zNSTuY0wv+YvbBIofiiIiUIwWZ15onBunQj3ngf2u5
- 51MQ3jbQDYJ9YimxK6VDCjia/eq3mEtS+KjAG90OQtlriBuwkdoc34U18Tiib9baWbAJ
- g/iXjWCT2IQdXBAaGVR6ul3rWF+Osz3IOR9uiykptpWi9K97ysPWpPjwdqMX6JgyMkUw
- 1K8A3yd8iRtN2/Sodn2yL23ea0/dePbqGymLHCnhmwQjKooO6jxga2MdeeD0FqHnJx/O
- ugyA==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=+++5aADtVKjfvwNLVBFEl3WA/F03oXpoJw/Q1qi6pcM=;
+ b=KL8kV6LTn8ecNs5BfNF8YAAbETmvsC/hNiOV23Bo3QDqHPYq8YJSBiqvSbODZrrWD1
+ a8+GtHI3uVxZtCqlQg9u398PzvLNunyIiS34fzakNxdpCGNfeEhG+bxpR2g+vHNTxM2W
+ vwBBNMJ8nP5K98CChEndYoG9jbOOVmq+aQfqQSU5yZdGJK8KjnXfA2VbfNHROqU9/Kjz
+ lyD9ANzD6Rg4ghj0ICZUQlZ1deM037FIr+1IrsAsIAVRDlly84mStPFG2rPqLKXlNXoI
+ RS02A1ZMGwaRCoF3bT7yCxPzvK43n+8mQ6qkklifoPcsa1LDDREwfmKADUfsK9Qn3u+N
+ U0PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=91xU47N+ew7Ed2NAORuVv3G60fv/jiepIAtCgPX/80s=;
- b=1w9wBp0kOeZ+j9jenPnvw+6cD5s+79II1kHgLMwrXx36CuGoxjUdI3sba5BNFkCGsN
- kE8EzjeCeqkMIHEx7lMorLe3jrnehuyR3SSoMG1DmhRieHPR2sYWTEbqKZLSwfbwDBk1
- VHb4tkQVGlUfnEJTnKmII2HGjEP0/DLlu59khVj/6gXDgySg0wG1KYG3aR9glbr5b781
- Yq38Sy9IpYloM82s0kHbFLl0Cy5foD0piOW+myJimVW/38wVSLeS3RqXvizPmldB1V/G
- Acz5gGG5kwGomBAbItwFMasw12/HjZSXjdd95YU8/zvQiNB/f3TciJ9gfYvqhl9Osrth
- Xb1g==
-X-Gm-Message-State: AOAM533JmzvJ0D6SG7J6EmoB3Pd7uOwCasw7sG/YhzyW3//m+3GYCn1v
- 7vV08AaEvR9pdeJxy9692JzD2Ihwv9nimsk0vqJ4rFsUY5A=
-X-Google-Smtp-Source: ABdhPJzNcCX9eqircSZ7AK3JlN9tKcUvfguPOIOGYedQaShi+i6ThbCrJ9/o2LEV7317d4ObH/l9X0tskShNRKIg0CE=
-X-Received: by 2002:a05:6808:1a09:b0:325:2f1e:1956 with SMTP id
- bk9-20020a0568081a0900b003252f1e1956mr8078560oib.228.1651090660246; Wed, 27
- Apr 2022 13:17:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220426212026.712081-1-fontaine.fabrice@gmail.com>
- <20220426235740.1b2543d1@windsurf>
-In-Reply-To: <20220426235740.1b2543d1@windsurf>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=+++5aADtVKjfvwNLVBFEl3WA/F03oXpoJw/Q1qi6pcM=;
+ b=LyLb77zIuDhLZdpvU/8epUBhElG9ZWOD4r2lUU8aCc4dmrTXR4VoagEoN1eolnB1SE
+ 2jP0vQnHyHJttqIIJeQWEuH9ZMT0LcxYlek4z57iTfkhR4vwEd7M4jBAKB36DcqJ5NEO
+ rGt/VxDdMYMwNUBQDgcjkg0YGxRwyYFv9sD9hXeQkt0XH56DC4pf6BV/8P9LJgKvIkzq
+ B9gOiPSbJr4Cu4sQslwTCa0VOtIXGXnXeb53KZ9hpQj4QSOdaUz8LeDPDCotJ7NDMaf5
+ KPe00RJjclveM+fTs26jjR+Yh2sgk92u/NzPG7HS/fIntkZODBnj6+j+kcVxwROgYkY/
+ hqOA==
+X-Gm-Message-State: AOAM532OuGn3WO2XSZg/U1x+Wejd1AGgTGX4GqOGQOdovtF9VEQrgLVe
+ /L3PoqWrToqN+Cc09g//Gsp1srFkJug=
+X-Google-Smtp-Source: ABdhPJyVqezOKB0BUtr/vgmBF8zBg7sst1LDhm3DVCIYsPmQ+Yt5Fy40l2m/gfGA/GeXW1/SnHOPRQ==
+X-Received: by 2002:a05:600c:3d95:b0:393:d67a:d2a8 with SMTP id
+ bi21-20020a05600c3d9500b00393d67ad2a8mr26650760wmb.39.1651090810769; 
+ Wed, 27 Apr 2022 13:20:10 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ d5-20020a056000186500b0020a8688963bsm17694967wri.89.2022.04.27.13.20.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Apr 2022 13:20:10 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 27 Apr 2022 22:15:34 +0200
-Message-ID: <CAPi7W83tNKtcnNyPGWQ5Gdi_UM42gM+SCV5chzJ7W06JFYTpdg@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/cryptodev-linux: needs
- CONFIG_CRYPTO_USER_API_AEAD
+To: buildroot@buildroot.org
+Date: Wed, 27 Apr 2022 22:18:12 +0200
+Message-Id: <20220427201812.4037832-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/freeipmi: fix build with
+ argp-standalone and NLS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,70 +89,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgbWFyLiAyNiBhdnIuIDIwMjIgw6AgMjM6NTcsIFRob21hcyBQZXRhenpvbmkKPHRob21hcy5w
-ZXRhenpvbmlAYm9vdGxpbi5jb20+IGEgw6ljcml0IDoKPgo+IE9uIFR1ZSwgMjYgQXByIDIwMjIg
-MjM6MjA6MjYgKzAyMDAKPiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWls
-LmNvbT4gd3JvdGU6Cj4KPiA+IENPTkZJR19DUllQVE9fVVNFUl9BUElfQUVBRCBpcyBuZWVkZWQg
-dG8gZml4IHRoZSBmb2xsb3dpbmcgYnVpbGQKPiA+IGZhaWx1cmU6Cj4gPgo+ID4gRVJST1I6IG1v
-ZHBvc3Q6ICJjcnlwdG9fYWxsb2Nfc2tjaXBoZXIiIFsvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxk
-L2luc3RhbmNlLTIvb3V0cHV0LTEvYnVpbGQvY3J5cHRvZGV2LWxpbnV4LTEuMTIvLi9jcnlwdG9k
-ZXYua29dIHVuZGVmaW5lZCEKPiA+IEVSUk9SOiBtb2Rwb3N0OiAic2NhdHRlcndhbGtfbWFwX2Fu
-ZF9jb3B5IiBbL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS0yL291dHB1dC0xL2J1
-aWxkL2NyeXB0b2Rldi1saW51eC0xLjEyLy4vY3J5cHRvZGV2LmtvXSB1bmRlZmluZWQhCj4gPiBF
-UlJPUjogbW9kcG9zdDogImNyeXB0b19haGFzaF9maW5hbCIgWy9ob21lL2F1dG9idWlsZC9hdXRv
-YnVpbGQvaW5zdGFuY2UtMi9vdXRwdXQtMS9idWlsZC9jcnlwdG9kZXYtbGludXgtMS4xMi8uL2Ny
-eXB0b2Rldi5rb10gdW5kZWZpbmVkIQo+ID4gRVJST1I6IG1vZHBvc3Q6ICJjcnlwdG9fYWVhZF9l
-bmNyeXB0IiBbL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS0yL291dHB1dC0xL2J1
-aWxkL2NyeXB0b2Rldi1saW51eC0xLjEyLy4vY3J5cHRvZGV2LmtvXSB1bmRlZmluZWQhCj4gPiBF
-UlJPUjogbW9kcG9zdDogImNyeXB0b19hZWFkX3NldGtleSIgWy9ob21lL2F1dG9idWlsZC9hdXRv
-YnVpbGQvaW5zdGFuY2UtMi9vdXRwdXQtMS9idWlsZC9jcnlwdG9kZXYtbGludXgtMS4xMi8uL2Ny
-eXB0b2Rldi5rb10gdW5kZWZpbmVkIQo+ID4gRVJST1I6IG1vZHBvc3Q6ICJjcnlwdG9fc2tjaXBo
-ZXJfZGVjcnlwdCIgWy9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtMi9vdXRwdXQt
-MS9idWlsZC9jcnlwdG9kZXYtbGludXgtMS4xMi8uL2NyeXB0b2Rldi5rb10gdW5kZWZpbmVkIQo+
-ID4gRVJST1I6IG1vZHBvc3Q6ICJjcnlwdG9fZGVzdHJveV90Zm0iIFsvaG9tZS9hdXRvYnVpbGQv
-YXV0b2J1aWxkL2luc3RhbmNlLTIvb3V0cHV0LTEvYnVpbGQvY3J5cHRvZGV2LWxpbnV4LTEuMTIv
-Li9jcnlwdG9kZXYua29dIHVuZGVmaW5lZCEKPiA+IEVSUk9SOiBtb2Rwb3N0OiAiY3J5cHRvX3Nr
-Y2lwaGVyX3NldGtleSIgWy9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtMi9vdXRw
-dXQtMS9idWlsZC9jcnlwdG9kZXYtbGludXgtMS4xMi8uL2NyeXB0b2Rldi5rb10gdW5kZWZpbmVk
-IQo+ID4gRVJST1I6IG1vZHBvc3Q6ICJjcnlwdG9fYWVhZF9kZWNyeXB0IiBbL2hvbWUvYXV0b2J1
-aWxkL2F1dG9idWlsZC9pbnN0YW5jZS0yL291dHB1dC0xL2J1aWxkL2NyeXB0b2Rldi1saW51eC0x
-LjEyLy4vY3J5cHRvZGV2LmtvXSB1bmRlZmluZWQhCj4gPiBFUlJPUjogbW9kcG9zdDogImNyeXB0
-b19hZWFkX3NldGF1dGhzaXplIiBbL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS0y
-L291dHB1dC0xL2J1aWxkL2NyeXB0b2Rldi1saW51eC0xLjEyLy4vY3J5cHRvZGV2LmtvXSB1bmRl
-ZmluZWQhCj4KPiBBcmUgeW91IHN1cmUgb2YgdGhlIHJlbGF0aW9uc2hpcCBiZXR3ZWVuIHRoZXNl
-IGZ1bmN0aW9ucyBhbmQKPiBDT05GSUdfQ1JZUFRPX1VTRVJfQVBJX0FFQUQgPwo+Cj4gY3J5cHRv
-X2FlYWRfZW5jcnlwdCgpIGlzIGltcGxlbWVudGVkIGluIGNyeXB0by9hZWFkLmMsIHdoaWNoIGlz
-IGJ1aWx0Cj4gd2hlbiBDT05GSUdfQ1JZUFRPX0FFQUQyPXkuCj4KPiBjcnlwdG9fc2tjaXBoZXJf
-c2V0a2V5KCkgaXMgaW1wbGVtZW50ZWQgaW4gY3J5cHRvL3NrY2lwaGVyLmMsIHdoaWNoIGlzCj4g
-YnVpbHQgd2hlbiBDT05GSUdfQ1JZUFRPX1NLQ0lQSEVSMj15Lgo+Cj4gQ1JZUFRPX1VTRVJfQVBJ
-X0FFQUQgZW5hYmxlcyBhIHVzZXItc3BhY2UgaW50ZXJmYWNlLCBidXQgaGVyZSB3ZSdyZQo+IHRh
-bGtpbmcgYWJvdXQgYSBrZXJuZWwtbGV2ZWwgaW50ZXJmYWNlLgo+Cj4gQ291bGQgeW91IGNsYXJp
-Znk/CgpJJ20gZmFyIGZyb20gYmVpbmcgYSBrZXJuZWwgb3IgY3J5cHRvZGV2LWxpbnV4IGV4cGVy
-dCBidXQgaGVyZSBpcyB3YXMKbXkgcmVhc29ubmluZzoKICAtIENPTkZJR19DUllQVE9fQUVBRDIg
-YW5kIENPTkZJR19DUllQVE9fU0tDSVBIRVIyIGFyZSBoaWRkZW4gb3B0aW9ucwp0aGF0IGNhbid0
-IGJlIGVuYWJsZWQgYnkgS0NPTkZJR19FTkFCTEVfT1BULgogIC0gRnJvbSBteSB1bmRlcnN0YW5k
-aW5nIGNyeXB0b2Rldi1saW51eCBhbGxvd3MgInVzZXJzcGFjZQphcHBsaWNhdGlvbnMgdG8gdGFr
-ZSBhZHZhbnRhZ2Ugb2YgaGFyZHdhcmUgYWNjZWxlcmF0b3JzIi4gU28sIEkKYXNzdW1lZCB0aGF0
-IGNyeXB0b2Rldi1saW51eCBuZWVkZWQgc29tZSBzb3J0IG9mIHVzZXJzcGFjZSBBUEkgb24gdGhl
-Cmtlcm5lbC4gSG93ZXZlciwgSSBkaWRuJ3QgZmluZCBhIGxvdCBvZiBpbmZvcm1hdGlvbiBhYm91
-dCB0aGlzIHN1YmplY3QKb24gY3J5cHRvZGV2LWxpbnV4IHdlYnNpdGUuIEl0IHNlZW1zIHRoYXQg
-c29tZSBwcm9qZWN0cyBwb2ludGVkIG91dAp0aGF0IENSWVBUT19VU0VSX0FQSV9BRUFEIHNob3Vs
-ZCBiZSBlbmFibGVkIChlLmcuCmh0dHBzOi8vZ2l0aHViLmNvbS9zY2FsZXdheS9rZXJuZWwtdG9v
-bHMvaXNzdWVzLzE0OCkuIEluZGVlZCwKQ1JZUFRPX1VTRVJfQVBJX0FFQUQgd2lsbCBzZWxlY3Qg
-Q09ORklHX0NSWVBUT197QUVBRCxTS0NJUEhFUn0gKGFuZCBzbwpDT05GSUdfQ1JZUFRPX3tBRUFE
-LFNLQ0lQSEVSfTIpLgoKSG93ZXZlciwgYXMgSSBzYWlkLCBJIGNvdWxkIGJlIHRvdGFsbHkgd3Jv
-bmcsIHBlcmhhcHMgc2VsZWN0aW5nCkNSWVBUT19VU0VSX0FQSV9BRUFEIGlzIG5vdCBjb3JyZWN0
-IChldmVuIGlmIGl0IGZpeGVzIHRoZSBidWlsZApmYWlsdXJlKS4KSG9wZWZ1bGx5LCBzb21lb25l
-IHdpdGggbW9yZSBrbm93bGVkZ2Ugb2YgY3J5cHRvZGV2LWxpbnV4IHNob3VsZCBiZQphYmxlIHRv
-IGZpbmQgdGhlIGNvcnJlY3QgZml4LgoKPgo+IFRob21hcwo+IC0tCj4gVGhvbWFzIFBldGF6em9u
-aSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgo+IEVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwg
-ZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCj4gaHR0cHM6Ly9ib290bGluLmNvbQoKQmVzdCBSZWdh
-cmRzLAoKRmFicmljZQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Fix the following build failure with argp-standalone and NLS raised
+since commit 5430c8fedd0392e79e0c011825b056fea129980a:
+
+configure:14644: checking for argp_parse in -largp
+configure:14669: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/arm-buildroot-linux-uclibcgnueabi-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -largp  -lm -lm -lm  >&5
+/home/giuliobenetti/autobuild/run/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libargp.a(argp-parse.o): in function `argp_version_parser':
+/home/giuliobenetti/autobuild/run/instance-1/output-1/build/argp-standalone-1.4.1/argp-parse.c:181: undefined reference to `libintl_dgettext'
+
+[...]
+
+In file included from freeipmi-argp-fmtstream.c:35:
+freeipmi-argp-namefrob.h:62:32: error: redefinition of 'argp_fmtstream_write'
+   62 | #define __argp_fmtstream_write argp_fmtstream_write
+      |                                ^~~~~~~~~~~~~~~~~~~~
+freeipmi-argp-fmtstream.c:395:1: note: in expansion of macro '__argp_fmtstream_write'
+  395 | __argp_fmtstream_write (argp_fmtstream_t __fs,
+      | ^~~~~~~~~~~~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/26090162396b1b8cedfc58e1790ced528fcc35c6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/freeipmi/freeipmi.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/freeipmi/freeipmi.mk b/package/freeipmi/freeipmi.mk
+index 9fb59245b9..b26ed0c0bf 100644
+--- a/package/freeipmi/freeipmi.mk
++++ b/package/freeipmi/freeipmi.mk
+@@ -20,7 +20,8 @@ FREEIPMI_CONF_OPTS = --without-random-device
+ # Work around for uClibc or musl toolchains which lack argp_*()
+ # functions.
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+-FREEIPMI_DEPENDENCIES += argp-standalone
++FREEIPMI_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
++FREEIPMI_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
