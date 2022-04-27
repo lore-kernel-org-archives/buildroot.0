@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFB4CC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 18:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9869FC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 18:59:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FE5A831D6;
-	Wed, 27 Apr 2022 18:58:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 58A36403A4;
+	Wed, 27 Apr 2022 18:59:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 730OoFax-3qe; Wed, 27 Apr 2022 18:58:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id erndkBgFsayE; Wed, 27 Apr 2022 18:59:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B73E783163;
-	Wed, 27 Apr 2022 18:58:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 548561BF9CB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8085440151;
+	Wed, 27 Apr 2022 18:59:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B6FF71BF322
  for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:57:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 83C4F60ED5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E62F400BA
  for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:57:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Myt8NFWzmafN for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 18:57:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hdGlCQ_4O78N for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 18:57:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D619A60EE2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D4D540151
  for <buildroot@buildroot.org>; Wed, 27 Apr 2022 18:57:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3E8D5845FF; Wed, 27 Apr 2022 18:47:26 +0000 (UTC)
+ id 696D784601; Wed, 27 Apr 2022 18:47:26 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Wed, 27 Apr 2022 20:50:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: abb1286fa02bf89be32e84ccb86a441da10147ea
-X-Git-Newrev: 915c1d0aa4cee24bf9f8d9c60cafd708fe4e2f19
+X-Git-Oldrev: 2dacd52d27b06536f084368ae0f1352aff33915b
+X-Git-Newrev: b5be270f2bb79ad0616cae8d0246b14eb60f9be1
 X-Patchwork-Hint: ignore
-Message-Id: <20220427184726.3E8D5845FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "package/pure-ftpd: doesn't build
- with libressl"
+Message-Id: <20220427184726.696D784601@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hwdata: bump to version 0.358
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,33 +58,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=915c1d0aa4cee24bf9f8d9c60cafd708fe4e2f19
+commit: https://git.buildroot.net/buildroot/commit/?id=b5be270f2bb79ad0616cae8d0246b14eb60f9be1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit e87e6fd085b8a4965b9dc84635fd36e380da4dde as
-pure-ftpd can be built with libressl since bump to version 3.5.2 in
-commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2 and
-https://github.com/libressl-portable/openbsd/commit/f5674b4e2330b382bacefd3393affc8eb2ee2ba8.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pure-ftpd/pure-ftpd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/hwdata/hwdata.hash | 2 +-
+ package/hwdata/hwdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 0354949e28..f3cbef84b9 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -45,7 +45,7 @@ else
- PURE_FTPD_CONF_OPTS += --without-ldap
- endif
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index 7861106859..6c5a091a06 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  0d3d21af57822f35141b524808fd9e4823dbb413df338606195010dc0aa1c935  hwdata-0.355.tar.gz
++sha256  f0bb38588b9fcb43e15dac4ce8461b7580ef38ac20ecab83cef638413646decb  hwdata-0.358.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index 4dd9c9e28e..b2e1838074 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
- PURE_FTPD_CONF_OPTS += --with-tls
- PURE_FTPD_DEPENDENCIES += host-pkgconf openssl
- PURE_FTPD_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+-HWDATA_VERSION = 0.355
++HWDATA_VERSION = 0.358
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
