@@ -1,89 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAD1EC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 17:16:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC341C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 17:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FBF382F84;
-	Wed, 27 Apr 2022 17:16:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CAAD41A5B;
+	Wed, 27 Apr 2022 17:18:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HbssyMkx3sf8; Wed, 27 Apr 2022 17:16:34 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 945F582E5F;
-	Wed, 27 Apr 2022 17:16:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C096F1BF420
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:16:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE41141A51
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:16:31 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SAt-Q9Pl9_Jb for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 17:16:30 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DLnY37_yhKZP; Wed, 27 Apr 2022 17:18:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B3C841A57;
+	Wed, 27 Apr 2022 17:18:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 62A3E1BF420
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:17:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6016983E66
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:17:59 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mwSfl9UEwvC6 for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 17:17:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5F99341A4E
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 17:16:30 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id r13so4738649ejd.5
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 10:16:30 -0700 (PDT)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 688EF83E45
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 17:17:58 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id k27so2727439edk.4
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 10:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=DqOjLDyVWEwwwov4d7zs3VuDdo5j00je6Ng155eCIGc=;
- b=GwK3Uzyet3WQWi9bKUJfJbMyatCQeqLDL5IvQZr3JUoCe1yW/Fb7bNIv8DW9F9MX35
- 7HBPHdXuJCeth4Rk02shECHqmzdypCeEakEPgTfZR2hz4E2qzxcEzpMz4lKlbsVqLCuV
- diSurL4tzrineHKVF/C3j90LxksblvWgCtUX1X68bqu++v7yRw+bC3z1jjcU2SFP4zah
- nbGJhk2Qt0lnQrvvHA0fAZON/ZaDCwOyC41tmXO3AG0JBExMALeO+q6u0BxHFp91t2U0
- go+DUlQYtZOnrgnEj3L7s9OKc4qWBHXfQF01yRVShR7zQK2VC43K2rPxJ0fxUeciwux6
- R2Lw==
+ bh=OWUVtTumDaD2y4W9NSmKjrPJgzTmyemvN13bBCii0A8=;
+ b=NTNR0Gxrh7XuetyfZx/S0eQ63AOYHSAazI8gCCOZvhydoo4ZDWzyuTHj3JAWdaCZjn
+ wQbw3vBfSYxGF4dSn0xF5XzwlZVkasIT3GtwWF4uPbMrqsa66vroINadW3y3d4G/TE4q
+ NSDhWxefC9oqyetA633DgSp3wZlBK+IqJHcMZOal6f9U3hkSHL3LZawxmyYi0hxlj7i6
+ VdeVCGVSi6BpmdWvtiO0fwl7yHSjEskpOSLNC30j3IMSY7ddCa7Cb+B9cWgtu3clMTIB
+ 07aUJ4Z9jq8pbBE+i15a8c4aLNRYV+52yIEpqgGu2d5LN0+OYlIDtKtWcLMrmuaGjFu1
+ kyqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=DqOjLDyVWEwwwov4d7zs3VuDdo5j00je6Ng155eCIGc=;
- b=mVQZUaCxnATI78YUZfMdWKIA2TqYJiTpviYUKzzOtQ2FMrzZk8cLsYqHLQlcE5rSFe
- IbvD6F8i4cb9xaWDDhLEGsV8ULnM+8Zyky++ac57mdur0PSz8IkxfMH7lOuq03+QkelN
- SlqaGtgz7COrNjG4wkZcIbwxJt4mEr+Ey5CnflPD9E6yhMd26Dra28JhUr1AKMOwuiKh
- nDu3+mAMtqQAZrOpDMusmmckyU5vzb1/wsZze1yBwF9pKbVvvktDgkx4zwMmnyfBZ5Sv
- 7qOQA488I7tWT/ybOeB5dBqz15226TDDBxIVJuvE1I8cSVdFL6Ogp+bhvS7ta0CqQqOo
- HchA==
-X-Gm-Message-State: AOAM53188x6mbxRUAJKQtWs/Fa5fJXDSycR4JMg8w18/y2fG0J5HSZVW
- j3obOFiuTlYX9PM4KvDdBvybPQ==
-X-Google-Smtp-Source: ABdhPJyDIkswHZAHqOYHMa5KvKjcHQ/C3BIqy6a5doRglx8i+jnGEcyIAyb/OtzkXzKTSrKdIGN/ww==
-X-Received: by 2002:a17:906:99d0:b0:6f3:ce58:67be with SMTP id
- s16-20020a17090699d000b006f3ce5867bemr3267144ejn.237.1651079788260; 
- Wed, 27 Apr 2022 10:16:28 -0700 (PDT)
+ bh=OWUVtTumDaD2y4W9NSmKjrPJgzTmyemvN13bBCii0A8=;
+ b=GCVL1czkTpq3EOA1RPUypUbWZsqjbBC1pOtYv5Qzv2SMgnVEAJkDSmVYk6d6kJLPMB
+ f0etpOxUrAvpiyWeEzt6g21Q8IpCQ7ZKQzKhQv+JSiO3NqBJRnJGQL/SWA+fcNaiHNI+
+ WBh82n+7jwBp7JHWe2fK1Dlzc0//rMBfdoxfWIW5qKXJCx6pUuoBkDVbYdnwDGD1KicT
+ hlJmUT+Bw5gfNSu1X6Xk54sgXHIzcAnzTqAZ6YJgRdLSqWUZzkTMbcAx/01AIjqx0WgW
+ 9Jd+aGVCWxEoUeHPhHbbNlew40Tj4k/I2ZC9CEOqLeMCveNS8ew2tJrsr7H01MdxIGXI
+ G6XA==
+X-Gm-Message-State: AOAM532aGUShWczfgkXmTWWjgfpf8bXEgLrXu4fu8RkwYAtlQxTRsdHh
+ 1xwEVeNEBd/HbUIiN2OnFh6G2w==
+X-Google-Smtp-Source: ABdhPJxWZkOPHfEOGG5Aepplllk+oGod/itvhxxragefj7y4NbxzQgUk8U9Ugaqsx8OLMQL4bTkf5A==
+X-Received: by 2002:aa7:d954:0:b0:425:f621:f77f with SMTP id
+ l20-20020aa7d954000000b00425f621f77fmr12981894eds.363.1651079876632; 
+ Wed, 27 Apr 2022 10:17:56 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- 22-20020a508e16000000b00425c9d1704bsm7655375edw.4.2022.04.27.10.16.27
+ w22-20020a05640234d600b00425f1d7deb9sm5247249edc.28.2022.04.27.10.17.56
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Apr 2022 10:16:27 -0700 (PDT)
-Message-ID: <ccb2ce77-09eb-62a3-d150-47d2a9b378b1@mind.be>
-Date: Wed, 27 Apr 2022 19:16:26 +0200
+ Wed, 27 Apr 2022 10:17:56 -0700 (PDT)
+Message-ID: <9ce03303-1b6b-3894-58f2-91318daa7df5@mind.be>
+Date: Wed, 27 Apr 2022 19:17:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org
-References: <20220425080544.770047-1-buildroot@heine.tech>
+To: ambi@samba.org, buildroot@buildroot.org
+References: <afc126a1-3afc-44e8-710c-69e9be5dd1ed@mind.be>
+ <20220425081626.80691-1-ambi@samba.org>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220425080544.770047-1-buildroot@heine.tech>
-Subject: Re: [Buildroot] [PATCH 1/1] package/grpc: bump to version 1.45.2
+In-Reply-To: <20220425081626.80691-1-ambi@samba.org>
+Subject: Re: [Buildroot] [PATCH 1/2] package/openjdk-bin: add support for
+ host architecture aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +97,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Robert Rose <robertroyrose@gmail.com>
+Cc: Tudor Holton <buildroot@tudorholton.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,90 +105,58 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 25/04/2022 10:05, Michael Nosthoff via buildroot wrote:
-> grpc now requires gcc >= 5.1
-> see https://groups.google.com/g/grpc-io/c/Plvp29818BE
+On 25/04/2022 10:16, ambi@samba.org wrote:
+> From: Christian Ambach <ambi@samba.org>
 > 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> Signed-off-by: Christian Ambach <ambi@samba.org>
 
-  Applied to master, thanks.
-
-
-> ---
->   package/grpc/Config.in |  6 +++---
->   package/grpc/grpc.hash |  2 +-
->   package/grpc/grpc.mk   | 10 +---------
->   3 files changed, 5 insertions(+), 13 deletions(-)
-> 
-> diff --git a/package/grpc/Config.in b/package/grpc/Config.in
-> index ad3ddbcf19..adba1cea52 100644
-> --- a/package/grpc/Config.in
-> +++ b/package/grpc/Config.in
-> @@ -3,7 +3,7 @@ config BR2_PACKAGE_GRPC
->   	depends on BR2_INSTALL_LIBSTDCPP
->   	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
->   	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # protobuf, re2, libabseil-cpp
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5_1
-
-  This doesn't exist, it's just BR2_TOOLCHAIN_GCC_AT_LEAST_5. GCC 5.1 is the 
-first release in the GCC 5 series, so that's fine.
+  Applied both to master, thanks.
 
   Regards,
   Arnout
 
->   	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
->   	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
->   	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-> @@ -19,9 +19,9 @@ config BR2_PACKAGE_GRPC
+> ---
+>   package/openjdk-bin/openjdk-bin.hash |  2 ++
+>   package/openjdk-bin/openjdk-bin.mk   | 10 +++++++++-
+>   2 files changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+> index 62691ed6f0..4d3942125f 100644
+> --- a/package/openjdk-bin/openjdk-bin.hash
+> +++ b/package/openjdk-bin/openjdk-bin.hash
+> @@ -1,8 +1,10 @@
+>   # https://github.com/adoptium/temurin17-binaries/releases
+>   sha256  288f34e3ba8a4838605636485d0365ce23e57d5f2f68997ac4c2e4c01967cd48  OpenJDK17U-jdk_x64_linux_hotspot_17.0.2_8.tar.gz
+> +sha256  302caf29f73481b2b914ba2b89705036010c65eb9bc8d7712b27d6e9bedf6200  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.2_8.tar.gz
 >   
->   	  http://github.com/grpc/grpc
+>   # From https://github.com/adoptium/temurin11-binaries/releases
+>   sha256  43fb84f8063ad9bf6b6d694a67b8f64c8827552b920ec5ce794dfe5602edffe7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
+> +sha256  79572f5172c6a040591d34632f98a20ed148702bbce2f57649e8ac01c0d2e3db  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.14.1_1.tar.gz
 >   
-> -comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9"
-> +comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 5.1"
->   	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
->   	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
->   	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-> -		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> +		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_5_1
->   	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-> diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-> index 6db2acd759..9e3a225a51 100644
-> --- a/package/grpc/grpc.hash
-> +++ b/package/grpc/grpc.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  8c05641b9f91cbc92f51cc4a5b3a226788d7a63f20af4ca7aaca50d92cc94a0d  grpc-1.44.0.tar.gz
-> +sha256  e18b16f7976aab9a36c14c38180f042bb0fd196b75c9fd6a20a2b5f934876ad6  grpc-1.45.2.tar.gz
->   sha256  277adcc1dcef8359b1efb48e628635f88b40be8fbd64e82fd0169930d135d7a5  LICENSE
-> diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-> index 9138b4ea59..2f037b5d59 100644
-> --- a/package/grpc/grpc.mk
-> +++ b/package/grpc/grpc.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -GRPC_VERSION = 1.44.0
-> +GRPC_VERSION = 1.45.2
->   GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
->   GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
->   GRPC_LICENSE_FILES = LICENSE
-> @@ -63,14 +63,6 @@ GRPC_CFLAGS += -O0
->   GRPC_CXXFLAGS += -O0
+>   # Locally calculated
+>   sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
+> diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+> index 3d1ebd7429..5cb6e3ba6a 100644
+> --- a/package/openjdk-bin/openjdk-bin.mk
+> +++ b/package/openjdk-bin/openjdk-bin.mk
+> @@ -11,8 +11,16 @@ else
+>   HOST_OPENJDK_BIN_VERSION_MAJOR = 11
+>   HOST_OPENJDK_BIN_VERSION_MINOR = 0.14.1_1
 >   endif
+> +
+> +ifeq ($(HOSTARCH),x86_64)
+> +HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME = x64
+> +endif
+> +ifeq ($(HOSTARCH),aarch64)
+> +HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME = aarch64
+> +endif
+> +
+>   HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
+> -HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+> +HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_$(HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME)_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+>   HOST_OPENJDK_BIN_SITE = https://github.com/adoptium/temurin$(HOST_OPENJDK_BIN_VERSION_MAJOR)-binaries/releases/download/jdk-$(subst _,%2B,$(HOST_OPENJDK_BIN_VERSION))
 >   
-> -# Toolchains older than gcc5 will fail to compile with -0s due to:
-> -# error: failure memory model cannot be stronger than success memory model for
-> -# '__atomic_compare_exchange', so we use -O2 in these cases
-> -ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5):$(BR2_OPTIMIZE_S),:y)
-> -GRPC_CFLAGS += -O2
-> -GRPC_CXXFLAGS += -O2
-> -endif
-> -
->   GRPC_CONF_OPTS += \
->   	-DCMAKE_C_FLAGS="$(GRPC_CFLAGS)" \
->   	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
+>   HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
