@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 891E2C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 18:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D0B4C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 18:58:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A97283163;
-	Wed, 27 Apr 2022 18:58:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 06136403A4;
+	Wed, 27 Apr 2022 18:58:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oPyd7W0YjiLN; Wed, 27 Apr 2022 18:58:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R-Bt_6ZB99Us; Wed, 27 Apr 2022 18:58:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B1E383112;
-	Wed, 27 Apr 2022 18:58:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 147D140151;
+	Wed, 27 Apr 2022 18:58:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 99F351BF9CB
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:57:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 208EE1BF322
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:57:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8587B831CB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 859C0831D6
  for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:57:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id woC7tMoNtSQ9 for <buildroot@lists.busybox.net>;
+ with ESMTP id gSWoQfL13mTE for <buildroot@lists.busybox.net>;
  Wed, 27 Apr 2022 18:57:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CC5A9829B6
+ by smtp1.osuosl.org (Postfix) with ESMTP id E0C6182A6C
  for <buildroot@buildroot.org>; Wed, 27 Apr 2022 18:57:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 32C9784602; Wed, 27 Apr 2022 18:47:26 +0000 (UTC)
+ id 4986B84601; Wed, 27 Apr 2022 18:47:26 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Wed, 27 Apr 2022 20:50:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f6ba5e31c27fb0b908fab40c979c0f47fff5fd08
-X-Git-Newrev: abb1286fa02bf89be32e84ccb86a441da10147ea
+X-Git-Oldrev: 915c1d0aa4cee24bf9f8d9c60cafd708fe4e2f19
+X-Git-Newrev: cfaee5c49f1ace45adb84be671a49f7a6d1e6079
 X-Patchwork-Hint: ignore
-Message-Id: <20220427184726.32C9784602@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version to 19.0.4-Matrix
+Message-Id: <20220427184726.4986B84601@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wtfutil: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +58,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abb1286fa02bf89be32e84ccb86a441da10147ea
+commit: https://git.buildroot.net/buildroot/commit/?id=cfaee5c49f1ace45adb84be671a49f7a6d1e6079
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+cpe:2.3:a:wtfutil:wtf is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awtfutil%3Awtf
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wtfutil/wtfutil.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 74aefe2138..36294274f2 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1549422ac1386929dfc1a479898d6311440d1f8bfd1bc94e1fe5da9cc2db805c  kodi-inputstream-adaptive-19.0.3-Matrix.tar.gz
-+sha256  eef7660e9306854282ccc8b994ffc38b2fe1e62e155d883cfa346bddc84b595b  kodi-inputstream-adaptive-19.0.4-Matrix.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 83ac897037..ed85d21684 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/wtfutil/wtfutil.mk b/package/wtfutil/wtfutil.mk
+index 6e841411a9..54fea09574 100644
+--- a/package/wtfutil/wtfutil.mk
++++ b/package/wtfutil/wtfutil.mk
+@@ -8,5 +8,7 @@ WTFUTIL_VERSION = 0.41.0
+ WTFUTIL_SITE = $(call github,wtfutil,wtf,v$(WTFUTIL_VERSION))
+ WTFUTIL_LICENSE = MPL-2.0
+ WTFUTIL_LICENSE_FILES = LICENSE.md
++WTFUTIL_CPE_ID_VENDOR = wtfutil
++WTFUTIL_CPE_ID_PRODUCT = wtf
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 19.0.3-Matrix
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 19.0.4-Matrix
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+ $(eval $(golang-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
