@@ -1,67 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D392C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 08:22:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34180C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 08:31:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99E5A82CDE;
-	Wed, 27 Apr 2022 08:22:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB88A41976;
+	Wed, 27 Apr 2022 08:31:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BP7aFFMgARd0; Wed, 27 Apr 2022 08:22:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1AF98261C;
-	Wed, 27 Apr 2022 08:22:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E831F1BF947
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 08:22:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D556141938
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 08:22:20 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=igalia.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1jEWJA2pD7Ea for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 08:22:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B696C418AB
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 08:22:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
- s=20170329;
- h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=SO2q1M0cuymuYlsKOABxF8l3BSz4H8CpvqgQfRbwUFE=; b=BL5u0SGrYyW4eY0Fl8U/un9Xdm
- UlsMRj7CS1QAdaP6CM8cO0iM3GLOetETms++FXJP8girfxH1G2U7bT97Cfa5pDUmhrL7x3zQMQpnx
- ABUPKcCUwsDbkFBSFl+iCFHSFIywJNaqloakcOP57195GmSHfyademJfn6ePjg/BeKCnGxBEDtagf
- jXpEg41WLjpvgn2ivxwzociT6ua6ae/jqkjSKD8tBIK3lJyiZ/CnybS1ZLk5AD6dIc8P3AF4MJrn5
- VALuyOVA28nadfrn2N91wCLrRQORYFcr0ns7F8QLlIRo9G8JIHcpX2KAJMNCJuRMkF5H1mQ8QLrKm
- iK80UI7A==;
-Received: from 91-153-34-227.elisa-laajakaista.fi ([91.153.34.227] helo=momiji)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1njcwD-00034Q-36; Wed, 27 Apr 2022 10:22:17 +0200
-Received: from localhost (momiji [local])
- by momiji (OpenSMTPD) with ESMTPA id 22d672c6;
- Wed, 27 Apr 2022 08:22:06 +0000 (UTC)
-Date: Wed, 27 Apr 2022 11:22:01 +0300
-Message-ID: <20220427112201.GB584565@momiji>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20220427044100.5EBFF60E53@smtp3.osuosl.org>
-References: <20220427044100.5EBFF60E53@smtp3.osuosl.org>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PPQiW60q-sSm; Wed, 27 Apr 2022 08:31:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8719C41938;
+	Wed, 27 Apr 2022 08:31:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E7E91BF947
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 08:31:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 97A5860E0B
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 08:31:21 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lv_rGFXH1IbI for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 08:31:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7C42060B70
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 08:31:20 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6B8DB240011;
+ Wed, 27 Apr 2022 08:31:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1651048276;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=FUJDyYcl6Cb6Ss9VseQ3Vlrmsmf2/35UTv7mFEmpjS0=;
+ b=fgPUWN3GIWX0TiCAf9XlLFPLqZl8kCKXv6Z2TS7XY1PDIXzM4KW7cMJmA2etg0CoQGvU10
+ OFku7qs7fODABKaWToBiuBTD2mS/sq7goSYhTziuSMlBrtgonUtvvIyTcQ8RPHV4ODNaMO
+ bSB0lCf3CIUFNfGVpQKMzHkwY9c4bTTk6XlrUXgJyReXL70YY8g8oVu/XmRE3wyF2XYZeJ
+ 1GxACdDQOyo4zW/6tE1yu8HYisfJp771vVKy9/AyJYxYdzrzbXDGnw9xVIqSTso69uL7sU
+ ldm2Q/1B1E5gABWZiXQLWqQE1qXhmS2gtMaa5A9QDhX3S+5Nm6brLG5YnllGRg==
+Date: Wed, 27 Apr 2022 10:31:02 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220427103102.7f934c1f@windsurf>
+In-Reply-To: <20220427035039.1664864-1-james.hilliard1@gmail.com>
+References: <20220427035039.1664864-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2022-04-26
+Subject: Re: [Buildroot] [PATCH 1/1] package/python3: drop libressl support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,61 +68,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============9222252745665546150=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hello James,
 
---===============9222252745665546150==
-Content-Type: multipart/signed; boundary="AUrAxMB3Ed72bx/B"; micalg="pgp-sha1"; protocol="application/pgp-signature"
+On Tue, 26 Apr 2022 21:50:39 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
+> Libressl is no longer supported as of python 3.10.
+> 
+> See: https://peps.python.org/pep-0644/#libressl
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/a16/a160cfdc9dfc036c4dc41af1c796f8838d91c573
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
---AUrAxMB3Ed72bx/B
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
+Thanks for your patch. I think it raises one question: is libressl
+still relevant? Should we still support it?
 
-SGVsbG8sCgpPbiBXZWQsIDI3IEFwciAyMDIyIDA0OjQwOjU1ICswMDAwIFRob21hcyBQZXRhenpv
-bmkgdmlhIGJ1aWxkcm9vdCA8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+IHdyb3RlOgoKPiBEZXRh
-aWwgb2YgZmFpbHVyZXMgZm9yIG1hc3Rlcgo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-Cj4gCj4gICAgIGFyY2ggICAgIHwgICAgICAgICAgICAgcmVhc29uICAgICAgICAgICAgIHwgT0s/
-IHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB1cmwgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICB8IG9ycGg/Cj4gLS0tLS0tLS0tLS0tLSstLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0r
-LS0tLS0tLQo+Cj4gWy4uLl0KPgo+ICAgICBtNjhrICAgICB8ICAgICAgICAgIGJyb3RsaS0xLjAu
-OSAgICAgICAgICB8IE5PSyB8IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRz
-LzJmMjIyZDVhODZiNDIzN2I4MWNhMzFkYmE4OWY1OGIwZTZlODc5ZGIgfCAgICAgCgpBcyB3aXRo
-IHByZXZpb3VzIG02OGsgcmVsYXRlZCBmaXh1cHMsIHRoaXMgY2FuIGJlIHdvcmthcm91bmRlZCBi
-eQpzd2l0Y2hpbmcgZnJvbSAtTzIgKHByb2JsZW1hdGljKSB0byAtT3MgKGFuZCBnZW5lcmF0ZWQg
-Y29kZSBzdGlsbApsb29rcyByZWFzb25hYmx5IGdvb2QgdG8gbWUsIHRob3VnaCBJIGFtIHZlcnkg
-ZmFyIGZyb20gYmVpbmcgYW4KZXhwZXJ0IHdpdGggdGhpcyBhcmNoaXRlY3R1cmUpLgoKRml4IHN1
-Ym1pdHRlZCBoZXJlOgoKICBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVp
-bGRyb290L3BhdGNoLzIwMjIwNDI3MDgxNzQ0LjExNjc2Ni0xLWFwZXJlekBpZ2FsaWEuY29tLwoK
-CkNoZWVycywK4oCUQWRyacOhbgo=
+My understanding was that it is not really a successful fork, and in
+the end, openssl has mostly caught up and remains the de-facto standard
+implementation. See https://lwn.net/Articles/841664/.
 
---AUrAxMB3Ed72bx/B
-Content-Type: application/pgp-signature; name="signature.asc"
+I don't have a very well-informed opinion, but perhaps we should think
+about this?
 
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYmj9KQAKCRCRxVnb5MkS
-O7zuAJ9iHP6Z+mriuje5OfMKiPWrKqztygCdH+FoJSHYruuusuDAvGwFkXwmQHs=
-=VVyt
------END PGP SIGNATURE-----
-
---AUrAxMB3Ed72bx/B--
-
---===============9222252745665546150==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9222252745665546150==--
