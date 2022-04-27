@@ -1,81 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F587C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 07:25:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF606C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 07:28:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B9F20404B9;
-	Wed, 27 Apr 2022 07:25:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 750F183E7C;
+	Wed, 27 Apr 2022 07:28:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gBDfJbErPxYN; Wed, 27 Apr 2022 07:25:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C95A14016A;
-	Wed, 27 Apr 2022 07:25:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E078E1BF48C
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:25:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DCFF882E5F
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:25:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PEjDCDa-Sssz for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 07:25:44 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uWqMoVHSX0Sn; Wed, 27 Apr 2022 07:28:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6435D83E54;
+	Wed, 27 Apr 2022 07:28:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 418CC1BF48C
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:28:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2DBCF41938
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 07:28:29 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nhsKFxAhv0lJ for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 07:28:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A42C282D49
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 07:25:44 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id 125so1822036iov.10
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 00:25:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 021634190D
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 07:28:27 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id r13so1636038ejd.5
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 00:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=MZH/W1zM1Kf1Z+iiWkNVZy5au1WfRA2nlLMf1Emq/K4=;
- b=ns1h0erJlu5vrcpvqx9GdRV/j+TuzYA8rSyDYVUN9Ctxb0C/zS+Qx+viwSP5C6DnlF
- lSAa+i6QabZ7X6vHdC8SME9f9N0ByGLpiR3OQT4hbyJkT3GiuAQ/Venz8tQJKO37p+wt
- xIDAkzJuXJJMdB/XKoY51WuVUr6xmm52zn/fuPdI9fUl+/V5tNcegJrTjBAp38RJRYId
- KRgq9ko5gQLrx0cdBhcLxPvqE9yR6Y+wblipGboc6qD/CE6BfVwcQLSF0+2QdutM5ewA
- JaOZlY2qy++QeJUalZRcqv1PnPBvgQtqo88eg4y/28pyu+A2/lT2L37bi0n0k//qfA+/
- 40mw==
+ bh=/Vbb68ycF9BEFUzKbCxJ4GLoygZo2hwXfQ1MT5Qz6MI=;
+ b=buVEdUrkDutNzvCPMRxqRgC6J5fxMEDH5mRzY5wC/uSusrCvkSf4GCKRJ6nDVdsC2E
+ R7j7qt0rfKEmNtJJTYEmDc69xlinRGL2NIUNDhtarQvIMMzKLdO0X/Y2ypirU2Wjp2k3
+ 6wXl03KjPBYuFFwEQRbrcJ962EEfFaOqBHUVFiGt44GuF0E5yVjyLCgnq02/nmmfW2Dd
+ og5cE9DKDoGabS5MqTbkYeBoi4XvjJzi6Oy6YYD2wor7JfuKvcZUG3eA7rXuW5Zq/1Ox
+ dGqN+H7MJsedOp2PZgnHX1ji8PDCA1t24hQF6k8wBFlaTjTYdOw/UOCHYJquN50dXRHM
+ u5Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=MZH/W1zM1Kf1Z+iiWkNVZy5au1WfRA2nlLMf1Emq/K4=;
- b=c4TgwWA5WO/GYbf9XXpE3swUp8dwIvHYdHYl29bmvS6LQuYHUjosNgra6YbDCiJ6WP
- SP6XW5lXdz2dToc/Sty76jKGDDIvluBd33Ml+fcq5PzdWPRRk/tc6EMxixg5Q2vbDAae
- 5rZhLD+HUR7pTJl/Y/GSQpdh9c5f0x3i6+vMrCuzU+pLdmec8sK6RfnOIcJ9DCnz+H0j
- HXkXHaRRonUqCe6uPzji+imhi0gDaJoPS6C2lZl0Sy2uqv3f8eckUbN5fyPYKrj1//5H
- EuxANb6ll3dV2CA7tgNG8v9OP0bJ/W7PvVV71Dr5spwOfEKInJMWANelgUrqWZLzEQX0
- isgg==
-X-Gm-Message-State: AOAM533IaeG2eOi4QuDdEEnZJYKer1GDsgAp4AwO2C1uttTx0uENNBTd
- LcxUCwQAyO3N8G6yNUFxK1m9hiC/bk4=
-X-Google-Smtp-Source: ABdhPJxrCKLMMhwRBN7IcD0RI0wSpttmiohCVzl4aijfZSkF7oq5ZpPZhBYpSm75WPYOL6Ue7KQ7EQ==
-X-Received: by 2002:a05:6602:1510:b0:657:277e:8096 with SMTP id
- g16-20020a056602151000b00657277e8096mr11345844iow.152.1651044343462; 
- Wed, 27 Apr 2022 00:25:43 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
- [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- y4-20020a92d0c4000000b002cd8a7db5f5sm6355472ila.11.2022.04.27.00.25.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Apr 2022 00:25:43 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 27 Apr 2022 01:25:41 -0600
-Message-Id: <20220427072541.4082648-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ bh=/Vbb68ycF9BEFUzKbCxJ4GLoygZo2hwXfQ1MT5Qz6MI=;
+ b=LqnEl+xrPrXves/fgzHObbs0r5Nl3Lk3sZUlEfpnoir3ie7sH/f3jcrNxzYyp9nODO
+ ZCuAUkvduaiggiQ/DszOiXRGPjTf0BkNsGZz9qr1NFZruWqnASmKORFBg0PDxUVQq7s+
+ EKZpVIgXYwMyXaPEsd3NwBlWN8j9Tcdu2y+1yMxcPbc8y734i3N84IkZvJ1XKpnNBNUF
+ hJQxSenpVsSWdGhPTZaO50jExqZqhEQ2CIuV+Q+7nHraSPA484FpsV9VMMD6ah7llMQF
+ x2UHR8MJPPSwcT9T/J/Wr0ct8x/Ir6BWnU37T0Wu9wGxqtqmEc4ktOpZVq59WZ5s+oqH
+ 8nag==
+X-Gm-Message-State: AOAM530369xDgSrRtjMKSf0cpTkDSVuy9QI8VqHI2exP0DXo023RQbpv
+ WaHg4+ZDr3KrYMxVlZCDGSYfI34+L8R9EQ==
+X-Google-Smtp-Source: ABdhPJyHFVd5X4kbIKemJJy0Cn9TGVYFAtj0CsqLxhgOqXy1Ot0+QuSQtlhQ8u2tqbMBKd7mCjLHyQ==
+X-Received: by 2002:a17:906:32d5:b0:6f3:be75:8485 with SMTP id
+ k21-20020a17090632d500b006f3be758485mr3953664ejk.685.1651044506160; 
+ Wed, 27 Apr 2022 00:28:26 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ gl2-20020a170906e0c200b006a767d52373sm6133846ejb.182.2022.04.27.00.28.25
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 27 Apr 2022 00:28:25 -0700 (PDT)
+Message-ID: <7bd523ca-a336-d0df-72f8-2b87ffbd9104@mind.be>
+Date: Wed, 27 Apr 2022 09:28:24 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] package/wilc-driver: add missing
- BR2_LINUX_KERNEL dependency
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-GB
+To: Christian Stewart <christian@paral.in>
+References: <20220414204922.866533-1-christian@paral.in>
+ <55c0f7da-0907-b920-5a9b-33a82dcdb32b@mind.be>
+ <CA+h8R2pJDuZhTYYp23oA4HuXyLFJe4BiGYn_GTpYn0Wmm_Bb0A@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CA+h8R2pJDuZhTYYp23oA4HuXyLFJe4BiGYn_GTpYn0Wmm_Bb0A@mail.gmail.com>
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/go: add support for riscv64
+ architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,48 +98,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Kris Bahnsen <kris@embeddedTS.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
- - http://autobuild.buildroot.net/results/40b/40b8aa0c19917f64c3f272f5479068e7631ffcc3
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - add comment when !BR2_LINUX_KERNEL
----
- package/wilc-driver/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/package/wilc-driver/Config.in b/package/wilc-driver/Config.in
-index caf46ae281..24a7b05b17 100644
---- a/package/wilc-driver/Config.in
-+++ b/package/wilc-driver/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_WILC_DRIVER
- 	bool "wilc kernel module"
-+	depends on BR2_LINUX_KERNEL
- 	help
- 	  External kernel module for WILC1000/3000 devices.
- 
-@@ -16,6 +17,9 @@ config BR2_PACKAGE_WILC_DRIVER
- 
- 	  https://github.com/embeddedTS/wilc3000-external-module
- 
-+comment "wilc kernel module needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
- if BR2_PACKAGE_WILC_DRIVER
- 
- config BR2_PACKAGE_WILC_DRIVER_SPI
--- 
-2.25.1
+On 27/04/2022 02:55, Christian Stewart wrote:
+> Arnout,
+> 
+> On Thu, Apr 21, 2022 at 12:54 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 14/04/2022 22:49, Christian Stewart via buildroot wrote:
+>>> +GOARCH is set when calling mkbuildcfg, so go1.4 is trying to compile riscv64.
+>>
+>>    You SoB is missing.
+> 
+> Go's repository disallows signed-off-by lines.
+> 
+>>    Also, the reference to the upstream PR is missing. And you should probably
+>> refer to gerrit instead.
+> 
+> Same issue: I've format-patch the exact patch sent upstream, without changes.
+> 
+> Do I modify it specifically for this patch in Buildroot?
 
+  Exactly. Alternatively, you can use GO_PATCH = ... to download the upstream 
+patch (cfr. how it's done in zfs). In that case, you also need to add a hash for 
+it. We currently don't use that method very often but I think it's a good one in 
+fact.
+
+>>> diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+>>> index e82ab6e81a..8be86103ea 100644
+>>> --- a/package/go/Config.in.host
+>>> +++ b/package/go/Config.in.host
+>>> @@ -5,7 +5,7 @@ config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>>>        depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+>>>        depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
+>>>                || BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
+>>> -             || BR2_mips64 || BR2_mips64el || BR2_s390x
+>>> +             || BR2_mips64 || BR2_mips64el || BR2_riscv || BR2_s390x
+>>
+>>    Here you enable it both for riscv32 and riscv64, but below you always set
+>> GOARCH to riscv64.
+> 
+> I'm not sure if it was in this patch revision, but I have in my local version:
+> 
+>      # Go doesn't support Risc-v 32-bit.
+>      depends on !BR2_RISCV_32
+
+  That is indeed missing from this patch.
+
+
+>> Also, are you sure it doesn't need any of the ISA extensions? I can imagine
+>> that Go would be using atomics, floating point and integer
+>> multiplication/division. Of course, there's almost no chance of finding a
+>> riscv64 without these extensions, but better be correct, right?
+> 
+> Probably yes.
+
+  Is there an easy way to find out, or should we just depend on all of them?
+
+
+>>   Also, does Go support all three ABI types (integer, single precision and
+>> double precision)? Again, we only ever test lp64d in the autobuilders, but
+>> better be correct, right?
+> 
+> There's only one riscv64 target for Go so I have to assume it means lp64d.
+
+  Please add that to the BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS dependencies.
+
+  Regards,
+  Arnout
+
+> 
+> Note: I have now tested this extensively on a Nezha Risc-v CPU as well
+> as a Qemu VM.
+> 
+> https://github.com/skiffos/buildroot/blob/e1fc20cf9/package/go/Config.in.host#L12
+> 
+> Best,
+> Christian Stewart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
