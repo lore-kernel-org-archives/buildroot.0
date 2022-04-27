@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA29CC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:42:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 218AEC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7757061028;
-	Wed, 27 Apr 2022 19:42:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D423061024;
+	Wed, 27 Apr 2022 19:42:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9dPK0QM55csm; Wed, 27 Apr 2022 19:42:34 +0000 (UTC)
+	with ESMTP id nUIrPQwc8CLZ; Wed, 27 Apr 2022 19:42:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE39D6101D;
-	Wed, 27 Apr 2022 19:42:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2C6B71BF9CB
+	by smtp3.osuosl.org (Postfix) with ESMTP id E08606102D;
+	Wed, 27 Apr 2022 19:42:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B5661C1148
  for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:41:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE22360C18
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBBA3417C6
  for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:41:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mdAqEVNP0H48 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wAdYxBJq-8iJ for <buildroot@lists.busybox.net>;
  Wed, 27 Apr 2022 19:41:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 258E260B3D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1599341803
  for <buildroot@buildroot.org>; Wed, 27 Apr 2022 19:41:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 71F7784607; Wed, 27 Apr 2022 19:30:53 +0000 (UTC)
+ id 600B084604; Wed, 27 Apr 2022 19:30:53 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Wed, 27 Apr 2022 21:27:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bcaf5eb0c19e57b48a15a815d7b466bc06475ea5
-X-Git-Newrev: 8915f51cc0dcc6977973bd5f1cd12fa4aa87f1e0
+X-Git-Oldrev: 1a47c42b33f0426776e29a0df58c08fb654ab4ca
+X-Git-Newrev: 01ee7f84fb9da338d36fbaad3cf8a07391a843d3
 X-Patchwork-Hint: ignore
-Message-Id: <20220427193053.71F7784607@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/brotli: workaround m68k build
- issues
+Message-Id: <20220427193053.600B084604@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgit2: bump version to 1.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,55 +58,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8915f51cc0dcc6977973bd5f1cd12fa4aa87f1e0
+commit: https://git.buildroot.net/buildroot/commit/?id=01ee7f84fb9da338d36fbaad3cf8a07391a843d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On m68k building with optimizations  results in failures such as:
+git added restrictions on config files to fix CVE 2022-24765.  libgit2
+adopted these changes for compatibility reasons, even if the vuln is
+not exploitable in libgit2.
 
-/tmp/cckiMnG5.s: Assembler messages:
-/tmp/cckiMnG5.s:142572: Error: value -39206 out of range
-/tmp/cckiMnG5.s:142629: Error: value -40282 out of range
-/tmp/cckiMnG5.s:146408: Error: value -53294 out of range
-/tmp/cckiMnG5.s:159014: Error: value -39206 out of range
-/tmp/cckiMnG5.s:159071: Error: value -40282 out of range
-/tmp/cckiMnG5.s:162850: Error: value -53294 out of range
-/tmp/cckiMnG5.s:175456: Error: value -39206 out of range
-/tmp/cckiMnG5.s:175513: Error: value -40282 out of range
-/tmp/cckiMnG5.s:179292: Error: value -53294 out of range
-/tmp/cckiMnG5.s:191898: Error: value -39206 out of range
-/tmp/cckiMnG5.s:191955: Error: value -40282 out of range
-/tmp/cckiMnG5.s:195734: Error: value -53294 out of range
+https://github.com/libgit2/libgit2/releases/tag/v1.4.3
 
-These only appear when building with -O2, the smaller code generated
-with -Os does not cause trouble, so workaround by using that.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/2f222d5a86b4237b81ca31dba89f58b0e6e879db/
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/brotli/brotli.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
-index 43c8524c0b..ac49fe664f 100644
---- a/package/brotli/brotli.mk
-+++ b/package/brotli/brotli.mk
-@@ -21,6 +21,12 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
- BROTLI_CFLAGS += -O0
- endif
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index ada411ea22..3b5837f789 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  901c2b4492976b86477569502a41c31b274b69adc177149c02099ea88404ef19  libgit2-1.4.2.tar.gz
++sha256  f48b961e463a9e4e7e7e58b21a0fb5a9b2a1d24d9ba4d15870a0c9b8ad965163  libgit2-1.4.3.tar.gz
+ sha256  0092f24acc306ee3287dc05b5e85cb9e0e48cd3f11c60c4625b1a673a5912616  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index e94dd9c370..3f1e6e1593 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Workaround "Error: value -1234 out of range" assembler issues
-+# when building with optimizations.
-+ifeq ($(BR2_m68k),y)
-+BROTLI_CFLAGS += -Os
-+endif
-+
- BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="$(BROTLI_CFLAGS)"
- 
- $(eval $(cmake-package))
+-LIBGIT2_VERSION = 1.4.2
++LIBGIT2_VERSION = 1.4.3
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception, MIT (sha1), wildmatch license (wildmatch), CC0-1.0 (xoroshiro256)
+ LIBGIT2_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
