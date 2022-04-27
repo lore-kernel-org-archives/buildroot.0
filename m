@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9180C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 594CFC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:43:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64B7961001;
-	Wed, 27 Apr 2022 19:43:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1152F80C58;
+	Wed, 27 Apr 2022 19:43:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xtO_487FWN29; Wed, 27 Apr 2022 19:43:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kLySw_JaQT8X; Wed, 27 Apr 2022 19:43:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80BAC60A75;
-	Wed, 27 Apr 2022 19:43:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3DA401BF2EA
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:41:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43E3A82F80;
+	Wed, 27 Apr 2022 19:43:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B88A1BF2EA
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:41:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6E4C60B3D
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA49F409ED
  for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:41:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qon3EpSKLMEb for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 19:41:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9zw1Os3Ac9yR for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 19:41:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1CC8360A75
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 19:41:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EF5BA40621
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 19:41:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 6907984606; Wed, 27 Apr 2022 19:30:53 +0000 (UTC)
+ id 56D2C84604; Wed, 27 Apr 2022 19:30:53 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Wed, 27 Apr 2022 21:27:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 01ee7f84fb9da338d36fbaad3cf8a07391a843d3
-X-Git-Newrev: bcaf5eb0c19e57b48a15a815d7b466bc06475ea5
+X-Git-Oldrev: fbf78c2a738b1a0413c835201064abfa9a3a03f1
+X-Git-Newrev: 1a47c42b33f0426776e29a0df58c08fb654ab4ca
 X-Patchwork-Hint: ignore
-Message-Id: <20220427193053.6907984606@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nodejs: add missing host-pkgconf
- dependency
+Message-Id: <20220427193053.56D2C84604@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wilc-driver: add missing
+ BR2_LINUX_KERNEL dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,36 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcaf5eb0c19e57b48a15a815d7b466bc06475ea5
+commit: https://git.buildroot.net/buildroot/commit/?id=1a47c42b33f0426776e29a0df58c08fb654ab4ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
- - http://autobuild.buildroot.net/results/d1f/d1f49b451b56e3cf6a97d27e8db5b85b0cb58ca9
+ - http://autobuild.buildroot.net/results/40b/40b8aa0c19917f64c3f272f5479068e7631ffcc3
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Kris Bahnsen <kris@embeddedTS.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/nodejs/nodejs.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/wilc-driver/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 2e41c11dbd..4fe34e0aad 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -7,10 +7,11 @@
- NODEJS_VERSION = 14.18.3
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
--NODEJS_DEPENDENCIES = host-qemu host-python3 host-nodejs c-ares \
-+NODEJS_DEPENDENCIES = host-qemu host-pkgconf host-python3 host-nodejs c-ares \
- 	libuv zlib nghttp2 \
- 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
--HOST_NODEJS_DEPENDENCIES = host-icu host-libopenssl host-python3 host-zlib
-+HOST_NODEJS_DEPENDENCIES = host-icu host-libopenssl host-pkgconf host-python3 \
-+	host-zlib
- NODEJS_INSTALL_STAGING = YES
- NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
- NODEJS_LICENSE_FILES = LICENSE
+diff --git a/package/wilc-driver/Config.in b/package/wilc-driver/Config.in
+index caf46ae281..24a7b05b17 100644
+--- a/package/wilc-driver/Config.in
++++ b/package/wilc-driver/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WILC_DRIVER
+ 	bool "wilc kernel module"
++	depends on BR2_LINUX_KERNEL
+ 	help
+ 	  External kernel module for WILC1000/3000 devices.
+ 
+@@ -16,6 +17,9 @@ config BR2_PACKAGE_WILC_DRIVER
+ 
+ 	  https://github.com/embeddedTS/wilc3000-external-module
+ 
++comment "wilc kernel module needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++
+ if BR2_PACKAGE_WILC_DRIVER
+ 
+ config BR2_PACKAGE_WILC_DRIVER_SPI
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
