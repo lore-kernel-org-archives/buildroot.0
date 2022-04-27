@@ -1,81 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF412C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 03:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16A29C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 03:56:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6FD17418C9;
-	Wed, 27 Apr 2022 03:50:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C58E831DE;
+	Wed, 27 Apr 2022 03:56:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ewupylXXveMo; Wed, 27 Apr 2022 03:50:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aLyZ8DSs89uE; Wed, 27 Apr 2022 03:56:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3351E41727;
-	Wed, 27 Apr 2022 03:50:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A95B01BF9C6
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 03:50:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F38A831C1;
+	Wed, 27 Apr 2022 03:56:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E0FF71BF962
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 03:56:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 96C1D60DFF
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 03:50:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE11C418EC
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 03:56:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sXpd0n7UrhE7 for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 03:50:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2je-cpQgvNVQ for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 03:56:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com
- [IPv6:2001:4860:4864:20::33])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 94A2760A70
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 03:50:49 +0000 (UTC)
-Received: by mail-oa1-x33.google.com with SMTP id
- 586e51a60fabf-e2fa360f6dso745490fac.2
- for <buildroot@buildroot.org>; Tue, 26 Apr 2022 20:50:49 -0700 (PDT)
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
+ [IPv6:2607:f8b0:4864:20::d31])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BD7AE418E9
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 03:56:02 +0000 (UTC)
+Received: by mail-io1-xd31.google.com with SMTP id 125so1297960iov.10
+ for <buildroot@buildroot.org>; Tue, 26 Apr 2022 20:56:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=gal3Fhf0ZUdLubJw+7mG2Ts2SfGZtKS2OoBR5q5dimw=;
- b=UdVLP4F2QEUerJd5MIcH6OMO1AlhxX6aEPhSnvFYa8Oyk3/CZXa2pznhcvq2OyWL1R
- bldD8EFhjqYU2SXif2sahZcYcRJfx33yP/dotxpNMLUXskp8o+SV3bd/eE52U56e4dEd
- FgVvECdTjyJ1bieCBfiNNZpn4FZ9Gd63g5Y9RwIX6qVxGnMJuVsfdG0ADTj2VlKapGiQ
- OGHcl4fnCvCaK7Hq58JZ2VYgqcwjfMBNC7x6No4b9XBwWVgn1140v3yy6J57FujL1XmT
- Jza6NetFyeLOFPrzZQu04XQTgZiARDWMncGOj1UuuxLU0gmSGnIzmryMzYGhsS2VYM2v
- AqWA==
+ bh=7DBexflY2kZmFucEJopKxhZweWltYfr4CcbmYUdOgMg=;
+ b=POkhrOCUvHews850Iz8mTyM1qky3GF/B8CnRGt3ajlUK+NWTT0S0W7/odFJsCldLzd
+ JnUB1bbEIp+x2CMe2D7ZTIVJDxXR1810j2OSh3U2WDzDp1NxPCBSdlvptlvwdHJwOAsr
+ QfWMW4FrQSOvw8KjqHS+YABaMWR0jrZSvUXd73T/NgPCdf7m3oyvgvqevdyXpxvZ0kX+
+ cPY+X8tbpQ221qdll3ZGV/3YITW6Afx1Bpmu+BjphwRsB0TM7Vs8VXj3I9k86/esO+yu
+ irAF/j+eCLtyd+ADOwqc5fUlzgYjrIn+WqUPQlnwZJwoUd8nCpwGHpgizARPUPPCZCZD
+ njBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=gal3Fhf0ZUdLubJw+7mG2Ts2SfGZtKS2OoBR5q5dimw=;
- b=BuyWJnx5I3xmoGhybMbsE9yaSrXXJEkk4Cw9FP+wXb8S7Xx5vFIL5OzmzwPM0iUHG5
- h3cCtVoZuC4e3hsepELQoQvKV20AmfQBkOnqZ7PvKPg2aetXK5wHMmmjjq/JlrshMjcY
- WxP+eolRzsIWACQdLt0iEkUjtrHMbP9L7ztAo/oJdLnrIvLtZl0ln7c2Ilqj3WsGEyb7
- OhlLZIZsFY9meTGYf2eX0HW7/8S6ZlJjyV/W1G09mCvIe1fKja2YnAlWrm6iTLi5Ay/8
- vP46xYvqKTiZuQpLcJoY5QCgrbxQkHgF3QivlnwU2TOL8Tq0NNLO0icPCoOXaA1QeSzj
- ys9Q==
-X-Gm-Message-State: AOAM531i2+jwFUR4vp9ZHsPZZBJHWDrWVVMQgb+kNMzqhy0kZPekdd5n
- aUrSXitb0la3npO3aJUgPIblT6X87xA=
-X-Google-Smtp-Source: ABdhPJxApn4zj3Ahuj24/79ofotMDQC0GMbIpzv+3QLtZ+wX7Le70OVH651+d/3YpCwd69Y+WMob+g==
-X-Received: by 2002:a05:6870:b14f:b0:e9:2216:b396 with SMTP id
- a15-20020a056870b14f00b000e92216b396mr6874456oal.157.1651031448326; 
- Tue, 26 Apr 2022 20:50:48 -0700 (PDT)
+ bh=7DBexflY2kZmFucEJopKxhZweWltYfr4CcbmYUdOgMg=;
+ b=snqU4dHGXO7JpndepcWgDmRQZFWovSxt2VJ76SfpmJSPp77B48rVbWy0XKXwNQubNc
+ o0uod95EasEUKUAnERGvNttR01AOrC30pL7ngR0RL9xo5c1geGCh/x0jNHjj6t1NHg37
+ SkSju+3zfAcUrkbDUF8qUPv+/G9dUxWKTXtfrEHNbbPaUeqH7NxvCh6Hn6iCPkq4Kji1
+ XXmZWYa1A3WpvNxbZsKc2X91pSeodkNFN35V0WT0utN7uC/BuSs9cPdeu5LSRA4E7oKp
+ KsyW4c3IykxbCRaLtbQyJmVovMavFBbH3JYzEou9SVz+228TyVDxTBciD64BgT8r12CL
+ njTg==
+X-Gm-Message-State: AOAM531g9T+9xDYStx0z6kOw6nGKFQ8ZPdUPDgPQIvgZ0MYopWvqgK2F
+ 1eqIWoKzQ1/BnTHnbwTcRO8Sa5yusAY=
+X-Google-Smtp-Source: ABdhPJygcSd9yKRcGLq9pAEVus0Ymgf0syknh+IuwOHQ1f/HqmWl2IIViB2alhyOxqLTJdFS2Xp7hQ==
+X-Received: by 2002:a05:6638:164b:b0:323:ac42:8d4b with SMTP id
+ a11-20020a056638164b00b00323ac428d4bmr11373470jat.75.1651031761541; 
+ Tue, 26 Apr 2022 20:56:01 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
  [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- t6-20020a056870f20600b000e686d1388dsm204663oao.39.2022.04.26.20.50.47
+ v1-20020a6bac01000000b006575e6d99c7sm9069821ioe.29.2022.04.26.20.56.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Apr 2022 20:50:48 -0700 (PDT)
+ Tue, 26 Apr 2022 20:56:01 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Apr 2022 21:50:39 -0600
-Message-Id: <20220427035039.1664864-1-james.hilliard1@gmail.com>
+Date: Tue, 26 Apr 2022 21:55:56 -0600
+Message-Id: <20220427035556.1814178-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python3: drop libressl support
+Subject: [Buildroot] [PATCH 1/1] package/python3: fix unsafe openssl header
+ path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,32 +94,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Libressl is no longer supported as of python 3.10.
-
-See: https://peps.python.org/pep-0644/#libressl
+Explicitely set the openssl path so that python3 doesn't search host
+header paths for target openssl headers.
 
 Fixes:
- - http://autobuild.buildroot.net/results/a16/a160cfdc9dfc036c4dc41af1c796f8838d91c573
+ - http://autobuild.buildroot.net/results/c27/c27fe795e079350dd1c9af45be417d41b55e57c3
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python3/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/python3/python3.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index 61470c2944..761c38c850 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -89,7 +89,8 @@ config BR2_PACKAGE_PYTHON3_READLINE
- config BR2_PACKAGE_PYTHON3_SSL
- 	bool "ssl"
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2 if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2
- 	help
- 	  _ssl module for Python3 (required for https in urllib etc).
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 3a334fb28d..7f3b7cc8a5 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -103,6 +103,7 @@ endif
  
+ ifeq ($(BR2_PACKAGE_PYTHON3_SSL),y)
+ PYTHON3_DEPENDENCIES += openssl
++PYTHON3_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
+ else
+ PYTHON3_CONF_OPTS += --disable-openssl
+ endif
 -- 
 2.25.1
 
