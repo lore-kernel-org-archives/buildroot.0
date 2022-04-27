@@ -1,89 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 110AFC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F124DC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 19:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD026830B8;
-	Wed, 27 Apr 2022 19:38:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A255160BAD;
+	Wed, 27 Apr 2022 19:38:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cMvfTk5LrJmw; Wed, 27 Apr 2022 19:38:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xqjiWIRxiaUA; Wed, 27 Apr 2022 19:38:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 422CC8301D;
-	Wed, 27 Apr 2022 19:38:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 790221BF2EA
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:38:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B175260B3D;
+	Wed, 27 Apr 2022 19:38:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 195371BF2EA
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:38:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 72EF0409ED
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:38:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0777B60B3D
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 19:38:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AENYt-wFXZVr for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 19:38:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O2Avoo2gIy8L for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 19:38:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 592784036A
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 19:38:05 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id g23so3100726edy.13
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 12:38:05 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E518D60A75
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 19:38:34 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id i27so5394882ejd.9
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 12:38:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=5MSDTmH6vYxRtOqniGeK7vJZsBeSmsZwhiwGKNKPoVE=;
- b=NNL57OmDeGJYx6Z2sCH2nnMBFsCiBTegXQ9SKz5+4jWE/85UXbibatEVP2H39bZtVH
- mcWGf2Jhe7CAIhV//2WpZ1jiMFTSMPf27CXvyL4HIU9l4Q8lAZMMHf/n1gwR6gOgBVTR
- qLMxAu3GLTKR3mTZTPpMCdDQBUMG3eIs7TG1CqMIFrotqoYjCYDyaI8wm7jSzvknzeC6
- sMxv+0XAd5DsL/2egt0ETCPTtGWTB/YIa84DnObffUYSLT1v+rn29GUnXgR4AXPMkc/c
- Ds/fpLRHYzw4WgaQllGLghRlJZ3j/WNVaACVhZ0Ttc7meGLqmzUADKnRDshGA4o4yxY3
- JcQQ==
+ bh=IgW3s5P8yoKog61bWHToas6GV5Qbz97uT88kHHFbuIU=;
+ b=TfQLSfuy02Frd9t9zEBqP25U9hwGnznRwMwtLpWe+3KoSsalOrfBBQllYdPnJT1aX/
+ NosH2fM3XDrItWdMXgg0FnfgLN5Nu1wVj/ZD4bWw+kEvcRPcIedeuj/O4OILG9Z1QU3u
+ H8V8yNA/ioJc1uWwF/lj1aUZA9l1v0+5YJRaGDWndpZ9IwphlzS/5vnwcZO//CFrxP1J
+ PuFhar2mItoaPLNO0bWUBqHfY5OJXfjkq0PgQF3DQldve6KvIPgVkQ0N2dElKwlMMM/h
+ 6OUdZel5C0Q3blFqhl4wzcC7ga1jsFOQCevBwNKTzpmgECzdf+ihCRHk65ueU2l9UEg+
+ FSeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=5MSDTmH6vYxRtOqniGeK7vJZsBeSmsZwhiwGKNKPoVE=;
- b=H7ZtZHifvjWBVyusRZjRIElKiYLgzYner/dG/6q8cmOQu3RUKtG7H9hrtLiPsoEteS
- uy3h5f81cK0olcrdTKxVPHjclZQALA2anxU/HYAtVq+9rwAIZiZ5adDMnfrAshTG9tV8
- FWYumhnkm9sYE5+ApaejytXh57hyXo6Qje9XVzCd+T2/dmJp/a8kyPHNAF39REgXmOaB
- alWxX8tioQ6so3GrPjO2wxYVgOTZfMmi7GxLYSFTQ9ihzdA/WSYyFjuVqV0c2P/ogQxd
- aCWnpN6hmWvfDdutJ7NEwP0ug/9RPI4hjZVHay7uBQ6T123lXrnJmzG6PY8S2mnUKRaT
- AXsg==
-X-Gm-Message-State: AOAM533VGAgICZTG6fArj5F8ngTMEMnjcGlLVTZgCa5TLkax/7DYMKWK
- KrQN70C+zMXjXtoVcBGJlqLIZJIGHQyXpA==
-X-Google-Smtp-Source: ABdhPJyTbL4vudhlngbfSLNuHzgl9hOWbFJpazjkXCYobO1QoMr3K39gV7o46ITzpylVCpk5p2Rq9w==
-X-Received: by 2002:a05:6402:26c7:b0:423:e5d6:b6c6 with SMTP id
- x7-20020a05640226c700b00423e5d6b6c6mr31933320edd.61.1651088283550; 
- Wed, 27 Apr 2022 12:38:03 -0700 (PDT)
+ bh=IgW3s5P8yoKog61bWHToas6GV5Qbz97uT88kHHFbuIU=;
+ b=f3s0eEY3ksnW0UiBbE06C6QAeO6+K0Z+8KA6FSvsJOUoxjjhdy/4C8OX8ackcPOoHX
+ IrQpGifaIZPviMO307FqxK5DxsX2//N19yVFjZyjAkZdzeYyyyyykieV8EG3/jtnvDQf
+ jzsetea/3tqJBbpClerzLiaRcG6q9tlVPIwuDq9VGUDWUcjdPs4sdRox2+926238ST4Z
+ s96IQAXIhvfQDPzczmSK5OYWmX8QL3+BYktLd22kMUyN3VVeSOurT174DUXMr4dhlbo8
+ V+ZMVz7/TX9kAq0MnDtz/FCY6ck0cVIGZaNok+2aujICjdo5vtnShAyKgVI8WdiC9l5b
+ 62ng==
+X-Gm-Message-State: AOAM532DvEL/R1vZRz3t/cblxr1/S6gRyrtTccDDl1dD7raVQa5dJiqn
+ BgSfb7B5mwBJsps0ktaL1Izetdo1Fnj6VQ==
+X-Google-Smtp-Source: ABdhPJyFNhr9EUQGCZib/124bEI7ivsP9ug5FW4LekMHs7f5dkF7Sxqfd30tgfXAD8W/r0yqat/FLQ==
+X-Received: by 2002:a17:907:105d:b0:6f3:a3ea:cdfd with SMTP id
+ oy29-20020a170907105d00b006f3a3eacdfdmr12831778ejb.704.1651088313142; 
+ Wed, 27 Apr 2022 12:38:33 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- f23-20020aa7d857000000b0042617ba63b4sm83901eds.62.2022.04.27.12.38.02
+ w7-20020a056402070700b0042617ba63bbsm87270edx.69.2022.04.27.12.38.32
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Apr 2022 12:38:03 -0700 (PDT)
-Message-ID: <a083e346-264e-965c-105b-c1f731685fd1@mind.be>
-Date: Wed, 27 Apr 2022 21:38:00 +0200
+ Wed, 27 Apr 2022 12:38:32 -0700 (PDT)
+Message-ID: <986d8b1e-202d-e6df-01b0-bb80519805dc@mind.be>
+Date: Wed, 27 Apr 2022 21:38:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220427035039.1664864-1-james.hilliard1@gmail.com>
+References: <20220427072541.4082648-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220427035039.1664864-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: drop libressl support
+In-Reply-To: <20220427072541.4082648-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/wilc-driver: add missing
+ BR2_LINUX_KERNEL dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,8 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Kris Bahnsen <kris@embeddedTS.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,13 +102,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 27/04/2022 05:50, James Hilliard wrote:
-> Libressl is no longer supported as of python 3.10.
-> 
-> See: https://peps.python.org/pep-0644/#libressl
-> 
+On 27/04/2022 09:25, James Hilliard wrote:
 > Fixes:
->   - http://autobuild.buildroot.net/results/a16/a160cfdc9dfc036c4dc41af1c796f8838d91c573
+>   - http://autobuild.buildroot.net/results/40b/40b8aa0c19917f64c3f272f5479068e7631ffcc3
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
@@ -120,23 +114,33 @@ On 27/04/2022 05:50, James Hilliard wrote:
   Arnout
 
 > ---
->   package/python3/Config.in | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+> Changes v1 -> v2:
+>    - add comment when !BR2_LINUX_KERNEL
+> ---
+>   package/wilc-driver/Config.in | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/python3/Config.in b/package/python3/Config.in
-> index 61470c2944..761c38c850 100644
-> --- a/package/python3/Config.in
-> +++ b/package/python3/Config.in
-> @@ -89,7 +89,8 @@ config BR2_PACKAGE_PYTHON3_READLINE
->   config BR2_PACKAGE_PYTHON3_SSL
->   	bool "ssl"
->   	select BR2_PACKAGE_OPENSSL
-> -	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2 if BR2_PACKAGE_LIBOPENSSL
-> +	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2
+> diff --git a/package/wilc-driver/Config.in b/package/wilc-driver/Config.in
+> index caf46ae281..24a7b05b17 100644
+> --- a/package/wilc-driver/Config.in
+> +++ b/package/wilc-driver/Config.in
+> @@ -1,5 +1,6 @@
+>   config BR2_PACKAGE_WILC_DRIVER
+>   	bool "wilc kernel module"
+> +	depends on BR2_LINUX_KERNEL
 >   	help
->   	  _ssl module for Python3 (required for https in urllib etc).
+>   	  External kernel module for WILC1000/3000 devices.
 >   
+> @@ -16,6 +17,9 @@ config BR2_PACKAGE_WILC_DRIVER
+>   
+>   	  https://github.com/embeddedTS/wilc3000-external-module
+>   
+> +comment "wilc kernel module needs a Linux kernel to be built"
+> +	depends on !BR2_LINUX_KERNEL
+> +
+>   if BR2_PACKAGE_WILC_DRIVER
+>   
+>   config BR2_PACKAGE_WILC_DRIVER_SPI
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
