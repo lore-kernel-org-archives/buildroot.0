@@ -1,83 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AFEBC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 20:20:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23CBEC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 20:25:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D130161020;
-	Wed, 27 Apr 2022 20:20:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B60A682F92;
+	Wed, 27 Apr 2022 20:25:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id layPDTZg9BOv; Wed, 27 Apr 2022 20:20:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EiqNT4MOc7S9; Wed, 27 Apr 2022 20:25:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF3D861022;
-	Wed, 27 Apr 2022 20:20:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E661982C7C;
+	Wed, 27 Apr 2022 20:25:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 637D51BF869
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:20:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7F4BA1BF869
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:25:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5FE024089B
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:20:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CE1B41695
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 20:25:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bJGgAZgHgcpf for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 20:20:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4DE77403ED
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 20:20:14 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- o12-20020a1c4d0c000000b00393fbe2973dso3168866wmh.2
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 13:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=+++5aADtVKjfvwNLVBFEl3WA/F03oXpoJw/Q1qi6pcM=;
- b=KL8kV6LTn8ecNs5BfNF8YAAbETmvsC/hNiOV23Bo3QDqHPYq8YJSBiqvSbODZrrWD1
- a8+GtHI3uVxZtCqlQg9u398PzvLNunyIiS34fzakNxdpCGNfeEhG+bxpR2g+vHNTxM2W
- vwBBNMJ8nP5K98CChEndYoG9jbOOVmq+aQfqQSU5yZdGJK8KjnXfA2VbfNHROqU9/Kjz
- lyD9ANzD6Rg4ghj0ICZUQlZ1deM037FIr+1IrsAsIAVRDlly84mStPFG2rPqLKXlNXoI
- RS02A1ZMGwaRCoF3bT7yCxPzvK43n+8mQ6qkklifoPcsa1LDDREwfmKADUfsK9Qn3u+N
- U0PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=+++5aADtVKjfvwNLVBFEl3WA/F03oXpoJw/Q1qi6pcM=;
- b=LyLb77zIuDhLZdpvU/8epUBhElG9ZWOD4r2lUU8aCc4dmrTXR4VoagEoN1eolnB1SE
- 2jP0vQnHyHJttqIIJeQWEuH9ZMT0LcxYlek4z57iTfkhR4vwEd7M4jBAKB36DcqJ5NEO
- rGt/VxDdMYMwNUBQDgcjkg0YGxRwyYFv9sD9hXeQkt0XH56DC4pf6BV/8P9LJgKvIkzq
- B9gOiPSbJr4Cu4sQslwTCa0VOtIXGXnXeb53KZ9hpQj4QSOdaUz8LeDPDCotJ7NDMaf5
- KPe00RJjclveM+fTs26jjR+Yh2sgk92u/NzPG7HS/fIntkZODBnj6+j+kcVxwROgYkY/
- hqOA==
-X-Gm-Message-State: AOAM532OuGn3WO2XSZg/U1x+Wejd1AGgTGX4GqOGQOdovtF9VEQrgLVe
- /L3PoqWrToqN+Cc09g//Gsp1srFkJug=
-X-Google-Smtp-Source: ABdhPJyVqezOKB0BUtr/vgmBF8zBg7sst1LDhm3DVCIYsPmQ+Yt5Fy40l2m/gfGA/GeXW1/SnHOPRQ==
-X-Received: by 2002:a05:600c:3d95:b0:393:d67a:d2a8 with SMTP id
- bi21-20020a05600c3d9500b00393d67ad2a8mr26650760wmb.39.1651090810769; 
- Wed, 27 Apr 2022 13:20:10 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- d5-20020a056000186500b0020a8688963bsm17694967wri.89.2022.04.27.13.20.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Apr 2022 13:20:10 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id DmFeVP1IXGQ2 for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 20:25:43 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 49774415C5
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 20:25:43 +0000 (UTC)
+Received: from fwd87.dcpf.telekom.de (fwd87.aul.t-online.de [10.223.144.113])
+ by mailout12.t-online.de (Postfix) with SMTP id 8091E18D68
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 22:25:25 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.204.173]) by fwd87.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1njoE1-09V0l70; Wed, 27 Apr 2022 22:25:25 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37506)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1njoE0-0003bw-VG
+ for buildroot@buildroot.org; Wed, 27 Apr 2022 22:25:25 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Wed, 27 Apr 2022 22:18:12 +0200
-Message-Id: <20220427201812.4037832-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Wed, 27 Apr 2022 22:25:24 +0200
+Message-Id: <20220427202524.53586-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/freeipmi: fix build with
- argp-standalone and NLS
+X-TOI-EXPURGATEID: 150726::1651091125-00000271-7836740A/0/0 CLEAN NORMAL
+X-TOI-MSGID: 5b0ce183-6b96-46c1-bd82-81be4153aade
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-zattoo: bump version to
+ 19.7.14-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,54 +62,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with argp-standalone and NLS raised
-since commit 5430c8fedd0392e79e0c011825b056fea129980a:
-
-configure:14644: checking for argp_parse in -largp
-configure:14669: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/arm-buildroot-linux-uclibcgnueabi-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -largp  -lm -lm -lm  >&5
-/home/giuliobenetti/autobuild/run/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libargp.a(argp-parse.o): in function `argp_version_parser':
-/home/giuliobenetti/autobuild/run/instance-1/output-1/build/argp-standalone-1.4.1/argp-parse.c:181: undefined reference to `libintl_dgettext'
-
-[...]
-
-In file included from freeipmi-argp-fmtstream.c:35:
-freeipmi-argp-namefrob.h:62:32: error: redefinition of 'argp_fmtstream_write'
-   62 | #define __argp_fmtstream_write argp_fmtstream_write
-      |                                ^~~~~~~~~~~~~~~~~~~~
-freeipmi-argp-fmtstream.c:395:1: note: in expansion of macro '__argp_fmtstream_write'
-  395 | __argp_fmtstream_write (argp_fmtstream_t __fs,
-      | ^~~~~~~~~~~~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/26090162396b1b8cedfc58e1790ced528fcc35c6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeipmi/freeipmi.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freeipmi/freeipmi.mk b/package/freeipmi/freeipmi.mk
-index 9fb59245b9..b26ed0c0bf 100644
---- a/package/freeipmi/freeipmi.mk
-+++ b/package/freeipmi/freeipmi.mk
-@@ -20,7 +20,8 @@ FREEIPMI_CONF_OPTS = --without-random-device
- # Work around for uClibc or musl toolchains which lack argp_*()
- # functions.
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
--FREEIPMI_DEPENDENCIES += argp-standalone
-+FREEIPMI_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
-+FREEIPMI_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- endif
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index 4f9a60e942..d7693bdfb0 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  64fbbb6c816993b39d35fa000e76b9cb1846ae8ae580e807da943f51e4a3afd7  kodi-pvr-zattoo-19.7.13-Matrix.tar.gz
++sha256  ccd27cfbfee58df9acc71df0661bd56ff34fbf7d9afc8de78d3224d33b30ef44  kodi-pvr-zattoo-19.7.14-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index f2badeaa05..658db25f27 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+-KODI_PVR_ZATTOO_VERSION = 19.7.13-Matrix
++KODI_PVR_ZATTOO_VERSION = 19.7.14-Matrix
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
 -- 
-2.35.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
