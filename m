@@ -1,63 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E26E6C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 08:18:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D392C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 08:22:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 86DD340448;
-	Wed, 27 Apr 2022 08:18:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 99E5A82CDE;
+	Wed, 27 Apr 2022 08:22:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nPsdS0MpqRZv; Wed, 27 Apr 2022 08:18:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BP7aFFMgARd0; Wed, 27 Apr 2022 08:22:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 66BE5400E7;
-	Wed, 27 Apr 2022 08:18:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 201C11BF947
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 08:18:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1AF98261C;
+	Wed, 27 Apr 2022 08:22:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E831F1BF947
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 08:22:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 110DA400E7
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 08:18:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D556141938
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 08:22:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2Ce0jUkPg5R8 for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 08:17:58 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=igalia.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1jEWJA2pD7Ea for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 08:22:19 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B764440017
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 08:17:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B696C418AB
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 08:22:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
  s=20170329;
- h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
- Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
  List-Post:List-Owner:List-Archive;
- bh=4GfmW63aEbNDVuWTQFsQjhhsuI8K0ji7E7hVZEmxpok=; b=EQC9Jos/i+M2YXInh06DjCqeeo
- fcUi5wwZv4s/tuk/nnvaoypllBY0nDCLBf0iuCNkHjPCBBsz+xmPXAMNkRgXPnBLuBL+cyxbD4nPy
- JTN4X8zOXuxKqOCkY+9HV81RJuSHeFh5Mx+/drZunMbCWPULQihg6SCUiJbb9OHMIpTW3/aeaTCVt
- BmhBPJnmF+XF4B2Z+WA7rdUriDDTXJ+NqE+Sm78BH1Dcju7nPN52Vl3Qi7zZTbfQbE239YhCMfxCE
- 8DPRD1GV/Hl3xVXDi+1U1NQu/wwBVcdD3bqbocngZQi8YcBxlaSCHhDWEYAYZBL3mm38DkswfR/vH
- 0KtRW8GA==;
-Received: from 91-153-34-227.elisa-laajakaista.fi ([91.153.34.227] helo=kodama)
+ bh=SO2q1M0cuymuYlsKOABxF8l3BSz4H8CpvqgQfRbwUFE=; b=BL5u0SGrYyW4eY0Fl8U/un9Xdm
+ UlsMRj7CS1QAdaP6CM8cO0iM3GLOetETms++FXJP8girfxH1G2U7bT97Cfa5pDUmhrL7x3zQMQpnx
+ ABUPKcCUwsDbkFBSFl+iCFHSFIywJNaqloakcOP57195GmSHfyademJfn6ePjg/BeKCnGxBEDtagf
+ jXpEg41WLjpvgn2ivxwzociT6ua6ae/jqkjSKD8tBIK3lJyiZ/CnybS1ZLk5AD6dIc8P3AF4MJrn5
+ VALuyOVA28nadfrn2N91wCLrRQORYFcr0ns7F8QLlIRo9G8JIHcpX2KAJMNCJuRMkF5H1mQ8QLrKm
+ iK80UI7A==;
+Received: from 91-153-34-227.elisa-laajakaista.fi ([91.153.34.227] helo=momiji)
  by fanzine2.igalia.com with esmtpsa 
  (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1njcrz-0002uJ-4l; Wed, 27 Apr 2022 10:17:55 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 72fcbd5a;
- Wed, 27 Apr 2022 08:17:44 +0000 (UTC)
+ id 1njcwD-00034Q-36; Wed, 27 Apr 2022 10:22:17 +0200
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id 22d672c6;
+ Wed, 27 Apr 2022 08:22:06 +0000 (UTC)
+Date: Wed, 27 Apr 2022 11:22:01 +0300
+Message-ID: <20220427112201.GB584565@momiji>
 From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-Date: Wed, 27 Apr 2022 11:17:44 +0300
-Message-Id: <20220427081744.116766-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.36.0
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220427044100.5EBFF60E53@smtp3.osuosl.org>
+References: <20220427044100.5EBFF60E53@smtp3.osuosl.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/brotli: workaround m68k build issues
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2022-04-26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,61 +73,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============9222252745665546150=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On m68k building with optimizations  results in failures such as:
 
-/tmp/cckiMnG5.s: Assembler messages:
-/tmp/cckiMnG5.s:142572: Error: value -39206 out of range
-/tmp/cckiMnG5.s:142629: Error: value -40282 out of range
-/tmp/cckiMnG5.s:146408: Error: value -53294 out of range
-/tmp/cckiMnG5.s:159014: Error: value -39206 out of range
-/tmp/cckiMnG5.s:159071: Error: value -40282 out of range
-/tmp/cckiMnG5.s:162850: Error: value -53294 out of range
-/tmp/cckiMnG5.s:175456: Error: value -39206 out of range
-/tmp/cckiMnG5.s:175513: Error: value -40282 out of range
-/tmp/cckiMnG5.s:179292: Error: value -53294 out of range
-/tmp/cckiMnG5.s:191898: Error: value -39206 out of range
-/tmp/cckiMnG5.s:191955: Error: value -40282 out of range
-/tmp/cckiMnG5.s:195734: Error: value -53294 out of range
+--===============9222252745665546150==
+Content-Type: multipart/signed; boundary="AUrAxMB3Ed72bx/B"; micalg="pgp-sha1"; protocol="application/pgp-signature"
 
-These only appear when building with -O2, the smaller code generated
-with -Os does not cause trouble, so workaround by using that.
 
-Fixes:
+--AUrAxMB3Ed72bx/B
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
 
-  http://autobuild.buildroot.net/results/2f222d5a86b4237b81ca31dba89f58b0e6e879db/
+SGVsbG8sCgpPbiBXZWQsIDI3IEFwciAyMDIyIDA0OjQwOjU1ICswMDAwIFRob21hcyBQZXRhenpv
+bmkgdmlhIGJ1aWxkcm9vdCA8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+IHdyb3RlOgoKPiBEZXRh
+aWwgb2YgZmFpbHVyZXMgZm9yIG1hc3Rlcgo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+Cj4gCj4gICAgIGFyY2ggICAgIHwgICAgICAgICAgICAgcmVhc29uICAgICAgICAgICAgIHwgT0s/
+IHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB1cmwgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICB8IG9ycGg/Cj4gLS0tLS0tLS0tLS0tLSstLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0r
+LS0tLS0tLQo+Cj4gWy4uLl0KPgo+ICAgICBtNjhrICAgICB8ICAgICAgICAgIGJyb3RsaS0xLjAu
+OSAgICAgICAgICB8IE5PSyB8IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRz
+LzJmMjIyZDVhODZiNDIzN2I4MWNhMzFkYmE4OWY1OGIwZTZlODc5ZGIgfCAgICAgCgpBcyB3aXRo
+IHByZXZpb3VzIG02OGsgcmVsYXRlZCBmaXh1cHMsIHRoaXMgY2FuIGJlIHdvcmthcm91bmRlZCBi
+eQpzd2l0Y2hpbmcgZnJvbSAtTzIgKHByb2JsZW1hdGljKSB0byAtT3MgKGFuZCBnZW5lcmF0ZWQg
+Y29kZSBzdGlsbApsb29rcyByZWFzb25hYmx5IGdvb2QgdG8gbWUsIHRob3VnaCBJIGFtIHZlcnkg
+ZmFyIGZyb20gYmVpbmcgYW4KZXhwZXJ0IHdpdGggdGhpcyBhcmNoaXRlY3R1cmUpLgoKRml4IHN1
+Ym1pdHRlZCBoZXJlOgoKICBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVp
+bGRyb290L3BhdGNoLzIwMjIwNDI3MDgxNzQ0LjExNjc2Ni0xLWFwZXJlekBpZ2FsaWEuY29tLwoK
+CkNoZWVycywK4oCUQWRyacOhbgo=
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/brotli/brotli.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+--AUrAxMB3Ed72bx/B
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
-index 43c8524c0b..ac49fe664f 100644
---- a/package/brotli/brotli.mk
-+++ b/package/brotli/brotli.mk
-@@ -21,6 +21,12 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
- BROTLI_CFLAGS += -O0
- endif
- 
-+# Workaround "Error: value -1234 out of range" assembler issues
-+# when building with optimizations.
-+ifeq ($(BR2_m68k),y)
-+BROTLI_CFLAGS += -Os
-+endif
-+
- BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="$(BROTLI_CFLAGS)"
- 
- $(eval $(cmake-package))
--- 
-2.36.0
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYmj9KQAKCRCRxVnb5MkS
+O7zuAJ9iHP6Z+mriuje5OfMKiPWrKqztygCdH+FoJSHYruuusuDAvGwFkXwmQHs=
+=VVyt
+-----END PGP SIGNATURE-----
+
+--AUrAxMB3Ed72bx/B--
+
+--===============9222252745665546150==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9222252745665546150==--
