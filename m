@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B38CC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 17:18:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31866C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 17:19:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA18060F25;
-	Wed, 27 Apr 2022 17:18:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE79783E9F;
+	Wed, 27 Apr 2022 17:19:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e1l5brlvC0-4; Wed, 27 Apr 2022 17:18:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HW5GcbQG6F4z; Wed, 27 Apr 2022 17:19:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E13E260E4B;
-	Wed, 27 Apr 2022 17:18:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EFA301BF9CB
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:18:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E83E983E7A;
+	Wed, 27 Apr 2022 17:19:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 237A31BF420
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:18:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DE3B960F25
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:18:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11A35408E2
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 17:18:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D-6dzr0XjUZh for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 17:18:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3MSag2nTCHNp for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 17:18:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06FB660701
- for <buildroot@buildroot.org>; Wed, 27 Apr 2022 17:18:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA9BF403FF
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 17:18:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 880FC845FD; Wed, 27 Apr 2022 17:08:06 +0000 (UTC)
+ id 75E04845FA; Wed, 27 Apr 2022 17:08:06 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 27 Apr 2022 18:23:50 +0200
+Date: Wed, 27 Apr 2022 18:23:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 25f56c5d602903b2c572fd05ded3be8bee79f981
-X-Git-Newrev: 8bbd3e31f1fe906670306bc7224ac3f932219c5c
+X-Git-Oldrev: b3f42bf1005e3395f03ac4db0a0583306c9467b0
+X-Git-Newrev: 80bd1002787815295118355f742f79930bf2974d
 X-Patchwork-Hint: ignore
-Message-Id: <20220427170806.880FC845FD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cryptsetup: fix build with
- argp-standalone
+Message-Id: <20220427170806.75E04845FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ding-libs: bump to version 0.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,86 +58,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bbd3e31f1fe906670306bc7224ac3f932219c5c
+commit: https://git.buildroot.net/buildroot/commit/?id=80bd1002787815295118355f742f79930bf2974d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised since bump of argp-standalone to
-version 1.4.1 in commit 0fe85041bc9e0b4ade4d71dd10b61c3b9ec8945d and
-https://github.com/ericonr/argp-standalone/commit/e7ff8d9787d2641e55f6ac4afb777da60ef98043:
+- Update site to get latest release
+- Update indentation in hash file (two spaces)
 
-/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `parse_opt':
-cryptsetup-ssh.c:(.text+0x14c): undefined reference to `argp_state_help'
-/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `main':
-cryptsetup-ssh.c:(.text+0x7db): undefined reference to `argp_parse'
-
-Fixes:
- - http://autobuild.buildroot.org/results/cb3fdae4e0da603f304501f65127800346cb3915
+https://github.com/SSSD/ding-libs/releases/tag/0.6.2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...002-configure.ac-replace-argp_usage-check.patch | 40 ++++++++++++++++++++++
- package/cryptsetup/cryptsetup.mk                   |  1 +
- 2 files changed, 41 insertions(+)
+ package/ding-libs/Config.in      | 2 +-
+ package/ding-libs/ding-libs.hash | 8 +++++---
+ package/ding-libs/ding-libs.mk   | 5 ++---
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch b/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
-new file mode 100644
-index 0000000000..66e3be350c
---- /dev/null
-+++ b/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
-@@ -0,0 +1,40 @@
-+From 21515ad7a3b000ee6038f82bbb428ab527002bbd Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 24 Apr 2022 19:47:53 +0200
-+Subject: [PATCH] configure.ac: replace argp_usage check
-+
-+Replace check for argp_usage by argp_parse as argp_usage is not used by
-+cryptsetup. Moreover, this will fix the following build failure raised
-+with argp-standalone in version 1.4.0 and
-+https://github.com/ericonr/argp-standalone/commit/e7ff8d9787d2641e55f6ac4afb777da60ef98043:
-+
-+/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `parse_opt':
-+cryptsetup-ssh.c:(.text+0x14c): undefined reference to `argp_state_help'
-+/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `main':
-+cryptsetup-ssh.c:(.text+0x7db): undefined reference to `argp_parse'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cb3fdae4e0da603f304501f65127800346cb3915
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://gitlab.com/cryptsetup/cryptsetup/-/issues/737]
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index d31fb0a7..e47179f2 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -413,7 +413,7 @@ if test "x$enable_ssh_token" = "xyes"; then
-+ 	AC_CHECK_DECLS([ssh_session_is_known_server], [], [], [#include <libssh/libssh.h>])
-+ 	AC_CHECK_HEADER([argp.h], [], AC_MSG_ERROR([You need argp library.]))
-+ 	saved_LIBS=$LIBS
-+-	AC_SEARCH_LIBS([argp_usage],[argp])
-++	AC_SEARCH_LIBS([argp_parse],[argp])
-+ 	AC_SUBST(ARGP_LIBS, $LIBS)
-+ 	LIBS=$saved_LIBS
-+ fi
-+-- 
-+2.35.1
-+
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 81469c511e..0f5c2dc5ae 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -19,6 +19,7 @@ CRYPTSETUP_CPE_ID_VENDOR = cryptsetup_project
- CRYPTSETUP_INSTALL_STAGING = YES
+diff --git a/package/ding-libs/Config.in b/package/ding-libs/Config.in
+index 152dca0426..dc87a01bf2 100644
+--- a/package/ding-libs/Config.in
++++ b/package/ding-libs/Config.in
+@@ -13,4 +13,4 @@ config BR2_PACKAGE_DING_LIBS
+ 	  initialization format (INI) into a library collection data
+ 	  structure (libini_config).
  
- # 0001-Add-check-program-for-symver-attribute.patch
-+# 0002-configure.ac-replace-argp_usage-check.patch
- CRYPTSETUP_AUTORECONF = YES
+-	  https://pagure.io/SSSD/ding-libs
++	  https://github.com/SSSD/ding-libs
+diff --git a/package/ding-libs/ding-libs.hash b/package/ding-libs/ding-libs.hash
+index 2ac5bd8eee..d5d87faccd 100644
+--- a/package/ding-libs/ding-libs.hash
++++ b/package/ding-libs/ding-libs.hash
+@@ -1,4 +1,6 @@
++# From https://github.com/SSSD/ding-libs/releases/download/0.6.2/ding-libs-0.6.2.tar.gz.sha256sum
++sha256  e5f07f34f5921bcb5ccccfe3751c28497879a6451cd7b395e99e24d9b5728e8d  ding-libs-0.6.2.tar.gz
++
+ # Locally computed
+-sha256 ad3c573641701f67d4b6bd8a5a71f0b65d45fd39fe961495ef5f5d3c57fc0963 ding-libs-ding_libs-0_6_1.tar.gz
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
+-sha256 6c57f43c939054fd4b831f271a14c97a488c38f98cdda5e887c5d396e3b3bc58 COPYING.LESSER
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  6c57f43c939054fd4b831f271a14c97a488c38f98cdda5e887c5d396e3b3bc58  COPYING.LESSER
+diff --git a/package/ding-libs/ding-libs.mk b/package/ding-libs/ding-libs.mk
+index 1e8fa59d69..a4ee7351b5 100644
+--- a/package/ding-libs/ding-libs.mk
++++ b/package/ding-libs/ding-libs.mk
+@@ -4,10 +4,9 @@
+ #
+ ################################################################################
  
- CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
+-DING_LIBS_VERSION = 0.6.1
+-DING_LIBS_SOURCE = ding-libs-ding_libs-$(subst .,_,$(DING_LIBS_VERSION)).tar.gz
++DING_LIBS_VERSION = 0.6.2
+ DING_LIBS_SITE = \
+-	https://pagure.io/SSSD/ding-libs/archive/ding_libs-$(subst .,_,$(DING_LIBS_VERSION))
++	https://github.com/SSSD/ding-libs/releases/download/$(DING_LIBS_VERSION)
+ DING_LIBS_DEPENDENCIES = host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
