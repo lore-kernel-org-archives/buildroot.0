@@ -1,86 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81522C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 18:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 905F1C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 18:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 320D282741;
-	Wed, 27 Apr 2022 18:55:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 482D161001;
+	Wed, 27 Apr 2022 18:55:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VVkA-GCc30Hd; Wed, 27 Apr 2022 18:55:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FsWThPDrr0Bv; Wed, 27 Apr 2022 18:55:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8675826EA;
-	Wed, 27 Apr 2022 18:55:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 972131BF322
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:55:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3C9260EE2;
+	Wed, 27 Apr 2022 18:55:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C8F31BF322
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 94132826C2
- for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:55:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39DFB40151
+ for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:55:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jj2Jk1g8IW76 for <buildroot@lists.busybox.net>;
- Wed, 27 Apr 2022 18:55:00 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F-BtwJsPSKPE for <buildroot@lists.busybox.net>;
+ Wed, 27 Apr 2022 18:55:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 01957826EA
- for <buildroot@busybox.net>; Wed, 27 Apr 2022 18:54:59 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id i19so5172015eja.11
- for <buildroot@busybox.net>; Wed, 27 Apr 2022 11:54:59 -0700 (PDT)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1BF22400BA
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 18:55:19 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id z99so3009615ede.5
+ for <buildroot@buildroot.org>; Wed, 27 Apr 2022 11:55:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=bBQx14Tp7BshxkSUok39NqaPwGufXc5gcdVAlZUcOio=;
- b=Pagjadc5aVMroMgb8p57IXno0BCfo5SYSCv/WZj/5eLG9sadAiBUSA8YDuWQou7WGJ
- Wz8omiWXVn6ArtNu1/f9Wzg9gYXWFi8argCKtemn2T4xeS4e9c8reTH+68liTQ2PFEID
- dLTTOIW2Ge6Dso6unls19iKl8mzkHOPp7PTN35NThU8lgoViMp1VluRa32d1hO3XMNVu
- LOkxBxg57pikEpkLH6SapT08z4Z1l7Zyy7n4lsp1Ebj4GAxJxswwEmUfvXzqRueaT/wN
- JxBrOz6MrKhcEXxkeNd7FuxIxi0tamAKCihjo4jSxXVRBtc+luXTuj4tjjPwzFLnUttG
- i+8w==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=+6cP8MgLwVxwOHh5rNUryuydf5TW5YliUTTG7mMQmiU=;
+ b=RPgBJ7a7Wx54jEhR5XouLCdX3XGsSrT4hccm3bGR+pdAu4un+079W8wwRgZPLwm/ht
+ 5u4Mw4Y/uya2pQ1sFLn5XvqZjXDas/HPJlLt8p6ciBciLF9LZZEeSJKMnLS+1R4tynqL
+ 8eZ/9Vmp4dm0W/XdQiL+EIoQ5oBVu+lpHLHDdwp/jiNzQVHMZesNQ1zkbpFsLU6orDDn
+ 2tMvkaVusy9co1/7rr9Yzf9Ci5NpnQAOA3Wz3LMi1R4hHuIfQ0f0KPofvKUVuoZEOqOC
+ HQkuw4Hf/SaFfqCqfpFjRV9ZTsFc2h6AX1+Pn9NuI88g5thlEa7ZxlO/spwPkvIuG01b
+ 5YIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=bBQx14Tp7BshxkSUok39NqaPwGufXc5gcdVAlZUcOio=;
- b=H5Ase89VEwvuS+j6ICtEzuZWrOHp4FfDT3bVmW5AEHZHqsftN+gjNLyeBaknYBNinH
- 1+xu9y7vl0U8UGjqS+Bi3Rqt7iln9DPDD7Oqf4AQvQy29bvbiYJJHnHKDFB7ELuQ7nR3
- +t9A6GzBXx4YF2ou5D4xlcf+vhZ9BoYauAacEamZgFe2eZsZudBLGGtIXnpC9yFIikY4
- ZMnCrJakr5wBD+IcvoIDjuqyfbblUGodHeifouaQaAe55OVCDB7ZXlylM5Gr4hZNqveO
- v5ptQcXbLKRvdv03qXvF65HGKMRZlTwQRgcNfhrDzrLKo17bbFr3QFSZq3xnC9gicLbA
- jTyw==
-X-Gm-Message-State: AOAM532PlwfSli1GTZkwo6FluDiegPNXWDvqkNZOYcoAp06FuE4ruEh1
- ethEVMPcnVkojOlTVrqLYZrk5A==
-X-Google-Smtp-Source: ABdhPJywlgQdneQD7K+PUl2dYTycRMIuqH44uhP4TZzGPuE2iKrIEGTzj/CqpTqVh+KmzKDIREvqwQ==
-X-Received: by 2002:a17:907:97cf:b0:6f3:b1e0:888 with SMTP id
- js15-20020a17090797cf00b006f3b1e00888mr9520269ejc.119.1651085698035; 
- Wed, 27 Apr 2022 11:54:58 -0700 (PDT)
+ bh=+6cP8MgLwVxwOHh5rNUryuydf5TW5YliUTTG7mMQmiU=;
+ b=sLqBSsQt777yhm4q/qPEvor9mzq+dJOxq5Z/a3747kuApM49RSM0mbbvvNkWCSdTyN
+ rxV3Ms3UiC3u+g0au5/ntXUEMV1ZjXroFZ9eA3Y/kZ5TbYA/ffhoEzwprsvHAso7xJkt
+ zxTDyC8iojNp9FD/35MP8DvcNobS+x2SDcjcPMVTMGVHs8+yXeiR60ughuxN0HPD4acb
+ 4CEwtXigR5raiD4Us9NOfFiDZNNoAxHT16d5hcupYDP/DF+jJe8+0pyjdaYoi61GplzN
+ VVFkzoJZ3/gUnx/d2iCsfLGNsPSqk2oAs1nHA1jeDZLzdV8m2cQWks8DvaKGmsAb7WbH
+ sOOw==
+X-Gm-Message-State: AOAM531bFnE1hRONfXCODIk6KHSm2EwBsx8ipyvrULj6p4W26l2S+KYD
+ veE6p/x0YJlJgnTmFpYLA1ZW1FvnA+s2oA==
+X-Google-Smtp-Source: ABdhPJxXFwDqabBC0OvpfHDeQU5PacHzuu5E9pkh3C4xO0nV9vLDUzI0ELXajjusbcp3fzAsLwjKrg==
+X-Received: by 2002:a05:6402:11c9:b0:425:ef56:a1dd with SMTP id
+ j9-20020a05640211c900b00425ef56a1ddmr16082366edw.143.1651085718279; 
+ Wed, 27 Apr 2022 11:55:18 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- p14-20020a056402154e00b0042617ba63a8sm25894edx.50.2022.04.27.11.54.57
+ j8-20020a170906410800b006f39ffef37fsm4111054ejk.205.2022.04.27.11.55.17
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Apr 2022 11:54:57 -0700 (PDT)
-Message-ID: <60587a76-4edd-574f-29cc-262b328244d0@mind.be>
-Date: Wed, 27 Apr 2022 20:54:56 +0200
+ Wed, 27 Apr 2022 11:55:17 -0700 (PDT)
+Message-ID: <a0d68821-857a-6ba1-8ca1-691574f5ec5f@mind.be>
+Date: Wed, 27 Apr 2022 20:55:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
-References: <20220426113724.3544523-1-francois.perrad@gadz.org>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220426171600.2552919-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220426113724.3544523-1-francois.perrad@gadz.org>
-Subject: Re: [Buildroot] [PATCH] package/ethtool: bump to version 5.17
+In-Reply-To: <20220426171600.2552919-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/2] package/libpri: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,6 +95,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -99,43 +103,59 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 26/04/2022 13:37, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On 26/04/2022 19:15, Fabrice Fontaine wrote:
+> pritest, rosetest and testprilib needs a static library and pridump
+> needs a dynamic library resulting in the following static build failure
+> since the addition of the package in commit
+> a77f356b78f9134227f9702a1eb09c3203c42d88:
+> 
+> /home/autobuild/autobuild/instance-15/output-1/host/bin/aarch64_be-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0  -static -fPIC -MD -MT pridump.o -MF .pridump.o.d -MP -c -o pridump.o pridump.c
+> /home/autobuild/autobuild/instance-15/output-1/host/bin/aarch64_be-buildroot-linux-uclibc-gcc -static -shared -Wl,-hlibpri.so.1.4  -o libpri.so.1.4 copy_string.o pri.o q921.o prisched.o q931.o pri_aoc.o pri_cc.o pri_facility.o asn1_primitive.o rose.o rose_address.o rose_etsi_aoc.o rose_etsi_cc.o rose_etsi_diversion.o rose_etsi_ect.o rose_etsi_mwi.o rose_other.o rose_q931.o rose_qsig_aoc.o rose_qsig_cc.o rose_qsig_ct.o rose_qsig_diversion.o rose_qsig_mwi.o rose_qsig_name.o version.o
+> /home/autobuild/autobuild/instance-15/output-1/host/lib/gcc/aarch64_be-buildroot-linux-uclibc/10.3.0/../../../../aarch64_be-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-15/output-1/host/aarch64_be-buildroot-linux-uclibc/sysroot/lib/../lib64/libc.a(__uClibc_main.os): in function `__uClibc_fini':
+> __uClibc_main.c:(.text+0xd0): undefined reference to `__fini_array_start'
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/1217922af3a72646ae242c2c4dec22ead7883b91
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  Applied to master, thanks, as well as the 7 other version bumps.
+  Applied both to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/ethtool/ethtool.hash | 2 +-
->   package/ethtool/ethtool.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   package/libpri/libpri.mk | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-> index 59c657e86..f317a1fb1 100644
-> --- a/package/ethtool/ethtool.hash
-> +++ b/package/ethtool/ethtool.hash
-> @@ -1,5 +1,5 @@
->   # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
-> -sha256  686fd6110389d49c2a120f00c3cd5dfe43debada8e021e4270d74bbe452a116d  ethtool-5.15.tar.xz
-> +sha256  64ab914b9c6b45047245d91f40b8760b2728992a9e5af22717c644238e889133  ethtool-5.17.tar.xz
->   # Locally calculated
->   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->   sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-> diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-> index c4bb9bdd9..10f0c802a 100644
-> --- a/package/ethtool/ethtool.mk
-> +++ b/package/ethtool/ethtool.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+> diff --git a/package/libpri/libpri.mk b/package/libpri/libpri.mk
+> index e1fa2abcf5..34d84393c4 100644
+> --- a/package/libpri/libpri.mk
+> +++ b/package/libpri/libpri.mk
+> @@ -17,6 +17,7 @@ LIBPRI_INSTALL_STAGING = YES
+>   # So we need to explicitly build only what we can.
+>   ifneq ($(BR2_SHARED_LIBS),y)
+>   LIBPRI_LIBS = libpri.a
+> +LIBPRI_UTILS += pritest rosetest testprilib
+>   define LIBPRI_INSTALL_A
+>   	$(INSTALL) -D -m 0644 $(@D)/libpri.a $(1)/usr/lib/libpri.a
+>   endef
+> @@ -24,14 +25,13 @@ endif
 >   
-> -ETHTOOL_VERSION = 5.15
-> +ETHTOOL_VERSION = 5.17
->   ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
->   ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
->   ETHTOOL_LICENSE = GPL-2.0
+>   ifneq ($(BR2_STATIC_LIBS),y)
+>   LIBPRI_LIBS += libpri.so.1.4
+> +LIBPRI_UTILS += pridump
+>   define LIBPRI_INSTALL_SO
+>   	$(INSTALL) -D -m 0644 $(@D)/libpri.so.1.4 $(1)/usr/lib/libpri.so.1.4
+>   	ln -sf libpri.so.1.4 $(1)/usr/lib/libpri.so
+>   endef
+>   endif
+>   
+> -LIBPRI_UTILS = pridump pritest rosetest testprilib
+> -
+>   define LIBPRI_BUILD_CMDS
+>   	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) \
+>   		CFLAGS="$(TARGET_CFLAGS) -fPIC" -C $(@D) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
