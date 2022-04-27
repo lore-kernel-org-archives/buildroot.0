@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D244DC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 18:58:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 891E2C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Apr 2022 18:58:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7767661001;
-	Wed, 27 Apr 2022 18:58:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A97283163;
+	Wed, 27 Apr 2022 18:58:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xQN0OMeWnEVq; Wed, 27 Apr 2022 18:58:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oPyd7W0YjiLN; Wed, 27 Apr 2022 18:58:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79AE661015;
-	Wed, 27 Apr 2022 18:57:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7F3851BF9B6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B1E383112;
+	Wed, 27 Apr 2022 18:58:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 99F351BF9CB
  for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:57:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C87A61015
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8587B831CB
  for <buildroot@lists.busybox.net>; Wed, 27 Apr 2022 18:57:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1-_VgLu82V9r for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id woC7tMoNtSQ9 for <buildroot@lists.busybox.net>;
  Wed, 27 Apr 2022 18:57:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C3A1460ED5
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC5A9829B6
  for <buildroot@buildroot.org>; Wed, 27 Apr 2022 18:57:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 2773584601; Wed, 27 Apr 2022 18:47:26 +0000 (UTC)
+ id 32C9784602; Wed, 27 Apr 2022 18:47:26 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 27 Apr 2022 20:50:15 +0200
+Date: Wed, 27 Apr 2022 20:50:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3cd32e0a57112ecc309092331e9836051f105ec0
-X-Git-Newrev: f6ba5e31c27fb0b908fab40c979c0f47fff5fd08
+X-Git-Oldrev: f6ba5e31c27fb0b908fab40c979c0f47fff5fd08
+X-Git-Newrev: abb1286fa02bf89be32e84ccb86a441da10147ea
 X-Patchwork-Hint: ignore
-Message-Id: <20220427184726.2773584601@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/barebox: bump version to 2022.04.0
+Message-Id: <20220427184726.32C9784602@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
+ version to 19.0.4-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,53 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6ba5e31c27fb0b908fab40c979c0f47fff5fd08
+commit: https://git.buildroot.net/buildroot/commit/?id=abb1286fa02bf89be32e84ccb86a441da10147ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index c16fea3cea..726f0f980b 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 74aefe2138..36294274f2 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  1549422ac1386929dfc1a479898d6311440d1f8bfd1bc94e1fe5da9cc2db805c  kodi-inputstream-adaptive-19.0.3-Matrix.tar.gz
++sha256  eef7660e9306854282ccc8b994ffc38b2fe1e62e155d883cfa346bddc84b595b  kodi-inputstream-adaptive-19.0.4-Matrix.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 83ac897037..ed85d21684 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2022.01.0"
-+	bool "2022.04.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2022.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2022.04.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 3d52d40beb..3a92f7fd82 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,8 +1,8 @@
- # From https://www.barebox.org/download/barebox-2021.12.0.tar.bz2.md5
--md5  753ba533ced54f4113f9e97846c13fc1  barebox-2022.01.0.tar.bz2
-+md5  e4970687cf7943eadf71b1ae6d344ff7  barebox-2022.04.0.tar.bz2
- 
- # Locally calculated
--sha256  ddf7898075bec05e4865ce0f7a2ac19c2b1efaaa0d066eba1939494e25711d28  barebox-2022.01.0.tar.bz2
-+sha256  f751b506deb0a5d82682a85cf65e329dd562e48ea057533dc5c8876120a09ebc  barebox-2022.04.0.tar.bz2
- 
- # License files, locally computed
- sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 19.0.3-Matrix
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 19.0.4-Matrix
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
