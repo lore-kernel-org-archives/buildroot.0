@@ -1,46 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E0EDC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:54:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F922C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:55:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B341C41BFE;
-	Thu, 28 Apr 2022 21:54:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BAC6A405D9;
+	Thu, 28 Apr 2022 21:55:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MI03SyuBDI1Q; Thu, 28 Apr 2022 21:53:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xk3ndZZQ67sp; Thu, 28 Apr 2022 21:55:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8799341BF4;
-	Thu, 28 Apr 2022 21:53:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE6644049A;
+	Thu, 28 Apr 2022 21:55:43 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6F6A11BF2E4
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:53:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EB1C41BF2E4
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C70860B56
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:53:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D93B960B58
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:55:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bi24zwA7R2Qu for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 21:53:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D26D260B4A
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 21:53:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A018484729; Thu, 28 Apr 2022 21:43:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 28 Apr 2022 23:53:45 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6030cea9e99d93b361e9ee42ce57859792d575cb
-X-Git-Newrev: 7badb943a8b2495cdd5034a9ca95ea73e01afab0
-X-Patchwork-Hint: ignore
-Message-Id: <20220428214335.A018484729@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
- 19.7.14-Matrix
+ with ESMTP id zijdazKYzcna for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 21:55:41 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D167E60B4A
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 21:55:40 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A30CD240002;
+ Thu, 28 Apr 2022 21:55:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1651182938;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6Sb5GPOUGjFhCcUF620mBxNxRMLhxJ2O4Bn/Pdv5Usw=;
+ b=PPG1m7HRQR1ZVpnG8q7wkVmtLEORbSNF6N3ClV3kgiOq0jndGDLYzxTrbc4ZARjZ2NQ8ai
+ TLePNAnDkpd21HmrUhpM57fFJLfMlZVzbuuy9+iTLO+yqASVYtIfKeCInGJn+lzuxhpwrf
+ zSYyu6au57qTJAE2QD3XX7gN0m2Te09S/HR5/3FqswaNEaVe1aXBqvzPVkFuRO9o8dpuJI
+ HgfDCs1oGGS1jirmosgqeVuLJWUg130E1o9t2Qs/92yovGdri1OP0UpOSi81OnQpJBmIbq
+ GPnXM9cIUaxD2h4yA/SXc6si4HGOT1zxdq2o8UL2g+prDICj3wL+2Py6Bh4Y1g==
+Date: Thu, 28 Apr 2022 23:55:36 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20220428235536.73948423@windsurf>
+In-Reply-To: <20220428215003.GG3624965@scaer>
+References: <20220428212011.534725-1-thomas.petazzoni@bootlin.com>
+ <20220428215003.GG3624965@scaer>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] Revert "toolchain/toolchain-external: error
+ if BR2_TOOLCHAIN_EXTERNAL_PATH is not set"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,44 +73,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Kristof Havasi <havasiefr@gmail.com>, Buildroot List <buildroot@buildroot.org>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7badb943a8b2495cdd5034a9ca95ea73e01afab0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 28 Apr 2022 23:50:03 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> On 2022-04-28 23:20 +0200, Thomas Petazzoni via buildroot spake thusly:
+> > This reverts commit 8945ba49480a7885d104445ca855ef7681a374ff.  
+> 
+> This is a commit on the 2022.02.x branch; it is a backport of
+> 8e91385a2cb81c5f8114354f4494230e2aebb93a on master.
+> 
+> Did you meant this patch to be applied only to 2022.02.x?
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index 4f9a60e942..d7693bdfb0 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  64fbbb6c816993b39d35fa000e76b9cb1846ae8ae580e807da943f51e4a3afd7  kodi-pvr-zattoo-19.7.13-Matrix.tar.gz
-+sha256  ccd27cfbfee58df9acc71df0661bd56ff34fbf7d9afc8de78d3224d33b30ef44  kodi-pvr-zattoo-19.7.14-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index f2badeaa05..658db25f27 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_ZATTOO_VERSION = 19.7.13-Matrix
-+KODI_PVR_ZATTOO_VERSION = 19.7.14-Matrix
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
+No.
+
+> I would believe it should be applied to master and backported to 2022.02
+> instead, no?
+
+Yes, absolutely. I referred to 8e91385a2cb81c5f8114354f4494230e2aebb93a
+because that's what the bug reporter pointed to as the offending
+commit, as the bug report is on the 2022.02.x branch.
+
+Though I agree the commit log should probably refer to the commit in
+master. I can send a v2 if needed.
+
+Thanks for the review!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
