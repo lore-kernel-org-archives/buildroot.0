@@ -1,56 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FDAFC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 07:39:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6915C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 07:40:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B583827AA;
-	Thu, 28 Apr 2022 07:39:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5FF6440441;
+	Thu, 28 Apr 2022 07:40:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V_pzQAz8QQB6; Thu, 28 Apr 2022 07:39:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SYdfE_rKbbj9; Thu, 28 Apr 2022 07:40:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8823A82784;
-	Thu, 28 Apr 2022 07:39:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9BC551BF333
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 07:39:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C15740494;
+	Thu, 28 Apr 2022 07:40:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A2581BF333
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 07:40:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89485416D3
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 07:39:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 77FBA8278F
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 07:40:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IeDYohPeCHCt for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 07:39:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sDZA4DWiHxKb for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 07:40:36 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EE53441684
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 07:39:21 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4069381453
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 07:40:35 +0000 (UTC)
 Received: (Authenticated sender: thomas.perrot@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D91FF40008;
- Thu, 28 Apr 2022 07:39:18 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id B5A441BF208;
+ Thu, 28 Apr 2022 07:40:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1651131559;
+ t=1651131633;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
  bh=+p3Y1aoCrW5dPIcU6BmLtP2otlDjJSfQ9n9saS1qRp4=;
- b=AcYsPm9CKXKuZYwz8W4m76loa+mUjIhzBBrLkkYXFhXew0nM/J6HR63xQ2kGegTaD7ekyw
- u44rkNizc4EDJvp45C+4rPBDZKywVKlp8jg0Da8YKW46ie312iv51Xif0h6piEqghIfpxd
- CVRHbFus/Eyl7A9kRz0UYezvAo0dl7JAb9pt0yLsmuiqXq3ZyexIy5K9+V+NueRFzKkFzs
- dPiPaEWZvp86mP2zB/eFctCQJ/M88t8gf5czWUNRVbcq/1idiw2Ptr6nw9Pz+wVimhrUyT
- WKIiVB02h1EuVR+2keF1Zzit+tLMHVS6MNFp0ogFLqCclOIalK3QgpYXTMo5gw==
+ b=pMntldixvu5UqzeMnVCyfwr32pSKaJJzqZv+QTydS0y7l2SUvejpgTVgnWQrp7igv/bW80
+ ZMep4gAvfjui7cIu53Y1CSvSYoF9RGGSHVdqtqJ3KuZh4OlZFYoFXBEkZlow73JoN09bBS
+ spt+JKwnKXW/d/0z+VgGQdFUxlzrjqffWzSZ+K3aO8hGFw+WrdEfcVAvcvrwlxvsFJZypb
+ vVgUgYUDkqWCnHJyVTj4Vi79dbk+T+G/zpnQKlOS4mFkgtlE4x2BISBYJSgzi9p96MHIVw
+ fJG/Zy7SFsjmgelT3S9Aep0P7tvWLR2aaUxHa/FmePVZD/R7HyvzX4iCsYZskQ==
 To: buildroot@buildroot.org
-Date: Thu, 28 Apr 2022 09:39:14 +0200
-Message-Id: <20220428073915.3991220-1-thomas.perrot@bootlin.com>
+Date: Thu, 28 Apr 2022 09:40:18 +0200
+Message-Id: <20220428074018.3993608-1-thomas.perrot@bootlin.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Subject: [Buildroot] [PATCH v2] package/imx-mkimage: install print_fit_hab.sh
