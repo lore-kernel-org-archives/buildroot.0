@@ -1,64 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF591C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:35:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1969CC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:38:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 950F741BF0;
-	Thu, 28 Apr 2022 21:35:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0D3E83F28;
+	Thu, 28 Apr 2022 21:38:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GkWcud4CNGTu; Thu, 28 Apr 2022 21:35:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB81541BE9;
-	Thu, 28 Apr 2022 21:35:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6A7351BF2E4
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:35:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 675F083E82
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:35:48 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SSlk1qA0acD0 for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 21:35:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2BEC283E81
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 21:35:46 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 60A7EE0005;
- Thu, 28 Apr 2022 21:35:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1651181745;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=W0K8UKl70ZmPsb1N/9ZgzBkLLWMd5713NehxtusH4a8=;
- b=lCCvHoZH6/sbF3P6Z/MJeSPp5HE0Q2evIT0y0MP42hfc6GPBPE3wGcsZ5II2tzQ6gHaWDb
- aX/ebROkh4AScyorlNuRJQ+eTwqNHhXxCAIP+NJgq3e1vjppI3F+PZEvIwDxQhm6Sf5R6J
- egn+Z62Z+C7Z5S7LvedSPlLMlWnlBYDUoSoaM2qasla9RFEzlWYdIY9uRDBVXdnZCVONH3
- ghKZHZdiyzqpFp+rPwD9OE7vbwz4NPGuF8b1Ff1Pjj6vlBLZz/HA3ZF8fuIBVOIvx/5t8h
- vIVG64ObT5T+LgLAY6T9uL+9KsBZ88qPrhS2ScNIx+PzKX8mqj8bsxwiMSfswg==
-Date: Thu, 28 Apr 2022 23:35:44 +0200
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20220428233544.58ad8a57@windsurf>
-In-Reply-To: <20220428211355.3933644-1-bernd.kuhls@t-online.de>
-References: <20220428211355.3933644-1-bernd.kuhls@t-online.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/stellarium: bump version to
- 0.22.1
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YRznU-ZzR4F8; Thu, 28 Apr 2022 21:38:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0E3C83F25;
+	Thu, 28 Apr 2022 21:38:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A89E41BF2E4
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:38:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5B1660D50
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:38:17 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E1Y3JJK9vuFh for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 21:38:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 07EFC60B56
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 21:38:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id D454A846E9; Thu, 28 Apr 2022 21:27:55 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 28 Apr 2022 23:36:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2b985fb8a0ddeb2e3c8351bd7c1a5a5326ac6dfd
+X-Git-Newrev: 6d97f3e2e64707d9d4589fdf5dae8252143dc31f
+X-Patchwork-Hint: ignore
+Message-Id: <20220428212755.D454A846E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php: bump version to 8.0.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,35 +53,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 28 Apr 2022 23:13:55 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6d97f3e2e64707d9d4589fdf5dae8252143dc31f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Release notes:
-> http://stellarium.org/release/2022/04/16/stellarium-0.22.1.html
-> 
-> Removed backported patch.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...uilding-Stellarium-without-scripting.patch | 49 -------------------
->  package/stellarium/stellarium.hash            |  4 +-
->  package/stellarium/stellarium.mk              |  2 +-
->  3 files changed, 3 insertions(+), 52 deletions(-)
->  delete mode 100644 package/stellarium/0001-Fixed-building-Stellarium-without-scripting.patch
+Changelog: https://www.php.net/ChangeLog-8.php#8.0.18
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 3d73e60f90..76501c0fdd 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  4e7d94bb3d144412cb8b2adeb599fb1c6c1d7b357b0d0d0478dc5ef53532ebc5  php-8.0.17.tar.xz
++sha256  db161652cacae4b31c347fbf2e17b80656473cb365f2bb3460c4552f5647e2e7  php-8.0.18.tar.xz
+ 
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 6454d6fe87..adfbf3cad2 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.0.17
++PHP_VERSION = 8.0.18
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
