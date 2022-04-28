@@ -1,79 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6365FC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 19:45:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70640C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 19:53:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 029474048C;
-	Thu, 28 Apr 2022 19:45:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BAD441BC4;
+	Thu, 28 Apr 2022 19:53:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YDqdBLX0h6fa; Thu, 28 Apr 2022 19:45:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mhNbS_H3FnWh; Thu, 28 Apr 2022 19:52:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 10F7D4017E;
-	Thu, 28 Apr 2022 19:45:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AC19A1BF3AD
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 19:45:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D76C741BB8;
+	Thu, 28 Apr 2022 19:52:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CC5271BF3AD
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 19:52:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99F9E4017E
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 19:45:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C8C3641BB8
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 19:52:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uqXmrhmFPVT9 for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 19:45:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E_ni_8XwmKkZ for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 19:52:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
- [IPv6:2607:f8b0:4864:20::132])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B03AF400E3
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 19:45:48 +0000 (UTC)
-Received: by mail-il1-x132.google.com with SMTP id t4so2667644ilo.12
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 12:45:48 -0700 (PDT)
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
+ [IPv6:2607:f8b0:4864:20::d29])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7703741B7B
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 19:52:51 +0000 (UTC)
+Received: by mail-io1-xd29.google.com with SMTP id e3so3882389ios.6
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 12:52:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=wWvjVErNZv7DMzAnOTPH+d4e+ncVXrRpFLt8vLRom6s=;
- b=RH57DD6vJNuN8YZYG3R9mmKkFCD3t2rzuWwOpbzcF1CriGITubssldrEon9AR2ISUH
- CvtDa08XqfJ6SNAEQ543aeucwpIX+60hvx8QhhkI0mP0SR7K14AMpSwpiZzRI7GjJ8lk
- g0fkborjtWn91xDnxU2oj0TslT1SLER2Ly+/l2Yic1bMIT71E0J4Qg5TVl7aLsmh/ouY
- S4Z4Y9m5vDwITd+YEi2RkO2HOVMm17LCIkGX033K888e2YrYc/W66uR2xpcoQvkT+ehp
- FtbxCaYSRZuHDGyK+vx/SgYRkx+9Qa60Mp3UDXuXI+GR+xnW/QU+QsgcciQZvMB019l3
- u1aA==
+ bh=o4T0Gwr8zf7aIrM1Yusvsw+VLhdPL+U705re3DNjW78=;
+ b=f+VahWABy4+ka2D/NCZde99o3hTZDiTh3bR1fj0h9Lso+mVivrbwFyL6Ctr+S3rZt1
+ 0TjAwNfNFzhJaOJJacKh1OhylwS/mOLvsyQ0kA2IxusUpg16eOTNBsMUj6tfMq/ugIp9
+ 5BC2x9HDbBaR2BzbL6FqoKGwcTTzjIQ7YWpVQHWZbZBSQXWNFpclF2n01Y8h+SV51dyZ
+ P1LzOd6TuKh7IS77OjR0igaDT80Dt/b3BdNEMeIQGxJR+tzs7sshlM4SgqXbRJVwXBHq
+ wV2UD/bPLlLg/mLiaosJMZ+ePZXSHTiLxgxz0NklgbQaqFepCmiUAJMAbNNGkKE3Sdck
+ zjQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=wWvjVErNZv7DMzAnOTPH+d4e+ncVXrRpFLt8vLRom6s=;
- b=ZCiTFnNvGtS09tlKd6RjCsNCfWR4w2gFMRtLsWydgAjDxPkv3tXte6WOxe2mT7EtsK
- k1SR+8yq1Evltg0GmvkaoqIY1emWnPCxYVjB8KlmaC2ekwceDZOZpRw64rUe619JRwGr
- 2b3368XWFQmS0Pu/mRZg0rWqJ7g3giByKsM176g8RI6Pcy7a7hG181MAz7YGW3hH+6to
- HN99hN+AHpsCBK1ffWoesbIwz/w+jxzFneDZ3Op6pA7dU6/KOgvcRyNQ5IN2gSvzotYd
- HUTavHKMSMYfLRKWjLd4yujqJnUSJgOfWh+26GRETtppsABj8R0xUH/neWTfg/Iso+Kl
- n8aQ==
-X-Gm-Message-State: AOAM5304t0mNNRM7K+yUKBzO20UtA0TfnlgVthLVx45AGCZesUQmeLp1
- 9d2NEMEJecFLAn0s9sdBV+ZX4XQB9DA=
-X-Google-Smtp-Source: ABdhPJxjZ2gBUrk7LwweAFNIxJG0aD983AVbZm3t5ljhZZnorZARiwRwayUQMq/X+m77iv+UBqxwxg==
-X-Received: by 2002:a05:6e02:80b:b0:2cd:b428:e665 with SMTP id
- u11-20020a056e02080b00b002cdb428e665mr6696176ilm.197.1651175147519; 
- Thu, 28 Apr 2022 12:45:47 -0700 (PDT)
+ bh=o4T0Gwr8zf7aIrM1Yusvsw+VLhdPL+U705re3DNjW78=;
+ b=ntzC+yc0utXtQBbm8Lk7+A17EWBNKW+pE0Y8HcjCQX+8fsm5oezHdAfF57I7GgqFcf
+ 7p9BMP/uNJSNVUhAPuPq7yhgCNCcrazeIPRmNRE+BaLgU2wuCeIIeBHFQMZUG/Qtcd1z
+ ISmm6PtDhzybaUsCOtcD7IKJgUnXMWxZo1ikfqpTvjo+/y8n/8EFCbAbnEdITi0JP5kW
+ qjDIm4JDhAmGKv615CpTwQgvFkVkJAtcqKcQb0EfZAFWYkXC88bok6bigBrzGol/a00y
+ DXCS9Z5tdxkCHjDGBxint6gCcaLT59SLDy4lRr/sWbvcUAu8Z8PaBJotYJTE1MotAPjp
+ ++ow==
+X-Gm-Message-State: AOAM5318feOBn53O8pLD2wQu2NHBGEfOOoO9CnrQ/S2H7JXQPSOqvZ/D
+ gAl2FNAWrEfXODoCvOfQjdJ+jg2rrAg=
+X-Google-Smtp-Source: ABdhPJxtXBVh3YowfEqHyUUTRIp+/uc2wbxNmsFyqq4cKWKj1VOaqwSaYn1L9+eYcctsvRLFPJ+/Tg==
+X-Received: by 2002:a6b:f403:0:b0:657:880c:f351 with SMTP id
+ i3-20020a6bf403000000b00657880cf351mr8674694iog.131.1651175570302; 
+ Thu, 28 Apr 2022 12:52:50 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
  [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- y4-20020a92d0c4000000b002cd8a7db5f5sm451282ila.11.2022.04.28.12.45.46
+ i9-20020a056e02054900b002cc1959aa6fsm412006ils.87.2022.04.28.12.52.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 28 Apr 2022 12:45:47 -0700 (PDT)
+ Thu, 28 Apr 2022 12:52:49 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Apr 2022 13:45:45 -0600
-Message-Id: <20220428194545.776652-1-james.hilliard1@gmail.com>
+Date: Thu, 28 Apr 2022 13:52:48 -0600
+Message-Id: <20220428195248.782790-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-simplejson: bump to version
- 3.17.6
+Subject: [Buildroot] [PATCH 1/1] package/python-typing-extensions: bump to
+ version 4.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,47 +85,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This package now requires the flit setup type.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-simplejson/python-simplejson.hash | 4 ++--
- package/python-simplejson/python-simplejson.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../python-typing-extensions/python-typing-extensions.hash  | 4 ++--
+ .../python-typing-extensions/python-typing-extensions.mk    | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
-index bb44bdfc79..0f56d4c6cc 100644
---- a/package/python-simplejson/python-simplejson.hash
-+++ b/package/python-simplejson/python-simplejson.hash
+diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
+index abaac77d34..f37a609adc 100644
+--- a/package/python-typing-extensions/python-typing-extensions.hash
++++ b/package/python-typing-extensions/python-typing-extensions.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/simplejson/json
--md5  1756427859454004e90e028d263cf23e  simplejson-3.17.5.tar.gz
--sha256  91cfb43fb91ff6d1e4258be04eee84b51a4ef40a28d899679b9ea2556322fb50  simplejson-3.17.5.tar.gz
-+md5  0b8f47c9451bf101a791f8b5bccf1f33  simplejson-3.17.6.tar.gz
-+sha256  cf98038d2abf63a1ada5730e91e84c642ba6c225b0198c3684151b1f80c5f8a6  simplejson-3.17.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/typing_extensions/json
+-md5  ed80ecc8eac5cb15840535ca54eb43f3  typing_extensions-3.10.0.2.tar.gz
+-sha256  49f75d16ff11f1cd258e1b988ccff82a3ca5570217d7ad8c5f48205dd99a677e  typing_extensions-3.10.0.2.tar.gz
++md5  197fb153e3720a3f6e0c85bb47f9c2b5  typing_extensions-4.2.0.tar.gz
++sha256  f1c24655a0da0d1b67f07e17a5e6b2a105894e6824b92096378bb3668ef02376  typing_extensions-4.2.0.tar.gz
  # Locally computed sha256 checksums
- sha256  fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
-diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
-index 5bed8d20a9..52bff7569c 100644
---- a/package/python-simplejson/python-simplejson.mk
-+++ b/package/python-simplejson/python-simplejson.mk
-@@ -4,9 +4,9 @@
+ sha256  ff17ce94e102024deb68773eb1cc74ca76da4e658f373531f0ac22d68a6bb1ad  LICENSE
+diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
+index 668071e025..a664e5d3e9 100644
+--- a/package/python-typing-extensions/python-typing-extensions.mk
++++ b/package/python-typing-extensions/python-typing-extensions.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_SIMPLEJSON_VERSION = 3.17.5
-+PYTHON_SIMPLEJSON_VERSION = 3.17.6
- PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
--PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/01/52/41c71718f941c9a5abebfaa24e3c14e3c0229327b7ebd21348989845ed8f
-+PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/7a/47/c7cc3d4ed15f09917838a2fb4e1759eafb6d2f37ebf7043af984d8b36cf7
- PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
- PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
- PYTHON_SIMPLEJSON_CPE_ID_VENDOR = simplejson_project
+-PYTHON_TYPING_EXTENSIONS_VERSION = 3.10.0.2
++PYTHON_TYPING_EXTENSIONS_VERSION = 4.2.0
+ PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
+-PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/ed/12/c5079a15cf5c01d7f4252b473b00f7e68ee711be605b9f001528f0298b98
+-PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = setuptools
++PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/fe/71/1df93bd59163c8084d812d166c907639646e8aac72886d563851b966bf18
++PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = flit
+ PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
+ PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
+ 
 -- 
 2.25.1
 
