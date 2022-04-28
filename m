@@ -4,52 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D94CC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 20:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3925C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 20:16:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 947F96118B;
-	Thu, 28 Apr 2022 20:15:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C11F605DB;
+	Thu, 28 Apr 2022 20:16:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kZan2wNTf3Fs; Thu, 28 Apr 2022 20:15:46 +0000 (UTC)
+	with ESMTP id gGIlQxEd9LCg; Thu, 28 Apr 2022 20:16:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D96461189;
-	Thu, 28 Apr 2022 20:15:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 42E7D1BF36D
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 20:15:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADAA861189;
+	Thu, 28 Apr 2022 20:16:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 344F51BF36D
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 20:16:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3FB7B83EF7
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 20:15:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 22C0641BD6
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 20:16:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BLT8FlWuCjg1 for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 20:15:43 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 14E1183EF0
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 20:15:42 +0000 (UTC)
-Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
- by mailout11.t-online.de (Postfix) with SMTP id 10B81214F1;
- Thu, 28 Apr 2022 22:15:40 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.204.173]) by fwd78.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nkAY6-11uUkr0; Thu, 28 Apr 2022 22:15:38 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55360)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nkAY6-0007Ri-AO;
- Thu, 28 Apr 2022 22:15:38 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uYZdkV1BCFbi for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 20:16:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E7E7041BD5
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 20:16:22 +0000 (UTC)
+Received: by mail-il1-x135.google.com with SMTP id y11so2713471ilp.4
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 13:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=U+p9COgGZnYEOg7op2h2Ojnh7Za94NAqq1KaUni6oes=;
+ b=Vj6keSizpykKpxCO6sQjQt/7qub7bWWQQAOilzSdD1o4HcPPUKdFX9fa8zk05hWCqV
+ w+CmxAUO93yGg6IYt6lgl5+YDL3/P+lKxxFKxzuSXU5izUhTdaxlcyMRMjMU8IMl+x7N
+ rFVa8uIgyRU1IXCXKPOefJq3lHZUPgto/eISTIs6Fj3y3PdKTUQVQtnYHi33Hbe5DVUC
+ hdbQhCDCKlQ7S/18MZ9ddrVJjOr21K6vrSS2qRo91wO6869OYl+J76H2lYzsJaNB+HK6
+ oqegboEYPpcP9i93/oVlL3Loy4xoQM0LGLIWj7aUwYaOExQehaIiIy05cDFJVMmol9Ll
+ olbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=U+p9COgGZnYEOg7op2h2Ojnh7Za94NAqq1KaUni6oes=;
+ b=7Gp9pAD2udY46+9cZnbQnzcozfBONjHWJjd7frE/WxdPBjCLH18AsZxs/KNJffuVld
+ 87uOo+dInz+C2ZvbravI5rFHQzWM4/tKK1J238TYOSI0/uETXGttlTx455dzICLmp9nh
+ 1N7bMWAtZCZUzgzPWZ9EDx6k2jxFsR9AHdwTAWVEDSAQ4g2ZguBHNHiqp6WcbV1EEhIz
+ ocsQ1v4H1u2srAujzheKWLZOXqgJ6ADwMdbGJV2/sGmRUxZDpED+e2aHZuvmSUiXysa+
+ zThl7jx/6hjd0+4wE7jeOKjEpOZ8X1jqIl7URF/9jMhq6O5/E6+3jGVU/HNPEf/pgCL8
+ beqA==
+X-Gm-Message-State: AOAM532BXPAbctuXpvXrQMT6NdqX2f8Zx4rpIW+WrGuiu6jliTszf6Lh
+ LHDyB8UaDP/3R2Jr0S/xIjHEYbew6e8=
+X-Google-Smtp-Source: ABdhPJwKchqofh2C8y035FCgkTwBHP3wHdP07iXQeqEoMu4aPX/MkZfpylCCPYM7LrmC3UYIdsvfIA==
+X-Received: by 2002:a05:6e02:1a4c:b0:2cd:8b45:a4cb with SMTP id
+ u12-20020a056e021a4c00b002cd8b45a4cbmr10019449ilv.186.1651176981401; 
+ Thu, 28 Apr 2022 13:16:21 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
+ [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
+ i3-20020a056602134300b0064620a85b6dsm638176iov.12.2022.04.28.13.16.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 28 Apr 2022 13:16:20 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Apr 2022 22:15:38 +0200
-Message-Id: <20220428201538.3150261-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Thu, 28 Apr 2022 14:16:19 -0600
+Message-Id: <20220428201619.792756-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1651176938-0000AD4E-034FBD9A/0/0 CLEAN NORMAL
-X-TOI-MSGID: 225cacf4-4142-4095-890d-2c262fd021c2
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump verson to 4.4.2
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to version
+ 22.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,47 +87,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Cc: Mauro Condarelli <mc5686@mclink.it>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;hb=refs/heads/release/4.4
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index abb397f872..8669a060d0 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 7b963df635..cc68f822a3 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  eadbad9e9ab30b25f5520fbfde99fae4a92a1ae3c0257a8d68569a4651e30e02  ffmpeg-4.4.1.tar.xz
-+sha256  af419a7f88adbc56c758ab19b4c708afbcae15ef09606b82b855291f6a6faa93  ffmpeg-4.4.2.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 5a79faed47..82d229903f 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5  9b0ae4ff164232c952ba01ab3516188e  autobahn-22.1.1.tar.gz
+-sha256  17e1b58b6ae1a63ca7d926b1d71bb9e4fd6b9ac9a1a2277d8ee40e0b61f54746  autobahn-22.1.1.tar.gz
++md5  b0b5e10bfea95f32900708be705efcf0  autobahn-22.3.2.tar.gz
++sha256  58a887c7a196bb08d8b6624cb3695f493a9e5c9f00fd350d8d6f829b47ff9036  autobahn-22.3.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index df43e9cdf2..37256ec8f6 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 4.4.1
-+FFMPEG_VERSION = 4.4.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-PYTHON_AUTOBAHN_VERSION = 22.1.1
++PYTHON_AUTOBAHN_VERSION = 22.3.2
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/0e/2a/0b627ad4adf70437b5753462958b3ba5c6802d7664eb4a680e46423659ba
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/e9/a7/4dea20063b78eb50a54182494ae634cffc0ed6208bf775771f374a9fb8bc
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_CPE_ID_VENDOR = crossbar
 -- 
-2.30.2
+2.25.1
 
 _______________________________________________
 buildroot mailing list
