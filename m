@@ -1,66 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09F11C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 22:05:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B938C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 22:06:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A55DF83EDD;
-	Thu, 28 Apr 2022 22:05:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E37EA61197;
+	Thu, 28 Apr 2022 22:06:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YXp1q7UIxxjh; Thu, 28 Apr 2022 22:05:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c-TnrTnio8Pz; Thu, 28 Apr 2022 22:06:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1C0883403;
-	Thu, 28 Apr 2022 22:04:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5E4BB1BF2B9
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 22:04:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C681660B5C;
+	Thu, 28 Apr 2022 22:06:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A5BEB1BF2B9
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 22:06:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5AA2C4049A
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 22:04:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 945C383403
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 22:06:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iTDSh8DfXxyR for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 22:04:57 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7E5GKhsF-Kwm for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 22:06:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4D78140004
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 22:04:57 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:dcb4:7861:786a:5693])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 1CDAB19F576;
- Fri, 29 Apr 2022 00:04:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1651183495;
- bh=2JcxswlKRr1q5ZIsqsRQZuFsuPgs5uq8iO55MjYPIJ0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=p6iWIkd5+yNX6Xhud0Fkc5D9DOpKjDPNeAzy6TKh70djxhubLQuEOUg9Z9abEwebe
- Is1Zd4/LuLU7trgqWZMD4F+Gix0jyg0R4eXBUYa7dc9BFjjRgj0Tu9zg76K1fIjk/n
- +dgItxA7WjYKDV7IrCN4ATF2gwcnMZH+liks+puI9cCf0QLiw1xa+rc6fxjWBOTwgP
- KEQT1F5Fv9iNtmVDnrlJrizQYfhJB9IwHoqeDcu+G1qcuLpL0LfPxgfl2HXK8bz2RW
- TexWrxMh4PepLZvZS46JhYRAG4YGJ9K0pFTKgjYdcoJW0mgfWlNS6alAyRw9g2myTI
- 9tDWTwwi7odSw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 29 Apr 2022 00:04:45 +0200
-Date: Fri, 29 Apr 2022 00:04:45 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220428220445.GJ3624965@scaer>
-References: <20220428212011.534725-1-thomas.petazzoni@bootlin.com>
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 781138333E
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 22:06:02 +0000 (UTC)
+Received: by mail-io1-xd36.google.com with SMTP id e194so7933889iof.11
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 15:06:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=1iXhksOFIzYnyZc+5BegXtZ7sT71H8Q/rTD+0bSBKOA=;
+ b=EoBZoJkfyPHs7bWXM5+qR0sLHu1WYuXxITZGPl+8ZvILGGuWIgFEwpZvbJoIWc+qsF
+ QQJTLLzmu/CDqkzuVm/+2qQ3ymB5V0YEVG4ccaHmg/v11N4wCEnRr0ViXhvES8Kgqmbj
+ fflcLR6I9EifC4Qcj53gBXPVxH1+FyJwLm/rli/bDaH7Rqxfh4xzpl+WBLLL13y2NxAt
+ Nf54K2QKlfcu5y19x54zY/USGOPP36SpjhbmScPieH8yXOeboIAKYbtnhBG4yWCv3po+
+ 5K5nWicSvLrGsekHkU5rFApkAlhXFP9/DQJxP7CwP59Wg+C2O/X4VVBuMSRPPii262ex
+ dUPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=1iXhksOFIzYnyZc+5BegXtZ7sT71H8Q/rTD+0bSBKOA=;
+ b=Ee25txJnut94GoWWTyr4HiSJ6iF14r4x7ihxKfD9g1hCUJV/WteE6qFHdrUpHyFst6
+ GO1u4K6Un1brjLBsfQs8JKihDQnH1pVHVlVP4JkRnUr0mE03VyI0TZZKOp4F6CA2wJzT
+ XKzQmRa7mZA/uRFz/WdDA0PCKYtzElCiwn2oyKPhc3tZZ7l6PDuQndKyVNDmgudzJ7j5
+ xqAHb+P2aETjil9JmmU6RDHKoaf7ld4C7WIe2yN5rldwIfNQDZiHc9cfWz79+xWCIIRp
+ washd0ZtEKfuDhCq4p2CTel4RpjL7nfZAHluBvLENlMgL9E/9HWHjlR9fxDBF8hAluXG
+ Gtxw==
+X-Gm-Message-State: AOAM531OhwLMPfnXabujsjM1mc4NWQUczz6V/pQMfg9a783qUrRhjz0M
+ Bujehcp2lyZK0qL8ywppQIf6rg2GEqw=
+X-Google-Smtp-Source: ABdhPJwZ+LudL40Ffur2siISdGEP8bBY/CTHecI8UpEMXd1+zw7XkKkOxGkBmXHIimJtKY4QbWSFvg==
+X-Received: by 2002:a05:6602:194:b0:64f:caa4:f9e0 with SMTP id
+ m20-20020a056602019400b0064fcaa4f9e0mr14953719ioo.1.1651183561399; 
+ Thu, 28 Apr 2022 15:06:01 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
+ [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
+ 123-20020a6b1581000000b00657b48baeb8sm635769iov.41.2022.04.28.15.06.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 28 Apr 2022 15:06:00 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 28 Apr 2022 16:05:57 -0600
+Message-Id: <20220428220559.1236052-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220428212011.534725-1-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] Revert "toolchain/toolchain-external: error
- if BR2_TOOLCHAIN_EXTERNAL_PATH is not set"
+Subject: [Buildroot] [PATCH 1/3] package/pkg-python: deduplicate common
+ env/opts variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,91 +87,189 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Kristof Havasi <havasiefr@gmail.com>, Buildroot List <buildroot@buildroot.org>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+There are many varibles shared via setuptools, distutils and pep517,
+combine those common env/opts variables to make them easier to
+maintain.
 
-On 2022-04-28 23:20 +0200, Thomas Petazzoni via buildroot spake thusly:
-> This reverts commit 8945ba49480a7885d104445ca855ef7681a374ff.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/pkg-python.mk | 95 +++++++++++++++++++------------------------
+ 1 file changed, 42 insertions(+), 53 deletions(-)
 
-I've changes this to the corresponding sha1 on master.
-
-> This commit is incorrect, as it is perfectly valid for
-> BR2_TOOLCHAIN_EXTERNAL_PATH to be empty. The help text of
-> BR2_TOOLCHAIN_EXTERNAL_PATH even documents it as a supported case:
-> 
->           If empty, the compiler will be searched in $PATH.
-> 
-> Commit 392b0a26f5fd8d3aedce7e0c15f9762a79312f01 ("toolchain-external:
-> default BR2_TOOLCHAIN_EXTERNAL_PATH to empty") even made that the
-> default saying "In addition, it in fact works correctly when it is
-> empty. In that case, the toolchain will be searched in PATH."
-> 
-> A user has reported that commit
-> 8945ba49480a7885d104445ca855ef7681a374ff breaks his use-case:
-
-And here I kept that hash and added a comment that it's a backpor of the
-commit on master.
-
->   https://lore.kernel.org/buildroot/CADBnMvhgaozAgZgy3njckjL1i0U6bZ0fLrq-kdFF-qpGhFWgmw@mail.gmail.com/
-> 
-> Reported-by: Kristof Havasi <havasiefr@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Applied to master, thanks.
-
-> ---
-> This should be backported to 2022.02.x
-
-Ah, I missed that post-cpmmit-log mesage earlier.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  toolchain/toolchain-external/pkg-toolchain-external.mk | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index c7f4175c9e..299b6008aa 100644
-> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -69,12 +69,7 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
->  TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
->  else
->  TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(abspath $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH)))
-> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL)$(BR_BUILDING),yy)
-> -ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
-> -$(error No external toolchain path set, check your BR2_TOOLCHAIN_EXTERNAL_PATH setting)
-> -endif
->  endif
-> -endif # BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
->  
->  ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
->  ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index e9de5cb8d3..852ab25619 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -33,78 +33,76 @@ PKG_PYTHON_HOST_PLATFORM = linux-$(PKG_PYTHON_ARCH)
+ PKG_PYTHON_SYSCONFIGDATA_PATH = $(PYTHON3_PATH)/_sysconfigdata__linux_*.py
+ PKG_PYTHON_SYSCONFIGDATA_NAME = `{ [ -e $(PKG_PYTHON_SYSCONFIGDATA_PATH) ] && basename $(PKG_PYTHON_SYSCONFIGDATA_PATH) .py; } || true`
+ 
+-# Target distutils-based packages
+-PKG_PYTHON_DISTUTILS_ENV = \
++# Target python packages
++PKG_PYTHON_ENV = \
++	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
++	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
++	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+ 	PATH=$(BR_PATH) \
+ 	$(TARGET_CONFIGURE_OPTS) \
+-	LDSHARED="$(TARGET_CROSS)gcc -shared" \
+ 	PYTHONPATH="$(PYTHON3_PATH)" \
+ 	PYTHONNOUSERSITE=1 \
+-	SETUPTOOLS_USE_DISTUTILS=stdlib \
+-	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+-	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+-	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+ 	_python_sysroot=$(STAGING_DIR) \
+ 	_python_prefix=/usr \
+ 	_python_exec_prefix=/usr
+ 
++# Host python packages
++HOST_PKG_PYTHON_ENV = \
++	PATH=$(BR_PATH) \
++	PYTHONNOUSERSITE=1 \
++	$(HOST_CONFIGURE_OPTS)
++
++# Target distutils-based packages
++PKG_PYTHON_DISTUTILS_ENV = \
++	$(PKG_PYTHON_ENV) \
++	SETUPTOOLS_USE_DISTUTILS=stdlib \
++
+ PKG_PYTHON_DISTUTILS_BUILD_OPTS = \
+ 	--executable=/usr/bin/python
+ 
+-PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
++PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+ 	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+-	--prefix=/usr \
++	--prefix=/usr
++
++PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
++	$(PKG_PYTHON_DISTUTILS_INSTALL_OPTS) \
+ 	--root=$(TARGET_DIR)
+ 
+ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
+-	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+-	--prefix=/usr \
++	$(PKG_PYTHON_DISTUTILS_INSTALL_OPTS) \
+ 	--root=$(STAGING_DIR)
+ 
+ # Host distutils-based packages
+ HOST_PKG_PYTHON_DISTUTILS_ENV = \
+-	PATH=$(BR_PATH) \
+-	PYTHONNOUSERSITE=1 \
+-	SETUPTOOLS_USE_DISTUTILS=stdlib \
+-	$(HOST_CONFIGURE_OPTS)
++	$(HOST_PKG_PYTHON_ENV) \
++	SETUPTOOLS_USE_DISTUTILS=stdlib
+ 
+ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+ 	--prefix=$(HOST_DIR)
+ 
+ # Target setuptools-based packages
+ PKG_PYTHON_SETUPTOOLS_ENV = \
+-	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+-	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+-	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+-	PATH=$(BR_PATH) \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	PYTHONPATH="$(PYTHON3_PATH)" \
+-	PYTHONNOUSERSITE=1 \
+-	SETUPTOOLS_USE_DISTUTILS=stdlib \
+-	_python_sysroot=$(STAGING_DIR) \
+-	_python_prefix=/usr \
+-	_python_exec_prefix=/usr
++	$(PKG_PYTHON_ENV) \
++	SETUPTOOLS_USE_DISTUTILS=stdlib
+ 
+-PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
++PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 	--prefix=/usr \
+ 	--executable=/usr/bin/python \
+-	--single-version-externally-managed \
++	--single-version-externally-managed
++
++PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
++	$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
+ 	--root=$(TARGET_DIR)
+ 
+ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+-	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+-	--prefix=/usr \
+-	--executable=/usr/bin/python \
+-	--single-version-externally-managed \
++	$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
+ 	--root=$(STAGING_DIR)
+ 
+ # Host setuptools-based packages
+ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+-	PATH=$(BR_PATH) \
+-	PYTHONNOUSERSITE=1 \
+-	SETUPTOOLS_USE_DISTUTILS=stdlib \
+-	$(HOST_CONFIGURE_OPTS)
++	$(HOST_PKG_PYTHON_ENV) \
++	SETUPTOOLS_USE_DISTUTILS=stdlib
+ 
+ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 	--prefix=$(HOST_DIR) \
+@@ -113,28 +111,21 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 
+ # Target pep517-based packages
+ PKG_PYTHON_PEP517_ENV = \
+-	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+-	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+-	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+-	PATH=$(BR_PATH) \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	PYTHONPATH="$(PYTHON3_PATH)" \
+-	PYTHONNOUSERSITE=1 \
+-	_python_sysroot=$(STAGING_DIR) \
+-	_python_prefix=/usr \
+-	_python_exec_prefix=/usr
++	$(PKG_PYTHON_ENV)
+ 
+-PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
++PKG_PYTHON_PEP517_INSTALL_OPTS = \
+ 	--interpreter=/usr/bin/python \
+-	--script-kind=posix \
++	--script-kind=posix
++
++PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
++	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
+ 	--purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+ 	--headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 	--scripts=$(TARGET_DIR)/usr/bin \
+ 	--data=$(TARGET_DIR)/usr
+ 
+ PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
+-	--interpreter=/usr/bin/python \
+-	--script-kind=posix \
++	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
+ 	--purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+ 	--headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 	--scripts=$(STAGING_DIR)/usr/bin \
+@@ -142,9 +133,7 @@ PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
+ 
+ # Host pep517-based packages
+ HOST_PKG_PYTHON_PEP517_ENV = \
+-	PATH=$(BR_PATH) \
+-	PYTHONNOUSERSITE=1 \
+-	$(HOST_CONFIGURE_OPTS)
++	$(HOST_PKG_PYTHON_ENV)
+ 
+ HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
+ 	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
