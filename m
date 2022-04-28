@@ -4,78 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD14CC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 19:37:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 695D4C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 19:42:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D1C283EDA;
-	Thu, 28 Apr 2022 19:37:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B49F831C1;
+	Thu, 28 Apr 2022 19:42:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j4xPFJ3QMXzv; Thu, 28 Apr 2022 19:37:45 +0000 (UTC)
+	with ESMTP id cdznvOSE87dt; Thu, 28 Apr 2022 19:42:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC76083ED5;
-	Thu, 28 Apr 2022 19:37:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2EE4E1BF3AD
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 19:37:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27E0D818C0;
+	Thu, 28 Apr 2022 19:42:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5570B1BF3AD
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 19:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2B3D64017E
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 19:37:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35FBD60E69
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 19:42:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qwMPrad4WT-K for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 19:37:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id njevxpsUv6Vc for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 19:42:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4D79A400E3
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 19:37:41 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id 125so7570404iov.10
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 12:37:41 -0700 (PDT)
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F28E660B68
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 19:42:35 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id f2so7341209ioh.7
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 12:42:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=FDWXHCIfm3lM1ynAxwxPwPn/eMI/mRnC/PhayVac+ts=;
- b=qeqPq0L/qWY04NNlJwxEsERCCbeTlQvVYST9ywN7wuPo1TS9eR4ItJkaRynfcUd06A
- aAKjuMTzm1JcwI+8evZIzmKrGQdEZ8/elZkRQHw5vF3pxVoCUV+DSAGMlq+T4VCGWCbj
- 3DcnDfdVaXHF37IpwPjv51tva0pnhTtgx8LOY7nXxgP0QAhX2wJS+C5dkJRuireIKOOy
- oLBdSUEg1edI/IwwSdqX1GihHvocgKwS1vUCMPxwFaVIzRRc9DtH3I9OpzA72kID6Zw3
- FdN8bt6hu5Q1gj2IyLfXH6q1xqXMM96JQtdIExdtYPvq1eWFxztVkwgNO8PUOLYu33U4
- B2NQ==
+ bh=7dbS2nRv5JFCWSrAW4ytS8TxqC2g+Egbwz06uU3CFiw=;
+ b=d+qSod/EFdCvhbvNyF/K5yj2H7cnC844K/V4xb8f9vEyx757bMPhNJkxUaVT4YqdpN
+ 86lm1M46bRZdSVmDr7Zaw5aM0Hla02aZnVlviPFnk/Ot80+2QT3FwCr1s/8/stLvVmPX
+ tz65DI2iTtq98UVyTZc6pr9wm/wtqv4r5EGnbawCxWzOy5DQLV/x8AN3mS9iAkOCELgM
+ Ay1X2weQO1CZyfEHlT1Hg3CNt1TIalc80XzBA2qNDHLGaTT2TJ3FGfkVC86qT2kPnTrk
+ XPaynthbGwkEhv4WtmHuw5NZTfzZC0AnjN66MkZJnr6Zs/1+D1FjnTgLt90V0bVPBKjz
+ nzNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=FDWXHCIfm3lM1ynAxwxPwPn/eMI/mRnC/PhayVac+ts=;
- b=jLUnOh2Jl1gwyJH9jFTB67Wds1SF+D55U1TDC4WOu0dYhy256SxzscDsaSl/d8wm5w
- 7xhvNoItbt0jyHnIfdM3q+nK6NykXzxwZfemuOdiFABz63G33bU8D+eEkD3eqsow/102
- 13gJiHCcZ4Nhb2Krxw38WI581UlHEpMT+LW54xhMs1HaDX/1FW2//97v2X9qtsOEyDSa
- ntojI5xIPwd77f5I3GV7F9czIrxAYhZrw74O7/nVkJuLkcjpbanDW3CsXNDvwKeMnZBA
- ZgTDxdtdwKUN/YPdZ1Cs5cqGPmiNb/uRHBy67TQYGnHXg8QMvmmHP8sfepao59MEiT7l
- 6wUA==
-X-Gm-Message-State: AOAM5304bptuc06L9El5pHyLKpOeCiALePMKq1zEwfrpXHpBOb1A6FfO
- /texP0PEadpQG+2EHWNP8P4ajbTFcJk=
-X-Google-Smtp-Source: ABdhPJxsi3Y3oWfyBcAwR7YFvqnkMMf9kXyVQgfTaDbMqhg0EUm5v7EvyJI5A3kmC7atz/80UaBWQQ==
-X-Received: by 2002:a5e:8718:0:b0:657:af28:7485 with SMTP id
- y24-20020a5e8718000000b00657af287485mr5427099ioj.56.1651174660108; 
- Thu, 28 Apr 2022 12:37:40 -0700 (PDT)
+ bh=7dbS2nRv5JFCWSrAW4ytS8TxqC2g+Egbwz06uU3CFiw=;
+ b=7DW9T2FCtEfkOmhc0tic/INVkpYxK9eImUKMwaZuaqdihE8ZKQ5Z1nDSjwunIMEd+q
+ ilZaQrVKqL9MDSg/++LkKcoI02xLpan80ENcj6L4t4z3+ov22fwwD/FLV/vjJnwCOKow
+ 2QG/pV98kfF+ECLn4/OVmy1DuD3GLszXxkt6KPH0wvoFYQCn8U1sLfJNdp8C/UjvyoPc
+ j/5WKieROjfZtToNCKfTW3KkZ2IWxwcFUjMMzEzf2Eo5DXJMOMDiWeYDfuIfLFoQFUAd
+ DTrX9HR8TFUHL6BGXE4w2RzBi4bH2xXndVB0pKVujDOLhonRy4iq7WiQzSi1d31f6PAk
+ VkAQ==
+X-Gm-Message-State: AOAM531pjvmcz0G/I8gyuOR8+VwN/nnAdFM0nwmjo6IgwdnCnFR7xnYj
+ KL5rwfpqKYmJsSBSftIuxk1yZrIkOBI=
+X-Google-Smtp-Source: ABdhPJxcuh8Q5f3MPe4b/OTpDEXyNaluhaneD1O/btDvzKja8j3vShzRBDlpAsUWh0eYTToG2ofGAw==
+X-Received: by 2002:a05:6602:26cd:b0:649:2bae:a63a with SMTP id
+ g13-20020a05660226cd00b006492baea63amr14855816ioo.148.1651174954701; 
+ Thu, 28 Apr 2022 12:42:34 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
  [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- m8-20020a92d708000000b002c6381d9144sm409983iln.59.2022.04.28.12.37.39
+ f5-20020a6b5105000000b006572915097asm486710iob.35.2022.04.28.12.42.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 28 Apr 2022 12:37:39 -0700 (PDT)
+ Thu, 28 Apr 2022 12:42:34 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Apr 2022 13:37:38 -0600
-Message-Id: <20220428193738.772448-1-james.hilliard1@gmail.com>
+Date: Thu, 28 Apr 2022 13:42:32 -0600
+Message-Id: <20220428194232.775056-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-setuptools-rust: bump to
- version 1.3.0
+Subject: [Buildroot] [PATCH 1/1] package/python-setuptools: bump to version
+ 62.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,38 +95,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-setuptools-rust/python-setuptools-rust.hash | 4 ++--
- package/python-setuptools-rust/python-setuptools-rust.mk   | 4 ++--
+ package/python-setuptools/python-setuptools.hash | 4 ++--
+ package/python-setuptools/python-setuptools.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-setuptools-rust/python-setuptools-rust.hash b/package/python-setuptools-rust/python-setuptools-rust.hash
-index ae3a3463a5..2375c7528f 100644
---- a/package/python-setuptools-rust/python-setuptools-rust.hash
-+++ b/package/python-setuptools-rust/python-setuptools-rust.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools-rust/json
--md5  50c85a5d19ebb7985dc548c76a3bcc25  setuptools-rust-1.2.0.tar.gz
--sha256  0a4ada479e8c7e3d8bd7cb56e1a29acc2b2bb98c2325051b0cdcb57d7f056de8  setuptools-rust-1.2.0.tar.gz
-+md5  9760ac511ebe33c759b76efb0a1299dd  setuptools-rust-1.3.0.tar.gz
-+sha256  958c5bf4ab6483d59dab888538121871cc5006354a42fb0fbd50acf03caad1de  setuptools-rust-1.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256  b20668c1590582b3882854050ccfbdb7aee1f71a1ffe9eacc4c5aeb08a14161b  LICENSE
-diff --git a/package/python-setuptools-rust/python-setuptools-rust.mk b/package/python-setuptools-rust/python-setuptools-rust.mk
-index c2d8c6d9a7..c342773476 100644
---- a/package/python-setuptools-rust/python-setuptools-rust.mk
-+++ b/package/python-setuptools-rust/python-setuptools-rust.mk
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index 1a378d1b76..d4a9ba3d88 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,4 +1,4 @@
+ # From https://pypi.org/pypi/setuptools/json
+-md5  6c6a97cf68e1db789a2e5c054f067278  setuptools-60.9.3.tar.gz
+-sha256  2347b2b432c891a863acadca2da9ac101eae6169b1d3dfee2ec605ecd50dbfe5  setuptools-60.9.3.tar.gz
++md5  95f4924aacd634ab579f17fc71f79fb1  setuptools-62.1.0.tar.gz
++sha256  47c7b0c0f8fc10eec4cf1e71c6fdadf8decaa74ffa087e68cd1c20db7ad6a592  setuptools-62.1.0.tar.gz
+ sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 3309cd9df4..c6a2137e1d 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_RUST_VERSION = 1.2.0
-+PYTHON_SETUPTOOLS_RUST_VERSION = 1.3.0
- PYTHON_SETUPTOOLS_RUST_SOURCE = setuptools-rust-$(PYTHON_SETUPTOOLS_RUST_VERSION).tar.gz
--PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/4e/02/2fc4c83b4f816fdd30f38c0c4837a322d21967f953bb9a51bce91b4511f6
-+PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/a9/55/5db4a5b137af2afdc23a6e251d5ebb3b4e04c8deb68fbb5ffdacbd134c0c
- PYTHON_SETUPTOOLS_RUST_SETUP_TYPE = setuptools
- PYTHON_SETUPTOOLS_RUST_LICENSE = MIT
- PYTHON_SETUPTOOLS_RUST_LICENSE_FILES = LICENSE
+-PYTHON_SETUPTOOLS_VERSION = 60.9.3
++PYTHON_SETUPTOOLS_VERSION = 62.1.0
+ PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/14/74/54890935244ce053abcc4fa01ef4982a84743a8d128d4cf5eae56e2d156c
++PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/ea/a3/3d3cbbb7150f90c4cf554048e1dceb7c6ab330e4b9138a40e130a4cc79e1
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
 -- 
 2.25.1
 
