@@ -4,61 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AE70C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:12:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2364BC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3A6A611C0;
-	Thu, 28 Apr 2022 21:12:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2AA5611C3;
+	Thu, 28 Apr 2022 21:12:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4b5bxOO2UeOH; Thu, 28 Apr 2022 21:12:41 +0000 (UTC)
+	with ESMTP id 8tx1VCVGMkS0; Thu, 28 Apr 2022 21:12:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFD7361172;
-	Thu, 28 Apr 2022 21:12:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3965E1BF2E4
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:10:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED1C3611BE;
+	Thu, 28 Apr 2022 21:12:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E61D1BF2E4
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:10:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 27DAE419F5
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:10:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1CDE74048A
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:10:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q_ELFLI_6e_O for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 21:10:18 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D733B41BE8
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 21:10:17 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 45382E0004;
- Thu, 28 Apr 2022 21:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1651180216;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Jp8BFri/m+CTY3qHPneD/CxQmBO3ntGcdOHwU/yO/OM=;
- b=a1iccmyLLAUKA/45Shup0+tlowq4LXFBCuT2qe4QycCiB6Yy0BpmKTC+kbmT0GOb93nUT8
- ukR8l4gklkfVfdN/B+2CqtL3F+yNN+WUiqJW3LnD71aw5S+5CNTCpm2eJkJQfCFOIyMzW7
- KxfqLSFiabA23YMK3BMSzlBxM3c4ijHqPpaScN5mDCt/eiel4FO/bGrGS/B0RLW/R5OsA2
- 7Sgw9BeR5QWVRbbMuFcTLs+EsHJEV+Qk3k1XmC7GbMgyUGyG+p0i3C2mhHL+zKLPG7S7kn
- yPjrblCp8Z+OpdyEPMH/MPmXFITJMpCsIve5Yx0LKAXbe+FW9/gwLhC74fvmNQ==
-Date: Thu, 28 Apr 2022 23:09:51 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220428230951.5d7b3873@windsurf>
-In-Reply-To: <20220428200043.787738-1-james.hilliard1@gmail.com>
-References: <20220428200043.787738-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-ujson: bump to version
- 5.2.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gALf-8VUFXu2 for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 21:10:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43413400E3
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 21:10:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 2A553846A5; Thu, 28 Apr 2022 21:00:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 28 Apr 2022 23:10:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b492a2671bea67b9af033df2ae0d3aec0ba5ded1
+X-Git-Newrev: 29bd9004b48e75c84bb83918f40b40ba6ec65ca6
+X-Patchwork-Hint: ignore
+Message-Id: <20220428210006.2A553846A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vlc: bump version to 3.0.17.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,39 +53,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mauro Condarelli <mc5686@mclink.it>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 28 Apr 2022 14:00:43 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=29bd9004b48e75c84bb83918f40b40ba6ec65ca6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Drop patches that are now upstream.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...for-aarch64_be-or1k-and-microblazebe.patch | 30 ------
->  ...0002-Add-support-of-ARC-architecture.patch | 36 -------
->  .../0003-Add-support-for-microblaze.patch     | 27 ------
->  ...4-Pseiderer-add-nios2-and-xtensa-001.patch | 95 -------------------
->  package/python-ujson/python-ujson.hash        |  4 +-
->  package/python-ujson/python-ujson.mk          |  4 +-
->  6 files changed, 4 insertions(+), 192 deletions(-)
->  delete mode 100644 package/python-ujson/0001-Add-support-for-aarch64_be-or1k-and-microblazebe.patch
->  delete mode 100644 package/python-ujson/0002-Add-support-of-ARC-architecture.patch
->  delete mode 100644 package/python-ujson/0003-Add-support-for-microblaze.patch
->  delete mode 100644 package/python-ujson/0004-Pseiderer-add-nios2-and-xtensa-001.patch
+Release notes: http://www.videolan.org/vlc/releases/3.0.17.html
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vlc/vlc.hash | 8 ++++----
+ package/vlc/vlc.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 468ec7df35..9060097906 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,7 +1,7 @@
+-# From https://get.videolan.org/vlc/3.0.16/vlc-3.0.16.tar.xz.sha256
+-sha256  ffae35fc64f625c175571d2346bc5f6207be99762517f15423e74f18399410f6  vlc-3.0.16.tar.xz
+-# From https://get.videolan.org/vlc/3.0.16/vlc-3.0.16.tar.xz.sha1
+-sha1  e22ac839a09b5ead8992ae6aa8ea886364283e6a  vlc-3.0.16.tar.xz
++# From https://get.videolan.org/vlc/3.0.17.4/vlc-3.0.17.4.tar.xz.sha256
++sha256  8c5a62d88a4fb45c1b095cf10befef217dfa87aedcec5184b9e7d590b6dd4133  vlc-3.0.17.4.tar.xz
++# From https://get.videolan.org/vlc/3.0.17.4/vlc-3.0.17.4.tar.xz.sha1
++sha1  ebcd9939103fda141267c5a8f1c603df4533218e  vlc-3.0.17.4.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index b793e0efe0..aee3b735a9 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VLC_VERSION = 3.0.16
++VLC_VERSION = 3.0.17.4
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
