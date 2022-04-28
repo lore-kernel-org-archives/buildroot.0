@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EAEBC433FE
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:12:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44957C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C89F611A6;
-	Thu, 28 Apr 2022 21:12:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 059276119E;
+	Thu, 28 Apr 2022 21:12:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PTQD9w-dVdIH; Thu, 28 Apr 2022 21:12:15 +0000 (UTC)
+	with ESMTP id J5f8rX_5dEI0; Thu, 28 Apr 2022 21:12:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36822611AE;
-	Thu, 28 Apr 2022 21:12:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 295C81BF2E4
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:10:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BFDA61188;
+	Thu, 28 Apr 2022 21:12:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 197F11BF2E4
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:10:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1780C41BB3
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:10:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1686A4048A
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:10:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VSkNBBNfKwrM for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 21:10:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jXZQLgOOxDNc for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 21:10:16 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::224])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EC15741BE8
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 21:10:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0BD9E400E3
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 21:10:15 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A7573E0003;
- Thu, 28 Apr 2022 21:10:12 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id E3466E0005;
+ Thu, 28 Apr 2022 21:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1651180213;
+ t=1651180214;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=tbquIUBD7WJZ8QW+ethQPca97o72jncUqYWftcBpnIk=;
- b=W5FXAb4azKsxXzs9J7kc94d9kh2aBv99a/z+Fs6p08t+kz0hNKniNz1MSzg8SBFtjtUYRr
- bJieQBGWpx8hGxcO4CujnO5nYWHz8EqZggRPiCeO9XZK87cec0EO3SJfj/7dIBcWGPb8ke
- j39fnNPORTRECfOXbwq+e4FeNFxvWuSkfiuzqrj7CQbJYVbEdPrRo/dSn8ZpQCRD0LK2kZ
- kM3o+5V27xUENJU33OwQRQGifHQG4KqCM6eiBX7eW4Q6NDAoi6uqTBo15L9yXb5BDOY9s/
- 31knafOGqcvOzo3pEt+MZuSmZBnv51MOCOE8pcX0AE8KguLrsFUzIUBDYBAzrg==
-Date: Thu, 28 Apr 2022 23:09:35 +0200
+ bh=aWem36CBOGtChAJdRK52eN6AIqk0WEU0hfo+mdEjRaM=;
+ b=krrXJ+8VvsDN2uZ0/ReHfzJ4S0+lOM8wEDyPbbF2Quc7cPgVg9KyGoIJ+oJpNgEKqwM+QE
+ b8KFnP6N1NG68d9RtX/6Asw9lq9OjRX9PR9Z8XrMBub5Vx2wTU3rjtdIT0RY1O9luWPUdH
+ Nz+Rya1LFOPBhWsHViTqnJ0o4yZDLgoviJN93qa1uYMpxBhz9ppUawZ0brYFN7s/b7yaIu
+ riOQJfKwC/Hlx6Qe/rpjNFmnKx+0mHBdPGmvLjqgRf9a8A8zza9Xc0HUXseN3MXS8ZOdBb
+ QtWZlHlaxBFrYGd0jmuFsE7Ojk4HJk/4NPXP1Fp/CSNAmrz7lsN0MEuZaqYgyA==
+Date: Thu, 28 Apr 2022 23:09:54 +0200
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220428230935.19ab0684@windsurf>
-In-Reply-To: <20220428193114.759935-1-james.hilliard1@gmail.com>
-References: <20220428193114.759935-1-james.hilliard1@gmail.com>
+Message-ID: <20220428230954.712e0a86@windsurf>
+In-Reply-To: <20220428200325.789340-1-james.hilliard1@gmail.com>
+References: <20220428200325.789340-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-cryptography: bump to
- version 37.0.1
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-urllib3: bump to version
+ 1.26.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,14 +78,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 28 Apr 2022 13:31:14 -0600
+On Thu, 28 Apr 2022 14:03:25 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-cryptography/python-cryptography.hash | 2 +-
->  package/python-cryptography/python-cryptography.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/python-urllib3/python-urllib3.hash | 4 ++--
+>  package/python-urllib3/python-urllib3.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
