@@ -4,61 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F575C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:40:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3BEBC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A16D400E3;
-	Thu, 28 Apr 2022 21:40:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A0CC740C5E;
+	Thu, 28 Apr 2022 21:40:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YN5bJot5L5Ay; Thu, 28 Apr 2022 21:40:17 +0000 (UTC)
+	with ESMTP id T-fG_N00KoKG; Thu, 28 Apr 2022 21:40:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B601840AC2;
-	Thu, 28 Apr 2022 21:40:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BF8A21BF2E4
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:38:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B705140C4E;
+	Thu, 28 Apr 2022 21:40:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 934F91BF2E4
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:39:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE7CE83F25
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:38:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8FDA341C12
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:39:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TZ_V14OJzYWE for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 21:38:49 +0000 (UTC)
-X-Greylist: delayed 00:42:41 by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BF76483F37
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 21:38:48 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 63D4E240002;
- Thu, 28 Apr 2022 21:38:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1651181926;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=U9nj6dRDMb2cVIFz+LbEDjq+c5yb2lXAsWQs4HqpoDE=;
- b=LF8s9UdYXw73jfRz3dhPOU4y4uyZmvpFKVt0p6wrm34/qCUPFN3PKBdtOYhD/DoVn3pVi9
- bJjq5DTwGXbCWuuaW0zEwqbhtzrRJe7VgxpZQuZ+OYhXzj5wWLfJfhvZQijLV0f2Cvix73
- s8ECQYpYrDC3FseJrotfRmkrVFfB8Rn2hok+PmMaNCh2Iu8t9u1sIhNkGz0MWVukyr8jtr
- JnRObYnFEuBg2NnchlfeFDEj0tNtXYeRLDRjsTROfRmna8/ZsLq63piy6IcbjGkt6nmJET
- FIcWbyidThitFoWWle386zb62nCKwWHHYY0OSxiQhtHotX3x+g59Aa5U4zdu/A==
-Date: Thu, 28 Apr 2022 23:38:45 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220428233845.6a62a2a2@windsurf>
-In-Reply-To: <20220428204932.948797-1-fontaine.fabrice@gmail.com>
-References: <20220428204932.948797-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/vim: security bump to version
- 8.2.4843
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rxT3I3dsmVOZ for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 21:39:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B84D541BF1
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 21:39:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 92059846EE; Thu, 28 Apr 2022 21:29:28 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 28 Apr 2022 23:39:44 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8c76fc9d1ccf623a8dad4d845a371bb5936e38d4
+X-Git-Newrev: 2449d9c9dd69f5d291997560c4d48cbd5c5b0fe9
+X-Patchwork-Hint: ignore
+Message-Id: <20220428212928.92059846EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sdl2_ttf: disable builtin harfbuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,33 +53,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 28 Apr 2022 22:49:32 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2449d9c9dd69f5d291997560c4d48cbd5c5b0fe9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix CVE-2022-1381: global heap buffer overflow in skip_range in GitHub
-> repository vim/vim prior to 8.2.4763. This vulnerability is capable of
-> crashing software, Bypass Protection Mechanism, Modify Memory, and
-> possible remote execution
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/vim/vim.hash | 2 +-
->  package/vim/vim.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Disable builtin harfbuzz which is enabled by default since bump to
+version 2.0.18 in commit f4da031a77f200515bcc5b2e0fe665a7b4f2a780 and
+https://github.com/libsdl-org/SDL_ttf/commit/834ec54127dc9c2a12928f5fe32cf110ec4c7a7f
+resulting in the following build failure without threads:
 
-Applied to master, thanks.
+In file included from external/harfbuzz-2.8.0/src/hb.hh:470,
+                 from external/harfbuzz-2.8.0/src/hb-aat-layout.cc:28:
+external/harfbuzz-2.8.0/src/hb-mutex.hh:53:10: fatal error: pthread.h: No such file or directory
+   53 | #include <pthread.h>
+      |          ^~~~~~~~~~~
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/ac8b366558bec61ada84ec15cf27652fde2b63b2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sdl2_ttf/sdl2_ttf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
+index 54e76815f1..054e327fac 100644
+--- a/package/sdl2_ttf/sdl2_ttf.mk
++++ b/package/sdl2_ttf/sdl2_ttf.mk
+@@ -11,7 +11,7 @@ SDL2_TTF_LICENSE = Zlib
+ SDL2_TTF_LICENSE_FILES = COPYING.txt
+ SDL2_TTF_INSTALL_STAGING = YES
+ SDL2_TTF_DEPENDENCIES = sdl2 freetype host-pkgconf
+-SDL2_TTF_CONF_OPTS = --disable-freetype-builtin
++SDL2_TTF_CONF_OPTS = --disable-freetype-builtin --disable-harfbuzz-builtin
+ 
+ ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
+ SDL2_TTF_DEPENDENCIES += harfbuzz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
