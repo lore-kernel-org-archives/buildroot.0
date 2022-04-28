@@ -1,78 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0C1CC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 07:47:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9261BC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 08:46:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 488EC60AEB;
-	Thu, 28 Apr 2022 07:47:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F072C4051D;
+	Thu, 28 Apr 2022 08:46:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q876tvNuY7HG; Thu, 28 Apr 2022 07:47:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GE3KC1g1jh7v; Thu, 28 Apr 2022 08:46:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BB8B60AC9;
-	Thu, 28 Apr 2022 07:47:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0BDA540494;
+	Thu, 28 Apr 2022 08:46:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 296741BF333
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 07:47:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 242181BF59A
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 08:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0FAD840117
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 07:47:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1192340494
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 08:46:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CIEoE9nlN4U4 for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 07:47:14 +0000 (UTC)
+ with ESMTP id 4Gn3QsGszIRE for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 08:45:59 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AC405400FB
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 07:47:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1651132031;
- bh=oe91+gdpLza9t6aZsrBYeXDxKkId79dyJNyINsDwx6I=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=c/bifde9+ESJV4780j6A2ygsCfx7E3uj+0tVKEWVWjC9U4601uM71rogkuEs+R3Cw
- u5AO6deQ8k+JQWnPb6orBB6Dr+52ICyFexF5OLPTaIDUTTSGWS/g+rNrCXd4IvkTI8
- y/sZPbjz6Vr4aGzIXOV7jSpAmM1tJ4lvf3Sxpiso=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([84.133.21.31]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MCKBm-1nafC11wgM-009Qhx; Thu, 28 Apr 2022 09:47:11 +0200
-From: Andreas Ehmanns <universeiii@gmx.de>
-To: buildroot@buildroot.org
-Date: Thu, 28 Apr 2022 09:46:41 +0200
-Message-Id: <20220428074641.5682-1-universeiii@gmx.de>
-X-Mailer: git-send-email 2.26.2
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5D83F400D7
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 08:45:59 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7798C20007;
+ Thu, 28 Apr 2022 08:45:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1651135556;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=jviQkwjmCVzF1BmVVfPDVIquMNRJ7Zf4DsT0n+amyx4=;
+ b=pCDZPNv3gaQ31km4Cdq5Rm6bgejvJMBzbYCEF3BOILSEpWQnKwElUbT+dGIRe1QJ9+QK5p
+ JF0aeLgmiCLX4O5jf6ROVRI52yHCuPnA3L+ew1CMEQjKUuRh9dqF/Y0qBqGSA988zxHGC8
+ fWV9C4VhdLxUQUCtCETjG/W0/WoM7bjY/464jiU+FhYawKSajOOjlyvhCjJ4qNeO6Muoxo
+ ZzUjy4WV8hMDEXHK0sh4axzZKdVVKSfr0Vnndx7LDuRQ0z1upv7iRkbWI0riLSfIZSSoBx
+ N8R5O3WdHH6Qw83f+njec0bgkhrTswBjhFC5eMBebmabcvol6rOjZirSGvBRyw==
+Date: Thu, 28 Apr 2022 10:45:55 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220428104555.62683882@windsurf>
+In-Reply-To: <20220427201812.4037832-1-fontaine.fabrice@gmail.com>
+References: <20220427201812.4037832-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:hUaKIc20iCM7ooAKnaruiCdlJ1gQdVANW63bgp9rL/Qh4hYTmpP
- NfXqs/7eC61k1NQScZJ5XHS1rq/wNv0UZWaJqu+BKJyMpx6aCJwUI6E8zlLZJspJ21rhdo+
- wqQfhpHMjl3U2gegDTSCkl3ZFwLUQP34w++HoqJdZqbgZO9BeQf+9cWEO5i8hxDN3HirA2v
- /Vi1jRjBVFUguD+9zXCYQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9Qy7vlOQWw8=:xcGjArWtGdrqXt2yzyd2ep
- I9VPXoJvMMLZSIDTlblnOH5CXZ+Yt6x1Y5V4VJX3exNVgK12DDZ6eycczo6r6iu/ztCwAUnon
- 0jGNDXcYUkSlyTbsJWi50EEgudEoYQFafyGpCJmmP3nhD7qIcuFeQkZY52nnP4a4htuCGotQJ
- Kh0EGXSh+yStdE/v9CWkMBQkcr1svdv20mz5pyMLiZV/NPy8cB5DBCOWQomPN1SRcbi9bW0HM
- CUy6l4ihaa2hhmcmULHL2xebc+OeLvvbKejY0tLSCAPVp/M/xPpxozo9prJgAfy5u2GgddoV7
- AjY/t2jWiTiKwqP2hKr0w88hSG9H4VIVwAduy15/Tlr805ITfbZtrW5+THkUV8liLh4E9S+yO
- ewaEHJQQRZdSSHmR/FiJTcl6sOOhN0gb/19FuX1DbuiAxqmosW1PAkKA1IobbShC0BVo5IDl3
- cH1LqoWoYha3haH7EdX20jesbt+O+nQAWmlW3Z+7nC16D6YDXLeM3YZFHJlEI4Fs+rXdDPkh0
- bTnfDu3iK/JfrFvBphqMP2DJcltu9X1fexuh6Bus2Xg8li+H55LH638ZRbN67Witw/nqD+W9k
- IW1bnWKTq8qGOkRbHKLA2UerdatqspTmXHtZgeN65B2yNpDONFg5KSk6VVy+XDhiogsXeVmqY
- V3zWErmd7ss1R+mHHEI3lRPLh9AqiRX5ELuBUYMOBfHehPA1Th7em8dD9u/afJHxE4DrDNb4i
- DUVDHZT6mJakQMGKM5GaZ3oTP8bwhqyC+5CZfZfw6r6F3Y7ozGxDWwq8xv5akrIrWuL8obbki
- bbCrJkWJtzKKRLAXaVPZTvDcFtGfRZfV/SAdgriio9eJSbuz4Z/lsaDyRBW4Lzrws1pziOa+q
- EiCYpt5wW/7tKI983T+bZbmgaq/R8/y4QeydXUDx5JcPBvzz327IFVdhxjlMwgF4hxidHRuMB
- RRPPxVAhgXcNvFwyHcXkecTe3pUyyRkwl6sVAHub24UBhnGM195H6wlmfzy0HxHl8RbuF7niJ
- uR1fVEA7lnq8NxGR758Ao5o7r/QuWuLBTRUBSTZ8COKssuWqRNIXu2yFo9XHSniGhApiBJpAo
- u16a5x1CLgzJzU=
-Subject: [Buildroot] [PATCH 1/1] package/dhcp: add security options to DHCP
- server
+Subject: Re: [Buildroot] [PATCH 1/1] package/freeipmi: fix build with
+ argp-standalone and NLS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,67 +68,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Ehmanns <universeiii@gmx.de>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-I was trying to make the ISC dhcp daemon more secure by using the
--user and -group option to let dhcp server run as non-root user.
-Unfortunately these options are not available when building ISC dhcp
-server with buildroot.
-The reason is, that the configure script must be called with the
-option --enable-paranoia to activate these options. But this option
-is not set in the dhcp.mk file.
+Hello Fabrice,
 
-To be backward compatible I added a new option to the dhcp's Config.in
-file to enable this feature when desired and parse this option in
-dhcp.mk.
+On Wed, 27 Apr 2022 22:18:12 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Andreas Ehmanns <universeiii@gmx.de>
----
- package/dhcp/Config.in | 8 ++++++++
- package/dhcp/dhcp.mk   | 4 ++++
- 2 files changed, 12 insertions(+)
+> Fix the following build failure with argp-standalone and NLS raised
+> since commit 5430c8fedd0392e79e0c011825b056fea129980a:
+> 
+> configure:14644: checking for argp_parse in -largp
+> configure:14669: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/arm-buildroot-linux-uclibcgnueabi-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -largp  -lm -lm -lm  >&5
+> /home/giuliobenetti/autobuild/run/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libargp.a(argp-parse.o): in function `argp_version_parser':
+> /home/giuliobenetti/autobuild/run/instance-1/output-1/build/argp-standalone-1.4.1/argp-parse.c:181: undefined reference to `libintl_dgettext'
+> 
+> [...]
+> 
+> In file included from freeipmi-argp-fmtstream.c:35:
+> freeipmi-argp-namefrob.h:62:32: error: redefinition of 'argp_fmtstream_write'
+>    62 | #define __argp_fmtstream_write argp_fmtstream_write
+>       |                                ^~~~~~~~~~~~~~~~~~~~
+> freeipmi-argp-fmtstream.c:395:1: note: in expansion of macro '__argp_fmtstream_write'
+>   395 | __argp_fmtstream_write (argp_fmtstream_t __fs,
+>       | ^~~~~~~~~~~~~~~~~~~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/26090162396b1b8cedfc58e1790ced528fcc35c6
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
-index e0706efafb..5cf7af82de 100644
---- a/package/dhcp/Config.in
-+++ b/package/dhcp/Config.in
-@@ -25,6 +25,14 @@ config BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK
- 	help
- 	  Enable delayed ACK feature in the ISC DHCP server.
+While your patch is indeed the most "immediate" fix, shouldn't we think
+about providing a pkg-config file for argp-standalone, so that its
+indirect dependency on libintl when static linking can be properly
+described, and transparently discovered by users of argp-standalone?
 
-+config BR2_PACKAGE_DHCP_SERVER_ENABLE_PARANOIA
-+	bool "Enable paranoia options"
-+	depends on BR2_PACKAGE_DHCP_SERVER
-+	help
-+	  Add option --enable-paranoia to configure script. This activates
-+	  additional server options (-user, -group and -chroot) to make
-+	  dhcp server more secure.
-+
- config BR2_PACKAGE_DHCP_RELAY
- 	bool "dhcp relay"
- 	help
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index f815c6c802..b73137506d 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -78,6 +78,10 @@ ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
- DHCP_CONF_OPTS += --enable-delayed-ack
- endif
+Because otherwise here, you'll have to basically propagate this to all
+users of argp-standalone, and to all users of users of argp-standalone.
 
-+ifeq ($(BR2_PACKAGE_DHCP_SERVER_ENABLE_PARANOIA),y)
-+DHCP_CONF_OPTS += --enable-paranoia
-+endif
-+
- define DHCP_INSTALL_LIBS
- 	$(MAKE) -C $(@D)/bind install-bind DESTDIR=$(TARGET_DIR)
- 	$(MAKE) -C $(@D)/common install-exec DESTDIR=$(TARGET_DIR)
---
-2.26.2
-
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
