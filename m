@@ -4,60 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54717C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 22:00:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F79AC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 22:03:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2D3D41BEA;
-	Thu, 28 Apr 2022 22:00:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D80AF41295;
+	Thu, 28 Apr 2022 22:03:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OaEVj2cti4k8; Thu, 28 Apr 2022 22:00:46 +0000 (UTC)
+	with ESMTP id KQKTVSukMigB; Thu, 28 Apr 2022 22:03:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9086C41B98;
-	Thu, 28 Apr 2022 22:00:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B19DA1BF36D
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 22:00:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 987E44098A;
+	Thu, 28 Apr 2022 22:03:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3552A1BF36D
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 22:03:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE55F41B98
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 22:00:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 23F5E830DE
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 22:03:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HvTmMOcTb8W9 for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 22:00:42 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1ECEF41B6B
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 22:00:41 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2B5F740003;
- Thu, 28 Apr 2022 22:00:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1651183240;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=jyq48hpZ+mRM+m20RPhx/sTllXbX7oUIgjvzHJMQ6KI=;
- b=jfb1hs3UT3i2qPuMW2IEpvohkr4yQYwglBmGOhKQ5nkCAcrjsYEMjnXA6llPc3iNZh1Oeh
- hlq5sIW2aufIKg5K4UnnR2m9EcgAUDfiVjNJtte+ViqaQz/zQaq7MltR9AUFnN8RcYeokG
- fe0O2r0YUPMmc6/N2bWFyQE9IghuHspUzvsXE7f0t8p2+ycjA3gE68qplSmmf6/tPL7kit
- ayFG3Ng63eCtIvvFq5rvMGLLnZXCg9xnYK31hLs7DdtIvcfdzauUoDna2TNL1MfjM7aGjy
- kGZ3vn+Ao3w2tl72qwUzzHDaRqpVotPqeF7Sve/nS6nYWa1t/4HiFl7wGpzhzg==
-Date: Fri, 29 Apr 2022 00:00:39 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20220429000039.23e1a1fe@windsurf>
-In-Reply-To: <20220428215220.GI3624965@scaer>
-References: <20220428205548.524402-1-thomas.petazzoni@bootlin.com>
- <20220428205548.524402-4-thomas.petazzoni@bootlin.com>
- <20220428215220.GI3624965@scaer>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3 4/4] package/binutils: drop version 2.32
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YOS11zya685T for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 22:03:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6579C83004
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 22:03:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 3084384736; Thu, 28 Apr 2022 21:52:52 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 29 Apr 2022 00:03:01 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7badb943a8b2495cdd5034a9ca95ea73e01afab0
+X-Git-Newrev: 77fc4580254997c1f9f83efabd061e81de0b022e
+X-Patchwork-Hint: ignore
+Message-Id: <20220428215252.3084384736@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "toolchain/toolchain-external:
+ error if BR2_TOOLCHAIN_EXTERNAL_PATH is not set"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,46 +53,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Buildroot List <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 28 Apr 2022 23:52:20 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=77fc4580254997c1f9f83efabd061e81de0b022e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> I was considering on not applying that one, so we could have a fallback
-> in case there were runtime issues reported with newer binutils (I could
-> only build-test your series, I lack a noMMU target).
-> 
-> But if that happens to be the case, we can revert this patch quite
-> easily.
-> 
-> so, applied to master, thanks.
+This reverts commit 8e91385a2cb81c5f8114354f4494230e2aebb93a.
 
-Really if people still need to use binutils 2.32 and none of the newer
-binutils version work for FLAT, I would call FLAT an unmaintained
-use-case, which should lead us to drop support for it rather than
-keeping an old binutils version around.
+This commit is incorrect, as it is perfectly valid for
+BR2_TOOLCHAIN_EXTERNAL_PATH to be empty. The help text of
+BR2_TOOLCHAIN_EXTERNAL_PATH even documents it as a supported case:
 
-I don't know if there's an easy way to test an ARM noMMU build in Qemu.
-https://xpack.github.io/qemu-arm/ which is a fork of Qemu, seems to
-emulate STM32F429I-Discovery, which we have support for in Buildroot.
-Not clear if the source is available, but since Qemu is GPLv2, I guess
-the source code for this fork should be available somewhere.
+          If empty, the compiler will be searched in $PATH.
 
-Best regards,
+Commit 392b0a26f5fd8d3aedce7e0c15f9762a79312f01 ("toolchain-external:
+default BR2_TOOLCHAIN_EXTERNAL_PATH to empty") even made that the
+default saying "In addition, it in fact works correctly when it is
+empty. In that case, the toolchain will be searched in PATH."
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+A user has reported that commit
+8945ba49480a7885d104445ca855ef7681a374ff (the backport of 8e91385a2c to
+the 2022.02.x LTS branch) breaks his use-case:
+
+  https://lore.kernel.org/buildroot/CADBnMvhgaozAgZgy3njckjL1i0U6bZ0fLrq-kdFF-qpGhFWgmw@mail.gmail.com/
+
+Reported-by: Kristof Havasi <havasiefr@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998@free.fr: reference 8e91385a2c on master]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index c7f4175c9e..299b6008aa 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -69,12 +69,7 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
+ TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
+ else
+ TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(abspath $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH)))
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL)$(BR_BUILDING),yy)
+-ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
+-$(error No external toolchain path set, check your BR2_TOOLCHAIN_EXTERNAL_PATH setting)
+-endif
+ endif
+-endif # BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
+ 
+ ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
+ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
