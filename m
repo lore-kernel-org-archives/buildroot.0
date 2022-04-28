@@ -4,48 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BC3FC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 06:11:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FDAFC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 07:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16A89826B4;
-	Thu, 28 Apr 2022 06:11:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B583827AA;
+	Thu, 28 Apr 2022 07:39:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AEHkmKuTDdA0; Thu, 28 Apr 2022 06:11:41 +0000 (UTC)
+	with ESMTP id V_pzQAz8QQB6; Thu, 28 Apr 2022 07:39:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 09DE0824F4;
-	Thu, 28 Apr 2022 06:11:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 352611BF379
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 06:11:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8823A82784;
+	Thu, 28 Apr 2022 07:39:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9BC551BF333
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 07:39:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 321F2813E5
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 06:11:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89485416D3
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 07:39:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wt_TL8yCW3e7 for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 06:11:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 00E2B812CD
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 06:11:36 +0000 (UTC)
-Received: from iago.. (unknown [151.43.181.239])
- by serv15.avernis.de (Postfix) with ESMTPSA id 8BAA1CB4428D;
- Thu, 28 Apr 2022 08:10:51 +0200 (CEST)
-From: Andreas Ziegler <br015@umbiko.net>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IeDYohPeCHCt for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 07:39:22 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EE53441684
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 07:39:21 +0000 (UTC)
+Received: (Authenticated sender: thomas.perrot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D91FF40008;
+ Thu, 28 Apr 2022 07:39:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1651131559;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=+p3Y1aoCrW5dPIcU6BmLtP2otlDjJSfQ9n9saS1qRp4=;
+ b=AcYsPm9CKXKuZYwz8W4m76loa+mUjIhzBBrLkkYXFhXew0nM/J6HR63xQ2kGegTaD7ekyw
+ u44rkNizc4EDJvp45C+4rPBDZKywVKlp8jg0Da8YKW46ie312iv51Xif0h6piEqghIfpxd
+ CVRHbFus/Eyl7A9kRz0UYezvAo0dl7JAb9pt0yLsmuiqXq3ZyexIy5K9+V+NueRFzKkFzs
+ dPiPaEWZvp86mP2zB/eFctCQJ/M88t8gf5czWUNRVbcq/1idiw2Ptr6nw9Pz+wVimhrUyT
+ WKIiVB02h1EuVR+2keF1Zzit+tLMHVS6MNFp0ogFLqCclOIalK3QgpYXTMo5gw==
 To: buildroot@buildroot.org
-Date: Thu, 28 Apr 2022 08:10:31 +0200
-Message-Id: <20220428061031.3443-1-br015@umbiko.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <fa4889f5-77f6-2406-5495-df83fb9fee48@mind.be>
-References: <fa4889f5-77f6-2406-5495-df83fb9fee48@mind.be>
+Date: Thu, 28 Apr 2022 09:39:14 +0200
+Message-Id: <20220428073915.3991220-1-thomas.perrot@bootlin.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: [Buildroot] [PATCH v2 1/1] package/mpd: fix iconv detection w/
- libiconv installed
+Subject: [Buildroot] [PATCH v2] package/imx-mkimage: install print_fit_hab.sh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,95 +65,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Ziegler <br015@umbiko.net>,
- =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+From: Thomas Perrot via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perrot <thomas.perrot@bootlin.com>
+Cc: Thomas Perrot <thomas.perrot@bootlin.com>, thomas.petazzoni@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix build failures caused by meson failing to properly detect iconv() when 
-libiconv is installed and a missing link dependency. 
+This script gives the address, the offset and the size of binaries have been
+stored into U-Boot FIT image that contains TF-A, U-Boot and OP-TEE.
 
-Upstream pull request:
-https://github.com/MusicPlayerDaemon/MPD/pull/1515
-
-Fixes the following build failures:
-http://autobuild.buildroot.net/results/7a0/7a0fe4e9248ed96a5c4934361de16e0b59a51d50/
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: Thomas Perrot <thomas.perrot@bootlin.com>
 ---
-changes v1->v2:
-  extract patch from git w/o numbering, fix typo, add signed-off-by
 
- ...iconv-detection-when-libiconv-is-ins.patch | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/mpd/0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch
+Changes v2:
+ - Fix a typo, when the variable BL31 is empty, BL33 was initialized instead of
+   BL31.
 
-diff --git a/package/mpd/0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch b/package/mpd/0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch
+ ...rt-for-overriding-BL31-BL32-and-BL33.patch | 61 +++++++++++++++++++
+ package/imx-mkimage/imx-mkimage.mk            |  1 +
+ 2 files changed, 62 insertions(+)
+ create mode 100644 package/imx-mkimage/0004-Add-support-for-overriding-BL31-BL32-and-BL33.patch
+
+diff --git a/package/imx-mkimage/0004-Add-support-for-overriding-BL31-BL32-and-BL33.patch b/package/imx-mkimage/0004-Add-support-for-overriding-BL31-BL32-and-BL33.patch
 new file mode 100644
-index 0000000000..63742c0cbe
+index 000000000000..715b0f31d052
 --- /dev/null
-+++ b/package/mpd/0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch
-@@ -0,0 +1,55 @@
-+From 3882a5a263caa681778a21b1f5f13a1b64536796 Mon Sep 17 00:00:00 2001
-+From: aeolio <git@aeolio.de>
-+Date: Wed, 20 Apr 2022 16:10:39 +0200
-+Subject: [PATCH] src/lib/icu: fix iconv() detection when libiconv is installed
++++ b/package/imx-mkimage/0004-Add-support-for-overriding-BL31-BL32-and-BL33.patch
+@@ -0,0 +1,61 @@
++From 8fc8fc3dfce7533b9c965185277d34e27055cc8f Mon Sep 17 00:00:00 2001
++From: Thomas Perrot <thomas.perrot@bootlin.com>
++Date: Tue, 26 Apr 2022 15:10:04 +0200
++Subject: [PATCH] Add support for overriding BL31, BL32 and BL33
 +
-+Signed-off-by: aeolio <git@aeolio.de>
-+
-+Fix typo in comment
-+
-+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
++Signed-off-by: Thomas Perrot <thomas.perrot@bootlin.com>
 +---
-+ src/lib/icu/meson.build | 11 +++++++++--
-+ 1 file changed, 9 insertions(+), 2 deletions(-)
++ iMX8M/print_fit_hab.sh | 14 +++++++++-----
++ 1 file changed, 9 insertions(+), 5 deletions(-)
 +
-+diff --git a/src/lib/icu/meson.build b/src/lib/icu/meson.build
-+index 59215e704..972c1fda3 100644
-+--- a/src/lib/icu/meson.build
-++++ b/src/lib/icu/meson.build
-+@@ -12,17 +12,23 @@ if is_windows
-+   icu_sources += 'Win32.cxx'
-+ endif
-+ 
-++iconv_dep = []
-+ if icu_dep.found()
-+   icu_sources += [
-+     'Util.cxx',
-+     'Init.cxx',
-+   ]
-+ elif not get_option('iconv').disabled()
-+-  have_iconv = compiler.has_function('iconv', prefix : '#include <iconv.h>')
-+-  conf.set('HAVE_ICONV', have_iconv)
-++  # an installed iconv library will make the builtin iconv() unavailable,
-++  # so search for the library first and pass it as (possible) dependency
-++  iconv_dep = compiler.find_library('libiconv', required: false)
-++  have_iconv = compiler.has_function('iconv', 
-++    dependencies: iconv_dep, 
-++    prefix : '#include <iconv.h>')
-+   if not have_iconv and get_option('iconv').enabled()
-+     error('iconv() not available')
-+   endif
-++  conf.set('HAVE_ICONV', have_iconv)
-+ endif
-+ 
-+ icu = static_library(
-+@@ -31,6 +37,7 @@ icu = static_library(
-+   include_directories: inc,
-+   dependencies: [
-+     icu_dep,
-++    iconv_dep,
-+     fmt_dep,
-+   ],
-+ )
-+-- 
-+2.34.1
++diff --git a/iMX8M/print_fit_hab.sh b/iMX8M/print_fit_hab.sh
++index b915115d1ecc..dbc28f2d9af5 100755
++--- a/iMX8M/print_fit_hab.sh
+++++ b/iMX8M/print_fit_hab.sh
++@@ -1,12 +1,16 @@
++ #!/bin/bash
 +
--- 
-2.34.1
-
++-BL32="tee.bin"
++-
++ let fit_off=$1
++
++ # keep backward compatibility
++ [ -z "$TEE_LOAD_ADDR" ] && TEE_LOAD_ADDR="0xfe000000"
++
+++[ -z "$BL31" ] && BL31="bl31.bin"
+++
+++[ -z "$BL32" ] && BL32="tee.bin"
+++
+++[ -z "$BL33" ] && BL33="u-boot-nodtb.bin"
+++
++ if [ -z "$ATF_LOAD_ADDR" ]; then
++ 	echo "ERROR: BL31 load address is not set" >&2
++ 	exit 0
++@@ -26,7 +30,7 @@ else
++ 	let uboot_sign_off=$((fit_off - 0x8000 - ivt_off + 0x3000))
++ fi
++
++-let uboot_size=$(ls -lct u-boot-nodtb.bin | awk '{print $5}')
+++let uboot_size=$(ls -lct $BL33 | awk '{print $5}')
++ let uboot_load_addr=0x40200000
++
++ let last_sign_off=$(((uboot_sign_off + uboot_size + 3) & ~3))
++@@ -64,13 +68,13 @@ done
++
++ let atf_sign_off=$((last_sign_off))
++ let atf_load_addr=$ATF_LOAD_ADDR
++-let atf_size=$(ls -lct bl31.bin | awk '{print $5}')
+++let atf_size=$(ls -lct $BL31 | awk '{print $5}')
++
++ if [ ! -f $BL32 ]; then
++ 	let tee_size=0x0
++ 	let tee_sign_off=$((atf_sign_off + atf_size))
++ else
++-	let tee_size=$(ls -lct tee.bin | awk '{print $5}')
+++	let tee_size=$(ls -lct $BL32 | awk '{print $5}')
++
++ 	let tee_sign_off=$(((atf_sign_off + atf_size + 3) & ~3))
++ 	let tee_load_addr=$TEE_LOAD_ADDR
++--
++2.35.1
++
+diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
+index 17ba3596f752..b88be0ca6441 100644
+--- a/package/imx-mkimage/imx-mkimage.mk
++++ b/package/imx-mkimage/imx-mkimage.mk
+@@ -21,6 +21,7 @@ endef
+ define HOST_IMX_MKIMAGE_INSTALL_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
+ 	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_fit_atf.sh $(HOST_DIR)/bin/mkimage_fit_atf.sh
++	$(INSTALL) -D -m 755 $(@D)/iMX8M/print_fit_hab.sh $(HOST_DIR)/bin/print_fit_hab.sh
+ endef
+ else
+ # i.MX8 and i.MX8X
+--
+2.35.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
