@@ -1,66 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 125E0C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 15:45:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 893B6C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 15:51:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A35AC6101C;
-	Thu, 28 Apr 2022 15:45:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2032340520;
+	Thu, 28 Apr 2022 15:51:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9mEd9WLhVRnc; Thu, 28 Apr 2022 15:45:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4WL9_DjHoYBr; Thu, 28 Apr 2022 15:51:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5CCC60AFF;
-	Thu, 28 Apr 2022 15:45:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ABA9A1BF39D
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 15:45:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2286940499;
+	Thu, 28 Apr 2022 15:51:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A22041BF39D
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 15:51:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A973C83403
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 15:45:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 847DE40499
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 15:51:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SV8L_p_Qswp8 for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 15:45:54 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C834F8333E
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 15:45:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yPGeii6Yr3SN for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 15:51:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8B06040490
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 15:51:16 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:8d9a:c8d:7cf:ba48])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 9A7AD7802E5;
- Thu, 28 Apr 2022 17:45:49 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id CB89778035D;
+ Thu, 28 Apr 2022 17:51:12 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1651160751;
- bh=Zlrzejj3n6C+W9g7QVCzX781ZCU4HBAaRQzBaYjTeAE=;
+ s=smtp-20201208; t=1651161074;
+ bh=ZNgsW0VtgwxjhZGbZCeng+BJ0ZDnMaqLqcszWZMVb7w=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=f1Qx0OupcZMXyI/C8CSc34rdR/xL2nVlZlFMTjMBlXXJ31d5yKsvplM1QJAl/ffUU
- xUkzOnmfLqm2u5dw8vaNCoy2WwWDYqtQaceOyOMNCIv17LohJbLpiIo3WJ5Ua9xMkW
- w51VH07KX3IpgHGZGZwKJ5KAJBI66iG8HnJbjdKaGR2pojQiut8+7t024Vs37zL4Hk
- /zCQSECZxUpRNJ0RguDnSrDAA5e/h3Bi4mHUGtt1GhDVP6jy6voMuFmAwuB7GOo5ac
- LV4R25J9SrNoIz3F0II53m/k6I2S7RJjbuPlKRXryCGKvWAocgQPgJkG1P0Cg4n8fY
- jCm6FBfiQlVOw==
+ b=e3/hdr0ZLLgmGo8s94KyxycyXBAuU0p8a8hevqAxtqUrF3CHfkHqA8ykIfKUI1jsn
+ YuYho2Hfb3WbcqYWSoc8rhZ41kdApFf42mFbDv6RSJcRscOvTdfFIMwqwBRrtnluUc
+ 7g0jCmBwyIUQLBpvRPNfo0+kS4oHGvfN6aSzgfL1WoqEN2cOyt13eqUa7FcpqDP7qg
+ +yZ1C+Yk987k/vdg2lFMr5ICMUuGfvG6ZU7P69nZMcetsKRmAcJ6JZR2LTg8EymKUQ
+ nU5zse3LrN7AsUueIz0JlzeHDm0c4f3Ywx98qGz4isA9Q1+ivznCeHbrnfxVOXRXOY
+ Jm52kHW+kDuhw==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 28 Apr 2022 17:45:49 +0200
-Date: Thu, 28 Apr 2022 17:45:49 +0200
+ Thu, 28 Apr 2022 17:51:12 +0200
+Date: Thu, 28 Apr 2022 17:51:12 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Andreas Ehmanns <universeiii@gmx.de>
-Message-ID: <20220428154549.GE3624965@scaer>
-References: <20220428134207.16521-1-universeiii@gmx.de>
+Message-ID: <20220428155112.GF3624965@scaer>
+References: <20220428074641.5682-1-universeiii@gmx.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220428134207.16521-1-universeiii@gmx.de>
+In-Reply-To: <20220428074641.5682-1-universeiii@gmx.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/tftpd: add include of config
- file to init script
+Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: add security options to
+ DHCP server
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,40 +78,69 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Andreas, All,
 
-On 2022-04-28 15:42 +0200, Andreas Ehmanns spake thusly:
-> HPA's tftp server init script does not support include of a
-> configuration file. So changing daemon parameters would cause
-> a modification of the init script.
-> Similar to NFS, dropbear, DHCP, SNMP and other network services
-> in buildroot, this patch adds an include of /etc/default/tftpd
-> to the init script. So any user can change the default behaviour
-> by adding its own configuration file instead of changing the init
-> script.
+On 2022-04-28 09:46 +0200, Andreas Ehmanns spake thusly:
+> I was trying to make the ISC dhcp daemon more secure by using the
+> -user and -group option to let dhcp server run as non-root user.
+> Unfortunately these options are not available when building ISC dhcp
+> server with buildroot.
+> The reason is, that the configure script must be called with the
+> option --enable-paranoia to activate these options. But this option
+> is not set in the dhcp.mk file.
+> 
+> To be backward compatible I added a new option to the dhcp's Config.in
+> file to enable this feature when desired and parse this option in
+> dhcp.mk.
 > 
 > Signed-off-by: Andreas Ehmanns <universeiii@gmx.de>
+> ---
+>  package/dhcp/Config.in | 8 ++++++++
+>  package/dhcp/dhcp.mk   | 4 ++++
+>  2 files changed, 12 insertions(+)
+> 
+> diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
+> index e0706efafb..5cf7af82de 100644
+> --- a/package/dhcp/Config.in
+> +++ b/package/dhcp/Config.in
+> @@ -25,6 +25,14 @@ config BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK
+>  	help
+>  	  Enable delayed ACK feature in the ISC DHCP server.
+> 
+> +config BR2_PACKAGE_DHCP_SERVER_ENABLE_PARANOIA
+> +	bool "Enable paranoia options"
+> +	depends on BR2_PACKAGE_DHCP_SERVER
+> +	help
+> +	  Add option --enable-paranoia to configure script. This activates
+> +	  additional server options (-user, -group and -chroot) to make
+> +	  dhcp server more secure.
 
-Applied to master, thanks.
+    $ make check-package
+    package/dhcp/Config.in:32: help text: <tab><2 spaces><62 chars>
+    (http://nightly.buildroot.org/#writing-rules-config-in)
+
+Applied to master with that fixed, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/tftpd/S80tftpd-hpa | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/tftpd/S80tftpd-hpa b/package/tftpd/S80tftpd-hpa
-> index 4e8361faa7..8ae15150a1 100644
-> --- a/package/tftpd/S80tftpd-hpa
-> +++ b/package/tftpd/S80tftpd-hpa
-> @@ -11,6 +11,8 @@ DAEMON=/usr/sbin/$NAME
->  PIDFILE=/var/run/$NAME.pid
->  SCRIPTNAME=/etc/init.d/S80tftpd-hpa
-> 
-> +[ -r "/etc/default/$NAME" ] && . "/etc/default/$NAME"
 > +
->  #
->  #	Function that starts the daemon/service.
->  #
+>  config BR2_PACKAGE_DHCP_RELAY
+>  	bool "dhcp relay"
+>  	help
+> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+> index f815c6c802..b73137506d 100644
+> --- a/package/dhcp/dhcp.mk
+> +++ b/package/dhcp/dhcp.mk
+> @@ -78,6 +78,10 @@ ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
+>  DHCP_CONF_OPTS += --enable-delayed-ack
+>  endif
+> 
+> +ifeq ($(BR2_PACKAGE_DHCP_SERVER_ENABLE_PARANOIA),y)
+> +DHCP_CONF_OPTS += --enable-paranoia
+> +endif
+> +
+>  define DHCP_INSTALL_LIBS
+>  	$(MAKE) -C $(@D)/bind install-bind DESTDIR=$(TARGET_DIR)
+>  	$(MAKE) -C $(@D)/common install-exec DESTDIR=$(TARGET_DIR)
 > --
 > 2.26.2
 > 
