@@ -4,75 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6FC8C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 16:27:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB45EC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 17:39:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A6B66101C;
-	Thu, 28 Apr 2022 16:27:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 294326112A;
+	Thu, 28 Apr 2022 17:39:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vz7Q5KlzjoFB; Thu, 28 Apr 2022 16:27:47 +0000 (UTC)
+	with ESMTP id K5sZaCqEQ7-l; Thu, 28 Apr 2022 17:39:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 681BE610B8;
-	Thu, 28 Apr 2022 16:27:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 569BF610FA;
+	Thu, 28 Apr 2022 17:39:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 895991BF424
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 16:27:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 48E611BF9C6
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 17:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8626960B04
- for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 16:27:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36836610FA
+ for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 17:39:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3ANJeyp_ar68 for <buildroot@lists.busybox.net>;
- Thu, 28 Apr 2022 16:27:45 +0000 (UTC)
+ with ESMTP id sSHkTGonrqCH for <buildroot@lists.busybox.net>;
+ Thu, 28 Apr 2022 17:39:24 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B887960ACD
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 16:27:44 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id w4so7448866wrg.12
- for <buildroot@buildroot.org>; Thu, 28 Apr 2022 09:27:44 -0700 (PDT)
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A2C0D610F9
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 17:39:24 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id p18so6354618edr.7
+ for <buildroot@buildroot.org>; Thu, 28 Apr 2022 10:39:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:date:message-id:mime-version
+ h=mime-version:from:date:message-id:subject:to
  :content-transfer-encoding;
- bh=K3GV2Z0alQqcWeoEIFlk9mQeUZ/3YLaiUFndoAfsM0w=;
- b=W66JD5eXXfpBPYg8k5BTSZmAWkzkyvCBkvQTFqGmhp1PZDMeWBv9S551OE69QKQi6S
- /G1mklnFpHzxBtBmXC3d24u3Kd2chP+qdlNADxQIN2TCUJcr4pqzv5Ln6Je31f0Iu+hA
- P6Td81KxNkSljvdQ33p4a+aBaXTTMAmqfPpys3+yciClHen4daWw6tttPhx4kDf9488o
- +25s3hPWR1HhyFYhDB/45jp/5O4e+o2c9z5LvKTLDAARot7HdkVyNREa7dY27gOcm9g4
- iGbix93zCh+kd8jahhI3HPvV2OGlh7jJUgQP5y3SaEXQX33fNTN2E2liwKCOCknkbXh7
- pkkQ==
+ bh=WxpxIkBkjQ37QJFQewI6fwM4XAfID8m8+rT3b3bHHxQ=;
+ b=DOXVQFAxpMITpq5e3gaPpc1qCS/5mGLyJg/udYlbJbLeFXbxRlgEwSloBy2m7EeTxh
+ m8bhHTkcFglu7sjJBNMhDnE3f5+P0N/mPJpHanWUl+bEhJhw4cx37jY3b3fXpg+5116u
+ K2hOPTy7EEJen20hge+jwH2lVO+TU/pOVvYzmucvdKxdxe9qLB58QlAIxuh9lmdJFivZ
+ KFFBfz+ypUu6ZkqVRAMR/IP8xzEuqZ2yXii+ISHigX7oNlpEikZTNoEqJMQ3TRlYhAtL
+ Jz+XEDO9aRdi3RuPT/XeAsoZJ2t/3DEyFOmrfbPcziafS2/5fQQGdbZrXeJgjzkITWUo
+ oyrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=K3GV2Z0alQqcWeoEIFlk9mQeUZ/3YLaiUFndoAfsM0w=;
- b=ssJfNBvrDyXzKoPCJgAIRZmw1IgfiZEJL9ImRv9L6FYjUAQOqQIdFud+om3uTjc4qZ
- kvNxaoV6Ady4yGwAPErRa1F2EmVfjC4VqVXGVjrH92XiY9Xm2gCavCrJHdptM3/fXPRd
- RQp1M1c/QyYtqqeHdlYZdzXrDdEPFybKvPyYf3cj91BPSdwmRMZ4IJrLnjz1zz/VpFmO
- wbBPlntBev5an2vWajzuaDM77GPLp1sIoIiuY7Cx8p+0FTBFJXdHtOm+Sy65mPRXfEXQ
- G9Dihv6lXsQFUYqo9/efUwJ3eX4V93NEpr/cjKhRIvBGQzN+SsTF6ejoBANIWByG18pI
- mpBA==
-X-Gm-Message-State: AOAM533G+dusMiRSHFVBL5jjgSn0ThupcJeUZ1CEFMWXmwnwOTWWkL4f
- BOKiYXOu2MX2fXLU2sG1Up6qz0F1jlU=
-X-Google-Smtp-Source: ABdhPJwtoKAgdDc00+yZ35AddeLuoGaB5PgCn+0Z/siCikuX5TAiwhwMER8dz5BxrgE5aWFm6Qxejw==
-X-Received: by 2002:a05:6000:1786:b0:20c:4447:3462 with SMTP id
- e6-20020a056000178600b0020c44473462mr656575wrg.601.1651163262897; 
- Thu, 28 Apr 2022 09:27:42 -0700 (PDT)
-Received: from scaer.home ([2a01:cb19:8b51:cb00:8d9a:c8d:7cf:ba48])
- by smtp.gmail.com with ESMTPSA id
- l6-20020a1c2506000000b0038e6fe8e8d8sm422402wml.5.2022.04.28.09.27.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 28 Apr 2022 09:27:42 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 28 Apr 2022 18:27:38 +0200
-Message-Id: <20220428162738.1243794-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+ :content-transfer-encoding;
+ bh=WxpxIkBkjQ37QJFQewI6fwM4XAfID8m8+rT3b3bHHxQ=;
+ b=A7lo1HaPc6Si/i9tXuIKVLB89uLKbSic1RiqWTAs74HeKHD54U0XZdbkng49wD2/rC
+ Dkib9k0yod+KZX/eFFaXdObjWnS0niAPE/3Y49xzW4AdBcQ/+kNTsmh/9sAY36Lif3YL
+ 2DoowDJ5Lg0FBGIOP3k4stEciyS5rBb1YNVhJQcyGQkyighQTtsqz2giZ3kAGcLYUiU4
+ A4WXibwmZCCTybd/cWjMeqmJ3urHValoIM0lvMv1HO8IhCXajCyT8IjNzWQLbdXUzkEr
+ j+Rr9j30Kwud5DEjrDHpPNIM2wgJGrvS66RGM2m5fZjFmOc3dzJaM0wGhjWqJ91I4Yim
+ WcEg==
+X-Gm-Message-State: AOAM533K6Sezj7X/dPJhbp6+104KXgVp3xuF7YYhKHPcqWE0K13lY4ox
+ qYzAyVka363D8u0Gld3jFdxnW6IxiniHi6r6HuqJaznDCyQ=
+X-Google-Smtp-Source: ABdhPJy00DNKgeG8UC1Gd9OW1+8etQgVS28M/HOc+1qSyQq1zuqRDTkd5o7wLPnOlPAmg6v09UsdL2Fv4plD8TGlwbU=
+X-Received: by 2002:aa7:c789:0:b0:413:605d:8d17 with SMTP id
+ n9-20020aa7c789000000b00413605d8d17mr36689758eds.100.1651167562472; Thu, 28
+ Apr 2022 10:39:22 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/dhcp: add explicit option disabling
+From: Kristof Havasi <havasiefr@gmail.com>
+Date: Thu, 28 Apr 2022 19:39:11 +0200
+Message-ID: <CADBnMvhgaozAgZgy3njckjL1i0U6bZ0fLrq-kdFF-qpGhFWgmw@mail.gmail.com>
+To: buildroot@buildroot.org
+Subject: [Buildroot] Build regression after 2022.02.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,55 +78,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Ehmanns <universeiii@gmx.de>, Jan Havran <havran.jan@email.cz>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Eugen Hristev <eugen.hristev@microchip.com>,
- Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commits 4db37c663cc0 (dhcp: add config option for delayed-ack feature
-of dhcp server) and 40f7adae3c03 (package/dhcp: add security options to
-DHCP server) forgot to explicit disable the option when not requested.
-
-Fix that now.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Andreas Ehmanns <universeiii@gmx.de>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Cc: Jan Havran <havran.jan@email.cz>
-Cc: Eugen Hristev <eugen.hristev@microchip.com>
----
- package/dhcp/dhcp.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index b73137506d..cbc95cb152 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -76,10 +76,14 @@ endif
- 
- ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
- DHCP_CONF_OPTS += --enable-delayed-ack
-+else
-+DHCP_CONF_OPTS += --disable-delayed-ack
- endif
- 
- ifeq ($(BR2_PACKAGE_DHCP_SERVER_ENABLE_PARANOIA),y)
- DHCP_CONF_OPTS += --enable-paranoia
-+else
-+DHCP_CONF_OPTS += --disable-paranoia
- endif
- 
- define DHCP_INSTALL_LIBS
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgdGhlcmUhCgpJIGp1c3QgdXBkYXRlZCBmcm9tIDIwMjIuMDIgdG8gMjAyMi4wMi4wMS4KCk15
+IGJ1aWxkIGJyb2tlIGR1ZSB0byA4OTQ1YmE0OTQ4MGE3ODg1ZDEwNDQ0CiJ0b29sY2hhaW4vdG9v
+bGNoYWluLWV4dGVybmFsOiBlcnJvciBpZiBCUjJfVE9PTENIQUlOX0VYVEVSTkFMX1BBVEggaXMg
+bm90IHNldCIKCkkgc2VsZWN0ZWQgYSBib290bGluIHRvb2xjaGFpbiBmb3IgYXJtdjcsIHdoaWNo
+IGlzIGluc3RhbGxlZCBvbiB0aGUKYnVpbGQgc3lzdGVtIGFuZCBpcyBhdmFpbGFibGUKdmlhIFBB
+VEguIEFzIHRoZSBoZWxwIHN0cmluZyBvZiBCUjJfVE9PTENIQUlOX0VYVEVSTkFMX1BBVEggZGVz
+Y3JpYmVzLCBpZiBpdCBpcwplbXB0eSwgdGhlbiBQQVRIIHdpbGwgYmUgc2VhcmNoZWQuCgpJZiBJ
+IHJldmVydCB0aGUgYWJvdmUgY29tbWl0IHRoZSBidWlsZCBzdWNjZWVkcyBsaWtlIGJlZm9yZS4K
+CkkgY291bGQgc2VlIHRoZSByZWFzb24gYmVoaW5kIHRoZSBjaGVjayBpbiB0aGUgY29tbWl0IGZv
+ciB0aGUgY2FzZSwKd2hlcmUgdGhlIHRvb2xjaGFpbiBpcyB5ZXQgdG8gYmUgZG93bmxvYWRlZCwg
+YnV0IHRoZW4gdGhlIGxpbmVzIGVuZGVkCnVwIGluIHRoZSB3cm9uZwpicmFuY2ggb2YgdGhlIGlm
+L2Vsc2Ugc3RhdGVtZW50LgoKSW4gY2FzZSB0aGUgdG9vbGNoYWluIGlzIGFscmVhZHkgYXZhaWxh
+YmxlIHZpYSBQQVRILCBJIHN1Z2dlc3QgdG8KZm9sbG93IHRoZSBwcmV2aW91cyBsb2dpYwphbmQg
+ZGVzY3JpcHRpb24gaW4gdGhlIGhlbHAgdGV4dDoKICAgICAiSWYgZW1wdHksIHRoZSBjb21waWxl
+ciB3aWxsIGJlIHNlYXJjaGVkIGluICRQQVRILiIKCkJlc3QgUmVnYXJkcywKS3Jpc3TDs2YKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
+aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
+dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
