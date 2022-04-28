@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBEB7C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:10:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8C79C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 28 Apr 2022 21:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95C5283F18;
-	Thu, 28 Apr 2022 21:10:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 660E161196;
+	Thu, 28 Apr 2022 21:10:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0C_CUQx372uO; Thu, 28 Apr 2022 21:10:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lXguhooU439q; Thu, 28 Apr 2022 21:10:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9ABC383F12;
-	Thu, 28 Apr 2022 21:10:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 356F21BF2E4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A73661191;
+	Thu, 28 Apr 2022 21:10:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1AD251C11A5
  for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:09:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB4BA41BF3
+ by smtp3.osuosl.org (Postfix) with ESMTP id C74566119A
  for <buildroot@lists.busybox.net>; Thu, 28 Apr 2022 21:09:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YoWx1IzK7xh6 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6jep-Imu_NZl for <buildroot@lists.busybox.net>;
  Thu, 28 Apr 2022 21:09:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 70F3D41BE6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A8F261198
  for <buildroot@buildroot.org>; Thu, 28 Apr 2022 21:09:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4C98D846A0; Thu, 28 Apr 2022 20:58:45 +0000 (UTC)
+ id 418738469F; Thu, 28 Apr 2022 20:58:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 Apr 2022 23:00:24 +0200
+Date: Thu, 28 Apr 2022 23:00:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 678d92b5a7716989b15e963bf2ad0f1f29810262
-X-Git-Newrev: 61e525780d2b684799c48aeb3455c6394d3a7fb6
+X-Git-Oldrev: 6f93ce0d1c29649dea3eb0fee5e1da4b577f4d3e
+X-Git-Newrev: 678d92b5a7716989b15e963bf2ad0f1f29810262
 X-Patchwork-Hint: ignore
-Message-Id: <20220428205845.4C98D846A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-typing-extensions: bump to
- version 4.2.0
+Message-Id: <20220428205845.418738469F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-simplejson: bump to version
+ 3.17.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,48 +60,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61e525780d2b684799c48aeb3455c6394d3a7fb6
+commit: https://git.buildroot.net/buildroot/commit/?id=678d92b5a7716989b15e963bf2ad0f1f29810262
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This package now requires the flit setup type.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-typing-extensions/python-typing-extensions.hash | 4 ++--
- package/python-typing-extensions/python-typing-extensions.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-simplejson/python-simplejson.hash | 4 ++--
+ package/python-simplejson/python-simplejson.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
-index abaac77d34..f37a609adc 100644
---- a/package/python-typing-extensions/python-typing-extensions.hash
-+++ b/package/python-typing-extensions/python-typing-extensions.hash
+diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
+index bb44bdfc79..0f56d4c6cc 100644
+--- a/package/python-simplejson/python-simplejson.hash
++++ b/package/python-simplejson/python-simplejson.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/typing_extensions/json
--md5  ed80ecc8eac5cb15840535ca54eb43f3  typing_extensions-3.10.0.2.tar.gz
--sha256  49f75d16ff11f1cd258e1b988ccff82a3ca5570217d7ad8c5f48205dd99a677e  typing_extensions-3.10.0.2.tar.gz
-+md5  197fb153e3720a3f6e0c85bb47f9c2b5  typing_extensions-4.2.0.tar.gz
-+sha256  f1c24655a0da0d1b67f07e17a5e6b2a105894e6824b92096378bb3668ef02376  typing_extensions-4.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/simplejson/json
+-md5  1756427859454004e90e028d263cf23e  simplejson-3.17.5.tar.gz
+-sha256  91cfb43fb91ff6d1e4258be04eee84b51a4ef40a28d899679b9ea2556322fb50  simplejson-3.17.5.tar.gz
++md5  0b8f47c9451bf101a791f8b5bccf1f33  simplejson-3.17.6.tar.gz
++sha256  cf98038d2abf63a1ada5730e91e84c642ba6c225b0198c3684151b1f80c5f8a6  simplejson-3.17.6.tar.gz
  # Locally computed sha256 checksums
- sha256  ff17ce94e102024deb68773eb1cc74ca76da4e658f373531f0ac22d68a6bb1ad  LICENSE
-diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
-index 668071e025..a664e5d3e9 100644
---- a/package/python-typing-extensions/python-typing-extensions.mk
-+++ b/package/python-typing-extensions/python-typing-extensions.mk
-@@ -4,10 +4,10 @@
+ sha256  fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
+diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
+index 5bed8d20a9..52bff7569c 100644
+--- a/package/python-simplejson/python-simplejson.mk
++++ b/package/python-simplejson/python-simplejson.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TYPING_EXTENSIONS_VERSION = 3.10.0.2
-+PYTHON_TYPING_EXTENSIONS_VERSION = 4.2.0
- PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
--PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/ed/12/c5079a15cf5c01d7f4252b473b00f7e68ee711be605b9f001528f0298b98
--PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = setuptools
-+PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/fe/71/1df93bd59163c8084d812d166c907639646e8aac72886d563851b966bf18
-+PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = flit
- PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
- PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
- 
+-PYTHON_SIMPLEJSON_VERSION = 3.17.5
++PYTHON_SIMPLEJSON_VERSION = 3.17.6
+ PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
+-PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/01/52/41c71718f941c9a5abebfaa24e3c14e3c0229327b7ebd21348989845ed8f
++PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/7a/47/c7cc3d4ed15f09917838a2fb4e1759eafb6d2f37ebf7043af984d8b36cf7
+ PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
+ PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
+ PYTHON_SIMPLEJSON_CPE_ID_VENDOR = simplejson_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
