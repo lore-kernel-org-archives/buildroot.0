@@ -1,91 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67C6CC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 29 Apr 2022 09:53:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6617AC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 29 Apr 2022 14:08:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9B5741CA3;
-	Fri, 29 Apr 2022 09:53:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D2977400F2;
+	Fri, 29 Apr 2022 14:08:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PmU7liDryzfB; Fri, 29 Apr 2022 09:53:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LZ-wVBUsGz0a; Fri, 29 Apr 2022 14:08:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8F0441C9F;
-	Fri, 29 Apr 2022 09:53:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 74C711BF344
- for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 09:53:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F8114040D;
+	Fri, 29 Apr 2022 14:08:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 48AC51BF2A1
+ for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 14:08:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60D5741C9F
- for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 09:53:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 453D260D74
+ for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 14:08:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OkzUqFGkUe5m for <buildroot@lists.busybox.net>;
- Fri, 29 Apr 2022 09:53:11 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 11D5F41C9C
- for <buildroot@buildroot.org>; Fri, 29 Apr 2022 09:53:10 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id g23so8422649edy.13
- for <buildroot@buildroot.org>; Fri, 29 Apr 2022 02:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=ohpqSO6N6pZ3pQGJcMaTOS6reMAwtTYfivOnbJ9pYTE=;
- b=emRMkvBmdxLoEnziilUH9wsBfpk5ejlahXeO0NbQ/pYlcQvg3aB3iDkrK1kDj+DRqi
- 8wK00Ba8D2oX+jgeFJ9JajP0XH1om08vpoZBzl+UOKimgGlO6t1cpuTuEhbs3LEEgKuT
- uxpMHYKjE51SBLQj2+6hK/Y9zZSgVigfrMNoJsufNjTc4Bhu2jsEuQPy4UxSg8/6JFm3
- /wahEMxKQyzuDJ3ZLtWHPh+jtsmrWp0fl3h6zl6ocYuNKolkH40dSTK/Cm8xYgdfWOH5
- sPIGF2hBgxzGCkSe9vU/NX161xHYK24wqI2skvUh7s18qpGCgXbmmr44WCfcWFN+n15s
- GJZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=ohpqSO6N6pZ3pQGJcMaTOS6reMAwtTYfivOnbJ9pYTE=;
- b=YZl32IBL4FgyXb2GPXNpM6govIEX5GHcaMRtxsrEmdyCN8EY6NN7R7hmfR5u1nRslX
- RgRRKGpkN6I7qr7fVHXQYNypoYggWveZldZQn2jylQdrxpwz7m4BEh55u1gWP906N0bE
- GPK9xYQ0zl++/QE3VTeo9f86lHGFN5j3DFjl7ls+m/s9SZyy1PxTIqeWQOUKrE360WTl
- 2bu/AJrj9/IMN5U89esNgsURNlhq5q6GteOuyezzOdpOdWhZqQ6PdFCB1bSH3ZsF3zQI
- ntgW0VSOvPPaAK9QRKVU9eF+u5o95s2k+AbwVj7QJBDE7naNLNw4jNTUwAgTyWFBqbu6
- bs5Q==
-X-Gm-Message-State: AOAM531nDBmA86q0MwLSG0A/P9CdOgyMDEPad9Y+7WopoHqq2TqOULFZ
- 7M3wpUUhN+rVJfEE+LkDk6Nu7w==
-X-Google-Smtp-Source: ABdhPJyrmoduK4o9eZ0BGmg0VYwk/n/vNQN99YnPOYNPcvDlPtQfe/WGYDAknp6W+2eGQldye6nl6Q==
-X-Received: by 2002:aa7:cd0a:0:b0:425:bc13:4ccb with SMTP id
- b10-20020aa7cd0a000000b00425bc134ccbmr38577905edw.229.1651225989022; 
- Fri, 29 Apr 2022 02:53:09 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- q8-20020aa7cc08000000b0042617ba637esm2737826edt.8.2022.04.29.02.53.08
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 29 Apr 2022 02:53:08 -0700 (PDT)
-Message-ID: <3ec51ca9-f5d5-bdcd-49a0-5a44729bb65d@mind.be>
-Date: Fri, 29 Apr 2022 11:53:07 +0200
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=freenet.de
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U-quUlWwQXWj for <buildroot@lists.busybox.net>;
+ Fri, 29 Apr 2022 14:08:38 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mout1.freenet.de (mout1.freenet.de [IPv6:2001:748:100:40::2:3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3E89160AEC
+ for <buildroot@buildroot.org>; Fri, 29 Apr 2022 14:08:37 +0000 (UTC)
+Received: from [195.4.92.124] (helo=sub5.freenet.de)
+ by mout1.freenet.de with esmtpa (ID earthquake.de@freenet.de) (port 25) (Exim
+ 4.94.2 #2) id 1nkRCY-009Uya-Gx
+ for buildroot@buildroot.org; Fri, 29 Apr 2022 16:02:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freenet.de; 
+ s=mjaymdexmjqk;
+ h=Content-Transfer-Encoding:Content-Type:Subject:From:To:
+ MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+ List-Subscribe:List-Post:List-Owner:List-Archive;
+ bh=nxxtQGfwci9U+fgwY8v4YPsjo23217jx8GH68LsbX3E=; b=iVMhYMJuRAxbTqDa9XL8X4q30G
+ S8rvzAAixB8jUhapGfFLvUGD0RAXHu5/+DtPdRPpXft+mxPapAzt52GbRF/BU1ifXFPdJvgSf8rki
+ gaFgUw0BMC2bkuStHt0/wdRHL/rch5zhKSLIuVuiVbRZgI2nwZaGXpidgmQapoZ3f2yPrbSAlQq6l
+ 5D6/Vb4MFCHJH87ilUDAl8GebB1HHtMbCrquWjnexo81jjE5JR7sQy5mvkOKTx/4ZvMHWeVA6oCP0
+ qpNdE0IOkCJwGK+QWUutxP2f4VAvg4qFWN46kQ0RxjzThP4f+MxnfOP68F22DAqqkZuhuNUwOH8i3
+ mjFRrP7w==;
+Received: from p5df03b90.dip0.t-ipconnect.de ([93.240.59.144]:57225
+ helo=[10.32.8.78])
+ by sub5.freenet.de with esmtpsa (ID earthquake.de@freenet.de)
+ (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (port 465) (Exim
+ 4.94.2 #2) id 1nkRCZ-00DAaf-7T
+ for buildroot@buildroot.org; Fri, 29 Apr 2022 16:02:31 +0200
+Message-ID: <8043273d-730b-c378-fd91-21e6902081fa@freenet.de>
+Date: Fri, 29 Apr 2022 16:02:30 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Content-Language: en-GB
-To: Peter Korsgaard <peter@korsgaard.com>
-References: <20220427035039.1664864-1-james.hilliard1@gmail.com>
- <20220427103102.7f934c1f@windsurf>
- <CADvTj4og7yAZT69jVo8=5yHSppj7ih7dsUAy6hH+zib7HEi51g@mail.gmail.com>
- <2c51f9ba-5d02-17f7-98d0-8a4c1b6dcf79@mind.be>
- <87y1zqi902.fsf@dell.be.48ers.dk>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <87y1zqi902.fsf@dell.be.48ers.dk>
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: drop libressl support
+Content-Language: de-DE
+To: buildroot@buildroot.org
+From: Earthquake <earthquake.de@freenet.de>
+X-Originated-At: 93.240.59.144!57225
+X-Scan-TS: Fri, 29 Apr 2022 16:02:31 +0200
+Subject: [Buildroot] ACE + TAO with buildroot - GLIBC_2.28 not found
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,58 +78,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>, "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 27/04/2022 22:09, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
-> Hi,
-> 
->   >>> I don't have a very well-informed opinion, but perhaps we should think
->   >>> about this?
->   >> Yeah, not really sure, it may be useful to keep around, I think it
->   >> has an
->   >> alternative updated API to openssl's updated API that may be desirable
->   >> for some use cases, although probably not the most commonly used.
-> 
->   >  At that point, however, having libressl as a virtual package
->   >  alternative for openssl becomes less and less realistic. Virtual
->   > packages should only be used if the alternatives can be considered
->   > drop-in replacements with compatible API. A few exceptions are
->   > acceptable, but it's becoming too much.
-> 
->   >  We should also start thinking what to do with openssl 3. It has an
->   >  API that is somewhat compatible with openssl 1.1.1, but there are
->   > almost no packages that can use it without any changes. This could
->   > actually be an opportunity to get aout of this mess: most packages
->   > that are not compatible with libressl are probably already compatible
->   > with openssl 3. So if we introduce an openssl3 package, we can migrate
->   > the packages that don't like libressl to that, and leave the choice
->   > between openssl 1.1.1 and libressl for legacy and BSD packages.
-> 
-> That indeed sounds like a way forward. Do we expect most applications to
-> (already have) move to the v3.x API or do we rather expect to have to
-> keep around openssl 1.1.1 / libressl for a long time?
-
-  Fedora 36 has openssl3 as default and openssl1.1 as compat. So I expect that 
-the flagship packages will support openssl3 by now, and it will take years for 
-all almost-unmaintained packages to get updated.
-
-  Unfortunately I know of no easy way of querying reverse dependencies, so it's 
-hard to evaluate how many packages currently still need openssl1.1.
-
-  Regards,
-  Arnout
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgppbnRlcmdyYXRpbmcgQUNFIHdhcyBzdWNjZXNzZnVsbCB3aXRoCgpodHRwczovL3BhdGNo
+d29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjEwNDEzMTM0MTM5LjEz
+MjgxLTEtbWF0dGhldy53ZWJlckByb2Nrd2VsbGNvbGxpbnMuY29tLyAKCgpBQ0UgbGliIGlzIGJ1
+aWx0LgoKV2hlbiBJIGludGVncmF0ZSBUQU8gaW4gdGhlIGFjZS5tawoKVEFPX0xJQlJBUklFUyAr
+PSBUQU9fSURMClRBT19MSUJSQVJJRXMgKz0gdGFvL1BvcnRhYmxlU2VydmVyCiQoZm9yZWFjaCBs
+aWIsJChUQU9fTElCUkFSSUVTKSwgQUNFX1JPT1Q9IiQoQEQpIiAKJChUQVJHRVRfQ09ORklHVVJF
+X09QVFMpICQoTUFLRSkgLUMgJChARCkvVEFPLyQobGliKSBBQ0VfUk9PVD0iJChARCkiIApUQU9f
+Uk9PVD0iJChARCkvVEFPIsKgIGFsbCApCgpUaGUgdGFvX2lkbCBjb21wbGllciB3aWxsIGJlIGJ1
+aWx0LgoKVGhlIFBvcnRhYmxlU2VydmVyIHVzZXMgdGhlIGNyZWF0ZWQgdGFvX2lkbCBjb21wbGll
+ciBidXQgZXhpdCB3aXRoOgoKLi4vLi4vLi4vYmluL3Rhb19pZGw6IC9saWIveDg2XzY0LWxpbnV4
+LWdudS9saWJjLnNvLjY6IHZlcnNpb24gCmBHTElCQ18yLjI4JyBub3QgZm91bmQgKHJlcXVpcmVk
+IGJ5IC4uLy4uLy4uL2xpYi9saWJBQ0Uuc28uNy4wLjIpCi4uLy4uLy4uL2Jpbi90YW9faWRsOiAv
+bGliL3g4Nl82NC1saW51eC1nbnUvbGliYy5zby42OiB2ZXJzaW9uIApgR0xJQkNfMi4zMicgbm90
+IGZvdW5kIChyZXF1aXJlZCBieSAuLi8uLi8uLi9saWIvbGliQUNFLnNvLjcuMC4yKQoKV3Jvbmcg
+d2F5IHRvIGNhbGw/CgoKVGhhbmtzIGZvciBzdXBwb3J0LAoKQWxleAoKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
