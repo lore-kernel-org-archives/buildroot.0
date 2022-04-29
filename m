@@ -1,59 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75D1DC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 29 Apr 2022 14:47:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D9A0C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 29 Apr 2022 18:37:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3838540588;
-	Fri, 29 Apr 2022 14:47:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C294B415D9;
+	Fri, 29 Apr 2022 18:37:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sl-iTlPAr4iP; Fri, 29 Apr 2022 14:47:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3k6ANSNyLpGl; Fri, 29 Apr 2022 18:37:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 44813400F2;
-	Fri, 29 Apr 2022 14:47:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 358801BF989
- for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 14:47:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82B23410C6;
+	Fri, 29 Apr 2022 18:37:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E9E71BF855
+ for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 18:37:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2362F60BF9
- for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 14:47:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6BF6D83EBF
+ for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 18:37:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=agner.ch
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dMEFamwSfXAo for <buildroot@lists.busybox.net>;
- Fri, 29 Apr 2022 14:47:44 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A2E1C60E2C
- for <buildroot@buildroot.org>; Fri, 29 Apr 2022 14:47:44 +0000 (UTC)
-Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id 8722B5C10E9;
- Fri, 29 Apr 2022 16:47:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
- t=1651243662;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:in-reply-to:
- references; bh=pX0F9xjBkO8SkuRyUouuu0D8D9sEXu+1KzTjA7S6EnM=;
- b=ecLtx1YdykACrAxtgngD+ge5RLe5knT/lJLGIswpcPXhzruoz5LJUKgQhTYw0BpLzpmeaR
- l8C2s0gUVC/oDG5kvb/bcYfG43246/mKKgAtFtIFPG04qrBeSoZfBi7VgUbStBm3pdJKrB
- IURvdlcbXnvyApD/+aal5j+UWajN8w8=
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LRj1pI7F0U5s for <buildroot@lists.busybox.net>;
+ Fri, 29 Apr 2022 18:37:13 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BD33783E92
+ for <buildroot@buildroot.org>; Fri, 29 Apr 2022 18:37:13 +0000 (UTC)
+Received: from fwd77.dcpf.telekom.de (fwd77.aul.t-online.de [10.223.144.103])
+ by mailout05.t-online.de (Postfix) with SMTP id 1353512D13
+ for <buildroot@buildroot.org>; Fri, 29 Apr 2022 20:37:11 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.204.173]) by fwd77.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1nkVUL-1c9vTV0; Fri, 29 Apr 2022 20:37:09 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38672)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nkVUL-0006Xb-00
+ for buildroot@buildroot.org; Fri, 29 Apr 2022 20:37:09 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Fri, 29 Apr 2022 20:37:08 +0200
+Message-Id: <20220429183708.3819668-2-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220429183708.3819668-1-bernd.kuhls@t-online.de>
+References: <20220429183708.3819668-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-Date: Fri, 29 Apr 2022 16:47:42 +0200
-From: Stefan Agner <stefan@agner.ch>
-To: buildroot@buildroot.org, "Yann E. MORIN" <yann.morin.1998@free.fr>
-User-Agent: Roundcube Webmail/1.4.9
-Message-ID: <1f0d993a5097ca6e94a4ded0b7e0c5cb@agner.ch>
-X-Sender: stefan@agner.ch
-Subject: [Buildroot] GRUB2 2.04 (buildroot 2022.02.1) failure reading sector
- errors
+X-TOI-EXPURGATEID: 150726::1651257429-0001606D-853A51D3/0/0 CLEAN NORMAL
+X-TOI-MSGID: 57958eab-4a32-4843-98c5-3427adf6874a
+Subject: [Buildroot] [PATCH 2/2] package/tor: bump version to 0.4.7.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,33 +68,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Release notes: https://forum.torproject.net/t/stable-release-0-4-7-7/3108
 
-On Home Assistant OS we are moving from Barebox to GRUB2 as the
-bootloader for UEFI based systems. The switch is currently on our beta
-channel with several hundert of users. I have now 4 independent reports
-where the system stopped booting after upgrading to the new OS version
-with GRUB2. The systems show the same error: "error: failure reading
-sector 0x9c900 from `hd0`." The sector number is not always the same,
-but it seems to be always within the partition holding the kernel. We
-are using compressed squashfs which might be a factor influencing the
-problem.
+Added sha256 hash provided by upstream.
 
-Despite testing on several actual and virtual x86-64 systems I am unable
-to reproduce so far.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tor/tor.hash | 3 ++-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-At least one of the systems has been successfully tested with Debian 11
-bullseye (which is using GRUB2 2.04 as well). That boot flow doesn't
-make use of squashfs of course.
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 16e01c80a9..8f37dd6219 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,4 @@
++# From https://dist.torproject.org/tor-0.4.7.7.tar.gz.sha256sum
++sha256  3e131158b52b9435d7e43d1c47ef288b96d005342cc44b8c950bb403851a5b44  tor-0.4.7.7.tar.gz
+ # Locally computed
+-sha256  94ccd60e04e558f33be73032bc84ea241660f92f58cfb88789bda6893739e31c  tor-0.4.6.10.tar.gz
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 78a6de66dc..3b470a80d8 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.4.6.10
++TOR_VERSION = 0.4.7.7
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
+-- 
+2.30.2
 
-Anyone seen similar issues? Ideas how to get to the bottom of this?
-
-I am considering moving to 2.06 to see if that fixes the problem, is
-anyone working on 2.06 already? I see that buildroot is carring 150
-patches on-top of vanilla GRUB2, so that requires some work.
-
-Best regards,
-Stefan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
