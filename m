@@ -1,76 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66D82C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 29 Apr 2022 07:05:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36BC3C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 29 Apr 2022 07:34:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBACC4090E;
-	Fri, 29 Apr 2022 07:05:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8AAD83FFA;
+	Fri, 29 Apr 2022 07:34:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vaV8hw_sJzxU; Fri, 29 Apr 2022 07:05:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wG-tnQyNJygr; Fri, 29 Apr 2022 07:34:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C3BEC408E2;
-	Fri, 29 Apr 2022 07:05:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD2BC83415;
+	Fri, 29 Apr 2022 07:34:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 918C71BF380
- for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 07:05:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BE6251BF380
+ for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 07:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D8666110B
- for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 07:05:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA6B260597
+ for <buildroot@lists.busybox.net>; Fri, 29 Apr 2022 07:34:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6qwsRLPqW6hv for <buildroot@lists.busybox.net>;
- Fri, 29 Apr 2022 07:05:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
- [IPv6:2607:f8b0:4864:20::235])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6005A60D60
- for <buildroot@buildroot.org>; Fri, 29 Apr 2022 07:05:33 +0000 (UTC)
-Received: by mail-oi1-x235.google.com with SMTP id r1so7512794oie.4
- for <buildroot@buildroot.org>; Fri, 29 Apr 2022 00:05:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=tj/cOQjHly8jUhWighS719VvWiFUth/nTbyHbfpmJ5s=;
- b=f/gXgvT8uFVSoxzhQxKD9mZG20016iYA3jj9gynQYhcL6E3PfPFauHCDVERsRVuyQ4
- rL3FgA7XrdkGfuQD1eduK4xHApIJFwg8XDLp0Fpr4dqy1T1DGlndRG25zh9HGJjNcBcb
- OMPG0aiQ5fjsyBCWimPLNHCrEfPrytMJsu1yaZa4skMsrUkGAjjFnj/uHhf5jVH/iw0v
- T3JATDYKwiagkc8ARwsDibQuDVj6uHQRlzfAtv1v+oi1Sm1xLdyvY9oVgkn3KPXlQrnO
- 6AYWRdd91fURQOOuErHXeU+dQ3iMOh/BALlt7B3joKxS9Pv1yEvRTNsyccSCYaV9jIyH
- XzEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=tj/cOQjHly8jUhWighS719VvWiFUth/nTbyHbfpmJ5s=;
- b=t30nLWNrUFBKTABn6wIx83C3QwESgr1PwODFBQ57dytyiBSwQhBh/5lHwUe/I+QxQv
- AwmPThY6MYMgjCGPOHHd8pxFBtds4ddU6VUWlm/7vjy0hxbMPVyD3Yx2K0KWsXp9BbPp
- u6Wf2ARUA0OCXM8dB/2RU8UHGkoQn7uMLuMhz8tVLBa/KPEP/byw6TkFBvo2PNsnZzpb
- 6ZsBm+hfTCyKUI6X01DDpo4QjX+j0uHMa1DrAKv7VIEa4L9fPI2AyeE9otI2toN/EFk0
- h5K+NJRCwJpXNdaCtMpELIHCTEs8IqP1il9M3zcsmXsYchMHWMxGJIPdkexdkknw8oPe
- Lblg==
-X-Gm-Message-State: AOAM531l/JwWEtVRCsBtSf15rDXmrT2eEFmLB3fdJ+O1bZC/V7IRv2P+
- 5gK82vn11XkXwt5BkgcS6HUY5dEvdIN/seJuVlcI3uW4
-X-Google-Smtp-Source: ABdhPJzhRmSiZzhNHP/vPk5lnYhEG44gDqTeb1qs7fomaT4ROw69VsMW9nKsjhO4eoh+IqpxmbNPVSFgszlVy8oSAvY=
-X-Received: by 2002:aca:c182:0:b0:2ef:8fd4:7523 with SMTP id
- r124-20020acac182000000b002ef8fd47523mr893684oif.148.1651215932355; Fri, 29
- Apr 2022 00:05:32 -0700 (PDT)
-MIME-Version: 1.0
+ with ESMTP id BUMs0ME9tNBX for <buildroot@lists.busybox.net>;
+ Fri, 29 Apr 2022 07:34:03 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 74783600CD
+ for <buildroot@buildroot.org>; Fri, 29 Apr 2022 07:34:03 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 104981BF212;
+ Fri, 29 Apr 2022 07:33:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1651217640;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=29wHoW3vBjExaYjDfBfULXW8V3gRYavC5eOWWxolpYE=;
+ b=JxMuw1KEYyDyJmQRq85r2uuyb7n5IKLvGBDjg+U7RGy6M0CtSIOuIoRs1ZZ+GHDlZvKbST
+ kbHslrErI8U+apa+lB51UD/5Izq6fJuL/KGuXkHomToDd6tZonZiu6ibL0eXBT8RahsWIH
+ 4HfTlU49VoGyVh/5VVHYEcG8asBr7IvxHOgwwcAPxSYc0iepIvFQAnGQpN6XRBId7IWt0S
+ Bh01fbEawmgQL+QJ2/vlsn1o0JZGUetOxbAa9hRn6HXNfJY/sS5PP1ZUXArm/tGq+Fg9M1
+ G+7Jej/XElOcu5Pp9+DVt28ZUykJjhXxLfmAD40SQUC0LouNyeTyD60GgMTr5w==
+Date: Fri, 29 Apr 2022 09:33:58 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220429093358.55e406a5@windsurf>
+In-Reply-To: <CAPi7W80-tGgUc_PibQtzVpRbKNz1+RmXqkALF5x_ZScEgAM=ww@mail.gmail.com>
 References: <20220427205057.4044072-1-fontaine.fabrice@gmail.com>
  <20220428234527.3c5bb3b9@windsurf>
-In-Reply-To: <20220428234527.3c5bb3b9@windsurf>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 29 Apr 2022 09:05:21 +0200
-Message-ID: <CAPi7W80-tGgUc_PibQtzVpRbKNz1+RmXqkALF5x_ZScEgAM=ww@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ <CAPi7W80-tGgUc_PibQtzVpRbKNz1+RmXqkALF5x_ZScEgAM=ww@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
 Subject: Re: [Buildroot] [PATCH 1/1] package/numactl: needs atomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -83,51 +71,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
  Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgamV1LiAyOCBhdnIuIDIwMjIgw6AgMjM6NDUsIFRob21hcyBQZXRhenpvbmkKPHRob21hcy5w
-ZXRhenpvbmlAYm9vdGxpbi5jb20+IGEgw6ljcml0IDoKPgo+IE9uIFdlZCwgMjcgQXByIDIwMjIg
-MjI6NTA6NTcgKzAyMDAKPiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWls
-LmNvbT4gd3JvdGU6Cj4KPiA+IG51bWFjdGwgdW5jb25kaXRpb25hbGx5IHVzZXMgX19hdG9taWNf
-ZmV0Y2hfYW5kIHJlc3VsdGluZyBpbiB0aGUKPiA+IGZvbGxvd2luZyBidWlsZCBmYWlsdXJlIG9u
-IG1pY3JvYmxhemUgc2luY2UgY29tbWl0Cj4gPiA0ZWQ1NDBkZGY1OWJlYzRiMzg5YmU0NGQ3ZjQy
-ODIwZDI0NjY5MDRmOgo+Cj4gVGhpcyBleHBsYW5hdGlvbiBpcyB1bmZvcnR1bmF0ZWx5IGluY29y
-cmVjdC4gSXQgaGFzIG5vdGhpbmcgdG8gZG8gd2l0aAo+IG1pY3JvYmxhemUsIGJlY2F1c2UgQlIy
-X1RPT0xDSEFJTl9IQVNfQVRPTUlDIGlzIHRydWUgb24gbWljcm9ibGF6ZToKPgo+IGNvbmZpZyBC
-UjJfVE9PTENIQUlOX0hBU19MSUJBVE9NSUMKPiAgICAgICAgIGJvb2wKPiAgICAgICAgIGRlZmF1
-bHQgeSBpZiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzggJiYgXAo+ICAgICAgICAgICAg
-ICAgICAhQlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9DT0RFU09VUkNFUllfQUFSQ0g2NCAmJiBcCj4g
-ICAgICAgICAgICAgICAgIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgJiYgXAo+ICAgICAgICAg
-ICAgICAgICAhQlIyX0JJTkZNVF9GTEFUCj4KPiBjb25maWcgQlIyX1RPT0xDSEFJTl9IQVNfQVRP
-TUlDCj4gICAgICAgICBib29sCj4gICAgICAgICBkZWZhdWx0IHkgaWYgQlIyX1RPT0xDSEFJTl9I
-QVNfTElCQVRPTUlDCj4gICAgICAgICBkZWZhdWx0IHkgaWYgQlIyX1RPT0xDSEFJTl9HQ0NfQVRf
-TEVBU1RfNF83ICYmIEJSMl9hcm0KPiAgICAgICAgIGRlZmF1bHQgeSBpZiBCUjJfVE9PTENIQUlO
-X0dDQ19BVF9MRUFTVF80XzcgJiYgQlIyX2FybWViCj4gICAgICAgICBkZWZhdWx0IHkgaWYgQlIy
-X1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfNF83ICYmIEJSMl94dGVuc2EKPiAgICAgICAgIGRlZmF1
-bHQgeSBpZiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzcgJiYgQlIyX0FSQ0hfSVNfNjQK
-Pgo+IEhvd2V2ZXIsIHRoZSBrZXkgdGhpbmcgaXMgdGhhdCB0aGUgYnVpbGQgZmFpbHVyZQo+IGh0
-dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2UyMjVjYjgzZGFlMzkwZDlkYzU0
-M2Q0ZGE4NWM1MjE4MGVmYmQ0MGEKPiBoYXMgdGhyZWFkIHN1cHBvcnQgZGlzYWJsZWQsIGFuZCB3
-aGVuIHRocmVhZHMgYXJlIGRpc2FibGVkLCBsaWJhdG9taWMKPiBpcyBub3QgYnVpbHQsIGFuZCB0
-aGVyZWZvcmUgQlIyX1RPT0xDSEFJTl9IQVNfTElCQVRPTUlDIGlzIGZhbHNlLgo+Cj4gSG93ZXZl
-ciwgSSBkb24ndCBzZWUgYW55d2hlcmUgaW4gdGhlIG51bWFjdGwgYnVpbGQgc3lzdGVtIHdoZXJl
-Cj4gLWxhdG9taWMgaXMgcGFzc2VkLiBEb2VzIGl0IGJ1aWxkIG9uIGFyY2hpdGVjdHVyZXMgdGhh
-dCBuZWVkIHRvIGxpbmsKPiBhZ2FpbnN0IGxpYmF0b21pYyB0byBnZXQgYXRvbWljIGludHJpbnNp
-Y3M/CgpMaW5raW5nIHdpdGggLWxhdG9taWMgaXMgZG9uZSB0aGFua3MgdG8gMDAwMi1saW5rLXdp
-dGgtbGF0b21pYy1pZi1uZWVkZWQucGF0Y2guClRoaXMgcGF0Y2ggd2FzIGFkZGVkIHRvIGZpeCB0
-aGUgYnVpbGQgb24gYXJjaGl0ZWN0dXJlcyBzdWNoIGFzIHNwYXJjdjguCkhvd2V2ZXIsIEkgZG9u
-J3QgdW5kZXJzdGFuZCB3aHkgdGhlIGJ1aWxkIGZhaWxzIG9uIG1pY3JvYmxhemUgd2l0aG91dCBs
-aWJhdG9taWMuCkFyZSB3ZSBzdXJlIHRoYXQgbWljcm9ibGF6ZSByZWFsbHkgc3VwcG9ydHMgYXRv
-bWljIHdpdGhvdXQgbGliYXRvbWljPwoKPgo+IENvdWxkIHlvdSBkb3VibGUgY2hlY2sgdGhpcywg
-YW5kIHJld29yayB0aGUgY29tbWl0IG1lc3NhZ2U/Cj4KPiBUaGFua3MhCj4KPiBUaG9tYXMKPiAt
-LQo+IFRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KPiBFbWJlZGRl
-ZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwo+IGh0dHBzOi8vYm9v
-dGxpbi5jb20KCkJlc3QgUmVnYXJkcywKCkZhYnJpY2UKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+Hello Fabrice,
+
+On Fri, 29 Apr 2022 09:05:21 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> > However, the key thing is that the build failure
+> > http://autobuild.buildroot.org/results/e225cb83dae390d9dc543d4da85c52180efbd40a
+> > has thread support disabled, and when threads are disabled, libatomic
+> > is not built, and therefore BR2_TOOLCHAIN_HAS_LIBATOMIC is false.
+> >
+> > However, I don't see anywhere in the numactl build system where
+> > -latomic is passed. Does it build on architectures that need to link
+> > against libatomic to get atomic intrinsics?  
+> 
+> Linking with -latomic is done thanks to 0002-link-with-latomic-if-needed.patch.
+> This patch was added to fix the build on architectures such as sparcv8.
+
+Ah, I missed that patch, thanks for pointing it out!
+
+> However, I don't understand why the build fails on microblaze without libatomic.
+> Are we sure that microblaze really supports atomic without libatomic?
+
+I explained it in my previous e-mail I think :-)
+
+It fails because the configuration you're pointing to has threads
+disabled, and when threads are disabled, libatomic is not
+built/provided by gcc. This is properly handled by
+BR2_TOOLCHAIN_HAS_LIBATOMIC being false in such configurations.
+
+So basically, your patch is correct (IMO), but the commit log isn't:
+the problem isn't Microblaze specific, but would happen on any
+architecture that needs libatomic to provide atomic intrinsics.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
