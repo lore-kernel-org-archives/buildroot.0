@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5B8BC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 18:57:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA8A2C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 18:58:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D42D60B8B;
-	Sat, 30 Apr 2022 18:57:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72FE060B9A;
+	Sat, 30 Apr 2022 18:58:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id se79KEd5PeIf; Sat, 30 Apr 2022 18:57:48 +0000 (UTC)
+	with ESMTP id JKixWJUSmrxe; Sat, 30 Apr 2022 18:58:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AC8060B58;
-	Sat, 30 Apr 2022 18:57:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 513391BF94D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7771160B78;
+	Sat, 30 Apr 2022 18:58:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 98B2D1BF5AE
  for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:54:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 29E1A60B58
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FD894161C
  for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:54:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MD9RV-NwtIM7 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VNdUKSboIy8V for <buildroot@lists.busybox.net>;
  Sat, 30 Apr 2022 18:54:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5396960B73
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D72F41625
  for <buildroot@buildroot.org>; Sat, 30 Apr 2022 18:54:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id E213F84B55; Sat, 30 Apr 2022 18:44:17 +0000 (UTC)
+ id 1594784B54; Sat, 30 Apr 2022 18:44:18 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 30 Apr 2022 20:40:21 +0200
+Date: Sat, 30 Apr 2022 20:42:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 60aa067d74e41a7a598eb7ac44978f84d77a0eae
-X-Git-Newrev: b03e8e693a62256289adb8db715622c3447d34ad
+X-Git-Oldrev: 53b9e2e168cc2359640b635b607f9786da9b54ba
+X-Git-Newrev: fbe825eb6a7401a0b71daa7bece6a3e348f7371e
 X-Patchwork-Hint: ignore
-Message-Id: <20220430184417.E213F84B55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tor: add -lz to fix static builds
+Message-Id: <20220430184418.1594784B54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libosmium: bump version to 2.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,146 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b03e8e693a62256289adb8db715622c3447d34ad
+commit: https://git.buildroot.net/buildroot/commit/?id=fbe825eb6a7401a0b71daa7bece6a3e348f7371e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In order to remove a patch which needs frequent updates on major version
-bumps and to get rid of autoreconf we just add -lz when creating a static
-build. This make sure that static linking occurs in the right order.
+Release-notes: https://github.com/osmcode/libosmium/releases/tag/v2.18.0
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../tor/0001-Fix-static-linking-with-OpenSSL.patch | 94 ----------------------
- package/tor/tor.mk                                 |  7 +-
- 2 files changed, 5 insertions(+), 96 deletions(-)
+ package/libosmium/libosmium.hash | 2 +-
+ package/libosmium/libosmium.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-deleted file mode 100644
-index 26ed6fe819..0000000000
---- a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-+++ /dev/null
-@@ -1,94 +0,0 @@
--From ba6b8ee5b6dee19493a150c3715b0e202440d206 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Thu, 24 Jan 2019 18:19:51 +0100
--Subject: [PATCH] Fix static linking with OpenSSL
--
--Adjust link order of libz to solve bug with static linking
--and remove host paths when looking for openssl.
--
--[Vincent:
-- - Adapt the patch to make it apply on the new version.]
--[Bernd: rebased for tor-0.2.7.6, 0.2.8.10, 0.2.9.9, 0.3.1.7, 0.3.2.10,
--        0.3.4.8, 0.3.5.7, 0.4.4.5, 0.4.5.6 & 0.4.6.7]
--[Fabrice: fix detection of openssl functions in 0.3.5.8]
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac         | 4 ++--
-- src/test/include.am  | 8 ++++----
-- src/tools/include.am | 4 ++--
-- 4 files changed, 9 insertions(+), 9 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 05e1392cf..580befa6b 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1074,7 +1074,7 @@ AC_ARG_WITH(ssl-dir,
--   ])
-- 
-- AC_MSG_NOTICE([Now, we'll look for OpenSSL >= 1.0.1])
---TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto $TOR_LIB_GDI $TOR_LIB_WS32 $TOR_LIB_CRYPT32],
--+TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto -lz $TOR_LIB_GDI $TOR_LIB_WS32 $TOR_LIB_CRYPT32],
--     [#include <openssl/ssl.h>
--      char *getenv(const char *);],
--     [struct ssl_cipher_st;
--@@ -1104,7 +1104,7 @@ dnl Now check for particular openssl functions.
-- save_LIBS="$LIBS"
-- save_LDFLAGS="$LDFLAGS"
-- save_CPPFLAGS="$CPPFLAGS"
---LIBS="$TOR_OPENSSL_LIBS $LIBS"
--+LIBS="$TOR_OPENSSL_LIBS -lz $LIBS"
-- LDFLAGS="$TOR_LDFLAGS_openssl $LDFLAGS"
-- CPPFLAGS="$TOR_CPPFLAGS_openssl $CPPFLAGS"
-- 
--diff --git a/src/test/include.am b/src/test/include.am
--index ecb768957..39a622e88 100644
----- a/src/test/include.am
--+++ b/src/test/include.am
--@@ -399,8 +399,8 @@ src_test_test_ntor_cl_LDFLAGS = @TOR_LDFLAGS_zlib@ $(TOR_LDFLAGS_CRYPTLIB)
-- src_test_test_ntor_cl_LDADD = \
-- 	libtor.a \
-- 	$(rust_ldadd) \
---	@TOR_ZLIB_LIBS@ @TOR_LIB_MATH@ \
---	$(TOR_LIBS_CRYPTLIB) @TOR_LIB_WS32@ @TOR_LIB_IPHLPAPI@ @TOR_LIB_SHLWAPI@ @TOR_LIB_GDI@ @TOR_LIB_USERENV@ \
--+	@TOR_LIB_MATH@ \
--+	$(TOR_LIBS_CRYPTLIB) @TOR_ZLIB_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_IPHLPAPI@ @TOR_LIB_SHLWAPI@ @TOR_LIB_GDI@ @TOR_LIB_USERENV@ \
-- 	@CURVE25519_LIBS@ @TOR_LZMA_LIBS@ @TOR_TRACE_LIBS@
-- src_test_test_ntor_cl_AM_CPPFLAGS =	       \
-- 	$(AM_CPPFLAGS)
--@@ -409,8 +409,8 @@
-- src_test_test_hs_ntor_cl_LDFLAGS = @TOR_LDFLAGS_zlib@ $(TOR_LDFLAGS_CRYPTLIB)
-- src_test_test_hs_ntor_cl_LDADD = \
-- 	libtor.a \
---	@TOR_ZLIB_LIBS@ @TOR_LIB_MATH@ \
---	$(TOR_LIBS_CRYPTLIB) @TOR_LIB_WS32@ @TOR_LIB_IPHLPAPI@ @TOR_LIB_SHLWAPI@ @TOR_LIB_GDI@ \
--+	@TOR_LIB_MATH@ \
--+	$(TOR_LIBS_CRYPTLIB) @TOR_ZLIB_LIBS@ @TOR_LIB_WS32@ @TOR_LIB_IPHLPAPI@ @TOR_LIB_SHLWAPI@ @TOR_LIB_GDI@ \
--         @CURVE25519_LIBS@ @TOR_TRACE_LIBS@
-- src_test_test_hs_ntor_cl_AM_CPPFLAGS =	       \
-- 	$(AM_CPPFLAGS)
--diff --git a/src/tools/include.am b/src/tools/include.am
--index f7aa7e0d1..4c4e8aa7a 100644
----- a/src/tools/include.am
--+++ b/src/tools/include.am
--@@ -35,7 +35,7 @@ src_tools_tor_gencert_LDADD = \
-- 	$(TOR_CRYPTO_LIBS) \
-- 	$(TOR_UTIL_LIBS) \
-- 	$(rust_ldadd) \
---	@TOR_LIB_MATH@ @TOR_ZLIB_LIBS@ $(TOR_LIBS_CRYPTLIB) \
--+	@TOR_LIB_MATH@ $(TOR_LIBS_CRYPTLIB) @TOR_ZLIB_LIBS@ \
-- 	@TOR_LIB_WS32@ @TOR_LIB_IPHLPAPI@ @TOR_LIB_SHLWAPI@ @TOR_LIB_GDI@ @TOR_LIB_USERENV@ @CURVE25519_LIBS@
-- endif
-- 
--@@ -45,7 +45,7 @@ src_tools_tor_print_ed_signing_cert_LDADD = \
-- 	src/trunnel/libor-trunnel.a \
--         $(TOR_CRYPTO_LIBS) \
--         $(TOR_UTIL_LIBS) \
---	@TOR_LIB_MATH@ $(TOR_LIBS_CRYPTLIB) \
--+	@TOR_LIB_MATH@ $(TOR_LIBS_CRYPTLIB) @TOR_ZLIB_LIBS@ \
-- 	@TOR_LIB_WS32@ @TOR_LIB_USERENV@ @TOR_LIB_SHLWAPI@ @TOR_LIB_GDI@
-- 
-- if USE_NSS
---- 
--2.20.1
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index d16b3541eb..78a6de66dc 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -11,7 +11,6 @@ TOR_LICENSE_FILES = LICENSE
- TOR_CPE_ID_VENDOR = torproject
- TOR_SELINUX_MODULES = tor
- TOR_DEPENDENCIES = libevent openssl zlib
--TOR_AUTORECONF = YES
+diff --git a/package/libosmium/libosmium.hash b/package/libosmium/libosmium.hash
+index ccfd3b09b0..cb53a91c67 100644
+--- a/package/libosmium/libosmium.hash
++++ b/package/libosmium/libosmium.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ff85d55ca83d77fc41f6b7ae77f3d8d4337d299cbb4cc60c00e1f9d90d94e71b  libosmium-2.17.3.tar.gz
++sha256  c05a3e95c9c811521ebad8637e90f43ab8fb053b310875acce741cc4c17d6f59  libosmium-2.18.0.tar.gz
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
+diff --git a/package/libosmium/libosmium.mk b/package/libosmium/libosmium.mk
+index 6510af4e77..f7ced04de3 100644
+--- a/package/libosmium/libosmium.mk
++++ b/package/libosmium/libosmium.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- TOR_CONF_OPTS = \
- 	--disable-gcc-hardening \
-@@ -64,8 +63,12 @@ endif
- TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--TOR_CONF_ENV += LIBS=-latomic
-+TOR_LIBS += -latomic
- endif
-+ifeq ($(BR2_STATIC_LIBS),y)
-+TOR_LIBS += -lz
-+endif
-+TOR_CONF_ENV += LIBS="$(TOR_LIBS)"
- 
- define TOR_INSTALL_CONF
- 	$(INSTALL) -D -m 644 $(@D)/src/config/torrc.minimal \
+-LIBOSMIUM_VERSION = 2.17.3
++LIBOSMIUM_VERSION = 2.18.0
+ LIBOSMIUM_SITE = $(call github,osmcode,libosmium,v$(LIBOSMIUM_VERSION))
+ LIBOSMIUM_LICENSE = BSL-1.0
+ LIBOSMIUM_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
