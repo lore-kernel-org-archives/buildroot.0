@@ -1,66 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE10BC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 11:44:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CA7DC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 12:26:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82D8084075;
-	Sat, 30 Apr 2022 11:44:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5177419F5;
+	Sat, 30 Apr 2022 12:26:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tQLLszuLXEzX; Sat, 30 Apr 2022 11:44:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vcbDOF0JG_fY; Sat, 30 Apr 2022 12:26:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83B6284060;
-	Sat, 30 Apr 2022 11:44:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9E40F1BF5E0
- for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 11:44:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40792419B2;
+	Sat, 30 Apr 2022 12:26:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 44E651BF4E6
+ for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 12:26:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8BD7840103
- for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 11:44:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32A446063B
+ for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 12:26:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=inbox.ru
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6hwv53lpEGER for <buildroot@lists.busybox.net>;
- Sat, 30 Apr 2022 11:44:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4067B40022
- for <buildroot@buildroot.org>; Sat, 30 Apr 2022 11:44:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru;
- s=mail4; 
- h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=6WS6M8HLu4q0Iz7s/5mohQdwSAVyxhTkPXLNE55I+uE=; 
- t=1651319051;x=1651924451; 
- b=AFp6L4Zrv4uS8SsOgdzFvLTpPMH/m9gF+QkoXdDb9wjHwbZ3b+zLifHsGALIwEv3BFQwbj0D3voroTPmcUXZvKNWfqpi9ZreKkl8QaHqYxBbKL1ZXaY05FPGEuufcocFDNzslbEP5hbeQnI9rgXuXRaE7yOWnWc751qmEH+KUBOumBB030OV+otKjw91AQlKZuPtMrDkpHpLzF4UfOz2wlWurZywabCwhRlDkeyeenef1692gurU72fln1AeUC/8Ld597pT5HKIRxrhzWB7Sw6jE6dUO9Lbd5trXuMpSjtjLw4LGnp7IosH2Y+RYhTydN2FTGbiSq6WiA7e7ar2EyA==;
-Received: by smtpng1.m.smailru.net with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1nklWC-0003iL-3c; Sat, 30 Apr 2022 14:44:08 +0300
-From: Maxim Kochetkov <fido_max@inbox.ru>
-To: buildroot@buildroot.org
-Date: Sat, 30 Apr 2022 14:44:06 +0300
-Message-Id: <20220430114406.545127-1-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.34.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ihv7tdK790yQ for <buildroot@lists.busybox.net>;
+ Sat, 30 Apr 2022 12:26:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B1890600D1
+ for <buildroot@buildroot.org>; Sat, 30 Apr 2022 12:26:38 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id e24so13931546wrc.9
+ for <buildroot@buildroot.org>; Sat, 30 Apr 2022 05:26:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=UuK28JF111TPSNaMiclWroUbvZRp+FminpnGecRrUT0=;
+ b=DIFUBAQ8US9sUsNxLyy5raITvq+a8KwVinTrgeVIe60XP9fOcil1+exiOUiPDUxpD9
+ 48a3D0aWrysOb1KEi54gBWt1O17ACf5mAGrMkNKs1V2P6xUwh9kRFpn6JjpCII8YwaOY
+ JYuQk+TusLrC2D/x/CndIn6yd8iXTyjchF3wVU5HWgkFBxrR3t1YbiwFzMJ0qum9HMjh
+ xG9Un114FMax+37yIgfJsFBj8x9tbWYvfBh0Fg4Tf1HUxCFsk/oJKDtpNuPyYvzOByMi
+ oWgeLOfw/+PKljEcMjVPlZmpFYZ4enHKRAaiqTlRsHhjjY6gDG5757SDuf/BcJR2isP+
+ BTOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=UuK28JF111TPSNaMiclWroUbvZRp+FminpnGecRrUT0=;
+ b=RS+2gyUOocZ63fMtXM72Hn1Sd80GIRd8FK7C4obJnYX/IlgYuoNlrFFVPgY2PF9M2Y
+ 2h0V0WNsHyPHX/nlDAp8mMeFY1PKz8sCNqgG6wA4QEEN4QQ+0/vwXr93EtqDQG6HzBB7
+ JKCrvP0vK/NuvEBR6akQjY67OGLr6H717kzJ/MIoMlZCXsrmQJ22/UPZLoazJyeYBmnt
+ jtJcTA21WKBG9XYwJL1jd/Ri4n7n9H17w3MPu0R8DM2Xzdk2fy1VFxKwI880o/h6VoFV
+ UJdkh9ELLoAgPq3mEFTwsJ7uXZxRhPuPWxjxU5hBAilQ9eeHumCNwFinsH4yuBhs47+L
+ HZqw==
+X-Gm-Message-State: AOAM530gwyKe7zDlThIYN7gKQFAXbUj0Pocu54jl2A71VKm9tQC3z9BJ
+ Z9c/Wg0fhhvNoJHaOI4OKOZgTUvxfYPA2KTaugczYzC6h0Q=
+X-Google-Smtp-Source: ABdhPJw+fwoy5Xp56zZe8hRjWAhob0hA3De8WltiLSaSUsCzeQoM+8sxD4OD71I8Hqw9XVm2c0xbww7FzMlLlIdvq/M=
+X-Received: by 2002:a5d:428f:0:b0:20a:de6f:6b02 with SMTP id
+ k15-20020a5d428f000000b0020ade6f6b02mr3052059wrq.542.1651321596740; Sat, 30
+ Apr 2022 05:26:36 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: smtpng1.m.smailru.net;
- auth=pass smtp.auth=fido_max@inbox.ru
- smtp.mailfrom=fido_max@inbox.ru
-X-7564579A: EEAE043A70213CC8
-X-77F55803: 4F1203BC0FB41BD9086B0A94CD1F151448582A4BE10ACC7C79FC887CBB8B2133182A05F5380850404C228DA9ACA6FE27EF5B885925869D862A68AC2F4D9D80E93F4BE18FED14EF47C8B3D5D5D8659232
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE782A779A89F7D69B2C2099A533E45F2D0395957E7521B51C2CFCAF695D4D8E9FCEA1F7E6F0F101C6778DA827A17800CE77AA33865E80AF043EA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38BEBC5CAB6D411FFA6745E78764906BDBDD76A63DFDA3F0ABA20879F7C8C5043D14489FFFB0AA5F4BFA417C69337E82CC2CC7F00164DA146DAFE8445B8C89999728AA50765F790063735D2385A5E2B3AC3389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8FA486DC37A503D0BF6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA7E827F84554CEF5019E625A9149C048EE9ECD01F8117BC8BEE2021AF6380DFAD18AA50765F790063735872C767BF85DA227C277FBC8AE2E8B9C5AF73B5E338C8A75ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
-X-8FC586DF: 6EFBBC1D9D64D975
-X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C414F749A5E30D975C242CCBC298CA299AA938B147C72ACBA2F6B9898BF8446E9D9C2B6934AE262D3EE7EAB7254005DCED556CBE7F905700A4A71A35648BE338CE9510FB958DCE06DB58C12E6D310A6D53F1175FABE1C0F9B6DC48ACC2A39D04F89CDFB48F4795C241BDAD6C7F3747799A
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34E9B0C12ABED5513714E517E3810802C5F84763920E88135207C18C8A24ACCB39C4421E83BBBF8D291D7E09C32AA3244CCA16BA6CB1DA5596009393EB96F0FC4BA8CE788DE6831205729B2BEF169E0186
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojpu98ZoqON0YF+eUidfcyGQ==
-X-Mailru-Sender: 689FA8AB762F739339CABD9B3CA9A7D677B0A9E9215AF117053CA37A8D47093998CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-Subject: [Buildroot] [PATCH 1/1] package/postgis: bump version to 3.2.1
+References: <20220422100918.2818811-1-thomas.perrot@bootlin.com>
+In-Reply-To: <20220422100918.2818811-1-thomas.perrot@bootlin.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sat, 30 Apr 2022 14:26:24 +0200
+Message-ID: <CAEyMn7bMtshaEzSG+yc_gsmtHpdNoc6GTyDgs5mEseerXznpMQ@mail.gmail.com>
+To: Thomas Perrot <thomas.perrot@bootlin.com>
+Subject: Re: [Buildroot] [PATCH v3 2/2] package/imx-cst: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,45 +81,146 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release-notes: https://git.osgeo.org/gitea/postgis/postgis/src/tag/3.2.1/NEWS
+Hi Thomas,
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- package/postgis/postgis.hash | 2 +-
- package/postgis/postgis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Am Fr., 22. Apr. 2022 um 12:16 Uhr schrieb Thomas Perrot via buildroot
+<buildroot@buildroot.org>:
+>
+> This package provides i.MX Code Signing Tools uses to sign i.MX bootloader
+> to enable secure boot (HABv4 and AHAB).
+>
+> Signed-off-by: Thomas Perrot <thomas.perrot@bootlin.com>
+> ---
+>
+> Changes v2:
+>   - Add a trailing slash
+>   - Preserve CFLAGS and LDFLAGS
+>
+> Changes v3:
+>   - Hard code the OSTYPE variable to linux64
+>
+>  DEVELOPERS                     |  1 +
+>  package/Config.in.host         |  1 +
+>  package/imx-cst/Config.in.host |  8 +++++++
+>  package/imx-cst/imx-cst.hash   |  3 +++
+>  package/imx-cst/imx-cst.mk     | 43 ++++++++++++++++++++++++++++++++++
+>  5 files changed, 56 insertions(+)
+>  create mode 100644 package/imx-cst/Config.in.host
+>  create mode 100644 package/imx-cst/imx-cst.hash
+>  create mode 100644 package/imx-cst/imx-cst.mk
+>
 
-diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
-index 12ca18f84f..018e6523f3 100644
---- a/package/postgis/postgis.hash
-+++ b/package/postgis/postgis.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7ab9e154c6947c0cffb8fa12d70806add9aa060e62b6c86a2e206f9d4b507cfd  postgis-3.2.0.tar.gz
-+sha256  fbab68dde6ca3934b24ba08c8ab0cff2594f57f93deab41a15c82ae1bb69893e  postgis-3.2.1.tar.gz
- sha256  55b69f22e1752830dd565852dc7ff242daf289dbd3a6bfede5db43f90d2e28c9  LICENSE.TXT
-diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
-index d9cda64730..b77071d03b 100644
---- a/package/postgis/postgis.mk
-+++ b/package/postgis/postgis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGIS_VERSION = 3.2.0
-+POSTGIS_VERSION = 3.2.1
- POSTGIS_SITE = https://download.osgeo.org/postgis/source
- # parallel build issues
- POSTGIS_MAKE = $(MAKE1)
--- 
-2.34.1
+What about having the package located in package/freescale-imx/ like
+the most other packages for the imx family?
 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 6e49334dcc42..86cb04e54e5d 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2767,6 +2767,7 @@ F:        package/xorcurses/
+>
+>  N:     Thomas Perrot <thomas.perrot@bootlin.com>
+>  F:     package/byacc/
+> +F:     package/imx-cst/
+>
+>  N:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>  F:     arch/Config.in.arm
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index cd1c34b5a3d9..282594b40b8d 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -40,6 +40,7 @@ menu "Host utilities"
+>         source "package/google-breakpad/Config.in.host"
+>         source "package/gptfdisk/Config.in.host"
+>         source "package/imagemagick/Config.in.host"
+> +       source "package/imx-cst/Config.in.host"
+>         source "package/imx-mkimage/Config.in.host"
+>         source "package/imx-usb-loader/Config.in.host"
+>         source "package/jh71xx-tools/Config.in.host"
+> diff --git a/package/imx-cst/Config.in.host b/package/imx-cst/Config.in.host
+> new file mode 100644
+> index 000000000000..84cb825e59cf
+> --- /dev/null
+> +++ b/package/imx-cst/Config.in.host
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_HOST_IMX_CST
+> +       bool "host imx-cst"
+> +       help
+> +         I.MX code signing tool provides software code signing
+> +         support designed that integrate the HABv4 and AHAB
+> +         library.
+> +
+> +         https://www.nxp.com/webapp/sps/download/license.jsp?colCode=IMX_CST_TOOL
+> diff --git a/package/imx-cst/imx-cst.hash b/package/imx-cst/imx-cst.hash
+> new file mode 100644
+> index 000000000000..9c27bfe82038
+> --- /dev/null
+> +++ b/package/imx-cst/imx-cst.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  2bcc03c7cedba58f7207a72a28e75cfe78007988d68c1095c793cce991c2936e  imx-cst-e2c687a856e6670e753147aacef42d0a3c07891a-br1.tar.gz
+> +sha256  5dee6f54c636a97b15d7e9dfc8075248c36764b3819828cbc94cbd17c1755fb9  LICENSE.bsd3
+> diff --git a/package/imx-cst/imx-cst.mk b/package/imx-cst/imx-cst.mk
+> new file mode 100644
+> index 000000000000..120f9c5575e1
+> --- /dev/null
+> +++ b/package/imx-cst/imx-cst.mk
+> @@ -0,0 +1,43 @@
+> +################################################################################
+> +#
+> +# imx-cst
+> +#
+> +################################################################################
+> +
+> +# debian/3.3.1+dfsg-2
+> +IMX_CST_SITE = https://gitlab.apertis.org/pkg/imx-code-signing-tool.git
+> +IMX_CST_SITE_METHOD = git
+> +IMX_CST_VERSION = e2c687a856e6670e753147aacef42d0a3c07891a
+> +IMX_CST_LICENSE = BSD-3-Clause
+> +IMX_CST_LICENSE_FILES = LICENSE.bsd3
+> +
+> +HOST_IMX_CST_DEPENDENCIES = host-byacc host-flex host-openssl
+> +
+> +# We don't use HOST_CONFIGURE_OPTS when building cst, because we need
+> +# to preserve the CFLAGS/LDFLAGS used by their Makefile.
+> +define HOST_IMX_CST_BUILD_CMDS
+> +       $(HOST_MAKE_ENV) $(MAKE) \
+> +               OSTYPE=linux64 \
+> +               ENCRYPTION=yes \
+> +               AR="$(HOSTAR)" \
+> +               CC="$(HOSTCC)" \
+> +               LD="$(HOSTCC)" \
+> +               OBJCOPY="$(HOSTOBJCOPY)" \
+> +               RANLIB="$(HOSTRANLIB)" \
+> +               EXTRACFLAGS="$(HOST_CFLAGS) $(HOST_CPPFLAGS)" \
+> +               EXTRALDFLAGS="$(HOST_LDFLAGS)" \
+> +               PWD=$(@D)/code/cst \
+> +               -C $(@D)/code/cst \
+> +               build
+> +       $(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+> +               COPTS="$(HOST_CFLAGS) $(HOST_CPPFLAGS) $(HOST_LDFLAGS)" \
+> +               -C $(@D)/code/hab_csf_parser
+> +endef
+> +
+> +define HOST_IMX_CST_INSTALL_CMDS
+> +       $(INSTALL) -D -m 755 $(@D)/code/cst/code/obj.linux64/cst $(HOST_DIR)/bin/cst
+> +       $(INSTALL) -D -m 755 $(@D)/code/cst/code/obj.linux64/srktool $(HOST_DIR)/bin/srktool
+> +       $(INSTALL) -D -m 755 $(@D)/code/hab_csf_parser/csf_parser $(HOST_DIR)/bin/csf_parser
+> +endef
+> +
+> +$(eval $(host-generic-package))
+> --
+> 2.35.1
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
