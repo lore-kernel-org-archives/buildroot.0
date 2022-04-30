@@ -4,43 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BC89C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 18:08:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18B1BC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 18:43:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5F8E4136B;
-	Sat, 30 Apr 2022 18:08:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A276415A6;
+	Sat, 30 Apr 2022 18:43:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JNbk58p3r1ul; Sat, 30 Apr 2022 18:08:15 +0000 (UTC)
+	with ESMTP id HpAjc0ZiFXrV; Sat, 30 Apr 2022 18:43:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1FED410DC;
-	Sat, 30 Apr 2022 18:08:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D4F1415CB;
+	Sat, 30 Apr 2022 18:43:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0895E1BF5AE
- for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:07:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1983F1BF5AE
+ for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:43:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EAC02410DC
- for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:07:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 155B34156F
+ for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:43:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6bt7PsTba04V for <buildroot@lists.busybox.net>;
- Sat, 30 Apr 2022 18:07:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B8A3410CA
- for <buildroot@buildroot.org>; Sat, 30 Apr 2022 18:07:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 349EE84773; Sat, 30 Apr 2022 17:57:31 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sat, 30 Apr 2022 20:02:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a15e35c4ebc52f29f65372c8e86cefa874aa4aaf
-X-Git-Newrev: ea86757e51cf424566f79896335d31d15b89d0d9
-X-Patchwork-Hint: ignore
-Message-Id: <20220430175731.349EE84773@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sysdig: bump to 0.29.1
+ with ESMTP id EDlPrkFbv8gH for <buildroot@lists.busybox.net>;
+ Sat, 30 Apr 2022 18:43:52 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8168E4155E
+ for <buildroot@buildroot.org>; Sat, 30 Apr 2022 18:43:52 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id k23so21066468ejd.3
+ for <buildroot@buildroot.org>; Sat, 30 Apr 2022 11:43:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=3LKoPddTtnjdFTarngm2C+d1ReQ/ac1vTD+7ILgtnuY=;
+ b=O4TFgzytmAONPsqrSX0Gywdt6WyLsI5O36ozIO+PcF0nVakYK2dkhO9LKLM00iBUKD
+ WHuiGLo+A8oxIxYqDGTl9bq1GHI7rzWox8ChT7LxYfQLAZrBfnq7XryGXFhAQrSJntKR
+ oDqBor8fthaMeAugTzVxoloxB/ZtFroZG45DKKuSDyu7PZ5CqUQlQRwLQa8wJ2CqdvAV
+ OCTrhpwuP+22BhjapdZrtxfH8rDrluzhBxVygzEErcyAMEIY/RZCEoNNhH/fSGW4laiA
+ y2TnMLmtfFflm6LoR2cylQucK/bL3XFR5MWtj8YqW8YPdxdoF8dhk1NMEFi7I3mXJB2O
+ bivA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=3LKoPddTtnjdFTarngm2C+d1ReQ/ac1vTD+7ILgtnuY=;
+ b=wmyCA0vXwE2EpTF5+MtjIhSZo67m85ggJ7Tys64wufng05eXVt0tT9rXFyJwLVx6pQ
+ UzuLAKW4rWSK4uF+b1CKq6PLrMO5eeZZuZqNs7ZH02Nmtss1BdT0VC4zC6nuPKZut5Vo
+ aNIpmDetR8fchhlyquRkBo3qAuIDQbpAcOXyVLYNevfE7HCCSc1WJeE5plcXMCNfRZ5h
+ zAd0kV0yEtf/fIyR1PfnE20KL135SPZOOWP7oyPGT7PSaf904GkncawIYh6yZBSqoFw+
+ JURHuqt/98Zt8v8oTZ1NJHNclI0QpQQeV0jLpSzUvjaqRQ7+K772dcvSayRtMrzQ/6wE
+ YT4Q==
+X-Gm-Message-State: AOAM531bbUKdb++dXAwjmLicsvZ6XGmwfPbFrfclN/alHSrcbRhG1ns/
+ D6ohvNwrlss6s0qssxmqxh1h44ulkSbCsg==
+X-Google-Smtp-Source: ABdhPJz9acxzNZcySJBLVPbstc+LmoW6HibiysXY9E5IxUa1CUwf/X2wGeEuW3Yj3dpoMSOXzjmDPQ==
+X-Received: by 2002:a17:907:3f1c:b0:6f3:98ab:4735 with SMTP id
+ hq28-20020a1709073f1c00b006f398ab4735mr4875910ejc.547.1651344230391; 
+ Sat, 30 Apr 2022 11:43:50 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ o4-20020a056402038400b0042617ba63c9sm4413015edv.83.2022.04.30.11.43.49
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 30 Apr 2022 11:43:49 -0700 (PDT)
+Message-ID: <9cf624c2-6e87-f664-08ae-6920968fe152@mind.be>
+Date: Sat, 30 Apr 2022 20:43:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220427200838.2896323-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220427200838.2896323-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/bubblewrap: disable tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,365 +93,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea86757e51cf424566f79896335d31d15b89d0d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-sysdig 0.27.1 cannot be cross-compiled to, e.g., aarch64 because it uses open()
-syscall [1].
-This patch bumps its version to enable cross-compilation. Existing
-patches have been upstream, but a new patch (merged upstream) has to be
-added to avoid downloading json-for-modern-cpp during the build.
 
-[1] https://marc.info/?l=buildroot&m=164951521629400
+On 27/04/2022 22:08, Fabrice Fontaine wrote:
+> Disable tests to avoid the following build failure on mips32:
+> 
+> [9/10] Compiling C object tests/try-syscall.p/try-syscall.c.o
+> FAILED: tests/try-syscall.p/try-syscall.c.o
+> /home/autobuild/autobuild/instance-11/output-1/host/bin/mipsel-buildroot-linux-musl-gcc -Itests/try-syscall.p -Itests -I../tests -fdiagnostics-color=always -Wall -Winvalid-pch -Wextra -O3 -D_GNU_SOURCE -Werror=shadow -Werror=empty-body -Werror=strict-prototypes -Werror=missing-prototypes -Werror=implicit-function-declaration -Werror=pointer-arith -Werror=init-self -Werror=missing-declarations -Werror=return-type -Werror=overflow -Werror=int-conversion -Werror=incompatible-pointer-types -Werror=misleading-indentation -Werror=missing-include-dirs -Werror=aggregate-return -Werror=switch-default -Wswitch-enum -Wno-sign-compare -Wno-error=sign-compare -Wno-missing-field-initializers -Wno-error=missing-field-initializers -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O1 -g0 -MD -MQ tests/try-syscall.p/try-syscall.c.o -MF tests/try-syscall.p/try-syscall.c.o.d -o tests/try-syscall.p/try-syscall.c.o -c ../tests/try-syscall.c
+> ../tests/try-syscall.c:34:5: error: #error "Unknown MIPS ABI"
+>     34 | #   error "Unknown MIPS ABI"
+>        |     ^~~~~
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/cf0365354fc8c16e5871d561daae0fa5039d0bee
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...-USE_BUNDLED_DEPS-before-getting-nlohmann.patch | 52 ++++++++++++++
- ...ply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch | 82 ----------------------
- ...ink-against-libabseil-cpp-which-grpc-uses.patch | 47 -------------
- package/sysdig/Config.in                           | 33 ++++-----
- package/sysdig/sysdig.hash                         |  4 +-
- package/sysdig/sysdig.mk                           | 53 +++++---------
- 6 files changed, 83 insertions(+), 188 deletions(-)
+  Applied to master, thanks.
 
-diff --git a/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch b/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
-new file mode 100644
-index 0000000000..3521bd3f8d
---- /dev/null
-+++ b/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
-@@ -0,0 +1,52 @@
-+From 0dbebd008c04d266dc41c4bec8280a0744fd5130 Mon Sep 17 00:00:00 2001
-+From: Francis Laniel <flaniel@linux.microsoft.com>
-+Date: Wed, 13 Apr 2022 18:01:11 +0100
-+Subject: [PATCH] cmake: Check USE_BUNDLED_DEPS before getting
-+ nlohmann-json.
-+
-+Upstream: https://github.com/draios/sysdig/pull/1869
-+Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-+---
-+ cmake/modules/nlohmann-json.cmake | 29 +++++++++++++++++++----------
-+ 1 file changed, 19 insertions(+), 10 deletions(-)
-+
-+diff --git a/cmake/modules/nlohmann-json.cmake b/cmake/modules/nlohmann-json.cmake
-+index bb1279d7..feb0f071 100644
-+--- a/cmake/modules/nlohmann-json.cmake
-++++ b/cmake/modules/nlohmann-json.cmake
-+@@ -16,13 +16,22 @@
-+ # limitations under the License.
-+ #
-+ 
-+-set(NJSON_SRC "${PROJECT_BINARY_DIR}/njson-prefix/src/njson")
-+-message(STATUS "Using bundled nlohmann-json in '${NJSON_SRC}'")
-+-set(NJSON_INCLUDE_DIR "${NJSON_SRC}/single_include")
-+-ExternalProject_Add(
-+-  njson
-+-  URL "https://github.com/nlohmann/json/archive/v3.3.0.tar.gz"
-+-  URL_HASH "SHA256=2fd1d207b4669a7843296c41d3b6ac5b23d00dec48dba507ba051d14564aa801"
-+-  CONFIGURE_COMMAND ""
-+-  BUILD_COMMAND ""
-+-  INSTALL_COMMAND "")
-++if(NOT USE_BUNDLED_DEPS)
-++  find_path(NJSON_INCLUDE_DIR NAMES nlohmann/json.hpp)
-++  if(NJSON_INCLUDE_DIR)
-++    message(STATUS "Found njson: include: ${NJSON_INCLUDE_DIR}")
-++  else()
-++    message(FATAL_ERROR "Couldn't find system njson")
-++  endif()
-++else()
-++  set(NJSON_SRC "${PROJECT_BINARY_DIR}/njson-prefix/src/njson")
-++  message(STATUS "Using bundled nlohmann-json in '${NJSON_SRC}'")
-++  set(NJSON_INCLUDE_DIR "${NJSON_SRC}/single_include")
-++  ExternalProject_Add(
-++    njson
-++    URL "https://github.com/nlohmann/json/archive/v3.3.0.tar.gz"
-++    URL_HASH "SHA256=2fd1d207b4669a7843296c41d3b6ac5b23d00dec48dba507ba051d14564aa801"
-++    CONFIGURE_COMMAND ""
-++    BUILD_COMMAND ""
-++    INSTALL_COMMAND "")
-++endif()
-+-- 
-+2.25.1
-+
-diff --git a/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch b/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch
-deleted file mode 100644
-index 7873210281..0000000000
---- a/package/sysdig/0001-libsinsp-Apply-PATCH_COMMAND-to-fix-lua-types-and-fu.patch
-+++ /dev/null
-@@ -1,82 +0,0 @@
--From cc8bccc3ebb90103900a7f0f2b085ddb723b8792 Mon Sep 17 00:00:00 2001
--From: Francis Laniel <flaniel@linux.microsoft.com>
--Date: Wed, 6 Apr 2022 16:54:37 +0100
--Subject: [PATCH] libsinsp: Apply PATCH_COMMAND to fix lua types and function.
--
--Buildroot luajit 5.1 seems to not have compatibility between luaL_reg and
--luaL_Reg.
--So, we apply sysdig CMakeLists.txt PATCH_COMMAND to fix this and lua function
--call as well.
--Note that, this PATCH_COMMAND was added in sysdig in:
--a064440394c9 ("Adding power support to Travis builds (#1566)")
--
--This patch is also present in kubernetes/minikube in:
--f036c279bc59 ("Add patch for compiling sysdig with system luajit")
--
--Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-----
-- userspace/libsinsp/chisel.cpp         | 6 +++---
-- userspace/libsinsp/lua_parser.cpp     | 2 +-
-- userspace/libsinsp/lua_parser_api.cpp | 2 +-
-- 3 files changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/userspace/libsinsp/chisel.cpp b/userspace/libsinsp/chisel.cpp
--index 0a6e3cf8..0c2e255a 100644
----- a/userspace/libsinsp/chisel.cpp
--+++ b/userspace/libsinsp/chisel.cpp
--@@ -98,7 +98,7 @@ void lua_stackdump(lua_State *L)
-- // Lua callbacks
-- ///////////////////////////////////////////////////////////////////////////////
-- #ifdef HAS_LUA_CHISELS
---const static struct luaL_reg ll_sysdig [] =
--+const static struct luaL_Reg ll_sysdig [] =
-- {
-- 	{"set_filter", &lua_cbacks::set_global_filter},
-- 	{"set_snaplen", &lua_cbacks::set_snaplen},
--@@ -134,7 +134,7 @@ const static struct luaL_reg ll_sysdig [] =
-- 	{NULL,NULL}
-- };
-- 
---const static struct luaL_reg ll_chisel [] =
--+const static struct luaL_Reg ll_chisel [] =
-- {
-- 	{"request_field", &lua_cbacks::request_field},
-- 	{"set_filter", &lua_cbacks::set_filter},
--@@ -146,7 +146,7 @@ const static struct luaL_reg ll_chisel [] =
-- 	{NULL,NULL}
-- };
-- 
---const static struct luaL_reg ll_evt [] =
--+const static struct luaL_Reg ll_evt [] =
-- {
-- 	{"field", &lua_cbacks::field},
-- 	{"get_num", &lua_cbacks::get_num},
--diff --git a/userspace/libsinsp/lua_parser.cpp b/userspace/libsinsp/lua_parser.cpp
--index 0e26617d..78810d96 100644
----- a/userspace/libsinsp/lua_parser.cpp
--+++ b/userspace/libsinsp/lua_parser.cpp
--@@ -32,7 +32,7 @@ extern "C" {
-- #include "lauxlib.h"
-- }
-- 
---const static struct luaL_reg ll_filter [] =
--+const static struct luaL_Reg ll_filter [] =
-- {
-- 	{"rel_expr", &lua_parser_cbacks::rel_expr},
-- 	{"bool_op", &lua_parser_cbacks::bool_op},
--diff --git a/userspace/libsinsp/lua_parser_api.cpp b/userspace/libsinsp/lua_parser_api.cpp
--index c89e9126..c3d8008a 100644
----- a/userspace/libsinsp/lua_parser_api.cpp
--+++ b/userspace/libsinsp/lua_parser_api.cpp
--@@ -266,7 +266,7 @@ int lua_parser_cbacks::rel_expr(lua_State *ls)
-- 					string err = "Got non-table as in-expression operand\n";
-- 					throw sinsp_exception("parser API error");
-- 				}
---				int n = luaL_getn(ls, 4);  /* get size of table */
--+				int n = lua_objlen (ls, 4);  /* get size of table */
-- 				for (i=1; i<=n; i++)
-- 				{
-- 					lua_rawgeti(ls, 4, i);
---- 
--2.25.1
--
-diff --git a/package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch b/package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch
-deleted file mode 100644
-index a9155fbb4a..0000000000
---- a/package/sysdig/0002-Link-against-libabseil-cpp-which-grpc-uses.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From a7fb3b863c3574470c45fdf6084dcc40931ca017 Mon Sep 17 00:00:00 2001
--From: Francis Laniel <flaniel@linux.microsoft.com>
--Date: Thu, 7 Apr 2022 18:30:23 +0100
--Subject: [PATCH] Link against libabseil-cpp which grpc uses.
--
--This patch was taken from:
--55c96b61f7b9 ("sysdig: make extra linking against abseil conditional") [1]
--from hhoffstaette/portage.
--
--[1] https://github.com/hhoffstaette/portage/blob/55c96b61f7b91e4d91bed6723e86c00dd91f8d16/dev-util/sysdig/files/0.27.1-grpc-absl-sync.patch
--
--Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-----
-- CMakeLists.txt                    | 1 +
-- userspace/libsinsp/CMakeLists.txt | 4 ++++
-- 2 files changed, 5 insertions(+)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 1f34f1d6..c0354b29 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -552,6 +552,7 @@ if(NOT WIN32 AND NOT APPLE)
-- 			else()
-- 				message(FATAL_ERROR "Couldn't find system grpc")
-- 			endif()
--+			find_library(ABSL_SYNC_LIB NAMES absl_synchronization)
-- 			find_program(GRPC_CPP_PLUGIN grpc_cpp_plugin)
-- 			if(NOT GRPC_CPP_PLUGIN)
-- 				message(FATAL_ERROR "System grpc_cpp_plugin not found")
--diff --git a/userspace/libsinsp/CMakeLists.txt b/userspace/libsinsp/CMakeLists.txt
--index d72f9115..d1b7ea02 100644
----- a/userspace/libsinsp/CMakeLists.txt
--+++ b/userspace/libsinsp/CMakeLists.txt
--@@ -214,6 +214,10 @@ if(NOT WIN32)
-- 				"${JQ_LIB}"
-- 				"${B64_LIB}")
-- 
--+			if(ABSL_SYNC_LIB)
--+				target_link_libraries(sinsp "${ABSL_SYNC_LIB}")
--+			endif()
--+
-- 			if(NOT MUSL_OPTIMIZED_BUILD)
-- 			target_link_libraries(sinsp
-- 				rt
---- 
--2.25.1
--
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index c124054105..3a21f51725 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -1,26 +1,17 @@
- config BR2_PACKAGE_SYSDIG
- 	bool "sysdig"
--	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_LINUX_KERNEL
--	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp, protobuf, tbb
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
--	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, jq, protobuf, tbb
--	depends on !BR2_STATIC_LIBS # elfutils, protobuf, tbb
--	depends on BR2_USE_WCHAR # elfutils
--	depends on BR2_TOOLCHAIN_USES_GLIBC # elfutils
--	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
--	select BR2_PACKAGE_C_ARES
--	select BR2_PACKAGE_ELFUTILS
--	select BR2_PACKAGE_GRPC
--	select BR2_PACKAGE_JQ
--	select BR2_PACKAGE_JSONCPP
--	select BR2_PACKAGE_LIBB64
--	select BR2_PACKAGE_LIBCURL
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # falcosecurity-libs
-+	depends on BR2_LINUX_KERNEL # falcosecurity-libs
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # falcosecurity-libs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # falcosecurity-libs
-+	depends on !BR2_STATIC_LIBS # falcosecurity-libs
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # falcosecurity-libs
-+	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1 # falcosecurity-libs
-+	select BR2_PACKAGE_FALCOSECURITY_LIBS
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_PROTOBUF
--	select BR2_PACKAGE_TBB
--	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
-+	select BR2_PACKAGE_YAML_CPP
- 	help
- 	  Sysdig is open source, system-level exploration:
- 	  capture system state and activity from a running Linux
-@@ -36,4 +27,4 @@ comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 4.8, dynamic lib
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_USES_GLIBC \
--	    || !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
-+		|| !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
-diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
-index 4ec46abfc3..380c9dce1e 100644
---- a/package/sysdig/sysdig.hash
-+++ b/package/sysdig/sysdig.hash
-@@ -1,5 +1,3 @@
- # sha256 locally computed
--sha256  b9d05854493d245a7a7e75f77fc654508f720aab5e5e8a3a932bd8eb54e49bda  sysdig-0.27.1.tar.gz
-+sha256  3721c97f0da43c1a68d2962d30363525d8532ab5f2534dfefc86d175e17e423e  sysdig-0.29.1.tar.gz
- sha256  a88fbf820b38b1c7fabc6efe291b8259e02ae21326f56fe31c6c9adf374b2702  COPYING
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  driver/GPL2.txt
--sha256  e3f6a43d097ed68176e9738de925d98b938e1bccf6d6bd1bcd79395eca8f76ed  driver/MIT.txt
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index 9a9aaa35c3..76cabcaeca 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--SYSDIG_VERSION = 0.27.1
-+SYSDIG_VERSION = 0.29.1
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
--SYSDIG_LICENSE = Apache-2.0 (userspace), MIT or GPL-2.0 (driver)
--SYSDIG_LICENSE_FILES = COPYING driver/MIT.txt driver/GPL2.txt
-+SYSDIG_LICENSE = Apache-2.0
-+SYSDIG_LICENSE_FILE = COPYING
- SYSDIG_CPE_ID_VENDOR = sysdig
- SYSDIG_CONF_OPTS = \
- 	-DENABLE_DKMS=OFF \
-@@ -16,39 +16,22 @@ SYSDIG_CONF_OPTS = \
- SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- SYSDIG_DEPENDENCIES = \
--	c-ares \
--	elfutils \
--	grpc \
--	jq \
--	jsoncpp \
--	libb64 \
--	libcurl \
--	luainterpreter \
-+	falcosecurity-libs \
- 	ncurses \
--	openssl \
--	protobuf \
--	tbb \
--	zlib
-+	json-for-modern-cpp \
-+	yaml-cpp
- 
--# sysdig creates the module Makefile from a template, which contains a
--# single place-holder, KBUILD_FLAGS, wich is only replaced with two
--# things:
--#   - debug flags, which we don't care about here,
--#   - 'sysdig-feature' flags, which are never set, so always empty
--# So, just replace the place-holder with the only meaningful value: nothing.
--define SYSDIG_MODULE_GEN_MAKEFILE
--	$(INSTALL) -m 0644 $(@D)/driver/Makefile.in $(@D)/driver/Makefile
--	$(SED) 's/@KBUILD_FLAGS@//;' $(@D)/driver/Makefile
--	$(SED) 's/@PROBE_NAME@/sysdig-probe/;' $(@D)/driver/Makefile
--endef
--SYSDIG_POST_PATCH_HOOKS += SYSDIG_MODULE_GEN_MAKEFILE
--
--# Don't build the driver as part of the 'standard' procedure, we'll
--# build it on our own with the kernel-module infra.
--SYSDIG_CONF_OPTS += -DBUILD_DRIVER=OFF
--
--SYSDIG_MODULE_SUBDIRS = driver
--SYSDIG_MODULE_MAKE_OPTS = KERNELDIR=$(LINUX_DIR)
-+# Don't build the driver as part of the 'standard' procedure, it has been built
-+# by falcosecurity-libs.mk.
-+# grpc_cpp_plugin is needed to build falcosecurity libs, so we give the host
-+# one there.
-+SYSDIG_CONF_OPTS += -DFALCOSECURITY_LIBS_SOURCE_DIR=$(FALCOSECURITY_LIBS_SRCDIR) \
-+	-DBUILD_DRIVER=OFF \
-+	-DGRPC_CPP_PLUGIN=$(HOST_DIR)/bin/grpc_cpp_plugin \
-+	-DDRIVER_NAME=$(FALCOSECURITY_LIBS_DRIVER_NAME.) \
-+	-DENABLE_DKMS=OFF \
-+	-DUSE_BUNDLED_DEPS=OFF \
-+	-DWITH_CHISEL=ON \
-+	-DVALIJSON_INCLUDE=$(BUILD_DIR)/valijson-0.6/include/valijson
- 
--$(eval $(kernel-module))
- $(eval $(cmake-package))
+  Regards,
+  Arnout
+
+> ---
+>   .../0001-meson-add-tests-option.patch         | 54 +++++++++++++++++++
+>   package/bubblewrap/bubblewrap.mk              |  3 +-
+>   2 files changed, 56 insertions(+), 1 deletion(-)
+>   create mode 100644 package/bubblewrap/0001-meson-add-tests-option.patch
+> 
+> diff --git a/package/bubblewrap/0001-meson-add-tests-option.patch b/package/bubblewrap/0001-meson-add-tests-option.patch
+> new file mode 100644
+> index 0000000000..32836f925d
+> --- /dev/null
+> +++ b/package/bubblewrap/0001-meson-add-tests-option.patch
+> @@ -0,0 +1,54 @@
+> +From 34ea0ad841d6f9167db391c08e6cd51471fed6be Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sun, 3 Apr 2022 11:27:06 +0200
+> +Subject: [PATCH] meson: add tests option
+> +
+> +Allow the user to disable tests, for example to avoid the following
+> +build failure on mips32:
+> +
+> +FAILED: tests/try-syscall.p/try-syscall.c.o
+> +/home/autobuild/autobuild/instance-11/output-1/host/bin/mipsel-buildroot-linux-musl-gcc -Itests/try-syscall.p -Itests -I../tests -fdiagnostics-color=always -Wall -Winvalid-pch -Wextra -O3 -D_GNU_SOURCE -Werror=shadow -Werror=empty-body -Werror=strict-prototypes -Werror=missing-prototypes -Werror=implicit-function-declaration -Werror=pointer-arith -Werror=init-self -Werror=missing-declarations -Werror=return-type -Werror=overflow -Werror=int-conversion -Werror=incompatible-pointer-types -Werror=misleading-indentation -Werror=missing-include-dirs -Werror=aggregate-return -Werror=switch-default -Wswitch-enum -Wno-sign-compare -Wno-error=sign-compare -Wno-missing-field-initializers -Wno-error=missing-field-initializers -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O1 -g0 -MD -MQ tests/try-syscall.p/try-syscall.c.o -MF tests/try-syscall.p/try-syscall.c.o.d -o tests/try-syscall.p/try-syscall.c.o -c ../tests/try-syscall.c
+> +../tests/try-syscall.c:34:5: error: #error "Unknown MIPS ABI"
+> +   34 | #   error "Unknown MIPS ABI"
+> +      |     ^~~~~
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/cf0365354fc8c16e5871d561daae0fa5039d0bee
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://github.com/containers/bubblewrap/commit/34ea0ad841d6f9167db391c08e6cd51471fed6be]
+> +---
+> + meson.build       | 4 +++-
+> + meson_options.txt | 6 ++++++
+> + 2 files changed, 9 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/meson.build b/meson.build
+> +index 5b63aa64..9277ac4e 100644
+> +--- a/meson.build
+> ++++ b/meson.build
+> +@@ -152,4 +152,6 @@ if not meson.is_subproject()
+> +   subdir('completions')
+> + endif
+> +
+> +-subdir('tests')
+> ++if get_option('tests')
+> ++  subdir('tests')
+> ++endif
+> +diff --git a/meson_options.txt b/meson_options.txt
+> +index 2fa3a8c3..a136a3c3 100644
+> +--- a/meson_options.txt
+> ++++ b/meson_options.txt
+> +@@ -38,6 +38,12 @@ option(
+> +   description : 'enable optional SELINUX support',
+> +   value : 'auto',
+> + )
+> ++option(
+> ++  'tests',
+> ++  type : 'boolean',
+> ++  description : 'build tests',
+> ++  value : 'true',
+> ++)
+> + option(
+> +   'zsh_completion',
+> +   type : 'feature',
+> diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
+> index 5875b0d6e2..81456e9e0d 100644
+> --- a/package/bubblewrap/bubblewrap.mk
+> +++ b/package/bubblewrap/bubblewrap.mk
+> @@ -17,7 +17,8 @@ BUBBLEWRAP_CONF_OPTS = \
+>   	-Dzsh_completion=disabled \
+>   	-Dman=disabled \
+>   	-Dpython=$(HOST_DIR)/bin/python \
+> -	-Drequire_userns=false
+> +	-Drequire_userns=false \
+> +	-Dtests=false
+>   
+>   ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
+>   BUBBLEWRAP_CONF_OPTS += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
