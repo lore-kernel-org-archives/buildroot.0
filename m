@@ -4,85 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9363FC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 18:50:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F003C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 18:51:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5BBFB4034B;
-	Sat, 30 Apr 2022 18:50:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1921A404D8;
+	Sat, 30 Apr 2022 18:51:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IhupjNsSK-62; Sat, 30 Apr 2022 18:50:50 +0000 (UTC)
+	with ESMTP id SDBmAewkyqd8; Sat, 30 Apr 2022 18:51:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47731404C6;
-	Sat, 30 Apr 2022 18:50:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 86DD31BF5AE
- for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:50:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F644404C6;
+	Sat, 30 Apr 2022 18:51:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E0D61BF5AE
+ for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:51:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 72DDC404EE
- for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:50:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C2D560B5E
+ for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:51:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oxa7v0yDRh0b for <buildroot@lists.busybox.net>;
- Sat, 30 Apr 2022 18:50:36 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l5WVJ8Bt50RO for <buildroot@lists.busybox.net>;
+ Sat, 30 Apr 2022 18:51:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 53AC4404C3
- for <buildroot@buildroot.org>; Sat, 30 Apr 2022 18:50:36 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id b24so12472641edu.10
- for <buildroot@buildroot.org>; Sat, 30 Apr 2022 11:50:36 -0700 (PDT)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 78CD960B58
+ for <buildroot@buildroot.org>; Sat, 30 Apr 2022 18:51:03 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id g6so21096129ejw.1
+ for <buildroot@buildroot.org>; Sat, 30 Apr 2022 11:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=4ysMliYWH8LAj/o5ORGXCj0qpV/+oL5xXr6QEOz224U=;
- b=JIi0Q0Bxmkkulg8osERrwcehrpQUawildKz/OFmGDVgq6Qe0P5n0ugSnw3SwZuxt/u
- qSKlw2F3MPJM3K7USwEXCgzWLo3awBSJfgeSvaR4h1LUP2C8djT5ePMHy+sr58+4Skn3
- 8fbPQhXxbMmxjecOow4LAkdSirkzhmowgoJ3eOgw2JWBq4YYVW+gUNG5qtJoVz3jEGIW
- 5MbkPxuf+0ACfVZfi1oLg7phPVTTI1R3SELi/mJ6mO931hfXPR7l9daHP0gvhVZ/Ru2l
- xSRLCy0lqynSHJqSrg51xGiUmGfcXdRsDYOkyZIBdkIebOLOlhXTdOioFCSIALzCCKic
- ud7A==
+ bh=0o71yZM48xmdkgulmkjhA/zr2BdMCKzNumCkAP5DxC4=;
+ b=DRmEgreboq5bMdSydeSv9fNsO7sgYOSrHem/3xenXh60witDZTh39ty79uAoGYpwRb
+ eRfjNRh+/lWMPWzAgv4+ok+H44uqErr3AEVV/HhuAaf7LXCvDnQL49gm57XYfk6/Di6z
+ oWAizxdUnODXjl5x2lBjErnyJf5IIqhu4F2/Dix9ogSjMxMtFzmo9od6nHKY5tnUHP7t
+ ceqEm7yiuO3ZDtff6KW7IQ7yjX6GoTb+7aL0CgZe/Gsu6eK+vKFka26ptUpBJlrwRtut
+ ZeENMVAhC8kwylOOSUxYqpRVW2iogfuxH/SSFypAT+pxrGtU131eVFQPgI7cFXtmy3pv
+ ngSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=4ysMliYWH8LAj/o5ORGXCj0qpV/+oL5xXr6QEOz224U=;
- b=qyrNMCC2ruW5cx1fUiJwBzJ+EUx0SlGt5HzGW6UaRAtrsxTIK2qAJSlNdDVspb92RN
- cp+vP96c4Gkw3plKk7/ktr4ydOjh5nKDMm8y4ULDcr9bRRYXWZesh9WvblT9FGqT3RjO
- d5JeZxPgLDhKkBgbvFtTOVqRFXglKx3O/j/+7bgfuMwypoWFpKqo1urDEn4tV8tQVizh
- kuAQorF3QzJEq8I/jTXbH7z9fpgDKjciae3fpnM8ehJ/3d9OR+VGFf8ltItqul2DG1Ny
- DPOezwr1r9ktHOCBVVvj6vlwoP+/es1MX3dmuN7rm/hFCwGWjXJwas9aB9bPYEMywsQW
- 74iQ==
-X-Gm-Message-State: AOAM533zBUE/SRA4R0JTFR1GBI8uT1A8xxZUxvAIxIntZkyOpGT5feiP
- h4oDKBL1d7dwuGXZ+MDpQqtnIg==
-X-Google-Smtp-Source: ABdhPJzKlKqX/MlziQHoUDyTwKcC21ViqQd+0n5dl8Yjj+q11ENTS8Omi7YFMlNy0bKGuB9rp4kiSA==
-X-Received: by 2002:a50:eb87:0:b0:425:c3e2:17a9 with SMTP id
- y7-20020a50eb87000000b00425c3e217a9mr5561728edr.109.1651344634403; 
- Sat, 30 Apr 2022 11:50:34 -0700 (PDT)
+ bh=0o71yZM48xmdkgulmkjhA/zr2BdMCKzNumCkAP5DxC4=;
+ b=oIAkqlAr8h7vg840a04A5MXteBxEI07Ue5KdJPhD1XYl6sqR0hcnvn28/D/6f/WkAG
+ JeL3TjF05GWvfxdzlK41XdvCSer0KU/BoF+NAvC/hrJEptQNJBgMg56jHhI3qrB2ttWg
+ z/0JP2UJCNxO0IKCZApIG6/WLt79H30wNSHBQWK/oFS/EG0dR5molX0TAL/79t2TPSij
+ 8KpHXtkbmq4PIo8Jn1bdXH9FXk8Knr/Dp5CwaOLGNnfP3qQ2TDk/VuMsmQcIwz0KLU8S
+ g1P9gKdWwRfr+WpVxjYitc3+GRVQvRzZHCk1EKIwXG/uCmU5DWphPDIr2yeN4MKIm03f
+ gTSw==
+X-Gm-Message-State: AOAM530Pss/bp3X+MVe75taJw4JCtSvtTih0nDl0AV3l8ugb/bxzhJm0
+ zUvXlhmXg2kQmgEPi67kjD/sVw==
+X-Google-Smtp-Source: ABdhPJxahmFiqPtp3DzRN1iNx+PMyU0Q/DS4WdeT7SbAiczvMm80fKl6TYd0Y67uDUMD16Gy5qpt7w==
+X-Received: by 2002:a17:907:97cf:b0:6df:846f:ad0a with SMTP id
+ js15-20020a17090797cf00b006df846fad0amr4740443ejc.286.1651344661657; 
+ Sat, 30 Apr 2022 11:51:01 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- gz25-20020a170907a05900b006f3ef214e63sm1862494ejc.201.2022.04.30.11.50.33
+ ee47-20020a056402292f00b0041d893ed437sm4693182edb.2.2022.04.30.11.51.01
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 30 Apr 2022 11:50:33 -0700 (PDT)
-Message-ID: <740d615d-29c0-565e-b502-7ad4be5d6d13@mind.be>
-Date: Sat, 30 Apr 2022 20:50:33 +0200
+ Sat, 30 Apr 2022 11:51:01 -0700 (PDT)
+Message-ID: <e0676749-54c7-948c-c0f7-9dbc0e9b9c0b@mind.be>
+Date: Sat, 30 Apr 2022 20:50:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220428204048.4003582-1-fontaine.fabrice@gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20220428221727.1680234-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220428204048.4003582-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/libldns: fix build with
- libressl >= 3.5.0
+In-Reply-To: <20220428221727.1680234-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH v2 1/3] package/pkg-python: deduplicate
+ common env/opts variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,7 +96,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,19 +105,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 28/04/2022 22:40, Fabrice Fontaine wrote:
-> Fix the following build failure with libressl raised since bump to
-> version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
+On 29/04/2022 00:17, James Hilliard wrote:
+> There are many varibles shared via setuptools, distutils and pep517,
+> combine those common env/opts variables to make them easier to
+> maintain.
 > 
-> ./dnssec.c: In function 'ldns_key_buf2dsa_raw':
-> ./dnssec.c:386:5: error: invalid use of incomplete typedef 'DSA' {aka 'struct dsa_st'}
->    386 |  dsa->p = P;
->        |     ^~
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/d754fbaa8f6687597682fbf0b71c16527c8cd603
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
 
@@ -122,112 +118,177 @@ On 28/04/2022 22:40, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   ...se-accessors-for-DSA-and-RSA-objects.patch | 96 +++++++++++++++++++
->   1 file changed, 96 insertions(+)
->   create mode 100644 package/libldns/0001-Use-accessors-for-DSA-and-RSA-objects.patch
+> Changes v1 -> v2:
+>    - restore accidentially dropped LDSHARED in distutils env
+> ---
+>   package/pkg-python.mk | 96 +++++++++++++++++++------------------------
+>   1 file changed, 43 insertions(+), 53 deletions(-)
 > 
-> diff --git a/package/libldns/0001-Use-accessors-for-DSA-and-RSA-objects.patch b/package/libldns/0001-Use-accessors-for-DSA-and-RSA-objects.patch
-> new file mode 100644
-> index 0000000000..f7ebbbf8b2
-> --- /dev/null
-> +++ b/package/libldns/0001-Use-accessors-for-DSA-and-RSA-objects.patch
-> @@ -0,0 +1,96 @@
-> +From 887d618239312cc8c11e41c45492eee02a8f28a2 Mon Sep 17 00:00:00 2001
-> +From: Theo Buehler <tb@openbsd.org>
-> +Date: Tue, 11 Jan 2022 21:14:24 +0100
-> +Subject: [PATCH] Use accessors for DSA and RSA objects
+> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+> index e9de5cb8d3..b86e12423f 100644
+> --- a/package/pkg-python.mk
+> +++ b/package/pkg-python.mk
+> @@ -33,78 +33,77 @@ PKG_PYTHON_HOST_PLATFORM = linux-$(PKG_PYTHON_ARCH)
+>   PKG_PYTHON_SYSCONFIGDATA_PATH = $(PYTHON3_PATH)/_sysconfigdata__linux_*.py
+>   PKG_PYTHON_SYSCONFIGDATA_NAME = `{ [ -e $(PKG_PYTHON_SYSCONFIGDATA_PATH) ] && basename $(PKG_PYTHON_SYSCONFIGDATA_PATH) .py; } || true`
+>   
+> -# Target distutils-based packages
+> -PKG_PYTHON_DISTUTILS_ENV = \
+> +# Target python packages
+> +PKG_PYTHON_ENV = \
+> +	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+> +	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+> +	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+>   	PATH=$(BR_PATH) \
+>   	$(TARGET_CONFIGURE_OPTS) \
+> -	LDSHARED="$(TARGET_CROSS)gcc -shared" \
+>   	PYTHONPATH="$(PYTHON3_PATH)" \
+>   	PYTHONNOUSERSITE=1 \
+> -	SETUPTOOLS_USE_DISTUTILS=stdlib \
+> -	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+> -	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+> -	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+>   	_python_sysroot=$(STAGING_DIR) \
+>   	_python_prefix=/usr \
+>   	_python_exec_prefix=/usr
+>   
+> +# Host python packages
+> +HOST_PKG_PYTHON_ENV = \
+> +	PATH=$(BR_PATH) \
+> +	PYTHONNOUSERSITE=1 \
+> +	$(HOST_CONFIGURE_OPTS)
 > +
-> +In the upcoming LibreSSL version 3.5, the DSA and RSA structs will
-> +become opaque, so we should use the OpenSSL 1.1 setters and getters
-> +to fix the build.  The relevant API has been available since
-> +LibreSSL 2.7. The last LibreSSL version (2.6) not having these
-> +accessors was EOL late 2018, so no users should be affected by this
-> +change.
+> +# Target distutils-based packages
+> +PKG_PYTHON_DISTUTILS_ENV = \
+> +	$(PKG_PYTHON_ENV) \
+> +	LDSHARED="$(TARGET_CROSS)gcc -shared" \
+> +	SETUPTOOLS_USE_DISTUTILS=stdlib \
 > +
-> +[Retrieved from:
-> +https://github.com/NLnetLabs/ldns/commit/887d618239312cc8c11e41c45492eee02a8f28a2]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + dnssec.c   | 4 ++--
-> + host2str.c | 4 ++--
-> + keys.c     | 6 +++---
-> + 3 files changed, 7 insertions(+), 7 deletions(-)
+>   PKG_PYTHON_DISTUTILS_BUILD_OPTS = \
+>   	--executable=/usr/bin/python
+>   
+> -PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
+> +PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+>   	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+> -	--prefix=/usr \
+> +	--prefix=/usr
 > +
-> +diff --git a/dnssec.c b/dnssec.c
-> +index 63fece52..fbaa518a 100644
-> +--- a/dnssec.c
-> ++++ b/dnssec.c
-> +@@ -381,7 +381,7 @@ ldns_key_buf2dsa_raw(const unsigned char* key, size_t len)
-> + 		BN_free(Y);
-> + 		return NULL;
-> + 	}
-> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
-> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
-> + #ifndef S_SPLINT_S
-> + 	dsa->p = P;
-> + 	dsa->q = Q;
-> +@@ -468,7 +468,7 @@ ldns_key_buf2rsa_raw(const unsigned char* key, size_t len)
-> + 		BN_free(modulus);
-> + 		return NULL;
-> + 	}
-> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
-> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
-> + #ifndef S_SPLINT_S
-> + 	rsa->n = modulus;
-> + 	rsa->e = exponent;
-> +diff --git a/host2str.c b/host2str.c
-> +index a207a913..634c5676 100644
-> +--- a/host2str.c
-> ++++ b/host2str.c
-> +@@ -2451,7 +2451,7 @@ ldns_key2buffer_str(ldns_buffer *output, const ldns_key *k)
-> + 					const BIGNUM *n=NULL, *e=NULL, *d=NULL,
-> + 						*p=NULL, *q=NULL, *dmp1=NULL,
-> + 						*dmq1=NULL, *iqmp=NULL;
-> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
-> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
-> + 					n = rsa->n;
-> + 					e = rsa->e;
-> + 					d = rsa->d;
-> +@@ -2504,7 +2504,7 @@ ldns_key2buffer_str(ldns_buffer *output, const ldns_key *k)
-> + 				if(1) {
-> + 					const BIGNUM *p=NULL, *q=NULL, *g=NULL,
-> + 						*priv_key=NULL, *pub_key=NULL;
-> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
-> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
-> + #ifndef S_SPLINT_S
-> + 					p = dsa->p;
-> + 					q = dsa->q;
-> +diff --git a/keys.c b/keys.c
-> +index 91a3dffd..78bea972 100644
-> +--- a/keys.c
-> ++++ b/keys.c
-> +@@ -861,7 +861,7 @@ ldns_key_new_frm_fp_rsa_l(FILE *f, int *line_nr)
-> + 	}
-> + #endif /* splint */
+> +PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
+> +	$(PKG_PYTHON_DISTUTILS_INSTALL_OPTS) \
+>   	--root=$(TARGET_DIR)
+>   
+>   PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
+> -	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+> -	--prefix=/usr \
+> +	$(PKG_PYTHON_DISTUTILS_INSTALL_OPTS) \
+>   	--root=$(STAGING_DIR)
+>   
+>   # Host distutils-based packages
+>   HOST_PKG_PYTHON_DISTUTILS_ENV = \
+> -	PATH=$(BR_PATH) \
+> -	PYTHONNOUSERSITE=1 \
+> -	SETUPTOOLS_USE_DISTUTILS=stdlib \
+> -	$(HOST_CONFIGURE_OPTS)
+> +	$(HOST_PKG_PYTHON_ENV) \
+> +	SETUPTOOLS_USE_DISTUTILS=stdlib
+>   
+>   HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+>   	--prefix=$(HOST_DIR)
+>   
+>   # Target setuptools-based packages
+>   PKG_PYTHON_SETUPTOOLS_ENV = \
+> -	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+> -	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+> -	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+> -	PATH=$(BR_PATH) \
+> -	$(TARGET_CONFIGURE_OPTS) \
+> -	PYTHONPATH="$(PYTHON3_PATH)" \
+> -	PYTHONNOUSERSITE=1 \
+> -	SETUPTOOLS_USE_DISTUTILS=stdlib \
+> -	_python_sysroot=$(STAGING_DIR) \
+> -	_python_prefix=/usr \
+> -	_python_exec_prefix=/usr
+> +	$(PKG_PYTHON_ENV) \
+> +	SETUPTOOLS_USE_DISTUTILS=stdlib
+>   
+> -PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+> +PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+>   	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+>   	--prefix=/usr \
+>   	--executable=/usr/bin/python \
+> -	--single-version-externally-managed \
+> +	--single-version-externally-managed
 > +
-> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
-> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
-> + # ifndef S_SPLINT_S
-> + 	rsa->n = n;
-> + 	rsa->e = e;
-> +@@ -982,7 +982,7 @@ ldns_key_new_frm_fp_dsa_l(FILE *f, ATTR_UNUSED(int *line_nr))
-> + 	}
-> + #endif /* splint */
+> +PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+> +	$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
+>   	--root=$(TARGET_DIR)
+>   
+>   PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+> -	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+> -	--prefix=/usr \
+> -	--executable=/usr/bin/python \
+> -	--single-version-externally-managed \
+> +	$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
+>   	--root=$(STAGING_DIR)
+>   
+>   # Host setuptools-based packages
+>   HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+> -	PATH=$(BR_PATH) \
+> -	PYTHONNOUSERSITE=1 \
+> -	SETUPTOOLS_USE_DISTUTILS=stdlib \
+> -	$(HOST_CONFIGURE_OPTS)
+> +	$(HOST_PKG_PYTHON_ENV) \
+> +	SETUPTOOLS_USE_DISTUTILS=stdlib
+>   
+>   HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+>   	--prefix=$(HOST_DIR) \
+> @@ -113,28 +112,21 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+>   
+>   # Target pep517-based packages
+>   PKG_PYTHON_PEP517_ENV = \
+> -	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+> -	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+> -	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+> -	PATH=$(BR_PATH) \
+> -	$(TARGET_CONFIGURE_OPTS) \
+> -	PYTHONPATH="$(PYTHON3_PATH)" \
+> -	PYTHONNOUSERSITE=1 \
+> -	_python_sysroot=$(STAGING_DIR) \
+> -	_python_prefix=/usr \
+> -	_python_exec_prefix=/usr
+> +	$(PKG_PYTHON_ENV)
+>   
+> -PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
+> +PKG_PYTHON_PEP517_INSTALL_OPTS = \
+>   	--interpreter=/usr/bin/python \
+> -	--script-kind=posix \
+> +	--script-kind=posix
 > +
-> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
-> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
-> + # ifndef S_SPLINT_S
-> + 	dsa->p = p;
-> + 	dsa->q = q;
-> +@@ -1660,7 +1660,7 @@ ldns_key_rsa2bin(unsigned char *data, RSA *k, uint16_t *size)
-> + 	if (!k) {
-> + 		return false;
-> + 	}
-> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
-> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
-> + 	n = k->n;
-> + 	e = k->e;
-> + #else
+> +PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
+> +	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
+>   	--purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+>   	--headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+>   	--scripts=$(TARGET_DIR)/usr/bin \
+>   	--data=$(TARGET_DIR)/usr
+>   
+>   PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
+> -	--interpreter=/usr/bin/python \
+> -	--script-kind=posix \
+> +	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
+>   	--purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+>   	--headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+>   	--scripts=$(STAGING_DIR)/usr/bin \
+> @@ -142,9 +134,7 @@ PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
+>   
+>   # Host pep517-based packages
+>   HOST_PKG_PYTHON_PEP517_ENV = \
+> -	PATH=$(BR_PATH) \
+> -	PYTHONNOUSERSITE=1 \
+> -	$(HOST_CONFIGURE_OPTS)
+> +	$(HOST_PKG_PYTHON_ENV)
+>   
+>   HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
+>   	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
