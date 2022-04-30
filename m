@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9085CC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 18:50:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9363FC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 18:50:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BE6B60B6A;
-	Sat, 30 Apr 2022 18:50:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5BBFB4034B;
+	Sat, 30 Apr 2022 18:50:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7L3UBKTCI3DK; Sat, 30 Apr 2022 18:50:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IhupjNsSK-62; Sat, 30 Apr 2022 18:50:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E2C960B58;
-	Sat, 30 Apr 2022 18:50:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 77CAE1BF5AE
- for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:50:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 47731404C6;
+	Sat, 30 Apr 2022 18:50:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 86DD31BF5AE
+ for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73D3B60B58
- for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:50:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 72DDC404EE
+ for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:50:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LKnNpRx11CSK for <buildroot@lists.busybox.net>;
- Sat, 30 Apr 2022 18:50:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oxa7v0yDRh0b for <buildroot@lists.busybox.net>;
+ Sat, 30 Apr 2022 18:50:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A528360B4D
- for <buildroot@buildroot.org>; Sat, 30 Apr 2022 18:50:18 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id k23so21082953ejd.3
- for <buildroot@buildroot.org>; Sat, 30 Apr 2022 11:50:18 -0700 (PDT)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 53AC4404C3
+ for <buildroot@buildroot.org>; Sat, 30 Apr 2022 18:50:36 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id b24so12472641edu.10
+ for <buildroot@buildroot.org>; Sat, 30 Apr 2022 11:50:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=3XFmJYUfmwtSdyDKo4vXW2XDn6w9RwjHLUnFPdOKdh0=;
- b=JjIwAyfYqX8e6mbzdFdGs1MgFmTDzIlYvGUnOtKR5TjiGMB2pO7Lk4UCptglN1cg03
- RvgP58Wf+0ObJ8qUJk9CXhOGlqfeT/uFe7Da8JSEAlOdVFMDBdmuw0HkDWmZfucpJj5O
- tlqecCLAUe7tjshxqyKzySIsETWV21PoII+tCtT+0LSVZf9+69p57m0goeVRGMw6hf2d
- 7lXcl0BVIkcokojnSGdqK5dp8gCwhF07NoWrhyaBJ9HXYN5t8X7vpNxXD0QnDIIt+Vac
- 3C9WBsN4WGiy62GE/7piTYWxhuevWIWpWYKFzKuOfjnkP3U+PBlOQJDKfqmA9ZWeFbwl
- KYgg==
+ bh=4ysMliYWH8LAj/o5ORGXCj0qpV/+oL5xXr6QEOz224U=;
+ b=JIi0Q0Bxmkkulg8osERrwcehrpQUawildKz/OFmGDVgq6Qe0P5n0ugSnw3SwZuxt/u
+ qSKlw2F3MPJM3K7USwEXCgzWLo3awBSJfgeSvaR4h1LUP2C8djT5ePMHy+sr58+4Skn3
+ 8fbPQhXxbMmxjecOow4LAkdSirkzhmowgoJ3eOgw2JWBq4YYVW+gUNG5qtJoVz3jEGIW
+ 5MbkPxuf+0ACfVZfi1oLg7phPVTTI1R3SELi/mJ6mO931hfXPR7l9daHP0gvhVZ/Ru2l
+ xSRLCy0lqynSHJqSrg51xGiUmGfcXdRsDYOkyZIBdkIebOLOlhXTdOioFCSIALzCCKic
+ ud7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=3XFmJYUfmwtSdyDKo4vXW2XDn6w9RwjHLUnFPdOKdh0=;
- b=Mrh6uhRz3ojZZnRZOuliZgL15O3V00YDtaRYR2Hb6utrg90dKkwGGlgsMtfT6Mz2z9
- 9seuRfOXAbWBRvcZx0ZkUq4vd9VFe99V9Jkr265by9Aq0kxRINoA+32w6J+xuT6EX2sn
- E8W6U72itHLil5QoWtLIwAiim3WaSjekUc/xcF4VQkplgK8ccDZL+UVzllFjxdsAuLzH
- ikKPxjD5L5lkpzterMfmxtgdq6yJ5XettHFrg4cJ22c8B2OZI6EsuSnlZdmLCcQ4Cuob
- QgE7t9vu+C54L8cI0Zh+GH1hogUKZbrKpoZHUxJJIImV7fimIM+HQlCSjLrICwiLbVIc
- GtHg==
-X-Gm-Message-State: AOAM5325j7FfgcbRkytTYXkEgavkHx/JBlawECKkzbgrRJ9trfAEArpm
- wnoqHHhyGRL/8wE2tdtG4jdAmQ==
-X-Google-Smtp-Source: ABdhPJzJ/gbknUi/frWxHGkA6ImZ6muJXay9cu3ghw+YjYdKVeHxdSyhzHpZRC+O/HQ0cax8MJGaqA==
-X-Received: by 2002:a17:906:c0d6:b0:6ca:457e:f1b7 with SMTP id
- bn22-20020a170906c0d600b006ca457ef1b7mr4797765ejb.399.1651344616837; 
- Sat, 30 Apr 2022 11:50:16 -0700 (PDT)
+ bh=4ysMliYWH8LAj/o5ORGXCj0qpV/+oL5xXr6QEOz224U=;
+ b=qyrNMCC2ruW5cx1fUiJwBzJ+EUx0SlGt5HzGW6UaRAtrsxTIK2qAJSlNdDVspb92RN
+ cp+vP96c4Gkw3plKk7/ktr4ydOjh5nKDMm8y4ULDcr9bRRYXWZesh9WvblT9FGqT3RjO
+ d5JeZxPgLDhKkBgbvFtTOVqRFXglKx3O/j/+7bgfuMwypoWFpKqo1urDEn4tV8tQVizh
+ kuAQorF3QzJEq8I/jTXbH7z9fpgDKjciae3fpnM8ehJ/3d9OR+VGFf8ltItqul2DG1Ny
+ DPOezwr1r9ktHOCBVVvj6vlwoP+/es1MX3dmuN7rm/hFCwGWjXJwas9aB9bPYEMywsQW
+ 74iQ==
+X-Gm-Message-State: AOAM533zBUE/SRA4R0JTFR1GBI8uT1A8xxZUxvAIxIntZkyOpGT5feiP
+ h4oDKBL1d7dwuGXZ+MDpQqtnIg==
+X-Google-Smtp-Source: ABdhPJzKlKqX/MlziQHoUDyTwKcC21ViqQd+0n5dl8Yjj+q11ENTS8Omi7YFMlNy0bKGuB9rp4kiSA==
+X-Received: by 2002:a50:eb87:0:b0:425:c3e2:17a9 with SMTP id
+ y7-20020a50eb87000000b00425c3e217a9mr5561728edr.109.1651344634403; 
+ Sat, 30 Apr 2022 11:50:34 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- cz9-20020a0564021ca900b0042617ba63b3sm4380162edb.61.2022.04.30.11.50.16
+ gz25-20020a170907a05900b006f3ef214e63sm1862494ejc.201.2022.04.30.11.50.33
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 30 Apr 2022 11:50:16 -0700 (PDT)
-Message-ID: <d1b94f78-77de-166f-7cc5-5496a14a68fc@mind.be>
-Date: Sat, 30 Apr 2022 20:50:15 +0200
+ Sat, 30 Apr 2022 11:50:33 -0700 (PDT)
+Message-ID: <740d615d-29c0-565e-b502-7ad4be5d6d13@mind.be>
+Date: Sat, 30 Apr 2022 20:50:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <20220428162738.1243794-1-yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220428204048.4003582-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220428162738.1243794-1-yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH] package/dhcp: add explicit option disabling
+In-Reply-To: <20220428204048.4003582-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/libldns: fix build with
+ libressl >= 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,10 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Ehmanns <universeiii@gmx.de>,
- Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>,
- Eugen Hristev <eugen.hristev@microchip.com>, Jan Havran <havran.jan@email.cz>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,19 +102,19 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 28/04/2022 18:27, Yann E. MORIN wrote:
-> Commits 4db37c663cc0 (dhcp: add config option for delayed-ack feature
-> of dhcp server) and 40f7adae3c03 (package/dhcp: add security options to
-> DHCP server) forgot to explicit disable the option when not requested.
+On 28/04/2022 22:40, Fabrice Fontaine wrote:
+> Fix the following build failure with libressl raised since bump to
+> version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
 > 
-> Fix that now.
+> ./dnssec.c: In function 'ldns_key_buf2dsa_raw':
+> ./dnssec.c:386:5: error: invalid use of incomplete typedef 'DSA' {aka 'struct dsa_st'}
+>    386 |  dsa->p = P;
+>        |     ^~
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Andreas Ehmanns <universeiii@gmx.de>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-> Cc: Jan Havran <havran.jan@email.cz>
-> Cc: Eugen Hristev <eugen.hristev@microchip.com>
+> Fixes:
+>   - http://autobuild.buildroot.org/results/d754fbaa8f6687597682fbf0b71c16527c8cd603
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
@@ -124,28 +122,112 @@ On 28/04/2022 18:27, Yann E. MORIN wrote:
   Arnout
 
 > ---
->   package/dhcp/dhcp.mk | 4 ++++
->   1 file changed, 4 insertions(+)
+>   ...se-accessors-for-DSA-and-RSA-objects.patch | 96 +++++++++++++++++++
+>   1 file changed, 96 insertions(+)
+>   create mode 100644 package/libldns/0001-Use-accessors-for-DSA-and-RSA-objects.patch
 > 
-> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-> index b73137506d..cbc95cb152 100644
-> --- a/package/dhcp/dhcp.mk
-> +++ b/package/dhcp/dhcp.mk
-> @@ -76,10 +76,14 @@ endif
->   
->   ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
->   DHCP_CONF_OPTS += --enable-delayed-ack
-> +else
-> +DHCP_CONF_OPTS += --disable-delayed-ack
->   endif
->   
->   ifeq ($(BR2_PACKAGE_DHCP_SERVER_ENABLE_PARANOIA),y)
->   DHCP_CONF_OPTS += --enable-paranoia
-> +else
-> +DHCP_CONF_OPTS += --disable-paranoia
->   endif
->   
->   define DHCP_INSTALL_LIBS
+> diff --git a/package/libldns/0001-Use-accessors-for-DSA-and-RSA-objects.patch b/package/libldns/0001-Use-accessors-for-DSA-and-RSA-objects.patch
+> new file mode 100644
+> index 0000000000..f7ebbbf8b2
+> --- /dev/null
+> +++ b/package/libldns/0001-Use-accessors-for-DSA-and-RSA-objects.patch
+> @@ -0,0 +1,96 @@
+> +From 887d618239312cc8c11e41c45492eee02a8f28a2 Mon Sep 17 00:00:00 2001
+> +From: Theo Buehler <tb@openbsd.org>
+> +Date: Tue, 11 Jan 2022 21:14:24 +0100
+> +Subject: [PATCH] Use accessors for DSA and RSA objects
+> +
+> +In the upcoming LibreSSL version 3.5, the DSA and RSA structs will
+> +become opaque, so we should use the OpenSSL 1.1 setters and getters
+> +to fix the build.  The relevant API has been available since
+> +LibreSSL 2.7. The last LibreSSL version (2.6) not having these
+> +accessors was EOL late 2018, so no users should be affected by this
+> +change.
+> +
+> +[Retrieved from:
+> +https://github.com/NLnetLabs/ldns/commit/887d618239312cc8c11e41c45492eee02a8f28a2]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + dnssec.c   | 4 ++--
+> + host2str.c | 4 ++--
+> + keys.c     | 6 +++---
+> + 3 files changed, 7 insertions(+), 7 deletions(-)
+> +
+> +diff --git a/dnssec.c b/dnssec.c
+> +index 63fece52..fbaa518a 100644
+> +--- a/dnssec.c
+> ++++ b/dnssec.c
+> +@@ -381,7 +381,7 @@ ldns_key_buf2dsa_raw(const unsigned char* key, size_t len)
+> + 		BN_free(Y);
+> + 		return NULL;
+> + 	}
+> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+> + #ifndef S_SPLINT_S
+> + 	dsa->p = P;
+> + 	dsa->q = Q;
+> +@@ -468,7 +468,7 @@ ldns_key_buf2rsa_raw(const unsigned char* key, size_t len)
+> + 		BN_free(modulus);
+> + 		return NULL;
+> + 	}
+> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+> + #ifndef S_SPLINT_S
+> + 	rsa->n = modulus;
+> + 	rsa->e = exponent;
+> +diff --git a/host2str.c b/host2str.c
+> +index a207a913..634c5676 100644
+> +--- a/host2str.c
+> ++++ b/host2str.c
+> +@@ -2451,7 +2451,7 @@ ldns_key2buffer_str(ldns_buffer *output, const ldns_key *k)
+> + 					const BIGNUM *n=NULL, *e=NULL, *d=NULL,
+> + 						*p=NULL, *q=NULL, *dmp1=NULL,
+> + 						*dmq1=NULL, *iqmp=NULL;
+> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+> + 					n = rsa->n;
+> + 					e = rsa->e;
+> + 					d = rsa->d;
+> +@@ -2504,7 +2504,7 @@ ldns_key2buffer_str(ldns_buffer *output, const ldns_key *k)
+> + 				if(1) {
+> + 					const BIGNUM *p=NULL, *q=NULL, *g=NULL,
+> + 						*priv_key=NULL, *pub_key=NULL;
+> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+> + #ifndef S_SPLINT_S
+> + 					p = dsa->p;
+> + 					q = dsa->q;
+> +diff --git a/keys.c b/keys.c
+> +index 91a3dffd..78bea972 100644
+> +--- a/keys.c
+> ++++ b/keys.c
+> +@@ -861,7 +861,7 @@ ldns_key_new_frm_fp_rsa_l(FILE *f, int *line_nr)
+> + 	}
+> + #endif /* splint */
+> +
+> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+> + # ifndef S_SPLINT_S
+> + 	rsa->n = n;
+> + 	rsa->e = e;
+> +@@ -982,7 +982,7 @@ ldns_key_new_frm_fp_dsa_l(FILE *f, ATTR_UNUSED(int *line_nr))
+> + 	}
+> + #endif /* splint */
+> +
+> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+> + # ifndef S_SPLINT_S
+> + 	dsa->p = p;
+> + 	dsa->q = q;
+> +@@ -1660,7 +1660,7 @@ ldns_key_rsa2bin(unsigned char *data, RSA *k, uint16_t *size)
+> + 	if (!k) {
+> + 		return false;
+> + 	}
+> +-#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+> ++#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+> + 	n = k->n;
+> + 	e = k->e;
+> + #else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
