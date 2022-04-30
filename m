@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9B90C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 18:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C72EDC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 30 Apr 2022 18:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C908404C5;
-	Sat, 30 Apr 2022 18:55:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 854B8828B5;
+	Sat, 30 Apr 2022 18:55:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cOeT1HEm6FB8; Sat, 30 Apr 2022 18:55:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rYXTmlvtoDMq; Sat, 30 Apr 2022 18:55:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 81B654034B;
-	Sat, 30 Apr 2022 18:55:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 03F3B1BF5AE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8443581D70;
+	Sat, 30 Apr 2022 18:55:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 229651BF951
  for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:54:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0061841626
+ by smtp1.osuosl.org (Postfix) with ESMTP id 115E781B52
  for <buildroot@lists.busybox.net>; Sat, 30 Apr 2022 18:54:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u33l3Ri7eme8 for <buildroot@lists.busybox.net>;
- Sat, 30 Apr 2022 18:54:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cK5yiMAknJjQ for <buildroot@lists.busybox.net>;
+ Sat, 30 Apr 2022 18:54:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E78F54161E
- for <buildroot@buildroot.org>; Sat, 30 Apr 2022 18:54:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4AB6981A99
+ for <buildroot@buildroot.org>; Sat, 30 Apr 2022 18:54:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 7EF7F847F3; Sat, 30 Apr 2022 18:44:17 +0000 (UTC)
+ id D72E884B54; Sat, 30 Apr 2022 18:44:17 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 30 Apr 2022 20:20:52 +0200
+Date: Sat, 30 Apr 2022 20:40:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ebf745b6768689a088a1e51bdb4e7b941dfd15c5
-X-Git-Newrev: 7280c202f8a29310fa801e5322dad00308c9c4c7
+X-Git-Oldrev: 94831ab236ca336109a4f2b78b30129c8dcdf1b5
+X-Git-Newrev: 60aa067d74e41a7a598eb7ac44978f84d77a0eae
 X-Patchwork-Hint: ignore
-Message-Id: <20220430184417.7EF7F847F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freeipmi: fix build with
- argp-standalone and NLS
+Message-Id: <20220430184417.D72E884B54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-python: deduplicate common
+ env/opts variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +59,184 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7280c202f8a29310fa801e5322dad00308c9c4c7
+commit: https://git.buildroot.net/buildroot/commit/?id=60aa067d74e41a7a598eb7ac44978f84d77a0eae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with argp-standalone and NLS raised
-since commit 5430c8fedd0392e79e0c011825b056fea129980a:
+There are many varibles shared via setuptools, distutils and pep517,
+combine those common env/opts variables to make them easier to
+maintain.
 
-configure:14644: checking for argp_parse in -largp
-configure:14669: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/arm-buildroot-linux-uclibcgnueabi-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -largp  -lm -lm -lm  >&5
-/home/giuliobenetti/autobuild/run/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libargp.a(argp-parse.o): in function `argp_version_parser':
-/home/giuliobenetti/autobuild/run/instance-1/output-1/build/argp-standalone-1.4.1/argp-parse.c:181: undefined reference to `libintl_dgettext'
-
-[...]
-
-In file included from freeipmi-argp-fmtstream.c:35:
-freeipmi-argp-namefrob.h:62:32: error: redefinition of 'argp_fmtstream_write'
-   62 | #define __argp_fmtstream_write argp_fmtstream_write
-      |                                ^~~~~~~~~~~~~~~~~~~~
-freeipmi-argp-fmtstream.c:395:1: note: in expansion of macro '__argp_fmtstream_write'
-  395 | __argp_fmtstream_write (argp_fmtstream_t __fs,
-      | ^~~~~~~~~~~~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/26090162396b1b8cedfc58e1790ced528fcc35c6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/freeipmi/freeipmi.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/pkg-python.mk | 96 +++++++++++++++++++++++----------------------------
+ 1 file changed, 43 insertions(+), 53 deletions(-)
 
-diff --git a/package/freeipmi/freeipmi.mk b/package/freeipmi/freeipmi.mk
-index 9fb59245b9..b26ed0c0bf 100644
---- a/package/freeipmi/freeipmi.mk
-+++ b/package/freeipmi/freeipmi.mk
-@@ -20,7 +20,8 @@ FREEIPMI_CONF_OPTS = --without-random-device
- # Work around for uClibc or musl toolchains which lack argp_*()
- # functions.
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
--FREEIPMI_DEPENDENCIES += argp-standalone
-+FREEIPMI_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
-+FREEIPMI_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- endif
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index e9de5cb8d3..b86e12423f 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -33,78 +33,77 @@ PKG_PYTHON_HOST_PLATFORM = linux-$(PKG_PYTHON_ARCH)
+ PKG_PYTHON_SYSCONFIGDATA_PATH = $(PYTHON3_PATH)/_sysconfigdata__linux_*.py
+ PKG_PYTHON_SYSCONFIGDATA_NAME = `{ [ -e $(PKG_PYTHON_SYSCONFIGDATA_PATH) ] && basename $(PKG_PYTHON_SYSCONFIGDATA_PATH) .py; } || true`
  
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+-# Target distutils-based packages
+-PKG_PYTHON_DISTUTILS_ENV = \
++# Target python packages
++PKG_PYTHON_ENV = \
++	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
++	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
++	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+ 	PATH=$(BR_PATH) \
+ 	$(TARGET_CONFIGURE_OPTS) \
+-	LDSHARED="$(TARGET_CROSS)gcc -shared" \
+ 	PYTHONPATH="$(PYTHON3_PATH)" \
+ 	PYTHONNOUSERSITE=1 \
+-	SETUPTOOLS_USE_DISTUTILS=stdlib \
+-	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+-	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+-	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+ 	_python_sysroot=$(STAGING_DIR) \
+ 	_python_prefix=/usr \
+ 	_python_exec_prefix=/usr
+ 
++# Host python packages
++HOST_PKG_PYTHON_ENV = \
++	PATH=$(BR_PATH) \
++	PYTHONNOUSERSITE=1 \
++	$(HOST_CONFIGURE_OPTS)
++
++# Target distutils-based packages
++PKG_PYTHON_DISTUTILS_ENV = \
++	$(PKG_PYTHON_ENV) \
++	LDSHARED="$(TARGET_CROSS)gcc -shared" \
++	SETUPTOOLS_USE_DISTUTILS=stdlib \
++
+ PKG_PYTHON_DISTUTILS_BUILD_OPTS = \
+ 	--executable=/usr/bin/python
+ 
+-PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
++PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+ 	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+-	--prefix=/usr \
++	--prefix=/usr
++
++PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
++	$(PKG_PYTHON_DISTUTILS_INSTALL_OPTS) \
+ 	--root=$(TARGET_DIR)
+ 
+ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
+-	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+-	--prefix=/usr \
++	$(PKG_PYTHON_DISTUTILS_INSTALL_OPTS) \
+ 	--root=$(STAGING_DIR)
+ 
+ # Host distutils-based packages
+ HOST_PKG_PYTHON_DISTUTILS_ENV = \
+-	PATH=$(BR_PATH) \
+-	PYTHONNOUSERSITE=1 \
+-	SETUPTOOLS_USE_DISTUTILS=stdlib \
+-	$(HOST_CONFIGURE_OPTS)
++	$(HOST_PKG_PYTHON_ENV) \
++	SETUPTOOLS_USE_DISTUTILS=stdlib
+ 
+ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+ 	--prefix=$(HOST_DIR)
+ 
+ # Target setuptools-based packages
+ PKG_PYTHON_SETUPTOOLS_ENV = \
+-	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+-	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+-	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+-	PATH=$(BR_PATH) \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	PYTHONPATH="$(PYTHON3_PATH)" \
+-	PYTHONNOUSERSITE=1 \
+-	SETUPTOOLS_USE_DISTUTILS=stdlib \
+-	_python_sysroot=$(STAGING_DIR) \
+-	_python_prefix=/usr \
+-	_python_exec_prefix=/usr
++	$(PKG_PYTHON_ENV) \
++	SETUPTOOLS_USE_DISTUTILS=stdlib
+ 
+-PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
++PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 	--prefix=/usr \
+ 	--executable=/usr/bin/python \
+-	--single-version-externally-managed \
++	--single-version-externally-managed
++
++PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
++	$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
+ 	--root=$(TARGET_DIR)
+ 
+ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+-	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+-	--prefix=/usr \
+-	--executable=/usr/bin/python \
+-	--single-version-externally-managed \
++	$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
+ 	--root=$(STAGING_DIR)
+ 
+ # Host setuptools-based packages
+ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+-	PATH=$(BR_PATH) \
+-	PYTHONNOUSERSITE=1 \
+-	SETUPTOOLS_USE_DISTUTILS=stdlib \
+-	$(HOST_CONFIGURE_OPTS)
++	$(HOST_PKG_PYTHON_ENV) \
++	SETUPTOOLS_USE_DISTUTILS=stdlib
+ 
+ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 	--prefix=$(HOST_DIR) \
+@@ -113,28 +112,21 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 
+ # Target pep517-based packages
+ PKG_PYTHON_PEP517_ENV = \
+-	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
+-	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
+-	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+-	PATH=$(BR_PATH) \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	PYTHONPATH="$(PYTHON3_PATH)" \
+-	PYTHONNOUSERSITE=1 \
+-	_python_sysroot=$(STAGING_DIR) \
+-	_python_prefix=/usr \
+-	_python_exec_prefix=/usr
++	$(PKG_PYTHON_ENV)
+ 
+-PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
++PKG_PYTHON_PEP517_INSTALL_OPTS = \
+ 	--interpreter=/usr/bin/python \
+-	--script-kind=posix \
++	--script-kind=posix
++
++PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
++	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
+ 	--purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+ 	--headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 	--scripts=$(TARGET_DIR)/usr/bin \
+ 	--data=$(TARGET_DIR)/usr
+ 
+ PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
+-	--interpreter=/usr/bin/python \
+-	--script-kind=posix \
++	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
+ 	--purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+ 	--headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 	--scripts=$(STAGING_DIR)/usr/bin \
+@@ -142,9 +134,7 @@ PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
+ 
+ # Host pep517-based packages
+ HOST_PKG_PYTHON_PEP517_ENV = \
+-	PATH=$(BR_PATH) \
+-	PYTHONNOUSERSITE=1 \
+-	$(HOST_CONFIGURE_OPTS)
++	$(HOST_PKG_PYTHON_ENV)
+ 
+ HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
+ 	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
