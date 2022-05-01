@@ -1,66 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4CB6C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  1 May 2022 20:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEF8DC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  1 May 2022 20:19:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 784C44059D;
-	Sun,  1 May 2022 20:13:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CD5983E77;
+	Sun,  1 May 2022 20:19:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mK9lEYxQj6ev; Sun,  1 May 2022 20:13:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4E9A1403B7;
-	Sun,  1 May 2022 20:13:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AA08D1BF311
- for <buildroot@lists.busybox.net>; Sun,  1 May 2022 20:13:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9301583E76
- for <buildroot@lists.busybox.net>; Sun,  1 May 2022 20:13:51 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oD5JuCF3QA5F for <buildroot@lists.busybox.net>;
- Sun,  1 May 2022 20:13:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 78ECB83E74
- for <buildroot@buildroot.org>; Sun,  1 May 2022 20:13:50 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:9448:1aca:a169:bea6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id A4CD27802B2;
- Sun,  1 May 2022 22:13:44 +0200 (CEST)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LemjNKERz6f8; Sun,  1 May 2022 20:19:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4951C82572;
+	Sun,  1 May 2022 20:19:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 81A221BF311
+ for <buildroot@lists.busybox.net>; Sun,  1 May 2022 20:19:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 690CD60B2D
+ for <buildroot@lists.busybox.net>; Sun,  1 May 2022 20:19:16 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rMn5WezV0L78 for <buildroot@lists.busybox.net>;
+ Sun,  1 May 2022 20:19:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5557060B02
+ for <buildroot@buildroot.org>; Sun,  1 May 2022 20:19:12 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.172.106.47])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 65139B0051B;
+ Sun,  1 May 2022 22:19:07 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1651436028;
- bh=3Gm34TtfvSdyRsKLzGTKZ+eIqxCmSnjgJsHutHW2g6M=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=O3Fs3e+HEoSNFxwssF2Malx1F+aL4Zx5UgDKQHzmRqW6FhzGGcZgKXPKJJ+RIUkEk
- DD8yaiVMUEJhBx3QDmtuR4digyXQocyx5/2J9uLG0h9c+KCP9phDTiQeZS37Ixajwp
- hx+F67fwtudi2X0X94H0atHfT7eWd+t5bQQO/yFoJ0oY+Em63SJASxgmAOrjUQAyzc
- vpCIOouTBQAkmuTIPZNcMcLJUj8SuuNSrSKHDnGn99UGvq/V1jymPzb+mF7OWwn2Y/
- x5/glQroa4zOgVtAJKvVgbnu6WN6LgF9PV8NMT5npLli1LmXUFGufrhr/eBICZokfT
- yRsQ3TUhM8L0Q==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 01 May 2022 22:13:44 +0200
-Date: Sun, 1 May 2022 22:13:44 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220501201344.GS3624965@scaer>
-References: <20220501074401.1135229-1-james.hilliard1@gmail.com>
+ s=smtp-20201208; t=1651436348;
+ bh=7edmaqlgIJDynHZ+dck3J/fFoAWaoI8+bYZu+vOKaoM=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=DvhnGX14+uMvykXv4d7g1Fsc5QHdQ+4VFRwnLpK80FUXdE4AimGoy7CPu5HNwnvvQ
+ DhEWDWQEkM0hQlww531FQY3TQ4OwsA5novGn8GLr5COE14BTGFTObpcypr8VTw6HLd
+ qt2bH2iK11sck7U/NDdtgLwiQB4FPExC7G7ZgL90vzrx9Wtb0OJ1opvJV8n8NSjoz6
+ iSdrHDKqeLVHhiC6xKzQ2CGp0UpjL7bhTeRwqt2sdwraqJImCtqWg8i0UV71JUj1ne
+ NgwNa7x/bvVXo+JWGbt8T7J6nTDmbLOXPbFozvZh6cODZpLX3v/fThvOJB+1RHvZtS
+ mReepfpG+lNGA==
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sun,  1 May 2022 22:18:43 +0200
+Message-Id: <20220501201843.1692535-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20220305200730.11060-1-ju.o@free.fr>
+References: <20220305200730.11060-1-ju.o@free.fr>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220501074401.1135229-1-james.hilliard1@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v3 1/2] package/pkg-python: add
- setuptools-rust infrastructure
+Subject: [Buildroot] [PATCH v2 1/1] package/octave: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,150 +67,328 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+GNU Octave is a high-level language, primarily intended for numerical
+computations. It provides a convenient command line interface for
+solving linear and nonlinear problems numerically, and for performing
+other numerical experiments using a language that is mostly compatible
+with Matlab. It may also be used as a batch-oriented language. Octave
+has extensive tools for solving common numerical linear algebra
+problems, finding the roots of nonlinear equations, integrating
+ordinary functions, manipulating polynomials, and integrating ordinary
+differential and differential-algebraic equations. It is easily
+extensible and customizable via user-defined functions written in
+Octave's own language, or using dynamically loaded modules written in
+C++, C, Fortran, or other languages.
 
-On 2022-05-01 01:44 -0600, James Hilliard spake thusly:
-> The setuptools-rust package infrastructure is essentially a variant
-> of the setuptools package infrastructure which sets up the env
-> and download hooks required for building setuptools-rust packages.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://www.octave.org/
 
-First, thanks a lot for working on this topic; this is greatly
-appreciated.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Changes v1 -> v2:
+- Updated package from v6.4.0 to v7.1.0
+- Rebased patch
+- Improved package test by running few octave internal self tests.
 
-However, I believe this one is going a bit too far, at least for now.
-Indeed, in Buildroot, we try to wait for until we have a few examples
-of a specific package type before we add infrastructure support for it.
-Usually, that rounds at about 5-ish packages.
+---
+Package tested with:
 
-For now, we have a single python package that is partly written in rust,
-and it is not very complex, so we can live with it for now, and it
-serves as a pretty good example of what is needed.
+   make check-package
+   ...
+   0 warnings generated
 
-However, what I am afraid of, is that even non-python packages may end
-having parts of them written in rust, and so maybe we would need a more
-generic solution, with something that's be used like $(kernel-module)
-or just with variables...
+   ./utils/test-pkg -a -p octave
+   ...
+   45 builds, 35 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
 
-Until we have more such examples, then it is hard to be sure that a new
-type of python packages is ther good approach or not.
+   support/testing/run-tests \
+       -d dl -o output_folder \
+       tests.package.test_octave.TestOctave
+   ...
+   OK
 
-Regards,
-Yann E. MORIN.
+From qemu_aarch64_virt_defconfig with Octave, on target:
 
-> ---
->  package/pkg-python.mk | 46 ++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 43 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-> index b86e12423f..a9bb12550c 100644
-> --- a/package/pkg-python.mk
-> +++ b/package/pkg-python.mk
-> @@ -110,6 +110,24 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
->  	--root=/ \
->  	--single-version-externally-managed
->  
-> +# Target setuptools-rust-based packages
-> +PKG_PYTHON_SETUPTOOLS_RUST_ENV = \
-> +	$(PKG_PYTHON_SETUPTOOLS_ENV) \
-> +	$(PKG_CARGO_ENV) \
-> +	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
-> +
-> +PKG_PYTHON_SETUPTOOLS_RUST_DL_ENV = \
-> +	$(PKG_CARGO_ENV)
-> +
-> +# Host setuptools-rust-based packages
-> +HOST_PKG_PYTHON_SETUPTOOLS_RUST_ENV = \
-> +	$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
-> +	$(HOST_PKG_CARGO_ENV) \
-> +	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
-> +
-> +HOST_PKG_PYTHON_SETUPTOOLS_RUST_DL_ENV = \
-> +	$(HOST_PKG_CARGO_ENV)
-> +
->  # Target pep517-based packages
->  PKG_PYTHON_PEP517_ENV = \
->  	$(PKG_PYTHON_ENV)
-> @@ -177,14 +195,30 @@ $(2)_BASE_BUILD_CMD   = setup.py build
->  $(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)
->  endif
->  # Setuptools
-> -else ifeq ($$($(2)_SETUP_TYPE),setuptools)
-> +else ifneq ($$(filter setuptools setuptools-rust,$$($(2)_SETUP_TYPE)),)
->  ifeq ($(4),target)
-> +ifeq ($$($(2)_SETUP_TYPE),setuptools-rust)
-> +$(2)_BASE_ENV = $$(PKG_PYTHON_SETUPTOOLS_RUST_ENV)
-> +$(2)_DL_ENV = $$(PKG_PYTHON_SETUPTOOLS_RUST_DL_ENV)
-> +$(2)_DL_ENV += BR_CARGO_MANIFEST_PATH=$$($(2)_CARGO_MANIFEST_PATH)
-> +else
->  $(2)_BASE_ENV = $$(PKG_PYTHON_SETUPTOOLS_ENV)
-> +endif
->  $(2)_BASE_BUILD_CMD = setup.py build
->  $(2)_BASE_INSTALL_TARGET_CMD = setup.py install --no-compile $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
->  $(2)_BASE_INSTALL_STAGING_CMD = setup.py install $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
->  else
-> +ifeq ($$($(2)_SETUP_TYPE),setuptools-rust)
-> +$(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_RUST_ENV)
-> +$(2)_DL_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_RUST_DL_ENV)
-> +ifndef $(2)_CARGO_MANIFEST_PATH
-> +$(2)_DL_ENV += BR_CARGO_MANIFEST_PATH=$$($(3)_CARGO_MANIFEST_PATH)
-> +else
-> +$(2)_DL_ENV += BR_CARGO_MANIFEST_PATH=$$($(2)_CARGO_MANIFEST_PATH)
-> +endif
-> +else
->  $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
-> +endif
->  $(2)_BASE_BUILD_CMD = setup.py build
->  $(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
->  endif
-> @@ -208,7 +242,7 @@ $(2)_BASE_BUILD_CMD = -m flit_core.wheel
->  $(2)_BASE_INSTALL_CMD ?= -m installer dist/*
->  endif
->  else
-> -$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
-> +$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'setuptools-rust', 'pep517' or 'flit'.")
->  endif
->  
->  # Target packages need both the python interpreter on the target (for
-> @@ -225,8 +259,14 @@ endif # ($(4),target)
->  # Setuptools based packages will need setuptools for the host Python
->  # interpreter (both host and target).
->  #
-> -ifeq ($$($(2)_SETUP_TYPE),setuptools)
-> +ifneq ($$(filter setuptools setuptools-rust,$$($(2)_SETUP_TYPE)),)
->  $(2)_DEPENDENCIES += $$(if $$(filter host-python-setuptools,$(1)),,host-python-setuptools)
-> +ifeq ($$($(2)_SETUP_TYPE),setuptools-rust)
-> +$(2)_DEPENDENCIES += host-python-setuptools-rust host-rustc
-> +# We need to vendor the Cargo crates at download time
-> +$(2)_DOWNLOAD_POST_PROCESS = cargo
-> +$(2)_DOWNLOAD_DEPENDENCIES = host-rustc
-> +endif
->  else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
->  $(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
->  ifeq ($$($(2)_SETUP_TYPE),flit)
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+   octave --eval 'oruntests general'
+   ...
+   [all general tests passed]
+---
+ DEVELOPERS                                    |  2 +
+ package/Config.in                             |  1 +
+ ...-BLAS-library-integer-size-detection.patch | 40 ++++++++++
+ package/octave/Config.in                      | 42 ++++++++++
+ package/octave/octave.hash                    |  3 +
+ package/octave/octave.mk                      | 28 +++++++
+ support/testing/tests/package/test_octave.py  | 79 +++++++++++++++++++
+ 7 files changed, 195 insertions(+)
+ create mode 100644 package/octave/0001-Fix-BLAS-library-integer-size-detection.patch
+ create mode 100644 package/octave/Config.in
+ create mode 100644 package/octave/octave.hash
+ create mode 100644 package/octave/octave.mk
+ create mode 100644 support/testing/tests/package/test_octave.py
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b08253d6ef..d776806e40 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1614,6 +1614,7 @@ F:	configs/zynq_qmtech_defconfig
+ F:	package/fluid-soundfont/
+ F:	package/fluidsynth/
+ F:	package/glslsandbox-player/
++F:	package/octave/
+ F:	package/ola/
+ F:	package/ptm2human/
+ F:	package/python-distro/
+@@ -1623,6 +1624,7 @@ F:	package/riscv-isa-sim/
+ F:	package/zynaddsubfx/
+ F:	support/testing/tests/package/sample_python_distro.py
+ F:	support/testing/tests/package/sample_python_gnupg.py
++F:	support/testing/tests/package/test_octave.py
+ F:	support/testing/tests/package/test_python_distro.py
+ F:	support/testing/tests/package/test_python_gnupg.py
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 4687dd4426..270bdb1b18 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -758,6 +758,7 @@ menu "Mono libraries/modules"
+ endmenu
+ endif
+ 	source "package/nodejs/Config.in"
++	source "package/octave/Config.in"
+ 	source "package/openjdk/Config.in"
+ 	source "package/perl/Config.in"
+ if BR2_PACKAGE_PERL
+diff --git a/package/octave/0001-Fix-BLAS-library-integer-size-detection.patch b/package/octave/0001-Fix-BLAS-library-integer-size-detection.patch
+new file mode 100644
+index 0000000000..3fb609de07
+--- /dev/null
++++ b/package/octave/0001-Fix-BLAS-library-integer-size-detection.patch
+@@ -0,0 +1,40 @@
++From e4dcfefac4215ee66c3dda5b067dd6d06066b0a2 Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Sat, 5 Mar 2022 12:36:09 +0100
++Subject: [PATCH] Fix BLAS library integer size detection
++
++When cross-compiling, octave ./configure script fails to detect the BLAS
++library integer size and fails with the message:
++
++    configure: error: unrecognized BLAS library integer size
++
++This patch fixes this detection.
++
++Patch adapted from:
++https://github.com/openembedded/meta-openembedded/commit/0ad153f721ef99de585c4452a997a7104f45d71d
++
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ configure.ac | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index de7a00a330..383ce27b06 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -781,6 +781,12 @@ if test $ax_blas_ok = no || test $ax_lapack_ok = no; then
++   AC_MSG_ERROR([BLAS and LAPACK libraries are required])
++ fi
++ 
+++if ac_fn_f77_try_run "$LINENO"; then :
+++  ax_blas_integer_size=8
+++else
+++  ax_blas_integer_size=4
+++fi
+++
++ case $ax_blas_integer_size in
++   4)
++     HAVE_64_BIT_BLAS=no
++-- 
++2.36.0
++
+diff --git a/package/octave/Config.in b/package/octave/Config.in
+new file mode 100644
+index 0000000000..b504310d19
+--- /dev/null
++++ b/package/octave/Config.in
+@@ -0,0 +1,42 @@
++config BR2_PACKAGE_OCTAVE
++	bool "octave"
++	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_HAS_FORTRAN
++	# Some Bootlin x86_64 toolchains (like version
++	# bleeding-edge-2021.11-1) has a file
++	# "x86_64-buildroot-linux-gnu/lib64/libgfortran.la" including
++	# a "dependency_libs=" entry with an incorrect absolute path
++	# to linquadmath.la on the bootlin build host. This breaks
++	# builds using libtool with libgfortran. Those toolchains are
++	# used by the "utils/test-pkg" script.
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BOOTLIN || !BR2_x86_64
++	select BR2_PACKAGE_OPENBLAS
++	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_PCRE_UTF
++	help
++	  GNU Octave is a high-level language, primarily intended for
++	  numerical computations. It provides a convenient command
++	  line interface for solving linear and nonlinear problems
++	  numerically, and for performing other numerical experiments
++	  using a language that is mostly compatible with Matlab. It
++	  may also be used as a batch-oriented language. Octave has
++	  extensive tools for solving common numerical linear algebra
++	  problems, finding the roots of nonlinear equations,
++	  integrating ordinary functions, manipulating polynomials,
++	  and integrating ordinary differential and
++	  differential-algebraic equations. It is easily extensible
++	  and customizable via user-defined functions written in
++	  Octave's own language, or using dynamically loaded modules
++	  written in C++, C, Fortran, or other languages.
++
++	  https://www.octave.org/
++
++comment "octave needs a toolchain w/ C++11 and fortran"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_HAS_FORTRAN
++
++comment "octave needs the openblas package"
++	depends on !BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+diff --git a/package/octave/octave.hash b/package/octave/octave.hash
+new file mode 100644
+index 0000000000..72d47cdf54
+--- /dev/null
++++ b/package/octave/octave.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  9e8d1f4d64fa1bcfa30a571e240dc83715dbaede1de96a982bdc89cac7ced42c  octave-7.1.0.tar.lz
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/octave/octave.mk b/package/octave/octave.mk
+new file mode 100644
+index 0000000000..4e828eb734
+--- /dev/null
++++ b/package/octave/octave.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# octave
++#
++################################################################################
++
++OCTAVE_VERSION = 7.1.0
++OCTAVE_SITE = https://ftp.gnu.org/gnu/octave
++OCTAVE_SOURCE = octave-$(OCTAVE_VERSION).tar.lz
++OCTAVE_LICENSE = GPL-3.0+
++OCTAVE_LICENSE_FILES = COPYING
++OCTAVE_AUTORECONF = YES
++
++OCTAVE_CONF_OPTS = --disable-java
++
++OCTAVE_DEPENDENCIES = \
++	host-gperf \
++	openblas \
++	pcre
++
++ifeq ($(BR2_PACKAGE_READLINE),y)
++OCTAVE_CONF_OPTS += --enable-readline
++OCTAVE_DEPENDENCIES += readline
++else
++OCTAVE_CONF_OPTS += --disable-readline
++endif
++
++$(eval $(autotools-package))
+diff --git a/support/testing/tests/package/test_octave.py b/support/testing/tests/package/test_octave.py
+new file mode 100644
+index 0000000000..31d0105503
+--- /dev/null
++++ b/support/testing/tests/package/test_octave.py
+@@ -0,0 +1,79 @@
++import os
++
++import infra.basetest
++
++
++class TestOctave(infra.basetest.BRTest):
++    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it does
++    # not include gfortran.
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.26"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_OCTAVE=y
++        """
++    timeout = 60
++
++    def octave_cmd(self, octave_expr):
++        return "octave --quiet --eval '{}'".format(octave_expr)
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
++        self.emulator.login()
++
++        # Check Euler identity
++        cmd = self.octave_cmd("assert (exp(i*pi)+1, 0, 1e-10)")
++        self.assertRunOk(cmd)
++
++        # Solve equation system example from Octave homepage
++        octave_expr = "b = [4; 9; 2]; "
++        octave_expr += "A = [ 3 4 5; 1 3 1; 3 5 9 ]; "
++        octave_expr += "x = A \ b; "
++        octave_expr += "assert(x, [-1.5; 4; -1.5], 1e-10)"
++        cmd = self.octave_cmd(octave_expr)
++        self.assertRunOk(cmd)
++
++        # Check octave can fail
++        cmd = self.octave_cmd("assert(false)")
++        _, exit_code = self.emulator.run(cmd)
++        self.assertNotEqual(exit_code, 0)
++
++        # Check string output
++        string = "Hello World"
++        cmd = self.octave_cmd("printf(\"{}\\n\")".format(string))
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output, [string])
++
++        # Run some octave self tests
++        octave_modules = [
++            "elfun/atan2d",
++            "elfun/sind",
++            "general/gradient",
++            "general/num2str",
++            "polynomial/poly",
++            "signal/fftconv",
++            "special-matrix/magic",
++            "specfun/isprime",
++            "statistics/corr",
++            "strings/str2num"
++        ]
++
++        for mod in octave_modules:
++            cmd = self.octave_cmd('assert(test(\"{}\"),true)'.format(mod))
++            self.assertRunOk(cmd)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.36.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
