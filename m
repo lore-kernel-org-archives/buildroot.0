@@ -1,83 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF468C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  1 May 2022 07:44:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 025B7C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  1 May 2022 08:01:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6A0F54038D;
-	Sun,  1 May 2022 07:44:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 994DF410CB;
+	Sun,  1 May 2022 08:01:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xXotpiyaaXl2; Sun,  1 May 2022 07:44:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zXDYGeaKaOLQ; Sun,  1 May 2022 08:01:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6A613401D5;
-	Sun,  1 May 2022 07:44:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3201B410A3;
+	Sun,  1 May 2022 08:01:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 850BE1BF3EF
- for <buildroot@lists.busybox.net>; Sun,  1 May 2022 07:44:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6E71D1BF3EF
+ for <buildroot@lists.busybox.net>; Sun,  1 May 2022 08:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8175C410AE
- for <buildroot@lists.busybox.net>; Sun,  1 May 2022 07:44:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B1A1410A3
+ for <buildroot@lists.busybox.net>; Sun,  1 May 2022 08:01:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kMAR8Ybpmmy0 for <buildroot@lists.busybox.net>;
- Sun,  1 May 2022 07:44:13 +0000 (UTC)
+ with ESMTP id ZrrzritDePPA for <buildroot@lists.busybox.net>;
+ Sun,  1 May 2022 08:01:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
- [IPv6:2607:f8b0:4864:20::d34])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 593A6410A3
- for <buildroot@buildroot.org>; Sun,  1 May 2022 07:44:13 +0000 (UTC)
-Received: by mail-io1-xd34.google.com with SMTP id z18so13206287iob.5
- for <buildroot@buildroot.org>; Sun, 01 May 2022 00:44:12 -0700 (PDT)
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1ED3E409BE
+ for <buildroot@buildroot.org>; Sun,  1 May 2022 08:01:07 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id d3so6370875ilr.10
+ for <buildroot@buildroot.org>; Sun, 01 May 2022 01:01:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=YjjJtcq8meXHsBYueUHPojQORDBJPpYhikC+9Wm/jk4=;
- b=pTebZ3+iht8KUQzC6sjvFclh7KViVdcWfPfrnsNk3fK+Rq0Obou77vIkG8BGyy7YlR
- fsRBjTi1y9yQdnZ3oJpsCeLmrkMDHzOUOy5NAGYZogcABcaiIgjzqhgxHPDF693HVndw
- cAiUKsRZcOUPpypHe3Txy1EmlkPO4Tyjv9AqpA1nrKp2PGb59YDb18bRXD8S9gAjJXCv
- ByNz4GlWqU77ogzxH1Se0bTWk23rwog9X8smuYx+ICYpcI+DwS7ybKcTABAjv+0ZIiHk
- SSd/UgJUounSst1ZBsv1o874gbUZdc9R0+ZehGbofjgQXY6X1YVN7WE+933+foEayj01
- hmQQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=I6k1Rn1+6DpcGRbKQ5Iy8nqZUW7U6uzLWVx5TdSKo2Y=;
+ b=L/D4737dN3nst2DBpcf7/DQ/cM2eppk8r7h0kxIJimmCfYi9QDshE8T0EW4zWNmZEf
+ 6QuMCGZp0bYh4rcznhgV3zhf4GVvX10PHQMepxGuASfT8k5O9dSYzao6M51+/rLjss9W
+ SYB6gTrujqBEmGXo0YcvDeFBvIIBT3C3UyEcCsQoJGh0TOlVQ2jZL1tdwCArqKhCrz2g
+ VupWSSURzEMzxEgC83u+e7gKmH+eqopLxeQsCuxveXpnihVlQHfvHZWB2PEe6XSrNje0
+ vUGaSlDhdJHs2iEOIkTx9gXQyCp1CU34y0g4+tmSeG5eafmPyIPy/R1f9Osp1apctaym
+ 07LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=YjjJtcq8meXHsBYueUHPojQORDBJPpYhikC+9Wm/jk4=;
- b=Yb3iTdnJsV2ebhCh7RCRJLMonmXDJTdmSQFDL33xQDlnED9nwMmI54ALhDTkLnGDql
- vFZwwxKNlcfYM90b3v0o8uNkLPtfFh+xctIYL6zRdsAjlDM6quzd88FrUmOhlHufeGQA
- 76oDTkKA4u/RBexF+O1e2E9XzKLW7lHJ69Dez9NcXbmMZG8E2kTxwBcKXtS/SDeT8Z99
- Oo12W2HvKI7h7w6Oy9OmPftnmP13w09XJ7N+gdgya5WYAk4MFu2RyZezFrCt3I31g5it
- 50n6GCjKF7ZdQGdJMNCjsB0DS9GYJKo4SOSAo2tgtN8aMa1XrS3/X0NWmXUbmgsZdwIs
- A3gA==
-X-Gm-Message-State: AOAM5321LDu00+vWSYswN7zvMZqm+HKSEnpUppeuFc2muQPfVnGnH3fO
- lNR2rZfjDwUOaOyYNDhjTXoQDNnlsWE=
-X-Google-Smtp-Source: ABdhPJzXXmFLL/Lf/XLFimw6NpOMKwInV0btRhGAw0Tcvzm5YpwCE3pRFp8gx6kdC/Wi6tUrPo3Vww==
-X-Received: by 2002:a05:6602:2c4c:b0:64f:a897:80cb with SMTP id
- x12-20020a0566022c4c00b0064fa89780cbmr2610455iov.139.1651391051985; 
- Sun, 01 May 2022 00:44:11 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=I6k1Rn1+6DpcGRbKQ5Iy8nqZUW7U6uzLWVx5TdSKo2Y=;
+ b=u+CBP+K8zbVJAV5EmxZVo0ulwP5HGfoG9tPxfCGpQcrLKRu4/NcWelVQpUrLT96fPS
+ /hA4CG/anRFovLkDNNZq5q/bksIGLr0Hk+wX3+vl3rEXOW5HBQgi3SkD5xgCTGUuBQCt
+ U8rc/fgnwYtEZJFmLR8OMBogTCLXKVYVQ6VluJwdSJfbugMjrWtyjn5jK5hNkT5TKYi8
+ +Tu6dqO/aljRukreU8Llisp2U5jvw+8S9jkCwKpTChPzdrAqkGxjbfzDZ0nc98lRzH6e
+ OZdjlma7th8eHeGHHFEqynZ85kVkmskg7aw+ER9+zk1dwpJVPyE/bFNHCsPNQaZJiBh7
+ MPJw==
+X-Gm-Message-State: AOAM532bxwQ1h5aX767UOCRRcpCcviNso53cgwpQQv7lPTMfTgCobiM+
+ PP5cgp6EHFwyqGpYIwoFY2AaCU8iE9A=
+X-Google-Smtp-Source: ABdhPJwtzyayQctZEYypMDv/MrfqKrbrmC0m9t8exYIL9R4ADmql/ttbTf8IDBxHyvfK+gzeQa2r1Q==
+X-Received: by 2002:a05:6e02:1708:b0:2cb:fbc9:c69d with SMTP id
+ u8-20020a056e02170800b002cbfbc9c69dmr2620944ill.54.1651392066931; 
+ Sun, 01 May 2022 01:01:06 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
  [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- j18-20020a02a692000000b0032b3a7817b3sm2103377jam.119.2022.05.01.00.44.11
+ z3-20020a056638000300b0032b3a781749sm2089915jao.13.2022.05.01.01.01.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 May 2022 00:44:11 -0700 (PDT)
+ Sun, 01 May 2022 01:01:06 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 May 2022 01:44:01 -0600
-Message-Id: <20220501074401.1135229-2-james.hilliard1@gmail.com>
+Date: Sun,  1 May 2022 02:01:02 -0600
+Message-Id: <20220501080102.3125294-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220501074401.1135229-1-james.hilliard1@gmail.com>
-References: <20220501074401.1135229-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 2/2] package/python-cryptography: migrate to
- setuptools-rust infrastructure
+Subject: [Buildroot] [PATCH 1/1] package/python-cryptography: fix symbol
+ redeclared error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,70 +85,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We can now significantly simplify the python-cryptography build using
-the new setuptools-rust setup type introduced in the python package
-infrastructure.
+Backport a patch removing invalid OPENSSL_NO_PSK guard.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/1f2/1f2f203ee5130fdfce005281e71bf371699701f3
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes v2 -> v3:
-  - rebase
----
- .../python-cryptography.mk                    | 30 +++----------------
- 1 file changed, 4 insertions(+), 26 deletions(-)
+ ...id-OPENSSL_NO_PSK-defined-guard-7146.patch | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch
 
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 7714b9ad88..e3fde91c5b 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -7,36 +7,14 @@
- PYTHON_CRYPTOGRAPHY_VERSION = 37.0.1
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
- PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/3d/5f/addb8b91fd356792d28e59a8275fec833323cb28604fb3a497c35d7cf0a3
--PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
-+PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools-rust
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
- PYTHON_CRYPTOGRAPHY_CPE_ID_VENDOR = cryptography_project
- PYTHON_CRYPTOGRAPHY_CPE_ID_PRODUCT = cryptography
--PYTHON_CRYPTOGRAPHY_DEPENDENCIES = \
--	host-python-setuptools-rust \
--	host-python-cffi \
--	host-rustc \
--	openssl
--HOST_PYTHON_CRYPTOGRAPHY_DEPENDENCIES = \
--	host-python-setuptools-rust \
--	host-python-cffi \
--	host-rustc \
--	host-openssl
--PYTHON_CRYPTOGRAPHY_ENV = \
--	$(PKG_CARGO_ENV) \
--	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
--HOST_PYTHON_CRYPTOGRAPHY_ENV = \
--	$(HOST_PKG_CARGO_ENV) \
--	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
--# We need to vendor the Cargo crates at download time
--PYTHON_CRYPTOGRAPHY_DOWNLOAD_POST_PROCESS = cargo
--PYTHON_CRYPTOGRAPHY_DOWNLOAD_DEPENDENCIES = host-rustc
--PYTHON_CRYPTOGRAPHY_DL_ENV = \
--	$(PKG_CARGO_ENV) \
--	BR_CARGO_MANIFEST_PATH=src/rust/Cargo.toml
--HOST_PYTHON_CRYPTOGRAPHY_DL_ENV = \
--	$(HOST_PKG_CARGO_ENV) \
--	BR_CARGO_MANIFEST_PATH=src/rust/Cargo.toml
-+PYTHON_CRYPTOGRAPHY_CARGO_MANIFEST_PATH = src/rust/Cargo.toml
-+PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-cffi openssl
-+HOST_PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-cffi host-openssl
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
+diff --git a/package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch b/package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch
+new file mode 100644
+index 0000000000..5d953b8931
+--- /dev/null
++++ b/package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch
+@@ -0,0 +1,56 @@
++From 891a06101d7b48c61d0d3174f79e9962b995770e Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Fri, 29 Apr 2022 16:06:10 -0600
++Subject: [PATCH] Remove invalid OPENSSL_NO_PSK defined guard (#7146)
++
++These symbols are not conditional on OPENSSL_NO_PSK in ssl.h
++
++SSL_CTX_set_psk_find_session_callback:
++https://github.com/openssl/openssl/blob/openssl-3.0.2/include/openssl/ssl.h.in#L847
++
++SSL_CTX_set_psk_use_session_callback:
++https://github.com/openssl/openssl/blob/openssl-3.0.2/include/openssl/ssl.h.in#L850-L851
++
++As such we can not guard the fallback with defined(OPENSSL_NO_PSK)
++as this will result in redeclaration errors.
++
++Fixes:
++build/temp.linux-sparc64-3.10/_openssl.c:2286:8: error: 'SSL_CTX_set_psk_find_session_callback' redeclared as different kind of symbol
++ 2286 | void (*SSL_CTX_set_psk_find_session_callback)(SSL_CTX *,
++      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++In file included from build/temp.linux-sparc64-3.10/_openssl.c:832:
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:855:6: note: previous declaration of 'SSL_CTX_set_psk_find_session_callback' was here
++  855 | void SSL_CTX_set_psk_find_session_callback(SSL_CTX *ctx,
++      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++build/temp.linux-sparc64-3.10/_openssl.c:2293:8: error: 'SSL_CTX_set_psk_use_session_callback' redeclared as different kind of symbol
++ 2293 | void (*SSL_CTX_set_psk_use_session_callback)(SSL_CTX *,
++      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++In file included from build/temp.linux-sparc64-3.10/_openssl.c:832:
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:858:6: note: previous declaration of 'SSL_CTX_set_psk_use_session_callback' was here
++  858 | void SSL_CTX_set_psk_use_session_callback(SSL_CTX *ctx,
++      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++891a06101d7b48c61d0d3174f79e9962b995770e]
++---
++ src/_cffi_src/openssl/ssl.py | 3 +--
++ 2 files changed, 2 insertions(+), 3 deletions(-)
++
++diff --git a/src/_cffi_src/openssl/ssl.py b/src/_cffi_src/openssl/ssl.py
++index 1314b85b0..d036e4f2d 100644
++--- a/src/_cffi_src/openssl/ssl.py
+++++ b/src/_cffi_src/openssl/ssl.py
++@@ -785,8 +785,7 @@ void (*SSL_CTX_set_cookie_verify_cb)(SSL_CTX *,
++ static const long Cryptography_HAS_SSL_COOKIE = 1;
++ #endif
++ #if CRYPTOGRAPHY_OPENSSL_LESS_THAN_111 || \
++-    CRYPTOGRAPHY_IS_LIBRESSL || CRYPTOGRAPHY_IS_BORINGSSL || \
++-    defined(OPENSSL_NO_PSK)
+++    CRYPTOGRAPHY_IS_LIBRESSL || CRYPTOGRAPHY_IS_BORINGSSL
++ static const long Cryptography_HAS_PSK_TLSv1_3 = 0;
++ void (*SSL_CTX_set_psk_find_session_callback)(SSL_CTX *,
++                                            int (*)(
++-- 
++2.25.1
++
 -- 
 2.25.1
 
