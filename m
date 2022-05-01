@@ -1,79 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 025B7C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  1 May 2022 08:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A0E2C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  1 May 2022 08:42:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 994DF410CB;
-	Sun,  1 May 2022 08:01:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C01340493;
+	Sun,  1 May 2022 08:42:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zXDYGeaKaOLQ; Sun,  1 May 2022 08:01:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RVIRI6utZhVh; Sun,  1 May 2022 08:42:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3201B410A3;
-	Sun,  1 May 2022 08:01:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E71D1BF3EF
- for <buildroot@lists.busybox.net>; Sun,  1 May 2022 08:01:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 31D6D404D5;
+	Sun,  1 May 2022 08:42:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 975DA1BF396
+ for <buildroot@lists.busybox.net>; Sun,  1 May 2022 08:42:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B1A1410A3
- for <buildroot@lists.busybox.net>; Sun,  1 May 2022 08:01:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7FCD381453
+ for <buildroot@lists.busybox.net>; Sun,  1 May 2022 08:42:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZrrzritDePPA for <buildroot@lists.busybox.net>;
- Sun,  1 May 2022 08:01:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0po-AVdSIcTb for <buildroot@lists.busybox.net>;
+ Sun,  1 May 2022 08:42:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
- [IPv6:2607:f8b0:4864:20::134])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1ED3E409BE
- for <buildroot@buildroot.org>; Sun,  1 May 2022 08:01:07 +0000 (UTC)
-Received: by mail-il1-x134.google.com with SMTP id d3so6370875ilr.10
- for <buildroot@buildroot.org>; Sun, 01 May 2022 01:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=I6k1Rn1+6DpcGRbKQ5Iy8nqZUW7U6uzLWVx5TdSKo2Y=;
- b=L/D4737dN3nst2DBpcf7/DQ/cM2eppk8r7h0kxIJimmCfYi9QDshE8T0EW4zWNmZEf
- 6QuMCGZp0bYh4rcznhgV3zhf4GVvX10PHQMepxGuASfT8k5O9dSYzao6M51+/rLjss9W
- SYB6gTrujqBEmGXo0YcvDeFBvIIBT3C3UyEcCsQoJGh0TOlVQ2jZL1tdwCArqKhCrz2g
- VupWSSURzEMzxEgC83u+e7gKmH+eqopLxeQsCuxveXpnihVlQHfvHZWB2PEe6XSrNje0
- vUGaSlDhdJHs2iEOIkTx9gXQyCp1CU34y0g4+tmSeG5eafmPyIPy/R1f9Osp1apctaym
- 07LQ==
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com
+ [209.85.218.43])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AB1988141E
+ for <buildroot@buildroot.org>; Sun,  1 May 2022 08:42:26 +0000 (UTC)
+Received: by mail-ej1-f43.google.com with SMTP id gh6so22905513ejb.0
+ for <buildroot@buildroot.org>; Sun, 01 May 2022 01:42:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=I6k1Rn1+6DpcGRbKQ5Iy8nqZUW7U6uzLWVx5TdSKo2Y=;
- b=u+CBP+K8zbVJAV5EmxZVo0ulwP5HGfoG9tPxfCGpQcrLKRu4/NcWelVQpUrLT96fPS
- /hA4CG/anRFovLkDNNZq5q/bksIGLr0Hk+wX3+vl3rEXOW5HBQgi3SkD5xgCTGUuBQCt
- U8rc/fgnwYtEZJFmLR8OMBogTCLXKVYVQ6VluJwdSJfbugMjrWtyjn5jK5hNkT5TKYi8
- +Tu6dqO/aljRukreU8Llisp2U5jvw+8S9jkCwKpTChPzdrAqkGxjbfzDZ0nc98lRzH6e
- OZdjlma7th8eHeGHHFEqynZ85kVkmskg7aw+ER9+zk1dwpJVPyE/bFNHCsPNQaZJiBh7
- MPJw==
-X-Gm-Message-State: AOAM532bxwQ1h5aX767UOCRRcpCcviNso53cgwpQQv7lPTMfTgCobiM+
- PP5cgp6EHFwyqGpYIwoFY2AaCU8iE9A=
-X-Google-Smtp-Source: ABdhPJwtzyayQctZEYypMDv/MrfqKrbrmC0m9t8exYIL9R4ADmql/ttbTf8IDBxHyvfK+gzeQa2r1Q==
-X-Received: by 2002:a05:6e02:1708:b0:2cb:fbc9:c69d with SMTP id
- u8-20020a056e02170800b002cbfbc9c69dmr2620944ill.54.1651392066931; 
- Sun, 01 May 2022 01:01:06 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
- [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- z3-20020a056638000300b0032b3a781749sm2089915jao.13.2022.05.01.01.01.06
+ bh=Z6jR5QLmIPcofZpc5ft9a60+7N2NeWdxCD6f9IiFu0E=;
+ b=PBHon0cGHos8pVeyl0V0wquBX/Wl88+hK10/OAtL7d+GTHJC6vE1tZKCuU7o1bul12
+ p+DjqjqorT6fxbHM1ZMttp8vELa0NQ78VNP7WJbl/DeAiZCbUy+OQ3fpzO9VynfRscY3
+ F2v8rLhIg1NnllCFQudtIXzLPQV1FkUHxzsrD0vui1rOzojmyGo8Qf09uEhiC1+ds2Bg
+ CNbawJeOxdCSOjz2UpkcNPtR4QVaI+gIe83qDiEwzAMSNSonGurimLQNZevxamMSMBZv
+ sp+jG733Byd9PUd5aInUyMvZNaf3AiY4paWfOgpGcUHWwdfuZzJnjWJj78/PyCTkNPbO
+ aBkA==
+X-Gm-Message-State: AOAM532nJk7ZIydjlcQ9GVJq7UdLJqAdIHP0LE8oU7F2yLf2JE5dGTv9
+ 6zX3nKsoV2vSfI0Q7ZQ251GXOJ63cVE=
+X-Google-Smtp-Source: ABdhPJxQHCQQ+XtLuEbfxhjOskXM1yiKtjO+oYXktmeWq6As9Mlh3LXZgBWfpgxrK/Vrqejg5sWLPQ==
+X-Received: by 2002:a17:906:794f:b0:6f3:b079:7e54 with SMTP id
+ l15-20020a170906794f00b006f3b0797e54mr6776519ejo.519.1651394544806; 
+ Sun, 01 May 2022 01:42:24 -0700 (PDT)
+Received: from localhost.localdomain (tmo-082-126.customers.d1-online.com.
+ [80.187.82.126]) by smtp.gmail.com with ESMTPSA id
+ d2-20020a170907272200b006f3ef214e1esm2391478ejl.132.2022.05.01.01.42.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 May 2022 01:01:06 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Sun, 01 May 2022 01:42:24 -0700 (PDT)
+From: Thomas Huth <huth@tuxfamily.org>
 To: buildroot@buildroot.org
-Date: Sun,  1 May 2022 02:01:02 -0600
-Message-Id: <20220501080102.3125294-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Sun,  1 May 2022 10:42:13 +0200
+Message-Id: <20220501084213.547024-1-huth@tuxfamily.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-cryptography: fix symbol
- redeclared error
+Subject: [Buildroot] [PATCH] package/kvm-unit-tests: Fix license information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,87 +74,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Cyril Bur <cyrilbur@gmail.com>, Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport a patch removing invalid OPENSSL_NO_PSK guard.
+The kvm-unit-tests are licensed under the GPL v2 nowadays, see:
 
-Fixes:
- - http://autobuild.buildroot.net/results/1f2/1f2f203ee5130fdfce005281e71bf371699701f3
+ https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/commit/b29b222beb424a00
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Huth <huth@tuxfamily.org>
 ---
- ...id-OPENSSL_NO_PSK-defined-guard-7146.patch | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch
+ package/kvm-unit-tests/kvm-unit-tests.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch b/package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch
-new file mode 100644
-index 0000000000..5d953b8931
---- /dev/null
-+++ b/package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch
-@@ -0,0 +1,56 @@
-+From 891a06101d7b48c61d0d3174f79e9962b995770e Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Fri, 29 Apr 2022 16:06:10 -0600
-+Subject: [PATCH] Remove invalid OPENSSL_NO_PSK defined guard (#7146)
-+
-+These symbols are not conditional on OPENSSL_NO_PSK in ssl.h
-+
-+SSL_CTX_set_psk_find_session_callback:
-+https://github.com/openssl/openssl/blob/openssl-3.0.2/include/openssl/ssl.h.in#L847
-+
-+SSL_CTX_set_psk_use_session_callback:
-+https://github.com/openssl/openssl/blob/openssl-3.0.2/include/openssl/ssl.h.in#L850-L851
-+
-+As such we can not guard the fallback with defined(OPENSSL_NO_PSK)
-+as this will result in redeclaration errors.
-+
-+Fixes:
-+build/temp.linux-sparc64-3.10/_openssl.c:2286:8: error: 'SSL_CTX_set_psk_find_session_callback' redeclared as different kind of symbol
-+ 2286 | void (*SSL_CTX_set_psk_find_session_callback)(SSL_CTX *,
-+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+In file included from build/temp.linux-sparc64-3.10/_openssl.c:832:
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:855:6: note: previous declaration of 'SSL_CTX_set_psk_find_session_callback' was here
-+  855 | void SSL_CTX_set_psk_find_session_callback(SSL_CTX *ctx,
-+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+build/temp.linux-sparc64-3.10/_openssl.c:2293:8: error: 'SSL_CTX_set_psk_use_session_callback' redeclared as different kind of symbol
-+ 2293 | void (*SSL_CTX_set_psk_use_session_callback)(SSL_CTX *,
-+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+In file included from build/temp.linux-sparc64-3.10/_openssl.c:832:
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:858:6: note: previous declaration of 'SSL_CTX_set_psk_use_session_callback' was here
-+  858 | void SSL_CTX_set_psk_use_session_callback(SSL_CTX *ctx,
-+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1@gmail.com: backport from upstream commit
-+891a06101d7b48c61d0d3174f79e9962b995770e]
-+---
-+ src/_cffi_src/openssl/ssl.py | 3 +--
-+ 2 files changed, 2 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/_cffi_src/openssl/ssl.py b/src/_cffi_src/openssl/ssl.py
-+index 1314b85b0..d036e4f2d 100644
-+--- a/src/_cffi_src/openssl/ssl.py
-++++ b/src/_cffi_src/openssl/ssl.py
-+@@ -785,8 +785,7 @@ void (*SSL_CTX_set_cookie_verify_cb)(SSL_CTX *,
-+ static const long Cryptography_HAS_SSL_COOKIE = 1;
-+ #endif
-+ #if CRYPTOGRAPHY_OPENSSL_LESS_THAN_111 || \
-+-    CRYPTOGRAPHY_IS_LIBRESSL || CRYPTOGRAPHY_IS_BORINGSSL || \
-+-    defined(OPENSSL_NO_PSK)
-++    CRYPTOGRAPHY_IS_LIBRESSL || CRYPTOGRAPHY_IS_BORINGSSL
-+ static const long Cryptography_HAS_PSK_TLSv1_3 = 0;
-+ void (*SSL_CTX_set_psk_find_session_callback)(SSL_CTX *,
-+                                            int (*)(
-+-- 
-+2.25.1
-+
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index e56436f802..0bdbca70ac 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -7,7 +7,7 @@
+ KVM_UNIT_TESTS_VERSION = 2022-03-08
+ KVM_UNIT_TESTS_SOURCE = kvm-unit-tests-v$(KVM_UNIT_TESTS_VERSION).tar.bz2
+ KVM_UNIT_TESTS_SITE = https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/archive/v$(KVM_UNIT_TESTS_VERSION)
+-KVM_UNIT_TESTS_LICENSE = LGPL-2.0
++KVM_UNIT_TESTS_LICENSE = GPL-2.0
+ KVM_UNIT_TESTS_LICENSE_FILES = COPYRIGHT
+ 
+ ifeq ($(BR2_aarch64),y)
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
