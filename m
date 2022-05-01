@@ -1,66 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB0EAC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  1 May 2022 19:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4CB6C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  1 May 2022 20:13:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6158E60E39;
-	Sun,  1 May 2022 19:58:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 784C44059D;
+	Sun,  1 May 2022 20:13:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KvsRoSUQGBHg; Sun,  1 May 2022 19:58:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mK9lEYxQj6ev; Sun,  1 May 2022 20:13:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52EC160E1E;
-	Sun,  1 May 2022 19:58:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C960B1BF3FB
- for <buildroot@lists.busybox.net>; Sun,  1 May 2022 19:58:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E9A1403B7;
+	Sun,  1 May 2022 20:13:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AA08D1BF311
+ for <buildroot@lists.busybox.net>; Sun,  1 May 2022 20:13:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5B1540896
- for <buildroot@lists.busybox.net>; Sun,  1 May 2022 19:58:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9301583E76
+ for <buildroot@lists.busybox.net>; Sun,  1 May 2022 20:13:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B0vZJnvSaa7m for <buildroot@lists.busybox.net>;
- Sun,  1 May 2022 19:58:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oD5JuCF3QA5F for <buildroot@lists.busybox.net>;
+ Sun,  1 May 2022 20:13:50 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 98F36404B6
- for <buildroot@buildroot.org>; Sun,  1 May 2022 19:58:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 78ECB83E74
+ for <buildroot@buildroot.org>; Sun,  1 May 2022 20:13:50 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:9448:1aca:a169:bea6])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 5E53F780368;
- Sun,  1 May 2022 21:58:31 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id A4CD27802B2;
+ Sun,  1 May 2022 22:13:44 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1651435114;
- bh=C9bCJQm/ctGxDgqS92lCm9f3c3wLm0M9cXIIVk7fRas=;
+ s=smtp-20201208; t=1651436028;
+ bh=3Gm34TtfvSdyRsKLzGTKZ+eIqxCmSnjgJsHutHW2g6M=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=WtP8QTv0KU+dwHotGqmNZmrV8CbTPCqFwq+IuAhyJMSQ1w4CQY4LZrDSSyLY7/ecL
- oOs9jmyk+cGui4V16TY8fvhrbaqjhc9OweaBJ9zPFE9h9A0Vdy1fxC/WJuw+BnHxWD
- PRhFgM/p49TzGdtwTzoT2EFCrSAXyTol42n9KokShlctZ1xon/ZLvcDL5bNUfgCyoJ
- I2G0uIYRcGelUfq2wDdrKOY7DBk2Kw0FF/ezzCYTwbx+s/aqqP+UOzIkpccIjFBfwR
- U46HK00W5YBxceZNpXCm1QipEv2u+4VCZaCG6hbvyuiD61XCMWDD9asTmgJQ4hm4iz
- DVDDQNEQXpf2A==
+ b=O3Fs3e+HEoSNFxwssF2Malx1F+aL4Zx5UgDKQHzmRqW6FhzGGcZgKXPKJJ+RIUkEk
+ DD8yaiVMUEJhBx3QDmtuR4digyXQocyx5/2J9uLG0h9c+KCP9phDTiQeZS37Ixajwp
+ hx+F67fwtudi2X0X94H0atHfT7eWd+t5bQQO/yFoJ0oY+Em63SJASxgmAOrjUQAyzc
+ vpCIOouTBQAkmuTIPZNcMcLJUj8SuuNSrSKHDnGn99UGvq/V1jymPzb+mF7OWwn2Y/
+ x5/glQroa4zOgVtAJKvVgbnu6WN6LgF9PV8NMT5npLli1LmXUFGufrhr/eBICZokfT
+ yRsQ3TUhM8L0Q==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 01 May 2022 21:58:31 +0200
-Date: Sun, 1 May 2022 21:58:31 +0200
+ Sun, 01 May 2022 22:13:44 +0200
+Date: Sun, 1 May 2022 22:13:44 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220501195831.GR3624965@scaer>
-References: <20220501080102.3125294-1-james.hilliard1@gmail.com>
+Message-ID: <20220501201344.GS3624965@scaer>
+References: <20220501074401.1135229-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220501080102.3125294-1-james.hilliard1@gmail.com>
+In-Reply-To: <20220501074401.1135229-1-james.hilliard1@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-cryptography: fix symbol
- redeclared error
+Subject: Re: [Buildroot] [PATCH v3 1/2] package/pkg-python: add
+ setuptools-rust infrastructure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,7 +72,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -80,86 +81,126 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 James, All,
 
-On 2022-05-01 02:01 -0600, James Hilliard spake thusly:
-> Backport a patch removing invalid OPENSSL_NO_PSK guard.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/1f2/1f2f203ee5130fdfce005281e71bf371699701f3
+On 2022-05-01 01:44 -0600, James Hilliard spake thusly:
+> The setuptools-rust package infrastructure is essentially a variant
+> of the setuptools package infrastructure which sets up the env
+> and download hooks required for building setuptools-rust packages.
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Applied to master, thanks.
+First, thanks a lot for working on this topic; this is greatly
+appreciated.
+
+However, I believe this one is going a bit too far, at least for now.
+Indeed, in Buildroot, we try to wait for until we have a few examples
+of a specific package type before we add infrastructure support for it.
+Usually, that rounds at about 5-ish packages.
+
+For now, we have a single python package that is partly written in rust,
+and it is not very complex, so we can live with it for now, and it
+serves as a pretty good example of what is needed.
+
+However, what I am afraid of, is that even non-python packages may end
+having parts of them written in rust, and so maybe we would need a more
+generic solution, with something that's be used like $(kernel-module)
+or just with variables...
+
+Until we have more such examples, then it is hard to be sure that a new
+type of python packages is ther good approach or not.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  ...id-OPENSSL_NO_PSK-defined-guard-7146.patch | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch
+>  package/pkg-python.mk | 46 ++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 43 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch b/package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch
-> new file mode 100644
-> index 0000000000..5d953b8931
-> --- /dev/null
-> +++ b/package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch
-> @@ -0,0 +1,56 @@
-> +From 891a06101d7b48c61d0d3174f79e9962b995770e Mon Sep 17 00:00:00 2001
-> +From: James Hilliard <james.hilliard1@gmail.com>
-> +Date: Fri, 29 Apr 2022 16:06:10 -0600
-> +Subject: [PATCH] Remove invalid OPENSSL_NO_PSK defined guard (#7146)
+> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+> index b86e12423f..a9bb12550c 100644
+> --- a/package/pkg-python.mk
+> +++ b/package/pkg-python.mk
+> @@ -110,6 +110,24 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+>  	--root=/ \
+>  	--single-version-externally-managed
+>  
+> +# Target setuptools-rust-based packages
+> +PKG_PYTHON_SETUPTOOLS_RUST_ENV = \
+> +	$(PKG_PYTHON_SETUPTOOLS_ENV) \
+> +	$(PKG_CARGO_ENV) \
+> +	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
 > +
-> +These symbols are not conditional on OPENSSL_NO_PSK in ssl.h
+> +PKG_PYTHON_SETUPTOOLS_RUST_DL_ENV = \
+> +	$(PKG_CARGO_ENV)
 > +
-> +SSL_CTX_set_psk_find_session_callback:
-> +https://github.com/openssl/openssl/blob/openssl-3.0.2/include/openssl/ssl.h.in#L847
+> +# Host setuptools-rust-based packages
+> +HOST_PKG_PYTHON_SETUPTOOLS_RUST_ENV = \
+> +	$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
+> +	$(HOST_PKG_CARGO_ENV) \
+> +	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
 > +
-> +SSL_CTX_set_psk_use_session_callback:
-> +https://github.com/openssl/openssl/blob/openssl-3.0.2/include/openssl/ssl.h.in#L850-L851
+> +HOST_PKG_PYTHON_SETUPTOOLS_RUST_DL_ENV = \
+> +	$(HOST_PKG_CARGO_ENV)
 > +
-> +As such we can not guard the fallback with defined(OPENSSL_NO_PSK)
-> +as this will result in redeclaration errors.
-> +
-> +Fixes:
-> +build/temp.linux-sparc64-3.10/_openssl.c:2286:8: error: 'SSL_CTX_set_psk_find_session_callback' redeclared as different kind of symbol
-> + 2286 | void (*SSL_CTX_set_psk_find_session_callback)(SSL_CTX *,
-> +      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +In file included from build/temp.linux-sparc64-3.10/_openssl.c:832:
-> +/home/giuliobenetti/autobuild/run/instance-0/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:855:6: note: previous declaration of 'SSL_CTX_set_psk_find_session_callback' was here
-> +  855 | void SSL_CTX_set_psk_find_session_callback(SSL_CTX *ctx,
-> +      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +build/temp.linux-sparc64-3.10/_openssl.c:2293:8: error: 'SSL_CTX_set_psk_use_session_callback' redeclared as different kind of symbol
-> + 2293 | void (*SSL_CTX_set_psk_use_session_callback)(SSL_CTX *,
-> +      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +In file included from build/temp.linux-sparc64-3.10/_openssl.c:832:
-> +/home/giuliobenetti/autobuild/run/instance-0/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:858:6: note: previous declaration of 'SSL_CTX_set_psk_use_session_callback' was here
-> +  858 | void SSL_CTX_set_psk_use_session_callback(SSL_CTX *ctx,
-> +      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +[james.hilliard1@gmail.com: backport from upstream commit
-> +891a06101d7b48c61d0d3174f79e9962b995770e]
-> +---
-> + src/_cffi_src/openssl/ssl.py | 3 +--
-> + 2 files changed, 2 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/src/_cffi_src/openssl/ssl.py b/src/_cffi_src/openssl/ssl.py
-> +index 1314b85b0..d036e4f2d 100644
-> +--- a/src/_cffi_src/openssl/ssl.py
-> ++++ b/src/_cffi_src/openssl/ssl.py
-> +@@ -785,8 +785,7 @@ void (*SSL_CTX_set_cookie_verify_cb)(SSL_CTX *,
-> + static const long Cryptography_HAS_SSL_COOKIE = 1;
-> + #endif
-> + #if CRYPTOGRAPHY_OPENSSL_LESS_THAN_111 || \
-> +-    CRYPTOGRAPHY_IS_LIBRESSL || CRYPTOGRAPHY_IS_BORINGSSL || \
-> +-    defined(OPENSSL_NO_PSK)
-> ++    CRYPTOGRAPHY_IS_LIBRESSL || CRYPTOGRAPHY_IS_BORINGSSL
-> + static const long Cryptography_HAS_PSK_TLSv1_3 = 0;
-> + void (*SSL_CTX_set_psk_find_session_callback)(SSL_CTX *,
-> +                                            int (*)(
-> +-- 
-> +2.25.1
-> +
+>  # Target pep517-based packages
+>  PKG_PYTHON_PEP517_ENV = \
+>  	$(PKG_PYTHON_ENV)
+> @@ -177,14 +195,30 @@ $(2)_BASE_BUILD_CMD   = setup.py build
+>  $(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)
+>  endif
+>  # Setuptools
+> -else ifeq ($$($(2)_SETUP_TYPE),setuptools)
+> +else ifneq ($$(filter setuptools setuptools-rust,$$($(2)_SETUP_TYPE)),)
+>  ifeq ($(4),target)
+> +ifeq ($$($(2)_SETUP_TYPE),setuptools-rust)
+> +$(2)_BASE_ENV = $$(PKG_PYTHON_SETUPTOOLS_RUST_ENV)
+> +$(2)_DL_ENV = $$(PKG_PYTHON_SETUPTOOLS_RUST_DL_ENV)
+> +$(2)_DL_ENV += BR_CARGO_MANIFEST_PATH=$$($(2)_CARGO_MANIFEST_PATH)
+> +else
+>  $(2)_BASE_ENV = $$(PKG_PYTHON_SETUPTOOLS_ENV)
+> +endif
+>  $(2)_BASE_BUILD_CMD = setup.py build
+>  $(2)_BASE_INSTALL_TARGET_CMD = setup.py install --no-compile $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
+>  $(2)_BASE_INSTALL_STAGING_CMD = setup.py install $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
+>  else
+> +ifeq ($$($(2)_SETUP_TYPE),setuptools-rust)
+> +$(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_RUST_ENV)
+> +$(2)_DL_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_RUST_DL_ENV)
+> +ifndef $(2)_CARGO_MANIFEST_PATH
+> +$(2)_DL_ENV += BR_CARGO_MANIFEST_PATH=$$($(3)_CARGO_MANIFEST_PATH)
+> +else
+> +$(2)_DL_ENV += BR_CARGO_MANIFEST_PATH=$$($(2)_CARGO_MANIFEST_PATH)
+> +endif
+> +else
+>  $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
+> +endif
+>  $(2)_BASE_BUILD_CMD = setup.py build
+>  $(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
+>  endif
+> @@ -208,7 +242,7 @@ $(2)_BASE_BUILD_CMD = -m flit_core.wheel
+>  $(2)_BASE_INSTALL_CMD ?= -m installer dist/*
+>  endif
+>  else
+> -$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
+> +$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'setuptools-rust', 'pep517' or 'flit'.")
+>  endif
+>  
+>  # Target packages need both the python interpreter on the target (for
+> @@ -225,8 +259,14 @@ endif # ($(4),target)
+>  # Setuptools based packages will need setuptools for the host Python
+>  # interpreter (both host and target).
+>  #
+> -ifeq ($$($(2)_SETUP_TYPE),setuptools)
+> +ifneq ($$(filter setuptools setuptools-rust,$$($(2)_SETUP_TYPE)),)
+>  $(2)_DEPENDENCIES += $$(if $$(filter host-python-setuptools,$(1)),,host-python-setuptools)
+> +ifeq ($$($(2)_SETUP_TYPE),setuptools-rust)
+> +$(2)_DEPENDENCIES += host-python-setuptools-rust host-rustc
+> +# We need to vendor the Cargo crates at download time
+> +$(2)_DOWNLOAD_POST_PROCESS = cargo
+> +$(2)_DOWNLOAD_DEPENDENCIES = host-rustc
+> +endif
+>  else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
+>  $(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
+>  ifeq ($$($(2)_SETUP_TYPE),flit)
 > -- 
 > 2.25.1
 > 
