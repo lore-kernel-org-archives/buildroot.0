@@ -1,46 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8421DC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 22:04:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BC3BC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 22:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3081A40989;
-	Mon,  2 May 2022 22:04:00 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RAMz-Ds85LG1; Mon,  2 May 2022 22:03:59 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D8B904091F;
-	Mon,  2 May 2022 22:03:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A9C691BF2C0
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:59:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B05E04156D
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:59:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28FA841511;
+	Mon,  2 May 2022 22:09:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bYcEKf9ugKdx for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 21:59:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 83B1B415AA
- for <buildroot@buildroot.org>; Mon,  2 May 2022 21:59:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 4CDC684EC9; Mon,  2 May 2022 21:48:51 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FpEnHKR3SWx5; Mon,  2 May 2022 22:09:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB179414E5;
+	Mon,  2 May 2022 22:09:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EAFBF1BF33A
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 22:09:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E850A81A15
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 22:09:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9rc1Qqyxec5B for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 22:09:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 04B50819F3
+ for <buildroot@buildroot.org>; Mon,  2 May 2022 22:09:23 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id e194so17331575iof.11
+ for <buildroot@buildroot.org>; Mon, 02 May 2022 15:09:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Yz9RkeZ0eZtjz3fgdvDtTBlZ9JFmMo6GilDuF7vqG60=;
+ b=fBplHIHJHkYWnchJM1Q9iIFDJccAjTQkaQ2geXKW51C7Ohf+zrILrLJEw9rhuP2v8m
+ AwF/3BZ+jtuHeMhAJel65bgybfUIHcDpznT2s50NrvwVul8j4AtGe/70HbugqGELGCmc
+ U1roi3T9xp4PnW6TufTKiaa9vaAOUT9X3u05jOwit52GfmbHjKhkOujfTpX057/m8hHJ
+ /KrIp5rT5aHDvJxnAh4LFOhT83x58R0zOKxwZs32cd7QxVS7gWj1PN6Ru0NK7+Vdb6zh
+ tKUWbe2JLhxQrv+aibG3kokQlt6EgU3ypMFJj5NhObYjgo6DXhyPMI3JyGz19iUnSShe
+ bXhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Yz9RkeZ0eZtjz3fgdvDtTBlZ9JFmMo6GilDuF7vqG60=;
+ b=uyO+FxzvVnL6O5JJiQsFYV044CPgXgRWBUM9dnhEV8ax9cuKYJ+TF0XECwzUcSkfrk
+ ZunCUvwOpWoFTmUp6OnFKWuLOcf/SRqVDno1KGSn7zULoZjSWSeOiE2rqwrpvF0xY4EH
+ AajkmJleDeXz8kLWX7kDRYBRQQ1BC++KMaqCehp5OrnxIDq2A6d9JU7F8xW6xpz789sk
+ geaHL+VtVMlIVwC8zYgrNQjtO4/Dto1MgA1sqOyiQ/cF4ksI347WsPOrO596jb1Wxy46
+ DV+9ck8hWOSt3X6ItLUF+v3ymRDy6+Sz6Ve0kAeT8CCR6C6Aj30sWTpywfr+NQWykb3E
+ tJSA==
+X-Gm-Message-State: AOAM5302RaNk/nPZINYDt6Pv2Xl9QHB0i3Xz8R6RIhCX+BQeKkqAKouQ
+ dvT36etdAhKPyega75jzY1Yw4lVQGlk=
+X-Google-Smtp-Source: ABdhPJyxFcMU4NN4U1jaSpNgDKZjUsR7U6zRiojlzM6phN6SuZoBAtArsuyPGhtFlRhLZmFEdQpceA==
+X-Received: by 2002:a05:6602:14c7:b0:65a:5046:5c7f with SMTP id
+ b7-20020a05660214c700b0065a50465c7fmr3923430iow.42.1651529362885; 
+ Mon, 02 May 2022 15:09:22 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
+ [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
+ 12-20020a92c64c000000b002cde6e352ddsm2933603ill.39.2022.05.02.15.09.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 02 May 2022 15:09:22 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 2 May 2022 23:56:38 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7a9d1ae972e9a6729c9655e0c36d1e2b93198efd
-X-Git-Newrev: 3fa79c038ec75228015ea0022de80c5e7a2003f8
-X-Patchwork-Hint: ignore
-Message-Id: <20220502214851.4CDC684EC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qemu: bump to version 7.0.0
+Date: Mon,  2 May 2022 16:09:19 -0600
+Message-Id: <20220502220919.1313508-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v5 1/1] package/python-pillow: fix pkg-config
+ search paths
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,250 +87,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0612273908457758276=="
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0612273908457758276==
-Content-Type: text/plain
+Currently pillow doesn't correctly search pkg-config system paths
+for some libraries which can prevent some libraries from being
+properly detected/enabled in pillow.
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fa79c038ec75228015ea0022de80c5e7a2003f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This is due to pillow implementing custom header validation
+checks which need system paths present to function correctly:
+https://github.com/python-pillow/Pillow/blob/9.0.1/setup.py#L633
 
-Remove upstream patch 0002-build-disable-fcf-protection-on-march-486-m16.patch
+Removed custom BUILD_CMDS and INSTALL_TARGET_CMDS which were
+causing python-pillow to be installed for the host, they are
+not required, we just need to set build_ext at the start
+of PYTHON_PILLOW_BUILD_OPTS instead.
 
-Handle new or removed configure options:
-- disable dbus-display
-- remove libxml2 configure option
-
-Support for for ARMv4 and ARMv5 hosts has been dropped, Qemu target
-package needs at least ARMv6. The architecture test is done at runtime,
-so qemu package for ARMv4 or ARMv5 target would build but will error
-out at runtime:
-https://git.qemu.org/?p=qemu.git;a=commitdiff;h=01dfc0ed7f2c5f8dbab65f31228a2888c7b85a07
-
-See:
-https://wiki.qemu.org/ChangeLog/7.0
-
-Runtime tested in gitlab:
-https://gitlab.com/kubu93/buildroot/-/pipelines/520991787
-
-Add a new patch fixing the build with seccomp support enabled.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...ests-fp-disable-fp-bench-build-by-default.patch |  8 ++--
- ...d-disable-fcf-protection-on-march-486-m16.patch | 50 ----------------------
- ...u-seccomp.c-add-missing-header-for-CLONE_.patch | 42 ++++++++++++++++++
- package/qemu/Config.in                             |  2 +-
- package/qemu/qemu.hash                             |  2 +-
- package/qemu/qemu.mk                               |  5 ++-
- 6 files changed, 51 insertions(+), 58 deletions(-)
+Changes v4 -> v5:
+  - use backported upstream patch
+Changes v3 -> v4:
+  - pass BUILD_OPTS to INSTALL_TARGET_OPTS
+Changes v2 -> v3:
+  - actually remove MAX_CONCURRENCY env variable
+Changes v1 -> v2:
+  - remove unrelated MAX_CONCURRENCY env variable
+---
+ ...Search-pkg-config-system-libs-cflags.patch | 33 +++++++++++++++++++
+ package/python-pillow/python-pillow.mk        | 23 +++----------
+ 2 files changed, 37 insertions(+), 19 deletions(-)
+ create mode 100644 package/python-pillow/0001-Search-pkg-config-system-libs-cflags.patch
 
-diff --git a/package/qemu/0001-tests-fp-disable-fp-bench-build-by-default.patch b/package/qemu/0001-tests-fp-disable-fp-bench-build-by-default.patch
-index 9bc8d43d59..60518bcfa3 100644
---- a/package/qemu/0001-tests-fp-disable-fp-bench-build-by-default.patch
-+++ b/package/qemu/0001-tests-fp-disable-fp-bench-build-by-default.patch
-@@ -1,4 +1,4 @@
--From f82238299d3c4cd23ca60cfc0cf4271f5c860873 Mon Sep 17 00:00:00 2001
-+From 83d976d6d7f0357659d5daa0f01c52048a609e88 Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@gmail.com>
- Date: Wed, 25 Aug 2021 21:55:53 +0200
- Subject: [PATCH] tests/fp: disable fp-bench build by default
-@@ -12,10 +12,10 @@ Signed-off-by: Romain Naour <romain.naour@gmail.com>
-  1 file changed, 1 insertion(+)
- 
- diff --git a/tests/fp/meson.build b/tests/fp/meson.build
--index 07e2cdc8d2..c96460b7f1 100644
-+index 8bd0979f67..2fe019d2c6 100644
- --- a/tests/fp/meson.build
- +++ b/tests/fp/meson.build
--@@ -631,6 +631,7 @@ fpbench = executable(
-+@@ -636,6 +636,7 @@ fpbench = executable(
-    dependencies: [qemuutil],
-    include_directories: [sfinc, include_directories(tfdir)],
-    c_args: fpcflags,
-@@ -24,5 +24,5 @@ index 07e2cdc8d2..c96460b7f1 100644
-  
-  fptestlog2 = executable(
- -- 
--2.31.1
-+2.35.1
- 
-diff --git a/package/qemu/0002-build-disable-fcf-protection-on-march-486-m16.patch b/package/qemu/0002-build-disable-fcf-protection-on-march-486-m16.patch
-deleted file mode 100644
-index 7595d31c8d..0000000000
---- a/package/qemu/0002-build-disable-fcf-protection-on-march-486-m16.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 9584d3d00a454f47b0341465142bcf0735d734ae Mon Sep 17 00:00:00 2001
--From: Christian Ehrhardt <christian.ehrhardt@canonical.com>
--Date: Wed, 23 Mar 2022 10:07:13 +0100
--Subject: [PATCH] build: disable fcf-protection on -march=486 -m16
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Some of the roms build with -march=i486 -m16 which is incompatible
--with -fcf-protection. That in turn is can be set by default, for
--example in Ubuntu [1].
--That causes:
-- cc1: error: ‘-fcf-protection’ is not compatible with this target
--
--This won't work on -march=i486 -m16 and no matter if set or not we can
--override it to "none" if the option is known to the compiler to be
--able to build reliably.
--
--Fixes: https://gitlab.com/qemu-project/qemu/-/issues/889
--
--[1]: https://wiki.ubuntu.com/ToolChain/CompilerFlags#A-fcf-protection
--
--Signed-off-by: Christian Ehrhardt <christian.ehrhardt@canonical.com>
--Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
--Reviewed-by: Thomas Huth <thuth@redhat.com>
--Message-Id: <20220323090713.1002588-1-christian.ehrhardt@canonical.com>
--Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
--Signed-off-by: Dario Binacchi <dariobin@libero.it>
-----
-- pc-bios/optionrom/Makefile | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/pc-bios/optionrom/Makefile b/pc-bios/optionrom/Makefile
--index 5d55d25acca2..f1ef89807355 100644
----- a/pc-bios/optionrom/Makefile
--+++ b/pc-bios/optionrom/Makefile
--@@ -14,6 +14,10 @@ cc-option = $(if $(shell $(CC) $1 -c -o /dev/null -xc /dev/null >/dev/null 2>&1
-- 
-- override CFLAGS += -march=i486 -Wall
-- 
--+# If -fcf-protection is enabled in flags or compiler defaults that will
--+# conflict with -march=i486
--+override CFLAGS += $(call cc-option, -fcf-protection=none)
--+
-- # Flags for dependency generation
-- override CPPFLAGS += -MMD -MP -MT $@ -MF $(@D)/$(*F).d
-- 
---- 
--2.32.0
--
-diff --git a/package/qemu/0002-softmmu-qemu-seccomp.c-add-missing-header-for-CLONE_.patch b/package/qemu/0002-softmmu-qemu-seccomp.c-add-missing-header-for-CLONE_.patch
+diff --git a/package/python-pillow/0001-Search-pkg-config-system-libs-cflags.patch b/package/python-pillow/0001-Search-pkg-config-system-libs-cflags.patch
 new file mode 100644
-index 0000000000..91506b14d9
+index 0000000000..d0552ce0f4
 --- /dev/null
-+++ b/package/qemu/0002-softmmu-qemu-seccomp.c-add-missing-header-for-CLONE_.patch
-@@ -0,0 +1,42 @@
-+From df07d3754bdf15e0efac244cfee290c9bac86352 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Mon, 2 May 2022 23:17:46 +0200
-+Subject: [PATCH] softmmu/qemu-seccomp.c: add missing header for CLONE_NEWGROUP
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/python-pillow/0001-Search-pkg-config-system-libs-cflags.patch
+@@ -0,0 +1,33 @@
++From 9ea46247048f861f088f09541cd434aeb16e6f9c Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Tue, 15 Mar 2022 23:31:59 -0600
++Subject: [PATCH] Search pkg-config system libs/cflags.
 +
-+With seccomp support enabled Qemu 7.0.0 fail to build with the
-+following error:
++We need to search the system paths as well from pkg-config for
++some packages to be found properly.
 +
-+../softmmu/qemu-seccomp.c:116:19: error: ‘CLONE_NEWCGROUP’ undeclared here (not in a function)
-+  116 | FORBID_CLONE_FLAG(CLONE_NEWCGROUP);
-+      |                   ^~~~~~~~~~~~~~~
-+../softmmu/qemu-seccomp.c:73:18: note: in definition of macro ‘FORBID_CLONE_FLAG’
-+   73 |       .datum_a = flag, .datum_b = flag } }
-+      |                  ^~~~
-+
-+CLONE_NEWCGROUP has been added in Qemu 7.0.0 by commit [1].
-+
-+[1] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=5a2f693f07a1e93ada5277b2fb1530b2698be0fa
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++9ea46247048f861f088f09541cd434aeb16e6f9c]
 +---
-+ softmmu/qemu-seccomp.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ setup.py | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/softmmu/qemu-seccomp.c b/softmmu/qemu-seccomp.c
-+index deaf8a4ef5..96c83e121f 100644
-+--- a/softmmu/qemu-seccomp.c
-++++ b/softmmu/qemu-seccomp.c
-+@@ -21,6 +21,7 @@
-+ #include <sys/prctl.h>
-+ #include <seccomp.h>
-+ #include "sysemu/seccomp.h"
-++#include <linux/sched.h>
-+ #include <linux/seccomp.h>
-+ 
-+ /* For some architectures (notably ARM) cacheflush is not supported until
++diff --git a/setup.py b/setup.py
++index 9a05e5105..d41aedbd6 100755
++--- a/setup.py
+++++ b/setup.py
++@@ -252,8 +252,8 @@ def _cmd_exists(cmd):
++ def _pkg_config(name):
++     try:
++         command = os.environ.get("PKG_CONFIG", "pkg-config")
++-        command_libs = [command, "--libs-only-L", name]
++-        command_cflags = [command, "--cflags-only-I", name]
+++        command_libs = [command, "--libs-only-L", "--keep-system-libs", name]
+++        command_cflags = [command, "--cflags-only-I", "--keep-system-cflags", name]
++         if not DEBUG:
++             command_libs.append("--silence-errors")
++             command_cflags.append("--silence-errors")
 +-- 
-+2.35.1
++2.25.1
 +
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 1afbc6c364..e960a062cb 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
- 	bool
- 	# Only tested on these architectures
- 	default y if BR2_aarch64
--	default y if BR2_arm
-+	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
- 	default y if BR2_i386
- 	default y if BR2_mips
- 	default y if BR2_mipsel
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 9411832384..9c1a85a347 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256  68e15d8e45ac56326e0b9a4afa8b49a3dfe8aba3488221d098c84698bca65b45  qemu-6.2.0.tar.xz
-+sha256  f6b375c7951f728402798b0baabb2d86478ca53d44cedbefabbe1c46bf46f839  qemu-7.0.0.tar.xz
- sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index e69e813059..9c2b819174 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 901876e0ee..1d99f44fa1 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -12,7 +12,10 @@ PYTHON_PILLOW_LICENSE_FILES = LICENSE
+ PYTHON_PILLOW_CPE_ID_VENDOR = python
+ PYTHON_PILLOW_CPE_ID_PRODUCT = pillow
+ PYTHON_PILLOW_SETUP_TYPE = setuptools
+-PYTHON_PILLOW_BUILD_OPTS = --disable-platform-guessing
++
++PYTHON_PILLOW_DEPENDENCIES = host-pkgconf
++PYTHON_PILLOW_BUILD_OPTS = build_ext --disable-platform-guessing
++PYTHON_PILLOW_INSTALL_TARGET_OPTS = $(PYTHON_PILLOW_BUILD_OPTS)
  
--QEMU_VERSION = 6.2.0
-+QEMU_VERSION = 7.0.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
-@@ -197,12 +197,12 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-coreaudio \
- 			--disable-curl \
- 			--disable-curses \
-+			--disable-dbus-display \
- 			--disable-docs \
- 			--disable-dsound \
- 			--disable-hvf \
- 			--disable-jack \
- 			--disable-libiscsi \
--			--disable-libxml2 \
- 			--disable-linux-aio \
- 			--disable-linux-io-uring \
- 			--disable-malloc-trim \
-@@ -369,6 +369,7 @@ define HOST_QEMU_CONFIGURE_CMDS
- 		--disable-containers \
- 		--disable-coreaudio \
- 		--disable-curl \
-+		--disable-dbus-display \
- 		--disable-docs \
- 		--disable-dsound \
- 		--disable-jack \
-
---===============0612273908457758276==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ PYTHON_PILLOW_DEPENDENCIES += freetype
+@@ -68,22 +71,4 @@ else
+ PYTHON_PILLOW_BUILD_OPTS += --disable-webp --disable-webpmux
+ endif
+ 
+-define PYTHON_PILLOW_BUILD_CMDS
+-	cd $(PYTHON_PILLOW_BUILDDIR); \
+-		PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+-		$(PYTHON_PILLOW_BASE_ENV) $(PYTHON_PILLOW_ENV) \
+-		$(PYTHON_PILLOW_PYTHON_INTERPRETER) setup.py build_ext \
+-		$(PYTHON_PILLOW_BASE_BUILD_OPTS) $(PYTHON_PILLOW_BUILD_OPTS)
+-endef
+-
+-define PYTHON_PILLOW_INSTALL_TARGET_CMDS
+-	cd $(PYTHON_PILLOW_BUILDDIR); \
+-		PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+-		$(PYTHON_PILLOW_BASE_ENV) $(PYTHON_PILLOW_ENV) \
+-		$(PYTHON_PILLOW_PYTHON_INTERPRETER) setup.py build_ext \
+-		$(PYTHON_PILLOW_BUILD_OPTS) install \
+-		$(PYTHON_PILLOW_BASE_INSTALL_TARGET_OPTS) \
+-		$(PYTHON_PILLOW_INSTALL_TARGET_OPTS)
+-endef
+-
+ $(eval $(python-package))
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0612273908457758276==--
