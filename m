@@ -1,78 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30088C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:57:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E2A0C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:57:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECC6660F95;
-	Mon,  2 May 2022 21:57:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 007CF414CE;
+	Mon,  2 May 2022 21:57:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J9eiS-GpSajH; Mon,  2 May 2022 21:57:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DBBA60F08;
-	Mon,  2 May 2022 21:57:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BD3301BF2BC
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:57:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A58CB4035B
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:57:21 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ngwv0NuX3xX0 for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 21:57:19 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JzodUZBPHu6R; Mon,  2 May 2022 21:57:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA8D34109B;
+	Mon,  2 May 2022 21:57:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F1D451BF2BC
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:57:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E0E0460DC2
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:57:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4zc4bgdrYXN7 for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 21:57:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com
- [IPv6:2001:4860:4864:20::2f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 890EE40343
- for <buildroot@buildroot.org>; Mon,  2 May 2022 21:57:19 +0000 (UTC)
-Received: by mail-oa1-x2f.google.com with SMTP id
- 586e51a60fabf-deb9295679so15584342fac.6
- for <buildroot@buildroot.org>; Mon, 02 May 2022 14:57:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=ZS5l0PF2Q/Nh9wh4gsSo3iR74e5B6XA+mfGH5UpPu4o=;
- b=HVgrkxqJ3PNhR8aVe/IQRm/c4aDTfUQL7JXbpSwTBeXIDli4VUEYkuiytj5YMe/kJn
- lA4fKekx3SYuLnk8iZyLWOzNI2isvOLTOnbUxILrG2Wi5xqngV9PP/gVUzVTVrIPShhR
- BCa8cUDU+UP4tCc0spBuywLZR/d+eN4Yu855gt/fIgJ1U4J+1xRNQBHye7nB4nZHmCqb
- 2DM7EGJ4iXA28vxjUiwvPNUpAu6SaFssqGtc35x/2JWKJmNpkbFd9k/YQtSYir8D+sFO
- BzfgVOEk6CtvWw5kNg4Yzic8FnICVaPRLTpR6F233KRIwLMKNxSif09vEytb0nqvO6gd
- 6sSw==
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D6E6060F08
+ for <buildroot@buildroot.org>; Mon,  2 May 2022 21:57:30 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id y3so30110719ejo.12
+ for <buildroot@buildroot.org>; Mon, 02 May 2022 14:57:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=ZPzfIIriqY0Yf0kRAVn+KeVrxCxaJ8eTAdi2lKi1hIs=;
+ b=DWEqGDL9tNRF98XUDJzuNWwJQ6by4G2VYV52h0tZbCVIvZW7a8mhTSzdkbdx6ThVW6
+ nBsf+5uDE/b9OQjr2Y73a6csf+zJQvQHTbnzoyuP6KXrlBJh4RLaxnroatxZ3h1XLCh0
+ LQrnbWkDD7hYL1VbBbbsAFGaOrdtzV/imSSzqSIaWrQ0f4R9mdxP5k3EEt9mg11V9Orb
+ f+MGH7Wz4rpamG98K6saNEKBMgELV/5x14T29ntvzwInO5pO+aDHPNkS0SAOoZbtYrNG
+ 2/T5iQ6XgvyShyYOsgI8aefYyi+2BhBHdk1UOOCLDcpY/ie1zaD8j5OiOMTpJcjcXH7n
+ 24Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=ZS5l0PF2Q/Nh9wh4gsSo3iR74e5B6XA+mfGH5UpPu4o=;
- b=r/hkvAM0Xp/Q2EUY2JfgvzlmPvadq1PKLDLayLAme/L35yYYEAAVpJyz6TkKePeQnn
- ZKFLh0Kzukfd58wO8JdMMbSrNWY5yXPin0dVI0KNqparf6BQRHiJEMr+3NgtJmV/Rzsx
- /03TBB1i5tXolnyxC0OY8bmxYIT7TzZiHtoZwiXE6W+/Hd4uQpcPgzQDg6Rffp5iNSF+
- 0fPGGS5rp/lgVq9mu7b68mWVzs0p76wl1e281ESrcyCBN7eoQylSRlp8g+3VlMVh4TmK
- sghvcsv8h2hHvZ4PVnp8XS5IOtszAWuWT/7by5Q35WDtkPTTzKKWfwRz92XBF4iCflFV
- SM3Q==
-X-Gm-Message-State: AOAM530movQ3zXOkwxSns7HN6RTAtPLwx64POoe0OzNhJN8Pd58L/n+u
- oe4Gr3UxKMj0R5ZqljdrZ2tw1QWKj1lg7BeVNOl2cxKN+uw=
-X-Google-Smtp-Source: ABdhPJxAlCmPf5I1iEmWQITXx4QHujoUxGQ4RjfbvZ3xT/pLpfDnevwvF0h8c7twJUJVi1iLITxT+BkLQ64B0pV0yy0=
-X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
- v29-20020a056870311d00b000de9b6c362bmr531937oaa.200.1651528638137; Mon, 02
- May 2022 14:57:18 -0700 (PDT)
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=ZPzfIIriqY0Yf0kRAVn+KeVrxCxaJ8eTAdi2lKi1hIs=;
+ b=05kxq/LHXPyqZxBg0cICfZC7HlPzih6dvUZCqRWwQek2TMfKSkas4OYAOOvuVkzNZU
+ yicwGoDiGAGbFEql7jovwvgR89gFQ4JDUgRefcEmvnB+5YOFziCBOOiNnsllS/azIVWX
+ xkOkmLo6TVONJOP4TIUL6m1YpcUwIUGHge8MCFPbDkhv91MopGTXnMdMDwk/wKiiqU/W
+ RMt6GrwvGSDGuzBr5b2m+JIUghRu4qdOTGXPtxdREup5C1WrdanbOaWdZP73F4gruiB6
+ JTNa+iqNp6dKv8NbbenF81N4z36dazlDx11kpu9/ncyvGAMQHJn0xB+exC46t18LdFTH
+ seQw==
+X-Gm-Message-State: AOAM5305tWLX6KrbKzlzmc8CkcWKXfdGT82rjVqU9uxiSKH8znI1EpCk
+ qAXWvLb/Rf858doBSao+ro17ug==
+X-Google-Smtp-Source: ABdhPJxQNz5VR7mO0Y4ZkAgGOCsznKWtDud82EksB119qEI5sIuoyACcT/mXu8iYY0s09iupvwY0sg==
+X-Received: by 2002:a17:906:2709:b0:6f0:13d5:d58f with SMTP id
+ z9-20020a170906270900b006f013d5d58fmr13225600ejc.443.1651528649031; 
+ Mon, 02 May 2022 14:57:29 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ l16-20020a056402125000b0041d527833b9sm7170782edw.3.2022.05.02.14.57.28
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 02 May 2022 14:57:28 -0700 (PDT)
+Message-ID: <e5ad685c-4cbe-0c79-c4b8-e6acf3df7b35@mind.be>
+Date: Mon, 2 May 2022 23:57:27 +0200
 MIME-Version: 1.0
-References: <20220502080002.1618828-1-james.hilliard1@gmail.com>
- <b4f79a8e-9ebd-4314-8554-64145fbd4ab4@mind.be>
-In-Reply-To: <b4f79a8e-9ebd-4314-8554-64145fbd4ab4@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 2 May 2022 15:57:06 -0600
-Message-ID: <CADvTj4oO8Vkip8arP2OQt8veaQ+zGxD684GSh4FP1ZK0R8-mFg@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCH 1/1] package/linux-headers: prevent invalid
- custom headers selection
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-GB
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20220502170912.412062-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220502170912.412062-1-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: fix build with mbedtls
+ when h2-enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,512 +96,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, May 2, 2022 at 10:30 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->   Hi James,
->
-> On 02/05/2022 10:00, James Hilliard wrote:
-> > If BR2_KERNEL_HEADERS_AS_KERNEL is selected and the kernel version
-> > is known we should not allow mismatched headers to be selected.
->
->   I had noticed this issue as well and didn't know how to fix it. Your patch
-> however gave me an idea of a nice way to do it.
->
-> >
-> > For BR2_LINUX_KERNEL_LATEST_CIP_VERSION and
-> > BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION this means that we only can
-> > allow BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10 and for
-> > BR2_LINUX_KERNEL_LATEST_VERSION we can only allow the matching
-> > BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15 selection.
-> >
-> > Fixes:
-> >   - http://autobuild.buildroot.net/results/816/816d7a3ad77ba051fff7fba7f2a38fc31549c360
-> >   - http://autobuild.buildroot.net/results/3c3/3c3a9fc1a1e0002ae8169fd47b3003ebb86935f6
-> >   - http://autobuild.buildroot.net/results/188/18883459577dc0fdc01149110ffb81bf1a28c94a
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >   package/linux-headers/Config.in.host | 176 ++++++++++++++++++++++++++-
-> >   1 file changed, 174 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> > index decf02d175..715bc49deb 100644
-> > --- a/package/linux-headers/Config.in.host
-> > +++ b/package/linux-headers/Config.in.host
-> > @@ -127,8 +127,6 @@ endif
-> >
-> >   choice
-> >       bool "Custom kernel headers series"
-> > -     default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15 if \
-> > -             (BR2_KERNEL_HEADERS_AS_KERNEL && BR2_LINUX_KERNEL_LATEST_VERSION)
-> >       depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL || \
-> >                  BR2_KERNEL_HEADERS_CUSTOM_TARBALL || BR2_KERNEL_HEADERS_CUSTOM_GIT
->
->   Really what we want is that there is no user choice if
-> BR2_KERNEL_HEADERS_AS_KERNEL && (BR2_LINUX_KERNEL_LATEST_VERSION ||
-> BR2_LINUX_KERNEL_LATEST_CIP_VERSION || BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION).
->
->   Of course, then we need another way to make sure the proper HEADERS_AT_LEAST
-> is selected. But we can do that with blind symbols. E.g.
->
-> config BR2_PACKAGE_HOST_LINUX_HEADERS_LATEST_AS_KERNEL
->         bool
->         default y
->         depends on BR2_KERNEL_HEADERS_AS_KERNEL
->         depends on BR2_LINUX_KERNEL_LATEST_VERSION
->         select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
->
->   Alternatively, and perhaps a bit more elegant, we can do the select directly
-> in linux/Config.in:
->
-> config BR2_LINUX_KERNEL_LATEST_VERSION
->          bool "Latest version (5.15)"
->         select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15 if BR2_KERNEL_HEADERS_AS_KERNEL
 
-I like this option best as it keeps the version number specific selection in the
-same place as the version number comment so that it shouldn't be missed
-when bumping the latest kernel version.
 
-Sent in v2:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220502215342.3485999-1-james.hilliard1@gmail.com/
+On 02/05/2022 19:09, Bernd Kuhls wrote:
+> Bug was introduced by bumping libcurl to 7.83.0 in
+> https://git.busybox.net/buildroot/commit/?id=b0b25f145469a14e3d85becf19aaca0a40fd4e25
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/825/825b0ae84d5212200710628689079ec54a4bda3f/
+> http://autobuild.buildroot.net/results/881/8812ffdf42a3adf2df834c4b6e36316cd932821e/
+> http://autobuild.buildroot.net/results/3e8/3e840c896e4b8aacc9d784f16a6388eac4178246/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
->
->   Similarly, to simplify the big or above, we can define a blind symbol in
-> linux/Config.in:
->
-> config BR2_LINUX_KERNEL_FIXED_VERSION
->         bool
->
-> config BR2_LINUX_KERNEL_LATEST_VERSION
->          bool "Latest version (5.15)"
->         select BR2_LINUX_KERNEL_FIXED_VERSION
->
-> (but I don't know if that is really worth it).
->
->
->   Regards,
->   Arnout
->
->
-> >       help
-> > @@ -144,237 +142,411 @@ choice
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16
-> >       bool "5.16.x or later"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15
-> >       bool "5.15.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14
-> >       bool "5.14.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13
-> >       bool "5.13.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_13
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12
-> >       bool "5.12.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11
-> >       bool "5.11.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10
-> >       bool "5.10.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9
-> >       bool "5.9.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8
-> >       bool "5.8.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7
-> >       bool "5.7.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6
-> >       bool "5.6.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_5
-> >       bool "5.5.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4
-> >       bool "5.4.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3
-> >       bool "5.3.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2
-> >       bool "5.2.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1
-> >       bool "5.1.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0
-> >       bool "5.0.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20
-> >       bool "4.20.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19
-> >       bool "4.19.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18
-> >       bool "4.18.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17
-> >       bool "4.17.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16
-> >       bool "4.16.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15
-> >       bool "4.15.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14
-> >       bool "4.14.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13
-> >       bool "4.13.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12
-> >       bool "4.12.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11
-> >       bool "4.11.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10
-> >       bool "4.10.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9
-> >       bool "4.9.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8
-> >       bool "4.8.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7
-> >       bool "4.7.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6
-> >       bool "4.6.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5
-> >       bool "4.5.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4
-> >       bool "4.4.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3
-> >       bool "4.3.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2
-> >       bool "4.2.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1
-> >       bool "4.1.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0
-> >       bool "4.0.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19
-> >       bool "3.19.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18
-> >       bool "3.18.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17
-> >       bool "3.17.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16
-> >       bool "3.16.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15
-> >       bool "3.15.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14
-> >       bool "3.14.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13
-> >       bool "3.13.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12
-> >       bool "3.12.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_11
-> >       bool "3.11.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10
-> >       bool "3.10.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9
-> >       bool "3.9.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8
-> >       bool "3.8.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_7
-> >       bool "3.7.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_6
-> >       bool "3.6.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_5
-> >       bool "3.5.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_4
-> >       bool "3.4.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_3
-> >       bool "3.3.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_2
-> >       bool "3.2.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_1
-> >       bool "3.1.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0
-> >       bool "3.0.x"
-> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
-> >       bool "2.6.x"
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     depends on !BR2_KERNEL_HEADERS_AS_KERNEL || !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-> >
-> >   endchoice
-> >
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   ...-mbedtls-fix-compile-when-h2-enabled.patch | 32 +++++++++++++++++++
+>   1 file changed, 32 insertions(+)
+>   create mode 100644 package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch
+> 
+> diff --git a/package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch b/package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch
+> new file mode 100644
+> index 0000000000..61cbabd84a
+> --- /dev/null
+> +++ b/package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch
+> @@ -0,0 +1,32 @@
+> +From 6eb7fb37d901ed1e4ce07cbd628ee11bf02db1f3 Mon Sep 17 00:00:00 2001
+> +From: Daniel Stenberg <daniel@haxx.se>
+> +Date: Thu, 28 Apr 2022 17:11:50 +0200
+> +Subject: [PATCH] mbedtls: fix compile when h2-enabled
+> +
+> +Fixes #8766
+> +Reported-by: LigH-de on github
+> +Closes #8768
+> +
+> +Downloaded from upstream commit
+> +https://github.com/curl/curl/commit/6eb7fb37d901ed1e4ce07cbd628ee11bf02db1f3
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + lib/vtls/mbedtls.c | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/lib/vtls/mbedtls.c b/lib/vtls/mbedtls.c
+> +index 64f57c5d8321..5f9b87e6b75b 100644
+> +--- a/lib/vtls/mbedtls.c
+> ++++ b/lib/vtls/mbedtls.c
+> +@@ -815,8 +815,8 @@ mbed_connect_step2(struct Curl_easy *data, struct connectdata *conn,
+> +     if(next_protocol) {
+> +       infof(data, VTLS_INFOF_ALPN_ACCEPTED_1STR, next_protocol);
+> + #ifdef USE_HTTP2
+> +-      if(!strncmp(next_protocol, ALPN_H2, ALPN_H2_LEN) &&
+> +-         !next_protocol[ALPN_H2_LEN]) {
+> ++      if(!strncmp(next_protocol, ALPN_H2, ALPN_H2_LENGTH) &&
+> ++         !next_protocol[ALPN_H2_LENGTH]) {
+> +         conn->negnpn = CURL_HTTP_VERSION_2;
+> +       }
+> +       else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
