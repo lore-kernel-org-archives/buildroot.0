@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C446C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 22:00:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 112D7C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 22:00:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0776760F3D;
-	Mon,  2 May 2022 22:00:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC38360FA3;
+	Mon,  2 May 2022 22:00:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s6Zf6KFI-Sla; Mon,  2 May 2022 22:00:05 +0000 (UTC)
+	with ESMTP id HJoPDOQZebuI; Mon,  2 May 2022 22:00:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 333C960E2A;
-	Mon,  2 May 2022 22:00:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 70A6A1BF982
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:59:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1FDA60E2A;
+	Mon,  2 May 2022 22:00:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 034131BF2BC
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:59:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55DBD415B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5187360F90
  for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:59:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 88ofTlMXovSX for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 21:59:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DvSF7QKfMcVc for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 21:59:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 021B341551
- for <buildroot@buildroot.org>; Mon,  2 May 2022 21:59:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D481060E2A
+ for <buildroot@buildroot.org>; Mon,  2 May 2022 21:59:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id CDAEE84EC9; Mon,  2 May 2022 21:48:50 +0000 (UTC)
+ id 9991484EC9; Mon,  2 May 2022 21:48:50 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 2 May 2022 23:40:23 +0200
+Date: Mon, 2 May 2022 23:35:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 70b674c48dc59b6bfb38003bae1b8290b4777f2e
-X-Git-Newrev: 71c2a29e5e130c34d6a2cdbc38b26a55068f88ab
+X-Git-Oldrev: 985e9f733c02b01a5beb88dad383e9a1fc4f60ea
+X-Git-Newrev: f355fab421d728c262f93d4a44317cb5f850b725
 X-Patchwork-Hint: ignore
-Message-Id: <20220502214850.CDAEE84EC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/genrandconfig: fix ext2 config
- variable
+Message-Id: <20220502214850.9991484EC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-installer: migrate setup
+ type to flit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,35 +59,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71c2a29e5e130c34d6a2cdbc38b26a55068f88ab
+commit: https://git.buildroot.net/buildroot/commit/?id=f355fab421d728c262f93d4a44317cb5f850b725
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This should have been BR2_TARGET_ROOTFS_EXT2 as the
-BR2_TARGET_ROOTFS_EXT2_GEN variable is an integer variable used
-to indicate the ext2/ext3/ext4 variant.
+This package is moving to flit and will soon be dropping distutils
+compatibility support.
 
-Fixes:
- - http://autobuild.buildroot.net/results/5d7/5d7833212bd8a2b575945f848d8c91dabe7d3c30
+We need to use flit-bootstrap as opposed to the normal flit setup
+type since host-python-pypa-build depends on host-python-installer.
+
+We need to add the src directory to the PYTHONPATH so that installer
+can run from the src directory when installing itself.
+
+We need to explicitly add host-python-flit-core to the dependencies -
+only host-python-installer is automatically added to the depenedencies
+for flit-bootstrap packages, and this would create a circular dependency
+so is explicitly excluded in the infra.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- utils/genrandconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-installer/python-installer.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index ab1f6f43b1..70af84f002 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -443,7 +443,7 @@ def fixup_config(sysinfo, configfile):
-         configlines.remove('BR2_TARGET_OPTEE_OS=y\n')
-         configlines.remove('BR2_TARGET_OPTEE_OS_PLATFORM=""\n')
+diff --git a/package/python-installer/python-installer.mk b/package/python-installer/python-installer.mk
+index 862a251415..08f17499dd 100644
+--- a/package/python-installer/python-installer.mk
++++ b/package/python-installer/python-installer.mk
+@@ -9,6 +9,8 @@ PYTHON_INSTALLER_SOURCE = installer-$(PYTHON_INSTALLER_VERSION).tar.gz
+ PYTHON_INSTALLER_SITE = https://files.pythonhosted.org/packages/74/b7/9187323cd732840f1cddd6a9f05961406636b50c799eef37c920b63110c0
+ PYTHON_INSTALLER_LICENSE = MIT
+ PYTHON_INSTALLER_LICENSE_FILES = LICENSE
+-PYTHON_INSTALLER_SETUP_TYPE = distutils
++PYTHON_INSTALLER_SETUP_TYPE = flit-bootstrap
++HOST_PYTHON_INSTALLER_DEPENDENCIES = host-python-flit-core
++HOST_PYTHON_INSTALLER_ENV = PYTHONPATH="$(@D)/src"
  
--    if 'BR2_TARGET_ROOTFS_EXT2_GEN=y\n' in configlines and \
-+    if 'BR2_TARGET_ROOTFS_EXT2=y\n' in configlines and \
-        'BR2_TARGET_ROOTFS_EXT2_SIZE="60M"\n' in configlines:
-         configlines.remove('BR2_TARGET_ROOTFS_EXT2_SIZE="60M"\n')
-         configlines.append('BR2_TARGET_ROOTFS_EXT2_SIZE="%s"\n' % ROOTFS_SIZE)
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
