@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2773EC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 22:02:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10217C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 22:02:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7AC9409B2;
-	Mon,  2 May 2022 22:02:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0F41415E6;
+	Mon,  2 May 2022 22:02:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6qiTi9knRXcX; Mon,  2 May 2022 22:02:24 +0000 (UTC)
+	with ESMTP id Y5HPCxADwWtc; Mon,  2 May 2022 22:02:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6911A40866;
-	Mon,  2 May 2022 22:02:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 27CD61BF2BC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 43FFA415EB;
+	Mon,  2 May 2022 22:02:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 844251BF2BC
  for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52D9660F97
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5ABA6415ED
  for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:59:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fW8qJEyhcz9l for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oFomQs1DYlqx for <buildroot@lists.busybox.net>;
  Mon,  2 May 2022 21:59:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32B6260ECB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6109A41578
  for <buildroot@buildroot.org>; Mon,  2 May 2022 21:59:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0B03084F0E; Mon,  2 May 2022 21:48:51 +0000 (UTC)
+ id 3405984EC9; Mon,  2 May 2022 21:48:51 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 2 May 2022 23:40:24 +0200
+Date: Mon, 2 May 2022 23:56:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e5ff1de64e60f6ab2faaa751378fce0ec6bf1010
-X-Git-Newrev: fd3dfd177225ad5dd25bb181e07b92075eb380a7
+X-Git-Oldrev: e248426a15904ca611443a3bc3fd61c3fb1a591b
+X-Git-Newrev: 29ef8e1a7084a269a1fbd638edd5a863220e4556
 X-Patchwork-Hint: ignore
-Message-Id: <20220502214851.0B03084F0E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/redis: bump to v7.0.0
+Message-Id: <20220502214851.3405984EC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nano: bump to version 6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,60 +58,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd3dfd177225ad5dd25bb181e07b92075eb380a7
+commit: https://git.buildroot.net/buildroot/commit/?id=29ef8e1a7084a269a1fbd638edd5a863220e4556
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From the release notes:
-(See https://github.com/redis/redis/blob/7.0.0/00-RELEASENOTES)
-
-Introduction to the Redis 7.0 release
-=====================================
-
-Redis 7.0 includes several new user-facing features, significant performance
-optimizations, and many other improvements. It also includes changes that
-potentially break backwards compatibility with older versions. We urge users to
-review the release notes carefully before upgrading.
-
-In particular, users should be aware of the following changes:
-
-1. Redis 7 stores AOF as multiple files in a folder; see Multi-Part AOF below.
-2. Redis 7 uses a new version 10 format for RDB files, which is incompatible
-   with older versions.
-3. Redis 7 converts ziplist encoded keys to listpacks on the fly when loading
-   an older RDB format. Conversion applies to loading a file from disk or
-   replicating from a Redis master and will slightly increase loading time.
-
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 74a9392a63..582c3afa03 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 69ebc27b7f..8308005bbc 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
 @@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  5b2b8b7a50111ef395bf1c1d5be11e6e167ac018125055daa8b5c2317ae131ab  redis-6.2.6.tar.gz
-+sha256  284d8bd1fd85d6a55a05ee4e7c31c31977ad56cbf344ed83790beeb148baa720  redis-7.0.0.tar.gz
- 
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index f3c030d68c..3b91fbf8c8 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v6/nano-6.2.tar.xz.asc
++# https://www.nano-editor.org/dist/v6/nano-6.3.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256  2bca1804bead6aaf4ad791f756e4749bb55ed860eec105a97fba864bc6a77cb3  nano-6.2.tar.xz
++sha256  eb532da4985672730b500f685dbaab885a466d08fbbf7415832b95805e6f8687  nano-6.3.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index e3ecbab56f..cad215bed2 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--REDIS_VERSION = 6.2.6
-+REDIS_VERSION = 7.0.0
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+ NANO_VERSION_MAJOR = 6
+-NANO_VERSION = $(NANO_VERSION_MAJOR).2
++NANO_VERSION = $(NANO_VERSION_MAJOR).3
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
