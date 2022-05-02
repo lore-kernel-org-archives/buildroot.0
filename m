@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD0CEC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20314C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:58:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E0EA41609;
-	Mon,  2 May 2022 21:58:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C991260F95;
+	Mon,  2 May 2022 21:58:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jMjHVKyhGPMH; Mon,  2 May 2022 21:58:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ArMKt_SFIkNR; Mon,  2 May 2022 21:58:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44193415ED;
-	Mon,  2 May 2022 21:58:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAB1960E2A;
+	Mon,  2 May 2022 21:58:26 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 34ACF1BF2BC
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:58:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 147C61BF2BC
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:58:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9047281398
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:58:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1121B8301F
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:58:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e4UjmxS7W0af for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 21:58:09 +0000 (UTC)
+ with ESMTP id gv9bGau8kwwD for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 21:58:24 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5108681B14
- for <buildroot@busybox.net>; Mon,  2 May 2022 21:58:09 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id i27so30156719ejd.9
- for <buildroot@busybox.net>; Mon, 02 May 2022 14:58:09 -0700 (PDT)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 124B180B54
+ for <buildroot@busybox.net>; Mon,  2 May 2022 21:58:24 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id bv19so30171769ejb.6
+ for <buildroot@busybox.net>; Mon, 02 May 2022 14:58:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=57O0bVvI7pCTyU0RnVV3+X2tEjBvu1Th9AcXYh+GitE=;
- b=Pngb34sZkHrTZAIj/lJmDaWNPKokV5I9JWVHMstiD92SpAvJ1KDmUtCMyWRPwADcv7
- Jac6MVYwBB2VVD+prnz5M7aPwg64kyr+qinW+yMaMuElpjeRkDHwSFMr2b61RTn+lJJW
- ZnwFd2XhqoC9tVYcmgRxitG9JYya0Z/iZdDmlgp+hLsjMMQosN2Zlyjxr90JPt2q4G1r
- TYAuSXvO+bsi6SXYYyOpgRhv0I8yFxma164Z7cvKdt6xBdlcqMJZNirlb603NeATJIaa
- SriYa7LGdf1OVQq/zyv4ifNn9hkWAXAyAhx/UJI/Bs5t6a4o/s6WoEbqKtJMZ/Covv48
- mb7g==
+ bh=EP6+3z07UWi66i4v48XFuZd6PWx76KDyrYsxD9UfIFs=;
+ b=PKBzY15JW9LuJuJyL586AKd62js6sbHRnIL5fPeBtUTgSSZ9L3vvncKytgPwEM4c6p
+ Ao5zNaxd+8rJALgQ23U3jsGC3fxKzK455rB5bwGDy2/5C+CJRPAB01mHxD5+zKN4P+cM
+ LRMxYQ2MXbKyNmaa9R6qhrbH1cZ4zfbGo7a+5FSfOci/awY4LbLJ2OBqZv7/e1timc+I
+ K4NmFmkZeBQUbkZwjBxmtqPD6ZMfZ2BI/tgfHvfbSKxzJOtpqvpAR6Lhy8cm6646Y+Ss
+ VOMdW25E48V3jeKQGly4Jpxh4ubMAMTtAWvcI29ZA8qcPyDYWhX77ZtMTVDWN5q1UMLS
+ XYOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=57O0bVvI7pCTyU0RnVV3+X2tEjBvu1Th9AcXYh+GitE=;
- b=58RjnEuBJC6VQLr08A6HRmua00IFAILJU2po4AeXPaRt4pUkzyofi9k5Q1EG07g4Zk
- TuGyHvaHBIlHqZpIDdUU2enjJ7X3c43ghoDSFhdELDbZMNVrjxyU0VHp1aK7MWfZBvsE
- DzmhSOhTzGZ9sz2tA/NlKECsa/BcmrMee4S7p1gsIcbN1pvq7KDzIeAS+rHGCtqqYwcU
- eNBZKL4kXkU7U3qR9p6g5A5oBZueIe6DLv7Oc6PXQ7hSiv7C5UyjqC12ohEmdZcfdXWV
- dW7QnFCysRVFCKqGjqKqMIoyrf+lRBcYmjqghTMQRu/kbLy0RQDQUah2DZPmOId7yjvD
- 7BTw==
-X-Gm-Message-State: AOAM531hmHspv4tGG9+Xmu+KpoOD3ezIGnWZCm2+IcgUSD+58CrCrcRJ
- XjFPM4FksNyEvYYbbyGHrpbqbwohqYCC0g==
-X-Google-Smtp-Source: ABdhPJyFy1ZSviCAXPNMSGOHEPaHQplu5rMEfKOcTve0JcR6YtWsfK3mZCAdREPU8PUsEdpK+kBf9Q==
-X-Received: by 2002:a17:907:3d89:b0:6f4:7e66:b500 with SMTP id
- he9-20020a1709073d8900b006f47e66b500mr1520701ejc.134.1651528687569; 
- Mon, 02 May 2022 14:58:07 -0700 (PDT)
+ bh=EP6+3z07UWi66i4v48XFuZd6PWx76KDyrYsxD9UfIFs=;
+ b=ZnW7hFcPK4dLuoyFgMUITPdGRS8GYWR0t2U26hX0wLUwuUy4wIF7ESCI3ahQ2O4nIi
+ U7+TqtXp7/pqzw6l5gI/DIWZTVGj8p70QPoTviz6M9zIbhE3IP7bdGw2YyEaqNKVhSYF
+ dayEe6mxbnpULn8DtPa5uW4ltR/ybqmcVzblcnB75gB8tTMAIL3kqSpfkDA5kblCHQpB
+ Hd5D0GOc7SBqo0yxjGa8LFXDCoUAvqoGTA1QhRK7EY2hz7ZILB3EPUpQgsGJhZcmxZxg
+ 4E5pmAx5bQk7of/cWuZ+PvUwqhtoJT+XuC+GxbHLgfqexjuU2vr/dGe6EK42OaMfJ175
+ 6awA==
+X-Gm-Message-State: AOAM5311B0dtY/8w7nBDBohRNWgKkuWjlazlnAWYhfUuieVpfoVhcHzO
+ EcQy2xnfG4uOzEfP2W+fyDo2eQ==
+X-Google-Smtp-Source: ABdhPJx4R03ncKATFi2a7V0zI8d517bh9k8iLClSOxE3rffZaTDSB4XG/lhNh8kRT+sZKyLvkcuXMA==
+X-Received: by 2002:a17:907:1623:b0:6e8:8678:640d with SMTP id
+ hb35-20020a170907162300b006e88678640dmr12793304ejc.189.1651528702385; 
+ Mon, 02 May 2022 14:58:22 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- hy11-20020a1709068a6b00b006f3ef214db0sm3956700ejc.22.2022.05.02.14.58.06
+ e25-20020a056402149900b0042617ba63d5sm7083572edv.95.2022.05.02.14.58.20
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 02 May 2022 14:58:06 -0700 (PDT)
-Message-ID: <662ab74d-f751-69ad-3257-dbee32dca01d@mind.be>
-Date: Mon, 2 May 2022 23:58:05 +0200
+ Mon, 02 May 2022 14:58:21 -0700 (PDT)
+Message-ID: <fb6d36d8-d2d1-b5be-533e-ac331582dae2@mind.be>
+Date: Mon, 2 May 2022 23:58:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
 To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
-References: <20220502201148.92261-1-francois.perrad@gadz.org>
+References: <20220502201209.92316-1-francois.perrad@gadz.org>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220502201148.92261-1-francois.perrad@gadz.org>
-Subject: Re: [Buildroot] [PATCH] package/nano: bump to version 6.3
+In-Reply-To: <20220502201209.92316-1-francois.perrad@gadz.org>
+Subject: Re: [Buildroot] [PATCH] package/sqlite: bump to version 3.38.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,7 +101,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 02/05/2022 22:11, Francois Perrad wrote:
+On 02/05/2022 22:12, Francois Perrad wrote:
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
   Applied to master, thanks.
@@ -110,35 +110,34 @@ On 02/05/2022 22:11, Francois Perrad wrote:
   Arnout
 
 > ---
->   package/nano/nano.hash | 4 ++--
->   package/nano/nano.mk   | 2 +-
+>   package/sqlite/sqlite.hash | 2 +-
+>   package/sqlite/sqlite.mk   | 4 ++--
 >   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-> index 69ebc27b7..8308005bb 100644
-> --- a/package/nano/nano.hash
-> +++ b/package/nano/nano.hash
-> @@ -1,5 +1,5 @@
->   # Locally calculated after checking pgp signature
-> -# https://www.nano-editor.org/dist/v6/nano-6.2.tar.xz.asc
-> +# https://www.nano-editor.org/dist/v6/nano-6.3.tar.xz.asc
->   # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
-> -sha256  2bca1804bead6aaf4ad791f756e4749bb55ed860eec105a97fba864bc6a77cb3  nano-6.2.tar.xz
-> +sha256  eb532da4985672730b500f685dbaab885a466d08fbbf7415832b95805e6f8687  nano-6.3.tar.xz
->   sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-> diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-> index e3ecbab56..cad215bed 100644
-> --- a/package/nano/nano.mk
-> +++ b/package/nano/nano.mk
-> @@ -5,7 +5,7 @@
+> diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+> index 882cf8564..12a543f00 100644
+> --- a/package/sqlite/sqlite.hash
+> +++ b/package/sqlite/sqlite.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  e7974aa1430bad690a5e9f79a6ee5c8492ada8269dc675875ad0fb747d7cada4  sqlite-autoconf-3380200.tar.gz
+> +sha256  61f2dd93a2e38c33468b7125967c3218bf9f4dd8365def6025e314f905dc942e  sqlite-autoconf-3380300.tar.gz
+>   sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+> diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+> index 9f88af7ae..3ba120df8 100644
+> --- a/package/sqlite/sqlite.mk
+> +++ b/package/sqlite/sqlite.mk
+> @@ -4,8 +4,8 @@
+>   #
 >   ################################################################################
 >   
->   NANO_VERSION_MAJOR = 6
-> -NANO_VERSION = $(NANO_VERSION_MAJOR).2
-> +NANO_VERSION = $(NANO_VERSION_MAJOR).3
->   NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
->   NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
->   NANO_LICENSE = GPL-3.0+
+> -SQLITE_VERSION = 3.38.2
+> -SQLITE_TAR_VERSION = 3380200
+> +SQLITE_VERSION = 3.38.3
+> +SQLITE_TAR_VERSION = 3380300
+>   SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+>   SQLITE_SITE = https://www.sqlite.org/2022
+>   SQLITE_LICENSE = Public domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
