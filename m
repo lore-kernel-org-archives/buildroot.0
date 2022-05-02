@@ -4,71 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42ACBC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 09:51:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9AAAC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 10:12:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3916403FB;
-	Mon,  2 May 2022 09:51:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9901040526;
+	Mon,  2 May 2022 10:12:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w9lIiW4mb9fG; Mon,  2 May 2022 09:51:36 +0000 (UTC)
+	with ESMTP id ZCnlLltmmhWz; Mon,  2 May 2022 10:12:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 834A0402F2;
-	Mon,  2 May 2022 09:51:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 87F6B1BF280
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 09:51:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A198D404DA;
+	Mon,  2 May 2022 10:12:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1102A1BF3CB
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 10:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C626960BB1
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 09:51:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0DCB9404DA
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 10:12:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=freenet.de
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I1JN6ANjMtH1 for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 09:51:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mout2.freenet.de (mout2.freenet.de [IPv6:2001:748:100:40::2:4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 33B1660736
- for <buildroot@buildroot.org>; Mon,  2 May 2022 09:51:30 +0000 (UTC)
-Received: from [195.4.92.119] (helo=sub0.freenet.de)
- by mout2.freenet.de with esmtpa (ID earthquake.de@freenet.de) (port 25) (Exim
- 4.94.2 #2) id 1nlSiF-00B9cZ-45
- for buildroot@buildroot.org; Mon, 02 May 2022 11:51:27 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freenet.de; 
- s=mjaymdexmjqk;
- h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
- References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
- Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
- Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
- List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=0PIqM5gQESeCDLSc+gkDFkMMuOjXvNfHoe/eoIIWaSo=; b=DMVI9lHA8eMe58MTB+KHNB/48H
- Clruwv+X+TMVX9t/I6KvFy1f5dzeIezRmW579+A0icjhi0SuZOvtHjeQvmfOVRgyBGv5ALlE/kgSC
- SpyzTkYa9whq5HA17m7+tdIlkI1lVKpPbXSKPrFGiKHV2lF7o9kpA91UmU9WUG5Wd+5v/Wm0S+sb1
- c3NQDNSpUca69SylPkx7VsF5cCOcH+6xLn27DK3KOsOAl2KaC7871M61TiNLSBIAVydpA3JOG3qGy
- w4yN/vCL0njtA+u5BXBUZah+S9ZoN2GRkNfbIv8d9lSZgX+gf15bqHvmA1L3wMusmshsMJQnu5H10
- EFX0LVZQ==;
-Received: from ipbcc0e031.dynamic.kabel-deutschland.de ([188.192.224.49]:58216
- helo=[192.168.0.12])
- by sub0.freenet.de with esmtpsa (ID earthquake.de@freenet.de)
- (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (port 465) (Exim
- 4.94.2 #2) id 1nlSiE-005QAL-R2
- for buildroot@buildroot.org; Mon, 02 May 2022 11:51:26 +0200
-Message-ID: <e7567c94-6750-bfe4-bce7-fd763264c2e2@freenet.de>
-Date: Mon, 2 May 2022 11:51:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zMpbAQSW61Ys for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 10:12:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1279E404CA
+ for <buildroot@buildroot.org>; Mon,  2 May 2022 10:12:27 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id w4so18935155wrg.12
+ for <buildroot@buildroot.org>; Mon, 02 May 2022 03:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=UJXE6AY/VivlrlEShH1wCTw4i3gWXvK+/TgaEpQGUDw=;
+ b=QzyDP3NpAEEUalUKPGJojf3XPp6qRpwu1GQklEurFzFbvi8qZojcc3fDShGS5LoNmy
+ c64jFAwloEh/E6LCCquFOl9TprrPDx/uWRUbVPEl1GwpVp14NMPL/9YGKEj5IUhWq1gO
+ w5PzorJ0IVYEL6UdoSO7hy8ZCmyonU7jhYF4wWzUumBdQKj92D+QRswcXOHaHw0yUpu6
+ CuZCw+1VlGck2hadiYOH6AUbasrmrL91JjT6EJyVy4da9qBQTfF7OqjttHa484x7W08d
+ efZL9iAE29FzDfHIZ9yKwtHdUCZTQ8sDyVf/t2SYxWkWB7GM+iFv6ZdGvILXSIyccQx2
+ kVPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=UJXE6AY/VivlrlEShH1wCTw4i3gWXvK+/TgaEpQGUDw=;
+ b=W8JPmGv5KAFZ7xjfvLVHe/DLQg8RUQo/QyMjY5jN2UGDYVHlOPYPTbpRjJ2pkuhqfu
+ 5g30qne5t9SQlWPxobgfVAlxRFTscMad3g/uEiEjdDB9+6SZ88eC08XIW6Yd7g3TbBnz
+ 5IcvU9l1klpJISZKeWKbOF7pdZK8Y8ism48KKQs/F2/cQ8acYPLnynVKyrn3NjzCUhpA
+ m3VDEvvHDCGeP2QEyHIld6jJVAJhXnCe5rQZ+NLYwXl518ZVIWF91jDuWhgVAZK9SAv1
+ 0O57vBR2BROj9NUoO4Fr1yQD+3ijUHiyJGSa+GzsM7EzIhZpQHgp4TNKoQK257XqvaaW
+ btHQ==
+X-Gm-Message-State: AOAM533e7bA+X4Fo38Y7b01I56SEPAuISUEN1+ure8BvnTbM3GaE970X
+ QmOB6wyHJTNLZbyYvwj8wgweoVfz5Js=
+X-Google-Smtp-Source: ABdhPJyOgKADO9xYj6c9jTaF8fTfZaICTfLI1TI2xt2ofOtoKs3csVlft7lJkLTUhBq4ISAFW5jpWw==
+X-Received: by 2002:a5d:434e:0:b0:207:a48e:a99a with SMTP id
+ u14-20020a5d434e000000b00207a48ea99amr8797835wrr.250.1651486346046; 
+ Mon, 02 May 2022 03:12:26 -0700 (PDT)
+Received: from smartron.home ([2a02:a03f:63d3:7700:47c:f3ae:fe47:54e6])
+ by smtp.gmail.com with ESMTPSA id
+ 22-20020a05600c021600b003942a244eddsm7297685wmi.34.2022.05.02.03.12.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 02 May 2022 03:12:25 -0700 (PDT)
+From: Titouan Christophe <titouanchristophe@gmail.com>
 To: buildroot@buildroot.org
-References: <8043273d-730b-c378-fd91-21e6902081fa@freenet.de>
- <3bcef05e-2ddd-2929-8bc7-f16c7ef33cd1@mind.be>
-From: Alex <earthquake.de@freenet.de>
-In-Reply-To: <3bcef05e-2ddd-2929-8bc7-f16c7ef33cd1@mind.be>
-X-Originated-At: 188.192.224.49!58216
-X-Scan-TS: Mon, 02 May 2022 11:51:26 +0200
-Subject: Re: [Buildroot] ACE + TAO with buildroot - GLIBC_2.28 not found
+Date: Mon,  2 May 2022 12:12:08 +0200
+Message-Id: <20220502101208.1576497-1-titouanchristophe@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v7.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,58 +84,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Titouan Christophe <titouanchristophe@gmail.com>,
+ Daniel Price <daniel.price@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQXJub3V0LAoKdGhhbmtzIGZvciB5b3VyIGFuc3dlci4KCkFtIDMwLjA0LjIwMjIgdW0gMTI6
-MzEgc2NocmllYiBBcm5vdXQgVmFuZGVjYXBwZWxsZToKPgo+Cj4gT24gMjkvMDQvMjAyMiAxNjow
-MiwgRWFydGhxdWFrZSB3cm90ZToKPj4gSGksCj4+Cj4+IGludGVyZ3JhdGluZyBBQ0Ugd2FzIHN1
-Y2Nlc3NmdWxsIHdpdGgKPj4KPj4gaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0
-L2J1aWxkcm9vdC9wYXRjaC8yMDIxMDQxMzEzNDEzOS4xMzI4MS0xLW1hdHRoZXcud2ViZXJAcm9j
-a3dlbGxjb2xsaW5zLmNvbS8gCj4+Cj4+Cj4+IEFDRSBsaWIgaXMgYnVpbHQuCj4+Cj4+IFdoZW4g
-SSBpbnRlZ3JhdGUgVEFPIGluIHRoZSBhY2UubWsKPj4KPj4gVEFPX0xJQlJBUklFUyArPSBUQU9f
-SURMCj4+IFRBT19MSUJSQVJJRXMgKz0gdGFvL1BvcnRhYmxlU2VydmVyCj4+ICQoZm9yZWFjaCBs
-aWIsJChUQU9fTElCUkFSSUVTKSwgQUNFX1JPT1Q9IiQoQEQpIiAKPj4gJChUQVJHRVRfQ09ORklH
-VVJFX09QVFMpICQoTUFLRSkgLUMgJChARCkvVEFPLyQobGliKSBBQ0VfUk9PVD0iJChARCkiIAo+
-PiBUQU9fUk9PVD0iJChARCkvVEFPIsKgIGFsbCApCj4+Cj4+IFRoZSB0YW9faWRsIGNvbXBsaWVy
-IHdpbGwgYmUgYnVpbHQuCj4+Cj4+IFRoZSBQb3J0YWJsZVNlcnZlciB1c2VzIHRoZSBjcmVhdGVk
-IHRhb19pZGwgY29tcGxpZXIgYnV0IGV4aXQgd2l0aDoKPj4KPj4gLi4vLi4vLi4vYmluL3Rhb19p
-ZGw6IC9saWIveDg2XzY0LWxpbnV4LWdudS9saWJjLnNvLjY6IHZlcnNpb24gCj4+IGBHTElCQ18y
-LjI4JyBub3QgZm91bmQgKHJlcXVpcmVkIGJ5IC4uLy4uLy4uL2xpYi9saWJBQ0Uuc28uNy4wLjIp
-Cj4+IC4uLy4uLy4uL2Jpbi90YW9faWRsOiAvbGliL3g4Nl82NC1saW51eC1nbnUvbGliYy5zby42
-OiB2ZXJzaW9uIAo+PiBgR0xJQkNfMi4zMicgbm90IGZvdW5kIChyZXF1aXJlZCBieSAuLi8uLi8u
-Li9saWIvbGliQUNFLnNvLjcuMC4yKQo+Cj4gwqBZb3UgY3JlYXRlZCB0YW9faWRsIGZvciB0aGUg
-dGFyZ2V0LCBidXQgYXJlIHRyeWluZyB0byBydW4gaXQgb24gdGhlIAo+IGhvc3QuIFRoZSBsaWJj
-IHZlcnNpb25zIG9uIHRhcmdldCBhbmQgaG9zdCBhcmUgbm90IGNvbXBhdGlibGUuCj4KPiDCoFRo
-aXMgcHJvYmFibHkgbWVhbnMgdGhhdCB0aGUgdGFvIGJ1aWxkIHN5c3RlbSBpcyBub3QgCj4gY3Jv
-c3MtY29tcGlsYXRpb24gZnJpZW5kbHkuIFBlcmhhcHMgaXQgZG9lcyBzdXBwb3J0IGNyb3NzLWNv
-bXBpbGF0aW9uIAo+IGJ1dCB5b3UgbmVlZCBzb21lIG90aGVyIG9wdGlvbiB0byBwYXNzIHRoZSBo
-b3N0IGNvbXBpbGVyICh3ZSBwYXNzIAo+IENDX0ZPUl9CVUlMRD0iJChIT1NUQ0MpIiBiZWNhdXNl
-IENDX0ZPUl9CVUlMRCBpcyB0aGUgdmFyaWFibGUgdXNlZCBieSAKPiBhdXRvdG9vbHMsIGJ1dCB3
-aXRoIGEgY3VzdG9tIE1ha2VmaWxlIHRoZXkgbWF5IGV4cGVjdCBhIGRpZmZlcmVudCAKPiB2YXJp
-YWJsZSkuCgpUQU8gc3VwcG9ydHMgY3Jvc3MgY29tcGlsZS4KVEFPIGl0c2VsZiBhbGxvd3MgdG8g
-c2V0IHRoZSBsb2NhdGlvbiBmb3IgdGhlIGNvbXBpbGVyLgpJIGhhdmUgdG8gd3JpdGUgYSBob3N0
-LWFjZS5tayBiYWNhdXNlIGZvciBjcm9zcyBjb21waWxhdGlvbiB0aGUgdGFvX2lkbCAKY29tcGls
-ZXIgbXVzdCBiZSBidWlsdC9hdmFpbGFibGUgZm9yIHRoZSBob3N0ICh0aGUgYnVpbGRyb290IGhv
-c3QpLgoKU2V0dGluZyB0aGUgY29tcGlsZXIgcGF0aCBpbiBUQU8gcGxhdGZvcm1fbWFjcm9zLkdO
-VSBmaWxlOgoKVEFPX0lETCA6PSAkKEhPU1RfUk9PVCkvYmluL3Rhb19pZGwKVEFPX0lETEZMQUdT
-ICs9IC1nICQoSE9TVF9ST09UKS9iaW4vZ3BlcmYKVEFPX0lETF9ERVAgOj0gJChIT1NUX1JPT1Qp
-L2Jpbi90YW9faWRsJChFWEVFWFQpCgpDYW4gSSB1c2UgYSBidWlsZHJvb3QgdmFyaWFibGVzIHRo
-YXQgY29udGFpbnMgdGhlIGhvc3QgcGF0aD8KCgo+Cj4gwqBJZiBpdCByZWFsbHkgZG9lc24ndCBz
-dXBwb3J0IGNyb3NzLWNvbXBpbGF0aW9uLCB0aGVuIHlvdSBzaG91bGQgbWFrZSAKPiBhIGhvc3Qt
-YWNlIHBhY2thZ2UgdGhhdCBidWlsZHMgdGFvX2lkbCBhbmQgaW5zdGFsbHMgaXQgaW4gCj4gJChI
-T1NUX0RJUikvYmluLCBhbmQgdGhlbiBjYWxsIHRoYXQgb25lLgoKCkkgdGhlcmUgYSBob3N0IHBh
-Y2thZ2UgdGVtcGxhdGUgdGhhdCBJIGNhbiB1c2UgZm9yIGNyZWF0aW5nIHRoZSAKaG9zdC1hY2Uu
-bWs/CgoKPiDCoFJlZ2FyZHMsCj4gwqBBcm5vdXQKPgo+Pgo+PiBXcm9uZyB3YXkgdG8gY2FsbD8K
-Pj4KPj4KPj4gVGhhbmtzIGZvciBzdXBwb3J0LAo+Pgo+PiBBbGV4Cj4+Cj4+IF9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+IGJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKPj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPj4gaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cj4gX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QKClRoYW5rwrRzLgoKQmVzdCByZWdhcmRzLAoKQWxleAoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+From the release notes:
+(See https://github.com/redis/redis/blob/7.0.0/00-RELEASENOTES)
+
+Introduction to the Redis 7.0 release
+=====================================
+
+Redis 7.0 includes several new user-facing features, significant performance
+optimizations, and many other improvements. It also includes changes that
+potentially break backwards compatibility with older versions. We urge users to
+review the release notes carefully before upgrading.
+
+In particular, users should be aware of the following changes:
+
+1. Redis 7 stores AOF as multiple files in a folder; see Multi-Part AOF below.
+2. Redis 7 uses a new version 10 format for RDB files, which is incompatible
+   with older versions.
+3. Redis 7 converts ziplist encoded keys to listpacks on the fly when loading
+   an older RDB format. Conversion applies to loading a file from disk or
+   replicating from a Redis master and will slightly increase loading time.
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 74a9392a63..582c3afa03 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  5b2b8b7a50111ef395bf1c1d5be11e6e167ac018125055daa8b5c2317ae131ab  redis-6.2.6.tar.gz
++sha256  284d8bd1fd85d6a55a05ee4e7c31c31977ad56cbf344ed83790beeb148baa720  redis-7.0.0.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index f3c030d68c..3b91fbf8c8 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 6.2.6
++REDIS_VERSION = 7.0.0
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
