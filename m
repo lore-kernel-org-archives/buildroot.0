@@ -1,89 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C403C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C932C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 582F3405A3;
-	Mon,  2 May 2022 21:58:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0630C81450;
+	Mon,  2 May 2022 21:59:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Io1ecRmHuirQ; Mon,  2 May 2022 21:58:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Er8_Mho1B1Yr; Mon,  2 May 2022 21:59:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6FFBE40445;
-	Mon,  2 May 2022 21:58:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7103C1BF2BC
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:58:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1BE2C81398;
+	Mon,  2 May 2022 21:59:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5923C1BF2BC
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:59:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F884414CE
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:58:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5165060F4C
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:59:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9g1tT6vf2V-q for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 21:58:46 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6FCB3409F7
- for <buildroot@buildroot.org>; Mon,  2 May 2022 21:58:46 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id p18so18039199edr.7
- for <buildroot@buildroot.org>; Mon, 02 May 2022 14:58:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=dkzHqXTiaBDvxG6pFkc4ZacwzOr/Nah21svemrDiJZk=;
- b=Z2I0NaP3VMvf0Vsd8NiresY36UlXDMyvI/gPP0jjKKVDzuJxsJWQKCKwJCjhc0sBrH
- sjapcVww3GZ5TJRNVIyBlx4Qy27kJUMsaJJRZ2ktMR1GjYf9ubKJXoRMCl4bfex5b7e3
- vuj3cDTlg9MgE4nLEzJF7A8c42x2HUe6o3MKeK24pQtNbY/89aQPZtG4PtHRcSVo1iK8
- kF3hBUfv2tMhOddE3N3jCwRFvrEwAxewrggMOSfOvapJ4vCGLzkUVj7I4R+RK1HHjBWP
- jgNCk4ELnHmRwnYQaf/4nP56kzp5xcosm41YApXfHcRb09p3a1xcNpIX7etTwTABwBQn
- WnNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=dkzHqXTiaBDvxG6pFkc4ZacwzOr/Nah21svemrDiJZk=;
- b=6QCymuvsABK+rBmRiH1X5yyoAgMeveUO1Je1YifjPgy6uf1eJOWYE3WOONrrDh07Mg
- vVYvCgLecak+ki7wAZfS8CN9Ofp6aNNYYgWhO4UGRBCBEH7Q9ZV30mgatM30/KWx7Iy3
- e8/lY/tMY71G2QBKiIbmMHU/X2H/qDiDJIxtNe5pERmRo0eEzOeU5YRXaVK8Nm/dhvpN
- V5rkLKJwV+o+9Kd4ouHYPTmB49+kEY8mk3bUnstrCAHasnQODTEDqrxrGy5fAuhe4wn7
- +R7hdKmWOw8Rw3D3xWzKWF+I1Np4ONL8ganIpgVLeXMpS7nUOS0KZD62TsCpo4Dm+t8l
- +g7Q==
-X-Gm-Message-State: AOAM531yafiqi8M1r4kLmKxlj6OtSDx1y2I15//vA9u0XKq1lFrEi1EN
- GDHaNznyYFHKXzc8IWGyNEGUlQ==
-X-Google-Smtp-Source: ABdhPJxbZ+g9Ke8PUG4qjgHmOLIIiJXpBN8rAck+rbvmAEPD2e8cOQ/1shFXOPnc+LYKpk1AQNNAeA==
-X-Received: by 2002:aa7:d416:0:b0:425:f5c7:d633 with SMTP id
- z22-20020aa7d416000000b00425f5c7d633mr15069938edq.105.1651528724701; 
- Mon, 02 May 2022 14:58:44 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- em20-20020a170907289400b006f3ef214e04sm3973308ejc.106.2022.05.02.14.58.43
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 02 May 2022 14:58:44 -0700 (PDT)
-Message-ID: <2bc9f168-ce7b-c99d-708a-070c8da5820c@mind.be>
-Date: Mon, 2 May 2022 23:58:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-GB
-To: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-References: <20220502212519.75249-1-romain.naour@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220502212519.75249-1-romain.naour@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/2] package/qemu: rewrite
- BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET to be more readable
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4V64-8DjMq1d for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 21:59:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0034A60E2D
+ for <buildroot@buildroot.org>; Mon,  2 May 2022 21:59:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id BDED484F0E; Mon,  2 May 2022 21:48:50 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Mon, 2 May 2022 23:40:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a6b71b47568cebe9b0a36380f4cbce509411017c
+X-Git-Newrev: 8c25838b53e6e469839a71df5da610378e87aa40
+X-Patchwork-Hint: ignore
+Message-Id: <20220502214850.BDED484F0E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rockchip-mali: fix build failure
+ due to missing URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,50 +53,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=8c25838b53e6e469839a71df5da610378e87aa40
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Github rockchip-linux doesn't provide libmali repository anymore and the
+only up-to-date and maintained repository I've found is JeffyCN/mirrors
+branch libmali that provide the identical situtation we were at with
+previous repository, so let's switch to JeffyCN repository. This fixes
+a build failure while trying to install rockchip-mali.
 
-On 02/05/2022 23:25, Romain Naour wrote:
-> Use the same format introduced for BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-> in commit 65e05cd914c895461a65ebdf901f991585529005.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/rockchip-mali/rockchip-mali.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Applied both to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/qemu/Config.in | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-> index 7bb203a177..1afbc6c364 100644
-> --- a/package/qemu/Config.in
-> +++ b/package/qemu/Config.in
-> @@ -1,9 +1,14 @@
->   config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
->   	bool
->   	# Only tested on these architectures
-> -	default y if BR2_aarch64 || BR2_i386 || BR2_mips || BR2_mipsel \
-> -		|| BR2_x86_64 || BR2_arm \
-> -		|| BR2_powerpc64 || BR2_powerpc64le
-> +	default y if BR2_aarch64
-> +	default y if BR2_arm
-> +	default y if BR2_i386
-> +	default y if BR2_mips
-> +	default y if BR2_mipsel
-> +	default y if BR2_powerpc64
-> +	default y if BR2_powerpc64le
-> +	default y if BR2_x86_64
->   
->   comment "QEMU requires a toolchain with wchar, threads, gcc >= 8"
->   	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+diff --git a/package/rockchip-mali/rockchip-mali.mk b/package/rockchip-mali/rockchip-mali.mk
+index 6200191a73..848682229d 100644
+--- a/package/rockchip-mali/rockchip-mali.mk
++++ b/package/rockchip-mali/rockchip-mali.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ROCKCHIP_MALI_VERSION = 721653b5b3b525a4f80d15aa7e2f9df7b7e60427
+-ROCKCHIP_MALI_SITE = $(call github,rockchip-linux,libmali,$(ROCKCHIP_MALI_VERSION))
++ROCKCHIP_MALI_SITE = $(call github,JeffyCN,mirrors,$(ROCKCHIP_MALI_VERSION))
+ ROCKCHIP_MALI_LICENSE = Proprietary
+ ROCKCHIP_MALI_LICENSE_FILES = END_USER_LICENCE_AGREEMENT.txt
+ ROCKCHIP_MALI_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
