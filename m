@@ -1,89 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 705EFC433FE
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8957C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2902F415A9;
-	Mon,  2 May 2022 21:54:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 697BA405B6;
+	Mon,  2 May 2022 21:55:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qg4mTdvhw-PW; Mon,  2 May 2022 21:54:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NHdG8dvLIZtk; Mon,  2 May 2022 21:55:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6482409EE;
-	Mon,  2 May 2022 21:54:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 203901BF2BC
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:54:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 60ABF40580;
+	Mon,  2 May 2022 21:55:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 611661BF2BC
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:55:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D41C606DC
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:54:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4FD38404E9
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:55:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N9TdbeR-AJLZ for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 21:54:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZffMFGWKnnxo for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 21:54:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 31304600C5
- for <buildroot@buildroot.org>; Mon,  2 May 2022 21:54:43 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id be20so18027320edb.12
- for <buildroot@buildroot.org>; Mon, 02 May 2022 14:54:43 -0700 (PDT)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 31843403BF
+ for <buildroot@buildroot.org>; Mon,  2 May 2022 21:54:59 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id g20so18026417edw.6
+ for <buildroot@buildroot.org>; Mon, 02 May 2022 14:54:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=rs45plx+Hy2zkSB+sFPuihDqhiHdYGFRMemctZglPbs=;
- b=OOf6YE3hPp1hm9kIi23Kpoxr8zuWZXpbqSsjvtThko38vVXhDrs5gT8OAja3mE0BAt
- 4wiUWOWxLUa4UZ/ztT7U9KQnCXGL/7b1eQHCBsEN3TSHJyQEoFBGJNoX5TuYA0UNV0fz
- 0nKPwVjcM7mPYLsvNPh9U0rmNJuyz3EJ4clXs90leNDJGHxEkzcIZ61hsOT+xMZD2ht2
- Rse5wMDJxWtLZlY5CC1VdlIY2lFWMc2mwNAVwJCtfCqY8zq12LthT0oN2zQWZKHqoOco
- zKacBCidxyc+No/hZB8sMXQ3LxAWI5f5fYTO+3tXM5oUgLjX9tNnuETttVnHdhd13AlY
- bESg==
+ bh=dc1OPMr2E3391D2yV9LgHYJLKUVnkAJefhi4EQEjfNE=;
+ b=NQXfUKkr3XQAXdiBq0f0gEGG7nsGqlD/JBDYUdrFXNb4b7lvlNMLA079afyGl/K/j8
+ G0M1p/t8Z25CeyPrBdAE0F1dAi+j0mTyZzzZKUEXFFTeND/WC+CPb8UOL0ZRJnakkGSW
+ /8R0J9+tVMo3aKbBBz7zhhMY+JBV3xtmOqXd5yd3tehPi71PwnREwgUowYuwS26WIReg
+ /noO23GXAQXAt77BHlJGc/CuGHBCeKcG8t7ZQR5dgYXrXEheOiXp+wTqJll97EBWD6e5
+ G7p58blpt/LbY5zqfXYDcIKXGzTbOd63ng66W9/jBaLMRTiacg8+WJRxHcinzhciy3wG
+ ROqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=rs45plx+Hy2zkSB+sFPuihDqhiHdYGFRMemctZglPbs=;
- b=Pzlqgu3xEiMhWBa/Al02Bf1w7VgxoXKmvAWzjnaAd7WoFg2I6sAbEdk0GaYueW5mEA
- xQ33qcGfeVQi7X3op7Cq4enHb2Z1VEH6ZBjALAfISfOvMc6QIovkjAcm9rjKMS36p89o
- 3QP9LBhq49y5Zpx6L2OGqMIUl2orTlC+uywY9DqGjp+VRs7eUjXmxJHEPbpSvRv+UxxW
- btoWC+Hg0VXPp98bpuFz2OVrTiCU8e9nvu0Irb61dWqTjkFSGYYJ3AASxJ51RUOHW+Iq
- 6cEGDf3Xhs3VgfztfCcD8V49mqaHXVsKhMpI58uiydMK1oKvwoSNidDwMi7nmS76c3AR
- 1qIQ==
-X-Gm-Message-State: AOAM531iMe8X0iIrq9AgsQa+RGwUhV5RbUw2tDcF8qLeaWhsrR3SP8aq
- zTHhiV/IpP1p5tpj0LCf8gv9eg==
-X-Google-Smtp-Source: ABdhPJz3kcybXR1/SEmS1cat9cAuV6OwMNtqjecQlpuphLlvIkZolW3wpOrq7q72ijVfOKabu4my9g==
-X-Received: by 2002:a05:6402:2743:b0:427:ccb0:b8d3 with SMTP id
- z3-20020a056402274300b00427ccb0b8d3mr6007416edd.72.1651528481323; 
- Mon, 02 May 2022 14:54:41 -0700 (PDT)
+ bh=dc1OPMr2E3391D2yV9LgHYJLKUVnkAJefhi4EQEjfNE=;
+ b=pGS60QgMKGERSvc5jFqM/2gWvZDDvP+BFqS6dxAYrJAlZ+LV7WUYqxqvcwAC4on69b
+ iJdrWNl+nF21/hz3W3IUT4zMVr+4fhz0VLIoFDa2Wr0uFXrC25qJ7rRLvlJZ4g15SH65
+ ZEoF/SOsaFjPamNimM1SB0MHMztCXHmNCcWar0rxGH0QyRuCb/c7yp7wGkuW6lLjH9GW
+ VeJIEUwyloHE4yMb0Gbl1HkiXzZO/Erad3HH76seGgcgYFuZ0Vcuxa9NvBqe+KtRM4t8
+ qtXFCa2cyU0vW+pQ3jYPvtOLlHbstZTrKHgMa0J7pk8wkLVJElDwTdlJgFSsbmDYmbTv
+ ciJw==
+X-Gm-Message-State: AOAM532pvoqU9heurnTGs1Edva+3+hnA+yV1UdCgVIOkZyO01DeocfxR
+ 5sjHC8NYUdmW240iPckNxuXWgA==
+X-Google-Smtp-Source: ABdhPJwtEOrBWLbSMEIFESs5edOx3kGP2/bDeu5Kn1vhVudxYGZCSPliP76be+oIaUi8npo0VP/gNQ==
+X-Received: by 2002:aa7:da08:0:b0:425:af3c:196a with SMTP id
+ r8-20020aa7da08000000b00425af3c196amr15237911eds.69.1651528497397; 
+ Mon, 02 May 2022 14:54:57 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- cy19-20020a0564021c9300b0042617ba6386sm6996373edb.16.2022.05.02.14.54.40
+ zd21-20020a17090698d500b006f3ef214e4csm3979616ejb.178.2022.05.02.14.54.56
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 02 May 2022 14:54:40 -0700 (PDT)
-Message-ID: <5f262b22-1c9c-763b-a052-e462daef2648@mind.be>
-Date: Mon, 2 May 2022 23:54:40 +0200
+ Mon, 02 May 2022 14:54:56 -0700 (PDT)
+Message-ID: <dd4f3977-121a-c3e3-076e-2377ab483b51@mind.be>
+Date: Mon, 2 May 2022 23:54:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-References: <20220501110640.300796-1-ju.o@free.fr>
+To: Alexander Egorenkov <egorenar@linux.ibm.com>, buildroot@buildroot.org
+References: <20220502054637.79491-1-egorenar@linux.ibm.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220501110640.300796-1-ju.o@free.fr>
-Subject: Re: [Buildroot] [PATCH 1/1] package/glslsandbox-player: fix build
- with libexecinfo
+In-Reply-To: <20220502054637.79491-1-egorenar@linux.ibm.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/s390-tools: bump to version
+ 2.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,15 +100,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 01/05/2022 13:06, Julien Olivain wrote:
-> Fix build failure raised on uclibc and musl since the addition of
-> libexecinfo package in commit:
-> eea8ba446c10701a273432552108d80fb2224ef4
-> 
-> Fixes:
-> - http://autobuild.buildroot.net/results/9591ffe5968fe5f20b29799d1c234426cacd549a
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+On 02/05/2022 07:46, Alexander Egorenkov wrote:
+> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 
   Applied to master, thanks.
 
@@ -118,25 +109,80 @@ On 01/05/2022 13:06, Julien Olivain wrote:
   Arnout
 
 > ---
->   package/glslsandbox-player/glslsandbox-player.mk | 5 +++++
->   1 file changed, 5 insertions(+)
+>   ...kefile-no-pie-is-not-a-valid-ld-flag.patch | 29 -------------------
+>   package/s390-tools/s390-tools.hash            |  2 +-
+>   package/s390-tools/s390-tools.mk              |  6 ++--
+>   3 files changed, 3 insertions(+), 34 deletions(-)
+>   delete mode 100644 package/s390-tools/0004-zipl-boot-Makefile-no-pie-is-not-a-valid-ld-flag.patch
 > 
-> diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
-> index c5fbf062b7..70bd5ca370 100644
-> --- a/package/glslsandbox-player/glslsandbox-player.mk
-> +++ b/package/glslsandbox-player/glslsandbox-player.mk
-> @@ -12,6 +12,11 @@ GLSLSANDBOX_PLAYER_DEPENDENCIES = libegl libgles host-pkgconf
->   GLSLSANDBOX_PLAYER_LICENSE = BSD-2-Clause
->   GLSLSANDBOX_PLAYER_LICENSE_FILES = LICENSE
+> diff --git a/package/s390-tools/0004-zipl-boot-Makefile-no-pie-is-not-a-valid-ld-flag.patch b/package/s390-tools/0004-zipl-boot-Makefile-no-pie-is-not-a-valid-ld-flag.patch
+> deleted file mode 100644
+> index fcdf06088a8d..000000000000
+> --- a/package/s390-tools/0004-zipl-boot-Makefile-no-pie-is-not-a-valid-ld-flag.patch
+> +++ /dev/null
+> @@ -1,29 +0,0 @@
+> -From 9fd3c733c645be13a2e39a3bae3983f88530b48d Mon Sep 17 00:00:00 2001
+> -From: =?UTF-8?q?Lukas=20M=C3=A4rdian?= <lukas.maerdian@canonical.com>
+> -Date: Thu, 7 Jan 2021 12:46:22 +0100
+> -Subject: [PATCH] zipl/boot/Makefile: -no-pie is not a valid ld flag
+> -
+> -The "-no-pie" option never has been a valid flag of ld. It breaks the build with newer binutils.
+> -See:
+> -https://sourceware.org/bugzilla/show_bug.cgi?id=27050
+> -https://bugs.launchpad.net/ubuntu/+source/s390-tools/+bug/1907789
+> -
+> -[Retrieved from: https://github.com/ibm-s390-linux/s390-tools/pull/106]
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ----
+> - zipl/boot/Makefile | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff --git a/zipl/boot/Makefile b/zipl/boot/Makefile
+> -index a2e5f190..b81df778 100644
+> ---- a/zipl/boot/Makefile
+> -+++ b/zipl/boot/Makefile
+> -@@ -109,7 +109,7 @@ stage3.bin:	stage3.exec
+> - 		$< $@
+> -
+> - data.o: $(FILES)
+> --	$(LD) $(NO_PIE_LDFLAGS) -r -b binary -o data.o $(FILES)
+> -+	$(LD) -r -b binary -o data.o $(FILES)
+> -
+> - data.h: data.o
+> - 	rm -f data.h
+> diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
+> index 6ea8f7ea2076..dc9209856b00 100644
+> --- a/package/s390-tools/s390-tools.hash
+> +++ b/package/s390-tools/s390-tools.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed:
+> -sha256  6fa6add92e896541c0ef74885a4084474fc0d77049e8ac7372872a70a46ddd74  s390-tools-2.20.0.tar.gz
+> +sha256  d0f56fe4f6a62dda45ccd87191e42ebfaec82671ff4b96cc2229a7fe240ce072  s390-tools-2.21.0.tar.gz
+>   sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
+> diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
+> index 3c386af6fd10..040db78c05a6 100644
+> --- a/package/s390-tools/s390-tools.mk
+> +++ b/package/s390-tools/s390-tools.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
-> +ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-> +GLSLSANDBOX_PLAYER_DEPENDENCIES += libexecinfo
-> +GLSLSANDBOX_PLAYER_CONF_ENV += LIBS="-lexecinfo"
-> +endif
-> +
->   ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_PNG),y)
->   GLSLSANDBOX_PLAYER_DEPENDENCIES += libpng
->   GLSLSANDBOX_PLAYER_CONF_OPTS += --with-libpng
+> -S390_TOOLS_VERSION = 2.20.0
+> +S390_TOOLS_VERSION = 2.21.0
+>   S390_TOOLS_SITE = $(call github,ibm-s390-linux,s390-tools,v$(S390_TOOLS_VERSION))
+>   S390_TOOLS_LICENSE = MIT
+>   S390_TOOLS_LICENSE_FILES = LICENSE
+> @@ -12,9 +12,7 @@ S390_TOOLS_DEPENDENCIES = zlib
+>   
+>   S390_TOOLS_MAKE_OPTS = \
+>   	ARCH=$(BR2_ARCH) \
+> -	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+> -	LINK="$(TARGET_CC)" \
+> -	LINKXX="$(TARGET_CXX)"
+> +	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+>   
+>   ifeq ($(BR2_PACKAGE_LIBCURL),y)
+>   S390_TOOLS_DEPENDENCIES += libcurl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
