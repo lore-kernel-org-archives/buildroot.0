@@ -4,56 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3978DC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 18:55:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 668B9C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 20:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 990A260F87;
-	Mon,  2 May 2022 18:55:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED5AD60F93;
+	Mon,  2 May 2022 20:03:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NEb6Mq0JV0k1; Mon,  2 May 2022 18:55:29 +0000 (UTC)
+	with ESMTP id tlPOnWQHqEgH; Mon,  2 May 2022 20:03:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1FB960F0E;
-	Mon,  2 May 2022 18:55:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E6EE11BF30C
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 18:55:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 05F2860F87;
+	Mon,  2 May 2022 20:03:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E4D41BF30C
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 20:03:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E3CA782521
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 18:55:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A34240AAB
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 20:03:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DvHxAqPpAthn for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 18:55:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 785C9824A4
- for <buildroot@buildroot.org>; Mon,  2 May 2022 18:55:25 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.164.167.166])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 6DE90B00565;
- Mon,  2 May 2022 20:55:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1651517721;
- bh=mFYUXDlYRjTbfBd2+W69YzBV8v3IIbrqfffFphBjC8U=;
- h=From:To:Cc:Subject:Date:From;
- b=R2XMQxL2JCdU7o0/cQQw0jsrNYUCwOhwQn/WS0DDUD0sOCKks5eEtPQ9dD5ycZ2Id
- T7Y7KikhcMpYLGi6x7cTfRkTl8xuQWB0o6Gp5roXzuTr18KTePwej2DePlNyv3+lGg
- 24S+HySugcpDmrbdqhgoee0z3wbeZRhT0GzBqWOy/bkObMzcCgiUfjXVwGKH6cm3oZ
- Xv/av8j8/E743FHqcYLoRH3Qtq1q9e47kYDkZ+BQbAeZkGyOJuA3c17eFGNOzJd2yz
- ZPmqmcrYQSydbfMWyeCu5JuYNtV+UOME91J38WrJF88uGiGsD4zM9qyHtb3mErf8PM
- u5G4LLKT0u3mQ==
-From: Julien Olivain <ju.o@free.fr>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KYQ5_ERqRMwH for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 20:03:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com
+ [IPv6:2607:f8b0:4864:20::733])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 68FD7408D1
+ for <buildroot@buildroot.org>; Mon,  2 May 2022 20:03:27 +0000 (UTC)
+Received: by mail-qk1-x733.google.com with SMTP id a76so4614382qkg.12
+ for <buildroot@buildroot.org>; Mon, 02 May 2022 13:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=jXGfHC540UcrxQUozDOtS3W0HTI4RycgnOOSVEv3WIM=;
+ b=By2Gc0kS27iTCcGFgCNhsgXrNpPo0RuwXq18dmJabNBZ1V0+w7GOV0JB/92E2ZpJSh
+ q2tqu8oyXFq2OSBqCU/r/Hanssw6N10ixXlMsiS7HsJW8ETjSkVyKXTx0RhyiK77Fxai
+ VFprudODgpd94LfKPBKep9LDAoNQnQmGU7nnjN7QeTcnjAjRcExn45LLBYzL2S+Uc4UX
+ YFFLMCnh33Az3edjZPm7xnSTXumiQF7r4ycycgG208PIlzsaDiKOnp3XML8YOTOL8RvA
+ 62UOiA2kb2YWFdYakKb1PmsOjIhCjgzhr1/TUmt4UEiGdOXuIbPP0yM4L5q8eVbGXEIB
+ 5bNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=jXGfHC540UcrxQUozDOtS3W0HTI4RycgnOOSVEv3WIM=;
+ b=StkRV6kAEYyQK9j+3WGy72nipiJFQQiVMtVXvVI9B1ObV6B6WnmniIJjniPZb3Nn0X
+ ZRUaUgUM1v3DtgShx2L7JWTpQyMYegSMlpWAyA1ur5x287v68gP8a4pzIFT5Xrp4c8x4
+ EIT7eNy/iLhwInNB9WrLYblpPIQPApF68ricinNCVOXR/LVU7moB7DwMfLjI3qgmcyGl
+ 7K8zUuIHWF4zFR4Ubg2VFMoNiDZMelwzIY6eoNh8MHNegVbHzFSxFXR3nkf8hCzzZPxp
+ cgdiHLElKEJegt/mhxo4aJnZcu0Pn+mlkhl7RPm3zVCT5dE/ffK0IdfzfbDw7dBIfolu
+ XWVA==
+X-Gm-Message-State: AOAM530nrdQM3tAkjswhmPXrgjvEwhHULmzfUbY6EumPQxsjQmzYL2IG
+ WaxN8d7DMg6cqjLCHjNUnH69xYkcREc=
+X-Google-Smtp-Source: ABdhPJy9g4sz9+KX6VOZfYB6NoTzdszDjAL4GrbxkDx++ESRkv2WyPiUcPEmUhWVOHxpzg0yxt5g5A==
+X-Received: by 2002:a05:620a:993:b0:69f:d0fb:48a5 with SMTP id
+ x19-20020a05620a099300b0069fd0fb48a5mr6487302qkx.562.1651521805780; 
+ Mon, 02 May 2022 13:03:25 -0700 (PDT)
+Received: from localhost.localdomain ([12.125.190.90])
+ by smtp.gmail.com with ESMTPSA id
+ j127-20020a378785000000b0069fc13ce1easm1845130qkd.27.2022.05.02.13.03.24
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Mon, 02 May 2022 13:03:25 -0700 (PDT)
+From: ckhardin@gmail.com
 To: buildroot@buildroot.org
-Date: Mon,  2 May 2022 20:55:06 +0200
-Message-Id: <20220502185506.34664-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.36.0
+Date: Mon,  2 May 2022 13:00:36 -0700
+Message-Id: <20220502200036.61876-1-ckhardin@gmail.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version 2.2.7
+Subject: [Buildroot] [PATCH v2] toolchain/toolchain-external: add aarch64 as
+ a hostarch for arm tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,55 +87,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Charles Hardin <ckhardin@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since v2.2.6, see:
-- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.2.7
+From: Charles Hardin <ckhardin@gmail.com>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+The gcc toolchain is also released for an aarch64 host target and allow
+that configuration to be used as part of the configuration. Tested on
+on a aarch64 linux docker.
+
+Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+__
+Changes v1 -> v2
+  - use HOSTARCH directly in the .mk (suggested by Baruch Siach)
 ---
-Package tested with:
+ .../toolchain-external/toolchain-external-arm-arm/Config.in    | 2 +-
+ .../toolchain-external-arm-arm/toolchain-external-arm-arm.hash | 3 +++
+ .../toolchain-external-arm-arm/toolchain-external-arm-arm.mk   | 2 +-
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-   make check-package
-   ...
-   0 warnings generated
-
-   ./utils/test-pkg -a -p fluidsynth
-   ...
-   45 builds, 7 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- package/fluidsynth/fluidsynth.hash | 2 +-
- package/fluidsynth/fluidsynth.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
-index 20eb9ec49f..12e67404fa 100644
---- a/package/fluidsynth/fluidsynth.hash
-+++ b/package/fluidsynth/fluidsynth.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ca90fe675cacd9a7b442662783c4e7fa0e1fd638b28d64105a4e3fe0f618d20f  fluidsynth-2.2.6.tar.gz
-+sha256  460d86d8d687f567dc4780890b72538c7ff6b2082080ef2f9359d41670a309cf  fluidsynth-2.2.7.tar.gz
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index d7c72ed059..c4c9883102 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+index 0fbeba6aae..ca9831e05f 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+@@ -8,7 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+ 	depends on BR2_ARM_CPU_HAS_NEON
+-	depends on BR2_HOSTARCH = "x86_64"
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "aarch64"
+ 	depends on BR2_ARM_EABIHF
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+index d58692de53..1fc2c5de57 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+@@ -1,4 +1,7 @@
+ # From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz.asc
+ md5  87ec580b290df2febc7c476f59484635  gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz.asc
++md5  0f1c5c90f5c62e1d1066f75fb3e51e21  gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz
+ # locally calculated
+ sha256  aa074fa8371a4f73fecbd16bd62c8b1945f23289e26414794f130d6ccdf8e39c  gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
++sha256  fccd7af76988da2b077f939eb2a78baa9935810918d2bf3f837bc74f52efa825  gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+index 4392205105..8731a4f0e5 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+@@ -7,6 +7,6 @@
+ TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2021.07
+ TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
  
--FLUIDSYNTH_VERSION = 2.2.6
-+FLUIDSYNTH_VERSION = 2.2.7
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
+-TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-x86_64-arm-none-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-$(HOSTARCH)-arm-none-linux-gnueabihf.tar.xz
+ 
+ $(eval $(toolchain-external-package))
 -- 
-2.36.0
+2.32.0 (Apple Git-132)
 
 _______________________________________________
 buildroot mailing list
