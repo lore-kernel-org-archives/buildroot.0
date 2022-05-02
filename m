@@ -1,46 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF2E0C433FE
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:05:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DACD6C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C5FE40517;
-	Mon,  2 May 2022 21:05:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86D9A60F99;
+	Mon,  2 May 2022 21:25:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S8WrMI1crH4h; Mon,  2 May 2022 21:05:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j0ZolQk-ZwXB; Mon,  2 May 2022 21:25:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3235840151;
-	Mon,  2 May 2022 21:05:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 463451BF2BC
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:05:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C22260F90;
+	Mon,  2 May 2022 21:25:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F3061BF2BC
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:25:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3495582784
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:05:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED6AA60F90
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:25:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MBLtla5WDbh5 for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 21:05:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 194208277E
- for <buildroot@buildroot.org>; Mon,  2 May 2022 21:05:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id E48D384EA7; Mon,  2 May 2022 20:54:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eyUS65i1bUqy for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 21:25:33 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A40FE60F87
+ for <buildroot@buildroot.org>; Mon,  2 May 2022 21:25:33 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id b19so21002936wrh.11
+ for <buildroot@buildroot.org>; Mon, 02 May 2022 14:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=HIoRx92/GuY11hGBhjlPmcsCOVX2Xa5xOZzt5C6xu9k=;
+ b=bxiYErE77n62ZoHZC8HPvAtmNdd11/VdpcuhY7lOxJROfWEW+tM04RppWzf4uL/cR2
+ MTt2tRufjDlniLkj6bFUMIdjtG3cVbbUY5wYgX/Kmdy0NI0iiYn+6zdvv3gLjpGAstgi
+ c/zbbwt48vJo44r0RSdRSCsEzUwJo0Rj/a93uvY80nnAAMz2s9tl8qKlNHbQUXXskcOe
+ MgcebE8LAkeuUM8yWLDqu5ACLK9M99pztJL7vRzHGjJwLdgqZS+rli5RZzP8z5CdxtQG
+ WZhji/Ea7Kis9Ozy5xQBdULUEiE9q437QGY1GZ7zZSMwToDpJcORGPFhpEUFQ6DPqXKV
+ rVHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=HIoRx92/GuY11hGBhjlPmcsCOVX2Xa5xOZzt5C6xu9k=;
+ b=JtgTyxZGXpyOc408WnOew0YKfzy5xdyX6gynNMcYXNCU1RZBvP4fnYE/2N64LKPOrT
+ B/aLzyLq1fBpYyr+re1wOdzWU7wZxQ2BQEZHP7xBhrpR2J9QALQaxkgVlm+u4pw3pek2
+ 0BupfEMH0+uQRfRItSIb9/znwPD4Kg5IYO/ObxUdCREYjZnlz15kRFaWuYJJ6iB5zP+W
+ ergQgkUm33RLq+ZqRdFLyVYn48M0m1KMtZTGazUtioM3FmhlSmezH3BMGbqABE4eLaaP
+ 7as1mx/3oquai+sncj8sbUnWxFMlNXH7VyfrOQCKruzYaNLoff1naKnBEnvDpM/1hSA9
+ RmeA==
+X-Gm-Message-State: AOAM530NjbWJ09vXc+/+lAa8EiJKHt3gxqTOyGrXx8WEAyAHJwEN+pD8
+ Jj/kZZfwAsuWycMYYR7VpXbSXX/F614=
+X-Google-Smtp-Source: ABdhPJxB2WgB9sn3XJfNxzeh2MwJFDjLekPprtlZncj6cottOlEJTHGzAV6DS+K7nZY9CometregcQ==
+X-Received: by 2002:adf:c6c2:0:b0:206:e60:1eef with SMTP id
+ c2-20020adfc6c2000000b002060e601eefmr10525411wrh.579.1651526731860; 
+ Mon, 02 May 2022 14:25:31 -0700 (PDT)
+Received: from atlas.home
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id
+ z6-20020adfc006000000b0020c5253d8e2sm8077016wre.46.2022.05.02.14.25.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 02 May 2022 14:25:31 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 2 May 2022 22:58:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b12336d1fad12fbb82b4d9144e6cb5636a12256
-X-Git-Newrev: 985e9f733c02b01a5beb88dad383e9a1fc4f60ea
-X-Patchwork-Hint: ignore
-Message-Id: <20220502205437.E48D384EA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: add setting for systemd
- default.target
+Date: Mon,  2 May 2022 23:25:18 +0200
+Message-Id: <20220502212519.75249-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/2] package/qemu: rewrite
+ BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET to be more readable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,68 +87,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Arnout Vandecappelle \(Essensium/Mind\) via buildroot"
- <buildroot@buildroot.org>
-Reply-To: "Arnout Vandecappelle \(Essensium/Mind\)" <arnout@mind.be>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=985e9f733c02b01a5beb88dad383e9a1fc4f60ea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Use the same format introduced for BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+in commit 65e05cd914c895461a65ebdf901f991585529005.
 
-This adds the option to set systemd's default.target in
-the System Configuration subheading if systemd is
-specified as the init system.
-
-The argument for default.target is specified pre-build
-as opposed to overriding the hardcoded "multi-user.target"
-symlink with post-build scripts or a rootfs overlay
-
-Signed-off-by: Sen Hastings <sen@phobosdpl.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/systemd/systemd.mk |  2 +-
- system/Config.in           | 11 +++++++++++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ package/qemu/Config.in | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 7a711319cf..b309507e12 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -571,7 +571,7 @@ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
- endif
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 7bb203a177..1afbc6c364 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -1,9 +1,14 @@
+ config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+ 	bool
+ 	# Only tested on these architectures
+-	default y if BR2_aarch64 || BR2_i386 || BR2_mips || BR2_mipsel \
+-		|| BR2_x86_64 || BR2_arm \
+-		|| BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_aarch64
++	default y if BR2_arm
++	default y if BR2_i386
++	default y if BR2_mips
++	default y if BR2_mipsel
++	default y if BR2_powerpc64
++	default y if BR2_powerpc64le
++	default y if BR2_x86_64
  
- define SYSTEMD_INSTALL_INIT_HOOK
--	ln -fs multi-user.target \
-+	ln -fs "$(call qstrip,$(BR2_PACKAGE_SYSTEMD_DEFAULT_TARGET))" \
- 		$(TARGET_DIR)/usr/lib/systemd/system/default.target
- endef
- 
-diff --git a/system/Config.in b/system/Config.in
-index a4ffbfa18c..888c24ce81 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -154,6 +154,17 @@ source "$BR2_BASE_DIR/.br2-external.in.init"
- 
- endchoice
- 
-+config BR2_PACKAGE_SYSTEMD_DEFAULT_TARGET
-+	string "The default unit systemd starts at bootup"
-+	default "multi-user.target"
-+	depends on BR2_INIT_SYSTEMD
-+	help
-+	  Specify the name of the unit configuration file to be started
-+	  at bootup by systemd. Should end in ".target".
-+	  ex: multi-user.target
-+
-+	  https://www.freedesktop.org/software/systemd/man/systemd.special.html#default.target
-+
- choice
- 	prompt "/dev management" if !BR2_INIT_SYSTEMD
- 	default BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS
+ comment "QEMU requires a toolchain with wchar, threads, gcc >= 8"
+ 	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
