@@ -1,81 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF2DCC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:53:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B8FEC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:54:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B1C0405E7;
-	Mon,  2 May 2022 21:53:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB9504109D;
+	Mon,  2 May 2022 21:54:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OV27yj_rREuA; Mon,  2 May 2022 21:53:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mf0cqC1I554q; Mon,  2 May 2022 21:54:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A073A404E9;
-	Mon,  2 May 2022 21:53:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3E87C1BF2BC
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:53:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 552D1409C6;
+	Mon,  2 May 2022 21:54:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E0201BF2BC
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B0C7600C5
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:53:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6BEB4409C6
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:54:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GuFIxVeSllqC for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 21:53:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EnfdKPmz5ZNS for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 21:54:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 49339600B9
- for <buildroot@buildroot.org>; Mon,  2 May 2022 21:53:47 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id t4so8701116ilo.12
- for <buildroot@buildroot.org>; Mon, 02 May 2022 14:53:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 37E11409B2
+ for <buildroot@buildroot.org>; Mon,  2 May 2022 21:54:13 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id a21so18039883edb.1
+ for <buildroot@buildroot.org>; Mon, 02 May 2022 14:54:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=KEEfS81ZxLb5G8ip0PSMAyxbBA7kMJJMTep+XK8OM2A=;
- b=b9o0XhcAwEkFbmlbSYVZ9Ax3JfQfTfxYJLeZZJJk8bxeFVPJ/LKU7A8U2uDzHaNF1v
- kM49lcV+mqaB8Z+t2Vq9e3h2pChJ/NAlN2yG4UhwH9o5WEzBR+RRShzXLP1lgV0s4Di0
- aKX7LHxUbL8GbkDDT+0QcvVW4qK/iKzD9R+WAc6MaDppYyCWl9J0fFEkJFLxUdqQHO5c
- LsEejgu0yHZR0818B9L8JrRaIbGB7wNgLiS+A0MicVapoqeZPJoj7gnhXl/2zgRTynjV
- 22vvWzYjoVmafh4S00lwJue/mN9DT9ZyGc7QWs+k7iuQw7GpkbF2t8/4ud7KnY/NfjQe
- d2zA==
+ bh=bzR8+zVWwYFHpxLoWtsskgK9lIoVt5QrGjROyrT14cE=;
+ b=ibXMmKqHiaT7+gRCQrEXWxeNEFOR7rgQrTLToQmh4IvGCQ+br7FsD6sZ6FGyxLCFZ6
+ OAtOc1GgshSKfw4e649d++poMEvC4MfPO2SfvbVBlSvbYbXX/AaNv5z7wPKmxUlfrxvL
+ 45H3V9jI1QgACJhN5wroZkErK5Qf+h/tmj7zKFM6CRl9tifAOXtAAdVjzHvs+YyfrjFh
+ ro6/7bDehCwnoNmYIKP9SqPFYEmFiHoLpERdwE3oG+KqweWBKvnPMzxXZNspBE/vrfWu
+ oftf+fhipwqfeenh32XBi7qM32gBCKuLq3CjaJOo1BreU/8a7/r/igpn6IapUlJtP76c
+ Wkxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=KEEfS81ZxLb5G8ip0PSMAyxbBA7kMJJMTep+XK8OM2A=;
- b=UCbWdQPqpeThF1jWiK2loA2A+PeezsQ33tPZCxlDFJHVEXnjFEzxsIyg7MeI47dW35
- ZzR2vliKVuN5XrQK8mD8kwcERWXdfhY1gXpPVzRcYw6xpVsGOMAdi15+cB67Pc7Doc/G
- vNpgVCUHlGkxZktx9zTeV0f8wMbk9sjZPXdbbPeYv6ODOEK1AOBecnwVrSCDIOpNIcBf
- 8vAxFrlZuBjKBKjgys8DtyG3eoJ10GQySgotGdyx4igZoNuEXIc5K4dYniVYushlFvXT
- JHAESWHQYfKbxahQyXmd+R+jW32HSzjNZxAA9VxzXp/+ivoWQj+xPFFU1ec8eReTLhem
- lRZg==
-X-Gm-Message-State: AOAM532dVySas4xtWza+GQToNX/XHe+h45Q35/RORQuF7kGlSA5O4gq3
- Gq2ytYH55gnU+3iEc0+fe4m4v/NDrfE=
-X-Google-Smtp-Source: ABdhPJyDUA2m9mYpdBe/Itk4mOp8JPxmoIPG5jYgUeG/29DPHAmfCJunTzsf5wHKv1XjR/uGNktcIw==
-X-Received: by 2002:a92:ca4f:0:b0:2cc:4571:3cd3 with SMTP id
- q15-20020a92ca4f000000b002cc45713cd3mr5268357ilo.110.1651528426107; 
- Mon, 02 May 2022 14:53:46 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
- [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- x16-20020a0566380cb000b0032b3a78173esm3366972jad.2.2022.05.02.14.53.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 May 2022 14:53:45 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  2 May 2022 15:53:42 -0600
-Message-Id: <20220502215342.3485999-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ bh=bzR8+zVWwYFHpxLoWtsskgK9lIoVt5QrGjROyrT14cE=;
+ b=JAmFtblsk91aHVtn94kgkAE5vJCt0zN+GbSehdMFbFTGZUBufHybdtHbZn/OS0TiyC
+ mEVbaEpDPd+fzyyLbkP7xRIp17BbItzz53FqGZWmNOEuiZYNtWXG9XeNcwNtuzideZoW
+ OdC0ldL2gsMv5l9ejaVoSh/Ikd8UwNZrHo7GaSK22wv+ZYB693WE+wkNt5qG7/+uPQru
+ hKLu5AnfLdAoXHcWLaZZRvBNi80NO3UNo4qgSiDthHzTcbWPXiW2csv7+AK1aMpb35VV
+ eVKFNxDMrmvNCUOrn03I4Gnp8kcbzV/MrP7PXMDO5IIMKTw6yqZo2tXI7TLYKoNZFnYw
+ 0JJw==
+X-Gm-Message-State: AOAM532mEYW+CUwlYEHqULmmuMPx8ilRqFH7UdylxBaygySqCROsQQg+
+ 9u2oZGfTwCfCvjaRdCyJFxKTsjRybCxiKQ==
+X-Google-Smtp-Source: ABdhPJwtayI+Mlhm1cnUNXvlVZ1PUIbljAWSkfU2bBhpgC8lKe+cAmnrEGgg1OFUyJy0Z7yvobTjDw==
+X-Received: by 2002:aa7:db0a:0:b0:427:db1d:b258 with SMTP id
+ t10-20020aa7db0a000000b00427db1db258mr2547211eds.304.1651528451399; 
+ Mon, 02 May 2022 14:54:11 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ ig11-20020a1709072e0b00b006f3ef214e2dsm4125802ejc.147.2022.05.02.14.54.10
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 02 May 2022 14:54:10 -0700 (PDT)
+Message-ID: <c199ac1d-6883-fca4-5065-87ee6c466f12@mind.be>
+Date: Mon, 2 May 2022 23:54:09 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] package/linux-headers: prevent invalid
- custom headers selection
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-GB
+To: Dario Binacchi <dariobin@libero.it>, buildroot@buildroot.org
+References: <20220502051059.8301-1-dariobin@libero.it>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220502051059.8301-1-dariobin@libero.it>
+Subject: Re: [Buildroot] [v2,
+ 1/1] package/libmnl: add options to build examples
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,79 +94,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-If BR2_KERNEL_HEADERS_AS_KERNEL is selected and the kernel version
-is known we should not allow potentially incompatible custom headers
-to be selected.
 
-For BR2_LINUX_KERNEL_LATEST_CIP_VERSION and
-BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION this means we should select
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 and for
-BR2_LINUX_KERNEL_LATEST_VERSION this means we should select
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15.
 
-Fixes:
- - http://autobuild.buildroot.net/results/816/816d7a3ad77ba051fff7fba7f2a38fc31549c360
- - http://autobuild.buildroot.net/results/3c3/3c3a9fc1a1e0002ae8169fd47b3003ebb86935f6
- - http://autobuild.buildroot.net/results/188/18883459577dc0fdc01149110ffb81bf1a28c94a
+On 02/05/2022 07:10, Dario Binacchi wrote:
+> The example applications, which are minimal, can be of great help in
+> understanding how the library works.
+> 
+> As there is no configure option to enable examples compilation, building
+> and installation instructions had to be added to libmnl.mk. By default,
+> which is always the case for buildroot, they are disabled.
+> 
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> ---
+> Changes v1 -> v2:
+> - Build all examples when BR2_PACKAGE_LIBMNL_EXAMPLES is set.
+> ---
+>   package/libmnl/Config.in |  9 +++++++++
+>   package/libmnl/libmnl.mk | 28 ++++++++++++++++++++++++++++
+>   2 files changed, 37 insertions(+)
+> 
+> diff --git a/package/libmnl/Config.in b/package/libmnl/Config.in
+> index 5acfb2447e..b4a4195751 100644
+> --- a/package/libmnl/Config.in
+> +++ b/package/libmnl/Config.in
+> @@ -5,3 +5,12 @@ config BR2_PACKAGE_LIBMNL
+>   	  to Netlink developers.
+>   
+>   	  http://netfilter.org/projects/libmnl/
+> +
+> +if BR2_PACKAGE_LIBMNL
+> +
+> +config BR2_PACKAGE_LIBMNL_EXAMPLES
+> +	bool "install examples"
+> +	help
+> +	  Install binary examples.
+> +
+> +endif
+> diff --git a/package/libmnl/libmnl.mk b/package/libmnl/libmnl.mk
+> index 3361d05248..d9b1fbabe7 100644
+> --- a/package/libmnl/libmnl.mk
+> +++ b/package/libmnl/libmnl.mk
+> @@ -12,4 +12,32 @@ LIBMNL_LICENSE = LGPL-2.1+
+>   LIBMNL_LICENSE_FILES = COPYING
+>   LIBMNL_CPE_ID_VENDOR = netfilter
+>   
+> +ifeq ($(BR2_PACKAGE_LIBMNL_EXAMPLES),y)
+> +define LIBMNL_EXAMPLES_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) check -C $(@D)
+> +endef
+> +LIBMNL_POST_BUILD_HOOKS += LIBMNL_EXAMPLES_BUILD_CMDS
+> +
+> +LIBMNL_EXAMPLES_INSTALL_TARGETS += \
+> +	$(addprefix examples/genl/, genl-family-get genl-group-events)
+> +LIBMNL_EXAMPLES_INSTALL_TARGETS += \
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - entirely disable Custom kernel headers series when kernel version is known
----
- linux/Config.in                      | 3 +++
- package/linux-headers/Config.in.host | 5 +++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+  This could have been simpler as
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 4b4ea8d92b..82f5675f6c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -29,9 +29,11 @@ choice
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.15)"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15 if BR2_KERNEL_HEADERS_AS_KERNEL
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (5.10.104-cip3)"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -51,6 +53,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	bool "Latest CIP RT SLTS version (5.10.104-cip3-rt3)"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
- 	help
- 	  Same as the CIP version, but this is the PREEMPT_RT realtime
- 	  variant.
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index decf02d175..43a116974b 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -127,8 +127,9 @@ endif
- 
- choice
- 	bool "Custom kernel headers series"
--	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15 if \
--		(BR2_KERNEL_HEADERS_AS_KERNEL && BR2_LINUX_KERNEL_LATEST_VERSION)
-+	depends on !BR2_LINUX_KERNEL_LATEST_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
-+	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
-+	depends on !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
- 	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL || \
- 		   BR2_KERNEL_HEADERS_CUSTOM_TARBALL || BR2_KERNEL_HEADERS_CUSTOM_GIT
- 	help
--- 
-2.25.1
+LIBMNL_EXAMPLES_INSTALL_TARGETS = \
+	$(addprefix ...) \
+	$(addprefix ...) \
+	....
 
+  But I was too lazy to fix it up, so I applied to master as is, thanks.
+
+  Regards,
+  Arnout
+
+> +	$(addprefix examples/kobject/, kobject-event)
+> +LIBMNL_EXAMPLES_INSTALL_TARGETS += \
+> +	$(addprefix examples/netfilter/, nfct-create-batch \
+> +		nfct-daemon nfct-dump nfct-event nf-log \
+> +		nf-queue)
+> +LIBMNL_EXAMPLES_INSTALL_TARGETS += \
+> +	$(addprefix examples/rtnl/, rtnl-addr-add rtnl-addr-dump \
+> +		rtnl-link-dump rtnl-link-dump2 rtnl-link-dump3 \
+> +		rtnl-link-event rtnl-link-set rtnl-neigh-dump \
+> +		rtnl-route-add rtnl-route-dump rtnl-route-event)
+> +
+> +define LIBMNL_EXAMPLES_INSTALL_TARGET_CMDS
+> +	$(foreach t,$(LIBMNL_EXAMPLES_INSTALL_TARGETS), \
+> +		$(INSTALL) -D -m 0755 $(@D)/$(t) \
+> +			$(TARGET_DIR)/usr/bin/$(notdir $(t))$(sep))
+> +endef
+> +LIBMNL_POST_INSTALL_TARGET_HOOKS += LIBMNL_EXAMPLES_INSTALL_TARGET_CMDS
+> +endif
+> +
+>   $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
