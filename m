@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96461C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 22:01:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F361C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 22:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FF91415E6;
-	Mon,  2 May 2022 22:01:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E44154168D;
+	Mon,  2 May 2022 22:01:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TSp2rn9Me3Z4; Mon,  2 May 2022 22:01:22 +0000 (UTC)
+	with ESMTP id QSiNf3EC4Tln; Mon,  2 May 2022 22:01:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BFB3415AA;
-	Mon,  2 May 2022 22:01:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 28C4E1BF2C0
+	by smtp4.osuosl.org (Postfix) with ESMTP id AC82541619;
+	Mon,  2 May 2022 22:01:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6EDE41BF2BC
  for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:59:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 53C548145F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56C5A415BB
  for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:59:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3Dkpht6OeEx7 for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 21:59:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AL4uJcSaRA83 for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 21:59:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC6DA80B54
- for <buildroot@buildroot.org>; Mon,  2 May 2022 21:59:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B6E74156F
+ for <buildroot@buildroot.org>; Mon,  2 May 2022 21:59:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id A2C5384F0E; Mon,  2 May 2022 21:48:50 +0000 (UTC)
+ id 01FBE84EC9; Mon,  2 May 2022 21:48:51 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 2 May 2022 23:38:08 +0200
+Date: Mon, 2 May 2022 23:40:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f355fab421d728c262f93d4a44317cb5f850b725
-X-Git-Newrev: 2fa7abca8d11b5d767ca0caee9aa6d09713d4cb6
+X-Git-Oldrev: 8ea0b4fce62d8527d45e12490030126d568c9811
+X-Git-Newrev: e5ff1de64e60f6ab2faaa751378fce0ec6bf1010
 X-Patchwork-Hint: ignore
-Message-Id: <20220502214850.A2C5384F0E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-python: add comment why no
- dependencies are added for host-python-installer.
+Message-Id: <20220502214851.01FBE84EC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: do not allow selecting RTAI for
+ latest/cip kernels
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,34 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fa7abca8d11b5d767ca0caee9aa6d09713d4cb6
+commit: https://git.buildroot.net/buildroot/commit/?id=e5ff1de64e60f6ab2faaa751378fce0ec6bf1010
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also, only host-python-installer itself needs to be added now.
-host-python-flit-core is a dependency of host-python-installer so
-doesn't need to be added explicitly.
+RTAI is only supported on very specific kernel versions that are
+different from the latest/cip kernel versions, so we should not
+allow selecting RTAI when building with latest/cip kernels.
 
+Fixes:
+ - http://autobuild.buildroot.net/results/412/412492e19b41f95ff2445df6b7564cb0fa48873b
+ - http://autobuild.buildroot.net/results/32c/32c9ffd8e965eb690ca0b0471e9c1cc16bb2fa66
+ - http://autobuild.buildroot.net/results/0bc/0bc178dcb11aa23e5f8bf75c958d8a56c6c38964
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pkg-python.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ linux/Config.ext.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index b86e12423f..452fa0d3ea 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -233,8 +233,10 @@ ifeq ($$($(2)_SETUP_TYPE),flit)
- $(2)_DEPENDENCIES += host-python-flit-core
- endif
- else ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
-+# Don't add dependency on host-python-installer for
-+# host-python-installer itself, and its dependencies.
- ifeq ($$(filter host-python-flit-core host-python-installer,$(1)),)
--$(2)_DEPENDENCIES += host-python-flit-core host-python-installer
-+$(2)_DEPENDENCIES += host-python-installer
- endif
- endif # SETUP_TYPE
- 
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 734a52a533..5b968b0bcb 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -48,6 +48,9 @@ comment "xenomai needs a uClibc or glibc toolchain w/ threads"
+ # RTAI
+ config BR2_LINUX_KERNEL_EXT_RTAI
+ 	bool "RTAI Real-time patch"
++	depends on !BR2_LINUX_KERNEL_LATEST_VERSION
++	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	depends on !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	select BR2_PACKAGE_RTAI
+ 	help
+ 	  RTAI Kernel part.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
