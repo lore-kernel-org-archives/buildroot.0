@@ -1,90 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1EE8C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20E9CC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  2 May 2022 21:53:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53EC040621;
-	Mon,  2 May 2022 21:53:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFB708144E;
+	Mon,  2 May 2022 21:53:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EOunb4eDnCx0; Mon,  2 May 2022 21:53:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i_6TOii9iGWq; Mon,  2 May 2022 21:53:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 65226404E9;
-	Mon,  2 May 2022 21:52:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B24861BF2BC
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:52:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08544813D3;
+	Mon,  2 May 2022 21:53:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C34D1BF2BC
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:53:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9E33D408AE
- for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:52:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05F6B403BF
+ for <buildroot@lists.busybox.net>; Mon,  2 May 2022 21:53:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R82nkXTqLsEk for <buildroot@lists.busybox.net>;
- Mon,  2 May 2022 21:52:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6GExw7qS3dvP for <buildroot@lists.busybox.net>;
+ Mon,  2 May 2022 21:53:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5FA60408A2
- for <buildroot@buildroot.org>; Mon,  2 May 2022 21:52:56 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id p18so18028194edr.7
- for <buildroot@buildroot.org>; Mon, 02 May 2022 14:52:56 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 211DD4063F
+ for <buildroot@buildroot.org>; Mon,  2 May 2022 21:53:10 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id dk23so30152886ejb.8
+ for <buildroot@buildroot.org>; Mon, 02 May 2022 14:53:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=zjiFDKyaujTdhCNdTeq+JpRnXUvh6hNO6S/KPNRI/nY=;
- b=TqF/vPtVX/msx9NS5bHXdrFUDGWLDj558jcHhIrB4oOtTWNV3DghgIvtvXafGh4/AC
- ZjsY6ta1/rby4UC1c67aHtXtn0vtno9g97BRX4hTZ64A9jd+ncF2bwIc/8uTcEOiIOfO
- +7o8ONmLzrn3ro8AHqvghDRaVvy+7jD0sn7mMRnml5ceXF/Q89V6CBMsvLoqznz9GIyD
- u/dEVKtLnrSKdZI8vVjPyAv/RRrPy3+ZdHlNTwXy4fdqNhGY4qyHY8J1HDZtVEA88UWe
- t1v9XRkjrAj3AdFGTyIc75DdFpnitBbSP5jyGRYWSbQKJZzp3aXo+K3/Q+mwFtDL8bBv
- pz8w==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=jbXvFC3a5tlQG9EQjsR+KeuOEIUO+HQ839MtFVOU+ZI=;
+ b=TH5AXsAi2Dqz10a38omA5XZiq/VNXST9UQn1mFb8YANLpZxKQccG/qOlpzuzxuY4mp
+ gBijQkpoQE7MKffCEzIhxJHHxy/sxqfYmCNLabYusoII5d0SSDTDSpreIJgq4gVUs8sg
+ lUOOVjrpcBHgrjR/B/r3KeEzaRYlaeLJW8z9wXlvcUI22bYAp6vPFSPZ9gMexjGXeuPE
+ RYKQP+Lzxun0EELnqQmH7tsjKk0F5YtULxcFaoURSA/jcQufqjjuQS/9xu0ALt3PU6s0
+ e4lW/5DLPmSoMj/HtvcNk9uyVE3+1m7x+xgprpkKouZ3WIOjnCcBIkrqAwfwit91qp0X
+ eB+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=zjiFDKyaujTdhCNdTeq+JpRnXUvh6hNO6S/KPNRI/nY=;
- b=v4DsE/tre5oxwovZWuo2e+6L/uxAr41Tqyuul2PON+hYN4rfkloqA02YrB9Ee50xvx
- PCl0C+g4i3y87g5uGCBfEVv4JgR3sBRm1Xv0n/4PoI5RIwFni8011kXyJAPMjGRwcwk1
- Xsg3xDkBi4bkoaPafq8laA9+xm3tBq9b/GqengO1Jyw1pgljoxQ7eagi35MXcIpt56NR
- vs4ktMfBn25U9UmXBEZxTZoSkhwAGBk9iyQ0monGOUDK7OLOcUXjQgQb9o0SujnLVlHK
- nSdgchgsf/R28PcDfukZ0/mt+MAob4oRNB5fRpnkbC5Eija1vctUNPRmniBxKCfzmQs1
- aMxA==
-X-Gm-Message-State: AOAM532swqNCinMy+u1DmbBDcNmwp9F4JXcFjS0kEmgwPCPZDfzK8+N5
- r77t0bBQ0WnDTMFJVqgaWJxwAg==
-X-Google-Smtp-Source: ABdhPJzI2bVU3I8UztkVZUMjTGSVQfITaN0nvfYHddbYv3COaYZ6hR4GtivpwmHSZR5LiSpRg4TRMQ==
-X-Received: by 2002:a05:6402:228c:b0:425:d911:fd35 with SMTP id
- cw12-20020a056402228c00b00425d911fd35mr15453762edb.325.1651528374387; 
- Mon, 02 May 2022 14:52:54 -0700 (PDT)
+ bh=jbXvFC3a5tlQG9EQjsR+KeuOEIUO+HQ839MtFVOU+ZI=;
+ b=UVHq9L1RS7DbKvzeMjKcMMiM4SRRZQSl7RcGJydTWm0L9djwfLrAXV4wKKGcoau9dT
+ qinGGLlVD+em8FH5zwytL4Ip59MBPEbvd74NdxWHA4eOTFve+arGu1PgsTOainkBOwBz
+ KEIiFWe2MmdJyg1r+LLCUYdGZS2dsACFdVy2BxPYQuX6BPI+WsEGNGo6hO0C5bH4P9Uq
+ vMWJRX3OtHppR8w60UnHowuc4aKMYJOS/lKfJYky7M7wwCQV3Q0xB9vOTCLka0gQ/5PP
+ azKwO28nNV4U30dDGc9x8NgydPoGZDwdGXSJE7ISDtl3xNc82Bgv04UZaHIsX56GAgc6
+ TkEw==
+X-Gm-Message-State: AOAM5337tLYPUS0MuVdJ70tHydbEI6adK94DuJw/8uS7gbQg6RN8tu25
+ d05wE144W4Jpavi+BTh0ZpMXEA==
+X-Google-Smtp-Source: ABdhPJyvWzN6+XjNxPRthsmHCIgAhflALyOAXAZfVpVvy8yaX1UCjtC0jrNzmRL07A27UypEUwB8gg==
+X-Received: by 2002:a17:907:94c9:b0:6e8:ab67:829e with SMTP id
+ dn9-20020a17090794c900b006e8ab67829emr12455832ejc.313.1651528388291; 
+ Mon, 02 May 2022 14:53:08 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- t19-20020aa7d4d3000000b0042617ba63c2sm7144319edr.76.2022.05.02.14.52.53
+ d11-20020a056402078b00b0042617ba63c0sm7117908edy.74.2022.05.02.14.53.07
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 02 May 2022 14:52:53 -0700 (PDT)
-Message-ID: <6d240506-25df-6db2-f62b-f2c04360b968@mind.be>
-Date: Mon, 2 May 2022 23:52:53 +0200
+ Mon, 02 May 2022 14:53:07 -0700 (PDT)
+Message-ID: <c2d6ef95-5bb3-d23d-dc5e-3fd0ce6531b0@mind.be>
+Date: Mon, 2 May 2022 23:53:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20220501000750.1569310-1-giulio.benetti@benettiengineering.com>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20220501073844.317391-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220501000750.1569310-1-giulio.benetti@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH] package/libnss: bump to version 3.78
+In-Reply-To: <20220501073844.317391-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: fix ext2 config
+ variable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +95,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,45 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 01/05/2022 02:07, Giulio Benetti wrote:
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+On 01/05/2022 09:38, James Hilliard wrote:
+> This should have been BR2_TARGET_ROOTFS_EXT2 as the
+> BR2_TARGET_ROOTFS_EXT2_GEN variable is an integer variable used
+> to indicate the ext2/ext3/ext4 variant.
+> 
+> Fixes:
+>   - http://autobuild.buildroot.net/results/5d7/5d7833212bd8a2b575945f848d8c91dabe7d3c30
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
-
-  This isn't a security bump?
 
   Regards,
   Arnout
 
 > ---
->   package/libnss/libnss.hash | 4 ++--
->   package/libnss/libnss.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+>   utils/genrandconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-> index 04e81e6b84..0c06495f5e 100644
-> --- a/package/libnss/libnss.hash
-> +++ b/package/libnss/libnss.hash
-> @@ -1,4 +1,4 @@
-> -# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_77_RTM/src/SHA256SUMS
-> -sha256  825edf5a2fd35b788a23ff80face591f82919ae3ad2b8f77d424a450d618dedd  nss-3.77.tar.gz
-> +# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_78_RTM/src/SHA256SUMS
-> +sha256  f455f341e787c1167328e80a84f77b9a557d595066dda6486a1874d72da68800  nss-3.78.tar.gz
->   # Locally calculated
->   sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-> index 7568ec67ed..540092dfcf 100644
-> --- a/package/libnss/libnss.mk
-> +++ b/package/libnss/libnss.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+> diff --git a/utils/genrandconfig b/utils/genrandconfig
+> index ab1f6f43b1..70af84f002 100755
+> --- a/utils/genrandconfig
+> +++ b/utils/genrandconfig
+> @@ -443,7 +443,7 @@ def fixup_config(sysinfo, configfile):
+>           configlines.remove('BR2_TARGET_OPTEE_OS=y\n')
+>           configlines.remove('BR2_TARGET_OPTEE_OS_PLATFORM=""\n')
 >   
-> -LIBNSS_VERSION = 3.77
-> +LIBNSS_VERSION = 3.78
->   LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
->   LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
->   LIBNSS_DISTDIR = dist
+> -    if 'BR2_TARGET_ROOTFS_EXT2_GEN=y\n' in configlines and \
+> +    if 'BR2_TARGET_ROOTFS_EXT2=y\n' in configlines and \
+>          'BR2_TARGET_ROOTFS_EXT2_SIZE="60M"\n' in configlines:
+>           configlines.remove('BR2_TARGET_ROOTFS_EXT2_SIZE="60M"\n')
+>           configlines.append('BR2_TARGET_ROOTFS_EXT2_SIZE="%s"\n' % ROOTFS_SIZE)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
