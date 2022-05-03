@@ -1,90 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBB7AC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 20:28:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05AA5C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 20:28:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CC01416B5;
-	Tue,  3 May 2022 20:28:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B093340B47;
+	Tue,  3 May 2022 20:28:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gWJhhBhxlfqV; Tue,  3 May 2022 20:28:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KrDvtp3WLt0V; Tue,  3 May 2022 20:28:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37B75417AE;
-	Tue,  3 May 2022 20:28:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C84ED40B37;
+	Tue,  3 May 2022 20:28:29 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3CB5A1BF2C1
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 20:27:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6F5DD1BF2C1
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 20:28:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B36460F2E
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 20:27:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C46A60F2D
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 20:28:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K5NfWrjq8M4K for <buildroot@lists.busybox.net>;
- Tue,  3 May 2022 20:27:51 +0000 (UTC)
+ with ESMTP id JulyBCdb-kt6 for <buildroot@lists.busybox.net>;
+ Tue,  3 May 2022 20:28:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E42AD60F2D
- for <buildroot@buildroot.org>; Tue,  3 May 2022 20:27:50 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id i19so35496791eja.11
- for <buildroot@buildroot.org>; Tue, 03 May 2022 13:27:50 -0700 (PDT)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 96AFE60F2E
+ for <buildroot@buildroot.org>; Tue,  3 May 2022 20:28:05 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id k27so21127574edk.4
+ for <buildroot@buildroot.org>; Tue, 03 May 2022 13:28:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=/Hym/7p10W91bSoh3a+D21dy2iXq2295Xriu2lkqGGQ=;
- b=Hb4PYXzumPlojsLNsj+An0fjea36dB2T/f6WnqYlSdsTYWqKEMJqRnDMsnO1/YA2PE
- I9NdMV9E558gwtmZoJi0cX1nCfWD+bf5tvHz2KSRXA8O3M7587STtOtNNGn/hNmcZVug
- QhvnqiXi1R0+7em3J4TrFLbkAVU1bSzvUu6CO+N9NJysZ7KyxfRfynA7ZbLkEwXpBTYr
- wlQ7IUtpmaZnEPyda4hVlCcfJi7uKERwiqx86dsV/NS/Ctja0YpKlp9mO/2Ey/1msybN
- 9e/7lzKqwgjAvFGVYas59PmlfPRteVcFHiKb+xp43Y5FdIt0Vk5APxRUkasMcZvSRb7W
- cajA==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=37sgllwRM5MUOC/AQcRw3xN+1GW5F+WMHpLnQ9DsdYk=;
+ b=V1LZqJywkHdnaKGdkfotvg01Tn10TvmrbHplVgwIMMErk6Gs8U2IUgfIapXkc7lQsI
+ JsXqcuMesZORkRf2WfwDe2rxOhYuRyGRPSTEr6mFugeV89VUgBl7v+H48ueY1AwZtXvb
+ sKqtOnhKS08DDS8nTdp5jKF13btd6SJp6NmVGhDRbGNv9yPI7Ep6CW1UlF3d0+0n7tn0
+ hT8lBiT4myMnH6sweKHlgAuvTK0KbWmmTxURowbTnf4HfDmJXPSe9LFKJ0E0TP9+abv6
+ ge8KWvE9LVMGpwygySXT4T+lLK1+TNSTu5SnZa2o+siIZ2qbOTa5Bvb/LtijloFqKzT/
+ SWBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=/Hym/7p10W91bSoh3a+D21dy2iXq2295Xriu2lkqGGQ=;
- b=Wqvjo76pfxbjkdRpQekBI73yuZ68ucV7I4h1Y9hk20cnLtO7DYgMwf2exCKUBqpaJb
- R6piXKyOoXGSBqX6HOJfoLp07OGaPSF9j4vclKoHS5CxQuCzvhbfTfpRZ/Z+dgQjGUEs
- m/K5fcB71K4hjUMxti5V1/zXnKMb3PW9yucO6z5fNQZDwdDTY/tiuDXxiYJAh8+dxf4I
- 1VY2WznrJLUqlZ0V99IKP2ZHO5WnjEOINX2AuaWiNayQiAmmc/pcSEF/mXEmL63GnXI+
- f9fxWXmSR1Q34sInLP0Rj/rl7GNet94ZFqwXtluMr8mDK2qiwBxHDwRvaNTsMps+wqVW
- 0vRQ==
-X-Gm-Message-State: AOAM531xHZEPrHL38IO1po3f4sjSQYsbrZKFvoWGdAirmmxy+EidYMhR
- pRI34kVLVkMAZIm4Pzi7COHm9Q==
-X-Google-Smtp-Source: ABdhPJwKxzl1lR1iqpifjG0XtFmaqYrhXUmXd2NSFK6k0F+djGpmngtFwM2CBGZLN8tvZRG8IyQJqA==
-X-Received: by 2002:a17:906:c10d:b0:6f4:a770:846e with SMTP id
- do13-20020a170906c10d00b006f4a770846emr2533597ejc.497.1651609669145; 
- Tue, 03 May 2022 13:27:49 -0700 (PDT)
+ bh=37sgllwRM5MUOC/AQcRw3xN+1GW5F+WMHpLnQ9DsdYk=;
+ b=kudIg3LapogB6VQ5no0BRVqYx5LZS+6xME7AdibUq86ahyIq5PCq4bBJJPDK9HxoKY
+ U3DhPfCf2AjTU81leLVubyLVTwB9Z0GDJxOrkdUlUTG2xyb428MXL6jN/+O8FygYGiwp
+ aq5JoTdN0XesHhpETbicMXGqn+73t/rDCbMYbNbjVZdhUOx+KoTPVpwdUqXbest4UkCC
+ mJR1vHQYH0ksYG8LASItRwy50xf64AwwtZEddFLc7ofS74lZupAEZymTttq6F/Qg4zA8
+ DUUoRoSZILy+5slBWVq9QGdeivLNTPaCLjOb0JxsHgxWEl1z9akyW6FUqh5cSq7zjJed
+ FfcA==
+X-Gm-Message-State: AOAM533kry6nQ83vf56/tKYQ9u38W96VOKS7GmLXmkBhi1OMEyoDOIkS
+ iOSXKC1yZOQMl2G/8uwzTAV/2Q==
+X-Google-Smtp-Source: ABdhPJynwc6dQ3uezMYlY1E1j2FxZMfjFe60apZmIvT4lsL5i/TM2Gru+8wgDG37+zgLUwNjomJ1TQ==
+X-Received: by 2002:a05:6402:26d3:b0:427:c571:86fe with SMTP id
+ x19-20020a05640226d300b00427c57186femr12186788edd.133.1651609683709; 
+ Tue, 03 May 2022 13:28:03 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- gv3-20020a1709072bc300b006f3ef214db7sm5012149ejc.29.2022.05.03.13.27.45
+ rb48-20020a170907693000b006f3ef214e11sm5017992ejc.119.2022.05.03.13.28.03
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 03 May 2022 13:27:48 -0700 (PDT)
-Message-ID: <5c3f29d1-d0e6-6772-b263-0d51d1ffd679@mind.be>
-Date: Tue, 3 May 2022 22:27:44 +0200
+ Tue, 03 May 2022 13:28:03 -0700 (PDT)
+Message-ID: <8fcec20b-cc98-91c8-5031-db37c03dd19d@mind.be>
+Date: Tue, 3 May 2022 22:28:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220503011754.2730166-1-james.hilliard1@gmail.com>
+References: <20220503015039.3354269-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220503011754.2730166-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/luajit: depend on
- !BR2_PACKAGE_LUA
+In-Reply-To: <20220503015039.3354269-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: only fixup host
+ uboot tools source when empty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +95,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,12 +102,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 03/05/2022 03:17, James Hilliard wrote:
-> We can't enable lua and luajit at the same time as they both provide
-> the virtual luainterpreter package.
-> 
-> Fixes:
-> package/luajit/luajit.mk:80: *** Configuration error: both "luajit" and "lua" are selected as providers for virtual package "luainterpreter". Only one provider can be selected at a time. Please fix your configuration.  Stop.
+On 03/05/2022 03:50, James Hilliard wrote:
+> If the kconfig values being replaced are not empty we should not
+> try to fix them.
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
@@ -119,42 +114,34 @@ On 03/05/2022 03:17, James Hilliard wrote:
   Arnout
 
 > ---
->   package/luajit/Config.in | 2 ++
->   package/snort3/Config.in | 2 ++
->   2 files changed, 4 insertions(+)
+>   utils/genrandconfig | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-> index 3111a2548f..f27099e80c 100644
-> --- a/package/luajit/Config.in
-> +++ b/package/luajit/Config.in
-> @@ -14,6 +14,8 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->   config BR2_PACKAGE_LUAJIT
->   	bool "luajit"
->   	depends on !BR2_STATIC_LIBS # dlopen
-> +	# Luajit conflicts with the regular lua package
-> +	depends on !BR2_PACKAGE_LUA
->   	# Luajit is only available for some target architectures, and
->   	# has some complexity wrt 32/64. See luajit.mk for details.
->   	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-> diff --git a/package/snort3/Config.in b/package/snort3/Config.in
-> index dcc29b820a..9b96e7cb58 100644
-> --- a/package/snort3/Config.in
-> +++ b/package/snort3/Config.in
-> @@ -1,5 +1,6 @@
->   config BR2_PACKAGE_SNORT3
->   	bool "snort3"
-> +	depends on !BR2_PACKAGE_LUA # luajit
->   	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
->   	depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
->   	depends on BR2_USE_MMU # fork()
-> @@ -34,6 +35,7 @@ config BR2_PACKAGE_SNORT3
->   	  https://www.snort.org/snort3
+> diff --git a/utils/genrandconfig b/utils/genrandconfig
+> index 70af84f002..cdd781c6c2 100755
+> --- a/utils/genrandconfig
+> +++ b/utils/genrandconfig
+> @@ -298,7 +298,9 @@ def fixup_config(sysinfo, configfile):
+>          'BR2_PACKAGE_FLANN=y\n' in configlines:
+>           return False
 >   
->   comment "snort3 needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 4.9"
-> +	depends on !BR2_PACKAGE_LUA
->   	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->   	depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
->   	depends on BR2_USE_MMU
+> -    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines:
+> +    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines and \
+> +       'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE=""\n' in configlines and \
+> +       'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE=""\n' in configlines:
+>           bootenv = os.path.join(args.outputdir, "boot_env.txt")
+>           with open(bootenv, "w+") as bootenvf:
+>               bootenvf.write("prop=value")
+> @@ -307,7 +309,8 @@ def fixup_config(sysinfo, configfile):
+>           configlines.remove('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE=""\n')
+>           configlines.append('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE="0x1000"\n')
+>   
+> -    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y\n' in configlines:
+> +    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y\n' in configlines and \
+> +       'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE=""\n' in configlines:
+>           bootscr = os.path.join(args.outputdir, "boot_script.txt")
+>           with open(bootscr, "w+") as bootscrf:
+>               bootscrf.write("prop=value")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
