@@ -1,59 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADCADC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 19:00:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B587C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 19:14:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2908160BA1;
-	Tue,  3 May 2022 19:00:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D75BF40256;
+	Tue,  3 May 2022 19:14:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rxKQALag1Dsb; Tue,  3 May 2022 19:00:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id klgbMmY-SNhs; Tue,  3 May 2022 19:14:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32A8B60B09;
-	Tue,  3 May 2022 19:00:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1207B1BF3E8
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 19:00:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3132401C5;
+	Tue,  3 May 2022 19:14:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B3F4E1BF33A
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 19:14:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 00B954094C
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 19:00:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2F6682F77
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 19:14:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id crfC0mNUXw50 for <buildroot@lists.busybox.net>;
- Tue,  3 May 2022 19:00:12 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 57D40410CB
- for <buildroot@buildroot.org>; Tue,  3 May 2022 19:00:12 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.166.222.86])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 9B77513F86E;
- Tue,  3 May 2022 21:00:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1651604409;
- bh=OzmA9Eh+N3YhAbeGoUhLLcWjuAkT0QVOxvX49GATGlA=;
- h=From:To:Cc:Subject:Date:From;
- b=WiS8gZwJGaFYNUlUaKy2YuPRNTqyPHWz0gNeyhZI4Ya5oGdotRseTeoN/zfcVMUDn
- StInm3Q3g/TPNDhvK0zN3f9cjcPQKe3nRjIwVkFDVlFglLqvtBg87F10SEBkft07DI
- 10OS8M0tdaKII1NlLt4sjkpXfV0ya/S4wdLUtp6Us7pMnkKO/Z4PFfDy8ytrWM8eHX
- PwW4BVWYLHV+hV/8h7Ju0C+RS5OVmLdTjJBTuAy8u/1kiXn4xLZMPqtBXwTMJCZYBe
- kTK9YMeioNaxzxJb4NiwIFVzoTjPMhkiE7kE9l/B0tjcixdehlaOSeO3dD1ftXFD6O
- FlhMLnqbi55fQ==
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SIlt-36r4hht for <buildroot@lists.busybox.net>;
+ Tue,  3 May 2022 19:14:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F29F382F49
+ for <buildroot@buildroot.org>; Tue,  3 May 2022 19:14:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id B721885089; Tue,  3 May 2022 19:03:50 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue,  3 May 2022 20:59:58 +0200
-Message-Id: <20220503185958.7939-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.36.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/eigen: bump to version 3.4.0
+Date: Tue, 3 May 2022 21:14:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: df0a0ae9d98ed477b7f9b827b3747397d35eda03
+X-Git-Newrev: b5b28c942b367531527cae48ccadf639e33c0e85
+X-Patchwork-Hint: ignore
+Message-Id: <20220503190350.B721885089@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sysdig: fix DRIVER_NAME definition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,83 +52,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Matt Weber <matthew.weber@collins.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since 3.3.7:
-- https://eigen.tuxfamily.org/index.php?title=ChangeLog#Eigen_3.3.8
-- https://eigen.tuxfamily.org/index.php?title=ChangeLog#Eigen_3.3.9
-- https://eigen.tuxfamily.org/index.php?title=ChangeLog#Eigen_3.4.0
+commit: https://git.buildroot.net/buildroot/commit/?id=b5b28c942b367531527cae48ccadf639e33c0e85
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit slightly change the logic defining CMAKE_Fortran_COMPILER in
-CONF_OPTS to set it only if BR2_TOOLCHAIN_HAS_FORTRAN=y. This is because
-eigen cmake file fails if CMAKE_Fortran_COMPILER is set to a
-non-existing fortran compiler.
+When I wrote the previous commit, I was not fully focused and wrote:
+-DDRIVER_NAME=$(FALCOSECURITY_LIBS_DRIVER_NAME.)
+Which leaded to DRIVER_NAME to be empty.
+So, it was not possible to use sysdig due to the following error message:
+error opening device /dev/0. Make sure you have root credentials and that the  module is loaded.
 
-Note: COPYING.BSD hash changed due to the addition of a new-line at the
-end of the file. The content of the file did not changed.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Fixes: ea86757e51cf ("package/sysdig: bump to 0.29.1")
+Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Tested with:
+ package/sysdig/sysdig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    make check-package
-    ...
-    0 warnings generated
-
-    ./utils/test-pkg -a -p eigen
-    ...
-    45 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- package/eigen/eigen.hash | 4 ++--
- package/eigen/eigen.mk   | 9 ++++++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/package/eigen/eigen.hash b/package/eigen/eigen.hash
-index 5ec561ad10..ad7d6da9dc 100644
---- a/package/eigen/eigen.hash
-+++ b/package/eigen/eigen.hash
-@@ -1,6 +1,6 @@
- # Locally computed
--sha256  685adf14bd8e9c015b78097c1dc22f2f01343756f196acdc76a678e1ae352e11  eigen-3.3.7.tar.bz2
--sha256  4f877e5ae4672568ef82cfd0023e2cef4a7cf55d867ab249efc9569a7eb9e5b1  COPYING.BSD
-+sha256  b4c198460eba6f28d34894e3a5710998818515104d6e74e5cc331ce31e46e626  eigen-3.4.0.tar.bz2
-+sha256  51928dce36213c5333ba3172e847d735d4c6e9b7ff2722a326c49067155b82eb  COPYING.BSD
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.GPL
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  f5b330efdad110cdd84d585ec61220b0650461fa599e36b13e1726c9346dcfb9  COPYING.MINPACK
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 98e6c61e38..9df286e11f 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EIGEN_VERSION = 3.3.7
-+EIGEN_VERSION = 3.4.0
- EIGEN_SOURCE = eigen-$(EIGEN_VERSION).tar.bz2
- EIGEN_SITE = $(call gitlab,libeigen,eigen,$(EIGEN_VERSION))
- EIGEN_LICENSE = MPL2, BSD-3-Clause, LGPL-2.1
-@@ -15,7 +15,10 @@ EIGEN_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- # Default Eigen CMake installs .pc file in /usr/share/pkgconfig
- # change it to /usr/lib/pkgconfig, to be consistent with other packages.
--EIGEN_CONF_OPTS = -DPKGCONFIG_INSTALL_DIR=/usr/lib/pkgconfig \
--	-DCMAKE_Fortran_COMPILER=$(TARGET_FC)
-+EIGEN_CONF_OPTS = -DPKGCONFIG_INSTALL_DIR=/usr/lib/pkgconfig
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
-+EIGEN_CONF_OPTS += -DCMAKE_Fortran_COMPILER=$(TARGET_FC)
-+endif
- 
- $(eval $(cmake-package))
--- 
-2.36.0
-
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+index 76cabcaeca..318746d44a 100644
+--- a/package/sysdig/sysdig.mk
++++ b/package/sysdig/sysdig.mk
+@@ -28,7 +28,7 @@ SYSDIG_DEPENDENCIES = \
+ SYSDIG_CONF_OPTS += -DFALCOSECURITY_LIBS_SOURCE_DIR=$(FALCOSECURITY_LIBS_SRCDIR) \
+ 	-DBUILD_DRIVER=OFF \
+ 	-DGRPC_CPP_PLUGIN=$(HOST_DIR)/bin/grpc_cpp_plugin \
+-	-DDRIVER_NAME=$(FALCOSECURITY_LIBS_DRIVER_NAME.) \
++	-DDRIVER_NAME=$(FALCOSECURITY_LIBS_DRIVER_NAME) \
+ 	-DENABLE_DKMS=OFF \
+ 	-DUSE_BUNDLED_DEPS=OFF \
+ 	-DWITH_CHISEL=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
