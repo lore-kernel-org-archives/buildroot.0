@@ -1,79 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1404C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 00:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A862AC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 01:18:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D1E040AAD;
-	Tue,  3 May 2022 00:49:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16A7F416D9;
+	Tue,  3 May 2022 01:18:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Oz1bhDFonT4p; Tue,  3 May 2022 00:49:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LXqd9DzxZc2s; Tue,  3 May 2022 01:18:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5672440AA2;
-	Tue,  3 May 2022 00:49:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 923FB1BF339
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 00:49:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 936D9408BA;
+	Tue,  3 May 2022 01:18:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A4EDA1BF297
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 01:18:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8105A409FC
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 00:49:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1CCE408C7
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 01:18:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N4NLxsvaBlwz for <buildroot@lists.busybox.net>;
- Tue,  3 May 2022 00:49:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0k0XDQtTMedS for <buildroot@lists.busybox.net>;
+ Tue,  3 May 2022 01:17:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C9D754026F
- for <buildroot@buildroot.org>; Tue,  3 May 2022 00:49:45 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id g21so17608201iom.13
- for <buildroot@buildroot.org>; Mon, 02 May 2022 17:49:45 -0700 (PDT)
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
+ [IPv6:2607:f8b0:4864:20::136])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5C2D4408BA
+ for <buildroot@buildroot.org>; Tue,  3 May 2022 01:17:58 +0000 (UTC)
+Received: by mail-il1-x136.google.com with SMTP id b5so8913220ile.0
+ for <buildroot@buildroot.org>; Mon, 02 May 2022 18:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=VuQiHf01YNVfy6t8r8l6/Q65O/9+67gxJDhKd6YiXPg=;
- b=P0g91y1AoNyVCktPDMV25WhV8oKNH6c3sdig4CfAoq//9t1ADpLCR/7BbARlfhqAhh
- Xtw4Ck5inlsI6VZBIm1Crr+Uu7KnbiHeNniqOnSMVgIdrLz5CAFf2PtcyiZbJ648E/zq
- 0Xm1mYG5AWMQDuiBTQJCgcPwnm3ZU4rgroFxUDHxMzafAgKYVNjrskS/MCSu3TQPGEI2
- kSQb9ciWStKGD2ZmLehXGysn3IOPKFKGtkTThDaL8/YjntP3SZmTs2vtqMXnLd+g5jYZ
- IcpZKKGn9ev7lKGUb0b141OJulIapPZRzIwCHCtO4UVrM1kGEeXYvYdJOlqzhHSZJKfw
- 4YeQ==
+ bh=6m6sqo5+qOKFDtlJOHuCZQmmu3fH8WLV+KUoZl6aDmc=;
+ b=a4a0jDfSg/2zdraVwlyp3JA4P9BsGQvbHOHdeleZB4EIssMDtgdClqcpbsdSOu4llS
+ FWfm4o1lBE/VxFW5Al9wePyS8B5QJWM22733xtFxO3jA4L/uXPgyd1UAJsfTFHbxAd1T
+ 7Mn7OcElVymI7F/cLtMen23afNFEWRiPog+529TdI1PWL6AIGlcVDl9qdjFmZE096Ml3
+ TFbQlUqHVTf4n/NWzN9WVfNVYduKxnLNtQIWEyxloj1BSjho3DrL2MPaVnMqK1VaQQz4
+ n6EbZvKFb1vgEo9Rfzhcoi9E9kyAhbhx6z0RSft2xBpCikcpycfvVltxhXeyGNTwCZrF
+ hD3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=VuQiHf01YNVfy6t8r8l6/Q65O/9+67gxJDhKd6YiXPg=;
- b=KEOn/SseBJLdaAoidpYny5QOYDbWJDnwlIdl0Ng7LbduLd3Dd/AvSEg3T5cNZXSztW
- GMN+ALaGMcU2iJfN6NVU1bqoUrGKfNqGLEohpS8s0XVXj+bWZCSLO9jZvMrNqa5uZF+Q
- r6ctcL4Ty2PKgbPD5/tBi2dgv5+Q8p1KNlCyvWzqkXUOjaPs/MdaXsIei/vTtBL+1Ev2
- q/d3tcwSbZMD3u0RbnLT1jFlHPT/fGtglv+UTgSV72cNSevTtIicHzIqzChELjCJuyii
- qjwIbgCt3B6ZDkTRgMFK+WQvrxdxAH7v+GbolE4q8R4CwiI1vJpGxENjB+gIUUv9KkHn
- QjPw==
-X-Gm-Message-State: AOAM532JsXRe+gxPOIekSP5WwWl+KKj7mgmddClMx0/6aTtGlr4OLCgv
- pLtXL2xeRSM+LmE0ihUim8X3O5wPlpQ=
-X-Google-Smtp-Source: ABdhPJx+gEEOUMTnx2msJqY1rpV97kskz+GIrKNUYkgwoJwafv6YqB9C/lcNeJfDY5ros3iUWeYbxA==
-X-Received: by 2002:a05:6602:2e8d:b0:64f:b683:c70d with SMTP id
- m13-20020a0566022e8d00b0064fb683c70dmr5304748iow.62.1651538984694; 
- Mon, 02 May 2022 17:49:44 -0700 (PDT)
+ bh=6m6sqo5+qOKFDtlJOHuCZQmmu3fH8WLV+KUoZl6aDmc=;
+ b=ccL7vsmjhIbMG9WeteNEnYD5+gqTwcOEtdI9kp7Tpz9ta6dnEgwuWTdvI6NLIZqp40
+ sWzw9mUFU5VaB7l5JzZslcwTScknhCAK/1USl1ulKqi4KoWSKfVfTwQOi0oxUxSbqK6n
+ TdMbgpk3++Pc4gRnQtPiS/cEdhBykZLaGymvAz95XxBKFrz63nXRBks5DeKIfvWRxf/+
+ HEGLoPNtA5Db7zgCINnfbr7GoyBtQl+j+PvfgacGyh97ODX8NGL8Rn1vLhBt2rgdnc7Q
+ +sdWRCnCpliiMYqnEWLVFwgfU+J/m4E/wB64swEsGCuL45AEF+Ly6Kieriu+ibypWS0P
+ s7ig==
+X-Gm-Message-State: AOAM530qr4sJoqRhCjb3LdLo2N1UNnKgA3BL2b9lkPXGxgRqBgc+Kydr
+ V2kOozi9EywPlRBwdA/tnriyutC7Xts=
+X-Google-Smtp-Source: ABdhPJygD88GiDwIT31nxUuu5SbM3NMvQmB99a1ErcwCRFLwnSLZlJsvgC+W1Cpi00mbEAYae3oDJA==
+X-Received: by 2002:a92:6e0b:0:b0:2c9:a276:58cc with SMTP id
+ j11-20020a926e0b000000b002c9a27658ccmr5752491ilc.199.1651540677196; 
+ Mon, 02 May 2022 18:17:57 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
  [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- r2-20020a92c502000000b002cde6e352e2sm3088855ilg.44.2022.05.02.17.49.44
+ 18-20020a056e0211b200b002cde6e352d3sm3053303ilj.29.2022.05.02.18.17.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 May 2022 17:49:44 -0700 (PDT)
+ Mon, 02 May 2022 18:17:56 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  2 May 2022 18:49:43 -0600
-Message-Id: <20220503004943.3170832-1-james.hilliard1@gmail.com>
+Date: Mon,  2 May 2022 19:17:54 -0600
+Message-Id: <20220503011754.2730166-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: use high quality
- random for KCONFIG_SEED
+Subject: [Buildroot] [PATCH 1/1] package/luajit: depend on !BR2_PACKAGE_LUA
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,55 +84,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Internally genrandconfig will use gettimeofday when generating a
-KCONFIG_SEED, since autobuild-run executes genrandconfig at the same
-time for multiple autobuilder runners this could potentially result
-in the same KCONFIG_SEED being generated for those test runs started
-at the same time.
+We can't enable lua and luajit at the same time as they both provide
+the virtual luainterpreter package.
 
-To ensure this doesn't happen set the KCONFIG_SEED using the urandom
-entropy source.
+Fixes:
+package/luajit/luajit.mk:80: *** Configuration error: both "luajit" and "lua" are selected as providers for virtual package "luainterpreter". Only one provider can be selected at a time. Please fix your configuration.  Stop.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- utils/genrandconfig | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/luajit/Config.in | 2 ++
+ package/snort3/Config.in | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 70af84f002..8ed2783a6d 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -18,6 +18,7 @@
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index 3111a2548f..f27099e80c 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -14,6 +14,8 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ config BR2_PACKAGE_LUAJIT
+ 	bool "luajit"
+ 	depends on !BR2_STATIC_LIBS # dlopen
++	# Luajit conflicts with the regular lua package
++	depends on !BR2_PACKAGE_LUA
+ 	# Luajit is only available for some target architectures, and
+ 	# has some complexity wrt 32/64. See luajit.mk for details.
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+diff --git a/package/snort3/Config.in b/package/snort3/Config.in
+index dcc29b820a..9b96e7cb58 100644
+--- a/package/snort3/Config.in
++++ b/package/snort3/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SNORT3
+ 	bool "snort3"
++	depends on !BR2_PACKAGE_LUA # luajit
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
+ 	depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
+ 	depends on BR2_USE_MMU # fork()
+@@ -34,6 +35,7 @@ config BR2_PACKAGE_SNORT3
+ 	  https://www.snort.org/snort3
  
- # This script generates a random configuration for testing Buildroot.
- 
-+from binascii import hexlify
- import contextlib
- import csv
- import os
-@@ -605,9 +606,13 @@ def gen_config(args):
-                   file=sys.stderr)
-             return 1
-         bounded_loop -= 1
--        subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
--                               "KCONFIG_PROBABILITY=%d" % randint(1, 20),
--                               "randpackageconfig" if args.toolchains_csv else "randconfig"])
-+        make_rand = [
-+            "make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-+            "KCONFIG_SEED=0x%s" % hexlify(os.urandom(4)).decode("ascii").upper(),
-+            "KCONFIG_PROBABILITY=%d" % randint(1, 20),
-+            "randpackageconfig" if args.toolchains_csv else "randconfig"
-+        ]
-+        subprocess.check_call(make_rand)
- 
-         if fixup_config(sysinfo, configfile):
-             break
+ comment "snort3 needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 4.9"
++	depends on !BR2_PACKAGE_LUA
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
+ 	depends on BR2_USE_MMU
 -- 
 2.25.1
 
