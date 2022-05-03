@@ -4,52 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BAFBC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 14:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 738DFC433FE
+	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 14:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3EDD40ADE;
-	Tue,  3 May 2022 14:27:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ABEF540AD6;
+	Tue,  3 May 2022 14:27:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c4byL75cRA8x; Tue,  3 May 2022 14:27:18 +0000 (UTC)
+	with ESMTP id xXMkPMFRPEyl; Tue,  3 May 2022 14:27:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E185340AD6;
-	Tue,  3 May 2022 14:27:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3370F1BF41A
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 14:27:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9599E40AF9;
+	Tue,  3 May 2022 14:27:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E6511BF41A
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 14:27:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 218FF40AD6
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 14:27:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C6F081495
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 14:27:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xeHfGOJfBu3i for <buildroot@lists.busybox.net>;
- Tue,  3 May 2022 14:27:14 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=linux.microsoft.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EuvEtWZ3n2Fr for <buildroot@lists.busybox.net>;
+ Tue,  3 May 2022 14:27:15 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4DDAB401C5
- for <buildroot@buildroot.org>; Tue,  3 May 2022 14:27:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BB59D81427
+ for <buildroot@buildroot.org>; Tue,  3 May 2022 14:27:15 +0000 (UTC)
 Received: from pwmachine.home (154.pool92-186-13.dynamic.orange.es
  [92.186.13.154])
- by linux.microsoft.com (Postfix) with ESMTPSA id 9808920EB0C5;
- Tue,  3 May 2022 07:27:11 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9808920EB0C5
+ by linux.microsoft.com (Postfix) with ESMTPSA id D307E20EAB9D;
+ Tue,  3 May 2022 07:27:13 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D307E20EAB9D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
- s=default; t=1651588033;
- bh=fOG1Ona9lVx83TH2Wfr+z6znLHdTP7uj4ulYH2SdBA8=;
- h=From:To:Cc:Subject:Date:From;
- b=Px3JcQtn+C4ST3XI4so13yvObFnOGqq+l9bh2i+oFYvXsaZV5V0iXsNV6FafspCjt
- kx/R6PwSbkcuuVlrNl6R4RPOwGGLEhhte9kyojugo653US1sI4jEnEtpjht/3y4bBR
- NqLgUYRcytAL2Yec1trgSL1pDBjpbJ8gePTjB4W4=
+ s=default; t=1651588035;
+ bh=YYr86OlBigIChRmJ0zB9IOUFHNus3lfmeuQ1paY71rM=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=AxT/8xJLKhmuFiVkO5kdTPFw9sgZ1EcAn7BYpkba6+UKkWo2Bla/4M42pX+4rcU2B
+ QHZv5OUHp8+HZU9Tg02CjpaJzl8df92EmvHm4NtBIHYx7PDOAb5QCD0ck3J3YcSE4s
+ 3XpEk0lUkIJMoQuakpeOtHCInhuKmGZBveurUzCE=
 From: Francis Laniel <flaniel@linux.microsoft.com>
 To: buildroot@buildroot.org
-Date: Tue,  3 May 2022 15:26:59 +0100
-Message-Id: <20220503142701.14397-1-flaniel@linux.microsoft.com>
+Date: Tue,  3 May 2022 15:27:00 +0100
+Message-Id: <20220503142701.14397-2-flaniel@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220503142701.14397-1-flaniel@linux.microsoft.com>
+References: <20220503142701.14397-1-flaniel@linux.microsoft.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 0/2] Bump sysdig to 0.29.2
+Subject: [Buildroot] [PATCH 1/2] package/sysdig: fix DRIVER_NAME definition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,49 +72,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi.
+When I wrote the previous commit, I was not fully focused and wrote:
+-DDRIVER_NAME=$(FALCOSECURITY_LIBS_DRIVER_NAME.)
+Which leaded to DRIVER_NAME to be empty.
+So, it was not possible to use sysdig due to the following error message:
+error opening device /dev/0. Make sure you have root credentials and that the  module is loaded.
 
-
-In my last contribution, I wrote a mistake in sysdig.mk which leaded DRIVER_NAME
-to be empty [1]...
-(The machine where I built is not the same than the one where I wrote and send
-the patch...)
-So, in this series, I fixed my previous error and bumped sysdig to its latest
-version.
-
-I was, of course, able to build and run sysdig within a VM based on
-qemu_x86_64_defconfig:
-Welcome to Buildroot
-buildroot login: root
-# sysdig --version
-sysdig version 0.29.2
-# sysdig | head
-scap: loading out-of-tree module taints kernel.
-scap: driver loading, scap
-scap: adding new consumer (____ptrval____)
-scap: initializing ring buffer for CPU 0
-scap: CPU buffer initialized, size=8388608
-scap: starting capture
-4 14:21:45.440896991 0 <NA> (114) > switch next=10 pgft_maj=7 pgft_min=1300 vm_size=45464 vm_rss=18460 vm_swap=0
-...
-91 14:21:45.449639600 0 <NA> (0) > switch next=114(<NA>) pgft_maj=0 pgft_min=0 vm_size=0 vm_rss=0 vm_swap=0
-scap: deallocating consumer (____ptrval____)
-scap: no more consumers, stopping capture
-
-If you see any way to improve this contribution, feel free to share it!
-
-Francis Laniel (2):
-  package/sysdig: fix DRIVER_NAME definition
-  package/sysdig: bump to version 0.29.2
-
- package/sysdig/sysdig.hash | 2 +-
- package/sysdig/sysdig.mk   | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-
-Best regards and thank you in advance.
+Fixes: ea86757e51cf ("package/sysdig: bump to 0.29.1")
+Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 ---
-[1] https://git.buildroot.net/buildroot/commit/?id=ea86757e51cf424566f79896335d31d15b89d0d9
+ package/sysdig/sysdig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+index 76cabcaeca..318746d44a 100644
+--- a/package/sysdig/sysdig.mk
++++ b/package/sysdig/sysdig.mk
+@@ -28,7 +28,7 @@ SYSDIG_DEPENDENCIES = \
+ SYSDIG_CONF_OPTS += -DFALCOSECURITY_LIBS_SOURCE_DIR=$(FALCOSECURITY_LIBS_SRCDIR) \
+ 	-DBUILD_DRIVER=OFF \
+ 	-DGRPC_CPP_PLUGIN=$(HOST_DIR)/bin/grpc_cpp_plugin \
+-	-DDRIVER_NAME=$(FALCOSECURITY_LIBS_DRIVER_NAME.) \
++	-DDRIVER_NAME=$(FALCOSECURITY_LIBS_DRIVER_NAME) \
+ 	-DENABLE_DKMS=OFF \
+ 	-DUSE_BUNDLED_DEPS=OFF \
+ 	-DWITH_CHISEL=ON \
 -- 
 2.25.1
 
