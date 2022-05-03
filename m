@@ -1,78 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A862AC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 01:18:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC50AC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 01:50:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16A7F416D9;
-	Tue,  3 May 2022 01:18:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3DAE560FC6;
+	Tue,  3 May 2022 01:50:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LXqd9DzxZc2s; Tue,  3 May 2022 01:18:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wpYXBzw49lQw; Tue,  3 May 2022 01:50:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 936D9408BA;
-	Tue,  3 May 2022 01:18:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22F0860FC9;
+	Tue,  3 May 2022 01:50:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A4EDA1BF297
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 01:18:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6A8EF1BF297
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 01:50:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1CCE408C7
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 01:18:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58BA7415C5
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 01:50:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0k0XDQtTMedS for <buildroot@lists.busybox.net>;
- Tue,  3 May 2022 01:17:58 +0000 (UTC)
+ with ESMTP id VZ9QDftlI8-9 for <buildroot@lists.busybox.net>;
+ Tue,  3 May 2022 01:50:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
- [IPv6:2607:f8b0:4864:20::136])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5C2D4408BA
- for <buildroot@buildroot.org>; Tue,  3 May 2022 01:17:58 +0000 (UTC)
-Received: by mail-il1-x136.google.com with SMTP id b5so8913220ile.0
- for <buildroot@buildroot.org>; Mon, 02 May 2022 18:17:58 -0700 (PDT)
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4BD094154F
+ for <buildroot@buildroot.org>; Tue,  3 May 2022 01:50:43 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id r27so12830145iot.1
+ for <buildroot@buildroot.org>; Mon, 02 May 2022 18:50:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=6m6sqo5+qOKFDtlJOHuCZQmmu3fH8WLV+KUoZl6aDmc=;
- b=a4a0jDfSg/2zdraVwlyp3JA4P9BsGQvbHOHdeleZB4EIssMDtgdClqcpbsdSOu4llS
- FWfm4o1lBE/VxFW5Al9wePyS8B5QJWM22733xtFxO3jA4L/uXPgyd1UAJsfTFHbxAd1T
- 7Mn7OcElVymI7F/cLtMen23afNFEWRiPog+529TdI1PWL6AIGlcVDl9qdjFmZE096Ml3
- TFbQlUqHVTf4n/NWzN9WVfNVYduKxnLNtQIWEyxloj1BSjho3DrL2MPaVnMqK1VaQQz4
- n6EbZvKFb1vgEo9Rfzhcoi9E9kyAhbhx6z0RSft2xBpCikcpycfvVltxhXeyGNTwCZrF
- hD3A==
+ bh=qun7STNXO5kXs8jwWLHZ1bJXg3o4f4ZSq29hKmZq9Oo=;
+ b=Mw9+k5luBVcRfOaaEc/kr5M9Ni4540FHCmJzfbEQltw3/f6z+7XXgIvKZ8xiYb9DOC
+ 4E92T4K4kC+8ufWGoGtArYAdDvdh2G/GWr6Tedo6QaURUk7lfDA4km4DeOdGyhLt7+IQ
+ uPsYJbMS9t6Zu6GwTeyv0GwGcR9MzqNKY0i3tzQFeDp7dEWJPxX7NfSTY2NtlLfbQCUD
+ Ne3MJcVRnxXTI7xfXklIxEssrffouMQ/wYCq+UXuDXjar6V57/0xYdBxz2KdIdWkhSFj
+ lcjioL3Qq5AR4a+dQpNtzJ0d2+AvML3OAWBug87EKdvxoeHBOucK3wdkDEd2TAG1w7kc
+ QBtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=6m6sqo5+qOKFDtlJOHuCZQmmu3fH8WLV+KUoZl6aDmc=;
- b=ccL7vsmjhIbMG9WeteNEnYD5+gqTwcOEtdI9kp7Tpz9ta6dnEgwuWTdvI6NLIZqp40
- sWzw9mUFU5VaB7l5JzZslcwTScknhCAK/1USl1ulKqi4KoWSKfVfTwQOi0oxUxSbqK6n
- TdMbgpk3++Pc4gRnQtPiS/cEdhBykZLaGymvAz95XxBKFrz63nXRBks5DeKIfvWRxf/+
- HEGLoPNtA5Db7zgCINnfbr7GoyBtQl+j+PvfgacGyh97ODX8NGL8Rn1vLhBt2rgdnc7Q
- +sdWRCnCpliiMYqnEWLVFwgfU+J/m4E/wB64swEsGCuL45AEF+Ly6Kieriu+ibypWS0P
- s7ig==
-X-Gm-Message-State: AOAM530qr4sJoqRhCjb3LdLo2N1UNnKgA3BL2b9lkPXGxgRqBgc+Kydr
- V2kOozi9EywPlRBwdA/tnriyutC7Xts=
-X-Google-Smtp-Source: ABdhPJygD88GiDwIT31nxUuu5SbM3NMvQmB99a1ErcwCRFLwnSLZlJsvgC+W1Cpi00mbEAYae3oDJA==
-X-Received: by 2002:a92:6e0b:0:b0:2c9:a276:58cc with SMTP id
- j11-20020a926e0b000000b002c9a27658ccmr5752491ilc.199.1651540677196; 
- Mon, 02 May 2022 18:17:57 -0700 (PDT)
+ bh=qun7STNXO5kXs8jwWLHZ1bJXg3o4f4ZSq29hKmZq9Oo=;
+ b=cVT+XwIkVUIINtoV1wbVOm7IonCr+FFooj08BhxOrDNEh91vIhryFBHWPORl8YSO3/
+ HYn5ijZ9Mjmm02vPGSPJY7eVBc8DYhMUFPUaWlP0RXVUIMG3e8UIaaF1p4EpURb/vEsN
+ eykyWvxirWrDLkUMqz62kbxg3Qez638VP2KuZexj1vOL4Uh5iCER/70ygOfs/uHit58/
+ oHblZpsiN5IU317HoEL3hALNyzi0Sa37fnWC91mz87LCo11GdGPor9YoOMhw6M2y1xlW
+ KJwl088V7rWL+Jcpm3OFd8uqIvi0KihiISXWUJgefqq3QtC0WliPvEFW2naPz3NUoiru
+ Eg7g==
+X-Gm-Message-State: AOAM532lXHlyu2C3kHyTeSXKCih6IkmFB5DANJBjV4Sc379giQFK+bea
+ UPX8rZOZ/WA5J/bMVqFewbWSLC+oPTY=
+X-Google-Smtp-Source: ABdhPJxKGk+bDvomcxiAn0NVdmaakk8rY8HAK8ikPHTWQfkO+AwuMkgnBYcgti0aaMwsRKMGjfgUPw==
+X-Received: by 2002:a05:6638:19c4:b0:32b:6436:f1c9 with SMTP id
+ bi4-20020a05663819c400b0032b6436f1c9mr3417626jab.303.1651542642160; 
+ Mon, 02 May 2022 18:50:42 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
  [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- 18-20020a056e0211b200b002cde6e352d3sm3053303ilj.29.2022.05.02.18.17.56
+ u127-20020a022385000000b0032b3a7817c0sm3524670jau.132.2022.05.02.18.50.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 May 2022 18:17:56 -0700 (PDT)
+ Mon, 02 May 2022 18:50:41 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  2 May 2022 19:17:54 -0600
-Message-Id: <20220503011754.2730166-1-james.hilliard1@gmail.com>
+Date: Mon,  2 May 2022 19:50:39 -0600
+Message-Id: <20220503015039.3354269-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/luajit: depend on !BR2_PACKAGE_LUA
+Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: only fixup host uboot
+ tools source when empty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,57 +87,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We can't enable lua and luajit at the same time as they both provide
-the virtual luainterpreter package.
-
-Fixes:
-package/luajit/luajit.mk:80: *** Configuration error: both "luajit" and "lua" are selected as providers for virtual package "luainterpreter". Only one provider can be selected at a time. Please fix your configuration.  Stop.
+If the kconfig values being replaced are not empty we should not
+try to fix them.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/luajit/Config.in | 2 ++
- package/snort3/Config.in | 2 ++
- 2 files changed, 4 insertions(+)
+ utils/genrandconfig | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index 3111a2548f..f27099e80c 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -14,6 +14,8 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- config BR2_PACKAGE_LUAJIT
- 	bool "luajit"
- 	depends on !BR2_STATIC_LIBS # dlopen
-+	# Luajit conflicts with the regular lua package
-+	depends on !BR2_PACKAGE_LUA
- 	# Luajit is only available for some target architectures, and
- 	# has some complexity wrt 32/64. See luajit.mk for details.
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-diff --git a/package/snort3/Config.in b/package/snort3/Config.in
-index dcc29b820a..9b96e7cb58 100644
---- a/package/snort3/Config.in
-+++ b/package/snort3/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SNORT3
- 	bool "snort3"
-+	depends on !BR2_PACKAGE_LUA # luajit
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
- 	depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
- 	depends on BR2_USE_MMU # fork()
-@@ -34,6 +35,7 @@ config BR2_PACKAGE_SNORT3
- 	  https://www.snort.org/snort3
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 70af84f002..cdd781c6c2 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -298,7 +298,9 @@ def fixup_config(sysinfo, configfile):
+        'BR2_PACKAGE_FLANN=y\n' in configlines:
+         return False
  
- comment "snort3 needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 4.9"
-+	depends on !BR2_PACKAGE_LUA
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 	depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
- 	depends on BR2_USE_MMU
+-    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines:
++    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines and \
++       'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE=""\n' in configlines and \
++       'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE=""\n' in configlines:
+         bootenv = os.path.join(args.outputdir, "boot_env.txt")
+         with open(bootenv, "w+") as bootenvf:
+             bootenvf.write("prop=value")
+@@ -307,7 +309,8 @@ def fixup_config(sysinfo, configfile):
+         configlines.remove('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE=""\n')
+         configlines.append('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE="0x1000"\n')
+ 
+-    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y\n' in configlines:
++    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y\n' in configlines and \
++       'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE=""\n' in configlines:
+         bootscr = os.path.join(args.outputdir, "boot_script.txt")
+         with open(bootscr, "w+") as bootscrf:
+             bootscrf.write("prop=value")
 -- 
 2.25.1
 
