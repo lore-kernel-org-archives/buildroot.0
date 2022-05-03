@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57AD1C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 20:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDB1EC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 20:32:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08A6961066;
-	Tue,  3 May 2022 20:32:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6E8661058;
+	Tue,  3 May 2022 20:32:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZkOtocJZ4zsr; Tue,  3 May 2022 20:32:34 +0000 (UTC)
+	with ESMTP id iDQ9Oo2nznnM; Tue,  3 May 2022 20:32:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 006EB61058;
-	Tue,  3 May 2022 20:32:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CB9661059;
+	Tue,  3 May 2022 20:32:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D9D311BF2C1
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 20:31:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EBD731BF2C1
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 20:31:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7673417A8
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD98E4171C
  for <buildroot@lists.busybox.net>; Tue,  3 May 2022 20:31:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2FeJjLUuf0_2 for <buildroot@lists.busybox.net>;
+ with ESMTP id z0N1VvMIaAlJ for <buildroot@lists.busybox.net>;
  Tue,  3 May 2022 20:31:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE41041799
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB30D416B5
  for <buildroot@buildroot.org>; Tue,  3 May 2022 20:31:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 88B0A854F2; Tue,  3 May 2022 20:20:54 +0000 (UTC)
+ id 51D65854F2; Tue,  3 May 2022 20:20:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 3 May 2022 22:23:25 +0200
+Date: Tue, 3 May 2022 22:19:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 57926b025bcdb477d69ee9c1474e6867f0e0a3b5
-X-Git-Newrev: e8b1ac2d11a0c04df58220893e532937985413bc
+X-Git-Oldrev: b89d63326decda74d4ce2731d7d117e71e7e0b92
+X-Git-Newrev: 6c4abd0e6151bf568a2c9bd6dbbfd87f65995410
 X-Patchwork-Hint: ignore
-Message-Id: <20220503202054.88B0A854F2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freetype: bump to version 2.12.1
+Message-Id: <20220503202054.51D65854F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zchunk: fix unsafe header/library
+ path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,43 +59,133 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8b1ac2d11a0c04df58220893e532937985413bc
+commit: https://git.buildroot.net/buildroot/commit/?id=6c4abd0e6151bf568a2c9bd6dbbfd87f65995410
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Backport a patch from upstream to fix:
+unsafe header/library path used in cross-compilation: '-I/usr/include'
+
+Fixes:
+ - http://autobuild.buildroot.net/results/825/82517abd49dcf82c17fabaf9680353d5a6cc4279
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/freetype/freetype.hash | 6 +++---
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...fix-argp-standalone-wrap-and-find_library.patch | 106 +++++++++++++++++++++
+ 1 file changed, 106 insertions(+)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index 78d0ba20d7..a558a3e846 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.12.0/
--sha1  fd1eb1a27f178808e1d8ccd82c71abfa5d0ebe13  freetype-2.12.0.tar.xz
--sha256  ef5c336aacc1a079ff9262d6308d6c2a066dd4d2a905301c4adda9b354399033  freetype-2.12.0.tar.xz
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.12.1/
-+sha1  5133eed28a7624ffabbf6d00aa3f68b841d62d80  freetype-2.12.1.tar.xz
-+sha256  4766f20157cc4cf0cd292f80bf917f92d1c439b243ac3018debf6b9140c41a7f  freetype-2.12.1.tar.xz
- 
- # Locally calculated
- sha256  c85e842b7ff04d95dab7d68e812773de0f8b67940e5449d35b42c66eb0f619fe  LICENSE.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 5c6b8c73be..36ef3cb527 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.12.0
-+FREETYPE_VERSION = 2.12.1
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
+diff --git a/package/zchunk/0001-meson-fix-argp-standalone-wrap-and-find_library.patch b/package/zchunk/0001-meson-fix-argp-standalone-wrap-and-find_library.patch
+new file mode 100644
+index 0000000000..6c9cdba3ad
+--- /dev/null
++++ b/package/zchunk/0001-meson-fix-argp-standalone-wrap-and-find_library.patch
+@@ -0,0 +1,106 @@
++From 473c97cda44b95f5cea08a0cdd566e602df564db Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Thu, 21 Apr 2022 14:24:01 -0600
++Subject: [PATCH] meson: fix argp-standalone wrap and find_library
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++473c97cda44b95f5cea08a0cdd566e602df564db]
++---
++ .github/workflows/main.yml       | 27 ---------------------------
++ meson.build                      |  6 +++---
++ subprojects/argp-standalone.wrap |  7 +++++++
++ 3 files changed, 10 insertions(+), 30 deletions(-)
++ create mode 100644 subprojects/argp-standalone.wrap
++
++diff --git a/.github/workflows/main.yml b/.github/workflows/main.yml
++index c49806f..35667af 100644
++--- a/.github/workflows/main.yml
+++++ b/.github/workflows/main.yml
++@@ -35,25 +35,11 @@ jobs:
++     steps:
++       - uses: actions/checkout@v2
++ 
++-      - uses: actions/checkout@v2
++-        with:
++-          repository: wolfv/argp-standalone
++-          path: argp-standalone
++-
++       - name: Install mamba
++         uses: mamba-org/provision-with-micromamba@main
++         with:
++           environment-file: .github/environment.yml
++ 
++-      - name: Compile argp-standalone
++-        shell: cmd /C CALL {0}
++-        run: |
++-          CALL micromamba activate zchunk_test_env
++-          cd argp-standalone
++-          meson setup builddir
++-          meson compile -C builddir --prefix=%CONDA_PREFIX%\Library
++-          meson install -C builddir
++-
++       - name: Compile zchunk
++         shell: cmd /C CALL {0}
++         run: |
++@@ -75,11 +61,6 @@ jobs:
++     steps:
++       - uses: actions/checkout@v2
++ 
++-      - uses: actions/checkout@v2
++-        with:
++-          repository: wolfv/argp-standalone
++-          path: argp-standalone
++-
++       - uses: actions/setup-python@v1
++         with:
++           python-version: '3.x'
++@@ -87,14 +68,6 @@ jobs:
++       - name: Install meson and ninja
++         run: pip install meson ninja
++ 
++-      - name: Compile argp-standalone
++-        shell: cmd /C CALL {0}
++-        run: |
++-          cd argp-standalone
++-          meson setup builddir
++-          meson compile -C builddir
++-          meson install -C builddir
++-
++       - name: Compile zchunk
++         shell: cmd /C CALL {0}
++         run: |
++diff --git a/meson.build b/meson.build
++index 1c6b32d..aa7dd25 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -58,10 +58,10 @@ endif
++ 
++ # argp-standalone dependency (if required)
++ if build_machine.system() == 'windows' or build_machine.system() == 'darwin' or build_machine.system() == 'freebsd' or not cc.links('#include <argp.h>\nstatic error_t parse_opt (int key, char *arg, struct argp_state *state) { argp_usage(state); return 0; }; void main() {}')
++-    if fs.is_dir(join_paths([get_option('prefix'), 'include']))
++-        inc += include_directories(join_paths([get_option('prefix'), 'include']))
+++    argplib = cc.find_library('argp', has_headers : ['argp.h'], required: false)
+++    if not argplib.found()
+++        argplib = dependency('argp-standalone')
++     endif
++-    argplib = cc.find_library('argp', dirs : join_paths([get_option('prefix'), 'lib']))
++ else
++     argplib = dependency('', required : false)
++ endif
++diff --git a/subprojects/argp-standalone.wrap b/subprojects/argp-standalone.wrap
++new file mode 100644
++index 0000000..14c0b63
++--- /dev/null
+++++ b/subprojects/argp-standalone.wrap
++@@ -0,0 +1,7 @@
+++[wrap-git]
+++directory = argp-standalone-1.4.1
+++url = https://github.com/argp-standalone/argp-standalone.git
+++revision = 21855f34ec9997c37e1a08cd69497336513a5800
+++
+++[provide]
+++dependency_names = argp-standalone
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
