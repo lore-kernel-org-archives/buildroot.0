@@ -1,47 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97692C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 14:18:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BAFBC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 14:27:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37BF681BA8;
-	Tue,  3 May 2022 14:18:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3EDD40ADE;
+	Tue,  3 May 2022 14:27:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z3WsiOxf6UgE; Tue,  3 May 2022 14:18:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c4byL75cRA8x; Tue,  3 May 2022 14:27:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41D8D81B14;
-	Tue,  3 May 2022 14:18:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1A3321BF9B2
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 14:18:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E185340AD6;
+	Tue,  3 May 2022 14:27:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3370F1BF41A
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 14:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08CA4409B6
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 14:18:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 218FF40AD6
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 14:27:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z7MiV7Wl4lwj for <buildroot@lists.busybox.net>;
- Tue,  3 May 2022 14:18:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 28493409A1
- for <buildroot@buildroot.org>; Tue,  3 May 2022 14:18:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6010084EFA; Tue,  3 May 2022 14:07:43 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xeHfGOJfBu3i for <buildroot@lists.busybox.net>;
+ Tue,  3 May 2022 14:27:14 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DDAB401C5
+ for <buildroot@buildroot.org>; Tue,  3 May 2022 14:27:14 +0000 (UTC)
+Received: from pwmachine.home (154.pool92-186-13.dynamic.orange.es
+ [92.186.13.154])
+ by linux.microsoft.com (Postfix) with ESMTPSA id 9808920EB0C5;
+ Tue,  3 May 2022 07:27:11 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9808920EB0C5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+ s=default; t=1651588033;
+ bh=fOG1Ona9lVx83TH2Wfr+z6znLHdTP7uj4ulYH2SdBA8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Px3JcQtn+C4ST3XI4so13yvObFnOGqq+l9bh2i+oFYvXsaZV5V0iXsNV6FafspCjt
+ kx/R6PwSbkcuuVlrNl6R4RPOwGGLEhhte9kyojugo653US1sI4jEnEtpjht/3y4bBR
+ NqLgUYRcytAL2Yec1trgSL1pDBjpbJ8gePTjB4W4=
+From: Francis Laniel <flaniel@linux.microsoft.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 May 2022 16:13:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b935f46a9b09098eb36e653e0ca61fde984214b9
-X-Git-Newrev: df0a0ae9d98ed477b7f9b827b3747397d35eda03
-X-Patchwork-Hint: ignore
-Message-Id: <20220503140743.6010084EFA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynqmp_zcu106_defconfig: bump to
- Xilinx 2022.1
+Date: Tue,  3 May 2022 15:26:59 +0100
+Message-Id: <20220503142701.14397-1-flaniel@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 0/2] Bump sysdig to 0.29.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,61 +61,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Francis Laniel <flaniel@linux.microsoft.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df0a0ae9d98ed477b7f9b827b3747397d35eda03
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi.
 
-This patch bumps configs/zynqmp_zcu106_defconfig to Xilinx software release 2022.1
-which includes the following updates:
-  - TF-A release version 2.6
-  - U-Boot release version 2022.01
-  - Linux kernel release version 5.15.19
 
-It is better to use a Xilinx official release version than sha tags.
+In my last contribution, I wrote a mistake in sysdig.mk which leaded DRIVER_NAME
+to be empty [1]...
+(The machine where I built is not the same than the one where I wrote and send
+the patch...)
+So, in this series, I fixed my previous error and bumped sysdig to its latest
+version.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+I was, of course, able to build and run sysdig within a VM based on
+qemu_x86_64_defconfig:
+Welcome to Buildroot
+buildroot login: root
+# sysdig --version
+sysdig version 0.29.2
+# sysdig | head
+scap: loading out-of-tree module taints kernel.
+scap: driver loading, scap
+scap: adding new consumer (____ptrval____)
+scap: initializing ring buffer for CPU 0
+scap: CPU buffer initialized, size=8388608
+scap: starting capture
+4 14:21:45.440896991 0 <NA> (114) > switch next=10 pgft_maj=7 pgft_min=1300 vm_size=45464 vm_rss=18460 vm_swap=0
+...
+91 14:21:45.449639600 0 <NA> (0) > switch next=114(<NA>) pgft_maj=0 pgft_min=0 vm_size=0 vm_rss=0 vm_swap=0
+scap: deallocating consumer (____ptrval____)
+scap: no more consumers, stopping capture
+
+If you see any way to improve this contribution, feel free to share it!
+
+Francis Laniel (2):
+  package/sysdig: fix DRIVER_NAME definition
+  package/sysdig: bump to version 0.29.2
+
+ package/sysdig/sysdig.hash | 2 +-
+ package/sysdig/sysdig.mk   | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+
+Best regards and thank you in advance.
 ---
- configs/zynqmp_zcu106_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+[1] https://git.buildroot.net/buildroot/commit/?id=ea86757e51cf424566f79896335d31d15b89d0d9
+-- 
+2.25.1
 
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index d836edfaf0..c8b507f0db 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v5.15-930-g966124532656bc95d781abf57531e4cd4f962237"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xlnx_rebase_v5.15_LTS_2022.1"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
-@@ -16,14 +16,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/Xilinx/arm-trusted-firmware.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.6-33-ge678d5ddc475f34dea8f5004fb6ebde118621784"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="xlnx_rebase_v2.6_2022.1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2022.01-165-g667001319cbe511ce6353195fb4910ae5cb041ce"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xlnx_rebase_v2022.01_2022.1"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/zcu106/uboot.fragment"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
