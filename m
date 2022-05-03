@@ -4,43 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EC01C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 20:34:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAA15C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 21:00:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1754040B37;
-	Tue,  3 May 2022 20:34:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 45BD340B57;
+	Tue,  3 May 2022 21:00:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Js9-PsKt9C4e; Tue,  3 May 2022 20:34:54 +0000 (UTC)
+	with ESMTP id fOMYbwIA64sK; Tue,  3 May 2022 21:00:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B6A740B42;
-	Tue,  3 May 2022 20:34:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4240F1BF2C1
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 20:34:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3CD7640B4D;
+	Tue,  3 May 2022 21:00:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AE1141BF2C1
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 21:00:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3006A40ABF
- for <buildroot@lists.busybox.net>; Tue,  3 May 2022 20:34:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AAC5D61017
+ for <buildroot@lists.busybox.net>; Tue,  3 May 2022 21:00:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mpo95IKoozyS for <buildroot@lists.busybox.net>;
- Tue,  3 May 2022 20:34:31 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7263E40528
- for <buildroot@buildroot.org>; Tue,  3 May 2022 20:34:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 171778555E; Tue,  3 May 2022 20:23:59 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Tue, 3 May 2022 22:32:15 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4077fc834cb9e7aa1b9442c43b03a0f23067961
-X-Git-Newrev: 593e8cb71f8f2ac69889424bbef5ab09c0dbb06e
-X-Patchwork-Hint: ignore
-Message-Id: <20220503202359.171778555E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zfs: refactor test cases
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 28Hhj8YPWdjp for <buildroot@lists.busybox.net>;
+ Tue,  3 May 2022 21:00:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
+ [89.40.174.40])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9B06F60FF6
+ for <buildroot@buildroot.org>; Tue,  3 May 2022 21:00:13 +0000 (UTC)
+Received: from [77.244.183.192] (port=62394 helo=[192.168.178.75])
+ by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
+ (envelope-from <luca@lucaceresoli.net>)
+ id 1nlzcx-000AeT-Ad; Tue, 03 May 2022 23:00:11 +0200
+Message-ID: <dab01e63-1617-e93c-3e39-1834df2ef008@lucaceresoli.net>
+Date: Tue, 3 May 2022 23:00:09 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: it-IT
+To: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
+References: <20220502084506.4054715-1-neal.frager@amd.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <20220502084506.4054715-1-neal.frager@amd.com>
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
+ luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+Subject: Re: [Buildroot] [PATCH v1 1/4] configs/zynq_zc706_defconfig: bump
+ to Xilinx 2022.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,122 +72,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1165828372831689129=="
+Cc: giulio.benetti@benettiengineering.com, ju.o@free.fr
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1165828372831689129==
-Content-Type: text/plain
+Hi Neal,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=593e8cb71f8f2ac69889424bbef5ab09c0dbb06e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/05/22 10:45, Neal Frager wrote:
+> This patch bumps configs/zynq_zc706_defconfig to Xilinx software release 2022.1
+> which includes the following updates:
+>   - U-Boot bumped to 2022.01
+>   - Linux bumped to 5.15.19
+>   - rootfs changed from CPIO to EXT4
+>   - extlinux.conf for distro boot support
+>   - U-Boot migrated from git clone to tarball for faster builds
+> 
+> This patch has been build and run tested on a ZC706 evaluation board.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>  board/zynq/extlinux.conf        |  4 ++++
+>  board/zynq/genimage.cfg         | 11 ++++++++---
+>  board/zynq/post-build.sh        |  8 ++++++++
+>  board/zynq/post-image.sh        |  6 ++++--
+>  board/zynq/zc706/uboot.fragment |  1 +
+>  configs/zynq_zc706_defconfig    | 20 ++++++++++----------
 
-Add TestZfsBase that contains the common parts of the test.
+Most of these changes affect all the zynq boards, but the defconfigs for
+three of them are in separate patches. If we want commits to be atomic
+(read: bisectable) these should be suqashed into a single commit.
 
-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- support/testing/tests/package/test_zfs.py | 62 +++++--------------------------
- 1 file changed, 10 insertions(+), 52 deletions(-)
-
-diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
-index 706934ca65..1cc030e78c 100644
---- a/support/testing/tests/package/test_zfs.py
-+++ b/support/testing/tests/package/test_zfs.py
-@@ -3,13 +3,12 @@ import os
- import infra.basetest
- 
- 
--class TestZfsGlibc(infra.basetest.BRTest):
-+class TestZfsBase(infra.basetest.BRTest):
-     config = \
-         """
-         BR2_x86_64=y
-         BR2_x86_corei7=y
-         BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_STABLE=y
-         BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-@@ -60,58 +59,17 @@ class TestZfsGlibc(infra.basetest.BRTest):
-             self.assertRunOk(cmd)
- 
- 
--class TestZfsUclibc(infra.basetest.BRTest):
--    config = \
-+class TestZfsGlibc(TestZfsBase):
-+    config = TestZfsBase.config + \
-+        """
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_STABLE=y
-+        """
-+
-+
-+class TestZfsUclibc(TestZfsBase):
-+    config = TestZfsBase.config + \
-         """
--        BR2_x86_64=y
--        BR2_x86_corei7=y
--        BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_UCLIBC_STABLE=y
--        BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
--        BR2_LINUX_KERNEL=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.35"
--        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
--        BR2_PACKAGE_ZFS=y
--        BR2_PACKAGE_PYTHON3=y
--        BR2_PACKAGE_PYTHON_CFFI=y
--        BR2_PACKAGE_PYTHON_SETUPTOOLS=y
--        BR2_PACKAGE_ZLIB_NG=y
--        BR2_PACKAGE_LIBRESSL=y
--        BR2_TARGET_ROOTFS_CPIO=y
--        # BR2_TARGET_ROOTFS_TAR is not set
-         """
- 
--    def test_run(self):
--        kernel = os.path.join(self.builddir, "images", "bzImage")
--        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
--        self.emulator.boot(
--            arch="x86_64",
--            kernel=kernel,
--            kernel_cmdline=["console=ttyS0"],
--            options=["-cpu", "Nehalem", "-m", "320", "-initrd", cpio_file],
--        )
--        self.emulator.login()
- 
--        cmds = [
--            # Init
--            "modprobe zfs",
--            "mount -o remount,size=132M /tmp",
--            "fallocate -l 64M /tmp/container1.raw",
--            "fallocate -l 64M /tmp/container2.raw",
--            "zpool create -m /pool pool raidz /tmp/container1.raw /tmp/container2.raw",
--            "dd if=/dev/urandom bs=1M count=8 of=/pool/urandom",
--            "sha256sum /pool/urandom > /tmp/urandom.sha256",
--            # Check ZFS
--            "zpool export pool",
--            "zpool import pool -d /tmp/container1.raw -d /tmp/container2.raw",
--            "dd conv=notrunc bs=1M count=32 seek=16 if=/dev/urandom of=/tmp/container1.raw",
--            "zpool scrub -w pool",
--            "sha256sum -c /tmp/urandom.sha256",
--            "zpool status -v",
--            # Check PyZFS
--            "arc_summary",
--        ]
--        for cmd in cmds:
--            self.assertRunOk(cmd)
-
---===============1165828372831689129==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Luca
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1165828372831689129==--
