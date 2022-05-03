@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74FFAC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 20:31:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06491C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  3 May 2022 20:32:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 23A6A40B42;
-	Tue,  3 May 2022 20:31:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6D5F6100B;
+	Tue,  3 May 2022 20:32:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e_CTFmqrQMng; Tue,  3 May 2022 20:31:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mSEsCpCEUzWy; Tue,  3 May 2022 20:32:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 26F6740ABF;
-	Tue,  3 May 2022 20:31:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 82E3C1BF9C2
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCF6A60BDB;
+	Tue,  3 May 2022 20:32:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C75E61BF2C1
  for <buildroot@lists.busybox.net>; Tue,  3 May 2022 20:31:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7DEAE40B3B
+ by smtp4.osuosl.org (Postfix) with ESMTP id B685B417A4
  for <buildroot@lists.busybox.net>; Tue,  3 May 2022 20:31:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9dlIXXUVw5ym for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e7EYR0gOQG13 for <buildroot@lists.busybox.net>;
  Tue,  3 May 2022 20:31:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE59C40528
+ by smtp4.osuosl.org (Postfix) with ESMTP id C6A114171C
  for <buildroot@buildroot.org>; Tue,  3 May 2022 20:31:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 7B74E854F3; Tue,  3 May 2022 20:20:54 +0000 (UTC)
+ id 6EA8E854F2; Tue,  3 May 2022 20:20:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 3 May 2022 22:22:04 +0200
+Date: Tue, 3 May 2022 22:20:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e11431dd611bd3f9f23a2fc48f3b077d35073b9d
-X-Git-Newrev: 57926b025bcdb477d69ee9c1474e6867f0e0a3b5
+X-Git-Oldrev: fe740dcac8b065e4d52674b84cd3ff4e65959442
+X-Git-Newrev: e11431dd611bd3f9f23a2fc48f3b077d35073b9d
 X-Patchwork-Hint: ignore
-Message-Id: <20220503202054.7B74E854F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/genrandconfig: only fixup host uboot
- tools source when empty
+Message-Id: <20220503202054.6EA8E854F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luajit: depend on !BR2_PACKAGE_LUA
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,43 +58,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57926b025bcdb477d69ee9c1474e6867f0e0a3b5
+commit: https://git.buildroot.net/buildroot/commit/?id=e11431dd611bd3f9f23a2fc48f3b077d35073b9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If the kconfig values being replaced are not empty we should not
-try to fix them.
+We can't enable lua and luajit at the same time as they both provide
+the virtual luainterpreter package.
+
+Fixes:
+package/luajit/luajit.mk:80: *** Configuration error: both "luajit" and "lua" are selected as providers for virtual package "luainterpreter". Only one provider can be selected at a time. Please fix your configuration.  Stop.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- utils/genrandconfig | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/luajit/Config.in | 2 ++
+ package/snort3/Config.in | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 8ed2783a6d..89ad53ca4c 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -299,7 +299,9 @@ def fixup_config(sysinfo, configfile):
-        'BR2_PACKAGE_FLANN=y\n' in configlines:
-         return False
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index 3111a2548f..f27099e80c 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -14,6 +14,8 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ config BR2_PACKAGE_LUAJIT
+ 	bool "luajit"
+ 	depends on !BR2_STATIC_LIBS # dlopen
++	# Luajit conflicts with the regular lua package
++	depends on !BR2_PACKAGE_LUA
+ 	# Luajit is only available for some target architectures, and
+ 	# has some complexity wrt 32/64. See luajit.mk for details.
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+diff --git a/package/snort3/Config.in b/package/snort3/Config.in
+index dcc29b820a..9b96e7cb58 100644
+--- a/package/snort3/Config.in
++++ b/package/snort3/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SNORT3
+ 	bool "snort3"
++	depends on !BR2_PACKAGE_LUA # luajit
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
+ 	depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
+ 	depends on BR2_USE_MMU # fork()
+@@ -34,6 +35,7 @@ config BR2_PACKAGE_SNORT3
+ 	  https://www.snort.org/snort3
  
--    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines:
-+    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines and \
-+       'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE=""\n' in configlines and \
-+       'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE=""\n' in configlines:
-         bootenv = os.path.join(args.outputdir, "boot_env.txt")
-         with open(bootenv, "w+") as bootenvf:
-             bootenvf.write("prop=value")
-@@ -308,7 +310,8 @@ def fixup_config(sysinfo, configfile):
-         configlines.remove('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE=""\n')
-         configlines.append('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE="0x1000"\n')
- 
--    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y\n' in configlines:
-+    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y\n' in configlines and \
-+       'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE=""\n' in configlines:
-         bootscr = os.path.join(args.outputdir, "boot_script.txt")
-         with open(bootscr, "w+") as bootscrf:
-             bootscrf.write("prop=value")
+ comment "snort3 needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 4.9"
++	depends on !BR2_PACKAGE_LUA
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
+ 	depends on BR2_USE_MMU
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
