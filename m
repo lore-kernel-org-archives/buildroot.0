@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4745FC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 19:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE287C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 19:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A08183F93;
-	Wed,  4 May 2022 19:48:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78A9D41944;
+	Wed,  4 May 2022 19:59:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GGFaKGVRBuox; Wed,  4 May 2022 19:48:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MwOvAOsP0YNh; Wed,  4 May 2022 19:59:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A6B183372;
-	Wed,  4 May 2022 19:48:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 11E0A1BF3BE
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 19:47:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6CE941938;
+	Wed,  4 May 2022 19:59:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 18EBE1BF215
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 19:59:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A88A61051
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 19:47:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0619340BBD
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 19:59:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b3YMn9DAM8NK for <buildroot@lists.busybox.net>;
- Wed,  4 May 2022 19:47:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gxPAglp6kHO7 for <buildroot@lists.busybox.net>;
+ Wed,  4 May 2022 19:59:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4560160BB4
- for <buildroot@buildroot.org>; Wed,  4 May 2022 19:47:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7C2640BB7
+ for <buildroot@buildroot.org>; Wed,  4 May 2022 19:59:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B456885784; Wed,  4 May 2022 19:36:55 +0000 (UTC)
+ id 2D99D8578A; Wed,  4 May 2022 19:49:14 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 4 May 2022 21:38:31 +0200
+Date: Wed, 4 May 2022 21:47:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fcca7574430a04f0b0c6aeecc5399f7758dfc38c
-X-Git-Newrev: 96a4aee2890d88841b467dd069e2980b93f7fd9a
+X-Git-Oldrev: 24a2dc45cb7b4ab3f5af91c441c31b7fab58b60e
+X-Git-Newrev: d4723bb9bd050729f7830bfb9da5695c343cfded
 X-Patchwork-Hint: ignore
-Message-Id: <20220504193655.B456885784@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libopenssl: security bump to
- version 1.1.1o
+Message-Id: <20220504194914.2D99D8578A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: document flit/pep517 python
+ package infrastructure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,56 +59,151 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96a4aee2890d88841b467dd069e2980b93f7fd9a
+commit: https://git.buildroot.net/buildroot/commit/?id=d4723bb9bd050729f7830bfb9da5695c343cfded
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Note that the flit-bootstrap SETUP_TYPE is deliberately not
+documented as it is used only for bootstrapping the host pep517
+toolchain and should not be used anywhere else.
 
-- The c_rehash script allows command injection (CVE-2022-1292)
-
-The c_rehash script does not properly sanitise shell metacharacters to
-prevent command injection.  This script is distributed by some operating
-systems in a manner where it is automatically executed.  On such operating
-systems, an attacker could execute arbitrary commands with the privileges of
-the script.
-
-Use of the c_rehash script is considered obsolete and should be replaced by
-the OpenSSL rehash command line tool.
-
-https://www.openssl.org/news/secadv/20220503.txt
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ docs/manual/adding-packages-directory.txt |  4 +-
+ docs/manual/adding-packages-python.txt    | 74 ++++++++++++++++++-------------
+ 2 files changed, 46 insertions(+), 32 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 22bb365bcc..ec5fd0fe84 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1n.tar.gz.sha256
--sha256  40dceb51a4f6a5275bde0e6bf20ef4b91bfc32ed57c0552e2e8e15463372b17a  openssl-1.1.1n.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1o.tar.gz.sha256
-+sha256  9384a2b0570dd80358841464677115df785edb941c71211f75076d72fe6b438f  openssl-1.1.1o.tar.gz
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 749e2d43b9..04f5241d05 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -429,8 +429,8 @@ different way, using different infrastructures:
+    and xref:cmake-package-reference[reference].
  
- # License files
- sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index ae6658ed40..0c039dc7d6 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ * *Makefiles for Python modules*: We have a dedicated infrastructure
+-   for Python modules that use either the +distutils+ or the
+-   +setuptools+ mechanism. We cover them through a
++   for Python modules that use the +distutils+, +flit+, +pep517+ or
++   +setuptools+ mechanisms. We cover them through a
+    xref:python-package-tutorial[tutorial] and a
+    xref:python-package-reference[reference].
  
--LIBOPENSSL_VERSION = 1.1.1n
-+LIBOPENSSL_VERSION = 1.1.1o
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
+index 0141fea85b..500967f235 100644
+--- a/docs/manual/adding-packages-python.txt
++++ b/docs/manual/adding-packages-python.txt
+@@ -4,8 +4,9 @@
+ === Infrastructure for Python packages
+ 
+ This infrastructure applies to Python packages that use the standard
+-Python setuptools mechanism as their build system, generally
+-recognizable by the usage of a +setup.py+ script.
++Python setuptools or pep517 mechanisms as their build system, generally
++recognizable by the usage of a +setup.py+ script or +pyproject.toml+
++file.
+ 
+ [[python-package-tutorial]]
+ 
+@@ -50,8 +51,8 @@ On line 13, we declare our dependencies, so that they are built
+ before the build process of our package starts.
+ 
+ On line 14, we declare the specific Python build system being used. In
+-this case the +distutils+ Python build system is used. The two
+-supported ones are +distutils+ and +setuptools+.
++this case the +distutils+ Python build system is used. The four
++supported ones are +distutils+, +flit+, +pep517+ and +setuptools+.
+ 
+ Finally, on line 16, we invoke the +python-package+ macro that
+ generates all the Makefile rules that actually allow the package to be
+@@ -97,11 +98,13 @@ Note that:
+ One variable specific to the Python infrastructure is mandatory:
+ 
+ * +PYTHON_FOO_SETUP_TYPE+, to define which Python build system is used
+-  by the package. The two supported values are +distutils+ and
+-  +setuptools+. If you don't know which one is used in your package,
+-  look at the +setup.py+ file in your package source code, and see
+-  whether it imports things from the +distutils+ module or the
+-  +setuptools+ module.
++  by the package. The four supported values are +distutils+, +flit+,
++  +pep517+ and +setuptools+. If you don't know which one is used in
++  your package, look at the +setup.py+ or +pyproject.toml+ file in your
++  package source code, and see whether it imports things from the
++  +distutils+, +flit+ module or the +setuptools+ module. If the package
++  is using a +pyproject.toml+ file without any build-system requires
++  and with a local in-tree backend-path one should use +pep517+.
+ 
+ A few additional variables, specific to the Python infrastructure, can
+ optionally be defined, depending on the package's needs. Many of them
+@@ -109,37 +112,48 @@ are only useful in very specific cases, typical packages will
+ therefore only use a few of them, or none.
+ 
+ * +PYTHON_FOO_SUBDIR+ may contain the name of a subdirectory inside the
+-  package that contains the main +setup.py+ file. This is useful,
+-  if for example, the main +setup.py+ file is not at the root of
+-  the tree extracted by the tarball. If +HOST_PYTHON_FOO_SUBDIR+ is not
+-  specified, it defaults to +PYTHON_FOO_SUBDIR+.
++  package that contains the main +setup.py+ or +pyproject.toml+ file.
++  This is useful, if for example, the main +setup.py+ or +pyproject.toml+
++  file is not at the root of the tree extracted by the tarball. If
++  +HOST_PYTHON_FOO_SUBDIR+ is not specified, it defaults to
++  +PYTHON_FOO_SUBDIR+.
+ 
+ * +PYTHON_FOO_ENV+, to specify additional environment variables to
+-  pass to the Python +setup.py+ script (for both the build and install
+-  steps). Note that the infrastructure is automatically passing
+-  several standard variables, defined in +PKG_PYTHON_DISTUTILS_ENV+
+-  (for distutils target packages), +HOST_PKG_PYTHON_DISTUTILS_ENV+
+-  (for distutils host packages), +PKG_PYTHON_SETUPTOOLS_ENV+ (for
+-  setuptools target packages) and +HOST_PKG_PYTHON_SETUPTOOLS_ENV+
+-  (for setuptools host packages).
++  pass to the Python +setup.py+ script (for distutils/setuptools
++  packages) or the +support/scripts/pyinstaller.py+ script (for
++  flit/pep517 packages) for both the build and install steps. Note
++  that the infrastructure is automatically passing several standard
++  variables, defined in +PKG_PYTHON_DISTUTILS_ENV+ (for distutils
++  target packages), +HOST_PKG_PYTHON_DISTUTILS_ENV+ (for distutils
++  host packages), +PKG_PYTHON_SETUPTOOLS_ENV+ (for setuptools target
++  packages), +HOST_PKG_PYTHON_SETUPTOOLS_ENV+ (for setuptools host
++  packages), +PKG_PYTHON_PEP517_ENV+ (for flit/pep517 target packages)
++  and +HOST_PKG_PYTHON_PEP517_ENV+ (for flit/pep517 host packages).
+ 
+ * +PYTHON_FOO_BUILD_OPTS+, to specify additional options to pass to the
+-  Python +setup.py+ script during the build step. For target distutils
+-  packages, the +PKG_PYTHON_DISTUTILS_BUILD_OPTS+ options are already
+-  passed automatically by the infrastructure.
++  Python +setup.py+ script during the build step, this generally only
++  makes sense to use for distutils/setuptools based packages as
++  flit/pep517 based packages do not pass these options to a +setup.py+
++  script but instead pass them to +support/scripts/pyinstaller.py+.
++  For target distutils packages, the +PKG_PYTHON_DISTUTILS_BUILD_OPTS+
++  options are already passed automatically by the infrastructure.
+ 
+ * +PYTHON_FOO_INSTALL_TARGET_OPTS+, +PYTHON_FOO_INSTALL_STAGING_OPTS+,
+   +HOST_PYTHON_FOO_INSTALL_OPTS+ to specify additional options to pass
+-  to the Python +setup.py+ script during the target installation step,
+-  the staging installation step or the host installation,
+-  respectively. Note that the infrastructure is automatically passing
+-  some options, defined in +PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS+
+-  or +PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS+ (for target distutils
++  to the Python +setup.py+ script (for distutils/setuptools packages)
++  or +support/scripts/pyinstaller.py+ (for flit/pep517 packages) during
++  the target installation step, the staging installation step or the
++  host installation, respectively. Note that the infrastructure is
++  automatically passing some options, defined in
++  +PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS+ or
++  +PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS+ (for target distutils
+   packages), +HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS+ (for host
+   distutils packages), +PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS+ or
+   +PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS+ (for target setuptools
+-  packages) and +HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS+ (for host
+-  setuptools packages).
++  packages), +HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS+ (for host
++  setuptools packages) and +PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS+ or
++  +PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS+ (for target flit/pep517
++  packages).
+ 
+ With the Python infrastructure, all the steps required to build and
+ install the packages are already defined, and they generally work well
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
