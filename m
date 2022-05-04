@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A76A8C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 07:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11F1CC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 08:08:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AE8541820;
-	Wed,  4 May 2022 07:39:37 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IpAePin3YhLI; Wed,  4 May 2022 07:39:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 077EB4157B;
-	Wed,  4 May 2022 07:39:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F2C0E1BF42D
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 07:39:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E04E860D53
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 07:39:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95E5F60E09;
+	Wed,  4 May 2022 08:08:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rU-RwGO9RENY for <buildroot@lists.busybox.net>;
- Wed,  4 May 2022 07:39:33 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c8SC6rCLbB67; Wed,  4 May 2022 08:08:58 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10F5660B74;
+	Wed,  4 May 2022 08:08:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 34D321BF475
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 08:08:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31B2A416BE
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 08:08:55 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4uATBO3BH8DM for <buildroot@lists.busybox.net>;
+ Wed,  4 May 2022 08:08:53 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AF10360BE2
- for <buildroot@buildroot.org>; Wed,  4 May 2022 07:39:32 +0000 (UTC)
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6EA6F40235
+ for <buildroot@buildroot.org>; Wed,  4 May 2022 08:08:52 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DD66F20011;
- Wed,  4 May 2022 07:39:27 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1C1F320000A;
+ Wed,  4 May 2022 08:08:48 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nm9ba-00DK13-Kw; Wed, 04 May 2022 09:39:26 +0200
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1nmA40-00DT1Z-49; Wed, 04 May 2022 10:08:48 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Michal Simek <michal.simek@xilinx.com>
-References: <20220503152425.1069617-1-neal.frager@amd.com>
- <20220503152425.1069617-2-neal.frager@amd.com>
- <87h7653i8q.fsf@dell.be.48ers.dk>
- <edddb58b-dee7-21aa-05b8-3a94c3e2c4d1@xilinx.com>
- <878rrh3gvx.fsf@dell.be.48ers.dk>
- <86b8666c-4427-32c6-c015-f9b67e963195@xilinx.com>
-Date: Wed, 04 May 2022 09:39:26 +0200
-In-Reply-To: <86b8666c-4427-32c6-c015-f9b67e963195@xilinx.com> (Michal Simek's
- message of "Wed, 4 May 2022 09:24:05 +0200")
-Message-ID: <874k253fwx.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+To: buildroot@buildroot.org
+Date: Wed,  4 May 2022 10:08:46 +0200
+Message-Id: <20220504080847.3209785-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 2/2] configs/zynqmp_zcu106_defconfig:
- transition to tarballs
+Subject: [Buildroot] [PATCH] package/libopenssl: security bump to version
+ 1.1.1o
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,33 +57,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: luca@lucaceresoli.net, giulio.benetti@benettiengineering.com,
- buildroot@buildroot.org, Neal Frager <neal.frager@amd.com>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Michal" == Michal Simek <michal.simek@xilinx.com> writes:
+Fixes the following security issues:
 
-Hi,
+- The c_rehash script allows command injection (CVE-2022-1292)
 
- >> > This is caused by not proper psu_init which setup PLLs incorrectly.
- >> This is using the psu_init_gpl.c in U-Boot:
- >> https://github.com/Xilinx/u-boot-xlnx/blob/xlnx_rebase_v2022.01_2022.1/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
- >> And the pmu configuration object from Neal:
- >> https://git.buildroot.net/buildroot/tree/board/zynqmp/zcu106/pm_cfg_obj.c
- >> So what exactly needs to change?
+The c_rehash script does not properly sanitise shell metacharacters to
+prevent command injection.  This script is distributed by some operating
+systems in a manner where it is automatically executed.  On such operating
+systems, an attacker could execute arbitrary commands with the privileges of
+the script.
 
- > I don't have this board here that's why likely taken from any old
- > design before this check was added to Linux.
- > U-Boot psu_init_gpl.c should be updated.
+Use of the c_rehash script is considered obsolete and should be replaced by
+the OpenSSL rehash command line tool.
 
-Ok, I also only have temporary access to a zcu106. Neal/Michal, will you
-take care of it?
+https://www.openssl.org/news/secadv/20220503.txt
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 22bb365bcc..ec5fd0fe84 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1n.tar.gz.sha256
+-sha256  40dceb51a4f6a5275bde0e6bf20ef4b91bfc32ed57c0552e2e8e15463372b17a  openssl-1.1.1n.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1o.tar.gz.sha256
++sha256  9384a2b0570dd80358841464677115df785edb941c71211f75076d72fe6b438f  openssl-1.1.1o.tar.gz
+ 
+ # License files
+ sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index ae6658ed40..0c039dc7d6 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 1.1.1n
++LIBOPENSSL_VERSION = 1.1.1o
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
 -- 
-Bye, Peter Korsgaard
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
