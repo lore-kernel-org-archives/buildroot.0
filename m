@@ -1,87 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70FA0C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 19:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5942C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 19:46:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 893E441881;
-	Wed,  4 May 2022 19:36:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3DA0040BBD;
+	Wed,  4 May 2022 19:46:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B4e0n1f5LaUC; Wed,  4 May 2022 19:36:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CKxkPdExAtrC; Wed,  4 May 2022 19:46:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2233041882;
-	Wed,  4 May 2022 19:36:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7EE3E1BF3BE
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 19:36:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4257840BB7;
+	Wed,  4 May 2022 19:46:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 61ABD1BF3BE
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 19:46:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6626E41882
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 19:36:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5EB5E83F91
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 19:46:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OLhTPrrUjVbo for <buildroot@lists.busybox.net>;
- Wed,  4 May 2022 19:36:07 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mPk9b9VMD0Zt for <buildroot@lists.busybox.net>;
+ Wed,  4 May 2022 19:46:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 62FFC41881
- for <buildroot@buildroot.org>; Wed,  4 May 2022 19:36:07 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id gh6so4865217ejb.0
- for <buildroot@buildroot.org>; Wed, 04 May 2022 12:36:07 -0700 (PDT)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1FA7B83F7D
+ for <buildroot@buildroot.org>; Wed,  4 May 2022 19:46:20 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id g20so2872828edw.6
+ for <buildroot@buildroot.org>; Wed, 04 May 2022 12:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=kQsgdNBFAtbpZ29Ywa5xY6wKJ7Ckfqoa1TqS3/cfP98=;
- b=DvB5TrHyyvrWvyAJ1NMkYdjEzy5aCWN2mQI2P45qaWioVPNAWb+Ptr4gKuhEs6h/Sj
- 31ygVnuVWXMTkDQ9qbQ5TfaY6chBV+hE6ceOe7pYl6I652JGmyoWn4DApDXLJJlITnRy
- WkNHwgiPmAoQA1MnAsBijcuBBRHfD644fafYZHC5XAYc+OGVGX2EZ4lPU2fMda7aAVer
- v6WrUo6v712TNesob0L8r3Z7noazEzHpOMc0nFbTi0bM4uaOhBbE8d9iIH0+frYNL/kS
- YyZyzlJjWHhq5LUVE1vY5IZRDIZGk2J7577IGXnf3COgoJs6rSHd/vDCJvM9XpBu2/xT
- a5Pg==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=y3e0RP1slomqMQjWSNqTqTNutZGdemXZhv5ZqMv8J3c=;
+ b=A2c2OtTBB1bUHyl6Lp3+lLQOuragH82Dvpqs3ph4So2z1kDb16krVJyz9yuKOlW1kD
+ j0VfIQ0JqIRr8TAbO8g+VRcmFvoKxodTcWW24beDYyRRkAPQE2sLGnU/MAW3LEetPafS
+ uBX/1Z3/M+t2kQvfttv8i1u6tY45s7htzlkWxMQRAtjoB5VcIip+j8PpezcmnmI0Oej7
+ Il+RO9JGbXhdjbI4PKcex2jQHHNXfd8ZBeCLcwJ4SadizoLaUyu9DcNjCf/S1MIce62g
+ oDu6bmwGD6cUcrhprClU+YnR7zjOXl1FUwDtcWB0we5OLguUVx+fp43W2EUTNRG77WyZ
+ D/Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=kQsgdNBFAtbpZ29Ywa5xY6wKJ7Ckfqoa1TqS3/cfP98=;
- b=TkmLa6tDlJ055l4XGSDn+Y4Sv+PmMUKM2wPoMvkrF7KWWaSmKCJr/Ev9RpFr0RB3Cw
- IyKjlElnThnck6qZM9gTMfyg1kCRVqybKZ3v59h9M59N723NRBdPrbIy0uFUKFbte8x/
- XGKJ8rj8Fv0JTzPz5/dJCmwVpJ1LXILPUEY/4W45r3bb0xoBDvQsg5ZMfxW1vpolPiuz
- cosjm979omwPnQYZrUpQN3f/s/dhPTm72LZfUrD1z83dx86q7hkk9JchE/RV3/iDM6X1
- 4tEg32s49TnzOWosFZHH4BonqDdPR63LO+6FvmddYDxfQ9P0GQlXU39xhzfFU3f91QcE
- sYwQ==
-X-Gm-Message-State: AOAM533ngnGjQcKkVriecxNAgJmY/n5cj+tt7kZ5s2RhqkvwHjIfo6i3
- T5ghP3jKG3m8vsbgmSu58pqSvQ==
-X-Google-Smtp-Source: ABdhPJyK7IRynVzfyFoqD3a6jnYhieCYNhtLPAIgN5DUoIjvLuxvD9iXga+lzypjXSiWTa2UUBiiJw==
-X-Received: by 2002:a17:907:60d4:b0:6e8:7121:3c80 with SMTP id
- hv20-20020a17090760d400b006e871213c80mr22140032ejc.352.1651692965187; 
- Wed, 04 May 2022 12:36:05 -0700 (PDT)
+ bh=y3e0RP1slomqMQjWSNqTqTNutZGdemXZhv5ZqMv8J3c=;
+ b=UswD4i1A5PZuwEWvlvcVCyebHn2YgHtjsx4/myRgy3gpLBxjK3YSsKLu9FtQ3U6YDc
+ 5ylFVugKdP2/auGNDKdji/AJAcVIRwrNjvi6dT61ltTvZHZVv509C6dqWgc3AjHJBEN/
+ pMT2LQBG66bLnxhZLmY73w5mGJOTfkFvImv1tApP33Mr1zn3vdq+WKfyW5Iur8va5H8D
+ LqPvAkIgxvqeN0+nPw6qS8GAoVUUlDzKXrbfKWWBCwbUPqtKNSC7Uc/9NcNOz+Pp7yDj
+ iQV10wmKdM+EfW4DSOwP9PQU20N8grZ/ctdW/LNlWq53iTDLiX2X7BNTcTQwb4Gd+aBC
+ ngDg==
+X-Gm-Message-State: AOAM530perp8zqkcmg5vsST2SZ9ukgR9YBJGDsD+fOFiU60+jeKx9ZTR
+ fFXI52H4Lcq0oS7XV/QDoogJ7g==
+X-Google-Smtp-Source: ABdhPJx60gxmKyvPbt0fbPsMzTd4R91pSGYDHB0josVd7cYe0pp9IwYgQ64psgsSXsZJeR+IEc26Uw==
+X-Received: by 2002:a05:6402:370b:b0:41d:8508:20af with SMTP id
+ ek11-20020a056402370b00b0041d850820afmr25416258edb.16.1651693578157; 
+ Wed, 04 May 2022 12:46:18 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- qv48-20020a17090787b000b006f3ef214e09sm6093316ejc.111.2022.05.04.12.36.04
+ d7-20020a05640208c700b0042617ba63bfsm9403295edz.73.2022.05.04.12.46.17
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 04 May 2022 12:36:04 -0700 (PDT)
-Message-ID: <c9105461-815a-c212-2afc-4c175467b424@mind.be>
-Date: Wed, 4 May 2022 21:36:04 +0200
+ Wed, 04 May 2022 12:46:17 -0700 (PDT)
+Message-ID: <87ce0a58-6986-7596-9c8d-26e9fec07605@mind.be>
+Date: Wed, 4 May 2022 21:46:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
-To: Yannick Brosseau <yannick.brosseau@gmail.com>, buildroot@buildroot.org
-References: <20220504164214.1095968-1-yannick.brosseau@gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20220503023117.266256-1-james.hilliard1@gmail.com>
+ <82d1991b-48c4-c767-dfe3-b28264eca4d0@mind.be>
+ <CADvTj4qXE3v_OrFT7m-M0qWnV7L7Tfa5eeM=7idg-Fpi8S_Afw@mail.gmail.com>
+ <de87d7cd-45d4-1dd5-578a-c61c59ae7c09@mind.be>
+ <CADvTj4pM2JJjuOigR8W5UnNxFFm2qgz+aY4JSvF5YdC_5q+qpQ@mail.gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220504164214.1095968-1-yannick.brosseau@gmail.com>
-Subject: Re: [Buildroot] [PATCH] package/openocd: Fix segfault when using
- ST-Link driver
+In-Reply-To: <CADvTj4pM2JJjuOigR8W5UnNxFFm2qgz+aY4JSvF5YdC_5q+qpQ@mail.gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: add DTS cuimage
+ fixup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,102 +100,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: buildroot <buildroot@buildroot.org>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAwNC8wNS8yMDIyIDE4OjQyLCBZYW5uaWNrIEJyb3NzZWF1IHdyb3RlOgo+IFJlY2VudCBj
-aGFuZ2VzIGluIGxpYnVzYiBoYXZlIGV4cG9zZWQgYSBidWcgaW4gT3Blbk9DRCB3aGljaCBub3cg
-Y3Jhc2ggd2hlbiB0cnlpbmcKPiB0byB1c2UgdGhlIFNULUxpbmsgZHJpdmVyLgo+IAo+IFVwc3Ry
-ZWFtIGhhcyBhIGZpeCBhcyBjb21taXQgY2ZmMGU0MTdkYTU4YWRlZjFjZWVmOWE2M2E5OTQxMmMy
-Y2M4N2ZmMy4gVGhpcyBhZGQgdGhlIGNvbW1pdAo+IGFzIGEgc3RhbmQgYWxvbmUgcGF0Y2guCj4g
-Cj4gU2hvdWxkIGJlIHJlbW92ZWQgd2hlbiBPcGVuT0NEIGlzIHVwZGF0ZWQgdG8gYSBuZXdlciBy
-ZWxlYXNlIHRoYW4gMC4xMQoKQWRkIGEgU2lnbmVkLW9mZi1ieSBsaW5lIGZvciB5b3Vyc2VsZi4g
-IFRoaXMgaXMgYSBzaG9ydCB3YXkgZm9yIHlvdSB0bwphc3NlcnQgdGhhdCB5b3UgYXJlIGVudGl0
-bGVkIHRvIGNvbnRyaWJ1dGUgdGhlIHBhdGNoIHVuZGVyIGJ1aWxkcm9vdCdzCkdQTCBsaWNlbnNl
-LiAgU2VlICBodHRwOi8vZWxpbnV4Lm9yZy9EZXZlbG9wZXJfQ2VydGlmaWNhdGVfT2ZfT3JpZ2lu
-CmZvciBtb3JlIGRldGFpbHMuCgo+IC0tLQo+ICAgLi4uR1Ytd2l0aC1saWJ1c2ItdjEuMC4yNC0z
-My1nMzJhMjIwNi0xLnBhdGNoIHwgODggKysrKysrKysrKysrKysrKysrKwo+ICAgMSBmaWxlIGNo
-YW5nZWQsIDg4IGluc2VydGlvbnMoKykKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL29w
-ZW5vY2QvMDAwMy1zdGxpbmstZml4LVNJR1NFR1Ytd2l0aC1saWJ1c2ItdjEuMC4yNC0zMy1nMzJh
-MjIwNi0xLnBhdGNoCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb3Blbm9jZC8wMDAzLXN0bGlu
-ay1maXgtU0lHU0VHVi13aXRoLWxpYnVzYi12MS4wLjI0LTMzLWczMmEyMjA2LTEucGF0Y2ggYi9w
-YWNrYWdlL29wZW5vY2QvMDAwMy1zdGxpbmstZml4LVNJR1NFR1Ytd2l0aC1saWJ1c2ItdjEuMC4y
-NC0zMy1nMzJhMjIwNi0xLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAw
-MDAwMDAwLi41ZGUzYzkxZmJlCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2Uvb3Blbm9j
-ZC8wMDAzLXN0bGluay1maXgtU0lHU0VHVi13aXRoLWxpYnVzYi12MS4wLjI0LTMzLWczMmEyMjA2
-LTEucGF0Y2gKPiBAQCAtMCwwICsxLDg4IEBACj4gK0Zyb20gY2ZmMGU0MTdkYTU4YWRlZjFjZWVm
-OWE2M2E5OTQxMmMyY2M4N2ZmMyBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogQW50
-b25pbyBCb3JuZW8gPGJvcm5lby5hbnRvbmlvQGdtYWlsLmNvbT4KPiArRGF0ZTogV2VkLCAyMyBK
-dW4gMjAyMSAxNjo1MjoxNiArMDIwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIHN0bGluazogZml4IFNJ
-R1NFR1Ygd2l0aCBsaWJ1c2IgdjEuMC4yNC0zMy1nMzJhMjIwNiAoMTE2MTgpCj4gK01JTUUtVmVy
-c2lvbjogMS4wCj4gK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAo+ICtD
-b250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0Cj4gKwo+ICtUaGUgc3RsaW5rIGRyaXZlciBp
-bmNvcnJlY3RseSB1c2VzIGEgTlVMTCBwb2ludGVyIGZvciBsaWJ1c2Incwo+ICtzdHJ1Y3QgbGli
-dXNiX2NvbnRleHQuCj4gK1RoZSBjb3JyZWN0IHZhbHVlIHRvIGJlIHVzZWQgaXMgbG9jYWwgaW4g
-bGlidXNiX2hlbHBlci5jLgo+ICsKPiArTW92ZSBpbiB0aGUgaGVscGVyIGZpbGUsIGluIGEgd3Jh
-cHBlciBmdW5jdGlvbiwgdGhlIG9ubHkgY2FsbCB0aGF0Cj4gK3JlcXVpcmVzIHRoZSBhYm92ZSB2
-YWx1ZSwgYW5kIGxldCBzdGxpbmsgZHJpdmVyIHRvIHVzZSB0aGlzCj4gK3dyYXBwZXIuCj4gKwo+
-ICtUaGlzIGlzc3VlIGhhcyBub3QgdHJpZ2dlcmVkIGFueSB2aXNpYmxlIHByb2JsZW0gdW50aWwg
-YSBjb2RlCj4gK3JlZmFjdG9yaW5nIFsxXSBpbiBsaWJ1c2IgaGFzIG1hZGUgT3Blbk9DRCBjcmFz
-aGluZyBvbiBXaW5kb3dzIGFuZAo+ICtvbiBNYWNPUy4KCiAgSSBndWVzcyBub3Qgb25seSBXaW5k
-b3dzIGFuZCBNYWNPUyBidXQgYWxzbyBMaW51eCwgb3RoZXJ3aXNlIHlvdSB3b3VsZG4ndCBoYXZl
-IApzZW50IHRoaXMsIHJpZ2h0PwoKPiArCj4gK0NoYW5nZS1JZDogSWQxODE4YzhhZjdjZjBkNGQx
-N2RmYTFkMjJhYWQwNzlkYTAxZWY3NDAKPiArU2lnbmVkLW9mZi1ieTogQW50b25pbyBCb3JuZW8g
-PGJvcm5lby5hbnRvbmlvQGdtYWlsLmNvbT4KPiArRml4ZXM6IGh0dHBzOi8vc291cmNlZm9yZ2Uu
-bmV0L3Avb3Blbm9jZC90aWNrZXRzLzMwOC8KPiArRml4ZXM6IGh0dHBzOi8vZ2l0aHViLmNvbS9s
-aWJ1c2IvbGlidXNiL2lzc3Vlcy85MjgvCj4gK0ZpeGVzOiA0MmQ4ZmE4OTljNmEgKCJzdGxpbmtf
-dXNiOiBTdWJtaXQgbXVsdGlwbGUgVVNCIFVSQnMgYXQgb25jZSB0byBpbXByb3ZlIHBlcmZvcm1h
-bmNlIikKPiArTGluazogWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9saWJ1c2IvbGlidXNiL2NvbW1p
-dC8zMmEyMjA2OTQyOGMKPiArUmVwb3J0ZWQtYnk6IEFuZHJ6ZWogU2llcsW8xJlnYSA8YXNpZXI3
-MEBnbWFpbC5jb20+Cj4gK0NvLWRldmVsb3BlZC1ieTogQW5kcnplaiBTaWVyxbzEmWdhIDxhc2ll
-cjcwQGdtYWlsLmNvbT4KPiArQ28tZGV2ZWxvcGVkLWJ5OiBYaWFvZmFuIENoZW4gPHhpYW9mYW5j
-QGdtYWlsLmNvbT4KPiArUmV2aWV3ZWQtb246IGh0dHA6Ly9vcGVub2NkLnp5bGluLmNvbS82MzMx
-Cj4gK1Rlc3RlZC1ieTogamVua2lucwo+ICtSZXZpZXdlZC1ieTogTWFyYyBTY2hpbmsgPGRldkB6
-YXBiLmRlPgo+ICtSZXZpZXdlZC1ieTogWGlhb2ZhbiA8eGlhb2ZhbmNAZ21haWwuY29tPgo+ICtS
-ZXZpZXdlZC1ieTogQW5kcnplaiBTaWVyxbzEmWdhIDxhc2llcjcwQGdtYWlsLmNvbT4KPiArUmV2
-aWV3ZWQtYnk6IE9sZWtzaWogUmVtcGVsIDxsaW51eEByZW1wZWwtcHJpdmF0LmRlPgo+ICtSZXZp
-ZXdlZC1ieTogQW5kcmVhcyBGcml0aW9mc29uIDxhbmRyZWFzLmZyaXRpb2Zzb25AZ21haWwuY29t
-PgoKICBIZXJlLCB5b3UgbmVlZCB0byBhZGQgeW91ciBTaWduZWQtb2ZmLWJ5IGFzIHdlbGwuIFRo
-aXMgaXMgbmVlZGVkIGJlY2F1c2UgdGhlIApwYWNrYWdlIGxpY2Vuc2UgbWF5IGJlIGRpZmZlcmVu
-dCBmcm9tIEJ1aWxkcm9vdCdzLCBhbmQgdGhlIHBhdGNoIHRha2VzIHRoZSAKcGFja2FnZSdzIGxp
-Y2Vuc2UuCgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+ICstLS0KPiArIHNyYy9qdGFnL2RyaXZlcnMv
-bGlidXNiX2hlbHBlci5jIHwgNSArKysrKwo+ICsgc3JjL2p0YWcvZHJpdmVycy9saWJ1c2JfaGVs
-cGVyLmggfCAxICsKPiArIHNyYy9qdGFnL2RyaXZlcnMvc3RsaW5rX3VzYi5jICAgIHwgNyArLS0t
-LS0tCj4gKyAzIGZpbGVzIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkK
-PiArCj4gK2RpZmYgLS1naXQgYS9zcmMvanRhZy9kcml2ZXJzL2xpYnVzYl9oZWxwZXIuYyBiL3Ny
-Yy9qdGFnL2RyaXZlcnMvbGlidXNiX2hlbHBlci5jCj4gK2luZGV4IGYwMTIyZDUzNC4uMThmZTRi
-YWQ0IDEwMDY0NAo+ICstLS0gYS9zcmMvanRhZy9kcml2ZXJzL2xpYnVzYl9oZWxwZXIuYwo+ICsr
-KysgYi9zcmMvanRhZy9kcml2ZXJzL2xpYnVzYl9oZWxwZXIuYwo+ICtAQCAtMzYzLDMgKzM2Myw4
-IEBAIGludCBqdGFnX2xpYnVzYl9nZXRfcGlkKHN0cnVjdCBsaWJ1c2JfZGV2aWNlICpkZXYsIHVp
-bnQxNl90ICpwaWQpCj4gKwo+ICsgCXJldHVybiBFUlJPUl9GQUlMOwo+ICsgfQo+ICsrCj4gKytp
-bnQganRhZ19saWJ1c2JfaGFuZGxlX2V2ZW50c19jb21wbGV0ZWQoaW50ICpjb21wbGV0ZWQpCj4g
-Kyt7Cj4gKysJcmV0dXJuIGxpYnVzYl9oYW5kbGVfZXZlbnRzX2NvbXBsZXRlZChqdGFnX2xpYnVz
-Yl9jb250ZXh0LCBjb21wbGV0ZWQpOwo+ICsrfQo+ICtkaWZmIC0tZ2l0IGEvc3JjL2p0YWcvZHJp
-dmVycy9saWJ1c2JfaGVscGVyLmggYi9zcmMvanRhZy9kcml2ZXJzL2xpYnVzYl9oZWxwZXIuaAo+
-ICtpbmRleCBmYTdkMDZlMjguLjNlNzc4NjVkNiAxMDA2NDQKPiArLS0tIGEvc3JjL2p0YWcvZHJp
-dmVycy9saWJ1c2JfaGVscGVyLmgKPiArKysrIGIvc3JjL2p0YWcvZHJpdmVycy9saWJ1c2JfaGVs
-cGVyLmgKPiArQEAgLTYwLDUgKzYwLDYgQEAgaW50IGp0YWdfbGlidXNiX2Nob29zZV9pbnRlcmZh
-Y2Uoc3RydWN0IGxpYnVzYl9kZXZpY2VfaGFuZGxlICpkZXZoLAo+ICsgCQl1bnNpZ25lZCBpbnQg
-KnVzYl93cml0ZV9lcCwKPiArIAkJaW50IGJjbGFzcywgaW50IHN1YmNsYXNzLCBpbnQgcHJvdG9j
-b2wsIGludCB0cmFuc190eXBlKTsKPiArIGludCBqdGFnX2xpYnVzYl9nZXRfcGlkKHN0cnVjdCBs
-aWJ1c2JfZGV2aWNlICpkZXYsIHVpbnQxNl90ICpwaWQpOwo+ICsraW50IGp0YWdfbGlidXNiX2hh
-bmRsZV9ldmVudHNfY29tcGxldGVkKGludCAqY29tcGxldGVkKTsKPiArCj4gKyAjZW5kaWYgLyog
-T1BFTk9DRF9KVEFHX0RSSVZFUlNfTElCVVNCX0hFTFBFUl9IICovCj4gK2RpZmYgLS1naXQgYS9z
-cmMvanRhZy9kcml2ZXJzL3N0bGlua191c2IuYyBiL3NyYy9qdGFnL2RyaXZlcnMvc3RsaW5rX3Vz
-Yi5jCj4gK2luZGV4IGM2OGJiYjNjYS4uN2IxOTMyYjlmIDEwMDY0NAo+ICstLS0gYS9zcmMvanRh
-Zy9kcml2ZXJzL3N0bGlua191c2IuYwo+ICsrKysgYi9zcmMvanRhZy9kcml2ZXJzL3N0bGlua191
-c2IuYwo+ICtAQCAtNDk3LDEzICs0OTcsOCBAQCBzdGF0aWMgdm9pZCBzeW5jX3RyYW5zZmVyX3dh
-aXRfZm9yX2NvbXBsZXRpb24oc3RydWN0IGxpYnVzYl90cmFuc2ZlciAqdHJhbnNmZXIpCj4gKyB7
-Cj4gKyAJaW50IHIsICpjb21wbGV0ZWQgPSB0cmFuc2Zlci0+dXNlcl9kYXRhOwo+ICsKPiArLQkv
-KiBBc3N1bWluZyBhIHNpbmdsZSBsaWJ1c2IgY29udGV4dCBleGlzdHMuICBUaGVyZSBubyBleGlz
-dGluZyBpbnRlcmZhY2UgaW50byB0aGlzCj4gKy0JICogbW9kdWxlIHRvIHBhc3MgYSBsaWJ1c2Ig
-Y29udGV4dC4KPiArLQkgKi8KPiArLQlzdHJ1Y3QgbGlidXNiX2NvbnRleHQgKmN0eCA9IE5VTEw7
-Cj4gKy0KPiArIAl3aGlsZSAoISpjb21wbGV0ZWQpIHsKPiArLQkJciA9IGxpYnVzYl9oYW5kbGVf
-ZXZlbnRzX2NvbXBsZXRlZChjdHgsIGNvbXBsZXRlZCk7Cj4gKysJCXIgPSBqdGFnX2xpYnVzYl9o
-YW5kbGVfZXZlbnRzX2NvbXBsZXRlZChjb21wbGV0ZWQpOwo+ICsgCQlpZiAociA8IDApIHsKPiAr
-IAkJCWlmIChyID09IExJQlVTQl9FUlJPUl9JTlRFUlJVUFRFRCkKPiArIAkJCQljb250aW51ZTsK
-PiArLS0KPiArMi4zNS4xCj4gKwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+
+
+On 04/05/2022 04:02, James Hilliard wrote:
+> On Tue, May 3, 2022 at 2:29 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>>
+>> On 03/05/2022 13:16, James Hilliard wrote:
+>>> On Tue, May 3, 2022 at 12:41 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 03/05/2022 04:31, James Hilliard wrote:
+>>>>> If we don't have a DTS name or path we need to also disable cuimage
+>>>>> to disable DTS support as BR2_LINUX_KERNEL_CUIMAGE requires DTS
+>>>>> support.
+>>>>>
+>>>>> Fixes:
+>>>>> linux/linux.mk:591: *** No kernel device tree source specified, check your BR2_LINUX_KERNEL_INTREE_DTS_NAME / BR2_LINUX_KERNEL_CUSTOM_DTS_PATH settings.  Stop.
+>>>>>
+>>>>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>>>>> ---
+>>>>>     utils/genrandconfig | 3 +++
+>>>>>     1 file changed, 3 insertions(+)
+>>>>>
+>>>>> diff --git a/utils/genrandconfig b/utils/genrandconfig
+>>>>> index 70af84f002..b821e60114 100755
+>>>>> --- a/utils/genrandconfig
+>>>>> +++ b/utils/genrandconfig
+>>>>> @@ -381,6 +381,9 @@ def fixup_config(sysinfo, configfile):
+>>>>>             if 'BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y\n' in configlines:
+>>>>>                 configlines.remove('BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y\n')
+>>>>>                 configlines.append('BR2_LINUX_KERNEL_ZIMAGE=y\n')
+>>>>> +        if 'BR2_LINUX_KERNEL_CUIMAGE=y\n' in configlines:
+>>>>
+>>>>     Similar to the previous patch (only fixup host uboot tools ...), should this
+>>>> be done only if no DTS is given? I.e.:
+>>>>
+>>>> if 'BR2_LINUX_KERNEL_CUIMAGE=y\n' in configlines and \
+>>>>        ('BR2_LINUX_KERNEL_INTREE_DTS_NAME=""\n' in configlines or \
+>>>>         'BR2_LINUX_KERNEL_CUSTOM_DTS_PATH=""\n' in configlines):
+>>>
+>>> Should be ok already due to parent match conditions covering the invalid case.
+>>
+>>    No, what I mean is: it is only needed to remove the line if DTS is not set. If
+>> either DTS_NAME or DTS_PATH is set, there's no need to remove the CUIMAGE config.
+> 
+> Yes, that's exactly what this patch does AFAIU, see parent match
+> conditions here:
+> https://github.com/buildroot/buildroot/blob/49f9a08223005584ca28c6f243ee5cb1d1e64f57/utils/genrandconfig#L377-L378
+
+  Argh, I just should believe you instead of thinking I know better...
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> 
+> The BR2_LINUX_KERNEL_CUIMAGE removal only happens if both
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME and BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+> are empty.
+> 
+>>
+>>    This is similar to the patch you submitted for
+>> BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE and _SCRIPT: they only need to be removed
+>> if the corresponding _SOURCE config is not set.
+>>
+>>    Regards,
+>>    Arnout
+>>
+>>>
+>>>>
+>>>>
+>>>>     Regards,
+>>>>     Arnout
+>>>>
+>>>>> +            configlines.remove('BR2_LINUX_KERNEL_CUIMAGE=y\n')
+>>>>> +            configlines.append('BR2_LINUX_KERNEL_UIMAGE=y\n')
+>>>>>             if 'BR2_LINUX_KERNEL_SIMPLEIMAGE=y\n' in configlines:
+>>>>>                 configlines.remove('BR2_LINUX_KERNEL_SIMPLEIMAGE=y\n')
+>>>>>                 configlines.append('BR2_LINUX_KERNEL_VMLINUX=y\n')
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
