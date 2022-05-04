@@ -4,117 +4,145 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D968C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 04:02:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BC95C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 04:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE60761058;
-	Wed,  4 May 2022 04:02:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A17566106F;
+	Wed,  4 May 2022 04:03:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NNyVuI1JhJ7B; Wed,  4 May 2022 04:02:05 +0000 (UTC)
+	with ESMTP id fJXbvJ8Ydpi5; Wed,  4 May 2022 04:03:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A651760E22;
-	Wed,  4 May 2022 04:02:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C7D041BF397
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 04:02:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3D846106D;
+	Wed,  4 May 2022 04:03:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EEE3D1BF397
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 04:03:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1A5640167
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 04:02:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB0F940126
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 04:03:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 64MHBd8vnWxL for <buildroot@lists.busybox.net>;
- Wed,  4 May 2022 04:02:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ezPNeGa-9pZb for <buildroot@lists.busybox.net>;
+ Wed,  4 May 2022 04:03:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam12on20617.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe5a::617])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AD97E40148
- for <buildroot@buildroot.org>; Wed,  4 May 2022 04:02:00 +0000 (UTC)
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on20628.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e88::628])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 54F8A400C6
+ for <buildroot@buildroot.org>; Wed,  4 May 2022 04:03:09 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K8fLI0gdbSSIrrV1oMXDNw0ZXvELrTj5EaaOtlsqdHlJMDZqJHDIUjmxuN5RZr3WuB/gX89ja/3RoQ+Qss+EU6ZDyM2UQGW2ulHPK3/oKC08JGTDp0PaXZKKCTc/4/0Qf/SmQ14U0F18loRiHW/ObTcI01NLdJqQBNZ+tLr4JAVvYyOpdrqdMPLMOPQv0RDxWRpARkQNjIg7XoV4hVDGvCeYERQHoubZe1WRNTNhVZKCn9pNYD3CHg1wyfGUQzfywkZyuxP6hSs7mRmujzb9dY8MZrFOgqz6y4J63eFxhM/sRWLfh66TfNKnxwJ4Wo38dNg8bVVwVtuRqMz7qysAIA==
+ b=M1I/HmRe2+RKpo/Q0w9supkcosD8rzj/GLmV6bzM6HBpj4y2cb+CETGeXuDmNVFhDzrfFIr87U37MmWQjtmzgD3qtgi0WjXlSG2af+84lM7nb2vjqkIzpamlWM3bJDQK6z1pHA806DaUe68tKAItxd+TCYDAMjj/4Z3YR9LFphPV5xCT7VcxjZ23uHxFslnns4vRWmbxdVnAHkqlBRVT8xswxWaOg/CBiMqg2/Q+nE5AmsI1dXuA92P8lPc1rsyGwxh6UvoaexPKb+A+Zvi27vdv/RXsgIhbOICrL4eG0qLU/rv5MsWAlikIWZEyrO/WvqESeMds1F/FgPoaEedM3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GAKaXr8CQeSLcUL7rdC4L76pbv+f83ZzTEF8IbyJ2Vw=;
- b=dxq/nZVRs10HxMGjiv+GTHiyhYeWcVq/dkgz12LS+Emi9QORb/2R84L2/EzzCQbrRRlPm5dWt04F+UTX61nxWb6PZEbzgmQGxaHdg+hTuhMqFfr/D13NC9mE/5lErXwqtvd8ncUDaX6TUBN71W8BVYEHn+GjUmPb4Koo+RT4b3/G7Zz7WMtN7jbd98BN8MYTxzcmeleLmGLhJYwuP4RK7tiQg0X8xz9iOYsF7nocjM3uVe87KZTIov5mmAETYAYltcfF6f1mHw2Fb+u8V/Dz0jDw5+SD5t+akO4u1U+Te83bnRe8x2TpYsOuMVTPfsGYL8Jskz1s2/8J1YmlbpEr4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 149.199.62.198) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=amd.com; dkim=none (message not signed); arc=none
+ bh=sXJnN/uhvBiG7mbINHlpfbP32y6R6HrWlB4wApMu98g=;
+ b=ZnvKaPNxCx3wFN+I10DQaYKLnsGf71u/PKiyWFuztpHynEsXEVwEanW1kaBJGpYQ15Gp+/p4WUx6PWGL4gEeXeiUNrOZWD4auDxD3V7g2EpmZn3hgqf2e/hAn0akEwEBROmL3O7MNCa8xD6cLexnMNQYYA2QYJw1+cMuv7EbnlSAsnaoMsBcL37kiKJWzfLACqH4MO9EYKT3KYvMhF0/ENDgm+ykuz0NQu8lt0akHhM5X3UjUdh/G3KL9CoKTZJfINquFf7V9QrStzT0lqD+/H1Y7Kkd0teCdqfv15VhqDIxmp5zBNdy0VWOz0dwLUFL/zh9d1mKSrhRUJdZaErlfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GAKaXr8CQeSLcUL7rdC4L76pbv+f83ZzTEF8IbyJ2Vw=;
- b=RQBfSrEbw8uqZUHuv8EnDaCqA5nptiWIlSVHrfvjKo9YeDwJMctgsa9FTyTpE6kp0VZYnfEx4YivJ0Op3uO0cvnyZUFFdaTDCz9Y1dMCxifSL1dMRnFpNneUbf4rBodSdPShyC9jAls1CJc0SkmJmLQLu4beOh8c3qzY6OZOeF8=
-Received: from BN9PR03CA0966.namprd03.prod.outlook.com (2603:10b6:408:109::11)
- by BN0PR02MB8142.namprd02.prod.outlook.com (2603:10b6:408:16a::19)
+ bh=sXJnN/uhvBiG7mbINHlpfbP32y6R6HrWlB4wApMu98g=;
+ b=Q2tuNfu9wlFXhkTphGKSlZrBdTdeSPlWqvdxF4YDHrrQT29mk1EfreQzwxSmVnlTlFaMnQJVOdk4jU7Av4zKgmyR0APZTy629rd+h+wXN4UQ72ZWCYpdz5N1k4KtHDNKHKuaAAx9Ha/OsjyHsjXqU8bd0meP58oAD/ZlcI7HuyI=
+Received: from SJ0PR02MB7758.namprd02.prod.outlook.com (2603:10b6:a03:320::24)
+ by BN8PR02MB5906.namprd02.prod.outlook.com (2603:10b6:408:ba::30)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Wed, 4 May
- 2022 04:01:57 +0000
-Received: from BN1NAM02FT062.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:109::4) by BN9PR03CA0966.outlook.office365.com
- (2603:10b6:408:109::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13 via Frontend
- Transport; Wed, 4 May 2022 04:01:57 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 149.199.62.198) smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=amd.com;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- amd.com discourages use of 149.199.62.198 as permitted sender)
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT062.mail.protection.outlook.com (10.13.2.168) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5227.15 via Frontend Transport; Wed, 4 May 2022 04:01:56 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 3 May 2022 21:01:53 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 3 May 2022 21:01:53 -0700
-Envelope-to: buildroot@buildroot.org, luca@lucaceresoli.net,
- giulio.benetti@benettiengineering.com, ju.o@free.fr,
- arnout@mind.be, peter@korsgaard.com, neal.frager@amd.com
-Received: from [172.25.185.186] (port=35390 helo=xcoapps69.xilinx.com)
- by smtp.xilinx.com with esmtp (Exim 4.90)
- (envelope-from <neal.frager@amd.com>)
- id 1nm6D3-0008rT-9S; Tue, 03 May 2022 21:01:53 -0700
-To: <buildroot@buildroot.org>
-Date: Tue, 3 May 2022 22:01:44 -0600
-Message-ID: <20220504040144.3297941-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1fb16df-5100-46cd-306a-08da2d82d4f0
-X-MS-TrafficTypeDiagnostic: BN0PR02MB8142:EE_
-X-Microsoft-Antispam-PRVS: <BN0PR02MB8142BC6490D2437BCE93BD6DF0C39@BN0PR02MB8142.namprd02.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 2
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Db+Cd9a1XDOS7Cv9qxyJHwQ/aWg3MbNh+eK/zZA9wU4DkJins1mvai748qfMA1NYtB9jP2C/QNzjwoVjt5kRLi82lU4Oj4OhpAJOz44FcT1XfCjj2eTjpoQruCnYmuwyqVzM8yvs67Tb4w8rBIwTETnKd1slA/yFuNTzzqeWmCKwBRMMYjiCMB7EpVoDBfIXnbWFarICqrP/aQnHzRA7xDqsfCislLhDtMPA8xKEoUpKMOltbP8feogbPjW5lWtbO/0gm00afob+eJRyHoffp8ylgdP5uA7scOiiootmei0DcuEb4x0ZBelWS7agDLn5U4sVIoZs6xp0mntF748GRTbDNkEMcBMNC/pX8LM/1dKUzOAwvZ1XBKTs13kdJcpZIv4/BtsnZFMrvAuA0z3WhP/Tcg43aVYMlYTtW87qj/VFrLfGpmtJ+wuiN3O3zAvKj7MYQWo3v/LsjyDVhbSdrJ3fF3bFGYPG8Xxl3EkIyHI7zp/RqckwNaPoNrToqP7Gjx3RIES4iyklpW33/9J9nfPAcCRZP126BazKsoz/86IgsrsqeHcJo30LEWat43pchfgv02APohSV5lF8N+pquOL7NSJ3Sl5JGODtISqDEi4M0hEfVuWfKgqUHSVmPDgPdKn82PccFRTZ1j3FnWrdzbXFLa56U82zT2bd7D7W74Z0+uLyTOfi0l+7TjWaxadQfil63ORVamPj8Oy8etBOfQ+UFeFcjJb012gtqHU38LMQ14xipaKCKRDugLoKzkUflLvgRMKcdwcB3uML5YD55+1hgw6DRagGepKxCvUG0I9RKT/oat0F23jKLzCtH/PoppyuIfgyzrhba/DX2ZNjkQQ3rNmjkfGXSLrFUTohBBc=
-X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:xsj-pvapexch01.xlnx.xilinx.com;
- PTR:unknown-62-198.xilinx.com; CAT:NONE;
- SFS:(13230001)(4636009)(40470700004)(46966006)(35950700001)(82310400005)(5660300002)(70586007)(30864003)(4326008)(9786002)(508600001)(70206006)(44832011)(8936002)(8676002)(7636003)(1076003)(6916009)(54906003)(316002)(356005)(6666004)(2906002)(26005)(2616005)(83380400001)(36756003)(40460700003)(47076005)(86362001)(336012)(102446001)(21314003)(41080700001);
+ 2022 04:03:06 +0000
+Received: from SJ0PR02MB7758.namprd02.prod.outlook.com
+ ([fe80::e83c:1862:8bea:4f08]) by SJ0PR02MB7758.namprd02.prod.outlook.com
+ ([fe80::e83c:1862:8bea:4f08%4]) with mapi id 15.20.5206.025; Wed, 4 May 2022
+ 04:03:05 +0000
+From: Neal Frager <nealf@xilinx.com>
+To: Luca Ceresoli <luca@lucaceresoli.net>, Neal Frager <neal.frager@amd.com>, 
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [PATCH v1 1/4] configs/zynq_zc706_defconfig: bump to Xilinx
+ 2022.1
+Thread-Index: AQHYXgEWuvUaJhqW4kOEzwcFjmReG60NpYmAgAB14CA=
+Date: Wed, 4 May 2022 04:03:05 +0000
+Message-ID: <SJ0PR02MB775849B52C24CA3FE954E027D7C39@SJ0PR02MB7758.namprd02.prod.outlook.com>
+References: <20220502084506.4054715-1-neal.frager@amd.com>
+ <dab01e63-1617-e93c-3e39-1834df2ef008@lucaceresoli.net>
+In-Reply-To: <dab01e63-1617-e93c-3e39-1834df2ef008@lucaceresoli.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b1062241-34ec-4764-0805-08da2d82fe0f
+x-ms-traffictypediagnostic: BN8PR02MB5906:EE_
+x-microsoft-antispam-prvs: <BN8PR02MB59066B870B95E0802F20C27DD7C39@BN8PR02MB5906.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kVc9q6Mo+N9+qNbQKuW6jbIehqtgTm1rW3Q7D+lHU1dMP3i3CXE7izOzltqX5w/3D4eQKbxCJ1g5reXXMMaItdu4qidiABj2lski0DDfHsIlHbN5Hj2v7s5iBjcbEJ4DNq8sHWo4djVs2I/8emMqQr1HaHH5ASK9d+K6ZwwL1hNRK5oM10YDOfCYg7kheTguBNhIXjEUh1ARd9g7yNnQ7jieonLYxR+3nOfWWhPtXObg21mbJ+ktke5SHXDBgfMaeS3wTm9UkSEAjaxKwzj2UX1yqMkl1sj+VM9BaW9GkAufb1EkAnaFLB1NAhzcLbq+W5m6hbLUmqu76Xw9GgKxqif63X5+pK6vZlfkccQydGa/gq7mFwvBNasAQRv/YpsodqAEE6p8/yuf35h89ovVIcEPyaZdiGYpzBok3kUGbBbHmb0ZV7VTw4oAElAzIegCv1zYd5m4e4Bh/SX3q8K6fXbK3GnprA6+EcyaN7iE1x01MR6XLmlImpi3N5nsY/ELzVCAhxZYkNTidV8MF6SNdkXDsQ9UZrtJmIGShHk3nc3d4RvvDQknnEhd0ttKdNL5q54aOJX2muD/eOy1KHG9Du9N9frOqBV4d97ZRCbD7XmnPWLeWm/fDNmEeawc84tZyoaPJ9piuPxEXvCJIJPfudh2hQJg5pRFSp2jigGbUmDOGmXZ+p1iWp6MIYRQhWAAgFtagwj4MSIg1GnyJGnVWP7Xp2kvl7meZNhfQ9O0OTmwpNa/ef4iWxK9/yNd8fax
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SJ0PR02MB7758.namprd02.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230001)(4636009)(366004)(508600001)(2906002)(83380400001)(71200400001)(38070700005)(38100700002)(9686003)(186003)(76116006)(4326008)(64756008)(86362001)(66476007)(66556008)(8676002)(66446008)(122000001)(66946007)(6506007)(33656002)(55016003)(7696005)(8936002)(316002)(52536014)(5660300002)(110136005)(54906003)(41080700001);
  DIR:OUT; SFP:1101; 
-X-OriginatorOrg: xilinx.onmicrosoft.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 04:01:56.6449 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1fb16df-5100-46cd-306a-08da2d82d4f0
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
- Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT062.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR02MB8142
-Subject: [Buildroot] [PATCH v2 1/1] configs/zynq_xxx_defconfig: bump to
- Xilinx 2022.1
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VmUrRjQzVE04bXdwbHZlTkxzY2NDbnJTM2dSRWIzaFlFWGZmNVlZTGxsM1hz?=
+ =?utf-8?B?ZjZPSW9GVG9rZi94cjFCRlNMeUVIRUdjWURBcnozaWlHOGVqa2x6VmtFUDI2?=
+ =?utf-8?B?NHN5VnJ6WWt2QjFIVEdTK1dVOXREU0FlQmF2Z0FBSi80SWxhRmlKclc0Vi9Z?=
+ =?utf-8?B?NFEvN1hhZjd3bU1lSE9yMkNreDJ0UmxCV292SG52UUZLSWpzSlhsQzBseS85?=
+ =?utf-8?B?LzFKQ2xLRWd5UWlZeGFWS1pKNndveEo5OU9ETzFSU0dNeWxnemU0dXQ4ejQ5?=
+ =?utf-8?B?cHNXTVhEQklwakNIdUV2OUNNbzEzMEFHUGFHZG51M3RaRnJlRmp3d1VaajNU?=
+ =?utf-8?B?NFFNYWNuNk9TZFRpZjVSSzZEU2ZudGRTbzBlVzU5YVR1emV3MktIQjJNSGFp?=
+ =?utf-8?B?RHJGWVBnUWJJY3k1UmpVWWFxbGxuakh1OXBMRzhQbUsxTGZ0SHgySnlEVCsv?=
+ =?utf-8?B?RDVON3RMdzRtdXZkQkcrNDVFOWZ2NTlQUkNtWTladUhkWFNvOFJlVGVna2xu?=
+ =?utf-8?B?a1A5WXZIcS9vcVExQkJrVE1CS1NsSUVSS2dzQktlM2tGeDlvdFcyOUV1b2hR?=
+ =?utf-8?B?d21iTUprQkpjOWQwVjIwREltWURWbHR3MjJrUWwyblBSTTU1dGpGeXI0ajc4?=
+ =?utf-8?B?MXlPOWRkUWNnU2hQSmducnNHbklpSTJXcS83RXRGNzhkMEZhV1QyVUhEN3ZN?=
+ =?utf-8?B?dnRHd1M2cERKQnBOOFROS0hyNGJTWEVkeWdIS0lpUTMrUFQ5Rm5zVVRKdGo0?=
+ =?utf-8?B?Y2tack0yNlVZZDFkU2NnRUhSa1l3SW5mZ3VVUFhXSlpKd1ZPMmJybUVLL3I5?=
+ =?utf-8?B?a0E1S1N5bk5GVWxvUzBVOEJhdjB5SXRwbVJTa3hZMERyZHkxNTRPVEdmY3Zw?=
+ =?utf-8?B?V213MFJ6a0VjVEdJNGpWVnJJb2xSWXYwRXp3L2Q0MjhaTXl5Ni94RFZ3MWRr?=
+ =?utf-8?B?WllDcUFERXJnR3dKcUNpYTRsd3JOQmR5SGhFcWpjY3AwSENoWDl1dFdTeWVH?=
+ =?utf-8?B?YTJPbkRmN1R5UDZmcFF3OW9TU29iOEx3OXZDWmtXTTEyRkIzSTJJeVBNT3FD?=
+ =?utf-8?B?b29nN2xQa3lScUwvT3JiYXZyVlgyeWk5VjRqMFkzTVd5QnkvN0ZaUW9BR0Ev?=
+ =?utf-8?B?QURyOHo1VjRKeXUxNy9zQlZYRmQ5MjdJVnhYTzNLRFJFVFV3VnRqK1laSlJF?=
+ =?utf-8?B?bnpIemFNOUZucGpJZ2dWU0NFMk0zQ2VYNEpXTGFacFhoMUhsMHduTmI3WERI?=
+ =?utf-8?B?TTNYTDZGbXBtZjBFK1JRa0p1d3Y4eURqWGs2aDdsUXBRMHVlVTYwTGRzeXFI?=
+ =?utf-8?B?b05HNzZySkQ4VTJtZ3hVVWNBaGJkVVlhK0lMK3NlYXFuR01RUE04N3hLaGU3?=
+ =?utf-8?B?VTV5MTVSRDI0SENNMjJZdk1hc2x2d20wbC85TjlUMW50ZlhuYjErL3l2a0VV?=
+ =?utf-8?B?blFyZXNqVlE1T3BQUGtwUHU2Y0lHaitmbmhLdmZHZFFtTmJKTHhQZ2MxVDdk?=
+ =?utf-8?B?VFlTYmd3REk2UHFlMkNGUHgzL2U2ZkpTdDJROGxFVzdCN21sVThGL1R1Ukgx?=
+ =?utf-8?B?cWkvakQzQVpuLzQxVWZQNnRQY201TmNxcVhkWVhOeTVaakU4UzdTTllveFd2?=
+ =?utf-8?B?YVdncnBacTdZUWJUYUZqMkQzZVNvcVlNMnFKL0NsdVJzUUxjRHBUWmhQTXFX?=
+ =?utf-8?B?MS81aUFVamRhNnRRdHhGbVZwN2R5ZjhDZzd5NG96SldXelBwRlJEeW1IdnRz?=
+ =?utf-8?B?ZjA4T1cybkhLVFdLRnloZFMxaVVtTzZPSVF5dE9DdkJUSENheUdRQzRhWTNF?=
+ =?utf-8?B?b1RIYjltd3lKY0wyNnBaMFFxK0lpRnRZcjBoaUVIV1Y4YUlyaFhOUkp3bGdR?=
+ =?utf-8?B?YzlPUittT3VabDRsRTBJS0U1Rml6cnY0TUFhL3ZkT3p0YjRGN09NK2xIc0I1?=
+ =?utf-8?B?SFJ3OTFRVFVJYThUVmtGZlU3SDBzV0JWNGxSZlh4UnFIdGZjUlI3NlYrVm5V?=
+ =?utf-8?B?MHJpbDZsZWxhOHFucFpBUUw3TnUvZnhMN1hxRUczbmRtVEdWK29vWWcrb3RI?=
+ =?utf-8?B?S2JOaWlNVnFHUHNYZXVXbkJhdnRBNUNLY01MTENZTE1PN3gyS2R4dGN2UmRq?=
+ =?utf-8?B?UVg0Q2tHeXRPZE54TFg1OFlCV1c3RHdGcHBpY00vd2xkcXJFYmszbWN0ZGkz?=
+ =?utf-8?B?NVBLOHkrTUVQTjZJWUFCRjVpM0U1QXFXeGNzaFNDOEdYZGQyS3FqNTltT2lh?=
+ =?utf-8?B?MVNVaHZZYUt0YU51bVFHN3RlSmFxbEZsbWhEWkl3Y1hZU3U3cmpEQ0Y4L1Rh?=
+ =?utf-8?B?UncyT3lLV2Vxa09lem1lMWZZNDN3U3BGR1ptN1dJR3c4c08yd3kvT3pFSUZu?=
+ =?utf-8?Q?5wnW6io6Sdy1r040fRxZJTDzxZZIzUoGemJ6OoIp+vPQm?=
+x-ms-exchange-antispam-messagedata-1: TnluDZEG69mB1A==
+MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB7758.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1062241-34ec-4764-0805-08da2d82fe0f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 May 2022 04:03:05.6649 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: voMAibSNbR5qQjhjocY+IygLqRxAqEXev2B29VjZWrnYE2OjcBHSwrP3bS2p3uaFsPGbaB6pQm31t6nwx+XqIg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR02MB5906
+Subject: Re: [Buildroot] [PATCH v1 1/4] configs/zynq_zc706_defconfig: bump
+ to Xilinx 2022.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -126,294 +154,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ju.o@free.fr, Neal Frager <neal.frager@amd.com>, luca@lucaceresoli.net,
- giulio.benetti@benettiengineering.com
+Cc: "giulio.benetti@benettiengineering.com"
+ <giulio.benetti@benettiengineering.com>, "ju.o@free.fr" <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch bumps configs/zynq_xxx_defconfigs to Xilinx software release 2022.1
-which includes the following updates:
-  - U-Boot bumped to 2022.01
-  - Linux bumped to 5.15.19
-  - rootfs changed from CPIO to EXT4
-  - extlinux.conf for distro boot support
-  - U-Boot migrated from git clone to tarball for faster builds
+Hi Luca,
 
-This patch has been build and run tested on a ZC706 evaluation board.
-This patch has been build tested only for zed, microzed and qmtech boards.
+> This patch bumps configs/zynq_zc706_defconfig to Xilinx software 
+> release 2022.1 which includes the following updates:
+>   - U-Boot bumped to 2022.01
+>   - Linux bumped to 5.15.19
+>   - rootfs changed from CPIO to EXT4
+>   - extlinux.conf for distro boot support
+>   - U-Boot migrated from git clone to tarball for faster builds
+>
+> This patch has been build and run tested on a ZC706 evaluation board.
+>
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>  board/zynq/extlinux.conf        |  4 ++++
+>  board/zynq/genimage.cfg         | 11 ++++++++---
+>  board/zynq/post-build.sh        |  8 ++++++++
+>  board/zynq/post-image.sh        |  6 ++++--
+>  board/zynq/zc706/uboot.fragment |  1 +
+>  configs/zynq_zc706_defconfig    | 20 ++++++++++----------
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+> Most of these changes affect all the zynq boards, but the defconfigs for three of them are in separate patches. If we want commits to be atomic
+> (read: bisectable) these should be suqashed into a single commit.
 
----
-V1->V2:
-  - squashed patch set into single atomic patch
----
- board/zynq/extlinux.conf           |  4 ++++
- board/zynq/genimage.cfg            | 11 ++++++++---
- board/zynq/microzed/uboot.fragment |  1 +
- board/zynq/post-build.sh           |  8 ++++++++
- board/zynq/post-image.sh           |  6 ++++--
- board/zynq/zc706/uboot.fragment    |  1 +
- board/zynq/zed/uboot.fragment      |  1 +
- configs/zynq_microzed_defconfig    | 22 +++++++++++-----------
- configs/zynq_qmtech_defconfig      |  7 ++++---
- configs/zynq_zc706_defconfig       | 20 ++++++++++----------
- configs/zynq_zed_defconfig         | 24 ++++++++++++------------
- 11 files changed, 64 insertions(+), 41 deletions(-)
- create mode 100644 board/zynq/extlinux.conf
- create mode 100644 board/zynq/microzed/uboot.fragment
- create mode 100755 board/zynq/post-build.sh
- create mode 100644 board/zynq/zc706/uboot.fragment
- create mode 100644 board/zynq/zed/uboot.fragment
+I have squashed the patch set into a single patch with v2.  Thanks!
 
-diff --git a/board/zynq/extlinux.conf b/board/zynq/extlinux.conf
-new file mode 100644
-index 0000000000..3c2ab4f46a
---- /dev/null
-+++ b/board/zynq/extlinux.conf
-@@ -0,0 +1,4 @@
-+label linux
-+  kernel /uImage
-+  devicetree /system.dtb
-+  append console=ttyPS0,115200 root=/dev/mmcblk0p2 rw rootwait
-diff --git a/board/zynq/genimage.cfg b/board/zynq/genimage.cfg
-index 67baca795e..78eb9275dd 100644
---- a/board/zynq/genimage.cfg
-+++ b/board/zynq/genimage.cfg
-@@ -3,12 +3,12 @@ image boot.vfat {
- 		files = {
- 			"boot.bin",
- 			"u-boot.img",
--			"devicetree.dtb",
-+			"system.dtb",
- 			"uImage"
- 		}
- 
--		file uramdisk.image.gz {
--			image = "rootfs.cpio.uboot"
-+		file extlinux/extlinux.conf {
-+			image = extlinux.conf
- 		}
- 	}
- 
-@@ -24,4 +24,9 @@ image sdcard.img {
- 		bootable = "true"
- 		image = "boot.vfat"
- 	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
- }
-diff --git a/board/zynq/microzed/uboot.fragment b/board/zynq/microzed/uboot.fragment
-new file mode 100644
-index 0000000000..bc4dffaffa
---- /dev/null
-+++ b/board/zynq/microzed/uboot.fragment
-@@ -0,0 +1 @@
-+CONFIG_DEFAULT_DEVICE_TREE="zynq-microzed"
-diff --git a/board/zynq/post-build.sh b/board/zynq/post-build.sh
-new file mode 100755
-index 0000000000..9fd8bbf2c8
---- /dev/null
-+++ b/board/zynq/post-build.sh
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+
-+# genimage will need to find the extlinux.conf
-+# in the binaries directory
-+
-+BOARD_DIR="$(dirname $0)"
-+
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux.conf
-diff --git a/board/zynq/post-image.sh b/board/zynq/post-image.sh
-index 0cf92e0aa9..ac74286cf6 100755
---- a/board/zynq/post-image.sh
-+++ b/board/zynq/post-image.sh
-@@ -8,6 +8,8 @@ FIRST_DT=$(sed -n \
-            's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9\-]*\).*"$/\1/p' \
-            ${BR2_CONFIG})
- 
--[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/devicetree.dtb
-+[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
- 
--support/scripts/genimage.sh -c board/zynq/genimage.cfg
-+BOARD_DIR="$(dirname $0)"
-+
-+support/scripts/genimage.sh -c $BOARD_DIR/genimage.cfg
-diff --git a/board/zynq/zc706/uboot.fragment b/board/zynq/zc706/uboot.fragment
-new file mode 100644
-index 0000000000..ad5efa6204
---- /dev/null
-+++ b/board/zynq/zc706/uboot.fragment
-@@ -0,0 +1 @@
-+CONFIG_DEFAULT_DEVICE_TREE="zynq-zc706"
-diff --git a/board/zynq/zed/uboot.fragment b/board/zynq/zed/uboot.fragment
-new file mode 100644
-index 0000000000..d58fcd5439
---- /dev/null
-+++ b/board/zynq/zed/uboot.fragment
-@@ -0,0 +1 @@
-+CONFIG_DEFAULT_DEVICE_TREE="zynq-zed"
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index 1bb11fee7e..10a4f4095f 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -2,26 +2,26 @@ BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xilinx-v2017.3)/linux-xilinx-v2017.3.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.1)/xlnx_rebase_v5.15_LTS_2022.1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
--BR2_TARGET_ROOTFS_CPIO=y
--BR2_TARGET_ROOTFS_CPIO_GZIP=y
--BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-microzed"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2018.2"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_microzed"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynq/microzed/uboot.fragment"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
-diff --git a/configs/zynq_qmtech_defconfig b/configs/zynq_qmtech_defconfig
-index 4db3f68b1f..f536b80f57 100644
---- a/configs/zynq_qmtech_defconfig
-+++ b/configs/zynq_qmtech_defconfig
-@@ -5,6 +5,7 @@ BR2_ARM_ENABLE_VFP=y
- BR2_GLOBAL_PATCH_DIR="board/qmtech/zynq/patches"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-@@ -14,9 +15,9 @@ BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-qmtech"
--BR2_TARGET_ROOTFS_CPIO=y
--BR2_TARGET_ROOTFS_CPIO_GZIP=y
--BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index e8019177d2..82c47be7a5 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -2,26 +2,26 @@ BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xilinx-v2017.3)/linux-xilinx-v2017.3.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.1)/xlnx_rebase_v5.15_LTS_2022.1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc706"
--BR2_TARGET_ROOTFS_CPIO=y
--BR2_TARGET_ROOTFS_CPIO_GZIP=y
--BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2018.2"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zc706"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynq/zc706/uboot.fragment"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index a215695b54..34e1b67184 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
-@@ -2,26 +2,26 @@ BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.1)/xlnx_rebase_v5.15_LTS_2022.1.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
--BR2_TARGET_ROOTFS_CPIO=y
--BR2_TARGET_ROOTFS_CPIO_GZIP=y
--BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2018.2"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zed"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynq/zed/uboot.fragment"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
--- 
-2.17.1
-
+Best regards,
+Neal Frager
+AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
