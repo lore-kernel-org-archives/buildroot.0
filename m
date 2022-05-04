@@ -1,53 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FA83C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 07:11:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBF4DC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 07:18:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95E3860E33;
-	Wed,  4 May 2022 07:11:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B6E7410CB;
+	Wed,  4 May 2022 07:18:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZUm8iEvV8-Us; Wed,  4 May 2022 07:11:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k4KrFEJH6bGu; Wed,  4 May 2022 07:18:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9383160D53;
-	Wed,  4 May 2022 07:11:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A373440A06;
+	Wed,  4 May 2022 07:18:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 03C961BF42D
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 07:11:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0604F1BF42D
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 07:18:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E53BF4175B
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 07:11:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E7D554098A
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 07:18:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a6z0DyUmMisP for <buildroot@lists.busybox.net>;
- Wed,  4 May 2022 07:11:04 +0000 (UTC)
+ with ESMTP id 58D8KXySvGpx for <buildroot@lists.busybox.net>;
+ Wed,  4 May 2022 07:18:30 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
  [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2D80541758
- for <buildroot@buildroot.org>; Wed,  4 May 2022 07:11:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A418D40987
+ for <buildroot@buildroot.org>; Wed,  4 May 2022 07:18:30 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id F31BEFF807;
- Wed,  4 May 2022 07:10:59 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 14C96FF80D;
+ Wed,  4 May 2022 07:18:27 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nm9A2-00DIyY-Qg; Wed, 04 May 2022 09:10:58 +0200
+ id 1nm9HH-00DJIQ-0h; Wed, 04 May 2022 09:18:27 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Florian Fainelli <f.fainelli@gmail.com>
-References: <20220504025732.1788544-1-f.fainelli@gmail.com>
-Date: Wed, 04 May 2022 09:10:58 +0200
-In-Reply-To: <20220504025732.1788544-1-f.fainelli@gmail.com> (Florian
- Fainelli's message of "Tue, 3 May 2022 19:57:32 -0700")
-Message-ID: <87czgt3h8d.fsf@dell.be.48ers.dk>
+To: Michal Simek <michal.simek@xilinx.com>
+References: <20220503152425.1069617-1-neal.frager@amd.com>
+ <20220503152425.1069617-2-neal.frager@amd.com>
+ <87h7653i8q.fsf@dell.be.48ers.dk>
+ <edddb58b-dee7-21aa-05b8-3a94c3e2c4d1@xilinx.com>
+Date: Wed, 04 May 2022 09:18:26 +0200
+In-Reply-To: <edddb58b-dee7-21aa-05b8-3a94c3e2c4d1@xilinx.com> (Michal Simek's
+ message of "Wed, 4 May 2022 09:11:23 +0200")
+Message-ID: <878rrh3gvx.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package: Add cpulimit
+Subject: Re: [Buildroot] [PATCH v1 2/2] configs/zynqmp_zcu106_defconfig:
+ transition to tarballs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,97 +63,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin.1998@free.fr, thomas.petazzoni@bootlin.com, mmayer@broadcom.com,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: luca@lucaceresoli.net, giulio.benetti@benettiengineering.com,
+ buildroot@buildroot.org, Neal Frager <neal.frager@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkZsb3JpYW4iID09IEZsb3JpYW4gRmFpbmVsbGkgPGYuZmFpbmVsbGlAZ21haWwuY29t
-PiB3cml0ZXM6CgogPiBDcHVsaW1pdCBpcyBhIHRvb2wgd2hpY2ggbGltaXRzIHRoZSBDUFUgdXNh
-Z2Ugb2YgYSBwcm9jZXNzIChleHByZXNzZWQgaW4KID4gcGVyY2VudGFnZSwgbm90IGluIENQVSB0
-aW1lKS4gSXQgaXMgdXNlZnVsIHRvIGNvbnRyb2wgYmF0Y2ggam9icywgd2hlbgogPiB5b3UgZG9u
-J3Qgd2FudCB0aGVtIHRvIGVhdCB0b28gbWFueSBDUFUgY3ljbGVzLgoKID4gU2lnbmVkLW9mZi1i
-eTogRmxvcmlhbiBGYWluZWxsaSA8Zi5mYWluZWxsaUBnbWFpbC5jb20+CgpUaGFua3MsIGEgZmV3
-IGNvbW1lbnRzOgoKPiAtLS0KID4gIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgfCAgMSAr
-CiA+ICBwYWNrYWdlL2NwdWxpbWl0L0NvbmZpZy5pbiAgIHwgIDcgKysrKysrKwogPiAgcGFja2Fn
-ZS9jcHVsaW1pdC9jcHVsaW1pdC5tayB8IDIzICsrKysrKysrKysrKysrKysrKysrKysrCiA+ICAz
-IGZpbGVzIGNoYW5nZWQsIDMxIGluc2VydGlvbnMoKykKID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBw
-YWNrYWdlL2NwdWxpbWl0L0NvbmZpZy5pbgogPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uv
-Y3B1bGltaXQvY3B1bGltaXQubWsKCllvdSBhcmUgbWlzc2luZyBhIGNwdWxpbWl0Lmhhc2ggd2l0
-aCB0aGUgdGFyYmFsbCBhbmQgbGljZW5zZSBmaWxlCmhhc2hlczoKCmh0dHBzOi8vbmlnaHRseS5i
-dWlsZHJvb3Qub3JnLyNhZGRpbmctcGFja2FnZXMtaGFzaAoKQW5kIGFuIGVudHJ5IGluIERFVkVM
-T1BFUlM6CgpodHRwczovL25pZ2h0bHkuYnVpbGRyb290Lm9yZy8jREVWRUxPUEVSUwoKID4gZGlm
-ZiAtLWdpdCBhL3BhY2thZ2UvQ29uZmlnLmluIGIvcGFja2FnZS9Db25maWcuaW4KID4gaW5kZXgg
-NDMzOTQxZGMwMWI4Li5mNTZhOGZlMjU5NGQgMTAwNjQ0CiA+IC0tLSBhL3BhY2thZ2UvQ29uZmln
-LmluCiA+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCiA+IEBAIC0yNTI0LDYgKzI1MjQsNyBAQCBt
-ZW51ICJTeXN0ZW0gdG9vbHMiCiA+ICAJc291cmNlICJwYWNrYWdlL2NpcmN1cy9Db25maWcuaW4i
-CiA+ICAJc291cmNlICJwYWNrYWdlL2NvbnRhaW5lcmQvQ29uZmlnLmluIgogPiAgCXNvdXJjZSAi
-cGFja2FnZS9jb3JldXRpbHMvQ29uZmlnLmluIgogPiArCXNvdXJjZSAicGFja2FnZS9jcHVsaW1p
-dC9Db25maWcuaW4iCiA+ICAJc291cmNlICJwYWNrYWdlL2NwdWxvYWQvQ29uZmlnLmluIgogPiAg
-CXNvdXJjZSAicGFja2FnZS9kYWVtb24vQ29uZmlnLmluIgogPiAgCXNvdXJjZSAicGFja2FnZS9k
-YzNkZC9Db25maWcuaW4iCiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2NwdWxpbWl0L0NvbmZpZy5p
-biBiL3BhY2thZ2UvY3B1bGltaXQvQ29uZmlnLmluCiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0CiA+
-IGluZGV4IDAwMDAwMDAwMDAwMC4uNDhmOWZhZDk3MmRlCiA+IC0tLSAvZGV2L251bGwKID4gKysr
-IGIvcGFja2FnZS9jcHVsaW1pdC9Db25maWcuaW4KID4gQEAgLTAsMCArMSw3IEBACiA+ICtjb25m
-aWcgQlIyX1BBQ0tBR0VfQ1BVTElNSVQKID4gKwlib29sICJjcHVsaW1pdCIKID4gKwloZWxwCiA+
-ICsJICBDcHVsaW1pdCBpcyBhIHRvb2wgd2hpY2ggbGltaXRzIHRoZSBDUFUgdXNhZ2Ugb2YgYSBw
-cm9jZXNzIChleHByZXNzZWQKID4gKwkgIGluIHBlcmNlbnRhZ2UsIG5vdCBpbiBDUFUgdGltZSkK
-Ci4vdXRpbHMvY2hlY2stcGFja2FnZSBjb21wbGFpbnMgYWJvdXQgdGhlIGxpbmUgbGVuZ3RoIGhl
-cmU6CgpwYWNrYWdlL2NwdWxpbWl0L0NvbmZpZy5pbjo0OiBoZWxwIHRleHQ6IDx0YWI+PDIgc3Bh
-Y2VzPjw2MiBjaGFycz4gKGh0dHA6Ly9uaWdodGx5LmJ1aWxkcm9vdC5vcmcvI3dyaXRpbmctcnVs
-ZXMtY29uZmlnLWluKQoKID4gKwogPiArCSAgaHR0cHM6Ly9naXRodWIuY29tL29wc2VuZ2luZS9j
-cHVsaW1pdAogPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9jcHVsaW1pdC9jcHVsaW1pdC5tayBiL3Bh
-Y2thZ2UvY3B1bGltaXQvY3B1bGltaXQubWsKID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKID4gaW5k
-ZXggMDAwMDAwMDAwMDAwLi42M2IxNDQ2Y2MwOGIKID4gLS0tIC9kZXYvbnVsbAogPiArKysgYi9w
-YWNrYWdlL2NwdWxpbWl0L2NwdWxpbWl0Lm1rCiA+IEBAIC0wLDAgKzEsMjMgQEAKID4gKyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjCiA+ICsjCiA+ICsjIGNwdWxpbWl0CiA+ICsjCiA+ICsjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIwogPiArCiA+ICtDUFVMSU1JVF9WRVJTSU9OID0gdjAuMgogPiArQ1BV
-TElNSVRfU09VUkNFID0gJChDUFVMSU1JVF9WRVJTSU9OKS50YXIuZ3oKID4gK0NQVUxJTUlUX1NJ
-VEUgPSBodHRwczovL2dpdGh1Yi5jb20vb3BzZW5naW5lL2NwdWxpbWl0L2FyY2hpdmUvcmVmcy90
-YWdzLyQoQ1BVTElNSVRfVkVSU0lPTikKCldlIGhhdmUgYSBnaXRodWIgaGVscGVyLCBzbyB5b3Ug
-Y2FuIGp1c3QgZG86CgpDUFVMSU1JVF9WRVJTSU9OID0gMC4yCkNQVUxJTUlUX1NJVEUgPSAkKGNh
-bGwgZ2l0aHViLG9wc2VuZ2luZSxjcHVsaW1pdCx2JChDUFVMSU1JVF9WRVJTSU9OKSkKCkkgZGlk
-IGEgdGVzdCBidWlsZCBoZXJlIGFuZCBpdCBmYWlscyB0byBidWlsZCB3aXRoIGdsaWJjLCBhcyBp
-dCB1c2VzCnN5cy9zeXNjdGwuaCAod2hpY2ggd2FzIHJlbW92ZWQgaW4gZ2xpYmMgMi4zMik6Cgoq
-IFRoZSBkZXByZWNhdGVkIDxzeXMvc3lzY3RsLmg+IGhlYWRlciBhbmQgdGhlIHN5c2N0bCBmdW5j
-dGlvbiBoYXZlIGJlZW4KICByZW1vdmVkLiAgVG8gc3VwcG9ydCBvbGQgYmluYXJpZXMsIHRoZSBz
-eXNjdGwgZnVuY3Rpb24gY29udGludWVzIHRvCiAgZXhpc3QgYXMgYSBjb21wYXRpYmlsaXR5IHN5
-bWJvbCAob24gdGhvc2UgYXJjaGl0ZWN0dXJlcyB3aGljaCBoYWQgaXQpLAogIGJ1dCBhbHdheXMg
-ZmFpbHMgd2l0aCBFTk9TWVMuICBUaGlzIHJlZmxlY3RzIHRoZSByZW1vdmFsIG9mIHRoZSBzeXN0
-ZW0KICBjYWxsIGZyb20gYWxsIGFyY2hpdGVjdHVyZXMsIHN0YXJ0aW5nIHdpdGggTGludXggNS41
-LgoKRG9lcyB0aGlzIHV0aWxpdHkgd29yayB3aXRoIDUuNSsga2VybmVscz8gTXVzbCBhZmFpayBh
-bHNvIGRvZXNuJ3QgaGF2ZQpzeXMvc3lzY3RsLmguCgpwcm9jZXNzX2dyb3VwLmM6IEluIGZ1bmN0
-aW9uIOKAmGZpbmRfcHJvY2Vzc19ieV9uYW1l4oCZOgpwcm9jZXNzX2dyb3VwLmM6NjQ6MTU6IHdh
-cm5pbmc6IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9mIGZ1bmN0aW9uIOKAmGJhc2VuYW1l4oCZIFst
-V2ltcGxpY2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQogICA2NCB8ICAgaWYgKHN0cm5jbXAoYmFz
-ZW5hbWUocHJvYy5jb21tYW5kKSwgcHJvY2Vzc19uYW1lLCBzdHJsZW4ocHJvY2Vzc19uYW1lKSk9
-PTAgJiYga2lsbChwaWQsU0lHQ09OVCk9PTApIHsKICAgICAgfCAgICAgICAgICAgICAgIF5+fn5+
-fn5+CnByb2Nlc3NfZ3JvdXAuYzo2NDoxNTogd2FybmluZzogcGFzc2luZyBhcmd1bWVudCAxIG9m
-IOKAmHN0cm5jbXDigJkgbWFrZXMgcG9pbnRlciBmcm9tIGludGVnZXIgd2l0aG91dCBhIGNhc3Qg
-Wy1XaW50LWNvbnZlcnNpb25dCiAgIDY0IHwgICBpZiAoc3RybmNtcChiYXNlbmFtZShwcm9jLmNv
-bW1hbmQpLCBwcm9jZXNzX25hbWUsIHN0cmxlbihwcm9jZXNzX25hbWUpKT09MCAmJiBraWxsKHBp
-ZCxTSUdDT05UKT09MCkgewogICAgICB8ICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fgogICAgICB8ICAgICAgICAgICAgICAgfAogICAgICB8ICAgICAgICAgICAgICAgaW50Cklu
-IGZpbGUgaW5jbHVkZWQgZnJvbSBwcm9jZXNzX2dyb3VwLmM6MjI6Ci9ob21lL3Bla28vc291cmNl
-L2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9hYXJjaDY0LWJ1aWxkcm9vdC1saW51eC1nbnUvc3lzcm9v
-dC91c3IvaW5jbHVkZS9zdHJpbmcuaDoxNDM6MzM6IG5vdGU6IGV4cGVjdGVkIOKAmGNvbnN0IGNo
-YXIgKuKAmSBidXQgYXJndW1lbnQgaXMgb2YgdHlwZSDigJhpbnTigJkKICAxNDMgfCBleHRlcm4g
-aW50IHN0cm5jbXAgKGNvbnN0IGNoYXIgKl9fczEsIGNvbnN0IGNoYXIgKl9fczIsIHNpemVfdCBf
-X24pCiAgICAgIHwgICAgICAgICAgICAgICAgICAgICB+fn5+fn5+fn5+fn5efn5+Ci9ob21lL3Bl
-a28vc291cmNlL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9iaW4vYWFyY2g2NC1ub25lLWxpbnV4LWdu
-dS1nY2MgLW8gY3B1bGltaXQgY3B1bGltaXQuYyBsaXN0Lm8gcHJvY2Vzc19pdGVyYXRvci5vIHBy
-b2Nlc3NfZ3JvdXAubyAtRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0X1NPVVJDRSAt
-RF9GSUxFX09GRlNFVF9CSVRTPTY0ICAtT3MgLWcwIC1EX0ZPUlRJRllfU09VUkNFPTEKY3B1bGlt
-aXQuYzo0MToxMDogZmF0YWwgZXJyb3I6IHN5cy9zeXNjdGwuaDogTm8gc3VjaCBmaWxlIG9yIGRp
-cmVjdG9yeQogICA0MSB8ICNpbmNsdWRlIDxzeXMvc3lzY3RsLmg+CiAgICAgIHwgICAgICAgICAg
-Xn5+fn5+fn5+fn5+fn4KY29tcGlsYXRpb24gdGVybWluYXRlZC4KCgpJIGRpZG4ndCBsb29rIGF0
-IHRoZSBjb2RlLCBidXQgaXQgd291bGQgYmUgZ29vZCB0byBtYWtlIGl0IHdvcmsgb24KbW9kZXJu
-IHN5c3RlbXMuIEFsdGVybmF0aXZlbHkgeW91IHdpbGwgbmVlZCB0byBtYWtlIGl0IGRlcGVuZCBv
-biB1Q2xpYmMuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+>>>>> "Michal" == Michal Simek <michal.simek@xilinx.com> writes:
+
+ > On 5/4/22 08:49, Peter Korsgaard wrote:
+ >>>>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
+ >> > This patch migrates configs/zynqmp_zcu106_defconfig to tarballs
+ >> for TF-A, u-boot and Linux.
+ >> > This patch has zero change in code running on the device.
+ >> > The goal is to improve build speed and align with the zynq_xxx_defconfigs.
+ >> > Signed-off-by: Neal Frager <neal.frager@amd.com>
+ >> Committed, thanks.
+ >> Notice: I'm still seeing noisy warnings from the kernel during boot,
+ >> did
+ >> you hear back from Michal abot that?
+ >> [    4.384715] zynqmp-display fd4a0000.display: vtc bridge property
+ >> not present
+ >> [    4.393156] ------------[ cut here ]------------
+ >> [    4.397776] More than allowed devices are using the vpll_int, which is forbidden
+
+
+ > This is caused by not proper psu_init which setup PLLs incorrectly.
+
+This is using the psu_init_gpl.c in U-Boot:
+
+https://github.com/Xilinx/u-boot-xlnx/blob/xlnx_rebase_v2022.01_2022.1/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
+
+And the pmu configuration object from Neal:
+
+https://git.buildroot.net/buildroot/tree/board/zynqmp/zcu106/pm_cfg_obj.c
+
+So what exactly needs to change?
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
