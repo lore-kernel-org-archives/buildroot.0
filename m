@@ -1,73 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B50EC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 22:21:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EFEDC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 23:28:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8916680B2D;
-	Wed,  4 May 2022 22:21:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3739418E8;
+	Wed,  4 May 2022 23:28:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3ia9E2hwW4pv; Wed,  4 May 2022 22:21:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 531ViB6jOBKP; Wed,  4 May 2022 23:28:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98D9C83F91;
-	Wed,  4 May 2022 22:21:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6A7F21BF3C8
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 22:21:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80773418B1;
+	Wed,  4 May 2022 23:28:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 60F421BF484
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 23:27:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6152583F91
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 22:21:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4F1BC610D2
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 23:27:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kXDyz32-EFf3 for <buildroot@lists.busybox.net>;
- Wed,  4 May 2022 22:21:19 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KxtZPnH7VqU1 for <buildroot@lists.busybox.net>;
+ Wed,  4 May 2022 23:27:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6799A83F90
- for <buildroot@buildroot.org>; Wed,  4 May 2022 22:21:19 +0000 (UTC)
-Received: by mail-lf1-x135.google.com with SMTP id y32so4658719lfa.6
- for <buildroot@buildroot.org>; Wed, 04 May 2022 15:21:19 -0700 (PDT)
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7AC4A60BC4
+ for <buildroot@buildroot.org>; Wed,  4 May 2022 23:27:56 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id i20so3158820ion.0
+ for <buildroot@buildroot.org>; Wed, 04 May 2022 16:27:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:from:date:message-id:subject:to
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=KBfqsK+gcO7iKMsezS23VB2pQI1TSBXlZT1tdI633Xg=;
- b=NXAHXtaB4ZRL9HOBk9gqzs53D4ONbc5TR208fNdFQ2t9vHKlNlvQKZtz2OG0qKON6s
- GS+luyZUdZVRNtmVuWU5EjdbdePKsRXYLlT+/SK8wbvfvZZMM5CRiFCXkvPxXqlVoURZ
- HDc6tNKDQo4zxcauemZ4YPoJDa2xtq8HQpzwXDgXU5mAH1t0RkPfHqTzZebVheMUJ8l+
- HJTwPsPOvh23ujTkPBWec80SiRaSf2Rob9/Qs6OCTmLaJ+MVoce95jlVzEQHKqzhMX4U
- YRn9/JMDv6sAanqDeAW4DrxIUvm5jGNNLPArLflQ71vQCe51lm+c3Idnkfsm/ILF+7qU
- fw+g==
+ bh=rwZnnx54pKpx/WT7ZV2UAyV0IaHef9iFh7Q8inThgc4=;
+ b=ZtY5aYdSy8kFG7EjwR2Xf2gsUVko79MEv6lU+uj0TFD3k1sbrO4gZ4qu5imhJovwW1
+ REXCYUpIbZi823XrmpHM4J2PMSrWpMKx0GhwJylZfwKJ9K/UDhMd5la8xTeMJfuJjhnP
+ 0DRKo2+dUiHRFm4nX+K6wUjMnwSum7i1oXK55J52KLam2/yPyCGi60+zWo8Y6JzKAgav
+ 4L9ke8ylK4dy332/siojny546cXnsEFwDP2lHWhb12yhh1vj3Hw/8JdJiK+SRHie93Rl
+ u44WmOGm3hkh2b51apt+iR1j6KUVuJ8GjPIzf2vsAz2sm5/zL/KVMiFezs0IlC9AaVEK
+ Cktw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=KBfqsK+gcO7iKMsezS23VB2pQI1TSBXlZT1tdI633Xg=;
- b=NTH6wWDkqV7GdxQAMb34bSaIWjC4vQ01FIwVOYw0wP2mg00zgl4LJ1HP+sfQJc79Ep
- U91Ai7c0XAXu+3bckVgQdRHSYKQfI3JnshUTf1185ZXccrfoELVXbDpigHWaF6ojawL0
- AII9V0eb/eybAVvRhbFHS2KjOVS9d8tR/1zqXrGwn+DNclcBm8/Dap5cVzMMJovTp47D
- YV+pmuiPv9bhu1fmvPiFKoNMC+jp9syUesmxXgfx+rrcjUPrYwM3yeWS9ijUAvCuzDyt
- HX7rHpeGB3OiQx2J3Y9bKvMPJ1F04Rmjty5F3yjGwAYUd7Vl9gAcz2RMO//uIIfJSuIi
- HMag==
-X-Gm-Message-State: AOAM530SeSg2W+eORcJbK/XdniBMUS9gJezC8JKH1jAGDifeFmqaZaT4
- WhgyJII1s2pPGJtXt4kSivkqQyr7md9ERK4bG04rLl50dX4xeL1X
-X-Google-Smtp-Source: ABdhPJxZzA0KWAYP/sclL31OXpXViKSFfhymSfsYizj1Wh+NTKmaE0eCfK45n6XO15dPeQX8OF1SzflInVrpnoEpi0k=
-X-Received: by 2002:a05:6512:1399:b0:448:9f0b:bf4f with SMTP id
- p25-20020a056512139900b004489f0bbf4fmr15180610lfa.67.1651702877044; Wed, 04
- May 2022 15:21:17 -0700 (PDT)
-MIME-Version: 1.0
-From: =?UTF-8?Q?Nuno_Gon=C3=A7alves?= <nunojpg@gmail.com>
-Date: Wed, 4 May 2022 23:21:06 +0100
-Message-ID: <CAEXMXLSha38Ybck+-p9Tnx4cQqPJbXfFQ17qFMDTrpvjh_tEeA@mail.gmail.com>
+ bh=rwZnnx54pKpx/WT7ZV2UAyV0IaHef9iFh7Q8inThgc4=;
+ b=ZcDuGhIFZ+iyorcHZ2pB74YKlyQmM8/uXeYUZwkPfNt92UTDo0W39JSJUFPEurtdVg
+ PEsgfzn95atzu3Bls1YO1dOqbWL12t347rrSUc5bhx9eIW3gWM2YCZiO1FrEpVLytT4O
+ d7CVqyLODqlqA/h74IRes8DbgLyoyQc5C0K1Da92654iqmfzRgr7n/nCitPo52hAtn3V
+ KBFCE5EZRsGgTkFHcwAd7LMHclfFtYespfMVf/aIMPQOhx/dr45C5BAW+e9VfSKsHusv
+ PP2krQ9HsDPY5Zg1UJvQTf33ww6l9NJzC8zva7pkZz5XdzyN25N26Eag0uNUHkGLFf81
+ furQ==
+X-Gm-Message-State: AOAM533CP6kw3RGwyKIDNpqigMZXe5JybzeYTpMqkItmtOLr0FcpJhZO
+ BZDX+fuUDjsbQhbEUmyPS/CLhDEKsAM=
+X-Google-Smtp-Source: ABdhPJxZhef2JjW69O8OnJ3KQ32Ogyff0qmag0xeVH0nDNyI9fIL68JOcSvVJdW5tW2D8CDp2M42sA==
+X-Received: by 2002:a05:6602:2a42:b0:652:8e2d:e4b7 with SMTP id
+ k2-20020a0566022a4200b006528e2de4b7mr9338206iov.142.1651706875382; 
+ Wed, 04 May 2022 16:27:55 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
+ [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
+ q13-20020a5d9f0d000000b0065a47e16f62sm3971069iot.52.2022.05.04.16.27.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 04 May 2022 16:27:55 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Subject: [Buildroot] [PATC] package/google-breakpad: add option to build
- target tools
+Date: Wed,  4 May 2022 17:27:52 -0600
+Message-Id: <20220504232752.4188723-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/ninja: add make jobserver support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,49 +86,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyB0b29scyBhcmUgcmVxdWlyZWQgZm9yIGRlYnVnIHNjZW5hcmlvcyB3aGVyZSB0aGUgZGVi
-dWcKaGFwcGVucyBpbi10YXJnZXQuCgpTaWduZWQtb2ZmLWJ5OiBOdW5vIEdvbsOnYWx2ZXMgPG51
-bm9qcGdAZ21haWwuY29tPgotLS0KIHBhY2thZ2UvZ29vZ2xlLWJyZWFrcGFkL0NvbmZpZy5pbiAg
-ICAgICAgICB8IDEyICsrKysrKysrKysrKwogcGFja2FnZS9nb29nbGUtYnJlYWtwYWQvZ29vZ2xl
-LWJyZWFrcGFkLm1rIHwgIDUgKysrKy0KIDIgZmlsZXMgY2hhbmdlZCwgMTYgaW5zZXJ0aW9ucygr
-KSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZ29vZ2xlLWJyZWFrcGFkL0Nv
-bmZpZy5pbgpiL3BhY2thZ2UvZ29vZ2xlLWJyZWFrcGFkL0NvbmZpZy5pbgppbmRleCAwN2M0OTk5
-NmRkLi4wY2I4ODFhNGM5IDEwMDY0NAotLS0gYS9wYWNrYWdlL2dvb2dsZS1icmVha3BhZC9Db25m
-aWcuaW4KKysrIGIvcGFja2FnZS9nb29nbGUtYnJlYWtwYWQvQ29uZmlnLmluCkBAIC0zNCw2ICsz
-NCwxOCBAQCBjb25maWcgQlIyX1BBQ0tBR0VfR09PR0xFX0JSRUFLUEFECgogICAgaHR0cHM6Ly9j
-aHJvbWl1bS5nb29nbGVzb3VyY2UuY29tL2JyZWFrcGFkL2JyZWFrcGFkCgoraWYgQlIyX1BBQ0tB
-R0VfR09PR0xFX0JSRUFLUEFECitjb25maWcgQlIyX1BBQ0tBR0VfR09PR0xFX0JSRUFLUEFEX1RP
-T0xTCisgYm9vbCAiQnVpbGQgdGFyZ2V0IHRvb2xzIgorIGhlbHAKKyAgICBCdWlsZCBwcm9jZXNz
-b3IgYW5kIHRvb2xzIGZvciB0YXJnZXQgYXMgZHVtcF9zeW1zLCBtaW5pZHVtcF9zdGFja3dhbGsK
-KyAgICBhbmQgbWljcm9kdW1wX3N0YWNrd2Fsay4KKworICAgIFRoaXMgdG9vbHMgYXJlIGluc3Rh
-bGxlZCB0byB0aGUgc3RhZ2luZyBmb2xkZXIgb25seSwgc28gbm90IHBhcnQgb2YKKyAgICB0aGUg
-dGFyZ2V0IGltYWdlIGJ5IGRlZmF1bHQuCisKK2VuZGlmICMgQlIyX1BBQ0tBR0VfR09PR0xFX0JS
-RUFLUEFECisKIGNvbW1lbnQgImdvb2dsZS1icmVha3BhZCByZXF1aXJlcyBhIGdsaWJjIG9yIHVD
-bGliYyB0b29sY2hhaW4gdy8Kd2NoYXIsIHRocmVhZCwgQysrLCBnY2MgPj0gNC44IgogIGRlcGVu
-ZHMgb24gQlIyX1BBQ0tBR0VfR09PR0xFX0JSRUFLUEFEX0FSQ0hfU1VQUE9SVFMKICBkZXBlbmRz
-IG9uIEJSMl9QQUNLQUdFX0hPU1RfR09PR0xFX0JSRUFLUEFEX0FSQ0hfU1VQUE9SVFMKZGlmZiAt
-LWdpdCBhL3BhY2thZ2UvZ29vZ2xlLWJyZWFrcGFkL2dvb2dsZS1icmVha3BhZC5tawpiL3BhY2th
-Z2UvZ29vZ2xlLWJyZWFrcGFkL2dvb2dsZS1icmVha3BhZC5tawppbmRleCBjYWZlMTM1OWYzLi5k
-YzQxN2Y0NjM3IDEwMDY0NAotLS0gYS9wYWNrYWdlL2dvb2dsZS1icmVha3BhZC9nb29nbGUtYnJl
-YWtwYWQubWsKKysrIGIvcGFja2FnZS9nb29nbGUtYnJlYWtwYWQvZ29vZ2xlLWJyZWFrcGFkLm1r
-CkBAIC03LDcgKzcsNiBAQAogR09PR0xFX0JSRUFLUEFEX1ZFUlNJT04gPSBjODVlYjRhNTliNjE4
-ZjNiZWFhZDU0NDVjZWIxZjg2NWZmYThlZmRmCiBHT09HTEVfQlJFQUtQQURfU0lURSA9IGh0dHBz
-Oi8vY2hyb21pdW0uZ29vZ2xlc291cmNlLmNvbS9icmVha3BhZC9icmVha3BhZAogR09PR0xFX0JS
-RUFLUEFEX1NJVEVfTUVUSE9EID0gZ2l0Ci1HT09HTEVfQlJFQUtQQURfQ09ORl9PUFRTID0gLS1k
-aXNhYmxlLXByb2Nlc3NvciAtLWRpc2FibGUtdG9vbHMKICMgT25seSBhIHN0YXRpYyBsaWJyYXJ5
-IGlzIGluc3RhbGxlZAogR09PR0xFX0JSRUFLUEFEX0lOU1RBTExfVEFSR0VUID0gTk8KIEdPT0dM
-RV9CUkVBS1BBRF9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKQEAgLTM4LDUgKzM3LDkgQEAgZGVmaW5l
-IEdPT0dMRV9CUkVBS1BBRF9FWFRSQUNUX1NZTUJPTFMKIGVuZGVmCiBHT09HTEVfQlJFQUtQQURf
-VEFSR0VUX0ZJTkFMSVpFX0hPT0tTICs9IEdPT0dMRV9CUkVBS1BBRF9FWFRSQUNUX1NZTUJPTFMK
-CitpZmVxICgkKEJSMl9QQUNLQUdFX0dPT0dMRV9CUkVBS1BBRF9UT09MUyksKQorR09PR0xFX0JS
-RUFLUEFEX0NPTkZfT1BUUyA9IC0tZGlzYWJsZS1wcm9jZXNzb3IgLS1kaXNhYmxlLXRvb2xzCitl
-bmRpZgorCiAkKGV2YWwgJChhdXRvdG9vbHMtcGFja2FnZSkpCiAkKGV2YWwgJChob3N0LWF1dG90
-b29scy1wYWNrYWdlKSkKLS0gCjIuMzIuMApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+Switch to the Kitware(cmake maintainer) fork of ninja with make
+jobserver support.
+
+This fork has tagged releases based on upstream release tags with
+jobserver support added.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/ninja/ninja.hash | 2 +-
+ package/ninja/ninja.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/ninja/ninja.hash b/package/ninja/ninja.hash
+index fd2c594a77..ecde199844 100644
+--- a/package/ninja/ninja.hash
++++ b/package/ninja/ninja.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  ce35865411f0490368a8fc383f29071de6690cbadc27704734978221f25e2bed  ninja-1.10.2.tar.gz
++sha256  549c31ee596566b952c600e23eb9b8d39a4112cd5fdeb2e5a83370669176da40  ninja-1.10.2.g51db2.kitware.jobserver-1.tar.gz
+ sha256  eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea  COPYING
+diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
+index ab1941023e..bc84046414 100644
+--- a/package/ninja/ninja.mk
++++ b/package/ninja/ninja.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-NINJA_VERSION = 1.10.2
+-NINJA_SITE = $(call github,ninja-build,ninja,v$(NINJA_VERSION))
++NINJA_VERSION_MAJOR = 1.10.2
++NINJA_VERSION = $(NINJA_VERSION_MAJOR).g51db2.kitware.jobserver-1
++NINJA_SITE = $(call github,Kitware,ninja,v$(NINJA_VERSION))
+ NINJA_LICENSE = Apache-2.0
+ NINJA_LICENSE_FILES = COPYING
+ 
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
