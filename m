@@ -1,80 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D01ECC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 18:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70FA0C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 19:36:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63B9540BC9;
-	Wed,  4 May 2022 18:30:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 893E441881;
+	Wed,  4 May 2022 19:36:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oIADMUR_UTup; Wed,  4 May 2022 18:30:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B4e0n1f5LaUC; Wed,  4 May 2022 19:36:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1311140BC5;
-	Wed,  4 May 2022 18:30:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B7F8F1BF3C2
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 18:30:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2233041882;
+	Wed,  4 May 2022 19:36:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7EE3E1BF3BE
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 19:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A34CC40BBD
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 18:30:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6626E41882
+ for <buildroot@lists.busybox.net>; Wed,  4 May 2022 19:36:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vzf56jFLrTms for <buildroot@lists.busybox.net>;
- Wed,  4 May 2022 18:30:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OLhTPrrUjVbo for <buildroot@lists.busybox.net>;
+ Wed,  4 May 2022 19:36:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 390D440AAC
- for <buildroot@buildroot.org>; Wed,  4 May 2022 18:30:04 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id u3so3162828wrg.3
- for <buildroot@buildroot.org>; Wed, 04 May 2022 11:30:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=kZqe8kGYOf0ecwmFdFvVN9tILYJ6S8+Lku5vpq9kXTE=;
- b=mzRDaPfoIk7sOuMmky3qtswqWy5zRETQnyrJ2iTxXpQDGOUMkIojGfo/Ox4rrbIFrN
- KUGp8ZYxJKhrj+WKyOzUJ2DZvUBGflkgO9Byb/OcTzhl9w4OlJ3KQrYZ4r4nvqy/dhm7
- lMbyYK6hBJxYHUSa3SjCCDSRBZwGD7B037z6Fl4gGwwLwEFReSc9WvmdSzB5NszNclRy
- CP6DvJgGlT96/9ZpAA616wV+YZ9EPzOMQs5ag4LoJULXaptzfQkZ/m5Q8euWcnfTX2Am
- +nduyUpXHsVivh2jOxRvhZRNGt83T0YeJYrLFBxZ1KxhOK2eK+XcSpqA9ETeD7zqWAWK
- MJJA==
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 62FFC41881
+ for <buildroot@buildroot.org>; Wed,  4 May 2022 19:36:07 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id gh6so4865217ejb.0
+ for <buildroot@buildroot.org>; Wed, 04 May 2022 12:36:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=kQsgdNBFAtbpZ29Ywa5xY6wKJ7Ckfqoa1TqS3/cfP98=;
+ b=DvB5TrHyyvrWvyAJ1NMkYdjEzy5aCWN2mQI2P45qaWioVPNAWb+Ptr4gKuhEs6h/Sj
+ 31ygVnuVWXMTkDQ9qbQ5TfaY6chBV+hE6ceOe7pYl6I652JGmyoWn4DApDXLJJlITnRy
+ WkNHwgiPmAoQA1MnAsBijcuBBRHfD644fafYZHC5XAYc+OGVGX2EZ4lPU2fMda7aAVer
+ v6WrUo6v712TNesob0L8r3Z7noazEzHpOMc0nFbTi0bM4uaOhBbE8d9iIH0+frYNL/kS
+ YyZyzlJjWHhq5LUVE1vY5IZRDIZGk2J7577IGXnf3COgoJs6rSHd/vDCJvM9XpBu2/xT
+ a5Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=kZqe8kGYOf0ecwmFdFvVN9tILYJ6S8+Lku5vpq9kXTE=;
- b=z19qIPW7TlL4Eu7pvQuAYs1Q1BOZVO26cmH4Y14yy+yBPs82zaxGp/qEBvj8hrJvka
- pjGbtq7LvCT74E47Zn5Fv9ybQxAU5nvAzsUDcCNS2Fw8Ps0lJPNn3a0vtXx8/M3dybzN
- bFQB7onM9A7ViQtcCN/9Wu0VgZo70qNurGi3Xp7/xYnlbgSr+z77Pj2UDU340k3aFT4u
- 5JXhGHyvm/pjjWLgg3yxNy7M5qk6Sb6hCv8w/vFOI5ueZjLZ45CQPnM9dp4SJPgLRXuN
- CUnDHaqAtAAaXW0c1UmpbL2Dc3D0cr7vwB5EqW7x9rhwIAYF55/u584cJZUNnpWl+WfF
- lZfg==
-X-Gm-Message-State: AOAM533EJuL2wPKMJOYOHhWmOX2GRkeaUwWtluQ/5YVwWs6XzQp3PpFB
- CQtSwtMRWSYCpR1UvkwE68tS98ksaY8=
-X-Google-Smtp-Source: ABdhPJxzHf55TM0oKkWt4tmkk8nvGMS3PEBYxJYjwsZ3RXF6F4q6O/RIpW2qHLc36gdvvw2TgnYdpg==
-X-Received: by 2002:adf:f747:0:b0:20a:d30a:5f08 with SMTP id
- z7-20020adff747000000b0020ad30a5f08mr17479844wrp.278.1651689003112; 
- Wed, 04 May 2022 11:30:03 -0700 (PDT)
-Received: from atlas.home
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ bh=kQsgdNBFAtbpZ29Ywa5xY6wKJ7Ckfqoa1TqS3/cfP98=;
+ b=TkmLa6tDlJ055l4XGSDn+Y4Sv+PmMUKM2wPoMvkrF7KWWaSmKCJr/Ev9RpFr0RB3Cw
+ IyKjlElnThnck6qZM9gTMfyg1kCRVqybKZ3v59h9M59N723NRBdPrbIy0uFUKFbte8x/
+ XGKJ8rj8Fv0JTzPz5/dJCmwVpJ1LXILPUEY/4W45r3bb0xoBDvQsg5ZMfxW1vpolPiuz
+ cosjm979omwPnQYZrUpQN3f/s/dhPTm72LZfUrD1z83dx86q7hkk9JchE/RV3/iDM6X1
+ 4tEg32s49TnzOWosFZHH4BonqDdPR63LO+6FvmddYDxfQ9P0GQlXU39xhzfFU3f91QcE
+ sYwQ==
+X-Gm-Message-State: AOAM533ngnGjQcKkVriecxNAgJmY/n5cj+tt7kZ5s2RhqkvwHjIfo6i3
+ T5ghP3jKG3m8vsbgmSu58pqSvQ==
+X-Google-Smtp-Source: ABdhPJyK7IRynVzfyFoqD3a6jnYhieCYNhtLPAIgN5DUoIjvLuxvD9iXga+lzypjXSiWTa2UUBiiJw==
+X-Received: by 2002:a17:907:60d4:b0:6e8:7121:3c80 with SMTP id
+ hv20-20020a17090760d400b006e871213c80mr22140032ejc.352.1651692965187; 
+ Wed, 04 May 2022 12:36:05 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- f8-20020a7bc8c8000000b00394615cf468sm896647wml.28.2022.05.04.11.30.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 May 2022 11:30:02 -0700 (PDT)
-From: Romain Naour <romain.naour@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  4 May 2022 20:29:58 +0200
-Message-Id: <20220504182958.82477-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ qv48-20020a17090787b000b006f3ef214e09sm6093316ejc.111.2022.05.04.12.36.04
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 04 May 2022 12:36:04 -0700 (PDT)
+Message-ID: <c9105461-815a-c212-2afc-4c175467b424@mind.be>
+Date: Wed, 4 May 2022 21:36:04 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/gcc: bump to version 11.3
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-GB
+To: Yannick Brosseau <yannick.brosseau@gmail.com>, buildroot@buildroot.org
+References: <20220504164214.1095968-1-yannick.brosseau@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220504164214.1095968-1-yannick.brosseau@gmail.com>
+Subject: Re: [Buildroot] [PATCH] package/openocd: Fix segfault when using
+ ST-Link driver
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,167 +93,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Tested with toolchain-builder:
-https://gitlab.com/kubu93/toolchains-builder/-/pipelines/529686714
-
-See:
-https://gcc.gnu.org/pipermail/gcc/2022-April/238573.html
-https://gcc.gnu.org/gcc-11/changes.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- ...-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch | 10 +++++-----
- ...-or1k-Use-cmodel-large-when-building-crtstuff.patch |  8 ++++----
- ...ine-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch |  6 +++---
- package/gcc/Config.in.host                             |  2 +-
- package/gcc/gcc.hash                                   |  4 ++--
- 5 files changed, 15 insertions(+), 15 deletions(-)
- rename package/gcc/{11.2.0 => 11.3.0}/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch (96%)
- rename package/gcc/{11.2.0 => 11.3.0}/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch (93%)
- rename package/gcc/{11.2.0 => 11.3.0}/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch (88%)
-
-diff --git a/package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch b/package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-similarity index 96%
-rename from package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-rename to package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-index 6e32f953a3..4888f7e320 100644
---- a/package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-+++ b/package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-@@ -1,4 +1,4 @@
--From eff8110674ef193481d3657456a262beeb9951ff Mon Sep 17 00:00:00 2001
-+From 7a20b4574f06472086c786bd1b078ee962cdb02c Mon Sep 17 00:00:00 2001
- From: Stafford Horne <shorne@gmail.com>
- Date: Tue, 6 Apr 2021 05:47:17 +0900
- Subject: [PATCH] or1k: Add mcmodel option to handle large GOTs
-@@ -166,10 +166,10 @@ index 6bd0f3eee6d..cc23e3b8856 100644
-  Target RejectNegative Mask(CMOV)
-  Enable generation of conditional move (l.cmov) instructions.  By default the
- diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
--index 57b97a0838c..d8a6b0b60c9 100644
-+index 35508efb4ef..a1b7608a3aa 100644
- --- a/gcc/doc/invoke.texi
- +++ b/gcc/doc/invoke.texi
--@@ -1141,7 +1141,8 @@ Objective-C and Objective-C++ Dialects}.
-+@@ -1136,7 +1136,8 @@ Objective-C and Objective-C++ Dialects}.
-  @gccoptlist{-mboard=@var{name}  -mnewlib  -mhard-mul  -mhard-div @gol
-  -msoft-mul  -msoft-div @gol
-  -msoft-float  -mhard-float  -mdouble-float -munordered-float @gol
-@@ -179,7 +179,7 @@ index 57b97a0838c..d8a6b0b60c9 100644
-  
-  @emph{PDP-11 Options}
-  @gccoptlist{-mfpu  -msoft-float  -mac0  -mno-ac0  -m40  -m45  -m10 @gol
--@@ -26684,6 +26685,15 @@ Enable generation of shift with immediate (@code{l.srai}, @code{l.srli},
-+@@ -26443,6 +26444,15 @@ Enable generation of shift with immediate (@code{l.srai}, @code{l.srli},
-  @code{l.slli}) instructions.  By default extra instructions will be generated
-  to store the immediate to a register first.
-  
-@@ -196,5 +196,5 @@ index 57b97a0838c..d8a6b0b60c9 100644
-  @end table
-  
- -- 
--2.25.1
-+2.35.1
- 
-diff --git a/package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch b/package/gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-similarity index 93%
-rename from package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-rename to package/gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-index 00dd5de2a3..716f007a24 100644
---- a/package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-+++ b/package/gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-@@ -1,4 +1,4 @@
--From da8a9d695b3c4b9397b5d9a27660bfa48af8d707 Mon Sep 17 00:00:00 2001
-+From c544a63928406b706b8493fd9b8ca2136b433cf0 Mon Sep 17 00:00:00 2001
- From: Stafford Horne <shorne@gmail.com>
- Date: Wed, 21 Apr 2021 05:33:15 +0900
- Subject: [PATCH] or1k: Use cmodel=large when building crtstuff
-@@ -29,10 +29,10 @@ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-  create mode 100644 libgcc/config/or1k/t-crtstuff
- 
- diff --git a/libgcc/config.host b/libgcc/config.host
--index 50f00062232..8ca7a00082a 100644
-+index f2dc7e266f4..6f193c32fbd 100644
- --- a/libgcc/config.host
- +++ b/libgcc/config.host
--@@ -1119,12 +1119,12 @@ nios2-*-*)
-+@@ -1132,12 +1132,12 @@ nios2-*-*)
-  	extra_parts="$extra_parts crti.o crtn.o"
-  	;;
-  or1k-*-linux*)
-@@ -56,5 +56,5 @@ index 00000000000..dcae7f3498e
- +# Compile crtbeginS.o and crtendS.o with -mcmodel=large
- +CRTSTUFF_T_CFLAGS_S += -mcmodel=large
- -- 
--2.25.1
-+2.35.1
- 
-diff --git a/package/gcc/11.2.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch b/package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-similarity index 88%
-rename from package/gcc/11.2.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-rename to package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-index 5ac03d7c0c..e33dec3ff6 100644
---- a/package/gcc/11.2.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-+++ b/package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-@@ -1,4 +1,4 @@
--From f80e9941739fb3973b61fc6a5abddef5ad2faf73 Mon Sep 17 00:00:00 2001
-+From 8ef5787701f4d7cf46a27771d38ab54af2499e25 Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd.kuhls@t-online.de>
- Date: Fri, 27 Mar 2020 21:23:53 +0100
- Subject: [PATCH] gcc: define _REENTRANT for OpenRISC when -pthread is passed
-@@ -14,7 +14,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  1 file changed, 2 insertions(+)
- 
- diff --git a/gcc/config/or1k/linux.h b/gcc/config/or1k/linux.h
--index cbdc781418f..36303af892c 100644
-+index 196f3f3c8f0..0cbdc934af1 100644
- --- a/gcc/config/or1k/linux.h
- +++ b/gcc/config/or1k/linux.h
- @@ -32,6 +32,8 @@
-@@ -27,5 +27,5 @@ index cbdc781418f..36303af892c 100644
-  #define LINK_SPEC "%{h*}			\
-     %{static:-Bstatic}				\
- -- 
--2.31.1
-+2.35.1
- 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index a1fe192d3a..f6b9b4fa9d 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -81,7 +81,7 @@ config BR2_GCC_VERSION
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
- 	default "9.4.0"     if BR2_GCC_VERSION_9_X
- 	default "10.3.0"    if BR2_GCC_VERSION_10_X
--	default "11.2.0"    if BR2_GCC_VERSION_11_X
-+	default "11.3.0"    if BR2_GCC_VERSION_11_X
- 	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
- 
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 5655c7a9d7..ad8bae4a99 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
- sha512  dfd3500bf21784b8351a522d53463cf362ede66b0bc302edf350bb44e94418497a8b4b797b6af8ca9b2eeb746b3b115d9c3698381b989546e9151b4496415624  gcc-9.4.0.tar.xz
- # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-10.3.0/sha512.sum
- sha512  2b2dd7453d48a398c29eaebd1422b70341001b8c90a62aee51e83344e7fdd8a8e45f82a4a9165bd7edc76dada912c932f4b6632c5636760fec4c5d7e402b3f86  gcc-10.3.0.tar.xz
--# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.2.0/sha512.sum
--sha512  d53a0a966230895c54f01aea38696f818817b505f1e2bfa65e508753fcd01b2aedb4a61434f41f3a2ddbbd9f41384b96153c684ded3f0fa97c82758d9de5c7cf  gcc-11.2.0.tar.xz
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.3.0/sha512.sum
-+sha512  f0be5ad705c73b84477128a69c047f57dd47002f375eb60e1e842e08cf2009a509e92152bca345823926d550b7395ae6d4de7db51d1ee371c2dc37313881fca7  gcc-11.3.0.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  b0853e2b1c5998044392023fa653e399e74118c46e616504ac59e1a2cf27620f94434767ce06b6cf4ca3dfb57f81d6eda92752befaf095ea5e564a9181b4659c  gcc-arc-2020.09-release.tar.gz
--- 
-2.35.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAwNC8wNS8yMDIyIDE4OjQyLCBZYW5uaWNrIEJyb3NzZWF1IHdyb3RlOgo+IFJlY2VudCBj
+aGFuZ2VzIGluIGxpYnVzYiBoYXZlIGV4cG9zZWQgYSBidWcgaW4gT3Blbk9DRCB3aGljaCBub3cg
+Y3Jhc2ggd2hlbiB0cnlpbmcKPiB0byB1c2UgdGhlIFNULUxpbmsgZHJpdmVyLgo+IAo+IFVwc3Ry
+ZWFtIGhhcyBhIGZpeCBhcyBjb21taXQgY2ZmMGU0MTdkYTU4YWRlZjFjZWVmOWE2M2E5OTQxMmMy
+Y2M4N2ZmMy4gVGhpcyBhZGQgdGhlIGNvbW1pdAo+IGFzIGEgc3RhbmQgYWxvbmUgcGF0Y2guCj4g
+Cj4gU2hvdWxkIGJlIHJlbW92ZWQgd2hlbiBPcGVuT0NEIGlzIHVwZGF0ZWQgdG8gYSBuZXdlciBy
+ZWxlYXNlIHRoYW4gMC4xMQoKQWRkIGEgU2lnbmVkLW9mZi1ieSBsaW5lIGZvciB5b3Vyc2VsZi4g
+IFRoaXMgaXMgYSBzaG9ydCB3YXkgZm9yIHlvdSB0bwphc3NlcnQgdGhhdCB5b3UgYXJlIGVudGl0
+bGVkIHRvIGNvbnRyaWJ1dGUgdGhlIHBhdGNoIHVuZGVyIGJ1aWxkcm9vdCdzCkdQTCBsaWNlbnNl
+LiAgU2VlICBodHRwOi8vZWxpbnV4Lm9yZy9EZXZlbG9wZXJfQ2VydGlmaWNhdGVfT2ZfT3JpZ2lu
+CmZvciBtb3JlIGRldGFpbHMuCgo+IC0tLQo+ICAgLi4uR1Ytd2l0aC1saWJ1c2ItdjEuMC4yNC0z
+My1nMzJhMjIwNi0xLnBhdGNoIHwgODggKysrKysrKysrKysrKysrKysrKwo+ICAgMSBmaWxlIGNo
+YW5nZWQsIDg4IGluc2VydGlvbnMoKykKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL29w
+ZW5vY2QvMDAwMy1zdGxpbmstZml4LVNJR1NFR1Ytd2l0aC1saWJ1c2ItdjEuMC4yNC0zMy1nMzJh
+MjIwNi0xLnBhdGNoCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb3Blbm9jZC8wMDAzLXN0bGlu
+ay1maXgtU0lHU0VHVi13aXRoLWxpYnVzYi12MS4wLjI0LTMzLWczMmEyMjA2LTEucGF0Y2ggYi9w
+YWNrYWdlL29wZW5vY2QvMDAwMy1zdGxpbmstZml4LVNJR1NFR1Ytd2l0aC1saWJ1c2ItdjEuMC4y
+NC0zMy1nMzJhMjIwNi0xLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAw
+MDAwMDAwLi41ZGUzYzkxZmJlCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2Uvb3Blbm9j
+ZC8wMDAzLXN0bGluay1maXgtU0lHU0VHVi13aXRoLWxpYnVzYi12MS4wLjI0LTMzLWczMmEyMjA2
+LTEucGF0Y2gKPiBAQCAtMCwwICsxLDg4IEBACj4gK0Zyb20gY2ZmMGU0MTdkYTU4YWRlZjFjZWVm
+OWE2M2E5OTQxMmMyY2M4N2ZmMyBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogQW50
+b25pbyBCb3JuZW8gPGJvcm5lby5hbnRvbmlvQGdtYWlsLmNvbT4KPiArRGF0ZTogV2VkLCAyMyBK
+dW4gMjAyMSAxNjo1MjoxNiArMDIwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIHN0bGluazogZml4IFNJ
+R1NFR1Ygd2l0aCBsaWJ1c2IgdjEuMC4yNC0zMy1nMzJhMjIwNiAoMTE2MTgpCj4gK01JTUUtVmVy
+c2lvbjogMS4wCj4gK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAo+ICtD
+b250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0Cj4gKwo+ICtUaGUgc3RsaW5rIGRyaXZlciBp
+bmNvcnJlY3RseSB1c2VzIGEgTlVMTCBwb2ludGVyIGZvciBsaWJ1c2Incwo+ICtzdHJ1Y3QgbGli
+dXNiX2NvbnRleHQuCj4gK1RoZSBjb3JyZWN0IHZhbHVlIHRvIGJlIHVzZWQgaXMgbG9jYWwgaW4g
+bGlidXNiX2hlbHBlci5jLgo+ICsKPiArTW92ZSBpbiB0aGUgaGVscGVyIGZpbGUsIGluIGEgd3Jh
+cHBlciBmdW5jdGlvbiwgdGhlIG9ubHkgY2FsbCB0aGF0Cj4gK3JlcXVpcmVzIHRoZSBhYm92ZSB2
+YWx1ZSwgYW5kIGxldCBzdGxpbmsgZHJpdmVyIHRvIHVzZSB0aGlzCj4gK3dyYXBwZXIuCj4gKwo+
+ICtUaGlzIGlzc3VlIGhhcyBub3QgdHJpZ2dlcmVkIGFueSB2aXNpYmxlIHByb2JsZW0gdW50aWwg
+YSBjb2RlCj4gK3JlZmFjdG9yaW5nIFsxXSBpbiBsaWJ1c2IgaGFzIG1hZGUgT3Blbk9DRCBjcmFz
+aGluZyBvbiBXaW5kb3dzIGFuZAo+ICtvbiBNYWNPUy4KCiAgSSBndWVzcyBub3Qgb25seSBXaW5k
+b3dzIGFuZCBNYWNPUyBidXQgYWxzbyBMaW51eCwgb3RoZXJ3aXNlIHlvdSB3b3VsZG4ndCBoYXZl
+IApzZW50IHRoaXMsIHJpZ2h0PwoKPiArCj4gK0NoYW5nZS1JZDogSWQxODE4YzhhZjdjZjBkNGQx
+N2RmYTFkMjJhYWQwNzlkYTAxZWY3NDAKPiArU2lnbmVkLW9mZi1ieTogQW50b25pbyBCb3JuZW8g
+PGJvcm5lby5hbnRvbmlvQGdtYWlsLmNvbT4KPiArRml4ZXM6IGh0dHBzOi8vc291cmNlZm9yZ2Uu
+bmV0L3Avb3Blbm9jZC90aWNrZXRzLzMwOC8KPiArRml4ZXM6IGh0dHBzOi8vZ2l0aHViLmNvbS9s
+aWJ1c2IvbGlidXNiL2lzc3Vlcy85MjgvCj4gK0ZpeGVzOiA0MmQ4ZmE4OTljNmEgKCJzdGxpbmtf
+dXNiOiBTdWJtaXQgbXVsdGlwbGUgVVNCIFVSQnMgYXQgb25jZSB0byBpbXByb3ZlIHBlcmZvcm1h
+bmNlIikKPiArTGluazogWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9saWJ1c2IvbGlidXNiL2NvbW1p
+dC8zMmEyMjA2OTQyOGMKPiArUmVwb3J0ZWQtYnk6IEFuZHJ6ZWogU2llcsW8xJlnYSA8YXNpZXI3
+MEBnbWFpbC5jb20+Cj4gK0NvLWRldmVsb3BlZC1ieTogQW5kcnplaiBTaWVyxbzEmWdhIDxhc2ll
+cjcwQGdtYWlsLmNvbT4KPiArQ28tZGV2ZWxvcGVkLWJ5OiBYaWFvZmFuIENoZW4gPHhpYW9mYW5j
+QGdtYWlsLmNvbT4KPiArUmV2aWV3ZWQtb246IGh0dHA6Ly9vcGVub2NkLnp5bGluLmNvbS82MzMx
+Cj4gK1Rlc3RlZC1ieTogamVua2lucwo+ICtSZXZpZXdlZC1ieTogTWFyYyBTY2hpbmsgPGRldkB6
+YXBiLmRlPgo+ICtSZXZpZXdlZC1ieTogWGlhb2ZhbiA8eGlhb2ZhbmNAZ21haWwuY29tPgo+ICtS
+ZXZpZXdlZC1ieTogQW5kcnplaiBTaWVyxbzEmWdhIDxhc2llcjcwQGdtYWlsLmNvbT4KPiArUmV2
+aWV3ZWQtYnk6IE9sZWtzaWogUmVtcGVsIDxsaW51eEByZW1wZWwtcHJpdmF0LmRlPgo+ICtSZXZp
+ZXdlZC1ieTogQW5kcmVhcyBGcml0aW9mc29uIDxhbmRyZWFzLmZyaXRpb2Zzb25AZ21haWwuY29t
+PgoKICBIZXJlLCB5b3UgbmVlZCB0byBhZGQgeW91ciBTaWduZWQtb2ZmLWJ5IGFzIHdlbGwuIFRo
+aXMgaXMgbmVlZGVkIGJlY2F1c2UgdGhlIApwYWNrYWdlIGxpY2Vuc2UgbWF5IGJlIGRpZmZlcmVu
+dCBmcm9tIEJ1aWxkcm9vdCdzLCBhbmQgdGhlIHBhdGNoIHRha2VzIHRoZSAKcGFja2FnZSdzIGxp
+Y2Vuc2UuCgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+ICstLS0KPiArIHNyYy9qdGFnL2RyaXZlcnMv
+bGlidXNiX2hlbHBlci5jIHwgNSArKysrKwo+ICsgc3JjL2p0YWcvZHJpdmVycy9saWJ1c2JfaGVs
+cGVyLmggfCAxICsKPiArIHNyYy9qdGFnL2RyaXZlcnMvc3RsaW5rX3VzYi5jICAgIHwgNyArLS0t
+LS0tCj4gKyAzIGZpbGVzIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkK
+PiArCj4gK2RpZmYgLS1naXQgYS9zcmMvanRhZy9kcml2ZXJzL2xpYnVzYl9oZWxwZXIuYyBiL3Ny
+Yy9qdGFnL2RyaXZlcnMvbGlidXNiX2hlbHBlci5jCj4gK2luZGV4IGYwMTIyZDUzNC4uMThmZTRi
+YWQ0IDEwMDY0NAo+ICstLS0gYS9zcmMvanRhZy9kcml2ZXJzL2xpYnVzYl9oZWxwZXIuYwo+ICsr
+KysgYi9zcmMvanRhZy9kcml2ZXJzL2xpYnVzYl9oZWxwZXIuYwo+ICtAQCAtMzYzLDMgKzM2Myw4
+IEBAIGludCBqdGFnX2xpYnVzYl9nZXRfcGlkKHN0cnVjdCBsaWJ1c2JfZGV2aWNlICpkZXYsIHVp
+bnQxNl90ICpwaWQpCj4gKwo+ICsgCXJldHVybiBFUlJPUl9GQUlMOwo+ICsgfQo+ICsrCj4gKytp
+bnQganRhZ19saWJ1c2JfaGFuZGxlX2V2ZW50c19jb21wbGV0ZWQoaW50ICpjb21wbGV0ZWQpCj4g
+Kyt7Cj4gKysJcmV0dXJuIGxpYnVzYl9oYW5kbGVfZXZlbnRzX2NvbXBsZXRlZChqdGFnX2xpYnVz
+Yl9jb250ZXh0LCBjb21wbGV0ZWQpOwo+ICsrfQo+ICtkaWZmIC0tZ2l0IGEvc3JjL2p0YWcvZHJp
+dmVycy9saWJ1c2JfaGVscGVyLmggYi9zcmMvanRhZy9kcml2ZXJzL2xpYnVzYl9oZWxwZXIuaAo+
+ICtpbmRleCBmYTdkMDZlMjguLjNlNzc4NjVkNiAxMDA2NDQKPiArLS0tIGEvc3JjL2p0YWcvZHJp
+dmVycy9saWJ1c2JfaGVscGVyLmgKPiArKysrIGIvc3JjL2p0YWcvZHJpdmVycy9saWJ1c2JfaGVs
+cGVyLmgKPiArQEAgLTYwLDUgKzYwLDYgQEAgaW50IGp0YWdfbGlidXNiX2Nob29zZV9pbnRlcmZh
+Y2Uoc3RydWN0IGxpYnVzYl9kZXZpY2VfaGFuZGxlICpkZXZoLAo+ICsgCQl1bnNpZ25lZCBpbnQg
+KnVzYl93cml0ZV9lcCwKPiArIAkJaW50IGJjbGFzcywgaW50IHN1YmNsYXNzLCBpbnQgcHJvdG9j
+b2wsIGludCB0cmFuc190eXBlKTsKPiArIGludCBqdGFnX2xpYnVzYl9nZXRfcGlkKHN0cnVjdCBs
+aWJ1c2JfZGV2aWNlICpkZXYsIHVpbnQxNl90ICpwaWQpOwo+ICsraW50IGp0YWdfbGlidXNiX2hh
+bmRsZV9ldmVudHNfY29tcGxldGVkKGludCAqY29tcGxldGVkKTsKPiArCj4gKyAjZW5kaWYgLyog
+T1BFTk9DRF9KVEFHX0RSSVZFUlNfTElCVVNCX0hFTFBFUl9IICovCj4gK2RpZmYgLS1naXQgYS9z
+cmMvanRhZy9kcml2ZXJzL3N0bGlua191c2IuYyBiL3NyYy9qdGFnL2RyaXZlcnMvc3RsaW5rX3Vz
+Yi5jCj4gK2luZGV4IGM2OGJiYjNjYS4uN2IxOTMyYjlmIDEwMDY0NAo+ICstLS0gYS9zcmMvanRh
+Zy9kcml2ZXJzL3N0bGlua191c2IuYwo+ICsrKysgYi9zcmMvanRhZy9kcml2ZXJzL3N0bGlua191
+c2IuYwo+ICtAQCAtNDk3LDEzICs0OTcsOCBAQCBzdGF0aWMgdm9pZCBzeW5jX3RyYW5zZmVyX3dh
+aXRfZm9yX2NvbXBsZXRpb24oc3RydWN0IGxpYnVzYl90cmFuc2ZlciAqdHJhbnNmZXIpCj4gKyB7
+Cj4gKyAJaW50IHIsICpjb21wbGV0ZWQgPSB0cmFuc2Zlci0+dXNlcl9kYXRhOwo+ICsKPiArLQkv
+KiBBc3N1bWluZyBhIHNpbmdsZSBsaWJ1c2IgY29udGV4dCBleGlzdHMuICBUaGVyZSBubyBleGlz
+dGluZyBpbnRlcmZhY2UgaW50byB0aGlzCj4gKy0JICogbW9kdWxlIHRvIHBhc3MgYSBsaWJ1c2Ig
+Y29udGV4dC4KPiArLQkgKi8KPiArLQlzdHJ1Y3QgbGlidXNiX2NvbnRleHQgKmN0eCA9IE5VTEw7
+Cj4gKy0KPiArIAl3aGlsZSAoISpjb21wbGV0ZWQpIHsKPiArLQkJciA9IGxpYnVzYl9oYW5kbGVf
+ZXZlbnRzX2NvbXBsZXRlZChjdHgsIGNvbXBsZXRlZCk7Cj4gKysJCXIgPSBqdGFnX2xpYnVzYl9o
+YW5kbGVfZXZlbnRzX2NvbXBsZXRlZChjb21wbGV0ZWQpOwo+ICsgCQlpZiAociA8IDApIHsKPiAr
+IAkJCWlmIChyID09IExJQlVTQl9FUlJPUl9JTlRFUlJVUFRFRCkKPiArIAkJCQljb250aW51ZTsK
+PiArLS0KPiArMi4zNS4xCj4gKwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
