@@ -4,78 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D5DBC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 20:24:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A739C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 20:37:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BD2CE404A0;
-	Thu,  5 May 2022 20:24:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D1C8404B4;
+	Thu,  5 May 2022 20:37:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RRnCSRezdpkh; Thu,  5 May 2022 20:24:44 +0000 (UTC)
+	with ESMTP id l0dr16G-fr0z; Thu,  5 May 2022 20:37:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E4DF6404BF;
-	Thu,  5 May 2022 20:24:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A7A901BF342
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 20:24:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 17BF040383;
+	Thu,  5 May 2022 20:37:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3DCDB1BF342
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 20:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 864324196C
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 20:24:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3AB618406C
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 20:37:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nfnKjM4vG06j for <buildroot@lists.busybox.net>;
- Thu,  5 May 2022 20:24:39 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id viqMn7l53SLE for <buildroot@lists.busybox.net>;
+ Thu,  5 May 2022 20:37:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com
- [IPv6:2001:4860:4864:20::2b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6F57D4196B
- for <buildroot@buildroot.org>; Thu,  5 May 2022 20:24:39 +0000 (UTC)
-Received: by mail-oa1-x2b.google.com with SMTP id
- 586e51a60fabf-ed9a75c453so5323989fac.11
- for <buildroot@buildroot.org>; Thu, 05 May 2022 13:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 44E6F84063
+ for <buildroot@buildroot.org>; Thu,  5 May 2022 20:37:32 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id g6so10885944ejw.1
+ for <buildroot@buildroot.org>; Thu, 05 May 2022 13:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=yTlePSY8PuT1/VbvWTTWiJ0wj0zfIBFEgGfNuRT27yo=;
- b=oaIp7gMwv6K2U63D6cJKT01DaDIrifSywTnUjV6bwHuz8n4NUkFQrJjoF/U5OXnA7U
- fI3mWQ5aqA++RgW4tLHSRk3Pr7tYejXHAda43dhizbYXfwjU6/PFzxcwOF71R+ZmAAMd
- i2pFpN8uXeIlAq/bHw+9Tscx6pRs+1YXzeySbqjkIaUk6rb4znPkw4mT+vj/DbOZoLgc
- bK8fjJnAvfv9DDyEsFZ5EGSXk9ySvnnszbxhMtpE1LovS7kV9XoQDBjEId76BNVLfgSP
- xDJ8fHOog5z8rp/AIwH9hnjBeWgBNnhC9j4dn0zz6CO+C3E7lft9asllFvd4QnZOZyOO
- xF+g==
+ bh=TxN0KDc6u46FqnkPj8zpR5UaJoYQL1fAWYZovwjqVoc=;
+ b=AlcFpzoqtIcSoL5Qjena7QYsyH3BSn35GTVJOYNpYdXtWbR2V7o8tuUOJUBrtDl7YY
+ ST7nZOmTmRgAFspHYQ4DwNfVpZEHQwYu17Srg47d1mhAEAkxJB4d8N11bSg9rQpEnN4P
+ +lNh2L/OP3rguNuikNXdEen6PwZcsucPI0mww+UkqSSRXexEqRkxUv3Sa1qr7CBpQsjr
+ bzpX8MFWICQ7mCTxOtySeiZoIh0mHIrKRPelcu6uYhcMxgQbRP8mzJ3aUO78YYFY0mE5
+ G1HRGyFZO7v40caxsWvEJuE958UrJ0tMS2LlvWFnWdzwnrW8pjKLfnFF3H6I2uLIRfu1
+ NVmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=yTlePSY8PuT1/VbvWTTWiJ0wj0zfIBFEgGfNuRT27yo=;
- b=sH7k4k9fqXKq0O1N6dRBr0cd7dW4qb8LHfpxZNFhmkDt9/LLx+dNkzTcdbWkfsCRFk
- nAFJ3TTcVMz2NAITQdDm/xmwWBXGDuKwkgRZHfD/NE+sSS4N7dQZZFbJOn1d/xrUhqNA
- mFJg3awETzI5rjGNOusM5kJrdJU+HOFA3VsAGduPOz50hSO647wWNn7xXyQuBGekgkeL
- QGl98y/0/bEqaYPQ8LzEUw8jCbEP6zdmK21Jg2/1GJBJyUnqqhlS5GJxonc2H69Q2GRQ
- 8ZIubarjra6j/iWVJ9qSsojJ0v+CEAZH0mCF7986628G1KzvAFDKFscUHptLTulK2zYh
- l7sQ==
-X-Gm-Message-State: AOAM533kFOYt1UGeV9z1miqln98dowPsfaZpc2k1O3ZB0XSEpC1tQGz+
- eXaEGZSJoj0SdzmDKvZh7P/6/FPB/w0=
-X-Google-Smtp-Source: ABdhPJw2j+OaOLal0THBN3cVD8a0TGkTpl0kAC65BmoVYNAa8pCPRG3R5zNU3xTMNJn4zRj2nRR/VQ==
-X-Received: by 2002:a05:6870:886:b0:ee:1abe:9a32 with SMTP id
- fx6-20020a056870088600b000ee1abe9a32mr1333760oab.112.1651782278168; 
- Thu, 05 May 2022 13:24:38 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
- [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- u7-20020a9d7207000000b0060603221268sm972736otj.56.2022.05.05.13.24.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 05 May 2022 13:24:37 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  5 May 2022 14:24:36 -0600
-Message-Id: <20220505202436.1058027-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ bh=TxN0KDc6u46FqnkPj8zpR5UaJoYQL1fAWYZovwjqVoc=;
+ b=HdHtrsS3dQjM2jLoil+NCw6gHj1gpj5hyJsbQXzO+C5uNWxOC2fWA535Nr6+hSNfMQ
+ MvCQSjGI2F812/5UDdNHLgJOSEiIFVSCYKmX/BbGt5wReYqliTpg0mfhmstaN4EL1KTW
+ V7cpkNf4eqwOatmgQSa9roS2xYVKucjY+XSBb8rpZ4xwwLBxUZg5xBQCEySJsZZNyrmW
+ pLHMe0FARe42WmpQiXLQGvGPsRk9bSPtOCP6AA2C2/zjV3HdSwQ0ly+hGFE5e575fiS+
+ 8/KPQZBBXGKHAr3XqFQXlX5UBnJHpMSfDCyI9OPk2ofMcGbPKS/ta3IjmZ4rmwQHymUh
+ dF4A==
+X-Gm-Message-State: AOAM530ft2CPDQ/JC2BZBVTiBkgNlqICQd088dCpx9TuIvDqL3pgIN+H
+ vIKyZNWxSD1EwIqN7R9OygKTVw==
+X-Google-Smtp-Source: ABdhPJxBCOJ5BlgaNTBUukoygfqty65IRL8YgHRMEaw09VLD2T5M54BVjYYnK7oEwRkdtAKepo6YTA==
+X-Received: by 2002:a17:907:9626:b0:6f4:2d7e:6430 with SMTP id
+ gb38-20020a170907962600b006f42d7e6430mr24527912ejc.113.1651783050481; 
+ Thu, 05 May 2022 13:37:30 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ z12-20020a1709064e0c00b006f3ef214e03sm1125922eju.105.2022.05.05.13.37.29
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 05 May 2022 13:37:29 -0700 (PDT)
+Message-ID: <c8c34832-4993-4779-e125-4beea032836b@mind.be>
+Date: Thu, 5 May 2022 22:37:28 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/zchunk: fix symbol conflict
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-GB
+To: yann.morin@orange.com, buildroot@buildroot.org
+References: <24588_1651771186_62740732_24588_360_1_2d4cd3ac6995d7b5119ef4dfdc22b975992b8a73.1651770627.git.yann.morin@orange.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <24588_1651771186_62740732_24588_360_1_2d4cd3ac6995d7b5119ef4dfdc22b975992b8a73.1651770627.git.yann.morin@orange.com>
+Subject: Re: [Buildroot] [PATCH] package/pkg-download: do not try to vendor
+ _EXTRA_DOWNLOADS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,66 +96,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport a patch to fix a symbol conflict issue.
 
-Fixes:
- - http://autobuild.buildroot.net/results/225/22590a7038a40da3700d56c1f82f7dc74225702a
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...002-zck-declare-write_data-as-static.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/zchunk/0002-zck-declare-write_data-as-static.patch
+On 05/05/2022 19:19, yann.morin@orange.com wrote:
+> From: "Yann E. MORIN" <yann.morin@orange.com>
+> 
+> For golang- or cargo-based packages, we apply a vendoring pass after the
+> package's "main" download is done. Whether to vendor or not is based on
+> the heuristic that a specific directory exists or not; for golang
+> packages, we look for '/vendor', while for cargo, we look for '/VENDOR'.
+> 
+> This is fine for the "main" (by lack of a better term) download, but
+> this falls flat on its face for extra downloads. Indeed, so packages may
+> need to download data sets, or assets, as _EXTRA_DOWNLOADS. Those are
+> usually just data blobs, and are not actual golang or cargo packages; as
+> such they do not need to be vendored, but worse, if we try to actually
+> vendor them, this fails because the required files for vendoring are
+> missing from the archives in such data sets.
+> 
+> We fix that by decoupling the download for the extra download, from the
+> download for the main archive. We pass the post-processing option only
+> to the main download.
+> 
+> This makes the hard assumption that extra downloads will never need to
+> be post-processed for vendoring, of course; we hope this will always be
+> correct in practice.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/package/zchunk/0002-zck-declare-write_data-as-static.patch b/package/zchunk/0002-zck-declare-write_data-as-static.patch
-new file mode 100644
-index 0000000000..3c48ab3d50
---- /dev/null
-+++ b/package/zchunk/0002-zck-declare-write_data-as-static.patch
-@@ -0,0 +1,34 @@
-+From 477c4e891bd4d9e41fcbaa07cd1a37c0975df5cc Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Wed, 4 May 2022 16:32:48 -0600
-+Subject: [PATCH] zck: declare write_data as static
-+
-+This needs to be declared static to avoid a symbol conflict:
-+io.c:(.text+0xe8): multiple definition of `write_data'; src/zck.p/zck.c.o:zck.c:(.text+0x1f4): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/225/22590a7038a40da3700d56c1f82f7dc74225702a
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1@gmail.com: backport from upstream commit
-+477c4e891bd4d9e41fcbaa07cd1a37c0975df5cc]
-+---
-+ src/zck.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/zck.c b/src/zck.c
-+index 7727479..83b2630 100644
-+--- a/src/zck.c
-++++ b/src/zck.c
-+@@ -159,7 +159,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
-+ 
-+ static struct argp argp = {options, parse_opt, args_doc, doc};
-+ 
-+-void write_data(zckCtx *zck, char *data, ssize_t in_size) {
-++static void write_data(zckCtx *zck, char *data, ssize_t in_size) {
-+     if(zck_write(zck, data, in_size) < 0) {
-+         LOG_ERROR("%s", zck_get_error(zck));
-+         exit(1);
-+-- 
-+2.25.1
-+
--- 
-2.25.1
 
+  Applied to master, thanks, with a few changes:
+
+      - no loop needed for MAIN_DOWNLOAD, it can have only one;
+      - remove superfluous backslash in the definition of MAIN_DOWNLOAD;
+      - introduce _ADDITIONAL_DOWNLOADS to avoid filter-out.
+
+
+  Regards,
+  Arnout
+
+> ---
+>   package/pkg-download.mk | 3 ++-
+>   package/pkg-generic.mk  | 8 ++++++--
+>   2 files changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index a15e21e110..28b31ca30e 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -103,6 +103,7 @@ endif
+>   #
+>   # Argument 1 is the source location
+>   # Argument 2 is the upper-case package name
+> +# Argument 3 is a sapce-separated list of optional arguments
+>   #
+>   ################################################################################
+>   
+> @@ -118,10 +119,10 @@ define DOWNLOAD
+>   		-n '$($(2)_BASENAME_RAW)' \
+>   		-N '$($(2)_RAWNAME)' \
+>   		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
+> -		$(if $($(2)_DOWNLOAD_POST_PROCESS),-p '$($(2)_DOWNLOAD_POST_PROCESS)') \
+>   		$(if $($(2)_GIT_SUBMODULES),-r) \
+>   		$(if $($(2)_GIT_LFS),-l) \
+>   		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(2)),-u $(uri)) \
+> +		$(3) \
+>   		$(QUIET) \
+>   		-- \
+>   		$($(2)_DL_OPTS)
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 1222526ba1..3a3af44fc4 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -192,7 +192,8 @@ $(BUILD_DIR)/%/.stamp_downloaded:
+>   			break ; \
+>   		fi ; \
+>   	done
+> -	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p),$(PKG))$(sep))
+> +	$(foreach p,$($(PKG)_MAIN_DOWNLOAD),$(call DOWNLOAD,$(p),$(PKG),$(if $($(PKG)_DOWNLOAD_POST_PROCESS),-p '$($(PKG)_DOWNLOAD_POST_PROCESS)'))$(sep))
+> +	$(foreach p,$(filter-out $($(PKG)_MAIN_DOWNLOAD),$($(PKG)_ALL_DOWNLOADS)),$(call DOWNLOAD,$(p),$(PKG))$(sep))
+>   	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+>   	$(Q)mkdir -p $(@D)
+>   	@$(call step_end,download)
+> @@ -601,8 +602,11 @@ ifndef $(2)_PATCH
+>    endif
+>   endif
+>   
+> -$(2)_ALL_DOWNLOADS = \
+> +$(2)_MAIN_DOWNLOAD = \
+>   	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
+> +
+> +$(2)_ALL_DOWNLOADS = \
+> +	$$($(2)_MAIN_DOWNLOAD) \
+>   	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+>   		$$(if $$(findstring ://,$$(p)),$$(p),\
+>   			$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$(p)))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
