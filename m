@@ -4,57 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DEB4C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 03:20:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CFDFC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 04:22:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C95D8403AC;
-	Thu,  5 May 2022 03:20:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F091040236;
+	Thu,  5 May 2022 04:22:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u5xOXGreVMQF; Thu,  5 May 2022 03:20:44 +0000 (UTC)
+	with ESMTP id 2lkF5cEKFNw3; Thu,  5 May 2022 04:22:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E172940223;
-	Thu,  5 May 2022 03:20:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6E5A41BF389
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 03:20:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 08F764013E;
+	Thu,  5 May 2022 04:22:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1970D1BF8A8
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 04:22:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6436083E14
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 03:20:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 15EC44013E
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 04:22:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=tkos.co.il
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z7VX4Gh1-BWO for <buildroot@lists.busybox.net>;
- Thu,  5 May 2022 03:20:39 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EDA8483E0F
- for <buildroot@busybox.net>; Thu,  5 May 2022 03:20:38 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 273944405D7;
- Thu,  5 May 2022 06:19:41 +0300 (IDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1651720781;
- bh=sDIKW6oMpoOlNqNt8mPa0JAFTBSHATlspPnx9IWGV7I=;
- h=From:To:Cc:Subject:Date:From;
- b=cFNWxJkZsPkRGkqa0V9S7cyiZysXJAygmrqR28NyNEm+mq6+kSBAFtRv8POD0Zh9J
- Vl3KkBBLmp0arNqKe3d57TvKTJLocEztbux4yhM/Do4n71z5SZJ0FROzKLSZB+z+bI
- U7HhfsObCRvi2EoK4/N24LKhj9zDqzAtojjnbrikY90atZzCPmr6c9GJjw+z/jYj1I
- EMYQZXjnWptX8RZSMztsquWek+wnJirbm9OcIi7xVjwJH/M70E3bwxu2pCLHm/O6QZ
- rY/yXHzAAgfAFY2ycXWDOK61+bWVtHld7K4r/SUplTpWqNGSRpP3ukrrwWDeMLUrmN
- Fi52ynJLmHNpw==
-To: buildroot@busybox.net
-Date: Thu,  5 May 2022 06:20:27 +0300
-Message-Id: <6b4488278264afdbe3614a452671c3a89220e2f8.1651720827.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id okMXdvcDfrof for <buildroot@lists.busybox.net>;
+ Thu,  5 May 2022 04:22:30 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
+ [IPv6:2607:f8b0:4864:20::12f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EA3064010E
+ for <buildroot@buildroot.org>; Thu,  5 May 2022 04:22:29 +0000 (UTC)
+Received: by mail-il1-x12f.google.com with SMTP id l15so2153259ilh.3
+ for <buildroot@buildroot.org>; Wed, 04 May 2022 21:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=kXxalsImzbQTfAuXFnFJCCXPwMLi15X5I1PaNKss/OA=;
+ b=JMceBpZJ6eHHPux4QQcDNYezd5EQNXjsfLtNmbPU92Yy8ut8iyxor3zYf0HLzUbluS
+ IlUOYDPTj2UdbvmR+ZNH4J6uef5ZgmvsjBmDzGsbXIDmh+8das4/a0lq6DUe5cRsa7Dq
+ sRSK/w2XR88+3IbXzlOZji2C0fQldhkt8MVFJjOn26r4HOpQOlLpAgTV+cdngcgNn9Dh
+ tsxp5n00fNrZDAmC+iurhpt0rpj2WCHIeIH3GTATeZ7uFJwl22Cp5p1uh4eivcC30pbV
+ P7zDQygTzMJ4XaXO6kZCYAQDAv/3Sma33kWlcVVVQQOclQmtB6h+Fp2sgrwY8fou1bBd
+ kNww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=kXxalsImzbQTfAuXFnFJCCXPwMLi15X5I1PaNKss/OA=;
+ b=d+E7CXIUhXxbNAtaRQ3HBSC4C1wftQxS5If0nK2jxoUIw8lxcjMUJBG0S4cWN2OEGi
+ oenyhjYrzQiWIMRnbQ4PQs/PDrjnXc1MmzODx5lCfpyCEkkBZIW6QYnvVY7XOUhvM3kZ
+ 6/r2cgjxPwZekB4onf6KCrxMRdNnvtxojru8l5DYoj81u/3tSzd6A4r/+L80TzOOpJld
+ dw+N3/Dak1oapQKrOZ2trPeeluC1YWCzfKlYeUU+lS37erwoHiSN0SC2kZ5J65Pzw2l3
+ dRsi+Sp++jfPCljfML08oGImzIMp/WfNeaosMclu0hM5jHcKGPB2ElEjSD7cxBgnEOIH
+ Kw5A==
+X-Gm-Message-State: AOAM533eYu5N7KoDMeIUfts/sTGMKjy4Bv264P0xsgo2RFDchUL4MPIy
+ bEbKSJClgCfsXzcDL0a8iUXzY5t1TO4=
+X-Google-Smtp-Source: ABdhPJz5FinzFzKnoi2KTGZ9/bSogvlAEjoKy/2+MNfVJdLzG4OM6sXyrCqLaa3jdZhzSD8+UNI6nA==
+X-Received: by 2002:a05:6e02:1c45:b0:2ce:7f37:928f with SMTP id
+ d5-20020a056e021c4500b002ce7f37928fmr8834918ilg.182.1651724548884; 
+ Wed, 04 May 2022 21:22:28 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
+ [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
+ n14-20020a92d9ce000000b002cde6e352f7sm174196ilq.65.2022.05.04.21.22.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 04 May 2022 21:22:28 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  4 May 2022 22:22:26 -0600
+Message-Id: <20220505042226.2216083-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] linux: add a comment about
- CONFIG_EXTRA_FIRMWARE requirement
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: add support for new cpu
+ families
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,41 +85,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Charlie Leger <c.leger@borea-dental.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Explain why the kernel needs firmware packages as build time
-dependencies.
+Add mappings for new cpu families based on the reference table:
+https://mesonbuild.com/Reference-tables.html#cpu-families
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- linux/linux.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/pkg-meson.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7ff7b05042e4..e0a1ff74f998 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -70,7 +70,11 @@ LINUX_MAKE_ENV = \
- 	BR_BINARIES_DIR=$(BINARIES_DIR)
- 
- LINUX_INSTALL_IMAGES = YES
--LINUX_DEPENDENCIES = host-kmod \
-+LINUX_DEPENDENCIES = host-kmod
-+
-+# The kernel CONFIG_EXTRA_FIRMWARE feature requires firmware files at build
-+# time. Make sure they are available before the kernel builds.
-+LINUX_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-microcode) \
- 	$(if $(BR2_PACKAGE_LINUX_FIRMWARE),linux-firmware) \
- 	$(if $(BR2_PACKAGE_WIRELESS_REGDB),wireless-regdb)
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index f1390a18d0..ff850fa79f 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -36,6 +36,8 @@ else ifeq ($(BR2_arm)$(BR2_armeb),y)
+ PKG_MESON_TARGET_CPU_FAMILY = arm
+ else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+ PKG_MESON_TARGET_CPU_FAMILY = aarch64
++else ifeq ($(BR2_csky),y)
++PKG_MESON_TARGET_CPU_FAMILY = csky
+ else ifeq ($(BR2_i386),y)
+ PKG_MESON_TARGET_CPU_FAMILY = x86
+ else ifeq ($(BR2_m68k),y)
+@@ -50,8 +52,12 @@ else ifeq ($(BR2_powerpc),y)
+ PKG_MESON_TARGET_CPU_FAMILY = ppc
+ else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
+ PKG_MESON_TARGET_CPU_FAMILY = ppc64
+-else ifeq ($(BR2_riscv),y)
++else ifeq ($(BR2_riscv)$(BR2_RISCV_32),yy)
++PKG_MESON_TARGET_CPU_FAMILY = riscv32
++else ifeq ($(BR2_riscv)$(BR2_RISCV_64),yy)
+ PKG_MESON_TARGET_CPU_FAMILY = riscv64
++else ifeq ($(BR2_s390x),y)
++PKG_MESON_TARGET_CPU_FAMILY = s390x
+ else ifeq ($(BR2_sh4)$(BR2_sh4eb)$(BR2_sh4a)$(BR2_sh4aeb),y)
+ PKG_MESON_TARGET_CPU_FAMILY = sh4
+ else ifeq ($(BR2_sparc),y)
 -- 
-2.35.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
