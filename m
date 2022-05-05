@@ -1,122 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A35A4C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 09:15:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F9BC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 10:10:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 532A48141F;
-	Thu,  5 May 2022 09:15:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A56E760FEB;
+	Thu,  5 May 2022 10:10:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ei3IRxZi42BS; Thu,  5 May 2022 09:15:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8-tm_WbHU0mH; Thu,  5 May 2022 10:10:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F89081410;
-	Thu,  5 May 2022 09:15:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C004960AA0;
+	Thu,  5 May 2022 10:10:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DEDD61BF3D5
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 09:15:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C515D1BF2B7
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 10:10:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CAB9F4195A
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 09:15:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B27304195F
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 10:10:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CyYayWxhUtJR for <buildroot@lists.busybox.net>;
- Thu,  5 May 2022 09:15:39 +0000 (UTC)
+ with ESMTP id 4_9V3KzMvLjY for <buildroot@lists.busybox.net>;
+ Thu,  5 May 2022 10:10:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam12on2062d.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe59::62d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CA5D54196E
- for <buildroot@buildroot.org>; Thu,  5 May 2022 09:15:39 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PwrQVwBvtkBtD5pd6+hwwJ4ispRNbqoHt1f6WcFOfsVQNK/WWVGRK1b6aZ98qobD0b4lNhpGAhBwIGuhxSdRIGSYH4JKma/tKNK0qndkSF1eSt0ozCvhmZekgTrwQKQnhz3nf8CX9+/jxZFeuBMfDlbFvcHwaSi1kr3ijiQ3vciyXYM7wGgtb7eQmjKl6k6d+NwKql4+gQGK9W5+g81UOY3tnvNeNrBwTIuXbrJ1nMsTllrGfxi3zqV99viteYlVnv4rbSoQ8IHOvhht0QTK1JvPFp3+238TGNHRBonZQUXjvN4rmsddSZUpMp6MW/g+9pbcdxftvOPFnkB49m8mEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VrP1fqMb3pAw8wgRzQUbpPhvvZM1Z02wEYFZZudyHok=;
- b=csZkXRFYr/R5lbrK7pWsDvXnPkHhqkAHM35id0G31PZFvjSNRYQwcRrJ3TbtYQJvMENrW4wXCy2RhmqfSkG2/vQWq2sxwY0Im4KFjJv5JwYkBsnyfzDYoUI/ilYnJICfR/Z0rMrBpMj+ArEbYHLjvDpldCLE82d01vcS911yCNiSBfAp+eXo/vtrbLX5oM4TacTSNu6E1lZn/KQV6uL3p39lSJM5PGOBugUUzqsPcMiyDbCYwV5ei2BEAG5/ZxDlg0nf6xjPl6wJAGUN6eOFmahUM0NxgFn7s/x3LHjjfYQROf7R4AUXMxH0LD9yLOQhobEYNYk+dLziceUNUe3Q5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 149.199.62.198) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VrP1fqMb3pAw8wgRzQUbpPhvvZM1Z02wEYFZZudyHok=;
- b=o/oJBm1O6kTyzx2IWw6dsryTwC5vOArC00DllqYuGHos5aQdygOGhoe9TSYCpVhCUhtHr+GhCOQNDUgCTsVxhcXi+QqodhUrOEltmNFx9P+X1nk40di7RM29sxOkxKTDN2aHOdNDjXD/m7ABIep0snpO2cxU0vEgpSFpUlis0iA=
-Received: from BN0PR04CA0023.namprd04.prod.outlook.com (2603:10b6:408:ee::28)
- by MWHPR02MB2623.namprd02.prod.outlook.com (2603:10b6:300:44::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Thu, 5 May
- 2022 09:15:35 +0000
-Received: from BN1NAM02FT049.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:ee:cafe::ae) by BN0PR04CA0023.outlook.office365.com
- (2603:10b6:408:ee::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24 via Frontend
- Transport; Thu, 5 May 2022 09:15:34 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 149.199.62.198) smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=amd.com;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- amd.com discourages use of 149.199.62.198 as permitted sender)
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT049.mail.protection.outlook.com (10.13.2.89) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5227.15 via Frontend Transport; Thu, 5 May 2022 09:15:34 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 5 May 2022 02:15:29 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 5 May 2022 02:15:29 -0700
-Envelope-to: buildroot@buildroot.org, luca@lucaceresoli.net,
- giulio.benetti@benettiengineering.com, peter@korsgaard.com,
- michal.simek@amd.com, neal.frager@amd.com
-Received: from [172.25.185.186] (port=53514 helo=xcoapps69.xilinx.com)
- by smtp.xilinx.com with esmtp (Exim 4.90)
- (envelope-from <neal.frager@amd.com>)
- id 1nmXa5-000D06-Hg; Thu, 05 May 2022 02:15:29 -0700
-To: <buildroot@buildroot.org>
-Date: Thu, 5 May 2022 03:15:22 -0600
-Message-ID: <20220505091522.646109-2-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220505091522.646109-1-neal.frager@amd.com>
-References: <20220505091522.646109-1-neal.frager@amd.com>
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
+ [IPv6:2607:f8b0:4864:20::1036])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 898B041958
+ for <buildroot@buildroot.org>; Thu,  5 May 2022 10:10:10 +0000 (UTC)
+Received: by mail-pj1-x1036.google.com with SMTP id o69so3763531pjo.3
+ for <buildroot@buildroot.org>; Thu, 05 May 2022 03:10:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=sender:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=5zKd29TJi6JJmA04q/X+RIJyxx9CY+SvWKYEh0Pndug=;
+ b=W+PMouCCnCuTInGxh4DYkCwEy84f4KsWkOYw7dsBwQ/Yf79LPbYwn0gMPjIGo/HdnF
+ Uep+o5WfeZgi02lVuQi+cMLRdHMPvSsmdfs1+BqlblkVLe+k77ejEF0G6ajdMtwVGE8a
+ wPqNZEzj2IY9+z4rrVNHK3S06aGAAHMF+EFYTO/6AQpwK3hDYqVcwHNcwN8c2vro2GsI
+ 5fbGoGmr52EAAUlIhusBolb3B69D2flZNIXiOOhEFJPrJbJumYGvBiwB8osdGsZjCrWu
+ DcU33Mxe94Gi6QKgZqiwpdzxw0m4owA8XYXp9XJZanyT85Fv8iLWGzTFP3DYg4ZNlM20
+ A8zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+ :mime-version:content-transfer-encoding;
+ bh=5zKd29TJi6JJmA04q/X+RIJyxx9CY+SvWKYEh0Pndug=;
+ b=8IAEGnDAe8gi+cenPsfkIIcGukuRY15+Dl/UUXRMPDZVNEMKq7U5l041mVe7ssevKG
+ Dk8RY2jXHaOrfX9JNpG+Vn5tc31A9kjEHapbBf8urwNHILyGZAVMyi7JQIf7NcFBJLDn
+ UoZBIeQ27L33cP6ziXY8XPFARr2HGNR7u7sYYxlv3U7U65xf0nlebKlexm/1kBCrQouD
+ pTVDaYYb0+crK7z3VQzFu+HFP4/EbsCQ8WaRHyFGr40S+FwcYKFHCVWH0iPTnudNyyiT
+ FL7yNiJbx0zrwOEyocnME/aj711q3W9ESjtw8hIIqlLLq5493CYI6lrbiZpNH+FRAwUY
+ /+iw==
+X-Gm-Message-State: AOAM5312TVCX5T4MoQ3tVNNH/697T+oPji4hnnKjlaGtbxyL9GyffKKz
+ eQo2IKFsZ16hQHDONvsxWP0PgokNl9s=
+X-Google-Smtp-Source: ABdhPJxqJ6IUhCQ8qPcXkihXtqQxfu47ZlkVBG2UQrNWdXMrUBPmCnXG9C/9TLKOK95Yk7VQeFSRXA==
+X-Received: by 2002:a17:902:bb8d:b0:156:51a1:3f5a with SMTP id
+ m13-20020a170902bb8d00b0015651a13f5amr26646080pls.65.1651745408909; 
+ Thu, 05 May 2022 03:10:08 -0700 (PDT)
+Received: from localhost.localdomain ([45.124.203.14])
+ by smtp.gmail.com with ESMTPSA id
+ n36-20020a056a000d6400b0051008603b66sm944146pfv.219.2022.05.05.03.10.05
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 05 May 2022 03:10:07 -0700 (PDT)
+From: Joel Stanley <joel@jms.id.au>
+To: buildroot@buildroot.org
+Date: Thu,  5 May 2022 19:39:56 +0930
+Message-Id: <20220505100956.155737-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6cb8e025-3110-4fbb-240d-08da2e77cf97
-X-MS-TrafficTypeDiagnostic: MWHPR02MB2623:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR02MB26234212DC9BD2C91B542A21F0C29@MWHPR02MB2623.namprd02.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 2
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mDOQawVw3dPH6Tr+AqP5VAjiiDxp+7mRrKev2CNhewyl5cUdrRkStVCUOov/gsZG5NPbmoo3rURKarTSEIbBOoCKjSvB8bpZT42RjDeTS9mWfJlhaGsEGHb6h6/GOY1QU91/hrirdBFc+i9gT2HMjrgYwI+lck7fafF9T33M5zYRJukwDGpaIxBxFMXxQNcUEDjhRab7NQ3GrAs1T/K89KzV8RSxBiV7PYhSw1GbpNnQVsN7GD77+4WmjKR+gGEsaP7EYSUWxabO3grZ08YV+k0iqQIvUDP9U59NN05KW/3eeBygRPjk1micSk4RaSoc3tmFJogZxMTRZoMLOjSEt6HsOCY93/GUherKst8NKTeeMkT82+v1oEfq3WAxl81UXHqD66/+tdJ1kk262qqWHP6o9Dppcg8Rr3YGPKZx0bXIhZCPunvJJ2DskMComRWKOXjOruTd9Xzc10oxWtuIUyGqmg+lRVoRvKYcpp2gT+Ayq2GorroJ4FQMZLzJJ+hFkv8GRGnZyCYsFdUxn1vIg9+HcXRCELxdMfTM3p0GIGDNecE0xuIRzzoBfc+EiLP17um5daGmPmllHkN5Mn0+/ZrrtyCZzFi4ZvV025n4Nj2GcNKiipQd1MGU26MMBKusSxmwNsDO+qaAjBoA4uFIuU054Wo+N7vBN1V3o7LCMny/LFSmqgwTGiqCnAa8Ayf+qC6GCLQj2CBGMpRVla5B1KLB6AbRACTU/7Vy3V0v70OqYbr+JXqCTEvmRqXYDSCSFUtzJ5COfFAlOe6gLasnXhXlijiEsko9bCLihX6476xgk/8INh40Fq4fCC3M64IVqzg2qYNzy1DNhmYh5YaiwA==
-X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:xsj-pvapexch01.xlnx.xilinx.com;
- PTR:unknown-62-198.xilinx.com; CAT:NONE;
- SFS:(13230001)(4636009)(46966006)(40470700004)(2906002)(6916009)(5660300002)(83380400001)(54906003)(336012)(47076005)(35950700001)(8936002)(1076003)(36756003)(2616005)(44832011)(9786002)(316002)(70206006)(86362001)(40460700003)(70586007)(26005)(82310400005)(7636003)(6666004)(8676002)(4326008)(508600001)(356005)(102446001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: xilinx.onmicrosoft.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2022 09:15:34.3715 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6cb8e025-3110-4fbb-240d-08da2e77cf97
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
- Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT049.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2623
-Subject: [Buildroot] [PATCH v1 2/2] configs/zynqmp_zcu106_defconfig: bump
- pmufw to 2022.1
+Subject: [Buildroot] [PATCH] package/gcc: Disable uclibc for powerpc64 and
+ powerpc64le
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -128,39 +87,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: luca@lucaceresoli.net, giulio.benetti@benettiengineering.com,
- michal.simek@amd.com, Neal Frager <neal.frager@amd.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch bumps configs/zynqmp_zcu106_defconfig pmufw to 2022.1.
-The pm_cfg_obj.c has not changed between 2021.2 and 2022.1.
-The pmufw_v2022.1.bin has been tested on a zcu106 board.
+uClibc-ng does not (and has never) supported the 64 bit powerpc
+architecture.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
- configs/zynqmp_zcu106_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm a bit confused as to why uclibc was ever an option. Perhaps I missed
+something! I did a search of the mailing list archive and the best I
+found was this post from Thomas:
 
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index 96b15eea81..27967fc0bd 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -28,7 +28,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/v2021.2/bin/pmufw-v2021.2.bin"
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/v2022.1/bin/pmufw-v2022.1.bin"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ https://lore.kernel.org/buildroot/20160817193721.0cc1466d@free-electrons.com/
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ package/gcc/Config.in.host | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index a1fe192d3a24..3364860ec7a4 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -31,6 +31,8 @@ config BR2_GCC_VERSION_9_X
+ 	# upstream gcc. C-SKY gcc upstream support not tested
+ 	# with upstream binutils and glibc.
+ 	depends on !BR2_csky
++	# 64 bit powerpc is not supported by uclibc
++	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && (BR2_powerpc64 || BR2_powerpc64le))
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 
+ config BR2_GCC_VERSION_10_X
+@@ -43,6 +45,8 @@ config BR2_GCC_VERSION_10_X
+ 	# upstream gcc. C-SKY gcc upstream support not tested
+ 	# with upstream binutils and glibc.
+ 	depends on !BR2_csky
++	# 64 bit powerpc is not supported by uclibc
++	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && (BR2_powerpc64 || BR2_powerpc64le))
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 
+ config BR2_GCC_VERSION_11_X
+@@ -54,6 +58,8 @@ config BR2_GCC_VERSION_11_X
+ 	# that need to be reverted since gcc 8.4, 9.3 and 10.1.
+ 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
+ 	depends on !BR2_sparc
++	# 64 bit powerpc is not supported by uclibc
++	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && (BR2_powerpc64 || BR2_powerpc64le))
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 
+ endchoice
 -- 
-2.17.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
