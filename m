@@ -4,44 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EA8FC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 12:03:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D868C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 12:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B3DAE40C09;
-	Thu,  5 May 2022 12:02:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C5B9740C0C;
+	Thu,  5 May 2022 12:05:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rmBTpkTTUtNA; Thu,  5 May 2022 12:02:58 +0000 (UTC)
+	with ESMTP id eIZ1svicVWy9; Thu,  5 May 2022 12:05:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2E7940BE7;
-	Thu,  5 May 2022 12:02:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6F19A1BF2A6
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 12:02:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DCC0040BE7;
+	Thu,  5 May 2022 12:05:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A86891BF318
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 12:05:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6AF136110C
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 12:02:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 95E8240BE7
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 12:05:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vYpIw4Hj9f5k for <buildroot@lists.busybox.net>;
- Thu,  5 May 2022 12:02:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C7AczLiU_EPa for <buildroot@lists.busybox.net>;
+ Thu,  5 May 2022 12:05:01 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 451A86110B
- for <buildroot@buildroot.org>; Thu,  5 May 2022 12:02:54 +0000 (UTC)
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A219A40359
+ for <buildroot@buildroot.org>; Thu,  5 May 2022 12:05:01 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::222])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 5E70ECDFA2
+ for <buildroot@buildroot.org>; Thu,  5 May 2022 12:02:12 +0000 (UTC)
 Received: (Authenticated sender: foss@0leil.net)
- by mail.gandi.net (Postfix) with ESMTPSA id A1F2024000E;
- Thu,  5 May 2022 12:02:50 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 10CC440002;
+ Thu,  5 May 2022 12:02:05 +0000 (UTC)
 From: Quentin Schulz <foss+buildroot@0leil.net>
 To: buildroot@buildroot.org
-Date: Thu,  5 May 2022 14:02:33 +0200
-Message-Id: <20220505120233.494216-1-foss+buildroot@0leil.net>
+Date: Thu,  5 May 2022 14:01:38 +0200
+Message-Id: <20220505120138.493950-1-foss+buildroot@0leil.net>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libcamera: bump to latest master commit
- 8a845ab078c3fe12ac4edd16c8cbac5b7ec03b98
+Subject: [Buildroot] [RFC PATCH] package/libcamera: remove rpath and strip
+ debug symbols before signing IPA libs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,7 +58,8 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>,
  Quentin Schulz <foss+buildroot@0leil.net>,
- Kieran Bingham <kieran.bingham@ideasonboard.com>
+ Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -63,41 +67,58 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-This brings in numerous improvements in ipu3 and rpi IPAs as well as
-adding support for Black Level Correction, auto gain and auto white
-balance algorithms to rkisp IPA. A handful of new camera sensors are
-also supported.
+Open-Source IPA shlibs need to be signed in order to be runnable within
+the same process, otherwise they are deemed Closed-Source and run in
+another process and communicate over IPC.
+Buildroot strips debug symbols and sanitizes RPATH in a post build
+process. We need to do the same before signing the IPA shlibs otherwise
+the signature won't match the shlib on the rootfs.
+
+meson gets rid of rpath while installing so we don't need to do it
+manually.
+However the signing process is also part of the meson install target, so
+we have a chicken and the egg problem. Let's install the libs in the
+target directory (and do a useless signing) to get rid of rpath, then
+strip debug symbols the same way Buildroot does in post build step, then
+re-sign shlibs directly in TARGET_DIR with signing script from
+libcamera.
 
 Cc: Quentin Schulz <foss+buildroot@0leil.net>
 Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
- package/libcamera/libcamera.hash | 2 +-
- package/libcamera/libcamera.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcamera/libcamera.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index 8d5abf0e62..181bb1349a 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,4 +1,4 @@
--sha256  3624c71ba492c602c5335aab3dc87798193f7596c6cc75f7cfb847165f180930  libcamera-1966b9a58436fab51f8270aad6a228b935e4fac4-br1.tar.gz
-+sha256  9aa62d41470238ac8c3bb847601d1a803ac7a270d3b5e87f722e9c93c867d18d  libcamera-8a845ab078c3fe12ac4edd16c8cbac5b7ec03b98-br1.tar.gz
- 
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
 diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 9cbb1910dc..77381ab3ca 100644
+index 77381ab3ca..d1303a2ff5 100644
 --- a/package/libcamera/libcamera.mk
 +++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+@@ -104,4 +104,25 @@ LIBCAMERA_DEPENDENCIES += libexecinfo
+ LIBCAMERA_LDFLAGS = $(TARGET_LDFLAGS) -lexecinfo
+ endif
  
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = 1966b9a58436fab51f8270aad6a228b935e4fac4
-+LIBCAMERA_VERSION = 8a845ab078c3fe12ac4edd16c8cbac5b7ec03b98
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
++# Open-Source IPA shlibs need to be signed in order to be runnable within the
++# same process, otherwise they are deemed Closed-Source and run in another
++# process and communicate over IPC.
++# Buildroot strips debug symbols and sanitizes RPATH in a post build process. We
++# need to do the same before signing the IPA shlibs otherwise the signature
++# won't match the shlib on the rootfs.
++#
++# meson gets rid of rpath while installing so we don't need to do it manually.
++# However the signing process is also part of the meson install target, so we
++# have a chicken and the egg problem. Let's install the libs in the target
++# directory (and do a useless signing) to get rid of rpath, then strip debug
++# symbols the same way Buildroot does in post build step, then re-sign shlibs
++# directly in TARGET_DIR with signing script from libcamera.
++define LIBCAMERA_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(LIBCAMERA_NINJA_ENV) DESTDIR=$(TARGET_DIR) \
++		$(NINJA) $(NINJA_OPTS) -C $(LIBCAMERA_SRCDIR)/build install
++	find $(TARGET_DIR) -type f -name "ipa_*.so" -print0 | xargs -0 $(STRIPCMD) 2>/dev/null || true
++	MESON_INSTALL_DESTDIR_PREFIX=$(TARGET_DIR)/usr/lib/libcamera/ $(@D)/src/ipa/ipa-sign-install.sh $(@D)/build/src/ipa-priv-key.pem $(addprefix ipa_,$(addsuffix .so,$(LIBCAMERA_PIPELINES-y)))
++	MESON_INSTALL_DESTDIR_PREFIX=$(TARGET_DIR)/usr/lib64/libcamera/ $(@D)/src/ipa/ipa-sign-install.sh $(@D)/build/src/ipa-priv-key.pem $(addprefix ipa_,$(addsuffix .so,$(LIBCAMERA_PIPELINES-y)))
++endef
++
+ $(eval $(meson-package))
 -- 
 2.35.1
 
