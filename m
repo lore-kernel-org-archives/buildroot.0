@@ -1,81 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35324C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 06:44:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C751C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 08:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D40424011A;
-	Thu,  5 May 2022 06:44:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3829D41866;
+	Thu,  5 May 2022 08:47:42 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UtT0ySrmNfKe; Thu,  5 May 2022 08:47:41 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id EABC341814;
+	Thu,  5 May 2022 08:47:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BC49F1BF35B
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 08:47:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A8DB4401B7
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 08:47:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uVX2WhuKJXiM; Thu,  5 May 2022 06:44:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DCBC6400CB;
-	Thu,  5 May 2022 06:44:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 54A6A1BF3C5
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 06:44:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 50DED418E8
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 06:44:13 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T30eRqOHcRXk for <buildroot@lists.busybox.net>;
- Thu,  5 May 2022 06:44:12 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 90C3D418DE
- for <buildroot@buildroot.org>; Thu,  5 May 2022 06:44:12 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id e194so3793480iof.11
- for <buildroot@buildroot.org>; Wed, 04 May 2022 23:44:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=+KNdue3mmNFcNlGB09M9qrjNSLDcIZ4aLaDVDiplyU4=;
- b=mzMi2Hp1Mtg/Gq6TyzMQKE8GRHrfPYgyd2lXA4oI37zl0P8dVaMPUfWVEaLSoU9Q3p
- 6jdLMbbRqahDq6rjmvT5Qs1txOKp99FCcafvAsCUXSxEVyfNsQzxkhb5hotbR7gi2BUx
- evPkEgdkE3qQhKyUUTsR5dfaeiz3yoKFf6rOZKrrJKZ0Q5rHBp1R1SXC1savX+L23BuJ
- bwkuln0E2nB1vbg/sf6H/CKdB7iIaCiCOPan8jxVx8y5RDZLFl9bWM1GL4HMUoDvNO1Y
- G4of3Vx93henWWEpvP/vQ6ZKl9yEfcplO7fO2DNkmH5y0d1h1IqKIVy2cuChcJ9yZeKD
- GnPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=+KNdue3mmNFcNlGB09M9qrjNSLDcIZ4aLaDVDiplyU4=;
- b=3gro6I2mjxv4kCWUMSMFR+k96pLBsK9WizfBzT2Sk5uN9bDTIFxJIJhsGd/mktckoU
- R6iuxb5MU3eUkVkJCXLBTDVytGl39aMh0N8txMxXu/JvbiKj4uP7gtUyGsZrv7YVOYYa
- bUkZoHRNuc7m/diVkuZi2BKOD1V2fhX3w5X8qya6stpK2eWji3w6X9O31ntFY5a3kVl4
- NMmdgqp2P57i4sj8XvWAH82A60KzZ9CC2xoAjHjWVMR6QjtTWQj3CP0DJLnciY7NGcbb
- GF0k9Rpiegy7tY8zrqSN6Mo3dfJw7dWxSvgKCv/XtwFBoYeqFespirvSrTACatGELg5+
- lcrA==
-X-Gm-Message-State: AOAM532Jh2ckruP+rK4TuCgwBJsM62EFoWsTyyJuw+Sdz0b+8yiKlUak
- dcnYghiZfCRD+iEhWGjOMRNTY7s61I4=
-X-Google-Smtp-Source: ABdhPJwXbPFfxEpevpafXXsN4EywJ94LG3CRH9F/xcudZbg83zr+3r50VvJw4Kbc29Y9fhSrsx+qNA==
-X-Received: by 2002:a05:6638:40ac:b0:328:6b81:f9e8 with SMTP id
- m44-20020a05663840ac00b003286b81f9e8mr10080709jam.153.1651733051524; 
- Wed, 04 May 2022 23:44:11 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
- [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- y4-20020a927d04000000b002cde6e352e0sm254048ilc.42.2022.05.04.23.44.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 May 2022 23:44:11 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  5 May 2022 00:43:53 -0600
-Message-Id: <20220505064353.3051663-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AIIcBz3EhSgX for <buildroot@lists.busybox.net>;
+ Thu,  5 May 2022 08:47:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
+ [89.40.174.40])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 96913400A4
+ for <buildroot@buildroot.org>; Thu,  5 May 2022 08:47:36 +0000 (UTC)
+Received: from [77.244.183.192] (port=62432 helo=[192.168.178.75])
+ by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
+ (envelope-from <luca@lucaceresoli.net>)
+ id 1nmX93-000EpF-Tq; Thu, 05 May 2022 10:47:33 +0200
+Message-ID: <58490506-19b4-081a-8240-cdbda33aa92f@lucaceresoli.net>
+Date: Thu, 5 May 2022 10:47:30 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: disable meson wrap
- downloads for host packages
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
+References: <20220504140417.1204631-1-neal.frager@amd.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <20220504140417.1204631-1-neal.frager@amd.com>
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
+ luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+Subject: Re: [Buildroot] [PATCH v1 1/1] configs/zynqmp_zcu106_defconfig:
+ uboot dp pll patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,38 +72,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>
+Cc: giulio.benetti@benettiengineering.com, michal.simek@amd.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This was already disabled for target packages in:
-12ba3563655e3ebab252e52daa6c710864fa869f
+Hi Neal,
 
-We need to disable wrap downloads for host meson packages as well.
+On 04/05/22 16:04, Neal Frager wrote:
+> This patch adds a u-boot patch that fixes the DP audio and video
+> PLL configurations for the zynqmp-zcu106-revA evaluation board.
+> 
+> The Linux DP driver expects the DP to be using the following PLL config:
+>   - DP video PLL should use the VPLL (0x0)
+>   - DP audio PLL should use the RPLL (0x3)
+> 
+> Register 0xFD1A0070 configures the DP video PLL.
+> Register 0xFD1A0074 configures the DP audio PLL.
+> 
+> This patch was build and run tested on a zynqmp-zcu106-revA target board.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>  ...zynqmp-zcu106-revA-Fix-DP-PLL-config.patch | 39 +++++++++++++++++++
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/pkg-meson.mk | 1 +
- 1 file changed, 1 insertion(+)
+I haven't seen this patch on the U-Boot mailing list. The best practice
+for fixes to packages is to send a patch to the upstream project (in the
+U-Boot case it would be a patch sent to their mailing list) and then
+integrate it in Buildroot with the addition of a line such as:
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index f1390a18d0..465be41567 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -156,6 +156,7 @@ define $(2)_CONFIGURE_CMDS
- 		--localstatedir=$$(HOST_DIR)/var \
- 		--default-library=shared \
- 		--buildtype=release \
-+		--wrap-mode=nodownload \
- 		-Dstrip=true \
- 		$$($$(PKG)_CONF_OPTS) \
- 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+Upstream-Status: submitted (https://.....)
+
+To have the topic traceable and mark that the patch is probably ending
+in a future release.
+
+This is not a major bug, it is rather an annoyance, thus it's worth
+spending a little extra time and have a clean patch here.
+
 -- 
-2.25.1
-
+Luca
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
