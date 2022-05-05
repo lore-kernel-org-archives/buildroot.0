@@ -1,47 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4112CC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 15:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14DABC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 15:54:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BAA4260D7B;
-	Thu,  5 May 2022 15:54:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8398419FD;
+	Thu,  5 May 2022 15:54:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s9uFm-6-hPHV; Thu,  5 May 2022 15:54:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wsq8EYVrXrCZ; Thu,  5 May 2022 15:54:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBB5460AD8;
-	Thu,  5 May 2022 15:54:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A64EC1BF391
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 15:54:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77CC4418AD;
+	Thu,  5 May 2022 15:54:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 29D991BF391
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 15:54:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 903FA40339
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 15:54:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 25CB9418AD
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 15:54:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lkvZ6yYYz65C for <buildroot@lists.busybox.net>;
- Thu,  5 May 2022 15:54:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bPONpXu4KvAI for <buildroot@lists.busybox.net>;
+ Thu,  5 May 2022 15:54:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam10on2062e.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e88::62e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 01A784026A
- for <buildroot@buildroot.org>; Thu,  5 May 2022 15:54:36 +0000 (UTC)
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com
+ (mail-dm3nam07on2062b.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e83::62b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 82AEC4179D
+ for <buildroot@buildroot.org>; Thu,  5 May 2022 15:54:35 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Prxi3FMBsFxIAsaVlCg/X1Q3CEoXZOkTbODREwOrTY6T7OwlXa+rjLW2/Cbb88Jx4crnqNKQASXfFNYzP/UFs9eDg2iBOaihFe6icChNQK5zaRZeICJFmh0CD+RVmU5LuDsKs36RcQt5rimoaG0rKY4P4fLJtWrabQXWLL91J30ApInvzPSWYcSLRi4b7O7Xu3BOj7HuSA0dBjMHKBNmElHNV9AEebJSOrhNHSSfXP0JL5w2hEjpQBCHExDvCDnWf2VnaCRSRdHUklh+hqJrUrFDYWV6fKgKIWRhrn9N5t/QYpJ1RETRvYJpIEvJKIPK+d2PkMUwPOgXAZ+8lrlbQA==
+ b=fbT+GqaVxp1RCG11dprrhpm+jhCpEMa7ki7UCOsa5jjOYV9R4mp9+oKUw90OPxg/MhO2emfQWaMfnWAQ4P1HfeSGYu0k/68/rDqEvvGepmNU8E4WMQrTXDaV0H4wii8R/4PJqpJlhFrg+5ckg42wD7Pj2mpoqH9n2CJlE6bRoKnQ7fWTjD4Irs3bqbyzOPqTrFPFPaTTXg2j4K4jb8/3KNO2BItT64+6n3WfuqTrCnMydUAxON28DMSH5SVhViTyejJAt/8fcBnck/X7fUMdITFh3PYmozmVAGTsBr5mP8d8tXPnS/iEt2yB7t9JhUStMP5lRQjW33bxOl3zBM0RcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2QMQeApv+DRldNIOtArddqviv8wnROD28cPtQ7WeCDA=;
- b=IC/1bQv3I5B6Vl4rZapA1y4u25d5zXeIN29KdqnyhmS0YyTSdktBI/15eMOdmvoe9Q+q8d+hIWi2pnHGn43gJbUaivQoqH5UdjsQvSdO0VSRlM7UzgcocB+JpraDHmS5mIbRTDY/bbddkJClDNxXy2sI1hcEDDyZjtb3upSNl5dCwM3TJlPd8609eneW7dUNJBKgmONYQxpv6L0xf5VEKdNQ0I2haPOY6rBXmDInh4kXnlzcctI3dGg3Yb3v8+xfwFn+2CfCKRfb60IFd2Xwsau61cxN5KTtoPM87iAGwsJ+i4euCg5/OaVCDnwmcUwT0JnXNAbo2y9pEAkcGc+/+w==
+ bh=NY9GNFoStSIQvFjKqB8w1GGBzJOZwiNY439zNjX3UfE=;
+ b=COwK6UzRHLhYb0yM+PMBEZKY769AvNiRB+oidnVgYIiaMu4TNQ3PZKNLZnziMqLqX91ElcZsFGw38KA2g3Bqim47BKp1vfM8e4U13jc/6ia05Z6mTgZZAHr2pMaLHtGbbg1D7fkQ7pXEVZc82EoX49H63/pKMH2E0vneoqHYabGgJGpS8Ti0L9cfh1hk43UeCjg/7svLGJP3BMoV8D450NgVLKsPp/eqRM1HcZWyJcDIUP3tqLz4YFQpC3rsX9Dk3nyN5wSlfadewIt47FjHtWM6IILIlY/NLggpfD63mhPqGBC6JXvHU1ixbytsRLicO3j4O3m2avm6H08zzne56A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
  is 149.199.62.198) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
@@ -49,73 +47,71 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2QMQeApv+DRldNIOtArddqviv8wnROD28cPtQ7WeCDA=;
- b=D932J7e6Wwpy6V5f1YhAe39Ews3s/d/9upxwufK9Mf6qJLXaQ+1QItfkVCWuCIUMKFeNAkiwuvoK/Pu/KDpCnfdV37v2z65ii6t/Hcbl79eIyQSJ/R+PlIuIy9sMb2oPybCvwd0XanVVR9pgrbHegISCQCUIPLpVb1b/48iYTiM=
-Received: from DM5PR21CA0019.namprd21.prod.outlook.com (2603:10b6:3:ac::29) by
- BL3PR02MB8148.namprd02.prod.outlook.com (2603:10b6:208:35f::18) with
+ bh=NY9GNFoStSIQvFjKqB8w1GGBzJOZwiNY439zNjX3UfE=;
+ b=f3bZwmV4P7QtBoUoSlk+XQFE/6qOlasYU3KDCDooz24HKPHEIoo+xx2rcTl0sPXJRhQ8rKBNNJLAZCKRrOqnrJBInruzOR4lwjTZpv0JixPFd6fIrQX9hEWFmk0BTotWD5DwutkApsbKANrG7vGVMBnEq5FsHSoGrqwehtk5pLk=
+Received: from DM6PR02CA0126.namprd02.prod.outlook.com (2603:10b6:5:1b4::28)
+ by SJ0PR02MB8596.namprd02.prod.outlook.com (2603:10b6:a03:3fd::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Thu, 5 May
- 2022 15:54:35 +0000
-Received: from DM3NAM02FT013.eop-nam02.prod.protection.outlook.com
- (2603:10b6:3:ac:cafe::97) by DM5PR21CA0019.outlook.office365.com
- (2603:10b6:3:ac::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.6 via Frontend
- Transport; Thu, 5 May 2022 15:54:34 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Thu, 5 May
+ 2022 15:54:32 +0000
+Received: from DM3NAM02FT047.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:1b4:cafe::b9) by DM6PR02CA0126.outlook.office365.com
+ (2603:10b6:5:1b4::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24 via Frontend
+ Transport; Thu, 5 May 2022 15:54:32 +0000
 X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
  149.199.62.198) smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=quarantine header.from=amd.com;
 Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
  amd.com discourages use of 149.199.62.198 as permitted sender)
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT013.mail.protection.outlook.com (10.13.5.126) with Microsoft SMTP
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT047.mail.protection.outlook.com (10.13.4.114) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5227.15 via Frontend Transport; Thu, 5 May 2022 15:54:34 +0000
+ 15.20.5227.15 via Frontend Transport; Thu, 5 May 2022 15:54:31 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 5 May 2022 08:54:34 -0700
+ 15.1.2176.14; Thu, 5 May 2022 08:54:30 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 5 May 2022 08:54:34 -0700
+ 15.1.2176.14 via Frontend Transport; Thu, 5 May 2022 08:54:30 -0700
 Envelope-to: buildroot@buildroot.org, luca@lucaceresoli.net,
  giulio.benetti@benettiengineering.com, peter@korsgaard.com,
  michal.simek@amd.com, neal.frager@amd.com
 Received: from [172.25.185.186] (port=58056 helo=xcoapps69.xilinx.com)
  by smtp.xilinx.com with esmtp (Exim 4.90)
  (envelope-from <neal.frager@amd.com>)
- id 1nmdoH-000DLx-TR; Thu, 05 May 2022 08:54:33 -0700
+ id 1nmdoE-000DLx-Mn; Thu, 05 May 2022 08:54:30 -0700
 To: <buildroot@buildroot.org>
-Date: Thu, 5 May 2022 09:54:24 -0600
-Message-ID: <20220505155424.3002847-2-neal.frager@amd.com>
+Date: Thu, 5 May 2022 09:54:23 -0600
+Message-ID: <20220505155424.3002847-1-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220505155424.3002847-1-neal.frager@amd.com>
-References: <20220505155424.3002847-1-neal.frager@amd.com>
 MIME-Version: 1.0
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: afc99149-7f4a-44ca-881f-08da2eaf8d09
-X-MS-TrafficTypeDiagnostic: BL3PR02MB8148:EE_
-X-Microsoft-Antispam-PRVS: <BL3PR02MB8148A1C3EB2A839B0F299187F0C29@BL3PR02MB8148.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: f61917ed-07c4-4770-4bde-08da2eaf8b79
+X-MS-TrafficTypeDiagnostic: SJ0PR02MB8596:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR02MB8596B84BF95F0915CA056ECDF0C29@SJ0PR02MB8596.namprd02.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 2
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0Npn8k81krLAQx1zMsbiegEYmXkN5ek/2xml4fjQVv9F7NaT92P6ajYtNZ1eF2mjjfVtuyWdF/+9qaW9bGuRqj4urwLvzjGMZUI4292QkWC4LaLe8fpxyzuzKC80X3BdXqYf20/bkRPkGwB7Y3P+64LJeWnqOZlOKizkrTvTGABXqT3kcMBfl8auSm+HjehgBuzgFIBzGRix0S1Pqf91R3F+gKbFCOfmPKbr2kjI2xdE7ypdtkPSOhAQ01XPCz99N7fdwP1gk1GvvOAuys4L7fSubl1jSJSh/f+8/uQ/muGmxdeqlORAak8KRRnk6k/+biYRagbxlcZJ7eRObAbkvRWR0V74JvhCz1fj0Pw7dUwwYfhCXHmeEJAky/BjufGNYClccwbbaPKY8ixolETXxqL48jXhL2NVDyfjoMl08PnjnVHLIxrkbE+aAh79KQuB03wRXN6VTgsbpTmEQvviBANsNBy6fqtYk6bYajxELo3Em6TBMGRV2jqJ8yUr2t7YTUBNL7eofqFrCZ0yBXjiBXUIgC5RQocLS7p2+TPALe9dgB8fppyuQmZ+mAy1BFNnUbBoW8F8UEhe9qXLL+WjIHaKyzZbRUIcO3A6tXi4AY3koFa5B7GhxS3I5YeQBWMgaI68jSp/wnhipU3gz00KXLoGEYZVeuNe9WYa1Y3WjbHNFDbVkckl/jJ9Ibk+9uK1GpB4V47wnMPTDZyNbfff8w==
+X-Microsoft-Antispam-Message-Info: 89Iu0QmixGPjl49QfaCiEYpIjxiP4M7Ri1ZkwX7/Pn5rMQMDzrK3QpD2Xu1+bmudjpK0j+GztJ55RAFaBfQY4N9L3n0vNlRxxqLUVa+SWYIGTvaFRUIRaMPGc4OHLf5d8gmUIL7vvnYu5gH3W8vRXLZl+nPA9bgSh4GukI0Zhx3puXi8+oKVXu8vG8XstqxeYg6jtyX0SkbUrK7UECs9NTvDli2/7XIikuI5TsQzPmZExi4LaogmgSNByrcN9SC+vSbaObZm4ghnjltPJb65FOlvvRjaX+Rcyzc7+JG1xAxWw5Prcd6YXde8oH3ufDhjmuc7Xhi5mASQL0fptOONc2mFfkFh/rlLeUTpwA8ytxmYEd+GGC+ySqtMw660f/Hy5dNOY9kzZFTcKJf7vJHmQktj+35TQoYJvSYc7hDcw09ja1FiupF8J8z871C+UzCciarnOXSg+l44uqRAhRO8MPEcnBy0OkTXL1d1dORsAaf8nBm7v4aRwnEzLtgauBOgcVLCyLndSG5gcqlsPgqZJO0h94g4PEJ36kTd2RQFZsuicchT5sGs6qY8Cxdvodgu1Yau0vUgL+qGtyDhK/lBBVRxlrRHkoioTLHmTHFhCIUG/5b6nZEVPLCi2fuHsVjJRUX4qpDtFs+0ipixNLVijaWUzwY7lrnIKD9xjBn9pqwqt5B3zmrbscv5cJWYCpR1L37DUSMj0W/OwmnBBaP57LUrk/sinFFX7C4CwOKN76+wnM7ND8xAama2V4EGMvGwPaH8cq7qtzSuWogQDkeZ0JU895Vm6EmLRn7H5rKEQOKfdEdqh8svgeFRWCzKghAUhkfjYkNRofLk/978dlJWgQ==
 X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:xsj-pvapexch01.xlnx.xilinx.com;
+ IPV:NLI; SFV:NSPM; H:xsj-pvapexch02.xlnx.xilinx.com;
  PTR:unknown-62-198.xilinx.com; CAT:NONE;
- SFS:(13230001)(4636009)(46966006)(40470700004)(36756003)(356005)(40460700003)(70206006)(8936002)(70586007)(7636003)(6916009)(26005)(2906002)(6666004)(54906003)(47076005)(4744005)(336012)(508600001)(44832011)(86362001)(2616005)(316002)(4326008)(5660300002)(8676002)(9786002)(82310400005)(35950700001)(1076003)(102446001);
+ SFS:(13230001)(4636009)(40470700004)(46966006)(30864003)(44832011)(316002)(9786002)(5660300002)(8936002)(82310400005)(6916009)(2906002)(508600001)(966005)(1076003)(19627235002)(336012)(6666004)(2616005)(47076005)(26005)(7636003)(356005)(86362001)(83380400001)(70586007)(70206006)(54906003)(36756003)(4326008)(8676002)(35950700001)(40460700003)(102446001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: xilinx.onmicrosoft.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2022 15:54:34.5773 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: afc99149-7f4a-44ca-881f-08da2eaf8d09
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2022 15:54:31.9545 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f61917ed-07c4-4770-4bde-08da2eaf8b79
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
- Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT013.eop-nam02.prod.protection.outlook.com
+ Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT047.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR02MB8148
-Subject: [Buildroot] [PATCH v1 2/2] DEVELOPERS update
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB8596
+Subject: [Buildroot] [PATCH v1 1/2] add configs/zynqmp_kria_kv260_defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -136,31 +132,764 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Updating Neal Frager in the DEVELOPERS file.
+This patch adds support for Xilinx Kria KV260 starter kit.
+
+KV260 features can be found here:
+https://www.xilinx.com/products/boards-and-kits/kv260.html
+
+While the Kria SOM is based on a ZynqMP SoC, there are some key
+boot config differences from the other ZynqMP evaluation boards.
+
+1. There are no boot switches on Kria SOMs. The boot mode is thus
+hard configured for QSPI flash. A pre-programmed boot.bin comes
+with every Starter Kit. U-Boot can then find the Linux kernel and
+file system on the SD card.
+
+Optional instructions for updating the boot.bin in the QSPI flash
+can be found in the readme.txt file and the link below.
+
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM
+
+2. Kria SOMs use UART1 for the console instead of UART0. For this
+reason, Kria Starter Kits will use a separate extlinux.conf file
+from other ZynqMP evaluation boards.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- DEVELOPERS | 5 +++++
- 1 file changed, 5 insertions(+)
+ board/zynqmp/kria/extlinux.conf        |   4 +
+ board/zynqmp/kria/kv260/pm_cfg_obj.c   | 556 +++++++++++++++++++++++++
+ board/zynqmp/kria/kv260/uboot.fragment |   1 +
+ board/zynqmp/kria/post-build.sh        |   8 +
+ board/zynqmp/kria/readme.txt           |  78 ++++
+ configs/zynqmp_kria_kv260_defconfig    |  37 ++
+ 6 files changed, 684 insertions(+)
+ create mode 100644 board/zynqmp/kria/extlinux.conf
+ create mode 100644 board/zynqmp/kria/kv260/pm_cfg_obj.c
+ create mode 100644 board/zynqmp/kria/kv260/uboot.fragment
+ create mode 100755 board/zynqmp/kria/post-build.sh
+ create mode 100644 board/zynqmp/kria/readme.txt
+ create mode 100644 configs/zynqmp_kria_kv260_defconfig
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 292b919137..861496fb9d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2100,8 +2100,13 @@ F:	package/pkg-qmake.mk
- F:	package/qt5/qt5opcua/
- 
- N:	Neal Frager <neal.frager@amd.com>
-+F:	board/zynq/
- F:	board/zynqmp/
-+F:	board/zynqmp/kria/
-+F:	configs/zynq_zc706_defconfig
- F:	configs/zynqmp_zcu102_defconfig
-+F:	configs/zynqmp_zcu106_defconfig
-+F:	configs/zynqmp_kria_kv260_defconfig
- 
- N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
- F:	package/uacme/
+diff --git a/board/zynqmp/kria/extlinux.conf b/board/zynqmp/kria/extlinux.conf
+new file mode 100644
+index 0000000000..663aabb7c3
+--- /dev/null
++++ b/board/zynqmp/kria/extlinux.conf
+@@ -0,0 +1,4 @@
++label linux
++  kernel /Image
++  devicetree /system.dtb
++  append console=ttyPS1,115200 root=/dev/mmcblk1p2 rw rootwait
+diff --git a/board/zynqmp/kria/kv260/pm_cfg_obj.c b/board/zynqmp/kria/kv260/pm_cfg_obj.c
+new file mode 100644
+index 0000000000..019df6e237
+--- /dev/null
++++ b/board/zynqmp/kria/kv260/pm_cfg_obj.c
+@@ -0,0 +1,556 @@
++/******************************************************************************
++* Copyright (c) 2017 - 2021 Xilinx, Inc.  All rights reserved.
++* SPDX-License-Identifier: MIT
++******************************************************************************/
++
++#include "xil_types.h"
++#include "pm_defs.h"
++
++#define PM_CONFIG_MASTER_SECTION_ID	0x101U
++#define PM_CONFIG_SLAVE_SECTION_ID	0x102U
++#define PM_CONFIG_PREALLOC_SECTION_ID	0x103U
++#define PM_CONFIG_POWER_SECTION_ID	0x104U
++#define PM_CONFIG_RESET_SECTION_ID	0x105U
++#define PM_CONFIG_SHUTDOWN_SECTION_ID	0x106U
++#define PM_CONFIG_SET_CONFIG_SECTION_ID	0x107U
++#define PM_CONFIG_GPO_SECTION_ID	0x108U
++
++#define PM_SLAVE_FLAG_IS_SHAREABLE	0x1U
++#define PM_MASTER_USING_SLAVE_MASK	0x2U
++
++#define PM_CONFIG_GPO1_MIO_PIN_34_MAP	(1U << 10U)
++#define PM_CONFIG_GPO1_MIO_PIN_35_MAP	(1U << 11U)
++#define PM_CONFIG_GPO1_MIO_PIN_36_MAP	(1U << 12U)
++#define PM_CONFIG_GPO1_MIO_PIN_37_MAP	(1U << 13U)
++
++#define PM_CONFIG_GPO1_BIT_2_MASK	(1U << 2U)
++#define PM_CONFIG_GPO1_BIT_3_MASK	(1U << 3U)
++#define PM_CONFIG_GPO1_BIT_4_MASK	(1U << 4U)
++#define PM_CONFIG_GPO1_BIT_5_MASK	(1U << 5U)
++
++#define SUSPEND_TIMEOUT	0xFFFFFFFFU
++
++#define PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK    0x00000001
++#define PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK    0x00000100
++#define PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK    0x00000200
++
++
++
++#if defined (__ICCARM__)
++#pragma language=save
++#pragma language=extended
++#endif
++#if defined (__GNUC__)
++    const u32 XPm_ConfigObject[] __attribute__((used, section(".sys_cfg_data"))) =
++#elif defined (__ICCARM__)
++#pragma location = ".sys_cfg_data"
++__root const u32 XPm_ConfigObject[] =
++#endif
++{
++	/**********************************************************************/
++	/* HEADER */
++	2,	/* Number of remaining words in the header */
++	8,	/* Number of sections included in config object */
++	1U,	/* Type of config object as base */
++	/**********************************************************************/
++	/* MASTER SECTION */
++	PM_CONFIG_MASTER_SECTION_ID, /* Master SectionID */
++	3U, /* No. of Masters*/
++
++	NODE_APU, /* Master Node ID */
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK, /* IPI Mask of this master */
++	SUSPEND_TIMEOUT, /* Suspend timeout */
++	PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* Suspend permissions */
++	PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* Wake permissions */
++
++	NODE_RPU_0, /* Master Node ID */
++	PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK, /* IPI Mask of this master */
++	SUSPEND_TIMEOUT, /* Suspend timeout */
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* Suspend permissions */
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* Wake permissions */
++
++	NODE_RPU_1, /* Master Node ID */
++	PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask of this master */
++	SUSPEND_TIMEOUT, /* Suspend timeout */
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK, /* Suspend permissions */
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK, /* Wake permissions */
++
++
++	/**********************************************************************/
++	/* SLAVE SECTION */
++
++
++	PM_CONFIG_SLAVE_SECTION_ID,	/* Section ID */
++	49,				/* Number of slaves */
++
++	NODE_OCM_BANK_0,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_OCM_BANK_1,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_OCM_BANK_2,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_OCM_BANK_3,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_TCM_0_A,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK, /* IPI Mask */
++
++	NODE_TCM_0_B,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK, /* IPI Mask */
++
++	NODE_TCM_1_A,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_TCM_1_B,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_L2,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_GPU_PP_0,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_GPU_PP_1,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_USB_0,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_USB_1,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_TTC_0,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_TTC_1,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_TTC_2,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_TTC_3,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_SATA,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_ETH_0,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_ETH_1,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_ETH_2,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_ETH_3,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_UART_0,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_UART_1,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_SPI_0,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_SPI_1,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_I2C_0,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_I2C_1,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_SD_0,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_SD_1,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_DP,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_GDMA,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_ADMA,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_NAND,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_QSPI,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_GPIO,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_CAN_0,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_CAN_1,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_EXTERN,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_DDR,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK| PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_IPI_APU,
++	0U,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK, /* IPI Mask */
++
++	NODE_IPI_RPU_0,
++	0U,
++	PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK, /* IPI Mask */
++
++	NODE_IPI_RPU_1,
++	0U,
++	PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_GPU,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_PCIE,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_PCAP,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_RTC,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++	NODE_VCU,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	0U, /* IPI Mask */
++
++	NODE_PL,
++	PM_SLAVE_FLAG_IS_SHAREABLE,
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
++
++
++	/**********************************************************************/
++	/* PREALLOC SECTION */
++
++	PM_CONFIG_PREALLOC_SECTION_ID, /* Preallaoc SectionID */
++	3U, /* No. of Masters*/
++
++/* Prealloc for psu_cortexa53_0 */
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK,
++	11,
++	NODE_DDR,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_L2,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_OCM_BANK_0,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_OCM_BANK_1,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_OCM_BANK_2,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_OCM_BANK_3,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_I2C_1,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_SD_1,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_QSPI,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_PL,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_IPI_APU,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++
++	/* Prealloc for psu_cortexr5_0 */
++	PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK,
++	3,
++	NODE_TCM_0_A,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_TCM_0_B,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_IPI_RPU_0,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++
++	/* Prealloc for psu_cortexr5_1 */
++	PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	3,
++	NODE_TCM_1_A,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_TCM_1_B,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++	NODE_IPI_RPU_1,
++	PM_MASTER_USING_SLAVE_MASK, /* Master is using Slave */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Current Requirements */
++	PM_CAP_ACCESS | PM_CAP_CONTEXT, /* Default Requirements */
++
++
++	
++	/**********************************************************************/
++	/* POWER SECTION */
++
++	PM_CONFIG_POWER_SECTION_ID, /* Power Section ID */
++	4U, /* Number of power nodes */
++
++	NODE_APU, /* Power node ID */
++	PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* Force power down permissions */
++
++	NODE_RPU, /* Power node ID */
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* Force power down permissions */
++
++	NODE_FPD, /* Power node ID */
++	PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* Force power down permissions */
++
++	NODE_PLD, /* Power node ID */
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* Force power down permissions */
++
++
++	/**********************************************************************/
++	/* RESET SECTION */
++
++	PM_CONFIG_RESET_SECTION_ID, /* Reset Section ID */
++	120U, /* Number of resets */
++
++	XILPM_RESET_PCIE_CFG, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_PCIE_BRIDGE, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_PCIE_CTRL, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_DP, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_SWDT_CRF, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_AFI_FM5, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_AFI_FM4, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_AFI_FM3, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_AFI_FM2, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_AFI_FM1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_AFI_FM0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GDMA, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPU_PP1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPU_PP0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPU, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GT, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_SATA, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_ACPU3_PWRON, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_ACPU2_PWRON, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_ACPU1_PWRON, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_ACPU0_PWRON, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_APU_L2, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_ACPU3, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_ACPU2, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_ACPU1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_ACPU0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_DDR, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_APM_FPD, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_SOFT, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GEM0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GEM1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GEM2, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GEM3, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_QSPI, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_UART0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_UART1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_SPI0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_SPI1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_SDIO0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_SDIO1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_CAN0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_CAN1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_I2C0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_I2C1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_TTC0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_TTC1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_TTC2, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_TTC3, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_SWDT_CRL, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_NAND, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_ADMA, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPIO, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_IOU_CC, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_TIMESTAMP, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_RPU_R50, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_RPU_R51, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_RPU_AMBA, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_OCM, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_RPU_PGE, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_USB0_CORERESET, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_USB1_CORERESET, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_USB0_HIBERRESET, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_USB1_HIBERRESET, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_USB0_APB, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_USB1_APB, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_IPI, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_APM_LPD, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_RTC, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_SYSMON, 0,
++	XILPM_RESET_AFI_FM6, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_LPD_SWDT, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_FPD, PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK,
++	XILPM_RESET_RPU_DBG1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_RPU_DBG0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_DBG_LPD, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_DBG_FPD, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_APLL, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_DPLL, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_VPLL, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_IOPLL, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_RPLL, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_0, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_1, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_2, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_3, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_4, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_5, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_6, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_7, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_8, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_9, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_10, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_11, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_12, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_13, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_14, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_15, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_16, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_17, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_18, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_19, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_20, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_21, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_22, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_23, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_24, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_25, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_26, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_27, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_28, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_29, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_30, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPO3_PL_31, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_RPU_LS, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_PS_ONLY, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_PL, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPIO5_EMIO_92, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPIO5_EMIO_93, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPIO5_EMIO_94, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++	XILPM_RESET_GPIO5_EMIO_95, PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK,
++
++	/**********************************************************************/
++	/* SET CONFIG SECTION */
++	PM_CONFIG_SET_CONFIG_SECTION_ID,		/* Set Config Section ID */
++	0U, /* Permissions to load base config object */
++	0U, /* Permissions to load overlay config object */
++
++	/**********************************************************************/
++	/* SHUTDOWN SECTION */
++
++	PM_CONFIG_SHUTDOWN_SECTION_ID, /* Shutdown Section ID */
++	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* System Shutdown/Restart Permission */
++
++	/**********************************************************************/
++	/* GPO SECTION */
++	PM_CONFIG_GPO_SECTION_ID,		/* GPO Section ID */
++	PM_CONFIG_GPO1_BIT_2_MASK |
++	PM_CONFIG_GPO1_MIO_PIN_34_MAP |
++	PM_CONFIG_GPO1_MIO_PIN_35_MAP |
++	0,					/* State of GPO pins */
++};
++#if defined (__ICCARM__)
++#pragma language=restore
++#endif
++
+diff --git a/board/zynqmp/kria/kv260/uboot.fragment b/board/zynqmp/kria/kv260/uboot.fragment
+new file mode 100644
+index 0000000000..e1aca68692
+--- /dev/null
++++ b/board/zynqmp/kria/kv260/uboot.fragment
+@@ -0,0 +1 @@
++CONFIG_DEFAULT_DEVICE_TREE="zynqmp-smk-k26-revA"
+diff --git a/board/zynqmp/kria/post-build.sh b/board/zynqmp/kria/post-build.sh
+new file mode 100755
+index 0000000000..9fd8bbf2c8
+--- /dev/null
++++ b/board/zynqmp/kria/post-build.sh
+@@ -0,0 +1,8 @@
++#!/bin/sh
++
++# genimage will need to find the extlinux.conf
++# in the binaries directory
++
++BOARD_DIR="$(dirname $0)"
++
++install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux.conf
+diff --git a/board/zynqmp/kria/readme.txt b/board/zynqmp/kria/readme.txt
+new file mode 100644
+index 0000000000..a3a4b5e65a
+--- /dev/null
++++ b/board/zynqmp/kria/readme.txt
+@@ -0,0 +1,78 @@
++**************************************************
++Xilinx Kria SOM Starter Kits - ZynqMP SoC
++**************************************************
++
++This document describes the Buildroot support for the Kria 
++KV260 starter kit by Xilinx, based on Kria SOM including the 
++Zynq UltraScale+ MPSoC (aka ZynqMP).  It has been tested with 
++the KV260 production board.
++
++Evaluation board features can be found here with the link below.
++
++KV260:
++https://www.xilinx.com/products/boards-and-kits/kv260.html
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make zynqmp_kria_kv260_defconfig
++
++Compile everything and build the rootfs image:
++
++    $ make
++
++Result of the build
++-------------------
++
++After building, you should get a tree like this:
++
++    output/images/
++    +-- atf-uboot.ub
++    +-- bl31.bin
++    +-- boot.bin
++    +-- boot.vfat
++    +-- Image
++    +-- rootfs.ext2
++    +-- rootfs.ext4 -> rootfs.ext2
++    +-- sdcard.img
++    +-- system.dtb -> smk-k26-revA-sck-kv-g-revB.dtb
++    +-- u-boot.itb
++    `-- smk-k26-revA-sck-kv-g-revB.dtb
++
++How to write the SD card
++========================
++
++WARNING! This will destroy all the card content. Use with care!
++
++The sdcard.img file is a complete bootable image ready to be written
++on the boot medium. To install it, simply copy the image to an SD
++card:
++
++    # dd if=output/images/sdcard.img of=/dev/sdX
++
++Where 'sdX' is the device node of the SD.
++
++Eject the SD card, insert it in the board, and power it up.
++
++How to write the boot.bn to QSPI boot flash
++===========================================
++
++The Kria SOMs are preconfigured to boot initially from QSPI.
++This makes these boards different from other ZynqMP boards
++in that the boot.bin needs to be flashed into the QSPI boot
++flash such that the U-Boot SPL can then load all of the
++remaining images from the SD card.
++
++In addition, the KV260 Starter Kit QSPI comes pre-flashed with
++a utility designed to make updating the QSPI flash memory
++easier.
++
++Instructions for using these utilities to update the boot.bin
++in QSPI flash can be found on the wiki link below.
++
++https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM#Boot-Firmware-Updates
++
++It is possible to boot the Buildroot generated SD card image without
++updating the QSPI boot.bin image, so this is an optional step.
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+new file mode 100644
+index 0000000000..d4a72a0d19
+--- /dev/null
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -0,0 +1,37 @@
++BR2_aarch64=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/kria/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.1)/xlnx_rebase_v5.15_LTS_2022.1.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/smk-k26-revA-sck-kv-g-revB"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.1)/xlnx_rebase_v2.6_2022.1.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/kria/kv260/uboot.fragment"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
++BR2_TARGET_UBOOT_ZYNQMP=y
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/v2022.1/bin/pmufw-v2022.1.bin"
++BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
++BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.17.1
 
