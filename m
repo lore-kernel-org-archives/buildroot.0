@@ -1,58 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE8A1C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 17:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C32ACC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 19:42:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2000F400D1;
-	Thu,  5 May 2022 17:40:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3467E60B9F;
+	Thu,  5 May 2022 19:42:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yFzniNVpty4b; Thu,  5 May 2022 17:40:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ERPKPmCwvfeN; Thu,  5 May 2022 19:42:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9F662401AE;
-	Thu,  5 May 2022 17:40:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C30460B8A;
+	Thu,  5 May 2022 19:42:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7BCF91BF354
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 17:40:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6E6A31BF376
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 19:42:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 78036401AE
- for <buildroot@lists.busybox.net>; Thu,  5 May 2022 17:40:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68B624011F
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 19:41:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vW0_mNoP9NuP for <buildroot@lists.busybox.net>;
- Thu,  5 May 2022 17:40:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0F42D400D1
- for <buildroot@buildroot.org>; Thu,  5 May 2022 17:40:23 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.164.11.20])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id D46F813F7E2;
- Thu,  5 May 2022 19:40:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1651772421;
- bh=nsmW/M3au5zHy35QT8WIGu+aiUJvCJ6CRaDi2Yafijk=;
- h=From:To:Cc:Subject:Date:From;
- b=HAGRbn9Sd5tR5v9e0rNtg2YaP6vmWZsp90IcBSpZCLlsrl+FoYwKfQQvpokwBLQct
- rcxlkEjVlh5LBYABUnf1ugXDGszV+PewOFN+MJJNDyvStkosOv4OgkKBd+JtQ5rJJi
- 5jFwer99pzh/t3RfKrz/+Wnck1ocM8oZX3StgdeAU3Aq2QSte0o4m3ivAWjzc5u3sQ
- 1fFzN5f/n2v023W9CEL7ilnBwN/+lBVS6JXRd4TT2UqAWiQfc8A3C/cMtZXfb+KSP2
- m/9mEOV0+k2ntKmerfEyLXxjG2fQyDwmIgV2DJnPG5UWDIPmTU9Zyrv8rGYQLAJb1w
- Ai4vYXHk26/cA==
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Thu,  5 May 2022 19:40:10 +0200
-Message-Id: <20220505174010.83712-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.36.0
+ with ESMTP id XNnhinXsk5sC for <buildroot@lists.busybox.net>;
+ Thu,  5 May 2022 19:41:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5B2BD404A0
+ for <buildroot@buildroot.org>; Thu,  5 May 2022 19:41:58 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id CBF86200003;
+ Thu,  5 May 2022 19:41:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nmhMH-00G83i-Hu; Thu, 05 May 2022 21:41:53 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Florian Fainelli <f.fainelli@gmail.com>
+References: <20220505172220.1865729-1-f.fainelli@gmail.com>
+Date: Thu, 05 May 2022 21:41:53 +0200
+In-Reply-To: <20220505172220.1865729-1-f.fainelli@gmail.com> (Florian
+ Fainelli's message of "Thu, 5 May 2022 10:22:20 -0700")
+Message-ID: <87bkwb22da.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/ola: add missing dependencies to
- libusb
+Subject: Re: [Buildroot] [PATCH v3] package: Add cpulimit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,50 +58,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: yann.morin.1998@free.fr, thomas.petazzoni@bootlin.com, mmayer@broadcom.com,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-- http://autobuild.buildroot.net/results/97d07f84cf8e34a697bd332c360ce353b96b2e26/
+>>>>> "Florian" == Florian Fainelli <f.fainelli@gmail.com> writes:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/ola/ola.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ > Cpulimit is a tool which limits the CPU usage of a process (expressed in
+ > percentage, not in CPU time). It is useful to control batch jobs, when
+ > you don't want them to eat too many CPU cycles.
 
-diff --git a/package/ola/ola.mk b/package/ola/ola.mk
-index 1fd6d6a592..6600de797e 100644
---- a/package/ola/ola.mk
-+++ b/package/ola/ola.mk
-@@ -203,6 +203,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OLA_PLUGIN_STAGEPROFI),y)
- OLA_CONF_OPTS += --enable-stageprofi --enable-libusb
-+OLA_DEPENDENCIES += libusb
- else
- OLA_CONF_OPTS += --disable-stageprofi
- endif
-@@ -215,12 +216,14 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OLA_PLUGIN_USBDMX),y)
- OLA_CONF_OPTS += --enable-usbdmx --enable-libusb
-+OLA_DEPENDENCIES += libusb
- else
- OLA_CONF_OPTS += --disable-usbdmx
- endif
- 
- ifeq ($(BR2_PACKAGE_OLA_PLUGIN_USBPRO),y)
- OLA_CONF_OPTS += --enable-usbpro --enable-libusb
-+OLA_DEPENDENCIES += libusb
- else
- OLA_CONF_OPTS += --disable-usbpro
- endif
+ > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+ > ---
+ > Changes in v3:
+
+ > - dropped CPULIMIT_SOURCE
+ > - dropped 'v' from CPULIMIT_VERSION
+ > - updated hash file with new tarball name
+
+ > Changes in v2:
+
+ > - added DEVELOPERS entry
+ > - back ported 2 patches from upstream project pull requests to address
+ >   build warnings
+ > - added _GNU_SOURCE to the CFLAGS
+ > - added hash file
+ > - corrected check-package warnings
+
+..
+
+ > +++ b/package/cpulimit/0001-Fix-crash-and-compiler-warnings.patch
+ > @@ -0,0 +1,56 @@
+ > +From d1f42082590bed42cbf6ef1bf37e936df1afbf6b Mon Sep 17 00:00:00 2001
+ > +From: Tobias Tangemann <tobias@tangemann.org>
+ > +Date: Thu, 9 Jul 2015 23:51:07 +0200
+ > +Subject: [PATCH] Fix crash (and compiler warnings)
+ > +
+ > +Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+
+I've added links to the upstream pull requests for both patches.
+
+ > +++ b/package/cpulimit/Config.in
+ > @@ -0,0 +1,7 @@
+ > +config BR2_PACKAGE_CPULIMIT
+ > +	bool "cpulimit"
+
+It uses fork(), so I've added a BR2_USE_MMU dependency.
+
+Committed with these fixes, thanks.
+
 -- 
-2.36.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
