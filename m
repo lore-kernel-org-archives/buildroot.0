@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 358FFC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 20:40:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3094BC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 20:40:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEFCE419D9;
-	Thu,  5 May 2022 20:40:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEC46610F5;
+	Thu,  5 May 2022 20:40:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S6bKv-cJYIng; Thu,  5 May 2022 20:40:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dcR7KsBTa0xg; Thu,  5 May 2022 20:40:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6AD8419D4;
-	Thu,  5 May 2022 20:40:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5BF6B1BF342
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4599C60BC4;
+	Thu,  5 May 2022 20:40:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 680E61C1189
  for <buildroot@lists.busybox.net>; Thu,  5 May 2022 20:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5882C40383
+ by smtp1.osuosl.org (Postfix) with ESMTP id 571C68407A
  for <buildroot@lists.busybox.net>; Thu,  5 May 2022 20:40:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KTH8i1WxawEy for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yTHz_nUdUzoJ for <buildroot@lists.busybox.net>;
  Thu,  5 May 2022 20:40:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ADE194011F
+ by smtp1.osuosl.org (Postfix) with ESMTP id B265484077
  for <buildroot@buildroot.org>; Thu,  5 May 2022 20:40:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id C2B2E85BA2; Thu,  5 May 2022 20:29:53 +0000 (UTC)
+ id CA96785B5E; Thu,  5 May 2022 20:29:53 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 5 May 2022 22:37:51 +0200
+Date: Thu, 5 May 2022 22:39:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f0c7cb01a960c6892d6082c74b7c07320ddaef0a
-X-Git-Newrev: 5e2482678f1604b9fefb17090d8dd9ade7df4625
+X-Git-Oldrev: 5e2482678f1604b9fefb17090d8dd9ade7df4625
+X-Git-Newrev: d56925bc438bfc425919adc33adc9d0c2d9f2c7b
 X-Patchwork-Hint: ignore
-Message-Id: <20220505202953.C2B2E85BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgcrypt: Fix powerpc64 build w/o
- optimisation
+Message-Id: <20220505202953.CA96785B5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zchunk: fix symbol conflict
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +58,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e2482678f1604b9fefb17090d8dd9ade7df4625
+commit: https://git.buildroot.net/buildroot/commit/?id=d56925bc438bfc425919adc33adc9d0c2d9f2c7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The following build failure was reported by the autobuilder:
+Backport a patch to fix a symbol conflict issue.
 
-powerpc64   |        libgcrypt-1.10.1        | NOK |
-http://autobuild.buildroot.net/results/eb60bb95411076b92f5c63f9b21c6e576998031c | ORPH
+Fixes:
+ - http://autobuild.buildroot.net/results/225/22590a7038a40da3700d56c1f82f7dc74225702a
 
-This config is building with BR2_OPTIMIZE_0=y.
-
-The code relies on the compiler turning the series of preprocessor
-macros in to a constant for the second argument to vec_sld:
-
- chacha20-ppc.c:60:10: error: argument 3 must be a 4-bit unsigned literal
-    60 |   return vec_sld (v, v, (16 - (4 * idx)) & 15);
-
-The argument is a constant, but it would require a significant rework to
-make this build without optimisation. Instead disable the vectorised
-powerpc code when building with optimisation disabled.
-
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libgcrypt/libgcrypt.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .../0002-zck-declare-write_data-as-static.patch    | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index f28552c6e7..8f4e5ec8c0 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -18,6 +18,7 @@ LIBGCRYPT_CPE_ID_VENDOR = gnupg
- LIBGCRYPT_AUTORECONF = YES
- LIBGCRYPT_CONF_OPTS = \
- 	--disable-tests \
-+	$(if $(BR2_OPTIMIZE_0),--disable-ppc-crypto-support,) \
- 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
- 
- # Libgcrypt doesn't support assembly for coldfire
+diff --git a/package/zchunk/0002-zck-declare-write_data-as-static.patch b/package/zchunk/0002-zck-declare-write_data-as-static.patch
+new file mode 100644
+index 0000000000..3c48ab3d50
+--- /dev/null
++++ b/package/zchunk/0002-zck-declare-write_data-as-static.patch
+@@ -0,0 +1,34 @@
++From 477c4e891bd4d9e41fcbaa07cd1a37c0975df5cc Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Wed, 4 May 2022 16:32:48 -0600
++Subject: [PATCH] zck: declare write_data as static
++
++This needs to be declared static to avoid a symbol conflict:
++io.c:(.text+0xe8): multiple definition of `write_data'; src/zck.p/zck.c.o:zck.c:(.text+0x1f4): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.net/results/225/22590a7038a40da3700d56c1f82f7dc74225702a
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++477c4e891bd4d9e41fcbaa07cd1a37c0975df5cc]
++---
++ src/zck.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/zck.c b/src/zck.c
++index 7727479..83b2630 100644
++--- a/src/zck.c
+++++ b/src/zck.c
++@@ -159,7 +159,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
++ 
++ static struct argp argp = {options, parse_opt, args_doc, doc};
++ 
++-void write_data(zckCtx *zck, char *data, ssize_t in_size) {
+++static void write_data(zckCtx *zck, char *data, ssize_t in_size) {
++     if(zck_write(zck, data, in_size) < 0) {
++         LOG_ERROR("%s", zck_get_error(zck));
++         exit(1);
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
