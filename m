@@ -1,80 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EFEDC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  4 May 2022 23:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97D05C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  5 May 2022 02:29:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3739418E8;
-	Wed,  4 May 2022 23:28:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1423F403AC;
+	Thu,  5 May 2022 02:29:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m6IGicWLcUyt; Thu,  5 May 2022 02:29:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1FB6040424;
+	Thu,  5 May 2022 02:29:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EDFF01BF3AE
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 02:29:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DB9034194A
+ for <buildroot@lists.busybox.net>; Thu,  5 May 2022 02:29:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 531ViB6jOBKP; Wed,  4 May 2022 23:28:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80773418B1;
-	Wed,  4 May 2022 23:28:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 60F421BF484
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 23:27:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F1BC610D2
- for <buildroot@lists.busybox.net>; Wed,  4 May 2022 23:27:59 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KxtZPnH7VqU1 for <buildroot@lists.busybox.net>;
- Wed,  4 May 2022 23:27:56 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7AC4A60BC4
- for <buildroot@buildroot.org>; Wed,  4 May 2022 23:27:56 +0000 (UTC)
-Received: by mail-io1-xd2e.google.com with SMTP id i20so3158820ion.0
- for <buildroot@buildroot.org>; Wed, 04 May 2022 16:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=rwZnnx54pKpx/WT7ZV2UAyV0IaHef9iFh7Q8inThgc4=;
- b=ZtY5aYdSy8kFG7EjwR2Xf2gsUVko79MEv6lU+uj0TFD3k1sbrO4gZ4qu5imhJovwW1
- REXCYUpIbZi823XrmpHM4J2PMSrWpMKx0GhwJylZfwKJ9K/UDhMd5la8xTeMJfuJjhnP
- 0DRKo2+dUiHRFm4nX+K6wUjMnwSum7i1oXK55J52KLam2/yPyCGi60+zWo8Y6JzKAgav
- 4L9ke8ylK4dy332/siojny546cXnsEFwDP2lHWhb12yhh1vj3Hw/8JdJiK+SRHie93Rl
- u44WmOGm3hkh2b51apt+iR1j6KUVuJ8GjPIzf2vsAz2sm5/zL/KVMiFezs0IlC9AaVEK
- Cktw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=rwZnnx54pKpx/WT7ZV2UAyV0IaHef9iFh7Q8inThgc4=;
- b=ZcDuGhIFZ+iyorcHZ2pB74YKlyQmM8/uXeYUZwkPfNt92UTDo0W39JSJUFPEurtdVg
- PEsgfzn95atzu3Bls1YO1dOqbWL12t347rrSUc5bhx9eIW3gWM2YCZiO1FrEpVLytT4O
- d7CVqyLODqlqA/h74IRes8DbgLyoyQc5C0K1Da92654iqmfzRgr7n/nCitPo52hAtn3V
- KBFCE5EZRsGgTkFHcwAd7LMHclfFtYespfMVf/aIMPQOhx/dr45C5BAW+e9VfSKsHusv
- PP2krQ9HsDPY5Zg1UJvQTf33ww6l9NJzC8zva7pkZz5XdzyN25N26Eag0uNUHkGLFf81
- furQ==
-X-Gm-Message-State: AOAM533CP6kw3RGwyKIDNpqigMZXe5JybzeYTpMqkItmtOLr0FcpJhZO
- BZDX+fuUDjsbQhbEUmyPS/CLhDEKsAM=
-X-Google-Smtp-Source: ABdhPJxZhef2JjW69O8OnJ3KQ32Ogyff0qmag0xeVH0nDNyI9fIL68JOcSvVJdW5tW2D8CDp2M42sA==
-X-Received: by 2002:a05:6602:2a42:b0:652:8e2d:e4b7 with SMTP id
- k2-20020a0566022a4200b006528e2de4b7mr9338206iov.142.1651706875382; 
- Wed, 04 May 2022 16:27:55 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-252-238.hlrn.qwest.net.
- [97.118.252.238]) by smtp.gmail.com with ESMTPSA id
- q13-20020a5d9f0d000000b0065a47e16f62sm3971069iot.52.2022.05.04.16.27.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 May 2022 16:27:55 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1NG3v1LGltHF for <buildroot@lists.busybox.net>;
+ Thu,  5 May 2022 02:29:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from monstilationax (41.68.233.220.static.exetel.com.au
+ [220.233.68.41])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AA79E41926
+ for <buildroot@buildroot.org>; Thu,  5 May 2022 02:29:22 +0000 (UTC)
+Received: by monstilationax (Postfix, from userid 1000)
+ id E9FE63846ACF; Thu,  5 May 2022 12:29:17 +1000 (AEST)
+From: Matt Flax <flatmax@flatmax.com>
 To: buildroot@buildroot.org
-Date: Wed,  4 May 2022 17:27:52 -0600
-Message-Id: <20220504232752.4188723-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Thu,  5 May 2022 12:29:16 +1000
+Message-Id: <20220505022916.509330-1-flatmax@flatmax.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/ninja: add make jobserver support
+Subject: [Buildroot] [PATCH v2 1/1] package/gtkiostream: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,52 +52,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>
+Cc: Matt Flax <flatmax@flatmax.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Switch to the Kitware(cmake maintainer) fork of ninja with make
-jobserver support.
+This package provides many useful software engineering and signal
+processing libraries.
 
-This fork has tagged releases based on upstream release tags with
-jobserver support added.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Matt Flax <flatmax@flatmax.com>
 ---
- package/ninja/ninja.hash | 2 +-
- package/ninja/ninja.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/ninja/ninja.hash b/package/ninja/ninja.hash
-index fd2c594a77..ecde199844 100644
---- a/package/ninja/ninja.hash
-+++ b/package/ninja/ninja.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  ce35865411f0490368a8fc383f29071de6690cbadc27704734978221f25e2bed  ninja-1.10.2.tar.gz
-+sha256  549c31ee596566b952c600e23eb9b8d39a4112cd5fdeb2e5a83370669176da40  ninja-1.10.2.g51db2.kitware.jobserver-1.tar.gz
- sha256  eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea  COPYING
-diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
-index ab1941023e..bc84046414 100644
---- a/package/ninja/ninja.mk
-+++ b/package/ninja/ninja.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+Notes:
+    Changes in v2:
+    
+    - added DEVELOPERS entry
+    - trimmed down Config.in to min. selections.
+    - Cleaned up gtkiostream.mk
+    - Added hash file.
+    - fixed TAB indention
+
+ DEVELOPERS                           |  3 +++
+ package/Config.in                    |  1 +
+ package/gtkiostream/Config.in        | 16 ++++++++++++++++
+ package/gtkiostream/gtkiostream.hash |  3 +++
+ package/gtkiostream/gtkiostream.mk   | 16 ++++++++++++++++
+ 5 files changed, 39 insertions(+)
+ create mode 100644 package/gtkiostream/Config.in
+ create mode 100644 package/gtkiostream/gtkiostream.hash
+ create mode 100644 package/gtkiostream/gtkiostream.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 292b919137..0c0fb9646d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1883,6 +1883,9 @@ F:	board/technologic/ts4900/
+ F:	configs/ts4900_defconfig
+ F:	package/ts4900-fpga/
  
--NINJA_VERSION = 1.10.2
--NINJA_SITE = $(call github,ninja-build,ninja,v$(NINJA_VERSION))
-+NINJA_VERSION_MAJOR = 1.10.2
-+NINJA_VERSION = $(NINJA_VERSION_MAJOR).g51db2.kitware.jobserver-1
-+NINJA_SITE = $(call github,Kitware,ninja,v$(NINJA_VERSION))
- NINJA_LICENSE = Apache-2.0
- NINJA_LICENSE_FILES = COPYING
- 
++N:	Matt Flax <flatmax@flatmax.org>
++F:	package/gtkiostream/
++
+ N:	Matt Weber <matthew.weber@collins.com>
+ F:	board/freescale/p*
+ F:	board/freescale/t*
+diff --git a/package/Config.in b/package/Config.in
+index befeadc27b..8e3dd0c08d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1328,6 +1328,7 @@ menu "Audio/Sound"
+ 	source "package/bcg729/Config.in"
+ 	source "package/caps/Config.in"
+ 	source "package/fdk-aac/Config.in"
++	source "package/gtkiostream/Config.in"
+ 	source "package/libao/Config.in"
+ 	source "package/libasplib/Config.in"
+ 	source "package/libbroadvoice/Config.in"
+diff --git a/package/gtkiostream/Config.in b/package/gtkiostream/Config.in
+new file mode 100644
+index 0000000000..2cbec5a844
+--- /dev/null
++++ b/package/gtkiostream/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_GTKIOSTREAM
++	bool "gtkiostream"
++	depends on BR2_INSTALL_LIBSTDCPP # eigen
++	select BR2_PACKAGE_EIGEN
++	select BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES
++	select BR2_PACKAGE_FFTW
++	select BR2_PACKAGE_FFTW_DOUBLE
++	select BR2_PACKAGE_FFTW_SINGLE
++	help
++	  This package provides many useful software engineering and signal
++	  processing includes and linkable library.
++
++	  https://github.com/flatmax/gtkiostream
++
++comment "gtkiostream needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/gtkiostream/gtkiostream.hash b/package/gtkiostream/gtkiostream.hash
+new file mode 100644
+index 0000000000..472dd2e9d2
+--- /dev/null
++++ b/package/gtkiostream/gtkiostream.hash
+@@ -0,0 +1,3 @@
++# locally computed hash
++sha256 9edf7d034796ac79a24ef1de14023a9c7f0f9b8bf7fdd6fc3437839c4fdc0aa0 gtkiostream-7b5056be13135a5526d39afbaaaff7cfd879b5ca.tar.gz
++sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 gpl.txt
+diff --git a/package/gtkiostream/gtkiostream.mk b/package/gtkiostream/gtkiostream.mk
+new file mode 100644
+index 0000000000..41cdd4e4a5
+--- /dev/null
++++ b/package/gtkiostream/gtkiostream.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# GTKIOSTREAM
++#
++################################################################################
++GTKIOSTREAM_VERSION = 7b5056be13135a5526d39afbaaaff7cfd879b5ca
++GTKIOSTREAM_SITE = $(call github,flatmax,gtkiostream,$(GTKIOSTREAM_VERSION))
++
++GTKIOSTREAM_LICENSE = GPL-2.0+
++GTKIOSTREAM_CONF_OPTS = --disable-octave
++GTKIOSTREAM_DEPENDENCIES = eigen fftw-double fftw-single host-pkgconf
++
++# Fetched from git, no configure script
++GTKIOSTREAM_AUTORECONF = YES
++
++$(eval $(autotools-package))
 -- 
-2.25.1
+2.32.0
 
 _______________________________________________
 buildroot mailing list
