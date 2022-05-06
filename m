@@ -1,71 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A08FFC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  6 May 2022 15:37:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59CB4C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  6 May 2022 15:37:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45E04403EA;
-	Fri,  6 May 2022 15:37:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF042814B6;
+	Fri,  6 May 2022 15:37:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fSVE-UdE-ouF; Fri,  6 May 2022 15:37:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nxi_mDGqVlRI; Fri,  6 May 2022 15:37:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5BAEC400E4;
-	Fri,  6 May 2022 15:37:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 759371BF299
- for <buildroot@lists.busybox.net>; Fri,  6 May 2022 15:37:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A93A81420;
+	Fri,  6 May 2022 15:37:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 373761BF299
+ for <buildroot@lists.busybox.net>; Fri,  6 May 2022 15:37:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 638EF402E1
- for <buildroot@lists.busybox.net>; Fri,  6 May 2022 15:37:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3479D81420
+ for <buildroot@lists.busybox.net>; Fri,  6 May 2022 15:37:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n42aqF4SW_Rp for <buildroot@lists.busybox.net>;
- Fri,  6 May 2022 15:37:01 +0000 (UTC)
-X-Greylist: delayed 00:05:04 by SQLgrey-1.8.0
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B5DC840269
- for <buildroot@buildroot.org>; Fri,  6 May 2022 15:37:00 +0000 (UTC)
-Received: from methusalix.internal.home.lespocky.de ([92.117.59.18]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1N6KpF-1ntT3h3pPt-016dV6; Fri, 06 May 2022 17:31:53 +0200
-Received: from falbala.internal.home.lespocky.de ([192.168.243.94])
- by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.3) tls
- TLS_AES_256_GCM_SHA384 (Exim 4.94.2)
- (envelope-from <post@lespocky.de>)
- id 1nmzvm-0006Yg-Kj; Fri, 06 May 2022 17:31:51 +0200
-Date: Fri, 6 May 2022 17:31:45 +0200
-From: Alexander Dahl <post@lespocky.de>
-To: Remi Jouannet <remijouannet@gmail.com>
-Message-ID: <20220506153144.GD19726@falbala.internal.home.lespocky.de>
-Mail-Followup-To: Remi Jouannet <remijouannet@gmail.com>,
- buildroot@buildroot.org, Remi Jouannet <remi.jouannet@outscale.com>
-References: <1651848863-30178-1-git-send-email-remi.jouannet@outscale.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YDOTIuwFykLi for <buildroot@lists.busybox.net>;
+ Fri,  6 May 2022 15:37:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 83C3181415
+ for <buildroot@buildroot.org>; Fri,  6 May 2022 15:37:50 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id v12so10509707wrv.10
+ for <buildroot@buildroot.org>; Fri, 06 May 2022 08:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:in-reply-to:content-transfer-encoding;
+ bh=hQWWtJuzFdLfnhZusz9fa82dPK8GvYmpun3rGDQJw7k=;
+ b=aciAJ1/ZGm+q+ippXVliu/ODJg6WWcS2ZIxC1+oIP2MfwjWz1hdSO0TMM7tj3FWbJX
+ 3Z7uHB+8fhr5opD9GOEI20gVyAMP3EX2GhMwJcrlZmBFnyZuA35vMwjpX6vVXSd2qrhm
+ 0QSHbWPnzOPlN9IDqPk1ZcepmOxR7JyQuWW9ixazCMHTl0yf5jX3iweOEZSl3krkmZQh
+ tRwE2t4j1iX4v2A0Mge2e8qfEQcZx0rReq25szXeaDoaAq9PUNhUr9O/QWXhVd+wye8C
+ p21CMFkC3zU+/31gsRnAOqS04inNbNrSRVMRnc9wm0BkLdoVuXXr69nM6nVSOa6ZD7ho
+ IApw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=hQWWtJuzFdLfnhZusz9fa82dPK8GvYmpun3rGDQJw7k=;
+ b=WsK1FjRQv5tDZdsEcc5ywwtJw249+E0yAGZZ0gAp/psMpIetMDXZCjtNWADtTYmJ9h
+ mFEOVBlMYfwSyPA8Xc1xjNGXOgo1rLgxpDiopNKGUg2VZPKZmTNqkBN9XhS+2KK39Z7y
+ Dp2GF6RbDCz95YBXDux+4GJ34Dh5LA1EhrcFQZEvACGCpTTJMvGuRdwp8t1JFAYUmgO8
+ ymJlyNhQKdGOKtumImDhusX14oW6QOua88757OPUH2Ic00FQACU76sGzJY6YPUQatuuF
+ A+VaaehbmO5Qr6Z9Sjzz0MFkxIKW8byZ9NHkhZryZRpRly3ANVIZq9uAzKpVhZyzs6K3
+ f5Sg==
+X-Gm-Message-State: AOAM531jsTOsExm6G1eUFZbbLEBzcClJGbF3nUb0Oi+PKvsoLlk6bXAn
+ Jw6tESx2IWZ9kgKllIPZ+v9+VXatt6Bw8Q==
+X-Google-Smtp-Source: ABdhPJxak++89lEYTDgISu4QQg8UjRnWIQlLpvCIUttQY/zQoVAyLDkHKW/4yoprRlfQdeBD/GINIQ==
+X-Received: by 2002:adf:e104:0:b0:206:109a:c90f with SMTP id
+ t4-20020adfe104000000b00206109ac90fmr3155618wrz.259.1651851468316; 
+ Fri, 06 May 2022 08:37:48 -0700 (PDT)
+Received: from [192.168.12.171] ([46.231.147.8])
+ by smtp.gmail.com with ESMTPSA id
+ q20-20020a7bce94000000b0039456fb80b3sm7046823wmj.43.2022.05.06.08.37.47
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 06 May 2022 08:37:47 -0700 (PDT)
+Message-ID: <615761ef-a121-d65e-6300-7f7291791619@gmail.com>
+Date: Fri, 6 May 2022 17:37:47 +0200
 MIME-Version: 1.0
-In-Reply-To: <1651848863-30178-1-git-send-email-remi.jouannet@outscale.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scan-Signature: 7af19da85ad859a41b3be88a3c47722c
-X-Provags-ID: V03:K1:lGTc+iPZ/0XzkWUKxD6CU1WSuXSn+Y83MLWtXjWcXwAFk8qSB6u
- RSaQmhD1cGJ5it20mOmKgo69uRfzEid0k0LIVwEuPFj0CSgD0e9DAFuI2MPZmU/NQ1qr5Qt
- 950/zdKroyLtheK4i3FbKUJchPXML94qZL6B4GSvCa69KeB11sVDR4E+KGPmyrc6UPFkaVV
- ELrm82IQS0PXdrfEQMRMw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hZEOIQJzHjg=:TcFBIy4i9WOecf+uSHUe1n
- KaGqBdMfCi0Ry4lkZbmgJwjKJsTSuyt2cE1ARVyfHNbCp5OS0BYJJRhlQEla0vl0hjZMEQAeD
- fT8YMsYUSzawdY0cwvPlvDv+j6OrBo9KvrwYVXGZWdXr01uyAmKI442iqhaP/y7cDFoRmdCAr
- Lbo19nbw+yvuPksgYhb6XzmN7TVqYZ/73pwlGQO4v/qB5pgcHdG0QnN2ukzwEKq0rgDIuYTk9
- U+ZNuZZfHifTsl5v2fvRv1Bn8YscoeCfM5Yag1nJ+CY2TxA90ubqadkpA7oTtgHEYfabUI5yn
- xAj2eAa4dLNhfTuhJb3DCR1MTeH0CCeHFrg8OHacDm+CTkWxsiJov591TSoCgWXq0FwJqJ0sf
- kjoNneOGoyXlbK8JzTji0LDFQ4+BN5GWCS+ws8kWQrgcDM1lp9E0vionxcir2VuksXBEhPqT2
- IMiyhAEiDKW/It9Eqia9BpDZILzfBja0NQiZnp1NlOLUTRoB7BorZrwZeJpjBBLiNsc487+t4
- aRitKQqKmgN9+QiiFQE+3ncr++V5RZImlWQW3mptnRGEbRJljLM47K9yvDzGJnokSrjv0nfXB
- 92YhFaIADVhDpVnX7fexc7zHDp8mPPv7jCYJ2D5gb87mB27lmRyGhscZifh3wR0RiI2HuS1Cu
- JBO7o4JeoskyB3/nkVX2ciwok6wBfS7XlsWnjYZIyid7Sl0J/gKKTAAxpO7qzsgjs/Oc=
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Content-Language: fr
+To: buildroot@buildroot.org, Remi Jouannet <remi.jouannet@outscale.com>
+References: <1651848863-30178-1-git-send-email-remi.jouannet@outscale.com>
+ <20220506153144.GD19726@falbala.internal.home.lespocky.de>
+From: =?UTF-8?Q?R=c3=a9mi_Jouannet?= <remijouannet@gmail.com>
+In-Reply-To: <20220506153144.GD19726@falbala.internal.home.lespocky.de>
 Subject: Re: [Buildroot] [PATCH 1/1] package/busybox: add -O staticroutes
  options to udhcpc udhcpc default script can handle staticroutes but it
  missing from ifupdown options
@@ -80,96 +92,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Remi Jouannet <remi.jouannet@outscale.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============9114045269344824646=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
---===============9114045269344824646==
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="SFyWQ0h3ruR435lw"
-Content-Disposition: inline
-
-
---SFyWQ0h3ruR435lw
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hei hei,
-
-took me a while to find the reasoning for this patch. Didn't expect it
-in that very long subject line. ;-)
-
-Greets
-Alex
-
-On Fri, May 06, 2022 at 02:54:23PM +0000, Remi Jouannet wrote:
-> Signed-off-by: R=E9mi Jouannet <remi.jouannet@outscale.com>
-> ---
->  package/busybox/busybox.config | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/package/busybox/busybox.config b/package/busybox/busybox.con=
-fig
-> index 52cb8ff..a614662 100644
-> --- a/package/busybox/busybox.config
-> +++ b/package/busybox/busybox.config
-> @@ -1022,7 +1022,7 @@ CONFIG_UDHCP_DEBUG=3D0
->  CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=3D80
->  CONFIG_FEATURE_UDHCP_RFC3397=3Dy
->  CONFIG_FEATURE_UDHCP_8021Q=3Dy
-> -CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS=3D"-b -R -O search"
-> +CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS=3D"-b -R -O search -O staticroutes"
-> =20
->  #
->  # Print Utilities
-> --=20
-> 1.8.3.1
->=20
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
---=20
-/"\ ASCII RIBBON | =BBWith the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.=AB
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
-
---SFyWQ0h3ruR435lw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEwo7muQJjlc+Prwj6NK3NAHIhXMYFAmJ1P1wACgkQNK3NAHIh
-XMbQIg//fJCMd+1vbeaCFUpgyROG/i1igm+KURbpY7fcedg1G8rA8y7mWhnBPuxF
-LWpgHauvn3bAMj5mvBwrd6Yyqx852NwxFttyiZNTDijKpaazCZLOsdSmiimaJLYv
-lMZmkVvmK06QwA6lCQgwyhtSuwAqBjmsZSSv0IjIAuM76GsSUX1CuuQ79a58BXSC
-Zgdrx82wdxaVvPxlLBPjaHHzy6bVTX1Na+T1B8xhxxYe4xp6YDUpxjUb1vMbCDqZ
-FZg0sZxOgcFVp/dFPrhDHTLnZIrJx5DoSRh3A/FYc2eR9uJlqF/YcLOefffWpV2Y
-d87cEO0PCmSDGg3mdLORuXppSGQf12N6SK+MpD9vNMU8Fw7cHkBbsZ5doG5KiO26
-96Hgrv8NH88oJuw5bPR6+UGsM29LSUvnbOQwaNfc2Oa70UmwGEefNlN/SrrxpKsp
-bFyOXGYZT8OCzZfk/TSLJZujAh4XzDtB/sCvxF7XLre/KLz2AUeuGLoPDaYDbrRl
-1E6SDXvS8PzQVyTAMO0Vo+G6qCgSZ79b+aLH9WU8BUj4d+JSSCh584Me0IUkr5JR
-9PbtiAdeItH0QcdER0PZdDz2kWDEJlXxSVDghlbHpRXCKpl2UnuXbjs2iYID1tEE
-Ke2F3PpB+QSW+ueQpl6ehzH3ymahDFZr0FJU9loW7y6BuTgLsrA=
-=5hDY
------END PGP SIGNATURE-----
-
---SFyWQ0h3ruR435lw--
-
---===============9114045269344824646==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9114045269344824646==--
+SGVsbG8sCgp5ZWFoIHNvcnJ5IGFib3V0IHRoYXQsIGknbSBub3QgdXNlZCB0byBzZW5kIHBhdGNo
+IGJ5IGVtYWlsCgpJIHdhbnRlZCB0byBkbyBhIHNpbXBsZSBzdWJqZWN0IGFuZCB3cml0ZSBhIGZl
+dyBsaW5lcyB0byBleHBsYWluIHRoZSAKcGF0Y2ggaW4gdGhlIGJvZHkKCmRvIHlvdSB3YW50IG1l
+IHRvIHNlbmQgYSBhbm90aGVyIHBhdGNoIHdpdGggYSBhIGJldHRlciBzdWJqZWN0L2JvZHkgPwoK
+TGUgMDYvMDUvMjAyMiDDoCAxNzozMSwgQWxleGFuZGVyIERhaGwgYSDDqWNyaXTCoDoKPiBIZWkg
+aGVpLAo+Cj4gdG9vayBtZSBhIHdoaWxlIHRvIGZpbmQgdGhlIHJlYXNvbmluZyBmb3IgdGhpcyBw
+YXRjaC4gRGlkbid0IGV4cGVjdCBpdAo+IGluIHRoYXQgdmVyeSBsb25nIHN1YmplY3QgbGluZS4g
+Oy0pCj4KPiBHcmVldHMKPiBBbGV4Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cg==
