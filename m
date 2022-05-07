@@ -4,59 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED108C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  7 May 2022 20:07:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02DABC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  7 May 2022 20:12:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 580B4408BA;
-	Sat,  7 May 2022 20:07:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A1201408C3;
+	Sat,  7 May 2022 20:12:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jVss44cf6fpn; Sat,  7 May 2022 20:07:52 +0000 (UTC)
+	with ESMTP id 7zoZjC1e1juH; Sat,  7 May 2022 20:12:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7155940199;
-	Sat,  7 May 2022 20:07:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4EA121BF599
- for <buildroot@lists.busybox.net>; Sat,  7 May 2022 20:07:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B4AD740527;
+	Sat,  7 May 2022 20:12:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BF1271BF599
+ for <buildroot@lists.busybox.net>; Sat,  7 May 2022 20:12:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 36B1F40199
- for <buildroot@lists.busybox.net>; Sat,  7 May 2022 20:07:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AE7A960EA8
+ for <buildroot@lists.busybox.net>; Sat,  7 May 2022 20:12:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vdg2zRVhtI7m for <buildroot@lists.busybox.net>;
- Sat,  7 May 2022 20:07:48 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 975F34017B
- for <buildroot@buildroot.org>; Sat,  7 May 2022 20:07:48 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.3])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 398F2440F56;
- Sat,  7 May 2022 23:06:47 +0300 (IDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1651954007;
- bh=Wau5bwozgdo3u738Hy7lQfioLJGPGUrG78vv0j93bDo=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=n8w4XolIZerY2c9kMf6JcB9etLGrVvSw3dEWkcavVXN5fXrzpRu0l28ph/xB2dCje
- WiOKstjn85PzujrtjqRlpnzXywp3UYj6JSRk3RyW7zrDCR+FBE1jXdC7E6HIRqgxDa
- rkdCZXfDWNkcGYzYx9EhGESTctY197lPicbMSz4U9LAYF7Id4WZCW/0K2sTh2Hdqdv
- cFIgO4McebfVhW7Eczsm9HPgxt6WEyXdo5VpRcEkiG6hazAebdtzkUkfuOmc02WE2Z
- AoPLelOOlDpCI4Axf72pFpRfCgUhpVHNyq3jKkdMBjbvPYREBgxsWpAq+h8PPHO5ku
- hxzyaqacyZCNA==
-References: <CAJ+vNU2OM0n2gFGy4K04NjXSQWDeAd434zyVD2vSLXvk4Y6d-Q@mail.gmail.com>
- <878rrfibvx.fsf@tarshish>
- <CAJ+vNU3KHR+J0y9o3CVOC+1zA6G3=kQG2G_bQ2PSegFho8c9BA@mail.gmail.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-To: Tim Harvey <tharvey@gateworks.com>
-Date: Sat, 07 May 2022 23:05:52 +0300
-In-reply-to: <CAJ+vNU3KHR+J0y9o3CVOC+1zA6G3=kQG2G_bQ2PSegFho8c9BA@mail.gmail.com>
-Message-ID: <8735hl9kdt.fsf@tarshish>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=iki.fi
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cMTDPp5nbLg2 for <buildroot@lists.busybox.net>;
+ Sat,  7 May 2022 20:12:05 +0000 (UTC)
+X-Greylist: delayed 00:09:41 by SQLgrey-1.8.0
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5E60060D75
+ for <buildroot@buildroot.org>; Sat,  7 May 2022 20:12:05 +0000 (UTC)
+Received: from localhost (dsl-jklbng12-54fba6-116.dhcp.inet.fi
+ [84.251.166.116])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest
+ SHA256) (No client certificate requested)
+ (Authenticated sender: sakkinen)
+ by meesny.iki.fi (Postfix) with ESMTPSA id AC57420048
+ for <buildroot@buildroot.org>; Sat,  7 May 2022 23:02:19 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+ t=1651953740;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=XuDloNYk2hKSLR28WBFbloEXdTAWOm60HEnehg6cd6Q=;
+ b=itlf0f7MWiBwAgk8wf6gwFHjyBxOhSkB+xHwGUUZq6RFgGlWqrF/9dr3pwxAThjs13HRLW
+ +qp6gshynXOCV9nP75vUzS8n4LNHAY+1cDyCmeR+fy+2znO3Qii9IBwgwXByD1umGAWHCQ
+ EpJ3AX9a0chTfleH3udsGigS5T836x4=
+Message-ID: <379b85295cffd8c19ca02051849d946a24a915de.camel@iki.fi>
+From: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+To: buildroot@buildroot.org
+Date: Sat, 07 May 2022 23:03:57 +0300
+User-Agent: Evolution 3.44.1 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] how to get buildroot to update a git repo that has
- changes? (ie building HEAD vs a specific SHA)
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+ s=meesny; t=1651953740;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=XuDloNYk2hKSLR28WBFbloEXdTAWOm60HEnehg6cd6Q=;
+ b=htB5DdmEYhnNs3KPCc01Q4LQc557GdtnfISrLlbcnpyjTnl9tvOxDCekLiFhnAjOiFyPtc
+ 2YwnxZ1Y9Esn/FHIacxF6Ov8J+e0+v5xGCd3/7IwHSlIJfhkgf6HPKkTPc37dz9n7/YNI2
+ Igka0aCWoF+PBOTVOBrwLVFcuMtMK80=
+ARC-Authentication-Results: i=1; ORIGINATING;
+ auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1651953740; a=rsa-sha256; cv=none;
+ b=dwPWPb2QgATFv+qecYwv2ZP9TIpYyuT2iGLCdaefk8k9kbNS/6lvjRj7rywq+tpnwe+zzm
+ FBhiUBrQUK0duRCveMP4SNBIkmO6NlDFLlQlZcoZHviku8ePOo3XBHdy8AOqZBQnFPnRTC
+ lW7Fb2R06hQj0QSCUl+gg1aciAkzgcU=
+Subject: [Buildroot] selftests/sgx
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,66 +83,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Tim,
-
-On Fri, May 06 2022, Tim Harvey wrote:
-> On Thu, May 5, 2022 at 8:21 PM Baruch Siach <baruch@tkos.co.il> wrote:
->> On Thu, May 05 2022, Tim Harvey wrote:
->> > Greetings,
->> >
->> > I use buildroot to build a Linux kernel+ramdisk using:
->> > BR2_LINUX_KERNEL_CUSTOM_GIT=y
->> > BR2_LINUX_KERNEL_CUSTOM_REPO_URL=<gitrepo>
->> > BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION=<gitbranch>
->> >
->> > When the upstream branch changes I would like to build that kernel but
->> > I find that buildroot caches the repo in dl/linux/.git and doesn't
->> > seem to know how to check to see if there are new commits.
->> >
->> > I realize that this is atypical as typically you want to configure
->> > buildroot for a specific package gitsha/tag.
->> >
->> > How would I go about getting buildroot to update the repo? I don't
->> > particularly want to rm dl/linux I want to instead somehow check to
->> > see if the repo needs a refresh then refresh it without a massive
->> > network download.
->>
->> Using a branch name for _VERSION is not supported. See the rationale in
->> the manual section 18.6.2, note on LIBFOO_VERSION description.
->>
->>   https://buildroot.org/downloads/manual/manual.html
->>
->> You might want to consider using OVERRIDE_SRCDIR to make Buildroot build
->> your local kernel source tree. See section 8.14.6 in the manual.
->
-> Thanks for the references. I do understand that it is not supported. I
-> guess I was looking for a few simple lines of shell that would tell me
-> if the cached repo was out of date so that I could remove it.
-> # get branch from BR2 config
-> KERNEL_BRANCH=$(grep BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION .config |
-> cut -d= -f2 | tr -d \")
-> # get the HEAD commit from the BR2 cache
-> KERNEL_HEAD=$(git -C dl/linux/git/ rev-parse $KERNEL_BRANCH)
-> ^^^ but I'm not sure how to check to see what the latest revision is
-> on the remote branch?
-
-Check 'git ls-remote'.
-
-baruch
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpXaGVuIHNwZWNpZnlpbmcgIkJSMl9QQUNLQUdFX0xJTlVYX1RPT0xTX1NFTEZURVNUUz15
+IiwgZm9yIHNvbWUgcmVhc29uCnRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3NneC8gYnVpbGQgcmVz
+dWx0cywgaS5lLiAic2d4OnRlc3Rfc2d4IiwgZG9lcwpub3QgZ2V0IGluY2x1ZGVkIHRvIHRoZSBy
+b290ZnMgaW1hZ2UsIG5vciBpcyBpdCBsaXN0ZWQgaW7CoAprc2VsZnRlc3QtbGlzdC50eHQuCgpJ
+ZiBJIG1hbnVhbGx5IGNvbXBpbGUgYW5kIGluc3RhbGwgc2VsZnRlc3RzLCBpdCBkb2VzIGdldCBp
+bmNsdWRlZC4gQW55CmlkZWFzIHdoYXQgY291bGQgYmUgd3Jvbmc/CgpCUiwgSmFya2tvCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
