@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64126C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  7 May 2022 16:13:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 797DEC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  7 May 2022 16:14:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6950409A3;
-	Sat,  7 May 2022 16:13:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 291B7405D1;
+	Sat,  7 May 2022 16:14:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yuQukghtubAl; Sat,  7 May 2022 16:13:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N6EfH0tYL8gX; Sat,  7 May 2022 16:14:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63186409A1;
-	Sat,  7 May 2022 16:13:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6EB8F1BF82D
- for <buildroot@lists.busybox.net>; Sat,  7 May 2022 16:13:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1355F4018B;
+	Sat,  7 May 2022 16:14:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 021A31BF82D
+ for <buildroot@lists.busybox.net>; Sat,  7 May 2022 16:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D0D28270B
- for <buildroot@lists.busybox.net>; Sat,  7 May 2022 16:13:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3BC360803
+ for <buildroot@lists.busybox.net>; Sat,  7 May 2022 16:13:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=riseup.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t97n2ZZ99A-Y for <buildroot@lists.busybox.net>;
- Sat,  7 May 2022 16:13:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IbV9uk2x1Q0o for <buildroot@lists.busybox.net>;
+ Sat,  7 May 2022 16:13:46 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AA5C6826F5
- for <buildroot@buildroot.org>; Sat,  7 May 2022 16:13:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 523E66079D
+ for <buildroot@buildroot.org>; Sat,  7 May 2022 16:13:46 +0000 (UTC)
 Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
  client-signature RSA-PSS (2048 bits) client-digest SHA256)
  (Client CN "mail.riseup.net", Issuer "R3" (not verified))
- by mx0.riseup.net (Postfix) with ESMTPS id 4KwXYM6mcMz9tqc;
- Sat,  7 May 2022 09:13:43 -0700 (PDT)
+ by mx0.riseup.net (Postfix) with ESMTPS id 4KwXYP5L3dz9tqg;
+ Sat,  7 May 2022 09:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
- t=1651940024; bh=K4nqd2CnnsvRkGRxE14dMwCNVJGMfJYIHtqgFsObBfk=;
- h=From:To:Cc:Subject:Date:From;
- b=sQb1fWkXi+RC2UJY7bdBeSQBgaC1GFvXqVta4bEtceS/E9zePO3pBJSaHoBMJPtDj
- /yqBiGtwfKSDRpULn9gcLhlaL9DehssnV96j8EULD2/0961dhwGyv7cUSfQwAI/qo2
- F9GjjmmpsKIE37BkYvR9wU0iMdRRfUwmDLoSHoLo=
-X-Riseup-User-ID: FEEDDAD295BBB6274DE71B7F249757E02134B162C8F011E387499C939A70872E
+ t=1651940025; bh=5nlKofEnwqliH+33AqH8gzbChtffkfEHe9I/ACRdXvg=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=E9fTe9Uxcsp2Qo1tTzelBCNqjCXMObuYHr6Msd5NLT5aIJCQz2AsU7c4IL0QkyE2L
+ eI04VMP89ScgaNzci5tChhi+XD6JBXjcUBNA/hoLXe7RC8Yzh/t+XqOEc14xdZ5tJC
+ eXU2NDu+LqTalpXVAzB3xBBwS6GIdw2+bWm/f1TQ=
+X-Riseup-User-ID: A2AFB4173E524308130FAA959A7DFA410AB223EF0AFBFD950DBA9C9ABDD1BB20
 Received: from [127.0.0.1] (localhost [127.0.0.1])
- by fews1.riseup.net (Postfix) with ESMTPSA id 4KwXYL5dqpz5vsl;
- Sat,  7 May 2022 09:13:42 -0700 (PDT)
+ by fews1.riseup.net (Postfix) with ESMTPSA id 4KwXYN5tRtz5vsl;
+ Sat,  7 May 2022 09:13:44 -0700 (PDT)
 From: Rufus Segar <rhs@riseup.net>
 To: buildroot@buildroot.org
-Date: Sat,  7 May 2022 17:13:37 +0100
-Message-Id: <20220507161338.2125859-1-rhs@riseup.net>
+Date: Sat,  7 May 2022 17:13:38 +0100
+Message-Id: <20220507161338.2125859-2-rhs@riseup.net>
+In-Reply-To: <20220507161338.2125859-1-rhs@riseup.net>
+References: <20220507161338.2125859-1-rhs@riseup.net>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package: add agent-proxy target and host
- packages
+Subject: [Buildroot] [PATCH 1/1] package: add kdmx target and host packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,109 +78,111 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Rufus Segar <rhs@riseup.net>
 ---
- package/Config.in                  |  1 +
- package/Config.in.host             |  1 +
- package/agent-proxy/Config.in      | 11 ++++++++++
- package/agent-proxy/Config.in.host | 11 ++++++++++
- package/agent-proxy/agent-proxy.mk | 33 ++++++++++++++++++++++++++++++
- 5 files changed, 57 insertions(+)
- create mode 100644 package/agent-proxy/Config.in
- create mode 100644 package/agent-proxy/Config.in.host
- create mode 100644 package/agent-proxy/agent-proxy.mk
+ package/Config.in           |  1 +
+ package/Config.in.host      |  1 +
+ package/kdmx/Config.in      | 12 ++++++++++++
+ package/kdmx/Config.in.host | 12 ++++++++++++
+ package/kdmx/kdmx.mk        | 33 +++++++++++++++++++++++++++++++++
+ 5 files changed, 59 insertions(+)
+ create mode 100644 package/kdmx/Config.in
+ create mode 100644 package/kdmx/Config.in.host
+ create mode 100644 package/kdmx/kdmx.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 8892134133..40e41d77a9 100644
+index 8892134133..9adaf4c5a2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -83,6 +83,7 @@ menu "Compressors and decompressors"
- endmenu
- 
- menu "Debugging, profiling and benchmark"
-+	source "package/agent-proxy/Config.in"
- 	source "package/babeltrace2/Config.in"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
+@@ -105,6 +105,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/gdb/Config.in"
+ 	source "package/google-breakpad/Config.in"
+ 	source "package/iozone/Config.in"
++	source "package/kdmx/Config.in"
+ 	source "package/kexec/Config.in"
+ 	source "package/kexec-lite/Config.in"
+ 	source "package/ktap/Config.in"
 diff --git a/package/Config.in.host b/package/Config.in.host
-index cd1c34b5a3..e71008f9d9 100644
+index cd1c34b5a3..9bb5f0587f 100644
 --- a/package/Config.in.host
 +++ b/package/Config.in.host
-@@ -2,6 +2,7 @@ menu "Host utilities"
- 
- 	source "package/abootimg/Config.in.host"
- 	source "package/aespipe/Config.in.host"
-+	source "package/agent-proxy/Config.in.host"
- 	source "package/android-tools/Config.in.host"
- 	source "package/asn1c/Config.in.host"
- 	source "package/babeltrace2/Config.in.host"
-diff --git a/package/agent-proxy/Config.in b/package/agent-proxy/Config.in
+@@ -45,6 +45,7 @@ menu "Host utilities"
+ 	source "package/jh71xx-tools/Config.in.host"
+ 	source "package/jq/Config.in.host"
+ 	source "package/jsmin/Config.in.host"
++	source "package/kdmx/Config.in.host"
+ 	source "package/kmod/Config.in.host"
+ 	source "package/libp11/Config.in.host"
+ 	source "package/lld/Config.in.host"
+diff --git a/package/kdmx/Config.in b/package/kdmx/Config.in
 new file mode 100644
-index 0000000000..fb66599589
+index 0000000000..af338e6bda
 --- /dev/null
-+++ b/package/agent-proxy/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_AGENT_PROXY
-+	bool "agent-proxy"
++++ b/package/kdmx/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_KDMX
++	bool "kdmx"
 +	help
-+	  This is a simple, small proxy which was intended for use with
-+	  kgdb, or gdbserver type connections where you want to share a
-+	  text console and a debug session.
++	  kdmx is a program designed to split GDB packets and other
++	  trafic coming from a target on a serial line into 2 separate
++	  pseudo-ttys.
 +
-+	  The idea is that you use the agent-proxy to connect to a
-+	  serial port directly or to a remote terminal server.
++	  The most common use of this is to run kgdb and console on a
++	  single serial port, but should be usable for alternating
++	  gdbserver or console over a serial line as well.
 +
 +	  git://git.kernel.org/pub/scm/utils/kernel/kgdb/agent-proxy.git
-diff --git a/package/agent-proxy/Config.in.host b/package/agent-proxy/Config.in.host
+diff --git a/package/kdmx/Config.in.host b/package/kdmx/Config.in.host
 new file mode 100644
-index 0000000000..34697665d4
+index 0000000000..5080659171
 --- /dev/null
-+++ b/package/agent-proxy/Config.in.host
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_HOST_AGENT_PROXY
-+	bool "host agent-proxy"
++++ b/package/kdmx/Config.in.host
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HOST_KDMX
++	bool "host kdmx"
 +	help
-+	  This is a simple, small proxy which was intended for use with
-+	  kgdb, or gdbserver type connections where you want to share a
-+	  text console and a debug session.
++	  kdmx is a program designed to split GDB packets and other
++	  trafic coming from a target on a serial line into 2 separate
++	  pseudo-ttys.
 +
-+	  The idea is that you use the agent-proxy to connect to a
-+	  serial port directly or to a remote terminal server.
++	  The most common use of this is to run kgdb and console on a
++	  single serial port, but should be usable for alternating
++	  gdbserver or console over a serial line as well.
 +
 +	  git://git.kernel.org/pub/scm/utils/kernel/kgdb/agent-proxy.git
-diff --git a/package/agent-proxy/agent-proxy.mk b/package/agent-proxy/agent-proxy.mk
+diff --git a/package/kdmx/kdmx.mk b/package/kdmx/kdmx.mk
 new file mode 100644
-index 0000000000..faec7fba32
+index 0000000000..42e17003b0
 --- /dev/null
-+++ b/package/agent-proxy/agent-proxy.mk
++++ b/package/kdmx/kdmx.mk
 @@ -0,0 +1,33 @@
 +################################################################################
 +#
-+# agent-proxy
++# kdmx
 +#
 +################################################################################
 +
-+AGENT_PROXY_VERSION = agent-proxy-1.97
-+AGENT_PROXY_SITE = git://git.kernel.org/pub/scm/utils/kernel/kgdb/agent-proxy.git
-+AGENT_PROXY_LICENSE = GPL-2.0+
-+AGENT_PROXY_LICENSE_FILES = COPYING
++KDMX_VERSION = agent-proxy-1.97
++KDMX_SITE = git://git.kernel.org/pub/scm/utils/kernel/kgdb/agent-proxy.git
++KDMX_LICENSE = GPL-2.0+
++KDMX_LICENSE_FILES = COPYING
 +
-+define AGENT_PROXY_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
++define KDMX_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/kdmx
 +endef
 +
-+define AGENT_PROXY_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/agent-proxy $(STAGING_DIR)/usr/bin
++define KDMX_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/kdmx/kdmx $(STAGING_DIR)/usr/bin
 +endef
 +
-+define AGENT_PROXY_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/agent-proxy $(TARGET_DIR)/usr/bin
++define KDMX_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/kdmx/kdmx $(TARGET_DIR)/usr/bin
 +endef
 +
-+define HOST_AGENT_PROXY_BUILD_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++define HOST_KDMX_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)/kdmx
 +endef
 +
-+define HOST_AGENT_PROXY_INSTALL_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(INSTALL) -D -m 0755 $(@D)/agent-proxy $(HOST_DIR)/bin
++define HOST_KDMX_INSTALL_CMDS
++	$(HOST_CONFIGURE_OPTS) $(INSTALL) -D -m 0755 $(@D)/kdmx/kdmx $(HOST_DIR)/bin
 +endef
 +
 +$(eval $(generic-package))
