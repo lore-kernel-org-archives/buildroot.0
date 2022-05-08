@@ -1,69 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE106C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  8 May 2022 14:43:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0B38C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  8 May 2022 15:48:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 552AA60E93;
-	Sun,  8 May 2022 14:43:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F82C403C5;
+	Sun,  8 May 2022 15:48:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0L1gC4C9Dxhz; Sun,  8 May 2022 14:43:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A1m3neIA9Q1b; Sun,  8 May 2022 15:48:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66C3A60E2E;
-	Sun,  8 May 2022 14:43:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0B8D81BF409
- for <buildroot@lists.busybox.net>; Sun,  8 May 2022 14:43:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B018240350;
+	Sun,  8 May 2022 15:48:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D4ED81BF356
+ for <buildroot@lists.busybox.net>; Sun,  8 May 2022 15:48:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0754040169
- for <buildroot@lists.busybox.net>; Sun,  8 May 2022 14:43:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3F5281B25
+ for <buildroot@lists.busybox.net>; Sun,  8 May 2022 15:48:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GKBSB_oQAgqO for <buildroot@lists.busybox.net>;
- Sun,  8 May 2022 14:43:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BD6EE40012
- for <buildroot@buildroot.org>; Sun,  8 May 2022 14:43:46 +0000 (UTC)
-Received: from [213.215.189.91] (port=17872 helo=[192.168.101.175])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1nni8N-0000mL-4T; Sun, 08 May 2022 16:43:44 +0200
-Message-ID: <2b14df50-4c9c-37e1-7f7e-543816a9f5b2@lucaceresoli.net>
-Date: Sun, 8 May 2022 16:43:13 +0200
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rMLUJV1Wo6P7 for <buildroot@lists.busybox.net>;
+ Sun,  8 May 2022 15:48:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 993AE81AF5
+ for <buildroot@buildroot.org>; Sun,  8 May 2022 15:48:24 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id bg25so7134415wmb.4
+ for <buildroot@buildroot.org>; Sun, 08 May 2022 08:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=EG62VlwoqbLx7DMhFtyQ8C6ulDdWFNwWUJxalVK2+3k=;
+ b=KKCKoP65aH4OASBuILQ2HnnpwGcvUBemZPMgEj6DoYe072Dqzh69BN4dD0xDZpstEF
+ Rt+grpp2kudqssqcFi1OxbQM6ZO8HXEQk0ZFHPVF9/aXgM11WCoMVzn3NJFZ/zhYZ0e1
+ KuEbTfl1Jq6sYMBliT0yxNf84FEhiyDbl/qo4Lejo+bAFRJAzgGKKeRObhGGx2Kx72IH
+ TJExOQqeAK4ophfz5AwhHorHRXJKPa8aAIWrYb7sMiyxcuHWFgx/Jypl6+5FxzaGcvpX
+ 486JdQ1UgdJ9wYMPM1W2CEAAO0dr2tAK6xml/MHxBeUvuuKdsoId25d9FBlaDgHZFca7
+ vGJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=EG62VlwoqbLx7DMhFtyQ8C6ulDdWFNwWUJxalVK2+3k=;
+ b=wDI5+fwD7QQMFgeOqourdGQJgsjvCcAOmfdLm4TYVP/M6UnXCGkyPGapAiYVc8ibuU
+ XBVWSB+7ssCwEQKUUss76rPWnP0i44Q4Okb5TOpC8eUH0OkyXvPGNq8gHw6uzqKauO+s
+ z1tAsv3W+6a4O8cRJfCooGtznd6wtArmT9Ybv2Ge3l7KKHkcH4mY2FkPo2YvWs5WcZKT
+ zXiEZ762I5OIhsUoMkvzkvyspD/FmjTruZhy4NHVEhl6B01uu6bA8Av+sJgKsBYGLYv+
+ BNyitcsnMke92sYIF+ivno7br3sdPdc578dg7z/iVq9K7CtnCwNjMSpyFCTs9D1ULVpr
+ SLuw==
+X-Gm-Message-State: AOAM533N0uvJ9iQbRAwSR4hl4JkLgld+xV5J2QK7SPxXEOEEkJcdwvB3
+ iSSMNCatliHV+waNV5eoe6KZyBhqk7s=
+X-Google-Smtp-Source: ABdhPJz33nhhx3hiHtQkRVuwd/vWctiUv0Gv2j04kvdsJqxcs4PE+x/8Q7fjKFwAzSkc+9IflbIMbg==
+X-Received: by 2002:a7b:c381:0:b0:37b:e01f:c1c0 with SMTP id
+ s1-20020a7bc381000000b0037be01fc1c0mr19440875wmj.98.1652024902489; 
+ Sun, 08 May 2022 08:48:22 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ t8-20020a05600c198800b0039429bfebebsm10511209wmq.3.2022.05.08.08.48.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 08 May 2022 08:48:22 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  8 May 2022 17:45:45 +0200
+Message-Id: <20220508154545.313469-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To: TIAN Yuanhao <tianyuanhao3@163.com>
-References: <20220418142855.3489541-1-tianyuanhao3@163.com>
- <bf3aa2a8-54d4-0b1f-a70c-5966b1e6e2d7@mind.be>
- <886d75d1-b878-f521-3c07-df7ceee8040b@lucaceresoli.net>
- <83d40c0d-c9f5-27e2-4e4c-14fa1d1f4507@163.com>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <83d40c0d-c9f5-27e2-4e4c-14fa1d1f4507@163.com>
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH] package/rtl8188eu: bump to 903b6fc
- (v5.2.2.4 branch HEAD)
+Subject: [Buildroot] [PATCH 1/1] package/jemalloc: bump to version 5.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,26 +87,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgVGlhbiwKCk9uIDA2LzA1LzIyIDE3OjE0LCBUSUFOIFl1YW5oYW8gd3JvdGU6Cj4gSGkgTHVj
-YSwKPiAKPiBPbiA1LzQvMjIgMDI6NDQsIEx1Y2EgQ2VyZXNvbGkgd3JvdGU6Cj4+IEhpIFRJQU4s
-Cj4+Cj4+IE9uIDE5LzA0LzIyIDIyOjM1LCBBcm5vdXQgVmFuZGVjYXBwZWxsZSB3cm90ZToKPj4+
-Cj4+PiBPbiAxOC8wNC8yMDIyIDE2OjI4LCBUSUFOIFl1YW5oYW8gd3JvdGU6Cj4+Pj4gVGhpcyBh
-bGxvd3MgdG8gYnVpbGQgYWdhaW5zdCBuZXdlciBrZXJuZWxzICh1cCB0byA1LjE4KS4KPj4+PiBU
-ZXN0ZWQgb24ga2VybmVsIHY1LjE1Lgo+Pj4+Cj4+Pj4gU2lnbmVkLW9mZi1ieTogVElBTiBZdWFu
-aGFvIDx0aWFueXVhbmhhbzNAMTYzLmNvbT4KPj4+IMKgwqBBcHBsaWVkIHRvIG1hc3RlciwgdGhh
-bmtzLgo+PiBXZSBhcmUgc2VlaW5nIG5ldyBidWlsZCBmYWlsdXJlcyBzaW5jZSB0aGlzIHBhdGNo
-IGhhcyBiZWVuIGFwcGxpZWQuIENhbgo+PiB5b3UgaGF2ZSBhIGxvb2s/Cj4+Cj4gQ29uZmlybWVk
-LCB0aGUgYnVpbGQgZmFpbGVkIGJlY2F1c2UgdGhlIGtlcm5lbCBjb25maWcgd2FzIG1pc3NpbmcK
-PiBDT05GSUdfQ0ZHODAyMTEuCgpPaCwgc3VyZS4gVGhlbiBpdCBzaG91bGQgYmUgZml4ZWQgYnkg
-YWRkaW5nICJDT05GSUdfQ0ZHODAyMTE9eSIgdG8KUlRMODE4OEVVX01PRFVMRV9NQUtFX09QVFMu
-IENhbiB5b3UgdHJ5IHRoYXQgcGxlYXNlLCBhbmQgc2VuZCBhIGZpeApwYXRjaC4gaWYgaXQgd29y
-a3M/CgpUaGFuayB5b3UhCgotLSAKTHVjYQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+Update indentation in hash fie (two spaces)
+
+https://github.com/jemalloc/jemalloc/releases/tag/5.3.0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/jemalloc/jemalloc.hash | 4 ++--
+ package/jemalloc/jemalloc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/jemalloc/jemalloc.hash b/package/jemalloc/jemalloc.hash
+index 5db53d0535..214fe8062b 100644
+--- a/package/jemalloc/jemalloc.hash
++++ b/package/jemalloc/jemalloc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 34330e5ce276099e2e8950d9335db5a875689a4c6a56751ef3b1d8c537f887f6  jemalloc-5.2.1.tar.bz2
+-sha256 94aa2caa98c25d942f58b956c71dba6a99ff98fc3a31cbc669fe2a4cd0268b53  COPYING
++sha256  2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa  jemalloc-5.3.0.tar.bz2
++sha256  94aa2caa98c25d942f58b956c71dba6a99ff98fc3a31cbc669fe2a4cd0268b53  COPYING
+diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
+index e43a4f7906..bd8a2d7654 100644
+--- a/package/jemalloc/jemalloc.mk
++++ b/package/jemalloc/jemalloc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JEMALLOC_VERSION = 5.2.1
++JEMALLOC_VERSION = 5.3.0
+ JEMALLOC_SOURCE = jemalloc-$(JEMALLOC_VERSION).tar.bz2
+ JEMALLOC_SITE = https://github.com/jemalloc/jemalloc/releases/download/$(JEMALLOC_VERSION)
+ JEMALLOC_LICENSE = BSD-2-Clause
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
