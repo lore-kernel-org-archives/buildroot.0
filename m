@@ -4,69 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B4DEC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  8 May 2022 08:35:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8010C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  8 May 2022 09:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75EEE408E9;
-	Sun,  8 May 2022 08:35:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A9B4408F0;
+	Sun,  8 May 2022 09:05:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EKwEH-DsMRCn; Sun,  8 May 2022 08:35:46 +0000 (UTC)
+	with ESMTP id TW-sPxQwnT8h; Sun,  8 May 2022 09:05:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B16E401C1;
-	Sun,  8 May 2022 08:35:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 219771BF2CA
- for <buildroot@lists.busybox.net>; Sun,  8 May 2022 08:35:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1275408E3;
+	Sun,  8 May 2022 09:05:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D7C2D1BF487
+ for <buildroot@lists.busybox.net>; Sun,  8 May 2022 09:05:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 01B9F40123
- for <buildroot@lists.busybox.net>; Sun,  8 May 2022 08:35:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C5FDC408E3
+ for <buildroot@lists.busybox.net>; Sun,  8 May 2022 09:05:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=freenet.de
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rrapkmbk4QYr for <buildroot@lists.busybox.net>;
- Sun,  8 May 2022 08:35:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t4CpO-FNmhF6 for <buildroot@lists.busybox.net>;
+ Sun,  8 May 2022 09:05:46 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mout3.freenet.de (mout3.freenet.de [IPv6:2001:748:100:40::2:5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 61C6140003
- for <buildroot@buildroot.org>; Sun,  8 May 2022 08:35:40 +0000 (UTC)
-Received: from [195.4.92.120] (helo=sub1.freenet.de)
- by mout3.freenet.de with esmtpa (ID earthquake.de@freenet.de) (port 25) (Exim
- 4.94.2 #2) id 1nncO8-00BxXc-9Z; Sun, 08 May 2022 10:35:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freenet.de; 
- s=mjaymdexmjqk;
- h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
- References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
- Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
- Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
- List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=rpomTsy2GEPXMSjsT92KvshojFdJUcKCeExaksJNJVI=; b=MZonwwA3jeH722f26tbKpOOgvG
- h+j30gknSNddbtK8GTm5C7lwJd9Mh+TIieURm9VkcMrm0FWSVnVddJ4r+8F8OxGzdvNDbmcy2oMeo
- wxDsUXiW4l+2dCeduYmQB0b4cVj9Hn8DNLCzHNwolKrSAv/Fynfh5hoyFVFd/jdEax7yzfVhJ3aGZ
- LIAyp2248ghzQ/nCjwu0OI2EsUXyCfTRXKDdyU0KG1CjbnbyYEZhETy24u7jj7R2hFjVYr/uUEO+i
- SUwChC7M/3XqYUQTb0cjV18YBfZm7xOvbInLmfZJxGAY7bEthAONQzIj8Hn5fRPmWWTy3Wv0zzQgx
- UUyKqhOA==;
-Received: from ipbcc0e031.dynamic.kabel-deutschland.de ([188.192.224.49]:61513
- helo=[192.168.0.12])
- by sub1.freenet.de with esmtpsa (ID earthquake.de@freenet.de)
- (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (port 465) (Exim
- 4.94.2 #2) id 1nncO8-006lcP-6X; Sun, 08 May 2022 10:35:36 +0200
-Message-ID: <eb164229-ac1c-764a-b9e5-bd86018611ff@freenet.de>
-Date: Sun, 8 May 2022 10:35:34 +0200
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BEE1B408E2
+ for <buildroot@buildroot.org>; Sun,  8 May 2022 09:05:45 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 71FEC1BF207;
+ Sun,  8 May 2022 09:05:41 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nncrD-000xVO-Ui; Sun, 08 May 2022 11:05:39 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Neal Frager <nealf@xilinx.com>
+References: <20220505155424.3002847-1-neal.frager@amd.com>
+ <87pmkqzcsf.fsf@dell.be.48ers.dk>
+ <BE2A1487-0690-4BE3-BFEA-AC439B98FD3D@xilinx.com>
+ <87czgpys46.fsf@dell.be.48ers.dk>
+ <8555E21D-3D7E-4C1B-8738-150AB664F8B8@xilinx.com>
+Date: Sun, 08 May 2022 11:05:39 +0200
+In-Reply-To: <8555E21D-3D7E-4C1B-8738-150AB664F8B8@xilinx.com> (Neal Frager's
+ message of "Sun, 8 May 2022 06:46:32 +0000")
+Message-ID: <874k20z95o.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
-References: <80d6f58b-a36e-6148-c6b6-37a29d3244e5@freenet.de>
- <874k221y8l.fsf@dell.be.48ers.dk>
-From: Alex <earthquake.de@freenet.de>
-In-Reply-To: <874k221y8l.fsf@dell.be.48ers.dk>
-X-Originated-At: 188.192.224.49!61513
-X-Scan-TS: Sun, 08 May 2022 10:35:36 +0200
-Subject: Re: [Buildroot] buildroot host builds with g++
+Subject: Re: [Buildroot] [PATCH v1 1/2] add
+ configs/zynqmp_kria_kv260_defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,50 +64,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "luca@lucaceresoli.net" <luca@lucaceresoli.net>,
+ "giulio.benetti@benettiengineering.com"
+ <giulio.benetti@benettiengineering.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ "michal.simek@amd.com" <michal.simek@amd.com>,
+ Neal Frager <neal.frager@amd.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+>>>>> "Neal" == Neal Frager <nealf@xilinx.com> writes:
+
 Hi,
 
-I created a target package for ACE(+TAO).
- From the package I need the Idl compiler for the host.
-Therefore I created a host makefile for building the IDL compiler (just 
-the idl compiler (with static option...)).
+ > Thank you for this idea.  Do you have a solution for the SD card file system as well?
 
-So, if I build the idl compiler for the target, compile is successfull. 
-(make with TARGET_CONFIGURE_OPTS)
-But buiding for the host (make with HOST_CONFIGURE_OPTS) the build fails 
-with
+ > The Kria Starter kits use mmc1 instead of mmc0 for the SD card, so
+ > this is also different in the extllinux.conf files.
 
-  g++: error: /usr/bin/g++": No such file or directory
+I believe you can use $devnum for that. Have a look at distro_bootcmd.
 
-In buildroot-config, BR2_TOOLCHAIN_BUILDROOT_CXX is set.
-
-So how can I get a g++ for host building?
-
-
-Best regards,
-
-Alex
-
-
->   > Hi,
->   > building package for the host, ends with:
->   > g++: error: /usr/bin/g++": No such file or directory
->
->   > Building the same package for the target works....
->
->   > Package mk for host build calls generic-package and host-generic-package.
->
-> This sounds like a Buildroot question rather than a Busybox one, so
-> please followup on the Buildroot list (buildroot@buildroot.org).
->
-> With that said, if your package is written in C++ and you try to build
-> it for the host, then you need a C++ compiler on your host, but please
-> provide some more details about what exactly you are trying to do.
->
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
