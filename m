@@ -1,61 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2206C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  9 May 2022 06:53:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A973C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  9 May 2022 08:00:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6081741503;
-	Mon,  9 May 2022 06:53:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFDC481AD7;
+	Mon,  9 May 2022 08:00:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R_SH3mNF7nts; Mon,  9 May 2022 06:53:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M4I6SzGqOott; Mon,  9 May 2022 08:00:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24B20414C9;
-	Mon,  9 May 2022 06:53:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C57E21BF284
- for <buildroot@lists.busybox.net>; Mon,  9 May 2022 06:53:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7198D81A65;
+	Mon,  9 May 2022 07:59:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E44B1BF20D
+ for <buildroot@lists.busybox.net>; Mon,  9 May 2022 07:59:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2B7540A15
- for <buildroot@lists.busybox.net>; Mon,  9 May 2022 06:53:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C67060B96
+ for <buildroot@lists.busybox.net>; Mon,  9 May 2022 07:59:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FbElWChcb-HN for <buildroot@lists.busybox.net>;
- Mon,  9 May 2022 06:53:05 +0000 (UTC)
-X-Greylist: delayed 00:19:59 by SQLgrey-1.8.0
-Received: from 1.mo576.mail-out.ovh.net (1.mo576.mail-out.ovh.net
- [178.33.251.173])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 612734028D
- for <buildroot@buildroot.org>; Mon,  9 May 2022 06:53:05 +0000 (UTC)
-Received: from player696.ha.ovh.net (unknown [10.111.172.147])
- by mo576.mail-out.ovh.net (Postfix) with ESMTP id 0053823D2A
- for <buildroot@buildroot.org>; Mon,  9 May 2022 06:17:16 +0000 (UTC)
-Received: from dopsi.ch (unknown [147.87.105.170])
- (Authenticated sender: dopsi@dopsi.ch)
- by player696.ha.ovh.net (Postfix) with ESMTPSA id C872620189BA2;
- Mon,  9 May 2022 06:17:14 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass
- (GARM-99G003d0850393-b0ef-415a-b0a3-ae13df52f742,
- 78D549BC67A32D4F57B2C9CF96F8C4035E46026E) smtp.auth=dopsi@dopsi.ch
-X-OVh-ClientIp: 147.87.105.170
-Message-ID: <4f2066e78ce300e38332ef957d1ded4be40307ae.camel@dopsi.ch>
-From: Simon Doppler <dopsi@dopsi.ch>
-To: "Alvaro G. M." <alvaro@linenoise.info>, buildroot@buildroot.org
-Date: Mon, 09 May 2022 08:17:14 +0200
-In-Reply-To: <20220504080140.03e99fbf@salem.gmr.ssr.upm.es>
-References: <20220504080140.03e99fbf@salem.gmr.ssr.upm.es>
-User-Agent: Evolution 3.36.5-0ubuntu1 
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=jms.id.au
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FWnQYQh8Fg32 for <buildroot@lists.busybox.net>;
+ Mon,  9 May 2022 07:59:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com
+ [IPv6:2607:f8b0:4864:20::f2e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C938760B89
+ for <buildroot@buildroot.org>; Mon,  9 May 2022 07:59:56 +0000 (UTC)
+Received: by mail-qv1-xf2e.google.com with SMTP id kj8so9883939qvb.6
+ for <buildroot@buildroot.org>; Mon, 09 May 2022 00:59:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=XCVHR9Q6/cWeLgE2xwZd3HA3URWz7wNgwqJdHFl/8f8=;
+ b=jxri+82gvF0rYFAIEyzbe6RmjNTTFohW8n27v4pm9V+bCvvs92o3rzW2GuBr3PKvPw
+ 0I735l7M0Dm/P+SPYF+IwGEfBsyst1bfkiZHGFku6137sEYoldfupbTaEPXt6NTwgEo2
+ Re3BZHDP1DZuywHRNaI6urB30j8uW1yYFTGvM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=XCVHR9Q6/cWeLgE2xwZd3HA3URWz7wNgwqJdHFl/8f8=;
+ b=20bwqGJiuPM2ShUTSNOqRNKa3XGOjSDb66Z/OYWZzqao6i5nRXMRUmyFLJms9X6s3l
+ 4oMNEshWyTj/oX22O8xfBPW1YiYYcu5kwJgklC/FSl7TLr9ZrBl0I51oXjl9ZOTk+DFh
+ JAHOGr8iL7xPVFdM/gMeN6f3X4oqkm4WtY5dmdz1D9WaO/au5666/1ujTgIhA8YppG5V
+ Tsoc+OxcMdaoqUQWivcAn1kHJ7G/4Rzy3k5+YuMpC+243PidbmIph9r4Yrvyxmve0tta
+ SInKZgRm9phgeAk2rzKMityQeIqHL3v2Y20KYkiZRG1PR0b1Y5QqGnYWhpJyBqX9d1P5
+ YBhg==
+X-Gm-Message-State: AOAM531oV57gpMxwc2ZHmW6M9fr0OJMl4sGCP6wW3Ckf54CB1qrQdqdU
+ YjH2PBh2DdW6qEvhh2vXQKYcCiSIHU8QxL5BProTahIG+94=
+X-Google-Smtp-Source: ABdhPJwfjQnlAvCvb4p1aTa9acErmr3vpLxBRi1Zvf8yOnWdQwtCsdOpQP7abIWH66tdlClrAz8VR4Lm7HbksirB8O4=
+X-Received: by 2002:a05:6214:f06:b0:45b:127b:7dc9 with SMTP id
+ gw6-20020a0562140f0600b0045b127b7dc9mr2564954qvb.8.1652083195334; Mon, 09 May
+ 2022 00:59:55 -0700 (PDT)
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 12820622243349051509
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekgddutdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkffuhffvffgjfhgtfggggfesthejredttderjeenucfhrhhomhepufhimhhonhcuffhophhplhgvrhcuoeguohhpshhiseguohhpshhirdgthheqnecuggftrfgrthhtvghrnhepfeffudeiieeigefhgedvueeitdegkefftdejtdekudffieelvdeggfevheekffevnecukfhppedtrddtrddtrddtpddugeejrdekjedruddthedrudejtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrieeliedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpeguohhpshhiseguohhpshhirdgthhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-Subject: Re: [Buildroot] Kernel and u-boot DTS include paths
+References: <20220505100956.155737-1-joel@jms.id.au>
+ <20220505195531.GA2547@scaer>
+In-Reply-To: <20220505195531.GA2547@scaer>
+From: Joel Stanley <joel@jms.id.au>
+Date: Mon, 9 May 2022 07:59:41 +0000
+Message-ID: <CACPK8XemeEyqrA-EPMh=VXXseF04FVbaR2gT16nm54f21fuDgg@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Subject: Re: [Buildroot] [PATCH] package/gcc: Disable uclibc for powerpc64
+ and powerpc64le
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,78 +80,189 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 2022-05-04 at 08:01 +0200, Alvaro G. M. wrote:
-> Hi
-> 
-> I'm building a system for a zynqmp SoC from Xilinx and I'm facing a
-> problem regarding device tree include paths.
-> 
-> The thing is that the kernel has placed zynqmp .dtsi files on its own
-> folder under dts/xilinx, such as xilinx/zynqmp.dtsi and xilinx/zynqmp-clk-ccf.dtsi
-> 
-> On uboot, these same (or equivalent) files are placed in the same
-> folder as any other .dtsi files, meaning that there is no xilinx/
-> directory.
-> 
-> So, now, since my custom DTS for my board starts off by including
-> those two files I mentioned (along a few others):
-> 
-> /dts-v1/;
-> 
-> #include "xilinx/zynqmp.dtsi"
-> #include "xilinx/zynqmp-clk-ccf.dtsi"
-> #include <dt-bindings/gpio/gpio.h>
-> #include <dt-bindings/phy/phy.h>
-> #include <dt-bindings/net/ti-dp83867.h>
-> 
-> Well... you can see where this is going. Linux kernel builds without
-> any issue, but u-boot fails because it cannot find xilinx/ directory.
-> But if I were to make uboot happy, then it would be the kernel the one
-> who complains about it.
-> 
-> I could just use two different files, but this duplicity doesn't sit
-> well with me. Am I missing some option that coould make this work?
-> 
-> Thanks, best regards!
-> 
+On Thu, 5 May 2022 at 19:55, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Joel, All,
+>
+> On 2022-05-05 19:39 +0930, Joel Stanley spake thusly:
+> > uClibc-ng does not (and has never) supported the 64 bit powerpc
+> > architecture.
+> >
+> > Signed-off-by: Joel Stanley <joel@jms.id.au>
+> > ---
+> > I'm a bit confused as to why uclibc was ever an option. Perhaps I missed
+> > something! I did a search of the mailing list archive and the best I
+> > found was this post from Thomas:
+> >
+> >  https://lore.kernel.org/buildroot/20160817193721.0cc1466d@free-electrons.com/
+> >
+> > Signed-off-by: Joel Stanley <joel@jms.id.au>
+> > ---
+> >  package/gcc/Config.in.host | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> > index a1fe192d3a24..3364860ec7a4 100644
+> > --- a/package/gcc/Config.in.host
+> > +++ b/package/gcc/Config.in.host
+> > @@ -31,6 +31,8 @@ config BR2_GCC_VERSION_9_X
+> >       # upstream gcc. C-SKY gcc upstream support not tested
+> >       # with upstream binutils and glibc.
+> >       depends on !BR2_csky
+> > +     # 64 bit powerpc is not supported by uclibc
+> > +     depends on !(BR2_TOOLCHAIN_USES_UCLIBC && (BR2_powerpc64 || BR2_powerpc64le))
+>
+> This is not the proper place to put this limitation. Instead, it should
+> be added to toolchain/toolchain-buildroot/Config.in so that uClibc is
+> not ever selectable for powerpc64.
+>
+> Except this is already the case:
+>
+>    28 config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+>    29     bool "uClibc-ng"
+>    30     depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
+>    31            BR2_arm     || BR2_armeb    || \
+>    32            BR2_i386    || BR2_m68k   || BR2_microblaze || \
+>    33            BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+>    34            BR2_or1k    || BR2_powerpc || BR2_RISCV_64 || \
+>    35            BR2_sh4     || BR2_sh4eb   || BR2_sparc || BR2_xtensa || \
+>    36            BR2_x86_64
+>
+> And indeed, when I enable either BR2_powerpc64 or BR2_powerpc64le, then
+> uclibc-ng is not selectable in the C library choice...
 
-Hi Alvaro,
+I missed this, thanks for pointing it out.
 
-One workaround for this issue is to add a custom patch to Linux so that the dts/xilinx subdirectory
-is part of the include path.
+As I describe below, the bug is due to selecting 32 bit userspace when
+building for a 64 bit CPU. This patch does not resolve that issue, as
+you point out.
 
-Something like this should work:
+>
+> So now I am confused. Could you explain why you had to hide away the gcc
+> versions when uclibc-ng is selected? And how you even managed to select
+> uClibc-ng with powerpc64 to begine with? Can you share a defconfig that
+> exhibits the issue?
 
-diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-index 1ba04e31a438..e141f6f5343c 100644
---- a/arch/arm64/boot/dts/Makefile
-+++ b/arch/arm64/boot/dts/Makefile
-@@ -31,3 +31,5 @@ subdir-y += tesla
- subdir-y += ti
- subdir-y += toshiba
- subdir-y += xilinx
-+
-+DTC_FLAGS += -iarch/arm64/boot/dts/xilinx
+I was looking at this autobuild failure:
 
-This will add the arch/arm64/boot/dts/xilinx to the include path for dtc.
-Once you have this, you will be able to use both 
+  powerpc    |         uclibc-1.0.40          | NOK |
+http://autobuild.buildroot.net/results/d72f51ccaa2911400e5b607e7fd259093e5f4b8a
+|
 
-#include "xilinx/zynqmp.dtsi"
-#include "zynqmp.dtsi"
+The build error was:
 
-to include the same file.
+In file included from ./libpthread/nptl/../nptl_db/thread_db.h:28,
+                 from ./libpthread/nptl/descr.h:30,
+                 from ./libpthread/nptl/pthreadP.h:25,
+                 from <stdin>:2:
+./include/sys/procfs.h:56:21: error: conflicting types for 'elf_vrregset_t'
+   56 | typedef elf_vrreg_t elf_vrregset_t[ELF_NVRREG];
+      |                     ^~~~~~~~~~~~~~
+In file included from
+/home/autobuild/autobuild/instance-3/output-1/build/linux-headers-5.15.33/usr/include/asm/sigcontext.h:14,
+                 from ./include/bits/sigcontext.h:30,
+                 from ./include/signal.h:396,
+                 from ./include/sys/procfs.h:26,
+                 from ./libpthread/nptl/../nptl_db/thread_db.h:28,
+                 from ./libpthread/nptl/descr.h:30,
+                 from ./libpthread/nptl/pthreadP.h:25,
+                 from <stdin>:2:
+/home/autobuild/autobuild/instance-3/output-1/build/linux-headers-5.15.33/usr/include/asm/elf.h:161:21:
+note: previous declaration of 'elf_vrregset_t' was here
+  161 | typedef elf_vrreg_t elf_vrregset_t[ELF_NVRREG];
+      |                     ^~~~~~~~~~~~~~
 
-Hope this helps,
+When I looked around for similar failures I found this, which led me
+down the path of "why is buildroot building uclibc for the 630?" (the
+630 is a 64-bit processor):
 
-Regards,
+https://lore.kernel.org/all/20160711043453.GA28468@waldemar-brodkorb.de/
 
-Simon Doppler
+This is where I got a bit confused, and it becomes obvious I didn't
+retest the defconfig that was failing before sending my patch.
 
+From the top of the defconfig, it is not configured for 64 bit (so my
+patch wouldn't have helped):
+
+BR2_powerpc=y
+BR2_powerpc_630=y
+
+My apologies. Thanks for your careful review.
+
+There's still an autobuilder failure that would be nice to avoid.
+
+It will show up for any 64 bit powerpc machine that is configured in
+buildroot with a 32 bit userspace. There's no defconfigs that do this
+in the tree, but the autobuilder appears to generate them on occasion.
+
+The gcc build defaults to the target machine, which is 64 bit, so gcc
+has the __powerpc64__ preprocessor set. uclibc then errors out as the
+kernel headers have unexpected values set.
+
+To fix the issue, buildroot would need to build the toolchain so it
+defaulted to 32 bit (by setting GCC_TARGET_CPU to powerpc), or ensure
+it passed -mcpu=powerpc to GCC each time it was invoked (for compiling
+and for linking).
+
+Alternatively, buildroot could change the arch configuration to not
+allow 32 bit userspace to be built if a 64 bit machine has been
+selected. If users wanted to run a 32 bit userspace they could still
+build userspace for a generic powerpc machine, which achieves a
+similar result without having to maintain the mixed configuration.
+
+Cheers,
+
+Joel
+
+
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >       select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+> >
+> >  config BR2_GCC_VERSION_10_X
+> > @@ -43,6 +45,8 @@ config BR2_GCC_VERSION_10_X
+> >       # upstream gcc. C-SKY gcc upstream support not tested
+> >       # with upstream binutils and glibc.
+> >       depends on !BR2_csky
+> > +     # 64 bit powerpc is not supported by uclibc
+> > +     depends on !(BR2_TOOLCHAIN_USES_UCLIBC && (BR2_powerpc64 || BR2_powerpc64le))
+> >       select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+> >
+> >  config BR2_GCC_VERSION_11_X
+> > @@ -54,6 +58,8 @@ config BR2_GCC_VERSION_11_X
+> >       # that need to be reverted since gcc 8.4, 9.3 and 10.1.
+> >       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
+> >       depends on !BR2_sparc
+> > +     # 64 bit powerpc is not supported by uclibc
+> > +     depends on !(BR2_TOOLCHAIN_USES_UCLIBC && (BR2_powerpc64 || BR2_powerpc64le))
+> >       select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+> >
+> >  endchoice
+> > --
+> > 2.35.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
