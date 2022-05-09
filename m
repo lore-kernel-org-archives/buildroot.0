@@ -4,92 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BFBCC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  9 May 2022 16:11:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 926A4C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  9 May 2022 16:12:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 870F960D76;
-	Mon,  9 May 2022 16:11:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E10F60E09;
+	Mon,  9 May 2022 16:12:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id peL9PhKCKHmZ; Mon,  9 May 2022 16:11:11 +0000 (UTC)
+	with ESMTP id Jh4NbnFqjAVm; Mon,  9 May 2022 16:12:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8370F60B06;
-	Mon,  9 May 2022 16:11:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8F5661BF281
- for <buildroot@lists.busybox.net>; Mon,  9 May 2022 16:11:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39F6160B20;
+	Mon,  9 May 2022 16:12:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C8F501BF281
+ for <buildroot@lists.busybox.net>; Mon,  9 May 2022 16:12:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7BF5140253
- for <buildroot@lists.busybox.net>; Mon,  9 May 2022 16:11:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C4BDB813EA
+ for <buildroot@lists.busybox.net>; Mon,  9 May 2022 16:12:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=smtpcorp.com header.b="tl0aUrqU";
- dkim=pass (2048-bit key) header.d=sonifex.co.uk header.b="J0r77L9o"
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UieQ8ZZwrU3N for <buildroot@lists.busybox.net>;
- Mon,  9 May 2022 16:11:03 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from e2i465.smtp2go.com (e2i465.smtp2go.com [103.2.141.209])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8B2D240104
- for <buildroot@buildroot.org>; Mon,  9 May 2022 16:11:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=smtpcorp.com; s=a1-4; h=List-Unsubscribe:Feedback-ID:From:To:Subject:Date:
- Message-ID:Reply-To:Sender:X-Smtpcorp-Track;
- bh=22Z1xPLO2Im1rP2A6xesO+Vz1GdD9h7MXoHylT/iFCI=; b=tl0aUrqU4wuNshFHsbZspuo8y4
- Nuxqpn8b3hrr5TfthwgUu9wET8o/BoftHx+JUKmE402hNQ8mNoQFolkESEZVzPL0/CcEf8+bujyeZ
- 9BDLMmrhnFob5iWx5idsvgYmM/tevWl5veDOYbLzjqZ1vu21oWyIv7Niz6kW9JJdO4SAfIbNoRPhB
- QWu/WA1xiCuzNRyn+XylfjwF0z+yaAt+kP2YKCrxhvs6xmUu52t37V0pJfzBHTu85Wv82/nPzZPMO
- K8qJmBarIwyGtHeDdxSmp+6caReK1DKpX7+5ieekIcL6LGf8F5jjbeUwXwCKMVj54Tq59I/dObHeO
- RZytTZ9g==;
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sonifex.co.uk;
- i=@sonifex.co.uk; q=dns/txt; s=s592615; t=1652112663; h=from : subject
- : to : message-id : date;
- bh=22Z1xPLO2Im1rP2A6xesO+Vz1GdD9h7MXoHylT/iFCI=;
- b=J0r77L9oqlRmzcKrKgeu9xcLZoSicpIbzcsRy1VINGeFnKZHlwX/4M1THwvmXDsbVrw3J
- FUcAO7mkqVNdffJUNpvAeswlDb9AwM/izgylMjThVGrsUArjxcZja0QtTFSjneQOgiZ2ox3
- DquTAi6K8w46/Jnk82tIjMKqTHhrHFYmTJuY05FWWKPZmbYTRl6MOzKL5eyomcXJcC4F2Dk
- 3/ProEktftqcqVNO4A1+Nohga5gyaGpvGq5IRI4LDth/3DnvG1waxGASc0rqN5JU1WYxjNV
- sES1T1NDx8w/xxFHvo2Cp2OB6vswPrjcy/xd0Qb5/B1GCzHvsrTeK+6AIAOw==
-Received: from [10.173.255.233] (helo=SmtpCorp) by smtpcorp.com with esmtpsa
- (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
- (Exim 4.94.2-S2G) (envelope-from <wesley@sonifex.co.uk>)
- id 1no1Q2-TRk6ZE-0h; Mon, 09 May 2022 11:19:14 +0000
-Received: from [10.87.224.66] (helo=NETHMAIL.sonifex.co.uk)
- by smtpcorp.com with esmtpsa
- (TLS1.2:ECDHE_SECP256R1__RSA_SHA512__AES_256_GCM:256)
- (Exim 4.94.2-S2G) (envelope-from <wesley@sonifex.co.uk>)
- id 1no1Q0-IbZqa7-Vf; Mon, 09 May 2022 11:19:13 +0000
-Received: from [192.168.0.19] (unknown [192.168.0.19])
- (Authenticated sender: wesley.revens@sonifex.co.uk)
- by NETHMAIL.sonifex.co.uk (Postfix) with ESMTPSA id 5DCE58099AD0;
- Mon,  9 May 2022 12:19:10 +0100 (BST)
-Message-ID: <7a83f95f-b3c1-9aeb-447d-9c7361158485@sonifex.co.uk>
-Date: Mon, 9 May 2022 12:19:10 +0100
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8XIO49reDL27 for <buildroot@lists.busybox.net>;
+ Mon,  9 May 2022 16:12:40 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DCCAD813BE
+ for <buildroot@busybox.net>; Mon,  9 May 2022 16:12:39 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id e24so20172896wrc.9
+ for <buildroot@busybox.net>; Mon, 09 May 2022 09:12:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=xfdZe2WJoBnNrAhkCwPZ3FKoiUYptBwbw/XaWn41oZg=;
+ b=HH95tr/eB/tXowj1jlqUacN2Xm45erq4k4iddpxlYAQvZVzHjK/xd3VImel1JO121g
+ JzX/TcQBXa2To/3CxSgetszHZUhcEpbjYEpRZGV9Jp8mz6uXaEou6cfJlIraPtbGsT2v
+ IzTV5yvS144I02MMHUVvTXoQSg4rwrKTMMOki/WT45iP5HXw7g+B2GEMNX1NTck+qdjS
+ /alwm3ExrAMbEXnbmpcarIaWl0t5A4LhK/s/QIJyoXzcAIdbz9MXNK0vi1ifR9xosBD3
+ UaR2fnvZGymq3SsZcHs0Hf4ZEHmaNS+9XDYbhd+32xZ3DSN4q21rIHuy1mz8ymfWK7sR
+ UYbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=xfdZe2WJoBnNrAhkCwPZ3FKoiUYptBwbw/XaWn41oZg=;
+ b=NHrtnXBVijPPvWxVTCUc3PsLAlJi1bJjMAJDuyL46Du7xv+onCO3bowPFTJz987c6F
+ EdVwdx8jYiE0U6HQC9TulrF4un2BeQW/taGmi9HFfq7x5YyQuyUi223m/uleO0UnU49e
+ HlywFNmF0BL8nHh4SS5khewSVbsh/HWmlooRLLmWBEm8jAagysuiAJGN/vC8JNhJNWf/
+ F3qa1tC+1LlYLdH4lEgWAHbtTKrG3JUez3CHvHWERkvRCTWdHrpEEV6hNIuV2f7WTd9a
+ jsaATucoHoyyPI8VXxzwMJ1+5tZKuzKtEVvVY50h9DWLS2e/woLd9hos3s2kbRVWlsBS
+ wDwg==
+X-Gm-Message-State: AOAM531iAvaMRygWnuyO0uOHSexIoxFPED3knjBSuHwd6fs3vQPbFmZ/
+ PgbwyDKjwU0blwuy4nZc0Ymh2zoydzY=
+X-Google-Smtp-Source: ABdhPJyIDyesu79PMQb4ZGwo2KDAValumjQTBpIqGINXxFng6qV3e4yDGL2wblyypT/pRbNmd/TZFA==
+X-Received: by 2002:adf:e10e:0:b0:206:2d7:b4de with SMTP id
+ t14-20020adfe10e000000b0020602d7b4demr14192172wrz.497.1652112757857; 
+ Mon, 09 May 2022 09:12:37 -0700 (PDT)
+Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ g3-20020a056000118300b0020c5253d8bcsm11760477wrx.8.2022.05.09.09.12.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 09 May 2022 09:12:37 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon,  9 May 2022 18:12:24 +0200
+Message-Id: <20220509161224.188751-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To: Neal Frager <nealf@xilinx.com>, Michal Simek <michals@xilinx.com>,
- Neal Frager <neal.frager@amd.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-References: <20220505155424.3002847-1-neal.frager@amd.com>
- <77b0f29f-7df7-36f4-9b49-5212fd46c5af@sonifex.co.uk>
- <51fb4a8c-cd8c-9db0-76e4-5461e72871f8@xilinx.com>
- <SJ0PR02MB7758503615E7EA06416E482CD7C69@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <dd608132-245a-32b7-7d27-f267c1524fee@xilinx.com>
- <74b54843-fd4a-4f93-6f8f-3f3110ab0548@sonifex.co.uk>
- <SJ0PR02MB7758B1B096451C45B9489053D7C69@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <f4f5acff-c577-b7cd-c708-4415c2a08b4c@sonifex.co.uk>
- <SJ0PR02MB7758243996DD3EB0BE94D176D7C69@SJ0PR02MB7758.namprd02.prod.outlook.com>
-From: Wesley Revens <wesley@sonifex.co.uk>
-In-Reply-To: <SJ0PR02MB7758243996DD3EB0BE94D176D7C69@SJ0PR02MB7758.namprd02.prod.outlook.com>
-Feedback-ID: 592615m:592615abMtQZZ:592615sHGBV5TFLK
-X-Report-Abuse: Please forward a copy of this message, including all headers, 
- to <abuse-report@smtp2go.com>
-Subject: Re: [Buildroot] [PATCH v1 1/2] add
- configs/zynqmp_kria_kv260_defconfig
+Subject: [Buildroot] [PATCH] package/gdbm: bump to version 1.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,63 +87,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "luca@lucaceresoli.net" <luca@lucaceresoli.net>,
- "giulio.benetti@benettiengineering.com"
- <giulio.benetti@benettiengineering.com>,
- "michal.simek@amd.com" <michal.simek@amd.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Neal,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/gdbm/gdbm.hash | 6 +++---
+ package/gdbm/gdbm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 09/05/2022 12:00, Neal Frager wrote:
-> Hi Wesley,
->
->> I initially tried using pmufw from the xilinx-k26-starterkit-2021.1 petalinux BSP but that failed. So I tried the pmufw from the 2022.1 BSP instead and have now made some more progress.
->> My board is booting to a u-boot prompt now but not continuing into Linux from the SD card.
-> Have you added the following to your board/zynqmp/kria/kv260/uboot.fragment as recommended by Michal?
->
-> CONFIG_DEFAULT_DEVICE_TREE="zynqmp-smk-k26-revA"
-> CONFIG_SYS_SPI_U_BOOT_OFFS=0xF80000
-> CONFIG_DTB_RESELECT=y
-> CONFIG_MULTI_DTB_FIT=y
-> CONFIG_ENV_IS_NOWHERE=y
-> CONFIG_DMA=y
-> CONFIG_XILINX_DPDMA=y
-> CONFIG_PHY=y
-> CONFIG_PHY_XILINX_ZYNQMP=y
-> CONFIG_PINCTRL=y
-> CONFIG_PINCONF=y
-> CONFIG_POWER_DOMAIN=y
-> CONFIG_ZYNQMP_POWER_DOMAIN=y
-> CONFIG_DM_RESET=y
-> CONFIG_RESET_ZYNQMP=y
-> CONFIG_VIDEO_ZYNQMP_DPSUB=y
->
-> Best regards,
-> Neal Frager
-> AMD
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/gdbm/gdbm.hash b/package/gdbm/gdbm.hash
+index 59f9ea62d..7449d5dc9 100644
+--- a/package/gdbm/gdbm.hash
++++ b/package/gdbm/gdbm.hash
+@@ -1,6 +1,6 @@
+ # From https://www.gnu.org.ua/software/gdbm/download.html
+-md5  0bbd38f12656e4728e2f7c4708aec014  gdbm-1.22.tar.gz
+-sha1  c45cc0178cbf41828369b07749d41778741703bd  gdbm-1.22.tar.gz
++md5  8551961e36bf8c70b7500d255d3658ec  gdbm-1.23.tar.gz
++sha1  50ba1b1d45ce33fd44e4fdaaf3b55a9d8f3dc418  gdbm-1.23.tar.gz
+ # Locally computed
+-sha256  f366c823a6724af313b6bbe975b2809f9a157e5f6a43612a72949138d161d762  gdbm-1.22.tar.gz
++sha256  74b1081d21fff13ae4bd7c16e5d6e504a4c26f7cde1dca0d963a484174bbcacd  gdbm-1.23.tar.gz
+ sha256  690d762f2e8e149ab1e2d6a409a3853b6151a2533b2382fae549a176d6bedecf  COPYING
+diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
+index 52624f580..e807a8e1e 100644
+--- a/package/gdbm/gdbm.mk
++++ b/package/gdbm/gdbm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GDBM_VERSION = 1.22
++GDBM_VERSION = 1.23
+ GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
+ GDBM_LICENSE = GPL-3.0+
+ GDBM_LICENSE_FILES = COPYING
+-- 
+2.32.0
 
-Yes I have those configs set - the only ones from Michal's list that I 
-don't have are:
-
-CONFIG_ENV_IS_NOWHERE=y (only)
-CONFIG_USE_DEFAULT_ENV_FILE=y
-CONFIG_DEFAULT_ENV_FILE="vars"
-
-When I was using the pre-loaded QSPI bootloader to boot my Linux image I 
-had to enable some peripherals in the Linux device tree to get Linux to 
-start correctly (e.g. disabling write protection on sdhci1 and enabling 
-the phy) Are any changed like that going to be required in the u-boot 
-device trees?
-
-To unsubscribe click: http://link.sonifex.co.uk/us/?e=1no1Q0mPZqa7Vf.-Ci0cfJb9IcX4
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
