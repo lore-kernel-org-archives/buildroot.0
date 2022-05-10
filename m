@@ -1,80 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99D16C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 16:33:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C247C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 16:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B1AF823E3;
-	Tue, 10 May 2022 16:33:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3CA3241735;
+	Tue, 10 May 2022 16:33:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gR9T_6O4fRX5; Tue, 10 May 2022 16:33:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iJcIR-bZZrQ9; Tue, 10 May 2022 16:33:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47FA981DA3;
-	Tue, 10 May 2022 16:33:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1585B1BF3A3
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 16:33:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 153A0404AA;
+	Tue, 10 May 2022 16:33:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 067B21BF3A3
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 16:33:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12A3D81DA3
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 16:33:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 02A3740239
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 16:33:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hFgNtbwrOWnR for <buildroot@lists.busybox.net>;
- Tue, 10 May 2022 16:33:02 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0pWsUg1Kx0al for <buildroot@lists.busybox.net>;
+ Tue, 10 May 2022 16:33:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1E508819FC
- for <buildroot@buildroot.org>; Tue, 10 May 2022 16:33:01 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id d5so24593235wrb.6
- for <buildroot@buildroot.org>; Tue, 10 May 2022 09:33:01 -0700 (PDT)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 463A740AA6
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 16:33:03 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id k126so10540722wme.2
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 09:33:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=gI4KI/bly+jmi93cd9zLGOTyhGdwhkp4NnQm5IwJ82M=;
- b=e3RGB2Dymt1TGQdLvgUuJ0w/6hIlR1oFY4bLuzlGEbZJRED91eCuZWpLoT4d5r2aO5
- vPwxfBWEtZV2hVcG5tPaNUELuvSJNXfNwPSiVTQTaW2Hs1wPhb0ewNYl60wsISBO+GLO
- C3XJSZB7rXgfLAu4GbELsvhcq+HQ1Q0qnuY0Xv//Xa4fzL+bScZLIgc3j++jiyPZobJd
- JwyXGxyz21bQ6LeTCSTMP9i0WyIH2E1VGV5Qs4MXc8MVy74akvq5uKvM2M97+T1vuQ5t
- nmSO2gloXzB6om6hAe1yPeqV06JNvfV1F97gOHRBD/aS9DUsmfogbrAFt6ivN4rdyfU3
- nezA==
+ bh=ohNzHUlK5lzbedyaWSzW7VzGTHlWG3ZeoGTb0pQWtxc=;
+ b=btImdb31DQzyBv+DFEAdMlzuSaL7Q3ei10kX6BpAiZ8WdnvnjToaxxeI0c5ZlxQx7I
+ EpO1bqDEoj+yof7aonWFayWUD9IYSt9engmDT5xiPVMz9T4Io6/H+Sy6OuRL+78Ehobz
+ iznoiVRzjZFs1g7DYDjKkWDyV2ZBsOy+ua8ngydJ/fIw0uzzumdM3KL7b6+nQhQOD7Hx
+ BDfitPc2c//4UaevgVtZDqZfaILspAeqhCWqu5BOzQcdRtVv4ma3he5EBJVj81I3ffQg
+ dZQ5aex0U6uJLlCrbg/gYsn+PTR10+wpNjYiRtJfiF5lOrI0Jq4JyJKGeQZIXxoRv1gN
+ EvYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=gI4KI/bly+jmi93cd9zLGOTyhGdwhkp4NnQm5IwJ82M=;
- b=pgmVwr/+gLwyXF9o2fN6Jq8AO1PEn6dQY3bjAgFNkz4DXDNeCdHL8PoGCQDemGmKe/
- /49BYGwH9MFhZ6Q3LSmHAeYJs5N8UBX4nQ3tWr8XOQR4e6GLMQC7EMmKt3TrGCKhLy/g
- 69WPAq6ih2FhmnNLZerAieZax+WYRQxEiHRbog7ikmAGuYhoz0u+YnmZ8NXMJIlH1Ca4
- sfxfVi+ih8FcsqZD8HEz2BdUfgObHx5diHDBODi/7JHjrYVioxfKrKwAra1jCqqymv4o
- r0jv63gILYbxuTyl915VZ2Qgd3p+0bwu+P+wkdYJgtCF6AxIHlEAQCGs4NRyrlr2aa7h
- QxMA==
-X-Gm-Message-State: AOAM530o1cgL6NTK4ovlnBv+97KeXJ9nOK7ewASBMEQMc2uDeGGCvEZf
- zwOa9EZ6qgSPXuUdzqL1p5GMycgTyBQ=
-X-Google-Smtp-Source: ABdhPJznhmUwCZ6dFzTfHMzbKd6fXWywD1gfU4JZLEnZua8cPQoOkoJLEJLM885WOOXMk+NzZZHw/Q==
-X-Received: by 2002:a5d:440d:0:b0:20c:4d68:7fb1 with SMTP id
- z13-20020a5d440d000000b0020c4d687fb1mr18641226wrq.7.1652200380216; 
- Tue, 10 May 2022 09:33:00 -0700 (PDT)
+ bh=ohNzHUlK5lzbedyaWSzW7VzGTHlWG3ZeoGTb0pQWtxc=;
+ b=MIlSjn/EmaOa9VnGV6fF2Aa1A1/jFoSyHUGf61Pnh5kzM072e9DY38y2fnmZXfmjTJ
+ CL3YUEateGRR1vOJIyH3nAr4bNRAhlH3zPxxP0PAFqBhJwoqW+/JfahCfCXbmmroe0uy
+ sxYt+etz3qXI0zQNw/NYE8qBn44FSe1U7TYQQcHscPApooLeAQMId8HsTFuS+tb9Njrn
+ bFi4Pm3vo0o1gXVgVpfd/qQ8zeufbl3JCVDWVDzfjc9bB8eSMaFMNA0AMwRlTJ8FceAb
+ o1GCxQI5l1QXC9sPmrn35oNbNORYQDUesd3Nt4KU2Ww/2spB5GJFcLSYei2muxCK8hNL
+ 4Y9g==
+X-Gm-Message-State: AOAM532fI7dHBex6Um5fJ9tWNowPysI+8L5qaDdL1hRGGUuOTRvSXFSA
+ 0sQl4JFzxdM11x0nJig6LKk2qj3ERT0=
+X-Google-Smtp-Source: ABdhPJypzrmh9/kCSmtDrNPLZT7TyBm3l/eOloPIozuHWS6KP5do1dl4Q/84jCoG7sVR2HOwhSFQxg==
+X-Received: by 2002:a1c:a3c6:0:b0:392:a630:286c with SMTP id
+ m189-20020a1ca3c6000000b00392a630286cmr814366wme.72.1652200381317; 
+ Tue, 10 May 2022 09:33:01 -0700 (PDT)
 Received: from dell5510.arch.suse.de (gw1.ms-free.net. [185.243.124.10])
  by smtp.gmail.com with ESMTPSA id
- l29-20020a05600c1d1d00b003942a244f53sm3260126wms.44.2022.05.10.09.32.59
+ l29-20020a05600c1d1d00b003942a244f53sm3260126wms.44.2022.05.10.09.33.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 10 May 2022 09:32:59 -0700 (PDT)
+ Tue, 10 May 2022 09:33:00 -0700 (PDT)
 From: Petr Vorel <petr.vorel@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 May 2022 18:32:48 +0200
-Message-Id: <20220510163249.21272-2-petr.vorel@gmail.com>
+Date: Tue, 10 May 2022 18:32:49 +0200
+Message-Id: <20220510163249.21272-3-petr.vorel@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220510163249.21272-1-petr.vorel@gmail.com>
 References: <20220510163249.21272-1-petr.vorel@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/musl: bump version to 1.2.3
+Subject: [Buildroot] [PATCH 2/2] musl: backport netlink macro fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,36 +95,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+8cf87b30 ("fix incorrect parameter name in internal netlink.h RTA_OK macro")
+
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/musl/musl.hash | 4 ++--
- package/musl/musl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...rameter-name-in-internal-netlink.h-R.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch
 
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 4ab18cebd8..e093a5358e 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# https://musl.libc.org/releases/musl-1.2.2.tar.gz.asc
--sha256  9b969322012d796dc23dda27a35866034fa67d8fb67e0e2c45c913c3d43219dd  musl-1.2.2.tar.gz
-+# https://musl.libc.org/releases/musl-1.2.3.tar.gz.asc
-+sha256  7d5b0b6062521e4627e099e4c9dc8248d32a30285e959b7eecaa780cf8cfd4a4  musl-1.2.3.tar.gz
- sha256  f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af  COPYRIGHT
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index b89945e3be..44c79da6f7 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUSL_VERSION = 1.2.2
-+MUSL_VERSION = 1.2.3
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+diff --git a/dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch b/dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch
+new file mode 100644
+index 0000000000..fa3057ff08
+--- /dev/null
++++ b/dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch
+@@ -0,0 +1,33 @@
++From 8cf87b3027009c0acac591d9ae80262dc25daccf Mon Sep 17 00:00:00 2001
++From: Ondrej Jirman <megous@megous.com>
++Date: Wed, 21 Nov 2018 17:29:21 +0100
++Subject: [PATCH] fix incorrect parameter name in internal netlink.h RTA_OK
++ macro
++
++the wrong name works only by accident.
++
++Signed-off-by: Ondrej Jirman <megous@megous.com>
++Signed-off-by: Rich Felker <dalias@aerifal.cx>
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++
++[ upstream status: 8cf87b3027009c0acac591d9ae80262dc25daccf ]
++---
++ src/network/netlink.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/network/netlink.h b/src/network/netlink.h
++index 38acb178..873fabe2 100644
++--- a/src/network/netlink.h
+++++ b/src/network/netlink.h
++@@ -86,7 +86,7 @@ struct ifaddrmsg {
++ #define RTA_DATALEN(rta)	((rta)->rta_len-sizeof(struct rtattr))
++ #define RTA_DATAEND(rta)	((char*)(rta)+(rta)->rta_len)
++ #define RTA_NEXT(rta)		(struct rtattr*)((char*)(rta)+NETLINK_ALIGN((rta)->rta_len))
++-#define RTA_OK(nlh,end)		((char*)(end)-(char*)(rta) >= sizeof(struct rtattr))
+++#define RTA_OK(rta,end)		((char*)(end)-(char*)(rta) >= sizeof(struct rtattr))
++ 
++ #define NLMSG_RTA(nlh,len)	((void*)((char*)(nlh)+sizeof(struct nlmsghdr)+NETLINK_ALIGN(len)))
++ #define NLMSG_RTAOK(rta,nlh)	RTA_OK(rta,NLMSG_DATAEND(nlh))
++-- 
++2.36.0
++
 -- 
 2.36.0
 
