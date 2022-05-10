@@ -1,159 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A3BBC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 08:26:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5449EC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 08:59:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A5E48176A;
-	Tue, 10 May 2022 08:26:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB476403AC;
+	Tue, 10 May 2022 08:59:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GpEAnEkZvIQR; Tue, 10 May 2022 08:26:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MOx1QDtp3-KQ; Tue, 10 May 2022 08:59:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A8B581252;
-	Tue, 10 May 2022 08:26:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5FEE31BF2BF
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 08:26:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB5D34013E;
+	Tue, 10 May 2022 08:59:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 860631BF20D
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 08:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4AE0B80C25
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 08:26:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 81EE84013E
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 08:59:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bFcIPIdWaCFk for <buildroot@lists.busybox.net>;
- Tue, 10 May 2022 08:26:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hLbFWrSrBOrI for <buildroot@lists.busybox.net>;
+ Tue, 10 May 2022 08:59:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam10on20614.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e89::614])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A26C580C0C
- for <buildroot@buildroot.org>; Tue, 10 May 2022 08:26:54 +0000 (UTC)
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com
+ (mail-co1nam11on20625.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eab::625])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 19939400CB
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 08:59:38 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eaxHkCjisamDMgLhHRXrcbAbGbXmATL7kFNQmpuasbhgeS67eZXxPdynwKlYIvq480GQezoRh+y4JlSfWED9x/0DHiWVOvdfN5X6EjoijMbeiCVU4Sa0zsT12KTH60AzdqMnjCkl8GGnozdSyBpDvMCcrnytBmXADxlwzRnk3uqDflXTr6PVsuAC7G3rUc4zR3nPDQx0RXM9G7/1M9mn1ATEcD6EpcpMiSTzDNIjNbsUM1XkJLZljDUsUcP908IYFOa6yvQm0pu3DFztdpzOQ+wqABfMWjy4qiR2z1oqcEJfIU1GUvLTx5qLxHa3g45OdudjxiNn+dbrLFVCYYDYzg==
+ b=DlG72M7AhXJEOaOof+bSW3lKqwyYrj+mAjDQRSXNEzMXv/3YP9zBzpBq9s4dyVkAnyPd2NwtpP51e14DwSknJ/WpX1tf+hAwWwifuk3iXXogPZmyR3wXZq5OGV45rTd+3iLeVMgEW3IA3oXXa0rZBZLqwoHCdHrdsMiTNZgtTP6WwJvdtY27WerVK7l+Zb4izxIrDjqvWemZn4Xqt/0IlkeWTKmdciCk//hIOZ2OcDlXcBsu7lFBYXGl0tRxKI4LRmtCL7rMB0K3YkfBTbH9LBEWNgx/eWeXPFo5RpKDNNm9l5ac77SICXqAmRuAFmIhRVDjp73CJ/dtwbnmp7wQFw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HJA11tNjLmmpWiJ+0lf/hyP76uKWWz6MH+IumjsXFWk=;
- b=C7+lQP6T+gcncnxajkiMuBB0jZY/Eo8J88ZZzyIpPESy5jtYvcHwfwii27X7JB+kHyoZ5ShBOynNmzPWlO9xwyuf4Sh0ttkR94+ETPbshZkJ4JtyyCoX4oVM4eC9yLDdKuZsLDgpL2ZakEJ9HCZA32B/EH5jF1mELtDMc6+pEevPNnPVyldMVrk2R2iAOfxreiWocvqIQF8+98mJjNwyaqzYbGgrOWlsjlpS7ROC4ExmGA9TG+VQoQrKLdrz5zeRZRmGPi/AlmpG1B6bzc9TV8z4ZgxjYOTPdr+iUdLinC6kR5ksKbkwGXfaSaE8ANuZo2UVQSQQNRDdomwdwKsBHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
- dkim=pass header.d=xilinx.com; arc=none
+ bh=p3OtIGEeCDTs2q5QoIlrfI5zOVfYWs6Kbl4hBl0X4Oo=;
+ b=YbtOskvwZa4po8GAL5ErBy8W6HgCm61uq4xoVRtxrPvtmfDYjc+0oLDAnnAZgmqGKpo0QJqFO7ps4tR97/u95NBMSclmO1qABY96qXUhu9nYWS86DL4r/zFbuWkLpJKdt0d/R3wxOhTkBIrg5a2XE8Lhp9vH2AJoU5LGOZ60jdPM1Jh+c2qd+hTWSck5GNAwGq//1GAeCsOBwRyzbxlnXm5tOrrSAJx93mINl7FvBltUB0OaNOM/nntp3I8sCicLOlTJ0b5E7HtQKjbxOqWdGWK2fjxngqn20gjnj3Ab3YmcZz3N0t+a84MnGUnDNIxpaF0hkbWPpAZZiDYu8LNiFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 149.199.62.198) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HJA11tNjLmmpWiJ+0lf/hyP76uKWWz6MH+IumjsXFWk=;
- b=hyT7f53b5XC5XZCpFTnDEmBEbOs+x0R37sTMX5ElkOLGFaba4JfVx7U1zZegfwamDvSyKg541EFgiSBhw2Lk5tC+1/GixyNB0hU/0zH9P20/niLo7VNT1oT7gGJgehipsmzpiofDuLiKKMv1vE/zPv7Gx9z6+m5C/b5eZfYBqgg=
-Received: from SJ0PR02MB7758.namprd02.prod.outlook.com (2603:10b6:a03:320::24)
- by DS0PR02MB8927.namprd02.prod.outlook.com (2603:10b6:8:c9::16) with
+ bh=p3OtIGEeCDTs2q5QoIlrfI5zOVfYWs6Kbl4hBl0X4Oo=;
+ b=apdiLfOM79TcT/1M8VWbnJ+fiEfUCSxFruA9lIZKY1rstUZ4cZxzlVz9fQ4sHK0RzO40+6K9KxtgVZ39op1t+k8CeVLcCI5cDIkLw4TBreMqEuKKf3YJova9fiWVk6tGWmrE+RM0P4bn2UZ649g6hXheJ2bohYtFA1VYykp3Lq0=
+Received: from BN9PR03CA0931.namprd03.prod.outlook.com (2603:10b6:408:108::6)
+ by DM5PR02MB2652.namprd02.prod.outlook.com (2603:10b6:3:41::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Tue, 10 May
- 2022 08:26:51 +0000
-Received: from SJ0PR02MB7758.namprd02.prod.outlook.com
- ([fe80::e83c:1862:8bea:4f08]) by SJ0PR02MB7758.namprd02.prod.outlook.com
- ([fe80::e83c:1862:8bea:4f08%5]) with mapi id 15.20.5227.023; Tue, 10 May 2022
- 08:26:51 +0000
-From: Neal Frager <nealf@xilinx.com>
-To: Wesley Revens <wesley@sonifex.co.uk>, Michal Simek <michals@xilinx.com>,
- Neal Frager <neal.frager@amd.com>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [PATCH v1 1/2] add
- configs/zynqmp_kria_kv260_defconfig
-Thread-Index: AQHYYJhu5wIi+XoP/0SfaUcCKPdJpa0RtJ0AgAADXACABF8KsIAAFGeAgAAdwwCAAAFaIIAAGo8AgAABPJCAAAWyAIAAKG0wgAANy4CAAAB54IAABngAgABDMbCAAJ2toIAAQvIAgAAAj0A=
-Date: Tue, 10 May 2022 08:26:51 +0000
-Message-ID: <SJ0PR02MB7758E0941247D253A6C78304D7C99@SJ0PR02MB7758.namprd02.prod.outlook.com>
-References: <20220505155424.3002847-1-neal.frager@amd.com>
- <51fb4a8c-cd8c-9db0-76e4-5461e72871f8@xilinx.com>
- <SJ0PR02MB7758503615E7EA06416E482CD7C69@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <dd608132-245a-32b7-7d27-f267c1524fee@xilinx.com>
- <74b54843-fd4a-4f93-6f8f-3f3110ab0548@sonifex.co.uk>
- <SJ0PR02MB7758B1B096451C45B9489053D7C69@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <f4f5acff-c577-b7cd-c708-4415c2a08b4c@sonifex.co.uk>
- <SJ0PR02MB7758243996DD3EB0BE94D176D7C69@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <7a83f95f-b3c1-9aeb-447d-9c7361158485@sonifex.co.uk>
- <SJ0PR02MB77588AD2DD701582C5F45A92D7C69@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <dfd44be7-0dbc-0a05-4e90-ed04501e4043@sonifex.co.uk>
- <SJ0PR02MB7758B99F6AD8F668FE7F318AD7C69@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <73ea7940-e778-cdf9-9364-66773632efbd@sonifex.co.uk>
- <SJ0PR02MB7758E384FFAF82E99CDEA261D7C69@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <SJ0PR02MB7758287753500487E7078A4AD7C99@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <193b6338-e28b-b974-ab4d-25bcd173d67f@sonifex.co.uk>
-In-Reply-To: <193b6338-e28b-b974-ab4d-25bcd173d67f@sonifex.co.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xilinx.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9c123908-f3f2-43e9-6d41-08da325ed56b
-x-ms-traffictypediagnostic: DS0PR02MB8927:EE_
-x-microsoft-antispam-prvs: <DS0PR02MB8927DF20BEC00F10E2B6AED7D7C99@DS0PR02MB8927.namprd02.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: w8cMQWvj0BE1jw9DuR1BOl6U9YKF52q/ykcbtflf1ZpHGC3mg4Tn3iX9rPIlh5zeZorWqLbGxu9cyrcNZgQKEOO4RnBkiv0WTjcHo51tLCSRUFO9fiSyDtaMcvvjrHOEHGCVmehuiN0a2kjd3fZuW6EZs86GsyaHjrmrjDk+DRVMrDaoEctADbVPh+LDfq9KPwmV4HKOJujDfUI45tKRU7gXTylqtxiNzAaDote9RspQRcWoZUXhEEpoI+SaIy8fQMb06DErQPhh6jgFPueC6X700klTbmi0CwnSMki9L3eVbzVWFIcl8iST0t4O8cIwDHmXQl1iiMYLTmcJR43qwAoe3w1N4suhtv5FfGd9LUuXyVEX2XLA0+5PHNI1FbBwhUkyLMNfksoo+A6d5lg7LoR0memMkG1ui7Q6aB0/yeE6KjawMS5qZHJl6wsMDClCttbjQ74rTtPb55IU2/RSP0D8NH0D0nXYhpiOiwj/BjNYNI9buaxSsiJMdPSf6Gx/BmXTZdeuUfkqYx6zOJNhN3TLvtlubMlieMudX5TEGcoYWYmgNDgxqovDJxLwgWIHQV4SDJ+qLoERsJQTmD7z75hXgwWI23l5CDj/F6/zk7h3UxbU7bueBeEsgpkw9SRb56f9X2IJA8U9a6FnZ0KCXaWYmbVJ0YLY8FwJCKENbASU5xmCxAhJ3BGtPbk5LNma3spB8mzc+ufsgNnp7C2ZYA==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SJ0PR02MB7758.namprd02.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230001)(4636009)(366004)(76116006)(52536014)(186003)(83380400001)(316002)(8676002)(64756008)(66446008)(4326008)(4744005)(2906002)(66476007)(8936002)(5660300002)(33656002)(66946007)(66556008)(38100700002)(86362001)(71200400001)(122000001)(38070700005)(26005)(9686003)(508600001)(53546011)(6506007)(7696005)(110136005)(54906003)(55016003);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VjJVbFAzeWN2VitobGxWRmIwMlo5TnJkemtBV3Y5T0FrOUxvOGtCNGhsSkdW?=
- =?utf-8?B?UVAvZWN0L1h6OXNROWQ4cmpPb1dFTGZZNmhpbythVGtmT0RLb0Fva213aXU0?=
- =?utf-8?B?MmNkWCttdTFxN29wcHBMeWg5eXVtdy9KdHh4MDF4QzZLczRwcXBsdzBlVHZ6?=
- =?utf-8?B?VDBESVZ3ZGJNLzAyeU5Tbkh3RkNDZHFGcnVudHhnTVVOdmxxU3FJdlIvYzFP?=
- =?utf-8?B?aUt2QTlpL0tLbnU5UnRDd0tWbE1NVktlckpVaHkrRVJFQVNIZEk5a1k2OEVp?=
- =?utf-8?B?elFkeDduSmkvam4wcHNaZ0xTaEpTdktmaVJsZnVyZzhMWjcrNGo1c1BRRWRn?=
- =?utf-8?B?YmtEelJnV2VtTDZNK1NNYSs4Q2hHUm13dU53cHA1WVJuNkRZOFRhS0NidUta?=
- =?utf-8?B?dHVGb2FiTlVQUEdoS2JtR2ZsZ1R3blp2WExNNXRjeExGUDJGbDNoTXVXekZa?=
- =?utf-8?B?TEE4VjlUK3lLZ25HZ1JKakJjdGlUZHh0blJYazdkWmhsMCtlaVlBbmp1ZUpS?=
- =?utf-8?B?RTl1UWN0aWlNMm5mczRYeDJsTnQ0cjVLWVQrYW5tZm1qNDhMZDB5T1NjQjNG?=
- =?utf-8?B?UEVxcFRpdWZQMHlVU0w3MUZqSjdRM0RrOXFITWQ5OWwrL241Z0pKeVYxdW9H?=
- =?utf-8?B?OFd5T3VoMk54WEJMNE85aENnZk9rckRJWG1EdDZSWDZ1K1ArbzZUaE5LalBX?=
- =?utf-8?B?SlEwS3ZoNUVmYkl2VHZ4SXVhRWExSU9DTGxTK3NYVWN3cXVpQU5Ud2ZtVjJn?=
- =?utf-8?B?VVNBZEtwUlBZUEpQaTNaSGxKc3RsbUM5Z08zVW1kVFlSVU1yd0NKZm9HNnd1?=
- =?utf-8?B?cGUxcExyRzZBTHNPUGRlTG1WVG0zNXBpVEFTbVhWS3NLQVZ2NXltUStjODZH?=
- =?utf-8?B?R0p4blQvcEh3bjF2YkQyWUVMSG5DRDVwRHVoRGZ1ckJaSnRZWisweG51bU9W?=
- =?utf-8?B?UWZ2V1h4bXh6NUtNaGxteTQ0V0tlZTBkUVV5a2N0ZXN5eXlPdlYwMm9iMDVT?=
- =?utf-8?B?c0tHYjJ0YlNXSU1UZFJ2Y2k0aGk4MzU4ejJ4VmpaellVVSs1QXJmODZGQXVq?=
- =?utf-8?B?ZTRmdTVmV01ndDcxZzNXVktJOXBMUjdLUGtrM25laFd5Q2t6Z1VUejZWT21H?=
- =?utf-8?B?aDM4Y1ZkUitxMGk1VUJMQnBudHdvOWJhUDNEUG1kdG0vVkdIVXRxRVNNVVdO?=
- =?utf-8?B?U1RlMWs3WXRyRzZGa0YvQmdhYjZGa3B2Ulg2a08xL1FwcTV5ZmtjMzJEeUZH?=
- =?utf-8?B?OW45c1lNYTRwd0kyTVN6K1RIaGpTbmhFdnh1eDFJYkQvS09VUWM0Nmhwa2dE?=
- =?utf-8?B?bElkWTBlMXVyd24xdU9rVG5ydVdJNWpkSHRsYndhZmVIRG1vOHhCTjJWY2Rs?=
- =?utf-8?B?eG4xMy96dDhLWkJTeGJYd3owZ052VXJiU0Z2NU12OXltWFZtOHhUMG9DWlhw?=
- =?utf-8?B?bVJqaFNMd1RJQnBHbVhWWWNmVmUyeG01VUVjaDlkd1J3LzQ4QXhYRGtnOHd2?=
- =?utf-8?B?K1p6OU43ZVdiNkxHM21OSVQyeXdIQ1RXMUdENGpwK1R4dXYrdVpxSUdKdVd3?=
- =?utf-8?B?NkU4RjdiY1BjWjNBd2UyWlRSTU9qWEN0dHQ0dE5LWGZQYXJWbDU3SlAzcUdM?=
- =?utf-8?B?eS9Wc1l5bHN5d2ZOaGZ3S0F6REI4aUZsZE1PbVFaejBtT2pwM1M4YUIzLzJm?=
- =?utf-8?B?VmR5RGlidEIwNGtWYkRIVGI5aUNvQklOT05XVmNSTHJKRDVVTXdYTG9Ob2hE?=
- =?utf-8?B?L25mMWpxRG9pdWttUXRlMlNFd0RpM0NUbEpJd2dDMDJSSVhuTnI0aTh5VlN5?=
- =?utf-8?B?S09QaEM1Q1BmU09YWTcrUVBibHhNOTBVYktMYWwyTGFXcGtxK1hDcVZJc1JJ?=
- =?utf-8?B?MHZhVzRzSXdUVXlDbWFTQUNnaXhDYWJNZXdDaTd5ZkFJRXJUcEZQZVo2N1V4?=
- =?utf-8?B?K0NwbHRvOHVFVjVMWXZZZzhSa2JTNGRpMk5aUU81WUNvT2EyaFdvSU02bVBj?=
- =?utf-8?B?Y21mR1V5WW1ZbGo1TURuL1pxdDljcmRIVWdwcXFKZ0xiVjRQZlFxM2ZyVVFv?=
- =?utf-8?B?Wm9Nc3gwM1pzTUdrZGxxd3Y2MysybHc1S2puQk1aK2FLVFZobkRUQ0pvdDhi?=
- =?utf-8?B?MTA2TEdoWTN6QlVEVU9adlpaSG53cWZUc2YwNTNRSXRQaTFZWDlaT2RZV1hX?=
- =?utf-8?B?RldxYTF6UHhFL2hhVXJVaWZZV1gvTVpoZE5QZmYwN0VqeER3WForNHRJTmM3?=
- =?utf-8?B?MVR3TEVOZTJzN09qNlJpYlpRK0FPVnJjdEtyNzFzUHFkK21HZENpMmhYLzYv?=
- =?utf-8?B?TEhhUS9Pbk12dzEwSGlOREpEeHIydUxjUldXWFVHWmorazVYU2hvZz09?=
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23; Tue, 10 May
+ 2022 08:59:35 +0000
+Received: from BN1NAM02FT064.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:108:cafe::25) by BN9PR03CA0931.outlook.office365.com
+ (2603:10b6:408:108::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21 via Frontend
+ Transport; Tue, 10 May 2022 08:59:35 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 149.199.62.198) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=amd.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ amd.com discourages use of 149.199.62.198 as permitted sender)
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT064.mail.protection.outlook.com (10.13.2.170) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5227.15 via Frontend Transport; Tue, 10 May 2022 08:59:35 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 10 May 2022 01:59:34 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 10 May 2022 01:59:34 -0700
+Envelope-to: buildroot@buildroot.org, luca@lucaceresoli.net,
+ giulio.benetti@benettiengineering.com, peter@korsgaard.com,
+ michal.simek@amd.com, wesley@sonifex.co.uk, neal.frager@amd.com
+Received: from [172.25.185.186] (port=56686 helo=xcoapps69.xilinx.com)
+ by smtp.xilinx.com with esmtp (Exim 4.90)
+ (envelope-from <neal.frager@amd.com>)
+ id 1noLiQ-000EwV-9K; Tue, 10 May 2022 01:59:34 -0700
+To: <buildroot@buildroot.org>
+Date: Tue, 10 May 2022 02:59:30 -0600
+Message-ID: <20220510085930.3646411-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB7758.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c123908-f3f2-43e9-6d41-08da325ed56b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2022 08:26:51.4623 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1HJASPaoxS4GWQUyVXQ2XqnfVhvoYWmj4BonPI8lQIE49mrz3aa+xP8sW+MthrVr5ghkHaxPv6S45Hf/5Qy2EA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR02MB8927
-Subject: Re: [Buildroot] [PATCH v1 1/2] add
- configs/zynqmp_kria_kv260_defconfig
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: aed574c5-2f59-46af-b892-08da326367e8
+X-MS-TrafficTypeDiagnostic: DM5PR02MB2652:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR02MB2652DF75DB76E93799B6FC17F0C99@DM5PR02MB2652.namprd02.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 2
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fJkirANyu6/AheB8Zdbsl2PFTFs66vkS9pMv7pisxMRCTiLCydKaeagZ9t/KMeqNqsIH0Cp5F1bImjMGCwbtFgAon44OlRk7OSU6SwNyNr0Iou3hyFhmYj77eiq/babi9wZ145k2+BCBtWx0O/945HkSn11LEUBS5mpeQvxnzNsZJnESDlw6RAGG1PrxbkdxcOZ8IT+5mTdl3DNhox8eexYBZBmFQrQxmps1kZeSX5+kV1p0amf5wsW2fPg7z6ZtRXy8tV39dExxo6Ee11fO5brPuEWLBwf/b4im3iUBHE59/no0Otjpwq/XwSKRf2scekgoCeVqKLLurskKVrU6gZhEsonHI2QjzWoxX3jXBp4HcJcAcAQlY9zSEPcrhv2Yw4IydK+tmkynGGAKllE5HMvc3jOQ6t+GefMPwwPwH0Wj0Gr5onqORnlWRvqj8F/3bl6ovgCShXk1aPHy7AqXy4s5iQ4j/DLwTh/k12zOBNzYdghH4g3G15yajO7bp8WJ8m5Iurt22C0NNWJZkb3qyKQtxfhCKpNidQTcsb39hDlEWikKGzmXJx9xbdWEQZt23NCTHNSDOYz7UW1+Kxe0H3eblmydWd3mlkQ/nz0XoLfl4UCpUhPu0YKKRIt0EZnccxRsqGOwu5uoQBU1dqLHZGkKaVqbRaofB/KrJkpb4j0CULoKIum2PETQMslA4vM+EVQCQA34yEEJWYE5IU78qJXZodf3c6n++P7/L8FM/SKT3IC3SVVAxlICDGPpaMAwjaWrcvtQehxxnp60sPpkjUgBkr2X1XPoTUFkLq4K8pY=
+X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:xsj-pvapexch02.xlnx.xilinx.com;
+ PTR:unknown-62-198.xilinx.com; CAT:NONE;
+ SFS:(13230001)(4636009)(46966006)(40470700004)(336012)(47076005)(70206006)(356005)(8676002)(70586007)(40460700003)(82310400005)(4326008)(2906002)(26005)(2616005)(83380400001)(6666004)(1076003)(35950700001)(86362001)(9786002)(8936002)(54906003)(6916009)(5660300002)(36756003)(508600001)(19627235002)(316002)(44832011)(7636003)(966005)(102446001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: xilinx.onmicrosoft.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 08:59:35.0771 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aed574c5-2f59-46af-b892-08da326367e8
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
+ Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT064.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB2652
+Subject: [Buildroot] [PATCH v1 1/1] configs/zynqmp_kria_kv260_defconfig:
+ fixes to boot.bin and u-boot.itb generation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -165,35 +124,260 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "luca@lucaceresoli.net" <luca@lucaceresoli.net>,
- "giulio.benetti@benettiengineering.com"
- <giulio.benetti@benettiengineering.com>,
- "michal.simek@amd.com" <michal.simek@amd.com>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: wesley@sonifex.co.uk, Neal Frager <neal.frager@amd.com>,
+ luca@lucaceresoli.net, giulio.benetti@benettiengineering.com,
+ michal.simek@amd.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Wesley,
+This patch includes the following corrections:
+  - additional kria k26 u-boot configs added to uboot.fragment
+  - atf moved to uart1 with ZYNQMP_CONSOLE=cadence1 define
+  - uboot patch added for correct fit-dtb.blob generation for kria starter kits
+  - readme.txt file updated with additional details for qspi flash programming
 
-On 10/05/2022 05:29, Neal Frager wrote:
-> Hi Wesley,
->
-> Simplifying the steps, here is what you need to do to get this working.
+Please note that the u-boot patch has not been upstreamed yet.
+It is being reviewed to find the best solution to handle the dtb overlays moving forward.
+For this reason, this is a temporary u-boot patch designed to enable buildroot development.
 
-> Success! - Following your instructions, my board is now booting into Linux from the SD card. My Linux image is not fully booting to a login prompt however but I have made some device tree changes so it is likely that I have broken something in there so will investigate that. I suspect a clean build will sort that.
+This patch has been build and run tested on a kria kv260 starter kit.
 
-> Thanks for your help with the u-boot side of things.
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+---
+ board/zynqmp/kria/kv260/uboot.fragment        |  14 ++
+ ...qmp-add-kria-fit-dtb.blob-generation.patch | 127 ++++++++++++++++++
+ board/zynqmp/kria/readme.txt                  |  28 +++-
+ configs/zynqmp_kria_kv260_defconfig           |   2 +
+ 4 files changed, 165 insertions(+), 6 deletions(-)
+ create mode 100644 board/zynqmp/kria/patches/uboot/0001-arm64-zynqmp-add-kria-fit-dtb.blob-generation.patch
 
-Great news!  Just so you know, I have a patch coming that will remove the manual fit-dtb.blob steps.
+diff --git a/board/zynqmp/kria/kv260/uboot.fragment b/board/zynqmp/kria/kv260/uboot.fragment
+index e1aca68692..23529e7fdb 100644
+--- a/board/zynqmp/kria/kv260/uboot.fragment
++++ b/board/zynqmp/kria/kv260/uboot.fragment
+@@ -1 +1,15 @@
+ CONFIG_DEFAULT_DEVICE_TREE="zynqmp-smk-k26-revA"
++CONFIG_SYS_SPI_U_BOOT_OFFS=0xF80000
++CONFIG_DTB_RESELECT=y
++CONFIG_MULTI_DTB_FIT=y
++CONFIG_DMA=y
++CONFIG_XILINX_DPDMA=y
++CONFIG_PHY=y
++CONFIG_PHY_XILINX_ZYNQMP=y
++CONFIG_PINCTRL=y
++CONFIG_PINCONF=y
++CONFIG_POWER_DOMAIN=y
++CONFIG_ZYNQMP_POWER_DOMAIN=y
++CONFIG_DM_RESET=y
++CONFIG_RESET_ZYNQMP=y
++CONFIG_VIDEO_ZYNQMP_DPSUB=y
+diff --git a/board/zynqmp/kria/patches/uboot/0001-arm64-zynqmp-add-kria-fit-dtb.blob-generation.patch b/board/zynqmp/kria/patches/uboot/0001-arm64-zynqmp-add-kria-fit-dtb.blob-generation.patch
+new file mode 100644
+index 0000000000..229ed57bc0
+--- /dev/null
++++ b/board/zynqmp/kria/patches/uboot/0001-arm64-zynqmp-add-kria-fit-dtb.blob-generation.patch
+@@ -0,0 +1,127 @@
++From 4c2fd6d17cea1a304a3bbfb6bf8bacb9276def05 Mon Sep 17 00:00:00 2001
++From: Neal Frager <neal.frager@amd.com>
++Date: Tue, 10 May 2022 09:28:30 +0100
++Subject: [PATCH 1/1] arm64: zynqmp: add kria fit-dtb.blob generation
++
++This patch adds the support for generating a fit-dtb.blob
++for Kria K26 SOM starter kits.
++
++Signed-off-by: Neal Frager <neal.frager@amd.com>
++---
++ arch/arm/mach-zynqmp/mkimage_fit_atf.sh | 10 ++++
++ som.its                                 | 80 +++++++++++++++++++++++++
++ 2 files changed, 90 insertions(+)
++ create mode 100644 som.its
++
++diff --git a/arch/arm/mach-zynqmp/mkimage_fit_atf.sh b/arch/arm/mach-zynqmp/mkimage_fit_atf.sh
++index 72a8a3eb77..18ca84c35c 100755
++--- a/arch/arm/mach-zynqmp/mkimage_fit_atf.sh
+++++ b/arch/arm/mach-zynqmp/mkimage_fit_atf.sh
++@@ -112,8 +112,18 @@ __TEE
++ fi
++ 
++ MULTI_DTB=`awk '/CONFIG_MULTI_DTB_FIT / { print $3 }' include/generated/autoconf.h`
+++DEFAULT_DT=`awk '/CONFIG_DEFAULT_DEVICE_TREE / { print $3 }' include/generated/autoconf.h`
++ 
++ if [ 1"$MULTI_DTB" -eq 11 ]; then
+++if [[ ${DEFAULT_DT} == *"zynqmp-smk-k26-revA"* ]]; then
+++	# Build overlays
+++	fdtoverlay -o zynqmp-smk-k26-xcl2g-revA-sck-kv-g-revA.dtb -i arch/arm/dts/zynqmp-smk-k26-revA.dtb arch/arm/dts/zynqmp-sck-kv-g-revA.dtbo
+++	fdtoverlay -o zynqmp-smk-k26-xcl2g-revA-sck-kv-g-revB.dtb -i arch/arm/dts/zynqmp-smk-k26-revA.dtb arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
+++	fdtoverlay -o zynqmp-smk-k26-xcl2g-revA-sck-kr-g-revA.dtb -i arch/arm/dts/zynqmp-smk-k26-revA.dtb arch/arm/dts/zynqmp-sck-kr-g-revA.dtbo
+++	fdtoverlay -o zynqmp-smk-k26-xcl2g-revA-sck-kr-g-revB.dtb -i arch/arm/dts/zynqmp-smk-k26-revA.dtb arch/arm/dts/zynqmp-sck-kr-g-revB.dtbo
+++
+++	tools/mkimage -E -f -q som.its -B 0x8 fit-dtb.blob
+++fi
++ 	cat << __FDT_IMAGE_EOF
++ 		fdt_1 {
++ 			description = "Multi DTB fit image";
++diff --git a/som.its b/som.its
++new file mode 100644
++index 0000000000..4fd9a9e2a2
++--- /dev/null
+++++ b/som.its
++@@ -0,0 +1,80 @@
+++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+++/dts-v1/;
+++/ {
+++	description = "SOM versions";
+++	images {
+++		fdt_1 {
+++			description = "zynqmp-smk-k26-revA";
+++			data = /incbin/("arch/arm/dts/zynqmp-smk-k26-revA.dtb");
+++			type = "flat_dt";
+++			arch = "arm64";
+++			compression = "none";
+++			hash {
+++				algo = "md5";
+++			};
+++		};
+++		fdt_2 {
+++			description = "zynqmp-smk-k26-xcl2g-revA-sck-kv-g-revA";
+++			data = /incbin/("zynqmp-smk-k26-xcl2g-revA-sck-kv-g-revA.dtb");
+++			type = "flat_dt";
+++			arch = "arm64";
+++			compression = "none";
+++			hash {
+++				algo = "md5";
+++			};
+++		};
+++		fdt_3 {
+++			description = "zynqmp-smk-k26-xcl2g-revA-sck-kv-g-revB";
+++			data = /incbin/("zynqmp-smk-k26-xcl2g-revA-sck-kv-g-revB.dtb");
+++			type = "flat_dt";
+++			arch = "arm64";
+++			compression = "none";
+++			hash {
+++				algo = "md5";
+++			};
+++		};
+++		fdt_4 {
+++			description = "zynqmp-smk-k26-xcl2g-revA-sck-kr-g-revA";
+++			data = /incbin/("zynqmp-smk-k26-xcl2g-revA-sck-kr-g-revA.dtb");
+++			type = "flat_dt";
+++			arch = "arm64";
+++			compression = "none";
+++			hash {
+++				algo = "md5";
+++			};
+++		};
+++		fdt_5 {
+++			description = "zynqmp-smk-k26-xcl2g-revA-sck-kr-g-revB";
+++			data = /incbin/("zynqmp-smk-k26-xcl2g-revA-sck-kr-g-revB.dtb");
+++			type = "flat_dt";
+++			arch = "arm64";
+++			compression = "none";
+++			hash {
+++				algo = "md5";
+++			};
+++		};
+++	};
+++	configurations {
+++		default = "config_1";
+++		config_1 {
+++			description = "zynqmp-smk-k26-revA";
+++			fdt = "fdt_1";
+++		};
+++		config_2 {
+++			description = "zynqmp-smk-k26-xcl2g-revA-sck-kv-g-revA";
+++			fdt = "fdt_2";
+++		};
+++		config_3 {
+++			description = "zynqmp-smk-k26-xcl2g-revA-sck-kv-g-revB";
+++			fdt = "fdt_3";
+++		};
+++		config_4 {
+++			description = "zynqmp-smk-k26-xcl2g-revA-sck-kr-g-revA";
+++			fdt = "fdt_4";
+++		};
+++		config_5 {
+++			description = "zynqmp-smk-k26-xcl2g-revA-sck-kr-g-revB";
+++			fdt = "fdt_5";
+++		};
+++	};
+++};
++-- 
++2.17.1
++
+diff --git a/board/zynqmp/kria/readme.txt b/board/zynqmp/kria/readme.txt
+index a3a4b5e65a..d64427a52c 100644
+--- a/board/zynqmp/kria/readme.txt
++++ b/board/zynqmp/kria/readme.txt
+@@ -56,23 +56,39 @@ Where 'sdX' is the device node of the SD.
+ 
+ Eject the SD card, insert it in the board, and power it up.
+ 
+-How to write the boot.bn to QSPI boot flash
+-===========================================
++How to write the boot.bn and u-boot.itb to QSPI boot flash
++==========================================================
+ 
+ The Kria SOMs are preconfigured to boot initially from QSPI.
+ This makes these boards different from other ZynqMP boards
+-in that the boot.bin needs to be flashed into the QSPI boot
+-flash such that the U-Boot SPL can then load all of the
+-remaining images from the SD card.
++in that the boot.bin and u-boot.itb files need to be flashed 
++into the QSPI boot flash such that U-Boot can then load all 
++of the remaining images from the SD card.
+ 
+ In addition, the KV260 Starter Kit QSPI comes pre-flashed with
+ a utility designed to make updating the QSPI flash memory
+ easier.
+ 
+-Instructions for using these utilities to update the boot.bin
++Instructions for using these utilities to update the files
+ in QSPI flash can be found on the wiki link below.
+ 
+ https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM#Boot-Firmware-Updates
+ 
++Additionally, it is possible to use u-boot for updating the
++QSPI with new boot.bin and u-boot.itb images with the u-boot
++commands below:
++
++Flashing u-boot.itb:
++    $ sf probe
++    $ fatload mmc 1 0x1000000 u-boot.itb
++    $ sf erase 0xf80000 (size of u-boot.itb)
++    $ sf write 0x1000000 0xf80000 (size of u-boot.itb)
++
++Flashing boot.bin:
++    $ sf probe
++    $ fatload mmc 1 0x1000000 boot.bin
++    $ sf erase 0x200000 (size of boot.bin)
++    $ sf write 0x1000000 0x200000 (size of boot.bin)
++
+ It is possible to boot the Buildroot generated SD card image without
+ updating the QSPI boot.bin image, so this is an optional step.
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index d4a72a0d19..42b8fdaf84 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -16,6 +16,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.1)/xlnx_rebase_v2.6_2022.1.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="ZYNQMP_CONSOLE=cadence1"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+@@ -35,3 +36,4 @@ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
++BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches"
+-- 
+2.17.1
 
-With my next patch to buildroot, the whole build process will be automated.
-
-Stay tuned!
-
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
