@@ -4,64 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56C4DC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 12:34:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A3DFC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 13:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D2AD640AA8;
-	Tue, 10 May 2022 12:34:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3B9B40AA6;
+	Tue, 10 May 2022 13:02:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y19xyoP5cbu5; Tue, 10 May 2022 12:34:29 +0000 (UTC)
+	with ESMTP id B2W-Hs0sK2Px; Tue, 10 May 2022 13:02:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CDBD140144;
-	Tue, 10 May 2022 12:34:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 977801BF255
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 12:34:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8A9D140327;
+	Tue, 10 May 2022 13:02:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5701F1BF255
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 13:02:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83985400FB
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 12:34:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 450EC60FAF
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 13:02:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KE9kJOlJ3hEd for <buildroot@lists.busybox.net>;
- Tue, 10 May 2022 12:34:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.40])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2EC3840144
- for <buildroot@buildroot.org>; Tue, 10 May 2022 12:34:25 +0000 (UTC)
-Received: from opfedar03.francetelecom.fr (unknown [xx.xx.xx.5])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by opfedar24.francetelecom.fr (ESMTP service) with ESMTPS id 4KyHXv24k1z5vdX; 
- Tue, 10 May 2022 14:34:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.com;
- s=ORANGE001; t=1652186063;
- bh=jeHlnca7c35duMwNBQAMaAy2aoGE7azOEKntLE0I+HM=;
- h=From:To:Subject:Date:Message-ID:MIME-Version:
- Content-Transfer-Encoding:Content-Type;
- b=xYNQ1yODS52mPEaOTybhd9jCauKvzT3VemOfooQk/PpZrhHFrQxJprcWm/E44iCgc
- sAgOyUsGNUN5nw1vMFmuVbIFc2EZ9qAB3u5trNBGzVS+p7CMBQe612EFHN+ATYNmGK
- 5zs7HXv69ZGhY4PR17+3tZ3wtOjouwXNb2P1JyZ8fg/Kjj5ZfnHPO+rdzKxlGefUfK
- lNuAd/TTM4dlOxec2dveQpbGjBY3eZUhHDe7pei+cHyRs5ElV92zIXogk2Xgt2FuhG
- k2ZLP0lgm3J5jK7xr1XmMWx+co7++NnVa4jFWbIQRGvPrDSCeTRjmanMi0urkSTR+F
- ZVfHykxeLu/pQ==
-Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Tue, 10 May 2022 14:34:20 +0200
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-Date: Tue, 10 May 2022 14:34:20 +0200
-Message-ID: <11033_1652186063_627A5BCF_11033_340_1_f3b8c61ce2f116c06c455a1f0163db9ca541896a.1652186060.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX601.corporate.adroot.infra.ftgroup
- (10.115.26.29) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-Subject: [Buildroot] [PATCH] fs/oci: entrypoint and command are
- space-separated lists
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=googlemail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MhS76O1Yb0mU for <buildroot@lists.busybox.net>;
+ Tue, 10 May 2022 13:02:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0B2CF60FA5
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 13:02:54 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id l18so32767852ejc.7
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 06:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id;
+ bh=bfhhAL4Dyfmr4b6GIRaxtqHTchOA03vZdScpmivVza4=;
+ b=QDsL2CXfsfZUaO2GXHzaKR3kFyA9Pa68IRlRc7gIryMq9yL9bBIUnkgueL2Xl8746K
+ v5l1Zl9X60CQs7xkxHGzu/yJBPOg2GAoWl1UqEZJnpuBt/ly+dNsFyTwp3hOmQgn7r21
+ rqt/5tswllfAEg6utWjesuop9NjQABdUE/pfGiBZB9ahkE9WJjDJOa4j473mGHJH+cvf
+ W/oovapVBD8lcCRep+eKxPUJyegvq9Kvxd+OvedtNQbI/V+Md0RhhtLgC57siYqRXuSH
+ 9xuA/5deFUNXyAwgDjwWISItlxD1LqHnCIvRPKkKriTsfNt05FbhQjHvO8KD5Wf3NfbT
+ tYsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id;
+ bh=bfhhAL4Dyfmr4b6GIRaxtqHTchOA03vZdScpmivVza4=;
+ b=NPkiyG5Thgi1e+52dZtt6upxG+cRlyF89Tyn2nqIFV8zlFjHFAgtzIbsM8iHP6cZ3h
+ znklJjoZI7/dicxJqDuigog7Q/6AGKqpPoXNVu8GDBIZ6obd60zEtxXkEpRn4GITYNbE
+ KGbcHIAkvN65i9oxrwu9wnleV6vhg+OEMzBhiavCy96LAON8GlqXW6iiC6rXpODMvNb2
+ US2eGZaMYkKb0DQNtgEW0Az3Txi9fVSsKyVduEyNIwz0RR4SxXl4uPBTr/7zA7JOYJR3
+ zJpo/KlOT6he4rslkHc682JZggJOX1N50WuDeeo2JUVl19pdNGdZdxidwA3TVZkpe6Q7
+ cpKg==
+X-Gm-Message-State: AOAM530Yqs7ZxbxvYv5QQ6LzUuvgkrYRBq28eptlrcUBEBOljcOuEnbx
+ Dn4hA5DPTLfHeie9OCBidikCWV0gk6k=
+X-Google-Smtp-Source: ABdhPJzIy6j0YRL4q67BLfMI46dL24l4pw+JKZ5zfya5W25s1qF5J5/lszk3TcAksFtEttm5CfrWug==
+X-Received: by 2002:a17:907:1c25:b0:6f4:342f:51e6 with SMTP id
+ nc37-20020a1709071c2500b006f4342f51e6mr19492608ejc.740.1652187772853; 
+ Tue, 10 May 2022 06:02:52 -0700 (PDT)
+Received: from development1.visionsystems.de (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ l17-20020aa7cad1000000b0042617ba63bfsm7613366edt.73.2022.05.10.06.02.52
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Tue, 10 May 2022 06:02:52 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Tue, 10 May 2022 15:02:48 +0200
+Message-Id: <20220510130248.10966-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.17.0
+Subject: [Buildroot] [PATCH] package/python-pyrsistent: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,98 +83,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin@orange.com>,
- Sergio Prado <sergio.prado@e-labworks.com>,
- Matthew Weber <matthew.weber@collins.com>
+From: yegorslists--- via buildroot <buildroot@buildroot.org>
+Reply-To: yegorslists@googlemail.com
+Cc: Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-The prompt and variable name for the OCI "entrypoint arguments" are
-somewhat incorrect. Indeed, they are in fact use to set the image
-"command". Yet, using "command" would be confusing too, because the
-interplay between entrypoint and command is tricky [0].
-
-TL-DR; when both entrrypoint and command are set, command acts as
-arguments passed to the entrypoint.
-
-Additionally, we currently can only pass a single item as either
-entrypoint or command. This precludes passing actual arguments to the
-entrypoint, or passing multiple arguments as command.
-
-For example:
-    BR2_TARGET_ROOTFS_OCI_ENTRYPOINT="/bin/tini -g -p SIGTERM --"
-    BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS="/usr/bin/env sh"
-
-generates an images with (only relevant fileds are included below):
-
-    {
-        "config": {
-            "Entrypoint": [ "/bin/tini -g -p SIGTERM --" ],
-            "Cmd": [ "/usr/bin/env sh" ]
-        }
-    }
-
-This is obviously incorrect, and not what one would expect:
-
-    {
-        "config": {
-            "Entrypoint": [ "/bin/tini", "-g", "-p", "SIGTERM --" ],
-            "Cmd": [ "/usr/bin/env", "sh" ]
-        }
-    }
-
-Fix that by passing as-many --entrypoint or --cmd as there are
-space-separated items in the corresponding lists.
-
-[0] https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>
-Cc: Matthew Weber <matthew.weber@collins.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- fs/oci/oci.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                                |  1 +
+ package/python-pyrsistent/Config.in              |  6 ++++++
+ package/python-pyrsistent/python-pyrsistent.hash |  5 +++++
+ package/python-pyrsistent/python-pyrsistent.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-pyrsistent/Config.in
+ create mode 100644 package/python-pyrsistent/python-pyrsistent.hash
+ create mode 100644 package/python-pyrsistent/python-pyrsistent.mk
 
-diff --git a/fs/oci/oci.mk b/fs/oci/oci.mk
-index aa81920d36..f98db0a8c8 100644
---- a/fs/oci/oci.mk
-+++ b/fs/oci/oci.mk
-@@ -15,13 +15,13 @@ OCI_SLOCI_IMAGE_OPTS += $(and $(GO_GOARM),--arch-variant v$(GO_GOARM))
- # entrypoint
- OCI_ENTRYPOINT = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT))
- ifneq ($(OCI_ENTRYPOINT),)
--OCI_SLOCI_IMAGE_OPTS += --entrypoint "$(OCI_ENTRYPOINT)"
-+OCI_SLOCI_IMAGE_OPTS += $(patsubst %,--entrypoint %,$(OCI_ENTRYPOINT))
- endif
- 
- # entrypoint arguments
- OCI_ENTRYPOINT_ARGS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS))
- ifneq ($(OCI_ENTRYPOINT_ARGS),)
--OCI_SLOCI_IMAGE_OPTS += --cmd "$(OCI_ENTRYPOINT_ARGS)"
-+OCI_SLOCI_IMAGE_OPTS += $(patsubst %,--cmd %,$(OCI_ENTRYPOINT_ARGS))
- endif
- 
- # author
+diff --git a/package/Config.in b/package/Config.in
+index 90357240b6..9bc32c4f9e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1178,6 +1178,7 @@ menu "External python modules"
+ 	source "package/python-pyqt5/Config.in"
+ 	source "package/python-pyratemp/Config.in"
+ 	source "package/python-pyroute2/Config.in"
++	source "package/python-pyrsistent/Config.in"
+ 	source "package/python-pysendfile/Config.in"
+ 	source "package/python-pysftp/Config.in"
+ 	source "package/python-pysmb/Config.in"
+diff --git a/package/python-pyrsistent/Config.in b/package/python-pyrsistent/Config.in
+new file mode 100644
+index 0000000000..49f97a00d9
+--- /dev/null
++++ b/package/python-pyrsistent/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYRSISTENT
++	bool "python-pyrsistent"
++	help
++	  Persistent/Functional/Immutable data structures.
++
++	  http://github.com/tobgu/pyrsistent/
+diff --git a/package/python-pyrsistent/python-pyrsistent.hash b/package/python-pyrsistent/python-pyrsistent.hash
+new file mode 100644
+index 0000000000..70d1cc6fa2
+--- /dev/null
++++ b/package/python-pyrsistent/python-pyrsistent.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pyrsistent/json
++md5  cef3da08455664bf917dcf8cd00d49a4  pyrsistent-0.18.1.tar.gz
++sha256  d4d61f8b993a7255ba714df3aca52700f8125289f84f704cf80916517c46eb96  pyrsistent-0.18.1.tar.gz
++# Locally computed sha256 checksums
++sha256  3ea56753cbd0cc897d3f4414a902f5694991db7c1b3abb8230216381185f9112  LICENSE.mit
+diff --git a/package/python-pyrsistent/python-pyrsistent.mk b/package/python-pyrsistent/python-pyrsistent.mk
+new file mode 100644
+index 0000000000..27ec41028f
+--- /dev/null
++++ b/package/python-pyrsistent/python-pyrsistent.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pyrsistent
++#
++################################################################################
++
++PYTHON_PYRSISTENT_VERSION = 0.18.1
++PYTHON_PYRSISTENT_SOURCE = pyrsistent-$(PYTHON_PYRSISTENT_VERSION).tar.gz
++PYTHON_PYRSISTENT_SITE = https://files.pythonhosted.org/packages/42/ac/455fdc7294acc4d4154b904e80d964cc9aae75b087bbf486be04df9f2abd
++PYTHON_PYRSISTENT_SETUP_TYPE = setuptools
++PYTHON_PYRSISTENT_LICENSE = MIT
++PYTHON_PYRSISTENT_LICENSE_FILES = LICENSE.mit
++
++$(eval $(python-package))
 -- 
-2.25.1
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.17.0
 
 _______________________________________________
 buildroot mailing list
