@@ -4,73 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2675C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 12:19:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56C4DC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 12:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 84B38405E3;
-	Tue, 10 May 2022 12:19:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D2AD640AA8;
+	Tue, 10 May 2022 12:34:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jSAffHMn9dSp; Tue, 10 May 2022 12:19:25 +0000 (UTC)
+	with ESMTP id y19xyoP5cbu5; Tue, 10 May 2022 12:34:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D37940144;
-	Tue, 10 May 2022 12:19:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2CBC41BF255
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 12:19:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CDBD140144;
+	Tue, 10 May 2022 12:34:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 977801BF255
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 12:34:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 142F7823CB
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 12:19:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 83985400FB
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 12:34:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=googlemail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 731eM80wHDXX for <buildroot@lists.busybox.net>;
- Tue, 10 May 2022 12:19:21 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
- [IPv6:2607:f8b0:4864:20::d34])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A4DCE8239A
- for <buildroot@buildroot.org>; Tue, 10 May 2022 12:19:21 +0000 (UTC)
-Received: by mail-io1-xd34.google.com with SMTP id i20so18320920ion.0
- for <buildroot@buildroot.org>; Tue, 10 May 2022 05:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=Jem2BYXQvr30nTE3Aqb9q54qGVZ2gOl7VrnuiUUBuMM=;
- b=I+PJlMbf5y6wVfydkwqiiI3LTRG98U7ph5tepSIvhRzh3gnOqYVbNut9KWp3SAy5iV
- k7vmPUeaUxuyDl3ULpwnO3p/FQGz8PphPZNuvIgQ74fo744eXG0mnCPsmLIDtiv5b7L4
- v7L1t5z5fYIn+I5Rz719KhVY1kWiHq4hwLbYGByRsrtRiQXPxIkj3gVOO8Syy0D5hDm8
- huJcEievCmIOKRtV2eeO7bNaE9ahWvbLgK1MHhyQ03EVkjJWcZIJGuhRBSl4ePu942TA
- hs6wqhOYd5AWMd6g6u6qwRu9DdKesZpJ5CtgdAadIeeCW5Uk4mHC0GvulKy2QdVRu/az
- Y7pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=Jem2BYXQvr30nTE3Aqb9q54qGVZ2gOl7VrnuiUUBuMM=;
- b=v+UvuskFxf1hACJo1oDdwRJYVU77UPNoV9/0vc2mwbZKdR8mHUeO6HSm5B0yi0uFJB
- QzIjIROtWXc29c/0r6uoq8WWky0dVWLfxbMQbdchh04GKpLCwlJjvCAgz5LtQBh9Bwm9
- dGtnfCYQoM91TQ57t8YADpmfJzBQgWxXL1GzjdxueJFjayAvWFYSEVwyduNLLGqORUl8
- b4JWek3utUBWLc2824+BXBjg84OT4sHgdRqJNnEee7STvPJyGn3VRoN1XICy/RuXFiRe
- Gt5FCvPNEsZu+VhcLdkRSYsoViLQOvrZUB8qW0dPwZpdn2RsYCSGBGMsxBTe/YD2RYNX
- Xo8g==
-X-Gm-Message-State: AOAM532x3llAbEq1PH8wHJHk3St1VAEYSo0k7iHI6X6HELaO5Lr6XJhw
- tG/cMVifJIaDs8ngR1FiLfIX9qMOmdwXRX+FkhU=
-X-Google-Smtp-Source: ABdhPJzugdgxqYpaIrhJ1RJoHOK0gNRPOm+gz0K9Vn8wwR8rq817q93lg8IeHNnzkukfNE+Vq79ev2xVYrSJ7KBYiCI=
-X-Received: by 2002:a05:6638:1446:b0:32b:75b9:7ff8 with SMTP id
- l6-20020a056638144600b0032b75b97ff8mr9790228jad.242.1652185160716; Tue, 10
- May 2022 05:19:20 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KE9kJOlJ3hEd for <buildroot@lists.busybox.net>;
+ Tue, 10 May 2022 12:34:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.40])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2EC3840144
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 12:34:25 +0000 (UTC)
+Received: from opfedar03.francetelecom.fr (unknown [xx.xx.xx.5])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by opfedar24.francetelecom.fr (ESMTP service) with ESMTPS id 4KyHXv24k1z5vdX; 
+ Tue, 10 May 2022 14:34:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.com;
+ s=ORANGE001; t=1652186063;
+ bh=jeHlnca7c35duMwNBQAMaAy2aoGE7azOEKntLE0I+HM=;
+ h=From:To:Subject:Date:Message-ID:MIME-Version:
+ Content-Transfer-Encoding:Content-Type;
+ b=xYNQ1yODS52mPEaOTybhd9jCauKvzT3VemOfooQk/PpZrhHFrQxJprcWm/E44iCgc
+ sAgOyUsGNUN5nw1vMFmuVbIFc2EZ9qAB3u5trNBGzVS+p7CMBQe612EFHN+ATYNmGK
+ 5zs7HXv69ZGhY4PR17+3tZ3wtOjouwXNb2P1JyZ8fg/Kjj5ZfnHPO+rdzKxlGefUfK
+ lNuAd/TTM4dlOxec2dveQpbGjBY3eZUhHDe7pei+cHyRs5ElV92zIXogk2Xgt2FuhG
+ k2ZLP0lgm3J5jK7xr1XmMWx+co7++NnVa4jFWbIQRGvPrDSCeTRjmanMi0urkSTR+F
+ ZVfHykxeLu/pQ==
+Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
+ Tue, 10 May 2022 14:34:20 +0200
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+Date: Tue, 10 May 2022 14:34:20 +0200
+Message-ID: <11033_1652186063_627A5BCF_11033_340_1_f3b8c61ce2f116c06c455a1f0163db9ca541896a.1652186060.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220509010917.1485280-1-james.hilliard1@gmail.com>
-In-Reply-To: <20220509010917.1485280-1-james.hilliard1@gmail.com>
-Date: Tue, 10 May 2022 14:15:43 +0200
-Message-ID: <CAGm1_kvp1rHf-=KNEP+Qwy=WjK5imi51D8YzfC61ToWORwuy_w@mail.gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/2] package/pkg-python: add setup.cfg-only
- setuptools project support
+X-Originating-IP: [10.115.27.51]
+X-ClientProxiedBy: OPE16NORMBX601.corporate.adroot.infra.ftgroup
+ (10.115.26.29) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+Subject: [Buildroot] [PATCH] fs/oci: entrypoint and command are
+ space-separated lists
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,88 +73,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot <buildroot@buildroot.org>
+Cc: "Yann E. MORIN" <yann.morin@orange.com>,
+ Sergio Prado <sergio.prado@e-labworks.com>,
+ Matthew Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi James,
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-On Mon, May 9, 2022 at 3:09 AM James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> Some projects have been removing their setup.py shims under the
-> assumption that they are not needed due to setuptools being usable
-> via pep517, however this is not actually the case as it is not
-> possible to bootstrap setuptools without setup.py style builds as
-> setuptools has a dependency on wheel when being used via pep517
-> which is itself not installable via pep517 as that would create a
-> dependency cycle between wheel and setuptools(which means wheel
-> itself must use a legacy setup.py build/installation for itself).
->
-> In addition our pep517 toolchain itself requires setuptools for
-> building/installing dependencies, although it would appear these
-> dependencies will eventually move to flit. Until this is resolved
-> we must use setup.py style builds for setuptools packages.
->
-> Since it is not yet possible to convert setup.py based setuptools
-> builds to pep517 based setuptools builds we simply need to execute
-> the setuptools shim code directly if the setup.py file is missing.
->
-> See:
-> https://setuptools.pypa.io/en/latest/setuptools.html#setup-cfg-only-projects
->
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+The prompt and variable name for the OCI "entrypoint arguments" are
+somewhat incorrect. Indeed, they are in fact use to set the image
+"command". Yet, using "command" would be confusing too, because the
+interplay between entrypoint and command is tricky [0].
 
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+TL-DR; when both entrrypoint and command are set, command acts as
+arguments passed to the entrypoint.
 
-Regards,
-Yegor
+Additionally, we currently can only pass a single item as either
+entrypoint or command. This precludes passing actual arguments to the
+entrypoint, or passing multiple arguments as command.
 
-> ---
->  package/pkg-python.mk | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
->
-> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-> index 452fa0d3ea..5794e3a195 100644
-> --- a/package/pkg-python.mk
-> +++ b/package/pkg-python.mk
-> @@ -86,6 +86,9 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
->         $(PKG_PYTHON_ENV) \
->         SETUPTOOLS_USE_DISTUTILS=stdlib
->
-> +PKG_PYTHON_SETUPTOOLS_CMD = \
-> +       $(if $(wildcard $($(PKG)_BUILDDIR)/setup.py),setup.py,-c 'from setuptools import setup;setup()')
-> +
->  PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
->         --install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
->         --prefix=/usr \
-> @@ -180,13 +183,13 @@ endif
->  else ifeq ($$($(2)_SETUP_TYPE),setuptools)
->  ifeq ($(4),target)
->  $(2)_BASE_ENV = $$(PKG_PYTHON_SETUPTOOLS_ENV)
-> -$(2)_BASE_BUILD_CMD = setup.py build
-> -$(2)_BASE_INSTALL_TARGET_CMD = setup.py install --no-compile $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
-> -$(2)_BASE_INSTALL_STAGING_CMD = setup.py install $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
-> +$(2)_BASE_BUILD_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) build
-> +$(2)_BASE_INSTALL_TARGET_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install --no-compile $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
-> +$(2)_BASE_INSTALL_STAGING_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
->  else
->  $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
-> -$(2)_BASE_BUILD_CMD = setup.py build
-> -$(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
-> +$(2)_BASE_BUILD_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) build
-> +$(2)_BASE_INSTALL_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
->  endif
->  else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
->  ifeq ($(4),target)
-> --
-> 2.25.1
->
+For example:
+    BR2_TARGET_ROOTFS_OCI_ENTRYPOINT="/bin/tini -g -p SIGTERM --"
+    BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS="/usr/bin/env sh"
+
+generates an images with (only relevant fileds are included below):
+
+    {
+        "config": {
+            "Entrypoint": [ "/bin/tini -g -p SIGTERM --" ],
+            "Cmd": [ "/usr/bin/env sh" ]
+        }
+    }
+
+This is obviously incorrect, and not what one would expect:
+
+    {
+        "config": {
+            "Entrypoint": [ "/bin/tini", "-g", "-p", "SIGTERM --" ],
+            "Cmd": [ "/usr/bin/env", "sh" ]
+        }
+    }
+
+Fix that by passing as-many --entrypoint or --cmd as there are
+space-separated items in the corresponding lists.
+
+[0] https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
+Cc: Matthew Weber <matthew.weber@collins.com>
+---
+ fs/oci/oci.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/oci/oci.mk b/fs/oci/oci.mk
+index aa81920d36..f98db0a8c8 100644
+--- a/fs/oci/oci.mk
++++ b/fs/oci/oci.mk
+@@ -15,13 +15,13 @@ OCI_SLOCI_IMAGE_OPTS += $(and $(GO_GOARM),--arch-variant v$(GO_GOARM))
+ # entrypoint
+ OCI_ENTRYPOINT = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT))
+ ifneq ($(OCI_ENTRYPOINT),)
+-OCI_SLOCI_IMAGE_OPTS += --entrypoint "$(OCI_ENTRYPOINT)"
++OCI_SLOCI_IMAGE_OPTS += $(patsubst %,--entrypoint %,$(OCI_ENTRYPOINT))
+ endif
+ 
+ # entrypoint arguments
+ OCI_ENTRYPOINT_ARGS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS))
+ ifneq ($(OCI_ENTRYPOINT_ARGS),)
+-OCI_SLOCI_IMAGE_OPTS += --cmd "$(OCI_ENTRYPOINT_ARGS)"
++OCI_SLOCI_IMAGE_OPTS += $(patsubst %,--cmd %,$(OCI_ENTRYPOINT_ARGS))
+ endif
+ 
+ # author
+-- 
+2.25.1
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
