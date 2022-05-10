@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66218C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 19:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35003C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 19:38:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15D508143E;
-	Tue, 10 May 2022 19:38:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D37AA417AA;
+	Tue, 10 May 2022 19:38:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tna5FoWQoPyX; Tue, 10 May 2022 19:38:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mJS2mPZ4g-QV; Tue, 10 May 2022 19:38:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B1CD81422;
-	Tue, 10 May 2022 19:38:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 335AD1BF32E
+	by smtp4.osuosl.org (Postfix) with ESMTP id B626F4179A;
+	Tue, 10 May 2022 19:38:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E0EF1BF9AD
  for <buildroot@lists.busybox.net>; Tue, 10 May 2022 19:38:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 20F764022C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D590417A3
  for <buildroot@lists.busybox.net>; Tue, 10 May 2022 19:38:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NZHyvda92YIe for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x9Au9mINa591 for <buildroot@lists.busybox.net>;
  Tue, 10 May 2022 19:38:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F6094012D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7ED2241794
  for <buildroot@buildroot.org>; Tue, 10 May 2022 19:38:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 43C2385CD9; Tue, 10 May 2022 19:27:37 +0000 (UTC)
+ id 4E4AF85CF8; Tue, 10 May 2022 19:27:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 May 2022 21:37:45 +0200
+Date: Tue, 10 May 2022 21:37:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e15ce8b04d5fa36c51690fbbf8a015e5fee026a1
-X-Git-Newrev: 76da59d6c541c2fcac73932615d775130b6c0588
+X-Git-Oldrev: 76da59d6c541c2fcac73932615d775130b6c0588
+X-Git-Newrev: 787b580af42bcf09aa45162abec23b1e35069ed8
 X-Patchwork-Hint: ignore
-Message-Id: <20220510192737.43C2385CD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bcusdk: drop trailing backslash
+Message-Id: <20220510192737.4E4AF85CF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dropwatch: bump to version 1.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,30 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76da59d6c541c2fcac73932615d775130b6c0588
+commit: https://git.buildroot.net/buildroot/commit/?id=787b580af42bcf09aa45162abec23b1e35069ed8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit e15ce8b04d5fa36c51690fbbf (package/bcusdk: fix build with
-argp-standalone and NLS) added a trailing backslash.  Drop it.
+https://github.com/nhorman/dropwatch/releases/tag/v1.5.4
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bcusdk/bcusdk.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/dropwatch/dropwatch.hash | 2 +-
+ package/dropwatch/dropwatch.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
-index 8006b265b9..f14b23c7cc 100644
---- a/package/bcusdk/bcusdk.mk
-+++ b/package/bcusdk/bcusdk.mk
-@@ -21,7 +21,7 @@ BCUSDK_CONF_OPTS = \
- 	--without-pth-test \
- 	--with-pth=$(STAGING_DIR)/usr
+diff --git a/package/dropwatch/dropwatch.hash b/package/dropwatch/dropwatch.hash
+index 867a7f12fb..24fc03097b 100644
+--- a/package/dropwatch/dropwatch.hash
++++ b/package/dropwatch/dropwatch.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  b748b66a816c1f94531446c0451da5461a4a31b0949244bb867d741c6ac0148b  dropwatch-1.5.3.tar.gz
++sha256  8c43d0c15d0cb9ce179fa1fb0610611723689a6f551b23c70a7ddc1cf068e8d2  dropwatch-1.5.4.tar.gz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
+index 36608ad8b3..33775f6c02 100644
+--- a/package/dropwatch/dropwatch.mk
++++ b/package/dropwatch/dropwatch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--BCUSDK_DEPENDENCIES = libpthsem \
-+BCUSDK_DEPENDENCIES = libpthsem
- 
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- BCUSDK_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
+-DROPWATCH_VERSION = 1.5.3
++DROPWATCH_VERSION = 1.5.4
+ DROPWATCH_SITE = $(call github,nhorman,dropwatch,v$(DROPWATCH_VERSION))
+ DROPWATCH_DEPENDENCIES = libnl readline libpcap host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ DROPWATCH_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
