@@ -1,47 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77017C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 20:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B92B1C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 21:04:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EE976106F;
-	Tue, 10 May 2022 20:27:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F2EA41833;
+	Tue, 10 May 2022 21:04:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JTmJd7lkCTFt; Tue, 10 May 2022 20:27:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Hlx3-xjTgbLP; Tue, 10 May 2022 21:04:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C8C360FDB;
-	Tue, 10 May 2022 20:27:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 441C44170B;
+	Tue, 10 May 2022 21:04:56 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 67EB01BF82F
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 20:27:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BA5F01BF421
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 21:04:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5711E401B6
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 20:27:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A8A4D4170B
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 21:04:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yvbcX_8UueOM for <buildroot@lists.busybox.net>;
- Tue, 10 May 2022 20:27:14 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8714940195
- for <buildroot@buildroot.org>; Tue, 10 May 2022 20:27:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4606685D34; Tue, 10 May 2022 20:16:26 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 10 May 2022 22:25:38 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 68d0aede597d32816c5b2ff32de0ce33cc14eb93
-X-Git-Newrev: c2d3033ddcf0c497cd46744bdd2bee84d18349a4
-X-Patchwork-Hint: ignore
-Message-Id: <20220510201626.4606685D34@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rauc: add option to enable gpt
- support
+ with ESMTP id K7GpJEhX2q6q for <buildroot@lists.busybox.net>;
+ Tue, 10 May 2022 21:04:53 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
+ [89.40.174.40])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 674444170A
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 21:04:53 +0000 (UTC)
+Received: from lmontsouris-655-1-15-199.w80-11.abo.wanadoo.fr
+ ([80.11.122.199]:54238 helo=[192.168.1.105])
+ by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
+ (envelope-from <luca@lucaceresoli.net>)
+ id 1noX2J-000DTo-2J; Tue, 10 May 2022 23:04:51 +0200
+Message-ID: <5c3c886d-002c-7ce9-bb94-43a39b6fa513@lucaceresoli.net>
+Date: Tue, 10 May 2022 23:04:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: it-IT
+To: TIAN Yuanhao <tianyuanhao3@163.com>, buildroot@buildroot.org
+References: <20220509153031.1562693-1-tianyuanhao3@163.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <20220509153031.1562693-1-tianyuanhao3@163.com>
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
+ luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+Subject: Re: [Buildroot] [PATCH 1/1] package/rtl8188eu: enable required
+ kernel options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,59 +73,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2d3033ddcf0c497cd46744bdd2bee84d18349a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Tian,
 
-GPT support was disabled by default before.
+On 09/05/22 17:30, TIAN Yuanhao wrote:
+> Enable Linux kernel configuration options required by the driver.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/951/9514704d6d44fc1b5dd188eac06b269427d3dee2
+>  - http://autobuild.buildroot.org/results/9ea/9ea060cc35e859ebc73c65fe2d1f7478f9b4fa8d
+>  - http://autobuild.buildroot.org/results/658/658c06f8125613b56511d3351cdfd3d8e19d48da
+> 
+> Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
 
-Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rauc/Config.in | 6 ++++++
- package/rauc/rauc.mk   | 7 +++++++
- 2 files changed, 13 insertions(+)
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-diff --git a/package/rauc/Config.in b/package/rauc/Config.in
-index b4f7b81948..2ea51f5bad 100644
---- a/package/rauc/Config.in
-+++ b/package/rauc/Config.in
-@@ -25,6 +25,12 @@ config BR2_PACKAGE_RAUC_DBUS
- 	  This option enables support for controlling rauc through
- 	  D-Bus.
- 
-+config BR2_PACKAGE_RAUC_GPT
-+	bool "GPT support"
-+	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
-+	help
-+	    This option enables support for GPT partition tables.
-+
- config BR2_PACKAGE_RAUC_NETWORK
- 	bool "network support"
- 	select BR2_PACKAGE_LIBCURL
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 7a10470cf2..0520b30521 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -31,6 +31,13 @@ else
- RAUC_CONF_OPTS += --disable-service
- endif
- 
-+ifeq ($(BR2_PACKAGE_RAUC_GPT),y)
-+RAUC_CONF_OPTS += --enable-gpt
-+RAUC_DEPENDENCIES += util-linux-libs
-+else
-+RAUC_CONF_OPTS += --disable-gpt
-+endif
-+
- ifeq ($(BR2_PACKAGE_RAUC_NETWORK),y)
- RAUC_CONF_OPTS += --enable-network
- RAUC_DEPENDENCIES += libcurl
+-- 
+Luca
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
