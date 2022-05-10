@@ -1,46 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52799C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 19:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 401AAC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 19:20:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E0BB140B2C;
-	Tue, 10 May 2022 19:19:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0202582EDB;
+	Tue, 10 May 2022 19:20:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SwaKGJaaeGXE; Tue, 10 May 2022 19:19:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GEOnmVQZuBIz; Tue, 10 May 2022 19:20:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC6DF40236;
-	Tue, 10 May 2022 19:19:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4041A1BF307
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 19:19:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 164ED82A2E;
+	Tue, 10 May 2022 19:20:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F6491BF32E
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 19:20:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F927417FB
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 19:19:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4DEAB82A2E
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 19:20:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SryH7ogDrQCm for <buildroot@lists.busybox.net>;
- Tue, 10 May 2022 19:19:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3180E4181E
- for <buildroot@buildroot.org>; Tue, 10 May 2022 19:19:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0A40F85C8C; Tue, 10 May 2022 19:08:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wBcEdo9WLdZl for <buildroot@lists.busybox.net>;
+ Tue, 10 May 2022 19:20:54 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 27726826BF
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 19:20:53 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 04EB21C0005;
+ Tue, 10 May 2022 19:20:50 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1noVPd-003L1t-Ou; Tue, 10 May 2022 21:20:49 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 10 May 2022 21:19:15 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3ef096786a5d364a7924105d67ff7dcdaaa21f61
-X-Git-Newrev: 60a8db376ee34fc0959ba3441b47e57e294b1abf
-X-Patchwork-Hint: ignore
-Message-Id: <20220510190837.0A40F85C8C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jemalloc: bump to version 5.3.0
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220508154545.313469-1-fontaine.fabrice@gmail.com>
+Date: Tue, 10 May 2022 21:20:49 +0200
+In-Reply-To: <20220508154545.313469-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 8 May 2022 17:45:45 +0200")
+Message-ID: <874k1xfb3i.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/jemalloc: bump to version 5.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,49 +59,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60a8db376ee34fc0959ba3441b47e57e294b1abf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Update indentation in hash fie (two spaces)
+ > Update indentation in hash fie (two spaces)
+ > https://github.com/jemalloc/jemalloc/releases/tag/5.3.0
 
-https://github.com/jemalloc/jemalloc/releases/tag/5.3.0
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/jemalloc/jemalloc.hash | 4 ++--
- package/jemalloc/jemalloc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Committed, thanks.
 
-diff --git a/package/jemalloc/jemalloc.hash b/package/jemalloc/jemalloc.hash
-index 5db53d0535..214fe8062b 100644
---- a/package/jemalloc/jemalloc.hash
-+++ b/package/jemalloc/jemalloc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 34330e5ce276099e2e8950d9335db5a875689a4c6a56751ef3b1d8c537f887f6  jemalloc-5.2.1.tar.bz2
--sha256 94aa2caa98c25d942f58b956c71dba6a99ff98fc3a31cbc669fe2a4cd0268b53  COPYING
-+sha256  2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa  jemalloc-5.3.0.tar.bz2
-+sha256  94aa2caa98c25d942f58b956c71dba6a99ff98fc3a31cbc669fe2a4cd0268b53  COPYING
-diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
-index e43a4f7906..bd8a2d7654 100644
---- a/package/jemalloc/jemalloc.mk
-+++ b/package/jemalloc/jemalloc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JEMALLOC_VERSION = 5.2.1
-+JEMALLOC_VERSION = 5.3.0
- JEMALLOC_SOURCE = jemalloc-$(JEMALLOC_VERSION).tar.bz2
- JEMALLOC_SITE = https://github.com/jemalloc/jemalloc/releases/download/$(JEMALLOC_VERSION)
- JEMALLOC_LICENSE = BSD-2-Clause
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
