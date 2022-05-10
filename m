@@ -4,74 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD155C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 07:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F308C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 07:38:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79E9660F6E;
-	Tue, 10 May 2022 07:14:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F050B60F71;
+	Tue, 10 May 2022 07:38:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1HWDSaTV8xtB; Tue, 10 May 2022 07:14:44 +0000 (UTC)
+	with ESMTP id F7s6AfslrljK; Tue, 10 May 2022 07:38:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BA0160F68;
-	Tue, 10 May 2022 07:14:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A25760F6D;
+	Tue, 10 May 2022 07:38:40 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1B4761BF2BE
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 07:14:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 87F921BF23C
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 07:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08216415D3
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 07:14:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF0AD403C5
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 07:38:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=googlemail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6jZULg5zRGuJ for <buildroot@lists.busybox.net>;
- Tue, 10 May 2022 07:14:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9D32F415D1
- for <buildroot@buildroot.org>; Tue, 10 May 2022 07:14:40 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id g20so18871597edw.6
- for <buildroot@buildroot.org>; Tue, 10 May 2022 00:14:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=from:to:cc:subject:date:message-id;
- bh=TsrLmVhgLVheX25kVcTWsYmL9nEoEv8ge36h8IegZQc=;
- b=TYOeZ69+phUidoyV6CDEBiGFR/B0bkctJDKBDTBfsLaN5XS3R9iz/F/udV8GVOtva0
- jNxb+cTSP36rYa/jYyvxmaDD/cLOaXQ/LE6oWwOzkfSZ4I66NmkRgPJRtnr4d+Q1fgNv
- sptTnku3F65xZKIr2X6NBS2r8zwfgBDqDA+ZLNRfqUJmwlt5PYHecyRtDFzbpRejzZza
- /mFtBRJqOYQBtAXPTaJsuQFKT7TqsEw21kNlz436Ga//mnqIbo4brTo99P/NMIzOHsTG
- kz1ntwaZGvxVJwBXv/n9B4bwEF58QfoJZ3xUdORIL6IArxmROwBX0rIqcjD1W/F4LA5b
- 5zIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id;
- bh=TsrLmVhgLVheX25kVcTWsYmL9nEoEv8ge36h8IegZQc=;
- b=Ga5iZ4ibyZ1mL2NF9VMz5q0QGlIFCgCjMTW9zcMesphIS38XhSoZsYEla7vPaO9vXw
- go9KBgKCMM8PniwJdwHGS0gqa1zX4FtTRN8+uzPj9FXZdkjH/OP5HyRCdF1Iwz/fk2GG
- xBktB7xPR6F74Pqhm7KmZ9J9T1bRBtb/Tueb90rMtXBJopABvxfeWSMcj1bfHgQv3565
- phQQyn/jGVcJTAmWX8vgsq5RAJ+tZVHJvdX5HCndg/KEXP/IJsPqkK1mASV/1onj0qyZ
- VWAi+bq0Ep7CGEn+dlyUt5ElEnJDMXYijfg1nZCXNtdOZUT+KMjxhe22S6mRoHXYpGU2
- hClg==
-X-Gm-Message-State: AOAM531uWJV518nuvCpp7a8v4OaY7dadXkAMbkGdR/6THv8oRBP1k10P
- UZCIQ3X8Cw9WEoUw8IMeXo7/+yESknY=
-X-Google-Smtp-Source: ABdhPJyMKPdAclXjRMuom3dJBCLyRIOF5ztw6RN1lVlSKs2cB4a7PxqYajklBYx4fXul/AWHZsPQmA==
-X-Received: by 2002:a05:6402:5205:b0:427:b431:e0ed with SMTP id
- s5-20020a056402520500b00427b431e0edmr22100455edd.186.1652166878235; 
- Tue, 10 May 2022 00:14:38 -0700 (PDT)
-Received: from development1.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- fi13-20020a170906da0d00b006f3ef214da9sm5901884ejb.15.2022.05.10.00.14.37
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Tue, 10 May 2022 00:14:37 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Tue, 10 May 2022 09:14:30 +0200
-Message-Id: <20220510071430.29647-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.17.0
-Subject: [Buildroot] [PATCH] package/python-rfc3987: new package
+ with ESMTP id U-pAjxGVPhad for <buildroot@lists.busybox.net>;
+ Tue, 10 May 2022 07:38:37 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 25B77403AC
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 07:38:36 +0000 (UTC)
+Received: from methusalix.internal.home.lespocky.de ([92.117.38.142]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MTR6K-1nMwC40hum-00Ti7X; Tue, 10 May 2022 09:38:32 +0200
+Received: from falbala.internal.home.lespocky.de ([192.168.243.94])
+ by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.3) tls
+ TLS_AES_256_GCM_SHA384 (Exim 4.94.2)
+ (envelope-from <post@lespocky.de>)
+ id 1noKRt-0003YT-Lp; Tue, 10 May 2022 09:38:30 +0200
+Date: Tue, 10 May 2022 09:38:23 +0200
+From: Alexander Dahl <post@lespocky.de>
+To: =?iso-8859-1?Q?R=E9mi?= Jouannet <remijouannet@gmail.com>
+Message-ID: <20220510073822.GE19726@falbala.internal.home.lespocky.de>
+Mail-Followup-To: =?iso-8859-1?Q?R=E9mi?= Jouannet <remijouannet@gmail.com>,
+ Remi Jouannet <remi.jouannet@outscale.com>, buildroot@buildroot.org
+References: <1651848863-30178-1-git-send-email-remi.jouannet@outscale.com>
+ <20220506153144.GD19726@falbala.internal.home.lespocky.de>
+ <4faa9736-e53b-629c-e6c8-7588e3cf7ba7@gmail.com>
+MIME-Version: 1.0
+In-Reply-To: <4faa9736-e53b-629c-e6c8-7588e3cf7ba7@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scan-Signature: bab203c11356ddcd966eb11ee84a16bf
+X-Provags-ID: V03:K1:C/clU7PDHrhE345R+wIdIbnQWSp1bLA2Ozm2NYnNtape8W/gAOW
+ yPYemz4Iw+KiPsrwBgZBr087D+PH68vJjn1qr0gfAGCMVVrP7pJF73DDAzhPDk6ZPYzdNKn
+ +g7GzShlfiK21sBST/UvOj3RjDemcwL03lqfmiMxS3gWFgtUBmetRAX7CnarKuzV2KjvCaJ
+ RHhVggjt2qR0n6yV839gw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IMT8TpeAS2E=:Z96NS5pV5/ypV8ET2nP1Hf
+ 67tPfPFCC0kllcLQJ2vdsDwAhGyOVzaFWOLAfVmQyGEo+wjktbm74JQK15vbZr2PxtInlVYiO
+ Tpz+bAvJd6HgFEjNqubWKIxK5lnND8SVUQMH8a+TId/J9tE2yHSYG5aWyMFlGySIEzs2BLh9x
+ Fq8jpPQXrWL2u9MLtbi4OX0tzihBZKPfPzmM/VrlCve0JhpuaFMVgqey+rN2nhBs6RzJVB4yl
+ IfFANIwGgD+yeMn1DSO0Zwe4xPy2BpDmSNHweQEp7U0xzaojh1rQmTpVyVEgeWonn218Vi9L0
+ AcFvJxjsMIEUQajZAUzDeoKcXNxdF4f2VGdBMeKBoenNPwqiOXcB/D+VsP9WP7WKcrMnXcmS2
+ 4qntbvqRGzbzDg9TM4w6yMeen6CYD/EZhIj9cFfGkv2qLViets9x3pUng6ogsz9FsjZsVwAC4
+ iKUs79kUnbUFOOiHQIEbah7WI/rTCC8Lquxaa2kEH1xiAn5o2C8W/rK/XUVkJMIw76v+faByN
+ A+0U7QJNy+tdii7/pOZEVaYxfBeAazj2voxs2Xl3/AyVkUX2LhIHQki4sk+6lfJlfSwVNGBqF
+ oqxqJ+Qq31QNGVp1wKPdZsCr/gkbBNSooeTXkHDR95n8X4hi1lowfptiGqH74fLUAcZl46VWW
+ aLs6x6o6Ui+2F1jJ+wCifoUQShLH8aE1RNIlNpTNhDE/Z52hOzgBv0SbaRAUOunPkn5c=
+Subject: Re: [Buildroot] [PATCH 1/1] package/busybox: add -O staticroutes
+ options to udhcpc udhcpc default script can handle staticroutes but it
+ missing from ifupdown options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,89 +82,129 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Remi Jouannet <remi.jouannet@outscale.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============5856517032851779328=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                          |  1 +
- package/python-rfc3987/Config.in           |  7 +++++++
- package/python-rfc3987/python-rfc3987.hash |  5 +++++
- package/python-rfc3987/python-rfc3987.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-rfc3987/Config.in
- create mode 100644 package/python-rfc3987/python-rfc3987.hash
- create mode 100644 package/python-rfc3987/python-rfc3987.mk
+--===============5856517032851779328==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="hwvH6HDNit2nSK4j"
+Content-Disposition: inline
 
-diff --git a/package/Config.in b/package/Config.in
-index 8892134133..68eafd2463 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1205,6 +1205,7 @@ menu "External python modules"
- 	source "package/python-requests/Config.in"
- 	source "package/python-requests-oauthlib/Config.in"
- 	source "package/python-requests-toolbelt/Config.in"
-+	source "package/python-rfc3987/Config.in"
- 	source "package/python-rpi-gpio/Config.in"
- 	source "package/python-rpi-ws281x/Config.in"
- 	source "package/python-rsa/Config.in"
-diff --git a/package/python-rfc3987/Config.in b/package/python-rfc3987/Config.in
-new file mode 100644
-index 0000000000..3cd74f5314
---- /dev/null
-+++ b/package/python-rfc3987/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_RFC3987
-+	bool "python-rfc3987"
-+	help
-+	  Parsing and validation of URIs (RFC 3986) and IRIs (RFC
-+	  3987).
-+
-+	  http://pypi.python.org/pypi/rfc3987
-diff --git a/package/python-rfc3987/python-rfc3987.hash b/package/python-rfc3987/python-rfc3987.hash
-new file mode 100644
-index 0000000000..013cee6161
---- /dev/null
-+++ b/package/python-rfc3987/python-rfc3987.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/rfc3987/json
-+md5  b6c4028acdc788a9ba697e1c1d6b896c  rfc3987-1.3.8.tar.gz
-+sha256  d3c4d257a560d544e9826b38bc81db676890c79ab9d7ac92b39c7a253d5ca733  rfc3987-1.3.8.tar.gz
-+# Locally computed sha256 checksums
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.txt
-diff --git a/package/python-rfc3987/python-rfc3987.mk b/package/python-rfc3987/python-rfc3987.mk
-new file mode 100644
-index 0000000000..cad17e8de2
---- /dev/null
-+++ b/package/python-rfc3987/python-rfc3987.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-rfc3987
-+#
-+################################################################################
-+
-+PYTHON_RFC3987_VERSION = 1.3.8
-+PYTHON_RFC3987_SOURCE = rfc3987-$(PYTHON_RFC3987_VERSION).tar.gz
-+PYTHON_RFC3987_SITE = https://files.pythonhosted.org/packages/14/bb/f1395c4b62f251a1cb503ff884500ebd248eed593f41b469f89caa3547bd
-+PYTHON_RFC3987_SETUP_TYPE = setuptools
-+PYTHON_RFC3987_LICENSE = GPL-3.0+
-+PYTHON_RFC3987_LICENSE_FILES = COPYING.txt
-+
-+$(eval $(python-package))
--- 
-2.17.0
+
+--hwvH6HDNit2nSK4j
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello R=C3=A9mi,
+
+On Fri, May 06, 2022 at 07:07:06PM +0200, R=C3=A9mi Jouannet wrote:
+> Hello,
+>=20
+> yeah sorry about that, i'm not used to send patch by email
+
+There is a section in the buildroot manual explaining the process
+quite well, in short: use `git format-patch` and `git send-email` =E2=80=A6
+
+https://buildroot.org/downloads/manual/manual.html#submitting-patches
+
+> I wanted to do a simple subject and write a few lines to explain the
+> patch in the body
+
+That's right. Short subject, one line empty, explanation below.
+
+> do you want me to send a another patch with a a better subject/body ?
+
+I'm not in the position to request that. I can just say patches in the
+right format have a much higher chance of being accepted.
+
+Greets
+Alex
+
+>=20
+> Le 06/05/2022 =C3=A0 17:31, Alexander Dahl a =C3=A9crit=C2=A0:
+> > Hei hei,
+> >=20
+> > took me a while to find the reasoning for this patch. Didn't expect it
+> > in that very long subject line. ;-)
+> >=20
+> > Greets
+> > Alex
+> >=20
+> > On Fri, May 06, 2022 at 02:54:23PM +0000, Remi Jouannet wrote:
+> > > Signed-off-by: R=C3=A9mi Jouannet<remi.jouannet@outscale.com>
+> > > ---
+> > >   package/busybox/busybox.config | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > >=20
+> > > diff --git a/package/busybox/busybox.config b/package/busybox/busybox=
+=2Econfig
+> > > index 52cb8ff..a614662 100644
+> > > --- a/package/busybox/busybox.config
+> > > +++ b/package/busybox/busybox.config
+> > > @@ -1022,7 +1022,7 @@ CONFIG_UDHCP_DEBUG=3D0
+> > >   CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=3D80
+> > >   CONFIG_FEATURE_UDHCP_RFC3397=3Dy
+> > >   CONFIG_FEATURE_UDHCP_8021Q=3Dy
+> > > -CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS=3D"-b -R -O search"
+> > > +CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS=3D"-b -R -O search -O staticroute=
+s"
+> > >   #
+> > >   # Print Utilities
+> > > --=20
+> > > 1.8.3.1
+> > >=20
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot@buildroot.org
+> > > https://lists.buildroot.org/mailman/listinfo/buildroot
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+
+--=20
+/"\ ASCII RIBBON | =C2=BBWith the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.=C2=AB
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+
+--hwvH6HDNit2nSK4j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEwo7muQJjlc+Prwj6NK3NAHIhXMYFAmJ6FmsACgkQNK3NAHIh
+XMZvEA//d+B5x7eSCp5Ums9SWWJSRcC2mzkuBTqFj1Vp2klkeeX34EQ5EyLGr9uL
+/E5RqKX5BKQdCTBDsejgumHD1ykfNZIdSxtExxsXb651OHz3i1S/4k/KYabpJkwW
+5R4cKjnBtmwgxOsFAlZeq6WrQfxetQ4dX1aTAluBYy78GNE96gVYcjZljFTIyqlf
+9by0momNVGsCLhOHRQYHwezaV7qx0NGMvu5JTsUFTfI1B2xymuycvt/7vo5iVYjk
+xivYJDUzC1JOihqGRlgVIBNtLr6s7rzFSaMM997EcRjn9qplqcXVlLubE/Z6PUi1
+qYv2eYrG1NfDk0sgkJjSwCguh4S5WoeNWhWSU1EWM/HYFakixMD3NzP5lxSjmMDV
+AFn7QlvgwiBCfxk7Nm0JvllaDsHTY6mKTEpnlQVHi15XtHRTPdcM6yihvwCXa/Td
+1cP3Wg1istkVeNONG2K+jl5vBKU0Wq8E3w/pWPM60oXuCWV86FLKaWDInq3q3emV
+Oil6NUTUtWQSx6HYGcyH0Un34Zx1kL0qv4+97ZiC0TdMzNkyPEOigiovW2lA55Xs
+z2pBdc693mtg2Q0zTfF8+ZV9e9b6PHI6uJwqDl3jnLyloIBbwA20QKpGKLCydQW7
+XNfGrunzBqzPmW++aMrSqrjrQig42tqdFXnjC+8H0gwAxo6h1l4=
+=ffii
+-----END PGP SIGNATURE-----
+
+--hwvH6HDNit2nSK4j--
+
+--===============5856517032851779328==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5856517032851779328==--
