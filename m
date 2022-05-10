@@ -4,86 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7A94C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 19:01:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F6F3C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 19:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A1AD60AF2;
-	Tue, 10 May 2022 19:01:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33A1A60F9F;
+	Tue, 10 May 2022 19:07:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1_lLXNSWN-cn; Tue, 10 May 2022 19:01:22 +0000 (UTC)
+	with ESMTP id uvAOYLWts41V; Tue, 10 May 2022 19:07:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63C6D6068B;
-	Tue, 10 May 2022 19:01:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 12EDD1BF21A
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 19:01:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 475E260F57;
+	Tue, 10 May 2022 19:07:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5BAC21BF307
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 19:07:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 00DD26068B
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 19:01:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A3E2402AA
+ for <buildroot@lists.busybox.net>; Tue, 10 May 2022 19:07:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8Ua4a01peS5w for <buildroot@lists.busybox.net>;
- Tue, 10 May 2022 19:01:17 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YcfraP57m3DY for <buildroot@lists.busybox.net>;
+ Tue, 10 May 2022 19:07:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8E84A600B8
- for <buildroot@buildroot.org>; Tue, 10 May 2022 19:01:17 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id n10so34802136ejk.5
- for <buildroot@buildroot.org>; Tue, 10 May 2022 12:01:17 -0700 (PDT)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 39B3C4029F
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 19:07:34 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id z2so33262745ejj.3
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 12:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=Z/3Ys6IPOEjdAPRUljeylu60qb6gk4z2fTyPT1LxIpY=;
- b=PiOm1H3GjoUELXWoQ6fXzUJwmtoGD1FgblALw6UWoHU+/9nivHld93xN8W3KLtXvXD
- H/QvRfuoGKBOZSz+SXMKgv9gu2bAS7xwTOnb5TIs2lrOFdlEvFcZWE9pl+jshWxqc+/l
- mujTPhxfXVhFra7BRv6mOq8XBXIiB2KEgv1pmlU+lHJc9M2L5n04RLV0RVFUl7ijKnIG
- 9dZCcZvta65cAS8Rb+U4OjCMAozFc25Nm6qgW1zfcVNMtAO1weRxR42A86LJVwb9uhlq
- j/zSuD4xm6ecd7rAvREs6iIuB9nKV6fgICroic27NcrTHhJ0Fq7elFGh4wzYbUI4E69Y
- Cznw==
+ bh=e0Rvy2niGjL2Jsyp1LeU16e9Ol/MM2mXg0M8qHfA3/U=;
+ b=I0D1r3TVKG0LB4DlWmlQar6Xbr1T/yHNGZQ4ZZRikfMYvWo0x9ht1KCB52gxPjDCO7
+ t9PDgyciP7ZAYYI2HM/ZGMtb6GvpO9cCi9DvybjqiXgatvv1ipuDN4dC0B6UDxQrlYyo
+ /8FClemgEXNCdTkeyL0z1qAcvP3eVtQpSsm9l2L/ZCavS4JcC+R0GSfjv2SJzZD+BDWl
+ SESGKojrMbCP1Th1DLv34khueiSw1e5E1jAcfzdkOvpDdvEYZNvO++X6sa0nEwgZI5bt
+ F004A92AUTSKWaZN+szqWGLwLmJ2BtCgWrebfIYUBOflJV5xAV//cyBbC06ZYOtsfXRV
+ 7v6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=Z/3Ys6IPOEjdAPRUljeylu60qb6gk4z2fTyPT1LxIpY=;
- b=TqYKQTwb6x7rz9u8dH4/kTRFRmrW8kepUmj/wv+gDChWBKn0qZ2l+Ce4O20Bz+XGG0
- hjRC7H4CkPWvwyqywqvK1eo4UqRj3PSlqh90D1QCd9LbSd9R0iG/eRN3qzIvf+y4sZSk
- AhWpWHU/nX2su2MIq2she/fmVbtYn7H5m0mrSe0ixzUBJmxkvtYQ5+279ov4xbRrpJ8b
- bWmUvAGySlrqj6CHwxLmW+EqcyhfrfRDe3k8+4bgnveFZBcBQDy/04SFnkX28TTMLYc+
- TfG0jFjSMqEownHgphWpPDreglyVbXO2v7G0gHcrdCmQR3ie7fS9CdF/ICXIybf0HToT
- okKg==
-X-Gm-Message-State: AOAM530pbfnejmPsCBZKElEOZcAm4ndZbEtKPRqpd1cw9qFUYebLElj0
- zcDUkhy1+GrIPth4oShH36ZEGg==
-X-Google-Smtp-Source: ABdhPJx60H5rbh4nML6YtSfAlVf9hN/K76Da5sy+yf3LHhKQSGLad1NjOEQJS4u7wDm3N8/dgkOy7w==
-X-Received: by 2002:a17:907:96a8:b0:6f4:45f1:6e76 with SMTP id
- hd40-20020a17090796a800b006f445f16e76mr21621853ejc.186.1652209275514; 
- Tue, 10 May 2022 12:01:15 -0700 (PDT)
+ bh=e0Rvy2niGjL2Jsyp1LeU16e9Ol/MM2mXg0M8qHfA3/U=;
+ b=n4uNa1iQeTomXkIe7IM+tMqncZtfHmI48ojqeU4cWLSF3eWKCr6iQzIoO+CFF3kZIT
+ Q5uLlK+ynHqeVF8T7O340ylSBaT0VGCrUkrz6ojUrIqw8kGcnxxPQ/Rc7jFJKmlzrN6Z
+ Ys71oBAGTa41pqUdWS68Uu2nUGPz3bk0ClVikemgq8Qh/U6AZQLYPiKoxF83F2PXf1C0
+ 2yq7ouquplZmrmQgeAet6+U4AWPyYAx9yg8UCu14EYTDK8MlYhHZbbEj1+PwXtnbFnc5
+ +9lZkP/5DdkzPiWG0rS/2w3QrQsajHUgtcJiMIlKZ+a0u3jF6tNM6Nrxza4wOrBfc2xy
+ iYcw==
+X-Gm-Message-State: AOAM533fISDRNOSXtKBiQVxqYKN54SzWTNjDj95w88oJ6SCI7uo2nZok
+ Sv5ljCOo1yfArmXcxlwJVmVghA==
+X-Google-Smtp-Source: ABdhPJyBWBJiTGsjafsTODOk4YMC5MYj7q9VDP19QYFvOuTZZrEM+f/Jzo+lAcknduuCzPN4t8P2eg==
+X-Received: by 2002:a17:906:6a29:b0:6f4:3389:9094 with SMTP id
+ qw41-20020a1709066a2900b006f433899094mr21344043ejc.323.1652209652363; 
+ Tue, 10 May 2022 12:07:32 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- 23-20020a170906309700b006f3ef214e4fsm43999ejv.181.2022.05.10.12.01.14
+ h8-20020a170906398800b006f3ef214e14sm58712eje.122.2022.05.10.12.07.31
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 10 May 2022 12:01:15 -0700 (PDT)
-Message-ID: <123fec62-0841-8dff-9da6-61f2cc9614d3@mind.be>
-Date: Tue, 10 May 2022 21:01:14 +0200
+ Tue, 10 May 2022 12:07:31 -0700 (PDT)
+Message-ID: <045e8c8e-7cba-5a78-4b4c-d0a5808d8f46@mind.be>
+Date: Tue, 10 May 2022 21:07:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220510003116.336797-1-james.hilliard1@gmail.com>
- <20220510003116.336797-2-james.hilliard1@gmail.com>
+To: Yegor Yefremov <yegorslists@googlemail.com>,
+ buildroot <buildroot@buildroot.org>
+References: <CAGm1_kvHtN6OeeidGFfbnC2e-xvvg6MjnQFmkGPPCqoAwMb+YQ@mail.gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220510003116.336797-2-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/python-orjson: bump to
- version 3.6.8
+In-Reply-To: <CAGm1_kvHtN6OeeidGFfbnC2e-xvvg6MjnQFmkGPPCqoAwMb+YQ@mail.gmail.com>
+Subject: Re: [Buildroot] Adding pylibfdt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,8 +96,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Graeme Smecher <gsmecher@threespeedlogic.com>,
- Asaf Kahlon <asafka7@gmail.com>,
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
@@ -105,84 +105,27 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 10/05/2022 02:31, James Hilliard wrote:
-> Convert package to use python infrastructure instead of cargo
-> infrastructure.
-
-  AFAIU, maturin was already available in 3.6.7, so the conversion should be 
-separate from the bump.
-
-  That said, I think Graeme intentionally did not use maturin because it doesn't 
-really offer much benefit over calling cargo directly. Do you have a reason to 
-prefer using maturin?
-
+On 10/05/2022 11:56, Yegor Yefremov via buildroot wrote:
+> Hi all,
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->   package/python-orjson/python-orjson.hash |  5 +++--
->   package/python-orjson/python-orjson.mk   | 24 ++++++++++++------------
->   2 files changed, 15 insertions(+), 14 deletions(-)
-> 
-> diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-> index 5ef2726d82..06cc5cae79 100644
-> --- a/package/python-orjson/python-orjson.hash
-> +++ b/package/python-orjson/python-orjson.hash
-> @@ -1,4 +1,5 @@
-> -# Locally calculated
-> -sha256  4713b120ad86b1b273f5952cbf9578c13d0f453064bd26d823e04a10c84824e6  python-orjson-3.6.7.tar.gz
-> +# Locally calculated after vendoring
-> +sha256  40b95576b81916d167f7a44829401acb3b6cbbfe9840b5ed88c9535a86507d7b  orjson-3.6.8.tar.gz
-> +# Locally computed sha256 checksums
->   sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
->   sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-> diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
-> index 5de4b2c5fa..ccbaf37c6d 100644
-> --- a/package/python-orjson/python-orjson.mk
-> +++ b/package/python-orjson/python-orjson.mk
-> @@ -4,19 +4,19 @@
->   #
->   ################################################################################
->   
-> -PYTHON_ORJSON_VERSION = 3.6.7
-> -PYTHON_ORJSON_SITE = $(call github,ijl,orjson,$(PYTHON_ORJSON_VERSION))
-> +PYTHON_ORJSON_VERSION = 3.6.8
-> +PYTHON_ORJSON_SOURCE = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
-> +PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/14/8e/7e745d867466bdafb12ab7b0179d40f23f55639f7cd14bd375acfa74aca2
+> What is the preferred way to add a host-pylibfdt package? Changing the
+> dtc package to build and install Python bindings or to add the
+> pylibfdt package [1] directly?
 
-  Kind of an aside, since this applies to many other packages: is there a reason 
-we prefer to get Python packages from pypi rather than the upstream source itself?
-
-> +PYTHON_ORJSON_SETUP_TYPE = pep517
->   PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
->   PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-> -PYTHON_ORJSON_DEPENDENCIES = host-python-cffi
-> -PYTHON_ORJSON_CARGO_ENV = \
-> +PYTHON_ORJSON_DEPENDENCIES = host-python-cffi host-python-maturin
-> +PYTHON_ORJSON_ENV = \
-> +	$(PKG_CARGO_ENV) \
->   	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
-> +# We need to vendor the Cargo crates at download time
-> +PYTHON_ORJSON_DOWNLOAD_POST_PROCESS = cargo
-> +PYTHON_ORJSON_DOWNLOAD_DEPENDENCIES = host-rustc
-> +PYTHON_ORJSON_DL_ENV = $(PKG_CARGO_ENV)
-
-  Is this going to be needed for all maturin packages? If yes, it will make 
-sense to move this into a maturin setup type (but preferably only after we have 
-at least 3 packages that use it).
+  Since the pylibfdt can be fetched from pypi, I think that's the easiest.
 
   Regards,
   Arnout
 
->   
-> -# orjson uses "maturin" to generate distribution packages - rather than teach
-> -# buildroot how to understand this, we reach in and install directly.
-> -define PYTHON_ORJSON_INSTALL_TARGET_CMDS
-> -	$(INSTALL) -m 0755 -D $(@D)/target/$(RUSTC_TARGET_NAME)/release/liborjson.so \
-> -		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/orjson.so
-> -endef
-> -
-> -$(eval $(cargo-package))
-> +$(eval $(python-package))
+> 
+> [1] https://github.com/devicetree-org/pylibfdt
+> 
+> Regards,
+> Yegor
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
