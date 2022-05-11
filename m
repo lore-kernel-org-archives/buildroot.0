@@ -1,64 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7AFAC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 10 May 2022 06:55:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14D7FC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 11 May 2022 15:08:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5693140A96;
-	Tue, 10 May 2022 06:55:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD51083419;
+	Wed, 11 May 2022 15:08:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J_RF49JQ5Ym0; Tue, 10 May 2022 06:55:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Rc_BZRy2hMKG; Wed, 11 May 2022 15:07:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D82140A92;
-	Tue, 10 May 2022 06:55:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2D73C1BF3D1
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 06:54:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7814583032;
+	Wed, 11 May 2022 15:07:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 780311BF593
+ for <buildroot@lists.busybox.net>; Wed, 11 May 2022 15:07:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B935415F8
- for <buildroot@lists.busybox.net>; Tue, 10 May 2022 06:54:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 707D540ACD
+ for <buildroot@lists.busybox.net>; Wed, 11 May 2022 15:07:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vgISio3fUjcB for <buildroot@lists.busybox.net>;
- Tue, 10 May 2022 06:54:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E268415C1
- for <buildroot@uclibc.org>; Tue, 10 May 2022 06:54:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 31BAE83D60; Tue, 10 May 2022 06:44:11 +0000 (UTC)
-From: bugzilla@busybox.net
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=rockwellcollins.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uKhxq3043ST3 for <buildroot@lists.busybox.net>;
+ Wed, 11 May 2022 15:07:55 +0000 (UTC)
+X-Greylist: delayed 00:45:20 by SQLgrey-1.8.0
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3908A40291
+ for <buildroot@uclibc.org>; Wed, 11 May 2022 15:07:55 +0000 (UTC)
+Received: from pps.filterd (m0074334.ppops.net [127.0.0.1])
+ by mx0b-00105401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id
+ 24BEHOjv016192
+ for <buildroot@uclibc.org>; Wed, 11 May 2022 14:22:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rockwellcollins.com;
+ h=from : to : cc : subject : date : message-id; s=POD2020;
+ bh=2O8uyb4ePzEdsuZ9JXzlRpi9ENctLia7mAlaQb1ryvU=;
+ b=lETuSpO5AFOK9ZmgcXGPKD3NQv8U4+B/DTijI18qEqO7tYVc0+QckbZjrx95yXCqTzVI
+ HvWprVO+CPLgyRxOCAE3RpXghVMqqOrIDBRKOnmKJMsGS1Mb0kWL7HS7kKSyES+UafIO
+ kTP92YT6CKfTUARyaljw5G8LZw0653dNuOIBIoEdTCtJWUTc8+rx5phuX5+Dzt8w1NHH
+ LVDN4f+5Pm4k0oni4z/XlTmANT/oRykdMWd9BYFIZjjq3gvq/YfmDKU+fWWBD/fxVTPN
+ 5sPZxZ/3xvU7WyrCFRuLEWRJ1j4vqL2fk0/dAbuhdZfgmyIepNpVCGLkR6NCm64XlpGG rg== 
+Received: from xnwpv38.utc.com ([167.17.239.18])
+ by mx0b-00105401.pphosted.com with ESMTP id 3fxyfasgty-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@uclibc.org>; Wed, 11 May 2022 14:22:34 +0000
+Received: from qusmna5m.utcapp.com (qusmna5m.utcapp.com [10.161.160.135])
+ by xnwpv38.utc.com (8.16.1.2/8.16.1.2) with ESMTPS id 24BEMWC6145254
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@uclibc.org>; Wed, 11 May 2022 14:22:32 GMT
+Received: from ciulimr02.rockwellcollins.com ([10.172.224.19])
+ by qusmna5m.utcapp.com (8.16.1.2/8.16.1.2) with ESMTPS id 24BEMW8D006005
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
+ for <buildroot@uclibc.org>; Wed, 11 May 2022 14:22:32 GMT
+X-Received: from biscuits.rockwellcollins.com (biscuits.rockwellcollins.lab
+ [10.148.119.137])
+ by ciulimr02.rockwellcollins.com (Postfix) with ESMTP id 47DD920094;
+ Wed, 11 May 2022 09:22:32 -0500 (CDT)
+From: Jared Bents <jared.bents@rockwellcollins.com>
 To: buildroot@uclibc.org
-Date: Tue, 10 May 2022 06:54:57 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.02
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: major
-X-Bugzilla-Who: alacki93@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-14796-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14796] New: 64 bit time and seccomp conflict
- (OpenSSH server crash)
+Date: Wed, 11 May 2022 09:22:28 -0500
+Message-Id: <20220511142228.29978-1-jared.bents@rockwellcollins.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-GUID: dGA5KCIxV14QD8riTDPt81WcyqkrMvRW
+X-Proofpoint-ORIG-GUID: dGA5KCIxV14QD8riTDPt81WcyqkrMvRW
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ lowpriorityscore=0 priorityscore=1501 clxscore=1011 mlxlogscore=999
+ adultscore=0 malwarescore=0 phishscore=0 impostorscore=0 spamscore=0
+ mlxscore=0 suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205110068
+Subject: [Buildroot] [PATCH v1 1/1] package/rsyslog: update to fix service
+ permissions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,59 +88,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Jared Bents <jared.bents@rockwellcollins.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNDc5NgoKICAgICAgICAg
-ICAgQnVnIElEOiAxNDc5NgogICAgICAgICAgIFN1bW1hcnk6IDY0IGJpdCB0aW1lIGFuZCBzZWNj
-b21wIGNvbmZsaWN0IChPcGVuU1NIIHNlcnZlcgogICAgICAgICAgICAgICAgICAgIGNyYXNoKQog
-ICAgICAgICAgIFByb2R1Y3Q6IGJ1aWxkcm9vdAogICAgICAgICAgIFZlcnNpb246IDIwMjIuMDIK
-ICAgICAgICAgIEhhcmR3YXJlOiBBbGwKICAgICAgICAgICAgICAgIE9TOiBMaW51eAogICAgICAg
-ICAgICBTdGF0dXM6IE5FVwogICAgICAgICAgU2V2ZXJpdHk6IG1ham9yCiAgICAgICAgICBQcmlv
-cml0eTogUDUKICAgICAgICAgQ29tcG9uZW50OiBPdGhlcgogICAgICAgICAgQXNzaWduZWU6IHVu
-YXNzaWduZWRAYnVpbGRyb290LnVjbGliYy5vcmcKICAgICAgICAgIFJlcG9ydGVyOiBhbGFja2k5
-M0BnbWFpbC5jb20KICAgICAgICAgICAgICAgIENDOiBidWlsZHJvb3RAdWNsaWJjLm9yZwogIFRh
-cmdldCBNaWxlc3RvbmU6IC0tLQoKSSBmb3VuZCB0aGF0IGdsaWJjIHdpdGggc3VwcG9ydCBmb3Ig
-NjQtYml0IHRpbWUgY291bGQgY3Jhc2ggT3BlblNTSCAoc3NoZCkKcHJvY2VzcyB3aXRoIGVuYWJs
-ZWQgc2VjY29tcC4gVGVzdCBlbnZpcm9ubWVudDoKLUtlcm5lbCA0LjE0Lnggd2l0aCBlbmFibGVk
-IHNlY2NvbXAKLTMyIGJpdCBBUk0gQ1BVCi1nbGliYyAyLjM0Ci1PcGVuU1NIIDguOXAxIHdpdGgg
-ZW5hYmxlZCBzZWNjb21wIHNhbmRib3gKLVRvb2xjaGFpbjogR0NDIDEwCgpTeXNjYWxsIHdyYXBw
-ZXJzIGxpa2UgYSBjbG9ja19nZXR0aW1lCihodHRwczovL2dpdGh1Yi5jb20vYm1pbm9yL2dsaWJj
-L2Jsb2IvZ2xpYmMtMi4zNC9zeXNkZXBzL3VuaXgvc3lzdi9saW51eC9jbG9ja19nZXR0aW1lLmMp
-CmZpcnN0IHJ1biBzeXNjYWxsIGRlZGljYXRlZCBmb3Iga2VybmVscyB0aGF0IHN1cHBvcnQgNjQg
-Yml0IHRpbWUuIElmIHRoaXMKc3lzY2FsbCBmYWlsZWQgd2l0aCBFTk9TWVMgZXJyb3IsIHRoZW4g
-Z2xpYmMgY2FsbHMgdHJhZGl0aW9uYWwgdmFyaWFudCBmb3IgMzIKYml0IHRpbWUuIElmIHlvdSBy
-dW4gc3NoZCB3aXRoIHN0cmFjZSB5b3UgY2FuIGZpbmQgZW50cmllcyBsaWtlIHRoaXM6Cgo0NjI4
-IGNsb2NrX2dldHRpbWU2NChDTE9DS19CT09UVElNRSwgMHhiZThjMTQ4OCkgPSAtMSBFTk9TWVMg
-KEZ1bmN0aW9uIG5vdAppbXBsZW1lbnRlZCkKNDYyOCBjbG9ja19nZXR0aW1lKENMT0NLX0JPT1RU
-SU1FLCB7dHZfc2VjPTI0NywgdHZfbnNlYz02NTMzMDExNjh9KSA9IDAKClVzdWFsbHkgdGhpcyBp
-cyBub3QgYSBwcm9ibGVtLCBidXQgc3NoZCB1c2VzIHNlY2NvbXAuIE9wZW5TU0ggaW4gaXRzIHNv
-dXJjZQpjb2RlIGFkZHMgdG8gc2VjY29tcCBzeXNjYWxscyB0aGF0IGNhbiBiZSBmb3VuZCBpbiBr
-ZXJuZWwgaGVhZGVycwooaHR0cHM6Ly9naXRodWIuY29tL29wZW5zc2gvb3BlbnNzaC1wb3J0YWJs
-ZS9ibG9iL21hc3Rlci9zYW5kYm94LXNlY2NvbXAtZmlsdGVyLmMpLgpJZiB5b3UgdXNlIGtlcm5l
-bCB3aXRob3V0IHN1cHBvcnQgZm9yIDY0IGJpdCB0aW1lIHRoZW4gcmVsYXRlZCBzeXNjYWxscyBh
-cmUgbm90CnJlZ2lzdGVyZWQgYXMgYWxsb3dlZCBpbiBzZWNjb21wLiBJZiBzc2hkIHRyaWVzIHRv
-IHVzZSBjbG9ja19nZXR0aW1lIGZyb20gZ2xpYmMKYWZ0ZXIgaW5pdGlhbGl6aW5nIHNlY2NvbXAs
-IHRoZSBwcm9jZXNzIHdpbGwgYmUga2lsbGVkOgoKNDYzNyBjbG9ja19nZXR0aW1lNjQoQ0xPQ0tf
-Qk9PVFRJTUUsIDx1bmZpbmlzaGVkIC4uLj4KNDYzNyA8Li4uIGNsb2NrX2dldHRpbWU2NCByZXN1
-bWVkPiA8dW5maW5pc2hlZCAuLi4+KSA9ID8KNDYzNyArKysga2lsbGVkIGJ5IFNJR1NZUyArKysK
-NDYyOCAtLS0gU0lHQ0hMRCB7c2lfc2lnbm89U0lHQ0hMRCwgc2lfY29kZT1DTERfS0lMTEVELCBz
-aV9waWQ9NDYzNywKc2lfdWlkPTEwMSwgc2lfc3RhdHVzPVNJR1NZUywgc2lfdXRpbWU9NCwgc2lf
-c3RpbWU9MH0gLS0tCjQ2Mjgga2lsbCg0NjM3LCBTSUdLSUxMKQoKRnJvbSB1c2VyJ3MgcGVyc3Bl
-Y3RpdmUgaXQgbG9va3MgbGlrZSBjb25uZWN0aW9uIHdpdGggc2VydmVyIHdhcyBjbG9zZWQgYmVm
-b3JlCmFueSBwYXNzd29yZCBwcm9tcHQuCgpTdXBwb3J0IGZvciA2NC1iaXQgdGltZSBoYXMgYmVl
-biBhZGRlZCBpbiBrZXJuZWwgNS4xCihodHRwczovL3d3dy5waG9yb25peC5jb20vc2Nhbi5waHA/
-cGFnZT1uZXdzX2l0ZW0mcHg9TGludXgtNS4xLVllYXItMjAzOC1TeXNjYWxscykuCk9sZGVyIChi
-dXQgc3RpbGwgc3VwcG9ydGVkKSBrZXJuZWxzIGxpa2UgNC4xNCBkb27igJl0IGhhdmUgdGhpcyBm
-ZWF0dXJlLgoKVGVtcG9yYXJ5IHNvbHV0aW9ucyB0byBmaXggdGhpcyBidWcgYXJlOgotQnVpbGRp
-bmcgT3BlblNTSCB3aXRob3V0IHNlY2NvbXAKLUJ1aWxkaW5nIGtlcm5lbCB3aXRob3V0IHNlY2Nv
-bXAKLVBhdGNoaW5nIGdsaWJjIHRvIHJlbW92ZSBjbG9ja19nZXR0aW1lNjQgc3lzY2FsbCAoYW5k
-IG90aGVyIHN5c2NhbGxzIHRoYXQgdXNlCjY0IGJpdCB0aW1lKS4KCkRpc2FibGluZyBzZWNjb21w
-IGlzIHRoZSBlYXNpZXN0IHdvcmthcm91bmQsIGJ1dCBpdCBkZWNyZWFzZXMgc2VjdXJpdHkgb2Yg
-c3NoZC4KCi0tIApZb3UgYXJlIHJlY2VpdmluZyB0aGlzIG1haWwgYmVjYXVzZToKWW91IGFyZSBv
-biB0aGUgQ0MgbGlzdCBmb3IgdGhlIGJ1Zy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Update to fix the permissions being set when installing the
+rsyslog service. The service should be installed with 644
+permissions and not 755 permissions.
+
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+---
+ package/rsyslog/rsyslog.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index afd1a5557e..7cd75b19b6 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -121,7 +121,7 @@ RSYSLOG_CONF_OPTS += \
+ endif
+ 
+ define RSYSLOG_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -m 0755 -D package/rsyslog/rsyslog.service \
++	$(INSTALL) -m 0644 -D package/rsyslog/rsyslog.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/rsyslog.service
+ endef
+ 
+-- 
+2.17.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
