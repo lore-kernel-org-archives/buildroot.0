@@ -1,48 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35161C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 11 May 2022 05:20:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46347C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 11 May 2022 06:01:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE46A6107B;
-	Wed, 11 May 2022 05:20:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52FCF4187C;
+	Wed, 11 May 2022 06:01:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P0QTNyUc4oWd; Wed, 11 May 2022 05:20:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id If18qNZQ8gJ3; Wed, 11 May 2022 06:01:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C00EA6106F;
-	Wed, 11 May 2022 05:20:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF61741879;
+	Wed, 11 May 2022 06:01:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5DAC71BF37A
- for <buildroot@lists.busybox.net>; Wed, 11 May 2022 05:20:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A55541BF37A
+ for <buildroot@lists.busybox.net>; Wed, 11 May 2022 06:01:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C466415B6
- for <buildroot@lists.busybox.net>; Wed, 11 May 2022 05:20:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9317D41878
+ for <buildroot@lists.busybox.net>; Wed, 11 May 2022 06:01:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EUcnPn3Rkn8X for <buildroot@lists.busybox.net>;
- Wed, 11 May 2022 05:20:14 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 61321415B7
- for <buildroot@buildroot.org>; Wed, 11 May 2022 05:20:14 +0000 (UTC)
-Received: from iago.. (unknown [151.37.22.168])
- by serv15.avernis.de (Postfix) with ESMTPSA id 3A3F9C9081A1;
- Wed, 11 May 2022 07:20:11 +0200 (CEST)
-From: Andreas Ziegler <br015@umbiko.net>
-To: buildroot@buildroot.org
-Date: Wed, 11 May 2022 07:19:53 +0200
-Message-Id: <20220511051953.34515-1-br015@umbiko.net>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id jMCe7IoyZ91T for <buildroot@lists.busybox.net>;
+ Wed, 11 May 2022 06:01:01 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.35])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2B1A741621
+ for <buildroot@buildroot.org>; Wed, 11 May 2022 06:01:01 +0000 (UTC)
+Received: from opfednr07.francetelecom.fr (unknown [xx.xx.xx.71])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by opfednr24.francetelecom.fr (ESMTP service) with ESMTPS id 4KykmV548bz1ytR; 
+ Wed, 11 May 2022 08:00:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.com;
+ s=ORANGE001; t=1652248858;
+ bh=744zxiS3b0XxEanNPtRA2EwsEY1doMazgFt+ayQamQE=;
+ h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+ b=qD4BwVF0E4Y3FXo67L/8Fu/Nmo3Gepz7NjRnCxaD9VGQMgNchcoasrNemgO6hjzL1
+ XlVZsykI150ps3N9rqdqBnUMCts3s7+EXVoni52qlzL3zYPeXN95b5l+pRB/SV0G2D
+ Rvlmo+Q2IR5BTqJTeUSd2G2rqSTLL3XOVWW2mUWjreXybkSehYwvkMvVKs5As8upso
+ LiRr3jAkMVVxIKZ49TtisJWXK2aEI4G96Wodiuj1Jhs2LPfQ7DFBt0VECw4M/1d0pO
+ QU0fIvcLhB2zoCYoobmZIPHoFQeXV0C7/fAVHQBU/57n2Yo6Jd71Yp/Lt0ZDHpAyVw
+ +VskO04yGVo8g==
+Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
+ Wed, 11 May 2022 08:00:56 +0200
+Date: Wed, 11 May 2022 08:00:56 +0200
+From: <yann.morin@orange.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <32022_1652248858_627B511A_32022_163_1_20220511060056.GA2862@tl-lnx-nyma7486>
+References: <24588_1651771186_62740732_24588_360_1_2d4cd3ac6995d7b5119ef4dfdc22b975992b8a73.1651770627.git.yann.morin@orange.com>
+ <c8c34832-4993-4779-e125-4beea032836b@mind.be>
+ <31076_1651814495_6274B05F_31076_440_1_20220506052132.GB2870@tl-lnx-nyma7486>
+ <4634ccff-2b76-5b91-0730-391c53b883b8@mind.be>
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 0.103.5 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: [Buildroot] [PATCH 1/1] package/mpd: update to version 0.23.7
+Content-Disposition: inline
+In-Reply-To: <4634ccff-2b76-5b91-0730-391c53b883b8@mind.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Originating-IP: [10.115.26.50]
+X-ClientProxiedBy: OPE16NORMBX303.corporate.adroot.infra.ftgroup
+ (10.115.26.12) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+Subject: Re: [Buildroot] [PATCH] package/pkg-download: do not try to vendor
+ _EXTRA_DOWNLOADS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,113 +78,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Ziegler <br015@umbiko.net>,
- =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Minor bug fixes, including upstream fix for meson iconv handling, which makes 
-0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch redundant. 
+Arnout, All,
 
-Introduces version dependencies for libshout and libupnp, which are met since 
-01/2021 (commit 118648d161). 
+On 2022-05-10 21:24 +0200, Arnout Vandecappelle spake thusly:
+> On 06/05/2022 07:21, yann.morin@orange.com wrote:
+> >On 2022-05-05 22:37 +0200, Arnout Vandecappelle spake thusly:
+[--SNIP--]
+> >>  Applied to master, thanks, with a few changes:
+> >>      - no loop needed for MAIN_DOWNLOAD, it can have only one;
+> >In fact, that was on purpose: it can have no main download...
+> >Indeed, a package can very well only declare extra downloads...
+> >I forgot to explain that in the commit log, sorry.
+>  OK. However, somehow this seems to work:
 
-Full change log:
-  https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.7/NEWS
+Yes, otherwise we could not even install host-skeleton to begin with....
 
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
----
- ...iconv-detection-when-libiconv-is-ins.patch | 53 -------------------
- package/mpd/mpd.hash                          |  2 +-
- package/mpd/mpd.mk                            |  2 +-
- 3 files changed, 2 insertions(+), 55 deletions(-)
- delete mode 100644 package/mpd/0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch
+>  So I don't think it is needed after all?
 
-diff --git a/package/mpd/0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch b/package/mpd/0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch
-deleted file mode 100644
-index 162999dc5f..0000000000
---- a/package/mpd/0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 3882a5a263caa681778a21b1f5f13a1b64536796 Mon Sep 17 00:00:00 2001
--From: aeolio <git@aeolio.de>
--Date: Wed, 20 Apr 2022 16:10:39 +0200
--Subject: [PATCH] src/lib/icu: fix iconv() detection when libiconv is installed
--
--Signed-off-by: aeolio <git@aeolio.de>
--Upstream: https://github.com/MusicPlayerDaemon/MPD/pull/1515
--Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-----
-- src/lib/icu/meson.build | 11 +++++++++--
-- 1 file changed, 9 insertions(+), 2 deletions(-)
--
--diff --git a/src/lib/icu/meson.build b/src/lib/icu/meson.build
--index 59215e704..972c1fda3 100644
----- a/src/lib/icu/meson.build
--+++ b/src/lib/icu/meson.build
--@@ -12,17 +12,23 @@ if is_windows
--   icu_sources += 'Win32.cxx'
-- endif
-- 
--+iconv_dep = []
-- if icu_dep.found()
--   icu_sources += [
--     'Util.cxx',
--     'Init.cxx',
--   ]
-- elif not get_option('iconv').disabled()
---  have_iconv = compiler.has_function('iconv', prefix : '#include <iconv.h>')
---  conf.set('HAVE_ICONV', have_iconv)
--+  # an installed iconv library will make the builtin iconv() unavailable,
--+  # so search for the library first and pass it as (possible) dependency
--+  iconv_dep = compiler.find_library('libiconv', required: false)
--+  have_iconv = compiler.has_function('iconv', 
--+    dependencies: iconv_dep, 
--+    prefix : '#include <iconv.h>')
--   if not have_iconv and get_option('iconv').enabled()
--     error('iconv() not available')
--   endif
--+  conf.set('HAVE_ICONV', have_iconv)
-- endif
-- 
-- icu = static_library(
--@@ -31,6 +37,7 @@ icu = static_library(
--   include_directories: inc,
--   dependencies: [
--     icu_dep,
--+    iconv_dep,
--     fmt_dep,
--   ],
-- )
---- 
--2.34.1
--
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index b09140abf5..353df25b39 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  cbc5928ee3ee1ef7ff6a58f6ba4afaee16c07e9eb42d0107bcc098010f4f26ed  mpd-0.23.6.tar.xz
-+sha256  960dcbac717c388f5dcc4fd945e3af19a476f2b15f367e9653d4c7a948768211  mpd-0.23.7.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 12da36098f..20c8f77fa8 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.23
--MPD_VERSION = $(MPD_VERSION_MAJOR).6
-+MPD_VERSION = $(MPD_VERSION_MAJOR).7
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost fmt
+Still, I am not happy that we are in a situation that works by accident.
+I'd much prefer we understand why exactly this does not break...
+
+> The dl-wrapper script apparently
+> doesn't do anything if the filename is empty.
+
+It really works by accident:
+
+ 1. we pass no URI, so I thought the dlwrapper would fail, as it
+    basically does:
+
+        download_and_check=0
+        for uri in "${uris[@]}"; do
+            ...
+        done
+        if [ "${download_and_check}" -eq 0 ]; then
+            exit 1
+        fi
+
+    However, it does not even go that far...
+
+ 2. even though there is no output file, we still pass the path to
+    the package output directory as the output path. So, as part of
+    validating the download, the wrapper checks if the output file
+    exists, and checks its hash:
+
+        if [ -e "${output}" ]; then
+            if support/download/check-hash ${quiet} "${hfile}" "${output}" ...
+                exit 0
+            ...
+        fi
+
+ 3. the output path does exist now, because we explicitly create it just
+    before calling the wrapper, because that's where we also locate the
+    lockfile.
+
+So, this is all a bit fragile, and I am not feeling very happy about
+that...
+
+So, I'll cook up a fixup patch to revert to the previous behaviour of
+not even attempting a download in that case.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.34.1
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 
 _______________________________________________
 buildroot mailing list
