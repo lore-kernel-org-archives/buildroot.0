@@ -1,80 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53ECEC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 11 May 2022 09:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 110F5C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 11 May 2022 10:07:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D62AE83365;
-	Wed, 11 May 2022 09:46:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 960C740247;
+	Wed, 11 May 2022 10:07:18 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bo1CRjrPcRXf; Wed, 11 May 2022 10:07:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B28240227;
+	Wed, 11 May 2022 10:07:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B3E451BF5B3
+ for <buildroot@lists.busybox.net>; Wed, 11 May 2022 10:07:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A038881092
+ for <buildroot@lists.busybox.net>; Wed, 11 May 2022 10:07:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DwQOCDtI1aOE; Wed, 11 May 2022 09:46:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D86A38331B;
-	Wed, 11 May 2022 09:46:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EAF3B1BF5DA
- for <buildroot@lists.busybox.net>; Wed, 11 May 2022 09:46:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D24EB40B58
- for <buildroot@lists.busybox.net>; Wed, 11 May 2022 09:46:08 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v0lLr-8OqvqX for <buildroot@lists.busybox.net>;
- Wed, 11 May 2022 09:46:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com
- [IPv6:2607:f8b0:4864:20::112b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F13674035D
- for <buildroot@buildroot.org>; Wed, 11 May 2022 09:46:07 +0000 (UTC)
-Received: by mail-yw1-x112b.google.com with SMTP id
- 00721157ae682-2f7bb893309so13977207b3.12
- for <buildroot@buildroot.org>; Wed, 11 May 2022 02:46:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=M4asP3nygyP7c4JbTafe558wXJfoFw1gfCAFShh9x1U=;
- b=Udn5B6RxisxiDPBgPZbBzTmPRvYybdkAhOtlA5JH41kBI7eteHwM45Nqcxe4cbJV8f
- US65Ky5YYFnm5wlAGBbg3hSQXMuIUSXzAQnLdW9MFH7tBD5VSgDiEgrO+iMMMSvdzsz/
- jWuorrIbEXKY9YZmP1lktmD+n+dz00SgaRoZtxcqhE/DgNnNDsS414acjOyncE8m+xIt
- CLpR7rRIpKj4A38XwPVAyo4wVxXbrQPxB6p8hlw1U6YiN2nbWourJiU56QxwTTuGvhzG
- DeTcmVwhCIj3wEuTy518aKLOan9KvZA9q29IvBLSuWp3Slfg/qPrJR1PnHFvmHW2TsPb
- j5wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=M4asP3nygyP7c4JbTafe558wXJfoFw1gfCAFShh9x1U=;
- b=QqH5Wo8ofEuDzhYhqpjWgGtgMyAbOBa2gQCYIDsur1EjzaGNGeXEmcLSZO5bCPZg5L
- 91KLhmgnqQ4IfYKWLunhIGmbN8+TJqRQF8/5JxFz/f64ftTUWpIFH4f0QG/v2SHVy7Op
- iXMVrMWBi+3lIo+dK1FwXk/iQPkqxIwqm4yG0jByFxVAjo+7CCaufG7a26gA48+hgoBJ
- uYIVOrgcN49VrCJYpPhOCD2VBjtQHI6QpTeEmR5Vzlrdop9wR4+HBpNBt4QluTFyQzE+
- L+sRVLefupx3WpEvn0gnS+UF9P9Q96S0Hr1vZROzde46Lvk2tL90n24f3IVYAGJE1c7v
- d64w==
-X-Gm-Message-State: AOAM530Ra/TXE9KJ5DcNK4ls9ZMcYkRa3sSC5kCfv6O/3HCpYu7DcTpg
- oamFVziRM17pzpnvWDtoqs0+AjTCNCHo17eeXhN7ZQ1Zdvyldg==
-X-Google-Smtp-Source: ABdhPJwntEyvM0P5m14wmHUlxwUquOfHxmsxkfxbPtQCF9oDOqJcjpTal+OoBe5VGc6rp+U/QZyO37LWoYyUEjQ6hE0=
-X-Received: by 2002:a81:4113:0:b0:2ca:287c:6c1e with SMTP id
- o19-20020a814113000000b002ca287c6c1emr24397729ywa.195.1652262366732; Wed, 11
- May 2022 02:46:06 -0700 (PDT)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WSeXIX3Qzq03 for <buildroot@lists.busybox.net>;
+ Wed, 11 May 2022 10:07:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C1B138105C
+ for <buildroot@buildroot.org>; Wed, 11 May 2022 10:07:12 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E739C20000B;
+ Wed, 11 May 2022 10:07:08 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1nojFM-006CTm-2I; Wed, 11 May 2022 12:07:08 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 11 May 2022 12:07:06 +0200
+Message-Id: <20220511100707.1477883-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220329145904.63900-1-andreynech@gmail.com>
- <CAOiXNkB0QVU8E_XBmurhOzBUq+JL2qfG4cUzRk_7PKrNa2S8Xw@mail.gmail.com>
- <CAGm1_kunaZvTKh6wF8htjDjmjUu+n6RjH=0fyevtZ4523J1SkA@mail.gmail.com>
- <CAOiXNkCU6McSVU43k1ikvSnq-jiKoWrfuBW9Xbf1a+eo5DEUUQ@mail.gmail.com>
- <b994c5b7-def3-48e9-9695-08cfc266fe34@mind.be>
-In-Reply-To: <b994c5b7-def3-48e9-9695-08cfc266fe34@mind.be>
-From: Andrey Nechypurenko <andreynech@gmail.com>
-Date: Wed, 11 May 2022 11:45:55 +0200
-Message-ID: <CAOiXNkDBgP=sjS5WEKR58VSgfikBmSV8FmcaQygAPHi-E_Lptw@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCH] package/cmake: bump version to 3.22.3
+Subject: [Buildroot] [PATCH] package/libcurl: security bump to version 7.83.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,51 +56,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alsey Miller <alseycmiller@gmail.com>, buildroot <buildroot@buildroot.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Arnout,
+Fixes the following security issues:
 
-> On 10/05/2022 17:20, Andrey Nechypurenko wrote:
-> > Hi Yegor,
-> >
-> >>> I am just curious if the following patch will be accepted for the
-> >>> upcoming release?
-> >>
-> >> What about bumping it to 3.23.1?
-> >
-> > At the time I submitted the patch (29.03), v.3.22 was the latest one. It
-> > also fixes the bug I was facing. So it is good enough for me and definitely
-> > better than v.3.18 currently used by Buildroot. If you would like to submit
-> > another one for v. 3.23.1 it would be great.
->
->   Up to now, we've always kept the cmake version in sync with the value of
-> BR2_CMAKE_VERSION_MIN (defined in support/dependencies/check-host-cmake.mk and
-> updated every time there is a package that requires a specific newer version -
-> like swift would, as mentioned by Alsey.
+- CVE-2022-27778: curl removes wrong file on error
+  https://curl.se/docs/CVE-2022-27778.html
 
-In addition to the Swift package mentioned by Alsey, there could be custom
-packages added by Buildroot users with external trees. This is what I am
-currently doing.
+- CVE-2022-27779: cookie for trailing dot TLD
+  https://curl.se/docs/CVE-2022-27779.html
 
->   What is the bug you were facing?
+- CVE-2022-27780: percent-encoded path separator in URL host
+  https://curl.se/docs/CVE-2022-27780.html
 
-Our custom package uses a feature which was buggy:
-https://gitlab.kitware.com/cmake/cmake/-/issues/18299 (it is also mentioned
-in the submitted patch). This bug was fixed in CMake 3.20.
+- CVE-2022-27781: CERTINFO never-ending busy-loop
+  https://curl.se/docs/CVE-2022-27781.html
 
-> Perhaps backporting its fix is appropriate?
+- CVE-2022-27782: TLS and SSH connection too eager reuse
+  https://curl.se/docs/CVE-2022-27782.html
 
-If the proposed patch with v.3.22 does not introduce any regression, then I
-personally do not see any reasons for backporting. 3.18 is two years old and
-it might be beneficial to switch to a newer one.
+- CVE-2022-30115: HSTS bypass via trailing dot
+  https://curl.se/docs/CVE-2022-30115.html
 
-Regards,
-Andrey.
+Drop now upstreamed 0001-mbedtls-fix-compile-when-h2-enabled.patch
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-mbedtls-fix-compile-when-h2-enabled.patch | 32 -------------------
+ package/libcurl/libcurl.hash                  |  4 +--
+ package/libcurl/libcurl.mk                    |  2 +-
+ 3 files changed, 3 insertions(+), 35 deletions(-)
+ delete mode 100644 package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch
+
+diff --git a/package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch b/package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch
+deleted file mode 100644
+index 61cbabd84a..0000000000
+--- a/package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 6eb7fb37d901ed1e4ce07cbd628ee11bf02db1f3 Mon Sep 17 00:00:00 2001
+-From: Daniel Stenberg <daniel@haxx.se>
+-Date: Thu, 28 Apr 2022 17:11:50 +0200
+-Subject: [PATCH] mbedtls: fix compile when h2-enabled
+-
+-Fixes #8766
+-Reported-by: LigH-de on github
+-Closes #8768
+-
+-Downloaded from upstream commit
+-https://github.com/curl/curl/commit/6eb7fb37d901ed1e4ce07cbd628ee11bf02db1f3
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- lib/vtls/mbedtls.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/lib/vtls/mbedtls.c b/lib/vtls/mbedtls.c
+-index 64f57c5d8321..5f9b87e6b75b 100644
+---- a/lib/vtls/mbedtls.c
+-+++ b/lib/vtls/mbedtls.c
+-@@ -815,8 +815,8 @@ mbed_connect_step2(struct Curl_easy *data, struct connectdata *conn,
+-     if(next_protocol) {
+-       infof(data, VTLS_INFOF_ALPN_ACCEPTED_1STR, next_protocol);
+- #ifdef USE_HTTP2
+--      if(!strncmp(next_protocol, ALPN_H2, ALPN_H2_LEN) &&
+--         !next_protocol[ALPN_H2_LEN]) {
+-+      if(!strncmp(next_protocol, ALPN_H2, ALPN_H2_LENGTH) &&
+-+         !next_protocol[ALPN_H2_LENGTH]) {
+-         conn->negnpn = CURL_HTTP_VERSION_2;
+-       }
+-       else
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 64a1129a90..8672380f09 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-7.83.0.tar.xz.asc
++# https://curl.se/download/curl-7.83.1.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  bbff0e6b5047e773f3c3b084d80546cc1be4e354c09e419c2d0ef6116253511a  curl-7.83.0.tar.xz
++sha256  2cb9c2356e7263a1272fd1435ef7cdebf2cd21400ec287b068396deb705c22c4  curl-7.83.1.tar.xz
+ sha256  321b1a09ebc30410f2e837c072e5521cf7095b757193af4a7dae1086e36ed31a  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index ea8529c914..15943f7512 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.83.0
++LIBCURL_VERSION = 7.83.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
