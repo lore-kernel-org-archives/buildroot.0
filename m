@@ -4,78 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7DFAC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 11 May 2022 00:19:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82319C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 11 May 2022 00:40:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88CD68319F;
-	Wed, 11 May 2022 00:19:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7F9D831B0;
+	Wed, 11 May 2022 00:40:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z13h2n6VIDzv; Wed, 11 May 2022 00:19:54 +0000 (UTC)
+	with ESMTP id fJdxcYrbhlb1; Wed, 11 May 2022 00:40:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94DFC8139D;
-	Wed, 11 May 2022 00:19:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CC25A1BF2F2
- for <buildroot@lists.busybox.net>; Wed, 11 May 2022 00:19:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0265831A7;
+	Wed, 11 May 2022 00:40:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 999411BF9B2
+ for <buildroot@lists.busybox.net>; Wed, 11 May 2022 00:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B23F341866
- for <buildroot@lists.busybox.net>; Wed, 11 May 2022 00:19:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 804D960FDB
+ for <buildroot@lists.busybox.net>; Wed, 11 May 2022 00:40:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id igS2XPQhtQnr for <buildroot@lists.busybox.net>;
- Wed, 11 May 2022 00:19:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2ZeHWK-rf4un for <buildroot@lists.busybox.net>;
+ Wed, 11 May 2022 00:40:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com
- [IPv6:2607:f8b0:4864:20::536])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BA0234179A
- for <buildroot@buildroot.org>; Wed, 11 May 2022 00:19:50 +0000 (UTC)
-Received: by mail-pg1-x536.google.com with SMTP id x12so352336pgj.7
- for <buildroot@buildroot.org>; Tue, 10 May 2022 17:19:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bdm118g7SuJWyyMoIlr/9Wr34ALK1mCQbom18/9QsUE=;
- b=EPzBaqwhXp5FHdlOeLgrKa17hcU2z5R4KMdN2sJxQyN5zCx0rj9PwqJX+TIdrNvwgY
- MZ56IUrC8y7RMgC9XXi6ON2hLwxWjRdqw6SO4XsqNPAs3t9T9DzgjkcDYCJ9M+H3ijV2
- IygDg+ORQsyv6A1wKoQYQ/gFVQRMZW4ZkD+i8qwg5XF6zYW/kzJmTHjg3MNDYUzWzJUh
- rFzTgjHGywbrhH0bgg6cvGQXYKCon+8PLX2WTQhF3aoJ3VTD3O1Z+B7tTWMwFqvVgWrd
- LqO9L4TObQ4NoWuIenl1a4qehuD/Bk1lxhOvSjB96ayhtDC2MU2s/ZBsN/KaMyjdr56L
- jf+Q==
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com
+ [209.85.214.176])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 82CEA60B59
+ for <buildroot@buildroot.org>; Wed, 11 May 2022 00:40:12 +0000 (UTC)
+Received: by mail-pl1-f176.google.com with SMTP id c11so318817plg.13
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 17:40:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=bdm118g7SuJWyyMoIlr/9Wr34ALK1mCQbom18/9QsUE=;
- b=g+MDstjHtYNhr6bY4iCiCrF4Og317HAAoAYAB527sMzWniTpuIwux/dWd+GLjFXRY+
- dO8Frgr+fgcsH55lCOr/Dg+qxFW5mU/DsTjoBioks0Anau1usFJdlZo0Mx57kwOk6Y8z
- OJKzhJKdwfW8t3FtTh4/F2Lz0wsw6NWKLr6z2RAztAIOdgmQ3JHUtkopzTYQOMzXT6E/
- kPgquLyk/DsRq+OWsRPCf6e3vunzVSVbwCsr9yGrjl6deUIPrREnFWa7YCVhaE35jLcl
- zDoDDGWwSnjGJx7ckFbqnEtiv8qWQi36SrOSxywBAZJwKECzGNtTnTqHgPVLexfp5ApA
- T9EA==
-X-Gm-Message-State: AOAM533EWP0MES6owA+0HGOe9cnHh3COhG4cy6fWuaRDyrzaGBJ7qsvp
- MEqEsUs6ivxMHqdOyrGvd2JlSnxSxog=
-X-Google-Smtp-Source: ABdhPJxjrVYnE+2WFH86Hn8u1Z/QS+7oNpPQ0Vo1EhS9kFzMZAnWbQTkcskJ7P6lMrBvb21SzDPOhQ==
-X-Received: by 2002:a63:e155:0:b0:3c6:7514:6c0d with SMTP id
- h21-20020a63e155000000b003c675146c0dmr14764188pgk.249.1652228389749; 
- Tue, 10 May 2022 17:19:49 -0700 (PDT)
-Received: from localhost.localdomain (ip72-194-116-95.oc.oc.cox.net.
- [72.194.116.95]) by smtp.gmail.com with ESMTPSA id
- ha18-20020a17090af3d200b001cd8e9ea22asm2460389pjb.52.2022.05.10.17.19.48
+ bh=YsrjfNM2dVMkbIKWSWMQ4pdroJluAYiTCvzmCoRkN2g=;
+ b=wyDNSwAv2JjLIw4vVjE8t9AFmLyKizdbhdDAkQWa8nk46G0GnC8ZUUI0yQ2HI1dlH0
+ i+2N6/sCTHkyqi754N8l+6ekUt/ui08n95/Dsy89Xmsb0uQxXlH4t54L9EfA0Mg1C9eU
+ yKYMmXxxB6M4u3lh93a4Gn5VvYzgwC0/Q1D/tT4mG+kLA4PpRRx4RejkWB6GPnYa0JAv
+ qoAitguEbM+oRq+vgn4ebHLR8u0vT8+jRyGoaNQRAq0AcaPwGjFtcYfQ4j8eQPrCYOav
+ 6VZD3Jl/29556Aa18lDEWaRE+DUku0wYfz8Q5XcXZYXURBluX1eTHcwo7inDk5xirUxE
+ 7pQg==
+X-Gm-Message-State: AOAM530i7HvxSF3MoqPbPC5T+FBRNzXAqK/XMgvqIgZobTQMpq+R3V02
+ SOL3gIu42BdrIQyfDOF0enIGEh7du864Sw==
+X-Google-Smtp-Source: ABdhPJzrf1ZR2FCYZaVrCfvnF9NX1o4Te9nAoQQ+2vDekh31ub2rJxlBiI4GtVtNvC+QY3Jc6gOv6Q==
+X-Received: by 2002:a17:902:7296:b0:151:62b1:e2b0 with SMTP id
+ d22-20020a170902729600b0015162b1e2b0mr22481266pll.165.1652229611426; 
+ Tue, 10 May 2022 17:40:11 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ g1-20020aa79dc1000000b0050dc76281e1sm144875pfq.187.2022.05.10.17.40.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 10 May 2022 17:19:49 -0700 (PDT)
-From: Florian Fainelli <f.fainelli@gmail.com>
+ Tue, 10 May 2022 17:40:09 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue, 10 May 2022 17:19:47 -0700
-Message-Id: <20220511001947.2112747-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Tue, 10 May 2022 17:40:06 -0700
+Message-Id: <20220511004007.3630-1-christian@paral.in>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/cpulimit: Disable build on OpenRISC
- with musl-libc
+Subject: [Buildroot] [PATCH 1/1] package/qemu: add symlink to target
+ qemu-system
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,48 +74,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, mmayer@broadcom.com,
- yann.morin.1998@free.fr
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As reported in the following autobuild report:
+Scripts which use the buildroot host system to execute a qemu for the compiled
+buildroot output can use the symlink at host/bin/qemu-system to execute the
+appropriate qemu-system for the target, for example qemu-system-riscv64.
 
-http://autobuild.buildroot.net/results/2a9cf20949beac46d1c689df2c5b7ab0d59c08b5/
-
-cpulimit does not build due to a lack of definition for elf_gregset_t
-which is not currently provided in the or1k musl-libc port. While this
-is being worked on, disable the build for or1k and musl-libc.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Fixes: 9e8e80d1e335 ("package: Add cpulimit")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/cpulimit/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/qemu/qemu.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/cpulimit/Config.in b/package/cpulimit/Config.in
-index 7cab152fc0ea..cca74afc9955 100644
---- a/package/cpulimit/Config.in
-+++ b/package/cpulimit/Config.in
-@@ -1,7 +1,12 @@
-+comment "cpulimit needs a toolchain w/ threads, does not build open openrisc with musl"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || (BR2_or1k && BR2_TOOLCHAIN_USES_MUSL)
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 9c2b819174..1bcffc2340 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -400,6 +400,12 @@ define HOST_QEMU_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
++# install symlink to qemu-system
++define HOST_QEMU_POST_INSTALL_SYMLINK
++	ln -sf ./qemu-system-$(HOST_QEMU_ARCH) $(HOST_DIR)/bin/qemu-system
++endef
++HOST_QEMU_POST_INSTALL_HOOKS += HOST_QEMU_POST_INSTALL_SYMLINK
 +
- config BR2_PACKAGE_CPULIMIT
- 	bool "cpulimit"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !(BR2_or1k && BR2_TOOLCHAIN_USES_MUSL)
- 	help
- 	  Cpulimit is a tool which limits the CPU usage of a process
- 	  (expressed in percentage, not in CPU time)
+ $(eval $(host-generic-package))
+ 
+ # variable used by other packages
 -- 
-2.25.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
