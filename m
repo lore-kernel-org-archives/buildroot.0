@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3B77C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 11 May 2022 11:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A436C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 11 May 2022 11:10:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 57F52610C7;
-	Wed, 11 May 2022 11:10:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 217D783366;
+	Wed, 11 May 2022 11:10:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FE6PLt8RuO6s; Wed, 11 May 2022 11:10:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AMBTSXjp4Wis; Wed, 11 May 2022 11:10:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D8DC610C9;
-	Wed, 11 May 2022 11:10:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E67901BF2BE
- for <buildroot@lists.busybox.net>; Wed, 11 May 2022 11:10:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3BCB5832C9;
+	Wed, 11 May 2022 11:10:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 039131BF9C2
+ for <buildroot@lists.busybox.net>; Wed, 11 May 2022 11:10:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E2D1A610C0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0018E40286
  for <buildroot@lists.busybox.net>; Wed, 11 May 2022 11:10:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5NHfOUKbmZ97 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wrygHDAYvmio for <buildroot@lists.busybox.net>;
  Wed, 11 May 2022 11:10:24 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B94F7610B9
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C42664010C
  for <buildroot@buildroot.org>; Wed, 11 May 2022 11:10:23 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 45522CE53C
- for <buildroot@buildroot.org>; Wed, 11 May 2022 11:06:37 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::224])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 4D919CFD17
+ for <buildroot@buildroot.org>; Wed, 11 May 2022 11:06:38 +0000 (UTC)
 Received: (Authenticated sender: foss@0leil.net)
- by mail.gandi.net (Postfix) with ESMTPSA id 196D3E000A;
- Wed, 11 May 2022 11:06:31 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 31F3EE0011;
+ Wed, 11 May 2022 11:06:32 +0000 (UTC)
 From: Quentin Schulz <foss+buildroot@0leil.net>
 To: buildroot@buildroot.org
-Date: Wed, 11 May 2022 13:06:18 +0200
-Message-Id: <20220511110619.1610327-1-foss+buildroot@0leil.net>
+Date: Wed, 11 May 2022 13:06:19 +0200
+Message-Id: <20220511110619.1610327-2-foss+buildroot@0leil.net>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220511110619.1610327-1-foss+buildroot@0leil.net>
+References: <20220511110619.1610327-1-foss+buildroot@0leil.net>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] manual: add _TARGET_FINALIZE_HOOKS in the
- list of hooks
+Subject: [Buildroot] [PATCH 2/2] manual: add LIBFOO_ROOTFS_PRE_CMD_HOOKS docs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,32 +67,44 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-While reading the docs to find hooks, I completely missed the
-LIBFOO_TARGET_FINALIZE_HOOKS one which was actually matching my
-use-case.
+Even though it's barely used in packages, let's list the hook in the
+list of supported hooks.
 
-Though it is documented in a subsection a few lines below, let's also
-have it in the list of supported hooks so it's not hidden away.
+Also add a specific section to explain what's its use and how it
+differs from LIBFOO_TARGET_FINALIZE_HOOKS.
 
 Cc: Quentin Schulz <foss+buildroot@0leil.net>
 Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
- docs/manual/adding-packages-hooks.txt | 2 ++
- 1 file changed, 2 insertions(+)
+ docs/manual/adding-packages-hooks.txt | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
-index 0ce79f8907..741b71ca29 100644
+index 741b71ca29..9dd77bece3 100644
 --- a/docs/manual/adding-packages-hooks.txt
 +++ b/docs/manual/adding-packages-hooks.txt
-@@ -46,6 +46,8 @@ The following hook points are available:
- * +LIBFOO_PRE_LEGAL_INFO_HOOKS+
- * +LIBFOO_POST_LEGAL_INFO_HOOKS+
+@@ -48,6 +48,8 @@ The following hook points are available:
  
-+* +LIBFOO_TARGET_FINALIZE_HOOKS+
+ * +LIBFOO_TARGET_FINALIZE_HOOKS+
+ 
++* +LIBFOO_ROOTFS_PRE_CMD_HOOKS+
 +
  These variables are 'lists' of variable names containing actions to be
  performed at this hook point. This allows several hooks to be
  registered at a given hook point. Here is an example:
+@@ -87,3 +89,12 @@ Packages may also register hooks in +LIBFOO_TARGET_FINALIZE_HOOKS+.
+ These hooks are run after all packages are built, but before the
+ filesystem images are generated. They are seldom used, and your
+ package probably do not need them.
++
++==== Rootfs pre-hook
++
++Packages may also register hooks in +LIBFOO_ROOTFS_PRE_CMD_HOOKS+.
++These hooks are run after all packages are built, but before the
++filesystem images are generated. They are run under fakeroot, in a
++temporary directory and after all +*_TARGET_FINALIZE_HOOKS+ have
++been run.
++They are seldom used, and your package probably do not need them.
 -- 
 2.35.3
 
