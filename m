@@ -1,69 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0085C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 11 May 2022 06:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48F1FC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 11 May 2022 06:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 517798328E;
-	Wed, 11 May 2022 06:23:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA63A40ADF;
+	Wed, 11 May 2022 06:42:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ObjozFR43d6F; Wed, 11 May 2022 06:23:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j1Pg_sJEyI-t; Wed, 11 May 2022 06:42:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4320183276;
-	Wed, 11 May 2022 06:23:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C54CF4060C;
+	Wed, 11 May 2022 06:42:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F33971BF870
- for <buildroot@lists.busybox.net>; Wed, 11 May 2022 06:23:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1A4611BF23C
+ for <buildroot@lists.busybox.net>; Wed, 11 May 2022 06:42:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E17A041794
- for <buildroot@lists.busybox.net>; Wed, 11 May 2022 06:23:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 07F9941718
+ for <buildroot@lists.busybox.net>; Wed, 11 May 2022 06:42:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=orange.com
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mgk7aFSAtk_e for <buildroot@lists.busybox.net>;
- Wed, 11 May 2022 06:23:21 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.34])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7379F40908
- for <buildroot@buildroot.org>; Wed, 11 May 2022 06:23:21 +0000 (UTC)
-Received: from opfednr04.francetelecom.fr (unknown [xx.xx.xx.68])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by opfednr20.francetelecom.fr (ESMTP service) with ESMTPS id 4KylGG6kNsz208y; 
- Wed, 11 May 2022 08:23:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.com;
- s=ORANGE001; t=1652250198;
- bh=oz/h1XuMSXHftfJ/s7PddVrm81JLuHYZ/yoq/BVbXFM=;
- h=From:To:Subject:Date:Message-ID:MIME-Version:
- Content-Transfer-Encoding:Content-Type;
- b=FSsPuP8bFUYQoaj14FbsRA1Tj7wiMAsCUo3N+fb2PxuQvvMF6HgHo77RbSO9xY42o
- JCmJFPnDalueckPGY6rX915sCowU/flabRa1b6CGxhUUzt7/SzD2D7fphlTw5GMOjo
- taTg2i/dCSgSjRXKHy9zN40nCsY5ZS9cIwu6UYw3A4ztYA1GHTPzqbFCLM5MgLYASi
- odPg3ta3g9j1UPl+MVVk+je2B/3bnNA7Rc0UnHKlARLdlkZw8zrRrNUPqOpp5oYNaR
- 1IBQ6Jcjfkpx1Ibr5blOLR6/4wLJagq+EX/pieSK5gDCSOetXB0leXQCV1tDolroVD
- j23V4rYxKk0uw==
-Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Wed, 11 May 2022 08:23:16 +0200
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-Date: Wed, 11 May 2022 08:23:16 +0200
-Message-ID: <17102_1652250198_627B5656_17102_437_1_abf36ee4172876cd86eaa1ce6691ddca377f8b0b.1652250196.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.25.1
+ with ESMTP id anL4pLZ0oDVg for <buildroot@lists.busybox.net>;
+ Wed, 11 May 2022 06:42:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 82EC341716
+ for <buildroot@buildroot.org>; Wed, 11 May 2022 06:42:42 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id y21so1357020edo.2
+ for <buildroot@buildroot.org>; Tue, 10 May 2022 23:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=UrXC+x11OQ1JFaN5oMegUxx8fJNiYsm7SFNNaiGfoqA=;
+ b=V+LjN93sdHXUHqJErdC26G7pKeeh0EbiYn52WljX9iGt9efTqYFBDPr8OaSbRGvWMw
+ 6kSRXYOhIAuyaRs37U8dPHrdOTMH/Tlpje/e/NAsqcMKWHPqaMgi/Proq7hhiowRdURL
+ SjHG0J9j/xEzG7fwn/1hGInORuFCSs8dzzZSZuI36of1Lolti2jBU2i3teUn/vRGqQjJ
+ 5NUnPmKl4Bpyd8f5/fPSLDL2mnimAOGr2ILIWHt13byV0fcThcDwStMMsDi0VHoGQDq1
+ jRXxF/9EXoiOIo91hxhzXtz0XilZUXD0tKnwlkNMH7Gqefb1XbJPacU2P+dBnjxp+GyM
+ O1XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=UrXC+x11OQ1JFaN5oMegUxx8fJNiYsm7SFNNaiGfoqA=;
+ b=cYO5jT8NIEpkf5SBypiQNnucPFaFdQH7v38RqExiqRYuSlrNBa+V2zZkHVOBqQ0dio
+ CwZn7JVqkOE8jaz4Fs33s/dtux1hniU/84sHmy9rNKyuDbL3ng8qFQBOzItNyX91ZHKb
+ Xid8HAXcTinH35sRuUWL1GjkS5cFnR1n4OH70JveY7mSZQPIetvV9Zf3+XpSdhqP+Wcj
+ 8dAczLlyP0IWzMxsPt1wWFPe+t2y600RtEF2I/i3A6aP/hkEzaKLSSvj0m20Y8+ugZJ4
+ EiIKhqzKXGvqOjwuyOJwZHVJzVxlej3/1Sxfaosd6tzoRkZwWWeItXVeQD/gHGwZdA4l
+ m1FA==
+X-Gm-Message-State: AOAM531Rpitu7iBoa0v9aXg0NhWFEPVYVJu6PIaWKSBkZ06S3SFAzlYA
+ AVz6VqTvYBicvPjqtG3fzfwgFg==
+X-Google-Smtp-Source: ABdhPJxRHz5UWkkgkfm82ALOVacHGHoihdrKGSyMwhatvq8CZglmm5lUvlzZY/i/9K04bSwrZ0yy0g==
+X-Received: by 2002:a05:6402:4408:b0:427:ab6f:a383 with SMTP id
+ y8-20020a056402440800b00427ab6fa383mr27174421eda.249.1652251360550; 
+ Tue, 10 May 2022 23:42:40 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ i3-20020a1709061cc300b006f3ef214ddfsm575987ejh.69.2022.05.10.23.42.39
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 10 May 2022 23:42:40 -0700 (PDT)
+Message-ID: <891d79c1-531b-7a95-7739-a19e634a318d@mind.be>
+Date: Wed, 11 May 2022 08:42:39 +0200
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.52]
-X-ClientProxiedBy: OPE16NORMBX605.corporate.adroot.infra.ftgroup
- (10.115.27.29) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-Subject: [Buildroot] [PATCH] package/pkg-generic: explicitly do not download
- package withtout source
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Petr Vorel <petr.vorel@gmail.com>
+References: <YnrH/mfbuJHRpYnw@pevik>
+ <CAPi7W80OTx7DuKHba8Y3Zr4vUJ-SnLGTesHyYCf-Gjw2z2hnNg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CAPi7W80OTx7DuKHba8Y3Zr4vUJ-SnLGTesHyYCf-Gjw2z2hnNg@mail.gmail.com>
+Subject: Re: [Buildroot] [RFC] iputils (meson build system) has git version
+ from buildroot instead of iputils
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,113 +98,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin@orange.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, Dagg Stompler <daggs@gmx.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
-
-Recent commit f0c7cb01a960 (package/pkg-download: do not try to vendor
-_EXTRA_DOWNLOADS) got last-minute changes when applied, which changed
-the expected behaviour for packages that do not have a main download.
-
-Before f0c7cb01a960, the dl-wrapper would not even be called for those
-packages, and the original patch that was sent also avoided downloading
-such packages, but f0c7cb01a960 now causes the dl-wrapper to be called.
-
-It is however an accident that the dl-wrapper does not fail. Indeed, it
-is expected to fail if no download was successful; we pass no URI, so
-the dl-wrapper should have failed, as it basically does:
-
-    download_and_check=0
-    for uri in "${uris[@]}"; do
-        ...
-    done
-    if [ "${download_and_check}" -eq 0 ]; then
-        exit 1
-    fi
-
-However, it does not even go that far...
-
-Even though there is no output file, we still pass the path to the
-package output directory as the output path. So, to avoid downloading
-files already present, the wrapper checks if the output file exists,
-and checks its hash:
-
-    if [ -e "${output}" ]; then
-        if support/download/check-hash ${quiet} "${hfile}" "${output}" ...
-            exit 0
-        ...
-    fi
-
-The output path does exist now, because we explicitly create it just
-before calling the wrapper, because that's where we also locate the
-lockfile.
-
-So it ends up trying to validate the hash of a directory, but it fails
-to, as there is indeed no hash file for that package. And a missing hash
-file is just a warning, not an error, which makes the download actually
-a success...
-
-So, this is currently working, and this is by pure luck.
-
-However, there is a potential issue: if a target package is a virtual
-package, but the host package is a real package, e.g. the same foo.mk
-does (or the other way around):
-
-    HOST_FOO_VERSION = 1.2.3
-    HOST_FOO_SITE = http://example.net/
-    $(eval $(virtual-package))
-    $(eval $(host-generic-package))
-
-If there is a hash file to validate the host download, then the current
-situation will cause a failure, because there would be a hash file, but
-no hash for the output path of the target variant, which would then be
-a hard-error.
-
-So, revert to the behaviour from before f0c7cb01a960, where no download
-is attempted for a package without a source (really, without a main
-download, now).
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 38219ce088..b233b07548 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -192,7 +192,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
- 			break ; \
- 		fi ; \
- 	done
--	$(call DOWNLOAD,$($(PKG)_MAIN_DOWNLOAD),$(PKG),$(patsubst %,-p '%',$($(PKG)_DOWNLOAD_POST_PROCESS)))
-+	$(if $($(PKG)_MAIN_DOWNLOAD),$(call DOWNLOAD,$($(PKG)_MAIN_DOWNLOAD),$(PKG),$(patsubst %,-p '%',$($(PKG)_DOWNLOAD_POST_PROCESS))))
- 	$(foreach p,$($(PKG)_ADDITIONAL_DOWNLOADS),$(call DOWNLOAD,$(p),$(PKG))$(sep))
- 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)mkdir -p $(@D)
--- 
-2.25.1
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAxMC8wNS8yMDIyIDIzOjQ3LCBGYWJyaWNlIEZvbnRhaW5lIHdyb3RlOgo+IEhpIFBldHIs
+Cj4gCj4gTGUgbWFyLiAxMCBtYWkgMjAyMiDDoCAyMjoxNiwgUGV0ciBWb3JlbCA8cGV0ci52b3Jl
+bEBnbWFpbC5jb20+IGEgw6ljcml0IDoKPj4KPj4gSGkgYWxsLAo+Pgo+PiBtZXNvbi5idWlsZCBb
+MV0gdXNlcyBnaXQtdmVyc2lvbi5oLm1lc29uIFsyXSB0byBwcm9kdWNlIEJVSUxEX0RJUkVDVE9S
+WS9naXQtdmVyc2lvbi5oLgo+Pgo+PiBCdWlsZGluZyBmcm9tIHNvdXJjZXMgKG5vdCBpbiBCdWls
+ZHJvb3QpIGl0IHdvcmtzOgo+PiAkIGhlYWQgLTEgYnVpbGRkaXIvZ2l0LXZlcnNpb24uaAo+PiAj
+ZGVmaW5lIFBBQ0tBR0VfVkVSU0lPTiAiMjAyMTEyMTUtMTUtZzMwOWYyODUiCj4+Cj4+IEJ1dCBi
+dWlsZGluZyBpbiBCdWlsZHJvb3QgaXQgZ2V0cyBnaXQgdmVyc2lvbiBmcm9tIEJ1aWxkcm9vdDoK
+Pj4gJCBoZWFkIC0xIG91dHB1dC9idWlsZC9pcHV0aWxzLTIwMjExMjE1L2J1aWxkL2dpdC12ZXJz
+aW9uLmgKPj4gI2RlZmluZSBQQUNLQUdFX1ZFUlNJT04gIjIwMjIuMDItODc2LWczZWYwOTY3ODZh
+Igo+Pgo+PiBJcyBpdCBhIGJ1ZyBpbiBpcHV0aWxzIG9yIGluIEJ1aWxkcm9vdCBtZXNvbj8KPiAK
+PiBUaGlzIGlzc3VlIGlzIHJhaXNlZCBiZWNhdXNlLCBpbiB0aGUgY29udGV4dCBvZiBidWlsZHJv
+b3QsIGlwdXRpbHMgaXMKPiByZXRyaWV2ZWQgYXMgYSB0YXJiYWxsLCBub3QgYSBnaXQgY2xvbmUu
+CgogIFRoaXMgd291bGQgYmUgdGhlIGNhc2UgZXZlbiBpZiB3ZSB0YWtlIGl0IGZyb20gYSBpdCBj
+bG9uZSwgYmVjYXVzZSB3ZSBmaXJzdCAKYXJjaGl2ZSB0aGUgdHJlZSBpbiBhIHRhcmJhbGwgYW5k
+IHRoZW4gZXh0cmFjdCB0aGUgdGFyYmFsbCBpbiB0aGUgYnVpbGQgCmRpcmVjdG9yeSAoaS5lLiB3
+aXRob3V0IHRoZSAuZ2l0IGRpcmVjdG9yeSkuCgogIE5vdGUgYWxzbyB0aGF0IHRoaXMgb25seSBo
+YXBwZW5zIGlmIHlvdXIgb3V0cHV0IGRpcmVjdG9yeSBpcyBiZWxvdyB0aGUgCkJ1aWxkcm9vdCB0
+cmVlLiBPbiB0aGUgb3RoZXIgaGFuZCwgaWYgeW91IHB1dCB5b3VyIG91dHB1dCBkaXJlY3Rvcnks
+IGZvciAKZXhhbXBsZSwgdW5kZXIgYSBCUjJfRVhURVJOQUwgcmVwb3NpdG9yeSAod2hpY2ggaXMg
+d2hhdCBJIHVzdWFsbHkgZG8pLCB0aGVuIGl0IAp3aWxsIHRha2UgdGhlIHZlcnNpb24gZnJvbSB0
+aGF0IHJlcG8uCgo+IFNvIG1lc29uJ3MgdmNzX3RhZyB3aWxsIHJldHJpZXZlIHRoZSBnaXQgaW5m
+b3JtYXRpb24gZnJvbSBidWlsZHJvb3QKPiBhbmQgd2lsbCBub3QgdXNlIGl0cyBmYWxsYmFjayAo
+aS5lLiBtZXNvbi5wcm9qZWN0X3ZlcnNpb24oKSkuCj4gCj4gVG8gZml4IGl0LCB0aGVyZSBpcyB0
+aHJlZSAic2ltcGxlIiBvcHRpb25zOgo+ICAgLSBhbGxvdyBidWlsZHJvb3QgdG8gY29uZmlndXJl
+IHRoZSB2ZXJzaW9uIChhcyBhbHJlYWR5IGRvbmUgaW4KPiBvcGVuNjI1NDEgcGFja2FnZSkKPiAg
+IC0gZG9uJ3QgdXNlIHZjc190YWcgYW5kIGFsd2F5cyBzZXQgcGFja2FnZV92ZXJzaW9uIHRvCj4g
+bWVzb24ucHJvamVjdF92ZXJzaW9uKCkgb3V0c2lkZSBvZiBhICJkZXZlbCIgbW9kZSBhcyBkb25l
+IGZvciBleGFtcGxlCj4gaW4gZ25vbWUgY29uc29sZSBbMV0KPiAgIC0gb3ZlcnJpZGUgdGhlIGRl
+ZmF1bHQgdmNzIGNvbW1hbmQgaW4gdmNzX3RhZyBjYWxsIChlLmcuIGNvbW1hbmQ6Cj4gJ2dpdCAt
+LWdpdC1kaXI9LmdpdCBkZXNjcmliZSAtLWRpcnR5PSsnKQoKICBUaGlzIGlzIGEgcHJvYmxlbSBm
+b3IgYWxsIHBhY2thZ2VzLCBub3QganVzdCBpcHV0aWxzLgoKICBJIHRoaW5rIGEgc29sdXRpb24g
+Y291bGQgYmUgdG8KCmV4cG9ydCBHSVRfQ0VJTElOR19ESVJFQ1RPUklFUyA9ICQoT1VUUFVUX0RJ
+UikKClRoYXQgd2F5LCBnaXQgd29uJ3QgdHJhdmVsIHVwIHRvIHRoZSBidWlsZHJvb3QgZGlyZWN0
+b3J5LiBTaG91bGQgYmUgdGVzdGVkIHdpdGggCnB1dHRpbmcgdGhlIG91dHB1dCBkaXJlY3Rvcnkg
+aW4gdmFyaW91cyBwbGFjZXMsIGFuZCBhbHNvIHdpdGggcHV0dGluZyBETF9ESVIgCmJlbG93IE9V
+VFBVVF9ESVIgb3IgZXF1YWwgdG8gT1VUUFVUX0RJUiBhbmQgZG93bmxvYWRpbmcgZ2l0IHBhY2th
+Z2VzLgoKICBSZWdhcmRzLAogIEFybm91dAoKPiAKPiBBbm90aGVyIG9wdGlvbiB3b3VsZCBiZSB0
+byBwYXRjaCBtZXNvbiBzbyB2Y3NfdGFnIGlzIGFsd2F5cyBydW4gd2l0aAo+ICItLWdpdC1kaXI9
+LmdpdCIuCj4gVGhpcyBpcyBwcm9iYWJseSB0aGUgbW9yZSBjb3JyZWN0IG9wdGlvbiBhcyB0aGlz
+IGlzc3VlIGlzIHByb2JhYmx5Cj4gYWZmZWN0aW5nIG90aGVyIHBhY2thZ2VzIHRoYW4gaXB1dGls
+cy4KPiBIb3dldmVyLCBmcm9tIG15IGV4cGVyaWVuY2UgaW4gbWVzb24sIGdldHRpbmcgc29tZXRo
+aW5nIG1lcmdlZAo+IHVwc3RyZWFtIGNhbiB0YWtlIGEgdmVyeSB2ZXJ5IGxvbmcgdGltZSAoZS5n
+LiBtb3JlIHRoYW4gdHdvIHllYXJzIGZvcgo+IGEgcHJlZmVyX3N0YXRpYyBvcHRpb24gWzJdKQo+
+IEkgZG9uJ3Qga25vdyBpZiB0aGlzIGlzIGNvbXBsZXRlbHkgcmVsYXRlZCBidXQgdGhpcyBpc3N1
+ZSBvbiB2Y3NfdGFnCj4gaXMgb3BlbmVkIGZvciBtb3JlIHRoYW4gb25lIHllYXIgWzNdIC4uLgo+
+IAo+PiBBbnkgaWRlYSBob3cgdG8gZml4IGl0Pwo+Pgo+PiBLaW5kIHJlZ2FyZHMsCj4+IFBldHIK
+Pj4KPj4gWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9pcHV0aWxzL2lwdXRpbHMvYmxvYi9tYXN0ZXIv
+bWVzb24uYnVpbGQjTDE0Cj4+IFsyXSBodHRwczovL2dpdGh1Yi5jb20vaXB1dGlscy9pcHV0aWxz
+L2Jsb2IvbWFzdGVyL2dpdC12ZXJzaW9uLmgubWVzb24KPiAKPiBCZXN0IFJlZ2FyZHMsCj4gCj4g
+RmFicmljZQo+IAo+IFsxXSBodHRwczovL2dpdGxhYi5nbm9tZS5vcmcvR05PTUUvY29uc29sZS8t
+L2Jsb2IvbWFpbi9tZXNvbi5idWlsZCNMMzUKPiBbMl0gaHR0cHM6Ly9naXRodWIuY29tL21lc29u
+YnVpbGQvbWVzb24vcHVsbC82NjI5Cj4gWzNdIGh0dHBzOi8vZ2l0aHViLmNvbS9tZXNvbmJ1aWxk
+L21lc29uL2lzc3Vlcy84NTY3Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
