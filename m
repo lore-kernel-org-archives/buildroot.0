@@ -1,56 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4C45C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 15:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4DB5C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 16:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DF1183E17;
-	Thu, 12 May 2022 15:52:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67E1D40C12;
+	Thu, 12 May 2022 16:01:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QlGjo8O7O8mF; Thu, 12 May 2022 15:52:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dvoxyF_TofqI; Thu, 12 May 2022 16:01:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43BB883E07;
-	Thu, 12 May 2022 15:52:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 53DE4405CD;
+	Thu, 12 May 2022 16:01:22 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5C2F61BF336
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 15:52:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10CCA1BF336
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 16:01:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 57CEA405B4
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 15:52:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F299F405BD
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 16:01:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q8ZzYzBMQfIx for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 15:52:05 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 31766405B1
- for <buildroot@buildroot.org>; Thu, 12 May 2022 15:52:05 +0000 (UTC)
-Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
- by mailout11.t-online.de (Postfix) with SMTP id 2D0F1167D2
- for <buildroot@buildroot.org>; Thu, 12 May 2022 17:52:02 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.203.41]) by fwd71.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1npB6f-0uL6Gn0; Thu, 12 May 2022 17:52:01 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48506)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1npB6f-00070g-6q
- for buildroot@buildroot.org; Thu, 12 May 2022 17:52:01 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ with ESMTP id m5OPGabHVsya for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 16:01:20 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 04A4A405CD
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 16:01:19 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id m20so11100656ejj.10
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 09:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Y4uAalrRn2Owg4gn73bh66XNvw+X0j6YuXpcWuyixYQ=;
+ b=PogWLCJvl3ZpvBvOZUarx8vV8RusLQF+fkbKErTzwXtClLlmXRZwqJDIzZAJaXUxLe
+ EfjwVoT33BEEpyOdJ+16zOacjuwJl7sePZrjSeHVbxDbVZgjpJcocHKvBBuR4ZfvCcfb
+ /4JZYi2O73A2SZs/Rv98K7eyAQYypWVkrSOkLEXwWcPEyxWdyseHSJvwmwrrjdia4w/R
+ Y9T63Xm2ZDjpj6su5KIJbBYJdIM9YJ21p2GgTAAbD+6x+1ni9xmXsbX32dVtruzYbU+B
+ fnHfzuXNTGDOhdQFZTH3p1pmpsDJK5TbttrEKhTVvzdKFrl82pUF2YCV2KruCSvVFPEW
+ tUZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Y4uAalrRn2Owg4gn73bh66XNvw+X0j6YuXpcWuyixYQ=;
+ b=S7jBH9EKdD3B9hFL6mL/CXnfdiUIxznYiT0tfW+RaIN2p0fL99B/Oh/X9nwu4qIEVC
+ 12gXbVoO89PH9SvxpimZzEYEspWJazfpzOMTzINWx1eTmtGseL6gTxorYkLQa2+CTj5f
+ 9txL2G6cGMIKF3Ce10jrX6KbIWn0Noc9rdzDFTSfWJA1/bSiqYshbejj+mNwkjTVDpFo
+ F4v+zSX5OCil793ZZzSzggfK8nqHfl4QlogwkGT8+7Ry6K2UTTX1N+sOUn9meE81j+4k
+ YjDGmHBOeikxI4s22jcCbbI8ExlLcp9OP/Z1qFoiJDFOnqbuHR1WD767M7/9h10UPOkz
+ JJ7A==
+X-Gm-Message-State: AOAM531Nw5b5WnX+/X5J4BwHxdeKMPUulEs/f+ajk04Xe/q8YA6hNhkY
+ uOqK7b37EOR1n7S6iR+3MfiJ6chznqU2vg==
+X-Google-Smtp-Source: ABdhPJyX5yqtEqBS5aiCxwTU9IE4++LsGVWmj7fscPwnuSnkZltJNKcCWyRBvVY7Bpf5qfHO+8wW0A==
+X-Received: by 2002:a17:907:6d0a:b0:6f9:b861:82b8 with SMTP id
+ sa10-20020a1709076d0a00b006f9b86182b8mr544257ejc.478.1652371277990; 
+ Thu, 12 May 2022 09:01:17 -0700 (PDT)
+Received: from arnoutx1.. (ip-188-118-3-185.reverse.destiny.be.
+ [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
+ lb20-20020a170907785400b006f3ef214df6sm2312382ejc.92.2022.05.12.09.01.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 12 May 2022 09:01:17 -0700 (PDT)
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 17:52:01 +0200
-Message-Id: <20220512155201.7384-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Thu, 12 May 2022 18:01:12 +0200
+Message-Id: <20220512160116.2011627-1-arnout@mind.be>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1652370721-00001674-94E67AA3/0/0 CLEAN NORMAL
-X-TOI-MSGID: a6f497ea-c693-42c2-bf0e-c766edacebf0
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-zattoo: bump version to
- 19.7.15-Matrix
+Subject: [Buildroot] [PATCH 1/5] package/gnutls: disable library search in
+ /usr/lib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +85,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+gnutls's configure script has a weird approach where it first searches
+for dependent libraries in the path specified by --prefix, before
+searching in the default search path. Since we set --prefix to /usr,
+and it doesn't take into account DESTDIR (which is anyway not set at
+configure time), that means it will first search /usr/lib before
+searching $(STAGING_DIR)/usr/lib.
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index d7693bdfb0..a24a7abcd8 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ccd27cfbfee58df9acc71df0661bd56ff34fbf7d9afc8de78d3224d33b30ef44  kodi-pvr-zattoo-19.7.14-Matrix.tar.gz
-+sha256  3126ce811e03ac92363a4e399b908336bb54328b7fa0d42c25ac85b2fe5aa7d4  kodi-pvr-zattoo-19.7.15-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 658db25f27..559dbf884b 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-@@ -4,7 +4,7 @@
+Ideally, this would be fixed in the configure script itself. However,
+the m4 file that does this is pretty complex, it's not immediately clear
+where to add $DESTDIR. In addition it comes from gnulib which is a
+somewhat annoying upstream.
+
+Therefore, instead, bypass the prefix lookup with
+--without-libfoo-prefix. Note that we could set
+--with-libfoo-prefix=$(STAGING_DIR)/usr (the latter is already done for
+librt and libpthread), but that's pretty pointless -
+--without-libfoo-prefix in fact reverts to what should have been done in
+the first place, i.e. use the toolchain search path.
+
+Add --without-libfoo-prefix for all options defined in configure (found
+with ./configure --help | grep without-.*-prefix). Most of these are
+only used in tests (e.g. libcrypto) or even not at all (e.g. libiconv),
+but it's fairly hard to discover this and to be sure that they are
+indeed not needed, so better pass all of them.
+
+Remove the now-redundant arguments for librt and libpthread.
+
+Add a comment to remind people to revisit these when bumping the
+version.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+This is for stable, but need to check if the same prefix options exist
+in 3.7.3.
+---
+ package/gnutls/gnutls.mk | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 0e461cd44c..b5503b1fc9 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -4,6 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_ZATTOO_VERSION = 19.7.14-Matrix
-+KODI_PVR_ZATTOO_VERSION = 19.7.15-Matrix
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
++# When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.7
+ GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).4
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+@@ -26,7 +27,15 @@ GNUTLS_CONF_OPTS = \
+ 	--disable-tests \
+ 	--enable-local-libopts \
+ 	--enable-openssl-compatibility \
+-	--with-librt-prefix=$(STAGING_DIR) \
++	--without-libcrypto-prefix \
++	--without-libdl-prefix \
++	--without-libev-prefix \
++	--without-libiconv-prefix \
++	--without-libintl-prefix \
++	--without-libpthread-prefix \
++	--without-libseccomp-prefix \
++	--without-librt-prefix \
++	--without-libz-prefix \
+ 	--without-tpm \
+ 	$(if $(BR2_PACKAGE_GNUTLS_OPENSSL),--enable,--disable)-openssl-compatibility \
+ 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools) \
+@@ -39,9 +48,6 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
+ 	gl_cv_func_gettimeofday_clobber=no
+ GNUTLS_INSTALL_STAGING = YES
+ 
+-# libpthread autodetection poison the linkpath
+-GNUTLS_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
+-
+ # gnutls needs libregex, but pcre can be used too
+ # The check isn't cross-compile friendly
+ GNUTLS_CONF_ENV += libopts_cv_with_libregex=yes
+@@ -70,7 +76,6 @@ GNUTLS_CONF_OPTS += --without-p11-kit
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
+-GNUTLS_CONF_OPTS += --with-libunistring-prefix=$(STAGING_DIR)/usr
+ GNUTLS_DEPENDENCIES += libunistring
+ else
+ GNUTLS_CONF_OPTS += --with-included-unistring
 -- 
-2.30.2
+2.35.1
 
 _______________________________________________
 buildroot mailing list
