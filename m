@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4991CC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:55:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B09BC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0726360BEE;
-	Thu, 12 May 2022 19:55:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE8C440399;
+	Thu, 12 May 2022 19:55:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I2yHLfglUeyg; Thu, 12 May 2022 19:55:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FY8wsnsqqyxI; Thu, 12 May 2022 19:55:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2AE360BB3;
-	Thu, 12 May 2022 19:55:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 152E01BF352
+	by smtp2.osuosl.org (Postfix) with ESMTP id D2A8540339;
+	Thu, 12 May 2022 19:55:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 482411BF9CB
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDF0F60B26
+ by smtp2.osuosl.org (Postfix) with ESMTP id C793540359
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IPBYU9m4kY9X for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P_9aX01lQAqY for <buildroot@lists.busybox.net>;
  Thu, 12 May 2022 19:51:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 032E760B30
+ by smtp2.osuosl.org (Postfix) with ESMTP id C09A040377
  for <buildroot@buildroot.org>; Thu, 12 May 2022 19:51:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 466D985C6F; Thu, 12 May 2022 19:41:01 +0000 (UTC)
+ id 1094F85C6F; Thu, 12 May 2022 19:41:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 21:49:58 +0200
+Date: Thu, 12 May 2022 21:49:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6d18367c6ce1758d74b1c54332f3bd598d9c911c
-X-Git-Newrev: 171ac077dc5633ecadf40383dcffafd4e06ed093
+X-Git-Oldrev: 2659ac537c0520ba9638a92fe6185a380fba6e45
+X-Git-Newrev: 87794ae497bbf6569e20c7ce13490f3799c3b3d7
 X-Patchwork-Hint: ignore
-Message-Id: <20220512194101.466D985C6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-dummy:
- bump version to 0.4.0
+Message-Id: <20220512194101.1094F85C6F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xclock: bump version to
+ 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +59,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=171ac077dc5633ecadf40383dcffafd4e06ed093
+commit: https://git.buildroot.net/buildroot/commit/?id=87794ae497bbf6569e20c7ce13490f3799c3b3d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2022-April/003155.html
+https://lists.x.org/archives/xorg-announce/2022-April/003147.html
+https://lists.x.org/archives/xorg-announce/2022-April/003156.html
 
+Removed md5 and sha1 hashes, not provided by upstream anymore.
 Reformatted license hash.
 Switched tarball to upstream-provided .xz format.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.hash   | 7 ++++---
- package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_xclock/xapp_xclock.hash | 10 ++++------
+ package/x11r7/xapp_xclock/xapp_xclock.mk   |  4 ++--
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.hash b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.hash
-index 3eac3840ef..eed28d3fde 100644
---- a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.hash
-+++ b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.hash
-@@ -1,4 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2016-December/002751.html
--sha256 3712bb869307233491e4c570732d6073c0dc3d99adfdb9977396a3fdf84e95b9  xf86-video-dummy-0.3.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-April/003155.html
-+sha256  e78ceae5c8c0588c7cb658f2afc3a9fac9ef665b52a75b01f8e9c5449a4e1e5a  xf86-video-dummy-0.4.0.tar.xz
-+sha512  1150a84c4f17215b9c579d8ce9399d547a01970bf7b5396653f14beb13a62deefe3008bf3ad6a2c5c0f46da4cbc0b840c18a7dff339e3b882d108183fa1d30d9  xf86-video-dummy-0.4.0.tar.xz
- # Locally calculated
--sha256 e29aa81e74563d14e5633963107c030e74e8352ea7dafee1a9d7e19b7d0e887b  COPYING
-+sha256  e29aa81e74563d14e5633963107c030e74e8352ea7dafee1a9d7e19b7d0e887b  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
-index 3127f6cb1b..e863b1e506 100644
---- a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
-+++ b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
+diff --git a/package/x11r7/xapp_xclock/xapp_xclock.hash b/package/x11r7/xapp_xclock/xapp_xclock.hash
+index 881b40154d..0bc011732f 100644
+--- a/package/x11r7/xapp_xclock/xapp_xclock.hash
++++ b/package/x11r7/xapp_xclock/xapp_xclock.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-July/003010.html
+-md5 437522a96f424f68fc64ed34ece9b211  xclock-1.0.9.tar.bz2
+-sha1 774c711cf7ee3f601f7209bbb01ce3f0d5ddbde6  xclock-1.0.9.tar.bz2
+-sha256 cf461fb2c6f2ac42c54d8429ee2010fdb9a1442a370adfbfe8a7bfaf33c123bb  xclock-1.0.9.tar.bz2
+-sha512 fcbac0b4ab1cea4ae0751ce1c0c6302048e5d98d459873c7580e4ca786ec49fa27f73e5831bdfe135abb5cfeabe886456276e9d01351ea7905c606f40f84522d  xclock-1.0.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-April/003156.html
++sha256  df7ceabf8f07044a2fde4924d794554996811640a45de40cb12c2cf1f90f742c  xclock-1.1.1.tar.xz
++sha512  059ea986bc7537c2796e8855676e8357bd8a7852fbac0839b3f8a9e3ffa088de41bc4e4961973353f0a7b7293366b81bc764d74f3dc4e90e361da06185d976e7  xclock-1.1.1.tar.xz
+ # Locally computed
+-sha256 ee1f19f46801ef00e70498603e74df644d0b93fc82f06b55ce64c3a2c9f16e71  COPYING
++sha256  ee1f19f46801ef00e70498603e74df644d0b93fc82f06b55ce64c3a2c9f16e71  COPYING
+diff --git a/package/x11r7/xapp_xclock/xapp_xclock.mk b/package/x11r7/xapp_xclock/xapp_xclock.mk
+index 77cc7011d3..852ae5dbae 100644
+--- a/package/x11r7/xapp_xclock/xapp_xclock.mk
++++ b/package/x11r7/xapp_xclock/xapp_xclock.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_DUMMY_VERSION = 0.3.8
--XDRIVER_XF86_VIDEO_DUMMY_SOURCE = xf86-video-dummy-$(XDRIVER_XF86_VIDEO_DUMMY_VERSION).tar.bz2
-+XDRIVER_XF86_VIDEO_DUMMY_VERSION = 0.4.0
-+XDRIVER_XF86_VIDEO_DUMMY_SOURCE = xf86-video-dummy-$(XDRIVER_XF86_VIDEO_DUMMY_VERSION).tar.xz
- XDRIVER_XF86_VIDEO_DUMMY_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_DUMMY_LICENSE = MIT
- XDRIVER_XF86_VIDEO_DUMMY_LICENSE_FILES = COPYING
+-XAPP_XCLOCK_VERSION = 1.0.9
+-XAPP_XCLOCK_SOURCE = xclock-$(XAPP_XCLOCK_VERSION).tar.bz2
++XAPP_XCLOCK_VERSION = 1.1.1
++XAPP_XCLOCK_SOURCE = xclock-$(XAPP_XCLOCK_VERSION).tar.xz
+ XAPP_XCLOCK_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XCLOCK_LICENSE = MIT
+ XAPP_XCLOCK_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
