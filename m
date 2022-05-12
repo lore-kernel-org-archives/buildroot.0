@@ -1,57 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C35FEC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 18:58:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEBE1C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 18:58:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79B1882437;
-	Thu, 12 May 2022 18:58:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 710ED401E7;
+	Thu, 12 May 2022 18:58:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QUyJ94Pbuvb1; Thu, 12 May 2022 18:58:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3_wiSdaV3BB2; Thu, 12 May 2022 18:58:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CB2A81303;
-	Thu, 12 May 2022 18:58:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5A1FD1BF578
+	by smtp4.osuosl.org (Postfix) with ESMTP id 283BC401B9;
+	Thu, 12 May 2022 18:58:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 685001BF9CB
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 18:54:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37999400FB
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 18:54:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9AB59607F0
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 18:54:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yW-7jQ-zBarl for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 18:54:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OkEtH4ox4s1P for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 18:53:59 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 47697400D0
- for <buildroot@buildroot.org>; Thu, 12 May 2022 18:54:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 72DF8607CA
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 18:53:59 +0000 (UTC)
 Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
- by mailout05.t-online.de (Postfix) with SMTP id 6D7C919778
- for <buildroot@buildroot.org>; Thu, 12 May 2022 20:54:00 +0200 (CEST)
+ by mailout05.t-online.de (Postfix) with SMTP id 61E721976D
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 20:53:56 +0200 (CEST)
 Received: from fli4l.lan.fli4l ([79.214.203.41]) by fwd89.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1npDwj-0Fvjfy0; Thu, 12 May 2022 20:53:57 +0200
+ esmtp id 1npDwi-0Fvjfu0; Thu, 12 May 2022 20:53:56 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:48510)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1npDwj-0004aZ-4M
- for buildroot@buildroot.org; Thu, 12 May 2022 20:53:57 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1npDwh-0004aZ-W9
+ for buildroot@buildroot.org; Thu, 12 May 2022 20:53:56 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 20:53:55 +0200
-Message-Id: <20220512185355.873825-25-bernd.kuhls@t-online.de>
+Date: Thu, 12 May 2022 20:53:38 +0200
+Message-Id: <20220512185355.873825-8-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220512185355.873825-1-bernd.kuhls@t-online.de>
 References: <20220512185355.873825-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1652381637-0000F5B3-A1F258AE/0/0 CLEAN NORMAL
-X-TOI-MSGID: 8f7d15a6-5bce-477d-9786-6d63c098d94e
-Subject: [Buildroot] [PATCH 25/25] package/x11r7/libxcb: bump version to 1.15
+X-TOI-EXPURGATEID: 150726::1652381636-0000F5B3-282F098D/0/0 CLEAN NORMAL
+X-TOI-MSGID: ac3f7ce6-7d48-4183-9be1-29cf88b8bc0e
+Subject: [Buildroot] [PATCH 08/25] package/x11r7/xapp_listres: bump version
+ to 1.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,43 +70,49 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2022-May/003164.html
+https://lists.x.org/archives/xorg-announce/2022-April/003142.html
 
+Removed md5 and sha1 hashes, not provided by upstream anymore.
 Reformatted license hash.
+Switched tarball to upstream-provided .xz format.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/libxcb/libxcb.hash | 8 ++++----
- package/x11r7/libxcb/libxcb.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_listres/xapp_listres.hash | 10 ++++------
+ package/x11r7/xapp_listres/xapp_listres.mk   |  4 ++--
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/libxcb/libxcb.hash b/package/x11r7/libxcb/libxcb.hash
-index 1861ef8a6b..2e2179e8da 100644
---- a/package/x11r7/libxcb/libxcb.hash
-+++ b/package/x11r7/libxcb/libxcb.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2020-February/003039.html
--sha256 a55ed6db98d43469801262d81dc2572ed124edc3db31059d4e9916eb9f844c34  libxcb-1.14.tar.xz
--sha512 b90a23204b0d2c29d8b115577edb01df0465e02d6a8876550fecd62375d24a5d5f872ddd5946772ddba077cadce75b12c7a6d218469dc30b5b92bc82188e8bc6  libxcb-1.14.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-May/003164.html
-+sha256  cc38744f817cf6814c847e2df37fcb8997357d72fa4bcbc228ae0fe47219a059  libxcb-1.15.tar.xz
-+sha512  f6c7d766b7cf9cab6abe948ee424cbae6951dbfe2f76fa58a109cdc05b0f0919dcc4e38176a22ff4b95fc1e38596115317e32ba33b24cae0035a4e30dbcbdad9  libxcb-1.15.tar.xz
+diff --git a/package/x11r7/xapp_listres/xapp_listres.hash b/package/x11r7/xapp_listres/xapp_listres.hash
+index 1e1c11953a..30fccec9d3 100644
+--- a/package/x11r7/xapp_listres/xapp_listres.hash
++++ b/package/x11r7/xapp_listres/xapp_listres.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002848.html
+-md5 24e05349f2881aaa58cbe160e49223ac  listres-1.0.4.tar.bz2
+-sha1 903857c7a9ec3d8edc8a88101aef33cd27796649  listres-1.0.4.tar.bz2
+-sha256 6a1229f478796e141d6658762f432ebbe1f6083b27550847d52239b3f7ec2b10  listres-1.0.4.tar.bz2
+-sha512 925bceab6ff96fcf91f58ba2f858905d6e2eff7074ba29cfc02def7c19fb493545837884f1070dc004422451f749cd459000c01e8c9bb51a7cce7f7ab4067b8a  listres-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-April/003142.html
++sha256  ce2a00bbe7d2eb8d75177006f343c80443a22d52570c48a43c6fe70ea074dc9d  listres-1.0.5.tar.xz
++sha512  caa3626773031fbf6d8bcc1f697afe6add64fe4a8d1d766c42d5c2346050869dd23a26a1718411134ab05c75835facf0786cab5595721a16df423cdc54dd813d  listres-1.0.5.tar.xz
  # Locally computed
--sha256 c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
-+sha256  c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index 4cbd9cf62f..4b293f9801 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
-@@ -4,7 +4,7 @@
+-sha256 aefb540c54bc95c68702cd2ae668c559e63cc1a84f55ae5c0e78547e7d75d2d5  COPYING
++sha256  aefb540c54bc95c68702cd2ae668c559e63cc1a84f55ae5c0e78547e7d75d2d5  COPYING
+diff --git a/package/x11r7/xapp_listres/xapp_listres.mk b/package/x11r7/xapp_listres/xapp_listres.mk
+index b4ac3e1de8..e0d7487f68 100644
+--- a/package/x11r7/xapp_listres/xapp_listres.mk
++++ b/package/x11r7/xapp_listres/xapp_listres.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBXCB_VERSION = 1.14
-+LIBXCB_VERSION = 1.15
- LIBXCB_SOURCE = libxcb-$(LIBXCB_VERSION).tar.xz
- LIBXCB_SITE = http://xcb.freedesktop.org/dist
- LIBXCB_LICENSE = MIT
+-XAPP_LISTRES_VERSION = 1.0.4
+-XAPP_LISTRES_SOURCE = listres-$(XAPP_LISTRES_VERSION).tar.bz2
++XAPP_LISTRES_VERSION = 1.0.5
++XAPP_LISTRES_SOURCE = listres-$(XAPP_LISTRES_VERSION).tar.xz
+ XAPP_LISTRES_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_LISTRES_LICENSE = MIT
+ XAPP_LISTRES_LICENSE_FILES = COPYING
 -- 
 2.30.2
 
