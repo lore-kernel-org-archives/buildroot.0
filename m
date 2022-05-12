@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 497D5C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 18:54:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04A24C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 18:54:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED22240133;
-	Thu, 12 May 2022 18:54:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F03360AC1;
+	Thu, 12 May 2022 18:54:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DZGu9k2kIX6p; Thu, 12 May 2022 18:54:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KFaCjq3zIMSw; Thu, 12 May 2022 18:54:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB13D400FB;
-	Thu, 12 May 2022 18:54:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 66A631BF9CB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 930E6607CA;
+	Thu, 12 May 2022 18:54:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 893CC1C1189
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 18:54:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4FE4940132
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7830081BA9
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 18:54:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eGvhjcyaRT_0 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E8_eMJTDRRLI for <buildroot@lists.busybox.net>;
  Thu, 12 May 2022 18:53:59 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 69FA4400D0
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 94BE181B04
  for <buildroot@buildroot.org>; Thu, 12 May 2022 18:53:59 +0000 (UTC)
 Received: from fwd77.dcpf.telekom.de (fwd77.aul.t-online.de [10.223.144.103])
- by mailout03.t-online.de (Postfix) with SMTP id A1E6B3D80
+ by mailout03.t-online.de (Postfix) with SMTP id A3F4D3D82
  for <buildroot@buildroot.org>; Thu, 12 May 2022 20:53:56 +0200 (CEST)
 Received: from fli4l.lan.fli4l ([79.214.203.41]) by fwd77.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1npDwi-0Sp6qf0; Thu, 12 May 2022 20:53:56 +0200
+ esmtp id 1npDwi-0Sp6qh0; Thu, 12 May 2022 20:53:56 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:48510)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1npDwh-0004aZ-LC
+ (envelope-from <bernd.kuhls@t-online.de>) id 1npDwh-0004aZ-Rj
  for buildroot@buildroot.org; Thu, 12 May 2022 20:53:55 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 20:53:33 +0200
-Message-Id: <20220512185355.873825-3-bernd.kuhls@t-online.de>
+Date: Thu, 12 May 2022 20:53:36 +0200
+Message-Id: <20220512185355.873825-6-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220512185355.873825-1-bernd.kuhls@t-online.de>
 References: <20220512185355.873825-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1652381636-0001606D-1065483A/0/0 CLEAN NORMAL
-X-TOI-MSGID: 04bf3856-5282-4acd-9598-dbb536bda06d
-Subject: [Buildroot] [PATCH 03/25] package/x11r7/xlib_libXcursor: bump
- version to 1.2.1
+X-TOI-EXPURGATEID: 150726::1652381636-0001606D-0BFFBB28/0/0 CLEAN NORMAL
+X-TOI-MSGID: e9235490-722b-4da7-9556-653db1b71391
+Subject: [Buildroot] [PATCH 06/25] package/x11r7/xapp_iceauth: bump version
+ to 1.0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,52 +70,49 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2022-April/003136.html
+https://lists.x.org/archives/xorg-announce/2022-April/003140.html
 
 Removed md5 and sha1 hashes, not provided by upstream anymore.
+Reformatted license hash.
 Switched tarball to upstream-provided .xz format.
-
-Updated license hash due to upstream commit "Convert COPYING from
-ISO-8859-1 to UTF-8":
-https://gitlab.freedesktop.org/xorg/lib/libxcursor/-/commit/66accad188420c40f0d62b409bfd2af605bb6f05
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXcursor/xlib_libXcursor.hash | 10 ++++------
- package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   |  4 ++--
+ package/x11r7/xapp_iceauth/xapp_iceauth.hash | 10 ++++------
+ package/x11r7/xapp_iceauth/xapp_iceauth.mk   |  4 ++--
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
-index 3a12253d40..11575edbf5 100644
---- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
-+++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
+diff --git a/package/x11r7/xapp_iceauth/xapp_iceauth.hash b/package/x11r7/xapp_iceauth/xapp_iceauth.hash
+index f1ea73a7af..694b6beaa1 100644
+--- a/package/x11r7/xapp_iceauth/xapp_iceauth.hash
++++ b/package/x11r7/xapp_iceauth/xapp_iceauth.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002972.html
--md5 9b9be0e289130fb820aedf67705fc549  libXcursor-1.2.0.tar.bz2
--sha1 cca0b34955d3c2f657f05a2a2c40f75353ddd912  libXcursor-1.2.0.tar.bz2
--sha256 3ad3e9f8251094af6fe8cb4afcf63e28df504d46bfa5a5529db74a505d628782  libXcursor-1.2.0.tar.bz2
--sha512 2b12d0fd17e311ce269dbba58588698885815eb07aa44d48525ed5cd9e5f379bb90138a792a191e2f74888ab10b3ca9a4f507f21de0984ed79748973ab927a03  libXcursor-1.2.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-April/003136.html
-+sha256  46c143731610bafd2070159a844571b287ac26192537d047a39df06155492104  libXcursor-1.2.1.tar.xz
-+sha512  ebb42a39855aab86d0c11fe6ad33d011cf56a6dc5c309bef643460319c03df239b7e09fe88777bb25c0e9ff8aceac6bf66e51cc04a2d5ee463b3bc3bbf1674e3  libXcursor-1.2.1.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002850.html
+-md5 3b9b79fa0f9928161f4bad94273de7ae  iceauth-1.0.8.tar.bz2
+-sha1 2ce23c40a17d98badeb8ce70d26e81a5ac0e178c  iceauth-1.0.8.tar.bz2
+-sha256 e6ee213a217265cc76050e4293ea70b98c32dce6505c6421227efbda62ab60c6  iceauth-1.0.8.tar.bz2
+-sha512 9d4520adf951b16a3e784349dbb70d5d8176b74b956f8adc63abf55d049745c113b03ccfa60a281fc39b487db3742302dc6287c9985ce83a0157bf4674df2af1  iceauth-1.0.8.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-April/003140.html
++sha256  2cb9dfcb545683af77fb1029bea3fc52dcc8a0666f7b8b2d7373b6ed4c408c05  iceauth-1.0.9.tar.xz
++sha512  16b2f58008587cf1544037ca8b1c76dbb75eb043b3048b3064e66ba6b147962233f1453c2cf18bfb136dd6dd21d3e27b5219e17e1ab7b81dbe93fb6aff801a72  iceauth-1.0.9.tar.xz
  # Locally computed
--sha256 1f1588aff23eec0cb6bb9cfe02f8a75abbe43faf3d9b1eff54b7fbc42774b3ad  COPYING
-+sha256  ad2e9d279088c5d612fb0e506ea8bb7d9f01b411e7f4b97b64589c3cd48a68f1  COPYING
-diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-index 79d9904010..4a1ffcce9e 100644
---- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-+++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+-sha256 fdd9ba8ccb92af2f31f542e7b7a18c27257e6cdce147d231bc9ba3654ad84976  COPYING
++sha256  fdd9ba8ccb92af2f31f542e7b7a18c27257e6cdce147d231bc9ba3654ad84976  COPYING
+diff --git a/package/x11r7/xapp_iceauth/xapp_iceauth.mk b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
+index 0e0e001705..ba1f522911 100644
+--- a/package/x11r7/xapp_iceauth/xapp_iceauth.mk
++++ b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XLIB_LIBXCURSOR_VERSION = 1.2.0
--XLIB_LIBXCURSOR_SOURCE = libXcursor-$(XLIB_LIBXCURSOR_VERSION).tar.bz2
-+XLIB_LIBXCURSOR_VERSION = 1.2.1
-+XLIB_LIBXCURSOR_SOURCE = libXcursor-$(XLIB_LIBXCURSOR_VERSION).tar.xz
- XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXCURSOR_LICENSE = MIT
- XLIB_LIBXCURSOR_LICENSE_FILES = COPYING
+-XAPP_ICEAUTH_VERSION = 1.0.8
+-XAPP_ICEAUTH_SOURCE = iceauth-$(XAPP_ICEAUTH_VERSION).tar.bz2
++XAPP_ICEAUTH_VERSION = 1.0.9
++XAPP_ICEAUTH_SOURCE = iceauth-$(XAPP_ICEAUTH_VERSION).tar.xz
+ XAPP_ICEAUTH_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_ICEAUTH_LICENSE = MIT
+ XAPP_ICEAUTH_LICENSE_FILES = COPYING
 -- 
 2.30.2
 
