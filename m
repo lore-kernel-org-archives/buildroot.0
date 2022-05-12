@@ -1,64 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42F8CC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:31:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF1D3C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:33:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DDD28416A9;
-	Thu, 12 May 2022 19:31:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96DBB400D0;
+	Thu, 12 May 2022 19:33:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i0zrJ9lCQ-FQ; Thu, 12 May 2022 19:31:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iWvjiBGMq7wy; Thu, 12 May 2022 19:33:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A502409F4;
-	Thu, 12 May 2022 19:31:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E35FD1BF352
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:31:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2210C40154;
+	Thu, 12 May 2022 19:33:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C7751BF352
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:33:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E0197409F4
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:31:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8941860B18
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:33:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cslPxvXIHbIo for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 19:31:19 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 77B944011E
- for <buildroot@buildroot.org>; Thu, 12 May 2022 19:31:19 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ccab:5af8:e14c:c986])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 633FD19F593;
- Thu, 12 May 2022 21:31:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1652383875;
- bh=oNkBX4aCUVlCpXzuwZihR18pCzhG5vVfPhVoc9UkH24=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=h/SYhIsRx/K+bQt/FIItZ+3sP7cW4nwz01qT6DKsfo1GWkTYujqbCVL8qSa9/9Jzm
- 6NlR4fpj4fMs8LAkUWwHWPLX6sH92bnkKr8A1NRBSWfib3VvAPx8ZKm2qjT4EgTvN0
- 7MQopHq0RUPwU0tfl8U3uu0gZn2GHxU0BTXA29KJDCfxhGHGgyg9W7PvvNuWOLFOHg
- tmM166CcEyi+tPmDEZJsTQ6VfFmZc+8bfpRHxHLFGRotM6Rcc4p+AVLNgWeSxh+rkK
- piIvxEfXo6zas0b1BkjCLjupaoWgNTzuDWVA3aslgRp5X1nKNGzvW0ptucKNrS+hys
- mggUIxfZXc1gA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 12 May 2022 21:31:13 +0200
-Date: Thu, 12 May 2022 21:31:13 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20220512193113.GA1597494@scaer>
-References: <20220512182720.757182-1-bernd.kuhls@t-online.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kf_Dj5pXTLpr for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 19:33:00 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DCC0160B0A
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 19:32:59 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E72B0FF804;
+ Thu, 12 May 2022 19:32:56 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1npEYR-008V9O-JH; Thu, 12 May 2022 21:32:55 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Neal Frager <nealf@xilinx.com>
+References: <20220503152425.1069617-1-neal.frager@amd.com>
+ <20220503152425.1069617-2-neal.frager@amd.com>
+ <87h7653i8q.fsf@dell.be.48ers.dk>
+ <edddb58b-dee7-21aa-05b8-3a94c3e2c4d1@xilinx.com>
+ <87ilqccu3k.fsf@dell.be.48ers.dk>
+ <SJ0PR02MB7758738449EEBFE4991D7973D7C89@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ <SJ0PR02MB7758FE7F237530275606A745D7C89@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ <875ymcawvb.fsf@dell.be.48ers.dk>
+ <56c3feaa-cbd2-eaa9-7800-cd2102fa8545@lucaceresoli.net>
+ <D9EEAC86-D8CB-46E0-A019-B0F792B0511C@xilinx.com>
+Date: Thu, 12 May 2022 21:32:55 +0200
+In-Reply-To: <D9EEAC86-D8CB-46E0-A019-B0F792B0511C@xilinx.com> (Neal Frager's
+ message of "Thu, 12 May 2022 16:09:42 +0000")
+Message-ID: <874k1ua6mw.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220512182720.757182-1-bernd.kuhls@t-online.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXfont2: remove
- autoreconf
+Subject: Re: [Buildroot] [PATCH v1 2/2] configs/zynqmp_zcu106_defconfig:
+ transition to tarballs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,57 +69,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Luca Ceresoli <luca@lucaceresoli.net>,
+ "giulio.benetti@benettiengineering.com"
+ <giulio.benetti@benettiengineering.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ Michal Simek <michals@xilinx.com>, Neal Frager <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+>>>>> "Neal" == Neal Frager <nealf@xilinx.com> writes:
 
-On 2022-05-12 20:27 +0200, Bernd Kuhls spake thusly:
-> Forgotten in commit e6f8c403fe6c9909d2d3f5fd897c3057b7677192 which
-> removed 0001-configure-define-HAVE_LIBBSD-when-libbsd-was-found.patch
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Hi,
 
-Applied to master, thanks.
+ >>> I had to also pass the -m* flags in EXTRA_COMPILER_FLAGS to get it to
+ >>> link, presumably the petalinux toolchain has incompatible
+ >>> defaults. Luca, any specific reasons to not pass CFLAGS there?
+ >> 
+ >> I'm afraid I have no real answer. :( When I initially wrote the script I
+ >> did it to have the same logic as petalinux. Later I didn't watch for its
+ >> changes. I would love to be helpful but I have no access to a zynqmp
+ >> board now.
 
-Regards,
-Yann E. MORIN.
+ > Would it be possible for you to just implement the changes that Peter
+ > has proposed?  Peter appears to have already identified a solution.
 
-> ---
->  package/x11r7/xlib_libXfont2/xlib_libXfont2.mk | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-> index 6a71761f4e..fb0bba879c 100644
-> --- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-> +++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-> @@ -12,8 +12,6 @@ XLIB_LIBXFONT2_LICENSE_FILES = COPYING
->  XLIB_LIBXFONT2_CPE_ID_VENDOR = x
->  XLIB_LIBXFONT2_CPE_ID_PRODUCT = libxfont
->  XLIB_LIBXFONT2_INSTALL_STAGING = YES
-> -# 0001-configure-define-HAVE_LIBBSD-when-libbsd-was-found.patch
-> -XLIB_LIBXFONT2_AUTORECONF = YES
->  XLIB_LIBXFONT2_DEPENDENCIES = \
->  	freetype \
->  	xlib_libfontenc \
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+ > Both Peter and I have zcu106 boards, so we can both test and verify
+ > the update works.
+
+Sorry, that is not true. I haven't found the magic incarnation to get a
+working pmufw build with the toolchain built by crosstool-ng. My diff
+was just to show what I had to change to adjust zynqmp-pmufw-builder to
+use a petalinux toolchain.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
