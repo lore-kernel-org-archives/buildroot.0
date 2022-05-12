@@ -1,58 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E15D1C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 18:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF013C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 18:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A070B823E0;
-	Thu, 12 May 2022 18:59:15 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qd85oGG6Vp2d; Thu, 12 May 2022 18:59:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A220881303;
-	Thu, 12 May 2022 18:59:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6DEB91BF578
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 18:54:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 43F6C60806
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 18:54:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6FDB60AE4;
+	Thu, 12 May 2022 18:59:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id famzQGTxdSuB for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 18:54:02 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FWbQrEGixggk; Thu, 12 May 2022 18:59:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C846160AC1;
+	Thu, 12 May 2022 18:59:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 499E61BF578
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 18:59:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 374CB40133
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 18:59:01 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id McMPJI78wEvn for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 18:59:00 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5A79360AC9
- for <buildroot@buildroot.org>; Thu, 12 May 2022 18:54:02 +0000 (UTC)
-Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
- by mailout05.t-online.de (Postfix) with SMTP id 6973319775
- for <buildroot@buildroot.org>; Thu, 12 May 2022 20:54:00 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.203.41]) by fwd89.t-online.de
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6D5F3400D0
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 18:59:00 +0000 (UTC)
+Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
+ by mailout03.t-online.de (Postfix) with SMTP id 6066F3CEC
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 20:58:58 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.203.41]) by fwd70.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1npDwj-0Fmf3v0; Thu, 12 May 2022 20:53:57 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48510)
+ esmtp id 1npE1Z-1r1wSf0; Thu, 12 May 2022 20:58:57 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48512)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1npDwj-0004aZ-0D
- for buildroot@buildroot.org; Thu, 12 May 2022 20:53:57 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1npE1Z-0005TO-HC
+ for buildroot@buildroot.org; Thu, 12 May 2022 20:58:57 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 20:53:53 +0200
-Message-Id: <20220512185355.873825-23-bernd.kuhls@t-online.de>
+Date: Thu, 12 May 2022 20:58:57 +0200
+Message-Id: <20220512185857.955701-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220512185355.873825-1-bernd.kuhls@t-online.de>
-References: <20220512185355.873825-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1652381637-0000F5B3-663B6AD3/0/0 CLEAN NORMAL
-X-TOI-MSGID: e22b02ad-5aaa-46fc-b76c-054169713c8f
-Subject: [Buildroot] [PATCH 23/25] package/x11r7/xapp_bitmap: bump version
- to 1.1.0
+X-TOI-EXPURGATEID: 150726::1652381937-00004E7B-5426AFC3/19/7512779595 SUSPECT
+ MAIL-COUNT
+X-TOI-MSGID: fb6b7964-a0dd-43b0-8200-3aad63e700f4
+Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version to
+ 0.103.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,49 +69,41 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2022-April/003162.html
+https://blog.clamav.net/2022/05/clamav-01050-01043-01036-released.html
 
-Removed md5 and sha1 hashes, not provided by upstream anymore.
-Reformatted license hash.
-Switched tarball to upstream-provided .xz format.
+Fixes CVE-2022-20770, CVE-2022-20771, CVE-2022-20785, CVE-2022-20792,
+CVE-2022-20796 & CVE-2022-20803.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_bitmap/xapp_bitmap.hash | 10 ++++------
- package/x11r7/xapp_bitmap/xapp_bitmap.mk   |  4 ++--
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xapp_bitmap/xapp_bitmap.hash b/package/x11r7/xapp_bitmap/xapp_bitmap.hash
-index f632bce3c5..8953bfc5f7 100644
---- a/package/x11r7/xapp_bitmap/xapp_bitmap.hash
-+++ b/package/x11r7/xapp_bitmap/xapp_bitmap.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-February/002941.html
--md5 b94172053ffa282bd88274f1e6a677f1  bitmap-1.0.9.tar.bz2
--sha1 26ba3130b14a2db81b427f2353ac21301c5d2527  bitmap-1.0.9.tar.bz2
--sha256 e0f3afad5272d796f54c33fa1b5bd1fb3f62843a54b28c87196d06a35123e5f5  bitmap-1.0.9.tar.bz2
--sha512 873c626c72a0f4025fe8c8aeedbf3fe4ee5657fb487ad7410406a20da518c0358041dc45c2549926cc10e1d031977073b9d1ddb32830fdce95b716a52fe44456  bitmap-1.0.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-April/003162.html
-+sha256  8e86879c2feeece3f10e189330479cf51da0dd268355d1e3ee8a8497ab833690  bitmap-1.1.0.tar.xz
-+sha512  3d6c94675f10772daeb71598c3e0ddcb51569b1bfc4771159e9df89599bfeb8bf49f464c24fef54d30a8f737af32136f859f844be03e088d24ed962f88381193  bitmap-1.1.0.tar.xz
- # Locally computed
--sha256 03be44611edac06827bd13c0815a67ecd37ffe8fb1b9e210d6545d79bec89a3a  COPYING
-+sha256  03be44611edac06827bd13c0815a67ecd37ffe8fb1b9e210d6545d79bec89a3a  COPYING
-diff --git a/package/x11r7/xapp_bitmap/xapp_bitmap.mk b/package/x11r7/xapp_bitmap/xapp_bitmap.mk
-index 6bc0dbde0d..ccc438560d 100644
---- a/package/x11r7/xapp_bitmap/xapp_bitmap.mk
-+++ b/package/x11r7/xapp_bitmap/xapp_bitmap.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 73f4ff88f1..579b0ec89e 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  1e74b1e1d2a8a9056449c313f48a6983b9d5ba0d6fb5ef0b2be6ad3c841a5426  clamav-0.103.5.tar.gz
++sha256  aaa12e3dc19f1d323b1c50d7a10fa8af557e4390149e864d59bde39b6ad9ba33  clamav-0.103.6.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index e2ee99d02b..10856ed971 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_BITMAP_VERSION = 1.0.9
--XAPP_BITMAP_SOURCE = bitmap-$(XAPP_BITMAP_VERSION).tar.bz2
-+XAPP_BITMAP_VERSION = 1.1.0
-+XAPP_BITMAP_SOURCE = bitmap-$(XAPP_BITMAP_VERSION).tar.xz
- XAPP_BITMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_BITMAP_LICENSE = MIT
- XAPP_BITMAP_LICENSE_FILES = COPYING
+-CLAMAV_VERSION = 0.103.5
++CLAMAV_VERSION = 0.103.6
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 -- 
 2.30.2
 
