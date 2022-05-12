@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF12EC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 08:48:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C99DC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 08:48:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6AE883EB8;
-	Thu, 12 May 2022 08:48:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDB684198F;
+	Thu, 12 May 2022 08:48:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GQx7IRdYSNQH; Thu, 12 May 2022 08:48:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3VW9gwlkzoqL; Thu, 12 May 2022 08:48:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C3A0383EB1;
-	Thu, 12 May 2022 08:48:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E5B991BF84C
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 08:48:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8AED8417E5;
+	Thu, 12 May 2022 08:48:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 82F961BF84C
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 08:48:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E246060A71
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 08:48:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 716D640122
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 08:48:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 28ME-44iVZ6J for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 08:48:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XLTUjkBC42n1 for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 08:48:22 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EF74F60757
- for <buildroot@buildroot.org>; Thu, 12 May 2022 08:48:00 +0000 (UTC)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3D9B2400FD
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 08:48:21 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C91DE1BF203;
- Thu, 12 May 2022 08:47:58 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0B39610000B;
+ Thu, 12 May 2022 08:48:19 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1np4UH-007gyO-IP; Thu, 12 May 2022 10:47:57 +0200
+ id 1np4Ud-007h0T-9Y; Thu, 12 May 2022 10:48:19 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Joel Stanley <joel@jms.id.au>
-References: <20220511114003.162006-1-joel@jms.id.au>
-Date: Thu, 12 May 2022 10:47:57 +0200
-In-Reply-To: <20220511114003.162006-1-joel@jms.id.au> (Joel Stanley's message
- of "Wed, 11 May 2022 21:10:02 +0930")
-Message-ID: <87lev79lxe.fsf@dell.be.48ers.dk>
+To: buildroot@buildroot.org
+References: <20220511071946.1185665-1-peter@korsgaard.com>
+Date: Thu, 12 May 2022 10:48:19 +0200
+In-Reply-To: <20220511071946.1185665-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 11 May 2022 09:19:46 +0200")
+Message-ID: <87h75v9lws.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/go: Bump to v1.18.2
+Subject: Re: [Buildroot] [PATCH] boot/shim: big endian arm/aarch64 variants
+ are not supported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,28 +59,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Anisse Astier <anisse@astier.eu>, buildroot@buildroot.org
+Cc: fontaine.fabrice@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Minor version bump to the latest release.
- > Signed-off-by: Joel Stanley <joel@jms.id.au>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/a6c7dd171529e2a7b7a26af8d99bec53117a7a02/
 
-According to to the upstream changelog this fixes security issues:
+ > Commit fd5842a1dd03642b2ea084439 (boot/shim: add
+ > BR2_PACKAGE_SHIM_ARCH_SUPPORTS) added explicit support for big/little endian
+ > arm/aarch64, but the shim code is hard coded for little endian:
 
-go1.18.2 (released 2022-05-10) includes security fixes to the syscall
-package, as well as bug fixes to the compiler, runtime, the go command,
-and the crypto/x509, go/types, net/http/httptest, reflect, and
-sync/atomic packages
+ > head -n 1 elf_{arm,aarch64}_efi.lds
+ > ==> elf_arm_efi.lds <==
+ > OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
 
-https://go.dev/doc/devel/release#go1.18
+ > ==> elf_aarch64_efi.lds <==
+ > OUTPUT_FORMAT("elf64-littleaarch64", "elf64-littleaarch64", "elf64-littleaarch64")
 
-So I have reworded the commit message to make this clear and committed,
-thanks.
+ > So drop the support for the big endian variants.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
