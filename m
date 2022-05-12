@@ -1,74 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B9BBC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 14:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A1F4C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 15:34:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF8F881751;
-	Thu, 12 May 2022 14:38:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v0sZkBw2uAvR; Thu, 12 May 2022 14:38:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CFB7D81458;
-	Thu, 12 May 2022 14:38:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EC4CB1BF3D7
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 14:38:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA5AA405B1
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 14:38:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00CEC40C0B;
+	Thu, 12 May 2022 15:34:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SIliA16ccn-g for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 14:38:36 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qyo0uUjfKwsc; Thu, 12 May 2022 15:34:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id EEC5F405CD;
+	Thu, 12 May 2022 15:34:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9672A1BF336
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 15:34:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 845EA41994
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 15:34:21 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GgDyJLmdBxiM for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 15:34:20 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F20B140025
- for <buildroot@buildroot.org>; Thu, 12 May 2022 14:38:35 +0000 (UTC)
-Received: from lmontsouris-655-1-15-199.w80-11.abo.wanadoo.fr
- ([80.11.122.199]:54256 helo=[192.168.1.105])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1np9xZ-000Fv4-Oa; Thu, 12 May 2022 16:38:33 +0200
-Message-ID: <56c3feaa-cbd2-eaa9-7800-cd2102fa8545@lucaceresoli.net>
-Date: Thu, 12 May 2022 16:38:32 +0200
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A7A0041909
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 15:34:19 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5CD14E0007;
+ Thu, 12 May 2022 15:34:15 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1npApS-008K2w-K6; Thu, 12 May 2022 17:34:14 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: <yann.morin@orange.com>
+References: <11033_1652186063_627A5BCF_11033_340_1_f3b8c61ce2f116c06c455a1f0163db9ca541896a.1652186060.git.yann.morin@orange.com>
+Date: Thu, 12 May 2022 17:34:14 +0200
+In-Reply-To: <11033_1652186063_627A5BCF_11033_340_1_f3b8c61ce2f116c06c455a1f0163db9ca541896a.1652186060.git.yann.morin@orange.com>
+ (yann morin's message of "Tue, 10 May 2022 14:34:20 +0200")
+Message-ID: <878rr6ahop.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To: Peter Korsgaard <peter@korsgaard.com>, Neal Frager <nealf@xilinx.com>
-References: <20220503152425.1069617-1-neal.frager@amd.com>
- <20220503152425.1069617-2-neal.frager@amd.com>
- <87h7653i8q.fsf@dell.be.48ers.dk>
- <edddb58b-dee7-21aa-05b8-3a94c3e2c4d1@xilinx.com>
- <87ilqccu3k.fsf@dell.be.48ers.dk>
- <SJ0PR02MB7758738449EEBFE4991D7973D7C89@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <SJ0PR02MB7758FE7F237530275606A745D7C89@SJ0PR02MB7758.namprd02.prod.outlook.com>
- <875ymcawvb.fsf@dell.be.48ers.dk>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <875ymcawvb.fsf@dell.be.48ers.dk>
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH v1 2/2] configs/zynqmp_zcu106_defconfig:
- transition to tarballs
+Subject: Re: [Buildroot] [PATCH] fs/oci: entrypoint and command are
+ space-separated lists
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,67 +60,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "giulio.benetti@benettiengineering.com"
- <giulio.benetti@benettiengineering.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- Michal Simek <michals@xilinx.com>, Neal Frager <neal.frager@amd.com>
+Cc: Sergio Prado <sergio.prado@e-labworks.com>,
+ Matthew Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+>>>>>   <yann.morin@orange.com> writes:
 
-On 11/05/22 17:54, Peter Korsgaard wrote:
->>>>>> "Neal" == Neal Frager <nealf@xilinx.com> writes:
-> 
->  > Hi Luca,
->  > We may need your help on this one.
-> 
->  > Peter and I have both replaced the pmufw.bin generated by the zynqmp-pmufw-builder with the one generated
->  > by vitis or petalinux.  When we build the boot.bin using the pmufw.bin from vitis or petalinux, reboot works
->  > as expected without changing anything else.
-> 
->  > So there appears to be something in the zynqmp-pmufw-builder which is incorrect for the pmufw 2022.1.
-> 
-> I believe it is an issue with (a different behaviour of) the
-> toolchain. I found a machine at $WORK with petalinux 2021.1 and rebuild
-> zynqmp-pmufw-builder with the following minor patch:
-> 
-> diff --git a/build.sh b/build.sh
-> index 6321733..f01194d 100755
-> --- a/build.sh
-> +++ b/build.sh
-> @@ -59,7 +59,7 @@ pmufw_build()
->      BSP_TARGETS_LIBDIR="${BSP_DIR}/psu_pmu_0/lib"
->      BSP_LIBXIL="${BSP_TARGETS_LIBDIR}/libxil.a"
-> 
-> -    CROSS="${HOME}/x-tools/microblazeel-xilinx-elf/bin/microblazeel-xilinx-elf-"
-> +    CROSS="microblaze-xilinx-elf-"
->      CC=${CROSS}gcc
->      AR=${CROSS}ar
->      AS=${CROSS}as
-> @@ -92,7 +92,7 @@ pmufw_build()
->               AS="${AS}" \
->               COMPILER="${CC}" \
->               COMPILER_FLAGS="-O2 -c" \
-> -             EXTRA_COMPILER_FLAGS="-g -Wall -Wextra -Os -flto -ffat-lto-objects" \
-> +             EXTRA_COMPILER_FLAGS="-g -Wall -Wextra -Os -flto -ffat-lto-objects -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v9.2 -mxl-soft-mul" \
->               ARCHIVER="${AR}" \
->               CFLAGS="${CFLAGS}" \
->               include libs
-> 
-> I had to also pass the -m* flags in EXTRA_COMPILER_FLAGS to get it to
-> link, presumably the petalinux toolchain has incompatible
-> defaults. Luca, any specific reasons to not pass CFLAGS there?
+ > From: "Yann E. MORIN" <yann.morin@orange.com>
+ > The prompt and variable name for the OCI "entrypoint arguments" are
+ > somewhat incorrect. Indeed, they are in fact use to set the image
+ > "command". Yet, using "command" would be confusing too, because the
+ > interplay between entrypoint and command is tricky [0].
 
-I'm afraid I have no real answer. :( When I initially wrote the script I
-did it to have the same logic as petalinux. Later I didn't watch for its
-changes. I would love to be helpful but I have no access to a zynqmp
-board now.
+ > TL-DR; when both entrrypoint and command are set, command acts as
+
+s/entrrypoint/entrypoint/
+
+> arguments passed to the entrypoint.
+
+ > Additionally, we currently can only pass a single item as either
+ > entrypoint or command. This precludes passing actual arguments to the
+ > entrypoint, or passing multiple arguments as command.
+
+ > For example:
+ >     BR2_TARGET_ROOTFS_OCI_ENTRYPOINT="/bin/tini -g -p SIGTERM --"
+ >     BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS="/usr/bin/env sh"
+
+ > generates an images with (only relevant fileds are included below):
+
+s/fileds/fields/
+
+ >     {
+ >         "config": {
+ >             "Entrypoint": [ "/bin/tini -g -p SIGTERM --" ],
+ >             "Cmd": [ "/usr/bin/env sh" ]
+ >         }
+ >     }
+
+ > This is obviously incorrect, and not what one would expect:
+
+ >     {
+ >         "config": {
+ >             "Entrypoint": [ "/bin/tini", "-g", "-p", "SIGTERM --" ],
+ >             "Cmd": [ "/usr/bin/env", "sh" ]
+ >         }
+ >     }
+
+ > Fix that by passing as-many --entrypoint or --cmd as there are
+ > space-separated items in the corresponding lists.
+
+ > [0] https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact
+
+ > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+ > Cc: Sergio Prado <sergio.prado@e-labworks.com>
+ > Cc: Matthew Weber <matthew.weber@collins.com>
+ > ---
+ >  fs/oci/oci.mk | 4 ++--
+ >  1 file changed, 2 insertions(+), 2 deletions(-)
+
+ > diff --git a/fs/oci/oci.mk b/fs/oci/oci.mk
+ > index aa81920d36..f98db0a8c8 100644
+ > --- a/fs/oci/oci.mk
+ > +++ b/fs/oci/oci.mk
+ > @@ -15,13 +15,13 @@ OCI_SLOCI_IMAGE_OPTS += $(and $(GO_GOARM),--arch-variant v$(GO_GOARM))
+ >  # entrypoint
+ >  OCI_ENTRYPOINT = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT))
+ >  ifneq ($(OCI_ENTRYPOINT),)
+ > -OCI_SLOCI_IMAGE_OPTS += --entrypoint "$(OCI_ENTRYPOINT)"
+ > +OCI_SLOCI_IMAGE_OPTS += $(patsubst %,--entrypoint %,$(OCI_ENTRYPOINT))
+ >  endif
+ 
+ >  # entrypoint arguments
+ >  OCI_ENTRYPOINT_ARGS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS))
+ >  ifneq ($(OCI_ENTRYPOINT_ARGS),)
+ > -OCI_SLOCI_IMAGE_OPTS += --cmd "$(OCI_ENTRYPOINT_ARGS)"
+ > +OCI_SLOCI_IMAGE_OPTS += $(patsubst %,--cmd %,$(OCI_ENTRYPOINT_ARGS))
+
+It indeed makes sense to split the entrypoint on white space, but for
+the args (cmd) it exchanges one set of breakage for another -
+E.G. sometimes people want to run sh -c "my shell logic goes here".
+
+I'm not sure what to do about that though. As you are not quoting the
+arguments you cannot even set it to stuff without white space but ith
+shell characters, E.G. ENTRYPOINT="sh -c" ARGS="date;date" as the ; gets
+enterpreted in the call to sloci-image.
+
+In general I'm not sure how much value the oci support brings over just
+doing:
+
+docker import -c '<Dockerfile command>' output/images/rootfs.tar <name>:<tag>
 
 -- 
-Luca
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
