@@ -1,66 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CED3C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 20:19:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB80CC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 20:27:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B58340436;
-	Thu, 12 May 2022 20:19:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68BEE415CD;
+	Thu, 12 May 2022 20:27:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9og_fMKogm0s; Thu, 12 May 2022 20:19:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lV5cUvtOsf3m; Thu, 12 May 2022 20:27:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED96740412;
-	Thu, 12 May 2022 20:18:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E29301BF398
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:18:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33D19410C8;
+	Thu, 12 May 2022 20:27:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A9B4D1BF3A4
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:27:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D0F1160B30
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:18:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9789A401DB
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:27:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J0n2A-WjwFdO for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 20:18:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0m2cYcGmpfpD for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 20:27:24 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B8A4460B22
- for <buildroot@buildroot.org>; Thu, 12 May 2022 20:18:56 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ccab:5af8:e14c:c986])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 77DA219F57B;
- Thu, 12 May 2022 22:18:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1652386734;
- bh=ClIOLxHtuRAxzSIHvwOeAj7H/p1RVRXHfBsSRVirm8Y=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=htgOjQjOu1AvkohbhaTiJK/+C9uv42unQKOac3uW1BmyO0bO01Nf4juhmKOxk2za6
- P2evcuAvSujO2SUO4p6eckbVdPLZl0t8Cec1m1ULwDKH34zOs7rExaqkChY3WeH0i1
- 8LSYFdvCEdmKvbeR1kIW0fVOIpH+kacprMqAwN0Por71TkF933xqWItUxOCucq+mHS
- lszMK78/RY9AHvEHhDMaDS4ST1MO8iNw80wRswsEPUHXj8eyOOz4k1LDNrreDlLxld
- x3gVbNsviO5tNCprvxcv2ktKH+S7av4wMHrOgbGJvVtcic7RrP9gOcNa8fTDuFpHjL
- zZI10XakZI4bQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 12 May 2022 22:18:52 +0200
-Date: Thu, 12 May 2022 22:18:52 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-Message-ID: <20220512201852.GI1597494@scaer>
-References: <20220512121217.176652-1-arnout@mind.be>
- <20220512121217.176652-2-arnout@mind.be>
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3881B40187
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 20:27:24 +0000 (UTC)
+Received: from fwd77.dcpf.telekom.de (fwd77.aul.t-online.de [10.223.144.103])
+ by mailout12.t-online.de (Postfix) with SMTP id 62333D7E9;
+ Thu, 12 May 2022 22:27:21 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.203.41]) by fwd77.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1npFP6-3HNahF0; Thu, 12 May 2022 22:27:20 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48516)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1npFP6-0003em-4w;
+ Thu, 12 May 2022 22:27:20 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Thu, 12 May 2022 22:27:20 +0200
+Message-Id: <20220512202720.1319703-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220512121217.176652-2-arnout@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 2/2] package/nodejs: use ninja for build
+X-TOI-EXPURGATEID: 150726::1652387240-0001606D-5A6D7FAF/0/0 CLEAN NORMAL
+X-TOI-MSGID: 818b6de2-ffc1-46a2-9fde-b87a5cdb5f62
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,103 +62,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Arnout, All,
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2022-May/000673.html
 
-On 2022-05-12 14:12 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> Not only is ninja much faster, it also avoids the following build
-> failure:
-> make[3]: printf: Argument list too long
-> 
-> This failure happens when the output directory is about 6 levels deep.
-> It's due to the make generator of gyp that uses some crazy shell
-> processing for splitting up paths on /. The ninja generator does no such
-> thing.
-> 
-> While we're at it, remove redundant parenthesis in
-> HOST_NODEJS_CONFIGURE_CMDS.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 7 +++----
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-Thank you! \o/
-
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/nodejs/nodejs.mk | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index 909347eb2e..70febca74f 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -10,6 +10,7 @@ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
->  NODEJS_DEPENDENCIES = \
->  	c-ares \
->  	host-nodejs \
-> +	host-ninja \
->  	host-pkgconf \
->  	host-python3 \
->  	host-qemu \
-> @@ -20,6 +21,7 @@ NODEJS_DEPENDENCIES = \
->  HOST_NODEJS_DEPENDENCIES = \
->  	host-icu \
->  	host-libopenssl \
-> +	host-ninja \
->  	host-pkgconf \
->  	host-python3 \
->  	host-zlib
-> @@ -37,7 +39,8 @@ NODEJS_CONF_OPTS = \
->  	--without-dtrace \
->  	--without-etw \
->  	--cross-compiling \
-> -	--dest-os=linux
-> +	--dest-os=linux \
-> +	--ninja
->  
->  HOST_NODEJS_MAKE_OPTS = \
->  	$(HOST_CONFIGURE_OPTS) \
-> @@ -82,7 +85,7 @@ NODEJS_CONF_OPTS += --without-npm
->  endif
->  
->  define HOST_NODEJS_CONFIGURE_CMDS
-> -	(cd $(@D); \
-> +	cd $(@D); \
->  		$(HOST_CONFIGURE_OPTS) \
->  		PATH=$(@D)/bin:$(BR_PATH) \
->  		PYTHON=$(HOST_DIR)/bin/python3 \
-> @@ -96,7 +99,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
->  		--shared-zlib \
->  		--no-cross-compiling \
->  		--with-intl=system-icu \
-> -	)
-> +		--ninja
->  endef
->  
->  NODEJS_HOST_TOOLS_V8 = \
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 2fa0370f96..fb3763297d 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.0.2
++MESA3D_HEADERS_VERSION = 22.0.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 6f06c85760..32221b8c89 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2022-April/000670.html
+-sha256  df4fa560dcce6680133067cd15b0505fc424ca703244ce9ab247c74d2fab6885  mesa-22.0.2.tar.xz
+-sha512  939ddf9acd280e1b20b3540349b3ad07bbeee5d821198f1d667e86634449bf5d0a0df5832753b8b3f8816709c2f02959cce25f3d26a33cc758dd8e25d158ddb8  mesa-22.0.2.tar.xz
+-
++# From https://lists.freedesktop.org/archives/mesa-announce/2022-May/000673.html
++sha256  9f2b30f5276a9abaf71aafc6979685e2636189de1a87aea2c9e69744a6d0ebb9  mesa-22.0.3.tar.xz
++sha512  3982cd2fadca5349b2513885ed734c2422e3f2dced85f471f245b120ffaf018acafcd929dc5ec317f2c568bb5f619f5a3475d3a92495f766a2eefb225efcac14  mesa-22.0.3.tar.xz
+ # License
+ sha256  4bc15d14dcc134b024cbdca3b5330010136ce8a427b6f8353440ce2ad7aab037  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 41c8d80daf..40b61161d0 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.0.2
++MESA3D_VERSION = 22.0.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
