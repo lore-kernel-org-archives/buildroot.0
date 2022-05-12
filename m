@@ -1,86 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65447C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 06:51:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55D52C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 07:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AE5F4198B;
-	Thu, 12 May 2022 06:51:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6CB960D5B;
+	Thu, 12 May 2022 07:22:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F734UgKcWBIo; Thu, 12 May 2022 06:51:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZveapatDbKHb; Thu, 12 May 2022 07:22:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9BF94197D;
-	Thu, 12 May 2022 06:50:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 59C2F1BF300
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 06:50:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D45860BF5;
+	Thu, 12 May 2022 07:22:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 00D551BF4D8
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 07:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 41587400FD
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 06:50:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E398240343
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 07:22:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N3U6Dc1XLbCb for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 06:50:55 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=googlemail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GX7NfTQu66cP for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 07:22:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 43907400B8
- for <buildroot@buildroot.org>; Thu, 12 May 2022 06:50:55 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id be20so5007337edb.12
- for <buildroot@buildroot.org>; Wed, 11 May 2022 23:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to;
- bh=K2vWQlRSy4v5wZf2x+TnlGZl9YWr40vC/gvd/th7cE8=;
- b=KB9OYj1eJ9zw8UAaRujdarqOZNvjs11cvNKcicPye0VLk5vdVjr0FdAHFHCM44SO9R
- YGSP2N8cnrJlIQwnXhZyQJMmnjUVaeinMgurnkN88w/Euk7moz+tEoHvKLRYeoozkHbx
- /SvbZpsblmpNc1ZPUyvOE8V94da8RQWeQPUML6y+twbsrDwFMrRtf4UBxDULrurRjSZJ
- Gf12fVxJXwwJ8CxUiBBDAIXgQ6fMA40/c77+u756jGA9OrS4COKue7x7TpYj5BhyTnIX
- 5JUS1WsPw16mjf9ZWrRtfdOmBqPe8WV+L5zrraoFOA12m+wjgYFYYnIHNDrGE1NvIsiK
- urGA==
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
+ [IPv6:2607:f8b0:4864:20::d2d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CA3F04033C
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 07:22:21 +0000 (UTC)
+Received: by mail-io1-xd2d.google.com with SMTP id a10so4392365ioe.9
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 00:22:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=dDn9QxBwN8jQp/8xZRMvVllr/datykAdwxmBqmV+Me8=;
+ b=ZbHTI28TPVWtrDb2FdEwHMNnwPoIYIwMflA1ufQlWfwpvEl0I+M8r7TbMi1+p2kfc0
+ iuQTDKbptVcpQnOWWRowehEI2r+SOnVLHXDN5ZTWql2msX0tj/Yjikdh+1wMTTexCfTQ
+ UDu6sSgfGuHMziR1rchhEnY+iTryOMwD0ybRf1lsPFlDeeYMUCfAtRFfsilZvOeJ4mLQ
+ Apnhos8m4XZQUVCrcDV1qm/jWprJpYBvVGEpWBE+1BtmRzCmXevdSOF0Ao/ehAGGUQ6+
+ 4oS+vDXBiek6C+d3I66tTsRwQbuIzQkWtkFg67KtuzZ611MmSC/pU+O1a3ARm3e6Aq1X
+ A0GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to;
- bh=K2vWQlRSy4v5wZf2x+TnlGZl9YWr40vC/gvd/th7cE8=;
- b=rFyiAuuMpEHDk+XkDYr8D4B5n6L2H3OywKp/y/G/zVHbY5EalMIK/AdA/KNiLUFrgl
- RVs3UW3rvKQ/kUGvHArcGuUVRSMuORp6Kj5Nap+uHPOoJw4G9J6pMzFXtzZccaalk0ol
- ab66B36fQ85GJFI4ORle/myO4bBiTQQxNoW7FX8D+nObzSXwy1Y9+v03JXnEVi/hJIdC
- qrts54Ovb0hEE2HLbrGekZYcVTht7qRsen/7+dkA9JfWs+zf3/fEU7W3SSJJPYdkj9GE
- EQ+OZwkZZHimzCwI3z78TcF+0kITzNZDzCJKG66714VGi4w6yisHNCHV3Gp4xnRprpVp
- 2RJw==
-X-Gm-Message-State: AOAM531Xdg7RgZJIFRRTZm+efjX6UD+Upzlb+fyI5QFYDD+3zbb458Ag
- /fEXSpAUGH3TJ1iLCuBM5Q==
-X-Google-Smtp-Source: ABdhPJytY3DgFCkf6xASh1woYLhbwQsabE4rbusSkZ1rbFz5ZsU2M6Hv8Fngrv0p2+V/nbrbN/CZ3Q==
-X-Received: by 2002:a05:6402:5242:b0:427:cade:4737 with SMTP id
- t2-20020a056402524200b00427cade4737mr33777024edd.398.1652338253003; 
- Wed, 11 May 2022 23:50:53 -0700 (PDT)
-Received: from [192.168.10.198] (bbcs-119-245.pub.wingo.ch. [144.2.119.245])
- by smtp.gmail.com with ESMTPSA id
- a9-20020a05640213c900b0042617ba63c8sm2110343edx.82.2022.05.11.23.50.52
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 11 May 2022 23:50:52 -0700 (PDT)
-Message-ID: <04ff514d-0de7-279f-f443-0339fad4865f@gmail.com>
-Date: Thu, 12 May 2022 08:50:51 +0200
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=dDn9QxBwN8jQp/8xZRMvVllr/datykAdwxmBqmV+Me8=;
+ b=1rAbOG5nr8AsI9u+qFI0sEUI+4d+iyenDkTQEpgOrga4lPkaoDQXe8kT2+lStP5Yss
+ pNLDD2PSa5q8iF7ATCFikKnBbsDK0ryKo5p3xH4FctSnv89WqqwAIb6pCbdMoiryMyLA
+ L4ESMCzUZaXJf8tVIDn/fuZUNVahq2218fwfoAtt3556hZwKbDCPmhiidS3FYoO0fADM
+ tzaEgb5qo5gp8F25vwCx11hXNeF5Hse41V8waTe3Ka18e3JtMR9hfESnpI0NZBmwD1/D
+ Min+bBqP2QRtCmsZplemZJFEE6dOxdFrcbVWm7e/yPWRJ63Ts6ZpXbC6qAWGTD05cjd7
+ aiAQ==
+X-Gm-Message-State: AOAM533evQrzl2ijIMxSHo+weQwFjz7me5Z552k33xtFb0KKryOL8kWF
+ nUKy2kh1ejol2MA2GWgnLoTAw7bNfMEUdCg+tQw=
+X-Google-Smtp-Source: ABdhPJymydYcTs0z+frPs7JqySw7W6vZZX4KSDRU5XN4PhgWjuzbEf50BSxNodXXaVURCQlerGToL6sKkOW1WRNw+B4=
+X-Received: by 2002:a05:6638:2584:b0:32d:b5e8:b271 with SMTP id
+ s4-20020a056638258400b0032db5e8b271mr7559913jat.113.1652340140712; Thu, 12
+ May 2022 00:22:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To: Alistair Francis <alistair23@gmail.com>
-References: <20220427131400.223113-1-noahhuetter@gmail.com>
- <CAKmqyKPcAFNmd5tz=JTZZVcUKKZeTpQsockEDL66pfjJM2FhKQ@mail.gmail.com>
-From: =?UTF-8?Q?Noah_H=c3=bctter?= <noahhuetter@gmail.com>
-In-Reply-To: <CAKmqyKPcAFNmd5tz=JTZZVcUKKZeTpQsockEDL66pfjJM2FhKQ@mail.gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] boot/opensbi: introduce
- BR2_TARGET_OPENSBI_CUSTOM_MAKEOPTS
+References: <20220511194616.2272499-1-geomatsi@gmail.com>
+In-Reply-To: <20220511194616.2272499-1-geomatsi@gmail.com>
+Date: Thu, 12 May 2022 09:22:10 +0200
+Message-ID: <CAGm1_kvOq3F_BNFqWOQhaJsRthOLG1k8vNWtJr3cAqZex2A4Eg@mail.gmail.com>
+To: Sergey Matyukevich <geomatsi@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/wpa_supplicant: wired driver
+ needs headers >= 4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,104 +82,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alistair Francis <alistair@alistair23.me>,
- buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============1381340365881603105=="
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---===============1381340365881603105==
-Content-Language: en-US
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------0v0HohrVrB6H8LFk4M8R5tAn"
+Hi Sergey,
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0v0HohrVrB6H8LFk4M8R5tAn
-Content-Type: multipart/mixed; boundary="------------w3g2ttsGE0UxrOarkj4cTHba";
- protected-headers="v1"
-From: =?UTF-8?Q?Noah_H=c3=bctter?= <noahhuetter@gmail.com>
-To: Alistair Francis <alistair23@gmail.com>
-Cc: buildroot <buildroot@buildroot.org>,
- Alistair Francis <alistair@alistair23.me>
-Message-ID: <04ff514d-0de7-279f-f443-0339fad4865f@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] boot/opensbi: introduce
- BR2_TARGET_OPENSBI_CUSTOM_MAKEOPTS
-References: <20220427131400.223113-1-noahhuetter@gmail.com>
- <CAKmqyKPcAFNmd5tz=JTZZVcUKKZeTpQsockEDL66pfjJM2FhKQ@mail.gmail.com>
-In-Reply-To: <CAKmqyKPcAFNmd5tz=JTZZVcUKKZeTpQsockEDL66pfjJM2FhKQ@mail.gmail.com>
+On Wed, May 11, 2022 at 9:46 PM Sergey Matyukevich <geomatsi@gmail.com> wrote:
+>
+> Wired driver enables macsec support which depends on if_macsec.h.
+> That header has only been exported since kernel v4.6, see commit:
+> https://github.com/torvalds/linux/commit/dece8d2b78d19df7fe5e4e965f1f0d1a3e188d1b
+>
+> Fixes:
+> - http://autobuild.buildroot.net/results/6bb619eb7fdecf7824fcc549c4ccb8e487665d10/
+>
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
---------------w3g2ttsGE0UxrOarkj4cTHba
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-SGkgQWxpc3RhaXIsDQoNCklzIHRoZXJlIGFueSBhY3Rpb24gbmVlZGVkIGZyb20gbXkgc2lk
-ZSB0byBnZXQgdGhpcyBjb21taXR0ZWQ/DQoNCk5vYWgNCg0KT24gNC8yOC8yMiAwMDo1NSwg
-QWxpc3RhaXIgRnJhbmNpcyB3cm90ZToNCj4gT24gV2VkLCBBcHIgMjcsIDIwMjIgYXQgMTE6
-MTQgUE0gTm9haCBIdWV0dGVyIDxub2FoaHVldHRlckBnbWFpbC5jb20+IHdyb3RlOg0KPj4N
-Cj4+IFNpZ25lZC1vZmYtYnk6IE5vYWggSHVldHRlciA8bm9haGh1ZXR0ZXJAZ21haWwuY29t
-Pg0KPiANCj4gUmV2aWV3ZWQtYnk6IEFsaXN0YWlyIEZyYW5jaXMgPGFsaXN0YWlyLmZyYW5j
-aXNAd2RjLmNvbT4NCj4gDQo+IEFsaXN0YWlyDQo+IA0KPj4gLS0tDQo+PiAgIGJvb3Qvb3Bl
-bnNiaS9Db25maWcuaW4gIHwgNiArKysrKysNCj4+ICAgYm9vdC9vcGVuc2JpL29wZW5zYmku
-bWsgfCAzICsrLQ0KPj4gICAyIGZpbGVzIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgMSBk
-ZWxldGlvbigtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9ib290L29wZW5zYmkvQ29uZmlnLmlu
-IGIvYm9vdC9vcGVuc2JpL0NvbmZpZy5pbg0KPj4gaW5kZXggZjE0NDM0OThkOS4uZmYwOTVl
-YTgwMCAxMDA2NDQNCj4+IC0tLSBhL2Jvb3Qvb3BlbnNiaS9Db25maWcuaW4NCj4+ICsrKyBi
-L2Jvb3Qvb3BlbnNiaS9Db25maWcuaW4NCj4+IEBAIC0xMTksNCArMTE5LDEwIEBAIGNvbmZp
-ZyBCUjJfVEFSR0VUX09QRU5TQklfRldfRkRUX1BBVEgNCj4+ICAgICAgICAgICAgbXVzdCBi
-ZSBzZXQgaW4gdGhlIFUtQm9vdCBjb25maWd1cmF0aW9uIGZvciB0aGlzIGZpbGUgdG8gYmUN
-Cj4+ICAgICAgICAgICAgcHJvZHVjZWQuDQo+Pg0KPj4gK2NvbmZpZyBCUjJfVEFSR0VUX09Q
-RU5TQklfQ1VTVE9NX01BS0VPUFRTDQo+PiArICAgICAgIHN0cmluZyAiQ3VzdG9tIG1ha2Ug
-b3B0aW9ucyINCj4+ICsgICAgICAgaGVscA0KPj4gKyAgICAgICAgIExpc3Qgb2YgY3VzdG9t
-IG1ha2Ugb3B0aW9ucyBwYXNzZWQgYXQgYnVpbGQgdGltZS4gQ2FuIGJlDQo+PiArICAgICAg
-ICAgdXNlZCBmb3IgZXhhbXBsZSB0byBwYXNzIGEgQlVJTERfSU5GTz0gdmFsdWUuDQo+PiAr
-DQo+PiAgIGVuZGlmDQo+PiBkaWZmIC0tZ2l0IGEvYm9vdC9vcGVuc2JpL29wZW5zYmkubWsg
-Yi9ib290L29wZW5zYmkvb3BlbnNiaS5taw0KPj4gaW5kZXggOGUwNTU2MzNhOC4uZDAwN2Fl
-MTI5OSAxMDA2NDQNCj4+IC0tLSBhL2Jvb3Qvb3BlbnNiaS9vcGVuc2JpLm1rDQo+PiArKysg
-Yi9ib290L29wZW5zYmkvb3BlbnNiaS5taw0KPj4gQEAgLTMxLDcgKzMxLDggQEAgQlJfTk9f
-Q0hFQ0tfSEFTSF9GT1IgKz0gJChPUEVOU0JJX1NPVVJDRSkNCj4+ICAgZW5kaWYNCj4+DQo+
-PiAgIE9QRU5TQklfTUFLRV9FTlYgPSBcDQo+PiAtICAgICAgIENST1NTX0NPTVBJTEU9JChU
-QVJHRVRfQ1JPU1MpDQo+PiArICAgICAgIENST1NTX0NPTVBJTEU9JChUQVJHRVRfQ1JPU1Mp
-IFwNCj4+ICsgICAgICAgJChjYWxsIHFzdHJpcCwkKEJSMl9UQVJHRVRfT1BFTlNCSV9DVVNU
-T01fTUFLRU9QVFMpKQ0KPj4NCj4+ICAgT1BFTlNCSV9QTEFUID0gJChjYWxsIHFzdHJpcCwk
-KEJSMl9UQVJHRVRfT1BFTlNCSV9QTEFUKSkNCj4+ICAgaWZuZXEgKCQoT1BFTlNCSV9QTEFU
-KSwpDQo+PiAtLQ0KPj4gMi4zNS4xDQo+Pg0KPj4gX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18NCj4+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QNCj4+
-IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnDQo+PiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QNCg0KLS0gDQpOb2FoIEh1ZXR0ZXINCmh0
-dHBzOi8vYmVlYmxlYnJveC5jaC8NCkZpbmdlcnByaW50OiBBMjUxIDgzOTEgNTk4OSAwOTRF
-IDA3NDcgNkI2OCAzNjJBIDFDNTggNDU2RCBEQTBGDQo=
+Regards,
+Yegor
 
---------------w3g2ttsGE0UxrOarkj4cTHba--
-
---------------0v0HohrVrB6H8LFk4M8R5tAn
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEolGDkVmJCU4HR2toNiocWEVt2g8FAmJ8rksFAwAAAAAACgkQNiocWEVt2g96
-EAgApVtIYFcu9Lyz4A2Dmur03bzK2yukWyAY7eFnjvJ1nX8l4pwNw9lSDkjI6u57oHtT9/NdoO+B
-WO3fVmhLKFqCV6tEVhpO5V+W65Q2EIDA70IfYI2nispyPloEZ3uwt1SVllc5vlGM569fogMIlDg/
-INBv2rp/mJXR/EliU8/fvL9VTSwt0s5SFYdqnQSBSSo2x7QnTAqildLKGxqGLYnpYYiKVeKnbJt2
-jGEI//pezjAqKIiR7nlJ+Git8JWbxPeUrSVsgS1oKJ4wi9t7icQtoCXrBHhLzEkF6Elj19+JPNL/
-LIZFQkl38aZ7DSEJ7joTBW9qOEkPbgHslX9iS6N3nw==
-=swzL
------END PGP SIGNATURE-----
-
---------------0v0HohrVrB6H8LFk4M8R5tAn--
-
---===============1381340365881603105==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> ---
+>  package/wpa_supplicant/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+> index 7e2432985c..92953f69f0 100644
+> --- a/package/wpa_supplicant/Config.in
+> +++ b/package/wpa_supplicant/Config.in
+> @@ -42,6 +42,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WEXT
+>  config BR2_PACKAGE_WPA_SUPPLICANT_WIRED
+>         bool "Enable wired support"
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
+> +       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+>         select BR2_PACKAGE_LIBNL
+>         select BR2_PACKAGE_WPA_SUPPLICANT_EAP
+>         help
+> @@ -49,6 +50,9 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WIRED
+>           supplicant can be used with Ethernet.  This also enables
+>           support for MACSEC.
+>
+> +comment "wired macsec support needs a toolchain w/ headers >= 4.6"
+> +       depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+> +
+>  comment "wired support needs a toolchain w/ threads"
+>         depends on !BR2_TOOLCHAIN_HAS_THREADS
+>
+> --
+> 2.35.1
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1381340365881603105==--
