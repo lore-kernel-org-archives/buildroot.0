@@ -1,66 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CEC2C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:51:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5507C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BEB0A60B30;
-	Thu, 12 May 2022 19:51:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EDC182553;
+	Thu, 12 May 2022 19:51:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uOzFLifh9Ump; Thu, 12 May 2022 19:51:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CHn-s-4Gl84V; Thu, 12 May 2022 19:51:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9E0360B22;
-	Thu, 12 May 2022 19:51:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5D2521BF352
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 816E182AF8;
+	Thu, 12 May 2022 19:51:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DE2F1BF352
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BB07416D5
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 173CC80E4F
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sct4Wd9V-9NX for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 19:51:13 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F3B98416EE
- for <buildroot@buildroot.org>; Thu, 12 May 2022 19:51:12 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ccab:5af8:e14c:c986])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 1D45719F58A;
- Thu, 12 May 2022 21:51:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1652385071;
- bh=VPSTdr5Zg9x+41UdT8yFWfiIZDpejEn5zgOtgbJYu5M=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=vHEnmCgFBZFUB+9wfG/w36EJIBkzbwwguTk9hcjah02SMSnTqZctMYEa/3kOpSVt0
- wlCYsd3qkPBHEGu1CgMzNi6pAStDwAs/uj62zb9k9aBTYHD3ou5DWBr8aAhPO3CMRX
- U2lTWwYAe24syDtv/TVWLG7rrageqhikc5e0ExRrTXgHhRJTIf49DhjZbYPA1LPvbm
- y0MxAnN2slWp6K0osGNweo5cFzvsq+vDeYffVSEpM3gU/hFInBstaMdUWRmWyCvBKl
- kARgwted7LlEPE3p8zjWW9pL4WI7jlRhq/CBH5hbXRTZ48LxcNI3OdkKH363wD8NsK
- 5+J5GB9RbZxfQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 12 May 2022 21:51:08 +0200
-Date: Thu, 12 May 2022 21:51:08 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20220512195108.GC1597494@scaer>
-References: <20220512185355.873825-1-bernd.kuhls@t-online.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220512185355.873825-1-bernd.kuhls@t-online.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 01/25] package/x11r7/xlib_libXvMC: bump
- version to 1.0.13
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cD18L-7zQ63K for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 19:51:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6601A80C5E
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 19:51:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id A5CB785C8A; Thu, 12 May 2022 19:41:00 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 12 May 2022 21:49:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 42bda53514e8d4f2277b08c328f5546d1745e756
+X-Git-Newrev: 432714f8187b0ceabf9441cf173438b4f4bd3a8e
+X-Patchwork-Hint: ignore
+Message-Id: <20220512194100.A5CB785C8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_twm: bump version to
+ 1.0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,82 +53,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bern, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=432714f8187b0ceabf9441cf173438b4f4bd3a8e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series of 25 patches applied to master, thanks.
+Release notes:
+https://lists.x.org/archives/xorg-announce/2022-April/003135.html
 
-I replied specifically to the xsm patch, please have a look at it.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/x11r7/xapp_twm/xapp_twm.hash | 6 +++---
+ package/x11r7/xapp_twm/xapp_twm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-On 2022-05-12 20:53 +0200, Bernd Kuhls spake thusly:
-> Release notes:
-> https://lists.x.org/archives/xorg-announce/2022-March/003132.html
-> 
-> Removed md5 and sha1 hashes, not provided by upstream anymore.
-> Reformatted license hash.
-> Switched tarball to upstream-provided .xz format.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/xlib_libXvMC/xlib_libXvMC.hash | 11 ++++-------
->  package/x11r7/xlib_libXvMC/xlib_libXvMC.mk   |  4 ++--
->  2 files changed, 6 insertions(+), 9 deletions(-)
-> 
-> diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash b/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
-> index be4ba751aa..15221969e3 100644
-> --- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
-> +++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
-> @@ -1,8 +1,5 @@
-> -# From https://lists.x.org/archives/xorg-announce/2019-September/003023.html
-> -md5 3569ff7f3e26864d986d6a21147eaa58  libXvMC-1.0.12.tar.bz2
-> -sha1 4871f92a83faa86aff5c630a2d6016c67bf11b97  libXvMC-1.0.12.tar.bz2
-> -sha256 6b3da7977b3f7eaf4f0ac6470ab1e562298d82c4e79077765787963ab7966dcd  libXvMC-1.0.12.tar.bz2
-> -sha512 62cb9a72b20af3b081d2d555a253b0e2b8b26b31f4fad10bd3e53bbf96e1663b61bd8df2b78b16f18218cd37cce0c9e6809ae16ded226b37a8b199e41b223955  libXvMC-1.0.12.tar.bz2
-> -
-> +# From https://lists.x.org/archives/xorg-announce/2022-March/003132.html
-> +sha256  0a9ebe6dea7888a747e5aca1b891d53cd7d3a5f141a9645f77d9b6a12cee657c  libXvMC-1.0.13.tar.xz
-> +sha512  c9d0f73884a586efb9ea4f77fc8555f60d940077d7dff8eaa765b86345c8b4e3d80b860f68191d2830c272b9e464c08450fbb51bb64819753a6f4228c71861ac  libXvMC-1.0.13.tar.xz
->  # Locally computed
-> -sha256 b7c709df281675a07eb60a71c5fa2599d1ef538eb79ae7ad6e774b10e4a804c4  COPYING
-> +sha256  b7c709df281675a07eb60a71c5fa2599d1ef538eb79ae7ad6e774b10e4a804c4  COPYING
-> diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-> index 7980f17493..c1fe31277e 100644
-> --- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-> +++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -XLIB_LIBXVMC_VERSION = 1.0.12
-> -XLIB_LIBXVMC_SOURCE = libXvMC-$(XLIB_LIBXVMC_VERSION).tar.bz2
-> +XLIB_LIBXVMC_VERSION = 1.0.13
-> +XLIB_LIBXVMC_SOURCE = libXvMC-$(XLIB_LIBXVMC_VERSION).tar.xz
->  XLIB_LIBXVMC_SITE = http://xorg.freedesktop.org/releases/individual/lib
->  XLIB_LIBXVMC_LICENSE = MIT
->  XLIB_LIBXVMC_LICENSE_FILES = COPYING
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/x11r7/xapp_twm/xapp_twm.hash b/package/x11r7/xapp_twm/xapp_twm.hash
+index 26661f1fbd..75d89a9984 100644
+--- a/package/x11r7/xapp_twm/xapp_twm.hash
++++ b/package/x11r7/xapp_twm/xapp_twm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-June/003047.html
+-sha256  f4e8a842dec410e79741f25ed4dfac09df080835d0bba2e3983b5914569b68c7  twm-1.0.11.tar.xz
+-sha512  948034bba23e6b6c4412fcd2e46bb11a9980297601218a54a5055165ab0229a44dde0d50f338b24e82d76f390597e2fa09d11ff7f3fe1b1d736b10083c7da20d  twm-1.0.11.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2022-April/003135.html
++sha256  aaf201d4de04c1bb11eed93de4bee0147217b7bdf61b7b761a56b2fdc276afe4  twm-1.0.12.tar.xz
++sha512  f3d68df7e06516f6b74f19181efcfd9db2479c8ea0c72c3a6ed0dc1b222405b40d81a2dea17b662955e0c1783e87d0d3eb067c3b6e7c6eed8c0d38d03d362260  twm-1.0.12.tar.xz
+ # Locally computed
+ sha256  4809ffc9656bc9a704e19ab467d1cedc97c48c9d1f9a4018e6d99d2e61f75945  COPYING
+diff --git a/package/x11r7/xapp_twm/xapp_twm.mk b/package/x11r7/xapp_twm/xapp_twm.mk
+index 46d4ca331d..b222830497 100644
+--- a/package/x11r7/xapp_twm/xapp_twm.mk
++++ b/package/x11r7/xapp_twm/xapp_twm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_TWM_VERSION = 1.0.11
++XAPP_TWM_VERSION = 1.0.12
+ XAPP_TWM_SOURCE = twm-$(XAPP_TWM_VERSION).tar.xz
+ XAPP_TWM_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_TWM_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
