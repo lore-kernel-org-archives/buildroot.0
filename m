@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE1F0C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 18:54:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 497D5C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 18:54:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3586A82D40;
-	Thu, 12 May 2022 18:54:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED22240133;
+	Thu, 12 May 2022 18:54:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G34S0GxqrjMN; Thu, 12 May 2022 18:54:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DZGu9k2kIX6p; Thu, 12 May 2022 18:54:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 51E0181902;
-	Thu, 12 May 2022 18:54:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6451F1BF578
+	by smtp2.osuosl.org (Postfix) with ESMTP id EB13D400FB;
+	Thu, 12 May 2022 18:54:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 66A631BF9CB
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 18:54:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5CB0060AC1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4FE4940132
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 18:54:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yYB3OOCtoHab for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eGvhjcyaRT_0 for <buildroot@lists.busybox.net>;
  Thu, 12 May 2022 18:53:59 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 803EB607F0
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 69FA4400D0
  for <buildroot@buildroot.org>; Thu, 12 May 2022 18:53:59 +0000 (UTC)
 Received: from fwd77.dcpf.telekom.de (fwd77.aul.t-online.de [10.223.144.103])
- by mailout03.t-online.de (Postfix) with SMTP id A59E73D79
- for <buildroot@buildroot.org>; Thu, 12 May 2022 20:53:57 +0200 (CEST)
+ by mailout03.t-online.de (Postfix) with SMTP id A1E6B3D80
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 20:53:56 +0200 (CEST)
 Received: from fli4l.lan.fli4l ([79.214.203.41]) by fwd77.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1npDwj-0Sp6qk0; Thu, 12 May 2022 20:53:57 +0200
+ esmtp id 1npDwi-0Sp6qf0; Thu, 12 May 2022 20:53:56 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:48510)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1npDwj-0004aZ-2O
- for buildroot@buildroot.org; Thu, 12 May 2022 20:53:57 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1npDwh-0004aZ-LC
+ for buildroot@buildroot.org; Thu, 12 May 2022 20:53:55 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 20:53:54 +0200
-Message-Id: <20220512185355.873825-24-bernd.kuhls@t-online.de>
+Date: Thu, 12 May 2022 20:53:33 +0200
+Message-Id: <20220512185355.873825-3-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220512185355.873825-1-bernd.kuhls@t-online.de>
 References: <20220512185355.873825-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1652381637-0001606D-EC37E26F/0/0 CLEAN NORMAL
-X-TOI-MSGID: becb5976-c038-41db-b63c-d07802373c7b
-Subject: [Buildroot] [PATCH 24/25] package/x11r7/xcb-proto: bump version to
- 1.15
+X-TOI-EXPURGATEID: 150726::1652381636-0001606D-1065483A/0/0 CLEAN NORMAL
+X-TOI-MSGID: 04bf3856-5282-4acd-9598-dbb536bda06d
+Subject: [Buildroot] [PATCH 03/25] package/x11r7/xlib_libXcursor: bump
+ version to 1.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,40 +70,52 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2022-May/003163.html
+https://lists.x.org/archives/xorg-announce/2022-April/003136.html
+
+Removed md5 and sha1 hashes, not provided by upstream anymore.
+Switched tarball to upstream-provided .xz format.
+
+Updated license hash due to upstream commit "Convert COPYING from
+ISO-8859-1 to UTF-8":
+https://gitlab.freedesktop.org/xorg/lib/libxcursor/-/commit/66accad188420c40f0d62b409bfd2af605bb6f05
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xcb-proto/xcb-proto.hash | 6 +++---
- package/x11r7/xcb-proto/xcb-proto.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.hash | 10 ++++------
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   |  4 ++--
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xcb-proto/xcb-proto.hash b/package/x11r7/xcb-proto/xcb-proto.hash
-index e6bc2379bf..7007ff14de 100644
---- a/package/x11r7/xcb-proto/xcb-proto.hash
-+++ b/package/x11r7/xcb-proto/xcb-proto.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2020-October/003061.html
--sha256  f04add9a972ac334ea11d9d7eb4fc7f8883835da3e4859c9afa971efdf57fcc3  xcb-proto-1.14.1.tar.xz
--sha512  140fbf48483bacc7f6b70fdcf76f9e4ff0e87df9cb3a071cea47d8fe4574407cdefcfbd674099014d297e5fc010748e71d8609fca4cc32e8b25c634f928b727d  xcb-proto-1.14.1.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-May/003163.html
-+sha256  d34c3b264e8365d16fa9db49179cfa3e9952baaf9275badda0f413966b65955f  xcb-proto-1.15.tar.xz
-+sha512  a333ac7c39f17ff2567419d09a9a77210c943a4e88d79eb152d416ae26bf6fb14e2446f9817abc806edd7aa3733bd4de5852b5ae90a25cbcc9d40e59c211aa36  xcb-proto-1.15.tar.xz
+diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
+index 3a12253d40..11575edbf5 100644
+--- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
++++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002972.html
+-md5 9b9be0e289130fb820aedf67705fc549  libXcursor-1.2.0.tar.bz2
+-sha1 cca0b34955d3c2f657f05a2a2c40f75353ddd912  libXcursor-1.2.0.tar.bz2
+-sha256 3ad3e9f8251094af6fe8cb4afcf63e28df504d46bfa5a5529db74a505d628782  libXcursor-1.2.0.tar.bz2
+-sha512 2b12d0fd17e311ce269dbba58588698885815eb07aa44d48525ed5cd9e5f379bb90138a792a191e2f74888ab10b3ca9a4f507f21de0984ed79748973ab927a03  libXcursor-1.2.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-April/003136.html
++sha256  46c143731610bafd2070159a844571b287ac26192537d047a39df06155492104  libXcursor-1.2.1.tar.xz
++sha512  ebb42a39855aab86d0c11fe6ad33d011cf56a6dc5c309bef643460319c03df239b7e09fe88777bb25c0e9ff8aceac6bf66e51cc04a2d5ee463b3bc3bbf1674e3  libXcursor-1.2.1.tar.xz
  # Locally computed
- sha256  c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
-diff --git a/package/x11r7/xcb-proto/xcb-proto.mk b/package/x11r7/xcb-proto/xcb-proto.mk
-index 64190c817f..1e25d43593 100644
---- a/package/x11r7/xcb-proto/xcb-proto.mk
-+++ b/package/x11r7/xcb-proto/xcb-proto.mk
-@@ -4,7 +4,7 @@
+-sha256 1f1588aff23eec0cb6bb9cfe02f8a75abbe43faf3d9b1eff54b7fbc42774b3ad  COPYING
++sha256  ad2e9d279088c5d612fb0e506ea8bb7d9f01b411e7f4b97b64589c3cd48a68f1  COPYING
+diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+index 79d9904010..4a1ffcce9e 100644
+--- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
++++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XCB_PROTO_VERSION = 1.14.1
-+XCB_PROTO_VERSION = 1.15
- XCB_PROTO_SOURCE = xcb-proto-$(XCB_PROTO_VERSION).tar.xz
- XCB_PROTO_SITE = https://xorg.freedesktop.org/archive/individual/proto
- XCB_PROTO_LICENSE = MIT
+-XLIB_LIBXCURSOR_VERSION = 1.2.0
+-XLIB_LIBXCURSOR_SOURCE = libXcursor-$(XLIB_LIBXCURSOR_VERSION).tar.bz2
++XLIB_LIBXCURSOR_VERSION = 1.2.1
++XLIB_LIBXCURSOR_SOURCE = libXcursor-$(XLIB_LIBXCURSOR_VERSION).tar.xz
+ XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXCURSOR_LICENSE = MIT
+ XLIB_LIBXCURSOR_LICENSE_FILES = COPYING
 -- 
 2.30.2
 
