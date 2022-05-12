@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CCFAC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:54:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1B8EC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA86A40339;
-	Thu, 12 May 2022 19:54:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B797E404D0;
+	Thu, 12 May 2022 19:54:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 15KFN72Uddau; Thu, 12 May 2022 19:54:14 +0000 (UTC)
+	with ESMTP id zLhVABn_P4B0; Thu, 12 May 2022 19:54:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E4BE240359;
-	Thu, 12 May 2022 19:54:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 72FA11BF352
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E37A40412;
+	Thu, 12 May 2022 19:54:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D8AA1BF9CB
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ABB0682553
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FC4860B22
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T-8XekwC_W7T for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 19:51:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cHB772L2sh3g for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 19:51:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1400080D9D
- for <buildroot@buildroot.org>; Thu, 12 May 2022 19:51:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B860060B25
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 19:51:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 573B285C90; Thu, 12 May 2022 19:41:01 +0000 (UTC)
+ id 0742185C90; Thu, 12 May 2022 19:41:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 21:50:03 +0200
+Date: Thu, 12 May 2022 21:49:43 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 23e6fba6c1eb195aa9cdb4e97075a8bbdf4bb3d7
-X-Git-Newrev: 720c3b3cac5f2c44afdc8c07ba4b4c131b1d9a85
+X-Git-Oldrev: b52b3e2578c1bda7fc96e9ec1f3efa33d6d80644
+X-Git-Newrev: 2659ac537c0520ba9638a92fe6185a380fba6e45
 X-Patchwork-Hint: ignore
-Message-Id: <20220512194101.573B285C90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xauth: bump version to
- 1.1.2
+Message-Id: <20220512194101.0742185C90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_setxkbmap: bump version
+ to 1.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +59,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=720c3b3cac5f2c44afdc8c07ba4b4c131b1d9a85
+commit: https://git.buildroot.net/buildroot/commit/?id=2659ac537c0520ba9638a92fe6185a380fba6e45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2022-April/003158.html
+https://lists.x.org/archives/xorg-announce/2022-April/003146.html
 
+Added dependency to xlib_libXrandr needed after upstream commit:
+https://gitlab.freedesktop.org/xorg/app/setxkbmap/-/commit/13d1e26d696c5113a20dfc2f56c03ddb837a2eac
+
+Removed md5 and sha1 hashes, not provided by upstream anymore.
+Reformatted license hash.
 Switched tarball to upstream-provided .xz format.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xauth/xapp_xauth.hash | 7 +++----
- package/x11r7/xapp_xauth/xapp_xauth.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/x11r7/xapp_setxkbmap/Config.in           |  1 +
+ package/x11r7/xapp_setxkbmap/xapp_setxkbmap.hash | 10 ++++------
+ package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk   |  6 +++---
+ 3 files changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/package/x11r7/xapp_xauth/xapp_xauth.hash b/package/x11r7/xapp_xauth/xapp_xauth.hash
-index 22ea4cadfd..e66c1a67b1 100644
---- a/package/x11r7/xapp_xauth/xapp_xauth.hash
-+++ b/package/x11r7/xapp_xauth/xapp_xauth.hash
-@@ -1,6 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-November/003118.html
--sha256  164ea0a29137b284a47b886ef2affcb0a74733bf3aad04f9b106b1a6c82ebd92  xauth-1.1.1.tar.bz2
--sha512  998c3158378fff50d368959c29335173b8d98e02591cb3d7b2f9534b5a44b19deb4cb7da9bf291ca5a37f69f833d72839b2c6611723306d10c1b4968ae4d4120  xauth-1.1.1.tar.bz2
--
-+# From https://lists.x.org/archives/xorg-announce/2022-April/003158.html
-+sha256  78ba6afd19536ced1dddb3276cba6e9555a211b468a06f95f6a97c62ff8ee200  xauth-1.1.2.tar.xz
-+sha512  ac23fcd166b45abf7b030994ff3332c9906023dc1ddfa9b9d3000e6a914dc5e0213c4a2aa409cb3ddb93e1f9f4f6374376109241a95ef8c36af842de1f6f76e8  xauth-1.1.2.tar.xz
+diff --git a/package/x11r7/xapp_setxkbmap/Config.in b/package/x11r7/xapp_setxkbmap/Config.in
+index 2b1389c753..add50813f0 100644
+--- a/package/x11r7/xapp_setxkbmap/Config.in
++++ b/package/x11r7/xapp_setxkbmap/Config.in
+@@ -2,5 +2,6 @@ config BR2_PACKAGE_XAPP_SETXKBMAP
+ 	bool "setxkbmap"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXKBFILE
++	select BR2_PACKAGE_XLIB_LIBXRANDR
+ 	help
+ 	  Controls the keyboard layout of a running X server.
+diff --git a/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.hash b/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.hash
+index 4f963593cb..a57d7cc737 100644
+--- a/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.hash
++++ b/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-July/003007.html
+-md5 93e736c98fb75856ee8227a0c49a128d  setxkbmap-1.3.2.tar.bz2
+-sha1 44783734bc58fca93165a20da0bb3eca1ccb9ad9  setxkbmap-1.3.2.tar.bz2
+-sha256 8ff27486442725e50b02d7049152f51d125ecad71b7ce503cfa09d5d8ceeb9f5  setxkbmap-1.3.2.tar.bz2
+-sha512 bfa8015dee0d8d3fdbbd89afbd71c8606ce168d6edca8521d5ed05a00fecbea39bc4bfcce84b71458bdeb34c60bd80a5df27e0691ccee3966443ecdc937faf38  setxkbmap-1.3.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-April/003146.html
++sha256  b560c678da6930a0da267304fa3a41cc5df39a96a5e23d06f14984c87b6f587b  setxkbmap-1.3.3.tar.xz
++sha512  208f07a7f7bce47b573099d4cd8c941a3a4d74b456720bc3ca1cbba298381a2ab98c7500d6e6cd6d5dd61840b7c42cf6521da754ec395f266f8158102a55ad58  setxkbmap-1.3.3.tar.xz
  # Locally computed
- sha256 dcdf5fa36a652efbe61a21def1301739b0010334ae3f049f1cff433221a8c7a5  COPYING
-diff --git a/package/x11r7/xapp_xauth/xapp_xauth.mk b/package/x11r7/xapp_xauth/xapp_xauth.mk
-index 64b064d3bd..248a66e3a0 100644
---- a/package/x11r7/xapp_xauth/xapp_xauth.mk
-+++ b/package/x11r7/xapp_xauth/xapp_xauth.mk
-@@ -4,8 +4,8 @@
+-sha256 afb8ce58340b6a6b85b73e256425263ce46f5a427279785e275991cb660cce82  COPYING
++sha256  afb8ce58340b6a6b85b73e256425263ce46f5a427279785e275991cb660cce82  COPYING
+diff --git a/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk b/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk
+index 8b69747593..4d48a3fbc1 100644
+--- a/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk
++++ b/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--XAPP_XAUTH_VERSION = 1.1.1
--XAPP_XAUTH_SOURCE = xauth-$(XAPP_XAUTH_VERSION).tar.bz2
-+XAPP_XAUTH_VERSION = 1.1.2
-+XAPP_XAUTH_SOURCE = xauth-$(XAPP_XAUTH_VERSION).tar.xz
- XAPP_XAUTH_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XAUTH_LICENSE = MIT
- XAPP_XAUTH_LICENSE_FILES = COPYING
+-XAPP_SETXKBMAP_VERSION = 1.3.2
+-XAPP_SETXKBMAP_SOURCE = setxkbmap-$(XAPP_SETXKBMAP_VERSION).tar.bz2
++XAPP_SETXKBMAP_VERSION = 1.3.3
++XAPP_SETXKBMAP_SOURCE = setxkbmap-$(XAPP_SETXKBMAP_VERSION).tar.xz
+ XAPP_SETXKBMAP_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_SETXKBMAP_LICENSE = MIT
+ XAPP_SETXKBMAP_LICENSE_FILES = COPYING
+-XAPP_SETXKBMAP_DEPENDENCIES = xlib_libX11 xlib_libxkbfile
++XAPP_SETXKBMAP_DEPENDENCIES = xlib_libX11 xlib_libxkbfile xlib_libXrandr
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
