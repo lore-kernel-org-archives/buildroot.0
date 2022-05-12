@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B71BC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 08:48:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6EEEC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 08:48:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 366CF417A9;
-	Thu, 12 May 2022 08:48:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IV-8ev6RQvnY; Thu, 12 May 2022 08:48:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32D66419B0;
-	Thu, 12 May 2022 08:48:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1FA5B1BF84C
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 08:48:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E83460A71
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 08:48:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FDAD60757;
+	Thu, 12 May 2022 08:48:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sfHS6H2VhMdV for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 08:48:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DDED060757
- for <buildroot@buildroot.org>; Thu, 12 May 2022 08:48:30 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D30881C0009;
- Thu, 12 May 2022 08:48:26 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1np4Uj-007h0n-Rk; Thu, 12 May 2022 10:48:25 +0200
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KtkfaTyxwjYZ; Thu, 12 May 2022 08:48:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0CD560B68;
+	Thu, 12 May 2022 08:48:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C4A0C1BF84C
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 08:48:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C15AE40BD0
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 08:48:53 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mpDwaljkGWa3 for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 08:48:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A74640122
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 08:48:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 6714985A58; Thu, 12 May 2022 08:38:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20220511100707.1477883-1-peter@korsgaard.com>
-Date: Thu, 12 May 2022 10:48:25 +0200
-In-Reply-To: <20220511100707.1477883-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 11 May 2022 12:07:06 +0200")
-Message-ID: <87czgj9lwm.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/libcurl: security bump to version
- 7.83.1
+Date: Thu, 12 May 2022 10:40:16 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b02f13cd54912f3dffd0e0863378050104430d77
+X-Git-Newrev: 0ebbf0b280b10b04ab6b7b23c597f76f6490df64
+X-Patchwork-Hint: ignore
+Message-Id: <20220512083801.6714985A58@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/shim: big endian arm/aarch64 variants
+ are not supported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,41 +53,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0ebbf0b280b10b04ab6b7b23c597f76f6490df64
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following security issues:
- > - CVE-2022-27778: curl removes wrong file on error
- >   https://curl.se/docs/CVE-2022-27778.html
+Fixes:
+http://autobuild.buildroot.net/results/a6c7dd171529e2a7b7a26af8d99bec53117a7a02/
 
- > - CVE-2022-27779: cookie for trailing dot TLD
- >   https://curl.se/docs/CVE-2022-27779.html
+Commit fd5842a1dd03642b2ea084439 (boot/shim: add
+BR2_PACKAGE_SHIM_ARCH_SUPPORTS) added explicit support for big/little endian
+arm/aarch64, but the shim code is hard coded for little endian:
 
- > - CVE-2022-27780: percent-encoded path separator in URL host
- >   https://curl.se/docs/CVE-2022-27780.html
+head -n 1 elf_{arm,aarch64}_efi.lds
+==> elf_arm_efi.lds <==
+OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
 
- > - CVE-2022-27781: CERTINFO never-ending busy-loop
- >   https://curl.se/docs/CVE-2022-27781.html
+==> elf_aarch64_efi.lds <==
+OUTPUT_FORMAT("elf64-littleaarch64", "elf64-littleaarch64", "elf64-littleaarch64")
 
- > - CVE-2022-27782: TLS and SSH connection too eager reuse
- >   https://curl.se/docs/CVE-2022-27782.html
+So drop the support for the big endian variants.
 
- > - CVE-2022-30115: HSTS bypass via trailing dot
- >   https://curl.se/docs/CVE-2022-30115.html
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/shim/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > Drop now upstreamed 0001-mbedtls-fix-compile-when-h2-enabled.patch
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/shim/Config.in b/boot/shim/Config.in
+index c4f1a9f317..462ef12d62 100644
+--- a/boot/shim/Config.in
++++ b/boot/shim/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_SHIM_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_aarch64 || BR2_aarch64_be
+-	default y if BR2_arm || BR2_armeb
++	default y if BR2_aarch64
++	default y if BR2_arm
+ 	default y if BR2_i386
+ 	default y if BR2_x86_64
+ 	# it includes gnu-efi
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
