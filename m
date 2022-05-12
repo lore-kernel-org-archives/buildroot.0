@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 706C1C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 20:17:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDD44C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 20:17:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21E10402E0;
-	Thu, 12 May 2022 20:17:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A1D2403AE;
+	Thu, 12 May 2022 20:17:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7mC9SBWrF-FM; Thu, 12 May 2022 20:17:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vgb_I858N-As; Thu, 12 May 2022 20:17:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7062402C2;
-	Thu, 12 May 2022 20:17:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 798D31BF398
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:16:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 814DC40359;
+	Thu, 12 May 2022 20:17:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 593371BF398
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:17:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 64A97401EF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 46158605AC
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:16:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cuKQa7vwKbb5 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uT-pRomoy-GF for <buildroot@lists.busybox.net>;
  Thu, 12 May 2022 20:16:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7AE37401E2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9072E60B31
  for <buildroot@buildroot.org>; Thu, 12 May 2022 20:16:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id AC9B185D5C; Thu, 12 May 2022 20:06:05 +0000 (UTC)
+ id C61DD85D5E; Thu, 12 May 2022 20:06:05 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 22:14:18 +0200
+Date: Thu, 12 May 2022 22:16:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7990ac2bba510f63400cd5ca3d56ed466339d568
-X-Git-Newrev: 07408779cc068041a2da6838fe077d1a679f1736
+X-Git-Oldrev: fb5aad3024a1f592867068ff22962cf3d576ff19
+X-Git-Newrev: fa56c5f4a2fff2a0363c6dfad7f0f6f74bb3e299
 X-Patchwork-Hint: ignore
-Message-Id: <20220512200605.AC9B185D5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nodejs: bump to 16.15.0
+Message-Id: <20220512200605.C61DD85D5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nodejs: use ninja for build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,41 +58,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07408779cc068041a2da6838fe077d1a679f1736
+commit: https://git.buildroot.net/buildroot/commit/?id=fa56c5f4a2fff2a0363c6dfad7f0f6f74bb3e299
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Kyle Discher <discher.kyle@gmail.com>
+Not only is ninja much faster, it also avoids the following build
+failure:
+make[3]: printf: Argument list too long
+
+This failure happens when the output directory is about 6 levels deep.
+It's due to the make generator of gyp that uses some crazy shell
+processing for splitting up paths on /. The ninja generator does no such
+thing.
+
+While we're at it, remove redundant parenthesis in
+HOST_NODEJS_CONFIGURE_CMDS.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nodejs/nodejs.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 6365ef852b..998229341e 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v14.18.3/SHASUMS256.txt
--sha256  783ac443cd343dd6c68d2abcf7e59e7b978a6a428f6a6025f9b84918b769d608  node-v14.18.3.tar.xz
-+# From https://nodejs.org/dist/v16.15.0/SHASUMS256.txt
-+sha256  a0f812efc43f78321eca08957960a48f5e6bf97004d5058c8dd3b03c646ea4f7  node-v16.15.0.tar.xz
- 
- # Hash for license file
- sha256  b3a67885b5a6ac35e8bbe8190509e41b79b0d9a2e3fbd47186f2ac4727f63be5  LICENSE
 diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 4fe34e0aad..6dcaf34aa4 100644
+index 708d5ac411..cfd9295d4e 100644
 --- a/package/nodejs/nodejs.mk
 +++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 14.18.3
-+NODEJS_VERSION = 16.15.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+@@ -9,6 +9,7 @@ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
  NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-qemu host-pkgconf host-python3 host-nodejs c-ares \
+ NODEJS_DEPENDENCIES = \
+ 	host-nodejs \
++	host-ninja \
+ 	host-pkgconf \
+ 	host-python3 \
+ 	host-qemu \
+@@ -20,6 +21,7 @@ NODEJS_DEPENDENCIES = \
+ HOST_NODEJS_DEPENDENCIES = \
+ 	host-icu \
+ 	host-libopenssl \
++	host-ninja \
+ 	host-pkgconf \
+ 	host-python3 \
+ 	host-zlib
+@@ -37,7 +39,8 @@ NODEJS_CONF_OPTS = \
+ 	--without-dtrace \
+ 	--without-etw \
+ 	--cross-compiling \
+-	--dest-os=linux
++	--dest-os=linux \
++	--ninja
+ 
+ HOST_NODEJS_MAKE_OPTS = \
+ 	$(HOST_CONFIGURE_OPTS) \
+@@ -82,7 +85,7 @@ NODEJS_CONF_OPTS += --without-npm
+ endif
+ 
+ define HOST_NODEJS_CONFIGURE_CMDS
+-	(cd $(@D); \
++	cd $(@D); \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		PATH=$(@D)/bin:$(BR_PATH) \
+ 		PYTHON=$(HOST_DIR)/bin/python3 \
+@@ -96,7 +99,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 		--shared-zlib \
+ 		--no-cross-compiling \
+ 		--with-intl=system-icu \
+-	)
++		--ninja
+ endef
+ 
+ NODEJS_HOST_TOOLS_V8 = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
