@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B461BC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84A56C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 643A240393;
-	Thu, 12 May 2022 19:53:49 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EsfmQ6_jNUb2; Thu, 12 May 2022 19:53:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6981040339;
-	Thu, 12 May 2022 19:53:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 589081C1189
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 92CE181395
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3EA2182F0F;
+	Thu, 12 May 2022 19:54:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tfQpjpwFVM43 for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vmvJBufUN0I8; Thu, 12 May 2022 19:54:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30D4382A2E;
+	Thu, 12 May 2022 19:54:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 31AA31BF352
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 588614033F
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:54 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P_Z2LDWsqOno for <buildroot@lists.busybox.net>;
  Thu, 12 May 2022 19:51:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E435580CC8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F08240359
  for <buildroot@buildroot.org>; Thu, 12 May 2022 19:51:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 337F285C90; Thu, 12 May 2022 19:41:01 +0000 (UTC)
+ id E09B985C6F; Thu, 12 May 2022 19:41:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 21:49:54 +0200
+Date: Thu, 12 May 2022 21:49:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b457585728f598effaaf8607586ffb5ac9c7a368
-X-Git-Newrev: 57e517a2940a671fc9d45842493e0ba51a6fd164
+X-Git-Oldrev: c800c9a56cbc559b61d1772ee5b7dcf9f1844ee7
+X-Git-Newrev: 9a5e228a89b634e258e95dd01a78218d663e3fee
 X-Patchwork-Hint: ignore
-Message-Id: <20220512194101.337F285C90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xlsfonts: bump version
- to 1.0.7
+Message-Id: <20220512194100.E09B985C6F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_listres: bump version
+ to 1.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,11 +59,11 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57e517a2940a671fc9d45842493e0ba51a6fd164
+commit: https://git.buildroot.net/buildroot/commit/?id=9a5e228a89b634e258e95dd01a78218d663e3fee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2022-April/003151.html
+https://lists.x.org/archives/xorg-announce/2022-April/003142.html
 
 Removed md5 and sha1 hashes, not provided by upstream anymore.
 Reformatted license hash.
@@ -72,41 +72,41 @@ Switched tarball to upstream-provided .xz format.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xlsfonts/xapp_xlsfonts.hash | 10 ++++------
- package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk   |  4 ++--
+ package/x11r7/xapp_listres/xapp_listres.hash | 10 ++++------
+ package/x11r7/xapp_listres/xapp_listres.mk   |  4 ++--
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.hash b/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.hash
-index f76369f97e..cd8ae4f368 100644
---- a/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.hash
-+++ b/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.hash
+diff --git a/package/x11r7/xapp_listres/xapp_listres.hash b/package/x11r7/xapp_listres/xapp_listres.hash
+index 1e1c11953a..30fccec9d3 100644
+--- a/package/x11r7/xapp_listres/xapp_listres.hash
++++ b/package/x11r7/xapp_listres/xapp_listres.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002867.html
--md5 5774fd4f518b3f338f2b28f270e04bfc  xlsfonts-1.0.6.tar.bz2
--sha1 bf95e46e0897dcb9d197ce20d4fa024b8ace5148  xlsfonts-1.0.6.tar.bz2
--sha256 89b80b3a030006ab6cef717be286c12f2477894b227158b1e6133274f6ebd368  xlsfonts-1.0.6.tar.bz2
--sha512 052a3b1dec23cb20fdfacd4500cb836feb3b888bf568a548ea71deb58a4ba10a1ad5392d658e95272c6d4a1832edf1f19c3de2498b78dca82c43ee52800a30c0  xlsfonts-1.0.6.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-April/003151.html
-+sha256  7b726945a967b44c35cddee5edd74802907a239ce2e2e515730b8a32c8e50465  xlsfonts-1.0.7.tar.xz
-+sha512  ec82be0a97500a9e64fb5a6adbbec470b249b1267c3081c2bd44cd3e7148107517d1234c1da2f81b0405230ab03ad2943ea53756c3380f4d561665b38d0cedc0  xlsfonts-1.0.7.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002848.html
+-md5 24e05349f2881aaa58cbe160e49223ac  listres-1.0.4.tar.bz2
+-sha1 903857c7a9ec3d8edc8a88101aef33cd27796649  listres-1.0.4.tar.bz2
+-sha256 6a1229f478796e141d6658762f432ebbe1f6083b27550847d52239b3f7ec2b10  listres-1.0.4.tar.bz2
+-sha512 925bceab6ff96fcf91f58ba2f858905d6e2eff7074ba29cfc02def7c19fb493545837884f1070dc004422451f749cd459000c01e8c9bb51a7cce7f7ab4067b8a  listres-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-April/003142.html
++sha256  ce2a00bbe7d2eb8d75177006f343c80443a22d52570c48a43c6fe70ea074dc9d  listres-1.0.5.tar.xz
++sha512  caa3626773031fbf6d8bcc1f697afe6add64fe4a8d1d766c42d5c2346050869dd23a26a1718411134ab05c75835facf0786cab5595721a16df423cdc54dd813d  listres-1.0.5.tar.xz
  # Locally computed
--sha256 dcdf5fa36a652efbe61a21def1301739b0010334ae3f049f1cff433221a8c7a5 COPYING
-+sha256  dcdf5fa36a652efbe61a21def1301739b0010334ae3f049f1cff433221a8c7a5  COPYING
-diff --git a/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk b/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk
-index 0ccd4ea6b0..f8a35e5638 100644
---- a/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk
-+++ b/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk
+-sha256 aefb540c54bc95c68702cd2ae668c559e63cc1a84f55ae5c0e78547e7d75d2d5  COPYING
++sha256  aefb540c54bc95c68702cd2ae668c559e63cc1a84f55ae5c0e78547e7d75d2d5  COPYING
+diff --git a/package/x11r7/xapp_listres/xapp_listres.mk b/package/x11r7/xapp_listres/xapp_listres.mk
+index b4ac3e1de8..e0d7487f68 100644
+--- a/package/x11r7/xapp_listres/xapp_listres.mk
++++ b/package/x11r7/xapp_listres/xapp_listres.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XAPP_XLSFONTS_VERSION = 1.0.6
--XAPP_XLSFONTS_SOURCE = xlsfonts-$(XAPP_XLSFONTS_VERSION).tar.bz2
-+XAPP_XLSFONTS_VERSION = 1.0.7
-+XAPP_XLSFONTS_SOURCE = xlsfonts-$(XAPP_XLSFONTS_VERSION).tar.xz
- XAPP_XLSFONTS_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XLSFONTS_LICENSE = MIT
- XAPP_XLSFONTS_LICENSE_FILES = COPYING
+-XAPP_LISTRES_VERSION = 1.0.4
+-XAPP_LISTRES_SOURCE = listres-$(XAPP_LISTRES_VERSION).tar.bz2
++XAPP_LISTRES_VERSION = 1.0.5
++XAPP_LISTRES_SOURCE = listres-$(XAPP_LISTRES_VERSION).tar.xz
+ XAPP_LISTRES_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_LISTRES_LICENSE = MIT
+ XAPP_LISTRES_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
