@@ -1,62 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0BD4C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 14:37:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B9BBC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 14:38:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 546774031F;
-	Thu, 12 May 2022 14:37:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF8F881751;
+	Thu, 12 May 2022 14:38:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s-JR_cZmWZD0; Thu, 12 May 2022 14:37:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v0sZkBw2uAvR; Thu, 12 May 2022 14:38:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 285BD4025D;
-	Thu, 12 May 2022 14:37:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CFB7D81458;
+	Thu, 12 May 2022 14:38:40 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E612A1BF3D7
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 14:37:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EC4CB1BF3D7
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 14:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D4585405B1
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 14:37:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA5AA405B1
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 14:38:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5lQ1tuvyr6r6 for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 14:37:10 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 93F3540025
- for <buildroot@buildroot.org>; Thu, 12 May 2022 14:37:09 +0000 (UTC)
-Received: from harderbit.localdomain ([92.154.77.116]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.168]) with ESMTPSA (Nemesis)
- id 1MXGes-1nHgvE30N4-00YhSD; Thu, 12 May 2022 16:37:06 +0200
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 16:36:47 +0200
-Message-Id: <20220512143647.49989-1-thomas.claveirole@green-communications.fr>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id SIliA16ccn-g for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 14:38:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
+ [89.40.174.40])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F20B140025
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 14:38:35 +0000 (UTC)
+Received: from lmontsouris-655-1-15-199.w80-11.abo.wanadoo.fr
+ ([80.11.122.199]:54256 helo=[192.168.1.105])
+ by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
+ (envelope-from <luca@lucaceresoli.net>)
+ id 1np9xZ-000Fv4-Oa; Thu, 12 May 2022 16:38:33 +0200
+Message-ID: <56c3feaa-cbd2-eaa9-7800-cd2102fa8545@lucaceresoli.net>
+Date: Thu, 12 May 2022 16:38:32 +0200
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:FZV/HBYx3vtzKi0q+bPfcEeU79f518i/USVXNo7K84+wWh7qUwt
- gIvhcObCAnrO/hNFhhQjMvyH/JoSHtCMO3S0dXcZz/sVQZTqT5L5LFz+pVUDxWShBnihhoS
- UbwoPzIt3zDhtnoyUtojHR4IpWWr0x7PSdhkFqrnNJV6TP1+yD5jKr44B65qc5HW7e2nVRg
- kpIgQk+fbYiURmBGVktgQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PDZ0mGRJxZY=:dwA/zk3/xJfZzRU2t9UyDc
- zprTbQmV9dTJ3tELuiSoV5YQO4oq3gpTm+RG1kEnLCJMDdL0fSHnwIfSuVv2ljSOB9fOxClqY
- uCStiks7vZ6pXhhDoP3ZJapkfylukpzdwDCqjs0eHH5WiqZNAF23U+1TIKDm87R/AKfu//BE2
- 55BKpWGXJcvYJJ2q4FMvFkhAiH3FuvVgxsylfQL8+jZ2QazndHGLn9jK7x1uRmg0BIleGTLy+
- s4YM91vekNyB/gqVYMaZmwX1p6VGFqGX4qSPQQY8ef5A3ku86sc2MLxuj39iN47hiUWVtcKB0
- 0eP1PvY7s7HhJpnwHn9EFYa/621c5JHJHZL+RXcznfWyLjrEFYqIVf6llaYimQxRX9F49nyy/
- kHGY90aCuPgVMmcmizBmqI3xdfWlSa5RFzSCjnZPh9au/MzaTqsyPuqY4UUBVvE+srqLlllro
- LcwBmGgYFP13bgH7hBZ2Wi1/zGXdbWapdHVT9F5aA59UmknSH9z50EVThdQ5lqwra6NeFt6F9
- ZVsT3gkMXOiHKEeQFJz9lURF2Dat2rQQvCzQ9OnFlDOy+bYHrh9UxTz+/ZJV+zLDbrkbioBeO
- k+LAQvEndRLs0kCf9nAC/3D0gveF1Vg14Qx8NX5qwwm6PeQ6SKh6YCZ93uavKGE4hgV0viigO
- poMuIOFH4CpvQNT57XYWtM9FqJ4ei/20QnYEjwkGGNrMNGHXmOcSCrRYSDSNqD9vlzH4hpZDq
- VYeMJ116/TpD/8Z9w/jx53m149NxfJe91tsmxg==
-Subject: [Buildroot] [PATCH 1/1] package/vuejs-router: bump to version 4.0.15
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To: Peter Korsgaard <peter@korsgaard.com>, Neal Frager <nealf@xilinx.com>
+References: <20220503152425.1069617-1-neal.frager@amd.com>
+ <20220503152425.1069617-2-neal.frager@amd.com>
+ <87h7653i8q.fsf@dell.be.48ers.dk>
+ <edddb58b-dee7-21aa-05b8-3a94c3e2c4d1@xilinx.com>
+ <87ilqccu3k.fsf@dell.be.48ers.dk>
+ <SJ0PR02MB7758738449EEBFE4991D7973D7C89@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ <SJ0PR02MB7758FE7F237530275606A745D7C89@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ <875ymcawvb.fsf@dell.be.48ers.dk>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <875ymcawvb.fsf@dell.be.48ers.dk>
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
+ luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+Subject: Re: [Buildroot] [PATCH v1 2/2] configs/zynqmp_zcu106_defconfig:
+ transition to tarballs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,43 +80,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Cc: "giulio.benetti@benettiengineering.com"
+ <giulio.benetti@benettiengineering.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ Michal Simek <michals@xilinx.com>, Neal Frager <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
----
- package/vuejs-router/vuejs-router.hash | 2 +-
- package/vuejs-router/vuejs-router.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Peter,
 
-diff --git a/package/vuejs-router/vuejs-router.hash b/package/vuejs-router/vuejs-router.hash
-index fe270a6062..ba8f09b508 100644
---- a/package/vuejs-router/vuejs-router.hash
-+++ b/package/vuejs-router/vuejs-router.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6adff85db2045a092ba4bf37e95cdc3c661cfe4f3e7f7cbc36082a57c05c6365  vue-router-4.0.14.tgz
-+sha256  59d6f3e237e68953fc4e4e22463b487b9fde5733b3ff3392eec488c0cc84976b  vue-router-4.0.15.tgz
- sha256  9c0015250f592a09d7787efc07152afcf661fff6bda2554359f6d00987828c02  LICENSE
-diff --git a/package/vuejs-router/vuejs-router.mk b/package/vuejs-router/vuejs-router.mk
-index 397a78e1a7..562c698157 100644
---- a/package/vuejs-router/vuejs-router.mk
-+++ b/package/vuejs-router/vuejs-router.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VUEJS_ROUTER_VERSION = 4.0.14
-+VUEJS_ROUTER_VERSION = 4.0.15
- VUEJS_ROUTER_SOURCE = vue-router-$(VUEJS_ROUTER_VERSION).tgz
- VUEJS_ROUTER_SITE = https://registry.npmjs.org/vue-router/-
- VUEJS_ROUTER_LICENSE = MIT
+On 11/05/22 17:54, Peter Korsgaard wrote:
+>>>>>> "Neal" == Neal Frager <nealf@xilinx.com> writes:
+> 
+>  > Hi Luca,
+>  > We may need your help on this one.
+> 
+>  > Peter and I have both replaced the pmufw.bin generated by the zynqmp-pmufw-builder with the one generated
+>  > by vitis or petalinux.  When we build the boot.bin using the pmufw.bin from vitis or petalinux, reboot works
+>  > as expected without changing anything else.
+> 
+>  > So there appears to be something in the zynqmp-pmufw-builder which is incorrect for the pmufw 2022.1.
+> 
+> I believe it is an issue with (a different behaviour of) the
+> toolchain. I found a machine at $WORK with petalinux 2021.1 and rebuild
+> zynqmp-pmufw-builder with the following minor patch:
+> 
+> diff --git a/build.sh b/build.sh
+> index 6321733..f01194d 100755
+> --- a/build.sh
+> +++ b/build.sh
+> @@ -59,7 +59,7 @@ pmufw_build()
+>      BSP_TARGETS_LIBDIR="${BSP_DIR}/psu_pmu_0/lib"
+>      BSP_LIBXIL="${BSP_TARGETS_LIBDIR}/libxil.a"
+> 
+> -    CROSS="${HOME}/x-tools/microblazeel-xilinx-elf/bin/microblazeel-xilinx-elf-"
+> +    CROSS="microblaze-xilinx-elf-"
+>      CC=${CROSS}gcc
+>      AR=${CROSS}ar
+>      AS=${CROSS}as
+> @@ -92,7 +92,7 @@ pmufw_build()
+>               AS="${AS}" \
+>               COMPILER="${CC}" \
+>               COMPILER_FLAGS="-O2 -c" \
+> -             EXTRA_COMPILER_FLAGS="-g -Wall -Wextra -Os -flto -ffat-lto-objects" \
+> +             EXTRA_COMPILER_FLAGS="-g -Wall -Wextra -Os -flto -ffat-lto-objects -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v9.2 -mxl-soft-mul" \
+>               ARCHIVER="${AR}" \
+>               CFLAGS="${CFLAGS}" \
+>               include libs
+> 
+> I had to also pass the -m* flags in EXTRA_COMPILER_FLAGS to get it to
+> link, presumably the petalinux toolchain has incompatible
+> defaults. Luca, any specific reasons to not pass CFLAGS there?
+
+I'm afraid I have no real answer. :( When I initially wrote the script I
+did it to have the same logic as petalinux. Later I didn't watch for its
+changes. I would love to be helpful but I have no access to a zynqmp
+board now.
+
 -- 
-2.35.1
-
+Luca
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
