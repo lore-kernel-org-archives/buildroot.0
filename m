@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B09BC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:55:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E116DC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 19:55:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE8C440399;
-	Thu, 12 May 2022 19:55:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A0FF540436;
+	Thu, 12 May 2022 19:55:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FY8wsnsqqyxI; Thu, 12 May 2022 19:55:33 +0000 (UTC)
+	with ESMTP id b1T48bhOV4jZ; Thu, 12 May 2022 19:55:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D2A8540339;
-	Thu, 12 May 2022 19:55:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 482411BF9CB
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9AEFF40412;
+	Thu, 12 May 2022 19:55:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 25F4A1BF352
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:52:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C793540359
+ by smtp3.osuosl.org (Postfix) with ESMTP id E102560B3A
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 19:51:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P_9aX01lQAqY for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kHwyxNUZJWHj for <buildroot@lists.busybox.net>;
  Thu, 12 May 2022 19:51:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C09A040377
- for <buildroot@buildroot.org>; Thu, 12 May 2022 19:51:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3FCA460B6C
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 19:51:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 1094F85C6F; Thu, 12 May 2022 19:41:01 +0000 (UTC)
+ id 8436085C6F; Thu, 12 May 2022 19:41:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 21:49:45 +0200
+Date: Thu, 12 May 2022 21:50:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2659ac537c0520ba9638a92fe6185a380fba6e45
-X-Git-Newrev: 87794ae497bbf6569e20c7ce13490f3799c3b3d7
+X-Git-Oldrev: 79b3c44bfa4a2b03dbe82eaed59cd4afa0733252
+X-Git-Newrev: 53ca8dc693d1c74a65bd202594a93729c7ad8fff
 X-Patchwork-Hint: ignore
-Message-Id: <20220512194101.1094F85C6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xclock: bump version to
- 1.1.1
+Message-Id: <20220512194101.8436085C6F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/libxcb: bump version to 1.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,55 +58,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87794ae497bbf6569e20c7ce13490f3799c3b3d7
+commit: https://git.buildroot.net/buildroot/commit/?id=53ca8dc693d1c74a65bd202594a93729c7ad8fff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2022-April/003147.html
-https://lists.x.org/archives/xorg-announce/2022-April/003156.html
+https://lists.x.org/archives/xorg-announce/2022-May/003164.html
 
-Removed md5 and sha1 hashes, not provided by upstream anymore.
 Reformatted license hash.
-Switched tarball to upstream-provided .xz format.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xclock/xapp_xclock.hash | 10 ++++------
- package/x11r7/xapp_xclock/xapp_xclock.mk   |  4 ++--
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/x11r7/libxcb/libxcb.hash | 8 ++++----
+ package/x11r7/libxcb/libxcb.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xapp_xclock/xapp_xclock.hash b/package/x11r7/xapp_xclock/xapp_xclock.hash
-index 881b40154d..0bc011732f 100644
---- a/package/x11r7/xapp_xclock/xapp_xclock.hash
-+++ b/package/x11r7/xapp_xclock/xapp_xclock.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-July/003010.html
--md5 437522a96f424f68fc64ed34ece9b211  xclock-1.0.9.tar.bz2
--sha1 774c711cf7ee3f601f7209bbb01ce3f0d5ddbde6  xclock-1.0.9.tar.bz2
--sha256 cf461fb2c6f2ac42c54d8429ee2010fdb9a1442a370adfbfe8a7bfaf33c123bb  xclock-1.0.9.tar.bz2
--sha512 fcbac0b4ab1cea4ae0751ce1c0c6302048e5d98d459873c7580e4ca786ec49fa27f73e5831bdfe135abb5cfeabe886456276e9d01351ea7905c606f40f84522d  xclock-1.0.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-April/003156.html
-+sha256  df7ceabf8f07044a2fde4924d794554996811640a45de40cb12c2cf1f90f742c  xclock-1.1.1.tar.xz
-+sha512  059ea986bc7537c2796e8855676e8357bd8a7852fbac0839b3f8a9e3ffa088de41bc4e4961973353f0a7b7293366b81bc764d74f3dc4e90e361da06185d976e7  xclock-1.1.1.tar.xz
+diff --git a/package/x11r7/libxcb/libxcb.hash b/package/x11r7/libxcb/libxcb.hash
+index 1861ef8a6b..2e2179e8da 100644
+--- a/package/x11r7/libxcb/libxcb.hash
++++ b/package/x11r7/libxcb/libxcb.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-February/003039.html
+-sha256 a55ed6db98d43469801262d81dc2572ed124edc3db31059d4e9916eb9f844c34  libxcb-1.14.tar.xz
+-sha512 b90a23204b0d2c29d8b115577edb01df0465e02d6a8876550fecd62375d24a5d5f872ddd5946772ddba077cadce75b12c7a6d218469dc30b5b92bc82188e8bc6  libxcb-1.14.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2022-May/003164.html
++sha256  cc38744f817cf6814c847e2df37fcb8997357d72fa4bcbc228ae0fe47219a059  libxcb-1.15.tar.xz
++sha512  f6c7d766b7cf9cab6abe948ee424cbae6951dbfe2f76fa58a109cdc05b0f0919dcc4e38176a22ff4b95fc1e38596115317e32ba33b24cae0035a4e30dbcbdad9  libxcb-1.15.tar.xz
  # Locally computed
--sha256 ee1f19f46801ef00e70498603e74df644d0b93fc82f06b55ce64c3a2c9f16e71  COPYING
-+sha256  ee1f19f46801ef00e70498603e74df644d0b93fc82f06b55ce64c3a2c9f16e71  COPYING
-diff --git a/package/x11r7/xapp_xclock/xapp_xclock.mk b/package/x11r7/xapp_xclock/xapp_xclock.mk
-index 77cc7011d3..852ae5dbae 100644
---- a/package/x11r7/xapp_xclock/xapp_xclock.mk
-+++ b/package/x11r7/xapp_xclock/xapp_xclock.mk
-@@ -4,8 +4,8 @@
+-sha256 c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
++sha256  c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index 4cbd9cf62f..4b293f9801 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XCLOCK_VERSION = 1.0.9
--XAPP_XCLOCK_SOURCE = xclock-$(XAPP_XCLOCK_VERSION).tar.bz2
-+XAPP_XCLOCK_VERSION = 1.1.1
-+XAPP_XCLOCK_SOURCE = xclock-$(XAPP_XCLOCK_VERSION).tar.xz
- XAPP_XCLOCK_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XCLOCK_LICENSE = MIT
- XAPP_XCLOCK_LICENSE_FILES = COPYING
+-LIBXCB_VERSION = 1.14
++LIBXCB_VERSION = 1.15
+ LIBXCB_SOURCE = libxcb-$(LIBXCB_VERSION).tar.xz
+ LIBXCB_SITE = http://xcb.freedesktop.org/dist
+ LIBXCB_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
