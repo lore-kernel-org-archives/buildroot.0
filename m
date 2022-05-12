@@ -4,62 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3B5FC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 20:53:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 904A8C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 20:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79B58416C2;
-	Thu, 12 May 2022 20:53:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 492E5416A9;
+	Thu, 12 May 2022 20:53:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qD3T5g84tExK; Thu, 12 May 2022 20:53:18 +0000 (UTC)
+	with ESMTP id 6RVc_D_oqR2P; Thu, 12 May 2022 20:53:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CAC6C41741;
-	Thu, 12 May 2022 20:53:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 71E521BF3A4
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:53:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02DA7410AF;
+	Thu, 12 May 2022 20:53:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 157271BF3A4
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 69E9B41750
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:53:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 04AB482A0E
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:53:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sT34BcLmwM6E for <buildroot@lists.busybox.net>;
- Thu, 12 May 2022 20:53:02 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mG9KvlnEkRjt for <buildroot@lists.busybox.net>;
+ Thu, 12 May 2022 20:53:50 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0405540909
- for <buildroot@buildroot.org>; Thu, 12 May 2022 20:53:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2D1E5829B6
+ for <buildroot@buildroot.org>; Thu, 12 May 2022 20:53:50 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:ccab:5af8:e14c:c986])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 43CEB19F553;
- Thu, 12 May 2022 22:52:57 +0200 (CEST)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 73B3F19F576;
+ Thu, 12 May 2022 22:53:45 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1652388780;
- bh=fD5QAJbDWDcMl2a6LATC4QutX7oVQn/eia7ZsRS9x20=;
+ s=smtp-20201208; t=1652388828;
+ bh=9b/jH4LLPO2kX62gk7XpEUecBRjyVCBVSv/0hed+AqU=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=X5sMurA/xL4O+HSRSY3fUpO6rooPB2+BvvYlOZyxs1fbkawSFNYEL91LQTJqAuvRP
- Xs/+bZYc3yHXv3QgxRsyr8Ywhzvy03hmabhmErP/SpeP30hy1lopMUms6gx2thh2AX
- lkhXjLmCG+HXENSSxKGE2nLN4WDJRE400hkVOfpYKy50TasOS+JW6D5LyV0U9MK2QD
- VHuOa5JzI0joa4l1y8FW8BFr2+phDFbUeVlZP0WA7Q6CsOnL60iqv555Sl+g+/gQ98
- 5tQS8UaQcck5Yrs5qvrh+CFsXCBCuuaEntsj++lS+1dwfQBZ0xrZRW8AriKRCeuRZG
- S/nwXOh916CGQ==
+ b=GoSVBm2gPqUF/kHFskh4nWXVy8eotsXXHa1ZWYsgdfSG1PFFyC++f/mrwOEA7pRom
+ YgPkATi2jnpviSVzExavKeFxJJs9aRQPCT+A5mhbiqtrnm+QHpX/hXJfawhP8fopnB
+ XXLhVuxq6iSoTizZL6/JmNsYZHnQd5B5lr0S8TAbZpyhFtI+FYLh9lMW2zTDnDoBIQ
+ GOAN0Aoeo/C0ElVTVF8//3wo8QdXA7BmslH1iq2rMea/L2RelutS9YqAqZh3SU5m+c
+ tmgQCVJK3oAUFnf0sCit9LuaUB0dBfqDUxJ+x3rPOiPBrl+sCwLOGye0aD8o4gx/kF
+ CEk0Ytv+U9Sgw==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 12 May 2022 22:52:57 +0200
-Date: Thu, 12 May 2022 22:52:57 +0200
+ Thu, 12 May 2022 22:53:45 +0200
+Date: Thu, 12 May 2022 22:53:45 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-Message-ID: <20220512205256.GK1597494@scaer>
+Message-ID: <20220512205345.GL1597494@scaer>
 References: <20220512160116.2011627-1-arnout@mind.be>
- <20220512160116.2011627-2-arnout@mind.be>
+ <20220512160116.2011627-3-arnout@mind.be>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220512160116.2011627-2-arnout@mind.be>
+In-Reply-To: <20220512160116.2011627-3-arnout@mind.be>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 2/5] package/gnutls: remove unused libregex
- dependency
+Subject: Re: [Buildroot] [PATCH 3/5] package/gnutls: remove redundant
+ --enable-openssl-compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,11 +82,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Arnout, All,
 
 On 2022-05-12 18:01 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> The pcre/libregex dependency was removed in version 3.7.3 with upstream
-> commit 26578b7d02c269ff1d34ff782d84c7667734d03d, which removed the
-> bundled libopts. Remove the pcre dependency and the relevant CONF_OPTS
-> handling.
-> 
+> The option is set a few lines below depending on
+> BR2_PACKAGE_GNUTLS_OPENSSL.
+
+I've moved all the openssl compatibility stuff under a single
+conditional block.
+
 > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Applied to master, thanks.
@@ -93,61 +96,21 @@ Regards,
 Yann E. MORIN.
 
 > ---
-> This is for stable since it's already the case for 3.7.3, the version in
-> 2022.02.x
-> ---
->  package/gnutls/Config.in |  1 -
->  package/gnutls/gnutls.mk | 11 +----------
->  2 files changed, 1 insertion(+), 11 deletions(-)
+>  package/gnutls/gnutls.mk | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-> index d57bb8d135..28982b15a1 100644
-> --- a/package/gnutls/Config.in
-> +++ b/package/gnutls/Config.in
-> @@ -7,7 +7,6 @@ config BR2_PACKAGE_GNUTLS
->  	depends on BR2_USE_WCHAR
->  	select BR2_PACKAGE_LIBTASN1
->  	select BR2_PACKAGE_NETTLE
-> -	select BR2_PACKAGE_PCRE
->  	help
->  	  GnuTLS is a secure communications library implementing the SSL
->  	  and TLS protocols and technologies around them.
 > diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-> index b5503b1fc9..79e7d529b1 100644
+> index 79e7d529b1..1d997781b0 100644
 > --- a/package/gnutls/gnutls.mk
 > +++ b/package/gnutls/gnutls.mk
-> @@ -17,7 +17,7 @@ GNUTLS_LICENSE += , GPL-3.0+ (gnutls-openssl library)
->  GNUTLS_LICENSE_FILES += doc/COPYING
->  endif
->  
-> -GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
-> +GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle
->  GNUTLS_CPE_ID_VENDOR = gnu
->  GNUTLS_CONF_OPTS = \
->  	--disable-doc \
 > @@ -25,7 +25,6 @@ GNUTLS_CONF_OPTS = \
 >  	--disable-libdane \
 >  	--disable-rpath \
 >  	--disable-tests \
-> -	--enable-local-libopts \
->  	--enable-openssl-compatibility \
+> -	--enable-openssl-compatibility \
 >  	--without-libcrypto-prefix \
 >  	--without-libdl-prefix \
-> @@ -48,14 +47,6 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
->  	gl_cv_func_gettimeofday_clobber=no
->  GNUTLS_INSTALL_STAGING = YES
->  
-> -# gnutls needs libregex, but pcre can be used too
-> -# The check isn't cross-compile friendly
-> -GNUTLS_CONF_ENV += libopts_cv_with_libregex=yes
-> -GNUTLS_CONF_OPTS += \
-> -	--with-regex-header=pcreposix.h \
-> -	--with-libregex-cflags="`$(PKG_CONFIG_HOST_BINARY) libpcreposix --cflags`" \
-> -	--with-libregex-libs="`$(PKG_CONFIG_HOST_BINARY) libpcreposix --libs`"
-> -
->  ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
->  GNUTLS_CONF_OPTS += --enable-cryptodev
->  GNUTLS_DEPENDENCIES += cryptodev-linux
+>  	--without-libev-prefix \
 > -- 
 > 2.35.1
 > 
