@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ABE4C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 20:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3174C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 12 May 2022 20:52:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A868E60B6C;
-	Thu, 12 May 2022 20:52:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D9864168A;
+	Thu, 12 May 2022 20:52:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vw4QvWJI-gZx; Thu, 12 May 2022 20:52:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ugo_PRsihqOi; Thu, 12 May 2022 20:52:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF9FE60B64;
-	Thu, 12 May 2022 20:52:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 652F7409FA;
+	Thu, 12 May 2022 20:52:49 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BE53D1BF3A4
- for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:51:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8D3BC1BF3A4
+ for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C8AEB40199
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7FBC40462
  for <buildroot@lists.busybox.net>; Thu, 12 May 2022 20:51:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O8KkCAfALOCT for <buildroot@lists.busybox.net>;
+ with ESMTP id oVZO1mXljb_z for <buildroot@lists.busybox.net>;
  Thu, 12 May 2022 20:51:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC92F40412
+ by smtp2.osuosl.org (Postfix) with ESMTP id D7ED740393
  for <buildroot@buildroot.org>; Thu, 12 May 2022 20:51:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 2403E85D86; Thu, 12 May 2022 20:41:01 +0000 (UTC)
+ id 0DD0A85D87; Thu, 12 May 2022 20:41:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 12 May 2022 22:50:47 +0200
+Date: Thu, 12 May 2022 22:38:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 91354636e6a535be56990ffea78e483aad56ed05
-X-Git-Newrev: 3292f8741257019c2b7b791335852d8d438f5a76
+X-Git-Oldrev: 00a046e455c88dd352c9bda3b93b8e6ed60d492c
+X-Git-Newrev: 91b10ec79a65fe6bb9668e66c4a37b8e568ee15e
 X-Patchwork-Hint: ignore
-Message-Id: <20220512204101.2403E85D86@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnutls: libunistring is not
- optional
+Message-Id: <20220512204101.0DD0A85D87@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnutls: remove redundant
+ --enable-openssl-compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,71 +59,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3292f8741257019c2b7b791335852d8d438f5a76
+commit: https://git.buildroot.net/buildroot/commit/?id=91b10ec79a65fe6bb9668e66c4a37b8e568ee15e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the very beginning, libunistring was a mandatory dependency of
-gnutls. However, it would use its internal copy if libunistring was not
-selected. We never want that, so make libunistring an actual mandatory
-dependency.
+The option is set a few lines below depending on
+BR2_PACKAGE_GNUTLS_OPENSSL.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[yann.morin.1998@free.fr: move it all under a single conditional block]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gnutls/Config.in | 3 +--
- package/gnutls/gnutls.mk | 9 ++-------
- 2 files changed, 3 insertions(+), 9 deletions(-)
+ package/gnutls/gnutls.mk | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index 28982b15a1..59af32bf1e 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -2,10 +2,9 @@ config BR2_PACKAGE_GNUTLS
- 	bool "gnutls"
- 	# https://gitlab.com/gnutls/gnutls/issues/203
- 	depends on !BR2_STATIC_LIBS
--	# gnulib requires a library that implements wctomb().
--	# This is noticed only when linking with libgnutls.so.
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBTASN1
-+	select BR2_PACKAGE_LIBUNISTRING
- 	select BR2_PACKAGE_NETTLE
- 	help
- 	  GnuTLS is a secure communications library implementing the SSL
 diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 761a17bd20..f7f3e046e9 100644
+index 79e7d529b1..2d37cfc65f 100644
 --- a/package/gnutls/gnutls.mk
 +++ b/package/gnutls/gnutls.mk
-@@ -12,7 +12,7 @@ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+@@ -12,11 +12,6 @@ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
  GNUTLS_LICENSE = LGPL-2.1+ (core library)
  GNUTLS_LICENSE_FILES = doc/COPYING.LESSER
  
--GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle
-+GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 libunistring nettle
+-ifeq ($(BR2_PACKAGE_GNUTLS_OPENSSL),y)
+-GNUTLS_LICENSE += , GPL-3.0+ (gnutls-openssl library)
+-GNUTLS_LICENSE_FILES += doc/COPYING
+-endif
+-
+ GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle
  GNUTLS_CPE_ID_VENDOR = gnu
  GNUTLS_CONF_OPTS = \
- 	--disable-doc \
-@@ -20,6 +20,7 @@ GNUTLS_CONF_OPTS = \
+@@ -25,7 +20,6 @@ GNUTLS_CONF_OPTS = \
  	--disable-libdane \
  	--disable-rpath \
  	--disable-tests \
-+	--without-included-unistring \
+-	--enable-openssl-compatibility \
  	--without-libcrypto-prefix \
  	--without-libdl-prefix \
  	--without-libev-prefix \
-@@ -74,12 +75,6 @@ else
- GNUTLS_CONF_OPTS += --without-p11-kit
- endif
+@@ -36,7 +30,6 @@ GNUTLS_CONF_OPTS = \
+ 	--without-librt-prefix \
+ 	--without-libz-prefix \
+ 	--without-tpm \
+-	$(if $(BR2_PACKAGE_GNUTLS_OPENSSL),--enable,--disable)-openssl-compatibility \
+ 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools) \
+ 	$(if $(BR2_PACKAGE_GNUTLS_ENABLE_SSL2),--enable,--disable)-ssl2-support \
+ 	$(if $(BR2_PACKAGE_GNUTLS_ENABLE_GOST),--enable,--disable)-gost
+@@ -47,6 +40,14 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
+ 	gl_cv_func_gettimeofday_clobber=no
+ GNUTLS_INSTALL_STAGING = YES
  
--ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
--GNUTLS_DEPENDENCIES += libunistring
--else
--GNUTLS_CONF_OPTS += --with-included-unistring
--endif
--
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- GNUTLS_CONF_OPTS += --with-zlib
- GNUTLS_DEPENDENCIES += zlib
++ifeq ($(BR2_PACKAGE_GNUTLS_OPENSSL),y)
++GNUTLS_LICENSE += , GPL-3.0+ (gnutls-openssl library)
++GNUTLS_LICENSE_FILES += doc/COPYING
++GNUTLS_CONF_OPTS += --enable-openssl-compatibility
++else
++GNUTLS_CONF_OPTS += --disable-openssl-compatibility
++endif
++
+ ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
+ GNUTLS_CONF_OPTS += --enable-cryptodev
+ GNUTLS_DEPENDENCIES += cryptodev-linux
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
