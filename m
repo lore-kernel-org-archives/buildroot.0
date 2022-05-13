@@ -1,79 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F512C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 20:31:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F116C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 20:35:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8EDC410B6;
-	Fri, 13 May 2022 20:31:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A86EB40490;
+	Fri, 13 May 2022 20:35:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id spL7SwO442qZ; Fri, 13 May 2022 20:31:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ll2gziPt2SvH; Fri, 13 May 2022 20:35:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C73CF409B0;
-	Fri, 13 May 2022 20:31:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 40D791BF3CD
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 20:31:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BBD2940256;
+	Fri, 13 May 2022 20:35:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DE941BF3CD
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 20:35:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2FB2A409B0
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 20:31:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 65F1440256
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 20:35:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oT0uCvwVZI_X for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 20:31:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fgvotAzFDprn for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 20:35:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E71EF40939
- for <buildroot@buildroot.org>; Fri, 13 May 2022 20:31:08 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id t6so12823661wra.4
- for <buildroot@buildroot.org>; Fri, 13 May 2022 13:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2E226400EA
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 20:35:07 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id gh6so18438088ejb.0
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 13:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=8ekVfIFg/NBG2ClpdZojiyah/zsfPhBAyRVj1u/ZYnQ=;
- b=MPh4x5gnqw/Zay6n9PNWhnNkmkI2gM8rW/kKAeNXWdT62t3zDGfNF1p15KBTydSb22
- AsivR2QeKDSAd7NzaRAlvfOSB2XHEgPw4j1bW51l4kHnre3764i5McTwm2dB6F9bqods
- MNESMlSF+knNaKw7cdLA5IrkRGfy97efoWB3hvtTNgYNcC3S4ufH42lNsYWFWpYerliS
- xCmBIjF93kh/VAKjwwKw6b5m9ERo4aEpHSLManCn3dV9aRvSLKNNRGVXK0BsqiS3Il0d
- bbPsa6rARZ1LWwaCozyit+eWajOvI3zFndctDm6N+UpzkNjoaYc3Fx51uS3upIE/Vcb2
- KSHw==
+ bh=722Uasti9rjOModguJncFeWitPsN/AlSRqf5oMvne2g=;
+ b=PpMUJevgGdRNpqVDPjrtNEuj4jSdvjaZIBjtU/Z8/A4Y7Ih27hNZbNGyq9rJlvux/7
+ udmpQvLn0SuWLImqJQb7WSoydo4IEgB4rPw809xzhuObii/aIqqrKJrY6VBKWq7zzHZY
+ tYMLLFM9+JD/j/JqvDzNk1nTLLxgbquWor5HvYYKJtqomujR26R2fa7wn6CHMW5ycPPi
+ XSC8SjjStz0q92Ry3iOuVm4e6Q6DgHvIIy6/XbbXkRNK0fFc/5kWP2wxtBKnCPdyC5it
+ LFLY/+ONTOExTY8loq9DgLvLwVedfPcM2HF6dp51lQYE3aHw0vnyb1BeePw/f5EQo2pn
+ 62lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=8ekVfIFg/NBG2ClpdZojiyah/zsfPhBAyRVj1u/ZYnQ=;
- b=Iycb8uD/qM24D4wjPDxG2YBEOj0DUZzCjw96L2I10GKgq5Ykb/ppLEtgIuxd3sbaO9
- WbAXy6cZMRN4p4RFkrqjaCojVjZWhseO2pdm+CLLARnmLQCeV1VYTzE81pKemOTFw4y5
- pCoWbQ3qWbfRgmi6JEPRI85etIeRWXv9b8xWjgwXY+zCOUB1yYakCbD4QZXnp7hqooEe
- 4R6TJF7T+lVH1xLmTAgHkT0ll7FPfu1mvmVkKP028TG8+tVBYd7zdxV9UTkqmWHl7oJ7
- OnHJqmNFn0if54tSWr6lcWkBkNO85EN53FwxiJE2AQXNvnOABI7nz0klKtgRDloNaPM1
- Loog==
-X-Gm-Message-State: AOAM530H29YTSJiTNXGt1YAPB4SCx9JMgp4/554w7APfCNXYfqWQNots
- 9Qpp5dwuBmAPcMo16GXpzP5UT+7TuL0=
-X-Google-Smtp-Source: ABdhPJxoX4ub56ChhtobPRXyhQRxLFkjT3F9SGLoaLVHCyaYVkMJn8PlWi27QAP1+uFf9m0Naen0jQ==
-X-Received: by 2002:a5d:52ce:0:b0:20c:e030:b05a with SMTP id
- r14-20020a5d52ce000000b0020ce030b05amr5226607wrv.174.1652473866937; 
- Fri, 13 May 2022 13:31:06 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ bh=722Uasti9rjOModguJncFeWitPsN/AlSRqf5oMvne2g=;
+ b=tEZDNVQ3UykIx1qW/xQPT3XD7/fNLsgiNA2AMl5vrL7ntt/2ItvhuQaEIMK5XxfhAd
+ stA+GFIoK70vyvvgCjMstb+hv41vzaOjG3bVJXwkkxxmXOjQELvq0Iru2ysglyjubwtt
+ BLPfA9YtAdQKkyFBVbadSyoVlP5Ywz2VLUDqHheZT+Ig1UqlQyMlZTXA2zEYc6+D8Wkc
+ 7IU1V6IZJnNe6T8/s/uGWU/eDkhQWR7Ww+EuhZ+0GBebZdr7lfOFsBlBOqOy5uKHW3Y4
+ 3gmBC7zXiaRiWap+9pn30oqz1GRDAtPUPNsfuX5TyDam0dviq4oe2VnAi+E//AiEjQc1
+ AcQw==
+X-Gm-Message-State: AOAM5325+eCN5lLtitI0EjQugij9p46EWXCFJ5BWbNBU6OC91wHIUFGF
+ brb1DEuNX/sRAaAgN25B1t8AOEA8HU4nzg==
+X-Google-Smtp-Source: ABdhPJzCsTN73WVfZzPLFvBSlgbS42wiG8RRhVtZY1M4PwvfapbiVtd+oZHyB+30KbjTsKl8cRXK8Q==
+X-Received: by 2002:a17:907:3f86:b0:6db:b745:f761 with SMTP id
+ hr6-20020a1709073f8600b006dbb745f761mr5612297ejc.610.1652474105382; 
+ Fri, 13 May 2022 13:35:05 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- t6-20020a7bc3c6000000b003942a244f47sm6300055wmj.32.2022.05.13.13.31.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 May 2022 13:31:06 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 13 May 2022 22:28:55 +0200
-Message-Id: <20220513202855.752024-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ m7-20020a17090672c700b006f3ef214e39sm1093969ejl.159.2022.05.13.13.35.04
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 13 May 2022 13:35:04 -0700 (PDT)
+Message-ID: <7c474ae0-2a57-0c3f-56e4-9c7017bc84ea@mind.be>
+Date: Fri, 13 May 2022 22:35:04 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/alchemy: add host-pkgconf dependency
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-GB
+To: Peter Korsgaard <peter@korsgaard.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220513144215.2598981-1-peter@korsgaard.com>
+ <20220513144215.2598981-4-peter@korsgaard.com>
+ <20220513163446.GQ1597494@scaer> <87lev58j8l.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <87lev58j8l.fsf@dell.be.48ers.dk>
+Subject: Re: [Buildroot] [PATCH 4/4] {linux,
+ linux-headers}: default to 5.17.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,54 +97,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Herv=C3=A9=20Codina?= <herve.codina@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-host-pkgconf is a mandatory dependency since the addition of the package
-in commit 7f1f3f87868fa333833dbba9f4f07adc338b34ed resulting in the
-following ulog build failure:
 
-/home/buildroot/autobuild/run/instance-0/output-1/per-package/ulog/host/opt/alchemy/check.mk:36: *** 'pkg-config' is required.  Stop.
 
-An other option would be to set TARGET_OS to baremetal but it could have
-unexpected side-effects such as removing -fPIC for arm targets
+On 13/05/2022 18:55, Peter Korsgaard wrote:
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>   > Peter, All,
+>   > On 2022-05-13 16:42 +0200, Peter Korsgaard spake thusly:
+>   >> 5.15.x is getting quite old, so default to 5.17.x instead.
+> 
+>   > But 5.15 is a longterm kernel, while 5.17 will probably not be.
+> 
+> True, but we normally default to the latest kernel, I just kept it for
+> 5.15 for the LTS release.
 
-Fixes:
- - http://autobuild.buildroot.org/results/c731fe0e9bdbfce0823f9c48641f1ed710fa6125
+  FWIW, +1 to that philosophy.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/alchemy/alchemy.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+  Regards,
+  Arnout
 
-diff --git a/package/alchemy/alchemy.mk b/package/alchemy/alchemy.mk
-index 18cdd0a645..10d1068ac4 100644
---- a/package/alchemy/alchemy.mk
-+++ b/package/alchemy/alchemy.mk
-@@ -8,7 +8,7 @@ ALCHEMY_VERSION = d95b3c38cd37814a1b98d0bbf813de7adaaecfbc
- ALCHEMY_SITE = $(call github,Parrot-Developers,alchemy,$(ALCHEMY_VERSION))
- ALCHEMY_LICENSE = BSD-3-Clause (Alchemy), GPL-2.0 (kconfig)
- ALCHEMY_LICENSE_FILES = COPYING README
--HOST_ALCHEMY_DEPENDENCIES = host-python3
-+HOST_ALCHEMY_DEPENDENCIES = host-pkgconf host-python3
- 
- ALCHEMY_HOME = $(HOST_DIR)/opt/alchemy
- ALCHEMY_SDK_BASEDIR = $(STAGING_DIR)/usr/lib/alchemy/sdk
-@@ -35,6 +35,7 @@ ALCHEMY_TARGET_ENV = \
- 	ALCHEMY_HOME=$(ALCHEMY_HOME) \
- 	ALCHEMY_WORKSPACE_DIR="$(@D)" \
- 	ALCHEMY_TARGET_OUT=alchemy-out \
-+	PKGCONFIG_BIN=$(PKG_CONFIG_HOST_BINARY) \
- 	TARGET_OS=linux \
- 	TARGET_OS_FLAVOUR=buildroot \
- 	TARGET_CROSS="$(TARGET_CROSS)" \
--- 
-2.35.1
-
+> 
+>   > Also, see below...
+> 
+>   >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>   >> ---
+>   > [--SNIP--]
+>   >> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+>   >> index 5ff616fb34..859f772624 100644
+>   >> --- a/package/linux-headers/Config.in.host
+>   >> +++ b/package/linux-headers/Config.in.host
+>   > [--SNIP--]
+>   >> @@ -56,10 +56,6 @@ config BR2_KERNEL_HEADERS_5_15
+>   >> bool "Linux 5.15.x kernel headers"
+>   >> select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
+>   >>
+>   >> -config BR2_KERNEL_HEADERS_5_16
+>   >> -	bool "Linux 5.16.x kernel headers"
+>   >> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
+> 
+>   > Did you forget to squash this hunk...
+> 
+> Ups, indeed. Will fix.
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
