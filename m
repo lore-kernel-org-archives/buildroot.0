@@ -1,59 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B515BC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 10:57:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE702C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 13:17:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67EC48340C;
-	Fri, 13 May 2022 10:57:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5CD6A40912;
+	Fri, 13 May 2022 13:17:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u0tuSZ0hm5zh; Fri, 13 May 2022 10:57:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8pyXNOAmKnmr; Fri, 13 May 2022 13:17:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 303BC82883;
-	Fri, 13 May 2022 10:57:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5DAEF1BF289
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 10:57:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 25881408E6;
+	Fri, 13 May 2022 13:17:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CB961BF2AB
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 13:17:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4BFE382883
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 10:57:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E4C3B408E9
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 13:17:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Uy03zFKE2rMI for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 10:57:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3E2DE827BB
- for <buildroot@buildroot.org>; Fri, 13 May 2022 10:57:24 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.3])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4QCn8EuER9FG for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 13:17:50 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.35])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 98910408E0
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 13:17:50 +0000 (UTC)
+Received: from opfednr05.francetelecom.fr (unknown [xx.xx.xx.69])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
  (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id A54D2440528;
- Fri, 13 May 2022 13:56:19 +0300 (IDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1652439380;
- bh=qEtB66mMTjilu9Wp024RGfH7ksjZo/9RJ2JLDOAYJzs=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=T/ihB19UOH3RE9e85Y7BaVZu8xFT1krUWcJui+B2XC0YzIvV1cWEameszMyUXFpWX
- LLHYZtJLH3an9Qzu5Dw1CfRRNToRYAe9jaXOKnHUGKzvh8VolifpTOQE9TqllHoLH+
- R5LbaANppTxeATrffvtvJoHCiK5AKF23aC3bY5jZfEb972E4rx/tS7Hki7nEYAOnce
- N62apWa8wLtN9yNVUvdoJKgnf6y9Nsit4RX6Hx2QCeCWm5ume75hTjtESJITkXB3GB
- EmmrPi+3PA8sqTY0RuI4Ty84Bzr51IsjnR95QraaIjoBGeqcHkd8CIglK266HFteG2
- Uub1tDCtLFIeg==
-References: <8c2fc8d9-5bc7-1982-35ed-1fc31e1bb470@mind.be>
-User-agent: mu4e 1.6.10; emacs 27.1
-To: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 13 May 2022 13:33:36 +0300
-In-reply-to: <8c2fc8d9-5bc7-1982-35ed-1fc31e1bb470@mind.be>
-Message-ID: <87bkw17l9r.fsf@tarshish>
+ by opfednr27.francetelecom.fr (ESMTP service) with ESMTPS id 4L08Mb6jWvz4x64; 
+ Fri, 13 May 2022 15:17:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.com;
+ s=ORANGE001; t=1652447867;
+ bh=5s6KRwWxWTLAnw6hRtpm0En4fn7uIudKtEpZ3i4IlNA=;
+ h=From:To:Subject:Date:Message-ID:MIME-Version:
+ Content-Transfer-Encoding:Content-Type;
+ b=UUyy9SDu92XSwreLhDqx2hxN1WNAnGw9ote45tyvaZbyPTyMNEtP8SOQSDh01/IYd
+ FomfTJlvcSRLZ6JROQRa3k0fO9WNInALvIMn5LPwjM4Q0uRVkOySmymv5Si6KWM+rH
+ mPrGyNdIEeXLoWFeqzquxWjLoi09bdkoAB3g70O4asI0tkw+F0B8Xds9GYfYNXOsrD
+ Ed/LIOo9uCFPTf1cFR7+dgGQp1+9O8obcr7tmKKTtZwPqSVdZC9ByBl2NrJ4yr7+qk
+ +FtQ1DqFRQNYvB/9+V5cSEapuzr+kDguivvCg9r00ENf8NTxl7sf2BeCJ7cqO1fUN9
+ jIsE1eAMfiF5g==
+Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
+ Fri, 13 May 2022 15:17:45 +0200
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+Date: Fri, 13 May 2022 15:17:45 +0200
+Message-ID: <28412_1652447867_627E5A7B_28412_29_1_cc0e3c8f4215e41cd4cd0742a94f777783beabfc.1652447836.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] Article for the German Linux magazine
+X-Originating-IP: [10.115.26.50]
+X-ClientProxiedBy: OPE16NORMBX403.corporate.adroot.infra.ftgroup
+ (10.115.26.16) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+Subject: [Buildroot] [PATCH v2] fs/oci: entrypoint and command are
+ space-separated lists
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,135 +73,240 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Jens-Christoph Brendel <jens-christoph.brendel@computec.de>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: "Yann E. MORIN" <yann.morin@orange.com>,
+ Sergio Prado <sergio.prado@e-labworks.com>,
+ Matthew Weber <matthew.weber@collins.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQXJub3V0LAoKT24gRnJpLCBNYXkgMTMgMjAyMiwgQXJub3V0IFZhbmRlY2FwcGVsbGUgd3Jv
-dGU6Cj4gwqBBYm91dCB0d28gd2Vla3MgYWdvLCB3ZSBnb3QgYSBtYWlsIG9uIHRoZSBsaXN0IGFz
-a2luZyBmb3IgYSB2b2x1bnRlZXIgdG8KPiB3cml0ZSBhbiBpbnRyb2R1Y3RvcnkgYXJ0aWNsZSBh
-Ym91dCBCdWlsZHJvb3QgZm9yIHRoZSBJb1QtdGhlbWVkIGlzc3VlIG9mIHRoZQo+IEdlcm1hbiBM
-aW51eCBtYWdhemluZS4gSSB2b2x1bnRlZXJlZCB0d28gcml0ZSBzdWNoIGFuIGFydGljbGUuCgpU
-aGFua3MuCgo+IMKgSSBoYXZlIGFuIG91dGxpbmUgb3Igcm91Z2ggZHJhZnQgYmVsb3cuIEl0J3Mg
-anVzdCBidWxsZXQgcG9pbnRzICh0aG91Z2ggSQo+IGVuZGVkIHVwIHdyaXRpbmcgc2VudGVuY2Vz
-IGZvciBtb3N0IG9mIGl0KS4gSSdkIGxpa2UgdG8gZ2V0IGZlZWRiYWNrIG9uOgo+Cj4gLSBJcyB0
-aGVyZSBhbnl0aGluZyBtaXNzaW5nIHRoYXQgSSBzaG91bGQgbWVudGlvbiBpbiB0aGUgYXJ0aWNs
-ZT8KPgo+IC0gSXMgdGhlcmUgc29tZXRoaW5nIGluIGhlcmUgd2hpY2ggaXMgaW5jb3JyZWN0Pwo+
-Cj4gLSBJcyB0aGVyZSBzb21ldGhpbmcgaGVyZSB0aGF0IHdlIGFjdHVhbGx5IGRvbid0IHdhbnQg
-dG8gZHJhdyBhdHRlbnRpb24gdG8/Cj4KPiDCoFBsZWFzZSAqZG8gbm90KiBwYXkgYXR0ZW50aW9u
-IHRvIHN0eWxlIG9yIHNwZWxsaW5nIG9yIGxpdHRsZSBkZXRhaWxzIHRoYXQgYXJlCj4gbWlzc2lu
-Zy4KPgo+Cj4gwqBUaGFuayB5b3UgZm9yIHlvdXIgaGVscCEKPgo+Cj4gwqBSZWdhcmRzLAo+IMKg
-QXJub3V0Cj4KPgo+IEJ1aWxkcm9vdCBmb3IgSW9UCj4KPiBGb3IgSW9UIGRpc3RybyBpcyBpbXBv
-cnRhbnQ6Cj4gLSBnZXR0aW5nIGEgYmFzaWMgc3lzdGVtIHVwIGFuZCBydW5uaW5nIHF1aWNrbHk7
-Cj4gLSBzbWFsbCBmb290cHJpbnQgKHNvbWV0aW1lcyBvbmx5IDY0TUIgb2YgZmxhc2gpCj4gLSBj
-b250cm9sIG92ZXIgd2hhdCB5b3UgYnVpbGQ7Cj4gLSBzdXBwb3J0IGZvciBhbGwgbWFqb3IgY2xv
-dWQgc2VydmljZXMKPiAtIGVhc3kgaW50ZWdyYXRpb24gb2Ygb3duIGNvbXBvbmVudHM7Cj4gLSBh
-dHRlbnRpb24gZm9yIHNlY3VyaXR5IGlzc3Vlcy4KPgo+IEJ1aWxkcm9vdCBpcyBhIGJ1aWxkIHN5
-c3RlbSB0aGF0IGdyZXcgb3V0IG9mIHVDbGludXggYW5kIGJ1c3lib3gsIHNvIHdpdGggYQo+IGZv
-Y3VzIG9uIHZlcnkgc21hbGwgc3lzdGVtcy4KPiBNZWFud2hpbGUsIGl0IHN1cHBvcnRzIGFsbCBr
-aW5kcyBvZiBkaWZmZXJlbnQgdXNlIGNhc2VzLCByYW5naW5nIGZyb20gKHN0aWxsKQo+IHN5c3Rl
-bXMgd2l0aCBvbmx5IGEgZmV3IE1CIG9mIGZsYXNoLCBvdmVyIGRvY2tlciBpbWFnZXMgZm9yIGNs
-b3VkIGRlcGxveW1lbnRzLCAKPiB0byBjb21wbGV4IHN5c3RlbXMgd2l0aCBhIGdyYXBoaWNhbCBz
-dGFjaywgZGF0YWJhc2UsIGV0Yy4KPiBUaGUgcHJpbmNpcGxlcyBvZiBCdWlsZHJvb3QgYXJlCj4g
-LSBzaW1wbGljaXR5Owo+IC0gZmxleGliaWxpdHkgdG8gYnVpbGQgZXhhY3RseSB0aGUgc3lzdGVt
-IHlvdSB3YW50Owo+IC0gcmVwcm9kdWNpYmlsaXR5OiBpZiB5b3UgcmVidWlsZCB0aGUgc2FtZSBj
-b25maWd1cmF0aW9uIHllYXJzIGxhdGVyLCB5b3UKPiAgIHNob3VsZCBnZXQgdGhlIHNhbWUgcmVz
-dWx0IGJpdC1mb3ItYml0OwoKImJpdC1mb3ItYml0IiBpcyBhIGJvbGQgc3RhdGVtZW50LiBJJ20g
-bm90IHN1cmUgd2UgYXJlIHF1aXRlIHRoZXJlCnlldC4gTWF5YmUganVzdCAic2hvdWxkIGdldCB0
-aGUgc2FtZSByZXN1bHQiLgoKPiAtIG1haW50YWluYWJpbGl0eS4KPgo+IFdpdGggQnVpbGRyb290
-LCB5b3UgY2FuIGJ1aWxkIGEgc3lzdGVtIGJ5IGNob29zaW5nIHdoaWNoIHBhY2thZ2VzIHlvdSB3
-YW50IGFuZAo+IHNvbWUgb3RoZXIgb3B0aW9ucyBpbiBhIG1lbnUgc3lzdGVtIChiYXNlZCBvbiB0
-aGF0IG9mIHRoZSBMaW51eCBrZXJuZWwpLgo+IE9uIHRoYXQgYmFzaXMsIEJ1aWxkcm9vdCB3aWxs
-IGRvd25sb2FkIGFuZCBidWlsZCB0aGUgc291cmNlIGNvZGUgb2YgdGhlCj4gc2VsZWN0ZWQgcGFj
-a2FnZXMgYW5kIGNvbXBpbGUgaXQgaW50byB0aGUgcm9vdCBmaWxlIHN5c3RlbS4KCk1pZ2h0IGJl
-IHdvcnRoIG1lbnRpb24gdGhhdCBCdWlsZHJvb3QgYWxzbyAob3B0aW9uYWxseSkgYnVpbGRzIHRo
-ZQp0b29sY2hhaW4gZm9yIHlvdSwgb3B0aW1pemVkIHNwZWNpZmljYWxseSBmb3IgeW91ciB0YXJn
-ZXQgcGxhdGZvcm0KdmFyaWFudC4gWW91IG1lbnRpb24gdGhlIFNESyBiZWxvdywgYnV0IGl0IGlz
-IGZyYW1lZCBhcyBhIHRvb2wgZm9yCmV4dGVybmFsIHNvZnR3YXJlICh3aGljaCBpdCBpcykuCgpN
-YXliZSBhbHNvIHNheSBzb21ldGhpbmcgYWJvdXQgY3Jvc3MgY29tcGlsYXRpb24gaW4gZ2VuZXJh
-bC4KCj4gWW91IGNhbiBhbHNvIGFkZCB5b3VyIG93biBleHRyYSBmaWxlcywgZm9yIGV4YW1wbGUg
-Y29uZmlndXJhdGlvbiBmaWxlcyBvciB5b3VyCj4gb3duIGFwcGxpY2F0aW9uLgo+IFRvIGdldCB5
-b3Ugc3RhcnRlZCwgdGhlcmUgYXJlIHNhbXBsZSBjb25maWd1cmF0aW9ucyBmb3IgYWJvdXQgMjMw
-IGJvYXJkcyB0aGF0Cj4geW91IGNhbiBidXkgb2ZmLXRoZS1zaGVsZiwgcGx1cyBhYm91dCA0MCBj
-b25maWd1cmF0aW9ucyBmb3Igc2ltdWxhdGlvbiBpbgo+IHFlbXUuCj4gSG93ZXZlciwgaXQgaXMg
-ZWFzeSBlbm91Z2ggdG8gbWFrZSB5b3VyIG93biBjb25maWd1cmF0aW9uLCBhcyBsb25nIGFzIHlv
-dSBrbm93Cj4gd2hpY2ggQ1BVIHZhcmlhbnQgeW91IGhhdmUgYW5kIHdoaWNoIGJvb3Rsb2FkZXIg
-YW5kIGtlcm5lbCBvcHRpb25zIChkZXZpY2UKPiB0cmVlKSB0byB1c2UuCj4KPiBJbiBwcmFjdGlj
-ZSwgaG93ZXZlciwgeW91IHdpbGwgYWxtb3N0IGFsd2F5cyB3YW50IHRvIGFkZCB5b3VyIG93biBh
-cHBsaWNhdGlvbi4KPiBGb3IgdGhhdCwgeW91IGNhbiBnZW5lcmF0ZSBhbiBTREsgdGhhdCB5b3Ug
-Y2FuIHVzZSB0byBidWlsZCB0aGUgYXBwbGljYXRpb24sCj4gZS5nLiBpbiBhbiBJREUuCj4gQnV0
-IGl0IGlzIGFsc28gdmVyeSBlYXN5IHRvIGNyZWF0ZSBhIG5ldyBwYWNrYWdlIGZvciB5b3VyIGFw
-cGxpY2F0aW9uLgo+IElmIHlvdSB1c2Ugb25lIG9mIHRoZSBzdXBwb3J0ZWQgYnVpbGQgc3lzdGVt
-cyAobWVzb24sIGNtYWtlLCBhdXRvdG9vbHMsIHFtYWtlLAo+IHdhZiwgY2FyZ28sIGdvLCBweXRo
-b24sIHJlYmFyKSwgYSBmZXcgbGluZXMgYXJlIHVzdWFsbHkgZW5vdWdoLgoKTWF5YmUgbWVudGlv
-biBCUjJfRVhURVJOQUwgaGVyZS4gVGhhdCBpcywgd2UgaGF2ZSBmYWNpbGl0aWVzIHRoYXQgYXJl
-Cm1lYW50IHRvIG1ha2UgaW50ZWdyYXRpb24gb2YgZXh0ZXJuYWwgc29mdHdhcmUgZWFzaWVyLgoK
-PiBBcGFydCBmcm9tIHRoZSBmbGV4aWJpbGl0eSBvZiB0aGUgY2hvaWNlIG9mIHBhY2thZ2VzIChl
-LmcuIDQgZGlmZmVyZW50IGluaXQKPiBzeXN0ZW1zLCAzIGRpZmZlcmVudCBDIGxpYnJhcmllcywg
-MTUgZGlmZmVyZW50IHJvb3QgZmlsZSBzeXN0ZW1zLCBtb3JlIHRoYW4gMTAgCj4gZGlmZmVyZW50
-IHdlYiBzZXJ2ZXJzIG9yIHdlYiBmcmFtZXdvcmtzKSwgdGhlIGZsZXhpYmlsaXR5IGlzIG1haW5s
-eSBpbiB0aGUKPiBwb3NzaWJpbGl0aWVzIHRvIG1vZGlmeSB0aGUgcm9vdCBmaWxlIHN5c3RlbSwg
-dG8gYWRkIGNvbmZpZ3VyYXRpb24gZmlsZXMsCj4gZXRjLiBCZWNhdXNlIG9mIHRoZSBsYXJnZSBh
-bW91bnQgb2YgZnJlZWRvbSwgdGhlIGNob2ljZSBvZiBwYWNrYWdlcyBpcyBvZnRlbgo+IGxpbWl0
-ZWQgdG8gYSBmZXcgbGluZXMuCgpXaGF0IGRvZXMgdGhhdCBtZWFuPwoKPiBIb3dldmVyLCB3aXRo
-IHNvIG11Y2ggZnJlZWRvbSwgdGhlcmUgaXMgbm8gc3RhbmRhcmQKPiB3YXkgdG8gaW1wbGVtZW50
-IHNvbWUgY29tbW9uIHVzZSBjYXNlcywgZS5nLiwgcmVhZG9ubHkgcm9vdCBmaWxlIHN5c3RlbSB3
-aXRoIGEKPiBzZXBhcmF0ZSBwYXJ0aXRpb24gZm9yIHBlcnNpc3RlbmNlLCBvciBhIHZlcmlmaWVk
-IGJvb3QgcHJvY2VzcyB3aXRoIGhhcmR3YXJlCj4gVFBNLiBJdCBpcyBwb3NzaWJsZSB0byBpbXBs
-ZW1lbnQgYWxsIHRoZXNlIHRoaW5ncywgYnV0IHlvdSBoYXZlIHRvIGZpZ3VyZSBvdXQKPiBob3cu
-CgpBbHRlcm5hdGl2ZSBwaHJhc2luZyB0aGF0IGVtcGhhc2l6ZXMgQnVpbGRyb290J3MgZmxleGli
-aWxpdHk6CgogIFRoZSBmbGV4aWJpbGl0eSB0aGF0IEJ1aWxkcm9vdCBwcm92aWRlcyBhbGxvd3Mg
-eW91IHRvIGludGVncmF0ZSBmZWF0dXJlcyB0aGF0IAogIGFyZSBub3Qgc3RhbmRhcmRpemVkLCBs
-aWtlIHJlYWQgb25seSByb290IGZpbGVzeXN0ZW1zIHdpdGggc2VwYXJhdGUgd3JpdGFibGUKICBw
-YXJ0aXRpb25zLCBvciBzZWN1cmUgYm9vdC4gSXQgZG9lcyBub3Qgc2F2ZSB5b3UgZnJvbSB0aGUg
-aGFyZCB3b3JrIG9mCiAgZmlndXJpbmcgb3V0IGFueSBwbGF0Zm9ybSBzcGVjaWZpYyByZXF1aXJl
-bWVudHMsIGJ1dCBCdWlsZHJvb3QgaXMgbm90CiAgaW4geW91ciB3YXkuCgo+IFRoZXJlIGFyZSBz
-b21lIHByb2plY3RzIHRoYXQgdXNlIGJ1aWxkcm9vdCB0byBidWlsZCBhIG1vcmUgbWFuYWdlZCAo
-YW5kIHRodXMKPiBsZXNzIGZsZXhpYmxlKSAiZGlzdHJvIjogU2tpZmZPUywgZGFobGlhT1MsIEJh
-dG9jZXJhIExpbnV4LCBIb21lIEFzc2lzdGFudCAKPiBPcGVyYXRpbmcgU3lzdGVtLgo+Cj4gRm9y
-IHNlY3VyaXR5IGlzc3VlcywgYnVpbGRyb290IGhhcyBhIHN5c3RlbSB0aGF0IGF1dG9tYXRpY2Fs
-bHkgZGV0ZWN0cwo+IENWRXMuIFRoZSBsaXN0IG9mIHBhY2thZ2VzIGlzIHVwZGF0ZWQgd2Vla2x5
-IG9uIAo+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9zdGF0cy9tYXN0ZXIuaHRtbC4g
-QSBtYWlsIGlzIGFsc28gc2VudCB0byB0aGUKPiBwZW9wbGUgd2hvIHNpZ25lZCB1cCBhcyBkZXZl
-bG9wZXJzIGZvciB0aGUgcGFja2FnZS4KPiBJbiBhZGRpdGlvbiwgQnVpbGRyb290IG9mZmVycyB0
-aGUgY2xhc3NpY2FsIGdsb2JhbCBoYXJkZW5pbmcgb3B0aW9uczogc3RhY2sKPiBzbWFzaGluZyBw
-cm90ZWN0aW9uLCBQSUMvUElFLCBSRUxSTywgYnVmZmVyIG92ZXJmbG93IGRldGVjdGlvbi4KPgo+
-IEludGVybmFsbHksIEJ1aWxkcm9vdCB1c2VzIEdOVSBtYWtlIHRvIGRyaXZlIHRoZSBidWlsZCwg
-c3VwcG9ydGVkIGJ5IHNoZWxsCj4gc2NyaXB0cyBhbmQgc29tZSBDIGNvZGUgKG1vc3RseSBjb3Bp
-ZWQgYW5kIGFkYXB0ZWQgZnJvbSBlbHNld2hlcmUpLgo+IFRoZSBpbmZyYXN0cnVjdHVyZSBjb25z
-aXN0cyBvZiBhYm91dCA1MDAwIGxpbmVzIEdOVSBtYWtlLCA1MDAwIGxpbmVzIHNoZWxsCj4gc2Ny
-aXB0cywgYW5kIDIwMDAwIGxpbmVzIEMgY29kZSAobWFpbmx5IGZvciB0aGUgS2NvbmZpZyBpbmZy
-YXN0cnVjdHVyZSkuIFRoZSAKPiBtYWtlIGNvZGUgaXMgbm90IHNvIGVhc3kgdG8gdW5kZXJzdGFu
-ZCAoYmVjYXVzZSBtYWtlIGlzIGEgc3RyYW5nZSBsYW5ndWFnZSksCj4gYnV0IGl0IGlzIHN0aWxs
-IG1hbmFnZWFibGUuIE1vcmVvdmVyLCBhZGp1c3RtZW50cyB0byB0aGUgY29yZSBjb2RlIGFyZSBy
-YXJlbHkKPiBuZWVkZWQgLSBtb3N0IGV2b2x1dGlvbiBpcyBpbiB0aGUgcGFja2FnZXMgdGhlbXNl
-bHZlcy4KCkNvcmUgQnVpbGRyb290IG1ha2UgY29kZSBpcyBjb21wbGV4IGluZGVlZC4gQnV0IG1v
-c3QgZGV2ZWxvcGVyIG9yIHVzZXJzIG5ldmVyIApzZWUgdGhpcyBjb2RlLiBTcGVjaWZpYyBwYWNr
-YWdlIGJ1aWxkIGNvZGUgaXMgbm90IGhhcmQgdG8gZ3Jhc3AuIE1heWJlIGFkZCBhbiAKZXhhbXBs
-ZSBwYWNrYWdlPwoKPiBCdWlsZHJvb3QgaXMgbWFpbnRhaW5lZCBieSB2b2x1bnRlZXJzLiBUaGVy
-ZSBhcmUgNCBtYWludGFpbmVycywgaS5lLiBwZW9wbGUKPiB3aXRoIGNvbW1pdCBhY2Nlc3MuIEhv
-d2V2ZXIsIHRoZSBiaWdnZXN0IGNvbnRyaWJ1dGlvbiBpcyBtYWRlIGJ5IGFib3V0IDEwMAo+IG90
-aGVyIHBlb3BsZSB3aG8gYWRkIGFib3V0IDE1MDAgY2hhbmdlc2V0cyBlYWNoIHJlbGVhc2UuIFJl
-bGVhc2VzIGFyZSBtYWRlCj4gZXZlcnkgMyBtb250aHMgKDIwWFguMDIsIDIwWFguMDUsIDIwWFgu
-MDgsIDIwWFguMTEpLiBUaGUgbGFzdCBtb250aCBvZiBhIGN5Y2xlCj4gaXMgYSBzdGFiaWxpdHkg
-cGhhc2Ugd2hlcmUgb25seSBmaXhlcyBhcmUgYXBwbGllZCAtIGJ1dCBuZXcgZXZvbHV0aW9ucyBz
-dGlsbAo+IGVuZCB1cCBpbiB0aGUgJ25leHQnIGJyYW5jaC4gVHdpY2UgYSB5ZWFyIHRoZXJlIGlz
-IGEgZGV2ZWxvcGVyIG1lZXRpbmcsCj4gYWx0aG91Z2ggZHVlIHRvIHRoZSBrbm93biBjaXJjdW1z
-dGFuY2VzIHRoaXMgaGFzIG5vdCB0YWtlbiBwbGFjZSBzaW5jZQo+IEZlYnJ1YXJ5IDIwMjAuIFRo
-ZSBjb21tdW5pdHkgaXMgbWFpbmx5IG9uIHRoZSBtYWlsaW5nIGxpc3QKPiAobGlzdHMuYnVpbGRy
-b290Lm9yZykgYW5kIG9uIElSQyAoI2J1aWxkcm9vdCBvbiBPRlRDKS4KCkEgZmV3IG1vcmUgdG9w
-aWNzIHRoYXQgbWlnaHQgYmUgd29ydGggbWVudGlvbjoKCiAgKiBCdWlsZHJvb3QgbWFudWFsCgog
-ICogTFRTIHJlbGVhc2VzCgogICogQXV0b2J1aWxkZXJzCgogICogVGVzdHMgaW5mcmFzdHJ1Y3R1
-cmUKCiAgKiBMaWNlbnNlIGluZm9ybWF0aW9uCgpIb3BlIHRoaXMgaGVscHMsCmJhcnVjaAoKLS0g
-CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfi4g
-Ln4gICBUayBPcGVuIFN5c3RlbXMKPX0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS1vb08tLVUtLU9vby0tLS0tLS0tLS0tLXs9CiAgIC0gYmFydWNoQHRrb3Mu
-Y28uaWwgLSB0ZWw6ICs5NzIuNTIuMzY4LjQ2NTYsIGh0dHA6Ly93d3cudGtvcy5jby5pbCAtCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+From: "Yann E. MORIN" <yann.morin@orange.com>
+
+The prompt and variable name for the OCI "entrypoint arguments" are
+somewhat incorrect. Indeed, they are in fact use to set the image
+"command". Yet, using "command" would be confusing too, because the
+interplay between entrypoint and command is tricky [0].
+
+TL-DR; when both entrrypoint and command are set, command acts as
+arguments passed to the entrypoint.
+
+Additionally, we currently can only pass a single item as either
+entrypoint or command. This precludes passing actual arguments to the
+entrypoint, or passing multiple arguments as command.
+
+For example:
+    BR2_TARGET_ROOTFS_OCI_ENTRYPOINT="/bin/tini -g -p SIGTERM --"
+    BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS="/usr/bin/env sh"
+
+generates an images with (only relevant fileds are included below):
+
+    {
+        "config": {
+            "Entrypoint": [ "/bin/tini -g -p SIGTERM --" ],
+            "Cmd": [ "/usr/bin/env sh" ]
+        }
+    }
+
+This is obviously incorrect, and not what one would expect:
+
+    {
+        "config": {
+            "Entrypoint": [ "/bin/tini", "-g", "-p", "SIGTERM", "--" ],
+            "Cmd": [ "/usr/bin/env", "sh" ]
+        }
+    }
+
+However, some people do want to be able to pass an actual shell
+scriptlet as a command, such as:
+
+    {
+        "config": {
+            "Entrypoint": [ "/bin/sh", "-c" ],
+            "Cmd": [ "my shell logic goes here" ]
+        }
+    }
+
+Handling both is obviously conflicting: we can't both split-on-spaces
+and not-split-on-spaces at the same time...
+
+So, we fix that in tow ways:
+
+  - make the current _OCI_ENTRYPOINT_ARGS a legacy option, and introduce
+    the new _OCI_CMD option with different semantics (see below) and an
+    appropriate prompt;
+
+  - we interpret both _OCI_ENTRYPOINT and _OCI_CMD as shell strings,
+    which we subject to the usual shell quoting [1] and token
+    recognition [2];
+
+Since _OCI_ENTRYPOINT_ARGS used to be interpreted as a single string, we
+can't easily change its meaning to be a space-separated list, as that
+would break existing setups, which is the reason we make it legacy and
+introduce a new option.
+
+Ideally, we would like to default the new option _OCI_CMD to be the
+quoted value of the previous _OCI_ENTRYPOINT_ARGS, but this is not
+possible in Kconfig. Still, users that had a _OCI_ENTRYPOINT_ARGS set
+will now get an early build error, and can still detect they need to do
+something about it.
+
+As for _OCI_ENTRYPOINT, it does not make much sense to support both
+cases. Indeed, withoput splitting on spaces, we'd end up with an
+entrypoint that would hava single item:
+
+    {
+        "config": {
+            "entrypoint: [ "some string with some spaces" ]
+        }
+    }
+
+which in this case would try to execute the program which name is
+actually "some string with some spaces", so we do not expect that
+existing entrypoints are set with any space in them, and so the new
+behaviour, unlike for _OCI_ENTRYPOINT_ARGS vs. _OCI_CMD, is compatible
+with existing configurations, and so we do not need to make it a legacy
+option and introduce a new one.
+
+[0] https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact
+[1] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_02
+[2] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_03
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
+Cc: Matthew Weber <matthew.weber@collins.com>
+
+---
+Changes v1 -> v2:
+  - drop _OCI_ENTRYPOINT_ARGS and replace with _OCI_CMD
+  - accept values that have shell escapes and quotes, and spaces
+---
+ Config.in.legacy | 19 +++++++++++++++++++
+ fs/oci/Config.in | 22 +++++++++++++++++++---
+ fs/oci/oci.mk    | 28 +++++++++++++++++-----------
+ 3 files changed, 55 insertions(+), 14 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 48c5ebb81e..8bbefc5ecd 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,25 @@ endif
+ 
+ comment "Legacy options removed in 2022.02"
+ 
++config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS
++	string "entrypoint argumetns has been changed as command"
++	help
++	  The OCI image BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS option has
++	  been renamed to BR2_TARGET_ROOTFS_OCI_CMD to better reflect its
++	  relation to the actual 'command' of the OCI image.
++
++	  The new semantic for BR2_TARGET_ROOTFS_OCI_CMD is slightly
++	  differnt in relation to how it is interpreted, so be sure to
++	  review the help entry for it.
++
++	  Due to this breaking change, the old value here could not be
++	  set to the new variable.
++
++config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS_WRAP
++	bool
++	default y if BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS != ""
++	select BR2_LEGACY
++
+ config BR2_PACKAGE_LIBCURL_LIBNSS
+ 	bool "libcurl NSS removed"
+ 	select BR2_LEGACY
+diff --git a/fs/oci/Config.in b/fs/oci/Config.in
+index 8f36c91c8f..5e7aff282f 100644
+--- a/fs/oci/Config.in
++++ b/fs/oci/Config.in
+@@ -42,10 +42,26 @@ config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT
+ 	help
+ 	  Command to execute when the container starts.
+ 
+-config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS
+-	string "entrypoint arguments"
++	  Spaces must be quoted or escaped, like for a shell string:
++	    /usr/bin/env sh -c
++	    /bin/my-init --some-option "1 2 3 4" some\ arg --
++
++	  See the Docker documentation on how entrypoint and command
++	  interact together:
++	    https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact
++
++config BR2_TARGET_ROOTFS_OCI_CMD
++	string "command (or entrypoint arguments)"
+ 	help
+-	  Default arguments to the entrypoint of the container.
++	  Default command, or entrypoint arguments, of the container.
++
++	  Spaces must be quoted or escaped, like for a shell string:
++	    "your shell scriptlet"
++	    /usr/bin/env sh
++
++	  See the Docker documentation on how entrypoint and command
++	  interact together:
++	    https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact
+ 
+ config BR2_TARGET_ROOTFS_OCI_WORKDIR
+ 	string "working directory"
+diff --git a/fs/oci/oci.mk b/fs/oci/oci.mk
+index aa81920d36..4458cf8ef9 100644
+--- a/fs/oci/oci.mk
++++ b/fs/oci/oci.mk
+@@ -12,17 +12,23 @@ OCI_SLOCI_IMAGE_OPTS = --arch $(GO_GOARCH)
+ # architecture variant (typically used only for arm)
+ OCI_SLOCI_IMAGE_OPTS += $(and $(GO_GOARM),--arch-variant v$(GO_GOARM))
+ 
+-# entrypoint
+-OCI_ENTRYPOINT = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT))
+-ifneq ($(OCI_ENTRYPOINT),)
+-OCI_SLOCI_IMAGE_OPTS += --entrypoint "$(OCI_ENTRYPOINT)"
+-endif
+-
+-# entrypoint arguments
+-OCI_ENTRYPOINT_ARGS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS))
+-ifneq ($(OCI_ENTRYPOINT_ARGS),)
+-OCI_SLOCI_IMAGE_OPTS += --cmd "$(OCI_ENTRYPOINT_ARGS)"
+-endif
++# entrypoint and command
++# Special treatment: both the entrypoint and arguments (aka command) are
++# a double-quoted, space-separated, escaped-double-quoted string, like:
++#     "foo \"1 2   3 4\" '  a b c d  ' bar\ buz"
++# which should be interpreted as a 4-item list (using single quotes to
++# delimit them and see leading/trailing spaces):
++#     'foo'
++#     '1 2   3 4'
++#     '  a b c d  '
++#     'bar buz'
++#
++# We use some trickery to have the shell properly expand this into a list
++# where each item is single-quoted and prefixed with the appropriate
++# option string:
++OCI_SLOCI_IMAGE_OPTS += \
++	$(shell eval printf -- "--entrypoint\ \'%s\'\ " $(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT)) \
++	$(shell eval printf -- "--cmd\ \'%s\'\ " $(BR2_TARGET_ROOTFS_OCI_CMD))
+ 
+ # author
+ OCI_AUTHOR = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_AUTHOR))
+-- 
+2.25.1
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
