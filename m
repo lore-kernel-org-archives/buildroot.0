@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C143C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 21:56:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 306ABC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 21:56:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8AF38415F5;
-	Fri, 13 May 2022 21:56:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D57774161B;
+	Fri, 13 May 2022 21:56:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5Y-61opso43A; Fri, 13 May 2022 21:56:07 +0000 (UTC)
+	with ESMTP id F5tkOActBqHS; Fri, 13 May 2022 21:56:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B0EF41484;
-	Fri, 13 May 2022 21:56:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A49741BF5A8
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:56:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2EC4415F5;
+	Fri, 13 May 2022 21:56:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CF4681BF5A8
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:56:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92CCA60806
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:56:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CBB6340207
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:56:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7HVeCl3AtFpT for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 21:56:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4juuuTJ7Ui9P for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 21:56:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8B99C60681
- for <buildroot@buildroot.org>; Fri, 13 May 2022 21:56:03 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id g23so11377725edy.13
- for <buildroot@buildroot.org>; Fri, 13 May 2022 14:56:03 -0700 (PDT)
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B1D974015A
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 21:56:47 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id dk23so18595166ejb.8
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 14:56:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=bcun/kmn0T7RQqoJE7lBiM/QJwy1ZnfigfxRCuA2hPQ=;
- b=SYIFFD4903zOlZQyuxmhGq609OYAxnmCfpJTKUJDpI8xazMwiJrkvaNekllNJsXpNC
- WjfoHkoMAMKk54SEMLsiUTn9M1IuakEgwEjaVD7wkqp8oV8M+HjhBoNJ9rI9o7spVdXh
- juI+iheTEX5ismAz41DProIZdzPv34LkqnKayDBWgvYeC6YHHIgOV+ErW64nWXE71xFb
- 7pSAAt96BDxqM8bmHozkPYUYCR/2bQ6VpRRaTcKqXwFrqPyBygwi1SKlY+shIRAwTBt2
- FUv6W8YQhlstlT/WIzCcktv9vz8BNRq2nkSzL+r6ri8KFL2sdj06u02jlP58vcAbGVmr
- h9gQ==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=rw/GCWVexh2w50Y6R166NTJe9cqMS6hUdscH/OIMNg8=;
+ b=CktNFzqFRx78UVJBt5CozpWPBQgNUtNuZAigHRwdpUUDubBamADGeSjObYGEeQm3Fj
+ ngRbS4ABDDObejf3DH3Ef/7dCwIyLsSHOobCBMbGRf+Vor4zhk0Y7WwCZsXVOzbLVhWs
+ L9zxCv0rJHbExVDtb6WqedEpGV02FU145Hx9zbCOVnqIArV59zFg3xba4bhABsHZiRgX
+ H5bmwZIucJU5H1ClYWf6oomamdkgpJW98P+8l9a5V+/aXz0Gd93BPfO5xQNev+0ZRwPs
+ HP+KsFFBAlcVYsABfFyoAgKdnSSnCAQyzG1tHoYe34mLuiyaRNNOv+17ZWosToDBzvTX
+ KS1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=bcun/kmn0T7RQqoJE7lBiM/QJwy1ZnfigfxRCuA2hPQ=;
- b=g+2wDyHXPMVEpcp7vXiUXPKwGzd8hxM/E8+zF7rpcXaF+syOqml/7HOkOgu2YPv+D6
- Zz0hvJvJXf0CTIHqHob7n+xGqqfR6JNeY0dG5gLfZj0LutigyX0o/e3rXQXMDgKtl3Kw
- YKUUnaiVBMDyJbyUidNNtWGSouTDAqtnv+N/Az8JtvfpwAF6XETibaGaFYDKjVnjvwhq
- 6PoSgG3an+3ABEjRYtxngYeSI7SphzlfJ794gZhy94l15rTGO3NSoH+13n6Qu3ufyYP2
- Ll1hK4dLV/SLzS6jnLJp/IlCiP76ChjZXIz8dokb3H7PYVRFZ5vZIlt8TJENhVq/i8e9
- HnYQ==
-X-Gm-Message-State: AOAM530PMUtAvDYbGsCZAgO8puM7FaUS/FhovfIF9MmtCaAxTeO8eaRe
- u9Ed5L1Muu+mA9o4cD8ySx7vOA==
-X-Google-Smtp-Source: ABdhPJwY+ZWoJAmJ1n9nbQq7mq6uYDEXcpKF2TWuF09Xw5uURIOm4qeoYID9h0+33AdxF6fx2dG3lQ==
-X-Received: by 2002:a50:f69b:0:b0:425:e693:5d1f with SMTP id
- d27-20020a50f69b000000b00425e6935d1fmr746899edn.272.1652478961661; 
- Fri, 13 May 2022 14:56:01 -0700 (PDT)
+ bh=rw/GCWVexh2w50Y6R166NTJe9cqMS6hUdscH/OIMNg8=;
+ b=clifYSBXcx1Wg04422chLrrQm5CaMTA2FLM4gJVWqL824kcXVzHfCKM5KUqDPh9Bae
+ IOGOpxqXjiXC1Rjt4asJCnuO1IO/FLx4OLDeN+6pVd9mDiyL1v8G9MuQGhzGxJAynXCM
+ 7KNqXFDdYedbKclpdzv+lRfgiktzGR4ms0faHgGz+wawpOlSHjRErx2pgv+fX7wnmfmt
+ IaKil+rF0MKeKSUjzIN54rIWBhRbV04T897nN0p5RdWjuJKFYw9a2USv91CJyKUvK76h
+ oKcRg1UctnEdb9y30TvD6Y2N5iHS7h+qUu07xcOkMKQ7HkwaEBgCBQaxkrWV/u/EvLXE
+ 8S6Q==
+X-Gm-Message-State: AOAM532MVyeWi84pztQ/EwYiP+KMcabn6Owo+Gd5JQ6jfmizzp3aMe/f
+ w2O659P1N6/MuxN9o3QFVfiigoey60rbXg==
+X-Google-Smtp-Source: ABdhPJzi+kNevFPI603YNKR5kXG0THr0zGPjvpxlZM2586oAyPO4YXtvIiElBYN/K2pVpW67Llw9dQ==
+X-Received: by 2002:a17:907:2146:b0:6f5:28b5:5f38 with SMTP id
+ rk6-20020a170907214600b006f528b55f38mr5963829ejb.118.1652479005714; 
+ Fri, 13 May 2022 14:56:45 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- v12-20020a17090651cc00b006f3ef214e17sm1163059ejk.125.2022.05.13.14.56.00
+ ia20-20020a170907a07400b006f4c24495e7sm1155783ejc.33.2022.05.13.14.56.44
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 13 May 2022 14:56:01 -0700 (PDT)
-Message-ID: <499beaa9-aa4b-6582-8a48-45fc1ecb31cf@mind.be>
-Date: Fri, 13 May 2022 23:56:00 +0200
+ Fri, 13 May 2022 14:56:45 -0700 (PDT)
+Message-ID: <3f28da1c-de5b-8022-c3d5-0a4c6e9bc303@mind.be>
+Date: Fri, 13 May 2022 23:56:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220510044636.3061290-1-james.hilliard1@gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220509204641.464787-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220510044636.3061290-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/git: fix build with iconv
+In-Reply-To: <20220509204641.464787-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcgi: disable tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +94,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,43 +101,87 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 10/05/2022 06:46, James Hilliard wrote:
-> Our libiconv shouldn't need the ICONV_OMITS_BOM workaround.
+On 09/05/2022 22:46, Fabrice Fontaine wrote:
+> Disable tests to avoid the following static build failure on sh4aeb:
 > 
-> We also need to correctly set the iconv path so that we don't use the
-> host iconv path.
+> In file included from /home/autobuild/autobuild/instance-5/output-1/build/libcgi-1.3.0/test/test_slist.c:20:
+> /home/autobuild/autobuild/instance-5/output-1/build/libcgi-1.3.0/include/libcgi/cgi.h:81:31: note: expected 'char *' but argument is of type 'const char *'
+>     81 | extern int slist_delete(char *name, formvars **start, formvars **last);
+>        |                         ~~~~~~^~~~
+> /home/autobuild/autobuild/instance-5/output-1/build/libcgi-1.3.0/test/test_slist.c:352:1: error: unable to find a register to spill in class 'FPUL_REGS'
+>    352 | }
+>        | ^
+> /home/autobuild/autobuild/instance-5/output-1/build/libcgi-1.3.0/test/test_slist.c:352:1: error: this is the insn:
+> (insn 1084 1081 1085 105 (set (reg:SI 4 r4)
+>          (mem/f:SI (post_inc:SI (reg:SI 76 fr12 [orig:343 ivtmp.286 ] [343])) [0 MEM[base: _414, offset: 0B]+0 S4 A32])) "/home/autobuild/autobuild/instance-5/output-1/build/libcgi-1.3.0/test/test_slist.c":323:3 189 {movsi_ie}
+>       (expr_list:REG_INC (reg:SI 76 fr12 [orig:343 ivtmp.286 ] [343])
+>          (nil)))
 > 
 > Fixes:
->   - http://autobuild.buildroot.net/results/027/027602a750fd0989f9861773a2c4672667590acc
+>   - http://autobuild.buildroot.org/results/84a2339568d23b328af2416bfcec1ef41eccdce5
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
-
-  Weird that this only comes up now - the incorrect --with-iconv has been there 
-since 9 years ago...
 
   Regards,
   Arnout
 
 > ---
->   package/git/git.mk | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+>   ...-CMakeLists.txt-honour-BUILD_TESTING.patch | 44 +++++++++++++++++++
+>   1 file changed, 44 insertions(+)
+>   create mode 100644 package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch
 > 
-> diff --git a/package/git/git.mk b/package/git/git.mk
-> index 0127ba5129..981a238acb 100644
-> --- a/package/git/git.mk
-> +++ b/package/git/git.mk
-> @@ -49,7 +49,8 @@ endif
->   ifeq ($(BR2_PACKAGE_LIBICONV),y)
->   GIT_DEPENDENCIES += libiconv
->   GIT_CONF_ENV_LIBS += -liconv
-> -GIT_CONF_OPTS += --with-iconv=/usr/lib
-> +GIT_CONF_OPTS += --with-iconv=$(STAGING_DIR)/usr
-> +GIT_CONF_ENV += ac_cv_iconv_omits_bom=no
->   else
->   GIT_CONF_OPTS += --without-iconv
->   endif
+> diff --git a/package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch b/package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch
+> new file mode 100644
+> index 0000000000..3ec674ae70
+> --- /dev/null
+> +++ b/package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch
+> @@ -0,0 +1,44 @@
+> +From 15ec267520efbe45193eb1df5361a4ab56164294 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sun, 8 May 2022 17:54:42 +0200
+> +Subject: [PATCH] CMakeLists.txt: honour BUILD_TESTING
+> +
+> +Allow the user to disable tests through the standard BUILD_TESTING
+> +option: https://cmake.org/cmake/help/latest/module/CTest.html
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://github.com/rafaelsteil/libcgi/commit/15ec267520efbe45193eb1df5361a4ab56164294]
+> +---
+> + CMakeLists.txt | 12 +++++++++---
+> + 1 file changed, 9 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index cbf0d97..e3329a1 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -29,15 +29,21 @@ option(BUILD_SHARED_LIBS
+> + 	"Global flag to cause add_library to create shared libraries if on."
+> + 	ON
+> + )
+> ++option(BUILD_TESTING
+> ++	"Build tests."
+> ++	ON
+> ++)
+> +
+> + # subdirectories
+> + add_subdirectory("include/libcgi")
+> + add_subdirectory("src")
+> +
+> + # test
+> +-enable_testing()
+> +-include(CTest)
+> +-add_subdirectory("test")
+> ++if(BUILD_TESTING)
+> ++	enable_testing()
+> ++	include(CTest)
+> ++	add_subdirectory("test")
+> ++endif(BUILD_TESTING)
+> +
+> + # cmake package stuff
+> + configure_package_config_file(${PROJECT_NAME_LC}-config.cmake.in
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
