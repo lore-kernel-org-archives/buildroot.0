@@ -1,91 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F116C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 20:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A343CC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 20:44:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A86EB40490;
-	Fri, 13 May 2022 20:35:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3BF3583F7D;
+	Fri, 13 May 2022 20:44:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ll2gziPt2SvH; Fri, 13 May 2022 20:35:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id raEo-LdCegeQ; Fri, 13 May 2022 20:44:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BBD2940256;
-	Fri, 13 May 2022 20:35:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4077C83F7A;
+	Fri, 13 May 2022 20:44:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7DE941BF3CD
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 20:35:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EC7001BF3CD
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 20:44:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65F1440256
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 20:35:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA45040160
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 20:44:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fgvotAzFDprn for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 20:35:07 +0000 (UTC)
+ with ESMTP id D2DRj1bdcig4 for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 20:44:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2E226400EA
- for <buildroot@buildroot.org>; Fri, 13 May 2022 20:35:07 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id gh6so18438088ejb.0
- for <buildroot@buildroot.org>; Fri, 13 May 2022 13:35:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B5419400EA
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 20:44:47 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ k126-20020a1ca184000000b003943fd07180so5331446wme.3
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 13:44:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=722Uasti9rjOModguJncFeWitPsN/AlSRqf5oMvne2g=;
- b=PpMUJevgGdRNpqVDPjrtNEuj4jSdvjaZIBjtU/Z8/A4Y7Ih27hNZbNGyq9rJlvux/7
- udmpQvLn0SuWLImqJQb7WSoydo4IEgB4rPw809xzhuObii/aIqqrKJrY6VBKWq7zzHZY
- tYMLLFM9+JD/j/JqvDzNk1nTLLxgbquWor5HvYYKJtqomujR26R2fa7wn6CHMW5ycPPi
- XSC8SjjStz0q92Ry3iOuVm4e6Q6DgHvIIy6/XbbXkRNK0fFc/5kWP2wxtBKnCPdyC5it
- LFLY/+ONTOExTY8loq9DgLvLwVedfPcM2HF6dp51lQYE3aHw0vnyb1BeePw/f5EQo2pn
- 62lg==
+ bh=IrLPIXdc0lM83K0fV75jWtMppc3AZZXcZBV8twCXwX4=;
+ b=IkNpng7bKvZyoRQ8xHFOdU/S2GF4Hc6mQ9eEBmVxddinI68Ot8Rcx+S0G+ipqMWRak
+ lEOmPhUT7LHYnoyL9lsW89+WKFH2ISEZcqXop2+yu4PkHbrH+KfVqonDY68zrV4YqtZt
+ mNAr4/gK0PWClAosqmBj5KPV+4LAfRmu/H/ElRc7YWa5c3mtvNPf4b/XOdo4fs1NiYsM
+ hjvzg8/N3wZtXDfbK1TAM72CaYPp+vNHZ9u/0sp7c+1isYNH4yupvDb99SbIRvjeJ0/1
+ /SQxnKLQ6EduMfqwXgyTjfX/RstcZyRbmAUzFf0zk19XRwXFD3fgbuL3H5t/xhjQXuVq
+ sExQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=722Uasti9rjOModguJncFeWitPsN/AlSRqf5oMvne2g=;
- b=tEZDNVQ3UykIx1qW/xQPT3XD7/fNLsgiNA2AMl5vrL7ntt/2ItvhuQaEIMK5XxfhAd
- stA+GFIoK70vyvvgCjMstb+hv41vzaOjG3bVJXwkkxxmXOjQELvq0Iru2ysglyjubwtt
- BLPfA9YtAdQKkyFBVbadSyoVlP5Ywz2VLUDqHheZT+Ig1UqlQyMlZTXA2zEYc6+D8Wkc
- 7IU1V6IZJnNe6T8/s/uGWU/eDkhQWR7Ww+EuhZ+0GBebZdr7lfOFsBlBOqOy5uKHW3Y4
- 3gmBC7zXiaRiWap+9pn30oqz1GRDAtPUPNsfuX5TyDam0dviq4oe2VnAi+E//AiEjQc1
- AcQw==
-X-Gm-Message-State: AOAM5325+eCN5lLtitI0EjQugij9p46EWXCFJ5BWbNBU6OC91wHIUFGF
- brb1DEuNX/sRAaAgN25B1t8AOEA8HU4nzg==
-X-Google-Smtp-Source: ABdhPJzCsTN73WVfZzPLFvBSlgbS42wiG8RRhVtZY1M4PwvfapbiVtd+oZHyB+30KbjTsKl8cRXK8Q==
-X-Received: by 2002:a17:907:3f86:b0:6db:b745:f761 with SMTP id
- hr6-20020a1709073f8600b006dbb745f761mr5612297ejc.610.1652474105382; 
- Fri, 13 May 2022 13:35:05 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ bh=IrLPIXdc0lM83K0fV75jWtMppc3AZZXcZBV8twCXwX4=;
+ b=rdThvzYtmgqD5jAyskj1xKmgfloqIOZqp9jvu1RouuaFsYhYQXGMEKbDOJT4cH5eRx
+ gxnDGRDKgG5Ae0UbLTMewTN8+k/1Jd7rDTX6EEvL1FfIh+pO4YyCHbTGhIVjwf1l3w7L
+ 2mvKaL1xTURgCPwjEOKAv2knTIVV9I+gA5vMyWhse5kG94h6PdvP5/DqFLJ2IJ4eJ86t
+ yQeye7feAVpBy+kU7Ht++/iy8CrCfrM/RVIF44c9tppakvqK2s45ygNZjDyviJOG5aSp
+ 8qn9TmV6JPXEdb9qX7M3Ru8reHW6FsU4qKFzVDUWryfTER6LNo4CAdaGyukmqQlp8Y5r
+ E6fg==
+X-Gm-Message-State: AOAM532RR4vQrK0lZPevKrBqjIaPOMNQbQrd2feXwDD0PRN9hYVO2q6z
+ e2MKyq6BlIx2YZl+YJZF9GlnEMU3emY=
+X-Google-Smtp-Source: ABdhPJxtMwrQEpv6nYa16HP4oaBi6DeZUzJYUGJCmQt1F/7UC7xty23tjppDJfSeNn6C1+1OGaIJoA==
+X-Received: by 2002:a05:600c:501e:b0:394:8b0a:3ec9 with SMTP id
+ n30-20020a05600c501e00b003948b0a3ec9mr6174104wmr.0.1652474685586; 
+ Fri, 13 May 2022 13:44:45 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- m7-20020a17090672c700b006f3ef214e39sm1093969ejl.159.2022.05.13.13.35.04
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 13 May 2022 13:35:04 -0700 (PDT)
-Message-ID: <7c474ae0-2a57-0c3f-56e4-9c7017bc84ea@mind.be>
-Date: Fri, 13 May 2022 22:35:04 +0200
+ a7-20020a7bc1c7000000b0039429bfebeasm6589406wmj.2.2022.05.13.13.44.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 13 May 2022 13:44:45 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 13 May 2022 22:42:34 +0200
+Message-Id: <20220513204234.760410-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-GB
-To: Peter Korsgaard <peter@korsgaard.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220513144215.2598981-1-peter@korsgaard.com>
- <20220513144215.2598981-4-peter@korsgaard.com>
- <20220513163446.GQ1597494@scaer> <87lev58j8l.fsf@dell.be.48ers.dk>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <87lev58j8l.fsf@dell.be.48ers.dk>
-Subject: Re: [Buildroot] [PATCH 4/4] {linux,
- linux-headers}: default to 5.17.x
+Subject: [Buildroot] [PATCH 1/1] package/libpjsip: security bump to version
+ 2.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,54 +89,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Luca Ceresoli <luca@lucaceresoli.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Security Issue:
+ - Potential buffer overflow in pjsip_auth_create_digest()
+   (GHSA-73f7-48m9-w662 a.k.a. CVE-2022-24754)
+ - Denial-of-service in XML parsing due to an infinite loop
+   (GHSA-5x45-qp78-g4p4 a.k.a. CVE-2022-24763)
+ - Potential stack buffer overflow when printing SDP into a buffer
+   (GHSA-f5qg-pqcg-765m a.k.a. CVE-2022-24764)
+ - Potential out-of-bound read/write when parsing RTCP FB RPSI
+   (GHSA-vhxv-phmx-g52q a.k.a. CVE-2022-24786)
+ - Potential infinite loop when parsing WAV format file
+   (GHSA-rwgw-vwxg-q799 a.k.a. CVE-2022-24792)
+ - Potential heap buffer overflow when parsing DNS packets
+   (GHSA-p6g5-v97c-w5q4 a.k.a. CVE-2022-24793)
 
+https://github.com/pjsip/pjproject/releases/tag/2.12.1
 
-On 13/05/2022 18:55, Peter Korsgaard wrote:
->>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->   > Peter, All,
->   > On 2022-05-13 16:42 +0200, Peter Korsgaard spake thusly:
->   >> 5.15.x is getting quite old, so default to 5.17.x instead.
-> 
->   > But 5.15 is a longterm kernel, while 5.17 will probably not be.
-> 
-> True, but we normally default to the latest kernel, I just kept it for
-> 5.15 for the LTS release.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libpjsip/libpjsip.hash | 2 +-
+ package/libpjsip/libpjsip.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-  FWIW, +1 to that philosophy.
+diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+index 74331ab6fb..b1ccdb2f37 100644
+--- a/package/libpjsip/libpjsip.hash
++++ b/package/libpjsip/libpjsip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b3b94d9be4aba8f6d2d1cb164603e81b0a6ee17352f9e2ba5b58e325e610ca5a  pjproject-2.12.tar.gz
++sha256  d0feef6963b07934e821ba4328aecb4c36358515c1b3e507da5874555d713533  pjproject-2.12.1.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 32cfa8c53c..a3303d1e8a 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -4,10 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBPJSIP_VERSION = 2.12
++LIBPJSIP_VERSION = 2.12.1
+ LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
+ LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
+-# https://github.com/pjsip/pjproject/archive/2.12.tar.gz
+ 
+ LIBPJSIP_DEPENDENCIES = libsrtp
+ LIBPJSIP_LICENSE = GPL-2.0+
+-- 
+2.35.1
 
-  Regards,
-  Arnout
-
-> 
->   > Also, see below...
-> 
->   >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->   >> ---
->   > [--SNIP--]
->   >> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
->   >> index 5ff616fb34..859f772624 100644
->   >> --- a/package/linux-headers/Config.in.host
->   >> +++ b/package/linux-headers/Config.in.host
->   > [--SNIP--]
->   >> @@ -56,10 +56,6 @@ config BR2_KERNEL_HEADERS_5_15
->   >> bool "Linux 5.15.x kernel headers"
->   >> select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
->   >>
->   >> -config BR2_KERNEL_HEADERS_5_16
->   >> -	bool "Linux 5.16.x kernel headers"
->   >> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
-> 
->   > Did you forget to squash this hunk...
-> 
-> Ups, indeed. Will fix.
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
