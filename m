@@ -1,89 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2208EC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:12:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF501C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCB6A60AD0;
-	Fri, 13 May 2022 22:12:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AD464027A;
+	Fri, 13 May 2022 22:12:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nDE2l8GSv5Hd; Fri, 13 May 2022 22:12:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF4CD60806;
-	Fri, 13 May 2022 22:12:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2BCF31BF868
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A03540207
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:23 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cvPSJUYKpJnX for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 22:11:22 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0eNk2MpuYBw5; Fri, 13 May 2022 22:12:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6E633403A4;
+	Fri, 13 May 2022 22:12:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C249D1BF868
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B0CBD60806
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WD_sYCNnyG77 for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 22:11:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 252834015A
- for <buildroot@buildroot.org>; Fri, 13 May 2022 22:11:22 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id kq17so18683359ejb.4
- for <buildroot@buildroot.org>; Fri, 13 May 2022 15:11:21 -0700 (PDT)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4BBB060AC1
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 22:11:25 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id z19so11460981edx.9
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 15:11:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=VyuPAPyAFAJobvarFCN7bjta5nugl87W5Q3pS9fKP+Y=;
- b=Y0MKb5ngp0QX5WnawnjPtaBr0a+kcgGwIQSSYrAFb53x8t5QQwSsaXeUg+32yAlviG
- qpF/2TUyQMWw6bAXHu41/P3TVOwLjD/9h7AVI73nC5ul846LFUzCVLnzr7HFWdlnkG9C
- 5x32d+7pkp40SfZRlRYWCNHGIYHzJ1WqrlNm8lmPYEb2LChfSy2jfWxepcKh6VNgfO6n
- 3VBTbFcGG0Iy7bSZriMMNbUIXvia+ZndrFjVjEIbXODbQ9HQz0V+x8IOQL4YMlf1xeAd
- 0OMNuxhBF2xS3PdGGUE6teHxMw/Kq5FwMwd4kVaGwpM2zNyvJiVWTyd2Q4Vmyc3pO8gR
- wnXA==
+ bh=MbnG8nlc2a4OjcLw1B9w3ghidMA8PNtWw++2d0FJaog=;
+ b=aDZjPorhDIlwC3KLZIYwQmYlv3J4RX3YfId6z+H5iQR0TiGVldnrMKYoh+zx1LACNL
+ tSJjpVB2UA0xccG7WmhY0OF8xRvpdHO13E1zH9j3FtPv7fPM+UVMPkvCAcFpBFrYzFbw
+ 7F+U90Bms2zJxCz8gnWSZNQf1dgva9N0QDRJWP6AgvLLV2Hl2YnluzeCSUkw8hDWDSEW
+ 6d3SuYsPeGgg5IIU6Z3l3xh3dUaioLklXu81Q+ZjC8bfQoNEqWtGqa3z4vqtRgzzJEPJ
+ oZ0+vTms67IP/x4/PEgBOam6FFs25Sb48rB5Xn6hZSw+2a8vteyUNNGBrMw8rBZSkNdZ
+ qTmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=VyuPAPyAFAJobvarFCN7bjta5nugl87W5Q3pS9fKP+Y=;
- b=wbSOsXX/awhwE8Xza86lg7G125YpGSwmBJqPbPNyLydXrVPtovqkimttXzLOLs0N3o
- d7swDeP5MzpPYKwpueNJ0B7cDG4X9W9p3zPE09+8bT5EXoJP4iJmWrKvNQS8ksNywISR
- OZ2Z0FQZzcCTIiqoHlvadKD8Js0PmuTLBpsgNccwrxukFgQm9UKUqSVq3SQcdWw53oD2
- mVNG8gVXSkhB7v1+rmat4/VB47z4egk0OVkBIe+/rojofhjP9uHNq6C1IGAuIqHUmQq/
- Sf8mTFe1RBW6ezD+JFBfJpiaDHAx5pGZ6O1VHlqydIGA8S8W4mYQS30LwlPdoIzVw7OA
- J0Cg==
-X-Gm-Message-State: AOAM532UdXIYrIPX8fAyYNIzR8eZVEgf4P9ee28OX8hhjKjKIfcQ8pAY
- oxEZsipfshf0aSkk7wHFWiZwDA==
-X-Google-Smtp-Source: ABdhPJzrumNrsgAxy6yKZE4Qz7WBxeB7U1CLnHmnLXpbYaWltp5M0HKlVGfOAKmoCVLlr3jNtH2zmg==
-X-Received: by 2002:a17:906:4f90:b0:6f6:b288:b3ab with SMTP id
- o16-20020a1709064f9000b006f6b288b3abmr6209101eju.189.1652479880329; 
- Fri, 13 May 2022 15:11:20 -0700 (PDT)
+ bh=MbnG8nlc2a4OjcLw1B9w3ghidMA8PNtWw++2d0FJaog=;
+ b=tyxj9EBYFmcjfNh6WSOsFr7+GAWy0PQ8VU3N8r1fB4F9binucdz38kECB4ETHKxffJ
+ C9e82uRGBcbJh5/LY0ZS7bNAa+MgfRsQrEUNABm3pmy+e9qslWQ/ZcaUnThpTDcU3rig
+ DKO/imKaoTU5v65ter9hOMKV4Np7e5Z5HGhvTv4XJwHaJZ3NwSHsUhDjd2VQQ0tRWIgP
+ H8xPEaUXvhN0JUJjHk2rd7WutQ4mcNQRIGCVeW/3f4mS1SH0kTYIbu+1eI4icBVFSGAG
+ KKryGTK5aoth2L0AhBx2B1yqT0vl1TRJRiuIogOD1X1HAF14XIGdOaSya8ClT5zqiRnh
+ 49LQ==
+X-Gm-Message-State: AOAM531I9XEuaToTPZP5ylPMufyiHwXeky9JNZGhLEhr4faHxK4MpLxC
+ Fbg1y8wLkb18fN2uAdgeg/IZJg==
+X-Google-Smtp-Source: ABdhPJxXn+0gDuYnG2Q41OkTzz2GGzoaeyaA5xiVEJFfmzKWkBX/AR1BB0JWEPhXzFYqmRdrPjHbtA==
+X-Received: by 2002:a05:6402:4408:b0:427:ab6f:a383 with SMTP id
+ y8-20020a056402440800b00427ab6fa383mr781490eda.249.1652479883535; 
+ Fri, 13 May 2022 15:11:23 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- zd7-20020a17090698c700b006f3ef214dfbsm1177869ejb.97.2022.05.13.15.11.19
+ i6-20020a50c3c6000000b0042617ba63besm1420182edf.72.2022.05.13.15.11.23
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 13 May 2022 15:11:19 -0700 (PDT)
-Message-ID: <7b54b51b-0c2c-4e7d-d901-d5d0769ad2f1@mind.be>
-Date: Sat, 14 May 2022 00:10:37 +0200
+ Fri, 13 May 2022 15:11:23 -0700 (PDT)
+Message-ID: <cf810e8a-2295-b438-f88d-ecbeba6bbf47@mind.be>
+Date: Sat, 14 May 2022 00:10:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220505210604.9605-1-fontaine.fabrice@gmail.com>
+References: <20220505210151.9244-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220505210604.9605-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/sngrep: fix build with libressl
- >= 3.5.0
+In-Reply-To: <20220505210151.9244-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkcs11-helper: fix build with
+ libressl >= 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,17 +102,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/05/2022 23:06, Fabrice Fontaine wrote:
+On 05/05/2022 23:01, Fabrice Fontaine wrote:
 > Fix the following build failure with libressl raised since bump to
 > version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
 > 
-> capture_openssl.c: In function 'P_hash':
-> capture_openssl.c:101:18: error: storage size of 'hm' isn't known
->    101 |         HMAC_CTX hm;
->        |                  ^~
+> pkcs11h-openssl.c: In function 'DSA_meth_set1_name':
+> pkcs11h-openssl.c:239:41: error: invalid use of incomplete typedef 'DSA_METHOD' {aka 'struct dsa_method'}
+>    239 |  rv = _pkcs11h_mem_strdup ((void *)&meth->name, name);
+>        |                                         ^~
 > 
 > Fixes:
->   - http://autobuild.buildroot.org/results/f1e8cdb3ac35a30055ab79d41e6cc038e5339c37
+>   - http://autobuild.buildroot.org/results/9b0d3bf7d97696c7be6de1724daaba196626b865
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -122,56 +122,99 @@ On 05/05/2022 23:06, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   ...nssl.h-fix-build-with-libressl-3.5.0.patch | 40 +++++++++++++++++++
->   1 file changed, 40 insertions(+)
->   create mode 100644 package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch
+>   ...5-0-does-not-have-DSA_meth_set1_name.patch | 69 +++++++++++++++++++
+>   package/pkcs11-helper/pkcs11-helper.mk        |  2 +
+>   2 files changed, 71 insertions(+)
+>   create mode 100644 package/pkcs11-helper/0002-openssl-libressl-3-5-0-does-not-have-DSA_meth_set1_name.patch
 > 
-> diff --git a/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch b/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch
+> diff --git a/package/pkcs11-helper/0002-openssl-libressl-3-5-0-does-not-have-DSA_meth_set1_name.patch b/package/pkcs11-helper/0002-openssl-libressl-3-5-0-does-not-have-DSA_meth_set1_name.patch
 > new file mode 100644
-> index 0000000000..7dbb29ab00
+> index 0000000000..21ce66ae79
 > --- /dev/null
-> +++ b/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch
-> @@ -0,0 +1,40 @@
-> +From 4e1406ad0df370ff8bf1d3a81aaadbb1cad2d761 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Fri, 29 Apr 2022 18:53:45 +0200
-> +Subject: [PATCH] src/capture_openssl.h: fix build with libressl >= 3.5.0
+> +++ b/package/pkcs11-helper/0002-openssl-libressl-3-5-0-does-not-have-DSA_meth_set1_name.patch
+> @@ -0,0 +1,69 @@
+> +From 17d10b0dfb2b56a047db307687640adcd560e199 Mon Sep 17 00:00:00 2001
+> +From: Alon Bar-Lev <alon.barlev@gmail.com>
+> +Date: Mon, 2 May 2022 21:26:58 +0300
+> +Subject: [PATCH] openssl: libressl-3.5.0 does not have DSA_meth_set1_name
 > +
-> +Fix the following build failure with libressl >= 3.5.0:
+> +while it does not expose the DSA_METHOD structure.
 > +
-> +capture_openssl.c: In function 'P_hash':
-> +capture_openssl.c:101:18: error: storage size of 'hm' isn't known
-> +  101 |         HMAC_CTX hm;
-> +      |                  ^~
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/f1e8cdb3ac35a30055ab79d41e6cc038e5339c37
-> +
+> +[Retrieved (and updated to remove ChangeLog update) from:
+> +https://github.com/OpenSC/pkcs11-helper/commit/17d10b0dfb2b56a047db307687640adcd560e199]
 > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Retrieved from:
-> +https://github.com/irontec/sngrep/commit/4e1406ad0df370ff8bf1d3a81aaadbb1cad2d761]
 > +---
-> + src/capture_openssl.h | 5 +++--
-> + 1 file changed, 3 insertions(+), 2 deletions(-)
+> + ChangeLog             |  1 +
+> + configure.ac          | 16 ++++++++++++++++
+> + lib/pkcs11h-openssl.c |  4 ++++
+> + 3 files changed, 21 insertions(+)
 > +
-> +diff --git a/src/capture_openssl.h b/src/capture_openssl.h
-> +index 780de494..1f87a5cd 100644
-> +--- a/src/capture_openssl.h
-> ++++ b/src/capture_openssl.h
-> +@@ -67,10 +67,11 @@
+> +diff --git a/configure.ac b/configure.ac
+> +index 716bb8d8..57697a3b 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -300,7 +300,9 @@ if test "${have_openssl}" = "no"; then
+> + fi
+> +
+> + if test "${have_openssl}" = "yes"; then
+> ++	old_CFLAGS="${CFLAGS}"
+> + 	old_LIBS="${LIBS}"
+> ++	CFLAGS="${CFLAGS} ${OPENSSL_CFLAGS}"
+> + 	LIBS="${LIBS} ${OPENSSL_LIBS}"
+> + 	AC_CHECK_FUNCS([ \
+> + 		RSA_meth_dup RSA_meth_free \
+> +@@ -344,6 +346,20 @@ if test "${have_openssl}" = "yes"; then
+> + 	)
+> + 	AC_MSG_CHECKING([for OpenSSL ec support])
+> + 	AC_MSG_RESULT([${openssl_ec}])
+> ++	# https://github.com/OpenSC/pkcs11-helper/pull/55
+> ++	AC_COMPILE_IFELSE(
+> ++		[AC_LANG_PROGRAM(
+> ++			[[#include <openssl/dsa.h>]],
+> ++			[[
+> ++				int foo() {
+> ++					DSA_METHOD *meth = NULL;
+> ++					sizeof(meth->name);
+> ++				}
+> ++			]]
+> ++		)],
+> ++		[AC_DEFINE([HAVE_DSA_METHOD_NAME], [1], [Have DSA_METHOD->name])]
+> ++	)
+> ++	CFLAGS="${old_CFLAGS}"
+> + 	LIBS="${old_LIBS}"
+> + fi
+> +
+> +diff --git a/lib/pkcs11h-openssl.c b/lib/pkcs11h-openssl.c
+> +index 961c955c..38ee8e2d 100644
+> +--- a/lib/pkcs11h-openssl.c
+> ++++ b/lib/pkcs11h-openssl.c
+> +@@ -235,9 +235,13 @@ DSA_meth_free (DSA_METHOD *meth)
+> + static int
+> + DSA_meth_set1_name (DSA_METHOD *meth, const char *name)
+> + {
+> ++#ifdef HAVE_DSA_METHOD_NAME
+> + 	CK_RV rv;
+> + 	rv = _pkcs11h_mem_strdup ((void *)&meth->name, name);
+> + 	return rv == CKR_OK ? 1 : 0;
+> ++#else
+> ++	return 0;
+> ++#endif
+> + }
 > + #endif
 > +
-> + /* LibreSSL declares OPENSSL_VERSION_NUMBER == 2.0 but does not include most
-> +- * changes from OpenSSL >= 1.1 (new functions, macros, deprecations, ...)
-> ++ * changes from OpenSSL >= 1.1 (new functions, macros, deprecations, ...) until
-> ++ * version 3.5.0
-> +  */
-> + #if defined(LIBRESSL_VERSION_NUMBER)
-> +-#define MODSSL_USE_OPENSSL_PRE_1_1_API (1)
-> ++#define MODSSL_USE_OPENSSL_PRE_1_1_API (LIBRESSL_VERSION_NUMBER < 0x30500000L)
-> + #else
-> + #define MODSSL_USE_OPENSSL_PRE_1_1_API (OPENSSL_VERSION_NUMBER < 0x10100000L)
-> + #endif
+> diff --git a/package/pkcs11-helper/pkcs11-helper.mk b/package/pkcs11-helper/pkcs11-helper.mk
+> index 4fc3e21e5a..f8fe54ecf5 100644
+> --- a/package/pkcs11-helper/pkcs11-helper.mk
+> +++ b/package/pkcs11-helper/pkcs11-helper.mk
+> @@ -11,6 +11,8 @@ PKCS11_HELPER_LICENSE = GPL-2.0 or BSD-3-Clause
+>   PKCS11_HELPER_LICENSE_FILES = COPYING COPYING.BSD COPYING.GPL
+>   PKCS11_HELPER_DEPENDENCIES = host-pkgconf
+>   PKCS11_HELPER_INSTALL_STAGING = YES
+> +# We're patching configure.ac
+> +PKCS11_HELPER_AUTORECONF = YES
+>   
+>   PKCS11_HELPER_CONF_OPTS = \
+>   	--disable-crypto-engine-polarssl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
