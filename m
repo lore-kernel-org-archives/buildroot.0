@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21A71C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:09:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F5FFC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7B42827C9;
-	Fri, 13 May 2022 22:09:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0FB183F80;
+	Fri, 13 May 2022 22:09:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zjCtNS6O9lIK; Fri, 13 May 2022 22:09:18 +0000 (UTC)
+	with ESMTP id bQU1OuIP5nlW; Fri, 13 May 2022 22:09:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB8748271D;
-	Fri, 13 May 2022 22:09:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 717201BF868
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:09:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A14BE828B3;
+	Fri, 13 May 2022 22:09:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CCFE1BF868
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:09:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5EDD240207
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:09:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0AFF560AC1
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:09:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q2hztn4P54Yq for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 22:09:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X07Sco1gZNj9 for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 22:09:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9979A4015A
- for <buildroot@buildroot.org>; Fri, 13 May 2022 22:09:11 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id a21so11497228edb.1
- for <buildroot@buildroot.org>; Fri, 13 May 2022 15:09:11 -0700 (PDT)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 29B6860806
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 22:09:15 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id k27so11471806edk.4
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 15:09:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=BpqhnzR+EK27Ln9bLksUl58MuM4sFwzgNI6O9rgNxQs=;
- b=QnoBjJuDfwSWJo2FbFODGVMXsbfn15Lj3nVstYeYsRhTlCvY2PG9ZIafx/NolYXOnS
- 1OlLocegim5KxPZC8cxVnj64cEDR9bXrGKJpQkdbHzTDZrXXoBBEgh89dCw6sv5/5xfz
- o3xU8Ue/KVXiCBgzKPe+tYUoQoCxm3cN2zu3YQF2Nuhy8c7JY+n/7yWZjc3hlEkkLoHd
- HM3zmTLhMBN+yrLMYgWixE9H0QHchUe7cwAa6z0waz1r72PGJV9LGr00n40VQXdzmPsV
- remlLvskEvlj+3EgCcoHgzDCacthWLjnJBS4x8N47NL7eXCos8LQ69+4Yi/4+fEjqrfz
- FvdQ==
+ bh=ZqoTZD/RBz9McHwqP4JisYEpWJ/1pZTWZaY4ptpGBLo=;
+ b=Ynx43K8M9hx6a7iRxQTUyI/GJL83LCWo592MJVm6kljMQfrlTKIEUrcTsT9joe9bhW
+ yvbptG8RzQCZIZknBj73J1ExtXDf5tRNIv/ycs80u7DoNCmulsVs+IOaOh1NB4REWB8b
+ FBWYiUKxil4A0Vjb5sECmMgkPA4ISfLmv1riukZkhG5WF8X3BlI+AekEvZJhlvCNhoBD
+ U07YAMmQ5cYLY84qG84W+gFf/dVLtW1RVoh76g1aZlpVWSaKlubx2+xcvzdd/Y/+KxHZ
+ kwywqjAviQBcw34MhDTASShFoVdBTSWzj7v/7okmxckdjfkMuapBvHcBU1sIC45j4qNC
+ E+TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=BpqhnzR+EK27Ln9bLksUl58MuM4sFwzgNI6O9rgNxQs=;
- b=r0FKpXxpz15/y8cXoR3joK7UfJtDf8ZADYQv2vEZxi4pFL8O+kNdAU7doCnR11FoZa
- BaL+9yczGJtEtC/jZ8HokvZ1zJLKOFeK7IZyn/YYZFdDfXPc7PxSD35s2mFs4M/QCz0W
- Mg98oAAVqza4DunaDHml9D7Fz+Ynjg2UTNcpJXtLjDs7tglbS7nWjHpQndmRMU5Z5Ceh
- DlRESdFTnzSqwTvF+4Rrm85z496A5Lplt0VDBHzklUIn85+ekF4Nts5cO6HD78VrImnX
- Xwff/84sBoPERYKYWfIifLB0PQfH1RSQHXdMBSah+DTX/5KoDujnj7GtU26kVWz+2F/z
- WNaw==
-X-Gm-Message-State: AOAM530CNbKwLHhVMLWDOfqmI2TVbjldpBa+jqTGNNSkI/tt0cSpoKrQ
- K4gB1O/hBDL142Je9a67b3JAOQ==
-X-Google-Smtp-Source: ABdhPJx4rRtHNeCFl1hLN3eHc9KHrLJjGGqDdbNWbdSVVq5rJmXc6vZZ+ERzSVdfxwJ0ZJ58y+nSHw==
-X-Received: by 2002:a05:6402:5188:b0:428:e77:b55b with SMTP id
- q8-20020a056402518800b004280e77b55bmr812130edd.82.1652479749895; 
- Fri, 13 May 2022 15:09:09 -0700 (PDT)
+ bh=ZqoTZD/RBz9McHwqP4JisYEpWJ/1pZTWZaY4ptpGBLo=;
+ b=QUbmPJ0uZevlWoItFR7Uh5S1OjCdObxAKUxvrP6O6sE8Nn/V+OjOdNki9tMOh2bGn+
+ 51YUizPcs51SM6Hc+gEYQulW3yr+413jgH/xG5nevrFKJj2G72PZ14eLZePlumtCX8CL
+ LYnMT2jhVCGY81OH5PE7BIRi8FDPUDHpHDCwqpn4UHz0hdvJjdVpphA6O4CRK1zdqkpV
+ w1AcZjMba/FrCLT6D2gpGF3vT8B2um+T7ihJnB3eTQtmppZbK9SmhrRO3ACe2iqVITjU
+ 5RIz3EjpyDBzNHYZEI3Jh3i0VW7FY9N3QcsOq3vQpdsH8w4L4r1Ckovd5+j0s9Xw03ka
+ EjOQ==
+X-Gm-Message-State: AOAM530SwFqZ8WZn8n5uyiYZMwcavGGX92KnTCKMziOWk7cr1cpWzPNI
+ cyMjQWv0PBPWQ6KQcmeZ39b+AQ==
+X-Google-Smtp-Source: ABdhPJybhsNZXoBcP3mLNO8V6uv+45xXXNWgeKdr3w4DIH9GCGKvMCZks/MRlXe/PJkVfTfXr8rJEg==
+X-Received: by 2002:a05:6402:51d2:b0:428:48d0:5d05 with SMTP id
+ r18-20020a05640251d200b0042848d05d05mr811966edd.28.1652479753291; 
+ Fri, 13 May 2022 15:09:13 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- r3-20020aa7d143000000b0042617ba63b2sm1434041edo.60.2022.05.13.15.09.09
+ e16-20020a170906749000b006f3ef214debsm1139510ejl.81.2022.05.13.15.09.12
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 13 May 2022 15:09:09 -0700 (PDT)
-Message-ID: <39f472c8-3c36-cc9a-c848-988e15c32649@mind.be>
-Date: Sat, 14 May 2022 00:05:16 +0200
+ Fri, 13 May 2022 15:09:12 -0700 (PDT)
+Message-ID: <375348cb-70ba-dff8-e72f-b0974126de77@mind.be>
+Date: Sat, 14 May 2022 00:07:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220509013417.1860755-1-james.hilliard1@gmail.com>
+References: <20220509010917.1485280-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220509013417.1860755-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-gobject: bump to version
- 3.42.1
+In-Reply-To: <20220509010917.1485280-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/2] package/pkg-python: add setup.cfg-only
+ setuptools project support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +96,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,42 +105,75 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 09/05/2022 03:34, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+On 09/05/2022 03:09, James Hilliard wrote:
+> Some projects have been removing their setup.py shims under the
+> assumption that they are not needed due to setuptools being usable
+> via pep517, however this is not actually the case as it is not
+> possible to bootstrap setuptools without setup.py style builds as
+> setuptools has a dependency on wheel when being used via pep517
+> which is itself not installable via pep517 as that would create a
+> dependency cycle between wheel and setuptools(which means wheel
+> itself must use a legacy setup.py build/installation for itself).
 
-  Applied to master, thanks.
+  I found this explanation a bit confusing, but I *think* you're saying "We 
+can't simply always use the 'from setuptools import setup' approach".
+
+  Anyway, applied both to master, thanks.
 
   Regards,
   Arnout
 
-> ---
->   package/python-gobject/python-gobject.hash | 4 ++--
->   package/python-gobject/python-gobject.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
-> index 100a05c74e..0c14efb1d4 100644
-> --- a/package/python-gobject/python-gobject.hash
-> +++ b/package/python-gobject/python-gobject.hash
-> @@ -1,3 +1,3 @@
-> -# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.42/pygobject-3.42.0.sha256sum
-> -sha256  9b12616e32cfc792f9dc841d9c472a41a35b85ba67d3a6eb427e307a6fe4367b  pygobject-3.42.0.tar.xz
-> +# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.42/pygobject-3.42.1.sha256sum
-> +sha256  1f34b5f7624de35e44eb5a7eb428353285bd03004d55131a5f7f7fa9b90f3cc9  pygobject-3.42.1.tar.xz
->   sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
-> diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
-> index b0a132d040..2fa7504d51 100644
-> --- a/package/python-gobject/python-gobject.mk
-> +++ b/package/python-gobject/python-gobject.mk
-> @@ -5,7 +5,7 @@
->   ################################################################################
+> In addition our pep517 toolchain itself requires setuptools for
+> building/installing dependencies, although it would appear these
+> dependencies will eventually move to flit. Until this is resolved
+> we must use setup.py style builds for setuptools packages.
+> 
+> Since it is not yet possible to convert setup.py based setuptools
+> builds to pep517 based setuptools builds we simply need to execute
+> the setuptools shim code directly if the setup.py file is missing.
+> 
+> See:
+> https://setuptools.pypa.io/en/latest/setuptools.html#setup-cfg-only-projects
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>   package/pkg-python.mk | 13 ++++++++-----
+>   1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+> index 452fa0d3ea..5794e3a195 100644
+> --- a/package/pkg-python.mk
+> +++ b/package/pkg-python.mk
+> @@ -86,6 +86,9 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
+>   	$(PKG_PYTHON_ENV) \
+>   	SETUPTOOLS_USE_DISTUTILS=stdlib
 >   
->   PYTHON_GOBJECT_VERSION_MAJOR = 3.42
-> -PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).0
-> +PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).1
->   PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.xz
->   PYTHON_GOBJECT_SITE = https://ftp.gnome.org/pub/gnome/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
->   PYTHON_GOBJECT_LICENSE = LGPL-2.1+
+> +PKG_PYTHON_SETUPTOOLS_CMD = \
+> +	$(if $(wildcard $($(PKG)_BUILDDIR)/setup.py),setup.py,-c 'from setuptools import setup;setup()')
+> +
+>   PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+>   	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+>   	--prefix=/usr \
+> @@ -180,13 +183,13 @@ endif
+>   else ifeq ($$($(2)_SETUP_TYPE),setuptools)
+>   ifeq ($(4),target)
+>   $(2)_BASE_ENV = $$(PKG_PYTHON_SETUPTOOLS_ENV)
+> -$(2)_BASE_BUILD_CMD = setup.py build
+> -$(2)_BASE_INSTALL_TARGET_CMD = setup.py install --no-compile $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
+> -$(2)_BASE_INSTALL_STAGING_CMD = setup.py install $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
+> +$(2)_BASE_BUILD_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) build
+> +$(2)_BASE_INSTALL_TARGET_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install --no-compile $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
+> +$(2)_BASE_INSTALL_STAGING_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
+>   else
+>   $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
+> -$(2)_BASE_BUILD_CMD = setup.py build
+> -$(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
+> +$(2)_BASE_BUILD_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) build
+> +$(2)_BASE_INSTALL_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
+>   endif
+>   else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
+>   ifeq ($(4),target)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
