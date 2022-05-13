@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 039D5C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:13:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBFEEC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:13:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA7FA4037C;
-	Fri, 13 May 2022 22:13:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F4C740936;
+	Fri, 13 May 2022 22:13:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i1tRxMryLurx; Fri, 13 May 2022 22:13:32 +0000 (UTC)
+	with ESMTP id 0CaVyUkovQxF; Fri, 13 May 2022 22:13:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C789940207;
-	Fri, 13 May 2022 22:13:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 051B61BF868
+	by smtp2.osuosl.org (Postfix) with ESMTP id 696954091F;
+	Fri, 13 May 2022 22:13:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F3AC1C1189
  for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1063E40966
+ by smtp1.osuosl.org (Postfix) with ESMTP id 433F181D7C
  for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L1iGzi7RgwjE for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FNcAAzhvEuln for <buildroot@lists.busybox.net>;
  Fri, 13 May 2022 22:11:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 403B3405E0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9480681B26
  for <buildroot@buildroot.org>; Fri, 13 May 2022 22:11:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 075FE85E2B; Fri, 13 May 2022 22:00:45 +0000 (UTC)
+ id 5D18785E25; Fri, 13 May 2022 22:00:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Fri, 13 May 2022 23:54:11 +0200
+Date: Fri, 13 May 2022 23:54:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1195486b5828f734424554e62784e0e2d0f776dd
-X-Git-Newrev: f7996b6c64aaecd87315cb25cc1805dbc3fb67a4
+X-Git-Oldrev: 5ade3ecdb8a154779c219f49175fa72e417cd7ae
+X-Git-Newrev: 5cd13ec7654e1f34f5b4063ed0d5b15f5697bd66
 X-Patchwork-Hint: ignore
-Message-Id: <20220513220045.075FE85E2B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sngrep: fix build with libressl >=
- 3.5.0
+Message-Id: <20220513220045.5D18785E25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rust: add host-pkgconf dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,72 +58,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7996b6c64aaecd87315cb25cc1805dbc3fb67a4
+commit: https://git.buildroot.net/buildroot/commit/?id=5cd13ec7654e1f34f5b4063ed0d5b15f5697bd66
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with libressl raised since bump to
-version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
+Add host-pkgconf dependency to fix the following build failure raised
+since commit 4e3be3ae9d4c9f1b0c035eee0c923a724f9a9316:
 
-capture_openssl.c: In function 'P_hash':
-capture_openssl.c:101:18: error: storage size of 'hm' isn't known
-  101 |         HMAC_CTX hm;
-      |                  ^~
+  run pkg_config fail: "Failed to run `\"/nvmedata/autobuild/instance-6/output-1/per-package/host-rust/host/bin/pkg-config\" \"--libs\" \"--cflags\" \"openssl\"`: No such file or directory (os error 2)"
 
 Fixes:
- - http://autobuild.buildroot.org/results/f1e8cdb3ac35a30055ab79d41e6cc038e5339c37
+ - http://autobuild.buildroot.org/results/b046523960079cbf85931b8f67c3b98dd07fbbda
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...e_openssl.h-fix-build-with-libressl-3.5.0.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/rust/rust.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch b/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch
-new file mode 100644
-index 0000000000..7dbb29ab00
---- /dev/null
-+++ b/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch
-@@ -0,0 +1,40 @@
-+From 4e1406ad0df370ff8bf1d3a81aaadbb1cad2d761 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 29 Apr 2022 18:53:45 +0200
-+Subject: [PATCH] src/capture_openssl.h: fix build with libressl >= 3.5.0
-+
-+Fix the following build failure with libressl >= 3.5.0:
-+
-+capture_openssl.c: In function 'P_hash':
-+capture_openssl.c:101:18: error: storage size of 'hm' isn't known
-+  101 |         HMAC_CTX hm;
-+      |                  ^~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/f1e8cdb3ac35a30055ab79d41e6cc038e5339c37
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/irontec/sngrep/commit/4e1406ad0df370ff8bf1d3a81aaadbb1cad2d761]
-+---
-+ src/capture_openssl.h | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/capture_openssl.h b/src/capture_openssl.h
-+index 780de494..1f87a5cd 100644
-+--- a/src/capture_openssl.h
-++++ b/src/capture_openssl.h
-+@@ -67,10 +67,11 @@
-+ #endif
-+ 
-+ /* LibreSSL declares OPENSSL_VERSION_NUMBER == 2.0 but does not include most
-+- * changes from OpenSSL >= 1.1 (new functions, macros, deprecations, ...)
-++ * changes from OpenSSL >= 1.1 (new functions, macros, deprecations, ...) until
-++ * version 3.5.0
-+  */
-+ #if defined(LIBRESSL_VERSION_NUMBER)
-+-#define MODSSL_USE_OPENSSL_PRE_1_1_API (1)
-++#define MODSSL_USE_OPENSSL_PRE_1_1_API (LIBRESSL_VERSION_NUMBER < 0x30500000L)
-+ #else
-+ #define MODSSL_USE_OPENSSL_PRE_1_1_API (OPENSSL_VERSION_NUMBER < 0x10100000L)
-+ #endif
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 6ac75f39c4..445fde70a4 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -14,6 +14,7 @@ HOST_RUST_PROVIDES = host-rustc
+ 
+ HOST_RUST_DEPENDENCIES = \
+ 	toolchain \
++	host-pkgconf \
+ 	host-python3 \
+ 	host-rust-bin \
+ 	host-openssl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
