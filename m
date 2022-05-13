@@ -1,56 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87E68C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 16:56:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEDA7C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 17:00:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4329940AC6;
-	Fri, 13 May 2022 16:56:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FD1660EB1;
+	Fri, 13 May 2022 17:00:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id arCK_03LuSfJ; Fri, 13 May 2022 16:56:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7ZpCCtjEZbdv; Fri, 13 May 2022 17:00:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5347E40ABD;
-	Fri, 13 May 2022 16:56:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5E85A1BF86B
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 16:55:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 919CB60EEE;
+	Fri, 13 May 2022 17:00:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 75D181BF86B
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 17:00:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C1D240ABD
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 16:55:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 64AD8831DE
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 17:00:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 09K-t_CSA6hh for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 16:55:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 39EA440ABA
- for <buildroot@buildroot.org>; Fri, 13 May 2022 16:55:58 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 554851BF204;
- Fri, 13 May 2022 16:55:55 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1npYa2-00B2kc-7W; Fri, 13 May 2022 18:55:54 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220513144215.2598981-1-peter@korsgaard.com>
- <20220513144215.2598981-4-peter@korsgaard.com>
- <20220513163446.GQ1597494@scaer>
-Date: Fri, 13 May 2022 18:55:54 +0200
-In-Reply-To: <20220513163446.GQ1597494@scaer> (Yann E. MORIN's message of
- "Fri, 13 May 2022 18:34:46 +0200")
-Message-ID: <87lev58j8l.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 4/4] {linux,
- linux-headers}: default to 5.17.x
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ABgIv_3nEFMk for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 17:00:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CBD6B82881
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 17:00:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 11B1B85E05; Fri, 13 May 2022 16:49:55 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 13 May 2022 18:59:30 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ac4186db91410fba01eab2fe6c370b059c3f7e18
+X-Git-Newrev: 52818d732b9bb4e4a80a9a453a53ebdec6cf6c7c
+X-Patchwork-Hint: ignore
+Message-Id: <20220513164955.11B1B85E05@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/kontron_pitx_imx8m_defconfig: use
+ linux kernel 5.17.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,47 +53,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=52818d732b9bb4e4a80a9a453a53ebdec6cf6c7c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Peter, All,
- > On 2022-05-13 16:42 +0200, Peter Korsgaard spake thusly:
- >> 5.15.x is getting quite old, so default to 5.17.x instead.
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998@free.fr: we now have 5.17 headers too]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/kontron_pitx_imx8m_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > But 5.15 is a longterm kernel, while 5.17 will probably not be.
-
-True, but we normally default to the latest kernel, I just kept it for
-5.15 for the LTS release.
-
- > Also, see below...
-
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- > [--SNIP--]
- >> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
- >> index 5ff616fb34..859f772624 100644
- >> --- a/package/linux-headers/Config.in.host
- >> +++ b/package/linux-headers/Config.in.host
- > [--SNIP--]
- >> @@ -56,10 +56,6 @@ config BR2_KERNEL_HEADERS_5_15
- >> bool "Linux 5.15.x kernel headers"
- >> select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
- >> 
- >> -config BR2_KERNEL_HEADERS_5_16
- >> -	bool "Linux 5.16.x kernel headers"
- >> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
-
- > Did you forget to squash this hunk...
-
-Ups, indeed. Will fix.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/kontron_pitx_imx8m_defconfig b/configs/kontron_pitx_imx8m_defconfig
+index 8f756f5246..286858aa72 100644
+--- a/configs/kontron_pitx_imx8m_defconfig
++++ b/configs/kontron_pitx_imx8m_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/pitx-imx8mq.dtb"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-kontron-pitx-imx8m"
+@@ -18,7 +18,7 @@ BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
+ 
+ BR2_PACKAGE_FREESCALE_IMX=y
+ BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
