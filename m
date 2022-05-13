@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E75B7C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2208EC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A54814099B;
-	Fri, 13 May 2022 22:11:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCB6A60AD0;
+	Fri, 13 May 2022 22:12:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7rN9eYkh9I6J; Fri, 13 May 2022 22:11:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nDE2l8GSv5Hd; Fri, 13 May 2022 22:12:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50A244095F;
-	Fri, 13 May 2022 22:11:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 67F271BF868
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF4CD60806;
+	Fri, 13 May 2022 22:12:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BCF31BF868
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64F3583F7C
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A03540207
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eg96kIL8sgg8 for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 22:11:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cvPSJUYKpJnX for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 22:11:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 534DC827C9
- for <buildroot@busybox.net>; Fri, 13 May 2022 22:11:20 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id s11so7672554edy.6
- for <buildroot@busybox.net>; Fri, 13 May 2022 15:11:20 -0700 (PDT)
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 252834015A
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 22:11:22 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id kq17so18683359ejb.4
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 15:11:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=QJdh48yEeXwMGDp6WrZpuSBdEw7+x/5LBGUra7pKUts=;
- b=SOR1Pt1Jjh+HjhEc0Bsk+uimAnt72jUHDo1oqopnly0oBs3wbaS5uWpaCDCz8sSBmv
- Bv9ZbqgXHf3lFNvZrVyBMLUwLnhpo/9aeUiQXpGF6KZwtWmR4lqgETfT2Bwh27AMkz20
- 5xADWg71nWGlbOnSaYvERM6G1tv/54BTQDfs2rOYWeeYd9zINUvV/wKxO3rVzR6fabif
- kbsWY95+HdPs+8BBzXXFOVtA8j4QA1YOTL6nT+rGxdxcYWIKbszsm/74uAOvIqqg3NkF
- akHZIZH7du5+8rcUnyVQ2OqN/713tj8CvXJgMpXRt7HM7IHnvKjtNJ8IEf4z2MIYBKFF
- s/Rw==
+ bh=VyuPAPyAFAJobvarFCN7bjta5nugl87W5Q3pS9fKP+Y=;
+ b=Y0MKb5ngp0QX5WnawnjPtaBr0a+kcgGwIQSSYrAFb53x8t5QQwSsaXeUg+32yAlviG
+ qpF/2TUyQMWw6bAXHu41/P3TVOwLjD/9h7AVI73nC5ul846LFUzCVLnzr7HFWdlnkG9C
+ 5x32d+7pkp40SfZRlRYWCNHGIYHzJ1WqrlNm8lmPYEb2LChfSy2jfWxepcKh6VNgfO6n
+ 3VBTbFcGG0Iy7bSZriMMNbUIXvia+ZndrFjVjEIbXODbQ9HQz0V+x8IOQL4YMlf1xeAd
+ 0OMNuxhBF2xS3PdGGUE6teHxMw/Kq5FwMwd4kVaGwpM2zNyvJiVWTyd2Q4Vmyc3pO8gR
+ wnXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=QJdh48yEeXwMGDp6WrZpuSBdEw7+x/5LBGUra7pKUts=;
- b=3yTTkJ2ba/T8S2EN+vuk1X3c9Lwv5z9GKOzq2Yig/L7Il3ZYy6ipbXqA6+BWKq38y7
- /Rt8xWa+qvNZOlt3Dy8ALt2k/l5z+dF8oNtAPciZ3d+CVLdk2fSdvTSiF4BDRL//Pfv2
- vf0rsn35IEPPyQiWzAgG8azmfRGBV6tyzg9Owzg6/EhqeSy36CH24D+BvGeqfIQA7SP6
- xAtPk4PNHP+l1C7UhO3onXMZLpdvBVy+9OjQHE+VyNltIu3kdcoGRGu+HGuxt+OxBB5n
- ROxpacqrwnSrQ21KnuBHDC2B48eHUSD+rX24TffqLLZERCQacIzdsNWMlz/xTnxJpPCP
- rXiQ==
-X-Gm-Message-State: AOAM532PWMGKLn14tIuYvwO05LwrqTX05juQ/Wt4PmAVFUTCxfwFT8m9
- r9jr6sumxZkoefdckNqZ21dlHw==
-X-Google-Smtp-Source: ABdhPJyoMyv3/Jyxyd9ntqg+cuWnK+5ynSgkYfo7ZAmGSgvb6+uvK6EvkOATSmlrWuj6wFkSNeUeJw==
-X-Received: by 2002:a50:9b43:0:b0:42a:34e4:3339 with SMTP id
- a3-20020a509b43000000b0042a34e43339mr752518edj.381.1652479878157; 
- Fri, 13 May 2022 15:11:18 -0700 (PDT)
+ bh=VyuPAPyAFAJobvarFCN7bjta5nugl87W5Q3pS9fKP+Y=;
+ b=wbSOsXX/awhwE8Xza86lg7G125YpGSwmBJqPbPNyLydXrVPtovqkimttXzLOLs0N3o
+ d7swDeP5MzpPYKwpueNJ0B7cDG4X9W9p3zPE09+8bT5EXoJP4iJmWrKvNQS8ksNywISR
+ OZ2Z0FQZzcCTIiqoHlvadKD8Js0PmuTLBpsgNccwrxukFgQm9UKUqSVq3SQcdWw53oD2
+ mVNG8gVXSkhB7v1+rmat4/VB47z4egk0OVkBIe+/rojofhjP9uHNq6C1IGAuIqHUmQq/
+ Sf8mTFe1RBW6ezD+JFBfJpiaDHAx5pGZ6O1VHlqydIGA8S8W4mYQS30LwlPdoIzVw7OA
+ J0Cg==
+X-Gm-Message-State: AOAM532UdXIYrIPX8fAyYNIzR8eZVEgf4P9ee28OX8hhjKjKIfcQ8pAY
+ oxEZsipfshf0aSkk7wHFWiZwDA==
+X-Google-Smtp-Source: ABdhPJzrumNrsgAxy6yKZE4Qz7WBxeB7U1CLnHmnLXpbYaWltp5M0HKlVGfOAKmoCVLlr3jNtH2zmg==
+X-Received: by 2002:a17:906:4f90:b0:6f6:b288:b3ab with SMTP id
+ o16-20020a1709064f9000b006f6b288b3abmr6209101eju.189.1652479880329; 
+ Fri, 13 May 2022 15:11:20 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- f19-20020a50a6d3000000b0042617ba6392sm1412891edc.28.2022.05.13.15.11.17
+ zd7-20020a17090698c700b006f3ef214dfbsm1177869ejb.97.2022.05.13.15.11.19
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 13 May 2022 15:11:17 -0700 (PDT)
-Message-ID: <6025713a-36a3-9fd0-7567-3fab47ff1f8f@mind.be>
-Date: Sat, 14 May 2022 00:10:24 +0200
+ Fri, 13 May 2022 15:11:19 -0700 (PDT)
+Message-ID: <7b54b51b-0c2c-4e7d-d901-d5d0769ad2f1@mind.be>
+Date: Sat, 14 May 2022 00:10:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
-To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
-References: <20220508133612.150132-1-francois.perrad@gadz.org>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220505210604.9605-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220508133612.150132-1-francois.perrad@gadz.org>
-Subject: Re: [Buildroot] [PATCH] package/open62541: bump to version 1.2.4
+In-Reply-To: <20220505210604.9605-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/sngrep: fix build with libressl
+ >= 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,8 +102,19 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 08/05/2022 15:36, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On 05/05/2022 23:06, Fabrice Fontaine wrote:
+> Fix the following build failure with libressl raised since bump to
+> version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
+> 
+> capture_openssl.c: In function 'P_hash':
+> capture_openssl.c:101:18: error: storage size of 'hm' isn't known
+>    101 |         HMAC_CTX hm;
+>        |                  ^~
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/f1e8cdb3ac35a30055ab79d41e6cc038e5339c37
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
@@ -110,72 +122,56 @@ On 08/05/2022 15:36, Francois Perrad wrote:
   Arnout
 
 > ---
->   .../0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch         | 8 ++++----
->   package/open62541/Config.in                               | 2 +-
->   package/open62541/open62541.hash                          | 2 +-
->   package/open62541/open62541.mk                            | 2 +-
->   4 files changed, 7 insertions(+), 7 deletions(-)
+>   ...nssl.h-fix-build-with-libressl-3.5.0.patch | 40 +++++++++++++++++++
+>   1 file changed, 40 insertions(+)
+>   create mode 100644 package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch
 > 
-> diff --git a/package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch b/package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch
-> index f912445b7..9e6dda26e 100644
-> --- a/package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch
-> +++ b/package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch
-> @@ -29,16 +29,16 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
->   index bc839f27..963460d0 100644
->   --- a/CMakeLists.txt
->   +++ b/CMakeLists.txt
-> -@@ -292,6 +292,8 @@ if(UA_FORCE_CPP)
-> +@@ -257,6 +257,8 @@ if(UA_FORCE_CPP)
->        add_definitions(-D__STDC_CONSTANT_MACROS) # We need the UINT32_C define
->    endif()
->    
->   +option(UA_FORCE_WERROR "Force compilation with -Werror" ON)
->   +
->    #General PubSub setup
-> - option(UA_ENABLE_PUBSUB "Enable the PubSub protocol" OFF)
-> -
-> -@@ -589,7 +591,9 @@ if(NOT UA_FORCE_CPP AND (CMAKE_COMPILER_IS_GNUCC OR "x${CMAKE_C_COMPILER_ID}" ST
-> + option(UA_ENABLE_PUBSUB "Enable publish/subscribe" OFF)
-> + mark_as_advanced(UA_ENABLE_PUBSUB)
-> +@@ -526,7 +528,9 @@ if(NOT UA_FORCE_CPP AND (CMAKE_COMPILER_IS_GNUCC OR "x${CMAKE_C_COMPILER_ID}" ST
->        check_add_cc_flag("-Wall")      # Warnings
->        check_add_cc_flag("-Wextra")    # More warnings
->        check_add_cc_flag("-Wpedantic") # Standard compliance
-> diff --git a/package/open62541/Config.in b/package/open62541/Config.in
-> index a835595e8..220fb3dfa 100644
-> --- a/package/open62541/Config.in
-> +++ b/package/open62541/Config.in
-> @@ -3,7 +3,7 @@ config BR2_PACKAGE_OPEN62541
->   	help
->   	  open62541 is an open source and free implementation of OPC UA.
->   
-> -	  http://open62541.org
-> +	  https://open62541.org/
->   
->   if BR2_PACKAGE_OPEN62541
->   
-> diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
-> index 5aa340ac1..3257bfe47 100644
-> --- a/package/open62541/open62541.hash
-> +++ b/package/open62541/open62541.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  c59c85b519a18350f5014b6e7b7545ee144ceeb15094e75b0b7ecec7dce43dd0  open62541-v1.2.2-br1.tar.gz
-> +sha256  e2e1b8e6285c4fd6d8e07f37d61a8728376d525e169fadb3d61918fa6a7c271a  open62541-v1.2.4-br1.tar.gz
->   sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-> diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-> index 627c29e95..87bd3449b 100644
-> --- a/package/open62541/open62541.mk
-> +++ b/package/open62541/open62541.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -OPEN62541_VERSION = v1.2.2
-> +OPEN62541_VERSION = v1.2.4
->   OPEN62541_SITE_METHOD = git
->   OPEN62541_SITE = https://github.com/open62541/open62541.git
->   OPEN62541_GIT_SUBMODULES = YES
+> diff --git a/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch b/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch
+> new file mode 100644
+> index 0000000000..7dbb29ab00
+> --- /dev/null
+> +++ b/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch
+> @@ -0,0 +1,40 @@
+> +From 4e1406ad0df370ff8bf1d3a81aaadbb1cad2d761 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Fri, 29 Apr 2022 18:53:45 +0200
+> +Subject: [PATCH] src/capture_openssl.h: fix build with libressl >= 3.5.0
+> +
+> +Fix the following build failure with libressl >= 3.5.0:
+> +
+> +capture_openssl.c: In function 'P_hash':
+> +capture_openssl.c:101:18: error: storage size of 'hm' isn't known
+> +  101 |         HMAC_CTX hm;
+> +      |                  ^~
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/f1e8cdb3ac35a30055ab79d41e6cc038e5339c37
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://github.com/irontec/sngrep/commit/4e1406ad0df370ff8bf1d3a81aaadbb1cad2d761]
+> +---
+> + src/capture_openssl.h | 5 +++--
+> + 1 file changed, 3 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/src/capture_openssl.h b/src/capture_openssl.h
+> +index 780de494..1f87a5cd 100644
+> +--- a/src/capture_openssl.h
+> ++++ b/src/capture_openssl.h
+> +@@ -67,10 +67,11 @@
+> + #endif
+> +
+> + /* LibreSSL declares OPENSSL_VERSION_NUMBER == 2.0 but does not include most
+> +- * changes from OpenSSL >= 1.1 (new functions, macros, deprecations, ...)
+> ++ * changes from OpenSSL >= 1.1 (new functions, macros, deprecations, ...) until
+> ++ * version 3.5.0
+> +  */
+> + #if defined(LIBRESSL_VERSION_NUMBER)
+> +-#define MODSSL_USE_OPENSSL_PRE_1_1_API (1)
+> ++#define MODSSL_USE_OPENSSL_PRE_1_1_API (LIBRESSL_VERSION_NUMBER < 0x30500000L)
+> + #else
+> + #define MODSSL_USE_OPENSSL_PRE_1_1_API (OPENSSL_VERSION_NUMBER < 0x10100000L)
+> + #endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
