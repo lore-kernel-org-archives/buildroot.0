@@ -1,56 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BA18C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 06:06:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 199AAC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 07:11:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E32CD60C04;
-	Fri, 13 May 2022 06:06:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AB35415E5;
+	Fri, 13 May 2022 07:11:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sxFxcKbUpxYM; Fri, 13 May 2022 06:06:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LCHR12jN-rUT; Fri, 13 May 2022 07:11:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF10660736;
-	Fri, 13 May 2022 06:06:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 663821BF577
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 06:06:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3348B410C6;
+	Fri, 13 May 2022 07:11:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 67F421BF357
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 07:11:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52C52402B1
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 06:06:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4AC7660B25
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 07:11:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WbnPVdPbyose for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 06:06:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 205F740141
- for <buildroot@buildroot.org>; Fri, 13 May 2022 06:06:36 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 39081100002;
- Fri, 13 May 2022 06:06:32 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1npORc-0096Vt-6l; Fri, 13 May 2022 08:06:32 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <11033_1652186063_627A5BCF_11033_340_1_f3b8c61ce2f116c06c455a1f0163db9ca541896a.1652186060.git.yann.morin@orange.com>
- <878rr6ahop.fsf@dell.be.48ers.dk>
- <d7ce3402-a37a-ca9b-52c5-1f85eeb79a7d@mind.be>
-Date: Fri, 13 May 2022 08:06:32 +0200
-In-Reply-To: <d7ce3402-a37a-ca9b-52c5-1f85eeb79a7d@mind.be> (Arnout
- Vandecappelle's message of "Fri, 13 May 2022 00:31:54 +0200")
-Message-ID: <87wneq7yqf.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7MMQvdOVlq02 for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 07:11:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E7A9C60AEE
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 07:11:00 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id g23so8812949edy.13
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 00:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=GATxOZR62BreRfPamyT918xv5pgayOsMVzDdx9n5rxo=;
+ b=NNu1FpapOFop7lcx0RG1C1crwdyZBZYZ6e4lcZp2cXWn/kdUL8n0a6k/BLj/eUYE6v
+ 3Ty6hZLWUTi6wq+oKE5RGxkc6G1QR2FjCp/4RpzIUDNfVBW3j9DmklB+mzjkbQLxqFaK
+ JexrLgKGAnRx4D14F6DbvCbnEsoA51W8MbsOJORyFHI4GU4fSAmvZhcaxLItgEHMNMI1
+ KjHt4fMqtBx2vns98OrZmjT7WAoHoTZ8MNPGqGwHFEjYqd0BjYNb7r9y9xQ41xbjvp+n
+ cP1rSdjpbh9VNzboOBHcxLMlDKkiysjLST36ZBVboCJkq1JDG+jPfG68rcZpVu0xneZK
+ Cm8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=GATxOZR62BreRfPamyT918xv5pgayOsMVzDdx9n5rxo=;
+ b=pykBrVbxYuMz4a5i7Of7vkBgY+cxDdh9/cX86COAu5bFotQoFHYtt83GNwlmhZBFt4
+ WkT2T2PE4FLEcNuGfwYHysdS4+wQ6GpGdwYbydiJCcts1N6cqoUyjoV+rtk2gr37hl7p
+ Jf1Glfd0y2Ns+pvipT13wqJLKLtTTtJGjUxNeUy1B5dDcPxgL6NdwdVdbcVGRUOUI0cZ
+ nShwOS7LgW9pVeW60+jpMB7Kk4sTeQRWFNgn4C8f4ByM7iJU1HFOugd0767GvPAHN0JI
+ rSz1jJW7AW/C9He+zUKlEMScgCGbCeZEdQFtZc7O3xFN/PizZvVYnl8BNFkMQFTtf1cM
+ M97w==
+X-Gm-Message-State: AOAM531biMlRaq1e9p7M6C/63xJaCBfgcNFXb9QiCqQSC+OHOZRcoLHc
+ MJsVg90irGbyGOlSfG1bgx6O9EVlGXu1cg==
+X-Google-Smtp-Source: ABdhPJx5z06yOO/dVvqBTmqIyNPPf7EHlaNNrtUHsSLv53vz0fzfRn7C41nwXMIDK/kl4gnfbCnXmA==
+X-Received: by 2002:a05:6402:1544:b0:428:b439:9a01 with SMTP id
+ p4-20020a056402154400b00428b4399a01mr19513246edx.201.1652425857813; 
+ Fri, 13 May 2022 00:10:57 -0700 (PDT)
+Received: from t450s.fritz.box (ip4d15a215.dynamic.kabel-deutschland.de.
+ [77.21.162.21]) by smtp.gmail.com with ESMTPSA id
+ ml13-20020a170906cc0d00b006f3ef214e63sm443183ejb.201.2022.05.13.00.10.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 13 May 2022 00:10:57 -0700 (PDT)
+From: Heiko Thiery <heiko.thiery@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 13 May 2022 09:10:43 +0200
+Message-Id: <20220513071046.18618-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] fs/oci: entrypoint and command are
- space-separated lists
+Subject: [Buildroot] [PATCH 0/4] Bump netopeer2 and dependencies to actual
+ upstream version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,76 +87,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin@orange.com, Sergio Prado <sergio.prado@e-labworks.com>,
- Matthew Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: Heiko Thiery <heiko.thiery@gmail.com>,
+ =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+netopeer2 has the depedency to the other packages and expects to also have
+these updated.
 
-Hi,
+Heiko Thiery (4):
+  package/libyang: bump verstion to 2.0.164
+  package/sysrepo: bump version to 2.1.42
+  package/libnetconf2: bump version to 2.1.7
+  package/netopeer2: bump version to 2.1.16
 
- >> It indeed makes sense to split the entrypoint on white space, but
- >> for
- >> the args (cmd) it exchanges one set of breakage for another -
- >> E.G. sometimes people want to run sh -c "my shell logic goes here".
- >> I'm not sure what to do about that though. As you are not quoting
- >> the
- >> arguments you cannot even set it to stuff without white space but ith
- >> shell characters, E.G. ENTRYPOINT="sh -c" ARGS="date;date" as the ; gets
- >> enterpreted in the call to sloci-image.
-
- >  Do you mean
-
- > BR2_TARGET_ROOTFS_OCI_ENTRYPOINT="sh -c"
- > BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS="'date; date'"
-
-Yes, exactly.
-
-
- > ? Yeah, we'd need a full quoting/splitting parse to support that. In
- > this particular case
-
- > BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS="date\;date"
-
- > would work, but it's kludgy.
-
- >  I do think it would help to put quotes around the options:
-
- > OCI_SLOCI_IMAGE_OPTS += $(patsubst %,--cmd '%',$(OCI_ENTRYPOINT_ARGS))
-
-Yes, agreed. That atleast fixes the special shell characters (except for
-' itself).
-
-
- >  That way, the usual cases (which Yann put in the commit message) are
- >  covered, but weird stuff is still possible as long as you pay
- > attention to spaces.
-
- >  If you really need spaces, you can still use $(space). So, after
- >  adding single quotes, the following should work:
-
- > BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS="date;$(space)date"
-
-Nice and easy for newcomers :P
-
-
- >> In general I'm not sure how much value the oci support brings over just
- >> doing:
- >> docker import -c '<Dockerfile command>' output/images/rootfs.tar
- >> <name>:<tag>
-
- >  That requires a docker daemon installed on the host, while
- >  sloci-image can be run as normal user without any host support
- > required.
-
-s/docker import/podman import/. With that said, wanting to build an OCI
-image and not having access docker/podman is quite unlikely I think.
+ ...IX-netopeer2-build-fails-when-buildi.patch | 34 ---------------
+ package/libnetconf2/libnetconf2.hash          |  2 +-
+ package/libnetconf2/libnetconf2.mk            |  2 +-
+ package/libyang/libyang.hash                  |  2 +-
+ package/libyang/libyang.mk                    |  2 +-
+ package/netopeer2/netopeer2.hash              |  2 +-
+ package/netopeer2/netopeer2.mk                |  6 ++-
+ ...uild-with-musl-libc-fails-due-to-unk.patch | 42 -------------------
+ package/sysrepo/sysrepo.hash                  |  2 +-
+ package/sysrepo/sysrepo.mk                    |  6 ++-
+ 10 files changed, 16 insertions(+), 84 deletions(-)
+ delete mode 100644 package/libnetconf2/0001-libnetconf2-BUGFIX-netopeer2-build-fails-when-buildi.patch
+ delete mode 100644 package/sysrepo/0001-sysrepo-BUGFIX-build-with-musl-libc-fails-due-to-unk.patch
 
 -- 
-Bye, Peter Korsgaard
+2.20.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
