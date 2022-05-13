@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F108C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4736C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:14:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24BDA83F8D;
-	Fri, 13 May 2022 22:14:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9BFB83F9A;
+	Fri, 13 May 2022 22:14:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ToHUDP7EtjKZ; Fri, 13 May 2022 22:14:36 +0000 (UTC)
+	with ESMTP id 3Y8qQMDdlM3d; Fri, 13 May 2022 22:14:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1EB9783F84;
-	Fri, 13 May 2022 22:14:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 147DA1BF868
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD20783F86;
+	Fri, 13 May 2022 22:14:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AAFEB1BF868
  for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 293C3405E0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9ADBD4095F
  for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xpcTgG2FbLVW for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id scEagtkTVFrw for <buildroot@lists.busybox.net>;
  Fri, 13 May 2022 22:11:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59AE640930
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99F5540980
  for <buildroot@buildroot.org>; Fri, 13 May 2022 22:11:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3257F85E29; Fri, 13 May 2022 22:00:45 +0000 (UTC)
+ id 706E785E25; Fri, 13 May 2022 22:00:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Fri, 13 May 2022 23:54:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf629c4e32a95977c1297b57fd636867eec5a063
-X-Git-Newrev: bb40efa6f443207fc98b195f6c89795c290aadc1
+X-Git-Oldrev: 0eca74ff6eaf2ed2ef8eb63084a179fb15679d26
+X-Git-Newrev: 8fb909b74f7310dd9a47e65c19e3c5c8a4e64f2d
 X-Patchwork-Hint: ignore
-Message-Id: <20220513220045.3257F85E29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/open62541: bump to version 1.2.4
+Message-Id: <20220513220045.706E785E25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cryptography: bump to
+ version 37.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,78 +59,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb40efa6f443207fc98b195f6c89795c290aadc1
+commit: https://git.buildroot.net/buildroot/commit/?id=8fb909b74f7310dd9a47e65c19e3c5c8a4e64f2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch | 8 ++++----
- package/open62541/Config.in                                     | 2 +-
- package/open62541/open62541.hash                                | 2 +-
- package/open62541/open62541.mk                                  | 2 +-
- 4 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-cryptography/python-cryptography.hash | 2 +-
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch b/package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch
-index f912445b7f..9e6dda26e1 100644
---- a/package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch
-+++ b/package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch
-@@ -29,16 +29,16 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
- index bc839f27..963460d0 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -292,6 +292,8 @@ if(UA_FORCE_CPP)
-+@@ -257,6 +257,8 @@ if(UA_FORCE_CPP)
-      add_definitions(-D__STDC_CONSTANT_MACROS) # We need the UINT32_C define
-  endif()
-  
- +option(UA_FORCE_WERROR "Force compilation with -Werror" ON)
- +
-  #General PubSub setup
-- option(UA_ENABLE_PUBSUB "Enable the PubSub protocol" OFF)
-- 
--@@ -589,7 +591,9 @@ if(NOT UA_FORCE_CPP AND (CMAKE_COMPILER_IS_GNUCC OR "x${CMAKE_C_COMPILER_ID}" ST
-+ option(UA_ENABLE_PUBSUB "Enable publish/subscribe" OFF)
-+ mark_as_advanced(UA_ENABLE_PUBSUB)
-+@@ -526,7 +528,9 @@ if(NOT UA_FORCE_CPP AND (CMAKE_COMPILER_IS_GNUCC OR "x${CMAKE_C_COMPILER_ID}" ST
-      check_add_cc_flag("-Wall")      # Warnings
-      check_add_cc_flag("-Wextra")    # More warnings
-      check_add_cc_flag("-Wpedantic") # Standard compliance
-diff --git a/package/open62541/Config.in b/package/open62541/Config.in
-index a835595e83..220fb3dfa6 100644
---- a/package/open62541/Config.in
-+++ b/package/open62541/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_OPEN62541
- 	help
- 	  open62541 is an open source and free implementation of OPC UA.
- 
--	  http://open62541.org
-+	  https://open62541.org/
- 
- if BR2_PACKAGE_OPEN62541
- 
-diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
-index 5aa340ac18..3257bfe477 100644
---- a/package/open62541/open62541.hash
-+++ b/package/open62541/open62541.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c59c85b519a18350f5014b6e7b7545ee144ceeb15094e75b0b7ecec7dce43dd0  open62541-v1.2.2-br1.tar.gz
-+sha256  e2e1b8e6285c4fd6d8e07f37d61a8728376d525e169fadb3d61918fa6a7c271a  open62541-v1.2.4-br1.tar.gz
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 627c29e95b..87bd3449b7 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index 0649207426..b51945a928 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after vendoring
+-sha256  d7718568773810e42481f51f810919f5501ad252300f4d1b36bb5127b2f6050d  cryptography-37.0.1.tar.gz
++sha256  b8ebc656926a88931d1822e3060001e288ecc7712feaa9fe7e1ddacd675c0a57  cryptography-37.0.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
+ sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 7714b9ad88..99eba3eeab 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--OPEN62541_VERSION = v1.2.2
-+OPEN62541_VERSION = v1.2.4
- OPEN62541_SITE_METHOD = git
- OPEN62541_SITE = https://github.com/open62541/open62541.git
- OPEN62541_GIT_SUBMODULES = YES
+-PYTHON_CRYPTOGRAPHY_VERSION = 37.0.1
++PYTHON_CRYPTOGRAPHY_VERSION = 37.0.2
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/3d/5f/addb8b91fd356792d28e59a8275fec833323cb28604fb3a497c35d7cf0a3
++PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/51/05/bb2b681f6a77276fc423d04187c39dafdb65b799c8d87b62ca82659f9ead
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
