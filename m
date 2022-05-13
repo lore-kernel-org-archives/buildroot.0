@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66604C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:13:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2386C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:14:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E62D83F84;
-	Fri, 13 May 2022 22:13:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE921403E9;
+	Fri, 13 May 2022 22:14:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9hhXjW-wDP28; Fri, 13 May 2022 22:13:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X8nc-tXWMl9n; Fri, 13 May 2022 22:14:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40C0383F80;
-	Fri, 13 May 2022 22:13:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 45C621BF868
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7F0A4091A;
+	Fri, 13 May 2022 22:14:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5888C1C11A9
  for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4FEFD41499
+ by smtp3.osuosl.org (Postfix) with ESMTP id A643F606E7
  for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v3AYaKBMrkw8 for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 22:11:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id egl_1XZwJOpd for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 22:11:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F8EC4095F
- for <buildroot@buildroot.org>; Fri, 13 May 2022 22:11:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F22760806
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 22:11:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 27FE085E2B; Fri, 13 May 2022 22:00:45 +0000 (UTC)
+ id CCB6985E2B; Fri, 13 May 2022 22:00:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Fri, 13 May 2022 23:54:12 +0200
+Date: Fri, 13 May 2022 23:54:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a191d391382557dc2fbf9306c3126cf2bddcf7e1
-X-Git-Newrev: cf629c4e32a95977c1297b57fd636867eec5a063
+X-Git-Oldrev: 25956b29e4d63f599b9baf7298f69538ba2f22fa
+X-Git-Newrev: 1d6abde27c98a1c6d8965a1ee2aa4afce8a34c5d
 X-Patchwork-Hint: ignore
-Message-Id: <20220513220045.27FE085E2B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xr819-xradio: enable for ARM only
+Message-Id: <20220513220045.CCB6985E2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8189fs: fix big-endian builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,42 +58,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf629c4e32a95977c1297b57fd636867eec5a063
+commit: https://git.buildroot.net/buildroot/commit/?id=1d6abde27c98a1c6d8965a1ee2aa4afce8a34c5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The xradio driver is broken for kernel configurations with disabled
-power management core functionality (CONFIG_PM). The xradio package
-makefile attempts to enable all the required kernel configuration
-options, including CONFIG_PM. However certain architectures have
-no support for CONFIG_PM. Those are or1k, nios2, csky, and more.
-
-One possible fix would be to exclude those architectures in the
-package Config.in. On the other hand, the xradio driver is rarely
-used: orangepi_zero is the only such board in Buildroot. So it
-makes sense to keep it simple and enable xradio only for ARM.
-Any new xradio users will be considered on a case by case basis.
+Fix rtl8189fs builds for big-endian platforms. For this purpose remove
+default little-endian configuration option from rtl8189fs Makefile.
+Configure proper endianness using USER_EXTRA_CFLAGS instead.
 
 Fixes:
-- http://autobuild.buildroot.net/results/2ad11cd7a9ca6b694854730e46260a944e8c4bac/
+- http://autobuild.buildroot.net/results/51e95561103e40ae94f38b9bb944bdfcd4ab50ed/
+- http://autobuild.buildroot.net/results/8ac7921926ab48aeb95dc4ea20f3c9970094c71d/
+- http://autobuild.buildroot.net/results/7f0bdd03c41bcc9e567fe722ed271e5dcf210f44/
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/xr819-xradio/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ .../0001-Makefile-remove-default-endianness.patch  | 30 ++++++++++++++++++++++
+ package/rtl8189fs/rtl8189fs.mk                     |  3 ++-
+ 2 files changed, 32 insertions(+), 1 deletion(-)
 
-diff --git a/package/xr819-xradio/Config.in b/package/xr819-xradio/Config.in
-index 9d7fa4b0f1..3d2dedf29e 100644
---- a/package/xr819-xradio/Config.in
-+++ b/package/xr819-xradio/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_XR819_XRADIO
- 	bool "xr819-xradio"
- 	depends on BR2_LINUX_KERNEL
-+	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
- 	help
- 	  Wireless driver for SDIO WiFi chip XR819
+diff --git a/package/rtl8189fs/0001-Makefile-remove-default-endianness.patch b/package/rtl8189fs/0001-Makefile-remove-default-endianness.patch
+new file mode 100644
+index 0000000000..47e42415eb
+--- /dev/null
++++ b/package/rtl8189fs/0001-Makefile-remove-default-endianness.patch
+@@ -0,0 +1,30 @@
++From 480d9da302885d9e8b3d1f9c68def569e3c8a8c0 Mon Sep 17 00:00:00 2001
++From: Sergey Matyukevich <geomatsi@gmail.com>
++Date: Mon, 9 May 2022 00:17:21 +0300
++Subject: [PATCH] Makefile: remove default endianness
++
++There is no way to remove configuration options from EXTRA_CFLAGS
++without editing Makefile. So default LE configuration can not be
++conveniently replaced by BE. Remove default endianness from the
++Makefile to enable its configuration via USER_EXTRA_CFLAGS.
++
++Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
++---
++ Makefile | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index dfca305..fde4e6b 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -22,7 +22,6 @@ endif
++ 
++ EXTRA_CFLAGS += -I$(src)/include
++ 
++-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
++ EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
++ 
++ EXTRA_LDFLAGS += --strip-debug
++-- 
++2.35.1
++
+diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
+index 6031a3072c..1c398919ba 100644
+--- a/package/rtl8189fs/rtl8189fs.mk
++++ b/package/rtl8189fs/rtl8189fs.mk
+@@ -11,7 +11,8 @@ RTL8189FS_LICENSE = GPL-2.0
+ RTL8189FS_MODULE_MAKE_OPTS = \
+ 	CONFIG_RTL8189FS=m \
+ 	KVER=$(LINUX_VERSION_PROBED) \
+-	KSRC=$(LINUX_DIR)
++	KSRC=$(LINUX_DIR) \
++	USER_EXTRA_CFLAGS="-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN"
  
+ define RTL8189FS_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
