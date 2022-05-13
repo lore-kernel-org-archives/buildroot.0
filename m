@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99EA6C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 21:54:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C143C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 21:56:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CE6B60B79;
-	Fri, 13 May 2022 21:54:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8AF38415F5;
+	Fri, 13 May 2022 21:56:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vidVttVO4Le1; Fri, 13 May 2022 21:54:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5Y-61opso43A; Fri, 13 May 2022 21:56:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3743260A75;
-	Fri, 13 May 2022 21:54:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 44AEB1BF5A8
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:54:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B0EF41484;
+	Fri, 13 May 2022 21:56:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A49741BF5A8
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:56:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 40FA983F74
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:54:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92CCA60806
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:56:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s-p7-m4I6BJd for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 21:54:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7HVeCl3AtFpT for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 21:56:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0318A83F6E
- for <buildroot@buildroot.org>; Fri, 13 May 2022 21:54:40 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id kq17so18627559ejb.4
- for <buildroot@buildroot.org>; Fri, 13 May 2022 14:54:40 -0700 (PDT)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8B99C60681
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 21:56:03 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id g23so11377725edy.13
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 14:56:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=eirOpyxv8WOXDUVq5bX5454w3gVfaugzW6Xf+X4IqX8=;
- b=iPfVtWavUcyGJdDfhTZGS/mnQr6aITjqhMbXthjcN8FjD2VtYowOnBZKR2UjP50hxB
- geJ/NRxq1YIwEczTXbY5X3jEID/Eu5rv0sW01lRerD/AuEG1kas4nBj7pgNaouRiqFlg
- 1bvOUUHSbTR61cmweAdO5+1AW6IeCIEi6Nilh00/etIdQ+s0GTKEhkPshXOSI4gcA5rn
- QGYUUd6eAkT4A9JCDg4BDA3Lv3for+gHSCgyqi+I/CFGpZznlX2q4pkmiPzS2PkN4T2I
- HyXI3uOU6TS611RHlM7P80sH8scxR5urAaEWIevNxRSQlbvK2cdiTyjeT03LMg+li5gY
- 7xnQ==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=bcun/kmn0T7RQqoJE7lBiM/QJwy1ZnfigfxRCuA2hPQ=;
+ b=SYIFFD4903zOlZQyuxmhGq609OYAxnmCfpJTKUJDpI8xazMwiJrkvaNekllNJsXpNC
+ WjfoHkoMAMKk54SEMLsiUTn9M1IuakEgwEjaVD7wkqp8oV8M+HjhBoNJ9rI9o7spVdXh
+ juI+iheTEX5ismAz41DProIZdzPv34LkqnKayDBWgvYeC6YHHIgOV+ErW64nWXE71xFb
+ 7pSAAt96BDxqM8bmHozkPYUYCR/2bQ6VpRRaTcKqXwFrqPyBygwi1SKlY+shIRAwTBt2
+ FUv6W8YQhlstlT/WIzCcktv9vz8BNRq2nkSzL+r6ri8KFL2sdj06u02jlP58vcAbGVmr
+ h9gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=eirOpyxv8WOXDUVq5bX5454w3gVfaugzW6Xf+X4IqX8=;
- b=rmMWdJ+ovIGBIKEPx6c2wvAyE0Sn8BClw1Xf8fCkBXiBfBi6hD+jko+dH8rqRKV2IG
- NvclN0abqQvt+2/WIAw3MGRBmWk5VFQ6JOhh1Oa+BENTN2EoObHN/giPyYo6uQ41NLU4
- WoqwEeK7zJotAuutuE4UZTPdQ5XZBBzSJ9PLy0ychz5lHp0LzCDpruO782BfxT6kPa1Q
- 4uL51/Wxc+GH5JbLf8LT1GxVu1At9NkfFpZhMWaxlANzFmnykbeF9EW8ftO8nukZiWQB
- enxJn67hBQFS1NFe7FBTTkZ75PXqwnEq+/e/i6+W42Ke/U7QlF+POdWKExeuZbDqQzPN
- fgpQ==
-X-Gm-Message-State: AOAM530VEV8B6PYm7XJxzmNxBvxhbHk6P2+RmOo9S8DhMMhe+LyE1QdD
- CL3EfAaQ+fMYJ45dzNeQINga+NIOQ3ZdhA==
-X-Google-Smtp-Source: ABdhPJy1ZYdPdYHSfzJyGGhq80s3rbQYKw8ynyFG5J/NmnR5EHEDEoZMM5k0j2ZrM0ZmJHISMF0haQ==
-X-Received: by 2002:a17:907:7da6:b0:6f4:dc6f:1e32 with SMTP id
- oz38-20020a1709077da600b006f4dc6f1e32mr5895330ejc.614.1652478879020; 
- Fri, 13 May 2022 14:54:39 -0700 (PDT)
+ bh=bcun/kmn0T7RQqoJE7lBiM/QJwy1ZnfigfxRCuA2hPQ=;
+ b=g+2wDyHXPMVEpcp7vXiUXPKwGzd8hxM/E8+zF7rpcXaF+syOqml/7HOkOgu2YPv+D6
+ Zz0hvJvJXf0CTIHqHob7n+xGqqfR6JNeY0dG5gLfZj0LutigyX0o/e3rXQXMDgKtl3Kw
+ YKUUnaiVBMDyJbyUidNNtWGSouTDAqtnv+N/Az8JtvfpwAF6XETibaGaFYDKjVnjvwhq
+ 6PoSgG3an+3ABEjRYtxngYeSI7SphzlfJ794gZhy94l15rTGO3NSoH+13n6Qu3ufyYP2
+ Ll1hK4dLV/SLzS6jnLJp/IlCiP76ChjZXIz8dokb3H7PYVRFZ5vZIlt8TJENhVq/i8e9
+ HnYQ==
+X-Gm-Message-State: AOAM530PMUtAvDYbGsCZAgO8puM7FaUS/FhovfIF9MmtCaAxTeO8eaRe
+ u9Ed5L1Muu+mA9o4cD8ySx7vOA==
+X-Google-Smtp-Source: ABdhPJwY+ZWoJAmJ1n9nbQq7mq6uYDEXcpKF2TWuF09Xw5uURIOm4qeoYID9h0+33AdxF6fx2dG3lQ==
+X-Received: by 2002:a50:f69b:0:b0:425:e693:5d1f with SMTP id
+ d27-20020a50f69b000000b00425e6935d1fmr746899edn.272.1652478961661; 
+ Fri, 13 May 2022 14:56:01 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- gv2-20020a1709072bc200b006f3ef214df5sm1159974ejc.91.2022.05.13.14.54.38
+ v12-20020a17090651cc00b006f3ef214e17sm1163059ejk.125.2022.05.13.14.56.00
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 13 May 2022 14:54:38 -0700 (PDT)
-Message-ID: <67908613-e26b-4a00-ca95-730c19aa87dd@mind.be>
-Date: Fri, 13 May 2022 23:54:37 +0200
+ Fri, 13 May 2022 14:56:01 -0700 (PDT)
+Message-ID: <499beaa9-aa4b-6582-8a48-45fc1ecb31cf@mind.be>
+Date: Fri, 13 May 2022 23:56:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
-To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org
-References: <20220510120858.3350640-1-buildroot@heine.tech>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20220510044636.3061290-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220510120858.3350640-1-buildroot@heine.tech>
-Subject: Re: [Buildroot] [PATCH] package/boost: bump version to 1.79.0
+In-Reply-To: <20220510044636.3061290-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/git: fix build with iconv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,6 +95,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,161 +103,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 10/05/2022 14:08, Michael Nosthoff via buildroot wrote:
-> - remove upstreamed patch
-> - add patch for boost::json bug in known issues on the boost release page [0]
+On 10/05/2022 06:46, James Hilliard wrote:
+> Our libiconv shouldn't need the ICONV_OMITS_BOM workaround.
 > 
-> [0] https://www.boost.org/users/history/version_1_79_0.html
+> We also need to correctly set the iconv path so that we don't use the
+> host iconv path.
 > 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> Fixes:
+>   - http://autobuild.buildroot.net/results/027/027602a750fd0989f9861773a2c4672667590acc
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
+
+  Weird that this only comes up now - the incorrect --with-iconv has been there 
+since 9 years ago...
 
   Regards,
   Arnout
 
 > ---
->   ...stat-h-include-on-musl-based-systems.patch | 31 ---------
->   .../0001-json-array-erase-relocate.patch      | 65 +++++++++++++++++++
->   package/boost/boost.hash                      |  4 +-
->   package/boost/boost.mk                        |  2 +-
->   4 files changed, 68 insertions(+), 34 deletions(-)
->   delete mode 100644 package/boost/0001-Fix-missing-sys-stat-h-include-on-musl-based-systems.patch
->   create mode 100644 package/boost/0001-json-array-erase-relocate.patch
+>   package/git/git.mk | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/boost/0001-Fix-missing-sys-stat-h-include-on-musl-based-systems.patch b/package/boost/0001-Fix-missing-sys-stat-h-include-on-musl-based-systems.patch
-> deleted file mode 100644
-> index 9b86b816bf..0000000000
-> --- a/package/boost/0001-Fix-missing-sys-stat-h-include-on-musl-based-systems.patch
-> +++ /dev/null
-> @@ -1,31 +0,0 @@
-> -From de657e01635306085488290ea83de541ec393f8b Mon Sep 17 00:00:00 2001
-> -From: Leonardo Neumann <leonardo@neumann.dev.br>
-> -Date: Mon, 13 Dec 2021 01:07:20 -0300
-> -Subject: [PATCH] Fix missing sys/stat.h include on musl-based systems
-> -
-> -Boost 1.78.0 fails to build on musl-based systems because musl does
-> -not include sys/stat.h by default.
-> -
-> -Fixes #161 ("Boost compiler error")
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: https://github.com/boostorg/interprocess/pull/162]
-> ----
-> - include/boost/interprocess/permissions.hpp | 4 ++++
-> - 1 file changed, 4 insertions(+)
-> -
-> -diff --git a/boost/interprocess/permissions.hpp b/boost/interprocess/permissions.hpp
-> -index ab55411e..0b21a685 100644
-> ---- a/boost/interprocess/permissions.hpp
-> -+++ b/boost/interprocess/permissions.hpp
-> -@@ -29,6 +29,10 @@
-> -
-> - #include <boost/interprocess/detail/win32_api.hpp>
-> -
-> -+#else
-> -+
-> -+#include <sys/stat.h>
-> -+
-> - #endif
-> -
-> - #endif   //#ifndef BOOST_INTERPROCESS_DOXYGEN_INVOKED
-> diff --git a/package/boost/0001-json-array-erase-relocate.patch b/package/boost/0001-json-array-erase-relocate.patch
-> new file mode 100644
-> index 0000000000..899b202279
-> --- /dev/null
-> +++ b/package/boost/0001-json-array-erase-relocate.patch
-> @@ -0,0 +1,65 @@
-> +From 07d7c3b2e0f8c6b269ba167117cd3e549df2f342 Mon Sep 17 00:00:00 2001
-> +From: Vinnie Falco <vinnie.falco@gmail.com>
-> +Date: Wed, 13 Apr 2022 05:49:05 -0700
-> +Subject: [PATCH] array::erase relocates correctly
-> +
-> +fix #692
-> +
-> +Signed-off-by: Michael Nosthoff<buildroot@heine.tech>
-> +[Upstream status: https://github.com/boostorg/json/issues/692]
-> +---
-> + boost/json/impl/array.ipp |  5 ++++-
-> + test/array.cpp                    | 16 ++++++++++++++++
-> + 2 files changed, 20 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/boost/json/impl/array.ipp b/boost/json/impl/array.ipp
-> +index 4d067fb5..a2c7fd6d 100644
-> +--- a/boost/json/impl/array.ipp
-> ++++ b/boost/json/impl/array.ipp
-> +@@ -491,8 +491,11 @@ erase(
-> +     auto const p = &(*t_)[0] +
-> +         (pos - &(*t_)[0]);
-> +     destroy(p, p + 1);
-> +-    relocate(p, p + 1, 1);
-> +     --t_->size;
-> ++    if(t_->size > 0)
-> ++        relocate(p, p + 1,
-> ++            t_->size - (p -
-> ++                &(*t_)[0]));
-> +     return p;
-> + }
-> +
-> +diff --git a/libs/json/test/array.cpp b/libs/json/test/array.cpp
-> +index 1cc87566..4516cc78 100644
-> +--- a/libs/json/test/array.cpp
-> ++++ b/libs/json/test/array.cpp
-> +@@ -1269,6 +1269,21 @@ class array_test
-> +             array{nullptr, "a", "b"}));
-> +     }
-> +
-> ++    void
-> ++    testIssue692()
-> ++    {
-> ++	    array a;
-> ++	    object obj;
-> ++	    obj["test1"] = "hello";
-> ++	    a.push_back(obj);
-> ++	    a.push_back(obj);
-> ++	    a.push_back(obj);
-> ++	    a.push_back(obj);
-> ++	    a.push_back(obj);
-> ++	    while(a.size())
-> ++		    a.erase(a.begin());
-> ++    }
-> ++
-> +     void
-> +     run()
-> +     {
-> +@@ -1283,6 +1298,7 @@ class array_test
-> +         testExceptions();
-> +         testEquality();
-> +         testHash();
-> ++        testIssue692();
-> +     }
-> + };
-> +
-> diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-> index a174e414ee..0f46befc0c 100644
-> --- a/package/boost/boost.hash
-> +++ b/package/boost/boost.hash
-> @@ -1,5 +1,5 @@
-> -# From https://www.boost.org/users/history/version_1_78_0.html
-> -sha256  8681f175d4bdb26c52222665793eef08490d7758529330f98d3b29dd0735bccc  boost_1_78_0.tar.bz2
-> +# From https://www.boost.org/users/history/version_1_79_0.html
-> +sha256  475d589d51a7f8b3ba2ba4eda022b170e562ca3b760ee922c146b6c65856ef39  boost_1_79_0.tar.bz2
->   
->   # Locally computed
->   sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-> index 032ba5c820..fe86344f6a 100644
-> --- a/package/boost/boost.mk
-> +++ b/package/boost/boost.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -BOOST_VERSION = 1.78.0
-> +BOOST_VERSION = 1.79.0
->   BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
->   BOOST_SITE = https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source
->   BOOST_INSTALL_STAGING = YES
+> diff --git a/package/git/git.mk b/package/git/git.mk
+> index 0127ba5129..981a238acb 100644
+> --- a/package/git/git.mk
+> +++ b/package/git/git.mk
+> @@ -49,7 +49,8 @@ endif
+>   ifeq ($(BR2_PACKAGE_LIBICONV),y)
+>   GIT_DEPENDENCIES += libiconv
+>   GIT_CONF_ENV_LIBS += -liconv
+> -GIT_CONF_OPTS += --with-iconv=/usr/lib
+> +GIT_CONF_OPTS += --with-iconv=$(STAGING_DIR)/usr
+> +GIT_CONF_ENV += ac_cv_iconv_omits_bom=no
+>   else
+>   GIT_CONF_OPTS += --without-iconv
+>   endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
