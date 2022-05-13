@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C5EFC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 21:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B35F3C43217
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 21:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF2E5403B4;
-	Fri, 13 May 2022 21:47:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5F258405E0;
+	Fri, 13 May 2022 21:48:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3kArKclR2sBW; Fri, 13 May 2022 21:48:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E025D40207;
+	Fri, 13 May 2022 21:48:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 05CEC1C1189
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:47:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E87DE40303
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:47:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uPe-FfkMWFMy; Fri, 13 May 2022 21:47:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 530394030A;
-	Fri, 13 May 2022 21:47:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E13551BF5A8
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:47:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFA2260A6C
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 21:47:50 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M_Jq66NVbM5Z for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 21:47:49 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XWL8-vR2sVxU for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 21:47:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DC8F860806
+ by smtp4.osuosl.org (Postfix) with ESMTP id E887140300
  for <buildroot@buildroot.org>; Fri, 13 May 2022 21:47:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id A5B9B85E26; Fri, 13 May 2022 21:36:54 +0000 (UTC)
+ id AEA3B85E29; Fri, 13 May 2022 21:36:54 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 13 May 2022 23:47:28 +0200
+Date: Fri, 13 May 2022 23:47:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ca135c99395b1046cce27bb10a8010791b893271
-X-Git-Newrev: 334924192b6bf17c91e23264b32702f6285fb165
+X-Git-Oldrev: 334924192b6bf17c91e23264b32702f6285fb165
+X-Git-Newrev: d1f7af938cb51139b43a6ca640dc16eb04b46d98
 X-Patchwork-Hint: ignore
-Message-Id: <20220513213654.A5B9B85E26@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-headers: drop 5.16.x option
+Message-Id: <20220513213654.AEA3B85E29@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: default to 5.17.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,72 +58,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=334924192b6bf17c91e23264b32702f6285fb165
+commit: https://git.buildroot.net/buildroot/commit/?id=d1f7af938cb51139b43a6ca640dc16eb04b46d98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The 5.16.x series is now EOL upstream, so drop the linux-headers option and
-add legacy handling for it.
+5.15.x is getting quite old, so default to 5.17.x instead.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in.legacy                     | 7 +++++++
- linux/linux.hash                     | 1 -
- package/linux-headers/Config.in.host | 5 -----
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ linux/Config.in                      | 6 +++---
+ package/linux-headers/Config.in.host | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 806e995bd1..95b9d784d3 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/linux/Config.in b/linux/Config.in
+index 24655a2962..fd3605a559 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -28,8 +28,8 @@ choice
+ 	prompt "Kernel version"
  
- comment "Legacy options removed in 2022.05"
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (5.15)"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15 if BR2_KERNEL_HEADERS_AS_KERNEL
++	bool "Latest version (5.17)"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_17 if BR2_KERNEL_HEADERS_AS_KERNEL
  
-+config BR2_KERNEL_HEADERS_5_16
-+	bool "kernel headers version 5.16.x are no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Version 5.16.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
-+
- config BR2_KERNEL_HEADERS_4_4
- 	bool "kernel headers version 4.4.x are no longer supported"
- 	select BR2_LEGACY
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 2a96eef8d3..3190813a0c 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  22f67ef6b12ef6c0c0353be4b90b4bf4b9b18b858c16c346fa495b67ec718c99  linux-5.17.7.tar.xz
--sha256  d8060dc88f862baaae66b42a2dbc12298ed667c698eb5c55617a7786ee47bf25  linux-5.16.20.tar.xz
- sha256  888641634f9e0e38cd0efcfec92ea3c126d381b24a514740d3fe3dc9988fd7ad  linux-5.15.39.tar.xz
- sha256  f5e417b32f89318b6d0a230109a592ffd68997817463dc4692fa49ec7fe42f71  linux-5.10.115.tar.xz
- sha256  0d16d343956d311e3f4ab3f032fd626d8e6b67c0db94edd32f561407d374f2a0  linux-5.4.193.tar.xz
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (5.10.104-cip3)"
+@@ -128,7 +128,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.15.39" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.17.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.104-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.104-cip3-rt3" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5ff616fb34..afe849772a 100644
+index afe849772a..859f772624 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -56,10 +56,6 @@ config BR2_KERNEL_HEADERS_5_15
- 	bool "Linux 5.15.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_5_15
++	default BR2_KERNEL_HEADERS_5_17
+ 	help
+ 	  Select the kernel version to get headers from.
  
--config BR2_KERNEL_HEADERS_5_16
--	bool "Linux 5.16.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
--
- config BR2_KERNEL_HEADERS_5_17
- 	bool "Linux 5.17.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_17
-@@ -389,7 +385,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.193"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.115"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.39"	if BR2_KERNEL_HEADERS_5_15
--	default "5.16.20"	if BR2_KERNEL_HEADERS_5_16
- 	default "5.17.7"	if BR2_KERNEL_HEADERS_5_17
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
