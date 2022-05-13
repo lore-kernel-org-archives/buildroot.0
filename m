@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBFEEC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:13:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66604C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F4C740936;
-	Fri, 13 May 2022 22:13:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0CaVyUkovQxF; Fri, 13 May 2022 22:13:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 696954091F;
-	Fri, 13 May 2022 22:13:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2F3AC1C1189
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 433F181D7C
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E62D83F84;
+	Fri, 13 May 2022 22:13:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FNcAAzhvEuln for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9hhXjW-wDP28; Fri, 13 May 2022 22:13:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40C0383F80;
+	Fri, 13 May 2022 22:13:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 45C621BF868
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4FEFD41499
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:41 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v3AYaKBMrkw8 for <buildroot@lists.busybox.net>;
  Fri, 13 May 2022 22:11:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9480681B26
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F8EC4095F
  for <buildroot@buildroot.org>; Fri, 13 May 2022 22:11:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5D18785E25; Fri, 13 May 2022 22:00:45 +0000 (UTC)
+ id 27FE085E2B; Fri, 13 May 2022 22:00:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Fri, 13 May 2022 23:54:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5ade3ecdb8a154779c219f49175fa72e417cd7ae
-X-Git-Newrev: 5cd13ec7654e1f34f5b4063ed0d5b15f5697bd66
+X-Git-Oldrev: a191d391382557dc2fbf9306c3126cf2bddcf7e1
+X-Git-Newrev: cf629c4e32a95977c1297b57fd636867eec5a063
 X-Patchwork-Hint: ignore
-Message-Id: <20220513220045.5D18785E25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rust: add host-pkgconf dependency
+Message-Id: <20220513220045.27FE085E2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xr819-xradio: enable for ARM only
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,35 +58,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cd13ec7654e1f34f5b4063ed0d5b15f5697bd66
+commit: https://git.buildroot.net/buildroot/commit/?id=cf629c4e32a95977c1297b57fd636867eec5a063
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add host-pkgconf dependency to fix the following build failure raised
-since commit 4e3be3ae9d4c9f1b0c035eee0c923a724f9a9316:
+The xradio driver is broken for kernel configurations with disabled
+power management core functionality (CONFIG_PM). The xradio package
+makefile attempts to enable all the required kernel configuration
+options, including CONFIG_PM. However certain architectures have
+no support for CONFIG_PM. Those are or1k, nios2, csky, and more.
 
-  run pkg_config fail: "Failed to run `\"/nvmedata/autobuild/instance-6/output-1/per-package/host-rust/host/bin/pkg-config\" \"--libs\" \"--cflags\" \"openssl\"`: No such file or directory (os error 2)"
+One possible fix would be to exclude those architectures in the
+package Config.in. On the other hand, the xradio driver is rarely
+used: orangepi_zero is the only such board in Buildroot. So it
+makes sense to keep it simple and enable xradio only for ARM.
+Any new xradio users will be considered on a case by case basis.
 
 Fixes:
- - http://autobuild.buildroot.org/results/b046523960079cbf85931b8f67c3b98dd07fbbda
+- http://autobuild.buildroot.net/results/2ad11cd7a9ca6b694854730e46260a944e8c4bac/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/rust/rust.mk | 1 +
+ package/xr819-xradio/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index 6ac75f39c4..445fde70a4 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -14,6 +14,7 @@ HOST_RUST_PROVIDES = host-rustc
+diff --git a/package/xr819-xradio/Config.in b/package/xr819-xradio/Config.in
+index 9d7fa4b0f1..3d2dedf29e 100644
+--- a/package/xr819-xradio/Config.in
++++ b/package/xr819-xradio/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_XR819_XRADIO
+ 	bool "xr819-xradio"
+ 	depends on BR2_LINUX_KERNEL
++	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
+ 	help
+ 	  Wireless driver for SDIO WiFi chip XR819
  
- HOST_RUST_DEPENDENCIES = \
- 	toolchain \
-+	host-pkgconf \
- 	host-python3 \
- 	host-rust-bin \
- 	host-openssl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
