@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7769AC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:15:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 563A9C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 22:16:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 33D25403C2;
-	Fri, 13 May 2022 22:15:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cusohoT4gz1l; Fri, 13 May 2022 22:15:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D8D84093B;
-	Fri, 13 May 2022 22:15:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D8C231BF868
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1C9940980
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AF2D414C6;
+	Fri, 13 May 2022 22:16:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HpJsDE0apK-g for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FfBihpuGhZdO; Fri, 13 May 2022 22:16:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCD0341526;
+	Fri, 13 May 2022 22:16:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B1901BF868
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5E874093B
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 22:11:41 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nf19dlerd5LS for <buildroot@lists.busybox.net>;
  Fri, 13 May 2022 22:11:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A55E54098C
+ by smtp2.osuosl.org (Postfix) with ESMTP id D8EC34015A
  for <buildroot@buildroot.org>; Fri, 13 May 2022 22:11:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 7BC5185E25; Fri, 13 May 2022 22:00:45 +0000 (UTC)
+ id A38A185E29; Fri, 13 May 2022 22:00:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Fri, 13 May 2022 23:54:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8fb909b74f7310dd9a47e65c19e3c5c8a4e64f2d
-X-Git-Newrev: 4686fb32a053753f502e24c5cd980db5b71f6a2c
+X-Git-Oldrev: 4b931400a27cab4aeebbadc0caca55d41300c739
+X-Git-Newrev: a072b2c07efcbc2b8398a0c124f72ed7e0845e34
 X-Patchwork-Hint: ignore
-Message-Id: <20220513220045.7BC5185E25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-python: add setup.cfg-only
- setuptools project support
+Message-Id: <20220513220045.A38A185E29@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-service-identity: bump to
+ version 21.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,70 +59,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4686fb32a053753f502e24c5cd980db5b71f6a2c
+commit: https://git.buildroot.net/buildroot/commit/?id=a072b2c07efcbc2b8398a0c124f72ed7e0845e34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some projects have been removing their setup.py shims under the
-assumption that they are not needed due to setuptools being usable
-via pep517, however this is not actually the case as it is not
-possible to bootstrap setuptools without setup.py style builds as
-setuptools has a dependency on wheel when being used via pep517
-which is itself not installable via pep517 as that would create a
-dependency cycle between wheel and setuptools(which means wheel
-itself must use a legacy setup.py build/installation for itself).
-
-In addition our pep517 toolchain itself requires setuptools for
-building/installing dependencies, although it would appear these
-dependencies will eventually move to flit. Until this is resolved
-we must use setup.py style builds for setuptools packages.
-
-Since it is not yet possible to convert setup.py based setuptools
-builds to pep517 based setuptools builds we simply need to execute
-the setuptools shim code directly if the setup.py file is missing.
-
-See:
-https://setuptools.pypa.io/en/latest/setuptools.html#setup-cfg-only-projects
+Drop BR2_PACKAGE_PYTHON_CHARACTERISTIC runtime dependency which is no
+longer used.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pkg-python.mk | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ package/python-service-identity/Config.in                    | 1 -
+ package/python-service-identity/python-service-identity.hash | 8 ++++----
+ package/python-service-identity/python-service-identity.mk   | 6 +++---
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 452fa0d3ea..5794e3a195 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -86,6 +86,9 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
- 	$(PKG_PYTHON_ENV) \
- 	SETUPTOOLS_USE_DISTUTILS=stdlib
+diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
+index aa6d0fe715..d6ca060562 100644
+--- a/package/python-service-identity/Config.in
++++ b/package/python-service-identity/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	# python-pyopenssl -> python-cryptography
+ 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+-	select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
+ 	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
+ 	select BR2_PACKAGE_PYTHON_PYASN1_MODULES # runtime
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+diff --git a/package/python-service-identity/python-service-identity.hash b/package/python-service-identity/python-service-identity.hash
+index 9a20d08925..f648918dbd 100644
+--- a/package/python-service-identity/python-service-identity.hash
++++ b/package/python-service-identity/python-service-identity.hash
+@@ -1,5 +1,5 @@
+-# md5, sha256 from https://pypi.org/pypi/service_identity/json
+-md5	c6b8bac93e7d899a1da313a19cc6570a  service_identity-18.1.0.tar.gz
+-sha256	0858a54aabc5b459d1aafa8a518ed2081a285087f349fe3e55197989232e2e2d  service_identity-18.1.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/service-identity/json
++md5  5e5c195d8fcedc72f9068be2ad9b5a13  service-identity-21.1.0.tar.gz
++sha256  6e6c6086ca271dc11b033d17c3a8bea9f24ebff920c587da090afc9519419d34  service-identity-21.1.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	c5075126e1272b176504e36af369781a95c5c1124239da8e4f61b0f9c15a56cf  LICENSE
++sha256  c5075126e1272b176504e36af369781a95c5c1124239da8e4f61b0f9c15a56cf  LICENSE
+diff --git a/package/python-service-identity/python-service-identity.mk b/package/python-service-identity/python-service-identity.mk
+index 5330239e48..e4ae8e6889 100644
+--- a/package/python-service-identity/python-service-identity.mk
++++ b/package/python-service-identity/python-service-identity.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+PKG_PYTHON_SETUPTOOLS_CMD = \
-+	$(if $(wildcard $($(PKG)_BUILDDIR)/setup.py),setup.py,-c 'from setuptools import setup;setup()')
-+
- PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
- 	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
- 	--prefix=/usr \
-@@ -180,13 +183,13 @@ endif
- else ifeq ($$($(2)_SETUP_TYPE),setuptools)
- ifeq ($(4),target)
- $(2)_BASE_ENV = $$(PKG_PYTHON_SETUPTOOLS_ENV)
--$(2)_BASE_BUILD_CMD = setup.py build
--$(2)_BASE_INSTALL_TARGET_CMD = setup.py install --no-compile $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
--$(2)_BASE_INSTALL_STAGING_CMD = setup.py install $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
-+$(2)_BASE_BUILD_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) build
-+$(2)_BASE_INSTALL_TARGET_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install --no-compile $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
-+$(2)_BASE_INSTALL_STAGING_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
- else
- $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
--$(2)_BASE_BUILD_CMD = setup.py build
--$(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
-+$(2)_BASE_BUILD_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) build
-+$(2)_BASE_INSTALL_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
- endif
- else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
- ifeq ($(4),target)
+-PYTHON_SERVICE_IDENTITY_VERSION = 18.1.0
+-PYTHON_SERVICE_IDENTITY_SOURCE = service_identity-$(PYTHON_SERVICE_IDENTITY_VERSION).tar.gz
+-PYTHON_SERVICE_IDENTITY_SITE = https://files.pythonhosted.org/packages/9a/3d/9eb0563e066ea0540cf580695593ab079376e920016d4d1b3ff2fd8abf4b
++PYTHON_SERVICE_IDENTITY_VERSION = 21.1.0
++PYTHON_SERVICE_IDENTITY_SOURCE = service-identity-$(PYTHON_SERVICE_IDENTITY_VERSION).tar.gz
++PYTHON_SERVICE_IDENTITY_SITE = https://files.pythonhosted.org/packages/09/2e/26ade69944773df4748c19d3053e025b282f48de02aad84906d34a29d28b
+ PYTHON_SERVICE_IDENTITY_LICENSE = MIT
+ PYTHON_SERVICE_IDENTITY_LICENSE_FILES = LICENSE
+ PYTHON_SERVICE_IDENTITY_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
