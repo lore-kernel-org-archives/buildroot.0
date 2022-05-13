@@ -4,62 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59B7EC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 17:02:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 018EDC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 13 May 2022 17:55:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7BD283E95;
-	Fri, 13 May 2022 17:02:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92BB583F38;
+	Fri, 13 May 2022 17:55:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lWQ88_eA2yQt; Fri, 13 May 2022 17:02:03 +0000 (UTC)
+	with ESMTP id V2UZFDcmQa6Y; Fri, 13 May 2022 17:55:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2AC082EF0;
-	Fri, 13 May 2022 17:02:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 30C501C1189
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 17:02:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36048826FB;
+	Fri, 13 May 2022 17:55:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D930F1BF2CD
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 17:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DEBC82EF0
- for <buildroot@lists.busybox.net>; Fri, 13 May 2022 17:02:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C810860EC7
+ for <buildroot@lists.busybox.net>; Fri, 13 May 2022 17:55:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B2DsYbBRq1pi for <buildroot@lists.busybox.net>;
- Fri, 13 May 2022 17:01:59 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 39B6282725
- for <buildroot@buildroot.org>; Fri, 13 May 2022 17:01:59 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:71f3:9479:94db:16e0])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3FB4513F8AD;
- Fri, 13 May 2022 19:01:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1652461317;
- bh=GmARUxBUadp/AIEK3hCt4YnjLA4+4rnWdm9CCBxlc6o=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=mQwYQR7LOo2fUoGCZnnR8Te85F2oERs3z0AkZAqSKAvcpjan/wgU028UI2lVarNaw
- a2oANBYg4aimZXvttioWxIswYnTe3b/6cZIWybKcdjheTU6N03U0sXdfHU2ILz8Ffu
- YRamoioN6B9DWC3jkWjD4FFR7wvzCZfH5kE3dFnQpTdhWipYix6WdpeCTxiB8KD0Uq
- DDN1ay4V73V5OdvYwje1uQy3Jt7Kr75gzHAVC3G2VbzgQqg40hLLcp+GVQHpmCVjfA
- jB7osGCTdV/vTTQCMTfTiOT74+hImtKTgq7Hn56T/55wPCiTOtr1mUIZflqHTqjU+a
- fXcDopx9ibGxA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 13 May 2022 19:01:54 +0200
-Date: Fri, 13 May 2022 19:01:54 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20220513170154.GU1597494@scaer>
-References: <20220513071522.19853-1-heiko.thiery@gmail.com>
- <20220513071522.19853-2-heiko.thiery@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vvHLGAFWGt3W for <buildroot@lists.busybox.net>;
+ Fri, 13 May 2022 17:55:48 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 91F2160E2D
+ for <buildroot@buildroot.org>; Fri, 13 May 2022 17:55:48 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3EC0920007;
+ Fri, 13 May 2022 17:55:44 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1npZVw-00B6hd-82; Fri, 13 May 2022 19:55:44 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Fri, 13 May 2022 19:55:39 +0200
+Message-Id: <20220513175540.2647317-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220513071522.19853-2-heiko.thiery@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] configs/kontron_pitx_imx8m: switch to
- upstream U-Boot
+Subject: [Buildroot] [PATCH v2 1/2] package/linux-headers: drop 5.16.x option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,110 +56,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Heiko, All,
+The 5.16.x series is now EOL upstream, so drop the linux-headers option and
+add legacy handling for it.
 
-On 2022-05-13 09:15 +0200, Heiko Thiery spake thusly:
-> Switch U-Boot from vendor downstream version to upstream. Since the
-> upstream U-Boot uses binman to build the bootable binary (flash.bin) the
-> need for the iMX specifc prepare script is no longer required.
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in.legacy                     | 7 +++++++
+ linux/linux.hash                     | 1 -
+ package/linux-headers/Config.in.host | 5 -----
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  board/kontron/pitx-imx8m/genimage.cfg  |  2 +-
->  board/kontron/pitx-imx8m/post-image.sh |  3 ---
->  configs/kontron_pitx_imx8m_defconfig   | 20 +++++++++++++-------
->  3 files changed, 14 insertions(+), 11 deletions(-)
->  delete mode 100755 board/kontron/pitx-imx8m/post-image.sh
-> 
-> diff --git a/board/kontron/pitx-imx8m/genimage.cfg b/board/kontron/pitx-imx8m/genimage.cfg
-> index 4a0aa117fb..bc100b171d 100644
-> --- a/board/kontron/pitx-imx8m/genimage.cfg
-> +++ b/board/kontron/pitx-imx8m/genimage.cfg
-> @@ -5,7 +5,7 @@ image sdcard.img {
->  
->  	partition imx-boot {
->  		in-partition-table = "no"
-> -		image = "imx8-boot-sd.bin"
-> +		image = "flash.bin"
->  		offset = 33K
->  	}
->  
-> diff --git a/board/kontron/pitx-imx8m/post-image.sh b/board/kontron/pitx-imx8m/post-image.sh
-> deleted file mode 100755
-> index 3452fd4501..0000000000
-> --- a/board/kontron/pitx-imx8m/post-image.sh
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -#!/bin/sh
-> -
-> -support/scripts/genimage.sh -c ${BINARIES_DIR}/genimage.cfg
-> diff --git a/configs/kontron_pitx_imx8m_defconfig b/configs/kontron_pitx_imx8m_defconfig
-> index 8f756f5246..161b9cfe3b 100644
-> --- a/configs/kontron_pitx_imx8m_defconfig
-> +++ b/configs/kontron_pitx_imx8m_defconfig
-> @@ -3,9 +3,9 @@ BR2_aarch64=y
->  
->  # System
->  BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
-> -BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/kontron/pitx-imx8m/post-build.sh"
-> -BR2_ROOTFS_POST_IMAGE_SCRIPT="board/kontron/pitx-imx8m/post-image.sh"
-> -BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/pitx-imx8mq.dtb"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/pitx-imx8m/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
->  
->  # Kernel
->  BR2_LINUX_KERNEL=y
-> @@ -37,12 +37,18 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://gitlab.kontron.com/imx/u-boot-imx/-/archive/PITX-IMX8M-R12/u-boot-imx-PITX-IMX8M-R12.tar.gz"
-> -BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pitx-imx8m"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_pitx_imx8m"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN=y
-> +BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
->  BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> -BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
->  BR2_TARGET_UBOOT_SPL=y
->  
->  # Required host tools to create the SD/eMMC image
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 806e995bd1..95b9d784d3 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2022.05"
+ 
++config BR2_KERNEL_HEADERS_5_16
++	bool "kernel headers version 5.16.x are no longer supported"
++	select BR2_LEGACY
++	help
++	  Version 5.16.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
++
+ config BR2_KERNEL_HEADERS_4_4
+ 	bool "kernel headers version 4.4.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 2a96eef8d3..3190813a0c 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  22f67ef6b12ef6c0c0353be4b90b4bf4b9b18b858c16c346fa495b67ec718c99  linux-5.17.7.tar.xz
+-sha256  d8060dc88f862baaae66b42a2dbc12298ed667c698eb5c55617a7786ee47bf25  linux-5.16.20.tar.xz
+ sha256  888641634f9e0e38cd0efcfec92ea3c126d381b24a514740d3fe3dc9988fd7ad  linux-5.15.39.tar.xz
+ sha256  f5e417b32f89318b6d0a230109a592ffd68997817463dc4692fa49ec7fe42f71  linux-5.10.115.tar.xz
+ sha256  0d16d343956d311e3f4ab3f032fd626d8e6b67c0db94edd32f561407d374f2a0  linux-5.4.193.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 5ff616fb34..afe849772a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -56,10 +56,6 @@ config BR2_KERNEL_HEADERS_5_15
+ 	bool "Linux 5.15.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
+ 
+-config BR2_KERNEL_HEADERS_5_16
+-	bool "Linux 5.16.x kernel headers"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
+-
+ config BR2_KERNEL_HEADERS_5_17
+ 	bool "Linux 5.17.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_17
+@@ -389,7 +385,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.4.193"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.115"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.39"	if BR2_KERNEL_HEADERS_5_15
+-	default "5.16.20"	if BR2_KERNEL_HEADERS_5_16
+ 	default "5.17.7"	if BR2_KERNEL_HEADERS_5_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
