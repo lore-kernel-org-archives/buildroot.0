@@ -1,88 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F6A6C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C798C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:48:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 41F4840C5F;
-	Sat, 14 May 2022 09:48:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FEC141622;
+	Sat, 14 May 2022 09:48:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MvyEjgePrgnA; Sat, 14 May 2022 09:48:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HhGzADGWVyeK; Sat, 14 May 2022 09:48:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D94840A62;
-	Sat, 14 May 2022 09:48:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D8D1E1BF85D
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:47:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D022440861;
+	Sat, 14 May 2022 09:48:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8044B1BF85D
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:48:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B107D83FA9
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:47:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F10360B42
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:48:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id apYYZ8Hfvbzg for <buildroot@lists.busybox.net>;
- Sat, 14 May 2022 09:47:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ck1EBTjszVSV for <buildroot@lists.busybox.net>;
+ Sat, 14 May 2022 09:48:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C3BA483F9B
- for <buildroot@busybox.net>; Sat, 14 May 2022 09:47:55 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id dk23so20297857ejb.8
- for <buildroot@busybox.net>; Sat, 14 May 2022 02:47:55 -0700 (PDT)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7719D60AE5
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 09:48:09 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id gh6so20422988ejb.0
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 02:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=KvsBvTGpohtfL8pkl8EVleoo3D+oFt7D1UQA+nVqmFU=;
- b=MCkwq9G4bxSjUnmgBlIZ2pxT4D3F4VjeOtmLQeIKohLvW0I43SNoRvgX1JqQfKonk6
- 2Eyjx9Q9IXK/Qu6VXIiNLLyEj/FpxfErPGEJt494W6vbmsgF1LeyRXOzHqfbcp+6SBTf
- UoNI5i1iKFIQqfkdFAs6hO2e98GqR+enVdA4xvZcuC7/3cdBgfOM/xChHqy8tnrHQM8q
- GGIIluGRf0ll1mI5f1tXS1vLwWareHkLGqg3/1GR1TWbkUkkHvi5lKa1Fqp7SxDpBygB
- 0hQHTeg2wfFuv3WgR7ZbTPgiddK8s0qGmHB0zxVusnM/In1A3pD3cTsy+LXg9ngvSq8S
- TFfw==
+ bh=JZPP6FqQBflS2N4dVsEclb1s1GNY13oQB5UEMhlGjZo=;
+ b=UDkEBlMv7SkJBZK2m3XVJBlLkaqiOXKyrmBqQ2xDEjocVCk2QI0TtWjYwXvLrL02uS
+ GanEwODIq+vG+0RIZTfOE5UEyG12dfEkR5ZUyTBb/Y5SkQU6PNFrq8C+gWNANnXRIpXe
+ 8hj7sZvroKuDOXS+zpgfRP0+ghfGYXHSN+KuQ2MoVUhvRCjMBDkCwKkwQH0VeNKabYKh
+ mNRlGor38Mv0miTS2cThZy269tseR3SAY8e8LMybFcJIru9Omp+NDOdYqd5W33YThL37
+ tUpqySMgk8n47ngC4LeknKo3B1ji+fMyxYcD76drVEff2m6r+c7QvLFMTenuLzP6F7Q6
+ qXRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=KvsBvTGpohtfL8pkl8EVleoo3D+oFt7D1UQA+nVqmFU=;
- b=4DMbAgAAVe5e4q3OcKTXK2SznRoc8IwqdGy/IMHvObKBSjsQKgghDlIw+MVlqqyeAN
- tGvYj3uDE1jhWFwDgmcuVBSNCsdaidqPkVIGm1k5Qm9Sxmpt4HJ7Z6R3uCOaTkQI1ebQ
- tPuolVrsSaNxcukG5vKeMEMuqh9D/olDiI2qFuO8NKCedNygiQh8IH/unEP1oF5qp9LZ
- tet4w4xctlCf2+paJX2oXDhfBJWk+PduYrK9kG1+jNxLpUvmILq+D8TkgSDqzrNlBhB/
- mdjYLwml8+gUKZuNJPUZLIONssoCBlW+zTzb5ta24O/hrDvsD7KCEyj7D+rQ+A/nV9A7
- 4TgQ==
-X-Gm-Message-State: AOAM533Kjiu2LrN09glCUsAu6JNdwRrbvV9D8tt4rzjI20xJ5j2IvvRX
- GTvm+Z8rAmV8SYOh/Oy1pMgC3ZPVRwr1mQ==
-X-Google-Smtp-Source: ABdhPJySWWfylDF/aleghtfEVx14lb7LXIiXuuL6w1KQ+sstaRc/ep4jRUM7U2CDKpXTHIs8mfSQIQ==
-X-Received: by 2002:a17:907:3da1:b0:6f4:2d69:75f6 with SMTP id
- he33-20020a1709073da100b006f42d6975f6mr7739296ejc.389.1652521673821; 
- Sat, 14 May 2022 02:47:53 -0700 (PDT)
+ bh=JZPP6FqQBflS2N4dVsEclb1s1GNY13oQB5UEMhlGjZo=;
+ b=rfXXsCfuie1uw/hOFgqj/KOwF7vJ3tqsNW3S83qIrPZauVrtnwGtYM7kgwzNn2Q/P5
+ wHoVsssNMhMWYY9WKCi+jwyXpqg5aXUkasXFR0NLJgy9R+XEExioINmrSvSNf8WEWoUf
+ 4cwWHCMKCUPklSEA8Lh2NmGVqMtoBHARCSoXOYQOh6V5xeFBMIofsjY0QIRCi3eX9UZq
+ kh4Klg4LB7uSlK6Pc/H4bK7xzJmqamag4lz8U1hA3MpASvyBKcPvSuxz1fgl2P88/Wtm
+ HH58cfQSc1JY1uOSulQCWKqk4X2Q+qeBSgV5iztdWArt7+5YdP7P9kFEuTvRcW3WDneG
+ 9BZg==
+X-Gm-Message-State: AOAM533Yl3PZ8ijQOnO0EtsleDwqQQergUftksKoJ2OJagmhCq41+Ftm
+ YbBTaY3fz19GXq4aER0awNdpddK5COf5mg==
+X-Google-Smtp-Source: ABdhPJxhZiG/W5wceswxsBzwIvcjC6rWFXFkx7irBV/GsxJn9Cgx7BkrNMGthZRgcrDPZaMv+o3Xjg==
+X-Received: by 2002:a17:907:7d93:b0:6fe:21d9:4230 with SMTP id
+ oz19-20020a1709077d9300b006fe21d94230mr688379ejc.42.1652521687392; 
+ Sat, 14 May 2022 02:48:07 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- j29-20020a170906535d00b006f3ef214e64sm1544472ejo.202.2022.05.14.02.47.53
+ h11-20020aa7c94b000000b00428a42815aasm2032332edt.0.2022.05.14.02.48.06
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 14 May 2022 02:47:53 -0700 (PDT)
-Message-ID: <8ca0c224-5735-eb73-f801-0e8b99968889@mind.be>
-Date: Sat, 14 May 2022 11:47:51 +0200
+ Sat, 14 May 2022 02:48:07 -0700 (PDT)
+Message-ID: <bef4fafb-b02a-f09c-a1db-90e980278dfe@mind.be>
+Date: Sat, 14 May 2022 11:48:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
-To: Baruch Siach <baruch@tkos.co.il>, buildroot@busybox.net
-References: <6588b9e983ce137243bb72afad96bab8a595bf32.1652362968.git.baruch@tkos.co.il>
+To: Thomas Claveirole <thomas.claveirole@green-communications.fr>,
+ buildroot@buildroot.org
+References: <20220512143647.49989-1-thomas.claveirole@green-communications.fr>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <6588b9e983ce137243bb72afad96bab8a595bf32.1652362968.git.baruch@tkos.co.il>
-Subject: Re: [Buildroot] [PATCH 1/2] package/pciutils: requires C99
+In-Reply-To: <20220512143647.49989-1-thomas.claveirole@green-communications.fr>
+Subject: Re: [Buildroot] [PATCH 1/1] package/vuejs-router: bump to version
+ 4.0.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,38 +103,41 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 12/05/2022 15:42, Baruch Siach via buildroot wrote:
-> Since version 3.8.0 pciutils requires C99 toolchain as documented in its
-> README file. Use the gnu99 variant because the code requires the GNU
-> extended getopt(3) and the 'asm' keyword.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/1c9988105b64594185a4002ca046aec8b87ea141/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On 12/05/2022 16:36, Thomas Claveirole wrote:
+> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 
-  Applied both to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/pciutils/pciutils.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   package/vuejs-router/vuejs-router.hash | 2 +-
+>   package/vuejs-router/vuejs-router.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-> index c1445968b91c..140276dbc47e 100644
-> --- a/package/pciutils/pciutils.mk
-> +++ b/package/pciutils/pciutils.mk
-> @@ -13,7 +13,7 @@ PCIUTILS_LICENSE_FILES = COPYING
->   PCIUTILS_MAKE_OPTS = \
->   	CROSS_COMPILE="$(TARGET_CROSS)" \
->   	HOST="$(NORMALIZED_ARCH)-linux" \
-> -	OPT="$(TARGET_CFLAGS)" \
-> +	OPT="$(TARGET_CFLAGS) -std=gnu99" \
->   	LDFLAGS="$(TARGET_LDFLAGS)" \
->   	DNS=no \
->   	STRIP=
+> diff --git a/package/vuejs-router/vuejs-router.hash b/package/vuejs-router/vuejs-router.hash
+> index fe270a6062..ba8f09b508 100644
+> --- a/package/vuejs-router/vuejs-router.hash
+> +++ b/package/vuejs-router/vuejs-router.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  6adff85db2045a092ba4bf37e95cdc3c661cfe4f3e7f7cbc36082a57c05c6365  vue-router-4.0.14.tgz
+> +sha256  59d6f3e237e68953fc4e4e22463b487b9fde5733b3ff3392eec488c0cc84976b  vue-router-4.0.15.tgz
+>   sha256  9c0015250f592a09d7787efc07152afcf661fff6bda2554359f6d00987828c02  LICENSE
+> diff --git a/package/vuejs-router/vuejs-router.mk b/package/vuejs-router/vuejs-router.mk
+> index 397a78e1a7..562c698157 100644
+> --- a/package/vuejs-router/vuejs-router.mk
+> +++ b/package/vuejs-router/vuejs-router.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -VUEJS_ROUTER_VERSION = 4.0.14
+> +VUEJS_ROUTER_VERSION = 4.0.15
+>   VUEJS_ROUTER_SOURCE = vue-router-$(VUEJS_ROUTER_VERSION).tgz
+>   VUEJS_ROUTER_SITE = https://registry.npmjs.org/vue-router/-
+>   VUEJS_ROUTER_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
