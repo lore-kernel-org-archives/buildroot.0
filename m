@@ -4,55 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD8B9C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 18:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA830C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 18:35:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F7CB83148;
-	Sat, 14 May 2022 18:00:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3EC4683E3F;
+	Sat, 14 May 2022 18:35:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EOMl430H_SQa; Sat, 14 May 2022 18:00:17 +0000 (UTC)
+	with ESMTP id B4B_t1El7Muk; Sat, 14 May 2022 18:35:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A80A982AAA;
-	Sat, 14 May 2022 18:00:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47F0C8346C;
+	Sat, 14 May 2022 18:35:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D7DA71BF3DE
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 17:56:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0458F1BF584
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 18:35:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9346414CB
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 17:56:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D8F3C410D1
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 18:35:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RNJE08X0OZwy for <buildroot@lists.busybox.net>;
- Sat, 14 May 2022 17:56:21 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4AD90414E4
- for <buildroot@buildroot.org>; Sat, 14 May 2022 17:56:20 +0000 (UTC)
-Received: from fwd86.dcpf.telekom.de (fwd86.aul.t-online.de [10.223.144.112])
- by mailout10.t-online.de (Postfix) with SMTP id 8ACAD6624;
- Sat, 14 May 2022 19:56:17 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.4.164]) by fwd86.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1npvzy-2G5rq10; Sat, 14 May 2022 19:56:14 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41714)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1npvzx-0005N1-L7;
- Sat, 14 May 2022 19:56:13 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Sat, 14 May 2022 19:56:06 +0200
-Message-Id: <20220514175612.2510884-13-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220514175612.2510884-1-bernd.kuhls@t-online.de>
-References: <20220514175612.2510884-1-bernd.kuhls@t-online.de>
+ with ESMTP id 5a4HqO-cCuqy for <buildroot@lists.busybox.net>;
+ Sat, 14 May 2022 18:35:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E14BD40908
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 18:35:38 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ a14-20020a7bc1ce000000b00393fb52a386so8676623wmj.1
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 11:35:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+ :content-disposition:in-reply-to;
+ bh=Hzf/JjfPX98PhKiaO1d9aViSijgZL9H9Cs+lTkf8V8k=;
+ b=KmsGxsFIajvXulkWvMZNlEMcGp+Z722V7a6zrYk08aePCzr9njETbeMA7dqq8frfOd
+ y1MKBrbDsWgz4Xfjm2WmuVF8B2wrh5UZR59Nx0u+DUiF/quJPT9FhsPAjB8GoHB8lazh
+ h1bCxQaUIvWzJUbi054Bcnxa5mqOnRajz4NReqkfg9ojDfmNsw1k8jwbFbprGNsiCbEX
+ y428XG8CropQuV/CRtpPErjEGeSGQxbGrWGjxVTTFDiv36tvGVT8Fg2Qe7lF6Cphf79z
+ aiRgOHQWtgVU1Bdq+1S90+8BgYZO5a+el3RUhzvksGB1L5/WB8q7OhU9J4t7sKM4q5k6
+ 6i4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+ :references:mime-version:content-disposition:in-reply-to;
+ bh=Hzf/JjfPX98PhKiaO1d9aViSijgZL9H9Cs+lTkf8V8k=;
+ b=mXzM0In8smisr+FQZUwe+WM+dqYm7p1rLczLS1KF8hMzwt1S8jQMvo7M0j0CPexzrr
+ te3oKNDd/ypnccaNFa3R7Ud9Hy50NyqAy0vDcI/D2sl9CKsYIMLzziWspkcLkeW+Dp9+
+ 4x1qpaIPRK3nr88RH3npy8VylLSMsftVllTlShJbf5YoBb2a8Ak8NX+xSwC5vt+CO4bh
+ uh5ys2i4ZCNkdryIgxMGroHHjDEihcZlASg5d/2VVrCKJClwGZn3sv35MUFCj9osjhBL
+ ZU4+JR/XbxnpLduBuq5Ay758MPHZXZEbkFQlomI93yYby1gNx+7fdSDkriRJ31qSvVNV
+ V4aw==
+X-Gm-Message-State: AOAM532+6fzccWVGFBrQfW/9Pcog9Iq2MW1AsDmSngBB4c7gjn++NqMR
+ 8onncHiWPRHhPwt/9XjWGNg=
+X-Google-Smtp-Source: ABdhPJx2OXlykCzVVb3+K2F6hfd8lRLFHRG2MDeTytZwcFuOqNaoCabHJI6LZheGtzmQHopSz5JpYg==
+X-Received: by 2002:a7b:ce82:0:b0:394:2514:6f07 with SMTP id
+ q2-20020a7bce82000000b0039425146f07mr9883240wmj.56.1652553336915; 
+ Sat, 14 May 2022 11:35:36 -0700 (PDT)
+Received: from pevik (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id
+ h18-20020a1ccc12000000b003943558a976sm5599168wmb.29.2022.05.14.11.35.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 14 May 2022 11:35:36 -0700 (PDT)
+Date: Sat, 14 May 2022 20:35:33 +0200
+From: Petr Vorel <petr.vorel@gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <Yn/2dekYOuHiq1yw@pevik>
+References: <20220510163249.21272-1-petr.vorel@gmail.com>
+ <20220510163249.21272-3-petr.vorel@gmail.com>
+ <91d3a296-4c11-4f31-d44c-4860ead80498@mind.be>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1652550974-000116DC-91CE67B4/0/0 CLEAN NORMAL
-X-TOI-MSGID: 28902910-943c-4b3e-b7be-0898666333bf
-Subject: [Buildroot] [PATCH 13/19]
- package/x11r7/xdriver_xf86-video-openchrome: bump version to 0.6.225
+Content-Disposition: inline
+In-Reply-To: <91d3a296-4c11-4f31-d44c-4860ead80498@mind.be>
+Subject: Re: [Buildroot] [PATCH 2/2] musl: backport netlink macro fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +91,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>, Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../xdriver_xf86-video-openchrome.hash                          | 2 +-
- .../xdriver_xf86-video-openchrome.mk                            | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Arnout,
 
-diff --git a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
-index 8c1c5ac91b..d8cc080a32 100644
---- a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
-+++ b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  05beeaff42ffbe41f37dbed0d6fe94d1829a9dd847cdab4068d107cfc485a62b  xdriver_xf86-video-openchrome-5e158c76eb3a0fb0db207229697139f8da2faaae-br1.tar.gz
-+sha256  037bebbe31bcca2b4f3adeefccd2a64a30e2924946a6c6646c5829f7362212ec  xdriver_xf86-video-openchrome-ab03de703b91c7e0fd3e4d1ca06ad5add7f077a1-br1.tar.gz
- sha256  1fde58bce5cff8c32e9a0a80bfa3e60213a2767954e30a367127d5afa2884ca2  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
-index 0e04f59466..e8001004bc 100644
---- a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
-+++ b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_OPENCHROME_VERSION = 5e158c76eb3a0fb0db207229697139f8da2faaae
-+XDRIVER_XF86_VIDEO_OPENCHROME_VERSION = ab03de703b91c7e0fd3e4d1ca06ad5add7f077a1
- XDRIVER_XF86_VIDEO_OPENCHROME_SITE = https://anongit.freedesktop.org/git/openchrome/xf86-video-openchrome.git
- XDRIVER_XF86_VIDEO_OPENCHROME_SITE_METHOD = git
- XDRIVER_XF86_VIDEO_OPENCHROME_LICENSE = MIT
--- 
-2.30.2
+> > diff --git a/dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch b/dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch
 
+>  This should be in package/musl, not dl/musl. Also, subject should be
+> package/musl: ...
+Uh.
+
+>  Applied both to master with that fixed.
+
+I'm sorry for silly mistakes, thanks for fixing them.
+
+Kind regards,
+Petr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
