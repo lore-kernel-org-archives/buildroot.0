@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0D37C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:48:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8846C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:49:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9AEA741622;
-	Sat, 14 May 2022 09:48:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0C1560F0A;
+	Sat, 14 May 2022 09:49:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZDaH8GgiFQL2; Sat, 14 May 2022 09:48:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58369403C5;
-	Sat, 14 May 2022 09:48:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C558A1BF85D
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:48:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C275460B42
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:48:55 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OHTWNgKz2JPD for <buildroot@lists.busybox.net>;
- Sat, 14 May 2022 09:48:55 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BV0CJuhyc3MB; Sat, 14 May 2022 09:49:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD8A260B42;
+	Sat, 14 May 2022 09:49:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 418A71BF85D
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:49:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2CC1241680
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:49:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3j2ADBz-lhLM for <buildroot@lists.busybox.net>;
+ Sat, 14 May 2022 09:49:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 009BB60AE5
- for <buildroot@buildroot.org>; Sat, 14 May 2022 09:48:54 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id be20so12511293edb.12
- for <buildroot@buildroot.org>; Sat, 14 May 2022 02:48:54 -0700 (PDT)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 55AA14055D
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 09:49:07 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id s11so8779726edy.6
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 02:49:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=Ym1oYRjUFn8kl7it6ynOdO00BoQ5/bBEySRSHo1YQfc=;
- b=DmkJP9Lcmz66NmGnEMNF9Stov2qAT5kKtE+IhkdOfPNUD1oeofxkboi3OcLq8ltWqx
- 5cLR50xaDpZsyCQd0ghQbBARjtL/mwonIKgqPUxQ2jSmWx8rxIoRceIqKTYAMXhmnlQP
- 2KEURKIp7OV+Sf0YGCIDVYNke59oLzLtxadUqAYpHymZX7KF0Plj0tRJq5QHP/NH2zyo
- SdaGI1P5Zr3XGF89cfvQd6hLLZyJwoI8a6Hs5AEPTrB+WlPbO0Iu/nzGEBBwWYHJ4ron
- s/f/0sTUdwfiFgFU55PinsYmcOJEnZtwBFHEBSTrFP7wx06IR3syz2Cda8KY/M6cLtF8
- yxCw==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=y6BoJJOYMxMnm1jtbcxnlKjzYxpa3h39kakTPMeJYww=;
+ b=aKTaXybLY8hRHaC8tU4JDiydkFAwlNlO7klyZwYAuiXoCePb0cQqI6boJ7Mbu8Ag+g
+ Uw4mWZNBHxWlrBcckPPWVvf6GmmkXI2Y7MjPWdGF2hzPgisOSkgAgnN0uTO+mD/R5VAg
+ eHfWQr3xhLb8foTLvVI/mpgQXJS3ja5paJL2bJLbb0DiUyIiRfU922BMjOTT8dUGE2HZ
+ xeyZ+5Q6qPMqkNA6s61s91t/SOuMTHef3hsggUq8t9Qhux44bIlvpRrPokUCXTD2PQ1N
+ BRnrPARso4Pl8jEhtdTuUyxjL1H6AMjz9haBrvpDCyGbYhwyZ33tkW4Zqh9X1vT7e44D
+ x4fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=Ym1oYRjUFn8kl7it6ynOdO00BoQ5/bBEySRSHo1YQfc=;
- b=PxdQo8MBCTTYVuGh9PL47C2RHEKiRq1Hk1z2t4S8630QU6W8HMOLDhhwqpfb68W1wM
- Zw7Q36VJkR3hJAOrvwJxhK06wlcUqAS/Sl4lT7eHpvluGx5usAAPlo1oCLuveiaeEOI2
- 36geb1P6P0izmgCTDDvIUhVgiNbP83hXWsgBla41DYwLtfM3CWNvOU5j40TbmL0AlJFE
- hzxRBFMQRHsnVryS177xjeTev7RcoF8vlPmHSga90Ydtm34NBXnuQmClVLxObnp9gHDV
- +CtAWBOiiubadvBb/zweWQXg2Rbp43nOh/5A8ZAI783K6x0pCAMKzPsLFL1049Th6/4e
- yEUw==
-X-Gm-Message-State: AOAM530d37PTIWnbFXxQ5eqmc4mxaOCG2wa5nbVbW/CcToUc63fZ/Vea
- OAp/ypjFDorBhpoYSD6tr05gThtJm3BcTg==
-X-Google-Smtp-Source: ABdhPJyDt2XCaPPV6OuGBBrrDV+LhYH7DjMmzkMBKjD6LHSq7eUUWo6EcoTIuoD0bfrrwHecaV9wTQ==
-X-Received: by 2002:a05:6402:f1d:b0:42a:a08a:c7d9 with SMTP id
- i29-20020a0564020f1d00b0042aa08ac7d9mr76781eda.159.1652521733238; 
- Sat, 14 May 2022 02:48:53 -0700 (PDT)
+ bh=y6BoJJOYMxMnm1jtbcxnlKjzYxpa3h39kakTPMeJYww=;
+ b=fEhFrnAu+WZueAcY4d8FGI3Ah8ecxki8a4zffTEA7X8YAsn2QiFBkzko7rzmzrDADr
+ XdGYrUP+2kk/2dR17DGenpbYQR81lKb7sy83PW7gnBZHVeL+Jd4KTNTBLPIFtRK+fXrN
+ NXJoXzDmdg5Pe+Hs/ye0MXOhXcO0y9XxOQGjUC6/AnIGhxxQgnsBf4ZvXC9trtkUE4zb
+ O9FWqRfW0Jo9WXCZtod2IIAxZAr04LD/sXS8PmGtFfD2E4osDwSRLr73Ee2LNSQv1jkE
+ KO4MK9RucSj5RY8dlJY3R9pMx1NbnYTnuN47gmyhSH1lfDlpI+BVZNLC07/1ooQl1h3B
+ DKGw==
+X-Gm-Message-State: AOAM5337/73zXr1Iz85aZ9sOkfEf/GAunytbmSeXafE1BycK8Mf0qQqu
+ +YWVtBlJHIY2ySNve0N7gkR6Sg==
+X-Google-Smtp-Source: ABdhPJyA+MGwKdhNoPspxogeGeBVk58hdLzhuypraN2eXtyrT1ROOFuisLd6+ryHOkvwgJK+V5q4fQ==
+X-Received: by 2002:a05:6402:2204:b0:426:34f1:1d2d with SMTP id
+ cq4-20020a056402220400b0042634f11d2dmr2959645edb.335.1652521745488; 
+ Sat, 14 May 2022 02:49:05 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- qz24-20020a170907681800b006f3ef214e68sm1494305ejc.206.2022.05.14.02.48.52
+ en8-20020a17090728c800b006f3ef214e0bsm1586605ejc.113.2022.05.14.02.49.04
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 14 May 2022 02:48:52 -0700 (PDT)
-Message-ID: <8fa10c1b-5342-db2d-584e-cbe43f8b3de8@mind.be>
-Date: Sat, 14 May 2022 11:48:51 +0200
+ Sat, 14 May 2022 02:49:05 -0700 (PDT)
+Message-ID: <45b465f4-6f74-2efc-18e8-b6328c818291@mind.be>
+Date: Sat, 14 May 2022 11:49:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
 To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20220512205732.2739449-1-bernd.kuhls@t-online.de>
+References: <20220512203435.1735055-1-bernd.kuhls@t-online.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220512205732.2739449-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for nut
+In-Reply-To: <20220512203435.1735055-1-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH 1/1] package/nut: fix typo in comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,6 +95,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,7 +103,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 12/05/2022 22:57, Bernd Kuhls wrote:
+On 12/05/2022 22:34, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
   Applied to master, thanks.
@@ -110,21 +112,22 @@ On 12/05/2022 22:57, Bernd Kuhls wrote:
   Arnout
 
 > ---
->   DEVELOPERS | 1 +
->   1 file changed, 1 insertion(+)
+>   package/nut/nut.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 53efd608f5..ea68ba10d4 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -406,6 +406,7 @@ F:	package/libyuv/
->   F:	package/mesa3d/
->   F:	package/minidlna/
->   F:	package/mjpg-streamer/
-> +F:	package/nut/
->   F:	package/perl-crypt-openssl-guess/
->   F:	package/perl-crypt-openssl-random/
->   F:	package/perl-crypt-openssl-rsa/
+> diff --git a/package/nut/nut.mk b/package/nut/nut.mk
+> index abb6433559..98891225a4 100644
+> --- a/package/nut/nut.mk
+> +++ b/package/nut/nut.mk
+> @@ -62,7 +62,7 @@ else
+>   NUT_CONF_OPTS += --without-cgi
+>   endif
+>   
+> -# nut-scanner needs libltdl, which is a wrapper arounf dlopen/dlsym,
+> +# nut-scanner needs libltdl, which is a wrapper around dlopen/dlsym,
+>   # so is not available for static-only builds.
+>   # There is no flag to directly enable/disable nut-scanner, it's done
+>   # via the --enable/disable-libltdl flag.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
