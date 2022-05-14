@@ -1,46 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18B35C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:54:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B952C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 12:37:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D79ED60F15;
-	Sat, 14 May 2022 09:54:50 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dHRtjC6jEAJg; Sat, 14 May 2022 09:54:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A194D60F0A;
-	Sat, 14 May 2022 09:54:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BC3451BF85D
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:50:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9B8C83FB5
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:50:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D8758130D;
+	Sat, 14 May 2022 12:37:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tkni6yfBGqfr for <buildroot@lists.busybox.net>;
- Sat, 14 May 2022 09:50:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DE3B683FBD
- for <buildroot@buildroot.org>; Sat, 14 May 2022 09:50:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8BF328376C; Sat, 14 May 2022 09:39:44 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sat, 14 May 2022 11:44:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4a762bf7f1b5753730d73ccac9b059f79c81387
-X-Git-Newrev: 814ed3896f62373f5e91978e3713642c2b6e85a9
-X-Patchwork-Hint: ignore
-Message-Id: <20220514093944.8BF328376C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/aircrack-ng: bump to version 1.7
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yrWGd9OwwuOx; Sat, 14 May 2022 12:37:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 126EE812E3;
+	Sat, 14 May 2022 12:37:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C6811BF831
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 12:36:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4B02400AA
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 12:36:57 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kHJatHzVXSNC for <buildroot@lists.busybox.net>;
+ Sat, 14 May 2022 12:36:56 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F08CE40342
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 12:36:55 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id d5so14598174wrb.6
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 05:36:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=4S1T7sjWK4gHqRUXjMZsuxxWwEyPx07ja2iICnBGH7k=;
+ b=iE5HAuGqIag/9j9U0vvNSGIlNO8bG1k7I50rGTFUFI868z8FqBmSOEaav8og+EH/Ic
+ y8tpPobLRZnZ70iPO2O/DG7zd8Iyk73snmPFRmwSKDaETcNxKv37ZYRbPjcRRJuMQ7y9
+ FdG4NbJTBh1XJuj4A22D3o+1a3REEtc+HIx2Jab04NwL73dFlmNmCcUjBgUjPmv9otZ5
+ VGJ1z+T0Gro36hP052K9PuxFJZpUNkPuFKkMhoIpwfIJwOB/CSpD7MvKmxIoH29wihbY
+ xQd/iOTVe7bglDDI3eCoaVs8r3szoN1drcVKImVRNfmAyKGKFEwIhcDauWV+BL14Y1PU
+ gMDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=4S1T7sjWK4gHqRUXjMZsuxxWwEyPx07ja2iICnBGH7k=;
+ b=rRcCnwPhxVvluYF46HXSe5e3mIKj1HwtCX4+ngIC3BCNCHthETy5ciMzwgDThs6cxL
+ a+D1XohKJl0JuU16oNHEmCzw1kURXEBFEE8TXgY4yQ/ky4OmZWt4XE/PrKXMgCJlEVay
+ Yqvto/nWSajyuIod5k2HL0a9IMgEpuJNz9lHA+nHbEGD39rfxkefxrOhnvbQg+syd4t4
+ /VSdzp9nRcF23PmfI5KuzaWlKPjL7phFCALZ5c4v16ZHPC/17yjFgJwOYn3AurQc3g/L
+ yR8W8PDbFRAZRgaxTNFZIXkIfB7jdl2gPpwzC1Id2IcFp5ILnLJ30IlL5d9NnS5q6PJa
+ 9heQ==
+X-Gm-Message-State: AOAM5303Jv7IhuY/MkFhhQw8RV6yKamwNrgZVJHbbInXEe9mP8hL4tKM
+ /fywpnRksO7rjy/XgCHw/Vo=
+X-Google-Smtp-Source: ABdhPJypd+Sa5ETjHVS+4Tgqo161Qr7am5wsFUy3HG1eHyFoVFMrqYTgaf6ukAVnkoqmJ4RiHDIIJQ==
+X-Received: by 2002:a5d:43d2:0:b0:20c:b986:a337 with SMTP id
+ v18-20020a5d43d2000000b0020cb986a337mr7125132wrr.445.1652531813981; 
+ Sat, 14 May 2022 05:36:53 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id
+ q11-20020adf9dcb000000b0020c5253d8cbsm4580464wre.23.2022.05.14.05.36.52
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 14 May 2022 05:36:53 -0700 (PDT)
+Message-ID: <e2817957-ded6-1873-c027-c912af2e45e0@gmail.com>
+Date: Sat, 14 May 2022 14:36:51 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To: =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>, buildroot@buildroot.org
+References: <20220514055312.2038383-1-clg@kaod.org>
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20220514055312.2038383-1-clg@kaod.org>
+Subject: Re: [Buildroot] [PATCH] configs/qemu_ppc64le_powernv8: use linux
+ kernel 5.17.7 and binutils 2.36.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,211 +94,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Gerome Burlats <gerome.burlats@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=814ed3896f62373f5e91978e3713642c2b6e85a9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- Drop patches (already in version)
-- Update indentation in hash file (two spaces)
-
-https://aircrack-ng.blogspot.com/2022/05/aircrack-ng-17.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../0001-Expand-packed-definition.patch            | 26 --------
- .../aircrack-ng/0002-Fix-duplicated-symbols.patch  | 74 ----------------------
- ...pto-crypto.c-fx-build-with-libressl-3.5.0.patch | 35 ----------
- package/aircrack-ng/aircrack-ng.hash               |  6 +-
- package/aircrack-ng/aircrack-ng.mk                 |  2 +-
- 5 files changed, 4 insertions(+), 139 deletions(-)
-
-diff --git a/package/aircrack-ng/0001-Expand-packed-definition.patch b/package/aircrack-ng/0001-Expand-packed-definition.patch
-deleted file mode 100644
-index f0c033a1aa..0000000000
---- a/package/aircrack-ng/0001-Expand-packed-definition.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From d4496006ac1e0c99908108b998ae39afb0658733 Mon Sep 17 00:00:00 2001
--From: Joseph Benden <joe@benden.us>
--Date: Tue, 7 Jul 2020 11:42:40 -0700
--Subject: [PATCH] Expand __packed definition.
--
--Signed-off-by: Joseph Benden <joe@benden.us>
--[Retrieved from:
--https://github.com/aircrack-ng/aircrack-ng/commit/d4496006ac1e0c99908108b998ae39afb0658733]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- lib/radiotap/radiotap.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/radiotap/radiotap.h b/lib/radiotap/radiotap.h
--index 57f784b8d..bb5a41dfc 100644
----- a/lib/radiotap/radiotap.h
--+++ b/lib/radiotap/radiotap.h
--@@ -56,7 +56,7 @@ struct ieee80211_radiotap_header {
-- 	 * @it_present: (first) present word
-- 	 */
-- 	uint32_t it_present;
---} __packed;
--+} __attribute__((__packed__));
-- 
-- /* version is always 0 */
-- #define PKTHDR_RADIOTAP_VERSION	0
-diff --git a/package/aircrack-ng/0002-Fix-duplicated-symbols.patch b/package/aircrack-ng/0002-Fix-duplicated-symbols.patch
-deleted file mode 100644
-index f181580808..0000000000
---- a/package/aircrack-ng/0002-Fix-duplicated-symbols.patch
-+++ /dev/null
-@@ -1,74 +0,0 @@
--From f6f1396807607f5649d20631db517cfca3a1f5c4 Mon Sep 17 00:00:00 2001
--From: Joseph Benden <joe@benden.us>
--Date: Tue, 7 Jul 2020 11:44:40 -0700
--Subject: [PATCH] Fix duplicated symbols.
--
--Signed-off-by: Joseph Benden <joe@benden.us>
--[Retrieved from:
--https://github.com/aircrack-ng/aircrack-ng/commit/f6f1396807607f5649d20631db517cfca3a1f5c4]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/airodump-ng/airodump-ng.c                 | 2 --
-- src/airventriloquist-ng/airventriloquist-ng.c | 6 +++---
-- src/tkiptun-ng/tkiptun-ng.c                   | 4 ++--
-- 3 files changed, 5 insertions(+), 7 deletions(-)
--
--diff --git a/src/airodump-ng/airodump-ng.c b/src/airodump-ng/airodump-ng.c
--index 3ae6994dd..e72bc88e2 100644
----- a/src/airodump-ng/airodump-ng.c
--+++ b/src/airodump-ng/airodump-ng.c
--@@ -92,8 +92,6 @@
-- #include "radiotap/radiotap_iter.h"
-- 
-- struct devices dev;
---uint8_t h80211[4096] __attribute__((aligned(16)));
---uint8_t tmpbuf[4096] __attribute__((aligned(16)));
-- 
-- static const unsigned char llcnull[] = {0, 0, 0, 0};
-- 
--diff --git a/src/airventriloquist-ng/airventriloquist-ng.c b/src/airventriloquist-ng/airventriloquist-ng.c
--index ac6b7647e..267d95540 100644
----- a/src/airventriloquist-ng/airventriloquist-ng.c
--+++ b/src/airventriloquist-ng/airventriloquist-ng.c
--@@ -173,7 +173,7 @@ static struct local_options
-- } lopt;
-- 
-- struct devices dev;
---struct wif *_wi_in, *_wi_out;
--+extern struct wif *_wi_in, *_wi_out;
-- 
-- struct ARP_req
-- {
--@@ -195,8 +195,8 @@ struct APt
-- };
-- 
-- unsigned long nb_pkt_sent;
---u_int8_t h80211[4096];
---static u_int8_t tmpbuf[4096];
--+extern u_int8_t h80211[4096];
--+extern u_int8_t tmpbuf[4096];
-- 
-- static int tcp_test(const char * ip_str, const short port)
-- {
--diff --git a/src/tkiptun-ng/tkiptun-ng.c b/src/tkiptun-ng/tkiptun-ng.c
--index dc67f5d58..43db0bc23 100644
----- a/src/tkiptun-ng/tkiptun-ng.c
--+++ b/src/tkiptun-ng/tkiptun-ng.c
--@@ -267,7 +267,7 @@ static struct local_options
-- 
-- // unused, but needed for link
-- struct devices dev;
---struct wif *_wi_in, *_wi_out;
--+extern struct wif *_wi_in, *_wi_out;
-- 
-- struct ARP_req
-- {
--@@ -289,7 +289,7 @@ struct APt
-- };
-- 
-- unsigned long nb_pkt_sent;
---unsigned char h80211[4096];
--+extern unsigned char h80211[4096];
-- static unsigned char srcbuf[4096];
-- static char strbuf[512];
-- static int alarmed;
-diff --git a/package/aircrack-ng/0003-lib-crypto-crypto.c-fx-build-with-libressl-3.5.0.patch b/package/aircrack-ng/0003-lib-crypto-crypto.c-fx-build-with-libressl-3.5.0.patch
-deleted file mode 100644
-index da1549df5b..0000000000
---- a/package/aircrack-ng/0003-lib-crypto-crypto.c-fx-build-with-libressl-3.5.0.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From cbfe47193bbab1f82fafb4b83c3d159a0f1fe03d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 3 May 2022 01:34:41 +0200
--Subject: [PATCH] lib/crypto/crypto.c: fx build with libressl >= 3.5.0 (#2310)
--
--Fix the following build failure with libressl >= 3.5.0:
--
--lib/crypto/crypto.c: In function 'calc_mic':
--lib/crypto/crypto.c:203:2: error: variable 'ctx' has initializer but incomplete type
--  203 |  HMAC_CTX ctx = {0};
--      |  ^~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/d8444dada84a54205273ac627d3e4f4692a55364
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/aircrack-ng/aircrack-ng/commit/cbfe47193bbab1f82fafb4b83c3d159a0f1fe03d]
-----
-- lib/crypto/crypto.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/crypto/crypto.c b/lib/crypto/crypto.c
--index df2c1bf41..52bc5e5ac 100644
----- a/lib/crypto/crypto.c
--+++ b/lib/crypto/crypto.c
--@@ -196,7 +196,7 @@ void calc_mic(struct AP_info * ap,
-- 	int i;
-- 	unsigned char pke[100];
-- #if defined(USE_GCRYPT) || OPENSSL_VERSION_NUMBER < 0x10100000L                \
---	|| defined(LIBRESSL_VERSION_NUMBER)
--+	|| (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
-- #define HMAC_USE_NO_PTR
-- #endif
-- 
-diff --git a/package/aircrack-ng/aircrack-ng.hash b/package/aircrack-ng/aircrack-ng.hash
-index 990c3ef563..3fb6de986b 100644
---- a/package/aircrack-ng/aircrack-ng.hash
-+++ b/package/aircrack-ng/aircrack-ng.hash
-@@ -1,6 +1,6 @@
- # From http://www.aircrack-ng.org/downloads.html
--sha1 ffeb4816476e7b329dc0c154f1aa4a30ad171beb aircrack-ng-1.6.tar.gz
--md5  22ddc85549b51ed0da0931d01ef215e5 aircrack-ng-1.6.tar.gz
-+sha1  bd43a35281c9c81d958b95aa76b4404c29f904ff  aircrack-ng-1.7.tar.gz
-+md5  a918ea7146f91d8c799fb770c38f4bec  aircrack-ng-1.7.tar.gz
- 
- # Hash for license file:
--sha256 fc51fd3a97223f2fd47b057202d4a6b0daaedf23b5a1f5ff8723c192fc1e021d LICENSE
-+sha256  fc51fd3a97223f2fd47b057202d4a6b0daaedf23b5a1f5ff8723c192fc1e021d  LICENSE
-diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
-index 95cda7c5a6..6ce738bbab 100644
---- a/package/aircrack-ng/aircrack-ng.mk
-+++ b/package/aircrack-ng/aircrack-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AIRCRACK_NG_VERSION = 1.6
-+AIRCRACK_NG_VERSION = 1.7
- AIRCRACK_NG_SITE = http://download.aircrack-ng.org
- AIRCRACK_NG_LICENSE = GPL-2.0+
- AIRCRACK_NG_LICENSE_FILES = LICENSE
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpMZSAxNC8wNS8yMDIyIMOgIDA3OjUzLCBDw6lkcmljIExlIEdvYXRlciBhIMOpY3Jp
+dMKgOgo+IHBwYzY0IG9yIHBvd2VybnYgTGludXggZGVmY29uZmlnIGZhaWwgdG8gYnVpbGQgd2l0
+aCBnY2MgMTEgYW5kL29yCj4gYmludXRpbHMgMi4zNyBbMV0gOgo+IAo+ICAgQ0MgICAgICBrZXJu
+ZWwva2V4ZWNfZmlsZS5vCj4gICBDYW5ub3QgZmluZCBzeW1ib2wgZm9yIHNlY3Rpb24gMTA6IC50
+ZXh0LnVubGlrZWx5Lgo+ICAga2VybmVsL2tleGVjX2ZpbGUubzogZmFpbGVkCj4gCj4gUGF0Y2hl
+cyBoYXZlIGJlZW4gc2VudCB1cHN0cmVhbSBhbmQgc2hvdWxkIHJlYWNoIExpbnV4IDUuMTguIFVu
+dGlsCj4gdGhlbiwgYnVtcCBrZXJuZWwgdmVyc2lvbiB0byB0aGUgbGF0ZXN0IHN1cHBvcnRlZCBp
+biBidWlsZHJvb3QgYW5kCj4gbGltaXQgYmludXRpbHMgdG8gMi4zNi4xIHdoaWNoIGRvZXNuJ3Qg
+cmFpc2UgdGhlIGlzc3VlLgo+IAo+IFsxXSBodHRwczovL2dpdGh1Yi5jb20vbGludXhwcGMvaXNz
+dWVzL2lzc3Vlcy8zODgKClRoaXMgYWxzbyBmaXhlcyBxZW11IHBwYzY0IGRlZmNvbmZpZ3MgdGVz
+dCBpbiBnaXRsYWI6Cmh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8t
+L2pvYnMvMjQ0NTc5Mzg5MQpodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJv
+b3QvLS9qb2JzLzI0NDU3OTM4OTIKaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVp
+bGRyb290Ly0vam9icy8yNDQ1NzkzODkzCgo+IAo+IFNpZ25lZC1vZmYtYnk6IEPDqWRyaWMgTGUg
+R29hdGVyIDxjbGdAa2FvZC5vcmc+Cj4gLS0tCj4gIGNvbmZpZ3MvcWVtdV9wcGM2NGxlX3Bvd2Vy
+bnY4X2RlZmNvbmZpZyB8IDUgKysrLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygr
+KSwgMiBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X3BwYzY0bGVf
+cG93ZXJudjhfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X3BwYzY0bGVfcG93ZXJudjhfZGVmY29u
+ZmlnCj4gaW5kZXggYTc4NDY5NWRkZjA2Li44ZGU0Y2Y1MTg5YjUgMTAwNjQ0Cj4gLS0tIGEvY29u
+Zmlncy9xZW11X3BwYzY0bGVfcG93ZXJudjhfZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9xZW11
+X3BwYzY0bGVfcG93ZXJudjhfZGVmY29uZmlnCj4gQEAgLTMsNiArMyw3IEBAIEJSMl9wb3dlcnBj
+NjRsZT15Cj4gIEJSMl9wb3dlcnBjX3Bvd2VyOD15Cj4gIAo+ICAjIFN5c3RlbQo+ICtCUjJfQklO
+VVRJTFNfVkVSU0lPTl8yXzM2X1g9eQoKSGF2ZSB5b3UgY29uc2lkZXJlZCBhZGRpbmcgdGhlIHBh
+dGNoIGluIGJvYXJkL3FlbXUvcHBjNjQtKi9wYXRjaGVzL2xpbnV4IGluc3RlYWQKb2YgZG93bmdy
+YWRpbmcgYmludXRpbHMgdmVyc2lvbj8KCk90aGVyIHBwYzY0IGRlZmNvbmZpZyBkb2Vzbid0IHNl
+ZW1zIHRvIHRyaWdnZXIgdGhpcyBpc3N1ZToKZnJlZXNjYWxlX3QxMDQwZDRyZGJfZGVmY29uZmln
+OkJSMl9wb3dlcnBjNjQ9eQpmcmVlc2NhbGVfdDIwODBfcWRzX3JkYl9kZWZjb25maWc6QlIyX3Bv
+d2VycGM2ND15CnFlbXVfcHBjNjRfZTU1MDBfZGVmY29uZmlnOkJSMl9wb3dlcnBjNjQ9eQoKQmVz
+dCByZWdhcmRzLApSb21haW4KCgo+ICBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0iaHZj
+MCIKPiAgQlIyX1NZU1RFTV9ESENQPSJldGgwIgo+ICAKPiBAQCAtMTUsMTIgKzE2LDEyIEBAIEJS
+Ml9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIKPiAg
+QlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICAKPiAgIyBM
+aW51eCBoZWFkZXJzIHNhbWUgYXMga2VybmVsCj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVB
+REVSU19DVVNUT01fNV8xNT15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNU
+T01fNV8xNz15Cj4gIAo+ICAjIEtlcm5lbAo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJ
+TlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZF
+UlNJT05fVkFMVUU9IjUuMTUuMTgiCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05f
+VkFMVUU9IjUuMTcuNyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9InBvd2VybnYiCj4g
+IEJSMl9MSU5VWF9LRVJORUxfVk1MSU5VWD15Cj4gIAoKX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
+YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
+by9idWlsZHJvb3QK
