@@ -4,76 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3B4DC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 21:46:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 663D8C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 21:47:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6711460D91;
-	Sat, 14 May 2022 21:46:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17D7D60D91;
+	Sat, 14 May 2022 21:47:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SaecXtQZm57s; Sat, 14 May 2022 21:46:19 +0000 (UTC)
+	with ESMTP id 3GZRE63rXln2; Sat, 14 May 2022 21:47:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6905E60E14;
-	Sat, 14 May 2022 21:46:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 97C7F1BF616
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 21:46:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26A8760A6A;
+	Sat, 14 May 2022 21:47:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 91E3D1BF616
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 21:47:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8324060A6A
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 21:46:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DF6882611
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 21:47:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FQ_kuhXvzdZ7 for <buildroot@lists.busybox.net>;
- Sat, 14 May 2022 21:46:15 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BC55B60806
- for <buildroot@buildroot.org>; Sat, 14 May 2022 21:46:15 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id f4so12352198iov.2
- for <buildroot@buildroot.org>; Sat, 14 May 2022 14:46:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=W2nunrLvxpp80zrUrTooQ5Z6n6O1xKvASkAo7AXGWVI=;
- b=bpNvWgKYXzs63W+rJkSc8bO61DSaeSyjFi4BIVcmJ6XEyp9uJ4HVb6LzbkG+RZyF+V
- 8eliDopWYcUzGwui89VF3jtoDZyl0VJ1lGypS5IsCt9n0+A0bjqSDpnIgwA07tBqeAk7
- biVseERavIy7MZ7Vj+1jn6/EeP9FkeLtxOQcOj63KHl/z2z9z7jKfsH3OhAJjpouZJDx
- He38xZg5WT5Koy/0/UQFJMb2kdZMw/kZj8apsou7qxS41HhuXTi7SxTTB4rMweaAfmuB
- VJO6MnifqiNdmpPe+B3tq0rnqdd1Z5fnMsNdHKaG2TONINUjj6pcQQXxMayOsc2AdRmI
- r7vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=W2nunrLvxpp80zrUrTooQ5Z6n6O1xKvASkAo7AXGWVI=;
- b=f3BAHmRfG0ZD5KT/2WzYOg6YDfLwryjchDoI2JW4iLPkBNc6p3Bjci0LF6LlTHfKGp
- NuMfPNPsXs0y2xs06u1Wcv+eB7w7yMkwp83UBtyFCtuPNRZwPcjs3/KbtpkXyb5RMARb
- POe/ve8Cpzplp81tzifrScqjQJaB31e1LQTGnnummpFc7SeDRItRFY5l87mAoFw+tdNq
- pwAIwCibGcTcyJ3AIRjNV1A+btMXoLd/6STxx7LDWqxftrRofrkkG1yaJlZHIKIUoHob
- 2g9Nf90PrJGjd1vIho1kvKKh/6C0BDfFGcdsQRh/rU23TCDYfIDebo4kUkSHyBjtmSXF
- CDSQ==
-X-Gm-Message-State: AOAM530hWb3T4Mgzv02c9BGN+dKP1n8jytxczJ2ZZ/VlM1qNXouVGcEW
- ZrDrq92SmCuIS9AflkuncyVSDY+UeSU=
-X-Google-Smtp-Source: ABdhPJxqWyOWx43/FBRsDKXkj7VHteiozs+XOe4aJCMYNDsnT2aPrnfTigxKKh6UaSYETFIRHHLR/A==
-X-Received: by 2002:a05:6602:160e:b0:64f:8c93:6a40 with SMTP id
- x14-20020a056602160e00b0064f8c936a40mr5048055iow.8.1652564774412; 
- Sat, 14 May 2022 14:46:14 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-134-20.hlrn.qwest.net.
- [97.118.134.20]) by smtp.gmail.com with ESMTPSA id
- k16-20020a5d91d0000000b0065aab053448sm1599881ior.21.2022.05.14.14.46.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 May 2022 14:46:14 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yN3L42B8qN6c for <buildroot@lists.busybox.net>;
+ Sat, 14 May 2022 21:47:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE5DB81C38
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 21:47:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 54B1785DAB; Sat, 14 May 2022 21:36:18 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 May 2022 15:46:12 -0600
-Message-Id: <20220514214612.3221647-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: allow overriding
- KCONFIG_PROBABILITY
+Date: Sat, 14 May 2022 23:06:06 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c42d2c34a2782fd15371b38c4d3d7348a3859727
+X-Git-Newrev: 97324175c0e5cbf5457a9f5a80a1bce13aadd81a
+X-Patchwork-Hint: ignore
+Message-Id: <20220514213618.54B1785DAB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swupdate: bump to version 2022.05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,69 +52,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Tweaking this variable should allow us to get better coverage of
-packages with larger dependency trees.
+commit: https://git.buildroot.net/buildroot/commit/?id=97324175c0e5cbf5457a9f5a80a1bce13aadd81a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop libubootenv and efibootmgr dependencies which are now
+optional runtime dependencies.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+ package/swupdate/swupdate.hash |  2 +-
+ package/swupdate/swupdate.mk   | 16 +---------------
+ 2 files changed, 2 insertions(+), 16 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 60ef8739cc..13be613691 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -615,7 +615,7 @@ def gen_config(args):
-         make_rand = [
-             "make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-             "KCONFIG_SEED=0x%s" % hexlify(os.urandom(4)).decode("ascii").upper(),
--            "KCONFIG_PROBABILITY=%d" % randint(1, 20),
-+            "KCONFIG_PROBABILITY=%d" % args.probability,
-             "randpackageconfig" if args.toolchains_csv else "randconfig"
-         ]
-         subprocess.check_call(make_rand)
-@@ -635,6 +635,21 @@ def gen_config(args):
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+index e431ecf40b..638b586e8a 100644
+--- a/package/swupdate/swupdate.hash
++++ b/package/swupdate/swupdate.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  4d078e57bb91e17025ee8cb1bb54c25532e8d2dbe329bba6a7a0328ac34a07e3  swupdate-2021.11.tar.gz
++sha256  1e819f71b19626bde1a4906ced39d3406ca240b458d3c4a998bd9c7333eba260  swupdate-2022.05.tar.gz
+ sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
+ sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
+ sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 065ae772ba..b2f50d2b71 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- if __name__ == '__main__':
-     import argparse
-+
-+    class Range(argparse.Action):
-+        def __init__(self, minimum=None, maximum=None, *args, **kwargs):
-+            self.min = minimum
-+            self.max = maximum
-+            kwargs["metavar"] = "[%d-%d]" % (self.min, self.max)
-+            super(Range, self).__init__(*args, **kwargs)
-+
-+        def __call__(self, parser, namespace, value, option_string=None):
-+            if not (self.min <= value <= self.max):
-+                msg = 'invalid choice: %r (choose from [%d-%d])' % \
-+                    (value, self.min, self.max)
-+                raise argparse.ArgumentError(self, msg)
-+            setattr(namespace, self.dest, value)
-+
-     parser = argparse.ArgumentParser(description="Generate a random configuration")
-     parser.add_argument("--outputdir", "-o",
-                         help="Output directory (relative to current directory)",
-@@ -642,6 +657,10 @@ if __name__ == '__main__':
-     parser.add_argument("--buildrootdir", "-b",
-                         help="Buildroot directory (relative to current directory)",
-                         type=str, default='.')
-+    parser.add_argument("--probability", "-p",
-+                        help="Override the KCONFIG_PROBABILITY value",
-+                        type=int, action=Range, minimum=0, maximum=100,
-+                        default=randint(1, 20))
+-SWUPDATE_VERSION = 2021.11
++SWUPDATE_VERSION = 2022.05
+ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
+ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
+@@ -32,13 +32,6 @@ else
+ SWUPDATE_MAKE_ENV += HAVE_LIBEXT2FS=n
+ endif
  
-     toolchains_csv = parser.add_mutually_exclusive_group(required=False)
-     toolchains_csv.add_argument("--toolchains-csv",
--- 
-2.25.1
-
+-ifeq ($(BR2_PACKAGE_EFIBOOTMGR),y)
+-SWUPDATE_DEPENDENCIES += efibootmgr
+-SWUPDATE_MAKE_ENV += HAVE_LIBEBGENV=y
+-else
+-SWUPDATE_MAKE_ENV += HAVE_LIBEBGENV=n
+-endif
+-
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
+ SWUPDATE_DEPENDENCIES += json-c
+ SWUPDATE_MAKE_ENV += HAVE_JSON_C=y
+@@ -158,13 +151,6 @@ define SWUPDATE_SET_SYSTEMD
+ endef
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
+-SWUPDATE_DEPENDENCIES += libubootenv
+-SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=y
+-else
+-SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=n
+-endif
+-
+ ifeq ($(BR2_PACKAGE_WOLFSSL),y)
+ SWUPDATE_DEPENDENCIES += wolfssl
+ SWUPDATE_MAKE_ENV += HAVE_WOLFSSL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
