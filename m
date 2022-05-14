@@ -4,87 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2050BC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:31:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7EC1C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:46:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4E6E60F00;
-	Sat, 14 May 2022 09:31:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62E3160F06;
+	Sat, 14 May 2022 09:46:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YbWn8Z3FrOiR; Sat, 14 May 2022 09:31:12 +0000 (UTC)
+	with ESMTP id oF58vtOBGBNN; Sat, 14 May 2022 09:45:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D5BE60AE5;
-	Sat, 14 May 2022 09:31:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AA4E71BF85D
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:31:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E59260B14;
+	Sat, 14 May 2022 09:45:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 35E2C1BF85D
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:45:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 97EAA40A30
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:31:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2139960B14
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:45:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oS_8XvK2xCxw for <buildroot@lists.busybox.net>;
- Sat, 14 May 2022 09:31:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hZAXtLXe_BG9 for <buildroot@lists.busybox.net>;
+ Sat, 14 May 2022 09:45:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4546C400EF
- for <buildroot@buildroot.org>; Sat, 14 May 2022 09:31:08 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id dk23so20256138ejb.8
- for <buildroot@buildroot.org>; Sat, 14 May 2022 02:31:08 -0700 (PDT)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 23CE260AE5
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 09:45:55 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id g23so12512455edy.13
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 02:45:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=eyR6xVptuDUN4FHKbb36RqUF3MWgbPc9aMR4usPrnz8=;
- b=SsGXHkDjhNPy2gykn0vCbEa1kqF8VqJoh4XlxXLiG12tIrWClIgYLMBTHo0wg9kaOl
- zEa27ymRQbXY/PR4B76X8soW4d6OXVjHjegdxsD3cVzQqppuOrgR4Ijd8G1DYRsR3Siy
- FHiF24HqCU/M1g0VuokIDwlMNX8QwdXXYvVYh3is0s1gIcxur2qsBDqYs7LCfr4Y14lg
- 6zEMisdGUYclEu9zE4Sj6RWKXEnSfdLt+4FzRwMlLPc1BpwHYQbLeBZWfTdyVLBdwcxH
- E2u65z6GrtFhDLw76klUIB0Ek2XNKWPbZGEVtAaSX/jcRNVfV4AIszgBpl5afUMG7mYI
- aFBQ==
+ bh=ftjrfuPDW4rCRjb/uH8+wt7RvWAtKyo7nKrEw/85aoo=;
+ b=CbC1IQ3egvAl1MtzJUJYFsziOVd9KX/38Tma2s1m9HhRovA0FE75gJANilGCKbnhu+
+ bWHlqvX7uqjvMU29MvLeUDJAEOB5w7Bu3LfhAZzBcq7BfXkgkHiXQP9MyERPSmo5bWCx
+ 7vL9Bgese5wxAA+Yjb31E45Vw8/wvw8RmOqsrhgFCWmQbIuty9kic9vp+NPReIVJTviO
+ 1D3XRgLHs7wXffQpUuBaDxu2FAlm7gkWE4Kmc08p5iMJ4AB8THZ34CB2EAhKct1PyNkt
+ aKzirWwGq9RcIo/fZUuXkFVSlJOVhCBwtbjl4DIOn7Vp4rUGVwbHs0edryPVG2/d+oI/
+ WoIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=eyR6xVptuDUN4FHKbb36RqUF3MWgbPc9aMR4usPrnz8=;
- b=KRFEP/ji+pk+6AI4oc+VKRtmkWk7SqcMCML2Jt6KN8RYYd0dFxurevcdoEslIkRJCL
- kOlFWHaQPLnoPiM+cvnFO1HAsmgpBVXEB+DjIducc1pIrBTdlaNz8/x0x2m0uEcQVc8p
- qLJBp1sP6A88ZpqWSLgyEbzNItU1zf36e/Ow/NhQCke050Wa18GkYkw8hHZ21Y48Ljt0
- 05+fCq6144Y9+5My42Z02OXXVnnznLARl0diPrrTeLiinf61u8yLAz3KoH5yGjrlYc5x
- gGB5YAn8M0pVYQ8uk0KYfcTEJ+tGgPRsA7c+gtBDZmJFFrDiQmkjdkOu6O7usAc7QBSJ
- bZSw==
-X-Gm-Message-State: AOAM532bubJB54oY0/E1pFvWbYvGQmolywCj69UW2Ymdiqhm7Th0rz0k
- E2/TZZPaMwzJdyXfkrCuj0gmOnDdSqa1dA==
-X-Google-Smtp-Source: ABdhPJzrtv31Po7hS0G+kb0rXV1bUMsxIcdKW8yr3xy6mgkJ06pLzzvjAfkncfce9z6jk3eD7qqUJg==
-X-Received: by 2002:a17:907:9720:b0:6f4:31d4:925f with SMTP id
- jg32-20020a170907972000b006f431d4925fmr7627296ejc.658.1652520666417; 
- Sat, 14 May 2022 02:31:06 -0700 (PDT)
+ bh=ftjrfuPDW4rCRjb/uH8+wt7RvWAtKyo7nKrEw/85aoo=;
+ b=zx5Ew20BVDCd6vU4n7lO6sOQJY4njMy9ZszFG4dbX3rIkzXTmIjiCNOMQnh10wtdlZ
+ /uObNAxvl8fqg+7rLTQzXoaQeQV5Arh2PUPBp0WJRjgfjv9HaNqB+ufKuR12SXiqVWVy
+ +iBjgvO4Ji242kMpdbcPyMJHyYRe++3r26qPr2RG3i16R5DGMqtJvjDXRiU2SMNkxjJ8
+ 0CmnPjG9sxC9LYtBJ8RA7k8ebr+xe8Fv/vbkQwSL7KqzXU8X2baFIZYuj+pBwlkobTIl
+ FXuFVpTc+1IsrzGq9dbj2NpXemRdJtIK7kN5hA7u49g9PfztlDo6gnafPUpcx7Tz2+28
+ l17Q==
+X-Gm-Message-State: AOAM531jUF36RRZMDqaTorvuONARr56LRG24dDN/KR3scCcrhT6MyJ1w
+ Qp9DMACU18StUva5ugSaOhfT4/IF2dqXXA==
+X-Google-Smtp-Source: ABdhPJwU/tjBSOhfCxTIW5wEl4dRanJr0cyBj8eLF/DtdmZRPVNCMleps7gwd7QJkrt910nTCobgOA==
+X-Received: by 2002:a05:6402:268e:b0:427:bb19:f889 with SMTP id
+ w14-20020a056402268e00b00427bb19f889mr2904517edd.33.1652521553986; 
+ Sat, 14 May 2022 02:45:53 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- qp24-20020a170907a21800b006f3ef214e56sm1558179ejc.188.2022.05.14.02.31.05
+ h5-20020a1709070b0500b006f3ef214e06sm1584358ejl.108.2022.05.14.02.45.53
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 14 May 2022 02:31:05 -0700 (PDT)
-Message-ID: <3db37c74-150e-24de-462b-58ed7902f5d6@mind.be>
-Date: Sat, 14 May 2022 11:31:04 +0200
+ Sat, 14 May 2022 02:45:53 -0700 (PDT)
+Message-ID: <91d3a296-4c11-4f31-d44c-4860ead80498@mind.be>
+Date: Sat, 14 May 2022 11:45:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20220512202720.1319703-1-bernd.kuhls@t-online.de>
+To: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
+References: <20220510163249.21272-1-petr.vorel@gmail.com>
+ <20220510163249.21272-3-petr.vorel@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220512202720.1319703-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 22.0.3
+In-Reply-To: <20220510163249.21272-3-petr.vorel@gmail.com>
+Subject: Re: [Buildroot] [PATCH 2/2] musl: backport netlink macro fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
@@ -105,64 +103,63 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 12/05/2022 22:27, Bernd Kuhls wrote:
-> Release notes:
-> https://lists.freedesktop.org/archives/mesa-announce/2022-May/000673.html
+On 10/05/2022 18:32, Petr Vorel wrote:
+> 8cf87b30 ("fix incorrect parameter name in internal netlink.h RTA_OK macro")
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->   package/mesa3d-headers/mesa3d-headers.mk | 2 +-
->   package/mesa3d/mesa3d.hash               | 7 +++----
->   package/mesa3d/mesa3d.mk                 | 2 +-
->   3 files changed, 5 insertions(+), 6 deletions(-)
+>   ...rameter-name-in-internal-netlink.h-R.patch | 33 +++++++++++++++++++
+>   1 file changed, 33 insertions(+)
+>   create mode 100644 dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch
 > 
-> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-> index 2fa0370f96..fb3763297d 100644
-> --- a/package/mesa3d-headers/mesa3d-headers.mk
-> +++ b/package/mesa3d-headers/mesa3d-headers.mk
-> @@ -12,7 +12,7 @@ endif
->   
->   # Not possible to directly refer to mesa3d variables, because of
->   # first/second expansion trickery...
-> -MESA3D_HEADERS_VERSION = 22.0.2
-> +MESA3D_HEADERS_VERSION = 22.0.3
+> diff --git a/dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch b/dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch
 
-  As I wrote earlier, your bump to 22.0.2 was marked as Changes Requested. Could 
-you please rebase and fix the issues?
+  This should be in package/musl, not dl/musl. Also, subject should be 
+package/musl: ...
+
+  Applied both to master with that fixed.
 
   Regards,
   Arnout
 
->   MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
->   MESA3D_HEADERS_SITE = https://archive.mesa3d.org
->   MESA3D_HEADERS_DL_SUBDIR = mesa3d
-> diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-> index 6f06c85760..32221b8c89 100644
-> --- a/package/mesa3d/mesa3d.hash
-> +++ b/package/mesa3d/mesa3d.hash
-> @@ -1,6 +1,5 @@
-> -# From https://lists.freedesktop.org/archives/mesa-announce/2022-April/000670.html
-> -sha256  df4fa560dcce6680133067cd15b0505fc424ca703244ce9ab247c74d2fab6885  mesa-22.0.2.tar.xz
-> -sha512  939ddf9acd280e1b20b3540349b3ad07bbeee5d821198f1d667e86634449bf5d0a0df5832753b8b3f8816709c2f02959cce25f3d26a33cc758dd8e25d158ddb8  mesa-22.0.2.tar.xz
-> -
-> +# From https://lists.freedesktop.org/archives/mesa-announce/2022-May/000673.html
-> +sha256  9f2b30f5276a9abaf71aafc6979685e2636189de1a87aea2c9e69744a6d0ebb9  mesa-22.0.3.tar.xz
-> +sha512  3982cd2fadca5349b2513885ed734c2422e3f2dced85f471f245b120ffaf018acafcd929dc5ec317f2c568bb5f619f5a3475d3a92495f766a2eefb225efcac14  mesa-22.0.3.tar.xz
->   # License
->   sha256  4bc15d14dcc134b024cbdca3b5330010136ce8a427b6f8353440ce2ad7aab037  docs/license.rst
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 41c8d80daf..40b61161d0 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -5,7 +5,7 @@
->   ################################################################################
->   
->   # When updating the version, please also update mesa3d-headers
-> -MESA3D_VERSION = 22.0.2
-> +MESA3D_VERSION = 22.0.3
->   MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
->   MESA3D_SITE = https://archive.mesa3d.org
->   MESA3D_LICENSE = MIT, SGI, Khronos
+> new file mode 100644
+> index 0000000000..fa3057ff08
+> --- /dev/null
+> +++ b/dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch
+> @@ -0,0 +1,33 @@
+> +From 8cf87b3027009c0acac591d9ae80262dc25daccf Mon Sep 17 00:00:00 2001
+> +From: Ondrej Jirman <megous@megous.com>
+> +Date: Wed, 21 Nov 2018 17:29:21 +0100
+> +Subject: [PATCH] fix incorrect parameter name in internal netlink.h RTA_OK
+> + macro
+> +
+> +the wrong name works only by accident.
+> +
+> +Signed-off-by: Ondrej Jirman <megous@megous.com>
+> +Signed-off-by: Rich Felker <dalias@aerifal.cx>
+> +Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> +
+> +[ upstream status: 8cf87b3027009c0acac591d9ae80262dc25daccf ]
+> +---
+> + src/network/netlink.h | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/network/netlink.h b/src/network/netlink.h
+> +index 38acb178..873fabe2 100644
+> +--- a/src/network/netlink.h
+> ++++ b/src/network/netlink.h
+> +@@ -86,7 +86,7 @@ struct ifaddrmsg {
+> + #define RTA_DATALEN(rta)	((rta)->rta_len-sizeof(struct rtattr))
+> + #define RTA_DATAEND(rta)	((char*)(rta)+(rta)->rta_len)
+> + #define RTA_NEXT(rta)		(struct rtattr*)((char*)(rta)+NETLINK_ALIGN((rta)->rta_len))
+> +-#define RTA_OK(nlh,end)		((char*)(end)-(char*)(rta) >= sizeof(struct rtattr))
+> ++#define RTA_OK(rta,end)		((char*)(end)-(char*)(rta) >= sizeof(struct rtattr))
+> +
+> + #define NLMSG_RTA(nlh,len)	((void*)((char*)(nlh)+sizeof(struct nlmsghdr)+NETLINK_ALIGN(len)))
+> + #define NLMSG_RTAOK(rta,nlh)	RTA_OK(rta,NLMSG_DATAEND(nlh))
+> +--
+> +2.36.0
+> +
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
