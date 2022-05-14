@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A5D0C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:53:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA73DC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:53:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DCEAA40C6D;
-	Sat, 14 May 2022 09:53:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B4B840C7D;
+	Sat, 14 May 2022 09:53:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gk8DxYMUTJz4; Sat, 14 May 2022 09:53:31 +0000 (UTC)
+	with ESMTP id WmM-iRynIf1Z; Sat, 14 May 2022 09:53:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E36B340C5D;
-	Sat, 14 May 2022 09:53:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C9AC91BF947
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:50:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9374D40C77;
+	Sat, 14 May 2022 09:53:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 67B2C1BF85D
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:50:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 85E1E415F5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E20183FA9
  for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:50:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jwG4phbjFe2D for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5YupsZ9pwuOr for <buildroot@lists.busybox.net>;
  Sat, 14 May 2022 09:50:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B946F41624
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7DFBA83FB4
  for <buildroot@buildroot.org>; Sat, 14 May 2022 09:50:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 710068376C; Sat, 14 May 2022 09:39:44 +0000 (UTC)
+ id 399AB83769; Sat, 14 May 2022 09:39:44 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 14 May 2022 11:44:48 +0200
+Date: Sat, 14 May 2022 11:37:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b980be3c5d4d1566fba8e20866bd88172084df5b
-X-Git-Newrev: e66cac7631dd6c9e83c82af3f19b9cc0d3f15ab7
+X-Git-Oldrev: ebd9486646fd27d315579081bc095f5e390055e6
+X-Git-Newrev: 0e459437b0483f0e538e4a0d4c7bfead2258188f
 X-Patchwork-Hint: ignore
-Message-Id: <20220514093944.710068376C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: test_zfs: don't run
- TestZfsBase as a test
+Message-Id: <20220514093944.399AB83769@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
+ 22.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,83 +54,44 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6324580267818971362=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6324580267818971362==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e66cac7631dd6c9e83c82af3f19b9cc0d3f15ab7
+commit: https://git.buildroot.net/buildroot/commit/?id=0e459437b0483f0e538e4a0d4c7bfead2258188f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The commit [1] introcuded TestZfsBase as a common function
-between all Zfs tests. But TestZfsBase test is executed
-as a test itself.
-
-Rename test_run() to base_test_run() to avoid this issue.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2429014006
-
-[1] 593e8cb71f8f2ac69889424bbef5ab09c0dbb06e
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- support/testing/tests/package/test_zfs.py | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
-index 8911dcfd9e..e3784f7d7d 100644
---- a/support/testing/tests/package/test_zfs.py
-+++ b/support/testing/tests/package/test_zfs.py
-@@ -25,7 +25,7 @@ class TestZfsBase(infra.basetest.BRTest):
-         # BR2_TARGET_ROOTFS_TAR is not set
-         """
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index e6cd7a1cd3..6ca3867908 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f070527b141174970a17195d0225ed43693c39fec83cd5e6d0effaa88e2a5553  intel-media-22.4.0.tar.gz
++sha256  5589d4e0142ae957d58798e3fba08d9e5e096e92eed422d40a82d45a14e6042f  intel-media-22.4.1.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index 55f1d5507d..e44330245b 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
--    def test_run(self):
-+    def base_test_run(self):
-         kernel = os.path.join(self.builddir, "images", "bzImage")
-         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-         self.emulator.boot(
-@@ -65,6 +65,9 @@ class TestZfsGlibc(TestZfsBase):
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_STABLE=y
-         """
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
  
-+    def test_run(self):
-+        TestZfsBase.base_test_run(self)
-+
- 
- class TestZfsUclibc(TestZfsBase):
-     config = TestZfsBase.config + \
-@@ -72,9 +75,15 @@ class TestZfsUclibc(TestZfsBase):
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_UCLIBC_STABLE=y
-         """
- 
-+    def test_run(self):
-+        TestZfsBase.base_test_run(self)
-+
- 
- class TestZfsMusl(TestZfsBase):
-     config = TestZfsBase.config + \
-         """
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_MUSL_STABLE=y
-         """
-+
-+    def test_run(self):
-+        TestZfsBase.base_test_run(self)
-
---===============6324580267818971362==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-INTEL_MEDIADRIVER_VERSION = 22.4.0
++INTEL_MEDIADRIVER_VERSION = 22.4.1
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6324580267818971362==--
