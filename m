@@ -1,88 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C67C8C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 15:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1913C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 15:45:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 415EB4047D;
-	Sat, 14 May 2022 15:17:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D3E060E02;
+	Sat, 14 May 2022 15:45:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YUkFSvD5OohQ; Sat, 14 May 2022 15:17:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p0e6fH-qFdZA; Sat, 14 May 2022 15:45:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC25140356;
-	Sat, 14 May 2022 15:17:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D71C60E50;
+	Sat, 14 May 2022 15:45:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 70CCF1BF2F8
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 15:17:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 90CB11BF2F8
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 15:45:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6673540168
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 15:17:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71C9D40183
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 15:45:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t8OwsUVMHFO8 for <buildroot@lists.busybox.net>;
- Sat, 14 May 2022 15:17:16 +0000 (UTC)
+ with ESMTP id AtuDzNplYUdc for <buildroot@lists.busybox.net>;
+ Sat, 14 May 2022 15:45:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2D921400A6
- for <buildroot@buildroot.org>; Sat, 14 May 2022 15:17:16 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id a5so11112640wrp.7
- for <buildroot@buildroot.org>; Sat, 14 May 2022 08:17:15 -0700 (PDT)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6B6F7400A6
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 15:45:25 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id m1so14962892wrb.8
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 08:45:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=usrCjSfqUIo8iu1zbCpMjyaIdrtQLfDqyMBxoIuJTms=;
- b=iTNXBSqJGVvRRsHq81XjrtyHzQH6D1xoXzNEDmVpq05Rmu5LZsy7rp1icxbvsUZBq+
- Bq84kzs44qJj7k+umd75aLot76g6LH4YPZE+rrVIeZAGIUUIO9XnTyLxWFKNXkBpetDP
- Cu7fnPfth6GCg7QmpinkM5PHsUi8fhP0V/gfU+WDG62VR2++tG3HVwuN4CNaCRPsdZK1
- Z05Iu32crJfU1k09ysueevHN25HT0ri3a86GJLXORKKh19r1HYWcW3qLlMHhhHKr+AlS
- BQseHtogw3KdqGvqiDlyRPBKlh67f0xDseEwBeWUdwdZLeSlNaTOAP7c2L3zmLJcvGQB
- B0hA==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=BLlnsX2pKYJWQnKjkRNCpAJR5JDqqE7cb6LoHNtyhAg=;
+ b=pcyPLAxxgS3D2uh8jo5eDf2I5EIhROuAw0+I93rTOgrwbNSHhvzEAATYru10rKMCaY
+ 5HsB8W1//9rBen38y+KuI6UJHJPw3NYwn6xIqXO9gYE7XScuZuYUa9yHIbVcu/qnfNzl
+ UuzB7W9JHLujnrDdyyYAezTB+MAW3In7ieuwP1nXyCqasJ7PHBRZSLP4yCF/d1M1KP4M
+ 495mBgeMPwDPuLU9oBUUhB1hDyElS7YtUTPuk2paDYmtapeczJ+JDJdibd4zyr/r60+x
+ iiYe6/fBZ8BhsjHbJgizsmE0TTViT5KzstmqFAVvDRL8fuINagpj2aSTPrV32POSOxCH
+ WM3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=usrCjSfqUIo8iu1zbCpMjyaIdrtQLfDqyMBxoIuJTms=;
- b=W40kt85kiTnyTf7Xhm5a2UYpMc7/Q57nolrkP5h3PnVTPQKHsbwqLcsgcVp/cwGI8h
- 6nH1dtzrbXwcVCkEuIPQdf4ykfhEXHO3HYR8x1ftFk/SUwDjCVte5FpYSvUikgTcSUee
- UwAX+6+1DcVw4z2FB2ncWh8gmmQhTK0jZdYdaLcU00wsiQg/O7QCCpkQLWp+AmteUtcM
- hLHZod90m9dE4TTy2syxD4DavnTbce4vy44DMxwFJQMW2Jr0QZbbkqfILO+LzK0BrsdN
- RQ3+8FpQaYcgO7l9aLl72ec1mp+E09+J+u2KX42lVqSjl1w3iyxTUtX91zG5rATWQu0F
- hwEw==
-X-Gm-Message-State: AOAM530dbTIHWl/h3PWa9b2AygfRuMGN1+yf1tFyghuPyZqo2PnwyEIL
- rm+RLkbWjr1RsOSMvNQxU48=
-X-Google-Smtp-Source: ABdhPJyNis9Fz9h3ii2Dm0jN18Wz38XxCL3ab2LkZ6hMuuBF0kZeti3W2wn5pw2UO/HboytP5dUKqg==
-X-Received: by 2002:adf:fa42:0:b0:20a:e8d6:58b8 with SMTP id
- y2-20020adffa42000000b0020ae8d658b8mr7984416wrr.64.1652541434165; 
- Sat, 14 May 2022 08:17:14 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ bh=BLlnsX2pKYJWQnKjkRNCpAJR5JDqqE7cb6LoHNtyhAg=;
+ b=IpekYKXIssDoG9s5m4u96dJlr+nXjnc+90Scn+FV+1zWCll16oRTOh0d0bc8WhDCPT
+ Jmg8tb6dox4Y0K0jabz5CkJ+xOlwDE6Tc7SWuTxW00yYaPEhfemxumSFP2Mz5pAK1a3/
+ sI4PSHEW7TNgp2UGpuLIsBczTBBYFWzXQtEtOOPeTgxkqwiCg/Z5nPultewWkPjtFiro
+ mv+IrPvHvrFrWkwV7h0zH6h7D7tEE4B5zSKOdlK6nCi6Id6yAEpa/bR9MS27i04Jm0R7
+ XGgPH/p98JDXVup+RX4Jop1G7HsWiY6fZydM+E4OnUn7y3IcJr2Tpsk+iR/17pzXafeL
+ r5tQ==
+X-Gm-Message-State: AOAM53346pf+TJRW6uByqLIFCy0r1wqHng9kVnMWq8fM/L12E2GD3CyN
+ kWK5ddhWrcejCLz7wLzbyY6KXkqTJsM=
+X-Google-Smtp-Source: ABdhPJwE1Ui/aall3bPizGXLx/RfW2V4Dyp35BUmpoBaJk13F2HchrO8s7c2XO3QwjmczL5vRq5B3Q==
+X-Received: by 2002:a5d:680f:0:b0:20a:d858:f703 with SMTP id
+ w15-20020a5d680f000000b0020ad858f703mr7987711wru.414.1652543123332; 
+ Sat, 14 May 2022 08:45:23 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- u13-20020adfa18d000000b0020c5253d913sm4730003wru.95.2022.05.14.08.17.13
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 14 May 2022 08:17:13 -0700 (PDT)
-Message-ID: <16915492-655d-8a28-1eb3-a0dfdf119713@gmail.com>
-Date: Sat, 14 May 2022 17:17:12 +0200
+ b18-20020a7bc252000000b003942a244f54sm9801885wmj.45.2022.05.14.08.45.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 14 May 2022 08:45:22 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 14 May 2022 17:42:33 +0200
+Message-Id: <20220514154233.4092-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220513202855.752024-1-fontaine.fabrice@gmail.com>
-From: Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <20220513202855.752024-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/alchemy: add host-pkgconf
- dependency
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: fix BR2_OPTIMIZE_FAST
+ comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,45 +88,141 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?Q?Herv=c3=a9_Codina?= <herve.codina@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Asaf Kahlon <asafka7@gmail.com>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Nathaniel Roach <nroach44@gmail.com>, Matt Weber <matthew.weber@collins.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRmFicmljZSwKCkxlIDEzLzA1LzIwMjIgw6AgMjI6MjgsIEZhYnJpY2UgRm9udGFpbmUg
-YSDDqWNyaXTCoDoKPiBob3N0LXBrZ2NvbmYgaXMgYSBtYW5kYXRvcnkgZGVwZW5kZW5jeSBzaW5j
-ZSB0aGUgYWRkaXRpb24gb2YgdGhlIHBhY2thZ2UKPiBpbiBjb21taXQgN2YxZjNmODc4NjhmYTMz
-MzgzM2RiYmE5ZjRmMDdhZGMzMzhiMzRlZCByZXN1bHRpbmcgaW4gdGhlCj4gZm9sbG93aW5nIHVs
-b2cgYnVpbGQgZmFpbHVyZToKPiAKPiAvaG9tZS9idWlsZHJvb3QvYXV0b2J1aWxkL3J1bi9pbnN0
-YW5jZS0wL291dHB1dC0xL3Blci1wYWNrYWdlL3Vsb2cvaG9zdC9vcHQvYWxjaGVteS9jaGVjay5t
-azozNjogKioqICdwa2ctY29uZmlnJyBpcyByZXF1aXJlZC4gIFN0b3AuCj4gCj4gQW4gb3RoZXIg
-b3B0aW9uIHdvdWxkIGJlIHRvIHNldCBUQVJHRVRfT1MgdG8gYmFyZW1ldGFsIGJ1dCBpdCBjb3Vs
-ZCBoYXZlCj4gdW5leHBlY3RlZCBzaWRlLWVmZmVjdHMgc3VjaCBhcyByZW1vdmluZyAtZlBJQyBm
-b3IgYXJtIHRhcmdldHMKPiAKPiBGaXhlczoKPiAgLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9v
-dC5vcmcvcmVzdWx0cy9jNzMxZmUwZTliZGJmY2UwODIzZjljNDg2NDFmMWVkNzEwZmE2MTI1CgpB
-bHNvIGZpeGVzOgpodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9q
-b2JzLzI0MjkwMTM1NTUKCj4gCj4gU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9u
-dGFpbmUuZmFicmljZUBnbWFpbC5jb20+CgpSZXZpZXdlZC1ieTogUm9tYWluIE5hb3VyIDxyb21h
-aW4ubmFvdXJAZ21haWwuY29tPgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IC0tLQo+ICBwYWNr
-YWdlL2FsY2hlbXkvYWxjaGVteS5tayB8IDMgKystCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2Vy
-dGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9hbGNoZW15
-L2FsY2hlbXkubWsgYi9wYWNrYWdlL2FsY2hlbXkvYWxjaGVteS5tawo+IGluZGV4IDE4Y2RkMGE2
-NDUuLjEwZDEwNjhhYzQgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9hbGNoZW15L2FsY2hlbXkubWsK
-PiArKysgYi9wYWNrYWdlL2FsY2hlbXkvYWxjaGVteS5tawo+IEBAIC04LDcgKzgsNyBAQCBBTENI
-RU1ZX1ZFUlNJT04gPSBkOTViM2MzOGNkMzc4MTRhMWI5OGQwYmJmODEzZGU3YWRhYWVjZmJjCj4g
-IEFMQ0hFTVlfU0lURSA9ICQoY2FsbCBnaXRodWIsUGFycm90LURldmVsb3BlcnMsYWxjaGVteSwk
-KEFMQ0hFTVlfVkVSU0lPTikpCj4gIEFMQ0hFTVlfTElDRU5TRSA9IEJTRC0zLUNsYXVzZSAoQWxj
-aGVteSksIEdQTC0yLjAgKGtjb25maWcpCj4gIEFMQ0hFTVlfTElDRU5TRV9GSUxFUyA9IENPUFlJ
-TkcgUkVBRE1FCj4gLUhPU1RfQUxDSEVNWV9ERVBFTkRFTkNJRVMgPSBob3N0LXB5dGhvbjMKPiAr
-SE9TVF9BTENIRU1ZX0RFUEVOREVOQ0lFUyA9IGhvc3QtcGtnY29uZiBob3N0LXB5dGhvbjMKPiAg
-Cj4gIEFMQ0hFTVlfSE9NRSA9ICQoSE9TVF9ESVIpL29wdC9hbGNoZW15Cj4gIEFMQ0hFTVlfU0RL
-X0JBU0VESVIgPSAkKFNUQUdJTkdfRElSKS91c3IvbGliL2FsY2hlbXkvc2RrCj4gQEAgLTM1LDYg
-KzM1LDcgQEAgQUxDSEVNWV9UQVJHRVRfRU5WID0gXAo+ICAJQUxDSEVNWV9IT01FPSQoQUxDSEVN
-WV9IT01FKSBcCj4gIAlBTENIRU1ZX1dPUktTUEFDRV9ESVI9IiQoQEQpIiBcCj4gIAlBTENIRU1Z
-X1RBUkdFVF9PVVQ9YWxjaGVteS1vdXQgXAo+ICsJUEtHQ09ORklHX0JJTj0kKFBLR19DT05GSUdf
-SE9TVF9CSU5BUlkpIFwKPiAgCVRBUkdFVF9PUz1saW51eCBcCj4gIAlUQVJHRVRfT1NfRkxBVk9V
-Uj1idWlsZHJvb3QgXAo+ICAJVEFSR0VUX0NST1NTPSIkKFRBUkdFVF9DUk9TUykiIFwKCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Commit e702a05d8998a1f2416225eb62b43b6585738fe9 wrongly added a
+dependency on !BR2_OPTIMIZE_FAST instead of BR2_OPTIMIZE_FAST
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/bandwidthd/Config.in      | 2 +-
+ package/collectd/Config.in        | 2 +-
+ package/lighttpd/Config.in        | 2 +-
+ package/php/Config.ext            | 4 ++--
+ package/poco/Config.in            | 2 +-
+ package/postgresql/Config.in      | 2 +-
+ package/python-psycopg2/Config.in | 2 +-
+ package/qt5/qt5base/Config.in     | 2 +-
+ 8 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
+index 7537552390..e2a6f1acb1 100644
+--- a/package/bandwidthd/Config.in
++++ b/package/bandwidthd/Config.in
+@@ -48,7 +48,7 @@ comment "postgresql support needs a toolchain w/ dynamic library, wchar"
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 
+ comment "postgresql support can't be built with Optimize for fast"
+-	depends on !BR2_OPTIMIZE_FAST
++	depends on BR2_OPTIMIZE_FAST
+ 
+ config BR2_PACKAGE_BANDWIDTHD_SQLITE3
+ 	bool "enable sqlite3 log storage"
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index da8465beee..dc6ecd2b72 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -487,7 +487,7 @@ comment "postgresql support needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
+ 
+ comment "postgresql support can't be built with Optimize for fast"
+-	depends on !BR2_OPTIMIZE_FAST
++	depends on BR2_OPTIMIZE_FAST
+ 
+ config BR2_PACKAGE_COLLECTD_PROCESSES
+ 	bool "processes"
+diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+index 9522b80426..5d9e624506 100644
+--- a/package/lighttpd/Config.in
++++ b/package/lighttpd/Config.in
+@@ -103,7 +103,7 @@ comment "pgsql support needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
+ 
+ comment "pgsql support can't be built with Optimize for fast"
+-	depends on !BR2_OPTIMIZE_FAST
++	depends on BR2_OPTIMIZE_FAST
+ 
+ config BR2_PACKAGE_LIGHTTPD_WEBDAV
+ 	bool "webdav support"
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index e4aced66df..1c2af9fd15 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -151,7 +151,7 @@ comment "PostgreSQL extension needs a toolchain w/ dynamic library, wchar"
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 
+ comment "PostgreSQL extension can't be built with Optimize for fast"
+-	depends on !BR2_OPTIMIZE_FAST
++	depends on BR2_OPTIMIZE_FAST
+ 
+ config BR2_PACKAGE_PHP_EXT_SQLITE
+ 	bool "SQLite3"
+@@ -186,7 +186,7 @@ comment "PostgreSQL drivers need a toolchain w/ wchar, dynamic library"
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 
+ comment "PostgreSQL drivers can't be built with Optimize for fast"
+-	depends on !BR2_OPTIMIZE_FAST
++	depends on BR2_OPTIMIZE_FAST
+ 
+ config BR2_PACKAGE_PHP_EXT_PDO_SQLITE
+ 	bool "SQLite3"
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index d2852ba03e..95f9a46e6e 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -57,7 +57,7 @@ config BR2_PACKAGE_POCO_DATA_PGSQL
+ 	select BR2_PACKAGE_POSTGRESQL
+ 
+ comment "Data/PostgreSQL can't be built with Optimize for fast"
+-	depends on !BR2_OPTIMIZE_FAST
++	depends on BR2_OPTIMIZE_FAST
+ 
+ config BR2_PACKAGE_POCO_DATA_SQLITE
+ 	bool "Data/SQLite"
+diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+index 7c48577daf..f3e918458c 100644
+--- a/package/postgresql/Config.in
++++ b/package/postgresql/Config.in
+@@ -40,4 +40,4 @@ comment "postgresql needs a toolchain w/ dynamic library, wchar"
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 
+ comment "postgresql can't be built with Optimize for fast"
+-	depends on !BR2_OPTIMIZE_FAST
++	depends on BR2_OPTIMIZE_FAST
+diff --git a/package/python-psycopg2/Config.in b/package/python-psycopg2/Config.in
+index 361c40cfa9..4aa86c7690 100644
+--- a/package/python-psycopg2/Config.in
++++ b/package/python-psycopg2/Config.in
+@@ -27,4 +27,4 @@ comment "python-psycopg2 needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
+ 
+ comment "python-psycopg2 can't be built with Optimize for fast"
+-	depends on !BR2_OPTIMIZE_FAST
++	depends on BR2_OPTIMIZE_FAST
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 6f2309dffd..b876f1948e 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -85,7 +85,7 @@ comment "PostgreSQL plugin needs a toolchain w/ wchar, dynamic library"
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 
+ comment "PostgreSQL plugin can't be built with Optimize for fast"
+-	depends on !BR2_OPTIMIZE_FAST
++	depends on BR2_OPTIMIZE_FAST
+ 
+ choice
+ 	prompt "SQLite 3 support"
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
