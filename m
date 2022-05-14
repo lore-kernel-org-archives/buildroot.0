@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97E4FC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:50:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2639C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:51:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4846B60F18;
-	Sat, 14 May 2022 09:50:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50C9141624;
+	Sat, 14 May 2022 09:51:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tc_ElIKGigMK; Sat, 14 May 2022 09:50:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZkK1GGsvm518; Sat, 14 May 2022 09:51:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59FAC60F21;
-	Sat, 14 May 2022 09:50:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 225EF1BF909
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08C744086E;
+	Sat, 14 May 2022 09:51:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3976D1BF85D
  for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:50:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD5DA60F26
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:50:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 36D3241674
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:50:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o6ZYcDNQp-sO for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0HbEbV8Urman for <buildroot@lists.busybox.net>;
  Sat, 14 May 2022 09:50:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3454460F0F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 587804086E
  for <buildroot@buildroot.org>; Sat, 14 May 2022 09:50:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D4B698376C; Sat, 14 May 2022 09:39:43 +0000 (UTC)
+ id 13F588376E; Sat, 14 May 2022 09:39:44 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 14 May 2022 11:35:30 +0200
+Date: Sat, 14 May 2022 11:37:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a2cd5639119eee5871b43968d2ace202064b640c
-X-Git-Newrev: fbd326cac3c7368b5a52ab0275cdaf78f0608873
+X-Git-Oldrev: d95a6dac3143a74fbd011eb423f3010ae3b05927
+X-Git-Newrev: 4a1e3ff0713b04373d4838c75ffcb84ee021ace4
 X-Patchwork-Hint: ignore
-Message-Id: <20220514093943.D4B698376C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/musl: backport netlink macro fix
+Message-Id: <20220514093944.13F588376E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpa_supplicant: wired driver needs
+ headers >= 4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,56 +59,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbd326cac3c7368b5a52ab0275cdaf78f0608873
+commit: https://git.buildroot.net/buildroot/commit/?id=4a1e3ff0713b04373d4838c75ffcb84ee021ace4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-8cf87b30 ("fix incorrect parameter name in internal netlink.h RTA_OK macro")
+Wired driver enables macsec support which depends on if_macsec.h.
+That header has only been exported since kernel v4.6, see commit:
+https://github.com/torvalds/linux/commit/dece8d2b78d19df7fe5e4e965f1f0d1a3e188d1b
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Fixes:
+- http://autobuild.buildroot.net/results/6bb619eb7fdecf7824fcc549c4ccb8e487665d10/
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...ct-parameter-name-in-internal-netlink.h-R.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/wpa_supplicant/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/musl/0003-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch b/package/musl/0003-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch
-new file mode 100644
-index 0000000000..fa3057ff08
---- /dev/null
-+++ b/package/musl/0003-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch
-@@ -0,0 +1,33 @@
-+From 8cf87b3027009c0acac591d9ae80262dc25daccf Mon Sep 17 00:00:00 2001
-+From: Ondrej Jirman <megous@megous.com>
-+Date: Wed, 21 Nov 2018 17:29:21 +0100
-+Subject: [PATCH] fix incorrect parameter name in internal netlink.h RTA_OK
-+ macro
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 7e2432985c..92953f69f0 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -42,6 +42,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WEXT
+ config BR2_PACKAGE_WPA_SUPPLICANT_WIRED
+ 	bool "Enable wired support"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+ 	select BR2_PACKAGE_LIBNL
+ 	select BR2_PACKAGE_WPA_SUPPLICANT_EAP
+ 	help
+@@ -49,6 +50,9 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WIRED
+ 	  supplicant can be used with Ethernet.  This also enables
+ 	  support for MACSEC.
+ 
++comment "wired macsec support needs a toolchain w/ headers >= 4.6"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
 +
-+the wrong name works only by accident.
-+
-+Signed-off-by: Ondrej Jirman <megous@megous.com>
-+Signed-off-by: Rich Felker <dalias@aerifal.cx>
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+
-+[ upstream status: 8cf87b3027009c0acac591d9ae80262dc25daccf ]
-+---
-+ src/network/netlink.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/network/netlink.h b/src/network/netlink.h
-+index 38acb178..873fabe2 100644
-+--- a/src/network/netlink.h
-++++ b/src/network/netlink.h
-+@@ -86,7 +86,7 @@ struct ifaddrmsg {
-+ #define RTA_DATALEN(rta)	((rta)->rta_len-sizeof(struct rtattr))
-+ #define RTA_DATAEND(rta)	((char*)(rta)+(rta)->rta_len)
-+ #define RTA_NEXT(rta)		(struct rtattr*)((char*)(rta)+NETLINK_ALIGN((rta)->rta_len))
-+-#define RTA_OK(nlh,end)		((char*)(end)-(char*)(rta) >= sizeof(struct rtattr))
-++#define RTA_OK(rta,end)		((char*)(end)-(char*)(rta) >= sizeof(struct rtattr))
-+ 
-+ #define NLMSG_RTA(nlh,len)	((void*)((char*)(nlh)+sizeof(struct nlmsghdr)+NETLINK_ALIGN(len)))
-+ #define NLMSG_RTAOK(rta,nlh)	RTA_OK(rta,NLMSG_DATAEND(nlh))
-+-- 
-+2.36.0
-+
+ comment "wired support needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
