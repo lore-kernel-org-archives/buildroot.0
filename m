@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B7A8C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:52:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39EE1C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 09:52:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ECD2140C67;
-	Sat, 14 May 2022 09:52:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8B0D40C6B;
+	Sat, 14 May 2022 09:52:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RA29r2z4gZxk; Sat, 14 May 2022 09:52:27 +0000 (UTC)
+	with ESMTP id H1Ltu-1wnGv3; Sat, 14 May 2022 09:52:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D4B640C61;
-	Sat, 14 May 2022 09:52:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 71D041BF85D
+	by smtp2.osuosl.org (Postfix) with ESMTP id D8ED240C74;
+	Sat, 14 May 2022 09:52:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B7D151BF909
  for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:50:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E31A983FC0
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:50:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 507814086E
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 09:50:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WOkBp6J6q8qg for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XAkIqEeT5-Cl for <buildroot@lists.busybox.net>;
  Sat, 14 May 2022 09:50:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F5A883F9B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 95CAB41622
  for <buildroot@buildroot.org>; Sat, 14 May 2022 09:50:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id CBA0B83769; Sat, 14 May 2022 09:39:43 +0000 (UTC)
+ id 42DBE8376C; Sat, 14 May 2022 09:39:44 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 14 May 2022 11:26:27 +0200
+Date: Sat, 14 May 2022 11:37:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7fa88b8eb637f5ec4927ac1bd05309dea7d60bc9
-X-Git-Newrev: a2cd5639119eee5871b43968d2ace202064b640c
+X-Git-Oldrev: 0e459437b0483f0e538e4a0d4c7bfead2258188f
+X-Git-Newrev: 1e9184796830e7849d009d4a45a7b9a3fbb347fd
 X-Patchwork-Hint: ignore
-Message-Id: <20220514093943.CBA0B83769@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/musl: bump version to 1.2.3
+Message-Id: <20220514093944.42DBE8376C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediasdk: bump version to
+ 22.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,40 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2cd5639119eee5871b43968d2ace202064b640c
+commit: https://git.buildroot.net/buildroot/commit/?id=1e9184796830e7849d009d4a45a7b9a3fbb347fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/musl/musl.hash | 4 ++--
- package/musl/musl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 4ab18cebd8..e093a5358e 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# https://musl.libc.org/releases/musl-1.2.2.tar.gz.asc
--sha256  9b969322012d796dc23dda27a35866034fa67d8fb67e0e2c45c913c3d43219dd  musl-1.2.2.tar.gz
-+# https://musl.libc.org/releases/musl-1.2.3.tar.gz.asc
-+sha256  7d5b0b6062521e4627e099e4c9dc8248d32a30285e959b7eecaa780cf8cfd4a4  musl-1.2.3.tar.gz
- sha256  f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af  COPYRIGHT
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index b89945e3be..44c79da6f7 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index 3ca50d629e..8e7db05e6d 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c1ebabf4c9a32de4349d9a9c707116b230cbf8a9c4655eec9ee844fd67dab6e8  intel-mediasdk-22.4.0.tar.gz
++sha256  4e53b750b1e5423c154a7abb56747a5892e27f3c848af8cc6692d208b9063360  intel-mediasdk-22.4.1.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 06b7aa87d0..33ec994f91 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MUSL_VERSION = 1.2.2
-+MUSL_VERSION = 1.2.3
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+-INTEL_MEDIASDK_VERSION = 22.4.0
++INTEL_MEDIASDK_VERSION = 22.4.1
+ INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
