@@ -4,65 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEF88C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 18:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0E38C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 19:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30D9E826F5;
-	Sat, 14 May 2022 18:58:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20C31812AB;
+	Sat, 14 May 2022 19:02:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id esc1dAyA6AoF; Sat, 14 May 2022 18:58:45 +0000 (UTC)
+	with ESMTP id VtuDX-AbPwG8; Sat, 14 May 2022 19:02:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F43381D47;
-	Sat, 14 May 2022 18:58:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 28E081BF584
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 18:58:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E73E81285;
+	Sat, 14 May 2022 19:02:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3952B1BF584
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 19:02:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 17287606F5
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 18:58:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 25784408E4
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 19:02:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NLUQ6zf76K8q for <buildroot@lists.busybox.net>;
- Sat, 14 May 2022 18:58:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vX5Efy_jsECM for <buildroot@lists.busybox.net>;
+ Sat, 14 May 2022 19:02:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DF7E860011
- for <buildroot@buildroot.org>; Sat, 14 May 2022 18:58:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E8464408D9
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 19:02:22 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:1949:2e37:e3d5:26d2])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C5E9E5FF7A;
- Sat, 14 May 2022 20:58:34 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 80AF85FF33;
+ Sat, 14 May 2022 21:02:13 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1652554718;
- bh=b3m0hkZLBRure/8yloHdjwn79q/5Yy4T+4+vhbrK7Gs=;
+ s=smtp-20201208; t=1652554939;
+ bh=s63khDDfi0YkPM0adYFTN75XNvK/tp6+/fooFlxD/iE=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=a+IxGq1xPLv4rib7omzbpRMGdqepKCm3nBc8RKeyXwNFUSQCdNfnucryQ1Yq7ggUV
- Gyi20vJPrJcAM2TXQHTdACOc0XvlVvmE2zzNuDg+XRIQ5iNcvWxfrtTNnuWOlw0aNz
- k+js6cTow/vrcawuIqNrmvoPJeyin8++gAO6XvPDgHkuS7CxFU7/3I/koZy9i3H310
- 1XGQKMEku6djNemaAHBt3tHJHJGcL0dOO3IxtQI0vKIkONEtOJ+QOGnhsUF/rat7H1
- Okbv26l9OPXo6WDd+dyqB2JnWU9Bl1yUV3/qxjQ6wV7mZcGajnLRpyWNYku81uW+Hk
- RPqI4XBNdnUIA==
+ b=kXzEpGYrYTV+FD8BavGT04BkFDjVQqGLDX+oXubFm+jnuGfcza95QEhvz4Uxvpvap
+ Rrn+in4SbSUqJhGE4jWsa7U0phBVAtn7g04OWPXBxoLCgvUTtMVqCbnQP5dcHNC6D3
+ vT9LbG+oKkgPTK+2Sped94gbUz+rKML/yiUdkaWu/iHTivUIa/TRtq16hIkB5NfJQt
+ SDLXKPXJTcvENcnK6fK1CZPpRJ7Lhdx2L6w+z/l7TO8o9e/qzx8vnx/lDtgDTR79AA
+ AbwA5mX64cA1KbkR11s4K76eirMoN7ZIdplNUm0de4oZzkGMmZpBqU0thBTSe9m2dF
+ 5oj42gkj883jg==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 14 May 2022 20:58:34 +0200
-Date: Sat, 14 May 2022 20:58:34 +0200
+ Sat, 14 May 2022 21:02:13 +0200
+Date: Sat, 14 May 2022 21:02:13 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220514185834.GA1597494@scaer>
-References: <20220514092152.1625466-1-fontaine.fabrice@gmail.com>
- <20220514133641.GZ1597494@scaer>
- <CAPi7W83wx+D5gYHKUtdS5abrYh-z-5h8QBe41pDnPrnCFK_HOQ@mail.gmail.com>
+Message-ID: <20220514190213.GB1597494@scaer>
+References: <20220514155301.4901-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <CAPi7W83wx+D5gYHKUtdS5abrYh-z-5h8QBe41pDnPrnCFK_HOQ@mail.gmail.com>
+In-Reply-To: <20220514155301.4901-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/v4l2loopback: add
- V4L2LOOPBACK_LINUX_CONFIG_FIXUPS
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain/toolchain-buildroot: glibc
+ can't be built with Optimize for fast
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,36 +72,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexandre Esse <alexandre.esse.dev@gmail.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RmFicmljZSwgQWxsLAoKT24gMjAyMi0wNS0xNCAxNTo0NyArMDIwMCwgRmFicmljZSBGb250YWlu
-ZSBzcGFrZSB0aHVzbHk6Cj4gTGUgc2FtLiAxNCBtYWkgMjAyMiDDoCAxNTozNiwgWWFubiBFLiBN
-T1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+IGEgw6ljcml0IDoKPiA+IE9uIDIwMjItMDUt
-MTQgMTE6MjEgKzAyMDAsIEZhYnJpY2UgRm9udGFpbmUgc3Bha2UgdGh1c2x5OgpbLS1TTklQLS1d
-Cj4gPiA+ICsgICAgICQoY2FsbCBLQ09ORklHX0VOQUJMRV9PUFQsQ09ORklHX1ZJREVPX0RFVikK
-PiA+IFRoYXQgb25lIGFsc28gZGVwZW5kcyBvbiBDT05GSUdfSTJDICh3aGljaCBoYXMgbm8gZGVw
-ZW5kZW5jeSkuCj4gCj4gVGhhbmtzIGZvciB5b3VyIHJldmlldyBidXQgSSB3YXNuJ3QgYWJsZSB0
-byBmaW5kIHRoZSBDT05GSUdfSTJDCj4gZGVwZW5kZW5jeSBpbiBrZXJuZWwgNS4xNy43Lgo+IEhl
-cmUgaXMgYW4gZXh0cmFjdCBvZiBkcml2ZXJzL21lZGlhL0tjb25maWc6Cj4gCj4gY29uZmlnIFZJ
-REVPX0RFVgo+ICAgICB0cmlzdGF0ZSAiVmlkZW80TGludXggY29yZSIKPiAgICAgZGVmYXVsdCBN
-RURJQV9DQU1FUkFfU1VQUE9SVCB8fCBNRURJQV9BTkFMT0dfVFZfU1VQUE9SVCB8fAo+IE1FRElB
-X1JBRElPX1NVUFBPUlQgfHwgTUVESUFfU0RSX1NVUFBPUlQgfHwgTUVESUFfUExBVEZPUk1fU1VQ
-UE9SVCB8fAo+IE1FRElBX1RFU1RfU1VQUE9SVAoKQWgsIHRoYXQncyBjb21taXQgOTk1OGQzMGYz
-OGI5NmYsIHdoaWNoIGlzIGdvaW5nIHRvIGJlIHBhcnQgb2YgNS4xOC4KClJlZ2FyZHMsCllhbm4g
-RS4gTU9SSU4uCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0t
-LS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAg
-fCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJh
-Y3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJ
-R04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0t
-LS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBo
-dHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwg
-ICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0t
-LS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fabrice, All,
+
+On 2022-05-14 17:53 +0200, Fabrice Fontaine spake thusly:
+> Fix the following build failure:
+> 
+> In file included from <command-line>:
+> ./../include/libc-symbols.h:82:3: error: #error "glibc must not be compiled with -ffast-math"
+>    82 | # error "glibc must not be compiled with -ffast-math"
+>       |   ^~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/3d91f3685ae6c3e1f765d419ea2c0da4cb0eb3be
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  toolchain/toolchain-buildroot/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index 8d9cf4cc68..8838cc48ff 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -60,6 +60,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 || !BR2_arc
+>  	depends on !BR2_powerpc_SPE
+>  	depends on BR2_RISCV_ISA_RVA || !BR2_riscv
+> +	depends on !BR2_OPTIMIZE_FAST
+
+I think in this case, we stil lwant to be able to select glibc, but we
+would override with -O2  (or -O3 ?) in glibc.mk
+
+Ditto for your second patch, for which we'd use -O1 maybe.
+
+We already for -O2 for nios2 for example.
+
+Regards,
+Yann E. MORIN.
+
+>  	select BR2_TOOLCHAIN_USES_GLIBC
+>  	help
+>  	  This option selects glibc as the C library for the
+> @@ -81,6 +82,9 @@ comment "glibc on MIPS w/ NAN2008 needs a toolchain w/ headers >= 4.5"
+>  	depends on BR2_MIPS_NAN_2008
+>  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+>  
+> +comment "glibc can't be built with Optimize for fast"
+> +	depends on BR2_OPTIMIZE_FAST
+> +
+>  config BR2_TOOLCHAIN_BUILDROOT_MUSL
+>  	bool "musl"
+>  	depends on BR2_aarch64	   || BR2_arm   || BR2_armeb   || BR2_i386 || \
+> -- 
+> 2.35.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
