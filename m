@@ -4,82 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA830C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 18:35:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEF88C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 18:58:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3EC4683E3F;
-	Sat, 14 May 2022 18:35:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30D9E826F5;
+	Sat, 14 May 2022 18:58:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B4B_t1El7Muk; Sat, 14 May 2022 18:35:42 +0000 (UTC)
+	with ESMTP id esc1dAyA6AoF; Sat, 14 May 2022 18:58:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47F0C8346C;
-	Sat, 14 May 2022 18:35:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0458F1BF584
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 18:35:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F43381D47;
+	Sat, 14 May 2022 18:58:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 28E081BF584
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 18:58:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D8F3C410D1
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 18:35:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17287606F5
+ for <buildroot@lists.busybox.net>; Sat, 14 May 2022 18:58:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5a4HqO-cCuqy for <buildroot@lists.busybox.net>;
- Sat, 14 May 2022 18:35:39 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NLUQ6zf76K8q for <buildroot@lists.busybox.net>;
+ Sat, 14 May 2022 18:58:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E14BD40908
- for <buildroot@buildroot.org>; Sat, 14 May 2022 18:35:38 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- a14-20020a7bc1ce000000b00393fb52a386so8676623wmj.1
- for <buildroot@buildroot.org>; Sat, 14 May 2022 11:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
- :content-disposition:in-reply-to;
- bh=Hzf/JjfPX98PhKiaO1d9aViSijgZL9H9Cs+lTkf8V8k=;
- b=KmsGxsFIajvXulkWvMZNlEMcGp+Z722V7a6zrYk08aePCzr9njETbeMA7dqq8frfOd
- y1MKBrbDsWgz4Xfjm2WmuVF8B2wrh5UZR59Nx0u+DUiF/quJPT9FhsPAjB8GoHB8lazh
- h1bCxQaUIvWzJUbi054Bcnxa5mqOnRajz4NReqkfg9ojDfmNsw1k8jwbFbprGNsiCbEX
- y428XG8CropQuV/CRtpPErjEGeSGQxbGrWGjxVTTFDiv36tvGVT8Fg2Qe7lF6Cphf79z
- aiRgOHQWtgVU1Bdq+1S90+8BgYZO5a+el3RUhzvksGB1L5/WB8q7OhU9J4t7sKM4q5k6
- 6i4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
- :references:mime-version:content-disposition:in-reply-to;
- bh=Hzf/JjfPX98PhKiaO1d9aViSijgZL9H9Cs+lTkf8V8k=;
- b=mXzM0In8smisr+FQZUwe+WM+dqYm7p1rLczLS1KF8hMzwt1S8jQMvo7M0j0CPexzrr
- te3oKNDd/ypnccaNFa3R7Ud9Hy50NyqAy0vDcI/D2sl9CKsYIMLzziWspkcLkeW+Dp9+
- 4x1qpaIPRK3nr88RH3npy8VylLSMsftVllTlShJbf5YoBb2a8Ak8NX+xSwC5vt+CO4bh
- uh5ys2i4ZCNkdryIgxMGroHHjDEihcZlASg5d/2VVrCKJClwGZn3sv35MUFCj9osjhBL
- ZU4+JR/XbxnpLduBuq5Ay758MPHZXZEbkFQlomI93yYby1gNx+7fdSDkriRJ31qSvVNV
- V4aw==
-X-Gm-Message-State: AOAM532+6fzccWVGFBrQfW/9Pcog9Iq2MW1AsDmSngBB4c7gjn++NqMR
- 8onncHiWPRHhPwt/9XjWGNg=
-X-Google-Smtp-Source: ABdhPJx2OXlykCzVVb3+K2F6hfd8lRLFHRG2MDeTytZwcFuOqNaoCabHJI6LZheGtzmQHopSz5JpYg==
-X-Received: by 2002:a7b:ce82:0:b0:394:2514:6f07 with SMTP id
- q2-20020a7bce82000000b0039425146f07mr9883240wmj.56.1652553336915; 
- Sat, 14 May 2022 11:35:36 -0700 (PDT)
-Received: from pevik (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- h18-20020a1ccc12000000b003943558a976sm5599168wmb.29.2022.05.14.11.35.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 May 2022 11:35:36 -0700 (PDT)
-Date: Sat, 14 May 2022 20:35:33 +0200
-From: Petr Vorel <petr.vorel@gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <Yn/2dekYOuHiq1yw@pevik>
-References: <20220510163249.21272-1-petr.vorel@gmail.com>
- <20220510163249.21272-3-petr.vorel@gmail.com>
- <91d3a296-4c11-4f31-d44c-4860ead80498@mind.be>
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DF7E860011
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 18:58:40 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:1949:2e37:e3d5:26d2])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id C5E9E5FF7A;
+ Sat, 14 May 2022 20:58:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1652554718;
+ bh=b3m0hkZLBRure/8yloHdjwn79q/5Yy4T+4+vhbrK7Gs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=a+IxGq1xPLv4rib7omzbpRMGdqepKCm3nBc8RKeyXwNFUSQCdNfnucryQ1Yq7ggUV
+ Gyi20vJPrJcAM2TXQHTdACOc0XvlVvmE2zzNuDg+XRIQ5iNcvWxfrtTNnuWOlw0aNz
+ k+js6cTow/vrcawuIqNrmvoPJeyin8++gAO6XvPDgHkuS7CxFU7/3I/koZy9i3H310
+ 1XGQKMEku6djNemaAHBt3tHJHJGcL0dOO3IxtQI0vKIkONEtOJ+QOGnhsUF/rat7H1
+ Okbv26l9OPXo6WDd+dyqB2JnWU9Bl1yUV3/qxjQ6wV7mZcGajnLRpyWNYku81uW+Hk
+ RPqI4XBNdnUIA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 14 May 2022 20:58:34 +0200
+Date: Sat, 14 May 2022 20:58:34 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220514185834.GA1597494@scaer>
+References: <20220514092152.1625466-1-fontaine.fabrice@gmail.com>
+ <20220514133641.GZ1597494@scaer>
+ <CAPi7W83wx+D5gYHKUtdS5abrYh-z-5h8QBe41pDnPrnCFK_HOQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <91d3a296-4c11-4f31-d44c-4860ead80498@mind.be>
-Subject: Re: [Buildroot] [PATCH 2/2] musl: backport netlink macro fix
+In-Reply-To: <CAPi7W83wx+D5gYHKUtdS5abrYh-z-5h8QBe41pDnPrnCFK_HOQ@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/v4l2loopback: add
+ V4L2LOOPBACK_LINUX_CONFIG_FIXUPS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,29 +74,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Alexandre Esse <alexandre.esse.dev@gmail.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Arnout,
-
-> > diff --git a/dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch b/dl/musl/0001-fix-incorrect-parameter-name-in-internal-netlink.h-R.patch
-
->  This should be in package/musl, not dl/musl. Also, subject should be
-> package/musl: ...
-Uh.
-
->  Applied both to master with that fixed.
-
-I'm sorry for silly mistakes, thanks for fixing them.
-
-Kind regards,
-Petr
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RmFicmljZSwgQWxsLAoKT24gMjAyMi0wNS0xNCAxNTo0NyArMDIwMCwgRmFicmljZSBGb250YWlu
+ZSBzcGFrZSB0aHVzbHk6Cj4gTGUgc2FtLiAxNCBtYWkgMjAyMiDDoCAxNTozNiwgWWFubiBFLiBN
+T1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+IGEgw6ljcml0IDoKPiA+IE9uIDIwMjItMDUt
+MTQgMTE6MjEgKzAyMDAsIEZhYnJpY2UgRm9udGFpbmUgc3Bha2UgdGh1c2x5OgpbLS1TTklQLS1d
+Cj4gPiA+ICsgICAgICQoY2FsbCBLQ09ORklHX0VOQUJMRV9PUFQsQ09ORklHX1ZJREVPX0RFVikK
+PiA+IFRoYXQgb25lIGFsc28gZGVwZW5kcyBvbiBDT05GSUdfSTJDICh3aGljaCBoYXMgbm8gZGVw
+ZW5kZW5jeSkuCj4gCj4gVGhhbmtzIGZvciB5b3VyIHJldmlldyBidXQgSSB3YXNuJ3QgYWJsZSB0
+byBmaW5kIHRoZSBDT05GSUdfSTJDCj4gZGVwZW5kZW5jeSBpbiBrZXJuZWwgNS4xNy43Lgo+IEhl
+cmUgaXMgYW4gZXh0cmFjdCBvZiBkcml2ZXJzL21lZGlhL0tjb25maWc6Cj4gCj4gY29uZmlnIFZJ
+REVPX0RFVgo+ICAgICB0cmlzdGF0ZSAiVmlkZW80TGludXggY29yZSIKPiAgICAgZGVmYXVsdCBN
+RURJQV9DQU1FUkFfU1VQUE9SVCB8fCBNRURJQV9BTkFMT0dfVFZfU1VQUE9SVCB8fAo+IE1FRElB
+X1JBRElPX1NVUFBPUlQgfHwgTUVESUFfU0RSX1NVUFBPUlQgfHwgTUVESUFfUExBVEZPUk1fU1VQ
+UE9SVCB8fAo+IE1FRElBX1RFU1RfU1VQUE9SVAoKQWgsIHRoYXQncyBjb21taXQgOTk1OGQzMGYz
+OGI5NmYsIHdoaWNoIGlzIGdvaW5nIHRvIGJlIHBhcnQgb2YgNS4xOC4KClJlZ2FyZHMsCllhbm4g
+RS4gTU9SSU4uCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0t
+LS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAg
+fCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJh
+Y3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJ
+R04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0t
+LS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBo
+dHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwg
+ICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0t
+LS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
+dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
