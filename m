@@ -1,46 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D5AFC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 15 May 2022 18:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F164C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 15 May 2022 19:32:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C03681445;
-	Sun, 15 May 2022 18:22:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DBFD60F9F;
+	Sun, 15 May 2022 19:32:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id meh9wvX0aBYI; Sun, 15 May 2022 18:22:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2v4AkiX_AMp8; Sun, 15 May 2022 19:32:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11B2281444;
-	Sun, 15 May 2022 18:22:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 314331BF424
- for <buildroot@lists.busybox.net>; Sun, 15 May 2022 18:22:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 728A760ACB;
+	Sun, 15 May 2022 19:32:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 527A11BF3A0
+ for <buildroot@lists.busybox.net>; Sun, 15 May 2022 19:32:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BE94A812FE
- for <buildroot@lists.busybox.net>; Sun, 15 May 2022 18:22:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C53C60ACB
+ for <buildroot@lists.busybox.net>; Sun, 15 May 2022 19:32:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dHQaZYQ39aDw for <buildroot@lists.busybox.net>;
- Sun, 15 May 2022 18:22:03 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E894581427
- for <buildroot@buildroot.org>; Sun, 15 May 2022 18:22:03 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7F65285EA0; Sun, 15 May 2022 18:11:04 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 15 May 2022 20:20:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5bd97b1c6d6f446a3ed621fd1d8a2fc6179ab696
-X-Git-Newrev: a6ab074b3fe6e5aa2e84da5986d123fd7a42c6e2
-X-Patchwork-Hint: ignore
-Message-Id: <20220515181104.7F65285EA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vlc: fix compilation with dav1d 1.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I9eugh1ciQex for <buildroot@lists.busybox.net>;
+ Sun, 15 May 2022 19:32:43 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com
+ [IPv6:2001:4860:4864:20::2a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 49C7F60A78
+ for <buildroot@buildroot.org>; Sun, 15 May 2022 19:32:43 +0000 (UTC)
+Received: by mail-oa1-x2a.google.com with SMTP id
+ 586e51a60fabf-f18e6ff0f6so2996988fac.11
+ for <buildroot@buildroot.org>; Sun, 15 May 2022 12:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=vx0C+M3Ppsh7J1fOViaBhSMoc1EDlHuvXDFwftzp9qQ=;
+ b=CD/8vTKXqfYpOtcE+rq5XKdetcmEx9fBh6OpYNbmSx2N9BT0ckGFdttOB2m8zCyHzV
+ xULIkU2c9iMHPOn4HZcZ/lBLjE9rugSoX4j+jqjpHOGUiALg0IQ9eskP18aeyGMiFRA7
+ Sqzvhm1b5VZWcLOHTa09dW2xN2dGM4Uye9kflHkamxw+lfJzHM0TdIIHhH3PmmwYBSbt
+ 0SQQdpFGicfnnKH3YxfhEXc+lgoRVg8IFj4WVHS7vXr4bQP0GnQTSiVcD1vLpgMfaU3W
+ ov9pd9i11anZv6Xo5CfIKiLlqVXBWc2LW3I6Ob8LdkGb1E2gJF/+FXGa1RkrqtS4aiW6
+ BSoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=vx0C+M3Ppsh7J1fOViaBhSMoc1EDlHuvXDFwftzp9qQ=;
+ b=CEM1QIbkTI80+a40cIZdThcjeHepJCmwQaf4qbcTyvRPHoro8gyDrxKNcFJ1WAa8f/
+ zfQLSLevDZVeIsqGvrThuAxlqyHXnoxhwtLjnku/czfsVFCaeyGXsKUyZfH7NGF4fCUO
+ JH/p89wYD6y4J1TXEvgkMGz5NGrol812wIn/Eg72Te4GFmb/b5AOnmIxIw3XlWD1JlSM
+ 64gdLByRyrLiyXW8j4RYF5rC3q9an2hR5y7GTSQWtH+AANRi4UWq4vrpLn9+OEsNcUb/
+ zRDpUTuOA4q1AC8xD0pcKnGvffy3INRuMvDmmHfsTzCplv1F4XSxw9/qQJgeOhL4hpjK
+ FscQ==
+X-Gm-Message-State: AOAM533OHgd+0/bu083rm4fsEgtFZfbCH8D6gbQZtExsoKCJmCVIlGkS
+ kcfQ4Ea61cx5CIZWkG3si+28QP5BvLGOdQMJ55Y=
+X-Google-Smtp-Source: ABdhPJxXpqCYmhiHD5rEcA/CVGGBO1Nii0Q2trA+jConA+X+cKodYVTXJd6FJWjk5tY7vJs3G4KE5PCfQtu1RWPG/GQ=
+X-Received: by 2002:a05:6870:fb8e:b0:f1:8e9b:f3d9 with SMTP id
+ kv14-20020a056870fb8e00b000f18e9bf3d9mr2277387oab.99.1652643162236; Sun, 15
+ May 2022 12:32:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220515110341.173923-1-romain.naour@gmail.com>
+In-Reply-To: <20220515110341.173923-1-romain.naour@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 15 May 2022 13:32:31 -0600
+Message-ID: <CADvTj4rsObRzgSQZcK9FJ7nyTg1DCCFfiaOQ21e7-S9227px1g@mail.gmail.com>
+To: Romain Naour <romain.naour@gmail.com>
+Subject: Re: [Buildroot] [PATCH] toolchain/toolchain-buildroot: error if no
+ libc available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,118 +81,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6ab074b3fe6e5aa2e84da5986d123fd7a42c6e2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, May 15, 2022 at 5:04 AM Romain Naour <romain.naour@gmail.com> wrote:
+>
+> Each libc available in Buildroot to build an internal toolchain have
+> dependencies (architecture, static build only, mmu only etc...).
+>
+> For examples, uClibc-ng is the only toolchain that support static only
+> builds. But since uClibc-ng doesn't support all architecture available
+> in Buildroot (nios2, riscv), we must prevent selecting static only
+> configuration (BR2_STATIC_LIBS) on such architectures.
+>
+> For such broken configuration, we can start building a toolchain by
+> building host-binutils and host-gcc-final without building
+> host-gcc-initial, linux-headers and uclibc package.
+>
+> The build fail during host-gcc-final build with the following error:
+>
+> In file included from ../../../libgcc/libgcc2.c:27:
+> ../../../libgcc/../gcc/tsystem.h:87:10: fatal error: stdio.h: No such file or directory
+>    87 | #include <stdio.h>
+>       |          ^~~~~~~~~
+> compilation terminated.
+>
+> We can't add an uClibc-ng dependency on BR2_STATIC_LIBS option since
+> it's also used for external toolchain backend.
+> Instead add a check if BR2_TOOLCHAIN_BUILDROOT_LIBC is not empty
 
-Fixes:
-http://autobuild.buildroot.net/results/a74/a74151c73b5dc613ce327a869105cb93631cbce9/
+I think something like this is probably better:
+https://patchwork.ozlabs.org/project/buildroot/patch/20220506054651.2853406-1-james.hilliard1@gmail.com/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...dav1d-fix-compilation-with-upcoming-dav1d.patch | 88 ++++++++++++++++++++++
- 1 file changed, 88 insertions(+)
-
-diff --git a/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch b/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch
-new file mode 100644
-index 0000000000..74b8645379
---- /dev/null
-+++ b/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch
-@@ -0,0 +1,88 @@
-+From 2202c892c8dc1381b596c53c2ebd3ca680061f95 Mon Sep 17 00:00:00 2001
-+From: Steve Lhomme <robux4@ycbcr.xyz>
-+Date: Fri, 18 Mar 2022 11:42:49 +0100
-+Subject: [PATCH] dav1d: fix compilation with (upcoming) dav1d 1.0
-+
-+(cherry picked from commit dbf45cea2a8abdfbef897b8a71f3eb782bb1b712) (edited)
-+edited:
-+- 3.0 has the 128 pixels padding elsewhere
-+- 3.0 has an extra parameter for add_integer_with_range()
-+- 3.0 was setting i_extra_picture_buffers further down in the code
-+- 3.0 uses 16 threads max
-+
-+Signed-off-by: Steve Lhomme <robux4@ycbcr.xyz>
-+
-+Downloaded from upstream commit
-+https://code.videolan.org/videolan/vlc/-/commit/2202c892c8dc1381b596c53c2ebd3ca680061f95
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ modules/codec/dav1d.c | 22 +++++++++++++++++++++-
-+ 1 file changed, 21 insertions(+), 1 deletion(-)
-+
-+diff --git a/modules/codec/dav1d.c b/modules/codec/dav1d.c
-+index 039165f52ec..cfabbc27cb3 100644
-+--- a/modules/codec/dav1d.c
-++++ b/modules/codec/dav1d.c
-+@@ -63,10 +63,16 @@ vlc_module_begin ()
-+     set_category(CAT_INPUT)
-+     set_subcategory(SUBCAT_INPUT_VCODEC)
-+ 
-++#if DAV1D_API_VERSION_MAJOR >= 6
-++    add_integer_with_range("dav1d-thread-frames", 0, 0, DAV1D_MAX_THREADS,
-++                THREAD_FRAMES_TEXT, THREAD_FRAMES_LONGTEXT, false)
-++    add_obsolete_string("dav1d-thread-tiles") // unused with dav1d 1.0
-++#else
-+     add_integer_with_range("dav1d-thread-frames", 0, 0, DAV1D_MAX_FRAME_THREADS,
-+                 THREAD_FRAMES_TEXT, THREAD_FRAMES_LONGTEXT, false)
-+     add_integer_with_range("dav1d-thread-tiles", 0, 0, DAV1D_MAX_TILE_THREADS,
-+                 THREAD_TILES_TEXT, THREAD_TILES_LONGTEXT, false)
-++#endif
-+ vlc_module_end ()
-+ 
-+ /*****************************************************************************
-+@@ -294,6 +300,11 @@ static int OpenDecoder(vlc_object_t *p_this)
-+         return VLC_ENOMEM;
-+ 
-+     dav1d_default_settings(&p_sys->s);
-++#if DAV1D_API_VERSION_MAJOR >= 6
-++    p_sys->s.n_threads = var_InheritInteger(p_this, "dav1d-thread-frames");
-++    if (p_sys->s.n_threads == 0)
-++        p_sys->s.n_threads = (i_core_count < 16) ? i_core_count : 16;
-++#else
-+     p_sys->s.n_tile_threads = var_InheritInteger(p_this, "dav1d-thread-tiles");
-+     if (p_sys->s.n_tile_threads == 0)
-+         p_sys->s.n_tile_threads =
-+@@ -303,6 +314,7 @@ static int OpenDecoder(vlc_object_t *p_this)
-+     p_sys->s.n_frame_threads = var_InheritInteger(p_this, "dav1d-thread-frames");
-+     if (p_sys->s.n_frame_threads == 0)
-+         p_sys->s.n_frame_threads = (i_core_count < 16) ? i_core_count : 16;
-++#endif
-+     p_sys->s.allocator.cookie = dec;
-+     p_sys->s.allocator.alloc_picture_callback = NewPicture;
-+     p_sys->s.allocator.release_picture_callback = FreePicture;
-+@@ -313,12 +325,20 @@ static int OpenDecoder(vlc_object_t *p_this)
-+         return VLC_EGENERIC;
-+     }
-+ 
-++#if DAV1D_API_VERSION_MAJOR >= 6
-++    msg_Dbg(p_this, "Using dav1d version %s with %d threads",
-++            dav1d_version(), p_sys->s.n_threads);
-++
-++    dec->i_extra_picture_buffers = (p_sys->s.n_threads - 1);
-++#else
-+     msg_Dbg(p_this, "Using dav1d version %s with %d/%d frame/tile threads",
-+             dav1d_version(), p_sys->s.n_frame_threads, p_sys->s.n_tile_threads);
-+ 
-++    dec->i_extra_picture_buffers = (p_sys->s.n_frame_threads - 1);
-++#endif
-++
-+     dec->pf_decode = Decode;
-+     dec->pf_flush = FlushDecoder;
-+-    dec->i_extra_picture_buffers = (p_sys->s.n_frame_threads - 1);
-+ 
-+     dec->fmt_out.video.i_width = dec->fmt_in.video.i_width;
-+     dec->fmt_out.video.i_height = dec->fmt_in.video.i_height;
-+-- 
-+GitLab
-+
+>
+> While at it, add a Kconfig comment for the user.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/42965d286285d5d6cfbb39f6195c87fa05dd3283/
+>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  toolchain/toolchain-buildroot/Config.in              | 3 +++
+>  toolchain/toolchain-buildroot/toolchain-buildroot.mk | 4 ++++
+>  2 files changed, 7 insertions(+)
+>
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index 8d9cf4cc68..a97b17acb8 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -107,6 +107,9 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+>         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>         default "musl"   if BR2_TOOLCHAIN_BUILDROOT_MUSL
+>
+> +comment "No libc available for this target! Please check your configuration"
+> +       depends on !BR2_TOOLCHAIN_BUILDROOT_LIBC
+> +
+>  source "package/linux-headers/Config.in.host"
+>  source "package/linux-headers/Config.in"
+>  source "package/musl/Config.in"
+> diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+> index b30cc332d2..7688d44615 100644
+> --- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+> +++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+> @@ -6,6 +6,10 @@
+>
+>  BR_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
+>
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT):$(BR_LIBC),y:)
+> +$(error "No libc available for this target! Please check your configuration.")
+> +endif
+> +
+>  # Triggering the build of the host-gcc-final will automatically do the
+>  # build of binutils, uClibc, kernel headers and all the intermediate
+>  # gcc steps.
+> --
+> 2.35.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
