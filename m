@@ -1,84 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94DF6C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 15 May 2022 09:05:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CD49C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 15 May 2022 09:14:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 265F660F5F;
-	Sun, 15 May 2022 09:05:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE08982893;
+	Sun, 15 May 2022 09:14:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RvZvZIN-FY_i; Sun, 15 May 2022 09:05:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rh3Ct0kOLPX1; Sun, 15 May 2022 09:14:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4148860F5C;
-	Sun, 15 May 2022 09:05:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0482C827AA;
+	Sun, 15 May 2022 09:14:35 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0BC6F1BF588
- for <buildroot@lists.busybox.net>; Sun, 15 May 2022 09:04:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 206391BF588
+ for <buildroot@lists.busybox.net>; Sun, 15 May 2022 09:14:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE2F740A65
- for <buildroot@lists.busybox.net>; Sun, 15 May 2022 09:04:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D22440A6A
+ for <buildroot@lists.busybox.net>; Sun, 15 May 2022 09:14:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zr2VGJ3asThP for <buildroot@lists.busybox.net>;
- Sun, 15 May 2022 09:04:46 +0000 (UTC)
+ with ESMTP id S-93SjgvdFtP for <buildroot@lists.busybox.net>;
+ Sun, 15 May 2022 09:14:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0C9ED40A42
- for <buildroot@buildroot.org>; Sun, 15 May 2022 09:04:45 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id r23so797728wrr.2
- for <buildroot@buildroot.org>; Sun, 15 May 2022 02:04:45 -0700 (PDT)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 08AEE40A42
+ for <buildroot@buildroot.org>; Sun, 15 May 2022 09:14:33 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ l38-20020a05600c1d2600b00395b809dfbaso6785696wms.2
+ for <buildroot@buildroot.org>; Sun, 15 May 2022 02:14:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=MLd+pZkN6zjECDA39wcFLitxFZRDdT9yzqF+4wwC+vU=;
- b=LxYzwAs/ATU7HtHCzjUBpT5bg+AurwLJZH1WG0HKDmNMUBWygyFgzQ5vdef94icL8+
- S2lQrX+LWV6oAKeoUsFmSNeH/QF4hIv8ifo7EsSRTV+IaL47zeOTdSYIuqdyR5mhX/Sm
- bu3VOqV91xcSUROgxke2C7uriK5WavpQqXMCEcN0JcWgCUan1T5rCViDoNWnOpvTqQU7
- KkIBchnvVWq8MJmjFJUuyLfPI7QUkKhx9CTX2oybkSj8QR9dmmzKrnas/A5ob+4cF6Mn
- HMjsf6H7mwxXcWq2ATDeLZFLjn1JhH84S4Gj1XWPuAYH1icDaKuxIKpOQvASccLJkaV8
- yWMQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=woBPTNvNr1h1IcGg91qLxSNfWyc3pteB0YewH4+Bi6Y=;
+ b=kzrOysVQ4YmB/G08ePTWFkrJRxCo6rNvq8mA1ZHM3rRJ6wv1lN3la7F1rEN2lqFO8r
+ WymIo3JrxfVnJJBk9K1e9urazVEtx0qqcL4pZqWNlCH2rmridxzgClz34Tbmvg0OkdBC
+ WcbJvimoTxiqTOCGWaW0oAXbN//xHbLZIiHn/qf3pORSv6SwJFnWcgMoR4P9xmnDNs2L
+ cMEfMpXTERRnFDdXG8zjso686V5OvYv/SlF9LLQdjUG0+2H9obUYa1pYGsIJCvlGuuJN
+ kCt8NCgHIHnR6u5FqHrTwZXO2sJIdDThDuYTR2zbHOIFnhp4MfG7UrJ72glLY9xH0qWY
+ 0hEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=MLd+pZkN6zjECDA39wcFLitxFZRDdT9yzqF+4wwC+vU=;
- b=CwCrEhcsZOSvWI5824B0GdL+F5cAEuqZByrG3R+5mZrw326FZjBMJDk3iznWEc+yyH
- N78YqJAa3Mq/WmVaPy4SV4x4iGEVwGJ37LNsQL1Z3dhCjKNweDzP5ZvRNI/5NAoIDc6B
- CECqLIc26hZdNeGuTwIOgs4xanXb8vM37HxoGMqUbYVfTGgzaHw9qnUhZnr4RJrW7BtZ
- kV8tb82exaitrZVqwdGVyfi5a+tD22/0heypBhLvdWcTArmHx9mGqILJhrjK60i1o3ox
- /GFH5/B05+aN/asj9lu1nqab7S9n6whBAB3OjJMjZojKAvnHcnHM5PVUNomL848lxxqA
- +Wyg==
-X-Gm-Message-State: AOAM5303Xt7yZ3dsrEn2abQjRjdjwmgne3wfaD3rBi2ls09Lpu6urLMc
- 3NAbpwo8TmyywqH0J4HMCxsTcfp1cgw=
-X-Google-Smtp-Source: ABdhPJwcW2fwzl12XT3LgBgMEytytgAu8dwkKcNBJkzPSIo2FgesP002qUreVpAFIsrIjMUrOvlBhg==
-X-Received: by 2002:a05:6000:1f9d:b0:20c:87b6:e775 with SMTP id
- bw29-20020a0560001f9d00b0020c87b6e775mr10096213wrb.253.1652605484095; 
- Sun, 15 May 2022 02:04:44 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=woBPTNvNr1h1IcGg91qLxSNfWyc3pteB0YewH4+Bi6Y=;
+ b=16Txi6bjIOUMmMa8Wc9x6M33cUtXc/cq6x8xMSpw1bdMhF5TziQfY3lYwA87R23WRA
+ 8IHefuagjPqjonCrugvHa06MyqmAKmJ6qoM7l0iAzC69rGevZVlSfaM2Alz1QW+aFGul
+ x6FszpexB3IefaItjUc1aa9xTrGmIOBhLB6uvmmbYn8WhOdbAf83o2aE4lVrYv5+OYFk
+ hFvc75D/nFIWXuUWL0rs/9bNHKi0miO2mtF6g3vRDmMPBsefq1e5dYkm1h54lOYwHEfV
+ /3opCIXDFjrMJ8AWNKERgKZ50ZsOf+d2iGO2RIRCLxUCZeLxWHPeCWikXNBlPK6W2DRH
+ 1nig==
+X-Gm-Message-State: AOAM533pcKky7/FfS8HISGaf2etoaih7WW2e/LOODf6dWe3BiQpooWFn
+ qHhhNYbE32cJh01ABVvZ459ii68xcjE=
+X-Google-Smtp-Source: ABdhPJznqDofbYXKUtDaM9Zo/FQIRA2KR3r+fuPWqIXqKWSgeZNhMa6n1LiyGrnDUnZwZzXGFzsSeA==
+X-Received: by 2002:a7b:ce8f:0:b0:394:46ae:549e with SMTP id
+ q15-20020a7bce8f000000b0039446ae549emr12180439wmj.54.1652606072004; 
+ Sun, 15 May 2022 02:14:32 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- o28-20020adfa11c000000b0020d03c14b9csm1889736wro.1.2022.05.15.02.04.43
+ c65-20020a1c3544000000b003949dbc3790sm7083544wma.18.2022.05.15.02.14.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 15 May 2022 02:04:43 -0700 (PDT)
+ Sun, 15 May 2022 02:14:31 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 May 2022 11:02:29 +0200
-Message-Id: <20220515090229.395668-2-fontaine.fabrice@gmail.com>
+Date: Sun, 15 May 2022 11:04:57 +0200
+Message-Id: <20220515090457.396038-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220515090229.395668-1-fontaine.fabrice@gmail.com>
-References: <20220515090229.395668-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/glibc: can't be built without optimization
+Subject: [Buildroot] [PATCH 1/1] package/git-crypt: fix build with libressl
+ >= 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,47 +89,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure:
+Fix the following build failure with libressl raised since bump to
+version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
 
-In file included from <command-line>:
-./../include/libc-symbols.h:75:3: error: #error "glibc cannot be compiled without optimization"
-   75 | # error "glibc cannot be compiled without optimization"
-      |   ^~~~~
+crypto-openssl-10.cpp:78:18: error: field 'ctx' has incomplete type 'HMAC_CTX' {aka 'hmac_ctx_st'}
+   78 |         HMAC_CTX ctx;
+      |                  ^~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/1ba20982d5ec0edc751a11a2d5639f5f6477b9bc
+ - http://autobuild.buildroot.org/results/98747d470c2ad59280934e160d24bd3fdad1503c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Force -O1 instead of disabling gcc
+ .../0001-fix-build-with-libressl-3.5.0.patch  | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/git-crypt/0001-fix-build-with-libressl-3.5.0.patch
 
- package/glibc/glibc.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 45155fdc28..5772c3355b 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -118,6 +118,11 @@ ifeq ($(BR2_nios2),y)
- GLIBC_CFLAGS += -O2
- endif
- 
-+# glibc can't be built without optimization
-+ifeq ($(BR2_OPTIMIZE_0),y)
-+GLIBC_CFLAGS += -O1
-+endif
+diff --git a/package/git-crypt/0001-fix-build-with-libressl-3.5.0.patch b/package/git-crypt/0001-fix-build-with-libressl-3.5.0.patch
+new file mode 100644
+index 0000000000..7daaf9c8fc
+--- /dev/null
++++ b/package/git-crypt/0001-fix-build-with-libressl-3.5.0.patch
+@@ -0,0 +1,56 @@
++From c21cde9010175e2355df17d4e81fedd6020603f8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 14 May 2022 00:03:51 +0200
++Subject: [PATCH] fix build with libressl >= 3.5.0
 +
- # glibc can't be built with Optimize for fast
- ifeq ($(BR2_OPTIMIZE_FAST),y)
- GLIBC_CFLAGS += -O2
++Fix the following build failure with libressl >= 3.5.0:
++
++crypto-openssl-10.cpp:78:18: error: field 'ctx' has incomplete type 'HMAC_CTX' {aka 'hmac_ctx_st'}
++   78 |         HMAC_CTX ctx;
++      |                  ^~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/98747d470c2ad59280934e160d24bd3fdad1503c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/AGWA/git-crypt/pull/249]
++---
++ crypto-openssl-10.cpp | 4 +++-
++ crypto-openssl-11.cpp | 4 +++-
++ 2 files changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/crypto-openssl-10.cpp b/crypto-openssl-10.cpp
++index f0f2c53..a7a5d52 100644
++--- a/crypto-openssl-10.cpp
+++++ b/crypto-openssl-10.cpp
++@@ -29,8 +29,10 @@
++  */
++ 
++ #include <openssl/opensslconf.h>
+++#include <openssl/opensslv.h>
++ 
++-#if !defined(OPENSSL_API_COMPAT)
+++#if !defined(OPENSSL_API_COMPAT) && \
+++	!(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x30500000L)
++ 
++ #include "crypto.hpp"
++ #include "key.hpp"
++diff --git a/crypto-openssl-11.cpp b/crypto-openssl-11.cpp
++index adf03bb..32c2483 100644
++--- a/crypto-openssl-11.cpp
+++++ b/crypto-openssl-11.cpp
++@@ -29,8 +29,10 @@
++  */
++ 
++ #include <openssl/opensslconf.h>
+++#include <openssl/opensslv.h>
++ 
++-#if defined(OPENSSL_API_COMPAT)
+++#if defined(OPENSSL_API_COMPAT) || \
+++	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x30500000L)
++ 
++ #include "crypto.hpp"
++ #include "key.hpp"
++-- 
++2.35.1
++
 -- 
 2.35.1
 
