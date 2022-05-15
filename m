@@ -4,84 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F189C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 15 May 2022 02:14:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59FF2C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 15 May 2022 03:25:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4FE7410C8;
-	Sun, 15 May 2022 02:14:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEF23409FB;
+	Sun, 15 May 2022 03:25:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wi-0oyPc3-io; Sun, 15 May 2022 02:14:27 +0000 (UTC)
+	with ESMTP id rKRiJg2a6mWN; Sun, 15 May 2022 03:25:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62C424092B;
-	Sun, 15 May 2022 02:14:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4A4CC1BF5EA
- for <buildroot@lists.busybox.net>; Sun, 15 May 2022 02:14:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57106409EE;
+	Sun, 15 May 2022 03:25:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 85EDC1BF962
+ for <buildroot@lists.busybox.net>; Sun, 15 May 2022 03:25:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3515960E74
- for <buildroot@lists.busybox.net>; Sun, 15 May 2022 02:14:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 74E33818E8
+ for <buildroot@lists.busybox.net>; Sun, 15 May 2022 03:25:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YBfBJKBd4iAs for <buildroot@lists.busybox.net>;
- Sun, 15 May 2022 02:14:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TLSmkO3Dkj7b for <buildroot@lists.busybox.net>;
+ Sun, 15 May 2022 03:25:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com
- [IPv6:2607:f8b0:4864:20::102d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2CC5760D74
- for <buildroot@buildroot.org>; Sun, 15 May 2022 02:14:24 +0000 (UTC)
-Received: by mail-pj1-x102d.google.com with SMTP id
- l11-20020a17090a49cb00b001d923a9ca99so11167971pjm.1
- for <buildroot@buildroot.org>; Sat, 14 May 2022 19:14:24 -0700 (PDT)
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com
+ [IPv6:2607:f8b0:4864:20::1032])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A135D818DC
+ for <buildroot@buildroot.org>; Sun, 15 May 2022 03:25:50 +0000 (UTC)
+Received: by mail-pj1-x1032.google.com with SMTP id
+ qe3-20020a17090b4f8300b001dc24e4da73so10485027pjb.1
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 20:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=Fp7Q6Dr0uu/ocpH9/ScmlEh197kfAJpZ3AxLv8ZYEYM=;
- b=hYGnKUyCk6zeKkvf91VQ5jQz+J4lgRZt9SMnvH4dK+SXPB1kLSUbDP0lM4Sccjvc7F
- wF9vjArm96DCnoJx06fkPcTXfHK7sOlbN5fw1BjZdaUCXBNXXczUVlu5Bo/f74OHfhR1
- szsz81mMO/bOO6GsI9NXln5teqp9xCronrmywwnSA0k4jgu9W9nuEtRZJIWwUiW0ccYR
- FqiEtLtinYtjKYnvuyUyo+E9+iGm04GR09GFnaBIf2NEJ851xet1Jaly38ICBebud6B6
- EtlqIrc7OAFWi1AMh++V1emsejt1Z91xVk1Y1PRs1Zoy+nm2n3094Q3jb0qPNW0DmsnE
- xBiQ==
+ h=date:from:to:cc:subject:message-id:references:mime-version
+ :content-disposition:in-reply-to;
+ bh=9xmJEw+WksKcONziOYqCpbCMU3BoS+PDns03YoFLFYU=;
+ b=jbrJyZKE6MXoIVFyBx2aDdDEvUXcyyTUw2TYYEwDOVQgakaQiHcmqWXn5b1lCvHqFx
+ qAjfv3TlZ+7XiKJoPogmAJfVA0JPQHXTWF3dxnu0ufQ7U+IP5ItZsL0d0AsFeyorzMaM
+ BhB1PJkFPu9okoafpLw+7/UVV+GhbXoGCE/b4ropCFE5UbbPVgIjVENmcl8yw6ehYfZV
+ OeC6Yi7c8cM+M/8TVc9ZS8p8wrdx5WborQyTfztISpqCjgH0BTJ4i5Ue8Q7g44TNzRNu
+ ZkXOubRHbB2Vqg79ZNhdZ7bdxiQMe+lyCqpbw0d3yT/DbqXnPgP4LtQNedGNjjhd4rRy
+ qTaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
- :content-transfer-encoding;
- bh=Fp7Q6Dr0uu/ocpH9/ScmlEh197kfAJpZ3AxLv8ZYEYM=;
- b=BUNP6DFkJglQvmeKPLoQa+UNQMuyT/N2cvTRnyErAYiPrYcZsEqHjPqgtWLr0rOoOl
- rmdtdWkmktJ61Yn70y/N3RfZvjb8V5Hc8Th15IByKHfewNezD355tDN5KBWMPGnJHs77
- hHOJD3/yLSOnucA/87TZSJnHj3XbQH099a3J+TPWnKkgmaLXG2viEHzBUpw/UZd+yDaa
- UuG9pCAZ0RD7WqNoXItoo6J3YA2eHD6GjmzBhOWk0AOy3W+vohzSguGVpzwCqEpZ7SFV
- 6izCkc4yAqt2AkzKKeMeOqjm4bUfbpXaS+V6LgDwspUFVnwphxRPecrlz/LEQTfaXeIc
- A2Xw==
-X-Gm-Message-State: AOAM530MhyY6dXxWdzzS00NGbbgIkezUz8tIRZ9nM+Xe3A0AUiU8pGGs
- FKx7zmFV4Rm+8E6VuEuf4qA=
-X-Google-Smtp-Source: ABdhPJy16WIahfOZybqJt3eRSXr6+CeeKwpn73XeGICVxu/IA6APXOM420+tc9ENqBeT3PLf7D6RFw==
-X-Received: by 2002:a17:902:a70d:b0:15e:da68:b1b1 with SMTP id
- w13-20020a170902a70d00b0015eda68b1b1mr11735576plq.53.1652580863463; 
- Sat, 14 May 2022 19:14:23 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:a874:f2e2:e388:1893?
- ([2600:8802:b00:4a48:a874:f2e2:e388:1893])
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to;
+ bh=9xmJEw+WksKcONziOYqCpbCMU3BoS+PDns03YoFLFYU=;
+ b=3AXunvtYewC7lbCsYFS+Fr5YcDo7GC0SBnRi3acaKNHguDNn7c0crSwtfXtnyAIXKM
+ l4gRaXUzMocrbGIhXJQXbZsK0QCHlwYAx3anT32Uvhz4M23SPAVOR7RZ2eekQvvFp81T
+ mXcpaD4ESSklfaGHeRkJU9EcoM4aSuzNKKtbwBWwXAEOslQtxQK3NHiFjY1JZLF/Sw/X
+ XQiEf+eAPAVZkGJ0/dKeMniaDtTGBuFKHQrdFadsZvgXDU2jo4gEFvCf7HaCbLadQwhm
+ HCxpocWJ/Hkr5ro2kHsxI/ZU+hmJTId88Y1GLOR2kFfX6ZYtFX8SoGetty3Hvj94Woa4
+ fXbA==
+X-Gm-Message-State: AOAM532vRTusAKjjkBhD/POiZHGw8PsksaI1vX6kUm4/kc0Ja9hZiRaJ
+ ppnRHLS9QcfMwqZEGUenqtM=
+X-Google-Smtp-Source: ABdhPJx1yRCldc+yUQ5hf/GChPM4qXolZVJwU64FJVGN30ZsNsMXKHn9e5wsCl4HbbVQTnPmPahOOQ==
+X-Received: by 2002:a17:902:ea0f:b0:15e:ad75:80d8 with SMTP id
+ s15-20020a170902ea0f00b0015ead7580d8mr12050861plg.150.1652585149965; 
+ Sat, 14 May 2022 20:25:49 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
  by smtp.gmail.com with ESMTPSA id
- 204-20020a6302d5000000b003c6a37b1628sm4033360pgc.13.2022.05.14.19.14.22
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 14 May 2022 19:14:22 -0700 (PDT)
-Message-ID: <14506c30-bf1c-71b3-bda5-b9105adf85b4@gmail.com>
-Date: Sat, 14 May 2022 19:14:21 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: Stafford Horne <shorne@gmail.com>
+ jg10-20020a17090326ca00b0015eb6d49679sm1616918plb.62.2022.05.14.20.25.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 14 May 2022 20:25:49 -0700 (PDT)
+Date: Sun, 15 May 2022 12:25:47 +0900
+From: Stafford Horne <shorne@gmail.com>
+To: Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <YoByu/uEWlDx+AT9@antec>
 References: <20220511001947.2112747-1-f.fainelli@gmail.com>
  <YoBg1aDzr7cEYB/l@antec>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <YoBg1aDzr7cEYB/l@antec>
+ <14506c30-bf1c-71b3-bda5-b9105adf85b4@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <14506c30-bf1c-71b3-bda5-b9105adf85b4@gmail.com>
 Subject: Re: [Buildroot] [PATCH] package/cpulimit: Disable build on OpenRISC
  with musl-libc
 X-BeenThere: buildroot@buildroot.org
@@ -95,39 +92,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin.1998@free.fr, mmayer@broadcom.com,
+Cc: yann.morin.1998@free.fr, musl@lists.openwall.com, mmayer@broadcom.com,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 5/14/2022 7:09 PM, Stafford Horne wrote:
-> On Tue, May 10, 2022 at 05:19:47PM -0700, Florian Fainelli wrote:
->> As reported in the following autobuild report:
->>
->> http://autobuild.buildroot.net/results/2a9cf20949beac46d1c689df2c5b7ab0d59c08b5/
->>
->> cpulimit does not build due to a lack of definition for elf_gregset_t
->> which is not currently provided in the or1k musl-libc port. While this
->> is being worked on, disable the build for or1k and musl-libc.
+On Sat, May 14, 2022 at 07:14:21PM -0700, Florian Fainelli wrote:
 > 
-> Hello,
 > 
-> You mention this is being worked on.  I am curious who is working on this?
+> On 5/14/2022 7:09 PM, Stafford Horne wrote:
+> > On Tue, May 10, 2022 at 05:19:47PM -0700, Florian Fainelli wrote:
+> > > As reported in the following autobuild report:
+> > > 
+> > > http://autobuild.buildroot.net/results/2a9cf20949beac46d1c689df2c5b7ab0d59c08b5/
+> > > 
+> > > cpulimit does not build due to a lack of definition for elf_gregset_t
+> > > which is not currently provided in the or1k musl-libc port. While this
+> > > is being worked on, disable the build for or1k and musl-libc.
+> > 
+> > Hello,
+> > 
+> > You mention this is being worked on.  I am curious who is working on this?
+> > 
+> > I try to look over OpenRISC stuff, do you need me to do anything on musl for
+> > this?
 > 
-> I try to look over OpenRISC stuff, do you need me to do anything on musl for
-> this?
+> I posted this:
+> 
+> https://www.openwall.com/lists/musl/2022/05/10/1
+> 
+> if you don't mind reviewing, thanks!
 
-I posted this:
+No problem, I don't have the mail in my inbox, I've subscribed to musl now.
 
-https://www.openwall.com/lists/musl/2022/05/10/1
+Put some comments below based on what I had configured in glibc.
 
-if you don't mind reviewing, thanks!
--- 
-Florian
+    diff --git a/arch/or1k/bits/user.h b/arch/or1k/bits/user.h
+    index e69de29bb2d1..3405bf771c0f 100644
+    --- a/arch/or1k/bits/user.h
+    +++ b/arch/or1k/bits/user.h
+    @@ -0,0 +1,11 @@
+    +struct user_regs {
+    +	unsigned long gpr[32];
+    +	unsigned long pc;
+    +	unsigned long sr;
+    +};
+
+OK, matches glibc.
+
+    +#define ELF_NGREG 34
+
+In glibc we define this as 32.  Howerver, we define elf_gregset_t as
+elf_gregset_t[34].  I don't see where ELF_NGREG is really used so I am
+not sure of the impact to this.  I also can't remember why I set these
+different in glibc.
+
+    +typedef unsigned long elf_greg_t, elf_gregset_t[ELF_NGREG];
+    +
+    +/* or32 does not have floating point support, placeholder */
+    +typedef unsigned long elf_fpregset_t;
+
+OpenRISC uses the same registers and floating point and integer. This is defined
+in glibc as:
+
+/* Register set for the floating-point registers.  */
+typedef elf_greg_t elf_fpregset_t[32];
+
+-Stafford
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
