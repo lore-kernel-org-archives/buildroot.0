@@ -4,78 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23DA6C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 14 May 2022 22:57:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78467C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 15 May 2022 02:09:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B852960E1A;
-	Sat, 14 May 2022 22:57:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1EF560E77;
+	Sun, 15 May 2022 02:09:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Sj55L2781Ics; Sat, 14 May 2022 22:57:48 +0000 (UTC)
+	with ESMTP id YavdmTRFQx1t; Sun, 15 May 2022 02:09:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C97C860D91;
-	Sat, 14 May 2022 22:57:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AAD1D1BF5F5
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 22:57:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D27560E73;
+	Sun, 15 May 2022 02:09:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 579C41BF5EA
+ for <buildroot@lists.busybox.net>; Sun, 15 May 2022 02:09:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A846082998
- for <buildroot@lists.busybox.net>; Sat, 14 May 2022 22:57:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D398408CA
+ for <buildroot@lists.busybox.net>; Sun, 15 May 2022 02:09:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RGgChSfxtZ8X for <buildroot@lists.busybox.net>;
- Sat, 14 May 2022 22:57:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2f4jvIMa98Ve for <buildroot@lists.busybox.net>;
+ Sun, 15 May 2022 02:09:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
- [IPv6:2607:f8b0:4864:20::d2a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1FE0E82948
- for <buildroot@buildroot.org>; Sat, 14 May 2022 22:57:45 +0000 (UTC)
-Received: by mail-io1-xd2a.google.com with SMTP id m6so12461742iob.4
- for <buildroot@buildroot.org>; Sat, 14 May 2022 15:57:45 -0700 (PDT)
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com
+ [IPv6:2607:f8b0:4864:20::431])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3EEA740004
+ for <buildroot@buildroot.org>; Sun, 15 May 2022 02:09:29 +0000 (UTC)
+Received: by mail-pf1-x431.google.com with SMTP id 204so11046261pfx.3
+ for <buildroot@buildroot.org>; Sat, 14 May 2022 19:09:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Kzpa2dG+9xoBdV5zqmID/NCgJsCmfb/XmTh/u3TnWfY=;
- b=aP10Oj6TF04v9hiP1beJrukP+9rKGBrqO24XqEkAM0Z/mbkh9aAQ878fKGJpfizd8L
- 6nrlU4KxG31DRgaT/oT84IbWlWqp21pfDW9L++1oFVJ4r3DTFu0MHfg2JXUh19CYYvLH
- ZnyTLC32Vww68uHfS5VcqAQYhpOnmdpCp8cUstdHTPoo0pzQEWs/vPhB30eIFnKQbzq+
- TOELDeY56TeNc7NJ3waC+zn7KKzLSblzKDxEhMGZazNK/7pcqDW5B9exp8nVeNF/y9yX
- 1qXMoIKI17i04FYz4u4+X4RUlIKrVLmtpkbLdt2yEfDjHEhymY9K3iJ4n/2rwpnKBxW1
- EZWQ==
+ h=date:from:to:cc:subject:message-id:references:mime-version
+ :content-disposition:in-reply-to;
+ bh=OtFFsxeQSuM0i4EUmG9Yh2YXBIdwd2FgTdfgsJ3AFJc=;
+ b=qAMj/y7UVH7iXmWjEgqktCTGxNv0+6MknWd3/f2BgpnMqdS47j4eSbM67fMzqWF6Kn
+ 96QHhcG1CbnO3tZNN/VDKraDR5gZJOxm5d8X67FsFvEHLgN5PK3dxsw2Av7ebC2eobxS
+ 9clq2g60w6o4zspG6CrAgwHtWQp4GJmEVWkIVzGBtoC9FhtYfsJz3lBqA/hYOi/8OAMZ
+ PcmkhO55aEgl46Na1tRogEaO6qS9P797Mr0xxdVJ9fY73utS+d2rd8ZeospQRztp6AF1
+ 3gfh/MNFqcj360RtKUb6UH9xkFLV09LbRecB6VHlSVpmo6CyREdDd/b5STTtWgNFDn1n
+ FmIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Kzpa2dG+9xoBdV5zqmID/NCgJsCmfb/XmTh/u3TnWfY=;
- b=zU5HHlQn7aKjE5KbJHrz2Rc6ZoHTfcJTfOIZKeip8d1KQqDpnd7VoojF80HSNifr3j
- eQ5JkYoOJvJJ9NFtGgkWP90XVcqiVrfFN64+FArxqoBfQRbH0PVRXw0jEDojkfokUXB9
- KR4V9Vv4lHlLg58veAdvhaHXPYVfLdESqhks5Ak2wBmqOk83J+HOsQhRWMXXwLmPO00z
- Zhojc+LJWfex51l9wcfQgPmHO71CXG3FHcwVIocFBr6SryTElgZo9eldcbXT6CT9ONmy
- k+KH1Lijs+40GlgY2fYlqE1VEKTf34KvH3+p7omirXdID02C/0a4v+VnVrt7BQa0WW+i
- W5Pw==
-X-Gm-Message-State: AOAM532+CT3WUT7jrqQNrGSL52DecCZSCVgxWEDee3/6rF9Zsb8TKusa
- ev9/Plewz9PJ+wnd3H49RAqZ8vDppjA=
-X-Google-Smtp-Source: ABdhPJzmoTvsuuPAdgRjR3hXvDMWloGC22ZgD1kJlwBjgaMFO88D+CN+qrqii/fL5Yhd4zwBWKlCFg==
-X-Received: by 2002:a05:6602:3d2:b0:65d:c151:f29f with SMTP id
- g18-20020a05660203d200b0065dc151f29fmr5114830iov.28.1652569064096; 
- Sat, 14 May 2022 15:57:44 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-134-20.hlrn.qwest.net.
- [97.118.134.20]) by smtp.gmail.com with ESMTPSA id
- q17-20020a056e02079100b002d11397f4f9sm349213ils.74.2022.05.14.15.57.43
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to;
+ bh=OtFFsxeQSuM0i4EUmG9Yh2YXBIdwd2FgTdfgsJ3AFJc=;
+ b=jqJtlgd327z9PCIk1bcxeQqLI8QMQt6cuF7OzUnBQdkYCl/yVtShx2AC7+cuR70hjI
+ TCC6d64aNQuFquttYGZ/nWDQ63CdYfwDnSh9N5uY/WXY32cXYNTvt6N2fQdqESkNf0yj
+ vXT8XOUEgZAWCH7Kg3j/k/o47Z06oiohDihLDQKzAhknkgWzrPG20Mc8EIeek1oepL39
+ d0D9/191QJzTvr28KexzvZmpInyKe4Eh/RUqzp1NsU8z2QlvST8/CWuTmQw+VzqsyBo9
+ KeSq0OB8c2JiMxKVCdSfPRR1PJ99VUddaHBuwzZ/J1qvpR2mdONVxVULj4joCPA6YLGp
+ GBRw==
+X-Gm-Message-State: AOAM533h0a8PEVgLha5c1/wwPMCBb03/R/bSRReNnlxt5JU04302CoOW
+ RSKu9ZCM4nNwc4aWt1cIgsk=
+X-Google-Smtp-Source: ABdhPJz8HkvmsGL3AiDiRQZ6dUjtoJ9kSEACQ5QqnZWdlRtCQGEhmeKoTTxUFzZctO1IA4GMAGdElg==
+X-Received: by 2002:a63:2048:0:b0:3db:7de7:34b4 with SMTP id
+ r8-20020a632048000000b003db7de734b4mr10106795pgm.105.1652580568665; 
+ Sat, 14 May 2022 19:09:28 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+ by smtp.gmail.com with ESMTPSA id
+ p2-20020a62d002000000b0050dc762814asm4264593pfg.36.2022.05.14.19.09.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 May 2022 15:57:43 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 14 May 2022 16:57:32 -0600
-Message-Id: <20220514225732.3102078-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ Sat, 14 May 2022 19:09:27 -0700 (PDT)
+Date: Sun, 15 May 2022 11:09:25 +0900
+From: Stafford Horne <shorne@gmail.com>
+To: Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <YoBg1aDzr7cEYB/l@antec>
+References: <20220511001947.2112747-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/gst1-imx: add missing
- BR2_INSTALL_LIBSTDCPP dependency
+Content-Disposition: inline
+In-Reply-To: <20220511001947.2112747-1-f.fainelli@gmail.com>
+Subject: Re: [Buildroot] [PATCH] package/cpulimit: Disable build on OpenRISC
+ with musl-libc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,39 +89,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>
+Cc: yann.morin.1998@free.fr, mmayer@broadcom.com,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_GST1_PLUGINS_BAD
-  Depends on [n]: BR2_PACKAGE_GSTREAMER1 [=y] && BR2_INSTALL_LIBSTDCPP [=n]
-  Selected by [y]:
-  - BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC [=y] && BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_IMX [=y]
+On Tue, May 10, 2022 at 05:19:47PM -0700, Florian Fainelli wrote:
+> As reported in the following autobuild report:
+> 
+> http://autobuild.buildroot.net/results/2a9cf20949beac46d1c689df2c5b7ab0d59c08b5/
+> 
+> cpulimit does not build due to a lack of definition for elf_gregset_t
+> which is not currently provided in the or1k musl-libc port. While this
+> is being worked on, disable the build for or1k and musl-libc.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/gstreamer1/gst1-imx/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Hello,
 
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index 41ef8548c5..18ffd1f7f5 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -81,6 +81,7 @@ comment "imxvpu needs the VPU imxvpuapi library"
- 
- config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC
- 	bool "imxv4l2videosrc"
-+	depends on BR2_INSTALL_LIBSTDCPP # gst1-plugins-bad
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD
- 	help
- 	  Elements for V4L2 capture
--- 
-2.25.1
+You mention this is being worked on.  I am curious who is working on this?
 
+I try to look over OpenRISC stuff, do you need me to do anything on musl for
+this?
+
+-Stafford
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
