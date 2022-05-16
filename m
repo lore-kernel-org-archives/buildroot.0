@@ -1,52 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F38F7C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 21:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE596C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 21:30:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 90CCB40918;
-	Mon, 16 May 2022 21:29:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B944418FF;
+	Mon, 16 May 2022 21:30:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TvI45Nv2_5j5; Mon, 16 May 2022 21:29:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Jqq6-sPvgyeB; Mon, 16 May 2022 21:30:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A30C140498;
-	Mon, 16 May 2022 21:29:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F2F7418D3;
+	Mon, 16 May 2022 21:30:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 033011BF35A
- for <buildroot@lists.busybox.net>; Mon, 16 May 2022 21:29:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D76451BF35A
+ for <buildroot@lists.busybox.net>; Mon, 16 May 2022 21:30:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D831A40498
- for <buildroot@lists.busybox.net>; Mon, 16 May 2022 21:29:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C4B714034B
+ for <buildroot@lists.busybox.net>; Mon, 16 May 2022 21:30:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b2pxS1iw7aYb for <buildroot@lists.busybox.net>;
- Mon, 16 May 2022 21:29:52 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DD5524034B
- for <buildroot@buildroot.org>; Mon, 16 May 2022 21:29:51 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EE0DDE0005
- for <buildroot@buildroot.org>; Mon, 16 May 2022 21:29:48 +0000 (UTC)
-Message-ID: <99679665-c4a2-464c-bd09-406e40084447@korsgaard.com>
-Date: Mon, 16 May 2022 23:29:48 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To: buildroot@buildroot.org
-References: <20220215015307.855341-1-james.hilliard1@gmail.com>
+ with ESMTP id vQ5WKgIfTByZ for <buildroot@lists.busybox.net>;
+ Mon, 16 May 2022 21:30:05 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B657040B90
+ for <buildroot@buildroot.org>; Mon, 16 May 2022 21:30:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id B26EE85E3D; Mon, 16 May 2022 21:19:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20220215015307.855341-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH v8 1/5] package/qt5/qt5base: enable ccache
- via configure option
+To: buildroot@buildroot.org
+Date: Mon, 16 May 2022 23:28:01 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fe6dc835e0581f82c570460903054d5b7d379cd2
+X-Git-Newrev: 9690c141f6f6644a5b92e950ac3b2a3c7fdd230b
+X-Patchwork-Hint: ignore
+Message-Id: <20220516211903.B26EE85E3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5base: enable ccache via
+ configure option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +53,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=9690c141f6f6644a5b92e950ac3b2a3c7fdd230b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This should be cleaner than editing mkspecs/common/g++-base.conf.
 
-On 15/02/2022 02.53, James Hilliard wrote:
-> This should be cleaner than editing mkspecs/common/g++-base.conf.
-> 
-> This should be more reliable with qt5webengine gn build system.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes v6 -> v7:
->    - remove QT5BASE_CONFIGURE_HOSTCC variable
-> ---
->   package/qt5/qt5base/qt5base.mk | 8 +++-----
->   1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index ef38d03253..cce92db81b 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -297,10 +297,9 @@ endef
->   endif
->   
->   # This allows to use ccache when available
-> -define QT5BASE_CONFIGURE_HOSTCC
-> -	$(SED) 's,^QMAKE_CC\s*=.*,QMAKE_CC = $(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
-> -	$(SED) 's,^QMAKE_CXX\s*=.*,QMAKE_CXX = $(HOSTCXX),' $(@D)/mkspecs/common/g++-base.conf
+This should be more reliable with qt5webengine gn build system.
 
-As pointed out by Yann on IRC, with this dropped we no longer enforce 
-that HOSTCC / HOSTCXX is used, so I've left in this hunk but changed to 
-the _NOCCACHE variants.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Peter: Leave in QMAKE_{CC,CXX} override to ensure HOST{CC,CXX} is used]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5base/qt5base.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---
-Bye, Peter Korsgaard
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 0c811b3ac1..926d6a307a 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -318,9 +318,14 @@ endef
+ endif
+ 
+ # This allows to use ccache when available
++ifeq ($(BR2_CCACHE),y)
++QT5BASE_CONFIGURE_OPTS += -ccache
++endif
++
++# Ensure HOSTCC/CXX is used
+ define QT5BASE_CONFIGURE_HOSTCC
+-	$(SED) 's,^QMAKE_CC\s*=.*,QMAKE_CC = $(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
+-	$(SED) 's,^QMAKE_CXX\s*=.*,QMAKE_CXX = $(HOSTCXX),' $(@D)/mkspecs/common/g++-base.conf
++	$(SED) 's,^QMAKE_CC\s*=.*,QMAKE_CC = $(HOSTCC_NOCCACHE),' $(@D)/mkspecs/common/g++-base.conf
++	$(SED) 's,^QMAKE_CXX\s*=.*,QMAKE_CXX = $(HOSTCXX_NOCCACHE),' $(@D)/mkspecs/common/g++-base.conf
+ endef
+ 
+ # Must be last so can override all options set by Buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
