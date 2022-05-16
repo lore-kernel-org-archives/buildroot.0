@@ -1,122 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFA3AC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 15:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F90AC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 16:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 712234184C;
-	Mon, 16 May 2022 15:13:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CDAD340B6B;
+	Mon, 16 May 2022 16:19:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s-q4W_YUJvCE; Mon, 16 May 2022 15:13:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YzzoBDV3rAj7; Mon, 16 May 2022 16:19:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3190740939;
-	Mon, 16 May 2022 15:13:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ECB7A1BF344
- for <buildroot@lists.busybox.net>; Mon, 16 May 2022 15:12:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 758B540ADF;
+	Mon, 16 May 2022 16:19:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2278C1BF362
+ for <buildroot@lists.busybox.net>; Mon, 16 May 2022 16:19:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB4DE61066
- for <buildroot@lists.busybox.net>; Mon, 16 May 2022 15:12:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DAF940ADF
+ for <buildroot@lists.busybox.net>; Mon, 16 May 2022 16:19:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IdsIiOCR_keM for <buildroot@lists.busybox.net>;
- Mon, 16 May 2022 15:12:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hszq773kVKlG for <buildroot@lists.busybox.net>;
+ Mon, 16 May 2022 16:19:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam12on20628.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe5a::628])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5594960709
- for <buildroot@buildroot.org>; Mon, 16 May 2022 15:12:29 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PhUR4OMBc1N+nNgx7DJzBEEgHSZzetuEAbI/clE3VtdeJXHyyHjunjTirlBcELW4jnY+iUGy0GJqNBYXFZjpw3hqRJGM7NKbXCgUvkDPA9MuiKyONUNWXPt7cY2//oEXpYIEnwkd8WZjnqE38pPePmOY7aZ2yWSbx41aSRVqjU880HWQvfwwiKKuxL5DB1oeo1bCMd2OUTHLxAkVn+yJhN07PyuG8OQBAqRkuvFBV1BUqwhl7jloRcPqwXlkc6GLm1nRQyUvPjYvQwl1JbCm8xszWGjeQZ8F/RJNJcTwBXC4fT1rMzp40pDMOyIQwBSTNbYWQ1UDPNyD0ZkBnInhWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qdMm5JkyzMCXW10kZvfCPAlwhdeAqZ+9aIDsfKpgM0w=;
- b=Pm62lg1Vz5hsHkimiEgiSXtGc/J14YU3oPIJ3QFm/1m0sTXi05eYdTtYBgXZopmyV0W/ByaMuuCO1eO9dTeqWHJ/86ZtcOL44p/ufD/05F+z4tNHmLjMzLRE77IH012CnV+Tho7MU74p0FCeaLT1wguU+sso+Qfu5FF1zT8knzGAVZn/YL5HHZh4MBrZTw53gqLKghNreSLj0chAteYhWKgJ8+wCPxubaTFbovcyEI5iujkJX/XfTQURdNtbF3rIzDWEb93+fcoz7KQKjlI1OeWK2lm+yko8Tp2ENMP2aLrj5KGRAVW6oqypOREHw1RhWsY4eX7Z2QmKR+W9hFF5iA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 149.199.62.198) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=amd.com; dkim=none (message not signed); arc=none
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com
+ [IPv6:2607:f8b0:4864:20::1129])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B2604404F8
+ for <buildroot@buildroot.org>; Mon, 16 May 2022 16:19:27 +0000 (UTC)
+Received: by mail-yw1-x1129.google.com with SMTP id
+ 00721157ae682-2ef5380669cso159065017b3.9
+ for <buildroot@buildroot.org>; Mon, 16 May 2022 09:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qdMm5JkyzMCXW10kZvfCPAlwhdeAqZ+9aIDsfKpgM0w=;
- b=KdGQ/vK4bya0mA1ageprmfN9qOCYsw0VCItvkKpUjk5cMrPtv8gatx5YscsYJ7KnSIOiJxDIto544+dzRDSlc9eonh9DFM1rlePoCqk1VhzwJ5hzwPRBiOZoU+1Huca1nKBlLSwIYBW/JtEV6aSp8Q96oLsIF9nx7OF0Tj1d2hc=
-Received: from BN7PR02CA0022.namprd02.prod.outlook.com (2603:10b6:408:20::35)
- by DM6PR02MB4330.namprd02.prod.outlook.com (2603:10b6:5:2a::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Mon, 16 May
- 2022 15:12:26 +0000
-Received: from BN1NAM02FT014.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:20:cafe::9d) by BN7PR02CA0022.outlook.office365.com
- (2603:10b6:408:20::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13 via Frontend
- Transport; Mon, 16 May 2022 15:12:26 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 149.199.62.198) smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=amd.com;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- amd.com discourages use of 149.199.62.198 as permitted sender)
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT014.mail.protection.outlook.com (10.13.2.131) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5250.13 via Frontend Transport; Mon, 16 May 2022 15:12:26 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 16 May 2022 08:12:15 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 16 May 2022 08:12:15 -0700
-Envelope-to: buildroot@buildroot.org, luca@lucaceresoli.net,
- giulio.benetti@benettiengineering.com, peter@korsgaard.com,
- michal.simek@amd.com, wesley@sonifex.co.uk, neal.frager@amd.com
-Received: from [172.25.185.186] (port=44046 helo=xcoapps69.xilinx.com)
- by smtp.xilinx.com with esmtp (Exim 4.90)
- (envelope-from <neal.frager@amd.com>)
- id 1nqcON-0000p8-Bg; Mon, 16 May 2022 08:12:15 -0700
-To: <buildroot@buildroot.org>
-Date: Mon, 16 May 2022 09:10:51 -0600
-Message-ID: <20220516151053.2363184-2-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220516151053.2363184-1-neal.frager@amd.com>
-References: <20220516151053.2363184-1-neal.frager@amd.com>
+ d=dynonavionics.com; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=4tyO9gOK2fe+whKAaTIMZe90B6aIUicZynrGcFtECRk=;
+ b=GGP3QtkDdR8F/8sMXGrFiFYMWgEAWEuQUxJtGDkuOq1BmGxYSjcUinahs64FZEN3U1
+ kihYIKJ+gQh3IGYrnmd4t6/kh2WZ+dRXf0JfVXyyT0imS0uKmnNWHkfkaomQCyEp/jiO
+ JqNnLTdMfWy6Mwaj4y0PexVj2crEvM3q7pE0w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=4tyO9gOK2fe+whKAaTIMZe90B6aIUicZynrGcFtECRk=;
+ b=v5HM3Dr+o/NGKnJ4JjUceXAldxY1sINViy7GzvWMtFe3e6Hjpz81ml1tKBkdT/XYba
+ HrnP18Es+xCtRhT3YJWVpqsPWhpnVqUiBQPQNkD8pRHvnIwn/CjD2OTOOWKvs+0OZVPF
+ Sqr8nL/cyhFKzNBU63hT8H1qFN2EcYaZNxQvgipOaxXtwtnL3yIxwpda5bIzZNO1xDRo
+ FfzQJQIKkYzE7G3WT4Z+QiTqTnzFKgfZdZh4oLBdo62ozx2ftRd2Or/+ppr6b8z3nRkZ
+ QOaHwFo2Rq6HgQkj+wMcgE4l9EwN+fsb9Vg/MWZplcj4rAR7sdYIxIVQekUvr6ZZltJH
+ TBRQ==
+X-Gm-Message-State: AOAM533f9+Gf761t++LFRuB/rn0oOlmBoMJmm9hf7UXSMl8PlntXugsn
+ ubDT2s31XuXuA/YF1e/GQq9OiDwq6oFe5hKLNXMW+A==
+X-Google-Smtp-Source: ABdhPJybfRO0MBdrojOpaHXlebwUZgs+9TGkPzxeeh4HC9SLHcuW7n1UU4F2vKlOV7ISWUC6QBHS06NnGnZq2iul5Pw=
+X-Received: by 2002:a81:805:0:b0:2f4:ce73:58c6 with SMTP id
+ 5-20020a810805000000b002f4ce7358c6mr20828436ywi.160.1652717966538; Mon, 16
+ May 2022 09:19:26 -0700 (PDT)
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f09c23d6-8289-442a-184a-08da374e7c79
-X-MS-TrafficTypeDiagnostic: DM6PR02MB4330:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR02MB4330A7A4B4B2C489F70ED740F0CF9@DM6PR02MB4330.namprd02.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 2
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9hhArXYrt+rzQ/mOjPd8F33ecgeh1UmXpdJn4klxVXw9aDvD49UizPUZdtPu6ikHE3aBRoJippzq54YMukO66tk8cbGYlmv2eyCl6Lyc9+W0MPe6YUdDy+PCKad7zsaTB9VTl2ulsXmgvHi5dUV5YkorP9tPwOctAw9CqeHeGIYYRCbEQ9WjP6dEkFrAbAcy5z0CIU2D9K3t6/OUXWS7dHdzKXWU8ca08njtWWJ4QjOOiwtD8+43pC/wNukWlPAuf9088bjrc+GT8c/sDmYzAeua5B7bCU8XIYDSdUWBdp/7l9Z2Hhk1sFsfxrWswg9W9HUeeDz89+yTJrZdBU86jpCYKQbBCRdFo4rQvZPeIoHD8YqCa5JLU5WlZNVM8/Lk8yXFVZ0xqMyG2c12iZXzD+VwvUP6Wsk4dkX0Rf/S35YnB4veYB6xpANspMiaUqPNu+ZIMiNrxMehthiBrYFA5dEEf6nUc02Rbf/zAU1JHoPUImnc89OvLxLg2hOkLSKQmsxsWI1xD5qMhIHuLP74modi7YJnJmcbxUjzNbjLjqB5tXsAo6qsRyBz8WZkLFnDx6jojsf5MY4D/fQ6I+1VSjAQ4AcUbvIIeccJ36o6j8TFs6oVY0xzxujTYVhOAs7i2dZMEyXbBrTDTvVWA9CGJ4nttKIjsasxNuAbkD7Q5mfp71bIvqX41s4YLafoMlKXVwKPvNUHVU4T1p2m3IYnaA==
-X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:xsj-pvapexch01.xlnx.xilinx.com;
- PTR:unknown-62-198.xilinx.com; CAT:NONE;
- SFS:(13230001)(4636009)(40470700004)(46966006)(7636003)(26005)(356005)(35950700001)(44832011)(508600001)(40460700003)(54906003)(6916009)(4744005)(86362001)(9786002)(82310400005)(36756003)(6666004)(2906002)(70206006)(316002)(5660300002)(47076005)(336012)(2616005)(8936002)(70586007)(8676002)(1076003)(4326008)(102446001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: xilinx.onmicrosoft.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 15:12:26.0384 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f09c23d6-8289-442a-184a-08da374e7c79
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
- Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT014.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4330
-Subject: [Buildroot] [PATCH v2 2/4] board/zynqmp/kria/kv260/uboot.fragment:
- add uboot build options
+References: <20211116104534.18868-1-kory.maincent@bootlin.com>
+ <4122452e-38c1-7044-398f-81c965bce9f9@mind.be>
+ <1935f55e-e2a5-1a4e-6bc2-135d8c8931cf@mind.be>
+In-Reply-To: <1935f55e-e2a5-1a4e-6bc2-135d8c8931cf@mind.be>
+From: David Corbeil <david.corbeil@dynonavionics.com>
+Date: Mon, 16 May 2022 09:19:16 -0700
+Message-ID: <CAHth+TVks46DRgjU=f7me-92yevVWQU5H8w_sYVWessx_sJHxA@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH v3] package/psplash: add support for missing
+ configure options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -128,47 +81,398 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: wesley@sonifex.co.uk, Neal Frager <neal.frager@amd.com>,
- luca@lucaceresoli.net, giulio.benetti@benettiengineering.com,
- michal.simek@amd.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Kory Maincent <kory.maincent@bootlin.com>, phil.eichinger@gmail.com,
+ thomas.petazzoni@bootlin.com, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============1167867904091718966=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds additional uboot build options that are
-required for kria k26 soms.
+--===============1167867904091718966==
+Content-Type: multipart/alternative; boundary="0000000000004f503b05df23634c"
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
- board/zynqmp/kria/kv260/uboot.fragment | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+--0000000000004f503b05df23634c
+Content-Type: text/plain; charset="UTF-8"
 
-diff --git a/board/zynqmp/kria/kv260/uboot.fragment b/board/zynqmp/kria/kv260/uboot.fragment
-index e1aca68692..a156748168 100644
---- a/board/zynqmp/kria/kv260/uboot.fragment
-+++ b/board/zynqmp/kria/kv260/uboot.fragment
-@@ -1 +1,14 @@
- CONFIG_DEFAULT_DEVICE_TREE="zynqmp-smk-k26-revA"
-+CONFIG_SYS_SPI_U_BOOT_OFFS=0xF80000
-+CONFIG_DMA=y
-+CONFIG_XILINX_DPDMA=y
-+CONFIG_PHY=y
-+CONFIG_PHY_XILINX_ZYNQMP=y
-+CONFIG_PINCTRL=y
-+CONFIG_PINCONF=y
-+CONFIG_POWER_DOMAIN=y
-+CONFIG_ZYNQMP_POWER_DOMAIN=y
-+CONFIG_DM_RESET=y
-+CONFIG_RESET_ZYNQMP=y
-+CONFIG_VIDEO_ZYNQMP_DPSUB=y
-+CONFIG_SF_DEFAULT_SPEED=40000000
+Ping
+
+On Sat, Dec 11, 2021 at 1:55 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+
+>
+> On 11/12/2021 10:51, Arnout Vandecappelle wrote:
+> >
+> >
+> > On 16/11/2021 11:45, Kory Maincent wrote:
+> >> Add support to three configure options:
+> >> --enable-startup-msg: Enable text banner output on startup
+> >> --enable-progress-bar: Enable progress bar
+> >> --enable-img-fullscreen: Enable the logo image in fullscreen mode
+>
+>   I forgot to mention before: the commit message should say explicitly
+> that
+> startup-msg and progress-bar default to enabled, so they have the
+> corresponding
+> default in Config.in.
+>
+>
+>
+>   Regards,
+>   Arnout
+>
+>
+> >>
+> >> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+> >> ---
+> >>
+> >> Change since v1:
+> >> Remove the crap .config.in.swp
+> >>
+> >> Change since v2:
+> >> Use both side of enable/disable configure option condition.
+> >> Use positive options in Kconfig.
+> >>
+> >>
+> >>   package/psplash/Config.in  | 17 +++++++++++++++++
+> >>   package/psplash/psplash.mk | 18 ++++++++++++++++++
+> >>   2 files changed, 35 insertions(+)
+> >>
+> >> diff --git a/package/psplash/Config.in b/package/psplash/Config.in
+> >> index da99b264e0..edd30dcb4d 100644
+> >> --- a/package/psplash/Config.in
+> >> +++ b/package/psplash/Config.in
+> >> @@ -35,6 +35,23 @@ config BR2_PACKAGE_PSPLASH_IMAGE
+> >>         Use a personalized png image as boot splash.
+> >>         Let it empty if you want to keep the psplash default image.
+> >>   +config BR2_PACKAGE_PSPLASH_FULL_SCREEN
+> >> +    bool "use fullscreen mode"
+> >> +    help
+> >> +      Enable the psplash image in fullscreen mode.
+> >> +
+> >> +config BR2_PACKAGE_PSPLASH_STARTUP_MSG
+> >> +    bool "enable startup message"
+> >> +    default y
+> >> +    help
+> >> +      Enable text banner output on startup.
+> >> +
+> >> +config BR2_PACKAGE_PSPLASH_PROGRESS_BAR
+> >> +    bool "enable progress bar"
+> >> +    default y
+> >> +    help
+> >> +      Enable the management of the progress bar.
+> >> +
+> >>   endif
+> >>     comment "psplash needs a toolchain w/ wchar"
+> >> diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+> >> index 5e61f2392f..e5b212381a 100644
+> >> --- a/package/psplash/psplash.mk
+> >> +++ b/package/psplash/psplash.mk
+> >> @@ -18,6 +18,24 @@ else
+> >>   PSPLASH_CONF_OPTS += --without-systemd
+> >>   endif
+> >>   +ifeq ($(BR2_PACKAGE_PSPLASH_FULL_SCREEN),y)
+> >> +PSPLASH_CONF_OPTS += --enable-img-fullscreen
+> >> +else
+> >> +PSPLASH_CONF_OPTS += --disable-img-fullscreen
+> >
+> >  Have you actually tested this?
+> >
+> >  I haven't, but I see this in configure.ac:
+> >
+> > AC_ARG_ENABLE([img-fullscreen],
+> >     AS_HELP_STRING([--enable-img-fullscreen], [Enable the logo image in
+> > fullscreen mode)]),
+> >     [img_fullscreen=true],
+> >     [img_fullscreen=false])
+> > AS_IF([test x$img_fullscreen = xtrue], [
+> >     EXTRA_GCC_FLAGS="$EXTRA_GCC_FLAGS -DPSPLASH_IMG_FULLSCREEN=1"
+> > ])
+> >
+> > i.a. AC_ARG_ENABLE is used incorrectly. That means that both
+> > --enable-img-fullscreen and --disable-image-fullscreen will enable the
+> option
+> > (because the action-if-present is img_fullscreen=true), while if nothing
+> is
+> > set it will be disbled.
+> >
+> >  Same for the other two options, but there the logic is inverted (i.e.
+> it's
+> > disabled if present and enabled if not).
+> >
+> >  I don't know if psplash is still an active project; if so, I would
+> propose to
+> > fix this in configure.ac and send the patch upstream. The fix is simple:
+> >
+> >
+> > AC_ARG_ENABLE([img-fullscreen],
+> >     AS_HELP_STRING([--enable-img-fullscreen], [Enable the logo image in
+> > fullscreen mode)]))
+> > AS_IF([test "x$enable_img_fullscreen" != "xno"], [
+> >     EXTRA_GCC_FLAGS="$EXTRA_GCC_FLAGS -DPSPLASH_IMG_FULLSCREEN=1"
+> > ])
+> >
+> >
+> >  and for enable-startup-msg:
+> >
+> > AC_ARG_ENABLE([startup-msg],
+> >     AS_HELP_STRING([--disable-startup-msg], [Disable text banner output
+> on
+> > startup]),
+> >     [],[enable_startup_msg=yes])
+> > AS_IF([test "x$enable_startup_msg" = "xno"], [
+> >     EXTRA_GCC_FLAGS="$EXTRA_GCC_FLAGS -DPSPLASH_DISABLE_STARTUP_MSG"
+> > ])
+> >
+> > (note: you have to use "no" because that is the value that is set when
+> > --disable-foo is given. You shouldn't use anything else because
+> > --enable-foo=no or --enable-foo=yes are also allowed).
+> >
+> >
+> >  Regards,
+> >  Arnout
+> >
+> >> +endif
+> >> +
+> >> +ifeq ($(BR2_PACKAGE_PSPLASH_STARTUP_MSG),y)
+> >> +PSPLASH_CONF_OPTS += --enable-startup-msg
+> >> +else
+> >> +PSPLASH_CONF_OPTS += --disable-startup-msg
+> >> +endif
+> >> +
+> >> +ifeq ($(BR2_PACKAGE_PSPLASH_PROGRESS_BAR),y)
+> >> +PSPLASH_CONF_OPTS += --enable-progress-bar
+> >> +else
+> >> +PSPLASH_CONF_OPTS += --disable-progress-bar
+> >> +endif
+> >> +
+> >>   PSPLASH_IMAGE = $(call qstrip,$(BR2_PACKAGE_PSPLASH_IMAGE))
+> >>     ifneq ($(PSPLASH_IMAGE),)
+> >>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+
+
 -- 
-2.17.1
+*David Corbeil-Stroombergen*
+Software development engineer
+Dynon
+425-402-0433 Main
+www.dynon.aero <http://www.dynonavionics.com/>
+
+--0000000000004f503b05df23634c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Ping</div><br><div class=3D"gmail_quote"><div dir=3D"ltr" =
+class=3D"gmail_attr">On Sat, Dec 11, 2021 at 1:55 AM Arnout Vandecappelle &=
+lt;<a href=3D"mailto:arnout@mind.be">arnout@mind.be</a>&gt; wrote:<br></div=
+><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border=
+-left:1px solid rgb(204,204,204);padding-left:1ex"><br>
+On 11/12/2021 10:51, Arnout Vandecappelle wrote:<br>
+&gt;<br>
+&gt;<br>
+&gt; On 16/11/2021 11:45, Kory Maincent wrote:<br>
+&gt;&gt; Add support to three configure options:<br>
+&gt;&gt; --enable-startup-msg: Enable text banner output on startup<br>
+&gt;&gt; --enable-progress-bar: Enable progress bar<br>
+&gt;&gt; --enable-img-fullscreen: Enable the logo image in fullscreen mode<=
+br>
+<br>
+=C2=A0=C2=A0I forgot to mention before: the commit message should say expli=
+citly that <br>
+startup-msg and progress-bar default to enabled, so they have the correspon=
+ding <br>
+default in Config.in.<br>
+<br>
+<br>
+<br>
+=C2=A0=C2=A0Regards,<br>
+=C2=A0=C2=A0Arnout<br>
+<br>
+<br>
+&gt;&gt;<br>
+&gt;&gt; Signed-off-by: Kory Maincent &lt;<a href=3D"mailto:kory.maincent@b=
+ootlin.com" target=3D"_blank">kory.maincent@bootlin.com</a>&gt;<br>
+&gt;&gt; ---<br>
+&gt;&gt;<br>
+&gt;&gt; Change since v1:<br>
+&gt;&gt; Remove the crap .config.in.swp<br>
+&gt;&gt;<br>
+&gt;&gt; Change since v2:<br>
+&gt;&gt; Use both side of enable/disable configure option condition.<br>
+&gt;&gt; Use positive options in Kconfig.<br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt; =C2=A0 package/psplash/Config.in=C2=A0 | 17 +++++++++++++++++<br>
+&gt;&gt; =C2=A0 package/psplash/<a href=3D"http://psplash.mk" rel=3D"norefe=
+rrer" target=3D"_blank">psplash.mk</a> | 18 ++++++++++++++++++<br>
+&gt;&gt; =C2=A0 2 files changed, 35 insertions(+)<br>
+&gt;&gt;<br>
+&gt;&gt; diff --git a/package/psplash/Config.in b/package/psplash/Config.in=
+<br>
+&gt;&gt; index da99b264e0..edd30dcb4d 100644<br>
+&gt;&gt; --- a/package/psplash/Config.in<br>
+&gt;&gt; +++ b/package/psplash/Config.in<br>
+&gt;&gt; @@ -35,6 +35,23 @@ config BR2_PACKAGE_PSPLASH_IMAGE<br>
+&gt;&gt; =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Use a personalized png =
+image as boot splash.<br>
+&gt;&gt; =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Let it empty if you wan=
+t to keep the psplash default image.<br>
+&gt;&gt; =C2=A0 +config BR2_PACKAGE_PSPLASH_FULL_SCREEN<br>
+&gt;&gt; +=C2=A0=C2=A0=C2=A0 bool &quot;use fullscreen mode&quot;<br>
+&gt;&gt; +=C2=A0=C2=A0=C2=A0 help<br>
+&gt;&gt; +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Enable the psplash image in fullsc=
+reen mode.<br>
+&gt;&gt; +<br>
+&gt;&gt; +config BR2_PACKAGE_PSPLASH_STARTUP_MSG<br>
+&gt;&gt; +=C2=A0=C2=A0=C2=A0 bool &quot;enable startup message&quot;<br>
+&gt;&gt; +=C2=A0=C2=A0=C2=A0 default y<br>
+&gt;&gt; +=C2=A0=C2=A0=C2=A0 help<br>
+&gt;&gt; +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Enable text banner output on start=
+up.<br>
+&gt;&gt; +<br>
+&gt;&gt; +config BR2_PACKAGE_PSPLASH_PROGRESS_BAR<br>
+&gt;&gt; +=C2=A0=C2=A0=C2=A0 bool &quot;enable progress bar&quot;<br>
+&gt;&gt; +=C2=A0=C2=A0=C2=A0 default y<br>
+&gt;&gt; +=C2=A0=C2=A0=C2=A0 help<br>
+&gt;&gt; +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Enable the management of the progr=
+ess bar.<br>
+&gt;&gt; +<br>
+&gt;&gt; =C2=A0 endif<br>
+&gt;&gt; =C2=A0 =C2=A0 comment &quot;psplash needs a toolchain w/ wchar&quo=
+t;<br>
+&gt;&gt; diff --git a/package/psplash/<a href=3D"http://psplash.mk" rel=3D"=
+noreferrer" target=3D"_blank">psplash.mk</a> b/package/psplash/<a href=3D"h=
+ttp://psplash.mk" rel=3D"noreferrer" target=3D"_blank">psplash.mk</a><br>
+&gt;&gt; index 5e61f2392f..e5b212381a 100644<br>
+&gt;&gt; --- a/package/psplash/<a href=3D"http://psplash.mk" rel=3D"norefer=
+rer" target=3D"_blank">psplash.mk</a><br>
+&gt;&gt; +++ b/package/psplash/<a href=3D"http://psplash.mk" rel=3D"norefer=
+rer" target=3D"_blank">psplash.mk</a><br>
+&gt;&gt; @@ -18,6 +18,24 @@ else<br>
+&gt;&gt; =C2=A0 PSPLASH_CONF_OPTS +=3D --without-systemd<br>
+&gt;&gt; =C2=A0 endif<br>
+&gt;&gt; =C2=A0 +ifeq ($(BR2_PACKAGE_PSPLASH_FULL_SCREEN),y)<br>
+&gt;&gt; +PSPLASH_CONF_OPTS +=3D --enable-img-fullscreen<br>
+&gt;&gt; +else<br>
+&gt;&gt; +PSPLASH_CONF_OPTS +=3D --disable-img-fullscreen<br>
+&gt;<br>
+&gt; =C2=A0Have you actually tested this?<br>
+&gt;<br>
+&gt; =C2=A0I haven&#39;t, but I see this in <a href=3D"http://configure.ac"=
+ rel=3D"noreferrer" target=3D"_blank">configure.ac</a>:<br>
+&gt;<br>
+&gt; AC_ARG_ENABLE([img-fullscreen],<br>
+&gt; =C2=A0=C2=A0=C2=A0 AS_HELP_STRING([--enable-img-fullscreen], [Enable t=
+he logo image in <br>
+&gt; fullscreen mode)]),<br>
+&gt; =C2=A0=C2=A0=C2=A0 [img_fullscreen=3Dtrue],<br>
+&gt; =C2=A0=C2=A0=C2=A0 [img_fullscreen=3Dfalse])<br>
+&gt; AS_IF([test x$img_fullscreen =3D xtrue], [<br>
+&gt; =C2=A0=C2=A0=C2=A0 EXTRA_GCC_FLAGS=3D&quot;$EXTRA_GCC_FLAGS -DPSPLASH_=
+IMG_FULLSCREEN=3D1&quot;<br>
+&gt; ])<br>
+&gt;<br>
+&gt; i.a. AC_ARG_ENABLE is used incorrectly. That means that both <br>
+&gt; --enable-img-fullscreen and --disable-image-fullscreen will enable the=
+ option <br>
+&gt; (because the action-if-present is img_fullscreen=3Dtrue), while if not=
+hing is <br>
+&gt; set it will be disbled.<br>
+&gt;<br>
+&gt; =C2=A0Same for the other two options, but there the logic is inverted =
+(i.e. it&#39;s <br>
+&gt; disabled if present and enabled if not).<br>
+&gt;<br>
+&gt; =C2=A0I don&#39;t know if psplash is still an active project; if so, I=
+ would propose to <br>
+&gt; fix this in <a href=3D"http://configure.ac" rel=3D"noreferrer" target=
+=3D"_blank">configure.ac</a> and send the patch upstream. The fix is simple=
+:<br>
+&gt;<br>
+&gt;<br>
+&gt; AC_ARG_ENABLE([img-fullscreen],<br>
+&gt; =C2=A0=C2=A0=C2=A0 AS_HELP_STRING([--enable-img-fullscreen], [Enable t=
+he logo image in <br>
+&gt; fullscreen mode)]))<br>
+&gt; AS_IF([test &quot;x$enable_img_fullscreen&quot; !=3D &quot;xno&quot;],=
+ [<br>
+&gt; =C2=A0=C2=A0=C2=A0 EXTRA_GCC_FLAGS=3D&quot;$EXTRA_GCC_FLAGS -DPSPLASH_=
+IMG_FULLSCREEN=3D1&quot;<br>
+&gt; ])<br>
+&gt;<br>
+&gt;<br>
+&gt; =C2=A0and for enable-startup-msg:<br>
+&gt;<br>
+&gt; AC_ARG_ENABLE([startup-msg],<br>
+&gt; =C2=A0=C2=A0=C2=A0 AS_HELP_STRING([--disable-startup-msg], [Disable te=
+xt banner output on <br>
+&gt; startup]),<br>
+&gt; =C2=A0=C2=A0=C2=A0 [],[enable_startup_msg=3Dyes])<br>
+&gt; AS_IF([test &quot;x$enable_startup_msg&quot; =3D &quot;xno&quot;], [<b=
+r>
+&gt; =C2=A0=C2=A0=C2=A0 EXTRA_GCC_FLAGS=3D&quot;$EXTRA_GCC_FLAGS -DPSPLASH_=
+DISABLE_STARTUP_MSG&quot;<br>
+&gt; ])<br>
+&gt;<br>
+&gt; (note: you have to use &quot;no&quot; because that is the value that i=
+s set when <br>
+&gt; --disable-foo is given. You shouldn&#39;t use anything else because <b=
+r>
+&gt; --enable-foo=3Dno or --enable-foo=3Dyes are also allowed).<br>
+&gt;<br>
+&gt;<br>
+&gt; =C2=A0Regards,<br>
+&gt; =C2=A0Arnout<br>
+&gt;<br>
+&gt;&gt; +endif<br>
+&gt;&gt; +<br>
+&gt;&gt; +ifeq ($(BR2_PACKAGE_PSPLASH_STARTUP_MSG),y)<br>
+&gt;&gt; +PSPLASH_CONF_OPTS +=3D --enable-startup-msg<br>
+&gt;&gt; +else<br>
+&gt;&gt; +PSPLASH_CONF_OPTS +=3D --disable-startup-msg<br>
+&gt;&gt; +endif<br>
+&gt;&gt; +<br>
+&gt;&gt; +ifeq ($(BR2_PACKAGE_PSPLASH_PROGRESS_BAR),y)<br>
+&gt;&gt; +PSPLASH_CONF_OPTS +=3D --enable-progress-bar<br>
+&gt;&gt; +else<br>
+&gt;&gt; +PSPLASH_CONF_OPTS +=3D --disable-progress-bar<br>
+&gt;&gt; +endif<br>
+&gt;&gt; +<br>
+&gt;&gt; =C2=A0 PSPLASH_IMAGE =3D $(call qstrip,$(BR2_PACKAGE_PSPLASH_IMAGE=
+))<br>
+&gt;&gt; =C2=A0 =C2=A0 ifneq ($(PSPLASH_IMAGE),)<br>
+&gt;&gt;<br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
+ class=3D"gmail_signature"><div dir=3D"ltr"><div dir=3D"ltr"><div><b style=
+=3D"color:rgb(68,68,68);font-size:12.8px">David Corbeil-Stroombergen</b><br=
+></div><font color=3D"#444444">Software development=C2=A0engineer<br></font=
+></div><div dir=3D"ltr"><font color=3D"#444444">Dynon</font></div><div dir=
+=3D"ltr"><span style=3D"color:rgb(68,68,68)">425-402-0433 Main</span>=C2=A0=
+<font color=3D"#444444"><br></font></div><div dir=3D"ltr"><font color=3D"#4=
+44444"><a href=3D"http://www.dynonavionics.com/" style=3D"color:rgb(17,85,2=
+04);font-size:12.8px" target=3D"_blank">www.dynon.aero</a></font></div></di=
+v></div>
+
+--0000000000004f503b05df23634c--
+
+--===============1167867904091718966==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1167867904091718966==--
