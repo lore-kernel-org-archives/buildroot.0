@@ -1,80 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A478FC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 21:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41327C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 21:50:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 56FBB40A6E;
-	Mon, 16 May 2022 21:50:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E44A161148;
+	Mon, 16 May 2022 21:50:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3nMWnPJnUtlg; Mon, 16 May 2022 21:50:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0hgNefJ1KnKI; Mon, 16 May 2022 21:50:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E95934048F;
-	Mon, 16 May 2022 21:50:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2189D1BF35A
+	by smtp3.osuosl.org (Postfix) with ESMTP id C934161123;
+	Mon, 16 May 2022 21:50:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F3071BF35A
  for <buildroot@lists.busybox.net>; Mon, 16 May 2022 21:50:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F02E418F8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D81B4048F
  for <buildroot@lists.busybox.net>; Mon, 16 May 2022 21:50:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YKm6i2GvihC0 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UK57w52d-tDE for <buildroot@lists.busybox.net>;
  Mon, 16 May 2022 21:50:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F072E418F7
- for <buildroot@buildroot.org>; Mon, 16 May 2022 21:50:20 +0000 (UTC)
-Received: by mail-io1-xd2b.google.com with SMTP id z18so17489122iob.5
- for <buildroot@buildroot.org>; Mon, 16 May 2022 14:50:20 -0700 (PDT)
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
+ [IPv6:2607:f8b0:4864:20::d2d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8CA264010C
+ for <buildroot@buildroot.org>; Mon, 16 May 2022 21:50:21 +0000 (UTC)
+Received: by mail-io1-xd2d.google.com with SMTP id a10so17444014ioe.9
+ for <buildroot@buildroot.org>; Mon, 16 May 2022 14:50:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=mwm+Q1u3WGwXFglwMXAywTWJ/IrkUuXf7VtjVbvqejE=;
- b=Io2wwYQsAIuHgpN5kO2lIhtVB7dZEECsrrrqZsuvm8ywZT1hdLNH7TSK6yPW+/oTnl
- 9apwiZZIQMLaxFPs0N0NcHG9ZsS8pqeWN5T5DMu4yBMRKQKjQMFYTH/xjZlf9okupcWE
- f1JOolunCn3TL/L8OHGTGxHY8dRHwWiAPory9gR7sPBAFWS1zbWo4sXnLnYrhIEXpbqb
- qj9Andx67sb/IF7YB2glR4DCbIOoATDlOg2bmMj5ALXjb4qDYv3sT0E3E4VSUd297kxv
- LIRP0IqiwPc7qINbb/2HrQhHyxuSA5NXbSQZFLwBpeivz/AATgrwqJ2xlyZe4E/8Ay38
- PCuQ==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=9lT2oA45RwnAnrvsNDutKut8xw7f309vh2qAAKp6Sqg=;
+ b=FdLkrYM0vIG295VzTNpb5EOww8BFg0itiwFaVqhawSjtogk13tfSimHTrOOz7jEgrf
+ /kTUlQdNh1GfjAX7+L1iUfBk2IxdsbPuPoNsxUeWDgwl+a8WrW7TlGy6sJxTGx7+mQzU
+ 1n3d+EwMqMsf++BJ44EJYh3DmUv4/xwGx2XbrLV9qIgPJjqze1NNBd0/48Aga0KfYxhy
+ kYdgk0datuqsevlNDeJy62f905MdVGDYNywywX9/1PzfN9albuypHExzMbro5cPRgYCp
+ TWX4Ulju6U4YOuEkUcJjRhNzKnvKPmqe7FPcMxwofggzhtQd37nUaaoOXdtbgF5tfRuG
+ q52A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=mwm+Q1u3WGwXFglwMXAywTWJ/IrkUuXf7VtjVbvqejE=;
- b=JMP0a+AB5TDlK0O2UYk7q2huGn2FcubSJ/JXsHopywV4FZT+xQFlkhRSiVQYDW0qqv
- Hna8tstfLiSJuVDbE6FwztTaTWsZ2pZqsd/MqAeFh0TyDuf9KL6wCjZgQTzBI6CtJduA
- yU8nj0hNiW4tsMz4RVYOXa0UgaS10ubsgmxEP6ZQLn6XAN1VdnXt5Ppr6xXyp+ERmEXH
- vMuVOr0a+7lFyzaivWydnYJBtTlF1tYnMR8lmLv9q86IQ1IVEWP/h3GQPvSCUsgvHV5J
- rQtKQqPrrE62YPWLmoysYnB9mvfa6kYiPWemdlOMvQs3QxTqGoZ5MuESGRxAOxZwPjWG
- c3hw==
-X-Gm-Message-State: AOAM532gK1tDHOn+rgcKQnex342d9QSOrIcj1zoimht9XaW5SwJdRcdF
- iSvStGWpLffKhHoJICJkpzpoi82zjsM=
-X-Google-Smtp-Source: ABdhPJwRSRir0wZEZgdl+UvzfORCu693wcstdn5R058Rdflpm6ymQCcgzlz3vvCYryW176YoiM20Sw==
-X-Received: by 2002:a05:6638:1515:b0:32b:eb62:97c8 with SMTP id
- b21-20020a056638151500b0032beb6297c8mr10740674jat.61.1652737819837; 
- Mon, 16 May 2022 14:50:19 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=9lT2oA45RwnAnrvsNDutKut8xw7f309vh2qAAKp6Sqg=;
+ b=mwintIPsCcDddM3/TI85Vgt3iYYq+DJGfidys3RL5aAj2eC3GHYH8C1r4pbeoeaXsK
+ c2pKNUdMrDbGcaqEY/ui1wxLt8c0baM9TeCnjwWVfLXHrlrqU8c2trtR8ivLevUoW7Ru
+ onzkTuVK2pMCm53lNR/IbX4/RbICK+VzxDwtC4H55ciEmh3fezmVmhn9Ey2eaOMZOjF0
+ 0MiyPrhDJrd7A7gQ9nRa8FBLR2Alv13626fb0tdiOmx5prPAjcc2r7apdjfCACPtFR4D
+ ZE0MD89hBQiSnAbQxAcspMTwI+k+TmFAf3skCP/vlqCvD/TWPsKUi7cH7weZ8mes3qY/
+ E33w==
+X-Gm-Message-State: AOAM533gQxu2pgUTjL8pZfiUpQqRZk8zpaAhOW4h9RE6VUKzY2mEk69j
+ /Vw12kQAdFi1Nuw8GI+g5aOdXrm7l5I=
+X-Google-Smtp-Source: ABdhPJyWrDSIKU8/dTIt4siVxSzqossvODhheq5tsf00tpn89MQtM+hzqoUK90Zcax+kbvkYFq5XeQ==
+X-Received: by 2002:a02:b396:0:b0:32e:1255:4d75 with SMTP id
+ p22-20020a02b396000000b0032e12554d75mr6741369jan.138.1652737820493; 
+ Mon, 16 May 2022 14:50:20 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-134-20.hlrn.qwest.net.
  [97.118.134.20]) by smtp.gmail.com with ESMTPSA id
  n29-20020a02715d000000b0032b3a7817d8sm3055496jaf.156.2022.05.16.14.50.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 May 2022 14:50:19 -0700 (PDT)
+ Mon, 16 May 2022 14:50:20 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 16 May 2022 15:50:14 -0600
-Message-Id: <20220516215015.4107253-1-james.hilliard1@gmail.com>
+Date: Mon, 16 May 2022 15:50:15 -0600
+Message-Id: <20220516215015.4107253-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220516215015.4107253-1-james.hilliard1@gmail.com>
+References: <20220516215015.4107253-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 1/2] package/python-maturin: new package
+Subject: [Buildroot] [PATCH v3 2/2] package/python-orjson: bump to version
+ 3.6.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,69 +98,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is pep517 pyo3 build backend that's an alternative to
-python-setuptools-rust.
-
-Note that maturin itself uses python-setuptools-rust for
-bootstrapping.
+Convert package to use python infrastructure instead of cargo
+infrastructure.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Tested-by: Graeme Smecher <gsmecher@threespeedlogic.com>
 ---
-Changes v2 -> v3:
-  - update to 0.12.16
-  - migrate to new python-setuptools-rust based bootstrapping
-Changes v1 -> v2:
-  - update patch comment to backport as it is merged upstream
----
- package/python-maturin/python-maturin.hash |  5 +++++
- package/python-maturin/python-maturin.mk   | 25 ++++++++++++++++++++++
- 2 files changed, 30 insertions(+)
- create mode 100644 package/python-maturin/python-maturin.hash
- create mode 100644 package/python-maturin/python-maturin.mk
+ package/python-orjson/python-orjson.hash |  5 +++--
+ package/python-orjson/python-orjson.mk   | 24 ++++++++++++------------
+ 2 files changed, 15 insertions(+), 14 deletions(-)
 
-diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
-new file mode 100644
-index 0000000000..8f86311d60
---- /dev/null
-+++ b/package/python-maturin/python-maturin.hash
-@@ -0,0 +1,5 @@
+diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
+index 5ef2726d82..06cc5cae79 100644
+--- a/package/python-orjson/python-orjson.hash
++++ b/package/python-orjson/python-orjson.hash
+@@ -1,4 +1,5 @@
+-# Locally calculated
+-sha256  4713b120ad86b1b273f5952cbf9578c13d0f453064bd26d823e04a10c84824e6  python-orjson-3.6.7.tar.gz
 +# Locally calculated after vendoring
-+sha256  91be78b43e737323a0946069a9582acbff6a0692523e016838b7fb09c1c55ee4  maturin-0.12.16.tar.gz
++sha256  40b95576b81916d167f7a44829401acb3b6cbbfe9840b5ed88c9535a86507d7b  orjson-3.6.8.tar.gz
 +# Locally computed sha256 checksums
-+sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
-+sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
-diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-new file mode 100644
-index 0000000000..5584dd7e06
---- /dev/null
-+++ b/package/python-maturin/python-maturin.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# python-maturin
-+#
-+################################################################################
-+
-+PYTHON_MATURIN_VERSION = 0.12.16
-+PYTHON_MATURIN_SOURCE = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
-+PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/79/b4/db1e3df1d05c42f0de29e2227ee17190c95f6724fcea47436c5f5e86ff53
-+PYTHON_MATURIN_SETUP_TYPE = setuptools
-+PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
-+PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
-+HOST_PYTHON_MATURIN_DEPENDENCIES = \
-+	host-python-setuptools-rust \
-+	host-python-tomli \
-+	host-rustc
-+HOST_PYTHON_MATURIN_ENV = \
-+	$(HOST_PKG_CARGO_ENV) \
-+	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+ sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
+ sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
+index 5de4b2c5fa..ccbaf37c6d 100644
+--- a/package/python-orjson/python-orjson.mk
++++ b/package/python-orjson/python-orjson.mk
+@@ -4,19 +4,19 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ORJSON_VERSION = 3.6.7
+-PYTHON_ORJSON_SITE = $(call github,ijl,orjson,$(PYTHON_ORJSON_VERSION))
++PYTHON_ORJSON_VERSION = 3.6.8
++PYTHON_ORJSON_SOURCE = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
++PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/14/8e/7e745d867466bdafb12ab7b0179d40f23f55639f7cd14bd375acfa74aca2
++PYTHON_ORJSON_SETUP_TYPE = pep517
+ PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
+ PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-PYTHON_ORJSON_DEPENDENCIES = host-python-cffi
+-PYTHON_ORJSON_CARGO_ENV = \
++PYTHON_ORJSON_DEPENDENCIES = host-python-cffi host-python-maturin
++PYTHON_ORJSON_ENV = \
++	$(PKG_CARGO_ENV) \
+ 	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
 +# We need to vendor the Cargo crates at download time
-+PYTHON_MATURIN_DOWNLOAD_POST_PROCESS = cargo
-+PYTHON_MATURIN_DOWNLOAD_DEPENDENCIES = host-rustc
-+HOST_PYTHON_MATURIN_DL_ENV = $(HOST_PKG_CARGO_ENV)
-+
-+$(eval $(host-python-package))
++PYTHON_ORJSON_DOWNLOAD_POST_PROCESS = cargo
++PYTHON_ORJSON_DOWNLOAD_DEPENDENCIES = host-rustc
++PYTHON_ORJSON_DL_ENV = $(PKG_CARGO_ENV)
+ 
+-# orjson uses "maturin" to generate distribution packages - rather than teach
+-# buildroot how to understand this, we reach in and install directly.
+-define PYTHON_ORJSON_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/target/$(RUSTC_TARGET_NAME)/release/liborjson.so \
+-		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/orjson.so
+-endef
+-
+-$(eval $(cargo-package))
++$(eval $(python-package))
 -- 
 2.25.1
 
