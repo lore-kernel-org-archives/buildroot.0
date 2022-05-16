@@ -4,78 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 183A2C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 18:40:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C111CC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 21:02:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89E4D414A1;
-	Mon, 16 May 2022 18:40:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32A01418FF;
+	Mon, 16 May 2022 21:02:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UT-ROqegwnNX; Mon, 16 May 2022 18:40:45 +0000 (UTC)
+	with ESMTP id VLxH6ajEiBl6; Mon, 16 May 2022 21:02:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E30840929;
-	Mon, 16 May 2022 18:40:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D7F4F1BF377
- for <buildroot@lists.busybox.net>; Mon, 16 May 2022 18:40:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBC8E409DB;
+	Mon, 16 May 2022 21:02:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B5FD1BF371
+ for <buildroot@lists.busybox.net>; Mon, 16 May 2022 21:02:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C5D2C40929
- for <buildroot@lists.busybox.net>; Mon, 16 May 2022 18:40:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 59CB3813A2
+ for <buildroot@lists.busybox.net>; Mon, 16 May 2022 21:02:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6eQXLPn-YLeS for <buildroot@lists.busybox.net>;
- Mon, 16 May 2022 18:40:41 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B574D40925
- for <buildroot@buildroot.org>; Mon, 16 May 2022 18:40:41 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id w4so21657989wrg.12
- for <buildroot@buildroot.org>; Mon, 16 May 2022 11:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6UoLy2hM5JMNpRm9UQgmv/6HkjR0RzYbpiwvy9B8cJU=;
- b=RgNGQcOBj0S9oT+e3R/KR5WY7kKvh6QfawIzwdLdfNbvQfJejM8t2q1HfLQQm/S1xu
- Xv7HgdU0Y78SjmCJ4QL8TPJsEvVMOswpgmHTlgoGRj+TiI14rQKk9CEqMFUri+v1iLbp
- 5qJZtaREyhx5CkEU56dXv396vmkr67OOHN98Mmi4Sy1tGknEXO+x/k8M7H/HBf9JRP+h
- PaMGSJTFb6Plx5PIz/UIywMTA5HWqUqB0fUvzFeF7zS7du2gTAHiNUeiTQkHcjp+cMBe
- lkJiIC0E3QCai+Qh/7X607a9IqzZGgaI7hhN0WjPzQAhnGpQ1oOE3WFYWgvEGjB5xEBn
- pkCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6UoLy2hM5JMNpRm9UQgmv/6HkjR0RzYbpiwvy9B8cJU=;
- b=VQ/n7c1xwDcIUT7LeRdeK34OX66IH8qOQquLduToUfqBzqKf0NvFoI4QyAbFQITHzs
- yM4Z5Ntt0/JzmKvFJ1+uvCgHnRg4xBZ32bvP516DSu7WJQJLBxgAbxBUv5lnOuY7R08u
- zzkFtnbMMb/ip34gZAApu1JOoC8WYGODMM8Xf8IKQOV/ntzwzn0F/e7hoQejtR8d3D3Q
- kER9+Ft5uW0slaxm+6xqG3T2Zqo5LhmvzafiOfr8VCsjV3otyNf/v+N+NcMmB5KHLdnN
- T4YudDpSzhhyvwS8stb2VkhjIlWqFAGeeTHVH2npQ6i7F3Ll/henqgUWt+4eVdqD7pLv
- sFqQ==
-X-Gm-Message-State: AOAM532l+nzO2ZdiHQD4Yh/lMoRgVWOgonsZYnjCXl8FBH/t8QI0NSsI
- ZfYBzMwuRYl/jV6EArkKOgiE23kazcs=
-X-Google-Smtp-Source: ABdhPJzsp2CoTHlj8qiweoascn5qKbVCFbN7BGvnGiF9AVC/1HuGogruyVII9s7Y66agwEgCtetf7A==
-X-Received: by 2002:a5d:4d84:0:b0:20d:1172:a240 with SMTP id
- b4-20020a5d4d84000000b0020d1172a240mr2198583wru.120.1652726439887; 
- Mon, 16 May 2022 11:40:39 -0700 (PDT)
-Received: from atlas.home
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id
- k20-20020adfb354000000b0020d110bc39esm1489733wrd.64.2022.05.16.11.40.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 May 2022 11:40:39 -0700 (PDT)
-From: Romain Naour <romain.naour@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 16 May 2022 20:40:35 +0200
-Message-Id: <20220516184035.187445-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.35.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DojBn-GVdu5X for <buildroot@lists.busybox.net>;
+ Mon, 16 May 2022 21:02:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E292C81348
+ for <buildroot@buildroot.org>; Mon, 16 May 2022 21:02:24 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5D72F60006;
+ Mon, 16 May 2022 21:02:20 +0000 (UTC)
+Message-ID: <0c01cfe9-70a7-b38e-fdce-a9e3ca8a08d5@korsgaard.com>
+Date: Mon, 16 May 2022 23:02:19 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] DEVELOPERS: remove Gerome Burlats,
- e-mail is bouncing
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20220215015307.855341-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+In-Reply-To: <20220215015307.855341-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH v8 1/5] package/qt5/qt5base: enable ccache
+ via configure option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,37 +58,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?UTF-8?Q?Ga=c3=abl_Portay?= <gael.portay@collabora.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Gerome Burlats left Smile in May 2022 and his e-mail has been disabled.
+Hi,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- DEVELOPERS | 4 ----
- 1 file changed, 4 deletions(-)
+On 15/02/2022 02.53, James Hilliard wrote:
+> This should be cleaner than editing mkspecs/common/g++-base.conf.
+> 
+> This should be more reliable with qt5webengine gn build system.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+> Changes v6 -> v7:
+>    - remove QT5BASE_CONFIGURE_HOSTCC variable
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8988688beb..c33959fa45 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1071,10 +1071,6 @@ F:	package/flannel/
- N:	Geoffrey Ragot <geoffreyragot@gmail.com>
- F:	package/python-pyyaml/
- 
--N:	Gerome Burlats <gerome.burlats@smile.fr>
--F:	board/qemu/
--F:	configs/qemu_*
--
- N:	Gilles Talis <gilles.talis@gmail.com>
- F:	board/freescale/imx8mmevk/
- F:	board/friendlyarm/nanopi-r2s/
--- 
-2.35.3
+Committed, thanks.
 
+--
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
