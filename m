@@ -1,72 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3011C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 22:09:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F20DDC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 22:13:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A5F6830AB;
-	Mon, 16 May 2022 22:09:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A03174048F;
+	Mon, 16 May 2022 22:13:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fl5Wie2tqdvw; Mon, 16 May 2022 22:09:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BBBD683096;
-	Mon, 16 May 2022 22:09:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 48F321BF2CF
- for <buildroot@lists.busybox.net>; Mon, 16 May 2022 22:09:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3720640119
- for <buildroot@lists.busybox.net>; Mon, 16 May 2022 22:09:46 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JTmlwHvM2WpU for <buildroot@lists.busybox.net>;
- Mon, 16 May 2022 22:09:45 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Hzs2DtdbU258; Mon, 16 May 2022 22:13:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D8D640119;
+	Mon, 16 May 2022 22:13:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 560FD1BF2CF
+ for <buildroot@lists.busybox.net>; Mon, 16 May 2022 22:13:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F75A41904
+ for <buildroot@lists.busybox.net>; Mon, 16 May 2022 22:13:11 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LTAKLoe8zfYZ for <buildroot@lists.busybox.net>;
+ Mon, 16 May 2022 22:13:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3CB164010C
- for <buildroot@buildroot.org>; Mon, 16 May 2022 22:09:45 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id r27so17540470iot.1
- for <buildroot@buildroot.org>; Mon, 16 May 2022 15:09:45 -0700 (PDT)
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com
+ [IPv6:2607:f8b0:4864:20::236])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DD60041901
+ for <buildroot@buildroot.org>; Mon, 16 May 2022 22:13:09 +0000 (UTC)
+Received: by mail-oi1-x236.google.com with SMTP id l16so20357028oil.6
+ for <buildroot@buildroot.org>; Mon, 16 May 2022 15:13:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:from:date:message-id:subject:to;
- bh=5hbQE3/Ml7jZROOBKig4P5H0EbKuTWUe6R69+riuo2I=;
- b=WyiSsoa1tdBnDHDfNEZE7O5mH8Qo1ika77Sf8F2+Z7w1shJxoEgZzGAlvjyUGKeIId
- anwV0MfJy1ziNv/Ws/Zvsj4fHoyKqbRy+fjtCOCzA/Ftz7lM1aBiH0+9TH9NeccvaMq7
- HoT+Ak9Yyn1JY9WV829gywWAmGwbvp+X6JcnQvniidLGFUMPgdN9Q/+0KutitDcZ9dst
- jJ5JG7LJs/z/0vo8MwQWERguYdFC2pG7tHS50fiKVnD4orORxUk6e/a0dC93O+Trua+7
- Qu/hjpTPOVkgVQFglS3m9xkL7GjW7k6NXshmpirtWrJvsVd3a01u6GTYgzLYhh3MafrL
- /REA==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=0YLt+iRtOxjDp1URN6+U/WofKifZsKvdV0bNLRwkiRw=;
+ b=o5MJ7VvrNqjzLGoUprxr7qup59sjqz++8jcoYuVXg1jw4K36BbGI1neMaGLFKePOW2
+ 9wcE7lUjlJE2IqUq4ZIM5hn2nvOD3hE7SG9YEphr0B1DtDkJ6aQPr9RrOpjckpG0e1QI
+ iFA1oQirov0TXPP8M+OSg8CAzksUfpgnXUSS/bIWUj58kYh7F2tmuSIOep70HoKsiZgb
+ 7sBIot9EDDNB62KXsK8PY4BkuLuTy8p3Lzc6lDGppekw5/KVIYfT0AHDm6LV5z7w2z0m
+ 5t3QEI4LXAIBHqTLhlEI00Co71DgboFm2IqZZM3jP5eWwJt6YW6/YUP/Bt7mF7d5a5et
+ 5EzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
- bh=5hbQE3/Ml7jZROOBKig4P5H0EbKuTWUe6R69+riuo2I=;
- b=Tg6vRW7vxQgiGb+OceX+2/d07ahHrMnR2Ureofl1rdnvcnlikmgdkVCq33TDmT1Tir
- TOwfXhlTvgqkNV8K6INZmTpOXlNfdUzwXqpm9OYg6FAtHU6jBb6ucOigCl8cYpR7gGif
- Apbr5CyRIMOFAxJoQXyKlwMWMj10Z+O32AreEd8GIrc2p8yqHs0IxqizMuESCeGFZ8hq
- jxNSDq7sB3mwrhLoO3DIWcdipvzTGlUaIAYAFOW6+KXORoupk0yIHsecghfAHTklThnu
- xXw5ixCNSAjzxUxbXOXANiF8nl7crqD03SeDZsebdUMxXtozdt2O1GRUbRDBU802/xGv
- 8Ctw==
-X-Gm-Message-State: AOAM531FwJ8UhedOHwCTLo+YL2a6vKZ9FsZeHsSwDVO3lSM8+l5vHNXr
- v7uhL36Y3czl4duAaDXiI+nqk7i1/j/TCEKP/O1f7W1D4/DF7w==
-X-Google-Smtp-Source: ABdhPJwgooErugeFr9eXk/XDSCmGB2zpJv//ELRkfTCv3JmIjbadVxtjqEz1b92hmvGoZiMaYa0LbwrTcS9EARv4KC4=
-X-Received: by 2002:a05:6638:14d3:b0:32b:66f8:75a7 with SMTP id
- l19-20020a05663814d300b0032b66f875a7mr8229909jak.114.1652738983964; Mon, 16
- May 2022 15:09:43 -0700 (PDT)
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=0YLt+iRtOxjDp1URN6+U/WofKifZsKvdV0bNLRwkiRw=;
+ b=PsLM2CHv6b75Q3kq864QMujHoXvQNCnqC7vCN+Ywu6ZMFf9Nc2Irdwcz+cNzG5kATb
+ PVn8En7mOHCvvwmI+vAqpdIAwwXKtOOckCCMs69aaug2y0h97x/KbOmyhZ0fowPCIzrn
+ Ags3QfU/cTvlo1eFmOWjGM/nbl3q3oRmQC2BVdPCi7cjdXnb9KwZpXLqNE7+RAvhpLPz
+ m4DqOD9PcGcECUxfy+pbbv1pd25eH+3QhFcqqnLXLmYD9N8HrK53rwR6VGJNkvSsEpqV
+ qwMEwkEPB/WS0Olc3Rqx3/CDbV+jbZu3qOBPRRBmU8SGAe8dbafk3U6lNp9BDGHIAJbT
+ EnDQ==
+X-Gm-Message-State: AOAM532VNExeelK+lBhNENsYRwnoQmRMTlmlBTuNb5jcpIkELEg2TUmu
+ 8PCqbyuUv1gQqkEivBCubkWLf41Hsnb1mEv/yCpLcc5YoJ4=
+X-Google-Smtp-Source: ABdhPJxwpHIF4h/M56jPpkwClokHmQjzMemvTK5TOPeM8ShSb5Rh+jB0541SI8yw4PpuTAo6DOvUD4lIoKCDZh0juC8=
+X-Received: by 2002:a05:6808:1da:b0:325:bf8e:df25 with SMTP id
+ x26-20020a05680801da00b00325bf8edf25mr9030425oic.99.1652739188752; Mon, 16
+ May 2022 15:13:08 -0700 (PDT)
 MIME-Version: 1.0
-From: bryce.schober@gmail.com
-Date: Mon, 16 May 2022 15:09:08 -0700
-Message-ID: <CAJpxd07JQQ2_xZZqKQ9Oc4DG-nNRCsmH=MHdMOPJwMciEhocXA@mail.gmail.com>
-To: buildroot@buildroot.org
-Subject: [Buildroot] sources.buildroot.net busybox download errors
+References: <CAJpxd07JQQ2_xZZqKQ9Oc4DG-nNRCsmH=MHdMOPJwMciEhocXA@mail.gmail.com>
+In-Reply-To: <CAJpxd07JQQ2_xZZqKQ9Oc4DG-nNRCsmH=MHdMOPJwMciEhocXA@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 16 May 2022 16:12:57 -0600
+Message-ID: <CADvTj4qNoz1jWKTQBjVKedTUMJer7h1c85BXgjE60KuZjwaKew@mail.gmail.com>
+To: bryce.schober@gmail.com
+Subject: Re: [Buildroot] sources.buildroot.net busybox download errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,117 +82,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============3516653168099615617=="
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3516653168099615617==
-Content-Type: multipart/alternative; boundary="0000000000000bb30005df2848dd"
-
---0000000000000bb30005df2848dd
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Our builds have been having a problem recently in downloading from
-http://sources.buildroot.net/busybox. It appears that
-busybox-1.35.0.tar.bz2 and some / many others have been corrupted, and
-cause both unexpected download behavior and checksum failures:
-
-$  wget http://sources.buildroot.net/busybox/busybox-1.35.0.tar.bz2
---2022-05-16 14:41:38--
-http://sources.buildroot.net/busybox/busybox-1.35.0.tar.bz2
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.26.1.37,
-172.67.72.56, 104.26.0.37, ...
-Connecting to sources.buildroot.net (sources.buildroot.net)|104.26.1.37|:80=
-...
-connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 2480624 (2.4M) [application/x-gtar-compressed]
-Saving to: =E2=80=98busybox-1.35.0.tar.bz2=E2=80=99
-
-busybox-1.35.0.tar.bz2
- 95%[=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D>   ] =
-  2.26M  --.-KB/s
-   in 5.8s
-
-2022-05-16 14:41:45Resolved (Completed) (402 KB/s) - Connection closed at
-byte 2374671. Retrying.
-
---2022-05-16 14:41:46--  (try: 2)
-http://sources.buildroot.net/busybox/busybox-1.35.0.tar.bz2
-Connecting to sources.buildroot.net (sources.buildroot.net)|104.26.1.37|:80=
-...
-connected.
-HTTP request sent, awaiting response... 416 Requested range not satisfiable
-
-    The file is already fully retrieved; nothing to do.
-
-$ sha256sum busybox-1.35.0.tar.bz2
-a7436caa65f0d51cc5c33a5d9be6b4b6d67e85ad1de106784921895176a164fc
- busybox-1.35.0.tar.bz2
-
-$ grep 'sha256 .* busybox-1.35.0.tar.bz2' package/busybox/busybox.hash
-sha256  faeeb244c35a348a334f4a59e44626ee870fb07b6884d68c10ae8bc19f83a694
- busybox-1.35.0.tar.bz2
-
-<><  <><  <><
-Bryce Schober
-
---0000000000000bb30005df2848dd
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Our builds have been having a problem recently in download=
-ing from=C2=A0<a href=3D"http://sources.buildroot.net/busybox">http://sourc=
-es.buildroot.net/busybox</a>. It appears that busybox-1.35.0.tar.bz2 and so=
-me / many others have been corrupted, and cause both unexpected download be=
-havior and checksum failures:<div><br></div><div>$=C2=A0=C2=A0wget <a href=
-=3D"http://sources.buildroot.net/busybox/busybox-1.35.0.tar.bz2">http://sou=
-rces.buildroot.net/busybox/busybox-1.35.0.tar.bz2</a><br>--2022-05-16 14:41=
-:38-- =C2=A0<a href=3D"http://sources.buildroot.net/busybox/busybox-1.35.0.=
-tar.bz2">http://sources.buildroot.net/busybox/busybox-1.35.0.tar.bz2</a><br=
->Resolving <a href=3D"http://sources.buildroot.net">sources.buildroot.net</=
-a> (<a href=3D"http://sources.buildroot.net">sources.buildroot.net</a>)... =
-104.26.1.37, 172.67.72.56, 104.26.0.37, ...<br>Connecting to <a href=3D"htt=
-p://sources.buildroot.net">sources.buildroot.net</a> (<a href=3D"http://sou=
-rces.buildroot.net">sources.buildroot.net</a>)|104.26.1.37|:80... connected=
-.<br>HTTP request sent, awaiting response... 200 OK<br>Length: 2480624 (2.4=
-M) [application/x-gtar-compressed]<br>Saving to: =E2=80=98busybox-1.35.0.ta=
-r.bz2=E2=80=99<br><br>busybox-1.35.0.tar.bz2 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A095%[=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-&gt; =C2=A0 ] =C2=A0 2.26M =C2=A0--.-KB/s =C2=A0 =C2=A0in 5.8s =C2=A0 =C2=
-=A0<br><br>2022-05-16 14:41:45Resolved (Completed) (402 KB/s) - Connection =
-closed at byte 2374671. Retrying.<br><br>--2022-05-16 14:41:46-- =C2=A0(try=
-: 2) =C2=A0<a href=3D"http://sources.buildroot.net/busybox/busybox-1.35.0.t=
-ar.bz2">http://sources.buildroot.net/busybox/busybox-1.35.0.tar.bz2</a><br>=
-Connecting to <a href=3D"http://sources.buildroot.net">sources.buildroot.ne=
-t</a> (<a href=3D"http://sources.buildroot.net">sources.buildroot.net</a>)|=
-104.26.1.37|:80... connected.<br>HTTP request sent, awaiting response... 41=
-6 Requested range not satisfiable<br><br>=C2=A0 =C2=A0 The file is already =
-fully retrieved; nothing to do.</div><div><br></div><div>$ sha256sum busybo=
-x-1.35.0.tar.bz2<br>a7436caa65f0d51cc5c33a5d9be6b4b6d67e85ad1de106784921895=
-176a164fc =C2=A0busybox-1.35.0.tar.bz2<br></div><div><br></div><div>$ grep =
-&#39;sha256 .* busybox-1.35.0.tar.bz2&#39; package/busybox/busybox.hash</di=
-v>sha256 =C2=A0faeeb244c35a348a334f4a59e44626ee870fb07b6884d68c10ae8bc19f83=
-a694 =C2=A0busybox-1.35.0.tar.bz2<div><div><div dir=3D"ltr" class=3D"gmail_=
-signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div><div di=
-r=3D"ltr"><div><div><br></div><div>&lt;&gt;&lt; =C2=A0&lt;&gt;&lt; =C2=A0&l=
-t;&gt;&lt;</div><div>Bryce Schober</div></div></div></div></div></div></div=
-></div></div>
-
---0000000000000bb30005df2848dd--
-
---===============3516653168099615617==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3516653168099615617==--
+T24gTW9uLCBNYXkgMTYsIDIwMjIgYXQgNDowOSBQTSA8YnJ5Y2Uuc2Nob2JlckBnbWFpbC5jb20+
+IHdyb3RlOgo+Cj4gT3VyIGJ1aWxkcyBoYXZlIGJlZW4gaGF2aW5nIGEgcHJvYmxlbSByZWNlbnRs
+eSBpbiBkb3dubG9hZGluZyBmcm9tIGh0dHA6Ly9zb3VyY2VzLmJ1aWxkcm9vdC5uZXQvYnVzeWJv
+eC4gSXQgYXBwZWFycyB0aGF0IGJ1c3lib3gtMS4zNS4wLnRhci5iejIgYW5kIHNvbWUgLyBtYW55
+IG90aGVycyBoYXZlIGJlZW4gY29ycnVwdGVkLCBhbmQgY2F1c2UgYm90aCB1bmV4cGVjdGVkIGRv
+d25sb2FkIGJlaGF2aW9yIGFuZCBjaGVja3N1bSBmYWlsdXJlczoKPgo+ICQgIHdnZXQgaHR0cDov
+L3NvdXJjZXMuYnVpbGRyb290Lm5ldC9idXN5Ym94L2J1c3lib3gtMS4zNS4wLnRhci5iejIKPiAt
+LTIwMjItMDUtMTYgMTQ6NDE6MzgtLSAgaHR0cDovL3NvdXJjZXMuYnVpbGRyb290Lm5ldC9idXN5
+Ym94L2J1c3lib3gtMS4zNS4wLnRhci5iejIKPiBSZXNvbHZpbmcgc291cmNlcy5idWlsZHJvb3Qu
+bmV0IChzb3VyY2VzLmJ1aWxkcm9vdC5uZXQpLi4uIDEwNC4yNi4xLjM3LCAxNzIuNjcuNzIuNTYs
+IDEwNC4yNi4wLjM3LCAuLi4KPiBDb25uZWN0aW5nIHRvIHNvdXJjZXMuYnVpbGRyb290Lm5ldCAo
+c291cmNlcy5idWlsZHJvb3QubmV0KXwxMDQuMjYuMS4zN3w6ODAuLi4gY29ubmVjdGVkLgo+IEhU
+VFAgcmVxdWVzdCBzZW50LCBhd2FpdGluZyByZXNwb25zZS4uLiAyMDAgT0sKPiBMZW5ndGg6IDI0
+ODA2MjQgKDIuNE0pIFthcHBsaWNhdGlvbi94LWd0YXItY29tcHJlc3NlZF0KPiBTYXZpbmcgdG86
+IOKAmGJ1c3lib3gtMS4zNS4wLnRhci5iejLigJkKPgo+IGJ1c3lib3gtMS4zNS4wLnRhci5iejIg
+ICAgICAgICAgOTUlWz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT0+ICAgXSAgIDIuMjZNICAtLS4tS0IvcyAgICBpbiA1LjhzCj4KPiAyMDIyLTA1LTE2IDE0OjQx
+OjQ1UmVzb2x2ZWQgKENvbXBsZXRlZCkgKDQwMiBLQi9zKSAtIENvbm5lY3Rpb24gY2xvc2VkIGF0
+IGJ5dGUgMjM3NDY3MS4gUmV0cnlpbmcuCgpMb29rcyBsaWtlIHlvdXIgZG93bmxvYWQgZGlkbid0
+IGNvbXBsZXRlIGR1ZSB0byBjb25uZWN0aW9uCmludGVycnVwdGlvbiBvZiBzb21lIHNvcnQuCgo+
+Cj4gLS0yMDIyLTA1LTE2IDE0OjQxOjQ2LS0gICh0cnk6IDIpICBodHRwOi8vc291cmNlcy5idWls
+ZHJvb3QubmV0L2J1c3lib3gvYnVzeWJveC0xLjM1LjAudGFyLmJ6Mgo+IENvbm5lY3RpbmcgdG8g
+c291cmNlcy5idWlsZHJvb3QubmV0IChzb3VyY2VzLmJ1aWxkcm9vdC5uZXQpfDEwNC4yNi4xLjM3
+fDo4MC4uLiBjb25uZWN0ZWQuCj4gSFRUUCByZXF1ZXN0IHNlbnQsIGF3YWl0aW5nIHJlc3BvbnNl
+Li4uIDQxNiBSZXF1ZXN0ZWQgcmFuZ2Ugbm90IHNhdGlzZmlhYmxlCgpBbmQgdGhlIHJlc3VtZSBz
+ZWVtZWQgdG8gZmFpbC4KCj4KPiAgICAgVGhlIGZpbGUgaXMgYWxyZWFkeSBmdWxseSByZXRyaWV2
+ZWQ7IG5vdGhpbmcgdG8gZG8uCj4KPiAkIHNoYTI1NnN1bSBidXN5Ym94LTEuMzUuMC50YXIuYnoy
+Cj4gYTc0MzZjYWE2NWYwZDUxY2M1YzMzYTVkOWJlNmI0YjZkNjdlODVhZDFkZTEwNjc4NDkyMTg5
+NTE3NmExNjRmYyAgYnVzeWJveC0xLjM1LjAudGFyLmJ6MgoKTG9va3MgZmluZSB3aGVuIEkgdHJp
+ZWQgZG93bmxvYWRpbmcgaXQ6CiQgc2hhMjU2c3VtIGJ1c3lib3gtMS4zNS4wLnRhci5iejIKZmFl
+ZWIyNDRjMzVhMzQ4YTMzNGY0YTU5ZTQ0NjI2ZWU4NzBmYjA3YjY4ODRkNjhjMTBhZThiYzE5Zjgz
+YTY5NApidXN5Ym94LTEuMzUuMC50YXIuYnoyCgo+Cj4gJCBncmVwICdzaGEyNTYgLiogYnVzeWJv
+eC0xLjM1LjAudGFyLmJ6MicgcGFja2FnZS9idXN5Ym94L2J1c3lib3guaGFzaAo+IHNoYTI1NiAg
+ZmFlZWIyNDRjMzVhMzQ4YTMzNGY0YTU5ZTQ0NjI2ZWU4NzBmYjA3YjY4ODRkNjhjMTBhZThiYzE5
+ZjgzYTY5NCAgYnVzeWJveC0xLjM1LjAudGFyLmJ6Mgo+Cj4gPD48ICA8PjwgIDw+PAo+IEJyeWNl
+IFNjaG9iZXIKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Xwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
+bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
