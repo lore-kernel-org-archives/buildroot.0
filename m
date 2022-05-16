@@ -1,83 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5CC8C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 13:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD63AC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 16 May 2022 13:17:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A10DE82CC7;
-	Mon, 16 May 2022 13:17:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 815DF40259;
+	Mon, 16 May 2022 13:17:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LeyQcLFG4yaJ; Mon, 16 May 2022 13:17:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ykCSnb2V9sZX; Mon, 16 May 2022 13:17:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4B81819D1;
-	Mon, 16 May 2022 13:17:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C0A111BF37E
- for <buildroot@lists.busybox.net>; Mon, 16 May 2022 13:14:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5552740232;
+	Mon, 16 May 2022 13:17:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 851731BF37E
+ for <buildroot@lists.busybox.net>; Mon, 16 May 2022 13:14:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BCF1F40B44
- for <buildroot@lists.busybox.net>; Mon, 16 May 2022 13:14:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 74B8282C9C
+ for <buildroot@lists.busybox.net>; Mon, 16 May 2022 13:14:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7yrrzHUAQPGE for <buildroot@lists.busybox.net>;
- Mon, 16 May 2022 13:14:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZxmwkS-vtu0s for <buildroot@lists.busybox.net>;
+ Mon, 16 May 2022 13:14:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E811840396
- for <buildroot@buildroot.org>; Mon, 16 May 2022 13:14:10 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id r23so4454984wrr.2
- for <buildroot@buildroot.org>; Mon, 16 May 2022 06:14:10 -0700 (PDT)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A3C0482C8E
+ for <buildroot@buildroot.org>; Mon, 16 May 2022 13:14:12 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id u3so20507930wrg.3
+ for <buildroot@buildroot.org>; Mon, 16 May 2022 06:14:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=AwvG7rNX0n8q8gwLTmVjjbizc8hMIPfwMOGQZaSseQQ=;
- b=K5+jWXoMxM5ZQUjbPIibn9gjiCQ+86pTQAdRcHJb8mWGC25q+jYG+OFNJQixw+fkDb
- ZdY+mtUFysB4PQNxtejN+WDOOZoapj30SIQxTTGN7aZce6KoPGmO5lpKnjC2ELuGxPkT
- ShxuqaZmJl+8cuJsfWz/i9MODvkpEVZUdNGBj9YKRIkjIXP2Ex7dOJRzg6XuP+tahRvd
- pf8Zyvrhu9Q+iobhAc/4HnlzcBOBvQXNes060aiCfro3xpjylrqaqo6B3yd1xEVD/34z
- hOn0XBaxaMGBaaIiOvZVVW3FsxyrjO7uV7pFZLRLF6Rt2jmIDa7miglP1P6MUdxdQGgg
- l66Q==
+ bh=GOm2iHKwUbo0D4M7e9PWQeUNMlEu8ik+KRelrz24F2A=;
+ b=CjLbZIWZw+QJ7cG5DKZnIlOwrf1+7j2ZKCkABFf22LoWuHF+sTDPTcpNaZY0Hpxedc
+ CLcK1ogYx+r1fqT9dddD4o+WK0mwp0rd5IOk01WkUjF7peHAlk1cZyJyjLfpDYCyfPo5
+ JSt7iq3pzhiDl6uyfNG/pgteHo5qEucAorfgHXP3iZ7iB51mfDZRFctoWIHcQScXP75M
+ UQix0NnkgeUsv1SiFBZfdb2YrYuxRHfC1Rjv+fY4fvrMSm+QH0uJ6gbAlZoe+DH9v2RG
+ IqPnajakRrgkf5+n44jTfJ7Xf84HWRWLx1/6ZAll3zPFXzBwEc58uy+Dtdj9ED9zQFI1
+ Cf/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=AwvG7rNX0n8q8gwLTmVjjbizc8hMIPfwMOGQZaSseQQ=;
- b=dPP8xM2etCTfUSGFmwrEfFBGJJpw7bbglAqQWHuPCMgfDDJgT0J8dFbxHIMxID5x9h
- xLE2wcL5usy0bf5bo3B7QJTZT/a0AOzrPHNZ5G6H/o8wq2p2qgWbFBFm3aGVm+E6fvak
- iOs1XmxIoDVqGxXLEOxhpgo83ON/CwBHCuzseZPww3cOuYhV8eoYCis6+YsSLurlqq2L
- SBqQDKIVlbJuIGrNOtGSR6GmHAsLSuu/4fGrQlyHGFJQ2xlqKEZcsTpen/z2m8rJb9gz
- a30Rq35T7SHuox2k7P5fIRd2FUhyMs3YoMnYCss8zLWKe8IgbfLWz9atkTIZjQAbDz1Q
- BFkQ==
-X-Gm-Message-State: AOAM532O4+H6waPvKHaMoCS1VobzWLsyEYFzkAMx+qKhZ6LrdYF83cyh
- NO7+FJWJkdpg3zE9DLayxfzOvjw8boU=
-X-Google-Smtp-Source: ABdhPJygrRzlu9vV3mUp8eaVmdVnGb8pjwsnoUWo3p61ZspfcuAU7cZmkBuQ+Q18rdo/DMwwv2jPMA==
-X-Received: by 2002:adf:f012:0:b0:20d:80e:1170 with SMTP id
- j18-20020adff012000000b0020d080e1170mr4312641wro.401.1652706848838; 
- Mon, 16 May 2022 06:14:08 -0700 (PDT)
+ bh=GOm2iHKwUbo0D4M7e9PWQeUNMlEu8ik+KRelrz24F2A=;
+ b=WPw9mvBBYDt8Zj6aUA3xIkpXcNcTvKImr8cv4wvEUDIwVtxxmhu71kkQlfxmZWBoHn
+ EAwb9kcRr7OPFzcTFUi63fobLAkCF+NK4OZBhI4MHymiGDd66DKAk3Yz42s6xw75jc8I
+ 3WTTNREfXMxiGh3wbZduPq3fCERIGTqxuJnEOvaPzJsOVUA3Lj1bFaU7e8SHXo4ka8W6
+ 9qFDabnj4HnLZ/MLfnmSHTs18M2Tv4NiXcpW69RNMv1cmloma73bYpFIh1Br74Xt9Nt8
+ SHQNmgorJioiiuoGsEokzpfLfcoFuR/7EaWNlhjBISZtx3IPZoUktVYLH/DbZ3B7+FbB
+ g1FQ==
+X-Gm-Message-State: AOAM533PmdSgNimG4weBztvqYOEhLF7iq6v/wtK1KyfmdXQeVqgktsx5
+ Go8+VgeHypXNY4svABWzo3tPQG0THz8=
+X-Google-Smtp-Source: ABdhPJxitALXm53kQU+gm4HWnxysgBMqH2R9EwHZdXqgm0ioOwPHh8Ee3NMXWMgvOm6YdF52vVQs3g==
+X-Received: by 2002:a5d:4d8a:0:b0:20d:2ba:7db8 with SMTP id
+ b10-20020a5d4d8a000000b0020d02ba7db8mr7363112wru.624.1652706852055; 
+ Mon, 16 May 2022 06:14:12 -0700 (PDT)
 Received: from shrek2.. (lmontsouris-659-1-42-116.w92-154.abo.wanadoo.fr.
  [92.154.77.116]) by smtp.gmail.com with ESMTPSA id
- ay41-20020a05600c1e2900b003942a244f51sm13023789wmb.42.2022.05.16.06.14.08
+ ay41-20020a05600c1e2900b003942a244f51sm13023789wmb.42.2022.05.16.06.14.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 May 2022 06:14:08 -0700 (PDT)
+ Mon, 16 May 2022 06:14:11 -0700 (PDT)
 From: Johan Oudinet <johan.oudinet@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 16 May 2022 15:13:29 +0200
-Message-Id: <20220516131334.1910858-16-johan.oudinet@gmail.com>
+Date: Mon, 16 May 2022 15:13:31 +0200
+Message-Id: <20220516131334.1910858-18-johan.oudinet@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220516131334.1910858-1-johan.oudinet@gmail.com>
 References: <20220516131334.1910858-1-johan.oudinet@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 15/20] package/erlang-jose: bump version to
- 1.11.1
+Subject: [Buildroot] [PATCH 17/20] package/erlang-p1-stun: bump version to
+ 1.0.47
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,33 +97,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang-jose/erlang-jose.hash | 4 ++--
- package/erlang-jose/erlang-jose.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/erlang-p1-stun/erlang-p1-stun.hash | 2 +-
+ package/erlang-p1-stun/erlang-p1-stun.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-jose/erlang-jose.hash b/package/erlang-jose/erlang-jose.hash
-index 71a1543d92..75e6f0a041 100644
---- a/package/erlang-jose/erlang-jose.hash
-+++ b/package/erlang-jose/erlang-jose.hash
+diff --git a/package/erlang-p1-stun/erlang-p1-stun.hash b/package/erlang-p1-stun/erlang-p1-stun.hash
+index fb56b8f4e6..aef122b4a6 100644
+--- a/package/erlang-p1-stun/erlang-p1-stun.hash
++++ b/package/erlang-p1-stun/erlang-p1-stun.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 d55a9d3a1697833fed555a21f1aeb2727af88193995cb6ffa945d4b6749d0e8d erlang-jose-1.9.0.tar.gz
--sha256 6397e2bd9a35a64c1bb798b937071fbe49d90667f717e65c74a0d0fe93d5c1be LICENSE.md
-+sha256  87cdcb9df6f943c97772e5d90bed87555a72c8957ce2cb901df259050e18e7bb  erlang-jose-1.11.1.tar.gz
-+sha256  6397e2bd9a35a64c1bb798b937071fbe49d90667f717e65c74a0d0fe93d5c1be  LICENSE.md
-diff --git a/package/erlang-jose/erlang-jose.mk b/package/erlang-jose/erlang-jose.mk
-index 43ed22a9f7..b31a60aa3e 100644
---- a/package/erlang-jose/erlang-jose.mk
-+++ b/package/erlang-jose/erlang-jose.mk
+-sha256  05d2f31f172883d2301a93cd141e6b930dfdd01e10b6aacf806becc3674973d8  erlang-p1-stun-1.0.39.tar.gz
++sha256  f9b82949b54778a4b766dca5509eef4475e1dbc165a449974dbd0cc54c6f84a2  erlang-p1-stun-1.0.47.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1-stun/erlang-p1-stun.mk
+index f762e7f45c..ce117e20b5 100644
+--- a/package/erlang-p1-stun/erlang-p1-stun.mk
++++ b/package/erlang-p1-stun/erlang-p1-stun.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_JOSE_VERSION = 1.9.0
-+ERLANG_JOSE_VERSION = 1.11.1
- ERLANG_JOSE_SITE = $(call github,potatosalad,erlang-jose,$(ERLANG_JOSE_VERSION))
- ERLANG_JOSE_LICENSE = MIT
- ERLANG_JOSE_LICENSE_FILES = LICENSE.md
+-ERLANG_P1_STUN_VERSION = 1.0.39
++ERLANG_P1_STUN_VERSION = 1.0.47
+ ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
+ ERLANG_P1_STUN_LICENSE = Apache-2.0
+ ERLANG_P1_STUN_LICENSE_FILES = LICENSE.txt
 -- 
 2.34.1
 
