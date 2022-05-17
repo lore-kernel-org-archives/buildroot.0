@@ -1,67 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69318C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 05:48:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E572C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 05:50:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01ACF41961;
-	Tue, 17 May 2022 05:48:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D17EF832C9;
+	Tue, 17 May 2022 05:50:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IVAQ2Cg8J-Sg; Tue, 17 May 2022 05:48:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C48C4192C;
-	Tue, 17 May 2022 05:48:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CD3EC1BF990
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 05:48:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC2238134A
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 05:48:02 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eT4Kwu3DSG1Y for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 05:48:01 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BE12681347
- for <buildroot@buildroot.org>; Tue, 17 May 2022 05:48:01 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:5536:e9db:e000:2fa9])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id D5118B0053E;
- Tue, 17 May 2022 07:47:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1652766479;
- bh=W/+BNLN8h4vqMIRErbaWIaNqz/VxoXNop4TmCqAqRS4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=i49IJTjQzwskR5g1P6KpZEDWfiWu9dFuUSbWMz1u0S413UO/MuyB8O0QjQZf+A9/f
- 34zuxm0lQkKsRpAwMEJS/dD+OszQQk47S9I3YWE/kTKNbjolROtah/yCqmFYhfx1KP
- A05UkR4czdQtd0GuGvcZm7OU0CaNWnCpO+JsUXvdrGX/xSShLqUMyoSN0wHbDQz/Y1
- 2vUrEGoD+vmXblR3kCTN7UobiUFuq03CnlziW6/XgiiciMb5TFfcDGmuU7y9WBYdLI
- kWrVz/IGjg3joFEJliDxsgt4BuOdWGeUxeJ3PW+P50KFzGgPbsK77auPmlyG4+kXFc
- aib6acDVcnCrQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 17 May 2022 07:47:54 +0200
-Date: Tue, 17 May 2022 07:47:54 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220517054754.GO1597494@scaer>
-References: <20220517020452.334921-1-james.hilliard1@gmail.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XPgSWX2cQibL; Tue, 17 May 2022 05:50:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB55A81489;
+	Tue, 17 May 2022 05:50:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E8CB51BF33C
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 05:50:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D57BC60760
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 05:50:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=jms.id.au
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i7CpjizQFNMU for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 05:50:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E4EBB60A9E
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 05:50:38 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id d21so7234264wra.10
+ for <buildroot@buildroot.org>; Mon, 16 May 2022 22:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=rfF7JBm9CY4vM8m1zznsTlQxCccKH6i07oHW5dri2Bw=;
+ b=C7IqVm5gvvAfDE2ISVOw1wn0bH6Bywqx2krGVYHZophNtzn7hvSqKrjjVRuF7ElFff
+ 6xwr6z+cvDOFiDgImUSt/cTFdFXStnU25vXKLorvOKt5kT727v0wFiO8ZjCjhJ+/QQHk
+ YLssnTajRyBc5YZrkTtzo2/71Ww7MbhfQk1p4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=rfF7JBm9CY4vM8m1zznsTlQxCccKH6i07oHW5dri2Bw=;
+ b=VbdN++0qUp1LfrpL0YK2BvnPokRHCA8bjd+VyvZts0PyTb7OvRiUjI24dnaFVajXaW
+ SYDEJ8V1eKRGMNm5jhA72zU7GO1F1iBJjemsgNj7AXGB9a00t9TowknhwXfT/i+ol1jA
+ nv/JELfSBbYTgu68v5qQWC51iBDt02lobHLVnlE2YaPj0BevK4nQfKKyLzGy/TKn4Urj
+ YrKhzX9ocNM90V8wSyfSpFY/UmaoPjgLf+TO6pRk2cAAIGKt0nibOw4Uqr0eKN3SYIzd
+ SAyTxl3zNJarPPmbNAkXFpMXfIO+fgbls/jiTYgmXISAX7QHI6K/XEySa/71rF6LfURd
+ J2qw==
+X-Gm-Message-State: AOAM532V3fcqsAiyGoMovNbxb+oeDd7K1hXRajvf7S+67HFfvCn4xIcB
+ nu3wdWRC76KFU2os6V57b0XxaDeoeI9155sP6wM=
+X-Google-Smtp-Source: ABdhPJw6/DbokTnO1+/oCVp4j/Qcwninko7b7yHnZgHQZ4XaS41RdIsII9a5AEob8ZixEqQVBXlAkvxC/HdiNQA6UZo=
+X-Received: by 2002:a5d:6d05:0:b0:20c:64fd:f98a with SMTP id
+ e5-20020a5d6d05000000b0020c64fdf98amr16809036wrq.474.1652766636837; Mon, 16
+ May 2022 22:50:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220517020452.334921-1-james.hilliard1@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/{glibc,
- localedef}: bump to version
- 2.35-96-g2c4fc8e5ca742c6a3a1933799495bb0b00a807f0
+References: <20220511114003.162006-1-joel@jms.id.au>
+ <87lev79lxe.fsf@dell.be.48ers.dk>
+In-Reply-To: <87lev79lxe.fsf@dell.be.48ers.dk>
+From: Joel Stanley <joel@jms.id.au>
+Date: Tue, 17 May 2022 05:50:24 +0000
+Message-ID: <CACPK8XeuZw-Ov4JUNSne6J2gNVrYCJRYU4B0akWsjg71jqHfCw@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Subject: Re: [Buildroot] [PATCH 1/2] package/go: Bump to v1.18.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,86 +79,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Anisse Astier <anisse@astier.eu>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+On Thu, 12 May 2022 at 08:48, Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
+>
+>  > Minor version bump to the latest release.
+>  > Signed-off-by: Joel Stanley <joel@jms.id.au>
+>
+> According to to the upstream changelog this fixes security issues:
+>
+> go1.18.2 (released 2022-05-10) includes security fixes to the syscall
+> package, as well as bug fixes to the compiler, runtime, the go command,
+> and the crypto/x509, go/types, net/http/httptest, reflect, and
+> sync/atomic packages
+>
+> https://go.dev/doc/devel/release#go1.18
+>
+> So I have reworded the commit message to make this clear and committed,
+> thanks.
 
-On 2022-05-16 20:04 -0600, James Hilliard spake thusly:
-> Fixes:
-> Generating locale C.UTF-8
-> [error] LC_MONETARY: value for field `mon_decimal_point' must not be an empty string
-> [error] no output file produced because errors were issued
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Thanks for doing that.
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/glibc/glibc.hash       | 2 +-
->  package/glibc/glibc.mk         | 2 +-
->  package/localedef/localedef.mk | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-> index f28c15c2a3..e0bbf341eb 100644
-> --- a/package/glibc/glibc.hash
-> +++ b/package/glibc/glibc.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated (fetched from Github)
-> -sha256  0ca43b2a6cd74609519554303a16e350abdac0e66943c5d98d91228233c826a0  glibc-2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586.tar.gz
-> +sha256  fc3c1d25640fd4cd09fbf7e17eafcc7943731e901cc0a3686503ae8adfb11d31  glibc-2.35-96-g2c4fc8e5ca742c6a3a1933799495bb0b00a807f0.tar.gz
->  
->  # Hashes for license files
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 5772c3355b..f3a08fbf24 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -7,7 +7,7 @@
->  # Generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
->  # When updating the version, please also update localedef
-> -GLIBC_VERSION = 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586
-> +GLIBC_VERSION = 2.35-96-g2c4fc8e5ca742c6a3a1933799495bb0b00a807f0
->  # Upstream doesn't officially provide an https download link.
->  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
->  # sometimes the connection times out. So use an unofficial github mirror.
-> diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-> index fb5edde0c2..061b7c7fc2 100644
-> --- a/package/localedef/localedef.mk
-> +++ b/package/localedef/localedef.mk
-> @@ -7,7 +7,7 @@
->  # Use the same VERSION and SITE as target glibc
->  # As in glibc.mk, generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
-> -LOCALEDEF_VERSION = 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586
-> +LOCALEDEF_VERSION = 2.35-96-g2c4fc8e5ca742c6a3a1933799495bb0b00a807f0
->  LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
->  LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
->  HOST_LOCALEDEF_DL_SUBDIR = glibc
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I noticed you didn't merge the second patch in this series. Is that
+one okay to go in too?
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
