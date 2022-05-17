@@ -4,43 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0A95C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 05:53:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B73FBC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 06:05:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 902C883DF0;
-	Tue, 17 May 2022 05:53:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55C6483E19;
+	Tue, 17 May 2022 06:05:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oQ8izzfw1um2; Tue, 17 May 2022 05:53:44 +0000 (UTC)
+	with ESMTP id R-EEgr2SAGrC; Tue, 17 May 2022 06:05:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AE5D836E1;
-	Tue, 17 May 2022 05:53:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E42451BF33C
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 05:53:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08F34836E1;
+	Tue, 17 May 2022 06:05:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 273581BF309
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 06:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DFCD6836E1
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 05:53:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D83E4060B
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 06:05:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FlknvW_bEuTL for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 05:53:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2EA8283498
- for <buildroot@buildroot.org>; Tue, 17 May 2022 05:53:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 5B20685F03; Tue, 17 May 2022 05:42:38 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 17 May 2022 07:51:18 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1386336fc82f841fc1b57b5448477d5b1b4302fd
-X-Git-Newrev: 555f8dfd6ef893463ce19d5ee242afd6b83cb450
-X-Patchwork-Hint: ignore
-Message-Id: <20220517054238.5B20685F03@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] fs/squashfs: Add block size option
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y_LakccIrqjG for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 06:05:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 411EC400F1
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 06:05:50 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:5536:e9db:e000:2fa9])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 7A450B00571;
+ Tue, 17 May 2022 08:05:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1652767547;
+ bh=mZAhwrXdpQITkKwlgUkde0atQA4DI+MMwr9Gb7Ll308=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=FHSUmAeefwHKqScTmYmeDQOguF35ao0UKXSySczOuMwjdWAhia1r+ACkv1tHAh2fQ
+ /NBtWBCbaQBK4G97Sf0AbpbVUoBQKkjHEBt5DYD2z/7Bn8x34sELMrSTGFknLGgFdI
+ 9vwWCt8nLbHNx+1LuS2b5edDmY1HiXggVE4MC9V5A4HK8nu4jqHl8tZFgGC28kO/S+
+ nSfg7ROIVLZC4946MTVWTI5j679KtZxy6dx0yQi2YHPT0tR3/N3n+mBu5348SkERf1
+ 1SgeTHC/0zsmbOA2qm5pwy/BlaMgqnUF7B4ZagaibVfAMLo+bCK3AfYjPNQ432Bbf5
+ 6CkBveMZQg+tA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 17 May 2022 08:05:45 +0200
+Date: Tue, 17 May 2022 08:05:45 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Linus Kaschulla <linus@cosmos-ink.net>
+Message-ID: <20220517060545.GP1597494@scaer>
+References: <20220517032459.3400-1-linus@cosmos-ink.net>
+ <20220517053803.GN1597494@scaer>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220517053803.GN1597494@scaer>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/2] fs/squashfs: Add block size option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,111 +72,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=555f8dfd6ef893463ce19d5ee242afd6b83cb450
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Linus, All,
 
-One advantage of squashfs over similar technologies is the support for
-bigger block sizes. However the default size is not a lot bigger
-(typically 128k if no `-b` flag specified).
+On 2022-05-17 07:38 +0200, Yann E. MORIN spake thusly:
+> On 2022-05-17 03:24 +0000, Linus Kaschulla spake thusly:
+> > This patch adds the ability to select from common block sizes
+> > which for example can aid in improving compression ratio.
+[--SNIP--]
+> > +ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_BS_64K),y)
 
-This patch adds the ability to select from common block sizes
-which for example can aid in improving compression ratio.
+I got a bit confused here, in fact: BR2_TARGET_ROOTFS_SQUASHFS4_BS_64K
+has a '4' after the 'SQUASHFS', but the options in the choice do not,
+so none of this conditional block was ever hit in fact. I dropped it.
 
-Signed-off-by: Linus Kaschulla <linus@cosmos-ink.net>
-[yann.morin.1998@free.fr:
+And I see where that '4' comes from: you mimicked the compression type
+choice. I totally missed that initially. That's a remnant from days pat,
+and if we were to add that code today, we'd not keep the '4'.
+
+An yway, applied to master with:
   - drop spurious boolean-based setting in .mk
   - split into multi-line
   - qstrip variable expansion
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- fs/squashfs/Config.in   | 50 +++++++++++++++++++++++++++++++++++++++++++++++++
- fs/squashfs/squashfs.mk |  5 ++++-
- 2 files changed, 54 insertions(+), 1 deletion(-)
 
-diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
-index 70d4a20cf0..341e50a08c 100644
---- a/fs/squashfs/Config.in
-+++ b/fs/squashfs/Config.in
-@@ -5,6 +5,56 @@ config BR2_TARGET_ROOTFS_SQUASHFS
- 
- if BR2_TARGET_ROOTFS_SQUASHFS
- 
-+choice
-+	prompt "block size"
-+	default BR2_TARGET_ROOTFS_SQUASHFS_BS_128K
-+	help
-+	  Data block size. Bigger values can improve
-+	  compression ratio.
-+
-+	  If unsure, leave at 128k (default).
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_BS_4K
-+	bool "4k"
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_BS_8K
-+	bool "8k"
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_BS_16K
-+	bool "16k"
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_BS_32K
-+	bool "32k"
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_BS_64K
-+	bool "64k"
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_BS_128K
-+	bool "128k"
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_BS_256K
-+	bool "256k"
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_BS_512K
-+	bool "512k"
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_BS_1024K
-+	bool "1024k"
-+
-+endchoice
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_BS
-+	string
-+	default "4K" if BR2_TARGET_ROOTFS_SQUASHFS_BS_4K
-+	default "8K" if BR2_TARGET_ROOTFS_SQUASHFS_BS_84K
-+	default "16K" if BR2_TARGET_ROOTFS_SQUASHFS_BS_16K
-+	default "32K" if BR2_TARGET_ROOTFS_SQUASHFS_BS_32K
-+	default "64K" if BR2_TARGET_ROOTFS_SQUASHFS_BS_64K
-+	default "128K" if BR2_TARGET_ROOTFS_SQUASHFS_BS_128K
-+	default "256K" if BR2_TARGET_ROOTFS_SQUASHFS_BS_256K
-+	default "512K" if BR2_TARGET_ROOTFS_SQUASHFS_BS_512K
-+	default "1024K" if BR2_TARGET_ROOTFS_SQUASHFS_BS_1024K
-+
- config BR2_TARGET_ROOTFS_SQUASHFS_PAD
- 	bool "pad to a 4K boundary"
- 	default y # legacy was always ON
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index 7a5e3e313e..2148bb4494 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -6,7 +6,10 @@
- 
- ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
- 
--ROOTFS_SQUASHFS_ARGS = -noappend -processors $(PARALLEL_JOBS)
-+ROOTFS_SQUASHFS_ARGS = \
-+	-noappend \
-+	-processors $(PARALLEL_JOBS) \
-+	-b $(call qstrip,$(BR2_TARGET_ROOTFS_SQUASHFS_BS))
- 
- ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS_PAD),)
- ROOTFS_SQUASHFS_ARGS += -nopad
+Thanks!
+
+> Finally, it would have been nice to add two test cases that at least the
+> 4K and 1024K options do work (the existing test tests the defaultm i.e
+> 128K). Tests are in:  support/testing/tests/fs/test_squashfs.py
+
+Still interested in seeing a test-case, though! ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
