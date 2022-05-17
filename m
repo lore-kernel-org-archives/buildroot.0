@@ -1,147 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE6E8C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 08:37:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D2AAC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 09:27:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C5AA61133;
-	Tue, 17 May 2022 08:37:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F80B40B90;
+	Tue, 17 May 2022 09:27:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U34O0VKR_6ox; Tue, 17 May 2022 08:37:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id geRGiw7w6bSF; Tue, 17 May 2022 09:27:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5146E60D8E;
-	Tue, 17 May 2022 08:37:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC4AF40521;
+	Tue, 17 May 2022 09:27:18 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BE4BE1BF2F3
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 08:37:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C4A651BF2C3
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 09:27:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACDB141881
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 08:37:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1F5940882
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 09:27:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=hopperindustrial.com.au
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xjI2PPoo4jKg for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 08:37:35 +0000 (UTC)
+ with ESMTP id nuk-f0AlhmC4 for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 09:27:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from AUS01-ME3-obe.outbound.protection.outlook.com
- (mail-me3aus01on20600.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:7004::600])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4E19141872
- for <buildroot@buildroot.org>; Tue, 17 May 2022 08:37:35 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DkLsF4aA+RxACu0H6Eb5D7/gLurBdj0GzQYgNYe2qbSNtggiRYxw1RQs94m//OynSUKCIbPkkH5CVI3rkTExlK5WbKL1ZP8Cq709tg4f9Xh/08X+TiPEh/FIsKo6kO7rci2QCN46NdA4j1w4rtxkbFyH074WDcfcJ15WkYnYGvxipYJvqeLrrk1ReXW16kTPD0esLd/6aZNDY6aX0/LJ9LnQmk/4LEU+QPh3c/EsZh0dp3Kjcbcl6I87kuDtQpWF8fMIJSHvQbTp/EX+7gdhfHAeOUGXkWfK19EttVYytYTjx0M/4JPQM8n3O7Meaq0NbWITWucDRKLM6C86NpTBUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g+9/Op+UDTZAfhZtPMdWUTG1T+WRJ/jkm8xRPZTXiWo=;
- b=L89YDipKTY5E8ZFsMs80WX/Ds6swFn0PwBlFU8AXJXqTwM2ELi5QOLOHP26GB5hEBj/HVLVsJafIKeNtzcA1+bcaPoYL6ZxT9WhIggl1+E9R8rPkbNpGfYEd5BgGTYYmh2oM7rRVNpjVHcDGUoO9EMr6x5HPF+oSTRJD206F/L1AvmDlUyL643To4p8Rd6K1P5ZjEcwobkqYxBIotTQToVhhvrtiY4fxCX0wRbZu+VxP5JKkrx95f8oCY/NZpdFW2bHDVhTGD5AQXfTsK5gdIGZW4+4vnmJUMfvAhdPmXeyemBlTgex5tctZkoS+vyE4v+koZKRLf7/8khg0FRUQDA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 104.210.80.79) smtp.rcpttodomain=buildroot.org
- smtp.mailfrom=hopperindustrial.com.au; dmarc=pass (p=reject sp=reject
- pct=100) action=none header.from=hopperindustrial.com.au; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=hopperindustrial.com.au; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g+9/Op+UDTZAfhZtPMdWUTG1T+WRJ/jkm8xRPZTXiWo=;
- b=nzMIQ/A0fPEvUb8c7A7rrLGEFbuou3U1fKCSFMEE27NOimU7KxUqD/l56L8iIi3L9knY/5cqE/FxF69X5DmtibwdgrL2UrZECxcLsjoqdjX8nHEG13dBXDXGsm+zjZ9khkQn9LehgIPhKpcfwfwCpm5abRk5kuFKHXPVkvLPp545U/jADFW3kZRbr2Jg3ai5qZAG+R35MHDOw+fKGRaqdwYJZ3kOEYEsiolHSYvglBTbazEOmQQh+ACrogcAfJLcod1TGH5Bj3HDS0eG6NKQCDB/3+PnhPAsdy4TtDJ1gVvFF6XT5YTRdOfPxkDGymcGUBu0fLL8CRVHzymL44JhTg==
-Received: from SYBPR01CA0216.ausprd01.prod.outlook.com (2603:10c6:10:16::36)
- by SYCP282MB0560.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:88::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Tue, 17 May
- 2022 08:37:28 +0000
-Received: from SY4AUS01FT020.eop-AUS01.prod.protection.outlook.com
- (2603:10c6:10:16:cafe::e0) by SYBPR01CA0216.outlook.office365.com
- (2603:10c6:10:16::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14 via Frontend
- Transport; Tue, 17 May 2022 08:37:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 104.210.80.79)
- smtp.mailfrom=hopperindustrial.com.au; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=hopperindustrial.com.au;
-Received-SPF: Pass (protection.outlook.com: domain of hopperindustrial.com.au
- designates 104.210.80.79 as permitted sender)
- receiver=protection.outlook.com; client-ip=104.210.80.79;
- helo=au1.smtp.exclaimer.net;
-Received: from au1.smtp.exclaimer.net (104.210.80.79) by
- SY4AUS01FT020.mail.protection.outlook.com (10.114.156.99) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5250.13 via Frontend Transport; Tue, 17 May 2022 08:37:25 +0000
-Received: from AUS01-ME3-obe.outbound.protection.outlook.com (104.47.71.240)
- by au1.smtp.exclaimer.net (104.210.80.79) with Exclaimer Signature Manager
- ESMTP Proxy au1.smtp.exclaimer.net (tlsversion=TLS12,
- tlscipher=TLS_ECDHE_WITH_AES256_SHA384); Tue, 17 May 2022 08:37:25 +0000
-X-ExclaimerHostedSignatures-MessageProcessed: true
-X-ExclaimerProxyLatency: 40289188
-X-ExclaimerImprintLatency: 2650103
-X-ExclaimerImprintAction: 1f018a51ae8c49bea6ee8f1524a695b6
-Received: from ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:8e::13)
- by SYBP282MB2318.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:104::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Tue, 17 May
- 2022 08:37:20 +0000
-Received: from ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM
- ([fe80::1dad:2cdd:f73b:ce9f]) by ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM
- ([fe80::1dad:2cdd:f73b:ce9f%6]) with mapi id 15.20.5250.018; Tue, 17 May 2022
- 08:37:20 +0000
-To: Baruch Siach <baruch@tkos.co.il>
-Thread-Topic: [Buildroot] [Question] - Buildroor 2021.02 - Can't find
- python-numpy in menuconfig (python 2.7)
-Thread-Index: AQHYaYYBK+m/UMXl20WeuLVwEe2cHq0iamsAgABTvJk=
-Date: Tue, 17 May 2022 08:37:19 +0000
-Message-ID: <ME3P282MB1347BF326D814EF66E360A80FECE9@ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM>
-References: <ME3P282MB134724A4FBF409DD7B541EF4FECE9@ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM>
- <87sfp8zut6.fsf@tarshish>
-In-Reply-To: <87sfp8zut6.fsf@tarshish>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=hopperindustrial.com.au;
-X-MS-Office365-Filtering-Correlation-Id: d384b585-5ec6-426b-9bee-08da37e078a6
-x-ms-traffictypediagnostic: SYBP282MB2318:EE_|SY4AUS01FT020:EE_|SYCP282MB0560:EE_
-X-Microsoft-Antispam-PRVS: <SYCP282MB0560172B54C87CAC2C89C69EFECE9@SYCP282MB0560.AUSP282.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: x5Ox1z1eHzGFPZ0c95tYH5Cv0MLguRD2+XzdEX9l5OMW5hIvGGyBig3kcgLWJ/rVlZf24EL/qSScREflgzAtor5Gfc+4/AQlgbUEOaBPVycdImub3XhbBrkYF4agP7J/Sx5IKtsxhjXZ0PL1iRMqwFTEK4AuaJ4R2kn9GDgbH3XV1Ge7wRekQQHYD93J5CnPavHKuBLnki9pQ4sMeTqovND7i26CEJzb3Gru7pXOROjrUjf6l97HptXoySRG6i+V5QLOYBs0Lkqh83U3Lo3UNNj3Z7VTktkxJGp+/COpqYaorMZRk8OHw21DtVKLM+TrFG/MWT/b2MFqs7J2060pCI00OgrrJkCBD8X71XJnjAiAGDJTfWI33VWgdLzYujgJVK4Xb9kfeyDhg0PJ0+DILJjcsBkzb6pSE1UweUyV/dGvKOlc8DELmpaw3Owwv/ahuYvHzssrfhZpb7gHynEtR7ehC9hP5xbumY5aP31jPZJTvn+XieswNYEDHcSDEoblxgoTxZ+KwKHz6x6fS+TXuT4epR7/S9namA53G53CjqmLUIF/BZHMc0ecSRjGabMZgQRv56avHo+t0S2v/WQtK7SGLGKt83OJE4WresB/rL1G0Watk9XLAlL0yo/jcTyU7136tsDHC4zimmuxOsQocZnqWM36GEeJQsxkczKmdHkKKhoY8yIfiSpfvhwgdizP4QFp9NatFfSobv8AVLUi//BU3DrfpCub4OyB4hhiJg+qscpJEotuz6f8p6xQyGr9j4G+hCjSwZYF6+cZO5X8dgW0H25Qx4PgMSjrtChhMN8=
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255; CTRY:; LANG:en;
- SCL:1; SRV:; IPV:NLI; SFV:NSPM; H:ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM; PTR:;
- CAT:NONE;
- SFS:(13230001)(4636009)(396003)(39840400004)(376002)(136003)(366004)(346002)(53546011)(19627405001)(91956017)(6916009)(2906002)(52536014)(71200400001)(55016003)(4326008)(33656002)(66556008)(64756008)(76116006)(66446008)(66946007)(66476007)(7696005)(508600001)(9686003)(166002)(8676002)(41300700001)(122000001)(186003)(6506007)(86362001)(966005)(26005)(316002)(8936002)(83380400001)(5660300002)(38070700005)(38100700002)(45080400002);
- DIR:OUT; SFP:1101; 
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com
+ [IPv6:2001:4860:4864:20::31])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8151B4032E
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 09:27:16 +0000 (UTC)
+Received: by mail-oa1-x31.google.com with SMTP id
+ 586e51a60fabf-edf3b6b0f2so23443945fac.9
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 02:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=ndbFkVNvPF0fqDVxCA4b0AF2uNj8H2XVO8R0ZJAMh7M=;
+ b=pCsebO5IoUuv19cBnIJmqpUoyGLMUtalMobKQdERXkAjhPSkqbPP0mOq0cZ/iUySa9
+ tGUuRURR2eBjBLgG5brrZmtm7n0hNyaeesRPld7eI9WTPZSmdrqsTeqNFugURl7tl8wW
+ hfaCNqEuR8rMmkaICxEMJc8hD//3yDy5x7WxETnnktnkR8yTiK+XnnoAsjBMuy9V3ndz
+ cX52/s0i1qZMKuQJW/tveObCb+2AAk+s43ix96hb7yxA/ELKFwipEIeYyHd3JPF0vMCX
+ 3lQdWpkFYKpvdRfnSgoJ/zYO+7zNVpX+3pJz05M8RMb+758nuD4GOdVKCBxNPPHb/0XQ
+ HR9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=ndbFkVNvPF0fqDVxCA4b0AF2uNj8H2XVO8R0ZJAMh7M=;
+ b=vQgXU332Oe5ZiepUVurKoS/sr3lnKXovoDF86p0x5rp86BNtfeo/n5WnzWYdp22H0z
+ DnuI6oByPED5t31uchv9/04OdXowy2oL/uy+tiM5kdJKo6nG3L0SJOLzY8LfuWdp3NAF
+ S3VLREngpxO1T03VSeKTpZgJIEA9yCJbV5+o0ge18B7QaM2yh232azD7Y+QV4wbOSkkx
+ R8HUWk4DD1sjBC80nlNz9ZhLhyyxT9ZG0U9uxbQ3PSbm6QjPZX/RVcgT3g7O5itNc84N
+ 8+FIqbbzqdQuqQIC5HZeZhGmbgYX578Fwmo9xA8Z7vEvhAMalRukLdSwpmCAp5CbeQnp
+ rHbw==
+X-Gm-Message-State: AOAM533LQ1Ls7bzMSiljRosLBkUjfEwcaX9XyiEZVcY/N2MMxKkLqaWE
+ s/7QIKHgftBT/0OEduIRN+6mli/049gnhjqObLs=
+X-Google-Smtp-Source: ABdhPJwKO35aYt+HNFy+dqLjLN0OEGvntNepsXR9Nxdbsi5n2uGLxevtoA3NNagGH/Cx3HRW00uwmBXXugACp9HJrck=
+X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
+ v29-20020a056870311d00b000de9b6c362bmr16977455oaa.200.1652779635395; Tue, 17
+ May 2022 02:27:15 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SYBP282MB2318
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: SY4AUS01FT020.eop-AUS01.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: d303b2ff-0654-4ed8-52a1-08da37e074ef
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hBvo44tzUuckv0T4AhLrkgehLZBgrK6i3afCD4EZEMWtgpk54io1ai81OzhHgAsYy9iUyeoc05BIATlxcqZarLfrTm7vS6S9qSglkNHX0YLq4xGYF/YXrKPyojn6LGPrZUFqb9P02fxttuizJ9DmGnR0x8JvBE26yLMy1e/FETmj6DU+MrIJWMUws6Uo50Ig3g4kHsd/R+eVNxvkv5ukMXANgg3TcpYV43lRchOZNkrO86Vy82s+rWCutt0htFWlpczFsY21GXbcQy8bH+dbBv83YUBxZeNBQHAmH96KbV/YaLLeTAGdrXk/HyTPQ3cpbEsG8TxuwVirKKYIbJGwmqr3NCmMQW1PeBcdLflxIw/hil7yBWIE9uiqVI+nPT/DcgcEiVZS2qilMd9JUImwDU2VBkv0B9siSDYYNs9rukIn9Rjze3Sm9AObWXQX0578Bu8yKsHEsCc0iVUQo5HornBdDdo5Ax6XBCpgWxA5Q+N0KDzuHWSKSkj0dD9b+7bEPH9s4G409OFCMh3Vqj20S22uWrKaK9sWPOXIGof4h+Tv50XXCMPpAQyQE/0o1W5GNbBnNsU4i882Dkjf6oTpU/krEIZpZCS67kZ4xIolfuPyLpWLRwBHGBJdTaNUnE+EfMDRTxXEXl6XVsMjN+Xa0+PudcxjUEv9ER3UQFmhFbXL9VpcMeuCqu85SNplxwDkCSIdoFhX0Gxm6XaWYz8yYb0Wuhy7+zaf39FdyIofJwW+r7T9caBwOifMhpj1+l1vHpqIQYpJcj540928BR0OKw==
-X-Forefront-Antispam-Report: CIP:104.210.80.79; CTRY:AU; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:au1.smtp.exclaimer.net; PTR:au1.smtp.exclaimer.net;
- CAT:NONE;
- SFS:(13230001)(4636009)(136003)(39840400004)(396003)(346002)(376002)(36840700001)(46966006)(83380400001)(166002)(19627405001)(316002)(6506007)(9686003)(47076005)(41300700001)(40480700001)(82310400005)(2906002)(966005)(52536014)(8936002)(53546011)(508600001)(7636003)(7596003)(70206006)(70586007)(86362001)(8676002)(26005)(4326008)(45080400002)(33964004)(36860700001)(7696005)(356005)(186003)(336012)(6916009)(33656002)(55016003)(5660300002);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: hopperindustrial.com.au
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 08:37:25.9296 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d384b585-5ec6-426b-9bee-08da37e078a6
-X-MS-Exchange-CrossTenant-Id: d9b9a834-a53c-4fa3-b2c0-12e53d54aec8
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d9b9a834-a53c-4fa3-b2c0-12e53d54aec8; Ip=[104.210.80.79];
- Helo=[au1.smtp.exclaimer.net]
-X-MS-Exchange-CrossTenant-AuthSource: SY4AUS01FT020.eop-AUS01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SYCP282MB0560
-Subject: Re: [Buildroot] [Question] - Buildroor 2021.02 - Can't find
- python-numpy in menuconfig (python 2.7)
+References: <20220215015307.855341-1-james.hilliard1@gmail.com>
+ <20220215015307.855341-5-james.hilliard1@gmail.com>
+ <f0607b08-10e0-6cf6-acbe-fbadad8e1722@korsgaard.com>
+In-Reply-To: <f0607b08-10e0-6cf6-acbe-fbadad8e1722@korsgaard.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 17 May 2022 03:27:04 -0600
+Message-ID: <CADvTj4qtBNwvZw66NPhoKRLsKkJQjqFb9tMo_4qyi-B+GThDxg@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Subject: Re: [Buildroot] [PATCH v8 5/5] package/qt5/qt5webengine: bump to
+ version 5.15.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -153,590 +85,152 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Alberto Fahrenkrog via buildroot <buildroot@buildroot.org>
-Reply-To: Alberto Fahrenkrog <AFahrenkrog@hopperindustrial.com.au>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============4504503698809549254=="
+Cc: =?UTF-8?B?R2HDq2wgUG9ydGF5?= <gael.portay@collabora.com>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
-
---===============4504503698809549254==
-Content-Type: multipart/related;
-	boundary="----_=_NextPart_78ea4e1f-2016-441a-9f1b-ba2179a82d32"
-
-This is a multi-part message in MIME format.
-
-------_=_NextPart_78ea4e1f-2016-441a-9f1b-ba2179a82d32
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_ME3P282MB1347BF326D814EF66E360A80FECE9ME3P282MB1347AUSP_"
-
---_000_ME3P282MB1347BF326D814EF66E360A80FECE9ME3P282MB1347AUSP_
-Content-Type: text/plain;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi Baruch, thanks for your help.
-
-I figured it out. I was using v2020.11 and v2020.05, and that gave me all s=
-orts of trouble. The combination that worked for me was:
-
-  *   BR 2020.02
-  *   BR2_TOOLCHAIN_BUILDROOT_GLIBC=3Dy
-  *   Kernel 5.4
-
-Earlier versions did not allow me to use the kernel 5.4.
-
-It took me a while to get all right, I had to do a few rebuilds from scratc=
-h, but it's all working now. Many thanks!
-
-Cheers,
-
-Alberto
-
-________________________________
-
-Alberto Fahrenkrog Snr Electronics engineer 
-Orica - Perth Technology Centre
-p: +61 (0) 8 6365 4056
-e: AFahrenkrog@hopperindustrial.com.au
-From: Baruch Siach <baruch@tkos.co.il>
-Sent: Tuesday, May 17, 2022 11:32 AM
-To: Alberto Fahrenkrog <AFahrenkrog@hopperindustrial.com.au>
-Cc: buildroot@buildroot.org <buildroot@buildroot.org>
-Subject: Re: [Buildroot] [Question] - Buildroor 2021.02 - Can't find python=
--numpy in menuconfig (python 2.7)
-
-[You don't often get email from baruch@tkos.co.il. Learn why this is import=
-ant at https://aka.ms/LearnAboutSenderIdentification.]
-
-CAUTION: This email originated from outside of the organization. Do not cli=
-ck links or open attachments unless you recognize the sender and know the c=
-ontent is safe.
-
-
-Hi Alberto,
-
-On Tue, May 17 2022, Alberto Fahrenkrog via buildroot wrote:
-> I'm trying to build the numpy package for python2.7. Unfortunately I
-> have to use python 2.7 before I'm able to upgrade.
-
-Note that Python 2.7 has been removed from the latest 2022.02 release.
-Which version are you using?
-
-> When I search "/" python-numpy in menuconfig, it tells me it's in
-> "Target Packages -> Interpreter languages and scripting -> External
-> Python Modules". But I can't find it on the list.
-
-There might be an unsatisfied dependency. The search results should show
-you the list of BR2_PACKAGE_PYTHON_NUMPY dependencies, and whether they
-are enabled. Specifically python-numpy needs glibc or musl C libraries.
-In that case you should see this comment in the menu:
-
-    *** python-numpy needs glibc or musl ***
-
-Another options is that numphy does not support your target
-platform. See the list of platforms under
-BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS in
-package/python-numpy/Config.in. In that case the menu comment does not
-show.
-
-> I tried adding it on my _defconfig as
-> BR2_PACKAGE_PYTHON_NUMPY=3Dy
-> BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS=3Dy
-> But that doesn't make a difference either.
-
-Kconfig removes symbols with unsatisfied dependencies.
-
-> I haven't spotted any typos.
+On Tue, May 17, 2022 at 1:35 AM Peter Korsgaard <peter@korsgaard.com> wrote:
 >
-> What's the correct way to add numpy to python 2.7? Any help is appreciate=
-d.
-
-Hope this helps,
-baruch
-
---
-                                                     ~. .~   Tk Open System=
-s
-=3D}------------------------------------------------ooO--U--Ooo------------=
-{=3D
-   - baruch@tkos.co.il - tel: +972.52.368.4656, https://aus01.safelinks.pro=
-tection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.tkos.co.il%2F&amp;data=3D05%7C0=
-1%7CAFahrenkrog%40hopperindustrial.com.au%7C2f7bb0d2493145df263308da37b7a73=
-8%7Cd9b9a834a53c4fa3b2c012e53d54aec8%7C0%7C0%7C637883559184011695%7CUnknown=
-%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6=
-Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DpjE3ULWjF0Lya1qLc0XyED42T0g61OfNmhk7CQYA=
-8do%3D&amp;reserved=3D0 -
-
---_000_ME3P282MB1347BF326D814EF66E360A80FECE9ME3P282MB1347AUSP_
-Content-Type: text/html;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-Hi Baruch, thanks for your help.</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-I figured it out. I was using v2020.11 and v2020.05, and that gave me all s=
-orts of trouble. The combination that worked for me was:</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<ul>
-<li><span>BR 2020.02</span></li><li><span>BR2_TOOLCHAIN_BUILDROOT_GLIBC=3Dy=
-</span></li><li><span>Kernel 5.4</span></li></ul>
-<div>Earlier versions did not allow me to use the kernel 5.4.</div>
-<div><br>=0D=0A</div>
-<div>It took me a while to get all right, I had to do a few rebuilds from s=
-cratch, but it's all working now. Many thanks!</div>
-<div><br>
-</div>
-<div>Cheers,</div>
-<div><br>
-</div>
-<div>Alberto<br>
-</div>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div id=3D"appendonsend"></div>
-<div dir=3D"ltr" style=3D"mso-line-height-rule:exactly;-webkit-text-size-ad=
-just:100%;direction:ltr;"><table cellpadding=3D"0" cellspacing=3D"0" border=
-=3D"0" style=3D"width:100%;"><tr style=3D"font-size:0;"><td align=3D"left" =
-style=3D"vertical-align:middle;"><table cellpadding=3D"0" cellspacing=3D"0"=
- border=3D"0" style=3D"font-size:0;"><tr style=3D"font-size:0;line-height:n=
-ormal;"><td align=3D"left" style=3D"padding:0;vertical-align:middle;"><img =
-src=3D"cid:image530861.png@CC873000.5954C34A" height=3D"60" border=3D"0" al=
-t=3D"" style=3D"height:60px;min-height:60px;max-height:60px;font-size:0;" /=
-></td></tr><tr style=3D"font-size:0;"><td align=3D"left" style=3D"padding:1=
-3px 0 0;vertical-align:top;"><table cellpadding=3D"0" cellspacing=3D"0" bor=
-der=3D"0" style=3D"font-size:0;"><tr style=3D"font-size:0;"><td align=3D"le=
-ft" style=3D"vertical-align:top;"><table cellpadding=3D"0" cellspacing=3D"0=
-" border=3D"0" style=3D"font-size:0;color:#000001;font-style:normal;font-we=
-ight:700;white-space:nowrap;"><tr style=3D"font-size:14.67px;"><td align=
-=3D"left" style=3D"vertical-align:top;font-family:Arial;">Alberto<span styl=
-e=3D"font-family:remialcxesans;font-size:1px;color:#FFFFFF;line-height:1px;=
-">&#8203;</span>&nbsp;Fahrenkrog</td><td align=3D"left" style=3D"vertical-a=
-lign:top;font-size:0;"><table cellpadding=3D"0" cellspacing=3D"0" border=
-=3D"0" style=3D"font-size:0;color:#000001;font-style:normal;font-weight:400=
-;white-space:nowrap;"><tr style=3D"font-size:14.67px;"><td align=3D"left" s=
-tyle=3D"padding:0 5px;vertical-align:top;font-family:Arial;">&nbsp;</td></t=
-r></table></td><td align=3D"left" style=3D"vertical-align:top;font-family:A=
-rial;font-style:italic;font-weight:400;">Snr&nbsp;Electronics&nbsp;engineer=
-&nbsp;</td></tr></table></td></tr><tr style=3D"font-size:0;"><td align=3D"l=
-eft" style=3D"vertical-align:middle;"><table cellpadding=3D"0" cellspacing=
-=3D"0" border=3D"0" style=3D"font-size:0;color:#000001;font-style:normal;fo=
-nt-weight:400;white-space:nowrap;"><tr style=3D"font-size:13.33px;"><td ali=
-gn=3D"left" style=3D"padding:7px 0 0;vertical-align:middle;font-family:Aria=
-l;">Orica&nbsp;=E2=80=91&nbsp;Perth&nbsp;Technology&nbsp;Centre</td></tr></=
-table></td></tr></table></td></tr><tr style=3D"font-size:0;"><td align=3D"l=
-eft" style=3D"padding:0;vertical-align:top;"><table cellpadding=3D"0" cells=
-pacing=3D"0" border=3D"0" style=3D"font-size:0;"><tr style=3D"font-size:0;"=
-><td align=3D"left" style=3D"padding:4px 0 0;vertical-align:top;"><table ce=
-llpadding=3D"0" cellspacing=3D"0" border=3D"0" style=3D"font-size:0;color:#=
-000001;font-style:normal;font-weight:400;white-space:nowrap;"><tr style=3D"=
-font-size:13.33px;"><td align=3D"left" style=3D"vertical-align:top;font-fam=
-ily:Arial;">p:&nbsp;+61&nbsp;(0)&nbsp;8&nbsp;6365&nbsp;4056</td></tr></tabl=
-e></td></tr></table></td></tr><tr style=3D"font-size:0;"><td align=3D"left"=
- style=3D"padding:5px 0 0;vertical-align:top;"><table cellpadding=3D"0" cel=
-lspacing=3D"0" border=3D"0" style=3D"font-size:0;color:#000001;font-style:n=
-ormal;font-weight:400;white-space:nowrap;"><tr style=3D"font-size:13.33px;"=
-><td align=3D"left" style=3D"padding:0 0 3px;vertical-align:top;font-family=
-:Arial;">e:&nbsp;<a href=3D"mailto:AFahrenkrog@hopperindustrial.com.au" tar=
-get=3D"_blank" id=3D"LPlnk689713" style=3D"text-decoration:none;color:#0000=
-01;"><strong style=3D"font-weight:400;">AFahrenkrog@hopperindustrial.com.au=
-</strong></a></td></tr></table></td></tr></table></td></tr></table></div><h=
-r style=3D"display:inline-block;width:98%" tabindex=3D"-1">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" st=
-yle=3D"font-size:11pt" color=3D"#000000"><b>From:</b> Baruch Siach &lt;baru=
-ch@tkos.co.il&gt;<br>
-<b>Sent:</b> Tuesday, May 17, 2022 11:32 AM<br>
-<b>To:</b> Alberto Fahrenkrog &lt;AFahrenkrog@hopperindustrial.com.au&gt;<b=
-r>
-<b>Cc:</b> buildroot@buildroot.org &lt;buildroot@buildroot.org&gt;<br>
-<b>Subject:</b> Re: [Buildroot] [Question] - Buildroor 2021.02 - Can't find=
- python-numpy in menuconfig (python 2.7)</font>
-<div>&nbsp;</div>
-</div>
-<div class=3D"BodyFragment"><font size=3D"2"><span style=3D"font-size:11pt;=
-">
-<div class=3D"PlainText">[You don't often get email from baruch@tkos.co.il.=
- Learn why this is important at
-<a href=3D"https://aka.ms/LearnAboutSenderIdentification.]">https://aka.ms/=
-LearnAboutSenderIdentification.]</a><br>
-<br>
-CAUTION: This email originated from outside of the organization. Do not cli=
-ck links or open attachments unless you recognize the sender and know the c=
-ontent is safe.<br>
-<br>
-<br>
-Hi Alberto,<br>
-<br>
-On Tue, May 17 2022, Alberto Fahrenkrog via buildroot wrote:<br>
-&gt; I'm trying to build the numpy package for python2.7. Unfortunately I<b=
-r>
-&gt; have to use python 2.7 before I'm able to upgrade.<br>
-<br>
-Note that Python 2.7 has been removed from the latest 2022.02 release.<br>
-Which version are you using?<br>
-<br>
-&gt; When I search &quot;/&quot; python-numpy in menuconfig, it tells me it=
-'s in<br>
-&gt; &quot;Target Packages -&gt; Interpreter languages and scripting -&gt; =
-External<br>
-&gt; Python Modules&quot;. But I can't find it on the list.<br>
-<br>
-There might be an unsatisfied dependency. The search results should show<br=
+> Hi,
 >
-you the list of BR2_PACKAGE_PYTHON_NUMPY dependencies, and whether they<br>
-are enabled. Specifically python-numpy needs glibc or musl C libraries.<br>
-In that case you should see this comment in the menu:<br>
-<br>
-&nbsp;&nbsp;&nbsp; *** python-numpy needs glibc or musl ***<br>
-<br>
-Another options is that numphy does not support your target<br>
-platform. See the list of platforms under<br>
-BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS in<br>
-package/python-numpy/Config.in. In that case the menu comment does not<br>
-show.<br>
-<br>
-&gt; I tried adding it on my _defconfig as<br>
-&gt; BR2_PACKAGE_PYTHON_NUMPY=3Dy<br>
-&gt; BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS=3Dy<br>
-&gt; But that doesn't make a difference either.<br>
-<br>
-Kconfig removes symbols with unsatisfied dependencies.<br>
-<br>
-&gt; I haven't spotted any typos.<br>
-&gt;<br>
-&gt; What's the correct way to add numpy to python 2.7? Any help is appreci=
-ated.<br>
-<br>
-Hope this helps,<br>
-baruch<br>
-<br>
---<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp; ~. .~&nbsp;&nbsp; Tk Open Systems<br>
-=3D}------------------------------------------------ooO--U--Ooo------------=
-{=3D<br>
-&nbsp;&nbsp; - baruch@tkos.co.il - tel: +972.52.368.4656, <a href=3D"https:=
-//aus01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.tkos.co.il=
-%2F&amp;amp;data=3D05%7C01%7CAFahrenkrog%40hopperindustrial.com.au%7C2f7bb0=
-d2493145df263308da37b7a738%7Cd9b9a834a53c4fa3b2c012e53d54aec8%7C0%7C0%7C637=
-883559184011695%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzI=
-iLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;amp;sdata=3DpjE3ULWjF0L=
-ya1qLc0XyED42T0g61OfNmhk7CQYA8do%3D&amp;amp;reserved=3D0">
-https://aus01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.tkos=
-=2Eco.il%2F&amp;amp;data=3D05%7C01%7CAFahrenkrog%40hopperindustrial.com.au%=
-7C2f7bb0d2493145df263308da37b7a738%7Cd9b9a834a53c4fa3b2c012e53d54aec8%7C0%7=
-C0%7C637883559184011695%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjo=
-iV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;amp;sdata=3DpjE=
-3ULWjF0Lya1qLc0XyED42T0g61OfNmhk7CQYA8do%3D&amp;amp;reserved=3D0</a>
- -<br>
-</div>
-</span></font></div>
-</body>
-</html>
+> On 15/02/2022 02.53, James Hilliard wrote:
+> > We need to use the separate package for the chromium submodule
+> > which has python3 support patches.
+> >
+> > We also need to apply a patch to qt5webengine to allow building with
+> > python3.
+> >
+> > Drop a patch which is now upstream.
+> >
+> > We need to set QT5WEBENGINE_SYNC_QT_HEADERS = YES as we are building
+> > from a repository archive instead of a release archive.
+> >
+> > We need to add some new required dependencies to qt5webengine so that
+> > it will build.
+> >
+> > Switch libraries to system libraries instead of bundled when possible.
+> >
+> > Migrate unsupported WEBENGINE_CONFIG to new config flag option.
+> >
+> > Override feature detection using config override flags to ensure we
+> > get the expected features enabled/disabled as autodetection logic
+> > may otherwise disable features without throwing build errors.
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>
+> I tried applying patch 1, 2, 3 and 5 (which took some effort as there
+> seems to be some DOS newlines confusing patchwork) and did a test build
+> for 32bit ARM:
+>
+> BR2_arm=y
+> BR2_cortex_a7=y
+> BR2_ARM_INSTRUCTIONS_THUMB2=y
+> BR2_CCACHE=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> BR2_PACKAGE_QT5=y
+> BR2_PACKAGE_QT5WEBENGINE=y
+>
+> But that fails building v8_snapshot/gen-regexp-special-case. Notice the
+> -m32 that get passed:
+>
+> [19941/21833] LINK v8_snapshot/gen-regexp-special-case
+> FAILED: v8_snapshot/gen-regexp-special-case
+> /home/peko/source/buildroot/output-qt/build/qt5webengine-5.15.8/host-bin/python
+> "../../3rdparty/chromium/build/toolchain/gcc_li
+>
+>                                  nk_wrapper.py"
+> --output="v8_snapshot/gen-regexp-special-case" -- /usr/bin/g++ -pie
+> -Wl,--fatal-warnings -Wl,--build-id=sha1 -fP
+>
+>                               IC -Wl,-z,noexecstack -Wl,-z,relro
+> -Wl,-z,now -Wl,-z,defs -Wl,--as-needed -m32 -pie -Wl,--disable-new-dtags
+> -Wl,-O2 -Wl,--gc-se
+>
+>      ctions -L/usr/lib -o "v8_snapshot/gen-regexp-special-case"
+> -Wl,--start-group @"v8_snapshot/gen-regexp-special-case.rsp"  -Wl,--
+>
+>                                                       end-group  -ldl
+> -lpthread -lrt -licui18n -licuuc -licudata
+> /usr/bin/ld: skipping incompatible
+> /usr/lib/x86_64-linux-gnu/libicui18n.so when searching for -licui18n
+> /usr/bin/ld: skipping incompatible
+> /usr/lib/x86_64-linux-gnu/libicui18n.a when searching for -licui18n
+> /usr/bin/ld: cannot find -licui18n
+> /usr/bin/ld: skipping incompatible
+> /usr/lib/x86_64-linux-gnu/libicui18n.so when searching for -licui18n
+> /usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicuuc.so
+> when searching for -licuuc
+> /usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicuuc.a
+> when searching for -licuuc
+> /usr/bin/ld: cannot find -licuuc
+> /usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicuuc.so
+> when searching for -licuuc
+> /usr/bin/ld: skipping incompatible
+> /usr/lib/x86_64-linux-gnu/libicudata.so when searching for -licudata
+> /usr/bin/ld: skipping incompatible
+> /usr/lib/x86_64-linux-gnu/libicudata.a when searching for -licudata
+> /usr/bin/ld: cannot find -licudata
+> /usr/bin/ld: skipping incompatible
+> /usr/lib/x86_64-linux-gnu/libicudata.so when searching for -licudata
+> collect2: error: ld returned 1 exit status
+> [19945/21833] CXX v8_snapshot/obj/v8/v8_libsampler/sampler.o
+> ninja: build stopped: subcommand failed.
+> make[5]: *** [Makefile.gn_run:362: run_ninja] Error 1
+> make[4]: *** [Makefile:82: sub-gn_run-pro-make_first] Error 2
+> make[3]: *** [Makefile:79: sub-core-make_first] Error 2
+> make[2]: *** [Makefile:49: sub-src-make_first] Error 2
+> make[1]: *** [package/pkg-generic.mk:293:
+> /home/peko/source/buildroot/output-qt/build/qt5webengine-5.15.8/.stamp_built]
+> Error 2
+>
+>
+> Any ideas? Notice that I did NOT apply patch 4 yet.
 
---_000_ME3P282MB1347BF326D814EF66E360A80FECE9ME3P282MB1347AUSP_--
+I think patch 4 was needed for fixing some linker issues with pkg-config
+resolved dependencies like icu.
 
-------_=_NextPart_78ea4e1f-2016-441a-9f1b-ba2179a82d32
-Content-Type: image/png;
-	name="image530861.png"
-Content-Transfer-Encoding: base64
-Content-ID: <image530861.png@CC873000.5954C34A>
-Content-Description: image530861.png
-Content-Disposition: inline;
-	creation-date="Tue, 17 May 2022 08:37:25 +0000";
-	filename=image530861.png;
-	modification-date="Tue, 17 May 2022 08:37:25 +0000";
-	size=14270
-
-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
-YUYrfJl7ad4AAAAASUVORK5CYII=
-
-------_=_NextPart_78ea4e1f-2016-441a-9f1b-ba2179a82d32--
-
-
---===============4504503698809549254==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+>
+> > ---
+> > Changes v7 -> v8:
+> >    - add missing BR2_PACKAGE_QT5BASE_HARFBUZZ select
+> >
+> > Changes v5 -> v6:
+> >    - switch to python3
+> >    - fix up config flags and rebase
+> >
+> > Changes v3 -> v4:
+> >    - linker fixes
+> >
+> > Changes v2 -> v3:
+> >    - add kconfig entries
+> > ---
+> >   package/qt5/qt5.mk                            |    1 -
+> >   .../0002-Add-python3-build-support.patch      |  168 +++
+> >   ...m-breakpad-fix-build-with-glibc-2.34.patch |   76 --
+> >   package/qt5/qt5webengine/Config.in            |   14 +
+> >   .../qt5/qt5webengine/host-python-wrapper.in   |    3 +
+> >   package/qt5/qt5webengine/qt5webengine.hash    | 1001 +----------------
+> >   package/qt5/qt5webengine/qt5webengine.mk      |  160 ++-
+> >   7 files changed, 323 insertions(+), 1100 deletions(-)
+> >   create mode 100644 package/qt5/qt5webengine/0002-Add-python3-build-support.patch
+> >   delete mode 100644 package/qt5/qt5webengine/0002-chromium-breakpad-fix-build-with-glibc-2.34.patch
+> >   create mode 100644 package/qt5/qt5webengine/host-python-wrapper.in
+> --
+> Bye, Peter Korsgaard
+>
+>
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4504503698809549254==--
-
