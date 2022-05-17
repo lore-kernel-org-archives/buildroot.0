@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9376C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 21:10:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D32FC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 21:10:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B90684058;
-	Tue, 17 May 2022 21:10:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4650F84066;
+	Tue, 17 May 2022 21:10:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7SkmXUKZcy-T; Tue, 17 May 2022 21:10:38 +0000 (UTC)
+	with ESMTP id 6SWxFdMqxmOF; Tue, 17 May 2022 21:10:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 660958402D;
-	Tue, 17 May 2022 21:10:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A802D1BF995
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17DFB84028;
+	Tue, 17 May 2022 21:10:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BB39B1BF9AA
  for <buildroot@lists.busybox.net>; Tue, 17 May 2022 21:10:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A562A60AE4
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA8EC84058
  for <buildroot@lists.busybox.net>; Tue, 17 May 2022 21:10:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gJJ9R-gugzJ3 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e5Raf7kUSTLZ for <buildroot@lists.busybox.net>;
  Tue, 17 May 2022 21:10:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D451F60A93
+ by smtp1.osuosl.org (Postfix) with ESMTP id DF11784028
  for <buildroot@buildroot.org>; Tue, 17 May 2022 21:10:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9963185F90; Tue, 17 May 2022 20:59:18 +0000 (UTC)
+ id A421385FAD; Tue, 17 May 2022 20:59:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 17 May 2022 22:52:09 +0200
+Date: Tue, 17 May 2022 23:09:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b3be5990680514634aad41a1ca8f5a6337223cf6
-X-Git-Newrev: bdb247436c7309f3fb8e7d60ed5e66883ae17a45
+X-Git-Oldrev: bdb247436c7309f3fb8e7d60ed5e66883ae17a45
+X-Git-Newrev: feda018834aa59d8b9398604f9c91e08de87943f
 X-Patchwork-Hint: ignore
-Message-Id: <20220517205918.9963185F90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pango: propagate reverse
+Message-Id: <20220517205918.A421385FAD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/grpc: propagate reverse
  dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,108 +60,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdb247436c7309f3fb8e7d60ed5e66883ae17a45
+commit: https://git.buildroot.net/buildroot/commit/?id=feda018834aa59d8b9398604f9c91e08de87943f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It appears some pango reverse dependencies aren't propagated properly.
+It appears some grpc reverse dependencies aren't propagated properly.
 
 Fixes:
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_PANGO
-  Depends on [n]: BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_USE_MMU [=y] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_HAS_SYNC_4 [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 [=n]
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_GRPC
+  Depends on [n]: BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_5 [=y] && !BR2_STATIC_LIBS [=n] && (BR2_TOOLCHAIN_HAS_SYNC_4 [=y] || BR2_TOOLCHAIN_HAS_ATOMIC [=y]) && BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS [=n]
   Selected by [y]:
-  - BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTML [=y] && BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_PLUGINS_BAD [=y] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_HAS_SYNC_4 [=y]
+  - BR2_PACKAGE_FALCOSECURITY_LIBS [=y] && BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS [=y] && BR2_LINUX_KERNEL [=y] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && !BR2_STATIC_LIBS [=n] && BR2_TOOLCHAIN_USES_GLIBC [=y] && BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1 [=y]
+
+On BR2_PACKAGE_COLLECTD_GRPC, we take this opportunity to drop the
+Config.in comment about the BR2_HOST_GCC_AT_LEAST_4_9, which was
+dropped from BR2_PACKAGE_COLLECTD_GRPC in commit
+8251d8c2559b25f11684776fc343059cf100657d ("package/grpc: restrict
+host-grpc to the absolute minimum")
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in  |  7 +++++--
- package/gstreamer1/gst1-plugins-base/Config.in | 10 +++++++---
- package/weston/Config.in                       |  5 +++--
- 3 files changed, 15 insertions(+), 7 deletions(-)
+ package/collectd/Config.in           |  7 +++----
+ package/falcosecurity-libs/Config.in |  4 +++-
+ package/sysdig/Config.in             | 10 +++++++---
+ 3 files changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 669360adb1..cd5a2c7b11 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -481,18 +481,21 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTML
- 	bool "ttml"
- 	depends on BR2_USE_WCHAR # pango -> glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> glib2
-+	depends on BR2_USE_MMU # pango -> glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_PANGO
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index dc6ecd2b72..fb76a105dc 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -683,16 +683,15 @@ config BR2_PACKAGE_COLLECTD_GRPC
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
+ 	depends on BR2_INSTALL_LIBSTDCPP # grpc -> protobuf
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # grpc -> protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # grpc -> libabseil-cpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # grpc -> libabseil-cpp
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
+ 	select BR2_PACKAGE_GRPC
  	help
- 	  Timed Text Markup Language (TTML) subtitle plugin
+ 	  Send/receive values using the gRPC protocol.
  
--comment "ttml needs a toolchain w/ wchar, threads, C++"
-+comment "ttml needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_INSTALL_LIBSTDCPP
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-comment "grpc needs a toolchain w/ C++, gcc >= 4.9, host gcc >= 4.9"
++comment "grpc needs a toolchain w/ C++, gcc >= 5"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
+-		|| !BR2_HOST_GCC_AT_LEAST_4_9
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
  
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC
- 	bool "mpeg2enc"
-diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
-index 7ca94d7dc4..bd4ee0b994 100644
---- a/package/gstreamer1/gst1-plugins-base/Config.in
-+++ b/package/gstreamer1/gst1-plugins-base/Config.in
-@@ -291,6 +291,9 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OPUS
+diff --git a/package/falcosecurity-libs/Config.in b/package/falcosecurity-libs/Config.in
+index e0b5a3d134..157bc8ef6d 100644
+--- a/package/falcosecurity-libs/Config.in
++++ b/package/falcosecurity-libs/Config.in
+@@ -1,11 +1,13 @@
+ config BR2_PACKAGE_FALCOSECURITY_LIBS
+ 	bool
++	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp, protobuf, tbb
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # grpc
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # jq, protobuf, tbb
+ 	depends on !BR2_STATIC_LIBS # protobuf, tbb
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # tbb
+ 	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
+ 	select BR2_PACKAGE_C_ARES
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 3a21f51725..c0a631bd49 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -1,13 +1,15 @@
+ config BR2_PACKAGE_SYSDIG
+ 	bool "sysdig"
++	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # falcosecurity-libs
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # falcosecurity-libs
+ 	depends on BR2_LINUX_KERNEL # falcosecurity-libs
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # falcosecurity-libs
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # falcosecurity-libs
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # falcosecurity-libs
+ 	depends on !BR2_STATIC_LIBS # falcosecurity-libs
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # falcosecurity-libs
+ 	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1 # falcosecurity-libs
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # falcosecurity-libs
+ 	select BR2_PACKAGE_FALCOSECURITY_LIBS
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
+@@ -21,10 +23,12 @@ config BR2_PACKAGE_SYSDIG
  
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
- 	bool "pango font renderer"
-+	depends on BR2_USE_WCHAR # pango -> glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> glib2
-+	depends on BR2_USE_MMU # pango -> glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
-@@ -298,10 +301,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
- 	help
- 	  Pango-based text rendering and overlay
+ 	  https://github.com/draios/sysdig/wiki
  
--comment "pango plugin needs a toolchain w/ C++, gcc >= 4.9"
--	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+comment "pango plugin needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
- 	bool "theora (*.ogg video)"
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 6ad8241caa..3b4e932b7d 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -147,6 +147,7 @@ config BR2_PACKAGE_WESTON_DEMO_CLIENTS
- 	bool "demo clients"
- 	depends on BR2_USE_MMU # pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pango
- 	depends on BR2_USE_WCHAR # pango
-@@ -156,11 +157,11 @@ config BR2_PACKAGE_WESTON_DEMO_CLIENTS
- 	help
- 	  This enables the installation of Weston's demo clients.
- 
--comment "demo clients needs an OpenGL ES provider, an OpenEGL-capable Wayland backend and a toolchain w/ wchar, threads, C++"
-+comment "demo clients needs an OpenGL ES provider, an OpenEGL-capable Wayland backend and a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR || !BR2_PACKAGE_HAS_LIBGLES || \
--		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- endif
+-comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 4.8, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
++comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 5, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
++	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_5 || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_USES_GLIBC \
+ 		|| !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
