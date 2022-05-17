@@ -1,62 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63929C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 04:35:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98ED3C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 04:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5D9960BE8;
-	Tue, 17 May 2022 04:35:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0928840883;
+	Tue, 17 May 2022 04:36:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id llKmkC78gK8e; Tue, 17 May 2022 04:35:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q_1s3aimG_Vq; Tue, 17 May 2022 04:36:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C32D960B6A;
-	Tue, 17 May 2022 04:35:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8B09D1BF2A3
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 04:35:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2AE04086C;
+	Tue, 17 May 2022 04:36:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3FE1A1BF2A3
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 04:36:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8840283DF3
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 04:35:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D91E4086C
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 04:36:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=tkos.co.il
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x0ktW5qXCMHf for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 04:35:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6BDC483DF2
- for <buildroot@buildroot.org>; Tue, 17 May 2022 04:35:50 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id A866744042A;
- Tue, 17 May 2022 07:34:41 +0300 (IDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1652762081;
- bh=hASFKQNgynGpPlIs6wzokUQUPDCuFIvTy+BzE3a7xKM=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=Pszz8dHXMuVf65yFJL9WM/3YD0BD7M8AkC7YvWHZTwzYXrX0UvecGEgX/bKBpY0WO
- gek4G7k8v93FZJRibIml4Y0S1D8o8mKS6R3/UVEe+5Ly2v9SLEtf0Zc0HrO1EWjJh+
- CHc5cz26lyOrifSP1955xxo8deVze11XlOS8mUteDdKATanitXbsrSreHdaSJsyMCv
- adrSc8IdRk4iK22iSD3zmrKX96Bw8SNv8AuPnwuYdV4P0udu7jNCNUZgRKEyFhX5Ii
- chX60hqAx9T02hZZYtCc0BUxVQTQq3UZjKIST1EEi4RZMZ51HxPM2Pz0b02CaVqvrU
- x+bjrFXbYoWxQ==
-References: <20220516224655.15730-1-flatmax@flatmax.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-To: Matt Flax <flatmax@flatmax.com>
-Date: Tue, 17 May 2022 07:34:17 +0300
-In-reply-to: <20220516224655.15730-1-flatmax@flatmax.com>
-Message-ID: <87o7zwzsgt.fsf@tarshish>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JH5v54DPddE6 for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 04:36:30 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com
+ [203.205.221.235])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 66E9B4086A
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 04:36:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+ s=s201512; t=1652762186;
+ bh=E/Lwighvi7/ea9YI5xrvJ3RS0QJbcb/brKurF0QiaRU=;
+ h=Date:From:To:Subject;
+ b=xS15khzKwOu12atsGd6Jzmd5zCvwnsbXh8c2m0UoQMznaEnXy6hyNxVN1CKIbVAyR
+ FhODOp6VtkKKBbOCCdESGwPkncaCeoSHqpx02BIYWlCUx4JYZOiK3tMCmYPmOAQp6W
+ 2yvYIi8y/J/evBGVmqvnAA2/EoxsQ7vQLBiyW2gI=
+Received: from localhost ([182.96.127.187])
+ by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
+ id 545344B5; Tue, 17 May 2022 12:21:05 +0800
+X-QQ-mid: xmsmtpt1652761265tjqw4ycrf
+Message-ID: <tencent_C71D728A2A59D78679AFBD91305772E8CF09@qq.com>
+X-QQ-XMAILINFO: NCdkvINN4D6IjREGLu9NBTJArRovHClllQRBC9mIf2lIbOi0TGsoshC7kweXBj
+ GTYh8lKsCaPYql/kIHHMsCNOLtEXICbi/wa+E4HwB2jxId/XCaJuINoDPMJkH1o/CZZQrvX0gacx
+ cD4PourZpB3xBAwf0OQOoh3QX71HtLo06kqknwIzqF5vqEYShxSTP7kW188lbCg29SuBwgM2P3Dw
+ /hyQFOtN9hOTqu/76n0tOocDz/A/h9XxGuBfepe919M0IgTe1GLa/GM7ZxhYHcCfrSiMMeQo/qLP
+ 54q0BhFgHZdCeXeNtT+TY8Q86XYJqKbN4Cr56nQwzV9OH6JN4MBDj//fLwt5NNTSuywsZHTDibuS
+ KGOOBUo36wEEioYPqtOeZQA3N1LV6FLbne30Wqvt/RhswUDczWFXdRJniwxiAN0bKBrQx0LZ24T3
+ JO2xIlMZhSVygqcalKpTJnDEUtZSvHKyAI78GILkzJTLZep65ILbWUJsv0bDZrW23WF+nwwXOjT7
+ YlIDNHoa1WX1lkoFgOsxzisuCUbuuT0ogaQLKgNsLMweEfgP1l3Qwclawsk0hP5n+Nww1UuMCnSr
+ zmbxDmSbnlcYUDepYkUpfe8PSitbwnZDGpMcCvkFT7rxsRCy0BmDI3Pksk6ToOLpUg5ujgNO3ffT
+ c2dREzdE3OKb2iGMbIS1Jrbp7gV0XutI1hFvwbrQ6AHVPp0xKCbPM0FnxaZVyzSant1cvnjeLSf7
+ sVNMK3sZUAGujESdb2glQ0GAfTSRxDCghSCrhNZlKzDQRIcggdyyEdlX+0zyhp6KnyVU42yk6cVm
+ AQHc4QYTBvJ9nzo7rgcgHw7PsfNr4uszVIbgxI8glZan8/ozCzFh/hXHKP1kr2rBE=
+Date: Tue, 17 May 2022 12:21:05 +0800
+From: c4droid <c4droid@foxmail.com>
+To: buildroot@buildroot.org
+X-OQ-MSGID: <YoMisY3tjisZrteH@Workstation>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [RESEND PATCH v2 1/1] package/gtkiostream: new
- package
+Content-Disposition: inline
+Subject: [Buildroot] Stuck at dhcpcd initialized in wifi when system booting
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,67 +74,12 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Matt,
-
-On Tue, May 17 2022, Matt Flax wrote:
-> This package provides many useful software engineering and signal
-> processing libraries.
->
-> Signed-off-by: Matt Flax <flatmax@flatmax.com>
-> ---
->
-> Notes:
->     Changes in v2:
->     
->     - added DEVELOPERS entry
->     - trimmed down Config.in to min. selections.
->     - Cleaned up gtkiostream.mk
->     - Added hash file.
->     - fixed TAB indention
-
-[...]
-
-> diff --git a/package/gtkiostream/Config.in b/package/gtkiostream/Config.in
-> new file mode 100644
-> index 0000000000..2cbec5a844
-> --- /dev/null
-> +++ b/package/gtkiostream/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_GTKIOSTREAM
-> +	bool "gtkiostream"
-> +	depends on BR2_INSTALL_LIBSTDCPP # eigen
-> +	select BR2_PACKAGE_EIGEN
-> +	select BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES
-
-This symbol has been removed in commit 74e6d6128b46 ("package/eigen: use
-cmake-package infra").
-
-baruch
-
-> +	select BR2_PACKAGE_FFTW
-> +	select BR2_PACKAGE_FFTW_DOUBLE
-> +	select BR2_PACKAGE_FFTW_SINGLE
-> +	help
-> +	  This package provides many useful software engineering and signal
-> +	  processing includes and linkable library.
-> +
-> +	  https://github.com/flatmax/gtkiostream
-> +
-> +comment "gtkiostream needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Hi, I'm building a custom system for my raspberrypi 3b, after configuration and compiling, flash images, I boot up system, the kernel stucked at initialize dhcpcd, also I notice some component uninitialized urandom seed. Have some solution for this?
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
