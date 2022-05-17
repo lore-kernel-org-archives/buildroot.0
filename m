@@ -4,76 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C390C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 19:24:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08129C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 19:32:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D9B560E11;
-	Tue, 17 May 2022 19:24:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8874160B85;
+	Tue, 17 May 2022 19:32:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D1swTFra0Qzp; Tue, 17 May 2022 19:24:50 +0000 (UTC)
+	with ESMTP id HW2tET9fBd9E; Tue, 17 May 2022 19:32:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 921A660B85;
-	Tue, 17 May 2022 19:24:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D09D71BF403
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:24:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A46BB60A9C;
+	Tue, 17 May 2022 19:32:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 46AFA1BF403
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD3A260B6A
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:24:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 42C46416E5
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:32:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lI1Sj9C6ZSl1 for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 19:24:47 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J-DF2J7aebU8 for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 19:32:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1BC6460B85
- for <buildroot@buildroot.org>; Tue, 17 May 2022 19:24:46 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id m6so20380473iob.4
- for <buildroot@buildroot.org>; Tue, 17 May 2022 12:24:46 -0700 (PDT)
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1E0C0402D1
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 19:32:25 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id h85so20369091iof.12
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 12:32:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=u1k9g5TLf8FiWat/MGtGHRpYjd/VsiHdpvNGN3S41+4=;
- b=oTt8964XF8Ou1kKqiE1zFh6Y4oX3Y9IKDDI25hh3IwnnM3FpUNDR4mFTv44vp+NpEp
- 9YKwzD5mIX27GmMZAJEO9wmAtWELrTfcaP4anC8mFeTOnLe//DQQX0HwKOQRTf5vVZFk
- vdvSv/q0UmRcdoozVnvqdNVVidMQ24Ky80cvzpgm3Cr2CtCkOGZBQedawOya6Jm/ddUM
- LVNGrsZaqSk5P2hWHN8RBIky8WKMBhLVDaUClwmrTqbOx67EPzSa8NJXOrPB+pQipsaE
- MnU5zh9vAmXd/6EYsPwsVeyroIdJ2saI1fjjiJtSbKc6JgpUJ7agoqLj10I/fHlLEfZY
- mCmA==
+ bh=WLYr/3laFGW3WZY3LCKYwkSJ0QYFMY9fJ+UMtCsAKog=;
+ b=oszmflqUZGzxbUqFJpfukOGMSwJFzyj7ckJktb6ajx4dktcU/f2zp0oUMAnvKy3KpL
+ UBTQ/JmqlonrSpLS/CQP5uVSMgSdRx2u2y3kO0oKYtEA0HIr+2GMDsNbpBNUVnm6ww2n
+ Jo4hBkt69owhLexHlDSnPtWKyU35yyNgQfxAdmJDTnQbmuqOX6GtiGqhZuf/Z358MhEV
+ yNSy387rYJkE8+1YkNXyw5LIVGLqjux4ihPPg1UKhkSFfzDx9w3ELbdQD1C1XKZPSxu7
+ LxFUC+/KujwJ8hJEJUyPuHGzuj2EnHBUCKRQyJTO4Qgs/1GrPiTVZbEL272rwJSYmkCO
+ 9t/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=u1k9g5TLf8FiWat/MGtGHRpYjd/VsiHdpvNGN3S41+4=;
- b=R8UGftgHAeTz+x60u4AKOdwMvC515mtl5XOhR7PveLbAE+P+CqSCRhDRIZQVNKlO0H
- Qk2ivymKQWGtUbiiNPFoNB987rv223q2F+xr64ocvbwWz7Eu8zW1XoCLoPfrvJE95Wpi
- uIfjFBqPB37EVIBxxbi2P0G9X/yLH1CcO+BoS7xXQBXaiy5YiFcYSoPUo3RSgZd4+SZv
- 2IVcZ7VErmukiCiGbNAx4Jc3VEQJL6E/I+2oy7uCBIzyZglH+ohrSYpSj/p9SLG//+lo
- B1vzz7YstvNrTA4azAlluy/WStbLX7E4b8jtOUNkfQMrglaTGEsdToir1mF5/ARaZiF/
- BLpA==
-X-Gm-Message-State: AOAM532T/GFNcb7iE6PIOPkejsphotgoHYzRlefhaeXxyoA+aTEiCF4F
- pEy3DWMXUSn+pYI0kgcjjYWLFi60nIk=
-X-Google-Smtp-Source: ABdhPJz83EjiLRNgGYuZcNlFEGskeDb0KvubeiSRWpN4fa7JXzD65UJlO/nxlz9qNVwVZhsxyw2YPw==
-X-Received: by 2002:a05:6638:3289:b0:32e:2c45:93b5 with SMTP id
- f9-20020a056638328900b0032e2c4593b5mr6726441jav.96.1652815486023; 
- Tue, 17 May 2022 12:24:46 -0700 (PDT)
+ bh=WLYr/3laFGW3WZY3LCKYwkSJ0QYFMY9fJ+UMtCsAKog=;
+ b=BjzTpMdcic4dNMtvQk11uAQoQbXPXWfXW0vvCXXcwilQmihFuiwzWShAZ0Deurftq6
+ 7uoBOPqTMQ9Tzvpwzj0b6ydZUBqZoasYYLvtzr8UmZkl4uPVBoMBcjuO89OUXjNHNJ2m
+ ZOYp8rXvjPeMDls7QtOIleWAEUu/houqiCgjdiK76O2b+Vz+KZ6PCSuYN1T2BbjxLffB
+ JDHR+Er12ltnhp5ZeFNtBJfJlha03T4hXsF46rMdCzJU4zHq4kUwEuHPz1haAYlXRUOD
+ 6SM/6e9+4SC7VdXBbbneszYssm+JAepmA4PixoM/0YNeOT6jIb6VPwQCQz6+YwrXAHon
+ lHew==
+X-Gm-Message-State: AOAM532SgoMzg+Z+F3aQJxpfJK2wBMWPObUmryBOmx8z1YvcqLRgNE6R
+ 9cc7Jp+WCDHVc9xygCpDxer4Fy0iT4s=
+X-Google-Smtp-Source: ABdhPJxISemN8qV6o04mIExoDzvpCLcT9XWVq3skasYviQ24RW+4et156OyNx+60qShH9+Lzgdhipg==
+X-Received: by 2002:a05:6602:1542:b0:65a:bc5d:db78 with SMTP id
+ h2-20020a056602154200b0065abc5ddb78mr10739153iow.128.1652815943892; 
+ Tue, 17 May 2022 12:32:23 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-134-20.hlrn.qwest.net.
  [97.118.134.20]) by smtp.gmail.com with ESMTPSA id
- b24-20020a05663805b800b0032e33767166sm1718849jar.9.2022.05.17.12.24.45
+ u15-20020a92600f000000b002cde6e352d3sm42908ilb.29.2022.05.17.12.32.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 May 2022 12:24:45 -0700 (PDT)
+ Tue, 17 May 2022 12:32:23 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 May 2022 13:24:39 -0600
-Message-Id: <20220517192439.1034654-1-james.hilliard1@gmail.com>
+Date: Tue, 17 May 2022 13:31:39 -0600
+Message-Id: <20220517193139.1827192-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] system: generate and set C.UTF-8 locale by
- default
+Subject: [Buildroot] [PATCH 1/1] package/bpftool: bump to version 6.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,42 +92,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Now that glibc/localedef supports the C.UTF-8 locale we should default
-to it as software like systemd generally expects it to be the locale
-used.
-
-This should in general reduce the amount of locale related
-compatibility issues and is what many distros have been using for
-their default locale for quite a few years so it should be a well
-tested configuration.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- system/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/bpftool/bpftool.hash | 2 +-
+ package/bpftool/bpftool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index 888c24ce81..7cc529d31e 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -440,7 +440,7 @@ config BR2_ENABLE_LOCALE_PURGE
+diff --git a/package/bpftool/bpftool.hash b/package/bpftool/bpftool.hash
+index 2e414b8eb8..5fbc25adb7 100644
+--- a/package/bpftool/bpftool.hash
++++ b/package/bpftool/bpftool.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  e4ce219d3b87dd70d8dbfb8f02bd356f70c010f739f17baca1c8912199a8a72b  bpftool-v6.7.0-br1.tar.gz
++sha256  f8f8cabc001823d270898ea3a635d1eb88e067bc24eed06f74e58d2650b32312  bpftool-v6.8.0-br1.tar.gz
+ sha256  7c588754d5e81e92e2a12e47cf78949d485c9c22b4850f12d21b3835c85947d1  LICENSE
+ sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSE.BSD-2-Clause
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0
+diff --git a/package/bpftool/bpftool.mk b/package/bpftool/bpftool.mk
+index 8742917253..bb1e4ccdff 100644
+--- a/package/bpftool/bpftool.mk
++++ b/package/bpftool/bpftool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_ENABLE_LOCALE_WHITELIST
- 	string "Locales to keep"
--	default "C en_US"
-+	default "C.UTF-8"
- 	depends on BR2_ENABLE_LOCALE_PURGE
- 	help
- 	  Whitespace seperated list of locales to allow on target.
-@@ -455,7 +455,7 @@ config BR2_ENABLE_LOCALE_WHITELIST
- 
- config BR2_GENERATE_LOCALE
- 	string "Generate locale data"
--	default ""
-+	default "C.UTF-8"
- 	depends on \
- 		(BR2_TOOLCHAIN_BUILDROOT_UCLIBC && BR2_ENABLE_LOCALE) || \
- 		BR2_TOOLCHAIN_USES_GLIBC
+-BPFTOOL_VERSION = v6.7.0
++BPFTOOL_VERSION = v6.8.0
+ BPFTOOL_SITE = https://github.com/libbpf/bpftool
+ BPFTOOL_SITE_METHOD = git
+ BPFTOOL_GIT_SUBMODULES = YES
 -- 
 2.25.1
 
