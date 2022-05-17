@@ -1,59 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36F76C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 03:25:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 582D0C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 03:45:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD91A834AE;
-	Tue, 17 May 2022 03:25:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C58EE6106B;
+	Tue, 17 May 2022 03:45:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oDu6TeWHJu21; Tue, 17 May 2022 03:25:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jsiCfoPFKNii; Tue, 17 May 2022 03:45:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB02983490;
-	Tue, 17 May 2022 03:25:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF4F160F99;
+	Tue, 17 May 2022 03:45:17 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8E31E1BF322
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 03:25:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ADB171BF322
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 03:45:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C82C41956
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 03:25:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B37D418D1
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 03:45:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=cosmos-ink.net
+ dkim=pass (2048-bit key) header.d=tkos.co.il
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 501uMlhB9oiO for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 03:25:34 +0000 (UTC)
+ with ESMTP id wi8_Qh8AySJx for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 03:45:14 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.cosmos-ink.net (mail.cosmos-ink.net
- [IPv6:2a01:4f9:4a:25aa::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7ADB64194D
- for <buildroot@buildroot.org>; Tue, 17 May 2022 03:25:34 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1A2681C666E9; Tue, 17 May 2022 05:25:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cosmos-ink.net;
- s=dkim; t=1652757932; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding:in-reply-to:references;
- bh=w4E+rfy3EPAWgOcXQb580m5u10WfhO2uqq/QZ0M9VAE=;
- b=L8GtP3SSWvqw6tLxqdX0PH/SMWOpEm57K0KFkR0hZX98NuoxGR0R1d/EWvvE9k/0JV/6eK
- ssuw+bELGLp+YAHG5wy2uRWXYtd6cfewirJz8OmeyhTNinmsBmE2E0GZvi7+ndeQiCRaii
- wbLFhEsDtlX9amcw0VigSmug16lGAlAMDZyPDfZ+RQeq3kNVYyCWMGzHeuDvxr/yjmnP40
- cpPGvFuStUSLOE7jekzR/1UCzz+agZwkf/S9wX83lxzH0biYBkhRO6/KQ2U0dW3Hk7XEYd
- leyLv35m5kUKXOy2s6etuF2BvoyUs12vRYTfFhQrksdON9tjgtnSciKhY0VXzg==
-To: buildroot@buildroot.org
-Date: Tue, 17 May 2022 03:24:59 +0000
-Message-Id: <20220517032459.3400-2-linus@cosmos-ink.net>
-In-Reply-To: <20220517032459.3400-1-linus@cosmos-ink.net>
-References: <20220517032459.3400-1-linus@cosmos-ink.net>
+Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 25CBC418D0
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 03:45:14 +0000 (UTC)
+Received: from tarshish (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 418BE4402AF;
+ Tue, 17 May 2022 06:44:05 +0300 (IDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+ s=default; t=1652759045;
+ bh=1XFPF0InR97FdSZHw+kNLbhAGVwb6MsMJ1pHzWyVVIE=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=PPwhTsGvO1ZhpZTwVErj03asNAhk8grFFhd4mC5QY1BgQIFYooD8ieGGLuhsYvSBE
+ 0Fp9JE/9JJxBWxWRwD9fE/ei0SMgZcb5htytByQp66BETMNhbfF0w2yBh+9cCpl/pn
+ erwp1xqnhGvBkENMB9BZdJ8RqETd89QvO3+pqALL/y38Iq9zMqd+8NB/5Io1g6naMJ
+ TvLZz/kh7GxBDBqbqX8d+Ta2WfM1rNEog++N+TDhvjg0Kk2qizmCNOYjSZNi3AyZiV
+ V1td/BY9RdarBsblXbLWH8B6dzbJwYBx/xT8pNh5k2JB4Z1j+5CN2B6YC9z3i0YZuL
+ f+nceUqcipv6Q==
+References: <ME3P282MB134724A4FBF409DD7B541EF4FECE9@ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM>
+User-agent: mu4e 1.6.10; emacs 27.1
+To: Alberto Fahrenkrog <AFahrenkrog@hopperindustrial.com.au>
+Date: Tue, 17 May 2022 06:32:28 +0300
+In-reply-to: <ME3P282MB134724A4FBF409DD7B541EF4FECE9@ME3P282MB1347.AUSP282.PROD.OUTLOOK.COM>
+Message-ID: <87sfp8zut6.fsf@tarshish>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH 2/2] fs/squashfs: Add option to compress with
- extreme options
+Subject: Re: [Buildroot] [Question] - Buildroor 2021.02 - Can't find
+ python-numpy in menuconfig (python 2.7)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,91 +68,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Linus Kaschulla via buildroot <buildroot@buildroot.org>
-Reply-To: Linus Kaschulla <linus@cosmos-ink.net>
-Cc: Linus Kaschulla <linus@cosmos-ink.net>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-mksquashfs allows to tweak many compressions parameters. Currently they
-can't be changed from kmenu. Leaving out potential space savings.
+Hi Alberto,
 
-This adds the option to enable a set of predetermined compression
-options. This option is enabled by default for lz4 since lz4 currently
-implicitly added the extreme to it in the makefile. So this aids in
-keeping backward compatibility.
+On Tue, May 17 2022, Alberto Fahrenkrog via buildroot wrote:
+> I'm trying to build the numpy package for python2.7. Unfortunately I
+> have to use python 2.7 before I'm able to upgrade.
 
-Signed-off-by: Linus Kaschulla <linus@cosmos-ink.net>
----
- fs/squashfs/Config.in   | 26 ++++++++++++++++++++++++++
- fs/squashfs/squashfs.mk |  6 +++++-
- 2 files changed, 31 insertions(+), 1 deletion(-)
+Note that Python 2.7 has been removed from the latest 2022.02 release.
+Which version are you using?
 
-diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
-index 341e50a08c..41c782105d 100644
---- a/fs/squashfs/Config.in
-+++ b/fs/squashfs/Config.in
-@@ -89,4 +89,30 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD
- 
- endchoice
- 
-+config BR2_TARGET_ROOTFS_SQUASHFS_EXTREME_COMP
-+	bool "extreme compression if possible"
-+	default BR2_TARGET_ROOTFS_SQUASHFS4_LZ4
-+	help
-+	  Use options to increase compression ration as much as
-+	  possible, like using architecture-specific options, at
-+	  the cost of time when assembling the filesystem image.
-+
-+	  For example:
-+	   - with gzip and lzo, use -Xcompression-level 9
-+	   - with xz use a architecture specific bjc (branch-call-jump) filter
-+	   - with zstd use -Xcompression-level 22
-+	   - and more
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_COMP_OPTS
-+	string
-+	depends on BR2_TARGET_ROOTFS_SQUASHFS_EXTREME_COMP
-+	default "-Xcompression-level 9" if BR2_TARGET_ROOTFS_SQUASHFS4_GZIP
-+	default "-Xcompression-level 9" if BR2_TARGET_ROOTFS_SQUASHFS4_LZO
-+	default "-Xhc" if BR2_TARGET_ROOTFS_SQUASHFS4_LZ4
-+	default "-Xbcj arm,armthumb" if BR2_TARGET_ROOTFS_SQUASHFS4_XZ && (BR2_arm || BR_aarch64)
-+	default "-Xbcj powerpc" if BR2_TARGET_ROOTFS_SQUASHFS4_XZ && (BR2_powerpc || BR2_powerpc64)
-+	default "-Xbcj sparc" if BR2_TARGET_ROOTFS_SQUASHFS4_XZ && (BR2_sparc || BR2_sparc64)
-+	default "-Xbcj x86" if BR2_TARGET_ROOTFS_SQUASHFS4_XZ && (BR2_i386 || BR2_x86_64)
-+	default "-Xcompression-level 22" if BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD
-+
- endif
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index 1790773f7e..51f8d0d7c9 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -25,7 +25,7 @@ ROOTFS_SQUASHFS_ARGS += -nopad
- endif
- 
- ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
--ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
-+ROOTFS_SQUASHFS_ARGS += -comp lz4
- else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
- ROOTFS_SQUASHFS_ARGS += -comp lzo
- else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZMA),y)
-@@ -38,6 +38,10 @@ else
- ROOTFS_SQUASHFS_ARGS += -comp gzip
- endif
- 
-+ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS_EXTREME_COMP),y)
-+ROOTFS_SQUASHFS_ARGS += $(call qstrip,$(BR2_TARGET_ROOTFS_SQUASHFS_COMP_OPTS))
-+endif
-+
- define ROOTFS_SQUASHFS_CMD
- 	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ $(ROOTFS_SQUASHFS_ARGS)
- endef
+> When I search "/" python-numpy in menuconfig, it tells me it's in
+> "Target Packages -> Interpreter languages and scripting -> External
+> Python Modules". But I can't find it on the list.
+
+There might be an unsatisfied dependency. The search results should show
+you the list of BR2_PACKAGE_PYTHON_NUMPY dependencies, and whether they
+are enabled. Specifically python-numpy needs glibc or musl C libraries.
+In that case you should see this comment in the menu:
+
+    *** python-numpy needs glibc or musl ***
+
+Another options is that numphy does not support your target
+platform. See the list of platforms under
+BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS in
+package/python-numpy/Config.in. In that case the menu comment does not
+show.
+
+> I tried adding it on my _defconfig as 
+> BR2_PACKAGE_PYTHON_NUMPY=y
+> BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS=y
+> But that doesn't make a difference either. 
+
+Kconfig removes symbols with unsatisfied dependencies.
+
+> I haven't spotted any typos.
+>
+> What's the correct way to add numpy to python 2.7? Any help is appreciated.
+
+Hope this helps,
+baruch
+
 -- 
-2.35.1
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
