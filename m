@@ -1,81 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 377FCC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 06:36:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB01EC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 07:30:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2131605A6;
-	Tue, 17 May 2022 06:36:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E17583E1A;
+	Tue, 17 May 2022 07:30:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vsr21m7mKJtX; Tue, 17 May 2022 06:36:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HOwXQcOhTnLC; Tue, 17 May 2022 07:30:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2DD660595;
-	Tue, 17 May 2022 06:36:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 27FCB1BF309
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 06:36:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 888DA83E13;
+	Tue, 17 May 2022 07:30:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F1F3F1BF2F6
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 07:30:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C2B541917
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 06:36:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E005683E13
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 07:30:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uB7ytXd3H_MC for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 06:36:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9FI5yjlWT4A2 for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 07:30:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
- [IPv6:2a00:1450:4864:20::132])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 98F9A41508
- for <buildroot@buildroot.org>; Tue, 17 May 2022 06:36:44 +0000 (UTC)
-Received: by mail-lf1-x132.google.com with SMTP id b18so29531919lfv.9
- for <buildroot@buildroot.org>; Mon, 16 May 2022 23:36:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version:organization
- :content-transfer-encoding;
- bh=n8aEqcxJyl8Shy6KNl1YTTSOO6A60RoMZYmsA5nPpGw=;
- b=Lq30XxXo8c5zQWNLrQoKbN27H0vEnKLF6lJDIIemfww/QExFcuSjyUnNw2CgKLc5aI
- hla/yq73hNeFGP+zDUV7iSB/4cIxjtvrZvWq7/RumLdXsu2A8kBzh9UwAmgKKFgnY4S5
- HIOQEobQ1cPGCgGd4y+MvSBiXiIs1KRfuDmYS2rSRDxVrwWRaC+xOaSmGblG5jE9rBZq
- c0Vw79zDbq+QFjtYbkyn2QhV00lDPzGBA5CbhOEzOGCjbQqTHklmtX/cjv9oURgQB+/8
- jPzKEtMdrCgP3ZIHagBMXbgIe4NzuDcO4itHXxRogRd72BNVeGg2cF0sNIOU1nu8v4hO
- 24SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :organization:content-transfer-encoding;
- bh=n8aEqcxJyl8Shy6KNl1YTTSOO6A60RoMZYmsA5nPpGw=;
- b=PMt65FwjSc2XNYmtVzgLUOXhxdcCfAK6S9maEzWf78kcJTkx7Ho8h0NEn5OSazWstm
- n4iqZbPqZBy/hbBKa+kCK56WuQHWgwFffJhGZR6MfjAZRnQUMNH2BrURY1eQSTE2DyB8
- sMP3Ix2Ul9RhQ6Z31Geuv0ZI/KyS3UXgZzB6me04SDNbyAgLUTKtIT+lh9e8Klnz32Y6
- rQ4Svz5maCjvEDSY95SEHvs2hxKM8ZCE+BbvyyhaoSn0z5GR0Fl9rPjd/3s6ViIrKirw
- qbyUwWPVRxvH/LogY0+rNGYh6Kk3i+jr2Jf3PuC7yl/I0u4LJaGYYBMIgi24FjANR/Mk
- 3icw==
-X-Gm-Message-State: AOAM533kZZycXgbGBxK3JQ19fgN4N1NZwcRcl8p217yQZfyAn7sjtDNG
- 0CcJSUr/gcNJPISas2KIJoioBNE9ZwM=
-X-Google-Smtp-Source: ABdhPJzn4qE280NPygZqTzD0pP48E4xTDl5dxCLnhPU/g5ekPmJ+TkuCOppECyfT0DhIXCd804CcfQ==
-X-Received: by 2002:a05:6512:4d0:b0:472:1941:fea9 with SMTP id
- w16-20020a05651204d000b004721941fea9mr15691197lfq.57.1652769402147; 
- Mon, 16 May 2022 23:36:42 -0700 (PDT)
-Received: from gimli.addiva.ad (a124.broadband3.quicknet.se. [46.17.184.124])
- by smtp.gmail.com with ESMTPSA id
- 27-20020ac25f5b000000b0047255d210desm1500514lfz.13.2022.05.16.23.36.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 May 2022 23:36:41 -0700 (PDT)
-From: Joachim Wiberg <troglobit@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 17 May 2022 08:36:36 +0200
-Message-Id: <20220517063636.858401-1-troglobit@gmail.com>
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com
+ (mail-co1nam11on20603.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eab::603])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1456783E11
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 07:30:22 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nk2s9q6OC5B8mSBlyug9vdhFAF9I+/1RNeDUmS0oIRcWxV9e+Bk/lCZl2DSg6i5qPAu0+59vjeGIUA6BQsHsrgcfxcUBR2at+pyK1eh/NnU/EUQl+IiN+w7430fhqDQkYdyxJ4gdX7Vo5EoYVGsNQCpk4/f8B8M8WEhT3ReEU3ohylOV9GCI5TA72mxxLbSDnr48jpscx2hms3pElCbAE742XbWbuLzmTFvE5YH74JwQZWDb6e134hX38Pg0cu4Cy3NpW2TjG7+ak0XyO/PISGcBBRgQfTEpuNPJP32pZiwqOTxU+dVcyNzO02gHWY2EMR276g0J30Obf1OdN9b44A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qdMm5JkyzMCXW10kZvfCPAlwhdeAqZ+9aIDsfKpgM0w=;
+ b=dY2Qafkd5/SpgNc8fruxNrzDjBjc9hpE5T9aMbOzkhT+sjivziCeEsLw8aWIRD1kRqNvrFNbokLRmmFDOnNnpQPjWdlkWXKyHlfIW1KTvtHwz0TvZCXmeYl8MFbO1e3hCe2jXVRg/zKxYxjMeNa16LaLutqnVzGo2MwkUbvdqrsmhty/K09RY2evgQYQPsUtUjsTiJKVxxK1TdoVYlWCrsx5CuUjd0sjLZL4Rblsvb2IMTftcKVxYFYHD94uZqCTjdQAElJCWU2qEjqyNujwWNcQhUpIXH428P2xwK7d38iKlWbB8rMscaT3p4Os62PCW9eUR2Wk4h1PBq918gkWDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 149.199.62.198) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qdMm5JkyzMCXW10kZvfCPAlwhdeAqZ+9aIDsfKpgM0w=;
+ b=X+JVURDypBRXzLXeGXjy58YaCZmFw1m91saVAIdop+omXKcsIcZ3CWlMeqJuUVRPYBc0LooAucIfbpFQ3vh7Xp8ib5whWRIs3cZ3KufsfyEHGP6cNTA0splWrfxDwU5oJvbeLhg90/sHoiKFuUSdj+bRK3IwiCvvlB7UW/UCol4=
+Received: from BN0PR08CA0027.namprd08.prod.outlook.com (2603:10b6:408:142::25)
+ by MN2PR02MB6863.namprd02.prod.outlook.com (2603:10b6:208:1d7::20)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Tue, 17 May
+ 2022 07:30:20 +0000
+Received: from BN1NAM02FT017.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:142:cafe::9b) by BN0PR08CA0027.outlook.office365.com
+ (2603:10b6:408:142::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13 via Frontend
+ Transport; Tue, 17 May 2022 07:30:20 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 149.199.62.198) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=amd.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ amd.com discourages use of 149.199.62.198 as permitted sender)
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT017.mail.protection.outlook.com (10.13.2.134) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5250.13 via Frontend Transport; Tue, 17 May 2022 07:30:20 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 17 May 2022 00:30:09 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 17 May 2022 00:30:09 -0700
+Envelope-to: buildroot@buildroot.org, luca@lucaceresoli.net,
+ giulio.benetti@benettiengineering.com, peter@korsgaard.com,
+ michal.simek@amd.com, wesley@sonifex.co.uk, neal.frager@amd.com
+Received: from [172.25.185.186] (port=52476 helo=xcoapps69.xilinx.com)
+ by smtp.xilinx.com with esmtp (Exim 4.90)
+ (envelope-from <neal.frager@amd.com>)
+ id 1nqrej-000EOf-4A; Tue, 17 May 2022 00:30:09 -0700
+To: <buildroot@buildroot.org>
+Date: Tue, 17 May 2022 01:29:49 -0600
+Message-ID: <20220517072950.1322452-2-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220517072950.1322452-1-neal.frager@amd.com>
+References: <20220517072950.1322452-1-neal.frager@amd.com>
 MIME-Version: 1.0
-Organization: Addiva Elektronik
-Subject: [Buildroot] [PATCH 1/1] package/libite: bump version to v2.5.2
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 416a587f-42ab-4ddb-e1ae-08da37d718ea
+X-MS-TrafficTypeDiagnostic: MN2PR02MB6863:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR02MB6863E0C5901B1FE09D0C73D5F0CE9@MN2PR02MB6863.namprd02.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 2
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 92oEsFVcPLUmFkCuKKvi5wJH53ikM6gIC+2f2FPYzEpbxf/cmDX0cP66gLyoEAXqikXupEl9/AJal7HNN57qaHFlaYwRDlqh7qAzJ95zoUfMHQjZWRqEupJBVuHq5Jvkh6YOAXMa7ZIWRnR/dP3x+IX+hY6nVwt3diOxF6R7bmzMAO7MLEjmcjgVpFJYIme37OQ7iT4i9ssqNUQU+HL93Q++5o4mjEu48jBa7EHLqRzbyRuctPAj/BXiIWueuYxjjSY6DQopAK6KDZ4FLFQZhyBOYVviQu5olt0hUyXTopa69rWtEhUT5FsNwF2stHJERxpKgMOGaViglKQ3N9/Rkqu27teqQweS77dZ7+p2Lr2omOwioTZ0fxLhMXJy9R8wmKPYYyhqlpfgvEu3UsUf5ldtumpV+Ov28Kwb8idaY0pI9qK536138RzY+Ig/K985AI+/iMsPEU4TY7CK/OteLdQ+HC3UEE95B3/NKjOWz/w2l2O5fL3VW4wcudjfylla1KbRIpWnn24dKoL0Rv3Ky6VWYxur8inkMcMojeAysGsObuBiOl2H2PdiOnyLb8LNk7h1/MhBk33vXvI9iPwQBRfa1OMgKyw8fCV6e2lz37vWgCAjcR292Mvnhl2Dm1gD59vgWenLwY1BSR8EChktrB7MVn+MxGFWmm7fzzGXEvBLyJXg0+WdH066v517Oa/nXClBz2dgzcVcyMdTPlo3Rg==
+X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:xsj-pvapexch01.xlnx.xilinx.com;
+ PTR:unknown-62-198.xilinx.com; CAT:NONE;
+ SFS:(13230001)(4636009)(46966006)(40470700004)(7636003)(6666004)(2906002)(1076003)(54906003)(47076005)(356005)(336012)(82310400005)(316002)(6916009)(86362001)(40460700003)(5660300002)(508600001)(44832011)(4326008)(8676002)(70206006)(70586007)(9786002)(4744005)(8936002)(35950700001)(26005)(2616005)(36756003)(102446001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: xilinx.onmicrosoft.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 07:30:20.0483 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 416a587f-42ab-4ddb-e1ae-08da37d718ea
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
+ Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT017.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB6863
+Subject: [Buildroot] [PATCH v3 2/3] board/zynqmp/kria/kv260/uboot.fragment:
+ add uboot build options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,52 +126,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joachim Wiberg <troglobit@gmail.com>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: wesley@sonifex.co.uk, Neal Frager <neal.frager@amd.com>,
+ luca@lucaceresoli.net, giulio.benetti@benettiengineering.com,
+ michal.simek@amd.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes:
- - Add printf format attribute hint to all vararg functions. This will
-   help users of these functions by telling CC what to look for
+This patch adds additional uboot build options that are
+required for kria k26 soms.
 
-Fixes:
- - Fix fisdir() segfault on GNU/Hurd
- - Fix touch() on Debian/kFreeBSD, use creat() instad of mknod()
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- package/libite/libite.hash | 2 +-
- package/libite/libite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/zynqmp/kria/kv260/uboot.fragment | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index 1dec65bd6b..8b622d87a9 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,5 +1,5 @@
- # Upstream .sha256 from GitHub
--sha256  5278fa0ca933727c78f4e05082cea58256d9302afac30bad0c3760cf2a18ef8f  libite-2.5.1.tar.xz
-+sha256  baa9bf9931427ef5e9ddfc5b72139981047a8d0d3c03a534d9716de38cf18bb5  libite-2.5.2.tar.xz
- 
- # Locally calculated
- sha256  20db0601195f708d68ff7907907b3cd3b25808efa8332e064b11f00c839a5d2f  LICENSE
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index 185ffe77de..66a8253c62 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBITE_VERSION = 2.5.1
-+LIBITE_VERSION = 2.5.2
- LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
- LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
+diff --git a/board/zynqmp/kria/kv260/uboot.fragment b/board/zynqmp/kria/kv260/uboot.fragment
+index e1aca68692..a156748168 100644
+--- a/board/zynqmp/kria/kv260/uboot.fragment
++++ b/board/zynqmp/kria/kv260/uboot.fragment
+@@ -1 +1,14 @@
+ CONFIG_DEFAULT_DEVICE_TREE="zynqmp-smk-k26-revA"
++CONFIG_SYS_SPI_U_BOOT_OFFS=0xF80000
++CONFIG_DMA=y
++CONFIG_XILINX_DPDMA=y
++CONFIG_PHY=y
++CONFIG_PHY_XILINX_ZYNQMP=y
++CONFIG_PINCTRL=y
++CONFIG_PINCONF=y
++CONFIG_POWER_DOMAIN=y
++CONFIG_ZYNQMP_POWER_DOMAIN=y
++CONFIG_DM_RESET=y
++CONFIG_RESET_ZYNQMP=y
++CONFIG_VIDEO_ZYNQMP_DPSUB=y
++CONFIG_SF_DEFAULT_SPEED=40000000
 -- 
-2.25.1
+2.17.1
 
 _______________________________________________
 buildroot mailing list
