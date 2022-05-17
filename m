@@ -4,61 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03EB8C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 19:59:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FCADC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 19:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B602B4033F;
-	Tue, 17 May 2022 19:59:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B90CF40CEB;
+	Tue, 17 May 2022 19:59:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YIpjDxH56u4p; Tue, 17 May 2022 19:59:29 +0000 (UTC)
+	with ESMTP id nMZhseAJYWwF; Tue, 17 May 2022 19:59:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B35C5400F2;
-	Tue, 17 May 2022 19:59:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A8ABB1BF20B
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:59:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9516840D24;
+	Tue, 17 May 2022 19:59:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F21C1BF20B
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:59:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9769A8403A
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:59:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6BE0C40CEB
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:59:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R4_n0auO1khd for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 19:59:26 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A675784039
- for <buildroot@buildroot.org>; Tue, 17 May 2022 19:59:26 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0ED73C0004;
- Tue, 17 May 2022 19:59:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1652817565;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=e8V3bfPfBQG9xMHp6CttOEVMH2wiFVp+I/K+snQgDwI=;
- b=LoHG+MZlDHNFs8ToUVis2MebDXdaZZTirDLNBjaQrFANn2SLtwW29d9xu9IyzKbWeJAlfQ
- iv3Ae2y+UAwduzwgiuDoiOYBdqWPekh8vEA6EeKaVG3Q79KFFhoVEdwyNM+KkRhECLDLft
- V/00TLuuTMXtP4vOdp7t021nBUivmYQFjB9vBfoR8A51D+BNcl6nnzkw2+jCm88P7ZeRCB
- a5YPGPCN6mX8PSrtFsdJjwJ6Td+780LXZbJiGwVYIMrtkHMrjYTbgaH1LjJGHR8sh9bEU7
- pkCA+YkSjL27VaPSfNW9jt2J5LfDl5/Ro1MDT9WEPyCCmP5mw8tTeGlOqrWcPw==
-Date: Tue, 17 May 2022 21:59:24 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220517215924.133d18c6@windsurf>
-In-Reply-To: <20220514225732.3102078-1-james.hilliard1@gmail.com>
-References: <20220514225732.3102078-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/gst1-imx: add missing
- BR2_INSTALL_LIBSTDCPP dependency
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MEY6ZhN-Gg9G for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 19:59:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD11D400F2
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 19:59:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id BC17C85F4A; Tue, 17 May 2022 19:48:39 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 17 May 2022 21:59:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 675cbaf9aa8ac082087def432bff1b8449c0653d
+X-Git-Newrev: 770c9e5ce3de4ef1743948898a37e9a2ad76ca8f
+X-Patchwork-Hint: ignore
+Message-Id: <20220517194839.BC17C85F4A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: restrict hs4x_rel31 to arc
+ gcc fork
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,39 +53,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Gary Bisson <bisson.gary@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello James,
+commit: https://git.buildroot.net/buildroot/commit/?id=770c9e5ce3de4ef1743948898a37e9a2ad76ca8f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 14 May 2022 16:57:32 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+All the ARC variants are supported by upstream gcc, except for the
+HS48 rel31 (hs4x_rel31) which is only supported by the ARC fork.
 
-> Fixes:
-> WARNING: unmet direct dependencies detected for BR2_PACKAGE_GST1_PLUGINS_BAD
->   Depends on [n]: BR2_PACKAGE_GSTREAMER1 [=y] && BR2_INSTALL_LIBSTDCPP [=n]
->   Selected by [y]:
->   - BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC [=y] && BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_IMX [=y]
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/357a74d53af96d4b868a9d5b9f9ce9432e0c53b5
+http://autobuild.buildroot.net/results/bcdf160a3d5ffcccd4402f65aca153faca4b32c2
 
-The commit title prefix should have been package/gstreamer1/gst1-imx.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: ARC Maintainers <arc-buildroot@synopsys.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/gcc/Config.in.host | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-But more importantly, you had forgotten to add a Config.in comment
-about this C++ dependency.
-
-I've fixed both issues, and applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index f6b9b4fa9d..2b12035c4b 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -31,6 +31,8 @@ config BR2_GCC_VERSION_9_X
+ 	# upstream gcc. C-SKY gcc upstream support not tested
+ 	# with upstream binutils and glibc.
+ 	depends on !BR2_csky
++	# ARC HS48 rel 31 only supported by gcc arc fork.
++	depends on !BR2_archs4x_rel31
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 
+ config BR2_GCC_VERSION_10_X
+@@ -43,6 +45,8 @@ config BR2_GCC_VERSION_10_X
+ 	# upstream gcc. C-SKY gcc upstream support not tested
+ 	# with upstream binutils and glibc.
+ 	depends on !BR2_csky
++	# ARC HS48 rel 31 only supported by gcc arc fork.
++	depends on !BR2_archs4x_rel31
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 
+ config BR2_GCC_VERSION_11_X
+@@ -54,6 +58,8 @@ config BR2_GCC_VERSION_11_X
+ 	# that need to be reverted since gcc 8.4, 9.3 and 10.1.
+ 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
+ 	depends on !BR2_sparc
++	# ARC HS48 rel 31 only supported by gcc arc fork.
++	depends on !BR2_archs4x_rel31
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 
+ endchoice
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
