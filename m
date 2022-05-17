@@ -1,64 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F39FC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 21:03:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 819CEC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 21:04:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D86058405D;
-	Tue, 17 May 2022 21:03:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B02641A31;
+	Tue, 17 May 2022 21:04:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ceEQaZkUvXyT; Tue, 17 May 2022 21:03:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JBIdUn4AHR64; Tue, 17 May 2022 21:04:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD5A88404D;
-	Tue, 17 May 2022 21:03:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8E9341BF83C
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 21:03:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9637E41A4F;
+	Tue, 17 May 2022 21:04:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D4EF31BF83C
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 21:04:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B12340191
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 21:03:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D134160B26
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 21:04:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fWKthEitRwkE for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 21:03:24 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mb_Gz55tD4Rb for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 21:04:09 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5E18B400FB
- for <buildroot@buildroot.org>; Tue, 17 May 2022 21:03:24 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 65D8340003;
- Tue, 17 May 2022 21:03:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1652821402;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=z+LKW0C30UwrQCjauoLWaDs5C717aIptcX+8VDUUJ30=;
- b=UzKGwKdv37VxNr7jLB3aSeD68z1pT6dQcN48fCjwF38FnBEnuKEb65Fi37+AIV7czzOn3x
- tKEmZYUih/G4JVmnlC4480Z/+db0bvA1EU3g+5Oc12nC70HKOjgwjlcqk606n3GDgO/KbY
- KGPMbUSdZ+wMpJfKKoWMfOXzHMC8kXBQ7peqwrs7YjcW/d9X/7xuUjQjp15/7UZ7pf3o0e
- 4wLXtSjesj5zaNQCDLbM1R1hK/aYjJVp0tmDUZMal3Bf1O/rsVIC0wCC/H0NGXQR0cNnew
- 1VVeI2Pbgixeo9fl325nejye1Ichcg4mHpiuu42K9IGC4wpFtjuV/ITFTNpP/A==
-Date: Tue, 17 May 2022 23:03:21 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220517230321.46c89a9d@windsurf>
-In-Reply-To: <20220514220347.1288504-1-james.hilliard1@gmail.com>
-References: <20220514220347.1288504-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EC7A9607F2
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 21:04:08 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:38de:5f35:431:927e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3787113F7E2;
+ Tue, 17 May 2022 23:04:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1652821446;
+ bh=qiD3TjOcf8ZzgwQZua3vHwK0GJEtJifkMvkqyeyK84Y=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=G2iez/D6sD8FSIHavXHa/RznG7bzuOT2YQiaBIK34hXqzC/KyoVV5xn/RK8epbUrj
+ 6TuL/LqtF1bOUAL6r8FXvjhMLGYcaYSGXg/lW8NWp4XG65i9wW/toSCIaGYc1gW7tZ
+ DhZwFBB6uVb8qlzGsaGLhedoxVePPBQjMDPc1Oxkr9Uj/Yh6lABh68LL4zrRRLZZ5R
+ tP37v0eolj+sNd+Sxq58zy2k5NblbogqAPndt1btaqFALPshSCuyyUVcbEfIhldtRB
+ Wqck4+yX64xinCLzRhPFJq851Bm1ZBkP+zIuh+H4T7jRq6IM40k/UGHTL/DFtzXKuc
+ 5aVZ2oqkHQMgA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 17 May 2022 23:04:03 +0200
+Date: Tue, 17 May 2022 23:04:03 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Linus <linus@cosmos-ink.net>
+Message-ID: <20220517210403.GV1597494@scaer>
+References: <20220517141938.3395-1-linus@cosmos-ink.net>
+ <20220517204027.GS1597494@scaer>
+ <7700647d-b901-b966-8588-8ae73590cd78@cosmos-ink.net>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/pango: propagate reverse
- dependencies
+Content-Disposition: inline
+In-Reply-To: <7700647d-b901-b966-8588-8ae73590cd78@cosmos-ink.net>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] fs/squashfs: needs more test cases
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +73,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 14 May 2022 16:03:47 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Linus, All,
 
-> It appears some pango reverse dependencies aren't propagated properly.
+On 2022-05-17 22:56 +0200, Linus spake thusly:
+> You've been really helpful. I really appreciate the time you set aside for
+> me.
+
+It benefits us all, so thanks!
+
+> Huge Thanks,
+> Linus Kaschulla
 > 
-> Fixes:
-> WARNING: unmet direct dependencies detected for BR2_PACKAGE_PANGO
->   Depends on [n]: BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_USE_MMU [=y] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_HAS_SYNC_4 [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 [=n]
->   Selected by [y]:
->   - BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTML [=y] && BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_PLUGINS_BAD [=y] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_HAS_SYNC_4 [=y]
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/gstreamer1/gst1-plugins-bad/Config.in  | 2 ++
->  package/gstreamer1/gst1-plugins-base/Config.in | 3 +++
->  package/weston/Config.in                       | 1 +
->  3 files changed, 6 insertions(+)
+> P.S.: I might probably add the pv utility (pipeview) sometime later as I
+> consider the tool essential and noticed it missing. But might be a few
+> months until I get to that. Should be a pretty easy addtion tough.
 
-I've applied to master, but after adding the necessary updates to the
-Config.in comments, which you had also forgotten in this patch.
+Err.. we do have it, no? See: package/pv/
 
-Thanks a lot!
+Regards,
+Yann E. MORIN.
 
-Thomas
+> Am 17.05.22 um 22:40 schrieb Yann E. MORIN:
+> >Linus, All,
+> >
+> >On 2022-05-17 14:19 +0000, Linus Kaschulla via buildroot spake thusly:
+> >>For the new patch, adding block size options (commit 555f8dfd),
+> >>Yann E. MORIN requested updated testcases that specifically ensure
+> >>the extreme blocksizes (4K and 1024K) don't cause issues.
+> >>
+> >>This patch splits the current test case in 2, testing with both
+> >>block sizes and ensuring the block size was applied in the same
+> >>fashion as for the specified compression.
+> >>
+> >>Signed-off-by: Linus Kaschulla <linus@cosmos-ink.net>
+> >>---
+> >>  support/testing/tests/fs/test_squashfs.py | 17 ++++++++++++++++-
+> >>  1 file changed, 16 insertions(+), 1 deletion(-)
+> >>
+> >>diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
+> >>index a914f5aac7..07239fcce2 100644
+> >>--- a/support/testing/tests/fs/test_squashfs.py
+> >>+++ b/support/testing/tests/fs/test_squashfs.py
+> >>@@ -3,13 +3,15 @@ import os
+> >>  import infra.basetest
+> >>-class TestSquashfs(infra.basetest.BRTest):
+> >>+class TestSquashfsMinBlocksize(infra.basetest.BRTest):
+> >In fact I think we need to keep the existing test that uses the default
+> >value too.
+> >
+> >>      config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> >>          """
+> >>          BR2_TARGET_ROOTFS_SQUASHFS=y
+> >>+        BR2_TARGET_ROOTFS_SQUASHFS_BS_4K=y
+> >>          BR2_TARGET_ROOTFS_SQUASHFS4_LZO=y
+> >>          # BR2_TARGET_ROOTFS_TAR is not set
+> >>          """
+> >>+    expected_blocksize_in_bytes = 1024 * 4
+> >>      def test_run(self):
+> >>          unsquashfs_cmd = ["host/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
+> >>@@ -18,6 +20,7 @@ class TestSquashfs(infra.basetest.BRTest):
+> >>          self.assertEqual(out[0],
+> >>                           "Found a valid SQUASHFS 4:0 superblock on images/rootfs.squashfs.")
+> >>          self.assertEqual(out[3], "Compression lzo")
+> >>+        self.assertEqual(out[4], "Block size {}".format(self.expected_blocksize_in_bytes))
+> >>          img = os.path.join(self.builddir, "images", "rootfs.squashfs")
+> >>          infra.img_round_power2(img)
+> >>@@ -31,3 +34,15 @@ class TestSquashfs(infra.basetest.BRTest):
+> >>          cmd = "mount | grep '/dev/root on / type squashfs'"
+> >>          self.assertRunOk(cmd)
+> >>+
+> >     $ make check-flake8
+> >     WARNING: support/testing/tests/fs/test_squashfs.py:40:1: E302 expected 2 blank lines, found 1
+> >
+> >Yes, like check-package, this is 100% totally undocumented. :-]
+> >
+> >So, I've restored the original test that checks the default, and two new
+> >tersts that check the min and max, and I fixed the flake8 issue.
+> >
+> >Applied to master, thanks.
+> >
+> >Regards,
+> >Yann E. MORIN.
+> >
+> >>+# Reusing TestSquashfsMinBlocksize's test_run(), but change
+> >>+# blocksize in config the maxium to ensure all extemes work.
+> >>+class TestSquashfsMaxBlocksize(TestSquashfsMinBlocksize):
+> >>+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> >>+        """
+> >>+        BR2_TARGET_ROOTFS_SQUASHFS=y
+> >>+        BR2_TARGET_ROOTFS_SQUASHFS_BS_1024K=y
+> >>+        BR2_TARGET_ROOTFS_SQUASHFS4_LZO=y
+> >>+        # BR2_TARGET_ROOTFS_TAR is not set
+> >>+        """
+> >>+    expected_blocksize_in_bytes = 1024 * 1024
+> >>-- 
+> >>2.35.1
+> >>
+> >>_______________________________________________
+> >>buildroot mailing list
+> >>buildroot@buildroot.org
+> >>https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
