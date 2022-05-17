@@ -1,53 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D433BC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 14:20:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A9FEC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 15:46:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7982383DF9;
-	Tue, 17 May 2022 14:20:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 14B8240C72;
+	Tue, 17 May 2022 15:46:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rlnySwGBSr5r; Tue, 17 May 2022 14:20:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IUHffq0RyHlr; Tue, 17 May 2022 15:46:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9280384018;
-	Tue, 17 May 2022 14:19:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B5FB91BF40A
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 14:19:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B6AA40BD3;
+	Tue, 17 May 2022 15:46:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 003F01BF3EE
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 15:46:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E6E484018
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 14:19:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F104E60E17
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 15:46:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jknbPcswS8us for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 14:19:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SEbBn1ad559f for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 15:46:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.cosmos-ink.net (mail.cosmos-ink.net
- [IPv6:2a01:4f9:4a:25aa::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E020283DF9
- for <buildroot@buildroot.org>; Tue, 17 May 2022 14:19:56 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 343541C6B2B2; Tue, 17 May 2022 16:19:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cosmos-ink.net;
- s=dkim; t=1652797194; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=tOoP8Q4cUSX9dFHXmsZmfOxaEV92gnkK71vXk/0cqQ8=;
- b=XOSdpqQw+B5A7yhpD9piqnCtBGR1uAvWXWtY7ILAaUkxGJhoJ2o+qvZNrXB1DPFj+/aReR
- B5xiVVfk5Ml0yfIlf/Jd31x4qM//0bJA35uFQUepGT3d4Q4rGCf/aUfB49qRLVcUhA0PNC
- nMj6bMizAp3WDUDnzQVLub+rpQG4VPE0dA+BtosFzkUB2dGubQT52wGn/1KRIA3WCahtG0
- gu92j8rD9CpzfWmt06tb+sxpc056q4CRetu3/InhkhextEMBoMwBY9gsqF5y6y8raIfr78
- nXlnol5fB7zxbwPO9MoJ2XcNt6qir9ED3l+VmkuPMcchd0XIhKZ3QJAuOB1/sw==
-To: buildroot@buildroot.org
-Date: Tue, 17 May 2022 14:19:38 +0000
-Message-Id: <20220517141938.3395-1-linus@cosmos-ink.net>
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A66F260591
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 15:46:46 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B32C12000C;
+ Tue, 17 May 2022 15:46:42 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nqzPF-005AQc-K2; Tue, 17 May 2022 17:46:41 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20220215015307.855341-1-james.hilliard1@gmail.com>
+ <20220215015307.855341-5-james.hilliard1@gmail.com>
+ <f0607b08-10e0-6cf6-acbe-fbadad8e1722@korsgaard.com>
+ <CADvTj4qtBNwvZw66NPhoKRLsKkJQjqFb9tMo_4qyi-B+GThDxg@mail.gmail.com>
+Date: Tue, 17 May 2022 17:46:41 +0200
+In-Reply-To: <CADvTj4qtBNwvZw66NPhoKRLsKkJQjqFb9tMo_4qyi-B+GThDxg@mail.gmail.com>
+ (James Hilliard's message of "Tue, 17 May 2022 03:27:04 -0600")
+Message-ID: <87r14s40wu.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH 1/1] fs/squashfs: needs more test cases
+Subject: Re: [Buildroot] [PATCH v8 5/5] package/qt5/qt5webengine: bump to
+ version 5.15.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,76 +63,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Linus Kaschulla via buildroot <buildroot@buildroot.org>
-Reply-To: Linus Kaschulla <linus@cosmos-ink.net>
-Cc: Linus Kaschulla <linus@cosmos-ink.net>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: =?utf-8?Q?Ga=C3=ABl?= Portay <gael.portay@collabora.com>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For the new patch, adding block size options (commit 555f8dfd),
-Yann E. MORIN requested updated testcases that specifically ensure
-the extreme blocksizes (4K and 1024K) don't cause issues.
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-This patch splits the current test case in 2, testing with both
-block sizes and ensuring the block size was applied in the same
-fashion as for the specified compression.
+Hi,
+ >> But that fails building v8_snapshot/gen-regexp-special-case. Notice the
+ >> -m32 that get passed:
+ >> 
+ >> [19941/21833] LINK v8_snapshot/gen-regexp-special-case
+ >> FAILED: v8_snapshot/gen-regexp-special-case
+ >> /home/peko/source/buildroot/output-qt/build/qt5webengine-5.15.8/host-bin/python
+ >> "../../3rdparty/chromium/build/toolchain/gcc_li
+ >> 
+ >> nk_wrapper.py"
+ >> --output="v8_snapshot/gen-regexp-special-case" -- /usr/bin/g++ -pie
+ >> -Wl,--fatal-warnings -Wl,--build-id=sha1 -fP
+ >> 
+ >> IC -Wl,-z,noexecstack -Wl,-z,relro
+ >> -Wl,-z,now -Wl,-z,defs -Wl,--as-needed -m32 -pie -Wl,--disable-new-dtags
+ >> -Wl,-O2 -Wl,--gc-se
+ >> 
+ >> ctions -L/usr/lib -o "v8_snapshot/gen-regexp-special-case"
+ >> -Wl,--start-group @"v8_snapshot/gen-regexp-special-case.rsp"  -Wl,--
+ >> 
+ >> end-group  -ldl
+ >> -lpthread -lrt -licui18n -licuuc -licudata
+ >> /usr/bin/ld: skipping incompatible
+ >> /usr/lib/x86_64-linux-gnu/libicui18n.so when searching for -licui18n
+ >> /usr/bin/ld: skipping incompatible
+ >> /usr/lib/x86_64-linux-gnu/libicui18n.a when searching for -licui18n
+ >> /usr/bin/ld: cannot find -licui18n
+ >> /usr/bin/ld: skipping incompatible
+ >> /usr/lib/x86_64-linux-gnu/libicui18n.so when searching for -licui18n
+ >> /usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicuuc.so
+ >> when searching for -licuuc
+ >> /usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicuuc.a
+ >> when searching for -licuuc
+ >> /usr/bin/ld: cannot find -licuuc
+ >> /usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicuuc.so
+ >> when searching for -licuuc
+ >> /usr/bin/ld: skipping incompatible
+ >> /usr/lib/x86_64-linux-gnu/libicudata.so when searching for -licudata
+ >> /usr/bin/ld: skipping incompatible
+ >> /usr/lib/x86_64-linux-gnu/libicudata.a when searching for -licudata
+ >> /usr/bin/ld: cannot find -licudata
+ >> /usr/bin/ld: skipping incompatible
+ >> /usr/lib/x86_64-linux-gnu/libicudata.so when searching for -licudata
+ >> collect2: error: ld returned 1 exit status
+ >> [19945/21833] CXX v8_snapshot/obj/v8/v8_libsampler/sampler.o
+ >> ninja: build stopped: subcommand failed.
+ >> make[5]: *** [Makefile.gn_run:362: run_ninja] Error 1
+ >> make[4]: *** [Makefile:82: sub-gn_run-pro-make_first] Error 2
+ >> make[3]: *** [Makefile:79: sub-core-make_first] Error 2
+ >> make[2]: *** [Makefile:49: sub-src-make_first] Error 2
+ >> make[1]: *** [package/pkg-generic.mk:293:
+ >> /home/peko/source/buildroot/output-qt/build/qt5webengine-5.15.8/.stamp_built]
+ >> Error 2
+ >> 
+ >> 
+ >> Any ideas? Notice that I did NOT apply patch 4 yet.
 
-Signed-off-by: Linus Kaschulla <linus@cosmos-ink.net>
----
- support/testing/tests/fs/test_squashfs.py | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ > I think patch 4 was needed for fixing some linker issues with pkg-config
+ > resolved dependencies like icu.
 
-diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
-index a914f5aac7..07239fcce2 100644
---- a/support/testing/tests/fs/test_squashfs.py
-+++ b/support/testing/tests/fs/test_squashfs.py
-@@ -3,13 +3,15 @@ import os
- import infra.basetest
- 
- 
--class TestSquashfs(infra.basetest.BRTest):
-+class TestSquashfsMinBlocksize(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-         """
-         BR2_TARGET_ROOTFS_SQUASHFS=y
-+        BR2_TARGET_ROOTFS_SQUASHFS_BS_4K=y
-         BR2_TARGET_ROOTFS_SQUASHFS4_LZO=y
-         # BR2_TARGET_ROOTFS_TAR is not set
-         """
-+    expected_blocksize_in_bytes = 1024 * 4
- 
-     def test_run(self):
-         unsquashfs_cmd = ["host/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
-@@ -18,6 +20,7 @@ class TestSquashfs(infra.basetest.BRTest):
-         self.assertEqual(out[0],
-                          "Found a valid SQUASHFS 4:0 superblock on images/rootfs.squashfs.")
-         self.assertEqual(out[3], "Compression lzo")
-+        self.assertEqual(out[4], "Block size {}".format(self.expected_blocksize_in_bytes))
- 
-         img = os.path.join(self.builddir, "images", "rootfs.squashfs")
-         infra.img_round_power2(img)
-@@ -31,3 +34,15 @@ class TestSquashfs(infra.basetest.BRTest):
- 
-         cmd = "mount | grep '/dev/root on / type squashfs'"
-         self.assertRunOk(cmd)
-+
-+# Reusing TestSquashfsMinBlocksize's test_run(), but change
-+# blocksize in config the maxium to ensure all extemes work.
-+class TestSquashfsMaxBlocksize(TestSquashfsMinBlocksize):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_TARGET_ROOTFS_SQUASHFS=y
-+        BR2_TARGET_ROOTFS_SQUASHFS_BS_1024K=y
-+        BR2_TARGET_ROOTFS_SQUASHFS4_LZO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    expected_blocksize_in_bytes = 1024 * 1024
+That unfortunately seems unrelated, because the build fails with the
+same error here after applying patch 4 :/
+
+From the command line passing -m32 to HOSTCC, it sounds like some cross
+compilation confusion to me.
+
 -- 
-2.35.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
