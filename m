@@ -4,78 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E700FC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 02:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0277C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 03:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6632D833A0;
-	Tue, 17 May 2022 02:05:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 31BC283280;
+	Tue, 17 May 2022 03:23:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oGfScnr7ugx8; Tue, 17 May 2022 02:05:09 +0000 (UTC)
+	with ESMTP id kr728-NkriQd; Tue, 17 May 2022 03:23:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E09B83381;
-	Tue, 17 May 2022 02:05:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D67811BF33F
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 02:05:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16FDF83498;
+	Tue, 17 May 2022 03:23:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BF1041BF322
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 03:23:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4BDF40573
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 02:05:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B768060F99
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 03:23:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QLjd8yiw9M3c for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 02:05:03 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
- [IPv6:2607:f8b0:4864:20::d29])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 21D6B404FE
- for <buildroot@buildroot.org>; Tue, 17 May 2022 02:05:02 +0000 (UTC)
-Received: by mail-io1-xd29.google.com with SMTP id z26so17896060iot.8
- for <buildroot@buildroot.org>; Mon, 16 May 2022 19:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=/BTq6yeLe+P0pMNwSAaRY8hgptwGGV59IAdu1dYnYcM=;
- b=bsXzjC8mPQ5TTkCn3y5n+zDCkxf8tOfQ2YvUM4NjZoS4xh9wT5+/5k2otLkZJMSNBR
- oc+JXP5UG8kh9HmEwD/hRAxZLd1yG+csMgv5S2U3F8ChasbcGIdNgYfL+nzk3UFqrPB1
- BkeHXnOXvv14svWiwMvGzdlo52kW+Z4bT8wJmREOVWiRri52GEHNRB9/SKrBOgm29T9E
- 4ffR50r5MtS/jXMeZeoFSCY0SPt2NDYE2yvm2GDJXJ9BlFx1lY92f8Kf6mqEXYWLWQhC
- 7GivLJhH7vUfRITlHS/sFFkX73/WBPc5MJHCgEjB5xydp3E6TVk+Yl/GWGvAZAFF9Ldx
- Xtkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=/BTq6yeLe+P0pMNwSAaRY8hgptwGGV59IAdu1dYnYcM=;
- b=cAUsFNVcrDTR9oxmTdRdFcAzkD7Lky0EwbR04PbXK5bETBWGmVB1t5yPPAkO16u3C0
- 50DZd2Y/Po+Ng3iFO43dxqLGMagILjWIIzpwTo1S7BcHIRCAeoqLLvIMpIWlMKk2NakX
- 5xqbkNvjKcYykcPoPWXMNr+acInjKt4GMB4u8fP6kEaCesD/fmbFCrDQ8VhRKuUeBCwP
- hCxGge8P0muspi7fqnKZAtqhy9qC32nxsv/bRUadKuUT9k5hfIm+RsNOIlh10G0vR8BB
- aUR/cMvRSbFhhqGiVYHO9EBlkMMZdNtOArxStV9ykZ5Qbi6gTOOv0qNw5cGq8kSps6Vt
- GUkA==
-X-Gm-Message-State: AOAM5304NLoPMrdjQRIhWrUvLsQl2tBqbFrb8QPzK5dpM+jzqfhShi7L
- dwA2xqHRw00Ri3gdNEGEXPZbM2Uu/hI=
-X-Google-Smtp-Source: ABdhPJw6O190za9HhWw6H+cZoNliSgeTo5CdeWOExO9l0CzqbeT4hLiuGI06urhYB2APwcBuJcty3w==
-X-Received: by 2002:a5e:821a:0:b0:657:c59f:898c with SMTP id
- l26-20020a5e821a000000b00657c59f898cmr9102759iom.209.1652753101879; 
- Mon, 16 May 2022 19:05:01 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-134-20.hlrn.qwest.net.
- [97.118.134.20]) by smtp.gmail.com with ESMTPSA id
- q18-20020a056e02097200b002d121a24278sm270531ilt.53.2022.05.16.19.05.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 May 2022 19:05:01 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 16 May 2022 20:04:52 -0600
-Message-Id: <20220517020452.334921-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=cosmos-ink.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xklgzjin9mjk for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 03:23:17 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.cosmos-ink.net (mail.cosmos-ink.net [95.217.104.42])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 64E0460EB2
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 03:23:17 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 1D7B31C6667E; Tue, 17 May 2022 05:23:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cosmos-ink.net;
+ s=dkim; t=1652757794;
+ h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=G4/uxUBgs0HOWW/XsHW4pdYZd1gwSatfnY0wKPcA7eo=;
+ b=V0L1bLom43CS+zT0oKTEPEPNbwtOiDjZ9h+OUrSD1+l0i+iMruCKAlk0M45V+5bi2oZwg4
+ rYrv8ley+3cUjQ+g9Lyv5Vk+oE4VtoYIn1m3zuo7dRqWKDe1eu9W2h2kmcp7bmZAeVjV8i
+ zEem3ExvbCICD1mt19ipt5JmRXmP77lRnrCj3mptZQf5BDNsGg3/i6iMqSpcqvY4i/s9ef
+ 0usRSlfoDv4lsinF+NoDQ9d7WlwnA+Zmz7B01BwYc5HQ/SFMMCOD0hmsIRUKmxtC2pF/9J
+ 8z/oXodvdHv2LniUQnjEzLcG/nGngrmZEr9tciWsRIX7BhKo4JVArwI5f44skw==
+Message-ID: <58851e39-5c59-0841-b985-808cc0f6901c@cosmos-ink.net>
+Date: Tue, 17 May 2022 05:23:10 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/{glibc, localedef}: bump to version
- 2.35-96-g2c4fc8e5ca742c6a3a1933799495bb0b00a807f0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220515145441.3682-1-linus@cosmos-ink.net>
+ <20220515205235.GG1597494@scaer>
+ <5027e8d8-02e3-b5ed-e1a6-8f9804d68d68@cosmos-ink.net>
+ <20220516164713.GI1597494@scaer>
+In-Reply-To: <20220516164713.GI1597494@scaer>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 1/1] fs/squashfs: add more options to
+ customize creation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,66 +71,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Linus via buildroot <buildroot@buildroot.org>
+Reply-To: Linus <linus@cosmos-ink.net>
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-Generating locale C.UTF-8
-[error] LC_MONETARY: value for field `mon_decimal_point' must not be an empty string
-[error] no output file produced because errors were issued
+Hi Yann, All,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/glibc/glibc.hash       | 2 +-
- package/glibc/glibc.mk         | 2 +-
- package/localedef/localedef.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+> Yes, 1K and 2K are not suported, but that page is about mksquashfs 3.x,
+> which supported from 4K to 128K, but we are now packagng 4.5, which
+> supports from 4K to 1M.
+Good to know! Didn't know the details on this and just guessed lucky.
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index f28c15c2a3..e0bbf341eb 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  0ca43b2a6cd74609519554303a16e350abdac0e66943c5d98d91228233c826a0  glibc-2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586.tar.gz
-+sha256  fc3c1d25640fd4cd09fbf7e17eafcc7943731e901cc0a3686503ae8adfb11d31  glibc-2.35-96-g2c4fc8e5ca742c6a3a1933799495bb0b00a807f0.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 5772c3355b..f3a08fbf24 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586
-+GLIBC_VERSION = 2.35-96-g2c4fc8e5ca742c6a3a1933799495bb0b00a807f0
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index fb5edde0c2..061b7c7fc2 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.35-6-g491f2ef1f0ff849490f374917957018d07ee0586
-+LOCALEDEF_VERSION = 2.35-96-g2c4fc8e5ca742c6a3a1933799495bb0b00a807f0
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- HOST_LOCALEDEF_DL_SUBDIR = glibc
--- 
-2.25.1
+> Yes, it should be hidden, i.e. have no prompt, because the actual user
+> input is the entry in the choice; [...]
 
+Cool. Wasn't aware of that. Seems the options appear in the .config,
+but are not exported to a defconfig.
+
+>> but I've
+>> so far never encountered that. I can add this of course if this has
+>> some benefit (maybe being able to specify a specific size in raw
+>> config values??).
+> Nope, the choice is the only way to set it.
+Technically, patching the generated .config would be a way As I found
+out above. But I agree that it is not changeable if one does everything
+correctly.
+
+## Patches
+
+I've done the patches now. I used the "config default" thing for
+both options. I was a bit confused about some envs using
+SQUASH4 and some only SQUASH. I'm assuming that the "4" is some
+baggage and left it out of the patches. Feel free to correct me
+if I assume incorrectly here.
+
+Regarding some compression options, seems that `xz --long-help`
+explicitly states that big endian is not supported for arm.
+While x86 explicitly states 64-bit support I'm not sure whether
+arm (and some similar architectures) are supposed to work for
+64 bit as well. For now I'm assuming it. Worst case it'll not
+do any savings there I guess.
+
+Looking forward for feedback on the new patches,
+Linus Kaschulla
+
+Am 16.05.22 um 18:47 schrieb Yann E. MORIN:
+> Linus, Al,
+>
+> On 2022-05-16 01:56 +0200, Linus spake thusly:
+>> I have already prepared the patch for blocksize, using choices
+>> from 4k, 8k, ..., 512k, 1024k. That one should be pretty straight
+>> forward.
+>>
+>> I also find 1k to be pretty ridiculous. Not even sure if it would
+>> work. This size seems to be pretty old and also only start at 4k:
+>> https://tldp.org/HOWTO/SquashFS-HOWTO/mksqoverview.html
+> Yes, 1K and 2K are not suported, but that page is about mksquashfs 3.x,
+> which supported from 4K to 128K, but we are now packagng 4.5, which
+> supports from 4K to 1M.
+>
+>> I've used the same style that was used for specifiying the compression.
+>> Not sure whether the later string without a name is hidden,
+> Yes, it should be hidden, i.e. have no prompt, because the actual user
+> input is the entry in the choice; the hidden string is just a
+> translation from a multi-boolean to a the actual size. We have such
+> constructs in a few opther places. For example, see the version choice
+> for the kernel version;
+>
+>        129 config BR2_LINUX_KERNEL_VERSION
+>        130     string
+>        131     default "5.17.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+>        132     default "5.10.104-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+>        133     default "5.10.104-cip3-rt3" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+>        134 ...
+>
+>> but I've
+>> so far never encountered that. I can add this of course if this has
+>> some benefit (maybe being able to specify a specific size in raw
+>> config values??).
+> Nope, the choice is the only way to set it.
+>
+>> ## Compression
+>>
+>> For the compression arguments, I'm up to anything here as well.
+>> I'm not sure if we should use all extreme options by default
+>>
+>>> Also note that lz4 already uses -Xhc unconditionally, and commit
+>>>      07e37bcc42f notes that an extra option was dropped, so maybe we
+>>>      should just unconditionally enable all those options when possible?
+>> Seems like a easy way to confuse people or cause errors should
+>> a option somehow make problems.
+> In that case, people would not enable this option if it is causing issue
+> for them.
+>
+>> Or is it a major problem to break
+>> the assumption that only lz4 is already optimized?
+> Well, to keep the existing behaviour we could do something like:
+>
+>      config BR2_TARGET_ROOTFS_EXTREME_COMP
+>          bool "extreme compression if possible"
+>          default y if BR2_TARGET_ROOTFS_SQUASHFS4_LZH
+>
+>>>    - for the comnpression options, I think a generic boolean would be
+>>>      better:
+>> I agree with that. Will try to get this done tomorrow and do a couple
+>> of tests to ensure there are no obvious problems.
+>>
+>> ## In conclusion
+>>
+>> If that's okay with you I can prepare a patch-set tomorrow and
+>> send them in for review (hopefully also tomorrow).
+> Yes, no worries, as you can make it. Thanks!
+>
+> Regards,
+> Yann E. MORIN.
+>
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
