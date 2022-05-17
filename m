@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48D04C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 19:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 058CEC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 19:54:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DEC2B60B6A;
-	Tue, 17 May 2022 19:53:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 894E684054;
+	Tue, 17 May 2022 19:54:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eArav18EWTuN; Tue, 17 May 2022 19:53:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 74DYeiQlK_9G; Tue, 17 May 2022 19:54:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EAE1360AE4;
-	Tue, 17 May 2022 19:53:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9950283F32;
+	Tue, 17 May 2022 19:54:40 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8C7BF1BF403
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:53:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B66451BF403
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B499418E4
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:53:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A46BA41A1D
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 19:54:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ILv8pLyw6s64 for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 19:53:54 +0000 (UTC)
+ with ESMTP id AhyfJTkV04B5 for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 19:54:38 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 82EFE4188E
- for <buildroot@buildroot.org>; Tue, 17 May 2022 19:53:54 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A33A44188C
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 19:54:38 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4F1341BF205;
- Tue, 17 May 2022 19:53:49 +0000 (UTC)
-Message-ID: <d1cedcd7-3f20-e2b3-f007-cc0e68c06f19@korsgaard.com>
-Date: Tue, 17 May 2022 21:53:48 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 3741920005;
+ Tue, 17 May 2022 19:54:32 +0000 (UTC)
+Message-ID: <c5cd16a5-2903-eba7-2e5d-8dbee5c94407@korsgaard.com>
+Date: Tue, 17 May 2022 21:54:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-US
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 References: <20220215015307.855341-1-james.hilliard1@gmail.com>
- <20220215015307.855341-2-james.hilliard1@gmail.com>
+ <20220215015307.855341-3-james.hilliard1@gmail.com>
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20220215015307.855341-2-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH v8 2/5]
- package/qt5/qt5webengine-chromium-catapult: new package
+In-Reply-To: <20220215015307.855341-3-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH v8 3/5] package/qt5/qt5webengine-chromium:
+ new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,13 +68,11 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 On 15/02/2022 02.53, James Hilliard wrote:
-> This version of catapult is python3 compatible and will be used to
-> replace the python2 only version in qt5webengine-chromium.
+> We need to add a separate package for the chromium submodule so that
+> we can apply patches for python3 support to it and replace catapult
+> with a python3 compatible version.
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes v2 -> v3:
->    - add kconfig entry
 
 Committed, thanks.
 
