@@ -1,79 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D2AAC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 09:27:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BC58C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 10:16:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F80B40B90;
-	Tue, 17 May 2022 09:27:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE3B4813D9;
+	Tue, 17 May 2022 10:16:34 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Qn7iZILf-dyy; Tue, 17 May 2022 10:16:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6A8481362;
+	Tue, 17 May 2022 10:16:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 124811BF28A
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 10:16:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E54940474
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 10:16:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id geRGiw7w6bSF; Tue, 17 May 2022 09:27:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC4AF40521;
-	Tue, 17 May 2022 09:27:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C4A651BF2C3
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 09:27:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1F5940882
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 09:27:17 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nuk-f0AlhmC4 for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 09:27:16 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FTC2zM1IUsF7 for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 10:16:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com
- [IPv6:2001:4860:4864:20::31])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8151B4032E
- for <buildroot@buildroot.org>; Tue, 17 May 2022 09:27:16 +0000 (UTC)
-Received: by mail-oa1-x31.google.com with SMTP id
- 586e51a60fabf-edf3b6b0f2so23443945fac.9
- for <buildroot@buildroot.org>; Tue, 17 May 2022 02:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=ndbFkVNvPF0fqDVxCA4b0AF2uNj8H2XVO8R0ZJAMh7M=;
- b=pCsebO5IoUuv19cBnIJmqpUoyGLMUtalMobKQdERXkAjhPSkqbPP0mOq0cZ/iUySa9
- tGUuRURR2eBjBLgG5brrZmtm7n0hNyaeesRPld7eI9WTPZSmdrqsTeqNFugURl7tl8wW
- hfaCNqEuR8rMmkaICxEMJc8hD//3yDy5x7WxETnnktnkR8yTiK+XnnoAsjBMuy9V3ndz
- cX52/s0i1qZMKuQJW/tveObCb+2AAk+s43ix96hb7yxA/ELKFwipEIeYyHd3JPF0vMCX
- 3lQdWpkFYKpvdRfnSgoJ/zYO+7zNVpX+3pJz05M8RMb+758nuD4GOdVKCBxNPPHb/0XQ
- HR9Q==
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com
+ [209.85.214.172])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7A272400FD
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 10:16:30 +0000 (UTC)
+Received: by mail-pl1-f172.google.com with SMTP id s14so16923785plk.8
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 03:16:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=ndbFkVNvPF0fqDVxCA4b0AF2uNj8H2XVO8R0ZJAMh7M=;
- b=vQgXU332Oe5ZiepUVurKoS/sr3lnKXovoDF86p0x5rp86BNtfeo/n5WnzWYdp22H0z
- DnuI6oByPED5t31uchv9/04OdXowy2oL/uy+tiM5kdJKo6nG3L0SJOLzY8LfuWdp3NAF
- S3VLREngpxO1T03VSeKTpZgJIEA9yCJbV5+o0ge18B7QaM2yh232azD7Y+QV4wbOSkkx
- R8HUWk4DD1sjBC80nlNz9ZhLhyyxT9ZG0U9uxbQ3PSbm6QjPZX/RVcgT3g7O5itNc84N
- 8+FIqbbzqdQuqQIC5HZeZhGmbgYX578Fwmo9xA8Z7vEvhAMalRukLdSwpmCAp5CbeQnp
- rHbw==
-X-Gm-Message-State: AOAM533LQ1Ls7bzMSiljRosLBkUjfEwcaX9XyiEZVcY/N2MMxKkLqaWE
- s/7QIKHgftBT/0OEduIRN+6mli/049gnhjqObLs=
-X-Google-Smtp-Source: ABdhPJwKO35aYt+HNFy+dqLjLN0OEGvntNepsXR9Nxdbsi5n2uGLxevtoA3NNagGH/Cx3HRW00uwmBXXugACp9HJrck=
-X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
- v29-20020a056870311d00b000de9b6c362bmr16977455oaa.200.1652779635395; Tue, 17
- May 2022 02:27:15 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=HQPAXnosapTSFzYNKYRzofKLlReLdd96P07hG6NBuNg=;
+ b=EpWU62i15xfk+d3o57SjtZjS0moU41Ili9kW6/YVZoBIK0grydccaHQ5+4hf49/ADf
+ WTr2Q4qB6AemBR/+im0EAQjsh1+JF4wLhwXeCEaswu/6k7357fkv4WhXlsqWJjWY51Wx
+ up3q3GFtSCYiwKPFYHb3IJD20PHYfJme2poNZ8DkoAxg6A+jO0rKs6es5SDsbSXRh/aE
+ u3UK0Ubzsug+lyoq4gWCrJ7Gxr2KVrRV/s2X8pp6z9jMq64jCGV7fOJG+YpLjdbCNREh
+ JgDwEflDe+7/oSGBC1uqD7Q58e5ZcW+ndIaGd2IZCgkhL89PTkbBDLjZ7vTe55HD5DZv
+ 9sVg==
+X-Gm-Message-State: AOAM532TMqPEka3NZKnz4wSDr8BpBEucLRh3aIMnk1dv588/uxe6b/oB
+ E6T5oyfsuBRV/k61sepugcSjJiUJ9Wgz4w==
+X-Google-Smtp-Source: ABdhPJzEKgjyojJxGuP/r1OduLKjbVPFCQ5bKhMNrmfAdP3PY9p5v+W6m0Uooc4z7tDeTqeDH8FMvQ==
+X-Received: by 2002:a17:90b:4f43:b0:1dc:c1f1:59c9 with SMTP id
+ pj3-20020a17090b4f4300b001dcc1f159c9mr24194546pjb.183.1652782589445; 
+ Tue, 17 May 2022 03:16:29 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ b7-20020a1709027e0700b0015e8d4eb1c7sm8680572plm.17.2022.05.17.03.16.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 17 May 2022 03:16:28 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Tue, 17 May 2022 03:16:24 -0700
+Message-Id: <20220517101624.3242600-1-christian@paral.in>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220215015307.855341-1-james.hilliard1@gmail.com>
- <20220215015307.855341-5-james.hilliard1@gmail.com>
- <f0607b08-10e0-6cf6-acbe-fbadad8e1722@korsgaard.com>
-In-Reply-To: <f0607b08-10e0-6cf6-acbe-fbadad8e1722@korsgaard.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 17 May 2022 03:27:04 -0600
-Message-ID: <CADvTj4qtBNwvZw66NPhoKRLsKkJQjqFb9tMo_4qyi-B+GThDxg@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Subject: Re: [Buildroot] [PATCH v8 5/5] package/qt5/qt5webengine: bump to
- version 5.15.8
+Subject: [Buildroot] [PATCH v1 1/1] package/pkg-utils: avoid overwriting =m
+ with =y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,151 +74,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?B?R2HDq2wgUG9ydGF5?= <gael.portay@collabora.com>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, May 17, 2022 at 1:35 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> Hi,
->
-> On 15/02/2022 02.53, James Hilliard wrote:
-> > We need to use the separate package for the chromium submodule
-> > which has python3 support patches.
-> >
-> > We also need to apply a patch to qt5webengine to allow building with
-> > python3.
-> >
-> > Drop a patch which is now upstream.
-> >
-> > We need to set QT5WEBENGINE_SYNC_QT_HEADERS = YES as we are building
-> > from a repository archive instead of a release archive.
-> >
-> > We need to add some new required dependencies to qt5webengine so that
-> > it will build.
-> >
-> > Switch libraries to system libraries instead of bundled when possible.
-> >
-> > Migrate unsupported WEBENGINE_CONFIG to new config flag option.
-> >
-> > Override feature detection using config override flags to ensure we
-> > get the expected features enabled/disabled as autodetection logic
-> > may otherwise disable features without throwing build errors.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->
-> I tried applying patch 1, 2, 3 and 5 (which took some effort as there
-> seems to be some DOS newlines confusing patchwork) and did a test build
-> for 32bit ARM:
->
-> BR2_arm=y
-> BR2_cortex_a7=y
-> BR2_ARM_INSTRUCTIONS_THUMB2=y
-> BR2_CCACHE=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> BR2_PACKAGE_MESA3D_OPENGL_ES=y
-> BR2_PACKAGE_QT5=y
-> BR2_PACKAGE_QT5WEBENGINE=y
->
-> But that fails building v8_snapshot/gen-regexp-special-case. Notice the
-> -m32 that get passed:
->
-> [19941/21833] LINK v8_snapshot/gen-regexp-special-case
-> FAILED: v8_snapshot/gen-regexp-special-case
-> /home/peko/source/buildroot/output-qt/build/qt5webengine-5.15.8/host-bin/python
-> "../../3rdparty/chromium/build/toolchain/gcc_li
->
->                                  nk_wrapper.py"
-> --output="v8_snapshot/gen-regexp-special-case" -- /usr/bin/g++ -pie
-> -Wl,--fatal-warnings -Wl,--build-id=sha1 -fP
->
->                               IC -Wl,-z,noexecstack -Wl,-z,relro
-> -Wl,-z,now -Wl,-z,defs -Wl,--as-needed -m32 -pie -Wl,--disable-new-dtags
-> -Wl,-O2 -Wl,--gc-se
->
->      ctions -L/usr/lib -o "v8_snapshot/gen-regexp-special-case"
-> -Wl,--start-group @"v8_snapshot/gen-regexp-special-case.rsp"  -Wl,--
->
->                                                       end-group  -ldl
-> -lpthread -lrt -licui18n -licuuc -licudata
-> /usr/bin/ld: skipping incompatible
-> /usr/lib/x86_64-linux-gnu/libicui18n.so when searching for -licui18n
-> /usr/bin/ld: skipping incompatible
-> /usr/lib/x86_64-linux-gnu/libicui18n.a when searching for -licui18n
-> /usr/bin/ld: cannot find -licui18n
-> /usr/bin/ld: skipping incompatible
-> /usr/lib/x86_64-linux-gnu/libicui18n.so when searching for -licui18n
-> /usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicuuc.so
-> when searching for -licuuc
-> /usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicuuc.a
-> when searching for -licuuc
-> /usr/bin/ld: cannot find -licuuc
-> /usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicuuc.so
-> when searching for -licuuc
-> /usr/bin/ld: skipping incompatible
-> /usr/lib/x86_64-linux-gnu/libicudata.so when searching for -licudata
-> /usr/bin/ld: skipping incompatible
-> /usr/lib/x86_64-linux-gnu/libicudata.a when searching for -licudata
-> /usr/bin/ld: cannot find -licudata
-> /usr/bin/ld: skipping incompatible
-> /usr/lib/x86_64-linux-gnu/libicudata.so when searching for -licudata
-> collect2: error: ld returned 1 exit status
-> [19945/21833] CXX v8_snapshot/obj/v8/v8_libsampler/sampler.o
-> ninja: build stopped: subcommand failed.
-> make[5]: *** [Makefile.gn_run:362: run_ninja] Error 1
-> make[4]: *** [Makefile:82: sub-gn_run-pro-make_first] Error 2
-> make[3]: *** [Makefile:79: sub-core-make_first] Error 2
-> make[2]: *** [Makefile:49: sub-src-make_first] Error 2
-> make[1]: *** [package/pkg-generic.mk:293:
-> /home/peko/source/buildroot/output-qt/build/qt5webengine-5.15.8/.stamp_built]
-> Error 2
->
->
-> Any ideas? Notice that I did NOT apply patch 4 yet.
+The KCONFIG_ENABLE_OPT is intended to enable a required kernel configuration
+option when a package requires it.
 
-I think patch 4 was needed for fixing some linker issues with pkg-config
-resolved dependencies like icu.
+However, this will often override an existing enabled module with `=m` with `=y`
+which overrides the module to be built-in instead of separate.
 
->
-> > ---
-> > Changes v7 -> v8:
-> >    - add missing BR2_PACKAGE_QT5BASE_HARFBUZZ select
-> >
-> > Changes v5 -> v6:
-> >    - switch to python3
-> >    - fix up config flags and rebase
-> >
-> > Changes v3 -> v4:
-> >    - linker fixes
-> >
-> > Changes v2 -> v3:
-> >    - add kconfig entries
-> > ---
-> >   package/qt5/qt5.mk                            |    1 -
-> >   .../0002-Add-python3-build-support.patch      |  168 +++
-> >   ...m-breakpad-fix-build-with-glibc-2.34.patch |   76 --
-> >   package/qt5/qt5webengine/Config.in            |   14 +
-> >   .../qt5/qt5webengine/host-python-wrapper.in   |    3 +
-> >   package/qt5/qt5webengine/qt5webengine.hash    | 1001 +----------------
-> >   package/qt5/qt5webengine/qt5webengine.mk      |  160 ++-
-> >   7 files changed, 323 insertions(+), 1100 deletions(-)
-> >   create mode 100644 package/qt5/qt5webengine/0002-Add-python3-build-support.patch
-> >   delete mode 100644 package/qt5/qt5webengine/0002-chromium-breakpad-fix-build-with-glibc-2.34.patch
-> >   create mode 100644 package/qt5/qt5webengine/host-python-wrapper.in
-> --
-> Bye, Peter Korsgaard
->
->
->
+This is undesirable behavior; we often want these as `=m` and not `=y` to reduce
+the size of the kernel image.
+
+This patch changes KCONFIG_MUNGE_DOT_CONFIG to prevent changing `=m` to `=y`.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/pkg-utils.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 7d1aea7710..96b15b3d46 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -21,8 +21,16 @@ KCONFIG_DOT_CONFIG = $(strip \
+ )
+ 
+ # KCONFIG_MUNGE_DOT_CONFIG (option, newline [, file])
++# If setting to =y and the option is already set to =m, ignore.
+ define KCONFIG_MUNGE_DOT_CONFIG
+-	$(SED) "/\\<$(strip $(1))\\>/d" $(call KCONFIG_DOT_CONFIG,$(3))
++	OPTION=$(firstword $(subst =, ,$(2))); \
++	VALUE=$(lastword $(subst =, ,$(2))); \
++	if [[ "$${VALUE}" == "y" ]]; then \
++		if grep -q "$${OPTION}=m" $(call KCONFIG_DOT_CONFIG,$(3)); then \
++			exit 0; \
++		fi; \
++  fi; \
++	$(SED) "/\\<$(strip $(1))\\>/d" $(call KCONFIG_DOT_CONFIG,$(3)); \
+ 	echo '$(strip $(2))' >> $(call KCONFIG_DOT_CONFIG,$(3))
+ endef
+ 
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
