@@ -4,88 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03713C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 21:31:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3597FC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 17 May 2022 21:59:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D2C360B51;
-	Tue, 17 May 2022 21:31:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3309610DA;
+	Tue, 17 May 2022 21:59:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5_oZKUGPKg7I; Tue, 17 May 2022 21:31:55 +0000 (UTC)
+	with ESMTP id b_C-eSz508z8; Tue, 17 May 2022 21:59:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D4E460B2B;
-	Tue, 17 May 2022 21:31:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4C7781BF28E
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 21:31:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2F3960B7D;
+	Tue, 17 May 2022 21:59:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 35B451BF20B
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 21:59:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3AFA160B2B
- for <buildroot@lists.busybox.net>; Tue, 17 May 2022 21:31:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31F55418FE
+ for <buildroot@lists.busybox.net>; Tue, 17 May 2022 21:59:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KwdiQYKNPugQ for <buildroot@lists.busybox.net>;
- Tue, 17 May 2022 21:31:52 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kjCK_jQvGwtu for <buildroot@lists.busybox.net>;
+ Tue, 17 May 2022 21:59:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 251E660615
- for <buildroot@buildroot.org>; Tue, 17 May 2022 21:31:52 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- l38-20020a05600c1d2600b00395b809dfbaso48008wms.2
- for <buildroot@buildroot.org>; Tue, 17 May 2022 14:31:51 -0700 (PDT)
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
+ [IPv6:2607:f8b0:4864:20::12a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E6D5B418FB
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 21:59:37 +0000 (UTC)
+Received: by mail-il1-x12a.google.com with SMTP id j7so294885ila.1
+ for <buildroot@buildroot.org>; Tue, 17 May 2022 14:59:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=tiz+kdTx6bI4CcvifeufqQtRSOtPaGPosQw3Butf0ew=;
- b=NER+lw1O84qKJukj6YtJOxsHWyVDDd/rH1CFvMxCuU3w6cYCWHKs4m/5sv3wnhdRNm
- Xd7xIWLRhgo5FjzUKsEzbqyROFwkSt6KgMCuPTMO2qc2es+LlK/t3rZ9rRCCyF/7YYA6
- o+dbcWfYpB5b3snlVNoaPFGJuzR1jf4CvQosi57dicosz+ElxXysvlJ3LjMTtzakl/iE
- 6jrhiQIVfK4AdOTZxRfmCN83M+2kA3p+I7GHg/jLWbNfe/0zQHzcl6RyJYsFxVTwBsix
- n2u8ElQp2xcCZJ16af3t/bzVqV1A7x+p3NtvAG1LSxtFUK8T+vG7Eu+PsNHquJ5PGfs7
- 0pQg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ZXPreCJLLITk3EeXwGAMv5ZihsEusTUN43m1Q4Cb+L8=;
+ b=N6Dwlb18eMk+bkFCnoLsBLtxSJypbIG+F/feJGYuajPPkDnygVGt0uqGUbJGbyKWCd
+ Rl5QDJzrB+nw9KgwLTvGs+NQfO5dAB9NOkv5t3S7aWzRKcgGJWdGz6iytnHZakRVFp4F
+ okiuAw6kkkDcArlVG4+XiiP0ldZL0OH4hn3cAmIhkmA/fiV94PJuZI++OZ5czS7qjkD5
+ zfCcWdqv64SrUrOoiMcQNLpza1aQcCZ/Qumx8DGuuN9dEduLEZCnqfN35HccVbOItOnB
+ /8CtcODWDOVcxiODBlCE+FVEv9hlZzsgqpaPqTaM+hablLWk6OZmjUvOG44md1ZKw4W5
+ RTsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=tiz+kdTx6bI4CcvifeufqQtRSOtPaGPosQw3Butf0ew=;
- b=MIoNRh/ulzpuJjsaHe1CcnaWjjkisZdV+DH+JjTLNa6l22rEq24xmyj7Gzc0PvALMR
- +j3A6/2q6KUMy6mWbjPjpXvc+A491ojvlmr/oKRkJNPGJ1eq8guD8fo56zcUJbnrXwT8
- IMqBCoshYnrOsY9S13OUEaPMkf/emlN2W80UAtXNqkujTr1BgJI31suQb1/1fyuhhFI5
- EcdOR0uD6dlTrJAsi01XFtK9dFetL9/V+r7OksQ82g29KJY9P5am0AyYeO4BN1Hcmccn
- K6/2v16XJauO5wAu813XPzOmmyyfw2jTAv2RoEd+S1w7nfli6JuEkgNhCCzi57NuQfQL
- DmWQ==
-X-Gm-Message-State: AOAM532+At7srL1TUNsNbPUOpuLnDBvOfOEWduZNn95tTwMCDYsjq0Q7
- wHrFTfh4Q1k8txoKujx5AUs=
-X-Google-Smtp-Source: ABdhPJz8eZwzdEdBq5lJvio7iQ49tafVS5LqiaRowYemdVUIQ36wFIBJ7DwBm80RtlPLnhBKCZZR3Q==
-X-Received: by 2002:a05:600c:3647:b0:393:fb6b:e778 with SMTP id
- y7-20020a05600c364700b00393fb6be778mr33486850wmq.71.1652823110080; 
- Tue, 17 May 2022 14:31:50 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id
- d28-20020adfa41c000000b0020e5b4ebaecsm154159wra.4.2022.05.17.14.31.48
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 17 May 2022 14:31:49 -0700 (PDT)
-Message-ID: <ba130602-e9e2-dfec-4613-277774467dbb@gmail.com>
-Date: Tue, 17 May 2022 23:31:47 +0200
+ bh=ZXPreCJLLITk3EeXwGAMv5ZihsEusTUN43m1Q4Cb+L8=;
+ b=vSOOfNUG3gexISZHYCm4mmnxXNLU11gPBdBh80kOXSi5ZJM6z4WlJ/quCqSamdaFrV
+ 2FkWjMi87c/ayHkCNg+YrPZwTQiVYNIMhwxpKYbgW47SCB4k0MjdD2oJNJxFqh5XB3jF
+ DSIcVvy5pDZ6FWiH6KYiL24gPosMk2jqwLyh1Af1ot7Bz5T5ILdpAaNDBnjR5qq23+Vs
+ jfj/584BoLEanhqMVu08XZZhsJYXf/rm+9TuWuY6cKpCM9vubEPEVPvPmC0sE/+6uWI5
+ PTj7FD5zAR2Y0vdxhPIUu2yHoPv68X6gbPx5R/g3hKXMuyoz/neHtEN4eIHjNwKLSRQg
+ Evvg==
+X-Gm-Message-State: AOAM5300f2t0TOakRKTyEIjcq1xM3pZM2rCZmaepToi9DTUZYO1iMQXf
+ GEyZgxJXch6j8jCh006sKRq9z7+Q1Sc=
+X-Google-Smtp-Source: ABdhPJxMCapupPIK2vk7EJcOA21ynpzHOU/MgghR1DIrO0gD8Hl+cI2Youyww29j95zow5B8yw5DuQ==
+X-Received: by 2002:a92:d9cb:0:b0:2d1:12f4:7a3e with SMTP id
+ n11-20020a92d9cb000000b002d112f47a3emr8290541ilq.321.1652824776760; 
+ Tue, 17 May 2022 14:59:36 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-134-20.hlrn.qwest.net.
+ [97.118.134.20]) by smtp.gmail.com with ESMTPSA id
+ j13-20020a02cb0d000000b0032e262428d1sm67354jap.143.2022.05.17.14.59.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 17 May 2022 14:59:36 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 17 May 2022 15:59:30 -0600
+Message-Id: <20220517215933.1553086-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>, buildroot@buildroot.org
-References: <20220514055312.2038383-1-clg@kaod.org>
- <e2817957-ded6-1873-c027-c912af2e45e0@gmail.com>
- <29a0e27f-8af8-73ee-7fef-fcdac814587f@kaod.org>
- <6b9b558c-cbb0-50e9-3775-a868ce87c9c7@gmail.com>
- <830f5cb0-afd9-de48-57f0-6fb9af3cf6ea@kaod.org>
-From: Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <830f5cb0-afd9-de48-57f0-6fb9af3cf6ea@kaod.org>
-Subject: Re: [Buildroot] [PATCH] configs/qemu_ppc64le_powernv8: use linux
- kernel 5.17.7 and binutils 2.36.1
+Subject: [Buildroot] [PATCH 1/4] package/python-typeguard: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,33 +86,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gerome Burlats <gerome.burlats@smile.fr>, Joel Stanley <joel@jms.id.au>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQ8OpZHJpYywKCkxlIDE0LzA1LzIwMjIgw6AgMTg6NDksIEPDqWRyaWMgTGUgR29hdGVy
-IGEgw6ljcml0wqA6Cj4gSGVsbG8gUm9tYWluLAo+IAo+Pj4+IEhhdmUgeW91IGNvbnNpZGVyZWQg
-YWRkaW5nIHRoZSBwYXRjaCBpbiBib2FyZC9xZW11L3BwYzY0LSovcGF0Y2hlcy9saW51eAo+Pj4+
-IGluc3RlYWQKPj4+PiBvZiBkb3duZ3JhZGluZyBiaW51dGlscyB2ZXJzaW9uPwo+Pj4KPj4+IHll
-cywgSSB0cmllZCBidXQgdGhlIHNlY29uZCBwYXRjaCBmYWlsZWQgdG8gYXBwbHkuIEkgY2FuIGJh
-Y2twb3J0Cj4+PiBpZiB0aGlzIGlzIGEgcHJlZmVycmVkIG9wdGlvbiwgYW5kIHNlbmQgYSB2Mi4K
-Pj4KPj4gSXQgZmFpbCB0byBhcHBseSBvbiB0aGUga2VybmVsIDUuMTUgb3IgdGhlIDUuMTc/Cj4g
-Cj4gb24gNS4xNy4KPiAKPj4gSSBndWVzcyB5b3UgdHJpZWQgdG8gYmFja3BvcnQgdGhlIHBhdGNo
-IG9uIHRoZSA1LjE3IGFuZCB5b3UgaGFkIHNvbWUgY29uZmxpY3RzLgo+IAo+IFRoZXkgYXJlIGlu
-IHRoZSBmdHJhY2Ugc3Vic3lzdGVtIDoKPiAKPiDCoCBodHRwczovL2xvcmUua2VybmVsLm9yZy9s
-a21sLzIwMjIwNDI4MTg0MjEyLjE4ZmJmNDM4QGdhbmRhbGYubG9jYWwuaG9tZS9ULwo+IAo+IHBh
-dGNoIDEgYXBwbGllcyBidXQgcGF0Y2ggMiBuZWVkcyBzb21lIGNhcmUuIFRoZXNlIGhhdmUgbm90
-IGJlZW4gbWVyZ2VkIHlldAo+IGFuZCB0aGF0J3MgYW5vdGhlciByZWFzb24gdG8gYmUgY2FyZWZ1
-bC4KPiAKPj4gU2luY2UgSXQncyBub3QgYSBlYXN5IGJhY2twb3J0LCBJJ20gb2sgdG8gZml4IHRo
-ZSBiaW51dGlscyB2ZXJzaW9uIGZvciBwcGM2NAo+PiBkZWZjb25maWdzIHVudGlsIGl0J3MgZml4
-ZWQgaW4gdXBjb21pbmcga2VybmVscy4KPiAKPiBUaGF0IG1pZ2h0IGJlIHRoZSBzYWZlc3Qgc29s
-dXRpb24gZm9yIG5vdy4KCk9rIHdpdGggdGhpcyBzb2x1dGlvbi4KCkl0IHNlZW1zIHlvdSBhcmUg
-bm90IHN1YnNjcmliZWQgdG8gdGhlIEJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QuIFlvdXIgcGF0Y2hl
-cwpkb2Vzbid0IGFwcGVhciBpbiBwYXRjaHdvcmsgWzFdCgpQbGVhc2UsIHN1YnNjcmliZSBhbmQg
-cmVzZW5kIHlvdXIgcGF0Y2guCgpbMV0gaHR0cDovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2pl
-Y3QvYnVpbGRyb290L2xpc3QKCkJlc3QgcmVnYXJkcywKUm9tYWluCgo+IAo+IFRoYW5rcywKPiAK
-PiBDLgo+IMKgCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/Config.in                              |  1 +
+ package/python-typeguard/Config.in             |  6 ++++++
+ package/python-typeguard/python-typeguard.hash |  5 +++++
+ package/python-typeguard/python-typeguard.mk   | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-typeguard/Config.in
+ create mode 100644 package/python-typeguard/python-typeguard.hash
+ create mode 100644 package/python-typeguard/python-typeguard.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 8892134133..c1816297c6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1264,6 +1264,7 @@ menu "External python modules"
+ 	source "package/python-txaio/Config.in"
+ 	source "package/python-txdbus/Config.in"
+ 	source "package/python-txtorcon/Config.in"
++	source "package/python-typeguard/Config.in"
+ 	source "package/python-typepy/Config.in"
+ 	source "package/python-typing-extensions/Config.in"
+ 	source "package/python-u-msgpack/Config.in"
+diff --git a/package/python-typeguard/Config.in b/package/python-typeguard/Config.in
+new file mode 100644
+index 0000000000..6fd8351570
+--- /dev/null
++++ b/package/python-typeguard/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_TYPEGUARD
++	bool "python-typeguard"
++	help
++	  Run-time type checker for Python.
++
++	  https://github.com/agronholm/typeguard
+diff --git a/package/python-typeguard/python-typeguard.hash b/package/python-typeguard/python-typeguard.hash
+new file mode 100644
+index 0000000000..76394bcb19
+--- /dev/null
++++ b/package/python-typeguard/python-typeguard.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/typeguard/json
++md5  22d49971f62f3baa3525349b1e03723d  typeguard-2.13.3.tar.gz
++sha256  00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4  typeguard-2.13.3.tar.gz
++# Locally computed sha256 checksums
++sha256  6163f7987dfb38d6bc320ce2b70b2f02b862bc41126516d552ef1cd43247e758  LICENSE
+diff --git a/package/python-typeguard/python-typeguard.mk b/package/python-typeguard/python-typeguard.mk
+new file mode 100644
+index 0000000000..8471f2e4fd
+--- /dev/null
++++ b/package/python-typeguard/python-typeguard.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-typeguard
++#
++################################################################################
++
++PYTHON_TYPEGUARD_VERSION = 2.13.3
++PYTHON_TYPEGUARD_SOURCE = typeguard-$(PYTHON_TYPEGUARD_VERSION).tar.gz
++PYTHON_TYPEGUARD_SITE = https://files.pythonhosted.org/packages/3a/38/c61bfcf62a7b572b5e9363a802ff92559cb427ee963048e1442e3aef7490
++PYTHON_TYPEGUARD_SETUP_TYPE = setuptools
++PYTHON_TYPEGUARD_LICENSE = MIT
++PYTHON_TYPEGUARD_LICENSE_FILES = LICENSE
++PYTHON_TYPEGUARD_DEPENDENCIES = host-python-setuptools-scm
++
++$(eval $(python-package))
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
