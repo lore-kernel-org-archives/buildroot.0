@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05745C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 12:14:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF4CDC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 12:15:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8FD9640D0F;
-	Wed, 18 May 2022 12:14:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACA6340D79;
+	Wed, 18 May 2022 12:15:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wEnO_IDdx7vo; Wed, 18 May 2022 12:14:47 +0000 (UTC)
+	with ESMTP id QsyvLymQP4u7; Wed, 18 May 2022 12:15:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 912BB4060D;
-	Wed, 18 May 2022 12:14:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 09FCA1BF4E4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 89DD34060D;
+	Wed, 18 May 2022 12:14:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 45AF11BF4E4
  for <buildroot@lists.busybox.net>; Wed, 18 May 2022 12:14:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0728B84095
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3373E41866
  for <buildroot@lists.busybox.net>; Wed, 18 May 2022 12:14:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ydfAZhrcTr4Q for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DfM3w24ojP5p for <buildroot@lists.busybox.net>;
  Wed, 18 May 2022 12:14:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5248C82EE1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4DE0341762
  for <buildroot@buildroot.org>; Wed, 18 May 2022 12:14:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A253A857AE; Wed, 18 May 2022 12:03:38 +0000 (UTC)
+ id 9512385FE4; Wed, 18 May 2022 12:03:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 May 2022 14:13:55 +0200
+Date: Wed, 18 May 2022 14:11:37 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 542df24db7f5eed5be0514451df725a3fdd90db6
-X-Git-Newrev: 91dc2ea40fc98e3f9e1ddcf395fa799e49612f26
+X-Git-Oldrev: 70f7599e595ced918febc6e4730e10ee1fbe0b47
+X-Git-Newrev: 542df24db7f5eed5be0514451df725a3fdd90db6
 X-Patchwork-Hint: ignore
-Message-Id: <20220518120338.A253A857AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libkcapi: fix
- build with BR2_OPTIMIZE_0
+Message-Id: <20220518120338.9512385FE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/janus-gateway:
+ Add systemd service file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +59,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91dc2ea40fc98e3f9e1ddcf395fa799e49612f26
+commit: https://git.buildroot.net/buildroot/commit/?id=542df24db7f5eed5be0514451df725a3fdd90db6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Override CPPFLAGS to fix the following build failure with BR2_OPTIMIZE_0
-raised since bump to version 0.14.0 in commit
-cd707a9112e38b4ce98326b96c0ed12054ca1cca and
-https://github.com/smuellerDD/libkcapi/commit/0e7b2b0300782aca19c324f3352f109777b4c51a:
-
-/home/autobuild/autobuild/instance-15/output-1/host/i686-buildroot-linux-gnu/sysroot/usr/include/features.h:412:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
-
-configure adds -D_FORTIFY_SOURCE to CPPFLAGS if it is not already
-defined. However, we don't want _FORTIFY_SOURCE to be enabled unless
-it's enabled by Buildroot (for exactly the above reason). Therefore,
-override CPPFLAGS in th build step to remove _FORTIFY_SOURCE again.
-
-It should be noted that upstream already rejected a PR to remove
--Werror: https://github.com/smuellerDD/libkcapi/pull/132
-
-Fixes:
- - http://autobuild.buildroot.org/results/35141ea3046f5a4593e0b27ef92e4ace6bc0be66
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Danilo Bargen <mail@dbrgn.ch>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 83aeec71fd6488295292bd1886decfe1874f9442)
+(cherry picked from commit 4e5c1dbb22bdd0e1daf9302ddc5ac7c89c461b05)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libkcapi/libkcapi.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/janus-gateway/janus-gateway.mk      |  5 +++++
+ package/janus-gateway/janus-gateway.service | 13 +++++++++++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
-index 60b3f94388..09c5c028bc 100644
---- a/package/libkcapi/libkcapi.mk
-+++ b/package/libkcapi/libkcapi.mk
-@@ -15,6 +15,7 @@ LIBKCAPI_CONF_ENV = \
- 	ac_cv_path_DB2PDF="" \
- 	ac_cv_path_DB2PS="" \
- 	ac_cv_path_XMLTO=""
-+LIBKCAPI_MAKE_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS)"
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index 84ca0bc116..381843a0af 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -131,4 +131,9 @@ else
+ JANUS_GATEWAY_CONF_OPTS += --disable-systemd-sockets
+ endif
  
- ifeq ($(BR2_PACKAGE_LIBKCAPI_ENCAPP),y)
- LIBKCAPI_CONF_OPTS += --enable-kcapi-encapp
++define JANUS_GATEWAY_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/janus-gateway/janus-gateway.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/janus-gateway.service
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/janus-gateway/janus-gateway.service b/package/janus-gateway/janus-gateway.service
+new file mode 100644
+index 0000000000..6e6bc7f017
+--- /dev/null
++++ b/package/janus-gateway/janus-gateway.service
+@@ -0,0 +1,13 @@
++[Unit]
++Description=Janus WebRTC Gateway
++Wants=network.target
++StartLimitIntervalSec=0
++
++[Service]
++Type=simple
++ExecStart=/usr/bin/janus
++Restart=on-failure
++RestartSec=5
++
++[Install]
++WantedBy=multi-user.target
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
