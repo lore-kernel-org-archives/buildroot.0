@@ -1,46 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A575C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 09:06:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21EF4C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 09:48:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 10C2840D0F;
-	Wed, 18 May 2022 09:06:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A77FD41A49;
+	Wed, 18 May 2022 09:48:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3jW_8FIokEKn; Wed, 18 May 2022 09:06:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KSaMuaGTLLOt; Wed, 18 May 2022 09:48:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D44A440CF9;
-	Wed, 18 May 2022 09:06:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F03241A48;
+	Wed, 18 May 2022 09:48:42 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B6FFA1BF35D
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 09:06:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 38C0C1BF35D
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 09:48:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A58F684002
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 09:06:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 264E982BC4
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 09:48:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eCXMg4sVaG5j for <buildroot@lists.busybox.net>;
- Wed, 18 May 2022 09:06:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E5CD83FFB
- for <buildroot@buildroot.org>; Wed, 18 May 2022 09:06:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1EC2785FD2; Wed, 18 May 2022 08:55:03 +0000 (UTC)
+ with ESMTP id XPfPzidLojFG for <buildroot@lists.busybox.net>;
+ Wed, 18 May 2022 09:48:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 92C7682A83
+ for <buildroot@buildroot.org>; Wed, 18 May 2022 09:48:39 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 984E224000B
+ for <buildroot@buildroot.org>; Wed, 18 May 2022 09:48:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>) id 1nrGIF-00648d-Ps
+ for buildroot@buildroot.org; Wed, 18 May 2022 11:48:35 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 May 2022 11:03:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a7fad410ea0265412c66095ff7e2f3a23b7c46c
-X-Git-Newrev: ae4e99aa9e36ca4cf51a853b5b1f74574bd78af4
-X-Patchwork-Hint: ignore
-Message-Id: <20220518085503.1EC2785FD2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2022.05-rc1
+Date: Wed, 18 May 2022 11:48:35 +0200
+Message-ID: <87y1yz2mto.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: [Buildroot] Buildroot 2022.05-rc1 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,187 +56,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae4e99aa9e36ca4cf51a853b5b1f74574bd78af4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    | 50 ++++++++++++++++++++++++++++++++++++++++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 22 ++++++++++----------
- docs/website/news.html     | 21 +++++++++++++++++++
- 4 files changed, 84 insertions(+), 13 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 1658db4cce..07f46162f6 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,53 @@
-+2022.05-rc1, released May 18th, 2022
-+
-+	Fixes all over the tree and new features.
-+
-+	Toolchain:
-+	- glibc update to 2.35, musl updated to 1.2.3
-+	- gcc 11.x updated to 11.3, support for external gcc 12.x
-+	- binutils 2.38 added, 2.32/2.35.2 removed, default changed to 2.37
-+	- s390x Bootlin external toolchain added
-+	- 5.17.x kernel headers support added
-+
-+	Filesystem:
-+	- Rework OCI entrypoint/command logic to handle command arguments
-+	- Squashfs block size is now configurable
-+
-+	Graphs: Also generate a build time timeline graph (for top
-+	level parallel builds).
-+
-+	scripts/pkg-stats: Optimize memory consumption for CPE parsing
-+
-+	Fix compatibility issue with the fakeroot script logic and
-+	modern versions of dash.
-+
-+	Change git:// URLs pointing to Github to https://, now that
-+	Github has turned off support for git://
-+
-+	New defconfigs: Octavo osd32mp1_brk / osd32mp1_red
-+
-+	New packages: falcosecurity-libs, lzma-alone, octave,
-+	python-flit-core, python-orjson, python-pydevmem,
-+	qt5webengine-chromium, qt5webengine-chromium-catapult, ragel,
-+	tbb, wilc-driver, wtfutil
-+
-+	Wilc1000-firmware renamed to wilc-firmware
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#14596: package dialog is outdated and contains a bug
-+	#14651: OpenSSH 8.9p1 compiler error under ARM
-+	#14656: Adding dependencies from an external tree does not work
-+	#14661: Fakeroot script relies on bash-isms, does not work with..
-+	#14681: QT5WEBENGINE not building
-+	#14686: genimage.cfg have a hard-coded .ext4 extension which..
-+	#14701: Multiple unresolved symbols while building kernel ..
-+	#14706: nodjs build problem
-+	#14711: nodjs build problem missing bzip
-+	#14721: python-argon2_cffi no longer works
-+	#14731: BR2_PACKAGE_IOSTAT
-+	#14751: LVM2 Outdated Link
-+
- 2022.02.1, released April 11th, 2022
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 05b790d770..b46f165081 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2022.05-git
-+export BR2_VERSION := 2022.05-rc1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1646777000
-+BR2_VERSION_EPOCH = 1652864000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 7cbf882f96..32e33d2437 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -75,41 +75,41 @@
- 	  <p><a href="/downloads/buildroot-2021.11.2.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
--      <h3 style="text-align: center;">Latest release candidate: <b>2022.02-rc3</b></h3>
-+-->
-+      <h3 style="text-align: center;">Latest release candidate: <b>2022.05-rc1</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2022.02-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2022.02-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2022.02-rc3.tar.gz">buildroot-2022.02-rc3.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2022.02-rc3.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2022.05-rc1.tar.gz">buildroot-2022.05-rc1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2022.05-rc1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2022.02-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.05-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2022.02-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.05-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2022.02-rc3.tar.bz2">buildroot-2022.02-rc3.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2022.02-rc3.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2022.05-rc1.tar.xz">buildroot-2022.05-rc1.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2022.05-rc1.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
---->
-+
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 1e39c4d910..847b216aa7 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2022.05-rc1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>18 May 2022</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>We have a new release candidate! Lots of changes all over the tree, see the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.05-rc1">CHANGES</a>
-+	  file for more details.</p>
-+
-+	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2022.05-rc1.tar.xz">2022.05-rc1
-+	  release</a>, and report any problems found to the
-+         <a href="support.html">mailing list</a> or
-+         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgMjAyMi4wNS1yYzEgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBh
+dDoKCmh0dHA6Ly9idWlsZHJvb3QubmV0L2Rvd25sb2Fkcy9idWlsZHJvb3QtMjAyMi4wNS1yYzEu
+dGFyLmd6CgpvcgoKaHR0cDovL2J1aWxkcm9vdC5uZXQvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIy
+LjA1LXJjMS50YXIueHoKCk9yIGdldCBpdCBmcm9tIEdpdDoKCmdpdDovL2dpdC5idWlsZHJvb3Qu
+bmV0L2J1aWxkcm9vdAoKUGxlYXNlIGdpdmUgaXQgYSBzcGluIGFuZCByZXBvcnQgYW55IHByb2Js
+ZW1zIHRvIHRoZSBtYWlsaW5nIGxpc3Qgb3IKYnVnIHRyYWNrZXIuCgpBIGZhaXJseSBidXN5IGN5
+Y2xlIHdpdGggbW9yZSB0aGFuIDEwMDAgY2hhbmdlcyBmcm9tIDEwMSB1bmlxdWUKY29udHJpYnV0
+b3JzIQoKT2Ygbm90ZXdvcnRoeSBuZXcgZmVhdHVyZXMvY2hhbmdlcyB3ZSBoYXZlOgoKLSBUb29s
+Y2hhaW46CiAgLSBnbGliYyB1cGRhdGUgdG8gMi4zNSwgbXVzbCB1cGRhdGVkIHRvIDEuMi4zCiAg
+LSBnY2MgMTEueCB1cGRhdGVkIHRvIDExLjMsIHN1cHBvcnQgZm9yIGV4dGVybmFsIGdjYyAxMi54
+CiAgLSBiaW51dGlscyAyLjM4IGFkZGVkLCAyLjMyLzIuMzUuMiByZW1vdmVkLCBkZWZhdWx0IGNo
+YW5nZWQgdG8gMi4zNwogIC0gczM5MHggQm9vdGxpbiBleHRlcm5hbCB0b29sY2hhaW4gYWRkZWQK
+ICAtIDUuMTcueCBrZXJuZWwgaGVhZGVycyBzdXBwb3J0IGFkZGVkCgotIEZpbGVzeXN0ZW06CiAg
+LSBSZXdvcmsgT0NJIGVudHJ5cG9pbnQvY29tbWFuZCBsb2dpYyB0byBoYW5kbGUgY29tbWFuZCBh
+cmd1bWVudHMKICAtIFNxdWFzaGZzIGJsb2NrIHNpemUgaXMgbm93IGNvbmZpZ3VyYWJsZQoKLSBN
+aXNjOgogIC0gRml4IGNvbXBhdGliaWxpdHkgaXNzdWUgd2l0aCB0aGUgZmFrZXJvb3Qgc2NyaXB0
+IGxvZ2ljIGFuZCBtb2Rlcm4KICAgIHZlcnNpb25zIG9mIGRhc2guCiAgLSBDaGFuZ2UgZ2l0Oi8v
+IFVSTHMgcG9pbnRpbmcgdG8gR2l0aHViIHRvIGh0dHBzOi8vLCBub3cgdGhhdCBHaXRodWIKICAg
+IGhhcyB0dXJuZWQgb2ZmIHN1cHBvcnQgZm9yIGdpdDovLwoKLSBOZXcgZGVmY29uZmlnczogT2N0
+YXZvIG9zZDMybXAxX2JyayAvIG9zZDMybXAxX3JlZAoKLSBOZXcgcGFja2FnZXM6IGZhbGNvc2Vj
+dXJpdHktbGlicywgbHptYS1hbG9uZSwgb2N0YXZlLAogIHB5dGhvbi1mbGl0LWNvcmUsIHB5dGhv
+bi1vcmpzb24sIHB5dGhvbi1weWRldm1lbSwKICBxdDV3ZWJlbmdpbmUtY2hyb21pdW0sIHF0NXdl
+YmVuZ2luZS1jaHJvbWl1bS1jYXRhcHVsdCwgcmFnZWwsIHRiYiwKICB3aWxjLWRyaXZlciwgd3Rm
+dXRpbAoKQW5kIHRoZSB1c3VhbCBwYWNrYWdlIHZlcnNpb24gdXBkYXRlcyBhbmQgYnVnIGZpeGVz
+LiBTZWUgdGhlIENIQU5HRVMKZmlsZSBmb3IgZGV0YWlsczoKCmh0dHA6Ly9naXQuYnVpbGRyb290
+Lm5ldC9idWlsZHJvb3QvcGxhaW4vQ0hBTkdFUz9pZD0yMDIyLjA1LXJjMQoKTWFueSB0aGFua3Mg
+dG8gdGhlIHBlb3BsZSBjb250cmlidXRpbmcgdG8gdGhpcyByZWxlYXNlOgoKZ2l0IHNob3J0bG9n
+IC1zIC1uIDIwMjIuMDIuLgoKICAgMzI3CUZhYnJpY2UgRm9udGFpbmUKICAgMTIyCUphbWVzIEhp
+bGxpYXJkCiAgICA5MwlCZXJuZCBLdWhscwogICAgNTIJRnJhbmNvaXMgUGVycmFkCiAgICAzNwlQ
+ZXRlciBLb3JzZ2FhcmQKICAgIDM2CVBldGVyIFNlaWRlcmVyCiAgICAyMAlUaG9tYXMgUGV0YXp6
+b25pCiAgICAxOQlSb21haW4gTmFvdXIKICAgIDE1CUFybm91dCBWYW5kZWNhcHBlbGxlIChFc3Nl
+bnNpdW0vTWluZCkKICAgIDE1CUp1bGllbiBPbGl2YWluCiAgICAxMwlTZXJnZXkgTWF0eXVrZXZp
+Y2gKICAgIDEyCUFkcmlhbiBQZXJleiBkZSBDYXN0cm8KICAgIDEyCUNocmlzdGlhbiBTdGV3YXJ0
+CiAgICAxMglHaXVsaW8gQmVuZXR0aQogICAgMTIJTmVhbCBGcmFnZXIKICAgIDExCUFuZ2VsbyBD
+b21wYWdudWNjaQogICAgMTAJSm9lbCBTdGFubGV5CiAgICAxMAlZYW5uIEUuIE1PUklOCiAgICAg
+OAlDbMOpbWVudCBMw6lnZXIKICAgICA4CVBldHIgVm9yZWwKICAgICA3CUZyYW5jaXMgTGFuaWVs
+CiAgICAgNglBbmRyZWFzIFppZWdsZXIKICAgICA2CUhlaWtvIFRoaWVyeQogICAgIDYJS3JpcyBC
+YWhuc2VuCiAgICAgNglNaWNoYWVsIE5vc3Rob2ZmCiAgICAgNglRdWVudGluIFNjaHVsegogICAg
+IDYJVElBTiBZdWFuaGFvCiAgICAgNglZZWdvciBZZWZyZW1vdgogICAgIDUJRGFyaW8gQmluYWNj
+aGkKICAgICA1CUV0aWVubmUgQ2FycmllcmUKICAgICA1CUZsb3JpYW4gRmFpbmVsbGkKICAgICA0
+CUFsZXhhbmRlciBFZ29yZW5rb3YKICAgICA0CUJhcnRvc3ogQmlsYXMKICAgICA0CUJhcnVjaCBT
+aWFjaAogICAgIDQJSsO2cmcgS3JhdXNlCiAgICAgNAlUaG9tYXMgQ2xhdmVpcm9sZQogICAgIDQJ
+VGjDqW8gTGVicnVuCiAgICAgNAlXYWxkZW1hciBCcm9ka29yYgogICAgIDMJR3VpbGxhdW1lIFcu
+IEJyZXMKICAgICAzCUphbiBIYXZyYW4KICAgICAzCUpvc8OpIEx1aXMgU2FsdmFkb3IgUnVmbwog
+ICAgIDMJTGludXMgS2FzY2h1bGxhCiAgICAgMwlNYXhpbSBLb2NoZXRrb3YKICAgICAzCVN0ZWZh
+biBBZ25lcgogICAgIDMJVGhvbWFzIEh1dGgKICAgICAzCVZpbmNlbnQgU3RlaGzDqQogICAgIDMJ
+WXUgQ2hpZW4gUGV0ZXIgTGluCiAgICAgMglBbGV4ZXkgQnJvZGtpbgogICAgIDIJQW5kcmVhcyBF
+aG1hbm5zCiAgICAgMglDaGFybGVzIEhhcmRpbgogICAgIDIJQ2hyaXMgUGFja2hhbQogICAgIDIJ
+Q2hyaXN0aWFuIEFtYmFjaAogICAgIDIJRW1pbGUgQ29ybWllcgogICAgIDIJSmFzb24gQS4gRG9u
+ZW5mZWxkCiAgICAgMglLb3J5IE1haW5jZW50CiAgICAgMglLeWxlIEhhcmRpbmcKICAgICAyCUxh
+bmcgRGFuaWVsCiAgICAgMglNYXJjdXMgRm9sa2Vzc29uCiAgICAgMglNYXJjdXMgSG9mZm1hbm4K
+ICAgICAyCU1pY2hhZWwgRmlzY2hlcgogICAgIDIJTmljb2xhcyBDYXZhbGxhcmkKICAgICAyCVRo
+b21hcyBQZXJyb3QKICAgICAyCVlhbm5pY2sgQnJvc3NlYXUKICAgICAxCUFuc3NpIEhhbm51bGEK
+ICAgICAxCUFzYWYgS2FobG9uCiAgICAgMQlDb3JuZWxpYSBIdWNrCiAgICAgMQlEYW5pbG8KICAg
+ICAxCUdhbyBYaWFuZwogICAgIDEJR3JhZW1lIFNtZWNoZXIKICAgICAxCUphbWVzIEtuaWdodAog
+ICAgIDEJSm9hY2hpbSBXaWJlcmcKICAgICAxCUpvaGFubmVzIEFncmljb2xhCiAgICAgMQlKb2hu
+IEtlZXBpbmcKICAgICAxCUpvc8OpIFBla2thcmluZW4KICAgICAxCUthbWVsIEJvdWhhcmEKICAg
+ICAxCUt5bGUgRGlzY2hlcgogICAgIDEJTGVnZXIgQ2hhcmxpZQogICAgIDEJTWFya3VzIE1heWVy
+CiAgICAgMQlNYXRoaWV1IE1pcm1vbnQKICAgICAxCU1pY2hhZWwgRHVycmFudAogICAgIDEJTWlr
+YSBKb2VucGVyYQogICAgIDEJTWlyemEgS2FwZXRhbm92aWMKICAgICAxCU5pY29sYXMgVHJhbgog
+ICAgIDEJTnVubyBHb27Dp2FsdmVzCiAgICAgMQlQZWRybyBBZ3VpbGFyCiAgICAgMQlSYWZhxYIg
+TWnFgmVja2kKICAgICAxCVJhcGhhZWwgUGF2bGlkaXMKICAgICAxCVLDqW1pIER1cmFmZm9ydAog
+ICAgIDEJU2Fzc2VuLCBSdXRnZXIKICAgICAxCVNlbiBIYXN0aW5ncwogICAgIDEJU2VyZ2V5IEt1
+em1pbm92CiAgICAgMQlTb2wgQmVraWMKICAgICAxCVN0ZXZlIENyaXRjaGxvdwogICAgIDEJVGhv
+bWFzIFJ1c2NoaXZhbAogICAgIDEJVGltIEhhbW1lcgogICAgIDEJVGl0b3VhbiBDaHJpc3RvcGhl
+CiAgICAgMQlZYWlyIEJlbi1BdnJhaGFtCiAgICAgMQlZdW5oYW8gVGlhbgogICAgIDEJYnJhZGZv
+cmQgYmFycgogICAgIDEJ0JvQtdC+0L3QuNC0INCu0YDRjNC10LIgKExlb25pZCBZdXJpZXYpCiAg
+ICAgMQnQoNC+0LzQsNC9INCU0L7QvdGH0LXQvdC60L4KCgpBbmQgYSBzcGVjaWFsIHRoYW5rcyB0
+byBvdXIgcGF0Y2ggcmV2aWV3ZXJzOgoKZ2l0IGxvZyAyMDIyLjAyLi4gfCBncmVwIC1FaSAnKHJl
+dmlld2VkfGFja2VkKS1ieTonIHwgXAogICAgc2VkICdzLy4qYnk6IC8vJyB8IHNvcnQgfCB1bmlx
+IC1jIHwgc29ydCAtbiAtcgoKICAgICAxMSBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlA
+YmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4KICAgICAgOSBFdGllbm5lIENhcnJpZXJlIDxldGllbm5l
+LmNhcnJpZXJlQGxpbmFyby5vcmc+CiAgICAgIDYgTHVjYSBDZXJlc29saSA8bHVjYUBsdWNhY2Vy
+ZXNvbGkubmV0PgogICAgICA0IFBldHIgVm9yZWwgPHBldHIudm9yZWxAZ21haWwuY29tPgogICAg
+ICAzIFllZ29yIFllZnJlbW92IDx5ZWdvcnNsaXN0c0Bnb29nbGVtYWlsLmNvbT4KICAgICAgMyBU
+aG9tYXMgSHV0aCA8aHV0aEB0dXhmYW1pbHkub3JnPgogICAgICAzIENocmlzdGlhbiBTdGV3YXJ0
+IDxjaHJpc3RpYW5AcGFyYWwuaW4+CiAgICAgIDMgQWRyaWFuIFBlcmV6IGRlIENhc3RybyA8YXBl
+cmV6QGlnYWxpYS5jb20+CiAgICAgIDIgUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwu
+Y29tPgogICAgICAyIFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KICAgICAgMiBN
+YXJjdXMgSG9mZm1hbm4gPG1hcmN1cy5ob2ZmbWFubkBvdGhlcm1vLmRlPgogICAgICAyIEphbWVz
+IEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgogICAgICAyIEhlcnZlIENvZGlu
+YSA8aGVydmUuY29kaW5hQGJvb3RsaW4uY29tPgogICAgICAxIFNlcmdleSBNYXR5dWtldmljaCA8
+Z2VvbWF0c2lAZ21haWwuY29tPgogICAgICAxIE1heGltIEtvY2hldGtvdiA8Zmlkb19tYXhAaW5i
+b3gucnU+CiAgICAgIDEgS3JpcyBCYWhuc2VuIDxrcmlzQGVtYmVkZGVkVFMuY29tPgogICAgICAx
+IEtpZXJhbiBCaW5naGFtIDxraWVyYW4uYmluZ2hhbUBpZGVhc29uYm9hcmQuY29tPgogICAgICAx
+IEJhcnVjaCBTaWFjaCA8YmFydWNoQHRrb3MuY28uaWw+CgpXZSB3aWxsIG5vdyBjcmVhdGUgYSBu
+ZXh0IGJyYW5jaCBhbmQgc3RhcnQgbWVyZ2luZyBuZXcgZmVhdHVyZXMgZm9yCjIwMjIuMDggYWxy
+ZWFkeSBpbiBwYXJhbGxlbCB3aXRoIHRoZSAyMDIyLjA1IHN0YWJpbGl6YXRpb24uCgotLQpCeWUs
+IFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
