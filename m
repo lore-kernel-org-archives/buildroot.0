@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D70CC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 19:18:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57E1DC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 19:18:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 39A4940354;
-	Wed, 18 May 2022 19:18:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C95241030;
+	Wed, 18 May 2022 19:18:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AdNuf_N9rz0A; Wed, 18 May 2022 19:18:05 +0000 (UTC)
+	with ESMTP id R9S7Hj7z5GOr; Wed, 18 May 2022 19:18:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1CD20401B7;
-	Wed, 18 May 2022 19:18:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5DF8F1BF427
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:18:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 031EE40BA4;
+	Wed, 18 May 2022 19:18:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 374C81BF427
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:18:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4D6F784039
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:18:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 266AF6124A
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:18:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Dkx1WZ3vGqir for <buildroot@lists.busybox.net>;
- Wed, 18 May 2022 19:18:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n4d1W8Vb8qmQ for <buildroot@lists.busybox.net>;
+ Wed, 18 May 2022 19:18:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 80E9482BF4
- for <buildroot@buildroot.org>; Wed, 18 May 2022 19:18:01 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id j28so4206020eda.13
- for <buildroot@buildroot.org>; Wed, 18 May 2022 12:18:01 -0700 (PDT)
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0AB9760EBE
+ for <buildroot@buildroot.org>; Wed, 18 May 2022 19:18:24 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id z2so5682950ejj.3
+ for <buildroot@buildroot.org>; Wed, 18 May 2022 12:18:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=UoUuKLv27Qo4hKUTjrfM+5tWlnEwQ34WlNvCq3k4oQw=;
- b=GhAWdVUPHaWgB2VNeWH7pDU7iJbnHt/zUFNPZuBLJE1zMFrIbabWf33TOoe/Qw1UPs
- xdCaX1iut4c4z9RpMeP3JDxkrAKKwIXvFM0clWfRKT5kNV2cc/BDM8RuUnWWBEH75+n8
- U1fqPxRXqrcLwrRyLUw6rqzZdVGzau8ei4J90lpl01qzvB1HesRjuForqbutLh1ZEquI
- fUNy6kO3aB2m4RWaSEkV2BC2OijKjtVQyzhGpwvBL4oENC2L/ZLvECCdgg2TLyuWB+N0
- r6g7QspOkiptMNWdl4ljMEK5K97bgcGV0/fWM//d2yhd11fBgKxiqbz5jc4np1T2z/YM
- XH8A==
+ bh=POjB+S0Wgxcz5foL/zOWUhLDbTPg3v2FJBDlDnXgi9s=;
+ b=Rj6pHB7hSgKojV50YnKPLo0u/mmiHsuHscf0/XuzKTjAkDWmKDh0FBshVVhS+fNlkT
+ 2oirh9fIIAUiygEmwEMd5cu2+C0mLg4TaublVgeUwt0Yb83bhR8QAxh/n5haknyU0WR+
+ M5boSmuQKCB12pPdQDlVcvz9gyuZu6ZZVJQmwUWQVEC8bEM8Sc4uyFlWevMwio/TKsDf
+ g3WS+wfA308k8whSyPhPCnM8eQkLspG2IbeuuKET3rCTAt5VqtKeZh72H6APEG0teijq
+ 9QvlCzhYrI+Ciuro7zYExtyf4lE5I15sl7tisbIu6C3zfSE6JFSkey7ZUd7Z8/495z+P
+ xxdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=UoUuKLv27Qo4hKUTjrfM+5tWlnEwQ34WlNvCq3k4oQw=;
- b=lXLq3wt2mxzupWo/bEOBklnmxDE/YFSQEo2kp8e5NNL/DGhfiWo28QhGM12/wr5y7i
- TcmVW21zGMP07XVLlx46G+Stc3n1AQaAoyenCUBM60jZ02jCz7RuMg6Hea+wgruPnWW6
- 72gh3sex4h53QwVcMMQoVuiA7wbScHvRSUccHzF9rSXglhZ0NPZz+Zuf4VloPMN0AnXJ
- odaMUmZbv7KZbYk4QydiWytOgeZqYVTVod4W1ZPXAmjwmIwVcof8jwxzQ7GpQrMQ/cmu
- jD4z/DvnPsq6aY+UTU9adiOClpnhjVEujW3RLlK19ctLQfjNl9+4vEseXBQhdZbv3Bh1
- ai4A==
-X-Gm-Message-State: AOAM5306zBx/tU9vCJNULImouxzyzJSewYSv/xq2jXpJC29RuFzULuwJ
- edCDIfll/N11iAHwDVfIj2lAXA==
-X-Google-Smtp-Source: ABdhPJyc0+VzEF0U86fjmCVBnwZkChzsfOVKSo43GIk2Kw2vPw7m5DXskCWWrMbvbwpubzTIdHqYDw==
-X-Received: by 2002:a05:6402:5253:b0:427:ed62:bb8b with SMTP id
- t19-20020a056402525300b00427ed62bb8bmr1392915edd.65.1652901479714; 
- Wed, 18 May 2022 12:17:59 -0700 (PDT)
+ bh=POjB+S0Wgxcz5foL/zOWUhLDbTPg3v2FJBDlDnXgi9s=;
+ b=v1dUcuCAba5bvGoRA81Yr8ohfiO5BMMRfb7XGfIlAaC9WbbSZS1uRrRiBgi9jREtJ0
+ dFhZEB7LfnNNiurbJgcbYeDIXK19qMti+jD+4h9Ajwlesrnb+Zw1vvBSFaBlcAf03Hg+
+ 092iGXS/lf5zkpDRjiIPSRvArOGlUfSKk3qAWgOWDD5lKxgoDXJKHkZXL6fgVDhmgHxr
+ WP1/P78G8KlqYG3bxBgrr3/Vrv5QawU7ynd0a7mgsEV9Szz4TsVT6YFuDlVEKSJdMUpJ
+ 2z8YtDhTPKdYN94Q2QoMxBk828y+v8r2SSgKKbycjtAQ5XyE1gUHjYFdRuHiuDdiCHgN
+ EbDA==
+X-Gm-Message-State: AOAM533bbDyqyqP+LWOUkLtwwP23Ty8V+wRrJG9BMT5NB6uvR7kpJoL6
+ kYQ58oLEByK4mnAysxL8Wv5sunOMkw4JcQ==
+X-Google-Smtp-Source: ABdhPJxNOuwMlBC6AagPfN4hQYXzPovAlAPQxumdb9g8TyQ+oOEs7XttL+zhdPX/4q5ExJkj57ZVcA==
+X-Received: by 2002:a17:907:62a6:b0:6ef:8118:d3e2 with SMTP id
+ nd38-20020a17090762a600b006ef8118d3e2mr916625ejc.605.1652901503207; 
+ Wed, 18 May 2022 12:18:23 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- p19-20020a17090664d300b006fe9209a9edsm417517ejn.128.2022.05.18.12.17.59
+ e1-20020a170906844100b006f3ef214da1sm1271867ejy.7.2022.05.18.12.18.22
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 18 May 2022 12:17:59 -0700 (PDT)
-Message-ID: <5a0bb1b8-b671-e85b-1942-3b17f31f0547@mind.be>
-Date: Wed, 18 May 2022 21:17:57 +0200
+ Wed, 18 May 2022 12:18:22 -0700 (PDT)
+Message-ID: <0e2cac5e-33ff-a4d3-258d-d48ed3c4e4a7@mind.be>
+Date: Wed, 18 May 2022 21:18:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220514222811.3925140-1-james.hilliard1@gmail.com>
+To: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+References: <20220517204317.198644-1-romain.naour@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220514222811.3925140-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/midori: add missing
- !BR2_PACKAGE_GNUPG dependency
+In-Reply-To: <20220517204317.198644-1-romain.naour@gmail.com>
+Subject: Re: [Buildroot] [PATCH] package/python-service-identity: add
+ missing python-six runtime dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,40 +102,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 15/05/2022 00:28, James Hilliard wrote:
-> The !BR2_PACKAGE_GNUPG needs to be propagated from BR2_PACKAGE_GCR.
+On 17/05/2022 22:43, Romain Naour wrote:
+> python-service-identity 21.1.0 release requires python-six at runtime [1].
 > 
 > Fixes:
-> WARNING: unmet direct dependencies detected for BR2_PACKAGE_GCR
->    Depends on [n]: BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS [=y] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_USE_MMU [=y] && !BR2_STATIC_LIBS [=n] && !BR2_PACKAGE_GNUPG [=y]
->    Selected by [y]:
->    - BR2_PACKAGE_MIDORI [=y] && BR2_PACKAGE_MIDORI_ARCH_SUPPORTS [=y] && !BR2_STATIC_LIBS [=n] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_HOST_GCC_AT_LEAST_8 [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_7 [=y] && BR2_TOOLCHAIN_USES_GLIBC [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_TOOLCHAIN_HAS_SYNC_4 [=y] && BR2_USE_WCHAR [=y] && BR2_PACKAGE_LIBGTK3 [=y] && (BR2_PACKAGE_LIBGTK3_X11 [=y] || BR2_PACKAGE_LIBGTK3_WAYLAND [=n])
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/2459841098
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->   package/midori/Config.in | 1 +
->   1 file changed, 1 insertion(+)
+> [1] https://github.com/pyca/service-identity/commit/705f4af829adf4d1b6e44250d8039635a73199d5
 > 
-> diff --git a/package/midori/Config.in b/package/midori/Config.in
-> index 715295e5a6..54e19d4d34 100644
-> --- a/package/midori/Config.in
-> +++ b/package/midori/Config.in
-> @@ -25,6 +25,7 @@ config BR2_PACKAGE_MIDORI
->   	bool "midori"
->   	depends on BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
->   	depends on !BR2_STATIC_LIBS # webkitgtk
-> +	depends on !BR2_PACKAGE_GNUPG # gcr
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-  You forget to add a comment for this.
-
-  Applied to master with that fixed, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
->   	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
->   	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection
->   	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # webkitgtk
+> ---
+>   package/python-service-identity/Config.in | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
+> index d6ca060562..09ebd97a65 100644
+> --- a/package/python-service-identity/Config.in
+> +++ b/package/python-service-identity/Config.in
+> @@ -7,6 +7,7 @@ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+>   	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
+>   	select BR2_PACKAGE_PYTHON_PYASN1_MODULES # runtime
+>   	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+> +	select BR2_PACKAGE_PYTHON_SIX # runtime
+>   	help
+>   	  Service identity verification for pyOpenSSL.
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
