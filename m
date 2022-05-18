@@ -1,90 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5776BC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 19:17:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A1DEC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 19:17:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 151614035D;
-	Wed, 18 May 2022 19:17:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5E636124A;
+	Wed, 18 May 2022 19:17:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o3lgsFeNY3kW; Wed, 18 May 2022 19:17:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jhq1k2W6YKV0; Wed, 18 May 2022 19:17:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A293B40278;
-	Wed, 18 May 2022 19:17:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C3FAC1BF427
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:16:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E70E6122A;
+	Wed, 18 May 2022 19:17:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8309F1BF427
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:17:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B27C640198
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:16:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7253182BF4
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:17:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R8bRUKZ7R0zi for <buildroot@lists.busybox.net>;
- Wed, 18 May 2022 19:16:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k9d3p1_vewRk for <buildroot@lists.busybox.net>;
+ Wed, 18 May 2022 19:17:24 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C600B40101
- for <buildroot@buildroot.org>; Wed, 18 May 2022 19:16:55 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id er5so4201109edb.12
- for <buildroot@buildroot.org>; Wed, 18 May 2022 12:16:55 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1E3A482A0B
+ for <buildroot@buildroot.org>; Wed, 18 May 2022 19:17:24 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id s3so4222538edr.9
+ for <buildroot@buildroot.org>; Wed, 18 May 2022 12:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=t/4yl7Acslf9wW1qphWEEIS/GK1c+aTLX6fovqGGh+c=;
- b=LUl4DYZvNaRgTxok6MK6et129GlnCqoknp0+xsMsETRd71ebBnDgGtjHdvAHSDlHkI
- +6GBEKRd9wo3bo/aSrWnwVI3ewNrLjWLcFx01VYTa+Hml959nKT8GV9onA0VYDsVNrZ/
- zks97JxR8A2ZQP3oJMaoC52A7Dp4y2aCLsW8cF4zi4l9uMhE2QSvo6M8OvNbwwMGaPDD
- e/G2ZtG5Dne5QH6PTlIthcXG+fnncMZMoEP2QtO8DutrfJfancVKYGo++0odj+Xihwzh
- DmPIGvUJK/KZOXBZHrshaKNEMYA8+AKSWaQIaieWWRoWnyAHxSIKAGrVWt2rli+kCv0c
- TWKA==
+ bh=aachMjRzaWRI9GhtMo1sgzZ8s80hUx1v6YS9sfvSPnY=;
+ b=L+wkuCqLdoWYd/9WrHujiIHvidZul2BeEK1qpGtMTgmOTThRJpomdM6B+OTN8syd/t
+ 9uZbj/yhNc+ZZeEwECREniQSVMZrkhaMoF8YEEkFxqX4KjgRLvvNEILWkmCLyxgaB47E
+ MfmdCRK+eAbfA2kSUAaYGOfzUGQRud2NijSzjbLHHNITSFBk9hFdlyR1RJhh7BnxJFOH
+ dtwnifQ6MXKOLPeEmHZFlTi5kr/KsiLw2dA9s0W2RceMNP5SAfwjEwi1irUy05Pxo7Yw
+ QafFZjumdrgENA+FS5Xnbls5t3tvgSUCdbOufalfrI39ZRgJ09nqLjrBIk6Thz9VRKLx
+ 0GNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=t/4yl7Acslf9wW1qphWEEIS/GK1c+aTLX6fovqGGh+c=;
- b=hzvR3zqpErc1oCSQSPh3Ut7Y994Zj+VVkEoxBvfCUUwdUMNxjTFpC0kX2LzueLKC2I
- EHJKI08z/CJUudOIHYKSfBOa8n1WrIJHKlfhq+CSrNQnzf/Y3NCCqCW/BCnTp/bEq5PG
- 9FbfQIUspKMREWfZX5j9Mg+U6M1Tna6HDfa0f+OUHrEpEOx3gnOGOK2v9KIzg7TkDrV6
- LytnOtVk9oRrlrcU1OknoF4xHkKgF94I8Xc9R3pFwbf8DJtCh8TfagaLJxVDQiR/qDs9
- xRC4CctfEruIPD222dWyI+SweNqjY0tmhX9FkUKOsnlGGBgkhrjE+X1PAwhSEUYSJxVH
- rygQ==
-X-Gm-Message-State: AOAM532Un3kj9CRorCiMTcEPZCiVZ0FVAacU3yeBYB3CCsgbG5+J0HOr
- xWScFd2r6ZvdhyYifigANQd6FA==
-X-Google-Smtp-Source: ABdhPJzy6n/uaAu1TdqSYPDvAkaiAC7P/9ycH8dk3Pa17VxJvsZe6wZH1q7HyyKJOA6PjdFEDtMGDA==
-X-Received: by 2002:a05:6402:90c:b0:415:d340:4ae2 with SMTP id
- g12-20020a056402090c00b00415d3404ae2mr1328187edz.331.1652901414052; 
- Wed, 18 May 2022 12:16:54 -0700 (PDT)
+ bh=aachMjRzaWRI9GhtMo1sgzZ8s80hUx1v6YS9sfvSPnY=;
+ b=jQWcVHof2l25eXLq5CjVBU2WJYUANiPZLh90z1UzEoN5MwGSwZhbEXj1Vt/vEySRSE
+ IQRh87rTwmqPa8bhEWCnjM/dKxfVEJtbzvI2ra89B4W6JcIb755rQNy1AJlv+57p+l7U
+ fdDnx49V2Dez1lvw3pE05CTHUGfIZxMmGW/ysqLVd8AJkgp6oK+sxH/MJjyxIBlZL72m
+ p6f261mMiIoYTAtwDe5zR2zRoH76L97Bc3BHoOFv1WrQxCY8QYupMSJMVxilIW+Xz0+J
+ GhikeQIxsof2hTQIN1xow2qp5FVngSVWwDt0rwm0VmTxMteeazNaoZdxOJ16VESrO3vi
+ kpAA==
+X-Gm-Message-State: AOAM533vLWexKSvZJH76SpUI7yM9yPSzQzDZOXgAOmO2QkPGBSfrG4/1
+ uWV6cIBybI+PHMcHJkulYqQSgQ==
+X-Google-Smtp-Source: ABdhPJz0A0pUPbnHiWB5tmrzKheHETtbkTpjFApdLOUn646/mYnVDEOYTeGsFOH3pP8J5dpxlKgvMQ==
+X-Received: by 2002:a05:6402:518c:b0:428:434e:a5be with SMTP id
+ q12-20020a056402518c00b00428434ea5bemr1368765edd.177.1652901442338; 
+ Wed, 18 May 2022 12:17:22 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- z18-20020a17090674d200b006f3ef214e42sm1282420ejl.168.2022.05.18.12.16.53
+ d2-20020a170907272200b006fe3b954db8sm1236166ejl.199.2022.05.18.12.17.21
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 18 May 2022 12:16:53 -0700 (PDT)
-Message-ID: <15c79636-4e4b-0478-4f88-558d5d7bb5d9@mind.be>
-Date: Wed, 18 May 2022 21:16:51 +0200
+ Wed, 18 May 2022 12:17:21 -0700 (PDT)
+Message-ID: <f210edc8-09f9-c668-cf1f-19992e5243a2@mind.be>
+Date: Wed, 18 May 2022 21:17:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220513215947.1454212-1-fontaine.fabrice@gmail.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20220514175612.2510884-1-bernd.kuhls@t-online.de>
+ <20220514175612.2510884-2-bernd.kuhls@t-online.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220513215947.1454212-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/rng-tools: fix build with
- argp-standalone and NLS
+In-Reply-To: <20220514175612.2510884-2-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH 02/19]
+ package/x11r7/xdriver_xf86-video-amdgpu: fix glamor support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +97,9 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>
+Cc: Gary Bisson <bisson.gary@gmail.com>, Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jezz@sysmic.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,46 +107,48 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 13/05/2022 23:59, Fabrice Fontaine wrote:
-> Fix the following build failure with argp-standalone and NLS raised
-> since commit 5430c8fedd0392e79e0c011825b056fea129980a:
-> 
-> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/libargp.a(argp-parse.o): in function `argp_version_parser':
-> /home/buildroot/autobuild/instance-0/output-1/build/argp-standalone-1.4.1/argp-parse.c:181: undefined reference to `libintl_dgettext'
-> 
-> [...]
-> 
-> configure: error: libargp not found
+On 14/05/2022 19:55, Bernd Kuhls wrote:
+> Add configure options for glamor support following the logic of the
+> xserver_xorg-server package:
+> https://git.busybox.net/buildroot/tree/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk#n141
 > 
 > Fixes:
->   - http://autobuild.buildroot.org/results/f7ee27fb4c3253f351deee9867a3b98128f079af
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> http://autobuild.buildroot.net/results/e78/e786118db87f65bdcb913656a7b6d9b3187a212c/
+> http://autobuild.buildroot.net/results/a00/a0089ed3abdb0a3712524ae77fc613a4982054ed/
+> http://autobuild.buildroot.net/results/541/54193d198efe371bdb19ac4981d631ff1e279717/
+> http://autobuild.buildroot.net/results/298/298198c036931b10f7e1046176bd48310ae7455f/
+> http://autobuild.buildroot.net/results/4da/4da87d30e6f5a10aafae60abce1b89ed92204a4e/
+> http://autobuild.buildroot.net/results/74c/74ceb71bd48ea3a2bf6ff68aec0af76a11662f1f/
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
   Applied to master, thanks.
+
+  The rest of the series is for next I think?
 
   Regards,
   Arnout
 
 > ---
->   package/rng-tools/rng-tools.mk | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk  | 6 ++++++
+>   1 file changed, 6 insertions(+)
 > 
-> diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-> index 8b195ea875..f736193a23 100644
-> --- a/package/rng-tools/rng-tools.mk
-> +++ b/package/rng-tools/rng-tools.mk
-> @@ -20,8 +20,8 @@ RNG_TOOLS_CONF_OPTS = --without-pkcs11
->   # Work around for uClibc or musl toolchains which lack argp_*()
->   # functions.
->   ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-> -RNG_TOOLS_CONF_ENV += LIBS="-largp"
-> -RNG_TOOLS_DEPENDENCIES += argp-standalone
-> +RNG_TOOLS_CONF_ENV += LIBS="-largp $(TARGET_NLS_LIBS)"
-> +RNG_TOOLS_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
->   endif
+> diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+> index e7196956a3..6423c03f5f 100644
+> --- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+> +++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+> @@ -15,6 +15,12 @@ XDRIVER_XF86_VIDEO_AMDGPU_DEPENDENCIES = \
+>   	xorgproto \
+>   	xserver_xorg-server
 >   
->   ifeq ($(BR2_PACKAGE_LIBRTLSDR),y)
+> +ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yyy)
+> +XDRIVER_XF86_VIDEO_AMDGPU_CONF_OPTS += --enable-glamor
+> +else
+> +XDRIVER_XF86_VIDEO_AMDGPU_CONF_OPTS += --disable-glamor
+> +endif
+> +
+>   # xdriver_xf86-video-amdgpu requires O_CLOEXEC
+>   XDRIVER_XF86_VIDEO_AMDGPU_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
