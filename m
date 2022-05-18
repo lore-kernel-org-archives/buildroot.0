@@ -1,56 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E1CEC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 17:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5021EC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 18:01:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F0C4E40620;
-	Wed, 18 May 2022 17:54:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF76C830C0;
+	Wed, 18 May 2022 18:01:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ImWSgut62T04; Wed, 18 May 2022 17:54:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NuIwTOUNPRr4; Wed, 18 May 2022 18:01:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F3EC40ACA;
-	Wed, 18 May 2022 17:54:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E45BE82F51;
+	Wed, 18 May 2022 18:01:48 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0BB341BF310
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 17:54:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5C3AC1BF2B1
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 18:01:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E820560E5B
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 17:54:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A3D5600B4
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 18:01:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WrrHAKVCVBvP for <buildroot@lists.busybox.net>;
- Wed, 18 May 2022 17:54:55 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D3AD060C29
- for <buildroot@buildroot.org>; Wed, 18 May 2022 17:54:54 +0000 (UTC)
-Received: from fwd87.dcpf.telekom.de (fwd87.aul.t-online.de [10.223.144.113])
- by mailout10.t-online.de (Postfix) with SMTP id 4E9608633
- for <buildroot@buildroot.org>; Wed, 18 May 2022 19:54:20 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.202.170]) by fwd87.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1nrNsK-1DT6Cv0; Wed, 18 May 2022 19:54:20 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44384)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1nrNsJ-0001Xy-JM
- for buildroot@buildroot.org; Wed, 18 May 2022 19:54:19 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Wed, 18 May 2022 19:54:19 +0200
-Message-Id: <20220518175419.3955-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+ with ESMTP id 3YnEXdYrs18P for <buildroot@lists.busybox.net>;
+ Wed, 18 May 2022 18:01:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5E4D86006A
+ for <buildroot@buildroot.org>; Wed, 18 May 2022 18:01:46 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id y13so4568172eje.2
+ for <buildroot@buildroot.org>; Wed, 18 May 2022 11:01:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=fqQOGl3cqjFUUN5SLGleAm4MA0IeWFiJDrqR3Vfo+BM=;
+ b=TON3mMH0iqojGgRP058RfEV4Eal2Guw/XpQ/F/htsNLnqUJkD2xWjTl8ylsZUboZXy
+ TK0HdSomBVq3GMkZfWrKWC5Fdv6QLo6AxB8NS6QdnPOjyiUgDDXgu1frrLdwDACCsv7r
+ g81duRzEl6TFe+zaOSwdceOWTwlIa7K6Gffav6QRoaXH1AVYwrxOS12EIecAwScOt1hA
+ vN+SSnYY/H+qGeEeFnOtbxMAP9j2NSikAWP29v0cKq4f6vChbFvO9FegOIvXT5+1fMps
+ ciRvEzquiM3c4nwV8ZANtrmuAG79pFLuY6k/ioe7oZyKPeVLo3Hd+7uDQY7HpPibj+MR
+ CEhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=fqQOGl3cqjFUUN5SLGleAm4MA0IeWFiJDrqR3Vfo+BM=;
+ b=X9MDfdL1S53WEKrOuDEaqmnpIZ3btlU8tDCiTyjvH9f5Xdvag+64JB694sKOnok7GL
+ JY3sFqxkGXv8wFx2aoToUwBPFDwqg2TCpJG6dnZiRiL5qkkIRG9PNUodNFwevRsC2ot+
+ k1OX0f2KFRMsKp9GKG5U/y0JXYGDhcez8seX0nz9Z4LB3uw+L/XdkB3dkEe1IZtQLc4a
+ B+TLWxU96A7AMVpPpN+s/WobvZutX8mmx9IJ+/YonBBOtdwWcH0skqsTzWRjo5irWE7+
+ zXTZBNhhXcfGONp1I0HrPwU+adrRjmybcA+axu5KKi+Nt4RbKU54zduHP4GNE1LchtlC
+ KOkA==
+X-Gm-Message-State: AOAM533uPTOBiff/FR4f9zGvObHRfhpvKh7ApCLOmdN+vU8KAsNl48E0
+ O9rcIi77zq4r9HW+XAa0o2tc/cZx2VdVqQ==
+X-Google-Smtp-Source: ABdhPJzTZeL1team5r1UUf9S4I0SCodNxlNHPWFljq/ngCbSisUFo9aTPELMpK5t5zDSYNH0yr9QHQ==
+X-Received: by 2002:a17:907:6e8d:b0:6f4:b220:a6b2 with SMTP id
+ sh13-20020a1709076e8d00b006f4b220a6b2mr706959ejc.71.1652896904426; 
+ Wed, 18 May 2022 11:01:44 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id
+ j4-20020a170906104400b006f52dbc192bsm1243218ejj.37.2022.05.18.11.01.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 18 May 2022 11:01:43 -0700 (PDT)
+Message-ID: <4b7583c4-5d03-60bc-4b42-4b2f18177a78@mind.be>
+Date: Wed, 18 May 2022 20:01:41 +0200
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1652896460-00000271-F94D88CC/0/0 CLEAN NORMAL
-X-TOI-MSGID: 6ef01e8f-e1f5-42cd-becd-21b313dad4f5
-Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: bump
- version to 19.0.5-Matrix
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-GB
+To: Christian Stewart <christian@paral.in>, buildroot@buildroot.org
+References: <20220517103608.3455749-1-christian@paral.in>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220517103608.3455749-1-christian@paral.in>
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/pkg-utils: prevent
+ kconfig_enable_opt from changing =m to =y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +96,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 36294274f2..0336fa0e0a 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  eef7660e9306854282ccc8b994ffc38b2fe1e62e155d883cfa346bddc84b595b  kodi-inputstream-adaptive-19.0.4-Matrix.tar.gz
-+sha256  43064b79462052ae68b342d82af733361ce38c5461acd3e1fa1c87ef8c24201a  kodi-inputstream-adaptive-19.0.5-Matrix.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index ed85d21684..5a6061fbcd 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 19.0.4-Matrix
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 19.0.5-Matrix
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
--- 
-2.30.2
 
+On 17/05/2022 12:36, Christian Stewart via buildroot wrote:
+> The KCONFIG_ENABLE_OPT is intended to enable a required kernel configuration
+> option when a package requires it.
+> 
+> However, this will often override an existing enabled module with `=m` with `=y`
+> which overrides the module to be built-in instead of separate.
+> 
+> This is undesirable behavior; we often want these as `=m` and not `=y` to reduce
+> the size of the kernel image.
+> 
+> This patch changes KCONFIG_MUNGE_DOT_CONFIG to prevent changing `=m` to `=y`.
+
+  Good catch!
+
+  Patch is a bit over-complicated, but I don't know how to do better.
+
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> 
+> ---
+> 
+> v1 -> v2:
+> 
+>   - fix indentation spacing: use tab instead of spaces
+>   - simplify by using $(1) instead of two separate variables
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>   package/pkg-utils.mk | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index 7d1aea7710..218d6ea9b0 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -21,8 +21,14 @@ KCONFIG_DOT_CONFIG = $(strip \
+>   )
+>   
+>   # KCONFIG_MUNGE_DOT_CONFIG (option, newline [, file])
+> +# If setting to =y and the option is already set to =m, ignore.
+>   define KCONFIG_MUNGE_DOT_CONFIG
+> -	$(SED) "/\\<$(strip $(1))\\>/d" $(call KCONFIG_DOT_CONFIG,$(3))
+> +	if [[ "$(lastword $(subst =, ,$(strip $(2))))" == "y" ]]; then \
+
+  This part we could avoid by adding a 4th option and setting it only on 
+KCONFIG_ENABLE_OPT.
+
+> +		if grep -q "$(strip $(1))=m" $(call KCONFIG_DOT_CONFIG,$(3)); then \
+> +			exit 0; \
+
+  This is a kind of hard-to-follow control structure - better turn around the 
+condition and do the replacement inside it. So, combined with the above:
+
+	if $(if $(4),grep -q ...,true); then \
+		sed ...; \
+		echo ...; \
+	fi
+
+
+
+  Regards,
+  Arnout
+
+> +		fi; \
+> +	fi; \
+> +	$(SED) "/\\<$(strip $(1))\\>/d" $(call KCONFIG_DOT_CONFIG,$(3)); \
+>   	echo '$(strip $(2))' >> $(call KCONFIG_DOT_CONFIG,$(3))
+>   endef
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
