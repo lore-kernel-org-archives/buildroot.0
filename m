@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78E32C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 12:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05745C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 12:14:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6C2884092;
-	Wed, 18 May 2022 12:14:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id am8DVUZ5liRT; Wed, 18 May 2022 12:14:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED45F83192;
-	Wed, 18 May 2022 12:14:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 446171BF4E4
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 12:14:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 40BDE4050C
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 12:14:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FD9640D0F;
+	Wed, 18 May 2022 12:14:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UzjZuyEf3UZp for <buildroot@lists.busybox.net>;
- Wed, 18 May 2022 12:14:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5972040164
- for <buildroot@buildroot.org>; Wed, 18 May 2022 12:14:11 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8772D20009;
- Wed, 18 May 2022 12:14:08 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nrIZ5-006BqG-LZ; Wed, 18 May 2022 14:14:07 +0200
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wEnO_IDdx7vo; Wed, 18 May 2022 12:14:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 912BB4060D;
+	Wed, 18 May 2022 12:14:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 09FCA1BF4E4
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 12:14:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0728B84095
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 12:14:45 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ydfAZhrcTr4Q for <buildroot@lists.busybox.net>;
+ Wed, 18 May 2022 12:14:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5248C82EE1
+ for <buildroot@buildroot.org>; Wed, 18 May 2022 12:14:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id A253A857AE; Wed, 18 May 2022 12:03:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220410103014.115744-1-fontaine.fabrice@gmail.com>
-Date: Wed, 18 May 2022 14:14:07 +0200
-In-Reply-To: <20220410103014.115744-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 10 Apr 2022 12:30:14 +0200")
-Message-ID: <87pmkb2g34.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/libkcapi: fix build with BR2_OPTIMIZE_0
+To: buildroot@buildroot.org
+Date: Wed, 18 May 2022 14:13:55 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 542df24db7f5eed5be0514451df725a3fdd90db6
+X-Git-Newrev: 91dc2ea40fc98e3f9e1ddcf395fa799e49612f26
+X-Patchwork-Hint: ignore
+Message-Id: <20220518120338.A253A857AE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libkcapi: fix
+ build with BR2_OPTIMIZE_0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,37 +53,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=91dc2ea40fc98e3f9e1ddcf395fa799e49612f26
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Override CPPFLAGS to fix the following build failure with BR2_OPTIMIZE_0
- > raised since bump to version 0.14.0 in commit
- > cd707a9112e38b4ce98326b96c0ed12054ca1cca and
- > https://github.com/smuellerDD/libkcapi/commit/0e7b2b0300782aca19c324f3352f109777b4c51a:
+Override CPPFLAGS to fix the following build failure with BR2_OPTIMIZE_0
+raised since bump to version 0.14.0 in commit
+cd707a9112e38b4ce98326b96c0ed12054ca1cca and
+https://github.com/smuellerDD/libkcapi/commit/0e7b2b0300782aca19c324f3352f109777b4c51a:
 
- > /home/autobuild/autobuild/instance-15/output-1/host/i686-buildroot-linux-gnu/sysroot/usr/include/features.h:412:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
+/home/autobuild/autobuild/instance-15/output-1/host/i686-buildroot-linux-gnu/sysroot/usr/include/features.h:412:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
 
- > It should be noted that upstream already rejected a PR to remove
- > -Werror: https://github.com/smuellerDD/libkcapi/pull/132
+configure adds -D_FORTIFY_SOURCE to CPPFLAGS if it is not already
+defined. However, we don't want _FORTIFY_SOURCE to be enabled unless
+it's enabled by Buildroot (for exactly the above reason). Therefore,
+override CPPFLAGS in th build step to remove _FORTIFY_SOURCE again.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/35141ea3046f5a4593e0b27ef92e4ace6bc0be66
+It should be noted that upstream already rejected a PR to remove
+-Werror: https://github.com/smuellerDD/libkcapi/pull/132
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Arnout Vandecappelle):
- >  - Override CPPFLAGS instead of COMMON_CPPFLAGS as -D_FORTIFY_SOURCE=2
- >    is added to CPPFLAGS by ax_add_fortify_source.m4
+Fixes:
+ - http://autobuild.buildroot.org/results/35141ea3046f5a4593e0b27ef92e4ace6bc0be66
 
-Committed to 2022.02.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 83aeec71fd6488295292bd1886decfe1874f9442)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libkcapi/libkcapi.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+index 60b3f94388..09c5c028bc 100644
+--- a/package/libkcapi/libkcapi.mk
++++ b/package/libkcapi/libkcapi.mk
+@@ -15,6 +15,7 @@ LIBKCAPI_CONF_ENV = \
+ 	ac_cv_path_DB2PDF="" \
+ 	ac_cv_path_DB2PS="" \
+ 	ac_cv_path_XMLTO=""
++LIBKCAPI_MAKE_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_LIBKCAPI_ENCAPP),y)
+ LIBKCAPI_CONF_OPTS += --enable-kcapi-encapp
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
