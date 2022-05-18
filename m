@@ -1,89 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33C24C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 19:16:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5776BC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 19:17:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8CE684198;
-	Wed, 18 May 2022 19:16:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 151614035D;
+	Wed, 18 May 2022 19:17:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PnatQPOzZtDR; Wed, 18 May 2022 19:16:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o3lgsFeNY3kW; Wed, 18 May 2022 19:17:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A873D840EA;
-	Wed, 18 May 2022 19:16:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A293B40278;
+	Wed, 18 May 2022 19:17:00 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 014621BF427
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:16:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C3FAC1BF427
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:16:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F04BE40198
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:16:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B27C640198
+ for <buildroot@lists.busybox.net>; Wed, 18 May 2022 19:16:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1XQtGPNCVoKy for <buildroot@lists.busybox.net>;
- Wed, 18 May 2022 19:16:43 +0000 (UTC)
+ with ESMTP id R8bRUKZ7R0zi for <buildroot@lists.busybox.net>;
+ Wed, 18 May 2022 19:16:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 06B3040101
- for <buildroot@buildroot.org>; Wed, 18 May 2022 19:16:42 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id j28so4202218eda.13
- for <buildroot@buildroot.org>; Wed, 18 May 2022 12:16:42 -0700 (PDT)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C600B40101
+ for <buildroot@buildroot.org>; Wed, 18 May 2022 19:16:55 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id er5so4201109edb.12
+ for <buildroot@buildroot.org>; Wed, 18 May 2022 12:16:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=WQKXGiCPML/nHzE2ZgrPet8FZqK544XCkI1O74CxIUQ=;
- b=RzZSGPqCTjjSJP+N18fY4MNq0dB/MmTVARKkdKCK45FXtu1wEzAI9c3slr64UEUAQV
- W6cT8Ncv0Ng0XxWtgA/o42PTrBXTk1+5t7dhQ2WV5bsqHapV2XG53sa8JxXCPGyBHSWe
- UX2q03niKyRyHj6sQsB70wJrNVn0zO6pZolAOvU2dPW5XrTEqAHL/KvT8Lx/rFKjMvGa
- 0osgr+ySZD9I4JR20nxxshnatvJUZZb+YLEjDls9SIfDjrRctFwFv4gpUY5WKWMAqk2Y
- wTxMvpDJ5kHamN056NW029H5ZqdS18mzo+TRnnvee3rOQD6cvWzgup0L/S1/Y6/FoSrf
- +Iqw==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=t/4yl7Acslf9wW1qphWEEIS/GK1c+aTLX6fovqGGh+c=;
+ b=LUl4DYZvNaRgTxok6MK6et129GlnCqoknp0+xsMsETRd71ebBnDgGtjHdvAHSDlHkI
+ +6GBEKRd9wo3bo/aSrWnwVI3ewNrLjWLcFx01VYTa+Hml959nKT8GV9onA0VYDsVNrZ/
+ zks97JxR8A2ZQP3oJMaoC52A7Dp4y2aCLsW8cF4zi4l9uMhE2QSvo6M8OvNbwwMGaPDD
+ e/G2ZtG5Dne5QH6PTlIthcXG+fnncMZMoEP2QtO8DutrfJfancVKYGo++0odj+Xihwzh
+ DmPIGvUJK/KZOXBZHrshaKNEMYA8+AKSWaQIaieWWRoWnyAHxSIKAGrVWt2rli+kCv0c
+ TWKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=WQKXGiCPML/nHzE2ZgrPet8FZqK544XCkI1O74CxIUQ=;
- b=P8LFBNaBOlZyLBMzbVD5q/MQ3JeUbHp63MmLjfba+rteQDc7mKvzk7+0OOqZSuIM70
- FExIDRw4z9jpEIE5m1Lz7ErgHqlSjQh/4FYSdCGZjgSLJS14grAcPa9ItJESvp2XuOkg
- XKVVxVhVGZhBKUq8qjQDalQmjasmWyaZNqX3zIfapBL6OepLEEwbcA1rqZQgP41NMFwU
- Zu4WatIt7BIQv+sUBuUQYo6kxZxC1IgBNwu3/UqxZAUkLKIpm3Fw7m9DG5arUBjPfiJQ
- ThKMq4Vf1zYMupiMZRkpu+YAKv7+9u1eJJAewnm6/qPfheyzn0vSUmVIRVvCs+m8CtvF
- QN+w==
-X-Gm-Message-State: AOAM533mUq/9crhzLed3V+GsHEZZ1GBIQPRONOA1vZvkRzGzh5x59+sP
- xHD0TJDM3ZnI9nwGrTQAjnIIyw==
-X-Google-Smtp-Source: ABdhPJykswJP+CarCghJyC/L49aJ4pOVnZE2A4VhSj+BZ135FWFcr4eAw+sag9F9AgScSJcZEKY/8A==
-X-Received: by 2002:a05:6402:5108:b0:427:e323:4c67 with SMTP id
- m8-20020a056402510800b00427e3234c67mr1366462edd.326.1652901401201; 
- Wed, 18 May 2022 12:16:41 -0700 (PDT)
+ bh=t/4yl7Acslf9wW1qphWEEIS/GK1c+aTLX6fovqGGh+c=;
+ b=hzvR3zqpErc1oCSQSPh3Ut7Y994Zj+VVkEoxBvfCUUwdUMNxjTFpC0kX2LzueLKC2I
+ EHJKI08z/CJUudOIHYKSfBOa8n1WrIJHKlfhq+CSrNQnzf/Y3NCCqCW/BCnTp/bEq5PG
+ 9FbfQIUspKMREWfZX5j9Mg+U6M1Tna6HDfa0f+OUHrEpEOx3gnOGOK2v9KIzg7TkDrV6
+ LytnOtVk9oRrlrcU1OknoF4xHkKgF94I8Xc9R3pFwbf8DJtCh8TfagaLJxVDQiR/qDs9
+ xRC4CctfEruIPD222dWyI+SweNqjY0tmhX9FkUKOsnlGGBgkhrjE+X1PAwhSEUYSJxVH
+ rygQ==
+X-Gm-Message-State: AOAM532Un3kj9CRorCiMTcEPZCiVZ0FVAacU3yeBYB3CCsgbG5+J0HOr
+ xWScFd2r6ZvdhyYifigANQd6FA==
+X-Google-Smtp-Source: ABdhPJzy6n/uaAu1TdqSYPDvAkaiAC7P/9ycH8dk3Pa17VxJvsZe6wZH1q7HyyKJOA6PjdFEDtMGDA==
+X-Received: by 2002:a05:6402:90c:b0:415:d340:4ae2 with SMTP id
+ g12-20020a056402090c00b00415d3404ae2mr1328187edz.331.1652901414052; 
+ Wed, 18 May 2022 12:16:54 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
  by smtp.gmail.com with ESMTPSA id
- ia16-20020a170907a07000b006f3ef214e16sm1263907ejc.124.2022.05.18.12.16.40
+ z18-20020a17090674d200b006f3ef214e42sm1282420ejl.168.2022.05.18.12.16.53
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 18 May 2022 12:16:40 -0700 (PDT)
-Message-ID: <b3197990-8d02-02ff-dce3-74c76bd35b39@mind.be>
-Date: Wed, 18 May 2022 21:16:39 +0200
+ Wed, 18 May 2022 12:16:53 -0700 (PDT)
+Message-ID: <15c79636-4e4b-0478-4f88-558d5d7bb5d9@mind.be>
+Date: Wed, 18 May 2022 21:16:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220513215156.1342774-1-fontaine.fabrice@gmail.com>
+References: <20220513215947.1454212-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220513215156.1342774-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/i2pd: fix build with libressl
- >= 3.5.0
+In-Reply-To: <20220513215947.1454212-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/rng-tools: fix build with
+ argp-standalone and NLS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,6 +96,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,23 +104,19 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 13/05/2022 23:51, Fabrice Fontaine wrote:
-> Fix the following build failure with libressl raised since bump to
-> version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
+On 13/05/2022 23:59, Fabrice Fontaine wrote:
+> Fix the following build failure with argp-standalone and NLS raised
+> since commit 5430c8fedd0392e79e0c011825b056fea129980a:
 > 
-> In file included from /nvmedata/autobuild/instance-27/output-1/build/i2pd-2.40.0/build/../libi2pd/Signature.h:18,
->                   from /nvmedata/autobuild/instance-27/output-1/build/i2pd-2.40.0/build/../libi2pd/Identity.h:20,
->                   from /nvmedata/autobuild/instance-27/output-1/build/i2pd-2.40.0/build/../libi2pd/Destination.h:21,
->                   from /nvmedata/autobuild/instance-27/output-1/build/i2pd-2.40.0/build/../libi2pd_client/ClientContext.h:16,
->                   from /nvmedata/autobuild/instance-27/output-1/build/i2pd-2.40.0/i18n/I18N.h:12,
->                   from /nvmedata/autobuild/instance-27/output-1/build/i2pd-2.40.0/i18n/Afrikaans.cpp:13:
-> /nvmedata/autobuild/instance-27/output-1/build/i2pd-2.40.0/build/../libi2pd/Crypto.h: In function 'int DSA_set0_pqg(DSA*, BIGNUM*, BIGNUM*, BIGNUM*)':
-> /nvmedata/autobuild/instance-27/output-1/build/i2pd-2.40.0/build/../libi2pd/Crypto.h:338:22: error: invalid use of incomplete type 'DSA' {aka 'struct dsa_st'}
->    338 |                 if (d->p) BN_free (d->p);
->        |                      ^~
+> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/libargp.a(argp-parse.o): in function `argp_version_parser':
+> /home/buildroot/autobuild/instance-0/output-1/build/argp-standalone-1.4.1/argp-parse.c:181: undefined reference to `libintl_dgettext'
+> 
+> [...]
+> 
+> configure: error: libargp not found
 > 
 > Fixes:
->   - http://autobuild.buildroot.org/results/8da524dda4a548de9b006ae156fdc582b0cffd47
+>   - http://autobuild.buildroot.org/results/f7ee27fb4c3253f351deee9867a3b98128f079af
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -128,43 +126,24 @@ On 13/05/2022 23:51, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   ...pd-Fix-the-build-with-LibreSSL-3-5-2.patch | 27 +++++++++++++++++++
->   1 file changed, 27 insertions(+)
->   create mode 100644 package/i2pd/0001-libi2pd-Fix-the-build-with-LibreSSL-3-5-2.patch
+>   package/rng-tools/rng-tools.mk | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/i2pd/0001-libi2pd-Fix-the-build-with-LibreSSL-3-5-2.patch b/package/i2pd/0001-libi2pd-Fix-the-build-with-LibreSSL-3-5-2.patch
-> new file mode 100644
-> index 0000000000..e9f905b7ee
-> --- /dev/null
-> +++ b/package/i2pd/0001-libi2pd-Fix-the-build-with-LibreSSL-3-5-2.patch
-> @@ -0,0 +1,27 @@
-> +From 0a1e302e8a242bbd1d39556e5ef05aced1b3b504 Mon Sep 17 00:00:00 2001
-> +From: orbea <orbea@riseup.net>
-> +Date: Sun, 8 May 2022 22:50:44 -0700
-> +Subject: [PATCH] libi2pd: Fix the build with LibreSSL 3.5.2
-> +
-> +[Retrieved from:
-> +https://github.com/PurpleI2P/i2pd/commit/0a1e302e8a242bbd1d39556e5ef05aced1b3b504]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + libi2pd/Crypto.h | 4 +++-
-> + 1 file changed, 3 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/libi2pd/Crypto.h b/libi2pd/Crypto.h
-> +index b02778141..726bd0a1e 100644
-> +--- a/libi2pd/Crypto.h
-> ++++ b/libi2pd/Crypto.h
-> +@@ -29,7 +29,9 @@
-> + #include "CPU.h"
-> +
-> + // recognize openssl version and features
-> +-#if ((OPENSSL_VERSION_NUMBER < 0x010100000) || defined(LIBRESSL_VERSION_NUMBER)) // 1.0.2 and below or LibreSSL
-> ++#if (defined(LIBRESSL_VERSION_NUMBER) && (LIBRESSL_VERSION_NUMBER >= 0x3050200fL)) // LibreSSL 3.5.2 and above
-> ++#   define LEGACY_OPENSSL 0
-> ++#elif ((OPENSSL_VERSION_NUMBER < 0x010100000) || defined(LIBRESSL_VERSION_NUMBER)) // 1.0.2 and below or LibreSSL
-> + #   define LEGACY_OPENSSL 1
-> + #   define X509_getm_notBefore X509_get_notBefore
-> + #   define X509_getm_notAfter X509_get_notAfter
+> diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+> index 8b195ea875..f736193a23 100644
+> --- a/package/rng-tools/rng-tools.mk
+> +++ b/package/rng-tools/rng-tools.mk
+> @@ -20,8 +20,8 @@ RNG_TOOLS_CONF_OPTS = --without-pkcs11
+>   # Work around for uClibc or musl toolchains which lack argp_*()
+>   # functions.
+>   ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+> -RNG_TOOLS_CONF_ENV += LIBS="-largp"
+> -RNG_TOOLS_DEPENDENCIES += argp-standalone
+> +RNG_TOOLS_CONF_ENV += LIBS="-largp $(TARGET_NLS_LIBS)"
+> +RNG_TOOLS_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
+>   endif
+>   
+>   ifeq ($(BR2_PACKAGE_LIBRTLSDR),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
