@@ -1,75 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97B68C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 18 May 2022 23:15:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 942B7C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 19 May 2022 03:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 043E740490;
-	Wed, 18 May 2022 23:15:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA23C60E9F;
+	Thu, 19 May 2022 03:10:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cPGf4IExHJBv; Wed, 18 May 2022 23:15:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2l5OKZ0D5qkH; Thu, 19 May 2022 03:10:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F18440207;
-	Wed, 18 May 2022 23:15:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3CB641BF59A
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 23:15:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4D4A60E2B;
+	Thu, 19 May 2022 03:10:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C2AA81BF20D
+ for <buildroot@lists.busybox.net>; Thu, 19 May 2022 03:10:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 388A440207
- for <buildroot@lists.busybox.net>; Wed, 18 May 2022 23:15:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B21D984404
+ for <buildroot@lists.busybox.net>; Thu, 19 May 2022 03:10:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CuImLzCLVrzI for <buildroot@lists.busybox.net>;
- Wed, 18 May 2022 23:15:28 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com
- [IPv6:2607:f8b0:4864:20::22d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 13619401C9
- for <buildroot@buildroot.org>; Wed, 18 May 2022 23:15:27 +0000 (UTC)
-Received: by mail-oi1-x22d.google.com with SMTP id v65so4502675oig.10
- for <buildroot@buildroot.org>; Wed, 18 May 2022 16:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=itl8+hN6DCj86qOwdi9KfFEzwXrRQv8V0xgyv4uwmG4=;
- b=onKUQLEEmyc9ZUWwsjFluqeSP1gH7it121Lf4ADrHC7w/kGXmcCENzuFzlRS9j2QEa
- 2jsUX1hB3Gex5cuhMWWPpxa7eNfx4avmlkWuQ1O5/DSh4lINwALPTQDf8LtKzOkw5JZu
- i24mg4bwAY6I3jHDZQNHGadBpMFihAjRADsvP31ZzmyPO8f+ExIZC4kqRwc7BOr1fJ5C
- u/Nq6bbXqSC8QAZew2x79KaiyVJhEstfBk6CU6KJYnCQeZpbMEANXWEdSJQh1UPeoL8g
- mQ4ZrEHj7QWMQfRn3QlJ3ESopS+aSgKcQf48uH+X4z0mGLGeLbtlDfsScQOqQ1ta7FsF
- Lh8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=itl8+hN6DCj86qOwdi9KfFEzwXrRQv8V0xgyv4uwmG4=;
- b=5oeLCIQiYCAV1zMgr44Rh5AUgsiwuiTTYvbX7P2MdCj2bEnF+nsk131KYTzlwN56ll
- ZdiGmOnFtPf27p/IG0PBKidydC1jbgmU0+PKNGWBhwN0lc14zo1cIq5X+7izTlrV77Fa
- bP3iDQ/5WGUNDMZQvJQm2qCRy8FHzcq+BthGxaNNRSjH4zIdQLVJqHhdf2y7sLeSYbye
- jbgL95iq99FKYmSnZwcyqz10fZgNMXIv+Ra2IDWms8wpuTz4FbQuu9fcxrIA5qJLCB3J
- 9GGdBFKX4w7PMWASDcPcrxz6GoFHnUjPUGjqtyxuvTkawkB3yxZGWa1/+0kIT6gBeLqV
- HvvQ==
-X-Gm-Message-State: AOAM531TZ5eqNCqAR6Oc+VKfJIBUAYztQ/Z/2vaXQbx6hngmNHtDKreW
- 1LYn+OqKXP0VLgRO5NctrLMEtjVgJfeYLLoQbZ9XqFs2Z34=
-X-Google-Smtp-Source: ABdhPJyq2uiJioG3g0n3aML81wGLWc1du6cEt8bJaoPcCcvoJqX3H4YJ05w/nZtmdMXIdUDCr63WpMBc1rsgAzhZbMI=
-X-Received: by 2002:a05:6808:1da:b0:325:bf8e:df25 with SMTP id
- x26-20020a05680801da00b00325bf8edf25mr1163431oic.99.1652915726910; Wed, 18
- May 2022 16:15:26 -0700 (PDT)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=tkos.co.il
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xTvj-O0S2xfF for <buildroot@lists.busybox.net>;
+ Thu, 19 May 2022 03:10:00 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 213D88427F
+ for <buildroot@buildroot.org>; Thu, 19 May 2022 03:09:59 +0000 (UTC)
+Received: from tarshish (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 4FA1A440478;
+ Thu, 19 May 2022 06:08:34 +0300 (IDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+ s=default; t=1652929729;
+ bh=EAr9JMlGViGvgXOazJ6heNq90RbiCJKiL+D42+ri9e0=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=VZaldMEReNEqPpTh2v8KpyQPMiVllRnV9QzpWmZXQdtvP6BpdkrvBjcNmNhd/q6Yz
+ ryxvRGS/XdSyDj4pys2BD11CUMaJLEnAlKehqL27kxXJ+1wFVHeuo2F8mUA5wiXIp+
+ u5cpByC3dH6sONL2bY1gPZb+n8JmwhHJ9lG+SMpS09dk/Y0mb7Vku/dCnkQ9IowPvh
+ ERbqt5wIZjc5CSB+YtLWWElJG4o5N/eWF7iJy7aYK+fDa7iHfwoAZk+lSU9tYsVaFc
+ DamAbmmYXPxXrxGBBEAqKGILzsbL2//qbxxf8KsrMrM9VN/d1PhSnJ7EkYaaOJ5z9V
+ UoogrnOT5ZadA==
+References: <fa9bd454f0e7d72a0eac64ddae226513b2968126.1652914532.git.stefan@agner.ch>
+User-agent: mu4e 1.6.10; emacs 27.1
+To: Stefan Agner <stefan@agner.ch>
+Date: Thu, 19 May 2022 06:06:48 +0300
+In-reply-to: <fa9bd454f0e7d72a0eac64ddae226513b2968126.1652914532.git.stefan@agner.ch>
+Message-ID: <87pmkaqkuv.fsf@tarshish>
 MIME-Version: 1.0
-References: <20220517192439.1034654-1-james.hilliard1@gmail.com>
- <e9dea93a-51b8-f807-5a89-f3908c864f08@mind.be>
-In-Reply-To: <e9dea93a-51b8-f807-5a89-f3908c864f08@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 18 May 2022 17:15:15 -0600
-Message-ID: <CADvTj4rop69VW2BuNc62DvqWCDd6XgMMVzi6AgmA4zkzLFVzGA@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCH 1/1] system: generate and set C.UTF-8 locale
- by default
+Subject: Re: [Buildroot] [PATCH] package/openvmtools: bump version to 11.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,70 +67,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: kaszak@gmail.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, May 18, 2022 at 12:27 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 17/05/2022 21:24, James Hilliard wrote:
-> > Now that glibc/localedef supports the C.UTF-8 locale we should default
-> > to it as software like systemd generally expects it to be the locale
-> > used.
-> >
-> > This should in general reduce the amount of locale related
-> > compatibility issues and is what many distros have been using for
-> > their default locale for quite a few years so it should be a well
-> > tested configuration.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >   system/Config.in | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/system/Config.in b/system/Config.in
-> > index 888c24ce81..7cc529d31e 100644
-> > --- a/system/Config.in
-> > +++ b/system/Config.in
-> > @@ -440,7 +440,7 @@ config BR2_ENABLE_LOCALE_PURGE
-> >
-> >   config BR2_ENABLE_LOCALE_WHITELIST
-> >       string "Locales to keep"
-> > -     default "C en_US"
-> > +     default "C.UTF-8"
-> >       depends on BR2_ENABLE_LOCALE_PURGE
-> >       help
-> >         Whitespace seperated list of locales to allow on target.
-> > @@ -455,7 +455,7 @@ config BR2_ENABLE_LOCALE_WHITELIST
-> >
-> >   config BR2_GENERATE_LOCALE
-> >       string "Generate locale data"
-> > -     default ""
-> > +     default "C.UTF-8"
-> >       depends on \
-> >               (BR2_TOOLCHAIN_BUILDROOT_UCLIBC && BR2_ENABLE_LOCALE) || \
->
->   Is this locale also supported by uClibc?
-
-Looks like there's issues there, I had assumed it was using
-host-localedef but I guess
-that's not the case, although wondering if it's possible as uclibc
-locale support seems
-pretty bad.
-
-Also wondering if the musl locale handling is ok for BR2_ENABLE_LOCALE_WHITELIST
-as I thought musl just used a built-in C.UTF-8 locale.
-
->
->   Regards,
->   Arnout
->
-> >               BR2_TOOLCHAIN_USES_GLIBC
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgU3RlZmFuLAoKT24gVGh1LCBNYXkgMTkgMjAyMiwgU3RlZmFuIEFnbmVyIHdyb3RlOgo+IFJl
+YmFzZSBwYXRjaGVzIGFzIG5lY2Vzc2FyeSBhbmQgYnVtcCB2ZXJzaW9uIHRvIDExLjMuNS4gVGhp
+cyBhbGxvd3MKPiB0byBidWlsZCBvcGVudm10b29scyBmb3IgYWFyY2g2NC4KPgo+IFNpZ25lZC1v
+ZmYtYnk6IFN0ZWZhbiBBZ25lciA8c3RlZmFuQGFnbmVyLmNoPgo+IC0tLQo+ICAuLi5fcG9sbC1o
+LXRvLWZpeC1idWlsZC1mYWlsdXJlLW9uLW11c2wucGF0Y2ggfCA4NSArKysrKysrKysrKy0tLS0t
+LS0tCj4gIC4uLi10ZXN0LWZvci1mZWF0dXJlLWluc3RlYWQtb2YtcGxhdGZvci5wYXRjaCB8ICAx
+ICsKPiAgLi4uLzAwMDktU2V0LXBlcm1pc3Npb25zLW9uLXJ1bGVzLWZpbGUucGF0Y2ggIHwgMjMg
+LS0tLS0KPiAgLi4uLzAwMTAtQ2hhbmdlLURFVlBBVEgtdG8tZGV2cGF0aC5wYXRjaCAgICAgIHwg
+MjUgLS0tLS0tCj4gIHBhY2thZ2Uvb3BlbnZtdG9vbHMvb3BlbnZtdG9vbHMuaGFzaCAgICAgICAg
+ICB8ICAyICstCj4gIHBhY2thZ2Uvb3BlbnZtdG9vbHMvb3BlbnZtdG9vbHMubWsgICAgICAgICAg
+ICB8ICA0ICstCj4gIDYgZmlsZXMgY2hhbmdlZCwgNTQgaW5zZXJ0aW9ucygrKSwgODYgZGVsZXRp
+b25zKC0pCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL29wZW52bXRvb2xzLzAwMDktU2V0
+LXBlcm1pc3Npb25zLW9uLXJ1bGVzLWZpbGUucGF0Y2gKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBh
+Y2thZ2Uvb3BlbnZtdG9vbHMvMDAxMC1DaGFuZ2UtREVWUEFUSC10by1kZXZwYXRoLnBhdGNoCj4K
+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcGVudm10b29scy8wMDAzLVJlbmFtZS1wb2xsLWgtaW50
+by12bV9wb2xsLWgtdG8tZml4LWJ1aWxkLWZhaWx1cmUtb24tbXVzbC5wYXRjaCBiL3BhY2thZ2Uv
+b3BlbnZtdG9vbHMvMDAwMy1SZW5hbWUtcG9sbC1oLWludG8tdm1fcG9sbC1oLXRvLWZpeC1idWls
+ZC1mYWlsdXJlLW9uLW11c2wucGF0Y2gKPiBpbmRleCBlOTQ5NWNlNDNmLi40NzQ5ZjNmNDYyIDEw
+MDY0NAo+IC0tLSBhL3BhY2thZ2Uvb3BlbnZtdG9vbHMvMDAwMy1SZW5hbWUtcG9sbC1oLWludG8t
+dm1fcG9sbC1oLXRvLWZpeC1idWlsZC1mYWlsdXJlLW9uLW11c2wucGF0Y2gKPiArKysgYi9wYWNr
+YWdlL29wZW52bXRvb2xzLzAwMDMtUmVuYW1lLXBvbGwtaC1pbnRvLXZtX3BvbGwtaC10by1maXgt
+YnVpbGQtZmFpbHVyZS1vbi1tdXNsLnBhdGNoCj4gQEAgLTEsNCArMSw1IEBACj4gLUZyb20gOWQx
+M2UzMmUzNjJhZDNjZTUxNjlmNDliN2YwZmUxZDkzODBlNTU4YyBNb24gU2VwIDE3IDAwOjAwOjAw
+IDIwMDEKPiArRnJvbSAxZGZhYjQ2ZDM2N2QxMWU5MTMyNTA2ZWUwZjdkM2ViMmNlZmY1ZjNjIE1v
+biBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtNZXNzYWdlLUlkOiA8MWRmYWI0NmQzNjdkMTFlOTEz
+MjUwNmVlMGY3ZDNlYjJjZWZmNWYzYy4xNjUyOTEzODMyLmdpdC5zdGVmYW5AYWduZXIuY2g+Cj4g
+IEZyb206IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgo+ICBE
+YXRlOiBNb24sIDMwIFNlcCAyMDE5IDEzOjMyOjM1ICswMjAwCj4gIFN1YmplY3Q6IFtQQVRDSF0g
+UmVuYW1lIHBvbGwuaCBpbnRvIHZtX3BvbGwuaCB0byBmaXggYnVpbGQgZmFpbHVyZSBvbiBtdXNs
+Cj4gQEAgLTI1LDcgKzI2LDcgQEAgYXN5bmNzb2NrZXQuYzoyNTM4OjMzOiBlcnJvcjog4oCYUE9M
+TElO4oCZIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW8KPiAgICAgICAgICAg
+IHBmZFtpXS5ldmVudHMgPSByZWFkID8gUE9MTElOIDogUE9MTE9VVDsKPiAgCj4gIFNvIHJlbmFt
+ZSBwb2xsLmggaW50byB2bV9wb2xsLmggYXMgc3VnZ2VzdGVkIGJ5IHNyb3dlIGluCj4gLWh0dHBz
+Oi8vZ2l0aHViLmNvbS92bXdhcmUvb3Blbi12bS10b29scy9pc3N1ZXMvMzU5I2lzc3VlY29tbWVu
+dC01MzM1Mjk5NTYKPiAraHR0cHM6Ly9naXRodWIuY29tL3Ztd2FyZS9pc3N1ZXMvMzU5I2lzc3Vl
+Y29tbWVudC01MzM1Mjk5NTYKClRoaXMgbGVhZHMgdG8gNDA0IGVycm9yIHBhZ2UuCgo+ICBGaXhl
+czoKPiAgIC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvNGY1NzVlZjQy
+YmJjNDM4N2EwN2UzOTYyMDUwNTJiMmRhMDgxYzY0ZAo+IEBAIC0zMywyNCArMzQsMjQgQEAgRml4
+ZXM6Cj4gIEZpeCAjMzU5Cj4gIAo+ICBTaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxm
+b250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiAtW1Vwc3RyZWFtIHN0YXR1czogaHR0cHM6Ly9n
+aXRodWIuY29tL3Ztd2FyZS9vcGVuLXZtLXRvb2xzL3B1bGwvMzgzXQo+ICtbVXBzdHJlYW0gc3Rh
+dHVzOiBodHRwczovL2dpdGh1Yi5jb20vdm13YXJlL3B1bGwvMzgzXQoKQWxzbyBoZXJlLgoKYmFy
+dWNoCgotLSAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICB+LiAufiAgIFRrIE9wZW4gU3lzdGVtcwo9fS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLW9vTy0tVS0tT29vLS0tLS0tLS0tLS0tez0KICAgLSBiYXJ1
+Y2hAdGtvcy5jby5pbCAtIHRlbDogKzk3Mi41Mi4zNjguNDY1NiwgaHR0cDovL3d3dy50a29zLmNv
+LmlsIC0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
