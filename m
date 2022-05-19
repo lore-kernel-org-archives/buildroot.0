@@ -4,78 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13274C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 19 May 2022 10:36:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 846E1C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 19 May 2022 13:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 80B6140C48;
-	Thu, 19 May 2022 10:36:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E84C7408B0;
+	Thu, 19 May 2022 13:41:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N3mE-9geWL8h; Thu, 19 May 2022 10:36:09 +0000 (UTC)
+	with ESMTP id uXeiOhoOK5KP; Thu, 19 May 2022 13:41:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 22DF540C4E;
-	Thu, 19 May 2022 10:36:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0296E405C2;
+	Thu, 19 May 2022 13:41:27 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 31A5B1BF408
- for <buildroot@lists.busybox.net>; Thu, 19 May 2022 10:36:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 222171BF388
+ for <buildroot@lists.busybox.net>; Thu, 19 May 2022 13:41:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E949842DB
- for <buildroot@lists.busybox.net>; Thu, 19 May 2022 10:36:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1EFBB81279
+ for <buildroot@lists.busybox.net>; Thu, 19 May 2022 13:41:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id khL8RugX9iDk for <buildroot@lists.busybox.net>;
- Thu, 19 May 2022 10:36:05 +0000 (UTC)
+ with ESMTP id uG8LI0HEHwRV for <buildroot@lists.busybox.net>;
+ Thu, 19 May 2022 13:41:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 23B6D842B0
- for <buildroot@busybox.net>; Thu, 19 May 2022 10:36:05 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id t6so6538515wra.4
- for <buildroot@busybox.net>; Thu, 19 May 2022 03:36:04 -0700 (PDT)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5C7C8801D5
+ for <buildroot@buildroot.org>; Thu, 19 May 2022 13:41:25 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id fd25so7049612edb.3
+ for <buildroot@buildroot.org>; Thu, 19 May 2022 06:41:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Nws0a2fsPHPScJNOx3bVUzcWNvjDgavo0AVnRk/B36M=;
- b=EOfKyWOjFWYibmE9JkMxE64Q9EWDcB9saUGU3j4ZyeBrqrD4zJ9LcdtEgf7QvX+NYv
- fBSjb7tl2GllfkjgcRhOl0lrCS0l3UwqMffTaSd5Un+DhQVnYOBCxz03me5n1SBvjHKm
- ZRPb/AyTO6k0Jy9XCGLb4vqtpwmBVuLpYWojMN2qCfzWgP6M/lw1NGQZIvP1gK2gdDxj
- yi6epZEkGTgGU4ErTok8jfqb9sFGquoLJ3Z6qwzq43/SkDLALjNkUHnAjz95osh861tT
- CjrcNiVNpsub3dZ+cNKZ4CxlGR/LjGj3qz/mIjv0v7fWRxDml9CossjtbVmyAtxcZ2U5
- JN7g==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=PC4YBhoXYVvqvhAZTME3D4TOmDTRPDUnKicqZx2EaqE=;
+ b=PxPyXWLwi6FIWsHXCsrSJGfjwIQtaFZK9dWBR9NtpumCkJICnUul/muqVzYbgNBs6y
+ jv2gH2WmKJA1ik2CDTEcGYTGwWAQhEDkSBqwZesLyi0zb9FAOjLfdwMj6YC0YyW6D29V
+ 0bI/D0/BnDyLx2W8a02cv1QZfyguJmSw7RYfiCEmuZ46AlD5QewTVrG+fPg/UOXDfFXk
+ CMzUx8pI7ZL022NE/dIKdvddsaMw80pIDLgnObs/kZ+nyIkpojyMgDDYTQUwQjOqKEnr
+ W/6qwTLgeWqOQt7P3xveJTgNG0TZ4XE8n+XN6EOQGhjj0GzgSnKU5CuK/b7WadlvbqLu
+ vo9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Nws0a2fsPHPScJNOx3bVUzcWNvjDgavo0AVnRk/B36M=;
- b=rgaMNWgUyVO+VjPVbDsjew5jazBWWqOLUHao4wTmDatSd7Aw/moq3Aysy3FJS8+8pF
- c3vnMiQvCuOKT5M7AohBFqyFpazoITDTJai0/F7MIZ6Rpi+eEBPhInqNx06rStHU5Vl5
- JIat5GLi5xnzGpGuAJYZv+/88dzOJRGs0LeIf9J20zp/b9FThHN2+gRznr34LjjlAU5s
- ELP1AebXV57lcVHEpOjT16B80N9eMEEbEeYdXYhkY85hPR5FOUUT7mIPyhAUE8pTXuyA
- jcqrPdSbrhlzLfvszbMy/pJdIPtwC9+lhm68M6j669mKCrQYILZVm5suqFtmC/owDWIc
- dlsg==
-X-Gm-Message-State: AOAM53368IR/ROncXRwKVz9xuZ0bcOXUH4TwAvcZnTG9e06w1CkcTb5B
- 3M0Sj+2dRH1YCy5o5MpGTk14b7kQE+8=
-X-Google-Smtp-Source: ABdhPJxIpoHi6x4pKg03QNicDNBqTb84DRrDq5MMQqlbP4J/kTncMHwPaMWkmqx4V09ZtxIvhtxEyA==
-X-Received: by 2002:a5d:5541:0:b0:20d:a89:ae21 with SMTP id
- g1-20020a5d5541000000b0020d0a89ae21mr3468450wrw.176.1652956562980; 
- Thu, 19 May 2022 03:36:02 -0700 (PDT)
-Received: from vm22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- l16-20020a05600c1d1000b0039444973258sm8415611wms.0.2022.05.19.03.36.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 May 2022 03:36:02 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Thu, 19 May 2022 12:35:35 +0200
-Message-Id: <20220519103535.1806705-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.34.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=PC4YBhoXYVvqvhAZTME3D4TOmDTRPDUnKicqZx2EaqE=;
+ b=Whihzr6tGHt8cbqMBEd1lLxe2Fz4YlFsa6I/Vh1sF9T7idza5y3DV7n34Era58j18C
+ ZtYpknis920iJtgjjaTzGJeCWxvITRLNLUaIN2Yh0tHGm8znbVM/iPyCfsYwibxQIEjl
+ 90e3hdExlKYiepudTzjn22+tvHTxSHR5sqqzEUl2gmBAw9QxbCy4BUCPxSbRHACkp/Bw
+ PtWOTUcE0Uvw6eIc2ugkKJ9Mp7dHpsw/Qak7vDDxImpIXcUWbZohFbPt9iEnGvi70fGu
+ qHvEAt7OV7UydtQIeD1wSUVGrjxIMYePMegzQh0hGDRVx02bi85TergQdFzMGkJgMao6
+ wSLg==
+X-Gm-Message-State: AOAM531BMiSu5rhCknurVBw7i5P8u1SajrKv70hUcG39H0bHA4KkEkjE
+ 8yrDQU+0kaidX7Qo8bB9XCakRVvEsl3u/+UMFGg=
+X-Google-Smtp-Source: ABdhPJy84NNE0JZRlCFyhNjGW8buMCBfoFapg7Tm2NEG6CM76GDcVK8NVFxhAqFY9OhdLRZwZ2Jf2Q91CSIYIEBG4gc=
+X-Received: by 2002:a05:6402:75a:b0:42a:bbb9:504c with SMTP id
+ p26-20020a056402075a00b0042abbb9504cmr5519758edy.348.1652967683426; Thu, 19
+ May 2022 06:41:23 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libressl: bump to version 3.5.3
+References: <20220516131334.1910858-1-johan.oudinet@gmail.com>
+ <20220516131334.1910858-2-johan.oudinet@gmail.com>
+ <20220516213202.GJ1597494@scaer>
+In-Reply-To: <20220516213202.GJ1597494@scaer>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Thu, 19 May 2022 15:41:11 +0200
+Message-ID: <CAJtjsKbMYmXGi86Ugo=QNk3edQPnsLMPNg6P6kkSBbRKBPvm=w@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Subject: Re: [Buildroot] [PATCH 01/20] package/erlang-idna: remove
+ unicode_util_compat library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,43 +84,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Yann, All,
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index c3590798d..7a7638b2d 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256  56feab8e21c3fa6549f8b7d7511658b8e98518162838a795314732654adf3e5f  libressl-3.5.2.tar.gz
-+sha256  3ab5e5eaef69ce20c6b170ee64d785b42235f48f2e62b095fca5d7b6672b8b28  libressl-3.5.3.tar.gz
- # Locally computed
- sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index a52a15c67..85d1fe5e3 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRESSL_VERSION = 3.5.2
-+LIBRESSL_VERSION = 3.5.3
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+On Mon, May 16, 2022 at 11:32 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> We're still on elran-idna 6.0.0.
+>
+> But as there's been no new release sine 2020-12-05, and no new commit
+> since about the same day, and since the patch you are adding is the only
+> commit since 6.1.1., maybe we should just bump to the latest commit in
+> the repository?
+
+Initially, I haven't bumped the version to 6.1.1 for two reasons:
+- ejabberd still depends on 6.0.0 and I was not sure if it would be
+compatible with a more recent version of this library.
+- The changelog says version 6.1.0 dropped support for rebar2. I was
+afraid it would be difficult to integrate such a version in Buildroot,
+because the rebar infrastructure is based on rebar2. I have no idea
+how long it would take to add support for rebar3 in buildroot.
+
+Since my goal was to upgrade ejabberd, I took the simple path to
+backport the only needed patch to drop the dependency on
+unicode_util_compat library.
+However, you're right it would be cleaner to bump the version of this
+erlang package to master. I've just done that and it was easier than
+expected and ejabberd still works with this version. I'm sending a new
+version of the whole series. Thanks.
 -- 
-2.34.1
-
+Johan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
