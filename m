@@ -1,59 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1A3CC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 19 May 2022 07:29:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 664DBC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 19 May 2022 07:36:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 60DCE843F8;
-	Thu, 19 May 2022 07:29:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E49D941C8E;
+	Thu, 19 May 2022 07:36:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PvHc0QJbdWV9; Thu, 19 May 2022 07:29:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zilIrN-2PdZf; Thu, 19 May 2022 07:36:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5A09843F9;
-	Thu, 19 May 2022 07:29:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7E1141B80;
+	Thu, 19 May 2022 07:36:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3A5491BF393
- for <buildroot@lists.busybox.net>; Thu, 19 May 2022 07:29:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A386E1BF393
+ for <buildroot@lists.busybox.net>; Thu, 19 May 2022 07:36:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23A6641C7B
- for <buildroot@lists.busybox.net>; Thu, 19 May 2022 07:29:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 90B4141B80
+ for <buildroot@lists.busybox.net>; Thu, 19 May 2022 07:36:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=agner.ch
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qGUbbKKIWOvT for <buildroot@lists.busybox.net>;
- Thu, 19 May 2022 07:29:17 +0000 (UTC)
+ with ESMTP id qZqYl5Fkla0u for <buildroot@lists.busybox.net>;
+ Thu, 19 May 2022 07:36:40 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2242441C72
- for <buildroot@buildroot.org>; Thu, 19 May 2022 07:29:17 +0000 (UTC)
-Received: from localhost.localdomain (unknown [IPv6:2a02:169:3df5:10::ed4])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id 83E415C0722;
- Thu, 19 May 2022 09:29:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
- t=1652945354;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:
- content-transfer-encoding:content-transfer-encoding:in-reply-to:
- references; bh=FoKA6IZFN6fer6cDLo3KTc0F/kDKvaupybF07lH3X9A=;
- b=xikZU0LNuOI9B1XF9mfot3SU5d+g1aNR716L4x2LLMCUryxwFTVXFSogF/VCbvfUcZohuy
- 6hAAdm7lL/sqA8lHVhtKUK+7ZFO2c9SQdm6owEVpRg+RUmG99V8jPD8wmmsA0nJyqQnU3P
- BPyGDs/7ENIPBHdBVUDmSlhF7wgbmlo=
-From: Stefan Agner <stefan@agner.ch>
-To: kaszak@gmail.com,
-	baruch@tkos.co.il,
-	buildroot@buildroot.org
-Date: Thu, 19 May 2022 09:29:06 +0200
-Message-Id: <9e9f78237f6f8ab0ee9e235b5b1c4b47ac1ea560.1652945312.git.stefan@agner.ch>
-X-Mailer: git-send-email 2.36.1
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 209F34176C
+ for <buildroot@buildroot.org>; Thu, 19 May 2022 07:36:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
+ s=20170329;
+ h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=hTbxgPkdtehiz4q8qm9CzgDTLfQkyuzUn5TOi6o9uv0=; b=SqMdbYOee8x5twM/R12fOcC12x
+ pVLndrlwzVFEOMuhirt/YjXA0RIvg1tVtoLLkgogpOMOeSb3sxRpZZu9e8PTcytoT1q9kCt239e1G
+ XSY8By67+VfEBz2RkZy+qzygKFvuy3zH/Ci9l4MNbCRLHYvq+aXC5oSe1yarW+nb0WXK6Mjk+E5fm
+ uDvFlMVzZ3ZxLCACRuzy4URqZxjSGKoZQMyIxoHsvrPz81TXxQYRmqxkimp2vJOYj7rGe2VkG6Yfe
+ 7yDL45b8pynwLMUiWNmiSW/xl/YKTWfekjThvDZTExhmh7qBcMr5FB9mSZ9/YVZUr4n9z1K5qLomQ
+ GgGaLcrA==;
+Received: from 91-152-140-238.elisa-laajakaista.fi ([91.152.140.238]
+ helo=momiji) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1nrai5-00AzbL-BS; Thu, 19 May 2022 09:36:37 +0200
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id 1a368ea2;
+ Thu, 19 May 2022 07:36:24 +0000 (UTC)
+Date: Thu, 19 May 2022 10:36:20 +0300
+Message-ID: <20220519103620.GB3593995@momiji>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20220518212015.439865-1-fontaine.fabrice@gmail.com>
+References: <20220518212015.439865-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] package/openvmtools: bump version to 11.3.5
+Subject: Re: [Buildroot] [PATCH 1/1] package/openjpeg: security bump to
+ version 2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,350 +71,258 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: stefan@agner.ch
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Olivier Schonken <olivier.schonken@gmail.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============4913033455556130138=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rebase patches as necessary and bump version to 11.3.5. This allows
-to build openvmtools for aarch64.
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
----
- ..._poll-h-to-fix-build-failure-on-musl.patch | 81 +++++++++++--------
- ...-test-for-feature-instead-of-platfor.patch |  1 +
- .../0009-Set-permissions-on-rules-file.patch  | 23 ------
- .../0010-Change-DEVPATH-to-devpath.patch      | 25 ------
- package/openvmtools/openvmtools.hash          |  2 +-
- package/openvmtools/openvmtools.mk            |  4 +-
- 6 files changed, 52 insertions(+), 84 deletions(-)
- delete mode 100644 package/openvmtools/0009-Set-permissions-on-rules-file.patch
- delete mode 100644 package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
+--===============4913033455556130138==
+Content-Type: multipart/signed; boundary="DWF4BLJ1YE3ODmUF"; micalg="pgp-sha1"; protocol="application/pgp-signature"
 
-diff --git a/package/openvmtools/0003-Rename-poll-h-into-vm_poll-h-to-fix-build-failure-on-musl.patch b/package/openvmtools/0003-Rename-poll-h-into-vm_poll-h-to-fix-build-failure-on-musl.patch
-index e9495ce43f..b4e94d870d 100644
---- a/package/openvmtools/0003-Rename-poll-h-into-vm_poll-h-to-fix-build-failure-on-musl.patch
-+++ b/package/openvmtools/0003-Rename-poll-h-into-vm_poll-h-to-fix-build-failure-on-musl.patch
-@@ -1,4 +1,5 @@
--From 9d13e32e362ad3ce5169f49b7f0fe1d9380e558c Mon Sep 17 00:00:00 2001
-+From 1dfab46d367d11e9132506ee0f7d3eb2ceff5f3c Mon Sep 17 00:00:00 2001
-+Message-Id: <1dfab46d367d11e9132506ee0f7d3eb2ceff5f3c.1652913832.git.stefan@agner.ch>
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Mon, 30 Sep 2019 13:32:35 +0200
- Subject: [PATCH] Rename poll.h into vm_poll.h to fix build failure on musl
-@@ -38,19 +39,19 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-  lib/asyncsocket/asyncsocket.c |   4 +-
-  lib/hgfsServer/hgfsServer.c   |   2 +-
-  lib/include/asyncsocket.h     |   2 +-
-- lib/include/poll.h            | 330 --------------------
-+ lib/include/poll.h            | 337 --------------------
-  lib/include/pollImpl.h        |   2 +-
-- lib/include/vm_poll.h         | 330 ++++++++++++++++++++
-+ lib/include/vm_poll.h         | 337 ++++++++++++++++++++
-  lib/rpcIn/rpcin.c             |   2 +-
-- 7 files changed, 336 insertions(+), 336 deletions(-)
-- delete mode 100644 open-vm-tools/lib/include/poll.h
-- create mode 100644 open-vm-tools/lib/include/vm_poll.h
-+ 7 files changed, 343 insertions(+), 343 deletions(-)
-+ delete mode 100644 lib/include/poll.h
-+ create mode 100644 lib/include/vm_poll.h
- 
--diff --git a/lib/asyncsocket/asyncsocket.c b/lib/asyncsocket/asyncsocket.c
--index 102638cc..01181a95 100644
-+diff --git a/lib/asyncsocket/asyncsocket.c b/open-vm-tools/lib/asyncsocket/asyncsocket.c
-+index 05147d2e..16949567 100644
- --- a/lib/asyncsocket/asyncsocket.c
- +++ b/lib/asyncsocket/asyncsocket.c
--@@ -69,8 +69,8 @@
-+@@ -70,8 +70,8 @@
-  #else
-  #include <stddef.h>
-  #include <ctype.h>
-@@ -60,7 +61,7 @@ index 102638cc..01181a95 100644
-  #include <sys/socket.h>
-  #include <sys/un.h>
-  #include <netdb.h>
--@@ -86,7 +86,7 @@
-+@@ -87,7 +87,7 @@
-  #include "random.h"
-  #include "asyncsocket.h"
-  #include "asyncSocketBase.h"
-@@ -69,24 +70,24 @@ index 102638cc..01181a95 100644
-  #include "log.h"
-  #include "err.h"
-  #include "hostinfo.h"
--diff --git a/lib/hgfsServer/hgfsServer.c b/lib/hgfsServer/hgfsServer.c
--index 46224551..fc691286 100644
-+diff --git a/lib/hgfsServer/hgfsServer.c b/open-vm-tools/lib/hgfsServer/hgfsServer.c
-+index 98f5b3f0..b436f0c7 100644
- --- a/lib/hgfsServer/hgfsServer.c
- +++ b/lib/hgfsServer/hgfsServer.c
--@@ -48,7 +48,7 @@
-- #include "hgfsServerOplock.h"
-+@@ -51,7 +51,7 @@
-  #include "hgfsDirNotify.h"
-+ #include "hgfsThreadpool.h"
-  #include "userlock.h"
- -#include "poll.h"
- +#include "vm_poll.h"
-  #include "mutexRankLib.h"
-  #include "vm_basic_asm.h"
-  #include "unicodeOperations.h"
--diff --git a/lib/include/asyncsocket.h b/lib/include/asyncsocket.h
--index 95a5e464..a4b4e5aa 100644
-+diff --git a/lib/include/asyncsocket.h b/open-vm-tools/lib/include/asyncsocket.h
-+index 47b5b873..b8b0149e 100644
- --- a/lib/include/asyncsocket.h
- +++ b/lib/include/asyncsocket.h
--@@ -164,7 +164,7 @@ typedef struct AsyncSocket AsyncSocket;
-+@@ -171,7 +171,7 @@ typedef struct AsyncSocket AsyncSocket;
-   * Or the client can specify its favorite poll class and locking behavior.
-   * Use of IVmdbPoll is only supported for regular sockets and for Attach.
-   */
-@@ -95,14 +96,14 @@ index 95a5e464..a4b4e5aa 100644
-  struct IVmdbPoll;
-  typedef struct AsyncSocketPollParams {
-     int flags;               /* Default 0, only POLL_FLAG_NO_BULL is valid */
--diff --git a/lib/include/poll.h b/lib/include/poll.h
-+diff --git a/lib/include/poll.h b/open-vm-tools/lib/include/poll.h
- deleted file mode 100644
--index 6acd4f35..00000000
-+index c90f5dcd..00000000
- --- a/lib/include/poll.h
- +++ /dev/null
--@@ -1,330 +0,0 @@
-+@@ -1,337 +0,0 @@
- -/*********************************************************
--- * Copyright (C) 1998-2018 VMware, Inc. All rights reserved.
-+- * Copyright (C) 1998-2020 VMware, Inc. All rights reserved.
- - *
- - * This program is free software; you can redistribute it and/or modify it
- - * under the terms of the GNU Lesser General Public License as published
-@@ -152,7 +153,7 @@ index 6acd4f35..00000000
- -
- -#ifdef _WIN32
- -#define HZ 100
---#elif defined linux
-+-#elif defined __linux__
- -#include <asm/param.h>
- -#elif __APPLE__
- -#include <TargetConditionals.h>
-@@ -335,6 +336,12 @@ index 6acd4f35..00000000
- - *      implementations are distinct from the core poll code.
- - */
- -
-+-
-+-/* Socket pair created with non-blocking mode */
-+-#define POLL_OPTIONS_SOCKET_PAIR_NONBLOCK_CONN  0x01
-+-
-+-typedef unsigned int SocketSpecialOpts;
-+-
- -typedef struct PollOptions {
- -   Bool locked;           // Use internal MXUser for locking
- -   Bool allowFullQueue;   // Don't assert when device event queue is full.
-@@ -342,6 +349,7 @@ index 6acd4f35..00000000
- -   PollerFireWrapper fireWrapperFn;  // optional; may be useful for stats
- -   void *fireWrapperData; // optional
- -   PollerErrorFn errorFn; // optional; called upon unrecoverable error
-+-   SocketSpecialOpts pollSocketOpts;
- -} PollOptions;
- -
- -
-@@ -354,7 +362,7 @@ index 6acd4f35..00000000
- -/*
- - * Functions
- - */
---int Poll_SocketPair(Bool vmci, Bool stream, int fds[2]);
-+-int Poll_SocketPair(Bool vmci, Bool stream, int fds[2], SocketSpecialOpts opts);
- -void Poll_Loop(Bool loop, Bool *exit, PollClass c);
- -void Poll_LoopTimeout(Bool loop, Bool *exit, PollClass c, int timeout);
- -Bool Poll_LockingEnabled(void);
-@@ -431,7 +439,7 @@ index 6acd4f35..00000000
- -#endif
- -
- -#endif // _POLL_H_
--diff --git a/lib/include/pollImpl.h b/lib/include/pollImpl.h
-+diff --git a/lib/include/pollImpl.h b/open-vm-tools/lib/include/pollImpl.h
- index 46442e55..8bc66997 100644
- --- a/lib/include/pollImpl.h
- +++ b/lib/include/pollImpl.h
-@@ -444,14 +452,14 @@ index 46442e55..8bc66997 100644
-  #include "vm_basic_asm.h"
-  
-  #if defined(__cplusplus)
--diff --git a/lib/include/vm_poll.h b/lib/include/vm_poll.h
-+diff --git a/lib/include/vm_poll.h b/open-vm-tools/lib/include/vm_poll.h
- new file mode 100644
--index 00000000..6acd4f35
-+index 00000000..c90f5dcd
- --- /dev/null
- +++ b/lib/include/vm_poll.h
--@@ -0,0 +1,330 @@
-+@@ -0,0 +1,337 @@
- +/*********************************************************
--+ * Copyright (C) 1998-2018 VMware, Inc. All rights reserved.
-++ * Copyright (C) 1998-2020 VMware, Inc. All rights reserved.
- + *
- + * This program is free software; you can redistribute it and/or modify it
- + * under the terms of the GNU Lesser General Public License as published
-@@ -501,7 +509,7 @@ index 00000000..6acd4f35
- +
- +#ifdef _WIN32
- +#define HZ 100
--+#elif defined linux
-++#elif defined __linux__
- +#include <asm/param.h>
- +#elif __APPLE__
- +#include <TargetConditionals.h>
-@@ -684,6 +692,12 @@ index 00000000..6acd4f35
- + *      implementations are distinct from the core poll code.
- + */
- +
-++
-++/* Socket pair created with non-blocking mode */
-++#define POLL_OPTIONS_SOCKET_PAIR_NONBLOCK_CONN  0x01
-++
-++typedef unsigned int SocketSpecialOpts;
-++
- +typedef struct PollOptions {
- +   Bool locked;           // Use internal MXUser for locking
- +   Bool allowFullQueue;   // Don't assert when device event queue is full.
-@@ -691,6 +705,7 @@ index 00000000..6acd4f35
- +   PollerFireWrapper fireWrapperFn;  // optional; may be useful for stats
- +   void *fireWrapperData; // optional
- +   PollerErrorFn errorFn; // optional; called upon unrecoverable error
-++   SocketSpecialOpts pollSocketOpts;
- +} PollOptions;
- +
- +
-@@ -703,7 +718,7 @@ index 00000000..6acd4f35
- +/*
- + * Functions
- + */
--+int Poll_SocketPair(Bool vmci, Bool stream, int fds[2]);
-++int Poll_SocketPair(Bool vmci, Bool stream, int fds[2], SocketSpecialOpts opts);
- +void Poll_Loop(Bool loop, Bool *exit, PollClass c);
- +void Poll_LoopTimeout(Bool loop, Bool *exit, PollClass c, int timeout);
- +Bool Poll_LockingEnabled(void);
-@@ -780,8 +795,8 @@ index 00000000..6acd4f35
- +#endif
- +
- +#endif // _POLL_H_
--diff --git a/lib/rpcIn/rpcin.c b/lib/rpcIn/rpcin.c
--index 47a3380e..660382c6 100644
-+diff --git a/lib/rpcIn/rpcin.c b/open-vm-tools/lib/rpcIn/rpcin.c
-+index 8b1fe759..f22fcd40 100644
- --- a/lib/rpcIn/rpcin.c
- +++ b/lib/rpcIn/rpcin.c
- @@ -57,7 +57,7 @@
-@@ -794,5 +809,5 @@ index 47a3380e..660382c6 100644
-  #  include "vmci_defs.h"
-  #include "dataMap.h"
- -- 
--2.23.0
-+2.36.1
- 
-diff --git a/package/openvmtools/0007-Use-configure-to-test-for-feature-instead-of-platfor.patch b/package/openvmtools/0007-Use-configure-to-test-for-feature-instead-of-platfor.patch
-index 0d3948aa10..abbc518362 100644
---- a/package/openvmtools/0007-Use-configure-to-test-for-feature-instead-of-platfor.patch
-+++ b/package/openvmtools/0007-Use-configure-to-test-for-feature-instead-of-platfor.patch
-@@ -125,6 +125,7 @@ Index: open-vm-tools/lib/nicInfo/nicInfoPosix.c
-  #include <sys/socket.h>
-  #include <sys/stat.h>
-  #include <errno.h>
-+ #include <limits.h>
- -#if defined(__FreeBSD__) || defined(__APPLE__)
- +#if HAVE_SYS_SYSCTL_H
-  # include <sys/sysctl.h>
-diff --git a/package/openvmtools/0009-Set-permissions-on-rules-file.patch b/package/openvmtools/0009-Set-permissions-on-rules-file.patch
-deleted file mode 100644
-index 6a37c1690d..0000000000
---- a/package/openvmtools/0009-Set-permissions-on-rules-file.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--From c3ef6a8285132871ad10f9300d8afff55d8d6de2 Mon Sep 17 00:00:00 2001
--From: puneetse <22071208+puneetse@users.noreply.github.com>
--Date: Wed, 16 Oct 2019 10:09:38 -0700
--Subject: [PATCH] Set permissions on rules file
--
--udevs rules should not be executable otherwise udev will log a warning in the journal
--
--Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-----
-- udev/Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/udev/Makefile.am b/udev/Makefile.am
--index 68fbc3e27..8b9a4d716 100644
----- a/udev/Makefile.am
--+++ b/udev/Makefile.am
--@@ -17,5 +17,5 @@
-- 
-- install-data-local:
-- 	$(INSTALL) -d $(DESTDIR)$(UDEVRULESDIR)
---	$(INSTALL) $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
--+	$(INSTALL) -m 0644 $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
-- 
-diff --git a/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch b/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
-deleted file mode 100644
-index 5af694d8f2..0000000000
---- a/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 22f5d198b3b2f7e4debed83948ba1baf70d4749a Mon Sep 17 00:00:00 2001
--From: puneetse <22071208+puneetse@users.noreply.github.com>
--Date: Wed, 16 Oct 2019 10:04:41 -0700
--Subject: [PATCH] Change $DEVPATH to $devpath
--
--$DEVPATH throws a warning by udev.
--
--Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-----
-- udev/99-vmware-scsi-udev.rules | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/udev/99-vmware-scsi-udev.rules b/udev/99-vmware-scsi-udev.rules
--index 053b59706..a605d80ef 100644
----- a/udev/99-vmware-scsi-udev.rules
--+++ b/udev/99-vmware-scsi-udev.rules
--@@ -2,6 +2,6 @@
-- #
-- # This file is part of open-vm-tools
-- 
---ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="Virtual disk*", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'"
---ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="VMware Virtual S", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'"
--+ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="Virtual disk*", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys/$devpath/device/timeout'"
--+ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="VMware Virtual S", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys/$devpath/device/timeout'"
-- 
-diff --git a/package/openvmtools/openvmtools.hash b/package/openvmtools/openvmtools.hash
-index bd81d1f05c..081538fbf3 100644
---- a/package/openvmtools/openvmtools.hash
-+++ b/package/openvmtools/openvmtools.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  364cd0fdfa5a05e872d08609659e6231ec99788669f7ebba24bfb8c94168daef  open-vm-tools-10.3.5-10430147.tar.gz
-+sha256  2053daf7b224ab7ae1a9cfcd6ae12494c646e2bf9aaca998225bd082a4a43fb7  open-vm-tools-11.3.5-18557794.tar.gz
- sha256  f734933bd7d49aef25aaf897ed7281ee822e8635056e69b895a7d2e668937fc5  COPYING
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 4201c6daa0..59080c05aa 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--OPENVMTOOLS_VERSION_MAJOR = 10.3.5
--OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR)-10430147
-+OPENVMTOOLS_VERSION_MAJOR = 11.3.5
-+OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR)-18557794
- OPENVMTOOLS_SITE = https://github.com/vmware/open-vm-tools/releases/download/stable-$(OPENVMTOOLS_VERSION_MAJOR)
- OPENVMTOOLS_SOURCE = open-vm-tools-$(OPENVMTOOLS_VERSION).tar.gz
- OPENVMTOOLS_LICENSE = LGPL-2.1
--- 
-2.36.1
+
+--DWF4BLJ1YE3ODmUF
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
+
+T24gV2VkLCAxOCBNYXkgMjAyMiAyMzoyMDoxNSArMDIwMCBGYWJyaWNlIEZvbnRhaW5lIDxmb250
+YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4gd3JvdGU6Cj4gRml4IENWRS0yMDIxLTI5MzM4OiBJbnRl
+Z2VyIE92ZXJmbG93IGluIE9wZW5KUEVHIHYyLjQuMCBhbGxvd3MgcmVtb3RlCj4gYXR0YWNrZXJz
+IHRvIGNyYXNoIHRoZSBhcHBsaWNhdGlvbiwgY2F1c2luZyBhIERlbmlhbCBvZiBTZXJ2aWNlIChE
+b1MpLgo+IFRoaXMgb2NjdXJzIHdoZW4gdGhlIGF0dGFja2VyIHVzZXMgdGhlIGNvbW1hbmQgbGlu
+ZSBvcHRpb24gIi1JbWdEaXIiIG9uCj4gYSBkaXJlY3RvcnkgdGhhdCBjb250YWlucyAxMDQ4NTc2
+IGZpbGVzLgo+IAo+IEZpeCBDVkUtMjAyMi0xMTIyOiBBIGZsYXcgd2FzIGZvdW5kIGluIHRoZSBv
+cGoyX2RlY29tcHJlc3MgcHJvZ3JhbSBpbgo+IG9wZW5qcGVnMiAyLjQuMCBpbiB0aGUgd2F5IGl0
+IGhhbmRsZXMgYW4gaW5wdXQgZGlyZWN0b3J5IHdpdGggYSBsYXJnZQo+IG51bWJlciBvZiBmaWxl
+cy4gV2hlbiBpdCBmYWlscyB0byBhbGxvY2F0ZSBhIGJ1ZmZlciB0byBzdG9yZSB0aGUKPiBmaWxl
+bmFtZXMgb2YgdGhlIGlucHV0IGRpcmVjdG9yeSwgaXQgY2FsbHMgZnJlZSgpIG9uIGFuIHVuaW5p
+dGlhbGl6ZWQKPiBwb2ludGVyLCBsZWFkaW5nIHRvIGEgc2VnbWVudGF0aW9uIGZhdWx0IGFuZCBh
+IGRlbmlhbCBvZiBzZXJ2aWNlLgo+IAo+IERyb3AgcGF0Y2hlcyAoYWxyZWFkeSBpbiB2ZXJzaW9u
+KQo+IAo+IGh0dHBzOi8vZ2l0aHViLmNvbS91Y2xvdXZhaW4vb3BlbmpwZWcvYmxvYi92Mi41LjAv
+TkVXUy5tZAo+IAo+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZh
+YnJpY2VAZ21haWwuY29tPgoKUmV2aWV3ZWQtYnk6IEFkcmlhbiBQZXJleiBkZSBDYXN0cm8gPGFw
+ZXJlekBpZ2FsaWEuY29tPgoKPiAtLS0KPiAgLi4uYXBwZW5kLWZsYWdzLWZvdW5kLWJ5LXBrZy1j
+b25maWctaWYtLnBhdGNoIHwgNzIgLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICAuLi4tYXBwZW5kLWZs
+YWdzLWZvdW5kLWJ5LXBrZy1jb25maWctaWYucGF0Y2ggfCA0OSAtLS0tLS0tLS0tLS0tCj4gIC4u
+Lkxpc3RzLnR4dC1Eb24tdC1yZXF1aXJlLWEtQy1jb21waWxlci5wYXRjaCB8IDM0IC0tLS0tLS0t
+LQo+ICAuLi5JUi1mb3ItT1BFTkpQRUdfSU5DTFVERV9ESVJTLWZpeGVzLXUucGF0Y2ggfCAzNyAt
+LS0tLS0tLS0tCj4gIHBhY2thZ2Uvb3BlbmpwZWcvb3BlbmpwZWcuaGFzaCAgICAgICAgICAgICAg
+ICB8ICAyICstCj4gIHBhY2thZ2Uvb3BlbmpwZWcvb3BlbmpwZWcubWsgICAgICAgICAgICAgICAg
+ICB8ICAyICstCj4gIDYgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxOTQgZGVsZXRp
+b25zKC0pCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL29wZW5qcGVnLzAwMDEtdGhpcmRw
+YXJ0eS10aWZmLWFwcGVuZC1mbGFncy1mb3VuZC1ieS1wa2ctY29uZmlnLWlmLS5wYXRjaAo+ICBk
+ZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9vcGVuanBlZy8wMDAyLXRoaXJkcGFydHktbGNtczIt
+YXBwZW5kLWZsYWdzLWZvdW5kLWJ5LXBrZy1jb25maWctaWYucGF0Y2gKPiAgZGVsZXRlIG1vZGUg
+MTAwNjQ0IHBhY2thZ2Uvb3BlbmpwZWcvMDAwMy1DTWFrZUxpc3RzLnR4dC1Eb24tdC1yZXF1aXJl
+LWEtQy1jb21waWxlci5wYXRjaAo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9vcGVuanBl
+Zy8wMDA0LVJldmVydC1Vc2UtSU5DX0RJUi1mb3ItT1BFTkpQRUdfSU5DTFVERV9ESVJTLWZpeGVz
+LXUucGF0Y2gKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcGVuanBlZy8wMDAxLXRoaXJkcGFy
+dHktdGlmZi1hcHBlbmQtZmxhZ3MtZm91bmQtYnktcGtnLWNvbmZpZy1pZi0ucGF0Y2ggYi9wYWNr
+YWdlL29wZW5qcGVnLzAwMDEtdGhpcmRwYXJ0eS10aWZmLWFwcGVuZC1mbGFncy1mb3VuZC1ieS1w
+a2ctY29uZmlnLWlmLS5wYXRjaAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IGJj
+ZTc5MGE0NzguLjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL29wZW5qcGVnLzAwMDEtdGhpcmRw
+YXJ0eS10aWZmLWFwcGVuZC1mbGFncy1mb3VuZC1ieS1wa2ctY29uZmlnLWlmLS5wYXRjaAo+ICsr
+KyAvZGV2L251bGwKPiBAQCAtMSw3MiArMCwwIEBACj4gLUZyb20gMzhmNTBjN2Q5YWQzYmEwNmI2
+NDU4MzA0NTY2NTIwM2FmYjUzY2JkOSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAtRnJvbTog
+U2FtdWVsIE1hcnRpbiA8cy5tYXJ0aW40OUBnbWFpbC5jb20+Cj4gLURhdGU6IFN1biwgNiBOb3Yg
+MjAxNiAxNjoyOTowOCArMDEwMAo+IC1TdWJqZWN0OiBbUEFUQ0hdIHRoaXJkcGFydHk6IHRpZmY6
+IGFwcGVuZCBmbGFncyBmb3VuZCBieSBwa2ctY29uZmlnIGlmCj4gLSBhdmFpbGFibGUKPiAtCj4g
+LVRoaXMgY2hhbmdlIGFsbG93cyB0byBnZXQgYWxsIHJlcXVpcmVkIENGTEFHUy9MREZMQUdTIGlu
+IGNhc2Ugb2Ygc3RhdGljIG9ubHkKPiAtYnVpbGQuCj4gLQo+IC1UaGlzIGJ1aWxkIGlzc3VlIFsx
+XSB3YXMgdHJpZ2dlcmVkIGJ5IHRoZSBCdWlsZHJvb3QgZmFybXMuCj4gLQo+IC1bMV0gaHR0cDov
+L2F1dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvZDBkL2QwZDIyNzI3MzExZDYzMDBlMGU0
+MDA3MjgxMjYxNzA0MDdiZmQ2OTkvYnVpbGQtZW5kLmxvZwo+IC0KPiAtU2lnbmVkLW9mZi1ieTog
+U2FtdWVsIE1hcnRpbiA8cy5tYXJ0aW40OUBnbWFpbC5jb20+Cj4gLS0tLQo+IC0gdGhpcmRwYXJ0
+eS9DTWFrZUxpc3RzLnR4dCB8IDIzICsrKysrKysrKysrKysrKysrKysrKy0tCj4gLSAxIGZpbGUg
+Y2hhbmdlZCwgMjEgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPiAtCj4gLWRpZmYgLS1n
+aXQgYS90aGlyZHBhcnR5L0NNYWtlTGlzdHMudHh0IGIvdGhpcmRwYXJ0eS9DTWFrZUxpc3RzLnR4
+dAo+IC1pbmRleCBjYjI0YjQzYjU4ZTIuLmNkNmE1ZTEzOTFiMCAxMDA2NDQKPiAtLS0tIGEvdGhp
+cmRwYXJ0eS9DTWFrZUxpc3RzLnR4dAo+IC0rKysgYi90aGlyZHBhcnR5L0NNYWtlTGlzdHMudHh0
+Cj4gLUBAIC0xLDUgKzEsOSBAQAo+IC0gIyAzcmQgcGFydHkgbGlicwo+IC0gCj4gLStpZihOT1Qg
+QlVJTERfVEhJUkRQQVJUWSkKPiAtKyAgaW5jbHVkZShGaW5kUGtnQ29uZmlnKQo+IC0rZW5kaWYo
+Tk9UIEJVSUxEX1RISVJEUEFSVFkpCj4gLSsKPiAtICMtLS0tLS0tLS0tLS0KPiAtICMgVHJ5IHRv
+IGZpbmQgbGliIFoKPiAtIGlmKEJVSUxEX1RISVJEUEFSVFkpCj4gLUBAIC0zNiw2ICs0MCw5IEBA
+IGlmKEJVSUxEX1RISVJEUEFSVFkpCj4gLSBlbHNlKEJVSUxEX1RISVJEUEFSVFkpCj4gLSAgIGlm
+KFpMSUJfRk9VTkQpCj4gLSAgICAgZmluZF9wYWNrYWdlKFBORykKPiAtKyAgICAjIFN0YXRpYyBv
+bmx5IGJ1aWxkOgo+IC0rICAgICMgICBpdCBpcyBub3QgbmVjZXNzYXJ5IHRvIGludm9rZSBwa2df
+Y2hlY2tfbW9kdWxlIG9uIGxpYnBuZywgYmVjYXVzZSBsaWJwbmcKPiAtKyAgICAjICAgb25seSBk
+ZXBlbmRzIG9uIHpsaWIsIHdoaWNoIGlzIGFscmVhZHkgY2hlY2tlZC4KPiAtICAgICBpZihQTkdf
+Rk9VTkQpCj4gLSAgICAgICBtZXNzYWdlKFNUQVRVUyAiWW91ciBzeXN0ZW0gc2VlbXMgdG8gaGF2
+ZSBhIFBORyBsaWIgYXZhaWxhYmxlLCB3ZSB3aWxsIHVzZSBpdCIpCj4gLSAgICAgICBzZXQoT1BK
+X0hBVkVfUE5HX0ggMSBQQVJFTlRfU0NPUEUpCj4gLUBAIC02NiwxMiArNzMsMjQgQEAgaWYoQlVJ
+TERfVEhJUkRQQVJUWSkKPiAtICAgc2V0KE9QSl9IQVZFX0xJQlRJRkYgMSBQQVJFTlRfU0NPUEUp
+Cj4gLSBlbHNlKEJVSUxEX1RISVJEUEFSVFkpCj4gLSAgIGZpbmRfcGFja2FnZShUSUZGKQo+IC0r
+ICAjIFN0YXRpYyBvbmx5IGJ1aWxkOgo+IC0rICAjICAgaXQgaXMgbmVjZXNzYXJ5IHRvIGludm9r
+ZSBwa2dfY2hlY2tfbW9kdWxlIG9uIGxpYnRpZmYgc2luY2UgaXQgbWF5IGhhdmUKPiAtKyAgIyAg
+IHNldmVyYWwgb3RoZXIgZGVwZW5kZW5jaWVzIG5vdCBkZWNsYXJlZCBieSBpdHMgY21ha2UgbW9k
+dWxlLCBidXQgdGhleSBhcmUKPiAtKyAgIyAgIGluIHRoZSBpdHMgcGtnY29uZmlnIG1vZHVsZS4K
+PiAtKyAgaWYoUEtHX0NPTkZJR19GT1VORCkKPiAtKyAgICBmb3JlYWNoKHBjX3RpZmZfbW9kdWxl
+IHRpZmYgdGlmZjMgdGlmZjQgdGlmZi0zIHRpZmYtNCBsaWJ0aWZmIGxpYnRpZmYzIGxpYnRpZmY0
+IGxpYnRpZmYtMyBsaWJ0aWZmLTQpCj4gLSsgICAgICBwa2dfY2hlY2tfbW9kdWxlcyhQQ19USUZG
+IFFVSUVUICR7cGNfdGlmZl9tb2R1bGV9KQo+IC0rICAgICAgaWYoUENfVElGRl9GT1VORCkKPiAt
+KyAgICAgICAgYnJlYWsoKQo+IC0rICAgICAgZW5kaWYoUENfVElGRl9GT1VORCkKPiAtKyAgICBl
+bmRmb3JlYWNoKCkKPiAtKyAgZW5kaWYoUEtHX0NPTkZJR19GT1VORCkKPiAtICAgaWYoVElGRl9G
+T1VORCkKPiAtICAgICBtZXNzYWdlKFNUQVRVUyAiWW91ciBzeXN0ZW0gc2VlbXMgdG8gaGF2ZSBh
+IFRJRkYgbGliIGF2YWlsYWJsZSwgd2Ugd2lsbCB1c2UgaXQiKQo+IC0gICAgIHNldChPUEpfSEFW
+RV9USUZGX0ggMSBQQVJFTlRfU0NPUEUpCj4gLSAgICAgc2V0KE9QSl9IQVZFX0xJQlRJRkYgMSBQ
+QVJFTlRfU0NPUEUpCj4gLS0gICAgc2V0KFRJRkZfTElCTkFNRSAke1RJRkZfTElCUkFSSUVTfSBQ
+QVJFTlRfU0NPUEUpCj4gLS0gICAgc2V0KFRJRkZfSU5DTFVERV9ESVJOQU1FICR7VElGRl9JTkNM
+VURFX0RJUn0gUEFSRU5UX1NDT1BFKQo+IC0rICAgIHNldChUSUZGX0xJQk5BTUUgJHtUSUZGX0xJ
+QlJBUklFU30gJHtQQ19USUZGX1NUQVRJQ19MSUJSQVJJRVN9IFBBUkVOVF9TQ09QRSkKPiAtKyAg
+ICBzZXQoVElGRl9JTkNMVURFX0RJUk5BTUUgJHtUSUZGX0lOQ0xVREVfRElSfSAke1BDX1RJRkZf
+U1RBVElDX0lOQ0xVREVfRElSU30gUEFSRU5UX1NDT1BFKQo+IC0gICBlbHNlKFRJRkZfRk9VTkQp
+ICMgbm90IGZvdW5kCj4gLSAgICAgc2V0KE9QSl9IQVZFX1RJRkZfSCAwIFBBUkVOVF9TQ09QRSkK
+PiAtICAgICBzZXQoT1BKX0hBVkVfTElCVElGRiAwIFBBUkVOVF9TQ09QRSkKPiAtLS0gCj4gLTIu
+MTAuMgo+IC0KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcGVuanBlZy8wMDAyLXRoaXJkcGFydHkt
+bGNtczItYXBwZW5kLWZsYWdzLWZvdW5kLWJ5LXBrZy1jb25maWctaWYucGF0Y2ggYi9wYWNrYWdl
+L29wZW5qcGVnLzAwMDItdGhpcmRwYXJ0eS1sY21zMi1hcHBlbmQtZmxhZ3MtZm91bmQtYnktcGtn
+LWNvbmZpZy1pZi5wYXRjaAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDU2OTdi
+ODJkZTIuLjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL29wZW5qcGVnLzAwMDItdGhpcmRwYXJ0
+eS1sY21zMi1hcHBlbmQtZmxhZ3MtZm91bmQtYnktcGtnLWNvbmZpZy1pZi5wYXRjaAo+ICsrKyAv
+ZGV2L251bGwKPiBAQCAtMSw0OSArMCwwIEBACj4gLUZyb20gMjI2ZGFhNzdlYTVhMzVkYTMwNmY5
+YWYyNTQ4ZjNlMmM5ZTc5ZjU3NyBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAtRnJvbTogUGV0
+ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0Pgo+IC1EYXRlOiBGcmksIDExIE5vdiAyMDE2
+IDIzOjM1OjEzICswMTAwCj4gLVN1YmplY3Q6IFtQQVRDSF0gdGhpcmRwYXJ0eTogbGNtczI6IGFw
+cGVuZCBmbGFncyBmb3VuZCBieSBwa2ctY29uZmlnIGlmCj4gLSBhdmFpbGFibGUKPiAtCj4gLVRo
+aXMgY2hhbmdlIGFsbG93cyB0byBnZXQgYWxsIHJlcXVpcmVkIENGTEFHUy9MREZMQUdTIGluIGNh
+c2Ugb2Ygc3RhdGljIG9ubHkKPiAtYnVpbGQuCj4gLQo+IC1GaXhlcyBhIGJ1aWxkcm9vdCBidWls
+ZCBmYWlsdXJlIChzZWUgWzFdLCBbMl0gYW5kIFszXSkuCj4gLQo+IC1bMV0gaHR0cDovL2F1dG9i
+dWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvNWNlLzVjZWUyMGFmZDhiZWY1MjY4ODMyY2RkY2Iz
+YTUyNzA3NDZiZTdhNTcKPiAtWzJdIGh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9waXBlcm1haWwv
+YnVpbGRyb290LzIwMTYtTm92ZW1iZXIvMTc3MTg3Lmh0bWwKPiAtWzNdIGh0dHA6Ly9saXN0cy5i
+dXN5Ym94Lm5ldC9waXBlcm1haWwvYnVpbGRyb290LzIwMTYtTm92ZW1iZXIvMTc3MTg4Lmh0bWwK
+PiAtCj4gLVNpZ25lZC1vZmYtYnk6IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4K
+PiAtLS0tCj4gLSB0aGlyZHBhcnR5L0NNYWtlTGlzdHMudHh0IHwgMTEgKysrKysrKysrLS0KPiAt
+IDEgZmlsZSBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gLQo+IC1k
+aWZmIC0tZ2l0IGEvdGhpcmRwYXJ0eS9DTWFrZUxpc3RzLnR4dCBiL3RoaXJkcGFydHkvQ01ha2VM
+aXN0cy50eHQKPiAtaW5kZXggY2Q2YTVlMTM5MWIwLi5hM2E4NDk0ZDg5YjEgMTAwNjQ0Cj4gLS0t
+LSBhL3RoaXJkcGFydHkvQ01ha2VMaXN0cy50eHQKPiAtKysrIGIvdGhpcmRwYXJ0eS9DTWFrZUxp
+c3RzLnR4dAo+IC1AQCAtMTEzLDEyICsxMTMsMTkgQEAgaWYoIEJVSUxEX1RISVJEUEFSVFkpCj4g
+LSAgIHNldChPUEpfSEFWRV9MSUJMQ01TMiAxIFBBUkVOVF9TQ09QRSkKPiAtIGVsc2UoQlVJTERf
+VEhJUkRQQVJUWSkKPiAtICAgZmluZF9wYWNrYWdlKExDTVMyKQo+IC0rICAjIFN0YXRpYyBvbmx5
+IGJ1aWxkOgo+IC0rICAjICAgaXQgaXMgbmVjZXNzYXJ5IHRvIGludm9rZSBwa2dfY2hlY2tfbW9k
+dWxlIG9uIGxjbXMyIHNpbmNlIGl0IG1heSBoYXZlCj4gLSsgICMgICBzZXZlcmFsIG90aGVyIGRl
+cGVuZGVuY2llcyBub3QgZGVjbGFyZWQgYnkgaXRzIGNtYWtlIG1vZHVsZSwgYnV0IHRoZXkgYXJl
+Cj4gLSsgICMgICBpbiB0aGUgaXRzIHBrZ2NvbmZpZyBtb2R1bGUuCj4gLSsgIGlmKFBLR19DT05G
+SUdfRk9VTkQpCj4gLSsgICAgcGtnX2NoZWNrX21vZHVsZXMoUENfTENNUzIgUVVJRVQgbGNtczIp
+Cj4gLSsgIGVuZGlmKFBLR19DT05GSUdfRk9VTkQpCj4gLSAgIGlmKExDTVMyX0ZPVU5EKQo+IC0g
+ICAgIG1lc3NhZ2UoU1RBVFVTICJZb3VyIHN5c3RlbSBzZWVtcyB0byBoYXZlIGEgTENNUzIgbGli
+IGF2YWlsYWJsZSwgd2Ugd2lsbCB1c2UgaXQiKQo+IC0gICAgIHNldChPUEpfSEFWRV9MQ01TMl9I
+IDEgUEFSRU5UX1NDT1BFKQo+IC0gICAgIHNldChPUEpfSEFWRV9MSUJMQ01TMiAxIFBBUkVOVF9T
+Q09QRSkKPiAtLSAgICBzZXQoTENNU19MSUJOQU1FICR7TENNUzJfTElCUkFSSUVTfSBQQVJFTlRf
+U0NPUEUpCj4gLS0gICAgc2V0KExDTVNfSU5DTFVERV9ESVJOQU1FICR7TENNUzJfSU5DTFVERV9E
+SVJTfSBQQVJFTlRfU0NPUEUpCj4gLSsgICAgc2V0KExDTVNfTElCTkFNRSAke0xDTVMyX0xJQlJB
+UklFU30gJHtQQ19MQ01TMl9TVEFUSUNfTElCUkFSSUVTfSBQQVJFTlRfU0NPUEUpCj4gLSsgICAg
+c2V0KExDTVNfSU5DTFVERV9ESVJOQU1FICR7TENNUzJfSU5DTFVERV9ESVJTfSAke1BDX0xDTVMy
+X1NUQVRJQ19JTkNMVURFX0RJUlN9IFBBUkVOVF9TQ09QRSkKPiAtICAgZWxzZShMQ01TMl9GT1VO
+RCkgIyBub3QgZm91bmQgbGNtczIKPiAtICAgICAjIHRyeSB0byBmaW5kIExDTVMKPiAtICAgICBm
+aW5kX3BhY2thZ2UoTENNUykKPiAtLS0gCj4gLTIuMTAuMgo+IC0KPiBkaWZmIC0tZ2l0IGEvcGFj
+a2FnZS9vcGVuanBlZy8wMDAzLUNNYWtlTGlzdHMudHh0LURvbi10LXJlcXVpcmUtYS1DLWNvbXBp
+bGVyLnBhdGNoIGIvcGFja2FnZS9vcGVuanBlZy8wMDAzLUNNYWtlTGlzdHMudHh0LURvbi10LXJl
+cXVpcmUtYS1DLWNvbXBpbGVyLnBhdGNoCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5k
+ZXggMTNjY2VlZjE5NS4uMDAwMDAwMDAwMAo+IC0tLSBhL3BhY2thZ2Uvb3BlbmpwZWcvMDAwMy1D
+TWFrZUxpc3RzLnR4dC1Eb24tdC1yZXF1aXJlLWEtQy1jb21waWxlci5wYXRjaAo+ICsrKyAvZGV2
+L251bGwKPiBAQCAtMSwzNCArMCwwIEBACj4gLUZyb20gNzg2ZGRjZDE0NzVhZGM2MTkzYzU5ZDUz
+ZTBkOGVkMmM1MDJmMmIwMCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAtRnJvbTogUGV0ZXIg
+S29yc2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPgo+IC1EYXRlOiBTYXQsIDIzIFNlcCAyMDE3
+IDE4OjQ5OjMxICswMjAwCj4gLVN1YmplY3Q6IFtQQVRDSF0gQ01ha2VMaXN0cy50eHQ6IERvbid0
+IHJlcXVpcmUgYSBDKysgY29tcGlsZXIKPiAtCj4gLUJ5IGRlZmF1bHQsIENNYWtlIGFzc3VtZXMg
+dGhhdCB0aGUgcHJvamVjdCBpcyB1c2luZyBib3RoIEMgYW5kIEMrKy4gIEJ5Cj4gLWV4cGxpY2l0
+bHkgcGFzc2luZyAnQycgYXMgYXJndW1lbnQgb2YgdGhlIHByb2plY3QoKSBtYWNybywgd2UgdGVs
+bCBDTWFrZQo+IC10aGF0IG9ubHkgQyBpcyB1c2VkLCB3aGljaCBwcmV2ZW50cyBDTWFrZSBmcm9t
+IGVycm9yaW5nIG91dCBpZiBhIEMrKwo+IC1jb21waWxlciBkb2Vzbid0IGV4aXN0Lgo+IC0KPiAt
+U3VibWl0dGVkIHVwc3RyZWFtOgo+IC1odHRwczovL2dpdGh1Yi5jb20vdWNsb3V2YWluL29wZW5q
+cGVnL3B1bGwvMTAyNwo+IC0KPiAtU2lnbmVkLW9mZi1ieTogUGV0ZXIgS29yc2dhYXJkIDxwZXRl
+ckBrb3JzZ2FhcmQuY29tPgo+IC0tLS0KPiAtIENNYWtlTGlzdHMudHh0IHwgMiArLQo+IC0gMSBm
+aWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4gLQo+IC1kaWZmIC0t
+Z2l0IGEvQ01ha2VMaXN0cy50eHQgYi9DTWFrZUxpc3RzLnR4dAo+IC1pbmRleCBlYzQyYmM5OS4u
+ZDgwZWI0OGIgMTAwNjQ0Cj4gLS0tLSBhL0NNYWtlTGlzdHMudHh0Cj4gLSsrKyBiL0NNYWtlTGlz
+dHMudHh0Cj4gLUBAIC0yNCw3ICsyNCw3IEBAIGVuZGlmKCkKPiAtICNzdHJpbmcoVE9MT1dFUiAk
+e09QRU5KUEVHX05BTUVTUEFDRX0gT1BFTkpQRUdfTElCUkFSWV9OQU1FKQo+IC0gc2V0KE9QRU5K
+UEVHX0xJQlJBUllfTkFNRSBvcGVuanAyKQo+IC0gCj4gLS1wcm9qZWN0KCR7T1BFTkpQRUdfTkFN
+RVNQQUNFfSkKPiAtK3Byb2plY3QoJHtPUEVOSlBFR19OQU1FU1BBQ0V9IEMpCj4gLSAKPiAtICMg
+RG8gZnVsbCBkZXBlbmRlbmN5IGhlYWRlcnMuCj4gLSBpbmNsdWRlX3JlZ3VsYXJfZXhwcmVzc2lv
+bigiXi4qJCIpCj4gLS0tIAo+IC0yLjExLjAKPiAtCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb3Bl
+bmpwZWcvMDAwNC1SZXZlcnQtVXNlLUlOQ19ESVItZm9yLU9QRU5KUEVHX0lOQ0xVREVfRElSUy1m
+aXhlcy11LnBhdGNoIGIvcGFja2FnZS9vcGVuanBlZy8wMDA0LVJldmVydC1Vc2UtSU5DX0RJUi1m
+b3ItT1BFTkpQRUdfSU5DTFVERV9ESVJTLWZpeGVzLXUucGF0Y2gKPiBkZWxldGVkIGZpbGUgbW9k
+ZSAxMDA2NDQKPiBpbmRleCBiODU1NTZhNjc5Li4wMDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9v
+cGVuanBlZy8wMDA0LVJldmVydC1Vc2UtSU5DX0RJUi1mb3ItT1BFTkpQRUdfSU5DTFVERV9ESVJT
+LWZpeGVzLXUucGF0Y2gKPiArKysgL2Rldi9udWxsCj4gQEAgLTEsMzcgKzAsMCBAQAo+IC1Gcm9t
+IDE0ZjRjMjdlN2M5MWY3NDVhMWRkYTk5OTFiNWRlZWEzY2JlZjIwNzIgTW9uIFNlcCAxNyAwMDow
+MDowMCAyMDAxCj4gLUZyb206IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
+aWwuY29tPgo+IC1EYXRlOiBUaHUsIDcgSmFuIDIwMjEgMTQ6MDk6NTAgKzAxMDAKPiAtU3ViamVj
+dDogW1BBVENIXSBSZXZlcnQgIlVzZSBJTkNfRElSIGZvciBPUEVOSlBFR19JTkNMVURFX0RJUlMg
+KGZpeGVzCj4gLSB1Y2xvdXZhaW4jMTE3NCkiCj4gLQo+IC1UaGlzIHJldmVydHMgY29tbWl0IDY1
+NTg2Mzc0ZDYzOWNmYzAxMDQ0MTk5OTJmOTAyMjE3NGI0MTI1OTQgd2hpY2gKPiAtYnJlYWtzIGNy
+b3NzLWNvbXBpbGF0aW9uIG9mIHBvcHBsZXIgdW5kZXIgYnVpbGRyb290IChiZWNhdXNlIG9mCj4g
+LURFU1RESVIgdXNhZ2UpLgo+IC0KPiAtU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8
+Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4gLVtVcHN0cmVhbSBzdGF0dXM6IGh0dHBzOi8v
+Z2l0aHViLmNvbS91Y2xvdXZhaW4vb3BlbmpwZWcvcHVsbC8xMzIxXQo+IC0tLS0KPiAtIGNtYWtl
+L09wZW5KUEVHQ29uZmlnLmNtYWtlLmluIHwgNiArKysrKy0KPiAtIDEgZmlsZSBjaGFuZ2VkLCA1
+IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiAtCj4gLWRpZmYgLS1naXQgYS9jbWFrZS9P
+cGVuSlBFR0NvbmZpZy5jbWFrZS5pbiBiL2NtYWtlL09wZW5KUEVHQ29uZmlnLmNtYWtlLmluCj4g
+LWluZGV4IDhhNzI2Njk3Li4yOTI1MTA4YSAxMDA2NDQKPiAtLS0tIGEvY21ha2UvT3BlbkpQRUdD
+b25maWcuY21ha2UuaW4KPiAtKysrIGIvY21ha2UvT3BlbkpQRUdDb25maWcuY21ha2UuaW4KPiAt
+QEAgLTI3LDggKzI3LDEyIEBAIGlmKEVYSVNUUyAke1NFTEZfRElSfS9PcGVuSlBFR1RhcmdldHMu
+Y21ha2UpCj4gLSAgICMgVGhpcyBpcyBhbiBpbnN0YWxsIHRyZWUKPiAtICAgaW5jbHVkZSgke1NF
+TEZfRElSfS9PcGVuSlBFR1RhcmdldHMuY21ha2UpCj4gLSAKPiAtKyAgIyBXZSBmaW5kIGEgcmVs
+YXRpdmUgcGF0aCBmcm9tIHRoZSBQS0cgZGlyZWN0b3J5IHRvIGhlYWRlciBmaWxlcy4KPiAtKyAg
+c2V0KFBLR19ESVIgIkBDTUFLRV9JTlNUQUxMX1BSRUZJWEAvQE9QRU5KUEVHX0lOU1RBTExfUEFD
+S0FHRV9ESVJAIikKPiAtICAgc2V0KElOQ19ESVIgIkBDTUFLRV9JTlNUQUxMX1BSRUZJWEAvQE9Q
+RU5KUEVHX0lOU1RBTExfSU5DTFVERV9ESVJAIikKPiAtLSAgZ2V0X2ZpbGVuYW1lX2NvbXBvbmVu
+dChPUEVOSlBFR19JTkNMVURFX0RJUlMgIiR7SU5DX0RJUn0iIEFCU09MVVRFKQo+IC0rICBmaWxl
+KFJFTEFUSVZFX1BBVEggUEtHX1RPX0lOQ19SUEFUSCAiJHtQS0dfRElSfSIgIiR7SU5DX0RJUn0i
+KQo+IC0rCj4gLSsgIGdldF9maWxlbmFtZV9jb21wb25lbnQoT1BFTkpQRUdfSU5DTFVERV9ESVJT
+ICIke1NFTEZfRElSfS8ke1BLR19UT19JTkNfUlBBVEh9IiBBQlNPTFVURSkKPiAtIAo+IC0gZWxz
+ZSgpCj4gLSAgIGlmKEVYSVNUUyAke1NFTEZfRElSfS9PcGVuSlBFR0V4cG9ydHMuY21ha2UpCj4g
+LS0tIAo+IC0yLjI5LjIKPiAtCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb3BlbmpwZWcvb3Blbmpw
+ZWcuaGFzaCBiL3BhY2thZ2Uvb3BlbmpwZWcvb3BlbmpwZWcuaGFzaAo+IGluZGV4IDg3OTgyNDUy
+NTYuLmNmYTBlMDFiN2QgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9vcGVuanBlZy9vcGVuanBlZy5o
+YXNoCj4gKysrIGIvcGFja2FnZS9vcGVuanBlZy9vcGVuanBlZy5oYXNoCj4gQEAgLTEsMyArMSwz
+IEBACj4gICMgTG9jYWxseSBjb21wdXRlZDoKPiAtc2hhMjU2ICA4NzAyYmE2OGI0NDI2NTdmMTFh
+YWViMmIzMzg0NDNjYThkNWZiOTViMGQ4NDU3NTc5NjhhN2JlMzFlZjdmMTZkICBvcGVuanBlZy0y
+LjQuMC50YXIuZ3oKPiArc2hhMjU2ICAwMzMzODA2ZDZhZGVjYzZmN2E5MTI0M2IyYjgzOWZmNGQy
+MDUzODIzNjM0ZDRmNmVkN2E1OWJjODc0MDkxMjJhICBvcGVuanBlZy0yLjUuMC50YXIuZ3oKPiAg
+c2hhMjU2ICBhNmFmMTM2ZjNlMTUwMzhhNjY2YjYxZjM3NjYxMmEwN2Q5YTRlNDhjYjdjMDFhZGJm
+M2UzM2IzZjE0YWI0OWI2ICBMSUNFTlNFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb3BlbmpwZWcv
+b3BlbmpwZWcubWsgYi9wYWNrYWdlL29wZW5qcGVnL29wZW5qcGVnLm1rCj4gaW5kZXggYjVkNDMz
+ZGYzMi4uNjAwYWMxZTE1NSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL29wZW5qcGVnL29wZW5qcGVn
+Lm1rCj4gKysrIGIvcGFja2FnZS9vcGVuanBlZy9vcGVuanBlZy5tawo+IEBAIC00LDcgKzQsNyBA
+QAo+ICAjCj4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gIAo+IC1PUEVOSlBFR19WRVJTSU9O
+ID0gMi40LjAKPiArT1BFTkpQRUdfVkVSU0lPTiA9IDIuNS4wCj4gIE9QRU5KUEVHX1NJVEUgPSAk
+KGNhbGwgZ2l0aHViLHVjbG91dmFpbixvcGVuanBlZyx2JChPUEVOSlBFR19WRVJTSU9OKSkKPiAg
+T1BFTkpQRUdfTElDRU5TRSA9IEJTRC0yLUNsYXVzZQo+ICBPUEVOSlBFR19MSUNFTlNFX0ZJTEVT
+ID0gTElDRU5TRQo+IC0tIAo+IDIuMzUuMQo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cj4gCgpDaGVlcnMsCuKAlEFkcmnDoW4K
+
+--DWF4BLJ1YE3ODmUF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYoXzdAAKCRCRxVnb5MkS
+O+NVAJ9AvTSnGfbYfUdBueawEnHb4vEg4QCfWu0RFQosmO4h5yIz3HaxR162Mdo=
+=S8FN
+-----END PGP SIGNATURE-----
+
+--DWF4BLJ1YE3ODmUF--
+
+--===============4913033455556130138==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4913033455556130138==--
