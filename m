@@ -1,42 +1,42 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB7DC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 20 May 2022 05:24:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F488C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 20 May 2022 07:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D8D08409BC;
-	Fri, 20 May 2022 05:24:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D98E260EE4;
+	Fri, 20 May 2022 07:22:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hboKG1kIQ0PH; Fri, 20 May 2022 05:24:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KelV9SSGYDP0; Fri, 20 May 2022 07:22:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA190402E8;
-	Fri, 20 May 2022 05:24:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 714DE1BF860
- for <buildroot@lists.busybox.net>; Fri, 20 May 2022 05:24:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E2A960E87;
+	Fri, 20 May 2022 07:22:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FA971BF2BC
+ for <buildroot@lists.busybox.net>; Fri, 20 May 2022 07:22:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D6A7402E8
- for <buildroot@lists.busybox.net>; Fri, 20 May 2022 05:24:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F34C844C4
+ for <buildroot@lists.busybox.net>; Fri, 20 May 2022 07:22:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6Gf0fVjiefXZ for <buildroot@lists.busybox.net>;
- Fri, 20 May 2022 05:24:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OYKN-KgJq9-v for <buildroot@lists.busybox.net>;
+ Fri, 20 May 2022 07:22:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A2E674002B
- for <buildroot@uclibc.org>; Fri, 20 May 2022 05:24:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 865CA844C3
+ for <buildroot@uclibc.org>; Fri, 20 May 2022 07:22:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 15D5581839; Fri, 20 May 2022 05:13:43 +0000 (UTC)
+ id C1B0C83C13; Fri, 20 May 2022 07:11:31 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 20 May 2022 05:24:51 +0000
+Date: Fri, 20 May 2022 07:22:41 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
@@ -50,15 +50,15 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-14816-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-14816-163-uqyTuAm5A2@https.bugs.busybox.net/>
+In-Reply-To: <bug-14816-163@https.bugs.busybox.net/>
+References: <bug-14816-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14816] New: Build fails on latest master with a
- systemd build failure, implicit func declaration gettid() error
+Subject: [Buildroot] [Bug 14816] Build fails on latest master with a systemd
+ build failure, implicit func declaration gettid() error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,94 +70,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNDgxNgoKICAgICAgICAg
-ICAgQnVnIElEOiAxNDgxNgogICAgICAgICAgIFN1bW1hcnk6IEJ1aWxkIGZhaWxzIG9uIGxhdGVz
-dCBtYXN0ZXIgd2l0aCBhIHN5c3RlbWQgYnVpbGQKICAgICAgICAgICAgICAgICAgICBmYWlsdXJl
-LCBpbXBsaWNpdCBmdW5jIGRlY2xhcmF0aW9uIGdldHRpZCgpIGVycm9yCiAgICAgICAgICAgUHJv
-ZHVjdDogYnVpbGRyb290CiAgICAgICAgICAgVmVyc2lvbjogdW5zcGVjaWZpZWQKICAgICAgICAg
-IEhhcmR3YXJlOiBBbGwKICAgICAgICAgICAgICAgIE9TOiBMaW51eAogICAgICAgICAgICBTdGF0
-dXM6IE5FVwogICAgICAgICAgU2V2ZXJpdHk6IGJsb2NrZXIKICAgICAgICAgIFByaW9yaXR5OiBQ
-NQogICAgICAgICBDb21wb25lbnQ6IE90aGVyCiAgICAgICAgICBBc3NpZ25lZTogdW5hc3NpZ25l
-ZEBidWlsZHJvb3QudWNsaWJjLm9yZwogICAgICAgICAgUmVwb3J0ZXI6IGFtb2wuZW0zM0BnbWFp
-bC5jb20KICAgICAgICAgICAgICAgIENDOiBidWlsZHJvb3RAdWNsaWJjLm9yZwogIFRhcmdldCBN
-aWxlc3RvbmU6IC0tLQoKSSBidWlsZGluZyBhIHJvb3QgZmlsZXN5c3RlbSBmb3IgUmFzcGJlcnJ5
-IFBpIDIgb24gbXkgVWJ1bnR1IDIwLjA0IG1hY2hpbmUgYW5kCm15IGxvY2FsIExpbmFybyBwcmVj
-b21waWxlZCBjcm9zcy1jb21waWxhdGlvbiB0b29sY2hhaW4uIE5vdCBhdHRlbXB0aW5nIHRvCmJ1
-aWxkIHRoZSBrZXJuZWwgb3IgYm9vdGxvYWRlciBzaW5jZSBJJ3ZlIGNvbXBpbGVkIHRoYXQgc2Vw
-YXJhdGVseSBmcm9tIHNvdXJjZS4KCkZvbGxvd2luZyBpcyB0aGUgY29uc29sZSBlcnJvciBsb2cu
-IEkgaGF2ZSBjb25maWd1cmVkIGxvdCBvZiBwYWNrYWdlcyBhbmQgbGlicwpmb3IgdGhpcyBidWls
-ZCBzbyBhdHRhY2hpbmcgYSAuY29uZmlnIGZpbGUgaW5zdGVhZCBvZiBsaXN0aW5nIHRoZW0gb3V0
-IGhlcmUuCgo+Pj4gc3lzdGVtZCAyNTAuNCBCdWlsZGluZwpQQVRIPSIvaG9tZS9hbW9sL1Byb2pl
-Y3RzL0VtYmVkZGVkTGludXhUb29scy9idWlsZHJvb3Qvb3V0cHV0L2hvc3QvYmluOi9ob21lL2Ft
-b2wvUHJvamVjdHMvRW1iZWRkZWRMaW51eFRvb2xzL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9zYmlu
-Oi9ob21lL2Ftb2wvYW5hY29uZGEzL2NvbmRhYmluOi9ob21lL2Ftb2wvLmxvY2FsL2JpbjovdXNy
-L2xvY2FsL3NiaW46L3Vzci9sb2NhbC9iaW46L3Vzci9zYmluOi91c3IvYmluOi9zYmluOi9iaW46
-L3Vzci9nYW1lczovdXNyL2xvY2FsL2dhbWVzOi9zbmFwL2JpbjovaG9tZS9hbW9sL1Byb2plY3Rz
-L0JCQi9nY2MtbGluYXJvLTcuNS4wLTIwMTkuMTIteDg2XzY0X2FybS1saW51eC1nbnVlYWJpaGYv
-YmluOi91c3IvbG9jYWwvYmluL2dtIgpMQ19BTEw9Qy5VVEYtOCBQWVRIT05OT1VTRVJTSVRFPXkK
-L2hvbWUvYW1vbC9Qcm9qZWN0cy9FbWJlZGRlZExpbnV4VG9vbHMvYnVpbGRyb290L291dHB1dC9o
-b3N0L2Jpbi9uaW5qYSAgIC1DCi9ob21lL2Ftb2wvUHJvamVjdHMvRW1iZWRkZWRMaW51eFRvb2xz
-L2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvc3lzdGVtZC0yNTAuNC8vYnVpbGQKbmluamE6IEVudGVy
-aW5nIGRpcmVjdG9yeQpgL2hvbWUvYW1vbC9Qcm9qZWN0cy9FbWJlZGRlZExpbnV4VG9vbHMvYnVp
-bGRyb290L291dHB1dC9idWlsZC9zeXN0ZW1kLTI1MC40Ly9idWlsZCcKWzMvNzQ4XSBDb21waWxp
-bmcgQyBvYmplY3QKc3JjL2xpYnN5c3RlbWQvbGlic3lzdGVtZF9zdGF0aWMuYS5wL3NkLWpvdXJu
-YWxfam91cm5hbC1zZW5kLmMubwpGQUlMRUQ6IHNyYy9saWJzeXN0ZW1kL2xpYnN5c3RlbWRfc3Rh
-dGljLmEucC9zZC1qb3VybmFsX2pvdXJuYWwtc2VuZC5jLm8gCi9ob21lL2Ftb2wvUHJvamVjdHMv
-RW1iZWRkZWRMaW51eFRvb2xzL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9iaW4vYXJtLWxpbnV4LWdu
-dWVhYmloZi1nY2MKLUlzcmMvbGlic3lzdGVtZC9saWJzeXN0ZW1kX3N0YXRpYy5hLnAgLUlzcmMv
-bGlic3lzdGVtZCAtSS4uL3NyYy9saWJzeXN0ZW1kCi1Jc3JjL2Jhc2ljIC1JLi4vc3JjL2Jhc2lj
-IC1Jc3JjL2Z1bmRhbWVudGFsIC1JLi4vc3JjL2Z1bmRhbWVudGFsIC1Jc3JjL3N5c3RlbWQKLUku
-Li9zcmMvc3lzdGVtZCAtSS4gLUkuLiAtSS4uL3NyYy9saWJzeXN0ZW1kL3NkLWJ1cwotSS4uL3Ny
-Yy9saWJzeXN0ZW1kL3NkLWRldmljZSAtSS4uL3NyYy9saWJzeXN0ZW1kL3NkLWV2ZW50Ci1JLi4v
-c3JjL2xpYnN5c3RlbWQvc2QtaHdkYiAtSS4uL3NyYy9saWJzeXN0ZW1kL3NkLWlkMTI4Ci1JLi4v
-c3JjL2xpYnN5c3RlbWQvc2Qtam91cm5hbCAtSS4uL3NyYy9saWJzeXN0ZW1kL3NkLW5ldGxpbmsK
-LUkuLi9zcmMvbGlic3lzdGVtZC9zZC1uZXR3b3JrIC1JLi4vc3JjL2xpYnN5c3RlbWQvc2QtcmVz
-b2x2ZQotZmRpYWdub3N0aWNzLWNvbG9yPWFsd2F5cyAtV2FsbCAtV2ludmFsaWQtcGNoIC1XZXh0
-cmEgLXN0ZD1nbnU5OSAtTzMKLVduby1mb3JtYXQtc2lnbmVkbmVzcyAtV25vLW1pc3NpbmctZmll
-bGQtaW5pdGlhbGl6ZXJzIC1Xbm8tdW51c2VkLXBhcmFtZXRlcgotV2RhdGUtdGltZSAtV2VuZGlm
-LWxhYmVscyAtV2Vycm9yPWZvcm1hdD0yCi1XZXJyb3I9aW1wbGljaXQtZnVuY3Rpb24tZGVjbGFy
-YXRpb24gLVdlcnJvcj1pbmNvbXBhdGlibGUtcG9pbnRlci10eXBlcwotV2Vycm9yPWludC1jb252
-ZXJzaW9uIC1XZXJyb3I9b3ZlcmZsb3cgLVdlcnJvcj1vdmVycmlkZS1pbml0Ci1XZXJyb3I9cmV0
-dXJuLXR5cGUgLVdlcnJvcj1zaGlmdC1jb3VudC1vdmVyZmxvdyAtV2Vycm9yPXNoaWZ0LW92ZXJm
-bG93PTIKLVdlcnJvcj11bmRlZiAtV2Zsb2F0LWVxdWFsIC1XaW1wbGljaXQtZmFsbHRocm91Z2g9
-NSAtV2luaXQtc2VsZiAtV2xvZ2ljYWwtb3AKLVdtaXNzaW5nLWluY2x1ZGUtZGlycyAtV21pc3Np
-bmctbm9yZXR1cm4gLVduZXN0ZWQtZXh0ZXJucwotV29sZC1zdHlsZS1kZWZpbml0aW9uIC1XcG9p
-bnRlci1hcml0aCAtV3JlZHVuZGFudC1kZWNscyAtV3NoYWRvdwotV3N0cmljdC1hbGlhc2luZz0y
-IC1Xc3RyaWN0LXByb3RvdHlwZXMgLVdzdWdnZXN0LWF0dHJpYnV0ZT1ub3JldHVybgotV3VudXNl
-ZC1mdW5jdGlvbiAtV3dyaXRlLXN0cmluZ3MgLVduby1tYXliZS11bmluaXRpYWxpemVkIC1Xbm8t
-dW51c2VkLXJlc3VsdAotV2Vycm9yPW1pc3NpbmctZGVjbGFyYXRpb25zIC1XZXJyb3I9bWlzc2lu
-Zy1wcm90b3R5cGVzCi1mZGlhZ25vc3RpY3Mtc2hvdy1vcHRpb24gLWZuby1jb21tb24gLWZuby1z
-dHJpY3QtYWxpYXNpbmcgLWZzdGFjay1wcm90ZWN0b3IKLWZzdGFjay1wcm90ZWN0b3Itc3Ryb25n
-IC1mdmlzaWJpbGl0eT1oaWRkZW4gLS1wYXJhbT1zc3AtYnVmZmVyLXNpemU9NAotZmZ1bmN0aW9u
-LXNlY3Rpb25zIC1mZGF0YS1zZWN0aW9ucyAtV2Vycm9yPXNoYWRvdyAtaW5jbHVkZSBjb25maWcu
-aAotRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0X1NPVVJDRSAtRF9GSUxFX09GRlNF
-VF9CSVRTPTY0IC1PcyAtZzAKLURfRk9SVElGWV9TT1VSQ0U9MSAtZlBJQyAtcHRocmVhZCAtZnZp
-c2liaWxpdHk9ZGVmYXVsdCAtTUQgLU1RCnNyYy9saWJzeXN0ZW1kL2xpYnN5c3RlbWRfc3RhdGlj
-LmEucC9zZC1qb3VybmFsX2pvdXJuYWwtc2VuZC5jLm8gLU1GCnNyYy9saWJzeXN0ZW1kL2xpYnN5
-c3RlbWRfc3RhdGljLmEucC9zZC1qb3VybmFsX2pvdXJuYWwtc2VuZC5jLm8uZCAtbwpzcmMvbGli
-c3lzdGVtZC9saWJzeXN0ZW1kX3N0YXRpYy5hLnAvc2Qtam91cm5hbF9qb3VybmFsLXNlbmQuYy5v
-IC1jCi4uL3NyYy9saWJzeXN0ZW1kL3NkLWpvdXJuYWwvam91cm5hbC1zZW5kLmMKLi4vc3JjL2xp
-YnN5c3RlbWQvc2Qtam91cm5hbC9qb3VybmFsLXNlbmQuYzogSW4gZnVuY3Rpb24g4oCYY2xvc2Vf
-am91cm5hbF9mZOKAmToKLi4vc3JjL2xpYnN5c3RlbWQvc2Qtam91cm5hbC9qb3VybmFsLXNlbmQu
-Yzo3NjoyNTogZXJyb3I6IGltcGxpY2l0IGRlY2xhcmF0aW9uCm9mIGZ1bmN0aW9uIOKAmGdldHRp
-ZOKAmTsgZGlkIHlvdSBtZWFuIOKAmGdldGdpZOKAmT8KWy1XZXJyb3I9aW1wbGljaXQtZnVuY3Rp
-b24tZGVjbGFyYXRpb25dCiAgICAgICAgIGlmIChnZXRwaWQoKSAhPSBnZXR0aWQoKSkKICAgICAg
-ICAgICAgICAgICAgICAgICAgIF5+fn5+fgogICAgICAgICAgICAgICAgICAgICAgICAgZ2V0Z2lk
-Ci4uL3NyYy9saWJzeXN0ZW1kL3NkLWpvdXJuYWwvam91cm5hbC1zZW5kLmM6NzY6MjU6IHdhcm5p
-bmc6IG5lc3RlZCBleHRlcm4KZGVjbGFyYXRpb24gb2Yg4oCYZ2V0dGlk4oCZIFstV25lc3RlZC1l
-eHRlcm5zXQpjYzE6IHNvbWUgd2FybmluZ3MgYmVpbmcgdHJlYXRlZCBhcyBlcnJvcnMKWzEwLzc0
-M10gQ29tcGlsaW5nIEMgb2JqZWN0CnNyYy9saWJzeXN0ZW1kL2xpYnN5c3RlbWRfc3RhdGljLmEu
-cC9zZC1ldmVudF9zZC1ldmVudC5jLm8KbmluamE6IGJ1aWxkIHN0b3BwZWQ6IHN1YmNvbW1hbmQg
-ZmFpbGVkLgptYWtlWzFdOiAqKiogW3BhY2thZ2UvcGtnLWdlbmVyaWMubWs6MjkzOgovaG9tZS9h
-bW9sL1Byb2plY3RzL0VtYmVkZGVkTGludXhUb29scy9idWlsZHJvb3Qvb3V0cHV0L2J1aWxkL3N5
-c3RlbWQtMjUwLjQvLnN0YW1wX2J1aWx0XQpFcnJvciAxCm1ha2U6ICoqKiBbTWFrZWZpbGU6ODQ6
-IF9hbGxdIEVycm9yIDIKCi0tIApZb3UgYXJlIHJlY2VpdmluZyB0aGlzIG1haWwgYmVjYXVzZToK
-WW91IGFyZSBvbiB0aGUgQ0MgbGlzdCBmb3IgdGhlIGJ1Zy4KX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+https://bugs.busybox.net/show_bug.cgi?id=14816
+
+--- Comment #1 from Amol Dhamale <amol.em33@gmail.com> ---
+Created attachment 9311
+  --> https://bugs.busybox.net/attachment.cgi?id=9311&action=edit
+The .config file after making custom configurations using menuconfig to
+raspberrypi2_defconfig
+
+https://github.com/amoldhamale1105/EmbeddedLinux/blob/master/boards/raspberrypi2/.config
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
