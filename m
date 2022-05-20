@@ -1,70 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49542C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 20 May 2022 05:23:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C4D3C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 20 May 2022 05:29:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E416409BC;
-	Fri, 20 May 2022 05:23:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE4B760ED2;
+	Fri, 20 May 2022 05:29:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nIMofuk-k5-j; Fri, 20 May 2022 05:23:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kPNho3nTPd54; Fri, 20 May 2022 05:29:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF8BA402E8;
-	Fri, 20 May 2022 05:23:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3DD981BF860
- for <buildroot@lists.busybox.net>; Fri, 20 May 2022 05:23:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8C3A60E8F;
+	Fri, 20 May 2022 05:29:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 251D11BF860
+ for <buildroot@lists.busybox.net>; Fri, 20 May 2022 05:29:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 39F4A402E8
- for <buildroot@lists.busybox.net>; Fri, 20 May 2022 05:23:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1027660E8F
+ for <buildroot@lists.busybox.net>; Fri, 20 May 2022 05:29:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lFukKO52Hv1Q for <buildroot@lists.busybox.net>;
- Fri, 20 May 2022 05:23:01 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
- [IPv6:2a00:1450:4864:20::22d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 55A634002B
- for <buildroot@buildroot.org>; Fri, 20 May 2022 05:23:01 +0000 (UTC)
-Received: by mail-lj1-x22d.google.com with SMTP id o22so8451868ljp.8
- for <buildroot@buildroot.org>; Thu, 19 May 2022 22:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:from:date:message-id:subject:to;
- bh=deoJQoW4/INC50QsH/uAg3lJJoumPSr/xUha+moEicQ=;
- b=INkrgbfrJa938lRx1ANu7An5hmwDhoyZyIEgiyaLZiOXQmS+9y21dlwSqkLXM7KdZG
- HMx5VFjIuAeHg44VOeYyGDasnEUjHPGDBEYCdYvndMCp7E+R3DPJk0aVw5htIEwqxDmy
- mbTyF9Cl1Q3JFQ8hZNd5ZjS4tbk0Ytk77h7I3dNWiGkzIonCr2QvOgRlP42SRh9Ey0iK
- wjq0N7s1WxPfCsuW3CzbhFlkG2Ym0YR+0//wsnV1wDPUUIyusFa+VXzAM+E/45sCs+e8
- mzrmyTB+QfVuQ0vnxPDulHUy6KrTkByyrjk6CjFlupGYzz/tkr+EMLAXXdgoPfhoL1vk
- 4vJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
- bh=deoJQoW4/INC50QsH/uAg3lJJoumPSr/xUha+moEicQ=;
- b=eoRP1F7LxV0zN2LLLcox/0mopBaLLyS3QwhC4dYnRFMrgQrFYGkMuZsJtDYHdzaSEt
- Me7O9mrSSGJF7ub22OEShyuxQMMZbXzK4HXZqHSfRzuFMv0Fk0aL+aFjzr3wXAsEUr8I
- /BBBNgfBYjEg8WcrFOnNemsFGF8SG8kawh0WiLHYCCaKkOeZzOlajvfFT32KgYvZeFUK
- rZVjIEhWu6SxmwhV2TYjza60VjUiG+Jz/GV0teVHRyvjesWX+40L9Y7HbpqJhIs3+pab
- K0D0byQdvWSe99CH2tj09QlEJm8PVmrUJtBT0353MPjpactQ0xuLKsdduwO73d7+uMct
- +hpA==
-X-Gm-Message-State: AOAM533AuErNwakXdzP27SGb2yQ37V+gxixRdEowcM83SzFY5gLh9t/R
- 2LipfNflD8nGxwjA0aRGzZEw+PH5K4O1SFXUmXYPMcL6DEg=
-X-Google-Smtp-Source: ABdhPJwsBSVAzWMwIivpAMbaQI/f4h5XJ3QHttD/qIsR3xgeMkhit3pYP0DQX16LhjiTC6KvNtA4TXweag3c12nW3vE=
-X-Received: by 2002:a05:651c:1617:b0:247:fd84:2195 with SMTP id
- f23-20020a05651c161700b00247fd842195mr4652393ljq.356.1653024178793; Thu, 19
- May 2022 22:22:58 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fFS2yJa7AmIe for <buildroot@lists.busybox.net>;
+ Fri, 20 May 2022 05:29:16 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CB1AD60A87
+ for <buildroot@buildroot.org>; Fri, 20 May 2022 05:29:15 +0000 (UTC)
+Received: from tarshish (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 013184403AA;
+ Fri, 20 May 2022 08:28:03 +0300 (IDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+ s=default; t=1653024484;
+ bh=yxbrJPfP0OHgWj4b8VW2XpqSilf7XUlxl/WP6MyCfpw=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=lu/zd0+IHjutHr+Wj8TAhMIcbyxV3JsnY5aG8r7zAK1RYso0WdRmdpZIRbiMmUfs7
+ KZ3QDMFZOYGPPnX1x8PXy6Mfc5jSS1liweELGvZh1bGisOygFL6a5o9gyugeV06An8
+ eepkjisi1N1iEiWtHBE7ijOrqVJdi666U/qvFBSKn66HSE6RRvLHv9uraM/3I/ti62
+ sJQJ1lvXOQLt1UNtdpmMIdXvcen9YhThly6VYb0tYnZoTZ9g4iyl1bNGcWMVcZTmE8
+ 1jMds8R88Sxh3x3MGAPcB+LUqas3nZydBTJuQIRH0b84HnN7+EFVvhxkTrdm50lX7N
+ B0nFMtuHgRaVA==
+References: <CAJiigQmUmhkv+AMuz2eF1kbi=_-VGEAmWTN40aUbvbTqA9+5dQ@mail.gmail.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+To: Ugroon} Hackerone <h1ugroon@gmail.com>
+Date: Fri, 20 May 2022 08:24:55 +0300
+In-reply-to: <CAJiigQmUmhkv+AMuz2eF1kbi=_-VGEAmWTN40aUbvbTqA9+5dQ@mail.gmail.com>
+Message-ID: <87czg8n55k.fsf@tarshish>
 MIME-Version: 1.0
-From: "Ugroon} Hackerone" <h1ugroon@gmail.com>
-Date: Fri, 20 May 2022 08:22:47 +0300
-Message-ID: <CAJiigQmUmhkv+AMuz2eF1kbi=_-VGEAmWTN40aUbvbTqA9+5dQ@mail.gmail.com>
-To: buildroot@buildroot.org
-Subject: [Buildroot] How to run an executable file
+Subject: Re: [Buildroot] How to run an executable file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,45 +65,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5521052063130392533=="
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5521052063130392533==
-Content-Type: multipart/alternative; boundary="000000000000fb70f705df6aae3a"
+Hi Ugroon,
 
---000000000000fb70f705df6aae3a
-Content-Type: text/plain; charset="UTF-8"
+On Fri, May 20 2022, Ugroon} Hackerone wrote:
+> I have an executable file and when I try to run it with "chmod +x
+> file" and "./file" I'm getting command not found: ./file error. So I
+> just want to learn how to execute this file?
+>
+> Note: The output of "file file" is Elf x64
 
-Hi,
+The most common reason for "not found" error on running an executable is
+that one or more of needed shared library is missing. The command
 
-I have an executable file and when I try to run it with "chmod +x file" and
-"./file" I'm getting command not found: ./file error. So I just want to
-learn how to execute this file?
+  readelf -d file
 
-Note: The output of "file file" is Elf x64
+will list the needed libraries, as well as more information on the
+dynamic section of the ELF executable. Make sure you have all listed
+shared libraries.
 
---000000000000fb70f705df6aae3a
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+baruch
 
-<div dir=3D"ltr">Hi,<div><br></div><div>I have an executable file and when =
-I try to run it with &quot;chmod +x file&quot; and &quot;./file&quot; I&#39=
-;m getting command not found: ./file error. So I just want to learn how to =
-execute this file?=C2=A0</div><div><br></div><div>Note: The output of &quot=
-;file file&quot; is Elf x64</div></div>
-
---000000000000fb70f705df6aae3a--
-
---===============5521052063130392533==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5521052063130392533==--
