@@ -1,75 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE006C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 20 May 2022 06:25:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43682C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 20 May 2022 06:33:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22CD861310;
-	Fri, 20 May 2022 06:25:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D671641109;
+	Fri, 20 May 2022 06:33:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t6oCsmGi9S51; Fri, 20 May 2022 06:25:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BmgTF81UmcZb; Fri, 20 May 2022 06:33:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F06D860EE5;
-	Fri, 20 May 2022 06:25:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A272D1BF339
- for <buildroot@lists.busybox.net>; Fri, 20 May 2022 06:25:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4EDA941106;
+	Fri, 20 May 2022 06:33:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C55A1BF339
+ for <buildroot@lists.busybox.net>; Fri, 20 May 2022 06:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9570684668
- for <buildroot@lists.busybox.net>; Fri, 20 May 2022 06:25:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 49C1241106
+ for <buildroot@lists.busybox.net>; Fri, 20 May 2022 06:32:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id URu8ppaqXsT1 for <buildroot@lists.busybox.net>;
- Fri, 20 May 2022 06:24:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZB6Q2sXCb3ga for <buildroot@lists.busybox.net>;
+ Fri, 20 May 2022 06:32:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com
- [IPv6:2607:f8b0:4864:20::830])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7B94284661
- for <buildroot@buildroot.org>; Fri, 20 May 2022 06:24:59 +0000 (UTC)
-Received: by mail-qt1-x830.google.com with SMTP id y15so2053185qtx.4
- for <buildroot@buildroot.org>; Thu, 19 May 2022 23:24:59 -0700 (PDT)
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
+ [IPv6:2607:f8b0:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B589B4002B
+ for <buildroot@buildroot.org>; Fri, 20 May 2022 06:32:57 +0000 (UTC)
+Received: by mail-ot1-x32c.google.com with SMTP id
+ z5-20020a9d62c5000000b00606041d11f1so4989844otk.2
+ for <buildroot@buildroot.org>; Thu, 19 May 2022 23:32:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=lGqd5jf1i6qPe4dj0Z+n4+kZh4yDvBG4hL61WXPa46w=;
- b=GwTSwZIlZp6JkePSiVaQ9+4fpITHIxFnfUiEA2YdKatf8BMm2rY9SAYl09b6yVpaF3
- raMZL9BciyufdtPv/WLev4Kt/gXFLc/bhPnw/GT9FL/MX4AAbPE5UJnrjp4IspRWMD04
- XBZC1L0odGpnVbddvP5FIZf/Wx8gn7vQPNdjI+G/smQIOtKXj2qzTMNiTaK/0OSQ+oT6
- 4Mbe+scgP28ek236BuP5JH/dJed09xZ5c1zTtUAprNVgXUwsiUIY+5/JTF9iZ2ERkgJB
- KYZgwZ6QNUPSb4scDUno71UotCFq1ORVBbffh4JwMUST0vAVnxhUx0J5E+NSpdtF/QMJ
- eUxg==
+ :cc:content-transfer-encoding;
+ bh=zIlC0prmR/PeCILG3UUtnM1VORJa4YOO4Dw7VByA51o=;
+ b=bRH0UodqqxPPAWEyP+iQsTkXms0bJ0iVKebqdPD8Ms+ImYuR+cqyflSYzwUwTJnizt
+ OKXY42JsWHuNUpNFIIEDT1xvRTgr+rTLPSgVXVg+GTaBPHDMN0Ys9J4VLTVUKCAKyLCP
+ s/f+NI5VH2OC4951pzD9gw4BqnTg1+zl1VjPQvhFgKBSEjrRStQt+UQzoakHnrC6xLKf
+ h0cgwbomSrPs9tFzwgLLBjaMCFFgjHAAtYZtOm6IA/UwYQI0yZ21xI8hUSXkhVlFgZlH
+ p+XdwDz54q0EhLvKRa0nk+K5ZYtqyljTqZIp6zxqtutfmfZYJBK5ZIDIooprPoXzsGoC
+ 5nHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=lGqd5jf1i6qPe4dj0Z+n4+kZh4yDvBG4hL61WXPa46w=;
- b=rnbZ63v1m97POgED1wsrgJ+XwTn5LzVyIHjGGg2XsuG+sHf+crzlzMpFD4GK7t8yhZ
- YP/s/iwansRzM7W1tEepOscbWIKUlefv+qJq24Q6ZOhbzXcJb+L0L9ofSp/MQDXsl648
- ffQ0G7vvP/e2vRdUYThl8vcki7onEo43wUMgvhI6X91o/85NyfhsSnIrW88f1iJmaUiH
- WI9lQtjIFYlBKq2TskzDoyljcOHxtovnO/jx/3/3kUX1012ByHqjKbRr1cTL63m1LbgA
- ZMkjzq9505zpeiU4szGfR0MEs1J3tn/wwqDa3HQwH3e+L3hGycFY0MRrZwk7/e87wAD+
- 9zHw==
-X-Gm-Message-State: AOAM533AuAGiXR+UWvnYoe7ZmKOQ+CzsYVWal2TKWynZ3rtLZtXySM0M
- 6BvlQrlwSf9bzr/bdNRSFOfMMPKi6qEuWFqfo6ZWeMkJNyFckA==
-X-Google-Smtp-Source: ABdhPJwaTCqXmWoUVSUQUbXWkArOFZtWxrVZcldERK8FbVRlReLku3iqYI8BlT1jowOd/3YAXmxgZX5tKrjdBAE+hnw=
-X-Received: by 2002:a05:622a:186:b0:2f3:b5e1:8f2c with SMTP id
- s6-20020a05622a018600b002f3b5e18f2cmr6653507qtw.99.1653027898204; Thu, 19 May
- 2022 23:24:58 -0700 (PDT)
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=zIlC0prmR/PeCILG3UUtnM1VORJa4YOO4Dw7VByA51o=;
+ b=3o0vluo08HfALg6mNdxJ5JX655GMtzG/Y1gSiYkBHqEv8CBwk3WMw+7+yXFjOrS0A0
+ k/VVA4irZjkjYZDEZSALDzgC7ah8vxSxoMxWIfC2vikMKnJeU3ys/VCOPRQFXjqzwgzZ
+ ZJSXMnTlwNUZZ944gFjQHeln9EvWIFJ4LMZpTTXgDABxrW+I73WirjcJmAVndiQIv5pr
+ 1e3LA2dB3HmiIeHN1Xsr/2lriVBhnGmjrGQsMGx0/JtWUQ5HR+u2ggtpkh+JRgrwwcN6
+ PmhF7VdwqSJXVb4ILKjdy1xFnNcaZYhunjszA7/CpZ21aJ60TOOzVceGpMTW11yQGjll
+ /dEA==
+X-Gm-Message-State: AOAM532wYY+PlwmaGcYhYmEvc9RVV8WuVxsst9SsFmDkSawuaylK/Ydk
+ uFZsh5fYC8hUn7jz7PRWnq7OYrGKDAReYGm2f/Q=
+X-Google-Smtp-Source: ABdhPJyXnsLM9ursaomhK1rHKFDhNZ0RUh3VnFAO8tCoFuIdaCup13E8HZyZQLl9netOdOMtCAgJvhDroVmLIJKrco0=
+X-Received: by 2002:a05:6830:442a:b0:606:5b5d:d399 with SMTP id
+ q42-20020a056830442a00b006065b5dd399mr3461577otv.151.1653028376485; Thu, 19
+ May 2022 23:32:56 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220519074438.462-1-xuminready@gmail.com>
  <CADvTj4oPXWFNWyQr7s01ZD_j4dwf=H7GMknJkS_KO55S06to+w@mail.gmail.com>
-In-Reply-To: <CADvTj4oPXWFNWyQr7s01ZD_j4dwf=H7GMknJkS_KO55S06to+w@mail.gmail.com>
-From: xu min <xuminready@gmail.com>
-Date: Thu, 19 May 2022 23:24:47 -0700
-Message-ID: <CAMpS7mTTRyKO+4055_GVzjErXc6Tg2qLjjPrJONEZd958=NuAQ@mail.gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
+ <CAMpS7mTTRyKO+4055_GVzjErXc6Tg2qLjjPrJONEZd958=NuAQ@mail.gmail.com>
+In-Reply-To: <CAMpS7mTTRyKO+4055_GVzjErXc6Tg2qLjjPrJONEZd958=NuAQ@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 20 May 2022 00:32:40 -0600
+Message-ID: <CADvTj4pYmhKNvP0xe=UYBD07dxPnz99oLUKS12iuu0=H5-COeg@mail.gmail.com>
+To: xu min <xuminready@gmail.com>
 Subject: Re: [Buildroot] [PATCH 1/1] package/shadowsocks-libev: remove this
  package. No longer maintained.
 X-BeenThere: buildroot@buildroot.org
@@ -84,911 +85,284 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============6787091129009330041=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6787091129009330041==
-Content-Type: multipart/alternative; boundary="000000000000ad252605df6b8c48"
-
---000000000000ad252605df6b8c48
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-shadowsocks-libev is bug-fix-only now. It hasn't had a new release for more
-than one and a half years. Buildroot keeps sending me emails about the
-building errors of this package. I don't know how to fix them and I don't
-have time. I doubt there are many people using this package on Buildroot.
-If someone can fix the building errors, maybe we can keep it for a while.
-
-On Thu, May 19, 2022 at 2:30 AM James Hilliard <james.hilliard1@gmail.com>
-wrote:
-
-> Seems to be still getting bug fixes from what I can tell and is useful
-> for systems
-> that don't have rust support.
->
-> On Thu, May 19, 2022 at 1:45 AM Min Xu <xuminready@gmail.com> wrote:
-> >
-> > Signed-off-by: Min Xu <xuminready@gmail.com>
-> > ---
-> >  DEVELOPERS                                    |  3 -
-> >  package/Config.in                             |  1 -
-> >  ...-pkg-config-to-find-netfilter_conntr.patch | 62 -------------
-> >  .../0002-fix-maybe-uninitialized-errors.patch | 93 -------------------
-> >  package/shadowsocks-libev/Config.in           | 34 -------
-> >  .../shadowsocks-libev/shadowsocks-libev.hash  |  7 --
-> >  .../shadowsocks-libev/shadowsocks-libev.mk    | 27 ------
-> >  7 files changed, 227 deletions(-)
-> >  delete mode 100644
-> package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfil=
-ter_conntr.patch
-> >  delete mode 100644
-> package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.patch
-> >  delete mode 100644 package/shadowsocks-libev/Config.in
-> >  delete mode 100644 package/shadowsocks-libev/shadowsocks-libev.hash
-> >  delete mode 100644 package/shadowsocks-libev/shadowsocks-libev.mk
-> >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index c33959fa..e09ae0eb 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -2075,9 +2075,6 @@ F:        configs/bananapi_m2_plus_defconfig
-> >  N:     Mikhail Boiko <mikhailboiko85@gmail.com>
-> >  F:     package/libfribidi/
-> >
-> > -N:     Min Xu <xuminready@gmail.com>
-> > -F:     package/shadowsocks-libev/
-> > -
-> >  N:     Miqu=C3=A8l Raynal <miquel.raynal@bootlin.com>
-> >  F:     package/mali-driver/
-> >  F:     package/rockchip-mali/
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 88921341..25d391d4 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -2356,7 +2356,6 @@ endif
-> >         source "package/samba4/Config.in"
-> >         source "package/sconeserver/Config.in"
-> >         source "package/ser2net/Config.in"
-> > -       source "package/shadowsocks-libev/Config.in"
-> >         source "package/shairport-sync/Config.in"
-> >         source "package/shellinabox/Config.in"
-> >         source "package/smcroute/Config.in"
-> > diff --git
-> a/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netf=
-ilter_conntr.patch
-> b/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netf=
-ilter_conntr.patch
-> > deleted file mode 100644
-> > index 781d3c0e..00000000
-> > ---
-> a/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netf=
-ilter_conntr.patch
-> > +++ /dev/null
-> > @@ -1,62 +0,0 @@
-> > -From b3c61360a93b7f08fc9c33526056211408301ea9 Mon Sep 17 00:00:00 2001
-> > -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > -Date: Mon, 23 Nov 2020 21:16:38 +0100
-> > -Subject: [PATCH] configure.ac: use pkg-config to find
-> netfilter_conntrack
-> > -
-> > -Use pkg-config to retrieve the dependencies of netfilter_conntrack
-> > -and avoid the following build failure when building statically:
-> > -
-> > -configure:13096:
-> /data/buildroot-test/instance-1/output-1/host/bin/x86_64-linux-gcc -o
-> conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D=
-64
-> -Os   -static
-> -I/data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uc=
-libc/sysroot/usr/include
-> -DPCRE_STATIC -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=3D64  -static
-> -L/data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uc=
-libc/sysroot/usr/lib
-> conftest.c -lnetfilter_conntrack -lnfnetlink -lev  -lcares -lsodium
-> -lmbedcrypto -lpcre  >&5
-> >
-> -/data/buildroot-test/instance-1/output-1/host/opt/ext-toolchain/bin/../l=
-ib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-lin=
-ux-uclibc/bin/ld:
-> /data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-ucli=
-bc/sysroot/usr/lib/libnetfilter_conntrack.a(api.o):
-> in function `nfct_fill_hdr.constprop.4':
-> > -api.c:(.text+0x3f): undefined reference to `mnl_nlmsg_put_header'
-> > -
-> > -Fixes:
-> > - -
-> http://autobuild.buildroot.org/results/6cad497a7ab941a0ee3fd7007defc81e30=
-cdcbe0
-> > -
-> > -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > -[Upstream status:
-> > -https://github.com/shadowsocks/shadowsocks-libev/pull/2773]
-> > ----
-> > - configure.ac    | 5 +++--
-> > - src/Makefile.am | 2 +-
-> > - 2 files changed, 4 insertions(+), 3 deletions(-)
-> > -
-> > -diff --git a/configure.ac b/configure.ac
-> > -index 9787bc2..207c041 100755
-> > ---- a/configure.ac
-> > -+++ b/configure.ac
-> > -@@ -252,7 +252,8 @@ AC_ARG_ENABLE(connmarktos,
-> > - if test x"$enable_connmarktos" =3D "xyes" ; then
-> > -       AC_MSG_NOTICE([Linux Netfilter Conntrack support requested by
-> --enable-connmarktos: ${enable_connmarktos}])
-> > -       if test "x$enable_connmarktos" !=3D "xno"; then
-> > --          AC_SEARCH_LIBS([nfct_query], [netfilter_conntrack],,[
-> > -+          PKG_CHECK_MODULES([NETFILTER_CONNTRACK],
-> [libnetfilter_conntrack],,
-> > -+          [AC_SEARCH_LIBS([nfct_query], [netfilter_conntrack],,[
-> > -               if test x"$enable_connmarktos" =3D "xyes"; then
-> > -                   AC_MSG_ERROR([--enable-connmarktos specified but
-> libnetfilter-conntrack library not found])
-> > -               fi
-> > -@@ -262,7 +263,7 @@ if test x"$enable_connmarktos" =3D "xyes" ; then
-> > -               if test x"$enable_connmarktos" =3D "xyes"; then
-> > -                   AC_MSG_ERROR([--enable-connmarktos specified but
-> libnetfilter-conntrack headers not found])
-> > -               fi
-> > --              with_netfilter_conntrack=3Dno])
-> > -+              with_netfilter_conntrack=3Dno])])
-> > -         # If nothing is broken; enable the libraries usage.
-> > -         if test "x$with_netfilter_conntrack" !=3D "xno"; then
-> > -               with_netfilter_conntrack=3Dyes
-> > -diff --git a/src/Makefile.am b/src/Makefile.am
-> > -index c261ed0..b81ced7 100644
-> > ---- a/src/Makefile.am
-> > -+++ b/src/Makefile.am
-> > -@@ -9,7 +9,7 @@ AM_CFLAGS +=3D -I$(top_srcdir)/libcork/include
-> > - endif
-> > - AM_CFLAGS +=3D $(LIBPCRE_CFLAGS)
-> > -
-> > --SS_COMMON_LIBS =3D $(INET_NTOP_LIB) $(LIBPCRE_LIBS)
-> > -+SS_COMMON_LIBS =3D $(INET_NTOP_LIB) $(LIBPCRE_LIBS)
-> $(NETFILTER_CONNTRACK_LIBS)
-> > - if !USE_SYSTEM_SHARED_LIB
-> > - SS_COMMON_LIBS +=3D $(top_builddir)/libbloom/libbloom.la \
-> > -                   $(top_builddir)/libipset/libipset.la \
-> > ---
-> > -2.29.2
-> > -
-> > diff --git
-> a/package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.patch
-> b/package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.patch
-> > deleted file mode 100644
-> > index 5275323e..00000000
-> > --- a/package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.pat=
-ch
-> > +++ /dev/null
-> > @@ -1,93 +0,0 @@
-> > -From 0c23224e926463b1097414979367655a27fa6d60 Mon Sep 17 00:00:00 2001
-> > -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > -Date: Thu, 7 Apr 2022 18:27:58 +0200
-> > -Subject: [PATCH] fix maybe-uninitialized errors
-> > -
-> > -Set {listen,server}_sock to -1 when needed as already done in
-> > -src/manager.c by commit ecf1fcc84594b09ed2d61e3677cd8e62bd897ccb to
-> > -avoid the following build failure:
-> > -
-> > -local.c: In function 'create_and_bind':
-> > -local.c:218:12: error: 'listen_sock' may be used uninitialized in this
-> function [-Werror=3Dmaybe-uninitialized]
-> > -  218 |     return listen_sock;
-> > -      |            ^~~~~~~~~~~
-> > -
-> > -Fixes:
-> > - -
-> http://autobuild.buildroot.org/results/27471a878ff52a972ac087d534e44fb0c5=
-0808f6
-> > -
-> > -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > -[Retrieved from:
-> > -
-> https://github.com/shadowsocks/shadowsocks-libev/commit/0c23224e926463b10=
-97414979367655a27fa6d60
-> ]
-> > ----
-> > - src/local.c    | 2 +-
-> > - src/redir.c    | 2 +-
-> > - src/server.c   | 2 +-
-> > - src/tunnel.c   | 2 +-
-> > - src/udprelay.c | 2 +-
-> > - 5 files changed, 5 insertions(+), 5 deletions(-)
-> > -
-> > -diff --git a/src/local.c b/src/local.c
-> > -index b1ab040bb..47d634ce5 100644
-> > ---- a/src/local.c
-> > -+++ b/src/local.c
-> > -@@ -168,7 +168,7 @@ create_and_bind(const char *addr, const char *port=
-)
-> > - {
-> > -     struct addrinfo hints;
-> > -     struct addrinfo *result, *rp;
-> > --    int s, listen_sock;
-> > -+    int s, listen_sock =3D -1;
-> > -
-> > -     memset(&hints, 0, sizeof(struct addrinfo));
-> > -     hints.ai_family   =3D AF_UNSPEC;   /* Return IPv4 and IPv6 choice=
-s */
-> > -diff --git a/src/redir.c b/src/redir.c
-> > -index 4a5a489f0..e60bd4870 100644
-> > ---- a/src/redir.c
-> > -+++ b/src/redir.c
-> > -@@ -147,7 +147,7 @@ create_and_bind(const char *addr, const char *port=
-)
-> > - {
-> > -     struct addrinfo hints;
-> > -     struct addrinfo *result, *rp;
-> > --    int s, listen_sock;
-> > -+    int s, listen_sock =3D -1;
-> > -
-> > -     memset(&hints, 0, sizeof(struct addrinfo));
-> > -     hints.ai_family   =3D AF_UNSPEC;   /* Return IPv4 and IPv6 choice=
-s */
-> > -diff --git a/src/server.c b/src/server.c
-> > -index e9cdc2619..073e38b22 100644
-> > ---- a/src/server.c
-> > -+++ b/src/server.c
-> > -@@ -550,7 +550,7 @@ create_and_bind(const char *host, const char *port=
-,
-> int mptcp)
-> > - {
-> > -     struct addrinfo hints;
-> > -     struct addrinfo *result, *rp, *ipv4v6bindall;
-> > --    int s, listen_sock;
-> > -+    int s, listen_sock =3D -1;
-> > -
-> > -     memset(&hints, 0, sizeof(struct addrinfo));
-> > -     hints.ai_family   =3D AF_UNSPEC;               /* Return IPv4 and
-> IPv6 choices */
-> > -diff --git a/src/tunnel.c b/src/tunnel.c
-> > -index e0886bdb9..6641fe62a 100644
-> > ---- a/src/tunnel.c
-> > -+++ b/src/tunnel.c
-> > -@@ -129,7 +129,7 @@ create_and_bind(const char *addr, const char *port=
-)
-> > - {
-> > -     struct addrinfo hints;
-> > -     struct addrinfo *result, *rp;
-> > --    int s, listen_sock;
-> > -+    int s, listen_sock =3D -1;
-> > -
-> > -     memset(&hints, 0, sizeof(struct addrinfo));
-> > -     hints.ai_family   =3D AF_UNSPEC;   /* Return IPv4 and IPv6 choice=
-s */
-> > -diff --git a/src/udprelay.c b/src/udprelay.c
-> > -index 23a042497..580ad4bd8 100644
-> > ---- a/src/udprelay.c
-> > -+++ b/src/udprelay.c
-> > -@@ -446,7 +446,7 @@ create_server_socket(const char *host, const char
-> *port)
-> > - {
-> > -     struct addrinfo hints;
-> > -     struct addrinfo *result, *rp, *ipv4v6bindall;
-> > --    int s, server_sock;
-> > -+    int s, server_sock =3D -1;
-> > -
-> > -     memset(&hints, 0, sizeof(struct addrinfo));
-> > -     hints.ai_family   =3D AF_UNSPEC;               /* Return IPv4 and
-> IPv6 choices */
-> > diff --git a/package/shadowsocks-libev/Config.in
-> b/package/shadowsocks-libev/Config.in
-> > deleted file mode 100644
-> > index fefb27bc..00000000
-> > --- a/package/shadowsocks-libev/Config.in
-> > +++ /dev/null
-> > @@ -1,34 +0,0 @@
-> > -config BR2_PACKAGE_SHADOWSOCKS_LIBEV
-> > -       bool "shadowsocks-libev"
-> > -       depends on BR2_TOOLCHAIN_HAS_SYNC_4 # for libcork
-> > -       depends on BR2_TOOLCHAIN_HAS_SYNC_8 || !BR2_ARCH_IS_64 # for
-> libcork
-> > -       depends on BR2_TOOLCHAIN_HAS_THREADS
-> > -       depends on BR2_USE_MMU # fork()
-> > -       select BR2_PACKAGE_C_ARES
-> > -       select BR2_PACKAGE_LIBEV
-> > -       select BR2_PACKAGE_LIBSODIUM
-> > -       select BR2_PACKAGE_MBEDTLS
-> > -       select BR2_PACKAGE_PCRE
-> > -       help
-> > -         Shadowsocks-libev is a lightweight secured SOCKS5 proxy for
-> > -         embedded devices and low-end boxes.
-> > -
-> > -         https://github.com/shadowsocks/shadowsocks-libev
-> > -
-> > -config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
-> > -       bool "connmarktos support in ss-server"
-> > -       depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV
-> > -       select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
-> > -       help
-> > -         Build ss-server with the connmark to TOS feature.
-> > -
-> > -         This feature requires advanced tc, iptables and conntrack
-> > -         rules to perform QoS on the server side.
-> > -
-> > -         If unsure, don't enable this option
-> > -
-> > -comment "shadowsocks-libev needs a toolchain w/ threads"
-> > -       depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> > -       depends on BR2_TOOLCHAIN_HAS_SYNC_8 || !BR2_ARCH_IS_64
-> > -       depends on BR2_USE_MMU
-> > -       depends on !BR2_TOOLCHAIN_HAS_THREADS
-> > diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash
-> b/package/shadowsocks-libev/shadowsocks-libev.hash
-> > deleted file mode 100644
-> > index 4f1d6d2f..00000000
-> > --- a/package/shadowsocks-libev/shadowsocks-libev.hash
-> > +++ /dev/null
-> > @@ -1,7 +0,0 @@
-> > -# Locally computed
-> > -sha256
-> cfc8eded35360f4b67e18dc447b0c00cddb29cc57a3cec48b135e5fb87433488
-> shadowsocks-libev-3.3.5.tar.gz
-> > -
-> > -# License files, locally calculated
-> > -sha256
-> 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
-> > -sha256
-> c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4bb8de3fb
-> libbloom/LICENSE
-> > -sha256
-> 4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a1911d25ae93
-> libcork/COPYING
-> > diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk
-> b/package/shadowsocks-libev/shadowsocks-libev.mk
-> > deleted file mode 100644
-> > index c76983ce..00000000
-> > --- a/package/shadowsocks-libev/shadowsocks-libev.mk
-> > +++ /dev/null
-> > @@ -1,27 +0,0 @@
-> >
-> -########################################################################=
-########
-> > -#
-> > -# shadowsocks-libev
-> > -#
-> >
-> -########################################################################=
-########
-> > -
-> > -SHADOWSOCKS_LIBEV_VERSION =3D 3.3.5
-> > -SHADOWSOCKS_LIBEV_SITE =3D
-> https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHA=
-DOWSOCKS_LIBEV_VERSION)
-> > -SHADOWSOCKS_LIBEV_LICENSE =3D GPL-3.0+, BSD-2-Clause (libbloom),
-> BSD-3-Clause (libcork, libipset)
-> > -SHADOWSOCKS_LIBEV_LICENSE_FILES =3D COPYING libbloom/LICENSE
-> libcork/COPYING
-> > -SHADOWSOCKS_LIBEV_CPE_ID_VENDOR =3D shadowsocks
-> > -SHADOWSOCKS_LIBEV_DEPENDENCIES =3D host-pkgconf c-ares libev libsodium
-> mbedtls pcre
-> > -SHADOWSOCKS_LIBEV_INSTALL_STAGING =3D YES
-> > -# We're patching configure.ac
-> > -SHADOWSOCKS_LIBEV_AUTORECONF =3D YES
-> > -SHADOWSOCKS_LIBEV_CONF_OPTS =3D \
-> > -       --with-pcre=3D$(STAGING_DIR)/usr \
-> > -       --disable-ssp
-> > -
-> > -ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
-> > -SHADOWSOCKS_LIBEV_DEPENDENCIES +=3D libnetfilter_conntrack
-> > -SHADOWSOCKS_LIBEV_CONF_OPTS +=3D --enable-connmarktos
-> > -else
-> > -SHADOWSOCKS_LIBEV_CONF_OPTS +=3D --disable-connmarktos
-> > -endif
-> > -
-> > -$(eval $(autotools-package))
-> > --
-> > 2.30.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
-
---=20
-
-*Best Regards*
-
-*XuMin's Ready=EF=BC=81*
-
---000000000000ad252605df6b8c48
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">shadowsocks-libev is bug-fix-only now. It hasn&#39;t had=
-=C2=A0a new release for more than one and a half years. Buildroot keeps sen=
-ding me emails about the building errors of this package. I don&#39;t know =
-how to fix them and I don&#39;t have time. I doubt there are many people us=
-ing this package on Buildroot. If someone can fix the building errors, mayb=
-e we can keep it for a while.<br></div><br><div class=3D"gmail_quote"><div =
-dir=3D"ltr" class=3D"gmail_attr">On Thu, May 19, 2022 at 2:30 AM James Hill=
-iard &lt;<a href=3D"mailto:james.hilliard1@gmail.com" target=3D"_blank">jam=
-es.hilliard1@gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_q=
-uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
-04);padding-left:1ex">Seems to be still getting bug fixes from what I can t=
-ell and is useful<br>
-for systems<br>
-that don&#39;t have rust support.<br>
-<br>
-On Thu, May 19, 2022 at 1:45 AM Min Xu &lt;<a href=3D"mailto:xuminready@gma=
-il.com" target=3D"_blank">xuminready@gmail.com</a>&gt; wrote:<br>
-&gt;<br>
-&gt; Signed-off-by: Min Xu &lt;<a href=3D"mailto:xuminready@gmail.com" targ=
-et=3D"_blank">xuminready@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=
-=C2=A0 3 -<br>
-&gt;=C2=A0 package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 -<br>
-&gt;=C2=A0 ...-pkg-config-to-find-netfilter_conntr.patch | 62 -------------=
-<br>
-&gt;=C2=A0 .../0002-fix-maybe-uninitialized-errors.patch | 93 -------------=
-------<br>
-&gt;=C2=A0 package/shadowsocks-libev/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0| 34 -------<br>
-&gt;=C2=A0 .../shadowsocks-libev/shadowsocks-libev.hash=C2=A0 |=C2=A0 7 --<=
-br>
-&gt;=C2=A0 .../shadowsocks-libev/<a href=3D"http://shadowsocks-libev.mk" re=
-l=3D"noreferrer" target=3D"_blank">shadowsocks-libev.mk</a>=C2=A0 =C2=A0 | =
-27 ------<br>
-&gt;=C2=A0 7 files changed, 227 deletions(-)<br>
-&gt;=C2=A0 delete mode 100644 package/shadowsocks-libev/0001-configure.ac-u=
-se-pkg-config-to-find-netfilter_conntr.patch<br>
-&gt;=C2=A0 delete mode 100644 package/shadowsocks-libev/0002-fix-maybe-unin=
-itialized-errors.patch<br>
-&gt;=C2=A0 delete mode 100644 package/shadowsocks-libev/Config.in<br>
-&gt;=C2=A0 delete mode 100644 package/shadowsocks-libev/shadowsocks-libev.h=
-ash<br>
-&gt;=C2=A0 delete mode 100644 package/shadowsocks-libev/<a href=3D"http://s=
-hadowsocks-libev.mk" rel=3D"noreferrer" target=3D"_blank">shadowsocks-libev=
-.mk</a><br>
-&gt;<br>
-&gt; diff --git a/DEVELOPERS b/DEVELOPERS<br>
-&gt; index c33959fa..e09ae0eb 100644<br>
-&gt; --- a/DEVELOPERS<br>
-&gt; +++ b/DEVELOPERS<br>
-&gt; @@ -2075,9 +2075,6 @@ F:=C2=A0 =C2=A0 =C2=A0 =C2=A0 configs/bananapi_m=
-2_plus_defconfig<br>
-&gt;=C2=A0 N:=C2=A0 =C2=A0 =C2=A0Mikhail Boiko &lt;<a href=3D"mailto:mikhai=
-lboiko85@gmail.com" target=3D"_blank">mikhailboiko85@gmail.com</a>&gt;<br>
-&gt;=C2=A0 F:=C2=A0 =C2=A0 =C2=A0package/libfribidi/<br>
-&gt;<br>
-&gt; -N:=C2=A0 =C2=A0 =C2=A0Min Xu &lt;<a href=3D"mailto:xuminready@gmail.c=
-om" target=3D"_blank">xuminready@gmail.com</a>&gt;<br>
-&gt; -F:=C2=A0 =C2=A0 =C2=A0package/shadowsocks-libev/<br>
-&gt; -<br>
-&gt;=C2=A0 N:=C2=A0 =C2=A0 =C2=A0Miqu=C3=A8l Raynal &lt;<a href=3D"mailto:m=
-iquel.raynal@bootlin.com" target=3D"_blank">miquel.raynal@bootlin.com</a>&g=
-t;<br>
-&gt;=C2=A0 F:=C2=A0 =C2=A0 =C2=A0package/mali-driver/<br>
-&gt;=C2=A0 F:=C2=A0 =C2=A0 =C2=A0package/rockchip-mali/<br>
-&gt; diff --git a/package/Config.in b/package/Config.in<br>
-&gt; index 88921341..25d391d4 100644<br>
-&gt; --- a/package/Config.in<br>
-&gt; +++ b/package/Config.in<br>
-&gt; @@ -2356,7 +2356,6 @@ endif<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/samba4/Config.in=
-&quot;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/sconeserver/Conf=
-ig.in&quot;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/ser2net/Config.i=
-n&quot;<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/shadowsocks-libev/Con=
-fig.in&quot;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/shairport-sync/C=
-onfig.in&quot;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/shellinabox/Conf=
-ig.in&quot;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/smcroute/Config.=
-in&quot;<br>
-&gt; diff --git a/package/shadowsocks-libev/0001-configure.ac-use-pkg-confi=
-g-to-find-netfilter_conntr.patch b/package/shadowsocks-libev/0001-configure=
-.ac-use-pkg-config-to-find-netfilter_conntr.patch<br>
-&gt; deleted file mode 100644<br>
-&gt; index 781d3c0e..00000000<br>
-&gt; --- a/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-fi=
-nd-netfilter_conntr.patch<br>
-&gt; +++ /dev/null<br>
-&gt; @@ -1,62 +0,0 @@<br>
-&gt; -From b3c61360a93b7f08fc9c33526056211408301ea9 Mon Sep 17 00:00:00 200=
-1<br>
-&gt; -From: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice@gmail.c=
-om" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
-&gt; -Date: Mon, 23 Nov 2020 21:16:38 +0100<br>
-&gt; -Subject: [PATCH] <a href=3D"http://configure.ac" rel=3D"noreferrer" t=
-arget=3D"_blank">configure.ac</a>: use pkg-config to find netfilter_conntra=
-ck<br>
-&gt; -<br>
-&gt; -Use pkg-config to retrieve the dependencies of netfilter_conntrack<br=
->
-&gt; -and avoid the following build failure when building statically:<br>
-&gt; -<br>
-&gt; -configure:13096: /data/buildroot-test/instance-1/output-1/host/bin/x8=
-6_64-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FIL=
-E_OFFSET_BITS=3D64=C2=A0 -Os=C2=A0 =C2=A0-static -I/data/buildroot-test/ins=
-tance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include -DP=
-CRE_STATIC -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSE=
-T_BITS=3D64=C2=A0 -static -L/data/buildroot-test/instance-1/output-1/host/x=
-86_64-buildroot-linux-uclibc/sysroot/usr/lib conftest.c -lnetfilter_conntra=
-ck -lnfnetlink -lev=C2=A0 -lcares -lsodium -lmbedcrypto -lpcre=C2=A0 &gt;&a=
-mp;5<br>
-&gt; -/data/buildroot-test/instance-1/output-1/host/opt/ext-toolchain/bin/.=
-./lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-=
-linux-uclibc/bin/ld: /data/buildroot-test/instance-1/output-1/host/x86_64-b=
-uildroot-linux-uclibc/sysroot/usr/lib/libnetfilter_conntrack.a(api.o): in f=
-unction `nfct_fill_hdr.constprop.4&#39;:<br>
-&gt; -api.c:(.text+0x3f): undefined reference to `mnl_nlmsg_put_header&#39;=
-<br>
-&gt; -<br>
-&gt; -Fixes:<br>
-&gt; - - <a href=3D"http://autobuild.buildroot.org/results/6cad497a7ab941a0=
-ee3fd7007defc81e30cdcbe0" rel=3D"noreferrer" target=3D"_blank">http://autob=
-uild.buildroot.org/results/6cad497a7ab941a0ee3fd7007defc81e30cdcbe0</a><br>
-&gt; -<br>
-&gt; -Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabric=
-e@gmail.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
-&gt; -[Upstream status:<br>
-&gt; -<a href=3D"https://github.com/shadowsocks/shadowsocks-libev/pull/2773=
-" rel=3D"noreferrer" target=3D"_blank">https://github.com/shadowsocks/shado=
-wsocks-libev/pull/2773</a>]<br>
-&gt; ----<br>
-&gt; - <a href=3D"http://configure.ac" rel=3D"noreferrer" target=3D"_blank"=
->configure.ac</a>=C2=A0 =C2=A0 | 5 +++--<br>
-&gt; - src/Makefile.am | 2 +-<br>
-&gt; - 2 files changed, 4 insertions(+), 3 deletions(-)<br>
-&gt; -<br>
-&gt; -diff --git a/<a href=3D"http://configure.ac" rel=3D"noreferrer" targe=
-t=3D"_blank">configure.ac</a> b/<a href=3D"http://configure.ac" rel=3D"nore=
-ferrer" target=3D"_blank">configure.ac</a><br>
-&gt; -index 9787bc2..207c041 100755<br>
-&gt; ---- a/<a href=3D"http://configure.ac" rel=3D"noreferrer" target=3D"_b=
-lank">configure.ac</a><br>
-&gt; -+++ b/<a href=3D"http://configure.ac" rel=3D"noreferrer" target=3D"_b=
-lank">configure.ac</a><br>
-&gt; -@@ -252,7 +252,8 @@ AC_ARG_ENABLE(connmarktos,<br>
-&gt; - if test x&quot;$enable_connmarktos&quot; =3D &quot;xyes&quot; ; then=
-<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0AC_MSG_NOTICE([Linux Netfilter Conntrack s=
-upport requested by --enable-connmarktos: ${enable_connmarktos}])<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0if test &quot;x$enable_connmarktos&quot; !=
-=3D &quot;xno&quot;; then<br>
-&gt; --=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 AC_SEARCH_LIBS([nfct_query], [net=
-filter_conntrack],,[<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 PKG_CHECK_MODULES([NETFILTER_CONN=
-TRACK], [libnetfilter_conntrack],,<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 [AC_SEARCH_LIBS([nfct_query], [ne=
-tfilter_conntrack],,[<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if test x&quot=
-;$enable_connmarktos&quot; =3D &quot;xyes&quot;; then<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
-AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack lib=
-rary not found])<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fi<br>
-&gt; -@@ -262,7 +263,7 @@ if test x&quot;$enable_connmarktos&quot; =3D &quo=
-t;xyes&quot; ; then<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if test x&quot=
-;$enable_connmarktos&quot; =3D &quot;xyes&quot;; then<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
-AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack hea=
-ders not found])<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fi<br>
-&gt; --=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 with_netfilter_conn=
-track=3Dno])<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 with_netfilter_conn=
-track=3Dno])])<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0# If nothing is broken; enable the =
-libraries usage.<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if test &quot;x$with_netfilter_conn=
-track&quot; !=3D &quot;xno&quot;; then<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0with_netfilter=
-_conntrack=3Dyes<br>
-&gt; -diff --git a/src/Makefile.am b/src/Makefile.am<br>
-&gt; -index c261ed0..b81ced7 100644<br>
-&gt; ---- a/src/Makefile.am<br>
-&gt; -+++ b/src/Makefile.am<br>
-&gt; -@@ -9,7 +9,7 @@ AM_CFLAGS +=3D -I$(top_srcdir)/libcork/include<br>
-&gt; - endif<br>
-&gt; - AM_CFLAGS +=3D $(LIBPCRE_CFLAGS)<br>
-&gt; -<br>
-&gt; --SS_COMMON_LIBS =3D $(INET_NTOP_LIB) $(LIBPCRE_LIBS)<br>
-&gt; -+SS_COMMON_LIBS =3D $(INET_NTOP_LIB) $(LIBPCRE_LIBS) $(NETFILTER_CONN=
-TRACK_LIBS)<br>
-&gt; - if !USE_SYSTEM_SHARED_LIB<br>
-&gt; - SS_COMMON_LIBS +=3D $(top_builddir)/libbloom/<a href=3D"http://libbl=
-oom.la" rel=3D"noreferrer" target=3D"_blank">libbloom.la</a> \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
-$(top_builddir)/libipset/<a href=3D"http://libipset.la" rel=3D"noreferrer" =
-target=3D"_blank">libipset.la</a> \<br>
-&gt; ---<br>
-&gt; -2.29.2<br>
-&gt; -<br>
-&gt; diff --git a/package/shadowsocks-libev/0002-fix-maybe-uninitialized-er=
-rors.patch b/package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.=
-patch<br>
-&gt; deleted file mode 100644<br>
-&gt; index 5275323e..00000000<br>
-&gt; --- a/package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.pa=
-tch<br>
-&gt; +++ /dev/null<br>
-&gt; @@ -1,93 +0,0 @@<br>
-&gt; -From 0c23224e926463b1097414979367655a27fa6d60 Mon Sep 17 00:00:00 200=
-1<br>
-&gt; -From: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice@gmail.c=
-om" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
-&gt; -Date: Thu, 7 Apr 2022 18:27:58 +0200<br>
-&gt; -Subject: [PATCH] fix maybe-uninitialized errors<br>
-&gt; -<br>
-&gt; -Set {listen,server}_sock to -1 when needed as already done in<br>
-&gt; -src/manager.c by commit ecf1fcc84594b09ed2d61e3677cd8e62bd897ccb to<b=
-r>
-&gt; -avoid the following build failure:<br>
-&gt; -<br>
-&gt; -local.c: In function &#39;create_and_bind&#39;:<br>
-&gt; -local.c:218:12: error: &#39;listen_sock&#39; may be used uninitialize=
-d in this function [-Werror=3Dmaybe-uninitialized]<br>
-&gt; -=C2=A0 218 |=C2=A0 =C2=A0 =C2=A0return listen_sock;<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ^~~~~=
-~~~~~~<br>
-&gt; -<br>
-&gt; -Fixes:<br>
-&gt; - - <a href=3D"http://autobuild.buildroot.org/results/27471a878ff52a97=
-2ac087d534e44fb0c50808f6" rel=3D"noreferrer" target=3D"_blank">http://autob=
-uild.buildroot.org/results/27471a878ff52a972ac087d534e44fb0c50808f6</a><br>
-&gt; -<br>
-&gt; -Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabric=
-e@gmail.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
-&gt; -[Retrieved from:<br>
-&gt; -<a href=3D"https://github.com/shadowsocks/shadowsocks-libev/commit/0c=
-23224e926463b1097414979367655a27fa6d60" rel=3D"noreferrer" target=3D"_blank=
-">https://github.com/shadowsocks/shadowsocks-libev/commit/0c23224e926463b10=
-97414979367655a27fa6d60</a>]<br>
-&gt; ----<br>
-&gt; - src/local.c=C2=A0 =C2=A0 | 2 +-<br>
-&gt; - src/redir.c=C2=A0 =C2=A0 | 2 +-<br>
-&gt; - src/server.c=C2=A0 =C2=A0| 2 +-<br>
-&gt; - src/tunnel.c=C2=A0 =C2=A0| 2 +-<br>
-&gt; - src/udprelay.c | 2 +-<br>
-&gt; - 5 files changed, 5 insertions(+), 5 deletions(-)<br>
-&gt; -<br>
-&gt; -diff --git a/src/local.c b/src/local.c<br>
-&gt; -index b1ab040bb..47d634ce5 100644<br>
-&gt; ---- a/src/local.c<br>
-&gt; -+++ b/src/local.c<br>
-&gt; -@@ -168,7 +168,7 @@ create_and_bind(const char *addr, const char *por=
-t)<br>
-&gt; - {<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0struct addrinfo hints;<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0struct addrinfo *result, *rp;<br>
-&gt; --=C2=A0 =C2=A0 int s, listen_sock;<br>
-&gt; -+=C2=A0 =C2=A0 int s, listen_sock =3D -1;<br>
-&gt; -<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0memset(&amp;hints, 0, sizeof(struct addrinfo));<b=
-r>
-&gt; -=C2=A0 =C2=A0 =C2=A0hints.ai_family=C2=A0 =C2=A0=3D AF_UNSPEC;=C2=A0 =
-=C2=A0/* Return IPv4 and IPv6 choices */<br>
-&gt; -diff --git a/src/redir.c b/src/redir.c<br>
-&gt; -index 4a5a489f0..e60bd4870 100644<br>
-&gt; ---- a/src/redir.c<br>
-&gt; -+++ b/src/redir.c<br>
-&gt; -@@ -147,7 +147,7 @@ create_and_bind(const char *addr, const char *por=
-t)<br>
-&gt; - {<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0struct addrinfo hints;<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0struct addrinfo *result, *rp;<br>
-&gt; --=C2=A0 =C2=A0 int s, listen_sock;<br>
-&gt; -+=C2=A0 =C2=A0 int s, listen_sock =3D -1;<br>
-&gt; -<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0memset(&amp;hints, 0, sizeof(struct addrinfo));<b=
-r>
-&gt; -=C2=A0 =C2=A0 =C2=A0hints.ai_family=C2=A0 =C2=A0=3D AF_UNSPEC;=C2=A0 =
-=C2=A0/* Return IPv4 and IPv6 choices */<br>
-&gt; -diff --git a/src/server.c b/src/server.c<br>
-&gt; -index e9cdc2619..073e38b22 100644<br>
-&gt; ---- a/src/server.c<br>
-&gt; -+++ b/src/server.c<br>
-&gt; -@@ -550,7 +550,7 @@ create_and_bind(const char *host, const char *por=
-t, int mptcp)<br>
-&gt; - {<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0struct addrinfo hints;<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0struct addrinfo *result, *rp, *ipv4v6bindall;<br>
-&gt; --=C2=A0 =C2=A0 int s, listen_sock;<br>
-&gt; -+=C2=A0 =C2=A0 int s, listen_sock =3D -1;<br>
-&gt; -<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0memset(&amp;hints, 0, sizeof(struct addrinfo));<b=
-r>
-&gt; -=C2=A0 =C2=A0 =C2=A0hints.ai_family=C2=A0 =C2=A0=3D AF_UNSPEC;=C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/* Return IPv4 and IPv6 cho=
-ices */<br>
-&gt; -diff --git a/src/tunnel.c b/src/tunnel.c<br>
-&gt; -index e0886bdb9..6641fe62a 100644<br>
-&gt; ---- a/src/tunnel.c<br>
-&gt; -+++ b/src/tunnel.c<br>
-&gt; -@@ -129,7 +129,7 @@ create_and_bind(const char *addr, const char *por=
-t)<br>
-&gt; - {<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0struct addrinfo hints;<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0struct addrinfo *result, *rp;<br>
-&gt; --=C2=A0 =C2=A0 int s, listen_sock;<br>
-&gt; -+=C2=A0 =C2=A0 int s, listen_sock =3D -1;<br>
-&gt; -<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0memset(&amp;hints, 0, sizeof(struct addrinfo));<b=
-r>
-&gt; -=C2=A0 =C2=A0 =C2=A0hints.ai_family=C2=A0 =C2=A0=3D AF_UNSPEC;=C2=A0 =
-=C2=A0/* Return IPv4 and IPv6 choices */<br>
-&gt; -diff --git a/src/udprelay.c b/src/udprelay.c<br>
-&gt; -index 23a042497..580ad4bd8 100644<br>
-&gt; ---- a/src/udprelay.c<br>
-&gt; -+++ b/src/udprelay.c<br>
-&gt; -@@ -446,7 +446,7 @@ create_server_socket(const char *host, const char=
- *port)<br>
-&gt; - {<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0struct addrinfo hints;<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0struct addrinfo *result, *rp, *ipv4v6bindall;<br>
-&gt; --=C2=A0 =C2=A0 int s, server_sock;<br>
-&gt; -+=C2=A0 =C2=A0 int s, server_sock =3D -1;<br>
-&gt; -<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0memset(&amp;hints, 0, sizeof(struct addrinfo));<b=
-r>
-&gt; -=C2=A0 =C2=A0 =C2=A0hints.ai_family=C2=A0 =C2=A0=3D AF_UNSPEC;=C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/* Return IPv4 and IPv6 cho=
-ices */<br>
-&gt; diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks=
--libev/Config.in<br>
-&gt; deleted file mode 100644<br>
-&gt; index fefb27bc..00000000<br>
-&gt; --- a/package/shadowsocks-libev/Config.in<br>
-&gt; +++ /dev/null<br>
-&gt; @@ -1,34 +0,0 @@<br>
-&gt; -config BR2_PACKAGE_SHADOWSOCKS_LIBEV<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;shadowsocks-libev&quot;<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_SYNC_4 # for =
-libcork<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_SYNC_8 || !BR=
-2_ARCH_IS_64 # for libcork<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_THREADS<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_USE_MMU # fork()<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_C_ARES<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBEV<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBSODIUM<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_MBEDTLS<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_PCRE<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Shadowsocks-libev is a lightweight =
-secured SOCKS5 proxy for<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0embedded devices and low-end boxes.=
-<br>
-&gt; -<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://github.com/shado=
-wsocks/shadowsocks-libev" rel=3D"noreferrer" target=3D"_blank">https://gith=
-ub.com/shadowsocks/shadowsocks-libev</a><br>
-&gt; -<br>
-&gt; -config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;connmarktos support in ss-serve=
-r&quot;<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV<b=
-r>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBNETFILTER_CONNTRACK<=
-br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Build ss-server with the connmark t=
-o TOS feature.<br>
-&gt; -<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0This feature requires advanced tc, =
-iptables and conntrack<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0rules to perform QoS on the server =
-side.<br>
-&gt; -<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0If unsure, don&#39;t enable this op=
-tion<br>
-&gt; -<br>
-&gt; -comment &quot;shadowsocks-libev needs a toolchain w/ threads&quot;<br=
->
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_SYNC_4<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_SYNC_8 || !BR=
-2_ARCH_IS_64<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_USE_MMU<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on !BR2_TOOLCHAIN_HAS_THREADS<br>
-&gt; diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/packag=
-e/shadowsocks-libev/shadowsocks-libev.hash<br>
-&gt; deleted file mode 100644<br>
-&gt; index 4f1d6d2f..00000000<br>
-&gt; --- a/package/shadowsocks-libev/shadowsocks-libev.hash<br>
-&gt; +++ /dev/null<br>
-&gt; @@ -1,7 +0,0 @@<br>
-&gt; -# Locally computed<br>
-&gt; -sha256=C2=A0 cfc8eded35360f4b67e18dc447b0c00cddb29cc57a3cec48b135e5fb=
-87433488=C2=A0 shadowsocks-libev-3.3.5.tar.gz<br>
-&gt; -<br>
-&gt; -# License files, locally calculated<br>
-&gt; -sha256=C2=A0 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db=
-76bace41=C2=A0 COPYING<br>
-&gt; -sha256=C2=A0 c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4=
-bb8de3fb=C2=A0 libbloom/LICENSE<br>
-&gt; -sha256=C2=A0 4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a191=
-1d25ae93=C2=A0 libcork/COPYING<br>
-&gt; diff --git a/package/shadowsocks-libev/<a href=3D"http://shadowsocks-l=
-ibev.mk" rel=3D"noreferrer" target=3D"_blank">shadowsocks-libev.mk</a> b/pa=
-ckage/shadowsocks-libev/<a href=3D"http://shadowsocks-libev.mk" rel=3D"nore=
-ferrer" target=3D"_blank">shadowsocks-libev.mk</a><br>
-&gt; deleted file mode 100644<br>
-&gt; index c76983ce..00000000<br>
-&gt; --- a/package/shadowsocks-libev/<a href=3D"http://shadowsocks-libev.mk=
-" rel=3D"noreferrer" target=3D"_blank">shadowsocks-libev.mk</a><br>
-&gt; +++ /dev/null<br>
-&gt; @@ -1,27 +0,0 @@<br>
-&gt; -#####################################################################=
-###########<br>
-&gt; -#<br>
-&gt; -# shadowsocks-libev<br>
-&gt; -#<br>
-&gt; -#####################################################################=
-###########<br>
-&gt; -<br>
-&gt; -SHADOWSOCKS_LIBEV_VERSION =3D 3.3.5<br>
-&gt; -SHADOWSOCKS_LIBEV_SITE =3D <a href=3D"https://github.com/shadowsocks/=
-shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)" rel=3D"n=
-oreferrer" target=3D"_blank">https://github.com/shadowsocks/shadowsocks-lib=
-ev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)</a><br>
-&gt; -SHADOWSOCKS_LIBEV_LICENSE =3D GPL-3.0+, BSD-2-Clause (libbloom), BSD-=
-3-Clause (libcork, libipset)<br>
-&gt; -SHADOWSOCKS_LIBEV_LICENSE_FILES =3D COPYING libbloom/LICENSE libcork/=
-COPYING<br>
-&gt; -SHADOWSOCKS_LIBEV_CPE_ID_VENDOR =3D shadowsocks<br>
-&gt; -SHADOWSOCKS_LIBEV_DEPENDENCIES =3D host-pkgconf c-ares libev libsodiu=
-m mbedtls pcre<br>
-&gt; -SHADOWSOCKS_LIBEV_INSTALL_STAGING =3D YES<br>
-&gt; -# We&#39;re patching <a href=3D"http://configure.ac" rel=3D"noreferre=
-r" target=3D"_blank">configure.ac</a><br>
-&gt; -SHADOWSOCKS_LIBEV_AUTORECONF =3D YES<br>
-&gt; -SHADOWSOCKS_LIBEV_CONF_OPTS =3D \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0--with-pcre=3D$(STAGING_DIR)/usr \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0--disable-ssp<br>
-&gt; -<br>
-&gt; -ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)<br>
-&gt; -SHADOWSOCKS_LIBEV_DEPENDENCIES +=3D libnetfilter_conntrack<br>
-&gt; -SHADOWSOCKS_LIBEV_CONF_OPTS +=3D --enable-connmarktos<br>
-&gt; -else<br>
-&gt; -SHADOWSOCKS_LIBEV_CONF_OPTS +=3D --disable-connmarktos<br>
-&gt; -endif<br>
-&gt; -<br>
-&gt; -$(eval $(autotools-package))<br>
-&gt; --<br>
-&gt; 2.30.2<br>
-&gt;<br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
-@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
-nfo/buildroot</a><br>
-</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
-><div><b><font face=3D"arial, helvetica, sans-serif"><br></font></b></div><=
-div><b><font face=3D"arial, helvetica, sans-serif">Best Regards</font></b><=
-/div><div><b><font face=3D"arial, helvetica, sans-serif"><br></font></b></d=
-iv><b><font face=3D"arial, helvetica, sans-serif">XuMin&#39;s Ready=EF=BC=
-=81</font></b></div>
-
---000000000000ad252605df6b8c48--
-
-
---===============6787091129009330041==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6787091129009330041==--
-
-
+T24gRnJpLCBNYXkgMjAsIDIwMjIgYXQgMTI6MjQgQU0geHUgbWluIDx4dW1pbnJlYWR5QGdtYWls
+LmNvbT4gd3JvdGU6Cj4KPiBzaGFkb3dzb2Nrcy1saWJldiBpcyBidWctZml4LW9ubHkgbm93LiBJ
+dCBoYXNuJ3QgaGFkIGEgbmV3IHJlbGVhc2UgZm9yIG1vcmUgdGhhbiBvbmUgYW5kIGEgaGFsZiB5
+ZWFycy4gQnVpbGRyb290IGtlZXBzIHNlbmRpbmcgbWUgZW1haWxzIGFib3V0IHRoZSBidWlsZGlu
+ZyBlcnJvcnMgb2YgdGhpcyBwYWNrYWdlLiBJIGRvbid0IGtub3cgaG93IHRvIGZpeCB0aGVtIGFu
+ZCBJIGRvbid0IGhhdmUgdGltZS4gSSBkb3VidCB0aGVyZSBhcmUgbWFueSBwZW9wbGUgdXNpbmcg
+dGhpcyBwYWNrYWdlIG9uIEJ1aWxkcm9vdC4gSWYgc29tZW9uZSBjYW4gZml4IHRoZSBidWlsZGlu
+ZyBlcnJvcnMsIG1heWJlIHdlIGNhbiBrZWVwIGl0IGZvciBhIHdoaWxlLgoKSSd2ZSBiZWVuIHVz
+aW5nIGl0LCBqdXN0IGRyb3AgeW91cnNlbGYgZnJvbSBERVZFTE9QRVJTIGFuZCB5b3Ugc2hvdWxk
+bid0IGdldAphbnkgbW9yZSBlbWFpbHMuCgpUaGUgYnVpbGQgZmFpbHVyZXMgYXJlbid0IHN1cGVy
+IGNvbW1vbiBhdCBsZWFzdCBzbyBJIHRoaW5rIGl0J3Mgc3RpbGwKd29ya2luZyBtb3N0Cm9mIHRo
+ZSB0aW1lLgoKPgo+IE9uIFRodSwgTWF5IDE5LCAyMDIyIGF0IDI6MzAgQU0gSmFtZXMgSGlsbGlh
+cmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+IHdyb3RlOgo+Pgo+PiBTZWVtcyB0byBiZSBz
+dGlsbCBnZXR0aW5nIGJ1ZyBmaXhlcyBmcm9tIHdoYXQgSSBjYW4gdGVsbCBhbmQgaXMgdXNlZnVs
+Cj4+IGZvciBzeXN0ZW1zCj4+IHRoYXQgZG9uJ3QgaGF2ZSBydXN0IHN1cHBvcnQuCj4+Cj4+IE9u
+IFRodSwgTWF5IDE5LCAyMDIyIGF0IDE6NDUgQU0gTWluIFh1IDx4dW1pbnJlYWR5QGdtYWlsLmNv
+bT4gd3JvdGU6Cj4+ID4KPj4gPiBTaWduZWQtb2ZmLWJ5OiBNaW4gWHUgPHh1bWlucmVhZHlAZ21h
+aWwuY29tPgo+PiA+IC0tLQo+PiA+ICBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgfCAgMyAtCj4+ID4gIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAxIC0KPj4gPiAgLi4uLXBrZy1jb25maWctdG8tZmluZC1uZXRmaWx0
+ZXJfY29ubnRyLnBhdGNoIHwgNjIgLS0tLS0tLS0tLS0tLQo+PiA+ICAuLi4vMDAwMi1maXgtbWF5
+YmUtdW5pbml0aWFsaXplZC1lcnJvcnMucGF0Y2ggfCA5MyAtLS0tLS0tLS0tLS0tLS0tLS0tCj4+
+ID4gIHBhY2thZ2Uvc2hhZG93c29ja3MtbGliZXYvQ29uZmlnLmluICAgICAgICAgICB8IDM0IC0t
+LS0tLS0KPj4gPiAgLi4uL3NoYWRvd3NvY2tzLWxpYmV2L3NoYWRvd3NvY2tzLWxpYmV2Lmhhc2gg
+IHwgIDcgLS0KPj4gPiAgLi4uL3NoYWRvd3NvY2tzLWxpYmV2L3NoYWRvd3NvY2tzLWxpYmV2Lm1r
+ICAgIHwgMjcgLS0tLS0tCj4+ID4gIDcgZmlsZXMgY2hhbmdlZCwgMjI3IGRlbGV0aW9ucygtKQo+
+PiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9zaGFkb3dzb2Nrcy1saWJldi8wMDAxLWNv
+bmZpZ3VyZS5hYy11c2UtcGtnLWNvbmZpZy10by1maW5kLW5ldGZpbHRlcl9jb25udHIucGF0Y2gK
+Pj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uvc2hhZG93c29ja3MtbGliZXYvMDAwMi1m
+aXgtbWF5YmUtdW5pbml0aWFsaXplZC1lcnJvcnMucGF0Y2gKPj4gPiAgZGVsZXRlIG1vZGUgMTAw
+NjQ0IHBhY2thZ2Uvc2hhZG93c29ja3MtbGliZXYvQ29uZmlnLmluCj4+ID4gIGRlbGV0ZSBtb2Rl
+IDEwMDY0NCBwYWNrYWdlL3NoYWRvd3NvY2tzLWxpYmV2L3NoYWRvd3NvY2tzLWxpYmV2Lmhhc2gK
+Pj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uvc2hhZG93c29ja3MtbGliZXYvc2hhZG93
+c29ja3MtbGliZXYubWsKPj4gPgo+PiA+IGRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxP
+UEVSUwo+PiA+IGluZGV4IGMzMzk1OWZhLi5lMDlhZTBlYiAxMDA2NDQKPj4gPiAtLS0gYS9ERVZF
+TE9QRVJTCj4+ID4gKysrIGIvREVWRUxPUEVSUwo+PiA+IEBAIC0yMDc1LDkgKzIwNzUsNiBAQCBG
+OiAgICAgICAgY29uZmlncy9iYW5hbmFwaV9tMl9wbHVzX2RlZmNvbmZpZwo+PiA+ICBOOiAgICAg
+TWlraGFpbCBCb2lrbyA8bWlraGFpbGJvaWtvODVAZ21haWwuY29tPgo+PiA+ICBGOiAgICAgcGFj
+a2FnZS9saWJmcmliaWRpLwo+PiA+Cj4+ID4gLU46ICAgICBNaW4gWHUgPHh1bWlucmVhZHlAZ21h
+aWwuY29tPgo+PiA+IC1GOiAgICAgcGFja2FnZS9zaGFkb3dzb2Nrcy1saWJldi8KPj4gPiAtCj4+
+ID4gIE46ICAgICBNaXF1w6hsIFJheW5hbCA8bWlxdWVsLnJheW5hbEBib290bGluLmNvbT4KPj4g
+PiAgRjogICAgIHBhY2thZ2UvbWFsaS1kcml2ZXIvCj4+ID4gIEY6ICAgICBwYWNrYWdlL3JvY2tj
+aGlwLW1hbGkvCj4+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvQ29uZmlnLmluIGIvcGFja2FnZS9D
+b25maWcuaW4KPj4gPiBpbmRleCA4ODkyMTM0MS4uMjVkMzkxZDQgMTAwNjQ0Cj4+ID4gLS0tIGEv
+cGFja2FnZS9Db25maWcuaW4KPj4gPiArKysgYi9wYWNrYWdlL0NvbmZpZy5pbgo+PiA+IEBAIC0y
+MzU2LDcgKzIzNTYsNiBAQCBlbmRpZgo+PiA+ICAgICAgICAgc291cmNlICJwYWNrYWdlL3NhbWJh
+NC9Db25maWcuaW4iCj4+ID4gICAgICAgICBzb3VyY2UgInBhY2thZ2Uvc2NvbmVzZXJ2ZXIvQ29u
+ZmlnLmluIgo+PiA+ICAgICAgICAgc291cmNlICJwYWNrYWdlL3NlcjJuZXQvQ29uZmlnLmluIgo+
+PiA+IC0gICAgICAgc291cmNlICJwYWNrYWdlL3NoYWRvd3NvY2tzLWxpYmV2L0NvbmZpZy5pbiIK
+Pj4gPiAgICAgICAgIHNvdXJjZSAicGFja2FnZS9zaGFpcnBvcnQtc3luYy9Db25maWcuaW4iCj4+
+ID4gICAgICAgICBzb3VyY2UgInBhY2thZ2Uvc2hlbGxpbmFib3gvQ29uZmlnLmluIgo+PiA+ICAg
+ICAgICAgc291cmNlICJwYWNrYWdlL3NtY3JvdXRlL0NvbmZpZy5pbiIKPj4gPiBkaWZmIC0tZ2l0
+IGEvcGFja2FnZS9zaGFkb3dzb2Nrcy1saWJldi8wMDAxLWNvbmZpZ3VyZS5hYy11c2UtcGtnLWNv
+bmZpZy10by1maW5kLW5ldGZpbHRlcl9jb25udHIucGF0Y2ggYi9wYWNrYWdlL3NoYWRvd3NvY2tz
+LWxpYmV2LzAwMDEtY29uZmlndXJlLmFjLXVzZS1wa2ctY29uZmlnLXRvLWZpbmQtbmV0ZmlsdGVy
+X2Nvbm50ci5wYXRjaAo+PiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+PiA+IGluZGV4IDc4
+MWQzYzBlLi4wMDAwMDAwMAo+PiA+IC0tLSBhL3BhY2thZ2Uvc2hhZG93c29ja3MtbGliZXYvMDAw
+MS1jb25maWd1cmUuYWMtdXNlLXBrZy1jb25maWctdG8tZmluZC1uZXRmaWx0ZXJfY29ubnRyLnBh
+dGNoCj4+ID4gKysrIC9kZXYvbnVsbAo+PiA+IEBAIC0xLDYyICswLDAgQEAKPj4gPiAtRnJvbSBi
+M2M2MTM2MGE5M2I3ZjA4ZmM5YzMzNTI2MDU2MjExNDA4MzAxZWE5IE1vbiBTZXAgMTcgMDA6MDA6
+MDAgMjAwMQo+PiA+IC1Gcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdt
+YWlsLmNvbT4KPj4gPiAtRGF0ZTogTW9uLCAyMyBOb3YgMjAyMCAyMToxNjozOCArMDEwMAo+PiA+
+IC1TdWJqZWN0OiBbUEFUQ0hdIGNvbmZpZ3VyZS5hYzogdXNlIHBrZy1jb25maWcgdG8gZmluZCBu
+ZXRmaWx0ZXJfY29ubnRyYWNrCj4+ID4gLQo+PiA+IC1Vc2UgcGtnLWNvbmZpZyB0byByZXRyaWV2
+ZSB0aGUgZGVwZW5kZW5jaWVzIG9mIG5ldGZpbHRlcl9jb25udHJhY2sKPj4gPiAtYW5kIGF2b2lk
+IHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVyZSB3aGVuIGJ1aWxkaW5nIHN0YXRpY2FsbHk6Cj4+
+ID4gLQo+PiA+IC1jb25maWd1cmU6MTMwOTY6IC9kYXRhL2J1aWxkcm9vdC10ZXN0L2luc3RhbmNl
+LTEvb3V0cHV0LTEvaG9zdC9iaW4veDg2XzY0LWxpbnV4LWdjYyAtbyBjb25mdGVzdCAtRF9MQVJH
+RUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0X1NPVVJDRSAtRF9GSUxFX09GRlNFVF9CSVRTPTY0
+ICAtT3MgICAtc3RhdGljIC1JL2RhdGEvYnVpbGRyb290LXRlc3QvaW5zdGFuY2UtMS9vdXRwdXQt
+MS9ob3N0L3g4Nl82NC1idWlsZHJvb3QtbGludXgtdWNsaWJjL3N5c3Jvb3QvdXNyL2luY2x1ZGUg
+LURQQ1JFX1NUQVRJQyAtcHRocmVhZCAtRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0
+X1NPVVJDRSAtRF9GSUxFX09GRlNFVF9CSVRTPTY0ICAtc3RhdGljIC1ML2RhdGEvYnVpbGRyb290
+LXRlc3QvaW5zdGFuY2UtMS9vdXRwdXQtMS9ob3N0L3g4Nl82NC1idWlsZHJvb3QtbGludXgtdWNs
+aWJjL3N5c3Jvb3QvdXNyL2xpYiBjb25mdGVzdC5jIC1sbmV0ZmlsdGVyX2Nvbm50cmFjayAtbG5m
+bmV0bGluayAtbGV2ICAtbGNhcmVzIC1sc29kaXVtIC1sbWJlZGNyeXB0byAtbHBjcmUgID4mNQo+
+PiA+IC0vZGF0YS9idWlsZHJvb3QtdGVzdC9pbnN0YW5jZS0xL291dHB1dC0xL2hvc3Qvb3B0L2V4
+dC10b29sY2hhaW4vYmluLy4uL2xpYi9nY2MveDg2XzY0LWJ1aWxkcm9vdC1saW51eC11Y2xpYmMv
+OC4zLjAvLi4vLi4vLi4vLi4veDg2XzY0LWJ1aWxkcm9vdC1saW51eC11Y2xpYmMvYmluL2xkOiAv
+ZGF0YS9idWlsZHJvb3QtdGVzdC9pbnN0YW5jZS0xL291dHB1dC0xL2hvc3QveDg2XzY0LWJ1aWxk
+cm9vdC1saW51eC11Y2xpYmMvc3lzcm9vdC91c3IvbGliL2xpYm5ldGZpbHRlcl9jb25udHJhY2su
+YShhcGkubyk6IGluIGZ1bmN0aW9uIGBuZmN0X2ZpbGxfaGRyLmNvbnN0cHJvcC40JzoKPj4gPiAt
+YXBpLmM6KC50ZXh0KzB4M2YpOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBtbmxfbmxtc2dfcHV0
+X2hlYWRlcicKPj4gPiAtCj4+ID4gLUZpeGVzOgo+PiA+IC0gLSBodHRwOi8vYXV0b2J1aWxkLmJ1
+aWxkcm9vdC5vcmcvcmVzdWx0cy82Y2FkNDk3YTdhYjk0MWEwZWUzZmQ3MDA3ZGVmYzgxZTMwY2Rj
+YmUwCj4+ID4gLQo+PiA+IC1TaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWlu
+ZS5mYWJyaWNlQGdtYWlsLmNvbT4KPj4gPiAtW1Vwc3RyZWFtIHN0YXR1czoKPj4gPiAtaHR0cHM6
+Ly9naXRodWIuY29tL3NoYWRvd3NvY2tzL3NoYWRvd3NvY2tzLWxpYmV2L3B1bGwvMjc3M10KPj4g
+PiAtLS0tCj4+ID4gLSBjb25maWd1cmUuYWMgICAgfCA1ICsrKy0tCj4+ID4gLSBzcmMvTWFrZWZp
+bGUuYW0gfCAyICstCj4+ID4gLSAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMyBk
+ZWxldGlvbnMoLSkKPj4gPiAtCj4+ID4gLWRpZmYgLS1naXQgYS9jb25maWd1cmUuYWMgYi9jb25m
+aWd1cmUuYWMKPj4gPiAtaW5kZXggOTc4N2JjMi4uMjA3YzA0MSAxMDA3NTUKPj4gPiAtLS0tIGEv
+Y29uZmlndXJlLmFjCj4+ID4gLSsrKyBiL2NvbmZpZ3VyZS5hYwo+PiA+IC1AQCAtMjUyLDcgKzI1
+Miw4IEBAIEFDX0FSR19FTkFCTEUoY29ubm1hcmt0b3MsCj4+ID4gLSBpZiB0ZXN0IHgiJGVuYWJs
+ZV9jb25ubWFya3RvcyIgPSAieHllcyIgOyB0aGVuCj4+ID4gLSAgICAgICBBQ19NU0dfTk9USUNF
+KFtMaW51eCBOZXRmaWx0ZXIgQ29ubnRyYWNrIHN1cHBvcnQgcmVxdWVzdGVkIGJ5IC0tZW5hYmxl
+LWNvbm5tYXJrdG9zOiAke2VuYWJsZV9jb25ubWFya3Rvc31dKQo+PiA+IC0gICAgICAgaWYgdGVz
+dCAieCRlbmFibGVfY29ubm1hcmt0b3MiICE9ICJ4bm8iOyB0aGVuCj4+ID4gLS0gICAgICAgICAg
+QUNfU0VBUkNIX0xJQlMoW25mY3RfcXVlcnldLCBbbmV0ZmlsdGVyX2Nvbm50cmFja10sLFsKPj4g
+PiAtKyAgICAgICAgICBQS0dfQ0hFQ0tfTU9EVUxFUyhbTkVURklMVEVSX0NPTk5UUkFDS10sIFts
+aWJuZXRmaWx0ZXJfY29ubnRyYWNrXSwsCj4+ID4gLSsgICAgICAgICAgW0FDX1NFQVJDSF9MSUJT
+KFtuZmN0X3F1ZXJ5XSwgW25ldGZpbHRlcl9jb25udHJhY2tdLCxbCj4+ID4gLSAgICAgICAgICAg
+ICAgIGlmIHRlc3QgeCIkZW5hYmxlX2Nvbm5tYXJrdG9zIiA9ICJ4eWVzIjsgdGhlbgo+PiA+IC0g
+ICAgICAgICAgICAgICAgICAgQUNfTVNHX0VSUk9SKFstLWVuYWJsZS1jb25ubWFya3RvcyBzcGVj
+aWZpZWQgYnV0IGxpYm5ldGZpbHRlci1jb25udHJhY2sgbGlicmFyeSBub3QgZm91bmRdKQo+PiA+
+IC0gICAgICAgICAgICAgICBmaQo+PiA+IC1AQCAtMjYyLDcgKzI2Myw3IEBAIGlmIHRlc3QgeCIk
+ZW5hYmxlX2Nvbm5tYXJrdG9zIiA9ICJ4eWVzIiA7IHRoZW4KPj4gPiAtICAgICAgICAgICAgICAg
+aWYgdGVzdCB4IiRlbmFibGVfY29ubm1hcmt0b3MiID0gInh5ZXMiOyB0aGVuCj4+ID4gLSAgICAg
+ICAgICAgICAgICAgICBBQ19NU0dfRVJST1IoWy0tZW5hYmxlLWNvbm5tYXJrdG9zIHNwZWNpZmll
+ZCBidXQgbGlibmV0ZmlsdGVyLWNvbm50cmFjayBoZWFkZXJzIG5vdCBmb3VuZF0pCj4+ID4gLSAg
+ICAgICAgICAgICAgIGZpCj4+ID4gLS0gICAgICAgICAgICAgIHdpdGhfbmV0ZmlsdGVyX2Nvbm50
+cmFjaz1ub10pCj4+ID4gLSsgICAgICAgICAgICAgIHdpdGhfbmV0ZmlsdGVyX2Nvbm50cmFjaz1u
+b10pXSkKPj4gPiAtICAgICAgICAgIyBJZiBub3RoaW5nIGlzIGJyb2tlbjsgZW5hYmxlIHRoZSBs
+aWJyYXJpZXMgdXNhZ2UuCj4+ID4gLSAgICAgICAgIGlmIHRlc3QgIngkd2l0aF9uZXRmaWx0ZXJf
+Y29ubnRyYWNrIiAhPSAieG5vIjsgdGhlbgo+PiA+IC0gICAgICAgICAgICAgICB3aXRoX25ldGZp
+bHRlcl9jb25udHJhY2s9eWVzCj4+ID4gLWRpZmYgLS1naXQgYS9zcmMvTWFrZWZpbGUuYW0gYi9z
+cmMvTWFrZWZpbGUuYW0KPj4gPiAtaW5kZXggYzI2MWVkMC4uYjgxY2VkNyAxMDA2NDQKPj4gPiAt
+LS0tIGEvc3JjL01ha2VmaWxlLmFtCj4+ID4gLSsrKyBiL3NyYy9NYWtlZmlsZS5hbQo+PiA+IC1A
+QCAtOSw3ICs5LDcgQEAgQU1fQ0ZMQUdTICs9IC1JJCh0b3Bfc3JjZGlyKS9saWJjb3JrL2luY2x1
+ZGUKPj4gPiAtIGVuZGlmCj4+ID4gLSBBTV9DRkxBR1MgKz0gJChMSUJQQ1JFX0NGTEFHUykKPj4g
+PiAtCj4+ID4gLS1TU19DT01NT05fTElCUyA9ICQoSU5FVF9OVE9QX0xJQikgJChMSUJQQ1JFX0xJ
+QlMpCj4+ID4gLStTU19DT01NT05fTElCUyA9ICQoSU5FVF9OVE9QX0xJQikgJChMSUJQQ1JFX0xJ
+QlMpICQoTkVURklMVEVSX0NPTk5UUkFDS19MSUJTKQo+PiA+IC0gaWYgIVVTRV9TWVNURU1fU0hB
+UkVEX0xJQgo+PiA+IC0gU1NfQ09NTU9OX0xJQlMgKz0gJCh0b3BfYnVpbGRkaXIpL2xpYmJsb29t
+L2xpYmJsb29tLmxhIFwKPj4gPiAtICAgICAgICAgICAgICAgICAgICQodG9wX2J1aWxkZGlyKS9s
+aWJpcHNldC9saWJpcHNldC5sYSBcCj4+ID4gLS0tCj4+ID4gLTIuMjkuMgo+PiA+IC0KPj4gPiBk
+aWZmIC0tZ2l0IGEvcGFja2FnZS9zaGFkb3dzb2Nrcy1saWJldi8wMDAyLWZpeC1tYXliZS11bmlu
+aXRpYWxpemVkLWVycm9ycy5wYXRjaCBiL3BhY2thZ2Uvc2hhZG93c29ja3MtbGliZXYvMDAwMi1m
+aXgtbWF5YmUtdW5pbml0aWFsaXplZC1lcnJvcnMucGF0Y2gKPj4gPiBkZWxldGVkIGZpbGUgbW9k
+ZSAxMDA2NDQKPj4gPiBpbmRleCA1Mjc1MzIzZS4uMDAwMDAwMDAKPj4gPiAtLS0gYS9wYWNrYWdl
+L3NoYWRvd3NvY2tzLWxpYmV2LzAwMDItZml4LW1heWJlLXVuaW5pdGlhbGl6ZWQtZXJyb3JzLnBh
+dGNoCj4+ID4gKysrIC9kZXYvbnVsbAo+PiA+IEBAIC0xLDkzICswLDAgQEAKPj4gPiAtRnJvbSAw
+YzIzMjI0ZTkyNjQ2M2IxMDk3NDE0OTc5MzY3NjU1YTI3ZmE2ZDYwIE1vbiBTZXAgMTcgMDA6MDA6
+MDAgMjAwMQo+PiA+IC1Gcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdt
+YWlsLmNvbT4KPj4gPiAtRGF0ZTogVGh1LCA3IEFwciAyMDIyIDE4OjI3OjU4ICswMjAwCj4+ID4g
+LVN1YmplY3Q6IFtQQVRDSF0gZml4IG1heWJlLXVuaW5pdGlhbGl6ZWQgZXJyb3JzCj4+ID4gLQo+
+PiA+IC1TZXQge2xpc3RlbixzZXJ2ZXJ9X3NvY2sgdG8gLTEgd2hlbiBuZWVkZWQgYXMgYWxyZWFk
+eSBkb25lIGluCj4+ID4gLXNyYy9tYW5hZ2VyLmMgYnkgY29tbWl0IGVjZjFmY2M4NDU5NGIwOWVk
+MmQ2MWUzNjc3Y2Q4ZTYyYmQ4OTdjY2IgdG8KPj4gPiAtYXZvaWQgdGhlIGZvbGxvd2luZyBidWls
+ZCBmYWlsdXJlOgo+PiA+IC0KPj4gPiAtbG9jYWwuYzogSW4gZnVuY3Rpb24gJ2NyZWF0ZV9hbmRf
+YmluZCc6Cj4+ID4gLWxvY2FsLmM6MjE4OjEyOiBlcnJvcjogJ2xpc3Rlbl9zb2NrJyBtYXkgYmUg
+dXNlZCB1bmluaXRpYWxpemVkIGluIHRoaXMgZnVuY3Rpb24gWy1XZXJyb3I9bWF5YmUtdW5pbml0
+aWFsaXplZF0KPj4gPiAtICAyMTggfCAgICAgcmV0dXJuIGxpc3Rlbl9zb2NrOwo+PiA+IC0gICAg
+ICB8ICAgICAgICAgICAgXn5+fn5+fn5+fn4KPj4gPiAtCj4+ID4gLUZpeGVzOgo+PiA+IC0gLSBo
+dHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8yNzQ3MWE4NzhmZjUyYTk3MmFj
+MDg3ZDUzNGU0NGZiMGM1MDgwOGY2Cj4+ID4gLQo+PiA+IC1TaWduZWQtb2ZmLWJ5OiBGYWJyaWNl
+IEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPj4gPiAtW1JldHJpZXZlZCBm
+cm9tOgo+PiA+IC1odHRwczovL2dpdGh1Yi5jb20vc2hhZG93c29ja3Mvc2hhZG93c29ja3MtbGli
+ZXYvY29tbWl0LzBjMjMyMjRlOTI2NDYzYjEwOTc0MTQ5NzkzNjc2NTVhMjdmYTZkNjBdCj4+ID4g
+LS0tLQo+PiA+IC0gc3JjL2xvY2FsLmMgICAgfCAyICstCj4+ID4gLSBzcmMvcmVkaXIuYyAgICB8
+IDIgKy0KPj4gPiAtIHNyYy9zZXJ2ZXIuYyAgIHwgMiArLQo+PiA+IC0gc3JjL3R1bm5lbC5jICAg
+fCAyICstCj4+ID4gLSBzcmMvdWRwcmVsYXkuYyB8IDIgKy0KPj4gPiAtIDUgZmlsZXMgY2hhbmdl
+ZCwgNSBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQo+PiA+IC0KPj4gPiAtZGlmZiAtLWdp
+dCBhL3NyYy9sb2NhbC5jIGIvc3JjL2xvY2FsLmMKPj4gPiAtaW5kZXggYjFhYjA0MGJiLi40N2Q2
+MzRjZTUgMTAwNjQ0Cj4+ID4gLS0tLSBhL3NyYy9sb2NhbC5jCj4+ID4gLSsrKyBiL3NyYy9sb2Nh
+bC5jCj4+ID4gLUBAIC0xNjgsNyArMTY4LDcgQEAgY3JlYXRlX2FuZF9iaW5kKGNvbnN0IGNoYXIg
+KmFkZHIsIGNvbnN0IGNoYXIgKnBvcnQpCj4+ID4gLSB7Cj4+ID4gLSAgICAgc3RydWN0IGFkZHJp
+bmZvIGhpbnRzOwo+PiA+IC0gICAgIHN0cnVjdCBhZGRyaW5mbyAqcmVzdWx0LCAqcnA7Cj4+ID4g
+LS0gICAgaW50IHMsIGxpc3Rlbl9zb2NrOwo+PiA+IC0rICAgIGludCBzLCBsaXN0ZW5fc29jayA9
+IC0xOwo+PiA+IC0KPj4gPiAtICAgICBtZW1zZXQoJmhpbnRzLCAwLCBzaXplb2Yoc3RydWN0IGFk
+ZHJpbmZvKSk7Cj4+ID4gLSAgICAgaGludHMuYWlfZmFtaWx5ICAgPSBBRl9VTlNQRUM7ICAgLyog
+UmV0dXJuIElQdjQgYW5kIElQdjYgY2hvaWNlcyAqLwo+PiA+IC1kaWZmIC0tZ2l0IGEvc3JjL3Jl
+ZGlyLmMgYi9zcmMvcmVkaXIuYwo+PiA+IC1pbmRleCA0YTVhNDg5ZjAuLmU2MGJkNDg3MCAxMDA2
+NDQKPj4gPiAtLS0tIGEvc3JjL3JlZGlyLmMKPj4gPiAtKysrIGIvc3JjL3JlZGlyLmMKPj4gPiAt
+QEAgLTE0Nyw3ICsxNDcsNyBAQCBjcmVhdGVfYW5kX2JpbmQoY29uc3QgY2hhciAqYWRkciwgY29u
+c3QgY2hhciAqcG9ydCkKPj4gPiAtIHsKPj4gPiAtICAgICBzdHJ1Y3QgYWRkcmluZm8gaGludHM7
+Cj4+ID4gLSAgICAgc3RydWN0IGFkZHJpbmZvICpyZXN1bHQsICpycDsKPj4gPiAtLSAgICBpbnQg
+cywgbGlzdGVuX3NvY2s7Cj4+ID4gLSsgICAgaW50IHMsIGxpc3Rlbl9zb2NrID0gLTE7Cj4+ID4g
+LQo+PiA+IC0gICAgIG1lbXNldCgmaGludHMsIDAsIHNpemVvZihzdHJ1Y3QgYWRkcmluZm8pKTsK
+Pj4gPiAtICAgICBoaW50cy5haV9mYW1pbHkgICA9IEFGX1VOU1BFQzsgICAvKiBSZXR1cm4gSVB2
+NCBhbmQgSVB2NiBjaG9pY2VzICovCj4+ID4gLWRpZmYgLS1naXQgYS9zcmMvc2VydmVyLmMgYi9z
+cmMvc2VydmVyLmMKPj4gPiAtaW5kZXggZTljZGMyNjE5Li4wNzNlMzhiMjIgMTAwNjQ0Cj4+ID4g
+LS0tLSBhL3NyYy9zZXJ2ZXIuYwo+PiA+IC0rKysgYi9zcmMvc2VydmVyLmMKPj4gPiAtQEAgLTU1
+MCw3ICs1NTAsNyBAQCBjcmVhdGVfYW5kX2JpbmQoY29uc3QgY2hhciAqaG9zdCwgY29uc3QgY2hh
+ciAqcG9ydCwgaW50IG1wdGNwKQo+PiA+IC0gewo+PiA+IC0gICAgIHN0cnVjdCBhZGRyaW5mbyBo
+aW50czsKPj4gPiAtICAgICBzdHJ1Y3QgYWRkcmluZm8gKnJlc3VsdCwgKnJwLCAqaXB2NHY2Ymlu
+ZGFsbDsKPj4gPiAtLSAgICBpbnQgcywgbGlzdGVuX3NvY2s7Cj4+ID4gLSsgICAgaW50IHMsIGxp
+c3Rlbl9zb2NrID0gLTE7Cj4+ID4gLQo+PiA+IC0gICAgIG1lbXNldCgmaGludHMsIDAsIHNpemVv
+ZihzdHJ1Y3QgYWRkcmluZm8pKTsKPj4gPiAtICAgICBoaW50cy5haV9mYW1pbHkgICA9IEFGX1VO
+U1BFQzsgICAgICAgICAgICAgICAvKiBSZXR1cm4gSVB2NCBhbmQgSVB2NiBjaG9pY2VzICovCj4+
+ID4gLWRpZmYgLS1naXQgYS9zcmMvdHVubmVsLmMgYi9zcmMvdHVubmVsLmMKPj4gPiAtaW5kZXgg
+ZTA4ODZiZGI5Li42NjQxZmU2MmEgMTAwNjQ0Cj4+ID4gLS0tLSBhL3NyYy90dW5uZWwuYwo+PiA+
+IC0rKysgYi9zcmMvdHVubmVsLmMKPj4gPiAtQEAgLTEyOSw3ICsxMjksNyBAQCBjcmVhdGVfYW5k
+X2JpbmQoY29uc3QgY2hhciAqYWRkciwgY29uc3QgY2hhciAqcG9ydCkKPj4gPiAtIHsKPj4gPiAt
+ICAgICBzdHJ1Y3QgYWRkcmluZm8gaGludHM7Cj4+ID4gLSAgICAgc3RydWN0IGFkZHJpbmZvICpy
+ZXN1bHQsICpycDsKPj4gPiAtLSAgICBpbnQgcywgbGlzdGVuX3NvY2s7Cj4+ID4gLSsgICAgaW50
+IHMsIGxpc3Rlbl9zb2NrID0gLTE7Cj4+ID4gLQo+PiA+IC0gICAgIG1lbXNldCgmaGludHMsIDAs
+IHNpemVvZihzdHJ1Y3QgYWRkcmluZm8pKTsKPj4gPiAtICAgICBoaW50cy5haV9mYW1pbHkgICA9
+IEFGX1VOU1BFQzsgICAvKiBSZXR1cm4gSVB2NCBhbmQgSVB2NiBjaG9pY2VzICovCj4+ID4gLWRp
+ZmYgLS1naXQgYS9zcmMvdWRwcmVsYXkuYyBiL3NyYy91ZHByZWxheS5jCj4+ID4gLWluZGV4IDIz
+YTA0MjQ5Ny4uNTgwYWQ0YmQ4IDEwMDY0NAo+PiA+IC0tLS0gYS9zcmMvdWRwcmVsYXkuYwo+PiA+
+IC0rKysgYi9zcmMvdWRwcmVsYXkuYwo+PiA+IC1AQCAtNDQ2LDcgKzQ0Niw3IEBAIGNyZWF0ZV9z
+ZXJ2ZXJfc29ja2V0KGNvbnN0IGNoYXIgKmhvc3QsIGNvbnN0IGNoYXIgKnBvcnQpCj4+ID4gLSB7
+Cj4+ID4gLSAgICAgc3RydWN0IGFkZHJpbmZvIGhpbnRzOwo+PiA+IC0gICAgIHN0cnVjdCBhZGRy
+aW5mbyAqcmVzdWx0LCAqcnAsICppcHY0djZiaW5kYWxsOwo+PiA+IC0tICAgIGludCBzLCBzZXJ2
+ZXJfc29jazsKPj4gPiAtKyAgICBpbnQgcywgc2VydmVyX3NvY2sgPSAtMTsKPj4gPiAtCj4+ID4g
+LSAgICAgbWVtc2V0KCZoaW50cywgMCwgc2l6ZW9mKHN0cnVjdCBhZGRyaW5mbykpOwo+PiA+IC0g
+ICAgIGhpbnRzLmFpX2ZhbWlseSAgID0gQUZfVU5TUEVDOyAgICAgICAgICAgICAgIC8qIFJldHVy
+biBJUHY0IGFuZCBJUHY2IGNob2ljZXMgKi8KPj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zaGFk
+b3dzb2Nrcy1saWJldi9Db25maWcuaW4gYi9wYWNrYWdlL3NoYWRvd3NvY2tzLWxpYmV2L0NvbmZp
+Zy5pbgo+PiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+PiA+IGluZGV4IGZlZmIyN2JjLi4w
+MDAwMDAwMAo+PiA+IC0tLSBhL3BhY2thZ2Uvc2hhZG93c29ja3MtbGliZXYvQ29uZmlnLmluCj4+
+ID4gKysrIC9kZXYvbnVsbAo+PiA+IEBAIC0xLDM0ICswLDAgQEAKPj4gPiAtY29uZmlnIEJSMl9Q
+QUNLQUdFX1NIQURPV1NPQ0tTX0xJQkVWCj4+ID4gLSAgICAgICBib29sICJzaGFkb3dzb2Nrcy1s
+aWJldiIKPj4gPiAtICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfU1lOQ180ICMg
+Zm9yIGxpYmNvcmsKPj4gPiAtICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfU1lO
+Q184IHx8ICFCUjJfQVJDSF9JU182NCAjIGZvciBsaWJjb3JrCj4+ID4gLSAgICAgICBkZXBlbmRz
+IG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPj4gPiAtICAgICAgIGRlcGVuZHMgb24gQlIy
+X1VTRV9NTVUgIyBmb3JrKCkKPj4gPiAtICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9DX0FSRVMK
+Pj4gPiAtICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9MSUJFVgo+PiA+IC0gICAgICAgc2VsZWN0
+IEJSMl9QQUNLQUdFX0xJQlNPRElVTQo+PiA+IC0gICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX01C
+RURUTFMKPj4gPiAtICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9QQ1JFCj4+ID4gLSAgICAgICBo
+ZWxwCj4+ID4gLSAgICAgICAgIFNoYWRvd3NvY2tzLWxpYmV2IGlzIGEgbGlnaHR3ZWlnaHQgc2Vj
+dXJlZCBTT0NLUzUgcHJveHkgZm9yCj4+ID4gLSAgICAgICAgIGVtYmVkZGVkIGRldmljZXMgYW5k
+IGxvdy1lbmQgYm94ZXMuCj4+ID4gLQo+PiA+IC0gICAgICAgICBodHRwczovL2dpdGh1Yi5jb20v
+c2hhZG93c29ja3Mvc2hhZG93c29ja3MtbGliZXYKPj4gPiAtCj4+ID4gLWNvbmZpZyBCUjJfUEFD
+S0FHRV9TSEFET1dTT0NLU19MSUJFVl9DT05OTUFSS1RPUwo+PiA+IC0gICAgICAgYm9vbCAiY29u
+bm1hcmt0b3Mgc3VwcG9ydCBpbiBzcy1zZXJ2ZXIiCj4+ID4gLSAgICAgICBkZXBlbmRzIG9uIEJS
+Ml9QQUNLQUdFX1NIQURPV1NPQ0tTX0xJQkVWCj4+ID4gLSAgICAgICBzZWxlY3QgQlIyX1BBQ0tB
+R0VfTElCTkVURklMVEVSX0NPTk5UUkFDSwo+PiA+IC0gICAgICAgaGVscAo+PiA+IC0gICAgICAg
+ICBCdWlsZCBzcy1zZXJ2ZXIgd2l0aCB0aGUgY29ubm1hcmsgdG8gVE9TIGZlYXR1cmUuCj4+ID4g
+LQo+PiA+IC0gICAgICAgICBUaGlzIGZlYXR1cmUgcmVxdWlyZXMgYWR2YW5jZWQgdGMsIGlwdGFi
+bGVzIGFuZCBjb25udHJhY2sKPj4gPiAtICAgICAgICAgcnVsZXMgdG8gcGVyZm9ybSBRb1Mgb24g
+dGhlIHNlcnZlciBzaWRlLgo+PiA+IC0KPj4gPiAtICAgICAgICAgSWYgdW5zdXJlLCBkb24ndCBl
+bmFibGUgdGhpcyBvcHRpb24KPj4gPiAtCj4+ID4gLWNvbW1lbnQgInNoYWRvd3NvY2tzLWxpYmV2
+IG5lZWRzIGEgdG9vbGNoYWluIHcvIHRocmVhZHMiCj4+ID4gLSAgICAgICBkZXBlbmRzIG9uIEJS
+Ml9UT09MQ0hBSU5fSEFTX1NZTkNfNAo+PiA+IC0gICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENI
+QUlOX0hBU19TWU5DXzggfHwgIUJSMl9BUkNIX0lTXzY0Cj4+ID4gLSAgICAgICBkZXBlbmRzIG9u
+IEJSMl9VU0VfTU1VCj4+ID4gLSAgICAgICBkZXBlbmRzIG9uICFCUjJfVE9PTENIQUlOX0hBU19U
+SFJFQURTCj4+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc2hhZG93c29ja3MtbGliZXYvc2hhZG93
+c29ja3MtbGliZXYuaGFzaCBiL3BhY2thZ2Uvc2hhZG93c29ja3MtbGliZXYvc2hhZG93c29ja3Mt
+bGliZXYuaGFzaAo+PiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+PiA+IGluZGV4IDRmMWQ2
+ZDJmLi4wMDAwMDAwMAo+PiA+IC0tLSBhL3BhY2thZ2Uvc2hhZG93c29ja3MtbGliZXYvc2hhZG93
+c29ja3MtbGliZXYuaGFzaAo+PiA+ICsrKyAvZGV2L251bGwKPj4gPiBAQCAtMSw3ICswLDAgQEAK
+Pj4gPiAtIyBMb2NhbGx5IGNvbXB1dGVkCj4+ID4gLXNoYTI1NiAgY2ZjOGVkZWQzNTM2MGY0YjY3
+ZTE4ZGM0NDdiMGMwMGNkZGIyOWNjNTdhM2NlYzQ4YjEzNWU1ZmI4NzQzMzQ4OCAgc2hhZG93c29j
+a3MtbGliZXYtMy4zLjUudGFyLmd6Cj4+ID4gLQo+PiA+IC0jIExpY2Vuc2UgZmlsZXMsIGxvY2Fs
+bHkgY2FsY3VsYXRlZAo+PiA+IC1zaGEyNTYgIDczNjg4M2Y5N2Q0NGRiZWMyODhiYjgyODE5ZjE4
+ZjRmODZkMDJhZTMxOTJmNmE5YWJlZmEwMGRiNzZiYWNlNDEgIENPUFlJTkcKPj4gPiAtc2hhMjU2
+ICBjNDFhNGJjMmM0YzQzZTRkYWEzMDUxZTc3ZTMxYjJkNWM4NTAwNDk4YWZhZWFjNmQ4MzFkNTVh
+NGJiOGRlM2ZiICBsaWJibG9vbS9MSUNFTlNFCj4+ID4gLXNoYTI1NiAgNGZhMmFkYTU0ZjhjMDQx
+MGVjMjQzMjY1Mzc4MjQyZmZlODYyMzg2ZDVhYzUxN2Y4ZGQzMGExOTExZDI1YWU5MyAgbGliY29y
+ay9DT1BZSU5HCj4+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc2hhZG93c29ja3MtbGliZXYvc2hh
+ZG93c29ja3MtbGliZXYubWsgYi9wYWNrYWdlL3NoYWRvd3NvY2tzLWxpYmV2L3NoYWRvd3NvY2tz
+LWxpYmV2Lm1rCj4+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4+ID4gaW5kZXggYzc2OTgz
+Y2UuLjAwMDAwMDAwCj4+ID4gLS0tIGEvcGFja2FnZS9zaGFkb3dzb2Nrcy1saWJldi9zaGFkb3dz
+b2Nrcy1saWJldi5tawo+PiA+ICsrKyAvZGV2L251bGwKPj4gPiBAQCAtMSwyNyArMCwwIEBACj4+
+ID4gLSMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4+ID4gLSMKPj4gPiAtIyBzaGFkb3dzb2Nrcy1s
+aWJldgo+PiA+IC0jCj4+ID4gLSMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4+ID4gLQo+PiA+IC1T
+SEFET1dTT0NLU19MSUJFVl9WRVJTSU9OID0gMy4zLjUKPj4gPiAtU0hBRE9XU09DS1NfTElCRVZf
+U0lURSA9IGh0dHBzOi8vZ2l0aHViLmNvbS9zaGFkb3dzb2Nrcy9zaGFkb3dzb2Nrcy1saWJldi9y
+ZWxlYXNlcy9kb3dubG9hZC92JChTSEFET1dTT0NLU19MSUJFVl9WRVJTSU9OKQo+PiA+IC1TSEFE
+T1dTT0NLU19MSUJFVl9MSUNFTlNFID0gR1BMLTMuMCssIEJTRC0yLUNsYXVzZSAobGliYmxvb20p
+LCBCU0QtMy1DbGF1c2UgKGxpYmNvcmssIGxpYmlwc2V0KQo+PiA+IC1TSEFET1dTT0NLU19MSUJF
+Vl9MSUNFTlNFX0ZJTEVTID0gQ09QWUlORyBsaWJibG9vbS9MSUNFTlNFIGxpYmNvcmsvQ09QWUlO
+Rwo+PiA+IC1TSEFET1dTT0NLU19MSUJFVl9DUEVfSURfVkVORE9SID0gc2hhZG93c29ja3MKPj4g
+PiAtU0hBRE9XU09DS1NfTElCRVZfREVQRU5ERU5DSUVTID0gaG9zdC1wa2djb25mIGMtYXJlcyBs
+aWJldiBsaWJzb2RpdW0gbWJlZHRscyBwY3JlCj4+ID4gLVNIQURPV1NPQ0tTX0xJQkVWX0lOU1RB
+TExfU1RBR0lORyA9IFlFUwo+PiA+IC0jIFdlJ3JlIHBhdGNoaW5nIGNvbmZpZ3VyZS5hYwo+PiA+
+IC1TSEFET1dTT0NLU19MSUJFVl9BVVRPUkVDT05GID0gWUVTCj4+ID4gLVNIQURPV1NPQ0tTX0xJ
+QkVWX0NPTkZfT1BUUyA9IFwKPj4gPiAtICAgICAgIC0td2l0aC1wY3JlPSQoU1RBR0lOR19ESVIp
+L3VzciBcCj4+ID4gLSAgICAgICAtLWRpc2FibGUtc3NwCj4+ID4gLQo+PiA+IC1pZmVxICgkKEJS
+Ml9QQUNLQUdFX1NIQURPV1NPQ0tTX0xJQkVWX0NPTk5NQVJLVE9TKSx5KQo+PiA+IC1TSEFET1dT
+T0NLU19MSUJFVl9ERVBFTkRFTkNJRVMgKz0gbGlibmV0ZmlsdGVyX2Nvbm50cmFjawo+PiA+IC1T
+SEFET1dTT0NLU19MSUJFVl9DT05GX09QVFMgKz0gLS1lbmFibGUtY29ubm1hcmt0b3MKPj4gPiAt
+ZWxzZQo+PiA+IC1TSEFET1dTT0NLU19MSUJFVl9DT05GX09QVFMgKz0gLS1kaXNhYmxlLWNvbm5t
+YXJrdG9zCj4+ID4gLWVuZGlmCj4+ID4gLQo+PiA+IC0kKGV2YWwgJChhdXRvdG9vbHMtcGFja2Fn
+ZSkpCj4+ID4gLS0KPj4gPiAyLjMwLjIKPj4gPgo+PiA+IF9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCj4+ID4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+PiA+
+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4+ID4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cj4KPgo+Cj4gLS0KPgo+IEJlc3QgUmVnYXJkcwo+
+Cj4gWHVNaW4ncyBSZWFkee+8gQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
