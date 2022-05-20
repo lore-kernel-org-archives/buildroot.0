@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F488C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 20 May 2022 07:22:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EEC9C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 20 May 2022 07:37:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D98E260EE4;
-	Fri, 20 May 2022 07:22:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KelV9SSGYDP0; Fri, 20 May 2022 07:22:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E2A960E87;
-	Fri, 20 May 2022 07:22:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8FA971BF2BC
- for <buildroot@lists.busybox.net>; Fri, 20 May 2022 07:22:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7F34C844C4
- for <buildroot@lists.busybox.net>; Fri, 20 May 2022 07:22:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0C7D8460A;
+	Fri, 20 May 2022 07:37:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OYKN-KgJq9-v for <buildroot@lists.busybox.net>;
- Fri, 20 May 2022 07:22:41 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s842i9UyRaAO; Fri, 20 May 2022 07:37:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E19058460C;
+	Fri, 20 May 2022 07:37:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 008BE1BF2BC
+ for <buildroot@lists.busybox.net>; Fri, 20 May 2022 07:37:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E2B7B409E7
+ for <buildroot@lists.busybox.net>; Fri, 20 May 2022 07:37:49 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lPRzd0aWgZqi for <buildroot@lists.busybox.net>;
+ Fri, 20 May 2022 07:37:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 865CA844C3
- for <buildroot@uclibc.org>; Fri, 20 May 2022 07:22:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D0FF409E2
+ for <buildroot@uclibc.org>; Fri, 20 May 2022 07:37:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id C1B0C83C13; Fri, 20 May 2022 07:11:31 +0000 (UTC)
+ id D073A85FB9; Fri, 20 May 2022 07:26:38 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 20 May 2022 07:22:41 +0000
+Date: Fri, 20 May 2022 07:37:48 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -43,15 +43,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: blocker
-X-Bugzilla-Who: amol.em33@gmail.com
+X-Bugzilla-Who: yann.morin.1998@free.fr
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-14816-163-uqyTuAm5A2@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-14816-163-OB2fJjd5TB@https.bugs.busybox.net/>
 In-Reply-To: <bug-14816-163@https.bugs.busybox.net/>
 References: <bug-14816-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -77,13 +77,30 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14816
 
---- Comment #1 from Amol Dhamale <amol.em33@gmail.com> ---
-Created attachment 9311
-  --> https://bugs.busybox.net/attachment.cgi?id=9311&action=edit
-The .config file after making custom configurations using menuconfig to
-raspberrypi2_defconfig
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-https://github.com/amoldhamale1105/EmbeddedLinux/blob/master/boards/raspberrypi2/.config
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998@free.fr
+
+--- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Amol, All,
+
+The failure is because systemd calls gettid(), and you are using a toolchain
+that is tool old to provide it.
+
+Indeed, gettid() was only introduced in glibc 2.30, but the Linaro toolchain
+still uses glibc 2.25.
+
+Use another toolchain.
+
+It is not really trivial to prevent such a configuration, because we dpo not
+have kconfig symbols that repreesents the glibc version (like we have for the
+kernel headers or gcc), so maybe we should just add an ad-hoc excluion of that
+toolchain (and other old ones?) in systemd/Config.in
+
+Regards,
+Yann E. MRON.
 
 -- 
 You are receiving this mail because:
