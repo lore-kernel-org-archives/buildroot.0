@@ -1,78 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63754C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 21 May 2022 12:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1315C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 21 May 2022 12:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 051E060FBA;
-	Sat, 21 May 2022 12:38:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 31BAC40B23;
+	Sat, 21 May 2022 12:39:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DXFuD5n_wwnh; Sat, 21 May 2022 12:38:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4f9uAQ6eWrvl; Sat, 21 May 2022 12:39:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E45460BD7;
-	Sat, 21 May 2022 12:38:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6BCF31BF2C0
- for <buildroot@lists.busybox.net>; Sat, 21 May 2022 12:38:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B242F40B07;
+	Sat, 21 May 2022 12:39:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F3B711BF2C0
+ for <buildroot@lists.busybox.net>; Sat, 21 May 2022 12:38:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A2C660BD7
- for <buildroot@lists.busybox.net>; Sat, 21 May 2022 12:38:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F139E844AA
+ for <buildroot@lists.busybox.net>; Sat, 21 May 2022 12:38:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zNsguuXsRM-G for <buildroot@lists.busybox.net>;
- Sat, 21 May 2022 12:38:48 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8DwjR8YaRoC3 for <buildroot@lists.busybox.net>;
+ Sat, 21 May 2022 12:38:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AA9C560BAE
- for <buildroot@buildroot.org>; Sat, 21 May 2022 12:38:48 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id y13so19305475eje.2
- for <buildroot@buildroot.org>; Sat, 21 May 2022 05:38:48 -0700 (PDT)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 52DD482BED
+ for <buildroot@buildroot.org>; Sat, 21 May 2022 12:38:59 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id n13so18147920ejv.1
+ for <buildroot@buildroot.org>; Sat, 21 May 2022 05:38:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bWzW7DT3csi7zWxwEFRetKPiPsw2VChSVzv0ZvTk9IE=;
- b=jH+TPfLkmmeTEQix+6VRxd/6GJDN4kg9Q/yDVexR5x6JlgopOQHtVoKGOooLmt5Fi+
- c0SEUIq9d63BFuhHMMpLVpIU11E/Cyo1z/E1cMV7mnS4rIe/8nUWgAYh5twfbJ/y+t8l
- KpXrQuz7mG+oUh3cJu1rqWDzsUwKBOVlrc1FYAobqAERQBsm8mcL28ZZEO+J98G3m3uf
- K57J798BFl739qSO+qERSEegUXiysL9OzRp8YgumIlj2kcf/K5fsJNRmTkJVm9KPDZn8
- CUmK0C9JbtTs5xe5KbPUJTHZh4NN4AzOf1l9s83ZbVU1pvypDmHYcFYGAa+ElFZR8f0+
- /Nmg==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=YvmjahSH6Cju7U9qzDN5zEJqIaL+shkYAg0/c8jmKAA=;
+ b=KP5bnkX6Nb/et9ga3dAmlhnjQl88ANrdpT7gGv4FgP3LnsSs3FhTydqRwOlty/Rzg4
+ ZAKeZe6uE0Ms1Dy9/QXBAGLKxY4FdvaURSggqeAbaYWgfmqJczdt39ccX+oCXM7TI280
+ ZOkZ+98UExnM0Bbi6ByD0Q06w4XTcGMoxWJmgbAu0tEz9kA7xa62UZrsFIni3Lm6k7bb
+ Po9pgFbZvHTvgrdZMzGlBeAH+oGk8PNbTByqi+rvRzvQGeDcdRjKsspbBOsHa+nxDq9g
+ u+4X9H8lYdrYUkRS6w1Vavh3QTIfVMMlDOMTTL0fSqa/TkuwlNhgA6YAEa+lEg2QOjzK
+ Rqgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bWzW7DT3csi7zWxwEFRetKPiPsw2VChSVzv0ZvTk9IE=;
- b=viCOY1adSoqF2LfetNSTLTMbr+sIfqsjn2yvRndt1iQEdJd7Wk5X6/clhKSmDKeEPe
- Qc/2FvuEpwZy++cUljxQ+ShjOk57FAOKHfxHhpSUL+lPNo+mc2wLXvt3LIblNTCAAKpL
- mk1V3ghFYOBZx3CERCfjYR0vhYCaFgXPSW129hf4bBIizY5o9AQrQV/1aCvsGVp1J8NZ
- FwQYgidGYuQBQcEBL0jRiAcLd6L1EiAu8O5MaaOFNStu5jINor2fUIrCLMJ1RVQOt3qz
- CSnthpal7/krMUv8rhf89SR3buyza4NNLONDPWTWg6QbfjUPALkmdeStXkBtVT7lkeZV
- 2DLg==
-X-Gm-Message-State: AOAM530U2mqc21fZ6IX9xpIhrLaRCVMauNoV+pJmA5FaEy6BE+6RKTcv
- gLq1D9WZuBbFwOJSn/UCAFW0HNpfrJE=
-X-Google-Smtp-Source: ABdhPJwMm3ssxxVoX4IjcaB4OfjSFX8uwaMqQuXmL+43O0OdrrGgFkJ4RttA2QLrMWvhx0V53U2nXQ==
-X-Received: by 2002:a17:907:3a11:b0:6fe:c56e:6c66 with SMTP id
- fb17-20020a1709073a1100b006fec56e6c66mr655815ejc.175.1653136726185; 
- Sat, 21 May 2022 05:38:46 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=YvmjahSH6Cju7U9qzDN5zEJqIaL+shkYAg0/c8jmKAA=;
+ b=aif9iluhz11g8CAh7+ca9pbpLx2vXQtfYBlyKFXFuWERXmrxmTwagCeP9lwNVDuqpz
+ sgxw8CcDR7roe1M7X1E9+SoW3AvibMOBWOMFB2aQnY9duXexzuEOHhMAPkvQFfcokbdB
+ fFBE2HSqorFSg/8tfxiDNBlYJKCCPj7WOT1/a0da63/TErkidccqt/fsMpzJVq9SHaZ/
+ Rs2Mm5GrYuyHUbHlbq+ZPbmS5fdD7UUxvXevsiau+nPMvf1kvVqtMDKdVe5oHR2jo75X
+ DIVxloPU2qF1tahsCoRKiBymr439Z5B2rGp5egxOx9o/rlNDOWmrGI8hnsLx1avJno+J
+ EKnw==
+X-Gm-Message-State: AOAM533HFNcNatk7VcgPv8CNCyd78YHU8g0/I6hNsmxMf07wZFO3HwOH
+ 19HaIMyAITjvXTUBCU0AJam9x3WRnU4=
+X-Google-Smtp-Source: ABdhPJw9ItLuIHFPSyicKsB6dRJkMurVc1uvKNN1HjaLgHkQCTM5kBZLURG+hy84nqrKO5Iq+fb5fg==
+X-Received: by 2002:a17:906:b048:b0:6fe:be4a:3ecf with SMTP id
+ bj8-20020a170906b04800b006febe4a3ecfmr2148765ejb.104.1653136737093; 
+ Sat, 21 May 2022 05:38:57 -0700 (PDT)
 Received: from t450s.fritz.box (ip4d15a215.dynamic.kabel-deutschland.de.
  [77.21.162.21]) by smtp.gmail.com with ESMTPSA id
- jx4-20020a170907760400b006f3ef214da3sm4110479ejc.9.2022.05.21.05.38.45
+ jx4-20020a170907760400b006f3ef214da3sm4110479ejc.9.2022.05.21.05.38.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 May 2022 05:38:45 -0700 (PDT)
+ Sat, 21 May 2022 05:38:56 -0700 (PDT)
 From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 May 2022 14:38:35 +0200
-Message-Id: <20220521123838.2881-1-heiko.thiery@gmail.com>
+Date: Sat, 21 May 2022 14:38:38 +0200
+Message-Id: <20220521123838.2881-2-heiko.thiery@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220521123838.2881-1-heiko.thiery@gmail.com>
+References: <20220521123838.2881-1-heiko.thiery@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 0/4] U-Boot bump to 2022.04
+Subject: [Buildroot] [PATCH 1/4] package/nettle: add build support for host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,24 +97,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since U-Boot 2022.04 the host tool mkeficapsule requires gnutls. Thus the
-dependency to the host variant has to be added. Unfortunatly this adds
-additional indirect dependencies to host-libasn1, host-nettle and
-host-libunistring are added and will increase the buildtime.
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ package/nettle/nettle.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Heiko Thiery (4):
-  package/nettle: add build support for host
-  package/libtasn1: add build support for host
-  package/gnutls: add build support for host
-  boot/uboot: bump to 2022.04
-
- boot/uboot/Config.in         |  4 ++--
- boot/uboot/uboot.mk          |  2 +-
- package/gnutls/gnutls.mk     | 26 ++++++++++++++++++++++++++
- package/libtasn1/libtasn1.mk |  1 +
- package/nettle/nettle.mk     |  1 +
- 5 files changed, 31 insertions(+), 3 deletions(-)
-
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index 3dbd0cb94b..bc3708ca94 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -27,3 +27,4 @@ NETTLE_CONF_OPTS += --disable-arm-neon
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.20.1
 
