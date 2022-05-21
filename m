@@ -4,77 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1038EC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 21 May 2022 15:30:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D628C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 21 May 2022 16:47:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C59F40B45;
-	Sat, 21 May 2022 15:30:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 784CD40B08;
+	Sat, 21 May 2022 16:47:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R09OcuIOkP96; Sat, 21 May 2022 15:30:50 +0000 (UTC)
+	with ESMTP id DBxCWsj8i0s0; Sat, 21 May 2022 16:47:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D5BBD40B3B;
-	Sat, 21 May 2022 15:30:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 21C011BF25B
- for <buildroot@lists.busybox.net>; Sat, 21 May 2022 15:30:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C79D40AFF;
+	Sat, 21 May 2022 16:47:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B2E01BF423
+ for <buildroot@lists.busybox.net>; Sat, 21 May 2022 16:47:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F16640B3B
- for <buildroot@lists.busybox.net>; Sat, 21 May 2022 15:30:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A35F83196
+ for <buildroot@lists.busybox.net>; Sat, 21 May 2022 16:47:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rkYmYW22Jve2 for <buildroot@lists.busybox.net>;
- Sat, 21 May 2022 15:30:46 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nGHNv_OYji20 for <buildroot@lists.busybox.net>;
+ Sat, 21 May 2022 16:47:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 214BF400AB
- for <buildroot@buildroot.org>; Sat, 21 May 2022 15:30:46 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id m20so3903557wrb.13
- for <buildroot@buildroot.org>; Sat, 21 May 2022 08:30:45 -0700 (PDT)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D2DA583118
+ for <buildroot@buildroot.org>; Sat, 21 May 2022 16:47:38 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ n124-20020a1c2782000000b003972dfca96cso4075320wmn.4
+ for <buildroot@buildroot.org>; Sat, 21 May 2022 09:47:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=LCWy9pIm8SlOTeSzAwJXSiSztxKW22Fe3V6cqEeUes4=;
- b=efpOlZYQvX8/uM0SvZ4MjztjGapvuvzC639p3/L9dBhAYsusqyjh2eQEKxL2P3JBr2
- mmzFNQiPn0xlFoKAM6ZWUtJYOguu4a860ti6c5riE8f9oFf7dGgGVV9z8DUmtIfSlxHr
- vCtF+dt4nfZ7GtahTyNfXyhIuuwJLfGV1r/wviaJlukro6eRWWs28cvN2/AhuLS63EIA
- KOA8Kcx7tGnKZjbM4WQd9b6cVpjyQRg/cjRFG2RVDiAUrx+saoK4084J63R13VfmR0Cr
- jG+6Lt5yYwvMeJaO28BBmA5v/O7q3FtzcrioO1faL/Dghn02L39NzYiAYuZdzszsc2LE
- ZiOQ==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=2HT0Eni8smmFqx2Y82VL53HZ3kVT/Re/7KPm6z7/s+8=;
+ b=J20fVKDluWk+iQcZFgc0bBXaYh+QSsSMg05WANk4FGXuMR45pIzGNSzjEX8hrEgty0
+ qXdacemWdOdBrno+AEAWruRlggPSwOnjhNLeIJ5PZLsSdZaBkRmBshndQjyzED0Hnst0
+ Gyd6LkyIzaqx9dB7x+QWDig67bCfTETTEzUNXIrPOK+j+1EHJR9N8j3CyVsNOooDdFL1
+ wGJM2R89+Nt4YqsJulCfYKtVAXR7maoAcfC/jkFBh+unah2n9WabK6BtWPLhdgaXxsty
+ hgwR8K47lHu/63/rdB05sF6aqy6c7EYIc8OuUVGi38A9+LNaX+xUZOYj4zE5BIHrEgtY
+ QsYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=LCWy9pIm8SlOTeSzAwJXSiSztxKW22Fe3V6cqEeUes4=;
- b=kSF3g2u3IXsJlmq/rKFJjtzmrgGtf7l7nYXMBD8zXPZFNcWgk3B3vdLSU1q5X2nm0H
- XC9LGZznceJX7gBjiQ0ueh03hg9YoYe4pwk7NzH7iZhXG2mGx7qhNyeHeiYoBXei+Eb8
- 8K0OvuIvt5BsRdMtBfEXvdNBHxAIJxWkH2heELfmtNzWy1isBhLz7UfPAHvuNMj3ECg0
- D4XZNGceChfPOmH1uH2Zt5lPdFn8uRczAmXahFWhUj7iwCD71p3qfhBNHVVyQGd63DNS
- XKerYC76KVgStOqw2J+XJlsiN9jZGjqU/7MxgveQ47WC5XDfLMOuSKyUfYEuQ808XP74
- B3tw==
-X-Gm-Message-State: AOAM533K+e3fQsu1Ixy3cnRYercGpUTkYXyS3ApDGAGWqZ0jsdxrwuB9
- EWSANuaUMd0PmBJK+QdosNBrAHvmj+s=
-X-Google-Smtp-Source: ABdhPJyfbeaK6NvkWq2L8Qn02XZk0Y858bGdVgAPyKdRyK5L0suImuNzkhZsN9bW4yr/V0xNCtK2yA==
-X-Received: by 2002:a5d:6042:0:b0:20e:65c0:f69b with SMTP id
- j2-20020a5d6042000000b0020e65c0f69bmr12672095wrt.524.1653147043997; 
- Sat, 21 May 2022 08:30:43 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- e3-20020adfa743000000b0020d0f111241sm5444003wrd.24.2022.05.21.08.30.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 May 2022 08:30:43 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 21 May 2022 17:28:24 +0200
-Message-Id: <20220521152824.894631-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=2HT0Eni8smmFqx2Y82VL53HZ3kVT/Re/7KPm6z7/s+8=;
+ b=uw/OoonvwP9Kb3pQjc0bQvg7l4M6cteZrOhr+8ToGr59Hh+0QxaVl6bRBDgCmW9ftS
+ RwzKlhh5eM0WpWSYlkSvo3DMJBgfiGpZO8JfgdAJ8SGbEP1n8VWsX5wNWUAkgVTLhiKP
+ L41QSztyHtnxh0BjsFwyCDhV4A1LGU9KNVZXuln5WkE4Fs+pryAzECATTk0yCRjfTTv6
+ 2CQLIJOxnCfTYPV+7ENiC3UafbRdExDpF27cJhxh+NxLPO4kPKxqDPKXMXhL/HmlXKl+
+ EOkXXERqi/KWatAC0JbVmDUGWUH1AVke+u2gCiR50EdMnndPYGM2sVhsMkiihtpaFCMs
+ C3sw==
+X-Gm-Message-State: AOAM533Gkd6FQjzMXcnUvgG/QhBHbRWcalI30doSPQg6Ljn+mLshT0YJ
+ ndoZeTiupZMHOJ7l3ZGZcdC3wq+DqhDM5K3Cx78qF01sdm0=
+X-Google-Smtp-Source: ABdhPJxuak29h76eoRA6gFdiiRjcCKz+f1UXV1B2SDiswsCX82eN/ndq7pgQgHYsEEa/ONGoya+8UqotW88OwdLCtDs=
+X-Received: by 2002:a05:600c:2e53:b0:397:4730:ee7a with SMTP id
+ q19-20020a05600c2e5300b003974730ee7amr388340wmf.118.1653151656891; Sat, 21
+ May 2022 09:47:36 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/rsyslog: security bump to version
- 8.2204.1
+References: <62886d67.1c69fb81.ac372.4710SMTPIN_ADDED_MISSING@mx.google.com>
+ <CAGi-RUKF09JmK_EACoQdBnS_Aw8G6Ep88Lx3rCHY3ZkxrqLvmQ@mail.gmail.com>
+ <20220521164440.0f0df25f@windsurf>
+In-Reply-To: <20220521164440.0f0df25f@windsurf>
+From: Ramon Fried <rfried.dev@gmail.com>
+Date: Sat, 21 May 2022 19:47:24 +0300
+Message-ID: <CAGi-RU+TOb+RCRzU=WeWw2DDwtcxk9_2gptgDpZJRZNonMGZUQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2022-05-20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,54 +85,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2022-24903: Modules for TCP syslog reception have a heap buffer
-overflow when octet-counted framing is used. The attacker can corrupt
-heap values, leading to data integrity issues and availability impact.
-Remote code execution is unlikely to happen but not impossible.
-
-https://github.com/rsyslog/rsyslog/security/advisories/GHSA-ggw7-xr6h-mmr8#advisory-comment-72243
-https://github.com/rsyslog/rsyslog/blob/v8.2204.1/ChangeLog
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/rsyslog/rsyslog.hash | 2 +-
- package/rsyslog/rsyslog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
-index f404098439..4049590bb8 100644
---- a/package/rsyslog/rsyslog.hash
-+++ b/package/rsyslog/rsyslog.hash
-@@ -1,5 +1,5 @@
- # From http://www.rsyslog.com/downloads/download-v8-stable/
--sha256  19b232f765c4ba7a35b91ef1f5f9af775f6ff78ef56bb7737a2ce79ccbb32b98  rsyslog-8.2010.0.tar.gz
-+sha256  a6d731e46ad3d64f6ad4b19bbf1bf56ca4760a44a24bb96823189dc2e71f7028  rsyslog-8.2204.1.tar.gz
- 
- # Locally calculated
- sha256  054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083  COPYING
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 529f143228..741d090d55 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RSYSLOG_VERSION = 8.2010.0
-+RSYSLOG_VERSION = 8.2204.1
- RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
--- 
-2.35.1
-
+On Sat, May 21, 2022 at 5:44 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Ramon,
+>
+> On Sat, 21 May 2022 17:23:04 +0300
+> Ramon Fried <rfried.dev@gmail.com> wrote:
+>
+> > > Build failures related to your packages:
+> > >
+> > >     arch     |             reason             |                                       url
+> > > -------------+--------------------------------+---------------------------------------------------------------------------------
+> > >     m68k     |          bitwise-0.43          | http://autobuild.buildroot.net/results/9e3b9a148bc84004fde4dfe9b389ca2b359a92e2
+> > >   riscv64    |          bitwise-0.43          | http://autobuild.buildroot.net/results/348afc2a0fde85c098a12b58e8e2dcc3780bbb6b
+> > >
+> > >
+> > > Thanks for your contribution to Buildroot!
+> > >
+> > > --
+> > > http://autobuild.buildroot.net
+> > Hi thomas.
+> > as I mentioned in an earlier mail, it looks like it is probably in dependencies.
+> > I took riscv64 as an example and built the qemu
+> > qemu_riscv64_virt_defconfig + bitwise locally.
+> > It is built successfully.
+> >
+> > How was the config file for building the above created ?
+>
+> If you follow the links above, you end up in a directory that contains
+> the full .config file (config) as well as the corresponding defconfig
+> (named "defconfig"). These are the configurations that triggered the
+> build issue.
+>
+> You can also reproduce a build issue by downloading the script
+> https://git.busybox.net/buildroot-test/plain/utils/br-reproduce-build
+> and run:
+>
+>  ./br-reproduce-build 9e3b9a148bc84004fde4dfe9b389ca2b359a92e2
+>
+> Where 9e3b9a148bc84004fde4dfe9b389ca2b359a92e2 is the identifier of the
+> failed build, as visible in the autobuild.buildroot.net URL.
+>
+> Let me know if this helps!
+Yes.
+I managed to reproduce.
+How do I know if it's a regression, or a new configuration that was tested ?
+How was the configuration generated ?
+I'm asking because the autotools fails to detect libreadline.
+libreadline is installed in the filesystem.
+Something is different in libreadline in this setup. I can't point my
+finger at the problem.
+>
+> Thomas Petazzoni
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
