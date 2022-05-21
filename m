@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 600D0C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 21 May 2022 21:59:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A469C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 21 May 2022 21:59:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18DFC8401A;
-	Sat, 21 May 2022 21:59:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BDC0840498;
+	Sat, 21 May 2022 21:59:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rzw86BptcOlO; Sat, 21 May 2022 21:59:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JiGHas5hf9TA; Sat, 21 May 2022 21:59:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22C98840BA;
-	Sat, 21 May 2022 21:59:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 03F861BF3F9
+	by smtp2.osuosl.org (Postfix) with ESMTP id C024F4034B;
+	Sat, 21 May 2022 21:59:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 06AEE1BF873
  for <buildroot@lists.busybox.net>; Sat, 21 May 2022 21:59:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E67D16106C
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9EA84186C
  for <buildroot@lists.busybox.net>; Sat, 21 May 2022 21:58:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cxg3ir8NIT2T for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SF4X6tluvBJb for <buildroot@lists.busybox.net>;
  Sat, 21 May 2022 21:58:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2886560E90
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B9A941710
  for <buildroot@buildroot.org>; Sat, 21 May 2022 21:58:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B6CAC85E06; Sat, 21 May 2022 21:47:45 +0000 (UTC)
+ id 9F4F985DA1; Sat, 21 May 2022 21:47:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 May 2022 23:58:27 +0200
+Date: Sat, 21 May 2022 23:57:50 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 4059d9d67b17998add6970f729e0124b596e3207
-X-Git-Newrev: 4dfd34f9f6ef5708685849493d33d31c81f8806d
+X-Git-Oldrev: 91dc2ea40fc98e3f9e1ddcf395fa799e49612f26
+X-Git-Newrev: f0196659019af5cc31bd5608f68cf9e476b2b747
 X-Patchwork-Hint: ignore
-Message-Id: <20220521214745.B6CAC85E06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/subversion:
- security bump to version 1.14.2
+Message-Id: <20220521214745.9F4F985DA1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/go: security bump
+ to version 1.17.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,104 +59,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4dfd34f9f6ef5708685849493d33d31c81f8806d
+commit: https://git.buildroot.net/buildroot/commit/?id=f0196659019af5cc31bd5608f68cf9e476b2b747
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixes the following security issues:
-
-- CVE-2021-28544: SVN authz protected copyfrom paths regression
-
-  Subversion servers reveal 'copyfrom' paths that should be hidden according
-  to configured path-based authorization (authz) rules.  When a node has
-  been copied from a protected location, users with access to the copy can
-  see the `copyfrom' path of the original.  This also reveals the fact that
-  the node was copied.  Only the 'copyfrom' path is revealed; not its
-  contents.  Both httpd and svnserve servers are vulnerable.
-
-  https://subversion.apache.org/security/CVE-2021-28544-advisory.txt
-
-- CVE-2022-24070: Subversion's mod_dav_svn is vulnerable to memory corruption
-
-  While looking up path-based authorization rules, mod_dav_svn servers may
-  attempt to use memory which has already been freed.
-
-  https://subversion.apache.org/security/CVE-2022-24070-advisory.txt
-
-Drop no longer needed patch and autoreconf, as this is now fixed upstream:
-
-https://svn.apache.org/viewvc?view=revision&revision=1881534
+go1.17.9 (released 2022-04-12) includes security fixes to the
+crypto/elliptic and encoding/pem packages, as well as bug fixes to the
+linker and runtime.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 89e51bc625d94fc5430be72894bd8fa4b1201ae5)
+Reviewed-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 2b2d97780d98763aaa7953776a3d6b9e887b7f8d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../subversion/0001-workaround-ac-run-ifelse.patch | 23 ----------------------
- package/subversion/subversion.hash                 |  4 ++--
- package/subversion/subversion.mk                   |  3 +--
- 3 files changed, 3 insertions(+), 27 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/subversion/0001-workaround-ac-run-ifelse.patch b/package/subversion/0001-workaround-ac-run-ifelse.patch
-deleted file mode 100644
-index 4f229dc49b..0000000000
---- a/package/subversion/0001-workaround-ac-run-ifelse.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--build/ac-macros/macosx.m4: workaround AC_RUN_IFELSE
--
--The SVN_LIB_MACHO_ITERATE macro contains an AC_RUN_IFELSE test that
--doesn't work when cross-compiling. However, this macro is related to
--testing Mac OS X APIs, so in the context of Buildroot, we don't care,
--and the test program is not even going to build. So we simply
--workaround this by turning the test into an AC_COMPILE_IFELSE.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--
--Index: b/build/ac-macros/macosx.m4
--===================================================================
----- a/build/ac-macros/macosx.m4
--+++ b/build/ac-macros/macosx.m4
--@@ -24,7 +24,7 @@
-- AC_DEFUN(SVN_LIB_MACHO_ITERATE,
-- [
--   AC_MSG_CHECKING([for Mach-O dynamic module iteration functions])
---  AC_RUN_IFELSE([AC_LANG_PROGRAM([[
--+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
--     #include <mach-o/dyld.h>
--     #include <mach-o/loader.h>
--   ]],[[
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-index 534d596514..d2239b1b5b 100644
---- a/package/subversion/subversion.hash
-+++ b/package/subversion/subversion.hash
-@@ -1,5 +1,5 @@
--# From https://www.apache.org/dist/subversion/subversion-1.14.1.tar.bz2.sha512
--sha512  0a70c7152b77cdbcb810a029263e4b3240b6ef41d1c19714e793594088d3cca758d40dfbc05622a806b06463becb73207df249393924ce591026b749b875fcdd  subversion-1.14.1.tar.bz2
-+# From https://www.apache.org/dist/subversion/subversion-1.14.2.tar.bz2.sha512
-+sha512  20ada4688ca07d9fb8da4b7d53b5084568652a3b9418c65e688886bae950a16a3ff37710fcfc9c29ef14a89e75b2ceec4e9cf35d5876a7896ebc2b512cfb9ecc  subversion-1.14.2.tar.bz2
- 
- # Locally calculated
- sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index d4cc717536..b27058c024 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 85e6adfb8c..507887eaaa 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  2effcd898140da79a061f3784ca4f8d8b13d811fb2abe9dad2404442dabbdf7a  go1.17.8.src.tar.gz
++sha256  763ad4bafb80a9204458c5fa2b8e7327fa971aee454252c0e362c11236156813  go1.17.9.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 3df16c9a68..41c9a8648f 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUBVERSION_VERSION = 1.14.1
-+SUBVERSION_VERSION = 1.14.2
- SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
- SUBVERSION_SITE = https://downloads.apache.org/subversion
- SUBVERSION_LICENSE = Apache-2.0
-@@ -20,7 +20,6 @@ SUBVERSION_DEPENDENCIES = \
- 	zlib \
- 	sqlite \
- 	$(TARGET_NLS_DEPENDENCIES)
--SUBVERSION_AUTORECONF = YES
- SUBVERSION_CONF_OPTS = \
- 	--with-expat=$(STAGING_DIR)/usr/include:$(STAGING_DIR)/usr/lib: \
- 	--with-apr=$(STAGING_DIR)/usr \
+-GO_VERSION = 1.17.8
++GO_VERSION = 1.17.9
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
