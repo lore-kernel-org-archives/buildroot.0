@@ -4,51 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98527C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 21 May 2022 21:58:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 600D0C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 21 May 2022 21:59:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F3E08450D;
-	Sat, 21 May 2022 21:58:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18DFC8401A;
+	Sat, 21 May 2022 21:59:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B-BHT9h2eIjX; Sat, 21 May 2022 21:58:44 +0000 (UTC)
+	with ESMTP id Rzw86BptcOlO; Sat, 21 May 2022 21:59:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7CBBF844B7;
-	Sat, 21 May 2022 21:58:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7EC0F1BF3F9
- for <buildroot@lists.busybox.net>; Sat, 21 May 2022 21:58:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22C98840BA;
+	Sat, 21 May 2022 21:59:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 03F861BF3F9
+ for <buildroot@lists.busybox.net>; Sat, 21 May 2022 21:59:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6DC2A8409D
- for <buildroot@lists.busybox.net>; Sat, 21 May 2022 21:58:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E67D16106C
+ for <buildroot@lists.busybox.net>; Sat, 21 May 2022 21:58:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qmiGcVppeVeP for <buildroot@lists.busybox.net>;
- Sat, 21 May 2022 21:58:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5130784060
- for <buildroot@buildroot.org>; Sat, 21 May 2022 21:58:39 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 47FBFE0003
- for <buildroot@buildroot.org>; Sat, 21 May 2022 21:58:37 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1nsX7M-00B5bb-9p
- for buildroot@buildroot.org; Sat, 21 May 2022 23:58:36 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Cxg3ir8NIT2T for <buildroot@lists.busybox.net>;
+ Sat, 21 May 2022 21:58:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2886560E90
+ for <buildroot@buildroot.org>; Sat, 21 May 2022 21:58:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id B6CAC85E06; Sat, 21 May 2022 21:47:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20220413121822.2448474-1-peter@korsgaard.com>
-Date: Sat, 21 May 2022 23:58:36 +0200
-In-Reply-To: <20220413121822.2448474-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 13 Apr 2022 14:18:22 +0200")
-Message-ID: <874k1i35v7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/subversion: security bump to
- version 1.14.2
+Date: Sat, 21 May 2022 23:58:27 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 4059d9d67b17998add6970f729e0124b596e3207
+X-Git-Newrev: 4dfd34f9f6ef5708685849493d33d31c81f8806d
+X-Patchwork-Hint: ignore
+Message-Id: <20220521214745.B6CAC85E06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/subversion:
+ security bump to version 1.14.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,42 +53,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4dfd34f9f6ef5708685849493d33d31c81f8806d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fixes the following security issues:
- > - CVE-2021-28544: SVN authz protected copyfrom paths regression
+Fixes the following security issues:
 
- >   Subversion servers reveal 'copyfrom' paths that should be hidden according
- >   to configured path-based authorization (authz) rules.  When a node has
- >   been copied from a protected location, users with access to the copy can
- >   see the `copyfrom' path of the original.  This also reveals the fact that
- >   the node was copied.  Only the 'copyfrom' path is revealed; not its
- >   contents.  Both httpd and svnserve servers are vulnerable.
+- CVE-2021-28544: SVN authz protected copyfrom paths regression
 
- >   https://subversion.apache.org/security/CVE-2021-28544-advisory.txt
+  Subversion servers reveal 'copyfrom' paths that should be hidden according
+  to configured path-based authorization (authz) rules.  When a node has
+  been copied from a protected location, users with access to the copy can
+  see the `copyfrom' path of the original.  This also reveals the fact that
+  the node was copied.  Only the 'copyfrom' path is revealed; not its
+  contents.  Both httpd and svnserve servers are vulnerable.
 
- > - CVE-2022-24070: Subversion's mod_dav_svn is vulnerable to memory corruption
+  https://subversion.apache.org/security/CVE-2021-28544-advisory.txt
 
- >   While looking up path-based authorization rules, mod_dav_svn servers may
- >   attempt to use memory which has already been freed.
+- CVE-2022-24070: Subversion's mod_dav_svn is vulnerable to memory corruption
 
- >   https://subversion.apache.org/security/CVE-2022-24070-advisory.txt
+  While looking up path-based authorization rules, mod_dav_svn servers may
+  attempt to use memory which has already been freed.
 
- > Drop no longer needed patch and autoreconf, as this is now fixed upstream:
+  https://subversion.apache.org/security/CVE-2022-24070-advisory.txt
 
- > https://svn.apache.org/viewvc?view=revision&revision=1881534
+Drop no longer needed patch and autoreconf, as this is now fixed upstream:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+https://svn.apache.org/viewvc?view=revision&revision=1881534
 
-Committed to 2022.02.x, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 89e51bc625d94fc5430be72894bd8fa4b1201ae5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../subversion/0001-workaround-ac-run-ifelse.patch | 23 ----------------------
+ package/subversion/subversion.hash                 |  4 ++--
+ package/subversion/subversion.mk                   |  3 +--
+ 3 files changed, 3 insertions(+), 27 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/subversion/0001-workaround-ac-run-ifelse.patch b/package/subversion/0001-workaround-ac-run-ifelse.patch
+deleted file mode 100644
+index 4f229dc49b..0000000000
+--- a/package/subversion/0001-workaround-ac-run-ifelse.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-build/ac-macros/macosx.m4: workaround AC_RUN_IFELSE
+-
+-The SVN_LIB_MACHO_ITERATE macro contains an AC_RUN_IFELSE test that
+-doesn't work when cross-compiling. However, this macro is related to
+-testing Mac OS X APIs, so in the context of Buildroot, we don't care,
+-and the test program is not even going to build. So we simply
+-workaround this by turning the test into an AC_COMPILE_IFELSE.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-
+-Index: b/build/ac-macros/macosx.m4
+-===================================================================
+---- a/build/ac-macros/macosx.m4
+-+++ b/build/ac-macros/macosx.m4
+-@@ -24,7 +24,7 @@
+- AC_DEFUN(SVN_LIB_MACHO_ITERATE,
+- [
+-   AC_MSG_CHECKING([for Mach-O dynamic module iteration functions])
+--  AC_RUN_IFELSE([AC_LANG_PROGRAM([[
+-+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+-     #include <mach-o/dyld.h>
+-     #include <mach-o/loader.h>
+-   ]],[[
+diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
+index 534d596514..d2239b1b5b 100644
+--- a/package/subversion/subversion.hash
++++ b/package/subversion/subversion.hash
+@@ -1,5 +1,5 @@
+-# From https://www.apache.org/dist/subversion/subversion-1.14.1.tar.bz2.sha512
+-sha512  0a70c7152b77cdbcb810a029263e4b3240b6ef41d1c19714e793594088d3cca758d40dfbc05622a806b06463becb73207df249393924ce591026b749b875fcdd  subversion-1.14.1.tar.bz2
++# From https://www.apache.org/dist/subversion/subversion-1.14.2.tar.bz2.sha512
++sha512  20ada4688ca07d9fb8da4b7d53b5084568652a3b9418c65e688886bae950a16a3ff37710fcfc9c29ef14a89e75b2ceec4e9cf35d5876a7896ebc2b512cfb9ecc  subversion-1.14.2.tar.bz2
+ 
+ # Locally calculated
+ sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+index d4cc717536..b27058c024 100644
+--- a/package/subversion/subversion.mk
++++ b/package/subversion/subversion.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUBVERSION_VERSION = 1.14.1
++SUBVERSION_VERSION = 1.14.2
+ SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
+ SUBVERSION_SITE = https://downloads.apache.org/subversion
+ SUBVERSION_LICENSE = Apache-2.0
+@@ -20,7 +20,6 @@ SUBVERSION_DEPENDENCIES = \
+ 	zlib \
+ 	sqlite \
+ 	$(TARGET_NLS_DEPENDENCIES)
+-SUBVERSION_AUTORECONF = YES
+ SUBVERSION_CONF_OPTS = \
+ 	--with-expat=$(STAGING_DIR)/usr/include:$(STAGING_DIR)/usr/lib: \
+ 	--with-apr=$(STAGING_DIR)/usr \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
