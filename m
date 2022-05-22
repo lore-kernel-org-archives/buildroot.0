@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E531FC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 10:32:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D61D7C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 10:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5F8641298;
-	Sun, 22 May 2022 10:32:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87B14415FC;
+	Sun, 22 May 2022 10:32:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jlg1DLmwut_o; Sun, 22 May 2022 10:32:10 +0000 (UTC)
+	with ESMTP id Lp28x2YSx4YM; Sun, 22 May 2022 10:32:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 716E8410D7;
-	Sun, 22 May 2022 10:32:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8ED001BF47E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 273AB415F1;
+	Sun, 22 May 2022 10:32:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9036C1BF962
  for <buildroot@lists.busybox.net>; Sun, 22 May 2022 10:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C7C283032
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C61840256
  for <buildroot@lists.busybox.net>; Sun, 22 May 2022 10:32:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VSalpmWpCyvc for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DUeX44HREysT for <buildroot@lists.busybox.net>;
  Sun, 22 May 2022 10:32:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C984282F51
+ by smtp2.osuosl.org (Postfix) with ESMTP id D62B1400B8
  for <buildroot@buildroot.org>; Sun, 22 May 2022 10:32:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3220686311; Sun, 22 May 2022 10:20:53 +0000 (UTC)
+ id 3F44B86316; Sun, 22 May 2022 10:20:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 22 May 2022 12:27:42 +0200
+Date: Sun, 22 May 2022 12:29:04 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 648f58ebf7d2178d79392ef87f49e0769ed38731
-X-Git-Newrev: fb517e83439cba19b9419e3145403b12a9fa1cf7
+X-Git-Oldrev: fb517e83439cba19b9419e3145403b12a9fa1cf7
+X-Git-Newrev: 1d763fce2cb0cd8ac95678a2b1d166d67e798e59
 X-Patchwork-Hint: ignore
-Message-Id: <20220522102053.3220686311@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] boot/sun20i-d1-spl:
- update to mainline 4da9c5
+Message-Id: <20220522102053.3F44B86316@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] boot/shim: disable on
+ mips64el
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,41 +59,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb517e83439cba19b9419e3145403b12a9fa1cf7
+commit: https://git.buildroot.net/buildroot/commit/?id=1d763fce2cb0cd8ac95678a2b1d166d67e798e59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Update to latest (as of April 14, 2022).
+Fix the following build failure on mips64el raised since commit
+11b347c03ab0b38389ec11b48f63236a3b4d6547:
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+In file included from shim.h:47,
+                 from shim.c:14:
+/nvmedata/autobuild/instance-17/output-1/build/shim-15.4/include/system/stdarg.h:72:2: error: #error what arch is this
+   72 | #error what arch is this
+      |  ^~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/74f4f1d010cfde6978fd614195ef0006f0acb45a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e7a3501750706eeec7854e708bcd9a8a27b61352)
+(cherry picked from commit 2fd41e56e0e26fd3f3265f0e0015031211e441cf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/sun20i-d1-spl/sun20i-d1-spl.hash | 2 +-
- boot/sun20i-d1-spl/sun20i-d1-spl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ boot/shim/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.hash b/boot/sun20i-d1-spl/sun20i-d1-spl.hash
-index 6ca60e5278..bb2fd66c28 100644
---- a/boot/sun20i-d1-spl/sun20i-d1-spl.hash
-+++ b/boot/sun20i-d1-spl/sun20i-d1-spl.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  69063601239a7254fb72e486b138d88a6f2b5c645b24cdfe9792123f975d4a8f  sun20i-d1-spl-771192d0b3737798d7feca87263c8fa74a449787.tar.gz
-+sha256  3ef28affd35a37675d91d3ac50b85e3dfa356420005f69713df73c85798ff1d8  sun20i-d1-spl-4da9c518c124d6f6123bf274e449514863df3646.tar.gz
-diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.mk b/boot/sun20i-d1-spl/sun20i-d1-spl.mk
-index 2462ce2322..3580ea4c25 100644
---- a/boot/sun20i-d1-spl/sun20i-d1-spl.mk
-+++ b/boot/sun20i-d1-spl/sun20i-d1-spl.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Commit on the 'mainline' branch
--SUN20I_D1_SPL_VERSION = 771192d0b3737798d7feca87263c8fa74a449787
-+SUN20I_D1_SPL_VERSION = 4da9c518c124d6f6123bf274e449514863df3646
- SUN20I_D1_SPL_SITE = $(call github,smaeul,sun20i_d1_spl,$(SUN20I_D1_SPL_VERSION))
- SUN20I_D1_SPL_INSTALL_TARGET = NO
- SUN20I_D1_SPL_INSTALL_IMAGES = YES
+diff --git a/boot/shim/Config.in b/boot/shim/Config.in
+index 2f74d6f332..b0e549a51b 100644
+--- a/boot/shim/Config.in
++++ b/boot/shim/Config.in
+@@ -2,6 +2,7 @@ config BR2_TARGET_SHIM
+ 	bool "shim"
+ 	# it includes gnu-efi
+ 	depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
++	depends on !BR2_mips64el
+ 	help
+ 	  Boot loader to chain-load signed boot loaders under Secure
+ 	  Boot.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
