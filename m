@@ -1,47 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FA6CC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 17:41:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AA3DC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 18:46:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1BAB4172F;
-	Sun, 22 May 2022 17:41:44 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4hp8vHPLIO-b; Sun, 22 May 2022 17:41:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D707416C7;
-	Sun, 22 May 2022 17:41:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 96E911BF2A6
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 17:41:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 93731605AE
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 17:41:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 224B760B12;
+	Sun, 22 May 2022 18:46:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kltOnYev5dOZ for <buildroot@lists.busybox.net>;
- Sun, 22 May 2022 17:41:39 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4F1BC60B6F
- for <buildroot@buildroot.org>; Sun, 22 May 2022 17:41:39 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (11)
-Received: from bartekk-pc.lan (77-255-16-206.adsl.inetia.pl [77.255.16.206])
- by server220076.nazwa.pl (Postfix) with ESMTP id BCB721BB779;
- Sun, 22 May 2022 19:41:34 +0200 (CEST)
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-To: buildroot@buildroot.org
-Date: Sun, 22 May 2022 19:41:33 +0200
-Message-Id: <20220522174133.106721-1-b.bilas@grinn-global.com>
-X-Mailer: git-send-email 2.36.1
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8kzV0ve1jz2h; Sun, 22 May 2022 18:46:38 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43B4560634;
+	Sun, 22 May 2022 18:46:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8EA061BF318
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 18:46:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D10D40580
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 18:46:35 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qE9XT8-YVFZH for <buildroot@lists.busybox.net>;
+ Sun, 22 May 2022 18:46:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
+ [IPv6:2607:f8b0:4864:20::629])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6C45D40102
+ for <buildroot@buildroot.org>; Sun, 22 May 2022 18:46:34 +0000 (UTC)
+Received: by mail-pl1-x629.google.com with SMTP id b5so4261953plx.10
+ for <buildroot@buildroot.org>; Sun, 22 May 2022 11:46:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=UbYpGIxA5xd9ZnwKoF5pxULBrvyrDImxOlegY/oRQOQ=;
+ b=X7Ka7tPOVVUh/YAKPP5aoafGFPkVTXZrht2wMviAKPwYQVygdICNpEuYSvRgTUohCv
+ miJTXAnjum15YhyO0VfT7Fkhdd6MltnSSKZT0FpmFKc+pJfVRcG8IHgu+nuVh6zkuLlL
+ 04Ga6iwI6skDklIa3cQiczFvoGSUNJmh0dnm4x29ebVfQ6zG6P9peFvVti4Uzrkqj/+O
+ Mlpu7/95/RLslvYTErPuslkSP/NBuYe2TzqstYnWXRuuD1yKz2S2l6ws/mBi86I72YT6
+ qETeVOOWYA8dbU3HwtLrUR375ZtqXPk3z+ownlghmdzfM5+3OGwTJSx0/hVPqhQii2ie
+ wc+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=UbYpGIxA5xd9ZnwKoF5pxULBrvyrDImxOlegY/oRQOQ=;
+ b=ZtvFNOkss5lZoWJZYIS1JUSokj53I42vN0KdnTx1yTaRTMdJfI/60EJeR0zi2VdO9w
+ QSQiaRnQDVNVw/RFz0frFAUPkxt9nHnDOzVlMgUpE8hXHebEsCGOiCr+6zsvPAQZqbPj
+ 8YOsIzC54g4E3xOtNW9Pgli+aiiqRta0SA6v1JBcKyjZFTXEoPyQHJG28LwPbDh7kU/E
+ wPhksNvrb2VceTcEdsyLUgXN0G0fCRkrcR+dCJt5T0VBpC/y8AU2zTOBPiUOjTOQ+DUO
+ 5tF3Aih7cDb8r9uTVaN3xJ3OYvNbLxo48p6q4n0CNE6fGbC4C56C1/VZf78qwS83sM+F
+ m9TQ==
+X-Gm-Message-State: AOAM532R0jPkcpA9HYOTBuXme29ExSHfnADktq04MH7pg1h/50mc3dHQ
+ LZ2fDMadEh4rPMIc/gxaH1vbwqyM4ecy5FhUvIxO3O8g
+X-Google-Smtp-Source: ABdhPJzSQcKRDTQ+zIcbtuTK8l+97LcDluDbQu/UA17IKgYJm8tte9jAx8syoz8QoKI8AnSuez8NUfjSklRI828qx3A=
+X-Received: by 2002:a17:902:e8d6:b0:161:ea52:cd52 with SMTP id
+ v22-20020a170902e8d600b00161ea52cd52mr14920952plg.71.1653245193821; Sun, 22
+ May 2022 11:46:33 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/python-esptool: bump version to 4.0
+References: <CALtfCQaLxNdrKhSjMfShjb-nQWUnqa3DSOwbyZm1+Q0fU1UUqQ@mail.gmail.com>
+ <87zgjapr8a.fsf@tarshish>
+In-Reply-To: <87zgjapr8a.fsf@tarshish>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Sun, 22 May 2022 20:45:58 +0200
+Message-ID: <CALtfCQaBG_p15ASxYKSyZhYOePW5uE-BW8F1KG7DkPeJ8bjLiw@mail.gmail.com>
+To: Baruch Siach <baruch@tkos.co.il>
+Subject: Re: [Buildroot] How to select python-cryptograhy package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,49 +82,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bartosz Bilas <b.bilas@grinn-global.com>
+Cc: buildroot@busybox.net, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- package/python-esptool/python-esptool.hash | 4 ++--
- package/python-esptool/python-esptool.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi Baruch,
 
-diff --git a/package/python-esptool/python-esptool.hash b/package/python-esptool/python-esptool.hash
-index ac8f6972d7..354955b2f3 100644
---- a/package/python-esptool/python-esptool.hash
-+++ b/package/python-esptool/python-esptool.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/esptool/json
--md5  ac499eaa99df9b536a98a6f99644f8f6  esptool-3.3.tar.gz
--sha256  39b92e1848e352183188f149f3e876cde4b8a1c095551e7e545a28e5c11eea13  esptool-3.3.tar.gz
-+md5  4e36d267401de7ef80ed84c141d8d41d  esptool-4.0.tar.gz
-+sha256  bf6ed90864a02da70fe20132ab589e892ec0af7437df9e0bc4844afd2fc2dac0  esptool-4.0.tar.gz
- # Locally computed sha256 checksums
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/python-esptool/python-esptool.mk b/package/python-esptool/python-esptool.mk
-index 28b5075e72..de7669d057 100644
---- a/package/python-esptool/python-esptool.mk
-+++ b/package/python-esptool/python-esptool.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_ESPTOOL_VERSION = 3.3
-+PYTHON_ESPTOOL_VERSION = 4.0
- PYTHON_ESPTOOL_SOURCE = esptool-$(PYTHON_ESPTOOL_VERSION).tar.gz
--PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/63/85/1a7f65d3f89c112c721c6ec013ecd948112df17640e453ddeb1921b05aab
-+PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/2d/91/76dac7a2c87172ee01e3e6e9ee17afb0b732065d49b476fef65c1ff8a386
- PYTHON_ESPTOOL_SETUP_TYPE = setuptools
- PYTHON_ESPTOOL_LICENSE = GPL-2.0+
- PYTHON_ESPTOOL_LICENSE_FILES = LICENSE
--- 
-2.36.1
+On Sat, 21 May 2022 at 22:26, Baruch Siach <baruch@tkos.co.il> wrote:
+>
+> BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS is a blind symbol that is enabled
+> automatically based on your host (build machine) architecture. Being
+> blind means that you can not enable this symbol manually.
+>
+> BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS is defined at
+> package/rustc/Config.in.host. What is your host platform?
 
+It is Linux, Ubuntu 20.04 (x86_64).
+
+> Do you use something that is not listed there?
+
+I am sorry, but I don't know what you mean by this question.
+
+Oscar Gomez Fuente.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
