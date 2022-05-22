@@ -4,44 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26F8FC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 20:25:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6D95C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 20:40:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7167341723;
-	Sun, 22 May 2022 20:25:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C8A7416F9;
+	Sun, 22 May 2022 20:40:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m5uy3OBqXNWP; Sun, 22 May 2022 20:25:04 +0000 (UTC)
+	with ESMTP id cVXpNxns7qmJ; Sun, 22 May 2022 20:40:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4F5F41718;
-	Sun, 22 May 2022 20:25:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4C22E1BF392
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 20:24:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FC6841635;
+	Sun, 22 May 2022 20:40:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DD15F1BF392
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 20:40:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3BA1D83EDF
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 20:24:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA499400DD
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 20:40:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nvGcWbDXOLXc for <buildroot@lists.busybox.net>;
- Sun, 22 May 2022 20:24:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6759F83EDE
- for <buildroot@buildroot.org>; Sun, 22 May 2022 20:24:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D4ABC8633F; Sun, 22 May 2022 20:13:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Iq4eAU8hEe8Z for <buildroot@lists.busybox.net>;
+ Sun, 22 May 2022 20:40:40 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A4DEC40133
+ for <buildroot@buildroot.org>; Sun, 22 May 2022 20:40:40 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ h205-20020a1c21d6000000b003972dda143eso4172732wmh.3
+ for <buildroot@buildroot.org>; Sun, 22 May 2022 13:40:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Q3rIrbowVO2hkHZwNtSaGWRt5IBBdGycSydVxuGf/Ws=;
+ b=CZ55OZ8Rhji0e6ZVYQL8hPzJfPs72smgCFzNTgi43xBMM8VpW7DAyaopsHWWdDoW1S
+ EButRPCzcJq5oGpl+tJwYCLUE9Qwagp6HRAlc6Iack/tGoxkVhqYECEQxMm+kkoeohTi
+ DWSBz0nfavzA87Pc5IiYpZOOurrrC71Cjhezt2s+Grv+HCKyLbWwdmjIkO8Q+hyLN2rD
+ 53hRVlRoDzDazZmPjMkVf9hMrj1Ps6/n7902fQLHV7v1W594fgTFefA4uBCHLRebjOg2
+ RhCwqWkmNus78Yl730pzHBHRT5Upg8mhYVTeGO1PLUBQ2x2E+EduvEXwGrww+NAZeXcT
+ hc6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Q3rIrbowVO2hkHZwNtSaGWRt5IBBdGycSydVxuGf/Ws=;
+ b=GDDy0ZGZK5SnzcjZMTmR3BDdjaynrsM1KF3ZM3L+nMNCmH1RWpYhoEqlOkWHQxz9qR
+ NsNKqgsjyEwPIGCexPpxQtVuCK0QRRO10Yq0kTn6E0IEOHAPky752G1Ls56yhcxXNTvD
+ UoxaDxfcYquLZhwMG0rIs0TCEXw2qRQedlkfc9Wwy76nc44T06MpPaKPGukyN3lnxF0x
+ uJdJYm5z7dC4nrEHIFjpYgs7+xWC85gFhBZJ1HT8BWg2Jl5CGm0ZpGdyiFxTSXBvqz8j
+ 3GoB6EjWWsLO8+A7CwHi9xk7artphufGnyAdc2BzpBzjj5kCfWTNtKKwsczKNJgtXEIR
+ xbMw==
+X-Gm-Message-State: AOAM531hEfFr4YlXj6KhUpGO6KGxBcGqwPZIoypDILn/1GFjZuOYijkA
+ IObinYm5kOiGH6PTxumFgs4jRwGx8jM=
+X-Google-Smtp-Source: ABdhPJzgf2DJ60egfu337NVlajhEPJG0z8Ykn8Yf67WM/2mq/NJyg71zMNHN6NDCZQ5u4Fhtd/L46w==
+X-Received: by 2002:a05:600c:1d18:b0:394:6469:abec with SMTP id
+ l24-20020a05600c1d1800b003946469abecmr17406033wms.89.1653252038589; 
+ Sun, 22 May 2022 13:40:38 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ j11-20020a05600c42cb00b003942a244ec8sm6748351wme.13.2022.05.22.13.40.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 22 May 2022 13:40:37 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 22 May 2022 22:21:59 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3d58ff0ca8653e672bd762e78e7e80cfb5f3b889
-X-Git-Newrev: 00ce9b0e5588fe30814e10463f03dc1e6887de31
-X-Patchwork-Hint: ignore
-Message-Id: <20220522201330.D4ABC8633F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/openjdk{-bin}:
- security bump 17.x to version 17.0.2+8
+Date: Sun, 22 May 2022 22:38:14 +0200
+Message-Id: <20220522203814.1408407-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/rtl8812au-aircrack-ng: bump to
+ version 37e27f9165300c89607144b646545fac576ec510
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,108 +89,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00ce9b0e5588fe30814e10463f03dc1e6887de31
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
-
-Fixes the following security issues:
-
-  - JDK-8251329: (zipfs) Files.walkFileTree walks infinitely if zip has dir named "." inside
-  - JDK-8264934, CVE-2022-21248: Enhance cross VM serialization
-  - JDK-8268488: More valuable DerValues
-  - JDK-8268494: Better inlining of inlined interfaces
-  - JDK-8268512: More content for ContentInfo
-  - JDK-8268813, CVE-2022-21283: Better String matching
-  - JDK-8269151: Better construction of EncryptedPrivateKeyInfo
-  - JDK-8269944: Better HTTP transport redux
-  - JDK-8270386, CVE-2022-21291: Better verification of scan methods
-  - JDK-8270392, CVE-2022-21293: Improve String constructions
-  - JDK-8270416, CVE-2022-21294: Enhance construction of Identity maps
-  - JDK-8270492, CVE-2022-21282: Better resolution of URIs
-  - JDK-8270498, CVE-2022-21296: Improve SAX Parser configuration management
-  - JDK-8270646, CVE-2022-21299: Improved scanning of XML entities
-  - JDK-8270952, CVE-2022-21277: Improve TIFF file handling
-  - JDK-8271962: Better TrueType font loading
-  - JDK-8271968: Better canonical naming
-  - JDK-8271987: Manifest improved manifest entries
-  - JDK-8272014, CVE-2022-21305: Better array indexing
-  - JDK-8272026, CVE-2022-21340: Verify Jar Verification
-  - JDK-8272236, CVE-2022-21341: Improve serial forms for transport
-  - JDK-8272272: Enhance jcmd communication
-  - JDK-8272462: Enhance image handling
-  - JDK-8273290: Enhance sound handling
-  - JDK-8273756, CVE-2022-21360: Enhance BMP image support
-  - JDK-8273838, CVE-2022-21365: Enhanced BMP processing
-  - JDK-8274096, CVE-2022-21366: Improve decoding of image files
-
-For more details, see the announcement:
-
-https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2022-January/011709.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit bbc318be1721990784497821dc4ecc7aea8c848e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openjdk-bin/openjdk-bin.hash | 2 +-
- package/openjdk-bin/openjdk-bin.mk   | 2 +-
- package/openjdk/openjdk.hash         | 2 +-
- package/openjdk/openjdk.mk           | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index 082da7bf87..62691ed6f0 100644
---- a/package/openjdk-bin/openjdk-bin.hash
-+++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -1,5 +1,5 @@
- # https://github.com/adoptium/temurin17-binaries/releases
--sha256  6ea18c276dcbb8522feeebcfc3a4b5cb7c7e7368ba8590d3326c6c3efc5448b6  OpenJDK17U-jdk_x64_linux_hotspot_17.0.1_12.tar.gz
-+sha256  288f34e3ba8a4838605636485d0365ce23e57d5f2f68997ac4c2e4c01967cd48  OpenJDK17U-jdk_x64_linux_hotspot_17.0.2_8.tar.gz
- 
- # From https://github.com/adoptium/temurin11-binaries/releases
- sha256  43fb84f8063ad9bf6b6d694a67b8f64c8827552b920ec5ce794dfe5602edffe7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index c9ddc9f69f..3d1ebd7429 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -6,7 +6,7 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
- HOST_OPENJDK_BIN_VERSION_MAJOR = 17
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.1_12
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.2_8
- else
- HOST_OPENJDK_BIN_VERSION_MAJOR = 11
- HOST_OPENJDK_BIN_VERSION_MINOR = 0.14.1_1
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index f8a4f15260..293787792d 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  8c076203a6f85ab916b3e54de1992bcbcc5ffe580c52b1ac8d52ca7afb9f02d1  openjdk-17.0.1+12.tar.gz
-+sha256  2fdd23261526362d4aaf58323441d4c31d29de2e374ba94bbf2727a00adc0ea7  openjdk-17.0.2+8.tar.gz
- sha256  0e859cc03378439023e17ee82aecee5a52265fb38906a8bebf16027aa2b2bcf5  openjdk-11.0.14.1+1.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 94b8cba577..42d52d57c4 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -6,7 +6,7 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
- OPENJDK_VERSION_MAJOR = 17
--OPENJDK_VERSION_MINOR = 0.1+12
-+OPENJDK_VERSION_MINOR = 0.2+8
- else
- OPENJDK_VERSION_MAJOR = 11
- OPENJDK_VERSION_MINOR = 0.14.1+1
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Rml4IHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVyZSB3aXRoIGtlcm5lbCA+PSA1LjE3IHRoYW5r
+cyB0bwpodHRwczovL2dpdGh1Yi5jb20vYWlyY3JhY2stbmcvcnRsODgxMmF1L2NvbW1pdC83ZTYx
+YWQ4OWNjYWU1MWE4MDcwNmY3NjVlMWQ1ZjJlODJhMTY2MmM3OgoKL2hvbWUvYXV0b2J1aWxkL2F1
+dG9idWlsZC9pbnN0YW5jZS0xNC9vdXRwdXQtMS9idWlsZC9ydGw4ODEyYXUtYWlyY3JhY2stbmct
+M2E2NDAyZTllNzk4MDI4OTFmMTUzMWI0MzViZTU0ZjRkOGI3MWYwYi8uL29zX2RlcC9vc2RlcF9z
+ZXJ2aWNlLmM6IEluIGZ1bmN0aW9uIOKAmHRocmVhZF9leGl04oCZOgovaG9tZS9hdXRvYnVpbGQv
+YXV0b2J1aWxkL2luc3RhbmNlLTE0L291dHB1dC0xL2J1aWxkL3J0bDg4MTJhdS1haXJjcmFjay1u
+Zy0zYTY0MDJlOWU3OTgwMjg5MWYxNTMxYjQzNWJlNTRmNGQ4YjcxZjBiLy4vb3NfZGVwL29zZGVw
+X3NlcnZpY2UuYzoxMjk1OjI6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlv
+biDigJhjb21wbGV0ZV9hbmRfZXhpdOKAmSBbLVdlcnJvcj1pbXBsaWNpdC1mdW5jdGlvbi1kZWNs
+YXJhdGlvbl0KIDEyOTUgfCAgY29tcGxldGVfYW5kX2V4aXQoY29tcCwgMCk7CiAgICAgIHwgIF5+
+fn5+fn5+fn5+fn5+fn5+CgpGaXhlczoKIC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3Jn
+L3Jlc3VsdHMvMWZmZjUwMjNiNWI3OWE3ZDgxZmQ0Y2JhNmRlYThkY2IzZjQyODM0MAoKU2lnbmVk
+LW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Ci0t
+LQogcGFja2FnZS9ydGw4ODEyYXUtYWlyY3JhY2stbmcvcnRsODgxMmF1LWFpcmNyYWNrLW5nLmhh
+c2ggfCAyICstCiBwYWNrYWdlL3J0bDg4MTJhdS1haXJjcmFjay1uZy9ydGw4ODEyYXUtYWlyY3Jh
+Y2stbmcubWsgICB8IDIgKy0KIDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRl
+bGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcnRsODgxMmF1LWFpcmNyYWNrLW5nL3J0
+bDg4MTJhdS1haXJjcmFjay1uZy5oYXNoIGIvcGFja2FnZS9ydGw4ODEyYXUtYWlyY3JhY2stbmcv
+cnRsODgxMmF1LWFpcmNyYWNrLW5nLmhhc2gKaW5kZXggZWQxOTIxZDFjMi4uNjY3Y2YzNGVmYyAx
+MDA2NDQKLS0tIGEvcGFja2FnZS9ydGw4ODEyYXUtYWlyY3JhY2stbmcvcnRsODgxMmF1LWFpcmNy
+YWNrLW5nLmhhc2gKKysrIGIvcGFja2FnZS9ydGw4ODEyYXUtYWlyY3JhY2stbmcvcnRsODgxMmF1
+LWFpcmNyYWNrLW5nLmhhc2gKQEAgLTEsMyArMSwzIEBACiAjIExvY2FsbHkgY2FsY3VsYXRlZAot
+c2hhMjU2ICBhY2FlNzU4YzM4MzQxOTZjNzFmNGVlNThmNTNhM2MxYjI5ZmZkOTg0ZjYzZmYyZjQw
+ZjJiMDgwYzg3ODVjNDlmICBydGw4ODEyYXUtYWlyY3JhY2stbmctM2E2NDAyZTllNzk4MDI4OTFm
+MTUzMWI0MzViZTU0ZjRkOGI3MWYwYi50YXIuZ3oKK3NoYTI1NiAgNzQ5YmEyZTc3ZDAzNjQzODE0
+NDVlNDBmN2YwYjcwNDFkODYxY2Y5YTM1NmRiZTUzMDg1ZTNhYmFlZjg4OGMxZCAgcnRsODgxMmF1
+LWFpcmNyYWNrLW5nLTM3ZTI3ZjkxNjUzMDBjODk2MDcxNDRiNjQ2NTQ1ZmFjNTc2ZWM1MTAudGFy
+Lmd6CiBzaGEyNTYgIDgxNzdmOTc1MTMyMTM1MjZkZjJjZjYxODRkOGZmOTg2YzY3NWFmYjUxNGQ0
+ZTY4YTQwNDAxMDUyMWI4ODA2NDMgIExJQ0VOU0UKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcnRsODgx
+MmF1LWFpcmNyYWNrLW5nL3J0bDg4MTJhdS1haXJjcmFjay1uZy5tayBiL3BhY2thZ2UvcnRsODgx
+MmF1LWFpcmNyYWNrLW5nL3J0bDg4MTJhdS1haXJjcmFjay1uZy5tawppbmRleCAyYmJjYTg4Y2Zi
+Li41NWMxMThhODI1IDEwMDY0NAotLS0gYS9wYWNrYWdlL3J0bDg4MTJhdS1haXJjcmFjay1uZy9y
+dGw4ODEyYXUtYWlyY3JhY2stbmcubWsKKysrIGIvcGFja2FnZS9ydGw4ODEyYXUtYWlyY3JhY2st
+bmcvcnRsODgxMmF1LWFpcmNyYWNrLW5nLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMKIAotUlRMODgxMkFVX0FJUkNSQUNLX05HX1ZFUlNJT04gPSAzYTY0MDJl
+OWU3OTgwMjg5MWYxNTMxYjQzNWJlNTRmNGQ4YjcxZjBiCitSVEw4ODEyQVVfQUlSQ1JBQ0tfTkdf
+VkVSU0lPTiA9IDM3ZTI3ZjkxNjUzMDBjODk2MDcxNDRiNjQ2NTQ1ZmFjNTc2ZWM1MTAKIFJUTDg4
+MTJBVV9BSVJDUkFDS19OR19TSVRFID0gJChjYWxsIGdpdGh1YixhaXJjcmFjay1uZyxydGw4ODEy
+YXUsJChSVEw4ODEyQVVfQUlSQ1JBQ0tfTkdfVkVSU0lPTikpCiBSVEw4ODEyQVVfQUlSQ1JBQ0tf
+TkdfTElDRU5TRSA9IEdQTC0yLjAKIFJUTDg4MTJBVV9BSVJDUkFDS19OR19MSUNFTlNFX0ZJTEVT
+ID0gTElDRU5TRQotLSAKMi4zNS4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
+b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAo=
