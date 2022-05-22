@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EBC9C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 20:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36595C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 20:20:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11D1C83E8A;
-	Sun, 22 May 2022 20:19:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB09C60E74;
+	Sun, 22 May 2022 20:20:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sisChdY9L-ci; Sun, 22 May 2022 20:19:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w5OigN1DrrGf; Sun, 22 May 2022 20:20:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 28A7383E86;
-	Sun, 22 May 2022 20:19:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D2FB01BF392
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 20:19:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF25E60B60;
+	Sun, 22 May 2022 20:20:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 14E5F1BF392
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 20:19:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C192B40A06
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 20:19:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 11BAC416FD
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 20:19:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dxf7iQQIv8Ev for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4iQCMB0sH6OE for <buildroot@lists.busybox.net>;
  Sun, 22 May 2022 20:19:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 246EC400DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 19074416FC
  for <buildroot@buildroot.org>; Sun, 22 May 2022 20:19:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8FA3186330; Sun, 22 May 2022 20:08:27 +0000 (UTC)
+ id 82A818632F; Sun, 22 May 2022 20:08:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 22 May 2022 22:18:23 +0200
+Date: Sun, 22 May 2022 22:17:49 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 28065bdcbb99edf9e79c6ddd0fd7672444725285
-X-Git-Newrev: 17b2be9ba5b2f408c387f8f84370a0f7423b8c01
+X-Git-Oldrev: c495d12ea3a74ea5308b10a1e9b087fc473ed601
+X-Git-Newrev: 28065bdcbb99edf9e79c6ddd0fd7672444725285
 X-Patchwork-Hint: ignore
-Message-Id: <20220522200827.8FA3186330@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/php-apcu: needs
- threads
+Message-Id: <20220522200827.82A818632F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/network-manager:
+ remove invalid dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +59,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17b2be9ba5b2f408c387f8f84370a0f7423b8c01
+commit: https://git.buildroot.net/buildroot/commit/?id=28065bdcbb99edf9e79c6ddd0fd7672444725285
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-php-apcu needs threads since its addition in commit
-8ddeeffa186d8bce875ac713c1e71483c618842a:
+Dependency on libiw has been removed since 0.9.3.990 [1].
+Dependency on libgcrypt has been removed since 1.2-beta1 [2].
+Dependency on libuuid has been removed since 1.31.4-dev [3].
 
-In file included from /home/buildroot/autobuild/instance-3/output-1/build/php-apcu-5.1.20/apc_lock.c:20:
-/home/buildroot/autobuild/instance-3/output-1/build/php-apcu-5.1.20/apc_lock.h:41:11: fatal error: pthread.h: No such file or directory
-   41 | # include "pthread.h"
-      |           ^~~~~~~~~~~
+[1]: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/7d0761588c2dde8816c109c38c1c94233fd74afe
+[2]: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/b6f5f030331cc680edbe19ae322e894494d63687
+[3]: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/73b9883c6f30320b727a664ff2c84cc772aac94b
 
-Fixes:
- - http://autobuild.buildroot.org/results/314405423aeece5ee55d76ec5c4fa1919e7ee853
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Reviewed-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Tested-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 4bd5fc000bec111820f6caea0c9dc02a3f068c94)
+(cherry picked from commit 8b47feff2ff8ac37355431cb0414822da2c87ea1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php-apcu/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/network-manager/Config.in          | 6 ------
+ package/network-manager/network-manager.mk | 2 +-
+ 2 files changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/package/php-apcu/Config.in b/package/php-apcu/Config.in
-index 6338980222..f8e1eb17bb 100644
---- a/package/php-apcu/Config.in
-+++ b/package/php-apcu/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_PHP_APCU
- 	bool "php-apcu"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index a48cb37b15..1370c81c9c 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_NETWORK_MANAGER
+ 	bool "network-manager"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 	depends on !BR2_STATIC_LIBS # gnutls
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_PACKAGE_HAS_UDEV
+@@ -13,11 +12,6 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_GNUTLS
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_LIBGCRYPT
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+-	select BR2_PACKAGE_WIRELESS_TOOLS
+-	select BR2_PACKAGE_WIRELESS_TOOLS_LIB
+ 	select BR2_PACKAGE_LIBNDP
  	help
- 	  APCu is an in-memory key-value store for PHP.
- 
- 	  https://pecl.php.net/package/APCu
-+
-+comment "php-apcu needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 	  NetworkManager is a set of co-operative tools that make
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index a90228992c..d979cfc0d7 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -10,7 +10,7 @@ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
+-	libgcrypt wireless_tools util-linux host-intltool libndp
++	host-intltool libndp
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+ NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
+ NETWORK_MANAGER_CPE_ID_VENDOR = gnome
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
