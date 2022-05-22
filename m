@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C32CBC433FE
-	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 10:22:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1E06C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 10:23:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 813868299E;
-	Sun, 22 May 2022 10:22:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BD6E82BED;
+	Sun, 22 May 2022 10:23:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 92HyIIsGVtr9; Sun, 22 May 2022 10:22:56 +0000 (UTC)
+	with ESMTP id eGg1xLMaOMky; Sun, 22 May 2022 10:23:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A81A382951;
-	Sun, 22 May 2022 10:22:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 29FD81BF963
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78C0282B3E;
+	Sun, 22 May 2022 10:23:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 33BE21BF966
  for <buildroot@lists.busybox.net>; Sun, 22 May 2022 10:22:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 18C064152B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2260A401AE
  for <buildroot@lists.busybox.net>; Sun, 22 May 2022 10:22:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wH1CsBK9Uvo7 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OOiVMYofDuSh for <buildroot@lists.busybox.net>;
  Sun, 22 May 2022 10:22:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 247D24152D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CA79400B8
  for <buildroot@buildroot.org>; Sun, 22 May 2022 10:22:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8429585FD5; Sun, 22 May 2022 10:10:55 +0000 (UTC)
+ id CB49085FDC; Sun, 22 May 2022 10:10:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 22 May 2022 12:07:24 +0200
+Date: Sun, 22 May 2022 12:19:22 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f56e0361c5493cf0b3d0c02fe570ac609c372841
-X-Git-Newrev: 7deb822467aa93c87b0e2803d9bc91483954a414
+X-Git-Oldrev: e1fddab59a0b39c0f7acb59006d447d9c2449241
+X-Git-Newrev: 2db718071f83b01ea971fe898da47658b9acf61f
 X-Patchwork-Hint: ignore
-Message-Id: <20220522101055.8429585FD5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/avrdude: spi
- needs headers >= 4.8
+Message-Id: <20220522101055.CB49085FDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/rtl8189es: bump
+ revision to 39c17661
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +59,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7deb822467aa93c87b0e2803d9bc91483954a414
+commit: https://git.buildroot.net/buildroot/commit/?id=2db718071f83b01ea971fe898da47658b9acf61f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-SPI unconditionally uses GPIOHANDLE_SET_LINE_VALUES_IOCTL which is only
-available since kernel 4.8 and
-https://github.com/torvalds/linux/commit/d7c51b47ac11e66f547b55640405c1c474642d72
-resulting in the following build failure since switch to upstream in
-commit 03fa36df7e6aca0f4a1c8ae2fe691c0cda6ddc7a:
+Update out-of-tree driver to make it work with Linux kernel v5.17
+(and older kernels not compatible with previous driver version,
+like v5.15 etc).
 
-linuxspi.c: In function 'linuxspi_reset_mcu':
-linuxspi.c:102:28: error: storage size of 'data' isn't known
-     struct gpiohandle_data data;
-                            ^~~~
-linuxspi.c:110:32: error: 'GPIOHANDLE_SET_LINE_VALUES_IOCTL' undeclared (first use in this function)
-     ret = ioctl(fd_linehandle, GPIOHANDLE_SET_LINE_VALUES_IOCTL, &data);
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/769021040e5e9293584734e4f461baeaa6dd91cd
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 114487dfd2fbd6c54155a5d58d46aa52ad4869de)
+Signed-off-by: Jan Havran <havran.jan@email.cz>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c95207037168015a942665d25d0341815fc57408)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/avrdude/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/rtl8189es/rtl8189es.hash | 2 +-
+ package/rtl8189es/rtl8189es.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
-index 89558a5ff5..cbbd076667 100644
---- a/package/avrdude/Config.in
-+++ b/package/avrdude/Config.in
-@@ -20,10 +20,10 @@ if BR2_PACKAGE_AVRDUDE
- config BR2_PACKAGE_AVRDUDE_SPI
- 	bool "SPI support"
- 	default y # Backward compatibility
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+diff --git a/package/rtl8189es/rtl8189es.hash b/package/rtl8189es/rtl8189es.hash
+index 624c51ac0d..d897e5e6c2 100644
+--- a/package/rtl8189es/rtl8189es.hash
++++ b/package/rtl8189es/rtl8189es.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  bf972b6494844c66885dc6846228994fac6075477cf9a7122ffd521e25ac791c  rtl8189es-2c8d44ae26485052f39d933a3a132b3ff395803a.tar.gz
++sha256  74325014c1a8503b3a7e48ad06997baddad8c1dae86bb79f4368532cc3e75fb2  rtl8189es-39c17661136da48f8e9c644194dce6a7f5076896.tar.gz
+diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
+index 9e4053ae83..51477ccc97 100644
+--- a/package/rtl8189es/rtl8189es.mk
++++ b/package/rtl8189es/rtl8189es.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "SPI support needs a toolchain w/ linux headers >= 4.6"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
-+comment "SPI support needs a toolchain w/ linux headers >= 4.8"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
- 
- endif
+-RTL8189ES_VERSION = 2c8d44ae26485052f39d933a3a132b3ff395803a
++RTL8189ES_VERSION = 39c17661136da48f8e9c644194dce6a7f5076896
+ RTL8189ES_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189ES_VERSION))
+ RTL8189ES_LICENSE = GPL-2.0
  
 _______________________________________________
 buildroot mailing list
