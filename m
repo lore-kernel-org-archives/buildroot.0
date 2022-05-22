@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59043C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 10:24:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E274C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 10:24:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15ABC40256;
-	Sun, 22 May 2022 10:24:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DBD7540597;
+	Sun, 22 May 2022 10:24:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sLp1CqjCSnlQ; Sun, 22 May 2022 10:24:17 +0000 (UTC)
+	with ESMTP id hn5O8whnVpPu; Sun, 22 May 2022 10:24:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 145AF403AA;
-	Sun, 22 May 2022 10:24:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DA10A1BF47E
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 10:22:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C86314057A;
+	Sun, 22 May 2022 10:24:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 66C6F1BF47E
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 10:22:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25FDD825BF
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 10:22:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 615634152B
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 10:22:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MwiQR-8aa14e for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nyCi2_G-NI-S for <buildroot@lists.busybox.net>;
  Sun, 22 May 2022 10:22:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3E432825DC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63D52415D2
  for <buildroot@buildroot.org>; Sun, 22 May 2022 10:22:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AE10585FD4; Sun, 22 May 2022 10:10:55 +0000 (UTC)
+ id D53A985FD4; Sun, 22 May 2022 10:10:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 22 May 2022 12:10:05 +0200
+Date: Sun, 22 May 2022 12:19:30 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 95fe8b2276a983e420b05acbd1691edf22bac56a
-X-Git-Newrev: c47ac4aa466de8e8b6ffc592f5fffbef4c8b73e7
+X-Git-Oldrev: 2db718071f83b01ea971fe898da47658b9acf61f
+X-Git-Newrev: 64d6c62350e3a387e4e40e1b3886e3d1d99b2d59
 X-Patchwork-Hint: ignore
-Message-Id: <20220522101055.AE10585FD4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/python-django:
- security bump to version 4.0.4
+Message-Id: <20220522101055.D53A985FD4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/rtl8189fs: bump
+ revision to 73f826f0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,63 +59,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c47ac4aa466de8e8b6ffc592f5fffbef4c8b73e7
+commit: https://git.buildroot.net/buildroot/commit/?id=64d6c62350e3a387e4e40e1b3886e3d1d99b2d59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixes the following security issues:
+Update out-of-tree driver to make it work with Linux kernel v5.17.
 
-CVE-2022-28346: Potential SQL injection in QuerySet.annotate(), aggregate(), and extra()
-
-QuerySet.annotate(), aggregate(), and extra() methods were subject to SQL
-injection in column aliases, using a suitably crafted dictionary, with
-dictionary expansion, as the **kwargs passed to these methods.
-
-CVE-2022-28347: Potential SQL injection via QuerySet.explain(**options) on PostgreSQL
-
-QuerySet.explain() method was subject to SQL injection in option names,
-using a suitably crafted dictionary, with dictionary expansion, as the
-**options argument.
-
-For more details, see the advisory:
-https://www.djangoproject.com/weblog/2022/apr/11/security-releases/
-
+Signed-off-by: Jan Havran <havran.jan@email.cz>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 87b8676fbfe57253696864cc3bf20e85852b9c8b)
+(cherry picked from commit 80c11958e6c2228686964c2d6f4e95273403888e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/rtl8189fs/rtl8189fs.hash | 2 +-
+ package/rtl8189fs/rtl8189fs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index f78df56c5f..8d9f0aafdb 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  a86339c0e87241597afa8744704d9965  Django-4.0.2.tar.gz
--sha256  110fb58fb12eca59e072ad59fc42d771cd642dd7a2f2416582aa9da7a8ef954a  Django-4.0.2.tar.gz
-+md5  153fcb5dd7360b7ad219d65cb53e2d57  Django-4.0.4.tar.gz
-+sha256  4e8177858524417563cc0430f29ea249946d831eacb0068a1455686587df40b5  Django-4.0.4.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 652ca477ce..b4d6ec21c9 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
+index a7c3641841..f9772f2a89 100644
+--- a/package/rtl8189fs/rtl8189fs.hash
++++ b/package/rtl8189fs/rtl8189fs.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  2350a15f866ac82a33c11f9505f2deb0f4aa819b9ac1f4809f8d6893412e73fd  rtl8189fs-e10294d2ded27586149fedee1f834d75477b8b40.tar.gz
++sha256  fd74248b8cc62e54a954502228be221ace6051832a972b8b3005cc05e9c87761  rtl8189fs-73f826f0fa74b2fc1ad67eaf92bf9787947ae673.tar.gz
+diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
+index 83c7f3ee0d..40b735c21b 100644
+--- a/package/rtl8189fs/rtl8189fs.mk
++++ b/package/rtl8189fs/rtl8189fs.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 4.0.2
-+PYTHON_DJANGO_VERSION = 4.0.4
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/61/84/676c840e8f1188a6c836e3224b97aa8be4c2e6857c690d6c564eb23a4975
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/d2/95/93d1f75da95624bf89e373d079fa72debf77f9b10acc31998cc52a5ff3f9
+-RTL8189FS_VERSION = e10294d2ded27586149fedee1f834d75477b8b40
++RTL8189FS_VERSION = 73f826f0fa74b2fc1ad67eaf92bf9787947ae673
+ RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
+ RTL8189FS_LICENSE = GPL-2.0
  
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
