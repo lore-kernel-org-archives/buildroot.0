@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F968C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 13:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07FDFC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 13:16:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 89F864057A;
-	Sun, 22 May 2022 13:16:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B7E3A60BB4;
+	Sun, 22 May 2022 13:16:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oFZfme-QmPJJ; Sun, 22 May 2022 13:16:24 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9685240386;
-	Sun, 22 May 2022 13:16:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 983851BF384
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 13:15:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86C4A60B5A
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 13:15:54 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kTTOlIUcUPAJ for <buildroot@lists.busybox.net>;
- Sun, 22 May 2022 13:15:54 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UI0k5dcoSqPG; Sun, 22 May 2022 13:16:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73FBC60AF2;
+	Sun, 22 May 2022 13:16:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 74D861BF384
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 13:16:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 628C840386
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 13:16:19 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aV0RjdwiAf65 for <buildroot@lists.busybox.net>;
+ Sun, 22 May 2022 13:16:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam12on2061f.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe59::61f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E027B60A82
- for <buildroot@buildroot.org>; Sun, 22 May 2022 13:15:53 +0000 (UTC)
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam08on20625.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e8c::625])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BA69C400B9
+ for <buildroot@buildroot.org>; Sun, 22 May 2022 13:16:18 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OQiaDOIVFxTC9IgDu8xAFddG9WmFZ4+yTSEgrKPkMg7ZQ//JSR5z116cdhLhoyG/BTyve36m2GtMfjS7lv3uce/4sI4LAkFJTe6P18es3Sn1CO/Qn/dKfd85gnjX+a6f3dUDusW1G9RPeQvGWNKOkNGWdTHNGA6cl40UCr/tHj33sU2b+8M58Rvt/gMlA5aDK+SBnHpIWQWf4tO4eTowEUmZPRpSOMjlPNb+AfZWUtdEaPfcfy9CETOywOErnfhdn07FY7BcVF2N5zDxQMxGCK+r6lQ1w8zODT2Cr7124YfcEJgSG55MKfoelAtYzMccEjswp9vvHHWOX56Teo/yjw==
+ b=axhwAnFZHNdAHoIBna/xxxgOBoi7X501qLlMjDOldD6yZufFBDF+sY8hkHH/9a6FzqNMgbOd1tSryub9U7Do6drRXvdpsCcJtGT9A3+34hgOTR3G0HjDGOAMsETI26tC6uYDSMy131e/fQs6SN52uIKwZJB8ZSPYixKy74sMNtPa3SjVrO0tmW/LXjRASpomdj3Objp9nf0a/1CSdAWANy9U9uXo5tHCXXD6csTONXoqEjg/CLLTpkCTrExx0qv5f9WZDeBbLUKayJQ1EuhGZ6ZMZgz6Fx6gOAkLLBAAWnHb9RjxPjoFLNji6PshotJ6ZL9GnSZKcdMGaZajMX9swQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+Kt2xbg3TNI5wjRzkeqnxDWRfw3ND+gqXdrWZ9xzH/8=;
- b=b+YaT0+CY7TR94VxRwUTvslAUgCbOaS4B6jHQo8S6xZzQjv9+u8w0huyhE2lrKbh3mBHwxsKdYjV4HgADy3/Yh69InkX6tPTvKvqqtXAIW7uFYPIKa2XedO675iCBp7Tq6dEXiFgCt+mdM94rg2dyvQLcDHdGCCUdIV9mSS589MKlOBAI/w7wJTHE4k2GyCqt9cXvy/etxt9tSNyqeUoUSYF6O6volfZqXQV5z9aGltHmwcyprRUzX/r6Ir4Y/b0ApMsCoY0Zr/FhKzdIkqqkU3m76dqz1ei2/kbknQziO0143Wdsnxk9jOGzjkP7t7DnfAzp3O0YwgaD9eJJKIhcg==
+ bh=MisOy9JDKFZY/F+C5C5FyC/8nsy/UmXX+Tka/L9SrDc=;
+ b=FKg6m8fftKZo/lhcYoXtGtSjtbg2/SnLpWONSaxOKyq1TUfvGPUDd/oHLSO4TOip49tlNevcgqtkKMkRTpQZ8XdAQA3NJPQAGQGLjWp93qfyGZS0aG5oYMmeo0B6gqzS+AhaGGcrxuKOjCeaO1pzwY714LERBKk3ZdDyCKqBjZhzdKkO8Pn6CyrehW+Hnfh2H82QvgveGo7J+HV0NpA2hUv2hsxR8P8Oo0qchKH737SUeo4qUXM3wvLDdyIQi7z47bZtErIzeltSBJcD1leNs85vcWRyKsm3sDkDU6Rmlm4DlTXGgPF069Qj0UIxWDWlrNZAqOSKjkWVy+DeACBoWA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
  is 149.199.62.198) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
@@ -49,73 +49,73 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+Kt2xbg3TNI5wjRzkeqnxDWRfw3ND+gqXdrWZ9xzH/8=;
- b=IJ6FwCKl8F0iXt62o0stO7paFUPpIUWBY45PpQmdO7xgD8I8pMjXPhtFRJaSCu1Ynrg4GmmM6LDgt+rMytrya1IXhZQA68nJ+bVcZhwHwRGf2diHdFToHlM8kYs7dyXIID8G4fuEqUn/wq/3y6M9K5vY8tFq5W8wbnVX34I8Kd0=
-Received: from SN2PR01CA0029.prod.exchangelabs.com (2603:10b6:804:2::39) by
- SJ0PR02MB7615.namprd02.prod.outlook.com (2603:10b6:a03:31b::23) with
+ bh=MisOy9JDKFZY/F+C5C5FyC/8nsy/UmXX+Tka/L9SrDc=;
+ b=XTUQQYuJ2gT7Y+DcQbtV8zHzKbCLRTcLZ0ZX7rjL/YYzqetpX0o51d220jvNX1SkU4gKjsiywcS1oCaKcEn7P18kGOWdiESG5oM/9kF6yqAdNB1gfxhCZTdRPhh+YTnlhI/iFxgEqG+2w6azeN0PWS0zNsiVh28isE2YyJBuU9U=
+Received: from SN6PR04CA0105.namprd04.prod.outlook.com (2603:10b6:805:f2::46)
+ by DM8PR02MB8122.namprd02.prod.outlook.com (2603:10b6:8:1b::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15; Sun, 22 May
- 2022 13:15:50 +0000
-Received: from SN1NAM02FT0005.eop-nam02.prod.protection.outlook.com
- (2603:10b6:804:2:cafe::7a) by SN2PR01CA0029.outlook.office365.com
- (2603:10b6:804:2::39) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.19 via Frontend
- Transport; Sun, 22 May 2022 13:15:49 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.16; Sun, 22 May
+ 2022 13:16:15 +0000
+Received: from SN1NAM02FT0024.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:805:f2:cafe::e2) by SN6PR04CA0105.outlook.office365.com
+ (2603:10b6:805:f2::46) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15 via Frontend
+ Transport; Sun, 22 May 2022 13:16:15 +0000
 X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
  149.199.62.198) smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=quarantine header.from=amd.com;
 Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
  amd.com discourages use of 149.199.62.198 as permitted sender)
 Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0005.mail.protection.outlook.com (10.97.4.182) with Microsoft SMTP
+ SN1NAM02FT0024.mail.protection.outlook.com (10.97.5.147) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5273.14 via Frontend Transport; Sun, 22 May 2022 13:15:49 +0000
+ 15.20.5273.14 via Frontend Transport; Sun, 22 May 2022 13:16:14 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Sun, 22 May 2022 06:15:45 -0700
+ 15.1.2176.14; Sun, 22 May 2022 06:15:48 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Sun, 22 May 2022 06:15:45 -0700
+ 15.1.2176.14 via Frontend Transport; Sun, 22 May 2022 06:15:48 -0700
 Envelope-to: buildroot@buildroot.org, luca@lucaceresoli.net,
  giulio.benetti@benettiengineering.com, peter@korsgaard.com,
  michal.simek@amd.com, wesley@sonifex.co.uk, neal.frager@amd.com
 Received: from [172.25.185.186] (port=39774 helo=xcoapps69.xilinx.com)
  by smtp.xilinx.com with esmtp (Exim 4.90)
  (envelope-from <neal.frager@amd.com>)
- id 1nslQv-0004kl-Jg; Sun, 22 May 2022 06:15:45 -0700
+ id 1nslQy-0004kl-6e; Sun, 22 May 2022 06:15:48 -0700
 To: <buildroot@buildroot.org>
-Date: Sun, 22 May 2022 07:15:34 -0600
-Message-ID: <20220522131535.1498502-3-neal.frager@amd.com>
+Date: Sun, 22 May 2022 07:15:35 -0600
+Message-ID: <20220522131535.1498502-4-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220522131535.1498502-1-neal.frager@amd.com>
 References: <20220522131535.1498502-1-neal.frager@amd.com>
 MIME-Version: 1.0
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a3f961ce-dc8e-4a6b-c845-08da3bf530c9
-X-MS-TrafficTypeDiagnostic: SJ0PR02MB7615:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR02MB76158994D013144CF8DFACD2F0D59@SJ0PR02MB7615.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 26991de7-3201-4516-65a6-08da3bf53fbf
+X-MS-TrafficTypeDiagnostic: DM8PR02MB8122:EE_
+X-Microsoft-Antispam-PRVS: <DM8PR02MB812280FAB8C48C433E3258E2F0D59@DM8PR02MB8122.namprd02.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 2
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: irKzVncB/1strX+2udmO1DQs5wgLk9vMkyNIGAtwZjuoDegQ7a6ZiXctEamGY5iGoL/ZIZMaxpfx405bizApu+ZQj38oZvNGcNgosRCps+IV+4bg4iNkIRz6V5PRjK9wT9Ue3FyAP963QuD+JPrySJ+K9f30cRWrX+Z+po4LjdLbzfegxAokrzlPBPfOxp0ZAsdfuTf4y5mp5doG0Rf5/Nc7gzyj7bSYJ1rQyu+5fqvWnoQbPqf4d389hq/LGmiEfbNt8RSAnQpfCcrr+m9WJb+eNR0jwK4QS4tYQiowjk61W7B7o1o760+VY9Dppjn1gYm3zi3gR8JsrXN2t+ybzWR4mUUoZ3lRjx9qoUqelXFzHMjTHWSVe8jOfXaRwq571aaEYCjyY3vFsGSxfYDt6ksroNNJpybYpAkk8aQHWX+79OZ16s3W22iqdFf4g6bvpJtWYoYP/+QCkEw6mgZcP/czrTNqmturOj1Q+H8FSCiSHwEI8v5kw0E5jbOOU1RXZu2nuiLxrBB7NU+YWdWJesVKGXnMO6GtnV6VC4CQ3HKhxXYoTsPhT1eU2nmAMe+X/QU7n7yUgSYvkRHFp55H6Ru0ltRjfiamaFo/fyVEUh5LVKiHXJi8ymXOx6GMOATtQxJmtURet161WkxrpqYptfkVndVOsXNqeKVeVCCXfYKfhpQzpNf9+UY2JjlMeVsROMTfKb1XADQHbmhz7NJnbQ==
+X-Microsoft-Antispam-Message-Info: JFvhz+cjCStiBzgVz7nLRGDyBhLI9SpWkfFk5re3r37fvl4TmWXN8VhWZHW7wmgDGsjygu/5UX8B7Q2OGlAxsN+c15ZrBjyzKgvnfh/MCPZZWngtxxTV4vMlPs3ps+ic7uAuu1AHfnOjnVHT4Cd8oAi+rU6tnMUTu8SIhyrX9PhNtHTwsHhws7CPfce5YDL67LVGyih00k0Xh97KFWpJancH8ILCJmyKh4Xa9M3gWxbcueN4mE5Ft43K6yc7rTdCLBwozPDohuuC7MFSRu+wzQ5NciFTZv5yuSLvRLmzyK+w+jcER6I4NhYMeFuanwEJqpVZ2/rUwDn2lx8eRTc7n5F3aKeN+elMH3sdpJ5AiML/sszbDd6S1jedI7iNsyjCiLQRQpivuwOeMrzjEUYPtGOuTvSq7ZI7zCuoALbT8cQLuf1meG/Q9dG2YgPQUr8uoCNmJ96BQN/jWeDo1r1tBz76FbPTrh41xPgUSDvDOLGtVvnx+IHhhiJRZMPfO+AcFJy7+HvSp0AFPbhwxnCRBtOQSYpAj4pSosCN76NPl81+31t5n/PuKGMQOosA4AzZeQ16gi7IQMARyOTvzdA1wjB5xdqjxq9bRr9UtEeSCVQDg7NS5p81k/u6uIcjuiXqnbkIwbutsalGFDVh8xdw3Q2I+0OvHJc1Y+cJfzzc+b17LT52UeWdlWFeVBJ69J/ZiYFUgjwY9bnn/G7sw2kPag==
 X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:xsj-pvapexch02.xlnx.xilinx.com;
  PTR:unknown-62-198.xilinx.com; CAT:NONE;
- SFS:(13230001)(4636009)(46966006)(40470700004)(356005)(336012)(47076005)(508600001)(9786002)(36756003)(5660300002)(8936002)(7636003)(2616005)(6916009)(1076003)(316002)(83380400001)(4326008)(35950700001)(86362001)(26005)(70206006)(70586007)(54906003)(8676002)(40460700003)(82310400005)(6666004)(2906002)(44832011)(102446001);
+ SFS:(13230001)(4636009)(46966006)(40470700004)(44832011)(6666004)(82310400005)(35950700001)(316002)(36756003)(5660300002)(86362001)(26005)(2906002)(40460700003)(9786002)(7636003)(4326008)(8676002)(2616005)(6916009)(8936002)(70206006)(54906003)(47076005)(508600001)(1076003)(83380400001)(356005)(336012)(70586007)(102446001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: xilinx.onmicrosoft.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2022 13:15:49.7121 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3f961ce-dc8e-4a6b-c845-08da3bf530c9
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2022 13:16:14.8099 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26991de7-3201-4516-65a6-08da3bf53fbf
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
  Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0005.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0024.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7615
-Subject: [Buildroot] [PATCH v1 3/4] configs/zynqmp_zcu106_defconfig: add
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR02MB8122
+Subject: [Buildroot] [PATCH v1 4/4] configs/zynqmp_kria_kv260_defconfig: add
  parameters to generate extlinux.conf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -138,38 +138,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch enables the zynqmp_zcu106_defconfig to auto-generate the
+This patch enables the zynqmp_kria_kv260_defconfig to auto-generate the
 extlinux.conf file.
 
-The board/zynqmp/extlinux.conf has been removed as it is no longer necessary.
+The board/zynqmp/kria/extlinux.conf and board/zynqmp/kria/post-build.sh have
+been removed as they are no longer necessary.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- board/zynqmp/extlinux.conf      | 5 -----
- configs/zynqmp_zcu106_defconfig | 1 +
- 2 files changed, 1 insertion(+), 5 deletions(-)
- delete mode 100644 board/zynqmp/extlinux.conf
+ board/zynqmp/kria/extlinux.conf     | 4 ----
+ board/zynqmp/kria/post-build.sh     | 8 --------
+ configs/zynqmp_kria_kv260_defconfig | 3 ++-
+ 3 files changed, 2 insertions(+), 13 deletions(-)
+ delete mode 100644 board/zynqmp/kria/extlinux.conf
+ delete mode 100755 board/zynqmp/kria/post-build.sh
 
-diff --git a/board/zynqmp/extlinux.conf b/board/zynqmp/extlinux.conf
+diff --git a/board/zynqmp/kria/extlinux.conf b/board/zynqmp/kria/extlinux.conf
 deleted file mode 100644
-index ae3ec8614a..0000000000
---- a/board/zynqmp/extlinux.conf
+index 663aabb7c3..0000000000
+--- a/board/zynqmp/kria/extlinux.conf
 +++ /dev/null
-@@ -1,5 +0,0 @@
+@@ -1,4 +0,0 @@
 -label linux
 -  kernel /Image
 -  devicetree /system.dtb
--  append console=ttyPS0,115200 root=/dev/mmcblk0p2 rw rootwait
+-  append console=ttyPS1,115200 root=/dev/mmcblk1p2 rw rootwait
+diff --git a/board/zynqmp/kria/post-build.sh b/board/zynqmp/kria/post-build.sh
+deleted file mode 100755
+index 9fd8bbf2c8..0000000000
+--- a/board/zynqmp/kria/post-build.sh
++++ /dev/null
+@@ -1,8 +0,0 @@
+-#!/bin/sh
 -
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index e1ea27a496..3d98dffe01 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -2,6 +2,7 @@ BR2_aarch64=y
+-# genimage will need to find the extlinux.conf
+-# in the binaries directory
+-
+-BOARD_DIR="$(dirname $0)"
+-
+-install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux.conf
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index d4a72a0d19..c1366b705c 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -1,7 +1,8 @@
+ BR2_aarch64=y
  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/kria/post-build.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
++BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.1)/xlnx_rebase_v5.15_LTS_2022.1.tar.gz"
