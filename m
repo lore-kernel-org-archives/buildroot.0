@@ -4,73 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AA3DC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 18:46:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D3F0C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 18:47:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 224B760B12;
-	Sun, 22 May 2022 18:46:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA21660D5A;
+	Sun, 22 May 2022 18:47:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8kzV0ve1jz2h; Sun, 22 May 2022 18:46:38 +0000 (UTC)
+	with ESMTP id 96iknVFewNPS; Sun, 22 May 2022 18:47:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43B4560634;
-	Sun, 22 May 2022 18:46:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8EA061BF318
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 18:46:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA4DB60B1B;
+	Sun, 22 May 2022 18:47:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ABA811BF318
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 18:47:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D10D40580
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 18:46:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A1D083E48
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 18:47:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qE9XT8-YVFZH for <buildroot@lists.busybox.net>;
- Sun, 22 May 2022 18:46:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
- [IPv6:2607:f8b0:4864:20::629])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6C45D40102
- for <buildroot@buildroot.org>; Sun, 22 May 2022 18:46:34 +0000 (UTC)
-Received: by mail-pl1-x629.google.com with SMTP id b5so4261953plx.10
- for <buildroot@buildroot.org>; Sun, 22 May 2022 11:46:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=UbYpGIxA5xd9ZnwKoF5pxULBrvyrDImxOlegY/oRQOQ=;
- b=X7Ka7tPOVVUh/YAKPP5aoafGFPkVTXZrht2wMviAKPwYQVygdICNpEuYSvRgTUohCv
- miJTXAnjum15YhyO0VfT7Fkhdd6MltnSSKZT0FpmFKc+pJfVRcG8IHgu+nuVh6zkuLlL
- 04Ga6iwI6skDklIa3cQiczFvoGSUNJmh0dnm4x29ebVfQ6zG6P9peFvVti4Uzrkqj/+O
- Mlpu7/95/RLslvYTErPuslkSP/NBuYe2TzqstYnWXRuuD1yKz2S2l6ws/mBi86I72YT6
- qETeVOOWYA8dbU3HwtLrUR375ZtqXPk3z+ownlghmdzfM5+3OGwTJSx0/hVPqhQii2ie
- wc+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=UbYpGIxA5xd9ZnwKoF5pxULBrvyrDImxOlegY/oRQOQ=;
- b=ZtvFNOkss5lZoWJZYIS1JUSokj53I42vN0KdnTx1yTaRTMdJfI/60EJeR0zi2VdO9w
- QSQiaRnQDVNVw/RFz0frFAUPkxt9nHnDOzVlMgUpE8hXHebEsCGOiCr+6zsvPAQZqbPj
- 8YOsIzC54g4E3xOtNW9Pgli+aiiqRta0SA6v1JBcKyjZFTXEoPyQHJG28LwPbDh7kU/E
- wPhksNvrb2VceTcEdsyLUgXN0G0fCRkrcR+dCJt5T0VBpC/y8AU2zTOBPiUOjTOQ+DUO
- 5tF3Aih7cDb8r9uTVaN3xJ3OYvNbLxo48p6q4n0CNE6fGbC4C56C1/VZf78qwS83sM+F
- m9TQ==
-X-Gm-Message-State: AOAM532R0jPkcpA9HYOTBuXme29ExSHfnADktq04MH7pg1h/50mc3dHQ
- LZ2fDMadEh4rPMIc/gxaH1vbwqyM4ecy5FhUvIxO3O8g
-X-Google-Smtp-Source: ABdhPJzSQcKRDTQ+zIcbtuTK8l+97LcDluDbQu/UA17IKgYJm8tte9jAx8syoz8QoKI8AnSuez8NUfjSklRI828qx3A=
-X-Received: by 2002:a17:902:e8d6:b0:161:ea52:cd52 with SMTP id
- v22-20020a170902e8d600b00161ea52cd52mr14920952plg.71.1653245193821; Sun, 22
- May 2022 11:46:33 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q1qhq1a3vfdU for <buildroot@lists.busybox.net>;
+ Sun, 22 May 2022 18:47:45 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 417BE83E3E
+ for <buildroot@buildroot.org>; Sun, 22 May 2022 18:47:45 +0000 (UTC)
+Received: from fwd76.dcpf.telekom.de (fwd76.aul.t-online.de [10.223.144.102])
+ by mailout07.t-online.de (Postfix) with SMTP id 36ED18E4F
+ for <buildroot@buildroot.org>; Sun, 22 May 2022 20:47:42 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.201.144]) by fwd76.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1nsqc9-2JJEIL0; Sun, 22 May 2022 20:47:41 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:41712)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nsqc9-0000CZ-3i
+ for buildroot@buildroot.org; Sun, 22 May 2022 20:47:41 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sun, 22 May 2022 20:47:41 +0200
+Message-Id: <20220522184741.2309805-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <CALtfCQaLxNdrKhSjMfShjb-nQWUnqa3DSOwbyZm1+Q0fU1UUqQ@mail.gmail.com>
- <87zgjapr8a.fsf@tarshish>
-In-Reply-To: <87zgjapr8a.fsf@tarshish>
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Sun, 22 May 2022 20:45:58 +0200
-Message-ID: <CALtfCQaBG_p15ASxYKSyZhYOePW5uE-BW8F1KG7DkPeJ8bjLiw@mail.gmail.com>
-To: Baruch Siach <baruch@tkos.co.il>
-Subject: Re: [Buildroot] How to select python-cryptograhy package
+X-TOI-EXPURGATEID: 150726::1653245261-0001619A-D0EC53C9/0/0 CLEAN NORMAL
+X-TOI-MSGID: 8f52942c-7857-44e4-b194-0a81cd412602
+Subject: [Buildroot] [PATCH/next 1/1] package/xmrig: enable for avmv7a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,30 +61,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Baruch,
+Available since 2017:
+https://github.com/xmrig/xmrig/commit/aa4f8b6fa78eb8331b5927ba5315b926ac75ce9c
 
-On Sat, 21 May 2022 at 22:26, Baruch Siach <baruch@tkos.co.il> wrote:
->
-> BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS is a blind symbol that is enabled
-> automatically based on your host (build machine) architecture. Being
-> blind means that you can not enable this symbol manually.
->
-> BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS is defined at
-> package/rustc/Config.in.host. What is your host platform?
+We noticed it since its addition to the readme:
+https://github.com/xmrig/xmrig/commit/97869f3347a621d9dbf20210289ce10c68a5bd34
 
-It is Linux, Ubuntu 20.04 (x86_64).
+Added patch to fix build with gcc-4.8.
 
-> Do you use something that is not listed there?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+Build-tested using this defconfig:
 
-I am sorry, but I don't know what you mean by this question.
+BR2_PACKAGE_XMRIG=y
 
-Oscar Gomez Fuente.
+                             andes-nds32 [ 1/45]: SKIPPED
+                             arm-aarch64 [ 2/45]: OK
+                   bootlin-aarch64-glibc [ 3/45]: OK
+               bootlin-arcle-hs38-uclibc [ 4/45]: SKIPPED
+                    bootlin-armv5-uclibc [ 5/45]: SKIPPED
+                     bootlin-armv7-glibc [ 6/45]: OK
+                   bootlin-armv7m-uclibc [ 7/45]: SKIPPED
+                      bootlin-armv7-musl [ 8/45]: OK
+                bootlin-m68k-5208-uclibc [ 9/45]: SKIPPED
+               bootlin-m68k-68040-uclibc [10/45]: SKIPPED
+             bootlin-microblazeel-uclibc [11/45]: SKIPPED
+                bootlin-mipsel32r6-glibc [12/45]: SKIPPED
+                   bootlin-mipsel-uclibc [13/45]: SKIPPED
+                     bootlin-nios2-glibc [14/45]: SKIPPED
+                 bootlin-openrisc-uclibc [15/45]: SKIPPED
+        bootlin-powerpc64le-power8-glibc [16/45]: SKIPPED
+           bootlin-powerpc-e500mc-uclibc [17/45]: SKIPPED
+                   bootlin-riscv32-glibc [18/45]: SKIPPED
+                   bootlin-riscv64-glibc [19/45]: SKIPPED
+                    bootlin-riscv64-musl [20/45]: SKIPPED
+                      bootlin-sh4-uclibc [21/45]: SKIPPED
+                   bootlin-sparc64-glibc [22/45]: SKIPPED
+                    bootlin-sparc-uclibc [23/45]: SKIPPED
+                    bootlin-x86-64-glibc [24/45]: OK
+                     bootlin-x86-64-musl [25/45]: OK
+                   bootlin-x86-64-uclibc [26/45]: SKIPPED
+                   bootlin-xtensa-uclibc [27/45]: SKIPPED
+                            br-arm-basic [28/45]: SKIPPED
+                    br-arm-full-nothread [29/45]: SKIPPED
+                      br-arm-full-static [30/45]: SKIPPED
+                   br-i386-pentium4-full [31/45]: SKIPPED
+                br-i386-pentium-mmx-musl [32/45]: OK
+                      br-mips64-n64-full [33/45]: SKIPPED
+                 br-mips64r6-el-hf-glibc [34/45]: SKIPPED
+               br-powerpc-603e-basic-cpp [35/45]: SKIPPED
+               br-powerpc64-power7-glibc [36/45]: SKIPPED
+                       linaro-aarch64-be [37/45]: SKIPPED
+                          linaro-aarch64 [38/45]: OK
+                              linaro-arm [39/45]: OK
+                     sourcery-arm-armv4t [40/45]: SKIPPED
+                            sourcery-arm [41/45]: SKIPPED
+                     sourcery-arm-thumb2 [42/45]: OK
+                         sourcery-mips64 [43/45]: SKIPPED
+                           sourcery-mips [44/45]: SKIPPED
+                          sourcery-nios2 [45/45]: SKIPPED
+45 builds, 35 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+ ...0001-astrobwt-fix-build-with-gcc-4.8.patch | 40 +++++++++++++++++++
+ package/xmrig/Config.in                       |  4 +-
+ 2 files changed, 42 insertions(+), 2 deletions(-)
+ create mode 100644 package/xmrig/0001-astrobwt-fix-build-with-gcc-4.8.patch
+
+diff --git a/package/xmrig/0001-astrobwt-fix-build-with-gcc-4.8.patch b/package/xmrig/0001-astrobwt-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..694d7b203c
+--- /dev/null
++++ b/package/xmrig/0001-astrobwt-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,40 @@
++From 72234ae73590fa93d837034a3fb48b71eb071a2a Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 22 May 2022 20:24:14 +0200
++Subject: [PATCH] astrobwt: fix build with gcc-4.8
++
++Fixes build error:
++
++xmrig-6.17.0/src/crypto/astrobwt/sort_indices2.cpp:40:24: error: missing binary operator before token "("
++ #if __has_cpp_attribute(unlikely)
++
++found with the buildroot toolchain
++arm-none-linux-gnueabi-gcc (Sourcery CodeBench Lite 2014.05-29) 4.8.3 20140320 (prerelease)
++
++Inspired by
++https://reviews.llvm.org/rG91c32fd8c8fa395971a028f7091273fa2c8f44e6
++
++Patch sent upstream: https://github.com/xmrig/xmrig/pull/3057
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/crypto/astrobwt/sort_indices2.cpp | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/crypto/astrobwt/sort_indices2.cpp b/src/crypto/astrobwt/sort_indices2.cpp
++index 2d86d462..3a70f619 100644
++--- a/src/crypto/astrobwt/sort_indices2.cpp
+++++ b/src/crypto/astrobwt/sort_indices2.cpp
++@@ -36,6 +36,9 @@
++ #define RESTRICT
++ #endif
++ 
+++#ifndef __has_cpp_attribute
+++#define __has_cpp_attribute(x) 0
+++#endif
++ 
++ #if __has_cpp_attribute(unlikely)
++ #define UNLIKELY(X) (X) [[unlikely]]
++-- 
++2.30.2
++
+diff --git a/package/xmrig/Config.in b/package/xmrig/Config.in
+index c5c6b3e37b..4c70abec6f 100644
+--- a/package/xmrig/Config.in
++++ b/package/xmrig/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_XMRIG
+ 	bool "xmrig"
+ 	# archs officially supported by upstream
+-	depends on BR2_aarch64 || BR2_x86_64 || BR2_i386
++	depends on BR2_ARM_CPU_ARMV7A || BR2_aarch64 || BR2_x86_64 || BR2_i386
+ 	depends on BR2_USE_MMU # libuv
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_XMRIG
+ 	  https://xmrig.com
+ 
+ comment "xmrig needs a glibc or musl toolchain w/ NPTL, dynamic library, C++"
+-	depends on BR2_aarch64 || BR2_x86_64 || BR2_i386
++	depends on BR2_ARM_CPU_ARMV7A || BR2_aarch64 || BR2_x86_64 || BR2_i386
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
