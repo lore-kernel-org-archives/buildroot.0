@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 561B7C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 10:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A77BC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 22 May 2022 10:32:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 228B7830AB;
-	Sun, 22 May 2022 10:32:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E53EE40256;
+	Sun, 22 May 2022 10:32:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3VhqTeZbxqCe; Sun, 22 May 2022 10:32:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BHSo1nZi9uI1; Sun, 22 May 2022 10:32:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D78582F8B;
-	Sun, 22 May 2022 10:32:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B590E1BF963
- for <buildroot@lists.busybox.net>; Sun, 22 May 2022 10:32:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E5D7E40578;
+	Sun, 22 May 2022 10:32:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A2FD71BF47E
+ for <buildroot@lists.busybox.net>; Sun, 22 May 2022 10:32:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B25EE410D7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8BA67400B8
  for <buildroot@lists.busybox.net>; Sun, 22 May 2022 10:32:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o5MJhbOL3t24 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QG_ZBjtxt0Vm for <buildroot@lists.busybox.net>;
  Sun, 22 May 2022 10:32:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3C08410D6
+ by smtp2.osuosl.org (Postfix) with ESMTP id DACF4401AE
  for <buildroot@buildroot.org>; Sun, 22 May 2022 10:32:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 293D2862EF; Sun, 22 May 2022 10:20:53 +0000 (UTC)
+ id 5600286311; Sun, 22 May 2022 10:20:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 22 May 2022 12:22:20 +0200
+Date: Sun, 22 May 2022 12:30:21 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 64d6c62350e3a387e4e40e1b3886e3d1d99b2d59
-X-Git-Newrev: 648f58ebf7d2178d79392ef87f49e0769ed38731
+X-Git-Oldrev: f9332d7aae9d0e4bbe07ff90171ac46e636854ce
+X-Git-Newrev: 00f402d3662ce26173438a59fe701c35fed5136d
 X-Patchwork-Hint: ignore
-Message-Id: <20220522102053.293D2862EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/lvm2: update site
+Message-Id: <20220522102053.5600286311@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/gzip: security
+ bump to 1.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +59,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=648f58ebf7d2178d79392ef87f49e0769ed38731
+commit: https://git.buildroot.net/buildroot/commit/?id=00f402d3662ce26173438a59fe701c35fed5136d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=14751
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 130cfc74d7a273999a3e61100a75d8ac1acc3579)
+CVE-2022-1271: arbitrary-file-write vulnerability
+
+zgrep applied to a crafted file name with two or more newlines
+can no longer overwrite an arbitrary, attacker-selected file.
+[bug introduced in gzip-1.3.10]
+
+https://www.openwall.com/lists/oss-security/2022/04/07/8
+
+Other changes:
+
+** Changes in behavior
+
+  'gzip -l' no longer misreports file lengths 4 GiB and larger.
+  Previously, 'gzip -l' output the 32-bit value stored in the gzip
+  header even though that is the uncompressed length modulo 2**32.
+  Now, 'gzip -l' calculates the uncompressed length by decompressing
+  the data and counting the resulting bytes.  Although this can take
+  much more time, nowadays the correctness pros seem to outweigh the
+  performance cons.
+
+  'zless' is no longer installed on platforms lacking 'less'.
+
+** Bug fixes
+
+  zgrep now names input file on error instead of mislabeling it as
+  "(standard input)", if grep supports the GNU -H and --label options.
+
+  'zdiff -C 5' no longer misbehaves by treating '5' as a file name.
+  [bug present since the beginning]
+
+  Configure-time options like --program-prefix now work.
+
+Release Announcement:
+https://lists.gnu.org/r/bug-gzip/2022-04/msg00011.html
+
+Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 4bfe7edc4b1b9074385edd03c3ac1e7e6df0889c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gzip/gzip.hash | 4 ++--
+ package/gzip/gzip.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index c52eaee1e1..126748d339 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,4 +1,4 @@
--# From http://sources.redhat.com/pub/lvm2/sha512.sum
-+# From https://sourceware.org/ftp/lvm2/sha512.sum
- sha512  6a93bed1d5cf36f0f48d4d413d028b0e480cd4fc20e25d173770a892f265d2a0cc68d01a720b1513469953649e989532cd0c45f9538f92a4190eb3dc4555857d  LVM2.2.03.14.tgz
- # Locally computed sha256 checksums
- sha256  e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 89fdf2c1be..9caf99eb9b 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
+index 1cf73ff912..80b86f4797 100644
+--- a/package/gzip/gzip.hash
++++ b/package/gzip/gzip.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/gzip/gzip-1.11.tar.xz.sig
++# https://ftp.gnu.org/gnu/gzip/gzip-1.12.tar.xz.sig
+ # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256  9b9a95d68fdcb936849a4d6fada8bf8686cddf58b9b26c9c4289ed0c92a77907  gzip-1.11.tar.xz
++sha256  ce5e03e519f637e1f814011ace35c4f87b33c0bbabeec35baf5fbd3479e91956  gzip-1.12.tar.xz
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index 92588fcdb8..2092df363c 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LVM2_VERSION = 2.03.14
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
--LVM2_SITE = http://sources.redhat.com/pub/lvm2
-+LVM2_SITE = https://sourceware.org/ftp/lvm2
- LVM2_INSTALL_STAGING = YES
- LVM2_LICENSE = GPL-2.0, LGPL-2.1
- LVM2_LICENSE_FILES = COPYING COPYING.LIB
+-GZIP_VERSION = 1.11
++GZIP_VERSION = 1.12
+ GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
+ GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
+ # Some other tools expect it to be in /bin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
