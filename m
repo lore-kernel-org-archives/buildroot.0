@@ -4,63 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B2B0C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 13:19:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B60C0C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 15:31:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F09A241749;
-	Mon, 23 May 2022 13:19:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E4664195C;
+	Mon, 23 May 2022 15:31:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EM8D-Kw12f9o; Mon, 23 May 2022 13:19:53 +0000 (UTC)
+	with ESMTP id CSlTjCrMzl6i; Mon, 23 May 2022 15:31:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF392416CE;
-	Mon, 23 May 2022 13:19:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 03B561BF2F0
- for <buildroot@lists.busybox.net>; Mon, 23 May 2022 13:19:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 329BE4192B;
+	Mon, 23 May 2022 15:31:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 00B451BF390
+ for <buildroot@lists.busybox.net>; Mon, 23 May 2022 15:31:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDCAD416CE
- for <buildroot@lists.busybox.net>; Mon, 23 May 2022 13:19:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ADCD9600C4
+ for <buildroot@lists.busybox.net>; Mon, 23 May 2022 15:31:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LV731mYc5bQf for <buildroot@lists.busybox.net>;
- Mon, 23 May 2022 13:19:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q-aVR-Jv1ptV for <buildroot@lists.busybox.net>;
+ Mon, 23 May 2022 15:31:34 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 90915416C9
- for <buildroot@buildroot.org>; Mon, 23 May 2022 13:19:48 +0000 (UTC)
-Received: from [77.244.183.192] (port=63486 helo=[192.168.178.75])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1nt7yL-00006f-Sr; Mon, 23 May 2022 15:19:45 +0200
-Message-ID: <e828792d-8371-7fe1-bdd1-b7f729fa7097@lucaceresoli.net>
-Date: Mon, 23 May 2022 15:19:44 +0200
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5D2DF60B97
+ for <buildroot@buildroot.org>; Mon, 23 May 2022 15:31:34 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0AA2610000E;
+ Mon, 23 May 2022 15:31:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ntA1p-00DiBy-SF; Mon, 23 May 2022 17:31:29 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220412204844.24228-1-fontaine.fabrice@gmail.com>
+Date: Mon, 23 May 2022 17:31:29 +0200
+In-Reply-To: <20220412204844.24228-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 12 Apr 2022 22:48:44 +0200")
+Message-ID: <87wnecw9im.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220521204348.1023965-1-fontaine.fabrice@gmail.com>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <20220521204348.1023965-1-fontaine.fabrice@gmail.com>
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH 1/1] package/qpid-proton: needs C++ and
- threads
+Subject: Re: [Buildroot] [PATCH 1/1] package/bpftool: needs __sync_*_4
+ intrisics
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,46 +59,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabrice,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-first, thanks for addressing this! It's been on my todo list for a long
-time but never got the time do look into that.
+ > bpftool needs __sync_*_4 intrisics since its addition in commit
+ > 3675131e6c654d7536a184db0184fde7a97040e0 and
+ > https://github.com/libbpf/libbpf/commit/b0c3d7133faa55fbcbc19f76f9cc9e183e178c97:
 
-On 21/05/22 22:43, Fabrice Fontaine wrote:
-> qpid-proton needs C++ (and so threads due to proactor) to avoid the
-> following build failure:
-> 
-> CMake Error at /nvmedata/autobuild/instance-3/output-1/host/share/cmake-3.18/Modules/CMakeTestCXXCompiler.cmake:59 (message):
->   The C++ compiler
-> 
->     "/usr/bin/c++"
-> 
->   is not able to compile a simple test program.
-> 
-> C++ check can't easily be removed:
-> https://github.com/apache/qpid-proton/pull/366
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/76f8deccc9c4eee29eddf42586cc28e96eec0827
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > /nvmedata/autobuild/instance-26/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
+ > /nvmedata/autobuild/instance-26/output-1/build/bpftool-v6.7.0/src/libbpf/libbpf.a(libbpf.o):
+ > in function `bpf_program__attach_kprobe_opts':
+ > libbpf.c:(.text+0xff88): undefined reference to `__sync_fetch_and_add_4'
 
-If upstream does not provide _working_ support for building without C++,
-then I would not spend much time in trying to do so.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/919b8351d3783ca30a860df87ae814d5c4b9fd41
 
-My only question is whether you tried to upgrade to the latest version
-and see whether non-C++ builds are supported there. I hope this would be
-a quick test. If you did that and still non-C++ builds fail:
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Committed to 2022.02.x, thanks.
 
 -- 
-Luca
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
