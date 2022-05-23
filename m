@@ -4,60 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0746C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 15:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14BB2C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 15:46:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8CB38408F0;
-	Mon, 23 May 2022 15:44:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A25AB408AF;
+	Mon, 23 May 2022 15:46:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Si32eUa4FKco; Mon, 23 May 2022 15:44:31 +0000 (UTC)
+	with ESMTP id 4QdHpIJFHiV6; Mon, 23 May 2022 15:46:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F33F405BC;
-	Mon, 23 May 2022 15:44:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 827891BF390
- for <buildroot@lists.busybox.net>; Mon, 23 May 2022 15:44:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB2D1402B1;
+	Mon, 23 May 2022 15:46:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 881CD1BF390
+ for <buildroot@lists.busybox.net>; Mon, 23 May 2022 15:46:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70AD5405BC
- for <buildroot@lists.busybox.net>; Mon, 23 May 2022 15:44:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84D1E60EB7
+ for <buildroot@lists.busybox.net>; Mon, 23 May 2022 15:46:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kJyFzokWNWSI for <buildroot@lists.busybox.net>;
- Mon, 23 May 2022 15:44:27 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hFeIg4uruvMi for <buildroot@lists.busybox.net>;
+ Mon, 23 May 2022 15:46:46 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 15FAE40017
- for <buildroot@buildroot.org>; Mon, 23 May 2022 15:44:26 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id E3CE144053C;
- Mon, 23 May 2022 18:43:11 +0300 (IDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1653320592;
- bh=LGPNNe2O1h5KbmWBVLRIISPXFHGDcdbluvfv2KksKok=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=Z+BaCofAjPIUjYm6jiYJKi9g+eUOP5gf2gE02M856NsgDelRsczlDsNZpckv+rD+a
- jM2nGIYorLaBNBsi6FMdNy+uA8cU5ImKwdv4jjGpNoO4ga7ZsXi6x7vfG9cTVn/ph0
- RrpS/pahaIovpeKlSiRXn/lCUAJ0SOGvAXPaZrtdEBw9YbmvSamRY0W1UvDEr2OjtA
- lVd4Fv6FkJGT2mViR25IyA3oUmvLLDRJxRyHAavrE/vvx0I0gMc/eRY4BMmlCYZGLP
- 0czYKpV/BVJOfAgVv3MB217Ua529TQC3mWYDwMkUO9QXQnnXadExKK4UObmzEdJPhQ
- 3sLuKgVmrf2Cg==
-References: <CALtfCQaLxNdrKhSjMfShjb-nQWUnqa3DSOwbyZm1+Q0fU1UUqQ@mail.gmail.com>
- <87zgjapr8a.fsf@tarshish>
- <CALtfCQaBG_p15ASxYKSyZhYOePW5uE-BW8F1KG7DkPeJ8bjLiw@mail.gmail.com>
- <87r14kq55b.fsf@tarshish>
- <CALtfCQY1a6sjLNUh42zsrsu1hPLTMHNDj4+5v5k8w8kv8u6tmg@mail.gmail.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-To: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Mon, 23 May 2022 18:38:58 +0300
-In-reply-to: <CALtfCQY1a6sjLNUh42zsrsu1hPLTMHNDj4+5v5k8w8kv8u6tmg@mail.gmail.com>
-Message-ID: <87ilpwp82x.fsf@tarshish>
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 42BD360A77
+ for <buildroot@buildroot.org>; Mon, 23 May 2022 15:46:45 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E460124000B;
+ Mon, 23 May 2022 15:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1653320803;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=LSCs2Hy7IYsH76/U9+KMnp1kM66l0ex7bx2lDVj3vpI=;
+ b=dMB4vNvftnJCYKIet7bb6YKFruo6VL3doWrykI7UgLIXgfpv9lOWFUJL4KKYi4/9HBE8v2
+ n8WzL6PI5BAGSWP6LGCvOQnIUnbzXkOMGtLrDE3VwVE4QCxA0OysyzhnhcektjA39LKJvN
+ F8hEeoCeBWcjp6XJPuFcSSj5+4jumthpDto8o92vEaZger4FPT5cDbW3GwiZzWY/bO7ysj
+ zju7LS+c6R2jNFJSU7XMU6XdAoQxV6wNTTmA+uHwpQb/ZtLqu8nF+tFrIp3eXxxdj3cylF
+ 5PiUaGtPUla9A68jK2fQZgVS8vtt+7rNULAb7QWJMEzRdRmuU0I3QNfoNrDM2w==
+Date: Mon, 23 May 2022 17:46:42 +0200
+To: Ramon Fried <rfried.dev@gmail.com>
+Message-ID: <20220523174642.0c7a2fc2@windsurf>
+In-Reply-To: <CAGi-RU+TOb+RCRzU=WeWw2DDwtcxk9_2gptgDpZJRZNonMGZUQ@mail.gmail.com>
+References: <62886d67.1c69fb81.ac372.4710SMTPIN_ADDED_MISSING@mx.google.com>
+ <CAGi-RUKF09JmK_EACoQdBnS_Aw8G6Ep88Lx3rCHY3ZkxrqLvmQ@mail.gmail.com>
+ <20220521164440.0f0df25f@windsurf>
+ <CAGi-RU+TOb+RCRzU=WeWw2DDwtcxk9_2gptgDpZJRZNonMGZUQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] How to select python-cryptograhy package
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2022-05-20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,37 +73,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: buildroot <buildroot@buildroot.org>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Oscar,
+Hello Ramon,
 
-On Mon, May 23 2022, Oscar Gomez Fuente wrote:
-> On Mon, 23 May 2022 at 05:50, Baruch Siach <baruch@tkos.co.il> wrote:
->> So BR2_HOSTARCH should be "x86_64". Is that what you see when you lookup
->> BR2_HOSTARCH in menuconfig?
->
-> YES
+On Sat, 21 May 2022 19:47:24 +0300
+Ramon Fried <rfried.dev@gmail.com> wrote:
 
-It turns out I mixed BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS with
-BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS. BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
-depends on the latter, and that in turn can only be enabled for musl or
-glibc. The default libc in Buildroot is uClibc-ng. So you must select a
-toolchain with musl or glibc to enable BR2_PACKAGE_PYTHON_CRYPTOGRAPHY.
+> > Let me know if this helps!  
+> Yes.
+> I managed to reproduce.
+> How do I know if it's a regression, or a new configuration that was tested ?
+> How was the configuration generated ?
 
-Sorry for my confusion.
+Configurations are randomly generated. So it can either be a
+configuration that was never tested before, or some other package that
+was updated, and which has an impact on bitwise.
 
-baruch
+If you look at:
 
+  http://autobuild.buildroot.net/?reason=bitwise-0.43
+
+You can see that the problem started appearing on May 1, 2022. It
+affects only riscv64 and m68k/5208, which is extremely strange (which
+only those architectures ?).
+
+What can be tried is take the first of those build issues (from May 1),
+reproduce it. And then checkout progressively older commits of
+Buildroot (before May 1), and see when it started failing.
+
+Best regards,
+
+Thomas
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
