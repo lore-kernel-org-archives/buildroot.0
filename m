@@ -4,51 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F26F3C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 13:02:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 889F8C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 13:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8ACCC40AE6;
-	Mon, 23 May 2022 13:02:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42CCE40B66;
+	Mon, 23 May 2022 13:02:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kd5CMeV-J6ov; Mon, 23 May 2022 13:02:43 +0000 (UTC)
+	with ESMTP id YrAkZwgk38gq; Mon, 23 May 2022 13:02:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B8D940643;
-	Mon, 23 May 2022 13:02:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4918C1BF3DD
- for <buildroot@lists.busybox.net>; Mon, 23 May 2022 13:02:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E99E040B4F;
+	Mon, 23 May 2022 13:02:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 275C11BF3DD
+ for <buildroot@lists.busybox.net>; Mon, 23 May 2022 13:02:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 29EF961084
- for <buildroot@lists.busybox.net>; Mon, 23 May 2022 13:02:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1648D81B23
+ for <buildroot@lists.busybox.net>; Mon, 23 May 2022 13:02:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hs3pziWC2C4B for <buildroot@lists.busybox.net>;
- Mon, 23 May 2022 13:02:39 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D15B360E2A
- for <buildroot@buildroot.org>; Mon, 23 May 2022 13:02:38 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 958631BF20A;
- Mon, 23 May 2022 13:02:35 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nt7hi-00DZYT-FP; Mon, 23 May 2022 15:02:34 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UdHYTdyqj5wB for <buildroot@lists.busybox.net>;
+ Mon, 23 May 2022 13:02:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3925382CE4
+ for <buildroot@buildroot.org>; Mon, 23 May 2022 13:02:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 169D086390; Mon, 23 May 2022 12:51:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220412182242.1452070-1-fontaine.fabrice@gmail.com>
-Date: Mon, 23 May 2022 15:02:34 +0200
-In-Reply-To: <20220412182242.1452070-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 12 Apr 2022 20:22:42 +0200")
-Message-ID: <871qwkxuz9.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/azure-iot-sdk-c: fix build with
- libressl >= 2.8.0
+To: buildroot@buildroot.org
+Date: Mon, 23 May 2022 15:00:50 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: bceccda3fd48a00bbe8263fd3b846dfb4cd79ac3
+X-Git-Newrev: 8961298f501bdecd0df25b9de532bc7954f56e5c
+X-Patchwork-Hint: ignore
+Message-Id: <20220523125127.169D086390@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/azure-iot-sdk-c:
+ fix build with libressl >= 2.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,32 +53,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8961298f501bdecd0df25b9de532bc7954f56e5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fix the following build failure with libressl >= 2.8.0 raised since
- > https://github.com/libressl-portable/openbsd/commit/703abab3212b397d500bd8c2f5f7ee6b03feb159:
+Fix the following build failure with libressl >= 2.8.0 raised since
+https://github.com/libressl-portable/openbsd/commit/703abab3212b397d500bd8c2f5f7ee6b03feb159:
 
- > /nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c: In function 'add_certificate_to_store':
- > /nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c:961:24: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
- >   961 |             bio_method = BIO_s_mem();
- >       |                        ^
- > cc1: all warnings being treated as errors
+/nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c: In function 'add_certificate_to_store':
+/nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c:961:24: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
+  961 |             bio_method = BIO_s_mem();
+      |                        ^
+cc1: all warnings being treated as errors
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/873f86fb2311ed29a791140f2341943475985fcc
+Fixes:
+ - http://autobuild.buildroot.org/results/873f86fb2311ed29a791140f2341943475985fcc
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit c2f829a71a728b689f8571187e1ff5b81f48a754)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...01-adapters-fix-build-with-libressl-2.8.0.patch | 85 ++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
-Committed to 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/azure-iot-sdk-c/0001-adapters-fix-build-with-libressl-2.8.0.patch b/package/azure-iot-sdk-c/0001-adapters-fix-build-with-libressl-2.8.0.patch
+new file mode 100644
+index 0000000000..e2a241bffe
+--- /dev/null
++++ b/package/azure-iot-sdk-c/0001-adapters-fix-build-with-libressl-2.8.0.patch
+@@ -0,0 +1,85 @@
++From 43b313988d66de144a528e4cf57827df1e8c692d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 12 Apr 2022 20:00:36 +0200
++Subject: [PATCH] adapters: fix build with libressl >= 2.8.0 (#589)
++
++Fix the following build failure with libressl >= 2.8.0 raised since
++https://github.com/libressl-portable/openbsd/commit/703abab3212b397d500bd8c2f5f7ee6b03feb159:
++
++/nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c: In function 'add_certificate_to_store':
++/nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c:961:24: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
++  961 |             bio_method = BIO_s_mem();
++      |                        ^
++cc1: all warnings being treated as errors
++
++Fix #585
++
++Fixes:
++ - http://autobuild.buildroot.org/results/873f86fb2311ed29a791140f2341943475985fcc
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/Azure/azure-c-shared-utility/commit/43b313988d66de144a528e4cf57827df1e8c692d]
++---
++ adapters/tlsio_openssl.c                | 2 +-
++ adapters/x509_openssl.c                 | 4 ++--
++ tests/x509_openssl_ut/x509_openssl_ut.c | 4 ++--
++ 3 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/c-utility/adapters/tlsio_openssl.c b/c-utility/adapters/tlsio_openssl.c
++index 4a3df8496..aa48ce52d 100644
++--- a/c-utility/adapters/tlsio_openssl.c
+++++ b/c-utility/adapters/tlsio_openssl.c
++@@ -953,7 +953,7 @@ static int add_certificate_to_store(TLS_IO_INSTANCE* tls_io_instance, const char
++         }
++         else
++         {
++-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
+++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
++             const BIO_METHOD* bio_method;
++ #else
++             BIO_METHOD* bio_method;
++diff --git a/c-utility/adapters/x509_openssl.c b/c-utility/adapters/x509_openssl.c
++index 5a9e5ac29..46195b403 100644
++--- a/c-utility/adapters/x509_openssl.c
+++++ b/c-utility/adapters/x509_openssl.c
++@@ -75,7 +75,7 @@ static int load_certificate_chain(SSL_CTX* ssl_ctx, const char* certificate)
++                 // certificates.
++ 
++                 /* Codes_SRS_X509_OPENSSL_07_006: [ If successful x509_openssl_add_ecc_credentials shall to import each certificate in the cert chain. ] */
++-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
+++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
++                 SSL_CTX_clear_extra_chain_certs(ssl_ctx);
++ #else
++                 if (ssl_ctx->extra_certs != NULL)
++@@ -345,7 +345,7 @@ int x509_openssl_add_certificates(SSL_CTX* ssl_ctx, const char* certificates)
++         else
++         {
++             /*Codes_SRS_X509_OPENSSL_02_012: [ x509_openssl_add_certificates shall get the memory BIO method function by calling BIO_s_mem. ]*/
++-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
+++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
++             const BIO_METHOD* bio_method;
++ #else
++             BIO_METHOD* bio_method;
++diff --git a/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c b/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c
++index b3349f6b0..f73191e3f 100644
++--- a/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c
+++++ b/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c
++@@ -348,7 +348,7 @@ BEGIN_TEST_SUITE(x509_openssl_unittests)
++         STRICT_EXPECTED_CALL(BIO_new_mem_buf((void*)TEST_PUBLIC_CERTIFICATE, -1));
++         STRICT_EXPECTED_CALL(PEM_read_bio_X509_AUX(IGNORED_PTR_ARG, NULL, NULL, NULL));
++         STRICT_EXPECTED_CALL(SSL_CTX_use_certificate(IGNORED_PTR_ARG, IGNORED_PTR_ARG));
++-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
+++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
++         // Actual macro name: SSL_CTX_clear_extra_chain_certs:
++         STRICT_EXPECTED_CALL(SSL_CTX_ctrl(TEST_SSL_CTX_STRUCTURE, SSL_CTRL_CLEAR_EXTRA_CHAIN_CERTS, 0, NULL));
++ #endif
++@@ -537,7 +537,7 @@ BEGIN_TEST_SUITE(x509_openssl_unittests)
++ 
++         umock_c_negative_tests_snapshot();
++ 
++-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
+++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
++     #ifdef __APPLE__
++         size_t calls_cannot_fail_rsa[] = { 4, 5, 6, 10, 12, 13, 14 };
++         size_t calls_cannot_fail_ecc[] = { 3, 4, 8, 10, 11, 12} ;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
