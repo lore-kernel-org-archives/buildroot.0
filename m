@@ -1,78 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 420C1C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 18:24:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04F55C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 21:16:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E96A418A4;
-	Mon, 23 May 2022 18:24:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 920BA81AF4;
+	Mon, 23 May 2022 21:16:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xzacQL6XZ9cY; Mon, 23 May 2022 18:24:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aABRTm6DNt0l; Mon, 23 May 2022 21:16:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D87D4188F;
-	Mon, 23 May 2022 18:24:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EA5711BF2A7
- for <buildroot@lists.busybox.net>; Mon, 23 May 2022 18:24:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B00A81A81;
+	Mon, 23 May 2022 21:16:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5BCA21BF299
+ for <buildroot@lists.busybox.net>; Mon, 23 May 2022 21:16:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D85634188F
- for <buildroot@lists.busybox.net>; Mon, 23 May 2022 18:24:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 498AD81A81
+ for <buildroot@lists.busybox.net>; Mon, 23 May 2022 21:16:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oMGj1g3zh0-a for <buildroot@lists.busybox.net>;
- Mon, 23 May 2022 18:24:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Fe3MbfPB6ROq for <buildroot@lists.busybox.net>;
+ Mon, 23 May 2022 21:16:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com
- [IPv6:2607:f8b0:4864:20::22a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6C14B41842
- for <buildroot@buildroot.org>; Mon, 23 May 2022 18:24:52 +0000 (UTC)
-Received: by mail-oi1-x22a.google.com with SMTP id w130so18856091oig.0
- for <buildroot@buildroot.org>; Mon, 23 May 2022 11:24:52 -0700 (PDT)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4F12881A6A
+ for <buildroot@buildroot.org>; Mon, 23 May 2022 21:16:48 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ h205-20020a1c21d6000000b003972dda143eso303346wmh.3
+ for <buildroot@buildroot.org>; Mon, 23 May 2022 14:16:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=ImvEIlMFxo9bJ6VdVtdTOxtnHlGNFP2Le8dUmHGfeKg=;
- b=q1bA7vfzvUY4mEbRX4RAJ+Zs/NLkUmiWIjduwGzCiCxXU1q8nuk3eIswOoxe/6sQOi
- IDHwv/wRMRuuIwnEekYjEmbX1Ne94IK0BS1fsLImTYcRKjxzp7D+uuhydMVpWSflNlCl
- Wj76YbMrlvGLJHgqtbAvjTkUHXRIFb2gsugMHFbnmSUheakSCma74vnUMap17UlywhHj
- 6SROxZK5kzJ2eEJOfNVDUDorqaZ7QrjaIOiNUkHaI5djkwJrLwtYAHZOe2tw8XKa32s2
- xh8pEpIv4Ki76C8mz/pzVyqQAYMiz/idHO8fxkJ9nWe69KBcrFkMT9XE88QPfvDZpv/d
- 3lqw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=SwaN2MypifYOwjiml2O36iGrNG0OwOVylfixZL9NIzo=;
+ b=S7t1I15qulB3ltW+i2kUOzlleFNH6342Jm3AoFXlq+v+UzHdgc9Mx1Lm9nFNBci6uj
+ dl5/qIhafBMBLJOJR1aTm/zNfml9VxVzE+XjEvoEeOJ5/gdF/ME631pqdYnaMWFGAqC+
+ E0g3jTZRptQz0HaOcy+MzmgnBnZPs68xueDg87prtEOuFOJsiqk3Q3H0yuBHN9aFwH+Y
+ q3PZ4tmoCvTzmX4E9KIePg666+wN2DZanJQdoiHN5q9J5BEUvejL2N9Y65RB6HrglThS
+ ZPqdX3hAgb/8QmVvEeqH5aaLMcnkNO0p93CsQq/wk9cZGk47j9xZKOMJguhmZ+w4Pgch
+ Okcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=ImvEIlMFxo9bJ6VdVtdTOxtnHlGNFP2Le8dUmHGfeKg=;
- b=OUwpUf/8Gu0JZan2YqoyIcJri64g5ZBcW8l9SxBlw1HAOHUBW4RGoebYoXJ+m+5rz6
- BTKtgbwtax92Po6IcQy2WSmGn0qx6zEErw2aUch1S13FtpTA5qSH/ZvSe8GXElBT2UCw
- Ha/JYpljymkYlvLEpi5kQU4BJT6LFd6k2w2xRjpodYerj/GIbfehw3IP7+Y/xYsEFKeR
- WVMe+Cp9GMx+obLWc9zt+aJeG+BBDsDan/PSOIqX6XAFd9/JEp/GMsjYCYbmwNNU+7QD
- 3Ta6xJiPm+P5aj4HmXokJsa8hNHe1wuRVx1iUR74Sq6zBsl/radz96X8gV1xeeHZKZ5S
- 5yWA==
-X-Gm-Message-State: AOAM532cqDOBftlf1S522RPOmR4GYCdQHKxXER2cpnrMaBjophIroEE8
- 0sR4oSaA4lDopLH7FwzMlUM/R/9rltExV+TzGyxceddf
-X-Google-Smtp-Source: ABdhPJyhjPTWQ5xu4WUiDIWDZRA8T19T2S7imcEkKwPFfsoHXLUmyVzDM4nzBJ+SxwQqwyz3yON1uiV1gr5dNh4b9to=
-X-Received: by 2002:a05:6808:2014:b0:32b:1806:8ed5 with SMTP id
- q20-20020a056808201400b0032b18068ed5mr190444oiw.99.1653330291244; Mon, 23 May
- 2022 11:24:51 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=SwaN2MypifYOwjiml2O36iGrNG0OwOVylfixZL9NIzo=;
+ b=gnUbB/2BXWw5p83iz8mNK4VM/f41PZBn2UIiz23tZDFb30nQ53UVfgXFELsoIFk/S5
+ 4d9mwBqty5f4Ga3BdZAeov8hxpHJTZlaQskZVX+Knj6GLCLWRTyj7eP2kqWCIqP6EsC+
+ H6pcDFYQzWT8kw5kqdlREvXYL0VVTKS3XOhpFtH0Ok8CDyuw5Q9ijf/X1bEYWNeRm+dA
+ zcESIiJ2S+VP208Unefc4YqgxkGR6XEmp2GsbRcMOmnOZBMt1pNtkYxbuBHXQBmrnETx
+ LRYGBCbi1sIwRmQgMXC+eLimygcZrgB+MRlsoDE68Hgh1lRoRu/57U+ijjFc0ZCozRW7
+ Lcmg==
+X-Gm-Message-State: AOAM533TJeLP2NnCcLsQ+hzcAEbCdc0NwWku1KH/2M5dMLGGl0kGKkAf
+ /tZ4DOsIkJUHn9y7KruO7ko4ewXgWd8=
+X-Google-Smtp-Source: ABdhPJwMDjqKN4m+qVZdv2hVxRW481GcDDIK+GOomcO5M7ApqZCjZG+qcXF6tBY7AmEqNHFalaIaTA==
+X-Received: by 2002:a7b:c4cc:0:b0:397:431f:eeb4 with SMTP id
+ g12-20020a7bc4cc000000b00397431feeb4mr771497wmk.123.1653340606183; 
+ Mon, 23 May 2022 14:16:46 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ l2-20020a05600c4f0200b003942a244ebesm397326wmq.3.2022.05.23.14.16.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 23 May 2022 14:16:44 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 23 May 2022 23:14:16 +0200
+Message-Id: <20220523211416.1500310-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <62886d67.1c69fb81.ac372.4710SMTPIN_ADDED_MISSING@mx.google.com>
- <CAGi-RUKF09JmK_EACoQdBnS_Aw8G6Ep88Lx3rCHY3ZkxrqLvmQ@mail.gmail.com>
- <20220521164440.0f0df25f@windsurf>
- <CAGi-RU+TOb+RCRzU=WeWw2DDwtcxk9_2gptgDpZJRZNonMGZUQ@mail.gmail.com>
- <20220523174642.0c7a2fc2@windsurf>
-In-Reply-To: <20220523174642.0c7a2fc2@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 23 May 2022 12:24:39 -0600
-Message-ID: <CADvTj4qe_sP1mTA=7YUY9v-33dG6JdEQ+xUBtsAGornYsqqLCA@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2022-05-20
+Subject: [Buildroot] [PATCH 1/1] package/qemu: fix musl and uclibc-ng build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,68 +86,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ramon Fried <rfried.dev@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, May 23, 2022 at 9:47 AM Thomas Petazzoni via buildroot
-<buildroot@buildroot.org> wrote:
->
-> Hello Ramon,
->
-> On Sat, 21 May 2022 19:47:24 +0300
-> Ramon Fried <rfried.dev@gmail.com> wrote:
->
-> > > Let me know if this helps!
-> > Yes.
-> > I managed to reproduce.
-> > How do I know if it's a regression, or a new configuration that was tested ?
-> > How was the configuration generated ?
->
-> Configurations are randomly generated. So it can either be a
-> configuration that was never tested before, or some other package that
-> was updated, and which has an impact on bitwise.
->
-> If you look at:
->
->   http://autobuild.buildroot.net/?reason=bitwise-0.43
->
-> You can see that the problem started appearing on May 1, 2022. It
-> affects only riscv64 and m68k/5208, which is extremely strange (which
-> only those architectures ?).
+Fix the following musl and uclibc-ng build failure raised since bump to
+version 7.0.0 in commit 3fa79c038ec75228015ea0022de80c5e7a2003f8 and
+https://git.qemu.org/?p=qemu.git;a=commit;h=244fd08323088db73590ff2317dfe86f810b51d7:
 
-Well it likely started getting hit due to the full randomization I
-recently started
-running on my autobuilders, if you notice only my two autobuilders are hitting
-it(which are the only ones running the non-default full randomization rather
-than just package configuration randomization).
+../linux-user/syscall.c: In function 'target_to_host_resource':
+../linux-user/syscall.c:1057:16: error: 'RLIMIT_RTTIME' undeclared (first use in this function); did you mean 'RLIMIT_NOFILE'?
+ 1057 |         return RLIMIT_RTTIME;
+      |                ^~~~~~~~~~~~~
+      |                RLIMIT_NOFILE
 
->
-> What can be tried is take the first of those build issues (from May 1),
-> reproduce it. And then checkout progressively older commits of
-> Buildroot (before May 1), and see when it started failing.
+Fixes:
+ - http://autobuild.buildroot.org/results/22d3b584b704613d030e1ea9e6b709b713e4cc26
 
-If it's only my autobuilders it likely just wasn't getting good coverage before,
-there were also a lot of other bugs that full randomization uncovered that
-were masking other issues by causing super early build failures, so good
-chance it's not actually a regression but an issue that just never showed up
-before due to poor test coverage of certain toolchain configurations.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ll.c-fix-build-without-RLIMIT_RTTIME.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/qemu/0003-linux-user-syscall.c-fix-build-without-RLIMIT_RTTIME.patch
 
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/qemu/0003-linux-user-syscall.c-fix-build-without-RLIMIT_RTTIME.patch b/package/qemu/0003-linux-user-syscall.c-fix-build-without-RLIMIT_RTTIME.patch
+new file mode 100644
+index 0000000000..729c2e9be8
+--- /dev/null
++++ b/package/qemu/0003-linux-user-syscall.c-fix-build-without-RLIMIT_RTTIME.patch
+@@ -0,0 +1,48 @@
++From 84863e007d4ef0858e74a1250e2472954924c617 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 14 May 2022 16:10:16 +0200
++Subject: [PATCH] linux-user/syscall.c: fix build without RLIMIT_RTTIME
++
++RLIMIT_RTTIME is not provided by uclibc-ng or by musl prior to version
++1.2.0 and
++https://github.com/bminor/musl/commit/2507e7f5312e79620f6337935d0a6c9045ccba09
++resulting in the following build failure since
++https://git.qemu.org/?p=qemu.git;a=commit;h=244fd08323088db73590ff2317dfe86f810b51d7:
++
++../linux-user/syscall.c: In function 'target_to_host_resource':
++../linux-user/syscall.c:1057:16: error: 'RLIMIT_RTTIME' undeclared (first use in this function); did you mean 'RLIMIT_NOFILE'?
++ 1057 |         return RLIMIT_RTTIME;
++      |                ^~~~~~~~~~~~~
++      |                RLIMIT_NOFILE
++
++Fixes:
++ - http://autobuild.buildroot.org/results/22d3b584b704613d030e1ea9e6b709b713e4cc26
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://patchwork.ozlabs.org/project/qemu-devel/patch/20220523105239.1499162-1-fontaine.fabrice@gmail.com]
++---
++Changes v1 -> v2 (after review of Laurent Vivier):
++ - Use an ifdef block instead of defining RLIMIT_RTTIME
++
++ linux-user/syscall.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/linux-user/syscall.c b/linux-user/syscall.c
++index dd0d92ba4e..488facb356 100644
++--- a/linux-user/syscall.c
+++++ b/linux-user/syscall.c
++@@ -1053,8 +1053,10 @@ static inline int target_to_host_resource(int code)
++         return RLIMIT_RSS;
++     case TARGET_RLIMIT_RTPRIO:
++         return RLIMIT_RTPRIO;
+++#ifdef RLIMIT_RTTIME
++     case TARGET_RLIMIT_RTTIME:
++         return RLIMIT_RTTIME;
+++#endif
++     case TARGET_RLIMIT_SIGPENDING:
++         return RLIMIT_SIGPENDING;
++     case TARGET_RLIMIT_STACK:
++-- 
++2.35.1
++
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
