@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFB8BC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 15:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B127CC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 15:37:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB1C940915;
-	Mon, 23 May 2022 15:37:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6926160EB7;
+	Mon, 23 May 2022 15:37:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OvWw-Is0har2; Mon, 23 May 2022 15:37:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id omV9KaLRPCat; Mon, 23 May 2022 15:37:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E99D408F8;
-	Mon, 23 May 2022 15:37:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DCE6C1BF977
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1944760E7E;
+	Mon, 23 May 2022 15:37:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F21CB1BF97C
  for <buildroot@lists.busybox.net>; Mon, 23 May 2022 15:36:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CBB3C41926
+ by smtp3.osuosl.org (Postfix) with ESMTP id E0893607BC
  for <buildroot@lists.busybox.net>; Mon, 23 May 2022 15:36:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hjm_B9GY8H13 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HWdZl3WcWm24 for <buildroot@lists.busybox.net>;
  Mon, 23 May 2022 15:36:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E10324184B
+ by smtp3.osuosl.org (Postfix) with ESMTP id F1D7360776
  for <buildroot@buildroot.org>; Mon, 23 May 2022 15:36:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7C233863F0; Mon, 23 May 2022 15:25:32 +0000 (UTC)
+ id 8DD38863F5; Mon, 23 May 2022 15:25:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 23 May 2022 17:30:43 +0200
+Date: Mon, 23 May 2022 17:34:03 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 8961298f501bdecd0df25b9de532bc7954f56e5c
-X-Git-Newrev: d9847c7f81804b3f2ee0a82816d46ee6a5349e49
+X-Git-Oldrev: d9847c7f81804b3f2ee0a82816d46ee6a5349e49
+X-Git-Newrev: 48fccc4eb50f8e4229d24bb786f1276acfe2ea02
 X-Patchwork-Hint: ignore
-Message-Id: <20220523152532.7C233863F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/bpftool: needs
- __sync_*_4 intrisics
+Message-Id: <20220523152532.8DD38863F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/liboping: fix
+ build with gcc >= 7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +59,158 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9847c7f81804b3f2ee0a82816d46ee6a5349e49
+commit: https://git.buildroot.net/buildroot/commit/?id=48fccc4eb50f8e4229d24bb786f1276acfe2ea02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-bpftool needs __sync_*_4 intrisics since its addition in commit
-3675131e6c654d7536a184db0184fde7a97040e0 and
-https://github.com/libbpf/libbpf/commit/b0c3d7133faa55fbcbc19f76f9cc9e183e178c97:
+Replace first patch (which is not in master after nearly 4 years) with
+a new set of pending patches to fix the following build failure with
+gcc >= 7:
 
-/nvmedata/autobuild/instance-26/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-26/output-1/build/bpftool-v6.7.0/src/libbpf/libbpf.a(libbpf.o): in function `bpf_program__attach_kprobe_opts':
-libbpf.c:(.text+0xff88): undefined reference to `__sync_fetch_and_add_4'
+liboping.c: In function 'ping_set_ttl':
+liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
+  207 |    "%s: %s", function, message);
+      |         ^~
+......
+  829 |      sstrerror (ret, errbuf, sizeof (errbuf)));
+      |      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
+  206 |  snprintf (obj->errmsg, sizeof (obj->errmsg),
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  207 |    "%s: %s", function, message);
+      |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/919b8351d3783ca30a860df87ae814d5c4b9fd41
+ - http://autobuild.buildroot.org/results/31083354e9064b2deef86917d67e92a88af0fa46
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 30cbb1e21716b205d1bbd5fc23d53a3f83773f22)
+(cherry picked from commit 1b47bd987f9d549b3dc5d7127d1773275560196d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bpftool/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ ...8-support.patch => 0001-fix-utf8-support.patch} |  0
+ ...size-to-make-GCC-s-truncation-check-happy.patch | 31 ---------------------
+ ...kets-when-adding-hosts-not-when-doing-th.patch} |  0
+ ...-with-GCC-7-buffer-overflow-with-snprintf.patch | 28 +++++++++++++++++++
+ .../liboping/0004-Fix-compile-error-on-GCC-7.patch | 32 ++++++++++++++++++++++
+ 5 files changed, 60 insertions(+), 31 deletions(-)
 
-diff --git a/package/bpftool/Config.in b/package/bpftool/Config.in
-index a1ef3843e6..461be9e5b4 100644
---- a/package/bpftool/Config.in
-+++ b/package/bpftool/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
- config BR2_PACKAGE_BPFTOOL
- 	bool "bpftool"
- 	depends on BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_nios2 # binutils
- 	depends on BR2_USE_WCHAR # binutils, elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
-@@ -24,6 +25,7 @@ config BR2_PACKAGE_BPFTOOL
- 
- comment "bpftool needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 4.12"
- 	depends on BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_nios2
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
+diff --git a/package/liboping/0002-fix-utf8-support.patch b/package/liboping/0001-fix-utf8-support.patch
+similarity index 100%
+rename from package/liboping/0002-fix-utf8-support.patch
+rename to package/liboping/0001-fix-utf8-support.patch
+diff --git a/package/liboping/0001-ping_host_add-Decrease-buffer-size-to-make-GCC-s-truncation-check-happy.patch b/package/liboping/0001-ping_host_add-Decrease-buffer-size-to-make-GCC-s-truncation-check-happy.patch
+deleted file mode 100644
+index b0aca8a715..0000000000
+--- a/package/liboping/0001-ping_host_add-Decrease-buffer-size-to-make-GCC-s-truncation-check-happy.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 18ca43507b351f339ff23062541ee8d58e813a53 Mon Sep 17 00:00:00 2001
+-From: Florian Forster <ff@octo.it>
+-Date: Sun, 29 Jul 2018 14:34:19 +0200
+-Subject: [PATCH] ping_host_add: Decrease buffer size to make GCC's truncation
+- check happy.
+-
+-Fixes: #38
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/octo/liboping/commit/18ca43507b351f339ff23062541ee8d58e813a53]
+----
+- src/liboping.c | 6 ++----
+- 1 file changed, 2 insertions(+), 4 deletions(-)
+-
+-diff --git a/src/liboping.c b/src/liboping.c
+-index 5253e8c..2470988 100644
+---- a/src/liboping.c
+-+++ b/src/liboping.c
+-@@ -1636,10 +1636,8 @@ int ping_host_add (pingobj_t *obj, const char *host)
+- 		}
+- 		else
+- 		{
+--			char errmsg[PING_ERRMSG_LEN];
+--
+--			snprintf (errmsg, PING_ERRMSG_LEN, "Unknown `ai_family': %i", ai_ptr->ai_family);
+--			errmsg[PING_ERRMSG_LEN - 1] = '\0';
+-+			char errmsg[64];
+-+			snprintf (errmsg, sizeof(errmsg), "Unknown `ai_family': %d", ai_ptr->ai_family);
+- 
+- 			dprintf ("%s", errmsg);
+- 			ping_set_error (obj, "getaddrinfo", errmsg);
+diff --git a/package/liboping/0003-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch b/package/liboping/0002-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
+similarity index 100%
+rename from package/liboping/0003-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
+rename to package/liboping/0002-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
+diff --git a/package/liboping/0003-Fix-compile-break-with-GCC-7-buffer-overflow-with-snprintf.patch b/package/liboping/0003-Fix-compile-break-with-GCC-7-buffer-overflow-with-snprintf.patch
+new file mode 100644
+index 0000000000..546f159187
+--- /dev/null
++++ b/package/liboping/0003-Fix-compile-break-with-GCC-7-buffer-overflow-with-snprintf.patch
+@@ -0,0 +1,28 @@
++From 0ad9ee080a7cd8037c341067cc67a84e32e69fea Mon Sep 17 00:00:00 2001
++From: Maurice Smulders <Maurice.Smulders@windtalker.com>
++Date: Thu, 30 Dec 2021 10:45:42 -0700
++Subject: [PATCH] Fix compile break with GCC 7+ - buffer overflow with snprintf
++
++[Retrieved from:
++https://github.com/octo/liboping/pull/64/commits/0ad9ee080a7cd8037c341067cc67a84e32e69fea]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/liboping.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/liboping.c b/src/liboping.c
++index bf9e059..9fd8f53 100644
++--- a/src/liboping.c
+++++ b/src/liboping.c
++@@ -203,8 +203,11 @@ static char *sstrerror (int errnum, char *buf, size_t buflen)
++ static void ping_set_error (pingobj_t *obj, const char *function,
++ 	       	const char *message)
++ {
+++#pragma GCC diagnostic push
+++#pragma GCC diagnostic ignored "-Wformat-truncation"
++ 	snprintf (obj->errmsg, sizeof (obj->errmsg),
++ 			"%s: %s", function, message);
+++#pragma GCC diagnostic pop
++ 	obj->errmsg[sizeof (obj->errmsg) - 1] = 0;
++ }
++ 
+diff --git a/package/liboping/0004-Fix-compile-error-on-GCC-7.patch b/package/liboping/0004-Fix-compile-error-on-GCC-7.patch
+new file mode 100644
+index 0000000000..38355be40e
+--- /dev/null
++++ b/package/liboping/0004-Fix-compile-error-on-GCC-7.patch
+@@ -0,0 +1,32 @@
++From 3d685bdb1a6c655bce6d36cfd96e084be07cd2b1 Mon Sep 17 00:00:00 2001
++From: Maurice Smulders <Maurice.Smulders@windtalker.com>
++Date: Tue, 4 Jan 2022 12:49:36 -0700
++Subject: [PATCH] Fix compile error on GCC < 7
++
++[Retrieved from:
++https://github.com/octo/liboping/pull/64/commits/3d685bdb1a6c655bce6d36cfd96e084be07cd2b1]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/liboping.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/liboping.c b/src/liboping.c
++index 9fd8f53..1ccf609 100644
++--- a/src/liboping.c
+++++ b/src/liboping.c
++@@ -203,11 +203,15 @@ static char *sstrerror (int errnum, char *buf, size_t buflen)
++ static void ping_set_error (pingobj_t *obj, const char *function,
++ 	       	const char *message)
++ {
+++#if __GNUC__ >= 7
++ #pragma GCC diagnostic push
++ #pragma GCC diagnostic ignored "-Wformat-truncation"
+++#endif
++ 	snprintf (obj->errmsg, sizeof (obj->errmsg),
++ 			"%s: %s", function, message);
+++#if __GNUC__ >= 7
++ #pragma GCC diagnostic pop
+++#endif
++ 	obj->errmsg[sizeof (obj->errmsg) - 1] = 0;
++ }
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
