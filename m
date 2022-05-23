@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCFEBC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 11:02:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71E00C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 23 May 2022 11:02:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 75E4D40B83;
-	Mon, 23 May 2022 11:02:33 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rIVa_-nxTrri; Mon, 23 May 2022 11:02:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5051240B77;
-	Mon, 23 May 2022 11:02:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B33CE1BF977
- for <buildroot@lists.busybox.net>; Mon, 23 May 2022 11:02:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A2BAB83FE6
- for <buildroot@lists.busybox.net>; Mon, 23 May 2022 11:02:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 21B7C83FEC;
+	Mon, 23 May 2022 11:02:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ben6tqXpnQke for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8W8YvG5xR_Aj; Mon, 23 May 2022 11:02:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 193C883FC3;
+	Mon, 23 May 2022 11:02:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CFE091BF30A
+ for <buildroot@lists.busybox.net>; Mon, 23 May 2022 11:02:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC9A4607F9
+ for <buildroot@lists.busybox.net>; Mon, 23 May 2022 11:02:16 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0BD5l7iOy2QY for <buildroot@lists.busybox.net>;
  Mon, 23 May 2022 11:02:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE5C583FAD
+ by smtp3.osuosl.org (Postfix) with ESMTP id E70646070A
  for <buildroot@buildroot.org>; Mon, 23 May 2022 11:02:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 080A286383; Mon, 23 May 2022 10:50:59 +0000 (UTC)
+ id F23FA86382; Mon, 23 May 2022 10:50:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 23 May 2022 12:57:41 +0200
+Date: Mon, 23 May 2022 12:56:50 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: cafc0925c1d28db9dcdf93af380606e7dc49c278
-X-Git-Newrev: 6289b788e3148ddef501311d8bfea8b314677054
+X-Git-Oldrev: 00ce9b0e5588fe30814e10463f03dc1e6887de31
+X-Git-Newrev: cafc0925c1d28db9dcdf93af380606e7dc49c278
 X-Patchwork-Hint: ignore
-Message-Id: <20220523105059.080A286383@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/rsync: fix static
- build
+Message-Id: <20220523105058.F23FA86382@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/shadowsocks-libev: fix maybe-uninitialized errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,59 +59,126 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6289b788e3148ddef501311d8bfea8b314677054
+commit: https://git.buildroot.net/buildroot/commit/?id=cafc0925c1d28db9dcdf93af380606e7dc49c278
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following static build failure when using an external zlib:
+Fix the following build failure:
 
-/home/autobuild/autobuild/instance-11/output-1/host/bin/i686-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Og -g0  -static -DHAVE_CONFIG_H -Wall -W -Wno-unused-parameter -static -o rsync flist.o rsync.o generator.o receiver.o cleanup.o sender.o exclude.o util.o util2.o main.o checksum.o match.o syscall.o log.o backup.o delete.o options.o io.o compat.o hlink.o token.o uidlist.o socket.o hashtable.o usage.o fileio.o batch.o clientname.o chmod.o acls.o xattrs.o progress.o pipe.o   params.o loadparm.o clientserver.o access.o connection.o authenticate.o lib/wildmatch.o lib/compat.o lib/snprintf.o lib/mdfour.o lib/md5.o lib/permstring.o lib/pool_alloc.o lib/sysacls.o lib/sysxattrs.o    -lz -lpopt -liconv
-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/i686-buildroot-linux-uclibc/9.4.0/../../../../i686-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-11/output-1/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/libz.a(deflate.c.o): in function `read_buf':
-deflate.c:(.text+0xb93): multiple definition of `read_buf'; io.o:io.c:(.text+0x2bf4): first defined here
+local.c: In function 'create_and_bind':
+local.c:218:12: error: 'listen_sock' may be used uninitialized in this function [-Werror=maybe-uninitialized]
+  218 |     return listen_sock;
+      |            ^~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/488453197da880dda8f47b71ff302192bcbb6679
+ - http://autobuild.buildroot.org/results/27471a878ff52a972ac087d534e44fb0c50808f6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit bd1dfdf69a9939039c0a45ed97fb96a600752db7)
+(cherry picked from commit eb952597c373ef11ea396df473c145a41adc742f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...inking-with-a-zlib-with-external-read_buf.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ .../0002-fix-maybe-uninitialized-errors.patch      | 93 ++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
 
-diff --git a/package/rsync/0002-Handle-linking-with-a-zlib-with-external-read_buf.patch b/package/rsync/0002-Handle-linking-with-a-zlib-with-external-read_buf.patch
+diff --git a/package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.patch b/package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.patch
 new file mode 100644
-index 0000000000..0af090732c
+index 0000000000..5275323e65
 --- /dev/null
-+++ b/package/rsync/0002-Handle-linking-with-a-zlib-with-external-read_buf.patch
-@@ -0,0 +1,27 @@
-+From 60dd42be603a79cd57cec076fe1680e9037be774 Mon Sep 17 00:00:00 2001
-+From: Wayne Davison <wayne@opencoder.net>
-+Date: Mon, 11 Apr 2022 08:29:54 -0700
-+Subject: [PATCH] Handle linking with a zlib with external read_buf.
++++ b/package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.patch
+@@ -0,0 +1,93 @@
++From 0c23224e926463b1097414979367655a27fa6d60 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 7 Apr 2022 18:27:58 +0200
++Subject: [PATCH] fix maybe-uninitialized errors
 +
-+[Retrieved from:
-+https://github.com/WayneD/rsync/commit/60dd42be603a79cd57cec076fe1680e9037be774]
++Set {listen,server}_sock to -1 when needed as already done in
++src/manager.c by commit ecf1fcc84594b09ed2d61e3677cd8e62bd897ccb to
++avoid the following build failure:
++
++local.c: In function 'create_and_bind':
++local.c:218:12: error: 'listen_sock' may be used uninitialized in this function [-Werror=maybe-uninitialized]
++  218 |     return listen_sock;
++      |            ^~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/27471a878ff52a972ac087d534e44fb0c50808f6
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/shadowsocks/shadowsocks-libev/commit/0c23224e926463b1097414979367655a27fa6d60]
 +---
-+ rsync.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
++ src/local.c    | 2 +-
++ src/redir.c    | 2 +-
++ src/server.c   | 2 +-
++ src/tunnel.c   | 2 +-
++ src/udprelay.c | 2 +-
++ 5 files changed, 5 insertions(+), 5 deletions(-)
 +
-+diff --git a/rsync.h b/rsync.h
-+index 4b30570b..e5aacd25 100644
-+--- a/rsync.h
-++++ b/rsync.h
-+@@ -1172,6 +1172,10 @@ struct name_num_obj {
-+ 	struct name_num_item list[10]; /* we'll get a compile error/warning if this is ever too small */
-+ };
++diff --git a/src/local.c b/src/local.c
++index b1ab040bb..47d634ce5 100644
++--- a/src/local.c
+++++ b/src/local.c
++@@ -168,7 +168,7 @@ create_and_bind(const char *addr, const char *port)
++ {
++     struct addrinfo hints;
++     struct addrinfo *result, *rp;
++-    int s, listen_sock;
+++    int s, listen_sock = -1;
 + 
-++#ifdef EXTERNAL_ZLIB
-++#define read_buf read_buf_
-++#endif
-++
-+ #ifndef __cplusplus
-+ #include "proto.h"
-+ #endif
++     memset(&hints, 0, sizeof(struct addrinfo));
++     hints.ai_family   = AF_UNSPEC;   /* Return IPv4 and IPv6 choices */
++diff --git a/src/redir.c b/src/redir.c
++index 4a5a489f0..e60bd4870 100644
++--- a/src/redir.c
+++++ b/src/redir.c
++@@ -147,7 +147,7 @@ create_and_bind(const char *addr, const char *port)
++ {
++     struct addrinfo hints;
++     struct addrinfo *result, *rp;
++-    int s, listen_sock;
+++    int s, listen_sock = -1;
++ 
++     memset(&hints, 0, sizeof(struct addrinfo));
++     hints.ai_family   = AF_UNSPEC;   /* Return IPv4 and IPv6 choices */
++diff --git a/src/server.c b/src/server.c
++index e9cdc2619..073e38b22 100644
++--- a/src/server.c
+++++ b/src/server.c
++@@ -550,7 +550,7 @@ create_and_bind(const char *host, const char *port, int mptcp)
++ {
++     struct addrinfo hints;
++     struct addrinfo *result, *rp, *ipv4v6bindall;
++-    int s, listen_sock;
+++    int s, listen_sock = -1;
++ 
++     memset(&hints, 0, sizeof(struct addrinfo));
++     hints.ai_family   = AF_UNSPEC;               /* Return IPv4 and IPv6 choices */
++diff --git a/src/tunnel.c b/src/tunnel.c
++index e0886bdb9..6641fe62a 100644
++--- a/src/tunnel.c
+++++ b/src/tunnel.c
++@@ -129,7 +129,7 @@ create_and_bind(const char *addr, const char *port)
++ {
++     struct addrinfo hints;
++     struct addrinfo *result, *rp;
++-    int s, listen_sock;
+++    int s, listen_sock = -1;
++ 
++     memset(&hints, 0, sizeof(struct addrinfo));
++     hints.ai_family   = AF_UNSPEC;   /* Return IPv4 and IPv6 choices */
++diff --git a/src/udprelay.c b/src/udprelay.c
++index 23a042497..580ad4bd8 100644
++--- a/src/udprelay.c
+++++ b/src/udprelay.c
++@@ -446,7 +446,7 @@ create_server_socket(const char *host, const char *port)
++ {
++     struct addrinfo hints;
++     struct addrinfo *result, *rp, *ipv4v6bindall;
++-    int s, server_sock;
+++    int s, server_sock = -1;
++ 
++     memset(&hints, 0, sizeof(struct addrinfo));
++     hints.ai_family   = AF_UNSPEC;               /* Return IPv4 and IPv6 choices */
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
