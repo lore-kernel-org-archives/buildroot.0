@@ -4,78 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F647C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 20:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31412C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 22:00:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E06DC61288;
-	Tue, 24 May 2022 20:24:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2ECF61298;
+	Tue, 24 May 2022 22:00:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t8pxaukqzy6p; Tue, 24 May 2022 20:24:45 +0000 (UTC)
+	with ESMTP id PiU6GSbArpc1; Tue, 24 May 2022 22:00:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C53661285;
-	Tue, 24 May 2022 20:24:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 96FAC1BF29D
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 20:24:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF29560E06;
+	Tue, 24 May 2022 22:00:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 09FA01BF215
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 22:00:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 85FFC840FE
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 20:24:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EBE00402FE
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 22:00:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mkG-OSvDVCfm for <buildroot@lists.busybox.net>;
- Tue, 24 May 2022 20:24:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TUs1bza4xfU0 for <buildroot@lists.busybox.net>;
+ Tue, 24 May 2022 22:00:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8DF61840FB
- for <buildroot@buildroot.org>; Tue, 24 May 2022 20:24:41 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id p26so24498193eds.5
- for <buildroot@buildroot.org>; Tue, 24 May 2022 13:24:41 -0700 (PDT)
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com
+ [IPv6:2001:4860:4864:20::2b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5361C402F6
+ for <buildroot@buildroot.org>; Tue, 24 May 2022 22:00:22 +0000 (UTC)
+Received: by mail-oa1-x2b.google.com with SMTP id
+ 586e51a60fabf-f18e6ff0f6so23910765fac.11
+ for <buildroot@buildroot.org>; Tue, 24 May 2022 15:00:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=Rdb9IOq5VCASno7UZrSFIFLkUGGKp/jEJ7/83vRTaJs=;
- b=d5vGKF38vt9+2i7CD6JsDZEbFqoBws5V+eCfgasiwx95MdVxETLrA3aN6oJSEpXeic
- uTa1RFLBwVxDqaI8c1OkXvbmoxdO0SayKpmpO+8SDcxOTC9InloH+0YkXyWnjXAM6GVa
- mR/jyxKjYcdAgNPDwkfA3K2cAXhqT2ku61hs6P3bKVcgkPjCMuDjLbh/hfXofc+zkU0H
- VpnwCKPStOc40f6s8yjTAsvwFe00+NBc0n9hdInlRGTmwYeEYXYBKCVRO5aE7vlPyjPr
- Oy2lFsXba1mZvfYIfU0gHanCL9tv/+3WQye5JQ2PmNQBGJaVxTMj12gTFRiZVuLsic7z
- pCRQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=5Yw0+UBv10oaEO8Vf49p5XAOLZ2BVUZmHQOnfcr3THU=;
+ b=R1sLX8O8HU8TTpmDzeV4E1x2VPMAgC8qQ/5AxVL80VlNSQqInmZnCRxaD9PzEgCUSh
+ JrLHsbRrP8MV9jtNEZKfnvcWa+p43kMQTDFaxCxC7QaHH0rsg88tbw3OBDVx1r643u9m
+ XhtlHX4cYz+HauecpbKJ8kaPTOhluyh551gtk4X9/WAsNrdaw/vchy+3457vCf8JK87p
+ yaV1H49fbgDvIKtmaZrFWg46ochP4NsmpRO0hCZlNrdakhn30YqIS42YNEfdFo6CT58I
+ O+RSe/nAX/tibbwvlgFfX+NRKXgSAB0mJM2RCjOh/b6UtnIasnH30zd8yBCMKF8zOB4l
+ rCFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=Rdb9IOq5VCASno7UZrSFIFLkUGGKp/jEJ7/83vRTaJs=;
- b=ZPmWMOTsNGzpUJak3Fhz+yOBuw2TyHEer8Yvbf4Ef7RiNeqVQcfl8cdyD+YEDU3zRg
- Q2DyzA6vwtAM4onLKlRvhTXLLFROjNF++dUv23gqyNrolP89dxM6Rjbkq5Z7+/XU954K
- 4dDXx91wHpKEU4H7yDIZ751OofHs5NpXuGs1lRYzcM9ft0uQgHGh1FJ1ojsIcaMjzRWM
- eLQMhGo4Pya/3FbiTViOjQGVbhr1lV7TVIfECiXdPniocJxxY2BNA/IozyyQOcYGha8Y
- yC2azXyBsh4eDntvv5CL09q/u9j0NZuzmzU2hWVSizkq4tarx+8b2kXZ2NkzF0nnjNAR
- ZJag==
-X-Gm-Message-State: AOAM530xLTaZ1tLJVh0b3kXGWXWm61mwKzCMGmuNWaydarAYtJOLeW1Q
- HbXUPSe0q2iGkOX2VU3gIgwR5KKyZ+gWBVAk1aUXdXUAQrPbCQ==
-X-Google-Smtp-Source: ABdhPJzwFZfcv6n0NGd+9stOPoJ1fhEViV4vO2AlOiG5O+uXT5W5i10BXUcr5aS7mjijZp/Q6gUf4gZ5116zls3jom0=
-X-Received: by 2002:aa7:dc09:0:b0:42a:aadd:8e71 with SMTP id
- b9-20020aa7dc09000000b0042aaadd8e71mr30984530edu.41.1653423879700; Tue, 24
- May 2022 13:24:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <CALtfCQaLxNdrKhSjMfShjb-nQWUnqa3DSOwbyZm1+Q0fU1UUqQ@mail.gmail.com>
- <87zgjapr8a.fsf@tarshish>
- <CALtfCQaBG_p15ASxYKSyZhYOePW5uE-BW8F1KG7DkPeJ8bjLiw@mail.gmail.com>
- <87r14kq55b.fsf@tarshish>
- <CALtfCQY1a6sjLNUh42zsrsu1hPLTMHNDj4+5v5k8w8kv8u6tmg@mail.gmail.com>
- <87ilpwp82x.fsf@tarshish>
- <CALtfCQauLNMOfBb6Zm8M8v-VHakY_Bs+p6CeQh0tVuTtfKyUDg@mail.gmail.com>
-In-Reply-To: <CALtfCQauLNMOfBb6Zm8M8v-VHakY_Bs+p6CeQh0tVuTtfKyUDg@mail.gmail.com>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=5Yw0+UBv10oaEO8Vf49p5XAOLZ2BVUZmHQOnfcr3THU=;
+ b=tf8iryqtNklzKQ6VQN1APDLzBOA92SlE0oKpCg7iae0nYW3QTUPFHqPvOWJY49SCbQ
+ SIg6FYSMUnpH1rv3lt7uIit5w+srXvc/lLzac0d+c5zzq+JTd1hVi6ZGe7Ld9yDXxB2L
+ yGrqDXIdcrG0olHgvzD+XSVWJrYlOwPpG5jRZQPPC9YVbe7IPCzHXs5Z1CKvo9kXRkGC
+ UTHT0J0k5zO4b1xC+1M0w/torW1C2gNrm2BSuGhh8/vwx1wGmDYUuDufc/ucx3VttI5i
+ Q/T1yhlOJEyMO9j7NKmJBx95FzjRLYBtRiZGU73MhKEPt13e7reBEAOi32MiH4UGgHul
+ 1u5w==
+X-Gm-Message-State: AOAM531ItkHMk2EWEAywN6i0zu8oa/DPj8p+pyHc9J5RWRujEQOZJmvM
+ SFiZ9g5QWahrja8KVGqqtnNnkEE47cCVog==
+X-Google-Smtp-Source: ABdhPJxxNaFVU5Sd/AhcHihh/0U6aOaW5Wvd4h2Yyrxf0wSo12rzvnRkjBbEcI5rY54FyY4sYzirCA==
+X-Received: by 2002:a05:6871:87:b0:da:b3f:3208 with SMTP id
+ u7-20020a056871008700b000da0b3f3208mr3869286oaa.184.1653429620953; 
+ Tue, 24 May 2022 15:00:20 -0700 (PDT)
+Received: from localhost.localdomain ([2804:14c:485:4b69:7038:3d4c:2793:50ad])
+ by smtp.gmail.com with ESMTPSA id
+ x4-20020a056870740400b000e686d1389dsm5297291oam.55.2022.05.24.15.00.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 24 May 2022 15:00:20 -0700 (PDT)
 From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 24 May 2022 17:24:30 -0300
-Message-ID: <CAOMZO5C7BUTkAd+bMyYk9+7+3rptg=cYNj8t1r9f0fYkv+aw+A@mail.gmail.com>
-To: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Subject: Re: [Buildroot] How to select python-cryptograhy package
+To: buildroot@buildroot.org
+Date: Tue, 24 May 2022 19:00:06 -0300
+Message-Id: <20220524220006.906954-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] configs/imx6-sabresd: bump U-Boot and kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,39 +87,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Fabio Estevam <festevam@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Oscar,
+Bump U-Boot to 2022.04 and kernel to 5.15.41 version.
 
-On Mon, May 23, 2022 at 1:08 PM Oscar Gomez Fuente
-<oscargomezf@gmail.com> wrote:
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/imx6-sabresd_defconfig     | 4 ++--
+ configs/imx6-sabresd_qt5_defconfig | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> I have just changed the toolchain from uClibc-ng to glibc or musl, and
-> it didn't appear the package BR2_PACKAGE_PYTHON_CRYPTOGRAPHY.
->
-> Do you have any suggestions?
+diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
+index 19986f2cbb54..c237c2dc7c5a 100644
+--- a/configs/imx6-sabresd_defconfig
++++ b/configs/imx6-sabresd_defconfig
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -33,7 +33,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.12"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.41"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 38a86131dda3..d962ac6897b2 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -30,7 +30,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.12"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.41"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+-- 
+2.25.1
 
-I think you should try the raspberrypi3_64_defconfig as the base defconfig.
-
-In package/rustc/Config.in.host we have:
-
-# The below entries match Tier 1 platforms as described at
-# https://doc.rust-lang.org/nightly/rustc/platform-support.html.
-config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER1_PLATFORMS
-bool
-# aarch64-unknown-linux-gnu
-default y if BR2_aarch64 && BR2_TOOLCHAIN_USES_GLIBC
-# i686-unknown-linux-gnu
-default y if (BR2_i686 || BR2_x86_pentiumpro || BR2_X86_CPU_HAS_MMX)
-&& BR2_TOOLCHAIN_USES_GLIBC
-# x86_64-unknown-linux-gnu
-default y if BR2_x86_64 && BR2_TOOLCHAIN_USES_GLIBC
-
-Then you could select glibc, python3, and BR2_PACKAGE_PYTHON_CRYPTOGRAPHY.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
