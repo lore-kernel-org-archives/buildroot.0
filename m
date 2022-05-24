@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E56DC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 08:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F39B8C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 08:15:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CED34167B;
-	Tue, 24 May 2022 08:14:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7528441891;
+	Tue, 24 May 2022 08:15:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mSOnam8NCcal; Tue, 24 May 2022 08:14:54 +0000 (UTC)
+	with ESMTP id E49L5B-S3aup; Tue, 24 May 2022 08:15:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8AB564162C;
-	Tue, 24 May 2022 08:14:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2672F1BF28D
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 08:14:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32A8C4167A;
+	Tue, 24 May 2022 08:15:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 973521BF28D
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 08:15:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 13F4B83F01
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 08:14:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9364B404CF
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 08:15:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SjdeNT7uk-tH for <buildroot@lists.busybox.net>;
- Tue, 24 May 2022 08:14:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bXvfR3oiZ8fH for <buildroot@lists.busybox.net>;
+ Tue, 24 May 2022 08:15:26 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B77FF83EE9
- for <buildroot@buildroot.org>; Tue, 24 May 2022 08:14:50 +0000 (UTC)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A56C1400F8
+ for <buildroot@buildroot.org>; Tue, 24 May 2022 08:15:26 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 48542100009;
- Tue, 24 May 2022 08:14:47 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 35281100018;
+ Tue, 24 May 2022 08:15:24 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1ntPgk-00Eglj-Ab; Tue, 24 May 2022 10:14:46 +0200
+ id 1ntPhL-00Egod-9z; Tue, 24 May 2022 10:15:23 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220413204838.1172927-1-fontaine.fabrice@gmail.com>
-Date: Tue, 24 May 2022 10:14:46 +0200
-In-Reply-To: <20220413204838.1172927-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 13 Apr 2022 22:48:38 +0200")
-Message-ID: <87k0abwdmx.fsf@dell.be.48ers.dk>
+References: <20220415184942.575667-1-fontaine.fabrice@gmail.com>
+Date: Tue, 24 May 2022 10:15:23 +0200
+In-Reply-To: <20220415184942.575667-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 15 Apr 2022 20:49:42 +0200")
+Message-ID: <87fskzwdlw.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libwebsockets: add mbedtls
- optional dependency
+Subject: Re: [Buildroot] [PATCH 1/1] package/linux-tools: cpupower needs
+ dynamic library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,7 +59,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -68,8 +67,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > mbedtls is an optional dependency since version 2.4.0 and
- > https://github.com/warmcat/libwebsockets/commit/3aaf38d3d89d0436301fe66d9a5c097ea4fb1064
+ > cpupower needs dynamic library since its addition in commit
+ > f1863ede94c29e120d7ce900f7cce211f1e8633a to avoid the following build
+ > failure:
+
+ > ld (ld-elf2flt): -shared used without passing a shared library ID
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/16f41b9169bd76352c2f2ed8c6239ad371b3a30e
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
