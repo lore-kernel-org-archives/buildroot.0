@@ -1,81 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68439C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 14:32:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 988C9C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 15:02:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 173AF83FA0;
-	Tue, 24 May 2022 14:32:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A3F160D96;
+	Tue, 24 May 2022 15:02:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HzkYHoi23xZ6; Tue, 24 May 2022 14:32:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nsxcp0Y7Iw5i; Tue, 24 May 2022 15:02:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 116A283F8C;
-	Tue, 24 May 2022 14:32:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3903F1BF329
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 14:32:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 375A760BA1;
+	Tue, 24 May 2022 15:02:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 966521BF329
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 15:02:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3447E83F8C
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 14:32:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 83E4660BA1
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 15:02:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xlcYjttcUNf1 for <buildroot@lists.busybox.net>;
- Tue, 24 May 2022 14:32:50 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 71E5B83F6C
- for <buildroot@buildroot.org>; Tue, 24 May 2022 14:32:50 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id f21so22078591ejh.11
- for <buildroot@buildroot.org>; Tue, 24 May 2022 07:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=0sHjaHY14JcdV2fqFPPK7FE+gkVrwQ1qt+w2Yyce4/s=;
- b=MI2Ade9GnGdYNske6FdvIjwVcFu7owMzYIwBnHgO3YpY3vWZ4lexTaH6qrXWPEVPVJ
- mNK2LMY/M7H3yU38+Ud0ptMoCPWVqAJFze7SibQBGCZvYK8gEFa1Zg2gPDl+EElhpg0I
- 2s8STfcjuCwgKmnLWxtSEfZNogpZu2iBR3f1AQnpVFOnzB1wsn5WiGSYo+gS/dfQ9qrv
- 6m+oivuH7E6MMUBKg58Tw7LTdXEMDeJThuULZ4porBnOBnaB7BkNBbooUYm8heI3rxQ8
- PZzz89qJE+Auait/SNWo2p1PhFa6+RyLFW8yOXrNrASSG7FT6RD9frWO6KSHdpast3z/
- 5nJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=0sHjaHY14JcdV2fqFPPK7FE+gkVrwQ1qt+w2Yyce4/s=;
- b=66VgQMdqsWIqqYgPUBxwFnUyOgmtQSkxF8Cc65cHh+cj5BNzfCxmLR8Gel6AYC6hF+
- vA+OzZvTMyswLAhs0Mpz7qUVbB1c4OGKMV5omzlaWNHTDqljvA/rTcYq4d/ucI88TmNJ
- dfTf0LpFPQ93wtJhctGR2EazQfbHnNLZSaivbkA2aPpz+Fy48w6CjRMA/W1rhQk5weG6
- BqDIXmlZHVvClusUo6rFeE6exJVP7FUtqZLj6addRIzUZ/iZby4NPZUcb+eU/Kkh3gaR
- GgL/PG/wtSqm0LTEvce9cpNDi+uadMnTL2FhzA97wFhxUctq5w66QBlgoW7BDqRKNoHp
- HlhQ==
-X-Gm-Message-State: AOAM533pdI0/vqe166/3hUtHBFrY25hQTumtv1kjGl6Zf+7G59lZyKAn
- /E6JSPp6L8xdLXOYx7M4ACLZWqydZJZ4SQ==
-X-Google-Smtp-Source: ABdhPJxznW3ozwBwGTM2bF9JbYoOvZOOqGisvG9MfHVU6L+AhJbSZzrA4CdSj3X4c3I9ekQeRH/row==
-X-Received: by 2002:a17:907:9725:b0:6fe:fce4:e08d with SMTP id
- jg37-20020a170907972500b006fefce4e08dmr5855263ejc.657.1653402768507; 
- Tue, 24 May 2022 07:32:48 -0700 (PDT)
-Received: from localhost.localdomain
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id
- k23-20020aa7d8d7000000b0042aa153e73esm9570777eds.12.2022.05.24.07.32.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 24 May 2022 07:32:47 -0700 (PDT)
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Tue, 24 May 2022 16:32:39 +0200
-Message-Id: <20220524143239.1050052-1-arnout@mind.be>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 87to53xMLeKP for <buildroot@lists.busybox.net>;
+ Tue, 24 May 2022 15:02:34 +0000 (UTC)
+X-Greylist: delayed 00:07:03 by SQLgrey-1.8.0
+Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C11C760B77
+ for <buildroot@buildroot.org>; Tue, 24 May 2022 15:02:33 +0000 (UTC)
+Received: from [192.168.50.225] ([146.241.66.179])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id tVwVnQpaLNP7ItVwVnPDHR; Tue, 24 May 2022 16:55:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1653404127; bh=WjPSRhdUePvfAIVzTtvqPyb2R9/8wFXGIe7r+p6Xrnc=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=DkK0IdC5Twbgint4JX33V7Y+yERkUnD6tSJzbVpTtq4VeKcq7dAUwJbtWX0LbJe1k
+ XLn3Al5eNYx6pmDtqTTyC5jnvhwYbpP2s8+Mxo8i5h9KZYa7X+KtYEzKBRt4yc0uK5
+ XfVFqKwJNxzMcz4/jgnlYwZApDS+cr20aSRGmn8UH9+Y+6axeGJKWwsCjx0d1iPA1E
+ mol+/jSlaZeB4WlhiqaalY7VpmBAb27rUjD5mIVFLU3+m+vZ+EPQg3JThLIiFr09oI
+ i6r9M6AG887j4L9ifd1PMdioP0CHbn8YEf0WOGN6qD/0VKeI+p6nHfa0wwq4kxmBMP
+ xTN0ogrIFRJRg==
+Message-ID: <b1c45001-9db1-7d36-15e6-630405d4a07a@benettiengineering.com>
+Date: Tue, 24 May 2022 16:55:27 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH/next] package/linux-firmware: install all
- RTL_RTW88 blobs
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <b07a637a-9842-7852-61c1-b7ca549b0c42@benettiengineering.com>
+ <CADvTj4puraDuVBrgA_wDGAcHsMTMbioDuoveZScziQ1A2WdTqw@mail.gmail.com>
+ <0886c6bf-316f-10c8-ba7f-7ba6d306478a@benettiengineering.com>
+ <CADvTj4qRkBWM9Pv+bd8bPN-jJn0tXVzR3g7TfNLPq1uz3L=zsQ@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <CADvTj4qRkBWM9Pv+bd8bPN-jJn0tXVzR3g7TfNLPq1uz3L=zsQ@mail.gmail.com>
+X-CMAE-Envelope: MS4xfO0kRwMG47t+y9prWqu0Rt3XLdYAz/rhRXBm6rtdVKVGArWMboydddJjZJ8lUvSXo1D2z5VYeVk45Y8INqlzLzXCQmkvFuubozlcA7WpIFK2mb8VzPC9
+ L6w/3SmVIXcEqFB745iDOhHcXN7udNeMXYf/0kO/Z1fCEmwDqNxPDHA9cY3KiSYAM1foCxAHe+x3cy5lyfIvuTMboO8uvJNP10rfVD4pS56l9ql3TphHTWVX
+ 9qEJleOTegyfx1+5WVKnPZQhZrlzExL7/6u9YjCZHnE=
+Subject: Re: [Buildroot] Can't reproduce libnss build failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,49 +71,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rather than installing just the three blobs mentioned explicitly in the
-.mk file, use a wildcard to install all blobs. At the time of this
-writing, this matches the following:
+On 24/05/22 00:08, James Hilliard wrote:
+> On Mon, May 23, 2022 at 3:43 PM Giulio Benetti
+> <giulio.benetti@benettiengineering.com> wrote:
+>>
+>>
+>> On 23/05/22 02:40, James Hilliard wrote:
+>>> On Sun, May 22, 2022 at 5:58 PM Giulio Benetti
+>>> <giulio.benetti@benettiengineering.com> wrote:
+>>>>
+>>>> Hi James,
+>>>>
+>>>> I'm dealing with libnss build failure with host gcc on your asahi-mini
+>>>> autobuilder, the host gcc doesn't
+>>>> like -m64 option when linking [1].
+>>>>
+>>>> I've spent many hours trying to reproduce it on various dockers and
+>>>> finally on a VM with Ubuntu 16.04
+>>>> 32 bits but in the first cases I can't have any build failure, while
+>>>> with the latter I have a different error.
+>>>
+>>> It's an aarch64 host, not 32 bit x86.
+>>>
+>>>>
+>>>> Can you please tell me specifically which distribution and distribution
+>>>> version you're using on asahi-mini?
+>>>> I'm on it and I'd like to fix it.
+>>>
+>>> As the name implies it's asahi linux(arch based) on a mac
+>>> mini(https://asahilinux.org/).
+>>
+>> Aah ok. Thank you, I'm now building a docker container with buildx based
+>> on ubuntu 20.04 for linux/arm64, let's see if it behaves the same.
+>> I've tried with archlinux:latest but arm64 is not available, while also
+>> agners/archlinuxarm gives me problems.
+>> Crossed fingers.
+> 
+> If that doesn't work send me your ssh pub key and I can just give you remote
+> access to the mac mini for reproducing/testing, I'm not really using it for
+> anything other than autobuilders at the moment.
 
--rw-r--r-- 1 arnout arnout  29K Mar  9 13:28 rtw8723d_fw.bin
--rw-r--r-- 1 arnout arnout 136K Mar  9 13:28 rtw8821c_fw.bin
--rw-r--r-- 1 arnout arnout 148K Mar  9 13:28 rtw8822b_fw.bin
--rw-r--r-- 1 arnout arnout 198K Mar  9 13:28 rtw8822c_fw.bin
--rw-r--r-- 1 arnout arnout 142K Mar  9 13:28 rtw8822c_wow_fw.bin
+Thanks a lot for the proposal but after lot of trials I've been able to
+build a linux/arm64 docker with Ubuntu 20.04. I already see that gcc 
+doesn't like -m64 option and I'm building(veeery slowly of course).
+So if I start to get mad for the slowness then yes, I'll give you my 
+public key and access your mac-mini.
 
-I.e. rtw8821c_fw.bin and rtw8822c_wow_fw.bin were missing.
-
-Although including all blobs nearly doubles the size, it still totals to
-just 660K which wouldn't warrant making more refined sub-options.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Thanks again
+Best regards
 ---
- package/linux-firmware/linux-firmware.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Giulio Benetti
+Benetti Engineering sas
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 0c725737d0..64d096df14 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -154,9 +154,7 @@ endif
- # rtw88
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_RTW88),y)
- LINUX_FIRMWARE_FILES += \
--	rtw88/rtw8723d_fw.bin \
--	rtw88/rtw8822b_fw.bin \
--	rtw88/rtw8822c_fw.bin
-+	rtw88/rtw*.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
- endif
- 
--- 
-2.35.1
-
+> 
+>>
+>> Kind regards
+>> ---
+>> Giulio Benetti
+>> Benetti Engineering sas
+>>
+>>>
+>>>>
+>>>> Thanks a lot
+>>>> Best regards
+>>>>
+>>>> [1]:
+>>>> http://autobuild.buildroot.net/results/dffa00b04f407715b04b1dfd8d9e5e4bc62b5ba2/
+>>>>
+>>>> ---
+>>>> Giulio Benetti
+>>>> Benetti Engineering sas
+>>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot@buildroot.org
+>>> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
