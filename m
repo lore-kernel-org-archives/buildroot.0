@@ -4,78 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31412C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 22:00:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42520C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 22:07:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2ECF61298;
-	Tue, 24 May 2022 22:00:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF274612AE;
+	Tue, 24 May 2022 22:07:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PiU6GSbArpc1; Tue, 24 May 2022 22:00:25 +0000 (UTC)
+	with ESMTP id 2sSIdaqosMEb; Tue, 24 May 2022 22:07:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF29560E06;
-	Tue, 24 May 2022 22:00:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 09FA01BF215
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 22:00:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCE2D612AA;
+	Tue, 24 May 2022 22:07:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A54991BF82D
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 22:07:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EBE00402FE
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 22:00:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9FF1260009
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 22:07:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TUs1bza4xfU0 for <buildroot@lists.busybox.net>;
- Tue, 24 May 2022 22:00:22 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com
- [IPv6:2001:4860:4864:20::2b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5361C402F6
- for <buildroot@buildroot.org>; Tue, 24 May 2022 22:00:22 +0000 (UTC)
-Received: by mail-oa1-x2b.google.com with SMTP id
- 586e51a60fabf-f18e6ff0f6so23910765fac.11
- for <buildroot@buildroot.org>; Tue, 24 May 2022 15:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5Yw0+UBv10oaEO8Vf49p5XAOLZ2BVUZmHQOnfcr3THU=;
- b=R1sLX8O8HU8TTpmDzeV4E1x2VPMAgC8qQ/5AxVL80VlNSQqInmZnCRxaD9PzEgCUSh
- JrLHsbRrP8MV9jtNEZKfnvcWa+p43kMQTDFaxCxC7QaHH0rsg88tbw3OBDVx1r643u9m
- XhtlHX4cYz+HauecpbKJ8kaPTOhluyh551gtk4X9/WAsNrdaw/vchy+3457vCf8JK87p
- yaV1H49fbgDvIKtmaZrFWg46ochP4NsmpRO0hCZlNrdakhn30YqIS42YNEfdFo6CT58I
- O+RSe/nAX/tibbwvlgFfX+NRKXgSAB0mJM2RCjOh/b6UtnIasnH30zd8yBCMKF8zOB4l
- rCFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5Yw0+UBv10oaEO8Vf49p5XAOLZ2BVUZmHQOnfcr3THU=;
- b=tf8iryqtNklzKQ6VQN1APDLzBOA92SlE0oKpCg7iae0nYW3QTUPFHqPvOWJY49SCbQ
- SIg6FYSMUnpH1rv3lt7uIit5w+srXvc/lLzac0d+c5zzq+JTd1hVi6ZGe7Ld9yDXxB2L
- yGrqDXIdcrG0olHgvzD+XSVWJrYlOwPpG5jRZQPPC9YVbe7IPCzHXs5Z1CKvo9kXRkGC
- UTHT0J0k5zO4b1xC+1M0w/torW1C2gNrm2BSuGhh8/vwx1wGmDYUuDufc/ucx3VttI5i
- Q/T1yhlOJEyMO9j7NKmJBx95FzjRLYBtRiZGU73MhKEPt13e7reBEAOi32MiH4UGgHul
- 1u5w==
-X-Gm-Message-State: AOAM531ItkHMk2EWEAywN6i0zu8oa/DPj8p+pyHc9J5RWRujEQOZJmvM
- SFiZ9g5QWahrja8KVGqqtnNnkEE47cCVog==
-X-Google-Smtp-Source: ABdhPJxxNaFVU5Sd/AhcHihh/0U6aOaW5Wvd4h2Yyrxf0wSo12rzvnRkjBbEcI5rY54FyY4sYzirCA==
-X-Received: by 2002:a05:6871:87:b0:da:b3f:3208 with SMTP id
- u7-20020a056871008700b000da0b3f3208mr3869286oaa.184.1653429620953; 
- Tue, 24 May 2022 15:00:20 -0700 (PDT)
-Received: from localhost.localdomain ([2804:14c:485:4b69:7038:3d4c:2793:50ad])
- by smtp.gmail.com with ESMTPSA id
- x4-20020a056870740400b000e686d1389dsm5297291oam.55.2022.05.24.15.00.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 24 May 2022 15:00:20 -0700 (PDT)
-From: Fabio Estevam <festevam@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 24 May 2022 19:00:06 -0300
-Message-Id: <20220524220006.906954-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UDWOTZUgF3dw for <buildroot@lists.busybox.net>;
+ Tue, 24 May 2022 22:07:39 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC3B8612A3
+ for <buildroot@buildroot.org>; Tue, 24 May 2022 22:07:38 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.66.179])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id tcgjn5UgDbMeitcgjn5S0d; Wed, 25 May 2022 00:07:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1653430057; bh=wGv7Z10hCyBTbWYkU/eqDVfijWPTAHO/aY+TCNI12tM=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=fYPSNqEKxmC+9o9mHz1NcyCzC6vLDr3CEFjG+rJOne2rXlEk0SjSYOtnjwagXuytR
+ IOFkB/3l7p6OfjNcrWdtOL5oldaMnajJDu5B6W8FICtrMW6SR92dgb/4Mar6e4oZPr
+ L+HUwLjnCxNAascoomYFcy8fOHRuiyhSHoi1lLC9CU6PvANyTPM0Hz4UTEbYb+qDY8
+ tojXpCgCy53pJ2OX338TBefWtaDHSQhr83Z9tGuwiONh9K0Ra2stF9VNnBanKaX5iR
+ K+Nc/iRSVsVmNeUnbFrHYeT6cQME7IvFLt/Ekf34j0nRIDgV9gqtutjK8vTYgV/QTF
+ BM1yQtOrfkF/g==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org,
+	James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 25 May 2022 00:07:34 +0200
+Message-Id: <20220524220734.93556-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] configs/imx6-sabresd: bump U-Boot and kernel
+X-CMAE-Envelope: MS4xfKuQ/9ND0TC2y2TQ8Cgm2JfIqvbG/Jq7lx9P2LziddyYGC6wprICTMyKr/J1EtHu1y9V9I5xxL6xuAV0qLqjc8IjipcC0uREL8PaEilThWUmmroyfQAS
+ TlUsEAGYzng3yXPVXkXMMfoLiLpbHlxP9kaND72GVm7p2xFFDPPpnIphwtfy2EkPk1CiymUtUKzSqQAHg3dk8rU5Zs194RS/H/97mUrHetp9VE8Ft8kQG/KT
+ D0XEnMNro3zf/GsVuSgxmGu4tE+tM2M2ncYW5to14NRtymdYjOkb2Ow1wscQWybnypWJ6rvWshsOAeT3AoYVj/vJgXIVPeBfrpSPA8RVhlRT1R10/XrPBX5U
+ Uudh3vVL
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure on Aarch64
+ host for powerpc64 target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,66 +67,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump U-Boot to 2022.04 and kernel to 5.15.41 version.
+When building on Aarch64 host for powerpc64 we get this error:
+gcc: error: unrecognized command-line option '-m64'
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+This happens because we don't have the flexibility to override the LDFLAGS
+when linking nsinstall host tool that is built in libnss. Also libnss uses
+the same LDFLAGS it uses for target and that is not correct.
+So let's add a patch to add NATIVE_LDFLAGS variable to override LFDFLAGS
+when building nsinstall utility and set it to HOST_LDFLAGS in libnss.mk
+
+Fixes:
+http://autobuild.buildroot.net/results/67500395f19aa698b98404cde8d20463e55504bf/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- configs/imx6-sabresd_defconfig     | 4 ++--
- configs/imx6-sabresd_qt5_defconfig | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Patch is pending upstream:
+https://bugzilla.mozilla.org/show_bug.cgi?id=1771036
+---
+ ...36-Fix-build-failure-on-Aarch64-host.patch | 36 +++++++++++++++++++
+ package/libnss/libnss.mk                      |  4 ++-
+ 2 files changed, 39 insertions(+), 1 deletion(-)
+ create mode 100644 package/libnss/0001-Bug-1771036-Fix-build-failure-on-Aarch64-host.patch
 
-diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
-index 19986f2cbb54..c237c2dc7c5a 100644
---- a/configs/imx6-sabresd_defconfig
-+++ b/configs/imx6-sabresd_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -33,7 +33,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.41"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index 38a86131dda3..d962ac6897b2 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -30,7 +30,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.41"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/package/libnss/0001-Bug-1771036-Fix-build-failure-on-Aarch64-host.patch b/package/libnss/0001-Bug-1771036-Fix-build-failure-on-Aarch64-host.patch
+new file mode 100644
+index 0000000000..2ca373cd21
+--- /dev/null
++++ b/package/libnss/0001-Bug-1771036-Fix-build-failure-on-Aarch64-host.patch
+@@ -0,0 +1,36 @@
++From 9d5900c1ee9000906a90923e861b0fd7f1061cde Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Tue, 24 May 2022 23:40:45 +0200
++Subject: [PATCH] Bug 1771036 - Fix build failure on Aarch64 host
++
++If trying to build on Aarch64 host for powerpc64 target we can't override
++the LDFLAGS leading to this build failure:
++gcc: error: unrecognized command-line option '-m64'
++
++So let's add NATIVE_LDFLAGS check and use it to link nsinstall. This way
++any build environment can pass LDFLAGS that fits better for host
++architecture.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ coreconf/nsinstall/Makefile | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/nss/coreconf/nsinstall/Makefile b/nss/coreconf/nsinstall/Makefile
++index 08dfbc2fe..5061789ff 100644
++--- a/nss/coreconf/nsinstall/Makefile
+++++ b/nss/coreconf/nsinstall/Makefile
++@@ -34,6 +34,10 @@ ifdef NATIVE_FLAGS
++ OS_CFLAGS=$(NATIVE_FLAGS)
++ endif
++ 
+++ifdef NATIVE_LDFLAGS
+++LDFLAGS=$(NATIVE_LDFLAGS)
+++endif
+++
++ include $(DEPTH)/coreconf/rules.mk
++ 
++ # Redefine MAKE_OBJDIR for just this directory
++-- 
++2.34.1
++
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 540092dfcf..0d0f1d84b9 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -92,7 +92,9 @@ define LIBNSS_BUILD_CMDS
+ 		SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
+ 		DIST=$(@D)/$(LIBNSS_DISTDIR) \
+ 		CHECKLOC= \
+-		$(LIBNSS_BUILD_VARS) NATIVE_FLAGS="$(HOST_CFLAGS) -DLINUX"
++		$(LIBNSS_BUILD_VARS) \
++		NATIVE_FLAGS="$(HOST_CFLAGS) -DLINUX" \
++		NATIVE_LDFLAGS="$(HOST_LDFLAGS)"
+ endef
+ 
+ define LIBNSS_INSTALL_STAGING_CMDS
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
