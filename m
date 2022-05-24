@@ -1,77 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 913B6C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 17:07:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2EFCC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 17:11:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E63F40C4E;
-	Tue, 24 May 2022 17:07:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4563241B59;
+	Tue, 24 May 2022 17:11:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vyq8d-soe8Fv; Tue, 24 May 2022 17:07:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rVq73X_-ePg2; Tue, 24 May 2022 17:11:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77A1840C3D;
-	Tue, 24 May 2022 17:07:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC44141B52;
+	Tue, 24 May 2022 17:11:47 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B7A41BF3D5
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 17:07:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8AD451BF3D5
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 17:11:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 26C7B60ABD
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 17:07:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7167F60EAD
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 17:11:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=iki.fi
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ItaKhuY3QnW8 for <buildroot@lists.busybox.net>;
- Tue, 24 May 2022 17:07:29 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1DF8060AAD
- for <buildroot@buildroot.org>; Tue, 24 May 2022 17:07:28 +0000 (UTC)
-Received: from localhost (91-154-92-55.elisa-laajakaista.fi [91.154.92.55])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest
- SHA256) (No client certificate requested)
- (Authenticated sender: sakkinen)
- by meesny.iki.fi (Postfix) with ESMTPSA id 2E233203DA;
- Tue, 24 May 2022 20:07:21 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
- t=1653412041;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=C16oxj4S7bOgGlckZukMCsyll8p4XjcNWMkuD4ybffg=;
- b=bSE4/I9+i5VhgLPBlufpeYsaQGnDKnD0uS7kNstQ8BmVYcLoz0HdkxpGeEmcsbbLxi9gmI
- T/VNipFUXBTFjTKux4nXvoj+dc1Bb+ujCDcpDIYCk5o8KowRvPMxXZdDDTnH0Cc94AmnJQ
- B/qXf5TTwjMikuFrR/iAZlkTJlwYl4s=
-From: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+ with ESMTP id 732xFTto_8y4 for <buildroot@lists.busybox.net>;
+ Tue, 24 May 2022 17:11:45 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 691A460ABD
+ for <buildroot@buildroot.org>; Tue, 24 May 2022 17:11:45 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id u3so26652033wrg.3
+ for <buildroot@buildroot.org>; Tue, 24 May 2022 10:11:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zP6d19tje31vNGV+b0RSWbt1MgVaRH/HEa68cmv1hS8=;
+ b=okGCXoAyDUfAnOuDGjxZEA2JAlrDZCAUIDbOsNKcSqTII1ibEr97zqTjgmDW5fi5qj
+ d7Jrv/76/RsAQBEUIUClzK5FEjLf49VJrwFG/5DxO/erAhQTQKX2171S3mVRftw8MzSK
+ f28f0N+c1CxJR+aN9tT0wgkVVTsdd1heq4TS55HcvYO8+6b/qm17/FHaAkH2YlZpgvJJ
+ dBBAplwVouwKQuUtGQEiqYFBW2xmswn7nTn/9j5/eGEsJ51wDy2zZjHlCHmPqqe9dEkT
+ IKY9bo0CGPYmTm9WzBIfpG/GIpm1Zby8ncmfPcUedv68j/0hWzfolTZ7gcifn3UMe80v
+ fvMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zP6d19tje31vNGV+b0RSWbt1MgVaRH/HEa68cmv1hS8=;
+ b=7JxUqu6Ata8aFc4s6kZKWDgGJrBhCnWVknSNOr6BktBOH7frUQlgt625a2OkrbAywW
+ zBBJHOWv/ye5QhqG07aalZ3bQNGN4+rWd78SBP2zYwSB5NplINXraC/IN8aPbDzq2e3G
+ b3y1LKKhCWQdMPch455xMaNIYKk8f2qWtiC1q45d8xiZB6WgessP9crt+nL+mU4+sMg6
+ hO5kHfYMECroLe43lRLqd7DZ3lizBVc0E6AKZCdPNPVD+jneCLDWLpOUIfEo6cCeq0cr
+ enJ5cmV1pi80vPi8r4XKFaxen0/+NetdWVkrJ8MXK47w774fJhk+7SaZ8pyMYriHPryw
+ lB7g==
+X-Gm-Message-State: AOAM531azS8t8/mlFmNOtZ6UF7j6AfE+PHTA1B60Mog2D2YOG/d3cysK
+ GvkPCaeknclPNjb+WNrikPiuj4BSOLE=
+X-Google-Smtp-Source: ABdhPJzbTddf0lBaKv/YanL2IdH626NOl9II0GEopm183xFEEz6yNUHuaYSNnwBRxg9X2R1qUbOc9g==
+X-Received: by 2002:a5d:59af:0:b0:20f:d3fc:c5ba with SMTP id
+ p15-20020a5d59af000000b0020fd3fcc5bamr11278357wrr.436.1653412303387; 
+ Tue, 24 May 2022 10:11:43 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ e16-20020a05600c4e5000b00397473ae25esm2808921wmq.34.2022.05.24.10.11.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 24 May 2022 10:11:42 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 24 May 2022 20:05:40 +0300
-Message-Id: <20220524170541.93208-1-jarkko.sakkinen@iki.fi>
-X-Mailer: git-send-email 2.36.1
+Date: Tue, 24 May 2022 19:09:11 +0200
+Message-Id: <20220524170911.2350456-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
- s=meesny; t=1653412041;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=C16oxj4S7bOgGlckZukMCsyll8p4XjcNWMkuD4ybffg=;
- b=N0SrZ9x++ldEJvasHRFcso+5vRKfm5j3BFPF0Kgxp6VgNBLFGaoL1d2DZWpVlfHWS04+VI
- 1+/8x7jwRHDZm8EgFyiqnuL3QCn7Jmi7hsBB/yR2rF/mvVeNFhZ1asxTCbPe81hkteO+6f
- +bZlXaB5izhGCxiQOA7yP2tlTI3qBiU=
-ARC-Authentication-Results: i=1; ORIGINATING;
- auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1653412041; a=rsa-sha256; cv=none;
- b=R+006cZbgs58UTg5MTZe+YBTpqoNxqHdb0wtC90qfu8k3yAiSRsd/lILtqJXBEpkKxl1rs
- /q7AOGZ3pX8AIbpSEwbmzmC+8tDxmAG9pSlF9aP5MjvQKq8tRK0/7Ej7s1G+/IX2iYiVjN
- Rl0kF+tD4SvdriBjqa9/Bv+Jp0Dn2CU=
-Subject: [Buildroot] [PATCH v2] package/linux-tools: openssl dependency for
- x86_64 selftests
+Subject: [Buildroot] [PATCH 1/1] package/libostree: fix build without systemd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,57 +87,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>,
- Jarkko Sakkinen <jarkko.sakkinen@iki.fi>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On x86_64, libssl is a dependency for kselftests. selftests/sgx depends on
-it.  Thus, select it in "Config.in", and add it as a build dependency in
-"linux-tool-selftests.mk.in".
+Fix the following build failure without systemd raised since bump to
+version 2022.03 in commit 0eb073ca2ba89dad2e531644fd33f693d228ef94:
 
-Link: https://lore.kernel.org/buildroot/20220517224809.21f77949@gmx.net/
-Suggested-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
----
-v2:
-Config.in: BR2_PACKAGE_LIBOPENSSL => BR2_PACKAGE_OPENSSL
----
- package/linux-tools/Config.in                  | 1 +
- package/linux-tools/linux-tool-selftests.mk.in | 3 +++
- 2 files changed, 4 insertions(+)
+src/libostree/ostree-sysroot-deploy.c: In function 'child_setup_fchdir':
+src/libostree/ostree-sysroot-deploy.c:2837:19: error: 'uintptr_t' undeclared (first use in this function); did you mean 'intptr_t'?
+ 2837 |   int fd = (int) (uintptr_t) data;
+      |                   ^~~~~~~~~
+      |                   intptr_t
 
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 791f2c085c..6217fcfb7a 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -98,6 +98,7 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
- 	select BR2_PACKAGE_LIBCAP_NG
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS # runtime (taskset)
-+	select BR2_PACKAGE_OPENSSL if BR2_x86_64
- 	help
- 	  Build and install (to /usr/lib/kselftests) kernel selftests.
- 
-diff --git a/package/linux-tools/linux-tool-selftests.mk.in b/package/linux-tools/linux-tool-selftests.mk.in
-index b824c11bd6..06158e6147 100644
---- a/package/linux-tools/linux-tool-selftests.mk.in
-+++ b/package/linux-tools/linux-tool-selftests.mk.in
-@@ -17,6 +17,9 @@ endif
- endif
- 
- SELFTESTS_DEPENDENCIES = libcap-ng popt
-+ifeq ($(NORMALIZED_ARCH),x86_64)
-+SELFTESTS_DEPENDENCIES += openssl
-+endif
- 
- SELFTESTS_MAKE_FLAGS = \
- 	$(LINUX_MAKE_FLAGS) \
+Fixes:
+ - http://autobuild.buildroot.org/results/c134d849e7942911cb6bd13869dd2f3aefd8c21c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...y-add-a-missing-include-for-stdint-h.patch | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 package/libostree/0001-lib-ostree-sysroot-deploy-add-a-missing-include-for-stdint-h.patch
+
+diff --git a/package/libostree/0001-lib-ostree-sysroot-deploy-add-a-missing-include-for-stdint-h.patch b/package/libostree/0001-lib-ostree-sysroot-deploy-add-a-missing-include-for-stdint-h.patch
+new file mode 100644
+index 0000000000..35f92c37ff
+--- /dev/null
++++ b/package/libostree/0001-lib-ostree-sysroot-deploy-add-a-missing-include-for-stdint-h.patch
+@@ -0,0 +1,24 @@
++From 4b7fc4f1e90bbeac89d2f939cde3070e69b4787a Mon Sep 17 00:00:00 2001
++From: Luca BRUNO <luca.bruno@coreos.com>
++Date: Fri, 6 May 2022 10:07:23 +0000
++Subject: [PATCH] lib/ostree-sysroot-deploy: add a missing include for stdint.h
++
++[Retrieved from:
++https://github.com/ostreedev/ostree/commit/4b7fc4f1e90bbeac89d2f939cde3070e69b4787a]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/libostree/ostree-sysroot-deploy.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/libostree/ostree-sysroot-deploy.c b/src/libostree/ostree-sysroot-deploy.c
++index 404f336fb5..96cc07531e 100644
++--- a/src/libostree/ostree-sysroot-deploy.c
+++++ b/src/libostree/ostree-sysroot-deploy.c
++@@ -22,6 +22,7 @@
++ #include <gio/gunixinputstream.h>
++ #include <gio/gunixoutputstream.h>
++ #include <glib-unix.h>
+++#include <stdint.h>
++ #include <sys/mount.h>
++ #include <sys/statvfs.h>
++ #include <sys/socket.h>
 -- 
-2.36.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
