@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6FABC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 13:02:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCAFAC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 13:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 944306006A;
-	Tue, 24 May 2022 13:02:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 946BB40C3A;
+	Tue, 24 May 2022 13:02:13 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 36GEsM5IWunR; Tue, 24 May 2022 13:02:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id A1FF240477;
+	Tue, 24 May 2022 13:02:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FEAB1BF349
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 13:01:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D53D60B95
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 13:01:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EUiWgqfhlFKe; Tue, 24 May 2022 13:02:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D40B56059A;
-	Tue, 24 May 2022 13:01:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 564C21BF989
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 13:01:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 44D7E41677
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 13:01:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bh99BjtdE1rW for <buildroot@lists.busybox.net>;
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6E-9e7TEl77k for <buildroot@lists.busybox.net>;
  Tue, 24 May 2022 13:01:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 449894162C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3803860E9D
  for <buildroot@buildroot.org>; Tue, 24 May 2022 13:01:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CF7BF86432; Tue, 24 May 2022 12:50:09 +0000 (UTC)
+ id C55D886431; Tue, 24 May 2022 12:50:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 24 May 2022 14:52:18 +0200
+Date: Tue, 24 May 2022 14:51:57 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 71b9653a28e6e5df438cac596bdb57a8553a4433
-X-Git-Newrev: 9388b29dd6df5db5085df4fb2a5c5f0eb9b5e26d
+X-Git-Oldrev: e35d7f2ed4cd0e2bab9d1003246cba951689e8bd
+X-Git-Newrev: 71b9653a28e6e5df438cac596bdb57a8553a4433
 X-Patchwork-Hint: ignore
-Message-Id: <20220524125009.CF7BF86432@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/mc: fix build
- with gcc 4.8
+Message-Id: <20220524125009.C55D886431@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libsigsegv: bump
+ to version 2.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +59,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9388b29dd6df5db5085df4fb2a5c5f0eb9b5e26d
+commit: https://git.buildroot.net/buildroot/commit/?id=71b9653a28e6e5df438cac596bdb57a8553a4433
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure with gcc 4.8 raised since bump to
-version 4.8.26 in commit e648dfa6f7078a6fbbc5feb83292c6a98300fe8f and
-https://github.com/MidnightCommander/mc/commit/8b4386df83ab5a525f0568113fe1e53d362f433e:
+This bump will fix the following build failure on or1k and microblazeel:
 
-tty-ncurses.c: In function 'tty_colorize_area':
-tty-ncurses.c:575:5: error: 'for' loop initial declarations are only allowed in C99 mode
-     for (int row = 0; row < rows; row++)
-     ^
+In file included from handler.c:20:
+handler-unix.c: In function 'sigsegv_handler':
+handler-unix.c:194:28: error: 'struct vma_struct' has no member named 'is_near_this'
+  194 |                       : vma.is_near_this (addr, &vma))
+      |                            ^
+
+https://git.savannah.gnu.org/gitweb/?p=libsigsegv.git;a=blob;f=NEWS;h=4d012f8b6cd9b2c1eccbf266a10aae56b0e79978;hb=9ad117adabd223b79e037575e071855c2b8b35c0
+https://git.savannah.gnu.org/gitweb/?p=libsigsegv.git;a=blob;f=ChangeLog;h=c52b227aae190ba9b161282efaa5f33cb4a127f9;hb=9ad117adabd223b79e037575e071855c2b8b35c0
 
 Fixes:
- - http://autobuild.buildroot.org/results/d9f0a11bde42fe6ae2e9449d3365609d59a6545d
+ - http://autobuild.buildroot.org/results/c693fafb8f1f68be30a281313fb1f0890cc08b1e
+ - http://autobuild.buildroot.org/results/ecde11129d102e3321b2aaef407697c29311c705
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit c99d2d34298ddfed16581ae3405ed70b52640cb5)
+(cherry picked from commit c6addf4606c3a41cdad5c6ac4c6508b298b6e92a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mc/mc.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/libsigsegv/libsigsegv.hash | 4 ++--
+ package/libsigsegv/libsigsegv.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index ac12c2173a..3858d62886 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -10,7 +10,9 @@ MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPL-3.0+
- MC_LICENSE_FILES = COPYING
- MC_DEPENDENCIES = libglib2 host-pkgconf $(TARGET_NLS_DEPENDENCIES)
--MC_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
-+MC_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -std=c99" \
-+	LIBS=$(TARGET_NLS_LIBS)
+diff --git a/package/libsigsegv/libsigsegv.hash b/package/libsigsegv/libsigsegv.hash
+index c827e6b866..13978da398 100644
+--- a/package/libsigsegv/libsigsegv.hash
++++ b/package/libsigsegv/libsigsegv.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/libsigsegv/libsigsegv-2.13.tar.gz.sig
+-sha256  be78ee4176b05f7c75ff03298d84874db90f4b6c9d5503f0da1226b3a3c48119  libsigsegv-2.13.tar.gz
++# https://ftp.gnu.org/gnu/libsigsegv/libsigsegv-2.14.tar.gz.sig
++sha256  cdac3941803364cf81a908499beb79c200ead60b6b5b40cad124fd1e06caa295  libsigsegv-2.14.tar.gz
+ # Locally calculated
+ sha256  8f2983e9a940367f48999881c14775db725ee643bce1e2f1ba195eb629a33cde  COPYING
+diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
+index 87a5d7a124..98bcd55c8c 100644
+--- a/package/libsigsegv/libsigsegv.mk
++++ b/package/libsigsegv/libsigsegv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_GPM),y)
- MC_CONF_OPTS += --with-gpm-mouse
+-LIBSIGSEGV_VERSION = 2.13
++LIBSIGSEGV_VERSION = 2.14
+ LIBSIGSEGV_SITE = $(BR2_GNU_MIRROR)/libsigsegv
+ LIBSIGSEGV_INSTALL_STAGING = YES
+ LIBSIGSEGV_CONF_ENV = sv_cv_fault_posix=yes
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
