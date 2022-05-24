@@ -1,53 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DD4CC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 15:04:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15392C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 24 May 2022 15:06:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 138E441B58;
-	Tue, 24 May 2022 15:04:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A05B560B77;
+	Tue, 24 May 2022 15:06:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x-7EN_pB0XxO; Tue, 24 May 2022 15:04:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rxMntAceVrmY; Tue, 24 May 2022 15:05:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB39041B57;
-	Tue, 24 May 2022 15:04:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5BF311BF395
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 15:04:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDBED60C2B;
+	Tue, 24 May 2022 15:05:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CF4E1BF395
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 15:05:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49BC041B57
- for <buildroot@lists.busybox.net>; Tue, 24 May 2022 15:04:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EDF6460C2B
+ for <buildroot@lists.busybox.net>; Tue, 24 May 2022 15:05:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UwSibqOtprvU for <buildroot@lists.busybox.net>;
- Tue, 24 May 2022 15:04:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sd4hF5e2D2AR for <buildroot@lists.busybox.net>;
+ Tue, 24 May 2022 15:05:56 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EC3C940045
- for <buildroot@buildroot.org>; Tue, 24 May 2022 15:04:25 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1793060B77
+ for <buildroot@buildroot.org>; Tue, 24 May 2022 15:05:55 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6AEE320009;
- Tue, 24 May 2022 15:04:22 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 61837E0009;
+ Tue, 24 May 2022 15:05:52 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1ntW57-00F6XZ-Kb; Tue, 24 May 2022 17:04:21 +0200
+ id 1ntW6Z-00F6jS-HS; Tue, 24 May 2022 17:05:51 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220419090055.2029170-1-fontaine.fabrice@gmail.com>
-Date: Tue, 24 May 2022 17:04:21 +0200
-In-Reply-To: <20220419090055.2029170-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 19 Apr 2022 11:00:55 +0200")
-Message-ID: <87fskzt1je.fsf@dell.be.48ers.dk>
+References: <20220419090346.2029839-1-fontaine.fabrice@gmail.com>
+Date: Tue, 24 May 2022 17:05:51 +0200
+In-Reply-To: <20220419090346.2029839-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 19 Apr 2022 11:03:45 +0200")
+Message-ID: <87bkvnt1gw.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/trinity: fix musl build
+Subject: Re: [Buildroot] [PATCH 1/2] package/expat: disable examples,
+ tests and xmlwf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,17 +68,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following build failure on musl:
- > In file included from /nvmedata/autobuild/instance-17/output-1/host/powerpc64-buildroot-linux-musl/sysroot/usr/include/asm/ioctl.h:12,
- >                  from /nvmedata/autobuild/instance-17/output-1/host/powerpc64-buildroot-linux-musl/sysroot/usr/include/linux/ioctl.h:5,
- >                  from /nvmedata/autobuild/instance-17/output-1/host/powerpc64-buildroot-linux-musl/sysroot/usr/include/linux/fs.h:14,
- >                  from ioctls/vfs.c:3:
- > ioctls/vfs.c:109:35: error: 'loff_t' undeclared here (not in a function); did you mean 'off_t'?
- >   109 |  { .name = "FIOQSIZE", .request = FIOQSIZE, },
- >       |                                   ^~~~~~~~
+ > Disable examples and tests (enabled by default) through
+ > --without-{examples,tests} which are available since version 2.2.7 and
+ > https://github.com/libexpat/libexpat/commit/1fdfd8a1b490f8ac9e7e11896298e41cc210d87d
+
+ > Also disable xmlwf (a binary that determines if an XML document is
+ > well-formed) through --without-xmlwf which is available since version
+ > 2.2.4 and
+ > https://github.com/libexpat/libexpat/commit/9d950527a07783c104aada685384edf3f8f23f8a
+
+ > This will fix the following build failure on riscv64:
+
+ > ERROR: reloc type R_RISCV_SET6 unsupported in this context
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/b7f46072751a8d70fa02f1c625c5279f70bec853
+ >  - http://autobuild.buildroot.org/results/99890c9c7ebe3266dd533c81352a3cbcf4d3d738
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
