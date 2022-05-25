@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5467C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 13:35:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD08AC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 13:36:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55DD08428D;
-	Wed, 25 May 2022 13:35:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E44841C27;
+	Wed, 25 May 2022 13:36:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JEQSSn_AnUxo; Wed, 25 May 2022 13:35:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GYfn2qzIA0rW; Wed, 25 May 2022 13:36:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75FFE84286;
-	Wed, 25 May 2022 13:35:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 361B241C12;
+	Wed, 25 May 2022 13:36:01 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A00EF1BF31F
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B1A431BF31F
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE0E561307
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8CAC86130A
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=wdc.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GqxGEghGc_dW for <buildroot@lists.busybox.net>;
- Wed, 25 May 2022 13:34:42 +0000 (UTC)
+ with ESMTP id vxi4rtW-2svb for <buildroot@lists.busybox.net>;
+ Wed, 25 May 2022 13:34:41 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E6D2E61313
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B43AC612F5
  for <buildroot@buildroot.org>; Wed, 25 May 2022 13:34:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
  t=1653485681; x=1685021681;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=ej14BLqtjWTJ2bhuNg/9RNXwlBIGfQPs8yqUqsAEZ+4=;
- b=JMKGWfbHXqa2qXsDkhZVvKThkY0rcRmxGW1psXDUMZZPjdS+l9WeztRt
- gMTtWpmJpskua6V8gjVZGIBKKepDR0FdJSaQQVoceLJnQgHSRMkUNVMde
- VD73F7toeaIwG1bcgShmq0l50J+olDYSADpz1m/SBCmijc/LRR2CQBujL
- kele5vy7EiFqEd6KXt1ndqZGCvni8qzER6RRry1RJB6Pf8woTaXhaU2Gv
- sWIxviag4w14yYIpALtU4EphWjRHMa0OKKwlaFvSOAW7UF3aj/Pfo43gb
- oXFlJIOORr+sP0HqoV24bEB7f2+03hsim79J87Kfr0d+J+tOb4FE6zd7F Q==;
-X-IronPort-AV: E=Sophos;i="5.91,250,1647273600"; d="scan'208";a="305635100"
+ bh=GUOYQGZsO6KuiDXBz121GyuxryM23jVgpkpeMEx43Ts=;
+ b=Z2sEk2+FgCJ06QqoYlRDMq7wlR3HnxqV7Ifw97BbAQbsLP/5RhKVMk6H
+ 3z/+wER0kdVsmEeexXleWaOEtqu8uNKytZUWgNw6KjMnOpvU/OOEqfi8M
+ 5ufNJuhUYJEtBIj2njWYySBEvz8l1FwehHWji91byKgHNLD2gnKoe9Y8n
+ 8rnzFjLhhIFjKIIDH3xlT8mZsJ7wkefxPvKDlafen55RdajsxTufUwWwk
+ 2Qvor/Rrj0AIgGkcU8RJvZPyW99aDn/4LoBXGO+Wa0F3LbYVvUmTnYWp8
+ dcJwuYSB3TikbjsewrvBDTX2Yvc0t5FHxwuRIEw/obTU5z8mgYVQIeNY+ A==;
+X-IronPort-AV: E=Sophos;i="5.91,250,1647273600"; d="scan'208";a="305635098"
 Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com)
  ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 25 May 2022 21:27:37 +0800
-IronPort-SDR: gRDFvJx4nsej9j6HVTjUD/mRQaiDNBqabQgMkqGN/99wfI+ctkhNnJzkrdfk2j4KsQ4H7Qaubk
- 9VduQ/TYQ+jgAgORcy6NqHrXnMvwpOSAUEmqQYCJcapldgP2TQ5inK9rUG2nm4STSuSQDRWRxE
- Yq+x7DJQZUxBQG2f/zVB8X+t2yVnTYdSMa3RBm9rQzE5aYOZFddgt98WB1kEz4aMPerKtZ8pf7
- YFuB0GL8YuXGgrrzKARfiL5MnDQj5rIkVjTkfDIn+4VPpWAg+6iuM08HyqMrz3U7WSVqaNDoRC
- Y1T2N6BdQhGnOCitFVk5YVn6
+ by ob1.hgst.iphmx.com with ESMTP; 25 May 2022 21:27:35 +0800
+IronPort-SDR: HZoe6qbwfYbMS6SWc+P8SxS4lWsCgyhjy+1mNMrFJ6sbihjO6xDnKA5eoKEYzcTOU2PQwEkZFs
+ wF/L6N89djCkhfmgq0AgbmjwO6l9SEt1Ec6/U3SzfDTe73KsnD3aCNjCNhzx7mCg9TiiAmmyWc
+ +uDC8UMjxXoFzLGevhfdBke8K/JAD0lOzbFqq/cL/JtzQVAN+0YeTdVZeCEmecbqM+uaz9wX2I
+ mCYbKei61XP1BJ3Ly1WjLDjq5QlE1p6+dENicO8Ydy1F1ai7K03r4fjFMv3qbDyORmOSlqljtm
+ qcLQO6voUrYmk/r/FgXETZd+
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 25 May 2022 05:51:32 -0700
-IronPort-SDR: MlEhgt14bxS4PqERuUl3jIIwApfFRvHOoxv7eiwGhJz4b/dxV4RFNTmMrYngEPOKm9UzdmCZJC
- +obyeCB6x+F3F2rOAv6bbgf4AIMpfzmY7ApEGmzIzIX6luII8k/dTua7xWxqahcUkaLMv3swMO
- MnlIFl0tqDnPH6W2dUBhfOYdrn49bAVrO2zRJRwZvY0qPHn0OY8ThlfJlJ22v4nzPlYIf8gOpx
- BhNxLukY3OK50HatC000S9Uu61m9YqC54SOjXNiH3KT3tAzzbp5La1yEfeJQsFPxh+wjoDHX2R
- Nzk=
+ 25 May 2022 05:51:31 -0700
+IronPort-SDR: 65QbAK+HMKvfVdEHJd1GlB799dS7FvAuRMPcz3oPzLYyQla+HkFi+zZ0aBtp9ibnVYaxVxGGDM
+ ydFOLmGFadZfCxtAdXKHT5wd5fAnjb4w5D8RMtJdO3JBJJ2Y2CyvIP/XUv1XdG3ldsYrA7rn2G
+ 6zCK0dDg5YRoOwPQ4Q8XSJDRGZpzFP4Mj5yE/AZcwu50T5dX9mBOFq9R9eyqkCCT2WgkCFe2GP
+ 7HnBX0xqrz2omZCiC0X7bBxJioQTfhbzc7UIWxs0uJi9e9nBwS2dmQRg7dUiTAHmaKYZscXL7U
+ 6tQ=
 WDCIronportException: Internal
 Received: from unknown (HELO twashi.fujisawa.hgst.com) ([10.225.163.54])
- by uls-op-cesaip01.wdc.com with ESMTP; 25 May 2022 06:27:36 -0700
+ by uls-op-cesaip01.wdc.com with ESMTP; 25 May 2022 06:27:35 -0700
 To: buildroot <buildroot@buildroot.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 May 2022 22:27:23 +0900
-Message-Id: <20220525132729.2349105-6-damien.lemoal@wdc.com>
+Date: Wed, 25 May 2022 22:27:22 +0900
+Message-Id: <20220525132729.2349105-5-damien.lemoal@wdc.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220525132729.2349105-1-damien.lemoal@wdc.com>
 References: <20220525132729.2349105-1-damien.lemoal@wdc.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 05/11] package: python-serial: Define host
- package
+Subject: [Buildroot] [PATCH 04/11]
+ configs/qemu_riscv64_nommu_virt_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,53 +96,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Niklas Cassel <niklas.cassel@wdc.com>
 
-Add the definiton of the host python-serial package to gain access to
-tools such as python-miniterm to easily open a serial console terminal
-with some boards (e.g. Canaan Kendryte K210 SoC-based riscv boards).
+Add RISC-V 64-bit nommu defconfig for QEMU virt machine with MMU
+disabled.
 
+Unlike qemu_riscv64_virt, qemu_riscv64_nommu_virt does not use OpenSBI,
+since the kernel is running in machine mode (M-mode).
+
+After the build is complete, you can start QEMU using the launcher
+script:
+$ output/images/start-qemu.sh
+
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
- package/Config.in.host                 | 1 +
- package/python-serial/Config.in.host   | 6 ++++++
- package/python-serial/python-serial.mk | 1 +
- 3 files changed, 8 insertions(+)
- create mode 100644 package/python-serial/Config.in.host
+ board/qemu/riscv64-virt/readme.txt        |  2 ++
+ configs/qemu_riscv64_nommu_virt_defconfig | 38 +++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
+ create mode 100644 configs/qemu_riscv64_nommu_virt_defconfig
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index cd1c34b5a3..89e1f06d37 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -73,6 +73,7 @@ menu "Host utilities"
- 	source "package/python-cython/Config.in.host"
- 	source "package/python-greenlet/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
-+	source "package/python-serial/Config.in.host"
- 	source "package/python-six/Config.in.host"
- 	source "package/python-xlrd/Config.in.host"
- 	source "package/python3/Config.in.host"
-diff --git a/package/python-serial/Config.in.host b/package/python-serial/Config.in.host
-new file mode 100644
-index 0000000000..3c071575d7
---- /dev/null
-+++ b/package/python-serial/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_PYTHON_SERIAL
-+	bool "host python-serial"
-+	help
-+	  python-serial is a Python library to access serial ports.
-+
-+	  https://github.com/pyserial/pyserial
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index 249ea9d5a3..87cd9392f1 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -12,3 +12,4 @@ PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
- PYTHON_SERIAL_SETUP_TYPE = setuptools
+diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
+index 747a9ea674..9e4cfc8c55 100644
+--- a/board/qemu/riscv64-virt/readme.txt
++++ b/board/qemu/riscv64-virt/readme.txt
+@@ -2,4 +2,6 @@ Run Linux in emulation with:
  
- $(eval $(python-package))
-+$(eval $(host-python-package))
+   qemu-system-riscv64 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv64_virt_defconfig
+ 
++  qemu-system-riscv64 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -nographic -cpu rv64,mmu=off # qemu_riscv64_nommu_virt_defconfig
++
+ The login prompt will appear in the terminal that started Qemu.
+diff --git a/configs/qemu_riscv64_nommu_virt_defconfig b/configs/qemu_riscv64_nommu_virt_defconfig
+new file mode 100644
+index 0000000000..46bd21f1da
+--- /dev/null
++++ b/configs/qemu_riscv64_nommu_virt_defconfig
+@@ -0,0 +1,38 @@
++# Architecture
++BR2_riscv=y
++BR2_RISCV_64=y
++
++# Toolchain
++BR2_PACKAGE_HOST_ELF2FLT=y
++# BR2_USE_MMU is not set
++
++# Busybox with hush
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
++
++# System
++BR2_TARGET_GENERIC_GETTY=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++
++# Image
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
++
++# Use Linux 5.16 headers until 5.17 headers are available
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_PATCH="board/riscv/nommu/kernel_patches"
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17"
++BR2_LINUX_KERNEL_DEFCONFIG="nommu_virt"
++BR2_LINUX_KERNEL_IMAGE=y
++
++# Disable network scripts
++# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
++
++# host-qemu for gitlab testing
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 -- 
 2.36.1
 
