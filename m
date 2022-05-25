@@ -1,67 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD764C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 06:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB72EC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 07:05:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67B636129A;
-	Wed, 25 May 2022 06:51:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CDE984105;
+	Wed, 25 May 2022 07:05:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nwf-6ok8D6RN; Wed, 25 May 2022 06:51:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HJuoVMlDT0WF; Wed, 25 May 2022 07:05:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E4AD61270;
-	Wed, 25 May 2022 06:51:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 770021BF319
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 06:51:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F1C3840F2;
+	Wed, 25 May 2022 07:05:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C120A1BF418
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 07:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7377F61270
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 06:51:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE4C241BA4
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 07:05:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JtU2_Ijlf4Y7 for <buildroot@lists.busybox.net>;
- Wed, 25 May 2022 06:51:32 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8EDDD61269
- for <buildroot@buildroot.org>; Wed, 25 May 2022 06:51:32 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:6823:fe26:3f6d:8e17])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 8B9355FFAA;
- Wed, 25 May 2022 08:51:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1653461490;
- bh=DJrqFFLWAil8PRfGpevB/NoxGMW+drvQLkpQYeqMlK4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=OCP1DPZv4d4+hUY02cJz1T1K5c6PWyK6Rwh6ZoxW5xulAdvmXbilgMLaMuhLHwIIa
- mSxnQDew0hLBYQNG++UAPmiVshayeePNX+fanz2FC3GILR+CRsZwvWHC+PwtENxCPK
- tm3Ak24vvkt/fS7ySxSWFcIM1A0p/CLtRtC13Zu5tHfgZvKXEdH3SNQkC8StgIak39
- hXbz5RR5L386FDa58kJ4Qa5TBcEYYJ/mcPxrZ/6R4ZlxuaTrQaGO5WcBrmzpuL51/g
- XbcvGPbvP1gTGpARQWN0+ezKtvBeRvAXnH7ngdfiWkYgSQYG0m4PmWDz8RyqHHPZjS
- T7Y6eTnCOseKw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 25 May 2022 08:51:26 +0200
-Date: Wed, 25 May 2022 08:51:26 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220525065126.GA301044@scaer>
-References: <20220514222811.3925140-1-james.hilliard1@gmail.com>
- <5a0bb1b8-b671-e85b-1942-3b17f31f0547@mind.be>
- <20220524190138.GB2500@scaer>
- <CADvTj4q77jiin-pcvecnfKC_KR+gxPR=7jYov2WgG=ZT5hGO7A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CADvTj4q77jiin-pcvecnfKC_KR+gxPR=7jYov2WgG=ZT5hGO7A@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/midori: add missing
- !BR2_PACKAGE_GNUPG dependency
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6fWO36RlTxhL for <buildroot@lists.busybox.net>;
+ Wed, 25 May 2022 07:05:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A883041B9C
+ for <buildroot@buildroot.org>; Wed, 25 May 2022 07:05:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 8040E864AD; Wed, 25 May 2022 06:54:10 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 25 May 2022 09:04:17 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5452b5887005298a87650ff4003ecfaecfd9aca0
+X-Git-Newrev: de77516a2b3f8435df066cfc611b0eacfb61b02e
+X-Patchwork-Hint: ignore
+Message-Id: <20220525065410.8040E864AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-tools: openssl dependency
+ for x86_64 selftests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,38 +53,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=de77516a2b3f8435df066cfc611b0eacfb61b02e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-05-24 13:16 -0600, James Hilliard spake thusly:
-> On Tue, May 24, 2022 at 1:01 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2022-05-18 21:17 +0200, Arnout Vandecappelle spake thusly:
-> > > On 15/05/2022 00:28, James Hilliard wrote:
-> > > >The !BR2_PACKAGE_GNUPG needs to be propagated from BR2_PACKAGE_GCR.
-[--SNIP--]
-> > Unfortunately, as Romain noticed, this is causing a circular (aka
-> > recursive) kconfig dependency:
-[--SNIP--]
-> Yeah, already sent a patch that should fix this:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20220519045549.2320246-1-james.hilliard1@gmail.com/
+On x86_64, libssl is a dependency for kselftests. selftests/sgx depends on
+it.  Thus, select it in "Config.in", and add it as a build dependency in
+"linux-tool-selftests.mk.in".
 
-Greatm thanks! I've just applied it now.
+Link: https://lore.kernel.org/buildroot/20220517224809.21f77949@gmx.net/
+Suggested-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+[yann.morin.1998@free.fr:
+  - in .mk: change condition to be on package being selected
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/linux-tools/Config.in                  | 1 +
+ package/linux-tools/linux-tool-selftests.mk.in | 5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 791f2c085c..6217fcfb7a 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -98,6 +98,7 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
+ 	select BR2_PACKAGE_LIBCAP_NG
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS # runtime (taskset)
++	select BR2_PACKAGE_OPENSSL if BR2_x86_64
+ 	help
+ 	  Build and install (to /usr/lib/kselftests) kernel selftests.
+ 
+diff --git a/package/linux-tools/linux-tool-selftests.mk.in b/package/linux-tools/linux-tool-selftests.mk.in
+index b824c11bd6..e29c7f59de 100644
+--- a/package/linux-tools/linux-tool-selftests.mk.in
++++ b/package/linux-tools/linux-tool-selftests.mk.in
+@@ -16,7 +16,10 @@ SELFTESTS_ARCH=$(NORMALIZED_ARCH)
+ endif
+ endif
+ 
+-SELFTESTS_DEPENDENCIES = libcap-ng popt
++SELFTESTS_DEPENDENCIES = \
++	libcap-ng \
++	popt \
++	$(if $(BR2_PACKAGE_OPENSSL),openssl)
+ 
+ SELFTESTS_MAKE_FLAGS = \
+ 	$(LINUX_MAKE_FLAGS) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
