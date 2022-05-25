@@ -4,77 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28073C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 13:35:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E34EC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 13:35:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C68F441C17;
-	Wed, 25 May 2022 13:35:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D6B241C28;
+	Wed, 25 May 2022 13:35:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 64Y97s1TwBmK; Wed, 25 May 2022 13:35:21 +0000 (UTC)
+	with ESMTP id P5CI86t07YA6; Wed, 25 May 2022 13:35:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B06441BE4;
-	Wed, 25 May 2022 13:35:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C81D41C10;
+	Wed, 25 May 2022 13:35:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2509F1BF31F
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8EB7B1BF31F
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D466F6130A
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9CA656130C
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=wdc.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZLVS2eHbTXz9 for <buildroot@lists.busybox.net>;
- Wed, 25 May 2022 13:34:39 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+ with ESMTP id BRIkAOOfw3N8 for <buildroot@lists.busybox.net>;
+ Wed, 25 May 2022 13:34:38 +0000 (UTC)
+X-Greylist: delayed 00:07:06 by SQLgrey-1.8.0
 Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BB64C6130C
- for <buildroot@buildroot.org>; Wed, 25 May 2022 13:34:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 140C4612F5
+ for <buildroot@buildroot.org>; Wed, 25 May 2022 13:34:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1653485679; x=1685021679;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=loFjWGW/+jdz1l49Ikwyb3MyuJVTmxf1mFKEiISQrPI=;
- b=RyurAUcRSxnlEJl7ao0GhakBVf8T+cy8arOvhcxIlpzxlk8UHd8lXuC/
- 7rpkQHScHlYbX3ModPst3g55mOEG/GNRtLP/udCEQk1EZSZ6XKo5EGICg
- PguTX1i51TyAY2MbFPjRK0iyGZEcmhyG6dN8vc8cTIc98iKgab9KGFx14
- jPxhZ0fWZ76hAem/IdD7VTLXKS4PvOsup+XoVFVmdY56QDt/AzgyMSIpf
- MWtF96oeeVAWgcFTsQs+WIRZEYn0qFx1BXJAr5WBcli54hJNuSVAcWRZ0
- VOlIRJCOULNGkqBy8/SS7Wnz0qXu/fLJ0fm0GC6l7GysranIRNypJSRYm A==;
-X-IronPort-AV: E=Sophos;i="5.91,250,1647273600"; d="scan'208";a="305635092"
+ t=1653485677; x=1685021677;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=SCPAmH/3YZbHTI7SUTLgoi5PZuorMGgr4mIn+IZ19zI=;
+ b=Tf4V/mtBKRLibkOjqMjI66BuVdXyZRrCI9pBoK/kUq8P543e3OyYwzZ2
+ qGKEC8u9wgE6CYp20SKd2rOseC/e7nF64HUYkBU3F8vtxtUD9J9+E6Oa8
+ qN12Gls6BJye7j3vbdR29kpX+gBPE5rt2oJVNyl2rGbRHY/0N1yi+3MWF
+ KCfiB0sQl7WR0AeurX0jvfd88uEtx5rms/gGMV97tQxQOWYXWY/PrV0CG
+ S1O8TmrvPObdeDderVp7VtjpCqMJTsdituJwACo+9ax05Bg4GMTZf4nfs
+ 7XF3cUH9jROCAsEuAeSedNRnZh7LLKWJ3wWu4i/BZR3ctfVE62scbvrHV Q==;
+X-IronPort-AV: E=Sophos;i="5.91,250,1647273600"; d="scan'208";a="305635081"
 Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com)
  ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 25 May 2022 21:27:34 +0800
-IronPort-SDR: mtkXUyXTrpp5I07xDkhvmZV9UsW58rc1U6bSNxgOAiFStq7d8DlLH1daNiXl7sDZP/6vQHyhNU
- DIOpZkZtKsbSVqTzD5+LAJgIf5J8BqKdVAUC7uZ/neHg7OrOwon2WIAHCVUExd/siZR8E97yYR
- qHhNvQLgXllU2WiNtY1+S4bbyzVNkqOiritr/kD23uMWJE1bkKZspsv8BVXviRcKAKU3sMgE5Q
- KVMpRBkicXL9ESZFXgJ7qfgWJU7OuywCo/24vtpQODiNcGePGgT06YeglFir65Ys6TNSqYW+U6
- H5SxboSXvx4R0acZwbrfx7qJ
+ by ob1.hgst.iphmx.com with ESMTP; 25 May 2022 21:27:31 +0800
+IronPort-SDR: Br6Zc9+NneGGrCn8hM+irlxz773pUIzj9pEgfh40p2AvRKCXGWGlp5ttI4MUj5lHRkYxYftqni
+ F7a1STlDHMhvOzaGgX3Q2xh8WZ48eR1+lesOeGZkUzrOrgEz6tRhMDcbLpsJlxcuzxyQuMYWuB
+ gpQDpvW4rN26olCa5NNSSJnGnbJTexCh4CAlLG/hadelHwydPOma/1F4ieig5uIVldzn3j8LXn
+ 7X5QSRgwHSBD4gd44PoXeBIonEsimXkO2f05j8azH3e0eZlVHJij63RaEUTREtBZlTXpGg3cvG
+ Xqa29FLrJONp5Bof7oCk+Kif
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 25 May 2022 05:51:30 -0700
-IronPort-SDR: +durAf/PFS363FnDG8s3QbG+moAlla9rS6KMxBw6lVREreo2Y/vu8vHfg2LhrUvVTHbyAPB/ZR
- Zq7iloI92mpYvJKszyXuSjhTqY61PERXXRuLXML6Wwf+QgG6dI3Mcz7Q7OG3I/Z2yr2LxwgcMG
- 8pzsTAhY/Gcpm3Zk6/Oj0J+36TFiWQlCnqEtExVHDNsvlAEwYDp6uXb9vM+3pfiu/3JKzH3QlI
- LKtWhpoDqNxfM2CPugoNg/7aH5FxI/rEp9VKxGq9aROAFCYhoDCSguifn9rYSGCnHoxP8J0/pu
- cuU=
+ 25 May 2022 05:51:27 -0700
+IronPort-SDR: oPcM8AxHMpULOOEIS87hCF8RZVZA/qV802sk9l5c3Bu78K/slSKajZSuR9oo17p7AEc6h4gel0
+ KU1u28CzsOMsBCmb+6rnaXGfVXykf0GMFyZYSrOUhtuvW/iw9cCtXnthOhdKOAngLWD/QyeyO+
+ Q5AKp5C2fURXXiWqpp/9aJ3kpQTE52SzTc6Wx7YrD6Pyyqw5jlTiaUN9uGDEmFcQriJY3GqIe5
+ CW7E2sQqjTkqhIST44XVE7x23cV/4+xIBIcoUxmbbeunbwf0CLJjyIF9jhnYIUKvfcSJuJ6oQZ
+ zsM=
 WDCIronportException: Internal
 Received: from unknown (HELO twashi.fujisawa.hgst.com) ([10.225.163.54])
- by uls-op-cesaip01.wdc.com with ESMTP; 25 May 2022 06:27:34 -0700
+ by uls-op-cesaip01.wdc.com with ESMTP; 25 May 2022 06:27:30 -0700
 To: buildroot <buildroot@buildroot.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 May 2022 22:27:21 +0900
-Message-Id: <20220525132729.2349105-4-damien.lemoal@wdc.com>
+Date: Wed, 25 May 2022 22:27:18 +0900
+Message-Id: <20220525132729.2349105-1-damien.lemoal@wdc.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220525132729.2349105-1-damien.lemoal@wdc.com>
-References: <20220525132729.2349105-1-damien.lemoal@wdc.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 03/11] board: Add common Linux kernel support
- for RISCV NOMMU builds
+Subject: [Buildroot] [PATCH 00/11] Fix RV64 NOMMU and add Canaan K210 SoC
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,143 +96,143 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-Add the board/riscv/nommu directory to add Linux kernel patches used for
-all RISC-V NOMMU builds (QEMU and Canaan Kendryte K210 SoC based
-boards).
+(resend using subscribed email address)
 
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
----
- ...ot-stop-relocating-GOT-entries-prema.patch | 110 ++++++++++++++++++
+This patch series is a rework of the old v5 series "Add RV64 NOMMU and
+Canaan K210 SoC support" already posted some (long) time ago.
+
+This series adds support for building 64-bits RISC-V NOMMU kernels (both
+bootable kernels and u-boot sdcard boot envronements) for NOMMU RISC-V
+64-bits boards. The board supported include QEMU and many boards using
+the dual-core RISC-V 64-bits Cannan Kendryte K210 SoC.
+
+The first patch is a simple fix of elf2flt configuration menu entry.
+The second patch fixes the existing elf2flt RISC-V 64-bits support.
+
+The third patch adds a Linux kernel patch that must be used for all
+NOMMU RISC-V builds. This patch will be present in the upcoming 5.19
+kernel.
+
+Patch 4 adds a buildroot configuration file for QEMU NOMMU RISC-V
+64-bits builds.
+
+Patch 5 modifies the python-serial package definition so that it can be
+used as a host package to open serial consoles with the K210-based
+boards.
+
+Patch 6 adds all configurations bits common to all K210-based boards.
+
+Finally, the last 5 patches add support for the following K210-based
+boards:
+* Sipeed MAIX Bit
+* Sipeed MAIXDUINO
+* Sipeed MAIX Dock (dan)
+* Sipeed MAIX Go
+* Canaan KD233 development board
+
+For each board, a readme.txt file is added to document how to build and
+install images for these   
+boards.
+
+One thing that is missing from this patch series is the addition of the
+python-based Kendryte K210 UART ISP utility kflash
+(https://github.com/vowstar/kflash.py). This utility is available
+as a package on the pypi.org package index but adding it as a buildroot
+package is difficult due to the package dependencies needed. These
+dependencies end up requiring other packages to be enable and end up
+with an openssl build conflict resulting in u-boot compilation failures.
+For this reason, this utility is not added as a package. Its
+installation and use is documented in the readme file for the K210
+boards.
+
+Damien Le Moal (10):
+  package: elf2flt: fix config menu entry description
+  package: elf2flt: Update RISC-V 64-bits support
+  board: Add common Linux kernel support for RISCV NOMMU builds
+  package: python-serial: Define host package
+  board: Add common support for Canaan K210 SoC-based boards
+  board: Add Sipeed MAIX-Bit board support
+  board: Add Sipeed MAIXDUINO board support
+  board: Add Sipeed MAIX-Dock board support
+  board: Add Sipeed MAIX-Go board support
+  board: Add Canaan KD233 board support
+
+Niklas Cassel (1):
+  configs/qemu_riscv64_nommu_virt_defconfig: new defconfig
+
+ DEVELOPERS                                    |  13 +
+ board/canaan/k210-soc/busybox-tiny.config     | 231 +++++++++++++
+ board/canaan/k210-soc/genimage.cfg            |  30 ++
+ board/canaan/k210-soc/linux-sdcard.config     |   4 +
+ board/canaan/k210-soc/post-build.sh           |  28 ++
+ board/canaan/k210-soc/rootfs_overlay/init     |   1 +
+ .../canaan/k210-soc/rootfs_overlay/sbin/init  |  41 +++
+ board/canaan/k210-soc/uboot.config            |   1 +
+ board/canaan/kd233/linux-cpio.config          |   2 +
+ board/canaan/kd233/readme.txt                 | 142 ++++++++
+ board/qemu/riscv64-virt/readme.txt            |   2 +
+ ...ot-stop-relocating-GOT-entries-prema.patch | 110 ++++++
  board/riscv/nommu/readme.txt                  |   3 +
- 2 files changed, 113 insertions(+)
+ board/sipeed/maix-bit/linux-cpio.config       |   2 +
+ board/sipeed/maix-bit/readme.txt              | 309 +++++++++++++++++
+ board/sipeed/maix-dock/linux-cpio.config      |   2 +
+ board/sipeed/maix-dock/readme.txt             | 314 ++++++++++++++++++
+ board/sipeed/maix-go/linux-cpio.config        |   2 +
+ board/sipeed/maix-go/readme.txt               | 313 +++++++++++++++++
+ board/sipeed/maixduino/linux-cpio.config      |   2 +
+ board/sipeed/maixduino/readme.txt             | 286 ++++++++++++++++
+ configs/canaan_kd233_defconfig                |  41 +++
+ configs/qemu_riscv64_nommu_virt_defconfig     |  38 +++
+ configs/sipeed_maix_bit_defconfig             |  38 +++
+ configs/sipeed_maix_bit_sdcard_defconfig      |  56 ++++
+ configs/sipeed_maix_dock_defconfig            |  38 +++
+ configs/sipeed_maix_dock_sdcard_defconfig     |  56 ++++
+ configs/sipeed_maix_go_defconfig              |  38 +++
+ configs/sipeed_maix_go_sdcard_defconfig       |  56 ++++
+ configs/sipeed_maixduino_defconfig            |  38 +++
+ configs/sipeed_maixduino_sdcard_defconfig     |  56 ++++
+ package/Config.in.host                        |   1 +
+ ...tate-32-byte-alignment-for-.data-sec.patch |  81 +++++
+ ...f2flt-fix-.eh_frame-section-handling.patch |  73 ++++
+ ...4-elf2flt-add-riscv-64-bits-support.patch} |  80 ++---
+ package/elf2flt/Config.in.host                |   2 +-
+ package/python-serial/Config.in.host          |   6 +
+ package/python-serial/python-serial.mk        |   1 +
+ 38 files changed, 2483 insertions(+), 54 deletions(-)
+ create mode 100644 board/canaan/k210-soc/busybox-tiny.config
+ create mode 100644 board/canaan/k210-soc/genimage.cfg
+ create mode 100644 board/canaan/k210-soc/linux-sdcard.config
+ create mode 100755 board/canaan/k210-soc/post-build.sh
+ create mode 120000 board/canaan/k210-soc/rootfs_overlay/init
+ create mode 100755 board/canaan/k210-soc/rootfs_overlay/sbin/init
+ create mode 100644 board/canaan/k210-soc/uboot.config
+ create mode 100644 board/canaan/kd233/linux-cpio.config
+ create mode 100644 board/canaan/kd233/readme.txt
  create mode 100644 board/riscv/nommu/kernel_patches/0001-binfmt_flat-do-not-stop-relocating-GOT-entries-prema.patch
  create mode 100644 board/riscv/nommu/readme.txt
+ create mode 100644 board/sipeed/maix-bit/linux-cpio.config
+ create mode 100644 board/sipeed/maix-bit/readme.txt
+ create mode 100644 board/sipeed/maix-dock/linux-cpio.config
+ create mode 100644 board/sipeed/maix-dock/readme.txt
+ create mode 100644 board/sipeed/maix-go/linux-cpio.config
+ create mode 100644 board/sipeed/maix-go/readme.txt
+ create mode 100644 board/sipeed/maixduino/linux-cpio.config
+ create mode 100644 board/sipeed/maixduino/readme.txt
+ create mode 100644 configs/canaan_kd233_defconfig
+ create mode 100644 configs/qemu_riscv64_nommu_virt_defconfig
+ create mode 100644 configs/sipeed_maix_bit_defconfig
+ create mode 100644 configs/sipeed_maix_bit_sdcard_defconfig
+ create mode 100644 configs/sipeed_maix_dock_defconfig
+ create mode 100644 configs/sipeed_maix_dock_sdcard_defconfig
+ create mode 100644 configs/sipeed_maix_go_defconfig
+ create mode 100644 configs/sipeed_maix_go_sdcard_defconfig
+ create mode 100644 configs/sipeed_maixduino_defconfig
+ create mode 100644 configs/sipeed_maixduino_sdcard_defconfig
+ create mode 100644 package/elf2flt/0002-elf2flt.ld-reinstate-32-byte-alignment-for-.data-sec.patch
+ create mode 100644 package/elf2flt/0003-elf2flt-fix-.eh_frame-section-handling.patch
+ rename package/elf2flt/{0002-elf2flt-add-riscv-64-bits-support.patch => 0004-elf2flt-add-riscv-64-bits-support.patch} (52%)
+ create mode 100644 package/python-serial/Config.in.host
 
-diff --git a/board/riscv/nommu/kernel_patches/0001-binfmt_flat-do-not-stop-relocating-GOT-entries-prema.patch b/board/riscv/nommu/kernel_patches/0001-binfmt_flat-do-not-stop-relocating-GOT-entries-prema.patch
-new file mode 100644
-index 0000000000..e5513b729b
---- /dev/null
-+++ b/board/riscv/nommu/kernel_patches/0001-binfmt_flat-do-not-stop-relocating-GOT-entries-prema.patch
-@@ -0,0 +1,110 @@
-+From 6045ab5fea4c849153ebeb0acb532da5f29d69c4 Mon Sep 17 00:00:00 2001
-+From: Niklas Cassel <niklas.cassel@wdc.com>
-+Date: Thu, 14 Apr 2022 11:10:18 +0200
-+Subject: binfmt_flat: do not stop relocating GOT entries prematurely on riscv
-+
-+Upstream commit 6045ab5fea4c849153ebeb0acb532da5f29d69c4.
-+
-+bFLT binaries are usually created using elf2flt.
-+
-+The linker script used by elf2flt has defined the .data section like the
-+following for the last 19 years:
-+
-+.data : {
-+	_sdata = . ;
-+	__data_start = . ;
-+	data_start = . ;
-+	*(.got.plt)
-+	*(.got)
-+	FILL(0) ;
-+	. = ALIGN(0x20) ;
-+	LONG(-1)
-+	. = ALIGN(0x20) ;
-+	...
-+}
-+
-+It places the .got.plt input section before the .got input section.
-+The same is true for the default linker script (ld --verbose) on most
-+architectures except x86/x86-64.
-+
-+The binfmt_flat loader should relocate all GOT entries until it encounters
-+a -1 (the LONG(-1) in the linker script).
-+
-+The problem is that the .got.plt input section starts with a GOTPLT header
-+(which has size 16 bytes on elf64-riscv and 8 bytes on elf32-riscv), where
-+the first word is set to -1. See the binutils implementation for riscv [1].
-+
-+This causes the binfmt_flat loader to stop relocating GOT entries
-+prematurely and thus causes the application to crash when running.
-+
-+Fix this by skipping the whole GOTPLT header, since the whole GOTPLT header
-+is reserved for the dynamic linker.
-+
-+The GOTPLT header will only be skipped for bFLT binaries with flag
-+FLAT_FLAG_GOTPIC set. This flag is unconditionally set by elf2flt if the
-+supplied ELF binary has the symbol _GLOBAL_OFFSET_TABLE_ defined.
-+ELF binaries without a .got input section should thus remain unaffected.
-+
-+Tested on RISC-V Canaan Kendryte K210 and RISC-V QEMU nommu_virt_defconfig.
-+
-+[1] https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elfnn-riscv.c;hb=binutils-2_38#l3275
-+
-+Cc: <stable@vger.kernel.org>
-+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-+Link: https://lore.kernel.org/r/20220414091018.896737-1-niklas.cassel@wdc.com
-+Fixed-by: kernel test robot <lkp@intel.com>
-+Link: https://lore.kernel.org/lkml/202204182333.OIUOotK8-lkp@intel.com
-+Signed-off-by: Kees Cook <keescook@chromium.org>
-+---
-+ fs/binfmt_flat.c | 27 ++++++++++++++++++++++++++-
-+ 1 file changed, 26 insertions(+), 1 deletion(-)
-+
-+diff --git a/fs/binfmt_flat.c b/fs/binfmt_flat.c
-+index 6268981500112..dca0b6875f9c3 100644
-+--- a/fs/binfmt_flat.c
-++++ b/fs/binfmt_flat.c
-+@@ -440,6 +440,30 @@ static void old_reloc(unsigned long rl)
-+ 
-+ /****************************************************************************/
-+ 
-++static inline u32 __user *skip_got_header(u32 __user *rp)
-++{
-++	if (IS_ENABLED(CONFIG_RISCV)) {
-++		/*
-++		 * RISC-V has a 16 byte GOT PLT header for elf64-riscv
-++		 * and 8 byte GOT PLT header for elf32-riscv.
-++		 * Skip the whole GOT PLT header, since it is reserved
-++		 * for the dynamic linker (ld.so).
-++		 */
-++		u32 rp_val0, rp_val1;
-++
-++		if (get_user(rp_val0, rp))
-++			return rp;
-++		if (get_user(rp_val1, rp + 1))
-++			return rp;
-++
-++		if (rp_val0 == 0xffffffff && rp_val1 == 0xffffffff)
-++			rp += 4;
-++		else if (rp_val0 == 0xffffffff)
-++			rp += 2;
-++	}
-++	return rp;
-++}
-++
-+ static int load_flat_file(struct linux_binprm *bprm,
-+ 		struct lib_info *libinfo, int id, unsigned long *extra_stack)
-+ {
-+@@ -789,7 +813,8 @@ static int load_flat_file(struct linux_binprm *bprm,
-+ 	 * image.
-+ 	 */
-+ 	if (flags & FLAT_FLAG_GOTPIC) {
-+-		for (rp = (u32 __user *)datapos; ; rp++) {
-++		rp = skip_got_header((u32 __user *) datapos);
-++		for (; ; rp++) {
-+ 			u32 addr, rp_val;
-+ 			if (get_user(rp_val, rp))
-+ 				return -EFAULT;
-+-- 
-+cgit 
-+
-diff --git a/board/riscv/nommu/readme.txt b/board/riscv/nommu/readme.txt
-new file mode 100644
-index 0000000000..ea754c9920
---- /dev/null
-+++ b/board/riscv/nommu/readme.txt
-@@ -0,0 +1,3 @@
-+RISC-V NOMMU Common Support
-+
-+This directory provides Linux kernel patches common to all RISC-V NO-MMU builds.
 -- 
 2.36.1
 
