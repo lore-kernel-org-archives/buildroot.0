@@ -4,63 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 432E7C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 14:25:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1A81C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 17:09:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D52EF41000;
-	Wed, 25 May 2022 14:25:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B5F740AA9;
+	Wed, 25 May 2022 17:09:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YlTp6YM3ZOG1; Wed, 25 May 2022 14:25:41 +0000 (UTC)
+	with ESMTP id sOGb25VVYmzW; Wed, 25 May 2022 17:09:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 420AB40FEC;
-	Wed, 25 May 2022 14:25:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 27E5840AD0;
+	Wed, 25 May 2022 17:09:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 86FFB1BF2CA
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 14:25:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9501C1BF407
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 17:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 73B9C41C29
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 14:25:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8294A41C9E
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 17:09:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id svjT99rPZPqF for <buildroot@lists.busybox.net>;
- Wed, 25 May 2022 14:25:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3F21041C19
- for <buildroot@buildroot.org>; Wed, 25 May 2022 14:25:38 +0000 (UTC)
-Received: from [77.244.183.192] (port=63512 helo=[192.168.178.75])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1ntrx9-000C25-IM; Wed, 25 May 2022 16:25:35 +0200
-Message-ID: <16f0674d-b933-730c-7600-45453d1d21f7@lucaceresoli.net>
-Date: Wed, 25 May 2022 16:25:33 +0200
+ with ESMTP id GqqqUt4YknzX for <buildroot@lists.busybox.net>;
+ Wed, 25 May 2022 17:09:00 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 13EE541CA2
+ for <buildroot@buildroot.org>; Wed, 25 May 2022 17:08:59 +0000 (UTC)
+Received: from fwd73.dcpf.telekom.de (fwd73.aul.t-online.de [10.223.144.99])
+ by mailout11.t-online.de (Postfix) with SMTP id 753F2148C0;
+ Wed, 25 May 2022 19:08:48 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.201.144]) by fwd73.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1ntuV1-38lIfZ0; Wed, 25 May 2022 19:08:43 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43124)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1ntuV1-0001gL-4O;
+ Wed, 25 May 2022 19:08:43 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Wed, 25 May 2022 19:08:43 +0200
+Message-Id: <20220525170843.20123-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: it-IT
-To: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
-References: <20220523053921.4076488-1-neal.frager@amd.com>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <20220523053921.4076488-1-neal.frager@amd.com>
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH v1 1/1] configs/zynqmp_kria_xxx_defconfig:
- uboot dp pll patch
+X-TOI-EXPURGATEID: 150726::1653498523-01432E2F-A1E2FA76/0/0 CLEAN NORMAL
+X-TOI-MSGID: 8619ee10-0dec-4be1-bde5-e937bf438f52
+Subject: [Buildroot] [PATCH/next 1/1] package/intel-mediadriver: bump
+ version to 22.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,39 +62,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: giulio.benetti@benettiengineering.com, michal.simek@amd.com,
- wesley@sonifex.co.uk
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 23/05/22 07:39, Neal Frager wrote:
-> This patch fixes the DP audio and video PLL configurations for the zynqmp-sm-k26-revA som.
-> It needs to be applied for both the kv260 and kr260 starter kits.
-> 
-> The Linux DP driver expects the DP to be using the following PLL config:
->   - DP video PLL should use the VPLL (0x0)
->   - DP audio PLL should use the RPLL (0x3)
->   - DP system time clock PLL should use RPLL (0x3)
-> 
-> Register 0xFD1A0070 configures the DP video PLL.
-> Register 0xFD1A0074 configures the DP audio PLL.
-> Register 0xFD1A007C configures the DP system time clock PLL.
-> 
-> This patch was build and run tested on a zynqmp-kria-kv260 target board.
-> 
-> Upstream-Status: submitted (https://lore.kernel.org/all/fa7e9abc419c9d7648405d1c62367dbe701d09b8.1652709736.git.michal.simek@amd.com/)
-> This patch will be removed from buildroot in a future release when no longer necessary.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index 6ca3867908..92346e9dae 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5589d4e0142ae957d58798e3fba08d9e5e096e92eed422d40a82d45a14e6042f  intel-media-22.4.1.tar.gz
++sha256  e8e7faeb40e523b0daf61336853e09f59f810598093d65737cd119107cf933f8  intel-media-22.4.2.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index f03dd03260..c5ad837243 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
+ 
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ 
+-INTEL_MEDIADRIVER_VERSION = 22.4.1
++INTEL_MEDIADRIVER_VERSION = 22.4.2
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 -- 
-Luca
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
