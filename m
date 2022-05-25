@@ -1,77 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DDC4C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 13:36:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A63B9C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 13:36:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0507B6130A;
-	Wed, 25 May 2022 13:36:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A2ED40FEC;
+	Wed, 25 May 2022 13:36:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 95PytlJJiFoB; Wed, 25 May 2022 13:36:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gQHojiXCDag5; Wed, 25 May 2022 13:36:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5457760A97;
-	Wed, 25 May 2022 13:36:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 91BA740A88;
+	Wed, 25 May 2022 13:36:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 07C641BF31F
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6C9461BF31F
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B5853612F5
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59D96612F5
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 13:34:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=wdc.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id axOQo1FCMvIq for <buildroot@lists.busybox.net>;
- Wed, 25 May 2022 13:34:47 +0000 (UTC)
+ with ESMTP id 2kCJBtg8eDSI for <buildroot@lists.busybox.net>;
+ Wed, 25 May 2022 13:34:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B4DBE61307
- for <buildroot@buildroot.org>; Wed, 25 May 2022 13:34:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C316B61307
+ for <buildroot@buildroot.org>; Wed, 25 May 2022 13:34:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1653485687; x=1685021687;
+ t=1653485689; x=1685021689;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=1K0owPGM032Vb2NpaGnsFC+Q2YloHUqLhi5g74jM7oM=;
- b=fkri7asTD2l8Ub9ANkwBaT3ELX5O+5hIWQNREoT8yWEi2chRvQrCBlbu
- 9As5R/oHLarcm8oidTuYpcAk/On4a8jzKI36wZSTRfZtK/rwvY8p5iSrI
- M/i+Pv7sl+u3sdLHQFqGFVkzzmmrXUs8MOd+sL4RrCnoo3J7hURpqjmOM
- Jk7p2TnD/McrvZQIN09Sb3NQwuMrUtyASKwBLw1+yYf+VUQBcUx8eaLC8
- +zjJ9kObvcNvOsq0UTbgCLvHo1usB4ULMvdG79GUm1Em7mn/BJ+K8xPr7
- SLoZmA8oFXgehzsCxiH6aAqALoJy8ssxIG2oCVU1p8Q5PFqjJbz5P/rnX w==;
-X-IronPort-AV: E=Sophos;i="5.91,250,1647273600"; d="scan'208";a="305635106"
+ bh=qBa/cTJtdaBw51h4zaZNHUZcSUUPfN4IYMK6GNa0ErM=;
+ b=E+R8/jq/Yhubw/7wQADi/JHS+FZGH2W/h1QuqjRLd4uGp7cg6orTZfz/
+ xkKoIhFXSpVtxWX0h62THtGHBg6mn/BlqiNay+x+cMulUSd5VNSYwoGgq
+ /7RQdu1U7tLOzWnpH0VPIKD5uJEktmStwNj9/bSdZKIiD14SmnBVnP49s
+ Imzg8kmd5SeRIrv7Ki7oEWlAJV9imCHApraay1MHA9MJ6Vkd3Emnqat0A
+ jtKmEIBJTdw9qG44tBvPyZTlavcU0kihC9n3Aq9wvKrN7CHXheR95oKvI
+ CXzTBhn1tob58W4sN553MpmLTED6KH9wUtP+AycQ6rBeLozvHhdx4PSPo w==;
+X-IronPort-AV: E=Sophos;i="5.91,250,1647273600"; d="scan'208";a="305635109"
 Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com)
  ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 25 May 2022 21:27:42 +0800
-IronPort-SDR: EED4c5uz1yYePzeHBUI7sVDznKHV7y6ygvLvVlKL0leITXjp9AzK+6YV0W+S2VD+OShemhxTs0
- ZUzWSZBXx+r0Au5IjPyMP0XmU5xFW36Ot75QQa3vD5wyU+iKdOfzd7LWB+OV/0KNlY65lY8JrH
- tugp7U/L7J1Q0CzcMw297iWLPGDkP0mo83sHnmX70P8h6iT/sdj2Pq7YO6/8QxNVKtZ1t2az0a
- GSZKTPGb6MKDTDNgtZo3I271tI04cohTt3rPzD1dcVMUUDkViFNJLBs0t+QSQ/VwanQpJoiowu
- E63u3fXlqv+htbRoWcPvYJLq
+ by ob1.hgst.iphmx.com with ESMTP; 25 May 2022 21:27:43 +0800
+IronPort-SDR: /v4fUQsdNB5j5fltpAp9L4x+rD2PB2SdMXe4MHdHLqUsVizZjO/6OPq5gPD7XQflHAxfTSYx4m
+ AUEJHaYCA34B1gKcA/X2hkHhYiBSTOL43O9fzCHnW0+cWtEaVNNUsb3pgi7ZFQIe1aadU9YWDC
+ ojYGRhxXgMtX5ajrSTXugL+EZp2TG3sqbHYyh8ShPzWvmAGMCneeRQeWQDK+N+K3YfApvoNJbq
+ c32wVuuXwdDTXBYrtg7CkfYQgNfCC7V1ktId761KuT2z4bFFEa7D6PnF1Lucy+6N0LSrB5DRx0
+ XDpyXacRlLbqmRIfJqHwUzKU
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 25 May 2022 05:51:37 -0700
-IronPort-SDR: Ep4EWBNuXTML5VkOnpgON1UnOUy5gJ8r7yWg4F6z0/FSA8o9SmtsTnj1KHVMkgyiDKTWXvb2jK
- 4bYSplOTt27JvVT6sIrYpNxAJ+5+9OYSGCKmYgzOHh4IBYQNpZ/jtGGcFR9LiFs63X0HDsNU8W
- iZninsmjNIq0xVMJNRPkTjM9OAhTftATSMFV3UwylXMV3yo7RPqXivDBxVtfzob3YuD6SZPhvZ
- crAJjAEdmkOwxHijIJSRDWeZ1r5ne5ddW079V4zZ+MeEM2VhMA5F1MkKsPDf39sVqi7430unbu
- 9ag=
+ 25 May 2022 05:51:39 -0700
+IronPort-SDR: Wv13LV4OI+BPj3JFjbjwo9o+LYzCohnRlAzOhsO0RH9KHUv6UVNGy7J3e0CUsgv4f2BWMpRDR6
+ u01DAmOPLxExhvflImmhoJ3kTfvFxzuPziIe147wXQ4IYC9JiWBKMf/YdqCfN/iqoffAqnGrBr
+ lMjgUqr0iMpC/ghT9oeS01wdhVIS2H0dOuvzEvwyc8roay33Nf/qTxSu1glwWx4m1F/rHqRcIj
+ AwPxcEOKLJ2+z7ZiGHGABfUoA1Ox/+WYMcN3Py7b2eOVlWtqfW/foz+mxrigBBCaTcQU42vD4s
+ dh4=
 WDCIronportException: Internal
 Received: from unknown (HELO twashi.fujisawa.hgst.com) ([10.225.163.54])
- by uls-op-cesaip01.wdc.com with ESMTP; 25 May 2022 06:27:41 -0700
+ by uls-op-cesaip01.wdc.com with ESMTP; 25 May 2022 06:27:42 -0700
 To: buildroot <buildroot@buildroot.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 May 2022 22:27:26 +0900
-Message-Id: <20220525132729.2349105-9-damien.lemoal@wdc.com>
+Date: Wed, 25 May 2022 22:27:27 +0900
+Message-Id: <20220525132729.2349105-10-damien.lemoal@wdc.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220525132729.2349105-1-damien.lemoal@wdc.com>
 References: <20220525132729.2349105-1-damien.lemoal@wdc.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 08/11] board: Add Sipeed MAIXDUINO board support
+Subject: [Buildroot] [PATCH 09/11] board: Add Sipeed MAIX-Dock board support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,13 +98,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
 Add two buildroot configuration files to build a minimal Linux
-environment for the Sipeed MAIXDUINO board. The configurations are:
-* sipeed_maixduino_defconfig: Build a bootable kernel image with an
+environment for the Sipeed MAIX-Dock board. The configurations are:
+* sipeed_maix_dock_defconfig: Build a bootable kernel image with an
   embedded initramfs root file system. The image built can be flashed to
   the board as is and does not require a boot loader. This configuration
   uses the tiny busybox configuration defined in
   board/canaan/k210-soc/busybox-tiny.config.
-* sipeed_maixduino_sdcard_defconfig: Build a kernel image with a root
+* sipeed_maix_dock_sdcard_defconfig: Build a kernel image with a root
   file system on the SD card and using U-Boot as the boot loader. This
   uses the default busybox minimal configuration.
 
@@ -110,81 +112,80 @@ Both configurations also enable the kflash and pyserial-miniterm host
 tools for flashing image files to the board and opening a terminal
 console.
 
-The readme.txt file documents how to build and boot the Sipeed MAIXDUINO
-board with these configurations.
+The readme.txt file documents how to build and boot the Sipeed
+MAIX-Dock board with these configurations.
 
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
  DEVELOPERS                                |   2 +
- board/sipeed/maixduino/linux-cpio.config  |   2 +
- board/sipeed/maixduino/readme.txt         | 286 ++++++++++++++++++++++
- configs/sipeed_maixduino_defconfig        |  38 +++
- configs/sipeed_maixduino_sdcard_defconfig |  56 +++++
- 5 files changed, 384 insertions(+)
- create mode 100644 board/sipeed/maixduino/linux-cpio.config
- create mode 100644 board/sipeed/maixduino/readme.txt
- create mode 100644 configs/sipeed_maixduino_defconfig
- create mode 100644 configs/sipeed_maixduino_sdcard_defconfig
+ board/sipeed/maix-dock/linux-cpio.config  |   2 +
+ board/sipeed/maix-dock/readme.txt         | 314 ++++++++++++++++++++++
+ configs/sipeed_maix_dock_defconfig        |  38 +++
+ configs/sipeed_maix_dock_sdcard_defconfig |  56 ++++
+ 5 files changed, 412 insertions(+)
+ create mode 100644 board/sipeed/maix-dock/linux-cpio.config
+ create mode 100644 board/sipeed/maix-dock/readme.txt
+ create mode 100644 configs/sipeed_maix_dock_defconfig
+ create mode 100644 configs/sipeed_maix_dock_sdcard_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 32b7513d2a..415832fef2 100644
+index 415832fef2..b8003218ab 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -635,6 +635,8 @@ F:	board/canaan/
- F:	board/sipeed/
- F:	configs/sipeed_maix_bit_defconfig
+@@ -637,6 +637,8 @@ F:	configs/sipeed_maix_bit_defconfig
  F:	configs/sipeed_maix_bit_sdcard_defconfig
-+F:	configs/sipeed_maixduino_defconfig
-+F:	configs/sipeed_maixduino_sdcard_defconfig
+ F:	configs/sipeed_maixduino_defconfig
+ F:	configs/sipeed_maixduino_sdcard_defconfig
++F:	configs/sipeed_maix_dock_defconfig
++F:	configs/sipeed_maix_dock_sdcard_defconfig
  
  N:	Daniel Nicoletti <dantti12@gmail.com>
  F:	package/cutelyst/
-diff --git a/board/sipeed/maixduino/linux-cpio.config b/board/sipeed/maixduino/linux-cpio.config
+diff --git a/board/sipeed/maix-dock/linux-cpio.config b/board/sipeed/maix-dock/linux-cpio.config
 new file mode 100644
-index 0000000000..049a2550c5
+index 0000000000..b1ca3166f8
 --- /dev/null
-+++ b/board/sipeed/maixduino/linux-cpio.config
++++ b/board/sipeed/maix-dock/linux-cpio.config
 @@ -0,0 +1,2 @@
 +CONFIG_SOC_CANAAN_K210_DTB_BUILTIN=y
-+CONFIG_SOC_CANAAN_K210_DTB_SOURCE="sipeed_maixduino"
-diff --git a/board/sipeed/maixduino/readme.txt b/board/sipeed/maixduino/readme.txt
++CONFIG_SOC_CANAAN_K210_DTB_SOURCE="sipeed_maix_dock"
+diff --git a/board/sipeed/maix-dock/readme.txt b/board/sipeed/maix-dock/readme.txt
 new file mode 100644
-index 0000000000..572e19c724
+index 0000000000..48ef160760
 --- /dev/null
-+++ b/board/sipeed/maixduino/readme.txt
-@@ -0,0 +1,286 @@
-+Sipeed MAIXDUINO Board
++++ b/board/sipeed/maix-dock/readme.txt
+@@ -0,0 +1,314 @@
++Sipeed MAIX-Dock Board
 +======================
 +
-+The Sipeed MAIXDUINO board is a dual-core RISC-V 64-bits board based on the
-+Canaan Kendryte K210 SoC. This board has the same form factor as the Arduino
-+UNO board.
++The Sipeed MAXI-Dock board is a dual-core RISC-V 64-bits board based on the
++Canaan Kendryte K210 SoC.
 +
-+Prerequisite                                                                    
-+------------                                                                    
-+                                                                                
-+In order to program the board boot ROM or SRAM, the kflash Kendryte K210 UART   
-+ISP utility. This can be done using the following command.                      
-+                                                                                
-+```                                                                             
-+$ pip3 install --user --upgrade kflash                                          
-+```                                                                             
-+                                                                                
-+The user running kflash also needs write access to the board USB port device.   
-+Assuming this device is /dev/ttyUSB0, the following command can be used.        
-+                                                                                
-+```                                                                             
-+$ sudo chmod go+rw /dev/ttyUSB0                                                 
-+```                                                                             
-+                                                                                
-+Buildroot Configuration                                                         
++Prerequisite
++------------
++
++In order to program the board boot ROM or SRAM, the kflash Kendryte K210 UART
++ISP utility. This can be done using the following command.
++
++```
++$ pip3 install --user --upgrade kflash
++```
++
++The user running kflash also needs write access to the board USB port device.
++Assuming this device is /dev/ttyUSB0, the following command can be used.
++
++```
++$ sudo chmod go+rw /dev/ttyUSB0
++```
++
++Buildroot Configuration
 +-----------------------
 +
-+Two buildroot configurations are provided:
++Two buildroot configuration files are provided:
 +
 +(1) Direct Linux Kernel Boot
 +
-+This is defined by the sipeed_maixduino_defconfig configuration. This
++This is defined by the sipeed_maix_dock_defconfig configuration. This
 +configuration allows building a bootable kernel image with a built-in initramfs
 +root file system (the board SD card is not used). The built kernel image can be
 +flashed directly to the board ROM for direct booting. No boot loader is
@@ -192,26 +193,25 @@ index 0000000000..572e19c724
 +
 +(2) U-Boot SD-Card Boot
 +
-+The sipeed_maixduino_sdcard_defconfig configuration allows building a kernel
++The sipeed_maix_dock_sdcard_defconfig configuration allows building a kernel
 +image with the root file system on the board SD card. U-Boot is used as the
 +boot loader.
 +
-+Note: U-Boot does not natively support the Sipeed MAIXDUINO board. However, the
-+board and device tree differences with the Sipeed MAIX-bit board are small
++Note: U-Boot does not natively support the Sipeed MAIX-Dock board. However, the
++board and device tree differences with the Sipeed MAIX-Bit board are small
 +enough for U-Boot to work.
 +
-+Both configuration files will also compile the kflash and pyserial-miniterm
-+host tools to respectively program bootable image files to the board and open
-+a serial terminal console.
++Both configuration files will also compile the pyserial-miniterm host tool open
++a serial terminal console for the board.
 +
 +Direct Linux Kernel Boot
-+------------------------
++-------------------------
 +
-+Using the sipeed_maixduino_defconfig configuration, the bootable kernel binary
++Using the sipeed_maix_dock_defconfig configuration, the bootable kernel binary
 +image is built as follows.
 +
 +```
-+$ make sipeed_maixduino_defconfig
++$ make sipeed_maix_dock_defconfig
 +$ make
 +```
 +
@@ -229,8 +229,8 @@ index 0000000000..572e19c724
 +The output will be similar to the following.
 +
 +```
-+[    0.000000] Linux version 5.18.0 (foo@bar.com) (riscv64-buildroot-linux-uclibc-gcc.br_real (Buildroot 2022.02-560-g6a2b542a09-dirty) 10.3.0, GNU ld (GNU Binutils) 2.32) #2 SMP Thu Apr 21 15:16:00 JST 2022
-+[    0.000000] Machine model: SiPeed MAIXDUINO
++[    0.000000] Linux version 5.18.0 (foo@bar.com) (riscv64-buildroot-linux-uclibc-gcc.br_real (Buildroot 2022.02-560-g6a2b542a09-dirty) 10.3.0, GNU ld (GNU Binutils) 2.32) #2 SMP Thu Apr 21 15:47:42 JST 2022
++[    0.000000] Machine model: SiPeed MAIX Dock
 +[    0.000000] earlycon: sifive0 at MMIO 0x0000000038000000 (options '115200n8')
 +[    0.000000] printk: bootconsole [sifive0] enabled
 +[    0.000000] Zone ranges:
@@ -250,7 +250,7 @@ index 0000000000..572e19c724
 +[    0.000000] Dentry cache hash table entries: 1024 (order: 1, 8192 bytes, linear)
 +[    0.000000] Inode-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
 +[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-+[    0.000000] Memory: 6000K/8192K available (964K kernel code, 137K rwdata, 205K rodata, 530K init, 66K bss, 2192K reserved, 0K cma-reserved)
++[    0.000000] Memory: 5980K/8192K available (964K kernel code, 137K rwdata, 205K rodata, 546K init, 66K bss, 2212K reserved, 0K cma-reserved)
 +[    0.000000] rcu: Hierarchical RCU implementation.
 +[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
 +[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
@@ -260,32 +260,32 @@ index 0000000000..572e19c724
 +[    0.000000] clint: timer@2000000: timer running at 7800000 Hz
 +[    0.000000] clocksource: clint_clocksource: mask: 0xffffffffffffffff max_cycles: 0x3990be68b, max_idle_ns: 881590404272 ns
 +[    0.000001] sched_clock: 64 bits at 7MHz, resolution 128ns, wraps every 4398046511054ns
-+[    0.008183] Calibrating delay loop (skipped), value calculated using timer frequency.. 15.60 BogoMIPS (lpj=31200)
-+[    0.018249] pid_max: default: 4096 minimum: 301
-+[    0.022860] Mount-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
++[    0.008187] Calibrating delay loop (skipped), value calculated using timer frequency.. 15.60 BogoMIPS (lpj=31200)
++[    0.018250] pid_max: default: 4096 minimum: 301
++[    0.022859] Mount-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
 +[    0.029971] Mountpoint-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
-+[    0.040242] rcu: Hierarchical SRCU implementation.
-+[    0.045124] smp: Bringing up secondary CPUs ...
-+[    0.050217] smp: Brought up 1 node, 2 CPUs
-+[    0.054346] devtmpfs: initialized
-+[    0.070924] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
-+[    0.079996] pinctrl core: initialized pinctrl subsystem
-+[    0.119893] clocksource: Switched to clocksource clint_clocksource
-+[    0.131992] workingset: timestamp_bits=62 max_order=11 bucket_order=0
-+[    0.179099] k210-sysctl 50440000.syscon: K210 system controller
-+[    0.194904] k210-rst 50440000.syscon:reset-controller: K210 reset controller
-+[    0.203108] cacheinfo: Unable to detect cache hierarchy for CPU 0
-+[    0.213867] i2c_dev: i2c /dev entries driver
-+[    0.223397] k210-fpioa 502b0000.pinmux: K210 FPIOA pin controller
-+[    0.235632] 38000000.serial: ttySIF0 at MMIO 0x38000000 (irq = 1, base_baud = 115200) is a SiFive UART v0
-+[    0.244585] printk: console [ttySIF0] enabled
-+[    0.244585] printk: console [ttySIF0] enabled
-+[    0.253190] printk: bootconsole [sifive0] disabled
-+[    0.253190] printk: bootconsole [sifive0] disabled
-+[    0.264820] panel@0 enforce active low on chipselect handle
-+[    0.281482] Freeing unused kernel image (initmem) memory: 524K
-+[    0.286621] This architecture does not have kernel memory protection.
-+[    0.293047] Run /init as init process
++[    0.040238] rcu: Hierarchical SRCU implementation.
++[    0.045110] smp: Bringing up secondary CPUs ...
++[    0.050215] smp: Brought up 1 node, 2 CPUs
++[    0.054345] devtmpfs: initialized
++[    0.071112] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
++[    0.080182] pinctrl core: initialized pinctrl subsystem
++[    0.120689] clocksource: Switched to clocksource clint_clocksource
++[    0.133165] workingset: timestamp_bits=62 max_order=11 bucket_order=0
++[    0.181750] k210-sysctl 50440000.syscon: K210 system controller
++[    0.198612] k210-rst 50440000.syscon:reset-controller: K210 reset controller
++[    0.206644] cacheinfo: Unable to detect cache hierarchy for CPU 0
++[    0.216569] i2c_dev: i2c /dev entries driver
++[    0.225905] k210-fpioa 502b0000.pinmux: K210 FPIOA pin controller
++[    0.238866] 38000000.serial: ttySIF0 at MMIO 0x38000000 (irq = 1, base_baud = 115200) is a SiFive UART v0
++[    0.247778] printk: console [ttySIF0] enabled
++[    0.247778] printk: console [ttySIF0] enabled
++[    0.256459] printk: bootconsole [sifive0] disabled
++[    0.256459] printk: bootconsole [sifive0] disabled
++[    0.268225] panel@0 enforce active low on chipselect handle
++[    0.285238] Freeing unused kernel image (initmem) memory: 540K
++[    0.290372] This architecture does not have kernel memory protection.
++[    0.296807] Run /init as init process
 +          __  _
 +         / / (_) ____   _   _ __  __
 +        / /  | ||  _ \ | | | |\ \/ /
@@ -313,7 +313,7 @@ index 0000000000..572e19c724
 +The build procedure is similar to the built-in initramfs case.
 +
 +```
-+$ make sipeed_maixduino_sdcard_defconfig
++$ make sipeed_maix_dock_sdcard_defconfig
 +$ make
 +```
 +
@@ -346,13 +346,43 @@ index 0000000000..572e19c724
 +
 +The above command will program U-Boot image to the board boot ROM and open a
 +terminal console once the u-boot.bin file is fully programmed. Reboot into the
-+newly programmed environment by pressing the board reset button.
++newly programmed environment by pressing the board reset button if it does 
++not reboot automatically.
 +
 +The output will be similar to the following.
 +
 +```
-+[    0.000000] Linux version 5.18.0 (foo@bar.com) (riscv64-buildroot-linux-uclibc-gcc.br_real (Buildroot 2022.02-560-g6a2b542a09-dirty) 10.3.0, GNU ld (GNU Binutils) 2.32) #1 SMP Thu Apr 21 15:30:18 JST 2022
-+[    0.000000] Machine model: SiPeed MAIXDUINO
++U-Boot 2022.04 (Apr 21 2022 - 15:59:50 +0900)
++
++DRAM:  8 MiB
++Core:  34 devices, 17 uclasses, devicetree: separate
++WDT:   Not starting watchdog@50400000
++MMC:   spi@53000000:slot@0: 0
++Loading Environment from SPIFlash... SF: Detected w25q128fw with page size 256 Bytes, erase size 4 KiB, total 16 MiB
++*** Warning - bad CRC, using default environment
++
++In:    serial@38000000
++Out:   serial@38000000
++Err:   serial@38000000
++Hit any key to stop autoboot:  0
++1717730 bytes read in 957 ms (1.7 MiB/s)
++10382 bytes read in 11 ms (920.9 KiB/s)
++## Booting kernel from Legacy Image at 80060000 ...
++   Image Name:   Linux
++   Image Type:   RISC-V Linux Kernel Image (uncompressed)
++   Data Size:    1717666 Bytes = 1.6 MiB
++   Load Address: 80000000
++   Entry Point:  80000000
++   Verifying Checksum ... OK
++## Flattened Device Tree blob at 80400000
++   Booting using the fdt blob at 0x80400000
++   Loading Kernel Image
++   Loading Device Tree to 00000000803fa000, end 00000000803ff88d ... OK
++
++Starting kernel ...
++
++[    0.000000] Linux version 5.18.0 (foo@bar.com) (riscv64-buildroot-linux-uclibc-gcc.br_real (Buildroot 2022.02-560-g6a2b542a09-dirty) 10.3.0, GNU ld (GNU Binutils) 2.32) #1 SMP Thu Apr 21 16:00:03 JST 2022
++[    0.000000] Machine model: SiPeed MAIX Dock
 +[    0.000000] earlycon: sifive0 at MMIO 0x0000000038000000 (options '115200n8')
 +[    0.000000] printk: bootconsole [sifive0] enabled
 +[    0.000000] Zone ranges:
@@ -382,43 +412,43 @@ index 0000000000..572e19c724
 +[    0.000000] clint: timer@2000000: timer running at 7800000 Hz
 +[    0.000000] clocksource: clint_clocksource: mask: 0xffffffffffffffff max_cycles: 0x3990be68b, max_idle_ns: 881590404272 ns
 +[    0.000001] sched_clock: 64 bits at 7MHz, resolution 128ns, wraps every 4398046511054ns
-+[    0.008191] Calibrating delay loop (skipped), value calculated using timer frequency.. 15.60 BogoMIPS (lpj=31200)
-+[    0.018255] pid_max: default: 4096 minimum: 301
++[    0.008196] Calibrating delay loop (skipped), value calculated using timer frequency.. 15.60 BogoMIPS (lpj=31200)
++[    0.018256] pid_max: default: 4096 minimum: 301
 +[    0.022876] Mount-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
-+[    0.029982] Mountpoint-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
-+[    0.040417] rcu: Hierarchical SRCU implementation.
-+[    0.045397] smp: Bringing up secondary CPUs ...
-+[    0.050513] smp: Brought up 1 node, 2 CPUs
-+[    0.054680] devtmpfs: initialized
-+[    0.072127] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
-+[    0.081205] pinctrl core: initialized pinctrl subsystem
-+[    0.125074] clocksource: Switched to clocksource clint_clocksource
-+[    0.138311] workingset: timestamp_bits=62 max_order=11 bucket_order=0
-+[    0.183471] k210-sysctl 50440000.syscon: K210 system controller
-+[    0.199873] k210-rst 50440000.syscon:reset-controller: K210 reset controller
-+[    0.208858] cacheinfo: Unable to detect cache hierarchy for CPU 0
-+[    0.221586] i2c_dev: i2c /dev entries driver
-+[    0.232786] k210-fpioa 502b0000.pinmux: K210 FPIOA pin controller
-+[    0.246572] 38000000.serial: ttySIF0 at MMIO 0x38000000 (irq = 1, base_baud = 115200) is a SiFive UART v0
-+[    0.255508] printk: console [ttySIF0] enabled
-+[    0.255508] printk: console [ttySIF0] enabled
-+[    0.264137] printk: bootconsole [sifive0] disabled
-+[    0.264137] printk: bootconsole [sifive0] disabled
-+[    0.275560] panel@0 enforce active low on chipselect handle
-+[    0.313245] mmc_spi spi3.0: SD/MMC host mmc0, no WP, no poweroff, cd polling
-+[    0.322845] Waiting for root device /dev/mmcblk0p2...
-+[    0.345869] mmc0: host does not support reading read-only switch, assuming write-enable
-+[    0.353221] mmc0: new SDHC card on SPI
-+[    0.360233] mmcblk0: mmc0:0000 SA16G 14.5 GiB
-+[    0.368350] random: fast init done
-+[    0.372926]  mmcblk0: p1 p2
-+[    0.391887] random: get_random_bytes called from 0x000000008009b7d2 with crng_init=1
-+[    0.400427] VFS: Mounted root (ext2 filesystem) readonly on device 179:2.
-+[    0.410128] devtmpfs: mounted
-+[    0.412628] Freeing unused kernel image (initmem) memory: 96K
-+[    0.418137] This architecture does not have kernel memory protection.
-+[    0.424530] Run /sbin/init as init process
-+[    0.563384] random: crng init done
++[    0.029980] Mountpoint-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
++[    0.040401] rcu: Hierarchical SRCU implementation.
++[    0.045379] smp: Bringing up secondary CPUs ...
++[    0.050494] smp: Brought up 1 node, 2 CPUs
++[    0.054656] devtmpfs: initialized
++[    0.072338] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
++[    0.081415] pinctrl core: initialized pinctrl subsystem
++[    0.123902] clocksource: Switched to clocksource clint_clocksource
++[    0.136898] workingset: timestamp_bits=62 max_order=11 bucket_order=0
++[    0.182570] k210-sysctl 50440000.syscon: K210 system controller
++[    0.198158] k210-rst 50440000.syscon:reset-controller: K210 reset controller
++[    0.207473] cacheinfo: Unable to detect cache hierarchy for CPU 0
++[    0.219724] i2c_dev: i2c /dev entries driver
++[    0.230080] k210-fpioa 502b0000.pinmux: K210 FPIOA pin controller
++[    0.243091] 38000000.serial: ttySIF0 at MMIO 0x38000000 (irq = 1, base_baud = 115200) is a SiFive UART v0
++[    0.252034] printk: console [ttySIF0] enabled
++[    0.252034] printk: console [ttySIF0] enabled
++[    0.260656] printk: bootconsole [sifive0] disabled
++[    0.260656] printk: bootconsole [sifive0] disabled
++[    0.272546] panel@0 enforce active low on chipselect handle
++[    0.308098] mmc_spi spi3.0: SD/MMC host mmc0, no WP, no poweroff, cd polling
++[    0.320197] Waiting for root device /dev/mmcblk0p2...
++[    0.344667] mmc0: host does not support reading read-only switch, assuming write-enable
++[    0.352020] mmc0: new SDHC card on SPI
++[    0.358566] mmcblk0: mmc0:0000 SA16G 14.5 GiB
++[    0.366866] random: fast init done
++[    0.371439]  mmcblk0: p1 p2
++[    0.391314] random: get_random_bytes called from 0x000000008009b7d2 with crng_init=1
++[    0.400977] VFS: Mounted root (ext2 filesystem) readonly on device 179:2.
++[    0.410966] devtmpfs: mounted
++[    0.413521] Freeing unused kernel image (initmem) memory: 96K
++[    0.418944] This architecture does not have kernel memory protection.
++[    0.425370] Run /sbin/init as init process
++[    0.633502] random: crng init done
 +          __  _
 +         / / (_) ____   _   _ __  __
 +        / /  | ||  _ \ | | | |\ \/ /
@@ -439,11 +469,11 @@ index 0000000000..572e19c724
 +```
 +$ output/host/bin/pyserial-miniterm --raw --eol=LF /dev/ttyUSB0 115200
 +```
-diff --git a/configs/sipeed_maixduino_defconfig b/configs/sipeed_maixduino_defconfig
+diff --git a/configs/sipeed_maix_dock_defconfig b/configs/sipeed_maix_dock_defconfig
 new file mode 100644
-index 0000000000..be23272c89
+index 0000000000..57d9f9d324
 --- /dev/null
-+++ b/configs/sipeed_maixduino_defconfig
++++ b/configs/sipeed_maix_dock_defconfig
 @@ -0,0 +1,38 @@
 +# Architecture
 +BR2_riscv=y
@@ -468,7 +498,7 @@ index 0000000000..be23272c89
 +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
 +BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maixduino/linux-cpio.config"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-dock/linux-cpio.config"
 +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 +BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
 +
@@ -483,11 +513,11 @@ index 0000000000..be23272c89
 +BR2_INIT_NONE=y
 +BR2_TARGET_ROOTFS_INITRAMFS=y
 +BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
-diff --git a/configs/sipeed_maixduino_sdcard_defconfig b/configs/sipeed_maixduino_sdcard_defconfig
+diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
 new file mode 100644
-index 0000000000..0957a11ba7
+index 0000000000..5043a7c0f3
 --- /dev/null
-+++ b/configs/sipeed_maixduino_sdcard_defconfig
++++ b/configs/sipeed_maix_dock_sdcard_defconfig
 @@ -0,0 +1,56 @@
 +# Architecture
 +BR2_riscv=y
@@ -516,7 +546,7 @@ index 0000000000..0957a11ba7
 +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 +BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maixduino"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maix_dock"
 +
 +# Packages
 +BR2_PACKAGE_HOST_ELF2FLT=y
