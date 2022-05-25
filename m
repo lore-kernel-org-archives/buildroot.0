@@ -4,81 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 966CFC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 06:28:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAC1EC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 06:50:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E9FD84066;
-	Wed, 25 May 2022 06:28:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51AC1840AE;
+	Wed, 25 May 2022 06:50:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MvP64UQGUHmZ; Wed, 25 May 2022 06:28:55 +0000 (UTC)
+	with ESMTP id raEJrDYkm6Z1; Wed, 25 May 2022 06:50:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BDFA84062;
-	Wed, 25 May 2022 06:28:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 537FD84089;
+	Wed, 25 May 2022 06:50:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9AA7B1BF319
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 06:28:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5CF141BF319
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 06:50:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9018341731
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 06:28:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50F8541BA0
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 06:50:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XYUX6c8Rww1c for <buildroot@lists.busybox.net>;
- Wed, 25 May 2022 06:28:51 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com
- [IPv6:2607:f8b0:4864:20::232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 56B3A41716
- for <buildroot@buildroot.org>; Wed, 25 May 2022 06:28:51 +0000 (UTC)
-Received: by mail-oi1-x232.google.com with SMTP id y66so17951061oia.1
- for <buildroot@buildroot.org>; Tue, 24 May 2022 23:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=hrbdVkpssQO5UHrr15SgQnI0TC484xkJ/9QVuRKFMPg=;
- b=N2vfcp7rfNq9ezbLWXV6bNGacB+9DB4vml1YtbgfkvIHiFyrcj1hvaPOPyVJHy3fhB
- C8H4s1thuo8/FGblUB6lr0SeBcHJF9NJoSZF2ddaMpIqRe+ZTze64kd6VD08oEZND2oY
- ohEpclbfoDFNHwtlCFv1bCnqDH9etJSQzv5f3ku4NM2XQMLPfKw7SQxXz6/Y12lgdCbb
- z70C2VcXaDbGy30XiOOwsdNUI3d90kb2GeKhn8rkBkmL+wXYDRCYGYVVeutPMewh++Xi
- kI3K1f7ok/K68jCfsDj+ybNlUWn4g6/UxhFmUPbdBJwwSXzgsMFwgTPAB2REjY9WatMw
- WUEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=hrbdVkpssQO5UHrr15SgQnI0TC484xkJ/9QVuRKFMPg=;
- b=evxTdVeZzy9i8pA4WvcGAJIOP+NPl4NxLyvPYs9Jfy/vUDXf9X6wGxN7N9PhUDiuLc
- C1JneojowGf1SbGKJh2xIQMpeXXeeAbwcKY5zcYSnXMX1rd8K2daD1BVRb7LJnTGbiPy
- mzd1pHf0m8XkfcRqyHShEvxcaycpXcPyCJpRrx4qXLRytj+JLRckMf+XiGlkEhv1ALtP
- wclhalDoH29ZqfnvJcNTru80FMCN3xufIdLHG5kl3ePxb+ZzQLZvOf2hTTJ/xhL4xBbb
- 7FetcYa8Zm80i9L4jBw/ScXIZXYcsEPsk+2jo0Zvgy6+HfdKLQ3FWEO3qE/xAcn9FX9h
- lenA==
-X-Gm-Message-State: AOAM532/YThfzNaGOtw+vCFIm/yBh88tHVjxe10z5MGMoeyhGYupfHQi
- IbvEdH8nGGJtwF7qlSu0n3I9pqF+fnirFhpGcJw=
-X-Google-Smtp-Source: ABdhPJzmChlkDav4Mv960MNFnn9XaEfnx2kY1jZAluNRfRA4hgnlar2XwKrFbV/WDlx7Js8K8pAhBImUwVzGVrq6zjU=
-X-Received: by 2002:a05:6808:2014:b0:32b:1806:8ed5 with SMTP id
- q20-20020a056808201400b0032b18068ed5mr4435937oiw.99.1653460130175; Tue, 24
- May 2022 23:28:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <CALtfCQaLxNdrKhSjMfShjb-nQWUnqa3DSOwbyZm1+Q0fU1UUqQ@mail.gmail.com>
- <87zgjapr8a.fsf@tarshish>
- <CALtfCQaBG_p15ASxYKSyZhYOePW5uE-BW8F1KG7DkPeJ8bjLiw@mail.gmail.com>
- <87r14kq55b.fsf@tarshish>
- <CALtfCQY1a6sjLNUh42zsrsu1hPLTMHNDj4+5v5k8w8kv8u6tmg@mail.gmail.com>
- <87ilpwp82x.fsf@tarshish>
- <CALtfCQauLNMOfBb6Zm8M8v-VHakY_Bs+p6CeQh0tVuTtfKyUDg@mail.gmail.com>
- <87a6b6pwqf.fsf@tarshish>
- <CALtfCQZPYEJBT=2hx6XJ1FH=ESHhw2N_LaqYbd+xdGkXxT503g@mail.gmail.com>
- <875ylup27u.fsf@tarshish>
-In-Reply-To: <875ylup27u.fsf@tarshish>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 25 May 2022 00:28:39 -0600
-Message-ID: <CADvTj4r=46JdJUPSzOXgmXVDBWYDM3v5wsFjymbzGF1xoyzO4Q@mail.gmail.com>
-To: Baruch Siach <baruch@tkos.co.il>
-Subject: Re: [Buildroot] How to select python-cryptograhy package
+ with ESMTP id VX3wIfWvjZiS for <buildroot@lists.busybox.net>;
+ Wed, 25 May 2022 06:50:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B23641B99
+ for <buildroot@buildroot.org>; Wed, 25 May 2022 06:50:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id DA62486490; Wed, 25 May 2022 06:38:40 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 25 May 2022 08:49:32 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b634d504cb5a0b621f115f36c50a712e85fc8027
+X-Git-Newrev: 5452b5887005298a87650ff4003ecfaecfd9aca0
+X-Patchwork-Hint: ignore
+Message-Id: <20220525063840.DA62486490@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcr: don't require gnupg2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,82 +52,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Oscar Gomez Fuente <oscargomezf@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, May 25, 2022 at 12:15 AM Baruch Siach <baruch@tkos.co.il> wrote:
->
-> Hi Oscar,
->
-> On Wed, May 25 2022, Oscar Gomez Fuente wrote:
-> >> So now when you lookup BR2_PACKAGE_PYTHON_CRYPTOGRAPHY in menuconfig
-> >> search do you still see 'BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS [=n]'?
-> >
-> > YES
-> >
-> >> Please send your .config file.
-> >
-> > OK
->
-> I see the problem now. Your target platform is BR2_arm (32 bit), but
-> your CPU selection is BR2_ARM_CPU_ARMV8A (64 bit capable). This
-> combination is not supported in current
-> BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_HOST_TOOLS_PLATFORMS or
-> BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_PLATFORMS. This patch should make
-> BR2_PACKAGE_PYTHON_CRYPTOGRAPHY selectable, but I'm not sure it's
-> correct:
->
-> diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-> index a86d95236d90..64b135f86f27 100644
-> --- a/package/rustc/Config.in.host
-> +++ b/package/rustc/Config.in.host
-> @@ -42,6 +42,8 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_HOST_TOOLS_PLATFORMS
->         default y if BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
->         # armv7-unknown-linux-gnueabihf
->         default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
-> +       # armv8-unknown-linux-gnueabihf
-> +       default y if BR2_arm && BR2_ARM_CPU_ARMV8A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
->         # mips-unknown-linux-gnu
->         default y if BR2_mips && BR2_TOOLCHAIN_USES_GLIBC && !BR2_MIPS_CPU_MIPS32R6
->         # mips64-unknown-linux-gnuabi64
-> @@ -86,6 +88,8 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_PLATFORMS
->         default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABI && BR2_TOOLCHAIN_USES_MUSL
->         # armv7-unknown-linux-musleabihf
->         default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_MUSL
-> +       # armv8-unknown-linux-musleabihf
-> +       default y if BR2_arm && BR2_ARM_CPU_ARMV8A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_MUSL
->         # i586-unknown-linux-gnu
->         default y if BR2_i586 && BR2_TOOLCHAIN_USES_GLIBC
->         # i586-unknown-linux-musl
->
-> Adding James and Thomas to Cc since they showed interest in rustc over
-> the last year.
->
-> Is that the right solution?
+commit: https://git.buildroot.net/buildroot/commit/?id=5452b5887005298a87650ff4003ecfaecfd9aca0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Probably needs mappings for the toolchain which don't seem to follow the same
-scheme as our currently supported architectures, see here:
-https://doc.rust-lang.org/rustc/platform-support.html#tier-2
+Requiring BR2_PACKAGE_GNUPG2 introduced a recursive dependency,
+since it appears gcr also supports gnupg we don't need to depend
+on !BR2_PACKAGE_GNUPG and can use gnupg if needed.
 
-For armv8 I see:
-thumbv8m.base-none-eabi*ARMv8-M Baseline
-thumbv8m.main-none-eabi*ARMv8-M Mainline
-thumbv8m.main-none-eabihf*ARMv8-M Mainline, hardfloat
+Fixes:
+package/gstreamer1/gstreamer1/Config.in:5:error: recursive dependency detected!
+package/gstreamer1/gstreamer1/Config.in:5:	symbol BR2_PACKAGE_GSTREAMER1 is selected by BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+package/webkitgtk/Config.in:90:	symbol BR2_PACKAGE_WEBKITGTK_MULTIMEDIA depends on BR2_PACKAGE_WEBKITGTK
+package/webkitgtk/Config.in:24:	symbol BR2_PACKAGE_WEBKITGTK is selected by BR2_PACKAGE_MIDORI
+package/midori/Config.in:24:	symbol BR2_PACKAGE_MIDORI depends on BR2_PACKAGE_GNUPG
+package/gnupg/Config.in:1:	symbol BR2_PACKAGE_GNUPG is selected by BR2_PACKAGE_PYTHON_GNUPG
+package/python-gnupg/Config.in:1:	symbol BR2_PACKAGE_PYTHON_GNUPG depends on BR2_PACKAGE_PYTHON3
+package/python3/Config.in:5:	symbol BR2_PACKAGE_PYTHON3 is selected by BR2_PACKAGE_JACK2_DBUS
+package/jack2/Config.in:35:	symbol BR2_PACKAGE_JACK2_DBUS depends on BR2_PACKAGE_JACK2
+package/jack2/Config.in:1:	symbol BR2_PACKAGE_JACK2 is selected by BR2_PACKAGE_FLUIDSYNTH_JACK2
+package/fluidsynth/Config.in:38:	symbol BR2_PACKAGE_FLUIDSYNTH_JACK2 depends on BR2_PACKAGE_FLUIDSYNTH
+package/fluidsynth/Config.in:1:	symbol BR2_PACKAGE_FLUIDSYNTH is selected by BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH
+package/gstreamer1/gst1-plugins-bad/Config.in:438:	symbol BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH depends on BR2_PACKAGE_GSTREAMER1
 
-Although not really sure those will work correctly with musl.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/gcr/Config.in    | 14 ++------------
+ package/gcr/gcr.mk       | 10 +++++++---
+ package/midori/Config.in |  6 ------
+ 3 files changed, 9 insertions(+), 21 deletions(-)
 
->
-> baruch
->
-> --
->                                                      ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/gcr/Config.in b/package/gcr/Config.in
+index afbec1a317..7c5fdba008 100644
+--- a/package/gcr/Config.in
++++ b/package/gcr/Config.in
+@@ -1,12 +1,11 @@
+ config BR2_PACKAGE_GCR
+ 	bool "gcr"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # gnupg2
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on !BR2_STATIC_LIBS # p11-kit
+-	depends on !BR2_PACKAGE_GNUPG # gnupg2
+-	select BR2_PACKAGE_GNUPG2 # runtime
++	select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG # runtime
++	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_P11_KIT
+@@ -16,15 +15,6 @@ config BR2_PACKAGE_GCR
+ 	  https://developer.gnome.org/gcr/
+ 
+ comment "gcr needs a toolchain w/ wchar, threads, dynamic library"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_STATIC_LIBS
+-
+-comment "gcr is incompatible with gnupg, gnupg2 only"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+-	depends on BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_USE_MMU
+-	depends on !BR2_STATIC_LIBS
+-	depends on BR2_PACKAGE_GNUPG # gnupg2
+diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
+index ef253b4ef9..d479de82d3 100644
+--- a/package/gcr/gcr.mk
++++ b/package/gcr/gcr.mk
+@@ -15,14 +15,18 @@ GCR_DEPENDENCIES = \
+ 	p11-kit \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ GCR_INSTALL_STAGING = YES
+-GCR_CONF_OPTS = \
+-	-Dgpg_path=/usr/bin/gpg2 \
+-	-Dgtk_doc=false
++GCR_CONF_OPTS = -Dgtk_doc=false
+ # Even though COPYING is v2 the code states v2.1+
+ GCR_LICENSE = LGPL-2.1+
+ GCR_LICENSE_FILES = COPYING
+ GCR_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
++ifeq ($(BR2_PACKAGE_GNUPG2),y)
++GCR_CONF_OPTS += -Dgpg_path=/usr/bin/gpg2
++else
++GCR_CONF_OPTS += -Dgpg_path=/usr/bin/gpg
++endif
++
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ GCR_DEPENDENCIES += gobject-introspection host-libxslt host-vala
+ GCR_CONF_OPTS += -Dintrospection=true
+diff --git a/package/midori/Config.in b/package/midori/Config.in
+index 308b0a7a42..f45444a289 100644
+--- a/package/midori/Config.in
++++ b/package/midori/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT # webkitgtk -> icu
+ 
+@@ -21,15 +20,10 @@ comment "midori needs libgtk3 w/ X11 or wayland backend"
+ 	depends on !BR2_PACKAGE_LIBGTK3_X11 && \
+ 		!BR2_PACKAGE_LIBGTK3_WAYLAND
+ 
+-comment "midori is incompatible with gnupg, gnupg2 only"
+-	depends on BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_GNUPG
+-
+ config BR2_PACKAGE_MIDORI
+ 	bool "midori"
+ 	depends on BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+ 	depends on !BR2_STATIC_LIBS # webkitgtk
+-	depends on !BR2_PACKAGE_GNUPG # gcr
+ 	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
+ 	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # webkitgtk
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
