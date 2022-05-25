@@ -4,60 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC725C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 06:50:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD764C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 06:51:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C851612AE;
-	Wed, 25 May 2022 06:50:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67B636129A;
+	Wed, 25 May 2022 06:51:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R25-3Eq6OXdl; Wed, 25 May 2022 06:50:32 +0000 (UTC)
+	with ESMTP id nwf-6ok8D6RN; Wed, 25 May 2022 06:51:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B0FF61269;
-	Wed, 25 May 2022 06:50:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E4AD61270;
+	Wed, 25 May 2022 06:51:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A2BF71BF319
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 06:50:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 770021BF319
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 06:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9EDEF61269
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 06:50:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7377F61270
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 06:51:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vn88vc9RZQpX for <buildroot@lists.busybox.net>;
- Wed, 25 May 2022 06:50:28 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3097060E8F
- for <buildroot@buildroot.org>; Wed, 25 May 2022 06:50:28 +0000 (UTC)
+ with ESMTP id JtU2_Ijlf4Y7 for <buildroot@lists.busybox.net>;
+ Wed, 25 May 2022 06:51:32 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8EDDD61269
+ for <buildroot@buildroot.org>; Wed, 25 May 2022 06:51:32 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:6823:fe26:3f6d:8e17])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id EC1CC5FFA7;
- Wed, 25 May 2022 08:50:22 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 8B9355FFAA;
+ Wed, 25 May 2022 08:51:26 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1653461425;
- bh=HH2jJoE+TV9pCtDDDsZU1yqYv9RIuygC+dWPSQ0a4yo=;
+ s=smtp-20201208; t=1653461490;
+ bh=DJrqFFLWAil8PRfGpevB/NoxGMW+drvQLkpQYeqMlK4=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=rDYCHVejuEy5xhObQJBawEj4w89Xm5LX1Ghth+NLTO2orXnFAdah7bAZUAH1GKCCL
- ej7lprnCYi9K12gglAn3B/WS/kLuKpi0KNbdOnKvQpErZO0SiBLtuSO1u5cGqyKEzC
- UPiAaFjv1Ugv7Mr326RWuVJib+/QckGpuHb+HVZXe7748gpXqCE22RiO9gjhd54qff
- PYcWw8LjOrQ3dUm+nfe5NG1UK5vo5Ht6dNPyqagoaSN4HvWyma+Kd/n79P/Bgc/4vj
- tDGX8n7Vr5QtXfC4ktUAiSO9V453fwrBYAMM7L3nop//WiUHRF77fpfpp8HiWh7SRd
- bZD7UvYrjaaaA==
+ b=OCP1DPZv4d4+hUY02cJz1T1K5c6PWyK6Rwh6ZoxW5xulAdvmXbilgMLaMuhLHwIIa
+ mSxnQDew0hLBYQNG++UAPmiVshayeePNX+fanz2FC3GILR+CRsZwvWHC+PwtENxCPK
+ tm3Ak24vvkt/fS7ySxSWFcIM1A0p/CLtRtC13Zu5tHfgZvKXEdH3SNQkC8StgIak39
+ hXbz5RR5L386FDa58kJ4Qa5TBcEYYJ/mcPxrZ/6R4ZlxuaTrQaGO5WcBrmzpuL51/g
+ XbcvGPbvP1gTGpARQWN0+ezKtvBeRvAXnH7ngdfiWkYgSQYG0m4PmWDz8RyqHHPZjS
+ T7Y6eTnCOseKw==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 25 May 2022 08:50:22 +0200
-Date: Wed, 25 May 2022 08:50:22 +0200
+ Wed, 25 May 2022 08:51:26 +0200
+Date: Wed, 25 May 2022 08:51:26 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220525065022.GC2500@scaer>
-References: <20220519045549.2320246-1-james.hilliard1@gmail.com>
+Message-ID: <20220525065126.GA301044@scaer>
+References: <20220514222811.3925140-1-james.hilliard1@gmail.com>
+ <5a0bb1b8-b671-e85b-1942-3b17f31f0547@mind.be>
+ <20220524190138.GB2500@scaer>
+ <CADvTj4q77jiin-pcvecnfKC_KR+gxPR=7jYov2WgG=ZT5hGO7A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220519045549.2320246-1-james.hilliard1@gmail.com>
+In-Reply-To: <CADvTj4q77jiin-pcvecnfKC_KR+gxPR=7jYov2WgG=ZT5hGO7A@mail.gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/gcr: don't require gnupg2
+Subject: Re: [Buildroot] [PATCH 1/1] package/midori: add missing
+ !BR2_PACKAGE_GNUPG dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,7 +73,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -77,135 +81,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 James, All,
 
-On 2022-05-18 22:55 -0600, James Hilliard spake thusly:
-> Requiring BR2_PACKAGE_GNUPG2 introduced a recursive dependency,
-> since it appears gcr also supports gnupg we don't need to depend
-> on !BR2_PACKAGE_GNUPG and can use gnupg if needed.
-> 
-> Fixes:
-> package/gstreamer1/gstreamer1/Config.in:5:error: recursive dependency detected!
-> package/gstreamer1/gstreamer1/Config.in:5:	symbol BR2_PACKAGE_GSTREAMER1 is selected by BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
-> package/webkitgtk/Config.in:90:	symbol BR2_PACKAGE_WEBKITGTK_MULTIMEDIA depends on BR2_PACKAGE_WEBKITGTK
-> package/webkitgtk/Config.in:24:	symbol BR2_PACKAGE_WEBKITGTK is selected by BR2_PACKAGE_MIDORI
-> package/midori/Config.in:24:	symbol BR2_PACKAGE_MIDORI depends on BR2_PACKAGE_GNUPG
-> package/gnupg/Config.in:1:	symbol BR2_PACKAGE_GNUPG is selected by BR2_PACKAGE_PYTHON_GNUPG
-> package/python-gnupg/Config.in:1:	symbol BR2_PACKAGE_PYTHON_GNUPG depends on BR2_PACKAGE_PYTHON3
-> package/python3/Config.in:5:	symbol BR2_PACKAGE_PYTHON3 is selected by BR2_PACKAGE_JACK2_DBUS
-> package/jack2/Config.in:35:	symbol BR2_PACKAGE_JACK2_DBUS depends on BR2_PACKAGE_JACK2
-> package/jack2/Config.in:1:	symbol BR2_PACKAGE_JACK2 is selected by BR2_PACKAGE_FLUIDSYNTH_JACK2
-> package/fluidsynth/Config.in:38:	symbol BR2_PACKAGE_FLUIDSYNTH_JACK2 depends on BR2_PACKAGE_FLUIDSYNTH
-> package/fluidsynth/Config.in:1:	symbol BR2_PACKAGE_FLUIDSYNTH is selected by BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH
-> package/gstreamer1/gst1-plugins-bad/Config.in:438:	symbol BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH depends on BR2_PACKAGE_GSTREAMER1
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+On 2022-05-24 13:16 -0600, James Hilliard spake thusly:
+> On Tue, May 24, 2022 at 1:01 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2022-05-18 21:17 +0200, Arnout Vandecappelle spake thusly:
+> > > On 15/05/2022 00:28, James Hilliard wrote:
+> > > >The !BR2_PACKAGE_GNUPG needs to be propagated from BR2_PACKAGE_GCR.
+[--SNIP--]
+> > Unfortunately, as Romain noticed, this is causing a circular (aka
+> > recursive) kconfig dependency:
+[--SNIP--]
+> Yeah, already sent a patch that should fix this:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20220519045549.2320246-1-james.hilliard1@gmail.com/
 
-Applied to master, thanks.
+Greatm thanks! I've just applied it now.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/gcr/Config.in    | 14 ++------------
->  package/gcr/gcr.mk       | 10 +++++++---
->  package/midori/Config.in |  6 ------
->  3 files changed, 9 insertions(+), 21 deletions(-)
-> 
-> diff --git a/package/gcr/Config.in b/package/gcr/Config.in
-> index afbec1a317..7c5fdba008 100644
-> --- a/package/gcr/Config.in
-> +++ b/package/gcr/Config.in
-> @@ -1,12 +1,11 @@
->  config BR2_PACKAGE_GCR
->  	bool "gcr"
-> -	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # gnupg2
->  	depends on BR2_USE_WCHAR # libglib2
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
->  	depends on BR2_USE_MMU # libglib2
->  	depends on !BR2_STATIC_LIBS # p11-kit
-> -	depends on !BR2_PACKAGE_GNUPG # gnupg2
-> -	select BR2_PACKAGE_GNUPG2 # runtime
-> +	select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG # runtime
-> +	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
->  	select BR2_PACKAGE_LIBGCRYPT
->  	select BR2_PACKAGE_LIBGLIB2
->  	select BR2_PACKAGE_P11_KIT
-> @@ -16,15 +15,6 @@ config BR2_PACKAGE_GCR
->  	  https://developer.gnome.org/gcr/
->  
->  comment "gcr needs a toolchain w/ wchar, threads, dynamic library"
-> -	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
->  	depends on BR2_USE_MMU
->  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
->  		BR2_STATIC_LIBS
-> -
-> -comment "gcr is incompatible with gnupg, gnupg2 only"
-> -	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
-> -	depends on BR2_USE_WCHAR
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	depends on BR2_USE_MMU
-> -	depends on !BR2_STATIC_LIBS
-> -	depends on BR2_PACKAGE_GNUPG # gnupg2
-> diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
-> index ef253b4ef9..d479de82d3 100644
-> --- a/package/gcr/gcr.mk
-> +++ b/package/gcr/gcr.mk
-> @@ -15,14 +15,18 @@ GCR_DEPENDENCIES = \
->  	p11-kit \
->  	$(TARGET_NLS_DEPENDENCIES)
->  GCR_INSTALL_STAGING = YES
-> -GCR_CONF_OPTS = \
-> -	-Dgpg_path=/usr/bin/gpg2 \
-> -	-Dgtk_doc=false
-> +GCR_CONF_OPTS = -Dgtk_doc=false
->  # Even though COPYING is v2 the code states v2.1+
->  GCR_LICENSE = LGPL-2.1+
->  GCR_LICENSE_FILES = COPYING
->  GCR_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
->  
-> +ifeq ($(BR2_PACKAGE_GNUPG2),y)
-> +GCR_CONF_OPTS += -Dgpg_path=/usr/bin/gpg2
-> +else
-> +GCR_CONF_OPTS += -Dgpg_path=/usr/bin/gpg
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
->  GCR_DEPENDENCIES += gobject-introspection host-libxslt host-vala
->  GCR_CONF_OPTS += -Dintrospection=true
-> diff --git a/package/midori/Config.in b/package/midori/Config.in
-> index 308b0a7a42..f45444a289 100644
-> --- a/package/midori/Config.in
-> +++ b/package/midori/Config.in
-> @@ -4,7 +4,6 @@ config BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
->  	depends on BR2_USE_MMU
->  	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
->  	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-> -	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
->  	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
->  	depends on !BR2_BINFMT_FLAT # webkitgtk -> icu
->  
-> @@ -21,15 +20,10 @@ comment "midori needs libgtk3 w/ X11 or wayland backend"
->  	depends on !BR2_PACKAGE_LIBGTK3_X11 && \
->  		!BR2_PACKAGE_LIBGTK3_WAYLAND
->  
-> -comment "midori is incompatible with gnupg, gnupg2 only"
-> -	depends on BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
-> -	depends on BR2_PACKAGE_GNUPG
-> -
->  config BR2_PACKAGE_MIDORI
->  	bool "midori"
->  	depends on BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
->  	depends on !BR2_STATIC_LIBS # webkitgtk
-> -	depends on !BR2_PACKAGE_GNUPG # gcr
->  	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
->  	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # webkitgtk
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
