@@ -1,84 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 091B4C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 21:08:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE6B6C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 25 May 2022 21:31:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67F608444A;
-	Wed, 25 May 2022 21:08:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37C07424D7;
+	Wed, 25 May 2022 21:31:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fAemF7uZJl3h; Wed, 25 May 2022 21:07:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y36muO1KBIqa; Wed, 25 May 2022 21:31:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75B41842C5;
-	Wed, 25 May 2022 21:07:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2ED7424D4;
+	Wed, 25 May 2022 21:31:37 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CA0A11BF356
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 21:07:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3FFE11BF356
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 21:31:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B194B400CE
- for <buildroot@lists.busybox.net>; Wed, 25 May 2022 21:07:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E812410BA
+ for <buildroot@lists.busybox.net>; Wed, 25 May 2022 21:31:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=paral.in
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r8dcvC1tYr1V for <buildroot@lists.busybox.net>;
- Wed, 25 May 2022 21:07:55 +0000 (UTC)
+ with ESMTP id 3nZv2LGTRF_f for <buildroot@lists.busybox.net>;
+ Wed, 25 May 2022 21:31:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B4E3F40022
- for <buildroot@buildroot.org>; Wed, 25 May 2022 21:07:55 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id i27so44025042ejd.9
- for <buildroot@buildroot.org>; Wed, 25 May 2022 14:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
- h=mime-version:from:date:message-id:subject:to:cc;
- bh=vycLW0rHXk6tMeeQ+6G/WRgz4JAxdNjcnVZQp5Bbz7c=;
- b=M/NXiCzkXCy780+v/YBL/uB+ArnjQ7gintSsY8rl2HsSZTgjnWQlgUoCuEpOQrtrbt
- 59UnGdjE88I2KM4GnMfvfzS3EhAERZ8kTthiudI4lBHsoku+dujHLFjNtaIH2lj1qzZN
- Rk9jciCXEM0eFX4lqt+C5bZb/7A5lJ8qgV3OJIte7vBUu74gNwoCYSkMVF8C/Zf5QLLd
- fncswESyRGo6GhRW78/WdYORYRQer1d4o3UYFanLMsXwim2bUWJFaziKC6OQFcCjNK82
- zzCjCQeq1rYTQ8RhVX4e+Jy0YoesqFYwoXqDfGMogA0U27rGXF8GtbFnkBl7PNHG1zPG
- CH0g==
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com
+ [209.85.210.169])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2FF72400CE
+ for <buildroot@buildroot.org>; Wed, 25 May 2022 21:31:35 +0000 (UTC)
+Received: by mail-pf1-f169.google.com with SMTP id y1so56790pfr.6
+ for <buildroot@buildroot.org>; Wed, 25 May 2022 14:31:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
- bh=vycLW0rHXk6tMeeQ+6G/WRgz4JAxdNjcnVZQp5Bbz7c=;
- b=vQy7ZyV30xGIjQlz6P8JK7pj0VK3ZJR3IckdiRSxioeBHHubF7u506mgCS8ROkA19w
- F85/6RyAEmtxCdLxIWMzamwUZv7GODsidEwfAq0kTcv4clbI3uFYx1Od5J5uwbn/Qy5Q
- 2IhcbZFGHBS4VeklIkKTO0r6Yb1RkDofrmVtkJ9aiF1A7DWv23IQrXoL6QeoINR03dgS
- rndGcQbXiwSvQ1jHzYEav0Hc5gHfKR15z/N9YVmkxdPc2uaD2r+5+94ilX0O915g1cvo
- Eyu6EIj4AQGtWyNHG7WmrnI/dqfFfky9kzbe0V25oHjCtNZjl+lQ4S3i3z6aL7zGjprA
- CrAw==
-X-Gm-Message-State: AOAM533nybAu815zTmFmcq2Ck9rZ0Ofie6eMkEwcNHCw9YCeyF3z9dda
- CxBcN9r4JoX1JU0rubf8nseiOLAjvXwSAcBV
-X-Google-Smtp-Source: ABdhPJzXknYm4x0c2Bwvg1endc9bf4aLU0ED4Qrf65ZQfspAGYPVoZ0yrCQ8fXrizg879wAdgEfDEw==
-X-Received: by 2002:a17:907:8a1a:b0:6fe:b42f:749a with SMTP id
- sc26-20020a1709078a1a00b006feb42f749amr24638618ejc.451.1653512873644; 
- Wed, 25 May 2022 14:07:53 -0700 (PDT)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com.
- [209.85.208.48]) by smtp.gmail.com with ESMTPSA id
- 23-20020a17090600d700b006f4b2aab627sm8448940eji.222.2022.05.25.14.07.49
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 25 May 2022 14:07:51 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id t5so5176182edc.2
- for <buildroot@buildroot.org>; Wed, 25 May 2022 14:07:49 -0700 (PDT)
-X-Received: by 2002:a05:6402:1cc1:b0:413:2cfb:b6ca with SMTP id
- ds1-20020a0564021cc100b004132cfbb6camr36597512edb.265.1653512869381; Wed, 25
- May 2022 14:07:49 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=h6x4SROdZhwIcGk4/M6q8F9vMAa3QCFiVi4yhUZsRCU=;
+ b=UQOhYL5Dub2mPw6S8l3+X2RCudVl5FdZiw3x+nD12Y3qPudz+e+wnycp0ojueznhui
+ RkOyHJ+FjoihC9os8eKJJ9T7tz/1USLc367MbFCfztpFvSp1LsPgA/+Yd/Z38eeIWJMp
+ iUmt3/819Nqun1t1VrCACkvpdLadCpkRZ4Dnm6kVxWFQphf6RfqM0cZzmDwiL41MtK/J
+ EyAeIvIlwtDEYhTbA0BqIy0+UMw+xEVuT4TfOaEJOfr1Xu+rGzxfAGgSu9brImvlZhq3
+ PAcfbk3kf/TrZpxqXO1+8vEXEJNvTNaHp9ntu/Qh9yivkp9AAEQ6eLp2uH2mlNtabWQ8
+ TjeA==
+X-Gm-Message-State: AOAM532UIMy2HvxRIf6TDcoasZqjEqu283VeQBcVCwSo1rjJTRXFdEgM
+ vFaUGC/4UOpO9BbupA8XEr8LRtPMqX3htQ==
+X-Google-Smtp-Source: ABdhPJxfwPm7CxPlD86SPe2ArJ7B2Mlh//6f5iPEixllm6fddwUAVYxzjv9C1tdGNDci/F3JgGItOw==
+X-Received: by 2002:a63:4c2:0:b0:3f5:d1f7:f492 with SMTP id
+ 185-20020a6304c2000000b003f5d1f7f492mr29953644pge.392.1653514294113; 
+ Wed, 25 May 2022 14:31:34 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ u8-20020a170903124800b0016196bd15f4sm10030017plh.15.2022.05.25.14.31.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 25 May 2022 14:31:33 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Wed, 25 May 2022 14:31:31 -0700
+Message-Id: <20220525213131.154515-1-christian@paral.in>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Date: Wed, 25 May 2022 14:07:38 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2pE3Z8=fjUBYvXMZp5d3s_+FRQeh4Ms1W8E8eySfdtazA@mail.gmail.com>
-Message-ID: <CA+h8R2pE3Z8=fjUBYvXMZp5d3s_+FRQeh4Ms1W8E8eySfdtazA@mail.gmail.com>
-To: Buildroot Mailing List <buildroot@buildroot.org>
-Subject: [Buildroot] [RFC] package/go: switch to gcc go instead of
- go-bootstrap
+Subject: [Buildroot] [PATCH v2 1/1] package/go: update patch for
+ go-bootstrap fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,91 +76,279 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Christian Stewart via buildroot <buildroot@buildroot.org>
 Reply-To: Christian Stewart <christian@paral.in>
-Cc: Joel Stanley <joel@jms.id.au>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: multipart/mixed; boundary="===============5024069159755440523=="
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5024069159755440523==
-Content-Type: multipart/alternative; boundary="00000000000036102705dfdc7734"
+Add a patch to fix a build failure due to the target GOARCH being used while
+bootstrapping the Go compiler with the go-bootstrap compiler.
 
---00000000000036102705dfdc7734
-Content-Type: text/plain; charset="UTF-8"
+Uses the host architecture variable instead.
 
-Hi all,
+This commit updates the patch with improvements from the upstream PR.
 
-Go will soon require Go >= 1.16 to bootstrap.
+PR: https://github.com/golang/go/pull/52362
 
-See: https://github.com/golang/go/issues/44505
+Signed-off-by: Christian Stewart <christian@paral.in>
 
-Go1.4 was the last version written in C.
+---
 
-Today, in Buildroot, we:
+v1 -> v2:
 
- - build gcc and/or use external toolchain
- - build go-bootstrap (go 1.4) with gcc
- - use go-bootstrap to build host-go
+ - simplify patch according to upstream comments
+ - update commit message in patch
 
-I propose that we switch to using Gccgo:
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ ...explicit-option-for-crosscompilation.patch |   2 +-
+ ...set-environment-before-generating-bu.patch | 119 ------------------
+ ...use-gohostarch-for-ssa-rewrite-check.patch |  93 ++++++++++++++
+ 3 files changed, 94 insertions(+), 120 deletions(-)
+ delete mode 100644 package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch
+ create mode 100644 package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
 
- - build gcc and/or use external toolchain
-    - add flags to enable the "go" language in Gcc
-    - GCC 11 or later
- - depend on the "go" language in Gcc to build host-go
- - use the gccgo compiler to bootstrap "host-go"
-
-See: https://go.dev/doc/install/source#bootstrapFromGccgo
-
-This will be more future proof, and also solve the issue of the upcoming
-switch to requiring Go 1.11 or newer to compile the Go compiler.
-
-If this looks good to everyone, I'll send a patch series.
-
-Thanks & best,
-Christian Stewart
-
-https://github.com/skiffos/skiffos
-
---00000000000036102705dfdc7734
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><div>Hi all,</div><div><br></div><div>Go =
-will soon require Go &gt;=3D 1.16 to bootstrap.<br></div><div><br></div><di=
-v>See: <a href=3D"https://github.com/golang/go/issues/44505">https://github=
-.com/golang/go/issues/44505</a></div><div><br></div><div>Go1.4 was the last=
- version written in C.</div><div><br></div><div>Today, in Buildroot, we:</d=
-iv><div><br></div><div>=C2=A0- build gcc and/or use external toolchain</div=
-><div>=C2=A0- build go-bootstrap (go 1.4) with gcc</div><div>=C2=A0- use go=
--bootstrap to build host-go</div><div><br></div><div>I propose that we swit=
-ch to using Gccgo:</div><div><br></div><div>=C2=A0- build gcc and/or use ex=
-ternal toolchain</div><div>=C2=A0=C2=A0=C2=A0 - add flags to enable the &qu=
-ot;go&quot; language in Gcc</div><div>=C2=A0=C2=A0=C2=A0 - GCC 11 or later<=
-/div><div>=C2=A0- depend on the &quot;go&quot; language in Gcc to build hos=
-t-go</div><div>=C2=A0- use the gccgo compiler to bootstrap &quot;host-go&qu=
-ot;</div><div><br></div><div>See: <a href=3D"https://go.dev/doc/install/sou=
-rce#bootstrapFromGccgo">https://go.dev/doc/install/source#bootstrapFromGccg=
-o</a></div><div><br></div><div>This will be more future proof, and also sol=
-ve the issue of the upcoming switch to requiring Go 1.11 or newer to compil=
-e the Go compiler.<br></div><div><br></div><div>If this looks good to every=
-one, I&#39;ll send a patch series.</div><div><br></div><div>Thanks &amp; be=
-st,</div><div>Christian Stewart</div><div><br></div><div><a href=3D"https:/=
-/github.com/skiffos/skiffos">https://github.com/skiffos/skiffos</a><br></di=
-v></div></div>
-
---00000000000036102705dfdc7734--
-
---===============5024069159755440523==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
+index 3a9b47474c..11e265a2ca 100644
+--- a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
++++ b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
+@@ -1,4 +1,4 @@
+-From 335c6245674088de616324398137416c7a1cbe8f Mon Sep 17 00:00:00 2001
++From a8f2a2b9ade01a099a05a2f4ea47e9a1de85df14 Mon Sep 17 00:00:00 2001
+ From: Angelo Compagnucci <angelo@amarulasolutions.com>
+ Date: Tue, 8 May 2018 16:08:44 +0200
+ Subject: [PATCH] build.go: explicit option for crosscompilation
+diff --git a/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch b/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch
+deleted file mode 100644
+index 5a6b694857..0000000000
+--- a/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch
++++ /dev/null
+@@ -1,119 +0,0 @@
+-From 4d43f7c4dd06e6f62be446996019d4505af54764 Mon Sep 17 00:00:00 2001
+-From: Christian Stewart <christian@paral.in>
+-Date: Thu, 14 Apr 2022 13:34:26 -0700
+-Subject: [PATCH] build: bootstrap: set environment before generating buildcfg
+-
+-The GOOS and GOARCH environment variables should be unset before calling
+-mkbuildcfg. This change fixes a build failure when GOARCH=riscv64.
+-
+-Building Go toolchain1 using go-1.4-bootstrap-20171003.
+-src/cmd/compile/internal/ssa/rewriteRISCV64.go:4814
+-invalid operation: y << x (shift count type int64, must be unsigned integer)
+-
+-There is a build issue with go1.4 with the riscv64 code: however, why is the
+-riscv64 code being compiled at all?
+-
+-GOARCH is set when calling mkbuildcfg, so go1.4 is trying to compile riscv64.
+-
+-[Buildroot]: submitted to upstream:
+-
+- - https://github.com/golang/go/issues/52583
+- - https://go-review.googlesource.com/c/go/+/400376
+- - GitHub-Pull-Request: golang/go#52362
+-
+-Signed-off-by: Christian Stewart <christian@paral.in>
+----
+- src/cmd/dist/buildtool.go | 56 ++++++++++++++++++++-------------------
+- 1 file changed, 29 insertions(+), 27 deletions(-)
+-
+-diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
+-index f1f3d50b6f..dabf01cf84 100644
+---- a/src/cmd/dist/buildtool.go
+-+++ b/src/cmd/dist/buildtool.go
+-@@ -116,9 +116,6 @@ func bootstrapBuildTools() {
+- 	}
+- 	xprintf("Building Go toolchain1 using %s.\n", goroot_bootstrap)
+- 
+--	mkbuildcfg(pathf("%s/src/internal/buildcfg/zbootstrap.go", goroot))
+--	mkobjabi(pathf("%s/src/cmd/internal/objabi/zbootstrap.go", goroot))
+--
+- 	// Use $GOROOT/pkg/bootstrap as the bootstrap workspace root.
+- 	// We use a subdirectory of $GOROOT/pkg because that's the
+- 	// space within $GOROOT where we store all generated objects.
+-@@ -130,6 +127,34 @@ func bootstrapBuildTools() {
+- 	base := pathf("%s/src/bootstrap", workspace)
+- 	xmkdirall(base)
+- 
+-+	// Set up environment for invoking Go 1.4 go command.
+-+	// GOROOT points at Go 1.4 GOROOT,
+-+	// GOPATH points at our bootstrap workspace,
+-+	// GOBIN is empty, so that binaries are installed to GOPATH/bin,
+-+	// and GOOS, GOHOSTOS, GOARCH, and GOHOSTOS are empty,
+-+	// so that Go 1.4 builds whatever kind of binary it knows how to build.
+-+	// Restore GOROOT, GOPATH, and GOBIN when done.
+-+	// Don't bother with GOOS, GOHOSTOS, GOARCH, and GOHOSTARCH,
+-+	// because setup will take care of those when bootstrapBuildTools returns.
+-+
+-+	defer os.Setenv("GOROOT", os.Getenv("GOROOT"))
+-+	os.Setenv("GOROOT", goroot_bootstrap)
+-+
+-+	defer os.Setenv("GOPATH", os.Getenv("GOPATH"))
+-+	os.Setenv("GOPATH", workspace)
+-+
+-+	defer os.Setenv("GOBIN", os.Getenv("GOBIN"))
+-+	os.Setenv("GOBIN", "")
+-+
+-+	os.Setenv("GOOS", "")
+-+	os.Setenv("GOHOSTOS", "")
+-+	os.Setenv("GOARCH", "")
+-+	os.Setenv("GOHOSTARCH", "")
+-+
+-+	// Create the build config files.
+-+	mkbuildcfg(pathf("%s/src/internal/buildcfg/zbootstrap.go", goroot))
+-+	mkobjabi(pathf("%s/src/cmd/internal/objabi/zbootstrap.go", goroot))
+-+
+- 	// Copy source code into $GOROOT/pkg/bootstrap and rewrite import paths.
+- 	writefile("module bootstrap\n", pathf("%s/%s", base, "go.mod"), 0)
+- 	for _, dir := range bootstrapDirs {
+-@@ -176,30 +201,6 @@ func bootstrapBuildTools() {
+- 		})
+- 	}
+- 
+--	// Set up environment for invoking Go 1.4 go command.
+--	// GOROOT points at Go 1.4 GOROOT,
+--	// GOPATH points at our bootstrap workspace,
+--	// GOBIN is empty, so that binaries are installed to GOPATH/bin,
+--	// and GOOS, GOHOSTOS, GOARCH, and GOHOSTOS are empty,
+--	// so that Go 1.4 builds whatever kind of binary it knows how to build.
+--	// Restore GOROOT, GOPATH, and GOBIN when done.
+--	// Don't bother with GOOS, GOHOSTOS, GOARCH, and GOHOSTARCH,
+--	// because setup will take care of those when bootstrapBuildTools returns.
+--
+--	defer os.Setenv("GOROOT", os.Getenv("GOROOT"))
+--	os.Setenv("GOROOT", goroot_bootstrap)
+--
+--	defer os.Setenv("GOPATH", os.Getenv("GOPATH"))
+--	os.Setenv("GOPATH", workspace)
+--
+--	defer os.Setenv("GOBIN", os.Getenv("GOBIN"))
+--	os.Setenv("GOBIN", "")
+--
+--	os.Setenv("GOOS", "")
+--	os.Setenv("GOHOSTOS", "")
+--	os.Setenv("GOARCH", "")
+--	os.Setenv("GOHOSTARCH", "")
+--
+- 	// Run Go 1.4 to build binaries. Use -gcflags=-l to disable inlining to
+- 	// workaround bugs in Go 1.4's compiler. See discussion thread:
+- 	// https://groups.google.com/d/msg/golang-dev/Ss7mCKsvk8w/Gsq7VYI0AwAJ
+-@@ -221,6 +222,7 @@ func bootstrapBuildTools() {
+- 		cmd = append(cmd, "-toolexec="+tool)
+- 	}
+- 	cmd = append(cmd, "bootstrap/cmd/...")
+-+
+- 	run(base, ShowOutput|CheckExit, cmd...)
+- 
+- 	// Copy binaries into tool binary directory.
+--- 
+-2.35.1
+-
+diff --git a/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch b/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
+new file mode 100644
+index 0000000000..e01cdf1e4c
+--- /dev/null
++++ b/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
+@@ -0,0 +1,93 @@
++From 6d862f5ac181b8a003480ed80e94c79cf4be51bb Mon Sep 17 00:00:00 2001
++From: Christian Stewart <christian@paral.in>
++Date: Thu, 14 Apr 2022 13:34:26 -0700
++Subject: [PATCH] cmd/dist: use gohostarch for ssa rewrite check
++
++Fix a build failure when bootstrapping the Go compiler with go-bootstrap 1.4
++while the environment contains GOARCH=riscv64.
++
++Building Go toolchain1 using go-1.4-bootstrap-20171003.
++src/cmd/compile/internal/ssa/rewriteRISCV64.go:4814
++invalid operation: y << x (shift count type int64, must be unsigned integer)
++
++This is because:
++
++ - buildtool.go:198: calls bootstrapRewriteFile(src)
++ - bootstrapRewriteFile: buildtool.go:283 calls:
++ - isUnneededSSARewriteFile: checks os.Getenv("GOARCH")
++ - isUnneededSSARewriteFile: returns "", false
++ - bootstrapRewriteFile: calls bootstrapFixImports
++ - boostrapFixImports: generates code go1.4 cannot compile
++
++Instead of checking "GOARCH" in the environment, use the gohostarch variable.
++
++---
++
++[Buildroot]: submitted to upstream:
++
++- https://github.com/golang/go/issues/52583
++- https://go-review.googlesource.com/c/go/+/400376
++- GitHub-Pull-Request: golang/go#52362
++
++Signed-off-by: Christian Stewart <christian@paral.in>
++---
++ src/cmd/dist/buildtool.go | 16 ++++++----------
++ 1 file changed, 6 insertions(+), 10 deletions(-)
++
++diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
++index f1f3d50b6f..947da115e3 100644
++--- a/src/cmd/dist/buildtool.go
+++++ b/src/cmd/dist/buildtool.go
++@@ -16,7 +16,6 @@ import (
++ 	"os"
++ 	"path/filepath"
++ 	"regexp"
++-	"runtime"
++ 	"strings"
++ )
++ 
++@@ -243,11 +242,11 @@ var ssaRewriteFileSubstring = filepath.FromSlash("src/cmd/compile/internal/ssa/r
++ 
++ // isUnneededSSARewriteFile reports whether srcFile is a
++ // src/cmd/compile/internal/ssa/rewriteARCHNAME.go file for an
++-// architecture that isn't for the current runtime.GOARCH.
+++// architecture that isn't for the given GOARCH.
++ //
++ // When unneeded is true archCaps is the rewrite base filename without
++ // the "rewrite" prefix or ".go" suffix: AMD64, 386, ARM, ARM64, etc.
++-func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
+++func isUnneededSSARewriteFile(srcFile, goArch string) (archCaps string, unneeded bool) {
++ 	if !strings.Contains(srcFile, ssaRewriteFileSubstring) {
++ 		return "", false
++ 	}
++@@ -262,13 +261,10 @@ func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
++ 	archCaps = fileArch
++ 	fileArch = strings.ToLower(fileArch)
++ 	fileArch = strings.TrimSuffix(fileArch, "splitload")
++-	if fileArch == os.Getenv("GOHOSTARCH") {
+++	if fileArch == goArch {
++ 		return "", false
++ 	}
++-	if fileArch == strings.TrimSuffix(runtime.GOARCH, "le") {
++-		return "", false
++-	}
++-	if fileArch == strings.TrimSuffix(os.Getenv("GOARCH"), "le") {
+++	if fileArch == strings.TrimSuffix(goArch, "le") {
++ 		return "", false
++ 	}
++ 	return archCaps, true
++@@ -277,9 +273,9 @@ func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
++ func bootstrapRewriteFile(srcFile string) string {
++ 	// During bootstrap, generate dummy rewrite files for
++ 	// irrelevant architectures. We only need to build a bootstrap
++-	// binary that works for the current runtime.GOARCH.
+++	// binary that works for the current gohostarch.
++ 	// This saves 6+ seconds of bootstrap.
++-	if archCaps, ok := isUnneededSSARewriteFile(srcFile); ok {
+++	if archCaps, ok := isUnneededSSARewriteFile(srcFile, gohostarch); ok {
++ 		return fmt.Sprintf(`// Code generated by go tool dist; DO NOT EDIT.
++ 
++ package ssa
++-- 
++2.35.1
++
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5024069159755440523==--
