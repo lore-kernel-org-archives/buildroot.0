@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ED95C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 26 May 2022 08:43:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C85AC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 26 May 2022 08:44:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A5C142583;
-	Thu, 26 May 2022 08:43:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C14A1845C9;
+	Thu, 26 May 2022 08:44:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w0sXfhl3ft54; Thu, 26 May 2022 08:43:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id InXjJVAvFXF2; Thu, 26 May 2022 08:44:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE61042598;
-	Thu, 26 May 2022 08:43:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1433E1BF9AD
- for <buildroot@lists.busybox.net>; Thu, 26 May 2022 08:43:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E87EF845A4;
+	Thu, 26 May 2022 08:44:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 41E591BF3D9
+ for <buildroot@lists.busybox.net>; Thu, 26 May 2022 08:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0236961319
- for <buildroot@lists.busybox.net>; Thu, 26 May 2022 08:43:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E8DA845A4
+ for <buildroot@lists.busybox.net>; Thu, 26 May 2022 08:44:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HKXVFfxfr-gE for <buildroot@lists.busybox.net>;
- Thu, 26 May 2022 08:43:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PKm6jwgdXSIb for <buildroot@lists.busybox.net>;
+ Thu, 26 May 2022 08:44:15 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7F64F61175
- for <buildroot@buildroot.org>; Thu, 26 May 2022 08:43:14 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EA4C984554
+ for <buildroot@buildroot.org>; Thu, 26 May 2022 08:44:14 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 042D320002;
- Thu, 26 May 2022 08:43:11 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id DA516E0004;
+ Thu, 26 May 2022 08:44:11 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nu95L-00HK5w-4t; Thu, 26 May 2022 10:43:11 +0200
+ id 1nu96I-00HKAI-RO; Thu, 26 May 2022 10:44:10 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-References: <20220423162249.A135981327@busybox.osuosl.org>
-Date: Thu, 26 May 2022 10:43:11 +0200
-In-Reply-To: <20220423162249.A135981327@busybox.osuosl.org> (Arnout
- Vandecappelle's message of "Sat, 23 Apr 2022 18:25:23 +0200")
-Message-ID: <87o7zkr8f4.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220421115529.2625137-1-fontaine.fabrice@gmail.com>
+Date: Thu, 26 May 2022 10:44:10 +0200
+In-Reply-To: <20220421115529.2625137-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 21 Apr 2022 13:55:29 +0200")
+Message-ID: <87k0a8r8dh.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/valgrind: fix compilation for
- uclibc
+Subject: Re: [Buildroot] [PATCH 1/1] package/arptables: fix build with
+ BR2_OPTIMIZE_0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,20 +66,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=3c88d24249d67e3e6b43d56b7052a155bd0150e0
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Fix the following build failure with BR2_OPTIMIZE_0 raised since the
+ > addition of the package in commit
+ > efc10eb6b87884f1f7917462d78af6953fcd99e3 and
+ > https://git.netfilter.org/arptables/commit/?id=369afc14de1d89ff5627ff4c5f72f6f839244b50:
 
- > - Add upstream patch ([1]) to fix compilation for uclibc
+ > libarptc/libarptc.c:48:21: error: redefinition of 'arpt_get_target'
+ >    48 | #define GET_TARGET  arpt_get_target
+ >       |                     ^~~~~~~~~~~~~~~
+ > libarptc/libarptc_incl.c:16:1: note: in expansion of macro 'GET_TARGET'
+ >    16 | GET_TARGET(STRUCT_ENTRY *e)
+ >       | ^~~~~~~~~~
+ > In file included from .//include/libarptc/libarptc.h:7,
+ >                  from libarptc/libarptc.c:26:
+ > .//include/linux/netfilter_arp/arp_tables.h:196:43: note: previous definition of 'arpt_get_target' was here
+ >   196 | static __inline__ struct xt_entry_target *arpt_get_target(struct arpt_entry *e)
+ >       |                                           ^~~~~~~~~~~~~~~
 
- > - Add autoreconf as the patch touches configure.ac
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/730dce4101e7afcee233067e2870603cd64b8a48
 
- > [1] https://sourceware.org/git/?p=valgrind.git;a=commit;h=9c9fd9ae24b45f915f0759d32f662835c26d37c3
-
- > Signed-off-by: Dario Binacchi <dariobin@libero.it>
- > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2022.02.x, thanks.
 
