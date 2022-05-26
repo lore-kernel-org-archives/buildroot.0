@@ -1,54 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCED9C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 26 May 2022 09:44:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF9E6C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 26 May 2022 09:46:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 594694118E;
-	Thu, 26 May 2022 09:44:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 530D1845F7;
+	Thu, 26 May 2022 09:46:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p17MmpDmbO82; Thu, 26 May 2022 09:44:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wDxFq-Grsc9m; Thu, 26 May 2022 09:46:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6915D41188;
-	Thu, 26 May 2022 09:44:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E477845F5;
+	Thu, 26 May 2022 09:46:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0347A1BF487
- for <buildroot@lists.busybox.net>; Thu, 26 May 2022 09:44:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 114EB1BF487
+ for <buildroot@lists.busybox.net>; Thu, 26 May 2022 09:46:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E446D42583
- for <buildroot@lists.busybox.net>; Thu, 26 May 2022 09:44:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F3E0742583
+ for <buildroot@lists.busybox.net>; Thu, 26 May 2022 09:46:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gV5R8ZV-7KA9 for <buildroot@lists.busybox.net>;
- Thu, 26 May 2022 09:44:46 +0000 (UTC)
+ with ESMTP id zb9y1cWsJ3sM for <buildroot@lists.busybox.net>;
+ Thu, 26 May 2022 09:46:05 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4B0EB42582
- for <buildroot@buildroot.org>; Thu, 26 May 2022 09:44:45 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0731042582
+ for <buildroot@buildroot.org>; Thu, 26 May 2022 09:46:04 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 513EE100003;
- Thu, 26 May 2022 09:44:42 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id AAC8620005;
+ Thu, 26 May 2022 09:46:01 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nuA2r-00HNNr-FS; Thu, 26 May 2022 11:44:41 +0200
+ id 1nuA48-00HNSt-HX; Thu, 26 May 2022 11:46:00 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 References: <20220419213450.887728-1-thomas.petazzoni@bootlin.com>
-Date: Thu, 26 May 2022 11:44:41 +0200
-In-Reply-To: <20220419213450.887728-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Tue, 19 Apr 2022 23:34:45
+ <20220419213450.887728-5-thomas.petazzoni@bootlin.com>
+Date: Thu, 26 May 2022 11:46:00 +0200
+In-Reply-To: <20220419213450.887728-5-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Tue, 19 Apr 2022 23:34:49
  +0200")
-Message-ID: <877d68r5km.fsf@dell.be.48ers.dk>
+Message-ID: <8735gwr5if.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/5] arch/Config.in.sh: fixup MMU selection
+Subject: Re: [Buildroot] [PATCH 5/5] arch/Config.in.sh: move
+ BR2_ARCH_HAS_MMU_MANDATORY one level up
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,35 +71,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > BR2_sh selects BR2_ARCH_HAS_MMU_OPTIONAL, which means that it's up to
- > the user to decide whether he wants to use MMU or not on SuperH
- > platforms.
-
- > However:
-
- >  - On SH2A, there is no MMU at all, so being to select "Use MMU"
- >    doesn't make any sense.
-
- >  - On SH4, there is no support for *not* using the MMU, so disabling
- >    "Use MMU" will cause the build to fail.
-
- > In order to fix this, we move the MMU selection to arch/Config.in.sh:
-
- >  - BR2_sh2a selects nothing, so that it's always noMMU
-
- >  - BR2_sh4* select BR2_ARCH_HAS_MMU_MANDATORY so that the MMU is
- >    always used.
-
- > Fixes:
-
- >  http://autobuild.buildroot.net/results/f4d52cabee61ee0f234b03c1ec1bd02e85e7bb20/ (FLAT
- >  selected with sh4aeb)
-
- >  http://autobuild.buildroot.net/results/d1b1dfe449f82944bd48215da3cdffd05797e2e9/ (FLAT
- >  selected with sh4a)
-
- >  http://autobuild.buildroot.net/results/45bc90fd2dde7bb201d7f999db1a8024cf889a06/ (FLAT
- >  selected with sh4)
+ > Now that all SuperH cores have a MMU, and must use it, move back the
+ > select BR2_ARCH_HAS_MMU_MANDATORY one level up.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
