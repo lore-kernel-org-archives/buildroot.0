@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8904EC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 07:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D24FC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 07:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F1FC8458E;
-	Fri, 27 May 2022 07:59:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1551442831;
+	Fri, 27 May 2022 07:59:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GVDXoe147dza; Fri, 27 May 2022 07:59:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vZYzHvawOSGl; Fri, 27 May 2022 07:59:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3922484584;
-	Fri, 27 May 2022 07:59:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E388A4282C;
+	Fri, 27 May 2022 07:59:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2DF4E1BF9D1
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 07:58:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3F0151BF35C
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 07:58:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F178484367
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 07:58:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1D121843A2
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 07:58:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VT9gmrMyjc1O for <buildroot@lists.busybox.net>;
+ with ESMTP id O_hryDY7o329 for <buildroot@lists.busybox.net>;
  Fri, 27 May 2022 07:58:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 35A3B843A2
- for <buildroot@buildroot.org>; Fri, 27 May 2022 07:58:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03E4784393
+ for <buildroot@buildroot.org>; Fri, 27 May 2022 07:58:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5C476865B4; Fri, 27 May 2022 07:46:54 +0000 (UTC)
+ id 2933E865B8; Fri, 27 May 2022 07:46:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 May 2022 09:40:45 +0200
+Date: Thu, 26 May 2022 23:22:06 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: bc61e52ae5f8f6983c2033156df8bced12a0284a
-X-Git-Newrev: 325d6fd451283aca566c87a702962c2e635cf402
+X-Git-Oldrev: f3becd1c1730009078fc0ae51712dd59caed634d
+X-Git-Newrev: ead74df1dc53ab2f2acfec0db7be2b342173f56d
 X-Patchwork-Hint: ignore
-Message-Id: <20220527074654.5C476865B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libselinux: fix
- host build
+Message-Id: <20220527074654.2933E865B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/assimp: force
+ libzlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,87 +59,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=325d6fd451283aca566c87a702962c2e635cf402
+commit: https://git.buildroot.net/buildroot/commit/?id=ead74df1dc53ab2f2acfec0db7be2b342173f56d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-The following build failure is raised since commit
-1745fcde740057951dcc5429f3bfabd103b764a1 because
-$(HOST_PKG_PYTHON_DISTUTILS_ENV) contains $(HOST_CONFIGURE_OPTS) and so
-will override LDFLAGS passed by libselinux.mk:
-
-/usr/bin/gcc -O2 -I/nvmedata/autobuild/instance-11/output-1/host/include -I../include -D_GNU_SOURCE  -DNO_ANDROID_BACKEND  -L/nvmedata/autobuild/instance-11/output-1/host/lib -Wl,-rpath,/nvmedata/autobuild/instance-11/output-1/host/lib -shared -o libselinux.so.1 avc.lo avc_internal.lo avc_sidtab.lo booleans.lo callbacks.lo canonicalize_context.lo checkAccess.lo check_context.lo checkreqprot.lo compute_av.lo compute_create.lo compute_member.lo compute_relabel.lo compute_user.lo context.lo deny_unknown.lo disable.lo enabled.lo fgetfilecon.lo freecon.lo freeconary.lo fsetfilecon.lo get_context_list.lo get_default_type.lo get_initial_context.lo getenforce.lo getfilecon.lo getpeercon.lo init.lo is_customizable_type.lo label.lo label_db.lo label_file.lo label_media.lo label_support.lo label_x.lo lgetfilecon.lo load_policy.lo lsetfilecon.lo mapping.lo matchmediacon.lo matchpathcon.lo policyvers.lo procattr.lo query_user_context.lo regex.lo reject_unknown.lo selinux_check_securetty_context.l
- o selinux_config.lo selinux_restorecon.lo sestatus.lo setenforce.lo setexecfilecon.lo setfilecon.lo setrans_client.lo seusers.lo sha1.lo stringrep.lo validatetrans.lo   -ldl -Wl,-soname,libselinux.so.1,--version-script=libselinux.map,-z,defs,-z,relro
-/usr/bin/ld: regex.lo: in function `regex_writef':
-regex.c:(.text+0x7c): undefined reference to `pcre_fullinfo'
-
-To fix this build failure, instead of moving LDFLAGS after
-$(HOST_PKG_PYTHON_DISTUTILS_ENV), drop LDFLAGS and add host-pkgconf
-dependency to retrieve pcre dependencies as pkg-config is supported
-since version 3.2 and
-https://github.com/SELinuxProject/selinux/commit/74093beab0c605641ec413be81e31e6b2f55d8d4
-
-Dropping LDFLAGS will also drop -lpthread which doesn't seem to raise
-any build failures with test-pkg:
-
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: SKIPPED
-                            sourcery-arm [6/6]: SKIPPED
-
-Apply the same update to the target variant for consistency.
-
-Fixes:
- - http://autobuild.buildroot.org/results/d16995f0decef9c9bf58cab4fa30f7daab6918fb
+Force libzlib instead of depending on it
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3bdfb5f5ad2d43cca491a7bc621800eaa0064c38)
+(cherry picked from commit dfb42ab91b7b1f58bc89362403321ed7063dda9f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libselinux/libselinux.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/assimp/Config.in | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 5790e79040..c6be8e638a 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -10,7 +10,8 @@ LIBSELINUX_LICENSE = Public Domain
- LIBSELINUX_LICENSE_FILES = LICENSE
- LIBSELINUX_CPE_ID_VENDOR = selinuxproject
+diff --git a/package/assimp/Config.in b/package/assimp/Config.in
+index 833e559a6f..5ffb50cd79 100644
+--- a/package/assimp/Config.in
++++ b/package/assimp/Config.in
+@@ -2,8 +2,9 @@ config BR2_PACKAGE_ASSIMP
+ 	bool "assimp"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+-	depends on BR2_PACKAGE_LIBZLIB
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_ZLIB_FORCE_LIBZLIB
+ 	help
+ 	  Open Asset Import Library (assimp) is a portable Open Source
+ 	  library to import various well-known 3D model formats in a
+@@ -14,11 +15,7 @@ config BR2_PACKAGE_ASSIMP
+ 	  http://www.assimp.org
  
--LIBSELINUX_DEPENDENCIES = $(BR2_COREUTILS_HOST_DEPENDENCY) libsepol pcre
-+LIBSELINUX_DEPENDENCIES = \
-+	$(BR2_COREUTILS_HOST_DEPENDENCY) host-pkgconf libsepol pcre
+ comment "assimp needs a toolchain w/ C++, wchar"
+-	depends on BR2_PACKAGE_LIBZLIB
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
  
- LIBSELINUX_INSTALL_STAGING = YES
- 
-@@ -52,8 +53,7 @@ endif # python3
- # when the python binding is enabled.
- LIBSELINUX_MAKE_OPTS += \
- 	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
--	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))" \
--	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
-+	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
- 
- define LIBSELINUX_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-@@ -76,13 +76,12 @@ define LIBSELINUX_INSTALL_TARGET_CMDS
- endef
- 
- HOST_LIBSELINUX_DEPENDENCIES = \
--	host-libsepol host-pcre host-swig host-python3
-+	host-pkgconf host-libsepol host-pcre host-swig host-python3
- 
- HOST_LIBSELINUX_MAKE_OPTS = \
- 	$(HOST_CONFIGURE_OPTS) \
- 	PREFIX=$(HOST_DIR) \
- 	SHLIBDIR=$(HOST_DIR)/lib \
--	LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread" \
- 	$(HOST_PKG_PYTHON_DISTUTILS_ENV) \
- 	PYTHON=python$(PYTHON3_VERSION_MAJOR)
- 
+-comment "assimp needs libzlib"
+-	depends on !BR2_PACKAGE_LIBZLIB
+-
+ comment "assimp needs exception_ptr"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
