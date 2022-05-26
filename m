@@ -1,55 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E350C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 26 May 2022 20:06:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AEF2C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 26 May 2022 21:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2A074122D;
-	Thu, 26 May 2022 20:06:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YJImMsYKV76H; Thu, 26 May 2022 20:06:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A29B140292;
-	Thu, 26 May 2022 20:06:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 76A701BF370
- for <buildroot@lists.busybox.net>; Thu, 26 May 2022 20:06:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 71FFA84346
- for <buildroot@lists.busybox.net>; Thu, 26 May 2022 20:06:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35AFC84758;
+	Thu, 26 May 2022 21:03:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gwYMQGkjCmQ9 for <buildroot@lists.busybox.net>;
- Thu, 26 May 2022 20:06:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 15B19842E0
- for <buildroot@buildroot.org>; Thu, 26 May 2022 20:06:39 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DC16920003;
- Thu, 26 May 2022 20:06:36 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nuJkh-000IMF-Mp; Thu, 26 May 2022 22:06:35 +0200
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OfLqJL5VnfSw; Thu, 26 May 2022 21:03:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3455384759;
+	Thu, 26 May 2022 21:03:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CE5CA1BF370
+ for <buildroot@lists.busybox.net>; Thu, 26 May 2022 21:03:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA7E661554
+ for <buildroot@lists.busybox.net>; Thu, 26 May 2022 21:03:16 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FeGZQjASqiMb for <buildroot@lists.busybox.net>;
+ Thu, 26 May 2022 21:03:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E2FD46155D
+ for <buildroot@buildroot.org>; Thu, 26 May 2022 21:03:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 20C7486561; Thu, 26 May 2022 20:51:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Andreas Ziegler <br015@umbiko.net>
-References: <20220424090931.268434-1-br015@umbiko.net>
- <20220424093208.268901-1-br015@umbiko.net>
-Date: Thu, 26 May 2022 22:06:35 +0200
-In-Reply-To: <20220424093208.268901-1-br015@umbiko.net> (Andreas Ziegler's
- message of "Sun, 24 Apr 2022 11:32:08 +0200")
-Message-ID: <87tu9coy7o.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/libnpupnp: update version to
- 4.2.2
+To: buildroot@buildroot.org
+Date: Thu, 26 May 2022 11:19:34 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 814880699521dde1efe7e572da92909ad712f6d9
+X-Git-Newrev: 1067c60c57cff73284eda8676edfbe5c1ae72786
+X-Patchwork-Hint: ignore
+Message-Id: <20220526205151.20C7486561@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] arch/Config.in.sh: move
+ BR2_ARCH_HAS_MMU_MANDATORY one level up
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,28 +53,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Andreas" == Andreas Ziegler <br015@umbiko.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1067c60c57cff73284eda8676edfbe5c1ae72786
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Bugfix release for:
- > http://autobuild.buildroot.net/results/a87/a8754431aad8808ae2d67e32d4a7973b00eda1c1/
+Now that all SuperH cores have an MMU, and must use it, move back the
+select BR2_ARCH_HAS_MMU_MANDATORY one level up.
 
- > Technical discussion:
- > https://github.com/MusicPlayerDaemon/MPD/pull/1513
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ec190481a76b494d348e0e03cfa3c580bb444d03)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ arch/Config.in    | 1 +
+ arch/Config.in.sh | 4 ----
+ 2 files changed, 1 insertion(+), 4 deletions(-)
 
- > Signed-off-by: Andreas Ziegler <br015@umbiko.net>
- > ---
- > Changes v1 -> v2: version number in comment
-
-Committed to 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/arch/Config.in b/arch/Config.in
+index e51ef60f40..1ea4e21413 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -228,6 +228,7 @@ config BR2_s390x
+ 
+ config BR2_sh
+ 	bool "SuperH"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  SuperH (or SH) is a 32-bit reduced instruction set computer
+ 	  (RISC) instruction set architecture (ISA) developed by
+diff --git a/arch/Config.in.sh b/arch/Config.in.sh
+index f00954bb5e..d3acc8ccf8 100644
+--- a/arch/Config.in.sh
++++ b/arch/Config.in.sh
+@@ -7,16 +7,12 @@ choice
+ 
+ config BR2_sh4
+ 	bool "sh4 (SH4 little endian)"
+-	select BR2_ARCH_HAS_MMU_MANDATORY
+ config BR2_sh4eb
+ 	bool "sh4eb (SH4 big endian)"
+-	select BR2_ARCH_HAS_MMU_MANDATORY
+ config BR2_sh4a
+ 	bool "sh4a (SH4A little endian)"
+-	select BR2_ARCH_HAS_MMU_MANDATORY
+ config BR2_sh4aeb
+ 	bool "sh4aeb (SH4A big endian)"
+-	select BR2_ARCH_HAS_MMU_MANDATORY
+ endchoice
+ 
+ config BR2_ARCH
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
