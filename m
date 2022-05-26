@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E09EC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 26 May 2022 08:47:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CC20C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 26 May 2022 08:47:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18CD18459E;
-	Thu, 26 May 2022 08:47:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3D0A6142A;
+	Thu, 26 May 2022 08:47:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k53UojE9rBrK; Thu, 26 May 2022 08:47:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vMbOdjL1hmGK; Thu, 26 May 2022 08:47:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B38D84554;
-	Thu, 26 May 2022 08:47:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 62C8E1BF3D9
- for <buildroot@lists.busybox.net>; Thu, 26 May 2022 08:46:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D955A61311;
+	Thu, 26 May 2022 08:47:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 560CE1BF3D9
+ for <buildroot@lists.busybox.net>; Thu, 26 May 2022 08:46:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4EDF041186
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46732408AB
  for <buildroot@lists.busybox.net>; Thu, 26 May 2022 08:46:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mSuFEAjxqUMA for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vt-UUWjUqlTR for <buildroot@lists.busybox.net>;
  Thu, 26 May 2022 08:46:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3BB9E4117D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2610640598
  for <buildroot@buildroot.org>; Thu, 26 May 2022 08:46:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9561986535; Thu, 26 May 2022 08:35:17 +0000 (UTC)
+ id 7B2D78652D; Thu, 26 May 2022 08:35:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 May 2022 10:42:37 +0200
+Date: Thu, 26 May 2022 10:33:54 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0066a82527d37348fbe1307aabe084d1be9b9b77
-X-Git-Newrev: ddacef50bc0852fca6a49792fc719088d925a178
+X-Git-Oldrev: c2dd57638b07645ac9143609cce51921e0ffffea
+X-Git-Newrev: 7604702d44c3a76b961fd46169e37e508cf107da
 X-Patchwork-Hint: ignore
-Message-Id: <20220526083517.9561986535@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/valgrind: fix
- compilation for uclibc
+Message-Id: <20220526083517.7B2D78652D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/opencv4: fix
+ uclibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,109 +59,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddacef50bc0852fca6a49792fc719088d925a178
+commit: https://git.buildroot.net/buildroot/commit/?id=7604702d44c3a76b961fd46169e37e508cf107da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-- Add upstream patch ([1]) to fix compilation for uclibc
+Add BR2_PACKAGE_OPENCV4_LIB_DNN to fix the following uclibc build
+failure raised since bump to version 4.5.5 in commit
+b6922313937712a89841b58d3b355edd53754bca and
+https://github.com/opencv/opencv/commit/1feb3838b51c0b27b0f3e64f02358ff5ef3111b8:
 
-- Add autoreconf as the patch touches configure.ac
+/home/giuliobenetti/autobuild/run/instance-3/output-1/build/opencv4-4.5.5/modules/dnn/src/layers/elementwise_layers.cpp: In member function 'float cv::dnn::RoundFunctor::calculate(float) const':
+/home/giuliobenetti/autobuild/run/instance-3/output-1/build/opencv4-4.5.5/modules/dnn/src/layers/elementwise_layers.cpp:1260:43: error: 'fegetround' is not a member of 'std'
+ 1260 |         int old_rounding_direction = std::fegetround();
+      |                                           ^~~~~~~~~~
+/home/peko/autobuild/instance-0/output-1/build/opencv4-4.5.5/modules/dnn/src/layers/elementwise_layers.cpp:1261:14: error: 'fesetround' is not a member of 'std'
+ 1261 |         std::fesetround(FE_TONEAREST);
+      |              ^~~~~~~~~~
+/home/peko/autobuild/instance-0/output-1/build/opencv4-4.5.5/modules/dnn/src/layers/elementwise_layers.cpp:1261:25: error: 'FE_TONEAREST' was not declared in this scope
+ 1261 |         std::fesetround(FE_TONEAREST);
+      |                         ^~~~~~~~~~~~
 
-[1] https://sourceware.org/git/?p=valgrind.git;a=commit;h=9c9fd9ae24b45f915f0759d32f662835c26d37c3
+Indeed, uclibc pretends to implement fenv but it raises build failures
+on numerous architectures (or1k, sh4, xtensa, mipsel, arm, arc, riscv64,
+etc.)
 
-Signed-off-by: Dario Binacchi <dariobin@libero.it>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/a6dd3c10acfbf6bc1af867d770cf0ce926c6ce84
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 3c88d24249d67e3e6b43d56b7052a155bd0150e0)
+(cherry picked from commit cc10bd5777af492b786c7d6c7fc917b855c6b7d8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0003-coregrind-fix-compilation-for-uclibc.patch | 65 ++++++++++++++++++++++
- package/valgrind/valgrind.mk                       |  2 +
- 2 files changed, 67 insertions(+)
+ package/opencv4/Config.in  | 11 +++++++++++
+ package/opencv4/opencv4.mk |  1 +
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/valgrind/0003-coregrind-fix-compilation-for-uclibc.patch b/package/valgrind/0003-coregrind-fix-compilation-for-uclibc.patch
-new file mode 100644
-index 0000000000..ff8dc974d8
---- /dev/null
-+++ b/package/valgrind/0003-coregrind-fix-compilation-for-uclibc.patch
-@@ -0,0 +1,65 @@
-+From 9c9fd9ae24b45f915f0759d32f662835c26d37c3 Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Fri, 8 Apr 2022 12:36:33 +0200
-+Subject: [PATCH] coregrind: fix compilation for uclibc
-+
-+It fixes a known iusse whose details are described at [1] and more
-+generally it guarantees that Valgrind is properly compiled for ulibc.
-+
-+[1] https://www.mail-archive.com/valgrind-users@lists.sourceforge.net/msg05295.html
-+
-+Suggested-by Michael Trimarchi <michael@amarulasolutions.com>
-+Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+---
-+ configure.ac                        | 2 ++
-+ coregrind/m_debuginfo/minilzo-inl.c | 4 ++++
-+ coregrind/vg_preloaded.c            | 4 ++++
-+ 3 files changed, 10 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 6f51dfd9f8fb..c627a9c17a4a 100755
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1204,6 +1204,8 @@ AC_SUBST(DEFAULT_SUPP)
-+ AC_CHECK_HEADER([features.h])
-+ 
-+ if test x$ac_cv_header_features_h = xyes; then
-++  AC_DEFINE([HAVE_HEADER_FEATURES_H], 1,
-++          [Define to 1 if you have the `features.h' header.])
-+   rm -f conftest.$ac_ext
-+   cat <<_ACEOF >conftest.$ac_ext
-+ #include <features.h>
-+diff --git a/coregrind/m_debuginfo/minilzo-inl.c b/coregrind/m_debuginfo/minilzo-inl.c
-+index 153d008fd44f..b45ec92eaa85 100644
-+--- a/coregrind/m_debuginfo/minilzo-inl.c
-++++ b/coregrind/m_debuginfo/minilzo-inl.c
-+@@ -1875,6 +1875,10 @@ extern "C" {
-+ 
-+ #endif
-+ 
-++#ifdef HAVE_HEADER_FEATURES_H
-++#include <features.h>
-++#endif
-++
-+ #undef LZO_HAVE_CONFIG_H
-+ #include "minilzo.h"
-+ 
-+diff --git a/coregrind/vg_preloaded.c b/coregrind/vg_preloaded.c
-+index 5e2098390847..3809811aede7 100644
-+--- a/coregrind/vg_preloaded.c
-++++ b/coregrind/vg_preloaded.c
-+@@ -45,6 +45,10 @@
-+ #include "pub_core_debuginfo.h"  // Needed for pub_core_redir.h
-+ #include "pub_core_redir.h"      // For VG_NOTIFY_ON_LOAD
-+ 
-++#ifdef HAVE_HEADER_FEATURES_H
-++#include <features.h>
-++#endif
-++
-+ #if defined(VGO_linux) || defined(VGO_solaris) || defined(VGO_freebsd)
-+ 
-+ /* ---------------------------------------------------------------------
-+-- 
-+2.32.0
-+
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index 52f2a04ffa..a3eabec9fe 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -14,6 +14,8 @@ VALGRIND_CONF_OPTS = \
- 	--disable-ubsan \
- 	--without-mpicc
- VALGRIND_INSTALL_STAGING = YES
-+# 0003-coregrind-fix-compilation-for-uclibc.patch
-+VALGRIND_AUTORECONF=YES
+diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
+index 31c32385da..d7a391a40a 100644
+--- a/package/opencv4/Config.in
++++ b/package/opencv4/Config.in
+@@ -30,6 +30,17 @@ config BR2_PACKAGE_OPENCV4_LIB_CALIB3D
+ 	  Include opencv_calib3d (camera calibration and 3d
+ 	  reconstruction) module into the OpenCV build.
  
- # Valgrind must be compiled with no stack protection, so forcefully
- # pass -fno-stack-protector to override what Buildroot may have in
++config BR2_PACKAGE_OPENCV4_LIB_DNN
++	bool "dnn"
++	# dnn needs fenv.h which is not provided by uclibc
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	help
++	  Include opencv_dnn (Deep Neural Networks) module into the
++	  OpenCV build.
++
++comment "dnn needs a glibc or musl toolchain"
++	depends on BR2_TOOLCHAIN_USES_UCLIBC
++
+ config BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
+ 	bool "features2d"
+ 	select BR2_PACKAGE_OPENCV4_LIB_FLANN
+diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+index e75f7144de..619bfd9dbc 100644
+--- a/package/opencv4/opencv4.mk
++++ b/package/opencv4/opencv4.mk
+@@ -92,6 +92,7 @@ OPENCV4_CONF_OPTS += \
+ 	-DBUILD_opencv_apps=OFF \
+ 	-DBUILD_opencv_calib3d=$(if $(BR2_PACKAGE_OPENCV4_LIB_CALIB3D),ON,OFF) \
+ 	-DBUILD_opencv_core=ON \
++	-DBUILD_opencv_dnn=$(if $(BR2_PACKAGE_OPENCV4_LIB_DNN),ON,OFF) \
+ 	-DBUILD_opencv_features2d=$(if $(BR2_PACKAGE_OPENCV4_LIB_FEATURES2D),ON,OFF) \
+ 	-DBUILD_opencv_flann=$(if $(BR2_PACKAGE_OPENCV4_LIB_FLANN),ON,OFF) \
+ 	-DBUILD_opencv_highgui=$(if $(BR2_PACKAGE_OPENCV4_LIB_HIGHGUI),ON,OFF) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
