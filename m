@@ -4,69 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B30A2C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 26 May 2022 02:17:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1C34C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 26 May 2022 07:43:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CEDE842AB;
-	Thu, 26 May 2022 02:17:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14E8B845C1;
+	Thu, 26 May 2022 07:43:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gp2xLKBrF11E; Thu, 26 May 2022 02:17:38 +0000 (UTC)
+	with ESMTP id NfdV9zRM_i6r; Thu, 26 May 2022 07:43:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3AD6E8427D;
-	Thu, 26 May 2022 02:17:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4AB521BF2A0
- for <buildroot@lists.busybox.net>; Thu, 26 May 2022 02:17:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4AB0F845BD;
+	Thu, 26 May 2022 07:43:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 68F911BF20B
+ for <buildroot@lists.busybox.net>; Thu, 26 May 2022 07:43:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4676840390
- for <buildroot@lists.busybox.net>; Thu, 26 May 2022 02:17:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 56C5C6142A
+ for <buildroot@lists.busybox.net>; Thu, 26 May 2022 07:43:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=jms.id.au
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y-ZPJ6loNRsv for <buildroot@lists.busybox.net>;
- Thu, 26 May 2022 02:17:34 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ett-bagsqXVJ for <buildroot@lists.busybox.net>;
+ Thu, 26 May 2022 07:43:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6537D400BA
- for <buildroot@buildroot.org>; Thu, 26 May 2022 02:17:34 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id x12so424687wrg.2
- for <buildroot@buildroot.org>; Wed, 25 May 2022 19:17:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=5r2Flw9+4ZTme2GyEGly808ZOrsJl42NahF7KBco1BI=;
- b=YTOw1svVQy5L0vaZ34ATBL5uThCzXLCzfNM5+NVzh3JXhyQuIRilNGEXKLRez35cU8
- I9E1mkqdLVdJ/iQu/iFRnKn3LthHEMxBfIH8VSwUstG69BdxIcirCod0+sWXtCIVUJ6d
- Ks3MSR8wFHmpQg1KoIDETjiEutGr00GWHZpNc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=5r2Flw9+4ZTme2GyEGly808ZOrsJl42NahF7KBco1BI=;
- b=mItcIGjS2/s/z7vdP+hFJdnlEI217l0zthgSjnq2cgR+iKsUHn1Q09r0v3eMNbyNAX
- 9oqLzoVbXsO3EQbC9V89RoLwcDhlAd9hUobyYm8NGibmjujOx7Mw0/X6UdysCeHR/EcE
- /xQu7r6WymS3RiGzx9rhRD7ZKY5/fuDBHmUAnKd1pEesLXFKxajnuZEmmbh8krTM46wu
- 5AqbxES5irzEXZTdIuA43pEtLcUhN68hK9bYANFa3G7ggc0ewsaq11g9DXslFTFUprkn
- +BQUoOrUmDAE6VGbYnTgg454cEZ2zfoMKpfts8cmyOPUAASw7jeSBV1PC7vtlPJ3br7H
- 3Jyw==
-X-Gm-Message-State: AOAM530oTP7Xavvctn+PwHPBHBqiDVVGqoiAi59u40HrpIiFPy7hVOjN
- Lfq+pZXybemm06ZaD3E8Jy8eTsxtqU5rNfxo4ZivIU+a1+M=
-X-Google-Smtp-Source: ABdhPJxiRvg3Vg7YIZLmtFHAOfP+tMIhwT3vbzfdMz1fUT8xqpbpgT6OG29YFB3QfYYjJ4dYHDCdY/m+l4q2mG2rogw=
-X-Received: by 2002:adf:ec0f:0:b0:20f:c997:6dba with SMTP id
- x15-20020adfec0f000000b0020fc9976dbamr19209277wrn.628.1653531452460; Wed, 25
- May 2022 19:17:32 -0700 (PDT)
-MIME-Version: 1.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 824D56116A
+ for <buildroot@buildroot.org>; Thu, 26 May 2022 07:43:31 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:a096:527a:92bb:d0a5])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 8A61B13F85A;
+ Thu, 26 May 2022 09:43:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1653551008;
+ bh=PN2oTuZ9cBlrMgWcl49d3Ymhf1yDCivs8RMC8X6gmfs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=oUE248O38Fvkl8gDgGIV+bxwBfoFBUmyvOsd78px6c8AAxoILZlzRa9rd8CEkPMWQ
+ zWBwkoenh3MtOKD4Ns56M4cjXWjzPIrPhbX7wcMUw6+wLBk8d7Mkvnb0faRb8b1kwg
+ thbfHvhI6jASTRVPMKHC/k6L1+D6P/bMkRwblMmbPL4eDOBJkQSIvbFWPpOFnhGTuL
+ C8eWWzu49V/7qvNXHcCxJuQedWCqqvGs8+ZMMQmTJFuyeFbSj1bbD7/bLCZBXvGCEh
+ jNlOlJk4iP8VlzgQvbeb+QCXVcFrZYJ+snny65cOiXozJemsCV8UWi8VySiFKuNMT4
+ j6Y3XwQ2Bt8dA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 26 May 2022 09:43:22 +0200
+Date: Thu, 26 May 2022 09:43:22 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20220526074322.GA451036@scaer>
 References: <CA+h8R2pE3Z8=fjUBYvXMZp5d3s_+FRQeh4Ms1W8E8eySfdtazA@mail.gmail.com>
  <20220525234312.643dfc03@windsurf>
+MIME-Version: 1.0
+Content-Disposition: inline
 In-Reply-To: <20220525234312.643dfc03@windsurf>
-From: Joel Stanley <joel@jms.id.au>
-Date: Thu, 26 May 2022 02:17:19 +0000
-Message-ID: <CACPK8Xe2LB_LNd0zVneLKd+eNmZBqvKX4cuZgqgTpkQPBmyR=g@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 Subject: Re: [Buildroot] [RFC] package/go: switch to gcc go instead of
  go-bootstrap
 X-BeenThere: buildroot@buildroot.org
@@ -80,54 +73,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+Cc: Joel Stanley <joel@jms.id.au>,
  Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 25 May 2022 at 21:43, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
+On 2022-05-25 23:43 +0200, Thomas Petazzoni spake thusly:
 > Hello Christian,
->
+> 
 > On Wed, 25 May 2022 14:07:38 -0700
 > Christian Stewart <christian@paral.in> wrote:
->
+> 
 > > I propose that we switch to using Gccgo:
-> >
+> > 
 > >  - build gcc and/or use external toolchain
 > >     - add flags to enable the "go" language in Gcc
 > >     - GCC 11 or later
->
+> 
 > The problem I see with this is that many external toolchains do not
 > provide Go support. While this will probably evolve over time, this is
 > not something that we can reasonably require right now.
-
-I use arm64 and ppc64le hosts for my buildrooting as they are the
-fastest machines I have access to. Neither are supported by
-go-bootstrap, so moving to gcc-go looks like a win for me.
-
-Likewise, we don't have prebuilt toolchains for those host CPUs so the
-question of external toolchains is not a factor.
-
-I appreciate that my situation is unusual.
-
+> 
 > So I believe we probably don't have much other choice but to provide a
 > path that consists in building Go in multiple stages: first Go 1.4,
 > then a version of Go that is the last one that can be built with Go
 > 1.4, and use that one to build the latest version of Go.
->
+> 
 > What do others think?
 
-How much work is it to maintain both approaches: go-bootstrap for
-setups where the host supports it and an external toolchain is in use,
-and gccgo for the other situations?
+I don't much like that we do need a multi-stage bootstrap, but this
+looks like the measiest path forward. Except that the second-stage
+bootstrap golang compiler will have to be installed "over" the
+first-stage one, so we'd need to be careful whether they would install
+a conflicting set of files.
 
-Cheers,
+Then, long-term, the gccgo path looks the most forward-looking solution,
+but it is probably a bit more complex to handle, as the gcc package is
+not trivial to extend (but just enabling go should not be *that* complex
+either, hopefully).
 
-Joel
+For internal toolchains, we alrady have a flag to enable C++; for
+externa l toolchains, we also have a flag for C++, D, and Fortran. We
+can add a similar flag for go. People usign an external toolchain
+without go support won't be able to use go packages, the same they won't
+be able to use C++ with an external tolchain that laxk a C++ compiler
+(even though this is pretty rare nowadays, tbh).
+
+So, in the end, maybe the gccgo path is not that scary.
+
+Still, I wonder what go level gccgo provides: is it a complete
+replacement for the golang compiler? Will we have (or do we already
+have) go packages that can't be built with gccgo but require golang?
+Or the ther way around?
+
+If so, do we plan on suporting that case (e.g.: depends on GO_IS_GOLANG,
+or even: depends on GO_IS_GCCGO)?
+
+Or do we plan on using gccgo just to build golang?
+
+Regards,
+Yann E. MORIN.
+
+> Thomas
+> -- 
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
