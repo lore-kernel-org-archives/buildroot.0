@@ -4,77 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53E05C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 10:34:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C333C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 10:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0989B425DE;
-	Fri, 27 May 2022 10:34:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 996DB42619;
+	Fri, 27 May 2022 10:34:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZqB6p9XPeKwn; Fri, 27 May 2022 10:34:23 +0000 (UTC)
+	with ESMTP id nuAI8mx-PQsF; Fri, 27 May 2022 10:34:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A9A13425D6;
-	Fri, 27 May 2022 10:34:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6A95C1BF841
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 10:33:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5071F42605;
+	Fri, 27 May 2022 10:34:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B642B1BF841
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 10:33:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 684FE84AD7
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 10:33:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AEE33424E1
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 10:33:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9QLvVZqseUzm for <buildroot@lists.busybox.net>;
- Fri, 27 May 2022 10:33:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jU8Sm1C5kgy6 for <buildroot@lists.busybox.net>;
+ Fri, 27 May 2022 10:33:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 357A784AD4
- for <buildroot@buildroot.org>; Fri, 27 May 2022 10:33:55 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id jx22so7832755ejb.12
- for <buildroot@buildroot.org>; Fri, 27 May 2022 03:33:54 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F09C8424B9
+ for <buildroot@buildroot.org>; Fri, 27 May 2022 10:33:53 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id rq11so7942239ejc.4
+ for <buildroot@buildroot.org>; Fri, 27 May 2022 03:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=TMHWYZ/TXrj+RLB8uKaxad4z53EGLe5MFoK/g84NfAQ=;
- b=JHcDXndYnHR2zqPSywv3uFZJbLcWRWT7BswtIDd8uT5PmRTbeaKt4rYpr2m6rsIcWB
- J+W6zTQ6xdlBetDhjEwNUFEEz6NRWb5MuATvg2gBapBBzd+SI1V89rEOsaBVz1o60TPx
- r/TVLp8bVqWkMPXhjI9XMZNVjQ78ZNsv8wPik=
+ bh=kG20JgmCbaK0uP4x9tsGFfOizsIrVAflMbHNjjfezSg=;
+ b=QDNb5zV3kq6cdMXJlrZlKSbkTkqH6az9w9EuGMXC31sViOfYZ5keVBAYzcLW+NCDee
+ tsTzitNpQOHuE0Hxdk24p0HxtMli3Jyu29XTrG9Z06qHHVEJmMEBVcMFVLSZE33jOHaA
+ XSBddr/VkyuVkciLMP3e4vZTT8/qwMqlwYjr4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=TMHWYZ/TXrj+RLB8uKaxad4z53EGLe5MFoK/g84NfAQ=;
- b=2hHLbenCOihQKbp9DVA0aI2aOtZQCMp80ToQaEvOtn7bDr8TCdA0zoie+dvhiz8qTU
- 634S+fDuI0VSlIQ0gt5S50GUkEZ51IMLx2lVRRUoNdZTkXyiSsHjddnMR3L3N+MxksFp
- 1pOc0LSpOS2WNv31YXbOfHzjdcQQWUcHPZO7PuIrRVRHtU8r8UstCzEpFFGIla7Cp4vV
- ZhkJD1ro4He2mgwg/tHxSl+c3snJh7IhIWvyL+9yXO64JJ4p2Smz47p3GdVIxmrdEexk
- P51/uoEDp2180v1Ua0qgW/eUxUJKH4CSMZQ0CJlpH79fi3dqxupHg8+bWq5glT3Ryem7
- O6rw==
-X-Gm-Message-State: AOAM531NMYEaOkjTMsFqPHpmY95AKO1C3xKKeKYh44Y62sq5rQySaaTk
- nubm11qp4F9gWIzbX4EGXdXAaAzc045/Sw==
-X-Google-Smtp-Source: ABdhPJwuphzH1h/wUwTqShF5LgYhbJUhUhFu6fxfWyYCPxc/0UrcFix9a2atO85rfkreXyQOJ5T2Og==
-X-Received: by 2002:a17:907:6daa:b0:6fe:b530:8f4e with SMTP id
- sb42-20020a1709076daa00b006feb5308f4emr29868161ejc.423.1653647633436; 
- Fri, 27 May 2022 03:33:53 -0700 (PDT)
+ bh=kG20JgmCbaK0uP4x9tsGFfOizsIrVAflMbHNjjfezSg=;
+ b=TMDKL7oVl3dveSa/rfvDg9W1rGJEjK/GgJKyWVPgcCXYFKMnNnyTKO1CJKxWw7r0Cl
+ mPOcqElZmw/jSG1H+P5iolk6Nr2qX6Qd8abs9yclHPnlKhLYVqkkJqtyWhDI0hCfG/N8
+ uYJRNlNcEIwNfvBSTi39avY4NQFZEkSFO68CwNdzMuVCXWnhE0qHaW459GnhWVFQsYXS
+ Q7SSS9sLq7kKSXYjZsruGYAqS3jqLZ2K4jSQwUOD9/11Cf0PzFmy3LH6SQrZZRegy48/
+ 1ymZ6qIT91CVwlL8bihdiqCK8SIPAUkZZc4NkUC9WmXrcJV794aIE4aOh5eiowuxxJ8q
+ my6w==
+X-Gm-Message-State: AOAM530M0Uo/K+6KBGD3B/9Y7Zcjaxfx8Z2zx7M8NctJemO24SNDLa/z
+ /a+3jtqrqY53QO8vOpCTwven2zL5FFf+3Q==
+X-Google-Smtp-Source: ABdhPJxnP7LI46/EnXXQCD+KRDAX+Nf/2OfiB6OifjAhQcquVoa+b+8sKcQZuIMUTxdP8aYZLf+/hg==
+X-Received: by 2002:a17:907:8a05:b0:6ff:1060:3ed1 with SMTP id
+ sc5-20020a1709078a0500b006ff10603ed1mr11521001ejc.341.1653647632004; 
+ Fri, 27 May 2022 03:33:52 -0700 (PDT)
 Received: from localhost.localdomain (host185251138155.static.fidoka.tech.
  [185.251.138.155]) by smtp.gmail.com with ESMTPSA id
- e8-20020a1709061e8800b006f3ef214e34sm1313306ejj.154.2022.05.27.03.33.52
+ e8-20020a1709061e8800b006f3ef214e34sm1313306ejj.154.2022.05.27.03.33.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 May 2022 03:33:53 -0700 (PDT)
+ Fri, 27 May 2022 03:33:51 -0700 (PDT)
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 May 2022 12:33:35 +0200
-Message-Id: <20220527103335.1968203-5-angelo@amarulasolutions.com>
+Date: Fri, 27 May 2022 12:33:33 +0200
+Message-Id: <20220527103335.1968203-3-angelo@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220527103335.1968203-1-angelo@amarulasolutions.com>
 References: <20220527103335.1968203-1-angelo@amarulasolutions.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 4/4] package/rtl8723ds: new package
+Subject: [Buildroot] [PATCH 2/4] package/wpa_supplicant: adding ifupdown
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,74 +92,133 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This package adds a driver for Realtek RTL8723DS wifi chip.
+Actually, configuring a wifi interface as per "interfaces" man:
+
+auto wlan0
+iface wlan0 inet dhcp
+wpa-conf /etc/wpa_supplicant.conf
+
+doesn't work on buildroot because the line wpa-conf is ignored due to
+the lack of a proper ifupdown script to handle the wpa_supplicant
+initialization.
+
+The provided file is a simplified version based on the one available
+on debian.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/Config.in              |  1 +
- package/rtl8723ds/Config.in    | 10 ++++++++++
- package/rtl8723ds/rtl8723ds.mk | 23 +++++++++++++++++++++++
- 3 files changed, 34 insertions(+)
- create mode 100644 package/rtl8723ds/Config.in
- create mode 100644 package/rtl8723ds/rtl8723ds.mk
+ package/wpa_supplicant/ifupdown.sh       | 71 ++++++++++++++++++++++++
+ package/wpa_supplicant/wpa_supplicant.mk | 10 ++++
+ 2 files changed, 81 insertions(+)
+ create mode 100755 package/wpa_supplicant/ifupdown.sh
 
-diff --git a/package/Config.in b/package/Config.in
-index 8892134133..52671dbf89 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -565,6 +565,7 @@ endmenu
- 	source "package/rtl8189es/Config.in"
- 	source "package/rtl8189fs/Config.in"
- 	source "package/rtl8723bs/Config.in"
-+	source "package/rtl8723ds/Config.in"
- 	source "package/rtl8723bu/Config.in"
- 	source "package/rtl8812au-aircrack-ng/Config.in"
- 	source "package/rtl8821au/Config.in"
-diff --git a/package/rtl8723ds/Config.in b/package/rtl8723ds/Config.in
-new file mode 100644
-index 0000000000..ef7dd39a68
+diff --git a/package/wpa_supplicant/ifupdown.sh b/package/wpa_supplicant/ifupdown.sh
+new file mode 100755
+index 0000000000..8eecf73436
 --- /dev/null
-+++ b/package/rtl8723ds/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_RTL8723DS
-+	bool "rtl8723ds"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  rtl8723bs wifi driver
++++ b/package/wpa_supplicant/ifupdown.sh
+@@ -0,0 +1,71 @@
++#!/bin/sh
 +
-+	  https://github.com/lwfinger/rtl8723ds
++# This file is executed by ifupdown in pre-up, post-up, pre-down and
++# post-down phases of network interface configuration.
 +
-+comment "rtl8723ds needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-diff --git a/package/rtl8723ds/rtl8723ds.mk b/package/rtl8723ds/rtl8723ds.mk
-new file mode 100644
-index 0000000000..dea403c8d6
---- /dev/null
-+++ b/package/rtl8723ds/rtl8723ds.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# rtl8723ds
-+#
-+################################################################################
++WPA_SUP_BIN="/usr/sbin/wpa_supplicant"
 +
-+RTL8723DS_VERSION = 76146e85847beb2427b1d4958fa275822f2b04ab
-+RTL8723DS_SITE = $(call github,lwfinger,rtl8723ds,$(RTL8723DS_VERSION))
-+RTL8723DS_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
++if [ -n "$IF_WPA_MAINT_DEBUG" ]; then
++	set -x
++fi
 +
-+RTL8723DS_MODULE_MAKE_OPTS = \
-+	CONFIG_RTL8723DS=m \
-+	KVER=$(LINUX_VERSION_PROBED) \
-+	KSRC=$(LINUX_DIR)
++# quit if we're called for the loopback
++if [ "$IFACE" = lo ]; then
++	exit 0
++fi
 +
-+define RTL8723DS_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
++# allow wpa_supplicant interface to be specified via wpa-iface
++# useful for starting wpa_supplicant on one interface of a bridge
++if [ -n "$IF_WPA_IFACE" ]; then
++	WPA_IFACE="$IF_WPA_IFACE"
++else
++	WPA_IFACE="$IFACE"
++fi
++
++WPA_SUP_PIDFILE="/run/wpa_supplicant.${WPA_IFACE}.pid"
++
++# quit if executables are not installed
++if [ ! -x "$WPA_SUP_BIN" ]; then
++	exit 0
++fi
++
++do_start () {
++	if [ -n "$IF_WPA_CONF" ] && [ "$IF_WPA_CONF" != "managed" ]; then
++		if [ ! -s "$IF_WPA_CONF" ]; then
++			echo "cannot read contents of $IF_WPA_CONF"
++			exit 1
++		fi
++		WPA_SUP_CONF_CTRL_DIR=$(sed -n -e 's/[[:space:]]*#.*//g' -e 's/[[:space:]]\+.*$//g' \
++			-e 's/^ctrl_interface=\(DIR=\)\?\(.*\)/\2/p' "$IF_WPA_CONF")
++		if [ -n "$WPA_SUP_CONF_CTRL_DIR" ]; then
++			WPA_SUP_CONF="-c $IF_WPA_CONF -C $WPA_SUP_CONF_CTRL_DIR"
++		else
++			WPA_SUP_CONF="-c $IF_WPA_CONF"
++		fi
++	else
++		# specify the default ctrl_interface
++		WPA_SUP_CONF="-C $WPA_CTRL_DIR"
++	fi
++}
++
++case "$MODE" in
++	start)
++		do_start
++		case "$PHASE" in
++			post-up)
++				start-stop-daemon -S -q -x ${WPA_SUP_BIN} \
++				-- -B -i ${WPA_IFACE} ${WPA_SUP_CONF} -P ${WPA_SUP_PIDFILE}
++				;;
++		esac
++		;;
++
++	stop)
++		case "$PHASE" in
++			pre-down)
++				start-stop-daemon -K -p ${WPA_SUP_PIDFILE}
++				;;
++		esac
++		;;
++esac
++
++exit 0
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index c4cfe03371..d38bf572db 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -250,6 +250,14 @@ define WPA_SUPPLICANT_INSTALL_STAGING_CMDS
+ 	$(WPA_SUPPLICANT_INSTALL_STAGING_WPA_CLIENT_SO)
+ endef
+ 
++ifeq ($(BR2_PACKAGE_IFUPDOWN_SCRIPTS),y)
++define WPA_SUPPLICANT_INSTALL_IFUP_SCRIPTS
++	$(INSTALL) -m 0755 -D package/wpa_supplicant/ifupdown.sh \
++		$(TARGET_DIR)/etc/network/if-up.d/wpasupplicant
++	ln -sf ../if-up.d/wpasupplicant $(TARGET_DIR)/etc/network/if-down.d/wpasupplicant
 +endef
++endif
 +
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
+ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/wpa_supplicant \
+ 		$(TARGET_DIR)/usr/sbin/wpa_supplicant
+@@ -259,8 +267,10 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+ 	$(WPA_SUPPLICANT_INSTALL_PASSPHRASE)
+ 	$(WPA_SUPPLICANT_INSTALL_DBUS)
+ 	$(WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO)
++	$(WPA_SUPPLICANT_INSTALL_IFUP_SCRIPTS)
+ endef
+ 
++
+ define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant.service
 -- 
 2.25.1
 
