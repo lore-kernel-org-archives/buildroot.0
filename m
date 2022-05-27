@@ -1,54 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 509FCC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 09:31:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EA29C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 09:33:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFDAA6164D;
-	Fri, 27 May 2022 09:31:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3469B84A1E;
+	Fri, 27 May 2022 09:33:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qa0DxwGm61lO; Fri, 27 May 2022 09:33:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55AF784A18;
+	Fri, 27 May 2022 09:33:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CB2541BF3B0
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:33:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C49B06164D
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:33:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dpUDLP0zmklE; Fri, 27 May 2022 09:31:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 035CC61644;
-	Fri, 27 May 2022 09:31:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 837C21BF3B0
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:31:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71E6A40573
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:31:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VkrR1r1LEFu3 for <buildroot@lists.busybox.net>;
- Fri, 27 May 2022 09:31:10 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oj3R43Yf1rYr for <buildroot@lists.busybox.net>;
+ Fri, 27 May 2022 09:33:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 700454056C
- for <buildroot@buildroot.org>; Fri, 27 May 2022 09:31:10 +0000 (UTC)
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CE3B061644
+ for <buildroot@buildroot.org>; Fri, 27 May 2022 09:33:46 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8E75CC0008;
- Fri, 27 May 2022 09:31:08 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7AC6D24000B;
+ Fri, 27 May 2022 09:33:44 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nuWJG-001laj-6I; Fri, 27 May 2022 11:31:06 +0200
+ id 1nuWLn-001ll5-Jj; Fri, 27 May 2022 11:33:43 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220426203036.2446167-1-fontaine.fabrice@gmail.com>
-Date: Fri, 27 May 2022 11:31:06 +0200
-In-Reply-To: <20220426203036.2446167-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 26 Apr 2022 22:30:36 +0200")
-Message-ID: <878rqnl3tx.fsf@dell.be.48ers.dk>
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20220427035039.1664864-1-james.hilliard1@gmail.com>
+Date: Fri, 27 May 2022 11:33:43 +0200
+In-Reply-To: <20220427035039.1664864-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Tue, 26 Apr 2022 21:50:39 -0600")
+Message-ID: <874k1bl3pk.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/openobex: fix static with
- libusb and libatomic
+Subject: Re: [Buildroot] [PATCH 1/1] package/python3: drop libressl support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,30 +59,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
- > Force LibUSB_VERSION_1.0 to ON to fix the following static build failure
- > with libusb and libatomic:
-
- > -- Looking for libusb_get_device_list in /nvmedata/autobuild/instance-4/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libusb-1.0.a
- > -- Looking for libusb_get_device_list in /nvmedata/autobuild/instance-4/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libusb-1.0.a - not found
-
- > [...]
-
- > /nvmedata/autobuild/instance-4/output-1/build/openobex-1.7.2/lib/transport/usbobex.h:30:10: fatal error: usb.h: No such file or directory
- >    30 | #include <usb.h>
- >       |          ^~~~~~~
+ > Libressl is no longer supported as of python 3.10.
+ > See: https://peps.python.org/pep-0644/#libressl
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/52b0edc4278f65fb4a9671b65c655cc4544a3103
+ >  - http://autobuild.buildroot.net/results/a16/a160cfdc9dfc036c4dc41af1c796f8838d91c573
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
 Committed to 2022.02.x, thanks.
 
