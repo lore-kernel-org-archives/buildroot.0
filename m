@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93A61C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 07:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFFC3C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 07:59:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 51C3E412F3;
-	Fri, 27 May 2022 07:59:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8038360BF3;
+	Fri, 27 May 2022 07:59:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id abANdppNyTG9; Fri, 27 May 2022 07:59:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aV5cnd19CJNi; Fri, 27 May 2022 07:59:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6056D412E6;
-	Fri, 27 May 2022 07:59:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31347614CF;
+	Fri, 27 May 2022 07:59:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 657D01BF9D1
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 07:58:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 766411BF35C
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 07:58:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDE9A412E6
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD77840B2B
  for <buildroot@lists.busybox.net>; Fri, 27 May 2022 07:58:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4RmqEA1Z7VsS for <buildroot@lists.busybox.net>;
+ with ESMTP id Wxkovv2ywiSt for <buildroot@lists.busybox.net>;
  Fri, 27 May 2022 07:58:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E022412EE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D986412F3
  for <buildroot@buildroot.org>; Fri, 27 May 2022 07:58:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4746F865B8; Fri, 27 May 2022 07:46:54 +0000 (UTC)
+ id 533BB865B4; Fri, 27 May 2022 07:46:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 May 2022 23:25:17 +0200
+Date: Fri, 27 May 2022 09:38:48 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 34e5c549347ff81399cb1e00f98aa984e1d9ad1b
-X-Git-Newrev: c31e50ccaaeadad77e8497b5216fae73046d8c1f
+X-Git-Oldrev: c31e50ccaaeadad77e8497b5216fae73046d8c1f
+X-Git-Newrev: bc61e52ae5f8f6983c2033156df8bced12a0284a
 X-Patchwork-Hint: ignore
-Message-Id: <20220527074654.4746F865B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/omniorb: fix
- openssl build
+Message-Id: <20220527074654.533BB865B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/pamtester: fix
+ build without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,48 +59,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c31e50ccaaeadad77e8497b5216fae73046d8c1f
+commit: https://git.buildroot.net/buildroot/commit/?id=bc61e52ae5f8f6983c2033156df8bced12a0284a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Add host-pkgconf dependency to fix the following build failure with
-openssl raised since commit 9d519412d65e13e4a7ffbb83edd8d1e4b2dfe4b7:
+pamtester uses an archaic configure.in with archaic constructs. This
+had generated a configure script that incorrectly tries to look for and
+validate a C++ compiler:
 
-/nvmedata/autobuild/instance-25/output-1/per-package/omniorb/host/bin/m68k-buildroot-linux-uclibc-g++ -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -Wall -Wno-unused -fexceptions  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I.. -I./.. -I../../../../../include/omniORB4/internal -I../../../../../include/omniORB4/internal -D_OMNIORB_SSL_LIBRARY -D__OMNIORB4__ -I../../../../../stub -D_REENTRANT -I/usr/include -I. -I. -I../../../../../include -I../../../../../include -D__OSVERSION__=2 -D__linux__ -D__m68k__ -o static/sslActive.o sslActive.cc
-m68k-buildroot-linux-uclibc-g++: WARNING: unsafe header/library path used in cross-compilation: '-I/usr/include'
-In file included from /usr/include/stdlib.h:55,
-                 from /usr/include/openssl/crypto.h:14,
-                 from /usr/include/openssl/bio.h:20,
-                 from /usr/include/openssl/ssl.h:18,
-                 from ../../../../../include/omniORB4/sslContext.h:48,
-                 from sslActive.cc:32:
-/usr/include/bits/floatn.h:75:70: error: unknown machine mode '__TC__'
-   75 | typedef _Complex float __cfloat128 __attribute__ ((__mode__ (__TC__)));
-      |
+    checking for powerpc64le-buildroot-linux-gnu-g++... no
+    checking whether we are using the GNU C++ compiler... no
+    checking whether no accepts -g... no
+    checking how to run the C++ preprocessor... /lib/cpp
+    configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+
+Calling autoreconf fixes the issue, as the generated configure no longer
+tries to look for a C++ compiler at all anymore.
 
 Fixes:
- - http://autobuild.buildroot.org/results/47b1906eb7dd122a81191d14ad663c5931cbfade
+ - http://autobuild.buildroot.org/results/c000aff659da024b6eef42bca824bdea7b5541c2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: expand commit log; add big-fat comment]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit aa0aeb4bfa2de530cf108dc3043766896c09d3e1)
+(cherry picked from commit 9993a36f5e1296e86f00376f795de485386bd913)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/omniorb/omniorb.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pamtester/pamtester.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
-index b44ec53fd5..d6434735cf 100644
---- a/package/omniorb/omniorb.mk
-+++ b/package/omniorb/omniorb.mk
-@@ -25,7 +25,7 @@ HOST_OMNIORB_CONF_OPTS += --disable-longdouble
+diff --git a/package/pamtester/pamtester.mk b/package/pamtester/pamtester.mk
+index b09e4d1cc0..77867403c3 100644
+--- a/package/pamtester/pamtester.mk
++++ b/package/pamtester/pamtester.mk
+@@ -10,4 +10,9 @@ PAMTESTER_DEPENDENCIES = linux-pam
+ PAMTESTER_LICENSE = BSD-3-Clause
+ PAMTESTER_LICENSE_FILES = LICENSE
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OMNIORB_CONF_OPTS += --with-openssl
--OMNIORB_DEPENDENCIES += openssl
-+OMNIORB_DEPENDENCIES += host-pkgconf openssl
- else
- OMNIORB_CONF_OPTS += --without-openssl
- endif
++# Obsolete constructs in the archaic configure.in generated an outworn
++# configure script that incorrectly searches a C++ compiler. Regenerate
++# the autoconf machinery to avoid failures without a C++ compiler.
++PAMTESTER_AUTORECONF = YES
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
