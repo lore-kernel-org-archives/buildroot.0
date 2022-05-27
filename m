@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC5AAC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 09:40:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5435C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 09:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AE636165D;
-	Fri, 27 May 2022 09:40:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78D0E428B7;
+	Fri, 27 May 2022 09:40:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RPCxMnBZOpXi; Fri, 27 May 2022 09:39:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JJkgR7zUL0bT; Fri, 27 May 2022 09:40:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7896161652;
-	Fri, 27 May 2022 09:39:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 91C661BF3B0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C6E2428B1;
+	Fri, 27 May 2022 09:40:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 987B31BF9D1
  for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:38:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6BDBC61652
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6CF4384A90
  for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:38:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 92pdTnsOPNSU for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YWLpg30hQolQ for <buildroot@lists.busybox.net>;
  Fri, 27 May 2022 09:38:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE94B61643
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE2898498A
  for <buildroot@buildroot.org>; Fri, 27 May 2022 09:38:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CF40B8662D; Fri, 27 May 2022 09:27:24 +0000 (UTC)
+ id BD0B48662F; Fri, 27 May 2022 09:27:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 May 2022 11:29:13 +0200
+Date: Fri, 27 May 2022 11:21:05 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: ae4774654e46a81b6699d2e3e5130e667549978a
-X-Git-Newrev: 3ef9c6ee6fe9afd4802192e84e4b1ae54272221b
+X-Git-Oldrev: 7547d4c317ee58ac48f2b785e66db93147df4fa4
+X-Git-Newrev: ede7d0a00070e2b0231084fc498ff49ffadc9c10
 X-Patchwork-Hint: ignore
-Message-Id: <20220527092724.CF40B8662D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/ltp-testsuite:
- fix static build
+Message-Id: <20220527092724.BD0B48662F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libmdbx: bump
+ version to 0.11.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,115 +54,90 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3961071701402160989=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ef9c6ee6fe9afd4802192e84e4b1ae54272221b
+--===============3961071701402160989==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=ede7d0a00070e2b0231084fc498ff49ffadc9c10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following static build failure:
+This is stable bugfix release of libmdbx. So it is reasonable to backport
+this patch to all applicable releases/branches of buildroot.
 
-/nvmedata/autobuild/instance-15/output-1/per-package/ltp-testsuite/host/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/10.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-15/output-1/per-package/ltp-testsuite/host/bin/../mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(syslog.os): in function `openlog':
-syslog.c:(.text+0x6b8): multiple definition of `openlog'; /tmp/ccvRnqfT.o:/nvmedata/autobuild/instance-15/output-1/build/ltp-testsuite-20220121/testcases/kernel/fs/fs-bench/random-access.c:14: first defined here
+The project as well as all its forks were removed from Github (see e.g.
+https://blog.desdelinux.net/en/libmdbx-0-11-7-arrives-with-project-migration-to-gitflic-bug-fixes-and-more/),
+therefore it moved to gitflic.ru. There is also a website with the
+documentation and the downloads.
 
-Fixes:
- - http://autobuild.buildroot.org/results/bfd0d906a05564a4f323db604f3b908abf552b20
+Release notes for v0.11.7 https://gitflic.ru/project/erthink/libmdbx/release/90ec9985-cd60-4d9a-8c98-8417506fd26d
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
+
+Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit e47efc9b90e8ecfe5b0b21f967001748fc111fbc)
+(cherry picked from commit 608d754cebb126745153c0a3d836355e43dc1c54)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...s-kernel-fs-declare-int-openlog-as-static.patch | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ package/libmdbx/Config.in    | 2 +-
+ package/libmdbx/libmdbx.hash | 4 ++--
+ package/libmdbx/libmdbx.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/ltp-testsuite/0002-testcases-kernel-fs-declare-int-openlog-as-static.patch b/package/ltp-testsuite/0002-testcases-kernel-fs-declare-int-openlog-as-static.patch
-new file mode 100644
-index 0000000000..ae10bfcfdd
---- /dev/null
-+++ b/package/ltp-testsuite/0002-testcases-kernel-fs-declare-int-openlog-as-static.patch
-@@ -0,0 +1,77 @@
-+From 002ca0320cd2c5e1515bf202f470d4becdf01532 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 24 Apr 2022 21:56:36 +0200
-+Subject: [PATCH] testcases/kernel/fs: declare int openlog as static
-+
-+Declare int openlog as static to avoid the following build failure when
-+building statically (e.g. on buildroot):
-+
-+/nvmedata/autobuild/instance-15/output-1/per-package/ltp-testsuite/host/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/10.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-15/output-1/per-package/ltp-testsuite/host/bin/../mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(syslog.os): in function `openlog':
-+syslog.c:(.text+0x6b8): multiple definition of `openlog'; /tmp/ccvRnqfT.o:/nvmedata/autobuild/instance-15/output-1/build/ltp-testsuite-20220121/testcases/kernel/fs/fs-bench/random-access.c:14: first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/bfd0d906a05564a4f323db604f3b908abf552b20
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
-+[Retrieved from:
-+https://github.com/linux-test-project/ltp/commit/002ca0320cd2c5e1515bf202f470d4becdf01532]
-+---
-+ testcases/kernel/fs/fs-bench/random-access-del-create.c | 2 --
-+ testcases/kernel/fs/fs-bench/random-access.c            | 2 +-
-+ testcases/kernel/fs/fs-bench/random-del-create.c        | 2 +-
-+ testcases/kernel/fs/scsi/ltpfs/main.c                   | 2 +-
-+ 4 files changed, 3 insertions(+), 5 deletions(-)
-+
-+diff --git a/testcases/kernel/fs/fs-bench/random-access-del-create.c b/testcases/kernel/fs/fs-bench/random-access-del-create.c
-+index 1f62a76b5e..1878fd78b5 100644
-+--- a/testcases/kernel/fs/fs-bench/random-access-del-create.c
-++++ b/testcases/kernel/fs/fs-bench/random-access-del-create.c
-+@@ -11,8 +11,6 @@
-+ #define FAIL 0
-+ #define SUCCESS 1
-+ 
-+-int openlog[2] = { 0, 0 };
-+-
-+ #define MAXNUM 0x100000
-+ 
-+ #define  MAXERROR 1024
-+diff --git a/testcases/kernel/fs/fs-bench/random-access.c b/testcases/kernel/fs/fs-bench/random-access.c
-+index cf41d6e81c..c2f32b86e7 100644
-+--- a/testcases/kernel/fs/fs-bench/random-access.c
-++++ b/testcases/kernel/fs/fs-bench/random-access.c
-+@@ -11,7 +11,7 @@
-+ #define FAIL 0
-+ #define SUCCESS 1
-+ 
-+-int openlog[2] = { 0, 0 };
-++static int openlog[2] = { 0, 0 };
-+ 
-+ #define MAXNUM 0x100000
-+ 
-+diff --git a/testcases/kernel/fs/fs-bench/random-del-create.c b/testcases/kernel/fs/fs-bench/random-del-create.c
-+index 0a86f976f3..345031f283 100644
-+--- a/testcases/kernel/fs/fs-bench/random-del-create.c
-++++ b/testcases/kernel/fs/fs-bench/random-del-create.c
-+@@ -11,7 +11,7 @@
-+ #define FAIL 0
-+ #define SUCCESS 1
-+ 
-+-int openlog[2] = { 0, 0 };
-++static int openlog[2] = { 0, 0 };
-+ 
-+ #define MAXNUM 0x100000
-+ 
-+diff --git a/testcases/kernel/fs/scsi/ltpfs/main.c b/testcases/kernel/fs/scsi/ltpfs/main.c
-+index 2c67c7a478..90a5531ac3 100644
-+--- a/testcases/kernel/fs/scsi/ltpfs/main.c
-++++ b/testcases/kernel/fs/scsi/ltpfs/main.c
-+@@ -38,7 +38,7 @@ int startc = 0;
-+ int showchar[] = { 124, 47, 45, 92, 124, 47, 45, 92 };
-+ 
-+ int nullFileHandle;
-+-int openlog[2] = { 0, 0 };
-++static int openlog[2] = { 0, 0 };
-+ 
-+ int cFileCount, dFileCount, errorCount;
-+ static int disk_space_pool = 0;
+diff --git a/package/libmdbx/Config.in b/package/libmdbx/Config.in
+index d13f73938f..4849d60b92 100644
+--- a/package/libmdbx/Config.in
++++ b/package/libmdbx/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_LIBMDBX
+ 	  libmdbx surpasses the legendary LMDB in terms of
+ 	  reliability, features and performance.
+ 
+-	  https://github.com/erthink/libmdbx
++	  https://libmdbx.website.yandexcloud.net/
+ 
+ if BR2_PACKAGE_LIBMDBX
+ 
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+index 2483d14dd1..7d663b3da0 100644
+--- a/package/libmdbx/libmdbx.hash
++++ b/package/libmdbx/libmdbx.hash
+@@ -1,5 +1,5 @@
+-# Hashes from: https://github.com/erthink/libmdbx/releases/
+-sha256  884de528f5c2abab2187b7c4c84b769d2551e1a748cbfdf0ae4c0f5c9f8dbd27  libmdbx-amalgamated-0.11.4.tar.gz
++# Hashes from: https://libmdbx.website.yandexcloud.net/release/SHA256SUMS
++sha256  3a9fb6a4cd941e646597235518714373fda1ca6d4c5e23669afe70ea87c20940  libmdbx-amalgamated-0.11.7.tar.xz
+ 
+ # Locally calculated
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index 1aff8fbb4d..a7056b2850 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBMDBX_VERSION = 0.11.4
+-LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
+-LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
++LIBMDBX_VERSION = 0.11.7
++LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
++LIBMDBX_SITE = https://libmdbx.website.yandexcloud.net/release
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
+ LIBMDBX_LICENSE = OLDAP-2.8
+ LIBMDBX_LICENSE_FILES = LICENSE
+
+--===============3961071701402160989==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3961071701402160989==--
