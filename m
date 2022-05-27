@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0516C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 08:12:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64D8CC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 08:12:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E81A412F0;
-	Fri, 27 May 2022 08:12:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 125B741304;
+	Fri, 27 May 2022 08:12:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WwY7YZUzXnGY; Fri, 27 May 2022 08:12:23 +0000 (UTC)
+	with ESMTP id n-bMPbO-3LEa; Fri, 27 May 2022 08:12:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C7FE412EE;
-	Fri, 27 May 2022 08:12:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 059561BF302
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC258412EE;
+	Fri, 27 May 2022 08:12:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 55BC41BF302
  for <buildroot@lists.busybox.net>; Fri, 27 May 2022 08:11:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4416883118
+ by smtp3.osuosl.org (Postfix) with ESMTP id 424EB615F8
  for <buildroot@lists.busybox.net>; Fri, 27 May 2022 08:11:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NSuvrTrSAh1s for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gtXX2xmP6Dt1 for <buildroot@lists.busybox.net>;
  Fri, 27 May 2022 08:11:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 915CF81442
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C02B61608
  for <buildroot@buildroot.org>; Fri, 27 May 2022 08:11:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B3E0C865C3; Fri, 27 May 2022 08:00:01 +0000 (UTC)
+ id 9DAA6865C3; Fri, 27 May 2022 08:00:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 May 2022 10:10:59 +0200
+Date: Fri, 27 May 2022 10:07:53 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: af5875c6aa73bbe7fd9b3d7a22da23462ea2cf3f
-X-Git-Newrev: 38aa6f09d99c501625c9ed79e4c14b05ac8f0461
+X-Git-Oldrev: b4eef07babf7668d344bb185a662474cdefa97fb
+X-Git-Newrev: d9ccb9a1d1d41eff92050ffa31d54b97e3892bd9
 X-Patchwork-Hint: ignore
-Message-Id: <20220527080001.B3E0C865C3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libinput: bump
- version to 1.20.0
+Message-Id: <20220527080001.9DAA6865C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/netatalk: fix
+ build with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,56 +59,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38aa6f09d99c501625c9ed79e4c14b05ac8f0461
+commit: https://git.buildroot.net/buildroot/commit/?id=d9ccb9a1d1d41eff92050ffa31d54b97e3892bd9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-- change site URL to new gitlab.freedesktop.org location
-- change hash from upstream provided to locally computed (and drop sha512)
+Fix the following build failure with libressl >= 2.7.0:
 
-For details see [1] and [2].
+In file included from uams_dhx_passwd.c:35:
+openssl_compat.h:15:19: error: static declaration of 'DH_set0_pqg' follows non-static declaration
+   15 | inline static int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g)
+      |                   ^~~~~~~~~~~
+In file included from uams_dhx_passwd.c:33:
+/home/autobuild/autobuild/instance-2/output-1/host/mips64-buildroot-linux-uclibc/sysroot/usr/include/openssl/dh.h:195:5: note: previous declaration of 'DH_set0_pqg' was here
+  195 | int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g);
+      |     ^~~~~~~~~~~
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2022-February/042111.html
-[2] https://gitlab.freedesktop.org/libinput/libinput/-/releases/1.20.0
+Fixes:
+ - http://autobuild.buildroot.org/results/fc6e308f346570f8198542602bc8c1bdd0a4869e
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 9cddb7bd56b8e430f6b798426b5c111c7b7d8fdd)
+(cherry picked from commit 2e8218f6aa20cb7521c29849f58b43d535989bf1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libinput/libinput.hash | 5 ++---
- package/libinput/libinput.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ ...enssl_compat.h-fix-build-with-libressl-2..patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index f18a727810..d1c7cfb104 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,6 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2021-December/042068.html
--sha256  3cae78ccde19d7d0f387e58bc734d4d17ab5f6426f54a9e8b728c90b17baa068  libinput-1.19.3.tar.xz
--sha512  f4b776d0da78c687ba21b430a04941ac6b43f68970c82ec9f7360358fdea5ed6a873948ce66a25bcdd64d4b95fa4bf705cc24dbc25c7c0f5fd2d0efbd763f298  libinput-1.19.3.tar.xz
-+# Locally computed
-+sha256  6c1f97892a7d599f97349e5e7c1239901fe00edcd4f6289f410034d5dc06cc85  libinput-1.20.0.tar.bz2
- 
- # License files
- sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 2f9c639c22..b814e3416d 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.19.3
--LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
--LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
-+LIBINPUT_VERSION = 1.20.0
-+LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
-+LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
- LIBINPUT_INSTALL_STAGING = YES
- LIBINPUT_LICENSE = MIT
+diff --git a/package/netatalk/0002-etc-uams-openssl_compat.h-fix-build-with-libressl-2..patch b/package/netatalk/0002-etc-uams-openssl_compat.h-fix-build-with-libressl-2..patch
+new file mode 100644
+index 0000000000..05913862f6
+--- /dev/null
++++ b/package/netatalk/0002-etc-uams-openssl_compat.h-fix-build-with-libressl-2..patch
+@@ -0,0 +1,43 @@
++From 58ddc137021a938f37c3794305a839f8df449d3f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 5 Apr 2022 23:59:15 +0200
++Subject: [PATCH] etc/uams/openssl_compat.h: fix build with libressl >= 2.7.0
++
++Fix the following build failure with libressl >= 2.7.0 which added
++DH_set0_pqg with
++https://github.com/libressl-portable/openbsd/commit/848e2a019c796b685fc8c5848283b86e48fbe0bf:
++
++In file included from uams_dhx_passwd.c:35:
++openssl_compat.h:15:19: error: static declaration of 'DH_set0_pqg' follows non-static declaration
++   15 | inline static int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g)
++      |                   ^~~~~~~~~~~
++In file included from uams_dhx_passwd.c:33:
++/home/autobuild/autobuild/instance-2/output-1/host/mips64-buildroot-linux-uclibc/sysroot/usr/include/openssl/dh.h:195:5: note: previous declaration of 'DH_set0_pqg' was here
++  195 | int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g);
++      |     ^~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fc6e308f346570f8198542602bc8c1bdd0a4869e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet]
++---
++ etc/uams/openssl_compat.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/etc/uams/openssl_compat.h b/etc/uams/openssl_compat.h
++index ded377bc..5cc8de34 100644
++--- a/etc/uams/openssl_compat.h
+++++ b/etc/uams/openssl_compat.h
++@@ -11,7 +11,7 @@ http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
++ #ifndef OPENSSL_COMPAT_H
++ #define OPENSSL_COMPAT_H
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000L)
++ inline static int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g)
++ {
++    /* If the fields p and g in d are NULL, the corresponding input
++-- 
++2.35.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
