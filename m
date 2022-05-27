@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49D39C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 09:55:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93D49C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 09:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 131E541336;
-	Fri, 27 May 2022 09:55:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A37241333;
+	Fri, 27 May 2022 09:55:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kFTtTAONcDaW; Fri, 27 May 2022 09:55:13 +0000 (UTC)
+	with ESMTP id Oon2cm5SngrH; Fri, 27 May 2022 09:55:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C73C41223;
-	Fri, 27 May 2022 09:55:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C6D8E1BF3B0
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:53:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F63D4133C;
+	Fri, 27 May 2022 09:55:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 041A71BF9D1
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:53:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7142E83E6D
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:53:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61C2E41343
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:53:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GMwLCa_b-JID for <buildroot@lists.busybox.net>;
- Fri, 27 May 2022 09:53:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mh7FGJPSFF3I for <buildroot@lists.busybox.net>;
+ Fri, 27 May 2022 09:53:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B2680846D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id C90894133C
  for <buildroot@buildroot.org>; Fri, 27 May 2022 09:53:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AD23A8665F; Fri, 27 May 2022 09:42:00 +0000 (UTC)
+ id B919386667; Fri, 27 May 2022 09:42:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 May 2022 11:52:55 +0200
+Date: Fri, 27 May 2022 11:53:00 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: dc4ac3f4e35a340dc6baa52a4d3eac96823e0f10
-X-Git-Newrev: f9c26b2bffb7a6a51728c18920b537211784368f
+X-Git-Oldrev: f9c26b2bffb7a6a51728c18920b537211784368f
+X-Git-Newrev: 15e59056c47f0f587a5368541b4f2ceb9cc1cd02
 X-Patchwork-Hint: ignore
-Message-Id: <20220527094200.AD23A8665F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/samba4: bump
- version to 4.15.7
+Message-Id: <20220527094200.B919386667@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/vim: security
+ bump to version 8.2.4843
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +59,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9c26b2bffb7a6a51728c18920b537211784368f
+commit: https://git.buildroot.net/buildroot/commit/?id=15e59056c47f0f587a5368541b4f2ceb9cc1cd02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Release notes: https://www.samba.org/samba/history/samba-4.15.7.html
+Fix CVE-2022-1381: global heap buffer overflow in skip_range in GitHub
+repository vim/vim prior to 8.2.4763. This vulnerability is capable of
+crashing software, Bypass Protection Mechanism, Modify Memory, and
+possible remote execution
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e57a4e0c75e6127addf62652ba57e52b2df2a83e)
+(cherry picked from commit 8c76fc9d1ccf623a8dad4d845a371bb5936e38d4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 20e5f00b21..ac28c35614 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index d55b1ea355..1cd0de9991 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
 @@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.15.6.tar.asc
--sha256  0575b999a9048445820428dc540ba8a9527ce596fa66af02ea2ba1ea9578bcb4  samba-4.15.6.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.15.7.tar.asc
-+sha256  76d0096c16ed0265b337d5731f3c0b32eed3adab6fa8b7585c055b287cd05d6b  samba-4.15.7.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 688aaac3eb..df3a7e58c8 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+ # Locally computed
+-sha256  ccd57b074326b2faa15591eba3c86dcc07e53781079c44a0354436b8c4fe9b70  vim-8.2.4732.tar.gz
++sha256  f2755fca3b2f47052166dd601a38411b9adbeca0d43885194db8ada4d1a171a3  vim-8.2.4843.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 4eb659fd6e..be96a08d09 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.15.6
-+SAMBA4_VERSION = 4.15.7
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-VIM_VERSION = 8.2.4732
++VIM_VERSION = 8.2.4843
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
