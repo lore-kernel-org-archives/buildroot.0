@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79001C433FE
-	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 09:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7971EC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 09:18:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24C1F41311;
-	Fri, 27 May 2022 09:17:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 12D4D41315;
+	Fri, 27 May 2022 09:18:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7UHK7NW6HyoY; Fri, 27 May 2022 09:17:37 +0000 (UTC)
+	with ESMTP id cCLCEEnlkkBl; Fri, 27 May 2022 09:18:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5DE054130A;
-	Fri, 27 May 2022 09:17:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 940BE1BF3B0
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:17:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24E6C4130A;
+	Fri, 27 May 2022 09:18:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F007F1BF3B0
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:18:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 827554130A
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:17:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED245848D8
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 09:18:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EI18IRihDvFy for <buildroot@lists.busybox.net>;
- Fri, 27 May 2022 09:17:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9-JmSy8h25eU for <buildroot@lists.busybox.net>;
+ Fri, 27 May 2022 09:18:25 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ABE8440573
- for <buildroot@buildroot.org>; Fri, 27 May 2022 09:17:33 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D3492848D7
+ for <buildroot@buildroot.org>; Fri, 27 May 2022 09:18:24 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6B630C0002;
- Fri, 27 May 2022 09:17:30 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id A82F6E000A;
+ Fri, 27 May 2022 09:18:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nuW65-001kfQ-Ix; Fri, 27 May 2022 11:17:29 +0200
+ id 1nuW6v-001kkF-QY; Fri, 27 May 2022 11:18:21 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20220424200620.1413743-1-james.hilliard1@gmail.com>
-Date: Fri, 27 May 2022 11:17:29 +0200
-In-Reply-To: <20220424200620.1413743-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Sun, 24 Apr 2022 14:06:20 -0600")
-Message-ID: <87tu9bl4gm.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220424204656.3352319-1-fontaine.fabrice@gmail.com>
+Date: Fri, 27 May 2022 11:18:21 +0200
+In-Reply-To: <20220424204656.3352319-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 24 Apr 2022 22:46:56 +0200")
+Message-ID: <87pmjzl4f6.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: bump to version 3.10.4
+Subject: Re: [Buildroot] [PATCH 1/1] package/cairo: fix build with
+ libexecinfo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,17 +60,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Drop override system locale patch which is now upstream.
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > Fix the following build failure raised on uclibc and musl since the
+ > addition of libexecinfo package in commit
+ > eea8ba446c10701a273432552108d80fb2224ef4:
+
+ > /home/giuliobenetti/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+ > /home/giuliobenetti/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libvcos.so:
+ > undefined reference to `backtrace_symbols'
+ > /home/giuliobenetti/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+ > /home/giuliobenetti/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libvcos.so:
+ > undefined reference to `backtrace'
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/836348270d564a46cc9ee840cf87b2494cc82cec
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2022.02.x, thanks.
 
