@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C24C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 19:02:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7343C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 19:04:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1FEA42971;
-	Fri, 27 May 2022 19:02:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B18D409B5;
+	Fri, 27 May 2022 19:04:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id clQrxHrMndeV; Fri, 27 May 2022 19:02:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v5hOkqZFvH_r; Fri, 27 May 2022 19:04:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA85A4281F;
-	Fri, 27 May 2022 19:02:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D16D1BF255
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 19:02:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7AF6B40992;
+	Fri, 27 May 2022 19:04:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B11C31BF296
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 19:04:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7C9BE844D8
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 19:02:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F25B40992
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 19:04:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MCueJgytCZSi for <buildroot@lists.busybox.net>;
- Fri, 27 May 2022 19:02:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4hgUnu0G0GLq for <buildroot@lists.busybox.net>;
+ Fri, 27 May 2022 19:04:43 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8B8FD844D4
- for <buildroot@buildroot.org>; Fri, 27 May 2022 19:02:30 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 61D2140179
+ for <buildroot@buildroot.org>; Fri, 27 May 2022 19:04:43 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D7A4CE0009;
- Fri, 27 May 2022 19:02:28 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id BF48EC0003;
+ Fri, 27 May 2022 19:04:40 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nufEC-002FzB-1O; Fri, 27 May 2022 21:02:28 +0200
+ id 1nufGJ-002GCf-Os; Fri, 27 May 2022 21:04:39 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Yann E. MORIN <yann.morin.1998@free.fr>
-References: <20220428215252.3084384736@busybox.osuosl.org>
-Date: Fri, 27 May 2022 21:02:28 +0200
-In-Reply-To: <20220428215252.3084384736@busybox.osuosl.org> (Yann E. MORIN's
- message of "Fri, 29 Apr 2022 00:03:01 +0200")
-Message-ID: <8735guiyt7.fsf@dell.be.48ers.dk>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20220429051206.38141-1-bernd.kuhls@t-online.de>
+Date: Fri, 27 May 2022 21:04:39 +0200
+In-Reply-To: <20220429051206.38141-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 29 Apr 2022 07:12:06 +0200")
+Message-ID: <87y1ymhk54.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] Revert "toolchain/toolchain-external:
- error if BR2_TOOLCHAIN_EXTERNAL_PATH is not set"
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: security bump version
+ to 7.83.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,40 +60,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=77fc4580254997c1f9f83efabd061e81de0b022e
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Changelog: https://curl.se/changes.html#7_83_0
+ > Release notes: https://curl.se/news.html
 
- > This reverts commit 8e91385a2cb81c5f8114354f4494230e2aebb93a.
+ > Fixes the following CVEs:
+ > CVE-2022-22576: OAUTH2 bearer bypass in connection re-use
+ > CVE-2022-27774: Credential leak on redirect
+ > CVE-2022-27775: Bad local IPv6 connection reuse
+ > CVE-2022-27776: Auth/cookie leak on redirect
 
- > This commit is incorrect, as it is perfectly valid for
- > BR2_TOOLCHAIN_EXTERNAL_PATH to be empty. The help text of
- > BR2_TOOLCHAIN_EXTERNAL_PATH even documents it as a supported case:
-
- >           If empty, the compiler will be searched in $PATH.
-
- > Commit 392b0a26f5fd8d3aedce7e0c15f9762a79312f01 ("toolchain-external:
- > default BR2_TOOLCHAIN_EXTERNAL_PATH to empty") even made that the
- > default saying "In addition, it in fact works correctly when it is
- > empty. In that case, the toolchain will be searched in PATH."
-
- > A user has reported that commit
- > 8945ba49480a7885d104445ca855ef7681a374ff (the backport of 8e91385a2c to
- > the 2022.02.x LTS branch) breaks his use-case:
-
- >   https://lore.kernel.org/buildroot/CADBnMvhgaozAgZgy3njckjL1i0U6bZ0fLrq-kdFF-qpGhFWgmw@mail.gmail.com/
-
- > Reported-by: Kristof Havasi <havasiefr@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > [yann.morin.1998@free.fr: reference 8e91385a2c on master]
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2022.02.x, thanks.
 
