@@ -1,47 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25E3BC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 08:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC63C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 08:16:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D849B61614;
-	Fri, 27 May 2022 08:13:16 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2n-4NM2nj0cD; Fri, 27 May 2022 08:13:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DEB3261610;
-	Fri, 27 May 2022 08:13:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 66F511BF9D1
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 08:11:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27B86412F0
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 08:11:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD901412FD;
+	Fri, 27 May 2022 08:16:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BS2IX-pBId31 for <buildroot@lists.busybox.net>;
- Fri, 27 May 2022 08:11:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 74F7E412F3
- for <buildroot@buildroot.org>; Fri, 27 May 2022 08:11:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A78C3865C5; Fri, 27 May 2022 08:00:01 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B25SXaQINcAN; Fri, 27 May 2022 08:16:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB0F6412F3;
+	Fri, 27 May 2022 08:16:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F21A91BF302
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 08:16:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D98604283A
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 08:16:45 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aibPVPP5C4fr for <buildroot@lists.busybox.net>;
+ Fri, 27 May 2022 08:16:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B324342839
+ for <buildroot@buildroot.org>; Fri, 27 May 2022 08:16:44 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 888F320005;
+ Fri, 27 May 2022 08:16:42 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nuV9F-001DiP-Mk; Fri, 27 May 2022 10:16:41 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 27 May 2022 10:09:33 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d9ccb9a1d1d41eff92050ffa31d54b97e3892bd9
-X-Git-Newrev: af5875c6aa73bbe7fd9b3d7a22da23462ea2cf3f
-X-Patchwork-Hint: ignore
-Message-Id: <20220527080001.A78C3865C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/python-zopfli:
- needs C++
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220423174858.2445604-1-fontaine.fabrice@gmail.com>
+Date: Fri, 27 May 2022 10:16:41 +0200
+In-Reply-To: <20220423174858.2445604-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 23 Apr 2022 19:48:58 +0200")
+Message-ID: <87o7zjmlue.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/clamav: fix libxml2 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,59 +59,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af5875c6aa73bbe7fd9b3d7a22da23462ea2cf3f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-python-zopfli needs C++ since its addition in commit
-53972c82964dd1337dff4ccbcdd484d243aef0ba:
+ > Pass ac_cv_path_xmlconfig to fix the following build failure with
+ > libxml2 raised since bump to version 0.102.0 in commit
+ > 007f49962a961f96ff87795217758ec3786d03ac and
+ > https://github.com/Cisco-Talos/clamav/commit/083ca38727b0ebd3979cf1ebc7b31148f6d5e7f7:
 
-nios2-buildroot-linux-gnu-gcc.br_real: error: zopfli/src/zopflipng/lodepng/lodepng.cpp: C++ compiler not installed on this system
+ > aarch64-none-linux-gnu-gcc: WARNING: unsafe header/library path used in cross-compilation: '-I/usr/include/libxml2'
+ > In file included from /usr/include/libxml2/libxml/parser.h:810,
+ >                  from others.c:62:
+ > /usr/include/libxml2/libxml/encoding.h:31:10: fatal error: unicode/ucnv.h: No such file or directory
+ >    31 | #include <unicode/ucnv.h>
+ >       |          ^~~~~~~~~~~~~~~~
 
-Fixes:
- - http://autobuild.buildroot.org/results/442ae4a02e691b4039d1694620f6284906cdc97f
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/5bb3bea6d13ac8d497f6862374d65a59bea7ed09
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit b8152158f8381a7d59c6d33851df9997a3cc0101)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-weasyprint/Config.in | 2 +-
- package/python-zopfli/Config.in     | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/python-weasyprint/Config.in b/package/python-weasyprint/Config.in
-index 7fe99c3951..18d72d742e 100644
---- a/package/python-weasyprint/Config.in
-+++ b/package/python-weasyprint/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_WEASYPRINT
- 	bool "python-weasyprint"
--	depends on BR2_INSTALL_LIBSTDCPP # python-brotli
-+	depends on BR2_INSTALL_LIBSTDCPP # python-brotli, python-zopfli
- 	select BR2_PACKAGE_PYTHON_BROTLI # runtime
- 	select BR2_PACKAGE_PYTHON_CFFI # runtime
- 	select BR2_PACKAGE_PYTHON_CSSSELECT2 # runtime
-diff --git a/package/python-zopfli/Config.in b/package/python-zopfli/Config.in
-index 0b1ebca85c..dc68a2fef0 100644
---- a/package/python-zopfli/Config.in
-+++ b/package/python-zopfli/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_PYTHON_ZOPFLI
- 	bool "python-zopfli"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Zopfli module for python.
- 
- 	  https://github.com/fonttools/py-zopfli
-+
-+comment "python-zopfli needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+Committed to 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
