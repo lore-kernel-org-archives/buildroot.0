@@ -1,55 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A455C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 08:17:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5F72C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 27 May 2022 08:18:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C33256161A;
-	Fri, 27 May 2022 08:17:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8615B412FC;
+	Fri, 27 May 2022 08:18:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PBixRh4H2hkw; Fri, 27 May 2022 08:17:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2tHymB11fkk4; Fri, 27 May 2022 08:18:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0030061567;
-	Fri, 27 May 2022 08:17:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 770191BF302
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 08:17:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7E765412F7;
+	Fri, 27 May 2022 08:18:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E4E731BF302
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 08:17:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73C6A61567
- for <buildroot@lists.busybox.net>; Fri, 27 May 2022 08:17:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E26428490B
+ for <buildroot@lists.busybox.net>; Fri, 27 May 2022 08:17:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 75_lRgAfS7vG for <buildroot@lists.busybox.net>;
- Fri, 27 May 2022 08:17:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6EB8160E90
- for <buildroot@buildroot.org>; Fri, 27 May 2022 08:17:43 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6362EE0009;
- Fri, 27 May 2022 08:17:41 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nuVAC-001Dpo-IA; Fri, 27 May 2022 10:17:40 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LTPQCOaQjH1P for <buildroot@lists.busybox.net>;
+ Fri, 27 May 2022 08:17:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4009884732
+ for <buildroot@buildroot.org>; Fri, 27 May 2022 08:17:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 59759865DE; Fri, 27 May 2022 08:06:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220423202458.299067-1-fontaine.fabrice@gmail.com>
- <20220423202458.299067-2-fontaine.fabrice@gmail.com>
-Date: Fri, 27 May 2022 10:17:40 +0200
-In-Reply-To: <20220423202458.299067-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 23 Apr 2022 22:24:58 +0200")
-Message-ID: <87fskvmlsr.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/suricata: security bump to
- version 6.0.5
+To: buildroot@buildroot.org
+Date: Fri, 27 May 2022 10:15:46 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: cbf8ef2fc8652a27d0db00f24e1c1106fefa58c0
+X-Git-Newrev: bd043900b21f651c6a47db8ffce7a8c10c09ab61
+X-Patchwork-Hint: ignore
+Message-Id: <20220527080631.59759865DE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/clamav: fix
+ libxml2 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,25 +53,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bd043900b21f651c6a47db8ffce7a8c10c09ab61
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Various security, performance, accuracy and stability issues have been
- > fixed.
+Pass ac_cv_path_xmlconfig to fix the following build failure with
+libxml2 raised since bump to version 0.102.0 in commit
+007f49962a961f96ff87795217758ec3786d03ac and
+https://github.com/Cisco-Talos/clamav/commit/083ca38727b0ebd3979cf1ebc7b31148f6d5e7f7:
 
- > https://forum.suricata.io/t/suricata-6-0-5-and-5-0-9-released/2415
+aarch64-none-linux-gnu-gcc: WARNING: unsafe header/library path used in cross-compilation: '-I/usr/include/libxml2'
+In file included from /usr/include/libxml2/libxml/parser.h:810,
+                 from others.c:62:
+/usr/include/libxml2/libxml/encoding.h:31:10: fatal error: unicode/ucnv.h: No such file or directory
+   31 | #include <unicode/ucnv.h>
+      |          ^~~~~~~~~~~~~~~~
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/5bb3bea6d13ac8d497f6862374d65a59bea7ed09
 
-Committed to 2022.02.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit f5e4bb185a2694c180ba1c51efab4e5a6c8b3975)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/clamav/clamav.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index cd2d06e6b3..e2ee99d02b 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -69,6 +69,7 @@ CLAMAV_CONF_OPTS += --without-libjson
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
++CLAMAV_CONF_ENV += ac_cv_path_xmlconfig=$(STAGING_DIR)/usr/bin/xml2-config
+ CLAMAV_CONF_OPTS += --with-xml=$(STAGING_DIR)/usr
+ CLAMAV_DEPENDENCIES += libxml2
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
