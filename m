@@ -1,53 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E169BC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 19:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2AB1C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 19:46:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 993D241803;
-	Sat, 28 May 2022 19:41:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77F56610CE;
+	Sat, 28 May 2022 19:46:18 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MS7imjXjv36o; Sat, 28 May 2022 19:46:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A8A260C04;
+	Sat, 28 May 2022 19:46:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 886BB1BF867
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 19:46:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 857A34186A
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 19:46:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kcF0XV5WvnPV; Sat, 28 May 2022 19:41:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 470B1417CF;
-	Sat, 28 May 2022 19:41:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9300F1BF867
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 19:41:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 81D9582B34
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 19:41:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jbA9AroZG_2z for <buildroot@lists.busybox.net>;
- Sat, 28 May 2022 19:41:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A200B82848
- for <buildroot@buildroot.org>; Sat, 28 May 2022 19:41:29 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 605A040007;
- Sat, 28 May 2022 19:41:27 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nv2JS-004L6D-Gi; Sat, 28 May 2022 21:41:26 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20220512203435.1735055-1-bernd.kuhls@t-online.de>
-Date: Sat, 28 May 2022 21:41:26 +0200
-In-Reply-To: <20220512203435.1735055-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 12 May 2022 22:34:35 +0200")
-Message-ID: <8735gt8mxl.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/nut: fix typo in comment
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rtw5EwfSFSZX for <buildroot@lists.busybox.net>;
+ Sat, 28 May 2022 19:46:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B16154184B
+ for <buildroot@buildroot.org>; Sat, 28 May 2022 19:46:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 6DAB685EEB; Sat, 28 May 2022 19:34:45 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 28 May 2022 21:46:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e7f7d13a6176b09c59cffed87f31bea346f07433
+X-Git-Newrev: 4245bc29d4ac37ffaaaee0f502a7abf3729a6715
+X-Patchwork-Hint: ignore
+Message-Id: <20220528193445.6DAB685EEB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_arm_vexpress_tz_defconfig:
+ optee-os needs dtc compiler
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,20 +53,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4245bc29d4ac37ffaaaee0f502a7abf3729a6715
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+optee-os 3.17.0 need host-dtc package to compile the devicetree
+added by the commit [1].
 
-Committed to 2022.02.x, thanks.
+[1] https://github.com/OP-TEE/optee_os/commit/3e03eb38ae68be06f43432d8034b69b7b3bd7ff6
 
--- 
-Bye, Peter Korsgaard
+Fixes:
+https://gitlab.com/kubu93/buildroot/-/jobs/2510255578
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/qemu_arm_vexpress_tz_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
+index def11721ae..f8956f1c05 100644
+--- a/configs/qemu_arm_vexpress_tz_defconfig
++++ b/configs/qemu_arm_vexpress_tz_defconfig
+@@ -38,6 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BL32_RAM_LOCATION=tdram"
+ 
+ # OP-TEE components
+ BR2_TARGET_OPTEE_OS=y
++BR2_TARGET_OPTEE_OS_NEEDS_DTC=y
+ BR2_TARGET_OPTEE_OS_PLATFORM="vexpress-qemu_virt"
+ BR2_PACKAGE_OPTEE_BENCHMARK=y
+ BR2_PACKAGE_OPTEE_EXAMPLES=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
