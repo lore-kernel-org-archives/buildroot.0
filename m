@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ED63C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 07:10:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E91B7C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 07:10:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB8CC41991;
-	Sat, 28 May 2022 07:10:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACCE54198D;
+	Sat, 28 May 2022 07:10:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2S2cfhMKj2p0; Sat, 28 May 2022 07:10:46 +0000 (UTC)
+	with ESMTP id dsLdH9U4XzYQ; Sat, 28 May 2022 07:10:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B25441993;
-	Sat, 28 May 2022 07:10:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 44A221BF2C4
+	by smtp2.osuosl.org (Postfix) with ESMTP id C43C44199A;
+	Sat, 28 May 2022 07:10:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A43151BF2C4
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 07:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D74660BED
+ by smtp4.osuosl.org (Postfix) with ESMTP id 748E842A03
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 07:08:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OZKgXTsC7g4U for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u4tIetMGaC7g for <buildroot@lists.busybox.net>;
  Sat, 28 May 2022 07:08:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 78E0C60FB9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 809D642A09
  for <buildroot@buildroot.org>; Sat, 28 May 2022 07:08:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6A43083C8F; Sat, 28 May 2022 06:57:30 +0000 (UTC)
+ id 7457B83CD9; Sat, 28 May 2022 06:57:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 28 May 2022 08:51:58 +0200
+Date: Sat, 28 May 2022 08:54:34 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f80caa4efc7e1e9abe94cac4bc5a46237ddf7254
-X-Git-Newrev: edcdc4988c7613bcbbf5962dbc06e3fd5d9b4e04
+X-Git-Oldrev: edcdc4988c7613bcbbf5962dbc06e3fd5d9b4e04
+X-Git-Newrev: cd3b02c73391510e92b450b043e394ac841ceb0c
 X-Patchwork-Hint: ignore
-Message-Id: <20220528065730.6A43083C8F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/fluidsynth: bump
- to version 2.2.7
+Message-Id: <20220528065730.7457B83CD9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ configs/zynqmp_zcu102_defconfig: bump to Xilinx 2022.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,43 +59,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edcdc4988c7613bcbbf5962dbc06e3fd5d9b4e04
+commit: https://git.buildroot.net/buildroot/commit/?id=cd3b02c73391510e92b450b043e394ac841ceb0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-For change log since v2.2.6, see:
-- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.2.7
+This patch bumps configs/zynqmp_zcu102_defconfig to Xilinx software release 2022.1
+which includes the following updates:
+  - TF-A release version 2.6
+  - U-Boot release version 2022.01
+  - Linux kernel release version 5.15.19
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 6487c0150aad00ce3d481ddea139d66c6646e496)
+It is better to use a Xilinx official release version than sha tags.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b935f46a9b09098eb36e653e0ca61fde984214b9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fluidsynth/fluidsynth.hash | 2 +-
- package/fluidsynth/fluidsynth.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/zynqmp_zcu102_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
-index 20eb9ec49f..12e67404fa 100644
---- a/package/fluidsynth/fluidsynth.hash
-+++ b/package/fluidsynth/fluidsynth.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ca90fe675cacd9a7b442662783c4e7fa0e1fd638b28d64105a4e3fe0f618d20f  fluidsynth-2.2.6.tar.gz
-+sha256  460d86d8d687f567dc4780890b72538c7ff6b2082080ef2f9359d41670a309cf  fluidsynth-2.2.7.tar.gz
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index d7c72ed059..c4c9883102 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUIDSYNTH_VERSION = 2.2.6
-+FLUIDSYNTH_VERSION = 2.2.7
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index 2dd0817bd8..37df0977a7 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v5.15-930-g966124532656bc95d781abf57531e4cd4f962237"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xlnx_rebase_v5.15_LTS_2022.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
+@@ -16,14 +16,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/Xilinx/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.6-33-ge678d5ddc475f34dea8f5004fb6ebde118621784"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="xlnx_rebase_v2.6_2022.1"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2022.01-165-g667001319cbe511ce6353195fb4910ae5cb041ce"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xlnx_rebase_v2022.01_2022.1"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/zcu102/uboot.fragment"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
