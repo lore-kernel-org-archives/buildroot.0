@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FC30C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 11:05:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4491C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 11:06:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9391B845B4;
-	Sat, 28 May 2022 11:05:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C0CA42696;
+	Sat, 28 May 2022 11:06:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TeQe-_F5CccK; Sat, 28 May 2022 11:05:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3TU6vG5JkUKN; Sat, 28 May 2022 11:06:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACDEB84796;
-	Sat, 28 May 2022 11:05:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 760B71BF95F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 655134266B;
+	Sat, 28 May 2022 11:06:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C5C491BF37A
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6356840B67
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF2A66119C
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:05:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NUaBnH7RW6eO for <buildroot@lists.busybox.net>;
- Sat, 28 May 2022 11:05:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WvV8lt15RI6V for <buildroot@lists.busybox.net>;
+ Sat, 28 May 2022 11:05:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A75694019A
- for <buildroot@buildroot.org>; Sat, 28 May 2022 11:05:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0397E613DB
+ for <buildroot@buildroot.org>; Sat, 28 May 2022 11:05:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3D54E84BCC; Sat, 28 May 2022 10:53:54 +0000 (UTC)
+ id 911EF85EB2; Sat, 28 May 2022 10:53:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 28 May 2022 11:39:00 +0200
+Date: Sat, 28 May 2022 12:54:18 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2d0412e9f137d931a70fa4bd74ca83888e4549da
-X-Git-Newrev: 8ce01bc88057fc14349cd5d461d2e2b7268bfc4c
+X-Git-Oldrev: c74231cc30ce684ad7a188a27814ad44776bfd77
+X-Git-Newrev: 38e6ff3ccbcb887d1c3eeb1d33258f555e7fa16c
 X-Patchwork-Hint: ignore
-Message-Id: <20220528105354.3D54E84BCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/clamav: security
- bump version to 0.103.6
+Message-Id: <20220528105354.911EF85EB2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/gnutls:
+ libunistring is not optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,48 +59,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ce01bc88057fc14349cd5d461d2e2b7268bfc4c
+commit: https://git.buildroot.net/buildroot/commit/?id=38e6ff3ccbcb887d1c3eeb1d33258f555e7fa16c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Release notes:
-https://blog.clamav.net/2022/05/clamav-01050-01043-01036-released.html
+Since the very beginning, libunistring was a mandatory dependency of
+gnutls. However, it would use its internal copy if libunistring was not
+selected. We never want that, so make libunistring an actual mandatory
+dependency.
 
-Fixes CVE-2022-20770, CVE-2022-20771, CVE-2022-20785, CVE-2022-20792,
-CVE-2022-20796 & CVE-2022-20803.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a1d49f97b99fc8b61cc737c2ecd44a510283d644)
+(cherry picked from commit 3292f8741257019c2b7b791335852d8d438f5a76)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnutls/Config.in | 3 +--
+ package/gnutls/gnutls.mk | 9 ++-------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 73f4ff88f1..579b0ec89e 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  1e74b1e1d2a8a9056449c313f48a6983b9d5ba0d6fb5ef0b2be6ad3c841a5426  clamav-0.103.5.tar.gz
-+sha256  aaa12e3dc19f1d323b1c50d7a10fa8af557e4390149e864d59bde39b6ad9ba33  clamav-0.103.6.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index e2ee99d02b..10856ed971 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index 28982b15a1..59af32bf1e 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -2,10 +2,9 @@ config BR2_PACKAGE_GNUTLS
+ 	bool "gnutls"
+ 	# https://gitlab.com/gnutls/gnutls/issues/203
+ 	depends on !BR2_STATIC_LIBS
+-	# gnulib requires a library that implements wctomb().
+-	# This is noticed only when linking with libgnutls.so.
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_LIBTASN1
++	select BR2_PACKAGE_LIBUNISTRING
+ 	select BR2_PACKAGE_NETTLE
+ 	help
+ 	  GnuTLS is a secure communications library implementing the SSL
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 761a17bd20..f7f3e046e9 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -12,7 +12,7 @@ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
+ GNUTLS_LICENSE_FILES = doc/COPYING.LESSER
  
--CLAMAV_VERSION = 0.103.5
-+CLAMAV_VERSION = 0.103.6
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+-GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle
++GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 libunistring nettle
+ GNUTLS_CPE_ID_VENDOR = gnu
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
+@@ -20,6 +20,7 @@ GNUTLS_CONF_OPTS = \
+ 	--disable-libdane \
+ 	--disable-rpath \
+ 	--disable-tests \
++	--without-included-unistring \
+ 	--without-libcrypto-prefix \
+ 	--without-libdl-prefix \
+ 	--without-libev-prefix \
+@@ -74,12 +75,6 @@ else
+ GNUTLS_CONF_OPTS += --without-p11-kit
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
+-GNUTLS_DEPENDENCIES += libunistring
+-else
+-GNUTLS_CONF_OPTS += --with-included-unistring
+-endif
+-
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GNUTLS_CONF_OPTS += --with-zlib
+ GNUTLS_DEPENDENCIES += zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
