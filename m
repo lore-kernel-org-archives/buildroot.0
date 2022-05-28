@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A721AC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C165EC43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 28C64826B0;
-	Tue,  7 Jun 2022 19:08:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57150840C7;
+	Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XzWE-f98fs7U; Tue,  7 Jun 2022 19:08:55 +0000 (UTC)
+	with ESMTP id MRf47H4f5waD; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 49F2D81DCB;
-	Tue,  7 Jun 2022 19:08:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 694261BF475
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:08:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CE3D83FEB;
+	Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 74B6D1BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5929F81DCB
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:08:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61CA240607
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qyaOTwPqS6Vx for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:08:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hgsLaIuRKTYe for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 95B4381C40
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:08:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FAEE400D7
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8718586B8D; Tue,  7 Jun 2022 18:56:59 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 7E45186E21; Tue,  7 Jun 2022 19:04:55 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 7 Jun 2022 21:06:39 +0200
+Date: Sat, 28 May 2022 23:35:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 487ac12ff993e0e401aaf2e15272901d2b280fd5
-X-Git-Newrev: 5da5a83142ab0d231b6346f4784af0366a475130
+X-Git-Oldrev: 5da5a83142ab0d231b6346f4784af0366a475130
+X-Git-Newrev: 727ca56d1426171052ccdc39e33dd72adbbbe1cf
 X-Patchwork-Hint: ignore
-Message-Id: <20220607185659.8718586B8D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Kickoff 2022.08 cycle
+Message-Id: <20220607190455.7E45186E21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: install all
+ RTL_RTW88 blobs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,27 +59,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5da5a83142ab0d231b6346f4784af0366a475130
+commit: https://git.buildroot.net/buildroot/commit/?id=727ca56d1426171052ccdc39e33dd72adbbbe1cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Rather than installing just the three blobs mentioned explicitly in the
+.mk file, use a wildcard to install all blobs. At the time of this
+writing, this matches the following:
 
-diff --git a/Makefile b/Makefile
-index 27b8051710..4305c8c3dd 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,7 +92,7 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2022.05
-+export BR2_VERSION := 2022.08-git
- # Actual time the release is cut (for reproducible builds)
- BR2_VERSION_EPOCH = 1654546000
- 
+-rw-r--r-- 1 arnout arnout  29K Mar  9 13:28 rtw8723d_fw.bin
+-rw-r--r-- 1 arnout arnout 136K Mar  9 13:28 rtw8821c_fw.bin
+-rw-r--r-- 1 arnout arnout 148K Mar  9 13:28 rtw8822b_fw.bin
+-rw-r--r-- 1 arnout arnout 198K Mar  9 13:28 rtw8822c_fw.bin
+-rw-r--r-- 1 arnout arnout 142K Mar  9 13:28 rtw8822c_wow_fw.bin
+
+I.e. rtw8821c_fw.bin and rtw8822c_wow_fw.bin were missing.
+
+Although including all blobs nearly doubles the size, it still totals to
+just 660K which wouldn't warrant making more refined sub-options.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/linux-firmware/linux-firmware.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+Patch is too large, so refusing to show it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
