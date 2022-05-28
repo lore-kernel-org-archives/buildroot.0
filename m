@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96FB0C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 11:06:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AE5DC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 11:07:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 471A360BB1;
-	Sat, 28 May 2022 11:06:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4237761669;
+	Sat, 28 May 2022 11:07:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kPWzdvUA9slI; Sat, 28 May 2022 11:06:56 +0000 (UTC)
+	with ESMTP id TFzdIhrlFuTD; Sat, 28 May 2022 11:07:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47ADE60B65;
-	Sat, 28 May 2022 11:06:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 41D751BF37A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C7BB616A1;
+	Sat, 28 May 2022 11:07:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E3E0A1BF37A
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EBB2442638
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94E4940B60
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:05:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 02hdt0OQKK_W for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n0nJ0N2kfEO3 for <buildroot@lists.busybox.net>;
  Sat, 28 May 2022 11:05:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CBEEF42623
+ by smtp2.osuosl.org (Postfix) with ESMTP id ACA7640B5E
  for <buildroot@buildroot.org>; Sat, 28 May 2022 11:05:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6364284BCC; Sat, 28 May 2022 10:53:54 +0000 (UTC)
+ id 567BC84BCC; Sat, 28 May 2022 10:53:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 28 May 2022 12:53:20 +0200
+Date: Sat, 28 May 2022 12:53:13 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: bd9246aad32c1531d8545f77a7da6f0f37b78bcd
-X-Git-Newrev: beca59fefc228fccd7d7fdc1b2ce6ec8944cdb46
+X-Git-Oldrev: 09c422606a6d1405da660c2206a606abf9ecb5aa
+X-Git-Newrev: bd9246aad32c1531d8545f77a7da6f0f37b78bcd
 X-Patchwork-Hint: ignore
-Message-Id: <20220528105354.6364284BCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gnutls: disable
- library search in /usr/lib
+Message-Id: <20220528105354.567BC84BCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/gnutls: bump to
+ version 3.7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,95 +59,232 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beca59fefc228fccd7d7fdc1b2ce6ec8944cdb46
+commit: https://git.buildroot.net/buildroot/commit/?id=bd9246aad32c1531d8545f77a7da6f0f37b78bcd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-gnutls's configure script has a weird approach where it first searches
-for dependent libraries in the path specified by --prefix, before
-searching in the default search path. Since we set --prefix to /usr,
-and it doesn't take into account DESTDIR (which is anyway not set at
-configure time), that means it will first search /usr/lib before
-searching $(STAGING_DIR)/usr/lib.
+remove merged patch
 
-Ideally, this would be fixed in the configure script itself. However,
-the m4 file that does this is pretty complex, it's not immediately clear
-where to add $DESTDIR. In addition it comes from gnulib which is a
-somewhat annoying upstream.
-
-Therefore, instead, bypass the prefix lookup with
---without-libfoo-prefix. Note that we could set
---with-libfoo-prefix=$(STAGING_DIR)/usr (the latter is already done for
-librt and libpthread), but that's pretty pointless -
---without-libfoo-prefix in fact reverts to what should have been done in
-the first place, i.e. use the toolchain search path.
-
-Add --without-libfoo-prefix for all options defined in configure (found
-with ./configure --help | grep without-.*-prefix). Most of these are
-only used in tests (e.g. libcrypto) or even not at all (e.g. libiconv),
-but it's fairly hard to discover this and to be sure that they are
-indeed not needed, so better pass all of them.
-
-Remove the now-redundant arguments for librt and libpthread.
-
-Add a comment to remind people to revisit these when bumping the
-version.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b707a67daa31da6bd4bca19096c74febfd54375a)
+(cherry picked from commit c809fa2d0fd8229f2712747f114eb802ed64d780)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.mk | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ ...01-locks-define-lock-functions-as-a-macro.patch | 179 ---------------------
+ package/gnutls/gnutls.hash                         |   4 +-
+ package/gnutls/gnutls.mk                           |   2 +-
+ 3 files changed, 3 insertions(+), 182 deletions(-)
 
+diff --git a/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch b/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch
+deleted file mode 100644
+index 52965c051d..0000000000
+--- a/package/gnutls/0001-locks-define-lock-functions-as-a-macro.patch
++++ /dev/null
+@@ -1,179 +0,0 @@
+-From 5803bfa3d4febdcf32494e2c2c8f4731cb8be7cd Mon Sep 17 00:00:00 2001
+-From: Daiki Ueno <ueno@gnu.org>
+-Date: Wed, 9 Mar 2022 08:07:58 +0100
+-Subject: [PATCH] locks: define lock functions as a macro
+-
+-When threads are not supported, glthread_* functions are defined as
+-no-op and thus dereferencing lock variables in inline functions will
+-cause compilation error.  This change fixes it by redefining our lock
+-functions as a macro so it will also be compiled out.
+-
+-Reported by Fabrice Fontaine in:
+-https://gitlab.com/gnutls/gnutls/-/issues/1330
+-
+-Signed-off-by: Daiki Ueno <ueno@gnu.org>
+-
+-[Retrieved from:
+-https://gitlab.com/gnutls/gnutls/-/commit/5803bfa3d4febdcf32494e2c2c8f4731cb8be7cd]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- lib/locks.c       | 54 -----------------------------------------------
+- lib/locks.h       | 28 ++++++++++++++++++------
+- lib/pkcs11.c      |  2 +-
+- lib/priority.c    |  2 +-
+- lib/verify-tofu.c |  2 +-
+- 5 files changed, 25 insertions(+), 63 deletions(-)
+-
+-diff --git a/lib/locks.c b/lib/locks.c
+-index d61504e077..8888ed6b12 100644
+---- a/lib/locks.c
+-+++ b/lib/locks.c
+-@@ -63,57 +63,3 @@ gnutls_global_set_mutex(mutex_init_func init, mutex_deinit_func deinit,
+- 	gnutls_mutex_lock = lock;
+- 	gnutls_mutex_unlock = unlock;
+- }
+--
+--int
+--gnutls_static_mutex_lock(gnutls_static_mutex_t lock)
+--{
+--	if (unlikely(glthread_lock_lock(lock))) {
+--		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
+--	}
+--	return 0;
+--}
+--
+--int
+--gnutls_static_mutex_unlock(gnutls_static_mutex_t lock)
+--{
+--	if (unlikely(glthread_lock_unlock(lock))) {
+--		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
+--	}
+--	return 0;
+--}
+--
+--int
+--gnutls_rwlock_rdlock(gnutls_rwlock_t rwlock)
+--{
+--	if (unlikely(glthread_rwlock_rdlock(rwlock))) {
+--		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
+--	}
+--	return 0;
+--}
+--
+--int
+--gnutls_rwlock_wrlock(gnutls_rwlock_t rwlock)
+--{
+--	if (unlikely(glthread_rwlock_wrlock(rwlock))) {
+--		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
+--	}
+--	return 0;
+--}
+--
+--int
+--gnutls_rwlock_unlock(gnutls_rwlock_t rwlock)
+--{
+--	if (unlikely(glthread_rwlock_unlock(rwlock))) {
+--		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
+--	}
+--	return 0;
+--}
+--
+--int
+--gnutls_once(gnutls_once_t once, void (*init_func) (void))
+--{
+--	if (unlikely(glthread_once(once, init_func))) {
+--		return gnutls_assert_val(GNUTLS_E_LOCKING_ERROR);
+--	}
+--	return 0;
+--}
+-diff --git a/lib/locks.h b/lib/locks.h
+-index a1ff0fa9d7..907adfc134 100644
+---- a/lib/locks.h
+-+++ b/lib/locks.h
+-@@ -40,8 +40,14 @@ extern mutex_unlock_func gnutls_mutex_unlock;
+-  */
+- #define GNUTLS_STATIC_MUTEX(lock) gl_lock_define_initialized(static, lock)
+- typedef gl_lock_t *gnutls_static_mutex_t;
+--int gnutls_static_mutex_lock(gnutls_static_mutex_t lock);
+--int gnutls_static_mutex_unlock(gnutls_static_mutex_t lock);
+-+
+-+#define gnutls_static_mutex_lock(LOCK)			\
+-+	(unlikely(glthread_lock_lock(LOCK)) ?		\
+-+	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
+-+
+-+#define gnutls_static_mutex_unlock(LOCK)		\
+-+	(unlikely(glthread_lock_unlock(LOCK)) ?		\
+-+	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
+- 
+- /* Unlike static mutexes, static rwlocks can be locked/unlocked with
+-  * the functions defined below, because there is no way to replace
+-@@ -50,13 +56,23 @@ int gnutls_static_mutex_unlock(gnutls_static_mutex_t lock);
+- #define GNUTLS_RWLOCK(rwlock) gl_rwlock_define_initialized(static, rwlock)
+- typedef gl_rwlock_t *gnutls_rwlock_t;
+- 
+--int gnutls_rwlock_rdlock(gnutls_rwlock_t rwlock);
+--int gnutls_rwlock_wrlock(gnutls_rwlock_t rwlock);
+--int gnutls_rwlock_unlock(gnutls_rwlock_t rwlock);
+-+#define gnutls_rwlock_rdlock(RWLOCK)			\
+-+	(unlikely(glthread_rwlock_rdlock(RWLOCK)) ?	\
+-+	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
+-+
+-+#define gnutls_rwlock_wrlock(RWLOCK)			\
+-+	(unlikely(glthread_rwlock_wrlock(RWLOCK)) ?	\
+-+	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
+-+
+-+#define gnutls_rwlock_unlock(RWLOCK)			\
+-+	(unlikely(glthread_rwlock_unlock(RWLOCK)) ?	\
+-+	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
+- 
+- #define GNUTLS_ONCE(once) gl_once_define(static, once)
+- typedef gl_once_t *gnutls_once_t;
+- 
+--int gnutls_once(gnutls_once_t once, void (*init_func) (void));
+-+#define gnutls_once(ONCE, INIT_FUNC)			\
+-+	(unlikely(glthread_once(ONCE, INIT_FUNC)) ?	\
+-+	gnutls_assert_val(GNUTLS_E_LOCKING_ERROR) : 0)
+- 
+- #endif /* GNUTLS_LIB_LOCKS_H */
+-diff --git a/lib/pkcs11.c b/lib/pkcs11.c
+-index 8dda0f07c9..ba8ac0c375 100644
+---- a/lib/pkcs11.c
+-+++ b/lib/pkcs11.c
+-@@ -351,7 +351,7 @@ int _gnutls_pkcs11_check_init(init_level_t req_level, void *priv, pkcs11_reinit_
+- 	ret = sret;
+- 
+-  cleanup:
+--	gnutls_static_mutex_unlock(&pkcs11_mutex);
+-+	(void)gnutls_static_mutex_unlock(&pkcs11_mutex);
+- 
+- 	return ret;
+- }
+-diff --git a/lib/priority.c b/lib/priority.c
+-index d17a923318..55ae185c1f 100644
+---- a/lib/priority.c
+-+++ b/lib/priority.c
+-@@ -2505,7 +2505,7 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
+- 	}
+- 
+-  out:
+--	gnutls_rwlock_unlock(&system_wide_config_rwlock);
+-+	(void)gnutls_rwlock_unlock(&system_wide_config_rwlock);
+- 	return ret;
+- }
+- 
+-diff --git a/lib/verify-tofu.c b/lib/verify-tofu.c
+-index 40b7acdc8a..97f47385e6 100644
+---- a/lib/verify-tofu.c
+-+++ b/lib/verify-tofu.c
+-@@ -434,7 +434,7 @@ int store_pubkey(const char *db_name, const char *host,
+- 	if (fp != NULL)
+- 		fclose(fp);
+- 
+--	gnutls_static_mutex_unlock(&file_mutex);
+-+	(void)gnutls_static_mutex_unlock(&file_mutex);
+- 	gnutls_free(b64key.data);
+- 
+- 	return ret;
+--- 
+-GitLab
+-
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 2ffc6c1b4e..c09e4665e5 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.3.tar.xz.sig
+-sha256  fc59c43bc31ab20a6977ff083029277a31935b8355ce387b634fa433f8f6c49a  gnutls-3.7.3.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.4.tar.xz.sig
++sha256  e6adbebcfbc95867de01060d93c789938cf89cc1d1f6ef9ef661890f6217451f  gnutls-3.7.4.tar.xz
+ # Locally calculated
+ sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
 diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 0e461cd44c..b5503b1fc9 100644
+index 7317a3bb1e..0e461cd44c 100644
 --- a/package/gnutls/gnutls.mk
 +++ b/package/gnutls/gnutls.mk
-@@ -4,6 +4,7 @@
- #
+@@ -5,7 +5,7 @@
  ################################################################################
  
-+# When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
  GNUTLS_VERSION_MAJOR = 3.7
- GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).4
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).3
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).4
  GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
-@@ -26,7 +27,15 @@ GNUTLS_CONF_OPTS = \
- 	--disable-tests \
- 	--enable-local-libopts \
- 	--enable-openssl-compatibility \
--	--with-librt-prefix=$(STAGING_DIR) \
-+	--without-libcrypto-prefix \
-+	--without-libdl-prefix \
-+	--without-libev-prefix \
-+	--without-libiconv-prefix \
-+	--without-libintl-prefix \
-+	--without-libpthread-prefix \
-+	--without-libseccomp-prefix \
-+	--without-librt-prefix \
-+	--without-libz-prefix \
- 	--without-tpm \
- 	$(if $(BR2_PACKAGE_GNUTLS_OPENSSL),--enable,--disable)-openssl-compatibility \
- 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools) \
-@@ -39,9 +48,6 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
- 	gl_cv_func_gettimeofday_clobber=no
- GNUTLS_INSTALL_STAGING = YES
- 
--# libpthread autodetection poison the linkpath
--GNUTLS_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
--
- # gnutls needs libregex, but pcre can be used too
- # The check isn't cross-compile friendly
- GNUTLS_CONF_ENV += libopts_cv_with_libregex=yes
-@@ -70,7 +76,6 @@ GNUTLS_CONF_OPTS += --without-p11-kit
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
--GNUTLS_CONF_OPTS += --with-libunistring-prefix=$(STAGING_DIR)/usr
- GNUTLS_DEPENDENCIES += libunistring
- else
- GNUTLS_CONF_OPTS += --with-included-unistring
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
