@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82617C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 07:11:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F8CAC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 08:08:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2748242ACD;
-	Sat, 28 May 2022 07:11:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 770FB6F477;
+	Sat, 28 May 2022 08:08:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hijfc9kUOO5i; Sat, 28 May 2022 07:11:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qVJzKYd-OrJt; Sat, 28 May 2022 08:08:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3E9D42AC7;
-	Sat, 28 May 2022 07:11:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B5B2A1BF2C4
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 07:09:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85A4861089;
+	Sat, 28 May 2022 08:08:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 888651BF59E
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 08:08:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7819B42AC3
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 07:08:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 76075405BA
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 08:08:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L0_JcrSTlHZz for <buildroot@lists.busybox.net>;
- Sat, 28 May 2022 07:08:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8796E42A0B
- for <buildroot@buildroot.org>; Sat, 28 May 2022 07:08:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7BDE483D21; Sat, 28 May 2022 06:57:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o5hUN5K-J7HP for <buildroot@lists.busybox.net>;
+ Sat, 28 May 2022 08:08:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 21B71405A3
+ for <buildroot@buildroot.org>; Sat, 28 May 2022 08:08:21 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 93491240004;
+ Sat, 28 May 2022 08:08:18 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nurUf-002whv-M9; Sat, 28 May 2022 10:08:17 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 28 May 2022 08:54:41 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: cd3b02c73391510e92b450b043e394ac841ceb0c
-X-Git-Newrev: bd0a915b965f6d594678a588f229e524262bbd86
-X-Patchwork-Hint: ignore
-Message-Id: <20220528065730.7BDE483D21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- configs/zynqmp_zcu106_defconfig: bump to Xilinx 2022.1
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20220502215342.3485999-1-james.hilliard1@gmail.com>
+Date: Sat, 28 May 2022 10:08:17 +0200
+In-Reply-To: <20220502215342.3485999-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Mon, 2 May 2022 15:53:42 -0600")
+Message-ID: <871qwef5am.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/linux-headers: prevent
+ invalid custom headers selection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,63 +60,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd0a915b965f6d594678a588f229e524262bbd86
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-This patch bumps configs/zynqmp_zcu106_defconfig to Xilinx software release 2022.1
-which includes the following updates:
-  - TF-A release version 2.6
-  - U-Boot release version 2022.01
-  - Linux kernel release version 5.15.19
+ > If BR2_KERNEL_HEADERS_AS_KERNEL is selected and the kernel version
+ > is known we should not allow potentially incompatible custom headers
+ > to be selected.
 
-It is better to use a Xilinx official release version than sha tags.
+ > For BR2_LINUX_KERNEL_LATEST_CIP_VERSION and
+ > BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION this means we should select
+ > BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 and for
+ > BR2_LINUX_KERNEL_LATEST_VERSION this means we should select
+ > BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit df0a0ae9d98ed477b7f9b827b3747397d35eda03)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/zynqmp_zcu106_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/816/816d7a3ad77ba051fff7fba7f2a38fc31549c360
+ >  - http://autobuild.buildroot.net/results/3c3/3c3a9fc1a1e0002ae8169fd47b3003ebb86935f6
+ >  - http://autobuild.buildroot.net/results/188/18883459577dc0fdc01149110ffb81bf1a28c94a
 
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index d836edfaf0..c8b507f0db 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v5.15-930-g966124532656bc95d781abf57531e4cd4f962237"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xlnx_rebase_v5.15_LTS_2022.1"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
-@@ -16,14 +16,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/Xilinx/arm-trusted-firmware.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.6-33-ge678d5ddc475f34dea8f5004fb6ebde118621784"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="xlnx_rebase_v2.6_2022.1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2022.01-165-g667001319cbe511ce6353195fb4910ae5cb041ce"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xlnx_rebase_v2022.01_2022.1"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/zcu106/uboot.fragment"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - entirely disable Custom kernel headers series when kernel version is known
+
+Committed to 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
