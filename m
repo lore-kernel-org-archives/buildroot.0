@@ -1,65 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5ACFC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 19:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 310A7C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 20:04:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21420849F6;
-	Sat, 28 May 2022 19:55:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CD7741989;
+	Sat, 28 May 2022 20:04:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yfwnIwQZesjb; Sat, 28 May 2022 19:55:34 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34873849EC;
-	Sat, 28 May 2022 19:55:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E0E151BF867
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 19:55:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CF2FD40382
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 19:55:31 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dizRns7mYpKR for <buildroot@lists.busybox.net>;
- Sat, 28 May 2022 19:55:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9EE63402E2
- for <buildroot@buildroot.org>; Sat, 28 May 2022 19:55:30 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:882a:25de:8723:774f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id ECC1319F574;
- Sat, 28 May 2022 21:55:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1653767729;
- bh=ElrTUCPeQSkWjkaM+7WoVB+6CiPgRxfUOkkJn2EgLGk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=cIh5XNEwX9FqiduvJEiFNQsZI/MPy1gcK3o7MkGPjd+MeK0u1bwsafm5hCk8yxx2a
- HCAnA46uUUPD9XLFBD6/XActgEC3WHmLe+5wn9RPPYt27OlRdzirMgdWa65ZTlr74+
- +citjVz2DTwxc+urljrXH3WYWwnuBoSfSFpM/H+1XhmWxh1lvqj+sSQYLHM+td4+1M
- K8Eazjkiutvv4JXFBqEFtAI2drylH2x/nOQJv40trRT2GocpmsiLbpwZxMWoOz1bEh
- xP7SeXOD/Hcql2ba5KZ9jtSBx4SPYunjZ5IPNxXpGw0O/fgf651SuI3lqkEJAbR7yp
- NRr2RGYSqLvzQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 28 May 2022 21:55:26 +0200
-Date: Sat, 28 May 2022 21:55:26 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220528195526.GG301044@scaer>
-References: <20220525220202.357390-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220525220202.357390-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: fix build without atomic
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5giPT2NCtM5T; Sat, 28 May 2022 20:04:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA8874197F;
+	Sat, 28 May 2022 20:04:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1973B1BF867
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 20:04:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0704F40B75
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 20:04:18 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s1sW7HLJ-Y6j for <buildroot@lists.busybox.net>;
+ Sat, 28 May 2022 20:04:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1BAFD40B06
+ for <buildroot@buildroot.org>; Sat, 28 May 2022 20:04:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id C87C585F51; Sat, 28 May 2022 19:52:47 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 28 May 2022 22:03:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4245bc29d4ac37ffaaaee0f502a7abf3729a6715
+X-Git-Newrev: 13c7db8716efffeb11b13e06087f4105010803be
+X-Patchwork-Hint: ignore
+Message-Id: <20220528195247.C87C585F51@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: fix build failure on
+ Aarch64 host for powerpc64 target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,84 +53,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=13c7db8716efffeb11b13e06087f4105010803be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-05-26 00:02 +0200, Fabrice Fontaine spake thusly:
-> Fix the following build failure without atomic raised since commit
-> fde21979427ffeb4fe9c0068310be195f2dec5ec:
-> 
-> /nvmedata/autobuild/instance-25/output-1/host/lib/gcc/mipsel-buildroot-linux-uclibc/10.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: cannot find -latomic: No such file or directory
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/db6/db6923915e36bcdb2953a3cdd2b450fa10794631
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/dhcp/dhcp.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-> index cbc95cb152..9628ffbe2a 100644
-> --- a/package/dhcp/dhcp.mk
-> +++ b/package/dhcp/dhcp.mk
-> @@ -62,6 +62,12 @@ else
->  DHCP_BIND_EXTRA_CONFIG += --without-zlib
->  endif
->  
-> +ifeq ($(BR2_TOOLCHAIN_HAS_ATOMIC),y)
-> +DHCP_BIND_EXTRA_CONFIG += --enable-atomic
-> +else
-> +DHCP_BIND_EXTRA_CONFIG += --disable-atomic
-> +endif
-> +
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
->  DHCP_CONF_ENV += LIBS=-latomic
+When building on Aarch64 host for powerpc64 we get this error:
+gcc: error: unrecognized command-line option '-m64'
 
-It feels very weird that we have the _HAS_LIBATOMIC and the _HAS_ATOMIC
-conditional blocks completely independent...
+This happens because we don't have the flexibility to override the LDFLAGS
+when linking nsinstall host tool that is built in libnss. Also libnss uses
+the same LDFLAGS it uses for target and that is not correct.
+So let's add a patch to add NATIVE_LDFLAGS variable to override LFDFLAGS
+when building nsinstall utility and set it to HOST_LDFLAGS in libnss.mk
 
-Indeed, BR2_TOOLCHAIN_HAS_LIBATOMIC selects BR2_TOOLCHAIN_HAS_ATOMIC.
-So, BR2_TOOLCHAIN_HAS_ATOMIC == y implies BR2_TOOLCHAIN_HAS_ATOMIC == y
-too.
+Fixes:
+http://autobuild.buildroot.net/results/67500395f19aa698b98404cde8d20463e55504bf/
 
-So, probably we would want tsoemthing like:
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Tested-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998@free.fr: add upstream link in patch itself]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...1771036-Fix-build-failure-on-Aarch64-host.patch | 37 ++++++++++++++++++++++
+ package/libnss/libnss.mk                           |  4 ++-
+ 2 files changed, 40 insertions(+), 1 deletion(-)
 
-    ifeq ($(BR2_TOOLCHAIN_HAS_ATOMIC),y)
-    DHCP_BIND_EXTRA_CONFIG += --enable-atomic
-    ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-    DHCP_CONF_ENV += LIBS=-latomic
-    endif
-    else
-    DHCP_BIND_EXTRA_CONFIG += --disable-atomic
-    endif
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
->  endif
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libnss/0001-Bug-1771036-Fix-build-failure-on-Aarch64-host.patch b/package/libnss/0001-Bug-1771036-Fix-build-failure-on-Aarch64-host.patch
+new file mode 100644
+index 0000000000..12b376744e
+--- /dev/null
++++ b/package/libnss/0001-Bug-1771036-Fix-build-failure-on-Aarch64-host.patch
+@@ -0,0 +1,37 @@
++From 9d5900c1ee9000906a90923e861b0fd7f1061cde Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Tue, 24 May 2022 23:40:45 +0200
++Subject: [PATCH] Bug 1771036 - Fix build failure on Aarch64 host
++
++If trying to build on Aarch64 host for powerpc64 target we can't override
++the LDFLAGS leading to this build failure:
++gcc: error: unrecognized command-line option '-m64'
++
++So let's add NATIVE_LDFLAGS check and use it to link nsinstall. This way
++any build environment can pass LDFLAGS that fits better for host
++architecture.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[upstream: https://bugzilla.mozilla.org/show_bug.cgi?id=1771036]
++---
++ coreconf/nsinstall/Makefile | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/nss/coreconf/nsinstall/Makefile b/nss/coreconf/nsinstall/Makefile
++index 08dfbc2fe..5061789ff 100644
++--- a/nss/coreconf/nsinstall/Makefile
+++++ b/nss/coreconf/nsinstall/Makefile
++@@ -34,6 +34,10 @@ ifdef NATIVE_FLAGS
++ OS_CFLAGS=$(NATIVE_FLAGS)
++ endif
++ 
+++ifdef NATIVE_LDFLAGS
+++LDFLAGS=$(NATIVE_LDFLAGS)
+++endif
+++
++ include $(DEPTH)/coreconf/rules.mk
++ 
++ # Redefine MAKE_OBJDIR for just this directory
++-- 
++2.34.1
++
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 540092dfcf..0d0f1d84b9 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -92,7 +92,9 @@ define LIBNSS_BUILD_CMDS
+ 		SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
+ 		DIST=$(@D)/$(LIBNSS_DISTDIR) \
+ 		CHECKLOC= \
+-		$(LIBNSS_BUILD_VARS) NATIVE_FLAGS="$(HOST_CFLAGS) -DLINUX"
++		$(LIBNSS_BUILD_VARS) \
++		NATIVE_FLAGS="$(HOST_CFLAGS) -DLINUX" \
++		NATIVE_LDFLAGS="$(HOST_LDFLAGS)"
+ endef
+ 
+ define LIBNSS_INSTALL_STAGING_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
