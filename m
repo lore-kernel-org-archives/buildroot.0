@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D1F3C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 07:09:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72299C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 07:09:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13E5D84CBA;
-	Sat, 28 May 2022 07:09:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 008F642AC9;
+	Sat, 28 May 2022 07:09:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SrJ204xBUifL; Sat, 28 May 2022 07:09:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zX3RnR8CbbAJ; Sat, 28 May 2022 07:09:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2947284CBD;
-	Sat, 28 May 2022 07:09:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0ED3A1BF962
+	by smtp4.osuosl.org (Postfix) with ESMTP id C748042AC3;
+	Sat, 28 May 2022 07:09:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 24BD71BF963
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 07:08:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0BDEC4198D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2219142AC3
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 07:08:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YLqBqsApu91q for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xKzZ_6wwgdRK for <buildroot@lists.busybox.net>;
  Sat, 28 May 2022 07:08:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4EF46404F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A687429F1
  for <buildroot@buildroot.org>; Sat, 28 May 2022 07:08:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 446A783D21; Sat, 28 May 2022 06:57:30 +0000 (UTC)
+ id 3BE3583C8F; Sat, 28 May 2022 06:57:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 28 May 2022 08:46:25 +0200
+Date: Sat, 28 May 2022 08:44:43 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d2463c1d2bd6d62778f189903a19a8d7a3da7cd5
-X-Git-Newrev: c5c6010a2bf1b5054441c974db9a4cd7709dc7e3
+X-Git-Oldrev: 612c06b37923553429896c654eb2841865365bfd
+X-Git-Newrev: d2463c1d2bd6d62778f189903a19a8d7a3da7cd5
 X-Patchwork-Hint: ignore
-Message-Id: <20220528065730.446A783D21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- package/glslsandbox-player: fix build with libexecinfo
+Message-Id: <20220528065730.3BE3583C8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/rockchip-mali:
+ fix build failure due to missing URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +59,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5c6010a2bf1b5054441c974db9a4cd7709dc7e3
+commit: https://git.buildroot.net/buildroot/commit/?id=d2463c1d2bd6d62778f189903a19a8d7a3da7cd5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix build failure raised on uclibc and musl since the addition of
-libexecinfo package in commit:
-eea8ba446c10701a273432552108d80fb2224ef4
+Github rockchip-linux doesn't provide libmali repository anymore and the
+only up-to-date and maintained repository I've found is JeffyCN/mirrors
+branch libmali that provide the identical situtation we were at with
+previous repository, so let's switch to JeffyCN repository. This fixes
+a build failure while trying to install rockchip-mali.
 
-Fixes:
-- http://autobuild.buildroot.net/results/9591ffe5968fe5f20b29799d1c234426cacd549a
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 99113727d6458fff1aaae7f9e9305f9b657d4263)
+(cherry picked from commit 8c25838b53e6e469839a71df5da610378e87aa40)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glslsandbox-player/glslsandbox-player.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/rockchip-mali/rockchip-mali.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
-index c5fbf062b7..70bd5ca370 100644
---- a/package/glslsandbox-player/glslsandbox-player.mk
-+++ b/package/glslsandbox-player/glslsandbox-player.mk
-@@ -12,6 +12,11 @@ GLSLSANDBOX_PLAYER_DEPENDENCIES = libegl libgles host-pkgconf
- GLSLSANDBOX_PLAYER_LICENSE = BSD-2-Clause
- GLSLSANDBOX_PLAYER_LICENSE_FILES = LICENSE
+diff --git a/package/rockchip-mali/rockchip-mali.mk b/package/rockchip-mali/rockchip-mali.mk
+index 6200191a73..848682229d 100644
+--- a/package/rockchip-mali/rockchip-mali.mk
++++ b/package/rockchip-mali/rockchip-mali.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-+GLSLSANDBOX_PLAYER_DEPENDENCIES += libexecinfo
-+GLSLSANDBOX_PLAYER_CONF_ENV += LIBS="-lexecinfo"
-+endif
-+
- ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_PNG),y)
- GLSLSANDBOX_PLAYER_DEPENDENCIES += libpng
- GLSLSANDBOX_PLAYER_CONF_OPTS += --with-libpng
+ ROCKCHIP_MALI_VERSION = 721653b5b3b525a4f80d15aa7e2f9df7b7e60427
+-ROCKCHIP_MALI_SITE = $(call github,rockchip-linux,libmali,$(ROCKCHIP_MALI_VERSION))
++ROCKCHIP_MALI_SITE = $(call github,JeffyCN,mirrors,$(ROCKCHIP_MALI_VERSION))
+ ROCKCHIP_MALI_LICENSE = Proprietary
+ ROCKCHIP_MALI_LICENSE_FILES = END_USER_LICENCE_AGREEMENT.txt
+ ROCKCHIP_MALI_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
