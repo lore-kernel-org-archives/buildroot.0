@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83F1BC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 09:19:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F00EC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 09:19:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4AC0584CE5;
-	Sat, 28 May 2022 09:19:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52B3E41A11;
+	Sat, 28 May 2022 09:19:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QSSnEmrhmFzb; Sat, 28 May 2022 09:19:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZISZcL1uELOP; Sat, 28 May 2022 09:19:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E81284CDC;
-	Sat, 28 May 2022 09:19:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1EE971BF95F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 268EF419A2;
+	Sat, 28 May 2022 09:19:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CBEB1BF5DA
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1119D405B2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 244AC84CAD
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QaBywaarb-op for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HQsBZtj0jr8c for <buildroot@lists.busybox.net>;
  Sat, 28 May 2022 09:17:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18D46419AE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7006C84CBD
  for <buildroot@buildroot.org>; Sat, 28 May 2022 09:17:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E0C9084257; Sat, 28 May 2022 09:05:37 +0000 (UTC)
+ id 3412684257; Sat, 28 May 2022 09:05:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 28 May 2022 10:57:00 +0200
+Date: Sat, 28 May 2022 11:14:03 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: fe4e72251b2b2eaed6a2842b92198a9f78fe5d55
-X-Git-Newrev: a93d294b771913c066a2c0c9fb4349d223c05114
+X-Git-Oldrev: b16eca8e45e9e8613a38ef0c958a49e12958a3f1
+X-Git-Newrev: 4b364f26e6cbb9e370567b5d71e47f4001501d96
 X-Patchwork-Hint: ignore
-Message-Id: <20220528090537.E0C9084257@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/pkg-meson:
- disable meson wrap downloads for host packages
+Message-Id: <20220528090538.3412684257@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] boot/shim: big endian
+ arm/aarch64 variants are not supported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,34 +59,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a93d294b771913c066a2c0c9fb4349d223c05114
+commit: https://git.buildroot.net/buildroot/commit/?id=4b364f26e6cbb9e370567b5d71e47f4001501d96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-This was already disabled for target packages in:
-12ba3563655e3ebab252e52daa6c710864fa869f
+Fixes:
+http://autobuild.buildroot.net/results/a6c7dd171529e2a7b7a26af8d99bec53117a7a02/
 
-We need to disable wrap downloads for host meson packages as well.
+Commit fd5842a1dd03642b2ea084439 (boot/shim: add
+BR2_PACKAGE_SHIM_ARCH_SUPPORTS) added explicit support for big/little endian
+arm/aarch64, but the shim code is hard coded for little endian:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5c2f0c698ca81889a127107c5ea1b197631b3130)
+head -n 1 elf_{arm,aarch64}_efi.lds
+==> elf_arm_efi.lds <==
+OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
+
+==> elf_aarch64_efi.lds <==
+OUTPUT_FORMAT("elf64-littleaarch64", "elf64-littleaarch64", "elf64-littleaarch64")
+
+So drop the support for the big endian variants.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0ebbf0b280b10b04ab6b7b23c597f76f6490df64)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-meson.mk | 1 +
- 1 file changed, 1 insertion(+)
+ boot/shim/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index ff850fa79f..9987fb73bb 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -162,6 +162,7 @@ define $(2)_CONFIGURE_CMDS
- 		--localstatedir=$$(HOST_DIR)/var \
- 		--default-library=shared \
- 		--buildtype=release \
-+		--wrap-mode=nodownload \
- 		-Dstrip=true \
- 		$$($$(PKG)_CONF_OPTS) \
- 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+diff --git a/boot/shim/Config.in b/boot/shim/Config.in
+index c4f1a9f317..462ef12d62 100644
+--- a/boot/shim/Config.in
++++ b/boot/shim/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_SHIM_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_aarch64 || BR2_aarch64_be
+-	default y if BR2_arm || BR2_armeb
++	default y if BR2_aarch64
++	default y if BR2_arm
+ 	default y if BR2_i386
+ 	default y if BR2_x86_64
+ 	# it includes gnu-efi
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
