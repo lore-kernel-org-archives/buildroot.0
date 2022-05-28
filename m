@@ -4,50 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5AEEC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 11:05:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A49D5C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 11:05:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 530FA425E6;
-	Sat, 28 May 2022 11:05:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47CC94264B;
+	Sat, 28 May 2022 11:05:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vK1zwm2KtovW; Sat, 28 May 2022 11:04:59 +0000 (UTC)
+	with ESMTP id I0mVxcJgf6xF; Sat, 28 May 2022 11:05:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39EBA425DB;
-	Sat, 28 May 2022 11:04:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 853BB1BF37A
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:04:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19C064262A;
+	Sat, 28 May 2022 11:05:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 53AF91BF37A
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 82233425D7
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:04:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4D00E849C3
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:05:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y1_FgJ3DWXQc for <buildroot@lists.busybox.net>;
- Sat, 28 May 2022 11:04:55 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4E84F425D5
- for <buildroot@buildroot.org>; Sat, 28 May 2022 11:04:54 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DE5CE20003;
- Sat, 28 May 2022 11:04:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nuuFY-003sjG-1w; Sat, 28 May 2022 13:04:52 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Nm5H_KG10OSG for <buildroot@lists.busybox.net>;
+ Sat, 28 May 2022 11:05:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B130F847B0
+ for <buildroot@buildroot.org>; Sat, 28 May 2022 11:05:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 4934A85EB2; Sat, 28 May 2022 10:53:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220508191141.1270350-1-fontaine.fabrice@gmail.com>
-Date: Sat, 28 May 2022 13:04:52 +0200
-In-Reply-To: <20220508191141.1270350-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 8 May 2022 21:11:41 +0200")
-Message-ID: <87fsktapez.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2,1/1] package/numactl: needs atomic
+To: buildroot@buildroot.org
+Date: Sat, 28 May 2022 11:41:00 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 8ce01bc88057fc14349cd5d461d2e2b7268bfc4c
+X-Git-Newrev: 09c422606a6d1405da660c2206a606abf9ecb5aa
+X-Patchwork-Hint: ignore
+Message-Id: <20220528105354.4934A85EB2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/nodejs: clean up
+ DEPENDENCIES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,36 +53,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=09c422606a6d1405da660c2206a606abf9ecb5aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > numactl unconditionally uses __atomic_fetch_and resulting in the
- > following build failure on architectures that need libatomic to provide
- > atomic intrinsics (e.g. microblaze) since commit
- > 4ed540ddf59bec4b389be44d7f42820d2466904f:
+One per line, and alphabetical (was already the case for host).
 
- > /nvmedata/autobuild/instance-5/output-1/host/lib/gcc/microblaze-buildroot-linux-uclibc/10.3.0/../../../../microblaze-buildroot-linux-uclibc/bin/ld:
- > ./.libs/libnuma.a(libnuma.o): in function `numa_node_to_cpus_v1':
- > (.text+0x2a34): undefined reference to `__atomic_fetch_and_1'
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[yann.morin.1998@free.fr: all host dependencies first]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit fb5aad3024a1f592867068ff22962cf3d576ff19)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nodejs/nodejs.mk | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/e225cb83dae390d9dc543d4da85c52180efbd40a
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Thomas Petazzoni):
- >  - Reword commit message
-
-Committed to 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 4fe34e0aad..5d8eb4af63 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -7,10 +7,21 @@
+ NODEJS_VERSION = 14.18.3
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+-NODEJS_DEPENDENCIES = host-qemu host-pkgconf host-python3 host-nodejs c-ares \
+-	libuv zlib nghttp2 \
++NODEJS_DEPENDENCIES = \
++	host-nodejs \
++	host-pkgconf \
++	host-python3 \
++	host-qemu \
++	c-ares \
++	libuv \
++	nghttp2 \
++	zlib \
+ 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
+-HOST_NODEJS_DEPENDENCIES = host-icu host-libopenssl host-pkgconf host-python3 \
++HOST_NODEJS_DEPENDENCIES = \
++	host-icu \
++	host-libopenssl \
++	host-pkgconf \
++	host-python3 \
+ 	host-zlib
+ NODEJS_INSTALL_STAGING = YES
+ NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
