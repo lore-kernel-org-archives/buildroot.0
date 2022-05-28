@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFD5AC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 09:18:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 202D6C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 09:18:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90ABB419F0;
-	Sat, 28 May 2022 09:18:23 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nsvj6dkoeHnp; Sat, 28 May 2022 09:18:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2C6A4198C;
-	Sat, 28 May 2022 09:18:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7B6261BF5DA
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C20B84CAB
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B836A84CDC;
+	Sat, 28 May 2022 09:18:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eeuuLBB_cbdn for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BSMMttwP6DxO; Sat, 28 May 2022 09:18:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BDF7984CD7;
+	Sat, 28 May 2022 09:18:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 94D531BF95F
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0A59261093
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iQpYE-BZJvjb for <buildroot@lists.busybox.net>;
  Sat, 28 May 2022 09:17:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 06ACD84CAD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5C90060B62
  for <buildroot@buildroot.org>; Sat, 28 May 2022 09:17:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BC4758424B; Sat, 28 May 2022 09:05:37 +0000 (UTC)
+ id 2169A84245; Sat, 28 May 2022 09:05:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 28 May 2022 10:48:24 +0200
+Date: Sat, 28 May 2022 11:09:18 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2b8c49ef508263ff713759a386b19bccb92eac4a
-X-Git-Newrev: 55bd58c9f1c89f68abd15e3082fccfd586f05146
+X-Git-Oldrev: d54e65686a783624b7707d1e6fc703e37eb26b83
+X-Git-Newrev: 2aafb4974d833fceab31b5e2a7133427718515d9
 X-Patchwork-Hint: ignore
-Message-Id: <20220528090537.BC4758424B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gcc: bump to
- version 11.3
+Message-Id: <20220528090538.2169A84245@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ configs/zynqmp_zcu106_defconfig: uboot dp pll patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,160 +59,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55bd58c9f1c89f68abd15e3082fccfd586f05146
+commit: https://git.buildroot.net/buildroot/commit/?id=2aafb4974d833fceab31b5e2a7133427718515d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Tested with toolchain-builder:
-https://gitlab.com/kubu93/toolchains-builder/-/pipelines/529686714
+This patch fixes the DP audio and video PLL configurations for the
+zynqmp-zcu106-revA evaluation board.
 
-See:
-https://gcc.gnu.org/pipermail/gcc/2022-April/238573.html
-https://gcc.gnu.org/gcc-11/changes.html
+The Linux DP driver expects the DP to be using the following PLL config:
+  - DP video PLL should use the VPLL (0x0)
+  - DP audio PLL should use the RPLL (0x3)
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 24a2dc45cb7b4ab3f5af91c441c31b7fab58b60e)
+Register 0xFD1A0070 configures the DP video PLL.
+Register 0xFD1A0074 configures the DP audio PLL.
+
+This patch was build and run tested on a zynqmp-zcu106-revA target board.
+
+Upstream-Status: submitted (https://lore.kernel.org/all/62538b4a04dee28a6fc8ac5b85f8c845a5a76aa4.1651740988.git.michal.simek@amd.com/)
+This patch will be removed from buildroot in a future release when no longer necessary.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 81253000885b3eaa2f521a998463c119a1c989ba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch    | 10 +++++-----
- .../0002-or1k-Use-cmodel-large-when-building-crtstuff.patch    |  8 ++++----
- ...-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch |  6 +++---
- package/gcc/Config.in.host                                     |  2 +-
- package/gcc/gcc.hash                                           |  4 ++--
- 5 files changed, 15 insertions(+), 15 deletions(-)
+ ...p-zynqmp-zcu102-revA-Fix-DP-PLL-configura.patch | 40 ++++++++++++++++++++++
+ configs/zynqmp_zcu106_defconfig                    |  1 +
+ 2 files changed, 41 insertions(+)
 
-diff --git a/package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch b/package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-similarity index 96%
-rename from package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-rename to package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-index 6e32f953a3..4888f7e320 100644
---- a/package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-+++ b/package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-@@ -1,4 +1,4 @@
--From eff8110674ef193481d3657456a262beeb9951ff Mon Sep 17 00:00:00 2001
-+From 7a20b4574f06472086c786bd1b078ee962cdb02c Mon Sep 17 00:00:00 2001
- From: Stafford Horne <shorne@gmail.com>
- Date: Tue, 6 Apr 2021 05:47:17 +0900
- Subject: [PATCH] or1k: Add mcmodel option to handle large GOTs
-@@ -166,10 +166,10 @@ index 6bd0f3eee6d..cc23e3b8856 100644
-  Target RejectNegative Mask(CMOV)
-  Enable generation of conditional move (l.cmov) instructions.  By default the
- diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
--index 57b97a0838c..d8a6b0b60c9 100644
-+index 35508efb4ef..a1b7608a3aa 100644
- --- a/gcc/doc/invoke.texi
- +++ b/gcc/doc/invoke.texi
--@@ -1141,7 +1141,8 @@ Objective-C and Objective-C++ Dialects}.
-+@@ -1136,7 +1136,8 @@ Objective-C and Objective-C++ Dialects}.
-  @gccoptlist{-mboard=@var{name}  -mnewlib  -mhard-mul  -mhard-div @gol
-  -msoft-mul  -msoft-div @gol
-  -msoft-float  -mhard-float  -mdouble-float -munordered-float @gol
-@@ -179,7 +179,7 @@ index 57b97a0838c..d8a6b0b60c9 100644
-  
-  @emph{PDP-11 Options}
-  @gccoptlist{-mfpu  -msoft-float  -mac0  -mno-ac0  -m40  -m45  -m10 @gol
--@@ -26684,6 +26685,15 @@ Enable generation of shift with immediate (@code{l.srai}, @code{l.srli},
-+@@ -26443,6 +26444,15 @@ Enable generation of shift with immediate (@code{l.srai}, @code{l.srli},
-  @code{l.slli}) instructions.  By default extra instructions will be generated
-  to store the immediate to a register first.
-  
-@@ -196,5 +196,5 @@ index 57b97a0838c..d8a6b0b60c9 100644
-  @end table
-  
- -- 
--2.25.1
-+2.35.1
- 
-diff --git a/package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch b/package/gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-similarity index 93%
-rename from package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-rename to package/gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-index 00dd5de2a3..716f007a24 100644
---- a/package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-+++ b/package/gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-@@ -1,4 +1,4 @@
--From da8a9d695b3c4b9397b5d9a27660bfa48af8d707 Mon Sep 17 00:00:00 2001
-+From c544a63928406b706b8493fd9b8ca2136b433cf0 Mon Sep 17 00:00:00 2001
- From: Stafford Horne <shorne@gmail.com>
- Date: Wed, 21 Apr 2021 05:33:15 +0900
- Subject: [PATCH] or1k: Use cmodel=large when building crtstuff
-@@ -29,10 +29,10 @@ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-  create mode 100644 libgcc/config/or1k/t-crtstuff
- 
- diff --git a/libgcc/config.host b/libgcc/config.host
--index 50f00062232..8ca7a00082a 100644
-+index f2dc7e266f4..6f193c32fbd 100644
- --- a/libgcc/config.host
- +++ b/libgcc/config.host
--@@ -1119,12 +1119,12 @@ nios2-*-*)
-+@@ -1132,12 +1132,12 @@ nios2-*-*)
-  	extra_parts="$extra_parts crti.o crtn.o"
-  	;;
-  or1k-*-linux*)
-@@ -56,5 +56,5 @@ index 00000000000..dcae7f3498e
- +# Compile crtbeginS.o and crtendS.o with -mcmodel=large
- +CRTSTUFF_T_CFLAGS_S += -mcmodel=large
- -- 
--2.25.1
-+2.35.1
- 
-diff --git a/package/gcc/11.2.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch b/package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-similarity index 88%
-rename from package/gcc/11.2.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-rename to package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-index 5ac03d7c0c..e33dec3ff6 100644
---- a/package/gcc/11.2.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-+++ b/package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-@@ -1,4 +1,4 @@
--From f80e9941739fb3973b61fc6a5abddef5ad2faf73 Mon Sep 17 00:00:00 2001
-+From 8ef5787701f4d7cf46a27771d38ab54af2499e25 Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd.kuhls@t-online.de>
- Date: Fri, 27 Mar 2020 21:23:53 +0100
- Subject: [PATCH] gcc: define _REENTRANT for OpenRISC when -pthread is passed
-@@ -14,7 +14,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  1 file changed, 2 insertions(+)
- 
- diff --git a/gcc/config/or1k/linux.h b/gcc/config/or1k/linux.h
--index cbdc781418f..36303af892c 100644
-+index 196f3f3c8f0..0cbdc934af1 100644
- --- a/gcc/config/or1k/linux.h
- +++ b/gcc/config/or1k/linux.h
- @@ -32,6 +32,8 @@
-@@ -27,5 +27,5 @@ index cbdc781418f..36303af892c 100644
-  #define LINK_SPEC "%{h*}			\
-     %{static:-Bstatic}				\
- -- 
--2.31.1
-+2.35.1
- 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index a1fe192d3a..f6b9b4fa9d 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -81,7 +81,7 @@ config BR2_GCC_VERSION
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
- 	default "9.4.0"     if BR2_GCC_VERSION_9_X
- 	default "10.3.0"    if BR2_GCC_VERSION_10_X
--	default "11.2.0"    if BR2_GCC_VERSION_11_X
-+	default "11.3.0"    if BR2_GCC_VERSION_11_X
- 	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
- 
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 5655c7a9d7..ad8bae4a99 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
- sha512  dfd3500bf21784b8351a522d53463cf362ede66b0bc302edf350bb44e94418497a8b4b797b6af8ca9b2eeb746b3b115d9c3698381b989546e9151b4496415624  gcc-9.4.0.tar.xz
- # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-10.3.0/sha512.sum
- sha512  2b2dd7453d48a398c29eaebd1422b70341001b8c90a62aee51e83344e7fdd8a8e45f82a4a9165bd7edc76dada912c932f4b6632c5636760fec4c5d7e402b3f86  gcc-10.3.0.tar.xz
--# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.2.0/sha512.sum
--sha512  d53a0a966230895c54f01aea38696f818817b505f1e2bfa65e508753fcd01b2aedb4a61434f41f3a2ddbbd9f41384b96153c684ded3f0fa97c82758d9de5c7cf  gcc-11.2.0.tar.xz
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.3.0/sha512.sum
-+sha512  f0be5ad705c73b84477128a69c047f57dd47002f375eb60e1e842e08cf2009a509e92152bca345823926d550b7395ae6d4de7db51d1ee371c2dc37313881fca7  gcc-11.3.0.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  b0853e2b1c5998044392023fa653e399e74118c46e616504ac59e1a2cf27620f94434767ce06b6cf4ca3dfb57f81d6eda92752befaf095ea5e564a9181b4659c  gcc-arc-2020.09-release.tar.gz
+diff --git a/board/zynqmp/zcu106/patches/uboot/0001-arm64-zynqmp-zynqmp-zcu102-revA-Fix-DP-PLL-configura.patch b/board/zynqmp/zcu106/patches/uboot/0001-arm64-zynqmp-zynqmp-zcu102-revA-Fix-DP-PLL-configura.patch
+new file mode 100644
+index 0000000000..4281880da0
+--- /dev/null
++++ b/board/zynqmp/zcu106/patches/uboot/0001-arm64-zynqmp-zynqmp-zcu102-revA-Fix-DP-PLL-configura.patch
+@@ -0,0 +1,40 @@
++From aaaa10b613165b7790fe1c084de007240b5bd77a Mon Sep 17 00:00:00 2001
++From: Neal Frager <neal.frager@amd.com>
++Date: Thu, 5 May 2022 13:34:43 +0100
++Subject: [PATCH 1/1] arm64: zynqmp: zynqmp-zcu102-revA: Fix DP PLL
++ configuration
++
++This patch fixes the DP audio and video PLL configurations
++for the zynqmp-zcu106-revA evaluation board
++
++The Linux DP driver expects the DP to be using the following PLL config:
++  - DP video PLL should use the VPLL (0x0)
++  - DP audio PLL should use the RPLL (0x3)
++
++Register 0xFD1A0070 configures the DP video PLL.
++Register 0xFD1A0074 configures the DP audio PLL.
++
++Signed-off-by: Neal Frager <neal.frager@amd.com>
++Signed-off-by: Michal Simek <michal.simek@amd.com>
++---
++ board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c b/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
++index 15f0be1a43..cbc436289f 100644
++--- a/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
+++++ b/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
++@@ -81,8 +81,8 @@ static unsigned long psu_clock_init_data(void)
++ 	psu_mask_write(0xFF5E0104, 0x00000007U, 0x00000000U);
++ 	psu_mask_write(0xFF5E0128, 0x01003F07U, 0x01000F00U);
++ 	psu_mask_write(0xFD1A00A0, 0x01003F07U, 0x01000200U);
++-	psu_mask_write(0xFD1A0070, 0x013F3F07U, 0x01010203U);
++-	psu_mask_write(0xFD1A0074, 0x013F3F07U, 0x01013C00U);
+++	psu_mask_write(0xFD1A0070, 0x013F3F07U, 0x01010500U);
+++	psu_mask_write(0xFD1A0074, 0x013F3F07U, 0x01013C03U);
++ 	psu_mask_write(0xFD1A007C, 0x013F3F07U, 0x01011303U);
++ 	psu_mask_write(0xFD1A0060, 0x03003F07U, 0x03000100U);
++ 	psu_mask_write(0xFD1A0068, 0x01003F07U, 0x01000200U);
++-- 
++2.17.1
++
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 27967fc0bd..e1ea27a496 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -35,3 +35,4 @@ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
++BR2_GLOBAL_PATCH_DIR="board/zynqmp/zcu106/patches"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
