@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F00EC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 09:19:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE74EC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 09:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52B3E41A11;
-	Sat, 28 May 2022 09:19:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5728541BE5;
+	Sat, 28 May 2022 09:19:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZISZcL1uELOP; Sat, 28 May 2022 09:19:14 +0000 (UTC)
+	with ESMTP id Jtv6Kdshoonp; Sat, 28 May 2022 09:19:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 268EF419A2;
-	Sat, 28 May 2022 09:19:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8CBEB1BF5DA
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF4D341BB8;
+	Sat, 28 May 2022 09:19:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D22B91BF5DA
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 244AC84CAD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1256460B56
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HQsBZtj0jr8c for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xdQ7fjpqX2pG for <buildroot@lists.busybox.net>;
  Sat, 28 May 2022 09:17:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7006C84CBD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FBBF60B26
  for <buildroot@buildroot.org>; Sat, 28 May 2022 09:17:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3412684257; Sat, 28 May 2022 09:05:38 +0000 (UTC)
+ id D747F8424B; Sat, 28 May 2022 09:05:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 28 May 2022 11:14:03 +0200
+Date: Sat, 28 May 2022 10:56:23 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: b16eca8e45e9e8613a38ef0c958a49e12958a3f1
-X-Git-Newrev: 4b364f26e6cbb9e370567b5d71e47f4001501d96
+X-Git-Oldrev: bc4ab10c4d8e8e459796d3c47a1fb96200003530
+X-Git-Newrev: fe4e72251b2b2eaed6a2842b92198a9f78fe5d55
 X-Patchwork-Hint: ignore
-Message-Id: <20220528090538.3412684257@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] boot/shim: big endian
- arm/aarch64 variants are not supported
+Message-Id: <20220528090537.D747F8424B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/pkg-meson: add
+ support for new cpu families
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +59,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b364f26e6cbb9e370567b5d71e47f4001501d96
+commit: https://git.buildroot.net/buildroot/commit/?id=fe4e72251b2b2eaed6a2842b92198a9f78fe5d55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/a6c7dd171529e2a7b7a26af8d99bec53117a7a02/
+Add mappings for new cpu families based on the reference table:
+https://mesonbuild.com/Reference-tables.html#cpu-families
 
-Commit fd5842a1dd03642b2ea084439 (boot/shim: add
-BR2_PACKAGE_SHIM_ARCH_SUPPORTS) added explicit support for big/little endian
-arm/aarch64, but the shim code is hard coded for little endian:
-
-head -n 1 elf_{arm,aarch64}_efi.lds
-==> elf_arm_efi.lds <==
-OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
-
-==> elf_aarch64_efi.lds <==
-OUTPUT_FORMAT("elf64-littleaarch64", "elf64-littleaarch64", "elf64-littleaarch64")
-
-So drop the support for the big endian variants.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0ebbf0b280b10b04ab6b7b23c597f76f6490df64)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 0a91f37c482914d70336454cb4ab4fa8ffda30a5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/shim/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-meson.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/boot/shim/Config.in b/boot/shim/Config.in
-index c4f1a9f317..462ef12d62 100644
---- a/boot/shim/Config.in
-+++ b/boot/shim/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_SHIM_ARCH_SUPPORTS
- 	bool
--	default y if BR2_aarch64 || BR2_aarch64_be
--	default y if BR2_arm || BR2_armeb
-+	default y if BR2_aarch64
-+	default y if BR2_arm
- 	default y if BR2_i386
- 	default y if BR2_x86_64
- 	# it includes gnu-efi
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index f1390a18d0..ff850fa79f 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -36,6 +36,8 @@ else ifeq ($(BR2_arm)$(BR2_armeb),y)
+ PKG_MESON_TARGET_CPU_FAMILY = arm
+ else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+ PKG_MESON_TARGET_CPU_FAMILY = aarch64
++else ifeq ($(BR2_csky),y)
++PKG_MESON_TARGET_CPU_FAMILY = csky
+ else ifeq ($(BR2_i386),y)
+ PKG_MESON_TARGET_CPU_FAMILY = x86
+ else ifeq ($(BR2_m68k),y)
+@@ -50,8 +52,12 @@ else ifeq ($(BR2_powerpc),y)
+ PKG_MESON_TARGET_CPU_FAMILY = ppc
+ else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
+ PKG_MESON_TARGET_CPU_FAMILY = ppc64
+-else ifeq ($(BR2_riscv),y)
++else ifeq ($(BR2_riscv)$(BR2_RISCV_32),yy)
++PKG_MESON_TARGET_CPU_FAMILY = riscv32
++else ifeq ($(BR2_riscv)$(BR2_RISCV_64),yy)
+ PKG_MESON_TARGET_CPU_FAMILY = riscv64
++else ifeq ($(BR2_s390x),y)
++PKG_MESON_TARGET_CPU_FAMILY = s390x
+ else ifeq ($(BR2_sh4)$(BR2_sh4eb)$(BR2_sh4a)$(BR2_sh4aeb),y)
+ PKG_MESON_TARGET_CPU_FAMILY = sh4
+ else ifeq ($(BR2_sparc),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
