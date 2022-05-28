@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCEA0C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 08:48:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 821AFC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 08:48:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C86942A27;
-	Sat, 28 May 2022 08:48:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3991342A27;
+	Sat, 28 May 2022 08:48:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O6nWEW4g5sdG; Sat, 28 May 2022 08:48:09 +0000 (UTC)
+	with ESMTP id irm816KrwBWe; Sat, 28 May 2022 08:48:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FC4542898;
-	Sat, 28 May 2022 08:48:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 137F442898;
+	Sat, 28 May 2022 08:48:53 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 630661BF59E
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 08:48:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C7B71BF59E
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 08:48:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 51D1184818
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 08:48:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0BA5484CCE
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 08:48:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VtJyKtf6tGU7 for <buildroot@lists.busybox.net>;
- Sat, 28 May 2022 08:48:06 +0000 (UTC)
+ with ESMTP id Q-0u9z9PTyD3 for <buildroot@lists.busybox.net>;
+ Sat, 28 May 2022 08:48:50 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 675068480E
- for <buildroot@buildroot.org>; Sat, 28 May 2022 08:48:06 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 047FE84CBB
+ for <buildroot@buildroot.org>; Sat, 28 May 2022 08:48:49 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2D4A4E0002
- for <buildroot@buildroot.org>; Sat, 28 May 2022 08:48:02 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 05DA420007;
+ Sat, 28 May 2022 08:48:46 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1nus77-002z5X-Bv
- for buildroot@buildroot.org; Sat, 28 May 2022 10:48:01 +0200
+ (envelope-from <peter@korsgaard.com>)
+ id 1nus7q-002z9O-6A; Sat, 28 May 2022 10:48:46 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-References: <20220504082157.3212469-1-peter@korsgaard.com>
-Date: Sat, 28 May 2022 10:48:01 +0200
-In-Reply-To: <20220504082157.3212469-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 4 May 2022 10:21:55 +0200")
-Message-ID: <877d66dovy.fsf@dell.be.48ers.dk>
+To: Romain Naour <romain.naour@gmail.com>
+References: <20220504182958.82477-1-romain.naour@gmail.com>
+Date: Sat, 28 May 2022 10:48:46 +0200
+In-Reply-To: <20220504182958.82477-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Wed, 4 May 2022 20:29:58 +0200")
+Message-ID: <8735gudoup.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] {linux, linux-headers}: bump 4.{9, 14,
- 19}.x / 5.{4, 10, 15, 16}.x series
+Subject: Re: [Buildroot] [PATCH] package/gcc: bump to version 11.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,14 +59,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Tested with toolchain-builder:
+ > https://gitlab.com/kubu93/toolchains-builder/-/pipelines/529686714
+
+ > See:
+ > https://gcc.gnu.org/pipermail/gcc/2022-April/238573.html
+ > https://gcc.gnu.org/gcc-11/changes.html
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed to 2022.02.x, thanks.
 
