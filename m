@@ -1,54 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99684C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 11:01:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5AEEC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 11:05:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08B666119C;
-	Sat, 28 May 2022 11:01:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 530FA425E6;
+	Sat, 28 May 2022 11:05:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wi4xFyt8exyj; Sat, 28 May 2022 11:01:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vK1zwm2KtovW; Sat, 28 May 2022 11:04:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0692C612D5;
-	Sat, 28 May 2022 11:01:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39EBA425DB;
+	Sat, 28 May 2022 11:04:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5C0861BF4D7
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:01:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 853BB1BF37A
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A191418E9
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:01:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82233425D7
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 11:04:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pa8c4Q-JEqgm for <buildroot@lists.busybox.net>;
- Sat, 28 May 2022 11:01:11 +0000 (UTC)
+ with ESMTP id Y1_FgJ3DWXQc for <buildroot@lists.busybox.net>;
+ Sat, 28 May 2022 11:04:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CB07B418E5
- for <buildroot@buildroot.org>; Sat, 28 May 2022 11:01:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4E84F425D5
+ for <buildroot@buildroot.org>; Sat, 28 May 2022 11:04:54 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 072D520007;
- Sat, 28 May 2022 11:01:06 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id DE5CE20003;
+ Sat, 28 May 2022 11:04:52 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nuuBu-003sWE-3M; Sat, 28 May 2022 13:01:06 +0200
+ id 1nuuFY-003sjG-1w; Sat, 28 May 2022 13:04:52 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@gmail.com>
-References: <20220512204944.94312-1-romain.naour@gmail.com>
-Date: Sat, 28 May 2022 13:01:06 +0200
-In-Reply-To: <20220512204944.94312-1-romain.naour@gmail.com> (Romain Naour's
- message of "Thu, 12 May 2022 22:49:44 +0200")
-Message-ID: <87k0a5apl9.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220508191141.1270350-1-fontaine.fabrice@gmail.com>
+Date: Sat, 28 May 2022 13:04:52 +0200
+In-Reply-To: <20220508191141.1270350-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 8 May 2022 21:11:41 +0200")
+Message-ID: <87fsktapez.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] support/testing: test_lxc: bump kernel
- version to 5.15.38 for complete pidfds support
+Subject: Re: [Buildroot] [PATCH v2,1/1] package/numactl: needs atomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,50 +59,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > As reported by [1], the lxc test is broken since lxc >= 4.0.11.
- > A patch was added to lxc 4.0.11 to use the new mount api for devpts
- > setup [2] but the fall back code doesn't work when this new mount
- > API is not supported. This API was added in kernel 5.6.
+ > numactl unconditionally uses __atomic_fetch_and resulting in the
+ > following build failure on architectures that need libatomic to provide
+ > atomic intrinsics (e.g. microblaze) since commit
+ > 4ed540ddf59bec4b389be44d7f42820d2466904f:
 
- > (kernel 5.5)
- > DEBUG conf - conf.c:lxc_setup_devpts_child:1682 - No new devpts instance will be
- > mounted since no pts devices are required
- > lxc-start lxc_iperf3  DEBUG conf - conf.c:lxc_setup_dev_console:1966 - Cleared
- > all (0) mounts from "/dev/console"
- > lxc-start lxc_iperf3  ERROR mount_utils - mount_utils.c:mount_at:661 - No such
- > file or directory - Failed to mount "/proc/self/fd/44" to "/proc/self/fd/43"
- > lxc-start lxc_iperf3  ERROR conf - conf.c:lxc_setup_dev_console:1988 - No such
- > file or directory - Failed to mount "10(/dev/pts/0)" on "43"
- > lxc-start lxc_iperf3  ERROR conf - conf.c:lxc_setup_console:2143 - No such file
- > or directory - Failed to setup console
-
- > (kernel 5.6)
- > lxc-start lxc_iperf3  TRACE mount_utils - mount_utils.c:can_use_mount_api:582 -
- > Kernel supports mount api
- > lxc-start lxc_iperf3  TRACE mount_utils - mount_utils.c:move_detached_mount:328
- > - Attach detached mount 45 to filesystem at 43
- > lxc-start lxc_iperf3  TRACE conf - conf.c:lxc_setup_dev_console:1990 - Setup
- > console "/dev/pts/0"
-
- > Bump the kernel to the current LTS 5.15.38 version that fully support the
- > mount API needed by lxc.
+ > /nvmedata/autobuild/instance-5/output-1/host/lib/gcc/microblaze-buildroot-linux-uclibc/10.3.0/../../../../microblaze-buildroot-linux-uclibc/bin/ld:
+ > ./.libs/libnuma.a(libnuma.o): in function `numa_node_to_cpus_v1':
+ > (.text+0x2a34): undefined reference to `__atomic_fetch_and_1'
 
  > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/2429013708
+ >  - http://autobuild.buildroot.org/results/e225cb83dae390d9dc543d4da85c52180efbd40a
 
- > [1] http://lists.busybox.net/pipermail/buildroot/2022-January/635251.html
- > [2] https://github.com/lxc/lxc/commit/be606e16fd0fa967219d890745a425625eafe251
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Thomas Petazzoni):
+ >  - Reword commit message
 
 Committed to 2022.02.x, thanks.
 
