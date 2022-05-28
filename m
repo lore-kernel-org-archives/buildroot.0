@@ -1,53 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45D0BC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 09:16:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 253E0C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 09:17:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DEDEB61096;
-	Sat, 28 May 2022 09:16:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8F0A84CB3;
+	Sat, 28 May 2022 09:17:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ErD9XquhyYGq; Sat, 28 May 2022 09:16:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NXmH_8HwKyBu; Sat, 28 May 2022 09:17:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FC236F4C4;
-	Sat, 28 May 2022 09:16:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D74F084C81;
+	Sat, 28 May 2022 09:17:01 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E5B631BF5DA
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:16:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 83B261BF5DA
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D386042AD1
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:16:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8066542AD1
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id El-6WGu6skhs for <buildroot@lists.busybox.net>;
- Sat, 28 May 2022 09:16:11 +0000 (UTC)
+ with ESMTP id oWMx6n32u7Y3 for <buildroot@lists.busybox.net>;
+ Sat, 28 May 2022 09:16:59 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9FC1D42ACF
- for <buildroot@buildroot.org>; Sat, 28 May 2022 09:16:10 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E15BE42ACF
+ for <buildroot@buildroot.org>; Sat, 28 May 2022 09:16:58 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 40808100003;
- Sat, 28 May 2022 09:16:08 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2917820002;
+ Sat, 28 May 2022 09:16:55 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nusYJ-003148-BW; Sat, 28 May 2022 11:16:07 +0200
+ id 1nusZ5-00317x-8r; Sat, 28 May 2022 11:16:55 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Andreas Ziegler <br015@umbiko.net>
-References: <20220511051953.34515-1-br015@umbiko.net>
-Date: Sat, 28 May 2022 11:16:07 +0200
-In-Reply-To: <20220511051953.34515-1-br015@umbiko.net> (Andreas Ziegler's
- message of "Wed, 11 May 2022 07:19:53 +0200")
-Message-ID: <87leumaug8.fsf@dell.be.48ers.dk>
+To: buildroot@buildroot.org
+References: <20220511100707.1477883-1-peter@korsgaard.com>
+Date: Sat, 28 May 2022 11:16:55 +0200
+In-Reply-To: <20220511100707.1477883-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 11 May 2022 12:07:06 +0200")
+Message-ID: <87h75aauew.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: update to version 0.23.7
+Subject: Re: [Buildroot] [PATCH] package/libcurl: security bump to version
+ 7.83.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,27 +60,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?Q?J=C3=B6rg?= Krause <joerg.krause@embedded.rocks>,
- buildroot@buildroot.org
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Andreas" == Andreas Ziegler <br015@umbiko.net> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Minor bug fixes, including upstream fix for meson iconv handling, which makes 
- > 0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch redundant. 
+ > Fixes the following security issues:
+ > - CVE-2022-27778: curl removes wrong file on error
+ >   https://curl.se/docs/CVE-2022-27778.html
 
- > Introduces version dependencies for libshout and libupnp, which are met since 
- > 01/2021 (commit 118648d161). 
+ > - CVE-2022-27779: cookie for trailing dot TLD
+ >   https://curl.se/docs/CVE-2022-27779.html
 
- > Full change log:
- >   https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.7/NEWS
+ > - CVE-2022-27780: percent-encoded path separator in URL host
+ >   https://curl.se/docs/CVE-2022-27780.html
 
- > Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+ > - CVE-2022-27781: CERTINFO never-ending busy-loop
+ >   https://curl.se/docs/CVE-2022-27781.html
+
+ > - CVE-2022-27782: TLS and SSH connection too eager reuse
+ >   https://curl.se/docs/CVE-2022-27782.html
+
+ > - CVE-2022-30115: HSTS bypass via trailing dot
+ >   https://curl.se/docs/CVE-2022-30115.html
+
+ > Drop now upstreamed 0001-mbedtls-fix-compile-when-h2-enabled.patch
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2022.02.x, thanks.
+
+> ---
+ >  ...-mbedtls-fix-compile-when-h2-enabled.patch | 32 -------------------
+ >  package/libcurl/libcurl.hash                  |  4 +--
+ >  package/libcurl/libcurl.mk                    |  2 +-
+ >  3 files changed, 3 insertions(+), 35 deletions(-)
+ >  delete mode 100644 package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch
+
+ > diff --git a/package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch b/package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch
+ > deleted file mode 100644
+ > index 61cbabd84a..0000000000
+ > --- a/package/libcurl/0001-mbedtls-fix-compile-when-h2-enabled.patch
+ > +++ /dev/null
+ > @@ -1,32 +0,0 @@
+ > -From 6eb7fb37d901ed1e4ce07cbd628ee11bf02db1f3 Mon Sep 17 00:00:00 2001
+ > -From: Daniel Stenberg <daniel@haxx.se>
+ > -Date: Thu, 28 Apr 2022 17:11:50 +0200
+ > -Subject: [PATCH] mbedtls: fix compile when h2-enabled
+ > -
+ > -Fixes #8766
+ > -Reported-by: LigH-de on github
+ > -Closes #8768
+ > -
+ > -Downloaded from upstream commit
+ > -https://github.com/curl/curl/commit/6eb7fb37d901ed1e4ce07cbd628ee11bf02db1f3
+ > -
+ > -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ----
+ > - lib/vtls/mbedtls.c | 4 ++--
+ > - 1 file changed, 2 insertions(+), 2 deletions(-)
+ > -
+ > -diff --git a/lib/vtls/mbedtls.c b/lib/vtls/mbedtls.c
+ > -index 64f57c5d8321..5f9b87e6b75b 100644
+ > ---- a/lib/vtls/mbedtls.c
+ > -+++ b/lib/vtls/mbedtls.c
+ > -@@ -815,8 +815,8 @@ mbed_connect_step2(struct Curl_easy *data, struct connectdata *conn,
+ > -     if(next_protocol) {
+ > -       infof(data, VTLS_INFOF_ALPN_ACCEPTED_1STR, next_protocol);
+ > - #ifdef USE_HTTP2
+ > --      if(!strncmp(next_protocol, ALPN_H2, ALPN_H2_LEN) &&
+
+ > --         !next_protocol[ALPN_H2_LEN]) {
+ > -+      if(!strncmp(next_protocol, ALPN_H2, ALPN_H2_LENGTH) &&
+ > -+         !next_protocol[ALPN_H2_LENGTH]) {
+ > -         conn->negnpn = CURL_HTTP_VERSION_2;
+ > -       }
+ > -       else
+
+ > diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+ > index 64a1129a90..8672380f09 100644
+ > --- a/package/libcurl/libcurl.hash
+ > +++ b/package/libcurl/libcurl.hash
+ > @@ -1,5 +1,5 @@
+ >  # Locally calculated after checking pgp signature
+ > -# https://curl.se/download/curl-7.83.0.tar.xz.asc
+ > +# https://curl.se/download/curl-7.83.1.tar.xz.asc
+ >  # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+ > -sha256  bbff0e6b5047e773f3c3b084d80546cc1be4e354c09e419c2d0ef6116253511a  curl-7.83.0.tar.xz
+ > +sha256  2cb9c2356e7263a1272fd1435ef7cdebf2cd21400ec287b068396deb705c22c4  curl-7.83.1.tar.xz
+ >  sha256  321b1a09ebc30410f2e837c072e5521cf7095b757193af4a7dae1086e36ed31a  COPYING
+ > diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+ > index ea8529c914..15943f7512 100644
+ > --- a/package/libcurl/libcurl.mk
+ > +++ b/package/libcurl/libcurl.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -LIBCURL_VERSION = 7.83.0
+ > +LIBCURL_VERSION = 7.83.1
+ >  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ >  LIBCURL_SITE = https://curl.se/download
+ >  LIBCURL_DEPENDENCIES = host-pkgconf \
+ > -- 
+
+ > 2.30.2
+
 
 -- 
 Bye, Peter Korsgaard
