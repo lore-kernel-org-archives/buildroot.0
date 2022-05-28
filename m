@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 808DBC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 09:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5CD6C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 28 May 2022 09:20:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 342E842AE5;
-	Sat, 28 May 2022 09:20:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7EEDC6F4C3;
+	Sat, 28 May 2022 09:20:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1WdrksPxygen; Sat, 28 May 2022 09:20:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NAEYemsf7sgk; Sat, 28 May 2022 09:20:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDB9F42AE3;
-	Sat, 28 May 2022 09:20:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 731F26109C;
+	Sat, 28 May 2022 09:20:20 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4390F1BF5DA
- for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 54AD51BF5DA
+ for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2AAEF419AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9B7D419AF
  for <buildroot@lists.busybox.net>; Sat, 28 May 2022 09:17:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yezzPPLenzfT for <buildroot@lists.busybox.net>;
- Sat, 28 May 2022 09:17:06 +0000 (UTC)
+ with ESMTP id ZuJUAdAhB3Wo for <buildroot@lists.busybox.net>;
+ Sat, 28 May 2022 09:17:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65CC7419B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 69F2A419B2
  for <buildroot@buildroot.org>; Sat, 28 May 2022 09:17:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2A5138424B; Sat, 28 May 2022 09:05:38 +0000 (UTC)
+ id 3D34584245; Sat, 28 May 2022 09:05:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 28 May 2022 11:12:06 +0200
+Date: Sat, 28 May 2022 11:15:13 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2aafb4974d833fceab31b5e2a7133427718515d9
-X-Git-Newrev: b16eca8e45e9e8613a38ef0c958a49e12958a3f1
+X-Git-Oldrev: 4b364f26e6cbb9e370567b5d71e47f4001501d96
+X-Git-Newrev: e2fb74103e3b5dac0a76de59152583ca9473c0cf
 X-Patchwork-Hint: ignore
-Message-Id: <20220528090538.2A5138424B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/e2fsprogs: fix
- CVE-2022-1304
+Message-Id: <20220528090538.3D34584245@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/mpd: update to
+ version 0.23.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,101 +59,109 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b16eca8e45e9e8613a38ef0c958a49e12958a3f1
+commit: https://git.buildroot.net/buildroot/commit/?id=e2fb74103e3b5dac0a76de59152583ca9473c0cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-An out-of-bounds read/write vulnerability was found in e2fsprogs 1.46.5.
-This issue leads to a segmentation fault and possibly arbitrary code
-execution via a specially crafted filesystem.
+Minor bug fixes, including upstream fix for meson iconv handling, which makes
+0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch redundant.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Introduces version dependencies for libshout and libupnp, which are met since
+01/2021 (commit 118648d161).
+
+Full change log:
+  https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.7/NEWS
+
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3ef096786a5d364a7924105d67ff7dcdaaa21f61)
+(cherry picked from commit 4c22b1650dcb1f4f946acc619ffcd3fd5921717c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...s-add-sanity-check-to-extent-manipulation.patch | 59 ++++++++++++++++++++++
- package/e2fsprogs/e2fsprogs.mk                     |  3 ++
- 2 files changed, 62 insertions(+)
+ ...-fix-iconv-detection-when-libiconv-is-ins.patch | 53 ----------------------
+ package/mpd/mpd.hash                               |  2 +-
+ package/mpd/mpd.mk                                 |  2 +-
+ 3 files changed, 2 insertions(+), 55 deletions(-)
 
-diff --git a/package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch b/package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch
-new file mode 100644
-index 0000000000..b5299a2a78
---- /dev/null
-+++ b/package/e2fsprogs/0001-libext2fs-add-sanity-check-to-extent-manipulation.patch
-@@ -0,0 +1,59 @@
-+From ab51d587bb9b229b1fade1afd02e1574c1ba5c76 Mon Sep 17 00:00:00 2001
-+From: Lukas Czerner <lczerner@redhat.com>
-+Date: Thu, 21 Apr 2022 19:31:48 +0200
-+Subject: libext2fs: add sanity check to extent manipulation
-+
-+It is possible to have a corrupted extent tree in such a way that a leaf
-+node contains zero extents in it. Currently if that happens and we try
-+to traverse the tree we can end up accessing wrong data, or possibly
-+even uninitialized memory. Make sure we don't do that.
-+
-+Additionally make sure that we have a sane number of bytes passed to
-+memmove() in ext2fs_extent_delete().
-+
-+Note that e2fsck is currently unable to spot and fix such corruption in
-+pass1.
-+
-+Signed-off-by: Lukas Czerner <lczerner@redhat.com>
-+Reported-by: Nils Bars <nils_bars@t-online.de>
-+Addresses: https://bugzilla.redhat.com/show_bug.cgi?id=2068113
-+Addresses: CVE-2022-1304
-+Addresses-Debian-Bug: #1010263
-+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-+
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/commit/?h=maint&id=ab51d587bb9b229b1fade1afd02e1574c1ba5c76]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/ext2fs/extent.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/lib/ext2fs/extent.c b/lib/ext2fs/extent.c
-+index b324c7b0..1a206a16 100644
-+--- a/lib/ext2fs/extent.c
-++++ b/lib/ext2fs/extent.c
-+@@ -495,6 +495,10 @@ retry:
-+ 			ext2fs_le16_to_cpu(eh->eh_entries);
-+ 		newpath->max_entries = ext2fs_le16_to_cpu(eh->eh_max);
-+ 
-++		/* Make sure there is at least one extent present */
-++		if (newpath->left <= 0)
-++			return EXT2_ET_EXTENT_NO_DOWN;
-++
-+ 		if (path->left > 0) {
-+ 			ix++;
-+ 			newpath->end_blk = ext2fs_le32_to_cpu(ix->ei_block);
-+@@ -1630,6 +1634,10 @@ errcode_t ext2fs_extent_delete(ext2_extent_handle_t handle, int flags)
-+ 
-+ 	cp = path->curr;
-+ 
-++	/* Sanity check before memmove() */
-++	if (path->left < 0)
-++		return EXT2_ET_EXTENT_LEAF_BAD;
-++
-+ 	if (path->left) {
-+ 		memmove(cp, cp + sizeof(struct ext3_extent_idx),
-+ 			path->left * sizeof(struct ext3_extent_idx));
-+-- 
-+cgit 
-+
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index cd70e3a034..39c9e07644 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -12,6 +12,9 @@ E2FSPROGS_LICENSE_FILES = NOTICE lib/ss/mit-sipb-copyright.h lib/et/internal.h
- E2FSPROGS_CPE_ID_VENDOR = e2fsprogs_project
- E2FSPROGS_INSTALL_STAGING = YES
+diff --git a/package/mpd/0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch b/package/mpd/0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch
+deleted file mode 100644
+index 162999dc5f..0000000000
+--- a/package/mpd/0002-src-lib-icu-fix-iconv-detection-when-libiconv-is-ins.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 3882a5a263caa681778a21b1f5f13a1b64536796 Mon Sep 17 00:00:00 2001
+-From: aeolio <git@aeolio.de>
+-Date: Wed, 20 Apr 2022 16:10:39 +0200
+-Subject: [PATCH] src/lib/icu: fix iconv() detection when libiconv is installed
+-
+-Signed-off-by: aeolio <git@aeolio.de>
+-Upstream: https://github.com/MusicPlayerDaemon/MPD/pull/1515
+-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+----
+- src/lib/icu/meson.build | 11 +++++++++--
+- 1 file changed, 9 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/lib/icu/meson.build b/src/lib/icu/meson.build
+-index 59215e704..972c1fda3 100644
+---- a/src/lib/icu/meson.build
+-+++ b/src/lib/icu/meson.build
+-@@ -12,17 +12,23 @@ if is_windows
+-   icu_sources += 'Win32.cxx'
+- endif
+- 
+-+iconv_dep = []
+- if icu_dep.found()
+-   icu_sources += [
+-     'Util.cxx',
+-     'Init.cxx',
+-   ]
+- elif not get_option('iconv').disabled()
+--  have_iconv = compiler.has_function('iconv', prefix : '#include <iconv.h>')
+--  conf.set('HAVE_ICONV', have_iconv)
+-+  # an installed iconv library will make the builtin iconv() unavailable,
+-+  # so search for the library first and pass it as (possible) dependency
+-+  iconv_dep = compiler.find_library('libiconv', required: false)
+-+  have_iconv = compiler.has_function('iconv', 
+-+    dependencies: iconv_dep, 
+-+    prefix : '#include <iconv.h>')
+-   if not have_iconv and get_option('iconv').enabled()
+-     error('iconv() not available')
+-   endif
+-+  conf.set('HAVE_ICONV', have_iconv)
+- endif
+- 
+- icu = static_library(
+-@@ -31,6 +37,7 @@ icu = static_library(
+-   include_directories: inc,
+-   dependencies: [
+-     icu_dep,
+-+    iconv_dep,
+-     fmt_dep,
+-   ],
+- )
+--- 
+-2.34.1
+-
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index b09140abf5..353df25b39 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  cbc5928ee3ee1ef7ff6a58f6ba4afaee16c07e9eb42d0107bcc098010f4f26ed  mpd-0.23.6.tar.xz
++sha256  960dcbac717c388f5dcc4fd945e3af19a476f2b15f367e9653d4c7a948768211  mpd-0.23.7.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 12da36098f..20c8f77fa8 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+# 0001-libext2fs-add-sanity-check-to-extent-manipulation.patch
-+E2FSPROGS_IGNORE_CVES += CVE-2022-1304
-+
- # Use libblkid and libuuid from util-linux for host and target packages.
- # This prevents overriding them with e2fsprogs' ones, which may cause
- # problems for other packages.
+ MPD_VERSION_MAJOR = 0.23
+-MPD_VERSION = $(MPD_VERSION_MAJOR).6
++MPD_VERSION = $(MPD_VERSION_MAJOR).7
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost fmt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
