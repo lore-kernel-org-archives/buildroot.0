@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21659C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:55:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4869AC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:55:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A252442649;
-	Sun, 29 May 2022 08:55:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2FD940338;
+	Sun, 29 May 2022 08:55:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4FaA5vYVVMWE; Sun, 29 May 2022 08:55:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8bSTH-DSVMYL; Sun, 29 May 2022 08:55:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D22B419F0;
-	Sun, 29 May 2022 08:55:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B97D1BF404
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F71140528;
+	Sun, 29 May 2022 08:55:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E4F1E1BF404
  for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 398FD60DB2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 66A4C4264B
  for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:54:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bmh12og26hNV for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4-CPq3WQoUaN for <buildroot@lists.busybox.net>;
  Sun, 29 May 2022 08:54:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CE8560C18
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89B70419C4
  for <buildroot@buildroot.org>; Sun, 29 May 2022 08:54:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1270A85F51; Sun, 29 May 2022 08:43:03 +0000 (UTC)
+ id 0A2EE86316; Sun, 29 May 2022 08:43:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 May 2022 10:43:12 +0200
+Date: Sun, 29 May 2022 10:41:49 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 88a86922b061b1da0348dbcb3cb0bf14ec5e0b09
-X-Git-Newrev: b6ab73fe1f466c0e30171b59ef3cdfcaeed16e5c
+X-Git-Oldrev: 25296268c6ff7df30974132f209ba95a6cc5f718
+X-Git-Newrev: 88a86922b061b1da0348dbcb3cb0bf14ec5e0b09
 X-Patchwork-Hint: ignore
-Message-Id: <20220529084303.1270A85F51@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gcc: restrict
- hs4x_rel31 to arc gcc fork
+Message-Id: <20220529084303.0A2EE86316@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/pinentry: add
+ missing !BR2_ARM_CPU_ARMV4 dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,56 +59,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6ab73fe1f466c0e30171b59ef3cdfcaeed16e5c
+commit: https://git.buildroot.net/buildroot/commit/?id=88a86922b061b1da0348dbcb3cb0bf14ec5e0b09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-All the ARC variants are supported by upstream gcc, except for the
-HS48 rel31 (hs4x_rel31) which is only supported by the ARC fork.
+Propagate this missing BR2_PACKAGE_QT5 dependency.
 
 Fixes:
-http://autobuild.buildroot.net/results/357a74d53af96d4b868a9d5b9f9ce9432e0c53b5
-http://autobuild.buildroot.net/results/bcdf160a3d5ffcccd4402f65aca153faca4b32c2
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_QT5
+  Depends on [n]: BR2_INSTALL_LIBSTDCPP [=y] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS_NPTL [=y] && BR2_HOST_GCC_AT_LEAST_5 [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_5 [=y] && !BR2_ARM_CPU_ARMV4 [=y] && !BR2_STATIC_LIBS [=n]
+  Selected by [y]:
+  - BR2_PACKAGE_PINENTRY_QT5 [=y] && BR2_PACKAGE_PINENTRY [=y] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS_NPTL [=y] && BR2_HOST_GCC_AT_LEAST_5 [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_5 [=y] && !BR2_arc [=n] && !BR2_STATIC_LIBS [=n]
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: ARC Maintainers <arc-buildroot@synopsys.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 770c9e5ce3de4ef1743948898a37e9a2ad76ca8f)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3ec4cb24717c59d17fd4965c546ecf762e1be890)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/Config.in.host | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/pinentry/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index f6b9b4fa9d..2b12035c4b 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -31,6 +31,8 @@ config BR2_GCC_VERSION_9_X
- 	# upstream gcc. C-SKY gcc upstream support not tested
- 	# with upstream binutils and glibc.
- 	depends on !BR2_csky
-+	# ARC HS48 rel 31 only supported by gcc arc fork.
-+	depends on !BR2_archs4x_rel31
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index 3f005f8c58..bd5e3af5a1 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -74,6 +74,7 @@ config BR2_PACKAGE_PINENTRY_QT5
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_HOST_GCC_AT_LEAST_5
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	depends on !BR2_ARM_CPU_ARMV4
+ 	depends on !BR2_arc
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_QT5
+@@ -84,6 +85,7 @@ config BR2_PACKAGE_PINENTRY_QT5
  
- config BR2_GCC_VERSION_10_X
-@@ -43,6 +45,8 @@ config BR2_GCC_VERSION_10_X
- 	# upstream gcc. C-SKY gcc upstream support not tested
- 	# with upstream binutils and glibc.
- 	depends on !BR2_csky
-+	# ARC HS48 rel 31 only supported by gcc arc fork.
-+	depends on !BR2_archs4x_rel31
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 
- config BR2_GCC_VERSION_11_X
-@@ -54,6 +58,8 @@ config BR2_GCC_VERSION_11_X
- 	# that need to be reverted since gcc 8.4, 9.3 and 10.1.
- 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
- 	depends on !BR2_sparc
-+	# ARC HS48 rel 31 only supported by gcc arc fork.
-+	depends on !BR2_archs4x_rel31
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 
- endchoice
+ comment "pinentry-qt5 needs a host gcc >= 5.0, and a toolchain w/ wchar, NPTL, gcc >= 5.0, C++, dynamic library"
+ 	depends on !BR2_arc
++	depends on !BR2_ARM_CPU_ARMV4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
+ 		BR2_STATIC_LIBS || !BR2_HOST_GCC_AT_LEAST_5
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
