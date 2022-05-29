@@ -1,88 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2BE3C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 19:53:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83D80C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 20:18:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89E2C82848;
-	Sun, 29 May 2022 19:53:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A6EB408DB;
+	Sun, 29 May 2022 20:18:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zUep8YSDiv9j; Sun, 29 May 2022 19:53:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y-i1CiYCyQiR; Sun, 29 May 2022 20:18:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B8CB827FA;
-	Sun, 29 May 2022 19:53:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC14C40B08;
+	Sun, 29 May 2022 20:18:09 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 187921BF3C3
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 19:53:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C1FB1BF3D7
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 20:18:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06AB4419D8
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 19:53:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 079C841A0D
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 20:18:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F7cOX2Tc-CZ2 for <buildroot@lists.busybox.net>;
- Sun, 29 May 2022 19:53:19 +0000 (UTC)
+ with ESMTP id VPUS7fOc6UCI for <buildroot@lists.busybox.net>;
+ Sun, 29 May 2022 20:18:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 81ED7419D0
- for <buildroot@buildroot.org>; Sun, 29 May 2022 19:53:19 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id p10so12126163wrg.12
- for <buildroot@buildroot.org>; Sun, 29 May 2022 12:53:19 -0700 (PDT)
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com
+ [IPv6:2001:4860:4864:20::2f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 54E3241A0B
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 20:18:06 +0000 (UTC)
+Received: by mail-oa1-x2f.google.com with SMTP id
+ 586e51a60fabf-f2a4c51c45so11987186fac.9
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 13:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=Tasv4RQM4cr3w6ik6P/a/tDppEo2yty0YtAWMqHIiJE=;
- b=ab9lkcdqaC0lIG1yn1b4L7MSGaNWqScERDw+7TtKFjwEjOItjlcIiUlB89t6POeqMt
- VIFP+RN7+xtTatXxpTOfRQpOoLsMWZm4SGiHRiuYQ9U360xA8CGIVPLscubWKFotW1is
- SPGt0Ka75X2lhGv9udmfCgDtX7t9HQ7Z2CxHUNsj7mvWwUiT4TLIiAvaDKdWIU7RtOeh
- hzWpq+rO7xALIw24eccMHtGJdGZovfCGOr3Zbg7WDzF+7K7sCpe7IKOV6sfp1XfTExcw
- PpcqRQs4AOAJAK5AEfbQx6JLlb06YJudQJSzr19OoW15gnpnkL912/InbtYWj8AdPcSQ
- +8/w==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=GOcQGseiAWWWjyKgJMuU8kpEQvbEUFr6bcyzJsgqyCg=;
+ b=inZ0QzcDEtO5w65uAUp0vgaU8OYkJXrDEuY2tAahDc+plGYJ93anY07QBO/hX0jJeu
+ 9SkFq7EHZQ3ddzgQAKFmhCvVjOaZN22PORsio2oo95LvbfdhnWP2TEf5SxAB9QrJNvAj
+ 1RVJ2sB/zIjv2y18YLi1Qxtd48ty6sAoAl9eTSYa/AT4uLslfZ2eehIS+K2oAxJP553C
+ vOzngUrrhJHiAh3B21ZY63S9tthx5UTML9oC8uwn0H54tEbMiMWKXEp7IlCA7KLU7+33
+ TUhZO3iv1j9zJinhi4yzqdExsn/TdyCbvK3rKEaSfNRG8ScBY4BiH/uwiUEYizu1jmxO
+ dimw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
- :content-transfer-encoding;
- bh=Tasv4RQM4cr3w6ik6P/a/tDppEo2yty0YtAWMqHIiJE=;
- b=Rv93lmqiEFj8TtkLPiDFKiVs46Z1GIXO4UBQ0E8ubUgrvquLWkJJQlF7+0hGnvy33F
- xG+WVLgb7ZvHvTqK8TmeSGzKgbvltwMRbDRhmOwGs1xHIT8GCV8bq9pg6Z4wuaWgF5r0
- jtKh2spoinFnDKiBxwMqjnDbvEJodZtWTumHloiuJ2c5+tEyKnKcKmLDGyumStEoNcf0
- Rrj7II7JbZhtjZN5J1LKvL18K3bN3/0bqBFxCgI7GU2km9rjfH6UsBm1hv5cbqWpzqtQ
- m5POML/m/GHQ5+AkxKXJc60bqKnaZJhUzm3SP8iZURGQanclOxQ7aqc77rPrbzd/JNou
- mSiA==
-X-Gm-Message-State: AOAM533fzxd0SyhDJCPgQjhJE8L065yy9Pk64wxvah8xUeq/WFQvAHxr
- 3NWEoiZjlO+TBcNq6R0j0TU=
-X-Google-Smtp-Source: ABdhPJylNSqZmSOw1lsbgsBSmrsjObVtM14bpA0lFAk/lvCRcXun/PFjEMFPqiyEissTzs7h+m90tA==
-X-Received: by 2002:a05:6000:71b:b0:20e:ed96:e976 with SMTP id
- bs27-20020a056000071b00b0020eed96e976mr38763500wrb.500.1653853997722; 
- Sun, 29 May 2022 12:53:17 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id
- i8-20020adfefc8000000b002102af52a2csm4556541wrp.9.2022.05.29.12.53.16
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 29 May 2022 12:53:17 -0700 (PDT)
-Message-ID: <e3350a95-d9ca-8d7d-0f48-22c86289a3db@gmail.com>
-Date: Sun, 29 May 2022 21:53:16 +0200
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=GOcQGseiAWWWjyKgJMuU8kpEQvbEUFr6bcyzJsgqyCg=;
+ b=AaT/kwg7YjvL8UcYSiDNeTT8BDDMqPBMgEYmw2lYoG7yRsryLFX/SRDBYPT6NF6+Kr
+ NwRoRvv4N+l/421Cny4BflpTc15lKgcOv7wiAtRVFxkjWo/ebSLWFHtCMGygJ7PwRL2G
+ kYtXjBbYujKf2YE733AaYOTRqOuVf79iUP1/JUuvJVYptOJFscUn+noK5FSn628UPnUG
+ dlvaRcmcHM7PSV8cM2WCF9oumXNPVTkxFzNCsNaCAAAZnwmhizXAok5xlJ4rDryj4b4Y
+ wzbifeI2ZdwvBkXUlARFR7HgAwEvyjC2Gt9qN8bCCCI+Qf4oLsmGMh3vnhPijsoRXojA
+ LvIQ==
+X-Gm-Message-State: AOAM530ib4NvyWMaDAsBAf/BEe8NmuTsjh8APUe1GR+ZC7XXXjcD5r4l
+ BnYLBOtKkvcHt9OnwpkSpG1U+XwXLrJAePx9wMw=
+X-Google-Smtp-Source: ABdhPJyojtwSRocL/hdmS4n/C0WjyBMsHOZQO70g5i3sAyp9+H05XCEBQAZVYYxyMgEYcj1GU0KVDbkEBnJ9STBEAQs=
+X-Received: by 2002:a05:6870:3105:b0:f2:9615:ff8e with SMTP id
+ v5-20020a056870310500b000f29615ff8emr8334158oaa.200.1653855485075; Sun, 29
+ May 2022 13:18:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: James Hilliard <james.hilliard1@gmail.com>
 References: <20220517200923.1516695-1-james.hilliard1@gmail.com>
  <7585dcea-4e32-a582-e138-e7e225609398@gmail.com>
  <CADvTj4re+hCC9n=HRMsLQ+SaEPPH=XBkCG83mTp_U79rr9Nvyg@mail.gmail.com>
-From: Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <CADvTj4re+hCC9n=HRMsLQ+SaEPPH=XBkCG83mTp_U79rr9Nvyg@mail.gmail.com>
+ <e3350a95-d9ca-8d7d-0f48-22c86289a3db@gmail.com>
+In-Reply-To: <e3350a95-d9ca-8d7d-0f48-22c86289a3db@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 29 May 2022 14:17:52 -0600
+Message-ID: <CADvTj4rWQx=g3MK6AoV7bbRS7ZOA4K7SMR2Qb+OhaOdX4y8odg@mail.gmail.com>
+To: Romain Naour <romain.naour@gmail.com>
 Subject: Re: [Buildroot] [PATCH 1/1] package/python-flask: bump to version
  2.1.2
 X-BeenThere: buildroot@buildroot.org
@@ -99,105 +89,447 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Cc: Lionel Flandrin <lionel@svkt.org>,
  "Yann E. MORIN" <yann.morin.1998@free.fr>, Asaf Kahlon <asafka7@gmail.com>,
  buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0850491136460105848=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgMjkvMDUvMjAyMiDDoCAyMTo0MSwgSmFtZXMgSGlsbGlhcmQgYSDDqWNyaXTCoDoKPiAKPiAK
-PiBPbiBTdW4sIE1heSAyOSwgMjAyMiwgMToyOSBQTSBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91
-ckBnbWFpbC5jb20KPiA8bWFpbHRvOnJvbWFpbi5uYW91ckBnbWFpbC5jb20+PiB3cm90ZToKPiAK
-PiAgICAgSGVsbG8gSmFtZXMsCj4gCj4gICAgIExlIDE3LzA1LzIwMjIgw6AgMjI6MDksIEphbWVz
-IEhpbGxpYXJkIGEgw6ljcml0wqA6Cj4gICAgID4gTGljZW5zZSBoYXNoIGNoYW5nZSBkdWUgdG8g
-bGljZW5zZSB0aXRsZSBzeW50YXggY2hhbmdlOgo+ICAgICA+Cj4gICAgIGh0dHBzOi8vZ2l0aHVi
-LmNvbS9wYWxsZXRzL2ZsYXNrL2NvbW1pdC85ZTdkM2E2YjY5NGIyN2Y5OTcyNjY4ODlhZTQ2M2Uw
-NmRkODNhMTg5Cj4gICAgIDxodHRwczovL2dpdGh1Yi5jb20vcGFsbGV0cy9mbGFzay9jb21taXQv
-OWU3ZDNhNmI2OTRiMjdmOTk3MjY2ODg5YWU0NjNlMDZkZDgzYTE4OT4KPiAKPiAgICAgVGhpcyBw
-YXRjaCBhbG9uZyB3aXRoIHB5dGhvbi13ZXJremV1ZyB2ZXJzaW9uIGJ1bXAgWzFdIGZpeGVzIHRo
-ZQo+ICAgICB0ZXN0cy5wYWNrYWdlLnRlc3RfcHl0aG9uX2ZsYXNrLlRlc3RQeXRob25QeTNGbGFz
-ayBidWlsZCBpc3N1ZSBpbiBnaXRsYWItY2kgWzJdLgo+IAo+ICAgICBUaGlzIHRlc3QgZmFpbCBz
-aW5jZSB0aGUgcHl0aG9uLWppbmphMiB2ZXJzaW9uIGJ1bXAgMy4xLjIgWzNdLgo+IAo+ICAgICBE
-byB5b3Uga25vdyBpZiBidW1waW5nIHB5dGhvbi1mbGFzaCBhbmQgcHl0aG9uLXdlcmt6ZXVnIG1h
-eSBpbnRyb2R1Y2Ugb3RoZXIKPiAgICAgcnVudGltZSBpc3N1ZT8gSXMgYW55IGZvbGxvd3VwIHZl
-cnNpb24gYnVtcCByZXF1aXJlZD8KPiAKPiBJIHNlbnQgYSBmZXcgcHl0aG9uIHBhY2thZ2UgYnVt
-cHMgdGhhdCBzaG91bGQgZml4IGl0LgoKT2ssIGJ1dCBpdCdzIG5vdCBleHBsaWNpdGx5IHN0YXRl
-ZCBpZiBpdCdzIGludGVuZGVkIGZvciBtYXN0ZXIgKHVwY29taW5nCjIwMjIuMDUpIG9yIG5leHQg
-YnJhbmNoLgpDYW4geW91IGxpc3Qgd2hpY2ggcGF0Y2ggbXVzdCBiZSBtZXJnZWQgaW4gbWFzdGVy
-PwoKPiAKPiAgICAgSXMgcmV2ZXJ0aW5nIHB5dGhvbi1qaW5qYTIgc2FmZT8KPiAKPiBJdCdzIHVz
-ZWQgYnkgc3R1ZmYgb3RoZXIgdGhhbiBmbGFzayBzbyBiZXN0IHRvIGFwcGx5IG15IHBhdGNoZXMg
-YnVtcGluZyB0aGUKPiBmbGFzayBkZXBzIHRoaW5rLgoKb2ssIEknbSBhZ3JlZSBvbiB0aGUgcHJp
-bmNpcGxlIGJ1dCBhcyB5b3Ugbm90aWNlZCwgYW55IHB5dGhvbiBwYWNrYWdlIHZlcnNpb24KYnVt
-cCBtYXkgdHJpZ2dlciBhIHJ1bnRpbWUgaXNzdWUgaW4gYW5vdGhlciBweXRob24gcGFja2FnZS4K
-ClRoaXMgc2hvdWxkIGZpeGVzIHR3byByZW1haW5pbmcgZ2l0bGFiLWNpIGlzc3VlczoKaHR0cHM6
-Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8yNDkxMzIxMjkyCmh0
-dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvMjQ5MTMyMTI5
-MQoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+IAo+ICAgICBUZXN0ZWQtYnk6IFJvbWFpbiBO
-YW91ciA8cm9tYWluLm5hb3VyQGdtYWlsLmNvbSA8bWFpbHRvOnJvbWFpbi5uYW91ckBnbWFpbC5j
-b20+Pgo+IAo+ICAgICBbMV0KPiAgICAgaHR0cDovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2pl
-Y3QvYnVpbGRyb290L3BhdGNoLzIwMjIwNTE3MjAxMjQ5LjE1MTgzNTgtMS1qYW1lcy5oaWxsaWFy
-ZDFAZ21haWwuY29tLwo+ICAgICA8aHR0cDovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3Qv
-YnVpbGRyb290L3BhdGNoLzIwMjIwNTE3MjAxMjQ5LjE1MTgzNTgtMS1qYW1lcy5oaWxsaWFyZDFA
-Z21haWwuY29tLz4KPiAgICAgWzJdIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1
-aWxkcm9vdC8tL2pvYnMvMjQ5MTMyMTI5MQo+ICAgICA8aHR0cHM6Ly9naXRsYWIuY29tL2J1aWxk
-cm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8yNDkxMzIxMjkxPgo+ICAgICBbM10gaHR0cDovL2xp
-c3RzLmJ1c3lib3gubmV0L3BpcGVybWFpbC9idWlsZHJvb3QvMjAyMi1NYXkvNjQyOTQyLmh0bWwK
-PiAgICAgPGh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9waXBlcm1haWwvYnVpbGRyb290LzIwMjIt
-TWF5LzY0Mjk0Mi5odG1sPgo+IAo+ICAgICBCZXN0IHJlZ2FyZHMsCj4gICAgIFJvbWFpbgo+IAo+
-ICAgICA+Cj4gICAgID4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxp
-YXJkMUBnbWFpbC5jb20KPiAgICAgPG1haWx0bzpqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPj4K
-PiAgICAgPiAtLS0KPiAgICAgPsKgIHBhY2thZ2UvcHl0aG9uLWZsYXNrL3B5dGhvbi1mbGFzay5o
-YXNoIHwgMTMgKysrKysrLS0tLS0tLQo+ICAgICA+wqAgcGFja2FnZS9weXRob24tZmxhc2svcHl0
-aG9uLWZsYXNrLm1rIDxodHRwOi8vcHl0aG9uLWZsYXNrLm1rPsKgIMKgfMKgIDQgKystLQo+ICAg
-ICA+wqAgMiBmaWxlcyBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDkgZGVsZXRpb25zKC0pCj4g
-ICAgID4KPiAgICAgPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tZmxhc2svcHl0aG9uLWZs
-YXNrLmhhc2gKPiAgICAgYi9wYWNrYWdlL3B5dGhvbi1mbGFzay9weXRob24tZmxhc2suaGFzaAo+
-ICAgICA+IGluZGV4IGM2Y2NkNjMzZjguLjVmMTlhNDUwYTEgMTAwNjQ0Cj4gICAgID4gLS0tIGEv
-cGFja2FnZS9weXRob24tZmxhc2svcHl0aG9uLWZsYXNrLmhhc2gKPiAgICAgPiArKysgYi9wYWNr
-YWdlL3B5dGhvbi1mbGFzay9weXRob24tZmxhc2suaGFzaAo+ICAgICA+IEBAIC0xLDcgKzEsNiBA
-QAo+ICAgICA+IC0jIEZyb20KPiAgICAgaHR0cHM6Ly9weXBpLm9yZy9wcm9qZWN0L0ZsYXNrLyNj
-b3B5LWhhc2gtbW9kYWwtOTExZmZiNjctZmU4NC00ZTI1LWExYTktZjRjNzQ1YTBhOTgwCj4gICAg
-IDxodHRwczovL3B5cGkub3JnL3Byb2plY3QvRmxhc2svI2NvcHktaGFzaC1tb2RhbC05MTFmZmI2
-Ny1mZTg0LTRlMjUtYTFhOS1mNGM3NDVhMGE5ODA+Cj4gICAgID4gLW1kNcKgIDBkYTQxNDVkMTcy
-OTkzY2QyOGE2YzYxOTYzMGNjMTljwqAgRmxhc2stMS4xLjIudGFyLmd6Cj4gICAgID4gLXNoYTI1
-NsKgIMKgIMKgCj4gICAgIMKgNGVmYTFhZTJkN2M5ODY1YWY0ODk4NmRlOGFlYjg1MDRiZjMyYzdm
-M2Q2ZmRjOTM1M2QzNGIyMWY0YjEyNzA2MMKgCj4gICAgIEZsYXNrLTEuMS4yLnRhci5nego+ICAg
-ICA+IC0KPiAgICAgPiAtIyBMaWNlbnNlIGZpbGVzCj4gICAgID4gLXNoYTI1NsKgIMKgIMKgCj4g
-ICAgIMKgNDg5YThlMTEwODUwOWVkOThhMzdiYjk4M2UxMWUwZjdlMWQzMWYwYmQ4Zjk5YTc5Yzg0
-NDhlN2ZmMzdkMDdlYcKgIExJQ0VOU0UucnN0Cj4gICAgID4gLXNoYTI1NsKgIMKgIMKgCj4gICAg
-IMKgMGVmM2FlMDI1ZjRhMzk4NzYxMDc5ZjBkNjg3ZmYzZDY2ZjRmZWYzYTMyYWMyNjA3MzE4ZTkw
-OWMwY2JhOTE1MMKgCj4gICAgIGRvY3MvbGljZW5zZS5yc3QKPiAgICAgPiArIyBtZDUsIHNoYTI1
-NiBmcm9tIGh0dHBzOi8vcHlwaS5vcmcvcHlwaS9mbGFzay9qc29uCj4gICAgIDxodHRwczovL3B5
-cGkub3JnL3B5cGkvZmxhc2svanNvbj4KPiAgICAgPiArbWQ1wqAgOTNmMTgzMmU1YmU3MDRlZjZm
-ZjJhNDEyNDU3OWNkODXCoCBGbGFzay0yLjEuMi50YXIuZ3oKPiAgICAgPiArc2hhMjU2wqAgMzE1
-ZGVkMmRkZjhhNjI4MTU2N2VkYjI3MzkzMDEwZmUzNDA2MTg4YmFmYmZlNjVhMzMzOWQ1Nzg3ZDg5
-ZTQ3N8KgCj4gICAgIEZsYXNrLTIuMS4yLnRhci5nego+ICAgICA+ICsjIExvY2FsbHkgY29tcHV0
-ZWQgc2hhMjU2IGNoZWNrc3Vtcwo+ICAgICA+ICtzaGEyNTbCoCA0ODlhOGUxMTA4NTA5ZWQ5OGEz
-N2JiOTgzZTExZTBmN2UxZDMxZjBiZDhmOTlhNzljODQ0OGU3ZmYzN2QwN2VhwqAKPiAgICAgTElD
-RU5TRS5yc3QKPiAgICAgPiArc2hhMjU2wqAgNzUzNWVhYzUxM2VkZDEyZmI4ZTMzZjIwM2M2YTQw
-MzU0OTYyOWUzNGIzNjM0MThjZGJkNmM2ZWE1NDY0NTE1ZMKgCj4gICAgIGRvY3MvbGljZW5zZS5y
-c3QKPiAgICAgPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tZmxhc2svcHl0aG9uLWZsYXNr
-Lm1rIDxodHRwOi8vcHl0aG9uLWZsYXNrLm1rPgo+ICAgICBiL3BhY2thZ2UvcHl0aG9uLWZsYXNr
-L3B5dGhvbi1mbGFzay5tayA8aHR0cDovL3B5dGhvbi1mbGFzay5taz4KPiAgICAgPiBpbmRleCAw
-NzdhYTYwMGI4Li5iNjg0YWZmNDgwIDEwMDY0NAo+ICAgICA+IC0tLSBhL3BhY2thZ2UvcHl0aG9u
-LWZsYXNrL3B5dGhvbi1mbGFzay5tayA8aHR0cDovL3B5dGhvbi1mbGFzay5taz4KPiAgICAgPiAr
-KysgYi9wYWNrYWdlL3B5dGhvbi1mbGFzay9weXRob24tZmxhc2subWsgPGh0dHA6Ly9weXRob24t
-Zmxhc2subWs+Cj4gICAgID4gQEAgLTQsOSArNCw5IEBACj4gICAgID7CoCAjCj4gICAgID7CoAo+
-ICAgICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICAgICA+wqAKPiAgICAgPiAtUFlUSE9OX0ZM
-QVNLX1ZFUlNJT04gPSAxLjEuMgo+ICAgICA+ICtQWVRIT05fRkxBU0tfVkVSU0lPTiA9IDIuMS4y
-Cj4gICAgID7CoCBQWVRIT05fRkxBU0tfU09VUkNFID0gRmxhc2stJChQWVRIT05fRkxBU0tfVkVS
-U0lPTikudGFyLmd6Cj4gICAgID4gLVBZVEhPTl9GTEFTS19TSVRFID0KPiAgICAgaHR0cHM6Ly9m
-aWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2VzLzRlLzBiL2NiMDIyNjhjOTBlNjc1NDVhMGUz
-YTM3ZWExY2EzZDQ1ZGUzYWNhNDNjZWI3ZGJmMTcxMmZiNTEyN2Q1ZAo+ICAgICA8aHR0cHM6Ly9m
-aWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2VzLzRlLzBiL2NiMDIyNjhjOTBlNjc1NDVhMGUz
-YTM3ZWExY2EzZDQ1ZGUzYWNhNDNjZWI3ZGJmMTcxMmZiNTEyN2Q1ZD4KPiAgICAgPiArUFlUSE9O
-X0ZMQVNLX1NJVEUgPQo+ICAgICBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2Fn
-ZXMvZDMvM2MvOTRmMzhkNGRiOTE5YTkzMjZhNzA2YWQ1NmYwNWE3ZTZmMGM4ZjdiN2Q5M2UyOTk3
-Y2NhNTRkM2JjMTRiCj4gICAgIDxodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2Fn
-ZXMvZDMvM2MvOTRmMzhkNGRiOTE5YTkzMjZhNzA2YWQ1NmYwNWE3ZTZmMGM4ZjdiN2Q5M2UyOTk3
-Y2NhNTRkM2JjMTRiPgo+ICAgICA+wqAgUFlUSE9OX0ZMQVNLX1NFVFVQX1RZUEUgPSBzZXR1cHRv
-b2xzCj4gICAgID7CoCBQWVRIT05fRkxBU0tfTElDRU5TRSA9IEJTRC0zLUNsYXVzZQo+ICAgICA+
-wqAgUFlUSE9OX0ZMQVNLX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFLnJzdCBkb2NzL2xpY2Vuc2Uu
-cnN0Cj4gCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============0850491136460105848==
+Content-Type: multipart/alternative; boundary="000000000000b2a91305e02c3c63"
+
+--000000000000b2a91305e02c3c63
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, May 29, 2022, 1:53 PM Romain Naour <romain.naour@gmail.com> wrote:
+
+> Le 29/05/2022 =C3=A0 21:41, James Hilliard a =C3=A9crit :
+> >
+> >
+> > On Sun, May 29, 2022, 1:29 PM Romain Naour <romain.naour@gmail.com
+> > <mailto:romain.naour@gmail.com>> wrote:
+> >
+> >     Hello James,
+> >
+> >     Le 17/05/2022 =C3=A0 22:09, James Hilliard a =C3=A9crit :
+> >     > License hash change due to license title syntax change:
+> >     >
+> >
+> https://github.com/pallets/flask/commit/9e7d3a6b694b27f997266889ae463e06d=
+d83a189
+> >     <
+> https://github.com/pallets/flask/commit/9e7d3a6b694b27f997266889ae463e06d=
+d83a189
+> >
+> >
+> >     This patch along with python-werkzeug version bump [1] fixes the
+> >     tests.package.test_python_flask.TestPythonPy3Flask build issue in
+> gitlab-ci [2].
+> >
+> >     This test fail since the python-jinja2 version bump 3.1.2 [3].
+> >
+> >     Do you know if bumping python-flash and python-werkzeug may
+> introduce other
+> >     runtime issue? Is any followup version bump required?
+> >
+> > I sent a few python package bumps that should fix it.
+>
+> Ok, but it's not explicitly stated if it's intended for master (upcoming
+> 2022.05) or next branch.
+> Can you list which patch must be merged in master?
+>
+I think all my python patches that were sent in the 17th:
+https://patchwork.ozlabs.org/project/buildroot/list/?submitter=3D66301
+
+>
+> >
+> >     Is reverting python-jinja2 safe?
+> >
+> > It's used by stuff other than flask so best to apply my patches bumping
+> the
+> > flask deps think.
+>
+> ok, I'm agree on the principle but as you noticed, any python package
+> version
+> bump may trigger a runtime issue in another python package.
+>
+> This should fixes two remaining gitlab-ci issues:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/2491321292
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/2491321291
+>
+> Best regards,
+> Romain
+>
+>
+> >
+> >
+> >     Tested-by: Romain Naour <romain.naour@gmail.com <mailto:
+> romain.naour@gmail.com>>
+> >
+> >     [1]
+> >
+> http://patchwork.ozlabs.org/project/buildroot/patch/20220517201249.151835=
+8-1-james.hilliard1@gmail.com/
+> >     <
+> http://patchwork.ozlabs.org/project/buildroot/patch/20220517201249.151835=
+8-1-james.hilliard1@gmail.com/
+> >
+> >     [2] https://gitlab.com/buildroot.org/buildroot/-/jobs/2491321291
+> >     <https://gitlab.com/buildroot.org/buildroot/-/jobs/2491321291>
+> >     [3]
+> http://lists.busybox.net/pipermail/buildroot/2022-May/642942.html
+> >     <http://lists.busybox.net/pipermail/buildroot/2022-May/642942.html>
+> >
+> >     Best regards,
+> >     Romain
+> >
+> >     >
+> >     > Signed-off-by: James Hilliard <james.hilliard1@gmail.com
+> >     <mailto:james.hilliard1@gmail.com>>
+> >     > ---
+> >     >  package/python-flask/python-flask.hash | 13 ++++++-------
+> >     >  package/python-flask/python-flask.mk <http://python-flask.mk>
+>  |  4 ++--
+> >     >  2 files changed, 8 insertions(+), 9 deletions(-)
+> >     >
+> >     > diff --git a/package/python-flask/python-flask.hash
+> >     b/package/python-flask/python-flask.hash
+> >     > index c6ccd633f8..5f19a450a1 100644
+> >     > --- a/package/python-flask/python-flask.hash
+> >     > +++ b/package/python-flask/python-flask.hash
+> >     > @@ -1,7 +1,6 @@
+> >     > -# From
+> >
+> https://pypi.org/project/Flask/#copy-hash-modal-911ffb67-fe84-4e25-a1a9-f=
+4c745a0a980
+> >     <
+> https://pypi.org/project/Flask/#copy-hash-modal-911ffb67-fe84-4e25-a1a9-f=
+4c745a0a980
+> >
+> >     > -md5  0da4145d172993cd28a6c619630cc19c  Flask-1.1.2.tar.gz
+> >     > -sha256
+> >      4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060
+> >     Flask-1.1.2.tar.gz
+> >     > -
+> >     > -# License files
+> >     > -sha256
+> >      489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea
+> LICENSE.rst
+> >     > -sha256
+> >      0ef3ae025f4a398761079f0d687ff3d66f4fef3a32ac2607318e909c0cba9150
+> >     docs/license.rst
+> >     > +# md5, sha256 from https://pypi.org/pypi/flask/json
+> >     <https://pypi.org/pypi/flask/json>
+> >     > +md5  93f1832e5be704ef6ff2a4124579cd85  Flask-2.1.2.tar.gz
+> >     > +sha256
+> 315ded2ddf8a6281567edb27393010fe3406188bafbfe65a3339d5787d89e477
+> >     Flask-2.1.2.tar.gz
+> >     > +# Locally computed sha256 checksums
+> >     > +sha256
+> 489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea
+> >     LICENSE.rst
+> >     > +sha256
+> 7535eac513edd12fb8e33f203c6a403549629e34b363418cdbd6c6ea5464515d
+> >     docs/license.rst
+> >     > diff --git a/package/python-flask/python-flask.mk <
+> http://python-flask.mk>
+> >     b/package/python-flask/python-flask.mk <http://python-flask.mk>
+> >     > index 077aa600b8..b684aff480 100644
+> >     > --- a/package/python-flask/python-flask.mk <http://python-flask.m=
+k
+> >
+> >     > +++ b/package/python-flask/python-flask.mk <http://python-flask.m=
+k
+> >
+> >     > @@ -4,9 +4,9 @@
+> >     >  #
+> >     >
+> >
+>  ########################################################################=
+########
+> >     >
+> >     > -PYTHON_FLASK_VERSION =3D 1.1.2
+> >     > +PYTHON_FLASK_VERSION =3D 2.1.2
+> >     >  PYTHON_FLASK_SOURCE =3D Flask-$(PYTHON_FLASK_VERSION).tar.gz
+> >     > -PYTHON_FLASK_SITE =3D
+> >
+> https://files.pythonhosted.org/packages/4e/0b/cb02268c90e67545a0e3a37ea1c=
+a3d45de3aca43ceb7dbf1712fb5127d5d
+> >     <
+> https://files.pythonhosted.org/packages/4e/0b/cb02268c90e67545a0e3a37ea1c=
+a3d45de3aca43ceb7dbf1712fb5127d5d
+> >
+> >     > +PYTHON_FLASK_SITE =3D
+> >
+> https://files.pythonhosted.org/packages/d3/3c/94f38d4db919a9326a706ad56f0=
+5a7e6f0c8f7b7d93e2997cca54d3bc14b
+> >     <
+> https://files.pythonhosted.org/packages/d3/3c/94f38d4db919a9326a706ad56f0=
+5a7e6f0c8f7b7d93e2997cca54d3bc14b
+> >
+> >     >  PYTHON_FLASK_SETUP_TYPE =3D setuptools
+> >     >  PYTHON_FLASK_LICENSE =3D BSD-3-Clause
+> >     >  PYTHON_FLASK_LICENSE_FILES =3D LICENSE.rst docs/license.rst
+> >
+>
+>
+
+--000000000000b2a91305e02c3c63
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div><br><br><div class=3D"gmail_quote"><div dir=3D"ltr" =
+class=3D"gmail_attr">On Sun, May 29, 2022, 1:53 PM Romain Naour &lt;<a href=
+=3D"mailto:romain.naour@gmail.com">romain.naour@gmail.com</a>&gt; wrote:<br=
+></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-=
+left:1px #ccc solid;padding-left:1ex">Le 29/05/2022 =C3=A0 21:41, James Hil=
+liard a =C3=A9crit=C2=A0:<br>
+&gt; <br>
+&gt; <br>
+&gt; On Sun, May 29, 2022, 1:29 PM Romain Naour &lt;<a href=3D"mailto:romai=
+n.naour@gmail.com" target=3D"_blank" rel=3D"noreferrer">romain.naour@gmail.=
+com</a><br>
+&gt; &lt;mailto:<a href=3D"mailto:romain.naour@gmail.com" target=3D"_blank"=
+ rel=3D"noreferrer">romain.naour@gmail.com</a>&gt;&gt; wrote:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Hello James,<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Le 17/05/2022 =C3=A0 22:09, James Hilliard a =C3=A9=
+crit=C2=A0:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; License hash change due to license title synta=
+x change:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://github.com/pallets/flask/commit/=
+9e7d3a6b694b27f997266889ae463e06dd83a189" rel=3D"noreferrer noreferrer" tar=
+get=3D"_blank">https://github.com/pallets/flask/commit/9e7d3a6b694b27f99726=
+6889ae463e06dd83a189</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://github.com/pallets/flask/com=
+mit/9e7d3a6b694b27f997266889ae463e06dd83a189" rel=3D"noreferrer noreferrer"=
+ target=3D"_blank">https://github.com/pallets/flask/commit/9e7d3a6b694b27f9=
+97266889ae463e06dd83a189</a>&gt;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0This patch along with python-werkzeug version bump =
+[1] fixes the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0tests.package.test_python_flask.TestPythonPy3Flask =
+build issue in gitlab-ci [2].<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0This test fail since the python-jinja2 version bump=
+ 3.1.2 [3].<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Do you know if bumping python-flash and python-werk=
+zeug may introduce other<br>
+&gt;=C2=A0 =C2=A0 =C2=A0runtime issue? Is any followup version bump require=
+d?<br>
+&gt; <br>
+&gt; I sent a few python package bumps that should fix it.<br>
+<br>
+Ok, but it&#39;s not explicitly stated if it&#39;s intended for master (upc=
+oming<br>
+2022.05) or next branch.<br>
+Can you list which patch must be merged in master?<br></blockquote></div></=
+div><div dir=3D"auto">I think all my python patches that were sent in the 1=
+7th:</div><div dir=3D"auto"><a href=3D"https://patchwork.ozlabs.org/project=
+/buildroot/list/?submitter=3D66301">https://patchwork.ozlabs.org/project/bu=
+ildroot/list/?submitter=3D66301</a><br></div><div dir=3D"auto"><div class=
+=3D"gmail_quote"><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8=
+ex;border-left:1px #ccc solid;padding-left:1ex">
+<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Is reverting python-jinja2 safe?<br>
+&gt; <br>
+&gt; It&#39;s used by stuff other than flask so best to apply my patches bu=
+mping the<br>
+&gt; flask deps think.<br>
+<br>
+ok, I&#39;m agree on the principle but as you noticed, any python package v=
+ersion<br>
+bump may trigger a runtime issue in another python package.<br>
+<br>
+This should fixes two remaining gitlab-ci issues:<br>
+<a href=3D"https://gitlab.com/buildroot.org/buildroot/-/jobs/2491321292" re=
+l=3D"noreferrer noreferrer" target=3D"_blank">https://gitlab.com/buildroot.=
+org/buildroot/-/jobs/2491321292</a><br>
+<a href=3D"https://gitlab.com/buildroot.org/buildroot/-/jobs/2491321291" re=
+l=3D"noreferrer noreferrer" target=3D"_blank">https://gitlab.com/buildroot.=
+org/buildroot/-/jobs/2491321291</a><br>
+<br>
+Best regards,<br>
+Romain<br>
+<br>
+<br>
+&gt; <br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Tested-by: Romain Naour &lt;<a href=3D"mailto:romai=
+n.naour@gmail.com" target=3D"_blank" rel=3D"noreferrer">romain.naour@gmail.=
+com</a> &lt;mailto:<a href=3D"mailto:romain.naour@gmail.com" target=3D"_bla=
+nk" rel=3D"noreferrer">romain.naour@gmail.com</a>&gt;&gt;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0[1]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"http://patchwork.ozlabs.org/project/buil=
+droot/patch/20220517201249.1518358-1-james.hilliard1@gmail.com/" rel=3D"nor=
+eferrer noreferrer" target=3D"_blank">http://patchwork.ozlabs.org/project/b=
+uildroot/patch/20220517201249.1518358-1-james.hilliard1@gmail.com/</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"http://patchwork.ozlabs.org/project/=
+buildroot/patch/20220517201249.1518358-1-james.hilliard1@gmail.com/" rel=3D=
+"noreferrer noreferrer" target=3D"_blank">http://patchwork.ozlabs.org/proje=
+ct/buildroot/patch/20220517201249.1518358-1-james.hilliard1@gmail.com/</a>&=
+gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[2] <a href=3D"https://gitlab.com/buildroot.org/bui=
+ldroot/-/jobs/2491321291" rel=3D"noreferrer noreferrer" target=3D"_blank">h=
+ttps://gitlab.com/buildroot.org/buildroot/-/jobs/2491321291</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://gitlab.com/buildroot.org/bui=
+ldroot/-/jobs/2491321291" rel=3D"noreferrer noreferrer" target=3D"_blank">h=
+ttps://gitlab.com/buildroot.org/buildroot/-/jobs/2491321291</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[3] <a href=3D"http://lists.busybox.net/pipermail/b=
+uildroot/2022-May/642942.html" rel=3D"noreferrer noreferrer" target=3D"_bla=
+nk">http://lists.busybox.net/pipermail/buildroot/2022-May/642942.html</a><b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"http://lists.busybox.net/pipermail/b=
+uildroot/2022-May/642942.html" rel=3D"noreferrer noreferrer" target=3D"_bla=
+nk">http://lists.busybox.net/pipermail/buildroot/2022-May/642942.html</a>&g=
+t;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Best regards,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Romain<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; Signed-off-by: James Hilliard &lt;<a href=3D"m=
+ailto:james.hilliard1@gmail.com" target=3D"_blank" rel=3D"noreferrer">james=
+.hilliard1@gmail.com</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:james.hilliard1@gmail.=
+com" target=3D"_blank" rel=3D"noreferrer">james.hilliard1@gmail.com</a>&gt;=
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; ---<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 package/python-flask/python-flask.hash |=
+ 13 ++++++-------<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 package/python-flask/<a href=3D"http://p=
+ython-flask.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">python-flas=
+k.mk</a> &lt;<a href=3D"http://python-flask.mk" rel=3D"noreferrer noreferre=
+r" target=3D"_blank">http://python-flask.mk</a>&gt;=C2=A0 =C2=A0|=C2=A0 4 +=
++--<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 2 files changed, 8 insertions(+), 9 dele=
+tions(-)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; diff --git a/package/python-flask/python-flask=
+.hash<br>
+&gt;=C2=A0 =C2=A0 =C2=A0b/package/python-flask/python-flask.hash<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; index c6ccd633f8..5f19a450a1 100644<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; --- a/package/python-flask/python-flask.hash<b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; +++ b/package/python-flask/python-flask.hash<b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; @@ -1,7 +1,6 @@<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; -# From<br>
+&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://pypi.org/project/Flask/#copy-has=
+h-modal-911ffb67-fe84-4e25-a1a9-f4c745a0a980" rel=3D"noreferrer noreferrer"=
+ target=3D"_blank">https://pypi.org/project/Flask/#copy-hash-modal-911ffb67=
+-fe84-4e25-a1a9-f4c745a0a980</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://pypi.org/project/Flask/#copy=
+-hash-modal-911ffb67-fe84-4e25-a1a9-f4c745a0a980" rel=3D"noreferrer norefer=
+rer" target=3D"_blank">https://pypi.org/project/Flask/#copy-hash-modal-911f=
+fb67-fe84-4e25-a1a9-f4c745a0a980</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; -md5=C2=A0 0da4145d172993cd28a6c619630cc19c=C2=
+=A0 Flask-1.1.2.tar.gz<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; -sha256=C2=A0 =C2=A0 =C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0=C2=A04efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc=
+9353d34b21f4b127060=C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Flask-1.1.2.tar.gz<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; -<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; -# License files<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; -sha256=C2=A0 =C2=A0 =C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0=C2=A0489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99=
+a79c8448e7ff37d07ea=C2=A0 LICENSE.rst<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; -sha256=C2=A0 =C2=A0 =C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0=C2=A00ef3ae025f4a398761079f0d687ff3d66f4fef3a32ac2=
+607318e909c0cba9150=C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0docs/license.rst<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; +# md5, sha256 from <a href=3D"https://pypi.or=
+g/pypi/flask/json" rel=3D"noreferrer noreferrer" target=3D"_blank">https://=
+pypi.org/pypi/flask/json</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://pypi.org/pypi/flask/json" re=
+l=3D"noreferrer noreferrer" target=3D"_blank">https://pypi.org/pypi/flask/j=
+son</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; +md5=C2=A0 93f1832e5be704ef6ff2a4124579cd85=C2=
+=A0 Flask-2.1.2.tar.gz<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; +sha256=C2=A0 315ded2ddf8a6281567edb27393010fe=
+3406188bafbfe65a3339d5787d89e477=C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Flask-2.1.2.tar.gz<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; +# Locally computed sha256 checksums<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; +sha256=C2=A0 489a8e1108509ed98a37bb983e11e0f7=
+e1d31f0bd8f99a79c8448e7ff37d07ea=C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0LICENSE.rst<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; +sha256=C2=A0 7535eac513edd12fb8e33f203c6a4035=
+49629e34b363418cdbd6c6ea5464515d=C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0docs/license.rst<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; diff --git a/package/python-flask/<a href=3D"h=
+ttp://python-flask.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">pyth=
+on-flask.mk</a> &lt;<a href=3D"http://python-flask.mk" rel=3D"noreferrer no=
+referrer" target=3D"_blank">http://python-flask.mk</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0b/package/python-flask/<a href=3D"http://python-fla=
+sk.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">python-flask.mk</a> =
+&lt;<a href=3D"http://python-flask.mk" rel=3D"noreferrer noreferrer" target=
+=3D"_blank">http://python-flask.mk</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; index 077aa600b8..b684aff480 100644<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; --- a/package/python-flask/<a href=3D"http://p=
+ython-flask.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">python-flas=
+k.mk</a> &lt;<a href=3D"http://python-flask.mk" rel=3D"noreferrer noreferre=
+r" target=3D"_blank">http://python-flask.mk</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; +++ b/package/python-flask/<a href=3D"http://p=
+ython-flask.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">python-flas=
+k.mk</a> &lt;<a href=3D"http://python-flask.mk" rel=3D"noreferrer noreferre=
+r" target=3D"_blank">http://python-flask.mk</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; @@ -4,9 +4,9 @@<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 #<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0###################################################=
+#############################<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; -PYTHON_FLASK_VERSION =3D 1.1.2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; +PYTHON_FLASK_VERSION =3D 2.1.2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 PYTHON_FLASK_SOURCE =3D Flask-$(PYTHON_F=
+LASK_VERSION).tar.gz<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; -PYTHON_FLASK_SITE =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://files.pythonhosted.org/packages/=
+4e/0b/cb02268c90e67545a0e3a37ea1ca3d45de3aca43ceb7dbf1712fb5127d5d" rel=3D"=
+noreferrer noreferrer" target=3D"_blank">https://files.pythonhosted.org/pac=
+kages/4e/0b/cb02268c90e67545a0e3a37ea1ca3d45de3aca43ceb7dbf1712fb5127d5d</a=
+><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://files.pythonhosted.org/packa=
+ges/4e/0b/cb02268c90e67545a0e3a37ea1ca3d45de3aca43ceb7dbf1712fb5127d5d" rel=
+=3D"noreferrer noreferrer" target=3D"_blank">https://files.pythonhosted.org=
+/packages/4e/0b/cb02268c90e67545a0e3a37ea1ca3d45de3aca43ceb7dbf1712fb5127d5=
+d</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; +PYTHON_FLASK_SITE =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://files.pythonhosted.org/packages/=
+d3/3c/94f38d4db919a9326a706ad56f05a7e6f0c8f7b7d93e2997cca54d3bc14b" rel=3D"=
+noreferrer noreferrer" target=3D"_blank">https://files.pythonhosted.org/pac=
+kages/d3/3c/94f38d4db919a9326a706ad56f05a7e6f0c8f7b7d93e2997cca54d3bc14b</a=
+><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://files.pythonhosted.org/packa=
+ges/d3/3c/94f38d4db919a9326a706ad56f05a7e6f0c8f7b7d93e2997cca54d3bc14b" rel=
+=3D"noreferrer noreferrer" target=3D"_blank">https://files.pythonhosted.org=
+/packages/d3/3c/94f38d4db919a9326a706ad56f05a7e6f0c8f7b7d93e2997cca54d3bc14=
+b</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 PYTHON_FLASK_SETUP_TYPE =3D setuptools<b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 PYTHON_FLASK_LICENSE =3D BSD-3-Clause<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 PYTHON_FLASK_LICENSE_FILES =3D LICENSE.r=
+st docs/license.rst<br>
+&gt; <br>
+<br>
+</blockquote></div></div></div>
+
+--000000000000b2a91305e02c3c63--
+
+--===============0850491136460105848==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0850491136460105848==--
