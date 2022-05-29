@@ -1,87 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CDE7C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 02:01:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30663C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 02:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D91C419C7;
-	Mon, 30 May 2022 02:01:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BE26740423;
+	Mon, 30 May 2022 02:13:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u-0d7jBcSGy0; Mon, 30 May 2022 02:01:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IlawebPLxYPU; Mon, 30 May 2022 02:13:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A975419BB;
-	Mon, 30 May 2022 02:01:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A06F40C00;
+	Mon, 30 May 2022 02:13:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D26B71BF352
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 02:01:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6BE101BF3A4
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 02:13:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF64184159
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 02:01:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 55B2D8191E
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 02:13:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=iki.fi
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XKZ-xUBFphzO for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 02:01:06 +0000 (UTC)
-X-Greylist: delayed 00:06:09 by SQLgrey-1.8.0
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6EA2784157
- for <buildroot@buildroot.org>; Mon, 30 May 2022 02:01:06 +0000 (UTC)
-Received: from localhost (91-154-92-55.elisa-laajakaista.fi [91.154.92.55])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest
- SHA256) (No client certificate requested)
- (Authenticated sender: sakkinen)
- by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 96FE21B0004B;
- Mon, 30 May 2022 04:54:51 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu; 
- t=1653875691;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=8eUqSzMfFIU+uBUQUmPhOqgv9y+SEI4IoMUmnxwq+2s=;
- b=HFzF6L8/Ko++hrqlK3BfBa9XhhZYPdz9HY9A/n8DWogR6Bn2mWa+7yiif1J2sJ5242rqCM
- JKqPC7C75EFMBFc0jQHng4yf+jIt2RcRRZygEVc/Zx+WWjBAPtjSf/9pV8rE7SIZzgON96
- ZTYMXtUAdj0sCNUjvbSLyd8iVbtyHJkJjLA0IbcVQsCcuun0z9ybtLmD0CV5IkZqJJI4H9
- yn2wjBsATdCYk59hG0EDa/0IZmbGO2vvU0wqjMyBFU10frDfm/QVjbexZwE4K7o4LPLt6E
- gF3JPmZC6/iNLKHLpq/kAZG6kIdxDdYRcvNVFEmNx+JiN7Ssa8AK8x45k8UBrg==
-Message-ID: <bdc4cbe5ecffc4bffc805945fd51aea97de1245a.camel@iki.fi>
-From: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-Date: Mon, 30 May 2022 04:53:05 +0300
-In-Reply-To: <469edce9-3d4d-0339-5974-bd553c7d3460@mind.be>
-References: <20220517172110.22265-1-jarkko.sakkinen@iki.fi>
- <469edce9-3d4d-0339-5974-bd553c7d3460@mind.be>
-User-Agent: Evolution 3.44.2 
+ with ESMTP id dWoZBmVPGbOx for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 02:13:07 +0000 (UTC)
+X-Greylist: delayed 02:19:59 by SQLgrey-1.8.0
+Received: from 2.mo581.mail-out.ovh.net (2.mo581.mail-out.ovh.net
+ [87.98.143.68])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D3B8F81842
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 02:13:06 +0000 (UTC)
+Received: from player728.ha.ovh.net (unknown [10.108.20.202])
+ by mo581.mail-out.ovh.net (Postfix) with ESMTP id CFE3222416
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 22:33:24 +0000 (UTC)
+Received: from blach.pl (unknown [178.218.193.145])
+ (Authenticated sender: grzegorz@blach.pl)
+ by player728.ha.ovh.net (Postfix) with ESMTPSA id 1F4392AEAC1CA;
+ Sun, 29 May 2022 22:33:20 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass
+ (GARM-101G00451339f1b-0e07-4b62-9c34-073a5a696859,
+ B6E767EC557CE4FA95D05743EA4C0310EE7C05D6) smtp.auth=grzegorz@blach.pl
+X-OVh-ClientIp: 178.218.193.145
+From: Grzegorz Blach <grzegorz@blach.pl>
+To: buildroot@buildroot.org
+Date: Mon, 30 May 2022 00:32:46 +0200
+Message-Id: <20220529223248.51556-4-grzegorz@blach.pl>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220529223248.51556-1-grzegorz@blach.pl>
+References: <20220529223248.51556-1-grzegorz@blach.pl>
 MIME-Version: 1.0
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1653875691; a=rsa-sha256; cv=none;
- b=tVhEyBS8IZUL3mQzOuwO8XWlyCxSSF0hdF8Wksl0gQGeV8rOF+SE3uB8tJtZrq7DGPxt48
- mzZ/tYkcI7z8En0Ne2j4A5+MGNZYdpDD8oA2YklaQseCcSBzUfC8t3ABVwoH3ZUYlKyif9
- Y6p6bWbedGCW+mTN8/vTWp+wNZJTn/AnJgC4+UZ1yX4+mx/fF/HFggAs5k3127Y370fzUZ
- nbLwzSD8DR+Z04eog823i1rtInMpEOdLjAJgQdU7wqOPfhvHZ9/Vgcy1Z3TzRvJ3s3yTbk
- Xubbc6z5509MBEXO93e3rKY5tRV+BoT+iitvo1ieMNRDKrvY4BziSJFhIjTSzA==
-ARC-Authentication-Results: i=1; ORIGINATING;
- auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
- s=lahtoruutu; t=1653875691;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=8eUqSzMfFIU+uBUQUmPhOqgv9y+SEI4IoMUmnxwq+2s=;
- b=YRAUUw5rr6B+GpIscR2fZHUtITH03dArJsUMbGEfhZQSD0oX3ILxeGv9rFBcHT2H1IXDkO
- c4jUou/uxeMxj2wTrcdbcu2keI6AX/9Oj9YYJEl9BWd4ZVNU5f+XHGsVTKBb3VpU0hMdjH
- KvjW+ZWOGQmq6zc9QeQnm3VH+aZIYckAU3T8l44PPmZok2ztyOw8+teSK02/TiSKZtTv33
- 73eRpiDvisrY6XmBxfVSPSDQW785HVa4hfJgtCFyT8X3nl3/J7zPtzZbOrcGgyx4a9bKyW
- 4/vSbSelQln/WAFx9aVzf5VZ44W1WO3aTL1J7ARwXVnqmvOiK3RnWIVhrrwEaQ==
-Subject: Re: [Buildroot] [PATCH RFC] package/enarx: add
+X-Ovh-Tracer-Id: 17632718443065524545
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrkeehgddtlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefirhiivghgohhriicuuehlrggthhcuoehgrhiivghgohhriiessghlrggthhdrphhlqeenucggtffrrghtthgvrhhnpeeifffhteelvedtuddtuedtfeelgedvjeevfeeuteehgfdtgfejhfdvteffjeehvdenucffohhmrghinhepphihphhirdhorhhgpdhphihthhhonhhhohhsthgvugdrohhrghenucfkpheptddrtddrtddrtddpudejkedrvddukedrudelfedrudegheenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjedvkedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehgrhiivghgohhriiessghlrggthhdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+Subject: [Buildroot] [PATCH 4/5] package/python-aioblescan: Bump to version
+ 0.2.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,27 +68,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCAyMDIyLTA1LTE4IGF0IDIwOjIzICswMjAwLCBBcm5vdXQgVmFuZGVjYXBwZWxsZSB3
-cm90ZToKPiBpZmVxICgkKEJSMl9QQUNLQUdFX0hPU1RfUlVTVENfTklHSFRMWSkseSkKPiBSVVNU
-X1ZFUlNJT04gPSAyMDIyLTA1LTE3Cj4gUlVTVF9TT1VSQ0UgPSBydXN0Yy1uaWdodGx5LXNyYy50
-YXIueHo/dmVyc2lvbj0kKFJVU1RfVkVSU0lPTikKPiBSVVNUX1NJVEUgPSBodHRwczovL3N0YXRp
-Yy5ydXN0LWxhbmcub3JnL2Rpc3QvJChSVVNUX1ZFUlNJT04pCj4gZWxzZQo+IFJVU1RfVkVSU0lP
-TiA9IDEuNjAuMAo+IFJVU1RfU09VUkNFID0gcnVzdGMtJChSVVNUX1ZFUlNJT04pLXNyYy50YXIu
-eHoKPiBSVVNUX1NJVEUgPSBodHRwczovL3N0YXRpYy5ydXN0LWxhbmcub3JnL2Rpc3QKPiBlbmRp
-Zgo+IAo+IMKgIFRoZSA/dmVyc2lvbj0gdGhpbmcgaXMgbmVlZGVkIHRvIGJlIGFibGUgdG8gdXBk
-YXRlIHRoZSBuaWdodGx5IHZlcnNpb24uIFdoZW4gCj4geW91IHVwZGF0ZSBpdCwgaXRzIGhhc2gg
-d2lsbCBjaGFuZ2UsIHNvIHdlIG5lZWQgdG8gbWFrZSBzdXJlIGl0IGFsc28gaGFzIGEgCj4gZGlm
-ZmVyZW50IGZpbGVuYW1lLiBTdHVmZiBhZnRlciA/IGlzIGlnbm9yZWQgYnkgdGhlIHNlcnZlciwg
-YnV0IHdpbGwgYmUgYWRkZWQgdG8gCj4gdGhlIGxvY2FsIGZpbGVuYW1lLiBBZnRlciB1cGRhdGlu
-ZywgdGhhdCB2ZXJzaW9uIGNoYW5nZXMgc28gdGhlIGZpbGVuYW1lIGNoYW5nZXMgCj4gc28gaXQg
-bm8gbG9uZ2VyIGNvbmZsaWN0cyB3aXRoIHRoZSBoYXNoLgoKVGhhbmtzIGEgbG90IGZvciB0aGUg
-c3VnZ2VzdGlvbi4gSSdtIHdvcmtpbmcgb24KYSBwYXRjaCBiYXNlZCBvbiB0aGlzLiBUcnlpbmcg
-dG8gbWFrZSBpdCBhdmFpbGFibGUKc29vbi4KCkJSLCBKYXJra28KX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ package/python-aioblescan/python-aioblescan.hash | 4 ++--
+ package/python-aioblescan/python-aioblescan.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-aioblescan/python-aioblescan.hash b/package/python-aioblescan/python-aioblescan.hash
+index 2592aace33..9a40ca4560 100644
+--- a/package/python-aioblescan/python-aioblescan.hash
++++ b/package/python-aioblescan/python-aioblescan.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aioblescan/json
+-md5  f59934c040a817192fcd3e713633cf20  aioblescan-0.2.8.tar.gz
+-sha256  2b048f5fe6e85b18fe306bdb63307705f3d1139563d3187d751b8657065a5bd9  aioblescan-0.2.8.tar.gz
++md5  0601cf9335e5d89166a88f53597c79bf  aioblescan-0.2.13.tar.gz
++sha256  28632e32c8180ea4b792f4cf9b88968dd100f4d3cee0cf16d27c193cf954422a  aioblescan-0.2.13.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c2066cd44079e0c706234001af18cb6ad4b62fc68d0d08d29fdc7319916647e0  LICENSE.txt
+diff --git a/package/python-aioblescan/python-aioblescan.mk b/package/python-aioblescan/python-aioblescan.mk
+index 8a9db927ac..f0e277d528 100644
+--- a/package/python-aioblescan/python-aioblescan.mk
++++ b/package/python-aioblescan/python-aioblescan.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOBLESCAN_VERSION = 0.2.8
++PYTHON_AIOBLESCAN_VERSION = 0.2.13
+ PYTHON_AIOBLESCAN_SOURCE = aioblescan-$(PYTHON_AIOBLESCAN_VERSION).tar.gz
+-PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/d2/10/b8b496903f33935c99f3602200d44ccc0b0a57b87e5fa65b89466c1b1f31
++PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/bd/04/c6798c76704d57da22f19c2e47485821d4b23144ef75f9c0e18dbfe47565
+ PYTHON_AIOBLESCAN_SETUP_TYPE = setuptools
+ PYTHON_AIOBLESCAN_LICENSE = MIT
+ PYTHON_AIOBLESCAN_LICENSE_FILES = LICENSE.txt
+-- 
+2.36.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
