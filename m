@@ -1,64 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57B93C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 21:41:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A69EFC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 21:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1967A82CFD;
-	Sun, 29 May 2022 21:41:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E4C8403C8;
+	Sun, 29 May 2022 21:47:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LDpOLVcesfwc; Sun, 29 May 2022 21:41:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Knn0gWgTWF38; Sun, 29 May 2022 21:47:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EA8882CDE;
-	Sun, 29 May 2022 21:41:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16B2540351;
+	Sun, 29 May 2022 21:47:07 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CBCA51BF336
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:41:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CAAE11BF336
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:47:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C924882CD4
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:41:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA07A82EC7
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:47:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8B7vnfwuDYFv for <buildroot@lists.busybox.net>;
- Sun, 29 May 2022 21:41:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 98F66826B0
- for <buildroot@buildroot.org>; Sun, 29 May 2022 21:41:34 +0000 (UTC)
+ with ESMTP id aqftyf_1ct1g for <buildroot@lists.busybox.net>;
+ Sun, 29 May 2022 21:47:05 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D855F82EB6
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 21:47:04 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:1c90:582e:b0d5:b1ff])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 07203780333;
- Sun, 29 May 2022 23:41:29 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 104757802B2;
+ Sun, 29 May 2022 23:46:58 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1653860493;
- bh=ZgriuntDbKffJ1QyrkUTTbc41HG5TmBKZTkpNbSOf8A=;
+ s=smtp-20201208; t=1653860823;
+ bh=fcZqb2b24bQn8Wl+xviiP5lLhHdpqUnWqKYpb0T1kFQ=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MprhceD9f4Ezml7gLAy3zqk0HtCYWgyxu3QscdM8mUu1M9wRwprWURMxHXMabzFC4
- V5L1l7h8kixKuKUV4IupocvX8v3yiYTRlUoArIUuOSoVQ20xAjyCMhmgqk9KEm04V2
- ZsQvKJOZ/pWxpypCIrOHJtWD3pgfyR2sKSRiaZjauzHLcoVHDkPMHPCuLpO8XHX2GR
- m2Orvkl+Hxh1ApkWouAKXStGEn2ZtOAx3aJJZtjbTOSSrKLSMHFnfuNSuqBygBYH1g
- ScoN+jbIF3xl/t9bIc77y8dYPHSlyVM6JNkTP/OoMDTyZADGa4fO+rherjE6r2wg63
- pw7eaBrFCrhmw==
+ b=qc7BPyrX7cDR2gOl/zoDZL3VSPC8gCaCydyBNm1L0vaVF1Z5eKEerouJ6HGS3iNVW
+ 1/JP2xky6Ie9AuO8WKarl2KMMf/ePnx8vXRBLbiTWt7IM/VgdJHXI4U4ACCTz2baYw
+ HPqnV+E0gWFZZZoO8LilESVK6d19zCqioX5K/G5kXmLTxJfPa7lQCOgpxfj16l5Vyj
+ PhpLvFsODR3O4UYwGf3I0nEd+iTbp8qdI93/UIyZ18nMsFwb7Sp4Sgl/E31GB0cwOu
+ k4V5IL+qlSYOLDB7p0NCvDWmRwYZT3mG/QnHBy0AQG+yiNgxoH0JK2W9XTIbAsegZ7
+ Nq8usYzDylMcw==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 May 2022 23:41:29 +0200
-Date: Sun, 29 May 2022 23:41:29 +0200
+ Sun, 29 May 2022 23:46:57 +0200
+Date: Sun, 29 May 2022 23:46:57 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220529214129.GL993669@scaer>
-References: <20220517201249.1518358-1-james.hilliard1@gmail.com>
+Message-ID: <20220529214657.GM993669@scaer>
+References: <20220517200923.1516695-1-james.hilliard1@gmail.com>
+ <7585dcea-4e32-a582-e138-e7e225609398@gmail.com>
+ <CADvTj4re+hCC9n=HRMsLQ+SaEPPH=XBkCG83mTp_U79rr9Nvyg@mail.gmail.com>
+ <e3350a95-d9ca-8d7d-0f48-22c86289a3db@gmail.com>
+ <CADvTj4rWQx=g3MK6AoV7bbRS7ZOA4K7SMR2Qb+OhaOdX4y8odg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220517201249.1518358-1-james.hilliard1@gmail.com>
+In-Reply-To: <CADvTj4rWQx=g3MK6AoV7bbRS7ZOA4K7SMR2Qb+OhaOdX4y8odg@mail.gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-werkzeug: bump to
- version 2.1.2
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-flask: bump to version
+ 2.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,72 +76,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@gmail.com>, Lionel Flandrin <lionel@svkt.org>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
-
-On 2022-05-17 14:12 -0600, James Hilliard spake thusly:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
-Since this version bump fixes a runtime test, I applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/python-werkzeug/python-werkzeug.hash | 6 +++---
->  package/python-werkzeug/python-werkzeug.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-> index 1d6de8a0c7..73fa6b5630 100644
-> --- a/package/python-werkzeug/python-werkzeug.hash
-> +++ b/package/python-werkzeug/python-werkzeug.hash
-> @@ -1,5 +1,5 @@
-> -# md5, sha256 from https://pypi.org/pypi/werkzeug/json
-> -md5  5d499cfdd30de5d9c946994783772efd  Werkzeug-1.0.1.tar.gz
-> -sha256  6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c  Werkzeug-1.0.1.tar.gz
-> +# md5, sha256 from https://pypi.org/pypi/Werkzeug/json
-> +md5  5835c8738b8081c53367cbcc5db8784c  Werkzeug-2.1.2.tar.gz
-> +sha256  1ce08e8093ed67d638d63879fd1ba3735817f7a80de3674d293f5984f25fb6e6  Werkzeug-2.1.2.tar.gz
->  # Locally computed sha256 checksums
->  sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-> diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-> index fe9b87af1d..9b32fdf097 100644
-> --- a/package/python-werkzeug/python-werkzeug.mk
-> +++ b/package/python-werkzeug/python-werkzeug.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -PYTHON_WERKZEUG_VERSION = 1.0.1
-> +PYTHON_WERKZEUG_VERSION = 2.1.2
->  PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
-> -PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/27/a33329150147594eff0ea4c33c2036c0eadd933141055be0ff911f7f8d04
-> +PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/cf/97eb1a3847c01ae53e8376bc21145555ac95279523a935963dc8ff96c50b
->  PYTHON_WERKZEUG_SETUP_TYPE = setuptools
->  PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
->  PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SmFtZXMsIEFsbCwKCk9uIDIwMjItMDUtMjkgMTQ6MTcgLTA2MDAsIEphbWVzIEhpbGxpYXJkIHNw
+YWtlIHRodXNseToKPiBPbiBTdW4sIE1heSAyOSwgMjAyMiwgMTo1MyBQTSBSb21haW4gTmFvdXIg
+PCBbMV1yb21haW4ubmFvdXJAZ21haWwuY29tPiB3cm90ZToKPiAgIExlIDI5LzA1LzIwMjIgw6Ag
+MjE6NDEsIEphbWVzIEhpbGxpYXJkIGEgw6ljcml0wqA6Cj4gICA+IE9uIFN1biwgTWF5IDI5LCAy
+MDIyLCAxOjI5IFBNIFJvbWFpbiBOYW91ciA8IFsyXXJvbWFpbi5uYW91ckBnbWFpbC5jb20KPiAg
+ID4gPG1haWx0bzogWzNdcm9tYWluLm5hb3VyQGdtYWlsLmNvbT4+IHdyb3RlOgpbLS1TTklQLS1d
+Cj4gICA+wqAgwqAgwqBEbyB5b3Uga25vdyBpZiBidW1waW5nIHB5dGhvbi1mbGFzaCBhbmQgcHl0
+aG9uLXdlcmt6ZXVnIG1heSBpbnRyb2R1Y2Ugb3RoZXIKPiAgID7CoCDCoCDCoHJ1bnRpbWUgaXNz
+dWU/IElzIGFueSBmb2xsb3d1cCB2ZXJzaW9uIGJ1bXAgcmVxdWlyZWQ/Cj4gICA+IEkgc2VudCBh
+IGZldyBweXRob24gcGFja2FnZSBidW1wcyB0aGF0IHNob3VsZCBmaXggaXQuCj4gICBPaywgYnV0
+IGl0J3Mgbm90IGV4cGxpY2l0bHkgc3RhdGVkIGlmIGl0J3MgaW50ZW5kZWQgZm9yIG1hc3RlciAo
+dXBjb21pbmcKPiAgIDIwMjIuMDUpIG9yIG5leHQgYnJhbmNoLgo+ICAgQ2FuIHlvdSBsaXN0IHdo
+aWNoIHBhdGNoIG11c3QgYmUgbWVyZ2VkIGluIG1hc3Rlcj8KPiBJIHRoaW5rIGFsbCBteSBweXRo
+b24gcGF0Y2hlcyB0aGF0IHdlcmUgc2VudCBpbiB0aGUgMTd0aDoKPiBbNl1odHRwczovL3BhdGNo
+d29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L2xpc3QvP3N1Ym1pdHRlcj02NjMwMQoK
+V2Ugd2VyZSByZWFsbHkgbGF0ZSBpbiB0aGlzIGN5Y2xlLCBidXQgcmMxIHdhcyB0YWdnZWQgb24g
+dGhlIDE4dGgsIGp1c3QKYSBkYXkgYWZ0ZXIgeW91IHNlbnQgeW91ciBweXRob24gYnVtcHMsIHNv
+IHRoZXkgY291bGQgbm90IGFsbCBiZQphcHBsaWVkLCBleGNlcHQgZm9yIHB5dGhvbi1mbGFzayBh
+bmQgcHl0aG9uLXdlcmt6ZXVnIHdoaWNoIGRvIGZpeCBhCnJ1bnRpbWUgdGVzdC4KCklmIHRoZSBy
+ZXN0IGFyZSByZWxhdGVkIHRvIHRoZSBmbGFzayBhbmQgd2Vya3pldWcgYW5kIG5lZWQgdG8gYmUg
+dXBkYXRlZCAKdG9nZXRoZXIgaW4gbG9jay1zdGVwLCB0aGVuIHRoZXkgc2hvdWxkIGhhdmUgYmVl
+biBncm91cGVkIGluIGEgc2VyaWVzCnRvZ2V0aGVyLgoKQW55d2F5LCBsZXQncyBzZWUgd2hhdCBv
+dXIgZ2l0bGFiLWNpIHBpcGVsaW5lIHNob3dzIHdpdGgganVzdCBmbGFzayBhbmQKd2Vya3pldWcu
+CgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0t
+LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwg
+IFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8
+IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2ln
+bmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAw
+OTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRo
+ZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBc
+IEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0t
+LS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
+cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
+dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
