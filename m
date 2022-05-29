@@ -1,46 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED580C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 21:39:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D522BC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 21:41:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 889F082865;
-	Sun, 29 May 2022 21:39:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79B246101A;
+	Sun, 29 May 2022 21:41:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 788Tne_hmkDC; Sun, 29 May 2022 21:39:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p4x9sxhjLPXP; Sun, 29 May 2022 21:41:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86DFC8254D;
-	Sun, 29 May 2022 21:39:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F6BA605AE;
+	Sun, 29 May 2022 21:41:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D8C161BF969
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:39:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 45E2D1BF336
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:41:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D5CB7605AE
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:39:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 34622605AE
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:41:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EXtQTd15WeEN for <buildroot@lists.busybox.net>;
- Sun, 29 May 2022 21:39:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F75B6058F
- for <buildroot@buildroot.org>; Sun, 29 May 2022 21:39:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 52E8C8672F; Sun, 29 May 2022 21:27:43 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 29 May 2022 23:38:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3f9bcc5134a694336a9930510f2764784901c868
-X-Git-Newrev: bd447bb88c1012d80b6ce0a43539d442c9acc922
-X-Patchwork-Hint: ignore
-Message-Id: <20220529212743.52E8C8672F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-werkzeug: bump to version
+ with ESMTP id 9F2_wiFV5SZN for <buildroot@lists.busybox.net>;
+ Sun, 29 May 2022 21:41:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 36FB96058F
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 21:41:13 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:1c90:582e:b0d5:b1ff])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 67D33780333;
+ Sun, 29 May 2022 23:41:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1653860471;
+ bh=Gh3r66WWwV/slHjqFcvHzy4g8zkdg2D7Vfdd4hsaGTE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=LHoPSmn2G53VAnAWLmIz9f5nf0cOzYKogKW25DefcBbxdgiUAFl9v2AR0fkotk2/u
+ MHmz13XlD21yU0gl6V5Af3h1U102zETrdpsnjk+iMNvAOstZVWSpN9Nn5YBeiax+ZT
+ BSnz84rikK7Eyk6P39Y5VIk5koe7OizdFv1HF9kazYzkIl+cZTEvh657V70BF/6Cxc
+ T/RcMhGczYmM/Lf0OXAzX1I+X73j19hoL9wSdn7lzwPfn7r2i1Er+eJRIHF8mxYCpc
+ DWK3tN/NRK0SBTtMnquBfADqKVkCIyitVawTruhC5mvAXCbtnaMg1+rOL/oR6QKVxM
+ G6w7ms1w+E7XQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 29 May 2022 23:41:07 +0200
+Date: Sun, 29 May 2022 23:41:07 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220529214107.GK993669@scaer>
+References: <20220517200923.1516695-1-james.hilliard1@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220517200923.1516695-1-james.hilliard1@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-flask: bump to version
  2.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -53,51 +70,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Lionel Flandrin <lionel@svkt.org>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd447bb88c1012d80b6ce0a43539d442c9acc922
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+James, All,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-werkzeug/python-werkzeug.hash | 6 +++---
- package/python-werkzeug/python-werkzeug.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On 2022-05-17 14:09 -0600, James Hilliard spake thusly:
+> License hash change due to license title syntax change:
+> https://github.com/pallets/flask/commit/9e7d3a6b694b27f997266889ae463e06dd83a189
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index 1d6de8a0c7..73fa6b5630 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
-@@ -1,5 +1,5 @@
--# md5, sha256 from https://pypi.org/pypi/werkzeug/json
--md5  5d499cfdd30de5d9c946994783772efd  Werkzeug-1.0.1.tar.gz
--sha256  6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c  Werkzeug-1.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/Werkzeug/json
-+md5  5835c8738b8081c53367cbcc5db8784c  Werkzeug-2.1.2.tar.gz
-+sha256  1ce08e8093ed67d638d63879fd1ba3735817f7a80de3674d293f5984f25fb6e6  Werkzeug-2.1.2.tar.gz
- # Locally computed sha256 checksums
- sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index fe9b87af1d..9b32fdf097 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_WERKZEUG_VERSION = 1.0.1
-+PYTHON_WERKZEUG_VERSION = 2.1.2
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
--PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/27/a33329150147594eff0ea4c33c2036c0eadd933141055be0ff911f7f8d04
-+PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/cf/97eb1a3847c01ae53e8376bc21145555ac95279523a935963dc8ff96c50b
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
- PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
+Since this version bump fixes a runtime test, I applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/python-flask/python-flask.hash | 13 ++++++-------
+>  package/python-flask/python-flask.mk   |  4 ++--
+>  2 files changed, 8 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
+> index c6ccd633f8..5f19a450a1 100644
+> --- a/package/python-flask/python-flask.hash
+> +++ b/package/python-flask/python-flask.hash
+> @@ -1,7 +1,6 @@
+> -# From https://pypi.org/project/Flask/#copy-hash-modal-911ffb67-fe84-4e25-a1a9-f4c745a0a980
+> -md5  0da4145d172993cd28a6c619630cc19c  Flask-1.1.2.tar.gz
+> -sha256	4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060  Flask-1.1.2.tar.gz
+> -
+> -# License files
+> -sha256	489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.rst
+> -sha256	0ef3ae025f4a398761079f0d687ff3d66f4fef3a32ac2607318e909c0cba9150  docs/license.rst
+> +# md5, sha256 from https://pypi.org/pypi/flask/json
+> +md5  93f1832e5be704ef6ff2a4124579cd85  Flask-2.1.2.tar.gz
+> +sha256  315ded2ddf8a6281567edb27393010fe3406188bafbfe65a3339d5787d89e477  Flask-2.1.2.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.rst
+> +sha256  7535eac513edd12fb8e33f203c6a403549629e34b363418cdbd6c6ea5464515d  docs/license.rst
+> diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
+> index 077aa600b8..b684aff480 100644
+> --- a/package/python-flask/python-flask.mk
+> +++ b/package/python-flask/python-flask.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_FLASK_VERSION = 1.1.2
+> +PYTHON_FLASK_VERSION = 2.1.2
+>  PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
+> -PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/4e/0b/cb02268c90e67545a0e3a37ea1ca3d45de3aca43ceb7dbf1712fb5127d5d
+> +PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/d3/3c/94f38d4db919a9326a706ad56f05a7e6f0c8f7b7d93e2997cca54d3bc14b
+>  PYTHON_FLASK_SETUP_TYPE = setuptools
+>  PYTHON_FLASK_LICENSE = BSD-3-Clause
+>  PYTHON_FLASK_LICENSE_FILES = LICENSE.rst docs/license.rst
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
