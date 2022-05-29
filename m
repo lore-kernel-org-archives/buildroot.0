@@ -4,52 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F9FDC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:20:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5CEFC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:24:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C798D40AB4;
-	Sun, 29 May 2022 08:20:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FE3B40537;
+	Sun, 29 May 2022 08:24:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j_bHUyH4tD7g; Sun, 29 May 2022 08:20:55 +0000 (UTC)
+	with ESMTP id Itq5r0rh41Kd; Sun, 29 May 2022 08:24:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EEAD240126;
-	Sun, 29 May 2022 08:20:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5522C1BF404
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:20:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0DA440126;
+	Sun, 29 May 2022 08:24:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9EECD1BF404
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4392040126
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:20:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C7AA610FF
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:24:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o7NvFekNUV_1 for <buildroot@lists.busybox.net>;
- Sun, 29 May 2022 08:20:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wpQzMUAF-DJh for <buildroot@lists.busybox.net>;
+ Sun, 29 May 2022 08:24:37 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6CD6D400E4
- for <buildroot@buildroot.org>; Sun, 29 May 2022 08:20:51 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2F86560E9F
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 08:24:36 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 48E70240004;
- Sun, 29 May 2022 08:20:49 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 666BB1BF204;
+ Sun, 29 May 2022 08:24:33 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nvEAK-004z6k-Bo; Sun, 29 May 2022 10:20:48 +0200
+ id 1nvEDw-004zMr-EA; Sun, 29 May 2022 10:24:32 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Sol Bekic via buildroot <buildroot@buildroot.org>
-References: <20220514131442.GY1597494@scaer>
- <20220514142659.70948-1-s+removethis@s-ol.nu>
-Date: Sun, 29 May 2022 10:20:48 +0200
-In-Reply-To: <20220514142659.70948-1-s+removethis@s-ol.nu> (Sol Bekic via
- buildroot's message of "Sat, 14 May 2022 16:26:59 +0200")
-Message-ID: <87h7587nrz.fsf@dell.be.48ers.dk>
+To: Romain Naour <romain.naour@gmail.com>
+References: <20220515171954.177732-1-romain.naour@gmail.com>
+Date: Sun, 29 May 2022 10:24:32 +0200
+In-Reply-To: <20220515171954.177732-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sun, 15 May 2022 19:19:54 +0200")
+Message-ID: <87czfw7nlr.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/usb_modeswitch: fix
- installation of systemd unit file
+Subject: Re: [Buildroot] [PATCH] arch/Config.in.x86: fix bonnell typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,29 +59,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sol Bekic <s+removethis@s-ol.nu>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Sol" == Sol Bekic via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > From: s-ol <s+removethis@s-ol.nu>
- > The upstream Makefile failed to detect systemd being present in some (maybe all)
- > builds, resulting in the unit file not being installed. Without the unit file,
- > the udev rules in usb_modeswitch-data don't work as expected (no modeswitch is
- > performed).
+ > Commit [1] added several x86 cpu variant and introduced a typo
+ > (bonnel) on bonnell cpu.
 
- > This commit adds a patch that modifies the Makefile to include
- > '$(PREFIX)/bin/systemctl' in the list of paths checked, which makes the
- > installation phase work as intended. I will also submit this patch upstream.
+ > Rename BR2_x86_bonnel to BR2_x86_bonnell without legacy
+ > handling since it never worked.
 
- > Signed-off-by: Sol Bekic <s+removethis@s-ol.nu>
- > ---
- > As requested by Yann E. Morin, both this patch and the patch-file it adds
- > are commented and signed off with my full name.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/2418106d30e07cf09834941e610c75dde78816d2/
+
+ > [1] 653fa001f30414165cb54dde577688d78cca6b42
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2022.02.x, thanks.
 
