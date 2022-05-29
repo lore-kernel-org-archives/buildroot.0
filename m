@@ -1,46 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB296C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 21:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ECECC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 21:32:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C2B361060;
-	Sun, 29 May 2022 21:26:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DA53841C0;
+	Sun, 29 May 2022 21:32:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JrLdAkQcNszD; Sun, 29 May 2022 21:26:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iBf8PwiTIov9; Sun, 29 May 2022 21:32:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F21B60EBF;
-	Sun, 29 May 2022 21:26:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DBF8482965;
+	Sun, 29 May 2022 21:32:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2DF6C1BF336
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:26:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3B16B1BF336
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:32:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C9C7419A3
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:26:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 230AC40920
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 21:32:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6VEgV8PkPQM5 for <buildroot@lists.busybox.net>;
- Sun, 29 May 2022 21:26:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B96D414CA
- for <buildroot@buildroot.org>; Sun, 29 May 2022 21:26:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id E2C758671E; Sun, 29 May 2022 21:15:01 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 29 May 2022 23:25:18 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7a5626e8e9a813c6f7d8493fec3df2bae9b8f9b
-X-Git-Newrev: bd40451b9746c0dd317c2037070fc2f93ffcc712
-X-Patchwork-Hint: ignore
-Message-Id: <20220529211501.E2C758671E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ktap: drop package
+ with ESMTP id lp-4YeWHUjci for <buildroot@lists.busybox.net>;
+ Sun, 29 May 2022 21:32:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3656140297
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 21:32:07 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:1c90:582e:b0d5:b1ff])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 9EB94780333;
+ Sun, 29 May 2022 23:32:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1653859923;
+ bh=UJ8rL/wtaMWe7YXg9xMbNGqVZ7r+1SIWKG4V0XuP2xE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=XKupq815ViAHYgsi65NJBWcFU8UX6u/gLLL++CRSKpeiXMOmT5P3WvWuap4YTgYLb
+ 54PO0Vck0fT7eYYmCcQJ1NwzzwIwDObFLN7eP8oo5pxWY8QHkFByFPz5rrGpjaDCNJ
+ RdtDpJX+8SU1i4WEmPCeHJ1COnAQbgJh7uK99p/UN5EgtkCGm7ES6UfCkLNGEE4MkP
+ imN/673V+VfY5MZELQd+vxM/vckl+5bvbWgH+56KgTX9+vQRFUYxCZ8UkHwANjJL1j
+ dYf1sAapqONhrzKh0OPmnXeneDHYF77oxlQSFV/wNffD0xKkETXXIw+t7jqiH/h2IM
+ svQCN29VkFgWA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 29 May 2022 23:32:01 +0200
+Date: Sun, 29 May 2022 23:32:01 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220529213201.GI993669@scaer>
+References: <20220519165149.918758-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220519165149.918758-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/ktap: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,230 +71,215 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5107999948419139533=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5107999948419139533==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=bd40451b9746c0dd317c2037070fc2f93ffcc712
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-ktap doesn't build with recent kernels (e.g. 5.10.104-cip3 or 5.15.37)
-and is not maintained anymore (latest release in 2013 and latest commit
-more than 5 years ago):
-
-In file included from /home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/amalg.c:21:
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/ktap.c:30:6: warning: "CONFIG_EVENT_TRACING" is not defined, evaluates to 0 [-Wundef]
-   30 | #if !CONFIG_EVENT_TRACING
-      |      ^~~~~~~~~~~~~~~~~~~~
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/ktap.c:31:2: error: #error "Please enable CONFIG_EVENT_TRACING before compile ktap"
-   31 | #error "Please enable CONFIG_EVENT_TRACING before compile ktap"
-      |  ^~~~~
-In file included from /home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/amalg.c:21:
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/ktap.c: In function ‘gettimeofday_ns’:
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/ktap.c:56:18: error: storage size of ‘now’ isn’t known
-   56 |  struct timespec now;
-      |                  ^~~
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/ktap.c:58:2: error: implicit declaration of function ‘getnstimeofday’; did you mean ‘gettimeofday_ns’? [-Werror=implicit-function-declaration]
-   58 |  getnstimeofday(&now);
-      |  ^~~~~~~~~~~~~~
-      |  gettimeofday_ns
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/ktap.c:56:18: warning: unused variable ‘now’ [-Wunused-variable]
-   56 |  struct timespec now;
-      |                  ^~~
-In file included from /home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/amalg.c:22:
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/kp_obj.c: In function ‘kp_obj_kstack2str’:
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/kp_obj.c:243:21: error: storage size of ‘trace’ isn’t known
-  243 |  struct stack_trace trace;
-      |                     ^~~~~
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/kp_obj.c:253:2: error: implicit declaration of function ‘save_stack_trace’ [-Werror=implicit-function-declaration]
-  253 |  save_stack_trace(&trace);
-      |  ^~~~~~~~~~~~~~~~
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/kp_obj.c:243:21: warning: unused variable ‘trace’ [-Wunused-variable]
-  243 |  struct stack_trace trace;
-      |                     ^~~~~
-In file included from /home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/amalg.c:27:
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/kp_transport.c: In function ‘trace_empty’:
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/kp_transport.c:105:39: error: passing argument 1 of ‘ring_buffer_empty_cpu’ from incompatible pointer type [-Werror=incompatible-pointer-types]
-  105 |   if (!ring_buffer_empty_cpu(ktap_iter->buffer, cpu))
-      |                              ~~~~~~~~~^~~~~~~~
-      |                                       |
-      |                                       struct ring_buffer *
-In file included from ./include/linux/trace_events.h:6,
-                 from /home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/trace_events.h:5,
-                 from /home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/kp_events.h:4,
-                 from /home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/kp_str.c:35,
-                 from /home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/amalg.c:24:
-./include/linux/ring_buffer.h:162:49: note: expected ‘struct trace_buffer *’ but argument is of type ‘struct ring_buffer *’
-  162 | bool ring_buffer_empty_cpu(struct trace_buffer *buffer, int cpu);
-      |                            ~~~~~~~~~~~~~~~~~~~~~^~~~~~
-In file included from /home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/amalg.c:27:
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/kp_transport.c: In function ‘trace_consume’:
-/home/autobuild/autobuild/instance-6/output-1/build/ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f/./runtime/kp_transport.c:116:31: error: passing argument 1 of ‘ring_buffer_consume’ from incompatible pointer type [-Werror=incompatible-pointer-types]
-  116 |  ring_buffer_consume(ktap_iter->buffer, iter->cpu, &iter->ts,
-      |                      ~~~~~~~~~^~~~~~~~
-      |                               |
-      |                               struct ring_buffer *
-
-Fixes:
- - http://autobuild.buildroot.org/results/9067192962b4011e0da27ac2b2dc53eb1e31582c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- Config.in.legacy       |  7 +++++++
- DEVELOPERS             |  3 ---
- package/Config.in      |  1 -
- package/ktap/Config.in | 31 -------------------------------
- package/ktap/ktap.hash |  3 ---
- package/ktap/ktap.mk   | 36 ------------------------------------
- 6 files changed, 7 insertions(+), 74 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3d5df3abbb..853a8917be 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2022.05"
- 
-+config BR2_PACKAGE_KTAP
-+	bool "ktap removed"
-+	select BR2_LEGACY
-+	help
-+	  Package was removed because it is not compatible with latest
-+	  kernels and is not maintained anymore (no release since 2013).
-+
- config BR2_KERNEL_HEADERS_5_16
- 	bool "kernel headers version 5.16.x are no longer supported"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c33959fa45..71cc3da6d7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -127,9 +127,6 @@ F:	package/dcron/
- F:	package/libxmlrpc/
- F:	package/python-docopt/
- 
--N:	Anders Darander <anders@chargestorm.se>
--F:	package/ktap/
--
- N:	André Zwing <nerv@dawncrow.de>
- F:	package/libkrb5/
- F:	package/openal/
-diff --git a/package/Config.in b/package/Config.in
-index 8892134133..00f061015f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -107,7 +107,6 @@ menu "Debugging, profiling and benchmark"
- 	source "package/iozone/Config.in"
- 	source "package/kexec/Config.in"
- 	source "package/kexec-lite/Config.in"
--	source "package/ktap/Config.in"
- 	source "package/kvm-unit-tests/Config.in"
- 	source "package/kyua/Config.in"
- 	source "package/latencytop/Config.in"
-diff --git a/package/ktap/Config.in b/package/ktap/Config.in
-deleted file mode 100644
-index 38293f6dde..0000000000
---- a/package/ktap/Config.in
-+++ /dev/null
-@@ -1,31 +0,0 @@
--config BR2_PACKAGE_KTAP
--	bool "ktap"
--	depends on BR2_LINUX_KERNEL
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	help
--	  ktap is a script-based dynamic tracing tool for Linux
--
--	  It uses a scripting language and lets users trace the Linux
--	  kernel dynamically. ktap is designed to give operational
--	  insights with interoperability that allows users to tune,
--	  troubleshoot and extend kernel and application.
--	  It's similar to Linux Systemtap and Solaris Dtrace.
--
--	  ktap doesn't support kernels older than 3.1.
--
--	  To be able to resolve symbols in DSO and for sdt, you need to
--	  enable elfutils.
--
--	  Your kernel must have CONFIG_EVENT_TRACING,
--	  CONFIG_PERF_EVENTS, and CONFIG_DEBUG_FS enabled to compile.
--
--	  Buildroot automatically enables these in the kernel
--	  configuration.
--
--	  http://www.ktap.org
--
--comment "ktap needs a Linux kernel to be built"
--	depends on !BR2_LINUX_KERNEL
--
--comment "ktap needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/ktap/ktap.hash b/package/ktap/ktap.hash
-deleted file mode 100644
-index 1eff712501..0000000000
---- a/package/ktap/ktap.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256 44a0808d57175cf9d15466f720e1e10d5ed1abc3497aedf9ddd6469545552345  ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f.tar.gz
--sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE-GPL
-diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
-deleted file mode 100644
-index eec8b75b7f..0000000000
---- a/package/ktap/ktap.mk
-+++ /dev/null
-@@ -1,36 +0,0 @@
--################################################################################
--#
--# ktap
--#
--################################################################################
--
--KTAP_VERSION = 23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f
--KTAP_SITE = $(call github,ktap,ktap,$(KTAP_VERSION))
--KTAP_LICENSE = GPL-2.0
--KTAP_LICENSE_FILES = LICENSE-GPL
--
--ifeq ($(BR2_PACKAGE_ELFUTILS),y)
--KTAP_DEPENDENCIES += elfutils
--else
--KTAP_FLAGS += NO_LIBELF=1
--endif
--
--define KTAP_BUILD_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(KTAP_FLAGS) ktap
--endef
--
--define KTAP_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m755 $(@D)/ktap $(TARGET_DIR)/usr/bin/ktap
--endef
--
--KTAP_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
--
--define KTAP_LINUX_CONFIG_FIXUPS
--	$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER)
--endef
--
--$(eval $(kernel-module))
--$(eval $(generic-package))
-
---===============5107999948419139533==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5107999948419139533==--
+SmFtZXMsIEFsbCwKCk9uIDIwMjItMDUtMTkgMTg6NTEgKzAyMDAsIEZhYnJpY2UgRm9udGFpbmUg
+c3Bha2UgdGh1c2x5Ogo+IGt0YXAgZG9lc24ndCBidWlsZCB3aXRoIHJlY2VudCBrZXJuZWxzIChl
+LmcuIDUuMTAuMTA0LWNpcDMgb3IgNS4xNS4zNykKPiBhbmQgaXMgbm90IG1haW50YWluZWQgYW55
+bW9yZSAobGF0ZXN0IHJlbGVhc2UgaW4gMjAxMyBhbmQgbGF0ZXN0IGNvbW1pdAo+IG1vcmUgdGhh
+biA1IHllYXJzIGFnbyk6Cj4gCj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIC9ob21lL2F1dG9idWls
+ZC9hdXRvYnVpbGQvaW5zdGFuY2UtNi9vdXRwdXQtMS9idWlsZC9rdGFwLTIzYmM3YTRhOTRiZDll
+NGUxYjhiN2MwNjYzMmU2MWMwNDFkNTdiNWYvLi9ydW50aW1lL2FtYWxnLmM6MjE6Cj4gL2hvbWUv
+YXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS02L291dHB1dC0xL2J1aWxkL2t0YXAtMjNiYzdh
+NGE5NGJkOWU0ZTFiOGI3YzA2NjMyZTYxYzA0MWQ1N2I1Zi8uL3J1bnRpbWUva3RhcC5jOjMwOjY6
+IHdhcm5pbmc6ICJDT05GSUdfRVZFTlRfVFJBQ0lORyIgaXMgbm90IGRlZmluZWQsIGV2YWx1YXRl
+cyB0byAwIFstV3VuZGVmXQoKSSB3YXMgZ29pbmcgdG8gc2F5OiBpcyBpdCBub3QganVzdCBhIG1h
+dHRlciBvZiBhZGRpbmcgRVZFTlRfVFJBQ0lORyB0bwpLVEFQX0xJTlVYX0NPTkZJR19GSVhVUFMg
+PwoKQnV0IHRoZW4uLi4KCj4gICAgMzAgfCAjaWYgIUNPTkZJR19FVkVOVF9UUkFDSU5HCj4gICAg
+ICAgfCAgICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+Cj4gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWls
+ZC9pbnN0YW5jZS02L291dHB1dC0xL2J1aWxkL2t0YXAtMjNiYzdhNGE5NGJkOWU0ZTFiOGI3YzA2
+NjMyZTYxYzA0MWQ1N2I1Zi8uL3J1bnRpbWUva3RhcC5jOjMxOjI6IGVycm9yOiAjZXJyb3IgIlBs
+ZWFzZSBlbmFibGUgQ09ORklHX0VWRU5UX1RSQUNJTkcgYmVmb3JlIGNvbXBpbGUga3RhcCIKPiAg
+ICAzMSB8ICNlcnJvciAiUGxlYXNlIGVuYWJsZSBDT05GSUdfRVZFTlRfVFJBQ0lORyBiZWZvcmUg
+Y29tcGlsZSBrdGFwIgo+ICAgICAgIHwgIF5+fn5+Cj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIC9o
+b21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtNi9vdXRwdXQtMS9idWlsZC9rdGFwLTIz
+YmM3YTRhOTRiZDllNGUxYjhiN2MwNjYzMmU2MWMwNDFkNTdiNWYvLi9ydW50aW1lL2FtYWxnLmM6
+MjE6Cj4gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS02L291dHB1dC0xL2J1aWxk
+L2t0YXAtMjNiYzdhNGE5NGJkOWU0ZTFiOGI3YzA2NjMyZTYxYzA0MWQ1N2I1Zi8uL3J1bnRpbWUv
+a3RhcC5jOiBJbiBmdW5jdGlvbiDigJhnZXR0aW1lb2ZkYXlfbnPigJk6Cj4gL2hvbWUvYXV0b2J1
+aWxkL2F1dG9idWlsZC9pbnN0YW5jZS02L291dHB1dC0xL2J1aWxkL2t0YXAtMjNiYzdhNGE5NGJk
+OWU0ZTFiOGI3YzA2NjMyZTYxYzA0MWQ1N2I1Zi8uL3J1bnRpbWUva3RhcC5jOjU2OjE4OiBlcnJv
+cjogc3RvcmFnZSBzaXplIG9mIOKAmG5vd+KAmSBpc27igJl0IGtub3duCj4gICAgNTYgfCAgc3Ry
+dWN0IHRpbWVzcGVjIG5vdzsKPiAgICAgICB8ICAgICAgICAgICAgICAgICAgXn5+Cj4gL2hvbWUv
+YXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS02L291dHB1dC0xL2J1aWxkL2t0YXAtMjNiYzdh
+NGE5NGJkOWU0ZTFiOGI3YzA2NjMyZTYxYzA0MWQ1N2I1Zi8uL3J1bnRpbWUva3RhcC5jOjU4OjI6
+IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbiDigJhnZXRuc3RpbWVvZmRh
+eeKAmTsgZGlkIHlvdSBtZWFuIOKAmGdldHRpbWVvZmRheV9uc+KAmT8gWy1XZXJyb3I9aW1wbGlj
+aXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCj4gICAgNTggfCAgZ2V0bnN0aW1lb2ZkYXkoJm5vdyk7
+CgpUaGlzIGlzIG5vdyByZWFsbHkgcmVtb3ZlZCBmcm9tIHRoZSBrZXJuZWwsIHNvIGt0YXAgd291
+bGQgYW55d2F5IG5lZWQKcGF0Y2hpbmcuCgpTbywgYXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4K
+ClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+ICAgICAgIHwgIF5+fn5+fn5+fn5+fn5+Cj4gICAg
+ICAgfCAgZ2V0dGltZW9mZGF5X25zCj4gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5j
+ZS02L291dHB1dC0xL2J1aWxkL2t0YXAtMjNiYzdhNGE5NGJkOWU0ZTFiOGI3YzA2NjMyZTYxYzA0
+MWQ1N2I1Zi8uL3J1bnRpbWUva3RhcC5jOjU2OjE4OiB3YXJuaW5nOiB1bnVzZWQgdmFyaWFibGUg
+4oCYbm934oCZIFstV3VudXNlZC12YXJpYWJsZV0KPiAgICA1NiB8ICBzdHJ1Y3QgdGltZXNwZWMg
+bm93Owo+ICAgICAgIHwgICAgICAgICAgICAgICAgICBefn4KPiBJbiBmaWxlIGluY2x1ZGVkIGZy
+b20gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS02L291dHB1dC0xL2J1aWxkL2t0
+YXAtMjNiYzdhNGE5NGJkOWU0ZTFiOGI3YzA2NjMyZTYxYzA0MWQ1N2I1Zi8uL3J1bnRpbWUvYW1h
+bGcuYzoyMjoKPiAvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEv
+YnVpbGQva3RhcC0yM2JjN2E0YTk0YmQ5ZTRlMWI4YjdjMDY2MzJlNjFjMDQxZDU3YjVmLy4vcnVu
+dGltZS9rcF9vYmouYzogSW4gZnVuY3Rpb24g4oCYa3Bfb2JqX2tzdGFjazJzdHLigJk6Cj4gL2hv
+bWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS02L291dHB1dC0xL2J1aWxkL2t0YXAtMjNi
+YzdhNGE5NGJkOWU0ZTFiOGI3YzA2NjMyZTYxYzA0MWQ1N2I1Zi8uL3J1bnRpbWUva3Bfb2JqLmM6
+MjQzOjIxOiBlcnJvcjogc3RvcmFnZSBzaXplIG9mIOKAmHRyYWNl4oCZIGlzbuKAmXQga25vd24K
+PiAgIDI0MyB8ICBzdHJ1Y3Qgc3RhY2tfdHJhY2UgdHJhY2U7Cj4gICAgICAgfCAgICAgICAgICAg
+ICAgICAgICAgIF5+fn5+Cj4gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS02L291
+dHB1dC0xL2J1aWxkL2t0YXAtMjNiYzdhNGE5NGJkOWU0ZTFiOGI3YzA2NjMyZTYxYzA0MWQ1N2I1
+Zi8uL3J1bnRpbWUva3Bfb2JqLmM6MjUzOjI6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBv
+ZiBmdW5jdGlvbiDigJhzYXZlX3N0YWNrX3RyYWNl4oCZIFstV2Vycm9yPWltcGxpY2l0LWZ1bmN0
+aW9uLWRlY2xhcmF0aW9uXQo+ICAgMjUzIHwgIHNhdmVfc3RhY2tfdHJhY2UoJnRyYWNlKTsKPiAg
+ICAgICB8ICBefn5+fn5+fn5+fn5+fn5+Cj4gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0
+YW5jZS02L291dHB1dC0xL2J1aWxkL2t0YXAtMjNiYzdhNGE5NGJkOWU0ZTFiOGI3YzA2NjMyZTYx
+YzA0MWQ1N2I1Zi8uL3J1bnRpbWUva3Bfb2JqLmM6MjQzOjIxOiB3YXJuaW5nOiB1bnVzZWQgdmFy
+aWFibGUg4oCYdHJhY2XigJkgWy1XdW51c2VkLXZhcmlhYmxlXQo+ICAgMjQzIHwgIHN0cnVjdCBz
+dGFja190cmFjZSB0cmFjZTsKPiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgXn5+fn4KPiBJ
+biBmaWxlIGluY2x1ZGVkIGZyb20gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS02
+L291dHB1dC0xL2J1aWxkL2t0YXAtMjNiYzdhNGE5NGJkOWU0ZTFiOGI3YzA2NjMyZTYxYzA0MWQ1
+N2I1Zi8uL3J1bnRpbWUvYW1hbGcuYzoyNzoKPiAvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2lu
+c3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQva3RhcC0yM2JjN2E0YTk0YmQ5ZTRlMWI4YjdjMDY2MzJl
+NjFjMDQxZDU3YjVmLy4vcnVudGltZS9rcF90cmFuc3BvcnQuYzogSW4gZnVuY3Rpb24g4oCYdHJh
+Y2VfZW1wdHnigJk6Cj4gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS02L291dHB1
+dC0xL2J1aWxkL2t0YXAtMjNiYzdhNGE5NGJkOWU0ZTFiOGI3YzA2NjMyZTYxYzA0MWQ1N2I1Zi8u
+L3J1bnRpbWUva3BfdHJhbnNwb3J0LmM6MTA1OjM5OiBlcnJvcjogcGFzc2luZyBhcmd1bWVudCAx
+IG9mIOKAmHJpbmdfYnVmZmVyX2VtcHR5X2NwdeKAmSBmcm9tIGluY29tcGF0aWJsZSBwb2ludGVy
+IHR5cGUgWy1XZXJyb3I9aW5jb21wYXRpYmxlLXBvaW50ZXItdHlwZXNdCj4gICAxMDUgfCAgIGlm
+ICghcmluZ19idWZmZXJfZW1wdHlfY3B1KGt0YXBfaXRlci0+YnVmZmVyLCBjcHUpKQo+ICAgICAg
+IHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB+fn5+fn5+fn5efn5+fn5+fgo+ICAgICAg
+IHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8Cj4gICAgICAgfCAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCByaW5nX2J1ZmZlciAqCj4g
+SW4gZmlsZSBpbmNsdWRlZCBmcm9tIC4vaW5jbHVkZS9saW51eC90cmFjZV9ldmVudHMuaDo2LAo+
+ICAgICAgICAgICAgICAgICAgZnJvbSAvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNl
+LTYvb3V0cHV0LTEvYnVpbGQva3RhcC0yM2JjN2E0YTk0YmQ5ZTRlMWI4YjdjMDY2MzJlNjFjMDQx
+ZDU3YjVmLy4vcnVudGltZS90cmFjZV9ldmVudHMuaDo1LAo+ICAgICAgICAgICAgICAgICAgZnJv
+bSAvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQva3Rh
+cC0yM2JjN2E0YTk0YmQ5ZTRlMWI4YjdjMDY2MzJlNjFjMDQxZDU3YjVmLy4vcnVudGltZS9rcF9l
+dmVudHMuaDo0LAo+ICAgICAgICAgICAgICAgICAgZnJvbSAvaG9tZS9hdXRvYnVpbGQvYXV0b2J1
+aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQva3RhcC0yM2JjN2E0YTk0YmQ5ZTRlMWI4Yjdj
+MDY2MzJlNjFjMDQxZDU3YjVmLy4vcnVudGltZS9rcF9zdHIuYzozNSwKPiAgICAgICAgICAgICAg
+ICAgIGZyb20gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS02L291dHB1dC0xL2J1
+aWxkL2t0YXAtMjNiYzdhNGE5NGJkOWU0ZTFiOGI3YzA2NjMyZTYxYzA0MWQ1N2I1Zi8uL3J1bnRp
+bWUvYW1hbGcuYzoyNDoKPiAuL2luY2x1ZGUvbGludXgvcmluZ19idWZmZXIuaDoxNjI6NDk6IG5v
+dGU6IGV4cGVjdGVkIOKAmHN0cnVjdCB0cmFjZV9idWZmZXIgKuKAmSBidXQgYXJndW1lbnQgaXMg
+b2YgdHlwZSDigJhzdHJ1Y3QgcmluZ19idWZmZXIgKuKAmQo+ICAgMTYyIHwgYm9vbCByaW5nX2J1
+ZmZlcl9lbXB0eV9jcHUoc3RydWN0IHRyYWNlX2J1ZmZlciAqYnVmZmVyLCBpbnQgY3B1KTsKPiAg
+ICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgIH5+fn5+fn5+fn5+fn5+fn5+fn5+fl5+
+fn5+fgo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSAvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2lu
+c3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQva3RhcC0yM2JjN2E0YTk0YmQ5ZTRlMWI4YjdjMDY2MzJl
+NjFjMDQxZDU3YjVmLy4vcnVudGltZS9hbWFsZy5jOjI3Ogo+IC9ob21lL2F1dG9idWlsZC9hdXRv
+YnVpbGQvaW5zdGFuY2UtNi9vdXRwdXQtMS9idWlsZC9rdGFwLTIzYmM3YTRhOTRiZDllNGUxYjhi
+N2MwNjYzMmU2MWMwNDFkNTdiNWYvLi9ydW50aW1lL2twX3RyYW5zcG9ydC5jOiBJbiBmdW5jdGlv
+biDigJh0cmFjZV9jb25zdW1l4oCZOgo+IC9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFu
+Y2UtNi9vdXRwdXQtMS9idWlsZC9rdGFwLTIzYmM3YTRhOTRiZDllNGUxYjhiN2MwNjYzMmU2MWMw
+NDFkNTdiNWYvLi9ydW50aW1lL2twX3RyYW5zcG9ydC5jOjExNjozMTogZXJyb3I6IHBhc3Npbmcg
+YXJndW1lbnQgMSBvZiDigJhyaW5nX2J1ZmZlcl9jb25zdW1l4oCZIGZyb20gaW5jb21wYXRpYmxl
+IHBvaW50ZXIgdHlwZSBbLVdlcnJvcj1pbmNvbXBhdGlibGUtcG9pbnRlci10eXBlc10KPiAgIDEx
+NiB8ICByaW5nX2J1ZmZlcl9jb25zdW1lKGt0YXBfaXRlci0+YnVmZmVyLCBpdGVyLT5jcHUsICZp
+dGVyLT50cywKPiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgIH5+fn5+fn5+fl5+fn5+fn5+
+Cj4gICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8Cj4gICAgICAgfCAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgcmluZ19idWZmZXIgKgo+IAo+IEZpeGVz
+Ogo+ICAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzkwNjcxOTI5NjJi
+NDAxMWUwZGEyN2FjMmIyZGM1M2ViMWUzMTU4MmMKPiAKPiBTaWduZWQtb2ZmLWJ5OiBGYWJyaWNl
+IEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiAtLS0KPiAgQ29uZmlnLmlu
+LmxlZ2FjeSAgICAgICB8ICA3ICsrKysrKysKPiAgREVWRUxPUEVSUyAgICAgICAgICAgICB8ICAz
+IC0tLQo+ICBwYWNrYWdlL0NvbmZpZy5pbiAgICAgIHwgIDEgLQo+ICBwYWNrYWdlL2t0YXAvQ29u
+ZmlnLmluIHwgMzEgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICBwYWNrYWdlL2t0
+YXAva3RhcC5oYXNoIHwgIDMgLS0tCj4gIHBhY2thZ2Uva3RhcC9rdGFwLm1rICAgfCAzNiAtLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiAgNiBmaWxlcyBjaGFuZ2VkLCA3IGlu
+c2VydGlvbnMoKyksIDc0IGRlbGV0aW9ucygtKQo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2Fn
+ZS9rdGFwL0NvbmZpZy5pbgo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9rdGFwL2t0YXAu
+aGFzaAo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9rdGFwL2t0YXAubWsKPiAKPiBkaWZm
+IC0tZ2l0IGEvQ29uZmlnLmluLmxlZ2FjeSBiL0NvbmZpZy5pbi5sZWdhY3kKPiBpbmRleCAzZDVk
+ZjNhYmJiLi44NTNhODkxN2JlIDEwMDY0NAo+IC0tLSBhL0NvbmZpZy5pbi5sZWdhY3kKPiArKysg
+Yi9Db25maWcuaW4ubGVnYWN5Cj4gQEAgLTE0Niw2ICsxNDYsMTMgQEAgZW5kaWYKPiAgCj4gIGNv
+bW1lbnQgIkxlZ2FjeSBvcHRpb25zIHJlbW92ZWQgaW4gMjAyMi4wNSIKPiAgCj4gK2NvbmZpZyBC
+UjJfUEFDS0FHRV9LVEFQCj4gKwlib29sICJrdGFwIHJlbW92ZWQiCj4gKwlzZWxlY3QgQlIyX0xF
+R0FDWQo+ICsJaGVscAo+ICsJICBQYWNrYWdlIHdhcyByZW1vdmVkIGJlY2F1c2UgaXQgaXMgbm90
+IGNvbXBhdGlibGUgd2l0aCBsYXRlc3QKPiArCSAga2VybmVscyBhbmQgaXMgbm90IG1haW50YWlu
+ZWQgYW55bW9yZSAobm8gcmVsZWFzZSBzaW5jZSAyMDEzKS4KPiArCj4gIGNvbmZpZyBCUjJfS0VS
+TkVMX0hFQURFUlNfNV8xNgo+ICAJYm9vbCAia2VybmVsIGhlYWRlcnMgdmVyc2lvbiA1LjE2Lngg
+YXJlIG5vIGxvbmdlciBzdXBwb3J0ZWQiCj4gIAlzZWxlY3QgQlIyX0xFR0FDWQo+IGRpZmYgLS1n
+aXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+IGluZGV4IDdlNjkwNDc0ZjUuLjcwMjRmZWIy
+NGEgMTAwNjQ0Cj4gLS0tIGEvREVWRUxPUEVSUwo+ICsrKyBiL0RFVkVMT1BFUlMKPiBAQCAtMTI3
+LDkgKzEyNyw2IEBAIEY6CXBhY2thZ2UvZGNyb24vCj4gIEY6CXBhY2thZ2UvbGlieG1scnBjLwo+
+ICBGOglwYWNrYWdlL3B5dGhvbi1kb2NvcHQvCj4gIAo+IC1OOglBbmRlcnMgRGFyYW5kZXIgPGFu
+ZGVyc0BjaGFyZ2VzdG9ybS5zZT4KPiAtRjoJcGFja2FnZS9rdGFwLwo+IC0KPiAgTjoJQW5kcsOp
+IFp3aW5nIDxuZXJ2QGRhd25jcm93LmRlPgo+ICBGOglwYWNrYWdlL2xpYmtyYjUvCj4gIEY6CXBh
+Y2thZ2Uvb3BlbmFsLwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2Uv
+Q29uZmlnLmluCj4gaW5kZXggNjdmOWUwYjE3NC4uNTE3MzAzMjUzMCAxMDA2NDQKPiAtLS0gYS9w
+YWNrYWdlL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCj4gQEAgLTEwNyw3ICsx
+MDcsNiBAQCBtZW51ICJEZWJ1Z2dpbmcsIHByb2ZpbGluZyBhbmQgYmVuY2htYXJrIgo+ICAJc291
+cmNlICJwYWNrYWdlL2lvem9uZS9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2Uva2V4ZWMv
+Q29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL2tleGVjLWxpdGUvQ29uZmlnLmluIgo+IC0J
+c291cmNlICJwYWNrYWdlL2t0YXAvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL2t2bS11
+bml0LXRlc3RzL0NvbmZpZy5pbiIKPiAgCXNvdXJjZSAicGFja2FnZS9reXVhL0NvbmZpZy5pbiIK
+PiAgCXNvdXJjZSAicGFja2FnZS9sYXRlbmN5dG9wL0NvbmZpZy5pbiIKPiBkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9rdGFwL0NvbmZpZy5pbiBiL3BhY2thZ2Uva3RhcC9Db25maWcuaW4KPiBkZWxldGVk
+IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAzODI5M2Y2ZGRlLi4wMDAwMDAwMDAwCj4gLS0tIGEv
+cGFja2FnZS9rdGFwL0NvbmZpZy5pbgo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSwzMSArMCwwIEBA
+Cj4gLWNvbmZpZyBCUjJfUEFDS0FHRV9LVEFQCj4gLQlib29sICJrdGFwIgo+IC0JZGVwZW5kcyBv
+biBCUjJfTElOVVhfS0VSTkVMCj4gLQlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVB
+RFMKPiAtCWhlbHAKPiAtCSAga3RhcCBpcyBhIHNjcmlwdC1iYXNlZCBkeW5hbWljIHRyYWNpbmcg
+dG9vbCBmb3IgTGludXgKPiAtCj4gLQkgIEl0IHVzZXMgYSBzY3JpcHRpbmcgbGFuZ3VhZ2UgYW5k
+IGxldHMgdXNlcnMgdHJhY2UgdGhlIExpbnV4Cj4gLQkgIGtlcm5lbCBkeW5hbWljYWxseS4ga3Rh
+cCBpcyBkZXNpZ25lZCB0byBnaXZlIG9wZXJhdGlvbmFsCj4gLQkgIGluc2lnaHRzIHdpdGggaW50
+ZXJvcGVyYWJpbGl0eSB0aGF0IGFsbG93cyB1c2VycyB0byB0dW5lLAo+IC0JICB0cm91Ymxlc2hv
+b3QgYW5kIGV4dGVuZCBrZXJuZWwgYW5kIGFwcGxpY2F0aW9uLgo+IC0JICBJdCdzIHNpbWlsYXIg
+dG8gTGludXggU3lzdGVtdGFwIGFuZCBTb2xhcmlzIER0cmFjZS4KPiAtCj4gLQkgIGt0YXAgZG9l
+c24ndCBzdXBwb3J0IGtlcm5lbHMgb2xkZXIgdGhhbiAzLjEuCj4gLQo+IC0JICBUbyBiZSBhYmxl
+IHRvIHJlc29sdmUgc3ltYm9scyBpbiBEU08gYW5kIGZvciBzZHQsIHlvdSBuZWVkIHRvCj4gLQkg
+IGVuYWJsZSBlbGZ1dGlscy4KPiAtCj4gLQkgIFlvdXIga2VybmVsIG11c3QgaGF2ZSBDT05GSUdf
+RVZFTlRfVFJBQ0lORywKPiAtCSAgQ09ORklHX1BFUkZfRVZFTlRTLCBhbmQgQ09ORklHX0RFQlVH
+X0ZTIGVuYWJsZWQgdG8gY29tcGlsZS4KPiAtCj4gLQkgIEJ1aWxkcm9vdCBhdXRvbWF0aWNhbGx5
+IGVuYWJsZXMgdGhlc2UgaW4gdGhlIGtlcm5lbAo+IC0JICBjb25maWd1cmF0aW9uLgo+IC0KPiAt
+CSAgaHR0cDovL3d3dy5rdGFwLm9yZwo+IC0KPiAtY29tbWVudCAia3RhcCBuZWVkcyBhIExpbnV4
+IGtlcm5lbCB0byBiZSBidWlsdCIKPiAtCWRlcGVuZHMgb24gIUJSMl9MSU5VWF9LRVJORUwKPiAt
+Cj4gLWNvbW1lbnQgImt0YXAgbmVlZHMgYSB0b29sY2hhaW4gdy8gdGhyZWFkcyIKPiAtCWRlcGVu
+ZHMgb24gIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9r
+dGFwL2t0YXAuaGFzaCBiL3BhY2thZ2Uva3RhcC9rdGFwLmhhc2gKPiBkZWxldGVkIGZpbGUgbW9k
+ZSAxMDA2NDQKPiBpbmRleCAxZWZmNzEyNTAxLi4wMDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9r
+dGFwL2t0YXAuaGFzaAo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSwzICswLDAgQEAKPiAtIyBMb2Nh
+bGx5IGNhbGN1bGF0ZWQKPiAtc2hhMjU2IDQ0YTA4MDhkNTcxNzVjZjlkMTU0NjZmNzIwZTFlMTBk
+NWVkMWFiYzM0OTdhZWRmOWRkZDY0Njk1NDU1NTIzNDUgIGt0YXAtMjNiYzdhNGE5NGJkOWU0ZTFi
+OGI3YzA2NjMyZTYxYzA0MWQ1N2I1Zi50YXIuZ3oKPiAtc2hhMjU2IGU2ZDZhMDA5NTA1ZTM0NWZl
+OTQ5ZTEzMTAzMzRmY2IwNzQ3ZjI4ZGFlMjg1Njc1OWRlMTAyYWI2NmI3MjJjYjQgIExJQ0VOU0Ut
+R1BMCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uva3RhcC9rdGFwLm1rIGIvcGFja2FnZS9rdGFwL2t0
+YXAubWsKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCBlZWM4Yjc1YjdmLi4wMDAw
+MDAwMDAwCj4gLS0tIGEvcGFja2FnZS9rdGFwL2t0YXAubWsKPiArKysgL2Rldi9udWxsCj4gQEAg
+LTEsMzYgKzAsMCBAQAo+IC0jIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+IC0jCj4gLSMga3RhcAo+
+IC0jCj4gLSMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gLQo+IC1LVEFQX1ZFUlNJT04gPSAyM2Jj
+N2E0YTk0YmQ5ZTRlMWI4YjdjMDY2MzJlNjFjMDQxZDU3YjVmCj4gLUtUQVBfU0lURSA9ICQoY2Fs
+bCBnaXRodWIsa3RhcCxrdGFwLCQoS1RBUF9WRVJTSU9OKSkKPiAtS1RBUF9MSUNFTlNFID0gR1BM
+LTIuMAo+IC1LVEFQX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFLUdQTAo+IC0KPiAtaWZlcSAoJChC
+UjJfUEFDS0FHRV9FTEZVVElMUykseSkKPiAtS1RBUF9ERVBFTkRFTkNJRVMgKz0gZWxmdXRpbHMK
+PiAtZWxzZQo+IC1LVEFQX0ZMQUdTICs9IE5PX0xJQkVMRj0xCj4gLWVuZGlmCj4gLQo+IC1kZWZp
+bmUgS1RBUF9CVUlMRF9DTURTCj4gLQkkKE1BS0UpIC1DICQoQEQpICQoVEFSR0VUX0NPTkZJR1VS
+RV9PUFRTKSAkKEtUQVBfRkxBR1MpIGt0YXAKPiAtZW5kZWYKPiAtCj4gLWRlZmluZSBLVEFQX0lO
+U1RBTExfVEFSR0VUX0NNRFMKPiAtCSQoSU5TVEFMTCkgLUQgLW03NTUgJChARCkva3RhcCAkKFRB
+UkdFVF9ESVIpL3Vzci9iaW4va3RhcAo+IC1lbmRlZgo+IC0KPiAtS1RBUF9NT0RVTEVfTUFLRV9P
+UFRTID0gS1ZFUlNJT049JChMSU5VWF9WRVJTSU9OX1BST0JFRCkKPiAtCj4gLWRlZmluZSBLVEFQ
+X0xJTlVYX0NPTkZJR19GSVhVUFMKPiAtCSQoY2FsbCBLQ09ORklHX0VOQUJMRV9PUFQsQ09ORklH
+X0RFQlVHX0ZTKQo+IC0JJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfRU5BQkxFX0RF
+RkFVTFRfVFJBQ0VSUykKPiAtCSQoY2FsbCBLQ09ORklHX0VOQUJMRV9PUFQsQ09ORklHX1BFUkZf
+RVZFTlRTKQo+IC0JJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfRlVOQ1RJT05fVFJB
+Q0VSKQo+IC1lbmRlZgo+IC0KPiAtJChldmFsICQoa2VybmVsLW1vZHVsZSkpCj4gLSQoZXZhbCAk
+KGdlbmVyaWMtcGFja2FnZSkpCj4gLS0gCj4gMi4zNS4xCj4gCj4gX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4g
+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QKCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0t
+LS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZ
+YW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBF
+cmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25l
+ciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5
+IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVy
+ZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBI
+VE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0t
+JwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
+b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
