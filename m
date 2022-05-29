@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 845EEC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35AC6C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:55:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 411F2849ED;
-	Sun, 29 May 2022 08:55:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2D2261104;
+	Sun, 29 May 2022 08:55:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h2EsuJd8UQ7u; Sun, 29 May 2022 08:55:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AmxBaXlknKh1; Sun, 29 May 2022 08:55:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43A5C84B15;
-	Sun, 29 May 2022 08:55:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA1E661100;
+	Sun, 29 May 2022 08:55:51 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 041B41BF404
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:54:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 167051BF404
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:54:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F276419C4
+ by smtp4.osuosl.org (Postfix) with ESMTP id C939F419F0
  for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:54:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gMOzG7mreNaj for <buildroot@lists.busybox.net>;
+ with ESMTP id QWvAFWpWaW1e for <buildroot@lists.busybox.net>;
  Sun, 29 May 2022 08:54:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A816141A02
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7B7A42648
  for <buildroot@buildroot.org>; Sun, 29 May 2022 08:54:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2DF9A86316; Sun, 29 May 2022 08:43:03 +0000 (UTC)
+ id 3F71186577; Sun, 29 May 2022 08:43:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 May 2022 10:47:50 +0200
+Date: Sun, 29 May 2022 10:52:26 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 49e573fc67c9065b9b71b4c4545a6a0e6aacc1de
-X-Git-Newrev: 238be7ae978c706ff8d9c189443ca032d4cfc95a
+X-Git-Oldrev: 5f24587ded47bc3df653fe6b98d956dc8c0520bb
+X-Git-Newrev: 55fcd7979ca47524dfecdfc75d7568be27b96437
 X-Patchwork-Hint: ignore
-Message-Id: <20220529084303.2DF9A86316@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/alchemy: add
- host-pkgconf dependency
+Message-Id: <20220529084303.3F71186577@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/pango: propagate
+ reverse dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +59,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=238be7ae978c706ff8d9c189443ca032d4cfc95a
+commit: https://git.buildroot.net/buildroot/commit/?id=55fcd7979ca47524dfecdfc75d7568be27b96437
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-host-pkgconf is a mandatory dependency since the addition of the package
-in commit 7f1f3f87868fa333833dbba9f4f07adc338b34ed resulting in the
-following ulog build failure:
-
-/home/buildroot/autobuild/run/instance-0/output-1/per-package/ulog/host/opt/alchemy/check.mk:36: *** 'pkg-config' is required.  Stop.
-
-An other option would be to set TARGET_OS to baremetal but it could have
-unexpected side-effects such as removing -fPIC for arm targets
+It appears some pango reverse dependencies aren't propagated properly.
 
 Fixes:
- - http://autobuild.buildroot.org/results/c731fe0e9bdbfce0823f9c48641f1ed710fa6125
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_PANGO
+  Depends on [n]: BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_USE_MMU [=y] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_HAS_SYNC_4 [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 [=n]
+  Selected by [y]:
+  - BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTML [=y] && BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_PLUGINS_BAD [=y] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_HAS_SYNC_4 [=y]
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Reviewed-by: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 837e3128687a1c892ff796b80b26edc4b1186d73)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bdb247436c7309f3fb8e7d60ed5e66883ae17a45)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alchemy/alchemy.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in  |  7 +++++--
+ package/gstreamer1/gst1-plugins-base/Config.in | 10 +++++++---
+ package/weston/Config.in                       |  5 +++--
+ 3 files changed, 15 insertions(+), 7 deletions(-)
 
-diff --git a/package/alchemy/alchemy.mk b/package/alchemy/alchemy.mk
-index 18cdd0a645..10d1068ac4 100644
---- a/package/alchemy/alchemy.mk
-+++ b/package/alchemy/alchemy.mk
-@@ -8,7 +8,7 @@ ALCHEMY_VERSION = d95b3c38cd37814a1b98d0bbf813de7adaaecfbc
- ALCHEMY_SITE = $(call github,Parrot-Developers,alchemy,$(ALCHEMY_VERSION))
- ALCHEMY_LICENSE = BSD-3-Clause (Alchemy), GPL-2.0 (kconfig)
- ALCHEMY_LICENSE_FILES = COPYING README
--HOST_ALCHEMY_DEPENDENCIES = host-python3
-+HOST_ALCHEMY_DEPENDENCIES = host-pkgconf host-python3
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 669360adb1..cd5a2c7b11 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -481,18 +481,21 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTML
+ 	bool "ttml"
+ 	depends on BR2_USE_WCHAR # pango -> glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> glib2
++	depends on BR2_USE_MMU # pango -> glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_PANGO
+ 	help
+ 	  Timed Text Markup Language (TTML) subtitle plugin
  
- ALCHEMY_HOME = $(HOST_DIR)/opt/alchemy
- ALCHEMY_SDK_BASEDIR = $(STAGING_DIR)/usr/lib/alchemy/sdk
-@@ -35,6 +35,7 @@ ALCHEMY_TARGET_ENV = \
- 	ALCHEMY_HOME=$(ALCHEMY_HOME) \
- 	ALCHEMY_WORKSPACE_DIR="$(@D)" \
- 	ALCHEMY_TARGET_OUT=alchemy-out \
-+	PKGCONFIG_BIN=$(PKG_CONFIG_HOST_BINARY) \
- 	TARGET_OS=linux \
- 	TARGET_OS_FLAVOUR=buildroot \
- 	TARGET_CROSS="$(TARGET_CROSS)" \
+-comment "ttml needs a toolchain w/ wchar, threads, C++"
++comment "ttml needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_INSTALL_LIBSTDCPP
++		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC
+ 	bool "mpeg2enc"
+diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
+index 7ca94d7dc4..bd4ee0b994 100644
+--- a/package/gstreamer1/gst1-plugins-base/Config.in
++++ b/package/gstreamer1/gst1-plugins-base/Config.in
+@@ -291,6 +291,9 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OPUS
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
+ 	bool "pango font renderer"
++	depends on BR2_USE_WCHAR # pango -> glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> glib2
++	depends on BR2_USE_MMU # pango -> glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+@@ -298,10 +301,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
+ 	help
+ 	  Pango-based text rendering and overlay
+ 
+-comment "pango plugin needs a toolchain w/ C++, gcc >= 4.9"
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++comment "pango plugin needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
+ 	bool "theora (*.ogg video)"
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 6ad8241caa..3b4e932b7d 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -147,6 +147,7 @@ config BR2_PACKAGE_WESTON_DEMO_CLIENTS
+ 	bool "demo clients"
+ 	depends on BR2_USE_MMU # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pango
+ 	depends on BR2_USE_WCHAR # pango
+@@ -156,11 +157,11 @@ config BR2_PACKAGE_WESTON_DEMO_CLIENTS
+ 	help
+ 	  This enables the installation of Weston's demo clients.
+ 
+-comment "demo clients needs an OpenGL ES provider, an OpenEGL-capable Wayland backend and a toolchain w/ wchar, threads, C++"
++comment "demo clients needs an OpenGL ES provider, an OpenEGL-capable Wayland backend and a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_USE_WCHAR || !BR2_PACKAGE_HAS_LIBGLES || \
+-		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
