@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E471C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:35:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B753C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 556D0404CF;
-	Sun, 29 May 2022 08:35:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A6DB426E9;
+	Sun, 29 May 2022 08:36:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VKvyfUNwhOLO; Sun, 29 May 2022 08:36:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED0D7426D3;
+	Sun, 29 May 2022 08:36:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BA2D1BF404
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:35:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5957340126
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:35:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ujPCbslYVvHV; Sun, 29 May 2022 08:35:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4B7C0400E4;
-	Sun, 29 May 2022 08:35:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6290E1BF969
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:35:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5161A61104
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:35:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2Ww4YzwIAqEo for <buildroot@lists.busybox.net>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oCWHsAfGx_6V for <buildroot@lists.busybox.net>;
  Sun, 29 May 2022 08:35:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AE40A60E8D
+ by smtp2.osuosl.org (Postfix) with ESMTP id A39CC40003
  for <buildroot@buildroot.org>; Sun, 29 May 2022 08:35:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4C8BD8643D; Sun, 29 May 2022 08:24:11 +0000 (UTC)
+ id 312BF86538; Sun, 29 May 2022 08:24:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 May 2022 10:19:43 +0200
+Date: Sun, 29 May 2022 10:12:54 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: c4d5b7b6c78002dddc51fd99dd0a9c0b24b3e77b
-X-Git-Newrev: 4c6381a91bbc3b426df8136d3ed2e8e89ec12036
+X-Git-Oldrev: 15c46c464420caf89b3fabca5cf0f58e0d2ed973
+X-Git-Newrev: 5cc4b5f63e88af3c66aa44e7601a8543cf74c72a
 X-Patchwork-Hint: ignore
-Message-Id: <20220529082411.4C8BD8643D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/usb_modeswitch:
- fix installation of systemd unit file
+Message-Id: <20220529082411.312BF86538@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/cifs-utils:
+ security bump to version 6.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +59,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c6381a91bbc3b426df8136d3ed2e8e89ec12036
+commit: https://git.buildroot.net/buildroot/commit/?id=5cc4b5f63e88af3c66aa44e7601a8543cf74c72a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-The upstream Makefile failed to detect systemd being present in some (maybe all)
-builds, resulting in the unit file not being installed. Without the unit file,
-the udev rules in usb_modeswitch-data don't work as expected (no modeswitch is
-performed).
+This is a security release to address the following bugs:
 
-This commit adds a patch that modifies the Makefile to include
-'$(PREFIX)/bin/systemctl' in the list of paths checked, which makes the
-installation phase work as intended. I will also submit this patch upstream.
+- CVE-2022-27239: mount.cifs: fix length check for ip option parsing
+- CVE-2022-29869: mount.cifs: fix verbose messages on option parsing
 
-Signed-off-by: Sol Bekic <s+removethis@s-ol.nu>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c6b746e6fcb385eb3ea75250673c3cf6f3743538)
+https://lists.samba.org/archive/samba-technical/2022-April/137335.html
+https://lists.samba.org/archive/samba-technical/2021-September/136914.html
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e5939475da5f98f110f5eb008681a43ecfe55595)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../usb_modeswitch/0001-fix-systemd-detection.patch    | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/cifs-utils/cifs-utils.hash | 2 +-
+ package/cifs-utils/cifs-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/usb_modeswitch/0001-fix-systemd-detection.patch b/package/usb_modeswitch/0001-fix-systemd-detection.patch
-new file mode 100644
-index 0000000000..d0b3e80aeb
---- /dev/null
-+++ b/package/usb_modeswitch/0001-fix-systemd-detection.patch
-@@ -0,0 +1,18 @@
-+Modify the Makefile to include '$(PREFIX)/bin/systemctl' in the list of paths.
-+This makes the udev intgeration work as intended when using systemd.
-+
-+Signed-off-by: Sol Bekic <s+removethis@s-ol.nu>
-+
-+diff --git a/Makefile b/Makefile
-+index 22bd0e0..72321a4 100755
-+--- a/Makefile
-++++ b/Makefile
-+@@ -62,7 +62,7 @@
-+	install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
-+	install -d $(DESTDIR)/var/lib/usb_modeswitch
-+	test -d $(UPSDIR) -a -e /sbin/initctl && install --mode=644 usb-modeswitch-upstart.conf $(UPSDIR) || test 1
-+-	test -d $(SYSDIR) -a \( -e /usr/bin/systemctl -o -e /bin/systemctl \) && install --mode=644 usb_modeswitch@.service $(SYSDIR) || test 1
-++	test -d $(SYSDIR) -a \( -e /usr/bin/systemctl -o -e /bin/systemctl -o -e $(PREFIX)/bin/systemctl \) && install --mode=644 usb_modeswitch@.service $(SYSDIR) || test 1
-+ 
-+ install: install-script
-+ 
+diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
+index 566a5c4bf4..ec6ea55961 100644
+--- a/package/cifs-utils/cifs-utils.hash
++++ b/package/cifs-utils/cifs-utils.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  43d8786c8613caccfa84913081c1d62bc2409575854cf895b05b48af0863d056  cifs-utils-6.13.tar.bz2
++sha256  a7b6940e93250c1676a6fa66b6ead91b78cd43a5fee99cc462459c8b9cf1e6f4  cifs-utils-6.15.tar.bz2
+ 
+ # Hash for license file:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index b29557cbe8..edf08d4b4d 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CIFS_UTILS_VERSION = 6.13
++CIFS_UTILS_VERSION = 6.15
+ CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
