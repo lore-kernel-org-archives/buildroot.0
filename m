@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 550F4C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:54:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFDB7C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:54:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E82560C18;
-	Sun, 29 May 2022 08:54:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C2E984602;
+	Sun, 29 May 2022 08:54:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hg32chj5bB5t; Sun, 29 May 2022 08:54:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BxiKVhwS75ch; Sun, 29 May 2022 08:54:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C86760E8D;
-	Sun, 29 May 2022 08:54:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 42B2B1BF404
+	by smtp1.osuosl.org (Postfix) with ESMTP id B203F83F39;
+	Sun, 29 May 2022 08:54:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 69EFE1BF969
  for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:54:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 314A160E8D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 666EE42649
  for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:54:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CfiMmMmFwd2E for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fsAvg7xQ8VUG for <buildroot@lists.busybox.net>;
  Sun, 29 May 2022 08:54:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 959B660DB2
+ by smtp4.osuosl.org (Postfix) with ESMTP id A04A7419F0
  for <buildroot@buildroot.org>; Sun, 29 May 2022 08:54:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1BA2386577; Sun, 29 May 2022 08:43:03 +0000 (UTC)
+ id 245AD8658B; Sun, 29 May 2022 08:43:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 May 2022 10:45:22 +0200
+Date: Sun, 29 May 2022 10:46:37 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: b6ab73fe1f466c0e30171b59ef3cdfcaeed16e5c
-X-Git-Newrev: 60eba210cdeddc2498d523fbae1eed80aa2caa63
+X-Git-Oldrev: 60eba210cdeddc2498d523fbae1eed80aa2caa63
+X-Git-Newrev: 49e573fc67c9065b9b71b4c4545a6a0e6aacc1de
 X-Patchwork-Hint: ignore
-Message-Id: <20220529084303.1BA2386577@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- package/gstreamer1/gst1-imx: add missing BR2_INSTALL_LIBSTDCPP dependency
+Message-Id: <20220529084303.245AD8658B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] boot/sun20i-d1-spl:
+ update to latest commit 882671
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,42 +59,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60eba210cdeddc2498d523fbae1eed80aa2caa63
+commit: https://git.buildroot.net/buildroot/commit/?id=49e573fc67c9065b9b71b4c4545a6a0e6aacc1de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixes:
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_GST1_PLUGINS_BAD
-  Depends on [n]: BR2_PACKAGE_GSTREAMER1 [=y] && BR2_INSTALL_LIBSTDCPP [=n]
-  Selected by [y]:
-  - BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC [=y] && BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_IMX [=y]
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 198244b3c31029aa16ae69e1661f1e1cd173b03f)
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d0cbd53ac4a054e94bc7f055bd4087f21a317f5e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-imx/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ boot/sun20i-d1-spl/sun20i-d1-spl.hash | 2 +-
+ boot/sun20i-d1-spl/sun20i-d1-spl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index 41ef8548c5..bd1f8d41f2 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -81,10 +81,14 @@ comment "imxvpu needs the VPU imxvpuapi library"
+diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.hash b/boot/sun20i-d1-spl/sun20i-d1-spl.hash
+index bb2fd66c28..11d17a9a16 100644
+--- a/boot/sun20i-d1-spl/sun20i-d1-spl.hash
++++ b/boot/sun20i-d1-spl/sun20i-d1-spl.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  3ef28affd35a37675d91d3ac50b85e3dfa356420005f69713df73c85798ff1d8  sun20i-d1-spl-4da9c518c124d6f6123bf274e449514863df3646.tar.gz
++sha256  08e2d0574e58c99734cd1d9ea89b86464242bf2db4f6769b23803bf9dcdac3c4  sun20i-d1-spl-882671fcf53137aaafc3a94fa32e682cb7b921f1.tar.gz
+diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.mk b/boot/sun20i-d1-spl/sun20i-d1-spl.mk
+index 3580ea4c25..6bcea0fa96 100644
+--- a/boot/sun20i-d1-spl/sun20i-d1-spl.mk
++++ b/boot/sun20i-d1-spl/sun20i-d1-spl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC
- 	bool "imxv4l2videosrc"
-+	depends on BR2_INSTALL_LIBSTDCPP # gst1-plugins-bad
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD
- 	help
- 	  Elements for V4L2 capture
- 
-+comment "imxv4l2videosrc needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK
- 	bool "imxv4l2videosink"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2 # V4L2_COLORSPACE_DEFAULT
+ # Commit on the 'mainline' branch
+-SUN20I_D1_SPL_VERSION = 4da9c518c124d6f6123bf274e449514863df3646
++SUN20I_D1_SPL_VERSION = 882671fcf53137aaafc3a94fa32e682cb7b921f1
+ SUN20I_D1_SPL_SITE = $(call github,smaeul,sun20i_d1_spl,$(SUN20I_D1_SPL_VERSION))
+ SUN20I_D1_SPL_INSTALL_TARGET = NO
+ SUN20I_D1_SPL_INSTALL_IMAGES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
