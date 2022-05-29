@@ -1,83 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C98C8C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 20:41:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03C19C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 20:54:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6034A83022;
-	Sun, 29 May 2022 20:41:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96A2641842;
+	Sun, 29 May 2022 20:54:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iKjoo8dpoOOX; Sun, 29 May 2022 20:41:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1M1It0jo2903; Sun, 29 May 2022 20:54:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 479A282CB7;
-	Sun, 29 May 2022 20:41:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B49FD41843;
+	Sun, 29 May 2022 20:54:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D01E31BF3D7
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 20:41:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 12D0A1BF3D7
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 20:54:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE7A440B0D
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 20:41:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0956F40128
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 20:54:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZwupKtxb_sLa for <buildroot@lists.busybox.net>;
- Sun, 29 May 2022 20:41:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C77234090E
- for <buildroot@buildroot.org>; Sun, 29 May 2022 20:41:41 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- p5-20020a1c2905000000b003970dd5404dso5461980wmp.0
- for <buildroot@buildroot.org>; Sun, 29 May 2022 13:41:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=a8alpTUDvIf23oVHtJMhaQqcYL2ROv5MgVDo9oKkCw8=;
- b=LTJNt8P2atd5AaojgAG+nId4xF8jEeIwEhLjgomqgjE9cZGy5xpW3/hUwZSEZjq1eg
- lUxmbHMx6DXGpmox7z4wiXAJ71eNi7a7XVDL2fNfDMAPKtNnqd5YqxbO6wtQBkr1qmSo
- nyOfpUEfcTE40iRLLdbEkPKLd3OdeZhynIGAP/VdCvEHqrEW+dKUSFGlB39dhDVcNjCG
- M9H6jafIcg00op9RvHngexijIMt+q7P+jwjYRpH9JSvHxzNC9eR3qbLBPgksXAU7lHuo
- Zl7sKBX0c6hcO4//eyMaQeHL4w7gjh75ZDgkmjmRAn+9pThEnMJxAgHJnyOHwXs8s1KF
- eKEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=a8alpTUDvIf23oVHtJMhaQqcYL2ROv5MgVDo9oKkCw8=;
- b=HzfpJNx6loxwWHKoaYIVRSgda2kQtclL1v/v7J30rpKMtxHis6Nngbc7mM8WKbYc70
- 6jtRo4/eGIK7d55dA9LlyrszX6/+CVdNVRU5DXzjHNJ82gk9UdodzcRQX564Bx3ad4yQ
- DHMMu/J4VUhakg2kT8M7icIqPNc82ykmbznH1W33pDQWASkE4LV3D4HDmSyR+hx4Mwyi
- IKQG96HzUVlUfZaSk9R1Py5qKQBi5VMyhui5QzxPelACb/uioKfO2WTLiBCJ9ixfoP28
- MYmPf9ZAX7wZWlxt6MhxchjpHZWbIJCKevHC4SRQmnqI3P6VIBAQTd1sysEeaKxPHmCj
- wqvw==
-X-Gm-Message-State: AOAM5301obLgucB8e9ktR9pEL2xH5ZTvJZmoGs4R9o/lt7yTFEXnyLq2
- N2YZn8yUmfHNdCbAdM3z2xu6/xx/8t8=
-X-Google-Smtp-Source: ABdhPJx7kXFqNC11yVgSNPaVKkzLIg+zGI23JVZc/29lepdQTsLMD5615tNfdJVnDXVLOKfDbGn4QQ==
-X-Received: by 2002:a05:600c:4fce:b0:397:84e3:2297 with SMTP id
- o14-20020a05600c4fce00b0039784e32297mr14266906wmq.197.1653856899740; 
- Sun, 29 May 2022 13:41:39 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- u1-20020adfae41000000b0020c5253d926sm7272239wrd.114.2022.05.29.13.41.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 May 2022 13:41:39 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id 40F5xySmXkv1 for <buildroot@lists.busybox.net>;
+ Sun, 29 May 2022 20:54:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A125400FF
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 20:54:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id EAAB3866FF; Sun, 29 May 2022 20:43:15 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 May 2022 22:39:10 +0200
-Message-Id: <20220529203910.2905393-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/ntfs-3g: security bump to version
- 2022.5.17
+Date: Sun, 29 May 2022 22:54:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3613c3cb331930bbb82cbfb27050f8e03ea288a5
+X-Git-Newrev: 7ebff53bf82ade8c2df25bfdf15f2501256f9d12
+X-Patchwork-Hint: ignore
+Message-Id: <20220529204315.EAAB3866FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/optee-client: fix build without
+ plugins
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,50 +53,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2021-46790, CVE-2022-30784, CVE-2022-30786, CVE-2022-30788 and
-CVE-2022-30789:
-https://github.com/tuxera/ntfs-3g/security/advisories/GHSA-xchm-ph5h-hw4x
+commit: https://git.buildroot.net/buildroot/commit/?id=7ebff53bf82ade8c2df25bfdf15f2501256f9d12
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/tuxera/ntfs-3g/releases/tag/2022.5.17
+Fix the following build failure raised since bump to version 3.17.0 in
+commit ffd45b8726d42bb299199d9f1e10ee3d3469c85a and
+https://github.com/OP-TEE/optee_client/commit/876b1ae719e12890ddd96e85cd4e9862dab46448:
+
+/home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.17.0/tee-supplicant/src/tee_supplicant.c:104:22: error: 'TEE_PLUGIN_LOAD_PATH' undeclared here (not in a function); did you mean 'TEEC_LOAD_PATH'?
+  104 |  .plugin_load_path = TEE_PLUGIN_LOAD_PATH,
+      |                      ^~~~~~~~~~~~~~~~~~~~
+      |                      TEEC_LOAD_PATH
+
+Fixes:
+ - http://autobuild.buildroot.org/results/384e0ca894dbc0ec72cea76141de890f1ce484db
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ntfs-3g/ntfs-3g.hash | 2 +-
- package/ntfs-3g/ntfs-3g.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ant-src-tee_supplicant.c-fix-build-withou.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
-index 668e11a800..89bce73559 100644
---- a/package/ntfs-3g/ntfs-3g.hash
-+++ b/package/ntfs-3g/ntfs-3g.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  55b883aa05d94b2ec746ef3966cb41e66bed6db99f22ddd41d1b8b94bb202efb  ntfs-3g_ntfsprogs-2021.8.22.tgz
-+sha256  0489fbb6972581e1b417ab578d543f6ae522e7fa648c3c9b49c789510fd5eb93  ntfs-3g_ntfsprogs-2022.5.17.tgz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING.LIB
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index 21f7cfc46d..64800c5eeb 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NTFS_3G_VERSION = 2021.8.22
-+NTFS_3G_VERSION = 2022.5.17
- NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
- NTFS_3G_SITE = http://tuxera.com/opensource
- NTFS_3G_CONF_OPTS = --disable-ldconfig
--- 
-2.35.1
-
+diff --git a/package/optee-client/0001-tee-supplicant-src-tee_supplicant.c-fix-build-withou.patch b/package/optee-client/0001-tee-supplicant-src-tee_supplicant.c-fix-build-withou.patch
+new file mode 100644
+index 0000000000..e41c9138ee
+--- /dev/null
++++ b/package/optee-client/0001-tee-supplicant-src-tee_supplicant.c-fix-build-withou.patch
+@@ -0,0 +1,39 @@
++From f2a7c942393c6383ac89d9264999cd9c93a70b80 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 14 May 2022 19:33:57 +0200
++Subject: [PATCH] tee-supplicant/src/tee_supplicant.c: fix build without
++ plugins
++
++Fix the following build failure with CFG_TEE_SUPP_PLUGINS != y raised
++since version 3.17.0 and commit [1].
++
++/home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.17.0/tee-supplicant/src/tee_supplicant.c:104:22: error: 'TEE_PLUGIN_LOAD_PATH' undeclared here (not in a function); did you mean 'TEEC_LOAD_PATH'?
++  104 |  .plugin_load_path = TEE_PLUGIN_LOAD_PATH,
++      |                      ^~~~~~~~~~~~~~~~~~~~
++      |                      TEEC_LOAD_PATH
++
++Link: [1] https://github.com/OP-TEE/optee_client/commit/876b1ae719e12890ddd96e85cd4e9862dab46448
++Fixes: http://autobuild.buildroot.org/results/384e0ca894dbc0ec72cea76141de890f1ce484db
++Reviewed-by: Jerome Forissier <jerome.forissier@linaro.org>
++Reviewed-by: Etienne Carriere <etienne.carriere@linaro.org>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/OP-TEE/optee_client/commit/f2a7c942393c6383ac89d9264999cd9c93a70b80]
++---
++ tee-supplicant/src/tee_supplicant.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/tee-supplicant/src/tee_supplicant.c b/tee-supplicant/src/tee_supplicant.c
++index 7b186ed9..53c29a26 100644
++--- a/tee-supplicant/src/tee_supplicant.c
+++++ b/tee-supplicant/src/tee_supplicant.c
++@@ -101,7 +101,9 @@ static struct tee_shm *shm_head;
++ 
++ struct tee_supplicant_params supplicant_params = {
++ 	.ta_dir = "optee_armtz",
+++#ifdef TEE_PLUGIN_LOAD_PATH
++ 	.plugin_load_path = TEE_PLUGIN_LOAD_PATH,
+++#endif
++ 	.fs_parent_path  = TEE_FS_PARENT_PATH,
++ };
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
