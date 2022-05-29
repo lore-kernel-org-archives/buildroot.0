@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52F7BC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:37:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD194C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:37:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0703D410E4;
-	Sun, 29 May 2022 08:37:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81FDB41764;
+	Sun, 29 May 2022 08:37:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oeTEEMA2tEJ4; Sun, 29 May 2022 08:37:04 +0000 (UTC)
+	with ESMTP id QfGOtsyqMBjy; Sun, 29 May 2022 08:37:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5D65401F0;
-	Sun, 29 May 2022 08:37:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DA9601BF96B
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:35:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8798F41760;
+	Sun, 29 May 2022 08:37:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 02CFB1BF404
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:35:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 522F0847D0
+ by smtp4.osuosl.org (Postfix) with ESMTP id D90D7426AD
  for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:35:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bP1PPVuuCPl6 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j6Ro1qj2H5Zd for <buildroot@lists.busybox.net>;
  Sun, 29 May 2022 08:35:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9F364847D3
+ by smtp4.osuosl.org (Postfix) with ESMTP id D3A04426BD
  for <buildroot@buildroot.org>; Sun, 29 May 2022 08:35:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2726C86536; Sun, 29 May 2022 08:24:11 +0000 (UTC)
+ id 6028986536; Sun, 29 May 2022 08:24:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 May 2022 10:12:40 +0200
+Date: Sun, 29 May 2022 10:25:28 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 86aabbd757c429b9777cf7d913c19485513eb150
-X-Git-Newrev: 15c46c464420caf89b3fabca5cf0f58e0d2ed973
+X-Git-Oldrev: 74ceee961195c233e911a8f26da3721334195607
+X-Git-Newrev: e57fd610eaf7b9552c61cb74dfaf687c57b59c2f
 X-Patchwork-Hint: ignore
-Message-Id: <20220529082411.2726C86536@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libpjsip:
- security bump to version 2.12.1
+Message-Id: <20220529082411.6028986536@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/postgresql:
+ security bump version to 14.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,59 +59,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15c46c464420caf89b3fabca5cf0f58e0d2ed973
+commit: https://git.buildroot.net/buildroot/commit/?id=e57fd610eaf7b9552c61cb74dfaf687c57b59c2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Security Issue:
- - Potential buffer overflow in pjsip_auth_create_digest()
-   (GHSA-73f7-48m9-w662 a.k.a. CVE-2022-24754)
- - Denial-of-service in XML parsing due to an infinite loop
-   (GHSA-5x45-qp78-g4p4 a.k.a. CVE-2022-24763)
- - Potential stack buffer overflow when printing SDP into a buffer
-   (GHSA-f5qg-pqcg-765m a.k.a. CVE-2022-24764)
- - Potential out-of-bound read/write when parsing RTCP FB RPSI
-   (GHSA-vhxv-phmx-g52q a.k.a. CVE-2022-24786)
- - Potential infinite loop when parsing WAV format file
-   (GHSA-rwgw-vwxg-q799 a.k.a. CVE-2022-24792)
- - Potential heap buffer overflow when parsing DNS packets
-   (GHSA-p6g5-v97c-w5q4 a.k.a. CVE-2022-24793)
+Release notes:
+https://www.postgresql.org/about/news/postgresql-143-137-1211-1116-and-1021-released-2449/
 
-https://github.com/pjsip/pjproject/releases/tag/2.12.1
+Fixes CVE-2022-1552:
+https://www.postgresql.org/support/security/CVE-2022-1552/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Removed patch which was committed upstream.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2a62ff8274a124ecf0734daa6886d75f4b73f3cd)
+(cherry picked from commit f822e078499fae5b6a9311a53a54d4022b4f7ba5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpjsip/libpjsip.hash | 2 +-
- package/libpjsip/libpjsip.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ ...0001-libpq-Fix-pkg-config-without-OpenSSL.patch | 34 ----------------------
+ package/postgresql/postgresql.hash                 |  4 +--
+ package/postgresql/postgresql.mk                   |  2 +-
+ 3 files changed, 3 insertions(+), 37 deletions(-)
 
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index 74331ab6fb..b1ccdb2f37 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b3b94d9be4aba8f6d2d1cb164603e81b0a6ee17352f9e2ba5b58e325e610ca5a  pjproject-2.12.tar.gz
-+sha256  d0feef6963b07934e821ba4328aecb4c36358515c1b3e507da5874555d713533  pjproject-2.12.1.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 32cfa8c53c..a3303d1e8a 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -4,10 +4,9 @@
+diff --git a/package/postgresql/0001-libpq-Fix-pkg-config-without-OpenSSL.patch b/package/postgresql/0001-libpq-Fix-pkg-config-without-OpenSSL.patch
+deleted file mode 100644
+index 90b0577a20..0000000000
+--- a/package/postgresql/0001-libpq-Fix-pkg-config-without-OpenSSL.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 465ab24296c27502c81c8c197725cba728b9b057 Mon Sep 17 00:00:00 2001
+-From: Peter Eisentraut <peter@eisentraut.org>
+-Date: Fri, 1 Apr 2022 17:12:56 +0200
+-Subject: [PATCH] libpq: Fix pkg-config without OpenSSL
+-
+-Do not add OpenSSL dependencies to libpq pkg-config file if OpenSSL is
+-not enabled.  Oversight in beff361bc1edc24ee5f8b2073a1e5e4c92ea66eb.
+-
+-Author: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Discussion: https://www.postgresql.org/message-id/flat/20220331163759.32665-1-fontaine.fabrice%40gmail.com
+-[Retrieved from:
+-https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=465ab24296c27502c81c8c197725cba728b9b057]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/interfaces/libpq/Makefile | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/src/interfaces/libpq/Makefile b/src/interfaces/libpq/Makefile
+-index 89bf5e0126..b5fd72a4ac 100644
+---- a/src/interfaces/libpq/Makefile
+-+++ b/src/interfaces/libpq/Makefile
+-@@ -95,7 +95,9 @@ SHLIB_PREREQS = submake-libpgport
+- 
+- SHLIB_EXPORTS = exports.txt
+- 
+-+ifeq ($(with_ssl),openssl)
+- PKG_CONFIG_REQUIRES_PRIVATE = libssl libcrypto
+-+endif
+- 
+- all: all-lib libpq-refs-stamp
+- 
+--- 
+-2.30.2
+-
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 2ba3b07563..8ebe7b58fa 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v14.2/postgresql-14.2.tar.bz2.sha256
+-sha256  2cf78b2e468912f8101d695db5340cf313c2e9f68a612fb71427524e8c9a977a  postgresql-14.2.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v14.3/postgresql-14.3.tar.bz2.sha256
++sha256  279057368bf59a919c05ada8f95c5e04abb43e74b9a2a69c3d46a20e07a9af38  postgresql-14.3.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 1dfb20b58d..45049f669d 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPJSIP_VERSION = 2.12
-+LIBPJSIP_VERSION = 2.12.1
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
- LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
--# https://github.com/pjsip/pjproject/archive/2.12.tar.gz
- 
- LIBPJSIP_DEPENDENCIES = libsrtp
- LIBPJSIP_LICENSE = GPL-2.0+
+-POSTGRESQL_VERSION = 14.2
++POSTGRESQL_VERSION = 14.3
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
