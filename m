@@ -4,82 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7FDEC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 13:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE8F9C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 13:18:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9BD5040A30;
-	Sun, 29 May 2022 13:18:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8428940AB4;
+	Sun, 29 May 2022 13:18:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kgeYLH6t7qgf; Sun, 29 May 2022 13:18:37 +0000 (UTC)
+	with ESMTP id zmFz228RvrN1; Sun, 29 May 2022 13:18:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF0BD40477;
-	Sun, 29 May 2022 13:18:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 551471BF4D8
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 13:18:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7087A40B38;
+	Sun, 29 May 2022 13:18:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 71A751BF4D8
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 13:18:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 430F760F08
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 13:18:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E25440477
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 13:18:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zfEaHpPvxB_l for <buildroot@lists.busybox.net>;
- Sun, 29 May 2022 13:18:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cJl5oEx8yS7t for <buildroot@lists.busybox.net>;
+ Sun, 29 May 2022 13:18:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 57F066108E
- for <buildroot@buildroot.org>; Sun, 29 May 2022 13:18:22 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id q7so510546wrg.5
- for <buildroot@buildroot.org>; Sun, 29 May 2022 06:18:22 -0700 (PDT)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9A0DB40140
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 13:18:25 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id e25so850930wra.11
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 06:18:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=bC2i2C+0ruExSB2CukIjrqCBgHssykf45mu+CF2ZS+8=;
- b=o4ev14BpSLJsAiAr01qpVRoTuK5NFmbSx2lwdZYSvoLycaaBZiOK0iMS3yy70WrvHL
- 8jBrbT2PZhsG2DvCuIUVQbD8eik9S61mX77A/01KIqIk8U6kAlKrQDRwYDZp0Uf3dnMH
- R24jtE+7OnuLbUrix0KOmsgJ3fo4s630r3AvMPVClD00tBIn25ZIu9E/ttBDJaqm0AqQ
- ODfhYw4XydKkCkuWoI6cE+2K9rpWvroirS2PgZ41zruz+dZd24EKKa3UvRTg6JZXfuug
- vV0sQLORmBeAjAdDwoM+dud1/QCQuLZI4zotuEfgp2I94AlqHy+uMD9137OBXUCwKgMP
- vyug==
+ bh=c2KKTExRlwNKxEON497IYr2OG+hJYWqNVcJkwhNSVSI=;
+ b=JeCd8H8rozbDzuN/wXQvCoiFW+9Vu5kbl9X2iO3E1mAupobQpA5BXerLnaQW6Z7AXn
+ GFhRhkLdZuJON/sVMhoXGfIMBxnnTgDOligJ4hSxhwsGF0gA6spoVe3f71SFTNlZrNJ8
+ bFq41bGczFCAuUxnxWvsKuNDo13sqeTWCuSlXibzY8n0L/MCA3u6MNx3in7wuA8oCDHY
+ XLlTabzDFIuWIJcyvhjQVXpzHMskJd0+UvyS31cP9rF75AUvVAaMBAqg13VFBvfFS9Vz
+ ptp2kcM3ayx/nywLeIQWn/WCI3lYnpDqvGcP4qj7b5XCbGh8+QUB3KXfhcLLfNv+/X+n
+ U/Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=bC2i2C+0ruExSB2CukIjrqCBgHssykf45mu+CF2ZS+8=;
- b=boUYK9OVFtY0yVqqdit24DGk2iAvI4wcb3ZewXXivJiXnQMkFdlyRtT2gS+4W7c28I
- D9BFWLPds0h5vMn/10iDqbXlW0MfONdxy2ikdbYm+++qqK9A3TYhKde7vTCzTMVZqPIO
- gJGl7O7BOzvpHK/dNcEVR2JErPXCgjv5yUVBSUGwWXrFRR6oGzaEj5swLhWJ4FwCnLYL
- m5VqaewOampVNFGSmDuz0IQcFVNrrv3Hocsf15n9AX35owFcjEvu0tiZcFR1zSrKg9z+
- 4hBo9jM43PmAO4OTa0id5Rxwezw2mPdsqYgYd+Csp2sgiT/qIiQj72gSdT6m58NYG0D1
- r71g==
-X-Gm-Message-State: AOAM5308EvmVNCCZVDFQyYxWlqyYRocaaDHGnKbTQ7k+jGBPoPIVIMw1
- ncgqHuSKcgj8A2pX6jt27sUfprv7ok8=
-X-Google-Smtp-Source: ABdhPJwL4aSRVSwCdrd/f+zpOzgeXeh3I3QwvGiirMeMkpsJGd7BLGqzBXphL9ooeWKNfWEbmjkT/A==
-X-Received: by 2002:a05:6000:110a:b0:20d:131e:bf0c with SMTP id
- z10-20020a056000110a00b0020d131ebf0cmr42691240wrw.108.1653830300477; 
- Sun, 29 May 2022 06:18:20 -0700 (PDT)
+ bh=c2KKTExRlwNKxEON497IYr2OG+hJYWqNVcJkwhNSVSI=;
+ b=7YuoDSjHhobTgO83ee4l8V7IDt/WmqHbV1znqXYm5x0BbHTuzIElPAQNNffp4xsGg7
+ QNwgNT2xoUI4zsCiaIHLi/GknqygV3YQNCDVine3b48Vdt6fJTlb3N3G2UD8AIB54KNh
+ e2/fZe4qiGRRr2lWGHnwPwiNSgIaU2Z5tWP2X40x9NKYuLcMhO89JfuvWPNmaE7+zkgn
+ ecEOc9DODR0QPOvqERd2Pfb0UAJxyg9R4brivm9HqrzVbtARzyRiB9s4VE79b6srgMAJ
+ Hg0PyUU6qgwdnG8+kdruUbQe8a5MrGo13BY1g1vgttiZHCA8cMSx6VvUwQkv78ZCcmeF
+ jZVA==
+X-Gm-Message-State: AOAM532yaxNoUL3L38ttrVqX8+3GntXY3pwpEKPTsqzAC9UO0z64PrSV
+ zx1UhM7BWgU6y0pjCeqhJrZcLjNe5Zo=
+X-Google-Smtp-Source: ABdhPJwtRfxzRey1RtTtc3sR/MyJY/BGqSSBrW7BJ3DVHCS/1s4hc+5vz7jaeTq3VF904BrV2ffx0Q==
+X-Received: by 2002:a05:6000:186c:b0:20f:e176:df0b with SMTP id
+ d12-20020a056000186c00b0020fe176df0bmr26082444wri.608.1653830303593; 
+ Sun, 29 May 2022 06:18:23 -0700 (PDT)
 Received: from atlas.home
  (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
  [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
  by smtp.gmail.com with ESMTPSA id
- d15-20020a05600c34cf00b003949dbc3790sm7492562wmq.18.2022.05.29.06.18.19
+ d15-20020a05600c34cf00b003949dbc3790sm7492562wmq.18.2022.05.29.06.18.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 May 2022 06:18:19 -0700 (PDT)
+ Sun, 29 May 2022 06:18:22 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 May 2022 15:18:02 +0200
-Message-Id: <20220529131811.481017-2-romain.naour@gmail.com>
+Date: Sun, 29 May 2022 15:18:04 +0200
+Message-Id: <20220529131811.481017-4-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220529131811.481017-1-romain.naour@gmail.com>
 References: <20220529131811.481017-1-romain.naour@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH for-next  02/11] configs/qemu_riscv{32,
- 64}_virt: kernel bump version to 5.15.43
+Subject: [Buildroot] [PATCH for-next 04/11] package/gcc: disable
+ libsanitizer for mips{el} and gcc > 12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,52 +89,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, Mark Corbin <mark@dibsco.co.uk>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-To build this defconfig with gcc 12, we need a patch from v5.15.24 [1]
-fixing the build with gcc 12.
+Since [1], gcc contains a workaround for struct_kernel_stat_sz
+definition and apply a local patch when updating libsanitizer with
+upstream (llvm-project) [2].
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=7486227fa47aa84b102be18fd9985f6e8e11e756
+Since gcc 12, the workaround is not enough and trigger the following
+error:
+
+In file included from ../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_linux.cpp:21:
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_linux.cpp:75:38: error: static assertion failed
+   75 | COMPILER_CHECK(struct_kernel_stat_sz == sizeof(struct stat));
+      |                ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+
+Disable libsanitizer for now.
+
+Note: Only glibc toolchains are affected since libsanitizer is
+disabled for musl and uClibc-ng	toolchains [3].
+
+Fixes:
+https://gitlab.com/kubu93/toolchains-builder/-/jobs/2510178606
+
+[1] http://gcc.gnu.org/ml/gcc/2018-03/msg00133.html
+[2] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=9f943b2446f2d0a345bbf9b4be3d3a4316372270
+[3] https://git.buildroot.net/buildroot/commit/?id=5f4d658d888b539de9a6247ae5b1a0999de5d4ec
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Mark Corbin <mark@dibsco.co.uk>
 ---
-The issue fixed by [1] can also be trigged with gcc 12 and binutils 2.37.
----
- configs/qemu_riscv32_virt_defconfig | 2 +-
- configs/qemu_riscv64_virt_defconfig | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/gcc.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-index dff87ef342..faf4e1e312 100644
---- a/configs/qemu_riscv32_virt_defconfig
-+++ b/configs/qemu_riscv32_virt_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.43"
- BR2_LINUX_KERNEL_DEFCONFIG="rv32"
- BR2_LINUX_KERNEL_IMAGE=y
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index e1f3935e56..73440e9e35 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -145,6 +145,12 @@ ifeq ($(BR2_mips64)$(BR2_mips64el)$(BR2_MIPS_NABI32),yy)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
+ endif
  
-diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-index d67d070185..c455680ee0 100644
---- a/configs/qemu_riscv64_virt_defconfig
-+++ b/configs/qemu_riscv64_virt_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.43"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_IMAGE=y
- 
++# libsanitizer bundled in gcc 12 fail to build for mips32 due to
++# mixing kernel and user struct stat.
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_12)$(BR2_mips)$(BR2_mipsel),yy)
++HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
++endif
++
+ # The logic in libbacktrace/configure.ac to detect if __sync builtins
+ # are available assumes they are as soon as target_subdir is not
+ # empty, i.e when cross-compiling. However, some platforms do not have
 -- 
 2.35.3
 
