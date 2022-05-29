@@ -4,61 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC93EC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:30:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8FECC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99A1B849ED;
-	Sun, 29 May 2022 08:30:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9FAF3849F0;
+	Sun, 29 May 2022 08:34:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JLLmdouZaMRc; Sun, 29 May 2022 08:30:15 +0000 (UTC)
+	with ESMTP id aa2ZlQcFyXGz; Sun, 29 May 2022 08:34:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6290584518;
-	Sun, 29 May 2022 08:30:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1126E1BF404
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:30:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 71FE2847D2;
+	Sun, 29 May 2022 08:34:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 249E31BF404
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:34:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F37D184518
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:30:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 12EE5416F4
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:34:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P86ntSrJ2I-g for <buildroot@lists.busybox.net>;
- Sun, 29 May 2022 08:30:11 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AF5B484514
- for <buildroot@buildroot.org>; Sun, 29 May 2022 08:30:11 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:882a:25de:8723:774f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 6CAF219F58A;
- Sun, 29 May 2022 10:30:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1653813008;
- bh=jOlB1LmlPWItCKqb5tG5kWZ+Q3p7YxSL7xVdBQ98IjM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=g5nSjkkafamhHQNByF85Dw9W722hPtBSlgdpnPlJmfehDCYRawbCKAsnisPj0nD2x
- Ugn5KVESOz13swfb8IMJr3AbzsVFZSP6cZJZpeE4ny2Tw3QyQBU92iD0jBUODdvwnR
- GE2m6erXQ5IMR4CyfxDXobbb8hhhDkUvLYAlC82Y6qibBEuqI4vy+MOx633Otc/nBd
- w59Qgr5ESZ+vyIuwkJb5wyPs/AYD55SjhW7Rbz3eCqE0TQJ4VUoELMvIpJtn1bkLpN
- g8EHD7pgFzYZAHsCi/mfT22hGp6UcfYk7+Nt8jPqgFgKtz1dpHbEXYSVtNV19vMAmf
- CQ/6ejvT4DusQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 May 2022 10:30:05 +0200
-Date: Sun, 29 May 2022 10:30:05 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220529083005.GR301044@scaer>
-References: <20220528234125.31331-1-giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IHFY5nZs1ziu for <buildroot@lists.busybox.net>;
+ Sun, 29 May 2022 08:34:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 32F83416E0
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 08:34:18 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B2B17C0002;
+ Sun, 29 May 2022 08:34:16 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nvENL-0050Ie-OI; Sun, 29 May 2022 10:34:15 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: <yann.morin@orange.com>
+References: <28412_1652447867_627E5A7B_28412_29_1_cc0e3c8f4215e41cd4cd0742a94f777783beabfc.1652447836.git.yann.morin@orange.com>
+Date: Sun, 29 May 2022 10:34:15 +0200
+In-Reply-To: <28412_1652447867_627E5A7B_28412_29_1_cc0e3c8f4215e41cd4cd0742a94f777783beabfc.1652447836.git.yann.morin@orange.com>
+ (yann morin's message of "Fri, 13 May 2022 15:17:45 +0200")
+Message-ID: <87v8to68l4.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220528234125.31331-1-giulio.benetti@benettiengineering.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] package/rockchip-mali: fix type on
- Config.in help section
+Subject: Re: [Buildroot] [PATCH v2] fs/oci: entrypoint and command are
+ space-separated lists
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,57 +60,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
- buildroot@buildroot.org
+Cc: Sergio Prado <sergio.prado@e-labworks.com>,
+ Matthew Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Giulio, All,
+>>>>>   <yann.morin@orange.com> writes:
 
-In the title:  s/type/typo/
+ > From: "Yann E. MORIN" <yann.morin@orange.com>
+ > The prompt and variable name for the OCI "entrypoint arguments" are
+ > somewhat incorrect. Indeed, they are in fact use to set the image
+ > "command". Yet, using "command" would be confusing too, because the
+ > interplay between entrypoint and command is tricky [0].
 
-On 2022-05-29 01:41 +0200, Giulio Benetti spake thusly:
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > TL-DR; when both entrrypoint and command are set, command acts as
+ > arguments passed to the entrypoint.
 
-Applied to master, thanks.
+ > Additionally, we currently can only pass a single item as either
+ > entrypoint or command. This precludes passing actual arguments to the
+ > entrypoint, or passing multiple arguments as command.
 
-Regards,
-Yann E. MORIN.
+ > For example:
+ >     BR2_TARGET_ROOTFS_OCI_ENTRYPOINT="/bin/tini -g -p SIGTERM --"
+ >     BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS="/usr/bin/env sh"
 
-> ---
->  package/rockchip-mali/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/rockchip-mali/Config.in b/package/rockchip-mali/Config.in
-> index 2a8cd786be..d616284911 100644
-> --- a/package/rockchip-mali/Config.in
-> +++ b/package/rockchip-mali/Config.in
-> @@ -14,7 +14,7 @@ config BR2_PACKAGE_ROCKCHIP_MALI
->  	select BR2_PACKAGE_MALI_DRIVER if BR2_LINUX_KERNEL
->  	help
->  	  Install the binary user-space libraries for the ARM Mali GPU
-> -	  suitable for Rockchip platforrms. This package requires a
-> +	  suitable for Rockchip platforms. This package requires a
->  	  kernel with the ARM Mali GPU kernel driver enabled, as found
->  	  in the 'mali-driver' package.
->  
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+ > generates an images with (only relevant fileds are included below):
+
+ >     {
+ >         "config": {
+ >             "Entrypoint": [ "/bin/tini -g -p SIGTERM --" ],
+ >             "Cmd": [ "/usr/bin/env sh" ]
+ >         }
+ >     }
+
+ > This is obviously incorrect, and not what one would expect:
+
+ >     {
+ >         "config": {
+ >             "Entrypoint": [ "/bin/tini", "-g", "-p", "SIGTERM", "--" ],
+ >             "Cmd": [ "/usr/bin/env", "sh" ]
+ >         }
+ >     }
+
+ > However, some people do want to be able to pass an actual shell
+ > scriptlet as a command, such as:
+
+ >     {
+ >         "config": {
+ >             "Entrypoint": [ "/bin/sh", "-c" ],
+ >             "Cmd": [ "my shell logic goes here" ]
+ >         }
+ >     }
+
+ > Handling both is obviously conflicting: we can't both split-on-spaces
+ > and not-split-on-spaces at the same time...
+
+ > So, we fix that in tow ways:
+
+ >   - make the current _OCI_ENTRYPOINT_ARGS a legacy option, and introduce
+ >     the new _OCI_CMD option with different semantics (see below) and an
+ >     appropriate prompt;
+
+ >   - we interpret both _OCI_ENTRYPOINT and _OCI_CMD as shell strings,
+ >     which we subject to the usual shell quoting [1] and token
+ >     recognition [2];
+
+ > Since _OCI_ENTRYPOINT_ARGS used to be interpreted as a single string, we
+ > can't easily change its meaning to be a space-separated list, as that
+ > would break existing setups, which is the reason we make it legacy and
+ > introduce a new option.
+
+ > Ideally, we would like to default the new option _OCI_CMD to be the
+ > quoted value of the previous _OCI_ENTRYPOINT_ARGS, but this is not
+ > possible in Kconfig. Still, users that had a _OCI_ENTRYPOINT_ARGS set
+ > will now get an early build error, and can still detect they need to do
+ > something about it.
+
+ > As for _OCI_ENTRYPOINT, it does not make much sense to support both
+ > cases. Indeed, withoput splitting on spaces, we'd end up with an
+ > entrypoint that would hava single item:
+
+ >     {
+ >         "config": {
+ >             "entrypoint: [ "some string with some spaces" ]
+ >         }
+ >     }
+
+ > which in this case would try to execute the program which name is
+ > actually "some string with some spaces", so we do not expect that
+ > existing entrypoints are set with any space in them, and so the new
+ > behaviour, unlike for _OCI_ENTRYPOINT_ARGS vs. _OCI_CMD, is compatible
+ > with existing configurations, and so we do not need to make it a legacy
+ > option and introduce a new one.
+
+ > [0] https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact
+ > [1] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_02
+ > [2] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_03
+
+ > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+ > Cc: Sergio Prado <sergio.prado@e-labworks.com>
+ > Cc: Matthew Weber <matthew.weber@collins.com>
+
+ > ---
+ > Changes v1 -> v2:
+ >   - drop _OCI_ENTRYPOINT_ARGS and replace with _OCI_CMD
+ >   - accept values that have shell escapes and quotes, and spaces
+
+Committed to 2022.02.x, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
