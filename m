@@ -1,54 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69C1BC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:13:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD527C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 29 May 2022 08:13:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1507D61150;
-	Sun, 29 May 2022 08:13:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C40140A80;
+	Sun, 29 May 2022 08:13:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PqDQYESDXEJu; Sun, 29 May 2022 08:13:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q8dXJAb_Ivub; Sun, 29 May 2022 08:13:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C09CC61152;
-	Sun, 29 May 2022 08:13:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B61D41BF404
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:13:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67D91404F1;
+	Sun, 29 May 2022 08:13:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 661541BF404
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:13:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A491561119
- for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:13:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6368983EFF
+ for <buildroot@lists.busybox.net>; Sun, 29 May 2022 08:13:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mEcQaABhiVP3 for <buildroot@lists.busybox.net>;
- Sun, 29 May 2022 08:13:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HGX9NtypCdjq for <buildroot@lists.busybox.net>;
+ Sun, 29 May 2022 08:13:44 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5EA4060E27
- for <buildroot@buildroot.org>; Sun, 29 May 2022 08:13:19 +0000 (UTC)
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 696CA83E91
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 08:13:44 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DE683C0005;
- Sun, 29 May 2022 08:13:15 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3C628240003;
+ Sun, 29 May 2022 08:13:42 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nvE30-004yai-T9; Sun, 29 May 2022 10:13:14 +0200
+ id 1nvE3R-004ye3-99; Sun, 29 May 2022 10:13:41 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220513210054.791074-1-fontaine.fabrice@gmail.com>
-Date: Sun, 29 May 2022 10:13:14 +0200
-In-Reply-To: <20220513210054.791074-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 13 May 2022 23:00:54 +0200")
-Message-ID: <87pmjw7o4l.fsf@dell.be.48ers.dk>
+References: <20220513211420.942633-1-fontaine.fabrice@gmail.com>
+Date: Sun, 29 May 2022 10:13:41 +0200
+In-Reply-To: <20220513211420.942633-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 13 May 2022 23:14:20 +0200")
+Message-ID: <87leuk7o3u.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/cifs-utils: security bump to
- version 6.15
+Subject: Re: [Buildroot] [PATCH 1/1] package/freerdp: security bump to
+ version 2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,7 +59,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -68,12 +67,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > This is a security release to address the following bugs:
- > - CVE-2022-27239: mount.cifs: fix length check for ip option parsing
- > - CVE-2022-29869: mount.cifs: fix verbose messages on option parsing
+ > Fix CVE-2022-24882: FreeRDP is a free implementation of the Remote
+ > Desktop Protocol (RDP). In versions prior to 2.7.0, NT LAN Manager
+ > (NTLM) authentication does not properly abort when someone provides and
+ > empty password value. This issue affects FreeRDP based RDP Server
+ > implementations. RDP clients are not affected. The vulnerability is
+ > patched in FreeRDP 2.7.0. There are currently no known workarounds.
 
- > https://lists.samba.org/archive/samba-technical/2022-April/137335.html
- > https://lists.samba.org/archive/samba-technical/2021-September/136914.html
+ > Fix CVE-2022-24883: FreeRDP is a free implementation of the Remote
+ > Desktop Protocol (RDP). Prior to version 2.7.0, server side
+ > authentication against a `SAM` file might be successful for invalid
+ > credentials if the server has configured an invalid `SAM` file path.
+ > FreeRDP based clients are not affected. RDP server implementations using
+ > FreeRDP to authenticate against a `SAM` file are affected. Version 2.7.0
+ > contains a fix for this issue. As a workaround, use custom
+ > authentication via `HashCallback` and/or ensure the `SAM` database path
+ > configured is valid and the application has file handles left.
+
+ > https://github.com/FreeRDP/FreeRDP/releases/tag/2.7.0
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
