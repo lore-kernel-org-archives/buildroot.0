@@ -1,78 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F24F2C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 08:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43C6EC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 10:04:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D0A26115B;
-	Mon, 30 May 2022 08:43:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CA52A40157;
+	Mon, 30 May 2022 10:04:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LSD9yuKni4TT; Mon, 30 May 2022 08:43:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VdYoluyldqwr; Mon, 30 May 2022 10:04:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96FFF61158;
-	Mon, 30 May 2022 08:43:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 507C61BF473
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 08:43:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CDC5440C1F;
+	Mon, 30 May 2022 10:04:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 540511BF3A1
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 10:04:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3EBC14198A
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 08:43:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 504B440C1F
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 10:04:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=redhat.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Azhc8N8pP3uF for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 08:43:53 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from us-smtp-delivery-124.mimecast.com
- (us-smtp-delivery-124.mimecast.com [170.10.129.124])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 178F2418AD
- for <buildroot@buildroot.org>; Mon, 30 May 2022 08:43:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
- s=mimecast20190719; t=1653900231;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- in-reply-to:in-reply-to:references:references;
- bh=mEauP80QluOs9sFrWZsRiUh3/2MM0zSHgUoMf7aa5FA=;
- b=J5sv32e7gc5pOCd/Kg1AvrLp9Kr+JIXuTWvS25WvZK0Kc9/x4/rMpekqGP/MSlt9jhjrDf
- hi9uDN061XHYJ6O0pi3CJBxTiidCnAPVsJcegDCAP4XiW8XO3yT6DklZERjDBeQLQEFezf
- To5IKFGFqqNXPqWUCcP9BmvOvqNaC5Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-149-IABUn4iPOLyHcrwel_c5JQ-1; Mon, 30 May 2022 04:43:46 -0400
-X-MC-Unique: IABUn4iPOLyHcrwel_c5JQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com
- [10.11.54.1])
- (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
- (No client certificate requested)
- by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC2921C08960;
- Mon, 30 May 2022 08:43:45 +0000 (UTC)
-Received: from localhost (unknown [10.39.194.233])
- by smtp.corp.redhat.com (Postfix) with ESMTPS id 3C15641136E0;
- Mon, 30 May 2022 08:43:44 +0000 (UTC)
-From: Cornelia Huck <cohuck@redhat.com>
-To: Thomas Huth <huth@tuxfamily.org>, buildroot@buildroot.org
-In-Reply-To: <20220529165616.767186-1-huth@tuxfamily.org>
-Organization: Red Hat GmbH
-References: <20220529165616.767186-1-huth@tuxfamily.org>
-User-Agent: Notmuch/0.34 (https://notmuchmail.org)
-Date: Mon, 30 May 2022 10:43:43 +0200
-Message-ID: <87a6azv29s.fsf@redhat.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ChKDqjfauRLW for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 10:04:15 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com
+ [IPv6:2001:4860:4864:20::2e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 703FE40C1E
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 10:04:15 +0000 (UTC)
+Received: by mail-oa1-x2e.google.com with SMTP id
+ 586e51a60fabf-f33f0f5b1dso1587143fac.8
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 03:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=dKkt37AWd42ZRd/+wAuPx6Sgi8Q7kS0kAoK+l9fin14=;
+ b=dS5/zUP8yLq0uPFvyUznw5auvBj2iH+1TV3n5sEuSU/qunYcMCdJrGYcLNphs4CGVl
+ +237ecnGyf7b4VUrbLNa/uuIF/+s9XLMjUMg1YCmhEdjKdHl8wgZBLLSL9raCqpWtViX
+ n/cJ1IKWBIuoibLkgcItvUCnIGVUjfNKLicIpYqVkIuBzVxVYcfLFX3DvKZSz6NE54Bv
+ E2GIkSWpX7lHuIjaPXi5YQ5+uzw1LGRDB2nlg/zyEl09INqkbCuCN+MInM2hZDBKdpY5
+ EEaxjq7KX5JVSLdAEWGQByY2MRJr37EqfvZitrI963MCXMo2oUPlW4QyxhMCLPz/88wW
+ wWhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=dKkt37AWd42ZRd/+wAuPx6Sgi8Q7kS0kAoK+l9fin14=;
+ b=Z+/1BOPsqv0NdWb260GfQCADodSmZ2z18C+VDkEjTdwfAP6uKN8swey/sXNpHN2xlJ
+ fSHyyq7YQQtX09IBaptuqfMwNMzHDzE7mASigbbJYyup9Ou5IjJuOEYNe01N8TZ4QRNI
+ ACSSQyPG6i/F5HC6pm90mgkMCpveRi5HLCy1sy3ETsrNgn7BJMssFLQ50SEzPTgDHDvY
+ JSYp4/cHXmgdkDTVN1CFYKC+aFDDFrfIxtxLmwFI0MEDotmlDDyI5SfLKTlR7/qLo5B0
+ L5+6O2Ulz9H9G2tuLz1KSwtc441jAjv+MVpXAZgN3p+fN75XBaELJRSqp/81EJeTDYP7
+ iuJg==
+X-Gm-Message-State: AOAM532DaXu9zvErdz1UNOFj6S/iynQTDWAy5AjiK/onhK81vPwr08ZZ
+ zChFNwTDrEIckpVAv0WIAyWFJdJyeA11sH9UyUe94f+jFEc=
+X-Google-Smtp-Source: ABdhPJxU6RpFEWGfjArhqUZlzR+bRraXEGhbxiX9WUfPjJugu97jpfB0N6UD2CLlZiEidZpyCmNSq0ZBwsKdTvhsGKc=
+X-Received: by 2002:a05:6870:b00a:b0:f1:7f07:8c36 with SMTP id
+ y10-20020a056870b00a00b000f17f078c36mr9811421oae.278.1653905054483; Mon, 30
+ May 2022 03:04:14 -0700 (PDT)
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-Authentication-Results: relay.mimecast.com;
- auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cohuck@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Subject: Re: [Buildroot] [PATCH] package/kvm-unit-tests: Fix build on big
- endian aarch64 targets
+References: <20220530033836.474926-1-damien.lemoal@opensource.wdc.com>
+ <20220530033836.474926-2-damien.lemoal@opensource.wdc.com>
+In-Reply-To: <20220530033836.474926-2-damien.lemoal@opensource.wdc.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Mon, 30 May 2022 20:03:48 +1000
+Message-ID: <CAKmqyKPhm35wDvgpT2Pv5EHv13tiPQLC=0hktTWobUSx8bWbfw@mail.gmail.com>
+To: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: Re: [Buildroot] [PATCH v2 01/11] package: elf2flt: fix config menu
+ entry description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,32 +82,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Cyril Bur <cyrilbur@gmail.com>, Matt Weber <matthew.weber@collins.com>
+Cc: Niklas Cassel <Niklas.Cassel@wdc.com>,
+ Alistair Francis <alistair@alistair23.me>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, May 29 2022, Thomas Huth <huth@tuxfamily.org> wrote:
-
-> When building with BR2_cortex_a76 in big endian mode, the build of
-> the kvm-unit-tests is currently failing since the "--arch" option
-> of the configure script is not set right. We also have to look at
-> BR2_aarch64_be in this case to get this initialized properly.
+On Mon, May 30, 2022 at 1:38 PM Damien Le Moal via buildroot
+<buildroot@buildroot.org> wrote:
 >
-> Fixes: f7228dadd371 ("package/kvm-unit-tests: add more arm support")
-> Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+> From: Damien Le Moal <damien.lemoal@wdc.com>
+>
+> Keep the same style as other config menu entries by removing the
+> question mark at the end of the elf2flt enable config option
+> description.
+>
+> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+> Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
+
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+
+Alistair
+
 > ---
->  A failing build log can be seen here, for example:
->  http://autobuild.buildroot.net/results/760f43a2780b78c753e6b5d631cb744db896f575/build-end.log
->
->  package/kvm-unit-tests/kvm-unit-tests.mk | 2 +-
+>  package/elf2flt/Config.in.host | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Ah, I had only tested LE, sorry about that.
-
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
-
+>
+> diff --git a/package/elf2flt/Config.in.host b/package/elf2flt/Config.in.host
+> index 2bab0095c2..339ed06b40 100644
+> --- a/package/elf2flt/Config.in.host
+> +++ b/package/elf2flt/Config.in.host
+> @@ -1,5 +1,5 @@
+>  config BR2_PACKAGE_HOST_ELF2FLT
+> -       bool "Enable elf2flt support?"
+> +       bool "Enable elf2flt support"
+>         depends on BR2_arm || BR2_sh || BR2_sparc || BR2_xtensa || BR2_RISCV_64
+>         depends on !BR2_USE_MMU
+>         help
+> --
+> 2.36.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
