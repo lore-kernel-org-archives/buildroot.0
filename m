@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAD38C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 23:41:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3D3EC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 23:42:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C1BC41C02;
-	Mon, 30 May 2022 23:41:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44239831E3;
+	Mon, 30 May 2022 23:42:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E6dSgkoaPFJ8; Mon, 30 May 2022 23:41:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SDIqH18yXWnH; Mon, 30 May 2022 23:41:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5779741BF5;
-	Mon, 30 May 2022 23:40:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C24628267C;
+	Mon, 30 May 2022 23:41:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 95E571BF2CD
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 23:40:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BF0371BF2CD
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 23:41:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8381C4032A
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 23:40:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB8C240217
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 23:41:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1I2Pr5sKfAnJ for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 23:40:56 +0000 (UTC)
+ with ESMTP id h03hXB9CORUq for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 23:41:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3450240236
- for <buildroot@uclibc.org>; Mon, 30 May 2022 23:40:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3893B401D8
+ for <buildroot@uclibc.org>; Mon, 30 May 2022 23:41:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id F06E9867ED; Mon, 30 May 2022 23:29:21 +0000 (UTC)
+ id 0E21C86837; Mon, 30 May 2022 23:30:21 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 30 May 2022 23:40:55 +0000
+Date: Mon, 30 May 2022 23:41:54 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -51,7 +51,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14826-163-1X1y8neQFA@https.bugs.busybox.net/>
+Message-ID: <bug-14826-163-qwF5xFWv0u@https.bugs.busybox.net/>
 In-Reply-To: <bug-14826-163@https.bugs.busybox.net/>
 References: <bug-14826-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -76,13 +76,15 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14826
 
---- Comment #2 from buildroot@apitman.com ---
+--- Comment #3 from buildroot@apitman.com ---
 I'd say that's good news. I just tried master and it doesn't work either.
 
 A system update just broke something on my end. I'm using Arch on kernel
 5.17.9.
 
 Is there a recommended distro to use for building buildroot?
+
+EDIT: **A system update probably broke something on my end
 
 -- 
 You are receiving this mail because:
