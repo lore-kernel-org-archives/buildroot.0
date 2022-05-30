@@ -1,104 +1,108 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01891C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 03:39:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60B4CC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 03:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AEB1A40C17;
-	Mon, 30 May 2022 03:39:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 132C441994;
+	Mon, 30 May 2022 03:40:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A84P86KD3OVQ; Mon, 30 May 2022 03:39:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xJ_86p5Aaz6B; Mon, 30 May 2022 03:40:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F14B40C0B;
-	Mon, 30 May 2022 03:39:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50AEE41995;
+	Mon, 30 May 2022 03:40:10 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 19E841BF834
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 03:38:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B7F821BF834
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 03:38:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0877340C01
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 03:38:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B49E240C01
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 03:38:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=wdc.com header.b="Og3nj8/i";
+ dkim=pass (2048-bit key) header.d=opensource.wdc.com
+ header.b="HkpyZn9l"
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wBJ51tY66ugn for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 03:38:48 +0000 (UTC)
+ with ESMTP id 1-aiVS0IYrjZ for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 03:38:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0D4C24000B
- for <buildroot@buildroot.org>; Mon, 30 May 2022 03:38:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 850394000B
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 03:38:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1653881927; x=1685417927;
+ t=1653881929; x=1685417929;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=IJnFQBNwN1WpR8zC3yjc+tOmEGnkTnHFG0hBbRT6aZY=;
- b=CCsQaYzV/luCA6fQRZrY+/tOGQgy0joMLfGpsQCWr5o6/7tO8bKtVQMA
- +leIs6uObhg58vBiZsu8P8eBdVz3BnMjNcvnkBh9Adk8tEjxb/OkSZYFt
- p2Cb+yE14IazFYrgvGkD7A4zjE/z3M/hh5GSkR9z6uZcPBBRBaWC4BP0J
- hDNFUaUWphvOaLh4gxoFAf99uDsxEGqA9jgrRi/+nJ6EucTlPadFDAQxA
- as0f1Zn9CyxqUoEQwPjQTKzbmU2fTwpWN67Rpx5v9Xgba/pfMwrO+rEr8
- DWIHTqe0AvbzdSWgmC4ZckgTSnpEEi9Y62G13VeyyxhvFy9TIMeFn7zR5 w==;
-X-IronPort-AV: E=Sophos;i="5.91,261,1647273600"; d="scan'208";a="313781123"
+ bh=Kd3PiITvw7hphRkUBxY1Rj84ce9PiabpfB9kr5asSKo=;
+ b=Og3nj8/ijp24LRPzZeae1Z2KxQ4b/eZW5ZM8pzdHXKOxHes45XZnP6UO
+ AZBrwzKuC+iWv4boYz5Rm4dC7TqvtJr1bcpuTjM4e+ZFHiuZ++nMTw0Av
+ yXmru2UtO5tMvITZjwTlW2c2K93TtaqMZPttAlTAk92rFGm3z1D8o8l6T
+ Fs1r5I0iBRnHqMjbvacVVK/Yy6QPKteohrJCgylKJh6ML9OiHUU6DdlPX
+ EbYLGHsoCVSs6V/usLllRHZjZJWvswdQ1jn/cslYVzBO1TtrMmwM4NByz
+ +4uH5PhpLA2E72jeaBq2DKAS9zbH6JYsKuOi4wPMlpZEytmxUhIZmI4di g==;
+X-IronPort-AV: E=Sophos;i="5.91,261,1647273600"; d="scan'208";a="313781124"
 Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com)
  ([199.255.45.15])
- by ob1.hgst.iphmx.com with ESMTP; 30 May 2022 11:38:47 +0800
-IronPort-SDR: OrI26DVz0kVwLj4nOj4KVc7T603MHn3Ia1nVQUk1g4izuxLbyqWAJmufoMvdHkk9TizjS4WE1i
- tYEXBYUYjTuYPizbi77xdUcrsit3+4sH6gIlfToqiJuC2gyTazolRNQUC3UuK4EXyN5WJa9702
- txmWa2t0HuESS7RJ504ctjDVk+4tY/3rZe1c8CdsHp18Q0yf69UsSC/FzRG71wbAP7BYsiw5Zq
- sR1+4acrMTmQFfAT8Wpiv0Ed9hpLxBSn+q2F6Vj7T4QxcB+oxMiIegTzPuf4YMO/NceC0wYkX0
- sQro7KgADSPBk2h6jZn2Xsxt
+ by ob1.hgst.iphmx.com with ESMTP; 30 May 2022 11:38:49 +0800
+IronPort-SDR: e/LqRJyscOyY45CK6+m6l3Ay8ffWTCEfcTkzhW36OXygMB07s53f3U++DIfZ9XbBMCsMOAkjj0
+ MlgT94h8F99lkKbM0ZJkeC4Z8NfpXVjizd0/VHgJJyKHTfRhFNRv6GOhWh1C5/iWZ+VIFwIp9l
+ Nh9WPqzPlR8Fo7uJqRcKx6c4s9T6OPP/kah2HpNJGcUAz9hiiwxiSi5tgK5MhGJPejciDi3KUo
+ M4TKq2uwDaZdN4mASXXSqsn8fCflmpjWyKddy5w1BjwsiLaEHlRqQeTTRnIv93FbYdloHUq/rg
+ ONldPbv8wReJu7ee6b8SN+CT
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 29 May 2022 19:58:12 -0700
-IronPort-SDR: UsZDzHwrU5zjr18fJ6KqYEw3sFCULmhhDqKaQSLHxwB9FEv8Dbl/p56zJUvZRlc1mDJP0dkqG2
- ZvB6laima0Jo/8D/4c5Wts4FSmp21lKA0kBcQlqYtywM/usyIFAJbBLeG+1L5lTExtf9QOJh7K
- p6GmPVs3tvyjMbo3g3clXOvlG/6qOFahbZ9Nas0tvRXPn4qpc6wXQvzxIFaqsbEy0ERG2LM11P
- qUEvAzv1iKvIIeZNammBEhEvmgmZudgD5t9nIx1TO2ZKffa5FNkGiGnwyZ1kPVkf+6WNSLVaLL
- 6cU=
+ 29 May 2022 19:58:14 -0700
+IronPort-SDR: RKrzFAmYb8+FFTHjM3Sz/6Oka+PZ7S8xMkVm/IQ6b8TNHAuZGWP74JqEmj774cKHEfD5KaC/nV
+ laE3PKEZPapvtzGRMjpUQrbfC/OqJItE59Iixd7bIDbrNLfX1PXFPE1rN/Yh6q1WnpZ/0g8Cyx
+ wweY8Tjw08ESmIwvTE0a/8qfgsAOReVizkSxLanmCbI8oN+h9Itr8FrjLQqPlwRzVW5ACWR7Ua
+ IKNyz6MIGpgfoRrSkWloKvqLDZSa8vLTjdBiR2c0xQhfW88iiYHxsXsVgDFAZVyR7r/XNwiMk0
+ mVY=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 29 May 2022 20:38:47 -0700
+ 29 May 2022 20:38:49 -0700
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LBLjg1s25z1SVp3
- for <buildroot@buildroot.org>; Sun, 29 May 2022 20:38:47 -0700 (PDT)
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LBLjh52LGz1Rwrw
+ for <buildroot@buildroot.org>; Sun, 29 May 2022 20:38:48 -0700 (PDT)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
  reason="pass (just generated, assumed good)"
  header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
  opensource.wdc.com; h=content-transfer-encoding:mime-version
  :references:in-reply-to:x-mailer:message-id:date:subject:to
- :from; s=dkim; t=1653881926; x=1656473927; bh=IJnFQBNwN1WpR8zC3y
- jc+tOmEGnkTnHFG0hBbRT6aZY=; b=Lx4DubDDrA+Tn9L5dCG4IaZtVifWWOqXKH
- MNlEodFTM1ZSmYjDC9PnMfECnfwMMZmZyAeu/viD2Gmu01SqNfE65miZS7IxMJ9G
- iC/jb559U/Mn0a3KYTNXSZyj3Z90Eq/ggepTG2OEehZk2v62wlibg8Ow52xb6iiB
- BvdggrQw7aW09EnQUYS/5Bm6dSJtYmXdOc8UUMFakXfnUTa3TI5UB/FGnZQ7hSVq
- A4iUuoa9RhOJAwmShu3H9BzUHhHjM25forGtdwSzD0Jh/tsL87Zeb44IeTzNdCvh
- WFHXyrb59inwQq/N7/vh///AncRKe/Bs/pchPeyw3E4Nusreh32g==
+ :from; s=dkim; t=1653881927; x=1656473928; bh=Kd3PiITvw7hphRkUBx
+ Y1Rj84ce9PiabpfB9kr5asSKo=; b=HkpyZn9lKLdDCTqCHlkF57MdP00YKdndyD
+ nbqtcHX2Fnk6z2LR2J9V9rcGLMqOZEVcQd5gvEry+ijpbNGkafZal9Sz4xXHBOd3
+ fys1GsU0AXT41aOqT6/nWX8JM76rwyjGZSXJwvuuMzDaATQy4Os2IpGGugMQae4M
+ e7jzOl68gYf/jBlV0Cf+0Non2d3KaC/qj6RKt4PdYKRp7lzZ1Y7BBq+QRx4wmsg4
+ IPIpeAn2pXGDSXc60Fg3NSlYbY2bkklXsRYINjhkuIg6XwkcLHKQaUrBWAryRRaR
+ 9edQvKRJQEzwu/T/q0kpfImUfb7hCJE7B+ovKMMsWli/00HOyRmg==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
  by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new,
- port 10026) with ESMTP id 3pzRw7ZBrTuG for <buildroot@buildroot.org>;
- Sun, 29 May 2022 20:38:46 -0700 (PDT)
+ port 10026) with ESMTP id NohXX3CJd8sZ for <buildroot@buildroot.org>;
+ Sun, 29 May 2022 20:38:47 -0700 (PDT)
 Received: from washi.fujisawa.hgst.com (washi.fujisawa.hgst.com
  [10.149.53.254])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LBLjd1q4mz1Rvlc;
- Sun, 29 May 2022 20:38:44 -0700 (PDT)
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LBLjf41TYz1Rvlx;
+ Sun, 29 May 2022 20:38:46 -0700 (PDT)
 To: buildroot <buildroot@buildroot.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 May 2022 12:38:30 +0900
-Message-Id: <20220530033836.474926-6-damien.lemoal@opensource.wdc.com>
+Date: Mon, 30 May 2022 12:38:31 +0900
+Message-Id: <20220530033836.474926-7-damien.lemoal@opensource.wdc.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220530033836.474926-1-damien.lemoal@opensource.wdc.com>
 References: <20220530033836.474926-1-damien.lemoal@opensource.wdc.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 05/11] package: python-kflash: Kendryte K210
- UART ISP Utility
+Subject: [Buildroot] [PATCH v2 06/11] board: Add common support for Canaan
+ K210 SoC-based boards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -120,142 +124,453 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add the kflash Kendryte K210 UART ISP Utility as a host package to allow
-users to program their board boot ROM or SRAM with built images.
+The Linux environment for all boards using the Canaan Kendryte K210 SoC
+can be built with the same process, using configurations that differ
+only by the device tree used for the build. This patch add the
+shared configurations, rootfs overlay and scripts used for all
+K210-based boards.
 
-The kflash utility is available through the pypi.org python package
-index. The project is homepage is: https://github.com/vowstar/kflash.py.
+Since the K210 SoC only has 8 MB of SRAM, a special busybox
+configuration and rootfs overlay are added to save memory at runtime:
+* For configurations using direct kernel boot (no boot loader), the
+  default busybox configuration busybox-minimal.config is modified
+  using the fragment file board/canaan/k210-soc/busybox-tiny.config.
+  This reduces the size of the busybox executable to save memory when
+  executing shell commands.
+* Busybox init system is not used and a special init scripts is provided
+  using the rootfs_overlay root file system overlay. This init script
+  simply mounts devtmpfs, /proc and /sys, and exec an interactive shell
+  after printing a logo. This avoids (1) boot failures due to large
+  memory allocations by the regular busybox init system (these
+  allocations fail on the K210 for lack of enough memory) and avoids
+  (2) keeping the init process sleeping in the background (wasted
+  memory).
 
-kflash depends on the python-serial and python-pyelftools packages.
-These packages are modified to add the host package definition.
+The board/canaan/k210-soc/busybox-tiny.config and the rootfs overlay
+files in board/canaan/k210-soc/rootfs_overlay are used for all Canaan
+K210 SoC based boards.
 
+For board configurations booting using the U-Boot boot loader, a common
+set of linux kernel configuration parameters is provided by the file
+board/canaan/k210-soc/linux-sdcard.config. In addition, the post build
+script board/canaan/k210-soc/post-build.sh file and U-Boot image
+generation configuration file board/canaan/k210-soc/genimage.cfg are
+provided. The post-build script creates a generic "k210.dtb" symlink to
+the compiled device tree file for the target board. This symlink is used
+by the genimage.cfg configuration, making this file common for all
+boards.
+
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
- DEVELOPERS                               |  3 +++
- package/Config.in.host                   |  3 +++
- package/python-kflash/Config.in.host     |  9 +++++++++
- package/python-kflash/python-kflash.hash |  5 +++++
- package/python-kflash/python-kflash.mk   | 15 +++++++++++++++
- package/python-pyelftools/Config.in.host |  7 +++++++
- package/python-serial/Config.in.host     |  6 ++++++
- package/python-serial/python-serial.mk   |  1 +
- 8 files changed, 49 insertions(+)
- create mode 100644 package/python-kflash/Config.in.host
- create mode 100644 package/python-kflash/python-kflash.hash
- create mode 100644 package/python-kflash/python-kflash.mk
- create mode 100644 package/python-pyelftools/Config.in.host
- create mode 100644 package/python-serial/Config.in.host
+ DEVELOPERS                                    |   1 +
+ board/canaan/k210-soc/busybox-tiny.config     | 231 ++++++++++++++++++
+ board/canaan/k210-soc/genimage.cfg            |  30 +++
+ board/canaan/k210-soc/linux-sdcard.config     |   4 +
+ board/canaan/k210-soc/post-build.sh           |  28 +++
+ board/canaan/k210-soc/rootfs_overlay/init     |   1 +
+ .../canaan/k210-soc/rootfs_overlay/sbin/init  |  41 ++++
+ board/canaan/k210-soc/uboot.config            |   1 +
+ 8 files changed, 337 insertions(+)
+ create mode 100644 board/canaan/k210-soc/busybox-tiny.config
+ create mode 100644 board/canaan/k210-soc/genimage.cfg
+ create mode 100644 board/canaan/k210-soc/linux-sdcard.config
+ create mode 100755 board/canaan/k210-soc/post-build.sh
+ create mode 120000 board/canaan/k210-soc/rootfs_overlay/init
+ create mode 100755 board/canaan/k210-soc/rootfs_overlay/sbin/init
+ create mode 100644 board/canaan/k210-soc/uboot.config
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 71cc3da6d7..14c6f02cce 100644
+index 14c6f02cce..93806b2c99 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -627,6 +627,9 @@ N:	Damien Lanson <damien@kal-host.com>
- F:	package/libvdpau/
- F:	package/log4cpp/
+@@ -629,6 +629,7 @@ F:	package/log4cpp/
  
-+N:	Damien Le Moal <damien.lemoal@wdc.com>
-+F:	package/python-kflash/
-+
+ N:	Damien Le Moal <damien.lemoal@wdc.com>
+ F:	package/python-kflash/
++F:	board/canaan/
+ 
  N:	Daniel Nicoletti <dantti12@gmail.com>
  F:	package/cutelyst/
- 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index cd1c34b5a3..6c9fd7c493 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -72,7 +72,10 @@ menu "Host utilities"
- 	source "package/pwgen/Config.in.host"
- 	source "package/python-cython/Config.in.host"
- 	source "package/python-greenlet/Config.in.host"
-+	source "package/python-kflash/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
-+	source "package/python-pyelftools/Config.in.host"
-+	source "package/python-serial/Config.in.host"
- 	source "package/python-six/Config.in.host"
- 	source "package/python-xlrd/Config.in.host"
- 	source "package/python3/Config.in.host"
-diff --git a/package/python-kflash/Config.in.host b/package/python-kflash/Config.in.host
+diff --git a/board/canaan/k210-soc/busybox-tiny.config b/board/canaan/k210-soc/busybox-tiny.config
 new file mode 100644
-index 0000000000..a16857078f
+index 0000000000..9db12b560a
 --- /dev/null
-+++ b/package/python-kflash/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_PYTHON_KFLASH
-+	bool "host python-kflash"
-+	depends on BR2_RISCV_64 && !BR2_USE_MMU
-+	select BR2_PACKAGE_HOST_PYTHON_PYELFTOOLS
-+	select BR2_PACKAGE_HOST_PYTHON_SERIAL
-+	help
-+	  Kendryte UART ISP Utility - programming code to k210.
-+
-+	  https://github.com/vowstar/kflash.py
-diff --git a/package/python-kflash/python-kflash.hash b/package/python-kflash/python-kflash.hash
-new file mode 100644
-index 0000000000..722c4e879b
---- /dev/null
-+++ b/package/python-kflash/python-kflash.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/kflash/json
-+md5  85549bcc1faa0f2cd5ebe3b04759e7fa  kflash-1.1.5.tar.gz
-+sha256  40a0976b52942c7a3bdfa2d9e2bdc8d7526cf6deb0759c8384281240c8fb404e  kflash-1.1.5.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c48133d7a08d743c2c01c6190fc1860f7d73777afa2199ed8d0a035b754d8bf9  LICENSE
-diff --git a/package/python-kflash/python-kflash.mk b/package/python-kflash/python-kflash.mk
-new file mode 100644
-index 0000000000..adbf6b30b0
---- /dev/null
-+++ b/package/python-kflash/python-kflash.mk
-@@ -0,0 +1,15 @@
-+################################################################################
++++ b/board/canaan/k210-soc/busybox-tiny.config
+@@ -0,0 +1,231 @@
 +#
-+# python-kflash
++# Additional config changes for busybox-minimal.config
++# to reduce the size of the busybox executable.
 +#
-+################################################################################
 +
-+PYTHON_KFLASH_VERSION = 1.1.5
-+PYTHON_KFLASH_SOURCE = kflash-$(PYTHON_KFLASH_VERSION).tar.gz
-+PYTHON_KFLASH_SITE = https://files.pythonhosted.org/packages/c4/b3/1c25a92922bfd3dbc05d972352c071167cad035c615f6f068f75c2f0fd01
-+PYTHON_KFLASH_SETUP_TYPE = setuptools
-+PYTHON_KFLASH_LICENSE = MIT
-+PYTHON_KFLASH_LICENSE_FILES = LICENSE
-+HOST_PYTHON_KFLASH_DEPENDENCIES = host-python-pyelftools host-python-serial
++#
++# Settings
++#
++# CONFIG_INCLUDE_SUSv2 is not set
++# CONFIG_LONG_OPTS is not set
++# CONFIG_LFS is not set
++# CONFIG_FEATURE_DEVPTS is not set
++# CONFIG_FEATURE_SYSLOG_INFO is not set
++# CONFIG_FEATURE_SYSLOG is not set
 +
-+$(eval $(host-python-package))
-diff --git a/package/python-pyelftools/Config.in.host b/package/python-pyelftools/Config.in.host
++#
++# Library Tuning
++#
++# CONFIG_FEATURE_RTMINMAX is not set
++# CONFIG_FEATURE_RTMINMAX_USE_LIBC_DEFINITIONS is not set
++# CONFIG_FEATURE_BUFFERS_USE_MALLOC is not set
++CONFIG_FEATURE_BUFFERS_GO_ON_STACK=y
++# CONFIG_FEATURE_EDITING_VI is not set
++# CONFIG_FEATURE_EDITING_SAVEHISTORY is not set
++# CONFIG_FEATURE_REVERSE_SEARCH is not set
++# CONFIG_FEATURE_EDITING_WINCH is not set
++# CONFIG_FEATURE_HWIB is not set
++
++#
++# Archival Utilities
++#
++# CONFIG_ZCAT is not set
++# CONFIG_BZCAT is not set
++# CONFIG_LZCAT is not set
++# CONFIG_XZCAT is not set
++# CONFIG_UNLZOP is not set
++# CONFIG_LZOPCAT is not set
++
++#
++# Coreutils
++#
++# CONFIG_CKSUM is not set
++# CONFIG_DOS2UNIX is not set
++# CONFIG_UNIX2DOS is not set
++# CONFIG_DU is not set
++# CONFIG_FACTOR is not set
++# CONFIG_FOLD is not set
++# CONFIG_HEAD is not set
++# CONFIG_INSTALL is not set
++# CONFIG_LINK is not set
++# CONFIG_LOGNAME is not set
++# CONFIG_MD5SUM is not set
++# CONFIG_SHA1SUM is not set
++# CONFIG_SHA256SUM is not set
++# CONFIG_SHA512SUM is not set
++# CONFIG_SHA3SUM is not set
++# CONFIG_MKFIFO is not set
++# CONFIG_NICE is not set
++# CONFIG_NL is not set
++# CONFIG_NOHUP is not set
++# CONFIG_OD is not set
++# CONFIG_PASTE is not set
++# CONFIG_SHRED is not set
++# CONFIG_SORT is not set
++# CONFIG_TAIL is not set
++# CONFIG_TEE is not set
++# CONFIG_TIMEOUT is not set
++# CONFIG_TR is not set
++# CONFIG_UNIQ is not set
++# CONFIG_UUDECODE is not set
++# CONFIG_BASE32 is not set
++# CONFIG_UUENCODE is not set
++# CONFIG_WC is not set
++# CONFIG_WHOAMI is not set
++# CONFIG_WHO is not set
++# CONFIG_W is not set
++# CONFIG_USERS is not set
++# CONFIG_YES is not set
++
++#
++# Common options
++#
++# CONFIG_FEATURE_VERBOSE is not set
++
++#
++# Debian Utilities
++#
++# CONFIG_RUN_PARTS is not set
++# CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS is not set
++# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
++# CONFIG_START_STOP_DAEMON is not set
++# CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS is not set
++# CONFIG_FEATURE_START_STOP_DAEMON_FANCY is not set
++# CONFIG_WHICH is not set
++
++#
++# klibc-utils
++#
++# CONFIG_NUKE is not set
++# CONFIG_RESUME is not set
++# CONFIG_RUN_INIT is not set
++
++#
++# Editors
++#
++# CONFIG_SED is not set
++CONFIG_VI=y
++CONFIG_FEATURE_VI_MAX_LEN=4096
++CONFIG_FEATURE_VI_COLON=y
++CONFIG_FEATURE_VI_YANKMARK=y
++CONFIG_FEATURE_VI_USE_SIGNALS=y
++CONFIG_FEATURE_VI_DOT_CMD=y
++CONFIG_FEATURE_VI_READONLY=y
++CONFIG_FEATURE_VI_SETOPTS=y
++CONFIG_FEATURE_VI_SET=y
++CONFIG_FEATURE_VI_WIN_RESIZE=y
++CONFIG_FEATURE_VI_ASK_TERMINAL=y
++CONFIG_FEATURE_VI_UNDO=y
++
++#
++# Finding Utilities
++#
++CONFIG_GREP=y
++# CONFIG_EGREP is not set
++# CONFIG_FGREP is not set
++# CONFIG_XARGS is not set
++
++#
++# Init Utilities
++#
++# CONFIG_HALT is not set
++# CONFIG_POWEROFF is not set
++# CONFIG_FEATURE_WAIT_FOR_INIT is not set
++# CONFIG_FEATURE_CALL_TELINIT is not set
++# CONFIG_INIT is not set
++# CONFIG_LINUXRC is not set
++
++#
++# Login/Password Management Utilities
++#
++# CONFIG_FEATURE_SHADOWPASSWDS is not set
++# CONFIG_USE_BB_CRYPT is not set
++# CONFIG_USE_BB_CRYPT_SHA is not set
++# CONFIG_ADDUSER is not set
++# CONFIG_GETTY is not set
++# CONFIG_LOGIN is not set
++# CONFIG_PASSWD is not set
++
++#
++# Linux System Utilities
++#
++# CONFIG_FALLOCATE is not set
++# CONFIG_FREERAMDISK is not set
++# CONFIG_FSFREEZE is not set
++# CONFIG_GETOPT is not set
++# CONFIG_XXD is not set
++# CONFIG_MESG is not set
++# CONFIG_MKE2FS is not set
++# CONFIG_MKDOSFS is not set
++# CONFIG_FEATURE_MOUNT_CIFS is not set
++# CONFIG_FEATURE_MOUNT_FSTAB is not set
++# CONFIG_FEATURE_MOUNT_OTHERTAB is not set
++# CONFIG_NOLOGIN is not set
++# CONFIG_LINUX32 is not set
++# CONFIG_LINUX64 is not set
++# CONFIG_SETPRIV is not set
++
++#
++# Common options for mount/umount
++#
++# CONFIG_FEATURE_MOUNT_LOOP is not set
++# CONFIG_FEATURE_MOUNT_LOOP_CREATE is not set
++
++#
++# Miscellaneous Utilities
++#
++# CONFIG_BC is not set
++# CONFIG_HEXEDIT is not set
++# CONFIG_I2CTRANSFER is not set
++# CONFIG_LSSCSI is not set
++# CONFIG_MIM is not set
++# CONFIG_PARTPROBE is not set
++# CONFIG_SETFATTR is not set
++# CONFIG_SETSERIAL is not set
++# CONFIG_TS is not set
++
++#
++# Networking Utilities
++#
++# CONFIG_HOSTNAME is not set
++# CONFIG_DNSDOMAINNAME is not set
++# CONFIG_IFCONFIG is not set
++# CONFIG_IFUP is not set
++# CONFIG_IFDOWN is not set
++# CONFIG_IP is not set
++# CONFIG_IPADDR is not set
++# CONFIG_IPLINK is not set
++# CONFIG_IPROUTE is not set
++# CONFIG_NC is not set
++# CONFIG_NETSTAT is not set
++# CONFIG_PING is not set
++# CONFIG_ROUTE is not set
++# CONFIG_TC is not set
++# CONFIG_TELNET is not set
++# CONFIG_WGET is not set
++# CONFIG_UDHCPC is not set
++
++#
++# Process Utilities
++#
++# CONFIG_KILLALL is not set
++# CONFIG_KILLALL5 is not set
++
++#
++# Runit Utilities
++#
++# CONFIG_SVC is not set
++# CONFIG_SVOK is not set
++
++#
++# Shells
++#
++CONFIG_BASH_IS_HUSH=y
++# CONFIG_BASH_IS_NONE is not set
++# CONFIG_HUSH_SAVEHISTORY is not set
++
++#
++# Options common to all shells
++#
++# CONFIG_FEATURE_SH_READ_FRAC is not set
++# CONFIG_FEATURE_SH_EMBEDDED_SCRIPTS is not set
+diff --git a/board/canaan/k210-soc/genimage.cfg b/board/canaan/k210-soc/genimage.cfg
 new file mode 100644
-index 0000000000..8f5829a964
+index 0000000000..da7d5dbafb
 --- /dev/null
-+++ b/package/python-pyelftools/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_PYTHON_PYELFTOOLS
-+	bool "host python-pyelftools"
-+	help
-+	  Pyelftools is a Python library for parsing and analyzing ELF
-+	  files and DWARF debug information.
++++ b/board/canaan/k210-soc/genimage.cfg
+@@ -0,0 +1,30 @@
++image boot.vfat {
++	vfat {
++		file uImage {
++			image = "uImage"
++		}
 +
-+	  https://github.com/eliben/pyelftools
-diff --git a/package/python-serial/Config.in.host b/package/python-serial/Config.in.host
++		file k210.dtb {
++			image = "k210.dtb"
++		}
++	}
++	size = 4M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition boot {
++		partition-type = 0xC
++		image = "boot.vfat"
++		bootable = "true"
++		offset = 4M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++		size = 64M
++	}
++}
+diff --git a/board/canaan/k210-soc/linux-sdcard.config b/board/canaan/k210-soc/linux-sdcard.config
 new file mode 100644
-index 0000000000..3c071575d7
+index 0000000000..4b0ead78a7
 --- /dev/null
-+++ b/package/python-serial/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_PYTHON_SERIAL
-+	bool "host python-serial"
-+	help
-+	  python-serial is a Python library to access serial ports.
++++ b/board/canaan/k210-soc/linux-sdcard.config
+@@ -0,0 +1,4 @@
++CONFIG_BUILTIN_DTB=n
++CONFIG_SOC_CANAAN_K210_DTB_BUILTIN=n
++CONFIG_SOC_CANAAN_K210_DTB_SOURCE=""
++CONFIG_CMDLINE="earlycon console=ttySIF0 root=/dev/mmcblk0p2 rootwait ro"
+diff --git a/board/canaan/k210-soc/post-build.sh b/board/canaan/k210-soc/post-build.sh
+new file mode 100755
+index 0000000000..5b6f56a2c5
+--- /dev/null
++++ b/board/canaan/k210-soc/post-build.sh
+@@ -0,0 +1,28 @@
++#!/bin/sh
 +
-+	  https://github.com/pyserial/pyserial
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index 249ea9d5a3..87cd9392f1 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -12,3 +12,4 @@ PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
- PYTHON_SERIAL_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
-+$(eval $(host-python-package))
++MKIMAGE=${HOST_DIR}/bin/mkimage
++
++# Generate u-Boot kernel image
++${MKIMAGE} -A riscv -O linux -T kernel -C none \
++	-a 0x80000000 -e 0x80000000 \
++	-n Linux -d ${BINARIES_DIR}/loader.bin ${BINARIES_DIR}/uImage
++
++# Link the kernel-built board dtb file to using the k210.dtb generic
++# name for use by genimage.cfg
++BOARDDTBKPATH="$(grep BR2_LINUX_KERNEL_INTREE_DTS_NAME ${BR2_CONFIG} | cut -d'=' -f2 | tr -d \")"
++
++BOARDDTB="$(basename ${BOARDDTBKPATH})"
++if [ -z "${BOARDDTB}" ]; then
++	echo "Board DTB file not specified"
++	exit 1
++fi
++
++BOARDDTB="${BINARIES_DIR}/${BOARDDTB}.dtb"
++if [ ! -f "${BOARDDTB}" ]; then
++        echo "Board DTB file not found in ${BINARIES_DIR}"
++        exit 1
++fi
++
++TARGETDTB=${BINARIES_DIR}/k210.dtb
++rm -f ${TARGETDTB}
++ln -s ${BOARDDTB} ${TARGETDTB}
+diff --git a/board/canaan/k210-soc/rootfs_overlay/init b/board/canaan/k210-soc/rootfs_overlay/init
+new file mode 120000
+index 0000000000..a0b71977c0
+--- /dev/null
++++ b/board/canaan/k210-soc/rootfs_overlay/init
+@@ -0,0 +1 @@
++/sbin/init
+\ No newline at end of file
+diff --git a/board/canaan/k210-soc/rootfs_overlay/sbin/init b/board/canaan/k210-soc/rootfs_overlay/sbin/init
+new file mode 100755
+index 0000000000..d4bf53d452
+--- /dev/null
++++ b/board/canaan/k210-soc/rootfs_overlay/sbin/init
+@@ -0,0 +1,41 @@
++#!/bin/sh
++
++# This script replaces the default busybox init process to avoid having that
++# process staying alive and sleeping in the background, (uselessly) consuming
++# precious memory.
++
++# Mount procfs and sysfs
++/bin/mount -t proc proc /proc
++/bin/mount -t sysfs sysfs /sys
++
++# When the kernel is directly booted, devtmpfs is not automatically mounted.
++# Manually mount it if needed.
++devmnt=$(mount | grep -c devtmpfs)
++if [ ${devmnt} -eq 0 ]; then
++    /bin/mount -t devtmpfs devtmpfs /dev
++fi
++
++# Use the /dev/console device node from devtmpfs if possible to not
++# confuse glibc's ttyname_r().
++# This may fail (E.G. booted with console=), and errors from exec will
++# terminate the shell, so use a subshell for the test
++if (exec 0</dev/console) 2>/dev/null; then
++    exec 0</dev/console
++    exec 1>/dev/console
++    exec 2>/dev/console
++fi
++
++# Clear memory to reduce page fragmentation
++echo 3 > /proc/sys/vm/drop_caches
++
++# Print a fun logo :)
++echo "          __  _"
++echo "         / / (_) ____   _   _ __  __"
++echo "        / /  | ||  _ \\ | | | |\\ \\/ /"
++echo "       / /___| || | | || |_| | >  < "
++echo "      /_____/|_||_| |_| \\____|/_/\\_\\"
++echo "    64-bits RISC-V Kendryte K210 NOMMU"
++echo ""
++
++# Finally, let's start an interactive shell
++exec /bin/sh
+diff --git a/board/canaan/k210-soc/uboot.config b/board/canaan/k210-soc/uboot.config
+new file mode 100644
+index 0000000000..159085f802
+--- /dev/null
++++ b/board/canaan/k210-soc/uboot.config
+@@ -0,0 +1 @@
++# CONFIG_WATCHDOG_AUTOSTART is not set
 -- 
 2.36.1
 
