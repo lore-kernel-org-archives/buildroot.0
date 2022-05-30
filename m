@@ -4,43 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F768C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 19:29:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28612C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 19:31:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27125840E7;
-	Mon, 30 May 2022 19:29:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA784840D1;
+	Mon, 30 May 2022 19:31:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id suSCeAV3CWcM; Mon, 30 May 2022 19:29:40 +0000 (UTC)
+	with ESMTP id e03_Zq0wlWQL; Mon, 30 May 2022 19:31:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00C92840DD;
-	Mon, 30 May 2022 19:29:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 581121BF2AB
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 19:29:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C95DC840C3;
+	Mon, 30 May 2022 19:31:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 30B781BF2AB
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 19:31:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 471E941B7C
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 19:29:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E56240C72
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 19:31:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NXRWmPGoJSOP for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 19:29:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4985741B56
- for <buildroot@buildroot.org>; Mon, 30 May 2022 19:29:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7D5BC86793; Mon, 30 May 2022 19:17:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 30 May 2022 21:22:06 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d35ba174095b86a0cf724179f7d4e8d0e3d9c127
-X-Git-Newrev: 8131ef6554aa34b388de33b6e340b125620c0c78
-X-Patchwork-Hint: ignore
-Message-Id: <20220530191750.7D5BC86793@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-kflash: new
- package
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aInljkqv1GHR for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 19:31:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DB9F4409C1
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 19:31:09 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E4EFAE0007;
+ Mon, 30 May 2022 19:31:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1653939067;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=et3LHcQh4KzI5dXF37BMWZgal5WtuwbSc5ql4JIdWf0=;
+ b=J4gB8RiCW7ZfKXYTtoif+IH+P1qSBAH8AkvfVKZzb1QiZwW4LqzCJZCfAYE6YdZc81ytSa
+ 6AmLq/+tMnJlE7j7CJbY3dU3nvRc7cQmxXFOJ1sBDbmOetA/3sur6BEHbePjw3LnMLpWy7
+ 7gD16GcGE1ZzUNz7lk02KF3hwwtv/YxBFQQaj/nq0HgyVwk6UXHSMYr2yBd5Kw0CUvOc59
+ PT6BdF9dDCvqXOjA6o7jLq1XqkPkiOXe6p7ziagCg68lrogWbzawlhnl8o5yQAT8XVEZX8
+ ToYvxyhp+kulCcCqCQfink6dSpC5NNn/3c4yu3t8qNVmh3AKpk8ehPkxicSO/A==
+Date: Mon, 30 May 2022 21:31:04 +0200
+To: Damien Le Moal via buildroot <buildroot@buildroot.org>
+Message-ID: <20220530213104.3f8755d4@windsurf>
+In-Reply-To: <20220530033836.474926-6-damien.lemoal@opensource.wdc.com>
+References: <20220530033836.474926-1-damien.lemoal@opensource.wdc.com>
+ <20220530033836.474926-6-damien.lemoal@opensource.wdc.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2 05/11] package: python-kflash: Kendryte
+ K210 UART ISP Utility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,102 +73,66 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Niklas Cassel <Niklas.Cassel@wdc.com>,
+ Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+ Alistair Francis <alistair@alistair23.me>, "Yann E
+ . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8131ef6554aa34b388de33b6e340b125620c0c78
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Damien,
 
-Add the kflash Kendryte K210 UART ISP Utility as a host package to allow
-users to program their board boot ROM or SRAM with built images.
+On Mon, 30 May 2022 12:38:30 +0900
+Damien Le Moal via buildroot <buildroot@buildroot.org> wrote:
 
-The kflash utility is available through the pypi.org python package
-index. The project is homepage is: https://github.com/vowstar/kflash.py.
+> Add the kflash Kendryte K210 UART ISP Utility as a host package to allow
+> users to program their board boot ROM or SRAM with built images.
+> 
+> The kflash utility is available through the pypi.org python package
+> index. The project is homepage is: https://github.com/vowstar/kflash.py.
+> 
+> kflash depends on the python-serial and python-pyelftools packages.
+> These packages are modified to add the host package definition.
+> 
+> Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> ---
+>  DEVELOPERS                               |  3 +++
+>  package/Config.in.host                   |  3 +++
+>  package/python-kflash/Config.in.host     |  9 +++++++++
+>  package/python-kflash/python-kflash.hash |  5 +++++
+>  package/python-kflash/python-kflash.mk   | 15 +++++++++++++++
+>  package/python-pyelftools/Config.in.host |  7 +++++++
+>  package/python-serial/Config.in.host     |  6 ++++++
+>  package/python-serial/python-serial.mk   |  1 +
+>  8 files changed, 49 insertions(+)
+>  create mode 100644 package/python-kflash/Config.in.host
+>  create mode 100644 package/python-kflash/python-kflash.hash
+>  create mode 100644 package/python-kflash/python-kflash.mk
+>  create mode 100644 package/python-pyelftools/Config.in.host
+>  create mode 100644 package/python-serial/Config.in.host
 
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                               |  3 +++
- package/Config.in.host                   |  1 +
- package/python-kflash/Config.in.host     |  7 +++++++
- package/python-kflash/python-kflash.hash |  5 +++++
- package/python-kflash/python-kflash.mk   | 15 +++++++++++++++
- 5 files changed, 31 insertions(+)
+I have applied to next, after doing some changes:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 435fa28478..096ca94f4e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -630,6 +630,9 @@ N:	Damien Lanson <damien@kal-host.com>
- F:	package/libvdpau/
- F:	package/log4cpp/
- 
-+N:	Damien Le Moal <damien.lemoal@wdc.com>
-+F:	package/python-kflash/
-+
- N:	Daniel Nicoletti <dantti12@gmail.com>
- F:	package/cutelyst/
- 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index cd1c34b5a3..8d2a8f4801 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -72,6 +72,7 @@ menu "Host utilities"
- 	source "package/pwgen/Config.in.host"
- 	source "package/python-cython/Config.in.host"
- 	source "package/python-greenlet/Config.in.host"
-+	source "package/python-kflash/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
- 	source "package/python-six/Config.in.host"
- 	source "package/python-xlrd/Config.in.host"
-diff --git a/package/python-kflash/Config.in.host b/package/python-kflash/Config.in.host
-new file mode 100644
-index 0000000000..0be8c18f15
---- /dev/null
-+++ b/package/python-kflash/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_PYTHON_KFLASH
-+	bool "host python-kflash"
-+	depends on BR2_RISCV_64 && !BR2_USE_MMU
-+	help
-+	  Kendryte UART ISP Utility - programming code to k210.
-+
-+	  https://github.com/vowstar/kflash.py
-diff --git a/package/python-kflash/python-kflash.hash b/package/python-kflash/python-kflash.hash
-new file mode 100644
-index 0000000000..722c4e879b
---- /dev/null
-+++ b/package/python-kflash/python-kflash.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/kflash/json
-+md5  85549bcc1faa0f2cd5ebe3b04759e7fa  kflash-1.1.5.tar.gz
-+sha256  40a0976b52942c7a3bdfa2d9e2bdc8d7526cf6deb0759c8384281240c8fb404e  kflash-1.1.5.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c48133d7a08d743c2c01c6190fc1860f7d73777afa2199ed8d0a035b754d8bf9  LICENSE
-diff --git a/package/python-kflash/python-kflash.mk b/package/python-kflash/python-kflash.mk
-new file mode 100644
-index 0000000000..adbf6b30b0
---- /dev/null
-+++ b/package/python-kflash/python-kflash.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-kflash
-+#
-+################################################################################
-+
-+PYTHON_KFLASH_VERSION = 1.1.5
-+PYTHON_KFLASH_SOURCE = kflash-$(PYTHON_KFLASH_VERSION).tar.gz
-+PYTHON_KFLASH_SITE = https://files.pythonhosted.org/packages/c4/b3/1c25a92922bfd3dbc05d972352c071167cad035c615f6f068f75c2f0fd01
-+PYTHON_KFLASH_SETUP_TYPE = setuptools
-+PYTHON_KFLASH_LICENSE = MIT
-+PYTHON_KFLASH_LICENSE_FILES = LICENSE
-+HOST_PYTHON_KFLASH_DEPENDENCIES = host-python-pyelftools host-python-serial
-+
-+$(eval $(host-python-package))
+ - I have split into a separate patch the addition of the host variant
+   of python-serial
+
+ - I have dropped the addition of package/python-serial/Config.in.host
+   and package/python-pyelftools/Config.in.host, as these were not
+   needed. We only add Config.in.host files for host packages that are
+   directly "useful" to the user, not when they are just dependencies
+   of another package.
+
+ - I have fixed the commit title to match our coding style.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
