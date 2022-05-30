@@ -4,61 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BF56C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 21:14:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3C38C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 21:25:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C4EF6121A;
-	Mon, 30 May 2022 21:14:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 772AF61233;
+	Mon, 30 May 2022 21:25:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S3t5p5kkNube; Mon, 30 May 2022 21:14:45 +0000 (UTC)
+	with ESMTP id MCjVUsbRxMKl; Mon, 30 May 2022 21:25:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3241761210;
-	Mon, 30 May 2022 21:14:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 72B8D1BF276
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:14:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA0C66121A;
+	Mon, 30 May 2022 21:25:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C8231BF276
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:25:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50C6240C88
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:14:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 89BC96121A
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:25:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tCl-kzZshZWz for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 21:14:41 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 220C14011C
- for <buildroot@buildroot.org>; Mon, 30 May 2022 21:14:40 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CF8A6E0002;
- Mon, 30 May 2022 21:14:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1653945279;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=mrWzrM8pu7h6mBwmRJjVJILqPfcAAtrk25LSW4UFFlI=;
- b=UnGg2pLo+Pg/GYkX4BAdhS2um/LeGRRD7SlxeqSfYMMzTiTeF7LsqW5EA8ayxYZ7jnRdfX
- lcGticHjoRQd/fXax1ApKFJ7gmRmW/wLMCIz3Nfe1/7zcYzLaWOAXaTo4vj1eipL6u/enn
- NiybC/egWMe7hZ+swmlRizo7E9SJOrQCNYVWMd6HnnY7umnAmRM+WQGi/UAUnTJBadNw3r
- clT76L/4O0CAaHzJifZlRzI6AL/+ggqHzzU3wEUdX+twtY5x+I0FLYV8qkeE8dLE1dJ7sG
- TbHxfrVp1V4dq7cHUSas9cVAUwqJrKK7SDAs3lVbQyXKWFqvDkCSGEYdre3ooA==
-Date: Mon, 30 May 2022 23:14:37 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220530231437.7e01723e@windsurf>
-In-Reply-To: <20220521152546.894405-1-fontaine.fabrice@gmail.com>
-References: <20220521152546.894405-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/boinc: fix build with
- libexecinfo
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6NGLABZHdS-U for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 21:25:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 10C4B60DFA
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 21:25:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 155F086822; Mon, 30 May 2022 21:13:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 30 May 2022 23:25:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9e48c2d5f1996e827e6db3f01797f5087ba527d4
+X-Git-Newrev: 2753d9ef82fe1bb5ff402341c56d18b2a4eb3d1d
+X-Patchwork-Hint: ignore
+Message-Id: <20220530211343.155F086822@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcr: put back
+ BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,37 +54,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 21 May 2022 17:25:46 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2753d9ef82fe1bb5ff402341c56d18b2a4eb3d1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix the following build failure raised on uclibc and musl since the
-> addition of libexecinfo package in commit
-> eea8ba446c10701a273432552108d80fb2224ef4:
-> 
-> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arc-buildroot-linux-uclibc/10.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: ../lib/.libs/libboinc.a(libboinc_la-diagnostics.o): in function `boinc_catch_signal':
-> diagnostics.cpp:(.text+0x8a): undefined reference to `backtrace'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/4504379b464eb144a4c257001eb4d316bb1f5e44
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/boinc/boinc.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+Commit 5452b5887005298a87650ff4003ecfaecfd9aca0 wrongly removed
+BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS dependency resulting in the
+following build failure:
 
-Applied to master, thanks.
+Makefile:576: *** libgpg-error is in the dependency chain of libgcrypt that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/261a137824109342fd83b766a299c1eeda6ff401
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gcr/Config.in    | 2 ++
+ package/midori/Config.in | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/package/gcr/Config.in b/package/gcr/Config.in
+index 7c5fdba008..dbc22cf478 100644
+--- a/package/gcr/Config.in
++++ b/package/gcr/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_GCR
+ 	bool "gcr"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+@@ -15,6 +16,7 @@ config BR2_PACKAGE_GCR
+ 	  https://developer.gnome.org/gcr/
+ 
+ comment "gcr needs a toolchain w/ wchar, threads, dynamic library"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_STATIC_LIBS
+diff --git a/package/midori/Config.in b/package/midori/Config.in
+index f45444a289..6029c0a9df 100644
+--- a/package/midori/Config.in
++++ b/package/midori/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # gcr -> libgcrypt -> libgpg-error
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT # webkitgtk -> icu
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
