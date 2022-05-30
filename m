@@ -1,81 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07F72C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 195ADC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:50:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7135D4187B;
-	Mon, 30 May 2022 20:49:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC9E661186;
+	Mon, 30 May 2022 20:50:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hNRR8fg8EX5P; Mon, 30 May 2022 20:49:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KUWs_L4qnaB7; Mon, 30 May 2022 20:50:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32C8D41701;
-	Mon, 30 May 2022 20:49:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A9D2C1BF31A
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:49:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6B6960E26;
+	Mon, 30 May 2022 20:50:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4FF581BF31A
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:49:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9568583F39
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:49:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C87160F81
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:49:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VamwtmfPxNEU for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 20:49:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vM1J4Ey3q6Uc for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 20:49:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5408483F35
- for <buildroot@buildroot.org>; Mon, 30 May 2022 20:49:52 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id s24so8771002wrb.10
- for <buildroot@buildroot.org>; Mon, 30 May 2022 13:49:52 -0700 (PDT)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 878CB60AF6
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 20:49:55 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id z17so7013069wmf.1
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 13:49:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6GZGU+gW4/1iKcEw0mS/cuG3E9guBP6KbbHcMIVkyXo=;
- b=ezXdb1il3Wia2FFLr0CJfg2/nMqqt24WxhKEXnXN1ycrgYrr1bnAJVmkfzWyhqoNGz
- RKUA8k0oF4dDVA3nDcLwH2B6iuE2xWm4iV54cIWI3D5gaQaTV634f9Tt+DyL/+YLNOvs
- xR/LMFOiAv2k/MhpDwAGvmSlK8tAs53Q/f6DXXXZiPayeaSq+4z5/UYT81Q6Lq/K7rrI
- qgLOSwSNUGql+/raEWl6sUXhiv+wnhAeruNsMprXyVgynf2/RHS6k3svU/XRFh9ZaT+6
- PYc/YKIWAtwf1dLpEuqCQBQp1v6ncunBT33KNcL6JzhQ83kon3kHs7/N1SmOC5xpTnKq
- /JPQ==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=tMO7zpFBjJ4ZPG3G99Lv1cPejkOA4eMfcsPISYtJLTA=;
+ b=BJfstGM+dPONsYNAcet4zgwlAd0LbVLGV9YR0NECy1Cy5Z5l0A4rEFH6jfwo8tR8Lo
+ kKPAVvx+mBsq8bKq6+AoDcay0fue5qy9Ttzs9frg8a2qqn3YyjEAcj5Iew0R2qQAvH1j
+ a1kU6ikum8c5i/MqEffzqodUw6Rh+OrJWJTzJ0qsB4+OOORjlvnTquFzYrpksgNQZp71
+ pxz3/Jw6eWDb/LhkX+y1hdKJhl33UlwBi7XeBZa5HAHuejq5drT30BvarLH8v0BeRaug
+ UC0iZG21EMJiOdVkpZ2Ekm8zwp6DrRN1tx5Hv0F/tA5AYIl/hmHiulpdD+uQRLF8p8qs
+ hCtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6GZGU+gW4/1iKcEw0mS/cuG3E9guBP6KbbHcMIVkyXo=;
- b=oOy80uXvtiy1Uxy9BsT6xtYHU9iKQ63UwVmOfEZqAdHNvWzvO+j+ejfzTYbXOH98x8
- YYnPSVwqAh3551Jp/EW+d1spjrO5Nly4XnCVBtLO1Bur/WWDDyE1+VakVcB2zeMeU2mT
- /XG28ZGzEF73yhSetrAfLmH29UlqGHku9ruQgWC7Lr/RbRNaKKGheV1szfOwysnmxHhb
- j7rysQrwg0ers0np3xG1no3dFkpfhYW6EbmnkjmBctHV40Uc0vCYeshp2oSTsiBcYWYN
- zaa8OpFbwXdD5eOX+IHE9/cYFkEsOwS3rCxoZgMkpKBENECFHsDe7/W9WK/qXjbp2DGQ
- OY/w==
-X-Gm-Message-State: AOAM533P/dvwXQ3D+D1YiPyZF9NqaUbTfalj6rbHFQ+DtyCfoRiPexP3
- wmNCc1hGLYmMwf/rcq/djxFCtt8V5to=
-X-Google-Smtp-Source: ABdhPJxZ3JgfajEzinC2K7zJda6UlFzNITgmfh8Q4N8uWkE77AvbsKDiXXLGdZ/8XffdrDZZdgL4+A==
-X-Received: by 2002:a5d:4d05:0:b0:20e:6457:f2b1 with SMTP id
- z5-20020a5d4d05000000b0020e6457f2b1mr46144807wrt.653.1653943790216; 
- Mon, 30 May 2022 13:49:50 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=tMO7zpFBjJ4ZPG3G99Lv1cPejkOA4eMfcsPISYtJLTA=;
+ b=WClUE50HSYlQwHzv+qNGC7ubxCTahZ9wCCLxKCNO7WDG5XKvDn3xZM15FQDqB430kr
+ PZ0vVvtyPUXXgYIw0czcP+HTQQMGvQgyAwoUBDm7Jj5fm/B27X54UsVLx8xgShPx2Kd8
+ AKUqmQl18fqlZFFbyECHpLtInphAuDzIaBvx/nQEmaNBT47Z6mBrfgMU6kaWgmdQ71Vr
+ CW7Mi7pAzDDIy+PQUx71BM1CnfX1A9cUFc6lNiGDCct4Ayfu8ed3NRaST9sqBTvLqpXE
+ 90xyAJ24kEeJB1yAL5Yk+MnZJu3K5ASsK42N5WPQ2HuxeVGTK65w7gL/VwG5vRh1PNxd
+ onaw==
+X-Gm-Message-State: AOAM532ojlzfTTEdP2wzD5usucoeNzyDCEqcOqzUrzoSd9zeCmJxRvQG
+ 9FIr1fiRV/h1pHS7BzxkZtUMlm1aqK4=
+X-Google-Smtp-Source: ABdhPJwgAcTqPLOEvqfM+KMWWOu8Q4yGIP52X1wGmq4KtDtiuBoJj0bvZ+lnkY+HqXsyHIyyXh+SwQ==
+X-Received: by 2002:a05:600c:358e:b0:397:7042:17a with SMTP id
+ p14-20020a05600c358e00b003977042017amr21172382wmq.4.1653943793492; 
+ Mon, 30 May 2022 13:49:53 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- x10-20020adfdcca000000b002102baa2370sm6052404wrm.100.2022.05.30.13.49.49
+ x10-20020adfdcca000000b002102baa2370sm6052404wrm.100.2022.05.30.13.49.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 30 May 2022 13:49:49 -0700 (PDT)
+ Mon, 30 May 2022 13:49:53 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 30 May 2022 22:47:15 +0200
-Message-Id: <20220530204716.3054785-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 May 2022 22:47:16 +0200
+Message-Id: <20220530204716.3054785-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220530204716.3054785-1-fontaine.fabrice@gmail.com>
+References: <20220530204716.3054785-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/gtest: gmock needs host gcc >= 4.9
+Subject: [Buildroot] [PATCH 2/2] package/gtest: merge
+ BR2_PACKAGE_GTEST_GMOCK blocks
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,52 +95,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-gtest unconditionally uses is_trivially_copy_constructible since
-version 1.11.0 and
-https://github.com/google/googletest/commit/c13c27a513ecd1cbf5700a45fe590e85e8ae6770
-
-So add a dependency on host gcc >= 4.9 for gmock to avoid the following
-build failure since commit 9dfbbbb4105c47602da048c9bb9499fb8862e768:
-
-In file included from /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/build/host-gtest-1.11.0/googletest/include/gtest/internal/gtest-death-test-internal.h:39:0,
-                 from /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/build/host-gtest-1.11.0/googletest/include/gtest/gtest-death-test.h:41,
-                 from /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/build/host-gtest-1.11.0/googletest/include/gtest/gtest.h:64,
-                 from /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/build/host-gtest-1.11.0/googletest/src/gtest-all.cc:38:
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/build/host-gtest-1.11.0/googletest/include/gtest/gtest-matchers.h: In static member function 'static constexpr bool testing::internal::MatcherBase<T>::IsInlined()':
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/build/host-gtest-1.11.0/googletest/include/gtest/gtest-matchers.h:414:12: error: 'is_trivially_copy_constructible' is not a member of 'std'
-            std::is_trivially_copy_constructible<M>::value &&
-            ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/9d19a47deb80824eaa718d80f14b0afd5f9eb054
+Since commit 6a9c6311f8fd4464b5555773589f587338f694a0, two
+BR2_PACKAGE_GTEST_GMOCK blocks are used instead of one which is a little
+bit unusual
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gtest/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/gtest/gtest.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/package/gtest/Config.in b/package/gtest/Config.in
-index d8bcf6343f..35fc9fea7b 100644
---- a/package/gtest/Config.in
-+++ b/package/gtest/Config.in
-@@ -26,6 +26,7 @@ if BR2_PACKAGE_GTEST
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index e7ce89a3f4..8ec5e9c535 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
+@@ -13,10 +13,6 @@ GTEST_LICENSE_FILES = LICENSE
+ GTEST_CPE_ID_VENDOR = google
+ GTEST_CPE_ID_PRODUCT = google_test
  
- config BR2_PACKAGE_GTEST_GMOCK
- 	bool "gmock"
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-gtest
- 	help
- 	  Inspired by jMock, EasyMock, and Hamcrest, and designed with
- 	  C++'s specifics in mind, Google C++ Mocking Framework (or
-@@ -47,6 +48,9 @@ config BR2_PACKAGE_GTEST_GMOCK
- 	  libraries required to link/run them. The host package installs
- 	  gmock_gen, a Python script used to generate code mocks.
+-ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
+-GTEST_DEPENDENCIES += host-gtest
+-endif
+-
+ HOST_GTEST_LICENSE = Apache-2.0
+ HOST_GTEST_LICENSE_FILES = googlemock/scripts/generator/LICENSE
+ HOST_GTEST_DEPENDENCIES = host-python3
+@@ -38,6 +34,7 @@ GTEST_CONF_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+ endif
  
-+comment "gmock needs host gcc >= 4.9"
-+	depends on !BR2_HOST_GCC_AT_LEAST_4_9
-+
- endif # BR2_PACKAGE_GTEST
- 
- comment "gtest needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
+ ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
++GTEST_DEPENDENCIES += host-gtest
+ GTEST_CONF_OPTS += -DBUILD_GMOCK=ON
+ else
+ GTEST_CONF_OPTS += -DBUILD_GMOCK=OFF
 -- 
 2.35.1
 
