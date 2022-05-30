@@ -1,46 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25E84C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C923AC43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:17:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D300A84005;
-	Tue,  7 Jun 2022 19:17:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6484560F07;
+	Tue,  7 Jun 2022 19:17:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EDDMdJkGm7_H; Tue,  7 Jun 2022 19:17:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CJNlKmM0-YEr; Tue,  7 Jun 2022 19:17:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E323F83F6F;
-	Tue,  7 Jun 2022 19:17:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A45641BF9B4
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6AF2660E9C;
+	Tue,  7 Jun 2022 19:17:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 04E991BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9419883E6F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 638C340640
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B6afLwuZ7rOp for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EdPxyGLwHd28 for <buildroot@lists.busybox.net>;
  Tue,  7 Jun 2022 19:16:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8CCB83E62
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97600402F5
  for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DBD8E86E21; Tue,  7 Jun 2022 19:04:55 +0000 (UTC)
+ id 892E7869E1; Tue,  7 Jun 2022 19:04:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 30 May 2022 21:46:18 +0200
+Date: Mon, 30 May 2022 20:47:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8131ef6554aa34b388de33b6e340b125620c0c78
-X-Git-Newrev: 53a23c3e5e286fb91ced437292792ecdd73a6324
+X-Git-Oldrev: 727ca56d1426171052ccdc39e33dd72adbbbe1cf
+X-Git-Newrev: 75301bf98821ccea20e38abeef41a15f0462be04
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190455.DBD8E86E21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imx6-sabresd: bump U-Boot and
- kernel
+Message-Id: <20220607190455.892E7869E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libstrophe: bump to version 0.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,68 +54,115 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6844221567215203311=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53a23c3e5e286fb91ced437292792ecdd73a6324
+--===============6844221567215203311==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=75301bf98821ccea20e38abeef41a15f0462be04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump U-Boot to 2022.04 and kernel to 5.15.41 version.
+It requires a patch to fix a build issue, which has been submitted
+upstream.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/imx6-sabresd_defconfig     | 4 ++--
- configs/imx6-sabresd_qt5_defconfig | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libstrophe/0001-fix-ssize_t.patch | 49 +++++++++++++++++++++++++++++++
+ package/libstrophe/libstrophe.hash        |  2 +-
+ package/libstrophe/libstrophe.mk          |  2 +-
+ 3 files changed, 51 insertions(+), 2 deletions(-)
 
-diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
-index 19986f2cbb..c237c2dc7c 100644
---- a/configs/imx6-sabresd_defconfig
-+++ b/configs/imx6-sabresd_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -33,7 +33,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.41"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index 38a86131dd..d962ac6897 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -30,7 +30,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.41"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/package/libstrophe/0001-fix-ssize_t.patch b/package/libstrophe/0001-fix-ssize_t.patch
+new file mode 100644
+index 0000000000..39b456de57
+--- /dev/null
++++ b/package/libstrophe/0001-fix-ssize_t.patch
+@@ -0,0 +1,49 @@
++From f31ef9c35c9bba831510777d551c4179295b208f Mon Sep 17 00:00:00 2001
++From: Michael Vetter <jubalh@iodoru.org>
++Date: Mon, 30 May 2022 14:47:44 +0200
++Subject: [PATCH] Include sys/types.h for ssize_t
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++When compiling on buildroot I get:
++`src/tls.c:235:28: error: ‘ssize_t’ undeclared (first use in this
++function); did you mean ‘size_t’? `
++
++To have this POSIX type available we will need to include
++`sys/types.h` on Linux. Unsure about other systems.
++
++Upstream: https://github.com/strophe/libstrophe/pull/207
++Signed-off-by: Michael Vetter <jubalh@iodoru.org>
++---
++ src/rand.c | 1 +
++ src/tls.c  | 4 ++++
++ 2 files changed, 5 insertions(+)
++
++diff --git a/src/rand.c b/src/rand.c
++index 061e85ee..25e4614a 100644
++--- a/src/rand.c
+++++ b/src/rand.c
++@@ -28,6 +28,7 @@
++ #if __GLIBC_PREREQ(2, 25)
++ #define USE_GETRANDOM
++ #include <sys/random.h>
+++#include <sys/types.h>
++ #include <errno.h>
++ #endif
++ #endif
++diff --git a/src/tls.c b/src/tls.c
++index 17d85dda..54746baa 100644
++--- a/src/tls.c
+++++ b/src/tls.c
++@@ -21,6 +21,10 @@
++ #include <stdarg.h>
++ #include <string.h>
++ 
+++#if defined(__linux__)
+++#include <sys/types.h>
+++#endif
+++
++ #include "strophe.h"
++ 
++ #include "common.h"
+diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
+index 9551b191c6..66ff0e7e7e 100644
+--- a/package/libstrophe/libstrophe.hash
++++ b/package/libstrophe/libstrophe.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  feafee545403d26a44aa573d4adf327d6d07ad3f3466370634d22bbac5bd49ee  libstrophe-0.11.0.tar.xz
++sha256  8e44acb26018816f9856626bd5ff924a36cc612d2b3747ee634d626326b72df7  libstrophe-0.12.0.tar.xz
+ sha256  82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+index 04ba0a69d0..f48d073770 100644
+--- a/package/libstrophe/libstrophe.mk
++++ b/package/libstrophe/libstrophe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSTROPHE_VERSION = 0.11.0
++LIBSTROPHE_VERSION = 0.12.0
+ LIBSTROPHE_SOURCE = libstrophe-$(LIBSTROPHE_VERSION).tar.xz
+ LIBSTROPHE_SITE = https://github.com/strophe/libstrophe/releases/download/$(LIBSTROPHE_VERSION)
+ LIBSTROPHE_DEPENDENCIES = host-pkgconf
+
+--===============6844221567215203311==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6844221567215203311==--
