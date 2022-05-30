@@ -1,66 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25A71C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 21:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F36F8C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 21:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DFA0883ECA;
-	Mon, 30 May 2022 21:47:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACFD540C14;
+	Mon, 30 May 2022 21:56:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id naxeqyP4I2ql; Mon, 30 May 2022 21:47:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x0_ZbIA_DrMR; Mon, 30 May 2022 21:56:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E3D2C83E89;
-	Mon, 30 May 2022 21:47:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A337F403E5;
+	Mon, 30 May 2022 21:56:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B7A7E1BF276
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:47:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D0B081BF276
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A54E141A21
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:47:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD39741A62
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:56:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
+ dkim=pass (2048-bit key) header.d=igalia.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q8xWWIw_Exd9 for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 21:46:59 +0000 (UTC)
+ with ESMTP id cEBz9C1B_-Yw for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 21:56:41 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 809EB41A09
- for <buildroot@buildroot.org>; Mon, 30 May 2022 21:46:59 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:f587:e70b:15ff:66a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 32AA45FF33;
- Mon, 30 May 2022 23:46:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1653947216;
- bh=A1ZaaFB3D9i+d8WdQ0gKr27pVr29U3slukVHZW8QLp0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Hv457S6n7xgTLKYTMlqLdz72+p6ZIK24wFk6dhWLT7Jd38YHTkbSBiVPvHLKOawpR
- ZWPRvkRQG2bhI8uAxAhVXU+HmDYiEW5RjQTimOKqnMlKTv7Lb/H31ORV2ElfgXhAw1
- oOCqPhmliRblIo5PRPHfKTIBomHrfOzJrB/NVTP8gWjnkz+zDYR11TFixNt384GZIt
- Lcbh4i55hNji+CDJ0Rpv8WRgboGj0zHg7yHxZXcI1Ur5C9IzJDzsHdqalQAUt+gZSS
- msGTCSBBSbFmpLd+wI9RLGiE1WJd15eePehPyDEfaneKMW4ZVq6CPfqthuJrZ5ezEZ
- +QbQCMRctfVEA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 30 May 2022 23:46:53 +0200
-Date: Mon, 30 May 2022 23:46:53 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20220530214653.GC1390376@scaer>
-References: <YggrcBOVfufdvm8G@waldemar-brodkorb.de>
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 25D2E41A21
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 21:56:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
+ s=20170329;
+ h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=HFjg0nCo0Wgq+3C/PQ8W9PXydtHZU1I6nS3xvvLp0Hs=; b=o6QoJTwNdjURwe9UfUBsGbvApE
+ lsiUAx+VFt9u5DW+KAD/9VqslyH/08kFovhfudnOq3fc48+M2QdbXRBeiWxzdxaYKohYOf/NuugP6
+ 1+01tIvOvD6nWXISBS8JNxIV9vmWPtg28js0+L2RbB8KD86VHTiQ5gfuOnaCiBj1XwE79OODehmyZ
+ NNVmuNRYy7uITFhchk116iA9zpXxxciegEk2Jp+YteEgYrW5SL/rPGk9S5UfIbortQCyn0EyjqYon
+ Em0zS67AKX1mp9Q79fRGSbZtNvk9dz9+0T5VojIJz9Vo08+AaRkuUDMjG703lYq7KqRAC62R9o3Zm
+ ZU0ws+qg==;
+Received: from 91-153-34-181.elisa-laajakaista.fi ([91.153.34.181] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1nvnNO-005yd2-BE; Mon, 30 May 2022 23:56:38 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 07d24e54;
+ Mon, 30 May 2022 21:56:27 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: buildroot@buildroot.org
+Date: Tue, 31 May 2022 00:56:27 +0300
+Message-Id: <20220530215627.1441783-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <YggrcBOVfufdvm8G@waldemar-brodkorb.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] board/qemu/ppc-bamboo: use path to vmlinux
- image for copy and paste users
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to version
+ 2.36.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,56 +72,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Waldemar, All,
+Bugfix release, mostly with build fixes, media playback improvements,
+an important fix for when using threaded rendering, and security patches
+for CVE-2022-26700, CVE-2022-26709, CVE-2022-26717, CVE-2022-26716, and
+CVE-2022-26719.
 
-On 2022-02-12 22:49 +0100, Waldemar Brodkorb spake thusly:
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  board/qemu/ppc-bamboo/readme.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/board/qemu/ppc-bamboo/readme.txt b/board/qemu/ppc-bamboo/readme.txt
-> index 0b70d2fa54..53d1970698 100644
-> --- a/board/qemu/ppc-bamboo/readme.txt
-> +++ b/board/qemu/ppc-bamboo/readme.txt
-> @@ -1,5 +1,5 @@
->  Run the emulation with:
->  
-> -qemu-system-ppc -nographic -M bamboo -kernel vmlinux -net nic,model=virtio-net-pci -net user # qemu_ppc_bamboo_defconfig
-> +qemu-system-ppc -nographic -M bamboo -kernel output/images/vmlinux -net nic,model=virtio-net-pci -net user # qemu_ppc_bamboo_defconfig
+Release notes:
 
-Since the correponding defconfig does build host-qemu, it would have
-made sense that the path to qemu-system-ppc also had been changed to
-output/host/bin/qemu-system-ppc, but I see that other readmes do not
-use that either...
+  https://wpewebkit.org/release/wpewebkit-2.36.2.html
+  https://wpewebkit.org/release/wpewebkit-2.36.3.html
 
-Applied to master, thanks.
+Accompanying security advisory:
 
-Regards,
-Yann E. MORIN.
+  https://wpewebkit.org/security/WSA-2022-0005.html
 
->  The login prompt will appear in the terminal that started Qemu.
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+This also imports a build fix which has not made it into the release.
 
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...en-cross-building-for-64-bit-ARM-htt.patch | 32 +++++++++++++++++++
+ package/wpewebkit/wpewebkit.hash              |  8 ++---
+ package/wpewebkit/wpewebkit.mk                |  2 +-
+ 3 files changed, 37 insertions(+), 5 deletions(-)
+ create mode 100644 package/wpewebkit/0001-Build-failure-when-cross-building-for-64-bit-ARM-htt.patch
+
+diff --git a/package/wpewebkit/0001-Build-failure-when-cross-building-for-64-bit-ARM-htt.patch b/package/wpewebkit/0001-Build-failure-when-cross-building-for-64-bit-ARM-htt.patch
+new file mode 100644
+index 0000000000..7c9c8666ad
+--- /dev/null
++++ b/package/wpewebkit/0001-Build-failure-when-cross-building-for-64-bit-ARM-htt.patch
+@@ -0,0 +1,32 @@
++From b0c63502f004db68b485354967bb1c56c071f4eb Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Tue, 31 May 2022 00:48:21 +0300
++Subject: [PATCH] Build failure when cross-building for 64-bit ARM
++ https://bugs.webkit.org/show_bug.cgi?id=241109
++
++Unreviewed build fix.
++
++* Source/WebCore/bindings/js/JSDOMMapLike.cpp: Add missing
++  JavaScriptCore/HashMapImplInlines.h header inclusion.
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Upstream status: https://github.com/WebKit/WebKit/pull/1165
++---
++ Source/WebCore/bindings/js/JSDOMMapLike.cpp | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/Source/WebCore/bindings/js/JSDOMMapLike.cpp b/Source/WebCore/bindings/js/JSDOMMapLike.cpp
++index e132c39fa54..2cb4b1b59a3 100644
++--- a/Source/WebCore/bindings/js/JSDOMMapLike.cpp
+++++ b/Source/WebCore/bindings/js/JSDOMMapLike.cpp
++@@ -28,6 +28,7 @@
++ 
++ #include "WebCoreJSClientData.h"
++ #include <JavaScriptCore/CatchScope.h>
+++#include <JavaScriptCore/HashMapImplInlines.h>
++ #include <JavaScriptCore/JSMap.h>
++ #include <JavaScriptCore/VMTrapsInlines.h>
++ 
++-- 
++2.36.1
++
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 3923c32111..253b4756d0 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.36.1.tar.xz.sums
+-md5  7ba1c7fd0f67891ad137d11cac12f7a9  wpewebkit-2.36.1.tar.xz
+-sha1  0918a4daded01f42e65ec02a69f21cd6705311db  wpewebkit-2.36.1.tar.xz
+-sha256  ec83d8b2f8c3479ce9950d69440f3b9876ab70200fe6f4e07686054a0cba5723  wpewebkit-2.36.1.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.36.3.tar.xz.sums
++md5  8bc53f86a3489da31fdbb581e1b87f7a  wpewebkit-2.36.3.tar.xz
++sha1  44a3d99ae48481917ddc478c5f91e6a4faa21ff5  wpewebkit-2.36.3.tar.xz
++sha256  66275debca7497daff3a7826734cd56262a807adb76c5dccdf257c89968c2fc8  wpewebkit-2.36.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 9c9a9a2838..abd09829a5 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEWEBKIT_VERSION = 2.36.1
++WPEWEBKIT_VERSION = 2.36.3
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.36.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
