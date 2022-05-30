@@ -1,54 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0842CC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 15:47:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B51AEC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 15:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B296540A9C;
-	Mon, 30 May 2022 15:47:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 67DAC83F94;
+	Mon, 30 May 2022 15:47:42 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5-q_LGncdsPq; Mon, 30 May 2022 15:47:41 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6BBFE83EBB;
+	Mon, 30 May 2022 15:47:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DDD7A1BF2E5
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 15:47:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9CF240AE5
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 15:47:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xbk7lnInrlFt; Mon, 30 May 2022 15:47:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C9F7540A87;
-	Mon, 30 May 2022 15:47:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D61FD1BF2E5
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 15:47:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C534C611CF
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 15:47:15 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pcHUZt_Pmbqq for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 15:47:14 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 52B5A611A9
- for <buildroot@buildroot.org>; Mon, 30 May 2022 15:47:14 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 422BD60018;
- Mon, 30 May 2022 15:47:12 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nvhbr-006cb7-AQ; Mon, 30 May 2022 17:47:11 +0200
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0ERtlx_ayIRV for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 15:47:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 384E140A90
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 15:47:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id C0D3086710; Mon, 30 May 2022 15:36:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220529194249.2391681-1-fontaine.fabrice@gmail.com>
- <87o7zf3two.fsf@dell.be.48ers.dk>
-Date: Mon, 30 May 2022 17:47:11 +0200
-In-Reply-To: <87o7zf3two.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 30 May 2022 17:46:31 +0200")
-Message-ID: <87fskr3tvk.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/janet: security bump to version
+To: buildroot@buildroot.org
+Date: Mon, 30 May 2022 17:46:00 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bd447bb88c1012d80b6ce0a43539d442c9acc922
+X-Git-Newrev: 228a92f6bd90552424a3b7cf6b105e0ffdd1af3b
+X-Patchwork-Hint: ignore
+Message-Id: <20220530153605.C0D3086710@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/janet: security bump to version
  1.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -61,27 +53,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=228a92f6bd90552424a3b7cf6b105e0ffdd1af3b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
- >> Fix CVE-2022-30763: Janet before 1.22.0 mishandles arrays.
- >> https://github.com/janet-lang/janet/releases/tag/v1.22.0
- >> https://blog.convisoappsec.com/en/bug-hunting-in-the-janet-language-interpreter
+Fix CVE-2022-30763: Janet before 1.22.0 mishandles arrays.
 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://github.com/janet-lang/janet/releases/tag/v1.22.0
+https://blog.convisoappsec.com/en/bug-hunting-in-the-janet-language-interpreter
 
- > Committed to 2022.02.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/janet/janet.hash | 2 +-
+ package/janet/janet.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sorry, I meant to master.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/janet/janet.hash b/package/janet/janet.hash
+index aff8e95bb5..a93129cfa5 100644
+--- a/package/janet/janet.hash
++++ b/package/janet/janet.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  52db8d18f93351256d0731810e8bea95516db8142f51eeb31664f7884bf63088  janet-1.21.2.tar.gz
++sha256  7c6969f8e82badc7afa28aa1054555c1c91d2858f9f45c41a82557f5c5ce85bd  janet-1.22.0.tar.gz
+ 
+ # Locally calculated
+ sha256  e2d2ae8360d95386af751ac7d1a3da36ea8ceb230e5f0eba7eb762547b1c58c9  LICENSE
+diff --git a/package/janet/janet.mk b/package/janet/janet.mk
+index 24a0f86032..ad09d47c6a 100644
+--- a/package/janet/janet.mk
++++ b/package/janet/janet.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANET_VERSION = 1.21.2
++JANET_VERSION = 1.22.0
+ JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
+ JANET_LICENSE = MIT
+ JANET_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
