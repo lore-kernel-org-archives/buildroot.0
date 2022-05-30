@@ -1,63 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C372C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:54:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9BC8C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49D4C6115A;
-	Mon, 30 May 2022 20:54:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CBB04187B;
+	Mon, 30 May 2022 20:55:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jdi_LFHosl_V; Mon, 30 May 2022 20:54:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HrMn8MJJDOZn; Mon, 30 May 2022 20:55:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D7F460AF6;
-	Mon, 30 May 2022 20:54:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E7AC61BF31A
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:54:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4321741706;
+	Mon, 30 May 2022 20:55:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BF311BF31A
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E444840AEF
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:54:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18B7441706
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:55:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cQBfcIgjeVZN for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 20:54:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C536740C88
- for <buildroot@buildroot.org>; Mon, 30 May 2022 20:54:29 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D5AE01BF204;
- Mon, 30 May 2022 20:54:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1653944068;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=WIJ9odUWEAM9eTIr0KLJ5ZWVMgA3Xi9cXg7bvSLuO/E=;
- b=c9sgh/deT9WrUm+E6K/ALnJ2fc6WUhhb2dkc9l0aIdCMAOv/sQi1SLRcruQLKggBENM2Yy
- xz6RnOEubEWuf672ZJ+lhkKSaeV05WZHWAyaN8fCWLFFgjEq1Tl0uBbGl5lcFh0NkkAf3m
- dqA0AM5fr7Uj3euZ+6qpCvL+bK/6L19aCIvqXCz+VL5HIFLDbky/wDOGbOhewmDWgYe37T
- VGWF0GYp4K7A8Lwk1yJPAhcsjnt4BzfwSs2l2Ks+aDpnkXXC5GcsF3UTc2LHHdTDtnoCZ5
- KpaqfV0xFMNds2MaAHzdNLATo7SGrbsFRhjyq94uxsv4FnP71LVlFz4juqg9mg==
-Date: Mon, 30 May 2022 22:54:27 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20220530225427.1a0ba6dc@windsurf>
-In-Reply-To: <20220522194732.2962580-1-peter@korsgaard.com>
-References: <20220522194732.2962580-1-peter@korsgaard.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/ruby: security bump to version 3.1.2
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kJpW8J4eAMPW for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 20:55:38 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1A07A41702
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 20:55:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 26CB486803; Mon, 30 May 2022 20:44:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 30 May 2022 22:54:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: db14515e879e550fde617e2baa24c40f4694ecb8
+X-Git-Newrev: da66811e8e4afe205d0b45f332dea033648e986a
+X-Patchwork-Hint: ignore
+Message-Id: <20220530204404.26CB486803@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vim: security bump to version
+ 8.2.4980
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,36 +54,66 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 22 May 2022 21:47:32 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=da66811e8e4afe205d0b45f332dea033648e986a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes the following security issues:
-> 
-> - CVE-2022-28738: Double free in Regexp compilation
-> - CVE-2022-28739: Buffer overrun in String-to-Float conversion
-> 
-> For more details, see the announcement:
-> https://www.ruby-lang.org/en/news/2022/04/12/ruby-3-1-2-released/
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/ruby/ruby.hash | 5 +++--
->  package/ruby/ruby.mk   | 2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
+Fix CVE-2022-1619: Heap-based Buffer Overflow in function
+cmdline_erase_chars in GitHub repository vim/vim prior to 8.2.4899. This
+vulnerabilities are capable of crashing software, modify memory, and
+possible remote execution
 
-Applied to master, thanks.
+Fix CVE-2022-1620: NULL Pointer Dereference in function
+vim_regexec_string at regexp.c:2729 in GitHub repository vim/vim prior
+to 8.2.4901. NULL Pointer Dereference in function vim_regexec_string at
+regexp.c:2729 allows attackers to cause a denial of service (application
+crash) via a crafted input.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fix CVE-2022-1621: Heap buffer overflow in vim_strncpy find_word in
+GitHub repository vim/vim prior to 8.2.4919. This vulnerability is
+capable of crashing software, Bypass Protection Mechanism, Modify
+Memory, and possible remote execution
+
+Fix CVE-2022-1629: Buffer Over-read in function find_next_quote in
+GitHub repository vim/vim prior to 8.2.4925. This vulnerabilities are
+capable of crashing software, Modify Memory, and possible remote
+execution
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 1cd0de9991..9d61d6fc87 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  f2755fca3b2f47052166dd601a38411b9adbeca0d43885194db8ada4d1a171a3  vim-8.2.4843.tar.gz
++sha256  5606a3c62dba038f4c4f2eddb305ffccbae58a7bfd569bdb8100f524564c8a32  vim-8.2.4980.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index be96a08d09..9e70360b90 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = 8.2.4843
++VIM_VERSION = 8.2.4980
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
