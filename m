@@ -1,61 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17A9BC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:27:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD33FC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:27:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD02683EB0;
-	Mon, 30 May 2022 20:27:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63CA040AD3;
+	Mon, 30 May 2022 20:27:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id umL0klF9uL3L; Mon, 30 May 2022 20:27:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HA5fSCNyjNbd; Mon, 30 May 2022 20:27:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D200C83EA5;
-	Mon, 30 May 2022 20:26:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6DE3C40AEF;
+	Mon, 30 May 2022 20:27:19 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7F2661BF31A
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:26:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 74F371BF31A
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:27:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7C39F83E74
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:26:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 72B6083EC2
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:27:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6V3nBe7jbsHq for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 20:26:55 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 83B3883E6D
- for <buildroot@buildroot.org>; Mon, 30 May 2022 20:26:55 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C40F0100004;
- Mon, 30 May 2022 20:26:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1653942414;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=i9BSV7fHaVq7UIQVlS23MmezMie47WP+5366YmjYa/U=;
- b=IOvoAee45Eb3yX5w02SCeXoLBBRK0N7juigQGs1UJ2bkauZsYpT1YpvUqWE+MXkfiTRLbR
- bZS2LC22rT3+UfTWOBloJJuNb2h2oaG5o232D1KWDpLtDzlEViu6HhYQayogghYbM+2+/W
- 9DjbHhFaH1uWN0eEpm5r6D/E+3b4jLYWrMDAsKgE/Nzkgdjprq6vtNW/6RZqZog+NfG+tN
- 7CKVDwSdEw5DE/jifhlJ8nWYNRVxv6/dpVRYbmdZDT0naEa2lSflmyzGna6swM1Xmy1gRy
- NeuzqHP3+48qVqyhU4P6j4Zuk4f0Sbn3hoteu9hDhaTwi7yk/9MJQ8NdyP7Miw==
-Date: Mon, 30 May 2022 22:26:52 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220530222652.63022cd9@windsurf>
-In-Reply-To: <20220526221711.731246-1-fontaine.fabrice@gmail.com>
-References: <20220526221711.731246-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/fbv: renumber patches
+ with ESMTP id cjb9K-Djo5do for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 20:27:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B197283EC1
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 20:27:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id CAD7C867BE; Mon, 30 May 2022 20:15:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 30 May 2022 22:27:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9eeb5cd96dcfb6b579eb745ee5f7e76fcdc51251
+X-Git-Newrev: bc469ee6329555284b2fe9162597917122fbbe3a
+X-Patchwork-Hint: ignore
+Message-Id: <20220530201543.CAD7C867BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rsyslog: security bump to version
+ 8.2204.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,42 +54,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 27 May 2022 00:17:10 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bc469ee6329555284b2fe9162597917122fbbe3a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Commit 9863553fe8fa16a4d19f652b409a44bb58ef5567 forgot to renumber
-> patches
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/fbv/{0002-cross.patch => 0001-cross.patch}                | 0
->  ...ig-endian.patch => 0002-fix-24bpp-support-on-big-endian.patch} | 0
->  package/fbv/{0004-fix-bgr555.patch => 0003-fix-bgr555.patch}      | 0
->  package/fbv/{0005-giflib.patch => 0004-giflib.patch}              | 0
->  package/fbv/{0006-include.patch => 0005-include.patch}            | 0
->  package/fbv/{0007-libpng15.patch => 0006-libpng15.patch}          | 0
->  6 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/fbv/{0002-cross.patch => 0001-cross.patch} (100%)
->  rename package/fbv/{0003-fix-24bpp-support-on-big-endian.patch => 0002-fix-24bpp-support-on-big-endian.patch} (100%)
->  rename package/fbv/{0004-fix-bgr555.patch => 0003-fix-bgr555.patch} (100%)
->  rename package/fbv/{0005-giflib.patch => 0004-giflib.patch} (100%)
->  rename package/fbv/{0006-include.patch => 0005-include.patch} (100%)
->  rename package/fbv/{0007-libpng15.patch => 0006-libpng15.patch} (100%)
+Fix CVE-2022-24903: Modules for TCP syslog reception have a heap buffer
+overflow when octet-counted framing is used. The attacker can corrupt
+heap values, leading to data integrity issues and availability impact.
+Remote code execution is unlikely to happen but not impossible.
 
-Both applied to master, thanks. I don't know if we should really
-continue to support such old unmaintained packages, though :-/
+https://github.com/rsyslog/rsyslog/security/advisories/GHSA-ggw7-xr6h-mmr8#advisory-comment-72243
+https://github.com/rsyslog/rsyslog/blob/v8.2204.1/ChangeLog
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rsyslog/rsyslog.hash | 2 +-
+ package/rsyslog/rsyslog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index f404098439..4049590bb8 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,5 +1,5 @@
+ # From http://www.rsyslog.com/downloads/download-v8-stable/
+-sha256  19b232f765c4ba7a35b91ef1f5f9af775f6ff78ef56bb7737a2ce79ccbb32b98  rsyslog-8.2010.0.tar.gz
++sha256  a6d731e46ad3d64f6ad4b19bbf1bf56ca4760a44a24bb96823189dc2e71f7028  rsyslog-8.2204.1.tar.gz
+ 
+ # Locally calculated
+ sha256  054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083  COPYING
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index afd1a5557e..ec0d405dc7 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RSYSLOG_VERSION = 8.2010.0
++RSYSLOG_VERSION = 8.2204.1
+ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+ RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
