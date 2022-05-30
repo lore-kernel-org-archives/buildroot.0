@@ -1,82 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 195ADC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:50:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE277C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:52:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC9E661186;
-	Mon, 30 May 2022 20:50:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C8E7831C1;
+	Mon, 30 May 2022 20:52:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KUWs_L4qnaB7; Mon, 30 May 2022 20:50:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oCrebttVJME2; Mon, 30 May 2022 20:52:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6B6960E26;
-	Mon, 30 May 2022 20:50:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF85381A6A;
+	Mon, 30 May 2022 20:52:45 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4FF581BF31A
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:49:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9C29A1BF31A
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:52:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4C87160F81
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:49:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 922926121B
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:52:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vM1J4Ey3q6Uc for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 20:49:55 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 878CB60AF6
- for <buildroot@buildroot.org>; Mon, 30 May 2022 20:49:55 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id z17so7013069wmf.1
- for <buildroot@buildroot.org>; Mon, 30 May 2022 13:49:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=tMO7zpFBjJ4ZPG3G99Lv1cPejkOA4eMfcsPISYtJLTA=;
- b=BJfstGM+dPONsYNAcet4zgwlAd0LbVLGV9YR0NECy1Cy5Z5l0A4rEFH6jfwo8tR8Lo
- kKPAVvx+mBsq8bKq6+AoDcay0fue5qy9Ttzs9frg8a2qqn3YyjEAcj5Iew0R2qQAvH1j
- a1kU6ikum8c5i/MqEffzqodUw6Rh+OrJWJTzJ0qsB4+OOORjlvnTquFzYrpksgNQZp71
- pxz3/Jw6eWDb/LhkX+y1hdKJhl33UlwBi7XeBZa5HAHuejq5drT30BvarLH8v0BeRaug
- UC0iZG21EMJiOdVkpZ2Ekm8zwp6DrRN1tx5Hv0F/tA5AYIl/hmHiulpdD+uQRLF8p8qs
- hCtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=tMO7zpFBjJ4ZPG3G99Lv1cPejkOA4eMfcsPISYtJLTA=;
- b=WClUE50HSYlQwHzv+qNGC7ubxCTahZ9wCCLxKCNO7WDG5XKvDn3xZM15FQDqB430kr
- PZ0vVvtyPUXXgYIw0czcP+HTQQMGvQgyAwoUBDm7Jj5fm/B27X54UsVLx8xgShPx2Kd8
- AKUqmQl18fqlZFFbyECHpLtInphAuDzIaBvx/nQEmaNBT47Z6mBrfgMU6kaWgmdQ71Vr
- CW7Mi7pAzDDIy+PQUx71BM1CnfX1A9cUFc6lNiGDCct4Ayfu8ed3NRaST9sqBTvLqpXE
- 90xyAJ24kEeJB1yAL5Yk+MnZJu3K5ASsK42N5WPQ2HuxeVGTK65w7gL/VwG5vRh1PNxd
- onaw==
-X-Gm-Message-State: AOAM532ojlzfTTEdP2wzD5usucoeNzyDCEqcOqzUrzoSd9zeCmJxRvQG
- 9FIr1fiRV/h1pHS7BzxkZtUMlm1aqK4=
-X-Google-Smtp-Source: ABdhPJwgAcTqPLOEvqfM+KMWWOu8Q4yGIP52X1wGmq4KtDtiuBoJj0bvZ+lnkY+HqXsyHIyyXh+SwQ==
-X-Received: by 2002:a05:600c:358e:b0:397:7042:17a with SMTP id
- p14-20020a05600c358e00b003977042017amr21172382wmq.4.1653943793492; 
- Mon, 30 May 2022 13:49:53 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- x10-20020adfdcca000000b002102baa2370sm6052404wrm.100.2022.05.30.13.49.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 30 May 2022 13:49:53 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id Zr-OBHlxHVz3 for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 20:52:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF48A60AE8
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 20:52:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id EE98B867EF; Mon, 30 May 2022 20:41:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 30 May 2022 22:47:16 +0200
-Message-Id: <20220530204716.3054785-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530204716.3054785-1-fontaine.fabrice@gmail.com>
-References: <20220530204716.3054785-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/gtest: merge
- BR2_PACKAGE_GTEST_GMOCK blocks
+Date: Mon, 30 May 2022 22:40:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7564f1de067e9e3cf0aa2662cab79b9834b54ff1
+X-Git-Newrev: db14515e879e550fde617e2baa24c40f4694ecb8
+X-Patchwork-Hint: ignore
+Message-Id: <20220530204109.EE98B867EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ruby: security bump to version
+ 3.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,48 +52,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stephan Hoffmann <sho@relinux.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since commit 6a9c6311f8fd4464b5555773589f587338f694a0, two
-BR2_PACKAGE_GTEST_GMOCK blocks are used instead of one which is a little
-bit unusual
+commit: https://git.buildroot.net/buildroot/commit/?id=db14515e879e550fde617e2baa24c40f4694ecb8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes the following security issues:
+
+- CVE-2022-28738: Double free in Regexp compilation
+- CVE-2022-28739: Buffer overrun in String-to-Float conversion
+
+For more details, see the announcement:
+https://www.ruby-lang.org/en/news/2022/04/12/ruby-3-1-2-released/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Tested-By: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gtest/gtest.mk | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ package/ruby/ruby.hash | 5 +++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index e7ce89a3f4..8ec5e9c535 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
-@@ -13,10 +13,6 @@ GTEST_LICENSE_FILES = LICENSE
- GTEST_CPE_ID_VENDOR = google
- GTEST_CPE_ID_PRODUCT = google_test
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 90e7627a97..da6221ec50 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,6 @@
+-# https://www.ruby-lang.org/en/news/2021/12/25/ruby-3-1-0-released/
+-sha512  a2bb6b5e62d5fa06dd9c30cf84ddcb2c27cb87fbaaffd2309a44391a6b110e1dde6b7b0d8c659b56387ee3c9b4264003f3532d5a374123a7c187ebba9293f320  ruby-3.1.0.tar.xz
++# https://www.ruby-lang.org/en/news/2022/04/12/ruby-3-1-2-released/
++sha512  4a74e9efc6ea4b3eff4fec7534eb1fff4794d021531defc2e9937e53c6668db8ecdc0fff2bc23d5e6602d0df344a2caa85b31c5414309541e3d5313ec82b6e21  ruby-3.1.2.tar.xz
++
+ # License files, Locally calculated
+ sha256  794c384f94396ab07e3e6f53a9f8be093facb7eb4193266024302b93b29e12dc  LEGAL
+ sha256  967586d538a28955ec2541910cf63c5ac345fcdea94bfb1f1705a1f6eb36bcbb  COPYING
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 4f3b94f83b..cbdfa4b826 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
--GTEST_DEPENDENCIES += host-gtest
--endif
--
- HOST_GTEST_LICENSE = Apache-2.0
- HOST_GTEST_LICENSE_FILES = googlemock/scripts/generator/LICENSE
- HOST_GTEST_DEPENDENCIES = host-python3
-@@ -38,6 +34,7 @@ GTEST_CONF_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
- endif
- 
- ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
-+GTEST_DEPENDENCIES += host-gtest
- GTEST_CONF_OPTS += -DBUILD_GMOCK=ON
- else
- GTEST_CONF_OPTS += -DBUILD_GMOCK=OFF
--- 
-2.35.1
-
+ RUBY_VERSION_MAJOR = 3.1
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).0
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
+ RUBY_VERSION_EXT = 3.1.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
