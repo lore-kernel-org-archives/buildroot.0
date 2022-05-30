@@ -4,42 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CADC9C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:58:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FA22C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:58:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8BF6840C93;
-	Mon, 30 May 2022 20:58:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2471B40C9B;
+	Mon, 30 May 2022 20:58:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QjzWtRAUDsPQ; Mon, 30 May 2022 20:58:30 +0000 (UTC)
+	with ESMTP id D_XUVLIaWTIT; Mon, 30 May 2022 20:58:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9EA0940C97;
-	Mon, 30 May 2022 20:58:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C55E01BF31A
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:58:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 503BA40C88;
+	Mon, 30 May 2022 20:58:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EA00C1BF31A
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:58:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3C1C4170D
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:58:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D82C140C88
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:58:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cc1zS0Hsnz_u for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 20:58:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6BC84170A
- for <buildroot@buildroot.org>; Mon, 30 May 2022 20:58:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C94FC86813; Mon, 30 May 2022 20:46:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 30 May 2022 22:58:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 858a7fe4e59ae43b6c83d203ca6591c444618eff
-X-Git-Newrev: 07cc32898b6ed0699db8d993b7334c3b1170e5de
-X-Patchwork-Hint: ignore
-Message-Id: <20220530204653.C94FC86813@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/boost: fix boost-log build
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xSf93Jrjj12M for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 20:58:48 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BCFAA40AEF
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 20:58:47 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BC64EC0006;
+ Mon, 30 May 2022 20:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1653944325;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=zt8oFDGPVHgThXEPZ+W2AljmPgl+zAFO44AvsI3SVUQ=;
+ b=CIk2ODOBvC0WMuEFi74hV+C9qomXnEVN7Km1fnt3oIwS2pp5/8Xx2zqfOKl7fFo51BVoqd
+ BjEMEDXvCLzgK8ZjQoSQTOeNwYnJFYC+q1TTZbWrgDLNjO34OO5nsxyd3/udDVKFvFh55C
+ nXj/jj5HMd4j1Naq7ssLAMaRHvHla38QjF1r5R899Js9HHU+7J+tsobRLGO+eUc06QYUU/
+ w9IUkzjL5t1UKiCt0mOo5fW9MzEFj8H0my6DFK04xvYVwhotWmB3eBkzkACFvflY0+aRQx
+ NZj8WG2ek3PUTF+KA04STxZWYfaNa9dZmhH+25YroZ/wnFzyk40Sj6BHO7N68g==
+Date: Mon, 30 May 2022 22:58:44 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220530225844.541fd44c@windsurf>
+In-Reply-To: <20220521122922.207122-1-fontaine.fabrice@gmail.com>
+References: <20220521122922.207122-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/boost: fix boost-log build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,88 +69,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07cc32898b6ed0699db8d993b7334c3b1170e5de
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 21 May 2022 14:29:22 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fix the following build failure with boost-log raised since bump to
-version 1.79.0 in commit 7fa88b8eb637f5ec4927ac1bd05309dea7d60bc9 and
-https://github.com/boostorg/log/commit/3cbc2585c3b7ff5d884a6c337a99525b57fa184b:
+> Fix the following build failure with boost-log raised since bump to
+> version 1.79.0 in commit 7fa88b8eb637f5ec4927ac1bd05309dea7d60bc9 and
+> https://github.com/boostorg/log/commit/3cbc2585c3b7ff5d884a6c337a99525b57fa184b:
+> 
+> error: at libs/log/build/Jamfile.v2:59
+> error: Unable to find file or target named
+> error:     '/boost/architecture//mips'
+> error: referred to from project at
+> error:     'libs/log/build'
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/edcc7c7f3586993a77b6cc06ed02363a42c09a83
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ips1-to-mips-and-alias-mips1-to-mips.patch | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 package/boost/0002-Rename-mips1-to-mips-and-alias-mips1-to-mips.patch
 
-error: at libs/log/build/Jamfile.v2:59
-error: Unable to find file or target named
-error:     '/boost/architecture//mips'
-error: referred to from project at
-error:     'libs/log/build'
+Applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/edcc7c7f3586993a77b6cc06ed02363a42c09a83
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ame-mips1-to-mips-and-alias-mips1-to-mips.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/package/boost/0002-Rename-mips1-to-mips-and-alias-mips1-to-mips.patch b/package/boost/0002-Rename-mips1-to-mips-and-alias-mips1-to-mips.patch
-new file mode 100644
-index 0000000000..cc4ab8a2f8
---- /dev/null
-+++ b/package/boost/0002-Rename-mips1-to-mips-and-alias-mips1-to-mips.patch
-@@ -0,0 +1,48 @@
-+From 1a55d1d9c6d1cf7739645080bdd92fe903b4211e Mon Sep 17 00:00:00 2001
-+From: Nikita Kniazev <nok.raven@gmail.com>
-+Date: Wed, 28 Jul 2021 21:06:54 +0300
-+Subject: [PATCH] Rename mips1 to mips and alias mips1 to mips
-+
-+[Retrieved from:
-+https://github.com/boostorg/config/commit/1a55d1d9c6d1cf7739645080bdd92fe903b4211e]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ checks/architecture/Jamfile.jam             | 3 ++-
-+ checks/architecture/{mips1.cpp => mips.cpp} | 4 ++--
-+ 2 files changed, 4 insertions(+), 3 deletions(-)
-+ rename checks/architecture/{mips1.cpp => mips.cpp} (89%)
-+
-+diff --git a/libs/config/checks/architecture/Jamfile.jam b/libs/config/checks/architecture/Jamfile.jam
-+index 2ba54f9ad..c3779d917 100644
-+--- a/libs/config/checks/architecture/Jamfile.jam
-++++ b/libs/config/checks/architecture/Jamfile.jam
-+@@ -18,7 +18,8 @@ obj 64 : 64.cpp ;
-+ 
-+ obj arm      : arm.cpp ;
-+ obj combined : combined.cpp ;
-+-obj mips1    : mips1.cpp ;
-++obj mips     : mips.cpp ;
-++alias mips1  : mips ; # Backwards compatibility
-+ obj power    : power.cpp ;
-+ obj riscv    : riscv.cpp ;
-+ obj sparc    : sparc.cpp ;
-+diff --git a/libs/config/checks/architecture/mips1.cpp b/libs/config/checks/architecture/mips.cpp
-+similarity index 89%
-+rename from checks/architecture/mips1.cpp
-+rename to checks/architecture/mips.cpp
-+index b4a670b89..85f85583d 100644
-+--- a/libs/config/checks/architecture/mips1.cpp
-++++ b/libs/config/checks/architecture/mips.cpp
-+@@ -1,4 +1,4 @@
-+-// mips1.cpp
-++// mips.cpp
-+ //
-+ // Copyright (c) 2012 Steven Watanabe
-+ //
-+@@ -7,5 +7,5 @@
-+ // http://www.boost.org/LICENSE_1_0.txt)
-+ 
-+ #if !(defined(__mips) || defined(_MIPS_ISA_MIPS1) || defined(_R3000))
-+-#error "Not MIPS1"
-++#error "Not MIPS"
-+ #endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
