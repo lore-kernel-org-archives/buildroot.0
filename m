@@ -1,63 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D3DDC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CADC9C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:58:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D100F82BC4;
-	Mon, 30 May 2022 20:57:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8BF6840C93;
+	Mon, 30 May 2022 20:58:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DsPnelAmSVpx; Mon, 30 May 2022 20:57:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QjzWtRAUDsPQ; Mon, 30 May 2022 20:58:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F310C82730;
-	Mon, 30 May 2022 20:57:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CEB721BF31A
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:56:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9EA0940C97;
+	Mon, 30 May 2022 20:58:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C55E01BF31A
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD86760AE8
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:56:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3C1C4170D
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:58:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1kIt_GVF_GUx for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 20:56:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B25B4607A3
- for <buildroot@buildroot.org>; Mon, 30 May 2022 20:56:57 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8AA9D20008;
- Mon, 30 May 2022 20:56:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1653944215;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=BfqR1a9Ewlfpv7iHBtQ9gT9OYD/wCS52BhkJqr7NyrQ=;
- b=d45QTQiwr+BfSEZX80iYrTVuMy2R0FwT0rYcMMOclt3+fPGpxZhS8z5aDXre6h1qiqaFAZ
- H5efALkLzGYLdkX69CqTZzVDBz/48vXSc/dSoddIzWavRsLZQEpqxuB1HI8e+5kffDcZ4j
- GB84Q7yPPjHKa4D0VgZp+A+NalbIxgErtpkTzbW4ubNbg+k9A2Z2yjkGo0kO5pMCQ+yfDg
- WJltPXr45VBsEcw4fAO/Xo09kVCa4+bK1pI/Apq4rMDnLB26vIPmVSXIZxVT/COjzxXQyn
- kG65ipCyqR7LZ9pTGKMVvU76JqnOXsxAQAJ/FAc5rZob2Kubvd4rIzJZ32Jzdw==
-Date: Mon, 30 May 2022 22:56:54 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220530225654.3b93904e@windsurf>
-In-Reply-To: <20220521115055.33789-1-fontaine.fabrice@gmail.com>
-References: <20220521115055.33789-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcec: fix build with gcc 10
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Cc1zS0Hsnz_u for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 20:58:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B6BC84170A
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 20:58:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id C94FC86813; Mon, 30 May 2022 20:46:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 30 May 2022 22:58:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 858a7fe4e59ae43b6c83d203ca6591c444618eff
+X-Git-Newrev: 07cc32898b6ed0699db8d993b7334c3b1170e5de
+X-Patchwork-Hint: ignore
+Message-Id: <20220530204653.C94FC86813@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/boost: fix boost-log build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,41 +53,88 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 21 May 2022 13:50:55 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=07cc32898b6ed0699db8d993b7334c3b1170e5de
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix the following build failure with gcc 10:
-> 
-> /nvmedata/autobuild/instance-2/output-1/build/libcec-6.0.2/src/cec-client/../../include/cecloader.h: In function 'bool LibCecBootloader(const char*)':
-> /nvmedata/autobuild/instance-2/output-1/build/libcec-6.0.2/src/cec-client/../../include/cecloader.h:175:14: error: converting to 'bool' from 'std::nullptr_t' requires direct-initialization [-fpermissive]
->   175 |       return NULL;
->       |              ^~~~
-> /nvmedata/autobuild/instance-2/output-1/build/libcec-6.0.2/src/cec-client/../../include/cecloader.h:184:12: error: converting to 'bool' from 'std::nullptr_t' requires direct-initialization [-fpermissive]
->   184 |     return NULL;
->       |            ^~~~
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e34bd78cc81e6da12a85c1e4ee76931818d91073
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-cecloader-h-fix-null-return.patch    | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/libcec/0001-cecloader-h-fix-null-return.patch
+Fix the following build failure with boost-log raised since bump to
+version 1.79.0 in commit 7fa88b8eb637f5ec4927ac1bd05309dea7d60bc9 and
+https://github.com/boostorg/log/commit/3cbc2585c3b7ff5d884a6c337a99525b57fa184b:
 
-Applied to master, thanks.
+error: at libs/log/build/Jamfile.v2:59
+error: Unable to find file or target named
+error:     '/boost/architecture//mips'
+error: referred to from project at
+error:     'libs/log/build'
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/edcc7c7f3586993a77b6cc06ed02363a42c09a83
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ame-mips1-to-mips-and-alias-mips1-to-mips.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+
+diff --git a/package/boost/0002-Rename-mips1-to-mips-and-alias-mips1-to-mips.patch b/package/boost/0002-Rename-mips1-to-mips-and-alias-mips1-to-mips.patch
+new file mode 100644
+index 0000000000..cc4ab8a2f8
+--- /dev/null
++++ b/package/boost/0002-Rename-mips1-to-mips-and-alias-mips1-to-mips.patch
+@@ -0,0 +1,48 @@
++From 1a55d1d9c6d1cf7739645080bdd92fe903b4211e Mon Sep 17 00:00:00 2001
++From: Nikita Kniazev <nok.raven@gmail.com>
++Date: Wed, 28 Jul 2021 21:06:54 +0300
++Subject: [PATCH] Rename mips1 to mips and alias mips1 to mips
++
++[Retrieved from:
++https://github.com/boostorg/config/commit/1a55d1d9c6d1cf7739645080bdd92fe903b4211e]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ checks/architecture/Jamfile.jam             | 3 ++-
++ checks/architecture/{mips1.cpp => mips.cpp} | 4 ++--
++ 2 files changed, 4 insertions(+), 3 deletions(-)
++ rename checks/architecture/{mips1.cpp => mips.cpp} (89%)
++
++diff --git a/libs/config/checks/architecture/Jamfile.jam b/libs/config/checks/architecture/Jamfile.jam
++index 2ba54f9ad..c3779d917 100644
++--- a/libs/config/checks/architecture/Jamfile.jam
+++++ b/libs/config/checks/architecture/Jamfile.jam
++@@ -18,7 +18,8 @@ obj 64 : 64.cpp ;
++ 
++ obj arm      : arm.cpp ;
++ obj combined : combined.cpp ;
++-obj mips1    : mips1.cpp ;
+++obj mips     : mips.cpp ;
+++alias mips1  : mips ; # Backwards compatibility
++ obj power    : power.cpp ;
++ obj riscv    : riscv.cpp ;
++ obj sparc    : sparc.cpp ;
++diff --git a/libs/config/checks/architecture/mips1.cpp b/libs/config/checks/architecture/mips.cpp
++similarity index 89%
++rename from checks/architecture/mips1.cpp
++rename to checks/architecture/mips.cpp
++index b4a670b89..85f85583d 100644
++--- a/libs/config/checks/architecture/mips1.cpp
+++++ b/libs/config/checks/architecture/mips.cpp
++@@ -1,4 +1,4 @@
++-// mips1.cpp
+++// mips.cpp
++ //
++ // Copyright (c) 2012 Steven Watanabe
++ //
++@@ -7,5 +7,5 @@
++ // http://www.boost.org/LICENSE_1_0.txt)
++ 
++ #if !(defined(__mips) || defined(_MIPS_ISA_MIPS1) || defined(_R3000))
++-#error "Not MIPS1"
+++#error "Not MIPS"
++ #endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
