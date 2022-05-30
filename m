@@ -4,37 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8B8BC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 22:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAD38C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 23:41:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6053B41A6F;
-	Mon, 30 May 2022 22:04:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C1BC41C02;
+	Mon, 30 May 2022 23:41:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fCV-7B3OvQCs; Mon, 30 May 2022 22:04:06 +0000 (UTC)
+	with ESMTP id E6dSgkoaPFJ8; Mon, 30 May 2022 23:41:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AD7F41A62;
-	Mon, 30 May 2022 22:04:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D8FBC1BF289
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 22:04:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5779741BF5;
+	Mon, 30 May 2022 23:40:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 95E571BF2CD
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 23:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6CA641A62
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 22:04:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8381C4032A
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 23:40:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RYg79kl54N7U for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 22:04:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1I2Pr5sKfAnJ for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 23:40:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1978241A21
- for <buildroot@uclibc.org>; Mon, 30 May 2022 22:04:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3450240236
+ for <buildroot@uclibc.org>; Mon, 30 May 2022 23:40:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 1033C86836; Mon, 30 May 2022 21:52:29 +0000 (UTC)
+ id F06E9867ED; Mon, 30 May 2022 23:29:21 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 30 May 2022 22:04:02 +0000
+Date: Mon, 30 May 2022 23:40:55 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -43,15 +43,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2022.02.2
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Who: buildroot@apitman.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-14826-163-uTv8cB8Iq4@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14826-163-1X1y8neQFA@https.bugs.busybox.net/>
 In-Reply-To: <bug-14826-163@https.bugs.busybox.net/>
 References: <bug-14826-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -76,29 +76,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14826
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+--- Comment #2 from buildroot@apitman.com ---
+I'd say that's good news. I just tried master and it doesn't work either.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998@free.fr
+A system update just broke something on my end. I'm using Arch on kernel
+5.17.9.
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Hello,
-
-I am afraid I was not able to reproduce the failure.
-
-From a clean checkout of git master (d590003), I did:
-
-    make qemu_x86_64_defconfig
-    make
-
-And the build succeeded.
-
-What version of Buildroot are you using?
-What system are you building on?
-
-Regards,
-Yann E. MORIN.
+Is there a recommended distro to use for building buildroot?
 
 -- 
 You are receiving this mail because:
