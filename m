@@ -1,76 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43C6EC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 10:04:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B703C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 10:19:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA52A40157;
-	Mon, 30 May 2022 10:04:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1510E61107;
+	Mon, 30 May 2022 10:19:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VdYoluyldqwr; Mon, 30 May 2022 10:04:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rJDySADYFlCa; Mon, 30 May 2022 10:19:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CDC5440C1F;
-	Mon, 30 May 2022 10:04:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 540511BF3A1
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 10:04:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A9E561160;
+	Mon, 30 May 2022 10:19:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 31F721BF314
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 10:19:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 504B440C1F
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 10:04:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 207A584088
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 10:19:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ChKDqjfauRLW for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 10:04:15 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com
- [IPv6:2001:4860:4864:20::2e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 703FE40C1E
- for <buildroot@buildroot.org>; Mon, 30 May 2022 10:04:15 +0000 (UTC)
-Received: by mail-oa1-x2e.google.com with SMTP id
- 586e51a60fabf-f33f0f5b1dso1587143fac.8
- for <buildroot@buildroot.org>; Mon, 30 May 2022 03:04:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=dKkt37AWd42ZRd/+wAuPx6Sgi8Q7kS0kAoK+l9fin14=;
- b=dS5/zUP8yLq0uPFvyUznw5auvBj2iH+1TV3n5sEuSU/qunYcMCdJrGYcLNphs4CGVl
- +237ecnGyf7b4VUrbLNa/uuIF/+s9XLMjUMg1YCmhEdjKdHl8wgZBLLSL9raCqpWtViX
- n/cJ1IKWBIuoibLkgcItvUCnIGVUjfNKLicIpYqVkIuBzVxVYcfLFX3DvKZSz6NE54Bv
- E2GIkSWpX7lHuIjaPXi5YQ5+uzw1LGRDB2nlg/zyEl09INqkbCuCN+MInM2hZDBKdpY5
- EEaxjq7KX5JVSLdAEWGQByY2MRJr37EqfvZitrI963MCXMo2oUPlW4QyxhMCLPz/88wW
- wWhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=dKkt37AWd42ZRd/+wAuPx6Sgi8Q7kS0kAoK+l9fin14=;
- b=Z+/1BOPsqv0NdWb260GfQCADodSmZ2z18C+VDkEjTdwfAP6uKN8swey/sXNpHN2xlJ
- fSHyyq7YQQtX09IBaptuqfMwNMzHDzE7mASigbbJYyup9Ou5IjJuOEYNe01N8TZ4QRNI
- ACSSQyPG6i/F5HC6pm90mgkMCpveRi5HLCy1sy3ETsrNgn7BJMssFLQ50SEzPTgDHDvY
- JSYp4/cHXmgdkDTVN1CFYKC+aFDDFrfIxtxLmwFI0MEDotmlDDyI5SfLKTlR7/qLo5B0
- L5+6O2Ulz9H9G2tuLz1KSwtc441jAjv+MVpXAZgN3p+fN75XBaELJRSqp/81EJeTDYP7
- iuJg==
-X-Gm-Message-State: AOAM532DaXu9zvErdz1UNOFj6S/iynQTDWAy5AjiK/onhK81vPwr08ZZ
- zChFNwTDrEIckpVAv0WIAyWFJdJyeA11sH9UyUe94f+jFEc=
-X-Google-Smtp-Source: ABdhPJxU6RpFEWGfjArhqUZlzR+bRraXEGhbxiX9WUfPjJugu97jpfB0N6UD2CLlZiEidZpyCmNSq0ZBwsKdTvhsGKc=
-X-Received: by 2002:a05:6870:b00a:b0:f1:7f07:8c36 with SMTP id
- y10-20020a056870b00a00b000f17f078c36mr9811421oae.278.1653905054483; Mon, 30
- May 2022 03:04:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220530033836.474926-1-damien.lemoal@opensource.wdc.com>
- <20220530033836.474926-2-damien.lemoal@opensource.wdc.com>
-In-Reply-To: <20220530033836.474926-2-damien.lemoal@opensource.wdc.com>
-From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 30 May 2022 20:03:48 +1000
-Message-ID: <CAKmqyKPhm35wDvgpT2Pv5EHv13tiPQLC=0hktTWobUSx8bWbfw@mail.gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8q8upLRdLIgo for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 10:19:33 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0A5AD84084
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 10:19:32 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id CD21031E073D; Mon, 30 May 2022 12:19:27 +0200 (CEST)
+Date: Mon, 30 May 2022 12:19:27 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: Re: [Buildroot] [PATCH v2 01/11] package: elf2flt: fix config menu
- entry description
+Message-ID: <YpSaL4TApmsrqxe3@waldemar-brodkorb.de>
+References: <20220530033836.474926-1-damien.lemoal@opensource.wdc.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220530033836.474926-1-damien.lemoal@opensource.wdc.com>
+X-Operating-System: Linux 5.10.0-10-amd64 x86_64
+Subject: Re: [Buildroot] [PATCH v2 00/11] Fix RV64 NOMMU and add Canaan K210
+ SoC support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,44 +66,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, May 30, 2022 at 1:38 PM Damien Le Moal via buildroot
-<buildroot@buildroot.org> wrote:
->
-> From: Damien Le Moal <damien.lemoal@wdc.com>
->
-> Keep the same style as other config menu entries by removing the
-> question mark at the end of the elf2flt enable config option
-> description.
->
-> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-> Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
+Hi,
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+tested on a Sipeed Maix-Bit board.
 
-Alistair
+Tested-By: Waldemar Brodkorb <wbx@openadk.org>
 
-> ---
->  package/elf2flt/Config.in.host | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/elf2flt/Config.in.host b/package/elf2flt/Config.in.host
-> index 2bab0095c2..339ed06b40 100644
-> --- a/package/elf2flt/Config.in.host
-> +++ b/package/elf2flt/Config.in.host
-> @@ -1,5 +1,5 @@
->  config BR2_PACKAGE_HOST_ELF2FLT
-> -       bool "Enable elf2flt support?"
-> +       bool "Enable elf2flt support"
->         depends on BR2_arm || BR2_sh || BR2_sparc || BR2_xtensa || BR2_RISCV_64
->         depends on !BR2_USE_MMU
->         help
-> --
-> 2.36.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Damien Le Moal via buildroot wrote,
+
+> This patch series is a rework of the old v5 series "Add RV64 NOMMU and
+> Canaan K210 SoC support" already posted some (long) time ago.
+> 
+> This series adds support for building 64-bits RISC-V NOMMU kernels (both
+> bootable kernels and u-boot sdcard boot envronements) for NOMMU RISC-V
+> 64-bits boards. The board supported include QEMU and many boards using
+> the dual-core RISC-V 64-bits Cannan Kendryte K210 SoC.
+> 
+> The first patch is a simple fix of elf2flt configuration menu entry.
+> The second patch fixes the existing elf2flt RISC-V 64-bits support.
+> 
+> The third patch adds a Linux kernel patch that must be used for all
+> NOMMU RISC-V builds. This patch will be present in the upcoming 5.19
+> kernel.
+> 
+> Patch 4 adds a buildroot configuration file for QEMU NOMMU RISC-V
+> 64-bits builds.
+> 
+> Patch 5 adds the python-kflash utility as a host package to allow users
+> to program their K210-based boards with bootable images. This patch also
+> modifies the python-serial package to add its host package definition to
+> make the python-miniterm utility available to users to open serial
+> consoles with their K210-based boards.
+> 
+> Patch 6 adds the configurations files common to all K210-based boards.
+> 
+> Finally, the last 5 patches add support for the following K210-based
+> boards:
+> * Sipeed MAIX Bit
+> * Sipeed MAIXDUINO
+> * Sipeed MAIX Dock (dan)
+> * Sipeed MAIX Go
+> * Canaan KD233 development board
+> 
+> For each board, a readme.txt file is added to document how to build and
+> install images for these  
+> boards.
+
+best regards
+ Waldemar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
