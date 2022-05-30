@@ -1,68 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6006C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:31:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAAD1C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 20:31:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C8128415F;
-	Mon, 30 May 2022 20:31:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4932E41B96;
+	Mon, 30 May 2022 20:31:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TT3hU-f8fz6r; Mon, 30 May 2022 20:31:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xZ2yQafEhHdh; Mon, 30 May 2022 20:31:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EABFD841B4;
-	Mon, 30 May 2022 20:31:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EE5EF1BF31A
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:30:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3763A41B8B;
+	Mon, 30 May 2022 20:31:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 534281BF31A
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:30:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D8101403A2
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:30:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F16741B87
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 20:30:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LXpAAi8WtCSn for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 20:30:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0E63640239
- for <buildroot@buildroot.org>; Mon, 30 May 2022 20:30:33 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:f587:e70b:15ff:66a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id A7B1E5FF13;
- Mon, 30 May 2022 22:30:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1653942631;
- bh=vWJ3JvwVXEY43iD2QwSdhnzG9w0dJKiysrx6jojt3+M=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=T+MDajI3IH5KdYAV8cCMp2wYpOWiZpxbHnOGUczdCuOyJX4wqFyEy0U/LN7m4A182
- gU37MyOFVoUjkAdqfLVUINpLJjAoI015C9R6VigqNuHPHqknNzspK/LTVdsIshE/nU
- 1y+RT5opZr6cHb9OOWq5qR8OrKOA3FWmGKpMjA+1K/CmEdhP53o4bOV1RBSeEhqIsN
- MwUKLQXhUm/4AIvMGzxCp7mqH9u2LNJ6JAUMfIk6/3uC1DAwx85T+plfz71bU3ruqj
- 4BqesxcesyvK1M6LUQq2j6glqf1SZhGIBMnSvQCImnHfrZTPGQhhTBK+tCPU1GNxSL
- kgGTnM+6m5hAQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 30 May 2022 22:30:29 +0200
-Date: Mon, 30 May 2022 22:30:29 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20220530203029.GB1390376@scaer>
-References: <20220527112146.387164-1-romain.naour@gmail.com>
- <20220528100508.GE301044@scaer>
- <f76f9cc6-4188-e92a-a753-b962849f2230@gmail.com>
- <20220530202339.GA1390376@scaer>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IwYR9Ic4H14l for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 20:30:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from delivery.mailspamprotection.com
+ (delivery.mailspamprotection.com [185.56.84.8])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1838E41B81
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 20:30:45 +0000 (UTC)
+Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
+ helo=es87.siteground.eu)
+ by se18.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
+ (Exim 4.92) (envelope-from <dimi@tpm.dev>)
+ id 1nvm2B-000DYT-4E; Mon, 30 May 2022 15:30:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tpm.dev;
+ s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+ Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=Nr8NkhMnmayT7AR4wE87kT5N15ZoM8s2jIRyPVLubNo=; b=OERWcvLQfVLHW8e0Z24Wbmipuc
+ PFtEiyAOSJ92lJeV5C4IoqgqVD0QKmefrlUlz/PuJ+V3N3B5IvUfPJaChXQwlhPrrAIt6jS3jFTUA
+ BD3z/c9M+wNMzt3jFwaOiuA9SPvI2BstbbocHRuwwcLNUGyDATGU8W4LJ+xkpVwfkYU5Nwm+me3Ql
+ kvLhEMCGIUUv57tI1pQiwITRqI8MTyYugZVKIIYSWiRG28XEqhcrasE2osPfQToRQ8NZmu5GdCjEZ
+ Wcxn8r27wHOkqEavhSw/ZxPujAuE3f5E7AaLGwT57hS3AfkQtmNCq1tPDLfrQC7WFnGrOt9g+BqyS
+ 4FeS6ZaQ==;
+Received: from [95.111.54.43] (port=56038 helo=localhost.localdomain)
+ by es87.siteground.eu with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.90-.1)
+ (envelope-from <dimi@tpm.dev>)
+ id 1nvm29-0003PW-9X; Mon, 30 May 2022 20:30:37 +0000
+From: Dimi Tomov <dimi@tpm.dev>
+To: buildroot@buildroot.org
+Date: Mon, 30 May 2022 23:30:01 +0300
+Message-Id: <20220530203001.574908-2-dimi@tpm.dev>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220530203001.574908-1-dimi@tpm.dev>
+References: <20220508212014.629607-1-dimi@tpm.dev>
+ <20220530203001.574908-1-dimi@tpm.dev>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220530202339.GA1390376@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] boot/edk2: fix gcc 11 Werror
+X-Originating-IP: 35.214.247.6
+X-SpamExperts-Domain: es87.siteground.eu
+X-SpamExperts-Username: 35.214.247.6
+Authentication-Results: mailspamprotection.com;
+ auth=pass smtp.auth=35.214.247.6@es87.siteground.eu
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: Combined (0.04)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT/t3aufDKeoWo8yyW/xEUzkPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xKipkaFeQDP2JiLCjsOSqCBHoJjdDPbdunZvlh+03gEx+y
+ AgUhs4TMs248ll4GqtGr/hqYzjDWzrFya1I3MqUAQaXPwIlI4yu/PH1NWDdGRZBxIMNp8QeVgSgF
+ ojR0NqtTtObPqIqeRAv2CqzEPfjvzn3+O390ZiUEIR10am7COXQg45AD+/l6P8h0+TPjaDxMfcvw
+ 9uVrltEafCGDyHAgHlsrgHdRWEueoBSMqiQzPh1yRvIbtitNGnLjaBpZxUE1lUtc0sYymngJCgc9
+ Cmsi1aGGPfH65H6AVD6gAKRZUoPAgTtUp75uqlx0KezvZHXNck283Ma4f9Sv82S3dBYCh4qquF0m
+ STLvgCmSR4faGwwvmLeDYYVoZCdncqjCVTxqe+hzuzR4e2zKsft/i9azUpyDFBOp1ITdzGU/ruyy
+ 5nGfZreTrrCodBGR0eudR/Re4NVbVEBU/8Tv9RjL1Pyu39sUHXwyAFnSuVW90ZJgh3r6hAL/pjzQ
+ N/GQ45ibIzuzIh1wkn5B+muMTuS2LDwzt8Ds8HhMu8AsuC+XP0IWdUIAUNuMtkDDGcfMcpylyxhs
+ 01KruaxB6s0aI7mWLxFqewZEt7CZOQ7IU15wrAsvU4/yXIk618YVJp5jM2kZcUgHPUbw7CVpNolc
+ zSoTuJsRnENsSECCOsy4kitQ2EVON3ZmAvzhACRw3PmZbvOIthGJLZYBOnJkMewq8SVvi7vzaT02
+ fm+lDqTOe615Hn/HezYfTH509XQw8Xdr+MnJzzZn/WnTKonJfGSB+FJgE/zw4HUoD+cIWUzsqPTs
+ oNyo6vdjzQ6YC7Heg3Xf7O1TOd6RJQvT/U9rVpsp+2+YWHqMJlXoybOvrfLlgErbJFPCX7X6uLCQ
+ WGN9pNli3DC1GSHOZUA/IbBXn3lSnHVoWCKrig+kUy0/V50A1sgx9X6XUyG7X+t1TW39Ja77LGPp
+ OwBdIsa6pXKCXxjFsbUwgHS0eo7ybJmmaWykWTbAAZ1XGFTzcEStuOgM8+WgcxlSOIcPxmo87wug
+ keVczgPJFLMsHgC00qgRk2z6CMYeLQ7wp2F7GO6T6bnYu21C1+IFqWMHzhJIya1bhC8OG6CHeS+X
+ Mj9B6P5z9jr1E+YC0mZnY7DiOrvyPQGBoymZzgLPbwz2OKHH5lr9xXvSM4nM3avg
+X-Report-Abuse-To: spam@quarantine1.mailspamprotection.com
+Subject: [Buildroot] [PATCH 2/2] v2: Fix typo in the hash file and create
+ path before using touch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,32 +102,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Dimitar Tomov <dimi@tpm.dev>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Um9tYWluLCBBbGwsCgpPbiAyMDIyLTA1LTMwIDIyOjIzICswMjAwLCBZYW5uIEUuIE1PUklOIHNw
-YWtlIHRodXNseToKPiBPbiAyMDIyLTA1LTMwIDIxOjA0ICswMjAwLCBSb21haW4gTmFvdXIgc3Bh
-a2UgdGh1c2x5Ogo+ID4gTGUgMjgvMDUvMjAyMiDDoCAxMjowNSwgWWFubiBFLiBNT1JJTiBhIMOp
-Y3JpdMKgOgo+ID4gPiBPbiAyMDIyLTA1LTI3IDEzOjIxICswMjAwLCBSb21haW4gTmFvdXIgc3Bh
-a2UgdGh1c2x5Ogo+ID4gPj4gQmFja3BvcnQgYSBwYXRjaCBbMV0gaW5jbHVkZWQgaW4gZWRrMi1z
-dGFibGUyMDIyMDIgcmVsZWFzZS4KPiBbLS1TTklQLS1dCj4gPiBJdCBzZWVtcyB0aGUgcGF0Y2gg
-ZmlsZSBoYXMgYmVlbiBjb3JydXB0ZWQgYnkgcGF0Y2h3b3JrOgo+IFstLVNOSVAtLV0KPiA+IEl0
-J3MgZHVlIHRvIGxpbmUgZW5kaW5nLgo+ID4gU2VlIGF0dGFjaG1lbnQgZmlsZS4KPiBBcyBkaXNj
-dXNzZWQgb24gSVJDOiB0aGlzIGlzIGFsc28gYm9ya2VkIHNvbWVob3cuLi4KCldlIGV2ZW50dWFs
-bHkgbWFuYWdlZCB0byBmaXggdGhlIHRoaW5nIHdpdGggbWFudWFsIHN0ZXBzIChJCmNoZXJyeS1w
-aWNrZWQgdGhlIHBhdGNoIGZyb20gUm9tYWluJ3MgdHJlZSkuCgpSZWdhcmRzLApZYW5uIEUuIE1P
-UklOLgoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0t
-LS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVh
-bC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8
-CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAg
-ICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0u
-LS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDov
-L3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAg
-IGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4t
-LS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+From: Dimitar Tomov <dimi@tpm.dev>
+
+Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
+---
+ package/wolftpm/wolftpm.hash | 2 +-
+ package/wolftpm/wolftpm.mk   | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/wolftpm/wolftpm.hash b/package/wolftpm/wolftpm.hash
+index 871e3e2d1d..6dbf143ffe 100644
+--- a/package/wolftpm/wolftpm.hash
++++ b/package/wolftpm/wolftpm.hash
+@@ -1,2 +1,2 @@
+ # Hash from https://github.com/wolfSSL/wolfTPM/archive/refs/tags/v2.3.1.tar.gz
+-sha256  f0d7c095491ac2cc9e44aa4ac3c22febf15942ef080431d8b43a9d0312ca6567  wolfTPM-2.3.1.tar.gz
++sha256  f0d7c095491ac2cc9e44aa4ac3c22febf15942ef080431d8b43a9d0312ca6567  wolftpm-2.3.1.tar.gz
+diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
+index 33cfdef6af..8d11fd1299 100644
+--- a/package/wolftpm/wolftpm.mk
++++ b/package/wolftpm/wolftpm.mk
+@@ -21,6 +21,7 @@ WOLFTPM_AUTORECONF = YES
+ WOLFTPM_CONF_OPTS = --disable-examples --enable-devtpm --with-wolfcrypt=$(TARGET_DIR)/usr/
+ 
+ define WOLFTPM_CONFIG_RPATH
++    mkdir $(@D)/build-aux
+     touch $(@D)/build-aux/config.rpath
+ endef
+ # Fix for autoconf bug with config.rconf
+-- 
+2.27.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
