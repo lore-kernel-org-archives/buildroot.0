@@ -4,46 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56959C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 21:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3680C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 30 May 2022 21:44:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02F3A61243;
-	Mon, 30 May 2022 21:40:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D14361245;
+	Mon, 30 May 2022 21:44:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xXFmcIGmDDnK; Mon, 30 May 2022 21:40:27 +0000 (UTC)
+	with ESMTP id 2Mh2mpNzOJLS; Mon, 30 May 2022 21:44:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B67C61240;
-	Mon, 30 May 2022 21:40:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D13421BF276
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:40:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19F7C61242;
+	Mon, 30 May 2022 21:44:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C7371BF276
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:44:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B907061240
- for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:40:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A67441A21
+ for <buildroot@lists.busybox.net>; Mon, 30 May 2022 21:44:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tvcr7wSTgBRy for <buildroot@lists.busybox.net>;
- Mon, 30 May 2022 21:40:22 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9DB9B6123C
- for <buildroot@buildroot.org>; Mon, 30 May 2022 21:40:22 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 86F3E240006
- for <buildroot@buildroot.org>; Mon, 30 May 2022 21:40:20 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1nvn7b-006uGF-LC
- for buildroot@buildroot.org; Mon, 30 May 2022 23:40:19 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DMcHVMePS3e7 for <buildroot@lists.busybox.net>;
+ Mon, 30 May 2022 21:44:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB38141A09
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 21:44:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id A0DD48682B; Mon, 30 May 2022 21:32:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 30 May 2022 23:40:19 +0200
-Message-ID: <877d624s3g.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: [Buildroot] Buildroot 2022.05-rc2 released
+Date: Mon, 30 May 2022 23:44:14 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2753d9ef82fe1bb5ff402341c56d18b2a4eb3d1d
+X-Git-Newrev: 2d8a4e1fdd0ce07e9db009819e59eeb01225f129
+X-Patchwork-Hint: ignore
+Message-Id: <20220530213251.A0DD48682B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kvm-unit-tests: fix build on big
+ endian aarch64 targets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,27 +52,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgpCdWlsZHJvb3QgMjAyMi4wNS1yYzIgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBh
-dDoKCmh0dHA6Ly9idWlsZHJvb3QubmV0L2Rvd25sb2Fkcy9idWlsZHJvb3QtMjAyMi4wNS1yYzIu
-dGFyLmd6CgpvcgoKaHR0cDovL2J1aWxkcm9vdC5uZXQvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIy
-LjA1LXJjMi50YXIueHoKCk9yIGdldCBpdCBmcm9tIEdpdDoKCmdpdDovL2dpdC5idWlsZHJvb3Qu
-bmV0L2J1aWxkcm9vdAoKQW5vdGhlciB3ZWVrLWFuZC1hLWhhbGYsIGFub3RoZXIgcmVsZWFzZSBj
-YW5kaWRhdGUuCgpQbGVhc2UgZ2l2ZSBpdCBhIHNwaW4gYW5kIHJlcG9ydCBhbnkgcHJvYmxlbXMg
-dG8gdGhlIG1haWxpbmcgbGlzdCBvcgpidWcgdHJhY2tlci4gTWFueSB0aGFua3MgdG8gdGhlIHBl
-b3BsZSBjb250cmlidXRpbmcgdG8gdGhpcyByZWxlYXNlOgoKZ2l0IHNob3J0bG9nIC1zbiAyMDIy
-LjA1LXJjMS4uCgogICAgMTYgIEZhYnJpY2UgRm9udGFpbmUKICAgICA2ICBKYW1lcyBIaWxsaWFy
-ZAogICAgIDUgIFJvbWFpbiBOYW91cgogICAgIDMgIEJhcnVjaCBTaWFjaAogICAgIDMgIFBldGVy
-IEtvcnNnYWFyZAogICAgIDIgIEdpdWxpbyBCZW5ldHRpCiAgICAgMSAgQXJub3V0IFZhbmRlY2Fw
-cGVsbGUgKEVzc2Vuc2l1bS9NaW5kKQogICAgIDEgIEJlcm5kIEt1aGxzCiAgICAgMSAgQ8OpZHJp
-YyBMZSBHb2F0ZXIKICAgICAxICBKYXJra28gU2Fra2luZW4KICAgICAxICBKb2VsIFN0YW5sZXkK
-ICAgICAxICBNYXJrdXMgTWF5ZXIKCkZvciBtb3JlIGRldGFpbHMsIHNlZSB0aGUgQ0hBTkdFUyBm
-aWxlOgoKaHR0cDovL2dpdC5idWlsZHJvb3QubmV0L2J1aWxkcm9vdC9wbGFpbi9DSEFOR0VTP2lk
-PTIwMjIuMDUtcmMyCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=2d8a4e1fdd0ce07e9db009819e59eeb01225f129
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+When building with BR2_cortex_a76 in big endian mode, the build of
+the kvm-unit-tests is currently failing since the "--arch" option
+of the configure script is not set right. We also have to look at
+BR2_aarch64_be in this case to get this initialized properly.
+
+Fixes: f7228dadd371 ("package/kvm-unit-tests: add more arm support")
+Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kvm-unit-tests/kvm-unit-tests.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index fd07ca85c3..dd8f153710 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -10,7 +10,7 @@ KVM_UNIT_TESTS_SITE = https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/archive
+ KVM_UNIT_TESTS_LICENSE = GPL-2.0, LGPL-2.0
+ KVM_UNIT_TESTS_LICENSE_FILES = COPYRIGHT
+ 
+-ifeq ($(BR2_aarch64),y)
++ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+ KVM_UNIT_TESTS_ARCH = aarch64
+ else ifeq ($(BR2_arm),y)
+ KVM_UNIT_TESTS_ARCH = arm
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
