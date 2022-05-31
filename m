@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 391ECC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:18:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 707C3C43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:18:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE4BA409F7;
-	Tue,  7 Jun 2022 19:18:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D6E582871;
+	Tue,  7 Jun 2022 19:18:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gCRFM1WOZfBM; Tue,  7 Jun 2022 19:18:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nlntd_rgHKCC; Tue,  7 Jun 2022 19:18:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 907F9410C9;
-	Tue,  7 Jun 2022 19:18:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2099E1BF9B5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A80982560;
+	Tue,  7 Jun 2022 19:18:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B3F21BF9B6
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 793EF60E68
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C45483E6A
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 40CU0wAAq3LD for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:16:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JzwpSdOBoJ30 for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C2DD060EE0
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9151183E6C
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B6C6E869E1; Tue,  7 Jun 2022 19:04:55 +0000 (UTC)
+ id 83CDD86E22; Tue,  7 Jun 2022 19:04:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 30 May 2022 21:15:10 +0200
+Date: Tue, 31 May 2022 10:26:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cecb262571a1754c0e88b7b6e6acece13db9c5d6
-X-Git-Newrev: 1b298db82fa7b108053f08110d50f4650fcc74ac
+X-Git-Oldrev: 541381a1340dd6935021ebf8053bc93109932df8
+X-Git-Newrev: b680798eaa882c78cdeb3e703e1e7a8b76df69e6
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190455.B6C6E869E1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu_riscv64_nommu_virt_defconfig:
- new defconfig
+Message-Id: <20220607190456.83CDD86E22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang-p1-stringprep: bump version
+ to 1.0.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,96 +60,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b298db82fa7b108053f08110d50f4650fcc74ac
+commit: https://git.buildroot.net/buildroot/commit/?id=b680798eaa882c78cdeb3e703e1e7a8b76df69e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add RISC-V 64-bit nommu defconfig for QEMU virt machine with MMU
-disabled.
-
-Unlike qemu_riscv64_virt, qemu_riscv64_nommu_virt does not use OpenSBI,
-since the kernel is running in machine mode (M-mode).
-
-After the build is complete, you can start QEMU using the launcher
-script:
-$ output/images/start-qemu.sh
-
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                |  3 +++
- board/qemu/riscv64-virt/readme.txt        |  2 ++
- configs/qemu_riscv64_nommu_virt_defconfig | 37 +++++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+)
+ package/erlang-p1-stringprep/erlang-p1-stringprep.hash | 2 +-
+ package/erlang-p1-stringprep/erlang-p1-stringprep.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c33959fa45..435fa28478 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2153,6 +2153,9 @@ N:	Nicolas Serafini <nicolas.serafini@ik.me>
- F:	package/exiv2/
- F:	package/ofono/
+diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.hash b/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
+index e23cc4f38b..eec611829a 100644
+--- a/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
++++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  47f9f8ee901f47b7f62c5140ea09f113efe7fedd5e8ffb92d50f51c5e11fb67f  erlang-p1-stringprep-1.0.23.tar.gz
++sha256  cdc2ffa6ba2171f55b78e69cfce5dab6099cbb6bc6955d88c5c53b0cf24d13af  erlang-p1-stringprep-1.0.27.tar.gz
+ sha256  f44415631770cb818de6d92f3961fdfe6e407a5154f84b87cc06ac27323e919c  LICENSE.ALL
+ sha256  42aef2a1337ef1f45ae2832aa5aa268c79b2560fb1f3ebab519629372cb24ffe  LICENSE.TCL
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+index 580f4a9aa9..233be52c58 100644
+--- a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
++++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+N:	Niklas Cassel <niklas.cassel@wdc.com>
-+F:	configs/qemu_riscv64_nommu_virt_defconfig
-+
- N:	Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
- F:	board/embest/riotboard/
- F:	configs/riotboard_defconfig
-diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
-index 747a9ea674..9e4cfc8c55 100644
---- a/board/qemu/riscv64-virt/readme.txt
-+++ b/board/qemu/riscv64-virt/readme.txt
-@@ -2,4 +2,6 @@ Run Linux in emulation with:
- 
-   qemu-system-riscv64 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv64_virt_defconfig
- 
-+  qemu-system-riscv64 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -nographic -cpu rv64,mmu=off # qemu_riscv64_nommu_virt_defconfig
-+
- The login prompt will appear in the terminal that started Qemu.
-diff --git a/configs/qemu_riscv64_nommu_virt_defconfig b/configs/qemu_riscv64_nommu_virt_defconfig
-new file mode 100644
-index 0000000000..bfee9e710a
---- /dev/null
-+++ b/configs/qemu_riscv64_nommu_virt_defconfig
-@@ -0,0 +1,37 @@
-+# Architecture
-+BR2_riscv=y
-+BR2_RISCV_64=y
-+
-+# Patches
-+BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
-+
-+# Toolchain
-+BR2_PACKAGE_HOST_ELF2FLT=y
-+# BR2_USE_MMU is not set
-+
-+# Busybox with hush
-+BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
-+
-+# System
-+BR2_TARGET_GENERIC_GETTY=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+
-+# Image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
-+BR2_LINUX_KERNEL_DEFCONFIG="nommu_virt"
-+BR2_LINUX_KERNEL_IMAGE=y
-+
-+# Disable network scripts
-+# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
-+
-+# host-qemu for gitlab testing
-+BR2_PACKAGE_HOST_QEMU=y
-+BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+-ERLANG_P1_STRINGPREP_VERSION = 1.0.23
++ERLANG_P1_STRINGPREP_VERSION = 1.0.27
+ ERLANG_P1_STRINGPREP_SITE = $(call github,processone,stringprep,$(ERLANG_P1_STRINGPREP_VERSION))
+ ERLANG_P1_STRINGPREP_LICENSE = TCL (tools/*.tcl), Apache-2.0 (rest)
+ ERLANG_P1_STRINGPREP_LICENSE_FILES = LICENSE.ALL LICENSE.TCL LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
