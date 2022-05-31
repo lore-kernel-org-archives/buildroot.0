@@ -4,59 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69583C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 23:04:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9BF7C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 23:20:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD1E8404D1;
-	Tue, 31 May 2022 23:04:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 45174403B8;
+	Tue, 31 May 2022 23:20:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YQOavEsMxUa2; Tue, 31 May 2022 23:04:08 +0000 (UTC)
+	with ESMTP id uDn8HFCAOyrZ; Tue, 31 May 2022 23:20:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD9EE404BB;
-	Tue, 31 May 2022 23:04:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6693D1BF836
- for <buildroot@lists.busybox.net>; Tue, 31 May 2022 23:04:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 51F85401D5;
+	Tue, 31 May 2022 23:20:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E5A151BF3DE
+ for <buildroot@lists.busybox.net>; Tue, 31 May 2022 23:20:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 51710404BB
- for <buildroot@lists.busybox.net>; Tue, 31 May 2022 23:04:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D106D60BA4
+ for <buildroot@lists.busybox.net>; Tue, 31 May 2022 23:20:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rE13v4yCxCxM for <buildroot@lists.busybox.net>;
- Tue, 31 May 2022 23:04:03 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2r57VqaMm1d4 for <buildroot@lists.busybox.net>;
+ Tue, 31 May 2022 23:20:22 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd15177.aruba.it (smtpcmd15177.aruba.it [62.149.156.177])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3F7F404B7
- for <buildroot@buildroot.org>; Tue, 31 May 2022 23:04:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 583E960B4C
+ for <buildroot@buildroot.org>; Tue, 31 May 2022 23:20:22 +0000 (UTC)
 Received: from [192.168.50.225] ([146.241.66.179])
  by Aruba Outgoing Smtp  with ESMTPSA
- id wAu7ne2PNXOlAwAu8n2qOu; Wed, 01 Jun 2022 01:04:01 +0200
+ id wB9vneSQlXOlAwB9vn2xMa; Wed, 01 Jun 2022 01:20:21 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1654038241; bh=wYVpHmMouPe7J6Jtuukr3YiK6TCR8dAH9wFSkGAwFqk=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=YbgivlB7vo3MeVazBL3Cey01wC37kVw6wp9uxascea3eCgZkCzQHpgB2vIlLIgsIR
- FrVQBlkVp7izKrUxPCRRB9u69+1rXvOFLTT1mdmj5JzMaXH78JSyl6Lvi0qZjQcGqb
- w9tg+KCeAQFaxah2T9ca5ksXLXgDMbW2/PrNSYIw7t3fcd9yuhdmrrVnFnrc4kXAb9
- GGrhFQKKNQtqwWmbUlAK7nlEnpRQpzVhMM3RQ+sGnwZ4FnAKvaswCAMJK/fKlwPMxd
- JkB5UaYXW/qlhVRzRJjebw1HNZL94xRkVerG/xG7XQzXPNVJHMAIt/QcMFbXhsRBgC
- tSys6XjvMbMKA==
-Message-ID: <224404ba-53e9-d97c-0ace-aa8885052ea5@benettiengineering.com>
-Date: Wed, 1 Jun 2022 01:03:58 +0200
+ t=1654039221; bh=r/LvFUQWNHJGtdwSl0ouzYUHWfHAWF1yhvhotSdWEHk=;
+ h=Date:MIME-Version:Subject:From:To:Content-Type;
+ b=i1iY9Jh8WVOw9vKpBdryzJbrod11Nphc6iWvUvXOVsxqc/+9rlaiN2w9y5qNNojKd
+ 1tOFtfkECH+3SrsxflPby4l46z3hpW2JsT4M77kPi3166TKqwJTSdNHFzU9rtvmiso
+ RD9S0p892OgOq/vvvZ4Eq1CWqUPL/EA1PGT8XV5alBIcA3eeh22ir8m5/RTI91BLbW
+ xH7MhilE/w8qf/6pFdW86tjfsJrcOmvFMJU/SykYpierqFgjTgaksp8OHZRp7QPMbJ
+ QhbtjLasQnWAN37RgljacK81t9tJBZtqwiEhDwR3Y5x21Ixik+iwATKp36JB041FvN
+ qlHT4Rqus3Iuw==
+Message-ID: <9eed64b3-946e-3f13-1fcd-168e68cad471@benettiengineering.com>
+Date: Wed, 1 Jun 2022 01:20:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
 Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 References: <20220531210109.472212-1-fontaine.fabrice@gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220531210109.472212-1-fontaine.fabrice@gmail.com>
-X-CMAE-Envelope: MS4xfEca8aYePjq0j0zHxIC8Z9htIHD/Xxq4oB8VhYUgC+dPf/Tjt8xefrNCaGNhGe4s6+kQA/eS5ts5eqwh/a67JQ/q0CyT0KmFAcAn6/aDJ5oKIIzGYuSY
- 3m6Hmb980CUAsIagQxsSSIPoqEpLxfSJ8ttzzROktNulRqpEsp+0i+kRHuHs40hmEdwSY4iA3dCObrIo6reep9yEx1SjIGPYC6wL/NLaVZk3QvA7+uSYkISk
- UnGbWMjM9RlIlEjx+lTOqgmSODyHf2usRHgWxVEGfO8bJxyATxllnTi8eWXSObNa5fKboH8xU0FZ68RCWnCbk7V+HT9fsdwQCuBpxcxP+TWPnxxreXY6ZZdV
- Qzn84Ztm4KSjpG3u5JYYebBwuSk7C16lCREyIK9vHn8kXBwWK2A=
+ <224404ba-53e9-d97c-0ace-aa8885052ea5@benettiengineering.com>
+In-Reply-To: <224404ba-53e9-d97c-0ace-aa8885052ea5@benettiengineering.com>
+X-CMAE-Envelope: MS4xfJPICOrhKU0zU+JwqfzDROyWXcggTwMR3UExd1XB6ngMb0gvItMnf74Jh3t5kFCaTwjgb0iR7VcowLxs1A8h7ZsBr8L9SeBruhPRmoRTyDJKCfCdToqH
+ beo15CRb2HSuMsZTRLTIGc93FI3qCCzujDCEjbGMNWLv7asvkEZimFcBJ/WQlvnw44GE0Rl6Tcpyr5j2aCYEvBaHBkId2kY451OagKfYpFsNY8l18fIV9tpI
+ MTy/Oro20VlQw+lgMz9O1YVx+2Qk26xDzsmAXKrpBJqiMPdI/H4CZDnMC8a/bxgjwgck0bdqyBgG+gqwxw7Ypr6Yf7Nx3uS3WIwjn7+bsAykQnJjuVUmAICh
+ sGsmNR97srmXAsh6i2nLIp9zzmd5+GLtDXQ6N7hWnepb3FcGjhg=
 Subject: Re: [Buildroot] [PATCH 1/1] toolchain/Config.in: sh4{eb, a,
  aeb} are affected by GCC bug 101737
 X-BeenThere: buildroot@buildroot.org
@@ -71,63 +74,45 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabrice,
-
-On 31/05/22 23:01, Fabrice Fontaine wrote:
-> pixman fails to build with BR2_OPTIMIZE_S on sh4{eb,a,aeb}:
-> 
-> In file included from pixman-fast-path.c:33:
-> pixman-fast-path.c: In function 'fast_composite_scaled_nearest_8888_565_normal_OVER':
-> pixman-inlines.h:586:1: internal compiler error: Segmentation fault
->    586 | }
->        | ^
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/c9d35d5975311a191dfbe12291398503987e804e
->   - http://autobuild.buildroot.org/results/d34b8672f6211d60af4122bdd94fa8c2f4f4bf6a
->   - http://autobuild.buildroot.org/results/933c4a2e73c987573ecc97172f442b78199462d5
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->   toolchain/Config.in | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index 73ea78624a..7584b85f71 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -199,7 +199,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_99140
->   # still exists in gcc = 11.1.0
->   config BR2_TOOLCHAIN_HAS_GCC_BUG_101737
->   	bool
-> -	default y if BR2_sh4
-> +	default y if BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb
-
-I've seen only now that BR2_sh4 stands only for:
-"sh4 (SH4 little endian)"
-Here I've meant to make it default y when any BR2_sh4* is selected.
-But at this point I would use BR2_sh since if we have that selected
-then all BR_sh4* cases are included and no other BR2_sh* is present.
-
-Can you please modify according to that?
-
-Thanks a lot
-Kind regards
--- 
-Giulio Benetti
-CTO/CEO@Benetti Engineering sas
-
->   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101915
->   # ICE: in extract_insn, at recog.c:2294 on microblaze.
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMDEvMDYvMjIgMDE6MDMsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+IEhpIEZhYnJpY2UsCj4g
+Cj4gT24gMzEvMDUvMjIgMjM6MDEsIEZhYnJpY2UgRm9udGFpbmUgd3JvdGU6Cj4+IHBpeG1hbiBm
+YWlscyB0byBidWlsZCB3aXRoIEJSMl9PUFRJTUlaRV9TIG9uIHNoNHtlYixhLGFlYn06Cj4+Cj4+
+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBwaXhtYW4tZmFzdC1wYXRoLmM6MzM6Cj4+IHBpeG1hbi1m
+YXN0LXBhdGguYzogSW4gZnVuY3Rpb24gCj4+ICdmYXN0X2NvbXBvc2l0ZV9zY2FsZWRfbmVhcmVz
+dF84ODg4XzU2NV9ub3JtYWxfT1ZFUic6Cj4+IHBpeG1hbi1pbmxpbmVzLmg6NTg2OjE6IGludGVy
+bmFsIGNvbXBpbGVyIGVycm9yOiBTZWdtZW50YXRpb24gZmF1bHQKPj4gwqDCoCA1ODYgfCB9Cj4+
+IMKgwqDCoMKgwqDCoCB8IF4KPj4KPj4gRml4ZXM6Cj4+IMKgIC0gCj4+IGh0dHA6Ly9hdXRvYnVp
+bGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2M5ZDM1ZDU5NzUzMTFhMTkxZGZiZTEyMjkxMzk4NTAz
+OTg3ZTgwNGUgCj4+Cj4+IMKgIC0gCj4+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9y
+ZXN1bHRzL2QzNGI4NjcyZjYyMTFkNjBhZjQxMjJiZGQ5NGZhOGMyZjRmNGJmNmEgCj4+Cj4+IMKg
+IC0gCj4+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzkzM2M0YTJlNzNj
+OTg3NTczZWNjOTcxNzJmNDQyYjc4MTk5NDYyZDUgCj4+Cj4+Cj4+IFNpZ25lZC1vZmYtYnk6IEZh
+YnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgo+PiAtLS0KPj4gwqAg
+dG9vbGNoYWluL0NvbmZpZy5pbiB8IDIgKy0KPj4gwqAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
+aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4+Cj4+IGRpZmYgLS1naXQgYS90b29sY2hhaW4vQ29uZmln
+LmluIGIvdG9vbGNoYWluL0NvbmZpZy5pbgo+PiBpbmRleCA3M2VhNzg2MjRhLi43NTg0Yjg1Zjcx
+IDEwMDY0NAo+PiAtLS0gYS90b29sY2hhaW4vQ29uZmlnLmluCj4+ICsrKyBiL3Rvb2xjaGFpbi9D
+b25maWcuaW4KPj4gQEAgLTE5OSw3ICsxOTksNyBAQCBjb25maWcgQlIyX1RPT0xDSEFJTl9IQVNf
+R0NDX0JVR185OTE0MAo+PiDCoCAjIHN0aWxsIGV4aXN0cyBpbiBnY2MgPSAxMS4xLjAKPj4gwqAg
+Y29uZmlnIEJSMl9UT09MQ0hBSU5fSEFTX0dDQ19CVUdfMTAxNzM3Cj4+IMKgwqDCoMKgwqAgYm9v
+bAo+PiAtwqDCoMKgIGRlZmF1bHQgeSBpZiBCUjJfc2g0Cj4+ICvCoMKgwqAgZGVmYXVsdCB5IGlm
+IEJSMl9zaDQgfHwgQlIyX3NoNGViIHx8IEJSMl9zaDRhIHx8IEJSMl9zaDRhZWIKPiAKPiBJJ3Zl
+IHNlZW4gb25seSBub3cgdGhhdCBCUjJfc2g0IHN0YW5kcyBvbmx5IGZvcjoKPiAic2g0IChTSDQg
+bGl0dGxlIGVuZGlhbikiCj4gSGVyZSBJJ3ZlIG1lYW50IHRvIG1ha2UgaXQgZGVmYXVsdCB5IHdo
+ZW4gYW55IEJSMl9zaDQqIGlzIHNlbGVjdGVkLgo+IEJ1dCBhdCB0aGlzIHBvaW50IEkgd291bGQg
+dXNlIEJSMl9zaCBzaW5jZSBpZiB3ZSBoYXZlIHRoYXQgc2VsZWN0ZWQKPiB0aGVuIGFsbCBCUl9z
+aDQqIGNhc2VzIGFyZSBpbmNsdWRlZCBhbmQgbm8gb3RoZXIgQlIyX3NoKiBpcyBwcmVzZW50Lgo+
+IAo+IENhbiB5b3UgcGxlYXNlIG1vZGlmeSBhY2NvcmRpbmcgdG8gdGhhdD8KCkFuZCB3aXRoIHRo
+YXQgY2hhbmdlOgpSZXZpZXdlZC1ieTogR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJl
+bmV0dGllbmdpbmVlcmluZy5jb20+CgotLSAKR2l1bGlvIEJlbmV0dGkKQ1RPL0NFT0BCZW5ldHRp
+IEVuZ2luZWVyaW5nIHNhcwoKPiBUaGFua3MgYSBsb3QKPiBLaW5kIHJlZ2FyZHMKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
