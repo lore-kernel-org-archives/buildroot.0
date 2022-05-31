@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 330A2C43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04AABC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:25:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F223360EE8;
-	Tue,  7 Jun 2022 19:24:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE48C42483;
+	Tue,  7 Jun 2022 19:25:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YDRJHkiM4ev8; Tue,  7 Jun 2022 19:24:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NQfjWj2KTakz; Tue,  7 Jun 2022 19:25:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F96660F93;
-	Tue,  7 Jun 2022 19:24:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ABC101BF475
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9225D41911;
+	Tue,  7 Jun 2022 19:25:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B164B1BF9B4
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A51998408D
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5913D4059B
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o7fkjqit8GpG for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 29UZknFvTaQm for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2723684005
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97E6D4055F
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1A8FA86E22; Tue,  7 Jun 2022 19:04:58 +0000 (UTC)
+ id 931E186E21; Tue,  7 Jun 2022 19:04:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 1 Jun 2022 23:22:40 +0200
+Date: Tue, 31 May 2022 10:26:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dac6e3011883ce3b35cbf64ec156186153bf0032
-X-Git-Newrev: f31696e1a114883c363bf7bf3bde5bff89de6fac
+X-Git-Oldrev: b680798eaa882c78cdeb3e703e1e7a8b76df69e6
+X-Git-Newrev: 22db16694406d6b2156acd74d3a49fafae6d015c
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190458.1A8FA86E22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtasn1: add build support for
- host
+Message-Id: <20220607190456.931E186E21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang-p1-xml: bump version to
+ 1.1.49
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,24 +60,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f31696e1a114883c363bf7bf3bde5bff89de6fac
+commit: https://git.buildroot.net/buildroot/commit/?id=22db16694406d6b2156acd74d3a49fafae6d015c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libtasn1/libtasn1.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/erlang-p1-xml/erlang-p1-xml.hash | 2 +-
+ package/erlang-p1-xml/erlang-p1-xml.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index ba86081df9..11ab223962 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -29,3 +29,4 @@ endef
- LIBTASN1_POST_INSTALL_TARGET_HOOKS += LIBTASN1_REMOVE_PROGS
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.hash b/package/erlang-p1-xml/erlang-p1-xml.hash
+index f2a4ab83e0..379ca7ef88 100644
+--- a/package/erlang-p1-xml/erlang-p1-xml.hash
++++ b/package/erlang-p1-xml/erlang-p1-xml.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  739f37a161a570071469ab1f3d8fc232f004ea616700fe7e46b6d8afa9d03a60  erlang-p1-xml-1.1.44.tar.gz
++sha256  02bcdb0a4350080a10b52de85c11de982e5f7cf2150f5b1b888f7a95ccb31265  erlang-p1-xml-1.1.49.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
+index 5730181ac6..eee2c74c03 100644
+--- a/package/erlang-p1-xml/erlang-p1-xml.mk
++++ b/package/erlang-p1-xml/erlang-p1-xml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+-ERLANG_P1_XML_VERSION = 1.1.44
++ERLANG_P1_XML_VERSION = 1.1.49
+ ERLANG_P1_XML_SITE = $(call github,processone,fast_xml,$(ERLANG_P1_XML_VERSION))
+ ERLANG_P1_XML_LICENSE = Apache-2.0
+ ERLANG_P1_XML_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
