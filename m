@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C89FC43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCE29C43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:26:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 00A9440B48;
-	Tue,  7 Jun 2022 19:26:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EAF384087;
+	Tue,  7 Jun 2022 19:26:56 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fsicqnF70xBL; Tue,  7 Jun 2022 19:26:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF4CA82F41;
+	Tue,  7 Jun 2022 19:26:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 105921BF9B4
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B05EF408C0
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sUXdRfW79BV2; Tue,  7 Jun 2022 19:26:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12FC34100C;
-	Tue,  7 Jun 2022 19:26:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D36911BF475
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C0EC8418FB
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:59 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wPIQxh-Lkgrl for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zApXpAB0tSTL for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05C9541907
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D48E40607
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EBE9F86E23; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
+ id 1033686E21; Tue,  7 Jun 2022 19:04:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Jun 2022 21:44:37 +0200
+Date: Tue, 31 May 2022 10:26:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd0a0da7dfd6dee5e0125e04a361fd8051a2a3cd
-X-Git-Newrev: 81f2dd7b489b73985c13db91ae958833ae84cb4f
+X-Git-Oldrev: d5b72f0d09a10691e6bdc80a4bebed51fdc29413
+X-Git-Newrev: 0a02fb55404b9b6a0b98777fdb2dfa4403fd685e
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190459.EBE9F86E23@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-amdgpu:
- needs libgbm
+Message-Id: <20220607190457.1033686E21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang-p1-mqtree: bump version to
+ 1.0.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,77 +52,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Arnout Vandecappelle \(Essensium/Mind\) via buildroot"
- <buildroot@buildroot.org>
-Reply-To: "Arnout Vandecappelle \(Essensium/Mind\)" <arnout@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81f2dd7b489b73985c13db91ae958833ae84cb4f
+commit: https://git.buildroot.net/buildroot/commit/?id=0a02fb55404b9b6a0b98777fdb2dfa4403fd685e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The package depends on gbm:
-https://gitlab.freedesktop.org/xorg/driver/xf86-video-amdgpu/-/blob/master/configure.ac#L75
-
-This dependency was always there. However, previously it was implicit
-from the mesa3d dependencies. Since we made libgbm a virtual package, it
-is possible that libgbm is selected in another way. Note that the
-original dependencies would always for libgbm in mesa3d, so this was not
-causing any build failures.
-
-Also explicitly add libgbm to _DEPENDENCIES. Previously, this was
-implied by the mesa3d dependency in xserver, but this is no longer true
-for other gbm providers.
-
-For details see
-http://lists.busybox.net/pipermail/buildroot/2022-April/641451.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xdriver_xf86-video-amdgpu/Config.in                 | 8 +++-----
- .../x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk  | 1 +
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/erlang-p1-mqtree/erlang-p1-mqtree.hash | 2 +-
+ package/erlang-p1-mqtree/erlang-p1-mqtree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/Config.in b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
-index c42255f55c..fb23fc1fdf 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AMDGPU
- 	bool "xf86-video-amdgpu"
- 	depends on BR2_USE_MMU # libdrm
--	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
--	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # gbm
-+	depends on BR2_PACKAGE_HAS_LIBGBM
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_AMDGPU
- 	select BR2_PACKAGE_LIBEPOXY
-@@ -11,7 +10,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AMDGPU
- 	help
- 	  AMD GPU video driver
+diff --git a/package/erlang-p1-mqtree/erlang-p1-mqtree.hash b/package/erlang-p1-mqtree/erlang-p1-mqtree.hash
+index cf1a880cb8..b91a0cdaa0 100644
+--- a/package/erlang-p1-mqtree/erlang-p1-mqtree.hash
++++ b/package/erlang-p1-mqtree/erlang-p1-mqtree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4f86e272a97152d3f5166dad583dc1b5bda9582f6777f6294fb8328def8b2189  erlang-p1-mqtree-1.0.10.tar.gz
++sha256  b0b5506f43fd2ef8f72b3d5f42ece4dd22d872f9be2a9120affb7c6ae047597f  erlang-p1-mqtree-1.0.14.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/erlang-p1-mqtree/erlang-p1-mqtree.mk b/package/erlang-p1-mqtree/erlang-p1-mqtree.mk
+index 19e31ef1b2..9e66bebbaa 100644
+--- a/package/erlang-p1-mqtree/erlang-p1-mqtree.mk
++++ b/package/erlang-p1-mqtree/erlang-p1-mqtree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "xf86-video-amdgpu needs egl/opengl support from mesa3d"
-+comment "xf86-video-amdgpu needs GBM"
- 	depends on BR2_USE_MMU
--	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
--		!BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	depends on !BR2_PACKAGE_HAS_LIBGBM
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-index 23452fe417..adba21dd62 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-@@ -11,6 +11,7 @@ XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
- XDRIVER_XF86_VIDEO_AMDGPU_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_AMDGPU_DEPENDENCIES = \
- 	libdrm \
-+	libgbm \
- 	xlib_libXcomposite \
- 	xorgproto \
- 	xserver_xorg-server
+-ERLANG_P1_MQTREE_VERSION = 1.0.10
++ERLANG_P1_MQTREE_VERSION = 1.0.14
+ ERLANG_P1_MQTREE_SITE = $(call github,processone,mqtree,$(ERLANG_P1_MQTREE_VERSION))
+ ERLANG_P1_MQTREE_LICENSE = Apache-2.0
+ ERLANG_P1_MQTREE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
