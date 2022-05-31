@@ -1,67 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9BF7C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 23:20:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06DC5C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 23:43:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45174403B8;
-	Tue, 31 May 2022 23:20:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A48B283403;
+	Tue, 31 May 2022 23:43:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uDn8HFCAOyrZ; Tue, 31 May 2022 23:20:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hPWXkgGhQ6jj; Tue, 31 May 2022 23:43:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 51F85401D5;
-	Tue, 31 May 2022 23:20:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E5A151BF3DE
- for <buildroot@lists.busybox.net>; Tue, 31 May 2022 23:20:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2113817EB;
+	Tue, 31 May 2022 23:43:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F9361BF844
+ for <buildroot@lists.busybox.net>; Tue, 31 May 2022 23:43:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D106D60BA4
- for <buildroot@lists.busybox.net>; Tue, 31 May 2022 23:20:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2D50817EB
+ for <buildroot@lists.busybox.net>; Tue, 31 May 2022 23:43:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2r57VqaMm1d4 for <buildroot@lists.busybox.net>;
- Tue, 31 May 2022 23:20:22 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd15177.aruba.it (smtpcmd15177.aruba.it [62.149.156.177])
- by smtp3.osuosl.org (Postfix) with ESMTP id 583E960B4C
- for <buildroot@buildroot.org>; Tue, 31 May 2022 23:20:22 +0000 (UTC)
-Received: from [192.168.50.225] ([146.241.66.179])
- by Aruba Outgoing Smtp  with ESMTPSA
- id wB9vneSQlXOlAwB9vn2xMa; Wed, 01 Jun 2022 01:20:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1654039221; bh=r/LvFUQWNHJGtdwSl0ouzYUHWfHAWF1yhvhotSdWEHk=;
- h=Date:MIME-Version:Subject:From:To:Content-Type;
- b=i1iY9Jh8WVOw9vKpBdryzJbrod11Nphc6iWvUvXOVsxqc/+9rlaiN2w9y5qNNojKd
- 1tOFtfkECH+3SrsxflPby4l46z3hpW2JsT4M77kPi3166TKqwJTSdNHFzU9rtvmiso
- RD9S0p892OgOq/vvvZ4Eq1CWqUPL/EA1PGT8XV5alBIcA3eeh22ir8m5/RTI91BLbW
- xH7MhilE/w8qf/6pFdW86tjfsJrcOmvFMJU/SykYpierqFgjTgaksp8OHZRp7QPMbJ
- QhbtjLasQnWAN37RgljacK81t9tJBZtqwiEhDwR3Y5x21Ixik+iwATKp36JB041FvN
- qlHT4Rqus3Iuw==
-Message-ID: <9eed64b3-946e-3f13-1fcd-168e68cad471@benettiengineering.com>
-Date: Wed, 1 Jun 2022 01:20:18 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xQIR-eIBdAKR for <buildroot@lists.busybox.net>;
+ Tue, 31 May 2022 23:43:11 +0000 (UTC)
+X-Greylist: delayed 04:30:04 by SQLgrey-1.8.0
+Received: from 9.mo561.mail-out.ovh.net (9.mo561.mail-out.ovh.net
+ [87.98.184.141])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 15150817D3
+ for <buildroot@buildroot.org>; Tue, 31 May 2022 23:43:10 +0000 (UTC)
+Received: from player756.ha.ovh.net (unknown [10.109.138.54])
+ by mo561.mail-out.ovh.net (Postfix) with ESMTP id 763BC249DF
+ for <buildroot@buildroot.org>; Tue, 31 May 2022 18:55:23 +0000 (UTC)
+Received: from blach.pl (unknown [178.218.193.145])
+ (Authenticated sender: grzegorz@blach.pl)
+ by player756.ha.ovh.net (Postfix) with ESMTPSA id 2A3752A41FDBF;
+ Tue, 31 May 2022 18:55:14 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass
+ (GARM-104R00580538729-2ef1-4880-8ac2-b6a44f2b6248,
+ 9FBD27401CD9201F28E554BA6E9F2A6F99B84174) smtp.auth=grzegorz@blach.pl
+X-OVh-ClientIp: 178.218.193.145
+From: Grzegorz Blach <grzegorz@blach.pl>
+To: buildroot@buildroot.org
+Date: Tue, 31 May 2022 20:54:44 +0200
+Message-Id: <20220531185444.226429-1-grzegorz@blach.pl>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220531210109.472212-1-fontaine.fabrice@gmail.com>
- <224404ba-53e9-d97c-0ace-aa8885052ea5@benettiengineering.com>
-In-Reply-To: <224404ba-53e9-d97c-0ace-aa8885052ea5@benettiengineering.com>
-X-CMAE-Envelope: MS4xfJPICOrhKU0zU+JwqfzDROyWXcggTwMR3UExd1XB6ngMb0gvItMnf74Jh3t5kFCaTwjgb0iR7VcowLxs1A8h7ZsBr8L9SeBruhPRmoRTyDJKCfCdToqH
- beo15CRb2HSuMsZTRLTIGc93FI3qCCzujDCEjbGMNWLv7asvkEZimFcBJ/WQlvnw44GE0Rl6Tcpyr5j2aCYEvBaHBkId2kY451OagKfYpFsNY8l18fIV9tpI
- MTy/Oro20VlQw+lgMz9O1YVx+2Qk26xDzsmAXKrpBJqiMPdI/H4CZDnMC8a/bxgjwgck0bdqyBgG+gqwxw7Ypr6Yf7Nx3uS3WIwjn7+bsAykQnJjuVUmAICh
- sGsmNR97srmXAsh6i2nLIp9zzmd5+GLtDXQ6N7hWnepb3FcGjhg=
-Subject: Re: [Buildroot] [PATCH 1/1] toolchain/Config.in: sh4{eb, a,
- aeb} are affected by GCC bug 101737
+X-Ovh-Tracer-Id: 7249106550391456065
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrkeekgddufeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepifhriigvghhorhiiuceulhgrtghhuceoghhriigvghhorhiisegslhgrtghhrdhplheqnecuggftrfgrthhtvghrnhepuedvheegleeludegleeggffgueekhedtfeelueegffehlefhiefhteejvdeuueetnecuffhomhgrihhnpehphihpihdrohhrghdpphihthhhohhnhhhoshhtvggurdhorhhgnecukfhppedtrddtrddtrddtpddujeekrddvudekrdduleefrddugeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejheeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepghhriigvghhorhiisegslhgrtghhrdhplhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+Subject: [Buildroot] [PATCH 3/5] package/python-falcon: Bump to version 3.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,46 +65,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMDEvMDYvMjIgMDE6MDMsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+IEhpIEZhYnJpY2UsCj4g
-Cj4gT24gMzEvMDUvMjIgMjM6MDEsIEZhYnJpY2UgRm9udGFpbmUgd3JvdGU6Cj4+IHBpeG1hbiBm
-YWlscyB0byBidWlsZCB3aXRoIEJSMl9PUFRJTUlaRV9TIG9uIHNoNHtlYixhLGFlYn06Cj4+Cj4+
-IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBwaXhtYW4tZmFzdC1wYXRoLmM6MzM6Cj4+IHBpeG1hbi1m
-YXN0LXBhdGguYzogSW4gZnVuY3Rpb24gCj4+ICdmYXN0X2NvbXBvc2l0ZV9zY2FsZWRfbmVhcmVz
-dF84ODg4XzU2NV9ub3JtYWxfT1ZFUic6Cj4+IHBpeG1hbi1pbmxpbmVzLmg6NTg2OjE6IGludGVy
-bmFsIGNvbXBpbGVyIGVycm9yOiBTZWdtZW50YXRpb24gZmF1bHQKPj4gwqDCoCA1ODYgfCB9Cj4+
-IMKgwqDCoMKgwqDCoCB8IF4KPj4KPj4gRml4ZXM6Cj4+IMKgIC0gCj4+IGh0dHA6Ly9hdXRvYnVp
-bGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2M5ZDM1ZDU5NzUzMTFhMTkxZGZiZTEyMjkxMzk4NTAz
-OTg3ZTgwNGUgCj4+Cj4+IMKgIC0gCj4+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9y
-ZXN1bHRzL2QzNGI4NjcyZjYyMTFkNjBhZjQxMjJiZGQ5NGZhOGMyZjRmNGJmNmEgCj4+Cj4+IMKg
-IC0gCj4+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzkzM2M0YTJlNzNj
-OTg3NTczZWNjOTcxNzJmNDQyYjc4MTk5NDYyZDUgCj4+Cj4+Cj4+IFNpZ25lZC1vZmYtYnk6IEZh
-YnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgo+PiAtLS0KPj4gwqAg
-dG9vbGNoYWluL0NvbmZpZy5pbiB8IDIgKy0KPj4gwqAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
-aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4+Cj4+IGRpZmYgLS1naXQgYS90b29sY2hhaW4vQ29uZmln
-LmluIGIvdG9vbGNoYWluL0NvbmZpZy5pbgo+PiBpbmRleCA3M2VhNzg2MjRhLi43NTg0Yjg1Zjcx
-IDEwMDY0NAo+PiAtLS0gYS90b29sY2hhaW4vQ29uZmlnLmluCj4+ICsrKyBiL3Rvb2xjaGFpbi9D
-b25maWcuaW4KPj4gQEAgLTE5OSw3ICsxOTksNyBAQCBjb25maWcgQlIyX1RPT0xDSEFJTl9IQVNf
-R0NDX0JVR185OTE0MAo+PiDCoCAjIHN0aWxsIGV4aXN0cyBpbiBnY2MgPSAxMS4xLjAKPj4gwqAg
-Y29uZmlnIEJSMl9UT09MQ0hBSU5fSEFTX0dDQ19CVUdfMTAxNzM3Cj4+IMKgwqDCoMKgwqAgYm9v
-bAo+PiAtwqDCoMKgIGRlZmF1bHQgeSBpZiBCUjJfc2g0Cj4+ICvCoMKgwqAgZGVmYXVsdCB5IGlm
-IEJSMl9zaDQgfHwgQlIyX3NoNGViIHx8IEJSMl9zaDRhIHx8IEJSMl9zaDRhZWIKPiAKPiBJJ3Zl
-IHNlZW4gb25seSBub3cgdGhhdCBCUjJfc2g0IHN0YW5kcyBvbmx5IGZvcjoKPiAic2g0IChTSDQg
-bGl0dGxlIGVuZGlhbikiCj4gSGVyZSBJJ3ZlIG1lYW50IHRvIG1ha2UgaXQgZGVmYXVsdCB5IHdo
-ZW4gYW55IEJSMl9zaDQqIGlzIHNlbGVjdGVkLgo+IEJ1dCBhdCB0aGlzIHBvaW50IEkgd291bGQg
-dXNlIEJSMl9zaCBzaW5jZSBpZiB3ZSBoYXZlIHRoYXQgc2VsZWN0ZWQKPiB0aGVuIGFsbCBCUl9z
-aDQqIGNhc2VzIGFyZSBpbmNsdWRlZCBhbmQgbm8gb3RoZXIgQlIyX3NoKiBpcyBwcmVzZW50Lgo+
-IAo+IENhbiB5b3UgcGxlYXNlIG1vZGlmeSBhY2NvcmRpbmcgdG8gdGhhdD8KCkFuZCB3aXRoIHRo
-YXQgY2hhbmdlOgpSZXZpZXdlZC1ieTogR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJl
-bmV0dGllbmdpbmVlcmluZy5jb20+CgotLSAKR2l1bGlvIEJlbmV0dGkKQ1RPL0NFT0BCZW5ldHRp
-IEVuZ2luZWVyaW5nIHNhcwoKPiBUaGFua3MgYSBsb3QKPiBLaW5kIHJlZ2FyZHMKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ package/python-falcon/python-falcon.hash | 4 ++--
+ package/python-falcon/python-falcon.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
+index 979419c25a..d4e99a6998 100644
+--- a/package/python-falcon/python-falcon.hash
++++ b/package/python-falcon/python-falcon.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/falcon/json
+-md5  4a70cfeeacb453f5fd7eb791bdd3ac01  falcon-3.0.1.tar.gz
+-sha256  c41d84db325881a870e8b7129d5ecfd972fa4323cf77b7119a1d2a21966ee681  falcon-3.0.1.tar.gz
++md5  0172450908573a4449a5937810d512b9  falcon-3.1.0.tar.gz
++sha256  f2760bd18c16393a6fb5e55f371f67921edb72febe693a82b3c5e82195d087b7  falcon-3.1.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
+index 1f400f9a1f..01b5eca4a2 100644
+--- a/package/python-falcon/python-falcon.mk
++++ b/package/python-falcon/python-falcon.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_FALCON_VERSION = 3.0.1
++PYTHON_FALCON_VERSION = 3.1.0
+ PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
+-PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/63/22/6a9009c53ad78e65d88a44db8eccc7f39c6f54fc05fb43b1e9cbbc481d06
++PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/36/53/4fd90c6c841bc2e4be29ab92c65e5406df9096c421f138bef9d95d43afc9
+ PYTHON_FALCON_SETUP_TYPE = setuptools
+ PYTHON_FALCON_LICENSE = Apache-2.0
+ PYTHON_FALCON_LICENSE_FILES = LICENSE
+-- 
+2.36.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
