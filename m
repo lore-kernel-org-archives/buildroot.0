@@ -4,104 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20EE1C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 05:50:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD850C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 05:50:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C96BA60B9D;
-	Tue, 31 May 2022 05:50:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60C9F60F84;
+	Tue, 31 May 2022 05:50:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T5bhwNEgvGDp; Tue, 31 May 2022 05:50:04 +0000 (UTC)
+	with ESMTP id 9X8LNrJcKP0p; Tue, 31 May 2022 05:50:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63F9E61110;
-	Tue, 31 May 2022 05:50:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5ACDD1BF375
- for <buildroot@lists.busybox.net>; Tue, 31 May 2022 05:49:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 688856125D;
+	Tue, 31 May 2022 05:50:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 996971BF375
+ for <buildroot@lists.busybox.net>; Tue, 31 May 2022 05:49:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 53B2740232
- for <buildroot@lists.busybox.net>; Tue, 31 May 2022 05:49:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8190C61110
+ for <buildroot@lists.busybox.net>; Tue, 31 May 2022 05:49:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=wdc.com header.b="SuhHc1HC";
- dkim=pass (2048-bit key) header.d=opensource.wdc.com
- header.b="IJ5meFu0"
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L6nzuLAQJu6U for <buildroot@lists.busybox.net>;
- Tue, 31 May 2022 05:49:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mr9IZYhowrYR for <buildroot@lists.busybox.net>;
+ Tue, 31 May 2022 05:49:36 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2D4D54023F
- for <buildroot@buildroot.org>; Tue, 31 May 2022 05:49:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EB73860B9D
+ for <buildroot@buildroot.org>; Tue, 31 May 2022 05:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1653976174; x=1685512174;
+ t=1653976175; x=1685512175;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=2kTGs8ul4ilIgxtHDyuT82YTBVhCgeHXvYjiXAqmzpQ=;
- b=SuhHc1HCx+9QhQfunRy25aguUP/kMHqbdsVo5FD6OtS04+mpGOC2MQ5g
- KOhFxYzA5561E5MDhcL/ljl2z9lERfL+Y7ygFs1WWq3VfLnSZEeTBVpt2
- +cAEweh2NyM/vlMGETDwWjNih7fBNTMXftmxQMRng1mNIeRv/uiwCcTfz
- TvjbBuV+1uOjI/PZC07328zmOvgVSqTN7Y1xWCNRJTmE1/1D6pBuAjQ5n
- 52YmagCN8fyxKsbkvXPt7CnGv2ONQ5OCBGTQDdSpXfYWqSlnog7CRv+GE
- h2WW0DvwR0F0u67yOURR8mMVkHNVmx1RcmWkhDAOmhgHhalo6kRnR52WF w==;
-X-IronPort-AV: E=Sophos;i="5.91,264,1647273600"; d="scan'208";a="306095078"
+ bh=WlzPnE6+PjfWrImw0aD7rTvKdMdVVqUpQT5rQ9vy+RE=;
+ b=N0EJL2nv0hfAxaRWY5vD+y2dWNt0lPu6tsIyNvpOW3KOq1RvWZYqky7G
+ VrP7yq0Yt8RR35RTLljmpnuubDWyYPdmADDR+uDPlyE8usvzI7fTArmt1
+ 2UPvpEf3XGDHE9bAGwzgmNC4IfAk+URlwb2lwrqWArvfRjLBBLhwLtll1
+ cLVJj+G3AMrvdeSwMIjUN8fjf6EXilMKr1mN2zEoUy9a4/sJfmfyyY/Rv
+ J/eeNnCtLEED+UOiEN4iU+eo4gcCAbf1FcN5BXHBQN67st0RwDmNMmZsi
+ WfahC2AR4Iax+1j7BHPo7TJxvEikTPtrJQMyvWTwtQr176Y5Pzipe4Swm A==;
+X-IronPort-AV: E=Sophos;i="5.91,264,1647273600"; d="scan'208";a="306095081"
 Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com)
  ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 31 May 2022 13:49:33 +0800
-IronPort-SDR: luHamoWxV6g/O0fHnaq6Go14I6KfPhP0OvJpzRw5GiVV7mz4XXxbl0NGsOVDnNWMxtoZhujz1D
- 2WiH4qlN6CZK29bQGv5pXOKPkBiEyOfyE9u10VOLU+1MXQhZ5UQvFid5+0D7aIQxbwSXiyam0I
- ma9xMWnjHzypXNz2/3mms1ZxrBlkpK2P35lQiJlRM6cRU4Q+DTLIe1oUq/ksfp1JLdNhS4N1zP
- s+iLobdgVyRgDmZlxjlM1qDcBz8p8UTqO39+Sq0rHfn9sf/vO982jnlAy+Za2l+vPN9iK75CWq
- zpKwpJCP16QyICaXA1ruc/i4
+ by ob1.hgst.iphmx.com with ESMTP; 31 May 2022 13:49:35 +0800
+IronPort-SDR: KAeLkZdjksVQZisPz4kp/gqPAePmXR5nuWWe+F+SY/A4G5m+6mueX0d473Q/qRvf+UHQym6Xjh
+ NV6/YQ53MuT81NrD9vPRTYCJmrd9Rqy1FWaM0H3GIstaSLvWy1DbA/Z1oGsWgdzm5yfFXGeHSb
+ +p5G15zPw6Nhg5WQWenzWs2Ljhpi2OAhj8UxUAPBC6TpJrYPHqS2GyPaA7EB3oFCGd3Uy727eu
+ cTSy/L1rwcMcnaWMp48tkCEt0h6QmUybJvvX1kR5d7VWxKjwLpmx+XoBmenFThERtHtHAk/aD0
+ 5GxS/R39nG2/11mTlMUwnC5x
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 30 May 2022 22:13:19 -0700
-IronPort-SDR: yG2mUeHFwm0jp0dJwwfMrrR8KPkcCqcCtfAu/qbbnxi86X4FIx/uGr3Lwpa6YaUTcvCkaPeSba
- OSWnRNNZw4W5a2XBg+GXvh0dgEnAMs0XgUooKQomBvIUCAJz+uFoBs2HsB9KhA33WYwr0mPUKT
- riHCQpCFTYubfATUX45E9kIsZeG5rwEfkoCTPG068HRxFgPvV7QIG7C62S+TsLbEe2PU59T9z1
- 0fd1C5f21dGhy7N12I4W4gww97K7PvcwC+SOSSnGV3YBCBT0OeGYD7oUm3Z6nK11P0mSavW0JZ
- QV4=
+ 30 May 2022 22:13:21 -0700
+IronPort-SDR: PXZDZxpYFZ4bLQ+p98MSS/gNR1f5a7s5MZ6r7BAzgP2W+TKfej+8PFj8JbiuT8s/V4S6xAAUGq
+ QJXTftVTeDOw0Hdy7uc3G93t6GEUbkvPNTbIV6HGBIb0Uffn2SoI9uRmHjIbarWQwkOWGRsLPl
+ Frpj1mEBHMvLi62hZZNzYbzof6tRgyQQbPJrMP4SOKHm2T/B424+WGO5AV8ENZgd44ugUKW9wI
+ e5aG36XnL6xy3pDHMSXXcl4yp65jC7hTqiFXPZrV98n4q1kmmjx06tSkx1CnIC8ZOeLXHeSzi/
+ a5s=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 30 May 2022 22:49:34 -0700
+ 30 May 2022 22:49:36 -0700
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LC1Z52gkcz1SVp0
- for <buildroot@buildroot.org>; Mon, 30 May 2022 22:49:33 -0700 (PDT)
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LC1Z66F7Fz1SHwl
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 22:49:34 -0700 (PDT)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
  reason="pass (just generated, assumed good)"
  header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
  opensource.wdc.com; h=content-transfer-encoding:mime-version
  :references:in-reply-to:x-mailer:message-id:date:subject:to
- :from; s=dkim; t=1653976172; x=1656568173; bh=2kTGs8ul4ilIgxtHDy
- uT82YTBVhCgeHXvYjiXAqmzpQ=; b=IJ5meFu0yb5lOpdPdUKWn9pxwfN+PV9MUo
- h9FpWwUZF29vm63yLhvHPrhAdMfW1RuD4NT6sHXjFOqMG7BxsyKqOL3xQ2bkUy64
- 3/Md7dWZ2gSBn1pXMJc4DfbRM1nQyrs2OJbDuaxSeNz4zGB4hvAG+eickOhqa4Wb
- +CETqICFh4BGoiGoe8oHpFcnGoY3v5gP5W1IcKdkG4ZEYatXoTl4c7CO5SKz8aXY
- YRtXEHpo3GNl5pP1Jvl4SbIZS1QL19QyoHqp6kj3HGS4QhF1bgDLwisJ1RIkN6r5
- 20nCpXm9U3xaYd8ErWkqFHnM58nhMk7bRdlnxQApXdMWOtqYe50A==
+ :from; s=dkim; t=1653976173; x=1656568174; bh=WlzPnE6+PjfWrImw0a
+ D7rTvKdMdVVqUpQT5rQ9vy+RE=; b=kZZuU2bBE6O0K80x0vJ0WPDylNTrXQH3/c
+ ncjPQBlrYHk+7e4Yxm/zAESiJw1xaVBaZdvX+y9DGsiTTx33QYXN+aajhOqEzZDm
+ Mb3vXTtbACjkzKevYtgER1a9SoTAOjM418GKvOim8EajNqua2oU5IEn0D4Qmm9jZ
+ 7Z9y7M+ElnzU4aqOf6Ckag+2kBEC2i44HO51eqr6Darhk0Ag/NgopXw+Mvh+j6MP
+ jVg+CTm098/ycVIsT3OBDDOp8hsMKF7oDnXz5+MTAmAh0nSce8sWWzvSDC6YLUd+
+ jtrNT2rEWf5codnGbJe2yLoIjl8GU/H6i8P1z1VCN4tP+Z66WYCA==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
  by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new,
- port 10026) with ESMTP id Frw-9prKzdev for <buildroot@buildroot.org>;
- Mon, 30 May 2022 22:49:32 -0700 (PDT)
+ port 10026) with ESMTP id B4fuuQEGZNND for <buildroot@buildroot.org>;
+ Mon, 30 May 2022 22:49:33 -0700 (PDT)
 Received: from twashi.fujisawa.hgst.com (unknown [10.225.163.61])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LC1Z32JjDz1Rvlc;
- Mon, 30 May 2022 22:49:31 -0700 (PDT)
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LC1Z43zM6z1Rvlx;
+ Mon, 30 May 2022 22:49:32 -0700 (PDT)
 To: buildroot <buildroot@buildroot.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 May 2022 14:49:21 +0900
-Message-Id: <20220531054926.373713-3-damien.lemoal@opensource.wdc.com>
+Date: Tue, 31 May 2022 14:49:22 +0900
+Message-Id: <20220531054926.373713-4-damien.lemoal@opensource.wdc.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220531054926.373713-1-damien.lemoal@opensource.wdc.com>
 References: <20220531054926.373713-1-damien.lemoal@opensource.wdc.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 2/7] board: Add common support for Canaan
- K210 SoC-based boards
+Subject: [Buildroot] [PATCH v3 3/7] board: Add Sipeed MAIX-Bit board support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -123,453 +118,490 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Linux environment for all boards using the Canaan Kendryte K210 SoC
-can be built with the same process, using configurations that differ
-only by the device tree used for the build. This patch add the
-shared configurations, rootfs overlay and scripts used for all
-K210-based boards.
+Add two buildroot configuration files to build a minimal Linux
+environment for the Sipeed MAIX Bit board. The configurations are:
+* sipeed_maix_bit_defconfig: Build a bootable kernel image with an
+  embedded initramfs root file system. The image built can be flashed to
+  the board as is and does not require a boot loader. This configuration
+  uses the tiny busybox configuration defined in
+  board/canaan/k210-soc/busybox-tiny.config.
+* sipeed_maix_bit_sdcard_defconfig: Build a kernel image with a root
+  file system on the SD card and using U-Boot as the boot loader. This
+  uses the default busybox minimal configuration.
 
-Since the K210 SoC only has 8 MB of SRAM, a special busybox
-configuration and rootfs overlay are added to save memory at runtime:
-* For configurations using direct kernel boot (no boot loader), the
-  default busybox configuration busybox-minimal.config is modified
-  using the fragment file board/canaan/k210-soc/busybox-tiny.config.
-  This reduces the size of the busybox executable to save memory when
-  executing shell commands.
-* Busybox init system is not used and a special init scripts is provided
-  using the rootfs_overlay root file system overlay. This init script
-  simply mounts devtmpfs, /proc and /sys, and exec an interactive shell
-  after printing a logo. This avoids (1) boot failures due to large
-  memory allocations by the regular busybox init system (these
-  allocations fail on the K210 for lack of enough memory) and avoids
-  (2) keeping the init process sleeping in the background (wasted
-  memory).
+Both configurations also enable the python-kflash and pyserial-miniterm
+host tools for flashing image files to the board and opening a terminal
+console.
 
-The board/canaan/k210-soc/busybox-tiny.config and the rootfs overlay
-files in board/canaan/k210-soc/rootfs_overlay are used for all Canaan
-K210 SoC based boards.
-
-For board configurations booting using the U-Boot boot loader, a common
-set of linux kernel configuration parameters is provided by the file
-board/canaan/k210-soc/linux-sdcard.config. In addition, the post build
-script board/canaan/k210-soc/post-build.sh file and U-Boot image
-generation configuration file board/canaan/k210-soc/genimage.cfg are
-provided. The post-build script creates a generic "k210.dtb" symlink to
-the compiled device tree file for the target board. This symlink is used
-by the genimage.cfg configuration, making this file common for all
-boards.
+The readme.txt file documents how to build and boot the Sipeed MAIX-Bit
+board with these configurations.
 
 Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
- DEVELOPERS                                    |   1 +
- board/canaan/k210-soc/busybox-tiny.config     | 231 ++++++++++++++++++
- board/canaan/k210-soc/genimage.cfg            |  30 +++
- board/canaan/k210-soc/linux-sdcard.config     |   4 +
- board/canaan/k210-soc/post-build.sh           |  28 +++
- board/canaan/k210-soc/rootfs_overlay/init     |   1 +
- .../canaan/k210-soc/rootfs_overlay/sbin/init  |  41 ++++
- board/canaan/k210-soc/uboot.config            |   1 +
- 8 files changed, 337 insertions(+)
- create mode 100644 board/canaan/k210-soc/busybox-tiny.config
- create mode 100644 board/canaan/k210-soc/genimage.cfg
- create mode 100644 board/canaan/k210-soc/linux-sdcard.config
- create mode 100755 board/canaan/k210-soc/post-build.sh
- create mode 120000 board/canaan/k210-soc/rootfs_overlay/init
- create mode 100755 board/canaan/k210-soc/rootfs_overlay/sbin/init
- create mode 100644 board/canaan/k210-soc/uboot.config
+ DEVELOPERS                               |   3 +
+ board/sipeed/maix-bit/linux-cpio.config  |   2 +
+ board/sipeed/maix-bit/readme.txt         | 316 +++++++++++++++++++++++
+ configs/sipeed_maix_bit_defconfig        |  39 +++
+ configs/sipeed_maix_bit_sdcard_defconfig |  57 ++++
+ 5 files changed, 417 insertions(+)
+ create mode 100644 board/sipeed/maix-bit/linux-cpio.config
+ create mode 100644 board/sipeed/maix-bit/readme.txt
+ create mode 100644 configs/sipeed_maix_bit_defconfig
+ create mode 100644 configs/sipeed_maix_bit_sdcard_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 096ca94f4e..972c5de380 100644
+index 972c5de380..3a5671e45b 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -632,6 +632,7 @@ F:	package/log4cpp/
- 
+@@ -633,6 +633,9 @@ F:	package/log4cpp/
  N:	Damien Le Moal <damien.lemoal@wdc.com>
  F:	package/python-kflash/
-+F:	board/canaan/
+ F:	board/canaan/
++F:	board/sipeed/
++F:	configs/sipeed_maix_bit_defconfig
++F:	configs/sipeed_maix_bit_sdcard_defconfig
  
  N:	Daniel Nicoletti <dantti12@gmail.com>
  F:	package/cutelyst/
-diff --git a/board/canaan/k210-soc/busybox-tiny.config b/board/canaan/k210-soc/busybox-tiny.config
+diff --git a/board/sipeed/maix-bit/linux-cpio.config b/board/sipeed/maix-bit/linux-cpio.config
 new file mode 100644
-index 0000000000..9db12b560a
+index 0000000000..de2f8fd074
 --- /dev/null
-+++ b/board/canaan/k210-soc/busybox-tiny.config
-@@ -0,0 +1,231 @@
-+#
-+# Additional config changes for busybox-minimal.config
-+# to reduce the size of the busybox executable.
-+#
-+
-+#
-+# Settings
-+#
-+# CONFIG_INCLUDE_SUSv2 is not set
-+# CONFIG_LONG_OPTS is not set
-+# CONFIG_LFS is not set
-+# CONFIG_FEATURE_DEVPTS is not set
-+# CONFIG_FEATURE_SYSLOG_INFO is not set
-+# CONFIG_FEATURE_SYSLOG is not set
-+
-+#
-+# Library Tuning
-+#
-+# CONFIG_FEATURE_RTMINMAX is not set
-+# CONFIG_FEATURE_RTMINMAX_USE_LIBC_DEFINITIONS is not set
-+# CONFIG_FEATURE_BUFFERS_USE_MALLOC is not set
-+CONFIG_FEATURE_BUFFERS_GO_ON_STACK=y
-+# CONFIG_FEATURE_EDITING_VI is not set
-+# CONFIG_FEATURE_EDITING_SAVEHISTORY is not set
-+# CONFIG_FEATURE_REVERSE_SEARCH is not set
-+# CONFIG_FEATURE_EDITING_WINCH is not set
-+# CONFIG_FEATURE_HWIB is not set
-+
-+#
-+# Archival Utilities
-+#
-+# CONFIG_ZCAT is not set
-+# CONFIG_BZCAT is not set
-+# CONFIG_LZCAT is not set
-+# CONFIG_XZCAT is not set
-+# CONFIG_UNLZOP is not set
-+# CONFIG_LZOPCAT is not set
-+
-+#
-+# Coreutils
-+#
-+# CONFIG_CKSUM is not set
-+# CONFIG_DOS2UNIX is not set
-+# CONFIG_UNIX2DOS is not set
-+# CONFIG_DU is not set
-+# CONFIG_FACTOR is not set
-+# CONFIG_FOLD is not set
-+# CONFIG_HEAD is not set
-+# CONFIG_INSTALL is not set
-+# CONFIG_LINK is not set
-+# CONFIG_LOGNAME is not set
-+# CONFIG_MD5SUM is not set
-+# CONFIG_SHA1SUM is not set
-+# CONFIG_SHA256SUM is not set
-+# CONFIG_SHA512SUM is not set
-+# CONFIG_SHA3SUM is not set
-+# CONFIG_MKFIFO is not set
-+# CONFIG_NICE is not set
-+# CONFIG_NL is not set
-+# CONFIG_NOHUP is not set
-+# CONFIG_OD is not set
-+# CONFIG_PASTE is not set
-+# CONFIG_SHRED is not set
-+# CONFIG_SORT is not set
-+# CONFIG_TAIL is not set
-+# CONFIG_TEE is not set
-+# CONFIG_TIMEOUT is not set
-+# CONFIG_TR is not set
-+# CONFIG_UNIQ is not set
-+# CONFIG_UUDECODE is not set
-+# CONFIG_BASE32 is not set
-+# CONFIG_UUENCODE is not set
-+# CONFIG_WC is not set
-+# CONFIG_WHOAMI is not set
-+# CONFIG_WHO is not set
-+# CONFIG_W is not set
-+# CONFIG_USERS is not set
-+# CONFIG_YES is not set
-+
-+#
-+# Common options
-+#
-+# CONFIG_FEATURE_VERBOSE is not set
-+
-+#
-+# Debian Utilities
-+#
-+# CONFIG_RUN_PARTS is not set
-+# CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS is not set
-+# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
-+# CONFIG_START_STOP_DAEMON is not set
-+# CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS is not set
-+# CONFIG_FEATURE_START_STOP_DAEMON_FANCY is not set
-+# CONFIG_WHICH is not set
-+
-+#
-+# klibc-utils
-+#
-+# CONFIG_NUKE is not set
-+# CONFIG_RESUME is not set
-+# CONFIG_RUN_INIT is not set
-+
-+#
-+# Editors
-+#
-+# CONFIG_SED is not set
-+CONFIG_VI=y
-+CONFIG_FEATURE_VI_MAX_LEN=4096
-+CONFIG_FEATURE_VI_COLON=y
-+CONFIG_FEATURE_VI_YANKMARK=y
-+CONFIG_FEATURE_VI_USE_SIGNALS=y
-+CONFIG_FEATURE_VI_DOT_CMD=y
-+CONFIG_FEATURE_VI_READONLY=y
-+CONFIG_FEATURE_VI_SETOPTS=y
-+CONFIG_FEATURE_VI_SET=y
-+CONFIG_FEATURE_VI_WIN_RESIZE=y
-+CONFIG_FEATURE_VI_ASK_TERMINAL=y
-+CONFIG_FEATURE_VI_UNDO=y
-+
-+#
-+# Finding Utilities
-+#
-+CONFIG_GREP=y
-+# CONFIG_EGREP is not set
-+# CONFIG_FGREP is not set
-+# CONFIG_XARGS is not set
-+
-+#
-+# Init Utilities
-+#
-+# CONFIG_HALT is not set
-+# CONFIG_POWEROFF is not set
-+# CONFIG_FEATURE_WAIT_FOR_INIT is not set
-+# CONFIG_FEATURE_CALL_TELINIT is not set
-+# CONFIG_INIT is not set
-+# CONFIG_LINUXRC is not set
-+
-+#
-+# Login/Password Management Utilities
-+#
-+# CONFIG_FEATURE_SHADOWPASSWDS is not set
-+# CONFIG_USE_BB_CRYPT is not set
-+# CONFIG_USE_BB_CRYPT_SHA is not set
-+# CONFIG_ADDUSER is not set
-+# CONFIG_GETTY is not set
-+# CONFIG_LOGIN is not set
-+# CONFIG_PASSWD is not set
-+
-+#
-+# Linux System Utilities
-+#
-+# CONFIG_FALLOCATE is not set
-+# CONFIG_FREERAMDISK is not set
-+# CONFIG_FSFREEZE is not set
-+# CONFIG_GETOPT is not set
-+# CONFIG_XXD is not set
-+# CONFIG_MESG is not set
-+# CONFIG_MKE2FS is not set
-+# CONFIG_MKDOSFS is not set
-+# CONFIG_FEATURE_MOUNT_CIFS is not set
-+# CONFIG_FEATURE_MOUNT_FSTAB is not set
-+# CONFIG_FEATURE_MOUNT_OTHERTAB is not set
-+# CONFIG_NOLOGIN is not set
-+# CONFIG_LINUX32 is not set
-+# CONFIG_LINUX64 is not set
-+# CONFIG_SETPRIV is not set
-+
-+#
-+# Common options for mount/umount
-+#
-+# CONFIG_FEATURE_MOUNT_LOOP is not set
-+# CONFIG_FEATURE_MOUNT_LOOP_CREATE is not set
-+
-+#
-+# Miscellaneous Utilities
-+#
-+# CONFIG_BC is not set
-+# CONFIG_HEXEDIT is not set
-+# CONFIG_I2CTRANSFER is not set
-+# CONFIG_LSSCSI is not set
-+# CONFIG_MIM is not set
-+# CONFIG_PARTPROBE is not set
-+# CONFIG_SETFATTR is not set
-+# CONFIG_SETSERIAL is not set
-+# CONFIG_TS is not set
-+
-+#
-+# Networking Utilities
-+#
-+# CONFIG_HOSTNAME is not set
-+# CONFIG_DNSDOMAINNAME is not set
-+# CONFIG_IFCONFIG is not set
-+# CONFIG_IFUP is not set
-+# CONFIG_IFDOWN is not set
-+# CONFIG_IP is not set
-+# CONFIG_IPADDR is not set
-+# CONFIG_IPLINK is not set
-+# CONFIG_IPROUTE is not set
-+# CONFIG_NC is not set
-+# CONFIG_NETSTAT is not set
-+# CONFIG_PING is not set
-+# CONFIG_ROUTE is not set
-+# CONFIG_TC is not set
-+# CONFIG_TELNET is not set
-+# CONFIG_WGET is not set
-+# CONFIG_UDHCPC is not set
-+
-+#
-+# Process Utilities
-+#
-+# CONFIG_KILLALL is not set
-+# CONFIG_KILLALL5 is not set
-+
-+#
-+# Runit Utilities
-+#
-+# CONFIG_SVC is not set
-+# CONFIG_SVOK is not set
-+
-+#
-+# Shells
-+#
-+CONFIG_BASH_IS_HUSH=y
-+# CONFIG_BASH_IS_NONE is not set
-+# CONFIG_HUSH_SAVEHISTORY is not set
-+
-+#
-+# Options common to all shells
-+#
-+# CONFIG_FEATURE_SH_READ_FRAC is not set
-+# CONFIG_FEATURE_SH_EMBEDDED_SCRIPTS is not set
-diff --git a/board/canaan/k210-soc/genimage.cfg b/board/canaan/k210-soc/genimage.cfg
++++ b/board/sipeed/maix-bit/linux-cpio.config
+@@ -0,0 +1,2 @@
++CONFIG_SOC_CANAAN_K210_DTB_BUILTIN=y
++CONFIG_SOC_CANAAN_K210_DTB_SOURCE="sipeed_maix_bit"
+diff --git a/board/sipeed/maix-bit/readme.txt b/board/sipeed/maix-bit/readme.txt
 new file mode 100644
-index 0000000000..da7d5dbafb
+index 0000000000..7cc53bca67
 --- /dev/null
-+++ b/board/canaan/k210-soc/genimage.cfg
-@@ -0,0 +1,30 @@
-+image boot.vfat {
-+	vfat {
-+		file uImage {
-+			image = "uImage"
-+		}
++++ b/board/sipeed/maix-bit/readme.txt
+@@ -0,0 +1,316 @@
++Sipeed MAIX-Bit Board
++=====================
 +
-+		file k210.dtb {
-+			image = "k210.dtb"
-+		}
-+	}
-+	size = 4M
-+}
++The Sipeed MAXI-Bit board is a dual-core RISC-V 64-bits board based on the
++Canaan Kendryte K210 SoC.
 +
-+image sdcard.img {
-+	hdimage {
-+	}
++Prerequisite
++------------
 +
-+	partition boot {
-+		partition-type = 0xC
-+		image = "boot.vfat"
-+		bootable = "true"
-+		offset = 4M
-+	}
++In order to use the kflash utility to program this board, the user must have
++access to the board USB serial device file. The simplest way to do this is to
++add your user to the same group as this device file. Assume the device file is
++/dev/ttyUSB0, first identify the device group name. In most cases, it is
++either "dialout" or "uucp". Also verify that read-write access is enabled for
++the group:
 +
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext2"
-+		size = 64M
-+	}
-+}
-diff --git a/board/canaan/k210-soc/linux-sdcard.config b/board/canaan/k210-soc/linux-sdcard.config
++```
++$ ls -l /dev/ttyUSB0
++crw-rw---- 1 root dialout 188, 0 May 26 13:48 /dev/ttyUSB0
++```
++
++Then add yourself to that group (dialout in this example):
++
++```
++$ sudo usermod -a -G dialout $(whoami)
++```
++
++To enable the above, it is sometimes necessary to logout and login again.
++
++Buildroot Configuration
++-----------------------
++
++Two buildroot configuration files are provided:
++
++(1) Direct Linux Kernel Boot
++
++This is defined by the sipeed_maix_bit_defconfig configuration. This
++configuration allows building a bootable kernel image with a built-in initramfs
++root file system (the board SD card is not used). The built kernel image can be
++flashed directly to the board ROM for direct booting. No boot loader is
++required.
++
++(2) U-Boot SD-Card Boot
++
++The sipeed_maix_bit_sdcard_defconfig configuration allows building a kernel
++image with the root file system on the board SD card. U-Boot is used as the
++boot loader.
++
++Both configuration files will also compile and install the kflash and
++pyserial-miniterm host utilities to program bootable image files to the board
++and open a serial terminal console.
++
++Direct Linux Kernel Boot
++-------------------------
++
++Using the sipeed_maix_bit_defconfig configuration, the bootable kernel binary
++image is built as follows.
++
++```
++$ make sipeed_maix_bit_defconfig
++$ make
++```
++
++The bootable binary image is the output/images/loader.bin file. This image file
++can be written to the board boot ROM using the kflash utility.
++
++```
++$ output/host/bin/kflash -b 1500000 -p /dev/ttyUSB0 -t output/images/loader.bin
++```
++
++Once the kernel image file is fully programmed, a terminal console is open and
++the board can be rebooted by pressing the reset button on the board (if it does
++not reboot automatically).
++
++The output will be similar to the following.
++
++```
++[    0.000000] Linux version 5.18.0 (foo@bar.com) (riscv64-buildroot-linux-uclibc-gcc.br_real (Buildroot 2022.02-560-g6a2b542a09-dirty) 10.3.0, GNU ld (GNU Binutils) 2.32) #2 SMP Thu Apr 21 14:30:02 JST 2022
++[    0.000000] Machine model: SiPeed MAIX BiT
++[    0.000000] earlycon: sifive0 at MMIO 0x0000000038000000 (options '115200n8')
++[    0.000000] printk: bootconsole [sifive0] enabled
++[    0.000000] Zone ranges:
++[    0.000000]   DMA32    [mem 0x0000000080000000-0x00000000807fffff]
++[    0.000000]   Normal   empty
++[    0.000000] Movable zone start for each node
++[    0.000000] Early memory node ranges
++[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000807fffff]
++[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000000807fffff]
++[    0.000000] riscv: ISA extensions acdfim
++[    0.000000] riscv: ELF capabilities acdfim
++[    0.000000] percpu: max_distance=0x16000 too large for vmalloc space 0x0
++[    0.000000] percpu: Embedded 11 pages/cpu s15264 r0 d29792 u45056
++[    0.000000] percpu: wasting 10 pages per chunk
++[    0.000000] Built 1 zonelists, mobility grouping off.  Total pages: 2020
++[    0.000000] Kernel command line: earlycon console=ttySIF0
++[    0.000000] Dentry cache hash table entries: 1024 (order: 1, 8192 bytes, linear)
++[    0.000000] Inode-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
++[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
++[    0.000000] Memory: 5996K/8192K available (964K kernel code, 137K rwdata, 205K rodata, 530K init, 66K bss, 2196K reserved, 0K cma-reserved)
++[    0.000000] rcu: Hierarchical RCU implementation.
++[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
++[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
++[    0.000000] riscv-intc: 64 local interrupts mapped
++[    0.000000] plic: interrupt-controller@c000000: mapped 65 interrupts with 2 handlers for 4 contexts.
++[    0.000000] k210-clk: clock-controller: CPU running at 390 MHz
++[    0.000000] clint: timer@2000000: timer running at 7800000 Hz
++[    0.000000] clocksource: clint_clocksource: mask: 0xffffffffffffffff max_cycles: 0x3990be68b, max_idle_ns: 881590404272 ns
++[    0.000001] sched_clock: 64 bits at 7MHz, resolution 128ns, wraps every 4398046511054ns
++[    0.008188] Calibrating delay loop (skipped), value calculated using timer frequency.. 15.60 BogoMIPS (lpj=31200)
++[    0.018250] pid_max: default: 4096 minimum: 301
++[    0.022860] Mount-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
++[    0.029972] Mountpoint-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
++[    0.040244] rcu: Hierarchical SRCU implementation.
++[    0.045121] smp: Bringing up secondary CPUs ...
++[    0.050225] smp: Brought up 1 node, 2 CPUs
++[    0.054355] devtmpfs: initialized
++[    0.071168] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
++[    0.080240] pinctrl core: initialized pinctrl subsystem
++[    0.119221] clocksource: Switched to clocksource clint_clocksource
++[    0.131498] workingset: timestamp_bits=62 max_order=11 bucket_order=0
++[    0.176943] k210-sysctl 50440000.syscon: K210 system controller
++[    0.193558] k210-rst 50440000.syscon:reset-controller: K210 reset controller
++[    0.201526] cacheinfo: Unable to detect cache hierarchy for CPU 0
++[    0.211611] i2c_dev: i2c /dev entries driver
++[    0.221375] k210-fpioa 502b0000.pinmux: K210 FPIOA pin controller
++[    0.233591] 38000000.serial: ttySIF0 at MMIO 0x38000000 (irq = 1, base_baud = 115200) is a SiFive UART v0
++[    0.242529] printk: console [ttySIF0] enabled
++[    0.242529] printk: console [ttySIF0] enabled
++[    0.251165] printk: bootconsole [sifive0] disabled
++[    0.251165] printk: bootconsole [sifive0] disabled
++[    0.274348] Freeing unused kernel image (initmem) memory: 524K
++[    0.279504] This architecture does not have kernel memory protection.
++[    0.285908] Run /init as init process
++          __  _
++         / / (_) ____   _   _ __  __
++        / /  | ||  _ \ | | | |\ \/ /
++       / /___| || | | || |_| | >  <
++      /_____/|_||_| |_| \____|/_/\_\
++    64-bits RISC-V Kendryte K210 NOMMU
++
++/ #
++```
++
++To open a terminal console without re-flashing the board, the pyserial-miniterm
++host tool can be used.
++
++```
++$ output/host/bin/pyserial-miniterm --raw --eol=LF /dev/ttyUSB0 115200
++```
++
++The options "--raw" and "--eol=LF" are added here to avoid a double carriage
++return each time a command is entered.
++
++
++U-Boot SD-Card Boot
++-------------------
++
++The build procedure is similar to the direct Linux kernel boot case.
++
++```
++$ make sipeed_maix_bit_sdcard_defconfig
++$ make
++```
++
++The build process will generate two files under the output/images directory.
++
++* sdcard.img: The image file for the SD card filesystem. This image has 2
++  partitions. The first partition is a vfat partition containing the kernel
++  uImage and the board device tree binary. The second partition is the root
++  filesystem with busybox installed. The second partition is formatted using
++  ext2 (rev1).
++
++* uboot.bin: U-Boot bootable binary to load and boot the kernel from the SD
++  card.
++
++The SD card can be prepared by writing the sdcard.img file, as follows.
++
++```
++$ sudo dd if=output/images/sdcard.img of=/dev/sdX bs=1M
++$ sync
++$ eject /dev/sdX
++```
++
++Where /dev/sdX is the device file name of the SD card. Once completed, the SD
++card can be inserted into the board and the U-Boot binary image written to the
++board boot flash using the kflash utility.
++
++```
++$ output/host/bin/kflash -b 1500000 -p /dev/ttyUSB0 -t output/images/u-boot.bin
++```
++
++The above command will program U-Boot image to the board boot ROM and open a
++terminal console once the u-boot.bin file is fully programmed. Reboot into the
++newly programmed environment by pressing the board reset button.
++
++The output will be similar to the following.
++
++```
++U-Boot 2022.04 (May 24 2022 - 17:08:34 +0900)
++
++DRAM:  8 MiB
++Core:  34 devices, 17 uclasses, devicetree: separate
++WDT:   Not starting watchdog@50400000
++MMC:   spi@53000000:slot@0: 0
++Loading Environment from SPIFlash... SF: Detected gd25lq128 with page size 256 Bytes, erase size 4 KiB, total 16 MiB
++*** Warning - bad CRC, using default environment
++
++In:    serial@38000000
++Out:   serial@38000000
++Err:   serial@38000000
++Hit any key to stop autoboot:  0
++1668562 bytes read in 933 ms (1.7 MiB/s)
++10468 bytes read in 11 ms (928.7 KiB/s)
++## Booting kernel from Legacy Image at 80060000 ...
++   Image Name:   Linux
++   Image Type:   RISC-V Linux Kernel Image (uncompressed)
++   Data Size:    1668498 Bytes = 1.6 MiB
++   Load Address: 80000000
++   Entry Point:  80000000
++   Verifying Checksum ... OK
++## Flattened Device Tree blob at 80400000
++   Booting using the fdt blob at 0x80400000
++   Loading Kernel Image
++   Loading Device Tree to 00000000803fa000, end 00000000803ff8e3 ... OK
++
++Starting kernel ...
++
++[    0.000000] Linux version 5.18.0 (foo@bar.com) (riscv64-buildroot-linux-uclibc-gcc.br_real (Buildroot 2022.02-1056-gc356b62332) 10.3.0, GNU ld (GNU Binutils) 2.37) #1 SMP Tue May 24 06:45:04 JST 2022
++[    0.000000] Machine model: SiPeed MAIX BiT
++[    0.000000] earlycon: sifive0 at MMIO 0x0000000038000000 (options '115200n8')
++[    0.000000] printk: bootconsole [sifive0] enabled
++[    0.000000] Zone ranges:
++[    0.000000]   DMA32    [mem 0x0000000080000000-0x00000000807fffff]
++[    0.000000]   Normal   empty
++[    0.000000] Movable zone start for each node
++[    0.000000] Early memory node ranges
++[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000807fffff]
++[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000000807fffff]
++[    0.000000] riscv: base ISA extensions acdfim
++[    0.000000] riscv: ELF capabilities acdfim
++[    0.000000] percpu: max_distance=0x16000 too large for vmalloc space 0x0
++[    0.000000] percpu: Embedded 11 pages/cpu s15648 r0 d29408 u45056
++[    0.000000] percpu: wasting 10 pages per chunk
++[    0.000000] Built 1 zonelists, mobility grouping off.  Total pages: 2020
++[    0.000000] Kernel command line: earlycon console=ttySIF0 root=/dev/mmcblk0p2 rootwait ro
++[    0.000000] Dentry cache hash table entries: 1024 (order: 1, 8192 bytes, linear)
++[    0.000000] Inode-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
++[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
++[    0.000000] Memory: 6204K/8192K available (1134K kernel code, 150K rwdata, 239K rodata, 100K init, 68K bss, 1988K reserved, 0K cma-reserved)
++[    0.000000] rcu: Hierarchical RCU implementation.
++[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
++[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
++[    0.000000] riscv-intc: 64 local interrupts mapped
++[    0.000000] plic: interrupt-controller@c000000: mapped 65 interrupts with 2 handlers for 4 contexts.
++[    0.000000] k210-clk: clock-controller: CPU running at 390 MHz
++[    0.000000] clint: timer@2000000: timer running at 7800000 Hz
++[    0.000000] clocksource: clint_clocksource: mask: 0xffffffffffffffff max_cycles: 0x3990be68b, max_idle_ns: 881590404272 ns
++[    0.000001] sched_clock: 64 bits at 7MHz, resolution 128ns, wraps every 4398046511054ns
++[    0.008194] Calibrating delay loop (skipped), value calculated using timer frequency.. 15.60 BogoMIPS (lpj=31200)
++[    0.018257] pid_max: default: 4096 minimum: 301
++[    0.022869] Mount-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
++[    0.029982] Mountpoint-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
++[    0.040424] rcu: Hierarchical SRCU implementation.
++[    0.045397] smp: Bringing up secondary CPUs ...
++[    0.050518] smp: Brought up 1 node, 2 CPUs
++[    0.054676] devtmpfs: initialized
++[    0.072365] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
++[    0.081396] pinctrl core: initialized pinctrl subsystem
++[    0.123762] clocksource: Switched to clocksource clint_clocksource
++[    0.136796] workingset: timestamp_bits=62 max_order=11 bucket_order=0
++[    0.181768] k210-sysctl 50440000.syscon: K210 system controller
++[    0.198397] k210-rst 50440000.syscon:reset-controller: K210 reset controller
++[    0.207373] cacheinfo: Unable to detect cache hierarchy for CPU 0
++[    0.218270] spi spi1.0: setup: ignoring unsupported mode bits a00
++[    0.224786] i2c_dev: i2c /dev entries driver
++[    0.235984] k210-fpioa 502b0000.pinmux: K210 FPIOA pin controller
++[    0.249172] 38000000.serial: ttySIF0 at MMIO 0x38000000 (irq = 1, base_baud = 115200) is a SiFive UART v0
++[    0.258078] printk: console [ttySIF0] enabled
++[    0.258078] printk: console [ttySIF0] enabled
++[    0.266707] printk: bootconsole [sifive0] disabled
++[    0.266707] printk: bootconsole [sifive0] disabled
++[    0.307910] mmc_spi spi3.0: SD/MMC host mmc0, no WP, no poweroff, cd polling
++[    0.319869] Waiting for root device /dev/mmcblk0p2...
++[    0.345016] mmc0: host does not support reading read-only switch, assuming write-enable
++[    0.352330] mmc0: new SDHC card on SPI
++[    0.359338] mmcblk0: mmc0:0000 SA16G 14.5 GiB
++[    0.367589] random: fast init done
++[    0.371533]  mmcblk0: p1 p2
++[    0.391794] random: get_random_bytes called from 0x0000000080095ae8 with crng_init=1
++[    0.393388] VFS: Mounted root (ext2 filesystem) readonly on device 179:2.
++[    0.411377] devtmpfs: mounted
++[    0.413922] Freeing unused kernel image (initmem) memory: 96K
++[    0.419344] This architecture does not have kernel memory protection.
++[    0.425777] Run /sbin/init as init process
++[    0.718314] random: crng init done
++[    0.799903] init (1): drop_caches: 3
++          __  _
++         / / (_) ____   _   _ __  __
++        / /  | ||  _ \ | | | |\ \/ /
++       / /___| || | | || |_| | >  <
++      /_____/|_||_| |_| \____|/_/\_\
++    64-bits RISC-V Kendryte K210 NOMMU
++
++/ #
++```
++
++Of note is that the kernel mounts the SD card as read-only by default to avoid
++corruptions of the ext2 root file system when the board is powered down. This
++is recommended as this board does not support clean shutdown or halt.
++
++Similarly to the initramfs build case, a console can be open without
++re-flashing the board using the host tool pyserial-miniterm.
++
++```
++$ output/host/bin/pyserial-miniterm --raw --eol=LF /dev/ttyUSB0 115200
++```
+diff --git a/configs/sipeed_maix_bit_defconfig b/configs/sipeed_maix_bit_defconfig
 new file mode 100644
-index 0000000000..4b0ead78a7
+index 0000000000..dbc5af4e74
 --- /dev/null
-+++ b/board/canaan/k210-soc/linux-sdcard.config
-@@ -0,0 +1,4 @@
-+CONFIG_BUILTIN_DTB=n
-+CONFIG_SOC_CANAAN_K210_DTB_BUILTIN=n
-+CONFIG_SOC_CANAAN_K210_DTB_SOURCE=""
-+CONFIG_CMDLINE="earlycon console=ttySIF0 root=/dev/mmcblk0p2 rootwait ro"
-diff --git a/board/canaan/k210-soc/post-build.sh b/board/canaan/k210-soc/post-build.sh
-new file mode 100755
-index 0000000000..5b6f56a2c5
---- /dev/null
-+++ b/board/canaan/k210-soc/post-build.sh
-@@ -0,0 +1,28 @@
-+#!/bin/sh
++++ b/configs/sipeed_maix_bit_defconfig
+@@ -0,0 +1,39 @@
++# Architecture
++BR2_riscv=y
++BR2_RISCV_64=y
++BR2_riscv_custom=y
++BR2_RISCV_ISA_CUSTOM_RVM=y
++BR2_RISCV_ISA_CUSTOM_RVA=y
++BR2_RISCV_ISA_CUSTOM_RVF=y
++BR2_RISCV_ISA_CUSTOM_RVD=y
++BR2_RISCV_ISA_CUSTOM_RVC=y
++BR2_RISCV_ABI_LP64D=y
 +
-+MKIMAGE=${HOST_DIR}/bin/mkimage
++# Patches
++BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
 +
-+# Generate u-Boot kernel image
-+${MKIMAGE} -A riscv -O linux -T kernel -C none \
-+	-a 0x80000000 -e 0x80000000 \
-+	-n Linux -d ${BINARIES_DIR}/loader.bin ${BINARIES_DIR}/uImage
++# Binary format
++# BR2_USE_MMU is not set
++BR2_BINFMT_FLAT=y
++BR2_BINFMT_FLAT_ONE=y
++# BR2_TARGET_ENABLE_ROOT_LOGIN is not set
 +
-+# Link the kernel-built board dtb file to using the k210.dtb generic
-+# name for use by genimage.cfg
-+BOARDDTBKPATH="$(grep BR2_LINUX_KERNEL_INTREE_DTS_NAME ${BR2_CONFIG} | cut -d'=' -f2 | tr -d \")"
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
++BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-bit/linux-cpio.config"
++BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
++BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
 +
-+BOARDDTB="$(basename ${BOARDDTBKPATH})"
-+if [ -z "${BOARDDTB}" ]; then
-+	echo "Board DTB file not specified"
-+	exit 1
-+fi
++# Packages
++BR2_PACKAGE_HOST_PYTHON_KFLASH=y
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
++BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.config"
++# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
 +
-+BOARDDTB="${BINARIES_DIR}/${BOARDDTB}.dtb"
-+if [ ! -f "${BOARDDTB}" ]; then
-+        echo "Board DTB file not found in ${BINARIES_DIR}"
-+        exit 1
-+fi
-+
-+TARGETDTB=${BINARIES_DIR}/k210.dtb
-+rm -f ${TARGETDTB}
-+ln -s ${BOARDDTB} ${TARGETDTB}
-diff --git a/board/canaan/k210-soc/rootfs_overlay/init b/board/canaan/k210-soc/rootfs_overlay/init
-new file mode 120000
-index 0000000000..a0b71977c0
---- /dev/null
-+++ b/board/canaan/k210-soc/rootfs_overlay/init
-@@ -0,0 +1 @@
-+/sbin/init
-\ No newline at end of file
-diff --git a/board/canaan/k210-soc/rootfs_overlay/sbin/init b/board/canaan/k210-soc/rootfs_overlay/sbin/init
-new file mode 100755
-index 0000000000..d4bf53d452
---- /dev/null
-+++ b/board/canaan/k210-soc/rootfs_overlay/sbin/init
-@@ -0,0 +1,41 @@
-+#!/bin/sh
-+
-+# This script replaces the default busybox init process to avoid having that
-+# process staying alive and sleeping in the background, (uselessly) consuming
-+# precious memory.
-+
-+# Mount procfs and sysfs
-+/bin/mount -t proc proc /proc
-+/bin/mount -t sysfs sysfs /sys
-+
-+# When the kernel is directly booted, devtmpfs is not automatically mounted.
-+# Manually mount it if needed.
-+devmnt=$(mount | grep -c devtmpfs)
-+if [ ${devmnt} -eq 0 ]; then
-+    /bin/mount -t devtmpfs devtmpfs /dev
-+fi
-+
-+# Use the /dev/console device node from devtmpfs if possible to not
-+# confuse glibc's ttyname_r().
-+# This may fail (E.G. booted with console=), and errors from exec will
-+# terminate the shell, so use a subshell for the test
-+if (exec 0</dev/console) 2>/dev/null; then
-+    exec 0</dev/console
-+    exec 1>/dev/console
-+    exec 2>/dev/console
-+fi
-+
-+# Clear memory to reduce page fragmentation
-+echo 3 > /proc/sys/vm/drop_caches
-+
-+# Print a fun logo :)
-+echo "          __  _"
-+echo "         / / (_) ____   _   _ __  __"
-+echo "        / /  | ||  _ \\ | | | |\\ \\/ /"
-+echo "       / /___| || | | || |_| | >  < "
-+echo "      /_____/|_||_| |_| \\____|/_/\\_\\"
-+echo "    64-bits RISC-V Kendryte K210 NOMMU"
-+echo ""
-+
-+# Finally, let's start an interactive shell
-+exec /bin/sh
-diff --git a/board/canaan/k210-soc/uboot.config b/board/canaan/k210-soc/uboot.config
++# Filesystem
++BR2_INIT_NONE=y
++BR2_TARGET_ROOTFS_INITRAMFS=y
++BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+diff --git a/configs/sipeed_maix_bit_sdcard_defconfig b/configs/sipeed_maix_bit_sdcard_defconfig
 new file mode 100644
-index 0000000000..159085f802
+index 0000000000..9f1c3a305f
 --- /dev/null
-+++ b/board/canaan/k210-soc/uboot.config
-@@ -0,0 +1 @@
-+# CONFIG_WATCHDOG_AUTOSTART is not set
++++ b/configs/sipeed_maix_bit_sdcard_defconfig
+@@ -0,0 +1,57 @@
++# Architecture
++BR2_riscv=y
++BR2_RISCV_64=y
++BR2_riscv_custom=y
++BR2_RISCV_ISA_CUSTOM_RVM=y
++BR2_RISCV_ISA_CUSTOM_RVA=y
++BR2_RISCV_ISA_CUSTOM_RVF=y
++BR2_RISCV_ISA_CUSTOM_RVD=y
++BR2_RISCV_ISA_CUSTOM_RVC=y
++BR2_RISCV_ABI_LP64D=y
++
++# Patches
++BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
++
++# System
++# BR2_USE_MMU is not set
++BR2_BINFMT_FLAT=y
++BR2_BINFMT_FLAT_ONE=y
++# BR2_TARGET_ENABLE_ROOT_LOGIN is not set
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
++BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
++BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
++BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maix_bit"
++
++# Packages
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
++# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
++
++# Filesystem
++BR2_INIT_NONE=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_SIZE=64M
++BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/canaan/k210-soc/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/canaan/k210-soc/genimage.cfg"
++
++# Bootloader and related host tools
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/uboot.config"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sipeed_maix_bitm"
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_PYTHON_KFLASH=y
 -- 
 2.36.1
 
