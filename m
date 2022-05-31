@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22971C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 08:47:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D80D5C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 08:47:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D682340CE4;
-	Tue, 31 May 2022 08:47:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8AD4440CE7;
+	Tue, 31 May 2022 08:47:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jnSkyf2LLJ1a; Tue, 31 May 2022 08:47:03 +0000 (UTC)
+	with ESMTP id c-h4Shf4kYdX; Tue, 31 May 2022 08:47:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0B7C40CDA;
-	Tue, 31 May 2022 08:47:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0849F1BF313
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8249240CF8;
+	Tue, 31 May 2022 08:47:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 801D21BF313
  for <buildroot@lists.busybox.net>; Tue, 31 May 2022 08:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C664741BC0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4020D40CD0
  for <buildroot@lists.busybox.net>; Tue, 31 May 2022 08:43:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oToL83-ADDBX for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fLASlrtZNmha for <buildroot@lists.busybox.net>;
  Tue, 31 May 2022 08:43:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 52C0A41BD4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5B36040CCE
  for <buildroot@buildroot.org>; Tue, 31 May 2022 08:43:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 51A0586864; Tue, 31 May 2022 08:31:28 +0000 (UTC)
+ id 6366F86871; Tue, 31 May 2022 08:31:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 31 May 2022 10:26:26 +0200
+Date: Tue, 31 May 2022 10:26:28 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bfab22cb1727e8b3fbb07339feb18e322584bf3d
-X-Git-Newrev: 117f85da8aaac1cea2c867036cf40fde32b3502c
+X-Git-Oldrev: 6d296aa2da87ab0071d68c6ad9f81d084a4ad7dc
+X-Git-Newrev: 21273da96e57ae8f3ee2d7d7e0a381dd863bf584
 X-Patchwork-Hint: ignore
-Message-Id: <20220531083128.51A0586864@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/erlang-p1-stun: bump
- version to 1.0.47
+Message-Id: <20220531083128.6366F86871@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/erlang-p1-zlib: bump
+ version to 1.0.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,38 +60,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=117f85da8aaac1cea2c867036cf40fde32b3502c
+commit: https://git.buildroot.net/buildroot/commit/?id=21273da96e57ae8f3ee2d7d7e0a381dd863bf584
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+The copyright year in the license file has been updated to 2022, hence
+the new license hash.
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-stun/erlang-p1-stun.hash | 2 +-
- package/erlang-p1-stun/erlang-p1-stun.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/erlang-p1-zlib/erlang-p1-zlib.hash | 4 ++--
+ package/erlang-p1-zlib/erlang-p1-zlib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.hash b/package/erlang-p1-stun/erlang-p1-stun.hash
-index fb56b8f4e6..aef122b4a6 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.hash
-+++ b/package/erlang-p1-stun/erlang-p1-stun.hash
+diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.hash b/package/erlang-p1-zlib/erlang-p1-zlib.hash
+index 7ce58762f8..f48aba90ea 100644
+--- a/package/erlang-p1-zlib/erlang-p1-zlib.hash
++++ b/package/erlang-p1-zlib/erlang-p1-zlib.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  05d2f31f172883d2301a93cd141e6b930dfdd01e10b6aacf806becc3674973d8  erlang-p1-stun-1.0.39.tar.gz
-+sha256  f9b82949b54778a4b766dca5509eef4475e1dbc165a449974dbd0cc54c6f84a2  erlang-p1-stun-1.0.47.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1-stun/erlang-p1-stun.mk
-index f762e7f45c..ce117e20b5 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.mk
-+++ b/package/erlang-p1-stun/erlang-p1-stun.mk
+-sha256  f0ac60336b2ddf55ac4f58934580cb8f02dba440d68feb607be312dd35d91269  erlang-p1-zlib-1.0.9.tar.gz
+-sha256  6cd4871db940d055cf272c12c10e0c08febdc94362e404390758fde34b4ce01a  LICENSE.txt
++sha256  cef52f8f28229bf7229b53d225a6a9865acf5bdeaf16a40f81bbeb226615be99  erlang-p1-zlib-1.0.10.tar.gz
++sha256  a401e98a7eef1c741b3e8b1a46a21730b4a1bc7020e4ec1a8c2a44dbd7f0ba5d  LICENSE.txt
+diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.mk b/package/erlang-p1-zlib/erlang-p1-zlib.mk
+index 0e6ee298ef..fdffb6ed3e 100644
+--- a/package/erlang-p1-zlib/erlang-p1-zlib.mk
++++ b/package/erlang-p1-zlib/erlang-p1-zlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_STUN_VERSION = 1.0.39
-+ERLANG_P1_STUN_VERSION = 1.0.47
- ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
- ERLANG_P1_STUN_LICENSE = Apache-2.0
- ERLANG_P1_STUN_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_ZLIB_VERSION = 1.0.9
++ERLANG_P1_ZLIB_VERSION = 1.0.10
+ ERLANG_P1_ZLIB_SITE = $(call github,processone,ezlib,$(ERLANG_P1_ZLIB_VERSION))
+ ERLANG_P1_ZLIB_LICENSE = Apache-2.0
+ ERLANG_P1_ZLIB_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
