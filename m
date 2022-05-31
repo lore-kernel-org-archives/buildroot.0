@@ -1,45 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00E45C43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:17:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 849E8C3F2D4
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:18:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B30CE4059B;
-	Tue,  7 Jun 2022 19:17:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CF5984005;
+	Tue,  7 Jun 2022 19:18:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bAFicHGJKvgl; Tue,  7 Jun 2022 19:17:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LCdE19InVQ7P; Tue,  7 Jun 2022 19:18:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DCE5240639;
-	Tue,  7 Jun 2022 19:17:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3033C1BF9B6
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55C0683E6F;
+	Tue,  7 Jun 2022 19:18:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 115751BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79F1260F6F
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F3BA418FB
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K7oquE3I4Hu5 for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:16:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rAeObVNclGVw for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D09E160F1D
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 459B9418FD
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C3B9786E22; Tue,  7 Jun 2022 19:04:55 +0000 (UTC)
+ id 3627786E22; Tue,  7 Jun 2022 19:04:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 30 May 2022 21:20:35 +0200
+Date: Tue, 31 May 2022 10:26:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1b298db82fa7b108053f08110d50f4650fcc74ac
-X-Git-Newrev: d35ba174095b86a0cf724179f7d4e8d0e3d9c127
+X-Git-Oldrev: c3c19e82b482538870906161dc72a3efa7ca1b20
+X-Git-Newrev: 63c5c26646ba31caef1a3f3bb16c49a11903e5a8
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190455.C3B9786E22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-serial: add host variant
+Message-Id: <20220607190456.3627786E22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang-idna: bump version to
+ 230a917
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,27 +60,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d35ba174095b86a0cf724179f7d4e8d0e3d9c127
+commit: https://git.buildroot.net/buildroot/commit/?id=63c5c26646ba31caef1a3f3bb16c49a11903e5a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will be needed by the upcoming python-kflash package.
+Remove the unicode_util_compat library, which is not needed for the
+erlang version packaged in Buildroot.
 
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-[Thomas: split from a larger patch from Damien Le Moal]
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-serial/python-serial.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/erlang-idna/erlang-idna.hash | 4 ++--
+ package/erlang-idna/erlang-idna.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index 249ea9d5a3..87cd9392f1 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -12,3 +12,4 @@ PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
- PYTHON_SERIAL_SETUP_TYPE = setuptools
+diff --git a/package/erlang-idna/erlang-idna.hash b/package/erlang-idna/erlang-idna.hash
+index 2200bbad8d..7ee4807195 100644
+--- a/package/erlang-idna/erlang-idna.hash
++++ b/package/erlang-idna/erlang-idna.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 d57e20ee88018ff0431e0275e91ada5915782870c9981fc798bcd05589031d6f erlang-idna-6.0.0.tar.gz
+-sha256 95f5c9410a95332b0833c4606028ee00008cd8c497336e230df3144d1a720bda LICENSE
++sha256  916b092cb8d35ca6e63ec183a674a28ff2f745ce05fd0c9c06da34875f6fe8d8  erlang-idna-230a917.tar.gz
++sha256  95f5c9410a95332b0833c4606028ee00008cd8c497336e230df3144d1a720bda  LICENSE
+diff --git a/package/erlang-idna/erlang-idna.mk b/package/erlang-idna/erlang-idna.mk
+index 27a32fb06d..4ef34e82bf 100644
+--- a/package/erlang-idna/erlang-idna.mk
++++ b/package/erlang-idna/erlang-idna.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(python-package))
-+$(eval $(host-python-package))
+-ERLANG_IDNA_VERSION = 6.0.0
++ERLANG_IDNA_VERSION = 230a917
+ ERLANG_IDNA_SITE = $(call github,benoitc,erlang-idna,$(ERLANG_IDNA_VERSION))
+ ERLANG_IDNA_LICENSE = MIT
+ ERLANG_IDNA_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
