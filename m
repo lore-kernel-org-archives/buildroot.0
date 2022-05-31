@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87521C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 08:43:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 664AFC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 08:44:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D94C41BBF;
-	Tue, 31 May 2022 08:43:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A2F341BE0;
+	Tue, 31 May 2022 08:44:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KGI62Z8MH8qK; Tue, 31 May 2022 08:43:45 +0000 (UTC)
+	with ESMTP id gVG7ENlG2FoY; Tue, 31 May 2022 08:43:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12FAB419FD;
-	Tue, 31 May 2022 08:43:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 17F621BF313
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C18D41BE6;
+	Tue, 31 May 2022 08:43:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 484051BF989
  for <buildroot@lists.busybox.net>; Tue, 31 May 2022 08:43:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D735D41887
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D64840A6D
  for <buildroot@lists.busybox.net>; Tue, 31 May 2022 08:43:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kZyL2Kro78Dr for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x0KlEeIsKRLC for <buildroot@lists.busybox.net>;
  Tue, 31 May 2022 08:43:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA61C41988
+ by smtp2.osuosl.org (Postfix) with ESMTP id D33AB40C8F
  for <buildroot@buildroot.org>; Tue, 31 May 2022 08:43:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D106186872; Tue, 31 May 2022 08:31:27 +0000 (UTC)
+ id DB6F186864; Tue, 31 May 2022 08:31:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 31 May 2022 10:26:12 +0200
+Date: Tue, 31 May 2022 10:26:14 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 541381a1340dd6935021ebf8053bc93109932df8
-X-Git-Newrev: b680798eaa882c78cdeb3e703e1e7a8b76df69e6
+X-Git-Oldrev: b680798eaa882c78cdeb3e703e1e7a8b76df69e6
+X-Git-Newrev: 22db16694406d6b2156acd74d3a49fafae6d015c
 X-Patchwork-Hint: ignore
-Message-Id: <20220531083127.D106186872@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/erlang-p1-stringprep:
- bump version to 1.0.27
+Message-Id: <20220531083127.DB6F186864@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/erlang-p1-xml: bump
+ version to 1.1.49
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,40 +60,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b680798eaa882c78cdeb3e703e1e7a8b76df69e6
+commit: https://git.buildroot.net/buildroot/commit/?id=22db16694406d6b2156acd74d3a49fafae6d015c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-stringprep/erlang-p1-stringprep.hash | 2 +-
- package/erlang-p1-stringprep/erlang-p1-stringprep.mk   | 2 +-
+ package/erlang-p1-xml/erlang-p1-xml.hash | 2 +-
+ package/erlang-p1-xml/erlang-p1-xml.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.hash b/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
-index e23cc4f38b..eec611829a 100644
---- a/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
-+++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.hash b/package/erlang-p1-xml/erlang-p1-xml.hash
+index f2a4ab83e0..379ca7ef88 100644
+--- a/package/erlang-p1-xml/erlang-p1-xml.hash
++++ b/package/erlang-p1-xml/erlang-p1-xml.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  47f9f8ee901f47b7f62c5140ea09f113efe7fedd5e8ffb92d50f51c5e11fb67f  erlang-p1-stringprep-1.0.23.tar.gz
-+sha256  cdc2ffa6ba2171f55b78e69cfce5dab6099cbb6bc6955d88c5c53b0cf24d13af  erlang-p1-stringprep-1.0.27.tar.gz
- sha256  f44415631770cb818de6d92f3961fdfe6e407a5154f84b87cc06ac27323e919c  LICENSE.ALL
- sha256  42aef2a1337ef1f45ae2832aa5aa268c79b2560fb1f3ebab519629372cb24ffe  LICENSE.TCL
+-sha256  739f37a161a570071469ab1f3d8fc232f004ea616700fe7e46b6d8afa9d03a60  erlang-p1-xml-1.1.44.tar.gz
++sha256  02bcdb0a4350080a10b52de85c11de982e5f7cf2150f5b1b888f7a95ccb31265  erlang-p1-xml-1.1.49.tar.gz
  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
-index 580f4a9aa9..233be52c58 100644
---- a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
-+++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
+index 5730181ac6..eee2c74c03 100644
+--- a/package/erlang-p1-xml/erlang-p1-xml.mk
++++ b/package/erlang-p1-xml/erlang-p1-xml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_STRINGPREP_VERSION = 1.0.23
-+ERLANG_P1_STRINGPREP_VERSION = 1.0.27
- ERLANG_P1_STRINGPREP_SITE = $(call github,processone,stringprep,$(ERLANG_P1_STRINGPREP_VERSION))
- ERLANG_P1_STRINGPREP_LICENSE = TCL (tools/*.tcl), Apache-2.0 (rest)
- ERLANG_P1_STRINGPREP_LICENSE_FILES = LICENSE.ALL LICENSE.TCL LICENSE.txt
+-ERLANG_P1_XML_VERSION = 1.1.44
++ERLANG_P1_XML_VERSION = 1.1.49
+ ERLANG_P1_XML_SITE = $(call github,processone,fast_xml,$(ERLANG_P1_XML_VERSION))
+ ERLANG_P1_XML_LICENSE = Apache-2.0
+ ERLANG_P1_XML_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
