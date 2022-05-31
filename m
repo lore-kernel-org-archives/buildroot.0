@@ -1,46 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C50FBC43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E55FCCA492
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:28:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 853458411C;
-	Tue,  7 Jun 2022 19:28:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0CC840B5A;
+	Tue,  7 Jun 2022 19:28:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MeDh2kPxxzGc; Tue,  7 Jun 2022 19:28:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8x1eta7-BYgR; Tue,  7 Jun 2022 19:28:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD0B583EB9;
-	Tue,  7 Jun 2022 19:28:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1711D1BF475
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1337740B49;
+	Tue,  7 Jun 2022 19:28:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B13B1BF9B4
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8CE3F83FEB
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C01C408C8
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iwSzHYvDXZRx for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sI19A7j4fDOn for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C227A840A2
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2DA0C405EC
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B5A8A86E23; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
+ id 1E2BB86E22; Tue,  7 Jun 2022 19:04:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Jun 2022 23:33:07 +0200
+Date: Tue, 31 May 2022 10:26:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5a366fcdb102c3a33e3a7e7c658559d5bc35785c
-X-Git-Newrev: ade95519e177c80956cad491357c2f60d0de5fff
+X-Git-Oldrev: 0a02fb55404b9b6a0b98777fdb2dfa4403fd685e
+X-Git-Newrev: 4adef845d150ae09300b6722bfacfbd17fa2e47e
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190459.B5A8A86E23@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
- to 0.5.19
+Message-Id: <20220607190457.1E2BB86E22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang-jose: bump version to 1.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,41 +59,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ade95519e177c80956cad491357c2f60d0de5fff
+commit: https://git.buildroot.net/buildroot/commit/?id=4adef845d150ae09300b6722bfacfbd17fa2e47e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://dovecot.org/list/dovecot-news/2022-May/000475.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/erlang-jose/erlang-jose.hash | 4 ++--
+ package/erlang-jose/erlang-jose.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index f3a5890151..635e221481 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+diff --git a/package/erlang-jose/erlang-jose.hash b/package/erlang-jose/erlang-jose.hash
+index 71a1543d92..75e6f0a041 100644
+--- a/package/erlang-jose/erlang-jose.hash
++++ b/package/erlang-jose/erlang-jose.hash
 @@ -1,3 +1,3 @@
- # Locally computed after checking signature
--sha256  a6d828f8d6f2decba5105343ece5c7a65245bd94e46a8ae4432a6d97543108a5  dovecot-2.3-pigeonhole-0.5.18.tar.gz
-+sha256  10b923efcc6f3c4d92ecdbb780e12a5c33e6d0fdbe3aba5fcd3ecde4179c730c  dovecot-2.3-pigeonhole-0.5.19.tar.gz
- sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index 62d9909cf5..c25cd60b21 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+ # Locally calculated
+-sha256 d55a9d3a1697833fed555a21f1aeb2727af88193995cb6ffa945d4b6749d0e8d erlang-jose-1.9.0.tar.gz
+-sha256 6397e2bd9a35a64c1bb798b937071fbe49d90667f717e65c74a0d0fe93d5c1be LICENSE.md
++sha256  87cdcb9df6f943c97772e5d90bed87555a72c8957ce2cb901df259050e18e7bb  erlang-jose-1.11.1.tar.gz
++sha256  6397e2bd9a35a64c1bb798b937071fbe49d90667f717e65c74a0d0fe93d5c1be  LICENSE.md
+diff --git a/package/erlang-jose/erlang-jose.mk b/package/erlang-jose/erlang-jose.mk
+index 43ed22a9f7..b31a60aa3e 100644
+--- a/package/erlang-jose/erlang-jose.mk
++++ b/package/erlang-jose/erlang-jose.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOVECOT_PIGEONHOLE_VERSION = 0.5.18
-+DOVECOT_PIGEONHOLE_VERSION = 0.5.19
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
- DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
+-ERLANG_JOSE_VERSION = 1.9.0
++ERLANG_JOSE_VERSION = 1.11.1
+ ERLANG_JOSE_SITE = $(call github,potatosalad,erlang-jose,$(ERLANG_JOSE_VERSION))
+ ERLANG_JOSE_LICENSE = MIT
+ ERLANG_JOSE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
