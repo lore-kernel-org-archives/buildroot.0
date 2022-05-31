@@ -1,46 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67C49C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 07:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 107B9C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 07:42:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D6BC40992;
-	Tue, 31 May 2022 07:03:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA62683F3F;
+	Tue, 31 May 2022 07:42:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2z1RencKi4Nj; Tue, 31 May 2022 07:03:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FnTRw0FRJDSg; Tue, 31 May 2022 07:42:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43FFD4098E;
-	Tue, 31 May 2022 07:03:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 554331BF989
- for <buildroot@lists.busybox.net>; Tue, 31 May 2022 07:02:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C02E83EF3;
+	Tue, 31 May 2022 07:42:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 88BA11BF35F
+ for <buildroot@lists.busybox.net>; Tue, 31 May 2022 07:42:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43DED4098E
- for <buildroot@lists.busybox.net>; Tue, 31 May 2022 07:02:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8556A60B8A
+ for <buildroot@lists.busybox.net>; Tue, 31 May 2022 07:42:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JBPu3y8sfpY3 for <buildroot@lists.busybox.net>;
- Tue, 31 May 2022 07:02:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ro9K613TsMLf for <buildroot@lists.busybox.net>;
+ Tue, 31 May 2022 07:42:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 15B9D4098D
- for <buildroot@buildroot.org>; Tue, 31 May 2022 07:02:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 58D3160B38
+ for <buildroot@buildroot.org>; Tue, 31 May 2022 07:42:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3066286852; Tue, 31 May 2022 06:51:10 +0000 (UTC)
+ id 658788685B; Tue, 31 May 2022 07:30:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 31 May 2022 09:02:40 +0200
+Date: Tue, 31 May 2022 09:03:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bab6100b515b3851c88cf2af87d82830e1a9fca4
-X-Git-Newrev: 93f831bf5d90b689474671cc9bb790d2305fc07a
+X-Git-Oldrev: 93f831bf5d90b689474671cc9bb790d2305fc07a
+X-Git-Newrev: 74a4bb58fe45d6218655f81e7158ac6dc8c28271
 X-Patchwork-Hint: ignore
-Message-Id: <20220531065110.3066286852@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/webkitgtk: security bump to
- version 2.36.3
+Message-Id: <20220531073043.658788685B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pipewire: fix uclibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,100 +59,316 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93f831bf5d90b689474671cc9bb790d2305fc07a
+commit: https://git.buildroot.net/buildroot/commit/?id=74a4bb58fe45d6218655f81e7158ac6dc8c28271
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bugfix release, mostly with build fixes, media playback improvements,
-an important fix for when using threaded rendering, and security patches
-for CVE-2022-26700, CVE-2022-26709, CVE-2022-26717, CVE-2022-26716, and
-CVE-2022-26719.
+Fix the following uclibc build failure:
 
-Release notes:
+/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/10.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: src/pipewire/libpipewire-0.3.so.0.351.0.p/introspect.c.o: in function `pw_node_info_merge':
+/home/buildroot/autobuild/instance-0/output-1/build/pipewire-0.3.51/build/../src/pipewire/introspect.c:216: undefined reference to `reallocarray'
 
-  https://webkitgtk.org/2022/05/28/webkitgtk2.36.3-released.html
-  https://webkitgtk.org/2022/05/18/webkitgtk2.36.2-released.html
+Fixes:
+ - http://autobuild.buildroot.org/results/374582f75713c4116ae23f972c5bc55214879502
 
-Accompanying security advisory:
-
-  https://webkitgtk.org/security/WSA-2022-0005.html
-
-This also imports a build fix which has not made it into the release.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...re-when-cross-building-for-64-bit-ARM-htt.patch | 32 ++++++++++++++++++++++
- package/webkitgtk/webkitgtk.hash                   |  8 +++---
- package/webkitgtk/webkitgtk.mk                     |  2 +-
- 3 files changed, 37 insertions(+), 5 deletions(-)
+ .../0002-fix-detection-of-reallocarray.patch       | 287 +++++++++++++++++++++
+ 1 file changed, 287 insertions(+)
 
-diff --git a/package/webkitgtk/0001-Build-failure-when-cross-building-for-64-bit-ARM-htt.patch b/package/webkitgtk/0001-Build-failure-when-cross-building-for-64-bit-ARM-htt.patch
+diff --git a/package/pipewire/0002-fix-detection-of-reallocarray.patch b/package/pipewire/0002-fix-detection-of-reallocarray.patch
 new file mode 100644
-index 0000000000..7c9c8666ad
+index 0000000000..8cb80c8672
 --- /dev/null
-+++ b/package/webkitgtk/0001-Build-failure-when-cross-building-for-64-bit-ARM-htt.patch
-@@ -0,0 +1,32 @@
-+From b0c63502f004db68b485354967bb1c56c071f4eb Mon Sep 17 00:00:00 2001
-+From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Tue, 31 May 2022 00:48:21 +0300
-+Subject: [PATCH] Build failure when cross-building for 64-bit ARM
-+ https://bugs.webkit.org/show_bug.cgi?id=241109
++++ b/package/pipewire/0002-fix-detection-of-reallocarray.patch
+@@ -0,0 +1,287 @@
++From 85ca67b9275780cc40bee08f92954db9184cad56 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 27 May 2022 15:00:17 +0200
++Subject: [PATCH] fix detection of reallocarray
 +
-+Unreviewed build fix.
++Fix detection of reallocarray (e.g. on glibc) raised since commit
++0708a39b439cec2871cfe3b705191028397e5b8b
 +
-+* Source/WebCore/bindings/js/JSDOMMapLike.cpp: Add missing
-+  JavaScriptCore/HashMapImplInlines.h header inclusion.
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+Upstream status: https://github.com/WebKit/WebKit/pull/1165
++[Retrieved (and backported) from:
++https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/85ca67b9275780cc40bee08f92954db9184cad56]
 +---
-+ Source/WebCore/bindings/js/JSDOMMapLike.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
++ meson.build                                            |  1 +
++ pipewire-jack/src/metadata.c                           |  2 +-
++ spa/plugins/bluez5/bluez5-dbus.c                       |  5 +++++
++ src/modules/module-client-node/client-node.c           |  2 +-
++ src/modules/module-client-node/remote-node.c           |  4 ++--
++ src/modules/module-client-node/v0/client-node.c        |  4 ++--
++ .../client-endpoint/endpoint-stream.c                  |  4 ++--
++ .../module-session-manager/client-endpoint/endpoint.c  |  4 ++--
++ .../client-session/endpoint-link.c                     |  4 ++--
++ .../module-session-manager/client-session/session.c    |  4 ++--
++ src/pipewire/introspect.c                              |  6 +++---
++ src/pipewire/utils.c                                   | 10 ++++++++++
++ src/pipewire/utils.h                                   |  5 ++---
++ 13 files changed, 35 insertions(+), 20 deletions(-)
 +
-+diff --git a/Source/WebCore/bindings/js/JSDOMMapLike.cpp b/Source/WebCore/bindings/js/JSDOMMapLike.cpp
-+index e132c39fa54..2cb4b1b59a3 100644
-+--- a/Source/WebCore/bindings/js/JSDOMMapLike.cpp
-++++ b/Source/WebCore/bindings/js/JSDOMMapLike.cpp
-+@@ -28,6 +28,7 @@
++diff --git a/meson.build b/meson.build
++index 314091779..e6bc29ba4 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -375,6 +375,7 @@ check_functions = [
++   ['gettid', '#include <unistd.h>', ['-D_GNU_SOURCE'], []],
++   ['memfd_create', '#include <sys/mman.h>', ['-D_GNU_SOURCE'], []],
++   ['getrandom', '#include <stddef.h>\n#include <sys/random.h>', ['-D_GNU_SOURCE'], []],
+++  ['reallocarray', '#include <stdlib.h>', ['-D_GNU_SOURCE'], []],
++   ['sigabbrev_np', '#include <string.h>', ['-D_GNU_SOURCE'], []],
++   ['XSetIOErrorExitHandler', '#include <X11/Xlib.h>', [], [x11_dep]],
++ ]
++diff --git a/pipewire-jack/src/metadata.c b/pipewire-jack/src/metadata.c
++index 8ccb5a348..d50948ff4 100644
++--- a/pipewire-jack/src/metadata.c
+++++ b/pipewire-jack/src/metadata.c
++@@ -120,7 +120,7 @@ static jack_property_t *add_property(jack_description_t *desc, const char *key,
 + 
-+ #include "WebCoreJSClientData.h"
-+ #include <JavaScriptCore/CatchScope.h>
-++#include <JavaScriptCore/HashMapImplInlines.h>
-+ #include <JavaScriptCore/JSMap.h>
-+ #include <JavaScriptCore/VMTrapsInlines.h>
++ 	if (desc->property_cnt == desc->property_size) {
++ 		ns = desc->property_size > 0 ? desc->property_size * 2 : 8;
++-		np = reallocarray(desc->properties, ns, sizeof(*prop));
+++		np = pw_reallocarray(desc->properties, ns, sizeof(*prop));
++ 		if (np == NULL)
++ 			return NULL;
++ 		desc->property_size = ns;
++diff --git a/spa/plugins/bluez5/bluez5-dbus.c b/spa/plugins/bluez5/bluez5-dbus.c
++index 98bf05df1..c2e4a7ba7 100644
++--- a/spa/plugins/bluez5/bluez5-dbus.c
+++++ b/spa/plugins/bluez5/bluez5-dbus.c
++@@ -50,6 +50,7 @@
++ #include <spa/utils/string.h>
++ #include <spa/utils/json.h>
 + 
+++#include "config.h"
++ #include "codec-loader.h"
++ #include "player.h"
++ #include "defs.h"
++@@ -1579,7 +1580,11 @@ const struct a2dp_codec **spa_bt_device_get_supported_a2dp_codecs(struct spa_bt_
++ 		if (j >= size) {
++ 			const struct a2dp_codec **p;
++ 			size = size * 2;
+++#ifdef HAVE_REALLOCARRRAY
++ 			p = reallocarray(supported_codecs, size, sizeof(const struct a2dp_codec *));
+++#else
+++			p = realloc(supported_codecs, size * sizeof(const struct a2dp_codec *));
+++#endif
++ 			if (p == NULL) {
++ 				free(supported_codecs);
++ 				return NULL;
++diff --git a/src/modules/module-client-node/client-node.c b/src/modules/module-client-node/client-node.c
++index 2533c360c..9357d03da 100644
++--- a/src/modules/module-client-node/client-node.c
+++++ b/src/modules/module-client-node/client-node.c
++@@ -191,7 +191,7 @@ static int update_params(struct params *p, uint32_t n_params, const struct spa_p
++ 		p->params = NULL;
++ 	} else {
++ 		struct spa_pod **np;
++-		np = reallocarray(p->params, p->n_params, sizeof(struct spa_pod *));
+++		np = pw_reallocarray(p->params, p->n_params, sizeof(struct spa_pod *));
++ 		if (np == NULL) {
++ 			pw_log_error("%p: can't realloc: %m", p);
++ 			free(p->params);
++diff --git a/src/modules/module-client-node/remote-node.c b/src/modules/module-client-node/remote-node.c
++index c04273e95..c0af9a21f 100644
++--- a/src/modules/module-client-node/remote-node.c
+++++ b/src/modules/module-client-node/remote-node.c
++@@ -318,7 +318,7 @@ static int add_node_update(struct node_data *data, uint32_t change_mask, uint32_
++ 							id, &idx, NULL, &param, &b.b);
++ 				if (res == 1) {
++ 					void *p;
++-					p = reallocarray(params, n_params + 1, sizeof(struct spa_pod *));
+++					p = pw_reallocarray(params, n_params + 1, sizeof(struct spa_pod *));
++ 					if (p == NULL) {
++ 						res = -errno;
++ 						pw_log_error("realloc failed: %m");
++@@ -384,7 +384,7 @@ static int add_port_update(struct node_data *data, struct pw_impl_port *port, ui
++ 							id, &idx, NULL, &param, &b.b);
++ 				if (res == 1) {
++ 					void *p;
++-					p = reallocarray(params, n_params + 1, sizeof(struct spa_pod*));
+++					p = pw_reallocarray(params, n_params + 1, sizeof(struct spa_pod*));
++ 					if (p == NULL) {
++ 						res = -errno;
++ 						pw_log_error("realloc failed: %m");
++diff --git a/src/modules/module-client-node/v0/client-node.c b/src/modules/module-client-node/v0/client-node.c
++index e71abbb14..aeb5931c6 100644
++--- a/src/modules/module-client-node/v0/client-node.c
+++++ b/src/modules/module-client-node/v0/client-node.c
++@@ -476,7 +476,7 @@ do_update_port(struct node *this,
++ 			port->params = NULL;
++ 		} else {
++ 			void *p;
++-			p = reallocarray(port->params, port->n_params, sizeof(struct spa_pod *));
+++			p = pw_reallocarray(port->params, port->n_params, sizeof(struct spa_pod *));
++ 			if (p == NULL) {
++ 				pw_log_error("%p: port %u can't realloc: %m", this, port_id);
++ 				free(port->params);
++@@ -1049,7 +1049,7 @@ client_node0_update(void *data,
++ 			this->params = NULL;
++ 		} else {
++ 			void *p;
++-			p = reallocarray(this->params, this->n_params, sizeof(struct spa_pod *));
+++			p = pw_reallocarray(this->params, this->n_params, sizeof(struct spa_pod *));
++ 			if (p == NULL) {
++ 				pw_log_error("%p: can't realloc: %m", this);
++ 				free(this->params);
++diff --git a/src/modules/module-session-manager/client-endpoint/endpoint-stream.c b/src/modules/module-session-manager/client-endpoint/endpoint-stream.c
++index 8d7f2da2b..8dde6f749 100644
++--- a/src/modules/module-session-manager/client-endpoint/endpoint-stream.c
+++++ b/src/modules/module-session-manager/client-endpoint/endpoint-stream.c
++@@ -196,7 +196,7 @@ int endpoint_stream_update(struct endpoint_stream *this,
++ 			this->params = NULL;
++ 		} else {
++ 			void *p;
++-			p = reallocarray(this->params, n_params, sizeof(struct spa_pod*));
+++			p = pw_reallocarray(this->params, n_params, sizeof(struct spa_pod*));
++ 			if (p == NULL) {
++ 				free(this->params);
++ 				this->params = NULL;
++@@ -227,7 +227,7 @@ int endpoint_stream_update(struct endpoint_stream *this,
++ 				this->info.params = NULL;
++ 			} else {
++ 				void *p;
++-				p = reallocarray(this->info.params, info->n_params, sizeof(struct spa_param_info));
+++				p = pw_reallocarray(this->info.params, info->n_params, sizeof(struct spa_param_info));
++ 				if (p == NULL) {
++ 					free(this->info.params);
++ 					this->info.params = NULL;
++diff --git a/src/modules/module-session-manager/client-endpoint/endpoint.c b/src/modules/module-session-manager/client-endpoint/endpoint.c
++index 8a7863ee1..aa13989b6 100644
++--- a/src/modules/module-session-manager/client-endpoint/endpoint.c
+++++ b/src/modules/module-session-manager/client-endpoint/endpoint.c
++@@ -213,7 +213,7 @@ int endpoint_update(struct endpoint *this,
++ 			this->params = NULL;
++ 		} else {
++ 			void *p;
++-			p = reallocarray(this->params, n_params, sizeof(struct spa_pod*));
+++			p = pw_reallocarray(this->params, n_params, sizeof(struct spa_pod*));
++ 			if (p == NULL) {
++ 				free(this->params);
++ 				this->params = NULL;
++@@ -245,7 +245,7 @@ int endpoint_update(struct endpoint *this,
++ 				this->info.params = NULL;
++ 			} else {
++ 				void *p;
++-				p = reallocarray(this->info.params, info->n_params, sizeof(struct spa_param_info));
+++				p = pw_reallocarray(this->info.params, info->n_params, sizeof(struct spa_param_info));
++ 				if (p == NULL) {
++ 					free(this->info.params);
++ 					this->info.params = NULL;
++diff --git a/src/modules/module-session-manager/client-session/endpoint-link.c b/src/modules/module-session-manager/client-session/endpoint-link.c
++index 9048fe30c..0bdbfc946 100644
++--- a/src/modules/module-session-manager/client-session/endpoint-link.c
+++++ b/src/modules/module-session-manager/client-session/endpoint-link.c
++@@ -209,7 +209,7 @@ int endpoint_link_update(struct endpoint_link *this,
++ 			this->params = NULL;
++ 		} else {
++ 			void *p;
++-			p = reallocarray(this->params, n_params, sizeof(struct spa_pod*));
+++			p = pw_reallocarray(this->params, n_params, sizeof(struct spa_pod*));
++ 			if (p == NULL) {
++ 				free(this->params);
++ 				this->params = NULL;
++@@ -241,7 +241,7 @@ int endpoint_link_update(struct endpoint_link *this,
++ 				this->info.params = NULL;
++ 			} else {
++ 				void *p;
++-				p = reallocarray(this->info.params, info->n_params, sizeof(struct spa_param_info));
+++				p = pw_reallocarray(this->info.params, info->n_params, sizeof(struct spa_param_info));
++ 				if (p == NULL) {
++ 					free(this->info.params);
++ 					this->info.params = NULL;
++diff --git a/src/modules/module-session-manager/client-session/session.c b/src/modules/module-session-manager/client-session/session.c
++index 681c56118..87c1b96a7 100644
++--- a/src/modules/module-session-manager/client-session/session.c
+++++ b/src/modules/module-session-manager/client-session/session.c
++@@ -196,7 +196,7 @@ int session_update(struct session *this,
++ 			this->params = NULL;
++ 		} else {
++ 			void *p;
++-			p = reallocarray(this->params, n_params, sizeof(struct spa_pod*));
+++			p = pw_reallocarray(this->params, n_params, sizeof(struct spa_pod*));
++ 			if (p == NULL) {
++ 				free(this->params);
++ 				this->params = NULL;
++@@ -222,7 +222,7 @@ int session_update(struct session *this,
++ 				this->info.params = NULL;
++ 			} else {
++ 				void *p;
++-				p = reallocarray(this->info.params, info->n_params, sizeof(struct spa_param_info));
+++				p = pw_reallocarray(this->info.params, info->n_params, sizeof(struct spa_param_info));
++ 				if (p == NULL) {
++ 					free(this->info.params);
++ 					this->info.params = NULL;
++diff --git a/src/pipewire/introspect.c b/src/pipewire/introspect.c
++index 35598a90d..2855009c0 100644
++--- a/src/pipewire/introspect.c
+++++ b/src/pipewire/introspect.c
++@@ -213,7 +213,7 @@ struct pw_node_info *pw_node_info_merge(struct pw_node_info *info,
++ 		uint32_t i, user, n_params = update->n_params;
++ 		void *np;
++ 
++-		np = reallocarray(info->params, n_params, sizeof(struct spa_param_info));
+++		np = pw_reallocarray(info->params, n_params, sizeof(struct spa_param_info));
++ 		if (np == NULL) {
++ 			free(info->params);
++ 			info->params = NULL;
++@@ -283,7 +283,7 @@ struct pw_port_info *pw_port_info_merge(struct pw_port_info *info,
++ 		uint32_t i, user, n_params = update->n_params;
++ 		void *np;
++ 
++-		np = reallocarray(info->params, n_params, sizeof(struct spa_param_info));
+++		np = pw_reallocarray(info->params, n_params, sizeof(struct spa_param_info));
++ 		if (np == NULL) {
++ 			free(info->params);
++ 			info->params = NULL;
++@@ -443,7 +443,7 @@ struct pw_device_info *pw_device_info_merge(struct pw_device_info *info,
++ 		uint32_t i, user, n_params = update->n_params;
++ 		void *np;
++ 
++-		np = reallocarray(info->params, n_params, sizeof(struct spa_param_info));
+++		np = pw_reallocarray(info->params, n_params, sizeof(struct spa_param_info));
++ 		if (np == NULL) {
++ 			free(info->params);
++ 			info->params = NULL;
++diff --git a/src/pipewire/utils.c b/src/pipewire/utils.c
++index 2f3240faf..a644049fd 100644
++--- a/src/pipewire/utils.c
+++++ b/src/pipewire/utils.c
++@@ -168,3 +168,13 @@ ssize_t pw_getrandom(void *buf, size_t buflen, unsigned int flags)
++ 	close(fd);
++ 	return bytes;
++ }
+++
+++SPA_EXPORT
+++void* pw_reallocarray(void *ptr, size_t nmemb, size_t size)
+++{
+++#ifdef HAVE_REALLOCARRAY
+++	return reallocarray(ptr, nmemb, size);
+++#else
+++	return realloc(ptr, nmemb * size);
+++#endif
+++}
++diff --git a/src/pipewire/utils.h b/src/pipewire/utils.h
++index 8f8e002b7..b320db22f 100644
++--- a/src/pipewire/utils.h
+++++ b/src/pipewire/utils.h
++@@ -88,6 +88,8 @@ pw_strip(char *str, const char *whitespace);
++ 
++ ssize_t pw_getrandom(void *buf, size_t buflen, unsigned int flags);
++ 
+++void* pw_reallocarray(void *ptr, size_t nmemb, size_t size);
+++
++ /**
++  * \}
++  */
 +-- 
-+2.36.1
++GitLab
 +
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 00a342ed7f..1176bbc7a1 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.36.1.tar.xz.sums
--md5  e6100df7f82d95a4e65176b10f5ab011  webkitgtk-2.36.1.tar.xz
--sha1  36a95b906e54bcf94d2be04e1cbaac3584da7eb1  webkitgtk-2.36.1.tar.xz
--sha256  0149ea5fb1d20f2a9981677d45c952a047330001ea24a8dc29035239f12c0c8f  webkitgtk-2.36.1.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.36.3.tar.xz.sums
-+md5  8ad4b1bfbbe3115ee163a8b2ba7b908f  webkitgtk-2.36.3.tar.xz
-+sha1  59ee6ee820be360ad57391870fa158064091c525  webkitgtk-2.36.3.tar.xz
-+sha256  732fcf8c4ec644b8ed28b46ebbd7c1ebab9d9e0afea9bdf5e5d12786afc478d1  webkitgtk-2.36.3.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 9e85c5b78f..39b16a90e7 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.36.1
-+WEBKITGTK_VERSION = 2.36.3
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
