@@ -4,60 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7FCDC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 08:23:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9035C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 08:43:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73B7E41794;
-	Tue, 31 May 2022 08:23:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C1B9419FD;
+	Tue, 31 May 2022 08:43:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XpyhMDkfZ3PT; Tue, 31 May 2022 08:23:02 +0000 (UTC)
+	with ESMTP id uA2PX5HqUT88; Tue, 31 May 2022 08:43:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44A194175F;
-	Tue, 31 May 2022 08:23:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D84621BF313
- for <buildroot@lists.busybox.net>; Tue, 31 May 2022 08:22:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4762941BD4;
+	Tue, 31 May 2022 08:43:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C52D1BF313
+ for <buildroot@lists.busybox.net>; Tue, 31 May 2022 08:43:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D5BD18346C
- for <buildroot@lists.busybox.net>; Tue, 31 May 2022 08:22:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A2AF60FCB
+ for <buildroot@lists.busybox.net>; Tue, 31 May 2022 08:43:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JkHjZKum2FCL for <buildroot@lists.busybox.net>;
- Tue, 31 May 2022 08:22:59 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E4EB683366
- for <buildroot@buildroot.org>; Tue, 31 May 2022 08:22:58 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 01C231C0002;
- Tue, 31 May 2022 08:22:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1653985377;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=BYK3pOC1k6DsUrhprx/VcmlYMZpEunS0vS6BrBLOzHI=;
- b=mKAaoeXyudVkHIpqooSYu+b442+r7Uzkx5l1wZacVkggKkyzxjlpEF3vtrAJkKFiipatVj
- +0215vbowtIembf5nQHli15MGlDaSrcd2N4QsaGXMh65v35mok/BG454RauRed839RfoBl
- 8jF915ZFd9nCH2iXdVjNFhS/Zyuu3+3Nq8Z/XFc7ENUTVoc32TmBL1tshNayXD2z2gsdie
- RSy2P1kWWB44KgLfAuYaFS5WCHTM0gaehcjFBVxmbwqTcOn6+UlIFPe33s7MqBfVDmSbLe
- gPBqF3iI+vR2cQH1tF9OJdEF9zqDEQZnknyzY4lIJ5axXr3S0GVZ3U5GsPCwkw==
-Date: Tue, 31 May 2022 10:22:56 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220531102256.7cdb38ba@windsurf>
-In-Reply-To: <20220520222713.2036389-1-fontaine.fabrice@gmail.com>
-References: <20220520222713.2036389-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcec: drop unrecognized option
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EZo2FIVI6dr3 for <buildroot@lists.busybox.net>;
+ Tue, 31 May 2022 08:43:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AEE8960761
+ for <buildroot@buildroot.org>; Tue, 31 May 2022 08:43:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 9D87486864; Tue, 31 May 2022 08:31:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 31 May 2022 10:26:06 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: c3c19e82b482538870906161dc72a3efa7ca1b20
+X-Git-Newrev: 63c5c26646ba31caef1a3f3bb16c49a11903e5a8
+X-Patchwork-Hint: ignore
+Message-Id: <20220531083127.9D87486864@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/erlang-idna: bump
+ version to 230a917
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,30 +54,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 21 May 2022 00:27:13 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=63c5c26646ba31caef1a3f3bb16c49a11903e5a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> HAVE_DATE_BIN has been dropped since version 4.0.5 and
-> https://github.com/Pulse-Eight/libcec/commit/d04037825e8c49075ddd3ae6f8f0b94a0fef2709
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libcec/libcec.mk | 1 -
->  1 file changed, 1 deletion(-)
+Remove the unicode_util_compat library, which is not needed for the
+erlang version packaged in Buildroot.
 
-Applied to master, thanks.
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/erlang-idna/erlang-idna.hash | 4 ++--
+ package/erlang-idna/erlang-idna.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/erlang-idna/erlang-idna.hash b/package/erlang-idna/erlang-idna.hash
+index 2200bbad8d..7ee4807195 100644
+--- a/package/erlang-idna/erlang-idna.hash
++++ b/package/erlang-idna/erlang-idna.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 d57e20ee88018ff0431e0275e91ada5915782870c9981fc798bcd05589031d6f erlang-idna-6.0.0.tar.gz
+-sha256 95f5c9410a95332b0833c4606028ee00008cd8c497336e230df3144d1a720bda LICENSE
++sha256  916b092cb8d35ca6e63ec183a674a28ff2f745ce05fd0c9c06da34875f6fe8d8  erlang-idna-230a917.tar.gz
++sha256  95f5c9410a95332b0833c4606028ee00008cd8c497336e230df3144d1a720bda  LICENSE
+diff --git a/package/erlang-idna/erlang-idna.mk b/package/erlang-idna/erlang-idna.mk
+index 27a32fb06d..4ef34e82bf 100644
+--- a/package/erlang-idna/erlang-idna.mk
++++ b/package/erlang-idna/erlang-idna.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ERLANG_IDNA_VERSION = 6.0.0
++ERLANG_IDNA_VERSION = 230a917
+ ERLANG_IDNA_SITE = $(call github,benoitc,erlang-idna,$(ERLANG_IDNA_VERSION))
+ ERLANG_IDNA_LICENSE = MIT
+ ERLANG_IDNA_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
