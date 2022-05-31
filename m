@@ -1,105 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C56A4C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 05:49:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB86BC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 31 May 2022 05:49:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2CE316115A;
-	Tue, 31 May 2022 05:49:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3ED8241834;
+	Tue, 31 May 2022 05:49:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tOsPJHigtQSY; Tue, 31 May 2022 05:49:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2_1cFmNCNnos; Tue, 31 May 2022 05:49:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 008D960F84;
-	Tue, 31 May 2022 05:49:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C94A34182D;
+	Tue, 31 May 2022 05:49:49 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A05531BF375
- for <buildroot@lists.busybox.net>; Tue, 31 May 2022 05:49:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 57AFA1BF375
+ for <buildroot@lists.busybox.net>; Tue, 31 May 2022 05:49:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8C8AD40489
+ by smtp2.osuosl.org (Postfix) with ESMTP id E745E400A4
  for <buildroot@lists.busybox.net>; Tue, 31 May 2022 05:49:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=wdc.com header.b="S8SeM/OU";
+ dkim=pass (2048-bit key) header.d=wdc.com header.b="BPf9Zll5";
  dkim=pass (2048-bit key) header.d=opensource.wdc.com
- header.b="QOlhymlM"
+ header.b="XGSg8qQV"
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U4eUQg-wMzED for <buildroot@lists.busybox.net>;
- Tue, 31 May 2022 05:49:33 +0000 (UTC)
+ with ESMTP id Dgr9ba83NWYX for <buildroot@lists.busybox.net>;
+ Tue, 31 May 2022 05:49:34 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A6473400A4
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F08DD40232
  for <buildroot@buildroot.org>; Tue, 31 May 2022 05:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
  t=1653976173; x=1685512173;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=YDNICyVDranm/7jcSr+tlQlTXYpekKURwAlPilDDt1g=;
- b=S8SeM/OUj0MBaP8guqccsGNszsNa0ycep68uA6Mn1ujh0r3xQuXOcucH
- 4/uWJpfAiOhjKMxaVdctGcuJpE6EZKoqsAIqqWcDGL/0If0XsuH8alkLs
- MAgXoEForcvLygWLi2C3u1eWgiMu234/RYafXkHrjDxuIQTV2aJ4byzcX
- qhTbtLRyFRD9z0a60HYXdXmwCxZJWEyFNWmuTj0lrEDTHNybP5NuJBMqU
- 0pTbv8f1JM2djuJ9ihsuR/0JEa1jQCXA8mWkObPiYeEoA76u51ly+AbJ9
- lHUD+uuMUXVSrIijQEEgd1bjr8G6ByxVYY4mRpP5OSMaNiXX6FnXzt3x+ Q==;
-X-IronPort-AV: E=Sophos;i="5.91,264,1647273600"; d="scan'208";a="306095075"
+ h=from:to:cc:subject:date:message-id:in-reply-to:
+ references:mime-version:content-transfer-encoding;
+ bh=ss1H1SnnOBWDOAZXTwpipHdmDv59qxiwvyQwFmstenE=;
+ b=BPf9Zll5/QKmZFRFzgnPBoLK5X2Ga6OI2p/WTG6CcOvR4tGvx4jVgkww
+ VRRzqL3RbNcQ/oZKS6vOC+xkB/WE8EYu3Y1q/djEZGyCWHeVgu0IlZPmD
+ CEK9tF8K2sSbRaZTyPCENJQS3VfxDbEolPo1BQe7QHFL/JG0VpPa3rCQK
+ eKYGaipIALRCPQ22ZqxbYGwwup/prQU3apU3v0gyhx4FfRAaNGUuhoaWi
+ Uo3UMfkWgOIiqKwDBZ0lPNEG5P1ql7oqLpsWSHL2wzOR4kMjYmoanxT3f
+ rxuQBx0rYmaGEoJop1HoyIY1hYl1B24B21jRPfP4JftMyJiRMv47YA/KY w==;
+X-IronPort-AV: E=Sophos;i="5.91,264,1647273600"; d="scan'208";a="306095076"
 Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com)
  ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 31 May 2022 13:49:30 +0800
-IronPort-SDR: Ggitmv3WAIvhN6cPEojfNy70GxuwwaXe9PZd7CsnorBPDvcEbESwzmvDQK/hvmrBhvTprZC/VU
- qz77CQPQC9QsGh1QTRy0iboWmEns1aldZ7TSVJR70kVzy0/33DsWA/n1AkzqjHWFqXXL3Nt3xU
- ZdKyJF3OzcraJktZ6rEXaXQjh1Cl9x28o//jcLvyHrWCvbcRFeEWppcCiBAgVtFYegLG4juWBF
- m3wvjtiCalZUToLaQflJCBwv/zlwDdGkSvnNBUxldKp5q3luUcudGsl4isSn1IQpXKta/T1amK
- LTltLeOLdnjlO+8CtK2G0J9k
+ by ob1.hgst.iphmx.com with ESMTP; 31 May 2022 13:49:32 +0800
+IronPort-SDR: dPJCWhMfZyi5C4SofvSQQOUbyaDPmj5+qizbBZw9588t/rKHsE/1pq2xfItD6PThSefMj0xPkp
+ X1iOBW/wbEF3pDq7fxeIdPLDHxmdUoAjnwzrcxVfIx0KDQEMhXe2H8soCU7Do3MG3S0k9hiYbf
+ 5sD7IVsZdz2jVz68e8yTTwVryhEfvU7AWTIKTBD4j06X7f6mX4Jz8CBW7rH0cFjmEHUfzMMOMt
+ S4EqmENtU635i0gJt2g/tSpe2LeX6DOeE1UdSYswy78LBkNSXqduQaSajvFep+87z51d+6JrSO
+ yzUJNOUQOrXdTRn6BMHZejs7
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 30 May 2022 22:13:17 -0700
-IronPort-SDR: Zo+cILjieOYpxt3H0L5jWVI6H063ouG57by06WZQe7ItmZGt2GFS6PZkB77zPw8z/soVPwMskC
- I8aw3TE0cCjqvPu/I7wphYeywdX6P5HpIyqneOmj657QmYpmgs4WYfNwjK0ApdGBNX0U8FoZHR
- tP1guUJuN+OowKNgmGPWoCIlI7r2jk+GoIPdFDXteWHq2Ip/lc9MSDurFjXxcUcvm45exNL/bD
- LK4I2yOswaGHU+FJ9CiNcJ2Ru/cp/FkglkpUnir4DKhL5cvpDT2DVDo6p9HEFOHpUbj3bn7YyZ
- PPk=
+ 30 May 2022 22:13:18 -0700
+IronPort-SDR: QSHIPHvcBRbew702O7jB/+39fz8itWTtbtEJhFGrk8VGZtwqIjcQM3USzcprmoicpgDk9HBw+G
+ rqhRuPQlONYMbMQQiHthIb3GrmSPHjdGXVfcxLQFEqKV00gbq8NwuA/R9cGQB//CttOYo+1g6E
+ 4w8XsffMhFxoSCtoRwG74m8t6ThdD5rwzlwCDgNhFKZhBkO2qUoGSMV5MVxx11j1WCKFfiVdml
+ LW0pcAvXJ9ZF3ZZPRZQHtVyhtSdJxDBMnxr+AnlUNRyTPOQfhnowDuzUrIMHmRKbAaY25nNR1U
+ dc4=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 30 May 2022 22:49:31 -0700
+ 30 May 2022 22:49:33 -0700
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LC1Z22Qf8z1SHwl
- for <buildroot@buildroot.org>; Mon, 30 May 2022 22:49:30 -0700 (PDT)
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LC1Z429M4z1Rwrw
+ for <buildroot@buildroot.org>; Mon, 30 May 2022 22:49:32 -0700 (PDT)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
  reason="pass (just generated, assumed good)"
  header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
  opensource.wdc.com; h=content-transfer-encoding:mime-version
- :x-mailer:message-id:date:subject:to:from; s=dkim; t=1653976169;
- x=1656568170; bh=YDNICyVDranm/7jcSr+tlQlTXYpekKURwAlPilDDt1g=; b=
- QOlhymlMuZaFtxmJj5JvIFOf7hD6RmdK2lAdEJ+5udtGXDf/QfmUHw65REN9/Wp9
- WZnvqpPUaTY47xDfn2EvpTXA56K4dROEz2o0tja3x5M4ypEJ8u74HQ80LPCdSgZN
- rUDXRhH8ufSC+ch7LnZ3vNA+IC30fTasq2wXuB4CKUhS7z3yBzU3hfg+YE/w0iuF
- 1NUJJz6hXMHZt8Z9MfxeoiMtI24iVFGRzrQRDrub8qQnkEwzaSvSiLcQLwGBtI4L
- /sin80q5IPdKcQbMJB3y1Xfu8tu0xcskne4bNEq77zJ4OL5rb7UU2dcCjhkZA/bV
- T+cODrl1OYSuETOvl6SwjQ==
+ :references:in-reply-to:x-mailer:message-id:date:subject:to
+ :from; s=dkim; t=1653976170; x=1656568171; bh=ss1H1SnnOBWDOAZXTw
+ pipHdmDv59qxiwvyQwFmstenE=; b=XGSg8qQVRUIcr5VjjKR3g2QGv/ac6xCW2C
+ 30g33KZRsswRNCWgyBNWe+VrlWVqIdnm3lVDQqynHhE8KYt44tBVyfdDs/tP28mh
+ UTrhe5ebyMGQ0ROzO/U6KCVr9aaKvCEsO+Xyr1EPwTBQQwiuzo+eBXkWkcOSlQXJ
+ zg8nHHBVPv+GJmTd4gXcE4SOM+u6+KfAKoeim8+ifnJOgHlVlLwRFK0Oeppw7yId
+ xy3oVhxyVBi6Qm2ooFgmCXhGdo7ufdimv6RUJnDiJOX+rYkN+8VFHlxzLelKISOO
+ TbKet3zom8XnYoVFxnKJWQIkLA5EOCxHLSJ+g8GW59nXaK1XveeA==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
  by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new,
- port 10026) with ESMTP id WepviSjPZFFN for <buildroot@buildroot.org>;
- Mon, 30 May 2022 22:49:29 -0700 (PDT)
+ port 10026) with ESMTP id UkXMUNbMNWYM for <buildroot@buildroot.org>;
+ Mon, 30 May 2022 22:49:30 -0700 (PDT)
 Received: from twashi.fujisawa.hgst.com (unknown [10.225.163.61])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LC1Z04XxJz1Rvlc;
- Mon, 30 May 2022 22:49:28 -0700 (PDT)
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LC1Z20WN8z1Rvlx;
+ Mon, 30 May 2022 22:49:29 -0700 (PDT)
 To: buildroot <buildroot@buildroot.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 May 2022 14:49:19 +0900
-Message-Id: <20220531054926.373713-1-damien.lemoal@opensource.wdc.com>
+Date: Tue, 31 May 2022 14:49:20 +0900
+Message-Id: <20220531054926.373713-2-damien.lemoal@opensource.wdc.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220531054926.373713-1-damien.lemoal@opensource.wdc.com>
+References: <20220531054926.373713-1-damien.lemoal@opensource.wdc.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 0/7] Fix RV64 NOMMU and add Canaan K210 SoC
- support
+Subject: [Buildroot] [PATCH v3 1/7] package/elf2flt: Remove Config.in.host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -121,119 +122,125 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch series is a rework of the old v5 series "Add RV64 NOMMU and
-Canaan K210 SoC support" already posted some (long) time ago.
+There is no need to have configuration files direbtly set the
+BR2_PACKAGE_HOST_ELF2FLT option. The need for the elf2flt utility is
+automatically determined by gcc build in package/gcc/gcc.mk according to
+the BR2_BINFMT_FLAT option.
 
-This series adds support for building 64-bits RISC-V NOMMU kernels (both
-bootable kernels and u-boot sdcard boot envronements) for NOMMU RISC-V
-64-bits boards. The board supported include QEMU and many boards using
-the dual-core RISC-V 64-bits Cannan Kendryte K210 SoC.
+Accordingly, we can remove the file package/elf2flt/Config.in.host to
+get rid of the BR2_PACKAGE_HOST_ELF2FLT option. BR2_STRIP_strip
+dependency on this option is replaced with a dependency on
+BR2_BINFMT_ELF.
 
-The first patch is a simple fix of elf2flt configuration.
+To stay consistent with the fact that elf2flt supports only the arm, sh,
+sparc, xtensa and riscv-64 architectures, a dependency on these
+architectures is added to the BR2_BINFMT_FLAT option in arch/Config.in.
 
-Patch 2 adds the configurations files common to all K210-based boards.
+Board configuration files setting the BR2_PACKAGE_HOST_ELF2FLT option
+are also updated.
 
-The last 5 patches add support for the following K210-based boards:
-* Sipeed MAIX Bit
-* Sipeed MAIXDUINO
-* Sipeed MAIX Dock (dan)
-* Sipeed MAIX Go
-* Canaan KD233 development board
-
-For each board, a readme.txt file is added to document how to build and
-install images for these boards.
-
-Changes from v2:
-* Rebased patches on next branch
-* Modified patch 1 to address Thomas comments
-* Removed patches already applied
-* Modified patches 2 to 7 to remove the BR2_PACKAGE_HOST_ELF2FLT and
-  reference the global patch directory in boar/riscv/nommu
-
-Changes from v1:
-* Modified patch 5 to add the python-kflash utility as a host package as
-  the new 1.1.5 version of this utility fixes the previously identified
-  problems with python dependencies.
-* Fixed patch 4 (qemu riscv nommu) to have buildroot configuration file
-  reference kernel 5.18.
-* Fixed patch 11 (kd233 board) to have buildroot configuration file
-  reference kernel 5.18.
-* Modified patch 7 to 11 to add the python-kflash host package to the
-  buildroot configuration files. The instructions in the readme.txt
-  file for each board are also updated accordingly.
-
-Damien Le Moal (7):
-  package/elf2flt: Remove Config.in.host
-  board: Add common support for Canaan K210 SoC-based boards
-  board: Add Sipeed MAIX-Bit board support
-  board: Add Sipeed MAIXDUINO board support
-  board: Add Sipeed MAIX-Dock board support
-  board: Add Sipeed MAIX-Go board support
-  board: Add Canaan KD233 board support
-
- Config.in                                     |   2 +-
- DEVELOPERS                                    |  11 +
- arch/Config.in                                |   1 +
- board/canaan/k210-soc/busybox-tiny.config     | 231 +++++++++++++
- board/canaan/k210-soc/genimage.cfg            |  30 ++
- board/canaan/k210-soc/linux-sdcard.config     |   4 +
- board/canaan/k210-soc/post-build.sh           |  28 ++
- board/canaan/k210-soc/rootfs_overlay/init     |   1 +
- .../canaan/k210-soc/rootfs_overlay/sbin/init  |  41 +++
- board/canaan/k210-soc/uboot.config            |   1 +
- board/canaan/kd233/linux-cpio.config          |   2 +
- board/canaan/kd233/readme.txt                 | 149 ++++++++
- board/sipeed/maix-bit/linux-cpio.config       |   2 +
- board/sipeed/maix-bit/readme.txt              | 316 +++++++++++++++++
- board/sipeed/maix-dock/linux-cpio.config      |   2 +
- board/sipeed/maix-dock/readme.txt             | 321 ++++++++++++++++++
- board/sipeed/maix-go/linux-cpio.config        |   2 +
- board/sipeed/maix-go/readme.txt               | 320 +++++++++++++++++
- board/sipeed/maixduino/linux-cpio.config      |   2 +
- board/sipeed/maixduino/readme.txt             | 292 ++++++++++++++++
- configs/canaan_kd233_defconfig                |  39 +++
- configs/qemu_arm_versatile_nommu_defconfig    |   1 -
- configs/qemu_riscv64_nommu_virt_defconfig     |   1 -
- configs/qemu_xtensa_lx60_nommu_defconfig      |   1 -
- configs/sipeed_maix_bit_defconfig             |  39 +++
- configs/sipeed_maix_bit_sdcard_defconfig      |  57 ++++
- configs/sipeed_maix_dock_defconfig            |  39 +++
- configs/sipeed_maix_dock_sdcard_defconfig     |  57 ++++
- configs/sipeed_maix_go_defconfig              |  39 +++
- configs/sipeed_maix_go_sdcard_defconfig       |  57 ++++
- configs/sipeed_maixduino_defconfig            |  39 +++
- configs/sipeed_maixduino_sdcard_defconfig     |  57 ++++
- package/elf2flt/Config.in.host                |  13 -
- toolchain/toolchain-buildroot/Config.in       |   1 -
- 34 files changed, 2180 insertions(+), 18 deletions(-)
- create mode 100644 board/canaan/k210-soc/busybox-tiny.config
- create mode 100644 board/canaan/k210-soc/genimage.cfg
- create mode 100644 board/canaan/k210-soc/linux-sdcard.config
- create mode 100755 board/canaan/k210-soc/post-build.sh
- create mode 120000 board/canaan/k210-soc/rootfs_overlay/init
- create mode 100755 board/canaan/k210-soc/rootfs_overlay/sbin/init
- create mode 100644 board/canaan/k210-soc/uboot.config
- create mode 100644 board/canaan/kd233/linux-cpio.config
- create mode 100644 board/canaan/kd233/readme.txt
- create mode 100644 board/sipeed/maix-bit/linux-cpio.config
- create mode 100644 board/sipeed/maix-bit/readme.txt
- create mode 100644 board/sipeed/maix-dock/linux-cpio.config
- create mode 100644 board/sipeed/maix-dock/readme.txt
- create mode 100644 board/sipeed/maix-go/linux-cpio.config
- create mode 100644 board/sipeed/maix-go/readme.txt
- create mode 100644 board/sipeed/maixduino/linux-cpio.config
- create mode 100644 board/sipeed/maixduino/readme.txt
- create mode 100644 configs/canaan_kd233_defconfig
- create mode 100644 configs/sipeed_maix_bit_defconfig
- create mode 100644 configs/sipeed_maix_bit_sdcard_defconfig
- create mode 100644 configs/sipeed_maix_dock_defconfig
- create mode 100644 configs/sipeed_maix_dock_sdcard_defconfig
- create mode 100644 configs/sipeed_maix_go_defconfig
- create mode 100644 configs/sipeed_maix_go_sdcard_defconfig
- create mode 100644 configs/sipeed_maixduino_defconfig
- create mode 100644 configs/sipeed_maixduino_sdcard_defconfig
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+---
+ Config.in                                  |  2 +-
+ arch/Config.in                             |  1 +
+ configs/qemu_arm_versatile_nommu_defconfig |  1 -
+ configs/qemu_riscv64_nommu_virt_defconfig  |  1 -
+ configs/qemu_xtensa_lx60_nommu_defconfig   |  1 -
+ package/elf2flt/Config.in.host             | 13 -------------
+ toolchain/toolchain-buildroot/Config.in    |  1 -
+ 7 files changed, 2 insertions(+), 18 deletions(-)
  delete mode 100644 package/elf2flt/Config.in.host
 
+diff --git a/Config.in b/Config.in
+index f0cd6f48ed..7192292d10 100644
+--- a/Config.in
++++ b/Config.in
+@@ -432,7 +432,7 @@ config BR2_ENABLE_RUNTIME_DEBUG
+ config BR2_STRIP_strip
+ 	bool "strip target binaries"
+ 	default y
+-	depends on !BR2_PACKAGE_HOST_ELF2FLT
++	depends on BR2_BINFMT_ELF
+ 	help
+ 	  Binaries and libraries in the target filesystem will be
+ 	  stripped using the normal 'strip' command. This allows to save
+diff --git a/arch/Config.in b/arch/Config.in
+index 49e16fce38..e89a58ac3b 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -392,6 +392,7 @@ config BR2_BINFMT_ELF
+ 
+ config BR2_BINFMT_FLAT
+ 	bool "FLAT"
++	depends on BR2_arm || BR2_sh || BR2_sparc || BR2_xtensa || BR2_RISCV_64
+ 	depends on !BR2_USE_MMU
+ 	help
+ 	  FLAT binary is a relatively simple and lightweight executable
+diff --git a/configs/qemu_arm_versatile_nommu_defconfig b/configs/qemu_arm_versatile_nommu_defconfig
+index 0c49d1b67d..d88ade1fe9 100644
+--- a/configs/qemu_arm_versatile_nommu_defconfig
++++ b/configs/qemu_arm_versatile_nommu_defconfig
+@@ -3,7 +3,6 @@ BR2_arm=y
+ BR2_arm926t=y
+ 
+ # Toolchain
+-BR2_PACKAGE_HOST_ELF2FLT=y
+ # BR2_USE_MMU is not set
+ 
+ # Patches
+diff --git a/configs/qemu_riscv64_nommu_virt_defconfig b/configs/qemu_riscv64_nommu_virt_defconfig
+index bfee9e710a..33fad50a3c 100644
+--- a/configs/qemu_riscv64_nommu_virt_defconfig
++++ b/configs/qemu_riscv64_nommu_virt_defconfig
+@@ -6,7 +6,6 @@ BR2_RISCV_64=y
+ BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
+ 
+ # Toolchain
+-BR2_PACKAGE_HOST_ELF2FLT=y
+ # BR2_USE_MMU is not set
+ 
+ # Busybox with hush
+diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
+index 44fb81bd74..f107b7e73b 100644
+--- a/configs/qemu_xtensa_lx60_nommu_defconfig
++++ b/configs/qemu_xtensa_lx60_nommu_defconfig
+@@ -4,7 +4,6 @@ BR2_XTENSA_CUSTOM=y
+ BR2_XTENSA_OVERLAY_FILE="https://github.com/jcmvbkbc/xtensa-toolchain-build/raw/95291b7c39e6f790d0b2f062c945a630290f2c81/overlays/xtensa_dc233c.tar.gz"
+ 
+ # Toolchain
+-BR2_PACKAGE_HOST_ELF2FLT=y
+ # BR2_USE_MMU is not set
+ 
+ # Use minimal busybox with hush and networking tools
+diff --git a/package/elf2flt/Config.in.host b/package/elf2flt/Config.in.host
+deleted file mode 100644
+index 2bab0095c2..0000000000
+--- a/package/elf2flt/Config.in.host
++++ /dev/null
+@@ -1,13 +0,0 @@
+-config BR2_PACKAGE_HOST_ELF2FLT
+-	bool "Enable elf2flt support?"
+-	depends on BR2_arm || BR2_sh || BR2_sparc || BR2_xtensa || BR2_RISCV_64
+-	depends on !BR2_USE_MMU
+-	help
+-	  uCLinux uses a Binary Flat format commonly known as BFLT. It
+-	  is a relatively simple and lightweight executable format
+-	  based on the original a.out format.
+-
+-	  This option compiles the required tools and makes the required
+-	  modifications on your toolchain (linker).
+-
+-	  https://github.com/uclinux-dev/elf2flt
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 8d9cf4cc68..9c80f22afa 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -114,5 +114,4 @@ source "package/uclibc/Config.in"
+ source "package/glibc/Config.in"
+ source "package/binutils/Config.in.host"
+ source "package/gcc/Config.in.host"
+-source "package/elf2flt/Config.in.host"
+ endif
 -- 
 2.36.1
 
