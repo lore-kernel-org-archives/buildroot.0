@@ -1,79 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4A87C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 20:33:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F229C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 20:43:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EFAA41865;
-	Wed,  1 Jun 2022 20:33:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09C7960EC4;
+	Wed,  1 Jun 2022 20:43:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bf4fi9NYdbBs; Wed,  1 Jun 2022 20:33:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QCj5FXZ5nYVb; Wed,  1 Jun 2022 20:43:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E96734184E;
-	Wed,  1 Jun 2022 20:33:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C78051BF2C7
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 20:33:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DB206076C;
+	Wed,  1 Jun 2022 20:43:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 204DE1BF2C7
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 20:43:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5C084184E
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 20:33:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E7C5606C6
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 20:43:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z9MM-BcXnCr5 for <buildroot@lists.busybox.net>;
- Wed,  1 Jun 2022 20:33:41 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6ED3841842
- for <buildroot@buildroot.org>; Wed,  1 Jun 2022 20:33:41 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id s24so3841988wrb.10
- for <buildroot@buildroot.org>; Wed, 01 Jun 2022 13:33:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=yhsCwpRqzOzp61YHY6qu5Xui3zC7iREAXthp8yp1p6c=;
- b=AeSYnLAFWI+M+jiUb+w15JUoCWLtldIsIA9bDFnx6iS50J9QHOtMXO+ZfGfu0hyLZk
- pcJm2pgncyi1jg/095KjA0Y4WMt3GB2/uJsIiJSxlExF4ISU6TAlUImZiuN8tYtBrL9o
- vbKtDA3xQzYgN2tdEscO2hyNTs9Dw+OKl2HI8OeFqkxeaXPES7ZfdL1wWuT4zWj+6M5C
- ozwbrH+tzjQiTd1z1Kn/6JIvRNBDXtdeMHZl/LslK8J3VoAWMWfJCZ98h9ELGuYBW8dd
- szZEbJCoYw8YmcGoXtLPcs5kzIxJCrePGhMuC9blLn9EEtWE6DQV6ubrXnCUDcjScOlr
- 1BUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=yhsCwpRqzOzp61YHY6qu5Xui3zC7iREAXthp8yp1p6c=;
- b=NTQEAMV4EWXVHZX/0Rja4WC038ele/QrxR+J662UuRKUMgF+CpVx1XBpsigW2ApURS
- lQiFmk+3P6khfo2CmL/5ijEzKCbR7Y0d5F+gaAN3jaU95HCI/LQHml0YoSgXSFFYmkFs
- KJZqLPTWI+W1HgfOXvGB0fGu6IrYXrgBk3IZCAt+WS3e7V+56u2MhmicrPOfGVp7D8Wp
- IZx/4j6rTFC5YqS20/zduqHn7pviRKYxZbKabg9lqi5qAF1NSc5tfa9dFWGetcmUjo5f
- qogz0ZSodsHgwX3XGvgl1/4zdRVMYemyltt/Qxj+6nq3sL6RH+W7/XI9MHlv3fqM+Dii
- m3Iw==
-X-Gm-Message-State: AOAM532HecxAhYlnAFrpVkGRl8x9nvAuRXjkaKrtW2sIvNWO8nlU6QKH
- xOkPz9Phq5R4WIkGTddmVhaRVEBACT0=
-X-Google-Smtp-Source: ABdhPJyHVikL+gxUSDJPuZdQUQbAUzb7pajLlAacAKArB/bqnm6H9Z+anwLWrszRHl4RNSoNFHOtjw==
-X-Received: by 2002:adf:f3ce:0:b0:211:55a:a604 with SMTP id
- g14-20020adff3ce000000b00211055aa604mr934531wrp.213.1654115619394; 
- Wed, 01 Jun 2022 13:33:39 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- y4-20020a5d4704000000b0020c5253d907sm2347275wrq.83.2022.06.01.13.33.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 01 Jun 2022 13:33:38 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qMbvS4_tFMJN for <buildroot@lists.busybox.net>;
+ Wed,  1 Jun 2022 20:43:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F8CC60597
+ for <buildroot@buildroot.org>; Wed,  1 Jun 2022 20:43:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id ECA7B868DD; Wed,  1 Jun 2022 20:32:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed,  1 Jun 2022 22:31:06 +0200
-Message-Id: <20220601203106.3436511-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/netdata: disable cloud
+Date: Wed, 1 Jun 2022 22:43:27 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: dd018f78de99ea78633694dba011f155849dde32
+X-Git-Newrev: 4bb884a3c61c6b71e33f69453a90eb2a367f64b7
+X-Patchwork-Hint: ignore
+Message-Id: <20220601203213.ECA7B868DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wolftpm: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,64 +51,134 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable cloud to avoid the following build failures raised since bump to
-version 1.33.1 in commit 73dc2eef2dc40b78e732872b26eee0bcea1087d1 and
-https://github.com/netdata/netdata/commit/e7e5d0c37242d8457e4b2610a95effe0db5ca1b1:
+commit: https://git.buildroot.net/buildroot/commit/?id=4bb884a3c61c6b71e33f69453a90eb2a367f64b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In file included from aclk/aclk.c:7:
-aclk/aclk_otp.h:11:23: error: unknown type name 'RSA'
-   11 | int aclk_get_mqtt_otp(RSA *p_key, char **mqtt_id, char **mqtt_usr, char **mqtt_pass, url_t *target);
-      |                       ^~~
-aclk/aclk.c:48:8: error: unknown type name 'RSA'
-   48 | static RSA *aclk_private_key = NULL;
-      |        ^~~
-aclk/aclk.c: In function 'load_private_key':
-aclk/aclk.c:52:9: warning: implicit declaration of function 'RSA_free' [-Wimplicit-function-declaration]
-   52 |         RSA_free(aclk_private_key);
-      |         ^~~~~~~~
-aclk/aclk.c:65:5: error: unknown type name 'BIO'; did you mean 'EIO'?
-   65 |     BIO *key_bio = BIO_new_mem_buf(private_key, -1);
-      |     ^~~
-      |     EIO
+wolfTPM is an open-source TPM 2.0 stack with backward API compatibility,
+designed for embedded use. It is highly portable, and has native support
+for Linux. wolfTPM has a compact code size with low resource usage.
 
-[...]
-
-In file included from database/sqlite/../../aclk/aclk.h:6:0,
-                 from database/sqlite/sqlite_aclk.c:10:
-database/sqlite/../../aclk/aclk_util.h:6:29: fatal error: mqtt_wss_client.h: No such file or directory
-compilation terminated.
-
-Fixes:
- - http://autobuild.buildroot.org/results/6c87c0d1699fd518a989cb81a191419f427accc5
- - http://autobuild.buildroot.org/results/aa77c027316b45e812eaf9ced61fb8e967bb987f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
+[Thomas:
+ - Fix ordering in the DEVELOPERS file, use full name
+ - Add missing !BR2_STATIC_LIBS dependency
+ - Use "select" and not "select on"
+ - Make sure wolftpm-config script gets post-processed by using
+   <pkg>_CONFIG_SCRIPTS
+ - Add missing --with-wolfcrypt option.
+ - Rename WOLFTPM_CONFIG_RPATH to WOLFTPM_TOUCH_CONFIG_RPATH and use
+   mkdir -p to make the hook re-executable]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netdata/netdata.mk | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/wolftpm/Config.in    | 16 ++++++++++++++++
+ package/wolftpm/wolftpm.hash |  2 ++
+ package/wolftpm/wolftpm.mk   | 32 ++++++++++++++++++++++++++++++++
+ 5 files changed, 54 insertions(+)
 
-diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
-index dade6c625b..c0ce74d18b 100644
---- a/package/netdata/netdata.mk
-+++ b/package/netdata/netdata.mk
-@@ -12,6 +12,7 @@ NETDATA_LICENSE = GPL-3.0+
- NETDATA_LICENSE_FILES = LICENSE
- NETDATA_CPE_ID_VENDOR = netdata
- NETDATA_CONF_OPTS = \
-+	--disable-cloud \
- 	--disable-dbengine \
- 	--disable-ebpf \
- 	--disable-ml \
--- 
-2.35.1
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fe840f33f5..7bc0e0632c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -729,6 +729,9 @@ F:	package/s6/
+ F:	package/skalibs/
+ F:	support/testing/tests/boot/test_edk2.py
+ 
++N:	Dimitar Tomov <dimi@tpm.dev>
++F:	package/wolftpm/
++
+ N:	Dimitrios Siganos <dimitris@siganos.org>
+ F:	package/wireless-regdb/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 4ab61713e0..8f1a7d4e9f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1433,6 +1433,7 @@ menu "Crypto"
+ 	source "package/trousers/Config.in"
+ 	source "package/ustream-ssl/Config.in"
+ 	source "package/wolfssl/Config.in"
++	source "package/wolftpm/Config.in"
+ endmenu
+ 
+ menu "Database"
+diff --git a/package/wolftpm/Config.in b/package/wolftpm/Config.in
+new file mode 100644
+index 0000000000..0fe094f277
+--- /dev/null
++++ b/package/wolftpm/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_WOLFTPM
++	bool "wolftpm"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_WOLFSSL
++	select BR2_PACKAGE_WOLFSSL_ALL
++	help
++	  wolfTPM is a portable, open-source TPM 2.0 stack with
++	  backward API compatibility, designed for embedded use.
++	  No external dependencies, compact code size with low
++	  resource usage.
++
++	  https://www.wolfssl.com/
++
++comment "wolftpm needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/wolftpm/wolftpm.hash b/package/wolftpm/wolftpm.hash
+new file mode 100644
+index 0000000000..6dbf143ffe
+--- /dev/null
++++ b/package/wolftpm/wolftpm.hash
+@@ -0,0 +1,2 @@
++# Hash from https://github.com/wolfSSL/wolfTPM/archive/refs/tags/v2.3.1.tar.gz
++sha256  f0d7c095491ac2cc9e44aa4ac3c22febf15942ef080431d8b43a9d0312ca6567  wolftpm-2.3.1.tar.gz
+diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
+new file mode 100644
+index 0000000000..ea01eaad6b
+--- /dev/null
++++ b/package/wolftpm/wolftpm.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# wolftpm
++#
++################################################################################
++
++WOLFTPM_VERSION = 2.3.1
++WOLFTPM_SITE = $(call github,wolfSSL,wolfTPM,v$(WOLFTPM_VERSION))
++WOLFTPM_INSTALL_STAGING = YES
++WOLFTPM_LICENSE = GPL-2.0+
++WOLFTPM_LICENSE_FILES = LICENSE
++WOLFTPM_CPE_ID_VENDOR = wolfssl
++WOLFTPM_DEPENDENCIES = host-pkgconf
++WOLFTPM_CONFIG_SCRIPTS = wolftpm-config
++
++# wolfTPM's source code is released without a configure script,
++# therefore we need autoreconf
++WOLFTPM_AUTORECONF = YES
++
++WOLFTPM_CONF_OPTS = \
++	--disable-examples \
++	--enable-devtpm \
++	--with-wolfcrypt=$(STAGING_DIR)/usr
++
++# Fix for missing config.rpath in the codebase
++define WOLFTPM_TOUCH_CONFIG_RPATH
++	mkdir -p $(@D)/build-aux
++	touch $(@D)/build-aux/config.rpath
++endef
++WOLFTPM_PRE_CONFIGURE_HOOKS += WOLFTPM_TOUCH_CONFIG_RPATH
++
++$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
