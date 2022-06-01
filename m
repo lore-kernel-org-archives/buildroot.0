@@ -4,59 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4894FC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75CCFC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:43:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01E6483365;
-	Wed,  1 Jun 2022 21:43:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4148083300;
+	Wed,  1 Jun 2022 21:43:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5mIHGzMCHYIi; Wed,  1 Jun 2022 21:43:17 +0000 (UTC)
+	with ESMTP id ki6a67eFD5QZ; Wed,  1 Jun 2022 21:43:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0932983300;
-	Wed,  1 Jun 2022 21:43:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 291FD832C9;
+	Wed,  1 Jun 2022 21:43:35 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9D1F41BF36A
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:43:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DD3031BF36A
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:43:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9AF7683300
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:43:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CCFC4832C9
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:43:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XlsF9fJTj6VH for <buildroot@lists.busybox.net>;
- Wed,  1 Jun 2022 21:43:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 86896832C9
- for <buildroot@buildroot.org>; Wed,  1 Jun 2022 21:43:13 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7309A20003;
- Wed,  1 Jun 2022 21:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654119791;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=lanlkYy/2n3+DSzOw7DQGr7GXWiRZS1SxvJY7vKt5xo=;
- b=ZbYI/aTmUh85v99oJkNujbf0Pq2UOBEuYLV0tqMi97l+jrGqjGM2Vh72XqpzgVNs2JlZty
- S+1KreqK2LQJ4xOVe3ZFeQY0zaeJ8HR6v4Qy686/BM1cQrp96eqlVKqkPwoqP1SIx7D3aS
- yCgRasbQJccKwBvIFqA/tn2cjmv+l1KwJ1hNwfkUYilbclbCMdZbVvhmtqfvx3TENM1w9C
- 6/YVK1R36Zwg2UZH1H9Mec9qCPpxChldYXaEwSH9cjTNJxm8MZlFY5t5QrYPOF83sNyuwy
- xPTQHB4RzuS5S4WqqAc2VZd7michO1eoYw1CkrmpS6Uep8chb2+2ywoHXne0wg==
-Date: Wed, 1 Jun 2022 23:43:10 +0200
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20220601234310.2a956189@windsurf>
-In-Reply-To: <20220531105902.204022-5-heiko.thiery@gmail.com>
-References: <20220531105902.204022-1-heiko.thiery@gmail.com>
- <20220531105902.204022-5-heiko.thiery@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 4/4] boot/uboot: bump to 2022.04
+ with ESMTP id ci3eVx9Tr9QY for <buildroot@lists.busybox.net>;
+ Wed,  1 Jun 2022 21:43:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1ED3A832BF
+ for <buildroot@buildroot.org>; Wed,  1 Jun 2022 21:43:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 87B8686951; Wed,  1 Jun 2022 21:31:54 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 1 Jun 2022 23:43:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0295e9602f22dd11e0e484bf10950354d1febe3b
+X-Git-Newrev: 85af9a673d1e467271da4f4a377e8d425145b61d
+X-Patchwork-Hint: ignore
+Message-Id: <20220601213154.87B8686951@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8812au-aircrack-ng: bump to
+ version 37e27f9165300c89607144b646545fac576ec510
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +54,67 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============9017209690864395911=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Heiko,
+--===============9017209690864395911==
+Content-Type: text/plain
 
-On Tue, 31 May 2022 12:59:05 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=85af9a673d1e467271da4f4a377e8d425145b61d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Since U-Boot 2022.04 a host dependency to gnutls is required if the
-> U-Boot board configuration has CONFIG_TOOLS_MKEFICAPSULE enabled. So
-> introduce a new BR U-Boot config option BR2_TARGET_UBOOT_NEEDS_GNUTLS to
-> solve this problem.
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Fix the following build failure with kernel >= 5.17 thanks to
+https://github.com/aircrack-ng/rtl8812au/commit/7e61ad89ccae51a80706f765e1d5f2e82a1662c7:
 
-I've split this into two patches, one doing the bump, one adding the
-new option.
+/home/autobuild/autobuild/instance-14/output-1/build/rtl8812au-aircrack-ng-3a6402e9e79802891f1531b435be54f4d8b71f0b/./os_dep/osdep_service.c: In function ‘thread_exit’:
+/home/autobuild/autobuild/instance-14/output-1/build/rtl8812au-aircrack-ng-3a6402e9e79802891f1531b435be54f4d8b71f0b/./os_dep/osdep_service.c:1295:2: error: implicit declaration of function ‘complete_and_exit’ [-Werror=implicit-function-declaration]
+ 1295 |  complete_and_exit(comp, 0);
+      |  ^~~~~~~~~~~~~~~~~
 
-Regarding the bump, you had forgotten the update of uboot.hash with the
-hash of the 2022.04 U-Boot tarball.
+Fixes:
+ - http://autobuild.buildroot.org/results/1fff5023b5b79a7d81fd4cba6dea8dcb3f428340
 
-Also, there was a minor check-package warning related to the formatting
-of the help text in the Config.in file.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash | 2 +-
+ package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-So, overall, applied to next, with the above issues fixed. Thanks a lot!
+diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
+index ed1921d1c2..667cf34efc 100644
+--- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
++++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  acae758c3834196c71f4ee58f53a3c1b29ffd984f63ff2f40f2b080c8785c49f  rtl8812au-aircrack-ng-3a6402e9e79802891f1531b435be54f4d8b71f0b.tar.gz
++sha256  749ba2e77d0364381445e40f7f0b7041d861cf9a356dbe53085e3abaef888c1d  rtl8812au-aircrack-ng-37e27f9165300c89607144b646545fac576ec510.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
+index 2bbca88cfb..55c118a825 100644
+--- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
++++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8812AU_AIRCRACK_NG_VERSION = 3a6402e9e79802891f1531b435be54f4d8b71f0b
++RTL8812AU_AIRCRACK_NG_VERSION = 37e27f9165300c89607144b646545fac576ec510
+ RTL8812AU_AIRCRACK_NG_SITE = $(call github,aircrack-ng,rtl8812au,$(RTL8812AU_AIRCRACK_NG_VERSION))
+ RTL8812AU_AIRCRACK_NG_LICENSE = GPL-2.0
+ RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+--===============9017209690864395911==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9017209690864395911==--
