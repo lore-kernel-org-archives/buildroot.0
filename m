@@ -4,43 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E0BBC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:18:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD61FC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:19:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C3088336D;
-	Wed,  1 Jun 2022 21:18:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A896683051;
+	Wed,  1 Jun 2022 21:19:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nbO6cKdSN2zH; Wed,  1 Jun 2022 21:18:58 +0000 (UTC)
+	with ESMTP id buKkeYyLM5zS; Wed,  1 Jun 2022 21:19:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D696831CA;
-	Wed,  1 Jun 2022 21:18:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CEFD21BF36A
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:18:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 626FB83385;
+	Wed,  1 Jun 2022 21:19:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C8B771BF36A
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:18:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACBF960EE7
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:18:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B6FCC83051
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:18:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mMti2gj6Dw13 for <buildroot@lists.busybox.net>;
- Wed,  1 Jun 2022 21:18:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA0AD60ED0
- for <buildroot@buildroot.org>; Wed,  1 Jun 2022 21:18:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6A3E786916; Wed,  1 Jun 2022 21:06:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 1 Jun 2022 23:18:17 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2cf8ac37e108e2696426388c2e340f0110a8d973
-X-Git-Newrev: 6efd6bec01fa64384e90b0d5cfc951d7cc3bf31d
-X-Patchwork-Hint: ignore
-Message-Id: <20220601210650.6A3E786916@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-stalker: bump
- version to 19.0.3-Matrix
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ex_z3arYWSw1 for <buildroot@lists.busybox.net>;
+ Wed,  1 Jun 2022 21:18:54 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 19AA28145B
+ for <buildroot@buildroot.org>; Wed,  1 Jun 2022 21:18:53 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2BEBD100003;
+ Wed,  1 Jun 2022 21:18:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1654118332;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=QWqRl9dtFwOlwJUSjx+iTHJu8slQMNhN5wSyQacpCFA=;
+ b=Uyfsw2ahOVyycLXmExc2W2vm5YkJYR46rZlAW311/p8T7w/1xGtxYrNCEAL0isQFISAUtG
+ G8QTdhV+4Xdu/Y2tcx3bL9w3MFIoD+2qgP9OqGeVSxO9cCHSHngAU4pkY9spfOqa8KVhdY
+ IyBVNzy4EsVeX4HOzLbkSdPjMgqfWQr1hb3VQJdETXjru35abUc4VMHWy7SI84IFd3gfrD
+ 71xe0T/RskZ0qOHIYGms9FGHog32wdLH/j5za/XEEcxjrd+JGOJpHaWD+3rxnWhiwIBGx1
+ gnk6I20S9jG1p7xDnuwpp1zQAfGiofocBGSf0Cmd83RShmzU5h5v0M7fD4BpOg==
+Date: Wed, 1 Jun 2022 23:18:51 +0200
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20220601231851.47751592@windsurf>
+In-Reply-To: <20220531155216.20802-1-bernd.kuhls@t-online.de>
+References: <20220531155216.20802-1-bernd.kuhls@t-online.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH/next 1/3] package/kodi-peripheral-joystick:
+ bump version to 19.0.3-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,44 +69,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6efd6bec01fa64384e90b0d5cfc951d7cc3bf31d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 31 May 2022 17:52:14 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kodi-pvr-stalker/kodi-pvr-stalker.hash | 2 +-
- package/kodi-pvr-stalker/kodi-pvr-stalker.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
+>  package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
-index 2eae79d371..ad47f02bd8 100644
---- a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ca472c4f43f77d7badca3fbe174f5877e6b3ff63407da09f690d8146ec737b59  kodi-pvr-stalker-19.0.2-Matrix.tar.gz
-+sha256  c0d71dad5fdbc334ea8b0b66f5155c72b6f59a76c268a1de71edb837688ebf81  kodi-pvr-stalker-19.0.3-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-index efa293a40d..bda1c8ff75 100644
---- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_STALKER_VERSION = 19.0.2-Matrix
-+KODI_PVR_STALKER_VERSION = 19.0.3-Matrix
- KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
- KODI_PVR_STALKER_LICENSE = GPL-2.0+
- KODI_PVR_STALKER_LICENSE_FILES = LICENSE.md
+All 3 patches applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
