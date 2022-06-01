@@ -1,45 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8EB8C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:14:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53854C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:14:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 70F9A409DA;
-	Wed,  1 Jun 2022 21:14:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D31A8151E;
+	Wed,  1 Jun 2022 21:14:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CssVhiN5zhHO; Wed,  1 Jun 2022 21:14:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KcPwKeqKLWeb; Wed,  1 Jun 2022 21:14:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 89FE9409DD;
-	Wed,  1 Jun 2022 21:14:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28D8081409;
+	Wed,  1 Jun 2022 21:14:54 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5D2141BF36A
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:14:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A215C1BF36A
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:14:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C58D415E6
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:14:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F2C6415E6
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:14:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T8MuLObz_emc for <buildroot@lists.busybox.net>;
- Wed,  1 Jun 2022 21:14:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F31F415E2
- for <buildroot@buildroot.org>; Wed,  1 Jun 2022 21:14:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B1419868FA; Wed,  1 Jun 2022 21:02:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 1 Jun 2022 23:08:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a1331ba01b146f4c3a29e0d604e92cf676a46f8
-X-Git-Newrev: 0295e9602f22dd11e0e484bf10950354d1febe3b
-X-Patchwork-Hint: ignore
-Message-Id: <20220601210248.B1419868FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/runc: security bump to v1.1.2
+ with ESMTP id 0wRbP6SnIwn8 for <buildroot@lists.busybox.net>;
+ Wed,  1 Jun 2022 21:14:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 43C22415E2
+ for <buildroot@buildroot.org>; Wed,  1 Jun 2022 21:14:50 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 218571BF205;
+ Wed,  1 Jun 2022 21:14:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1654118089;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=x5EehXZV5V23U4MhRjq+CcXX1mSBJMtt+fj5BQV8UFM=;
+ b=Kme52xqOsN5LAehjbuuDlX1szsrgqrqmoh/Xbv6JaIE7qGDoAu/naQ22CRyBEePCPNxrKP
+ rnbHsOwk+vlgP/dXDZq0lVGYiHuM2jTtNfzUtRlQ0VrsVmFiIYDKHE52MOoYqqTzSfbWBW
+ EqsavNQ/q9QPZXU08v5CRao9M9dCwGfaXCKEjjTf27/kQDDIlxjdCm2g9tNkDa6UhELSFG
+ OQzG6Cc148jqft+kGTwdQq4hYTuVJDHPyrp2/TBQh9pQWk6TKsSLB1PwRIP1NIR1u7sGah
+ ImFqs8sxC4aBjjsP4nY/eNgr7x/FRr4WhHMAlziwHN0vdW8C+LPxWwHtXKAzbw==
+Date: Wed, 1 Jun 2022 23:14:48 +0200
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Message-ID: <20220601231448.0a0109c0@windsurf>
+In-Reply-To: <20220601181047.89675-1-christian@paral.in>
+References: <20220601181047.89675-1-christian@paral.in>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/runc: security bump to v1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,58 +71,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0295e9602f22dd11e0e484bf10950354d1febe3b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed,  1 Jun 2022 11:10:47 -0700
+Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
 
-Fixes CVE-2022-29162
+> Fixes CVE-2022-29162
+> 
+> Minor security issue (which appears to not be exploitable) related to process
+> capabilities.
+> 
+> A bug was found in runc where runc exec --cap executed processes with ble Linux
+> process capabilities, creating an atypical Linux environment. For more
+> information, see GHSA-f3fp-gc8g-vw66 and CVE-2022-29162.
+> 
+> runc spec no longer sets any inheritable capabilities in the created example OCI
+> spec (config.json) file.
+> 
+> https://github.com/opencontainers/runc/releases/tag/v1.1.2
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  package/runc/runc.hash | 2 +-
+>  package/runc/runc.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Minor security issue (which appears to not be exploitable) related to process
-capabilities.
+Applied to master, thanks.
 
-A bug was found in runc where runc exec --cap executed processes with ble Linux
-process capabilities, creating an atypical Linux environment. For more
-information, see GHSA-f3fp-gc8g-vw66 and CVE-2022-29162.
-
-runc spec no longer sets any inheritable capabilities in the created example OCI
-spec (config.json) file.
-
-https://github.com/opencontainers/runc/releases/tag/v1.1.2
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index fe3c4cc488..f8133d13c1 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  11a34535c108b36fd59de58e7bef3a130444c9ea41e4b8bb8f8d4654c8ad654c  runc-1.1.1.tar.gz
-+sha256  0ccce82b1d9c058d8fd7443d261c96fd7a803f2775bcb1fec2bdb725bc7640f6  runc-1.1.2.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 2618b71f63..5faa8b683d 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RUNC_VERSION = 1.1.1
-+RUNC_VERSION = 1.1.2
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
- RUNC_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
