@@ -1,63 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AAD2C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5128C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4A1160E71;
-	Wed,  1 Jun 2022 21:48:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 546C6409E9;
+	Wed,  1 Jun 2022 21:49:29 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C5GTwim8_duB; Wed,  1 Jun 2022 21:49:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B1A1409DE;
+	Wed,  1 Jun 2022 21:49:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EBAF31BF36A
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:49:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DAF5D60C0B
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:49:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YHBegVvtq9QK; Wed,  1 Jun 2022 21:48:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05B7060BC6;
-	Wed,  1 Jun 2022 21:48:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C9BC11BF36A
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:48:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C7823832BF
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:48:44 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j3YtAO5FUFAV for <buildroot@lists.busybox.net>;
- Wed,  1 Jun 2022 21:48:44 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B9F1982F98
- for <buildroot@busybox.net>; Wed,  1 Jun 2022 21:48:43 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9494C240003;
- Wed,  1 Jun 2022 21:48:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654120122;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=BfZvIubfgQn+IbOGslYri9B5NPWwRs1VqIHQKbONQeQ=;
- b=fnyQ9YiJYYd3/UX681XTzqlZuySEvCvvFQ+SpEDHnIMj/zzlcYyZkm2atyGwlwPs/0Bk7n
- 05VG8R6wKsvt19EW3ROXZbE7OsWipeosOgMu0aDNrUnEW9z4QdwfeGnBSy5EFrE1CId1QQ
- BZrz5dqBpyQJUZe704jaC+IfJgBnB51W9stHKMfLKTJb+JthHcZ3Yec0F69sKU1UkRE+50
- KXcklNlgSn4Ng1YWl+wrJfyEUUIEtXLDigiXIDbEAOCR50MEvcslhr/UrKkJl+1vxTQwrr
- c+v4dq4JaDhnFBCG4QK1MSAAQywluJjR0eQ87wW0R6cIsPz+tc4kse8jT9x2RA==
-Date: Wed, 1 Jun 2022 23:48:40 +0200
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20220601234840.23775995@windsurf>
-In-Reply-To: <20220519103535.1806705-1-francois.perrad@gadz.org>
-References: <20220519103535.1806705-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/libressl: bump to version 3.5.3
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NEQVmo14lgJP for <buildroot@lists.busybox.net>;
+ Wed,  1 Jun 2022 21:49:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 23FC660BC6
+ for <buildroot@buildroot.org>; Wed,  1 Jun 2022 21:49:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 8B7508696A; Wed,  1 Jun 2022 21:37:46 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 1 Jun 2022 23:48:29 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: a3a1da05fcc36dc256ebae98c5498ae384a65aff
+X-Git-Newrev: 90712c01237cf42ba43c2d489c0357c6930cc54a
+X-Patchwork-Hint: ignore
+Message-Id: <20220601213746.8B7508696A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libressl: bump to
+ version 3.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,28 +54,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 19 May 2022 12:35:35 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=90712c01237cf42ba43c2d489c0357c6930cc54a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/libressl/libressl.hash | 2 +-
->  package/libressl/libressl.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index c3590798db..7a7638b2db 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  56feab8e21c3fa6549f8b7d7511658b8e98518162838a795314732654adf3e5f  libressl-3.5.2.tar.gz
++sha256  3ab5e5eaef69ce20c6b170ee64d785b42235f48f2e62b095fca5d7b6672b8b28  libressl-3.5.3.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index a52a15c676..85d1fe5e3a 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRESSL_VERSION = 3.5.2
++LIBRESSL_VERSION = 3.5.3
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
