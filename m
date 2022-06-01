@@ -1,62 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18C22C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 13:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01ADAC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 14:18:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD24F61072;
-	Wed,  1 Jun 2022 13:25:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A5C3A82F32;
+	Wed,  1 Jun 2022 14:18:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YQhXMK-mi4Wj; Wed,  1 Jun 2022 13:25:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ajl34P1ZB5I1; Wed,  1 Jun 2022 14:18:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3B7661062;
-	Wed,  1 Jun 2022 13:25:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A52D01BF3E1
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 13:25:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7F5C81AAB;
+	Wed,  1 Jun 2022 14:18:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1ED331BF2C7
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 14:18:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1B974171E
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 13:25:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1AD4A4011A
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 14:18:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ySmjUfvO9VxK for <buildroot@lists.busybox.net>;
- Wed,  1 Jun 2022 13:25:16 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1BD8D41717
- for <buildroot@buildroot.org>; Wed,  1 Jun 2022 13:25:15 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 19394200012;
- Wed,  1 Jun 2022 13:25:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654089914;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=fGZF8ZpHk2c279p3d7d8ojam6nxMLxkm49zwWUYbsnc=;
- b=cnUQBLKX+AE279SIYz+pN9iLW8NXRbP7URkEM/Ixac7m2vxNj6xLaJosQkoU+1JZcR2mPc
- ajtD93WB9QeROyllxfIqdX1pWA4BCWod9gFen0Dp/34m10COLqhqObdTOsbPKJCQbjxekr
- n+TXuLnii0hOuJVlvfO3kaeMkJiC5MCC7PCN1Cwpi78G9/sp8g1aDtQZ6+8HVndNOhhXPf
- vAjZbKyi8S+m8YhfhlVe5NY7lLS/qo0cRVUikW0oE75XRQxt89JkajiHUDNb+uiaBA2/Nh
- uoPQIhjeHc4ZPtlYdgk3cqyn72F9nCTQqh9b+mxIFurKj5LByiRrNS89EJ46Zg==
-Date: Wed, 1 Jun 2022 15:25:12 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220601152512.1faf25fd@windsurf>
-In-Reply-To: <20220531163828.3865322-1-fontaine.fabrice@gmail.com>
-References: <20220531163828.3865322-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=igalia.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q7QtAC_csoxN for <buildroot@lists.busybox.net>;
+ Wed,  1 Jun 2022 14:18:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2EACC40C32
+ for <buildroot@buildroot.org>; Wed,  1 Jun 2022 14:18:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
+ s=20170329;
+ h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=PcGlZZFJ/2AURMWkaz/asP+Edxrw6RJUT7QfxBBfcAU=; b=Fq/8T7rC8IcxkbCxorakzTlRep
+ faDNfRXdNb/dW8Y3XR+brzLxUhnSkv8ESGb6+Nvi1nGtBk0b8vdJZQzlj1wb35L8ES2H2/fHwS7lT
+ iCff/woxutYt+CGI8Lv+XraD7LOFV66KChkGQfCRcSwZIrP3gQPn3jmKIupNwDYGktKMmxqwmmqQK
+ 8BnhP7hlzRV7Nr0ZhiQo2Hw5cFhrWXVQQR9QbplqXPH4VatY+l8MYcYRQeO4fbaknJzau4tKyWXOX
+ aqy82Q2ecFROEwsf/pPYZEIQ/0Hbx4wA7GVrxeL0V+fB2iy22mLnSJs6fe+sJ4iP3I4fr0Y8TdmKH
+ 3Fuio2zA==;
+Received: from 91-153-34-181.elisa-laajakaista.fi ([91.153.34.181] helo=momiji)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1nwPBP-007RD5-Ea; Wed, 01 Jun 2022 16:18:47 +0200
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id 532b8cb4;
+ Wed, 1 Jun 2022 14:18:33 +0000 (UTC)
+Date: Wed, 1 Jun 2022 17:18:28 +0300
+Message-ID: <20220601171828.GB870187@momiji>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Michael Nosthoff <buildroot@heine.tech>
+In-Reply-To: <20220601103905.GB863200@momiji>
+References: <54-6295dc80-3-54e5e980@111886211> <20220601103905.GB863200@momiji>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/samba4: needs iconv.h
+Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: bump to version
+ 2.36.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,44 +73,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============3399472225200262774=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 31 May 2022 18:38:28 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> samba4 needs iconv.h since bump to version 4.15.3 in commit
-> d33ad03e75b89feb97a7edeba3156fa2ac417b06 and
-> https://gitlab.com/samba-team/samba/-/commit/fc51b38ed8b7ff239db82d4d2d52f6332910ca97:
-> 
-> ../../source3/lib/netapi/examples/common.c:13:10: fatal error: iconv.h: No such file or directory
->    13 | #include <iconv.h>
->       |          ^~~~~~~~~
-> 
-> Strangely enough, there is no autobuilder failures.
-> 
-> Fixes:
->  - https://bugs.buildroot.org/show_bug.cgi?id=14821
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/samba4/Config.in | 1 +
->  package/samba4/samba4.mk | 5 +++++
->  2 files changed, 6 insertions(+)
+--===============3399472225200262774==
+Content-Type: multipart/signed; boundary="ZIu43+8qDNAAGDfj"; micalg="pgp-sha1"; protocol="application/pgp-signature"
 
-Applied to master, thanks.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--ZIu43+8qDNAAGDfj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
+
+SGkgYWdhaW4sCgpPbiBXZWQsIDAxIEp1biAyMDIyIDEwOjM5OjA1ICswMzAwIEFkcmlhbiBQZXJl
+eiBkZSBDYXN0cm8gPGFwZXJlekBpZ2FsaWEuY29tPiB3cm90ZToKIAo+IE9uIFR1ZSwgMzEgTWF5
+IDIwMjIgMTE6MTQ6NTcgKzAyMDAgTWljaGFlbCBOb3N0aG9mZiB2aWEgYnVpbGRyb290IDxidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cj4gPgo+ID4gWy4uLl0KPiA+IAo+ID4gSSB0cmll
+ZCB3aXRoIHRoZSBsYXRlc3QgbWFzdGVyIGJyYW5jaCAod2l0aCAyLjM2LjMpIGFuZCBleHRlbmRl
+ZCB0aGUgcmFzcGJlcnJ5cGk0X2RlZmNvbmZpZyB3aXRoIGdyYXBoaWNzIGRyaXZlci4KPiA+IAo+
+ID4gVGhpcyBpcyB0aGUgZGVmY29uZmlnOgo+ID4KPiA+IFsuLi5dCj4gCj4gVGhhbmtzIGEgbG90
+IGZvciBzaGFyaW5nIHlvdXIgY29uZmlnLCB0aGF0IHdhcyBtb3N0IGhlbHBmdWwhIEkgaGF2ZSBi
+ZWVuCj4gYWJsZSB0byByZXByb2R1Y2UgdGhlIGJ1aWxkIGlzc3VlIGFuZCBJIGFtIGFscmVhZHkg
+d29ya2luZyBvbiBhIGZpeCwKPiB3aGljaCB3aWxsIG1ha2UgaXQgaW50byB0aGUgMi4zNi40IHJl
+bGVhc2UgaW4gc29tZSB3ZWVrcy4gSW4gdGhlCj4gbWVhbnRpbWUgSSB3aWxsIHN1Ym1pdCBhIGZp
+eCB0byBoYXZlIHRoZSBwYXRjaCBpbiBCdWlsZHJvb3QuCgpJIGFtIHN0aWxsIHdvcmtpbmcgdGhy
+b3VnaCBmaW5pc2hpbmcgYW5kIHRlc3RpbmcgYSBmaXgsIGJ1dCBJIGhhdmUKYWxyZWFkeSBmaWxl
+ZCBhbiBpc3N1ZSBpbiBCdWd6aWxsYSB0byB0cmFjayB0aGlzLiBGZWVsIGZyZWUgdG8gc3Vic2Ny
+aWJlCnRvIHRoZSBpc3N1ZSBbMV0gdG8gZm9sbG93IGFsb25nIDopCgpDaGVlcnMsCuKAlEFkcmnD
+oW4KCi0tLQpbMV0gaHR0cHM6Ly9idWdzLndlYmtpdC5vcmcvc2hvd19idWcuY2dpP2lkPTI0MTE4
+Mgo=
+
+--ZIu43+8qDNAAGDfj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYpd1NAAKCRCRxVnb5MkS
+O/7aAJ9juChr2OWidLrxmRSjx4cnUtRNzgCcDKOzVt6Q79Me+9PgmgZkl//gnfg=
+=e6P0
+-----END PGP SIGNATURE-----
+
+--ZIu43+8qDNAAGDfj--
+
+--===============3399472225200262774==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3399472225200262774==--
