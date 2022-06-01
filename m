@@ -1,45 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CD3CC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:22:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13AA4C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B3F361041;
-	Tue,  7 Jun 2022 19:22:28 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IRztXYAYDx2f; Tue,  7 Jun 2022 19:22:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25F6F61042;
-	Tue,  7 Jun 2022 19:22:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 97A2D1BF475
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F562408A5
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C6084408A5;
+	Tue,  7 Jun 2022 19:22:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0sn8keI1SoeQ for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:16:48 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 893VMZgV5a12; Tue,  7 Jun 2022 19:22:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E2D3B405E7;
+	Tue,  7 Jun 2022 19:22:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CC0871BF9B4
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3339041902
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JgrT_FVVc5GN for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFC9C4059B
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50ACA418FB
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D003886E21; Tue,  7 Jun 2022 19:04:55 +0000 (UTC)
+ id 4272786E23; Tue,  7 Jun 2022 19:04:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 30 May 2022 21:22:06 +0200
+Date: Wed, 1 Jun 2022 23:48:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d35ba174095b86a0cf724179f7d4e8d0e3d9c127
-X-Git-Newrev: 8131ef6554aa34b388de33b6e340b125620c0c78
+X-Git-Oldrev: a3a1da05fcc36dc256ebae98c5498ae384a65aff
+X-Git-Newrev: 90712c01237cf42ba43c2d489c0357c6930cc54a
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190455.D003886E21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-kflash: new package
+Message-Id: <20220607190458.4272786E23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libressl: bump to version 3.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,96 +59,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8131ef6554aa34b388de33b6e340b125620c0c78
+commit: https://git.buildroot.net/buildroot/commit/?id=90712c01237cf42ba43c2d489c0357c6930cc54a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add the kflash Kendryte K210 UART ISP Utility as a host package to allow
-users to program their board boot ROM or SRAM with built images.
-
-The kflash utility is available through the pypi.org python package
-index. The project is homepage is: https://github.com/vowstar/kflash.py.
-
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  3 +++
- package/Config.in.host                   |  1 +
- package/python-kflash/Config.in.host     |  7 +++++++
- package/python-kflash/python-kflash.hash |  5 +++++
- package/python-kflash/python-kflash.mk   | 15 +++++++++++++++
- 5 files changed, 31 insertions(+)
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 435fa28478..096ca94f4e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -630,6 +630,9 @@ N:	Damien Lanson <damien@kal-host.com>
- F:	package/libvdpau/
- F:	package/log4cpp/
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index c3590798db..7a7638b2db 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  56feab8e21c3fa6549f8b7d7511658b8e98518162838a795314732654adf3e5f  libressl-3.5.2.tar.gz
++sha256  3ab5e5eaef69ce20c6b170ee64d785b42235f48f2e62b095fca5d7b6672b8b28  libressl-3.5.3.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index a52a15c676..85d1fe5e3a 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+N:	Damien Le Moal <damien.lemoal@wdc.com>
-+F:	package/python-kflash/
-+
- N:	Daniel Nicoletti <dantti12@gmail.com>
- F:	package/cutelyst/
- 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index cd1c34b5a3..8d2a8f4801 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -72,6 +72,7 @@ menu "Host utilities"
- 	source "package/pwgen/Config.in.host"
- 	source "package/python-cython/Config.in.host"
- 	source "package/python-greenlet/Config.in.host"
-+	source "package/python-kflash/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
- 	source "package/python-six/Config.in.host"
- 	source "package/python-xlrd/Config.in.host"
-diff --git a/package/python-kflash/Config.in.host b/package/python-kflash/Config.in.host
-new file mode 100644
-index 0000000000..0be8c18f15
---- /dev/null
-+++ b/package/python-kflash/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_PYTHON_KFLASH
-+	bool "host python-kflash"
-+	depends on BR2_RISCV_64 && !BR2_USE_MMU
-+	help
-+	  Kendryte UART ISP Utility - programming code to k210.
-+
-+	  https://github.com/vowstar/kflash.py
-diff --git a/package/python-kflash/python-kflash.hash b/package/python-kflash/python-kflash.hash
-new file mode 100644
-index 0000000000..722c4e879b
---- /dev/null
-+++ b/package/python-kflash/python-kflash.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/kflash/json
-+md5  85549bcc1faa0f2cd5ebe3b04759e7fa  kflash-1.1.5.tar.gz
-+sha256  40a0976b52942c7a3bdfa2d9e2bdc8d7526cf6deb0759c8384281240c8fb404e  kflash-1.1.5.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c48133d7a08d743c2c01c6190fc1860f7d73777afa2199ed8d0a035b754d8bf9  LICENSE
-diff --git a/package/python-kflash/python-kflash.mk b/package/python-kflash/python-kflash.mk
-new file mode 100644
-index 0000000000..adbf6b30b0
---- /dev/null
-+++ b/package/python-kflash/python-kflash.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-kflash
-+#
-+################################################################################
-+
-+PYTHON_KFLASH_VERSION = 1.1.5
-+PYTHON_KFLASH_SOURCE = kflash-$(PYTHON_KFLASH_VERSION).tar.gz
-+PYTHON_KFLASH_SITE = https://files.pythonhosted.org/packages/c4/b3/1c25a92922bfd3dbc05d972352c071167cad035c615f6f068f75c2f0fd01
-+PYTHON_KFLASH_SETUP_TYPE = setuptools
-+PYTHON_KFLASH_LICENSE = MIT
-+PYTHON_KFLASH_LICENSE_FILES = LICENSE
-+HOST_PYTHON_KFLASH_DEPENDENCIES = host-python-pyelftools host-python-serial
-+
-+$(eval $(host-python-package))
+-LIBRESSL_VERSION = 3.5.2
++LIBRESSL_VERSION = 3.5.3
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
