@@ -1,66 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01B58C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8EB8C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:14:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3F00415E6;
-	Wed,  1 Jun 2022 21:10:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 70F9A409DA;
+	Wed,  1 Jun 2022 21:14:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r0xxMzmDoy9O; Wed,  1 Jun 2022 21:10:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CssVhiN5zhHO; Wed,  1 Jun 2022 21:14:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7BA04415E3;
-	Wed,  1 Jun 2022 21:10:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 89FE9409DD;
+	Wed,  1 Jun 2022 21:14:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 520441BF36A
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:09:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5D2141BF36A
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:14:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D599415E3
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:09:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C58D415E6
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:14:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8M7UFnITu4ov for <buildroot@lists.busybox.net>;
- Wed,  1 Jun 2022 21:09:56 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5303E415E2
- for <buildroot@buildroot.org>; Wed,  1 Jun 2022 21:09:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
- s=20170329;
- h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
- Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=HqrWCsrB+7M+5o+DAkEs5Ny7eSPGHD3bdnvkcjsK850=; b=kdnDXNUqvkWgDo8xQdt45nYA+c
- DszD0IhK9KPGBAJTd/mBQdVnC9W4Va2QCQgo6NV2LDv+PcXMTYnLxXRFJozq3wfU4CGbkYzCz2nar
- Ksvuea6ZPM0jdvkFC7neNa6Fhu61DTtwlGEy/xyCR+FKMUoQZOr1zPflBjYNT8ppg73PhRy44z0Ks
- pcjGPw/BB7hj3dmuOdhY0/COk+4x8JTrx6Wq006a9wtR1geFn+pqtPNKtu869loIQpv8tKrJGZcDn
- hsuPXaVjEcvvdXsuxesuXNB/bzUVZ1AbywwZK+Lr6eoiOxVRktBqXeXryc5R8DaZRRUlgK23P9NwI
- SKFFXNRA==;
-Received: from 91-153-34-181.elisa-laajakaista.fi ([91.153.34.181] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1nwVbF-007f5Y-3T; Wed, 01 Jun 2022 23:09:53 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 40c5e1aa;
- Wed, 1 Jun 2022 21:09:39 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
+ with ESMTP id T8MuLObz_emc for <buildroot@lists.busybox.net>;
+ Wed,  1 Jun 2022 21:14:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F31F415E2
+ for <buildroot@buildroot.org>; Wed,  1 Jun 2022 21:14:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id B1419868FA; Wed,  1 Jun 2022 21:02:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu,  2 Jun 2022 00:09:39 +0300
-Message-Id: <20220601210939.2350383-2-aperez@igalia.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220601210939.2350383-1-aperez@igalia.com>
-References: <20220601210939.2350383-1-aperez@igalia.com>
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/webkitgtk: support game controllers
- via libmanette
+Date: Wed, 1 Jun 2022 23:08:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6a1331ba01b146f4c3a29e0d604e92cf676a46f8
+X-Git-Newrev: 0295e9602f22dd11e0e484bf10950354d1febe3b
+X-Patchwork-Hint: ignore
+Message-Id: <20220601210248.B1419868FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/runc: security bump to v1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,51 +51,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Eric Le Bihan <eric.le.bihan.dev@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add support for the Gamepad API in webkitgtk, depending on
-libmanette, which is used for implementing access to game
-controllers.
+commit: https://git.buildroot.net/buildroot/commit/?id=0295e9602f22dd11e0e484bf10950354d1febe3b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Fixes CVE-2022-29162
+
+Minor security issue (which appears to not be exploitable) related to process
+capabilities.
+
+A bug was found in runc where runc exec --cap executed processes with ble Linux
+process capabilities, creating an atypical Linux environment. For more
+information, see GHSA-f3fp-gc8g-vw66 and CVE-2022-29162.
+
+runc spec no longer sets any inheritable capabilities in the created example OCI
+spec (config.json) file.
+
+https://github.com/opencontainers/runc/releases/tag/v1.1.2
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/webkitgtk/webkitgtk.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 39b16a90e7..07fc98c5f6 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -18,7 +18,6 @@ WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf \
- 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
--	-DENABLE_GAMEPAD=OFF \
- 	-DENABLE_GEOLOCATION=OFF \
- 	-DENABLE_GTKDOC=OFF \
- 	-DENABLE_MINIBROWSER=ON \
-@@ -71,6 +70,13 @@ else
- WEBKITGTK_CONF_OPTS += -DENABLE_INTROSPECTION=OFF
- endif
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index fe3c4cc488..f8133d13c1 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  11a34535c108b36fd59de58e7bef3a130444c9ea41e4b8bb8f8d4654c8ad654c  runc-1.1.1.tar.gz
++sha256  0ccce82b1d9c058d8fd7443d261c96fd7a803f2775bcb1fec2bdb725bc7640f6  runc-1.1.2.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 2618b71f63..5faa8b683d 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBMANETTE),y)
-+WEBKITGTK_CONF_OPTS += -DENABLE_GAMEPAD=ON
-+WEBKITGTK_DEPENDENCIES += libmanette
-+else
-+WEBKITGTK_CONF_OPTS += -DENABLE_GAMEPAD=OFF
-+endif
-+
- # Only one target platform can be built, assume X11 > Wayland
- 
- # GTK3-X11 target gives OpenGL from newer libgtk3 versions
--- 
-2.36.1
-
+-RUNC_VERSION = 1.1.1
++RUNC_VERSION = 1.1.2
+ RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
+ RUNC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
