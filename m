@@ -1,45 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53A51C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 12:34:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98301C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 12:43:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 157E382A4E;
-	Wed,  1 Jun 2022 12:34:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38E6B4089B;
+	Wed,  1 Jun 2022 12:43:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LrPFrcydtyvK; Wed,  1 Jun 2022 12:43:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1E214088E;
+	Wed,  1 Jun 2022 12:43:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F1EA11BF591
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 12:43:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E0A1482B2F
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 12:43:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sFNy3I5bU8mU; Wed,  1 Jun 2022 12:34:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B32982A2D;
-	Wed,  1 Jun 2022 12:34:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DB3321BF591
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 12:34:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9F6760BFB
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 12:34:31 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Wjl97VWiCi5 for <buildroot@lists.busybox.net>;
- Wed,  1 Jun 2022 12:34:31 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kR9aCKIKRdzh for <buildroot@lists.busybox.net>;
+ Wed,  1 Jun 2022 12:43:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0115660BE0
- for <buildroot@buildroot.org>; Wed,  1 Jun 2022 12:34:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3104882B24
+ for <buildroot@buildroot.org>; Wed,  1 Jun 2022 12:43:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4BA3F868A1; Wed,  1 Jun 2022 12:22:53 +0000 (UTC)
+ id 76624868A8; Wed,  1 Jun 2022 12:32:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 1 Jun 2022 14:34:21 +0200
+Date: Wed, 1 Jun 2022 14:43:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 267e39413ed09876c61eac1c5d7ee3042061b6f7
-X-Git-Newrev: ea79360907ffd8fff11828a0fbda213979b15247
+X-Git-Oldrev: ea79360907ffd8fff11828a0fbda213979b15247
+X-Git-Newrev: 1917fe29839c79f92e0a1e307768356c0076b62b
 X-Patchwork-Hint: ignore
-Message-Id: <20220601122253.4BA3F868A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rauc: fix build
+Message-Id: <20220601123208.76624868A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/Config.in: sh4{eb, a,
+ aeb} are affected by GCC bug 101737
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,73 +60,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea79360907ffd8fff11828a0fbda213979b15247
+commit: https://git.buildroot.net/buildroot/commit/?id=1917fe29839c79f92e0a1e307768356c0076b62b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised since bump to version 1.5 in
-commit 41bbe8df540e2c630ad04f8db7383a7e7705f368 and
-https://github.com/rauc/rauc/commit/be55282d71d967dcc0cf48303f8245cbc8fff053:
+pixman fails to build with BR2_OPTIMIZE_S on sh4{eb,a,aeb}:
 
-In file included from /nvmedata/autobuild/instance-22/output-1/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib.h:62,
-                 from src/verity_hash.c:26:
-src/verity_hash.c: In function 'verify_zero':
-src/verity_hash.c:69:55: error: expected ')' before 'PRIu64'
-   69 |    g_message("Spare area is not zeroed at position %" PRIu64 ".",
-      |                                                       ^~~~~~
+In file included from pixman-fast-path.c:33:
+pixman-fast-path.c: In function 'fast_composite_scaled_nearest_8888_565_normal_OVER':
+pixman-inlines.h:586:1: internal compiler error: Segmentation fault
+  586 | }
+      | ^
+
+Since all SuperH variants are affected, use BR2_sh instead of BR2_sh4.
 
 Fixes:
- - http://autobuild.buildroot.org/results/1a093c0e194a061836884419d2f50506105db01e
+ - http://autobuild.buildroot.org/results/c9d35d5975311a191dfbe12291398503987e804e
+ - http://autobuild.buildroot.org/results/d34b8672f6211d60af4122bdd94fa8c2f4f4bf6a
+ - http://autobuild.buildroot.org/results/933c4a2e73c987573ecc97172f442b78199462d5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...0001-src-verify_hash.c-include-inttypes.h.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ toolchain/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch b/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch
-new file mode 100644
-index 0000000000..916c8cca0b
---- /dev/null
-+++ b/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch
-@@ -0,0 +1,38 @@
-+From b19a9c26d88a913417e77aaf60c72cdbf393d1f6 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 31 May 2022 21:22:36 +0200
-+Subject: [PATCH] src/verify_hash.c: include inttypes.h
-+
-+Include inttypes.h to avoid the following build failure:
-+
-+In file included from /nvmedata/autobuild/instance-22/output-1/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib.h:62,
-+                 from src/verity_hash.c:26:
-+src/verity_hash.c: In function 'verify_zero':
-+src/verity_hash.c:69:55: error: expected ')' before 'PRIu64'
-+   69 |    g_message("Spare area is not zeroed at position %" PRIu64 ".",
-+      |                                                       ^~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/1a093c0e194a061836884419d2f50506105db01e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/rauc/rauc/pull/914]
-+---
-+ src/verity_hash.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/verity_hash.c b/src/verity_hash.c
-+index db82a78..3b2c2a0 100644
-+--- a/src/verity_hash.c
-++++ b/src/verity_hash.c
-+@@ -19,6 +19,7 @@
-+  */
-+ 
-+ #include <errno.h>
-++#include <inttypes.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+-- 
-+2.35.1
-+
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 73ea78624a..ea59ca2960 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -199,7 +199,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_99140
+ # still exists in gcc = 11.1.0
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_101737
+ 	bool
+-	default y if BR2_sh4
++	default y if BR2_sh
+ 
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101915
+ # ICE: in extract_insn, at recog.c:2294 on microblaze.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
