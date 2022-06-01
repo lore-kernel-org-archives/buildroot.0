@@ -1,45 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F229C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 20:43:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 731B5C43334
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 20:50:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09C7960EC4;
-	Wed,  1 Jun 2022 20:43:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E648827D9;
+	Wed,  1 Jun 2022 20:50:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QCj5FXZ5nYVb; Wed,  1 Jun 2022 20:43:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ivcokWNGZNNq; Wed,  1 Jun 2022 20:50:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0DB206076C;
-	Wed,  1 Jun 2022 20:43:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 204DE1BF2C7
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 20:43:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A2D782451;
+	Wed,  1 Jun 2022 20:50:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C3061BF2C7
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 20:50:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E7C5606C6
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 20:43:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 11A0F401F0
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 20:50:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qMbvS4_tFMJN for <buildroot@lists.busybox.net>;
- Wed,  1 Jun 2022 20:43:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F8CC60597
- for <buildroot@buildroot.org>; Wed,  1 Jun 2022 20:43:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id ECA7B868DD; Wed,  1 Jun 2022 20:32:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 1 Jun 2022 22:43:27 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: dd018f78de99ea78633694dba011f155849dde32
-X-Git-Newrev: 4bb884a3c61c6b71e33f69453a90eb2a367f64b7
-X-Patchwork-Hint: ignore
-Message-Id: <20220601203213.ECA7B868DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wolftpm: new package
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RjPPOA0fWHh9 for <buildroot@lists.busybox.net>;
+ Wed,  1 Jun 2022 20:50:35 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C8BF5401EF
+ for <buildroot@buildroot.org>; Wed,  1 Jun 2022 20:50:34 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 886C3C0002;
+ Wed,  1 Jun 2022 20:50:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1654116632;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=w2MTEsptioZYwciRT9kzyRi2M5pj6ipZtHrcw54+NEI=;
+ b=ltu+E9YNKAluuV8sw/SokxGXdvStD+WhiMOwk37/dvkVEId5OQ6x0SOOvUG+JWm0jXVqRR
+ J7EHyJimbLNuWft76bqaBuemmARMaY3iE1J8aGB5frDM2f2BSaC2wx16OlULRpccJDppL/
+ 5efJM3xyWY5k4OS8C1pPa+e5u6F4ImZ1rri27Nu957vy4ib+lZNbJQzgbUwgTD1NWgx7uc
+ GcB++hd7fGhqvb8QWzRMZCjhvLj94WBNZXjOHH83E+fCKPfruWFqa5zG4KS/07rzcAgpEq
+ hzvQzOfice86fmZQM2RVse1+EMDWn0iQfWsTjoGmEUm8dof4m0frtnry+XTcgQ==
+Date: Wed, 1 Jun 2022 22:50:31 +0200
+To: Dimi Tomov <dimi@tpm.dev>
+Message-ID: <20220601225031.79aca2b0@windsurf>
+In-Reply-To: <20220601194746.29106-1-dimi@tpm.dev>
+References: <20220530203001.574908-1-dimi@tpm.dev>
+ <20220601194746.29106-1-dimi@tpm.dev>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/wolftpm: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,133 +72,106 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bb884a3c61c6b71e33f69453a90eb2a367f64b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-wolfTPM is an open-source TPM 2.0 stack with backward API compatibility,
-designed for embedded use. It is highly portable, and has native support
-for Linux. wolfTPM has a compact code size with low resource usage.
-
-Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
-[Thomas:
- - Fix ordering in the DEVELOPERS file, use full name
- - Add missing !BR2_STATIC_LIBS dependency
- - Use "select" and not "select on"
- - Make sure wolftpm-config script gets post-processed by using
-   <pkg>_CONFIG_SCRIPTS
- - Add missing --with-wolfcrypt option.
- - Rename WOLFTPM_CONFIG_RPATH to WOLFTPM_TOUCH_CONFIG_RPATH and use
-   mkdir -p to make the hook re-executable]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                   |  3 +++
- package/Config.in            |  1 +
- package/wolftpm/Config.in    | 16 ++++++++++++++++
- package/wolftpm/wolftpm.hash |  2 ++
- package/wolftpm/wolftpm.mk   | 32 ++++++++++++++++++++++++++++++++
- 5 files changed, 54 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fe840f33f5..7bc0e0632c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -729,6 +729,9 @@ F:	package/s6/
- F:	package/skalibs/
- F:	support/testing/tests/boot/test_edk2.py
- 
-+N:	Dimitar Tomov <dimi@tpm.dev>
-+F:	package/wolftpm/
-+
- N:	Dimitrios Siganos <dimitris@siganos.org>
- F:	package/wireless-regdb/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 4ab61713e0..8f1a7d4e9f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1433,6 +1433,7 @@ menu "Crypto"
- 	source "package/trousers/Config.in"
- 	source "package/ustream-ssl/Config.in"
- 	source "package/wolfssl/Config.in"
-+	source "package/wolftpm/Config.in"
- endmenu
- 
- menu "Database"
-diff --git a/package/wolftpm/Config.in b/package/wolftpm/Config.in
-new file mode 100644
-index 0000000000..0fe094f277
---- /dev/null
-+++ b/package/wolftpm/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_WOLFTPM
-+	bool "wolftpm"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_WOLFSSL
-+	select BR2_PACKAGE_WOLFSSL_ALL
-+	help
-+	  wolfTPM is a portable, open-source TPM 2.0 stack with
-+	  backward API compatibility, designed for embedded use.
-+	  No external dependencies, compact code size with low
-+	  resource usage.
-+
-+	  https://www.wolfssl.com/
-+
-+comment "wolftpm needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/wolftpm/wolftpm.hash b/package/wolftpm/wolftpm.hash
-new file mode 100644
-index 0000000000..6dbf143ffe
---- /dev/null
-+++ b/package/wolftpm/wolftpm.hash
-@@ -0,0 +1,2 @@
-+# Hash from https://github.com/wolfSSL/wolfTPM/archive/refs/tags/v2.3.1.tar.gz
-+sha256  f0d7c095491ac2cc9e44aa4ac3c22febf15942ef080431d8b43a9d0312ca6567  wolftpm-2.3.1.tar.gz
-diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
-new file mode 100644
-index 0000000000..ea01eaad6b
---- /dev/null
-+++ b/package/wolftpm/wolftpm.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# wolftpm
-+#
-+################################################################################
-+
-+WOLFTPM_VERSION = 2.3.1
-+WOLFTPM_SITE = $(call github,wolfSSL,wolfTPM,v$(WOLFTPM_VERSION))
-+WOLFTPM_INSTALL_STAGING = YES
-+WOLFTPM_LICENSE = GPL-2.0+
-+WOLFTPM_LICENSE_FILES = LICENSE
-+WOLFTPM_CPE_ID_VENDOR = wolfssl
-+WOLFTPM_DEPENDENCIES = host-pkgconf
-+WOLFTPM_CONFIG_SCRIPTS = wolftpm-config
-+
-+# wolfTPM's source code is released without a configure script,
-+# therefore we need autoreconf
-+WOLFTPM_AUTORECONF = YES
-+
-+WOLFTPM_CONF_OPTS = \
-+	--disable-examples \
-+	--enable-devtpm \
-+	--with-wolfcrypt=$(STAGING_DIR)/usr
-+
-+# Fix for missing config.rpath in the codebase
-+define WOLFTPM_TOUCH_CONFIG_RPATH
-+	mkdir -p $(@D)/build-aux
-+	touch $(@D)/build-aux/config.rpath
-+endef
-+WOLFTPM_PRE_CONFIGURE_HOOKS += WOLFTPM_TOUCH_CONFIG_RPATH
-+
-+$(eval $(autotools-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gRGltaXRhciwKCk9uIFdlZCwgIDEgSnVuIDIwMjIgMjI6NDc6NDYgKzAzMDAKRGltaSBU
+b21vdiA8ZGltaUB0cG0uZGV2PiB3cm90ZToKCj4gRnJvbTogRGltaXRhciBUb21vdiA8ZGltaUB0
+cG0uZGV2Pgo+IAo+IHdvbGZUUE0gaXMgYW4gb3Blbi1zb3VyY2UgVFBNIDIuMCBzdGFjayB3aXRo
+IGJhY2t3YXJkIEFQSSBjb21wYXRpYmlsaXR5LAo+IGRlc2lnbmVkIGZvciBlbWJlZGRlZCB1c2Uu
+IEl0IGlzIGhpZ2hseSBwb3J0YWJsZSwgYW5kIGhhcyBuYXRpdmUgc3VwcG9ydAo+IGZvciBMaW51
+eC4gd29sZlRQTSBoYXMgYSBjb21wYWN0IGNvZGUgc2l6ZSB3aXRoIGxvdyByZXNvdXJjZSB1c2Fn
+ZS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBEaW1pdGFyIFRvbW92IDxkaW1pQHRwbS5kZXY+CgpJJ3Zl
+IGFwcGxpZWQgdG8gb3VyIG5leHQgYnJhbmNoLCBidXQgYWZ0ZXIgZG9pbmcgc2V2ZXJhbCBhZGRp
+dGlvbmFsCmZpeGVzLiBBbHNvLCB0aGVyZSBpcyBzb21ldGhpbmcgdG8gYmUgZml4ZWQgdXBzdHJl
+YW0sIHNlZSBiZWxvdy4KCj4gZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCj4g
+aW5kZXggNzFjYzNkYTZkNy4uYzEyM2QxYjkxNSAxMDA2NDQKPiAtLS0gYS9ERVZFTE9QRVJTCj4g
+KysrIGIvREVWRUxPUEVSUwo+IEBAIC0zMDcyLDMgKzMwNzIsNiBAQCBGOglwYWNrYWdlL3F1YXpp
+cC8KPiAgRjoJcGFja2FnZS9zaGFwZWxpYi8KPiAgRjoJcGFja2FnZS9zaW1wbGUtbWFpbC8KPiAg
+RjoJcGFja2FnZS90aW5jLwo+ICsKPiArTjoJRGltaSBUb21vdiA8ZGltaUB0cG0uZGV2Pgo+ICtG
+OglwYWNrYWdlL3dvbGZ0cG0vCgpFbnRyaWVzIGluIHRoaXMgZmlsZSBhcmUgYWxwaGFiZXRpY2Fs
+bHkgc29ydGVkLCBzbyB5b3Ugc2hvdWxkbid0IGhhdmUKYWRkZWQgeW91cnNlbGYgYXQgdGhlIGVu
+ZCwgYnV0IGF0IHRoZSAicmlnaHQiIHBsYWNlLgoKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS93b2xm
+dHBtL0NvbmZpZy5pbiBiL3BhY2thZ2Uvd29sZnRwbS9Db25maWcuaW4KPiBuZXcgZmlsZSBtb2Rl
+IDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjIzOTMyYTQxNzAKPiAtLS0gL2Rldi9udWxsCj4g
+KysrIGIvcGFja2FnZS93b2xmdHBtL0NvbmZpZy5pbgo+IEBAIC0wLDAgKzEsMTUgQEAKPiArY29u
+ZmlnIEJSMl9QQUNLQUdFX1dPTEZUUE0KPiArCWJvb2wgIndvbGZ0cG0iCj4gKwlkZXBlbmRzIG9u
+IEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKCllvdSBmb3Jnb3Q6CgoJZGVwZW5kcyBvbiAhQlIy
+X1NUQVRJQ19MSUJTCgp3aGljaCB5b3UgbmVlZCB0byByZXBsaWNhdGUgYmVjYXVzZSB5b3Ugc2Vs
+ZWN0IEJSMl9QQUNLQUdFX1dPTEZTU0xfQUxMLgoKPiArCXNlbGVjdCBvbiBCUjJfUEFDS0FHRV9X
+T0xGU1NMCj4gKwlzZWxlY3Qgb24gQlIyX1BBQ0tBR0VfV09MRlNTTF9BTEwKCkknbSB3b25kZXJp
+bmcgaWYgeW91IHRlc3RlZCB0aGlzLCBiZWNhdXNlICJzZWxlY3Qgb24iIGRvZXNuJ3QgZXhpc3Qg
+aW4KS2NvbmZpZy4gSXQncyBlaXRoZXIgInNlbGVjdCIgb3IgImRlcGVuZHMgb24iLCBidXQgbm90
+IGEgbWl4IG9mIGJvdGguCgo+ICsJaGVscAo+ICsJICB3b2xmVFBNIGlzIGEgcG9ydGFibGUsIG9w
+ZW4tc291cmNlIFRQTSAyLjAgc3RhY2sgd2l0aAo+ICsJICBiYWNrd2FyZCBBUEkgY29tcGF0aWJp
+bGl0eSwgZGVzaWduZWQgZm9yIGVtYmVkZGVkIHVzZS4KPiArCSAgTm8gZXh0ZXJuYWwgZGVwZW5k
+ZW5jaWVzLCBjb21wYWN0IGNvZGUgc2l6ZSB3aXRoIGxvdwo+ICsJICByZXNvdXJjZSB1c2FnZS4K
+PiArCj4gKwkgIGh0dHBzOi8vd3d3LndvbGZzc2wuY29tLwo+ICsKPiArY29tbWVudCAid29sZnRw
+bSBuZWVkcyBhIHRvb2xjaGFpbiB3LyB0aHJlYWRzIgo+ICsJZGVwZW5kcyBvbiAhQlIyX1RPT0xD
+SEFJTl9IQVNfVEhSRUFEUwoKVGhlIGNvbW1lbnQgaGFkIHRvIGJlIGFkanVzdGVkIGR1ZSB0byB0
+aGUgIUJSMl9TVEFUSUNfTElCUyBkZXBlbmRlbmN5LgoKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS93
+b2xmdHBtL3dvbGZ0cG0uaGFzaCBiL3BhY2thZ2Uvd29sZnRwbS93b2xmdHBtLmhhc2gKPiBuZXcg
+ZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjZkYmYxNDNmZmUKPiAtLS0gL2Rl
+di9udWxsCj4gKysrIGIvcGFja2FnZS93b2xmdHBtL3dvbGZ0cG0uaGFzaAo+IEBAIC0wLDAgKzEs
+MiBAQAo+ICsjIEhhc2ggZnJvbSBodHRwczovL2dpdGh1Yi5jb20vd29sZlNTTC93b2xmVFBNL2Fy
+Y2hpdmUvcmVmcy90YWdzL3YyLjMuMS50YXIuZ3oKPiArc2hhMjU2ICBmMGQ3YzA5NTQ5MWFjMmNj
+OWU0NGFhNGFjM2MyMmZlYmYxNTk0MmVmMDgwNDMxZDhiNDNhOWQwMzEyY2E2NTY3ICB3b2xmdHBt
+LTIuMy4xLnRhci5negoKR2FhaCwgSSdtIG5vdGljaW5nIG5vdyB0aGF0IHRoZSBoYXNoIG9mIHRo
+ZSBMSUNFTlNFIGZpbGUgaXMgbWlzc2luZywKYW5kIEkgZGlkbid0IHJlYWxpemUgYmVmb3JlIGFw
+cGx5aW5nLiBJIHdpbGwgZml4IHRoaXMgdXAuCgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3dvbGZ0
+cG0vd29sZnRwbS5tayBiL3BhY2thZ2Uvd29sZnRwbS93b2xmdHBtLm1rCj4gbmV3IGZpbGUgbW9k
+ZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4xZTFkZGMxM2UzCj4gLS0tIC9kZXYvbnVsbAo+
+ICsrKyBiL3BhY2thZ2Uvd29sZnRwbS93b2xmdHBtLm1rCj4gQEAgLTAsMCArMSwyOSBAQAo+ICsj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjCj4gKyMgd29sZnRwbQo+ICsjCj4gKyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjCj4gKwo+ICtXT0xGVFBNX1ZFUlNJT04gPSAyLjMuMQo+ICtXT0xGVFBN
+X1NJVEUgPSAkKGNhbGwgZ2l0aHViLHdvbGZTU0wsd29sZlRQTSx2JChXT0xGVFBNX1ZFUlNJT04p
+KQo+ICtXT0xGVFBNX0lOU1RBTExfU1RBR0lORyA9IFlFUwo+ICtXT0xGVFBNX0xJQ0VOU0UgPSBH
+UEwtMi4wKwo+ICtXT0xGVFBNX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4gK1dPTEZUUE1fQ1BF
+X0lEX1ZFTkRPUiA9IHdvbGZzc2wKPiArCj4gK1dPTEZUUE1fREVQRU5ERU5DSUVTID0gaG9zdC1w
+a2djb25mCgpJJ3ZlIGFkZGVkOgoKV09MRlRQTV9DT05GSUdfU0NSSVBUUyA9IHdvbGZ0cG0tY29u
+ZmlnCgpzbyB0aGF0IHRoZSB3b2xmdHBtLWNvbmZpZyBzY3JpcHQgaW5zdGFsbGVkIGluICQoU1RB
+R0lOR19ESVIpL3Vzci9iaW4KcmV0dXJucyBjb3JyZWN0IHJlc3VsdHMuCgo+ICsjIHdvbGZUUE0n
+cyBzb3VyY2UgY29kZSBpcyByZWxlYXNlZCB3aXRob3V0IGEgY29uZmlndXJlIHNjcmlwdCwKPiAr
+IyB0aGVyZWZvcmUgd2UgbmVlZCBhdXRvcmVjb25mCj4gK1dPTEZUUE1fQVVUT1JFQ09ORiA9IFlF
+Uwo+ICsKPiArV09MRlRQTV9DT05GX09QVFMgPSAtLWRpc2FibGUtZXhhbXBsZXMgLS1lbmFibGUt
+ZGV2dHBtCgpXaXRoIGp1c3QgdGhpcywgdGhlIGJ1aWxkIHdhcyBmYWlsaW5nIGZvciBtZSwgYXMg
+d29sZnRwbSBjb3VsZG4ndCBmaW5kCndvbGZzc2wuIEkgaGFkIHRvIGFkZDoKCiAgICAgICAgLS13
+aXRoLXdvbGZjcnlwdD0kKFNUQUdJTkdfRElSKS91c3IKCj4gK2RlZmluZSBXT0xGVFBNX0NPTkZJ
+R19SUEFUSAoKSSByZW5hbWVkIHRoZSBob29rIHRvIFdPTEZUUE1fVE9VQ0hfQ09ORklHX1JQQVRI
+Cgo+ICsgICAgbWtkaXIgJChARCkvYnVpbGQtYXV4CgpDaGFuZ2VkIHRvICJta2RpciAtcCIgc28g
+dGhhdCB0aGUgaG9vayBjYW4gYmUgcmUtZXhlY3V0ZWQgd2l0aG91dApmYWlsaW5nLgoKPiArICAg
+IHRvdWNoICQoQEQpL2J1aWxkLWF1eC9jb25maWcucnBhdGgKPiArZW5kZWYKPiArIyBGaXggZm9y
+IGF1dG9jb25mIGJ1ZyB3aXRoIGNvbmZpZy5yY29uZgoKVGhlcmUgaXMgbm8gYXV0b3JlY29uZiBi
+dWcuIFRoZSBidWcgaXMgaW4gdGhlIGNvZGUgb2Ygd29sZnRwbS4gSW4gdGhlCmNvbmZpZ3VyZS5h
+YyBzY3JpcHQgbGluZSAxNjUsIGl0IHVzZXMgdGhlIEFDX0xJQl9IQVZFX0xJTktGTEFHUyBtNApt
+YWNybywgd2hpY2ggY29tZXMgZnJvbSBnbnVsaWIuIFRoaXMgbWFjcm8gaXMgZG9jdW1lbnRlZCBh
+dCwgd2hpY2gKc3BlY2lmaWVzOgoKRXhhbXBsZSBvZiB1c2luZyBBQ19MSUJfTElOS0ZMQUdTCgpT
+dXBwb3NlIHlvdSB3YW50IHRvIHVzZSBsaWJ6LCB0aGUgY29tcHJlc3Npb24gbGlicmFyeS4KCiAg
+ICgxKSAgSW4gY29uZmlndXJlLmFjIHlvdSBhZGQgdGhlIGxpbmUKCiAgICAgIEFDX0NPTkZJR19B
+VVhfRElSKFtidWlsZC1hdXhdKQogICAgICBBQ19MSUJfTElOS0ZMQUdTKFt6XSkKCiAgICBOb3Rl
+IHRoYXQgc2luY2UgdGhlIEFDX0xJQl9MSU5LRkxBR1MgaW52b2NhdGlvbiBtb2RpZmllcyB0aGUK
+ICAgIENQUEZMQUdTLCBpdCBzaG91bGQgcHJlY2VkZSBhbGwgdGVzdHMgdGhhdCBjaGVjayBmb3Ig
+aGVhZGVyIGZpbGVzLAogICAgZGVjbGFyYXRpb25zLCBzdHJ1Y3R1cmVzIG9yIHR5cGVzLgoKCiAg
+ICAoMikgVG8gdGhlIHBhY2thZ2XigJlzIGJ1aWxkLWF1eCBkaXJlY3RvcnkgeW91IGFkZCB0aGUg
+ZmlsZQogICAgY29uZmlnLnJwYXRoLCBhbHNvIHBhcnQgb2YgdGhlIEdudWxpYiBoYXZlbGliIG1v
+ZHVsZS4gKGdudWxpYi10b29sCiAgICB3aWxsIHVzdWFsbHkgZG8gdGhpcyBmb3IgeW91IGF1dG9t
+YXRpY2FsbHkuKQoKCiAgICAoMykgSW4gTWFrZWZpbGUuaW4geW91IGFkZCBATElCWkAgdG8gdGhl
+IGxpbmsgY29tbWFuZCBsaW5lIG9mIHlvdXIKICAgIHByb2dyYW0uIE9yLCBpZiB5b3UgYXJlIHVz
+aW5nIEF1dG9tYWtlLCB5b3UgYWRkICQoTElCWikgdG8gdGhlCiAgICBMREFERCB2YXJpYWJsZSB0
+aGF0IGNvcnJlc3BvbmRzIHRvIHlvdXIgcHJvZ3JhbS4gCgpTZWUgcG9pbnQgKDIpID8gVGhpcyBp
+cyB3aGF0IHdhc24ndCBkb25lIGNvcnJlY3RseSBpbiB3b2xmdHBtIHdoZW4KaW50ZWdyYXRpbmcg
+dGhpcyBnbnVsaWIgbTQgbWFjcm8uCgpJZGVhbGx5IHRoaXMgc2hvdWxkIGJlIGZpeGVkIGluIHRo
+ZSB1cHN0cmVhbSB3b2xmdHBtIGNvZGUuIEhvd2V2ZXIsIHRvCmJlIGhvbmVzdCwgSSdtIG5vdCBl
+dmVuIHN1cmUgd2h5IHlvdXIgY29uZmlndXJlLmFjIGZpbGUgaXMgdXNpbmcKQUNfTElCX0hBVkVf
+TElOS0ZMQUdTKCkuIFlvdSBzaG91bGQgcHJvYmFibHkganVzdCBtaWdyYXRlIHRvIHVzZQpwa2ct
+Y29uZmlnLgoKVGhhbmtzIGZvciB5b3VyIGNvbnRyaWJ1dGlvbiEKClRob21hcwotLSAKVGhvbWFz
+IFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQg
+S2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
