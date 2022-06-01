@@ -4,73 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76B96C43334
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:55:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64B72C43334
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 22:07:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19B058333E;
-	Wed,  1 Jun 2022 21:55:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB50C83365;
+	Wed,  1 Jun 2022 22:07:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S3COY7WcHhiZ; Wed,  1 Jun 2022 21:55:42 +0000 (UTC)
+	with ESMTP id YdCZpZR_m5lv; Wed,  1 Jun 2022 22:07:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB7D083148;
-	Wed,  1 Jun 2022 21:55:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A722B8333E;
+	Wed,  1 Jun 2022 22:07:20 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 02AB21BF36A
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:55:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C3F411BF282
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 22:07:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD45760C1A
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:55:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B2EBE60B2D
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 22:07:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wsngiX5jiARV for <buildroot@lists.busybox.net>;
- Wed,  1 Jun 2022 21:55:39 +0000 (UTC)
+ with ESMTP id sBmYJArDcW36 for <buildroot@lists.busybox.net>;
+ Wed,  1 Jun 2022 22:07:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BD0ED60B2C
- for <buildroot@buildroot.org>; Wed,  1 Jun 2022 21:55:38 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id gi33so6414614ejc.3
- for <buildroot@buildroot.org>; Wed, 01 Jun 2022 14:55:38 -0700 (PDT)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5A51E60A6D
+ for <buildroot@buildroot.org>; Wed,  1 Jun 2022 22:07:18 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id er5so3950880edb.12
+ for <buildroot@buildroot.org>; Wed, 01 Jun 2022 15:07:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=JPGMGBueHlcYS2fpXdLhgK3DQUqfnw73PCUwZvkZ8E4=;
- b=qMdkQZDGSlqeiUArCWhbPmfQ+ACeZXzGbSFsCQqPLwhseUeuyF8fcP0gJmAwbiywrV
- 315gRKFvvwkaGkKfevZKpIgdTKDvsFrqGQGFWTCq3unQWAK7zMzjuhBTocCTGsOQkKrR
- iGdjHNv0NQdz+BvA/d5TLcMOUndJ9YYbm7PM0=
+ :cc; bh=U3YCHwd4DCU6JcuWcdORv5p/eMYs9j4XZEnyIEeL7zw=;
+ b=DVM+MvJES/XdZC9U3owmq+z0cLMfNcqEu28Fu7z6M61TvsadePvOEzEzvD6FuHNM6E
+ iCOHCrfJoEjWlSWFKDAv26Mr030mse/p0TUHlYjwmyUfOnKDp2ZzJYrhztdmQk0DWqpJ
+ Kenq2pdd4JqLK4ENzIjXSeptNbb3qId0dfoo4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=JPGMGBueHlcYS2fpXdLhgK3DQUqfnw73PCUwZvkZ8E4=;
- b=w3QEkP1VMWXDTjN+SxVOfxsfQhp6UtKKxDdvobW2lUL6y9H0Q+1dmwtVtosILQVHr6
- C8JvrAFbNgBhkyl4c2ZBSadQ+TRJGmkSDdpC7Us+Qyh0PLDaFZCfZ3Or7/K5TOM7KaPQ
- e7WcHRMSuyFm19RzEZMRkYd7xe8wwZv4auOM2PpsEQoQImVGd4wabOkfZmBZcoCxY13k
- xlx8B3e3A7qpYciIz3NHaFPOVEKjjeT8BQwqrYFKdTACXHTZmRP3vOM3ZO3u/WkAuHRJ
- c7lhkjcJLFUMFgVQh+Lsoz0fGi274FtDqx5kmFiLG+VWJqpkkdZHddOKNtoCrpOdjFdU
- QFww==
-X-Gm-Message-State: AOAM533+xOexY5t6C+YOiCQzIWk9Mcm3jWOMQWROexshQHK5Z2GEc9CK
- Duci53bCgjlMoAmObYRH95GbI0DGz2z15BPk05PN1g==
-X-Google-Smtp-Source: ABdhPJwr0huP28H8kE73o1kzfKTE++CFFBpKsGLdm4eE2MuLm3KOMo/8DgqP5fSgiFCBso+fo+UoZUysnkn7sdtEAb4=
-X-Received: by 2002:a17:906:a397:b0:6fe:a1e5:de70 with SMTP id
- k23-20020a170906a39700b006fea1e5de70mr1497707ejz.2.1654120536845; Wed, 01 Jun
- 2022 14:55:36 -0700 (PDT)
+ bh=U3YCHwd4DCU6JcuWcdORv5p/eMYs9j4XZEnyIEeL7zw=;
+ b=sec4iBI82ouLvXQ86G0fgo77H9PpJtSI8iG+6jvsruW1v6EYGjHiIrDRRtPV412seq
+ 0C7ZlYAyk8E0H9kEKHGn2hlF+Y+INLrVXH/I/Aqf6mDuUWq+rjBKaudUaOv93URKNN4z
+ FzsyV725LBP+n/JfZi8EGP+Y26GIkqZXmeARi7rHny2Rjz30S7uwdaTkA0wTl6GD+cE6
+ x8g9lQSDXLPq7BW+KBYp5kMYEpTi5eeAIeEx1R/kZO0xo5p/uH0qRs5M7AnzvcjaRxZM
+ F/Xprww9MmJ0cE5TcrfersnRbGRzid7dEZEGZJLGV1qjjcDJ5HV9mtaF7g45c0oHQssw
+ i/0w==
+X-Gm-Message-State: AOAM531HDhlLeHgT5bSEzGCtf6E8BYAgEIwO7y0ZvVRIHvNrPqHVSVTY
+ AxAEQs9gorRyXFkSsE8Jnm629p3Ox4MThtNeLSFfM7WHcOHD4A==
+X-Google-Smtp-Source: ABdhPJx8Q8+xkBN5lxKQYVnTRH9cyQwZEFGIKzC3ipz9rZxceYabapHp2kodfdQRbrAuJAS6A6hm1eDD1UXemnwshhA=
+X-Received: by 2002:a05:6402:520e:b0:42b:360b:78e1 with SMTP id
+ s14-20020a056402520e00b0042b360b78e1mr2116060edd.186.1654121236585; Wed, 01
+ Jun 2022 15:07:16 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220527103335.1968203-1-angelo@amarulasolutions.com>
- <20220527103335.1968203-2-angelo@amarulasolutions.com>
- <20220601212111.716a33cd@windsurf>
-In-Reply-To: <20220601212111.716a33cd@windsurf>
+ <20220527103335.1968203-3-angelo@amarulasolutions.com>
+ <20220601212552.479542be@windsurf>
+In-Reply-To: <20220601212552.479542be@windsurf>
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 1 Jun 2022 23:55:00 +0200
-Message-ID: <CA+_SqVacVxJkhC13fussgw9Pctmr8zrbc2DBs0m0+sqxNFfQZw@mail.gmail.com>
+Date: Thu, 2 Jun 2022 00:06:40 +0200
+Message-ID: <CA+_SqVY0JQbjAw9hM5Nym9AwB0_9TEd8NtfqLDa+pM03JA=ogg@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH 1/4] package/wpa_supplicant: fixing "Invalid
- configuration line"
+Subject: Re: [Buildroot] [PATCH 2/4] package/wpa_supplicant: adding ifupdown
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,58 +83,145 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: jagan@amarulasolutions.com, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1583983797261571825=="
+Content-Type: multipart/mixed; boundary="===============3793964665506049470=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1583983797261571825==
-Content-Type: multipart/alternative; boundary="00000000000003ca6c05e069f3dd"
+--===============3793964665506049470==
+Content-Type: multipart/alternative; boundary="000000000000b8f5f805e06a1cdf"
 
---00000000000003ca6c05e069f3dd
+--000000000000b8f5f805e06a1cdf
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jun 1, 2022 at 9:21 PM Thomas Petazzoni <
+On Wed, Jun 1, 2022 at 9:25 PM Thomas Petazzoni <
 thomas.petazzoni@bootlin.com> wrote:
 
-> On Fri, 27 May 2022 12:33:32 +0200
+> Hello,
+>
+> On Fri, 27 May 2022 12:33:33 +0200
 > Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 >
-> > Default configuration file is wrong for the default compiling options.
+> > Actually, configuring a wifi interface as per "interfaces" man:
 > >
-> > Fixes:
-> >
-> > Successfully initialized wpa_supplicant
-> > Line 1: unknown global field 'ctrl_interface=/var/run/wpa_supplicant'.
-> > Line 1: Invalid configuration line
-> > 'ctrl_interface=/var/run/wpa_supplicant'.
-> > Failed to read or parse configuration '/etc/wpa_supplicant.conf'.
-> >
-> > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> > auto wlan0
+> > iface wlan0 inet dhcp
+> > wpa-conf /etc/wpa_supplicant.conf
 >
-> Indeed, this option only makes sense when
-> BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE=y I suppose. However, in this
-> case, it makes sense a lot of sense to have this option in the config
-> file.
->
-> Should we have some kind of logic to add this line when
-> BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE=y ?
->
-> Maybe something like this:
->
-> # ctrl_interface=/var/run/wpa_supplicant #
-> BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE
->
-> and a bit of $(SED) magic in the .mk file ?
+> Do you have a link to an interfaces manpage that documents wpa-conf?
 >
 
-No need to have this logic in my opinion:
-* the option has a sensible default when enabled
-* If a user really needs to change the default, he can add that line
-manually in an overlay file.
+Not really, I had a look at the source code for busybox and general
+debian/ifupdown documentation. The better info I could find is this
+stackoverflow page
+https://unix.stackexchange.com/questions/262094/where-is-wpa-conf-documented
+
+
+> Is this supported by the Busybox ifupdown?
+>
+
+Yes it is.
 
 
 >
-> Best regards,
+> > diff --git a/package/wpa_supplicant/ifupdown.sh
+> b/package/wpa_supplicant/ifupdown.sh
+> > new file mode 100755
+> > index 0000000000..8eecf73436
+> > --- /dev/null
+> > +++ b/package/wpa_supplicant/ifupdown.sh
+> > @@ -0,0 +1,71 @@
+> > +#!/bin/sh
+> > +
+> > +# This file is executed by ifupdown in pre-up, post-up, pre-down and
+> > +# post-down phases of network interface configuration.
+> > +
+> > +WPA_SUP_BIN="/usr/sbin/wpa_supplicant"
+> > +
+> > +if [ -n "$IF_WPA_MAINT_DEBUG" ]; then
+> > +     set -x
+> > +fi
+>
+> Where is IF_WPA_MAINT_DEBUG supposed to be defined?
+>
+
+In your console before running the script manually if you need to debug it.
+
+> +# allow wpa_supplicant interface to be specified via wpa-iface
+> > +# useful for starting wpa_supplicant on one interface of a bridge
+> > +if [ -n "$IF_WPA_IFACE" ]; then
+> > +     WPA_IFACE="$IF_WPA_IFACE"
+> > +else
+> > +     WPA_IFACE="$IFACE"
+> > +fi
+>
+> I'm curious to understand how wpa-iface ends up in IP_WPA_IFACE. I
+> guess I'm missing a piece of the puzzla.
+>
+
+If you add an "echo $@" at the beginning of the script, you could see that
+when "wpa-conf" option is defined, those variables are injected into the
+environment by busybox while calling the ifup/ifdown scripts.
+
+
+>
+> > +WPA_SUP_PIDFILE="/run/wpa_supplicant.${WPA_IFACE}.pid"
+> > +
+> > +# quit if executables are not installed
+> > +if [ ! -x "$WPA_SUP_BIN" ]; then
+> > +     exit 0
+> > +fi
+>
+> This can be removed in the context of Buildroot. We tend to not check
+> for the installation of executables from the same package, as it's
+> quite useless.
+>
+
+Fair enough.
+
+
+> > +
+> > +do_start () {
+> > +     if [ -n "$IF_WPA_CONF" ] && [ "$IF_WPA_CONF" != "managed" ]; then
+> > +             if [ ! -s "$IF_WPA_CONF" ]; then
+> > +                     echo "cannot read contents of $IF_WPA_CONF"
+> > +                     exit 1
+> > +             fi
+> > +             WPA_SUP_CONF_CTRL_DIR=$(sed -n -e 's/[[:space:]]*#.*//g'
+> -e 's/[[:space:]]\+.*$//g' \
+> > +                     -e 's/^ctrl_interface=\(DIR=\)\?\(.*\)/\2/p'
+> "$IF_WPA_CONF")
+> > +             if [ -n "$WPA_SUP_CONF_CTRL_DIR" ]; then
+> > +                     WPA_SUP_CONF="-c $IF_WPA_CONF -C
+> $WPA_SUP_CONF_CTRL_DIR"
+>
+> The manpage of wpa_supplicant says:
+>
+>        -C ctrl_interface
+>               Path to ctrl_interface socket (Per interface. Only used if
+> -c is not).
+>
+> so passing -C when -c is passed does not make sense. Or am I missing
+> something?
+>
+
+Not entirely sure, need to check on this.  From my testing, that is working
+fine. Let me review that.
+
+
+> > +             else
+> > +                     WPA_SUP_CONF="-c $IF_WPA_CONF"
+> > +             fi
+> > +     else
+> > +             # specify the default ctrl_interface
+> > +             WPA_SUP_CONF="-C $WPA_CTRL_DIR"
+>
+> How is WPA_CTRL_DIR defined?
+>
+
+It should be injected too, but I'll do a recheck to be completely sure.
+
+
+> Thanks!
 >
 > Thomas
 > --
@@ -162,56 +249,146 @@ info@amarulasolutions.com
 www.amarulasolutions.com
 [`as] https://www.amarulasolutions.com|
 
---00000000000003ca6c05e069f3dd
+--000000000000b8f5f805e06a1cdf
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Wed, Jun 1, 2022 at 9:21 PM Thomas=
+<div dir=3D"ltr" class=3D"gmail_attr">On Wed, Jun 1, 2022 at 9:25 PM Thomas=
  Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petaz=
 zoni@bootlin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" =
 style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pa=
-dding-left:1ex">On Fri, 27 May 2022 12:33:32 +0200<br>
+dding-left:1ex">Hello,<br>
+<br>
+On Fri, 27 May 2022 12:33:33 +0200<br>
 Angelo Compagnucci &lt;<a href=3D"mailto:angelo@amarulasolutions.com" targe=
 t=3D"_blank">angelo@amarulasolutions.com</a>&gt; wrote:<br>
 <br>
-&gt; Default configuration file is wrong for the default compiling options.=
-<br>
+&gt; Actually, configuring a wifi interface as per &quot;interfaces&quot; m=
+an:<br>
 &gt; <br>
-&gt; Fixes:<br>
-&gt; <br>
-&gt; Successfully initialized wpa_supplicant<br>
-&gt; Line 1: unknown global field &#39;ctrl_interface=3D/var/run/wpa_suppli=
-cant&#39;.<br>
-&gt; Line 1: Invalid configuration line<br>
-&gt; &#39;ctrl_interface=3D/var/run/wpa_supplicant&#39;.<br>
-&gt; Failed to read or parse configuration &#39;/etc/wpa_supplicant.conf&#3=
-9;.<br>
-&gt; <br>
-&gt; Signed-off-by: Angelo Compagnucci &lt;<a href=3D"mailto:angelo@amarula=
-solutions.com" target=3D"_blank">angelo@amarulasolutions.com</a>&gt;<br>
+&gt; auto wlan0<br>
+&gt; iface wlan0 inet dhcp<br>
+&gt; wpa-conf /etc/wpa_supplicant.conf<br>
 <br>
-Indeed, this option only makes sense when<br>
-BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE=3Dy I suppose. However, in this<br>
-case, it makes sense a lot of sense to have this option in the config<br>
-file.<br>
+Do you have a link to an interfaces manpage that documents wpa-conf?<br></b=
+lockquote><div><br></div><div>Not really, I had a look at the source code f=
+or busybox and general debian/ifupdown documentation. The better info I cou=
+ld find is this stackoverflow page</div><div><a href=3D"https://unix.stacke=
+xchange.com/questions/262094/where-is-wpa-conf-documented">https://unix.sta=
+ckexchange.com/questions/262094/where-is-wpa-conf-documented</a> <br></div>=
+<div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px =
+0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+Is this supported by the Busybox ifupdown?<br></blockquote><div><br></div><=
+div>Yes it is.</div><div>=C2=A0<br></div><blockquote class=3D"gmail_quote" =
+style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pa=
+dding-left:1ex">
 <br>
-Should we have some kind of logic to add this line when<br>
-BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE=3Dy ?<br>
+&gt; diff --git a/package/wpa_supplicant/ifupdown.sh b/package/wpa_supplica=
+nt/ifupdown.sh<br>
+&gt; new file mode 100755<br>
+&gt; index 0000000000..8eecf73436<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/wpa_supplicant/ifupdown.sh<br>
+&gt; @@ -0,0 +1,71 @@<br>
+&gt; +#!/bin/sh<br>
+&gt; +<br>
+&gt; +# This file is executed by ifupdown in pre-up, post-up, pre-down and<=
+br>
+&gt; +# post-down phases of network interface configuration.<br>
+&gt; +<br>
+&gt; +WPA_SUP_BIN=3D&quot;/usr/sbin/wpa_supplicant&quot;<br>
+&gt; +<br>
+&gt; +if [ -n &quot;$IF_WPA_MAINT_DEBUG&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0set -x<br>
+&gt; +fi<br>
 <br>
-Maybe something like this:<br>
+Where is IF_WPA_MAINT_DEBUG supposed to be defined?<br></blockquote><div><b=
+r></div><div>In your console before running the script manually if you need=
+ to debug it. <br></div><div><br></div><blockquote class=3D"gmail_quote" st=
+yle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padd=
+ing-left:1ex">
+&gt; +# allow wpa_supplicant interface to be specified via wpa-iface<br>
+&gt; +# useful for starting wpa_supplicant on one interface of a bridge<br>
+&gt; +if [ -n &quot;$IF_WPA_IFACE&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0WPA_IFACE=3D&quot;$IF_WPA_IFACE&quot;<br>
+&gt; +else<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0WPA_IFACE=3D&quot;$IFACE&quot;<br>
+&gt; +fi<br>
 <br>
-# ctrl_interface=3D/var/run/wpa_supplicant # BR2_PACKAGE_WPA_SUPPLICANT_CTR=
-L_IFACE<br>
+I&#39;m curious to understand how wpa-iface ends up in IP_WPA_IFACE. I<br>
+guess I&#39;m missing a piece of the puzzla.<br></blockquote><div><br></div=
+><div>If you add an &quot;echo $@&quot; at the beginning of the script, you=
+ could see that when &quot;wpa-conf&quot; option is defined, those variable=
+s are injected into the environment by busybox while calling the ifup/ifdow=
+n scripts.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" styl=
+e=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
+g-left:1ex">
 <br>
-and a bit of $(SED) magic in the .mk file ?<br></blockquote><div><br></div>=
-<div>No need to have this logic in my opinion:</div><div>* the option has a=
- sensible default when enabled</div><div>* If a user really needs to change=
- the default, he can add that line manually in an overlay file.</div><div>=
-=C2=A0<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0=
+&gt; +WPA_SUP_PIDFILE=3D&quot;/run/wpa_supplicant.${WPA_IFACE}.pid&quot;<br=
+>
+&gt; +<br>
+&gt; +# quit if executables are not installed<br>
+&gt; +if [ ! -x &quot;$WPA_SUP_BIN&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0exit 0<br>
+&gt; +fi<br>
+<br>
+This can be removed in the context of Buildroot. We tend to not check<br>
+for the installation of executables from the same package, as it&#39;s<br>
+quite useless.<br></blockquote><div><br></div><div>Fair enough. <br></div><=
+div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0=
 px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+&gt; +<br>
+&gt; +do_start () {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0if [ -n &quot;$IF_WPA_CONF&quot; ] &amp;&amp; [ &=
+quot;$IF_WPA_CONF&quot; !=3D &quot;managed&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if [ ! -s &quot;$IF_W=
+PA_CONF&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0echo &quot;cannot read contents of $IF_WPA_CONF&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0exit 1<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fi<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0WPA_SUP_CONF_CTRL_DIR=
+=3D$(sed -n -e &#39;s/[[:space:]]*#.*//g&#39; -e &#39;s/[[:space:]]\+.*$//g=
+&#39; \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0-e &#39;s/^ctrl_interface=3D\(DIR=3D\)\?\(.*\)/\2/p&#39; &quot;$IF_W=
+PA_CONF&quot;)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if [ -n &quot;$WPA_SU=
+P_CONF_CTRL_DIR&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0WPA_SUP_CONF=3D&quot;-c $IF_WPA_CONF -C $WPA_SUP_CONF_CTRL_DIR&quot;=
 <br>
-Best regards,<br>
+<br>
+The manpage of wpa_supplicant says:<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0-C ctrl_interface<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 Path to ctrl_interface soc=
+ket (Per interface. Only used if -c is not).<br>
+<br>
+so passing -C when -c is passed does not make sense. Or am I missing<br>
+something?<br></blockquote><div><br></div><div>Not entirely sure, need to c=
+heck on this.=C2=A0 From my testing, that is working fine. Let me review th=
+at.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"ma=
+rgin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:=
+1ex">
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0else<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0WPA_SUP_CONF=3D&quot;-c $IF_WPA_CONF&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fi<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0else<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0# specify the default=
+ ctrl_interface<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0WPA_SUP_CONF=3D&quot;=
+-C $WPA_CTRL_DIR&quot;<br>
+<br>
+How is WPA_CTRL_DIR defined?<br></blockquote><div><br></div><div>It should =
+be injected too, but I&#39;ll do a recheck to be completely sure.</div><div=
+><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.=
+8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+Thanks!<br>
 <br>
 Thomas<br>
 -- <br>
@@ -276,9 +453,9 @@ amarulasolutions.com</span></a></p><div>[`as] <a href=3D"https://www.amarul=
 asolutions.com" target=3D"_blank">https://www.amarulasolutions.com</a>|</di=
 v></div></div></div>
 
---00000000000003ca6c05e069f3dd--
+--000000000000b8f5f805e06a1cdf--
 
---===============1583983797261571825==
+--===============3793964665506049470==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -289,4 +466,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1583983797261571825==--
+--===============3793964665506049470==--
