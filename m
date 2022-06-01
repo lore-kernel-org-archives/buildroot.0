@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBB01C43334
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:18:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3AD2C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jun 2022 21:18:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AA0641679;
-	Wed,  1 Jun 2022 21:18:33 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jWgXJ0Q6kvRu; Wed,  1 Jun 2022 21:18:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19EE941609;
-	Wed,  1 Jun 2022 21:18:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 97FDD1BF36A
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:18:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 95DDB83051
- for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:18:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DC19831DE;
+	Wed,  1 Jun 2022 21:18:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aSOxBBARAzrm for <buildroot@lists.busybox.net>;
- Wed,  1 Jun 2022 21:18:28 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sGPOeyN1c0Tr; Wed,  1 Jun 2022 21:18:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D7B0830C0;
+	Wed,  1 Jun 2022 21:18:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B7BF21BF9AD
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:18:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A69DB40102
+ for <buildroot@lists.busybox.net>; Wed,  1 Jun 2022 21:18:29 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1ANIlr5MLz6F for <buildroot@lists.busybox.net>;
+ Wed,  1 Jun 2022 21:18:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E2A218301F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0034C400F2
  for <buildroot@buildroot.org>; Wed,  1 Jun 2022 21:18:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5FE2286913; Wed,  1 Jun 2022 21:06:50 +0000 (UTC)
+ id 73C8686917; Wed,  1 Jun 2022 21:06:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 1 Jun 2022 23:18:13 +0200
+Date: Wed, 1 Jun 2022 23:18:21 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9d7be48e86f2f5a31cc6de986ff06786cad5e829
-X-Git-Newrev: 2cf8ac37e108e2696426388c2e340f0110a8d973
+X-Git-Oldrev: 6efd6bec01fa64384e90b0d5cfc951d7cc3bf31d
+X-Git-Newrev: 0ca7ed66f51b7dd1b037ae444654cccc391c3035
 X-Patchwork-Hint: ignore
-Message-Id: <20220601210650.5FE2286913@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/kodi-peripheral-joystick: bump version to 19.0.3-Matrix
+Message-Id: <20220601210650.73C8686917@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-mythtv: bump
+ version to 19.0.9-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,38 +60,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cf8ac37e108e2696426388c2e340f0110a8d973
+commit: https://git.buildroot.net/buildroot/commit/?id=0ca7ed66f51b7dd1b037ae444654cccc391c3035
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index 176f4be24d..5ac4247cbf 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index d7a8657da0..361aa6ce92 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  3188d2007449fb1bf52be923fcb4f7da3bd8e60a8644a7ae5635a0ea53a21368  kodi-peripheral-joystick-19.0.2-Matrix.tar.gz
-+sha256  0a595933998565902f112f0d476ada1cd732a1961ed10b8a2b9a52ed8bd8c652  kodi-peripheral-joystick-19.0.3-Matrix.tar.gz
+-sha256  2aca8c87b2f6d19fc385a4b5bde45637a4e6f417d0b43e514980d1cf26404ce7  kodi-pvr-mythtv-19.0.8-Matrix.tar.gz
++sha256  8f872c1c395c4688759271d60bcfbe5a652490eed723582fe60662d265ea900f  kodi-pvr-mythtv-19.0.9-Matrix.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index f56041c544..1b2b3f4984 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index d3110aed68..4d041dc8f0 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PERIPHERAL_JOYSTICK_VERSION = 19.0.2-Matrix
-+KODI_PERIPHERAL_JOYSTICK_VERSION = 19.0.3-Matrix
- KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
+-KODI_PVR_MYTHTV_VERSION = 19.0.8-Matrix
++KODI_PVR_MYTHTV_VERSION = 19.0.9-Matrix
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
