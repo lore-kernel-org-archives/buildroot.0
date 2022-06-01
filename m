@@ -1,45 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAD62C43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:30:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08757C43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:30:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B2A1424B4;
-	Tue,  7 Jun 2022 19:30:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6E0760F1E;
+	Tue,  7 Jun 2022 19:30:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yYCRKox9J2n3; Tue,  7 Jun 2022 19:30:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i1ExCyu6num8; Tue,  7 Jun 2022 19:30:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10CCD424A1;
-	Tue,  7 Jun 2022 19:30:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0E7F60F07;
+	Tue,  7 Jun 2022 19:30:20 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 156751BF475
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CA6C81BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4CF840B44
+ by smtp2.osuosl.org (Postfix) with ESMTP id B927440B47
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r4iMpJoDWjDh for <buildroot@lists.busybox.net>;
+ with ESMTP id GTnXV7pgo7rR for <buildroot@lists.busybox.net>;
  Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D3BB0404B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB382408BC
  for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C790886E22; Tue,  7 Jun 2022 19:04:57 +0000 (UTC)
+ id DF40686E21; Tue,  7 Jun 2022 19:04:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 1 Jun 2022 23:05:56 +0200
+Date: Wed, 1 Jun 2022 23:18:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1713777f3a3e0d3c223cf29869db86c4df99892f
-X-Git-Newrev: 35a3b4b26c8042d67f97791e3004f953c87987ef
+X-Git-Oldrev: 9d7be48e86f2f5a31cc6de986ff06786cad5e829
+X-Git-Newrev: 2cf8ac37e108e2696426388c2e340f0110a8d973
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190457.C790886E22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnss: bump version to 3.79
+Message-Id: <20220607190457.DF40686E21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-peripheral-joystick: bump
+ version to 19.0.3-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +60,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35a3b4b26c8042d67f97791e3004f953c87987ef
+commit: https://git.buildroot.net/buildroot/commit/?id=2cf8ac37e108e2696426388c2e340f0110a8d973
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 0c06495f5e..f7da9ccfdc 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_78_RTM/src/SHA256SUMS
--sha256  f455f341e787c1167328e80a84f77b9a557d595066dda6486a1874d72da68800  nss-3.78.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_79_RTM/src/SHA256SUMS
-+sha256  ebdf2d6a96613b6fe70ad579e9f983e0e94e0110171cfb2999db633d3394a514  nss-3.79.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 540092dfcf..1ef9abc0ab 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+index 176f4be24d..5ac4247cbf 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  3188d2007449fb1bf52be923fcb4f7da3bd8e60a8644a7ae5635a0ea53a21368  kodi-peripheral-joystick-19.0.2-Matrix.tar.gz
++sha256  0a595933998565902f112f0d476ada1cd732a1961ed10b8a2b9a52ed8bd8c652  kodi-peripheral-joystick-19.0.3-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+index f56041c544..1b2b3f4984 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.78
-+LIBNSS_VERSION = 3.79
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-KODI_PERIPHERAL_JOYSTICK_VERSION = 19.0.2-Matrix
++KODI_PERIPHERAL_JOYSTICK_VERSION = 19.0.3-Matrix
+ KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
+ KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
