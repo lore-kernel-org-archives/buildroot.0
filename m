@@ -1,62 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A74AC43334
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 14:04:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB2E7C43334
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 14:10:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CB9D60FD0;
-	Thu,  2 Jun 2022 14:04:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97B828269C;
+	Thu,  2 Jun 2022 14:10:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Iq9Yq5wRUCuz; Thu,  2 Jun 2022 14:04:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 35JuQd2Vw4Ul; Thu,  2 Jun 2022 14:10:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9441960E6F;
-	Thu,  2 Jun 2022 14:04:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DC93B1BF3D6
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 14:04:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7AE281B23;
+	Thu,  2 Jun 2022 14:10:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5139B1BF3D6
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 14:10:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D737F60FBC
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 14:04:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40590408B1
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 14:10:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Toq3vO-GQUJz for <buildroot@lists.busybox.net>;
- Thu,  2 Jun 2022 14:04:22 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E565360E6F
- for <buildroot@buildroot.org>; Thu,  2 Jun 2022 14:04:21 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D84E620003;
- Thu,  2 Jun 2022 14:04:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654178660;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=UEbGFPXDycJe4ftzXr9V/T1ootMw4MM8c9+Jsl8jFyc=;
- b=jy1wnoW3f/pFIx5/Do5++1gLzhzWCkB/ee5s0XKd+F4tQV2pg8AiJ7N3ELOl2V72rMtTRk
- Li/wqCbZhuE2BY36YfmHqCtW/twWCfChPPXIG5DPqnxctzjRToeSjEPVbh6MEFseZRIss2
- VYqbBxsaNtP5uK747+SfIJ3+m6TZKSORXis+laQwoTXlvYabTNG59EK0XKeHQDNcRoOhd9
- UrdIMhYXdD8/wvfMeGacDjLAWBDcln4L7UJlcK0D87wyqMZ5Ryfx9DerebkUiJW6KI4fqm
- SZzaUB/TtgILNXjzyrfjcEfwmt3G4uy9IP2JxSefinI0cVgscNnKfW4RSCUXKw==
-Date: Thu, 2 Jun 2022 16:04:18 +0200
-To: Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <20220602160418.519f17f9@windsurf>
-In-Reply-To: <20220519220747.455528-1-f.fainelli@gmail.com>
-References: <20220519220747.455528-1-f.fainelli@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/cpulimit: Backport a fix for an
- infrequent crash
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9YedtdsThmSb for <buildroot@lists.busybox.net>;
+ Thu,  2 Jun 2022 14:10:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92B3540162
+ for <buildroot@buildroot.org>; Thu,  2 Jun 2022 14:10:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 69C1F86A23; Thu,  2 Jun 2022 13:58:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 2 Jun 2022 16:04:50 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: c0646f72b23f3437bec90efae82242e6d07695fa
+X-Git-Newrev: d6f2af555fbc595b22fda1c737ab192a57e7b5a6
+X-Patchwork-Hint: ignore
+Message-Id: <20220602135837.69C1F86A23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libfuse3: bump to
+ version 3.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,38 +54,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: yann.morin.1998@free.fr, mmayer@broadcom.com, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 19 May 2022 15:07:46 -0700
-Florian Fainelli <f.fainelli@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d6f2af555fbc595b22fda1c737ab192a57e7b5a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Backport the fix submitted from this pull request:
-> 
-> https://github.com/opsengine/cpulimit/pull/61
-> 
-> to fix an infrequent crash.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  .../0003-Fix-an-infrequent-crash.patch        | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/cpulimit/0003-Fix-an-infrequent-crash.patch
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libfuse3/libfuse3.hash | 2 +-
+ package/libfuse3/libfuse3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied to master. PATCH 2/2 isn't really a fix, but it makes
-sense to have it in master IMO instead of this weird special case for
-the or1k/musl situation.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
+index cce2b11171..2fb5f329e3 100644
+--- a/package/libfuse3/libfuse3.hash
++++ b/package/libfuse3/libfuse3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  e73f75e58da59a0e333d337c105093c496c0fd7356ef3a5a540f560697c9c4e6  libfuse3-3.10.5.tar.gz
++sha256  25a00226d2d449c15b2f08467d6d5ebbb2a428260c4ab773721c32adbc6da072  libfuse3-3.11.0.tar.gz
+ sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index 1dbe918c5b..b3e3176708 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFUSE3_VERSION = 3.10.5
++LIBFUSE3_VERSION = 3.11.0
+ LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
+ LIBFUSE3_LICENSE = LGPL-2.1
+ LIBFUSE3_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
