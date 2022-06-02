@@ -1,63 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49335C43334
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 14:01:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42DF8C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 14:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF23340993;
-	Thu,  2 Jun 2022 14:01:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E11B2400D2;
+	Thu,  2 Jun 2022 14:01:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gKY0OUR5Jw_8; Thu,  2 Jun 2022 14:01:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id teJCOW9pvDdG; Thu,  2 Jun 2022 14:01:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF3B84097D;
-	Thu,  2 Jun 2022 14:01:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 580A21BF32D
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 14:01:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2D2A4057F;
+	Thu,  2 Jun 2022 14:01:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C7701BF32D
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 14:01:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 46A08605A6
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 14:01:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3642D40647
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 14:01:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8jq39FJRClCd for <buildroot@lists.busybox.net>;
- Thu,  2 Jun 2022 14:01:12 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1BFC26102F
- for <buildroot@buildroot.org>; Thu,  2 Jun 2022 14:01:11 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0907940018;
- Thu,  2 Jun 2022 14:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654178469;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=5a+cTVCCOitEvL+8hc4KAs1rHLVqLzH3luQooV8+q8g=;
- b=Q/oMoC1oGIAb4rXrT9GUXcbPqjbzbjQQMgL1VT7eyLHfjWe7feO0i0SCQXUzE0ariTw3KU
- Y80oFLe5ryCYmi0/9Nm93vUJ5koFvqjA5c8fk10zTznqxuTCSr6D844jihnpGuppIuOZTv
- J86VRiVCTz89eWmLIFjP7k7jNzYnQXAUUkW7BNzyHCl+o2/6S0uE08Glr0hVoOuRJbSmDd
- gxanqDRh2DKzQtOZzlWuNhfx7XXpLMImM4Adpvb9B6b92+fGGwzxbsNzg9S/6GeIl3yXXB
- ljqo1qYuxcpz/XurTaG9PoZm/k5AyzYJgRZc7kW2GrEgvXYT73KveY8Norr3TQ==
-Date: Thu, 2 Jun 2022 16:01:07 +0200
-To: Bartosz Bilas <b.bilas@grinn-global.com>
-Message-ID: <20220602160107.73c5bd46@windsurf>
-In-Reply-To: <20220522174133.106721-1-b.bilas@grinn-global.com>
-References: <20220522174133.106721-1-b.bilas@grinn-global.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/python-esptool: bump version to 4.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K151CPgwis7b for <buildroot@lists.busybox.net>;
+ Thu,  2 Jun 2022 14:01:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4CAE44057F
+ for <buildroot@buildroot.org>; Thu,  2 Jun 2022 14:01:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 315EF869F5; Thu,  2 Jun 2022 13:49:50 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 2 Jun 2022 16:01:25 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 5cc1bb317d558893e0bc188530222d46e9478ad6
+X-Git-Newrev: da643b87eb75d115d32311bf562acc5b21053452
+X-Patchwork-Hint: ignore
+Message-Id: <20220602134950.315EF869F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/seatd: bump to version
+ 0.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,28 +54,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 22 May 2022 19:41:33 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=da643b87eb75d115d32311bf562acc5b21053452
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> ---
->  package/python-esptool/python-esptool.hash | 4 ++--
->  package/python-esptool/python-esptool.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Update seatd to version 0.7.0, which includes a flurry of small fixes
+and removes usage of the SEATD_SOCK and SEATD_LOGLEVEL environment
+variables (the latter replaced by a command line switch).
 
-Applied to next, thanks.
+Release notes: https://git.sr.ht/~kennylevinsen/seatd/refs/0.7.0
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The -Dlibseat-logind= option now needs the "systemd" value when the
+logind backend is systemd-logind, this patch adapts usage of the build
+option accordingly.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/seatd/seatd.hash | 2 +-
+ package/seatd/seatd.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/seatd/seatd.hash b/package/seatd/seatd.hash
+index 88793b6dd5..7500036e5b 100644
+--- a/package/seatd/seatd.hash
++++ b/package/seatd/seatd.hash
+@@ -1,5 +1,5 @@
+ # Calculated locally
+-sha256  3d4ac288114219ba7721239cafee7bfbeb7cf8e1e7fd653602a369e4ad050bd8  0.6.4.tar.gz
++sha256  210ddf8efa1149cde4dd35908bef8e9e63c2edaa0cdb5435f2e6db277fafff3c  0.7.0.tar.gz
+ 
+ # License files
+ sha256  282a494803d666616bd726e0279636b5f6a31387ae19a707459074050f2600d3  LICENSE
+diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
+index 5382cad39b..96caf63b30 100644
+--- a/package/seatd/seatd.mk
++++ b/package/seatd/seatd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SEATD_VERSION = 0.6.4
++SEATD_VERSION = 0.7.0
+ SEATD_SOURCE = $(SEATD_VERSION).tar.gz
+ SEATD_SITE = https://git.sr.ht/~kennylevinsen/seatd/archive
+ SEATD_LICENSE = MIT
+@@ -17,7 +17,7 @@ SEATD_CONF_OPTS += \
+ 	-Dwerror=false
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
+-SEATD_CONF_OPTS += -Dlibseat-logind=enabled
++SEATD_CONF_OPTS += -Dlibseat-logind=systemd
+ SEATD_DEPENDENCIES += systemd
+ else
+ SEATD_CONF_OPTS += -Dlibseat-logind=disabled
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
