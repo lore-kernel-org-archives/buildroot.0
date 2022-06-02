@@ -1,82 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16DE1C43334
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 16:05:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C0BAC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 16:27:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 437C54198D;
-	Thu,  2 Jun 2022 16:05:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B01EA60B20;
+	Thu,  2 Jun 2022 16:27:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QmAHlV9FcktU; Thu,  2 Jun 2022 16:05:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RNUa4J93yYns; Thu,  2 Jun 2022 16:27:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C30394195F;
-	Thu,  2 Jun 2022 16:05:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 392A91BF275
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 16:05:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C37B960B07;
+	Thu,  2 Jun 2022 16:27:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 446F31BF44A
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 16:27:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35B414195F
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 16:05:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F10C40570
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 16:27:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3TMa_gmpOil4 for <buildroot@lists.busybox.net>;
- Thu,  2 Jun 2022 16:04:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mailfo01.lmco.com (mailfo01.lmco.com [192.31.106.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C6AEA4190C
- for <buildroot@buildroot.org>; Thu,  2 Jun 2022 16:04:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmco.com;
- h=from : to : subject :
- date : message-id : content-type : mime-version; s=corpgw201202;
- bh=eoMJG6+h7QuauKebJpk/eNmaXCWn/j4hMYEf1+wvivU=;
- b=1BheMDV8Ttt9cDi5wgWI1x+TWXXL0A41Len3pDCn6gdiE5gsW1rNfAAf85qZOviZ7tAO
- PmC935hTFsgQrajkke/0eN7wZiIwaJ6R8vf3REah+IjYThakOmYvs1oesSgj8wRVuTC+
- u+vycFbJlpsNB6C+vJKQ51qVvMjO9MbpI879JHboCIOCvgzjhg5HmE2Wfzzw6D4WDtLR
- rvfZeaBtkt7UNwwI+su04T7iMgf7La7aZlT7cFC+/0FS+ESyOJJkQswqvyO61gbuO+QD
- bqkP2uAtyXiRvKCxijM0AbM3V/QfTBJEvaomqEjq8aOB+mOF4ZP0OuIdocX1o9NZByWz Mg== 
-Received: from lmxpdend11w03.us.lmco.com (lmxpdend11w03.ems.lmco.com
- [172.23.20.74])
- by mailfo01.lmco.com (8.16.0.42/8.16.0.42) with ESMTP id 252G4siH206769
- for <buildroot@buildroot.org>; Thu, 2 Jun 2022 16:04:54 GMT
-Received: from lmxpdend11w05.us.lmco.com (172.23.20.76) by
- lmxpdend11w03.us.lmco.com (172.23.20.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id
- 15.1.2308.27; Thu, 2 Jun 2022 10:04:53 -0600
-Received: from lmxpdend11w05.us.lmco.com ([172.23.20.76]) by
- lmxpdend11w05.us.lmco.com ([172.23.20.76]) with mapi id 15.01.2308.021; Thu,
- 2 Jun 2022 10:04:53 -0600
-From: "Wood, Chris" <chris.wood@lmco.com>
-To: "'buildroot@buildroot.org'" <buildroot@buildroot.org>
-Thread-Topic: SHA Hashing of Licenses Causing Issues
-Thread-Index: Adh2lrtS9NzgEfeuQVKe23f8sAJTWw==
-Date: Thu, 2 Jun 2022 16:04:53 +0000
-Message-ID: <26ef81b5fd6d4cf7ad2e0f1a8674ce7d@lmco.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.23.20.10]
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5gm2ssCL0ebe for <buildroot@lists.busybox.net>;
+ Thu,  2 Jun 2022 16:27:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 18863400D8
+ for <buildroot@buildroot.org>; Thu,  2 Jun 2022 16:27:24 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id a10so295399wmj.5
+ for <buildroot@buildroot.org>; Thu, 02 Jun 2022 09:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CeKhPrBAyLxQWkW+sOqmq/HNF2k1fIAFb/5/KHWpwqs=;
+ b=eQnTfvDjKfXQkPI8ZGbApiSc8OSa/EKX0RxhKLm7YucibtfbdhKYZQBoSa1ii8oTIq
+ xpb1RSrJc8M+nNcpfu0EVpKTRrLkqoZ9H4EMp0s7qlmPRZsPHFEMfcZBDGY0AfcYZATU
+ IS0+wZe6Z6aqOV55gfUa/y3ro2nS2JF6G3XC4L8VLT6uxVKtNgdKVYGpdg9quEubPKeJ
+ ZWq7vDZetIoSsZ3sTF4l2SrgIE5lCYYWw474a3LSWRsLnDkYyE8En2SWIVxIEGQ75Lt9
+ bKeZtO9r4zBnb6SlRJuZpJ68P+wS1Tb0pJkehECQ5D2ozkdrCEzVPy6O9RK95Hj9mnyn
+ sK4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CeKhPrBAyLxQWkW+sOqmq/HNF2k1fIAFb/5/KHWpwqs=;
+ b=i2OG9PhI0PWUiDS0ToNnv0qTzVQdH3IGgLawy3oLYlrhFP38eaixrhUhSSInS3bBpL
+ a969X0TTl21KxOrHL0OnFvBK5wGJ1HRWY/wAS9dRZw3rTvAC4sVk+yF2JW9duUXxrfxj
+ geeXwf7oMOOiQMktJKP6NHLmzjQywIPxlROHaev95mTya9bS7tv90Y6JkXPbXVl0qczd
+ /WXbhnrXdLsJ/+z3SX1TJrW0v8v/y/YPyyvTwq1xovTMJWrJezYbjs0yge4SVyAjPQeX
+ V6RmhXfXY02x1BtsPXlS+jegAWkM0L9qVdEvezo+qw9uUXu4z+Ld/S7pEHS27m9Cb9lT
+ m3Zw==
+X-Gm-Message-State: AOAM531/SFE7CUBZ8ceS/DEt6YxkpXcttNbotApSQIuvK/2VAlENYY+7
+ mssMgJ3jrHVK10JEokUSXD0lvRB72bg=
+X-Google-Smtp-Source: ABdhPJx9i3hgvsb3BhN6NRse1Bwq1FyKIgW9H8funZSKbjjN1Nxe89s0z/6IQ9uZdcqho56hFOrMPA==
+X-Received: by 2002:a05:600c:3ba4:b0:397:49b8:262 with SMTP id
+ n36-20020a05600c3ba400b0039749b80262mr4727624wms.77.1654187242031; 
+ Thu, 02 Jun 2022 09:27:22 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ a4-20020a5d5084000000b002102f2fac37sm4961229wrt.51.2022.06.02.09.27.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 02 Jun 2022 09:27:21 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  2 Jun 2022 18:24:49 +0200
+Message-Id: <20220602162449.4160788-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Proofpoint-ORIG-GUID: zrGXf61VvAfkzQBdcfEFPDmHeOJWtvuD
-X-Proofpoint-GUID: zrGXf61VvAfkzQBdcfEFPDmHeOJWtvuD
-X-LM-Outbound: External 172.23.20.74 cntry=**
- g=zrGXf61VvAfkzQBdcfEFPDmHeOJWtvuD q=252G4siH206769 m=1
-X-LM-OBSENDER: chris.wood@lmco.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517, 18.0.874
- definitions=2022-06-02_04:2022-06-02,
- 2022-06-02 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
- mlxlogscore=728
- suspectscore=0 adultscore=0 mlxscore=0 phishscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206020066
-Subject: [Buildroot] SHA Hashing of Licenses Causing Issues
+Subject: [Buildroot] [PATCH 1/1] package/network-manager: put back libuuid
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,124 +88,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4565634335379460806=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4565634335379460806==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_26ef81b5fd6d4cf7ad2e0f1a8674ce7dlmcocom_"
+Commit 8b47feff2ff8ac37355431cb0414822da2c87ea1 wrongly removed libuuid
+dependency resulting in the following build failure:
 
---_000_26ef81b5fd6d4cf7ad2e0f1a8674ce7dlmcocom_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+checking for UUID... no
+configure: error: Package requirements (uuid) were not met:
 
-Hello
-I have encountered numerous issues with trying to run a software component =
-licensing deep scanner on BR 2022 v02.1 source code.  I can see that you ar=
-e trying to exercise comprehensive integrity on the component licensing for=
- which I greatly commend you.  However by removing all of the Copying and L=
-icensing files from the source code and replacing them with SHA hashes the =
-software licensing scanners are failing because they are looking for licens=
-es in the form of SPDX, OSI and other license formats and there is no (to m=
-y knowledge) Industry standard that pattern matches hashes to the licenses =
-as they are represented by either name in a recognized "license name" field=
- or in the text content or format contained in the OSI, SPDX or other indus=
-try recognized repositories.  I looked for the cross references in the BR d=
-istribution but the subdirectories are not present.
+Package 'uuid', required by 'virtual:world', not found
 
-Also the training materials are also confusing the scanners because there a=
-re innumerable references to the word "license" and then an example file na=
-me such as "FOO......" in the numerous examples and documents.
+It should be noted that <uuid/uuid.h> is still used in one example:
+https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/main/examples/C/glib/add-connection-gdbus.c#L17
+as stated in
+https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/73b9883c6f30320b727a664ff2c84cc772aac94b:
 
+"We still require libuuid for building, because it is used by an example
+program. Maybe that should be changed, to avoid the build dependency.
+But that can be done at a later time."
 
+Fixes:
+ - http://autobuild.buildroot.org/results/ac25c42d73161bf4cdfae3e53de8826f0b8dbf9c
 
---_000_26ef81b5fd6d4cf7ad2e0f1a8674ce7dlmcocom_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/network-manager/Config.in          | 2 ++
+ package/network-manager/network-manager.mk | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri",sans-serif;
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri",sans-serif;}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72" style=3D"word-wrap:=
-break-word">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Hello<o:p></o:p></p>
-<p class=3D"MsoNormal">I have encountered numerous issues with trying to ru=
-n a software component licensing deep scanner on BR 2022 v02.1 source code.=
-&nbsp; I can see that you are trying to exercise comprehensive integrity on=
- the component licensing for which I greatly
- commend you.&nbsp; However by removing all of the Copying and Licensing fi=
-les from the source code and replacing them with SHA hashes the software li=
-censing scanners are failing because they are looking for licenses in the f=
-orm of SPDX, OSI and other license formats
- and there is no (to my knowledge) Industry standard that pattern matches h=
-ashes to the licenses as they are represented by either name in a recognize=
-d &#8220;license name&#8221; field or in the text content or format contain=
-ed in the OSI, SPDX or other industry recognized
- repositories.&nbsp; I looked for the cross references in the BR distributi=
-on but the subdirectories are not present.&nbsp;
-<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Also the training materials are also confusing the s=
-canners because there are innumerable references to the word &#8220;license=
-&#8221; and then an example file name such as &#8220;FOO&#8230;&#8230;&#822=
-1; in the numerous examples and documents.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-</div>
-</body>
-</html>
-
---_000_26ef81b5fd6d4cf7ad2e0f1a8674ce7dlmcocom_--
-
---===============4565634335379460806==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 1370c81c9c..39114daf18 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -13,6 +13,8 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	select BR2_PACKAGE_GNUTLS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBNDP
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  NetworkManager is a set of co-operative tools that make
+ 	  networking simple and straightforward. Whether WiFi, wired,
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 81d6eedf0f..3c39ce7d6d 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -10,7 +10,7 @@ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
+-	host-intltool libndp
++	host-intltool libndp util-linux
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+ NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
+ NETWORK_MANAGER_CPE_ID_VENDOR = gnome
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4565634335379460806==--
