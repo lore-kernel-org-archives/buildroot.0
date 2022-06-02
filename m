@@ -1,46 +1,138 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B530DC43334
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 14:22:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A20BC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 15:31:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7003C408D1;
-	Thu,  2 Jun 2022 14:22:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF48C61071;
+	Thu,  2 Jun 2022 15:31:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TeNbNUncR7Uv; Thu,  2 Jun 2022 14:22:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vLWA3fRNkDJI; Thu,  2 Jun 2022 15:31:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 022AF408AC;
-	Thu,  2 Jun 2022 14:22:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 57F891BF5EA
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 14:21:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD5BC60FB7;
+	Thu,  2 Jun 2022 15:31:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B2D541BF401
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 15:31:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44BCA8266A
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 14:21:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1FB960FB7
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 15:31:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y6tBj89GZEKP for <buildroot@lists.busybox.net>;
- Thu,  2 Jun 2022 14:21:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE21182A0E
- for <buildroot@buildroot.org>; Thu,  2 Jun 2022 14:21:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9909B86A98; Thu,  2 Jun 2022 14:10:06 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 2 Jun 2022 16:14:38 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d2fc8442ebc20b2baf90e684c43fb9bc78fe838d
-X-Git-Newrev: 72f333fa744c8b3dbecfba58cf657b52e27e3e7b
-X-Patchwork-Hint: ignore
-Message-Id: <20220602141006.9909B86A98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-flask-login:
- bump to version 0.6.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yqJZNZ8EdvKk for <buildroot@lists.busybox.net>;
+ Thu,  2 Jun 2022 15:31:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com
+ (mail-he1eur01on0604.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe1e::604])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 67D3A60B15
+ for <buildroot@buildroot.org>; Thu,  2 Jun 2022 15:31:13 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LywxkZcv+PB1vZaEmhQJEQx3aHxj+VP8QzgdTkAxuxR3SmedPOtXFhzYY6oWoTU3d8jyRUoqR++BjatbGr+Sa9gXv+FgPDqZ0iddRnf2Di4IEo0dqolwSjHtBVxdELG/g5BaeOnv1RhAoIa8dOX0ZgxpUkMITJAptkyp4MfOI/2guuEmA/sAs0qr7il9tAPlA0B1qIhdPY+cKNtDJBdNYUc5XMEKd2mdor7fI9udwBvGWYUGULLuANQ0pGqGE/fkwf5mcfnZXvDT0tE5Kb3d00pD7v6/vVSl4+7V7kIMG8U0TDZj2+eDVC1h1bLlkZQ7lbWuXT9ds+lnyIsmfL5thA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZUQMzhec2Pqmt2v4sp4/3IFDKAoMHYuNzjBzMThvqY8=;
+ b=Mjz872xJOyWuohnwu7DSOZ+fs9VAdR/6G23K12Mu9p2wGxr4i+i/5rDYwN/WFBLc8cnIDWfZYNlvEpsGRLq4nhu5wWQpW/H0lOT6xBgyJIfdA2y1BWQPj/oXTFOT9KTyyC0pUV6ZBpjpBjncsOAk7sby4Q5igrDqIANgQTFZPYK4gfy2ENM+kH/Mg2Isa5tBBa3lSBACkIv1IuPwmhktk/GsoBiM7pmOQ/L/OoBT1Pxo/PTO3JGlRO+1Y0vqM6HPqD9nt9LS3yLPvf45b5oUUxpHn6jKYkG6R1WE9K40Sn02RNceAjn/cen+VYKQKVOrmDupgmRyrR1EO23j6AVFPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=orolia.com; dmarc=pass action=none header.from=orolia.com;
+ dkim=pass header.d=orolia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orolia.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZUQMzhec2Pqmt2v4sp4/3IFDKAoMHYuNzjBzMThvqY8=;
+ b=jcHDRrmIJgcSZ1E0bgbn98ZIFIHbxMDAMKw6gM5j6npVv0tur+SjI+7XMzV52Xp+Yi1PUEcZN4x7ujwwgTlz6LWjn70TabIoQwDdhIkWl/RoJBhp30YiGJLpF41douEnLLQqnCSEl5HXZkPeo+0tQV7Z53TLbVZHnJHmNXgKZVI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=orolia.com;
+Received: from AS4P251MB0612.EURP251.PROD.OUTLOOK.COM (2603:10a6:20b:4bf::21)
+ by AS8P251MB0354.EURP251.PROD.OUTLOOK.COM (2603:10a6:20b:405::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Thu, 2 Jun
+ 2022 15:31:09 +0000
+Received: from AS4P251MB0612.EURP251.PROD.OUTLOOK.COM
+ ([fe80::6d18:5065:c1d2:9d47]) by AS4P251MB0612.EURP251.PROD.OUTLOOK.COM
+ ([fe80::6d18:5065:c1d2:9d47%5]) with mapi id 15.20.5314.013; Thu, 2 Jun 2022
+ 15:31:09 +0000
+Message-ID: <084d72797070bdd11665d39bdb0d3df277c88b78.camel@orolia.com>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+To: Buildroot List <buildroot@buildroot.org>
+Date: Thu, 02 Jun 2022 17:31:08 +0200
+User-Agent: Evolution 3.38.3-1 
+X-ClientProxiedBy: LO4P265CA0163.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:312::7) To AS4P251MB0612.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:4bf::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 96e1f181-011b-4f51-c46e-08da44aceb00
+X-MS-TrafficTypeDiagnostic: AS8P251MB0354:EE_
+X-Microsoft-Antispam-PRVS: <AS8P251MB03548D8EC94919576DE8C12884DE9@AS8P251MB0354.EURP251.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AYAXuPGN/ksBFgfh1lDiLuqE4LR6MdtOkoA3i1Hx02/pyqSGOAPL/o5gAdHZZWN453NXDdjbLASblrYBrLrUnC8KucEYbs4J6i4amq2qb78s4WT+6vzLP2sAEWIz2WDxHn/AT+A8Kt9RuX1uhHA725GQi6u+RE1eXa/Prxae2+//a8lpxHl52id1mha6kSFvO/QzcW2MAy4Gz+kgACyN6Ze4DmAKYtgTbzXj88fpH1K31oYXLjr9dSK5/kJ6tE4TswZ+g2S+zv3EO6k9y4Hp7rQ6EJQ4XpabI1UCt4mkncWcFqRw7Q4RkDiR2c7RdBmliruZWtKtesaoM5qwPBFOfTCZ851v3P7naL4jpDQ1YyFw/IS9NMeujrhdaFTQA7OyzGPnp/qoXEuTHCUPnpgXnzjwNaPxGuunsOI0I3fn2+07v3qiBIH6rARprg8wS2muEw2dtQY+F+ouRquxqBh+neGrsNAwc2IjEb2ttRtaR+mFa28dBuzrpFA02qQdItHlC0pM3tabbE/8gDKbX5NUtti7WvoILcDuem3vog5AyBTBtIQb7hFSNcYO/hBo3rr/keEtE/dL0lCe4OpYWMVolBv1T6OIHmaDI1E4IZlTXOw8/3LBaMKEpHtypvK8CtTrjXr4/l3VOkpTCatKhqggKJjafemHgDIapiQwqYogOkLyKE2Exxv9oSVzQNUBZ8b0/bW+DZAYmKYhRPe9XBnEiA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AS4P251MB0612.EURP251.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230001)(4636009)(366004)(6916009)(66476007)(8676002)(54906003)(4326008)(66946007)(2616005)(316002)(66556008)(38100700002)(6512007)(6486002)(52116002)(86362001)(36756003)(186003)(107886003)(6506007)(5660300002)(44832011)(2906002)(508600001)(83380400001)(8936002)(21314003);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?amxWNk43Z3BGTmVzS0pBQ1JUZ2hJQzhEVElFMGN2UFV4ZmNzVDRGMnh2QThN?=
+ =?utf-8?B?ZnV1VmVENE1EcnhIb1pVaS9oc3ZlOXBFa0Rab2NNaEVldE9YY1RmTkdkRm82?=
+ =?utf-8?B?OVBKcDJTeHlXbmo1aGM4UDdWdHdVU2d5Nm9FQlVXcUo0aENkc0VDTFJUaUpE?=
+ =?utf-8?B?aUFwTnhsYTE1WkxvaUFVMTlLZHV0WGMyTWFsd0NJcUlKUDFCN28xc3BsZUNi?=
+ =?utf-8?B?Vk50Mng2MVRQM3FsSGVmbmlORUdJODUzZFFQcVJOSDFqT3NZbktseVdjNTdZ?=
+ =?utf-8?B?MFl4dXA2YThXYjJSUm9DRzI0TmxLekdHYjRTdU1ETUZCUlI0TktaRVlGQlEz?=
+ =?utf-8?B?VE9ZQVFqM1pKTFhORHQ1NUJHdkdVdmxPbFNVU1BldEU3eGFhOUQrT0F2NXZS?=
+ =?utf-8?B?YkUyT1pVNXJ0Z1JxcGNuQ1VGTEhKU2F4M3N2V0NLOFdSSkhBV3JWRWxWTUpk?=
+ =?utf-8?B?RXVsdlZsSGNNN1ovVXIvTzBFNDFzaTFLekU2REc5b0l5VjhKb3dLOGNabE53?=
+ =?utf-8?B?eXZoVm5NMy93RFVJQnRJVzJBSWViM0hXcUFQYVo3dTJYR3U1c1V6VDQycUVy?=
+ =?utf-8?B?T256Q2tZUURxOWE5OSt5OVFmczEraUt1dHNyeEM2Rzh6NW9FYXdqbmNpNlY2?=
+ =?utf-8?B?U3NwcVc5eWlMM2RGdHZORmZlRGNBWGJ6YmZzTnJRU1QwVWE2VkF6R2NNcFRn?=
+ =?utf-8?B?STlYUWVHa09sbXZtbVNlS1J0VURDTjByTGFPMHpqUXVEUEdUSnB1bFVlQlRE?=
+ =?utf-8?B?N0RHUTFVT1ExMlVudHE1eDFhSllVYmgycUd2ODRmdFpjTzRpVWRSQ1R3ZmRF?=
+ =?utf-8?B?UlY0Wml2VXNDeEE1NWs2ZmJqUVh6TW5nZjUrM3V4RjFrYmxFK0JrcnZHYmdV?=
+ =?utf-8?B?VE5OdnJIWFp0V1dJTnhyRmZONVp6VE05RU1ISlQzWjlMTG1zbCswU0g2SmJS?=
+ =?utf-8?B?Rkg1d0NNVGVMR3pKQ3NoaGQ4N3JvdnZWSUdCREpCL2s4VXI0UGFQbEpiQXg2?=
+ =?utf-8?B?VjZGLytFOTFTTmpuU0syb2RnUTVGYklNcG41OHByQTdRYlZGa0hydWFLcUk3?=
+ =?utf-8?B?YTNib2RvdGlVcEpjVDRjNWNHdDFmS21STnZUNUFTNVdJblBXL21QOTRpWmVQ?=
+ =?utf-8?B?cENYS283OEhoaGlqOTFQMTBrcTJVYTJvYVAvV0FmTkFHRWFUc2lhTUhuWkF3?=
+ =?utf-8?B?V0Z3TmxIQ0ZodjdxOGpXdVNzY05GM2tZM1gvOUZ2bmpIS3VHbGhNUUw1eWpS?=
+ =?utf-8?B?eEVMRktaYmh4bEsvdDZDZVBlczNrLzFOUlh1N0VFMExlSDZQZVNNeTFFYmF0?=
+ =?utf-8?B?QjNXZS9ZcHNLM0V2TGgyWDU3K29Hc1J1djQxYjFpNFFidmhnK1p3NTBSQnJM?=
+ =?utf-8?B?dnRvOWJPamJuSHhyNTB3ZmgvTzZ4WDlMME15WkNodEh0TGFGZGcwbzREVnk4?=
+ =?utf-8?B?aVZCSHFkQVFXeFdXRUNSQzd4YVQrbWFLcDcySEptdTlFSEc5YUwybWNIa3hi?=
+ =?utf-8?B?QzVnNXZVREZZc3lHVm1sbW9PTUlNL215Y1FYV0FpY0MwbW1ITDFTbVlMcUpm?=
+ =?utf-8?B?L1BJTENJbXRYbXA2WDQwdnpPbFJ1MnpObjBxRmU4eGdYV2E5TlZFYUxWVGNO?=
+ =?utf-8?B?RmVPT0FvSjlTdHlVTHZ3bTM0MnJWaUk4Q0pHYTNMNzROVTlsZ1pPS041NFdi?=
+ =?utf-8?B?cjdPRzRRSFhoR2QwaDRtRm9SU2Y1WXlwYTF6UWIrOGZpam1rYXNnR0hjYzRa?=
+ =?utf-8?B?UUc4N3A1dm96OUliRnJlWnJsdmg2dWg2d3N1ZGloc042ZnpjYjNCQ1A2QUpG?=
+ =?utf-8?B?RW9kWHdTWlVsR2VOQ1dqUkc1UCsyNFlGcWZBTERSckx0aytrZVlYay9VR0ND?=
+ =?utf-8?B?NzlBR1k2Q2k3cmp2aEwrNjc0NnpCditIdmhJdVlsK1VxL3NkREhQSDdyTWdr?=
+ =?utf-8?B?WCttNlpBdzdDQktiZndjUW1nYVE3RHJ1aUxYRjJ0YWdYZUk5blIzTnlIZmww?=
+ =?utf-8?B?cXFqcFBGQ3ZIM3lUekRmSmpDVXE2blFNRGtUaTcxQnpCSWxnbWdlKzlZYnRJ?=
+ =?utf-8?B?ZjdKak12WEhSTkdYTmNkVDJMOWpNb2FyVkdrNHJRNzJZcStRaHFacmVrc1hM?=
+ =?utf-8?B?UU1yQTM0YlBxK01McU10VlZtUzBHNUhnOTVhZjdvOEFPNFBhNFY0UHZWcVYr?=
+ =?utf-8?B?MTF2bXN4SkcvamNxaU82UDNFdnBwQ1BHQmpqWEhmU0NvM1Uvc21kQXFnV3Ew?=
+ =?utf-8?B?cUhDbC9zVnRoRm9Pb1c4OE9Xa3g0SENKM25mcDJJcC9lZVZiL2FoK2dPL1U0?=
+ =?utf-8?B?ajk4VEpDRkMzdWhRZS8rb0NZbUx5d2dpc3pvcWdmQUFjei9pSGxyMktpb0Mz?=
+ =?utf-8?Q?Al3s2b2xj7Im7kDT3oFLGi/NcRXqVSfn9aSYGqIuM0ung?=
+X-MS-Exchange-AntiSpam-MessageData-1: SoDoOZErajTO/HE0cAoa5178tbj5f066s9I=
+X-OriginatorOrg: orolia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96e1f181-011b-4f51-c46e-08da44aceb00
+X-MS-Exchange-CrossTenant-AuthSource: AS4P251MB0612.EURP251.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2022 15:31:09.4886 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a263030c-9c1b-421f-9471-1dec0b29c664
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: n0SLFU3Fmt1ANHB1d9hs/aZOADErxCbIaqLL4ndykNzDGpb3Vh1hA+mGELyBI0eZuUGqed9x+pqddx83U9TTujimzT5OOHiUy+kjlPhuNEE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P251MB0354
+Subject: [Buildroot] ulog compilation issue with buildroot 2022.02.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,55 +144,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Herve Codina <herve.codina@bootlin.com>, Tim Hammer <Tim.Hammer@orolia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72f333fa744c8b3dbecfba58cf657b52e27e3e7b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello!
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-flask-login/python-flask-login.hash | 9 ++++-----
- package/python-flask-login/python-flask-login.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 7 deletions(-)
+When using the following minimal config:
 
-diff --git a/package/python-flask-login/python-flask-login.hash b/package/python-flask-login/python-flask-login.hash
-index 9ff1f82a09..d11e37cce8 100644
---- a/package/python-flask-login/python-flask-login.hash
-+++ b/package/python-flask-login/python-flask-login.hash
-@@ -1,6 +1,5 @@
--# From https://pypi.org/project/Flask-Login/#copy-hash-modal-8bb2ac58-b80a-4793-84d4-4f32b92976d9
--md5  a2d94aa6ae935345ebc68eb3cbb5fccd  Flask-Login-0.5.0.tar.gz
--sha256  6d33aef15b5bcead780acc339464aae8a6e28f13c90d8b1cf9de8b549d1c0b4b  Flask-Login-0.5.0.tar.gz
--
--# License files
-+# md5, sha256 from https://pypi.org/pypi/flask-login/json
-+md5  0a1576eab473c2a8bb576348333d5ef5  Flask-Login-0.6.1.tar.gz
-+sha256  1306d474a270a036d6fd14f45640c4d77355e4f1c67ca4331b372d3448997b8c  Flask-Login-0.6.1.tar.gz
-+# Locally computed sha256 checksums
- sha256  7a9dfb9c5da204ed1370f3b62c13e2992a12da1da707f47e156897eeb4344e5b  LICENSE
-diff --git a/package/python-flask-login/python-flask-login.mk b/package/python-flask-login/python-flask-login.mk
-index efb63b262b..9a11fde542 100644
---- a/package/python-flask-login/python-flask-login.mk
-+++ b/package/python-flask-login/python-flask-login.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FLASK_LOGIN_VERSION = 0.5.0
-+PYTHON_FLASK_LOGIN_VERSION = 0.6.1
- PYTHON_FLASK_LOGIN_SOURCE = Flask-Login-$(PYTHON_FLASK_LOGIN_VERSION).tar.gz
--PYTHON_FLASK_LOGIN_SITE = https://files.pythonhosted.org/packages/f9/01/f6c0a3a654ca125cf9cd273314c03a8bc6a47bf861765c8c1d375e15a28d
-+PYTHON_FLASK_LOGIN_SITE = https://files.pythonhosted.org/packages/3c/0a/e376d599eb6a8999b803a8d390e32451e43a346dbe540350dad48be0069c
- PYTHON_FLASK_LOGIN_LICENSE = MIT
- PYTHON_FLASK_LOGIN_LICENSE_FILES = LICENSE
- PYTHON_FLASK_LOGIN_SETUP_TYPE = setuptools
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_NEON=y
+BR2_ARM_ENABLE_VFP=y
+BR2_ARM_FPU_NEON=y
+BR2_SSP_ALL=y
+BR2_FORTIFY_SOURCE_2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
+BR2_INIT_SYSTEMD=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+BR2_PACKAGE_ULOG=y
+
+the build will fail when trying to build ulog with the following error message:
+
+[...]
+xxx C++: libulog <= libulog/ulog.cpp
+xxx C: libulog <= libulog/ulog_read.c
+xxx C: libulog <= libulog/ulog_write.c
+xxx C: libulog <= libulog/ulog_write_android.c
+xxx C: libulog <= libulog/ulog_write_bin.c
+xxx C: libulog <= libulog/ulog_write_raw.c
+SharedLib: libulog => alchemy-out/build/libulog/libulog.so
+/home/ncarrier/workspace/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-
+gnueabihf/7.3.1/../../../../arm-linux-gnueabihf/bin/ld: cannot find /lib/libpthread.so.0
+/home/ncarrier/workspace/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-
+gnueabihf/7.3.1/../../../../arm-linux-gnueabihf/bin/ld: cannot find /usr/lib/libpthread_nonshared.a
+collect2: error: ld returned 1 exit status
+make[1]: Leaving directory '/home/ncarrier/workspace/buildroot/output/build/ulog-
+0389d243352255f6182326dccdae3d56dadc078f'
+make[1]: ***
+[/home/ncarrier/workspace/buildroot/output/host/opt/alchemy/classes/LIBRARY/rules.mk:25: alchemy-
+out/build/libulog/libulog.so] Error 1
+make: *** [package/pkg-generic.mk:293: /home/ncarrier/workspace/buildroot/output/build/ulog-
+0389d243352255f6182326dccdae3d56dadc078f/.stamp_built] Error 2
+
+From this traces, it looks like it is trying to link with /lib/libpthread.so.0, which can't work
+since it's the pthread library of the system.
+
+
+One thing to note is that, when BR2_INIT_SYSTEMD=y is removed from the config above, the build will
+succeed.
+So it looks like systemd or one of its dependencies, is enabling something which breaks ulog's
+build.
+
+Does anyone have an idea of what could possibly go wrong and maybe, of a workaround?
+My host machine is a debian 11 amd64.
+
+Thank you by advance :)
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
