@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A687AC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:31:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24D5AC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:31:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 675F8410EB;
-	Tue,  7 Jun 2022 19:31:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB07D6100D;
+	Tue,  7 Jun 2022 19:31:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JAO0PR4hP63D; Tue,  7 Jun 2022 19:31:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BUwe4d1EdrsU; Tue,  7 Jun 2022 19:31:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5EA3040FF5;
-	Tue,  7 Jun 2022 19:31:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0BF9C60F07;
+	Tue,  7 Jun 2022 19:31:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 60F2E1BF475
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 764951BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11A6D408C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 49CE840B5E
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ls1jh8AZyqx4 for <buildroot@lists.busybox.net>;
+ with ESMTP id vlwnhQgO4uDm for <buildroot@lists.busybox.net>;
  Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59E4D405D6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 88E5640607
  for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4D7EE86E21; Tue,  7 Jun 2022 19:04:58 +0000 (UTC)
+ id 897C586E21; Tue,  7 Jun 2022 19:04:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 2 Jun 2022 15:39:18 +0200
+Date: Thu, 2 Jun 2022 16:01:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90712c01237cf42ba43c2d489c0357c6930cc54a
-X-Git-Newrev: 9ac8fb266e9dd8c94ba89c9501571d9021fd838d
+X-Git-Oldrev: da643b87eb75d115d32311bf562acc5b21053452
+X-Git-Newrev: c0646f72b23f3437bec90efae82242e6d07695fa
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190458.4D7EE86E21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 22.4.2
+Message-Id: <20220607190458.897C586E21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-vfs-libarchive: bump version
+ to 19.2.0-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,38 +60,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ac8fb266e9dd8c94ba89c9501571d9021fd838d
+commit: https://git.buildroot.net/buildroot/commit/?id=c0646f72b23f3437bec90efae82242e6d07695fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash | 2 +-
+ package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 6ca3867908..92346e9dae 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+index f3a2c8fcef..c0468517f2 100644
+--- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  5589d4e0142ae957d58798e3fba08d9e5e096e92eed422d40a82d45a14e6042f  intel-media-22.4.1.tar.gz
-+sha256  e8e7faeb40e523b0daf61336853e09f59f810598093d65737cd119107cf933f8  intel-media-22.4.2.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index e44330245b..9f500346e6 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+-sha256  1360154d86bc73fc6f01f546d7b09a92968653cf05b037b0cd80a825d95a9187  kodi-vfs-libarchive-19.0.1-Matrix.tar.gz
++sha256  957c76d3327b618396d9530394b235cebb73090b53afdeb2bd0d87f9677622d9  kodi-vfs-libarchive-19.2.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+index eac02d7442..1f79bad71f 100644
+--- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 22.4.1
-+INTEL_MEDIADRIVER_VERSION = 22.4.2
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+-KODI_VFS_LIBARCHIVE_VERSION = 19.0.1-Matrix
++KODI_VFS_LIBARCHIVE_VERSION = 19.2.0-Matrix
+ KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
+ KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
+ KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
