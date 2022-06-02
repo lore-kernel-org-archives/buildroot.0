@@ -1,62 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CC6DC43334
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 13:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F39EAC43334
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 13:48:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABC4441797;
-	Thu,  2 Jun 2022 13:43:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EDAA607CA;
+	Thu,  2 Jun 2022 13:48:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rwQOZc7bUOrA; Thu,  2 Jun 2022 13:42:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GyoMnFWT-w_I; Thu,  2 Jun 2022 13:48:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CF4C41545;
-	Thu,  2 Jun 2022 13:42:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7D80D1BF32D
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 13:42:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0FA960B2E;
+	Thu,  2 Jun 2022 13:48:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 995621BF32D
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 13:48:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C19641545
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 13:42:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 84D8E4012E
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 13:48:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EAWU97NpY0Ui for <buildroot@lists.busybox.net>;
- Thu,  2 Jun 2022 13:42:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0B3504150F
- for <buildroot@buildroot.org>; Thu,  2 Jun 2022 13:42:55 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D0470C000A;
- Thu,  2 Jun 2022 13:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654177373;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Ly6h3zoQTXGAMtvGlRyu51bnZ+aOmw3L3TqJhY63b4I=;
- b=gEWraIJ0bQzGV1yyfHatbuK1Ro6EU7B+Skv+vZwVJgnnbKzwAWmXpUYfXsYF6ACjCEtXhN
- mCyue1qJ27UpClqFWZSW09z3Ec3rfJ55UWiKi1sPxAY9avzCxr7XZSiE5aQ1titJCuA4Hp
- n6DwHfnUIKi/eNjMgYTgL2dE8rOxJGKw/lozfz19E+JZUUBDL+N0JJWbwKX5BtL06nBlDF
- 3C4AtEW32q+h2lyxrBQfsX68wmHXc9Q88G+RA1m/ZN7bTwi+dDwZ2xQJ3w4B+EQc9ahZpl
- BKKa5GXUorsVn/MDwpiRBUGWJ8VsLi/3YuIvb3EHbQ2CqLZx6jAuBjdJJDSfHw==
-Date: Thu, 2 Jun 2022 15:42:51 +0200
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20220602154251.14aafbed@windsurf>
-In-Reply-To: <20220525170843.20123-1-bernd.kuhls@t-online.de>
-References: <20220525170843.20123-1-bernd.kuhls@t-online.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/intel-mediadriver: bump
- version to 22.4.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F56uDFFiBXUa for <buildroot@lists.busybox.net>;
+ Thu,  2 Jun 2022 13:48:12 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE2BC400D2
+ for <buildroot@buildroot.org>; Thu,  2 Jun 2022 13:48:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 92E05869E1; Thu,  2 Jun 2022 13:36:32 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 2 Jun 2022 15:46:50 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 9ac8fb266e9dd8c94ba89c9501571d9021fd838d
+X-Git-Newrev: ca3acb36121f50ea3125814153b8bc384d5bdf89
+X-Patchwork-Hint: ignore
+Message-Id: <20220602133632.92E05869E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-sip: bump to
+ version 4.19.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,28 +54,114 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 25 May 2022 19:08:43 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ca3acb36121f50ea3125814153b8bc384d5bdf89
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/intel-mediadriver/intel-mediadriver.hash | 2 +-
->  package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+This version is the minimum version needed to support newer versions of PyQT.
 
-Applied to next, thanks.
+Changes:
+  - Update the URL as this version is not hosted on sourceforge.
+  - Add --no-stubs to prevent the error: No such file or directory: sip.pyi
+  - Add 0001-remove-join-from-sip-h-files-string.patch to prevent python-sip
+    from attempting to copy the entire hosts /usr directory when
+    installing.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-remove-join-from-sip-h-files-string.patch | 33 ++++++++++++++++++++++
+ package/python-sip/python-sip.hash                 | 10 +++----
+ package/python-sip/python-sip.mk                   |  6 ++--
+ 3 files changed, 40 insertions(+), 9 deletions(-)
+
+diff --git a/package/python-sip/0001-remove-join-from-sip-h-files-string.patch b/package/python-sip/0001-remove-join-from-sip-h-files-string.patch
+new file mode 100644
+index 0000000000..e7a0d606e9
+--- /dev/null
++++ b/package/python-sip/0001-remove-join-from-sip-h-files-string.patch
+@@ -0,0 +1,33 @@
++From 009e5cf0750134ed5403aae23ef53a177764ca04 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Wed, 29 Dec 2021 13:49:15 -0800
++Subject: [PATCH] remove join from sip_h.files string
++
++When cross compiling, the configure system appends the hosts /usr/ directory 
++to the path of which to find files that python-sip will install. This leads to
++python-sip attempting to install everything under the hosts /usr directory into
++the targets /usr/include/python directory.
++
++Remove the .join() in the sip_h.files string to prevent the above issue.
++
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ configure.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.py b/configure.py
++index 25bcaa7..fc8f2dc 100644
++--- a/configure.py
+++++ b/configure.py
++@@ -408,7 +408,7 @@ def create_makefiles(macros):
++             # There will only be one element.
++             files, path = gen_installs[0]
++             pro.write("\n")
++-            pro.write("sip_h.files = %s\n" % " ".join(files))
+++            pro.write("sip_h.files = %s\n" % files)
++             pro.write("sip_h.path = %s\n" % quote(path))
++             pro.write("INSTALLS += sip_h\n")
++ 
++-- 
++2.33.1
++
+diff --git a/package/python-sip/python-sip.hash b/package/python-sip/python-sip.hash
+index 6adf44d410..0108924cdc 100644
+--- a/package/python-sip/python-sip.hash
++++ b/package/python-sip/python-sip.hash
+@@ -1,7 +1,5 @@
+-# From https://sourceforge.net/projects/pyqt/files/sip/sip-4.18/
+-md5 78724bf2a79878201c3bc81a1d8248ea	sip-4.18.tar.gz
+ # Locally calculated:
+-sha256 f1dc5c81c07a9ad97edcd4a0af964a41e420024ba7ca165afd2b351efd249cb6	 sip-4.18.tar.gz
+-sha256 accecbfda71ad4497bce0d451796706e734e405e5ecf3b3f9ee0cc68300a3d9c  LICENSE
+-sha256 7ebb61006e46b9e9340dd135d5f4afbbcb1d1d6c6709f74473b35929007b9aeb  LICENSE-GPL2
+-sha256 63cb5f5c1ea39b732c495f354f971e40f6db84c567ca5573a68bb65af07741f8  LICENSE-GPL3
++sha256  b39d93e937647807bac23579edbff25fe46d16213f708370072574ab1f1b4211  sip-4.19.25.tar.gz
++sha256  accecbfda71ad4497bce0d451796706e734e405e5ecf3b3f9ee0cc68300a3d9c  LICENSE
++sha256  7ebb61006e46b9e9340dd135d5f4afbbcb1d1d6c6709f74473b35929007b9aeb  LICENSE-GPL2
++sha256  63cb5f5c1ea39b732c495f354f971e40f6db84c567ca5573a68bb65af07741f8  LICENSE-GPL3
+diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
+index 01ccb1ddd5..3e015fa16c 100644
+--- a/package/python-sip/python-sip.mk
++++ b/package/python-sip/python-sip.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SIP_VERSION = 4.18
++PYTHON_SIP_VERSION = 4.19.25
+ PYTHON_SIP_SOURCE = sip-$(PYTHON_SIP_VERSION).tar.gz
+-PYTHON_SIP_SITE = http://downloads.sourceforge.net/project/pyqt/sip/sip-$(PYTHON_SIP_VERSION)
++PYTHON_SIP_SITE = https://www.riverbankcomputing.com/static/Downloads/sip/$(PYTHON_SIP_VERSION)
+ PYTHON_SIP_LICENSE = SIP license or GPL-2.0 or GPL-3.0
+ PYTHON_SIP_LICENSE_FILES = LICENSE LICENSE-GPL2 LICENSE-GPL3
+-
+ PYTHON_SIP_DEPENDENCIES = python3 qt5base
+ HOST_PYTHON_SIP_DEPENDENCIES = host-python3
+ 
+@@ -34,6 +33,7 @@ define PYTHON_SIP_CONFIGURE_CMDS
+ 			--incdir $(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 			--sipdir $(TARGET_DIR)/usr/share/sip \
+ 			--sysroot $(STAGING_DIR)/usr \
++			--no-stubs \
+ 			--use-qmake && \
+ 		$(HOST_DIR)/bin/qmake)
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
