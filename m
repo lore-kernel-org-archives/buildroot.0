@@ -4,69 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 905C0C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 17:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3722AC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 21:04:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E80760F07;
-	Thu,  2 Jun 2022 17:00:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7DB260B7D;
+	Thu,  2 Jun 2022 21:04:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bQN6z45frwvI; Thu,  2 Jun 2022 17:00:10 +0000 (UTC)
+	with ESMTP id ZgewLDV-FH-A; Thu,  2 Jun 2022 21:04:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F1D260E33;
-	Thu,  2 Jun 2022 17:00:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFD9F60D7B;
+	Thu,  2 Jun 2022 21:04:51 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3CEEC1BF44A
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 17:00:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AD1851BF344
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 21:04:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35B1A60E18
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 17:00:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9AC0560D7B
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 21:04:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7vRMNaOCx74D for <buildroot@lists.busybox.net>;
- Thu,  2 Jun 2022 17:00:07 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BBD0060E33
- for <buildroot@buildroot.org>; Thu,  2 Jun 2022 17:00:06 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CD0EAE000D;
- Thu,  2 Jun 2022 17:00:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654189203;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=a9kfvFpGYigFwRseGVOjSLzc+8mi2MzI0PXZwuZRPxA=;
- b=jetweL2HpuBppsrMbiA8WXor7VQObVzJMdEm6xYtjai2wzcbR6IhUj0ai3a9nFKefPaeTg
- P0B7TDDrio8F+HnRQOhhFLYIIAFlt/JRKJeAus71IC6kF8B4JfyBUaYK0f6sWGKa5TTcUh
- 2KfdVuB4FSTC4TEnaed2BZhC+i4EH0Dixi7Tpg6v8dlfnsPOSH1DGXOLhhfwOL0u+vgpKs
- Af0wiBBlaW3RYomPrmYxQK0usW0RWrDjz5pyUeidbG1EQkvcCMZB2unXdFj8mtseANTIKw
- WTPaAATDpVchRAqnyjul3cCUeKtP1zoZezp2YdTJb+ciaKrZyX5xkivTJSss/A==
-Date: Thu, 2 Jun 2022 19:00:01 +0200
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-Message-ID: <20220602190001.0c4c9f35@windsurf>
-In-Reply-To: <871qwiozwd.fsf@tarshish>
-References: <CALtfCQaLxNdrKhSjMfShjb-nQWUnqa3DSOwbyZm1+Q0fU1UUqQ@mail.gmail.com>
- <87zgjapr8a.fsf@tarshish>
- <CALtfCQaBG_p15ASxYKSyZhYOePW5uE-BW8F1KG7DkPeJ8bjLiw@mail.gmail.com>
- <87r14kq55b.fsf@tarshish>
- <CALtfCQY1a6sjLNUh42zsrsu1hPLTMHNDj4+5v5k8w8kv8u6tmg@mail.gmail.com>
- <87ilpwp82x.fsf@tarshish>
- <CALtfCQauLNMOfBb6Zm8M8v-VHakY_Bs+p6CeQh0tVuTtfKyUDg@mail.gmail.com>
- <87a6b6pwqf.fsf@tarshish>
- <CALtfCQZPYEJBT=2hx6XJ1FH=ESHhw2N_LaqYbd+xdGkXxT503g@mail.gmail.com>
- <875ylup27u.fsf@tarshish>
- <CADvTj4r=46JdJUPSzOXgmXVDBWYDM3v5wsFjymbzGF1xoyzO4Q@mail.gmail.com>
- <871qwiozwd.fsf@tarshish>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+ with ESMTP id YWtMnbqR2Wix for <buildroot@lists.busybox.net>;
+ Thu,  2 Jun 2022 21:04:48 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CFEE660B7D
+ for <buildroot@buildroot.org>; Thu,  2 Jun 2022 21:04:47 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id q7so7963122wrg.5
+ for <buildroot@buildroot.org>; Thu, 02 Jun 2022 14:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=sender:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=T76WPLsj0Z80Y2S4NGTEG2j13vcUndt/W9DZ1f53X3o=;
+ b=CeX1/tRs4bw/Y0XzdOSqSS0c0yGiJIZRIyvjdO9RoyfFmHud8Fs31lbTaEyyt1T/00
+ GVu+RrUkghfPsg2H/Yi4iXK0laBBWzJxtFgTV0mUXSWRf0UBhE6/JpZltGmehMbDVw3H
+ imJhG+MGIBzMApZ1x6mfTlRsnqVKOxXSaHESAc7vqP0Q0lyQc9eJeMp8dwqQrm4Vtwq0
+ yi+HPa4YfxOPu2nFRgxXzZS14MY8NWZSBrJ297QEsD3p5A1ddg7VWNUqVz7hgl0aTNeq
+ 0uTd+e4MESNU21PkG+lNfW7yQMvmg2+GeW60kKrPEbU9kZAWvtR/6/BYc6hHp1JZdjG2
+ 6jWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+ :mime-version:content-transfer-encoding;
+ bh=T76WPLsj0Z80Y2S4NGTEG2j13vcUndt/W9DZ1f53X3o=;
+ b=KsQU5AjC599QJIEPE8KpAVafRW6qsdn3UVgYaXuQmLIJIcSpDTbbE/5fM8pdRmTjKQ
+ ANFMpKY9RIjlg9JBsREO0dYFjONuidAQpBT8jsfV5lkskX5XOHgmgH/7LltinOQhQncV
+ rnLnzbfKog2vZPlge5ag91WLvo+Yo2xNW+Z+KJz+yzxvw6D50H9TmNzgdCguO31TLibS
+ MWZ7wj8Eqhk606cAObrEbbfpNxEiUVF9UXWV2Fce9F4K5INN0ILkGU9zlWM97rl0FdcU
+ mYcxBm7lbR2/5S9oCVDhEXEqJfXss8NrUBSHdiUZb9SMkyoC4wNeCarIRheWrOPg1EGe
+ KX7g==
+X-Gm-Message-State: AOAM533kzDJ069rkVQaUbXTnENVaRcHUXQBhp4LoiOn1N/NFHkxWt3MP
+ 0hqr/Db9p44YDUnmWQ4pU0l4u62sc/CPFQ==
+X-Google-Smtp-Source: ABdhPJzseVn2dbcFvwM8qmZ9vW4nfo2H19PLwZlC0dTsPHq8YUJ7a9cVTfM1OronB5fqiS4zj2YGUw==
+X-Received: by 2002:a05:6000:1565:b0:20e:64e7:e470 with SMTP id
+ 5-20020a056000156500b0020e64e7e470mr5286869wrz.260.1654203885959; 
+ Thu, 02 Jun 2022 14:04:45 -0700 (PDT)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:8d81:dd1:13eb:5257])
+ by smtp.gmail.com with ESMTPSA id
+ l13-20020a05600c4f0d00b0039c3055a63dsm3371357wmq.36.2022.06.02.14.04.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 02 Jun 2022 14:04:44 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Thu,  2 Jun 2022 23:04:21 +0200
+Message-Id: <20220602210421.426648-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] How to select python-cryptograhy package
+Subject: [Buildroot] [PATCH] linux: disable -Werror when building host tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,60 +84,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Oscar Gomez Fuente <oscargomezf@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>
+Cc: Anders Pitman <buildroot@apitman.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+gcc-12 is starting to trickle down to some distros, like Archlinux.
+gcc-12 has new warnings, and detects more cases of isues, like new
+UAF cases, which is causing build issues in code that was previously
+building fine, as reported in 14826:
 
-On Wed, 25 May 2022 10:01:06 +0300
-Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
+    In file included from sigchain.c:3:
+    In function 'xrealloc',
+        inlined from 'sigchain_push.isra' at sigchain.c:26:2:
+    subcmd-util.h:56:23: error: pointer may be used after 'realloc' [-Werror=use-after-free]
+       56 |                 ret = realloc(ptr, size);
+          |                       ^~~~~~~~~~~~~~~~~~
+    subcmd-util.h:52:21: note: call to 'realloc' here
+       52 |         void *ret = realloc(ptr, size);
+          |                     ^~~~~~~~~~~~~~~~~~
+    subcmd-util.h:58:31: error: pointer may be used after 'realloc' [-Werror=use-after-free]
+       58 |                         ret = realloc(ptr, 1);
+          |                               ^~~~~~~~~~~~~~~
+    subcmd-util.h:52:21: note: call to 'realloc' here
+       52 |         void *ret = realloc(ptr, size);
+          |                     ^~~~~~~~~~~~~~~~~~
 
-> The '*' in the table indicates no_std, that is, bare metal. That's most
-> likely not what we want for Buildroot. Can we map BR2_ARM_CPU_ARMV8A to
-> armv7 line the following:
-> 
-> diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-> index a86d95236d90..6aac703b2a4f 100644
-> --- a/package/rustc/Config.in.host
-> +++ b/package/rustc/Config.in.host
-> @@ -42,6 +42,8 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_HOST_TOOLS_PLATFORMS
->  	default y if BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
->  	# armv7-unknown-linux-gnueabihf
->  	default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
-> +	# armv8-unknown-linux-gnueabihf
+In that case, the kernel has already fixed their code, which is part of
+5.17:
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=52a9dab6d892763b2a8334a568bd4e2c1a6fde66
 
-I think this comment would be misleading. Indeed, based on this
-comment, you could think that for this configuration (BR2_arm &&
-BR2_ARM_CPU_ARMV8A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC) we
-would use the armv8-unknown-linux-gnueabihf variant of rustc, but
-that's not the one we would be using.
+However, we can't easily carry that patch, because we don't know
+whether the kernel the user uses already has the fix ir not.
 
-> +	default y if BR2_arm && BR2_ARM_CPU_ARMV8A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
->  	# mips-unknown-linux-gnu
->  	default y if BR2_mips && BR2_TOOLCHAIN_USES_GLIBC && !BR2_MIPS_CPU_MIPS32R6
->  	# mips64-unknown-linux-gnuabi64
-> @@ -86,6 +88,8 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_PLATFORMS
->  	default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABI && BR2_TOOLCHAIN_USES_MUSL
->  	# armv7-unknown-linux-musleabihf
->  	default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_MUSL
-> +	# armv8-unknown-linux-musleabihf
-> +	default y if BR2_arm && BR2_ARM_CPU_ARMV8A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_MUSL
+Instead, we can just tell the kernel to disable use of -Werror when
+building host tools.
 
-Same comment of course here.
+As a consequence, we can drop it from the perf-specific setting.
 
-Other than that, it looks good to me.
+Fixes: #14826
 
-Thomas
+Reported-by: Anders Pitman <buildroot@apitman.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ linux/linux.mk                            | 3 +++
+ package/linux-tools/linux-tool-perf.mk.in | 1 -
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 5aed47fee7..0d0cfcac50 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -147,11 +147,14 @@ endif
+ 
+ # We don't want to run depmod after installing the kernel. It's done in a
+ # target-finalize hook, to encompass modules installed by packages.
++# Disable building host tools with -Werror: newer gcc versions can be
++# extra picky about some code (https://bugs.busybox.net/show_bug.cgi?id=14826)
+ LINUX_MAKE_FLAGS = \
+ 	HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
+ 	ARCH=$(KERNEL_ARCH) \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
++	WERROR=0 \
+ 	DEPMOD=$(HOST_DIR)/sbin/depmod
+ 
+ ifeq ($(BR2_REPRODUCIBLE),y)
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index 4e28129f50..d82d45973c 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -20,7 +20,6 @@ PERF_MAKE_FLAGS = \
+ 	ARCH=$(PERF_ARCH) \
+ 	DESTDIR=$(TARGET_DIR) \
+ 	prefix=/usr \
+-	WERROR=0 \
+ 	NO_GTK2=1 \
+ 	NO_LIBPERL=1 \
+ 	NO_LIBPYTHON=1 \
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
