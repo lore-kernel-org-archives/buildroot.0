@@ -1,46 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33E99CCA483
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:32:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E150DCCA485
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:32:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F13FE40B49;
-	Tue,  7 Jun 2022 19:31:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F0F2424BE;
+	Tue,  7 Jun 2022 19:32:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wpZn1LTtYn5A; Tue,  7 Jun 2022 19:31:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dhoNG1uKXRSN; Tue,  7 Jun 2022 19:32:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A28D40640;
-	Tue,  7 Jun 2022 19:31:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45C77424C0;
+	Tue,  7 Jun 2022 19:32:12 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7EAA71BF475
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 841CF1BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E34AA40B9F
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5E8840BF7
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J1iFkunWyMxx for <buildroot@lists.busybox.net>;
+ with ESMTP id oOjpjH4LTEEh for <buildroot@lists.busybox.net>;
  Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B16D140B35
+ by smtp2.osuosl.org (Postfix) with ESMTP id C8D23400D7
  for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B153486E21; Tue,  7 Jun 2022 19:04:58 +0000 (UTC)
+ id BB35086E22; Tue,  7 Jun 2022 19:04:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 2 Jun 2022 16:14:14 +0200
+Date: Thu, 2 Jun 2022 16:14:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 463e66ff9361b037935a92a2b888e026c1fec3d7
-X-Git-Newrev: 9fb0f1cecac8639ec310ac9325a71aed4668c361
+X-Git-Oldrev: 9fb0f1cecac8639ec310ac9325a71aed4668c361
+X-Git-Newrev: e149215669fd46b4dc7354bcf1c70e58eb8e52bc
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190458.B153486E21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-itsdangerous: bump to
- version 2.1.2
+Message-Id: <20220607190458.BB35086E22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-click: bump to version 8.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,45 +59,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fb0f1cecac8639ec310ac9325a71aed4668c361
+commit: https://git.buildroot.net/buildroot/commit/?id=e149215669fd46b4dc7354bcf1c70e58eb8e52bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-itsdangerous/python-itsdangerous.hash | 4 ++--
- package/python-itsdangerous/python-itsdangerous.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-click/python-click.hash | 6 +++---
+ package/python-click/python-click.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-itsdangerous/python-itsdangerous.hash b/package/python-itsdangerous/python-itsdangerous.hash
-index dad4ec0800..071544e5bd 100644
---- a/package/python-itsdangerous/python-itsdangerous.hash
-+++ b/package/python-itsdangerous/python-itsdangerous.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/itsdangerous/json
--md5  996b9763d1b4bd0edd6eb86f0a490629  itsdangerous-2.0.1.tar.gz
--sha256  9e724d68fc22902a1435351f84c3fb8623f303fffcc566a4cb952df8c572cff0  itsdangerous-2.0.1.tar.gz
-+md5  c1bc730ddf53b8374eaa823f24eb6438  itsdangerous-2.1.2.tar.gz
-+sha256  5dbbc68b317e5e42f327f9021763545dc3fc3bfe22e6deb96aaf1fc38874156a  itsdangerous-2.1.2.tar.gz
- # Locally computed sha256 checksums
- sha256  63af09891b6be8ad1a4252ed43af0f4efba7fc948e228367bed7f3c5ae0b09d7  LICENSE.rst
- sha256  c9362a7258a11c84a8f7e825ccbbb5c425c6fc02368d3aee6494533fb99ba1f4  docs/license.rst
-diff --git a/package/python-itsdangerous/python-itsdangerous.mk b/package/python-itsdangerous/python-itsdangerous.mk
-index c53bc6b9ba..d7a1344e0a 100644
---- a/package/python-itsdangerous/python-itsdangerous.mk
-+++ b/package/python-itsdangerous/python-itsdangerous.mk
+diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
+index fb6e457ad5..81d19c419e 100644
+--- a/package/python-click/python-click.hash
++++ b/package/python-click/python-click.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/click/json
+-md5  53692f62cb99a1a10c59248f1776d9c0  click-7.1.2.tar.gz
+-sha256  d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a  click-7.1.2.tar.gz
+-# Locally computed sha256
++md5  a804b085de7a3ff96968e38e0f6f2e05  click-8.1.3.tar.gz
++sha256  7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e  click-8.1.3.tar.gz
++# Locally computed sha256 checksums
+ sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.rst
+diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
+index a829257f5e..6444d0148e 100644
+--- a/package/python-click/python-click.mk
++++ b/package/python-click/python-click.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ITSDANGEROUS_VERSION = 2.0.1
-+PYTHON_ITSDANGEROUS_VERSION = 2.1.2
- PYTHON_ITSDANGEROUS_SOURCE = itsdangerous-$(PYTHON_ITSDANGEROUS_VERSION).tar.gz
--PYTHON_ITSDANGEROUS_SITE = https://files.pythonhosted.org/packages/58/66/d6c5859dcac92b442626427a8c7a42322068c5cd5d4a463ce78b93f730b7
-+PYTHON_ITSDANGEROUS_SITE = https://files.pythonhosted.org/packages/7f/a1/d3fb83e7a61fa0c0d3d08ad0a94ddbeff3731c05212617dff3a94e097f08
- PYTHON_ITSDANGEROUS_SETUP_TYPE = setuptools
- PYTHON_ITSDANGEROUS_LICENSE = BSD-3-Clause
- PYTHON_ITSDANGEROUS_LICENSE_FILES = LICENSE.rst docs/license.rst
+-PYTHON_CLICK_VERSION = 7.1.2
++PYTHON_CLICK_VERSION = 8.1.3
+ PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
+-PYTHON_CLICK_SITE = https://files.pythonhosted.org/packages/27/6f/be940c8b1f1d69daceeb0032fee6c34d7bd70e3e649ccac0951500b4720e
++PYTHON_CLICK_SITE = https://files.pythonhosted.org/packages/59/87/84326af34517fca8c58418d148f2403df25303e02736832403587318e9e8
+ PYTHON_CLICK_LICENSE = BSD-3-Clause
+ PYTHON_CLICK_LICENSE_FILES = LICENSE.rst
+ PYTHON_CLICK_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
