@@ -4,96 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA2F2C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 05:01:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3071C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jun 2022 05:07:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7615C82EB4;
-	Thu,  2 Jun 2022 05:01:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A15782F03;
+	Thu,  2 Jun 2022 05:07:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JTnoMAYgKQTB; Thu,  2 Jun 2022 05:01:38 +0000 (UTC)
+	with ESMTP id NCJarJPu__xQ; Thu,  2 Jun 2022 05:07:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9703E82EAD;
-	Thu,  2 Jun 2022 05:01:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3985E1BF292
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 05:01:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DB8D82EAD;
+	Thu,  2 Jun 2022 05:07:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 29D4F1BF865
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 05:07:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 27B3840922
- for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 05:01:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 18BA340328
+ for <buildroot@lists.busybox.net>; Thu,  2 Jun 2022 05:07:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=tpm.dev
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M92sWxCR8ek5 for <buildroot@lists.busybox.net>;
- Thu,  2 Jun 2022 05:01:34 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from delivery.mailspamprotection.com
- (delivery.mailspamprotection.com [185.56.84.31])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A653D40743
- for <buildroot@buildroot.org>; Thu,  2 Jun 2022 05:01:34 +0000 (UTC)
-Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
- helo=es87.siteground.eu)
- by se29.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
- (Exim 4.92) (envelope-from <dimi@tpm.dev>)
- id 1nwcxY-000H4l-7N; Thu, 02 Jun 2022 00:01:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tpm.dev;
- s=default; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
- In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=WIwqSXcoZS7YnacoC5ZUh2y2eoI3f9+xUq7TH6/VmFU=; b=OUe1xr8CtGbUBz2/XRA1hjhuuM
- UvjoM2RidGDrGhp26b8XEed+VnYpkif2jBqjMERnwlNPv70lubL5Tq1AA33Bs3o239tQT/mioQdZb
- h6AI1i4pVcALX99m07Zs5blammZyH+B4UVWCa1jjNDnazdhxMZE+0I+2r4r+UFHoWDoHUYpPm/Kj1
- +qobe1xrcxRtO/M8MWJmw0RsDhw0zEeIJZJWrdtqZr/y4O//jAlrrElgW8MN05Ife9XUwvJc6c/50
- hMwY6bAUGiGLSmtRfbcnYKo+L/HDJnnlir7ivc9jX67uM77c5hlKW9QtkVbVytaloTVESiu26zXL/
- QZpx2gBw==;
-Received: from [127.0.0.1] (port=59330 helo=es87.siteground.eu)
- by es87.siteground.eu with esmtpa (Exim 4.90-.1)
- (envelope-from <dimi@tpm.dev>)
- id 1nwcxW-000J7h-EJ; Thu, 02 Jun 2022 05:01:22 +0000
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OYYutCHGsNw2 for <buildroot@lists.busybox.net>;
+ Thu,  2 Jun 2022 05:07:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B4BAC400E5
+ for <buildroot@buildroot.org>; Thu,  2 Jun 2022 05:07:01 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ h62-20020a1c2141000000b0039aa4d054e2so4167062wmh.1
+ for <buildroot@buildroot.org>; Wed, 01 Jun 2022 22:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=SVXCoCdLGMFXgW5dMWXyMIXYtqcMtrDXPj3jnz91O6Q=;
+ b=abMPy1y+Xo7vBE8JaJUdnDivRzkOxkfW/rH1VAWVfKPTvdVW9j5HI5vjqJan9LVUhN
+ fxB0QGxTN1FZ1Zkj7fyvdYm8Fc5sB2lSRix+qN52rZBznDiA1bnX9EKNUfJmeef4wn8e
+ OBVvIw0xYlZPOfep8SOgt8V6ZNIus/Pb67klz5xrkPDyFkN3ob7KZg/NhRmAlMqKN/ML
+ PGrEhOBkHMQUwt8jEmy5PGDyWI29i46ZcmqIaZ0ophyGCQ24hi2l6pDwDcU4RH5cRCdA
+ /B90Z/1fuupFv/NVpCXFYn1l67Uv7FUV7qU5HrV8Qh3vXb6wg/h/bafpA15VdSp8kd9l
+ 1IzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=SVXCoCdLGMFXgW5dMWXyMIXYtqcMtrDXPj3jnz91O6Q=;
+ b=cgJmMEMYnyvkiIbzXXZqgpQt0UJEAoc1e7U+SOUd8l4pRa+hMxPtP3jUE3zG+6c4++
+ 8wxdQJT7a/1dM3+hyZ0xgfaabmw6j1NnxaEGNRgRpRXCdU3tTfHtXTRxMERG4q+F6p+7
+ xLBAB+F0SUn8v4/uADjsaX7tiWdfWIU1pkCwge/1VSwYAM2gtm7t7YEIy32DfH+HpUzJ
+ B9CK3MrSFp3/riEvTqBttkiAFbo+Xnih/Rx389YnLZ0JCITH8+LEPvO7ry4Ii+6Pg9+g
+ nnp8CctkE0OtlPf8q/UsizXc1DeJ6knYHHcS+bE85X5A6jPYDva22F4J8JMMMal+q7a5
+ Wy1g==
+X-Gm-Message-State: AOAM5302VVytHqmjd/g7PU72V9eHc/eSWI9uBOobmlGbxsF0upn1jP3T
+ euOfZgOADGqX0C3a4wLJexHOLaevi2FsETWyAvTtvE6i
+X-Google-Smtp-Source: ABdhPJxfdA3+DhTa44cGmDZQoRYNX98kp61DqoAXse7Ol0yHXpKJO0zaTN3yChpGrthkB+3WeHs3PqnibyRZveewLv0=
+X-Received: by 2002:a1c:7207:0:b0:397:66ee:9d71 with SMTP id
+ n7-20020a1c7207000000b0039766ee9d71mr2350287wmc.8.1654146419585; Wed, 01 Jun
+ 2022 22:06:59 -0700 (PDT)
 MIME-Version: 1.0
-Date: Thu, 02 Jun 2022 08:01:22 +0300
-From: Dimi Tomov <dimi@tpm.dev>
+References: <20220531105902.204022-1-heiko.thiery@gmail.com>
+ <20220531105902.204022-5-heiko.thiery@gmail.com>
+ <20220601234310.2a956189@windsurf>
+In-Reply-To: <20220601234310.2a956189@windsurf>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 2 Jun 2022 07:06:48 +0200
+Message-ID: <CAEyMn7a2tSRXqbdmH2Kcc20a8o22+NLg6ch3bFfU6+E+042uwg@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20220601233607.336a4072@windsurf>
-References: <20220530203001.574908-1-dimi@tpm.dev>
- <20220601194746.29106-1-dimi@tpm.dev> <20220601225031.79aca2b0@windsurf>
- <4499743c804d1a5a091055a8bb58be72@tpm.dev>
- <20220601233607.336a4072@windsurf>
-Message-ID: <855061e514da0fc44a740cb6687e42ce@tpm.dev>
-X-Sender: dimi@tpm.dev
-Organization: TPM.dev
-X-Originating-IP: 35.214.247.6
-X-SpamExperts-Domain: es87.siteground.eu
-X-SpamExperts-Username: 35.214.247.6
-Authentication-Results: mailspamprotection.com;
- auth=pass smtp.auth=35.214.247.6@es87.siteground.eu
-X-SpamExperts-Outgoing-Class: ham
-X-SpamExperts-Outgoing-Evidence: Combined (0.14)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT8F7MbUHmjhpPUxTNidYKnnPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5zHcgQ1GLCGZipGdBYX2IdejIhOyETOLJV5VgRmbWjZJaaj
- T7GK+pV+DB0C1T8MJSONp1orT0zdSv/EvZ56A6zUQaXPwIlI4yu/PH1NWDdGRbMuquvcLZO/fWzt
- 9+bGf7pTtObPqIqeRAv2CqzEPfjvBK5fzIEWxOKtcShtfOYYenQg45AD+/l6P8h0+TPjaDxMfcvw
- 9uVrltEafCGDyHAgdas/VTNCC9cNG0ZUHetAVuAXlm/yIarJ6MLtuWSGk5WZn7S9PqmI7CxqPRD6
- uYFuWlL+AzdNu5X5f7NNcHGqANvvQ7y3dU9ER0LU50yMqo3HL0jq0UTY1VJNLTVaix4USb4d2v72
- 6lpj8/w5Va6KvnTD1aveotlgoppd3/OkI+ve6RqPPT75ZQBVMc+Li61b6cTrAfIBtLJVe62uoyOA
- UtfsPev7LNp/T0V6wcNiJWH6ZboosCGGDrdx/yGEn66RE9n6xcs9dAjFcdYUmx6p0CV+3YBwFTmQ
- DwcsbTdCl4f6Bfy1T3PwsUos1yNYdTOG17NirEYyqwqMBGrw8ELiqDAff04cDRXGaP/Cy6sgzmsE
- /Xy9bqh2t87xwDNJ1ZQn9Z1kUo7APEynsyHYUP3usgPt8rNcco5Lt6ku63DkksyWUQhsiRV7ToHt
- 3HSONnNjcxw3qqhc+N6cuEg4XWh5FmdlgpEWziJwQtUee+sRGgavbZh+X78RUpSCE6gsBmis0ddy
- Jhw20OyQnKtoOk9IJhv/vrSLvCUHMT/dLj+6VWWeH+mIf4ZAwT1XjbqQQ/uU0mCTpRgcoQPyBmzG
- 6HJjvZ5ECu3zMC6/UIvU+dfuPW4Fq60D0IrCERjnDPsHGlH62P/Q5P2avsXwIHCKRpn8mrgUqWtM
- kwf3MnkWOmaXxaB2Jb1rY1tO0r8h2f0Xr8lvTjrNCxinmu8YyXWCafR/2x66OQ0NojUFkvjGWF6o
- Utbn/4Ny/m4PJtdsKlQhcDiq647lNwN4qOsSZg+fYhVZG+aNsL2JRrOpejgF0fuKp2SDLX1tyhUO
- sR3FEBVf9eq5Q/RubER29Gsl7u8pEy3UTWWLX2ZbQb3UJKihEmoDuwjgD4vT+QwiY2D1YBmu6gZc
- v+1j2oorz4YWED/OKQ7wdK30zNNQQeLujWA6r47gmJ4=
-X-Report-Abuse-To: spam@quarantine1.mailspamprotection.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/wolftpm: new package
+Subject: Re: [Buildroot] [PATCH v2 4/4] boot/uboot: bump to 2022.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,54 +84,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thank you Thomas. This is awesome.
+Hi Thomas,
 
-Only FYI - I had no issues with wolfssl building from latest buildroot 
-master. My only issue was with the config.rpath autoconf file while 
-building wolftpm.
+Am Mi., 1. Juni 2022 um 23:43 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> Hello Heiko,
+>
+> On Tue, 31 May 2022 12:59:05 +0200
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> > Since U-Boot 2022.04 a host dependency to gnutls is required if the
+> > U-Boot board configuration has CONFIG_TOOLS_MKEFICAPSULE enabled. So
+> > introduce a new BR U-Boot config option BR2_TARGET_UBOOT_NEEDS_GNUTLS to
+> > solve this problem.
+> >
+> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+>
+> I've split this into two patches, one doing the bump, one adding the
+> new option.
 
-Best Regards,
-Dimi
+That makes sense.
 
-On 2022-06-02 12:36 AM, Thomas Petazzoni via buildroot wrote:
-> Hello,
-> 
-> On Thu, 02 Jun 2022 00:03:39 +0300
-> Dimi Tomov <dimi@tpm.dev> wrote:
-> 
->> Hello Thomas,
->> 
->> I have this working on a STM32MP157F-DK2 board with a ST33 TPM.
->> 
->> https://gist.github.com/tomoveu/8f0519cb8d75a5374a999f29640cf45c
->> 
->> Could it be that because I am using $make wolftpm-rebuild is saving me
->> from seeing the same errors?
-> 
-> I am not sure why you don't have the error about wolfssl being
-> unavailable. It was clearly failing to build here. I would need access
-> to your complete build log + output/build/wolftpm-<version>/config.log
-> to be able to (perhaps) say what's going on.
-> 
->> ps: Do I need to submit v4?
-> 
-> No, I said the patch was applied. It's in our next branch, see:
-> 
-> 
-> https://git.buildroot.org/buildroot/commit/?h=next&id=4bb884a3c61c6b71e33f69453a90eb2a367f64b7
-> 
-> Thanks!
-> 
+>
+> Regarding the bump, you had forgotten the update of uboot.hash with the
+> hash of the 2022.04 U-Boot tarball.
+
+Damn.
+
+> Also, there was a minor check-package warning related to the formatting
+> of the help text in the Config.in file.
+>
+> So, overall, applied to next, with the above issues fixed. Thanks a lot!
+
+Thanks for doing that.
+
 > Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
 
 -- 
-Founder of TPM.dev
+Heiko
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
