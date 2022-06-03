@@ -1,87 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66AF2C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jun 2022 04:49:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CB8BC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jun 2022 05:01:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E897E83FFA;
-	Fri,  3 Jun 2022 04:49:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 170394194B;
+	Fri,  3 Jun 2022 05:01:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6T3VA4Z6aFaV; Fri,  3 Jun 2022 04:49:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D6E8083FC6;
-	Fri,  3 Jun 2022 04:49:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CD5231BF2CF
- for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 04:49:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA7F041927
- for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 04:49:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=paral.in
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bsxj1LAOv9ZO for <buildroot@lists.busybox.net>;
- Fri,  3 Jun 2022 04:49:10 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id igkv_t026Zog; Fri,  3 Jun 2022 05:01:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 046784192F;
+	Fri,  3 Jun 2022 05:01:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9EAEE1BF2CF
+ for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 05:01:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89BB383FC7
+ for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 05:01:34 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gUh2nnmnDuf8 for <buildroot@lists.busybox.net>;
+ Fri,  3 Jun 2022 05:01:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 53FA241922
- for <buildroot@buildroot.org>; Fri,  3 Jun 2022 04:49:10 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id w27so8670215edl.7
- for <buildroot@buildroot.org>; Thu, 02 Jun 2022 21:49:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=/1mhnkzX4mz5kmAoeE1OZl1Xx5GCkE/NYTWc/+yuX0A=;
- b=OPOOUKJCfpNyKdbvizci+k7A+cSH4t3KIoobpWl9gQ6SD0UjqniNJ+SPJqfq1zxjrL
- xI2St1RbJfCC+nvCs1mF7lglVIU9MClLnDkIdbUHPcSiaLmzUHBP0kpz15kutawT1O+z
- TanIeCztnDjJjEYxHT/eYKr6DaD+r64PJFGBYgmfXUehI2CTBqmWmQN2Io9+5ZWlW6MZ
- zzFXaeX0Eqjbegdz1GQ9GQsq5vk9CePsHK4Kw5MJAd8L39l/uYjXdeiPemtq2vUXid6E
- 7WeVGuw56Cg8R6X/x/+rZ2KT8E7iu5rMybmn+APSRhrrL2bPePw2o9ox9yQljVe4Yaga
- /+/Q==
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B646E83F7A
+ for <buildroot@buildroot.org>; Fri,  3 Jun 2022 05:01:33 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id f7so4962698ilr.5
+ for <buildroot@buildroot.org>; Thu, 02 Jun 2022 22:01:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=0K7i0kYNuDjEX280gD76acRq85cOYej1/vdfzSsaDIE=;
+ b=jhDdaJxIfmbIeEn5ZKTjnoxDkcL+VKAw+6gcHqlm+Nd2UfORMUUHJi+/WQ9B+cRwrV
+ daFEQkTvaEvVmzr9gNX3NmzhG/QdkremR4K6e0Fxmjf9uHRs8x6YGrPNCqONSwOM5Uw3
+ yBJvOcYF1DWdtiu6lvLwvJ9qyruzBTjgfkbiE249YXO2alsPzr9faXnKnkmnjZ+5cBvi
+ QwXIOMMI7VJvwA4AZQ+vtyyP4vAeMlgRPp4d/AyOq2mee8UAs+V3yfAX0cFz4j4pYwmp
+ SI9rHoUijSo1c+0yhWyNkKRZCNlcwxVypqr+RctJysl48znO7YpngnH3j1TK/NDNwx3Y
+ QcEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=/1mhnkzX4mz5kmAoeE1OZl1Xx5GCkE/NYTWc/+yuX0A=;
- b=XbYDubrRbnt28Cslqca3clz8TrAp1iAa/FrUxYCkdMspVxYvEFpZFmJHePkwHS9q2X
- jHF1fqwR0+H3MHDNxgyfnHn+I2DwGEpnvO9mXPhvf9ll8kaGG2U1r+8lsmegklvOfXJ3
- bonsNWbk4lf68BDYT/ZLWyS51TCUaqA3X8RzTCEQ7RzJh6g4hX/FpmQ1t5Jkc3r00NcU
- JW/K6MgNA7dKWpyFumG7DJ8OVxxahbxZ7N4GeISZvQRW/D6P5k/m4XtVczyK1yQPL+nw
- t2Ls/nzT2dpz9TGsCRCWR4lAt5hxFyBVcaXwl3jwMnW4VkT4odyT6O0fuamedolFbfLG
- 2WhQ==
-X-Gm-Message-State: AOAM531rmWMOH1TSSkEKaFPQp0Q6g1a2Epow6IseqCWR07mZ8NxIJ+pP
- tlkR5hotw2H1htQYjcuNkr8R/Req3jq/c/oa
-X-Google-Smtp-Source: ABdhPJz53Nq0hxhbcvjUytePvtdDuF/RDKhL08g4Uk4AW2fhQFOYRnTcEHUoGxlUzU/6N1RjkFlxHg==
-X-Received: by 2002:a05:6402:50d4:b0:42e:686:df55 with SMTP id
- h20-20020a05640250d400b0042e0686df55mr8586173edb.403.1654231748328; 
- Thu, 02 Jun 2022 21:49:08 -0700 (PDT)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com.
- [209.85.208.50]) by smtp.gmail.com with ESMTPSA id
- z8-20020aa7c648000000b0042e309906desm445219edr.58.2022.06.02.21.49.07
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 02 Jun 2022 21:49:07 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id h19so8733471edj.0
- for <buildroot@buildroot.org>; Thu, 02 Jun 2022 21:49:07 -0700 (PDT)
-X-Received: by 2002:a05:6402:90d:b0:428:bda9:3e6b with SMTP id
- g13-20020a056402090d00b00428bda93e6bmr8798887edz.132.1654231747409; Thu, 02
- Jun 2022 21:49:07 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=0K7i0kYNuDjEX280gD76acRq85cOYej1/vdfzSsaDIE=;
+ b=tA+HrIhL0Q08gBi8CigP0T08dDy0sJLxC+lo3hP0i4kjw9oDgnuNSXwVLt0ndkaXbu
+ 1mga7m2efAkELf1c8tzY9k1HE224vSEEoIdw8G426/gVbSPOQE1YxyGoinDUA9tBF+vN
+ h0FBAWfp2vrtvb9yzurGaEP+dM5ISVpuWYwZB9nubKvn79uGDgOuQpF3QTjUejdi/ZlA
+ /cbRTdpBNut+UtvZZn5jllRxmHpV6OeqsglD40kB3R/LGyBgWN26xZrjHaNGJ9qJXrtN
+ sxyWCgT3CyqHU/63PM4SXp+CbRieKwoXi4PkdpB5ynWdT7iq9hnpTY50QrF+cXo9nUpr
+ 0G6A==
+X-Gm-Message-State: AOAM533dJHOz5oKrPmpjtirYfHtjNWAGR6/J33ODN3Pue3/oniOHgXq0
+ lu+0SPgtc8VxbFDEr+sd1BKqb82clQo=
+X-Google-Smtp-Source: ABdhPJxe24nRMGz+bL1y6qm9a6PkY9TIp3kEeQGK3wxYO3/Wan8H/4HG8VUS0RpV/jiqJOwT3wl2UQ==
+X-Received: by 2002:a05:6638:138f:b0:32e:dbe4:8ef4 with SMTP id
+ w15-20020a056638138f00b0032edbe48ef4mr4619852jad.283.1654232492521; 
+ Thu, 02 Jun 2022 22:01:32 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-113-86.hlrn.qwest.net.
+ [71.218.113.86]) by smtp.gmail.com with ESMTPSA id
+ p14-20020a056e02104e00b002d3ef369c95sm1289119ilj.31.2022.06.02.22.01.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 02 Jun 2022 22:01:31 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  2 Jun 2022 23:01:30 -0600
+Message-Id: <20220603050130.920429-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <62999194.1c69fb81.b5e75.5008SMTPIN_ADDED_MISSING@mx.google.com>
-In-Reply-To: <62999194.1c69fb81.b5e75.5008SMTPIN_ADDED_MISSING@mx.google.com>
-Date: Thu, 2 Jun 2022 21:48:56 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2rTCXB1bu4_0Pwxx7yzkYrY9P8DTbkSTuKM8bEa50dJVA@mail.gmail.com>
-Message-ID: <CA+h8R2rTCXB1bu4_0Pwxx7yzkYrY9P8DTbkSTuKM8bEa50dJVA@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2022-06-02
+Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.62.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,27 +86,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Thu, Jun 2, 2022 at 9:44 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->   aarch64    |         host-go-1.18.2         | http://autobuild.buildroot.net/results/24c9186f5583e2849fa1753f3bc3cfb1441c5a4e
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 2037c46bbc..33bd8b6eb9 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.62.1/meson-0.62.1.tar.gz.asc
+-sha256  a0f5caa1e70da12d5e63aa6a9504273759b891af36c8d87de381a4ed1380e845  meson-0.62.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.62.2/meson-0.62.2.tar.gz.asc
++sha256  a7669e4c4110b06b743d57cc5d6432591a6677ef2402139fe4f3d42ac13380b0  meson-0.62.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 6d55f19402..8bc7848705 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 0.62.1
++MESON_VERSION = 0.62.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
+-- 
+2.25.1
 
-Building with musl on aarch64, pthread not defined errors,
-
-is BR2_TOOLCHAIN_HAS_THREADS set with musl, and if so, is pthread
-available there?
-
-Thanks,
-Christian
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
