@@ -1,77 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13ECDC43334
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jun 2022 08:01:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9A85C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jun 2022 08:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 866A284292;
-	Fri,  3 Jun 2022 08:01:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2DF4241A22;
+	Fri,  3 Jun 2022 08:02:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GyyzWKKCUg5B; Fri,  3 Jun 2022 08:01:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gFviKCFYoYwX; Fri,  3 Jun 2022 08:02:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A146A84162;
-	Fri,  3 Jun 2022 08:01:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDDAA419D1;
+	Fri,  3 Jun 2022 08:02:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 180A61BF362
- for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 08:01:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9CB6E1BF362
+ for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 08:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14BC9400F3
- for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 08:01:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8AD23400F3
+ for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 08:02:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=linaro.org
+ dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xVzBOoDICls4 for <buildroot@lists.busybox.net>;
- Fri,  3 Jun 2022 08:01:04 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
- [IPv6:2607:f8b0:4864:20::230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B553D400AF
- for <buildroot@buildroot.org>; Fri,  3 Jun 2022 08:01:04 +0000 (UTC)
-Received: by mail-oi1-x230.google.com with SMTP id u79so4104296oie.5
- for <buildroot@buildroot.org>; Fri, 03 Jun 2022 01:01:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=YyB7TCu7aHO8+lbBF9SavOrrz5W0rmNckKKw3nGS5Xg=;
- b=EWdIk31WLa6d1pZ9XpF/scOBg/mXREEdE2KID3XHxN1d6OwCrjP8Gw3N2poCtEz7vj
- qEY9f6bJwjvgwr1f9cJrvQauug36TL5T/+zJjrzUznYHGST1cVhsPC9/ChRPrB0Xa4Dx
- 0ey8PNDCZOPhvgXlort50E/Ca51OYRRSg+G9QCvyITkDB+Jhg2JnBetRGj50HZEbYgri
- FutXfQwE1iW2aBu0euEMHiEYzr8kuKy34bMDTKnNitYjXNlFksMgo5sHtI06KcWCdqcR
- kxeTG9mUIhDoYTCqf6ZczZGYSCYEzdLelwlQ76E4EW6V5uqRhnO4tupuHTa1f/66DzQm
- zjbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=YyB7TCu7aHO8+lbBF9SavOrrz5W0rmNckKKw3nGS5Xg=;
- b=A6Zen/HBS7HSj5hHBn70xskaPj6OfRa4M8tUqREgo9gfuBBiEP+czn6vfevWIeNw88
- V4WHfb86FVlOxZ1Da9qMHg/xbKKvfDSWMHU6tH39O3PFmkbjzdT+kHioBFRLzLSQe5gG
- ELFESBhnj3sImc25+r94K6usPPt4jTfqks6RIPCL9b5fUyV86sOgGf6X2iX02BMeD8Iv
- K76RDAcglN15gu5qXEq7XX6dKtZugckVYzlSpyWLn3e15GIF6WjQc/1GgB6z1A/XFq1i
- RjKHkYZSnuzpRAHpKAqoazxUFMafp85FfP48kXv/pdirtpv9godjY7znn5TzA+9NZX59
- nVhw==
-X-Gm-Message-State: AOAM5313Daab5SJci5quEYZjXLolMZLiIPpAi9uhKgC57Gxs+W42NF96
- UuheyMTY0PsyXGE0CBPsQTmjB3QXpbNSREULDWvCLta0+4PiBw==
-X-Google-Smtp-Source: ABdhPJz5HQxwz8MwLdAm0qXVvqtHZO087t2AGbE5xZihkzrfMlxGfIluxw28hzmnY2goz6MvB7mVvkS41hi3RWQWxNg=
-X-Received: by 2002:a05:6808:124a:b0:32c:45f0:5011 with SMTP id
- o10-20020a056808124a00b0032c45f05011mr4748384oiv.217.1654243263595; Fri, 03
- Jun 2022 01:01:03 -0700 (PDT)
+ with ESMTP id iMC90F09kB3k for <buildroot@lists.busybox.net>;
+ Fri,  3 Jun 2022 08:02:53 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0EA77400AF
+ for <buildroot@buildroot.org>; Fri,  3 Jun 2022 08:02:52 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8DBD6240006;
+ Fri,  3 Jun 2022 08:02:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1654243369;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=rumSkiNN2c1L1GNQ2u56d9egWPu3lrJZCHcHrQDjbLg=;
+ b=CfqPQbCBp/I9jVlx4R8OV9IKQPxQcm0PsFbm7mwu2TJF+qPcsOPlelQZzY5fKJ0DZyDjQF
+ 5bEokVbTX0Dsrq/zIa8mXijU0lL9d1nYlJj4DGgXn0eeylZdfaW7nelAOHP7JDA4XromEZ
+ UesnN3ukbGjs5U00K9J6Ojlq9WhbI6Bc6CytyM7zv/11t3F3b9UxDoxOq06a7d01osTiZK
+ 9XCdSYDBBsRtIM58ofuC+dbSE+AGRq49GYF8qh7FGpIyafeehLBxVeARr7ufHsfFXGElZU
+ cETl5C7QViXMdQrZDJFGYAmn505XVBKKdWp0fL2Xkf3dllXaIByAeeOI6lIz9w==
+Date: Fri, 3 Jun 2022 10:02:48 +0200
+To: Christian Stewart <christian@paral.in>
+Message-ID: <20220603100248.01f89db7@windsurf>
+In-Reply-To: <CA+h8R2rTCXB1bu4_0Pwxx7yzkYrY9P8DTbkSTuKM8bEa50dJVA@mail.gmail.com>
+References: <62999194.1c69fb81.b5e75.5008SMTPIN_ADDED_MISSING@mx.google.com>
+ <CA+h8R2rTCXB1bu4_0Pwxx7yzkYrY9P8DTbkSTuKM8bEa50dJVA@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220602090012.2008381-1-kory.maincent@bootlin.com>
- <20220602090012.2008381-2-kory.maincent@bootlin.com>
-In-Reply-To: <20220602090012.2008381-2-kory.maincent@bootlin.com>
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 3 Jun 2022 10:00:52 +0200
-Message-ID: <CAN5uoS-i+Yr8gAVa=BP-1OkrDgZ_6p_z308U2npzhV9h3EAb_A@mail.gmail.com>
-To: kory.maincent@bootlin.com
-Subject: Re: [Buildroot] [PATCH 2/2] boot/optee-os: add support to build
- with python-pillow
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2022-06-02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,78 +71,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Kory,
+Hello,
 
-On Thu, 2 Jun 2022 at 11:00, <kory.maincent@bootlin.com> wrote:
->
-> From: Kory Maincent <kory.maincent@bootlin.com>
->
-> SOC constructor version of optee-os may uses python-pillow to build the
+On Thu, 2 Jun 2022 21:48:56 -0700
+Christian Stewart <christian@paral.in> wrote:
 
-s/uses/use/
+> Thomas,
+> 
+> On Thu, Jun 2, 2022 at 9:44 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >   aarch64    |         host-go-1.18.2         | http://autobuild.buildroot.net/results/24c9186f5583e2849fa1753f3bc3cfb1441c5a4e  
+> 
+> Building with musl on aarch64, pthread not defined errors,
+> 
+> is BR2_TOOLCHAIN_HAS_THREADS set with musl, and if so, is pthread
+> available there?
 
-> Trusted User Interface feature.
-> Add support to build these specific versions by adding a new
-> BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_PILLOW option which will
-> select host-python-pillow dependency.
->
-> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-> ---
+Well, there are several symbols causing problem which are not related
+to pthread:
 
-LGTM (Acked-by: Etienne Carriere <etienne.carriere@linaro.org>) with 2
-minor spelling issues.
+runtime/cgo(.text): relocation target stderr not defined
+runtime/cgo(.text): relocation target fwrite not defined
+runtime/cgo(.text): relocation target vfprintf not defined
+runtime/cgo(.text): relocation target fputc not defined
+runtime/cgo(.text): relocation target abort not defined
 
+so I'm not sure the issue is pthread related here. Obviously musl does
+implement fwrite, fputc, etc.
 
+And yes, musl implements pthread, so BR2_TOOLCHAIN_HAS_THREADS is true
+for musl-based configurations.
 
->  boot/optee-os/Config.in   | 7 +++++++
->  boot/optee-os/optee-os.mk | 4 ++++
->  2 files changed, 11 insertions(+)
->
-> diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-> index fb8a189a75..b459393191 100644
-> --- a/boot/optee-os/Config.in
-> +++ b/boot/optee-os/Config.in
-> @@ -72,6 +72,13 @@ config BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY
->           python-cryptography. Select this option if optee-os needs
->           python-cryptography to be built.
->
-> +config BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_PILLOW
-> +       bool "OP-TEE OS needs host-python-pillow"
-> +       help
-> +         OP-TEE OS version from SOC manufacturer may use python-pillow
-> +         to build the Trusted User Interface feature.
-> +         Select this option if optee-os need python-pillow to be built.
+Best regards,
 
-s/need/needs/
-
-> +
->  config BR2_TARGET_OPTEE_OS_CORE
->         bool "Build core"
->         default y
-> diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-> index 5313a1badc..88f14b48e4 100644
-> --- a/boot/optee-os/optee-os.mk
-> +++ b/boot/optee-os/optee-os.mk
-> @@ -29,6 +29,10 @@ else
->  OPTEE_OS_DEPENDENCIES += host-python-pycryptodomex
->  endif
->
-> +ifeq ($(BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_PILLOW),y)
-> +OPTEE_OS_DEPENDENCIES += host-python-pillow
-> +endif
-> +
->  ifeq ($(BR2_TARGET_OPTEE_OS_NEEDS_DTC),y)
->  OPTEE_OS_DEPENDENCIES += host-dtc
->  endif
-> --
-> 2.25.1
->
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
