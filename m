@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19D90C43334
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jun 2022 13:49:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 825A7C43334
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jun 2022 14:03:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A07F6401B2;
-	Fri,  3 Jun 2022 13:49:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A794405FA;
+	Fri,  3 Jun 2022 14:03:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PSlzbpAZ8ctl; Fri,  3 Jun 2022 13:49:34 +0000 (UTC)
+	with ESMTP id Qfb0iQjH8DWj; Fri,  3 Jun 2022 14:03:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B2A86409C8;
-	Fri,  3 Jun 2022 13:49:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 82CA51BF2F6
- for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 13:49:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 538D4405DD;
+	Fri,  3 Jun 2022 14:03:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 099F71BF2F6
+ for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 14:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70F83405DD
- for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 13:49:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0639183FE8
+ for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 14:03:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id graeXUHlSKj8 for <buildroot@lists.busybox.net>;
- Fri,  3 Jun 2022 13:49:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CD7D5401B2
- for <buildroot@buildroot.org>; Fri,  3 Jun 2022 13:49:30 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 2AE7D440478;
- Fri,  3 Jun 2022 16:49:20 +0300 (IDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1654264160;
- bh=B9f8+rNdPcPyE0zLXqKgfjEieYJUkC1UNDjCFK/fWx8=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=JKCfEen8VKLjERT19pHsySA+aHh2sO1b0euvBvAaAm3H4hnkEPL7GSQDhAFBo8xnt
- ATvyWQTlq8kEv9fiUHzKYZhrLt8BSefXcWIQpuov6K8T5u96F2Q+ecN3unAq6ot8fR
- qK5p8h86XfAVE526b9ZilEOSfOkbbVR9pB/79hFJhSP6mlOnUzgm5BBULG2kYAkUCX
- O78nzxEMQGUG31uMGK0fUNf8XPMBhT8BGaOxE2PbBuKOQfDeUGYkuVHq5ccQtqwWGi
- VoES9q48m9e4QiVDtr8ZMWCi2rkuJd2y53OEK2bW4XSxMprpGSk5KUkqtP+KWE8Gir
- 57uqO6rDQPn0A==
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Imf3Yn4QgeAX for <buildroot@lists.busybox.net>;
+ Fri,  3 Jun 2022 14:03:11 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7114283FB9
+ for <buildroot@buildroot.org>; Fri,  3 Jun 2022 14:03:11 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id F0DDFFF803;
+ Fri,  3 Jun 2022 14:03:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1654264988;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=nomnm72Aj5v+pLdrXnk19YTCJtfKCK+xyBvagmRpuUM=;
+ b=Dk5gw287bWtLYnipPnVrX4ixyAwwmdaJ24dJ7Y9RdT4KSMYHt+tWOVk16S1b3ZR47KCtXW
+ ECLpcqhuk7sJmUwG5Jr5tqRe4HU8lxyusy6YgYyIPiFKW5cJICPPyuUY5VNBaV/fRM4qfO
+ Cs5C/qbjV/CFrcrVIfwY0eynVv1G2NUewsMnkz9eLM7abftOJZJbKwzE51lvuwX4JiCUnb
+ x1WpbSUv5FGBcu//02gfLtEMu9qKK5+XYDoLGWoAGR1yil+k93tGdIpCEsQq8oNGC1lXEA
+ 7LLNEjJ1bfJJHiQVRKnwiIJ911CB6It4iFL5YbI04bxR4hajSOUA79JWfFKwuw==
+Date: Fri, 3 Jun 2022 16:03:06 +0200
+To: Baruch Siach <baruch@tkos.co.il>
+Message-ID: <20220603160306.00960433@windsurf>
+In-Reply-To: <871qw5eu1l.fsf@tarshish>
 References: <CALtfCQaLxNdrKhSjMfShjb-nQWUnqa3DSOwbyZm1+Q0fU1UUqQ@mail.gmail.com>
  <87zgjapr8a.fsf@tarshish>
  <CALtfCQaBG_p15ASxYKSyZhYOePW5uE-BW8F1KG7DkPeJ8bjLiw@mail.gmail.com>
@@ -58,11 +65,9 @@ References: <CALtfCQaLxNdrKhSjMfShjb-nQWUnqa3DSOwbyZm1+Q0fU1UUqQ@mail.gmail.com>
  <875ylup27u.fsf@tarshish>
  <CADvTj4r=46JdJUPSzOXgmXVDBWYDM3v5wsFjymbzGF1xoyzO4Q@mail.gmail.com>
  <871qwiozwd.fsf@tarshish> <20220602190001.0c4c9f35@windsurf>
-User-agent: mu4e 1.6.10; emacs 27.1
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 03 Jun 2022 16:47:21 +0300
-In-reply-to: <20220602190001.0c4c9f35@windsurf>
-Message-ID: <871qw5eu1l.fsf@tarshish>
+ <871qw5eu1l.fsf@tarshish>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Subject: Re: [Buildroot] How to select python-cryptograhy package
 X-BeenThere: buildroot@buildroot.org
@@ -76,8 +81,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: James Hilliard <james.hilliard1@gmail.com>,
  Oscar Gomez Fuente <oscargomezf@gmail.com>,
  Baruch Siach via buildroot <buildroot@buildroot.org>
@@ -86,60 +91,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+On Fri, 03 Jun 2022 16:47:21 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-On Thu, Jun 02 2022, Thomas Petazzoni wrote:
-> On Wed, 25 May 2022 10:01:06 +0300
-> Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
->
->> The '*' in the table indicates no_std, that is, bare metal. That's most
->> likely not what we want for Buildroot. Can we map BR2_ARM_CPU_ARMV8A to
->> armv7 line the following:
->> 
->> diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
->> index a86d95236d90..6aac703b2a4f 100644
->> --- a/package/rustc/Config.in.host
->> +++ b/package/rustc/Config.in.host
->> @@ -42,6 +42,8 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_HOST_TOOLS_PLATFORMS
->>  	default y if BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
->>  	# armv7-unknown-linux-gnueabihf
->>  	default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
->> +	# armv8-unknown-linux-gnueabihf
->
-> I think this comment would be misleading. Indeed, based on this
-> comment, you could think that for this configuration (BR2_arm &&
-> BR2_ARM_CPU_ARMV8A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC) we
-> would use the armv8-unknown-linux-gnueabihf variant of rustc, but
-> that's not the one we would be using.
+> > I think this comment would be misleading. Indeed, based on this
+> > comment, you could think that for this configuration (BR2_arm &&
+> > BR2_ARM_CPU_ARMV8A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC) we
+> > would use the armv8-unknown-linux-gnueabihf variant of rustc, but
+> > that's not the one we would be using.  
+> 
+> So what should be put in that comment? Just
+> 'armv7-unknown-linux-gnueabihf' like we do for BR2_ARM_CPU_ARMV7A?
 
-So what should be put in that comment? Just
-'armv7-unknown-linux-gnueabihf' like we do for BR2_ARM_CPU_ARMV7A?
+Maybe a bit more, to clarify that it's ARMv8 used in 32-bit mode, so we
+use the armv7 Rust toolchain.
 
-baruch
-
->
->> +	default y if BR2_arm && BR2_ARM_CPU_ARMV8A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
->>  	# mips-unknown-linux-gnu
->>  	default y if BR2_mips && BR2_TOOLCHAIN_USES_GLIBC && !BR2_MIPS_CPU_MIPS32R6
->>  	# mips64-unknown-linux-gnuabi64
->> @@ -86,6 +88,8 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_PLATFORMS
->>  	default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABI && BR2_TOOLCHAIN_USES_MUSL
->>  	# armv7-unknown-linux-musleabihf
->>  	default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_MUSL
->> +	# armv8-unknown-linux-musleabihf
->> +	default y if BR2_arm && BR2_ARM_CPU_ARMV8A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_MUSL
->
-> Same comment of course here.
->
-> Other than that, it looks good to me.
->
-> Thomas
-
-
+Thomas
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
