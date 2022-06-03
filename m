@@ -1,64 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57230C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jun 2022 14:43:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 098D7C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jun 2022 15:11:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D723284091;
-	Fri,  3 Jun 2022 14:43:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D206409FA;
+	Fri,  3 Jun 2022 15:11:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vyMv1Z3lTgAp; Fri,  3 Jun 2022 14:43:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sgSirAZn0JDi; Fri,  3 Jun 2022 15:11:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 053EB84042;
-	Fri,  3 Jun 2022 14:43:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B4ED54035D;
+	Fri,  3 Jun 2022 15:11:36 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EEBE21BF2F3
- for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 14:43:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B5CD1BF2C3
+ for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 15:11:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D606041797
- for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 14:43:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18A3141712
+ for <buildroot@lists.busybox.net>; Fri,  3 Jun 2022 15:11:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vcgCPzpkxryy for <buildroot@lists.busybox.net>;
- Fri,  3 Jun 2022 14:43:24 +0000 (UTC)
+ with ESMTP id ZN0iaTgZWCsA for <buildroot@lists.busybox.net>;
+ Fri,  3 Jun 2022 15:11:30 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 222A941A2C
- for <buildroot@buildroot.org>; Fri,  3 Jun 2022 14:43:23 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 421D940010;
- Fri,  3 Jun 2022 14:43:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654267400;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=iPTKlIWKAAHz3ZA11zEvXDY3ed6rQpgK66fPyzDE1zM=;
- b=YePkqN54TjuSLCasjU/ruMsOjpb1nNqHlEpnY7XLNZV+UGgW33qaKOXqaUrcODsW1DP+3Y
- xX2KGBVbDTOyybYpnWoROAVvTBrRteLMd+/hv7Tnhs33TTNLd1HC9vWQndZd22qo68uinF
- ikDLW/WgG9kGIJ+6KbI7rcBsNXoZypYPDneKpdPCNX4aeeuN8XCQmONsIt3E0OnUXvQpJZ
- eegE/7wyIT9TvziwvaeffJTrGfJzSC8GCyiiUg3+8p8rQugBJsDlU+izv0SOSGKhnOgWvi
- md3dtLH2Khw0gDG75HjAI+Gw4Tp4aR9TFSfIabWFK+YHYbeLK10T47HTrf30og==
-Date: Fri, 3 Jun 2022 16:43:19 +0200
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20220603164319.26afc2a6@windsurf>
-In-Reply-To: <6478648f-ffb3-cda2-66ad-3758ead25319@mind.be>
-References: <e123582d-c613-f81a-ac0d-b23bc4d3e74a@cartal.fr>
- <6478648f-ffb3-cda2-66ad-3758ead25319@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3C839410B9
+ for <buildroot@buildroot.org>; Fri,  3 Jun 2022 15:11:30 +0000 (UTC)
+Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
+ by mailout09.t-online.de (Postfix) with SMTP id 09F8C13D6E
+ for <buildroot@buildroot.org>; Fri,  3 Jun 2022 17:11:27 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([84.161.188.76]) by fwd80.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1nx8xQ-1QiCFF0; Fri, 3 Jun 2022 17:11:24 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40648)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1nx8xP-0001aU-Kz
+ for buildroot@buildroot.org; Fri, 03 Jun 2022 17:11:23 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Fri,  3 Jun 2022 17:11:23 +0200
+Message-Id: <20220603151123.780877-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: Re: [Buildroot] Make 4.3 and printvars
+X-TOI-EXPURGATEID: 150726::1654269084-0143B811-52135DD8/0/0 CLEAN NORMAL
+X-TOI-MSGID: a9d1cea9-795a-4bb7-aadc-8cc27bae5e5c
+Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-mythtv: bump version
+ to 19.0.10-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,43 +62,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jean-Pierre Cartal <jean-pierre@cartal.fr>,
- Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Fri, 3 Jun 2022 16:05:18 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
-
->   I tested it myself and indeed, it works!
-> 
->   It would be great if someone could hack this into the Makefile itself (so that 
-> it recurses if ulimit -s is not high enough) and revert 25cec5ea733251.
-
-FYI, the make 4.3 bug is resolved upstream:
-
-  https://git.savannah.gnu.org/cgit/make.git/commit/?id=e49e11e069fe7f214263be1782242b9b50f71eaa
-
-I have asked upstream to issue a new release:
-
-  https://savannah.gnu.org/bugs/?59093
-
-but not feedback so far.
-
-So this workaround of "ulimit -s <highvalue>" should only be needed for
-make 4.3. Later versions are supposed to be fixed.
-
-Thomas
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index 361aa6ce92..4a261835e0 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8f872c1c395c4688759271d60bcfbe5a652490eed723582fe60662d265ea900f  kodi-pvr-mythtv-19.0.9-Matrix.tar.gz
++sha256  397de3c9b0351079097f70d5e78930503aef2ec1ffb459ac1144b6a0051f2ba9  kodi-pvr-mythtv-19.0.10-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index 4d041dc8f0..c4c393088c 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_MYTHTV_VERSION = 19.0.9-Matrix
++KODI_PVR_MYTHTV_VERSION = 19.0.10-Matrix
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
