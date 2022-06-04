@@ -1,65 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88714C43334
-	for <buildroot@archiver.kernel.org>; Sat,  4 Jun 2022 17:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0BBEC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Jun 2022 17:05:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 37AF440C39;
-	Sat,  4 Jun 2022 17:05:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC26660ED2;
+	Sat,  4 Jun 2022 17:05:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c3McZ0_zxcKS; Sat,  4 Jun 2022 17:05:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rAKRK7Mn1MJ5; Sat,  4 Jun 2022 17:05:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 457AB40A99;
-	Sat,  4 Jun 2022 17:05:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4A716079D;
+	Sat,  4 Jun 2022 17:05:52 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F2E7A1BF364
- for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 17:05:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 681ED1BF364
+ for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 17:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA3E04099E
- for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 17:05:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64A64419C7
+ for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 17:05:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ng7k94m1HP11 for <buildroot@lists.busybox.net>;
- Sat,  4 Jun 2022 17:05:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D2964419C7
- for <buildroot@buildroot.org>; Sat,  4 Jun 2022 17:05:36 +0000 (UTC)
+ with ESMTP id 6iLziQSK15n5 for <buildroot@lists.busybox.net>;
+ Sat,  4 Jun 2022 17:05:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 23F3F4099E
+ for <buildroot@buildroot.org>; Sat,  4 Jun 2022 17:05:49 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:e086:bc2a:8b9d:c22])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id EBAA45FF96;
- Sat,  4 Jun 2022 19:05:30 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 664CF5FF67;
+ Sat,  4 Jun 2022 19:05:45 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1654362334;
- bh=1i3IHlZlJtUFIVOXgz9Y5+wbmLUtrrSFBzsDzQyYFRM=;
+ s=smtp-20201208; t=1654362347;
+ bh=vpa0sUQiiThbIHmnVS+Sltc7UNUuHuwRkIq31vx/edY=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=d6Shd8D7PMhdvwxXQgQsYnVNU3/5iacRhXHQkJKdNmJD5QmRh6ZoPOBHgrE7vNFSK
- vxsm8TZwDkUb1OsLG1rheHiHJXF+JIbh1ychrT4shRf3W/qnxpYluZue1enatG2jKA
- VVqqMNRPYt+caOTj+ybXOaFTmAUw0E4hqOoidMsc2dlJ8GlZLG+O+j/qyaPEbXjfjC
- UJOoTgBW/NhF1Vn/Tjdkp/5plbm9nsJko6UrN05PcBfT4tiNe+xnk4DpN3Rt4+ZUFZ
- v6eQ+zezR80AxeRm/GTwfFWCbK7pNmmWYBDHdhQlrCQ43bLJJxFk9MRV1vSOcLktOD
- yl1I4G+fKVF2Q==
+ b=ktD2fQ53YTikKdyceg1zqRXYEmWcEQYWUMLqa9QvOc2TSbDUunpxjAPaHKM7+CQkO
+ UZt5W46L4mfJmghwv63MltdAdwItlBBrMKTgGOFNyptaZmgooqKy9tOyrLVidnlvBo
+ PAaL0gyebFY8oSo6BfLi21sP8I52FyGRMIcBPlGSVIKmeIjuRExrUtB7mQbbck9TZa
+ 8IY7lh5dDKthGf8LV9SJqJCdX6JgqXt1M0QESyGNGRWLfW6UufEaHeaL91ZKk5Rc6l
+ b6wj1gIaU1++H2EyuhTJaoS7rjNWaUmznb8ngVWvzrhHpd5P0XBrf9OapSfQwZbmkv
+ 7KwxGFfgkrdog==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 04 Jun 2022 19:05:30 +0200
-Date: Sat, 4 Jun 2022 19:05:30 +0200
+ Sat, 04 Jun 2022 19:05:45 +0200
+Date: Sat, 4 Jun 2022 19:05:45 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220604170530.GP427639@scaer>
-References: <20220519164038.918088-1-fontaine.fabrice@gmail.com>
+Message-ID: <20220604170545.GQ427639@scaer>
+References: <20220519164200.918286-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220519164038.918088-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220519164200.918286-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/zchunk: fix build with
+Subject: Re: [Buildroot] [PATCH 1/1] package/iucode-tool: fix build with
  argp-standalone and NLS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -72,7 +72,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -80,16 +80,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2022-05-19 18:40 +0200, Fabrice Fontaine spake thusly:
+On 2022-05-19 18:42 +0200, Fabrice Fontaine spake thusly:
 > Fix the following build failure with argp-standalone and NLS raised
 > since commit 5430c8fedd0392e79e0c011825b056fea129980a:
 > 
-> /home/buildroot/autobuild/instance-3/output-1/host/bin/i686-linux-gcc  -o test/zck_cmp_uncomp test/zck_cmp_uncomp.p/zck_cmp_uncomp.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 '-Wl,-rpath,$ORIGIN/../src/lib' -Wl,-rpath-link,/home/buildroot/autobuild/instance-3/output-1/build/zchunk-1.2.2/build/src/lib -Wl,--start-group src/lib/libzck.so.1.2.2 -largp -Wl,--end-group
-> /home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-3/output-1/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/libargp.a(argp-help.o): in function `arg':
-> /home/buildroot/autobuild/instance-3/output-1/build/argp-standalone-1.4.1/argp-help.c:936: undefined reference to `libintl_dgettext'
+> configure:6091: /home/autobuild/autobuild/instance-3/output-1/host/bin/x86_64-buildroot-linux-musl-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -largp   >&5
+> /home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/x86_64-buildroot-linux-musl/10.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-3/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/lib/../lib64/libargp.a(argp-parse.o): in function `argp_version_parser':
+> /home/autobuild/autobuild/instance-3/output-1/build/argp-standalone-1.4.1/argp-parse.c:181: undefined reference to `libintl_dgettext'
+> 
+> [...]
+> 
+> checking for library containing argp_parse... no
+> configure: error: An implementation of GNU Argp was not found, please install libargp
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/1242d0b15ceb816e946bfc1b31dd39e68227359f
+>  - http://autobuild.buildroot.org/results/3d2d9e27aabcd6763510238087fe25d5273d3535
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -99,27 +104,30 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/zchunk/zchunk.mk | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+>  package/iucode-tool/iucode-tool.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/zchunk/zchunk.mk b/package/zchunk/zchunk.mk
-> index 5582c21e77..fc91f90431 100644
-> --- a/package/zchunk/zchunk.mk
-> +++ b/package/zchunk/zchunk.mk
-> @@ -9,8 +9,11 @@ ZCHUNK_SITE = $(call github,zchunk,zchunk,$(ZCHUNK_VERSION))
->  ZCHUNK_LICENSE = BSD-2-Clause
->  ZCHUNK_LICENSE_FILES = LICENSE
->  ZCHUNK_INSTALL_STAGING = YES
-> -ZCHUNK_DEPENDENCIES = \
-> -	$(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone)
-> +
-> +ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-> +ZCHUNK_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
-> +ZCHUNK_LDFLAGS += $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
-> +endif
+> diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+> index 596ad268b7..b123973a90 100644
+> --- a/package/iucode-tool/iucode-tool.mk
+> +++ b/package/iucode-tool/iucode-tool.mk
+> @@ -7,11 +7,15 @@
+>  IUCODE_TOOL_VERSION = 2.3.1
+>  IUCODE_TOOL_SOURCE = iucode-tool_$(IUCODE_TOOL_VERSION).tar.xz
+>  IUCODE_TOOL_SITE = https://gitlab.com/iucode-tool/releases/raw/master
+> -IUCODE_TOOL_DEPENDENCIES = $(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone)
+>  IUCODE_TOOL_LICENSE = GPL-2.0+
+>  IUCODE_TOOL_LICENSE_FILES = COPYING
+>  IUCODE_TOOL_CPE_ID_VENDOR = iucode-tool_project
 >  
->  ifeq ($(BR2_PACKAGE_LIBCURL),y)
->  ZCHUNK_DEPENDENCIES += libcurl
+> +ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+> +IUCODE_TOOL_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
+> +IUCODE_TOOL_CONF_ENV += LIBS=$(TARGET_NLS_LIBS)
+> +endif
+> +
+>  define IUCODE_TOOL_INSTALL_INIT_SYSV
+>  	$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
+>  		$(TARGET_DIR)/etc/init.d/S00iucode-tool
 > -- 
 > 2.35.1
 > 
