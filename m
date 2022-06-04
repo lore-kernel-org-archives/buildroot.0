@@ -1,67 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0462AC43334
-	for <buildroot@archiver.kernel.org>; Sat,  4 Jun 2022 18:50:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4121BC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Jun 2022 19:06:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95DC784550;
-	Sat,  4 Jun 2022 18:50:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B676541A07;
+	Sat,  4 Jun 2022 19:06:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C0FgVcKrxK7m; Sat,  4 Jun 2022 18:50:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QoI3Fbd3B_tR; Sat,  4 Jun 2022 19:06:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1E1B84542;
-	Sat,  4 Jun 2022 18:50:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AE644198C;
+	Sat,  4 Jun 2022 19:06:45 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3C53D1BF4E4
- for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 18:50:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 82B281BF3EF
+ for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 19:06:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 38CD860B52
- for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 18:50:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 717F660759
+ for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 19:06:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id te2QqWaqQgZK for <buildroot@lists.busybox.net>;
- Sat,  4 Jun 2022 18:50:52 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
- by smtp3.osuosl.org (Postfix) with ESMTP id C0D81606EC
- for <buildroot@buildroot.org>; Sat,  4 Jun 2022 18:50:51 +0000 (UTC)
-Received: from [192.168.50.225] ([146.241.66.179])
- by Aruba Outgoing Smtp  with ESMTPSA
- id xYrInISFzcKJdxYrInHgAS; Sat, 04 Jun 2022 20:50:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1654368649; bh=exBgYSYRtjfxFqF7J4xu5KkpJLrywCH3DD2+sa01x08=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=JxwcT22OpitprEZN/VDRXyCiP6+yupTVNTVQuQjlJJLjEjc86f4hPH/Qba+wXSej4
- mq3/sYfPI0t6rL0bKriQ1KSWIgZEsJYVE8DXGsqC32tEuoBsrjb78Aco+o5gVYh6g0
- dRDUFeEFKaN9DmeGarfpc5uoexEya+QwSODZhsbKNkmqirT9LXs4SiAktQbHhqI4RX
- GyLeNkSH+ECV1PUfn/6DD1GfQDT+lj0rYJnqMji2yIukYGeCnkY6SL82IUZeD/qR/s
- U000ea9CouSY+6WIfDI3C8d302KIltX/vuocUP+uY18A7kpbpjGxcekbcm5veBLA2B
- mGDgkbbevMbDg==
-Message-ID: <a3dd0f33-eff0-8649-c33e-248482e6296b@benettiengineering.com>
-Date: Sat, 4 Jun 2022 20:50:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Arnout Vandecappelle <arnout@mind.be>
-References: <e123582d-c613-f81a-ac0d-b23bc4d3e74a@cartal.fr>
- <6478648f-ffb3-cda2-66ad-3758ead25319@mind.be>
- <20220604081933.GD427639@scaer>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220604081933.GD427639@scaer>
-X-CMAE-Envelope: MS4xfGRHMGPtzseBWB/MoG8fqzBl4DKKfuodMQxBcyda6LX32r9t4yyNsv4lmBldU4fg+XEVixhyvDNkMrpNUajfYt02P4jqmH7NKTCxHlFXbT0yuP8LiP/t
- 61ANFNDmS9TPI4KtpAQGatTi0YNmTu4ED12a6+eS0rI9xSl92BysDT9Ovu6HMPxx/gtF9k9wyvODEAqssRmIBkMSvyAeKxxUGiTj8BnCJp8l6zNbUj6c4jkY
- UAYQeqvSj940tL2eqFHB/JyFhYzLbUytt2uaZLajf4ViqO9pmx+z0phIe+qjvANPyePV4EssSrwzXxFs8sGLRA==
-Subject: Re: [Buildroot] Make 4.3 and printvars
+ with ESMTP id NDDQ-pyQ5uoM for <buildroot@lists.busybox.net>;
+ Sat,  4 Jun 2022 19:06:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 90A856060A
+ for <buildroot@buildroot.org>; Sat,  4 Jun 2022 19:06:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 5D63B86B80; Sat,  4 Jun 2022 18:54:58 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 4 Jun 2022 21:06:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cb91d2e60fd1a38d257b731e8d4b7bf067f141de
+X-Git-Newrev: f5899f480b2df8f6608051b4e586a255151fe8c1
+X-Patchwork-Hint: ignore
+Message-Id: <20220604185458.5D63B86B80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-ati: fix
+ build with newer versions of xserver
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,64 +53,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jean-Pierre Cartal <jean-pierre@cartal.fr>,
- Buildroot Mailing List <buildroot@buildroot.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=f5899f480b2df8f6608051b4e586a255151fe8c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 04/06/22 10:19, Yann E. MORIN wrote:
-> All,
-> 
-> On 2022-06-03 16:05 +0200, Arnout Vandecappelle spake thusly:
->>   Sending this in name of Jean-Pierre, who is not on the list.
->>> A quick mail to let you know that I also faced the make 4.3 printvars issue you mentioned in Buildroot mailing list.
->>> On my side increasing the stack size limit as follow:
->>> ulimit -s 16000
->>> solved this issue.
->>   I tested it myself and indeed, it works!
-> 
-> Unfortunately, it does not:
-> 
->      $ make defconfig
->      $ make allyespackageconfig
-> 
->      $ ulimit -s
->      8192
->      $ make show-vars >/dev/null
->      Segmentation fault (core dumped)
-> 
->      $ ulimit -s 16000
->      $ ulimit -s
->      16000
->      $ make show-vars >/dev/null
->      [...]
->      Segmentation fault (core dumped)
-> 
-> I guess it works by chance on "small-enough" configurations, but this is
-> still not guaranteed that it works all the times.
+Fixes:
+http://autobuild.buildroot.net/results/ccc/ccc36c8cd3530153316190f378847081cb5c1c58/
+http://autobuild.buildroot.net/results/bef/bef85a6a09bdd1d1a5035ee7baac1f2d2e7e1a2e/
+http://autobuild.buildroot.net/results/7d6/7d65c8085a1ae122da4acc296538f2277b3ec15e/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...lude-dri-h-with-older-versions-of-xserver.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-this is reason why it worked on my up-to-date Ubuntu-22.04 while only
-building libnss.
-
--- 
-Giulio Benetti
-CTO/CEO@Benetti Engineering sas
-
-> I'd rather have no workaround, than one that is half-functional.
-> 
-> Yes, the above *is* extreme, and a completely degenerate case, yet it
-> means the issue it still present for "big-enough" configurations (I
-> haven't tried to find how many packages must be enabled before we reach
-> the tripping point, but that's not the point).
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-
+diff --git a/package/x11r7/xdriver_xf86-video-ati/0004-Only-include-dri-h-with-older-versions-of-xserver.patch b/package/x11r7/xdriver_xf86-video-ati/0004-Only-include-dri-h-with-older-versions-of-xserver.patch
+new file mode 100644
+index 0000000000..a969d61913
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-ati/0004-Only-include-dri-h-with-older-versions-of-xserver.patch
+@@ -0,0 +1,32 @@
++From 5eba006e4129e8015b822f9e1d2f1e613e252cda Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>
++Date: Tue, 2 Feb 2021 12:45:54 +0100
++Subject: [PATCH] Only include dri.h with older versions of xserver
++
++Not needed anymore with current versions.
++
++Downloaded from upstream commit
++https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati/-/commit/5eba006e4129e8015b822f9e1d2f1e613e252cda
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/drmmode_display.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/drmmode_display.c b/src/drmmode_display.c
++index 3099a729..a58f24dd 100644
++--- a/src/drmmode_display.c
+++++ b/src/drmmode_display.c
++@@ -45,7 +45,9 @@
++ #include "radeon_glamor.h"
++ #include "radeon_reg.h"
++ 
+++#if XORG_VERSION_CURRENT < XORG_VERSION_NUMERIC(1,19,99,1,0)
++ #include <dri.h>
+++#endif
++ 
++ #include "drmmode_display.h"
++ 
++-- 
++GitLab
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
