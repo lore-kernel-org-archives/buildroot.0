@@ -4,63 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 652A9C43334
-	for <buildroot@archiver.kernel.org>; Sat,  4 Jun 2022 10:13:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD467C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Jun 2022 11:15:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA00241C96;
-	Sat,  4 Jun 2022 10:13:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24C6F41C41;
+	Sat,  4 Jun 2022 11:15:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J_KHW1d6eBnR; Sat,  4 Jun 2022 10:13:55 +0000 (UTC)
+	with ESMTP id 2l1SmRdKGI2D; Sat,  4 Jun 2022 11:15:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51FB241B46;
-	Sat,  4 Jun 2022 10:13:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 96CC41BF414
- for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 10:13:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A443419E3;
+	Sat,  4 Jun 2022 11:15:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7704D1BF5AA
+ for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 11:15:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 861EB84434
- for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 10:13:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 619FB419E3
+ for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 11:15:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id acvXpWtE-s5V for <buildroot@lists.busybox.net>;
- Sat,  4 Jun 2022 10:13:52 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 97B8584430
- for <buildroot@buildroot.org>; Sat,  4 Jun 2022 10:13:52 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:e086:bc2a:8b9d:c22])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 750475FF20;
- Sat,  4 Jun 2022 12:13:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1654337629;
- bh=GFy6vj4gJModLAc5mqw4Q4PMkp8kYGoPTqvtX1KwUGE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ZE6ojrG9aDnKcLFa+miTYrA/JEoYeNZRCHL7V2wFFz16m/yC4ZYg7CL5GOBTJbJdN
- knfJPiBeE9zFGZOH7SvcYjkmkYbgMI+XuFycWleuvvVVnQyGdmXn1xMTfD6aZKM3Wv
- 7SDDrTw/9wZbCBFOX1Ahl71eAG15SnDAOw2KL9Kt3GJSmB+iC+AzWrDvjNVtG6Ug1r
- GalbeHubOLDKTnDRqLK/AftEyATTn1XQVC3UKzlJSiY9Uqg0Kl5uYbRIknnqgJbvWj
- 9wv1kYdMVdiHlCkDbItK9Afk2aVCvT/v0rFgunLrf4qmUgXbBOvEGDFFBHt/Pa77nw
- S+MuDiXvIEdQQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 04 Jun 2022 12:13:46 +0200
-Date: Sat, 4 Jun 2022 12:13:46 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: David GOUARIN <dgouarin@gmail.com>
-Message-ID: <20220604101346.GH427639@scaer>
-References: <20220330160436.16357-1-david.gouarin@thalesgroup.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220330160436.16357-1-david.gouarin@thalesgroup.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-cargo.mk: fix build with
- BR2_ENABLE_DEBUG
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J3kEjvLQctCl for <buildroot@lists.busybox.net>;
+ Sat,  4 Jun 2022 11:15:12 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5C25419E2
+ for <buildroot@buildroot.org>; Sat,  4 Jun 2022 11:15:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 6465786710; Sat,  4 Jun 2022 11:03:28 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 4 Jun 2022 13:15:05 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dd66a2f0b144f7b82f9dc4f820eaec2a5ad02c9c
+X-Git-Newrev: bc3de65655d10d8a4d2d09f37051014c933eacfd
+X-Patchwork-Hint: ignore
+Message-Id: <20220604110328.6465786710@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go: update patch for go-bootstrap
+ fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,89 +53,257 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David GOUARIN <david.gouarin@thalesgroup.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-David, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=bc3de65655d10d8a4d2d09f37051014c933eacfd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-03-30 18:04 +0200, David GOUARIN spake thusly:
-> When building with BR2_ENABLE_DEBUG, cargo packages are first built with --debug,
-> then the installation step rebuilds the sources in release mode with cargo install.
-> This is because cargo install forces a rebuild when the --path option is used.
+Add a patch to fix a build failure due to the target GOARCH being used while
+bootstrapping the Go compiler with the go-bootstrap compiler.
 
-So, should we also be passing  --path ./  at build time too?
+Uses the host architecture variable instead.
 
-> This patch adds a --debug to the cargo install command line as a workaround when
-> necessary, but it does not address the root cause, which is that cargo install
-> will rebuild the sources, possibly with different build options.
-> For example, when one use PKG_CARGO_BUILD_OPTS = --features myfeature, one must
-> also use PKG_CARGO_INSTALL_OPTS = --features myfeature.
+This commit updates the patch with improvements from the upstream PR.
 
-You mean, something like:
+PR: https://github.com/golang/go/pull/52362
 
-    diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-    index f7e3f39503..bc697ea6c1 100644
-    --- a/package/pkg-cargo.mk
-    +++ b/package/pkg-cargo.mk
-    @@ -90,6 +90,10 @@ endif
-     # listed in <pkg>_LICENSE.
-     $(2)_LICENSE += , vendored dependencies licenses probably not listed
-     
-    +# By default, the same set of options must be pass both at build time
-    +# and install time.
-    +$(2)_CARGO_INSTALL_OPTS ?= $$($(2)_CARGO_INSTALL_OPTS)
-    +
-     # Note: in all the steps below, we "cd" into the build directory to
-     # execute the "cargo" tool instead of passing $(@D)/Cargo.toml as the
-     # manifest-path. Indeed while the latter seems to work, it in fact
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...trap-set-environment-before-generating-bu.patch | 119 ---------------------
+ ...dist-use-gohostarch-for-ssa-rewrite-check.patch |  95 ++++++++++++++++
+ 2 files changed, 95 insertions(+), 119 deletions(-)
 
-> Signed-off-by: David GOUARIN <david.gouarin@thalesgroup.com>
-> ---
->  package/pkg-cargo.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-> index f7e3f39503..cf5ee2ae54 100644
-> --- a/package/pkg-cargo.mk
-> +++ b/package/pkg-cargo.mk
-> @@ -155,6 +155,7 @@ define $(2)_INSTALL_TARGET_CMDS
->  		$$($(2)_CARGO_ENV) \
->  		cargo install \
->  			--offline \
-> +			$$(if $$(BR2_ENABLE_DEBUG),--debug,) \
-
-At build time, we do it the other way around:
-
-    $$(if $$(BR2_ENABLE_DEBUG),,--release)
-
-so I believe this is exactly what we should do here as well, unless
-there is a good reason to do otherwise (in which case it should be
-explained in the commit log).
-
-Regards,
-Yann E. MORIN.
-
->  			--root $$(TARGET_DIR)/usr/ \
->  			--bins \
->  			--path ./ \
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch b/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch
+deleted file mode 100644
+index 5a6b694857..0000000000
+--- a/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch
++++ /dev/null
+@@ -1,119 +0,0 @@
+-From 4d43f7c4dd06e6f62be446996019d4505af54764 Mon Sep 17 00:00:00 2001
+-From: Christian Stewart <christian@paral.in>
+-Date: Thu, 14 Apr 2022 13:34:26 -0700
+-Subject: [PATCH] build: bootstrap: set environment before generating buildcfg
+-
+-The GOOS and GOARCH environment variables should be unset before calling
+-mkbuildcfg. This change fixes a build failure when GOARCH=riscv64.
+-
+-Building Go toolchain1 using go-1.4-bootstrap-20171003.
+-src/cmd/compile/internal/ssa/rewriteRISCV64.go:4814
+-invalid operation: y << x (shift count type int64, must be unsigned integer)
+-
+-There is a build issue with go1.4 with the riscv64 code: however, why is the
+-riscv64 code being compiled at all?
+-
+-GOARCH is set when calling mkbuildcfg, so go1.4 is trying to compile riscv64.
+-
+-[Buildroot]: submitted to upstream:
+-
+- - https://github.com/golang/go/issues/52583
+- - https://go-review.googlesource.com/c/go/+/400376
+- - GitHub-Pull-Request: golang/go#52362
+-
+-Signed-off-by: Christian Stewart <christian@paral.in>
+----
+- src/cmd/dist/buildtool.go | 56 ++++++++++++++++++++-------------------
+- 1 file changed, 29 insertions(+), 27 deletions(-)
+-
+-diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
+-index f1f3d50b6f..dabf01cf84 100644
+---- a/src/cmd/dist/buildtool.go
+-+++ b/src/cmd/dist/buildtool.go
+-@@ -116,9 +116,6 @@ func bootstrapBuildTools() {
+- 	}
+- 	xprintf("Building Go toolchain1 using %s.\n", goroot_bootstrap)
+- 
+--	mkbuildcfg(pathf("%s/src/internal/buildcfg/zbootstrap.go", goroot))
+--	mkobjabi(pathf("%s/src/cmd/internal/objabi/zbootstrap.go", goroot))
+--
+- 	// Use $GOROOT/pkg/bootstrap as the bootstrap workspace root.
+- 	// We use a subdirectory of $GOROOT/pkg because that's the
+- 	// space within $GOROOT where we store all generated objects.
+-@@ -130,6 +127,34 @@ func bootstrapBuildTools() {
+- 	base := pathf("%s/src/bootstrap", workspace)
+- 	xmkdirall(base)
+- 
+-+	// Set up environment for invoking Go 1.4 go command.
+-+	// GOROOT points at Go 1.4 GOROOT,
+-+	// GOPATH points at our bootstrap workspace,
+-+	// GOBIN is empty, so that binaries are installed to GOPATH/bin,
+-+	// and GOOS, GOHOSTOS, GOARCH, and GOHOSTOS are empty,
+-+	// so that Go 1.4 builds whatever kind of binary it knows how to build.
+-+	// Restore GOROOT, GOPATH, and GOBIN when done.
+-+	// Don't bother with GOOS, GOHOSTOS, GOARCH, and GOHOSTARCH,
+-+	// because setup will take care of those when bootstrapBuildTools returns.
+-+
+-+	defer os.Setenv("GOROOT", os.Getenv("GOROOT"))
+-+	os.Setenv("GOROOT", goroot_bootstrap)
+-+
+-+	defer os.Setenv("GOPATH", os.Getenv("GOPATH"))
+-+	os.Setenv("GOPATH", workspace)
+-+
+-+	defer os.Setenv("GOBIN", os.Getenv("GOBIN"))
+-+	os.Setenv("GOBIN", "")
+-+
+-+	os.Setenv("GOOS", "")
+-+	os.Setenv("GOHOSTOS", "")
+-+	os.Setenv("GOARCH", "")
+-+	os.Setenv("GOHOSTARCH", "")
+-+
+-+	// Create the build config files.
+-+	mkbuildcfg(pathf("%s/src/internal/buildcfg/zbootstrap.go", goroot))
+-+	mkobjabi(pathf("%s/src/cmd/internal/objabi/zbootstrap.go", goroot))
+-+
+- 	// Copy source code into $GOROOT/pkg/bootstrap and rewrite import paths.
+- 	writefile("module bootstrap\n", pathf("%s/%s", base, "go.mod"), 0)
+- 	for _, dir := range bootstrapDirs {
+-@@ -176,30 +201,6 @@ func bootstrapBuildTools() {
+- 		})
+- 	}
+- 
+--	// Set up environment for invoking Go 1.4 go command.
+--	// GOROOT points at Go 1.4 GOROOT,
+--	// GOPATH points at our bootstrap workspace,
+--	// GOBIN is empty, so that binaries are installed to GOPATH/bin,
+--	// and GOOS, GOHOSTOS, GOARCH, and GOHOSTOS are empty,
+--	// so that Go 1.4 builds whatever kind of binary it knows how to build.
+--	// Restore GOROOT, GOPATH, and GOBIN when done.
+--	// Don't bother with GOOS, GOHOSTOS, GOARCH, and GOHOSTARCH,
+--	// because setup will take care of those when bootstrapBuildTools returns.
+--
+--	defer os.Setenv("GOROOT", os.Getenv("GOROOT"))
+--	os.Setenv("GOROOT", goroot_bootstrap)
+--
+--	defer os.Setenv("GOPATH", os.Getenv("GOPATH"))
+--	os.Setenv("GOPATH", workspace)
+--
+--	defer os.Setenv("GOBIN", os.Getenv("GOBIN"))
+--	os.Setenv("GOBIN", "")
+--
+--	os.Setenv("GOOS", "")
+--	os.Setenv("GOHOSTOS", "")
+--	os.Setenv("GOARCH", "")
+--	os.Setenv("GOHOSTARCH", "")
+--
+- 	// Run Go 1.4 to build binaries. Use -gcflags=-l to disable inlining to
+- 	// workaround bugs in Go 1.4's compiler. See discussion thread:
+- 	// https://groups.google.com/d/msg/golang-dev/Ss7mCKsvk8w/Gsq7VYI0AwAJ
+-@@ -221,6 +222,7 @@ func bootstrapBuildTools() {
+- 		cmd = append(cmd, "-toolexec="+tool)
+- 	}
+- 	cmd = append(cmd, "bootstrap/cmd/...")
+-+
+- 	run(base, ShowOutput|CheckExit, cmd...)
+- 
+- 	// Copy binaries into tool binary directory.
+--- 
+-2.35.1
+-
+diff --git a/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch b/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
+new file mode 100644
+index 0000000000..2346208640
+--- /dev/null
++++ b/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
+@@ -0,0 +1,95 @@
++From 38d841a18ab0bcb63554fed6b38012e504599891 Mon Sep 17 00:00:00 2001
++From: Christian Stewart <christian@paral.in>
++Date: Wed, 1 Jun 2022 20:52:12 +0000
++Subject: [PATCH] cmd/dist: use gohostarch for ssa rewrite check
++
++Fix a build failure when bootstrapping the Go compiler with go-bootstrap 1.4
++while the environment contains GOARCH=riscv64.
++
++Building Go toolchain1 using go-1.4-bootstrap-20171003.
++src/cmd/compile/internal/ssa/rewriteRISCV64.go:4814
++invalid operation: y << x (shift count type int64, must be unsigned integer)
++
++This is because:
++
++ - buildtool.go:198: calls bootstrapRewriteFile(src)
++ - bootstrapRewriteFile: buildtool.go:283 calls:
++ - isUnneededSSARewriteFile: checks os.Getenv("GOARCH")
++ - isUnneededSSARewriteFile: returns "", false
++ - bootstrapRewriteFile: calls bootstrapFixImports
++ - boostrapFixImports: generates code go1.4 cannot compile
++
++Instead of checking "GOARCH" in the environment, use the gohostarch variable.
++
++Change-Id: Ie9c190498555c4068461fead6278a62e924062c6
++GitHub-Last-Rev: 300d7a7fea0a67c696970fd271e2ce709674a658
++GitHub-Pull-Request: golang/go#52362
++Reviewed-on: https://go-review.googlesource.com/c/go/+/400376
++Reviewed-by: Bryan Mills <bcmills@google.com>
++TryBot-Result: Gopher Robot <gobot@golang.org>
++Reviewed-by: Dmitri Shuralyov <dmitshur@google.com>
++Auto-Submit: Bryan Mills <bcmills@google.com>
++Run-TryBot: Bryan Mills <bcmills@google.com>
++Reviewed-by: Joel Sing <joel@sing.id.au>
++Run-TryBot: Joel Sing <joel@sing.id.au>
++---
++ src/cmd/dist/buildtool.go | 16 ++++++----------
++ 1 file changed, 6 insertions(+), 10 deletions(-)
++
++diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
++index 036f8c52fa..2d8ace52d8 100644
++--- a/src/cmd/dist/buildtool.go
+++++ b/src/cmd/dist/buildtool.go
++@@ -16,7 +16,6 @@ import (
++ 	"os"
++ 	"path/filepath"
++ 	"regexp"
++-	"runtime"
++ 	"strings"
++ )
++ 
++@@ -239,11 +238,11 @@ var ssaRewriteFileSubstring = filepath.FromSlash("src/cmd/compile/internal/ssa/r
++ 
++ // isUnneededSSARewriteFile reports whether srcFile is a
++ // src/cmd/compile/internal/ssa/rewriteARCHNAME.go file for an
++-// architecture that isn't for the current runtime.GOARCH.
+++// architecture that isn't for the given GOARCH.
++ //
++ // When unneeded is true archCaps is the rewrite base filename without
++ // the "rewrite" prefix or ".go" suffix: AMD64, 386, ARM, ARM64, etc.
++-func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
+++func isUnneededSSARewriteFile(srcFile, goArch string) (archCaps string, unneeded bool) {
++ 	if !strings.Contains(srcFile, ssaRewriteFileSubstring) {
++ 		return "", false
++ 	}
++@@ -258,13 +257,10 @@ func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
++ 	archCaps = fileArch
++ 	fileArch = strings.ToLower(fileArch)
++ 	fileArch = strings.TrimSuffix(fileArch, "splitload")
++-	if fileArch == os.Getenv("GOHOSTARCH") {
+++	if fileArch == goArch {
++ 		return "", false
++ 	}
++-	if fileArch == strings.TrimSuffix(runtime.GOARCH, "le") {
++-		return "", false
++-	}
++-	if fileArch == strings.TrimSuffix(os.Getenv("GOARCH"), "le") {
+++	if fileArch == strings.TrimSuffix(goArch, "le") {
++ 		return "", false
++ 	}
++ 	return archCaps, true
++@@ -273,9 +269,9 @@ func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
++ func bootstrapRewriteFile(srcFile string) string {
++ 	// During bootstrap, generate dummy rewrite files for
++ 	// irrelevant architectures. We only need to build a bootstrap
++-	// binary that works for the current runtime.GOARCH.
+++	// binary that works for the current gohostarch.
++ 	// This saves 6+ seconds of bootstrap.
++-	if archCaps, ok := isUnneededSSARewriteFile(srcFile); ok {
+++	if archCaps, ok := isUnneededSSARewriteFile(srcFile, gohostarch); ok {
++ 		return fmt.Sprintf(`// Code generated by go tool dist; DO NOT EDIT.
++ 
++ package ssa
++-- 
++2.35.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
