@@ -4,63 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 368CFC43334
-	for <buildroot@archiver.kernel.org>; Sat,  4 Jun 2022 11:21:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A70B9C43334
+	for <buildroot@archiver.kernel.org>; Sat,  4 Jun 2022 11:55:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB35C84410;
-	Sat,  4 Jun 2022 11:21:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 485B8844B6;
+	Sat,  4 Jun 2022 11:55:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3qpaGgygRnNp; Sat,  4 Jun 2022 11:21:42 +0000 (UTC)
+	with ESMTP id eaz7I2jxZfPK; Sat,  4 Jun 2022 11:55:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D392F84407;
-	Sat,  4 Jun 2022 11:21:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58C4F844B3;
+	Sat,  4 Jun 2022 11:55:17 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5EFB91BF5AA
- for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 11:21:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 301171BF5AA
+ for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 11:55:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4DB3841B2F
- for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 11:21:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D51241B3F
+ for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 11:55:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PH-nIk_vAA07 for <buildroot@lists.busybox.net>;
- Sat,  4 Jun 2022 11:21:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 97E8F41B2E
- for <buildroot@buildroot.org>; Sat,  4 Jun 2022 11:21:37 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:e086:bc2a:8b9d:c22])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id B53455FFA1;
- Sat,  4 Jun 2022 13:21:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1654341694;
- bh=eF1fFBN5gHRXD4NCNARzd+bKvKmhKUUm44VHPcruHdw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=rXdWz0XD1ZFM/anQBYQSZviQPIWCm9eplAIJ1J4opWJjYhgMGL5F3NRR2r+n66/kt
- 2SL81s+/ihjBYVp4FzckXhborCwTvWJw+ArnNz8ystshoQ3FB70udZOmQ3+i1D2nzF
- 3ykKER5gfBZddspPJ+ubEm8MUzt8TdNGH9CnCWlbGeOJ5kkoRsCR1eJMlQiG1C/5JH
- rFvVBjCwrp/9lUZQT5i/5F++JXFwOIOV22hrZPpiY+JQhqcT1WVNq7w7f13PYiRtFo
- hdaU69OtnviJJd+sbBQKw/p5CFSLGXS1r1vwa9a64ZEQTIzvJ3urCkKssRxTU4IUor
- Nmt+ev1AAa1YQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 04 Jun 2022 13:21:32 +0200
-Date: Sat, 4 Jun 2022 13:21:32 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Christian Stewart <christian@paral.in>
-Message-ID: <20220604112132.GJ427639@scaer>
-References: <20220528044112.30F8284C8E@smtp1.osuosl.org>
+ with ESMTP id YrbjpeVZctKe for <buildroot@lists.busybox.net>;
+ Sat,  4 Jun 2022 11:55:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 91A5941A1E
+ for <buildroot@buildroot.org>; Sat,  4 Jun 2022 11:55:14 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id s12so13283599ejx.3
+ for <buildroot@buildroot.org>; Sat, 04 Jun 2022 04:55:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=aNuXXCdE44b6f+0zzJKrkD/bH/DTUoiCOnABdcZf+TI=;
+ b=V01vBRlUxVKipb+33nlQAK9yWyV6XsWglRP02b0K+mg+voJZvwyNvSSf2EedPT/+mM
+ t2Egs4rcP+TlCt45g0xLdYRLo+jZyHI+OwIvAIynxyDqmX/3f6D8DzB5vLOI/3OeyGoe
+ 5lB3HO1ev5a4D4TMmxthjz0PqEcLfMmlrcvBjcBsxUnwgoNMfyBuqrVcxBBWp8kb0Mri
+ gWKfwqsxnr0Oe3egesdNG52QFZL9OT2b4eIVZc/XO2jXi97WOAl9MOlz+IC5bZDqKiFF
+ yP/ib2LJPs4KYE3yFe9++pecfDScdhWqk5ux1gmEMNy6C+9DsvSigLH5PDB/ViRl5K87
+ GH9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=aNuXXCdE44b6f+0zzJKrkD/bH/DTUoiCOnABdcZf+TI=;
+ b=Ww540xSQaHNELfwn2/8NngMKBkdxx1t6PEzOWQccUY6GBxPJSqPU808caAKgOWj0G4
+ AODgH4vPJQIiIiuXGeRKZE53gF1WCz3SNgX7OWpy3Hdzg0li1hrVvIqmAMAFpxIciAPa
+ QUuxgt0IREYiLDoZWREkRlUFl1uyfsJaKW3PF90MAwpG5m4ESpGKgLnZrwXgXZpbob7G
+ cJTrSNPivQotwkVBToXD97m9135dqEcqcjw0XtxUuRQDJHywTPHWCfJT7DyShwqGc5tl
+ uK/QOxkIVkiqw1yS4alTBaGbLxOhiCLSxFGzZC7iXxnYal2pEWYoL9zyH4PYpQX9QqT6
+ lmgg==
+X-Gm-Message-State: AOAM53166aSXHjcYLxbq1iMlhQTSPMsd1n7pG/BxUSY6B6f0MmSD5ZXn
+ 0mOxc1sSJLTw8botUl79KdUx4HgfMvU=
+X-Google-Smtp-Source: ABdhPJyHxCanI8Re0V+Jm9XDoZKRCqsTN9AcyQ+Uqg3nb84EnlieVN4c4StkmOapscmQzPOe60slfQ==
+X-Received: by 2002:a17:907:60d3:b0:6f5:c4c3:2f96 with SMTP id
+ hv19-20020a17090760d300b006f5c4c32f96mr12567524ejc.724.1654343712294; 
+ Sat, 04 Jun 2022 04:55:12 -0700 (PDT)
+Received: from t450s.fritz.box (ip4d15a215.dynamic.kabel-deutschland.de.
+ [77.21.162.21]) by smtp.gmail.com with ESMTPSA id
+ d10-20020a1709063cea00b006f3ef214e5bsm3891829ejh.193.2022.06.04.04.55.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 04 Jun 2022 04:55:11 -0700 (PDT)
+From: Heiko Thiery <heiko.thiery@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  4 Jun 2022 13:54:58 +0200
+Message-Id: <20220604115458.7914-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220528044112.30F8284C8E@smtp1.osuosl.org>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2022-05-27
+Subject: [Buildroot] [PATCH 1/2] package/rauc: bump to version 1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,89 +86,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Heiko Thiery <heiko.thiery@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Andrey Yurovsky <yurovsky@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Christian, All,
+Drop patch that is already in upstream.
 
-On 2022-05-28 04:41 -0000, Thomas Petazzoni via buildroot spake thusly:
-> Autobuild statistics for 2022-05-27
-> powerpc64le  |         wtfutil-0.41.0         | NOK | http://autobuild.buildroot.net/results/6358bff6bdf8c9b246596e7cbb9cc7392ff53c2b |     
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ ...src-verify_hash.c-include-inttypes.h.patch | 38 -------------------
+ package/rauc/rauc.hash                        |  2 +-
+ package/rauc/rauc.mk                          |  2 +-
+ 3 files changed, 2 insertions(+), 40 deletions(-)
+ delete mode 100644 package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch
 
-There are a few build failure for wtfutils, but I have absolutely no
-clue what is going on... Could you have a look, please?
-
-http://autobuild.buildroot.org/?reason=wtfutil-%
-
-(Ignore those on my autiobuilder: the distro was too old, without
-new-enough ca-certs)
-
-http://autobuild.buildroot.org/results/223/223b9407773dcd8a98e8f3424a14d36d1a6c1875/build-end.log
-
-loadelf: $WORK/b150/_pkg_.a(_x001.o): 1019558: sym#53 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b150/_pkg_.a(_x002.o): 1019565: sym#57 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b150/_pkg_.a(_x003.o): 1019576: sym#73 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b150/_pkg_.a(_x004.o): 1019584: sym#60 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b193/_pkg_.a(_x001.o): 1019588: sym#52 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b193/_pkg_.a(_x002.o): 1019595: sym#66 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b193/_pkg_.a(_x003.o): 1019602: sym#66 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b193/_pkg_.a(_x004.o): 1019609: sym#64 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b193/_pkg_.a(_x005.o): 1019616: sym#73 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b151/_pkg_.a(_x001.o): 1019620: sym#52 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b151/_pkg_.a(_x002.o): 1019627: sym#32 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b151/_pkg_.a(_x003.o): 1019632: sym#64 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b151/_pkg_.a(_x004.o): 1019638: sym#64 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b151/_pkg_.a(_x005.o): 1019648: sym#81 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b151/_pkg_.a(_x006.o): 1019656: sym#99 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b151/_pkg_.a(_x007.o): 1019661: sym#64 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b151/_pkg_.a(_x008.o): 1019666: sym#64 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b151/_pkg_.a(_x009.o): 1019672: sym#65 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-loadelf: $WORK/b151/_pkg_.a(_x010.o): 1019677: sym#76 (wm4.0.981f2b126b8e8fee2c81ed35ccb2e048): ignoring symbol in section 1 (type 0)
-_cgo_init: relocation target x_cgo_init not defined
-_cgo_notify_runtime_init_done: relocation target
-x_cgo_notify_runtime_init_done not defined
-/nvmedata/autobuild/instance-20/output-1/host/lib/go/pkg/tool/linux_amd64/link:
-too many errors
-
-
-http://autobuild.buildroot.org/results/635/6358bff6bdf8c9b246596e7cbb9cc7392ff53c2b/build-end.log
-
-os/user(.text): relocation target _restgpr0_30 not defined
-os/user(.text): relocation target _savegpr0_29 not defined
-os/user(.text): relocation target _restgpr0_29 not defined
-net(.text): relocation target _savegpr0_28 not defined
-net(.text): relocation target _restgpr0_28 not defined
-net(.text): relocation target _savegpr0_29 not defined
-net(.text): relocation target _restgpr0_29 not defined
-net(.text): relocation target _savegpr0_28 not defined
-net(.text): relocation target _restgpr0_28 not defined
-net(.text): relocation target _savegpr0_29 not defined
-net(.text): relocation target _restgpr0_29 not defined
-runtime/cgo(.text): relocation target _restgpr0_30 not defined
-runtime/cgo(.text): relocation target _restgpr0_31 not defined
-runtime/cgo(.text): relocation target _savegpr0_23 not defined
-runtime/cgo(.text): relocation target _restgpr0_23 not defined
-runtime/cgo(.text): relocation target _restgpr0_30 not defined
-runtime/cgo(.text): relocation target _savegpr0_29 not defined
-runtime/cgo(.text): relocation target _restgpr0_29 not defined
-runtime/cgo(.text): relocation target _savegpr0_25 not defined
-runtime/cgo(.text): relocation target _restgpr0_25 not defined
-runtime/cgo(.text): relocation target _savegpr0_28 not defined
-/home/giuliobenetti/autobuild/run/instance-2/output-1/host/lib/go/pkg/tool/linux_amd64/link: too many errors
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch b/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch
+deleted file mode 100644
+index 916c8cca0b..0000000000
+--- a/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From b19a9c26d88a913417e77aaf60c72cdbf393d1f6 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 31 May 2022 21:22:36 +0200
+-Subject: [PATCH] src/verify_hash.c: include inttypes.h
+-
+-Include inttypes.h to avoid the following build failure:
+-
+-In file included from /nvmedata/autobuild/instance-22/output-1/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib.h:62,
+-                 from src/verity_hash.c:26:
+-src/verity_hash.c: In function 'verify_zero':
+-src/verity_hash.c:69:55: error: expected ')' before 'PRIu64'
+-   69 |    g_message("Spare area is not zeroed at position %" PRIu64 ".",
+-      |                                                       ^~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/1a093c0e194a061836884419d2f50506105db01e
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/rauc/rauc/pull/914]
+----
+- src/verity_hash.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/verity_hash.c b/src/verity_hash.c
+-index db82a78..3b2c2a0 100644
+---- a/src/verity_hash.c
+-+++ b/src/verity_hash.c
+-@@ -19,6 +19,7 @@
+-  */
+- 
+- #include <errno.h>
+-+#include <inttypes.h>
+- #include <stdio.h>
+- #include <stdlib.h>
+- #include <string.h>
+--- 
+-2.35.1
+-
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index f6c1446de4..677d358158 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated, after verifying against
+ # https://github.com/rauc/rauc/releases/download/v1.6/rauc-1.6.tar.xz.asc
+-sha256  86013788dd02321b7c3f913ad3a1f8802afbc784ec076fa278524a9e1ef9e7b0  rauc-1.6.tar.xz
++sha256  8b7d37cc1eb57df4f03de3c943dd7be290b78d47be28881e8b1f070e1d5e55df  rauc-1.7.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 0520b30521..90b2317d4b 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RAUC_VERSION = 1.6
++RAUC_VERSION = 1.7
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
