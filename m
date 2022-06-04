@@ -1,65 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54257C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Jun 2022 08:05:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1356C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Jun 2022 08:19:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 092B2840FE;
-	Sat,  4 Jun 2022 08:05:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8E304408BB;
+	Sat,  4 Jun 2022 08:19:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LXH7DBVsxlGT; Sat,  4 Jun 2022 08:05:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8HulLcXMAC6c; Sat,  4 Jun 2022 08:19:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B3A6840C5;
-	Sat,  4 Jun 2022 08:05:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9DDB91BF41F
- for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 08:05:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 894D540734;
+	Sat,  4 Jun 2022 08:19:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 838131BF41F
+ for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 08:19:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D57E41A0F
- for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 08:05:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71F0A40734
+ for <buildroot@lists.busybox.net>; Sat,  4 Jun 2022 08:19:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XRf_0wnDkfRo for <buildroot@lists.busybox.net>;
- Sat,  4 Jun 2022 08:04:59 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6380241A0D
- for <buildroot@buildroot.org>; Sat,  4 Jun 2022 08:04:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LZZ5yBsV-GFq for <buildroot@lists.busybox.net>;
+ Sat,  4 Jun 2022 08:19:40 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5E1DA4018F
+ for <buildroot@buildroot.org>; Sat,  4 Jun 2022 08:19:40 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:e086:bc2a:8b9d:c22])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 4C8C25FF96;
- Sat,  4 Jun 2022 10:04:53 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 4072F5FFAE;
+ Sat,  4 Jun 2022 10:19:34 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1654329896;
- bh=zRo+27z5usua7Rc4lso0rpsFkp/TBf7L0ANDQjdbMLc=;
+ s=smtp-20201208; t=1654330777;
+ bh=jrv4+Og+jVd/LhXbisn4gj+UjCPq0Tr2JrSX97TVGDM=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=i1WvoikEdFJee6G0peWvMyP4L42Ci/QAfY9R7gRt/RCZUedyFNAGHha6x+zsQQmKu
- L4Tjq3y+x60WGSB3R8NTFqtvccCiOTHtLiNa+kKOKsFlUFSsJovc2zz8lvAEFA86Ap
- CpxW3lQ70wekZh5w+OW+S1bcqmr/WBcplQnHb/HVyJKsC4eoFZjyCySs6/2PCfQy40
- k6U8T7C+oGe7+8wg1/jHzIXH+6XrwYB71n6B568gL5yzwXPwC0OLRWJFdWq+u7y9cX
- DN33PgDGy33es5nvM4CtvBur1NMybbexTZrC9eB/J2JpNXibqkgQy1pt2d3Rr13n2x
- 36irk8EgpTjzw==
+ b=autlodS4Y8M/hjW7nfL3NPmWwoMT5nwYrG4rCrmj8+yoLj4q8lrn5Jni8qyMPqCGq
+ Y/8LPFMZwOkdIqolYVXMGEqbdxRq27MMXIX1WbxII5lTze0YWN7uDXUQSmJqM5j2ud
+ EnaAQkoBNntcPRFPsbOBDfgzwHF7CeyseGQtAP7XyvgedJe02kD6w+Cy92U7RK51MP
+ blJslyfWZVvEzYxQ5A9Z4adEFBKOe464o/mNF5twIsEcdyc0sJHyaJJypZPbnpEqKf
+ sPrlinfOtDLA8X44/TZ6wCPAqqymEsH2Ch97cbY0Q0D0d6PjpGBsmAR41sQjfpi/gY
+ wg25H0BHP3SQw==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 04 Jun 2022 10:04:52 +0200
-Date: Sat, 4 Jun 2022 10:04:52 +0200
+ Sat, 04 Jun 2022 10:19:33 +0200
+Date: Sat, 4 Jun 2022 10:19:33 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <20220604080452.GC427639@scaer>
-References: <20220603123506.1219339-1-luca@lucaceresoli.net>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220604081933.GD427639@scaer>
+References: <e123582d-c613-f81a-ac0d-b23bc4d3e74a@cartal.fr>
+ <6478648f-ffb3-cda2-66ad-3758ead25319@mind.be>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220603123506.1219339-1-luca@lucaceresoli.net>
+In-Reply-To: <6478648f-ffb3-cda2-66ad-3758ead25319@mind.be>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: update my e-mail address
+Subject: Re: [Buildroot] Make 4.3 and printvars
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,49 +70,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
+Cc: Jean-Pierre Cartal <jean-pierre@cartal.fr>,
+ Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Luca, Al,
+All,
 
-On 2022-06-03 14:35 +0200, Luca Ceresoli spake thusly:
-> My Bootlin address is preferred from now on.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+On 2022-06-03 16:05 +0200, Arnout Vandecappelle spake thusly:
+>  Sending this in name of Jean-Pierre, who is not on the list.
+> >A quick mail to let you know that I also faced the make 4.3 printvars issue you mentioned in Buildroot mailing list.
+> >On my side increasing the stack size limit as follow:
+> >ulimit -s 16000
+> >solved this issue.
+>  I tested it myself and indeed, it works!
 
-Applied to master, thanks.
+Unfortunately, it does not:
+
+    $ make defconfig
+    $ make allyespackageconfig
+
+    $ ulimit -s
+    8192
+    $ make show-vars >/dev/null
+    Segmentation fault (core dumped)
+
+    $ ulimit -s 16000
+    $ ulimit -s
+    16000
+    $ make show-vars >/dev/null
+    [...]
+    Segmentation fault (core dumped)
+
+I guess it works by chance on "small-enough" configurations, but this is
+still not guaranteed that it works all the times.
+
+I'd rather have no workaround, than one that is half-functional.
+
+Yes, the above *is* extreme, and a completely degenerate case, yet it
+means the issue it still present for "big-enough" configurations (I
+haven't tried to find how many packages must be enabled before we reach
+the tripping point, but that's not the point).
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  DEVELOPERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 71cc3da6d70b..aa18de83bcb6 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1729,7 +1729,7 @@ F:	package/intel-gmmlib/
->  F:	package/intel-mediadriver/
->  F:	package/intel-mediasdk/
->  
-> -N:	Luca Ceresoli <luca@lucaceresoli.net>
-> +N:	Luca Ceresoli <luca.ceresoli@bootlin.com>
->  F:	board/olimex/a20_olinuxino/
->  F:	board/zynq/
->  F:	board/zynqmp/
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
