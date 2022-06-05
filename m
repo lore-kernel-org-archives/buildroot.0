@@ -1,46 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1105C43334
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 21:11:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D41C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 21:11:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6384184104;
-	Sun,  5 Jun 2022 21:11:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D72B040D77;
+	Sun,  5 Jun 2022 21:11:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vOhIvjd7l0Hh; Sun,  5 Jun 2022 21:11:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OpWiXfJo7K2w; Sun,  5 Jun 2022 21:11:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78AD1840D7;
-	Sun,  5 Jun 2022 21:11:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 99B0A1BF290
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 21:10:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF1E44060C;
+	Sun,  5 Jun 2022 21:11:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F40571BF290
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 21:11:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9263341796
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 21:10:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E3D18840C7
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 21:11:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8ekBEcyv_UIV for <buildroot@lists.busybox.net>;
- Sun,  5 Jun 2022 21:10:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 523AF417C2
- for <buildroot@buildroot.org>; Sun,  5 Jun 2022 21:10:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9E15086C19; Sun,  5 Jun 2022 20:58:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 5 Jun 2022 23:10:20 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9d97ca0a5ebccabc7b5e605ade4ccbcc19668ca1
-X-Git-Newrev: f27ea50528755b5f353e3db124dee535645dcf09
-X-Patchwork-Hint: ignore
-Message-Id: <20220605205846.9E15086C19@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/graphicsmagick: bump
- to version 1.3.38
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bpNs-85Ry-YM for <buildroot@lists.busybox.net>;
+ Sun,  5 Jun 2022 21:11:12 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7E03F840BF
+ for <buildroot@buildroot.org>; Sun,  5 Jun 2022 21:11:12 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2850C200002;
+ Sun,  5 Jun 2022 21:11:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1654463470;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=CaPEoQVoWDRmGWLXUr8XEPa5NgVcuVc1lBAWc93PR18=;
+ b=RH6JUP1kPqdWPyejF0JMjvlMtfb+5uqSsdkcz3KPdLrNw8FOgaoc0cLHAcIHentO8Safk/
+ iCAdTavLF+ebdAZX/VkE/fVxOkubQzb2DeGZGFQ4I+1laFj39Gjo+LUZb1OLrpQMraZaij
+ SGFoHaYGLMHdug9Ca3WjSGj1tI1Mno/ewmlcVRRax4SLf3wjir/EpUj61DvVNnHQOsdwlD
+ K7pIp7bQifBxz7s1FPF/lgHfnAYhSH8qjoxTX7hxSQhVaQ8IK3Mjhlma9v3tizTZtRrAiE
+ XsVgznEl1IrXOSQR+CpOe5c4ZP32j/bpTzxKoER7RY8qf/x+JQqIS5DHK51RjQ==
+Date: Sun, 5 Jun 2022 23:11:09 +0200
+To: Grzegorz Blach <grzegorz@blach.pl>
+Message-ID: <20220605231109.213d1526@windsurf>
+In-Reply-To: <20220529223248.51556-1-grzegorz@blach.pl>
+References: <20220529223248.51556-1-grzegorz@blach.pl>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/5] package/python-rpi-ws281x: Bump to
+ version 4.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,50 +72,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f27ea50528755b5f353e3db124dee535645dcf09
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon, 30 May 2022 00:32:43 +0200
+Grzegorz Blach <grzegorz@blach.pl> wrote:
 
-License file hash is changed, due to a copyright year change:
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+> ---
+>  package/python-rpi-ws281x/python-rpi-ws281x.hash | 4 ++--
+>  package/python-rpi-ws281x/python-rpi-ws281x.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
--  Copyright (C) 2002-2021 GraphicsMagick Group
-+  Copyright (C) 2002-2022 GraphicsMagick Group
+Applied to next, thanks.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/graphicsmagick/graphicsmagick.hash | 4 ++--
- package/graphicsmagick/graphicsmagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/graphicsmagick/graphicsmagick.hash b/package/graphicsmagick/graphicsmagick.hash
-index cf6d224216..80130da5d6 100644
---- a/package/graphicsmagick/graphicsmagick.hash
-+++ b/package/graphicsmagick/graphicsmagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  90dc22f1a7bd240e4c9065a940962bf13da43c99bcc36cb111cc3c1a0d7477d4  GraphicsMagick-1.3.37.tar.xz
--sha256  8a4d960c5a3e453ee21e459e1794c7a0c85559825d3363a8d3b510b3344fdad4  Copyright.txt
-+sha256  d60cd9db59351d2b9cb19beb443170acaa28f073d13d258f67b3627635e32675  GraphicsMagick-1.3.38.tar.xz
-+sha256  0a20e661de942ebe115a354d0ec6d1d42b93856ea765f813f350a5ce5024cdb7  Copyright.txt
-diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-index 38743487eb..dbaa8ddf70 100644
---- a/package/graphicsmagick/graphicsmagick.mk
-+++ b/package/graphicsmagick/graphicsmagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRAPHICSMAGICK_VERSION = 1.3.37
-+GRAPHICSMAGICK_VERSION = 1.3.38
- GRAPHICSMAGICK_SOURCE = GraphicsMagick-$(GRAPHICSMAGICK_VERSION).tar.xz
- GRAPHICSMAGICK_SITE = https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/$(GRAPHICSMAGICK_VERSION)
- GRAPHICSMAGICK_LICENSE = MIT
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
