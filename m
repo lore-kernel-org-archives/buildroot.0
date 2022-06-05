@@ -1,46 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A14DC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 20:57:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAAD1C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 20:58:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B60A5417C4;
-	Sun,  5 Jun 2022 20:57:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9001D8431B;
+	Sun,  5 Jun 2022 20:58:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mI_Pi3BEvqMp; Sun,  5 Jun 2022 20:57:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fKXPQDzkU5qQ; Sun,  5 Jun 2022 20:58:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8111E41796;
-	Sun,  5 Jun 2022 20:57:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E46791BF3A8
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:57:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0080B84184;
+	Sun,  5 Jun 2022 20:58:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6632C1BF3A8
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:58:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D27AB40D76
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:57:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 552296128F
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:58:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tZVCdQYd85LX for <buildroot@lists.busybox.net>;
- Sun,  5 Jun 2022 20:57:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2EDE340104
- for <buildroot@buildroot.org>; Sun,  5 Jun 2022 20:57:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 818BA86BF7; Sun,  5 Jun 2022 20:45:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 5 Jun 2022 22:56:46 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 811e3d852380b6b5bf67f3349a4e5ef78ae103ea
-X-Git-Newrev: 53cf107505f5f831e4ebc1b70af172520af0ebfc
-X-Patchwork-Hint: ignore
-Message-Id: <20220605204538.818BA86BF7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gcnano-binaries: bump
- version to 969d115185
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bA-qkB6UDCkX for <buildroot@lists.busybox.net>;
+ Sun,  5 Jun 2022 20:58:22 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5EC0C6128C
+ for <buildroot@buildroot.org>; Sun,  5 Jun 2022 20:58:22 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 04ADD240002;
+ Sun,  5 Jun 2022 20:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1654462700;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=dIRW7aUJ/QjD2j42Bj/qE1+GO4in4pq15a7xJjngM7Y=;
+ b=HGi0lJROhoNtDw0RoCNPA/HsqyytXse+ga4Z5kxYe68+54ko1ZXrl+JDw8TY2AlrHgQ9KH
+ 5yLc+R5xOFVmfqdIpQ2nB4bcE2uZdqaMBI5EuiDYC4HunQMP+kPqcS7dHqcMolB6MXaZBg
+ RjCxCTkUyiK2i/kkxKvS6FhphakvSwyk3gMff/lSN1RqIznqZbRStavbRGmhqDUCZcr5H+
+ PS47D1wxInKOhpADbhlUH/YUQYBcH3TzLadeCSYLmoVijvn30YPViwUe548PeYjMvBKQDN
+ n07CYag4ha2MLc4EgYWFbO5WKyditUzkvK4iZhpleF1m0Lf48ZKxXL0aRWzL3w==
+Date: Sun, 5 Jun 2022 22:58:19 +0200
+To: Kory Maincent via buildroot <buildroot@buildroot.org>
+Message-ID: <20220605225819.1f803ff6@windsurf>
+In-Reply-To: <20220531125557.450076-1-kory.maincent@bootlin.com>
+References: <20220531125557.450076-1-kory.maincent@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package: gcnano-binaries: bump version to
+ 969d115185
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,50 +72,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: kory.maincent@bootlin.com, scooby22@web.de
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53cf107505f5f831e4ebc1b70af172520af0ebfc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 31 May 2022 14:55:57 +0200
+Kory Maincent via buildroot <buildroot@buildroot.org> wrote:
 
-Update to last version of gcnano-binaries compatible with kernel
-from StMicroelectronics version 5.10
+> From: Kory Maincent <kory.maincent@bootlin.com>
+> 
+> Update to last version of gcnano-binaries compatible with kernel
+> from StMicroelectronics version 5.10
+> 
+> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gcnano-binaries/gcnano-binaries.hash | 4 ++--
- package/gcnano-binaries/gcnano-binaries.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Commit title prefix should always be "package/<pkg>:" and not "package:
+<pkg>:".
 
-diff --git a/package/gcnano-binaries/gcnano-binaries.hash b/package/gcnano-binaries/gcnano-binaries.hash
-index e3efc82fc5..d4ad96672a 100644
---- a/package/gcnano-binaries/gcnano-binaries.hash
-+++ b/package/gcnano-binaries/gcnano-binaries.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 afec2ba2f524821452d561b56afd2fc241293ea4a6e8598d1663f58e5d16800f  gcnano-binaries-1534c3eaabb5ae545a8f97e95f853531365a13fc.tar.gz
--sha256 7d209718473d18f69f75adb7caf9cb5d4b0a31da068756aa011bea617de3dc57  EULA
-+sha256  32d91d6ce6e6551cb7ad0eee4698041fdeb10a4f216e6564adb06408476edc38  gcnano-binaries-969d11518529bb70a132909b02ddcc5736c92d91.tar.gz
-+sha256  7d209718473d18f69f75adb7caf9cb5d4b0a31da068756aa011bea617de3dc57  EULA
-diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
-index f6adc36dbd..affe0a6063 100644
---- a/package/gcnano-binaries/gcnano-binaries.mk
-+++ b/package/gcnano-binaries/gcnano-binaries.mk
-@@ -8,8 +8,8 @@ GCNANO_BINARIES_LIB_VERSION = 6.4
- GCNANO_BINARIES_LIB_REVISION = 3
- GCNANO_BINARIES_LIB_FULL_VERSION = $(GCNANO_BINARIES_LIB_VERSION).$(GCNANO_BINARIES_LIB_REVISION)
- GCNANO_BINARIES_DRIVER_VERSION = $(GCNANO_BINARIES_LIB_FULL_VERSION)
--GCNANO_BINARIES_USERLAND_VERSION = $(GCNANO_BINARIES_LIB_FULL_VERSION)-20200902
--GCNANO_BINARIES_VERSION = 1534c3eaabb5ae545a8f97e95f853531365a13fc
-+GCNANO_BINARIES_USERLAND_VERSION = $(GCNANO_BINARIES_LIB_FULL_VERSION)-20210726
-+GCNANO_BINARIES_VERSION = 969d11518529bb70a132909b02ddcc5736c92d91
- GCNANO_BINARIES_SITE = $(call github,STMicroelectronics,gcnano-binaries,$(GCNANO_BINARIES_VERSION))
- 
- GCNANO_BINARIES_LICENSE = MIT, Vivante End User Software License Terms
+
+>  # Locally calculated
+> -sha256 afec2ba2f524821452d561b56afd2fc241293ea4a6e8598d1663f58e5d16800f  gcnano-binaries-1534c3eaabb5ae545a8f97e95f853531365a13fc.tar.gz
+> +sha256 32d91d6ce6e6551cb7ad0eee4698041fdeb10a4f216e6564adb06408476edc38  gcnano-binaries-969d11518529bb70a132909b02ddcc5736c92d91.tar.gz
+
+The expected separator in the hash file now is two spaces, not one.
+This is reported by check-package.
+
+Applied to next with those issues fixed.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
