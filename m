@@ -1,45 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D46C3C43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:23:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49DB9C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:23:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2CBB60F6F;
-	Tue,  7 Jun 2022 19:23:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 16738408A5;
+	Tue,  7 Jun 2022 19:23:47 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kwh1gq5MVc-T; Tue,  7 Jun 2022 19:23:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CCE6404C2;
+	Tue,  7 Jun 2022 19:23:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 06D761BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2C51A60F6F
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iXEpRrcX_nGE; Tue,  7 Jun 2022 19:23:34 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5BBD60E68;
-	Tue,  7 Jun 2022 19:23:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DCC471BF9B5
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7873E418FB
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XeEBySyFsk-V for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5Cs0PjGLaOCq for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A2AD0418FE
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4329B60ED4
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 94A6786E21; Tue,  7 Jun 2022 19:04:58 +0000 (UTC)
+ id 4566286E23; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 2 Jun 2022 16:04:50 +0200
+Date: Sun, 5 Jun 2022 22:49:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c0646f72b23f3437bec90efae82242e6d07695fa
-X-Git-Newrev: d6f2af555fbc595b22fda1c737ab192a57e7b5a6
+X-Git-Oldrev: d8c5d9b53437741c79cd3d759de1fe81af9055fd
+X-Git-Newrev: edfa431c9b7b53dbbb3063bd5efd88aac84b1c6e
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190458.94A6786E21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libfuse3: bump to version 3.11.0
+Message-Id: <20220607190459.4566286E23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/optee-os: add support to build with
+ python-pillow
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +60,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6f2af555fbc595b22fda1c737ab192a57e7b5a6
+commit: https://git.buildroot.net/buildroot/commit/?id=edfa431c9b7b53dbbb3063bd5efd88aac84b1c6e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Some specific versions of OP-TEE need the python-pillow module on the
+host to build support for the TUI (Trusted User Interface) feature.
+
+To allow building such OP-TEE versions, this commit adds the option
+BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_PILLOW which when enabled ensures
+that host-python-pillow is built before OP-TEE.
+
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libfuse3/libfuse3.hash | 2 +-
- package/libfuse3/libfuse3.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ boot/optee-os/Config.in   | 7 +++++++
+ boot/optee-os/optee-os.mk | 4 ++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-index cce2b11171..2fb5f329e3 100644
---- a/package/libfuse3/libfuse3.hash
-+++ b/package/libfuse3/libfuse3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  e73f75e58da59a0e333d337c105093c496c0fd7356ef3a5a540f560697c9c4e6  libfuse3-3.10.5.tar.gz
-+sha256  25a00226d2d449c15b2f08467d6d5ebbb2a428260c4ab773721c32adbc6da072  libfuse3-3.11.0.tar.gz
- sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index 1dbe918c5b..b3e3176708 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index fb8a189a75..0be6e68b0c 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -72,6 +72,13 @@ config BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY
+ 	  python-cryptography. Select this option if optee-os needs
+ 	  python-cryptography to be built.
  
--LIBFUSE3_VERSION = 3.10.5
-+LIBFUSE3_VERSION = 3.11.0
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
++config BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_PILLOW
++	bool "OP-TEE OS needs host-python-pillow"
++	help
++	  Some specific OP-TEE OS versions may use python-pillow to
++	  build the Trusted User Interface feature.  Select this
++	  option if optee-os need python-pillow to be built.
++
+ config BR2_TARGET_OPTEE_OS_CORE
+ 	bool "Build core"
+ 	default y
+diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+index 5313a1badc..88f14b48e4 100644
+--- a/boot/optee-os/optee-os.mk
++++ b/boot/optee-os/optee-os.mk
+@@ -29,6 +29,10 @@ else
+ OPTEE_OS_DEPENDENCIES += host-python-pycryptodomex
+ endif
+ 
++ifeq ($(BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_PILLOW),y)
++OPTEE_OS_DEPENDENCIES += host-python-pillow
++endif
++
+ ifeq ($(BR2_TARGET_OPTEE_OS_NEEDS_DTC),y)
+ OPTEE_OS_DEPENDENCIES += host-dtc
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
