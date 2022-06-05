@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E556AC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:34:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB55DC43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:34:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4C9460B51;
-	Tue,  7 Jun 2022 19:34:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82D8860AFD;
+	Tue,  7 Jun 2022 19:34:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YQIdw0HtxBoe; Tue,  7 Jun 2022 19:34:01 +0000 (UTC)
+	with ESMTP id I1zcfWWauWbZ; Tue,  7 Jun 2022 19:34:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D6D7D60F1E;
-	Tue,  7 Jun 2022 19:33:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 540E260B56;
+	Tue,  7 Jun 2022 19:34:12 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5ED3B1BF475
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 123CC1BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A911B40FE4
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE44E4055A
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jNV3jZIZZkpK for <buildroot@lists.busybox.net>;
+ with ESMTP id qb3Q9zAL9fGx for <buildroot@lists.busybox.net>;
  Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 32B7740B60
+ by smtp2.osuosl.org (Postfix) with ESMTP id 020314055F
  for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 33D4D86E22; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
+ id 0466886E22; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Jun 2022 22:26:58 +0200
+Date: Sun, 5 Jun 2022 22:10:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 13973bc45e89926568e331e0bce951fc63f7515a
-X-Git-Newrev: fc86dfc5c8d122349377550016d0e41fed7322f5
+X-Git-Oldrev: ef070f06c6db92f402600aad5c9ccf718698269a
+X-Git-Newrev: c6310ae23228b5061c8852f79e547d2a11b62b2b
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190459.33D4D86E22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-mythtv: bump version to
- 19.0.10-Matrix
+Message-Id: <20220607190459.0466886E22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linuxconsoletools: bump version to
+ 1.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,38 +60,143 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc86dfc5c8d122349377550016d0e41fed7322f5
+commit: https://git.buildroot.net/buildroot/commit/?id=c6310ae23228b5061c8852f79e547d2a11b62b2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Upstream has released a new version. In this version, they
+have chosen to copy the conditional compilation of tools,
+however they have chosen to use DISABLE_* flags instead
+of ENABLE_* flags. Therefore, the logic in our .mk file
+has been reversed: when an option is *NOT* selected, we
+set the corresponding DISABLE_* flag.
+
+As a corollary, the patch to add conditional compilation
+in the upstream Makefile is no longer needed and is
+removed in this commit.
+
+Tested compilation by running `./utils/test-pkg -a` with
+a configuration that enables all options tools.
+
+Signed-off-by: Koen Martens <gmc@sonologic.nl>
+Tested-by: Koen Martens <gmc@sonologic.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../linuxconsoletools/0001-conditional-build.patch | 58 ----------------------
+ package/linuxconsoletools/linuxconsoletools.hash   |  2 +-
+ package/linuxconsoletools/linuxconsoletools.mk     | 18 +++----
+ 3 files changed, 10 insertions(+), 68 deletions(-)
 
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index 361aa6ce92..4a261835e0 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+diff --git a/package/linuxconsoletools/0001-conditional-build.patch b/package/linuxconsoletools/0001-conditional-build.patch
+deleted file mode 100644
+index 9f462a6436..0000000000
+--- a/package/linuxconsoletools/0001-conditional-build.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-Selectively build groups of tools (inputattach,
+-joystick tools and/or force-feedback tools).
+-
+-Signed-off-by: Koen Martens <gmc@sonologic.nl>
+-
+-diff -Naur a/utils/Makefile b/utils/Makefile
+---- a/utils/Makefile	2016-04-19 23:28:36.000000000 +0200
+-+++ b/utils/Makefile	2017-06-19 08:54:20.152184000 +0200
+-@@ -27,8 +27,26 @@
+- 
+- CFLAGS		?= -g -O2 -Wall
+- 
+--PROGRAMS	= inputattach jstest jscal fftest ffmvforce ffset \
+--		  ffcfstress jscal-restore jscal-store evdev-joystick
+-+PROGRAMS    =
+-+
+-+ifdef ENABLE_INPUTATTACH
+-+PROGRAMS	+= inputattach
+-+endif
+-+
+-+ifdef ENABLE_JOYSTICK
+-+PROGRAMS    += jstest
+-+PROGRAMS    += jscal
+-+PROGRAMS    += jscal-restore
+-+PROGRAMS    += jscal-store
+-+PROGRAMS    += evdev-joystick
+-+endif
+-+
+-+ifdef ENABLE_FORCEFEEDBACK
+-+PROGRAMS    += fftest
+-+PROGRAMS    += ffmvforce
+-+PROGRAMS    += ffset
+-+PROGRAMS    += ffcfstress
+-+endif
+- 
+- PREFIX          ?= /usr/local
+- 
+-@@ -79,13 +97,20 @@
+- 80-stelladaptor-joystick.rules: 80-stelladaptor-joystick.rules.in
+- 	sed "s^@@PREFIX@@^$(PREFIX)^g" < $^ > $@
+- 
+-+INSTALL_DEP = compile
+-+ifdef ENABLE_JOYSTICK
+-+INSTALL_DEP +=  80-stelladaptor-joystick.rules
+-+endif
+-+
+- install: compile 80-stelladaptor-joystick.rules
+- 	install -d $(DESTDIR)$(PREFIX)/bin
+- 	install $(PROGRAMS) $(DESTDIR)$(PREFIX)/bin
+-+ifdef ENABLE_JOYSTICK
+- 	install -d $(DESTDIR)$(PREFIX)/share/joystick
+- 	install extract filter ident $(DESTDIR)$(PREFIX)/share/joystick
+- 	install -d $(DESTDIR)/lib/udev/rules.d
+- 	install js-set-enum-leds $(DESTDIR)/lib/udev
+- 	install -m 644 80-stelladaptor-joystick.rules $(DESTDIR)/lib/udev/rules.d
+-+endif
+- 
+- .PHONY: compile clean distclean install
+diff --git a/package/linuxconsoletools/linuxconsoletools.hash b/package/linuxconsoletools/linuxconsoletools.hash
+index 889f6d1d6c..8e4099f163 100644
+--- a/package/linuxconsoletools/linuxconsoletools.hash
++++ b/package/linuxconsoletools/linuxconsoletools.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  8f872c1c395c4688759271d60bcfbe5a652490eed723582fe60662d265ea900f  kodi-pvr-mythtv-19.0.9-Matrix.tar.gz
-+sha256  397de3c9b0351079097f70d5e78930503aef2ec1ffb459ac1144b6a0051f2ba9  kodi-pvr-mythtv-19.0.10-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index 4d041dc8f0..c4c393088c 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256  bd4d4b7e37da02fc67e47ddf20b6f1243c0a7af7b02b918d5e72138ea8727547  linuxconsoletools-1.7.1.tar.bz2
++sha256  4da29745c782b7db18f5f37c49e77bf163121dd3761e2fc7636fa0cbf35c2456  linuxconsoletools-1.8.1.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/linuxconsoletools/linuxconsoletools.mk b/package/linuxconsoletools/linuxconsoletools.mk
+index 306a5b1fa0..a97618c832 100644
+--- a/package/linuxconsoletools/linuxconsoletools.mk
++++ b/package/linuxconsoletools/linuxconsoletools.mk
+@@ -4,24 +4,24 @@
  #
  ################################################################################
  
--KODI_PVR_MYTHTV_VERSION = 19.0.9-Matrix
-+KODI_PVR_MYTHTV_VERSION = 19.0.10-Matrix
- KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
- KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
+-LINUXCONSOLETOOLS_VERSION = 1.7.1
++LINUXCONSOLETOOLS_VERSION = 1.8.1
+ LINUXCONSOLETOOLS_SOURCE = linuxconsoletools-$(LINUXCONSOLETOOLS_VERSION).tar.bz2
+ LINUXCONSOLETOOLS_SITE = https://downloads.sourceforge.net/project/linuxconsole
+ LINUXCONSOLETOOLS_LICENSE = GPL-2.0+
+ LINUXCONSOLETOOLS_LICENSE_FILES = COPYING
+ 
+-ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH),y)
+-LINUXCONSOLETOOLS_MAKE_OPTS += ENABLE_INPUTATTACH=1
++ifneq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH),y)
++LINUXCONSOLETOOLS_MAKE_OPTS += DISABLE_INPUTATTACH=1
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK),y)
+-LINUXCONSOLETOOLS_MAKE_OPTS += ENABLE_JOYSTICK=1
++ifneq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK),y)
++LINUXCONSOLETOOLS_MAKE_OPTS += DISABLE_JOYSTICK=1
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK),y)
+-LINUXCONSOLETOOLS_MAKE_OPTS += \
+-	ENABLE_FORCEFEEDBACK=1 \
+-	CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
++ifneq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK),y)
++LINUXCONSOLETOOLS_MAKE_OPTS += DISABLE_FORCEFEEDBACK=1
++else
++LINUXCONSOLETOOLS_MAKE_OPTS += CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+ LINUXCONSOLETOOLS_DEPENDENCIES += sdl2 host-pkgconf
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
