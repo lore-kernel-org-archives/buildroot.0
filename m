@@ -4,98 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C994AC43334
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 12:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 449E0C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 14:01:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 54DAE40A4B;
-	Sun,  5 Jun 2022 12:50:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B051D40AFD;
+	Sun,  5 Jun 2022 14:01:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WwMbeZVdO4eo; Sun,  5 Jun 2022 12:50:18 +0000 (UTC)
+	with ESMTP id A8AFH_G5bfpg; Sun,  5 Jun 2022 14:01:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4B0B3404D3;
-	Sun,  5 Jun 2022 12:50:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 556281BF311
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 12:50:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CEDCC405F6;
+	Sun,  5 Jun 2022 14:01:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E7421BF393
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 14:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52A0084047
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 12:50:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 85E4E60D9D
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 14:01:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=tpm.dev
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B_Gw4fOK1-2I for <buildroot@lists.busybox.net>;
- Sun,  5 Jun 2022 12:50:14 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from delivery.mailspamprotection.com
- (delivery.mailspamprotection.com [185.56.84.32])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3A6A683FA8
- for <buildroot@buildroot.org>; Sun,  5 Jun 2022 12:50:14 +0000 (UTC)
-Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
- helo=es87.siteground.eu)
- by se29.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
- (Exim 4.92) (envelope-from <dimi@tpm.dev>)
- id 1nxphj-0000u4-3j; Sun, 05 Jun 2022 07:50:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tpm.dev;
- s=default; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
- In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=Uaohi7ku/jCLRKTNVcUwxIF6eRpQeTlRcbg/Sj5pcX8=; b=L+WnAGXNbLnZQi2IGU/u7prh8g
- rDBkHfjB0rd//dmyMGAmG7imnt4q/5qM3jxo9EX/ZUXf3LwmnOjvoFCsgjRr6Ofvdqx4pgJZUY696
- athgO50RgQmO+XoV54FDpr8PD0VcDTPBXb2YYmtR+LSxOBJc35+5Ncd04Mnek6Zca5C+Vp1J2gL6m
- gQuEnrJr4MnuMmCIt8WbpvMNrlARivOGCBM7NrF2ABsdfq74EvzX8isThxYzaAR+p9ai+sC12d6BL
- zo0XvVW2gs+tUfeR1tVsY1YfbZaVouNgF4jPpq5sGlzLgxf7vjbKzskQJlFqb4qsXTGI0cZNfWGMF
- f50nGEFQ==;
-Received: from [127.0.0.1] (port=31136 helo=es87.siteground.eu)
- by es87.siteground.eu with esmtpa (Exim 4.90-.1)
- (envelope-from <dimi@tpm.dev>)
- id 1nxphf-0002hj-Mf; Sun, 05 Jun 2022 12:49:59 +0000
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DXunNTq8Uvb7 for <buildroot@lists.busybox.net>;
+ Sun,  5 Jun 2022 14:01:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0576760BC4
+ for <buildroot@buildroot.org>; Sun,  5 Jun 2022 14:01:22 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id t13so16442866wrg.9
+ for <buildroot@buildroot.org>; Sun, 05 Jun 2022 07:01:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=kAunRwVESmc228tFCOMGt2v6cMxzrOWRtP1AK0QOJAw=;
+ b=iTeiyhLuHiRKoyZdRsQeScGufDt09oc2rBxDYXiH34yi3BUtCKDDunaNWtwiUqDjYv
+ iD3zUZ/1JCFwefZiw7wV5V12Lx/WqvNyJ5vD9w/+gQbMDP3MU6LFb5DBLKTKmkHeI2RL
+ waKBr+KrCGCilQ/HDsZ4Y7kPynmTsG6tvS1Lxth9zbl9OVVwkX+oMJFhAQ4aO2xEmMI5
+ FrqUg83q5zPsK/eenmnHIRLxfa5cbNtRS2IpABu0AmcLe6+gun2FvaPQ9lPzQW8JWXEJ
+ Z3szWkVxJoPfEL/fXgKMUHdNPF1JKWvd2Wt0PCAu3AdUJJUwoX1aOArsT3fZjwEENbS9
+ ARUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=kAunRwVESmc228tFCOMGt2v6cMxzrOWRtP1AK0QOJAw=;
+ b=Dlzuiq5wS1vp3AdmkR41WHGuGNJX3Iw5jEcjQ1Qdf8pSUtrutld/1G+T9tvHojM/UX
+ v1J7cDDsitKaw0MkXNuEU83QwuxnBMa3kuq3pD3xsQ6cxiL5oHpaxhZf4dkgRM6LC5qC
+ HQ9ujngUOMewi+SR1y5mniMZoTf7akTCZKLufo211RKXYDDJD4HOlqDIjSwMXW/4X7t6
+ OmzRWcN/++y/Tv5m2p5hUyf+nUu8uGI2bIKqRmX7Cmhc3F9RWMbeEgOm9AbvfHFBfa8a
+ /4cgEDhULzjuJtQtsBzEs3UrsdIIiQuDHZM71O0kFYhjKmcJ/AXaCNM7LTF83HBjMwox
+ GRNw==
+X-Gm-Message-State: AOAM533Ode2WMRpAeSxoDxzbHQz/ofeidz2MBW4HFb9En3aayLgpSHQa
+ /1SpTDX9UQEa+J8le1Q6RPk=
+X-Google-Smtp-Source: ABdhPJw0sZKFqhIy8cf6Vz2T6ZyFPvGTnTckFpN2uGqbQ34B6ChTjoK8Vbr/XDPySe889l09Njug2w==
+X-Received: by 2002:a05:6000:1c0d:b0:216:c9f4:2b83 with SMTP id
+ ba13-20020a0560001c0d00b00216c9f42b83mr5771866wrb.405.1654437681063; 
+ Sun, 05 Jun 2022 07:01:21 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id
+ t22-20020a05600c41d600b00397550b387bsm17275034wmh.23.2022.06.05.07.01.19
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 05 Jun 2022 07:01:20 -0700 (PDT)
+Message-ID: <012501bd-2055-6850-f00a-40e73e5cfa25@gmail.com>
+Date: Sun, 5 Jun 2022 16:01:17 +0200
 MIME-Version: 1.0
-Date: Sun, 05 Jun 2022 15:49:59 +0300
-From: Dimi Tomov <dimi@tpm.dev>
-To: Baruch Siach <baruch@tkos.co.il>, Martin Bark <martin@barkynet.com>
-In-Reply-To: <30bf207a13340e40cf083e6721d71460@tpm.dev>
-References: <cb76d24abec40b2e48d3d1dd2964b720@tpm.dev>
- <9251c4c3977f236b6c70e2c26f65a6c9@tpm.dev>
- <cefa8f258208ca9c1335d03895508b16@tpm.dev>
- <1ab54b30b3c2de10bcdeaa57f69c478b@tpm.dev>
- <d39ac782ff917689120b241a052b11cc@tpm.dev>
- <30bf207a13340e40cf083e6721d71460@tpm.dev>
-Message-ID: <0c50966fe0107ebc22de3f502828dc8d@tpm.dev>
-X-Sender: dimi@tpm.dev
-Organization: TPM.dev
-X-Originating-IP: 35.214.247.6
-X-SpamExperts-Domain: es87.siteground.eu
-X-SpamExperts-Username: 35.214.247.6
-Authentication-Results: mailspamprotection.com;
- auth=pass smtp.auth=35.214.247.6@es87.siteground.eu
-X-SpamExperts-Outgoing-Class: ham
-X-SpamExperts-Outgoing-Evidence: Combined (0.12)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT8ZSS4OfhpvmWhykY//texNPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5wyeMQO2X8Cp3nJ8z20Bm48mXQcXvgBwdPsgckLs23xIr8w
- OUqZ8/5fiNSm31Ip1nAjpx9soHOVwxRcKgX1jeW+/P2KA68bOYt0CoeAhNOZvwljaxkFYrj3R1cr
- 17AAs23KLMyCg2dNZJAK3gbNiIydjJKA7haz4rV6833Ny7pzTusBUwxLei5WfbYOwlA1j/PBI128
- r/Kn6gLOF3Dw0+51JU5pcJpt3JK/347T3ddDszVDPx49snBmt3mvjVEu1KMeigMttP/SK296THSN
- fG84WjgK8eSXaqvTogT9d22Zfp6J39DcTGtLC4s9xWFKM57e+VBAT7/iDvIuA8y8AC5BBP18vW6o
- drfO8cAzSdWUJ3ILXkRib82L43HIepkyRmrt3JsC5e/DlYVV9jqBtc/t9a3fvBg8I7q5hFKojyxx
- cVkDWpg3cUqnTXK7+jR2jt1xuwt6BW/LqWzUw+fkjzpuRAwX31WVY5lWjWxuGSRuxeH/U9irS6S/
- 4tPpWmJbHa138B2VLS1CpJIOW6O9dEv0FdiB1wGsIwp1rfFVK4orKL/MkTXVmMpAWIpXwTCeSh3C
- kdUpn8A2iMkLHL7hKRavnHl2TRtBFGxCwNLr/WIXTv9XXirEnIovV1DgiaRl4uEzrxMg36Jn7L4U
- IiMZgOGil2hsR99u5gXb6tWyU4Ig+a0jiD6XqsJZtjQxlyCdsezvfgASqYV08/XDEBcYDPz+CtbE
- guydx7+/OTtKDkewxUbHZyvxaoDHZu3kDSHQAYn0ueve0JZHC9g7yTKUVX5S119UJTC3pWi+xSvF
- azC0736kYH3pTkh+9N3RpnPTg4ilB88zIHaAzJ1MM+Uac+Gb8IwZYeUO3SdHOBIA/+dOcHeV3Rut
- woCbl6bePDUokDH0le6nwMqBTZPoY6UyWfs4xpom9HS037lCR5IYTfOPGxhgHWAwnOQo7d0zx9fP
- 9IUGe36LUkbq4uQ60WnRcdcrUNzSCKdUMUA8EmOuGIUG5/B4agWOBURF9vZZEPKbP7axnH8IQOGl
- 0OK9YQosYvUVGBt96cyC792PGPnCwto+jc3SLvmmH08hpnUWu8Jz3L6MyGnDIpSchlco6RIDoNg/
- DowYF5X92G1XxuvnCFAIOBFH5+voV8F0lWqCjvQnQq6JWFW8yhJ2Btz1sCvfhP6Q
-X-Report-Abuse-To: spam@quarantine1.mailspamprotection.com
-Subject: Re: [Buildroot] libcurl ignores default buildroot CA bundle
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To: Andreas Ziegler <br015@umbiko.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <mailman.2413.1654341347.130377.buildroot@buildroot.org>
+ <190f6507af24e5ee5e8797fbfaa3b7e3@umbiko.net>
+ <20220605090620.63a7375c@windsurf>
+ <d6a1f4d7ec93800f240b7457984040b9@umbiko.net>
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <d6a1f4d7ec93800f240b7457984040b9@umbiko.net>
+Subject: Re: [Buildroot] ulog compilation issue with buildroot 2022.02.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,148 +97,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot <buildroot@buildroot.org>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Herve Codina <herve.codina@bootlin.com>, Tim Hammer <Tim.Hammer@orolia.com>,
+ Buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Baruch,
-
-Please review the patch that fixes this - 
-https://lists.buildroot.org/pipermail/buildroot/2022-June/644127.html
-
-Thanks,
-Dimi
-
-On 2022-06-05 01:04 PM, Dimi Tomov wrote:
-> make libcurl-dirclean forced a rebuild with  wolfssl as the crypto
-> backend, however --with-ca-path does not work. Error below:
-> 
-> checking default CA cert bundle/path... configure: error:
-> --with-ca-path only works with OpenSSL, GnuTLS or mbedTLS
-> 
-> How to enable buildroot CA bundle for libcurl when using wolfssl?
-> 
-> Thanks,
-> Dimi
-> 
-> 
-> On 2022-06-05 11:32 AM, Dimi Tomov wrote:
->> I think I found another issue:
->> 
->> $make libcurl-reconfigure does not change the cryptopgrahic provider 
->> for curl.
->> 
->> I change the option using make menuconfig and I see it reflected in my
->> buildroot config.
->> 
->> ps: about curl w/ openssl, my board had its date set to May instead of
->> June and this was the issue.
->> 
->> Thanks,
->> 
->> Dimi
->> 
->> On 2022-06-05 11:16 AM, Dimi Tomov wrote:
->>> I forgot to mention that I have updated the system clock using data &
->>> hwclock -wu and the issue with libcurl and ca-certificates packages
->>> persists.
->>> 
->>> On 2022-06-05 10:24 AM, Dimi Tomov wrote:
->>>> Hell Martin and Baruch,
->>>> 
->>>> Issue persist after building my buildroot image with libcurl and
->>>> openssl as a cryptographic provider, ca-certificates package 
->>>> installed
->>>> properly and in default location. Error message only changed a bit:
->>>> 
->>>> # curl https://google.com
->>>> curl: (60) SSL certificate problem: certificate is not yet valid
->>>> More details here: https://curl.se/docs/sslcerts.html
->>>> 
->>>> curl failed to verify the legitimacy of the server and therefore 
->>>> could not
->>>> establish a secure connection to it. To learn more about this 
->>>> situation and
->>>> how to fix it, please visit the web page mentioned above.
->>>> 
->>>> ^the above page mentions that a CA bundle is missing.
->>>> 
->>>> However, /etc/ssl/certs is deployed properly by the buildroot make 
->>>> and
->>>> sdcard image.
->>>> 
->>>> Any ideas?
->>>> 
->>>> Thanks,
->>>> 
->>>> Dimi
->>>> 
->>>> --
->>>> Founder of TPM.dev
->>>> 
->>>> On 2022-06-04 09:16 PM, Dimi Tomov wrote:
->>>>> Hello Baruch,
->>>>> 
->>>>> I may have found an issue with the libcurl package.
->>>>> 
->>>>> The libcurl.mk file lacks CA path when built with wolfssl instead 
->>>>> of openssl.
->>>>> 
->>>>> ifeq ($(BR2_PACKAGE_LIBCURL_WOLFSSL),y)
->>>>> LIBCURL_CONF_OPTS += --with-wolfssl=$(STAGING_DIR)/usr
->>>>> LIBCURL_DEPENDENCIES += wolfssl
->>>>> else
->>>>> LIBCURL_CONF_OPTS += --without-wolfssl
->>>>> endif
->>>>> 
->>>>> I tried adding LIBCURL_CONF_OPTS += --with-ca-path=/etc/ssl/certs 
->>>>> in
->>>>> the above if case and rebuild, but this did not solve the issue. 
->>>>> Could
->>>>> you please take a look?
->>>>> 
->>>>> Thanks,
->>>>> 
->>>>> Dimi
->>>>> 
->>>>> On 2022-06-04 07:43 PM, Dimi Tomov wrote:
->>>>>> Hello Buildroot community,
->>>>>> 
->>>>>> I have a STM32MP1 target and my buildroot image has both the curl 
->>>>>> and
->>>>>> ca-certificates package installed. However, curl fails to 
->>>>>> authenticate
->>>>>> any https requests:
->>>>>> 
->>>>>> 
->>>>>> # curl https://google.com
->>>>>> 
->>>>>> curl: (77)  CA signer not available for verification
->>>>>> 
->>>>>> 
->>>>>> Do I need to do some extra buildroot configuration for libcurl to 
->>>>>> use
->>>>>> the CA bundle in /etc/ssl/certs?
->>>>>> 
->>>>>> Thanks,
->>>>>> 
->>>>>> Dimi Tomov
->>>>>> --
->>>>>> Founder of TPM.dev
->>>>>> _______________________________________________
->>>>>> buildroot mailing list
->>>>>> buildroot@buildroot.org
->>>>>> https://lists.buildroot.org/mailman/listinfo/buildroot
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot@buildroot.org
->>>> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-Founder of TPM.dev
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpMZSAwNS8wNi8yMDIyIMOgIDEzOjQ2LCBBbmRyZWFzIFppZWdsZXIgYSDDqWNyaXTC
+oDoKPiBIaSBUaG9tYXMsCj4gCj4gT24gMjAyMi0wNi0wNSAwNzowNiwgVGhvbWFzIFBldGF6em9u
+aSB3cm90ZToKPj4gSGVsbG8gQW5kcmVhcywKPj4KPj4gT24gU3VuLCAwNSBKdW4gMjAyMiAwNjow
+NTowOSArMDAwMAo+PiBBbmRyZWFzIFppZWdsZXIgPGJyMDE1QHVtYmlrby5uZXQ+IHdyb3RlOgo+
+Pgo+Pj4gVGhpcyBpcyB0aGUgZW52aXJvbm1lbnQgd2hlbiBhbGNoZW15IGlzIGNhbGxlZCBmcm9t
+IEJ1aWxkcm9vdDoKPj4+Cj4+PiBBTENIRU1ZX1RBUkdFVF9FTlYgPSBcCj4+PiDCoMKgwqDCoCQo
+VEFSR0VUX01BS0VfRU5WKSBcCj4+PiDCoMKgwqDCoEFMQ0hFTVlfSE9NRT0kKEFMQ0hFTVlfSE9N
+RSkgXAo+Pj4gwqDCoMKgwqBBTENIRU1ZX1dPUktTUEFDRV9ESVI9IiQoQEQpIiBcCj4+PiDCoMKg
+wqDCoEFMQ0hFTVlfVEFSR0VUX09VVD1hbGNoZW15LW91dCBcCj4+PiDCoMKgwqDCoFBLR0NPTkZJ
+R19CSU49JChQS0dfQ09ORklHX0hPU1RfQklOQVJZKSBcCj4+PiDCoMKgwqDCoFRBUkdFVF9PUz1s
+aW51eCBcCj4+PiDCoMKgwqDCoFRBUkdFVF9PU19GTEFWT1VSPWJ1aWxkcm9vdCBcCj4+PiDCoMKg
+wqDCoFRBUkdFVF9DUk9TUz0iJChUQVJHRVRfQ1JPU1MpIiBcCj4+PiDCoMKgwqDCoFRBUkdFVF9B
+UkNIPXh4eCBcCj4+PiDCoMKgwqDCoFRBUkdFVF9HTE9CQUxfQ1hYRkxBR1M9IiQoVEFSR0VUX0NY
+WEZMQUdTKSIgXAo+Pj4gwqDCoMKgwqBUQVJHRVRfR0xPQkFMX0xERkxBR1M9IiQoVEFSR0VUX0xE
+RkxBR1MpIiBcCj4+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIF4gTERGTEFHUyBhcmUgdXN1YWxseSBlbXB0eQo+Pj4gwqDCoMKgwqBUQVJHRVRf
+R0xPQkFMX0ZGTEFHUz0iJChUQVJHRVRfRkNGTEFHUykiIFwKPj4+IMKgwqDCoMKgVEFSR0VUX0dM
+T0JBTF9GQ0ZMQUdTPSIkKFRBUkdFVF9GQ0ZMQUdTKSIKPj4+Cj4+PiBBbGNoZW15IGFkZHMgbW9y
+ZSBzZXR0aW5ncyB0byBMREZMQUdTLCB0aGlzIGlzIHRoZSBmaW5hbCBjb250ZW50Ogo+Pj4KPj4+
+ICsgVEFSR0VUX0dMT0JBTF9MREZMQUdTID0gLU8yIC1XbCwtTzEKPj4+IC1MYWxjaGVteS1vdXQv
+c3RhZ2luZy9saWIvYXJtLWxpbnV4LWdudWVhYmloZiAtTGFsY2hlbXktb3V0L3N0YWdpbmcvbGli
+Cj4+PiAtTGFsY2hlbXktb3V0L3N0YWdpbmcvdXNyL2xpYi9hcm0tbGludXgtZ251ZWFiaWhmCj4+
+PiAtTGFsY2hlbXktb3V0L3N0YWdpbmcvdXNyL2xpYgo+Pj4gLVdsLC1ycGF0aC1saW5rPWFsY2hl
+bXktb3V0L3N0YWdpbmcvbGliL2FybS1saW51eC1nbnVlYWJpaGYKPj4+IC1XbCwtcnBhdGgtbGlu
+az1hbGNoZW15LW91dC9zdGFnaW5nL2xpYgo+Pj4gLVdsLC1ycGF0aC1saW5rPWFsY2hlbXktb3V0
+L3N0YWdpbmcvdXNyL2xpYi9hcm0tbGludXgtZ251ZWFiaWhmCj4+PiAtV2wsLXJwYXRoLWxpbms9
+YWxjaGVteS1vdXQvc3RhZ2luZy91c3IvbGliCj4+Pgo+Pj4gQWRkaW5nIHRoZSBCdWlsZHJvb3Qg
+c3RhZ2luZyBsaWJyYXJ5IHBhdGggdG8gTERGTEFHUyBtYWtlcyB0aGUgYnVpbGQKPj4+IHN1Y2Nl
+ZWQ6Cj4+Pgo+Pj4gwqDCoMKgwqAuLi4KPj4+IMKgwqDCoMKgVEFSR0VUX0dMT0JBTF9MREZMQUdT
+PSIkKFRBUkdFVF9MREZMQUdTKSAtTCQoU1RBR0lOR19ESVIpL3Vzci9saWIiIFwKPj4KPj4gVGhh
+bmtzIGZvciB5b3VyIGludmVzdGlnYXRpb24hCj4+Cj4+IC1MJChTVEFHSU5HX0RJUikvdXNyL2xp
+YiBzaG91bGQgbm9ybWFsbHkgbm90IGJlIG5lZWRlZCwgYmVjYXVzZQo+PiAkKFNUQUdJTkdfRElS
+KS91c3IvbGliIGlzIGluIHRoZSBkZWZhdWx0IHNlYXJjaCBwYXRoIG9mIHRoZQo+PiBjcm9zcy1j
+b21waWxlciwgYXMgdGhlIGNvbXBpbGVyIGhhcyAkKFNUQUdJTkdfRElSKS91c3IgYXMgaXRzIHN5
+c3Jvb3QuCj4+Cj4+IFNvIGZyb20gYSBjcm9zcy1jb21waWxlciBwZXJzcGVjdGl2ZSwgLUwkKFNU
+QUdJTkdfRElSKS91c3IvbGliIHNob3VsZAo+PiBub3JtYWxseSBub3QgYmUgbmVlZGVkLCBhbmQg
+dGhhdCdzIHdoeSBpdCdzIG5vdCBpbiAkKFRBUkdFVF9MREZMQUdTKS4KPiAKPiBBbmQgc3lzcm9v
+dCBpcyBkZXRlY3RlZCBieSBhbGNoZW15Ogo+IAo+ICsgVEFSR0VUX1RPT0xDSEFJTl9TWVNST09U
+ID0KPiAvaG9tZS9kYXRhL3Rlc3QvYXV0b2J1aWxkL2hvc3QvYXJtLWJ1aWxkcm9vdC1saW51eC1n
+bnVlYWJpaGYvc3lzcm9vdAoKWWVzIGJ1dCBhbGNoZW15IHRyeSB0byBjb3B5IHNvbWUgZmlsZXMg
+ZnJvbSBzdGFnaW5nIGRpcmVjdG9yeSB0bwp1bG9nL2FsY2hlbXktb3V0L3N0YWdpbmcKClNlZSBf
+bGliY19pbnN0YWxsZWRfZmlsZSB0YXJnZXQgaW4gb3V0cHV0L2hvc3Qvb3B0L2FsY2hlbXkvdG9v
+bGNoYWlucy9saWJjLm1rLgoKSWYgd2UgaGFjayBpbnRvIF9saWJjX2luc3RhbGxlZF9maWxlIHJ1
+bGUgdG8gbm90IGNvcHkgYW55IGZpbGVzIGZyb20gc3RhZ2luZywKdGhlIGJ1aWxkIHN1Y2NlZWQu
+Cgo+IAo+PiBBbHNvLCB0aGVyZSBpcyBhIGN1cmlvdXMgdGhpbmcgaW4gdGhlIHJlcG9ydCBmcm9t
+IE5pY29sYXM6IHRoZSBlcnJvcgo+PiBoYXBwZW5zIHdoZW4gc3lzdGVtZCBpcyBlbmFibGVkLCBi
+dXQgZG9lc24ndCBoYXBwZW4gd2hlbiBzeXN0ZW1kIGlzCj4+IGRpc2FibGVkLgo+IAo+IEkgY2Fu
+IGNvbmZpcm0gdGhpcy4gQWRkaW5nIEJSMl9JTklUX1NZU1RFTUQ9eSBicmVha3MgdGhlIGJ1aWxk
+ICh1c2luZyBtYWtlIGNsZWFuCj4gJiYgbWFrZSB1bG9nKS4KCkkgZGlkIGEgdHJ5IHdpdGhvdXQg
+c3lzdGVtZCBidXQgdGhlIGJ1aWxkIGZhaWxlZC4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiAK
+PiBLaW5kIHJlZ2FyZHMsCj4gQW5kcmVhcwo+IAo+PiBUaG9tYXMKPj4gLS0gCj4+IFRob21hcyBQ
+ZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KPj4gRW1iZWRkZWQgTGludXggYW5k
+IEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKPj4gaHR0cHM6Ly9ib290bGluLmNvbQo+
+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRy
+b290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
