@@ -1,52 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D28B7C43334
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 11:46:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38A0CC43334
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 12:48:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EC8161170;
-	Sun,  5 Jun 2022 11:46:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F22C843F5;
+	Sun,  5 Jun 2022 12:48:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 10Jtsc945QwL; Sun,  5 Jun 2022 11:46:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gSsEFCLE2ysK; Sun,  5 Jun 2022 12:48:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5836260C0E;
-	Sun,  5 Jun 2022 11:46:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C42601BF310
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 11:46:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB277843EF;
+	Sun,  5 Jun 2022 12:48:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A84F1BF311
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 12:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B295A4034B
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 11:46:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 293AC843EF
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 12:48:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0nBT76jDBLyG for <buildroot@lists.busybox.net>;
- Sun,  5 Jun 2022 11:46:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CB27940148
- for <buildroot@buildroot.org>; Sun,  5 Jun 2022 11:46:46 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id A9EE3C6CADF2;
- Sun,  5 Jun 2022 13:46:43 +0200 (CEST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2qQmPCfX5tRR for <buildroot@lists.busybox.net>;
+ Sun,  5 Jun 2022 12:48:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from delivery.mailspamprotection.com
+ (delivery.mailspamprotection.com [185.56.84.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4378E843EE
+ for <buildroot@buildroot.org>; Sun,  5 Jun 2022 12:48:07 +0000 (UTC)
+Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
+ helo=es87.siteground.eu)
+ by se24.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
+ (Exim 4.92) (envelope-from <dimi@tpm.dev>)
+ id 1nxpfn-000CqU-M4; Sun, 05 Jun 2022 07:48:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tpm.dev;
+ s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=RHvI6IFLO7jubznnf3IFacYE683KUKhOMhMPkHv/bIw=; b=bNVrXQaoOR36P39dVJhf2+zhtT
+ js/l0prb2My4sFE6PKUQ95Ln6oi4+IryNc2zF0cSq7x6zDJcjaoFZuw+xrBSsvn6fjayluxZd3RXb
+ daki93obpAquADYoGuEPIh2Z05QGBb8VML5tAzNp3Nzu/iVR7Em22fQ3eJw79nWCvyUFt6PCO8NLQ
+ RgtOF9TjCSRgWf5OHFGRIC1j4kmm2z4filM15Ubj4BT6K+9Hz5GTwjU+0qzGOsNU+shbI115NQfI9
+ aVWUdo4nv6XMWKR0oNk3BFCYEBa7r+YNUo/5RmAzkGMcNSM5nRYSuHAjepf23MNoM7kzb6s5WeAyN
+ RB7obE8Q==;
+Received: from [95.111.54.43] (port=46482 helo=localhost.localdomain)
+ by es87.siteground.eu with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.90-.1)
+ (envelope-from <dimi@tpm.dev>)
+ id 1nxpfk-000250-09; Sun, 05 Jun 2022 12:48:00 +0000
+From: Dimi Tomov <dimi@tpm.dev>
+To: buildroot@buildroot.org
+Date: Sun,  5 Jun 2022 15:47:49 +0300
+Message-Id: <20220605124749.719103-1-dimi@tpm.dev>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Date: Sun, 05 Jun 2022 11:46:43 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20220605090620.63a7375c@windsurf>
-References: <mailman.2413.1654341347.130377.buildroot@buildroot.org>
- <190f6507af24e5ee5e8797fbfaa3b7e3@umbiko.net>
- <20220605090620.63a7375c@windsurf>
-Message-ID: <d6a1f4d7ec93800f240b7457984040b9@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.6 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: Re: [Buildroot] ulog compilation issue with buildroot 2022.02.2
+X-Originating-IP: 35.214.247.6
+X-SpamExperts-Domain: es87.siteground.eu
+X-SpamExperts-Username: 35.214.247.6
+Authentication-Results: mailspamprotection.com;
+ auth=pass smtp.auth=35.214.247.6@es87.siteground.eu
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: Combined (0.02)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+6w/CN/sGM9f0p8F13GlVdPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xKipkaFeQDP2JiLCjsOSqCBHoJjdDPbdunZvlh+03gEwgh
+ S/AeyjcqEXQjvQBWnHaB5w7VMSgzYws8V2vqkQ88v9pI3x+KowyxF2mXKbTf61Gavff7/jlq6fkm
+ O4krnmuxC+60g1OCli94ELJwhE2kub8D9WD6xfbADJ1zA9HBaqd0cuPgMEJQbrlCqWEDfjMlo2gF
+ qV79OAY7fXoo/nPZ4o5sCtqcRuHYPoBR/xk7W5k+48LH88N7MxgR80QOpNPjizWiueKsu95pjKjE
+ ZivLcvKBc5WQ80hTGTAhCSql9y6IkaMv3Z4p4HmrwR+KNrmceXZNG0EUbELA0uv9YhdOn9qh6YJL
+ goIgpooGHNCWjcyd7yQQWL3CF2XL3W4+3422Z/tWtoggnTxct1hogZAWXPgQW/lHmBQYTwGUOuQt
+ neLwejJoep85cxiiuAjU3Rbb9o3fo72bmQvDKfo81/tuNGzNK57qt3T9bZrIrb0avJ7PU4uldRLy
+ m7Y+p+3nH61no0OLT1J6F/uPV57T7EU3BpiC/gvH9D2a5ajKP8dQZrSJjzN5e8VFlEjmqR4rzvUX
+ Ku1VbgppFJRGoXLED7mH6r3C2Qgzc+xROZfGnoE3614HqV8NrjpIfAVmkZmE2qRJ7laYEbvuQrJ+
+ TKp9BDpkOMyeV7249X2e1GQHGQCkcclGgiviJiOUFQh00akkcKtmAJ1M62784OylUJfDmQxrEJhS
+ dHbPMCc2t7rrP3FjdozzdPOPWdKjATtJ0dirmaogUfEKkGgR6X8JQY9+1ZSkQif5NiaPmZ+LPXFi
+ VmtBqlP6+VrkY2+6/x1wn2vYqPGD2pb7TJVA/QLYgNSBeEiWUQWD8ZUl6W6GbLVSRWNFEvfMpnhx
+ SILwE2lXJYqUIF7k1yqD7JMJmjvC17jZ2ygxHHASJNUmoOHSoqgqxfHmWbxnBMuG5KUNd2YoA3i6
+ jZ70GRAiJJgA0pWCx6W5Scflg+Fazkpch+34xBFBwu8BiYOl2rdDiSdgFm4f9pMpvOAGmiCBLL73
+ OB7NgJfiQgVvXnDbCojG2e3Yg/V9Nu52s9vTCZZbfz0JmsQszuRWhyD10tfqoGlbdTkTLaWCAXLa
+ sZx/CEDhpdDivWEKLGL1FRbQAHAsi0HaQ0P56BAwXro=
+X-Report-Abuse-To: spam@quarantine1.mailspamprotection.com
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: fix missing CA bundle when
+ wolfssl is SSL/TLS provider
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,86 +99,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Herve Codina <herve.codina@bootlin.com>, Tim Hammer <Tim.Hammer@orolia.com>,
- Buildroot <buildroot@buildroot.org>
+Cc: Dimitar Tomov <dimi@tpm.dev>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+From: Dimitar Tomov <dimi@tpm.dev>
 
-On 2022-06-05 07:06, Thomas Petazzoni wrote:
-> Hello Andreas,
-> 
-> On Sun, 05 Jun 2022 06:05:09 +0000
-> Andreas Ziegler <br015@umbiko.net> wrote:
-> 
->> This is the environment when alchemy is called from Buildroot:
->> 
->> ALCHEMY_TARGET_ENV = \
->> 	$(TARGET_MAKE_ENV) \
->> 	ALCHEMY_HOME=$(ALCHEMY_HOME) \
->> 	ALCHEMY_WORKSPACE_DIR="$(@D)" \
->> 	ALCHEMY_TARGET_OUT=alchemy-out \
->> 	PKGCONFIG_BIN=$(PKG_CONFIG_HOST_BINARY) \
->> 	TARGET_OS=linux \
->> 	TARGET_OS_FLAVOUR=buildroot \
->> 	TARGET_CROSS="$(TARGET_CROSS)" \
->> 	TARGET_ARCH=xxx \
->> 	TARGET_GLOBAL_CXXFLAGS="$(TARGET_CXXFLAGS)" \
->> 	TARGET_GLOBAL_LDFLAGS="$(TARGET_LDFLAGS)" \
->> 	                       ^ LDFLAGS are usually empty
->> 	TARGET_GLOBAL_FFLAGS="$(TARGET_FCFLAGS)" \
->> 	TARGET_GLOBAL_FCFLAGS="$(TARGET_FCFLAGS)"
->> 
->> Alchemy adds more settings to LDFLAGS, this is the final content:
->> 
->> + TARGET_GLOBAL_LDFLAGS = -O2 -Wl,-O1
->> -Lalchemy-out/staging/lib/arm-linux-gnueabihf 
->> -Lalchemy-out/staging/lib
->> -Lalchemy-out/staging/usr/lib/arm-linux-gnueabihf
->> -Lalchemy-out/staging/usr/lib
->> -Wl,-rpath-link=alchemy-out/staging/lib/arm-linux-gnueabihf
->> -Wl,-rpath-link=alchemy-out/staging/lib
->> -Wl,-rpath-link=alchemy-out/staging/usr/lib/arm-linux-gnueabihf
->> -Wl,-rpath-link=alchemy-out/staging/usr/lib
->> 
->> Adding the Buildroot staging library path to LDFLAGS makes the build
->> succeed:
->> 
->> 	...
->> 	TARGET_GLOBAL_LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
-> 
-> Thanks for your investigation!
-> 
-> -L$(STAGING_DIR)/usr/lib should normally not be needed, because
-> $(STAGING_DIR)/usr/lib is in the default search path of the
-> cross-compiler, as the compiler has $(STAGING_DIR)/usr as its sysroot.
-> 
-> So from a cross-compiler perspective, -L$(STAGING_DIR)/usr/lib should
-> normally not be needed, and that's why it's not in $(TARGET_LDFLAGS).
+Without CA bundle curl can not verify the remote peer and work with https.
+This is fixed by adding a config option pointing to the default location
+for CA bundle in buildroot. Alternatives like OpenSSL and MbedTLS use the
+same path, however the wolfSSL build options for libcurl did not include
+this path until now.
 
-And sysroot is detected by alchemy:
+Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
+---
+ package/libcurl/libcurl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-+ TARGET_TOOLCHAIN_SYSROOT = 
-/home/data/test/autobuild/host/arm-buildroot-linux-gnueabihf/sysroot
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 15943f7512..11f1e4de59 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -77,6 +77,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL_WOLFSSL),y)
+ LIBCURL_CONF_OPTS += --with-wolfssl=$(STAGING_DIR)/usr
++LIBCURL_CONF_OPTS += --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt
+ LIBCURL_DEPENDENCIES += wolfssl
+ else
+ LIBCURL_CONF_OPTS += --without-wolfssl
+-- 
+2.27.0
 
-> Also, there is a curious thing in the report from Nicolas: the error
-> happens when systemd is enabled, but doesn't happen when systemd is
-> disabled.
-
-I can confirm this. Adding BR2_INIT_SYSTEMD=y breaks the build (using 
-make clean && make ulog).
-
-Kind regards,
-Andreas
-
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
