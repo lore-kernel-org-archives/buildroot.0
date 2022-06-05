@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79CC6CCA47C
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:21:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB87DC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:22:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 42CAA405A3;
-	Tue,  7 Jun 2022 19:21:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A41EF61015;
+	Tue,  7 Jun 2022 19:22:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CjWwWCaDjzXR; Tue,  7 Jun 2022 19:21:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Lkq50bAIIZ7Y; Tue,  7 Jun 2022 19:22:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 62320404C2;
-	Tue,  7 Jun 2022 19:21:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C912E1BF475
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA9B460FE3;
+	Tue,  7 Jun 2022 19:22:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D89001BF9B4
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 044464190A
+ by smtp3.osuosl.org (Postfix) with ESMTP id D7A5960FC9
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tmdaQD50933c for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KOsOSVD7esTQ for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0706B41903
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2BFED60E9C
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EC4E486E22; Tue,  7 Jun 2022 19:04:57 +0000 (UTC)
+ id 1FECC86E23; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 1 Jun 2022 23:18:17 +0200
+Date: Sun, 5 Jun 2022 22:24:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2cf8ac37e108e2696426388c2e340f0110a8d973
-X-Git-Newrev: 6efd6bec01fa64384e90b0d5cfc951d7cc3bf31d
+X-Git-Oldrev: 3a6c130754d80005d3212ea7426599fe3a679ad6
+X-Git-Newrev: 9e59c4ab3883b4dc8b3a9b269524e62415780966
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190457.EC4E486E22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-stalker: bump version to
- 19.0.3-Matrix
+Message-Id: <20220607190459.1FECC86E23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rauc: add option to enable/disable
+ streaming support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,38 +60,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6efd6bec01fa64384e90b0d5cfc951d7cc3bf31d
+commit: https://git.buildroot.net/buildroot/commit/?id=9e59c4ab3883b4dc8b3a9b269524e62415780966
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+RAUC 1.7 introduces streaming update support. Make this configurable
+and add required dependency to libnl.
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-stalker/kodi-pvr-stalker.hash | 2 +-
- package/kodi-pvr-stalker/kodi-pvr-stalker.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/rauc/Config.in | 10 ++++++++++
+ package/rauc/rauc.mk   |  7 +++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
-index 2eae79d371..ad47f02bd8 100644
---- a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ca472c4f43f77d7badca3fbe174f5877e6b3ff63407da09f690d8146ec737b59  kodi-pvr-stalker-19.0.2-Matrix.tar.gz
-+sha256  c0d71dad5fdbc334ea8b0b66f5155c72b6f59a76c268a1de71edb837688ebf81  kodi-pvr-stalker-19.0.3-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-index efa293a40d..bda1c8ff75 100644
---- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+index 1170e50845..7451b29a55 100644
+--- a/package/rauc/Config.in
++++ b/package/rauc/Config.in
+@@ -40,6 +40,16 @@ config BR2_PACKAGE_RAUC_NETWORK
+ 	  This option enables support for updating firmware over
+ 	  the network using libcurl.
  
--KODI_PVR_STALKER_VERSION = 19.0.2-Matrix
-+KODI_PVR_STALKER_VERSION = 19.0.3-Matrix
- KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
- KODI_PVR_STALKER_LICENSE = GPL-2.0+
- KODI_PVR_STALKER_LICENSE_FILES = LICENSE.md
++if BR2_PACKAGE_RAUC_NETWORK
++
++config BR2_PACKAGE_RAUC_STREAMING
++	bool "streaming update support"
++	select BR2_PACKAGE_LIBNL
++	help
++	  This option enables support for streaming update mode.
++
++endif
++
+ config BR2_PACKAGE_RAUC_JSON
+ 	bool "JSON output support"
+ 	select BR2_PACKAGE_JSON_GLIB
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 90b2317d4b..8bfb0b79ba 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -52,6 +52,13 @@ else
+ RAUC_CONF_OPTS += --disable-json
+ endif
+ 
++ifeq ($(BR2_PACKAGE_RAUC_STREAMING),y)
++RAUC_CONF_OPTS += --enable-streaming
++RAUC_DEPENDENCIES += libnl
++else
++RAUC_CONF_OPTS += --disable-streaming
++endif
++
+ HOST_RAUC_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-openssl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
