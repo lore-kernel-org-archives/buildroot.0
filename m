@@ -1,45 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E919C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:35:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 248C5C43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:35:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4735A6101F;
-	Tue,  7 Jun 2022 19:35:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3B1D40B30;
+	Tue,  7 Jun 2022 19:35:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hYDhKcqxzk5t; Tue,  7 Jun 2022 19:35:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LpdtlzFDtlAH; Tue,  7 Jun 2022 19:35:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DCD260FE2;
-	Tue,  7 Jun 2022 19:35:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C323405EC;
+	Tue,  7 Jun 2022 19:35:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A80411BF475
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EF97C1BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD24340B42
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06BCB40B5A
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WYWaJDU5j1J4 for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
+ with ESMTP id FNRnExfD5pZq for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18A3740B5A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8543640B62
  for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0CD7586E21; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
+ id 74F1C86E23; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Jun 2022 22:23:32 +0200
+Date: Sun, 5 Jun 2022 23:10:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c6310ae23228b5061c8852f79e547d2a11b62b2b
-X-Git-Newrev: e04f1b015989ff924384861cb2872f84eade4155
+X-Git-Oldrev: 9d97ca0a5ebccabc7b5e605ade4ccbcc19668ca1
+X-Git-Newrev: f27ea50528755b5f353e3db124dee535645dcf09
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190459.0CD7586E21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rauc: fix build
+Message-Id: <20220607190459.74F1C86E23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/graphicsmagick: bump to version
+ 1.3.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,73 +60,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e04f1b015989ff924384861cb2872f84eade4155
+commit: https://git.buildroot.net/buildroot/commit/?id=f27ea50528755b5f353e3db124dee535645dcf09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised since bump to version 1.5 in
-commit 41bbe8df540e2c630ad04f8db7383a7e7705f368 and
-https://github.com/rauc/rauc/commit/be55282d71d967dcc0cf48303f8245cbc8fff053:
+License file hash is changed, due to a copyright year change:
 
-In file included from /nvmedata/autobuild/instance-22/output-1/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib.h:62,
-                 from src/verity_hash.c:26:
-src/verity_hash.c: In function 'verify_zero':
-src/verity_hash.c:69:55: error: expected ')' before 'PRIu64'
-   69 |    g_message("Spare area is not zeroed at position %" PRIu64 ".",
-      |                                                       ^~~~~~
+-  Copyright (C) 2002-2021 GraphicsMagick Group
++  Copyright (C) 2002-2022 GraphicsMagick Group
 
-Fixes:
- - http://autobuild.buildroot.org/results/1a093c0e194a061836884419d2f50506105db01e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...0001-src-verify_hash.c-include-inttypes.h.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/graphicsmagick/graphicsmagick.hash | 4 ++--
+ package/graphicsmagick/graphicsmagick.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch b/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch
-new file mode 100644
-index 0000000000..916c8cca0b
---- /dev/null
-+++ b/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch
-@@ -0,0 +1,38 @@
-+From b19a9c26d88a913417e77aaf60c72cdbf393d1f6 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 31 May 2022 21:22:36 +0200
-+Subject: [PATCH] src/verify_hash.c: include inttypes.h
-+
-+Include inttypes.h to avoid the following build failure:
-+
-+In file included from /nvmedata/autobuild/instance-22/output-1/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib.h:62,
-+                 from src/verity_hash.c:26:
-+src/verity_hash.c: In function 'verify_zero':
-+src/verity_hash.c:69:55: error: expected ')' before 'PRIu64'
-+   69 |    g_message("Spare area is not zeroed at position %" PRIu64 ".",
-+      |                                                       ^~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/1a093c0e194a061836884419d2f50506105db01e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/rauc/rauc/pull/914]
-+---
-+ src/verity_hash.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/verity_hash.c b/src/verity_hash.c
-+index db82a78..3b2c2a0 100644
-+--- a/src/verity_hash.c
-++++ b/src/verity_hash.c
-+@@ -19,6 +19,7 @@
-+  */
-+ 
-+ #include <errno.h>
-++#include <inttypes.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+-- 
-+2.35.1
-+
+diff --git a/package/graphicsmagick/graphicsmagick.hash b/package/graphicsmagick/graphicsmagick.hash
+index cf6d224216..80130da5d6 100644
+--- a/package/graphicsmagick/graphicsmagick.hash
++++ b/package/graphicsmagick/graphicsmagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  90dc22f1a7bd240e4c9065a940962bf13da43c99bcc36cb111cc3c1a0d7477d4  GraphicsMagick-1.3.37.tar.xz
+-sha256  8a4d960c5a3e453ee21e459e1794c7a0c85559825d3363a8d3b510b3344fdad4  Copyright.txt
++sha256  d60cd9db59351d2b9cb19beb443170acaa28f073d13d258f67b3627635e32675  GraphicsMagick-1.3.38.tar.xz
++sha256  0a20e661de942ebe115a354d0ec6d1d42b93856ea765f813f350a5ce5024cdb7  Copyright.txt
+diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
+index 38743487eb..dbaa8ddf70 100644
+--- a/package/graphicsmagick/graphicsmagick.mk
++++ b/package/graphicsmagick/graphicsmagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GRAPHICSMAGICK_VERSION = 1.3.37
++GRAPHICSMAGICK_VERSION = 1.3.38
+ GRAPHICSMAGICK_SOURCE = GraphicsMagick-$(GRAPHICSMAGICK_VERSION).tar.xz
+ GRAPHICSMAGICK_SITE = https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/$(GRAPHICSMAGICK_VERSION)
+ GRAPHICSMAGICK_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
