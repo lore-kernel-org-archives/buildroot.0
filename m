@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E91E0C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 21:11:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1105C43334
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 21:11:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B8A741701;
-	Sun,  5 Jun 2022 21:11:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6384184104;
+	Sun,  5 Jun 2022 21:11:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SXQMF1_zWUYc; Sun,  5 Jun 2022 21:11:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vOhIvjd7l0Hh; Sun,  5 Jun 2022 21:11:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B81DE41B64;
-	Sun,  5 Jun 2022 21:11:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78AD1840D7;
+	Sun,  5 Jun 2022 21:11:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6FF501BF290
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 21:10:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 99B0A1BF290
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 21:10:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F211417DC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9263341796
  for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 21:10:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iad2A3ld76MV for <buildroot@lists.busybox.net>;
+ with ESMTP id 8ekBEcyv_UIV for <buildroot@lists.busybox.net>;
  Sun,  5 Jun 2022 21:10:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 488E241796
+ by smtp4.osuosl.org (Postfix) with ESMTP id 523AF417C2
  for <buildroot@buildroot.org>; Sun,  5 Jun 2022 21:10:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8926D86C17; Sun,  5 Jun 2022 20:58:46 +0000 (UTC)
+ id 9E15086C19; Sun,  5 Jun 2022 20:58:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Jun 2022 23:10:13 +0200
+Date: Sun, 5 Jun 2022 23:10:20 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 53cf107505f5f831e4ebc1b70af172520af0ebfc
-X-Git-Newrev: e82a1c49bce61143c963c72f4674c6ebcefca5ba
+X-Git-Oldrev: 9d97ca0a5ebccabc7b5e605ade4ccbcc19668ca1
+X-Git-Newrev: f27ea50528755b5f353e3db124dee535645dcf09
 X-Patchwork-Hint: ignore
-Message-Id: <20220605205846.8926D86C17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-rpi-ws281x:
- bump to version 4.3.4
+Message-Id: <20220605205846.9E15086C19@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/graphicsmagick: bump
+ to version 1.3.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,45 +60,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e82a1c49bce61143c963c72f4674c6ebcefca5ba
+commit: https://git.buildroot.net/buildroot/commit/?id=f27ea50528755b5f353e3db124dee535645dcf09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+License file hash is changed, due to a copyright year change:
+
+-  Copyright (C) 2002-2021 GraphicsMagick Group
++  Copyright (C) 2002-2022 GraphicsMagick Group
 
 Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-rpi-ws281x/python-rpi-ws281x.hash | 4 ++--
- package/python-rpi-ws281x/python-rpi-ws281x.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/graphicsmagick/graphicsmagick.hash | 4 ++--
+ package/graphicsmagick/graphicsmagick.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-rpi-ws281x/python-rpi-ws281x.hash b/package/python-rpi-ws281x/python-rpi-ws281x.hash
-index 06b2d18607..ffdd826b6f 100644
---- a/package/python-rpi-ws281x/python-rpi-ws281x.hash
-+++ b/package/python-rpi-ws281x/python-rpi-ws281x.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/rpi-ws281x/json
--md5  333dacfc58058d5f485f9af74551c70e  rpi_ws281x-4.3.0.tar.gz
--sha256  0b9549687ab7117acbc4bac0e92742fd2c8290fd204514d72fed91c06ba2e805  rpi_ws281x-4.3.0.tar.gz
-+md5  016e1f03f9168ef03d4baf074aa60f03  rpi_ws281x-4.3.4.tar.gz
-+sha256  072eff1787e579d1710381b27c467709e3aab28ac579c7a47d7cc87398496f28  rpi_ws281x-4.3.4.tar.gz
- # Locally computed sha256 checksums
- sha256  7bbf6337c1eee7169579e6acd398f31ea274dfa3a1689ab7e654ca3585d5a8a9  LICENSE
- sha256  7bbf6337c1eee7169579e6acd398f31ea274dfa3a1689ab7e654ca3585d5a8a9  lib/LICENSE
-diff --git a/package/python-rpi-ws281x/python-rpi-ws281x.mk b/package/python-rpi-ws281x/python-rpi-ws281x.mk
-index b711039615..73befeb56e 100644
---- a/package/python-rpi-ws281x/python-rpi-ws281x.mk
-+++ b/package/python-rpi-ws281x/python-rpi-ws281x.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/graphicsmagick/graphicsmagick.hash b/package/graphicsmagick/graphicsmagick.hash
+index cf6d224216..80130da5d6 100644
+--- a/package/graphicsmagick/graphicsmagick.hash
++++ b/package/graphicsmagick/graphicsmagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  90dc22f1a7bd240e4c9065a940962bf13da43c99bcc36cb111cc3c1a0d7477d4  GraphicsMagick-1.3.37.tar.xz
+-sha256  8a4d960c5a3e453ee21e459e1794c7a0c85559825d3363a8d3b510b3344fdad4  Copyright.txt
++sha256  d60cd9db59351d2b9cb19beb443170acaa28f073d13d258f67b3627635e32675  GraphicsMagick-1.3.38.tar.xz
++sha256  0a20e661de942ebe115a354d0ec6d1d42b93856ea765f813f350a5ce5024cdb7  Copyright.txt
+diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
+index 38743487eb..dbaa8ddf70 100644
+--- a/package/graphicsmagick/graphicsmagick.mk
++++ b/package/graphicsmagick/graphicsmagick.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_RPI_WS281X_VERSION = 4.3.0
-+PYTHON_RPI_WS281X_VERSION = 4.3.4
- PYTHON_RPI_WS281X_SOURCE = rpi_ws281x-$(PYTHON_RPI_WS281X_VERSION).tar.gz
--PYTHON_RPI_WS281X_SITE = https://files.pythonhosted.org/packages/cd/b3/eb7ac93376952f165577707ec756f40c9537ed53c59fcbc3290c357370e0
-+PYTHON_RPI_WS281X_SITE = https://files.pythonhosted.org/packages/e2/d4/75fcc4f3412b9b16e39e6cd6156f2e171fe7b2e79057be17d1acf38fded4
- PYTHON_RPI_WS281X_SETUP_TYPE = setuptools
- PYTHON_RPI_WS281X_LICENSE = BSD-2-Clause
- PYTHON_RPI_WS281X_LICENSE_FILES = LICENSE lib/LICENSE
+-GRAPHICSMAGICK_VERSION = 1.3.37
++GRAPHICSMAGICK_VERSION = 1.3.38
+ GRAPHICSMAGICK_SOURCE = GraphicsMagick-$(GRAPHICSMAGICK_VERSION).tar.xz
+ GRAPHICSMAGICK_SITE = https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/$(GRAPHICSMAGICK_VERSION)
+ GRAPHICSMAGICK_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
