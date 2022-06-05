@@ -4,59 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73A35C43334
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 20:26:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 258DFC43334
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 20:26:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1454D41687;
-	Sun,  5 Jun 2022 20:26:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9F6B41B64;
+	Sun,  5 Jun 2022 20:26:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ab_LIZC8Sgch; Sun,  5 Jun 2022 20:26:15 +0000 (UTC)
+	with ESMTP id raEBweHqrG3c; Sun,  5 Jun 2022 20:26:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E57A141634;
-	Sun,  5 Jun 2022 20:26:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C20341B56;
+	Sun,  5 Jun 2022 20:26:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9D2061BF3A8
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:26:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8DC771BF3A8
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:26:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C33841634
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:26:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D4AA417DA
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:26:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vzb2GKm8lO2o for <buildroot@lists.busybox.net>;
- Sun,  5 Jun 2022 20:26:11 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 27F0941612
- for <buildroot@buildroot.org>; Sun,  5 Jun 2022 20:26:10 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 137A0200002;
- Sun,  5 Jun 2022 20:26:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654460768;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=7jOJ16+S8QXtXY2/I3BpR7e/u7F7zvF/Vj9XlTLbwY8=;
- b=gR50s6fnydTywBLhHbG5jFTi8Is8R8N+RG4QBm6t0esfB5OAl8FYB/P/JV0Y4qEPVdNAHn
- j4cRXHunup9f785VkozVPhaRlN3/9ySrTbW1tpYTVI+VnmtKGig+rmkIW/tfxVPgnbfuZL
- lh22AXpnI2IHuwoNo0BSvRQ8/71Gu0JnDZsZqzz6DD1cghqjRJqgT2Vs49h/vVhuKlz8Bt
- Fmx1vVfZ8hhnCRT0N9r9CkQ0nDn8UA6YiVezoFsK+mftb+jWuI7bRKnQGitxq3A9ENrtNt
- 3AI4BtevF8x85HxeKa8eidu/WhEdCrVXcrizCORoNqyNwLNQFIznwZ7BB2vAbw==
-Date: Sun, 5 Jun 2022 22:26:07 +0200
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20220605222607.4f1c4428@windsurf>
-In-Reply-To: <20220604115458.7914-2-heiko.thiery@gmail.com>
-References: <20220604115458.7914-1-heiko.thiery@gmail.com>
- <20220604115458.7914-2-heiko.thiery@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/rauc: add option to
- enable/disable streaming support
+ with ESMTP id 4_5YOxsJJLI3 for <buildroot@lists.busybox.net>;
+ Sun,  5 Jun 2022 20:26:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D95241B56
+ for <buildroot@buildroot.org>; Sun,  5 Jun 2022 20:26:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id E892D86BD1; Sun,  5 Jun 2022 20:14:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 5 Jun 2022 22:26:14 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 9e59c4ab3883b4dc8b3a9b269524e62415780966
+X-Git-Newrev: 13973bc45e89926568e331e0bce951fc63f7515a
+X-Patchwork-Hint: ignore
+Message-Id: <20220605201451.E892D86BD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/unbound: bump version
+ to 1.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,45 +54,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Andrey Yurovsky <yurovsky@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  4 Jun 2022 13:55:00 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=13973bc45e89926568e331e0bce951fc63f7515a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> RAUC 1.7 introduces streaming update support. Make this configurable and add
-> required dependency to libnl.
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  package/rauc/Config.in | 13 +++++++++++++
->  package/rauc/rauc.mk   |  7 +++++++
->  2 files changed, 20 insertions(+)
-> 
-> diff --git a/package/rauc/Config.in b/package/rauc/Config.in
-> index 1170e50845..fe029c73ca 100644
-> --- a/package/rauc/Config.in
-> +++ b/package/rauc/Config.in
-> @@ -40,6 +40,19 @@ config BR2_PACKAGE_RAUC_NETWORK
->  	  This option enables support for updating firmware over
->  	  the network using libcurl.
->  
-> +comment "rauc streaming support needs network support"
-> +	depends on !BR2_PACKAGE_RAUC_NETWORK
+Signed-off-by: Kyle Harding <kyle@balena.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/unbound/unbound.hash | 4 ++--
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I found this comment to not be very useful, it's pretty obvious that
-streaming will only be available with network support enabled IMO, so I
-dropped this comment and applied to next. Of course, I can always be
-convinced differently by you or my fellow co-maintainers :-)
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index 99caf7dd3d..68087cc28e 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,5 +1,5 @@
+-# From https://nlnetlabs.nl/downloads/unbound/unbound-1.15.0.tar.gz.sha256
+-sha256  a480dc6c8937447b98d161fe911ffc76cfaffa2da18788781314e81339f1126f  unbound-1.15.0.tar.gz
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.16.0.tar.gz.sha256
++sha256  6701534c938eb019626601191edc6d012fc534c09d2418d5b92827db0cbe48a5  unbound-1.16.0.tar.gz
+ 
+ # Locally calculated
+ sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index 782ed2b049..988508576b 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNBOUND_VERSION = 1.15.0
++UNBOUND_VERSION = 1.16.0
+ UNBOUND_SITE = https://www.unbound.net/downloads
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+ UNBOUND_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
