@@ -1,46 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB55DC43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:34:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45236C43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:34:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 82D8860AFD;
-	Tue,  7 Jun 2022 19:34:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 053294059B;
+	Tue,  7 Jun 2022 19:34:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I1zcfWWauWbZ; Tue,  7 Jun 2022 19:34:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zyEywCKIUI9U; Tue,  7 Jun 2022 19:34:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 540E260B56;
-	Tue,  7 Jun 2022 19:34:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 229E84022C;
+	Tue,  7 Jun 2022 19:34:25 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 123CC1BF475
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 436831BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE44E4055A
+ by smtp2.osuosl.org (Postfix) with ESMTP id ECD604055F
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qb3Q9zAL9fGx for <buildroot@lists.busybox.net>;
+ with ESMTP id F7rU0NlLa2lK for <buildroot@lists.busybox.net>;
  Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 020314055F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E5E540B5C
  for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0466886E22; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
+ id 4EF9386E22; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Jun 2022 22:10:48 +0200
+Date: Sun, 5 Jun 2022 22:55:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ef070f06c6db92f402600aad5c9ccf718698269a
-X-Git-Newrev: c6310ae23228b5061c8852f79e547d2a11b62b2b
+X-Git-Oldrev: edfa431c9b7b53dbbb3063bd5efd88aac84b1c6e
+X-Git-Newrev: 811e3d852380b6b5bf67f3349a4e5ef78ae103ea
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190459.0466886E22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linuxconsoletools: bump version to
- 1.8.1
+Message-Id: <20220607190459.4EF9386E22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/meson: bump to version 0.62.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,143 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6310ae23228b5061c8852f79e547d2a11b62b2b
+commit: https://git.buildroot.net/buildroot/commit/?id=811e3d852380b6b5bf67f3349a4e5ef78ae103ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream has released a new version. In this version, they
-have chosen to copy the conditional compilation of tools,
-however they have chosen to use DISABLE_* flags instead
-of ENABLE_* flags. Therefore, the logic in our .mk file
-has been reversed: when an option is *NOT* selected, we
-set the corresponding DISABLE_* flag.
-
-As a corollary, the patch to add conditional compilation
-in the upstream Makefile is no longer needed and is
-removed in this commit.
-
-Tested compilation by running `./utils/test-pkg -a` with
-a configuration that enables all options tools.
-
-Signed-off-by: Koen Martens <gmc@sonologic.nl>
-Tested-by: Koen Martens <gmc@sonologic.nl>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../linuxconsoletools/0001-conditional-build.patch | 58 ----------------------
- package/linuxconsoletools/linuxconsoletools.hash   |  2 +-
- package/linuxconsoletools/linuxconsoletools.mk     | 18 +++----
- 3 files changed, 10 insertions(+), 68 deletions(-)
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linuxconsoletools/0001-conditional-build.patch b/package/linuxconsoletools/0001-conditional-build.patch
-deleted file mode 100644
-index 9f462a6436..0000000000
---- a/package/linuxconsoletools/0001-conditional-build.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--Selectively build groups of tools (inputattach,
--joystick tools and/or force-feedback tools).
--
--Signed-off-by: Koen Martens <gmc@sonologic.nl>
--
--diff -Naur a/utils/Makefile b/utils/Makefile
----- a/utils/Makefile	2016-04-19 23:28:36.000000000 +0200
--+++ b/utils/Makefile	2017-06-19 08:54:20.152184000 +0200
--@@ -27,8 +27,26 @@
-- 
-- CFLAGS		?= -g -O2 -Wall
-- 
---PROGRAMS	= inputattach jstest jscal fftest ffmvforce ffset \
---		  ffcfstress jscal-restore jscal-store evdev-joystick
--+PROGRAMS    =
--+
--+ifdef ENABLE_INPUTATTACH
--+PROGRAMS	+= inputattach
--+endif
--+
--+ifdef ENABLE_JOYSTICK
--+PROGRAMS    += jstest
--+PROGRAMS    += jscal
--+PROGRAMS    += jscal-restore
--+PROGRAMS    += jscal-store
--+PROGRAMS    += evdev-joystick
--+endif
--+
--+ifdef ENABLE_FORCEFEEDBACK
--+PROGRAMS    += fftest
--+PROGRAMS    += ffmvforce
--+PROGRAMS    += ffset
--+PROGRAMS    += ffcfstress
--+endif
-- 
-- PREFIX          ?= /usr/local
-- 
--@@ -79,13 +97,20 @@
-- 80-stelladaptor-joystick.rules: 80-stelladaptor-joystick.rules.in
-- 	sed "s^@@PREFIX@@^$(PREFIX)^g" < $^ > $@
-- 
--+INSTALL_DEP = compile
--+ifdef ENABLE_JOYSTICK
--+INSTALL_DEP +=  80-stelladaptor-joystick.rules
--+endif
--+
-- install: compile 80-stelladaptor-joystick.rules
-- 	install -d $(DESTDIR)$(PREFIX)/bin
-- 	install $(PROGRAMS) $(DESTDIR)$(PREFIX)/bin
--+ifdef ENABLE_JOYSTICK
-- 	install -d $(DESTDIR)$(PREFIX)/share/joystick
-- 	install extract filter ident $(DESTDIR)$(PREFIX)/share/joystick
-- 	install -d $(DESTDIR)/lib/udev/rules.d
-- 	install js-set-enum-leds $(DESTDIR)/lib/udev
-- 	install -m 644 80-stelladaptor-joystick.rules $(DESTDIR)/lib/udev/rules.d
--+endif
-- 
-- .PHONY: compile clean distclean install
-diff --git a/package/linuxconsoletools/linuxconsoletools.hash b/package/linuxconsoletools/linuxconsoletools.hash
-index 889f6d1d6c..8e4099f163 100644
---- a/package/linuxconsoletools/linuxconsoletools.hash
-+++ b/package/linuxconsoletools/linuxconsoletools.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  bd4d4b7e37da02fc67e47ddf20b6f1243c0a7af7b02b918d5e72138ea8727547  linuxconsoletools-1.7.1.tar.bz2
-+sha256  4da29745c782b7db18f5f37c49e77bf163121dd3761e2fc7636fa0cbf35c2456  linuxconsoletools-1.8.1.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/linuxconsoletools/linuxconsoletools.mk b/package/linuxconsoletools/linuxconsoletools.mk
-index 306a5b1fa0..a97618c832 100644
---- a/package/linuxconsoletools/linuxconsoletools.mk
-+++ b/package/linuxconsoletools/linuxconsoletools.mk
-@@ -4,24 +4,24 @@
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 2037c46bbc..33bd8b6eb9 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.62.1/meson-0.62.1.tar.gz.asc
+-sha256  a0f5caa1e70da12d5e63aa6a9504273759b891af36c8d87de381a4ed1380e845  meson-0.62.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.62.2/meson-0.62.2.tar.gz.asc
++sha256  a7669e4c4110b06b743d57cc5d6432591a6677ef2402139fe4f3d42ac13380b0  meson-0.62.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 6d55f19402..8bc7848705 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUXCONSOLETOOLS_VERSION = 1.7.1
-+LINUXCONSOLETOOLS_VERSION = 1.8.1
- LINUXCONSOLETOOLS_SOURCE = linuxconsoletools-$(LINUXCONSOLETOOLS_VERSION).tar.bz2
- LINUXCONSOLETOOLS_SITE = https://downloads.sourceforge.net/project/linuxconsole
- LINUXCONSOLETOOLS_LICENSE = GPL-2.0+
- LINUXCONSOLETOOLS_LICENSE_FILES = COPYING
- 
--ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH),y)
--LINUXCONSOLETOOLS_MAKE_OPTS += ENABLE_INPUTATTACH=1
-+ifneq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH),y)
-+LINUXCONSOLETOOLS_MAKE_OPTS += DISABLE_INPUTATTACH=1
- endif
- 
--ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK),y)
--LINUXCONSOLETOOLS_MAKE_OPTS += ENABLE_JOYSTICK=1
-+ifneq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK),y)
-+LINUXCONSOLETOOLS_MAKE_OPTS += DISABLE_JOYSTICK=1
- endif
- 
--ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK),y)
--LINUXCONSOLETOOLS_MAKE_OPTS += \
--	ENABLE_FORCEFEEDBACK=1 \
--	CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-+ifneq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK),y)
-+LINUXCONSOLETOOLS_MAKE_OPTS += DISABLE_FORCEFEEDBACK=1
-+else
-+LINUXCONSOLETOOLS_MAKE_OPTS += CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
- LINUXCONSOLETOOLS_DEPENDENCIES += sdl2 host-pkgconf
- endif
- 
+-MESON_VERSION = 0.62.1
++MESON_VERSION = 0.62.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
