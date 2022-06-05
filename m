@@ -1,64 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0865EC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 20:21:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC9FCC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 20:24:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7EF0408B3;
-	Sun,  5 Jun 2022 20:21:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57D2860D5E;
+	Sun,  5 Jun 2022 20:24:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s3OSM27ll-Mp; Sun,  5 Jun 2022 20:21:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91646408A9;
-	Sun,  5 Jun 2022 20:21:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5BA911BF3A8
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:21:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49EB460AE6
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:21:44 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WjTHPyOzzgxC for <buildroot@lists.busybox.net>;
- Sun,  5 Jun 2022 20:21:43 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dobe6Y6jfzPX; Sun,  5 Jun 2022 20:24:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 699FD60B8B;
+	Sun,  5 Jun 2022 20:24:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D76381BF3A8
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:24:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C556840222
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 20:24:19 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w74pg8ds24ve for <buildroot@lists.busybox.net>;
+ Sun,  5 Jun 2022 20:24:19 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C546460B8B
- for <buildroot@buildroot.org>; Sun,  5 Jun 2022 20:21:42 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B525F40002;
- Sun,  5 Jun 2022 20:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654460499;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=lo5o672kIDc6SXujtt2AKa4/b0exuUwItbY7iNTPLtQ=;
- b=lORQkFUCTA5m3VCdUnN+HzXz2oXpwNZxstEVARuxbnaoaPdrr+lAgE2y13YjBD9bBtDFmr
- hAPM4wpDEihqysBuqX0JGJV8cZkKGogDTIzGQKE1sY9RXhjKqc4ehQ5hDHBic+2yQraTrr
- 6vjXfMwT3kSRikOujjWAK88sSSvyGyiozNA0t5FNwl6rLLqT2KBEyt1Js+INAszC9WSA95
- fFIHpfHewS3Od35+OmFRfdd+gmHuBk7h1F7Hup2b7uLJuDDAc6vMU015lLEMR4lepW5FrK
- TwwuMEet6/M8m8WQpZXSVVDzLKNJmlyGkE4Sz+K6SlZlUblKQvs50z03i2Ch3A==
-Date: Sun, 5 Jun 2022 22:21:37 +0200
-To: Koen Martens <gmc@sonologic.nl>
-Message-ID: <20220605222133.4e8364c7@windsurf>
-In-Reply-To: <20220605160902.GA1283120@coltrane>
-References: <20220605160902.GA1283120@coltrane>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CD36C40104
+ for <buildroot@buildroot.org>; Sun,  5 Jun 2022 20:24:18 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:3d1d:2cca:75e8:9e80])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 75E1C7802E5;
+ Sun,  5 Jun 2022 22:24:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1654460655;
+ bh=aewY7KEMvgOhpJ5cXbBerIVq+90iNggEA0R872pcG+4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=J0LT8kwF0JkbQhb0+lWnImNiLmuom6Zh4RYuzM6en9KumPatNXzd2RC/+U5xDETli
+ WvgXAwO+If569JtcMlMvfFYeiDWBhw2hQyH6yLWwkTKqAVExRNruIW6OfOc2gKMpsp
+ /LmU0Ja0rEfyyLZOx5YgZETKIi1C1rSGgRWyUEDaAqZ/67d6Ek1j60PeVSdnQmQ/cQ
+ EW73r5BpL9+RxGZx3lHhNF3kVgNzUvFVn+N8QPhz6RJ+QYOsc9r2r2wl+8tU9YRwMq
+ vZEhxH9cBNfscghjLoLxu76YQfg623i8rEpONLe2p/gsqedioczsggJZsfH79iG5PC
+ 1UjD8GwAIbLpw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 05 Jun 2022 22:24:11 +0200
+Date: Sun, 5 Jun 2022 22:24:11 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20220605202411.GU427639@scaer>
+References: <20220605194259.2928568-1-thomas.petazzoni@bootlin.com>
+ <20220605194259.2928568-7-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/linuxconsoletools: bump version
- to 1.8.1
+Content-Disposition: inline
+In-Reply-To: <20220605194259.2928568-7-thomas.petazzoni@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 6/7] support/scripts/gen-bootlin-toolchains:
+ properly take into account !BR2_STATIC_LIBS for glibc toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,47 +73,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 5 Jun 2022 18:09:02 +0200
-Koen Martens <gmc@sonologic.nl> wrote:
+Thomas, All,
 
-> Upstream has released a new version. In this version, they
-> have chosen to copy the conditional compilation of tools,
-> however they have chosen to use DISABLE_* flags instead
-> of ENABLE_* flags. Therefore, the logic in our .mk file
-> has been reversed: when an option is *NOT* selected, we
-> set the corresponding DISABLE_* flag.
+On 2022-06-05 21:42 +0200, Thomas Petazzoni spake thusly:
+> The Config.in options created for each toolchain were properly taking
+> into account the !BR2_STATIC_LIBS dependency of glibc
+> toolchains. However, this dependency was not taken into account into
+> the main BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
+> option. Consequently, if an architecture is only supported by glibc,
+> but BR2_STATIC_LIBS is enabled, the main "Bootlin toolchain" option
+> was visible... but with no selectable toolchain.
 > 
-> As a corollary, the patch to add conditional compilation
-> in the upstream Makefile is no longer needed and is
-> removed in this commit.
+> We fix this by making sure that
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS is only true for all
+> architectures supported, taking into account the fact that some
+> architectures can only be supported if !BR2_STATIC_LIBS, when the only
+> available C library is glibc.
 > 
-> Tested compilation by running `./utils/test-pkg -a` with
-> a configuration that enables all options tools.
-> 
-> Signed-off-by: Koen Martens <gmc@sonologic.nl>
-> Tested-by: Koen Martens <gmc@sonologic.nl>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  .../0001-conditional-build.patch              | 58 -------------------
->  .../linuxconsoletools/linuxconsoletools.hash  |  2 +-
->  .../linuxconsoletools/linuxconsoletools.mk    | 18 +++---
->  3 files changed, 10 insertions(+), 68 deletions(-)
->  delete mode 100644 package/linuxconsoletools/0001-conditional-build.patch
+>  support/scripts/gen-bootlin-toolchains | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+> index f9dd9da9a8..97a744340a 100755
+> --- a/support/scripts/gen-bootlin-toolchains
+> +++ b/support/scripts/gen-bootlin-toolchains
+> @@ -482,7 +482,10 @@ def gen_config_in_options(toolchains, fpath):
+>          f.write("config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS\n")
+>          f.write("\tbool\n")
+>          for arch, details in arches.items():
+> -            f.write("\tdefault y if %s\n" % " && ".join(details['conditions']))
+> +            conditions = details['conditions'].copy()
+> +            if set([t.libc for t in toolchains if t.arch == arch]) == set(['glibc']):
 
-Applied to next, thanks.
+What about:
 
-Thomas
+    if 'glibc' in [t.libc for t in toolchains if t.arch == arch]
+
+Regards,
+Yann E. MORIN.
+
+> +                conditions.append("!BR2_STATIC_LIBS")
+> +            f.write("\tdefault y if %s\n" % " && ".join(conditions))
+>          f.write("\n")
+>  
+>          f.write("if BR2_TOOLCHAIN_EXTERNAL_BOOTLIN\n\n")
+> -- 
+> 2.35.3
+> 
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
