@@ -1,82 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22DC3C43334
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 21:34:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D22D7C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 21:41:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6F0C41A18;
-	Sun,  5 Jun 2022 21:34:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FF53612A2;
+	Sun,  5 Jun 2022 21:41:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C_nuQvV1CIWt; Sun,  5 Jun 2022 21:34:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DEQpO3TuxPA1; Sun,  5 Jun 2022 21:41:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DF924187A;
-	Sun,  5 Jun 2022 21:34:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A82D660A70;
+	Sun,  5 Jun 2022 21:41:17 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D1DAA1BF290
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 21:33:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BBC3F1BF290
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 21:41:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C0ECC84035
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 21:33:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AAC1D840CB
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 21:41:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VBbGhDzcswKM for <buildroot@lists.busybox.net>;
- Sun,  5 Jun 2022 21:33:51 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C43F184034
- for <buildroot@buildroot.org>; Sun,  5 Jun 2022 21:33:50 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id z17so1922892wmi.1
- for <buildroot@buildroot.org>; Sun, 05 Jun 2022 14:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zISE6p+BfXIm4j6KWHQsgO0qffzrcWRupY8FX0wY1OU=;
- b=lxpBgqaeKjrvVQKWwkA6ViCGbQSQ61GlkyYHlZtj4GsOFAxNs1eVYKYC6LSSvx3uiY
- 48CAWZezfeCdsC2gHUNT8En+72incrY2otF/JZpWWuUOqFki5cErVnGYKznzbALwEgMI
- WgFZ6dlSIhYQpgub8Qs1WyMPo/NyHGi+SYnqfgok+yFV/tDgcWPB3t/mm+RsbLyoZ/7L
- x3cRq/AGveLqyIZ+b65ZN1LpVAdAjf78abAFuLwKjOzp1nZAawHxaFNa3gi58ZbEtkNA
- LXt3/NY6WSrAC9GHpVm6r9z67Si2JXRdkOYXEDGqHH9tb0H6w0CJb6/PRlcrpYLjOR2s
- 51wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zISE6p+BfXIm4j6KWHQsgO0qffzrcWRupY8FX0wY1OU=;
- b=Xr9JoYEG3aFKaRRZJtghKC/hmGoBiQRc9tE7OdjNNh6GpcOuwvWqLIwU4sdhgMvUxE
- lKS4312b7WoTYybApxmCF7WvGNTg9ZOq6IOVf8yu7cC0StS2wZe9pY9OwHF4tfvmx9a4
- aBbdTLOA26yX0OPBvFikLniVlCPGO4S4C2SVarI4vB/ySARC30XDxKACVwwLz0XpMuEV
- fRtznwM4vmOB/Gh7sG8XwGs/cUGaT4/eiRoRsBSdz9qbgqg0+EdmvT5kf2cWsoBo/qcM
- YOkjExMJHyMFDx3Unm+UlL21o/8QA/fEHH9kMJPqmKTxzLi4aUl+Cj1Xrxk97q9xnrBO
- auFA==
-X-Gm-Message-State: AOAM5316YorQKIkzZ3u46YA0OcVEVd+hxibL0RQw2u1SoNeC07zok+dJ
- K7MaS6zgdbJCOgwSQI/6oB8Ii1rQITk=
-X-Google-Smtp-Source: ABdhPJwmJjRHSyxSZ9AY0/PwFTy6M0H+9PiJvbJGqDUDx25oiA3ZU2r4Bqei6js7iydUCvgYb2xWrA==
-X-Received: by 2002:a7b:ce04:0:b0:394:1f46:213 with SMTP id
- m4-20020a7bce04000000b003941f460213mr19305475wmc.157.1654464828634; 
- Sun, 05 Jun 2022 14:33:48 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- e41-20020a05600c4ba900b0039754d1d327sm14692929wmp.13.2022.06.05.14.33.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Jun 2022 14:33:48 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id UJwaOTRtgG9s for <buildroot@lists.busybox.net>;
+ Sun,  5 Jun 2022 21:41:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F40D0840C5
+ for <buildroot@buildroot.org>; Sun,  5 Jun 2022 21:41:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 40AAA86C46; Sun,  5 Jun 2022 21:29:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun,  5 Jun 2022 23:31:13 +0200
-Message-Id: <20220605213113.2366560-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/linux-tools: fix tmon static build
- with uclibc
+Date: Sun, 5 Jun 2022 23:34:31 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: ade95519e177c80956cad491357c2f60d0de5fff
+X-Git-Newrev: b461b6562789f5889fceb3139d2c7668d2e7417b
+X-Patchwork-Hint: ignore
+Message-Id: <20220605212928.40AAA86C46@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/intel-gmmlib: bump
+ version to 22.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,43 +52,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pass LDFLAGS (which will contain -static) to fix the following tmon
-static build failure with uclibc:
+commit: https://git.buildroot.net/buildroot/commit/?id=b461b6562789f5889fceb3139d2c7668d2e7417b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-/home/autobuild/autobuild/instance-3/output-1/host/bin/x86_64-buildroot-linux-uclibc-gcc -O3 -Wall -Wshadow -W -Wformat -Wimplicit-function-declaration -Wimplicit-int  -D VERSION=\"1.0\"   tmon.o tui.o sysfs.o pid.o  -o tmon -lm -lpthread -lpanel -lncurses
-/home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/x86_64-buildroot-linux-uclibc/10.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/x86_64-buildroot-linux-uclibc/10.3.0/libgcc.a(unwind-dw2-fde-dip.o): in function `_Unwind_Find_FDE':
-/home/autobuild/autobuild/instance-3/output-1/build/host-gcc-final-10.3.0/build/x86_64-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde-dip.c:469: undefined reference to `dl_iterate_phdr'
-
-Fixes:
- - http://autobuild.buildroot.org/results/58f4cdb734b68afb02595d004e7ca19a15d1abcc
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-tools/linux-tool-tmon.mk.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-tools/linux-tool-tmon.mk.in b/package/linux-tools/linux-tool-tmon.mk.in
-index 15931c3124..56c328c51f 100644
---- a/package/linux-tools/linux-tool-tmon.mk.in
-+++ b/package/linux-tools/linux-tool-tmon.mk.in
-@@ -9,6 +9,7 @@ LINUX_TOOLS += tmon
- TMON_DEPENDENCIES = host-pkgconf ncurses
- TMON_MAKE_OPTS = $(LINUX_MAKE_FLAGS) \
- 	CC=$(TARGET_CC) \
-+	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index 5e48238448..7fb0fd0f4f 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  3b9a6d5e7e3f5748b3d0a2fb0e980ae943907fece0980bd9c0508e71c838e334  intel-gmmlib-22.1.2.tar.gz
++sha256  81dbb4ddec98bb18c3a038cd40222046ae7f5b24b2d5acbfb2400f39f02f2aaf  intel-gmmlib-22.1.3.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 25cc733e0c..db83671796 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
--- 
-2.35.1
-
+-INTEL_GMMLIB_VERSION = 22.1.2
++INTEL_GMMLIB_VERSION = 22.1.3
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
