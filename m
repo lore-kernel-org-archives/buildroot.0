@@ -4,63 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35A02C43334
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 19:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3E8DC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jun 2022 19:44:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB37261291;
-	Sun,  5 Jun 2022 19:44:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85F9B612A4;
+	Sun,  5 Jun 2022 19:44:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tAdxQE-CQw4g; Sun,  5 Jun 2022 19:44:32 +0000 (UTC)
+	with ESMTP id VUbQK1CgBJzu; Sun,  5 Jun 2022 19:44:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27F1961283;
-	Sun,  5 Jun 2022 19:44:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8558D1BF388
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 19:43:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96C8F612A3;
+	Sun,  5 Jun 2022 19:44:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A2B401BF388
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 19:43:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 82D1B8407F
- for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 19:43:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 910EA40D33
+ for <buildroot@lists.busybox.net>; Sun,  5 Jun 2022 19:43:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TO1hJ56Tlmz6 for <buildroot@lists.busybox.net>;
- Sun,  5 Jun 2022 19:43:20 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9NioPRMCaq0D for <buildroot@lists.busybox.net>;
+ Sun,  5 Jun 2022 19:43:22 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B6F428406A
- for <buildroot@buildroot.org>; Sun,  5 Jun 2022 19:43:19 +0000 (UTC)
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8A22040D24
+ for <buildroot@buildroot.org>; Sun,  5 Jun 2022 19:43:21 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id B2E94240008;
- Sun,  5 Jun 2022 19:43:17 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id 0879F240002;
+ Sun,  5 Jun 2022 19:43:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654458198;
+ t=1654458199;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=L3TuSzpkjo6UCdBeSPIGz6fOYExEMsp1qLkvu6zMOX4=;
- b=VPgL4nmgt2++1DMdbZYy5G/6exaLox0XgjJyCf4smhnRLT2QzFzOA/9HzBBkTs5dOLLVBA
- urkE6gTZQMb2YyZ/cRsToc+wuZi8h1tKEkQydnIjLZ3mi+3YJ7R5yDxlW7sOj9f6tJotdv
- AQ57FcmmPLxHdTi5d0eM8lwzsFJ3nqrN6vJ8fyj/ZhUNAZJdfEjDNufi/OZBfZCR2EglF0
- z6SU4sbbLbAR7EOkIDbHB4p5c1Jy5VT2kS1trN5f61V1z5fXQjHE5342pOIWwhBKRq0wSL
- Lc0bO9fdzZ3UBff+yV3ThEHLpyHTVRTmKyK9lulspn3aMSobMDgOEpam9xuczA==
+ bh=hatnkj4aD+RgLot0+W5xFHdxVpISYG654KsfhD1Tp+U=;
+ b=U6SdWNN42XoY/GFqXIYxD9g3mIbaPAwkeOD3U5BgD4eWpwKZUVIThn3EHd6fqEjf0HTyFw
+ flZ0vJj7130YeoLu+UbxlLBDeBml05gJOtJ06XMW7UMdS95CQY8H/SQh5ZHFkDGCoCfS/B
+ 9trhJsukbWF4HBK8VDVfqceSwJwk2qLVJhl40tXN2Z6Q1sfBxKF2+RjnJhTx2/LpbwwDsZ
+ lkZN2r3VTvlRkYgzCFxDCvXfNFS5OT4LKuinFUB+LCDPEA49dP19LATeawTHke6MbYP2JF
+ FRuCr5cHnxGU9tsJ1iPNz0UVjnJQlTKE1pAR2iUsSHg/8v84sofXhGolHWnxkA==
 To: Buildroot List <buildroot@buildroot.org>,
  "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>,
  James Hilliard <james.hilliard1@gmail.com>,
  "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Sun,  5 Jun 2022 21:42:58 +0200
-Message-Id: <20220605194259.2928568-7-thomas.petazzoni@bootlin.com>
+Date: Sun,  5 Jun 2022 21:42:59 +0200
+Message-Id: <20220605194259.2928568-8-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220605194259.2928568-1-thomas.petazzoni@bootlin.com>
 References: <20220605194259.2928568-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 6/7] support/scripts/gen-bootlin-toolchains:
- properly take into account !BR2_STATIC_LIBS for glibc toolchains
+Subject: [Buildroot] [PATCH 7/7]
+ toolchain/toolchain-external/toolchain-external-bootlin: regenerate with
+ correct !BR2_STATIC_LIBS handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,47 +75,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Config.in options created for each toolchain were properly taking
-into account the !BR2_STATIC_LIBS dependency of glibc
-toolchains. However, this dependency was not taken into account into
-the main BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
-option. Consequently, if an architecture is only supported by glibc,
-but BR2_STATIC_LIBS is enabled, the main "Bootlin toolchain" option
-was visible... but with no selectable toolchain.
-
-We fix this by making sure that
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS is only true for all
-architectures supported, taking into account the fact that some
-architectures can only be supported if !BR2_STATIC_LIBS, when the only
-available C library is glibc.
+This commit is simply the result of regenerating the
+toolchain-external-bootlin package after gen-bootlin-toolchains was
+changed in commit "support/scripts/gen-bootlin-toolchains: properly
+take into account !BR2_STATIC_LIBS for glibc toolchains".
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/gen-bootlin-toolchains | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../toolchain-external-bootlin/Config.in.options       | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index f9dd9da9a8..97a744340a 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -482,7 +482,10 @@ def gen_config_in_options(toolchains, fpath):
-         f.write("config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS\n")
-         f.write("\tbool\n")
-         for arch, details in arches.items():
--            f.write("\tdefault y if %s\n" % " && ".join(details['conditions']))
-+            conditions = details['conditions'].copy()
-+            if set([t.libc for t in toolchains if t.arch == arch]) == set(['glibc']):
-+                conditions.append("!BR2_STATIC_LIBS")
-+            f.write("\tdefault y if %s\n" % " && ".join(conditions))
-         f.write("\n")
- 
-         f.write("if BR2_TOOLCHAIN_EXTERNAL_BOOTLIN\n\n")
+diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+index 53034c4f5e..06a9ddf2d2 100644
+--- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+@@ -22,21 +22,21 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
+ 	default y if BR2_mips64 && BR2_mips_64 && BR2_MIPS_NABI32 && !BR2_MIPS_SOFT_FLOAT
+ 	default y if BR2_mips64el && BR2_mips_64 && BR2_MIPS_NABI32 && !BR2_MIPS_SOFT_FLOAT
+ 	default y if BR2_mips64el && BR2_mips_64r6 && BR2_MIPS_NABI32 && !BR2_MIPS_SOFT_FLOAT
+-	default y if BR2_nios2
++	default y if BR2_nios2 && !BR2_STATIC_LIBS
+ 	default y if BR2_or1k
+ 	default y if BR2_powerpc && BR2_powerpc_440fp
+ 	default y if BR2_powerpc && BR2_powerpc_e300c3
+ 	default y if BR2_powerpc && BR2_powerpc_e500mc
+-	default y if BR2_powerpc64 && BR2_powerpc_e5500
++	default y if BR2_powerpc64 && BR2_powerpc_e5500 && !BR2_STATIC_LIBS
+ 	default y if BR2_powerpc64 && BR2_powerpc_e6500
+ 	default y if BR2_powerpc64 && BR2_powerpc_power8
+ 	default y if BR2_powerpc64le && BR2_powerpc_power8
+-	default y if BR2_riscv && BR2_riscv_g && BR2_RISCV_32 && BR2_RISCV_ABI_ILP32D
++	default y if BR2_riscv && BR2_riscv_g && BR2_RISCV_32 && BR2_RISCV_ABI_ILP32D && !BR2_STATIC_LIBS
+ 	default y if BR2_riscv && BR2_riscv_g && BR2_RISCV_64 && BR2_RISCV_ABI_LP64D
+-	default y if BR2_s390x && BR2_s390x_z13
++	default y if BR2_s390x && BR2_s390x_z13 && !BR2_STATIC_LIBS
+ 	default y if BR2_sh && BR2_sh4
+ 	default y if BR2_sh && BR2_sh4aeb
+-	default y if BR2_sparc64 && BR2_sparc_v9
++	default y if BR2_sparc64 && BR2_sparc_v9 && !BR2_STATIC_LIBS
+ 	default y if BR2_sparc && BR2_sparc_v8
+ 	default y if BR2_x86_64 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2
+ 	default y if BR2_x86_64 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2 && BR2_X86_CPU_HAS_SSE3 && BR2_X86_CPU_HAS_SSSE3 && BR2_X86_CPU_HAS_SSE4 && BR2_X86_CPU_HAS_SSE42
 -- 
 2.35.3
 
