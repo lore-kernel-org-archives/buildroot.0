@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26DA9C43334
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 12:31:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 905EAC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 12:31:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCAD361110;
-	Mon,  6 Jun 2022 12:31:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SfOiVijdpPi5; Mon,  6 Jun 2022 12:31:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04B78611EE;
-	Mon,  6 Jun 2022 12:31:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2D97F1BF982
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 12:30:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26F7D400DB
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 12:30:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5049C40A92;
+	Mon,  6 Jun 2022 12:31:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zR2EMnddx7tb for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LlvIZ_If8pH1; Mon,  6 Jun 2022 12:31:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B10E409E0;
+	Mon,  6 Jun 2022 12:31:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B8471BF983
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 12:30:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 49A9141949
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 12:30:49 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TrIBB-sJnuLS for <buildroot@lists.busybox.net>;
  Mon,  6 Jun 2022 12:30:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C0DB40A67
+ by smtp4.osuosl.org (Postfix) with ESMTP id 639FF418F8
  for <buildroot@buildroot.org>; Mon,  6 Jun 2022 12:30:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5A9A586D10; Mon,  6 Jun 2022 12:18:59 +0000 (UTC)
+ id 3A51986D0E; Mon,  6 Jun 2022 12:18:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Jun 2022 14:28:58 +0200
+Date: Mon, 6 Jun 2022 14:26:32 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7f17a93ead47229fcd42407d812c6f2ca6368655
-X-Git-Newrev: 2c552913dd3c88acecb034fc473b3380ae57afe2
+X-Git-Oldrev: 8b13baaec1cf552e82064e2ea558364d6250f51e
+X-Git-Newrev: 27f0a5ea96f05fb6763f2ea18aadedc9a7ec721b
 X-Patchwork-Hint: ignore
-Message-Id: <20220606121859.5A9A586D10@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/rsyslog: drop
- libee dependency
+Message-Id: <20220606121859.3A51986D0E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/fbv: renumber
+ patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +59,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c552913dd3c88acecb034fc473b3380ae57afe2
+commit: https://git.buildroot.net/buildroot/commit/?id=27f0a5ea96f05fb6763f2ea18aadedc9a7ec721b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Extract from
-https://github.com/rsyslog/rsyslog/commit/1bc60d4ba29053bd54dd11de46e985f1d34d8462:
-
-"NOTE TO MAINTAINERS: libee is not used by rsyslog for quite some while.
-However, we never included this info into the changelog. So if you still
-make rsyslog depend on libee (some do this), you should stop doing so
-now. Libee is dead and no longer been maintained nor hosted by us."
+Commit 9863553fe8fa16a4d19f652b409a44bb58ef5567 forgot to renumber
+patches
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 55d164bf5d88669bad2bc52eb38eaab06619a027)
+(cherry picked from commit 1d969398e4eda833734bab9744078cce434d8db2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsyslog/rsyslog.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/fbv/{0002-cross.patch => 0001-cross.patch}                        | 0
+ ...ort-on-big-endian.patch => 0002-fix-24bpp-support-on-big-endian.patch} | 0
+ package/fbv/{0004-fix-bgr555.patch => 0003-fix-bgr555.patch}              | 0
+ package/fbv/{0005-giflib.patch => 0004-giflib.patch}                      | 0
+ package/fbv/{0006-include.patch => 0005-include.patch}                    | 0
+ package/fbv/{0007-libpng15.patch => 0006-libpng15.patch}                  | 0
+ 6 files changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index ec0d405dc7..a0fb949a9a 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -66,10 +66,6 @@ else
- RSYSLOG_CONF_OPTS += --disable-gnutls
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBEE),y)
--RSYSLOG_DEPENDENCIES += libee
--endif
--
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- RSYSLOG_DEPENDENCIES += libgcrypt
- RSYSLOG_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+diff --git a/package/fbv/0002-cross.patch b/package/fbv/0001-cross.patch
+similarity index 100%
+rename from package/fbv/0002-cross.patch
+rename to package/fbv/0001-cross.patch
+diff --git a/package/fbv/0003-fix-24bpp-support-on-big-endian.patch b/package/fbv/0002-fix-24bpp-support-on-big-endian.patch
+similarity index 100%
+rename from package/fbv/0003-fix-24bpp-support-on-big-endian.patch
+rename to package/fbv/0002-fix-24bpp-support-on-big-endian.patch
+diff --git a/package/fbv/0004-fix-bgr555.patch b/package/fbv/0003-fix-bgr555.patch
+similarity index 100%
+rename from package/fbv/0004-fix-bgr555.patch
+rename to package/fbv/0003-fix-bgr555.patch
+diff --git a/package/fbv/0005-giflib.patch b/package/fbv/0004-giflib.patch
+similarity index 100%
+rename from package/fbv/0005-giflib.patch
+rename to package/fbv/0004-giflib.patch
+diff --git a/package/fbv/0006-include.patch b/package/fbv/0005-include.patch
+similarity index 100%
+rename from package/fbv/0006-include.patch
+rename to package/fbv/0005-include.patch
+diff --git a/package/fbv/0007-libpng15.patch b/package/fbv/0006-libpng15.patch
+similarity index 100%
+rename from package/fbv/0007-libpng15.patch
+rename to package/fbv/0006-libpng15.patch
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
