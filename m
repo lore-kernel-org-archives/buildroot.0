@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9322C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 13:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11597C43334
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 13:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 728C441A4E;
-	Mon,  6 Jun 2022 13:03:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D6844170A;
+	Mon,  6 Jun 2022 13:04:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dLGf5WByEZJQ; Mon,  6 Jun 2022 13:03:55 +0000 (UTC)
+	with ESMTP id lzmewKsJOOBA; Mon,  6 Jun 2022 13:04:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52B2D41A27;
-	Mon,  6 Jun 2022 13:03:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 19CD61BF339
+	by smtp4.osuosl.org (Postfix) with ESMTP id B68D141B81;
+	Mon,  6 Jun 2022 13:04:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A69F31BF339
  for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:03:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0844B41A27
+ by smtp3.osuosl.org (Postfix) with ESMTP id A256B612D3
  for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:03:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qgKsdRCdbW6c for <buildroot@lists.busybox.net>;
- Mon,  6 Jun 2022 13:03:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 56SOjwm9HSo6 for <buildroot@lists.busybox.net>;
+ Mon,  6 Jun 2022 13:03:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E9066416F3
- for <buildroot@buildroot.org>; Mon,  6 Jun 2022 13:03:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3406E61070
+ for <buildroot@buildroot.org>; Mon,  6 Jun 2022 13:03:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B23A486D91; Mon,  6 Jun 2022 12:52:01 +0000 (UTC)
+ id 065AD86D91; Mon,  6 Jun 2022 12:52:02 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 6 Jun 2022 14:53:23 +0200
+Date: Mon, 6 Jun 2022 15:00:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f642d28e48497f98868f694476fb39ff5cb30110
-X-Git-Newrev: 41498af0df34a3ab61ce8e4f846c06bc534e6d16
+X-Git-Oldrev: 4fac515ab5f92c537e55f408c26be28ada7aaf7e
+X-Git-Newrev: 66496a40564a2ea590081c4461075ea9d256e579
 X-Patchwork-Hint: ignore
-Message-Id: <20220606125201.B23A486D91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gensio: needs atomic
+Message-Id: <20220606125202.065AD86D91@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: fix armeb build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +58,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41498af0df34a3ab61ce8e4f846c06bc534e6d16
+commit: https://git.buildroot.net/buildroot/commit/?id=66496a40564a2ea590081c4461075ea9d256e579
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gensio needs atomic since bump to version 2.0.1 in commit
-0f8d4a6ecd874770ce677b617b2c7f459eb1505d and
-https://github.com/cminyard/gensio/commit/5528267b54ac5a8ac0ecd7fd9ba481d654b0e92b:
+Fix the following armeb build failure raised since at least version
+6.2.0:
 
-/nvmedata/autobuild/instance-7/output-1/per-package/gensio/host/bin/../lib/gcc/arc-buildroot-linux-uclibc/11.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld: ../lib/.libs/libgensio.a(gensio_osops.o): in function `gensio_addr_dup':
-gensio_osops.c:(.text+0x1558): undefined reference to `__atomic_fetch_add_4'
+ERROR: Unknown target name 'armeb-softmmu'
 
 Fixes:
- - http://autobuild.buildroot.org/results/229e4bd1ba1787953899875ab56721c9609f035a
+ - http://autobuild.buildroot.org/results/dbd1417fb638ad41e9f23941141bbeb9c999fb05
+ - http://autobuild.buildroot.org/results/a6f97308aa2e634ed3d5b80b33b4663aa16c4693
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gensio/Config.in  | 1 +
- package/ser2net/Config.in | 1 +
- 2 files changed, 2 insertions(+)
+ package/qemu/qemu.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/gensio/Config.in b/package/gensio/Config.in
-index f874d1a469..fd0e476970 100644
---- a/package/gensio/Config.in
-+++ b/package/gensio/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GENSIO
- 	bool "gensio"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	help
- 	  A library to abstract stream I/O like serial port, TCP,
- 	  telnet, UDP, SSL, IPMI SOL, etc.
-diff --git a/package/ser2net/Config.in b/package/ser2net/Config.in
-index 3d110b70f2..1859d42c8f 100644
---- a/package/ser2net/Config.in
-+++ b/package/ser2net/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SER2NET
- 	bool "ser2net"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # gensio
- 	select BR2_PACKAGE_GENSIO
- 	select BR2_PACKAGE_LIBYAML
- 	help
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 1bcffc2340..290186ec4e 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -277,6 +277,9 @@ HOST_QEMU_DEPENDENCIES = host-meson host-pkgconf host-zlib host-libglib2 host-pi
+ #       xtensa          xtensa
+ 
+ HOST_QEMU_ARCH = $(ARCH)
++ifeq ($(HOST_QEMU_ARCH),armeb)
++HOST_QEMU_SYS_ARCH = arm
++endif
+ ifeq ($(HOST_QEMU_ARCH),i486)
+ HOST_QEMU_ARCH = i386
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
