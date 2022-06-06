@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C88A0C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 12:31:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26DA9C43334
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 12:31:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 738C284075;
-	Mon,  6 Jun 2022 12:31:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCAD361110;
+	Mon,  6 Jun 2022 12:31:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z7XKxRpehHx3; Mon,  6 Jun 2022 12:31:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SfOiVijdpPi5; Mon,  6 Jun 2022 12:31:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9280D84014;
-	Mon,  6 Jun 2022 12:31:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2AD6B1BF339
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04B78611EE;
+	Mon,  6 Jun 2022 12:31:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D97F1BF982
  for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 12:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2860884075
+ by smtp2.osuosl.org (Postfix) with ESMTP id 26F7D400DB
  for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 12:30:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ePxd4dQf-mK7 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zR2EMnddx7tb for <buildroot@lists.busybox.net>;
  Mon,  6 Jun 2022 12:30:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B05383F16
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C0DB40A67
  for <buildroot@buildroot.org>; Mon,  6 Jun 2022 12:30:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 45B5986CFA; Mon,  6 Jun 2022 12:18:59 +0000 (UTC)
+ id 5A9A586D10; Mon,  6 Jun 2022 12:18:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Jun 2022 14:26:39 +0200
+Date: Mon, 6 Jun 2022 14:28:58 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 27f0a5ea96f05fb6763f2ea18aadedc9a7ec721b
-X-Git-Newrev: b7b006373005d406d5aca2401bb4a2ed04c73aaa
+X-Git-Oldrev: 7f17a93ead47229fcd42407d812c6f2ca6368655
+X-Git-Newrev: 2c552913dd3c88acecb034fc473b3380ae57afe2
 X-Patchwork-Hint: ignore
-Message-Id: <20220606121859.45B5986CFA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/fbv: fix build
- with giflib and gcc >= 10
+Message-Id: <20220606121859.5A9A586D10@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/rsyslog: drop
+ libee dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,67 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7b006373005d406d5aca2401bb4a2ed04c73aaa
+commit: https://git.buildroot.net/buildroot/commit/?id=2c552913dd3c88acecb034fc473b3380ae57afe2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure with giflib and gcc >= 10:
+Extract from
+https://github.com/rsyslog/rsyslog/commit/1bc60d4ba29053bd54dd11de46e985f1d34d8462:
 
-/nvmedata/autobuild/instance-30/output-1/per-package/fbv/host/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/11.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: gif.o: in function `fh_gif_load':
-gif.c:(.text+0x338): undefined reference to `m_rend_gif_decodecolormap'
-
-Fixes:
- - http://autobuild.buildroot.org/results/dca603a61b1fd0558992b4a40152d23b5b9c0049
+"NOTE TO MAINTAINERS: libee is not used by rsyslog for quite some while.
+However, we never included this info into the changelog. So if you still
+make rsyslog depend on libee (some do this), you should stop doing so
+now. Libee is dead and no longer been maintained nor hosted by us."
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9eeb5cd96dcfb6b579eb745ee5f7e76fcdc51251)
+(cherry picked from commit 55d164bf5d88669bad2bc52eb38eaab06619a027)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fbv/0007-gif.c-fic-build-with-gcc-10.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/rsyslog/rsyslog.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/fbv/0007-gif.c-fic-build-with-gcc-10.patch b/package/fbv/0007-gif.c-fic-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..57d5777b61
---- /dev/null
-+++ b/package/fbv/0007-gif.c-fic-build-with-gcc-10.patch
-@@ -0,0 +1,36 @@
-+From 8877207b290da1c3bc100f2705c30e6bdafcd985 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 26 May 2022 23:59:46 +0200
-+Subject: [PATCH] gif.c: fic build with gcc >= 10
-+
-+Fix the following build failure with gcc >= 10::
-+
-+/nvmedata/autobuild/instance-30/output-1/per-package/fbv/host/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/11.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: gif.o: in function `fh_gif_load':
-+gif.c:(.text+0x338): undefined reference to `m_rend_gif_decodecolormap'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/dca603a61b1fd0558992b4a40152d23b5b9c0049
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not upstreamable (most active fork dropped gif
-+support: https://github.com/godspeed1989/fbv/pull/17)]
-+---
-+ gif.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gif.c b/gif.c
-+index 689e549..5560f25 100644
-+--- a/gif.c
-++++ b/gif.c
-+@@ -48,7 +48,7 @@ int fh_gif_id(char *name)
-+     return(0);
-+ }
-+ 
-+-inline void m_rend_gif_decodecolormap(unsigned char *cmb,unsigned char *rgbb,ColorMapObject *cm,int s,int l, int transparency)
-++static inline void m_rend_gif_decodecolormap(unsigned char *cmb,unsigned char *rgbb,ColorMapObject *cm,int s,int l, int transparency)
-+ {
-+     GifColorType *cmentry;
-+     int i;
-+-- 
-+2.35.1
-+
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index ec0d405dc7..a0fb949a9a 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -66,10 +66,6 @@ else
+ RSYSLOG_CONF_OPTS += --disable-gnutls
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBEE),y)
+-RSYSLOG_DEPENDENCIES += libee
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ RSYSLOG_DEPENDENCIES += libgcrypt
+ RSYSLOG_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
