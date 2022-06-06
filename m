@@ -1,81 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B7CBC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 21:26:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72A8BC43334
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 21:30:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BE793409A6;
-	Mon,  6 Jun 2022 21:26:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F7FC6105D;
+	Mon,  6 Jun 2022 21:30:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y7kZZOySQWC6; Mon,  6 Jun 2022 21:26:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AdDYkPwSWPnS; Mon,  6 Jun 2022 21:30:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C5D744014C;
-	Mon,  6 Jun 2022 21:26:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 58E001BF279
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 21:26:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6201561052;
+	Mon,  6 Jun 2022 21:30:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E55A1BF279
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 21:30:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5365B40925
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 21:26:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B6A383E3F
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 21:30:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xTOgwQtrRafr for <buildroot@lists.busybox.net>;
- Mon,  6 Jun 2022 21:26:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u1qx72htDmFL for <buildroot@lists.busybox.net>;
+ Mon,  6 Jun 2022 21:30:24 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 088EB40904
- for <buildroot@buildroot.org>; Mon,  6 Jun 2022 21:26:21 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id h5so21543199wrb.0
- for <buildroot@buildroot.org>; Mon, 06 Jun 2022 14:26:21 -0700 (PDT)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 22C0783E0A
+ for <buildroot@buildroot.org>; Mon,  6 Jun 2022 21:30:24 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id x17so21501818wrg.6
+ for <buildroot@buildroot.org>; Mon, 06 Jun 2022 14:30:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=cbrJDfj41D/RAcHV/kt71TrAZX6HmqJn7fezfCFPI7E=;
- b=RpSlX2q0TFIaez60ZY4nuUqtODeeqeil2tOcvHqmCgMdaTBoUmde5Wx2N+B410FEBz
- SvghWU8eJ0fug2pBREMlEqNRbC3esg7PlLg174RUmy0y9E6TbRuxZapE7xE7f9hDFVlj
- 5iMI5659N5gosdRerjF0SKPrh0PaU10UZr9HlbxsI1tZPf8Y79v1qVMDmtA96wuj6AcV
- B0QEtQOyIPGL+Fra0axa9Le0oC9KbQcnxWzrYvZDWOQh9Z0uJ88eK4nkmAbTUV04O3PD
- 0OIE9Kl7F97UtJjoZl24rQGf4i5QU5kWuyEQHwPe9D6IKMsjEs23GzufgWWoh1UgRc96
- cIvw==
+ bh=q6DpYbpD4fT/5GlEWzo2+uCqP36aGYVKD3kyNuKCyCU=;
+ b=UQ+enJauyJF1fnU7WBPZMRPULL2asSrZYmn+fJudl+xQ0qJmWssjlK7asFinQO3rOk
+ AUoahvkOaO37VbWc7hrgfuGVSNhxtjXeUdJ/Q6xb04GyZ45zDr3suiWVtPohenZpO8nK
+ 5Tp5x2SVHkmA+JOUUDjMM/YuDI09Sl772qR2YxAhQ0M3FDl1MCHj2o7UAAMcpXzmxo7Q
+ dhYhMAib2V1u/IaX/G495rKyz2pvJFiYAJUSkyZGQdZL8qnS2KL+QHzIWRBt456wSW3H
+ vO5R3xMCPjRIoIolNhKMS5wY0iZUnqvO1SoZhxkq0gS7f4ks8meLnijLc/Em9P3XizdM
+ F0rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=cbrJDfj41D/RAcHV/kt71TrAZX6HmqJn7fezfCFPI7E=;
- b=GBPL+2FIgGJvPHb7KATMIFjh2lUaMhsfdN36izg3iOctdRw6XKDu3RyflAVcHqUl8M
- 2RRXM62f2DtQyssxhAjhxYE7mtitv2432Pcl4w5ZurQoTVIckamFMH34O6Ul0KwvwGeO
- YzwQJ5cQXPOJ6a5vYyrfkMur+CevW1gza8LM98HG6N7g3HkpCTBr8E+yFNBkOvsBVlwk
- kxJMm3S0urCzXi3SsWDw1TtG8ASfRQBKCCdqBOZA55NvVU5eIONdgcnSVYtlxPlMHOvw
- VjHFJD6VB07JCDw9VBTD3qTN6k3Fh40oTrX+2d16hsZXNsshpeB6KNJ2qH4zHRPRCPHu
- W1wA==
-X-Gm-Message-State: AOAM530HGMWe5VZQlVU7dCxRaeSFgfvYNVQXsYt4giUFPYCNlxWUISBx
- H4mErQ6MXXSqOKwfe4DXHVn/n3Hr2js=
-X-Google-Smtp-Source: ABdhPJxmblfkhVVLV2j0utM0u0Tr2fQxy02eDM4QvuVaW1y3rPaMeC9M1qJswSsmNtKTh9YQtJL5uQ==
-X-Received: by 2002:adf:d1e7:0:b0:215:2126:dede with SMTP id
- g7-20020adfd1e7000000b002152126dedemr17779088wrd.297.1654550779971; 
- Mon, 06 Jun 2022 14:26:19 -0700 (PDT)
+ bh=q6DpYbpD4fT/5GlEWzo2+uCqP36aGYVKD3kyNuKCyCU=;
+ b=LUdkYe6rv/NOh3mjW+eDg7k5nKc4YfV6SxLKZ3Rm2odR8bnq3K7/5OPIbKKyhnFxsw
+ RRC3P7fBy8E5dogwcBPadfTw0d9k0nrqLEy3Bldgr28sjJpEgopkNBw4SDQxhsL10kn0
+ dDIMkFQL4X+qQ9+hfWDQW0FEnBlCcW4r89lUkYtE6/XM4jC4Soogy2rjwRXDqEjWnKnV
+ N4V2p0FGYh9+Y2uDrtc8CWo8Z4mm9bRlRKBaEiHWin3jY2/AvbnJVMDpTmTmMSOO8a0k
+ 3wwGCjTh9VkZQGDMmXHkqth/JdJui8L+VllmkeINkYmyoY30cr7woWNw9vQz5M6EwYBC
+ 9oyg==
+X-Gm-Message-State: AOAM530QAdeXsC/N/sIszzrWZ1NEhRjnwmb5nsrneKFgtMws4ziPvDJ1
+ xCZQJzlNX5ADGJv0vj49qTSsgBNZFFg=
+X-Google-Smtp-Source: ABdhPJzyWe6zCl9X7YUY6B5pQIqM3hooHHV0RoOc+pJtKfp5BZROlypGldpTbFr8L6GaPJTSdGMwhg==
+X-Received: by 2002:adf:fe8c:0:b0:215:a70d:53ff with SMTP id
+ l12-20020adffe8c000000b00215a70d53ffmr16028910wrr.138.1654551022118; 
+ Mon, 06 Jun 2022 14:30:22 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- s19-20020a1cf213000000b0039c4945c753sm7039911wmc.39.2022.06.06.14.26.19
+ h11-20020a5d688b000000b0020e63ab5d78sm16145759wru.26.2022.06.06.14.30.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Jun 2022 14:26:19 -0700 (PDT)
+ Mon, 06 Jun 2022 14:30:21 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  6 Jun 2022 23:23:42 +0200
-Message-Id: <20220606212342.3981-1-fontaine.fabrice@gmail.com>
+Date: Mon,  6 Jun 2022 23:27:42 +0200
+Message-Id: <20220606212742.13576-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.6.0
+Subject: [Buildroot] [PATCH 1/1] package/libaio: bump to version 0.3.113
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,43 +93,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a long term supported version that will be maintained till 2027.
-
-https://www.mail-archive.com/haproxy@formilux.org/msg42371.html
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libaio/libaio.hash | 2 +-
+ package/libaio/libaio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 18834c29b1..4b00438190 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
+diff --git a/package/libaio/libaio.hash b/package/libaio/libaio.hash
+index ac815a73b5..4ddc97334f 100644
+--- a/package/libaio/libaio.hash
++++ b/package/libaio/libaio.hash
 @@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.15.tar.gz.sha256
--sha256  3958b17b7ee80eb79712aaf24f0d83e753683104b36e282a8b3dcd2418e30082  haproxy-2.4.15.tar.gz
-+# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.0.tar.gz.sha256
-+sha256  90f8e608aacd513b0f542e0438fa12e7fb4622cf58bd4375f3fe0350146eaa59  haproxy-2.6.0.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index b498549e20..44fc9320b7 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -4,8 +4,8 @@
+ # From https://releases.pagure.org/libaio/CHECKSUMS
+-sha256  ab0462f2c9d546683e5147b1ce9c195fe95d07fac5bf362f6c01637955c3b492 libaio-0.3.112.tar.gz
++sha512  65c30a102433bf8386581b03fc706d84bd341be249fbdee11a032b237a7b239e8c27413504fef15e2797b1acd67f752526637005889590ecb380e2e120ab0b71  libaio-0.3.113.tar.gz
+ 
+ # Hash for license file:
+ sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index 34f08b75e7..e13e49346b 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HAPROXY_VERSION_MAJOR = 2.4
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).15
-+HAPROXY_VERSION_MAJOR = 2.6
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).0
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-LIBAIO_VERSION = 0.3.112
++LIBAIO_VERSION = 0.3.113
+ LIBAIO_SITE = https://releases.pagure.org/libaio
+ LIBAIO_INSTALL_STAGING = YES
+ LIBAIO_LICENSE = LGPL-2.1+
 -- 
 2.35.1
 
