@@ -1,45 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C8D6C43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:36:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E4AAC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:36:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E64C40B60;
-	Tue,  7 Jun 2022 19:36:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E438384176;
+	Tue,  7 Jun 2022 19:36:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HBjXK78_O2G5; Tue,  7 Jun 2022 19:36:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KNJ1m3B3eE5r; Tue,  7 Jun 2022 19:36:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C4BD40B47;
-	Tue,  7 Jun 2022 19:36:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F6CF83E75;
+	Tue,  7 Jun 2022 19:36:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 213E41BF475
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 106071BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84F6B40B62
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:16:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04CC54059B
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rZctqhOk47EH for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
+ with ESMTP id fq6VkEswlOuj for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2240640B58
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1364940C07
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 16C1A86E22; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
+ id 0202F86E22; Tue,  7 Jun 2022 19:05:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Jun 2022 22:23:39 +0200
+Date: Mon, 6 Jun 2022 21:44:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e04f1b015989ff924384861cb2872f84eade4155
-X-Git-Newrev: 3a6c130754d80005d3212ea7426599fe3a679ad6
+X-Git-Oldrev: 81f2dd7b489b73985c13db91ae958833ae84cb4f
+X-Git-Newrev: 82fb054745f8b3fa126be6b5b5506fca0ea999ea
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190459.16C1A86E22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rauc: bump to version 1.7
+Message-Id: <20220607190500.0202F86E22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-ati:
+ switch dependency from mesa3d to libgbm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -51,94 +52,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: "Arnout Vandecappelle \(Essensium/Mind\) via buildroot"
+ <buildroot@buildroot.org>
+Reply-To: "Arnout Vandecappelle \(Essensium/Mind\)" <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a6c130754d80005d3212ea7426599fe3a679ad6
+commit: https://git.buildroot.net/buildroot/commit/?id=82fb054745f8b3fa126be6b5b5506fca0ea999ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch that is already in upstream.
+The package depends on gbm and not mesa3d:
+https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati/-/blob/master/configure.ac#L155
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Remove the dependency to BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON in order
+to prevent a circular dependency here. This option will be removed in
+a follow-patch anyway because Mesa3D will drop DRI drivers in version
+22.x.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...0001-src-verify_hash.c-include-inttypes.h.patch | 38 ----------------------
- package/rauc/rauc.hash                             |  2 +-
- package/rauc/rauc.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 40 deletions(-)
+ package/x11r7/xdriver_xf86-video-ati/Config.in                 | 7 +++----
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk | 1 +
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch b/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch
-deleted file mode 100644
-index 916c8cca0b..0000000000
---- a/package/rauc/0001-src-verify_hash.c-include-inttypes.h.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From b19a9c26d88a913417e77aaf60c72cdbf393d1f6 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 31 May 2022 21:22:36 +0200
--Subject: [PATCH] src/verify_hash.c: include inttypes.h
--
--Include inttypes.h to avoid the following build failure:
--
--In file included from /nvmedata/autobuild/instance-22/output-1/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib.h:62,
--                 from src/verity_hash.c:26:
--src/verity_hash.c: In function 'verify_zero':
--src/verity_hash.c:69:55: error: expected ')' before 'PRIu64'
--   69 |    g_message("Spare area is not zeroed at position %" PRIu64 ".",
--      |                                                       ^~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/1a093c0e194a061836884419d2f50506105db01e
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/rauc/rauc/pull/914]
-----
-- src/verity_hash.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/verity_hash.c b/src/verity_hash.c
--index db82a78..3b2c2a0 100644
----- a/src/verity_hash.c
--+++ b/src/verity_hash.c
--@@ -19,6 +19,7 @@
--  */
-- 
-- #include <errno.h>
--+#include <inttypes.h>
-- #include <stdio.h>
-- #include <stdlib.h>
-- #include <string.h>
---- 
--2.35.1
--
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index f6c1446de4..677d358158 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated, after verifying against
- # https://github.com/rauc/rauc/releases/download/v1.6/rauc-1.6.tar.xz.asc
--sha256  86013788dd02321b7c3f913ad3a1f8802afbc784ec076fa278524a9e1ef9e7b0  rauc-1.6.tar.xz
-+sha256  8b7d37cc1eb57df4f03de3c943dd7be290b78d47be28881e8b1f070e1d5e55df  rauc-1.7.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 0520b30521..90b2317d4b 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
+index 1246014dca..81255d5a4c 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/Config.in
++++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
+@@ -1,15 +1,14 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
+ 	bool "xf86-video-ati"
+ 	depends on BR2_i386 || BR2_x86_64 # DRI radeon r100 driver
+-	depends on BR2_PACKAGE_MESA3D
++	depends on BR2_PACKAGE_HAS_LIBGBM
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBDRM_RADEON
+-	select BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
+ 	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  ATI video driver
  
--RAUC_VERSION = 1.6
-+RAUC_VERSION = 1.7
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+-comment "xf86-video-ati needs mesa3d"
++comment "xf86-video-ati needs GBM"
+ 	depends on BR2_i386 || BR2_x86_64
+-	depends on !BR2_PACKAGE_MESA3D
++	depends on !BR2_PACKAGE_HAS_LIBGBM
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index edb8b11add..e7f5852811 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+@@ -11,6 +11,7 @@ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_ATI_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = \
+ 	libdrm \
++	libgbm \
+ 	xlib_libXcomposite \
+ 	xorgproto \
+ 	xserver_xorg-server
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
