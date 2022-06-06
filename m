@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B539CCCA47E
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:37:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56301C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:37:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7468660FE2;
-	Tue,  7 Jun 2022 19:37:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2417F60E68;
+	Tue,  7 Jun 2022 19:37:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1wYR0nOFESy9; Tue,  7 Jun 2022 19:37:45 +0000 (UTC)
+	with ESMTP id 7_-yTKQzONuE; Tue,  7 Jun 2022 19:37:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F32060F6F;
-	Tue,  7 Jun 2022 19:37:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1231560F93;
+	Tue,  7 Jun 2022 19:37:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 12CC41BF475
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2822D1BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99EBB408A5
+ by smtp2.osuosl.org (Postfix) with ESMTP id BBDCD408A6
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:17:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zQViH5ynOr0R for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 19:16:53 +0000 (UTC)
+ with ESMTP id DbFul7emD2gr for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 75DBB40D75
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0A6E40BFC
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:16:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6A47A86E21; Tue,  7 Jun 2022 19:05:00 +0000 (UTC)
+ id D77CB86E21; Tue,  7 Jun 2022 19:04:59 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 6 Jun 2022 22:36:03 +0200
+Date: Mon, 6 Jun 2022 21:29:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d4dd30d15e696e79d228149f7ec15e753da1e0ae
-X-Git-Newrev: ab77b8742d4236451fba34943b168d94470c0e32
+X-Git-Oldrev: 19736185d498787e3dfee8e95287ff63523b20ea
+X-Git-Newrev: e3245e3eba03f9ec64597afbebdeb90dd3064b26
 X-Patchwork-Hint: ignore
-Message-Id: <20220607190500.6A47A86E21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-r128:
- switch dependency from mesa3d to libgl
+Message-Id: <20220607190459.D77CB86E21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: bump
+ version to 21.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,36 +59,146 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab77b8742d4236451fba34943b168d94470c0e32
+commit: https://git.buildroot.net/buildroot/commit/?id=e3245e3eba03f9ec64597afbebdeb90dd3064b26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-DRI support for this driver is provided by the xserver_xorg-server
-package when BR2_PACKAGE_HAS_LIBGL is enabled:
-https://git.busybox.net/buildroot/tree/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk#n91
+Release notes:
+https://lists.x.org/archives/xorg-announce/2022-January/003127.html
 
-Change the dependency to follow the logic of xserver_xorg-server.
+Removed patch which was applied upstream:
+https://gitlab.freedesktop.org/xorg/xserver/-/commit/9c66d910cae107cbcda02a8502ac5324a6eca052
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ ...tion-error-when-built-without-logind-plat.patch | 90 ----------------------
+ .../xserver_xorg-server/xserver_xorg-server.hash   |  6 +-
+ .../xserver_xorg-server/xserver_xorg-server.mk     |  2 +-
+ 3 files changed, 4 insertions(+), 94 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-index 690041d4c6..1931dbecd7 100644
---- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-+++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-@@ -11,7 +11,9 @@ XDRIVER_XF86_VIDEO_R128_LICENSE = MIT
- XDRIVER_XF86_VIDEO_R128_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_R128_DEPENDENCIES = xserver_xorg-server xorgproto
+diff --git a/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch b/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch
+deleted file mode 100644
+index 164c0039bd..0000000000
+--- a/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch
++++ /dev/null
+@@ -1,90 +0,0 @@
+-From 17b6ab4d8cecf55a3784dbefbef9bfcf84ee3b1b Mon Sep 17 00:00:00 2001
+-From: Jocelyn Falempe <jfalempe@redhat.com>
+-Date: Thu, 16 Dec 2021 15:46:43 +0100
+-Subject: [PATCH] Fix compilation error when built without logind/platform bus
+-
+-This was introduced by commit 8eb1396d
+-
+-Signed-off-by: Jocelyn Falempe <jfalempe@redhat.com>
+-[Peter: from https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/827]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- hw/xfree86/common/xf86Events.c               |  9 +--------
+- hw/xfree86/os-support/linux/systemd-logind.c | 16 +++++++++++-----
+- include/systemd-logind.h                     |  4 ++--
+- 3 files changed, 14 insertions(+), 15 deletions(-)
+-
+-diff --git a/hw/xfree86/common/xf86Events.c b/hw/xfree86/common/xf86Events.c
+-index 6076efa80..395bbc7b3 100644
+---- a/hw/xfree86/common/xf86Events.c
+-+++ b/hw/xfree86/common/xf86Events.c
+-@@ -383,14 +383,7 @@ xf86VTLeave(void)
+-         xf86GPUScreens[i]->LeaveVT(xf86GPUScreens[i]);
+- 
+-     if (systemd_logind_controls_session()) {
+--        for (i = 0; i < xf86_num_platform_devices; i++) {
+--            if (xf86_platform_devices[i].flags & XF86_PDEV_SERVER_FD) {
+--                int major, minor;
+--                major = xf86_platform_odev_attributes(i)->major;
+--                minor = xf86_platform_odev_attributes(i)->minor;
+--                systemd_logind_drop_master(major, minor);
+--            }
+--        }
+-+        systemd_logind_drop_master();
+-     }
+- 
+-     if (!xf86VTSwitchAway())
+-diff --git a/hw/xfree86/os-support/linux/systemd-logind.c b/hw/xfree86/os-support/linux/systemd-logind.c
+-index 35d5cc75b..f6a223a55 100644
+---- a/hw/xfree86/os-support/linux/systemd-logind.c
+-+++ b/hw/xfree86/os-support/linux/systemd-logind.c
+-@@ -308,13 +308,19 @@ cleanup:
+-  * and ensure the drm_drop_master is done before
+-  * VT_RELDISP when switching VT
+-  */
+--void systemd_logind_drop_master(int _major, int _minor)
+-+void systemd_logind_drop_master(void)
+- {
+--    struct systemd_logind_info *info = &logind_info;
+--    dbus_int32_t major = _major;
+--    dbus_int32_t minor = _minor;
+-+    int i;
+-+    for (i = 0; i < xf86_num_platform_devices; i++) {
+-+        if (xf86_platform_devices[i].flags & XF86_PDEV_SERVER_FD) {
+-+            dbus_int32_t major, minor;
+-+            struct systemd_logind_info *info = &logind_info;
+- 
+--    systemd_logind_ack_pause(info, minor, major);
+-+            major = xf86_platform_odev_attributes(i)->major;
+-+            minor = xf86_platform_odev_attributes(i)->minor;
+-+            systemd_logind_ack_pause(info, minor, major);
+-+        }
+-+    }
+- }
+- 
+- static DBusHandlerResult
+-diff --git a/include/systemd-logind.h b/include/systemd-logind.h
+-index a8af2b96d..5c04d0130 100644
+---- a/include/systemd-logind.h
+-+++ b/include/systemd-logind.h
+-@@ -33,7 +33,7 @@ int systemd_logind_take_fd(int major, int minor, const char *path, Bool *paus);
+- void systemd_logind_release_fd(int major, int minor, int fd);
+- int systemd_logind_controls_session(void);
+- void systemd_logind_vtenter(void);
+--void systemd_logind_drop_master(int major, int minor);
+-+void systemd_logind_drop_master(void);
+- #else
+- #define systemd_logind_init()
+- #define systemd_logind_fini()
+-@@ -41,7 +41,7 @@ void systemd_logind_drop_master(int major, int minor);
+- #define systemd_logind_release_fd(major, minor, fd) close(fd)
+- #define systemd_logind_controls_session() 0
+- #define systemd_logind_vtenter()
+--#define systemd_logind_drop_master(major, minor)
+-+#define systemd_logind_drop_master()
+- #endif
+- 
+- #endif
+--- 
+-2.20.1
+-
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 6008661db1..b5635b9afa 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2021-December/003125.html
+-sha256  c20bf46a9fe8e74bf4e75430637e58d49a02d806609dc161462bceb1ef7e8db0  xorg-server-21.1.2.tar.xz
+-sha512  6d7a0d29d5be09f80ed505c4d6ae964795127525a0ab73a4eab4f601788ab3627033143e5aeb4c2565c6683dd3402084d13acab5554606fbd519c4aec0a79def  xorg-server-21.1.2.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2022-January/003127.html
++sha256  61d6aad5b6b47a116b960bd7f0cba4ee7e6da95d6bb0b127bde75d7d1acdebe5  xorg-server-21.1.3.tar.xz
++sha512  cf5fed023eadda62ae732f8c4d427c272ebe005188341290f3d03147042c103b00cbb94d86a0256da815fb9b9a3da315c21a05ee0c926c1a2ff0c54ab0c0638b  xorg-server-21.1.3.tar.xz
  
--ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+XDRIVER_XF86_VIDEO_R128_CONF_OPTS += --enable-dri
-+else
- XDRIVER_XF86_VIDEO_R128_CONF_OPTS += --disable-dri
- endif
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 0cadba92a3..0f1779dcab 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-XSERVER_XORG_SERVER_VERSION = 21.1.2
++XSERVER_XORG_SERVER_VERSION = 21.1.3
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
