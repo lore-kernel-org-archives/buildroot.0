@@ -1,87 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1617C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 18:19:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB284C43334
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 18:19:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D66384069;
-	Mon,  6 Jun 2022 18:19:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3749A41C04;
+	Mon,  6 Jun 2022 18:19:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nuqA3v6wer_o; Mon,  6 Jun 2022 18:19:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H0j5OboI82wf; Mon,  6 Jun 2022 18:19:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D7CC830B8;
-	Mon,  6 Jun 2022 18:19:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2423E1BF2E3
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:19:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E28A041C01;
+	Mon,  6 Jun 2022 18:19:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9ACB01BF2E3
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:19:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1305D830B8
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:19:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8949160B61
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:19:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x4aAum36Cf8I for <buildroot@lists.busybox.net>;
- Mon,  6 Jun 2022 18:19:09 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IBkIKAPneYaZ for <buildroot@lists.busybox.net>;
+ Mon,  6 Jun 2022 18:19:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DBD2082F8A
- for <buildroot@buildroot.org>; Mon,  6 Jun 2022 18:19:08 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id z7so19908165edm.13
- for <buildroot@buildroot.org>; Mon, 06 Jun 2022 11:19:08 -0700 (PDT)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3C3C560A6A
+ for <buildroot@buildroot.org>; Mon,  6 Jun 2022 18:19:44 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id b8so3253203edj.11
+ for <buildroot@buildroot.org>; Mon, 06 Jun 2022 11:19:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=crr7tkBY4tvlsPkDow/X09XQAg0DFkTrBgIAoCxzqvk=;
- b=RgMRY1WgeCAVmgLm2s1qb9Dxx/N+/3iKvFdS/jqzjxSl20eY3N/IA3MK/wQoHZBBAe
- 00FiLeQvStbPRQz8yPEO7dBciAN6zuvJqE+C5prbPMdjVk1b4G+8oSwr8MpupwEsItBM
- qnt1CEHYkH6P/2O05J9MH9thIfmHio6uhGDgCkFRAN9iT3hwOtTdtS4/h0JmCpKYPUwb
- byLWoJmVFVn70o9KcK5zlJIIaUIbzQVCRc9hrpXVSf0v/R4vE2r2FN/XM0WC1HobDSQu
- z4KEJHqB7akjfHo4lYOKBgGdLdWWxHayKKA4PzpiVnn/uYy/87EcXQdENiBEEJZMZqEV
- IYoA==
+ bh=4Fw8BBBvOHBpV8APRUubG7XTLtcy61uuQmrGnuplFGo=;
+ b=RQHd4a443z9n4UBeIMLUoqFyQ9pM4chK1jGHmUa5yXCGztvzQIxqqP8U8cCFtzTWjh
+ WeegsNlsTBwzbxH0Qb2TXWkS+m5UTAHAzJhZDCbnftCqIViesmpfLQ1Ur8nVQxBAy5UG
+ U5UdLmD/KCPHKWilt8g6ugUikTKpiVydhljLbHAC/9ri/h0EnmKuSfJSS+ugrdIKCJBz
+ 3qFTIUxn4U89u0bWDUbsUkG8iDNBiBPRtbQdRan4DCykzIh8qBex/966biayVzDRzTBN
+ PvutD6EgnJMpsFfvVHH0QzglrkFUd65uXhz1h1bhqsqYOwPqjNQrH8saWjKqVni3V/RK
+ W/aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=crr7tkBY4tvlsPkDow/X09XQAg0DFkTrBgIAoCxzqvk=;
- b=ke5fRMp+1lFxhw4I/5EqYMS6QopKiTz08J+1bA77OGCmnZpVsBgVaNf00sMfFtF2/7
- 2eH0YOQga17P5xdexMxTvcTMq0LdXg0NpRgLPRgFfsnV5+UdPIg31OU4Rx5O3C7RJnZa
- RbqB/YSaDdh23Cus7n6LR3i2SVCqyH2l2nNp1SzGzucIcBjgW9XP74CGmeCWbUvw6Of8
- hzOHF1IIaAY7rcDNxiodtDjdZMEiT5XnmItZapSTRu8gAHzEDYOe6Rk+yOunlhY8u/xk
- q7gKhscjLJJg74aFqxHrq0WCw7VIYgnVlNjrPSktGkqiDl+mHkMQ+szfxU3w/HbEy6oQ
- CdEg==
-X-Gm-Message-State: AOAM5329FyeG2qOqOoAwsMw8VV3sp9zwFG4OnyzNDgzqfaWYnXyGul/e
- jXRKczK+/YFd8izw3Bb95p29TTXlMOct8Q==
-X-Google-Smtp-Source: ABdhPJxftHk+uevEIwsRbmEY6OPSKmCz9jb9IB29I7h87fQ1AaMREzUo+RW0k3tBOaXN0fJpfJNXLg==
-X-Received: by 2002:aa7:c14b:0:b0:42d:d763:104 with SMTP id
- r11-20020aa7c14b000000b0042dd7630104mr28987342edp.104.1654539546901; 
- Mon, 06 Jun 2022 11:19:06 -0700 (PDT)
+ bh=4Fw8BBBvOHBpV8APRUubG7XTLtcy61uuQmrGnuplFGo=;
+ b=Nv68e0HC6EeJxnQfUMtt7kBsfIl9hDSXy1pq1wS6ogyqBHHu47HLJrPx5S+xlMOGTO
+ vVoE7pOT6uvWM7OUlx9X6ZQpijK3arWSfNjNx2rHW9wVwhOn96gbo5ynIndvspvKGX7o
+ m4SVPcmgstzuTQF60nhVzjR4BZY7PPBit1eeU3JdBKzKAmlFvDgxH+7AX6qQX+PwqUbz
+ 79Ac+xirPFzyFz8ZyssR7tSNN+p5HFPvwanFAMc4RAGkAZ3tvZs2YVEF7abt6TuTGKHO
+ 5gIpAMK+KnvuNgE+/HOC5xZd/cvfUyNR6rpS8ycBSfzNe/7yPMx+kNGWSj3jurkvF9+n
+ L1/Q==
+X-Gm-Message-State: AOAM532Fm0OltsMe0xMQYnL/h8hZSx/50Rqek0gcxbSDCq8/iD5cFFN8
+ tNFv7xla4q2RATi01Dt+OmtE2+yF47jLaQ==
+X-Google-Smtp-Source: ABdhPJwPQcHHc7LAzavk21O0ljNvh1gMZUuiYutNdvadjM53TUq4Q2Fj9GeKXv3puDGx54wWF47/kA==
+X-Received: by 2002:a05:6402:60d:b0:42f:ac38:af75 with SMTP id
+ n13-20020a056402060d00b0042fac38af75mr18258500edv.203.1654539582313; 
+ Mon, 06 Jun 2022 11:19:42 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- h22-20020aa7c616000000b0042ab2127051sm8834330edq.64.2022.06.06.11.19.05
+ re16-20020a170906d8d000b007081282cbd8sm6325404ejb.76.2022.06.06.11.19.41
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 06 Jun 2022 11:19:06 -0700 (PDT)
-Message-ID: <8f8660db-9cfd-2764-151b-774608848ce4@mind.be>
-Date: Mon, 6 Jun 2022 20:19:04 +0200
+ Mon, 06 Jun 2022 11:19:41 -0700 (PDT)
+Message-ID: <db2283d3-fb5e-5878-9dfd-fc70a950686a@mind.be>
+Date: Mon, 6 Jun 2022 20:19:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
 Content-Language: en-GB
 To: Joel Stanley <joel@jms.id.au>, buildroot@buildroot.org
 References: <20220606085108.1628288-1-joel@jms.id.au>
- <20220606085108.1628288-3-joel@jms.id.au>
+ <20220606085108.1628288-2-joel@jms.id.au>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220606085108.1628288-3-joel@jms.id.au>
-Subject: Re: [Buildroot] [PATCH 2/2] package/powerpc-utils: Bump to v1.3.10
+In-Reply-To: <20220606085108.1628288-2-joel@jms.id.au>
+Subject: Re: [Buildroot] [PATCH 1/2] package/librtas: Bump to v2.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,95 +100,67 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Joel,
+
 
 On 06/06/2022 10:51, Joel Stanley wrote:
-> Since v1.3.9 the package requires numa.h from numctl, so add this as a
-> dependency.
-> 
-> This bump fixes a missing limits.h for PATH_MAX when building with musl
-> as detected by the autobuilder.
-> 
-> librtas now builds fine with musl too, so remove the glibc restriction
-> for enabling that support.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/613ec647e251ac52a01f222044bd675ce36c1b5b/
+> Includes build fixes for musl, so remove the glibc restriction.
 
-  Since we're about to release 2022.05, it's inconvenient to bump the package 
-version...
-
-  Also, it's not clear if this bump depends on the librtas bump. For sure, the 
-removal of the glibc requirement does depend on it.
-
-  Is there a possibility to backport the patch that fixes the build issue instead?
+  And what about uClibc (only in the BR2_powerpc case of course, because uClibc 
+doesn't support PPC64)?
 
   Regards,
   Arnout
 
-
 > 
 > Signed-off-by: Joel Stanley <joel@jms.id.au>
 > ---
->   package/powerpc-utils/Config.in          | 5 +----
->   package/powerpc-utils/powerpc-utils.hash | 2 +-
->   package/powerpc-utils/powerpc-utils.mk   | 4 ++--
->   3 files changed, 4 insertions(+), 7 deletions(-)
+>   package/librtas/Config.in    | 5 -----
+>   package/librtas/librtas.hash | 2 +-
+>   package/librtas/librtas.mk   | 2 +-
+>   3 files changed, 2 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
-> index d04d81c08acb..9034ea2e0fdd 100644
-> --- a/package/powerpc-utils/Config.in
-> +++ b/package/powerpc-utils/Config.in
-> @@ -7,6 +7,7 @@ config BR2_PACKAGE_POWERPC_UTILS
->   	depends on !BR2_STATIC_LIBS # dlfcn.h
+> diff --git a/package/librtas/Config.in b/package/librtas/Config.in
+> index 11660eb2817a..2f8219ee98ee 100644
+> --- a/package/librtas/Config.in
+> +++ b/package/librtas/Config.in
+> @@ -1,7 +1,6 @@
+>   config BR2_PACKAGE_LIBRTAS
+>   	bool "librtas"
 >   	depends on BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
->   	select BR2_PACKAGE_ZLIB
-> +	select BR2_PACKAGE_NUMACTL
->   	help
->   	  System utilities for PowerPC machines.
->   
-> @@ -16,7 +17,6 @@ if BR2_PACKAGE_POWERPC_UTILS
->   
->   config BR2_PACKAGE_POWERPC_UTILS_RTAS
->   	bool "RTAS support"
 > -	depends on BR2_TOOLCHAIN_USES_GLIBC
->   	select BR2_PACKAGE_LIBRTAS
 >   	help
->   	  Enable support for functions that require RTAS.
-> @@ -28,7 +28,4 @@ config BR2_PACKAGE_POWERPC_UTILS_RTAS
->   	  lsslot, activate_firmware, rtas_ibm_get_vpd, serv_config,
->   	  rtas_event_decode, sys_ident.
+>   	  The librtas package provides an interface for Run-Time
+>   	  Abstraction Services (RTAS) calls on PAPR platforms.
+> @@ -9,7 +8,3 @@ config BR2_PACKAGE_LIBRTAS
+>   	  and parse RTAS events.
 >   
-> -comment "RTAS support needs a glibc toolchain"
-> -	depends on !BR2_TOOLCHAIN_USES_GLIBC
+>   	  http://librtas.sourceforge.net/
 > -
->   endif
-> diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
-> index 8d0b10425b6d..b3c77fb223ba 100644
-> --- a/package/powerpc-utils/powerpc-utils.hash
-> +++ b/package/powerpc-utils/powerpc-utils.hash
+> -comment "librtas needs a glibc toolchain"
+> -	depends on BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+> -	depends on !BR2_TOOLCHAIN_USES_GLIBC
+> diff --git a/package/librtas/librtas.hash b/package/librtas/librtas.hash
+> index de0c0a476cac..8d4c4e191235 100644
+> --- a/package/librtas/librtas.hash
+> +++ b/package/librtas/librtas.hash
 > @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  4e3a21419863c08adde49f0795eff0fbfe4597ce82593fa5fe1f1177913fb7b9  powerpc-utils-1.3.8.tar.gz
-> +sha256  d64d9016a3e63a1e44c6e0833742cf964ae6bb1c6a9c7f0c7c5748aa335dc3db  powerpc-utils-1.3.10.tar.gz
->   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-> index b12194ae8e73..19fa84946c91 100644
-> --- a/package/powerpc-utils/powerpc-utils.mk
-> +++ b/package/powerpc-utils/powerpc-utils.mk
-> @@ -4,9 +4,9 @@
+>   # Locally computed
+> -sha256  b47b2a6f140347ac265e2c66ddf68293f6cdcc7c0c9a78c6e21ff52846465415  librtas-2.0.2.tar.gz
+> +sha256  1b951422ec9553fa9d5e5e158fd8e298f867f561189fff6817a9540d5661f145  librtas-2.0.3.tar.gz
+>   sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING.LESSER
+> diff --git a/package/librtas/librtas.mk b/package/librtas/librtas.mk
+> index c92a9e2fa494..458d7a0e478e 100644
+> --- a/package/librtas/librtas.mk
+> +++ b/package/librtas/librtas.mk
+> @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -POWERPC_UTILS_VERSION = 1.3.8
-> +POWERPC_UTILS_VERSION = 1.3.10
->   POWERPC_UTILS_SITE = $(call github,ibm-power-utilities,powerpc-utils,v$(POWERPC_UTILS_VERSION))
-> -POWERPC_UTILS_DEPENDENCIES = zlib
-> +POWERPC_UTILS_DEPENDENCIES = zlib numactl
->   POWERPC_UTILS_AUTORECONF = YES
->   POWERPC_UTILS_LICENSE = GPL-2.0+
->   POWERPC_UTILS_LICENSE_FILES = COPYING
+> -LIBRTAS_VERSION = 2.0.2
+> +LIBRTAS_VERSION = 2.0.3
+>   LIBRTAS_SITE = $(call github,ibm-power-utilities,librtas,v$(LIBRTAS_VERSION))
+>   LIBRTAS_LICENSE = LGPL-2.1+
+>   LIBRTAS_LICENSE_FILES = COPYING.LESSER
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
