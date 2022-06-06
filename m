@@ -1,64 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DFA8C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 10:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA0FAC43334
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 10:26:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1FEB83E37;
-	Mon,  6 Jun 2022 10:24:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 65E0D403E9;
+	Mon,  6 Jun 2022 10:26:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G0bxVovrV3M5; Mon,  6 Jun 2022 10:24:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yxlZl5j900FV; Mon,  6 Jun 2022 10:26:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0DB383280;
-	Mon,  6 Jun 2022 10:24:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7C61A1BF39A
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 10:24:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 798D2408AF;
+	Mon,  6 Jun 2022 10:26:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B34DD1BF39A
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 10:26:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B70683280
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 10:24:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A239060EA8
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 10:26:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DUpP6fWPwzVh for <buildroot@lists.busybox.net>;
- Mon,  6 Jun 2022 10:24:41 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3350F82A0B
- for <buildroot@buildroot.org>; Mon,  6 Jun 2022 10:24:41 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4013:c8f0:ae9b:2a1c])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id D795A780310;
- Mon,  6 Jun 2022 12:24:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1654511078;
- bh=7VdSd9s3yFavcJWptJjUjc3O2iddoWw9H7OsievnJtg=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Sqkn1h7D+AygR//X8qejv0M0GUfwrEbvT+CbI8b9xid2xXpk0UFIn/+itirYL3iJM
- ZEzUNaZB+xJ0YAastMZcn7SLfB0Ur4tz3noJ5YdPLh0kEm6u8eWAaA1nBUpAZqPEWW
- SR1U/JEm9opIIbORbmgLJYl7bkxZiceju0Ecpin2wS4mBwsQD99jh+vRajhkiUx/G4
- gIt7D0NN12tdYVDeEBRJ3iNPJdhgsg28mIQ3GBtYtB8M0cQBP9HBs0stntz7C6rgMN
- pFgaomUth8d3lioy0+HmxD8CEYCkYusmuPqfN95cvLWCIQRQDUgKP2nWTgIy+V880X
- nSpBxrNOxccxg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 06 Jun 2022 12:24:33 +0200
-Date: Mon, 6 Jun 2022 12:24:33 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220606102433.GW427639@scaer>
-References: <20220605194259.2928568-1-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220605194259.2928568-1-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 0/7] Fix a number of toolchain dependency
- issues
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Li-55ht4WjRj for <buildroot@lists.busybox.net>;
+ Mon,  6 Jun 2022 10:26:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABF1060E2E
+ for <buildroot@buildroot.org>; Mon,  6 Jun 2022 10:26:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id B944B86CB5; Mon,  6 Jun 2022 10:14:43 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 6 Jun 2022 12:21:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4142dbe7f08d5dcdc0dcfd041f3f816dd6e8a7f3
+X-Git-Newrev: 7532fc1bcd35f034754a467cb1dd39ecc8839b36
+X-Patchwork-Hint: ignore
+Message-Id: <20220606101443.B944B86CB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/musl: introduce and use
+ BR2_PACKAGE_MUSL_ARCH_SUPPORTS and BR2_PACKAGE_MUSL_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,87 +53,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Buildroot List <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7532fc1bcd35f034754a467cb1dd39ecc8839b36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-06-05 21:42 +0200, Thomas Petazzoni spake thusly:
-> The starting point for this series is the investigation of several
-> build failures affecting the master branch.
-> 
-> Most of those failures are due to the fact that we can currently
-> create configurations for which no C library is available. This
-> happens on architectures where glibc is the only supported C library,
-> but BR2_STATIC_LIBS is enabled.
-> 
-> This is taken care of by the first four patches, which are basically
-> split from a single patch posted by James Hilliard.
-> 
-> Then, another problem is that a recent commit allowed glibc only for
-> powerpc8 on the ppc64le architecture, leaving a number of other
-> PowerPC variants selectable with ppc64le, but for which no C library
-> was available.
-> 
-> Finally, the toolchain-external-booltin package had a similar problem
-> to the glibc/BR2_STATIC_LIBS issue: the package would be visible even
-> if BR2_STATIC_LIBS=y and the selected CPU architecture is only
-> supported by glibc.
-> 
-> Thomas
-> 
-> James Hilliard (4):
->   package/uclibc: introduce and use BR2_PACKAGE_UCLIBC_ARCH_SUPPORTS and
->     BR2_PACKAGE_UCLIBC_SUPPORTS
->   package/glibc: introduce and use BR2_PACKAGE_GLIBC_ARCH_SUPPORTS and
->     BR2_PACKAGE_GLIBC_SUPPORTS
->   package/musl: introduce and use BR2_PACKAGE_MUSL_ARCH_SUPPORTS and
->     BR2_PACKAGE_MUSL_SUPPORTS
+In this commit BR2_PACKAGE_MUSL_SUPPORTS looks redundant with
+BR2_PACKAGE_MUSL_ARCH_SUPPORTS, but for other C libraries, like glibc,
+it can be different.
 
-Those three patches, applied to master, thanks.
+To be consistent, we use the same pattern for musl.
 
-I've however re-ordered them so that glibc comes first, which is then
-used as an argument for keeping the same construct in uClibc-ng (so I
-tweaked the commit message slightly), and to make the same argument in
-musl as well (where I duplicated the commit log from uClibc-ng).
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/musl/Config.in                  | 28 ++++++++++++++++++++++++++++
+ toolchain/toolchain-buildroot/Config.in | 10 +---------
+ 2 files changed, 29 insertions(+), 9 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
->   Config.in: only allow BR2_STATIC_LIBS on supported libc/arch
-> 
-> Thomas Petazzoni (3):
->   arch/Config.in.powerpc: disable some variants on ppc64le
->   support/scripts/gen-bootlin-toolchains: properly take into account
->     !BR2_STATIC_LIBS for glibc toolchains
->   toolchain/toolchain-external/toolchain-external-bootlin: regenerate
->     with correct !BR2_STATIC_LIBS handling
-> 
->  Config.in                                     |  2 +
->  arch/Config.in.powerpc                        | 10 +++++
->  package/glibc/Config.in                       | 38 ++++++++++++++++
->  package/musl/Config.in                        | 28 ++++++++++++
->  package/uclibc/Config.in                      | 28 ++++++++++++
->  support/scripts/gen-bootlin-toolchains        |  5 ++-
->  toolchain/toolchain-buildroot/Config.in       | 43 ++++---------------
->  .../Config.in.options                         | 10 ++---
->  8 files changed, 124 insertions(+), 40 deletions(-)
-> 
-> -- 
-> 2.35.3
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/musl/Config.in b/package/musl/Config.in
+index 69da615b63..c1a10bdd58 100644
+--- a/package/musl/Config.in
++++ b/package/musl/Config.in
+@@ -1,3 +1,31 @@
++config BR2_PACKAGE_MUSL_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64
++	default y if BR2_arm
++	default y if BR2_armeb
++	default y if BR2_i386
++	default y if BR2_microblaze
++	default y if BR2_mips
++	default y if BR2_mipsel
++	default y if BR2_mips64
++	default y if BR2_mips64el
++	default y if BR2_or1k
++	default y if BR2_powerpc
++	default y if BR2_powerpc64
++	default y if BR2_powerpc64le
++	default y if BR2_RISCV_64
++	default y if BR2_sh
++	default y if BR2_x86_64
++	depends on !BR2_powerpc_SPE # not supported, build breaks
++	depends on !(BR2_powerpc64 || BR2_powerpc64le) || BR2_POWERPC_CPU_HAS_ALTIVEC
++	# sh2 nommu is supported by musl, but we don't have support
++	# for it in Buildroot.
++	depends on BR2_USE_MMU
++
++config BR2_PACKAGE_MUSL_SUPPORTS
++	bool
++	default y if BR2_PACKAGE_MUSL_ARCH_SUPPORTS
++
+ config BR2_PACKAGE_MUSL
+ 	bool
+ 	default y
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 7ce2998cf7..0dac816a4d 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -61,15 +61,7 @@ comment "glibc on MIPS w/ NAN2008 needs a toolchain w/ headers >= 4.5"
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	bool "musl"
+-	depends on BR2_aarch64	   || BR2_arm   || BR2_armeb   || BR2_i386 || \
+-		   BR2_microblaze  || BR2_mips  || BR2_mipsel  || BR2_mips64 || \
+-		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
+-		   BR2_powerpc64le || BR2_RISCV_64 || BR2_sh   || BR2_x86_64
+-	depends on !BR2_powerpc_SPE # not supported, build breaks
+-	depends on !(BR2_powerpc64 || BR2_powerpc64le) || BR2_POWERPC_CPU_HAS_ALTIVEC
+-	# sh2 nommu is supported by musl, but we don't have support
+-	# for it in Buildroot.
+-	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_MUSL_SUPPORTS
+ 	select BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  This option selects musl as the C library for the
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
