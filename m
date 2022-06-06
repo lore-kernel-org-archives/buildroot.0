@@ -4,85 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D01AC43334
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 12:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59FB2C43334
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 12:57:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC80683FC2;
-	Mon,  6 Jun 2022 12:51:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0151383F7E;
+	Mon,  6 Jun 2022 12:57:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fni2xPHKI6Rg; Mon,  6 Jun 2022 12:51:07 +0000 (UTC)
+	with ESMTP id r1WAjwsnpt69; Mon,  6 Jun 2022 12:57:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C108483FA3;
-	Mon,  6 Jun 2022 12:51:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5A1071BF339
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 12:51:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 987B683F13;
+	Mon,  6 Jun 2022 12:57:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 666A11BF339
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 12:57:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4937C83FA3
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 12:51:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6332E60BCE
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 12:57:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CBKrKDj0X6jL for <buildroot@lists.busybox.net>;
- Mon,  6 Jun 2022 12:51:04 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EC3E482B3E
- for <buildroot@buildroot.org>; Mon,  6 Jun 2022 12:51:03 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id v19so18672885edd.4
- for <buildroot@buildroot.org>; Mon, 06 Jun 2022 05:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=WgUfCTN46W/bNSbP89QinGiB1bcz6Rb04mcKzoJ5ftU=;
- b=I9ZP6pVi5MNE+jSpcHks3W7Wovcl/L3NB+EWaAI2xS9I7wsWCrUDu1VaI9/fYCMoCn
- hknWPeT7329SIJsTVrYxy6Z4fuOppYhQlwcDzmzv2eD39Zs90t8k/eCZfQRgZzuX+7+r
- PgmfNZnFk+0YYgRC92nAtGSL2a97lGub/jl6n6yLoIFuYrMGlBOX8T7JXjEuWkuGAoTZ
- 4C8Fxeo9Ahv1dxFQVTJSY+VL7y0RU/+DGtsCsNh89dWTA+Hi5AVnSrn0my2SbFk3N662
- Lx26LPbOX9QagKmXZep0sgMZ53mbwHXqP1M8uJNeGIlScn2sOW1d1Cv+FSO303871ZTh
- daJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=WgUfCTN46W/bNSbP89QinGiB1bcz6Rb04mcKzoJ5ftU=;
- b=Yy7Dh6B8frWwFNpNwumoXj3m5Pu2sPSu1SE+SPP6ADifMg1z/8QaMkCKn9RMgyA7XL
- Zz8BgnAve/QXvtueMOuS20EQBPUEhwv+wSJv4eDusZiX3RIwn4aURr2h+YR/5R4NHTEt
- tzsDdvqD14wvdnJaTotuQNlx8Iv9nvlXIQ2U/DtUS9/xKaI2uxdYEK7xnHqeu+MRS0qP
- vr7wCi1IRluQQEsxxD9iaO53jG0pJ4j1N2RWc8j5njNvKcsrz99OEBfDzZraC2HaNtd0
- 36FrfQbrdpkIHO45O54n6MQm6pCUQVWUk8iSKEbUdi+Oj9zrjsrKHFi4rCBJbyT9hiIk
- niZg==
-X-Gm-Message-State: AOAM531of438fmT5y/H2d8krzWGnC+Mc75k0iRiMnR8UjnlRrTjX6nhn
- duO5BpEZoTDX1L5DQiD+xyi6TQ==
-X-Google-Smtp-Source: ABdhPJzTK7KucWzd5tkJOZ7IslaiY/xk0y/kyWu0ADvSO6zkxzLJKW2Z0QnyjchGYvp5FUGavoiubg==
-X-Received: by 2002:a05:6402:3899:b0:42d:d79e:acef with SMTP id
- fd25-20020a056402389900b0042dd79eacefmr26621686edb.12.1654519862015; 
- Mon, 06 Jun 2022 05:51:02 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- o13-20020a17090608cd00b006fedcb78854sm6288525eje.164.2022.06.06.05.51.01
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 06 Jun 2022 05:51:01 -0700 (PDT)
-Message-ID: <92da4b94-b41c-c9c0-1ad1-394417374f3a@mind.be>
-Date: Mon, 6 Jun 2022 14:50:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-GB
-To: Roger Knecht <rknecht@pm.me>, buildroot@buildroot.org
-References: <20220604124523.22056-1-rknecht@pm.me>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220604124523.22056-1-rknecht@pm.me>
-Subject: Re: [Buildroot] [PATCH v2] configs/docker_*: add build config for
- docker images
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZZ-kdhix1G0A for <buildroot@lists.busybox.net>;
+ Mon,  6 Jun 2022 12:57:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FB2060BDC
+ for <buildroot@buildroot.org>; Mon,  6 Jun 2022 12:57:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 4F75B86D4B; Mon,  6 Jun 2022 12:45:26 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Mon, 6 Jun 2022 14:57:11 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 2ef9db7ad325e4fb3a142e10c2146da1fbf7e766
+X-Git-Newrev: 4c4230c32cb9a266be76eb430dc26f7241af8c44
+X-Patchwork-Hint: ignore
+Message-Id: <20220606124526.4F75B86D4B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libcec: fix build
+ with gcc 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,144 +53,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Roger,
+commit: https://git.buildroot.net/buildroot/commit/?id=4c4230c32cb9a266be76eb430dc26f7241af8c44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-On 04/06/2022 14:45, Roger Knecht via buildroot wrote:
-> Buildroot is not only great to build embedded systems but also to
-> create minimal docker images. Adding a default configuration for
-> docker images makes it easier to use.
+Fix the following build failure with gcc 10:
 
-  Thank you for your contribution. However, I feel it adds little to no value. 
-The docker configurations are absolutely trivial, and they also don't add any 
-testing surface. This compared to other boards, which find a combination of 
-bootloader, kernel and image generation options that actually work, and which 
-actually does add to the testing surface since the build of the kernel or 
-bootloader sometimes breaks with newer toolchains or host OSes.
+/nvmedata/autobuild/instance-2/output-1/build/libcec-6.0.2/src/cec-client/../../include/cecloader.h: In function 'bool LibCecBootloader(const char*)':
+/nvmedata/autobuild/instance-2/output-1/build/libcec-6.0.2/src/cec-client/../../include/cecloader.h:175:14: error: converting to 'bool' from 'std::nullptr_t' requires direct-initialization [-fpermissive]
+  175 |       return NULL;
+      |              ^~~~
+/nvmedata/autobuild/instance-2/output-1/build/libcec-6.0.2/src/cec-client/../../include/cecloader.h:184:12: error: converting to 'bool' from 'std::nullptr_t' requires direct-initialization [-fpermissive]
+  184 |     return NULL;
+      |            ^~~~
 
-  I've discussed with other maintainers, and they share this opinion.
+Fixes:
+ - http://autobuild.buildroot.org/results/e34bd78cc81e6da12a85c1e4ee76931818d91073
 
-  Therefore, I marked the patch as Changes Requested in patchwork.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 858a7fe4e59ae43b6c83d203ca6591c444618eff)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../libcec/0001-cecloader-h-fix-null-return.patch  | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-
-> 
-> How to build a Docker image with Buildroot:
-> $ make docker_x86_64_defconfig
-> $ make
-> 
-> Create a Docker image from Buildroot rootfs:
-> $ docker image import output/images/rootfs.tar buildroot-image:latest
-> 
-> Run Docker container:
-> $ docker run --rm -it buildroot-image:latest /bin/sh
-
-  This part should be in a README file (board/docker/readme.txt).
-
-  Regards,
-  Arnout
-
-> 
-> Signed-off-by: Roger Knecht <rknecht@pm.me>
-> ---
-> v2:
->   - Added Docker defconfig for ARM(64)
-> 
->   DEVELOPERS                       | 3 +++
->   configs/docker_aarch64_defconfig | 8 ++++++++
->   configs/docker_arm_defconfig     | 8 ++++++++
->   configs/docker_x86_64_defconfig  | 8 ++++++++
->   configs/docker_x86_defconfig     | 9 +++++++++
->   5 files changed, 36 insertions(+)
->   create mode 100644 configs/docker_aarch64_defconfig
->   create mode 100644 configs/docker_arm_defconfig
->   create mode 100644 configs/docker_x86_64_defconfig
->   create mode 100644 configs/docker_x86_defconfig
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index c33959fa45..ed46867afa 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2474,6 +2474,9 @@ F:	package/chocolate-doom/
->   F:	package/irssi/
->   F:	package/vnstat/
-> 
-> +N:	Roger Knecht <rknecht@pm.me>
-> +F:	configs/docker_*
-> +
->   N:	Romain Naour <romain.naour@gmail.com>
->   F:	board/qemu/
->   F:	configs/qemu_*
-> diff --git a/configs/docker_aarch64_defconfig b/configs/docker_aarch64_defconfig
-> new file mode 100644
-> index 0000000000..33577190c5
-> --- /dev/null
-> +++ b/configs/docker_aarch64_defconfig
-> @@ -0,0 +1,8 @@
-> +# Architecture
-> +BR2_aarch64=y
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_TAR=y
-> +
-> +# Init
-> +BR2_INIT_NONE=y
-> diff --git a/configs/docker_arm_defconfig b/configs/docker_arm_defconfig
-> new file mode 100644
-> index 0000000000..e17892fdf4
-> --- /dev/null
-> +++ b/configs/docker_arm_defconfig
-> @@ -0,0 +1,8 @@
-> +# Architecture
-> +BR2_arm=y
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_TAR=y
-> +
-> +# Init
-> +BR2_INIT_NONE=y
-> diff --git a/configs/docker_x86_64_defconfig b/configs/docker_x86_64_defconfig
-> new file mode 100644
-> index 0000000000..e571e8162a
-> --- /dev/null
-> +++ b/configs/docker_x86_64_defconfig
-> @@ -0,0 +1,8 @@
-> +# Architecture
-> +BR2_x86_64=y
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_TAR=y
-> +
-> +# Init
-> +BR2_INIT_NONE=y
-> diff --git a/configs/docker_x86_defconfig b/configs/docker_x86_defconfig
-> new file mode 100644
-> index 0000000000..33bb25a309
-> --- /dev/null
-> +++ b/configs/docker_x86_defconfig
-> @@ -0,0 +1,9 @@
-> +# Architecture
-> +BR2_i386=y
-> +BR2_x86_i686=y
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_TAR=y
-> +
-> +# Init
-> +BR2_INIT_NONE=y
-> --
-> 2.17.1
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/libcec/0001-cecloader-h-fix-null-return.patch b/package/libcec/0001-cecloader-h-fix-null-return.patch
+new file mode 100644
+index 0000000000..424e41c0ae
+--- /dev/null
++++ b/package/libcec/0001-cecloader-h-fix-null-return.patch
+@@ -0,0 +1,37 @@
++From 452b2049b2ee3e73968c603e5524b2d349ac0c3e Mon Sep 17 00:00:00 2001
++From: psykose <alice@ayaya.dev>
++Date: Sat, 9 Apr 2022 17:59:11 +0000
++Subject: [PATCH] cecloader.h: fix null return
++
++returning NULL is invalid for a return type of bool when NULL is defined
++as `nullptr` instead of 0L
++
++[Retrieved from:
++https://github.com/Pulse-Eight/libcec/pull/599/commits/452b2049b2ee3e73968c603e5524b2d349ac0c3e]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/cecloader.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/include/cecloader.h b/include/cecloader.h
++index be76468f..550f598e 100644
++--- a/include/cecloader.h
+++++ b/include/cecloader.h
++@@ -172,7 +172,7 @@ bool LibCecBootloader(const char *strLib = NULL)
++     if (!g_libCEC)
++     {
++       std::cout << dlerror() << std::endl;
++-      return NULL;
+++      return false;
++     }
++   }
++ 
++@@ -181,7 +181,7 @@ bool LibCecBootloader(const char *strLib = NULL)
++   if (!LibCecBootloader)
++   {
++     std::cout << "cannot find CECStartBootloader" << std::endl;
++-    return NULL;
+++    return false;
++   }
++ 
++   bool bReturn = LibCecBootloader();
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
