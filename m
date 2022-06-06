@@ -1,48 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39FE3C43334
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 13:16:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3E17C43334
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 13:17:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E9BC060EFA;
-	Mon,  6 Jun 2022 13:16:52 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0gApAcXfIzmZ; Mon,  6 Jun 2022 13:16:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AB4060C03;
-	Mon,  6 Jun 2022 13:16:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 52BC71BF2BC
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:16:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41C2883FF5
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:16:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 619DE84035;
+	Mon,  6 Jun 2022 13:17:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x-aUaYKRvQbu for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wE6SD8DeqrAM; Mon,  6 Jun 2022 13:17:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81BF983FF5;
+	Mon,  6 Jun 2022 13:17:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E7B41BF2BC
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:16:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2765860BD6
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:16:36 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hgykYzOuXmMS for <buildroot@lists.busybox.net>;
  Mon,  6 Jun 2022 13:16:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8956583FF1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D89760BBC
  for <buildroot@buildroot.org>; Mon,  6 Jun 2022 13:16:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 54C9E86D90; Mon,  6 Jun 2022 13:04:46 +0000 (UTC)
+ id 369B286DAA; Mon,  6 Jun 2022 13:04:46 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 6 Jun 2022 15:15:01 +0200
+Date: Mon, 6 Jun 2022 15:14:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fc63ec92928909d34c121817f0aa24d77412667e
-X-Git-Newrev: 3a7a49fdb1077040e29bd06eac4f652b94d2fc83
+X-Git-Oldrev: 66496a40564a2ea590081c4461075ea9d256e579
+X-Git-Newrev: 3b3105328e4aa54f3cfecbf8454a9db63875d76e
 X-Patchwork-Hint: ignore
-Message-Id: <20220606130446.54C9E86D90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- toolchain/toolchain-external/toolchain-external-bootlin: regenerate with
- correct !BR2_STATIC_LIBS handling
+Message-Id: <20220606130446.369B286DAA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Config.in: only allow BR2_STATIC_LIBS on
+ supported libc/arch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,51 +59,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a7a49fdb1077040e29bd06eac4f652b94d2fc83
+commit: https://git.buildroot.net/buildroot/commit/?id=3b3105328e4aa54f3cfecbf8454a9db63875d76e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit is simply the result of regenerating the
-toolchain-external-bootlin package after gen-bootlin-toolchains was
-changed in commit "support/scripts/gen-bootlin-toolchains: properly
-take into account !BR2_STATIC_LIBS for glibc toolchains".
+It is currently possible to select BR2_STATIC_LIBS while
+BR2_TOOLCHAIN_BUILDROOT is selected even when there are no buildroot
+toolchains that support BR2_STATIC_LIBS for the selected architecture.
 
+Add BR2_TOOLCHAIN_BUILDROOT_STATIC_LIBS_SUPPORTS so that we can
+disable the selection of BR2_STATIC_LIBS when using an unsupported
+architecture.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/4da59af8193376ec893321c4c2aaf1d25598502d
+ - http://autobuild.buildroot.net/results/1950348218a4f097f078d158977c13f8b0a97d6e
+ - http://autobuild.buildroot.net/results/2f03f2be32ad9898a990f6f0264d8c8d51991eb1
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998@free.fr: add back James' SoB from:
+    https://lore.kernel.org/buildroot/20220516210756.3093190-1-james.hilliard1@gmail.com/
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../toolchain-external-bootlin/Config.in.options               | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ Config.in                               | 2 ++
+ toolchain/toolchain-buildroot/Config.in | 5 +++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-index 53034c4f5e..06a9ddf2d2 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-@@ -22,21 +22,21 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
- 	default y if BR2_mips64 && BR2_mips_64 && BR2_MIPS_NABI32 && !BR2_MIPS_SOFT_FLOAT
- 	default y if BR2_mips64el && BR2_mips_64 && BR2_MIPS_NABI32 && !BR2_MIPS_SOFT_FLOAT
- 	default y if BR2_mips64el && BR2_mips_64r6 && BR2_MIPS_NABI32 && !BR2_MIPS_SOFT_FLOAT
--	default y if BR2_nios2
-+	default y if BR2_nios2 && !BR2_STATIC_LIBS
- 	default y if BR2_or1k
- 	default y if BR2_powerpc && BR2_powerpc_440fp
- 	default y if BR2_powerpc && BR2_powerpc_e300c3
- 	default y if BR2_powerpc && BR2_powerpc_e500mc
--	default y if BR2_powerpc64 && BR2_powerpc_e5500
-+	default y if BR2_powerpc64 && BR2_powerpc_e5500 && !BR2_STATIC_LIBS
- 	default y if BR2_powerpc64 && BR2_powerpc_e6500
- 	default y if BR2_powerpc64 && BR2_powerpc_power8
- 	default y if BR2_powerpc64le && BR2_powerpc_power8
--	default y if BR2_riscv && BR2_riscv_g && BR2_RISCV_32 && BR2_RISCV_ABI_ILP32D
-+	default y if BR2_riscv && BR2_riscv_g && BR2_RISCV_32 && BR2_RISCV_ABI_ILP32D && !BR2_STATIC_LIBS
- 	default y if BR2_riscv && BR2_riscv_g && BR2_RISCV_64 && BR2_RISCV_ABI_LP64D
--	default y if BR2_s390x && BR2_s390x_z13
-+	default y if BR2_s390x && BR2_s390x_z13 && !BR2_STATIC_LIBS
- 	default y if BR2_sh && BR2_sh4
- 	default y if BR2_sh && BR2_sh4aeb
--	default y if BR2_sparc64 && BR2_sparc_v9
-+	default y if BR2_sparc64 && BR2_sparc_v9 && !BR2_STATIC_LIBS
- 	default y if BR2_sparc && BR2_sparc_v8
- 	default y if BR2_x86_64 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2
- 	default y if BR2_x86_64 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2 && BR2_X86_CPU_HAS_SSE3 && BR2_X86_CPU_HAS_SSSE3 && BR2_X86_CPU_HAS_SSE4 && BR2_X86_CPU_HAS_SSE42
+diff --git a/Config.in b/Config.in
+index f0cd6f48ed..52c3c4b4c8 100644
+--- a/Config.in
++++ b/Config.in
+@@ -601,6 +601,8 @@ choice
+ 
+ config BR2_STATIC_LIBS
+ 	bool "static only"
++	depends on !BR2_TOOLCHAIN_BUILDROOT || \
++		BR2_TOOLCHAIN_BUILDROOT_STATIC_LIBS_SUPPORTS
+ 	help
+ 	  Build and use only static libraries. No shared libraries will
+ 	  be installed on the target. This potentially increases your
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 0dac816a4d..11566c27ff 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -20,6 +20,11 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
+ 
+ 	  If you're not sure, just leave the default "buildroot" value.
+ 
++config BR2_TOOLCHAIN_BUILDROOT_STATIC_LIBS_SUPPORTS
++	bool
++	default y if BR2_PACKAGE_UCLIBC_SUPPORTS
++	default y if BR2_PACKAGE_MUSL_SUPPORTS
++
+ choice
+ 	prompt "C library"
+ 	default BR2_TOOLCHAIN_BUILDROOT_UCLIBC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
