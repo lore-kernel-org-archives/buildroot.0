@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3E17C43334
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 13:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AB9AC43334
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 13:17:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 619DE84035;
-	Mon,  6 Jun 2022 13:17:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E579740408;
+	Mon,  6 Jun 2022 13:17:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wE6SD8DeqrAM; Mon,  6 Jun 2022 13:17:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SX7h-LG5a-Fd; Mon,  6 Jun 2022 13:17:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81BF983FF5;
-	Mon,  6 Jun 2022 13:17:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED983400FD;
+	Mon,  6 Jun 2022 13:17:15 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3E7B41BF2BC
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:16:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4EF261BF2BC
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:16:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2765860BD6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2BAD060BBC
  for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:16:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hgykYzOuXmMS for <buildroot@lists.busybox.net>;
+ with ESMTP id wZAfvVHJbBPS for <buildroot@lists.busybox.net>;
  Mon,  6 Jun 2022 13:16:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D89760BBC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D0A960EFA
  for <buildroot@buildroot.org>; Mon,  6 Jun 2022 13:16:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 369B286DAA; Mon,  6 Jun 2022 13:04:46 +0000 (UTC)
+ id 49B3386DAC; Mon,  6 Jun 2022 13:04:46 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 6 Jun 2022 15:14:05 +0200
+Date: Mon, 6 Jun 2022 15:15:01 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 66496a40564a2ea590081c4461075ea9d256e579
-X-Git-Newrev: 3b3105328e4aa54f3cfecbf8454a9db63875d76e
+X-Git-Oldrev: c0b02883148025ea3e62535f237b246818155a99
+X-Git-Newrev: fc63ec92928909d34c121817f0aa24d77412667e
 X-Patchwork-Hint: ignore
-Message-Id: <20220606130446.369B286DAA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Config.in: only allow BR2_STATIC_LIBS on
- supported libc/arch
+Message-Id: <20220606130446.49B3386DAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/gen-bootlin-toolchains:
+ properly take into account !BR2_STATIC_LIBS for glibc toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,62 +59,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b3105328e4aa54f3cfecbf8454a9db63875d76e
+commit: https://git.buildroot.net/buildroot/commit/?id=fc63ec92928909d34c121817f0aa24d77412667e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It is currently possible to select BR2_STATIC_LIBS while
-BR2_TOOLCHAIN_BUILDROOT is selected even when there are no buildroot
-toolchains that support BR2_STATIC_LIBS for the selected architecture.
+The Config.in options created for each toolchain were properly taking
+into account the !BR2_STATIC_LIBS dependency of glibc
+toolchains. However, this dependency was not taken into account into
+the main BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
+option. Consequently, if an architecture is only supported by glibc,
+but BR2_STATIC_LIBS is enabled, the main "Bootlin toolchain" option
+was visible... but with no selectable toolchain.
 
-Add BR2_TOOLCHAIN_BUILDROOT_STATIC_LIBS_SUPPORTS so that we can
-disable the selection of BR2_STATIC_LIBS when using an unsupported
-architecture.
+We fix this by making sure that
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS is only true for all
+architectures supported, taking into account the fact that some
+architectures can only be supported if !BR2_STATIC_LIBS, when the only
+available C library is glibc.
 
-Fixes:
- - http://autobuild.buildroot.net/results/4da59af8193376ec893321c4c2aaf1d25598502d
- - http://autobuild.buildroot.net/results/1950348218a4f097f078d158977c13f8b0a97d6e
- - http://autobuild.buildroot.net/results/2f03f2be32ad9898a990f6f0264d8c8d51991eb1
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998@free.fr: add back James' SoB from:
-    https://lore.kernel.org/buildroot/20220516210756.3093190-1-james.hilliard1@gmail.com/
-]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in                               | 2 ++
- toolchain/toolchain-buildroot/Config.in | 5 +++++
- 2 files changed, 7 insertions(+)
+ support/scripts/gen-bootlin-toolchains | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index f0cd6f48ed..52c3c4b4c8 100644
---- a/Config.in
-+++ b/Config.in
-@@ -601,6 +601,8 @@ choice
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index f9dd9da9a8..97a744340a 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -482,7 +482,10 @@ def gen_config_in_options(toolchains, fpath):
+         f.write("config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS\n")
+         f.write("\tbool\n")
+         for arch, details in arches.items():
+-            f.write("\tdefault y if %s\n" % " && ".join(details['conditions']))
++            conditions = details['conditions'].copy()
++            if set([t.libc for t in toolchains if t.arch == arch]) == set(['glibc']):
++                conditions.append("!BR2_STATIC_LIBS")
++            f.write("\tdefault y if %s\n" % " && ".join(conditions))
+         f.write("\n")
  
- config BR2_STATIC_LIBS
- 	bool "static only"
-+	depends on !BR2_TOOLCHAIN_BUILDROOT || \
-+		BR2_TOOLCHAIN_BUILDROOT_STATIC_LIBS_SUPPORTS
- 	help
- 	  Build and use only static libraries. No shared libraries will
- 	  be installed on the target. This potentially increases your
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 0dac816a4d..11566c27ff 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -20,6 +20,11 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
- 
- 	  If you're not sure, just leave the default "buildroot" value.
- 
-+config BR2_TOOLCHAIN_BUILDROOT_STATIC_LIBS_SUPPORTS
-+	bool
-+	default y if BR2_PACKAGE_UCLIBC_SUPPORTS
-+	default y if BR2_PACKAGE_MUSL_SUPPORTS
-+
- choice
- 	prompt "C library"
- 	default BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+         f.write("if BR2_TOOLCHAIN_EXTERNAL_BOOTLIN\n\n")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
