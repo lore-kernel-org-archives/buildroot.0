@@ -4,77 +4,144 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 195C2C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 14:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD84CCA473
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 14:28:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A70FE840D1;
-	Mon,  6 Jun 2022 14:24:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A6FC840F0;
+	Mon,  6 Jun 2022 14:28:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5Yt_oT3ynnXQ; Mon,  6 Jun 2022 14:24:33 +0000 (UTC)
+	with ESMTP id upG-JKUuarFQ; Mon,  6 Jun 2022 14:28:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C56D840D4;
-	Mon,  6 Jun 2022 14:24:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EA4C31BF363
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 14:24:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28868826B4;
+	Mon,  6 Jun 2022 14:28:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 290AE1BF363
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 14:28:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DCF5F840D4
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 14:24:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10A6C416F5
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 14:28:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qy_t71avnoOF for <buildroot@lists.busybox.net>;
- Mon,  6 Jun 2022 14:24:28 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=orolia.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cPdWrPIY34eQ for <buildroot@lists.busybox.net>;
+ Mon,  6 Jun 2022 14:28:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 61EA5840D1
- for <buildroot@buildroot.org>; Mon,  6 Jun 2022 14:24:28 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- m32-20020a05600c3b2000b0039756bb41f2so8008494wms.3
- for <buildroot@buildroot.org>; Mon, 06 Jun 2022 07:24:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=k0H6mxfeCTx8IXT0QCa2bRSU1hALR13sby6wzMpFQHU=;
- b=B7PTPpDt4TO+KhqbDjocXcB0wwyPimbfumYpND/8iFS3J5cEGpjnwZjJK+IiN0Q09a
- R1+2ZTqf+yRY5KI3OK32fKNkEVbs1dbE24mDnszOsGwHYREVZfOiDGj8uB0YtZfTxzB8
- ZY0q0CA6/z+y7IXaE4Sx5luS3HmPgQ3DoVeDWfLm019koXxA4+f71OzkZAT32ft0G+SU
- s0Vwb23xfesnexnJk2NhzJCbZpE2ASZZITDFI9bCn71DBTqq064QbwLyMAH2B8Lf0w0M
- CFxHCAu2yjplqusx5BvgGt9+kGG2z1jXE9QknM9QaT8OLW/Ij6Lfst8NcLwM4900hbvv
- 0AFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=k0H6mxfeCTx8IXT0QCa2bRSU1hALR13sby6wzMpFQHU=;
- b=B//vKCLm8b+fJ5etimN8hpuS118L+uAs4XYGYFSJ93Q0rE+dOBZ4yaMAG/+3pvuUDe
- InPhIKD/FkNrRIZuxp7tyUgeZa+snNbuTEDdQoTrrbji/BFv676/dlVtQ/WgVGHugsEp
- QUzm4OCMuc0SbULsqzn4kRqokjbWhV7xzAYOD4KRwUj6pHtBy1frxetJBULqxEU487fN
- WdQfY+D/cGZL7yihmTIKff7rfbtFBVuhXWJhw2def8FU+JWjyAly+jwFffqNdY0XRQGK
- jQPyX4zWIQ/V9r/AL7kr3UMTv2VJZOUGFtoLa+P4TDcWDVG6c8ru5YxOUJkWMWBQBgN7
- gbuA==
-X-Gm-Message-State: AOAM533Ic14cgzoVOTQWOSUqDK1LgM8AYUpfnHDU/b2gpjmZnyTFG/Gw
- 8LXllQQByQpOJ1t1wly0TiiyB2z+e5cTnw==
-X-Google-Smtp-Source: ABdhPJx6klotFn1jJV4auF6x7HkoVgeXFIHTVlCwEuJcHLCiElZonK5XJULAzND+e1DqfWoRGgCrrw==
-X-Received: by 2002:a05:600c:4243:b0:39c:5538:52ec with SMTP id
- r3-20020a05600c424300b0039c553852ecmr2139426wmm.98.1654525465841; 
- Mon, 06 Jun 2022 07:24:25 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- l24-20020a05600c1d1800b00397342bcfb7sm18218863wms.46.2022.06.06.07.24.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Jun 2022 07:24:25 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  6 Jun 2022 16:21:18 +0200
-Message-Id: <20220606142118.1055501-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com
+ (mail-he1eur04on0624.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe0d::624])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DB7E0416F3
+ for <buildroot@buildroot.org>; Mon,  6 Jun 2022 14:28:01 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N7LisO3d8O2VeBPhxQmlCfy4KmVN57pZ+/SKGLaUP/lXFXYqLBEVal/1/nXceKZ6vapZnJBWhK5iiCaMdGWdFu6M1hLB2fUHHkcjFTPw4ni+124HDrrvnKFNsoaFN/T+7sVVX0XVyNcXE9jGdImXJLICDiH9nHK602zg/A3h2P5SQ4z62bF5c3Fn8gFjOVuhPcgoR4Kp4yaTpWgQh9LV778fIQIF/rh3EINyLgwgAt1X57nC2yLnimEHM1HuQTMpatj2wsp/z/6BGF9vWNuCKIRWFF67ODK3NafvGzzE7PcRPUyZz7IyfMVj4WeDxx0TnW06MoPj81Wf2+l37SeQmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IRfM6whxsS50WmCNMpMaQIZb5Yr+35rw5uHxjvWiNnM=;
+ b=kwslGnrG3uf42u0ZE48I4gBvY/Zs2TljTQ6Bum0Pgkx+6xcNLHtnKGpIgKY5SDQVvaX4LrfC+vWXIrlw80lxp09dE9H2x+nzpeywKsYsWkDG5r5GDo9axgpBqeCX1fwL6+fsS//KRpzOmOFLVzrdxlmUBAeQ7vHhS7+ml1sc6Bwin1Mg10y90BnmU0VQ386K55Wd0EBFx4GoRfmLatgUbt7LQlSDfYIW7tPFKeR3ZGFTBnMwSgs4iM46TubfOOVbBrcZ37R5b7WWn6O6sCQvVEQxkTfK/6+PEtBxn/8gKox1YBSnL5BVJBbBbyHDiRRq8YnorSXmHjUTLAM3fcX84A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=orolia.com; dmarc=pass action=none header.from=orolia.com;
+ dkim=pass header.d=orolia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orolia.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IRfM6whxsS50WmCNMpMaQIZb5Yr+35rw5uHxjvWiNnM=;
+ b=Ch2ndROsUc9rYr3YghDl/2/PH3o2UqxvRcuBX1/NqLTgc1cXvlphse+Z5grYzDMH/VRXuiyKbmnaQmW3sfyFCrIXH3sTZAVYwi2sJFKR1v1oMT/CzjujCizqRoZofLtk1XiKX+W98KTb1XI/xg+p/023+j/IL7aY59/QT034NxY=
+Received: from DU0P251MB0779.EURP251.PROD.OUTLOOK.COM (2603:10a6:10:3a4::16)
+ by DB9P251MB0031.EURP251.PROD.OUTLOOK.COM (2603:10a6:10:2c4::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Mon, 6 Jun
+ 2022 14:27:56 +0000
+Received: from DU0P251MB0779.EURP251.PROD.OUTLOOK.COM
+ ([fe80::602b:d229:5484:16d0]) by DU0P251MB0779.EURP251.PROD.OUTLOOK.COM
+ ([fe80::602b:d229:5484:16d0%8]) with mapi id 15.20.5314.015; Mon, 6 Jun 2022
+ 14:27:56 +0000
+From: Tim Hammer <Tim.Hammer@orolia.com>
+To: Romain Naour <romain.naour@gmail.com>, Andreas Ziegler <br015@umbiko.net>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Thread-Topic: [Buildroot] ulog compilation issue with buildroot 2022.02.2
+Thread-Index: AQHYeKI4wuMK7S/c60GTPgM7h+vMuK1AZD8AgABOVoCAACWZgIABlU1Q
+Date: Mon, 6 Jun 2022 14:27:56 +0000
+Message-ID: <DU0P251MB077973A25F7238F7D310BBE3E3A29@DU0P251MB0779.EURP251.PROD.OUTLOOK.COM>
+References: <mailman.2413.1654341347.130377.buildroot@buildroot.org>
+ <190f6507af24e5ee5e8797fbfaa3b7e3@umbiko.net>
+ <20220605090620.63a7375c@windsurf>
+ <d6a1f4d7ec93800f240b7457984040b9@umbiko.net>
+ <012501bd-2055-6850-f00a-40e73e5cfa25@gmail.com>
+In-Reply-To: <012501bd-2055-6850-f00a-40e73e5cfa25@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=orolia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3521e5aa-3180-4a67-33d8-08da47c8bfd8
+x-ms-traffictypediagnostic: DB9P251MB0031:EE_
+x-microsoft-antispam-prvs: <DB9P251MB00316B32DCE69094033361F9E3A29@DB9P251MB0031.EURP251.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nNAMZHtyOhGPz5bcZ7u3J/Srert81nOv+JlBI4e3ACzrucOyxpIiq5qm3LRKE4YvW3BR+pMzRu7zZhipc+uu4jVQbFWXUhm4iBaeLNOgf9TIkvJH3R10lcpn4uxBNQjSrteJvVzH2JykVPAia92pBqXgI5bYrEEvH1fRJOPux0uH/MPM3apubWm+Oqk30z0SCnGeMMfZZuYFQeTCsXdj+tdoQ/vlZonwjSHmuhYkjc1iE+ym/xis9UYQhh9NffWvibzYaLVm8SyYyuqlGC6b6TndrdkPTOlpnMNFS8RXCzrf58+nI10c1xiLyLvHWpU1f740gx5r1Gtqs1/CvxZ5Hl81nXpyi4kwrmYVEWGHV+E+0SjMBGCnAn5/10PhdnarN8349AkwtLbbbl7/2e+aJdpqK9+1lZ3Gl4JiA2Nth8qxY9mDSRLVeb0MlXoNCoITMC0WNmj4BC6I2MvurAK5PNxPHN7ZHl+HW2ckf9xYvt/rlBPPZfjGzxNJ0MS3D09Y5ezxNy3SplsUfoeSNpeggBYK9rOriGfIx59WAq7uxtniykziamQgzIXQfDpSM19i9xrYygmcafmYOv8wQtVlPDRl4AmRxXQ6q8OCgDJRrcYW9cN4ryL1LHmsSE3olGekdoseYAcH4epmH4xJRD91CuzwHstEGEz8SiTIm15f1kz3j/OPbesieE3IeK+JL7iUpypVVqHdQB6BuiAWtIiNuDo45Aofpz5GdkuLn6wF8bdjxvG7fXfnLbwEpnb5Ob41rIypDJ8eqXks9wCzhjf5hzemAYAJY/6nvSQ3IR2EVs7WADKgxZV2FR+miJDdqlnq
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:DU0P251MB0779.EURP251.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230001)(4636009)(366004)(316002)(966005)(66574015)(33656002)(55016003)(5660300002)(86362001)(186003)(2906002)(38070700005)(6506007)(38100700002)(107886003)(53546011)(52536014)(8676002)(66556008)(4326008)(66446008)(64756008)(66476007)(66946007)(76116006)(110136005)(508600001)(54906003)(122000001)(71200400001)(7696005)(26005)(83380400001)(9686003)(8936002)(21314003);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WmJ2ZlR2RmVqSTdzd1NRb1ByY0tkQkl6c0p6a1B0ajFOT1pVcmJrQ2dvQXBM?=
+ =?utf-8?B?RXhCR3ZOODkwT2FJb2FkcEFsL2lLYmFNRDJHZzlzSUpoSGF2b29BZGp2L3Iv?=
+ =?utf-8?B?TGd2djdpQnVOd1hXelZWSWhoSjFrTTZXamRJQWtpcENXZHZpdC9zN01RMm9l?=
+ =?utf-8?B?TTE2a1gzWHlmOWx6bk5QTGtTbngrYUpRaFI3QXp1TWJGOVpLUDdES0ZaRXFB?=
+ =?utf-8?B?REZnVVNDWnY1ODBvNHBybUZ2WE5wNThFMEMyMm5uS3RsbmNTdHdDMHpJckIv?=
+ =?utf-8?B?V1FpYXZPRDNSUjkxcDVTTW42VERiZFcwZFN2amV6aEZFWUVJQmk1Skxkb1Ex?=
+ =?utf-8?B?TXNpMUJkczNhc2hUUk9xcDM5VjlOblBoaExab3lhVVRwdUZacHZnZzdvYzZM?=
+ =?utf-8?B?MDZZeXJJa0VZL0V4eTF4bzVES3pyQU4xcTlCYlYrZTZlV2FnNDNaWHdkUFB5?=
+ =?utf-8?B?UTNqaTBVdWsrLzdaNEJCbTErQytSZGJDOEg3dSs4a3YrR1N2dHd5amNBbzRm?=
+ =?utf-8?B?VWNDOWp1OVg3ZlUrUmtxSUgyUG1tR1NwakptMnpCcm1RV1A1a0pXNkVCbUY5?=
+ =?utf-8?B?empkSlQrY3NId0d0NzB4c2hnc0VkdmMzZm9rYlNuV3pMYWN2blVQdnlROHVF?=
+ =?utf-8?B?cnJOZDQwczVtVmE0dkRsL1Y3QW10Wkc5ZGREMEp0aGpPYXFOSGpwelJDdkpT?=
+ =?utf-8?B?bDUvUmttbWorQmhOTkYrSml6Y2lEcU9mWC9QMWMvWUN4N01DZGpJREVMMGxl?=
+ =?utf-8?B?eDVsUGxEd3V2eUkvOWNxbGNQN1JrcUI0aHk5M1JnRTRJYjFtMHNBNnRUZkto?=
+ =?utf-8?B?TUlyeUpvU3ppenJUTnpJQ1FEUVF2VFc4WEEzaWdzd2dUZ1JDOUZRSUVFN2VD?=
+ =?utf-8?B?M3JaWE9XYWNBYmZOemVMZ0NoTjR2VGFueTRTQW9pbGt5YTYvNjY0TktvakNI?=
+ =?utf-8?B?aUZ2NHBVbVM3eUUxenV0N3pibHRtL2tKVlFYQ2pQZ1haYmNBK2RSNkhPWHl0?=
+ =?utf-8?B?OGNIU1JJdVZVc3E5Nml0ZXVJYVc0WjJHV29sdVdySFVpSHNBNmJBM0trK0Vo?=
+ =?utf-8?B?Um9qL2FGWDhMS2RGK2VGUUdCZkY5L2wrQVdtYWJWc0JkdXBUVUpGMlBwU3dy?=
+ =?utf-8?B?cjNvUkRUcUZKZjdFbWNOdFlPMHNaYk5lR2VTb0w3YWNyWTZ2NFJFOFExMGEy?=
+ =?utf-8?B?TTAyd1lXUEhQbTg5R05lUFA2QXZnU3hlWWlJb2loaVc4eThTSm92OWptZ0xq?=
+ =?utf-8?B?c211dkJla2NRRHJZTU1mbStHNkk1a0RzZmFIcmJlK09lWGx0Q1Vib3MwcU9L?=
+ =?utf-8?B?OHBxNnJnS0ZGaHhlSmRLOVgzU1FFbWsxS3djZHNPOU5DTkQwUUJpWUxPZURm?=
+ =?utf-8?B?Q1pEUXlZMmJ1L0JrSFY3a3lzMkdtS20wZlpVNENYZldNdjlmODJFYW83MlRo?=
+ =?utf-8?B?MGtBbUNUcHNmYVduMEpadEVINDM0ZzErNE9XL0tQdm5GOVNCa0tqdXlkdzFh?=
+ =?utf-8?B?TTl4VVIzVHdNWk45QjE0WU9ldXc0TDloTHVDcGljb1pWY1EwQUQ5Njg0ekNN?=
+ =?utf-8?B?YVRQdWRlTU1UamgyZXpxY1ByT3FPNCt5T1IzRTQyemVxc2NIWW5TL3dnQXoy?=
+ =?utf-8?B?YUFZdlh2aEViRUdHWkFBV21iUGF3UEVGS0MvajNXRFZzNW5tRjRyUm1XVy9C?=
+ =?utf-8?B?MnNzOHlSbmcycjVIang0SGZpRzM4QjJ3d09lS2RmQXB6clJDdnIyM05KQnc3?=
+ =?utf-8?B?MkVHekJvZG5HTkFRTGlMQzRzNkNSbFEzNWZxV2dZQzB1NndqQW1kK0xMZlQv?=
+ =?utf-8?B?ZVNyQlZIbG03UWpYMVlIUFZxYnFMTFB1endmdy9tRW9HVXBzaHJWZ2tTWHpZ?=
+ =?utf-8?B?NjdJVjFXSmdpaGxPTDVRSVM0WlpzWDlFVEhVQUhYRERKUWlKNXo0ZlJmY01n?=
+ =?utf-8?B?YXZIRzZhenpZdGt2WUpHV0IvSVRXbUEvWmZFN28rdW5HbHdTZDYyWGtHNjNN?=
+ =?utf-8?B?Nlo5V1Via1R0SGlaeFBORWlmOFY5akpXbklVMC9rZzZvNDBQWG5jK242aVRV?=
+ =?utf-8?B?UkNqcEVHbWdHcjhPc2tXWUx4K2N6UWNKaWhhd0xTZll3Ni9MUENsdTRnbmly?=
+ =?utf-8?B?K3laaTZISWdNN1o0RDg4Wktnd0Y2SldReUV5aHJkeVlGTks5U1FFQWdEazV4?=
+ =?utf-8?B?UEMxUElncmE0R3VHUzE5QVFaM3RDbjdFSnpzMElvQWpaMDBUTHNEMEQ3c1JZ?=
+ =?utf-8?B?VTR2Vmx5UzVDSy9VVHA3TzJoVDVQSENGVDlta0lFVFUyQ3NXc3NCeHdYU1JY?=
+ =?utf-8?B?bnFYN0FNUkZQcEtnNnFjTzVOblU4citUSHV5QnBoRXZLaVEvQU5rZz09?=
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/openssl: libopenssl needs atomic
+X-OriginatorOrg: orolia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0P251MB0779.EURP251.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3521e5aa-3180-4a67-33d8-08da47c8bfd8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2022 14:27:56.3681 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a263030c-9c1b-421f-9471-1dec0b29c664
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bHVgypXrqlHhlGVSkCl7dPvUr6iHGI3o5TB14NQtoI5/OCD07Mzx+9hEm65TWx2LuEVKsyeFxn0QcDfT94ayXw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P251MB0031
+Subject: Re: [Buildroot] ulog compilation issue with buildroot 2022.02.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,874 +153,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>,
- Gustavo Heinz <gustavo@gsthnz.com>,
- Sven Haardiek <sven.haardiek@iotec-gmbh.de>,
- Yair Ben Avraham <yairba@protonmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Mauro Condarelli <mc5686@mclink.it>, Matt Weber <matthew.weber@collins.com>,
- Bernd Kuhls <bernd.kuhls@t-online.de>,
- =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
- Sergey Matyukevich <geomatsi@gmail.com>,
- Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>, Norbert Lange <nolange79@gmail.com>,
- Joseph Kogut <joseph.kogut@gmail.com>,
- =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>,
- =?UTF-8?q?Manuel=20V=C3=B6gele?= <develop@manuel-voegele.de>,
- Lionel Flandrin <lionel@svkt.org>, Pierre-Jean Texier <texier.pj2@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Philippe Reynes <philippe.reynes@softathome.com>,
- Asaf Kahlon <asafka7@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Herve Codina <herve.codina@bootlin.com>,
+ Buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libopenssl needs atomic or the build will fail (e.g. on sparcv8 without
-libatomic):
-
-${LDCMD:-/nvmedata/autobuild/instance-7/output-1/host/bin/sparc-buildroot-linux-uclibc-gcc}  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O0 -g2  -g2  -L.   \
-	-o apps/openssl apps/asn1pars.o apps/ca.o apps/ciphers.o apps/cms.o apps/crl.o apps/crl2p7.o apps/dgst.o apps/dhparam.o apps/dsa.o apps/dsaparam.o apps/ec.o apps/ecparam.o apps/enc.o apps/engine.o apps/errstr.o apps/gendsa.o apps/genpkey.o apps/genrsa.o apps/nseq.o apps/ocsp.o apps/openssl.o apps/passwd.o apps/pkcs12.o apps/pkcs7.o apps/pkcs8.o apps/pkey.o apps/pkeyparam.o apps/pkeyutl.o apps/prime.o apps/rand.o apps/rehash.o apps/req.o apps/rsa.o apps/rsautl.o apps/s_client.o apps/s_server.o apps/s_time.o apps/sess_id.o apps/smime.o apps/speed.o apps/spkac.o apps/srp.o apps/storeutl.o apps/ts.o apps/verify.o apps/version.o apps/x509.o \
-	 apps/libapps.a -lssl -lcrypto -ldl
-/nvmedata/autobuild/instance-7/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ./libssl.so: undefined reference to `__atomic_fetch_sub_4'
-
-It should be noted that openssl3 has added OPENSSL_DEV_NO_ATOMICS but
-"this is intended for internal development only, to check the
-refcounting is properly coded.  It should never become a configuration
-option, hence the name of the macro.":
-https://github.com/openssl/openssl/commit/503d4745a115b82db01c1fb22baaddb153d27cdb
-
-Fixes:
- - http://autobuild.buildroot.org/results/bce526d538f43a541fdfbc0c9b4a7cecebbbc539
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/circus/Config.in                    | 2 ++
- package/docker-compose/Config.in            | 2 ++
- package/fetchmail/Config.in                 | 1 +
- package/hostapd/Config.in                   | 1 +
- package/ibm-sw-tpm2/Config.in               | 2 ++
- package/ima-evm-utils/Config.in             | 2 ++
- package/kodi/Config.in                      | 2 ++
- package/libest/Config.in                    | 2 ++
- package/openssl/Config.in                   | 1 +
- package/pcm-tools/Config.in                 | 2 ++
- package/python-boto3/Config.in              | 1 +
- package/python-botocore/Config.in           | 1 +
- package/python-couchdb/Config.in            | 1 +
- package/python-crossbar/Config.in           | 1 +
- package/python-docker/Config.in             | 1 +
- package/python-flask-babel/Config.in        | 1 +
- package/python-flask-cors/Config.in         | 1 +
- package/python-flask-expects-json/Config.in | 1 +
- package/python-flask-jsonrpc/Config.in      | 1 +
- package/python-flask-login/Config.in        | 1 +
- package/python-flask-sqlalchemy/Config.in   | 1 +
- package/python-flask-wtf/Config.in          | 1 +
- package/python-flask/Config.in              | 1 +
- package/python-gunicorn/Config.in           | 1 +
- package/python-httplib2/Config.in           | 1 +
- package/python-ibmiotf/Config.in            | 1 +
- package/python-influxdb/Config.in           | 1 +
- package/python-m2crypto/Config.in           | 1 +
- package/python-mwclient/Config.in           | 1 +
- package/python-mwscrape/Config.in           | 1 +
- package/python-mwscrape2slob/Config.in      | 2 ++
- package/python-pip/Config.in                | 1 +
- package/python-raven/Config.in              | 1 +
- package/python-remi/Config.in               | 1 +
- package/python-requests-oauthlib/Config.in  | 1 +
- package/python-requests-toolbelt/Config.in  | 1 +
- package/python-requests/Config.in           | 1 +
- package/python-s3transfer/Config.in         | 1 +
- package/python-tomako/Config.in             | 1 +
- package/python-tornado/Config.in            | 1 +
- package/python-treq/Config.in               | 1 +
- package/python-uvloop/Config.in             | 2 ++
- package/python-websocket-client/Config.in   | 1 +
- package/python-websockets/Config.in         | 1 +
- package/python3/Config.in                   | 1 +
- package/softether/Config.in                 | 2 ++
- package/softhsm2/Config.in                  | 2 ++
- package/stunnel/Config.in                   | 1 +
- package/systemd/Config.in                   | 3 +++
- package/tpm2-abrmd/Config.in                | 2 ++
- package/tpm2-pkcs11/Config.in               | 2 ++
- package/tpm2-tools/Config.in                | 2 ++
- package/tpm2-totp/Config.in                 | 2 ++
- package/tpm2-tss/Config.in                  | 2 ++
- package/uhd/Config.in                       | 1 +
- package/wpa_supplicant/Config.in            | 2 ++
- 56 files changed, 75 insertions(+)
-
-diff --git a/package/circus/Config.in b/package/circus/Config.in
-index 832b04dfa4..bf921604b9 100644
---- a/package/circus/Config.in
-+++ b/package/circus/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_CIRCUS
- 	bool "circus"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-tornado -> python3-ssl -> libopenssl
- 	depends on BR2_PACKAGE_PYTHON3 # python-tornado
- 	depends on BR2_INSTALL_LIBSTDCPP # pyzmq -> zeromq
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pyzmq -> zeromq
-@@ -15,5 +16,6 @@ config BR2_PACKAGE_CIRCUS
- 	  https://circus.readthedocs.org/en/latest/
- 
- comment "circus needs Python 3 and a toolchain w/ C++, threads"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_PACKAGE_PYTHON3
-diff --git a/package/docker-compose/Config.in b/package/docker-compose/Config.in
-index f82a0c4bc2..0a161f06c2 100644
---- a/package/docker-compose/Config.in
-+++ b/package/docker-compose/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_DOCKER_COMPOSE
- 	bool "docker-compose"
- 	depends on BR2_USE_MMU # python3
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-docker -> python3-ssl -> libopenssl
- 	depends on BR2_USE_WCHAR # python3
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
- 	depends on !BR2_STATIC_LIBS # python3
-@@ -25,6 +26,7 @@ config BR2_PACKAGE_DOCKER_COMPOSE
- 
- comment "docker-compose needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
-diff --git a/package/fetchmail/Config.in b/package/fetchmail/Config.in
-index 1017df34b2..d86e69f58f 100644
---- a/package/fetchmail/Config.in
-+++ b/package/fetchmail/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_FETCHMAIL
- 	bool "fetchmail"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	select BR2_PACKAGE_CA_CERTIFICATES
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-index f4206ceea5..d78520ca40 100644
---- a/package/hostapd/Config.in
-+++ b/package/hostapd/Config.in
-@@ -78,6 +78,7 @@ config BR2_PACKAGE_HOSTAPD_WPS
- 
- config BR2_PACKAGE_HOSTAPD_WPA3
- 	bool "Enable WPA3 support"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	help
-diff --git a/package/ibm-sw-tpm2/Config.in b/package/ibm-sw-tpm2/Config.in
-index 179fa73951..94aef025c9 100644
---- a/package/ibm-sw-tpm2/Config.in
-+++ b/package/ibm-sw-tpm2/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_IBM_SW_TPM2
- 	bool "ibm-sw-tpm2"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # ibm-sw-tpm2
- 	select BR2_PACKAGE_OPENSSL
-@@ -13,4 +14,5 @@ config BR2_PACKAGE_IBM_SW_TPM2
- 	  https://sourceforge.net/projects/ibmswtpm2/
- 
- comment "ibm-sw-tpm2 needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/ima-evm-utils/Config.in b/package/ima-evm-utils/Config.in
-index 6c29c9de28..4dff04fdf4 100644
---- a/package/ima-evm-utils/Config.in
-+++ b/package/ima-evm-utils/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_IMA_EVM_UTILS
- 	bool "ima-evm-utils"
- 	depends on BR2_USE_MMU # keyutils
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # tpm2-tss -> libopenssl
- 	depends on !BR2_STATIC_LIBS # keyutils, tpm2-tss
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_KEYUTILS
-@@ -13,4 +14,5 @@ config BR2_PACKAGE_IMA_EVM_UTILS
- 
- comment "ima-evm-utils needs dynamic library support"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 4c6e01745c..cab574da43 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 
- comment "kodi needs python3 w/ .py modules, a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.9"
- 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-@@ -50,6 +51,7 @@ comment "kodi needs an OpenGL EGL backend with OpenGL or GLES support"
- 
- menuconfig BR2_PACKAGE_KODI
- 	bool "kodi"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-diff --git a/package/libest/Config.in b/package/libest/Config.in
-index 6abe9d2848..728e69a03c 100644
---- a/package/libest/Config.in
-+++ b/package/libest/Config.in
-@@ -1,8 +1,10 @@
- comment "libest needs a toolchain w/ dynamic library"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_LIBEST
- 	bool "libest"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	depends on !BR2_STATIC_LIBS # libexecinfo or glibc
- 	select BR2_PACKAGE_LIBEXECINFO if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index 7bf49b05f6..ed165569f0 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -16,6 +16,7 @@ choice
- 
- config BR2_PACKAGE_LIBOPENSSL
- 	bool "openssl"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  A collaborative effort to develop a robust, commercial-grade,
-diff --git a/package/pcm-tools/Config.in b/package/pcm-tools/Config.in
-index ca9719dc5f..a1b07e7c63 100644
---- a/package/pcm-tools/Config.in
-+++ b/package/pcm-tools/Config.in
-@@ -21,11 +21,13 @@ if BR2_PACKAGE_PCM_TOOLS
- config BR2_PACKAGE_PCM_TOOLS_PMU_QUERY
- 	bool "install the pmu-query script"
- 	default y
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_CA_CERTIFICATES # https
- 	select BR2_PACKAGE_PYTHON3_SSL # urllib2
- 
- comment "pmu-query needs Python3"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_PACKAGE_PYTHON3
- 
- endif
-diff --git a/package/python-boto3/Config.in b/package/python-boto3/Config.in
-index 67b1420388..83ca59e0a8 100644
---- a/package/python-boto3/Config.in
-+++ b/package/python-boto3/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_BOTO3
- 	bool "python-boto3"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-botocore -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_BOTOCORE # runtime
- 	select BR2_PACKAGE_PYTHON_JMESPATH # runtime
- 	select BR2_PACKAGE_PYTHON_S3TRANSFER # runtime
-diff --git a/package/python-botocore/Config.in b/package/python-botocore/Config.in
-index cc5e32b504..c204dedffe 100644
---- a/package/python-botocore/Config.in
-+++ b/package/python-botocore/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_BOTOCORE
- 	bool "python-botocore"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
- 	select BR2_PACKAGE_PYTHON_JMESPATH # runtime
- 	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
-diff --git a/package/python-couchdb/Config.in b/package/python-couchdb/Config.in
-index 5bff75750b..2d93d5b707 100644
---- a/package/python-couchdb/Config.in
-+++ b/package/python-couchdb/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_COUCHDB
- 	bool "python-couchdb"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	help
- 	  Python client library for working with CouchDB.
-diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
-index 60b60b1740..f5e36be4c0 100644
---- a/package/python-crossbar/Config.in
-+++ b/package/python-crossbar/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_CROSSBAR
- 	bool "python-crossbar"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-treq -> python-requests -> python3-ssl -> libopenssl
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
- 	# All the following dependencies are runtime dependencies
- 	select BR2_PACKAGE_PYTHON_ATTRS
-diff --git a/package/python-docker/Config.in b/package/python-docker/Config.in
-index b2296f42eb..8f08d04952 100644
---- a/package/python-docker/Config.in
-+++ b/package/python-docker/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_DOCKER
- 	bool "python-docker"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	# docker-engine may be running on another host, so no other dependency
- 	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-diff --git a/package/python-flask-babel/Config.in b/package/python-flask-babel/Config.in
-index 272d9ef1c1..f0eb7c5bd4 100644
---- a/package/python-flask-babel/Config.in
-+++ b/package/python-flask-babel/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_FLASK_BABEL
- 	bool "python-flask-babel"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-flask -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_FLASK # runtime
- 	select BR2_PACKAGE_PYTHON_BABEL # runtime
- 	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
-diff --git a/package/python-flask-cors/Config.in b/package/python-flask-cors/Config.in
-index e2e84797f9..c396c19c1f 100644
---- a/package/python-flask-cors/Config.in
-+++ b/package/python-flask-cors/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_FLASK_CORS
- 	bool "python-flask-cors"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-flask -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_FLASK # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
-diff --git a/package/python-flask-expects-json/Config.in b/package/python-flask-expects-json/Config.in
-index 901234762e..dc148f066a 100644
---- a/package/python-flask-expects-json/Config.in
-+++ b/package/python-flask-expects-json/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_FLASK_EXPECTS_JSON
- 	bool "python-flask-expects-json"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-flask -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_FLASK # runtime
- 	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
- 	help
-diff --git a/package/python-flask-jsonrpc/Config.in b/package/python-flask-jsonrpc/Config.in
-index c8ecd854b3..3cc663c668 100644
---- a/package/python-flask-jsonrpc/Config.in
-+++ b/package/python-flask-jsonrpc/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_FLASK_JSONRPC
- 	bool "python-flask-jsonrpc"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-flask -> python3-ssl -> libopenssl
- 	# runtime dependency
- 	select BR2_PACKAGE_PYTHON_FLASK
- 	help
-diff --git a/package/python-flask-login/Config.in b/package/python-flask-login/Config.in
-index 88c413e2a2..3baee27416 100644
---- a/package/python-flask-login/Config.in
-+++ b/package/python-flask-login/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_FLASK_LOGIN
- 	bool "python-flask-login"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-flask -> python3-ssl -> libopenssl
- 	# runtime dependency
- 	select BR2_PACKAGE_PYTHON_FLASK
- 	help
-diff --git a/package/python-flask-sqlalchemy/Config.in b/package/python-flask-sqlalchemy/Config.in
-index fa4a035110..f738cae76f 100644
---- a/package/python-flask-sqlalchemy/Config.in
-+++ b/package/python-flask-sqlalchemy/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_FLASK_SQLALCHEMY
- 	bool "python-flask-sqlalchemy"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-flask -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_FLASK # runtime
- 	select BR2_PACKAGE_PYTHON_SQLALCHEMY # runtime
- 	help
-diff --git a/package/python-flask-wtf/Config.in b/package/python-flask-wtf/Config.in
-index 4a8566a26a..cbeabe34c5 100644
---- a/package/python-flask-wtf/Config.in
-+++ b/package/python-flask-wtf/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_FLASK_WTF
- 	bool "python-flask-wtf"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-flask -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_FLASK # runtime
- 	select BR2_PACKAGE_PYTHON_ITSDANGEROUS # runtime
- 	select BR2_PACKAGE_PYTHON_WTFORMS # runtime
-diff --git a/package/python-flask/Config.in b/package/python-flask/Config.in
-index 8a44bf2db4..c0fc9c61ea 100644
---- a/package/python-flask/Config.in
-+++ b/package/python-flask/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_FLASK
- 	bool "python-flask"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_CLICK # runtime
- 	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
- 	select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
-diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
-index 18f0c034ba..9375dc867b 100644
---- a/package/python-gunicorn/Config.in
-+++ b/package/python-gunicorn/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_GUNICORN
- 	bool "python-gunicorn"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	help
-diff --git a/package/python-httplib2/Config.in b/package/python-httplib2/Config.in
-index a029814f03..c525e97319 100644
---- a/package/python-httplib2/Config.in
-+++ b/package/python-httplib2/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_HTTPLIB2
- 	bool "python-httplib2"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON3_ZLIB
- 	select BR2_PACKAGE_PYTHON3_SSL
- 	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
-diff --git a/package/python-ibmiotf/Config.in b/package/python-ibmiotf/Config.in
-index 64362db998..ffcbddd57d 100644
---- a/package/python-ibmiotf/Config.in
-+++ b/package/python-ibmiotf/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_IBMIOTF
- 	bool "python-ibmiotf"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_ISO8601 # runtime
- 	select BR2_PACKAGE_PYTHON_PAHO_MQTT # runtime
- 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
-diff --git a/package/python-influxdb/Config.in b/package/python-influxdb/Config.in
-index 6ebbd4aa9c..a0ddfd7166 100644
---- a/package/python-influxdb/Config.in
-+++ b/package/python-influxdb/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_INFLUXDB
- 	bool "python-influxdb"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-requests -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
- 	select BR2_PACKAGE_PYTHON_MSGPACK # runtime
- 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
-diff --git a/package/python-m2crypto/Config.in b/package/python-m2crypto/Config.in
-index af710d5351..b5891595f9 100644
---- a/package/python-m2crypto/Config.in
-+++ b/package/python-m2crypto/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_M2CRYPTO
- 	bool "python-m2crypto"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL # runtime
-diff --git a/package/python-mwclient/Config.in b/package/python-mwclient/Config.in
-index dc93e6c0df..ae9af5e281 100644
---- a/package/python-mwclient/Config.in
-+++ b/package/python-mwclient/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_MWCLIENT
- 	bool "python-mwclient"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-requests-oauthlib -> python-requests -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_REQUESTS_OAUTHLIB # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
-diff --git a/package/python-mwscrape/Config.in b/package/python-mwscrape/Config.in
-index fc9d5223f2..b7c1fde209 100644
---- a/package/python-mwscrape/Config.in
-+++ b/package/python-mwscrape/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_MWSCRAPE
- 	bool "python-mwscrape"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-couchdb -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_COUCHDB # runtime
- 	select BR2_PACKAGE_PYTHON_MWCLIENT # runtime
- 	select BR2_PACKAGE_PYTHON_PYLRU # runtime
-diff --git a/package/python-mwscrape2slob/Config.in b/package/python-mwscrape2slob/Config.in
-index 6ced253451..cd3e96e726 100644
---- a/package/python-mwscrape2slob/Config.in
-+++ b/package/python-mwscrape2slob/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_MWSCRAPE2SLOB
- 	bool "python-mwscrape2slob"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-couchdb -> python3-ssl -> libopenssl
- 	depends on !BR2_BINFMT_FLAT # python-slob -> python-pyicu -> icu
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # python-slob -> python-pyicu -> icu
- 	depends on BR2_INSTALL_LIBSTDCPP # python-slob -> python-pyicu -> icu
-@@ -16,6 +17,7 @@ config BR2_PACKAGE_PYTHON_MWSCRAPE2SLOB
- 	  https://github.com/itkach/mwscrape2slob
- 
- comment "python-mwscrape2slob needs a toolchain w/ C++, gcc >= 4.9, host gcc >= 4.9"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_HOST_GCC_AT_LEAST_4_9
-diff --git a/package/python-pip/Config.in b/package/python-pip/Config.in
-index 805dc01545..f90c352d90 100644
---- a/package/python-pip/Config.in
-+++ b/package/python-pip/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PIP
- 	bool "python-pip"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL
- 	help
-diff --git a/package/python-raven/Config.in b/package/python-raven/Config.in
-index d02232cfd8..e0715d4a3a 100644
---- a/package/python-raven/Config.in
-+++ b/package/python-raven/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_RAVEN
- 	bool "python-raven"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON3_ZLIB
- 	select BR2_PACKAGE_PYTHON3_SSL
- 	select BR2_PACKAGE_PYTHON3_UNICODEDATA
-diff --git a/package/python-remi/Config.in b/package/python-remi/Config.in
-index da2c2f4cfb..8b255cd0cc 100644
---- a/package/python-remi/Config.in
-+++ b/package/python-remi/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_REMI
- 	bool "python-remi"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	help
-diff --git a/package/python-requests-oauthlib/Config.in b/package/python-requests-oauthlib/Config.in
-index 85283b209c..ffddba61d4 100644
---- a/package/python-requests-oauthlib/Config.in
-+++ b/package/python-requests-oauthlib/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_REQUESTS_OAUTHLIB
- 	bool "python-requests-oauthlib"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-requests -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_OAUTHLIB # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	help
-diff --git a/package/python-requests-toolbelt/Config.in b/package/python-requests-toolbelt/Config.in
-index ba2b95152e..7be97de55e 100644
---- a/package/python-requests-toolbelt/Config.in
-+++ b/package/python-requests-toolbelt/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT
- 	bool "python-requests-toolbelt"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-requests -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	help
- 	  A utility belt for advanced users of python-requests.
-diff --git a/package/python-requests/Config.in b/package/python-requests/Config.in
-index 94a44682f4..c876bff1bd 100644
---- a/package/python-requests/Config.in
-+++ b/package/python-requests/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_REQUESTS
- 	bool "python-requests"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
- 	select BR2_PACKAGE_PYTHON_CHARSET_NORMALIZER # runtime
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
-diff --git a/package/python-s3transfer/Config.in b/package/python-s3transfer/Config.in
-index a7f85b146c..d8a4a0e5e0 100644
---- a/package/python-s3transfer/Config.in
-+++ b/package/python-s3transfer/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_S3TRANSFER
- 	bool "python-s3transfer"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-botocore -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_BOTOCORE # runtime
- 	help
- 	  An Amazon S3 Transfer Manager.
-diff --git a/package/python-tomako/Config.in b/package/python-tomako/Config.in
-index bd6d29982a..ce78c9ad6e 100644
---- a/package/python-tomako/Config.in
-+++ b/package/python-tomako/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_TOMAKO
- 	bool "python-tomako"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-tornado -> python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_TORNADO # runtime
- 	select BR2_PACKAGE_PYTHON_MAKO # runtime
- 	help
-diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
-index b5c59e970d..30e7f03a8e 100644
---- a/package/python-tornado/Config.in
-+++ b/package/python-tornado/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_TORNADO
- 	bool "python-tornado"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON3_ZLIB
- 	select BR2_PACKAGE_PYTHON3_SSL
- 	help
-diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-index 5d76a5cdd6..7ea66e9bd9 100644
---- a/package/python-treq/Config.in
-+++ b/package/python-treq/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_TREQ
- 	bool "python-treq"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-requests -> python3-ssl -> libopenssl
- 	# twisted TLS -> python-{pyopenssl,service-identity}
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-diff --git a/package/python-uvloop/Config.in b/package/python-uvloop/Config.in
-index b3fb275091..77f0ef5cf3 100644
---- a/package/python-uvloop/Config.in
-+++ b/package/python-uvloop/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_UVLOOP
- 	bool "python-uvloop"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
- 	depends on BR2_USE_MMU # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
-@@ -12,6 +13,7 @@ config BR2_PACKAGE_PYTHON_UVLOOP
- 	  http://github.com/MagicStack/uvloop
- 
- comment "python-uvloop needs a toolchain w/ NPTL, dynamic library"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_USE_MMU
-diff --git a/package/python-websocket-client/Config.in b/package/python-websocket-client/Config.in
-index 519e506615..a07e8693e0 100644
---- a/package/python-websocket-client/Config.in
-+++ b/package/python-websocket-client/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT
- 	bool "python-websocket-client"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	help
-diff --git a/package/python-websockets/Config.in b/package/python-websockets/Config.in
-index 60495b6284..1330f91772 100644
---- a/package/python-websockets/Config.in
-+++ b/package/python-websockets/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_WEBSOCKETS
- 	bool "python-websockets"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python3-ssl -> libopenssl
- 	select BR2_PACKAGE_PYTHON3_ZLIB
- 	select BR2_PACKAGE_PYTHON3_SSL
- 	help
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index 761c38c850..346bc0fcce 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -88,6 +88,7 @@ config BR2_PACKAGE_PYTHON3_READLINE
- 
- config BR2_PACKAGE_PYTHON3_SSL
- 	bool "ssl"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2
-diff --git a/package/softether/Config.in b/package/softether/Config.in
-index f8933cdc00..9e43fefa62 100644
---- a/package/softether/Config.in
-+++ b/package/softether/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SOFTETHER
- 	bool "softether"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
-@@ -30,4 +31,5 @@ config BR2_PACKAGE_SOFTETHER
- 
- comment "softether needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/softhsm2/Config.in b/package/softhsm2/Config.in
-index 78fccc9512..bfabbbd355 100644
---- a/package/softhsm2/Config.in
-+++ b/package/softhsm2/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SOFTHSM2
- 	bool "softhsm2"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -16,6 +17,7 @@ config BR2_PACKAGE_SOFTHSM2
- 	  https://www.opendnssec.org/softhsm
- 
- comment "softhsm2 needs a toolchain w/ C++, threads, gcc >= 4.8 and dynamic library support"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/stunnel/Config.in b/package/stunnel/Config.in
-index a46e2f0316..fccc63f161 100644
---- a/package/stunnel/Config.in
-+++ b/package/stunnel/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_STUNNEL
- 	bool "stunnel"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index d5d88404de..eacdc4c9fd 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -227,6 +227,7 @@ config BR2_PACKAGE_SYSTEMD_HIBERNATE
- 
- config BR2_PACKAGE_SYSTEMD_HOMED
- 	bool "enable home daemon"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # cryptsetup -> lvm2
- 	depends on BR2_USE_MMU # cryptsetup -> lvm2
- 	depends on !BR2_STATIC_LIBS # cryptsetup -> lvm2
-@@ -244,6 +245,7 @@ config BR2_PACKAGE_SYSTEMD_HOMED
- 
- comment "homed support needs a toolchain w/ threads, dynamic library, kernel headers >= 4.12"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-@@ -416,6 +418,7 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
- 
- config BR2_PACKAGE_SYSTEMD_REPART
- 	bool "enable repart support"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
-diff --git a/package/tpm2-abrmd/Config.in b/package/tpm2-abrmd/Config.in
-index 4931641af4..e310069a7a 100644
---- a/package/tpm2-abrmd/Config.in
-+++ b/package/tpm2-abrmd/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TPM2_ABRMD
- 	bool "tpm2-abrmd"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # tpm2-tss -> libopenssl
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
-@@ -22,5 +23,6 @@ config BR2_PACKAGE_TPM2_ABRMD
- 
- comment "tpm2-abrmd needs a toolchain w/ dynamic library, wchar, threads"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
-diff --git a/package/tpm2-pkcs11/Config.in b/package/tpm2-pkcs11/Config.in
-index 5d45703223..4f88c288e0 100644
---- a/package/tpm2-pkcs11/Config.in
-+++ b/package/tpm2-pkcs11/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TPM2_PKCS11
- 	bool "tpm2-pkcs11"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # tpm2-tss -> libopenssl
- 	depends on !BR2_STATIC_LIBS # tpm2-tss
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBYAML
-@@ -12,4 +13,5 @@ config BR2_PACKAGE_TPM2_PKCS11
- 	  https://github.com/tpm2-software/tpm2-pkcs11
- 
- comment "tpm2-pkcs11 needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
-index 1a6698570a..26c5d401be 100644
---- a/package/tpm2-tools/Config.in
-+++ b/package/tpm2-tools/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TPM2_TOOLS
- 	bool "tpm2-tools"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # tpm2-tss -> libopenssl
- 	depends on !BR2_STATIC_LIBS # tpm2-tss
- 	depends on BR2_USE_WCHAR
- 	# c16rtomb() not implemented in uClibc
-@@ -22,5 +23,6 @@ config BR2_PACKAGE_TPM2_TOOLS
- 	  https://github.com/tpm2-software/tpm2-tools
- 
- comment "tpm2-tools needs a glibc or musl toolchain w/ dynamic library, wchar"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
- 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-diff --git a/package/tpm2-totp/Config.in b/package/tpm2-totp/Config.in
-index dcadf5a5f2..c57d5c43a1 100644
---- a/package/tpm2-totp/Config.in
-+++ b/package/tpm2-totp/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TPM2_TOTP
- 	bool "tpm2-totp"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # tpm2-tss -> libopenssl
- 	depends on !BR2_STATIC_LIBS # tpm2-tss
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # glibc < 2.20
- 	select BR2_PACKAGE_LIBQRENCODE
-@@ -19,5 +20,6 @@ config BR2_PACKAGE_TPM2_TOTP
- 	  https://github.com/tpm2-software/tpm2-totp
- 
- comment "tpm2-totp needs a toolchain w/ dynamic library"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
-diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
-index 857987ae36..b42509c6e9 100644
---- a/package/tpm2-tss/Config.in
-+++ b/package/tpm2-tss/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TPM2_TSS
- 	bool "tpm2-tss"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-@@ -54,4 +55,5 @@ config BR2_PACKAGE_TPM2_TSS_FAPI
- endif
- 
- comment "tpm2-tss needs a toolchain w/ dynamic library"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/uhd/Config.in b/package/uhd/Config.in
-index 248e309dd5..51fa12dd7d 100644
---- a/package/uhd/Config.in
-+++ b/package/uhd/Config.in
-@@ -105,6 +105,7 @@ comment "uhd python API needs python3 and a toolchain w/ glibc or musl"
- 
- config BR2_PACKAGE_UHD_PYTHON
- 	bool "python API support"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # python-requests -> python3-ssl -> libopenssl
- 	depends on BR2_PACKAGE_PYTHON3
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 92953f69f0..e517264dd6 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -86,6 +86,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY
- 
- config BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING
- 	bool "Enable mesh networking"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	depends on BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-@@ -129,6 +130,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WPS
- 
- config BR2_PACKAGE_WPA_SUPPLICANT_WPA3
- 	bool "Enable WPA3 support"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libopenssl
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	help
--- 
-2.35.1
-
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
+DQpHcmVldGluZ3MgYWxsIC0NCg0KT24gU3VuLCBKdW4gMDUsIDIwMjIgYXQgMDQ6MDE6MTdQTSAr
+MDIwMCwgUm9tYWluIE5hb3VyIHdyb3RlOg0KPiBIZWxsbywNCj4gDQo+IExlIDA1LzA2LzIwMjIg
+w6AgMTM6NDYsIEFuZHJlYXMgWmllZ2xlciBhIMOpY3JpdMKgOg0KPiA+IEhpIFRob21hcywNCj4g
+PiANCj4gPiBPbiAyMDIyLTA2LTA1IDA3OjA2LCBUaG9tYXMgUGV0YXp6b25pIHdyb3RlOg0KPiA+
+PiBIZWxsbyBBbmRyZWFzLA0KPiA+Pg0KPiA+PiBPbiBTdW4sIDA1IEp1biAyMDIyIDA2OjA1OjA5
+ICswMDAwDQo+ID4+IEFuZHJlYXMgWmllZ2xlciA8YnIwMTVAdW1iaWtvLm5ldD4gd3JvdGU6DQo+
+ID4+DQo+ID4+PiBUaGlzIGlzIHRoZSBlbnZpcm9ubWVudCB3aGVuIGFsY2hlbXkgaXMgY2FsbGVk
+IGZyb20gQnVpbGRyb290Og0KPiA+Pj4NCj4gPj4+IEFMQ0hFTVlfVEFSR0VUX0VOViA9IFwNCj4g
+Pj4+IMKgwqDCoMKgJChUQVJHRVRfTUFLRV9FTlYpIFwNCj4gPj4+IMKgwqDCoMKgQUxDSEVNWV9I
+T01FPSQoQUxDSEVNWV9IT01FKSBcDQo+ID4+PiDCoMKgwqDCoEFMQ0hFTVlfV09SS1NQQUNFX0RJ
+Uj0iJChARCkiIFwNCj4gPj4+IMKgwqDCoMKgQUxDSEVNWV9UQVJHRVRfT1VUPWFsY2hlbXktb3V0
+IFwNCj4gPj4+IMKgwqDCoMKgUEtHQ09ORklHX0JJTj0kKFBLR19DT05GSUdfSE9TVF9CSU5BUlkp
+IFwNCj4gPj4+IMKgwqDCoMKgVEFSR0VUX09TPWxpbnV4IFwNCj4gPj4+IMKgwqDCoMKgVEFSR0VU
+X09TX0ZMQVZPVVI9YnVpbGRyb290IFwNCj4gPj4+IMKgwqDCoMKgVEFSR0VUX0NST1NTPSIkKFRB
+UkdFVF9DUk9TUykiIFwNCj4gPj4+IMKgwqDCoMKgVEFSR0VUX0FSQ0g9eHh4IFwNCj4gPj4+IMKg
+wqDCoMKgVEFSR0VUX0dMT0JBTF9DWFhGTEFHUz0iJChUQVJHRVRfQ1hYRkxBR1MpIiBcDQo+ID4+
+PiDCoMKgwqDCoFRBUkdFVF9HTE9CQUxfTERGTEFHUz0iJChUQVJHRVRfTERGTEFHUykiIFwNCj4g
+Pj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+XiBMREZMQUdTIGFyZSB1c3VhbGx5IGVtcHR5DQo+ID4+PiDCoMKgwqDCoFRBUkdFVF9HTE9CQUxf
+RkZMQUdTPSIkKFRBUkdFVF9GQ0ZMQUdTKSIgXA0KPiA+Pj4gwqDCoMKgwqBUQVJHRVRfR0xPQkFM
+X0ZDRkxBR1M9IiQoVEFSR0VUX0ZDRkxBR1MpIg0KPiA+Pj4NCj4gPj4+IEFsY2hlbXkgYWRkcyBt
+b3JlIHNldHRpbmdzIHRvIExERkxBR1MsIHRoaXMgaXMgdGhlIGZpbmFsIGNvbnRlbnQ6DQo+ID4+
+Pg0KPiA+Pj4gKyBUQVJHRVRfR0xPQkFMX0xERkxBR1MgPSAtTzIgLVdsLC1PMQ0KPiA+Pj4gLUxh
+bGNoZW15LW91dC9zdGFnaW5nL2xpYi9hcm0tbGludXgtZ251ZWFiaWhmIC1MYWxjaGVteS1vdXQv
+c3RhZ2luZy9saWINCj4gPj4+IC1MYWxjaGVteS1vdXQvc3RhZ2luZy91c3IvbGliL2FybS1saW51
+eC1nbnVlYWJpaGYNCj4gPj4+IC1MYWxjaGVteS1vdXQvc3RhZ2luZy91c3IvbGliDQo+ID4+PiAt
+V2wsLXJwYXRoLWxpbms9YWxjaGVteS1vdXQvc3RhZ2luZy9saWIvYXJtLWxpbnV4LWdudWVhYmlo
+Zg0KPiA+Pj4gLVdsLC1ycGF0aC1saW5rPWFsY2hlbXktb3V0L3N0YWdpbmcvbGliDQo+ID4+PiAt
+V2wsLXJwYXRoLWxpbms9YWxjaGVteS1vdXQvc3RhZ2luZy91c3IvbGliL2FybS1saW51eC1nbnVl
+YWJpaGYNCj4gPj4+IC1XbCwtcnBhdGgtbGluaz1hbGNoZW15LW91dC9zdGFnaW5nL3Vzci9saWIN
+Cj4gPj4+DQo+ID4+PiBBZGRpbmcgdGhlIEJ1aWxkcm9vdCBzdGFnaW5nIGxpYnJhcnkgcGF0aCB0
+byBMREZMQUdTIG1ha2VzIHRoZSBidWlsZA0KPiA+Pj4gc3VjY2VlZDoNCj4gPj4+DQo+ID4+PiDC
+oMKgwqDCoC4uLg0KPiA+Pj4gwqDCoMKgwqBUQVJHRVRfR0xPQkFMX0xERkxBR1M9IiQoVEFSR0VU
+X0xERkxBR1MpIC1MJChTVEFHSU5HX0RJUikvdXNyL2xpYiIgXA0KPiA+Pg0KPiA+PiBUaGFua3Mg
+Zm9yIHlvdXIgaW52ZXN0aWdhdGlvbiENCj4gPj4NCj4gPj4gLUwkKFNUQUdJTkdfRElSKS91c3Iv
+bGliIHNob3VsZCBub3JtYWxseSBub3QgYmUgbmVlZGVkLCBiZWNhdXNlDQo+ID4+ICQoU1RBR0lO
+R19ESVIpL3Vzci9saWIgaXMgaW4gdGhlIGRlZmF1bHQgc2VhcmNoIHBhdGggb2YgdGhlDQo+ID4+
+IGNyb3NzLWNvbXBpbGVyLCBhcyB0aGUgY29tcGlsZXIgaGFzICQoU1RBR0lOR19ESVIpL3VzciBh
+cyBpdHMgc3lzcm9vdC4NCj4gPj4NCj4gPj4gU28gZnJvbSBhIGNyb3NzLWNvbXBpbGVyIHBlcnNw
+ZWN0aXZlLCAtTCQoU1RBR0lOR19ESVIpL3Vzci9saWIgc2hvdWxkDQo+ID4+IG5vcm1hbGx5IG5v
+dCBiZSBuZWVkZWQsIGFuZCB0aGF0J3Mgd2h5IGl0J3Mgbm90IGluICQoVEFSR0VUX0xERkxBR1Mp
+Lg0KPiA+IA0KPiA+IEFuZCBzeXNyb290IGlzIGRldGVjdGVkIGJ5IGFsY2hlbXk6DQo+ID4gDQo+
+ID4gKyBUQVJHRVRfVE9PTENIQUlOX1NZU1JPT1QgPQ0KPiA+IC9ob21lL2RhdGEvdGVzdC9hdXRv
+YnVpbGQvaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4LWdudWVhYmloZi9zeXNyb290DQo+IA0KPiBZ
+ZXMgYnV0IGFsY2hlbXkgdHJ5IHRvIGNvcHkgc29tZSBmaWxlcyBmcm9tIHN0YWdpbmcgZGlyZWN0
+b3J5IHRvDQo+IHVsb2cvYWxjaGVteS1vdXQvc3RhZ2luZw0KPiANCg0KQW5kIGl0IHNlZW1zIHRo
+YXQgdGhlIGZpbGVzIGNvcGllZCBpcyBkaWZmZXJlbnQgYmV0d2VlbiB0aGUgd29ya2luZyAody9v
+IHN5c3RlbWQpDQphbmQgbm9uLXdvcmtpbmcgKHcvIHN5c3RlbWQpIGJ1aWxkcy4NCg0KTG9va2lu
+ZyBhdCBzeXNyb290IGluIGEgd29ya2luZyBidWlsZCwgaXQgb25seSBjb3BpZXMgdGhlIHR3byBm
+aWxlcyBmcm9tIHRoZSBsaWIvIGRpcmVjdG9yeToNCiAgICAuL2hvc3QvYXJtLWJ1aWxkcm9vdC1s
+aW51eC1nbnVlYWJpaGYvc3lzcm9vdC91c3IvbGliL2xpYnB0aHJlYWRfbm9uc2hhcmVkLmENCiAg
+ICAuL2hvc3QvYXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvc3lzcm9vdC91c3IvbGliL2xp
+YnB0aHJlYWQuc28NCiAgICAuL2hvc3QvYXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvc3lz
+cm9vdC91c3IvbGliL2xpYnB0aHJlYWQuYQ0KICAgIC4vaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4
+LWdudWVhYmloZi9zeXNyb290L2xpYi9saWJwdGhyZWFkLTIuMjUuc28NCiAgICAuL2hvc3QvYXJt
+LWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvc3lzcm9vdC9saWIvbGlicHRocmVhZC5zby4wDQoN
+CldoZXJlYXMgaW4gdGhlIG5vbi13b3JraW5nIGJ1aWxkLCB0aGUgZmlsZXMgYXJlIGFsbCBpbiB0
+aGUgdXNyL2xpYi8gZGlyZWN0b3J5Og0KICAgIC4vaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4LWdu
+dWVhYmloZi9zeXNyb290L3Vzci9saWIvbGlicHRocmVhZF9ub25zaGFyZWQuYQ0KICAgIC4vaG9z
+dC9hcm0tYnVpbGRyb290LWxpbnV4LWdudWVhYmloZi9zeXNyb290L3Vzci9saWIvbGlicHRocmVh
+ZC0yLjI1LnNvDQogICAgLi9ob3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jv
+b3QvdXNyL2xpYi9saWJwdGhyZWFkLnNvDQogICAgLi9ob3N0L2FybS1idWlsZHJvb3QtbGludXgt
+Z251ZWFiaWhmL3N5c3Jvb3QvdXNyL2xpYi9saWJwdGhyZWFkLmENCiAgIC4vaG9zdC9hcm0tYnVp
+bGRyb290LWxpbnV4LWdudWVhYmloZi9zeXNyb290L3Vzci9saWIvbGlicHRocmVhZC5zby4wDQoN
+CkluIHRoaXMgY2FzZSwgaXQgYWxzbyBjb3BpZXMgdGhlIGxpYnB0aHJlYWQuc28gZmlsZSB3aGlj
+aCBpcyBhbiBsZCBzY3JpcHQgd2hlcmUgSSB0aGluayBpdA0KaXMgZ2V0dGluZyB0aGUgYmFkIHBh
+dGg6DQogICAgLyogR05VIGxkIHNjcmlwdA0KICAgICAgIFVzZSB0aGUgc2hhcmVkIGxpYnJhcnks
+IGJ1dCBzb21lIGZ1bmN0aW9ucyBhcmUgb25seSBpbg0KICAgICAgIHRoZSBzdGF0aWMgbGlicmFy
+eSwgc28gdHJ5IHRoYXQgc2Vjb25kYXJpbHkuICAqLw0KICAgIE9VVFBVVF9GT1JNQVQoZWxmMzIt
+bGl0dGxlYXJtKQ0KICAgIEdST1VQICggL2xpYi9saWJwdGhyZWFkLnNvLjAgL3Vzci9saWIvbGli
+cHRocmVhZF9ub25zaGFyZWQuYSApDQoNCklzIHRoZXJlIHNvbWV0aGluZyBpbiB0aGUgc3lzdGVt
+ZCBjb25maWd1cmF0aW9uL2J1aWxkIHRoYXQgaXMgY3JlYXRpbmcgdGhpcyBzY3JpcHQNCmZpbGU/
+DQoNCg0KLlRpbQ0KVGltIEQuIEhhbW1lcg0KdGltLmhhbW1lckBvcm9saWEuY29tDQoNCg0KPiBT
+ZWUgX2xpYmNfaW5zdGFsbGVkX2ZpbGUgdGFyZ2V0IGluIG91dHB1dC9ob3N0L29wdC9hbGNoZW15
+L3Rvb2xjaGFpbnMvbGliYy5tay4NCj4gDQo+IElmIHdlIGhhY2sgaW50byBfbGliY19pbnN0YWxs
+ZWRfZmlsZSBydWxlIHRvIG5vdCBjb3B5IGFueSBmaWxlcyBmcm9tIHN0YWdpbmcsDQo+IHRoZSBi
+dWlsZCBzdWNjZWVkLg0KPiANCj4gPiANCj4gPj4gQWxzbywgdGhlcmUgaXMgYSBjdXJpb3VzIHRo
+aW5nIGluIHRoZSByZXBvcnQgZnJvbSBOaWNvbGFzOiB0aGUgZXJyb3INCj4gPj4gaGFwcGVucyB3
+aGVuIHN5c3RlbWQgaXMgZW5hYmxlZCwgYnV0IGRvZXNuJ3QgaGFwcGVuIHdoZW4gc3lzdGVtZCBp
+cw0KPiA+PiBkaXNhYmxlZC4NCj4gPiANCj4gPiBJIGNhbiBjb25maXJtIHRoaXMuIEFkZGluZyBC
+UjJfSU5JVF9TWVNURU1EPXkgYnJlYWtzIHRoZSBidWlsZCAodXNpbmcgbWFrZSBjbGVhbg0KPiA+
+ICYmIG1ha2UgdWxvZykuDQo+IA0KPiBJIGRpZCBhIHRyeSB3aXRob3V0IHN5c3RlbWQgYnV0IHRo
+ZSBidWlsZCBmYWlsZWQuDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IFJvbWFpbg0KPiANCj4gDQo+
+ID4gDQo+ID4gS2luZCByZWdhcmRzLA0KPiA+IEFuZHJlYXMNCj4gPiANCj4gPj4gVGhvbWFzDQo+
+ID4+IC0tIA0KPiA+PiBUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGlu
+DQo+ID4+IEVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5n
+DQo+ID4+IGh0dHBzOi8vYm9vdGxpbi5jb20NCj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXw0KPiA+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QNCj4gPiBi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZw0KPiA+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdA0KPiANCj4gX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18NCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdA0KPiBidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZw0KPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QNCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cg==
