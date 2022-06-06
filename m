@@ -1,46 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31BA8C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 20:14:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1971BC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 20:24:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB36284093;
-	Mon,  6 Jun 2022 20:14:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55C0041C12;
+	Mon,  6 Jun 2022 20:24:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DNMEIzPN5ytM; Mon,  6 Jun 2022 20:14:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C3mjltzrrvJH; Mon,  6 Jun 2022 20:24:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ABF4584090;
-	Mon,  6 Jun 2022 20:14:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13BD941C0C;
+	Mon,  6 Jun 2022 20:24:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8EF1B1BF297
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 20:14:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A14B31BF297
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 20:24:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BCBA415B1
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 20:14:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8FB4E41C0C
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 20:24:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R-nizcBpx-Pk for <buildroot@lists.busybox.net>;
- Mon,  6 Jun 2022 20:14:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDCFE415A2
- for <buildroot@buildroot.org>; Mon,  6 Jun 2022 20:14:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1528086DD3; Mon,  6 Jun 2022 20:02:29 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 6 Jun 2022 22:14:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 487f4b0da9c2ffb0328b3a7d4b59384d29b395b9
-X-Git-Newrev: 730baf05bfebac721bf5002d72787937a4da6378
-X-Patchwork-Hint: ignore
-Message-Id: <20220606200229.1528086DD3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2022.05
+ with ESMTP id ezg6ZDs5mNnc for <buildroot@lists.busybox.net>;
+ Mon,  6 Jun 2022 20:24:32 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4216941C09
+ for <buildroot@buildroot.org>; Mon,  6 Jun 2022 20:24:32 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id v1so20451557ejg.13
+ for <buildroot@buildroot.org>; Mon, 06 Jun 2022 13:24:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=LeyiNmk1USVD7Qjql81qjojg7TpS2qhGL7+nbqj7J3c=;
+ b=NYVIR7MbFC10TnaNXArHTU5xk3KpygDWq0aRxtA14qYK2vjLMrDDkeC1AkDiCErLGE
+ F0y/vVD7QN1rfyeJDxPgdPcWPWDPfwflFVRHBaUbGCc+YNVBPzce+GZjixH5TrH4oqSm
+ asCwNw1LfXT7JOftgn9WR2tZLD40np9oSAwcT3UCL68jpGePPfrBAcCq1bamZ3oUvGeI
+ U9gIRqTi+Lk8jd2VfWnCS7B1RMOMdWzq0v+wX3XyCOT2oK60YJSEfY1bTKHwdREgxQv7
+ bf0feARGs3lZSNj7QDlPF0c5VFFcHN+lQcI7dihH5QSWQ1ukgwtihrZ8Tu0bZQG2sDQK
+ iZ/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=LeyiNmk1USVD7Qjql81qjojg7TpS2qhGL7+nbqj7J3c=;
+ b=MSwIAurnqIsCt14QfdwaXzArL/P57gb/Cv3tZwfRBcVDqrBmoM+hqVrKr/ZHzXPf1e
+ rnYcCN4OLMpO/6hNxHrBrbQ91myvQ7D44cMQuqq+eogfzf+SoV9iQytVfFIlE0EfWA27
+ OC2Ib/KPbEX2yFpoRzr1q8XabPfzw5b5hEQzOs3rb0xb693y6QUAQzQZGDYLnU2VWE9Q
+ brvtAc7AYaANvdN/3gHCI2iF5ZbMylu+MHcQawW0bvNb2lKPKvbT6Z2TsuVvW+HKL4P2
+ mKuHjrdrEQNL5qRqzTGQY/CgLTn/vqeku9WSto1gPkyd9c+A9aWnkkRsuhrbRcNQa1bS
+ G6EA==
+X-Gm-Message-State: AOAM531BVrIRbUIdIxSzKJRD5qX4zJnn/45o3rAjCSzovtdBPWtDdNKA
+ zxT1qWgh6Xx3o2ud7CYhhKnnzQ==
+X-Google-Smtp-Source: ABdhPJzlq+Q8ioN8oAALXB/KkBtz1fQ7Z6WcuAFLM1IWweQO34ysDuTCTjzBoTm4B4tU5DW5JZFuEQ==
+X-Received: by 2002:a17:906:6a28:b0:711:d032:caa4 with SMTP id
+ qw40-20020a1709066a2800b00711d032caa4mr6069245ejc.80.1654547070281; 
+ Mon, 06 Jun 2022 13:24:30 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ qu19-20020a170907111300b006fe960c5c5asm6747412ejb.126.2022.06.06.13.24.28
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 06 Jun 2022 13:24:29 -0700 (PDT)
+Message-ID: <a13f8876-f325-4aa8-49a0-695d03b85a30@mind.be>
+Date: Mon, 6 Jun 2022 22:24:27 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-GB
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20220514175612.2510884-1-bernd.kuhls@t-online.de>
+ <20220514175612.2510884-7-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220514175612.2510884-7-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH 07/19]
+ package/x11r7/xdriver_xf86-video-imx-viv: switch dependency from mesa3d to
+ libgl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,188 +96,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Gary Bisson <bisson.gary@gmail.com>, Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jezz@sysmic.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=730baf05bfebac721bf5002d72787937a4da6378
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    | 23 +++++++++++++++++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 26 +++++++++++++-------------
- docs/website/news.html     | 18 ++++++++++++++++++
- support/misc/Vagrantfile   |  2 +-
- 5 files changed, 57 insertions(+), 16 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 5d8eb2f563..801af5b950 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,26 @@
-+2022.05, released June 6th, 2022
-+
-+	Fixes all over the tree.
-+
-+	Rework BR2_STATIC_LIBS handling to ensure it can only be
-+	enabled if a suitable C library is available.
-+
-+	Updated/fixed packages: arm-trusted-firmware, at91bootstap,
-+	boinc, boost, cpulimit, diffutils, edk2, eigen, fbv, gcr,
-+	gensio, glibc, go, gtest, iucode-tool, kvm-unit-tests, libcec,
-+	libcurl, libks, linux, linux-tools, lttng-modules, mariadb,
-+	memcached, mono, musl, mutt, netdata, network-manager, nginx,
-+	ogre, openjpeg, openvpn, pipewire, python-crossbar, qemu,
-+	qpid-proton, rauc, rockchip-mali, rsyslog,
-+	rtl8812au-aircrack-ng, ruby, runc, rustc, samba4, tiff,
-+	uclibc, unrar, vim, webkitgtk, wpewebkit,
-+	xdriver_xf86-video-ati, xml-security-c, zchunk, zlib-ng
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#14821: Samba server is failing to compile
-+	#14826: make qemu_x86_64_defconfig stopped working
-+
- 2022.05-rc2, released May 30th, 2022
- 
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index 24f8a7338f..27b8051710 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2022.05-rc2
-+export BR2_VERSION := 2022.05
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1653928000
-+BR2_VERSION_EPOCH = 1654546000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 1405e9b6e1..a30a186e6a 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,7 +8,7 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable / long term support release: <b>2022.02.2</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2022.02.2</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
-@@ -41,41 +41,41 @@
- 	  <p><a href="/downloads/buildroot-2022.02.2.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
--<!--
--      <h3 style="text-align: center;">Latest stable release: <b>2021.11.2</b></h3>
-+
-+      <h3 style="text-align: center;">Latest stable release: <b>2022.05</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2021.11.2.tar.gz">buildroot-2021.11.2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2021.11.2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2022.05.tar.gz">buildroot-2022.05.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2022.05.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.11.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.05.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.11.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.05.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2021.11.2.tar.xz">buildroot-2021.11.2.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2021.11.2.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2022.05.tar.xz">buildroot-2022.05.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2022.05.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
---->
-+<!--
-       <h3 style="text-align: center;">Latest release candidate: <b>2022.05-rc2</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
-@@ -109,7 +109,7 @@
- 	  <p><a href="/downloads/buildroot-2022.05-rc2.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
-+-->
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 4b75b68a83..691e3bfd88 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,24 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2022.05 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>6 June 2022</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The stable 2022.05 release is out - Thanks to everyone
-+	  contributing and testing the release candidates. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.05">CHANGES</a>
-+	  file for more details
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2022.05.tar.xz">2022.05 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index e343cf432e..21e3455ae1 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2022.02.2'
-+RELEASE='2022.05'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+On 14/05/2022 19:56, Bernd Kuhls wrote:
+> DRI support for this driver is provided by the xserver_xorg-server
+> package when BR2_PACKAGE_HAS_LIBGL is enabled:
+> https://git.busybox.net/buildroot/tree/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk#n91
+> 
+> Change the dependency to follow the logic of xserver_xorg-server.
+> 
+> Also fix a typo in the Config.in help text while being at it.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>   package/x11r7/xdriver_xf86-video-imx-viv/Config.in | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+> index 13cee14deb..292fdd05a4 100644
+> --- a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+> +++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+> @@ -1,10 +1,9 @@
+>   config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
+>   	bool "xf86-video-imx-viv"
+> +	depends on BR2_PACKAGE_HAS_LIBGL
+>   	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+>   	depends on BR2_PACKAGE_IMX_GPU_G2D
+>   	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
+> -	select BR2_PACKAGE_MESA3D # Needed in order to compile xorg with glx/dri
+> -	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+>   	select BR2_PACKAGE_LIBDRM
+>   	select BR2_PACKAGE_XORGPROTO
+>   	help
+> @@ -26,7 +25,10 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
+>   
+>   	  Don't forget to load galcore.ko and create /dev/galcore
+>   	  before using this driver (else, Xorg will exit with an
+> -	  obscur message like "Segmentation fault at address 0xc").
+> +	  obscure message like "Segmentation fault at address 0xc").
+> +
+> +comment "xf86-video-imx-viv needs an OpenGL backend"
+> +	depends on !BR2_PACKAGE_HAS_LIBGL
+
+  This should also retain the arch dependencies: BR2_arch and 
+BR2_TOOLCHAIN_HAS_SYNC_1.
+
+  Regards,
+  Arnout
+
+>   
+>   comment "xf86-video-imx-viv depends on imx-gpu-viv with X11 output"
+>   	depends on BR2_arm
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
