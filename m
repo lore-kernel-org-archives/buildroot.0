@@ -4,78 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEFD1C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 18:44:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08FE4C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 18:47:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 861C460DCB;
-	Mon,  6 Jun 2022 18:44:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC38160DCB;
+	Mon,  6 Jun 2022 18:47:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QIBwKWqWGst2; Mon,  6 Jun 2022 18:44:06 +0000 (UTC)
+	with ESMTP id Gx2a0L9_VHFq; Mon,  6 Jun 2022 18:47:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E1C660BF7;
-	Mon,  6 Jun 2022 18:44:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 66AA01BF2E3
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:43:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF1F360B0B;
+	Mon,  6 Jun 2022 18:47:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AC14E1BF2E3
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 61EF960BF7
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:43:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5C4A409DB
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:47:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lVl9qu5UouBq for <buildroot@lists.busybox.net>;
- Mon,  6 Jun 2022 18:43:43 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com
- [IPv6:2607:f8b0:4864:20::832])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A382460803
- for <buildroot@buildroot.org>; Mon,  6 Jun 2022 18:43:43 +0000 (UTC)
-Received: by mail-qt1-x832.google.com with SMTP id t21so3992036qtw.11
- for <buildroot@buildroot.org>; Mon, 06 Jun 2022 11:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=bo/fYMmC9rIuON8EeC29aSaS1+pSCBAD7nOrPlT5jIU=;
- b=EJsWfr/JOunHHsiV+gSMdLmWRSxGv1fop2Aq3BzcRn15ieNL2TRFaax87Me4qDH/pJ
- Hz/7BgQCmPTBHvQTXnEWvn/MUeF0VPvH2t453PSp87JaIzgBg/uIaMW/TCc992k7tSLX
- PYgGkm0W0/kkFUChRVBwdLaSkIOA1wbtem5pAydVWG3/0vIDFxlC9ege6uh8xtyN6TlT
- XWJv4U5HqZXYlJSkxfSXJyLUDp5G0Mr1d/Af1fny3VZa7N2B/PBrfm1zCco3c+9Fcl+o
- w6k6KXS1R/ijCKXsM35SLQurALXa0lJth9siW6sgxKI6kwISG6WKL+YaSRZYa0d7ScS3
- radA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=bo/fYMmC9rIuON8EeC29aSaS1+pSCBAD7nOrPlT5jIU=;
- b=0u8kQDH0Z2PJ6wx+5QRi6wM9j0w6RUeWJtZmL96WUEPEap0yPjIRiJcgP9IvNzy+WO
- 6vmPd6rJc0Jsx1yPaIEjDB/V3wLNDpEJyPrFoXQc8h9/w5Z2M7ezLuedr1DTPb+nCh5Y
- 1Cg1DvpatY6dRkQpiXhqXxRPt2SKuRgCN1zQEZX8b2ZxtR6ppUMEG6Luv7+1qZEODcmG
- oPNF1DtMaw4q5dD5Fm0aplrJu5Y4RQgv8T3Rh9NNPZOBqGmRMP9FY2JOZTa3GnNYvpDh
- xZm97WjgjUeXClVMpLZirO9WUKT0RuH1N47dOCD90wPvmZELMmka5j9b+CSz37WTJZCH
- Sc9w==
-X-Gm-Message-State: AOAM5330DCpVugtAso0Vkcn6kdLhSqWM5MiAcS3ZapfMCvg95o3+ybbA
- 9vOb01EEedQcbIUkROM29FQ=
-X-Google-Smtp-Source: ABdhPJzwnoWrC0btaqCzezljmOf4hdBNLwVAb3X07pYV4J8QnEMs88qzpj8AY0x72L7SzrrdB0369g==
-X-Received: by 2002:a05:622a:134a:b0:304:e0e0:a946 with SMTP id
- w10-20020a05622a134a00b00304e0e0a946mr13710124qtk.215.1654541022426; 
- Mon, 06 Jun 2022 11:43:42 -0700 (PDT)
-Received: from dell5510.arch.suse.de (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- m16-20020a05620a291000b006a6bb044740sm3584880qkp.66.2022.06.06.11.43.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Jun 2022 11:43:42 -0700 (PDT)
-From: Petr Vorel <petr.vorel@gmail.com>
-To: ltp@lists.linux.it
-Date: Mon,  6 Jun 2022 20:43:20 +0200
-Message-Id: <20220606184320.8210-3-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220606184320.8210-1-petr.vorel@gmail.com>
-References: <20220606184320.8210-1-petr.vorel@gmail.com>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=pm.me
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SVpbXfn2dN6L for <buildroot@lists.busybox.net>;
+ Mon,  6 Jun 2022 18:47:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DAD53405A0
+ for <buildroot@buildroot.org>; Mon,  6 Jun 2022 18:47:12 +0000 (UTC)
+Date: Mon, 06 Jun 2022 18:47:03 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+ s=protonmail3; t=1654541230; x=1654800430;
+ bh=M90Vr/G8PqW1r0IfN+O6WpVPbIaV3dyawnRQWLtPwRI=;
+ h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+ References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+ Feedback-ID:Message-ID;
+ b=IymrA0YpJIow67Cy+Hqw04lNxeBMv8hFDMyY4R8Rjfpp1JriQl2aXy3w9qBcRwcIQ
+ t+T03T+PL3SDlmavQAzHDntJ+o5ffFRsgdnCy0FyubomYo/6yDqHt3QHtfpfP1RW6d
+ tfV872H5y19B9yJHbCmJmZUDH9AfKFHqJ28eqVECDF/sHFKeVY5RCPcEYbYZ+p7Rqa
+ 1o8XQ/EhKQcOP/ks1gloROiU+RY4rNHaVvNrcspWf3gIofnIBMc6ZbPtsFMpVtvG5d
+ aLmiDxmiuNnP/A0xqPxm+mAMEnUaYqrjvOo6/ALiUBXUd+/hHvs7Ndle0PJFFOSLgg
+ quu1q2+sFmycA==
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <0dbp6yslTCRBatfrn6k1UP2LWacgM9lvSYHrTi3-pBGx4125WQ4ci6pq2PFfipv-H-SNeLnNLKvDflPOdYXteUZpqdA5S3JwCXP52OpvX6s=@pm.me>
+In-Reply-To: <7d99a90c-2560-7aec-c28a-8e2616108332@mind.be>
+References: <20220604124523.22056-1-rknecht@pm.me>
+ <92da4b94-b41c-c9c0-1ad1-394417374f3a@mind.be>
+ <7d99a90c-2560-7aec-c28a-8e2616108332@mind.be>
+Feedback-ID: 8957232:user:proton
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] kvm: Fix undefined reference to
- __stack_chk_fail()
+Subject: Re: [Buildroot] [PATCH v2] configs/docker_*: add build config for
+ docker images
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,44 +67,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Cyril Hrubis <chrubis@suse.cz>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Li Wang <liwang@redhat.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot Mailing List <buildroot@buildroot.org>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, Martin Doucha <mdoucha@suse.cz>
+From: Roger Knecht via buildroot <buildroot@buildroot.org>
+Reply-To: rknecht@pm.me
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Some x86_64 buildroot toolchains (bootlin-x86-64-glibc,
-bootlin-x86-64-musl) try to link to __stack_chk_fail().
--nostdlib is not enough, it requires also -fstack-protector.
+On Monday, June 6th, 2022 at 20:01, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 06/06/2022 14:50, Arnout Vandecappelle wrote:
+>
+> > Hi Roger,
+> >
+> > On 04/06/2022 14:45, Roger Knecht via buildroot wrote:
+> >
+> > > Buildroot is not only great to build embedded systems but also to
+> > > create minimal docker images. Adding a default configuration for
+> > > docker images makes it easier to use.
+> >
+> > Thank you for your contribution. However, I feel it adds little to no value.
+> > The docker configurations are absolutely trivial, and they also don't add any
+> > testing surface. This compared to other boards, which find a combination of
+> > bootloader, kernel and image generation options that actually work, and which
+> > actually does add to the testing surface since the build of the kernel or
+> > bootloader sometimes breaks with newer toolchains or host OSes.
+> >
+> > I've discussed with other maintainers, and they share this opinion.
+> >
+> > Therefore, I marked the patch as Changes Requested in patchwork.
+>
+>
+> Apologies, I meant that I marked it as Rejected.
+Yeah, I was a bit confused since it sounded like a rejection in the first place. ;)
+I saw this mail too late and I already replied to your first message.
+No problem, I drop the patch then.
 
-x86_64-buildroot-linux-gnu/bin/ld: /tmp/ccgBXEoR.o: in function `handle_page_fault':
-kvm_pagefault01.c:(.text+0x5d): undefined reference to `__stack_chk_fail'
-collect2: error: ld returned 1 exit status
+>
+> > > How to build a Docker image with Buildroot:
+> > > $ make docker_x86_64_defconfig
+> > > $ make
+> > >
+> > > Create a Docker image from Buildroot rootfs:
+> > > $ docker image import output/images/rootfs.tar buildroot-image:latest
+> > >
+> > > Run Docker container:
+> > > $ docker run --rm -it buildroot-image:latest /bin/sh
+> >
+> > This part should be in a README file (board/docker/readme.txt).
+>
+>
+> I added this comment for advise in case you would submit other contributions
+> of defconfigs.
+Thanks, will do it for future contributions.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- testcases/kernel/kvm/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/testcases/kernel/kvm/Makefile b/testcases/kernel/kvm/Makefile
-index 8d5193d8e..bce1a4eb5 100644
---- a/testcases/kernel/kvm/Makefile
-+++ b/testcases/kernel/kvm/Makefile
-@@ -9,7 +9,7 @@ ASFLAGS =
- CPPFLAGS += -I$(abs_srcdir)/include
- GUEST_CPPFLAGS = $(CPPFLAGS) -DCOMPILE_PAYLOAD
- GUEST_CFLAGS = -ffreestanding -O2 -Wall -fno-asynchronous-unwind-tables -mno-mmx -mno-sse
--GUEST_LDFLAGS = -nostdlib -Wl,--build-id=none
-+GUEST_LDFLAGS = -nostdlib -Wl,--build-id=none -fstack-protector
- GUEST_LDLIBS =
- 
- FILTER_OUT_MAKE_TARGETS := lib_guest lib_host lib_x86
--- 
-2.36.1
-
+Regards,
+Roger
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
