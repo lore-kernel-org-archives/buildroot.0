@@ -4,87 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 964B4CCA47F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 20:41:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5980FC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 20:43:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4542861189;
-	Mon,  6 Jun 2022 20:41:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C51E60E30;
+	Mon,  6 Jun 2022 20:43:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rEG8wkuLHhys; Mon,  6 Jun 2022 20:41:10 +0000 (UTC)
+	with ESMTP id vuzdVsngLuv0; Mon,  6 Jun 2022 20:43:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2753C61075;
-	Mon,  6 Jun 2022 20:41:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B702F1BF297
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 20:39:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA04B60DFF;
+	Mon,  6 Jun 2022 20:43:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E7661BF297
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 20:43:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A584F82882
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 20:39:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 397CD4094B
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 20:43:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WDtbuE8sS4xo for <buildroot@lists.busybox.net>;
- Mon,  6 Jun 2022 20:39:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k6t1H-FBtWQl for <buildroot@lists.busybox.net>;
+ Mon,  6 Jun 2022 20:43:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5D95282861
- for <buildroot@buildroot.org>; Mon,  6 Jun 2022 20:39:44 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id s12so23999928ejx.3
- for <buildroot@buildroot.org>; Mon, 06 Jun 2022 13:39:44 -0700 (PDT)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 49C114098C
+ for <buildroot@buildroot.org>; Mon,  6 Jun 2022 20:43:16 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id bg6so11398760ejb.0
+ for <buildroot@buildroot.org>; Mon, 06 Jun 2022 13:43:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=pyCchZumwNXLtL1RyRpds+45JUTjkd4HutR9attyDHw=;
- b=NuupNwPdmRzrrr5hagasSspgBo3IQu4xK0H81fSUnQzb5tL8lEhWOGIHJSZYNDn055
- olnxSyTuxLCaTY7MXty3jl4mJ7SKVY/qTCSSiPjMsRhGpyalBDEOxPanfeETyjeFMlYy
- xycpK9qvKb2g2Es+YM0Ks/wkVoD5a2b4sG55ZBxdelR+TaoKmt8sJgqG+0CvwbWJuZyD
- F0BNZE6NJnKVNdiZx+nfFz1pT0246U5nnqLzcyyyW2gkHTf9IfQvN/Ef2PmbfTt5GtiQ
- hLRWPpaJ0Ymav2IOKdB6cuixlQ+d0rNuY9QfFYOQ9ZM6r5D6RH87mcfyc+mHf2ffQvYU
- HM2A==
+ bh=1O4kskfUendTTF+q7546xqX5BX2ordV0m+RR3Hp+fG0=;
+ b=Msn6tmzeZA++OHxfmlDkHFMwIChgaxpFXFYSFJ6m/9cY7kVU1kQfylm10t6LL1EAcl
+ Ycnn4u6bIze8Hlp09+H0Zj3mgiAUnWC1T9vNgbwQOK7ISzPZWJqO2POExuuxZy0aeJzE
+ 0EQhJnalkn79OvggBZXk83PpszyJ4DvsQXCk/bvzUDYdPw7sPGAtVyPU4hPBJEup4lEH
+ HbhPyj5iofC1TFTKSRv1DH13ITOWUMrEGEUmiOLkEVGTPTxTPZAZ/aeLEWNG5Y92KKaH
+ 3kDzFzd7gFMJi5TU955Huf2EhIels6KTLgdNF01ZiKWEtwOAD/2Ct7WAdDgOXWaGOL5o
+ jiLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=pyCchZumwNXLtL1RyRpds+45JUTjkd4HutR9attyDHw=;
- b=3NTmWDQKsdLeyidDqeCObSBMihbxzSpYp6x1od6NVMQWaWSXBESAEexDY9bAvuWrM5
- qZ+P14h/PmSsb8QLrDYmPXgMVXNiVkHWwxl8nhgYF1F9PPIOA1+Ish5URTTZau/om6IG
- WNgPN6R2RZaHqVkW3+q7Li8pUqEmmoTm/bsJKRcFAQw8tEl1zRA8ZLlw+TQMCFraojDu
- T7OXnUSHTwWFvf4NimwmdkJYwTXrfm3Fonlx4+Fw3Gx+YD9PNZk8QditHqvB8vbxi4Rk
- iUw0gtLALcfjmUyCOeRnfhwG7BDzmKYgsCIrMoMWumASB6Smp1wmY68F8KQgB/9NzjVD
- 1WZA==
-X-Gm-Message-State: AOAM533GCH2PZpVyM5yWxxyzq4ltuqxZoCmKaJH6NzaQRd7y6nTjdSE2
- 9r/wKQP08AOmber45htcgjgybQ==
-X-Google-Smtp-Source: ABdhPJy2rlDfHd41ovicaAvcks0aiJrf4muMI/0jHuFpdBJRHc/v8NdydihRC4PGkaNd6qh6DhFHhg==
-X-Received: by 2002:a17:907:72c1:b0:6ff:c5f:6b7d with SMTP id
- du1-20020a17090772c100b006ff0c5f6b7dmr23514816ejc.676.1654547982540; 
- Mon, 06 Jun 2022 13:39:42 -0700 (PDT)
+ bh=1O4kskfUendTTF+q7546xqX5BX2ordV0m+RR3Hp+fG0=;
+ b=7snl3jDhGHfna1SJJo83dm8IkxnTtXB0a4z8sRP0Py8m+pMfnleOYXNFGv6UHZV2JX
+ l6IFit8Uoi4Yr/hEHoQmYWZnw8Hd+4bCSp1+R/+nXadi7xfdddTPm7JGC+snJQwvFTfU
+ awn3UHWzIzjjzzFcGWppnAwrVr2xzx5F7GiTgPAvMR44arOFtP91tn6PycI6bCHnRyGe
+ BABWBnGxlYeZYivM6VvTkwgt80fU1eD540u+69Xm7f+EK9f5VH2B7Dn4r2q8YA+3kFoI
+ V6xVoUDcVH9SpR0rOtPAGMMUhydJVfc2Q30gWEUjG8A/2MIt3S39iXWv8YlHIHX6PIry
+ Q4lg==
+X-Gm-Message-State: AOAM530xQXq/wP+6gGnvXBB8sPi03L4cV9d02exoHsFxMmCLGE9RdRzs
+ CBVRRhUMWhEHBmiTdZpNc2wPg/CylIMbIQ==
+X-Google-Smtp-Source: ABdhPJwL/Ejlt3sK7Hb3KRs5qCcPE4GkMcXuoK1sRWH37uYKozK9xvghQ29XR98LcAaEpj706DUfbw==
+X-Received: by 2002:a17:907:1620:b0:711:da21:d836 with SMTP id
+ hb32-20020a170907162000b00711da21d836mr3253290ejc.427.1654548194320; 
+ Mon, 06 Jun 2022 13:43:14 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- v9-20020a170906380900b00711d546f8a8sm1110431ejc.139.2022.06.06.13.39.41
+ y24-20020a170906071800b006feed200464sm6781124ejb.131.2022.06.06.13.43.13
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 06 Jun 2022 13:39:42 -0700 (PDT)
-Message-ID: <ec13bac4-2e1b-8c45-366f-675f0ad06377@mind.be>
-Date: Mon, 6 Jun 2022 22:37:43 +0200
+ Mon, 06 Jun 2022 13:43:13 -0700 (PDT)
+Message-ID: <ab57f204-1b69-e99e-6dd1-4d3809740ed2@mind.be>
+Date: Mon, 6 Jun 2022 22:43:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
 Content-Language: en-GB
 To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 References: <20220514175612.2510884-1-bernd.kuhls@t-online.de>
+ <20220514175612.2510884-19-bernd.kuhls@t-online.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220514175612.2510884-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 01/19] package/x11r7/xserver_xorg-server:
- bump version to 21.1.3
+In-Reply-To: <20220514175612.2510884-19-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH 19/19] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,151 +107,273 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/05/2022 19:55, Bernd Kuhls wrote:
+On 14/05/2022 19:56, Bernd Kuhls wrote:
 > Release notes:
-> https://lists.x.org/archives/xorg-announce/2022-January/003127.html
-> 
-> Removed patch which was applied upstream:
-> https://gitlab.freedesktop.org/xorg/xserver/-/commit/9c66d910cae107cbcda02a8502ac5324a6eca052
+> https://lists.freedesktop.org/archives/mesa-announce/2022-April/000670.html
+> https://lists.freedesktop.org/archives/mesa-announce/2022-March/000667.html
+> https://lists.freedesktop.org/archives/mesa-announce/2022-March/000665.html
+> https://lists.freedesktop.org/archives/mesa-announce/2022-May/000673.html
+> https://www.phoronix.com/scan.php?page=news_item&px=Mesa-22.0-Released
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-  This and the rest of the series applied to next, with the fixes as indicated 
-in individual replies, thanks.
+  This one was marked as Superseded in patchwork, but I couldn't find a newer 
+one... Any idea?
 
   Regards,
   Arnout
 
 > ---
->   ...error-when-built-without-logind-plat.patch | 90 -------------------
->   .../xserver_xorg-server.hash                  |  6 +-
->   .../xserver_xorg-server.mk                    |  2 +-
->   3 files changed, 4 insertions(+), 94 deletions(-)
->   delete mode 100644 package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch
+>   Config.in.legacy                         | 24 +++++++++
+>   package/mesa3d-headers/mesa3d-headers.mk | 12 +----
+>   package/mesa3d/Config.in                 | 69 ++----------------------
+>   package/mesa3d/mesa3d.hash               |  9 ++--
+>   package/mesa3d/mesa3d.mk                 | 16 +-----
+>   5 files changed, 35 insertions(+), 95 deletions(-)
 > 
-> diff --git a/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch b/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch
-> deleted file mode 100644
-> index 164c0039bd..0000000000
-> --- a/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch
-> +++ /dev/null
-> @@ -1,90 +0,0 @@
-> -From 17b6ab4d8cecf55a3784dbefbef9bfcf84ee3b1b Mon Sep 17 00:00:00 2001
-> -From: Jocelyn Falempe <jfalempe@redhat.com>
-> -Date: Thu, 16 Dec 2021 15:46:43 +0100
-> -Subject: [PATCH] Fix compilation error when built without logind/platform bus
-> -
-> -This was introduced by commit 8eb1396d
-> -
-> -Signed-off-by: Jocelyn Falempe <jfalempe@redhat.com>
-> -[Peter: from https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/827]
-> -Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ----
-> - hw/xfree86/common/xf86Events.c               |  9 +--------
-> - hw/xfree86/os-support/linux/systemd-logind.c | 16 +++++++++++-----
-> - include/systemd-logind.h                     |  4 ++--
-> - 3 files changed, 14 insertions(+), 15 deletions(-)
-> -
-> -diff --git a/hw/xfree86/common/xf86Events.c b/hw/xfree86/common/xf86Events.c
-> -index 6076efa80..395bbc7b3 100644
-> ---- a/hw/xfree86/common/xf86Events.c
-> -+++ b/hw/xfree86/common/xf86Events.c
-> -@@ -383,14 +383,7 @@ xf86VTLeave(void)
-> -         xf86GPUScreens[i]->LeaveVT(xf86GPUScreens[i]);
-> -
-> -     if (systemd_logind_controls_session()) {
-> --        for (i = 0; i < xf86_num_platform_devices; i++) {
-> --            if (xf86_platform_devices[i].flags & XF86_PDEV_SERVER_FD) {
-> --                int major, minor;
-> --                major = xf86_platform_odev_attributes(i)->major;
-> --                minor = xf86_platform_odev_attributes(i)->minor;
-> --                systemd_logind_drop_master(major, minor);
-> --            }
-> --        }
-> -+        systemd_logind_drop_master();
-> -     }
-> -
-> -     if (!xf86VTSwitchAway())
-> -diff --git a/hw/xfree86/os-support/linux/systemd-logind.c b/hw/xfree86/os-support/linux/systemd-logind.c
-> -index 35d5cc75b..f6a223a55 100644
-> ---- a/hw/xfree86/os-support/linux/systemd-logind.c
-> -+++ b/hw/xfree86/os-support/linux/systemd-logind.c
-> -@@ -308,13 +308,19 @@ cleanup:
-> -  * and ensure the drm_drop_master is done before
-> -  * VT_RELDISP when switching VT
-> -  */
-> --void systemd_logind_drop_master(int _major, int _minor)
-> -+void systemd_logind_drop_master(void)
-> - {
-> --    struct systemd_logind_info *info = &logind_info;
-> --    dbus_int32_t major = _major;
-> --    dbus_int32_t minor = _minor;
-> -+    int i;
-> -+    for (i = 0; i < xf86_num_platform_devices; i++) {
-> -+        if (xf86_platform_devices[i].flags & XF86_PDEV_SERVER_FD) {
-> -+            dbus_int32_t major, minor;
-> -+            struct systemd_logind_info *info = &logind_info;
-> -
-> --    systemd_logind_ack_pause(info, minor, major);
-> -+            major = xf86_platform_odev_attributes(i)->major;
-> -+            minor = xf86_platform_odev_attributes(i)->minor;
-> -+            systemd_logind_ack_pause(info, minor, major);
-> -+        }
-> -+    }
-> - }
-> -
-> - static DBusHandlerResult
-> -diff --git a/include/systemd-logind.h b/include/systemd-logind.h
-> -index a8af2b96d..5c04d0130 100644
-> ---- a/include/systemd-logind.h
-> -+++ b/include/systemd-logind.h
-> -@@ -33,7 +33,7 @@ int systemd_logind_take_fd(int major, int minor, const char *path, Bool *paus);
-> - void systemd_logind_release_fd(int major, int minor, int fd);
-> - int systemd_logind_controls_session(void);
-> - void systemd_logind_vtenter(void);
-> --void systemd_logind_drop_master(int major, int minor);
-> -+void systemd_logind_drop_master(void);
-> - #else
-> - #define systemd_logind_init()
-> - #define systemd_logind_fini()
-> -@@ -41,7 +41,7 @@ void systemd_logind_drop_master(int major, int minor);
-> - #define systemd_logind_release_fd(major, minor, fd) close(fd)
-> - #define systemd_logind_controls_session() 0
-> - #define systemd_logind_vtenter()
-> --#define systemd_logind_drop_master(major, minor)
-> -+#define systemd_logind_drop_master()
-> - #endif
-> -
-> - #endif
-> ---
-> -2.20.1
-> -
-> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-> index 6008661db1..b5635b9afa 100644
-> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-> @@ -1,6 +1,6 @@
-> -# From https://lists.x.org/archives/xorg-announce/2021-December/003125.html
-> -sha256  c20bf46a9fe8e74bf4e75430637e58d49a02d806609dc161462bceb1ef7e8db0  xorg-server-21.1.2.tar.xz
-> -sha512  6d7a0d29d5be09f80ed505c4d6ae964795127525a0ab73a4eab4f601788ab3627033143e5aeb4c2565c6683dd3402084d13acab5554606fbd519c4aec0a79def  xorg-server-21.1.2.tar.xz
-> +# From https://lists.x.org/archives/xorg-announce/2022-January/003127.html
-> +sha256  61d6aad5b6b47a116b960bd7f0cba4ee7e6da95d6bb0b127bde75d7d1acdebe5  xorg-server-21.1.3.tar.xz
-> +sha512  cf5fed023eadda62ae732f8c4d427c272ebe005188341290f3d03147042c103b00cbb94d86a0256da815fb9b9a3da315c21a05ee0c926c1a2ff0c54ab0c0638b  xorg-server-21.1.3.tar.xz
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 95b9d784d3..d9aa778f83 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,30 @@ endif
 >   
->   # Locally calculated
->   sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> index 0cadba92a3..0f1779dcab 100644
-> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> @@ -4,7 +4,7 @@
->   #
+>   comment "Legacy options removed in 2022.05"
+>   
+> +config BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
+> +	bool "mesa DRI i915 driver removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The DRI i915 driver was removed upstream.
+> +
+> +config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+> +	bool "mesa DRI i965 driver removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The DRI i965 driver was removed upstream.
+> +
+> +config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
+> +	bool "mesa DRI nouveau driver removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The DRI radeon nouveau was removed upstream.
+> +
+> +config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+> +	bool "mesa DRI radeon r100 driver removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The DRI radeon r100 driver was removed upstream.
+> +
+>   config BR2_KERNEL_HEADERS_5_16
+>   	bool "kernel headers version 5.16.x are no longer supported"
+>   	select BR2_LEGACY
+> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+> index 760c5368e5..fb3763297d 100644
+> --- a/package/mesa3d-headers/mesa3d-headers.mk
+> +++ b/package/mesa3d-headers/mesa3d-headers.mk
+> @@ -12,7 +12,7 @@ endif
+>   
+>   # Not possible to directly refer to mesa3d variables, because of
+>   # first/second expansion trickery...
+> -MESA3D_HEADERS_VERSION = 21.3.8
+> +MESA3D_HEADERS_VERSION = 22.0.3
+>   MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+>   MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+>   MESA3D_HEADERS_DL_SUBDIR = mesa3d
+> @@ -33,19 +33,9 @@ MESA3D_HEADERS_DIRS += GL
+>   
+>   ifeq ($(BR2_PACKAGE_XORG7),y)
+>   
+> -# Not using $(SED) because we do not want to work in-place, and $(SED)
+> -# contains -i.
+> -define MESA3D_HEADERS_BUILD_DRI_PC
+> -	sed -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
+> -	    package/mesa3d-headers/dri.pc \
+> -	    >$(@D)/src/mesa/drivers/dri/dri.pc
+> -endef
+> -
+>   define MESA3D_HEADERS_INSTALL_DRI_PC
+>   	$(INSTALL) -D -m 0644 $(@D)/include/GL/internal/dri_interface.h \
+>   		$(STAGING_DIR)/usr/include/GL/internal/dri_interface.h
+> -	$(INSTALL) -D -m 0644 $(@D)/src/mesa/drivers/dri/dri.pc \
+> -		$(STAGING_DIR)/usr/lib/pkgconfig/dri.pc
+>   endef
+>   
+>   endif # Xorg
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index e41da562dc..7468c2c804 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -63,16 +63,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+>   	bool
+>   	select BR2_PACKAGE_MESA3D_DRIVER
+>   
+> -config BR2_PACKAGE_MESA3D_DRI_DRIVER
+> -	bool
+> -	select BR2_PACKAGE_MESA3D_DRI3 if \
+> -		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4 && \
+> -			!BR2_RISCV_32)
+> -	select BR2_PACKAGE_MESA3D_DRIVER
+> -	select BR2_PACKAGE_MESA3D_GBM if \
+> -		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
+> -		!BR2_PACKAGE_MESA3D_OPENGL_EGL
+> -
+>   config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+>   	bool
+>   	select BR2_PACKAGE_MESA3D_DRIVER
+> @@ -134,16 +124,11 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+>   config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
+>   	bool "Gallium i915 driver"
+>   	depends on BR2_i386 || BR2_x86_64
+> -	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
+>   	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+>   	select BR2_PACKAGE_LIBDRM_INTEL
+>   	help
+>   	  Support for i915-based Intel GPUs.
+>   
+> -comment "Gallium i915: Only one i915 provider can be built"
+> -	depends on BR2_i386 || BR2_x86_64
+> -	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
+> -
+>   config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+>   	bool "Gallium iris driver"
+>   	depends on BR2_i386 || BR2_x86_64
+> @@ -330,49 +315,6 @@ comment "Gallium XvMC state tracker needs X.org and gallium drivers r600 or nouv
+>   		!(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
+>   		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)
+>   
+> -comment "DRI drivers"
+> -
+> -config BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
+> -	bool "DRI i915 driver"
+> -	depends on BR2_i386 || BR2_x86_64
+> -	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+> -	select BR2_PACKAGE_LIBDRM_INTEL
+> -	help
+> -	  Support for i915-based Intel GPUs.
+> -
+> -config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+> -	bool "DRI i965 driver"
+> -	depends on BR2_i386 || BR2_x86_64
+> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
+> -	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+> -	select BR2_PACKAGE_LIBDRM_INTEL
+> -	help
+> -	  Support for i965-based Intel GPUs.
+> -
+> -comment "DRI i965 driver needs a toolchain w/ headers >= 3.17"
+> -	depends on BR2_i386 || BR2_x86_64
+> -	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+> -
+> -config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
+> -	bool "DRI nouveau driver"
+> -	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+> -	select BR2_PACKAGE_LIBDRM_NOUVEAU
+> -	help
+> -	  Support for Nvidia-based GPUs.
+> -
+> -config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+> -	bool "DRI radeon r100 driver"
+> -	depends on BR2_i386 || BR2_x86_64
+> -	# libdrm's radeon option depends on LIBDRM_HAS_ATOMIC. Propagating
+> -	# that dependency here causes a circular dependency that Kconfig
+> -	# can't see is just spurious. However, that dependency is about
+> -	# the toolchain having sync4 primitives, which is always a given
+> -	# for i386 and x86_64.
+> -	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+> -	select BR2_PACKAGE_LIBDRM_RADEON
+> -	help
+> -	  Legacy Radeon driver for R100 series GPUs.
+> -
+>   comment "Vulkan drivers"
+>   
+>   config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+> @@ -406,17 +348,16 @@ comment "OpenGL API Support"
+>   
+>   config BR2_PACKAGE_MESA3D_GBM
+>   	bool "gbm"
+> -	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER \
+> -		|| (BR2_PACKAGE_MESA3D_GALLIUM_DRIVER && BR2_PACKAGE_MESA3D_OPENGL_EGL)
+> +	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER && \
+> +		BR2_PACKAGE_MESA3D_OPENGL_EGL
+>   	select BR2_PACKAGE_HAS_LIBGBM
+>   	select BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
+>   	select BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
+>   	help
+>   	  Enable Generic Buffer Management (gbm)
+>   
+> -comment "gbm support needs a dri driver or a gallium driver w/ EGL support."
+> -	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER \
+> -		&& !(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER && BR2_PACKAGE_MESA3D_OPENGL_EGL)
+> +comment "gbm support needs a gallium driver w/ EGL support."
+> +	depends on !(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER && BR2_PACKAGE_MESA3D_OPENGL_EGL)
+>   
+>   config BR2_PACKAGE_MESA3D_OPENGL_GLX
+>   	bool "OpenGL GLX"
+> @@ -432,7 +373,7 @@ comment "OpenGL GLX support needs X11"
+>   
+>   config BR2_PACKAGE_MESA3D_OPENGL_EGL
+>   	bool "OpenGL EGL"
+> -	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER || BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+>   	select BR2_PACKAGE_HAS_LIBEGL if !BR2_PACKAGE_LIBGLVND
+>   	select BR2_PACKAGE_LIBGLVND_DISPATCH_EGL if BR2_PACKAGE_LIBGLVND
+>   	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+> diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+> index 5b74e14fef..32221b8c89 100644
+> --- a/package/mesa3d/mesa3d.hash
+> +++ b/package/mesa3d/mesa3d.hash
+> @@ -1,6 +1,5 @@
+> -# From https://lists.freedesktop.org/archives/mesa-announce/2022-March/000666.html
+> -sha256  e70d273bdc53a4e931871bb5550ba3900e6a3deab2fff64184107c33e92d9da7  mesa-21.3.8.tar.xz
+> -sha512  0462c44fa8e358dafd03088411452bc172a365902795b3198df1e6cfbf1d87675ef5b72b572de7f15e5ee87b30ce5b2f217c81ea72b376962f6428c6ff83f2e9  mesa-21.3.8.tar.xz
+> -
+> +# From https://lists.freedesktop.org/archives/mesa-announce/2022-May/000673.html
+> +sha256  9f2b30f5276a9abaf71aafc6979685e2636189de1a87aea2c9e69744a6d0ebb9  mesa-22.0.3.tar.xz
+> +sha512  3982cd2fadca5349b2513885ed734c2422e3f2dced85f471f245b120ffaf018acafcd929dc5ec317f2c568bb5f619f5a3475d3a92495f766a2eefb225efcac14  mesa-22.0.3.tar.xz
+>   # License
+> -sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
+> +sha256  4bc15d14dcc134b024cbdca3b5330010136ce8a427b6f8353440ce2ad7aab037  docs/license.rst
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 9f375edc1f..aa6a4ac958 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -5,7 +5,7 @@
 >   ################################################################################
 >   
-> -XSERVER_XORG_SERVER_VERSION = 21.1.2
-> +XSERVER_XORG_SERVER_VERSION = 21.1.3
->   XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
->   XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
->   XSERVER_XORG_SERVER_LICENSE = MIT
+>   # When updating the version, please also update mesa3d-headers
+> -MESA3D_VERSION = 21.3.8
+> +MESA3D_VERSION = 22.0.3
+>   MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+>   MESA3D_SITE = https://archive.mesa3d.org
+>   MESA3D_LICENSE = MIT, SGI, Khronos
+> @@ -114,11 +114,6 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA)    += tegra
+>   MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
+>   MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
+>   MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+> -# DRI Drivers
+> -MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I915)   += i915
+> -MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
+> -MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU) += nouveau
+> -MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += r100
+>   # Vulkan Drivers
+>   MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
+>   
+> @@ -133,15 +128,6 @@ MESA3D_CONF_OPTS += \
+>   	-Dgallium-extra-hud=true
+>   endif
+>   
+> -ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+> -MESA3D_CONF_OPTS += \
+> -	-Ddri-drivers=
+> -else
+> -MESA3D_CONF_OPTS += \
+> -	-Dshared-glapi=enabled \
+> -	-Ddri-drivers=$(subst $(space),$(comma),$(MESA3D_DRI_DRIVERS-y))
+> -endif
+> -
+>   ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
+>   MESA3D_CONF_OPTS += \
+>   	-Dvulkan-drivers=
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
