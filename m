@@ -1,58 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AF0DC43334
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 18:35:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2F5DC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 18:43:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A0F741C1C;
-	Mon,  6 Jun 2022 18:35:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5293B82B3E;
+	Mon,  6 Jun 2022 18:43:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TVf6Aqu9SM0V; Mon,  6 Jun 2022 18:35:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6u1bjsetX7Fz; Mon,  6 Jun 2022 18:43:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81BB3414E6;
-	Mon,  6 Jun 2022 18:35:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6AE12828F2;
+	Mon,  6 Jun 2022 18:43:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7CC501BF2E3
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:35:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CCBB11BF2E3
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:43:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 68CFB414E6
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:35:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B665341496
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 18:43:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EQCP_jstoA-d for <buildroot@lists.busybox.net>;
- Mon,  6 Jun 2022 18:35:00 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4FA6A41496
- for <buildroot@buildroot.org>; Mon,  6 Jun 2022 18:35:00 +0000 (UTC)
-Date: Mon, 06 Jun 2022 18:34:53 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
- s=protonmail3; t=1654540496; x=1654799696;
- bh=a9LNRmW3vcw12UTP2R1zeP0QdynHlWBqqPPZOe3mUXA=;
- h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
- References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
- Feedback-ID:Message-ID;
- b=bOj/pDDG9SsZvzhxeVID/4vFFtk8VEPzGwPStlEx/IAwvAb+qsHjLbp+ezLIeGQGQ
- P18e37KVdWjxK5AsvrYteAj4Xm/MS1bdxTOS0ipydFDyQue6ArJ+99IBO5eRRt3El/
- r1PC4YOm7ESnm6uBEVbQ+qzuYAF2kFzjres+azLZUvwZ7Tt6B+GjZlo6bx5aBkj1NO
- RVTF+MK+9evT0mXMzGvvHgv/EHsQZZDEhX698G394HaxxpOAGEGK5sR/s9iTkQwCTG
- wwCGDRfRjA32n5DSeucqiG61PPFH8DEJ/SIJCSR8A+iq+pm+H3Shymble/rQjFCgqS
- upKWHFQOfaGyA==
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <xJc8DYTHFiixYvUB8xYOa6cn8VV-RTKs4uVaJxIC_z4TAgMeqhPtthwQgT5Zz39tM37tlFeeGNYz6lsbX2YW2_ejTQ19aHnQSVRYMBtTpso=@pm.me>
-In-Reply-To: <92da4b94-b41c-c9c0-1ad1-394417374f3a@mind.be>
-References: <20220604124523.22056-1-rknecht@pm.me>
- <92da4b94-b41c-c9c0-1ad1-394417374f3a@mind.be>
-Feedback-ID: 8957232:user:proton
+ with ESMTP id tRc8EAGPrKZl for <buildroot@lists.busybox.net>;
+ Mon,  6 Jun 2022 18:43:37 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com
+ [IPv6:2607:f8b0:4864:20::82f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4E25F410E6
+ for <buildroot@buildroot.org>; Mon,  6 Jun 2022 18:43:37 +0000 (UTC)
+Received: by mail-qt1-x82f.google.com with SMTP id 2so11038115qtw.0
+ for <buildroot@buildroot.org>; Mon, 06 Jun 2022 11:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=4Cz3rBqmJs1ICCKIMUfdA2HzsX3NZL5o7DD2DoCI9XE=;
+ b=hVKt8ndPnkS1DVyPV+1ZpwWRdl51z2MAE0/FIi3cMR9dmLlDNrsnucZiGqQ5M3DqhD
+ TqMrY2cCI6qcXXP1d8XNGIvFArHVn0yqFomGvEOqqf39zA49YqyQto9c+1F0DOFC/x8r
+ 7zWaYJRwVLixqGYeuvtgXBkoIMWT10LAprX3SUK2iz+TyiVZNRYiFFgN1R1e0N0013ue
+ aBuBEaCffIUbNY5USnNK9ogXScdMT7NzPKX46YKGTf+mgPJRn3Ak+evlhwV9dGbzOl4s
+ y7MqO4GGyaAq7qA6c45bswMcIq8InXoT+pt3aOyDPbKvGLi8n71mEhidgdtQv/qnGW4M
+ hCtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=4Cz3rBqmJs1ICCKIMUfdA2HzsX3NZL5o7DD2DoCI9XE=;
+ b=XEnQgCRh3CfG3mfQfA8Azry9g/aqcN1PgonMfq7IXkx1CrQJlEhDb7no9O2bM1RRuB
+ t4w53rsrQm6eT7yY2I37gBbYdViYqqb8HqSw6RgeT4nr4pX6MiKKkVWd6IUQQemx9m9e
+ LFY41k7HS5l+dg2t6wG/4fyFUlHVbrJszXTG1QuVa8LrjohBszRyA9GWD8401rOp3VyK
+ Cf0QRfOeaeHRL+nwu83qcBI3DrQw6DGO3r6wAuI7ZGLqIpsqxWECUfxTsI/3fPNma1u+
+ rI7pNaLJY9hBlqyz52vOGN2GSZdDY3+YhOGSWU6vbnfNQfYEP+DEST0RutDZcfZ2q10M
+ xvRA==
+X-Gm-Message-State: AOAM533lDdXUHSXE/+Yk4pPPivce+mJj9O5WSUJ8Ahi/Uw9PUq9qb52g
+ r6aF3hFD30RH5oFMDRieRHc=
+X-Google-Smtp-Source: ABdhPJwg0BuQ6/ACAhxT4P99URfrqIgrZmmjkl9nBQp+xSJW0CGJN0ZhCmqPYRRyTwWj/8ykBK4/bg==
+X-Received: by 2002:ac8:5956:0:b0:304:d85d:f16 with SMTP id
+ 22-20020ac85956000000b00304d85d0f16mr16929733qtz.606.1654541015982; 
+ Mon, 06 Jun 2022 11:43:35 -0700 (PDT)
+Received: from dell5510.arch.suse.de (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id
+ m16-20020a05620a291000b006a6bb044740sm3584880qkp.66.2022.06.06.11.43.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 06 Jun 2022 11:43:35 -0700 (PDT)
+From: Petr Vorel <petr.vorel@gmail.com>
+To: ltp@lists.linux.it
+Date: Mon,  6 Jun 2022 20:43:18 +0200
+Message-Id: <20220606184320.8210-1-petr.vorel@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] configs/docker_*: add build config for
- docker images
+Subject: [Buildroot] [PATCH 0/2] LTP compilation fixes for buildroot
+ toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,85 +87,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Roger Knecht via buildroot <buildroot@buildroot.org>
-Reply-To: rknecht@pm.me
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Cyril Hrubis <chrubis@suse.cz>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Li Wang <liwang@redhat.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, Martin Doucha <mdoucha@suse.cz>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Arnout,
+Hi all,
 
-On Monday, June 6th, 2022 at 14:50, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> Hi Roger,
->
-> On 04/06/2022 14:45, Roger Knecht via buildroot wrote:
->
-> > Buildroot is not only great to build embedded systems but also to
-> > create minimal docker images. Adding a default configuration for
-> > docker images makes it easier to use.
->
->
-> Thank you for your contribution. However, I feel it adds little to no value.
-> The docker configurations are absolutely trivial, and they also don't add any
-> testing surface.
-Thank you for reviewing the patch.
+this fixes 2 compilation failures of KVM tests reported some time ago [1].
 
-> This compared to other boards, which find a combination of
-> bootloader, kernel and image generation options that actually work, and which
-> actually does add to the testing surface since the build of the kernel or
-> bootloader sometimes breaks with newer toolchains or host OSes.
-Is it a requirement for defconfigs to add test surface in order to be accepted?
+Kind regards,
+Petr
 
-Containers run on the host kernel so this patch cannot add test surface for
-bootloader, kernel and image generation options.
+[1] https://lore.kernel.org/buildroot/YofzKdQAUOnR2gSW@pevik/
 
-I think it is better to compare the Docker defconfigs to QEMU instead of real
-boards. If the bootloader, kernel and image generation settings are removed
-from the QEMU defconfigs it results in a similar trivial config.
+Petr Vorel (2):
+  kvm: Fix compilation on x86
+  kvm: Fix undefined reference to __stack_chk_fail()
 
-The simplicity of the config also follows the buildroot manual:
-  "the configuration should be as minimal as possible, and should only build a
-   working basic BusyBox system for the target platform"
+ testcases/kernel/kvm/Makefile | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
->
-> I've discussed with other maintainers, and they share this opinion.
->
-> Therefore, I marked the patch as Changes Requested in patchwork.
-I see the following options to add more value to the patch:
+-- 
+2.36.1
 
-  1. Add a post-image.sh + Kconfig options to set the Docker image name and tags.
-     The post-image.sh will then automatically load rootfs.tar as Docker image.
-     This avoids running
-       `docker image import output/images/rootfs.tar <image name>:<image tag>`
-     after every build.
-
-  2. post-image.sh will generate a start-docker.sh (similar to start-qemu.sh)
-     which can used to run the Docker container. This avoids calling manually
-       `docker run --rm -it <image name>:<image tag> /bin/sh`
-
-Let me know if you have any other suggestions to bring more value to the patch.
-
-Despite the trivial changes it may add the following value:
-  - Faster full image builds for development
-    Container images do not require building the kernel and bootloader. Therefore a
-    full rebuild is faster. This may be useful for quick tests on target package changes.
-
-  - Extend buildroot's user base beyond embedded systems
-    If buildroot has an easy way to build container images it may attract more users outside
-    the embedded world.
-
-  - The run-time testing framework may run faster in a container than in QEMU (I didn't further
-    investigate in that direction)
-
-If this does not add enough value I have no hard feelings to drop the patch.
-
-Thanks,
-Roger
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
