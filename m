@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18789C43334
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 13:05:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CDDEC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 13:05:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D126B60C03;
-	Mon,  6 Jun 2022 13:05:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5BA6383264;
+	Mon,  6 Jun 2022 13:05:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n1QldzPwMNZb; Mon,  6 Jun 2022 13:05:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oRjNlbItW69P; Mon,  6 Jun 2022 13:05:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D722C6106B;
-	Mon,  6 Jun 2022 13:04:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8206283F60;
+	Mon,  6 Jun 2022 13:05:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 171E71BF339
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:03:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4D94E1BF982
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:03:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A9E7416F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1C98418F8
  for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 13:03:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lnpk24oQhExZ for <buildroot@lists.busybox.net>;
+ with ESMTP id n3S5Ch-9FVv5 for <buildroot@lists.busybox.net>;
  Mon,  6 Jun 2022 13:03:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 09D8F416F4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E5884170A
  for <buildroot@buildroot.org>; Mon,  6 Jun 2022 13:03:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id CC02286D93; Mon,  6 Jun 2022 12:52:01 +0000 (UTC)
+ id E2A7586D92; Mon,  6 Jun 2022 12:52:01 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 6 Jun 2022 14:57:12 +0200
+Date: Mon, 6 Jun 2022 14:58:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2cbcdbf0add46da55020eb56b5e4b974b44e958b
-X-Git-Newrev: aeeb621e725a63939d80693b67d6068545de09a2
+X-Git-Oldrev: 5471d7ce252208ffa8a7cdbb6f1f03939097ba39
+X-Git-Newrev: a1dafa1b04fff04b238be8dbe5543f366062d2d4
 X-Patchwork-Hint: ignore
-Message-Id: <20220606125201.CC02286D93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/eigen: fix build without Fortran
+Message-Id: <20220606125201.E2A7586D92@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vim: security bump to version
+ 8.2.5062
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,139 +59,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aeeb621e725a63939d80693b67d6068545de09a2
+commit: https://git.buildroot.net/buildroot/commit/?id=a1dafa1b04fff04b238be8dbe5543f366062d2d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure without a working Fortran compiler:
+Fix CVE-2022-1851: Out-of-bounds Read in GitHub repository vim/vim prior
+to 8.2.
 
-CMake Error at /nvmedata/autobuild/instance-17/output-1/host/share/cmake-3.18/Modules/CMakeTestFortranCompiler.cmake:51 (message):
-  The Fortran compiler
+Fix CVE-2022-1886: Heap-based Buffer Overflow in GitHub repository
+vim/vim prior to 8.2.
 
-    "/usr/bin/f95"
-
-  is not able to compile a simple test program.
-
-Fixes:
- - http://autobuild.buildroot.org/results/37f3f40ee39739b5e557d634b71a448762107a4b
+Fix CVE-2022-1898: Use After Free in GitHub repository vim/vim prior to
+8.2.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...-Options-for-controlling-build-components.patch | 85 ++++++++++++++++++++++
- package/eigen/eigen.mk                             |  9 ++-
- 2 files changed, 93 insertions(+), 1 deletion(-)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/eigen/0001-Adds-new-CMake-Options-for-controlling-build-components.patch b/package/eigen/0001-Adds-new-CMake-Options-for-controlling-build-components.patch
-new file mode 100644
-index 0000000000..693e610d0a
---- /dev/null
-+++ b/package/eigen/0001-Adds-new-CMake-Options-for-controlling-build-components.patch
-@@ -0,0 +1,85 @@
-+From cf82186416d04ea5df2a397d8fe09dc78d40ca65 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Antonio=20S=C3=A1nchez?= <cantonios@google.com>
-+Date: Sat, 5 Mar 2022 05:49:45 +0000
-+Subject: [PATCH] Adds new CMake Options for controlling build components.
-+
-+[Retrieved from:
-+https://gitlab.com/libeigen/eigen/-/commit/cf82186416d04ea5df2a397d8fe09dc78d40ca65]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ CMakeLists.txt        | 6 ++++++
-+ blas/CMakeLists.txt   | 3 ++-
-+ lapack/CMakeLists.txt | 5 +++++
-+ 3 files changed, 13 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index de1c23e91..0af36a53a 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -477,6 +477,9 @@ if(EIGEN_BUILD_TESTING)
-+   add_subdirectory(failtest)
-+ endif()
-+ 
-++include(CMakeDetermineFortranCompiler)
-++option(EIGEN_BUILD_BLAS "Toggles the building of the Eigen Blas library" ${CMAKE_Fortran_COMPILER})
-++option(EIGEN_BUILD_LAPACK "Toggles the building of the included Eigen LAPACK library" ${CMAKE_Fortran_COMPILER})
-+ if(EIGEN_LEAVE_TEST_IN_ALL_TARGET)
-+   add_subdirectory(blas)
-+   add_subdirectory(lapack)
-+@@ -611,6 +614,8 @@ set_target_properties (eigen PROPERTIES EXPORT_NAME Eigen)
-+ 
-+ install (TARGETS eigen EXPORT Eigen3Targets)
-+ 
-++option(EIGEN_BUILD_CMAKE_PACKAGE "Enables the creation of EigenConfig.cmake and related files" ON)
-++if(EIGEN_BUILD_CMAKE_PACKAGE)
-+ configure_package_config_file (
-+   ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Eigen3Config.cmake.in
-+   ${CMAKE_CURRENT_BINARY_DIR}/Eigen3Config.cmake
-+@@ -655,6 +660,7 @@ install (FILES ${CMAKE_CURRENT_BINARY_DIR}/Eigen3Config.cmake
-+ # Add uninstall target
-+ add_custom_target ( uninstall
-+     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/EigenUninstall.cmake)
-++endif()
-+ 
-+ if (EIGEN_SPLIT_TESTSUITE)
-+   ei_split_testsuite("${EIGEN_SPLIT_TESTSUITE}")
-+diff --git a/blas/CMakeLists.txt b/blas/CMakeLists.txt
-+index 8d3cb86dc..c530957fb 100644
-+--- a/blas/CMakeLists.txt
-++++ b/blas/CMakeLists.txt
-+@@ -1,6 +1,7 @@
-+ 
-+ project(EigenBlas CXX)
-+ 
-++if(EIGEN_BUILD_BLAS)
-+ include(CheckLanguage)
-+ check_language(Fortran)
-+ if(CMAKE_Fortran_COMPILER)
-+@@ -59,4 +60,4 @@ if(EIGEN_BUILD_TESTING)
-+ endif()
-+ 
-+ endif()
-+-
-++endif()
-+diff --git a/lapack/CMakeLists.txt b/lapack/CMakeLists.txt
-+index c8ca64001..8d6d75401 100644
-+--- a/lapack/CMakeLists.txt
-++++ b/lapack/CMakeLists.txt
-+@@ -1,5 +1,7 @@
-+ project(EigenLapack CXX)
-+ 
-++if(EIGEN_BUILD_LAPACK AND EIGEN_BUILD_BLAS)
-++
-+ include(CheckLanguage)
-+ check_language(Fortran)
-+ if(CMAKE_Fortran_COMPILER)
-+@@ -457,3 +459,6 @@ if(EXISTS ${eigen_full_path_to_testing_lapack})
-+ 
-+ endif()
-+ 
-++elseif(EIGEN_BUILD_LAPACK AND NOT EIGEN_BUILD_BLAS)
-++ message(FATAL_ERROR "EIGEN_BUILD_LAPACK requires EIGEN_BUILD_BLAS")
-++endif() #EIGEN_BUILD_LAPACK
-+-- 
-+GitLab
-+
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 9df286e11f..7fe3fbdac6 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -18,7 +18,14 @@ EIGEN_SUPPORTS_IN_SOURCE_BUILD = NO
- EIGEN_CONF_OPTS = -DPKGCONFIG_INSTALL_DIR=/usr/lib/pkgconfig
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 9d61d6fc87..55e5643b90 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  5606a3c62dba038f4c4f2eddb305ffccbae58a7bfd569bdb8100f524564c8a32  vim-8.2.4980.tar.gz
++sha256  3052bc702cfb49571dbcf9824827ae6032c37c7bf1a2aa0d3f7cc18c8f085dfb  vim-8.2.5062.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 9e70360b90..6dbb32d27b 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
--EIGEN_CONF_OPTS += -DCMAKE_Fortran_COMPILER=$(TARGET_FC)
-+EIGEN_CONF_OPTS += \
-+	-DCMAKE_Fortran_COMPILER=$(TARGET_FC) \
-+	-DEIGEN_BUILD_BLAS=ON \
-+	-DEIGEN_BUILD_LAPACK=ON
-+else
-+EIGEN_CONF_OPTS += \
-+	-DEIGEN_BUILD_BLAS=OFF \
-+	-DEIGEN_BUILD_LAPACK=OFF
- endif
- 
- $(eval $(cmake-package))
+-VIM_VERSION = 8.2.4980
++VIM_VERSION = 8.2.5062
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
