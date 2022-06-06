@@ -1,84 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C3BDC43334
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 08:51:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00D5DC43334
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jun 2022 09:14:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5950360E8C;
-	Mon,  6 Jun 2022 08:51:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BDE14183C;
+	Mon,  6 Jun 2022 09:14:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zv73G7IuuTdZ; Mon,  6 Jun 2022 08:51:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73DFB60E2E;
-	Mon,  6 Jun 2022 08:51:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 679E51BF39C
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 08:51:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5672E41620
- for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 08:51:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2Ee-TTRTQdvn for <buildroot@lists.busybox.net>;
- Mon,  6 Jun 2022 08:51:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com
- [IPv6:2607:f8b0:4864:20::102e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5464541607
- for <buildroot@buildroot.org>; Mon,  6 Jun 2022 08:51:23 +0000 (UTC)
-Received: by mail-pj1-x102e.google.com with SMTP id
- mh16-20020a17090b4ad000b001e8313301f1so5239327pjb.1
- for <buildroot@buildroot.org>; Mon, 06 Jun 2022 01:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=8ErAmk+miLJw1gbYCuNd8wbWVydvR7FAMfdqzZ7GKWA=;
- b=MlZ2g57b6C1aALpQE0QPs9NuN70YLCHRSaCf5vdQuI1kvQlAPrIPQqAKAYOa50medT
- 3+/Gm1mh9OEDXD74ycaIseeYvTfL0er4+XX0zbsZSAjP7n03nxHrwFdCtxfQDVBsSmIE
- KI540PaADTeG+D5USKxyzCdIsX8KJCY/jBdJuAm8e9Z6WLDDf1PIcZaXdn/H4Hu5lhk3
- EBpYnWzYBLz6yytNs2t5dydXEXtn6O/a7tkrN2GOMSMsAsXQA+USBAPDbvHtVwCMX0QT
- 60Fcm8izkiYgNarBDlQEujiD4Q9ha7e89cx99yrd7+26B4E2WijEGvMWPFXTSXWBTGFk
- PYsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:subject:date:message-id
- :in-reply-to:references:mime-version:content-transfer-encoding;
- bh=8ErAmk+miLJw1gbYCuNd8wbWVydvR7FAMfdqzZ7GKWA=;
- b=HqvoOfdLk1e9HsZTY3ZosC3g3NALyn8ibn58gU/c+2YXqZTkJWR9JKQVJSoELTsCkm
- /QT8S9lQDFSaq+6G8pST4rMg4DzaDZMnfwJxleXrfw6rtsQx35M7jM6KcBIr9qLVTpct
- /4haWR/OwR3zRJ9seLWrDEffY8fGcc0ZzvFcmtgl0un6AtiMso52XUOYxQWpOMXGxEj8
- lTZ6XqVkTWSV1PtidmtDeFz9f4/tO6CS5cBpT995E2NlBj+uUvwOpKswbEs/kf0ILBU5
- y55M1ChIENCacHqQ8N3TJMSBTTuiu6VRIuzg811hMGv1FlXA72e8L5p81Rc3CqiagKAS
- NKhA==
-X-Gm-Message-State: AOAM531u1IZdZpVHHJ3UeFOSyf7J8+5HpocqF+UwThFFnQcNcC3PWtG3
- Aa8T//b1OlKwRehSsiJkBvJoUhGpX0c=
-X-Google-Smtp-Source: ABdhPJwnQNcsb8P1oB9pleRJzk1L4xpgAcQiDShDImM/070w9evJRr1UwmvNlmVAvD150tKExqZXtw==
-X-Received: by 2002:a17:903:248:b0:155:ecb7:dfaf with SMTP id
- j8-20020a170903024800b00155ecb7dfafmr22945542plh.84.1654505481923; 
- Mon, 06 Jun 2022 01:51:21 -0700 (PDT)
-Received: from localhost.localdomain ([45.124.203.18])
- by smtp.gmail.com with ESMTPSA id
- r2-20020a170903020200b0015e8d4eb1f6sm9975253plh.64.2022.06.06.01.51.20
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Jun 2022 01:51:21 -0700 (PDT)
-From: Joel Stanley <joel@jms.id.au>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FN-BEaaIFfS4; Mon,  6 Jun 2022 09:14:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CAB94181D;
+	Mon,  6 Jun 2022 09:14:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4ED1A1BF3CE
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 09:14:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36928405AC
+ for <buildroot@lists.busybox.net>; Mon,  6 Jun 2022 09:14:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NtAPCFB_TqrP for <buildroot@lists.busybox.net>;
+ Mon,  6 Jun 2022 09:14:20 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 25879404EC
+ for <buildroot@buildroot.org>; Mon,  6 Jun 2022 09:14:18 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 56615C0004;
+ Mon,  6 Jun 2022 09:14:15 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1ny8oR-00CaAt-5r; Mon, 06 Jun 2022 11:14:15 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon,  6 Jun 2022 18:21:08 +0930
-Message-Id: <20220606085108.1628288-3-joel@jms.id.au>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220606085108.1628288-1-joel@jms.id.au>
-References: <20220606085108.1628288-1-joel@jms.id.au>
+Date: Mon,  6 Jun 2022 11:14:13 +0200
+Message-Id: <20220606091414.2998939-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/powerpc-utils: Bump to v1.3.10
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{9, 14,
+ 19}.x / 5.{4, 10, 15, 17}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,81 +62,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since v1.3.9 the package requires numa.h from numctl, so add this as a
-dependency.
-
-This bump fixes a missing limits.h for PATH_MAX when building with musl
-as detected by the autobuilder.
-
-librtas now builds fine with musl too, so remove the glibc restriction
-for enabling that support.
-
-Fixes:
-
- http://autobuild.buildroot.net/results/613ec647e251ac52a01f222044bd675ce36c1b5b/
-
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/powerpc-utils/Config.in          | 5 +----
- package/powerpc-utils/powerpc-utils.hash | 2 +-
- package/powerpc-utils/powerpc-utils.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 7 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
-index d04d81c08acb..9034ea2e0fdd 100644
---- a/package/powerpc-utils/Config.in
-+++ b/package/powerpc-utils/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_POWERPC_UTILS
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	depends on BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_NUMACTL
- 	help
- 	  System utilities for PowerPC machines.
+diff --git a/linux/Config.in b/linux/Config.in
+index fd3605a559..b2da6dffd9 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
-@@ -16,7 +17,6 @@ if BR2_PACKAGE_POWERPC_UTILS
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.17.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.17.13" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.104-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.104-cip3-rt3" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 3190813a0c..ab7bc0ebae 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,12 +1,12 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  22f67ef6b12ef6c0c0353be4b90b4bf4b9b18b858c16c346fa495b67ec718c99  linux-5.17.7.tar.xz
+-sha256  888641634f9e0e38cd0efcfec92ea3c126d381b24a514740d3fe3dc9988fd7ad  linux-5.15.39.tar.xz
+-sha256  f5e417b32f89318b6d0a230109a592ffd68997817463dc4692fa49ec7fe42f71  linux-5.10.115.tar.xz
+-sha256  0d16d343956d311e3f4ab3f032fd626d8e6b67c0db94edd32f561407d374f2a0  linux-5.4.193.tar.xz
++sha256  ea47fd08a16bd9001aacc8b88abd24af489bd87a364dd0545e0b6823a68bef53  linux-5.17.13.tar.xz
++sha256  b2390d7d977c66036ef0ceb294e408f2bdaab6dfeeb8ff4f4e0a84b71f8d8754  linux-5.15.45.tar.xz
++sha256  5b7a756004158ece2f5e41795ba523ec201743a736e34ce41cbe09177f7d0e8b  linux-5.10.120.tar.xz
++sha256  c2ad17b3fc70cd05d9e0766abe9b5aa9409fc2cc86a200eaa57c8f837afe36a8  linux-5.4.197.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  e03b777861fae559cb7ed635500cde305bc2ca34dee4dc2fe806de0060c87bdc  linux-4.9.313.tar.xz
+-sha256  3cd6d4eeb3a5d1c906b35c08f0d602f329410c291233bee1a7a2b168c7378bbe  linux-4.14.278.tar.xz
+-sha256  59bcfd094ec26b03ca506199224cff53c13325e62d22bd4e31ef4ccafe7265a2  linux-4.19.242.tar.xz
++sha256  7ea3369b915c99b38528dbf68c491f3f9324b2f4e56eac980dd7524d2fc30d1b  linux-4.9.317.tar.xz
++sha256  6637c8470c3093a477d2de6fa9e0f63c55810438a411c73bcd723634371657a3  linux-4.14.282.tar.xz
++sha256  00ad2f5a36c91221a2ade0078b93bf84b60d494bd1ef51eaccb5bdb6277dba3a  linux-4.19.246.tar.xz
+ # Locally computed
+ sha256  63e6df81c4a747c60eed535ffc2f6f1ddb0c17ec349e860316d9a700c69ab38e  linux-cip-5.10.104-cip3.tar.gz
+ sha256  9a45929d91ebaddbf6a0ef29750775e33d3c3f56f42f0a9e95e77e5b4eba3c6e  linux-cip-5.10.104-cip3-rt3.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 859f772624..d17686be4c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -379,13 +379,13 @@ endchoice
  
- config BR2_PACKAGE_POWERPC_UTILS_RTAS
- 	bool "RTAS support"
--	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_LIBRTAS
- 	help
- 	  Enable support for functions that require RTAS.
-@@ -28,7 +28,4 @@ config BR2_PACKAGE_POWERPC_UTILS_RTAS
- 	  lsslot, activate_firmware, rtas_ibm_get_vpd, serv_config,
- 	  rtas_event_decode, sys_ident.
- 
--comment "RTAS support needs a glibc toolchain"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
--
- endif
-diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
-index 8d0b10425b6d..b3c77fb223ba 100644
---- a/package/powerpc-utils/powerpc-utils.hash
-+++ b/package/powerpc-utils/powerpc-utils.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4e3a21419863c08adde49f0795eff0fbfe4597ce82593fa5fe1f1177913fb7b9  powerpc-utils-1.3.8.tar.gz
-+sha256  d64d9016a3e63a1e44c6e0833742cf964ae6bb1c6a9c7f0c7c5748aa335dc3db  powerpc-utils-1.3.10.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-index b12194ae8e73..19fa84946c91 100644
---- a/package/powerpc-utils/powerpc-utils.mk
-+++ b/package/powerpc-utils/powerpc-utils.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--POWERPC_UTILS_VERSION = 1.3.8
-+POWERPC_UTILS_VERSION = 1.3.10
- POWERPC_UTILS_SITE = $(call github,ibm-power-utilities,powerpc-utils,v$(POWERPC_UTILS_VERSION))
--POWERPC_UTILS_DEPENDENCIES = zlib
-+POWERPC_UTILS_DEPENDENCIES = zlib numactl
- POWERPC_UTILS_AUTORECONF = YES
- POWERPC_UTILS_LICENSE = GPL-2.0+
- POWERPC_UTILS_LICENSE_FILES = COPYING
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.9.313"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.278"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.242"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.193"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.115"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.39"	if BR2_KERNEL_HEADERS_5_15
+-	default "5.17.7"	if BR2_KERNEL_HEADERS_5_17
++	default "4.9.317"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.282"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.246"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.197"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.120"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.45"	if BR2_KERNEL_HEADERS_5_15
++	default "5.17.13"	if BR2_KERNEL_HEADERS_5_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.35.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
