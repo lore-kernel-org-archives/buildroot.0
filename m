@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3DB5C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 14:06:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C649C43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 14:06:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C2F340B9D;
-	Tue,  7 Jun 2022 14:06:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D159410F8;
+	Tue,  7 Jun 2022 14:06:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id feOp9YWTjhod; Tue,  7 Jun 2022 14:06:16 +0000 (UTC)
+	with ESMTP id kovKZsDX3AmL; Tue,  7 Jun 2022 14:06:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B80CA40AFE;
-	Tue,  7 Jun 2022 14:06:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A43241BF397
+	by smtp2.osuosl.org (Postfix) with ESMTP id 47D5040B0C;
+	Tue,  7 Jun 2022 14:06:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F24EF1BF397
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:05:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A1595613FC
+ by smtp4.osuosl.org (Postfix) with ESMTP id F01B2424A0
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:05:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FfQaa3kGYACX for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 14:05:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1UJi1zvfLIIL for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 14:05:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5EB66100D
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 14:05:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FE4A4249D
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 14:05:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3AB7286749; Tue,  7 Jun 2022 13:54:03 +0000 (UTC)
+ id 7625386ABD; Tue,  7 Jun 2022 13:54:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Jun 2022 16:00:26 +0200
+Date: Tue, 7 Jun 2022 16:05:39 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: fb98438cff630d79087b3e0fc38d08711f1c413a
-X-Git-Newrev: 01819fb88054522189c48e625f0557a6a936b0ac
+X-Git-Oldrev: f9e69d1b0fcb75c0b3ae943f38c7a1a8de4719ad
+X-Git-Newrev: c647ad5937c78e78c0a20f55e72298bc7a2f0627
 X-Patchwork-Hint: ignore
-Message-Id: <20220607135403.3AB7286749@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/uclibc: security
- bump to 1.0.41
+Message-Id: <20220607135403.7625386ABD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] DEVELOPERS: update my
+ e-mail address
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +59,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01819fb88054522189c48e625f0557a6a936b0ac
+commit: https://git.buildroot.net/buildroot/commit/?id=c647ad5937c78e78c0a20f55e72298bc7a2f0627
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixes CVE-2022-30295.
+My Bootlin address is preferred from now on.
 
-See here:
-https://www.nozominetworks.com/blog/nozomi-networks-discovers-unpatched-dns-bug-in-popular-c-standard-library-putting-iot-at-risk/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5507acd5df2a954b7559788dd03ead85245ad4a4)
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 9118c863b3247ae5c8ba1a61d941f6f1972a4edb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uclibc.hash | 4 ++--
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 989c9d887a..3b29c351b5 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.40/uClibc-ng-1.0.40.tar.xz.sha256
--sha256  d863f01815a64174d5019c73475e8aff5b60848a13876e79daf5d3d83ce7f889  uClibc-ng-1.0.40.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.41/uClibc-ng-1.0.41.tar.xz.sha256
-+sha256  b32a92a0218d95922d6976464e6ef51e2ebacfbcdb605820458d9dbb8a61e025  uClibc-ng-1.0.41.tar.xz
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index d79eaa1d0d..5006aa0cb6 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 880b50a13b..b7a4cb64f1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1710,7 +1710,7 @@ F:	package/intel-gmmlib/
+ F:	package/intel-mediadriver/
+ F:	package/intel-mediasdk/
  
--UCLIBC_VERSION = 1.0.40
-+UCLIBC_VERSION = 1.0.41
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+-N:	Luca Ceresoli <luca@lucaceresoli.net>
++N:	Luca Ceresoli <luca.ceresoli@bootlin.com>
+ F:	board/olimex/a20_olinuxino/
+ F:	board/zynq/
+ F:	board/zynqmp/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
