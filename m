@@ -1,79 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22B9FC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 23:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AB14C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 23:28:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C75160F1A;
-	Tue,  7 Jun 2022 23:12:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A95EB405F3;
+	Tue,  7 Jun 2022 23:28:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0WThUigG700W; Tue,  7 Jun 2022 23:12:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ngmkUkXZ1OyM; Tue,  7 Jun 2022 23:28:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9926E60F06;
-	Tue,  7 Jun 2022 23:12:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0908A1BF3FC
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 23:12:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E5DAA403F7;
+	Tue,  7 Jun 2022 23:28:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 86E751BF3FC
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 23:28:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EB5A260F06
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 23:12:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 83D1684484
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 23:28:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y-RyB2r1WD8B for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 23:12:35 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OPVXH-YJkNzw for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 23:28:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5310160B3B
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 23:12:35 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id z197so12967697iof.1
- for <buildroot@buildroot.org>; Tue, 07 Jun 2022 16:12:35 -0700 (PDT)
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
+ [IPv6:2607:f8b0:4864:20::133])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DA39C8447C
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 23:28:09 +0000 (UTC)
+Received: by mail-il1-x133.google.com with SMTP id d6so4579653ilm.4
+ for <buildroot@buildroot.org>; Tue, 07 Jun 2022 16:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=9WRTk2qKZSHAajCuCCXxk0XLdeN2b2VtRN5am9g+/30=;
- b=l7eX29qtoAESoWSKv1xGLIYs5Q1WRi6EHyP0nCcjY8MK0Qq1f9akRzoAbCVY5b3BXj
- J0f9ns3qH5UpG0ap43V/hKZtKmPmba46AaT/4wWy+bO4s1QQ9Q8eTwlCFSfQhYfJaqTZ
- xY+xkTp+k7NCan8U8ZWX1kuRuy7oxLLdxxSMzDxDDXU/Y3g7rtW1Mi4RI9mzwv6aUx4S
- Fi+hpDcS5pUR0IFCECr+Y+2RRtOOHj/PsF+VutsXeTwMiWU1bdbE3Y0bd3j7ttCo9SXx
- m5K9GUwDVN903ci6ohn5HXrxYRdCQ5jAIc5pk5uu3iUZGwqP/pQm9sbVsjZl6H9PQV5K
- 5WxA==
+ bh=viWOQiPFFhxj5p9Qc2TcMYQDWW/adNPeplj9ad7ZBLw=;
+ b=oUncxFdtD8E3QKQQpKHCydfjzldw5QxRh5R+krHRAQMNyNG591V6PE5XrgH3PQg8kA
+ IKbQVZo73Q4yrDo/LJjfAELGLtsH8remXTX/JbaX4ShXisDDC8efTj4rrEtnuN/VUS5D
+ mXq/VUOCqWBrfHWBH/y0NkbIuFYwrASFzO4RDPlsFMd0gnvU1A1jVl3pQbdhk9RXCn8W
+ VRYwVigSWNLcEIAE/OeFxwg1EIXabVgrEle5RLuIY4Lr/4AXwVcbpmEhLBulemFA+1Nv
+ PFDs49VljsfU0l2LD/hypUMMsyAt25ElcG1Ff2rz3AMiiAmTaV/Z4Q2smPE3S42uSciX
+ aLLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=9WRTk2qKZSHAajCuCCXxk0XLdeN2b2VtRN5am9g+/30=;
- b=oqjEcy6bvD5DgkiqwASWrGOQY4d5Feq32eRVwtjCHg6LH/RLG5kqf0BVnl6LA9R//d
- nah2vl8OoodgQP9LpJQpkD6HQhrYtnt9GDd4Pg+SI9m85ViUqwiteSIBZBt5NPXKgyNN
- y/stOlP7r8CzAM5EZTsHWo8oeDQqO/tWdZgf7oq4LhPHbP+V8l7+tMZPdfIRdBA0b6ce
- ck8bvM/kRgwBVVgdP4hI/FF+ssJGJkP1m+6Ftbfi85Her0cPpbbDx2zVV2FzmCldaKbg
- 7gDeFQFrKdfrJfmTj0N4C0BcynLYsXZXCG8vXE4clZ/1nzwQ7L4l3qnPaTLhAWhm9YAU
- U+JA==
-X-Gm-Message-State: AOAM532VLCVJjbpEYmG91D6vkKHn5ym3FLond+AtGZTM8C7gk7HaR8Gd
- tv5kc0EQxiRvM2OU0yFps62RbBDP/8g=
-X-Google-Smtp-Source: ABdhPJxuo9ZraRcrSQgT6ElwLdIuFOS63oyFW+L0Y/9a9JWxNd70eLSwy8Luxts0yBncVUImUtqXzw==
-X-Received: by 2002:a05:6638:3287:b0:331:ec7b:5883 with SMTP id
- f7-20020a056638328700b00331ec7b5883mr214267jav.19.1654643554013; 
- Tue, 07 Jun 2022 16:12:34 -0700 (PDT)
+ bh=viWOQiPFFhxj5p9Qc2TcMYQDWW/adNPeplj9ad7ZBLw=;
+ b=GBxv2rVFHQgs0yQ8bbkTu3RA1cn6OB4CY2wcnAGcYcFnnC7I7tC/xfXvMSHMwOmQON
+ ARoC/pMa19zxRkvERJElJCU8iraxC4SVSeFsmv5/4SXdBrd4RGBr5sH+/gIic+9+YAgA
+ h3E9ELC4dUGaGSc/IxKcE0TEsttYq5yZydzURgbnspk3omPFVSA3qBqN7zBk2cWg8QVc
+ 3zkcBKY1TScdCyAjwGaloY53Itt9D9XT+n65Z8Uv8Jxhl83JxfAqlfWmcDAkDFej+8k/
+ WwmTcUCNFGWytPiqRyrk+1GSOCHT6yhC/k8bBrnBj9IqDC9H0xH47D4OpdUXxEF0aUrJ
+ NzDQ==
+X-Gm-Message-State: AOAM533QTFzDaF8BRo48/5mzPzZ9Xad8qw0Y67NSy7aCgeicoyyxoDdS
+ y34/YtTIcthu+Iidsv68OLuyqeMDj2o=
+X-Google-Smtp-Source: ABdhPJx89yDtkOw2dw1HDaiKuCfjJyX76dhjkFu7W2DS3d4Yj+kYaBBGo+5m2iZfA1oDrWLf3pPe7w==
+X-Received: by 2002:a05:6e02:17c9:b0:2d1:a85f:7bd3 with SMTP id
+ z9-20020a056e0217c900b002d1a85f7bd3mr18498983ilu.92.1654644488642; 
+ Tue, 07 Jun 2022 16:28:08 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-113-86.hlrn.qwest.net.
  [71.218.113.86]) by smtp.gmail.com with ESMTPSA id
- p10-20020a92740a000000b002d1f0d4a9eesm7783317ilc.19.2022.06.07.16.12.33
+ g10-20020a02a08a000000b003314eada5b9sm7123338jah.14.2022.06.07.16.28.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 07 Jun 2022 16:12:33 -0700 (PDT)
+ Tue, 07 Jun 2022 16:28:08 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  7 Jun 2022 17:12:11 -0600
-Message-Id: <20220607231211.533086-1-james.hilliard1@gmail.com>
+Date: Tue,  7 Jun 2022 17:27:44 -0600
+Message-Id: <20220607232744.971937-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH buildroot-test 1/1] scripts/autobuild-run: add
- support for --branch option
+Subject: [Buildroot] [PATCH buildroot-test 1/1] scripts/autobuild-run: make
+ hung build timeout configurable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,66 +94,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In some cases it only makes sense to run tests against a specific
-branch, such as when testing new genrandconfig flags.
-
-Add a config option to override the branch selection.
+A reasonable value for this may vary depending on system load, specs
+and how many parallel builds are being run, so we should make it
+configurable.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- scripts/autobuild-run | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ scripts/autobuild-run | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 337644f..ceb9daf 100755
+index 337644f..cfd49ec 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -207,7 +207,7 @@ class SystemInfo:
- class Builder:
+@@ -120,9 +120,6 @@ else:
+     decode_bytes = _identity
+     encode_str = _identity
+ 
+-# A number of packages can take > 60mins of build time (e.g
+-# gst-ffmpeg, qt5webkit, mimic)
+-HUNG_BUILD_TIMEOUT = 120 # mins
+ VERSION = 1
+ 
+ def rm_ro(f, p, _):
+@@ -208,7 +205,7 @@ class Builder:
      def __init__(self, instance, njobs, sysinfo,
                   http_url, http_login, http_password,
--                 submitter, make_opts, nice, toolchains_csv,
-+                 submitter, make_opts, branch, nice, toolchains_csv,
-                  repo, upload, buildpid, debug):
+                  submitter, make_opts, nice, toolchains_csv,
+-                 repo, upload, buildpid, debug):
++                 repo, upload, buildpid, debug, hung_build_timeout):
          self.instance = instance
          self.njobs = njobs
-@@ -217,6 +217,7 @@ class Builder:
-         self.http_password = http_password
-         self.submitter = submitter
-         self.make_opts = make_opts
-+        self.branch = branch
-         self.nice = nice
-         self.toolchains_csv = toolchains_csv
-         self.repo = repo
-@@ -264,6 +265,8 @@ class Builder:
-         list. This way, branches with a higher weight are more likely to
-         be selected.
-         """
-+        if self.branch:
-+            return self.branch
-         csv_branches = []
-         with urlopen_closing(urlparse.urljoin(self.http_url, 'branches')) as r:
-             for l in r.readlines():
-@@ -802,6 +805,11 @@ def main():
-                         help="string of extra options to pass to Buildroot "
-                              "make, such as specific command wrappers",
+         self.sysinfo = sysinfo
+@@ -223,6 +220,7 @@ class Builder:
+         self.upload = upload
+         self.buildpid = buildpid
+         self.debug = debug
++        self.hung_build_timeout = hung_build_timeout
+         self.build_parallel = False
+ 
+         # frequently needed directories
+@@ -388,7 +386,7 @@ class Builder:
+             if os.path.exists(build_time_logfile):
+                 mtime = datetime.datetime.fromtimestamp(os.stat(build_time_logfile).st_mtime)
+ 
+-                if mtime < datetime.datetime.now() - datetime.timedelta(minutes=HUNG_BUILD_TIMEOUT):
++                if mtime < datetime.datetime.now() - datetime.timedelta(minutes=self.hung_build_timeout):
+                     if sub_proc.poll() is None:
+                         monitor_thread_hung_build_flag.set() # Used by do_build() to determine build hang
+                         log_write(self.log, "INFO: build hung")
+@@ -811,6 +809,11 @@ def main():
+     parser.add_argument("--debug", "-d",
+                         help="Send log output to stdout instead of log file",
                          type=str)
-+    parser.add_argument("--branch",
-+                        help="Restrict builds to a specific branch. "
-+                             "Useful for situations where it only makes sense "
-+                             "to run tests on a specific branch.",
-+                        type=str)
-     parser.add_argument("--pid-file",
-                         help="path to a file where to store the PID",
-                         type=pathlib.Path, default=pathlib.Path("/tmp/buildroot-autobuild.pid"))
-@@ -890,6 +898,7 @@ def main():
-             http_password = args.http_password,
-             submitter = args.submitter,
-             make_opts = (args.make_opts or ''),
-+            branch = args.branch,
-             nice = (args.nice or 0),
-             toolchains_csv = args.toolchains_csv,
++    parser.add_argument("--hung-build-timeout",
++                        help="A number of packages can take > 60mins of build "
++                             "time (e.g gst-ffmpeg, qt5webkit, mimic), sets "
++                             "timeout in minutes",
++                        type=int, default=120)
+     toolchains_csv = parser.add_mutually_exclusive_group(required=False)
+     toolchains_csv.add_argument("--toolchains-csv",
+                                 dest="toolchains_csv",
+@@ -895,7 +898,8 @@ def main():
              repo = args.repo,
+             upload = upload,
+             buildpid = buildpid,
+-            debug = args.debug)
++            debug = args.debug,
++            hung_build_timeout = args.hung_build_timeout)
+         p = multiprocessing.Process(target=builder.run_instance)
+         p.start()
+         processes.append(p)
 -- 
 2.25.1
 
