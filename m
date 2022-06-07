@@ -4,72 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EC45C43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 22:30:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22B9FC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 23:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B204E60F1E;
-	Tue,  7 Jun 2022 22:30:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C75160F1A;
+	Tue,  7 Jun 2022 23:12:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TOJS7ZhgV0C0; Tue,  7 Jun 2022 22:29:59 +0000 (UTC)
+	with ESMTP id 0WThUigG700W; Tue,  7 Jun 2022 23:12:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22D2B60E5B;
-	Tue,  7 Jun 2022 22:29:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9926E60F06;
+	Tue,  7 Jun 2022 23:12:37 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5BB791BF42D
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 22:29:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0908A1BF3FC
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 23:12:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 485E960E5B
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 22:29:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB5A260F06
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 23:12:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LQU3u2MUk5Tf for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 22:29:54 +0000 (UTC)
+ with ESMTP id y-RyB2r1WD8B for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 23:12:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com
- [IPv6:2607:f8b0:4864:20::22d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9C65D60D7B
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 22:29:54 +0000 (UTC)
-Received: by mail-oi1-x22d.google.com with SMTP id q184so8872137oia.1
- for <buildroot@buildroot.org>; Tue, 07 Jun 2022 15:29:54 -0700 (PDT)
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5310160B3B
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 23:12:35 +0000 (UTC)
+Received: by mail-io1-xd36.google.com with SMTP id z197so12967697iof.1
+ for <buildroot@buildroot.org>; Tue, 07 Jun 2022 16:12:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=ReKiLpvYgRq1eYGHvHbbMqCwzU9L00n/4y0vWG/HY7k=;
- b=fAZMpLcWY+TU3Eimbsxg7eCHofDC33kYannk/p/W10bUrt7DH2extL8eQ1Z2CzFKSO
- jFzQwnq4NXtJPTW2id1isSbz+EXWVkh1gzeRbMxjWOrEF8h8Dqwlm5OsLE5EZ+tYcbrH
- YJ4p5L017X8Vv8++obs+YSdNm9WArjriu6KNiLTJb1s5KJclRYHJbZd3aS1haMDv3mbg
- kBOfW1JpLs7On8YhgfuGBF/HwnImuVVohvW/hyFFPH0iL1UytSx7k0Nan2ZM7tXGk8P2
- c4u45u5s2CSxpRmZh/Qm2RbECtQ27pFBriPxl6YlLv5vs5ksYU+gxBx1QsV5YjEwgttK
- Kkbg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=9WRTk2qKZSHAajCuCCXxk0XLdeN2b2VtRN5am9g+/30=;
+ b=l7eX29qtoAESoWSKv1xGLIYs5Q1WRi6EHyP0nCcjY8MK0Qq1f9akRzoAbCVY5b3BXj
+ J0f9ns3qH5UpG0ap43V/hKZtKmPmba46AaT/4wWy+bO4s1QQ9Q8eTwlCFSfQhYfJaqTZ
+ xY+xkTp+k7NCan8U8ZWX1kuRuy7oxLLdxxSMzDxDDXU/Y3g7rtW1Mi4RI9mzwv6aUx4S
+ Fi+hpDcS5pUR0IFCECr+Y+2RRtOOHj/PsF+VutsXeTwMiWU1bdbE3Y0bd3j7ttCo9SXx
+ m5K9GUwDVN903ci6ohn5HXrxYRdCQ5jAIc5pk5uu3iUZGwqP/pQm9sbVsjZl6H9PQV5K
+ 5WxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=ReKiLpvYgRq1eYGHvHbbMqCwzU9L00n/4y0vWG/HY7k=;
- b=gSxY90o9WvxmXjvKZ8eulEPaPSsmcxqCwyXDO4RzdyhlyEUVrObFWMk9iII1R6+hgX
- b8IEkhySbgS4mbcln/1SLhzv+E4qBFwRM2/M0NwXWTfE8LLwOAuTqvHY75bVfdgOW8mI
- p7APzg/BPrWcAqY77xaQjl2L41kmvsVd46v4iglifIG9FjHww8AfE8hgFGOpi6rrZPv3
- FVlHBtFiuSyapEaXfsZlVvJWBSn54YCFV1Qd3r8OkiR7kTEabzamhmzVznJusdiLyBiJ
- 2kMzFfLL+bOwp0g35yj+s2i8PbWpNwIwDtfXiZTa7EBo2HCNFsx9FOEJqJ3INbhBmGl7
- 5NdA==
-X-Gm-Message-State: AOAM533EllrrNmWOoKr0OIGVkLl4ntgveP7guxeDuk+f1VB5P4N9Snux
- y7y0jco/vF7FozJvLo0v7lFwiyQkWpNguUDwO7yT0kqXDnk=
-X-Google-Smtp-Source: ABdhPJz79Q+jpEgfTXlqR4hlANJ6srJeo6BBGDqEwXWIpyPEy789FSS68FTVdSOJwK1E8lmn56vMsNaqR/4yrTv3AmU=
-X-Received: by 2002:a05:6808:114f:b0:32b:1be0:2316 with SMTP id
- u15-20020a056808114f00b0032b1be02316mr679086oiu.200.1654640993419; Tue, 07
- Jun 2022 15:29:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220413212745.480101-1-james.hilliard1@gmail.com>
- <20220608000128.046574c1@windsurf>
-In-Reply-To: <20220608000128.046574c1@windsurf>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=9WRTk2qKZSHAajCuCCXxk0XLdeN2b2VtRN5am9g+/30=;
+ b=oqjEcy6bvD5DgkiqwASWrGOQY4d5Feq32eRVwtjCHg6LH/RLG5kqf0BVnl6LA9R//d
+ nah2vl8OoodgQP9LpJQpkD6HQhrYtnt9GDd4Pg+SI9m85ViUqwiteSIBZBt5NPXKgyNN
+ y/stOlP7r8CzAM5EZTsHWo8oeDQqO/tWdZgf7oq4LhPHbP+V8l7+tMZPdfIRdBA0b6ce
+ ck8bvM/kRgwBVVgdP4hI/FF+ssJGJkP1m+6Ftbfi85Her0cPpbbDx2zVV2FzmCldaKbg
+ 7gDeFQFrKdfrJfmTj0N4C0BcynLYsXZXCG8vXE4clZ/1nzwQ7L4l3qnPaTLhAWhm9YAU
+ U+JA==
+X-Gm-Message-State: AOAM532VLCVJjbpEYmG91D6vkKHn5ym3FLond+AtGZTM8C7gk7HaR8Gd
+ tv5kc0EQxiRvM2OU0yFps62RbBDP/8g=
+X-Google-Smtp-Source: ABdhPJxuo9ZraRcrSQgT6ElwLdIuFOS63oyFW+L0Y/9a9JWxNd70eLSwy8Luxts0yBncVUImUtqXzw==
+X-Received: by 2002:a05:6638:3287:b0:331:ec7b:5883 with SMTP id
+ f7-20020a056638328700b00331ec7b5883mr214267jav.19.1654643554013; 
+ Tue, 07 Jun 2022 16:12:34 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-113-86.hlrn.qwest.net.
+ [71.218.113.86]) by smtp.gmail.com with ESMTPSA id
+ p10-20020a92740a000000b002d1f0d4a9eesm7783317ilc.19.2022.06.07.16.12.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 07 Jun 2022 16:12:33 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 7 Jun 2022 16:29:41 -0600
-Message-ID: <CADvTj4oXWedG7r8NJvHPipBLToK=gMNdMpTe9=nK3jC-OEoqZg@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH v3 1/1] scripts/autobuild-run: add
- --no-toolchains-csv option and drop docopt
+To: buildroot@buildroot.org
+Date: Tue,  7 Jun 2022 17:12:11 -0600
+Message-Id: <20220607231211.533086-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH buildroot-test 1/1] scripts/autobuild-run: add
+ support for --branch option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,85 +85,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Jun 7, 2022 at 4:01 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> On Wed, 13 Apr 2022 15:27:45 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > Since docopt is unmaintained and less flexible than argparse lets
-> > drop it and migrate to argparse.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> > Changes v2 -> v3:
-> >   - suppress --no-toolchains-csv default output from help
-> > Changes v1 -> v2:
-> >   - fix configparser
-> > ---
-> >  scripts/autobuild-run      | 202 ++++++-------
-> >  scripts/docopt.LICENSE-MIT |  23 --
-> >  scripts/docopt.py          | 581 -------------------------------------
-> >  3 files changed, 93 insertions(+), 713 deletions(-)
-> >  delete mode 100644 scripts/docopt.LICENSE-MIT
-> >  delete mode 100644 scripts/docopt.py
->
-> I have finally applied this patch, but after splitting it into two
-> commits:
->
->  * One implementing the docopt -> argparse migration
->
->  * One implementing the --no-toolchains-csv option
->
-> Also, the --no-toolchains-csv option of utils/genrandconfig did not
-> exist back in the 2022.02.x branch, so when autobuild-run is executed
-> with --no-toolchains-csv, it never built any configuration on
-> 2022.02.x, which is problematic.
+In some cases it only makes sense to run tests against a specific
+branch, such as when testing new genrandconfig flags.
 
-I've been running autobuilders restricted to master at the moment since
-the other branches were rather broken anyways with full package randomization.
+Add a config option to override the branch selection.
 
->
-> I worked this around by doing a special case:
->
->   https://git.buildroot.org/buildroot-test/commit/?id=cae22243b75f7766095cbef196016b3b3143b677
->
-> I have now deployed the new script on two of the autobuilder instances
-> that I manage (gcc159 and gcc160).
->
-> Could you on your side also update to use the latest version of
-> autobuild-run, so that we are aligned?
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ scripts/autobuild-run | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Yeah, I'll give that a try. May keep the master restriction in place
-for a little
-since the full randomization triggered a lot of errors that weren't regressions
-so much as things that just didn't have good coverage.
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 337644f..ceb9daf 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -207,7 +207,7 @@ class SystemInfo:
+ class Builder:
+     def __init__(self, instance, njobs, sysinfo,
+                  http_url, http_login, http_password,
+-                 submitter, make_opts, nice, toolchains_csv,
++                 submitter, make_opts, branch, nice, toolchains_csv,
+                  repo, upload, buildpid, debug):
+         self.instance = instance
+         self.njobs = njobs
+@@ -217,6 +217,7 @@ class Builder:
+         self.http_password = http_password
+         self.submitter = submitter
+         self.make_opts = make_opts
++        self.branch = branch
+         self.nice = nice
+         self.toolchains_csv = toolchains_csv
+         self.repo = repo
+@@ -264,6 +265,8 @@ class Builder:
+         list. This way, branches with a higher weight are more likely to
+         be selected.
+         """
++        if self.branch:
++            return self.branch
+         csv_branches = []
+         with urlopen_closing(urlparse.urljoin(self.http_url, 'branches')) as r:
+             for l in r.readlines():
+@@ -802,6 +805,11 @@ def main():
+                         help="string of extra options to pass to Buildroot "
+                              "make, such as specific command wrappers",
+                         type=str)
++    parser.add_argument("--branch",
++                        help="Restrict builds to a specific branch. "
++                             "Useful for situations where it only makes sense "
++                             "to run tests on a specific branch.",
++                        type=str)
+     parser.add_argument("--pid-file",
+                         help="path to a file where to store the PID",
+                         type=pathlib.Path, default=pathlib.Path("/tmp/buildroot-autobuild.pid"))
+@@ -890,6 +898,7 @@ def main():
+             http_password = args.http_password,
+             submitter = args.submitter,
+             make_opts = (args.make_opts or ''),
++            branch = args.branch,
+             nice = (args.nice or 0),
+             toolchains_csv = args.toolchains_csv,
+             repo = args.repo,
+-- 
+2.25.1
 
->
-> Thanks a lot for this work, it has been extremely useful to find more
-> problematic configurations!
-
-I think this patch should make it easier to find problematic configurations
-as well, right now there seems to be a heavy bias towards selecting packages
-with very few dependencies:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220514214612.3221647-1-james.hilliard1@gmail.com/
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
