@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C533EC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 14:07:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70BEBC43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 14:07:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 82C28613FB;
-	Tue,  7 Jun 2022 14:07:08 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0x98ndKngPlu; Tue,  7 Jun 2022 14:07:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9665E613F8;
-	Tue,  7 Jun 2022 14:07:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5597B1BF397
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:05:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5335A4249D
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:05:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A57E424A7;
+	Tue,  7 Jun 2022 14:07:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id diy0WZtTySDQ for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8iCo0K2BgpTY; Tue,  7 Jun 2022 14:07:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07B88424A0;
+	Tue,  7 Jun 2022 14:07:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 591B41BF9B4
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:05:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 497688435C
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:05:57 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SM90z8yjM_Gq for <buildroot@lists.busybox.net>;
  Tue,  7 Jun 2022 14:05:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A999441C28
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE59A8431F
  for <buildroot@buildroot.org>; Tue,  7 Jun 2022 14:05:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1AA1686ABC; Tue,  7 Jun 2022 13:54:03 +0000 (UTC)
+ id 23A2786749; Tue,  7 Jun 2022 13:54:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Jun 2022 15:57:01 +0200
+Date: Tue, 7 Jun 2022 15:58:07 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2a1e735a39f89c08dc6e293906c95740e3a320c0
-X-Git-Newrev: d36366cb36fef4706d2f85de3be35243b5fc977c
+X-Git-Oldrev: d36366cb36fef4706d2f85de3be35243b5fc977c
+X-Git-Newrev: dd935bd447c7284222cb3f69bd9f7f5c9e04c70f
 X-Patchwork-Hint: ignore
-Message-Id: <20220607135403.1AA1686ABC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] toolchain/Config.in:
- sh4{eb, a, aeb} are affected by GCC bug 101737
+Message-Id: <20220607135403.23A2786749@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/samba4: needs
+ iconv.h
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +59,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d36366cb36fef4706d2f85de3be35243b5fc977c
+commit: https://git.buildroot.net/buildroot/commit/?id=dd935bd447c7284222cb3f69bd9f7f5c9e04c70f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-pixman fails to build with BR2_OPTIMIZE_S on sh4{eb,a,aeb}:
+samba4 needs iconv.h since bump to version 4.15.3 in commit
+d33ad03e75b89feb97a7edeba3156fa2ac417b06 and
+https://gitlab.com/samba-team/samba/-/commit/fc51b38ed8b7ff239db82d4d2d52f6332910ca97:
 
-In file included from pixman-fast-path.c:33:
-pixman-fast-path.c: In function 'fast_composite_scaled_nearest_8888_565_normal_OVER':
-pixman-inlines.h:586:1: internal compiler error: Segmentation fault
-  586 | }
-      | ^
+../../source3/lib/netapi/examples/common.c:13:10: fatal error: iconv.h: No such file or directory
+   13 | #include <iconv.h>
+      |          ^~~~~~~~~
 
-Since all SuperH variants are affected, use BR2_sh instead of BR2_sh4.
+Strangely enough, there is no autobuilder failures.
 
 Fixes:
- - http://autobuild.buildroot.org/results/c9d35d5975311a191dfbe12291398503987e804e
- - http://autobuild.buildroot.org/results/d34b8672f6211d60af4122bdd94fa8c2f4f4bf6a
- - http://autobuild.buildroot.org/results/933c4a2e73c987573ecc97172f442b78199462d5
+ - https://bugs.buildroot.org/show_bug.cgi?id=14821
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1917fe29839c79f92e0a1e307768356c0076b62b)
+(cherry picked from commit 6a1331ba01b146f4c3a29e0d604e92cf676a46f8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/samba4/Config.in | 1 +
+ package/samba4/samba4.mk | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index d2c81217c8..0e9b2503c1 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -197,7 +197,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_99140
- # still exists in gcc = 11.1.0
- config BR2_TOOLCHAIN_HAS_GCC_BUG_101737
- 	bool
--	default y if BR2_sh4
-+	default y if BR2_sh
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index e114a7e13f..5907bdc478 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -16,6 +16,7 @@ config BR2_PACKAGE_SAMBA4
+ 	select BR2_PACKAGE_CMOCKA
+ 	select BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_ZLIB
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index df3a7e58c8..c90fdd006c 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -39,6 +39,11 @@ else
+ SAMBA4_CONF_OPTS += --disable-python
+ endif
  
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101915
- # ICE: in extract_insn, at recog.c:2294 on microblaze.
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++SAMBA4_DEPENDENCIES += libiconv
++SAMBA4_LDFLAGS += -liconv
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ SAMBA4_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+ SAMBA4_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
