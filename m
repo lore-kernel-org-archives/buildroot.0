@@ -1,53 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61F25C43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 12:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D010AC43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 12:23:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 104E4415C6;
-	Tue,  7 Jun 2022 12:23:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83EA3410C5;
+	Tue,  7 Jun 2022 12:23:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CPbNyrM23PNt; Tue,  7 Jun 2022 12:23:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JU7po3ZwbPvU; Tue,  7 Jun 2022 12:23:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 040C0409E9;
-	Tue,  7 Jun 2022 12:23:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6463C1BF33A
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 12:23:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 81DF6405BF;
+	Tue,  7 Jun 2022 12:23:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B7E21BF33A
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 12:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 538B560F30
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 12:23:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 37FF48422A
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 12:23:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4pPcrl3BUJDj for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 12:23:15 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9020B60BE8
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 12:23:15 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5462540002;
- Tue,  7 Jun 2022 12:23:12 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nyYEp-0002Dl-JO; Tue, 07 Jun 2022 14:23:11 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4-rfFs4P6tJD for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 12:23:24 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2FEEE8420A
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 12:23:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id C048B86782; Tue,  7 Jun 2022 12:11:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220531194615.468956-1-fontaine.fabrice@gmail.com>
-Date: Tue, 07 Jun 2022 14:23:11 +0200
-In-Reply-To: <20220531194615.468956-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 31 May 2022 21:46:15 +0200")
-Message-ID: <87tu8wwtlc.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/rauc: fix build
+To: buildroot@buildroot.org
+Date: Tue, 7 Jun 2022 11:44:24 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: f495022ee059cfc2f6c59a74a16a2c2e6b56e875
+X-Git-Newrev: e3b00c58d1e41f15459d33c732563761d7b5cdfd
+X-Patchwork-Hint: ignore
+Message-Id: <20220607121132.C048B86782@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/webkitgtk: bump
+ to version 2.36.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,34 +53,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andrey Yurovsky <yurovsky@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e3b00c58d1e41f15459d33c732563761d7b5cdfd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fix the following build failure raised since bump to version 1.5 in
- > commit 41bbe8df540e2c630ad04f8db7383a7e7705f368 and
- > https://github.com/rauc/rauc/commit/be55282d71d967dcc0cf48303f8245cbc8fff053:
+Bugfix release, with the usual flurry of correctness fixes, and a patch
+to fix the build with the accessibility support disabled. Release notes:
 
- > In file included from /nvmedata/autobuild/instance-22/output-1/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib.h:62,
- >                  from src/verity_hash.c:26:
- > src/verity_hash.c: In function 'verify_zero':
- > src/verity_hash.c:69:55: error: expected ')' before 'PRIu64'
- >    69 |    g_message("Spare area is not zeroed at position %" PRIu64 ".",
- >       |                                                       ^~~~~~
+  https://webkitgtk.org/2022/04/21/webkitgtk2.36.1-released.html
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/1a093c0e194a061836884419d2f50506105db01e
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit ab1157bbe4d31d76241d8922a995474b85c768ac)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 38068745ee..00a342ed7f 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.36.0.tar.xz.sums
+-md5  1e3fe866ab6e41e7ec3deb80bd5b3a85  webkitgtk-2.36.0.tar.xz
+-sha1  5b90bc59c2f442223de1a4d9dc8ff604888abb3c  webkitgtk-2.36.0.tar.xz
+-sha256  b877cca1f105235f5dd57c7ac2b2c2be3c6b691ff444f93925c7254cf156c64d  webkitgtk-2.36.0.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.36.1.tar.xz.sums
++md5  e6100df7f82d95a4e65176b10f5ab011  webkitgtk-2.36.1.tar.xz
++sha1  36a95b906e54bcf94d2be04e1cbaac3584da7eb1  webkitgtk-2.36.1.tar.xz
++sha256  0149ea5fb1d20f2a9981677d45c952a047330001ea24a8dc29035239f12c0c8f  webkitgtk-2.36.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index eca175d1bd..9e85c5b78f 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.36.0
++WEBKITGTK_VERSION = 2.36.1
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
