@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C3A0C43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 12:17:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28C33C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 12:17:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EED806140F;
-	Tue,  7 Jun 2022 12:17:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D69E3613FB;
+	Tue,  7 Jun 2022 12:17:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MJUJPj6I-RsR; Tue,  7 Jun 2022 12:17:16 +0000 (UTC)
+	with ESMTP id DSnL9bnSgvYw; Tue,  7 Jun 2022 12:17:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66CBF60BE8;
-	Tue,  7 Jun 2022 12:17:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 204751BF33A
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 12:17:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F110E6141C;
+	Tue,  7 Jun 2022 12:17:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D3D411BF33A
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 12:17:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0A146410C6
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 12:17:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3201843B9
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 12:17:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5aNa3zxfTB0q for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 12:17:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3uhQoNDVL8i5 for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 12:17:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 02AE0405BF
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 12:17:02 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 63EB4843AF
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 12:17:12 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 81DDD20003;
- Tue,  7 Jun 2022 12:16:57 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 69CC660013;
+ Tue,  7 Jun 2022 12:17:09 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1nyY8m-0001sc-Pq; Tue, 07 Jun 2022 14:16:56 +0200
+ id 1nyY8y-0001t8-2E; Tue, 07 Jun 2022 14:17:08 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Adrian Perez de Castro <aperez@igalia.com>
-References: <20220530215627.1441783-1-aperez@igalia.com>
-Date: Tue, 07 Jun 2022 14:16:56 +0200
-In-Reply-To: <20220530215627.1441783-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Tue, 31 May 2022 00:56:27 +0300")
-Message-ID: <87bkv4y8g7.fsf@dell.be.48ers.dk>
+References: <20220530220141.1445578-1-aperez@igalia.com>
+Date: Tue, 07 Jun 2022 14:17:08 +0200
+In-Reply-To: <20220530220141.1445578-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Tue, 31 May 2022 01:01:41 +0300")
+Message-ID: <877d5sy8fv.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
+Subject: Re: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
  version 2.36.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -75,18 +75,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
  > Release notes:
 
- >   https://wpewebkit.org/release/wpewebkit-2.36.2.html
- >   https://wpewebkit.org/release/wpewebkit-2.36.3.html
+ >   https://webkitgtk.org/2022/05/28/webkitgtk2.36.3-released.html
+ >   https://webkitgtk.org/2022/05/18/webkitgtk2.36.2-released.html
 
  > Accompanying security advisory:
 
- >   https://wpewebkit.org/security/WSA-2022-0005.html
+ >   https://webkitgtk.org/security/WSA-2022-0005.html
 
  > This also imports a build fix which has not made it into the release.
 
  > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Committed to 2021.02.x and 2022.02.x, thanks.
+Committed to 2022.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
