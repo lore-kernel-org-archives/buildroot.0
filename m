@@ -1,54 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29612C43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 18:47:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A721AC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 19:08:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8DF5418EB;
-	Tue,  7 Jun 2022 18:47:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28C64826B0;
+	Tue,  7 Jun 2022 19:08:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KDeTadh-vWPp; Tue,  7 Jun 2022 18:47:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XzWE-f98fs7U; Tue,  7 Jun 2022 19:08:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1F53418DC;
-	Tue,  7 Jun 2022 18:47:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C6C7C1BF42D
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 18:47:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49F2D81DCB;
+	Tue,  7 Jun 2022 19:08:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 694261BF475
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C30C04055A
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 18:47:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5929F81DCB
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 19:08:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mWMQtQtEVRkT for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 18:47:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D110140570
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 18:47:24 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6CEAA60002;
- Tue,  7 Jun 2022 18:47:21 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nyeEa-000CLL-7J; Tue, 07 Jun 2022 20:47:20 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qyaOTwPqS6Vx for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 19:08:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 95B4381C40
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 19:08:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 8718586B8D; Tue,  7 Jun 2022 18:56:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220521035129.493797-1-christian@paral.in>
- <20220604163404.GO427639@scaer>
-Date: Tue, 07 Jun 2022 20:47:20 +0200
-In-Reply-To: <20220604163404.GO427639@scaer> (Yann E. MORIN's message of "Sat, 
- 4 Jun 2022 18:34:04 +0200")
-Message-ID: <87o7z448g7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/go: set goos variable to linux
+To: buildroot@buildroot.org
+Date: Tue, 7 Jun 2022 21:06:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 487ac12ff993e0e401aaf2e15272901d2b280fd5
+X-Git-Newrev: 5da5a83142ab0d231b6346f4784af0366a475130
+X-Patchwork-Hint: ignore
+Message-Id: <20220607185659.8718586B8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Kickoff 2022.08 cycle
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,33 +52,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5da5a83142ab0d231b6346f4784af0366a475130
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Christian, All,
- > On 2022-05-20 20:51 -0700, Christian Stewart via buildroot spake thusly:
- >> This commit fixes a build error when the host environment has GOOS set to
- >> something other than "linux." For example,
- >> 
- >> cd ./buildroot
- >> GOOS="js" make
- >> 
- >> This will cause a build failure. Override GOOS to be either empty for host
- >> packages or set to "linux" for target packages.
- >> 
- >> Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Applied to master, thanks.
-
-Committed to 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index 27b8051710..4305c8c3dd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,7 +92,7 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2022.05
++export BR2_VERSION := 2022.08-git
+ # Actual time the release is cut (for reproducible builds)
+ BR2_VERSION_EPOCH = 1654546000
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
