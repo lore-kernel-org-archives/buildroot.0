@@ -1,80 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89108C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 20:31:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53724C43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 20:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED7CC8408D;
-	Tue,  7 Jun 2022 20:31:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E2D5D40598;
+	Tue,  7 Jun 2022 20:36:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dxu4qmWmpJBs; Tue,  7 Jun 2022 20:31:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UiHgFljiF1Ub; Tue,  7 Jun 2022 20:36:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C6FB83FEB;
-	Tue,  7 Jun 2022 20:31:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 60B6F1BF25B
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 20:31:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F1EFE40374;
+	Tue,  7 Jun 2022 20:36:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BFE4E1BF25B
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 20:36:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5DA1083FEB
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 20:31:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA92D60B60
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 20:36:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kC_ol8DTamB3 for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 20:31:18 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1491883FA8
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 20:31:17 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id d14so16665947wra.10
- for <buildroot@buildroot.org>; Tue, 07 Jun 2022 13:31:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=JXc8txSnFdA2GbyHHMITJpwzjBEbItal6z3Zg6GrCsc=;
- b=NAK6zOzcy+rDz+r3Q133a1JaQIvVtG5q/dsNTxeMg2SfCwXgq6NlrBb3GW/7ly+V8T
- PbZvzH5Cmv4nLseHyGh30+vIRN8RfWplt7BwgHgbo/mDybpONygGeKv/aQYxQZneqCAH
- 4XMbNVbdWoXbdGELf6Iw75B0x3+48cagzjdJDD8CiOcspSWI0i9wjtucEd/gvFm9uxuu
- fkWw6P2OwccZGua6U3I8KDYj5idQ/bnUfneq6cHQuOa2J8IngrGVHyz7aMbby20WUtfm
- v0SH8193OHLiG9P9PoSp/mq0ZvgTw1Ag3uA3/R7um8DnaUHXMTqlztLU8O0dzFsL47WK
- /2NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=JXc8txSnFdA2GbyHHMITJpwzjBEbItal6z3Zg6GrCsc=;
- b=dBOcNEKuqVVrVFjHVeB/vI8weEGwrvB041JgEPLtc02jyJGaENpwPvZjZNJbjPAf+q
- vnsrZEofbBwgocGxgbjNDd/ZqIaFnpeeZBsO31zCBEyAWxj8lxKo0/AGtdjmI8AVbkyC
- ODqj1HPUrkKzasFn6qhQthI2JdTzVCfQary0RQXsIzfsQWnFEvQnlRape4SMBzTNU0Fz
- +a5wKspESFTj/iY0O2Lm2QUbnSOPphq9FgrtWmdMLOJoe3DQ+ggOYohUAQF1dp/XbPcm
- KG3iEsheJv2vrq3NMhQnoFbNy7SJMwc2vAkHoB0+pkRV5Bdd67xMKFN9DrtO6Nq6lgaa
- M9FQ==
-X-Gm-Message-State: AOAM532TPDBZ3MvZ+ChhfvxQP72hcmA4f8wPMLP6uTi2inOOweEA0m70
- IYozQcDGCFKLKS9aOmn5gNEQWSt4ITs=
-X-Google-Smtp-Source: ABdhPJzjHhPMsOW1zSJe6wkzPAiSsMNTGpAD8G5P/oNCZe2KgBIdhJH9COmXEA41BN4XLw4Xnew22w==
-X-Received: by 2002:adf:db8b:0:b0:20f:fb4f:c3da with SMTP id
- u11-20020adfdb8b000000b0020ffb4fc3damr29963706wri.163.1654633875944; 
- Tue, 07 Jun 2022 13:31:15 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- n8-20020a05600c4f8800b0039c325eaff2sm18225855wmq.26.2022.06.07.13.31.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 07 Jun 2022 13:31:15 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  7 Jun 2022 22:28:28 +0200
-Message-Id: <20220607202828.1130778-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B2-OVXYQc6I7 for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 20:36:08 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6E4A460A9B
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 20:36:08 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 2459B240006;
+ Tue,  7 Jun 2022 20:36:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1654634165;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=u5/FPveLK8d2DVb/uG1yZLWtgIrGVa3MYMcspE95zsM=;
+ b=WjwFzLoFZmLvpyiuGZj2D0pM9Zc5/6EGMSDjrb+on5VcLK+9BTNQCih7XwuZ8isY/ejnBd
+ f9egjWiDIibNJfTWbJHmYTb6x7eqi7FGRapdQbpSi1sxO9qns1QXsItwmAH5MkCf/GbLQe
+ 9kITYzW+q9SCGYvtc/SZCDrOTqyJHfYEGRTj3Sj2Be2LJnyagdfPKDh2oZ15FgfsxnxIS6
+ UU6z3V8oCBMDB52mBBhQfS6ZUzbBfybsjIYnO7mQR+Pu56uvcFUdaG2voYXsv0osBWH7ZQ
+ tLp6Egr7MBZw7oJbFcbWP+wOYcI8CGtPdYdpNhK9CX2IJwd3GdkX77G++WzC5w==
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Romain Naour <romain.naour@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
+Date: Tue,  7 Jun 2022 22:35:41 +0200
+Message-Id: <20220607203553.3307479-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/jpeg: SIMD needs VSX with little
- endian
+Subject: [Buildroot] [PATCH 00/11] Another set of Bootlin toolchain
+ integration improvements
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,44 +68,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SIMD needs VSX with little endian to avoid the following build failure:
+Hello,
 
-In file included from /nvmedata/autobuild/instance-12/output-1/build/jpeg-turbo-2.1.3/simd/powerpc/jccolor-altivec.c:25:
-/nvmedata/autobuild/instance-12/output-1/build/jpeg-turbo-2.1.3/simd/powerpc/jccolext-altivec.c: In function 'jsimd_rgb_ycc_convert_altivec':
-/nvmedata/autobuild/instance-12/output-1/build/jpeg-turbo-2.1.3/simd/powerpc/jsimd_altivec.h:93:26: warning: implicit declaration of function 'vec_vsx_ld'; did you mean 'vec_vsl'? [-Wimplicit-function-declaration]
-   93 | #define VEC_LD(a, b)     vec_vsx_ld(a, b)
-      |                          ^~~~~~~~~~
+Patches 1 to 9 in this series are fixes for autobuilder
+issues. Patches 10 and 11 are improvements.
 
-Fixes:
- - http://autobuild.buildroot.org/results/be6d5ad0cee4ee19eb25e595d44555a1af6e073b
+Patches 1 and 2 fix the issue of RISC-V 64-bit toolchains being
+available on MMU-less architectures, even though they are not
+supported by the toolchain.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/jpeg/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Patches 3 and 4 fix the issue of ARM little endian toolchains being
+selectable for ARM big endian architectures.
 
-diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
-index 0a786060d7..371f89aa49 100644
---- a/package/jpeg/Config.in
-+++ b/package/jpeg/Config.in
-@@ -3,7 +3,8 @@ config BR2_PACKAGE_JPEG_SIMD_SUPPORT
- 	bool
- 	default y if BR2_X86_CPU_HAS_MMX
- 	default y if BR2_ARM_CPU_HAS_NEON
--	default y if BR2_POWERPC_CPU_HAS_ALTIVEC
-+	default y if BR2_POWERPC_CPU_HAS_ALTIVEC && !BR2_powerpc64le
-+	default y if BR2_POWERPC_CPU_HAS_VSX && BR2_powerpc64le
- 	default y if BR2_aarch64 || BR2_aarch64_be
- 
- config BR2_PACKAGE_JPEG
+Patches 5 and 6 fix the issue of i686 toolchains being used for < i686
+platforms.
+
+Patches 7, 8 and 9 fix the issue of an error when trying to copy
+gdbserver, with toolchains that don't have gdbserver.
+
+Patches 10 and 11 add support for the ARMv7 big-endian toolchains
+provided by toolchains.bootlin.com.
+
+Thanks!
+
+Thomas
+
+Thomas Petazzoni (11):
+  support/scripts/gen-bootlin-toolchains: fix RISC-V 64-bit toolchain
+    description
+  support/testing,toolchain/toolchain-external/toolchain-external-bootlin:
+    regenerate with latest gen-bootlin-toolchains script
+  support/scripts/gen-bootlin-toolchains: improve dependencies of ARM
+    toolchains
+  toolchain/toolchain-external/toolchain-external-bootlin: regenerate
+    with BR2_ARM dependency
+  support/scripts/gen-bootlin-toolchains: adjust dependencies of i686
+    toolchains
+  toolchain/toolchain-external/toolchain-external-bootlin: regenerate
+    after i686 toolchain dependency fixes
+  toolchain/toolchain-external: add
+    BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER option
+  support/scripts/gen-bootlin-toolchains: make use of
+    BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
+  toolchain/toolchain-external/toolchain-external-bootlin: regenerate
+    with BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
+  support/scripts/gen-bootlin-toolchains: add support for ARMv7 big
+    endian toolchain
+  support/testing,toolchain/toolchain-external/toolchain-external-bootlin:
+    regenerate with ARMv7 big endian toolchain
+
+ support/scripts/gen-bootlin-toolchains        |  34 ++-
+ .../tests/toolchain/test_external_bootlin.py  | 102 ++++++++
+ toolchain/toolchain-external/Config.in        |   4 +
+ .../Config.in.options                         | 233 +++++++++++++++++-
+ .../toolchain-external-bootlin.hash           |  12 +
+ .../toolchain-external-bootlin.mk             |  36 +++
+ 6 files changed, 407 insertions(+), 14 deletions(-)
+
 -- 
-2.35.1
+2.35.3
 
 _______________________________________________
 buildroot mailing list
