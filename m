@@ -1,65 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EF73C43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 14:22:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CCA6C43334
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 15:01:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F7AC424A0;
-	Tue,  7 Jun 2022 14:22:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B91786100D;
+	Tue,  7 Jun 2022 15:01:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yy-ELdSuUJ4K; Tue,  7 Jun 2022 14:22:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id orfhS7-93Jz7; Tue,  7 Jun 2022 15:01:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67B4D42490;
-	Tue,  7 Jun 2022 14:22:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6498A60FF3;
+	Tue,  7 Jun 2022 15:01:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DB6541BF397
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:22:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BC3F81BF397
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 15:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D830660FAB
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:22:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A30576100F
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 15:01:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=dawncrow.de
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rHfoeH_bPNuU for <buildroot@lists.busybox.net>;
- Tue,  7 Jun 2022 14:22:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de
- [85.215.255.24])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8F00D60FA6
- for <buildroot@buildroot.org>; Tue,  7 Jun 2022 14:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1654611728;
- s=strato-dkim-0002; d=dawncrow.de;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=+JkYqVawh5CPxfZbqPfTE18vwp+lm2trGMAw2f87oFk=;
- b=iugDVbTir5yEV5K6XgMLk7tJ5u0mDf0fvJlz/nog4n1lrpZ3uuxmqPjOBP/kSKXQM6
- Gx960P/qYhtTMtlCatjqO8s1KUlXQqocYS6B0IWF/PaCLFEru0H5YmozmKf1lFgsWy34
- fa1KC958Fl3pIsis/zVXjP4NXi+U4EYItnzg8IfzDE9jN2Y8o8QHtm1j1gyGk2kXcsBp
- WBjB6059ifYU9qp6J/cAGGRklSiFhL/REBLS77+WL8QUf/3cHWCTk/mZWMXkU/dvevZ8
- vw09AdwdmSWircrsX7aUykSBmtattc/Gu8DTfFYhXO1EQ/8aO/BSvudILJ+msS5jDLLA
- 5x2w==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":ImkWY2CseuihIZy6ZWWciR6unPhpN+aXzZGGjY6ptdusOK7nWzzuvt/yikxt/E0="
-X-RZG-CLASS-ID: mo00
-Received: from tesla.fritz.box by smtp.strato.de (RZmta 47.45.0 DYNA|AUTH)
- with ESMTPSA id Q06403y57EM8Dxv
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
- (Client did not present a certificate) for <buildroot@buildroot.org>;
- Tue, 7 Jun 2022 16:22:08 +0200 (CEST)
-From: =?UTF-8?q?Andr=C3=A9=20Zwing?= <nerv@dawncrow.de>
-To: buildroot@buildroot.org
-Date: Tue,  7 Jun 2022 16:22:05 +0200
-Message-Id: <20220607142205.248102-1-nerv@dawncrow.de>
-X-Mailer: git-send-email 2.25.1
+ with ESMTP id 96e0O1iAkmEl for <buildroot@lists.busybox.net>;
+ Tue,  7 Jun 2022 15:01:05 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9915060FAB
+ for <buildroot@buildroot.org>; Tue,  7 Jun 2022 15:01:05 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id o7so2476567eja.1
+ for <buildroot@buildroot.org>; Tue, 07 Jun 2022 08:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=3oQtiiRnk0V4EQgxNX2LLm6qAzLqpYKDwRlEpFYGmgI=;
+ b=agXLNwK+Fk1GB3r2VrVKEJs02q02oJ2S4xUgFjc4XE7aIsuTqdUn/BgS5MBZrrNcw3
+ Dl4O9R9hSOD4MvYKfLBygxzHgD4aUgAVpIWrzvJiNXg6oCC3V5ga2BFlMECgmJN1GfT+
+ jAkrQV9fDIbPjRtrn53+s0GdcDjCLym3kQoPg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=3oQtiiRnk0V4EQgxNX2LLm6qAzLqpYKDwRlEpFYGmgI=;
+ b=rlJfPLoDJaJcvCNXOGzUCaTOxO3zqs8ZBBiMrfbbu7fYdvzukK7xwlMCPbto+5e3Iv
+ TOrw/9BDw101iFzJ+xa0UuUMY3GQwTqcX/DaHQluJk26Qj3pOrwe+mig3/xHIyo9Txrr
+ YRRXi0ge0ZYewLCgR2c9mfBg47Ef8f5iWeJzWLPotic2AmCifauFthV8+CWHXYJG6W2U
+ YELPNxAVxZbOgJlkS8euiAjKKJwtL8UO88FyHa06E2bZCiSF3tHnChiW7X6lXnyvSNK8
+ BLh8+LiFo229r7GoSmOMTDdPP8RL4eGFysstdcMzKIuhheRwja93ddTpHyonsX9k50z2
+ IKFQ==
+X-Gm-Message-State: AOAM532JdPDWrbW+x3TBGTvyFmxUIwVB1CQhaIMGpfSlGycgPY3hnDVe
+ YnQK/FM7iklYNfI9n6E2hVS1NZgk46W1Xxqbfg1CMg==
+X-Google-Smtp-Source: ABdhPJw/vOIxUVzEeEmxe0P/Lufw+YcqIKXVIwQe1B7x+iiF3upuSCgJiWPsUA22NAOCDb8nyfQmtfn+wvmjcEj67Us=
+X-Received: by 2002:a17:907:1b1a:b0:703:a290:98f1 with SMTP id
+ mp26-20020a1709071b1a00b00703a29098f1mr27111582ejc.418.1654614063732; Tue, 07
+ Jun 2022 08:01:03 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libkrb5: bump to 1.20
+References: <20220527103335.1968203-1-angelo@amarulasolutions.com>
+ <20220527103335.1968203-3-angelo@amarulasolutions.com>
+ <ce3dbd69-bb72-a8ff-2ce8-e52da3133d9a@green-communications.fr>
+In-Reply-To: <ce3dbd69-bb72-a8ff-2ce8-e52da3133d9a@green-communications.fr>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Tue, 7 Jun 2022 17:00:27 +0200
+Message-ID: <CA+_SqVYYLqrjuYyFcOmoLd=e6Rsk+3eMVSkMNjEAMu0YF4a+eA@mail.gmail.com>
+To: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Subject: Re: [Buildroot] [PATCH 2/4] package/wpa_supplicant: adding ifupdown
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,83 +80,401 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: jagan@amarulasolutions.com, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============1251251982019071808=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogQW5kcsOpIFp3aW5nIDxuZXJ2QGRhd25jcm93LmRlPgotLS0KIC4uLi1k
-ZXJlZi1vbi1UR1MtaW5uZXItYm9keS1udWxsLXNlcnZlci5wYXRjaCB8IDQ3IC0tLS0tLS0tLS0t
-LS0tLS0tLS0KIHBhY2thZ2UvbGlia3JiNS9saWJrcmI1Lmhhc2ggICAgICAgICAgICAgICAgICB8
-ICA0ICstCiBwYWNrYWdlL2xpYmtyYjUvbGlia3JiNS5tayAgICAgICAgICAgICAgICAgICAgfCAg
-OCArLS0tCiAzIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNTUgZGVsZXRpb25zKC0p
-CiBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJrcmI1LzAwMDEtRml4LUtEQy1udWxsLWRl
-cmVmLW9uLVRHUy1pbm5lci1ib2R5LW51bGwtc2VydmVyLnBhdGNoCgpkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS9saWJrcmI1LzAwMDEtRml4LUtEQy1udWxsLWRlcmVmLW9uLVRHUy1pbm5lci1ib2R5LW51
-bGwtc2VydmVyLnBhdGNoIGIvcGFja2FnZS9saWJrcmI1LzAwMDEtRml4LUtEQy1udWxsLWRlcmVm
-LW9uLVRHUy1pbm5lci1ib2R5LW51bGwtc2VydmVyLnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEw
-MDY0NAppbmRleCBlYzZmNjIzMzgwLi4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvbGlia3JiNS8w
-MDAxLUZpeC1LREMtbnVsbC1kZXJlZi1vbi1UR1MtaW5uZXItYm9keS1udWxsLXNlcnZlci5wYXRj
-aAorKysgL2Rldi9udWxsCkBAIC0xLDQ3ICswLDAgQEAKLUZyb20gZDc3NWM5NWFmNzYwNmE1MWJm
-Nzk1NDdhOTRmYTUyZGRkMWNiN2Y0OSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IEdy
-ZWcgSHVkc29uIDxnaHVkc29uQG1pdC5lZHU+Ci1EYXRlOiBUdWUsIDMgQXVnIDIwMjEgMDE6MTU6
-MjcgLTA0MDAKLVN1YmplY3Q6IFtQQVRDSF0gRml4IEtEQyBudWxsIGRlcmVmIG9uIFRHUyBpbm5l
-ciBib2R5IG51bGwgc2VydmVyCi0KLUFmdGVyIHRoZSBLREMgZGVjb2RlcyBhIEZBU1QgaW5uZXIg
-Ym9keSwgaXQgZG9lcyBub3QgY2hlY2sgZm9yIGEgbnVsbAotc2VydmVyLiAgUHJpb3IgdG8gY29t
-bWl0IDM5NTQ4YTViMTdiYmRhOWVlYjYzNjI1YTIwMWNmZDE5YjlkZTFjNWIgdGhpcwotd291bGQg
-dHlwaWNhbGx5IHJlc3VsdCBpbiBhbiBlcnJvciBmcm9tIGtyYjVfdW5wYXJzZV9uYW1lKCksIGJ1
-dCB3aXRoCi10aGUgYWRkaXRpb24gb2YgZ2V0X2xvY2FsX3RndCgpIGl0IHJlc3VsdHMgaW4gYSBu
-dWxsIGRlcmVmZXJlbmNlLiAgQWRkCi1hIG51bGwgY2hlY2suCi0KLVJlcG9ydGVkIGJ5IEpvc2Vw
-aCBTdXR0b24gb2YgQ2F0YWx5c3QuCi0KLUNWRS0yMDIxLTM3NzUwOgotCi1JbiBNSVQga3JiNSBy
-ZWxlYXNlcyAxLjE0IGFuZCBsYXRlciwgYW4gYXV0aGVudGljYXRlZCBhdHRhY2tlciBjYW4KLWNh
-dXNlIGEgbnVsbCBkZXJlZmVyZW5jZSBpbiB0aGUgS0RDIGJ5IHNlbmRpbmcgYSBGQVNUIFRHUyBy
-ZXF1ZXN0IHdpdGgKLW5vIHNlcnZlciBmaWVsZC4KLQotdGlja2V0OiA5MDA4IChuZXcpCi10YWdz
-OiBwdWxsdXAKLXRhcmdldF92ZXJzaW9uOiAxLjE5LW5leHQKLXRhcmdldF92ZXJzaW9uOiAxLjE4
-LW5leHQKLQotW1JldHJpZXZlZCBmcm9tOgotaHR0cHM6Ly9naXRodWIuY29tL2tyYjUva3JiNS9j
-b21taXQvZDc3NWM5NWFmNzYwNmE1MWJmNzk1NDdhOTRmYTUyZGRkMWNiN2Y0OV0KLVNpZ25lZC1v
-ZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgotLS0t
-Ci0gc3JjL2tkYy9kb190Z3NfcmVxLmMgfCA1ICsrKysrCi0gMSBmaWxlIGNoYW5nZWQsIDUgaW5z
-ZXJ0aW9ucygrKQotCi1kaWZmIC0tZ2l0IGEvc3JjL2tkYy9kb190Z3NfcmVxLmMgYi9zcmMva2Rj
-L2RvX3Rnc19yZXEuYwotaW5kZXggNTgyZTQ5N2NjOS4uMzJkYzY1ZmE4ZSAxMDA2NDQKLS0tLSBh
-L3NyYy9rZGMvZG9fdGdzX3JlcS5jCi0rKysgYi9zcmMva2RjL2RvX3Rnc19yZXEuYwotQEAgLTIw
-NCw2ICsyMDQsMTEgQEAgcHJvY2Vzc190Z3NfcmVxKGtyYjVfa2RjX3JlcSAqcmVxdWVzdCwga3Ji
-NV9kYXRhICpwa3QsCi0gICAgICAgICBzdGF0dXMgPSAiRklORF9GQVNUIjsKLSAgICAgICAgIGdv
-dG8gY2xlYW51cDsKLSAgICAgfQotKyAgICBpZiAoc3ByaW5jID09IE5VTEwpIHsKLSsgICAgICAg
-IHN0YXR1cyA9ICJOVUxMX1NFUlZFUiI7Ci0rICAgICAgICBlcnJjb2RlID0gS1JCNUtEQ19FUlJf
-U19QUklOQ0lQQUxfVU5LTk9XTjsKLSsgICAgICAgIGdvdG8gY2xlYW51cDsKLSsgICAgfQotIAot
-ICAgICBlcnJjb2RlID0gZ2V0X2xvY2FsX3RndChrZGNfY29udGV4dCwgJnNwcmluYy0+cmVhbG0s
-IGhlYWRlcl9zZXJ2ZXIsCi0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICZsb2NhbF90Z3Qs
-ICZsb2NhbF90Z3Rfc3RvcmFnZSwgJmxvY2FsX3RndF9rZXkpOwpkaWZmIC0tZ2l0IGEvcGFja2Fn
-ZS9saWJrcmI1L2xpYmtyYjUuaGFzaCBiL3BhY2thZ2UvbGlia3JiNS9saWJrcmI1Lmhhc2gKaW5k
-ZXggODYwZjgyODc5My4uMmZjZTI0YjQ1YiAxMDA2NDQKLS0tIGEvcGFja2FnZS9saWJrcmI1L2xp
-YmtyYjUuaGFzaAorKysgYi9wYWNrYWdlL2xpYmtyYjUvbGlia3JiNS5oYXNoCkBAIC0xLDUgKzEs
-NSBAQAogIyBMb2NhbGx5IGNhbGN1bGF0ZWQgYWZ0ZXIgY2hlY2tpbmcgcGdwIHNpZ25hdHVyZQot
-c2hhMjU2ICA2NjA4NWUyZjU5NDc1MWU3N2U4MmUwZGJmN2JiYzM0NDMyMGZiNDhhOWRmMmE2MzNj
-ZmRkOGY3ZDZkYTk5ZmM4ICBrcmI1LTEuMTguNC50YXIuZ3oKK3NoYTI1NiAgN2UwMjJiZGQzYzg1
-MTgzMDE3M2Y5ZmFhYTAwNmEyMzBhMGUwZmRhZDRjOTUzZTg1YmZmNGJmMGRhMDM2ZTEyZiAga3Ji
-NS0xLjIwLnRhci5negogCiAjIEhhc2ggZm9yIGxpY2Vuc2UgZmlsZToKLXNoYTI1NiAgN2ZiYThi
-MDc2YmRjMmNmZWYxZDA4MTNjNWQ0MDY3ZDc2ZDViZTYwYzMyZDg0ZGUyMmQ1ZDFjZjQ1MTc0NGZl
-YiAgTk9USUNFCitzaGEyNTYgIGNmYWRjZjdiMmVhZDJmM2FmNzkzYzI1YzAwNjM4Yzk5MDhhYzAw
-MjNiMTAxNjk1ZjQwY2I5YTAzYjE2ODExZGMgIE5PVElDRQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9s
-aWJrcmI1L2xpYmtyYjUubWsgYi9wYWNrYWdlL2xpYmtyYjUvbGlia3JiNS5tawppbmRleCBiZDc1
-MWQ5Yzc3Li5jMGQzMjY5OTYwIDEwMDY0NAotLS0gYS9wYWNrYWdlL2xpYmtyYjUvbGlia3JiNS5t
-aworKysgYi9wYWNrYWdlL2xpYmtyYjUvbGlia3JiNS5tawpAQCAtNCw5ICs0LDggQEAKICMKICMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLUxJQktSQjVfVkVSU0lPTl9NQUpPUiA9IDEuMTgKLUxJ
-QktSQjVfVkVSU0lPTiA9ICQoTElCS1JCNV9WRVJTSU9OX01BSk9SKS40Ci1MSUJLUkI1X1NJVEUg
-PSBodHRwczovL3dlYi5taXQuZWR1L2tlcmJlcm9zL2Rpc3Qva3JiNS8kKExJQktSQjVfVkVSU0lP
-Tl9NQUpPUikKK0xJQktSQjVfVkVSU0lPTiA9IDEuMjAKK0xJQktSQjVfU0lURSA9IGh0dHBzOi8v
-d2ViLm1pdC5lZHUva2VyYmVyb3MvZGlzdC9rcmI1LyQoTElCS1JCNV9WRVJTSU9OKQogTElCS1JC
-NV9TT1VSQ0UgPSBrcmI1LSQoTElCS1JCNV9WRVJTSU9OKS50YXIuZ3oKIExJQktSQjVfU1VCRElS
-ID0gc3JjCiBMSUJLUkI1X0xJQ0VOU0UgPSBNSVQKQEAgLTE2LDkgKzE1LDYgQEAgTElCS1JCNV9D
-UEVfSURfUFJPRFVDVCA9IGtlcmJlcm9zXzUKIExJQktSQjVfREVQRU5ERU5DSUVTID0gaG9zdC1i
-aXNvbiAkKFRBUkdFVF9OTFNfREVQRU5ERU5DSUVTKQogTElCS1JCNV9JTlNUQUxMX1NUQUdJTkcg
-PSBZRVMKIAotIyAwMDAxLUZpeC1LREMtbnVsbC1kZXJlZi1vbi1UR1MtaW5uZXItYm9keS1udWxs
-LXNlcnZlci5wYXRjaAotTElCS1JCNV9JR05PUkVfQ1ZFUyArPSBDVkUtMjAyMS0zNzc1MAotCiAj
-IFRoZSBjb25maWd1cmUgc2NyaXB0IHVzZXMgQUNfVFJZX1JVTiB0ZXN0cyB0byBjaGVjayBmb3Ig
-dGhvc2UgdmFsdWVzLAogIyB3aGljaCBkb2Vzbid0IHdvcmsgaW4gYSBjcm9zcy1jb21waWxhdGlv
-biBzY2VuYXJpby4gVGhlcmVmb3JlLAogIyB3ZSBmZWVkIHRoZSBjb25maWd1cmUgc2NyaXB0IHdp
-dGggdGhlIGNvcnJlY3QgYW5zd2VyIGZvciB0aG9zZSB0ZXN0cwotLSAKMi4yNS4xCgpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
-ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
-Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============1251251982019071808==
+Content-Type: multipart/alternative; boundary="0000000000008289db05e0dcdbfd"
+
+--0000000000008289db05e0dcdbfd
+Content-Type: text/plain; charset="UTF-8"
+
+On Mon, Jun 6, 2022 at 5:09 PM Nicolas Cavallari <
+Nicolas.Cavallari@green-communications.fr> wrote:
+
+> Hello,
+>
+> On 27/05/2022 12:33, Angelo Compagnucci wrote:
+> > Actually, configuring a wifi interface as per "interfaces" man:
+> >
+> > auto wlan0
+> > iface wlan0 inet dhcp
+> > wpa-conf /etc/wpa_supplicant.conf
+> >
+> > doesn't work on buildroot because the line wpa-conf is ignored due to
+> > the lack of a proper ifupdown script to handle the wpa_supplicant
+> > initialization.
+> >
+> > The provided file is a simplified version based on the one available
+> > on debian.
+> >
+> > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> > ---
+> >   package/wpa_supplicant/ifupdown.sh       | 71 ++++++++++++++++++++++++
+> >   package/wpa_supplicant/wpa_supplicant.mk | 10 ++++
+> >   2 files changed, 81 insertions(+)
+> >   create mode 100755 package/wpa_supplicant/ifupdown.sh
+> >
+> > diff --git a/package/wpa_supplicant/ifupdown.sh
+> b/package/wpa_supplicant/ifupdown.sh
+> > new file mode 100755
+> > index 0000000000..8eecf73436
+> > --- /dev/null
+> > +++ b/package/wpa_supplicant/ifupdown.sh
+> > @@ -0,0 +1,71 @@
+> > +#!/bin/sh
+> > +
+> > +# This file is executed by ifupdown in pre-up, post-up, pre-down and
+> > +# post-down phases of network interface configuration.
+>
+> It is also executed for every interface regardless of if wpa-* options are
+> specified or not. ifupdown works by turning all options into IF_*
+> environment
+> variables and running all hooks with it.
+>
+> Right now this hook starts wpa_supplicant on every non-lo interface.
+> It probably needs a if [ -z "$IF_WPA_CONF" ]; then exit 0; fi somewhere.
+> The earliest the better.
+>
+
+Not entirely sure, wpa_supplicant can be used on Ethernet interfaces too.
+Better to check if the IF_WPA_CONF has a value or exit silently.
+
+
+>
+> > +
+> > +WPA_SUP_BIN="/usr/sbin/wpa_supplicant"
+> > +
+> > +if [ -n "$IF_WPA_MAINT_DEBUG" ]; then
+> > +     set -x
+> > +fi
+>
+> It is really necessary to support the "wpa-maint-debug yes"
+> /etc/network/interfaces option ?  This script is simple enough, unlike
+> Debian's.
+>
+
+Right.
+
+
+>
+> > +
+> > +# quit if we're called for the loopback
+> > +if [ "$IFACE" = lo ]; then
+> > +     exit 0
+> > +fi
+>
+> Special-casing lo can be removed by filtering on -z IF_WPA_CONF.  Nobody
+> is
+> going to specify a wpa-conf on the lo interface, and if they do, they
+> should
+> assume the consequences.
+>
+
+Right.
+
+
+>
+> > +
+> > +# allow wpa_supplicant interface to be specified via wpa-iface
+> > +# useful for starting wpa_supplicant on one interface of a bridge
+> > +if [ -n "$IF_WPA_IFACE" ]; then
+> > +     WPA_IFACE="$IF_WPA_IFACE"
+> > +else
+> > +     WPA_IFACE="$IFACE"
+> > +fi
+> > +
+> > +WPA_SUP_PIDFILE="/run/wpa_supplicant.${WPA_IFACE}.pid"
+> > +
+> > +# quit if executables are not installed
+> > +if [ ! -x "$WPA_SUP_BIN" ]; then
+> > +     exit 0
+> > +fi
+> > +
+> > +do_start () {
+> > +     if [ -n "$IF_WPA_CONF" ] && [ "$IF_WPA_CONF" != "managed" ]; then
+> > +             if [ ! -s "$IF_WPA_CONF" ]; then
+> > +                     echo "cannot read contents of $IF_WPA_CONF"
+> > +                     exit 1
+> > +             fi
+> > +             WPA_SUP_CONF_CTRL_DIR=$(sed -n -e 's/[[:space:]]*#.*//g'
+> -e 's/[[:space:]]\+.*$//g' \
+> > +                     -e 's/^ctrl_interface=\(DIR=\)\?\(.*\)/\2/p'
+> "$IF_WPA_CONF")
+> > +             if [ -n "$WPA_SUP_CONF_CTRL_DIR" ]; then
+> > +                     WPA_SUP_CONF="-c $IF_WPA_CONF -C
+> $WPA_SUP_CONF_CTRL_DI > +              else
+> > +                     WPA_SUP_CONF="-c $IF_WPA_CONF"
+> > +             fi
+> > +     else
+> > +             # specify the default ctrl_interface
+> > +             WPA_SUP_CONF="-C $WPA_CTRL_DIR"
+> > +     fi
+> > +}
+>
+> Debian's ifupdown script need wpa_supplicant to have a ctrl_interface
+> because it
+> want to use wpa_cli for all the other wpa-* options, and wpa_cli works by
+> connecting to a ctrl_interface.
+>
+> This script does not use wpa_cli so all the ctrl_interface handling can be
+> removed, unless you want to implement the other options later.
+>
+> By the way, "wpa-conf "managed" is mostly used with the other wpa-*
+> options to
+> configure the ssid/passphrase within /etc/network/interfaces, which is
+> something
+> your script does not support, so you can remove the first 'if'.
+>
+
+Right.
+
+
+-- 
+
+Angelo Compagnucci
+
+Software Engineer
+
+angelo@amarulasolutions.com
+__________________________________
+Amarula Solutions SRL
+
+Via le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 (0)42 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
+[`as] https://www.amarulasolutions.com|
+
+--0000000000008289db05e0dcdbfd
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Mon, Jun 6, 2022 at 5:09 PM Nicola=
+s Cavallari &lt;<a href=3D"mailto:Nicolas.Cavallari@green-communications.fr=
+">Nicolas.Cavallari@green-communications.fr</a>&gt; wrote:<br></div><blockq=
+uote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1p=
+x solid rgb(204,204,204);padding-left:1ex">Hello,<br>
+<br>
+On 27/05/2022 12:33, Angelo Compagnucci wrote:<br>
+&gt; Actually, configuring a wifi interface as per &quot;interfaces&quot; m=
+an:<br>
+&gt; <br>
+&gt; auto wlan0<br>
+&gt; iface wlan0 inet dhcp<br>
+&gt; wpa-conf /etc/wpa_supplicant.conf<br>
+&gt; <br>
+&gt; doesn&#39;t work on buildroot because the line wpa-conf is ignored due=
+ to<br>
+&gt; the lack of a proper ifupdown script to handle the wpa_supplicant<br>
+&gt; initialization.<br>
+&gt; <br>
+&gt; The provided file is a simplified version based on the one available<b=
+r>
+&gt; on debian.<br>
+&gt; <br>
+&gt; Signed-off-by: Angelo Compagnucci &lt;<a href=3D"mailto:angelo@amarula=
+solutions.com" target=3D"_blank">angelo@amarulasolutions.com</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 =C2=A0package/wpa_supplicant/ifupdown.sh=C2=A0 =C2=A0 =C2=A0 =C2=
+=A0| 71 ++++++++++++++++++++++++<br>
+&gt;=C2=A0 =C2=A0package/wpa_supplicant/<a href=3D"http://wpa_supplicant.mk=
+" rel=3D"noreferrer" target=3D"_blank">wpa_supplicant.mk</a> | 10 ++++<br>
+&gt;=C2=A0 =C2=A02 files changed, 81 insertions(+)<br>
+&gt;=C2=A0 =C2=A0create mode 100755 package/wpa_supplicant/ifupdown.sh<br>
+&gt; <br>
+&gt; diff --git a/package/wpa_supplicant/ifupdown.sh b/package/wpa_supplica=
+nt/ifupdown.sh<br>
+&gt; new file mode 100755<br>
+&gt; index 0000000000..8eecf73436<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/wpa_supplicant/ifupdown.sh<br>
+&gt; @@ -0,0 +1,71 @@<br>
+&gt; +#!/bin/sh<br>
+&gt; +<br>
+&gt; +# This file is executed by ifupdown in pre-up, post-up, pre-down and<=
+br>
+&gt; +# post-down phases of network interface configuration.<br>
+<br>
+It is also executed for every interface regardless of if wpa-* options are =
+<br>
+specified or not. ifupdown works by turning all options into IF_* environme=
+nt <br>
+variables and running all hooks with it.<br>
+<br>
+Right now this hook starts wpa_supplicant on every non-lo interface.<br>
+It probably needs a if [ -z &quot;$IF_WPA_CONF&quot; ]; then exit 0; fi som=
+ewhere.<br>
+The earliest the better.<br></blockquote><div><br></div><div>Not entirely s=
+ure, wpa_supplicant can be used on Ethernet interfaces too. Better to check=
+ if the IF_WPA_CONF has a value or exit silently.<br></div><div>=C2=A0</div=
+><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border=
+-left:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+&gt; +<br>
+&gt; +WPA_SUP_BIN=3D&quot;/usr/sbin/wpa_supplicant&quot;<br>
+&gt; +<br>
+&gt; +if [ -n &quot;$IF_WPA_MAINT_DEBUG&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0set -x<br>
+&gt; +fi<br>
+<br>
+It is really necessary to support the &quot;wpa-maint-debug yes&quot; <br>
+/etc/network/interfaces option ?=C2=A0 This script is simple enough, unlike=
+ Debian&#39;s.<br></blockquote><div><br></div><div>Right.</div><div>=C2=A0<=
+br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
+x;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+&gt; +<br>
+&gt; +# quit if we&#39;re called for the loopback<br>
+&gt; +if [ &quot;$IFACE&quot; =3D lo ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0exit 0<br>
+&gt; +fi<br>
+<br>
+Special-casing lo can be removed by filtering on -z IF_WPA_CONF.=C2=A0 Nobo=
+dy is <br>
+going to specify a wpa-conf on the lo interface, and if they do, they shoul=
+d <br>
+assume the consequences.<br></blockquote><div><br></div><div>Right.</div><d=
+iv>=C2=A0<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0p=
+x 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+&gt; +<br>
+&gt; +# allow wpa_supplicant interface to be specified via wpa-iface<br>
+&gt; +# useful for starting wpa_supplicant on one interface of a bridge<br>
+&gt; +if [ -n &quot;$IF_WPA_IFACE&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0WPA_IFACE=3D&quot;$IF_WPA_IFACE&quot;<br>
+&gt; +else<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0WPA_IFACE=3D&quot;$IFACE&quot;<br>
+&gt; +fi<br>
+&gt; +<br>
+&gt; +WPA_SUP_PIDFILE=3D&quot;/run/wpa_supplicant.${WPA_IFACE}.pid&quot;<br=
+>
+&gt; +<br>
+&gt; +# quit if executables are not installed<br>
+&gt; +if [ ! -x &quot;$WPA_SUP_BIN&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0exit 0<br>
+&gt; +fi<br>
+&gt; +<br>
+&gt; +do_start () {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0if [ -n &quot;$IF_WPA_CONF&quot; ] &amp;&amp; [ &=
+quot;$IF_WPA_CONF&quot; !=3D &quot;managed&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if [ ! -s &quot;$IF_W=
+PA_CONF&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0echo &quot;cannot read contents of $IF_WPA_CONF&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0exit 1<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fi<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0WPA_SUP_CONF_CTRL_DIR=
+=3D$(sed -n -e &#39;s/[[:space:]]*#.*//g&#39; -e &#39;s/[[:space:]]\+.*$//g=
+&#39; \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0-e &#39;s/^ctrl_interface=3D\(DIR=3D\)\?\(.*\)/\2/p&#39; &quot;$IF_W=
+PA_CONF&quot;)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if [ -n &quot;$WPA_SU=
+P_CONF_CTRL_DIR&quot; ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0WPA_SUP_CONF=3D&quot;-c $IF_WPA_CONF -C $WPA_SUP_CONF_CTRL_DI &gt; +=
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 else<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0WPA_SUP_CONF=3D&quot;-c $IF_WPA_CONF&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fi<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0else<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0# specify the default=
+ ctrl_interface<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0WPA_SUP_CONF=3D&quot;=
+-C $WPA_CTRL_DIR&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0fi<br>
+&gt; +}<br>
+<br>
+Debian&#39;s ifupdown script need wpa_supplicant to have a ctrl_interface b=
+ecause it <br>
+want to use wpa_cli for all the other wpa-* options, and wpa_cli works by <=
+br>
+connecting to a ctrl_interface.<br>
+<br>
+This script does not use wpa_cli so all the ctrl_interface handling can be =
+<br>
+removed, unless you want to implement the other options later.<br>
+<br>
+By the way, &quot;wpa-conf &quot;managed&quot; is mostly used with the othe=
+r wpa-* options to <br>
+configure the ssid/passphrase within /etc/network/interfaces, which is some=
+thing <br>
+your script does not support, so you can remove the first &#39;if&#39;.<br>=
+</blockquote><div><br></div><div>Right. <br></div></div><br clear=3D"all"><=
+br>-- <br><div dir=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"><p di=
+r=3D"ltr" style=3D"line-height:1.38;margin-top:0pt;margin-bottom:0pt"><span=
+ style=3D"font-size:11pt;font-family:Arial;color:rgb(0,0,0);background-colo=
+r:transparent;font-weight:400;font-style:normal;font-variant:normal;text-de=
+coration:none;vertical-align:baseline;white-space:pre-wrap"></span><span st=
+yle=3D"font-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0);backgr=
+ound-color:transparent;font-weight:500;font-style:normal;font-variant:norma=
+l;text-decoration:none;vertical-align:baseline;white-space:pre-wrap">Angelo=
+ Compagnucci</span></p><p dir=3D"ltr" style=3D"line-height:1.8;margin-top:0=
+pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubunt=
+u Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;font-w=
+eight:400;font-style:normal;font-variant:normal;text-decoration:none;vertic=
+al-align:baseline;white-space:pre-wrap">Software Engineer</span></p><p dir=
+=3D"ltr" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><span s=
+tyle=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:=
+rgb(0,0,0);background-color:transparent;font-weight:400;font-style:normal;f=
+ont-variant:normal;text-decoration:none;vertical-align:baseline;white-space=
+:pre-wrap"><a href=3D"mailto:angelo@amarulasolutions.com" target=3D"_blank"=
+>angelo@amarulasolutions.com</a>=C2=A0<br></span><span style=3D"font-size:1=
+0pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(241,194,50);bac=
+kground-color:transparent;font-weight:400;font-style:normal;font-variant:no=
+rmal;text-decoration:none;vertical-align:baseline;white-space:pre-wrap">___=
+_______________________________</span><span style=3D"font-size:10pt;font-fa=
+mily:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:tr=
+ansparent;font-weight:400;font-style:normal;font-variant:normal;text-decora=
+tion:none;vertical-align:baseline;white-space:pre-wrap"><br></span><span st=
+yle=3D"font-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0);backgr=
+ound-color:transparent;font-weight:500;font-style:normal;font-variant:norma=
+l;text-decoration:none;vertical-align:baseline;white-space:pre-wrap">Amarul=
+a Solutions SRL</span></p><p dir=3D"ltr" style=3D"line-height:1.8;margin-to=
+p:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ub=
+untu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;fon=
+t-weight:400;font-style:normal;font-variant:normal;text-decoration:none;ver=
+tical-align:baseline;white-space:pre-wrap">Via le Canevare 30, 31100 Trevis=
+o, Veneto, IT</span></p><p dir=3D"ltr" style=3D"line-height:1.8;margin-top:=
+0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubun=
+tu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;font-=
+weight:400;font-style:normal;font-variant:normal;text-decoration:none;verti=
+cal-align:baseline;white-space:pre-wrap">T. +39 (0)42 243 5310</span><span =
+style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color=
+:rgb(0,0,0);background-color:transparent;font-weight:400;font-style:normal;=
+font-variant:normal;text-decoration:none;vertical-align:baseline;white-spac=
+e:pre-wrap"><br></span><span style=3D"font-size:10pt;font-family:&quot;Ubun=
+tu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;font-=
+weight:400;font-style:normal;font-variant:normal;text-decoration:none;verti=
+cal-align:baseline;white-space:pre-wrap"><a href=3D"mailto:info@amarulasolu=
+tions.com" target=3D"_blank">info@amarulasolutions.com</a></span></p><p dir=
+=3D"ltr" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><a href=
+=3D"http://www.amarulasolutions.com/" style=3D"text-decoration:none" target=
+=3D"_blank"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quo=
+t;,monospace;color:rgb(0,0,0);background-color:transparent;font-weight:400;=
+font-style:normal;font-variant:normal;text-decoration:none;vertical-align:b=
+aseline;white-space:pre-wrap">www.amarulasolutions.com</span></a></p><div>[=
+`as] <a href=3D"https://www.amarulasolutions.com" target=3D"_blank">https:/=
+/www.amarulasolutions.com</a>|</div></div></div></div>
+
+--0000000000008289db05e0dcdbfd--
+
+--===============1251251982019071808==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1251251982019071808==--
