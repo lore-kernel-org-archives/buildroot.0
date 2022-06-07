@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BD3CCCA47C
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 14:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3DB5C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 14:06:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A16E61403;
-	Tue,  7 Jun 2022 14:06:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C2F340B9D;
+	Tue,  7 Jun 2022 14:06:17 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id feOp9YWTjhod; Tue,  7 Jun 2022 14:06:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B80CA40AFE;
+	Tue,  7 Jun 2022 14:06:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A43241BF397
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:05:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1595613FC
+ for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:05:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t4qwwHsXMtII; Tue,  7 Jun 2022 14:06:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B110610C4;
-	Tue,  7 Jun 2022 14:06:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 675CA1BF397
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:05:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64F088438F
- for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 14:05:55 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sPZrBMvpSOaX for <buildroot@lists.busybox.net>;
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FfQaa3kGYACX for <buildroot@lists.busybox.net>;
  Tue,  7 Jun 2022 14:05:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B95C58435C
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5EB66100D
  for <buildroot@buildroot.org>; Tue,  7 Jun 2022 14:05:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2D24586AC8; Tue,  7 Jun 2022 13:54:03 +0000 (UTC)
+ id 3AB7286749; Tue,  7 Jun 2022 13:54:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Jun 2022 15:59:12 +0200
+Date: Tue, 7 Jun 2022 16:00:26 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: dd935bd447c7284222cb3f69bd9f7f5c9e04c70f
-X-Git-Newrev: fb98438cff630d79087b3e0fc38d08711f1c413a
+X-Git-Oldrev: fb98438cff630d79087b3e0fc38d08711f1c413a
+X-Git-Newrev: 01819fb88054522189c48e625f0557a6a936b0ac
 X-Patchwork-Hint: ignore
-Message-Id: <20220607135403.2D24586AC8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/runc: security
- bump to v1.1.2
+Message-Id: <20220607135403.3AB7286749@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/uclibc: security
+ bump to 1.0.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,54 +59,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb98438cff630d79087b3e0fc38d08711f1c413a
+commit: https://git.buildroot.net/buildroot/commit/?id=01819fb88054522189c48e625f0557a6a936b0ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixes CVE-2022-29162
+Fixes CVE-2022-30295.
 
-Minor security issue (which appears to not be exploitable) related to process
-capabilities.
+See here:
+https://www.nozominetworks.com/blog/nozomi-networks-discovers-unpatched-dns-bug-in-popular-c-standard-library-putting-iot-at-risk/
 
-A bug was found in runc where runc exec --cap executed processes with ble Linux
-process capabilities, creating an atypical Linux environment. For more
-information, see GHSA-f3fp-gc8g-vw66 and CVE-2022-29162.
-
-runc spec no longer sets any inheritable capabilities in the created example OCI
-spec (config.json) file.
-
-https://github.com/opencontainers/runc/releases/tag/v1.1.2
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0295e9602f22dd11e0e484bf10950354d1febe3b)
+(cherry picked from commit 5507acd5df2a954b7559788dd03ead85245ad4a4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/uclibc/uclibc.hash | 4 ++--
+ package/uclibc/uclibc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index fe3c4cc488..f8133d13c1 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  11a34535c108b36fd59de58e7bef3a130444c9ea41e4b8bb8f8d4654c8ad654c  runc-1.1.1.tar.gz
-+sha256  0ccce82b1d9c058d8fd7443d261c96fd7a803f2775bcb1fec2bdb725bc7640f6  runc-1.1.2.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 2618b71f63..5faa8b683d 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 989c9d887a..3b29c351b5 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.40/uClibc-ng-1.0.40.tar.xz.sha256
+-sha256  d863f01815a64174d5019c73475e8aff5b60848a13876e79daf5d3d83ce7f889  uClibc-ng-1.0.40.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.41/uClibc-ng-1.0.41.tar.xz.sha256
++sha256  b32a92a0218d95922d6976464e6ef51e2ebacfbcdb605820458d9dbb8a61e025  uClibc-ng-1.0.41.tar.xz
+ # Locally calculated
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index d79eaa1d0d..5006aa0cb6 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.1.1
-+RUNC_VERSION = 1.1.2
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
- RUNC_LICENSE_FILES = LICENSE
+-UCLIBC_VERSION = 1.0.40
++UCLIBC_VERSION = 1.0.41
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
