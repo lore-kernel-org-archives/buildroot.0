@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74FE8C43334
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 12:24:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D85D2C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jun 2022 12:24:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FACD424AA;
-	Tue,  7 Jun 2022 12:24:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8ABD16077D;
+	Tue,  7 Jun 2022 12:24:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bOgJRjUHHJKr; Tue,  7 Jun 2022 12:24:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UNv50uB9YA3i; Tue,  7 Jun 2022 12:24:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22644415C6;
-	Tue,  7 Jun 2022 12:24:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 234161BF33A
+	by smtp3.osuosl.org (Postfix) with ESMTP id A008460F3C;
+	Tue,  7 Jun 2022 12:24:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 25B941BF9B4
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 12:23:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED8B28420A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 38F286077D
  for <buildroot@lists.busybox.net>; Tue,  7 Jun 2022 12:23:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FliOrh4do_v9 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i5cxjSOSkCV2 for <buildroot@lists.busybox.net>;
  Tue,  7 Jun 2022 12:23:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 487CF8420E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7637B60592
  for <buildroot@buildroot.org>; Tue,  7 Jun 2022 12:23:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DB00F86751; Tue,  7 Jun 2022 12:11:32 +0000 (UTC)
+ id 0F6D786782; Tue,  7 Jun 2022 12:11:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Jun 2022 11:45:07 +0200
+Date: Tue, 7 Jun 2022 14:19:37 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: c481f5f326c018959be5f42f7033be48ff78c56b
-X-Git-Newrev: b26b114243b95154b5a406091b69a440b941c720
+X-Git-Oldrev: 747b86ceba9bde7a03b7812b6d32fd588aad3291
+X-Git-Newrev: 6ff9cea6416787e1d6dcec568f6b1e368d26e5bf
 X-Patchwork-Hint: ignore
-Message-Id: <20220607121132.DB00F86751@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/wpewebkit: bump
- to version 2.36.0
+Message-Id: <20220607121133.0F6D786782@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/zlib-ng: fix
+ version in zlib.pc when building statically
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,68 +59,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b26b114243b95154b5a406091b69a440b941c720
+commit: https://git.buildroot.net/buildroot/commit/?id=6ff9cea6416787e1d6dcec568f6b1e368d26e5bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Update to a new major release which brings in improvements and a few new
-features. Release notes:
+Fix the following static build failure with transmission:
 
-  https://wpewebkit.org/release/wpewebkit-2.36.0.html
+checking for ZLIB... configure: error: Package requirements (zlib >= 1.2.3) were not met:
 
-None of the new features need additional dependencies. The build option
-USE_SYSTEMD has been renamed to ENABLE_JOURNALD_LOG, though.
+Package dependency requirement 'zlib >= 1.2.3' could not be satisfied.
+Package 'zlib' has version '', required version is '>= 1.2.3'
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 7d258f81cd95cf34888565504e6f82717e5e3407)
+Fixes:
+ - http://autobuild.buildroot.org/results/b3b882482f517726e5c780ba4c37818bd379df82
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 31a74276624af05e08ce03ba309310cc6dc4de5f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 6 +++---
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ ...txt-fix-version-in-zlib.pc-when-building-.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 231bbc447d..1e1aa62117 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.34.6.tar.xz.sums
--md5  c9705270b342474cca28cf51632ccbbe  wpewebkit-2.34.6.tar.xz
--sha1  44ae95de1b5ebf0a2b0ea3630b3677153c597402  wpewebkit-2.34.6.tar.xz
--sha256  301e895c8ed08ce7dccef3192b972f2ccfc2020463244c64069a636f2b05265f  wpewebkit-2.34.6.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.36.0.tar.xz.sums
-+md5  b7b951cd7f6eb4a8585338505ce71234  wpewebkit-2.36.0.tar.xz
-+sha1  904629a9ce3a4ab67d47315b008dc3152d504205  wpewebkit-2.36.0.tar.xz
-+sha256  096aa9f87d9bfbfc80f558388a86721cdcc508b42ddef10bd270aec9aee96d5a  wpewebkit-2.36.0.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index aa04e78623..3ce38d8c27 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.34.6
-+WPEWEBKIT_VERSION = 2.36.0
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
-@@ -81,10 +81,10 @@ WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
- endif
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
--WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=ON
-+WPEWEBKIT_CONF_OPTS += -DENABLE_JOURNALD_LOG=ON
- WPEWEBKIT_DEPENDENCIES += systemd
- else
--WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=OFF
-+WPEWEBKIT_CONF_OPTS += -DENABLE_JOURNALD_LOG=OFF
- endif
- 
- # JIT is not supported for MIPS r6, but the WebKit build system does not
+diff --git a/package/zlib-ng/0002-CMakeLists.txt-fix-version-in-zlib.pc-when-building-.patch b/package/zlib-ng/0002-CMakeLists.txt-fix-version-in-zlib.pc-when-building-.patch
+new file mode 100644
+index 0000000000..749c45ddca
+--- /dev/null
++++ b/package/zlib-ng/0002-CMakeLists.txt-fix-version-in-zlib.pc-when-building-.patch
+@@ -0,0 +1,53 @@
++From 9fcc446306f27eb253545540ce28403874b899fa Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 27 May 2022 23:25:21 +0200
++Subject: [PATCH] CMakeLists.txt: fix version in zlib.pc when building
++ statically
++
++When building statically (i.e. with BUILD_SHARED_LIBS=OFF),
++ZLIB_FULL_VERSION is not set resulting in an empty version in zlib.pc
++and the following build failure with transmission:
++
++checking for ZLIB... configure: error: Package requirements (zlib >= 1.2.3) were not met:
++
++Package dependency requirement 'zlib >= 1.2.3' could not be satisfied.
++Package 'zlib' has version '', required version is '>= 1.2.3'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/b3b882482f517726e5c780ba4c37818bd379df82
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/zlib-ng/zlib-ng/pull/1278]
++---
++ CMakeLists.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index a62a95e..6a26d59 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -150,8 +150,10 @@ if(ZLIB_COMPAT)
++     add_definitions(-DZLIB_COMPAT)
++     set(WITH_GZFILEOP ON)
++     set(SUFFIX "")
+++    set(ZLIB_FULL_VERSION ${ZLIB_HEADER_VERSION}.zlib-ng)
++ else()
++     set(SUFFIX "-ng")
+++    set(ZLIB_FULL_VERSION ${ZLIBNG_HEADER_VERSION})
++ endif()
++ 
++ if(WITH_GZFILEOP)
++@@ -1068,10 +1070,8 @@ if(NOT DEFINED BUILD_SHARED_LIBS OR BUILD_SHARED_LIBS)
++     set_target_properties(zlib PROPERTIES DEFINE_SYMBOL ZLIB_DLL)
++ 
++     if(ZLIB_COMPAT)
++-        set(ZLIB_FULL_VERSION ${ZLIB_HEADER_VERSION}.zlib-ng)
++         set_target_properties(zlib PROPERTIES SOVERSION 1)
++     else()
++-        set(ZLIB_FULL_VERSION ${ZLIBNG_HEADER_VERSION})
++         set_target_properties(zlib PROPERTIES SOVERSION 2)
++     endif()
++ 
++-- 
++2.35.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
