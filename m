@@ -1,62 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE11CC43334
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jun 2022 07:10:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 137BBC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jun 2022 07:10:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FD6D41914;
-	Wed,  8 Jun 2022 07:10:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADE3D60FDC;
+	Wed,  8 Jun 2022 07:10:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LvUcANv4PA60; Wed,  8 Jun 2022 07:10:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u03FOpdvJb1T; Wed,  8 Jun 2022 07:10:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4749B410C8;
-	Wed,  8 Jun 2022 07:10:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 89E1C1BF3D2
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBAF160FD8;
+	Wed,  8 Jun 2022 07:10:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F41EB1BF3D2
  for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:10:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7452F404A9
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2DF3410C8
  for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:10:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=bootlin.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G3FqCh3FH0eX for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sP6Y2PXCIJNt for <buildroot@lists.busybox.net>;
  Wed,  8 Jun 2022 07:10:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2FB0440363
- for <buildroot@buildroot.org>; Wed,  8 Jun 2022 07:10:31 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6D9BF4098A
+ for <buildroot@buildroot.org>; Wed,  8 Jun 2022 07:10:32 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id EE618FF804;
- Wed,  8 Jun 2022 07:10:28 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id 2E5DDFF812;
+ Wed,  8 Jun 2022 07:10:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654672229;
+ t=1654672230;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=azBwNbnLWZ0OkiZhCOLA7vxFpIv/IWpGqCTZjUOFUqQ=;
- b=kxSk8X3pSozjHLvJQF5XRUwCjaQ3+9/kQlF2Zqqk6Zlf71AqJ9k22/EIZ6lvSsrOlaYOaS
- uyBGE2GKuUb0E5GgK5ih2f4kzKb+Hah6OBRImXCrBZxHMHVmc3ixEXAZQRMycBwfJyCZH4
- 4pSN0t2A9m82T945xgtFoYmR7TotsKJlT0UI4k3lLn3Q0xiBFDbX4srKI6gNIRAhZShlzw
- TlBYdAshHhRpWsjNPfc92CllCI+aA4ykSNYg+4qpM7xCotgORoCEJ8DsmykdgiYt0gufjX
- pHMqGlYv9Z1nlHbiqo0ry/9Wj9UmnrtRr10U603I+uYr+KS+mMKAvG07uQjQZQ==
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=IyRcw2DWR6EK7FJXsKViuaSmSBOaeS6AfHNk7L51KNk=;
+ b=RB6dZm5ymlzupeSjsMuksijkUqlDnhjex2+SV3IQhHZRkJ33xrn5JDF6uJIzV6Yj9ZvaKw
+ 5XQD9aNEdzBwtd8f7Y2HuYFK+clPj+CocizR4PiGH5kcWEcn5XAQjz3/9coPtMiPKFgNyz
+ SY5P1dJlelg5HgdqrkFVcUT54kq1lycZkHlYy6JTIG8zuT2AZa0//fqDt9Bg6R3qruIEc8
+ YtkKkMeV4BAg5hPfM+E2pp922yCzZ4AGegrA7rHZlfVy1mjV+SOEXzPsNGg7LlO5MN9gF8
+ f38aoSRW7dfLPG9qAj1Va48Ydx66qUaSnJdIz99QkWvv47N5cceYZu9dZb1d3Q==
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
  Romain Naour <romain.naour@gmail.com>,
  Buildroot List <buildroot@buildroot.org>
-Date: Wed,  8 Jun 2022 09:10:12 +0200
-Message-Id: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
+Date: Wed,  8 Jun 2022 09:10:13 +0200
+Message-Id: <20220608071027.3384469-2-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
+References: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 00/14] Another set of Bootlin toolchain
- integration improvements
+Subject: [Buildroot] [PATCH v2 01/14]
+ support/scripts/gen-bootlin-toolchains: fix RISC-V 64-bit toolchain
+ description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,83 +80,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+We now support both MMU-enabled and MMU-less RISC-V 64-bit
+configurations. However, the Bootlin toolchain for RISC-V 64-bit only
+supports MMU-enabled configurations, but the current logic in
+toolchain/toolchain-external/toolchain-external-bootlin/ does not take
+this into account, and allows selecting the Booltin toolchain for
+MMU-less RISC-V 64-bit configurations.
 
-Overall summary
-===============
+To fix this, the gen-bootlin-toolchains script is modified to add the
+BR2_USE_MMU dependency to the description of the RISC-V 64-bit
+toolchain.
 
-Patches 1 to 12 in this series are fixes for autobuilder
-issues. Patches 13 and 14 are improvements.
+However, the BR2_USE_MMU dependency was also added for glibc and musl
+toolchains unconditionally, so to avoid duplicating the dependency, we
+now only add it only if not already present in the list of
+dependencies for this toolchain.
 
-Patches 1 and 2 fix the issue of RISC-V 64-bit toolchains being
-available on MMU-less architectures, even though they are not
-supported by the toolchain.
+This will allow to fix:
 
-Patches 3 and 4 fix the issue of ARM little endian toolchains being
-selectable for ARM big endian architectures.
+  http://autobuild.buildroot.net/results/d6aee9b275b1ec399aea59758ac8f69fdc5691fc/
 
-Patches 5 and 6 fix the issue of i686 toolchains being used for < i686
-platforms.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/gen-bootlin-toolchains | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Patches 7, 8 and 9 fix the issue of an error when trying to copy
-gdbserver, with toolchains that don't have gdbserver.
-
-Patches 10, 11 and 12 fix the issue of the "mips64" Bootlin toolchains
-being obsolete, but the gen-bootlin-toolchains still thinking they
-were available. This caused some mips64 n64 configurations to be
-thought of having Bootlin toolchains available, but in fact no such
-toolchains were provided. We fix this by making sure we check if an
-architecture has valid toolchains, and erroring out if not. And of
-course, we remove the "mips64" toolchain config.
-
-Patches 13 and 14 add support for the ARMv7 big-endian toolchains
-provided by toolchains.bootlin.com.
-
-Changes since v1
-================
-
- - Patches 10, 11 and 12 added to fix the "mips64" issue.
-
-Thomas
-
-Thomas Petazzoni (14):
-  support/scripts/gen-bootlin-toolchains: fix RISC-V 64-bit toolchain
-    description
-  support/testing,toolchain/toolchain-external/toolchain-external-bootlin:
-    regenerate with latest gen-bootlin-toolchains script
-  support/scripts/gen-bootlin-toolchains: improve dependencies of ARM
-    toolchains
-  toolchain/toolchain-external/toolchain-external-bootlin: regenerate
-    with BR2_ARM dependency
-  support/scripts/gen-bootlin-toolchains: adjust dependencies of i686
-    toolchains
-  toolchain/toolchain-external/toolchain-external-bootlin: regenerate
-    after i686 toolchain dependency fixes
-  toolchain/toolchain-external: add
-    BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER option
-  support/scripts/gen-bootlin-toolchains: make use of
-    BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
-  toolchain/toolchain-external/toolchain-external-bootlin: regenerate
-    with BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
-  support/scripts/gen-bootlin-toolchains: check that toolchains exists
-    for a certain arch
-  support/scripts/gen-bootlin-toolchains: drop "mips64" architecture
-    variant
-  toolchain/toolchain-external/toolchain-external-bootlin: regenerate
-    after mips64 toolchain removal
-  support/scripts/gen-bootlin-toolchains: add support for ARMv7 big
-    endian toolchain
-  support/testing,toolchain/toolchain-external/toolchain-external-bootlin:
-    regenerate with ARMv7 big endian toolchain
-
- support/scripts/gen-bootlin-toolchains        |  44 +++-
- .../tests/toolchain/test_external_bootlin.py  | 102 ++++++++
- toolchain/toolchain-external/Config.in        |   4 +
- .../Config.in.options                         | 234 +++++++++++++++++-
- .../toolchain-external-bootlin.hash           |  12 +
- .../toolchain-external-bootlin.mk             |  36 +++
- 6 files changed, 412 insertions(+), 20 deletions(-)
-
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index 97a744340a..16773cd9cb 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -159,7 +159,7 @@ arches = {
+         'prefix': 'riscv32',
+     },
+     'riscv64-lp64d': {
+-        'conditions': ['BR2_riscv', 'BR2_riscv_g', 'BR2_RISCV_64', 'BR2_RISCV_ABI_LP64D'],
++        'conditions': ['BR2_riscv', 'BR2_riscv_g', 'BR2_RISCV_64', 'BR2_RISCV_ABI_LP64D', 'BR2_USE_MMU'],
+         'prefix': 'riscv64',
+     },
+     's390x-z13': {
+@@ -312,13 +312,15 @@ class Toolchain:
+                 selects.append("BR2_TOOLCHAIN_EXTERNAL_UCLIBC")
+             elif frag.startswith("BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC"):
+                 # glibc needs mmu support
+-                depends.append("BR2_USE_MMU")
++                if "BR2_USE_MMU" not in depends:
++                    depends.append("BR2_USE_MMU")
+                 # glibc doesn't support static only configuration
+                 depends.append("!BR2_STATIC_LIBS")
+                 selects.append("BR2_TOOLCHAIN_EXTERNAL_GLIBC")
+             elif frag.startswith("BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL"):
+                 # musl needs mmu support
+-                depends.append("BR2_USE_MMU")
++                if "BR2_USE_MMU" not in depends:
++                    depends.append("BR2_USE_MMU")
+                 selects.append("BR2_TOOLCHAIN_EXTERNAL_MUSL")
+ 
+             # gcc version
 -- 
 2.35.3
 
