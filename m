@@ -4,61 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D08BC43334
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jun 2022 07:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DADFC43334
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jun 2022 07:59:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D58DE40363;
-	Wed,  8 Jun 2022 07:13:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4783940B6E;
+	Wed,  8 Jun 2022 07:59:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uUWYjFzGfENp; Wed,  8 Jun 2022 07:13:32 +0000 (UTC)
+	with ESMTP id 6ZrA3xrM-njc; Wed,  8 Jun 2022 07:59:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 72412404A9;
-	Wed,  8 Jun 2022 07:13:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 769AF40B0F;
+	Wed,  8 Jun 2022 07:59:15 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 15E081BF3D2
- for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:10:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 81D611BF25B
+ for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:59:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 04D87404A9
- for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:10:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 69F6A40B0F
+ for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:59:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NaWPINUTELJ6 for <buildroot@lists.busybox.net>;
- Wed,  8 Jun 2022 07:10:51 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3633640363
- for <buildroot@buildroot.org>; Wed,  8 Jun 2022 07:10:50 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 105C0FF80D;
- Wed,  8 Jun 2022 07:10:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654672249;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=VWpjbuTJv364EuobYM0MgSGd3v2RnvXeOojNpHqgsRw=;
- b=b2PZHuYnLGWubDgqGS/bfR/MGPOlZy6Of6fSF36cNfRCa5atrjxWa4FraFXnK5WsZZecs/
- m3SI4kSKfPKmaALUJQ9YRFKrdlXGDh44I9yfHV1aY7Gtvd2pjRMy97rM9mvhKsgyD7L8nH
- IQ+lbAE1z8cL6QWYbVYXusn94RyJzbXemJbJwFIIbYCceAtmTFRSBhKYDgc4vRWalhe1Pi
- HosvjJqVxoWN1q1p52eg0T8qxsYVQlZiA1+W7tXkISiJCdR4JMtsIRLOhjyohfkX9Gg23w
- yNDuUyZ/NhnMpwlGDpE4Y9972QgIPTq7ObfdX6yfoitzUX8pZiqwYW8sIdpmzA==
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Romain Naour <romain.naour@gmail.com>,
- Buildroot List <buildroot@buildroot.org>
-Date: Wed,  8 Jun 2022 09:10:26 +0200
-Message-Id: <20220608071027.3384469-15-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
-References: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
+ with ESMTP id CxvI2QrK86v3 for <buildroot@lists.busybox.net>;
+ Wed,  8 Jun 2022 07:59:13 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3B4A7404BD
+ for <buildroot@buildroot.org>; Wed,  8 Jun 2022 07:59:12 +0000 (UTC)
+Received: from [192.168.0.189] ([151.127.53.97]) by mrelayeu.kundenserver.de
+ (mreue009 [213.165.67.103]) with ESMTPSA (Nemesis) id
+ 1MWAaw-1oEkcx3rVy-00Xa0J; Wed, 08 Jun 2022 09:59:09 +0200
+Message-ID: <be16a0a9-1555-2f85-1e6a-35532ce3a0b6@green-communications.fr>
+Date: Wed, 8 Jun 2022 09:58:55 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 14/14]  support/testing,
- toolchain/toolchain-external/toolchain-external-bootlin: regenerate
- with ARMv7 big endian toolchain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: fr
+To: Angelo Compagnucci <angelo@amarulasolutions.com>, buildroot@buildroot.org
+References: <20220607151719.2305134-1-angelo@amarulasolutions.com>
+ <20220607151719.2305134-3-angelo@amarulasolutions.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+In-Reply-To: <20220607151719.2305134-3-angelo@amarulasolutions.com>
+X-Provags-ID: V03:K1:xq1naBcsFNrZoZx+cGjDS47wHCPmeI+yinnQI2JDHFXlljZanUq
+ GWSM0AccX9Byey0DqJTLJVZA3jh3DocpWurufWyljZrHqTm7deJzi7JDxznYne+gxMqr8fK
+ dhfjqpfLD69n3L1Kdxfy4PVIuMneK5Ns8bFyN/hJqQYJnS9sxsnCpl0g2zkLY129nybxLe1
+ jDNDLnsgMbn5PegAykVvA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jkT8UG5E1Lw=:MS3aG46AL2TsljWQ8JFjM7
+ APqpYVtA9+PdHsgHnHaSezxCFq//AtMHDMgrqgDMUDmGmXgFBQZ+qA147QTULnBbH7TfkTwHy
+ rdCXyYp8JiEx+NNCB39JhqNjXNAfGwWxtf0woqbLLM1GosPtXrp5jhF5Gr2SbYtZNaqL4bs7k
+ DTkxRmi3hfs5zdCX1I/CkhtWF7p0UEnWfv7LNmleioLr7hsAtptjBS/dLCXcNtOoYpFMjkv0g
+ cJ4D1ZHokWh5uBQQK3AraytgdATNDu7/gQft1kQfutelMfB1CKOT9kSeWebh1gBMQLRG9dwpj
+ bcoMB+yIT9LMTsY5K51lyHEbHeyO50OX4gX7BCS8JwLO7nGETg5AXOtJJ/Z516bzzjiFP8Pxk
+ 8DFHr6hEwr6aRS3clhGCbDDjJHSgOQtfglZ51ix3GmSRh+U2CliGdysn8bUjzYCJxjWairITi
+ rKqZ2nRo4MSCalVYWt1K0vRQu5wcN/PoD7XcI/ryC9mE/pSbm5K57i4l0ZzQlN73Vf1RSOvJn
+ khZ57r+neYzeKm0HH+zW6sbW5j5eHe0I2RvT2DD7k4a+EIT2WFQ2rpgv8vpqPrLPOvb+AHx4a
+ g0/r2CX0ZuLIYpQqdi1iKXqdD87ZakJF2TL8axVzu+kPm7nCeYU6r83UN4RrNTeXvUN9oMw1P
+ KmMYSyVOJ5tQVGvFqM8MdhdROB3yzP7IaAuCaBqRcIJnmABrx6VkacTjc2/4LpGiEbOLnUgcH
+ 9jod021Ww/sU1p2bFz8Q9RVKppQ7dvVq3hLc6rD1Zd6qmqfGEUd5FQOhA8DEo/eBjzOeM4n10
+ /9lyxIR
+Subject: Re: [Buildroot] [PATCH v2 2/3] package/wpa_supplicant: adding
+ ifupdown support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,375 +75,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: jagan@amarulasolutions.com
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../tests/toolchain/test_external_bootlin.py  |  96 +++++++++++
- .../Config.in.options                         | 153 ++++++++++++++++++
- .../toolchain-external-bootlin.hash           |  12 ++
- .../toolchain-external-bootlin.mk             |  36 +++++
- 4 files changed, 297 insertions(+)
+On 07/06/2022 17:17, Angelo Compagnucci wrote:
+> Actually, configuring a wifi interface as per "interfaces" man:
+> 
+> auto wlan0
+> iface wlan0 inet dhcp
+> wpa-conf /etc/wpa_supplicant.conf
+> 
+> doesn't work on buildroot because the line wpa-conf is ignored due to
+> the lack of a proper ifupdown script to handle the wpa_supplicant
+> initialization.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+> v1 -> v2:
+> * Simplify script to the minimum to have the service started (Thomas,
+>    Nicolas)
+> 
+>   package/wpa_supplicant/ifupdown.sh       | 48 ++++++++++++++++++++++++
+>   package/wpa_supplicant/wpa_supplicant.mk | 10 +++++
+>   2 files changed, 58 insertions(+)
+>   create mode 100755 package/wpa_supplicant/ifupdown.sh
+> 
+> diff --git a/package/wpa_supplicant/ifupdown.sh b/package/wpa_supplicant/ifupdown.sh
+> new file mode 100755
+> index 0000000000..7321c7602f
+> --- /dev/null
+> +++ b/package/wpa_supplicant/ifupdown.sh
+> @@ -0,0 +1,48 @@
+> +#!/bin/sh
+> +
+> +# This file is executed by ifupdown in pre-up, post-up, pre-down and
+> +# post-down phases of network interface configuration.
+> +
+> +WPA_SUP_BIN="/usr/sbin/wpa_supplicant"
+> +
+> +# Allow wpa_supplicant interface to be specified via wpa-iface
+> +# useful for starting wpa_supplicant on one interface of a bridge
+> +if [ -n "$IF_WPA_IFACE" ]; then
+> +	WPA_IFACE="$IF_WPA_IFACE"
+> +else
+> +	WPA_IFACE="$IFACE"
+> +fi
+> +
+> +WPA_SUP_PIDFILE="/run/wpa_supplicant.${WPA_IFACE}.pid"
+> +
+> +do_start () {
+> +	[ -z "$IF_WPA_CONF" ] && exit 0
+> +
+> +	if [ ! -s "$IF_WPA_CONF" ]; then
+> +		echo "cannot read contents of $IF_WPA_CONF"
+> +		exit 1
+> +	fi
+> +	WPA_SUP_CONF="-c $IF_WPA_CONF"
+> +}
+> +
+> +case "$MODE" in
+> +	start)
+> +		do_start
+> +		case "$PHASE" in
+> +			post-up)
+> +				start-stop-daemon -S -q -x ${WPA_SUP_BIN} \
+> +				-- -B -i ${WPA_IFACE} ${WPA_SUP_CONF} -P ${WPA_SUP_PIDFILE}
+> +				;;
+> +		esac
+> +		;;
+> +
+> +	stop)
+> +		case "$PHASE" in
+> +			pre-down)
+> +				start-stop-daemon -K -p ${WPA_SUP_PIDFILE}
+> +				;;
 
-diff --git a/support/testing/tests/toolchain/test_external_bootlin.py b/support/testing/tests/toolchain/test_external_bootlin.py
-index eb6d0e66ff..923bb0da94 100644
---- a/support/testing/tests/toolchain/test_external_bootlin.py
-+++ b/support/testing/tests/toolchain/test_external_bootlin.py
-@@ -521,6 +521,102 @@ class TestExternalToolchainBootlinArmv7eabihfUclibcStable(TestExternalToolchain)
-         TestExternalToolchain.common_check(self)
- 
- 
-+class TestExternalToolchainBootlinArmebv7eabihfGlibcBleedingEdge(TestExternalToolchain):
-+    config = """
-+        BR2_armeb=y
-+        BR2_cortex_a8=y
-+        BR2_ARM_EABIHF=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_BLEEDING_EDGE=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    toolchain_prefix = "armeb-linux"
-+
-+    def test_run(self):
-+        TestExternalToolchain.common_check(self)
-+
-+
-+class TestExternalToolchainBootlinArmebv7eabihfGlibcStable(TestExternalToolchain):
-+    config = """
-+        BR2_armeb=y
-+        BR2_cortex_a8=y
-+        BR2_ARM_EABIHF=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_STABLE=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    toolchain_prefix = "armeb-linux"
-+
-+    def test_run(self):
-+        TestExternalToolchain.common_check(self)
-+
-+
-+class TestExternalToolchainBootlinArmebv7eabihfMuslBleedingEdge(TestExternalToolchain):
-+    config = """
-+        BR2_armeb=y
-+        BR2_cortex_a8=y
-+        BR2_ARM_EABIHF=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_BLEEDING_EDGE=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    toolchain_prefix = "armeb-linux"
-+
-+    def test_run(self):
-+        TestExternalToolchain.common_check(self)
-+
-+
-+class TestExternalToolchainBootlinArmebv7eabihfMuslStable(TestExternalToolchain):
-+    config = """
-+        BR2_armeb=y
-+        BR2_cortex_a8=y
-+        BR2_ARM_EABIHF=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_STABLE=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    toolchain_prefix = "armeb-linux"
-+
-+    def test_run(self):
-+        TestExternalToolchain.common_check(self)
-+
-+
-+class TestExternalToolchainBootlinArmebv7eabihfUclibcBleedingEdge(TestExternalToolchain):
-+    config = """
-+        BR2_armeb=y
-+        BR2_cortex_a8=y
-+        BR2_ARM_EABIHF=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_BLEEDING_EDGE=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    toolchain_prefix = "armeb-linux"
-+
-+    def test_run(self):
-+        TestExternalToolchain.common_check(self)
-+
-+
-+class TestExternalToolchainBootlinArmebv7eabihfUclibcStable(TestExternalToolchain):
-+    config = """
-+        BR2_armeb=y
-+        BR2_cortex_a8=y
-+        BR2_ARM_EABIHF=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_STABLE=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    toolchain_prefix = "armeb-linux"
-+
-+    def test_run(self):
-+        TestExternalToolchain.common_check(self)
-+
-+
- class TestExternalToolchainBootlinArmv7mUclibcBleedingEdge(TestExternalToolchain):
-     config = """
-         BR2_arm=y
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-index 54d470f498..399843abc9 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-@@ -9,6 +9,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
- 	default y if BR2_arm && BR2_ARM_CPU_ARMV5 && BR2_ARM_EABI
- 	default y if BR2_arm && BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF
- 	default y if BR2_arm && BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF
-+	default y if BR2_armeb && BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF
- 	default y if BR2_arm && BR2_ARM_CPU_ARMV7M
- 	default y if BR2_m68k_m68k
- 	default y if BR2_m68k_cf
-@@ -891,6 +892,158 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_STABLE
- 
- 	  https://toolchains.bootlin.com/
- 
-+config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_BLEEDING_EDGE
-+	bool "armebv7-eabihf glibc bleeding-edge 2021.11-1"
-+	depends on BR2_armeb
-+	depends on BR2_ARM_CPU_ARMV7A
-+	depends on BR2_ARM_EABIHF
-+	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	help
-+	  Bootlin toolchain for the armebv7-eabihf architecture,
-+	  using the glibc C library. This is a bleeding-edge version,
-+	  which means it is using the latest versions of gcc, gdb and
-+	  binutils.
-+
-+	  https://toolchains.bootlin.com/
-+
-+config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_STABLE
-+	bool "armebv7-eabihf glibc stable 2021.11-1"
-+	depends on BR2_armeb
-+	depends on BR2_ARM_CPU_ARMV7A
-+	depends on BR2_ARM_EABIHF
-+	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	help
-+	  Bootlin toolchain for the armebv7-eabihf architecture,
-+	  using the glibc C library. This is a stable version, which
-+	  means it is using stable and proven versions of gcc, gdb
-+	  and binutils.
-+
-+	  https://toolchains.bootlin.com/
-+
-+config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_BLEEDING_EDGE
-+	bool "armebv7-eabihf musl bleeding-edge 2021.11-1"
-+	depends on BR2_armeb
-+	depends on BR2_ARM_CPU_ARMV7A
-+	depends on BR2_ARM_EABIHF
-+	depends on BR2_USE_MMU
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	help
-+	  Bootlin toolchain for the armebv7-eabihf architecture,
-+	  using the musl C library. This is a bleeding-edge version,
-+	  which means it is using the latest versions of gcc, gdb and
-+	  binutils.
-+
-+	  https://toolchains.bootlin.com/
-+
-+config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_STABLE
-+	bool "armebv7-eabihf musl stable 2021.11-1"
-+	depends on BR2_armeb
-+	depends on BR2_ARM_CPU_ARMV7A
-+	depends on BR2_ARM_EABIHF
-+	depends on BR2_USE_MMU
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	help
-+	  Bootlin toolchain for the armebv7-eabihf architecture,
-+	  using the musl C library. This is a stable version, which
-+	  means it is using stable and proven versions of gcc, gdb
-+	  and binutils.
-+
-+	  https://toolchains.bootlin.com/
-+
-+config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_BLEEDING_EDGE
-+	bool "armebv7-eabihf uclibc bleeding-edge 2021.11-1"
-+	depends on BR2_armeb
-+	depends on BR2_ARM_CPU_ARMV7A
-+	depends on BR2_ARM_EABIHF
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+	select BR2_USE_WCHAR
-+	select BR2_ENABLE_LOCALE
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	help
-+	  Bootlin toolchain for the armebv7-eabihf architecture,
-+	  using the uclibc C library. This is a bleeding-edge
-+	  version, which means it is using the latest versions of
-+	  gcc, gdb and binutils.
-+
-+	  https://toolchains.bootlin.com/
-+
-+config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_STABLE
-+	bool "armebv7-eabihf uclibc stable 2021.11-1"
-+	depends on BR2_armeb
-+	depends on BR2_ARM_CPU_ARMV7A
-+	depends on BR2_ARM_EABIHF
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
-+	select BR2_USE_WCHAR
-+	select BR2_ENABLE_LOCALE
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	help
-+	  Bootlin toolchain for the armebv7-eabihf architecture,
-+	  using the uclibc C library. This is a stable version, which
-+	  means it is using stable and proven versions of gcc, gdb
-+	  and binutils.
-+
-+	  https://toolchains.bootlin.com/
-+
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_BLEEDING_EDGE
- 	bool "armv7m uclibc bleeding-edge 2021.11-1"
- 	depends on BR2_arm
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
-index 1f2aa1386c..99e9ffc9ef 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
-@@ -68,6 +68,18 @@ sha256  767c99155f74d5620cfd59d0224df2f82dec7ce58be24d702081dca9793408a9  armv7-
- sha256  8d6cea2dfec2205ead2e6476f664d81442228d3b1e3fb9b320a54c68706ab9a2  armv7-eabihf--uclibc--bleeding-edge-2021.11-1.tar.bz2
- # From https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--uclibc--stable-2021.11-1.sha256
- sha256  3f8b1101a7318e2a6260a6b1c916b9b3bc69e8fd866d9e88eb85d3a496ad5064  armv7-eabihf--uclibc--stable-2021.11-1.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs/armebv7-eabihf--glibc--bleeding-edge-2021.11-1.sha256
-+sha256  1f7c0485d07718ed8b99288b5e2ec825d6931c92d7db8c880892682f7d717a40  armebv7-eabihf--glibc--bleeding-edge-2021.11-1.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs/armebv7-eabihf--glibc--stable-2021.11-1.sha256
-+sha256  bfc67cd580e357cf390cb3590fa89e738818af11ae9167e263178304c1656ccb  armebv7-eabihf--glibc--stable-2021.11-1.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs/armebv7-eabihf--musl--bleeding-edge-2021.11-1.sha256
-+sha256  488ec97dbbd37c5431c60b0bf6485948ba026ca5097e9e258f4847fbccaa0181  armebv7-eabihf--musl--bleeding-edge-2021.11-1.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs/armebv7-eabihf--musl--stable-2021.11-1.sha256
-+sha256  2a8d0752eaa480eff29b274e88c20e13ad41059f213991769b14684f219d7e12  armebv7-eabihf--musl--stable-2021.11-1.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs/armebv7-eabihf--uclibc--bleeding-edge-2021.11-1.sha256
-+sha256  a9665d2792bf9219c4a7153879d681b5f12c48e47b48969b1a87443b7ed9f26f  armebv7-eabihf--uclibc--bleeding-edge-2021.11-1.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs/armebv7-eabihf--uclibc--stable-2021.11-1.sha256
-+sha256  84c7a58351ec618a48a5b357777c48dbbfd52dc48983ebf988a29483693bacbf  armebv7-eabihf--uclibc--stable-2021.11-1.tar.bz2
- # From https://toolchains.bootlin.com/downloads/releases/toolchains/armv7m/tarballs/armv7m--uclibc--bleeding-edge-2021.11-1.sha256
- sha256  392215b53d8c03ca501481f6cfaa720676cf5a67ad1f25647f5a096398f57b28  armv7m--uclibc--bleeding-edge-2021.11-1.tar.bz2
- # From https://toolchains.bootlin.com/downloads/releases/toolchains/armv7m/tarballs/armv7m--uclibc--stable-2021.11-1.sha256
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
-index 786967052f..166cf5f45d 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
-@@ -210,6 +210,42 @@ TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = armv7-eabihf--uclibc--stable-$(TOOLCHAIN_EXT
- TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_BLEEDING_EDGE),y)
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = armebv7-eabihf--glibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_STABLE),y)
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = armebv7-eabihf--glibc--stable-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_BLEEDING_EDGE),y)
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = armebv7-eabihf--musl--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_STABLE),y)
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = armebv7-eabihf--musl--stable-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_BLEEDING_EDGE),y)
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = armebv7-eabihf--uclibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_STABLE),y)
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = armebv7-eabihf--uclibc--stable-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
-+TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/armebv7-eabihf/tarballs
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_BLEEDING_EDGE),y)
- TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-1
- TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = armv7m--uclibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
--- 
-2.35.3
+Now this script will still attempt to stop wpa_supplicant on all 
+interfaces even without a wpa-conf option. The [ -z "$IF_WPA_CONF" ] 
+check need to be done earlier.
 
+> +		esac
+> +		;;
+> +esac
+> +
+> +exit 0
+> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+> index c4cfe03371..d38bf572db 100644
+> --- a/package/wpa_supplicant/wpa_supplicant.mk
+> +++ b/package/wpa_supplicant/wpa_supplicant.mk
+> [...]
+> @@ -259,8 +267,10 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+>   	$(WPA_SUPPLICANT_INSTALL_PASSPHRASE)
+>   	$(WPA_SUPPLICANT_INSTALL_DBUS)
+>   	$(WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO)
+> +	$(WPA_SUPPLICANT_INSTALL_IFUP_SCRIPTS)
+>   endef
+>   
+> +
+
+This added blank line should probably go away.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
