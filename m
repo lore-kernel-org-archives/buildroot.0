@@ -4,66 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DADFC43334
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jun 2022 07:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3EFBCCA47B
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jun 2022 08:16:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4783940B6E;
-	Wed,  8 Jun 2022 07:59:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 593EF40B7F;
+	Wed,  8 Jun 2022 08:16:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6ZrA3xrM-njc; Wed,  8 Jun 2022 07:59:16 +0000 (UTC)
+	with ESMTP id 9oYM-XXmPqpI; Wed,  8 Jun 2022 08:16:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 769AF40B0F;
-	Wed,  8 Jun 2022 07:59:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 81D611BF25B
- for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:59:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 643FA40B7B;
+	Wed,  8 Jun 2022 08:16:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EB7AD1BF94D
+ for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 08:16:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 69F6A40B0F
- for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:59:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E779161001
+ for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 08:16:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CxvI2QrK86v3 for <buildroot@lists.busybox.net>;
- Wed,  8 Jun 2022 07:59:13 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3B4A7404BD
- for <buildroot@buildroot.org>; Wed,  8 Jun 2022 07:59:12 +0000 (UTC)
-Received: from [192.168.0.189] ([151.127.53.97]) by mrelayeu.kundenserver.de
- (mreue009 [213.165.67.103]) with ESMTPSA (Nemesis) id
- 1MWAaw-1oEkcx3rVy-00Xa0J; Wed, 08 Jun 2022 09:59:09 +0200
-Message-ID: <be16a0a9-1555-2f85-1e6a-35532ce3a0b6@green-communications.fr>
-Date: Wed, 8 Jun 2022 09:58:55 +0200
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=heine.tech
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7IX_VMYhVStX for <buildroot@lists.busybox.net>;
+ Wed,  8 Jun 2022 08:16:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6A5FC60FD1
+ for <buildroot@buildroot.org>; Wed,  8 Jun 2022 08:16:51 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 4EFE51820C3; Wed,  8 Jun 2022 10:16:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
+ t=1654676208; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=rEmY2wKAhqEYzJZiKaKAFFwlmhqIDdFoOk4UZmMEV90=;
+ b=I2iTXVw6lBmOZfGSGzJhlWUe0k4/0ctnA9gzfnpz3pNec7lWWPd6CzFvLSLEUOdiWCiOda
+ v8GqAx/usY03Tg/BQszeZWyuoMxEaaK/IEr8FtEhZ0aEct7YmukxcPY9zrkmk7QWPY0W5z
+ wRTg0l8fxnvU7cncgePI9bXNnXlRuT4=
+To: buildroot@buildroot.org
+Date: Wed,  8 Jun 2022 10:16:02 +0200
+Message-Id: <20220608081605.1141488-1-buildroot@heine.tech>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: fr
-To: Angelo Compagnucci <angelo@amarulasolutions.com>, buildroot@buildroot.org
-References: <20220607151719.2305134-1-angelo@amarulasolutions.com>
- <20220607151719.2305134-3-angelo@amarulasolutions.com>
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-In-Reply-To: <20220607151719.2305134-3-angelo@amarulasolutions.com>
-X-Provags-ID: V03:K1:xq1naBcsFNrZoZx+cGjDS47wHCPmeI+yinnQI2JDHFXlljZanUq
- GWSM0AccX9Byey0DqJTLJVZA3jh3DocpWurufWyljZrHqTm7deJzi7JDxznYne+gxMqr8fK
- dhfjqpfLD69n3L1Kdxfy4PVIuMneK5Ns8bFyN/hJqQYJnS9sxsnCpl0g2zkLY129nybxLe1
- jDNDLnsgMbn5PegAykVvA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jkT8UG5E1Lw=:MS3aG46AL2TsljWQ8JFjM7
- APqpYVtA9+PdHsgHnHaSezxCFq//AtMHDMgrqgDMUDmGmXgFBQZ+qA147QTULnBbH7TfkTwHy
- rdCXyYp8JiEx+NNCB39JhqNjXNAfGwWxtf0woqbLLM1GosPtXrp5jhF5Gr2SbYtZNaqL4bs7k
- DTkxRmi3hfs5zdCX1I/CkhtWF7p0UEnWfv7LNmleioLr7hsAtptjBS/dLCXcNtOoYpFMjkv0g
- cJ4D1ZHokWh5uBQQK3AraytgdATNDu7/gQft1kQfutelMfB1CKOT9kSeWebh1gBMQLRG9dwpj
- bcoMB+yIT9LMTsY5K51lyHEbHeyO50OX4gX7BCS8JwLO7nGETg5AXOtJJ/Z516bzzjiFP8Pxk
- 8DFHr6hEwr6aRS3clhGCbDDjJHSgOQtfglZ51ix3GmSRh+U2CliGdysn8bUjzYCJxjWairITi
- rKqZ2nRo4MSCalVYWt1K0vRQu5wcN/PoD7XcI/ryC9mE/pSbm5K57i4l0ZzQlN73Vf1RSOvJn
- khZ57r+neYzeKm0HH+zW6sbW5j5eHe0I2RvT2DD7k4a+EIT2WFQ2rpgv8vpqPrLPOvb+AHx4a
- g0/r2CX0ZuLIYpQqdi1iKXqdD87ZakJF2TL8axVzu+kPm7nCeYU6r83UN4RrNTeXvUN9oMw1P
- KmMYSyVOJ5tQVGvFqM8MdhdROB3yzP7IaAuCaBqRcIJnmABrx6VkacTjc2/4LpGiEbOLnUgcH
- 9jod021Ww/sU1p2bFz8Q9RVKppQ7dvVq3hLc6rD1Zd6qmqfGEUd5FQOhA8DEo/eBjzOeM4n10
- /9lyxIR
-Subject: Re: [Buildroot] [PATCH v2 2/3] package/wpa_supplicant: adding
- ifupdown support
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: [Buildroot] [PATCH] package/catch2: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,108 +58,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: jagan@amarulasolutions.com
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/06/2022 17:17, Angelo Compagnucci wrote:
-> Actually, configuring a wifi interface as per "interfaces" man:
-> 
-> auto wlan0
-> iface wlan0 inet dhcp
-> wpa-conf /etc/wpa_supplicant.conf
-> 
-> doesn't work on buildroot because the line wpa-conf is ignored due to
-> the lack of a proper ifupdown script to handle the wpa_supplicant
-> initialization.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
-> v1 -> v2:
-> * Simplify script to the minimum to have the service started (Thomas,
->    Nicolas)
-> 
->   package/wpa_supplicant/ifupdown.sh       | 48 ++++++++++++++++++++++++
->   package/wpa_supplicant/wpa_supplicant.mk | 10 +++++
->   2 files changed, 58 insertions(+)
->   create mode 100755 package/wpa_supplicant/ifupdown.sh
-> 
-> diff --git a/package/wpa_supplicant/ifupdown.sh b/package/wpa_supplicant/ifupdown.sh
-> new file mode 100755
-> index 0000000000..7321c7602f
-> --- /dev/null
-> +++ b/package/wpa_supplicant/ifupdown.sh
-> @@ -0,0 +1,48 @@
-> +#!/bin/sh
-> +
-> +# This file is executed by ifupdown in pre-up, post-up, pre-down and
-> +# post-down phases of network interface configuration.
-> +
-> +WPA_SUP_BIN="/usr/sbin/wpa_supplicant"
-> +
-> +# Allow wpa_supplicant interface to be specified via wpa-iface
-> +# useful for starting wpa_supplicant on one interface of a bridge
-> +if [ -n "$IF_WPA_IFACE" ]; then
-> +	WPA_IFACE="$IF_WPA_IFACE"
-> +else
-> +	WPA_IFACE="$IFACE"
-> +fi
-> +
-> +WPA_SUP_PIDFILE="/run/wpa_supplicant.${WPA_IFACE}.pid"
-> +
-> +do_start () {
-> +	[ -z "$IF_WPA_CONF" ] && exit 0
-> +
-> +	if [ ! -s "$IF_WPA_CONF" ]; then
-> +		echo "cannot read contents of $IF_WPA_CONF"
-> +		exit 1
-> +	fi
-> +	WPA_SUP_CONF="-c $IF_WPA_CONF"
-> +}
-> +
-> +case "$MODE" in
-> +	start)
-> +		do_start
-> +		case "$PHASE" in
-> +			post-up)
-> +				start-stop-daemon -S -q -x ${WPA_SUP_BIN} \
-> +				-- -B -i ${WPA_IFACE} ${WPA_SUP_CONF} -P ${WPA_SUP_PIDFILE}
-> +				;;
-> +		esac
-> +		;;
-> +
-> +	stop)
-> +		case "$PHASE" in
-> +			pre-down)
-> +				start-stop-daemon -K -p ${WPA_SUP_PIDFILE}
-> +				;;
+Catch2 is a modern C++ unit testing framework which is
+increasing in popularity.
+This package is staging only and allows to build tests
+to be run on the target.
 
-Now this script will still attempt to stop wpa_supplicant on all 
-interfaces even without a wpa-conf option. The [ -z "$IF_WPA_CONF" ] 
-check need to be done earlier.
+Further it can also be built as host package (similar to
+gtest)
 
-> +		esac
-> +		;;
-> +esac
-> +
-> +exit 0
-> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-> index c4cfe03371..d38bf572db 100644
-> --- a/package/wpa_supplicant/wpa_supplicant.mk
-> +++ b/package/wpa_supplicant/wpa_supplicant.mk
-> [...]
-> @@ -259,8 +267,10 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
->   	$(WPA_SUPPLICANT_INSTALL_PASSPHRASE)
->   	$(WPA_SUPPLICANT_INSTALL_DBUS)
->   	$(WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO)
-> +	$(WPA_SUPPLICANT_INSTALL_IFUP_SCRIPTS)
->   endef
->   
-> +
+- https://github.com/catchorg/Catch2
 
-This added blank line should probably go away.
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/catch2/Config.in   | 28 ++++++++++++++++++++++++++++
+ package/catch2/catch2.hash |  3 +++
+ package/catch2/catch2.mk   | 19 +++++++++++++++++++
+ 5 files changed, 52 insertions(+)
+ create mode 100644 package/catch2/Config.in
+ create mode 100644 package/catch2/catch2.hash
+ create mode 100644 package/catch2/catch2.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 86755bfe18..211e876e16 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2027,6 +2027,7 @@ F:	package/gnuplot/
+ F:	package/sdl2/
+ 
+ N:	Michael Nosthoff <buildroot@heine.tech>
++F:	package/catch2/
+ F:	package/grpc/
+ F:	package/gtest/
+ F:	package/libabseil-cpp/
+diff --git a/package/Config.in b/package/Config.in
+index 3b089166da..77ada20db9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1929,6 +1929,7 @@ menu "Other"
+ 	source "package/boost/Config.in"
+ 	source "package/c-capnproto/Config.in"
+ 	source "package/capnproto/Config.in"
++	source "package/catch2/Config.in"
+ 	source "package/cctz/Config.in"
+ 	source "package/cereal/Config.in"
+ 	source "package/clang/Config.in"
+diff --git a/package/catch2/Config.in b/package/catch2/Config.in
+new file mode 100644
+index 0000000000..b0eee9fa47
+--- /dev/null
++++ b/package/catch2/Config.in
+@@ -0,0 +1,28 @@
++config BR2_PACKAGE_CATCH2
++	bool "catch2"
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
++	depends on BR2_USE_MMU # fork()
++	help
++	  Catch2 is mainly a unit testing framework for C++, but it
++	  also provides basic micro-benchmarking features, and simple
++	  BDD macros.
++
++	  Catch2's main advantage is that using it is both simple and
++	  natural. Tests autoregister themselves and do not have to
++	  be named with valid identifiers, assertions look like
++	  normal C++ code, and sections provide a nice way to share
++	  set-up and tear-down code in tests.
++
++	  This package allows running testsuites on the target which
++	  might be advantageous in certain cases.
++
++	  https://github.com/catchorg/Catch2
++
++comment "gtest needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
+new file mode 100644
+index 0000000000..8d47257abe
+--- /dev/null
++++ b/package/catch2/catch2.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  8c4173c68ae7da1b5b505194a0c2d6f1b2aef4ec1e3e7463bde451f26bbaf4e7  v3.0.1.tar.gz
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
+diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
+new file mode 100644
+index 0000000000..e04b8a6b0a
+--- /dev/null
++++ b/package/catch2/catch2.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# catch2
++#
++################################################################################
++
++CATCH2_VERSION = 3.0.1
++CATCH2_SOURCE = v$(CATCH2_VERSION).tar.gz
++CATCH2_SITE = https://github.com/catchorg/Catch2/archive
++CATCH2_INSTALL_STAGING = YES
++CATCH2_INSTALL_TARGET = NO
++CATCH2_LICENSE = BSL-1.0
++CATCH2_LICENSE_FILES = LICENSE.txt
++CATCH2_SUPPORTS_IN_SOURCE_BUILD = NO
++
++CATCH2_CONF_OPTS = -DCATCH_INSTALL_DOCS=OFF
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
