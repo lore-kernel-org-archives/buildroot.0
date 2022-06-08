@@ -1,65 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EBCCC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jun 2022 07:12:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3E5AC43334
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jun 2022 07:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1499C40B61;
-	Wed,  8 Jun 2022 07:12:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DF5360FFF;
+	Wed,  8 Jun 2022 07:12:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E6B0c6J5xvUk; Wed,  8 Jun 2022 07:12:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ahoHqD0QK_6y; Wed,  8 Jun 2022 07:12:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2719A405AA;
-	Wed,  8 Jun 2022 07:12:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E3B860FF8;
+	Wed,  8 Jun 2022 07:12:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 57E0B1BF3D2
- for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:10:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 42F951BF3D2
+ for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:10:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4384E4191A
- for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:10:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 17DD94191A
+ for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 07:10:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O5XmxkV_uq-h for <buildroot@lists.busybox.net>;
- Wed,  8 Jun 2022 07:10:43 +0000 (UTC)
+ with ESMTP id 5odsNqBnXAHr for <buildroot@lists.busybox.net>;
+ Wed,  8 Jun 2022 07:10:44 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A964F410C8
- for <buildroot@buildroot.org>; Wed,  8 Jun 2022 07:10:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B2EBA4190C
+ for <buildroot@buildroot.org>; Wed,  8 Jun 2022 07:10:43 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 8565AFF808;
- Wed,  8 Jun 2022 07:10:40 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id BF41CFF814;
+ Wed,  8 Jun 2022 07:10:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654672241;
+ t=1654672242;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=QZ+fbjTQ/fyLJ4DCTw6uOrQ3JSKEnpEdBI1vMFz40jo=;
- b=ozpR51uiZDn6FGAqf4woi4zvF7LyNE/0PykLpoavPL7wEG3bfrBgT0y6j4+x7PfmOmpvvl
- XjiEh+D8z9VA3HKDTevBK1ahsZC3oAwoe5855Pqx+rkIq73noh4m4l/3JdbegqsiP7jQxZ
- D4l7suPVt6p9NNiBhY0jUco+WK2j7bZMwZHzXrAK8fYcEUckZCzzAkAXbQNfC5prEBpTME
- YoMKjU1HsRcGVc0HnugnzeBvaiXzlRqpZ/U89BN7rm7gJJUxgYODoYUTQ6nj4CzW5R2vm+
- bB2QzkANbwuFLtnES5ovhSpbThYiz6WOxbPQf6/oNYFcQzxTtjnEWI83egg85A==
+ bh=HKrG5WNuzMorQNRJDZRxtWGnSbEKCPKxaD+xXQsnnpc=;
+ b=Be1Xb7LJAUBQXiKz3cgDJETZGUUS/61m7UGT47dsA4o8SAdWEmhrQJCzOTGIYCIfEJAHWN
+ fxqYGFFOnS3uc7RzWxMEmUfMcIz8tZZPI7iccl688u53GgW8SI94593XPAFu4wDxNBnhE/
+ SaOUmGdyIzgzXl5m81vagwIt2Yx/xdXeJlDGSmgHiBIHPfjPykKbBEwDhqtBspL5cKUNJX
+ dCvaJaymdkino282FXKvD4qBsOF5v5UMj5U75rpY48dzO0Y5Vtz7S9YeoAwdOE67xzxr5a
+ c9/PHPQvK9GGs3Mosbx7ZCewjY8sf+xGUmbrOFGSkedRHEZENazFO3PZbpbDHQ==
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
  Romain Naour <romain.naour@gmail.com>,
  Buildroot List <buildroot@buildroot.org>
-Date: Wed,  8 Jun 2022 09:10:19 +0200
-Message-Id: <20220608071027.3384469-8-thomas.petazzoni@bootlin.com>
+Date: Wed,  8 Jun 2022 09:10:20 +0200
+Message-Id: <20220608071027.3384469-9-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
 References: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 07/14] toolchain/toolchain-external: add
- BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER option
+Subject: [Buildroot] [PATCH v2 08/14]
+ support/scripts/gen-bootlin-toolchains: make use of
+ BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,78 +74,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Some external toolchains do not have gdbserver available, but the
-option BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is always visible. And
-when enabled, this option aborts with an error when gdbserver cannot
-be found:
+The microblazeel, microblazebe and openrisc toolchains need to select
+this option as they don't have any gdb/gdbserver.
 
-  Could not find gdbserver in external toolchain
-
-Due to that, some random configurations fail to build when
-BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y, for example with the Bootlin
-toolchains for Microblaze or OpenRISC (because there's no GDB support
-for those architectures).
-
-One solution could be to make "Could not find gdbserver in external
-toolchain" a warning instead of a hard error, but then nobody would
-notice about this issue, in cases where it should legitimately abort
-with a hard error.
-
-So, the clean solution would be to add a
-BR2_TOOLCHAIN_EXTERNAL_HAS_GDBSERVER. But that means all existing
-external toolchains would have to be modified to select this option.
-
-Instead, and as an exception, we chose to use inverted logic, and
-create an option that is the opposite:
-BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER. By default, we assume
-external toolchains have gdbserver. If
-BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER is enabled, we disallow the
-BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY option.
-
-Note that the case of custom external toolchain does not matter: by
-definition they are not tested by the autobuilders, and by definition,
-we cannot now in menuconfig if the custom toolchain has or does not
-have gdbserver.
-
-This will help fixing:
+Helps in fixing:
 
   http://autobuild.buildroot.net/results/6315ef7b66ee4ae8f870c92186bc674d65f62f2c/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Note: if you want me to go with the positive logic option
-BR2_TOOLCHAIN_EXTERNAL_HAS_GDBSERVER, I'll be happy to provide the
-patches.
----
- toolchain/toolchain-external/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ support/scripts/gen-bootlin-toolchains | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 2177e6a678..1a67e5645f 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -155,9 +155,13 @@ source "toolchain/toolchain-external/toolchain-external-bootlin/Config.in.option
- # Custom toolchains
- source "toolchain/toolchain-external/toolchain-external-custom/Config.in.options"
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index c96a388f84..ad65f9fe5e 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -73,10 +73,12 @@ arches = {
+     'microblazebe': {
+         'conditions': ['BR2_microblazebe'],
+         'prefix': 'microblaze',
++        'gdbserver': False
+     },
+     'microblazeel': {
+         'conditions': ['BR2_microblazeel'],
+         'prefix': 'microblazeel',
++        'gdbserver': False
+     },
+     'mips32': {
+         # Not sure it could be used by other mips32 variants?
+@@ -122,6 +124,7 @@ arches = {
+     'openrisc': {
+         'conditions': ['BR2_or1k'],
+         'prefix': 'or1k',
++        'gdbserver': False,
+     },
+     'powerpc-440fp': {
+         # Not sure it could be used by other powerpc variants?
+@@ -311,6 +314,9 @@ class Toolchain:
+         for c in arches[self.arch]['conditions']:
+             depends.append(c)
  
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
-+	bool
++        if not arches[self.arch].get('gdbserver', True):
++            selects.append("BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER")
 +
- config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
- 	bool "Copy gdb server to the Target"
- 	depends on BR2_TOOLCHAIN_EXTERNAL
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	help
- 	  Copy the gdbserver provided by the external toolchain to the
- 	  target.
+         for frag in self.fragment:
+             # libc type
+             if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC"):
 -- 
 2.35.3
 
