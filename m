@@ -1,72 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C28BEC43334
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jun 2022 11:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EE45C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jun 2022 11:11:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4EBCB4014D;
-	Wed,  8 Jun 2022 11:10:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4545783FFA;
+	Wed,  8 Jun 2022 11:11:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zn-AkJGy7Ch5; Wed,  8 Jun 2022 11:10:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K9U8W-h6hyWA; Wed,  8 Jun 2022 11:11:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71A9E40025;
-	Wed,  8 Jun 2022 11:10:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EB3983FE1;
+	Wed,  8 Jun 2022 11:11:24 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 995871BF574
- for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 11:09:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 142231BF574
+ for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 11:11:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8808484000
- for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 11:09:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 10B5983FE1
+ for <buildroot@lists.busybox.net>; Wed,  8 Jun 2022 11:11:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WgqaZLDPDBME for <buildroot@lists.busybox.net>;
- Wed,  8 Jun 2022 11:09:57 +0000 (UTC)
+ with ESMTP id 2AWm66bBua6r for <buildroot@lists.busybox.net>;
+ Wed,  8 Jun 2022 11:11:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com
- [IPv6:2607:f8b0:4864:20::92f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 05FF583FF6
- for <buildroot@busybox.net>; Wed,  8 Jun 2022 11:09:56 +0000 (UTC)
-Received: by mail-ua1-x92f.google.com with SMTP id 63so6793607uaw.10
- for <buildroot@busybox.net>; Wed, 08 Jun 2022 04:09:56 -0700 (PDT)
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com
+ [IPv6:2607:f8b0:4864:20::e31])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0846A83FBE
+ for <buildroot@busybox.net>; Wed,  8 Jun 2022 11:11:20 +0000 (UTC)
+Received: by mail-vs1-xe31.google.com with SMTP id i186so19343861vsc.9
+ for <buildroot@busybox.net>; Wed, 08 Jun 2022 04:11:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=mime-version:from:date:message-id:subject:to:cc;
- bh=/pWZEtQva03k5rnAEFvYA4AixCI9hBmVXcv8KK5jB4M=;
- b=RR/B6YPyOz4GfplwHoKUhJTce53BMrE/MGR0E9QYM+L7dkvQGq4cHgx5icskDcfkOq
- R8CIqxUl9wm9xPBh9xUgM8Qh31dbqJn/FMC64PRarzYLfqAr5veGXdx4FDf4xsua5m9C
- ZSGLNIWK00wWIUl3nq27TbsNHC/ASjDC750y0X1yG3n+sr8BcS7wtslAlk0x2sXl4OZy
- iOqRBUn8Um3KKrRVB66XzRcZkrOkLBPtp5EEfORdmEVUKrHVvGGxjaKWtfgoNmGR4GzI
- zInCkRBWyPSNl/nZSz9KqWtgpCD/nSnNVaHnbuYuSGMtqKzV6jS3CqygzcbbXUMpmStz
- SiGQ==
+ bh=IeSNbld3hZYoBHRtLaujm3bFLXz5P16kBCCqD/kqe7w=;
+ b=ESOWSVBsfdpraoTdSkhZdMWEI4xZrmTKp8gi0WFxJswjUTiu58Pkg+Y5Mhz09df7Ue
+ EE/AhkAdUFIVvu48nnsWpsLwmHnx5uvIFufKZagASUNcNmYZDIeUO4c7VAbTz55P2NdJ
+ XgXlrGVCQCf40fSdKJPKmy1ZPlk4GYigNCAI9lsRe4VOCw7AjjdsZAYe2J9nvRMwtATO
+ hMNR0It6Q3CCPB7CwwHbMGHI4iyxnsXQy+OvQPujB07SDjn2ney579F9zi9BNqPvpX8c
+ xzU1riDppFbikHUvL0/5u5k6zAWdK2N6C1Uy04kM3VueZmobdEgGwpAoyJd369wozcRW
+ i7GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
- bh=/pWZEtQva03k5rnAEFvYA4AixCI9hBmVXcv8KK5jB4M=;
- b=IBLdWvqrsN1WAM4oxZJ18Ht4CKwGfueh6uZEHoO4zqr8yle76doIwFMf/JDSwrxd32
- s1m4Ggl0Sl++6MHWY6fBVKct6knv//VqdfINf34ltGpDtzqvOCEkQ/tKa8qCawiqvtVr
- X6Zybgm35ioQX/JUXSr6jVZXlQRzKJdWKJ+u/xqGjKqgk8P+qL/zS1JHx14NY62k7e6J
- BbvySZnOZavEDqjlc3kiID5npq0EG/W7zp7iJeliLA9pAdPDFtk4N8DJ+ErU2ACkKbTy
- 4WA/i3n2QotDEM2X4u2eN81flAbhUUHTlOVbXiCam3j/v/ATyaXuMzd7pwH7QcsJBV74
- Kleg==
-X-Gm-Message-State: AOAM531EZUg0QNf/TqwNRhlnzbeTGBqhDnZgsMgYqrPT1ZzcomB814Ks
- lETgVEIT46z6o4ha/N4wYjG5qO2xflqHobPQUDKAgd8rhxA=
-X-Google-Smtp-Source: ABdhPJzcWft061xyfIxNAbO0oGvAquAq8eEVuhkjbvyF9iCOl1x79dPfwdwn9C7Uir8rObc8r/VZn8zmIER/XEauCvU=
-X-Received: by 2002:ab0:6594:0:b0:378:d566:e982 with SMTP id
- v20-20020ab06594000000b00378d566e982mr7749109uam.22.1654686595799; Wed, 08
- Jun 2022 04:09:55 -0700 (PDT)
+ bh=IeSNbld3hZYoBHRtLaujm3bFLXz5P16kBCCqD/kqe7w=;
+ b=exsn9fCo3tFbV9/yUD7EB5wmO6kd99dr4tV0fdwO1sZvtRxH+oCQEoGPJpPMQ1/202
+ Mw4AW/CbL/R6ebuwHqAy4sDxCzqQCIWb/5AVcs2aK5Oy4kn/3LoNu8Dvk+lLF1RizYX6
+ eeoHkHDbEcjQ/mQcJa7QWF4QSeV3jADj8fWBRE3IyJ0PtcIcRmX6wO77/5aHFGBHGotm
+ xFQiTDMPh4qTGm1L0+bZ3bdiU71LExaXXYD9HD91Z3sjItnLQnRC6Zf8aTZjVBr7Bha1
+ QiIMWKag18wdlT7Hk9OpznPADNw5xfSH/55sEebTWziIev0egQXzfMFogT/J6AZiwe1z
+ hmdA==
+X-Gm-Message-State: AOAM533sUxwbq29vyE+eip/l70O1sVYWtBMnesqXgU/gQcsS0IZJL5cP
+ KMh/xpsfvaIL0DcoZad2uiNOecWc0J+5JS3inIVo7zam/TMBbw==
+X-Google-Smtp-Source: ABdhPJwnbz0YlpMbcciXlKzy6oxB+aggMpa+Xma3rNNodd+uBJXbhHH1pTXosC5yj8o7WuUP4pkx59DzmjETtUo+/WU=
+X-Received: by 2002:a67:e019:0:b0:349:d44f:c843 with SMTP id
+ c25-20020a67e019000000b00349d44fc843mr13981624vsl.54.1654686679724; Wed, 08
+ Jun 2022 04:11:19 -0700 (PDT)
 MIME-Version: 1.0
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <fperrad@gmail.com>
-Date: Wed, 8 Jun 2022 13:09:44 +0200
-Message-ID: <CAGhdn543kyd=cz3i1TWcbb=CtWj-4Bco6XgZ5PyUXmgzXx6E-A@mail.gmail.com>
+Date: Wed, 8 Jun 2022 13:11:08 +0200
+Message-ID: <CAGhdn56+3FGsLJ0UmH1snEBdfwA5Fy_N881T_x6ybMqVKv5N7g@mail.gmail.com>
 To: buildroot <buildroot@busybox.net>
-Subject: [Buildroot] [PATCH] package/iptables: bump to version 1.8.8
+Subject: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.34
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,86 +76,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6187681385067844078=="
+Content-Type: multipart/mixed; boundary="===============7512935529526795561=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6187681385067844078==
-Content-Type: multipart/alternative; boundary="000000000000c1ddf705e0edbeb7"
+--===============7512935529526795561==
+Content-Type: multipart/alternative; boundary="000000000000c276e505e0edc314"
 
---000000000000c1ddf705e0edbeb7
+--000000000000c276e505e0edc314
 Content-Type: text/plain; charset="UTF-8"
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/iptables/iptables.hash | 2 +-
- package/iptables/iptables.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
-index 7f1441393..f4e5ae159 100644
---- a/package/iptables/iptables.hash
-+++ b/package/iptables/iptables.hash
-@@ -1,4 +1,4 @@
- # From https://netfilter.org/projects/iptables/downloads.html
--sha256  c109c96bb04998cd44156622d36f8e04b140701ec60531a10668cfdff5e8d8f0
- iptables-1.8.7.tar.bz2
-+sha256  71c75889dc710676631553eb1511da0177bbaaf1b551265b912d236c3f51859f
- iptables-1.8.8.tar.bz2
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 23ce1f42b..c68c6e90f 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.33.sha256sum
+-sha256  588b06522e25d1579e989b6f9d8a1bdbf2fe13cde01a04e904ff346a225e7801
+ gtk+-3.24.33.tar.xz
++# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.34.sha256sum
++sha256  dbc69f90ddc821b8d1441f00374dc1da4323a2eafa9078e61edbe5eeefa852ec
+ gtk+-3.24.34.tar.xz
+
+ # Hash for license file:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c
  COPYING
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 555bb384f..a54194a8c 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index cd0a75eb2..53d7f6898 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
 
--IPTABLES_VERSION = 1.8.7
-+IPTABLES_VERSION = 1.8.8
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = https://netfilter.org/projects/iptables/files
- IPTABLES_INSTALL_STAGING = YES
+ LIBGTK3_VERSION_MAJOR = 3.24
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).33
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).34
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE =
+http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
 -- 
 2.34.1
 
---000000000000c1ddf705e0edbeb7
+--000000000000c276e505e0edc314
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr"><br>Signed-off-by: Francois Perrad &lt;<a href=3D"mailto:f=
-rancois.perrad@gadz.org" target=3D"_blank">francois.perrad@gadz.org</a>&gt;=
-<br>---<br>=C2=A0package/iptables/iptables.hash | 2 +-<br>=C2=A0package/ipt=
-ables/<a href=3D"http://iptables.mk" target=3D"_blank">iptables.mk</a> =C2=
-=A0 | 2 +-<br>=C2=A02 files changed, 2 insertions(+), 2 deletions(-)<br><br=
->diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.ha=
-sh<br>index 7f1441393..f4e5ae159 100644<br>--- a/package/iptables/iptables.=
-hash<br>+++ b/package/iptables/iptables.hash<br>@@ -1,4 +1,4 @@<br>=C2=A0# =
-From <a href=3D"https://netfilter.org/projects/iptables/downloads.html" tar=
-get=3D"_blank">https://netfilter.org/projects/iptables/downloads.html</a><b=
-r>-sha256 =C2=A0c109c96bb04998cd44156622d36f8e04b140701ec60531a10668cfdff5e=
-8d8f0 =C2=A0iptables-1.8.7.tar.bz2<br>+sha256 =C2=A071c75889dc710676631553e=
-b1511da0177bbaaf1b551265b912d236c3f51859f =C2=A0iptables-1.8.8.tar.bz2<br>=
-=C2=A0# Locally calculated<br>=C2=A0sha256 =C2=A08177f97513213526df2cf6184d=
-8ff986c675afb514d4e68a404010521b880643 =C2=A0COPYING<br>diff --git a/packag=
-e/iptables/<a href=3D"http://iptables.mk" target=3D"_blank">iptables.mk</a>=
- b/package/iptables/<a href=3D"http://iptables.mk" target=3D"_blank">iptabl=
-es.mk</a><br>index 555bb384f..a54194a8c 100644<br>--- a/package/iptables/<a=
- href=3D"http://iptables.mk" target=3D"_blank">iptables.mk</a><br>+++ b/pac=
-kage/iptables/<a href=3D"http://iptables.mk" target=3D"_blank">iptables.mk<=
-/a><br>@@ -4,7 +4,7 @@<br>=C2=A0#<br>=C2=A0################################=
-################################################<br>=C2=A0<br>-IPTABLES_VER=
-SION =3D 1.8.7<br>+IPTABLES_VERSION =3D 1.8.8<br>=C2=A0IPTABLES_SOURCE =3D =
-iptables-$(IPTABLES_VERSION).tar.bz2<br>=C2=A0IPTABLES_SITE =3D <a href=3D"=
-https://netfilter.org/projects/iptables/files" target=3D"_blank">https://ne=
-tfilter.org/projects/iptables/files</a><br>=C2=A0IPTABLES_INSTALL_STAGING =
-=3D YES<br>-- <br>2.34.1<br><br><br></div>
+rancois.perrad@gadz.org">francois.perrad@gadz.org</a>&gt;<br>---<br>=C2=A0p=
+ackage/libgtk3/libgtk3.hash | 4 ++--<br>=C2=A0package/libgtk3/<a href=3D"ht=
+tp://libgtk3.mk">libgtk3.mk</a> =C2=A0 | 2 +-<br>=C2=A02 files changed, 3 i=
+nsertions(+), 3 deletions(-)<br><br>diff --git a/package/libgtk3/libgtk3.ha=
+sh b/package/libgtk3/libgtk3.hash<br>index 23ce1f42b..c68c6e90f 100644<br>-=
+-- a/package/libgtk3/libgtk3.hash<br>+++ b/package/libgtk3/libgtk3.hash<br>=
+@@ -1,5 +1,5 @@<br>-# From <a href=3D"https://download.gnome.org/sources/gt=
+k+/3.24/gtk+-3.24.33.sha256sum">https://download.gnome.org/sources/gtk+/3.2=
+4/gtk+-3.24.33.sha256sum</a><br>-sha256 =C2=A0588b06522e25d1579e989b6f9d8a1=
+bdbf2fe13cde01a04e904ff346a225e7801 =C2=A0gtk+-3.24.33.tar.xz<br>+# From <a=
+ href=3D"https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.34.sha256su=
+m">https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.34.sha256sum</a><=
+br>+sha256 =C2=A0dbc69f90ddc821b8d1441f00374dc1da4323a2eafa9078e61edbe5eeef=
+a852ec =C2=A0gtk+-3.24.34.tar.xz<br>=C2=A0<br>=C2=A0# Hash for license file=
+:<br>=C2=A0sha256 =C2=A0b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e=
+29512acebd69c =C2=A0COPYING<br>diff --git a/package/libgtk3/<a href=3D"http=
+://libgtk3.mk">libgtk3.mk</a> b/package/libgtk3/<a href=3D"http://libgtk3.m=
+k">libgtk3.mk</a><br>index cd0a75eb2..53d7f6898 100644<br>--- a/package/lib=
+gtk3/<a href=3D"http://libgtk3.mk">libgtk3.mk</a><br>+++ b/package/libgtk3/=
+<a href=3D"http://libgtk3.mk">libgtk3.mk</a><br>@@ -5,7 +5,7 @@<br>=C2=A0##=
+###########################################################################=
+###<br>=C2=A0<br>=C2=A0LIBGTK3_VERSION_MAJOR =3D 3.24<br>-LIBGTK3_VERSION =
+=3D $(LIBGTK3_VERSION_MAJOR).33<br>+LIBGTK3_VERSION =3D $(LIBGTK3_VERSION_M=
+AJOR).34<br>=C2=A0LIBGTK3_SOURCE =3D gtk+-$(LIBGTK3_VERSION).tar.xz<br>=C2=
+=A0LIBGTK3_SITE =3D <a href=3D"http://ftp.gnome.org/pub/gnome/sources/gtk+/=
+$(LIBGTK3_VERSION_MAJOR)">http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIB=
+GTK3_VERSION_MAJOR)</a><br>=C2=A0LIBGTK3_LICENSE =3D LGPL-2.0+<br>-- <br>2.=
+34.1<br><br><br></div>
 
---000000000000c1ddf705e0edbeb7--
+--000000000000c276e505e0edc314--
 
---===============6187681385067844078==
+--===============7512935529526795561==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -168,4 +171,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6187681385067844078==--
+--===============7512935529526795561==--
