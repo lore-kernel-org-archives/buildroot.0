@@ -1,59 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A754C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 03:25:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D2FEC43334
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 03:26:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8CC241B39;
-	Thu,  9 Jun 2022 03:25:34 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SCyBPlmWkcf3; Thu,  9 Jun 2022 03:25:33 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36CFB41974;
-	Thu,  9 Jun 2022 03:25:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0E2C21BF982
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 03:25:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0346E40253
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 03:25:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A27A340BCC;
+	Thu,  9 Jun 2022 03:26:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e7SS7BJKcq_k for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 03:25:29 +0000 (UTC)
-X-Greylist: delayed 00:12:35 by SQLgrey-1.8.0
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5Q1uYw2EWc-J; Thu,  9 Jun 2022 03:26:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7954D40423;
+	Thu,  9 Jun 2022 03:26:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 81D651BF982
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 03:26:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E506610B3
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 03:26:52 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N4FZQzrwUPm0 for <buildroot@lists.busybox.net>;
+ Thu,  9 Jun 2022 03:26:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
  [60.248.80.70])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 87B7940126
- for <buildroot@buildroot.org>; Thu,  9 Jun 2022 03:25:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 82635610A9
+ for <buildroot@buildroot.org>; Thu,  9 Jun 2022 03:26:51 +0000 (UTC)
+Received: from Atcsqr.andestech.com (localhost [127.0.0.2] (may be forged))
+ by Atcsqr.andestech.com with ESMTP id 2593D194085596
+ for <buildroot@buildroot.org>; Thu, 9 Jun 2022 11:13:01 +0800 (+08)
+ (envelope-from peterlin@andestech.com)
 Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
- by Atcsqr.andestech.com with ESMTP id 2593PJCj093206;
- Thu, 9 Jun 2022 11:25:19 +0800 (+08)
+ by Atcsqr.andestech.com with ESMTP id 2593Cclo085427;
+ Thu, 9 Jun 2022 11:12:38 +0800 (+08)
  (envelope-from peterlin@andestech.com)
 Received: from Thinkpad-L14 (192.168.21.66) by ATCPCS16.andestech.com
  (10.0.1.222) with Microsoft SMTP Server id 14.3.498.0; Thu, 9 Jun 2022
- 11:25:18 +0800
-Date: Thu, 9 Jun 2022 11:27:03 +0800
+ 11:12:33 +0800
+Date: Thu, 9 Jun 2022 11:14:19 +0800
 From: Yu Chien Peter Lin <peterlin@andestech.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, <buildroot@buildroot.org>
-Message-ID: <YqFoh3njptKJTZlK@Thinkpad-L14>
+Message-ID: <YqFlixOmOo1mjnv+@Thinkpad-L14>
 References: <20220607205921.3312256-1-thomas.petazzoni@bootlin.com>
- <20220607205921.3312256-3-thomas.petazzoni@bootlin.com>
+ <20220607205921.3312256-2-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220607205921.3312256-3-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220607205921.3312256-2-thomas.petazzoni@bootlin.com>
 User-Agent: Mutt/2.2.5 (a8c7fba1) (2022-05-16)
 X-Originating-IP: [192.168.21.66]
 X-DNSRBL: 
-X-MAIL: Atcsqr.andestech.com 2593PJCj093206
-Subject: Re: [Buildroot] [PATCH 2/3]
- toolchain/toolchain-external/toolchain-external-andes-nds32: remove package
+X-MAIL: Atcsqr.andestech.com 2593D194085596
+Subject: Re: [Buildroot] [PATCH 1/3] configs/andes_ae300: remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,151 +74,215 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Jun 07, 2022 at 10:59:19PM +0200, Thomas Petazzoni wrote:
-> As we're about to remove the nds32 architecture support from
-> Buildroot, drop the toolchain-external-andes-nds32 external toolchain
-> package.
+On Tue, Jun 07, 2022 at 10:59:18PM +0200, Thomas Petazzoni wrote:
+> As we're about to remove the nds32 architecture support, remove the
+> only defconfig that used this CPU architecture.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
+Hi Thomas,
+
 Reviewed-by: Yu Chien Peter Lin <peterlin@andestech.com>
 
-Regards,
+Thanks,
 Peter Lin
 
 > ---
->  DEVELOPERS                                        |  1 -
->  .../config-fragments/autobuild/andes-nds32.config |  3 ---
->  .../autobuild/toolchain-configs.csv               |  1 -
->  toolchain/toolchain-external/Config.in            |  6 ------
->  .../toolchain-external-andes-nds32/Config.in      | 15 ---------------
->  .../Config.in.options                             |  9 ---------
->  .../toolchain-external-andes-nds32.hash           |  2 --
->  .../toolchain-external-andes-nds32.mk             | 10 ----------
->  8 files changed, 47 deletions(-)
->  delete mode 100644 support/config-fragments/autobuild/andes-nds32.config
->  delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
->  delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
->  delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash
->  delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk
+>  DEVELOPERS                                    |  1 -
+>  board/andes/ae300/ae300.fragment              |  1 -
+>  ...0001-nds32-Fix-boot-messages-garbled.patch | 28 ----------
+>  ...ve-redundant-YYLOC-global-declaratio.patch | 52 -------------------
+>  board/andes/ae300/readme.txt                  | 49 -----------------
+>  configs/andes_ae300_defconfig                 | 10 ----
+>  6 files changed, 141 deletions(-)
+>  delete mode 100644 board/andes/ae300/ae300.fragment
+>  delete mode 100644 board/andes/ae300/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch
+>  delete mode 100644 board/andes/ae300/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
+>  delete mode 100644 board/andes/ae300/readme.txt
+>  delete mode 100644 configs/andes_ae300_defconfig
 > 
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 25a5f82e79..078fa8a03e 100644
+> index 1fec764812..25a5f82e79 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -2165,7 +2165,6 @@ N:	Yu Chien Peter Lin <peterlin@andestech.com>
+> @@ -2164,7 +2164,6 @@ F:	package/tcf-agent/
+>  N:	Yu Chien Peter Lin <peterlin@andestech.com>
 >  F:	arch/Config.in.nds32
 >  F:	board/andes
+> -F:	configs/andes_ae300_defconfig
 >  F:	configs/andes_ae350_45_defconfig
-> -F:	toolchain/toolchain-external/toolchain-external-andes-nds32/
+>  F:	toolchain/toolchain-external/toolchain-external-andes-nds32/
 >  
->  N:	Olaf Rempel <razzor@kopf-tisch.de>
->  F:	package/ctorrent/
-> diff --git a/support/config-fragments/autobuild/andes-nds32.config b/support/config-fragments/autobuild/andes-nds32.config
+> diff --git a/board/andes/ae300/ae300.fragment b/board/andes/ae300/ae300.fragment
 > deleted file mode 100644
-> index 541677e002..0000000000
-> --- a/support/config-fragments/autobuild/andes-nds32.config
+> index 3b13d10740..0000000000
+> --- a/board/andes/ae300/ae300.fragment
 > +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -BR2_nds32=y
-> -BR2_TOOLCHAIN_EXTERNAL=y
-> -BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32=y
-> diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-> index f5e9bd8cf9..0b19051543 100644
-> --- a/support/config-fragments/autobuild/toolchain-configs.csv
-> +++ b/support/config-fragments/autobuild/toolchain-configs.csv
-> @@ -22,7 +22,6 @@ support/config-fragments/autobuild/br-arm-full-static.config,x86_64
->  support/config-fragments/autobuild/sourcery-arm.config,x86
->  
->  # Toolchains used by test-pkg only when the '-a' option is passed:
-> -support/config-fragments/autobuild/andes-nds32.config,x86
->  support/config-fragments/autobuild/arm-aarch64.config,x86_64
->  support/config-fragments/autobuild/bootlin-aarch64-glibc.config,x86_64
->  support/config-fragments/autobuild/bootlin-arcle-hs38-uclibc.config,x86_64
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 2177e6a678..cc6464aeaf 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -23,9 +23,6 @@ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config
->  # ARC
->  source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
->  
-> -# Andes
-> -source "toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in"
-> -
->  # ARM (use ARM toolchain by default)
->  source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in"
->  source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in"
-> @@ -130,9 +127,6 @@ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config
->  # ARC
->  source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options"
->  
-> -# Andes
-> -source "toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options"
-> -
->  # ARM
->  source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in.options"
->  source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options"
-> diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
+> @@ -1 +0,0 @@
+> -CONFIG_NDS32_BUILTIN_DTB="ae3xx"
+> diff --git a/board/andes/ae300/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch b/board/andes/ae300/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch
 > deleted file mode 100644
-> index ecd50cc805..0000000000
-> --- a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
+> index adb60937bd..0000000000
+> --- a/board/andes/ae300/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch
 > +++ /dev/null
-> @@ -1,15 +0,0 @@
-> -config BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32
-> -	bool "Andes nds32"
-> -	depends on BR2_nds32
-> -	depends on !BR2_STATIC_LIBS
-> -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> -	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
-> -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
-> -	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> -	select BR2_TOOLCHAIN_HAS_SSP
-> -	help
-> -	  nds32 toolchain for the nds32 architecture. It uses GCC
-> -	  8.2.1, GDB 8.1.1, glibc 2.28, Binutils 2.30. It generates
-> -	  code that runs on ae300 platform
-> diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
+> @@ -1,28 +0,0 @@
+> -From 90d52d180dcc5d1300dc352ca709eb6453894143 Mon Sep 17 00:00:00 2001
+> -From: Nylon Chen <nylon7@andestech.com>
+> -Date: Wed, 28 Nov 2018 16:26:46 +0800
+> -Subject: [PATCH] nds32: Fix boot messages garbled
+> -
+> -In order to display uart correctly we have to pass the correct setting of uart to kernel by bootarg.
+> -This patch will provide such settings to set the correct uart baud rate.
+> -
+> -Signed-off-by: Nylon Chen <nylon7@andestech.com>
+> ----
+> - arch/nds32/boot/dts/ae3xx.dts | 1 +
+> - 1 file changed, 1 insertion(+)
+> -
+> -diff --git a/arch/nds32/boot/dts/ae3xx.dts b/arch/nds32/boot/dts/ae3xx.dts
+> -index bb39749a6673..aefe2090926a 100644
+> ---- a/arch/nds32/boot/dts/ae3xx.dts
+> -+++ b/arch/nds32/boot/dts/ae3xx.dts
+> -@@ -6,6 +6,7 @@
+> - 	interrupt-parent = <&intc>;
+> - 
+> - 	chosen {
+> -+		bootargs = "memblock=debug earlycon console=ttyS0,38400n8 debug loglevel=7";
+> - 		stdout-path = &serial0;
+> - 	};
+> - 
+> --- 
+> -2.18.0
+> -
+> diff --git a/board/andes/ae300/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch b/board/andes/ae300/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
 > deleted file mode 100644
-> index 7d11ae2098..0000000000
-> --- a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
+> index 71ae991816..0000000000
+> --- a/board/andes/ae300/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
 > +++ /dev/null
-> @@ -1,9 +0,0 @@
-> -if BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32
+> @@ -1,52 +0,0 @@
+> -From f9df4186c17d686f1ca38f973d7a3a49e8e37c01 Mon Sep 17 00:00:00 2001
+> -From: Dirk Mueller <dmueller@suse.com>
+> -Date: Tue, 14 Jan 2020 18:53:41 +0100
+> -Subject: [PATCH] scripts/dtc: Remove redundant YYLOC global declaration
 > -
-> -config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-> -	default "nds32le-linux"
+> -gcc 10 will default to -fno-common, which causes this error at link
+> -time:
 > -
-> -config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-> -	default "toolchain-external-andes-nds32"
+> -  (.text+0x0): multiple definition of `yylloc'; dtc-lexer.lex.o (symbol from plugin):(.text+0x0): first defined here
 > -
-> -endif
-> diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash
+> -This is because both dtc-lexer as well as dtc-parser define the same
+> -global symbol yyloc. Before with -fcommon those were merged into one
+> -defintion. The proper solution would be to to mark this as "extern",
+> -however that leads to:
+> -
+> -  dtc-lexer.l:26:16: error: redundant redeclaration of 'yylloc' [-Werror=redundant-decls]
+> -   26 | extern YYLTYPE yylloc;
+> -      |                ^~~~~~
+> -In file included from dtc-lexer.l:24:
+> -dtc-parser.tab.h:127:16: note: previous declaration of 'yylloc' was here
+> -  127 | extern YYLTYPE yylloc;
+> -      |                ^~~~~~
+> -cc1: all warnings being treated as errors
+> -
+> -which means the declaration is completely redundant and can just be
+> -dropped.
+> -
+> -Signed-off-by: Dirk Mueller <dmueller@suse.com>
+> -Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
+> -[robh: cherry-pick from upstream]
+> -Cc: stable@vger.kernel.org
+> -Signed-off-by: Rob Herring <robh@kernel.org>
+> -Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ----
+> - scripts/dtc/dtc-lexer.l | 1 -
+> - 1 file changed, 1 deletion(-)
+> -
+> -diff --git a/scripts/dtc/dtc-lexer.l b/scripts/dtc/dtc-lexer.l
+> -index 06c040902444..d1b3810156c7 100644
+> ---- a/scripts/dtc/dtc-lexer.l
+> -+++ b/scripts/dtc/dtc-lexer.l
+> -@@ -38,7 +38,6 @@ LINECOMMENT	"//".*\n
+> - #include "srcpos.h"
+> - #include "dtc-parser.tab.h"
+> - 
+> --YYLTYPE yylloc;
+> - extern bool treesource_error;
+> - 
+> - /* CAUTION: this will stop working if we ever use yyless() or yyunput() */
+> --- 
+> -2.25.1
+> -
+> diff --git a/board/andes/ae300/readme.txt b/board/andes/ae300/readme.txt
 > deleted file mode 100644
-> index 4314bb1f55..0000000000
-> --- a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash
+> index 51c05c9235..0000000000
+> --- a/board/andes/ae300/readme.txt
 > +++ /dev/null
-> @@ -1,2 +0,0 @@
-> -# From https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521/nds32le-linux-glibc-v3-upstream.tar.gz
-> -sha256 6050601df85ad93a4c211c1d57ed3773edb62aa505f7e07d7d555652e83af2cc  nds32le-linux-glibc-v3-upstream.tar.gz
-> diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk
+> @@ -1,49 +0,0 @@
+> -Intro
+> -=====
+> -
+> -Andestech(nds32) AE300 Platform
+> -
+> -The AE300 prototype demonstrates the AE300 example platform on the FPGA.
+> -It is composed of one Andestech(nds32) processor and AE300.
+> -
+> -How to build it
+> -===============
+> -
+> -Configure Buildroot
+> --------------------
+> -
+> -The andes_ae300_defconfig configuration is a sample configuration with
+> -all that is required to bring the FPGA Development Board:
+> -
+> -  $ make andes_ae300_defconfig
+> -
+> -Build everything
+> -----------------
+> -Note: you will need to have access to the network, since Buildroot will
+> -download the packages' sources.
+> -
+> -  $ make
+> -
+> -Result of the build
+> --------------------
+> -
+> -After building, you should obtain this tree:
+> -
+> -output/images/
+> -    +-- vmlinux
+> -    +-- rootfs.cpio
+> -    +-- rootfs.tar
+> -
+> -How to run it
+> -=============
+> -
+> -Run
+> ----
+> -
+> -  Setup the Console with the rate 38400/8-N-1.
+> -
+> -  $ cd output/images
+> -  $ ../host/bin/nds32le-linux-gdb vmlinux
+> -  $ target remote [your host]
+> -  $ lo
+> -  $ c 
+> diff --git a/configs/andes_ae300_defconfig b/configs/andes_ae300_defconfig
 > deleted file mode 100644
-> index fa29490b4f..0000000000
-> --- a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk
+> index ffcb4d7d38..0000000000
+> --- a/configs/andes_ae300_defconfig
 > +++ /dev/null
 > @@ -1,10 +0,0 @@
-> -################################################################################
-> -#
-> -# toolchain-external-andes-nds32
-> -#
-> -################################################################################
-> -
-> -TOOLCHAIN_EXTERNAL_ANDES_NDS32_SITE = https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521
-> -TOOLCHAIN_EXTERNAL_ANDES_NDS32_SOURCE = nds32le-linux-glibc-v3-upstream.tar.gz
-> -
-> -$(eval $(toolchain-external-package))
+> -BR2_nds32=y
+> -BR2_GLOBAL_PATCH_DIR="board/andes/ae300/patches"
+> -BR2_TOOLCHAIN_EXTERNAL=y
+> -BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32=y
+> -BR2_LINUX_KERNEL=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17"
+> -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> -BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/andes/ae300/ae300.fragment"
+> -BR2_TARGET_ROOTFS_INITRAMFS=y
 > -- 
 > 2.35.3
 > 
