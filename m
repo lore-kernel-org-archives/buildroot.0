@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57F5BC43334
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:44:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C858CC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:44:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17A3A8426F;
-	Thu,  9 Jun 2022 20:44:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DF2F84245;
+	Thu,  9 Jun 2022 20:44:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dajJSc-DuLvV; Thu,  9 Jun 2022 20:44:44 +0000 (UTC)
+	with ESMTP id ehiD6YeqKjr6; Thu,  9 Jun 2022 20:44:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3FC8C83689;
-	Thu,  9 Jun 2022 20:44:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 823451BF2F0
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:43:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A58718426F;
+	Thu,  9 Jun 2022 20:44:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 755B01BF2F0
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D318741B52
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:43:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4060582681
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:43:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T4paVEK0DZej for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 476RZsshoCdv for <buildroot@lists.busybox.net>;
  Thu,  9 Jun 2022 20:43:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5505141A0A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 60EB1826D5
  for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:43:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 888BF86F1D; Thu,  9 Jun 2022 20:31:53 +0000 (UTC)
+ id 97A3B86F1C; Thu,  9 Jun 2022 20:31:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Jun 2022 22:43:16 +0200
+Date: Thu, 9 Jun 2022 22:43:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 79f92631fde8540f9cbd5c4d9f52c55e199a337f
-X-Git-Newrev: 44fa5be2745e0444cfb451701f7bf1a273a1d737
+X-Git-Oldrev: 44fa5be2745e0444cfb451701f7bf1a273a1d737
+X-Git-Newrev: 637437b1d5215717463454a17abc1b578b2e5778
 X-Patchwork-Hint: ignore
-Message-Id: <20220609203153.888BF86F1D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libaio: bump to version 0.3.113
+Message-Id: <20220609203153.97A3B86F1C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/json-c: bump to version 0.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +59,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44fa5be2745e0444cfb451701f7bf1a273a1d737
+commit: https://git.buildroot.net/buildroot/commit/?id=637437b1d5215717463454a17abc1b578b2e5778
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Set DISABLE_EXTRA_LIBS=ON to avoid adding an optional dependency on
+libbsd (added by
+https://github.com/json-c/json-c/commit/0f61f6921b2e4395d1e354ad356137e44d6a7e11
+https://github.com/json-c/json-c/commit/041cef434afe0d0c6da8b6ac1d1fa26087246dda)
+
+https://github.com/json-c/json-c/blob/json-c-0.16-20220414/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libaio/libaio.hash | 2 +-
- package/libaio/libaio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/json-c/json-c.hash | 2 +-
+ package/json-c/json-c.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libaio/libaio.hash b/package/libaio/libaio.hash
-index ac815a73b5..4ddc97334f 100644
---- a/package/libaio/libaio.hash
-+++ b/package/libaio/libaio.hash
-@@ -1,5 +1,5 @@
- # From https://releases.pagure.org/libaio/CHECKSUMS
--sha256  ab0462f2c9d546683e5147b1ce9c195fe95d07fac5bf362f6c01637955c3b492 libaio-0.3.112.tar.gz
-+sha512  65c30a102433bf8386581b03fc706d84bd341be249fbdee11a032b237a7b239e8c27413504fef15e2797b1acd67f752526637005889590ecb380e2e120ab0b71  libaio-0.3.113.tar.gz
- 
- # Hash for license file:
- sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
-diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
-index 34f08b75e7..e13e49346b 100644
---- a/package/libaio/libaio.mk
-+++ b/package/libaio/libaio.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
+index a20d370eb0..44d068a8b4 100644
+--- a/package/json-c/json-c.hash
++++ b/package/json-c/json-c.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/json-c/json-c/wiki
+-sha256  b8d80a1ddb718b3ba7492916237bbf86609e9709fb007e7f7d4322f02341a4c6  json-c-0.15.tar.gz
++sha256  8e45ac8f96ec7791eaf3bb7ee50e9c2100bbbc87b8d0f1d030c5ba8a0288d96b  json-c-0.16.tar.gz
+ # Locally calculated
+ sha256  74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
+diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
+index 3639bad25a..9af7f9a83e 100644
+--- a/package/json-c/json-c.mk
++++ b/package/json-c/json-c.mk
+@@ -4,12 +4,13 @@
  #
  ################################################################################
  
--LIBAIO_VERSION = 0.3.112
-+LIBAIO_VERSION = 0.3.113
- LIBAIO_SITE = https://releases.pagure.org/libaio
- LIBAIO_INSTALL_STAGING = YES
- LIBAIO_LICENSE = LGPL-2.1+
+-JSON_C_VERSION = 0.15
++JSON_C_VERSION = 0.16
+ JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
+ JSON_C_INSTALL_STAGING = YES
+ JSON_C_LICENSE = MIT
+ JSON_C_LICENSE_FILES = COPYING
+ JSON_C_CPE_ID_VENDOR = json-c_project
++JSON_C_CONF_OPTS = -DDISABLE_EXTRA_LIBS=ON
+ 
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
