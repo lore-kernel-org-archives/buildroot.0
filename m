@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC817C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:36:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7950C43334
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:36:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8937D60672;
-	Thu,  9 Jun 2022 20:36:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADFDB8426F;
+	Thu,  9 Jun 2022 20:36:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gmB02SUYzELW; Thu,  9 Jun 2022 20:36:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JTFNxfh4kaxm; Thu,  9 Jun 2022 20:36:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46D6B60D71;
-	Thu,  9 Jun 2022 20:36:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5FBF31C1135
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA6008425F;
+	Thu,  9 Jun 2022 20:36:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 794EC1BF35E
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD6686060A
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 718B641B73
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5lVafWAhexsc for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dszxdtxC5-VB for <buildroot@lists.busybox.net>;
  Thu,  9 Jun 2022 20:35:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C0C8605AC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 664F241C2F
  for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:35:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 72E0C86ECF; Thu,  9 Jun 2022 20:23:28 +0000 (UTC)
+ id 99BB686ED0; Thu,  9 Jun 2022 20:23:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 9 Jun 2022 22:20:13 +0200
+Date: Thu, 9 Jun 2022 22:32:01 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f5e5c9b4b25fb027aeb09b888545e3a1b5567745
-X-Git-Newrev: 641f27b7bb2032fac0809cd581758b31b57f291f
+X-Git-Oldrev: 86ff2cb992d92f04ed07455443ca7229a1e24e4c
+X-Git-Newrev: 9d774240eeaa7b475d70d3015b38435c00f4518a
 X-Patchwork-Hint: ignore
-Message-Id: <20220609202328.72E0C86ECF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/network-manager:
- put back libuuid dependency
+Message-Id: <20220609202328.99BB686ED0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/vim: security
+ bump to version 8.2.5062
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,64 +59,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=641f27b7bb2032fac0809cd581758b31b57f291f
+commit: https://git.buildroot.net/buildroot/commit/?id=9d774240eeaa7b475d70d3015b38435c00f4518a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit 8b47feff2ff8ac37355431cb0414822da2c87ea1 wrongly removed libuuid
-dependency resulting in the following build failure:
+Fix CVE-2022-1851: Out-of-bounds Read in GitHub repository vim/vim prior
+to 8.2.
 
-checking for UUID... no
-configure: error: Package requirements (uuid) were not met:
+Fix CVE-2022-1886: Heap-based Buffer Overflow in GitHub repository
+vim/vim prior to 8.2.
 
-Package 'uuid', required by 'virtual:world', not found
-
-It should be noted that <uuid/uuid.h> is still used in one example:
-https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/main/examples/C/glib/add-connection-gdbus.c#L17
-as stated in
-https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/73b9883c6f30320b727a664ff2c84cc772aac94b:
-
-"We still require libuuid for building, because it is used by an example
-program. Maybe that should be changed, to avoid the build dependency.
-But that can be done at a later time."
-
-Fixes:
- - http://autobuild.buildroot.org/results/ac25c42d73161bf4cdfae3e53de8826f0b8dbf9c
+Fix CVE-2022-1898: Use After Free in GitHub repository vim/vim prior to
+8.2.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit f642d28e48497f98868f694476fb39ff5cb30110)
+(cherry picked from commit a1dafa1b04fff04b238be8dbe5543f366062d2d4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/network-manager/Config.in          | 2 ++
- package/network-manager/network-manager.mk | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index 1370c81c9c..39114daf18 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -13,6 +13,8 @@ config BR2_PACKAGE_NETWORK_MANAGER
- 	select BR2_PACKAGE_GNUTLS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBNDP
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	help
- 	  NetworkManager is a set of co-operative tools that make
- 	  networking simple and straightforward. Whether WiFi, wired,
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index d979cfc0d7..4afe947a78 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -10,7 +10,7 @@ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
- NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
--	host-intltool libndp
-+	host-intltool libndp util-linux
- NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
- NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
- NETWORK_MANAGER_CPE_ID_VENDOR = gnome
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 9d61d6fc87..55e5643b90 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  5606a3c62dba038f4c4f2eddb305ffccbae58a7bfd569bdb8100f524564c8a32  vim-8.2.4980.tar.gz
++sha256  3052bc702cfb49571dbcf9824827ae6032c37c7bf1a2aa0d3f7cc18c8f085dfb  vim-8.2.5062.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 9e70360b90..6dbb32d27b 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = 8.2.4980
++VIM_VERSION = 8.2.5062
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
