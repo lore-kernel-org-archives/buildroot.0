@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 589D3C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:35:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0264BC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:36:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B98F60B63;
-	Thu,  9 Jun 2022 20:35:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B098860AE9;
+	Thu,  9 Jun 2022 20:36:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id USYTOrFRZcXE; Thu,  9 Jun 2022 20:35:54 +0000 (UTC)
+	with ESMTP id yghvpKGZqv8L; Thu,  9 Jun 2022 20:36:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D7666060A;
-	Thu,  9 Jun 2022 20:35:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A64AC60A8C;
+	Thu,  9 Jun 2022 20:36:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 631BD1BF35E
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 444031BF35E
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 51C1741C94
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D95A41B6B
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hyn0naQ-EWI0 for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 20:35:25 +0000 (UTC)
+ with ESMTP id Lk8Kvy6QqZnu for <buildroot@lists.busybox.net>;
+ Thu,  9 Jun 2022 20:35:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 56CB141B6B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 915C741C6E
  for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:35:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8F54686ECF; Thu,  9 Jun 2022 20:23:28 +0000 (UTC)
+ id A23A686ED1; Thu,  9 Jun 2022 20:23:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 9 Jun 2022 22:31:27 +0200
+Date: Thu, 9 Jun 2022 22:32:23 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: e37acca9b6d0ed18e5bb023b82d3f9ff219ec53b
-X-Git-Newrev: 86ff2cb992d92f04ed07455443ca7229a1e24e4c
+X-Git-Oldrev: 9d774240eeaa7b475d70d3015b38435c00f4518a
+X-Git-Newrev: 4aa8f56196d9dd2633110f4d1ffe089cee5530ec
 X-Patchwork-Hint: ignore
-Message-Id: <20220609202328.8F54686ECF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/mono: needs NPTL
+Message-Id: <20220609202328.A23A686ED1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/mariadb: security
+ bump to version 10.3.35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,53 +59,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86ff2cb992d92f04ed07455443ca7229a1e24e4c
+commit: https://git.buildroot.net/buildroot/commit/?id=4aa8f56196d9dd2633110f4d1ffe089cee5530ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-mono unconditionally uses pthread_attr_get_np and so needs NTPL since
-version 4.0.1.43 and
-https://github.com/mono/mono/commit/748fefa1d7199f008c6e56499ba482fb17fe1583:
+Fix CVE-2021-46669, CVE-2022-21427, CVE-2022-27376, CVE-2022-27377,
+CVE-2022-27378, CVE-2022-27379, CVE-2022-27380, CVE-2022-27381,
+CVE-2022-27383, CVE-2022-27384, CVE-2022-27386, CVE-2022-27387,
+CVE-2022-27445, CVE-2022-27447, CVE-2022-27448, CVE-2022-27449,
+CVE-2022-27452, CVE-2022-27456 and CVE-2022-27458
 
-mono-threads-linux.c: In function 'mono_threads_platform_get_stack_bounds':
-mono-threads-linux.c:26:15: error: implicit declaration of function 'pthread_getattr_np'; did you mean 'pthread_attr_init'? [-Werror=implicit-function-declaration]
-   26 |         res = pthread_getattr_np (pthread_self (), &attr);
-      |               ^~~~~~~~~~~~~~~~~~
-      |               pthread_attr_init
-
-Fixes:
- - http://autobuild.buildroot.org/results/6534ee4ae699c17ee98f6f89a8a1212936e04481
+https://mariadb.com/kb/en/mariadb-10335-release-notes
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5471d7ce252208ffa8a7cdbb6f1f03939097ba39)
+(cherry picked from commit 4fac515ab5f92c537e55f408c26be28ada7aaf7e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mono/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mono/Config.in b/package/mono/Config.in
-index 44b8cf8581..76178bcf9b 100644
---- a/package/mono/Config.in
-+++ b/package/mono/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_MONO
- 	bool "mono"
- 	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_getattr_np()
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBATOMIC_OPS
- 	help
-@@ -23,7 +23,7 @@ config BR2_PACKAGE_MONO
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 4da26bdf94..f7e3c7b744 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://dlm.mariadb.com/2117287/MariaDB/mariadb-10.3.34/source/sha512sums.txt
+-sha512  46d4575ec1afb68510652a4bb31ca5ce83a2f5f61048a6e9c1487b0ba58f079465a8b72518d44043cd42c631b19ff50b5498584676ac6473705b138fe3300741  mariadb-10.3.34.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.3.35
++sha512  9355de944eccef4e0bc01b19ffc3c0c72cf88befae7385c6f0ee1ea47dbd98d23f6bb46af9c140acc48d9d9613552870684bc0b7ca1f3cff1dc09c1a2c801573  mariadb-10.3.35.tar.gz
  
- 	  http://download.mono-project.com/sources/mono/
+ # Hash for license files
+ sha256  084aa0007efac6dda6aafffb3f3ef8b66b105862dad7ee23f6a4b52813f84464  README.md
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 18667e7e70..06fd1484b6 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--comment "mono needs a toolchain w/ C++, threads, dynamic library"
-+comment "mono needs a toolchain w/ C++, NPTL, dynamic library"
- 	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+-MARIADB_VERSION = 10.3.34
+-MARIADB_SITE = https://dlm.mariadb.com/2117285/MariaDB/mariadb-$(MARIADB_VERSION)/source
++MARIADB_VERSION = 10.3.35
++MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
+ # https://jira.mariadb.org/browse/MDEV-12297
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
