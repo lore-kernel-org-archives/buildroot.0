@@ -4,43 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92D44C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:32:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03E7FC43334
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:32:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36B0B4100B;
-	Thu,  9 Jun 2022 20:32:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B81DD41014;
+	Thu,  9 Jun 2022 20:32:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fl_aRNJugq38; Thu,  9 Jun 2022 20:32:41 +0000 (UTC)
+	with ESMTP id pASQvW3dDUXg; Thu,  9 Jun 2022 20:32:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0BEEF41016;
-	Thu,  9 Jun 2022 20:32:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8F7081C1135
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:32:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AFCA141154;
+	Thu,  9 Jun 2022 20:32:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A968D1BF35E
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:32:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7F24C8426D
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:32:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 964D641B8A
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:32:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tv7OC7ZOqRnZ for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 20:32:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 890438425F
- for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:32:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C220C86EC0; Thu,  9 Jun 2022 20:20:28 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 9 Jun 2022 22:32:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aebc3c62863b85dd2abd923547161066a24d8dce
-X-Git-Newrev: 66d7d3bec341188bcfd83fa70b44dd62e0073431
-X-Patchwork-Hint: ignore
-Message-Id: <20220609202028.C220C86EC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rpi-userland: fix libexecinfo
- workaround
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fTx4g9O2QGP6 for <buildroot@lists.busybox.net>;
+ Thu,  9 Jun 2022 20:32:33 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5BDE341B6B
+ for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:32:33 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 17C621C0003;
+ Thu,  9 Jun 2022 20:32:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nzOpS-002MHE-8b; Thu, 09 Jun 2022 22:32:30 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220606102822.398093-1-fontaine.fabrice@gmail.com>
+Date: Thu, 09 Jun 2022 22:32:30 +0200
+In-Reply-To: <20220606102822.398093-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 6 Jun 2022 12:28:22 +0200")
+Message-ID: <87sfodzig1.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/vim: security bump to version
+ 8.2.5062
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,166 +60,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66d7d3bec341188bcfd83fa70b44dd62e0073431
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix libexecinfo workaround to avoid the following ffmpeg build failure
-with BR2_PACKAGE_RPI_USERLAND raised on uclibc and musl since commit
-bc4cc27705de50356d7e9945e41bd989fdc56fe8:
+ > Fix CVE-2022-1851: Out-of-bounds Read in GitHub repository vim/vim prior
+ > to 8.2.
 
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/arm-linux-gcc --sysroot=/home/giuliobenetti/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot -mcpu=arm926ej-s -Wl,--as-needed -Wl,-z,noexecstack -o /tmp/ffconf.5K0cMIh3/test /tmp/ffconf.5K0cMIh3/test.o -lmmal_core -lmmal_util -lmmal_vc_client -lbcm_host -latomic
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libvcos.so: undefined reference to `backtrace_symbols'
+ > Fix CVE-2022-1886: Heap-based Buffer Overflow in GitHub repository
+ > vim/vim prior to 8.2.
 
-[...]
+ > Fix CVE-2022-1898: Use After Free in GitHub repository vim/vim prior to
+ > 8.2.
 
-ERROR: mmal not found
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/64d21872d25fef35b72106133ed2aed300f52f2f
+Committed to 2022.02.x, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...006-don-t-override-CMAKE_EXE_LINKER_FLAGS.patch | 58 ----------------------
- ...cos-pthreads-CMakeLists.txt-fix-build-wit.patch | 45 +++++++++++++++++
- package/rpi-userland/rpi-userland.mk               |  1 -
- 3 files changed, 45 insertions(+), 59 deletions(-)
+> ---
+ >  package/vim/vim.hash | 2 +-
+ >  package/vim/vim.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-userland/0006-don-t-override-CMAKE_EXE_LINKER_FLAGS.patch b/package/rpi-userland/0006-don-t-override-CMAKE_EXE_LINKER_FLAGS.patch
-deleted file mode 100644
-index bf2a9eb6ea..0000000000
---- a/package/rpi-userland/0006-don-t-override-CMAKE_EXE_LINKER_FLAGS.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From 87febf8b7b1c0a6d0ea1d26770d3665008d66fd2 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 25 Feb 2022 19:21:06 +0100
--Subject: [PATCH] don't override CMAKE_EXE_LINKER_FLAGS
--
--Don't override CMAKE_EXE_LINKER_FLAGS as it could be used by the user to
--pass additional flags such as -lexecinfo on musl and uclibc-ng
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/raspberrypi/userland/pull/719]
-----
-- host_applications/android/apps/vidtex/CMakeLists.txt | 2 +-
-- host_applications/linux/apps/raspicam/CMakeLists.txt | 2 +-
-- makefiles/cmake/arm-linux.cmake                      | 2 +-
-- 3 files changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/host_applications/android/apps/vidtex/CMakeLists.txt b/host_applications/android/apps/vidtex/CMakeLists.txt
--index e7206cc..16c64db 100644
----- a/host_applications/android/apps/vidtex/CMakeLists.txt
--+++ b/host_applications/android/apps/vidtex/CMakeLists.txt
--@@ -5,7 +5,7 @@ SET(COMPILE_DEFINITIONS -Werror -Wall)
-- # Set --no-as-needed to stop the linker discarding mmal_vc_client
-- # as it can't see that the constructor registers a load of functionality
-- # with the MMAL core.
---SET( CMAKE_EXE_LINKER_FLAGS "-Wl,--no-as-needed" )
--+SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed" )
-- 
-- include_directories(${PROJECT_SOURCE_DIR}/host_applications/linux/libs/bcm_host/include)
-- 
--diff --git a/host_applications/linux/apps/raspicam/CMakeLists.txt b/host_applications/linux/apps/raspicam/CMakeLists.txt
--index e6bd373..2f72eb2 100644
----- a/host_applications/linux/apps/raspicam/CMakeLists.txt
--+++ b/host_applications/linux/apps/raspicam/CMakeLists.txt
--@@ -6,7 +6,7 @@ SET(COMPILE_DEFINITIONS -Werror)
-- # Set --no-as-needed to stop the linker discarding mmal_vc_client
-- # as it can't see that the constructor registers a load of functionality
-- # with the MMAL core.
---SET( CMAKE_EXE_LINKER_FLAGS "-Wl,--no-as-needed" )
--+SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed" )
-- 
-- include_directories(${PROJECT_SOURCE_DIR}/host_applications/linux/libs/bcm_host/include)
-- include_directories(${PROJECT_SOURCE_DIR}/host_applications/linux/apps/raspicam/)
--diff --git a/makefiles/cmake/arm-linux.cmake b/makefiles/cmake/arm-linux.cmake
--index 957846a..e172282 100644
----- a/makefiles/cmake/arm-linux.cmake
--+++ b/makefiles/cmake/arm-linux.cmake
--@@ -93,7 +93,7 @@ if(ANDROID)
--     set(CMAKE_SHARED_LINKER_FLAGS "-nostdlib ${ANDROID_CRTBEGIN} -Wl,-Bdynamic -Wl,-T${ANDROID_LDSCRIPTS}/armelf.x")
-- 
--     link_directories(${ANDROID_LIBS})
---    set(CMAKE_EXE_LINKER_FLAGS "-nostdlib ${ANDROID_CRTBEGIN} -nostdlib -Wl,-z,noexecstack") 
--+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -nostdlib ${ANDROID_CRTBEGIN} -nostdlib -Wl,-z,noexecstack") 
--     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-dynamic-linker,/system/bin/linker -Wl,-rpath,${CMAKE_INSTALL_PREFIX}/lib")
--     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-T${ANDROID_LDSCRIPTS}/armelf.x -Wl,--gc-sections")
--     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,nocopyreloc -Wl,-z,noexecstack -Wl,--fix-cortex-a8 -Wl,--no-undefined")
---- 
--2.34.1
--
-diff --git a/package/rpi-userland/0006-interface-vcos-pthreads-CMakeLists.txt-fix-build-wit.patch b/package/rpi-userland/0006-interface-vcos-pthreads-CMakeLists.txt-fix-build-wit.patch
-new file mode 100644
-index 0000000000..e799c82418
---- /dev/null
-+++ b/package/rpi-userland/0006-interface-vcos-pthreads-CMakeLists.txt-fix-build-wit.patch
-@@ -0,0 +1,45 @@
-+From 220c37b496f5c883bbfa955ee7fee471e41c34d4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 25 Feb 2022 19:21:06 +0100
-+Subject: [PATCH] interface/vcos/pthreads/CMakeLists.txt: fix build with
-+ libexecinfo
-+
-+interface/vcos/glibc/vcos_backtrace.c uses execinfo.h which can be
-+provided by libexecinfo on uclibc or musl so link with it if needed to
-+avoid the following build failure:
-+
-+/home/peko/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../../build/lib/libvcos.so: undefined reference to `backtrace_symbols'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/93d3b8cc2ac5dfa9d4b44946c0b4d8171e8f52a1
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/raspberrypi/userland/pull/719]
-+---
-+ interface/vcos/pthreads/CMakeLists.txt | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/interface/vcos/pthreads/CMakeLists.txt b/interface/vcos/pthreads/CMakeLists.txt
-+index 1d81ca3..43aca03 100644
-+--- a/interface/vcos/pthreads/CMakeLists.txt
-++++ b/interface/vcos/pthreads/CMakeLists.txt
-+@@ -33,12 +33,14 @@ set (SOURCES
-+    ../generic/vcos_generic_blockpool.c
-+ )
-+ 
-++find_library (EXECINFO_LIBRARY execinfo)
-++
-+ if (VCOS_PTHREADS_BUILD_SHARED)
-+    add_library (vcos SHARED ${SOURCES})
-+-   target_link_libraries (vcos pthread dl rt)
-++   target_link_libraries (vcos pthread dl rt ${EXECINFO_LIBRARY})
-+ else ()
-+    add_library (vcos ${SOURCES})
-+-   target_link_libraries (vcos pthread rt)
-++   target_link_libraries (vcos pthread rt ${EXECINFO_LIBRARY})
-+ endif ()
-+ 
-+ 
-+-- 
-+2.35.1
-+
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 3564ec0703..1204196e19 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -15,7 +15,6 @@ RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
+ > diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+ > index 9d61d6fc87..55e5643b90 100644
+ > --- a/package/vim/vim.hash
+ > +++ b/package/vim/vim.hash
+ > @@ -1,4 +1,4 @@
+ >  # Locally computed
+ > -sha256  5606a3c62dba038f4c4f2eddb305ffccbae58a7bfd569bdb8100f524564c8a32  vim-8.2.4980.tar.gz
+ > +sha256  3052bc702cfb49571dbcf9824827ae6032c37c7bf1a2aa0d3f7cc18c8f085dfb  vim-8.2.5062.tar.gz
+ >  sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ >  sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+ > diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+ > index 9e70360b90..6dbb32d27b 100644
+ > --- a/package/vim/vim.mk
+ > +++ b/package/vim/vim.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
- RPI_USERLAND_DEPENDENCIES += libexecinfo
--RPI_USERLAND_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-lexecinfo
- endif
- 
- ifeq ($(BR2_PACKAGE_RPI_USERLAND_HELLO),y)
+ > -VIM_VERSION = 8.2.4980
+ > +VIM_VERSION = 8.2.5062
+ >  VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ >  VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ >  VIM_SUBDIR = src
+ > -- 
+
+ > 2.35.1
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot@buildroot.org
+ > https://lists.buildroot.org/mailman/listinfo/buildroot
+
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
