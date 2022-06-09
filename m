@@ -1,45 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E503C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57F5BC43334
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:44:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 60A3040C4F;
-	Thu,  9 Jun 2022 20:44:32 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rqwTuNYgvNkK; Thu,  9 Jun 2022 20:44:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FEAA41011;
-	Thu,  9 Jun 2022 20:44:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 334901BF2F0
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:43:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F1578280E
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:43:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17A3A8426F;
+	Thu,  9 Jun 2022 20:44:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VEHI24XDbTZY for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dajJSc-DuLvV; Thu,  9 Jun 2022 20:44:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FC8C83689;
+	Thu,  9 Jun 2022 20:44:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 823451BF2F0
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:43:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D318741B52
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:43:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T4paVEK0DZej for <buildroot@lists.busybox.net>;
  Thu,  9 Jun 2022 20:43:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 49FD782681
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5505141A0A
  for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:43:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7EC3286F1C; Thu,  9 Jun 2022 20:31:53 +0000 (UTC)
+ id 888BF86F1D; Thu,  9 Jun 2022 20:31:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Jun 2022 22:43:12 +0200
+Date: Thu, 9 Jun 2022 22:43:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dbbc25ff762348a4c32e7c5bd28a3fe3c858d9b3
-X-Git-Newrev: 79f92631fde8540f9cbd5c4d9f52c55e199a337f
+X-Git-Oldrev: 79f92631fde8540f9cbd5c4d9f52c55e199a337f
+X-Git-Newrev: 44fa5be2745e0444cfb451701f7bf1a273a1d737
 X-Patchwork-Hint: ignore
-Message-Id: <20220609203153.7EC3286F1C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/haproxy: bump to version 2.6.0
+Message-Id: <20220609203153.888BF86F1D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libaio: bump to version 0.3.113
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79f92631fde8540f9cbd5c4d9f52c55e199a337f
+commit: https://git.buildroot.net/buildroot/commit/?id=44fa5be2745e0444cfb451701f7bf1a273a1d737
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This is a long term supported version that will be maintained till 2027.
-
-https://www.mail-archive.com/haproxy@formilux.org/msg42371.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libaio/libaio.hash | 2 +-
+ package/libaio/libaio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 18834c29b1..4b00438190 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
+diff --git a/package/libaio/libaio.hash b/package/libaio/libaio.hash
+index ac815a73b5..4ddc97334f 100644
+--- a/package/libaio/libaio.hash
++++ b/package/libaio/libaio.hash
 @@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.15.tar.gz.sha256
--sha256  3958b17b7ee80eb79712aaf24f0d83e753683104b36e282a8b3dcd2418e30082  haproxy-2.4.15.tar.gz
-+# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.0.tar.gz.sha256
-+sha256  90f8e608aacd513b0f542e0438fa12e7fb4622cf58bd4375f3fe0350146eaa59  haproxy-2.6.0.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index b498549e20..44fc9320b7 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -4,8 +4,8 @@
+ # From https://releases.pagure.org/libaio/CHECKSUMS
+-sha256  ab0462f2c9d546683e5147b1ce9c195fe95d07fac5bf362f6c01637955c3b492 libaio-0.3.112.tar.gz
++sha512  65c30a102433bf8386581b03fc706d84bd341be249fbdee11a032b237a7b239e8c27413504fef15e2797b1acd67f752526637005889590ecb380e2e120ab0b71  libaio-0.3.113.tar.gz
+ 
+ # Hash for license file:
+ sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index 34f08b75e7..e13e49346b 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HAPROXY_VERSION_MAJOR = 2.4
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).15
-+HAPROXY_VERSION_MAJOR = 2.6
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).0
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-LIBAIO_VERSION = 0.3.112
++LIBAIO_VERSION = 0.3.113
+ LIBAIO_SITE = https://releases.pagure.org/libaio
+ LIBAIO_INSTALL_STAGING = YES
+ LIBAIO_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
