@@ -1,47 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BB0AC43334
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 07:24:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0226AC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 07:35:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB1668184F;
-	Thu,  9 Jun 2022 07:24:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9424860E35;
+	Thu,  9 Jun 2022 07:35:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NQj7zl1gfJ1k; Thu,  9 Jun 2022 07:24:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wlqtMo79E2al; Thu,  9 Jun 2022 07:35:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15EED8177A;
-	Thu,  9 Jun 2022 07:24:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BB9AF1BF2B7
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 07:23:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B350960E1A;
+	Thu,  9 Jun 2022 07:35:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E85B1BF2B7
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 07:35:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1681281440
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 07:23:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CB2641B70
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 07:35:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8gzwG9IpYpYy for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 07:23:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 613D281456
- for <buildroot@buildroot.org>; Thu,  9 Jun 2022 07:23:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D917686E7E; Thu,  9 Jun 2022 07:11:37 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 9 Jun 2022 09:22:26 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 1351f5c3fbfaee66dfba6aea1ab36273d6e876ae
-X-Git-Newrev: 68c3c32cc6d2a401513360f37800730431d40cc6
-X-Patchwork-Hint: ignore
-Message-Id: <20220609071137.D917686E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/rustc: fix
- BR2_PACKAGE_HOST_RUSTC_ARCH for ARMv6
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=bootlin.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A9SEWgUe_JOC for <buildroot@lists.busybox.net>;
+ Thu,  9 Jun 2022 07:35:34 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1975D41B60
+ for <buildroot@buildroot.org>; Thu,  9 Jun 2022 07:35:33 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B26A7C0013;
+ Thu,  9 Jun 2022 07:35:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1654760132;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=tbRf5q0FikEROqW4R1waKAF0gIk9hOo7rm3S/r3D6Qo=;
+ b=GbcdM3+bT0oED0Bzlf/aUhSSvX7CWDh8deDCfM6Pfh4SdFEhNs5Z2nKZgUQz7V76gbvd4X
+ SkhohYc2w0K7NyNn0pLr+pRyO0A93pU9eGD8bZOlrYIFPb9/pG4TDDVkESxte/K0oB6vIG
+ p3pOVMblHQocHSK9dH3P/NlYLVbZtMho+eu+USKmQYUjt+/8bFiM+iBO8hG2tpxYfc6GXD
+ 6O7I/I25nUQZqaIaP/e3cbz554Qw1LHNJiTw73D0Gh3luHueULEl3exhASaTjCPR2X2M2H
+ 33hW7fuiOAiZ+P/vsvVs+nsGwJuihdCWkFyNPlcVyVvlp0ickameJd9F5V7AZQ==
+Date: Thu, 9 Jun 2022 09:35:29 +0200
+To: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Message-ID: <20220609093529.5686eec5@windsurf>
+In-Reply-To: <e58d937e-3550-d063-c7d1-2cdde0ecd898@opensource.wdc.com>
+References: <20220531054926.373713-1-damien.lemoal@opensource.wdc.com>
+ <e58d937e-3550-d063-c7d1-2cdde0ecd898@opensource.wdc.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v3 0/7] Fix RV64 NOMMU and add Canaan K210
+ SoC support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,49 +71,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Niklas Cassel <niklas.cassel@wdc.com>,
+ Alistair Francis <alistair@alistair23.me>, "Yann E
+ . MORIN" <yann.morin.1998@free.fr>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68c3c32cc6d2a401513360f37800730431d40cc6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+Hello Damien,
 
-Fix the following build failure with ARMv6 raised since commit
-d69d40c029dc7d8199b745eaee759d92b66c5d17:
+On Tue, 7 Jun 2022 11:31:33 +0900
+Damien Le Moal <damien.lemoal@opensource.wdc.com> wrote:
 
-rust-1.60.0-x86_64-unknown-linux-gnu.tar.xz: OK (sha256: 83c3fb8645379ec308192fa713df87044892639495722077e07aa779b310239e)
-wget --passive-ftp -nd -t 3 -O '/nvmedata/autobuild/instance-20/output-1/build/.rust-std-1.60.0-armeb-unknown-linux-musleabi.tar.xz.rnWGvt/output' 'https://static.rust-lang.org/dist/rust-std-1.60.0-armeb-unknown-linux-musleabi.tar.xz'
---2022-06-05 12:30:08--  https://static.rust-lang.org/dist/rust-std-1.60.0-armeb-unknown-linux-musleabi.tar.xz
-Resolving static.rust-lang.org (static.rust-lang.org)... 108.156.120.70, 108.156.120.75, 108.156.120.122, ...
-Connecting to static.rust-lang.org (static.rust-lang.org)|108.156.120.70|:443... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2022-06-05 12:30:08 ERROR 404: Not Found.
+> > For each board, a readme.txt file is added to document how to build and
+> > install images for these boards.  
+> 
+> Thomas,
+> 
+> Ping ? Large backlog ?
 
-Fixes:
- - http://autobuild.buildroot.org/results/4b187767c233f0dae3fa7f8fea9dd67e2b5bb7d0
+Yes, I've handled other Buildroot patches/topics. Your patches are
+lined up in patchwork, and not forgotten. For the record, we have ~300
+patches in our backlog. We'll get to your patches!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 211a4848b73303b246f82f1aff899748dcfe902f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rustc/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+Thanks a lot!
 
-diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-index 80d1d1a3d8..c7b8a19a22 100644
---- a/package/rustc/Config.in.host
-+++ b/package/rustc/Config.in.host
-@@ -103,6 +103,7 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- config BR2_PACKAGE_HOST_RUSTC_ARCH
- 	string
- 	default "armv5te" if BR2_ARM_CPU_ARMV5
-+	default "arm" if BR2_ARM_CPU_ARMV6
- 	default "armv7"  if BR2_ARM_CPU_ARMV7A
- 	default "riscv64gc" if BR2_RISCV_64
- 	default BR2_ARCH
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
