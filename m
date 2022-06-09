@@ -1,80 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 202FFC43334
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 21:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A581C43334
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 21:17:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A9EE541B45;
-	Thu,  9 Jun 2022 21:15:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33DE58425B;
+	Thu,  9 Jun 2022 21:17:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nZu4j3B_EVc5; Thu,  9 Jun 2022 21:15:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WnPtKF83Nwvf; Thu,  9 Jun 2022 21:17:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84C4041B3B;
-	Thu,  9 Jun 2022 21:15:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 22EDA1BF340
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 21:15:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60F018410C;
+	Thu,  9 Jun 2022 21:17:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 47D221BF340
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 21:17:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B69541B3B
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 21:15:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3642F4100B
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 21:17:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y-23Z0zTmytw for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 21:15:50 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qDahirRhrIER for <buildroot@lists.busybox.net>;
+ Thu,  9 Jun 2022 21:17:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CCC1F41A5D
- for <buildroot@buildroot.org>; Thu,  9 Jun 2022 21:15:49 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id a15so25532629wrh.2
- for <buildroot@buildroot.org>; Thu, 09 Jun 2022 14:15:49 -0700 (PDT)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3DEA540C44
+ for <buildroot@buildroot.org>; Thu,  9 Jun 2022 21:17:30 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id z9so6236343wmf.3
+ for <buildroot@buildroot.org>; Thu, 09 Jun 2022 14:17:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=LIZU/n284tR1L5Zp9fCs0OhCcB/zEZiOoFFIKJ2PZgs=;
- b=jsnBWrFYrqkRsE9zQ7SL55WQK/AqiZ2VhnzcofWHqKxauTkKyeoi6soFZBqzHaHlhZ
- GHOIRWAQaNoXbTeAe2T6iQ8kadswaJAYbNTzTVKCtxRObkTswAo8qMm7LMPSRIicEME0
- 6MnINfsUXVV/ofKVh73IRTPipif8XdCux9i+byvH8QRs6xL//RSWDsC3e5OjmxD4lfMF
- n+8dK2oo0xEp7JtSXGkLV7TO5wJRW0wAmASFi1KWhQhOrNF8mVTPiKMGcUwoq03E4Kn+
- g3UUCA9U7YUK+MzbsAXhgZdilSOkjaKHMjwPIZGCU9OKsszE5MzOU/hOuKkTjiwskXbi
- yihw==
+ bh=6iuTdJkkW8Fr26K3CeBAVDQ85OA1fzjdT916haNV6lQ=;
+ b=RG/axgI7JZbXQsDnJ1lWO0aOoGbDf619meGZx8yLBOdghDsFIkvF83lkleQ7X1NsYg
+ HxdGBcE1OoK3S1jpA1YuqM+BZ7FHxzYpE2fEHx3QsQy5xNGgp/se2D2/x0+itqIKWJam
+ GMMd2qIUaS84XKjR67yemaZ1znGxJ98B6/AqBIMdZWiMBpxYblGkW1oyw5CLrC1pvlII
+ KR8BHChLXa5Q69xDHuzHkLNBPoIvX7xD/YZokHbGdctKEa8Usvp5RunUs6SnG6D3dgL1
+ r8H016ZFBrgjs35TDESM8J4pQ/mlKsp0IfMYX6Y6ltgO+a6d6LUTI96Ly+pexGTxsqTu
+ J/5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=LIZU/n284tR1L5Zp9fCs0OhCcB/zEZiOoFFIKJ2PZgs=;
- b=8Ofdx+bT+dyVl0yK+d4IrZncuQla8fUp9ksgvUwbnrcns9JlGdyTb6UzCvNiK2WYZp
- Dd7w3SQhtoUMzFQDWUMo6EbPx5wc6AdM0V3Ph8MviAZ4nxXDfiowVEKJpwE9FOMpPa38
- +mnLVz+fjCsbbK70OwnEwvgXAj+UdP7XCAfOY1jCoc6OUNdHBP+U5195hMEPM+k/qjD2
- tQOeL6QqWhwrPrY2GSPTmJaq8VbpaX8K8bVDnSDry+uCsGXghvTvb7AubWZJHW+9F3hd
- MC8n0Iazgh4eIZAvbzv0c8xENljmhHZg63WcrEJsYYBW9ov1fIVtVDEOri6Urn/23RZd
- y1KQ==
-X-Gm-Message-State: AOAM532xU0vnXVLB0CMlZkQFI5Okb30Df2prQfnoRq1Gw6pPUvJALZkP
- qVNyoXnIfbENlZIybvn1g/l60lBQD6Y=
-X-Google-Smtp-Source: ABdhPJxHG/Q4MDrgliM3P5km1k1P2ngDb5jP4cpOT+D2LvnA1/1t3dNiAA4LErv83eSLCMZYTsp+vw==
-X-Received: by 2002:adf:e488:0:b0:20f:d981:4b42 with SMTP id
- i8-20020adfe488000000b0020fd9814b42mr40778431wrm.455.1654809347747; 
- Thu, 09 Jun 2022 14:15:47 -0700 (PDT)
+ bh=6iuTdJkkW8Fr26K3CeBAVDQ85OA1fzjdT916haNV6lQ=;
+ b=tj4CeMdmFmevEdZnrZJs0aAJLxsBGUHn2K7rsKcOSKDPtCEH7YYFWjw4d5rwtTmj3K
+ UfB9WI64Eq3fx5l7yFw9bUCH1mrCpwiTZt7bwV4ATxtTzCqgYF2vNcF9p8AvNfsb9+yU
+ v9ShsyhN19nGNnEC64BxUMLnt9wE3U509OTyr8hiZQRfAB4yMWqRsQWppk+juuL0Li5U
+ u2e40JY2YSo/6mg2wgD1EoFKdbbdP6t8na6e7FKL3mWudkQ1OcwWArla4EkSWbg3TehP
+ u57tWVFzMDcPxQ2rU0J+szXp3SHC64NFmEKpNnxNAaOCYD65l6zs3t8OGoMNoTCjUk6R
+ biWg==
+X-Gm-Message-State: AOAM532/TXHHJ9Nrj8fBjNqUts8QI7i7p2imHB7pGQ01fATnEm7PgoGb
+ ZORKC3zKJekY0b6oIuQmkgYLj7wPk6w=
+X-Google-Smtp-Source: ABdhPJzBDOyC6AEH7ANS7m1otAD0wzW2VNyPZ5JEvc2mVDoQv4PI8I36pSCMzbiR3RKRggznN5xe8A==
+X-Received: by 2002:a05:600c:268a:b0:397:48d4:f6ad with SMTP id
+ 10-20020a05600c268a00b0039748d4f6admr5251624wmt.134.1654809448183; 
+ Thu, 09 Jun 2022 14:17:28 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- s13-20020a5d6a8d000000b0020c5253d8f7sm25654551wru.67.2022.06.09.14.15.46
+ bg23-20020a05600c3c9700b0039c15861001sm559475wmb.21.2022.06.09.14.17.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Jun 2022 14:15:47 -0700 (PDT)
+ Thu, 09 Jun 2022 14:17:27 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  9 Jun 2022 23:13:04 +0200
-Message-Id: <20220609211304.2939572-1-fontaine.fabrice@gmail.com>
+Date: Thu,  9 Jun 2022 23:14:54 +0200
+Message-Id: <20220609211454.2939854-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libmediaart: link with -latomic if
- needed
+Subject: [Buildroot] [PATCH 1/1] package/ecryptfs-utils: add host-pkgconf
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,41 +88,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Marcin Bis <marcin@bis.org.pl>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with BR2_PACKAGE_LIBMEDIAART_BACKEND_QT
-raised since bump to version 1.9.5 in commit
-3db4d486d689b4a9d59c8f7637211893b0a1cb1b:
+Add host-pkgconf dependency to fix the following build failure (e.g. with
+BR2_PER_PACKAGE_DIRECTORIES):
 
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: libmediaart/libmediaart-2.0.so.0.905.0.p/extractqt.cpp.o: in function `std::__atomic_base<int>::operator--()':
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/sparc-buildroot-linux-uclibc/include/c++/10.3.0/bits/atomic_base.h:334: undefined reference to `__atomic_fetch_sub_4'
+configure: error: OpenSSL not found
+
+As a side-effect, NSS_{CFLAGS,LIBS} can be dropped
 
 Fixes:
- - http://autobuild.buildroot.org/results/39aa4ecd37de774e06f67a6e1c4495dc1f0917b4
+ - http://autobuild.buildroot.org/results/ea16957e8f048b713f5d2713aa5f0c157b62f574
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libmediaart/libmediaart.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/ecryptfs-utils/ecryptfs-utils.mk | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index 77665fd95b..de92cde849 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -24,6 +24,9 @@ else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_QT),y)
- LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- LIBMEDIAART_DEPENDENCIES += qt5base
- LIBMEDIAART_CONF_OPTS += -Dimage_library=qt5
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBMEDIAART_LDFLAGS += -latomic
-+endif
- endif
+diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
+index f087e81a42..737c5b0ebb 100644
+--- a/package/ecryptfs-utils/ecryptfs-utils.mk
++++ b/package/ecryptfs-utils/ecryptfs-utils.mk
+@@ -11,14 +11,10 @@ ECRYPTFS_UTILS_LICENSE = GPL-2.0+
+ ECRYPTFS_UTILS_LICENSE_FILES = COPYING
+ ECRYPTFS_UTILS_CPE_ID_VENDOR = ecryptfs
  
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-ECRYPTFS_UTILS_DEPENDENCIES = keyutils libnss host-intltool
++ECRYPTFS_UTILS_DEPENDENCIES = host-pkgconf keyutils libnss host-intltool
+ ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
+ 
+-#Needed for build system to find pk11func.h and libnss3.so
+-ECRYPTFS_UTILS_CONF_ENV = \
+-	ac_cv_path_POD2MAN=true \
+-	NSS_CFLAGS="-I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr" \
+-	NSS_LIBS="-lnss3"
++ECRYPTFS_UTILS_CONF_ENV = ac_cv_path_POD2MAN=true
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ ECRYPTFS_UTILS_CONF_OPTS += --enable-pam
 -- 
 2.35.1
 
