@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66F3CC43334
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:35:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 487E3C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:35:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28DBD41C32;
-	Thu,  9 Jun 2022 20:35:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08CDC8426F;
+	Thu,  9 Jun 2022 20:35:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X1DUWql2QKwM; Thu,  9 Jun 2022 20:35:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oH24O0Kqzrmj; Thu,  9 Jun 2022 20:35:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09BB241B73;
-	Thu,  9 Jun 2022 20:35:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 122B91BF35E
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33A7B84268;
+	Thu,  9 Jun 2022 20:35:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 18FFA1BF35E
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0150441B73
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 07FBA84268
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sUqVZaP7S8Mv for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 20:35:09 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D722841B6B
- for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:35:08 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5C022200007;
- Thu,  9 Jun 2022 20:35:06 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1nzOrx-002MOH-Io; Thu, 09 Jun 2022 22:35:05 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C5ffUIi4csqh for <buildroot@lists.busybox.net>;
+ Thu,  9 Jun 2022 20:35:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 43B5C8425F
+ for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:35:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 7C6A986EA1; Thu,  9 Jun 2022 20:23:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220606114905.444147-1-fontaine.fabrice@gmail.com>
-Date: Thu, 09 Jun 2022 22:35:05 +0200
-In-Reply-To: <20220606114905.444147-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 6 Jun 2022 13:49:05 +0200")
-Message-ID: <87o7z1zibq.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mariadb: security bump to
- version 10.3.35
+To: buildroot@buildroot.org
+Date: Thu, 9 Jun 2022 22:24:46 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 641f27b7bb2032fac0809cd581758b31b57f291f
+X-Git-Newrev: 36a69726a944bdb86810b0221bdd7f9554935348
+X-Patchwork-Hint: ignore
+Message-Id: <20220609202328.7C6A986EA1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/gensio: needs
+ atomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,28 +53,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=36a69726a944bdb86810b0221bdd7f9554935348
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fix CVE-2021-46669, CVE-2022-21427, CVE-2022-27376, CVE-2022-27377,
- > CVE-2022-27378, CVE-2022-27379, CVE-2022-27380, CVE-2022-27381,
- > CVE-2022-27383, CVE-2022-27384, CVE-2022-27386, CVE-2022-27387,
- > CVE-2022-27445, CVE-2022-27447, CVE-2022-27448, CVE-2022-27449,
- > CVE-2022-27452, CVE-2022-27456 and CVE-2022-27458
+gensio needs atomic since bump to version 2.0.1 in commit
+0f8d4a6ecd874770ce677b617b2c7f459eb1505d and
+https://github.com/cminyard/gensio/commit/5528267b54ac5a8ac0ecd7fd9ba481d654b0e92b:
 
- > https://mariadb.com/kb/en/mariadb-10335-release-notes
+/nvmedata/autobuild/instance-7/output-1/per-package/gensio/host/bin/../lib/gcc/arc-buildroot-linux-uclibc/11.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld: ../lib/.libs/libgensio.a(gensio_osops.o): in function `gensio_addr_dup':
+gensio_osops.c:(.text+0x1558): undefined reference to `__atomic_fetch_add_4'
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/229e4bd1ba1787953899875ab56721c9609f035a
 
-Committed to 2022.02.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 41498af0df34a3ab61ce8e4f846c06bc534e6d16)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gensio/Config.in  | 1 +
+ package/ser2net/Config.in | 1 +
+ 2 files changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gensio/Config.in b/package/gensio/Config.in
+index f874d1a469..fd0e476970 100644
+--- a/package/gensio/Config.in
++++ b/package/gensio/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_GENSIO
+ 	bool "gensio"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	help
+ 	  A library to abstract stream I/O like serial port, TCP,
+ 	  telnet, UDP, SSL, IPMI SOL, etc.
+diff --git a/package/ser2net/Config.in b/package/ser2net/Config.in
+index 3d110b70f2..1859d42c8f 100644
+--- a/package/ser2net/Config.in
++++ b/package/ser2net/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SER2NET
+ 	bool "ser2net"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC # gensio
+ 	select BR2_PACKAGE_GENSIO
+ 	select BR2_PACKAGE_LIBYAML
+ 	help
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
