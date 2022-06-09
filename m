@@ -1,62 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61C4BC43334
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:33:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF319C43334
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:34:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21326826E7;
-	Thu,  9 Jun 2022 20:33:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 71F3740C4F;
+	Thu,  9 Jun 2022 20:34:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z9gvT5oTS3Ur; Thu,  9 Jun 2022 20:33:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vFbvkhi61Z_7; Thu,  9 Jun 2022 20:34:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4804F826C8;
-	Thu,  9 Jun 2022 20:33:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 10A071BF35E
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:33:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 899CA405E3;
+	Thu,  9 Jun 2022 20:34:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F40A1BF35E
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:34:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C930826C8
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:33:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D6F1405E3
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:34:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7IyciuKnd_PQ for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 20:33:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id glMuvbRgDn1F for <buildroot@lists.busybox.net>;
+ Thu,  9 Jun 2022 20:34:47 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 16FE08266D
- for <buildroot@busybox.net>; Thu,  9 Jun 2022 20:33:39 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2226C40327
+ for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:34:46 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D56CFE000A;
- Thu,  9 Jun 2022 20:33:37 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5A080FF802;
+ Thu,  9 Jun 2022 20:34:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654806818;
+ t=1654806885;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=TZ2KORbjD9ZfEmGJ4PvjevdM138dmv/1z0+PW+9+EmE=;
- b=e7zSYDhO1dg7QI20xG0R7pZ4rKxByOx+GRFrGEHwB1EujjCD+WoOZpeCREwEQ1ejV5sH5+
- Yy7L7Vzhh1apVbNbhe/KK8+TOsIcsX1u+5GPJ0Vhh3muFuDj3JPb7DBckqyzr3/fJXLJMN
- jRhx8+svSF6YxZJwaXx3IJ1r8py8DArJHTfotCF+rDTlp9DY7Pmjq/5pUZB5rlaQwH5Obg
- +KJ3tZdmAHU/w5+Pi4Kx6PYB5hHGrFqpT2aHDZyT67LkbuJJAeU/k6pgBOKflkGryIBhwz
- 1YsOy/m82/2K7s8Pk+G0J6BsciReqcPCCOLVa0TXGPfbuCrRKTs0myPe0ATKcA==
-Date: Thu, 9 Jun 2022 22:33:36 +0200
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-Message-ID: <20220609223336.4eebcd04@windsurf>
-In-Reply-To: <7ae79f05b1e4275dc7f27bc67344ed5c23229116.1654784099.git.baruch@tkos.co.il>
-References: <7ae79f05b1e4275dc7f27bc67344ed5c23229116.1654784099.git.baruch@tkos.co.il>
+ bh=L1QRkgb/9ZHT8k4n3JZSjVFV8homIkMRftizp7oz4D8=;
+ b=MMA1aXfk68C5hDIJZ94bMaZPIwjzLASyGrIkXRqzATzbmHUao91w1VDx/3M3dF/I0AXf3K
+ dojL67uXFEjtr1lULVTUMYUmSdgoT/auypbT2iMhzGwScIZCBPUWkGw72yRft+4+WtnD2n
+ qaqD6Y4NsxQijXFH1m+njFU2lexLPHBd+mhYDQA7FsvCJbvsc5dsqfCyxEp8SV0a1OaGDl
+ qwUJergHvUPd+O3nZkUcGY/lFlmkvGPCSsfbDXiZDdvSKDuV1ewjuBwDmsEe1hTGC38EMF
+ 5EHnPq855b10JagNCwtbHGfQmLEHS3gbzrY+e6XmqWXFF3g6xncmU8gwkHA78g==
+Date: Thu, 9 Jun 2022 22:34:44 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20220609223444.4885a9bf@windsurf>
+In-Reply-To: <YqGyLxqxwd94KHVS@waldemar-brodkorb.de>
+References: <YqGyLxqxwd94KHVS@waldemar-brodkorb.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/rustc: add support for ARMv8 with
- 32-bit software
+Subject: Re: [Buildroot] [PATCH] package/openswan: allow uClibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,31 +69,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net, James Hilliard <james.hilliard1@gmail.com>,
- Oscar Gomez Fuente <oscargomezf@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  9 Jun 2022 17:14:59 +0300
-Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
+On Thu, 9 Jun 2022 10:41:19 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-> BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is not enabled when ARMv8
-> target hardware is combined with 32-bit software. That is because ARMv7
-> (32-bit) toolchain is only enabled for BR2_ARM_CPU_ARMV7A which is
-> mutually exclusive with BR2_ARM_CPU_ARMV8A.
+> uClibc-ng 1.0.41 added ns_t_tkey
 > 
-> Use ARMv7 toolchain for 32-bit software.
-> 
-> Cc: James Hilliard <james.hilliard1@gmail.com>
-> Reported-by: Oscar Gomez Fuente <oscargomezf@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  package/rustc/Config.in.host | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  package/openswan/Config.in | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
+Thanks a lot for this patch! As usual, we will need to hold off a
+little bit on this one, until Bootlin external toolchains get rebuilt
+with uClibc-ng 1.0.41, otherwise we will get tons of build failures in
+our autobuilders.
 
 Thomas
 -- 
