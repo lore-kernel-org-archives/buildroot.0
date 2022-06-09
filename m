@@ -1,47 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66D49C43334
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:50:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0288C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BB7360687;
-	Thu,  9 Jun 2022 20:50:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9298D4148A;
+	Thu,  9 Jun 2022 20:53:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l-xnZ27jQva8; Thu,  9 Jun 2022 20:50:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y8Xy08zItVxr; Thu,  9 Jun 2022 20:53:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6084160672;
-	Thu,  9 Jun 2022 20:50:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 725901BF2F0
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:50:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DF18410D3;
+	Thu,  9 Jun 2022 20:53:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B3601BF2F0
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E32B60672
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:50:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 497FB410D3
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:53:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XIEjSum6Qjts for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 20:50:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A2CF96060A
- for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:50:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D6A3E86F36; Thu,  9 Jun 2022 20:38:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A1kI3phUKjyc for <buildroot@lists.busybox.net>;
+ Thu,  9 Jun 2022 20:53:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 53ED9409B1
+ for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:53:49 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5DEC9200003;
+ Thu,  9 Jun 2022 20:53:47 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nzPA2-002Ndv-Iu; Thu, 09 Jun 2022 22:53:46 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 9 Jun 2022 22:49:09 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: c29660ff2c0b2606097fdc6ada645527052dafb1
-X-Git-Newrev: 4e5544983d53c902b7bbac65b89720fb665b721c
-X-Patchwork-Hint: ignore
-Message-Id: <20220609203815.D6A3E86F36@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] boot/at91dataflashboot:
- disable on armeb
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220606163914.1592818-1-fontaine.fabrice@gmail.com>
+Date: Thu, 09 Jun 2022 22:53:46 +0200
+In-Reply-To: <20220606163914.1592818-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 6 Jun 2022 18:39:14 +0200")
+Message-ID: <87y1y5y2w5.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/rockchip-mali: fix armeb build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,40 +58,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e5544983d53c902b7bbac65b89720fb665b721c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-at91dataflashboot fails to build on armeb:
+ > Fix the following armeb build failure raised since the addition of the
+ > package in commit 97c74a73e5dee17530647f89b2c7d8692781eb14:
 
-/nvmedata/autobuild/instance-6/output-1/per-package/at91dataflashboot/host/bin/armeb-buildroot-linux-uclibcgnueabi-ld -T elf32-littlearm.lds -Ttext 0 -n -o DataflashBoot-1.05.out objs/cstartup_ram.o objs/at45.o objs/com.o objs/dataflash.o objs/div0.o objs/init.o objs/main.o objs/stdio.o objs/asm_isr.o objs/jump.o objs/_udivsi3.o objs/_umodsi3.o objs/led.o
-/nvmedata/autobuild/instance-6/output-1/per-package/at91dataflashboot/host/bin/armeb-buildroot-linux-uclibcgnueabi-ld: objs/cstartup_ram.o: compiled for a big endian system and target is little endian
+ > ERROR: architecture for "/usr/lib/libmali-bifrost-g31-rxp0-gbm.so" is "AArch64", should be "ARM"
 
-Fixes:
- - http://autobuild.buildroot.org/results/e44c042abc1dfb97b4f8a17389d27f842e9dd311
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/33ebfa936da8dfa4035db08a96f8872d7c9db6c3
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 6008e96cbb34d28d35077dddde8cd8951d0893d0)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/at91dataflashboot/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/boot/at91dataflashboot/Config.in b/boot/at91dataflashboot/Config.in
-index 4055f96410..8b37d84409 100644
---- a/boot/at91dataflashboot/Config.in
-+++ b/boot/at91dataflashboot/Config.in
-@@ -1,3 +1,3 @@
- config BR2_TARGET_AT91DATAFLASHBOOT
- 	bool "AT91 DataFlashBoot"
--	depends on BR2_arm926t
-+	depends on BR2_arm && BR2_arm926t
+Committed to 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
