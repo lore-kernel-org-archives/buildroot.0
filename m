@@ -1,61 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF319C43334
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:34:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66F3CC43334
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:35:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71F3740C4F;
-	Thu,  9 Jun 2022 20:34:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28DBD41C32;
+	Thu,  9 Jun 2022 20:35:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vFbvkhi61Z_7; Thu,  9 Jun 2022 20:34:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X1DUWql2QKwM; Thu,  9 Jun 2022 20:35:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 899CA405E3;
-	Thu,  9 Jun 2022 20:34:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2F40A1BF35E
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:34:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09BB241B73;
+	Thu,  9 Jun 2022 20:35:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 122B91BF35E
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1D6F1405E3
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:34:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0150441B73
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:35:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id glMuvbRgDn1F for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 20:34:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2226C40327
- for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:34:46 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5A080FF802;
- Thu,  9 Jun 2022 20:34:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654806885;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=L1QRkgb/9ZHT8k4n3JZSjVFV8homIkMRftizp7oz4D8=;
- b=MMA1aXfk68C5hDIJZ94bMaZPIwjzLASyGrIkXRqzATzbmHUao91w1VDx/3M3dF/I0AXf3K
- dojL67uXFEjtr1lULVTUMYUmSdgoT/auypbT2iMhzGwScIZCBPUWkGw72yRft+4+WtnD2n
- qaqD6Y4NsxQijXFH1m+njFU2lexLPHBd+mhYDQA7FsvCJbvsc5dsqfCyxEp8SV0a1OaGDl
- qwUJergHvUPd+O3nZkUcGY/lFlmkvGPCSsfbDXiZDdvSKDuV1ewjuBwDmsEe1hTGC38EMF
- 5EHnPq855b10JagNCwtbHGfQmLEHS3gbzrY+e6XmqWXFF3g6xncmU8gwkHA78g==
-Date: Thu, 9 Jun 2022 22:34:44 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20220609223444.4885a9bf@windsurf>
-In-Reply-To: <YqGyLxqxwd94KHVS@waldemar-brodkorb.de>
-References: <YqGyLxqxwd94KHVS@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sUqVZaP7S8Mv for <buildroot@lists.busybox.net>;
+ Thu,  9 Jun 2022 20:35:09 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D722841B6B
+ for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:35:08 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5C022200007;
+ Thu,  9 Jun 2022 20:35:06 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nzOrx-002MOH-Io; Thu, 09 Jun 2022 22:35:05 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220606114905.444147-1-fontaine.fabrice@gmail.com>
+Date: Thu, 09 Jun 2022 22:35:05 +0200
+In-Reply-To: <20220606114905.444147-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 6 Jun 2022 13:49:05 +0200")
+Message-ID: <87o7z1zibq.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/openswan: allow uClibc build
+Subject: Re: [Buildroot] [PATCH 1/1] package/mariadb: security bump to
+ version 10.3.35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,34 +60,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 9 Jun 2022 10:41:19 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> uClibc-ng 1.0.41 added ns_t_tkey
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/openswan/Config.in | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+ > Fix CVE-2021-46669, CVE-2022-21427, CVE-2022-27376, CVE-2022-27377,
+ > CVE-2022-27378, CVE-2022-27379, CVE-2022-27380, CVE-2022-27381,
+ > CVE-2022-27383, CVE-2022-27384, CVE-2022-27386, CVE-2022-27387,
+ > CVE-2022-27445, CVE-2022-27447, CVE-2022-27448, CVE-2022-27449,
+ > CVE-2022-27452, CVE-2022-27456 and CVE-2022-27458
 
-Thanks a lot for this patch! As usual, we will need to hold off a
-little bit on this one, until Bootlin external toolchains get rebuilt
-with uClibc-ng 1.0.41, otherwise we will get tons of build failures in
-our autobuilders.
+ > https://mariadb.com/kb/en/mariadb-10335-release-notes
 
-Thomas
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
