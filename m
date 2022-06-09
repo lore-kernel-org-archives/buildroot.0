@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02419C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 06:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BAD7C43334
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 06:56:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4A4B83EF3;
-	Thu,  9 Jun 2022 06:56:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E25040BE8;
+	Thu,  9 Jun 2022 06:56:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SzvktDBPZQOr; Thu,  9 Jun 2022 06:56:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J0wIv8nP_1td; Thu,  9 Jun 2022 06:56:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBEE483EB8;
-	Thu,  9 Jun 2022 06:56:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 142CD1BF376
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48774408ED;
+	Thu,  9 Jun 2022 06:56:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 264771C1135
  for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 06:55:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11FA183EA0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 22C3C41BE8
  for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 06:55:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T1d8YNnLtfQT for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 06:55:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I8vjFFwPF4bo for <buildroot@lists.busybox.net>;
+ Thu,  9 Jun 2022 06:55:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 014F483E7A
- for <buildroot@buildroot.org>; Thu,  9 Jun 2022 06:55:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF3A141BBA
+ for <buildroot@buildroot.org>; Thu,  9 Jun 2022 06:55:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 839EA86DE6; Thu,  9 Jun 2022 06:43:49 +0000 (UTC)
+ id 68F2286E63; Thu,  9 Jun 2022 06:43:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 9 Jun 2022 08:54:40 +0200
+Date: Thu, 9 Jun 2022 08:49:47 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 377a10823eb1c8781d4ebb9dca6a1633f246cbd6
-X-Git-Newrev: 3b50e06910bd01792e0f0f0ad79f8fb943b02cec
+X-Git-Oldrev: 8ffd5274062fd1650e4cb9d64644218957e5c4c6
+X-Git-Newrev: c65cdb1dd64113152f743bea97644ff804ba0554
 X-Patchwork-Hint: ignore
-Message-Id: <20220609064349.839EA86DE6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/go: security bump
- to version 1.17.11
+Message-Id: <20220609064349.68F2286E63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/iucode-tool: fix
+ build with argp-standalone and NLS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +59,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b50e06910bd01792e0f0f0ad79f8fb943b02cec
+commit: https://git.buildroot.net/buildroot/commit/?id=c65cdb1dd64113152f743bea97644ff804ba0554
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-go1.17.11 includes security fixes to the crypto/rand, crypto/tls, os/exec,
-and path/filepath packages, as well as bug fixes to the crypto/tls package.
+Fix the following build failure with argp-standalone and NLS raised
+since commit 5430c8fedd0392e79e0c011825b056fea129980a:
 
+configure:6091: /home/autobuild/autobuild/instance-3/output-1/host/bin/x86_64-buildroot-linux-musl-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -largp   >&5
+/home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/x86_64-buildroot-linux-musl/10.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-3/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/lib/../lib64/libargp.a(argp-parse.o): in function `argp_version_parser':
+/home/autobuild/autobuild/instance-3/output-1/build/argp-standalone-1.4.1/argp-parse.c:181: undefined reference to `libintl_dgettext'
+
+[...]
+
+checking for library containing argp_parse... no
+configure: error: An implementation of GNU Argp was not found, please install libargp
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3d2d9e27aabcd6763510238087fe25d5273d3535
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit cb91d2e60fd1a38d257b731e8d4b7bf067f141de)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iucode-tool/iucode-tool.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 5fe1a092ba..428778afdc 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  299e55af30f15691b015d8dcf8ecae72412412569e5b2ece20361753a456f2f9  go1.17.10.src.tar.gz
-+sha256  ac2649a65944c6a5abe55054000eee3d77196880da36a3555f62e06540e8eb54  go1.17.11.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index d47b8abd96..49d6ea7da8 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+index 596ad268b7..b123973a90 100644
+--- a/package/iucode-tool/iucode-tool.mk
++++ b/package/iucode-tool/iucode-tool.mk
+@@ -7,11 +7,15 @@
+ IUCODE_TOOL_VERSION = 2.3.1
+ IUCODE_TOOL_SOURCE = iucode-tool_$(IUCODE_TOOL_VERSION).tar.xz
+ IUCODE_TOOL_SITE = https://gitlab.com/iucode-tool/releases/raw/master
+-IUCODE_TOOL_DEPENDENCIES = $(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone)
+ IUCODE_TOOL_LICENSE = GPL-2.0+
+ IUCODE_TOOL_LICENSE_FILES = COPYING
+ IUCODE_TOOL_CPE_ID_VENDOR = iucode-tool_project
  
--GO_VERSION = 1.17.10
-+GO_VERSION = 1.17.11
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
++ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
++IUCODE_TOOL_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
++IUCODE_TOOL_CONF_ENV += LIBS=$(TARGET_NLS_LIBS)
++endif
++
+ define IUCODE_TOOL_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
+ 		$(TARGET_DIR)/etc/init.d/S00iucode-tool
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
