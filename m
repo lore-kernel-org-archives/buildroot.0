@@ -1,64 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF8C7C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:31:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 364ECC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 20:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72DE861136;
-	Thu,  9 Jun 2022 20:31:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0380884268;
+	Thu,  9 Jun 2022 20:32:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F8YfEQ2VB7bX; Thu,  9 Jun 2022 20:31:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9949860FD5;
-	Thu,  9 Jun 2022 20:31:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 48F311BF35E
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:31:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 463B98425F
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:31:51 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=bootlin.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2_HljiT1lXYe for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 20:31:50 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CVIHCJLEMTyB; Thu,  9 Jun 2022 20:32:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 179528425F;
+	Thu,  9 Jun 2022 20:32:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D47E1C1135
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:31:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5B52B409C1
+ for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 20:31:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y5DQCkg657ac for <buildroot@lists.busybox.net>;
+ Thu,  9 Jun 2022 20:31:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 289CC84253
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7ABD340327
  for <buildroot@buildroot.org>; Thu,  9 Jun 2022 20:31:49 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C8F5C1C0008;
- Thu,  9 Jun 2022 20:31:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
- t=1654806708;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Jh0fb9Od0Ytf98iRxxZuSm1oD+HKBH7uQH5MzVu4W+c=;
- b=UF8fI2zNjpHOVPJgkmnJfxQxvt3Qzf7u9XQe5Tsd1tU2vDjU6PD0wL6+5ASmuGns13mmLo
- yOmxLmm1jLSifQbljL2gbLLr9+2LyECPi6IxT8QOqch8ferV07d4SoFPzyRa8AOTxqvys7
- xzANuyUmA+pYo/xgwM+eBO9ws7UY9pKJAucKzMw0tKg1DL9lV6p7xXO3ejcPU3KMu/Tfpr
- DF5a4sgKbN8k4GQPlLeY7+bhyrJk4ycJDInodbz4/ONzyf27AIqiyJ5036lz8y8Ccjv0FD
- CsRey0z046fa8KiGh+aMW4MxRJBkll8NhAfQMjHlZ7JOYhhZVwW8bYd7b/ymSQ==
-Date: Thu, 9 Jun 2022 22:31:46 +0200
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Message-ID: <20220609223146.6c6185e4@windsurf>
-In-Reply-To: <20220608094803.3403930-1-thomas.petazzoni@bootlin.com>
-References: <20220608094803.3403930-1-thomas.petazzoni@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 19A9AE0003;
+ Thu,  9 Jun 2022 20:31:45 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nzOoj-002MD7-2c; Thu, 09 Jun 2022 22:31:45 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220606101316.366344-1-fontaine.fabrice@gmail.com>
+Date: Thu, 09 Jun 2022 22:31:45 +0200
+In-Reply-To: <20220606101316.366344-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 6 Jun 2022 12:13:16 +0200")
+Message-ID: <87wndpziha.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] arch/Config.in: armeb no-MMU is not
- supported
+Subject: Re: [Buildroot] [PATCH 1/1] package/mono: needs NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,45 +59,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  8 Jun 2022 11:48:02 +0200
-Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> elf2flt does not support ARM big-endian, so supporting Cortex M3/M4/M7
-> with armeb is not possibly.
-> 
-> Therefore this commit makes:
-> 
->  - MMU mandatory on armeb
->  - Prevents from seeing Cortex M3/M4/M7 on armeb
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/9bca0cbfb6a66c455e74ad194526bca942665978/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  arch/Config.in     | 2 +-
->  arch/Config.in.arm | 3 +++
->  2 files changed, 4 insertions(+), 1 deletion(-)
+ > mono unconditionally uses pthread_attr_get_np and so needs NTPL since
+ > version 4.0.1.43 and
+ > https://github.com/mono/mono/commit/748fefa1d7199f008c6e56499ba482fb17fe1583:
 
-I have mistakenly pushed my own patch, sorry about this. Hopefully
-people are OK with this, if not I can revert. Let me know.
+ > mono-threads-linux.c: In function 'mono_threads_platform_get_stack_bounds':
+ > mono-threads-linux.c:26:15: error: implicit declaration of function
+ > 'pthread_getattr_np'; did you mean 'pthread_attr_init'?
+ > [-Werror=implicit-function-declaration]
+ >    26 |         res = pthread_getattr_np (pthread_self (), &attr);
+ >       |               ^~~~~~~~~~~~~~~~~~
+ >       |               pthread_attr_init
 
-Best regards,
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/6534ee4ae699c17ee98f6f89a8a1212936e04481
 
-Thomas
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
