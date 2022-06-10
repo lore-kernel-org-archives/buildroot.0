@@ -1,64 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A76FC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jun 2022 14:59:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30332C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jun 2022 17:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 724EB40FEA;
-	Thu,  9 Jun 2022 14:59:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACD5E612B3;
+	Fri, 10 Jun 2022 17:11:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qGU66UsWu5iP; Thu,  9 Jun 2022 14:59:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zKo7i-bCFccV; Fri, 10 Jun 2022 17:11:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A91D040FF6;
-	Thu,  9 Jun 2022 14:59:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C778B1BF2B7
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 14:59:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C235260BCC;
+	Fri, 10 Jun 2022 17:11:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C4D91BF2B0
+ for <buildroot@lists.busybox.net>; Fri, 10 Jun 2022 17:11:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C4D2B83F74
- for <buildroot@lists.busybox.net>; Thu,  9 Jun 2022 14:59:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2586A40B28
+ for <buildroot@lists.busybox.net>; Fri, 10 Jun 2022 17:11:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vq_oFLLIj-z6 for <buildroot@lists.busybox.net>;
- Thu,  9 Jun 2022 14:59:03 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2486183F6B
- for <buildroot@uclibc.org>; Thu,  9 Jun 2022 14:59:03 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id DFE7086E95; Thu,  9 Jun 2022 14:47:06 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Thu, 09 Jun 2022 14:59:02 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.02
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocker
-X-Bugzilla-Who: fesc2000@mailbox.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14366-163-sRYouCaOS2@https.bugs.busybox.net/>
-In-Reply-To: <bug-14366-163@https.bugs.busybox.net/>
-References: <bug-14366-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LlpbEljPG_G4 for <buildroot@lists.busybox.net>;
+ Fri, 10 Jun 2022 17:11:18 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 38C28401AD
+ for <buildroot@buildroot.org>; Fri, 10 Jun 2022 17:11:18 +0000 (UTC)
+Received: by mail-lf1-x131.google.com with SMTP id t25so43782334lfg.7
+ for <buildroot@buildroot.org>; Fri, 10 Jun 2022 10:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=date:from:to:subject:message-id:mime-version:content-disposition;
+ bh=2UStm531X5UKIb4nKxgOMBdcNr5dkohkB98ezrp9wqg=;
+ b=bjqWkBy1jLlDqyqRqIOapB75hp2gkylvoQ45VU0Crw/T77MRiRbE4O+l1OlgUM0j61
+ lVnlYaj+yfhVna9pGcmUbbNWeIYia4Y0DgzSAEuA3YuPrzjoaOxkOfAlyesGgAoSl+m3
+ +vbd/14GJ6juUYlg95Z/ytu1a1D+ibk9FR4qhVWFPGlE0rB0kBNsADbMgn+EpAWS/HKH
+ /T6DRzo6CihZUWqdMayPLZvb1XmMl6je6zJjg0QUPS2rZdFuX9bEYG+/RgQ4qNgWS2Xx
+ yba5Y9i9Q+F5UW+e85C+cLfEdw9gMmj12f7+1X7gt1kq1ylY/Gcrl2pBC2Gf5xif+HVH
+ azpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+ :content-disposition;
+ bh=2UStm531X5UKIb4nKxgOMBdcNr5dkohkB98ezrp9wqg=;
+ b=NNsNRBgN9sOpX3/y81/TDKneEwlbSYd8hSxClKhQiNoEJ5PSiAI70EBMDJgdBX98kX
+ Bl3PomcweiF06EE92oWEMVWTebm8dt+38ACuRvuKHadBe5fSN4Ru0qzeEkMJxqpr9NNG
+ GcbOHNrlNGozgRAdtBVNZjPOkDZcwBc5qw+5EAfFjGmgoAizmCzStpOIhMnVvgYmUXzc
+ ZYwT0pSYOMoKomloz4AgpqRMDKf2ELnKQpCaYYIxjzmMxxRE8LHmfCVRRZZGUliiXS7Y
+ i2eLvx5HNolDs9MJP0Qk4Um0yedLBPc7hqkSnFfD9ee32Km32nR2djj1M67sn6ccrbyc
+ Ox5A==
+X-Gm-Message-State: AOAM532Ygtvk/pY701KcQDXUZhwLO7q0p4cKo9JT9bQShqNEMMCmGIrI
+ Uz0ApLITpAAN4oHksw/IlRE06Pmy2SE=
+X-Google-Smtp-Source: ABdhPJx+ZQAKn81WWF+yi8CRYxvZgtdejWi5BuwiJ7tKkv/AAHAxQq0BNx+HH6SUYJKuTboGV+WurA==
+X-Received: by 2002:a05:6512:282b:b0:47a:e70d:8723 with SMTP id
+ cf43-20020a056512282b00b0047ae70d8723mr6978361lfb.557.1654881076148; 
+ Fri, 10 Jun 2022 10:11:16 -0700 (PDT)
+Received: from hs ([213.87.144.82]) by smtp.gmail.com with ESMTPSA id
+ f9-20020a2e6a09000000b00254319f8e63sm4189544ljc.91.2022.06.10.10.11.14
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Jun 2022 10:11:15 -0700 (PDT)
+Date: Fri, 10 Jun 2022 20:11:13 +0300
+From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+To: buildroot@buildroot.org
+Message-ID: <YqN7MemqvW0pXxC3@hs>
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14366] Nodejs fails with "version `GLIBC_2.34' not
- found" on Ubuntu 20.04
+Content-Disposition: inline
+Subject: [Buildroot] [PATCH 1/1] package/tinyproxy: bump to version 1.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,26 +90,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14366
 
---- Comment #10 from Felix Schmidt <fesc2000@mailbox.org> ---
-(In reply to Frank Rogall from comment #9)
-I'm having a similar issue, with host=x86_64 and target=i686 (32bit).
+https://github.com/tinyproxy/tinyproxy/releases/tag/1.11.1
 
-Here this patch does not work. This is my workaround:
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+---
+ package/tinyproxy/tinyproxy.hash | 4 ++--
+ package/tinyproxy/tinyproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- buildroot/package/nodejs/v8-qemu-wrapper.in.orig
-+++ buildroot/package/nodejs/v8-qemu-wrapper.in
-@@ -5,5 +5,6 @@
- exec @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
-     @QEMU_USERMODE_ARGS@ \
-    -L "${STAGING_DIR}/" \
-+   -E LD_LIBRARY_PATH="${STAGING_DIR}/lib:${STAGING_DIR}/usr/lib/" \
-     "$@"
-
+diff --git a/package/tinyproxy/tinyproxy.hash b/package/tinyproxy/tinyproxy.hash
+index 8c58b98ca2..84e98a84ce 100644
+--- a/package/tinyproxy/tinyproxy.hash
++++ b/package/tinyproxy/tinyproxy.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/tinyproxy/tinyproxy/releases/tag/1.11.0
+-sha256  c1ec81cfc4c551d2c24e0227a5aeeaad8723bd9a39b61cd729e516b82eaa3f32  tinyproxy-1.11.0.tar.xz
++# From https://github.com/tinyproxy/tinyproxy/releases/tag/1.11.1
++sha512  2e3435bbfece3797c11ccce222eef494ed92e00dd82bea2c40a54e454b7e03c8abc8e09b244f2da7192209c39047369439d08974b79eebc996fb3095230d0374  tinyproxy-1.11.1.tar.xz
+ # locally computed
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
+index 3930e90d72..6b5a3f9625 100644
+--- a/package/tinyproxy/tinyproxy.mk
++++ b/package/tinyproxy/tinyproxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TINYPROXY_VERSION = 1.11.0
++TINYPROXY_VERSION = 1.11.1
+ TINYPROXY_SITE = https://github.com/tinyproxy/tinyproxy/releases/download/$(TINYPROXY_VERSION)
+ TINYPROXY_SOURCE = tinyproxy-$(TINYPROXY_VERSION).tar.xz
+ TINYPROXY_LICENSE = GPL-2.0+
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.30.2
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
