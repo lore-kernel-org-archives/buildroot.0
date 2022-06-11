@@ -1,91 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FDD4C43334
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jun 2022 17:40:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52F49C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jun 2022 20:20:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B14C642564;
-	Sat, 11 Jun 2022 17:40:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B0E9040989;
+	Sat, 11 Jun 2022 20:20:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2Rt21QxVacpO; Sat, 11 Jun 2022 17:40:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q93GwJuND8nx; Sat, 11 Jun 2022 20:19:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEA1542555;
-	Sat, 11 Jun 2022 17:40:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 199241BF82C
- for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 17:40:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63BD44061C;
+	Sat, 11 Jun 2022 20:19:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B4A3B1BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 20:19:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0714B8412F
- for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 17:40:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C39F60EFB
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 20:19:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F3sNG5TqSIZi for <buildroot@lists.busybox.net>;
- Sat, 11 Jun 2022 17:40:32 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 05CA584129
- for <buildroot@buildroot.org>; Sat, 11 Jun 2022 17:40:31 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id u12so3613950eja.8
- for <buildroot@buildroot.org>; Sat, 11 Jun 2022 10:40:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=uSWEplzlA7kSrPhhfbB2didYy/QofHx8MgWliO/nV2A=;
- b=azBV0R1dZk62f84zv5cDX5lVclf/s4v2TkMvAlUEQwFmlg5ywzliqeVlVKkAyNiiby
- L8/3nE9ZyVmV/0cQHkIYEG0AIlDBfEwrfH7Ofa3HJLNREIMFYsNXPa8uml5VY/mPE1rL
- Xm5xOuhqeL88oWMLB53pZv3t8AcQYZJPq5M1nlwcQP8u6IjLj9FhpVaav+1mcyIK04vL
- sLW3wq9kfJ5FmN4ZFwNWOOWKCRZtPF4idtMAjv4UeoF2QcHA9ljMJmtTaERYJPnjX8zR
- EIRrXOBcbuuvZaWO2/CKGyll7ddCvni4FkAbiKkN7et7lPgDcCnOaawvvTFXNq/SFPZO
- DaeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=uSWEplzlA7kSrPhhfbB2didYy/QofHx8MgWliO/nV2A=;
- b=t5/d/z23JEVH/BGF4nFut8WrJEbENmVFj3SUT5SLskJ8gcz3TnAUwnRj9thuiCE4MW
- hJ8bMFTAfdFhhHHRuThoaQHq8qEY60ICOqrAXxb/NJC8N0G6dl+cLRNA2JuQfLsBqsWE
- fHhb1AGlJ0nIn57aQ5jrmELsWjGFe+ZockKrNYgfhzeiUqgspgLv4wLapRJHhBlqjMjo
- wCq3svhHoPYmP2Jms9mca87h2etR0PhoRZqCdKkjA1oSj2LkZLXsZuWCMZ0Z3BJDTy2X
- fyqaI4YmPvyyvSdxa7k/aZXKnMilVkF50SJWPEbokyZvoflYD3ucISdMFJQFdjJ/LddL
- 3C6w==
-X-Gm-Message-State: AOAM530D9g7V78Dead8wNyEONyS0aeKlSoIYRVP+xI/Mfcs7XL7gakvk
- 1lHz7lXrX7YPidkVzoRje/1S3Q==
-X-Google-Smtp-Source: ABdhPJxkyH493Lc/iYCgvfy4HTMGEmhrDQbWe4/Hs25+At7XVtmGebYCtGxPJyob1N3Km+T+pxHvwQ==
-X-Received: by 2002:a17:906:9f1c:b0:711:cdda:a01f with SMTP id
- fy28-20020a1709069f1c00b00711cddaa01fmr29295659ejc.372.1654969230219; 
- Sat, 11 Jun 2022 10:40:30 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- k8-20020a056402048800b0042cf43e1937sm1752965edv.75.2022.06.11.10.40.25
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 11 Jun 2022 10:40:29 -0700 (PDT)
-Message-ID: <b190b147-d669-855a-c5a4-0046586e0fc6@mind.be>
-Date: Sat, 11 Jun 2022 19:40:23 +0200
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=tpm.dev
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aUpd8gUxvNRS for <buildroot@lists.busybox.net>;
+ Sat, 11 Jun 2022 20:19:54 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from delivery.mailspamprotection.com
+ (delivery.mailspamprotection.com [185.56.84.23])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4DD99606B0
+ for <buildroot@buildroot.org>; Sat, 11 Jun 2022 20:19:54 +0000 (UTC)
+Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
+ helo=es87.siteground.eu)
+ by se25.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
+ (Exim 4.92) (envelope-from <dimi@tpm.dev>)
+ id 1o07aD-0006HE-Sr; Sat, 11 Jun 2022 15:19:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tpm.dev;
+ s=default; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
+ In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=YsxXlT/Uv3SVaYaBtaPyfp0ktfozxIbdnZcv88Kwo5w=; b=HSp+Dd8CYpY4wXPbwBKlwO7554
+ ECdQrHXcbX4Vb6XzubWhlq+UbDK/COEmLz1eQkJw1EBCvx28i8CAxEaFTzhUwSFmSVKWkiw3EAEcY
+ +qcF0UmDdDMtAGdhvaiQKzbK6s6SvzjzdHVCcYJzfHzP0A1aJLPR8QCpu7D0CntFDHVu6lKHZ5V3N
+ 1V9r3utWJuJr8CabwtkFBwO6z1VYZntx/ukwMJVeM8ENE0jUChqeNW7ueAZJHPjJr1AMTugRSzzi+
+ qSyczT53W1Z0SJcAjz62MPgNKenm7C6+vNcz3dlP6h894K6AAutMByR87rXf/bgBbX0itabKCxh86
+ +s7MS+ug==;
+Received: from [127.0.0.1] (port=35106 helo=es87.siteground.eu)
+ by es87.siteground.eu with esmtpa (Exim 4.90-.1)
+ (envelope-from <dimi@tpm.dev>)
+ id 1o07aB-000Bfu-No; Sat, 11 Jun 2022 20:19:43 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220606142118.1055501-1-fontaine.fabrice@gmail.com>
- <55581997-b9da-7187-204c-3a47b32d6350@mind.be>
- <20220606211315.GA427639@scaer>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220606211315.GA427639@scaer>
-Subject: Re: [Buildroot] [PATCH 1/1] package/openssl: libopenssl needs atomic
+Date: Sat, 11 Jun 2022 23:19:43 +0300
+From: Dimi Tomov <dimi@tpm.dev>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220611143544.844613-1-fontaine.fabrice@gmail.com>
+References: <20220611143544.844613-1-fontaine.fabrice@gmail.com>
+Message-ID: <4b6ad1f2e42a88e1bbffefb9480ff5f2@tpm.dev>
+X-Sender: dimi@tpm.dev
+Organization: TPM.dev
+X-Originating-IP: 35.214.247.6
+X-SpamExperts-Domain: es87.siteground.eu
+X-SpamExperts-Username: 35.214.247.6
+Authentication-Results: mailspamprotection.com;
+ auth=pass smtp.auth=35.214.247.6@es87.siteground.eu
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.00853472088219)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT/lFWas1SWtSo6aw0khRKRmPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5zXBqNSapTpPkqU8rtpw71NFyJHgrHSwCtEjluuUWcpJy6t
+ qqQqDjtsvNgVjMorkiNpdtr/zHbEnQMJQw9jU01dUJRGtUOcUpjQoI0g1tgg30LkIjQmF3eA6uBR
+ sOOfzIUI2QyQ+IxgL7AzMcQws+it044Yc3UKVoMsHpoDsGuRbwDxxiMAICz6P3g28tGAMvzqPqRB
+ dN4gdbyCA2Yz2XfKiNHvZXVfQIZKaNTSUmy92zyhculNL4Kv1B7pfkqZpiV9qWu12vVUj5xBQUrw
+ t1bFYx3aPgw+VqqMKwjqRu7K//WEQZ1uDRaTscddvLdr0QyZJ5g5HjmFDWGEJOBZxk7R5HHYEJjr
+ oOvfkvm+jbvsKlE5ZCSoHa/7LfX2bMD5xLvhCcHQv+Vda3nPaVK0EfymGFvlHOQsi9fJrQH2HB7K
+ cikRseCyBjclZpv6D8yHWO2ec6cBx3r3HXymDSnwWpGuuZvJzloHvXAavZZu2bOHz0lNEHF1LSWF
+ /K4qKVXG9aOiuE2WsMQKCIxVc/Bl0gEhwVT9QLcFEqMOHs14qjRwSeexcQEBokpimN+IpZsSCXdU
+ 3Zc+tbQZZW2CB9MAVZ7m17NirEYyqwqMBGrw8ELiqJ2Lnubrt6xFfUVlzWE+fUwE/Xy9bqh2t87x
+ wDNJ1ZQnkG4rgMcOadSlmA4Mg6UQtNxCHahZfsjvoDKdqQReE7opol7/zxbDwFIVzeFgpWdBcxw3
+ qqhc+N6cuEg4XWh5FtyOJ22t24VloPyX9BGeStAkSLsOcUz+tDXKFe8JN6p6TWMhtpGJ7Yntcl2k
+ 6P08XH+V9p5Yms+BdRuRNxZgAvBqsgbDV2HxC6hTAaNRtelLABMII+MZt9lccg21Qbt2rvmiIpIf
+ ET3DKy6eOfDTAmMFq60D0IrCERjnDPsHGlH62P/Q5P2avsXwIHCKRpn8mumteFnRQMgdmmdZ3dtr
+ tugRtAjATd3Uexi+7hxR5Qhd2Z5JmISLRtpg+BX6Ks3o3eC1LXbNjyFcag1clVEejgaVTJXUyRYZ
+ QAqUcyeNZ9Pw647lNwN4qOsSZg+fYhVZGweUF86gi0+ssgYHyuRMdamM1/vGHv5niZSzvePQswR9
+ tAMyBK/fwHR0ICrRwpT/yWWLX2ZbQb3UJKihEmoDuwiHHKC85zpKzjzwXMd7fKV1b1JM50deWtJl
+ +ohOvCmYEc6Ya55kz6ATxdSh2h2ztUM=
+X-Report-Abuse-To: spam@quarantine1.mailspamprotection.com
+Subject: Re: [Buildroot] [PATCH 1/2] package/wolftpm: fix dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,116 +104,158 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>,
- Gustavo Heinz <gustavo@gsthnz.com>,
- Sven Haardiek <sven.haardiek@iotec-gmbh.de>,
- Yair Ben Avraham <yairba@protonmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Mauro Condarelli <mc5686@mclink.it>, Matt Weber <matthew.weber@collins.com>,
- Bernd Kuhls <bernd.kuhls@t-online.de>,
- =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
- Sergey Matyukevich <geomatsi@gmail.com>,
- Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>, Norbert Lange <nolange79@gmail.com>,
- Joseph Kogut <joseph.kogut@gmail.com>,
- =?UTF-8?Q?Jos=c3=a9_Pekkarinen?= <jose.pekkarinen@unikie.com>,
- =?UTF-8?Q?Manuel_V=c3=b6gele?= <develop@manuel-voegele.de>,
- Pierre-Jean Texier <texier.pj2@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Philippe Reynes <philippe.reynes@softathome.com>,
- Asaf Kahlon <asafka7@gmail.com>, Lionel Flandrin <lionel@svkt.org>
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi Fabrice,
+
+1) I advise strongly against this patch in its current form due to 
+security concerns. Please find my motivation below.
+
+2) Existing wolfTPM dependencies are propagated from the wolfssl 
+package.
+
+3) I am unable to reproduce your build error. Please provide the exact 
+commands and order you are running them on a clean buildroot master.
+
+Topic #1
+
+In order to have Man-in-the-middle protection, wolfTPM needs a 
+cryptogrpahic provider to set a secure channel of communication between 
+the HOST CPU and the TPM 2.0 HSM chip. Without MITM protection, keys and 
+other sensitive data can be sniffed, making it pointless to use a TPM 
+2.0 security chip in the first place.
+
+Therefore, making the default wolfTPM build work without wolfssl is a 
+SECURITY RED FLAG.
+
+Please consider adding an OPTION to build wolfTPM without wolfssl, 
+however keep the default wolfTPM build require the wolfssl library.
+
+Topic #2
+
+The threads and dynamic library support dependencies are propagated from 
+the wolfssl package and per recommendation of Thomas (adding to our 
+discussion).
+
+Both, wolfssl and wolfTPM could be build statically, however this is not 
+how I found the wolfssl package working in buildroot. Therefore, I used 
+the existing code base and added the wolftpm package accordingly.
+
+Topic #3
+
+It is a good practice when reporting an error to share how it can be 
+reproduced. I am unable to reproduce your build error.
+
+Last
+
+I find it difficult to address multiple topics/major changes in one 
+patch. I have tried to decouple the topics above and I am ready to 
+discuss further. Thank you for providing this feedback. I think there 
+are improvements we could make based on what is the expectation and 
+buildroot maintainers' requirements.
+
+Regards,
+Dimi
+-- 
+Founder of TPM.dev
 
 
-On 06/06/2022 23:13, Yann E. MORIN wrote:
-> Fabrice, Arnout, All,
+On 2022-06-11 05:35 PM, Fabrice Fontaine wrote:
+> pkg-config is not used by wolftpm and wolfssl dependency is missing 
+> (and
+> optional) resulting in the following build failure since the addition 
+> of
+> the package in commit 4bb884a3c61c6b71e33f69453a90eb2a367f64b7:
 > 
-> On 2022-06-06 21:06 +0200, Arnout Vandecappelle spake thusly:
->> On 06/06/2022 16:21, Fabrice Fontaine wrote:
->>> libopenssl needs atomic or the build will fail (e.g. on sparcv8 without
->>> libatomic):
->>
->>   I don't understand how it's possible that this error happens only with
->> James' fully random configs, and not with e.g. bootlin-m68k-5208-uclibc
->> (which I double checked does still have autobuilder results, and does not
->> have libatomic). In fact, there are successful builds of libopenssl without
->> libatomic, e.g. [1]. I found this with the autobuild query [2] (there's no
->> way to search for the absence of a symbol in the advanced search, but
->> m68k_cf5208 can't have atomic so it's a good way to search it).
+> configure: error: WolfSSL library not found. You can get it from
+> http://www.wolfssl.com/download.html
+>         If it's already installed, specify its path using
+> --with-wolfcrypt=/dir or --prefix=/dir
 > 
-> I did some test, and indeed, sparc v8 fails to build. But leon builds
-> successfully.
+> Moreover, BR2_PACKAGE_WOLFSSL_ALL, threads and dynamic libray support
+> are not mandatory:
 > 
-> For sparc v8, there are indeed references to __atomic_fetch_sub_4 and
-> __atomic_fetch_add_4. But for leon, none.
-
-  I've had a look as well, and it looks like this is from
-include/internal/refcount.h, which uses atomics under this condition:
-
-# elif defined(__GNUC__) && defined(__ATOMIC_RELAXED) && 
-__GCC_ATOMIC_INT_LOCK_FREE > 0
-
-I guess GCC incorrectly sets one of these options?
-
-
-
->>> ${LDCMD:-/nvmedata/autobuild/instance-7/output-1/host/bin/sparc-buildroot-linux-uclibc-gcc}  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O0 -g2  -g2  -L.   \
->>> 	-o apps/openssl apps/asn1pars.o apps/ca.o apps/ciphers.o apps/cms.o apps/crl.o apps/crl2p7.o apps/dgst.o apps/dhparam.o apps/dsa.o apps/dsaparam.o apps/ec.o apps/ecparam.o apps/enc.o apps/engine.o apps/errstr.o apps/gendsa.o apps/genpkey.o apps/genrsa.o apps/nseq.o apps/ocsp.o apps/openssl.o apps/passwd.o apps/pkcs12.o apps/pkcs7.o apps/pkcs8.o apps/pkey.o apps/pkeyparam.o apps/pkeyutl.o apps/prime.o apps/rand.o apps/rehash.o apps/req.o apps/rsa.o apps/rsautl.o apps/s_client.o apps/s_server.o apps/s_time.o apps/sess_id.o apps/smime.o apps/speed.o apps/spkac.o apps/srp.o apps/storeutl.o apps/ts.o apps/verify.o apps/version.o apps/x509.o \
->>> 	 apps/libapps.a -lssl -lcrypto -ldl
->>> /nvmedata/autobuild/instance-7/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ./libssl.so: undefined reference to `__atomic_fetch_sub_4'
->>>
->>> It should be noted that openssl3 has added OPENSSL_DEV_NO_ATOMICS but
->>> "this is intended for internal development only, to check the
->>> refcounting is properly coded.  It should never become a configuration
->>> option, hence the name of the macro.":
->>> https://github.com/openssl/openssl/commit/503d4745a115b82db01c1fb22baaddb153d27cdb
->>>
->>> Fixes:
->>>   - http://autobuild.buildroot.org/results/bce526d538f43a541fdfbc0c9b4a7cecebbbc539
->>>
->>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->>
->> [snip]
->>> diff --git a/package/openssl/Config.in b/package/openssl/Config.in
->>> index 7bf49b05f6..ed165569f0 100644
->>> --- a/package/openssl/Config.in
->>> +++ b/package/openssl/Config.in
->>> @@ -16,6 +16,7 @@ choice
->>>   config BR2_PACKAGE_LIBOPENSSL
->>>   	bool "openssl"
->>> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
->>
->>   Unfortunately, this is not enough (and it is already a huge patch...).
->>
->>   The result of this new dependency is that openssl is only available if
->> BR2_TOOLCHAIN_HAS_ATOMIC (libopenssl) ||
->> (!BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL && BR2_TOOLCHAIN_HAS_THREADS &&
->>   !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU))
->>
->>   So, in addition to the packages that select
->> BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL, all the packages that select
->> BR2_PACKAGE_OPENSSL have to be updated as well...
+> ./utils/test-pkg -p wolftpm
+>                     bootlin-armv5-uclibc [1/6]: OK
+>                      bootlin-armv7-glibc [2/6]: OK
+>                    bootlin-armv7m-uclibc [3/6]: OK
+>                      bootlin-x86-64-musl [4/6]: OK
+>                       br-arm-full-static [5/6]: OK
+>                             sourcery-arm [6/6]: OK
+> 6 builds, 0 skipped, 0 build failed, 0 legal-info failed, 0 show-info 
+> failed
 > 
-> This is going to be a huge change...
+> Fixes:
+>  -
+> http://autobuild.buildroot.org/results/77a93521b909e701ef4e86f18524258b9242c721
 > 
-> Can we maybe instead add an exception in the autobuilders, so that
-> "fringe" architectures or variants just get excluded?
-
-  Yeah, that's a good fallback. We already have a bunch of exception handling 
-like that in genrandconfig.
-
-  Regards,
-  Arnout
-
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/wolftpm/Config.in  |  7 -------
+>  package/wolftpm/wolftpm.mk | 13 ++++++++++---
+>  2 files changed, 10 insertions(+), 10 deletions(-)
 > 
-> Regards,
-> Yann E. MORIN.
+> diff --git a/package/wolftpm/Config.in b/package/wolftpm/Config.in
+> index 0fe094f277..741d92aa4e 100644
+> --- a/package/wolftpm/Config.in
+> +++ b/package/wolftpm/Config.in
+> @@ -1,9 +1,5 @@
+>  config BR2_PACKAGE_WOLFTPM
+>  	bool "wolftpm"
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -	depends on !BR2_STATIC_LIBS
+> -	select BR2_PACKAGE_WOLFSSL
+> -	select BR2_PACKAGE_WOLFSSL_ALL
+>  	help
+>  	  wolfTPM is a portable, open-source TPM 2.0 stack with
+>  	  backward API compatibility, designed for embedded use.
+> @@ -11,6 +7,3 @@ config BR2_PACKAGE_WOLFTPM
+>  	  resource usage.
 > 
+>  	  https://www.wolfssl.com/
+> -
+> -comment "wolftpm needs a toolchain w/ threads, dynamic library"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
+> index ea01eaad6b..f0cf0df0d3 100644
+> --- a/package/wolftpm/wolftpm.mk
+> +++ b/package/wolftpm/wolftpm.mk
+> @@ -10,7 +10,6 @@ WOLFTPM_INSTALL_STAGING = YES
+>  WOLFTPM_LICENSE = GPL-2.0+
+>  WOLFTPM_LICENSE_FILES = LICENSE
+>  WOLFTPM_CPE_ID_VENDOR = wolfssl
+> -WOLFTPM_DEPENDENCIES = host-pkgconf
+>  WOLFTPM_CONFIG_SCRIPTS = wolftpm-config
+> 
+>  # wolfTPM's source code is released without a configure script,
+> @@ -19,8 +18,7 @@ WOLFTPM_AUTORECONF = YES
+> 
+>  WOLFTPM_CONF_OPTS = \
+>  	--disable-examples \
+> -	--enable-devtpm \
+> -	--with-wolfcrypt=$(STAGING_DIR)/usr
+> +	--enable-devtpm
+> 
+>  # Fix for missing config.rpath in the codebase
+>  define WOLFTPM_TOUCH_CONFIG_RPATH
+> @@ -29,4 +27,13 @@ define WOLFTPM_TOUCH_CONFIG_RPATH
+>  endef
+>  WOLFTPM_PRE_CONFIGURE_HOOKS += WOLFTPM_TOUCH_CONFIG_RPATH
+> 
+> +ifeq ($(BR2_PACKAGE_WOLFSSL),y)
+> +WOLFTPM_CONF_OPTS += \
+> +	--enable-wolfcrypt \
+> +	--with-wolfcrypt=$(STAGING_DIR)/usr
+> +WOLFTPM_DEPENDENCIES += wolfssl
+> +else
+> +WOLFTPM_CONF_OPTS += --disable-wolfcrypt
+> +endif
+> +
+>  $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
