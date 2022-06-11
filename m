@@ -4,78 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B17B2C43334
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jun 2022 21:40:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEC26C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jun 2022 00:06:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D1D86105E;
-	Fri, 10 Jun 2022 21:40:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7ACDA61250;
+	Sat, 11 Jun 2022 00:06:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SFydx0xnVCc1; Fri, 10 Jun 2022 21:40:32 +0000 (UTC)
+	with ESMTP id izdeIWA6Txf8; Sat, 11 Jun 2022 00:06:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF33860BE7;
-	Fri, 10 Jun 2022 21:40:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0A3060B8A;
+	Sat, 11 Jun 2022 00:06:40 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D1ABC1BF3E0
- for <buildroot@lists.busybox.net>; Fri, 10 Jun 2022 21:40:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9046A1BF28C
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 00:06:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BFD19410AB
- for <buildroot@lists.busybox.net>; Fri, 10 Jun 2022 21:40:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 750AF4196E
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 00:06:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=igalia.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A_fLVf233DwZ for <buildroot@lists.busybox.net>;
- Fri, 10 Jun 2022 21:40:27 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A249B40E46
- for <buildroot@buildroot.org>; Fri, 10 Jun 2022 21:40:26 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id m24so159641wrb.10
- for <buildroot@buildroot.org>; Fri, 10 Jun 2022 14:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=8fZ4f+bpEIjgXnFiWzQ3QDSFKRXxIAiaP4VzgliACj4=;
- b=GinSP5y2VnEr/waJwF1xScnHA6tPAMtVTtiIvy3I91LPqe19U1X9yi0PF6lTyUpjkj
- f2OkfDu1gnvHlFZ/TMVWFQcXsVpQvpp17X8B898PqA1N+TEf6E8h1GqGia0WeKrk9tYu
- msuJOf72p2q3YrpodMoa751bAjmsrw/FdPcA3GAzXRSeAL1rQhg1LDeJvc/9Hf2mCKz1
- uFByosbqw3qK8kpX4egyHb+i3ZhvqaG7tUVDY/0QX8yYntTnHXdywIsbMyDsdPRcgyH8
- HoTVC5tPs3h6vTOVSCFFNvI1HzKddjdsL4vAVPzOMkQ1PSUF4TCrYRH8j7NOFpK36kpc
- VyrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=8fZ4f+bpEIjgXnFiWzQ3QDSFKRXxIAiaP4VzgliACj4=;
- b=cJS5JoFB1/Cm4Xm7e4bQUl3ryDuOFg+1Ze7MpnwpJpArYYKGxta13m35XnFB3Ji59B
- kL5mKOHQVJ9l2Bhhy7Qoe3YlZVOINF98Nn3dFRfQ3B7pVLS2sCVJhPhjV9FhVTY/z0RB
- 82tNGndkPd6Uuv4hzG3Xwix7d87Y1OXqS6etGfRF72dUL2FRXT4F3HvqLRSk61MsXCS0
- oXOmhUfwsTO2K8NUukA1M+sdURZWflmhVo7u0vz/7uGkFwnQGflkeHAMPjG0hidOUIIh
- UARDiQlkV68kmjN4HALZmYZe9aWBBP2hG2wk8uAwXcIVmlg48kzmPmRHZdl476OKZvKO
- P/2g==
-X-Gm-Message-State: AOAM531kHUrzvOE2DF4NrQjIkO4xs3Flis18FlBAsniMptEtP0Ainf3d
- B096OF1ri5zc5flr6TppE6YVvlYC8Ow=
-X-Google-Smtp-Source: ABdhPJx36eqJ7Z+rKVk7+0mgNmnHd35R+034bR9USsHHqVsQxMKHVPMn3ybPdYaoN/x9YoD1thJYWQ==
-X-Received: by 2002:adf:fd0a:0:b0:219:ea8d:c09e with SMTP id
- e10-20020adffd0a000000b00219ea8dc09emr4063189wrr.13.1654897224576; 
- Fri, 10 Jun 2022 14:40:24 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- d4-20020adffbc4000000b00219b4c01712sm467254wrs.92.2022.06.10.14.40.22
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Jun 2022 14:40:23 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 10 Jun 2022 23:37:41 +0200
-Message-Id: <20220610213741.3849566-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id 90SNdyEuSBmo for <buildroot@lists.busybox.net>;
+ Sat, 11 Jun 2022 00:06:35 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E699740E46
+ for <buildroot@buildroot.org>; Sat, 11 Jun 2022 00:06:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
+ s=20170329;
+ h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=445TX3qLLf2QuHjDzBdVKf8uUYcpZS5GuaZobI7gQLA=; b=lmw/LlUBbtfTZ3rZkRHb0ZwU5o
+ gAeHK1yQqZaXvVHfxiaD2c5pWMgVkGBoTyS9ORUgK7HLZT9XmDTo8pv0ldpRSqCFQ+1jda5gbz7UF
+ /KpTrYoatI5i44GbY+xlOPUIjxZ9ExvPtZn7/tmqWPgWAwLp95OMoYSBf4AQ6OG5HzRpa21cU7dta
+ yBdy47YWQpU3XcrdrMguFmRY9K75vNz9T90DfAafQIr0vT8hWbDEWt3G7lRrj8vIW9ms1uwjWwZHd
+ j/EMs67//C0X9ff6iF8rjSe6E8uJGns7Zc70UuINuCoXSvrwYFwneVJU4vE7PM6KdNLxwc3hPsxHT
+ dKdA1+UQ==;
+Received: from 135.224.60.213.dynamic.reverse-mundo-r.com ([213.60.224.135]
+ helo=momiji) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1nzoe6-00GK7N-Ve; Sat, 11 Jun 2022 02:06:31 +0200
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id 063ef117;
+ Sat, 11 Jun 2022 00:06:21 +0000 (UTC)
+Date: Sat, 11 Jun 2022 02:06:16 +0200
+Message-ID: <20220611020616.GB110359@momiji>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Michael Nosthoff <buildroot@heine.tech>
+In-Reply-To: <20220601171828.GB870187@momiji>
+References: <54-6295dc80-3-54e5e980@111886211>
+ <20220601103905.GB863200@momiji> <20220601171828.GB870187@momiji>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libmediaart: bump to version 1.9.6
+Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: bump to version
+ 2.36.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,256 +74,329 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============0440838780007165070=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop all patches (already in version)
-- unit_tests option has been renamed tests:
-  https://gitlab.gnome.org/GNOME/libmediaart/-/commit/1b0be1d5bea76c1d02a7afebc431844e933ed4a8
 
-https://gitlab.gnome.org/GNOME/libmediaart/-/blob/1.9.6/NEWS
+--===============0440838780007165070==
+Content-Type: multipart/signed; boundary="urZGlUtEYxL1pCv0"; micalg="pgp-sha1"; protocol="application/pgp-signature"
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-meson-add-introspection-option.patch | 87 -------------------
- .../0002-meson-add-unit_tests-option.patch    | 48 ----------
- ...t-meson.build-replace-shared_library.patch | 35 --------
- package/libmediaart/libmediaart.hash          |  4 +-
- package/libmediaart/libmediaart.mk            |  4 +-
- 5 files changed, 4 insertions(+), 174 deletions(-)
- delete mode 100644 package/libmediaart/0001-meson-add-introspection-option.patch
- delete mode 100644 package/libmediaart/0002-meson-add-unit_tests-option.patch
- delete mode 100644 package/libmediaart/0003-libmediaart-meson.build-replace-shared_library.patch
 
-diff --git a/package/libmediaart/0001-meson-add-introspection-option.patch b/package/libmediaart/0001-meson-add-introspection-option.patch
-deleted file mode 100644
-index 2b849040fe..0000000000
---- a/package/libmediaart/0001-meson-add-introspection-option.patch
-+++ /dev/null
-@@ -1,87 +0,0 @@
--From ee7d8736af172cd5ad71a0bd511c39daf401e3f6 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 5 Oct 2021 23:35:26 +0200
--Subject: [PATCH] meson: add introspection option
--
--Add introspection option
--
--Fix #3
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://gitlab.gnome.org/GNOME/libmediaart/-/merge_requests/14]
-----
-- libmediaart/meson.build | 42 +++++++++++++++++++++--------------------
-- meson_options.txt       |  2 ++
-- 2 files changed, 24 insertions(+), 20 deletions(-)
--
--diff --git a/libmediaart/meson.build b/libmediaart/meson.build
--index 56e00ab..2f44e63 100644
----- a/libmediaart/meson.build
--+++ b/libmediaart/meson.build
--@@ -41,28 +41,30 @@ libmediaart = shared_library(
--   install: true,
-- )
-- 
---gir_args = [
---  '--quiet',
---  '-DLIBMEDIAART_COMPILATION',
---]
--+if get_option('introspection')
--+  gir_args = [
--+    '--quiet',
--+    '-DLIBMEDIAART_COMPILATION',
--+  ]
-- 
---libmediaart_gir_and_typelib = gnome.generate_gir(libmediaart,
---  sources: libmediaart_sources + libmediaart_introspection_sources + libmediaart_public_headers,
---  nsversion: libmediaart_api_version,
---  namespace: 'MediaArt',
---  identifier_prefix: 'MediaArt',
---  symbol_prefix: 'media_art',
---  includes: ['Gio-2.0', 'GObject-2.0'],
---  header: 'libmediaart/mediaart.h',
---  export_packages: 'libmediaart-' + libmediaart_api_version,
---  extra_args: gir_args,
---  install: true
---)
--+  libmediaart_gir_and_typelib = gnome.generate_gir(libmediaart,
--+    sources: libmediaart_sources + libmediaart_introspection_sources + libmediaart_public_headers,
--+    nsversion: libmediaart_api_version,
--+    namespace: 'MediaArt',
--+    identifier_prefix: 'MediaArt',
--+    symbol_prefix: 'media_art',
--+    includes: ['Gio-2.0', 'GObject-2.0'],
--+    header: 'libmediaart/mediaart.h',
--+    export_packages: 'libmediaart-' + libmediaart_api_version,
--+    extra_args: gir_args,
--+    install: true
--+  )
-- 
---libmediaart_vapi = gnome.generate_vapi('libmediaart-' + libmediaart_api_version,
---  sources: libmediaart_gir_and_typelib[0],
---  packages: 'gio-2.0',
---  install: true)
--+  libmediaart_vapi = gnome.generate_vapi('libmediaart-' + libmediaart_api_version,
--+    sources: libmediaart_gir_and_typelib[0],
--+    packages: 'gio-2.0',
--+    install: true)
--+endif
-- 
-- libmediaart_dep = declare_dependency(
--   link_with: libmediaart,
--diff --git a/meson_options.txt b/meson_options.txt
--index 3ef49ba..b8c51b1 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -1,5 +1,7 @@
-- option('image_library', type: 'combo', choices: ['auto', 'gdk-pixbuf', 'qt4', 'qt5'],
--        description: 'Which image processing backend to use')
--+option('introspection', type : 'boolean', value : 'true',
--+       description : 'Enable / disable the GObject-Introspection integration')
-- option('gtk_doc',
--   type: 'boolean',
--   value: 'false',
---- 
--2.33.0
--
-diff --git a/package/libmediaart/0002-meson-add-unit_tests-option.patch b/package/libmediaart/0002-meson-add-unit_tests-option.patch
-deleted file mode 100644
-index 3519ff1984..0000000000
---- a/package/libmediaart/0002-meson-add-unit_tests-option.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 01d94777d9d1906750db0e27e2e7b8f228ae4343 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 9 Oct 2021 23:45:53 +0200
--Subject: [PATCH] meson: add unit_tests option
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:  not sent yet (waiting feedback on first patch)]
-----
-- meson_options.txt |  2 ++
-- tests/meson.build | 14 ++++++++------
-- 2 files changed, 10 insertions(+), 6 deletions(-)
--
--diff --git a/meson_options.txt b/meson_options.txt
--index b8c51b1..1172f93 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -2,6 +2,8 @@ option('image_library', type: 'combo', choices: ['auto', 'gdk-pixbuf', 'qt4', 'q
--        description: 'Which image processing backend to use')
-- option('introspection', type : 'boolean', value : 'true',
--        description : 'Enable / disable the GObject-Introspection integration')
--+option('unit_tests', type : 'boolean', value : 'true',
--+       description : 'Enable / disable unit tests')
-- option('gtk_doc',
--   type: 'boolean',
--   value: 'false',
--diff --git a/tests/meson.build b/tests/meson.build
--index 28834c0..02c96a1 100644
----- a/tests/meson.build
--+++ b/tests/meson.build
--@@ -1,7 +1,9 @@
---mediaart_test = executable('mediaart-test',
---  'mediaarttest.c',
---  dependencies: libmediaart_dep,
---)
--+if get_option('unit_tests')
--+  mediaart_test = executable('mediaart-test',
--+    'mediaarttest.c',
--+    dependencies: libmediaart_dep,
--+  )
-- 
---test('mediaart', mediaart_test,
---     env: 'G_TEST_SRCDIR=' + meson.current_source_dir())
--+  test('mediaart', mediaart_test,
--+       env: 'G_TEST_SRCDIR=' + meson.current_source_dir())
--+endif
---- 
--2.33.0
--
-diff --git a/package/libmediaart/0003-libmediaart-meson.build-replace-shared_library.patch b/package/libmediaart/0003-libmediaart-meson.build-replace-shared_library.patch
-deleted file mode 100644
-index d4b377d327..0000000000
---- a/package/libmediaart/0003-libmediaart-meson.build-replace-shared_library.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 2272d762436a3b0d2e4fef8fb4f1669814904620 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 12 Dec 2021 20:14:54 +0100
--Subject: [PATCH] libmediaart/meson.build: replace shared_library
--
--Replace shared_library by library call to avoid the following build
--failure when building statically:
--
--/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(__uClibc_main.os): in function `__uClibc_fini':
--__uClibc_main.c:(.text+0x15c): undefined reference to `__fini_array_start'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/18d26882a68dcf8f09b3e3d25636454a12939310
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- libmediaart/meson.build | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/libmediaart/meson.build b/libmediaart/meson.build
--index 2f44e63..1fd3b99 100644
----- a/libmediaart/meson.build
--+++ b/libmediaart/meson.build
--@@ -30,7 +30,7 @@ marshal = gnome.genmarshal('marshal',
-- 
-- libmediaart_dependencies = [glib, gio_unix, gobject, image_library]
-- 
---libmediaart = shared_library(
--+libmediaart = library(
--   'mediaart-' + libmediaart_api_version,
--   libmediaart_sources, marshal[0], marshal[1],
--   version: libmediaart_ltversion,
---- 
--2.33.0
--
-diff --git a/package/libmediaart/libmediaart.hash b/package/libmediaart/libmediaart.hash
-index d7115b20d4..ebc914526b 100644
---- a/package/libmediaart/libmediaart.hash
-+++ b/package/libmediaart/libmediaart.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.5.sha256sum:
--sha256  07def5a42c482ae71d3e1f77a4d0fdc337f74226059a65284d6d5a241f0e9cd6  libmediaart-1.9.5.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.6.sha256sum:
-+sha256  c3bc5025d7db380587f9c8eb800c611f6b5a16d6b4b78fcff93f62876a677f17  libmediaart-1.9.6.tar.xz
- 
- # Locally computed:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index 77665fd95b..c66fa0ccad 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBMEDIAART_VERSION_MAJOR = 1.9
--LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).5
-+LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).6
- LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
- LIBMEDIAART_SITE = \
- 	http://ftp.gnome.org/pub/gnome/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
-@@ -13,7 +13,7 @@ LIBMEDIAART_LICENSE = LGPL-2.1+
- LIBMEDIAART_LICENSE_FILES = COPYING.LESSER
- LIBMEDIAART_INSTALL_STAGING = YES
- LIBMEDIAART_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
--LIBMEDIAART_CONF_OPTS = -Dunit_tests=false
-+LIBMEDIAART_CONF_OPTS = -Dtests=false
- LIBMEDIAART_LDFLAGS = $(TARGET_NLS_LIBS)
- 
- ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF),y)
--- 
-2.35.1
+--urZGlUtEYxL1pCv0
+Content-Type: multipart/mixed; boundary="MRZqHZXb5GLNvUaW"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+
+
+--MRZqHZXb5GLNvUaW
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
+
+SGkgTWljaGFlbCwKCk9uIFdlZCwgMDEgSnVuIDIwMjIgMTc6MTg6MjggKzAzMDAgQWRyaWFuIFBl
+cmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+IHdyb3RlOgo+IEhpIGFnYWluLAo+IAo+
+IE9uIFdlZCwgMDEgSnVuIDIwMjIgMTA6Mzk6MDUgKzAzMDAgQWRyaWFuIFBlcmV6IGRlIENhc3Ry
+byA8YXBlcmV6QGlnYWxpYS5jb20+IHdyb3RlOgo+ICAKPiA+IE9uIFR1ZSwgMzEgTWF5IDIwMjIg
+MTE6MTQ6NTcgKzAyMDAgTWljaGFlbCBOb3N0aG9mZiB2aWEgYnVpbGRyb290IDxidWlsZHJvb3RA
+YnVpbGRyb290Lm9yZz4gd3JvdGU6Cj4gPiA+Cj4gPiA+IFsuLi5dCj4gPiA+IAo+ID4gPiBJIHRy
+aWVkIHdpdGggdGhlIGxhdGVzdCBtYXN0ZXIgYnJhbmNoICh3aXRoIDIuMzYuMykgYW5kIGV4dGVu
+ZGVkIHRoZSByYXNwYmVycnlwaTRfZGVmY29uZmlnIHdpdGggZ3JhcGhpY3MgZHJpdmVyLgo+ID4g
+PiAKPiA+ID4gVGhpcyBpcyB0aGUgZGVmY29uZmlnOgo+ID4gPgo+ID4gPiBbLi4uXQo+ID4gCj4g
+PiBUaGFua3MgYSBsb3QgZm9yIHNoYXJpbmcgeW91ciBjb25maWcsIHRoYXQgd2FzIG1vc3QgaGVs
+cGZ1bCEgSSBoYXZlIGJlZW4KPiA+IGFibGUgdG8gcmVwcm9kdWNlIHRoZSBidWlsZCBpc3N1ZSBh
+bmQgSSBhbSBhbHJlYWR5IHdvcmtpbmcgb24gYSBmaXgsCj4gPiB3aGljaCB3aWxsIG1ha2UgaXQg
+aW50byB0aGUgMi4zNi40IHJlbGVhc2UgaW4gc29tZSB3ZWVrcy4gSW4gdGhlCj4gPiBtZWFudGlt
+ZSBJIHdpbGwgc3VibWl0IGEgZml4IHRvIGhhdmUgdGhlIHBhdGNoIGluIEJ1aWxkcm9vdC4KPiAK
+PiBJIGFtIHN0aWxsIHdvcmtpbmcgdGhyb3VnaCBmaW5pc2hpbmcgYW5kIHRlc3RpbmcgYSBmaXgs
+IGJ1dCBJIGhhdmUKPiBhbHJlYWR5IGZpbGVkIGFuIGlzc3VlIGluIEJ1Z3ppbGxhIHRvIHRyYWNr
+IHRoaXMuIEZlZWwgZnJlZSB0byBzdWJzY3JpYmUKPiB0byB0aGUgaXNzdWUgWzFdIHRvIGZvbGxv
+dyBhbG9uZyA6KQoKVGhlIHBhdGNoIEkgYW0gd29ya2luZyBvbiBzdGlsbCBuZWVkcyBhIGJpdCBv
+ZiB3b3JrIFsxXSwgYnV0IGluIGl0cwpjdXJyZW50IHN0YXR1cyBpdCBjYW4gYWxyZWFkeSBiZSB1
+c2VkLiBJIGFtIGF0dGFjaGluZyBhIHZlcnNpb24gb2YgaXQKdGhhdCB3aWxsIGFwcGx5IGNsZWFu
+bHkgb24gdG9wIG9mIHRoZSAyLjM2LjMgcmVsZWFzZSwgd2hpY2ggeW91IGNhbgpkcm9wIGludG8g
+dGhlIHBhY2thZ2Uvd3Bld2Via2l0LyBzdWJkaXJlY3Rvcnkgb2YgdGhlIEJ1aWxkcm9vdCB0cmVl
+LgoKSSBob3BlIHRoaXMgaGVscHMsCgo+IC0tLQo+IFsxXSBodHRwczovL2J1Z3Mud2Via2l0Lm9y
+Zy9zaG93X2J1Zy5jZ2k/aWQ9MjQxMTgyCgrigJRBZHJpw6FuCgotLS0KWzFdIGh0dHBzOi8vZ2l0
+aHViLmNvbS9XZWJLaXQvV2ViS2l0L3B1bGwvMTIzMwo=
+
+--MRZqHZXb5GLNvUaW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="0001-ARM-NEON-FELightningNEON.cpp-fails-to-build-NEON-fas.patch"
+Content-Transfer-Encoding: base64
+
+RnJvbSAwZDMzNDRlMTdkMjU4MTA2NjE3YjBlNmQ3ODNkMDczYjE4OGEyNTQ4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBZHJpYW4gUGVyZXogZGUgQ2FzdHJvIDxhcGVyZXpAaWdhbGlh
+LmNvbT4KRGF0ZTogVGh1LCAyIEp1biAyMDIyIDExOjE5OjA2ICswMzAwClN1YmplY3Q6IFtQQVRD
+SF0gW0FSTV1bTkVPTl0gRkVMaWdodG5pbmdORU9OLmNwcCBmYWlscyB0byBidWlsZCwgTkVPTiBm
+YXN0CiBwYXRoIHNlZW1zIHVudXNlZCBodHRwczovL2J1Z3Mud2Via2l0Lm9yZy9zaG93X2J1Zy5j
+Z2k/aWQ9MjQxMTgyCgpSZXZpZXdlZCBieSBOT0JPRFkgKE9PUFMhKS4KCk1vdmUgdGhlIE5FT04g
+ZmFzdCBwYXRoIGZvciB0aGUgU1ZHIGxpZ2h0aW5nIGZpbHRlciBlZmZlY3RzIGludG8KRkVMaWdo
+dGluZ1NvZnR3YXJlQXBwbGllciwgYW5kIGFycmFuZ2UgdG8gYWN0dWFsbHkgdXNlIHRoZW0gYnkK
+Zm9yd2FyZGluZyBjYWxscyB0byBhcHBseVBsYXRmb3JtR2VuZXJpYygpIGludG8gYXBwbHlQbGF0
+Zm9ybU5lb24oKS4KClNvbWUgY2hhbmdlcyB3ZXJlIG5lZWRlZCB0byBhZGFwdCBwbGF0Zm9ybUFw
+cGx5TmVvbigpIHRvIHRoZSBjdXJyZW50CnN0YXRlIG9mIGZpbHRlcnMgYWZ0ZXIgcjI4NjE0MC4g
+VGhpcyB3YXMgbm90IGRldGVjdGVkIGJlY2F1c2UgdGhlIGNvZGUKYml0cm90dGVkIGR1ZSB0byBp
+dCBiZWluZyBndWFyZGVkIHdpdGggQ1BVKEFSTV9UUkFESVRJT05BTCksIHdoaWNoIGRvZXMKbm90
+IGdldCB1c2VkIG11Y2ggdGhlc2UgZGF5czogQ1BVKEFSTV9USFVNQjIpIGlzIG1vcmUgY29tbW9u
+LiBJdCBzaG91bGQKYmUgcG9zc2libGUgdG8gdXNlIHRoZSBORU9OIGZhc3QgcGF0aHMgYWxzbyBp
+biBUaHVtYiBtb2RlLCBidXQgdGhhdCBpcwpsZWZ0IGZvciBhIGZvbGxvdy11cCBmaXguCgoqIFNv
+dXJjZS9XZWJDb3JlL3BsYXRmb3JtL2dyYXBoaWNzL2NwdS9hcm0vZmlsdGVycy9GRUxpZ2h0aW5n
+TkVPTi5jcHA6CihXZWJDb3JlOjpGRUxpZ2h0aW5nU29mdHdhcmVBcHBsaWVyOjpwbGF0Zm9ybUFw
+cGx5TmVvbldvcmtlcik6CihXZWJDb3JlOjpGRUxpZ2h0aW5nU29mdHdhcmVBcHBsaWVyOjpnZXRQ
+b3dlckNvZWZmaWNpZW50cyk6CihXZWJDb3JlOjpGRUxpZ2h0aW5nOjpwbGF0Zm9ybUFwcGx5TmVv
+bldvcmtlcik6IERlbGV0ZWQuCihXZWJDb3JlOjpGRUxpZ2h0aW5nOjpnZXRQb3dlckNvZWZmaWNp
+ZW50cyk6IERlbGV0ZWQuCiogU291cmNlL1dlYkNvcmUvcGxhdGZvcm0vZ3JhcGhpY3MvY3B1L2Fy
+bS9maWx0ZXJzL0ZFTGlnaHRpbmdORU9OLmg6CihXZWJDb3JlOjpGRUxpZ2h0aW5nU29mdHdhcmVB
+cHBsaWVyOjphcHBseVBsYXRmb3JtTmVvbik6CihXZWJDb3JlOjpGRUxpZ2h0aW5nOjpwbGF0Zm9y
+bUFwcGx5TmVvbik6IERlbGV0ZWQuCiogU291cmNlL1dlYkNvcmUvcGxhdGZvcm0vZ3JhcGhpY3Mv
+ZmlsdGVycy9EaXN0YW50TGlnaHRTb3VyY2UuaDoKKiBTb3VyY2UvV2ViQ29yZS9wbGF0Zm9ybS9n
+cmFwaGljcy9maWx0ZXJzL0ZFTGlnaHRpbmcuaDoKKiBTb3VyY2UvV2ViQ29yZS9wbGF0Zm9ybS9n
+cmFwaGljcy9maWx0ZXJzL1BvaW50TGlnaHRTb3VyY2UuaDoKKiBTb3VyY2UvV2ViQ29yZS9wbGF0
+Zm9ybS9ncmFwaGljcy9maWx0ZXJzL1Nwb3RMaWdodFNvdXJjZS5oOgoqIFNvdXJjZS9XZWJDb3Jl
+L3BsYXRmb3JtL2dyYXBoaWNzL2ZpbHRlcnMvc29mdHdhcmUvRkVMaWdodGluZ1NvZnR3YXJlQXBw
+bGllci5oOgotLS0KIC4uLi9jcHUvYXJtL2ZpbHRlcnMvRkVMaWdodGluZ05FT04uY3BwICAgICAg
+ICB8ICA0ICstCiAuLi4vZ3JhcGhpY3MvY3B1L2FybS9maWx0ZXJzL0ZFTGlnaHRpbmdORU9OLmgg
+fCA1NCArKysrKysrKystLS0tLS0tLS0tCiAuLi4vZ3JhcGhpY3MvZmlsdGVycy9EaXN0YW50TGln
+aHRTb3VyY2UuaCAgICAgfCAgNCArKwogLi4uL3BsYXRmb3JtL2dyYXBoaWNzL2ZpbHRlcnMvRkVM
+aWdodGluZy5oICAgIHwgIDcgLS0tCiAuLi4vZ3JhcGhpY3MvZmlsdGVycy9Qb2ludExpZ2h0U291
+cmNlLmggICAgICAgfCAgNCArKwogLi4uL2dyYXBoaWNzL2ZpbHRlcnMvU3BvdExpZ2h0U291cmNl
+LmggICAgICAgIHwgIDQgKysKIC4uLi9zb2Z0d2FyZS9GRUxpZ2h0aW5nU29mdHdhcmVBcHBsaWVy
+LmggICAgICB8IDE2ICsrKysrKwogNyBmaWxlcyBjaGFuZ2VkLCA1NyBpbnNlcnRpb25zKCspLCAz
+NiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9Tb3VyY2UvV2ViQ29yZS9wbGF0Zm9ybS9ncmFw
+aGljcy9jcHUvYXJtL2ZpbHRlcnMvRkVMaWdodGluZ05FT04uY3BwIGIvU291cmNlL1dlYkNvcmUv
+cGxhdGZvcm0vZ3JhcGhpY3MvY3B1L2FybS9maWx0ZXJzL0ZFTGlnaHRpbmdORU9OLmNwcAppbmRl
+eCBmNmZmOGMyMGE1YTguLjQyYTk3ZmZjNTM3MiAxMDA2NDQKLS0tIGEvU291cmNlL1dlYkNvcmUv
+cGxhdGZvcm0vZ3JhcGhpY3MvY3B1L2FybS9maWx0ZXJzL0ZFTGlnaHRpbmdORU9OLmNwcAorKysg
+Yi9Tb3VyY2UvV2ViQ29yZS9wbGF0Zm9ybS9ncmFwaGljcy9jcHUvYXJtL2ZpbHRlcnMvRkVMaWdo
+dGluZ05FT04uY3BwCkBAIC00OSw3ICs0OSw3IEBAIHNob3J0KiBmZUxpZ2h0aW5nQ29uc3RhbnRz
+Rm9yTmVvbigpCiAgICAgcmV0dXJuIHNfRkVMaWdodGluZ0NvbnN0YW50c0Zvck5lb247CiB9CiAK
+LXZvaWQgRkVMaWdodGluZzo6cGxhdGZvcm1BcHBseU5lb25Xb3JrZXIoRkVMaWdodGluZ1BhaW50
+aW5nRGF0YUZvck5lb24qIHBhcmFtZXRlcnMpCit2b2lkIEZFTGlnaHRpbmdTb2Z0d2FyZUFwcGxp
+ZXI6OnBsYXRmb3JtQXBwbHlOZW9uV29ya2VyKEZFTGlnaHRpbmdQYWludGluZ0RhdGFGb3JOZW9u
+KiBwYXJhbWV0ZXJzKQogewogICAgIG5lb25EcmF3TGlnaHRpbmcocGFyYW1ldGVycyk7CiB9CkBA
+IC00NjQsNyArNDY0LDcgQEAgVE9TVFJJTkcobmVvbkRyYXdMaWdodGluZykgIjoiIE5MCiAgICAg
+ImIgLmxpZ2h0U3RyZW5ndGhDYWxjdWxhdGVkIiBOTAogKTsgLy8gTk9MSU5UCiAKLWludCBGRUxp
+Z2h0aW5nOjpnZXRQb3dlckNvZWZmaWNpZW50cyhmbG9hdCBleHBvbmVudCkKK2ludCBGRUxpZ2h0
+aW5nU29mdHdhcmVBcHBsaWVyOjpnZXRQb3dlckNvZWZmaWNpZW50cyhmbG9hdCBleHBvbmVudCkK
+IHsKICAgICAvLyBDYWxsaW5nIGEgcG93ZiBmdW5jdGlvbiBmcm9tIHRoZSBhc3NlbWJseSBjb2Rl
+IHdvdWxkIHJlcXVpcmUgdG8gc2F2ZQogICAgIC8vIGFuZCByZWxvYWQgYSBsb3Qgb2YgTkVPTiBy
+ZWdpc3RlcnMuIFNpbmNlIHRoZSBiYXNlIGlzIGluIHJhbmdlIFswLi4xXQpkaWZmIC0tZ2l0IGEv
+U291cmNlL1dlYkNvcmUvcGxhdGZvcm0vZ3JhcGhpY3MvY3B1L2FybS9maWx0ZXJzL0ZFTGlnaHRp
+bmdORU9OLmggYi9Tb3VyY2UvV2ViQ29yZS9wbGF0Zm9ybS9ncmFwaGljcy9jcHUvYXJtL2ZpbHRl
+cnMvRkVMaWdodGluZ05FT04uaAppbmRleCBiMTdjNjAzZDQwZDMuLmM2ZDE3ZjU3M2VjYSAxMDA2
+NDQKLS0tIGEvU291cmNlL1dlYkNvcmUvcGxhdGZvcm0vZ3JhcGhpY3MvY3B1L2FybS9maWx0ZXJz
+L0ZFTGlnaHRpbmdORU9OLmgKKysrIGIvU291cmNlL1dlYkNvcmUvcGxhdGZvcm0vZ3JhcGhpY3Mv
+Y3B1L2FybS9maWx0ZXJzL0ZFTGlnaHRpbmdORU9OLmgKQEAgLTI0LDE0ICsyNCwxNSBAQAogICog
+T0YgVEhJUyBTT0ZUV0FSRSwgRVZFTiBJRiBBRFZJU0VEIE9GIFRIRSBQT1NTSUJJTElUWSBPRiBT
+VUNIIERBTUFHRS4KICAqLwogCi0jaWZuZGVmIEZFTGlnaHRpbmdORU9OX2gKLSNkZWZpbmUgRkVM
+aWdodGluZ05FT05faAorI3ByYWdtYSBvbmNlCiAKICNpZiBDUFUoQVJNX05FT04pICYmIENQVShB
+Uk1fVFJBRElUSU9OQUwpICYmIENPTVBJTEVSKEdDQ19DT01QQVRJQkxFKQogCi0jaW5jbHVkZSAi
+RkVMaWdodGluZy5oIgorI2luY2x1ZGUgIkZFTGlnaHRpbmdTb2Z0d2FyZUFwcGxpZXIuaCIKKyNp
+bmNsdWRlICJJbWFnZUJ1ZmZlci5oIgogI2luY2x1ZGUgIlBvaW50TGlnaHRTb3VyY2UuaCIKICNp
+bmNsdWRlICJTcG90TGlnaHRTb3VyY2UuaCIKKyNpbmNsdWRlIDx3dGYvT2JqZWN0SWRlbnRpZmll
+ci5oPgogI2luY2x1ZGUgPHd0Zi9QYXJhbGxlbEpvYnMuaD4KIAogbmFtZXNwYWNlIFdlYkNvcmUg
+ewpAQCAtOTMsMTQgKzk0LDE0IEBAIGV4dGVybiAiQyIgewogdm9pZCBuZW9uRHJhd0xpZ2h0aW5n
+KEZFTGlnaHRpbmdQYWludGluZ0RhdGFGb3JOZW9uKik7CiB9CiAKLWlubGluZSB2b2lkIEZFTGln
+aHRpbmc6OnBsYXRmb3JtQXBwbHlOZW9uKGNvbnN0IExpZ2h0aW5nRGF0YSYgZGF0YSwgY29uc3Qg
+TGlnaHRTb3VyY2U6OlBhaW50aW5nRGF0YSYgcGFpbnRpbmdEYXRhKQoraW5saW5lIHZvaWQgRkVM
+aWdodGluZ1NvZnR3YXJlQXBwbGllcjo6YXBwbHlQbGF0Zm9ybU5lb24oY29uc3QgRkVMaWdodGlu
+Z1NvZnR3YXJlQXBwbGllcjo6TGlnaHRpbmdEYXRhJiBkYXRhLCBjb25zdCBMaWdodFNvdXJjZTo6
+UGFpbnRpbmdEYXRhJiBwYWludGluZ0RhdGEpCiB7Ci0gICAgYWxpZ25hcygxNikgRkVMaWdodGlu
+Z0Zsb2F0QXJndW1lbnRzRm9yTmVvbiBmbG9hdEFyZ3VtZW50czsKLSAgICBGRUxpZ2h0aW5nUGFp
+bnRpbmdEYXRhRm9yTmVvbiBuZW9uRGF0YSA9IHsKLSAgICAgICAgZGF0YS5waXhlbHMtPmRhdGEo
+KSwKKyAgICBXZWJDb3JlOjpGRUxpZ2h0aW5nRmxvYXRBcmd1bWVudHNGb3JOZW9uIGFsaWduYXMo
+MTYpIGZsb2F0QXJndW1lbnRzOworICAgIFdlYkNvcmU6OkZFTGlnaHRpbmdQYWludGluZ0RhdGFG
+b3JOZW9uIG5lb25EYXRhID0geworICAgICAgICBkYXRhLnBpeGVscy0+Ynl0ZXMoKSwKICAgICAg
+ICAgMSwKLSAgICAgICAgZGF0YS53aWR0aERlY3JlYXNlZEJ5T25lIC0gMSwKLSAgICAgICAgZGF0
+YS5oZWlnaHREZWNyZWFzZWRCeU9uZSAtIDEsCisgICAgICAgIGRhdGEud2lkdGggLSAyLAorICAg
+ICAgICBkYXRhLmhlaWdodCAtIDIsCiAgICAgICAgIDAsCiAgICAgICAgIDAsCiAgICAgICAgIDAs
+CkBAIC0xMTEsMjMgKzExMiwyMyBAQCBpbmxpbmUgdm9pZCBGRUxpZ2h0aW5nOjpwbGF0Zm9ybUFw
+cGx5TmVvbihjb25zdCBMaWdodGluZ0RhdGEmIGRhdGEsIGNvbnN0IExpZ2h0UwogICAgIC8vIFNl
+dCBsaWdodCBzb3VyY2UgYXJndW1lbnRzLgogICAgIGZsb2F0QXJndW1lbnRzLmNvbnN0T25lID0g
+MTsKIAotICAgIGF1dG8gY29sb3IgPSBtX2xpZ2h0aW5nQ29sb3IudG9Db2xvclR5cGVMb3NzeTxT
+UkdCQTx1aW50OF90Pj4oKS5yZXNvbHZlZCgpOworICAgIGF1dG8gY29sb3IgPSBkYXRhLmxpZ2h0
+aW5nQ29sb3IudG9Db2xvclR5cGVMb3NzeTxTUkdCQTx1aW50OF90Pj4oKS5yZXNvbHZlZCgpOwog
+CiAgICAgZmxvYXRBcmd1bWVudHMuY29sb3JSZWQgPSBjb2xvci5yZWQ7CiAgICAgZmxvYXRBcmd1
+bWVudHMuY29sb3JHcmVlbiA9IGNvbG9yLmdyZWVuOwogICAgIGZsb2F0QXJndW1lbnRzLmNvbG9y
+Qmx1ZSA9IGNvbG9yLmJsdWU7CiAgICAgZmxvYXRBcmd1bWVudHMucGFkZGluZzQgPSAwOwogCi0g
+ICAgaWYgKG1fbGlnaHRTb3VyY2UtPnR5cGUoKSA9PSBMU19QT0lOVCkgeworICAgIGlmIChkYXRh
+LmxpZ2h0U291cmNlLT50eXBlKCkgPT0gTFNfUE9JTlQpIHsKICAgICAgICAgbmVvbkRhdGEuZmxh
+Z3MgfD0gRkxBR19QT0lOVF9MSUdIVDsKLSAgICAgICAgUG9pbnRMaWdodFNvdXJjZSYgcG9pbnRM
+aWdodFNvdXJjZSA9IHN0YXRpY19jYXN0PFBvaW50TGlnaHRTb3VyY2UmPihtX2xpZ2h0U291cmNl
+LmdldCgpKTsKKyAgICAgICAgY29uc3QgYXV0byYgcG9pbnRMaWdodFNvdXJjZSA9ICpzdGF0aWNf
+Y2FzdDxjb25zdCBQb2ludExpZ2h0U291cmNlKj4oZGF0YS5saWdodFNvdXJjZSk7CiAgICAgICAg
+IGZsb2F0QXJndW1lbnRzLmxpZ2h0WCA9IHBvaW50TGlnaHRTb3VyY2UucG9zaXRpb24oKS54KCk7
+CiAgICAgICAgIGZsb2F0QXJndW1lbnRzLmxpZ2h0WSA9IHBvaW50TGlnaHRTb3VyY2UucG9zaXRp
+b24oKS55KCk7CiAgICAgICAgIGZsb2F0QXJndW1lbnRzLmxpZ2h0WiA9IHBvaW50TGlnaHRTb3Vy
+Y2UucG9zaXRpb24oKS56KCk7CiAgICAgICAgIGZsb2F0QXJndW1lbnRzLnBhZGRpbmcyID0gMDsK
+LSAgICB9IGVsc2UgaWYgKG1fbGlnaHRTb3VyY2UtPnR5cGUoKSA9PSBMU19TUE9UKSB7CisgICAg
+fSBlbHNlIGlmIChkYXRhLmxpZ2h0U291cmNlLT50eXBlKCkgPT0gTFNfU1BPVCkgewogICAgICAg
+ICBuZW9uRGF0YS5mbGFncyB8PSBGTEFHX1NQT1RfTElHSFQ7Ci0gICAgICAgIFNwb3RMaWdodFNv
+dXJjZSYgc3BvdExpZ2h0U291cmNlID0gc3RhdGljX2Nhc3Q8U3BvdExpZ2h0U291cmNlJj4obV9s
+aWdodFNvdXJjZS5nZXQoKSk7CisgICAgICAgIGNvbnN0IGF1dG8mIHNwb3RMaWdodFNvdXJjZSA9
+ICpzdGF0aWNfY2FzdDxjb25zdCBTcG90TGlnaHRTb3VyY2UqPihkYXRhLmxpZ2h0U291cmNlKTsK
+ICAgICAgICAgZmxvYXRBcmd1bWVudHMubGlnaHRYID0gc3BvdExpZ2h0U291cmNlLnBvc2l0aW9u
+KCkueCgpOwogICAgICAgICBmbG9hdEFyZ3VtZW50cy5saWdodFkgPSBzcG90TGlnaHRTb3VyY2Uu
+cG9zaXRpb24oKS55KCk7CiAgICAgICAgIGZsb2F0QXJndW1lbnRzLmxpZ2h0WiA9IHNwb3RMaWdo
+dFNvdXJjZS5wb3NpdGlvbigpLnooKTsKQEAgLTE0NSw3ICsxNDYsNyBAQCBpbmxpbmUgdm9pZCBG
+RUxpZ2h0aW5nOjpwbGF0Zm9ybUFwcGx5TmVvbihjb25zdCBMaWdodGluZ0RhdGEmIGRhdGEsIGNv
+bnN0IExpZ2h0UwogICAgICAgICBpZiAoc3BvdExpZ2h0U291cmNlLnNwZWN1bGFyRXhwb25lbnQo
+KSA9PSAxKQogICAgICAgICAgICAgbmVvbkRhdGEuZmxhZ3MgfD0gRkxBR19DT05FX0VYUE9ORU5U
+X0lTXzE7CiAgICAgfSBlbHNlIHsKLSAgICAgICAgQVNTRVJUKG1fbGlnaHRTb3VyY2UtPnR5cGUo
+KSA9PSBMU19ESVNUQU5UKTsKKyAgICAgICAgQVNTRVJUKGRhdGEubGlnaHRTb3VyY2UtPnR5cGUo
+KSA9PSBMU19ESVNUQU5UKTsKICAgICAgICAgZmxvYXRBcmd1bWVudHMubGlnaHRYID0gcGFpbnRp
+bmdEYXRhLmluaXRpYWxMaWdodGluZ0RhdGEubGlnaHRWZWN0b3IueCgpOwogICAgICAgICBmbG9h
+dEFyZ3VtZW50cy5saWdodFkgPSBwYWludGluZ0RhdGEuaW5pdGlhbExpZ2h0aW5nRGF0YS5saWdo
+dFZlY3Rvci55KCk7CiAgICAgICAgIGZsb2F0QXJndW1lbnRzLmxpZ2h0WiA9IHBhaW50aW5nRGF0
+YS5pbml0aWFsTGlnaHRpbmdEYXRhLmxpZ2h0VmVjdG9yLnooKTsKQEAgLTE1NSwzOCArMTU2LDM5
+IEBAIGlubGluZSB2b2lkIEZFTGlnaHRpbmc6OnBsYXRmb3JtQXBwbHlOZW9uKGNvbnN0IExpZ2h0
+aW5nRGF0YSYgZGF0YSwgY29uc3QgTGlnaHRTCiAgICAgLy8gU2V0IGxpZ2h0aW5nIGFyZ3VtZW50
+cy4KICAgICBmbG9hdEFyZ3VtZW50cy5zdXJmYWNlU2NhbGUgPSBkYXRhLnN1cmZhY2VTY2FsZTsK
+ICAgICBmbG9hdEFyZ3VtZW50cy5taW51c1N1cmZhY2VTY2FsZURpdmlkZWRCeUZvdXIgPSAtZGF0
+YS5zdXJmYWNlU2NhbGUgLyA0OwotICAgIGlmIChtX2xpZ2h0aW5nVHlwZSA9PSBGRUxpZ2h0aW5n
+OjpEaWZmdXNlTGlnaHRpbmcpCi0gICAgICAgIGZsb2F0QXJndW1lbnRzLmRpZmZ1c2VDb25zdGFu
+dCA9IG1fZGlmZnVzZUNvbnN0YW50OworICAgIGlmIChkYXRhLmZpbHRlclR5cGUgPT0gRmlsdGVy
+RWZmZWN0OjpUeXBlOjpGRURpZmZ1c2VMaWdodGluZykKKyAgICAgICAgZmxvYXRBcmd1bWVudHMu
+ZGlmZnVzZUNvbnN0YW50ID0gZGF0YS5kaWZmdXNlQ29uc3RhbnQ7CiAgICAgZWxzZSB7CiAgICAg
+ICAgIG5lb25EYXRhLmZsYWdzIHw9IEZMQUdfU1BFQ1VMQVJfTElHSFQ7Ci0gICAgICAgIGZsb2F0
+QXJndW1lbnRzLmRpZmZ1c2VDb25zdGFudCA9IG1fc3BlY3VsYXJDb25zdGFudDsKLSAgICAgICAg
+bmVvbkRhdGEuc3BlY3VsYXJFeHBvbmVudCA9IGdldFBvd2VyQ29lZmZpY2llbnRzKG1fc3BlY3Vs
+YXJFeHBvbmVudCk7Ci0gICAgICAgIGlmIChtX3NwZWN1bGFyRXhwb25lbnQgPT0gMSkKKyAgICAg
+ICAgZmxvYXRBcmd1bWVudHMuZGlmZnVzZUNvbnN0YW50ID0gZGF0YS5zcGVjdWxhckNvbnN0YW50
+OworICAgICAgICBuZW9uRGF0YS5zcGVjdWxhckV4cG9uZW50ID0gZ2V0UG93ZXJDb2VmZmljaWVu
+dHMoZGF0YS5zcGVjdWxhckV4cG9uZW50KTsKKyAgICAgICAgaWYgKGRhdGEuc3BlY3VsYXJFeHBv
+bmVudCA9PSAxKQogICAgICAgICAgICAgbmVvbkRhdGEuZmxhZ3MgfD0gRkxBR19TUEVDVUxBUl9F
+WFBPTkVOVF9JU18xOwogICAgIH0KICAgICBpZiAoZmxvYXRBcmd1bWVudHMuZGlmZnVzZUNvbnN0
+YW50ID09IDEpCiAgICAgICAgIG5lb25EYXRhLmZsYWdzIHw9IEZMQUdfRElGRlVTRV9DT05TVF9J
+U18xOwogCi0gICAgaW50IG9wdGltYWxUaHJlYWROdW1iZXIgPSAoKGRhdGEud2lkdGhEZWNyZWFz
+ZWRCeU9uZSAtIDEpICogKGRhdGEuaGVpZ2h0RGVjcmVhc2VkQnlPbmUgLSAxKSkgLyBzX21pbmlt
+YWxSZWN0RGltZW5zaW9uOworICAgIHN0YXRpYyBjb25zdGV4cHIgaW50IG1pbmltYWxSZWN0RGlt
+ZW5zaW9uID0gMTAwICogMTAwOyAvLyBFbXBpcmljYWwgZGF0YSBsaW1pdCBmb3IgcGFyYWxsZWwg
+am9icworICAgIGludCBvcHRpbWFsVGhyZWFkTnVtYmVyID0gKChkYXRhLndpZHRoIC0gMikgKiAo
+ZGF0YS5oZWlnaHQgLSAyKSkgLyBtaW5pbWFsUmVjdERpbWVuc2lvbjsKICAgICBpZiAob3B0aW1h
+bFRocmVhZE51bWJlciA+IDEpIHsKICAgICAgICAgLy8gSW5pdGlhbGl6ZSBwYXJhbGxlbCBqb2Jz
+Ci0gICAgICAgIFBhcmFsbGVsSm9iczxGRUxpZ2h0aW5nUGFpbnRpbmdEYXRhRm9yTmVvbj4gcGFy
+YWxsZWxKb2JzKCZXZWJDb3JlOjpGRUxpZ2h0aW5nOjpwbGF0Zm9ybUFwcGx5TmVvbldvcmtlciwg
+b3B0aW1hbFRocmVhZE51bWJlcik7CisgICAgICAgIFBhcmFsbGVsSm9iczxGRUxpZ2h0aW5nUGFp
+bnRpbmdEYXRhRm9yTmVvbj4gcGFyYWxsZWxKb2JzKCZGRUxpZ2h0aW5nU29mdHdhcmVBcHBsaWVy
+OjpwbGF0Zm9ybUFwcGx5TmVvbldvcmtlciwgb3B0aW1hbFRocmVhZE51bWJlcik7CiAKICAgICAg
+ICAgLy8gRmlsbCB0aGUgcGFyYW1ldGVyIGFycmF5CiAgICAgICAgIGludCBqb2IgPSBwYXJhbGxl
+bEpvYnMubnVtYmVyT2ZKb2JzKCk7CiAgICAgICAgIGlmIChqb2IgPiAxKSB7CiAgICAgICAgICAg
+ICBpbnQgeVN0YXJ0ID0gMTsKLSAgICAgICAgICAgIGludCB5U3RlcCA9IChkYXRhLmhlaWdodERl
+Y3JlYXNlZEJ5T25lIC0gMSkgLyBqb2I7CisgICAgICAgICAgICBpbnQgeVN0ZXAgPSAoZGF0YS5o
+ZWlnaHQgLSAyKSAvIGpvYjsKICAgICAgICAgICAgIGZvciAoLS1qb2I7IGpvYiA+PSAwOyAtLWpv
+YikgewogICAgICAgICAgICAgICAgIEZFTGlnaHRpbmdQYWludGluZ0RhdGFGb3JOZW9uJiBwYXJh
+bXMgPSBwYXJhbGxlbEpvYnMucGFyYW1ldGVyKGpvYik7CiAgICAgICAgICAgICAgICAgcGFyYW1z
+ID0gbmVvbkRhdGE7CiAgICAgICAgICAgICAgICAgcGFyYW1zLnlTdGFydCA9IHlTdGFydDsKLSAg
+ICAgICAgICAgICAgICBwYXJhbXMucGl4ZWxzICs9ICh5U3RhcnQgLSAxKSAqIChkYXRhLndpZHRo
+RGVjcmVhc2VkQnlPbmUgKyAxKSAqIDQ7CisgICAgICAgICAgICAgICAgcGFyYW1zLnBpeGVscyAr
+PSAoeVN0YXJ0IC0gMSkgKiBkYXRhLndpZHRoICogNDsKICAgICAgICAgICAgICAgICBpZiAoam9i
+ID4gMCkgewogICAgICAgICAgICAgICAgICAgICBwYXJhbXMuYWJzb2x1dGVIZWlnaHQgPSB5U3Rl
+cDsKICAgICAgICAgICAgICAgICAgICAgeVN0YXJ0ICs9IHlTdGVwOwogICAgICAgICAgICAgICAg
+IH0gZWxzZQotICAgICAgICAgICAgICAgICAgICBwYXJhbXMuYWJzb2x1dGVIZWlnaHQgPSBkYXRh
+LmhlaWdodERlY3JlYXNlZEJ5T25lIC0geVN0YXJ0OworICAgICAgICAgICAgICAgICAgICBwYXJh
+bXMuYWJzb2x1dGVIZWlnaHQgPSAoZGF0YS5oZWlnaHQgLSAxKSAtIHlTdGFydDsKICAgICAgICAg
+ICAgIH0KICAgICAgICAgICAgIHBhcmFsbGVsSm9icy5leGVjdXRlKCk7CiAgICAgICAgICAgICBy
+ZXR1cm47CkBAIC0xOTksNSArMjAxLDMgQEAgaW5saW5lIHZvaWQgRkVMaWdodGluZzo6cGxhdGZv
+cm1BcHBseU5lb24oY29uc3QgTGlnaHRpbmdEYXRhJiBkYXRhLCBjb25zdCBMaWdodFMKIH0gLy8g
+bmFtZXNwYWNlIFdlYkNvcmUKIAogI2VuZGlmIC8vIENQVShBUk1fTkVPTikgJiYgQ09NUElMRVIo
+R0NDX0NPTVBBVElCTEUpCi0KLSNlbmRpZiAvLyBGRUxpZ2h0aW5nTkVPTl9oCmRpZmYgLS1naXQg
+YS9Tb3VyY2UvV2ViQ29yZS9wbGF0Zm9ybS9ncmFwaGljcy9maWx0ZXJzL0Rpc3RhbnRMaWdodFNv
+dXJjZS5oIGIvU291cmNlL1dlYkNvcmUvcGxhdGZvcm0vZ3JhcGhpY3MvZmlsdGVycy9EaXN0YW50
+TGlnaHRTb3VyY2UuaAppbmRleCAwNjYwMTQzZmMxY2YuLjJiMWU4NmQ5OWZhNCAxMDA2NDQKLS0t
+IGEvU291cmNlL1dlYkNvcmUvcGxhdGZvcm0vZ3JhcGhpY3MvZmlsdGVycy9EaXN0YW50TGlnaHRT
+b3VyY2UuaAorKysgYi9Tb3VyY2UvV2ViQ29yZS9wbGF0Zm9ybS9ncmFwaGljcy9maWx0ZXJzL0Rp
+c3RhbnRMaWdodFNvdXJjZS5oCkBAIC0yNSw2ICsyNSwxMCBAQAogI2luY2x1ZGUgIkxpZ2h0U291
+cmNlLmgiCiAjaW5jbHVkZSA8d3RmL1JlZi5oPgogCituYW1lc3BhY2UgV1RGIHsKK2NsYXNzIFRl
+eHRTdHJlYW07Cit9IC8vIG5hbWVzcGFjZSBXVEYKKwogbmFtZXNwYWNlIFdlYkNvcmUgewogCiBj
+bGFzcyBEaXN0YW50TGlnaHRTb3VyY2UgOiBwdWJsaWMgTGlnaHRTb3VyY2UgewpkaWZmIC0tZ2l0
+IGEvU291cmNlL1dlYkNvcmUvcGxhdGZvcm0vZ3JhcGhpY3MvZmlsdGVycy9GRUxpZ2h0aW5nLmgg
+Yi9Tb3VyY2UvV2ViQ29yZS9wbGF0Zm9ybS9ncmFwaGljcy9maWx0ZXJzL0ZFTGlnaHRpbmcuaApp
+bmRleCAwYzA3M2JjMTNmOGMuLmUwZGIwMDU0NWMxNyAxMDA2NDQKLS0tIGEvU291cmNlL1dlYkNv
+cmUvcGxhdGZvcm0vZ3JhcGhpY3MvZmlsdGVycy9GRUxpZ2h0aW5nLmgKKysrIGIvU291cmNlL1dl
+YkNvcmUvcGxhdGZvcm0vZ3JhcGhpY3MvZmlsdGVycy9GRUxpZ2h0aW5nLmgKQEAgLTM1LDggKzM1
+LDYgQEAKIAogbmFtZXNwYWNlIFdlYkNvcmUgewogCi1zdHJ1Y3QgRkVMaWdodGluZ1BhaW50aW5n
+RGF0YUZvck5lb247Ci0KIGNsYXNzIEZFTGlnaHRpbmcgOiBwdWJsaWMgRmlsdGVyRWZmZWN0IHsK
+IHB1YmxpYzoKICAgICBjb25zdCBDb2xvciYgbGlnaHRpbmdDb2xvcigpIGNvbnN0IHsgcmV0dXJu
+IG1fbGlnaHRpbmdDb2xvcjsgfQpAQCAtNjcsMTEgKzY1LDYgQEAgcHJvdGVjdGVkOgogCiAgICAg
+c3RkOjp1bmlxdWVfcHRyPEZpbHRlckVmZmVjdEFwcGxpZXI+IGNyZWF0ZVNvZnR3YXJlQXBwbGll
+cigpIGNvbnN0IG92ZXJyaWRlOwogCi0jaWYgQ1BVKEFSTV9ORU9OKSAmJiBDUFUoQVJNX1RSQURJ
+VElPTkFMKSAmJiBDT01QSUxFUihHQ0NfQ09NUEFUSUJMRSkKLSAgICBzdGF0aWMgaW50IGdldFBv
+d2VyQ29lZmZpY2llbnRzKGZsb2F0IGV4cG9uZW50KTsKLSAgICBpbmxpbmUgdm9pZCBwbGF0Zm9y
+bUFwcGx5TmVvbihjb25zdCBMaWdodGluZ0RhdGEmLCBjb25zdCBMaWdodFNvdXJjZTo6UGFpbnRp
+bmdEYXRhJik7Ci0jZW5kaWYKLQogICAgIENvbG9yIG1fbGlnaHRpbmdDb2xvcjsKICAgICBmbG9h
+dCBtX3N1cmZhY2VTY2FsZTsKICAgICBmbG9hdCBtX2RpZmZ1c2VDb25zdGFudDsKZGlmZiAtLWdp
+dCBhL1NvdXJjZS9XZWJDb3JlL3BsYXRmb3JtL2dyYXBoaWNzL2ZpbHRlcnMvUG9pbnRMaWdodFNv
+dXJjZS5oIGIvU291cmNlL1dlYkNvcmUvcGxhdGZvcm0vZ3JhcGhpY3MvZmlsdGVycy9Qb2ludExp
+Z2h0U291cmNlLmgKaW5kZXggNWM5YzdmYjc4M2U2Li5lNTNhYTAxMmFjMWMgMTAwNjQ0Ci0tLSBh
+L1NvdXJjZS9XZWJDb3JlL3BsYXRmb3JtL2dyYXBoaWNzL2ZpbHRlcnMvUG9pbnRMaWdodFNvdXJj
+ZS5oCisrKyBiL1NvdXJjZS9XZWJDb3JlL3BsYXRmb3JtL2dyYXBoaWNzL2ZpbHRlcnMvUG9pbnRM
+aWdodFNvdXJjZS5oCkBAIC0yNiw2ICsyNiwxMCBAQAogI2luY2x1ZGUgIkxpZ2h0U291cmNlLmgi
+CiAjaW5jbHVkZSA8d3RmL1JlZi5oPgogCituYW1lc3BhY2UgV1RGIHsKK2NsYXNzIFRleHRTdHJl
+YW07Cit9IC8vIG5hbWVzcGFjZSBXVEYKKwogbmFtZXNwYWNlIFdlYkNvcmUgewogCiBjbGFzcyBQ
+b2ludExpZ2h0U291cmNlIDogcHVibGljIExpZ2h0U291cmNlIHsKZGlmZiAtLWdpdCBhL1NvdXJj
+ZS9XZWJDb3JlL3BsYXRmb3JtL2dyYXBoaWNzL2ZpbHRlcnMvU3BvdExpZ2h0U291cmNlLmggYi9T
+b3VyY2UvV2ViQ29yZS9wbGF0Zm9ybS9ncmFwaGljcy9maWx0ZXJzL1Nwb3RMaWdodFNvdXJjZS5o
+CmluZGV4IDA0ZTMzMWVjNGVjMC4uNzYzYzhkNDAwYjAwIDEwMDY0NAotLS0gYS9Tb3VyY2UvV2Vi
+Q29yZS9wbGF0Zm9ybS9ncmFwaGljcy9maWx0ZXJzL1Nwb3RMaWdodFNvdXJjZS5oCisrKyBiL1Nv
+dXJjZS9XZWJDb3JlL3BsYXRmb3JtL2dyYXBoaWNzL2ZpbHRlcnMvU3BvdExpZ2h0U291cmNlLmgK
+QEAgLTI2LDYgKzI2LDEwIEBACiAjaW5jbHVkZSAiTGlnaHRTb3VyY2UuaCIKICNpbmNsdWRlIDx3
+dGYvUmVmLmg+CiAKK25hbWVzcGFjZSBXVEYgeworY2xhc3MgVGV4dFN0cmVhbTsKK30gLy8gbmFt
+ZXNwYWNlIFdURgorCiBuYW1lc3BhY2UgV2ViQ29yZSB7CiAKIGNsYXNzIFNwb3RMaWdodFNvdXJj
+ZSA6IHB1YmxpYyBMaWdodFNvdXJjZSB7CmRpZmYgLS1naXQgYS9Tb3VyY2UvV2ViQ29yZS9wbGF0
+Zm9ybS9ncmFwaGljcy9maWx0ZXJzL3NvZnR3YXJlL0ZFTGlnaHRpbmdTb2Z0d2FyZUFwcGxpZXIu
+aCBiL1NvdXJjZS9XZWJDb3JlL3BsYXRmb3JtL2dyYXBoaWNzL2ZpbHRlcnMvc29mdHdhcmUvRkVM
+aWdodGluZ1NvZnR3YXJlQXBwbGllci5oCmluZGV4IGM5NzRkOTIxMTVmZi4uZTI4OTY2NjBjZmJk
+IDEwMDY0NAotLS0gYS9Tb3VyY2UvV2ViQ29yZS9wbGF0Zm9ybS9ncmFwaGljcy9maWx0ZXJzL3Nv
+ZnR3YXJlL0ZFTGlnaHRpbmdTb2Z0d2FyZUFwcGxpZXIuaAorKysgYi9Tb3VyY2UvV2ViQ29yZS9w
+bGF0Zm9ybS9ncmFwaGljcy9maWx0ZXJzL3NvZnR3YXJlL0ZFTGlnaHRpbmdTb2Z0d2FyZUFwcGxp
+ZXIuaApAQCAtMzYsNiArMzYsNyBAQAogbmFtZXNwYWNlIFdlYkNvcmUgewogCiBjbGFzcyBGRUxp
+Z2h0aW5nOworc3RydWN0IEZFTGlnaHRpbmdQYWludGluZ0RhdGFGb3JOZW9uOwogCiBjbGFzcyBG
+RUxpZ2h0aW5nU29mdHdhcmVBcHBsaWVyIGZpbmFsIDogcHVibGljIEZpbHRlckVmZmVjdENvbmNy
+ZXRlQXBwbGllcjxGRUxpZ2h0aW5nPiB7CiAgICAgV1RGX01BS0VfRkFTVF9BTExPQ0FURUQ7CkBA
+IC0xMzIsOCArMTMzLDIzIEBAIHByaXZhdGU6CiAKICAgICBzdGF0aWMgdm9pZCBhcHBseVBsYXRm
+b3JtR2VuZXJpY1BhaW50KGNvbnN0IExpZ2h0aW5nRGF0YSYsIGNvbnN0IExpZ2h0U291cmNlOjpQ
+YWludGluZ0RhdGEmLCBpbnQgc3RhcnRZLCBpbnQgZW5kWSk7CiAgICAgc3RhdGljIHZvaWQgYXBw
+bHlQbGF0Zm9ybUdlbmVyaWNXb3JrZXIoQXBwbHlQYXJhbWV0ZXJzKik7CisKKyNpZiBDUFUoQVJN
+X05FT04pICYmIENQVShBUk1fVFJBRElUSU9OQUwpICYmIENPTVBJTEVSKEdDQ19DT01QQVRJQkxF
+KQorICAgIHN0YXRpYyBpbnQgZ2V0UG93ZXJDb2VmZmljaWVudHMoZmxvYXQgZXhwb25lbnQpOwor
+ICAgIHN0YXRpYyB2b2lkIHBsYXRmb3JtQXBwbHlOZW9uV29ya2VyKEZFTGlnaHRpbmdQYWludGlu
+Z0RhdGFGb3JOZW9uKik7CisgICAgaW5saW5lIHN0YXRpYyB2b2lkIGFwcGx5UGxhdGZvcm1OZW9u
+KGNvbnN0IExpZ2h0aW5nRGF0YSYsIGNvbnN0IExpZ2h0U291cmNlOjpQYWludGluZ0RhdGEmKTsK
+KworICAgIGlubGluZSBzdGF0aWMgdm9pZCBhcHBseVBsYXRmb3JtR2VuZXJpYyhjb25zdCBMaWdo
+dGluZ0RhdGEmIGRhdGEsIGNvbnN0IExpZ2h0U291cmNlOjpQYWludGluZ0RhdGEmIHBhaW50aW5n
+RGF0YSkKKyAgICB7CisgICAgICAgIGFwcGx5UGxhdGZvcm1OZW9uKGRhdGEsIHBhaW50aW5nRGF0
+YSk7CisgICAgfQorI2Vsc2UKICAgICBzdGF0aWMgdm9pZCBhcHBseVBsYXRmb3JtR2VuZXJpYyhj
+b25zdCBMaWdodGluZ0RhdGEmLCBjb25zdCBMaWdodFNvdXJjZTo6UGFpbnRpbmdEYXRhJik7Cisj
+ZW5kaWYKKwogICAgIHN0YXRpYyB2b2lkIGFwcGx5UGxhdGZvcm0oY29uc3QgTGlnaHRpbmdEYXRh
+Jik7CiB9OwogCiB9IC8vIG5hbWVzcGFjZSBXZWJDb3JlCisKKyNpbmNsdWRlICJGRUxpZ2h0aW5n
+TkVPTi5oIgotLSAKMi4zNi4xCgo=
+
+--MRZqHZXb5GLNvUaW--
+
+--urZGlUtEYxL1pCv0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYqPceAAKCRCRxVnb5MkS
+O6ByAJwJtABtCBp6zY0YgshrtFn+5rufnwCfcdbcdAmDX1UrI0lTjdLVb2ioxog=
+=McmN
+-----END PGP SIGNATURE-----
+
+--urZGlUtEYxL1pCv0--
+
+--===============0440838780007165070==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0440838780007165070==--
