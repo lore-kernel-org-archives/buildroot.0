@@ -1,81 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53605C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jun 2022 13:00:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FF1BC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jun 2022 13:09:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F250B411F4;
-	Sat, 11 Jun 2022 13:00:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7C4A817AF;
+	Sat, 11 Jun 2022 13:09:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qBeSYaLOKnNN; Sat, 11 Jun 2022 13:00:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B51DZU37rwiV; Sat, 11 Jun 2022 13:09:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8063040A8D;
-	Sat, 11 Jun 2022 13:00:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C86A01BF35E
- for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 13:00:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25662817A3;
+	Sat, 11 Jun 2022 13:09:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 711741BF2A5
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 13:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3A6A4258D
- for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 13:00:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F7EF40A8D
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 13:09:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jqR7PuUvYiix for <buildroot@lists.busybox.net>;
- Sat, 11 Jun 2022 13:00:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IsD9WRQAq2aG for <buildroot@lists.busybox.net>;
+ Sat, 11 Jun 2022 13:09:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9B06042588
- for <buildroot@buildroot.org>; Sat, 11 Jun 2022 13:00:31 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id u8so1719092wrm.13
- for <buildroot@buildroot.org>; Sat, 11 Jun 2022 06:00:31 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0FC87404F0
+ for <buildroot@buildroot.org>; Sat, 11 Jun 2022 13:09:13 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id h5so1826728wrb.0
+ for <buildroot@buildroot.org>; Sat, 11 Jun 2022 06:09:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=+xx+IsgWfDEJZZLaLx35Qq+1dxYMxIiXBSLwD7Wsyhc=;
- b=KkLXwS/gI900beayMawxVx7v7U+j75uGVzObHtDMn7d9zIL4/uVvjcja/+nvHisV0N
- 9LcN2ReyJtKO0vDHH0PW+syX73VXRNEjtDqxuMnizcGXlARrBr6x4bUhtAs50AFKnnjE
- kJwi5e2Ol/mT//WnHKVljyTuujfasZkwJEn214q2rGbZDd5jhCOYLro+4di2f7W90X75
- 4B14XWLzEPz5gDKYwCPb56htbEIFJY6/C2eRezX5zwnLmuLSgMLTXOi9jsVy6FpkPQPG
- TYCHKGHKci88lFFqCbQd+1XUT55w2GNRxM6jRQ78tq1CFTyU31jQBJ7CUjhnPFnI16HF
- eUpw==
+ bh=tHMR9vQLUZMMFn0cGf6xGgbX+KUaXA1PPSIHCV9Jl7U=;
+ b=nhK1bPjBHz3+VsBnk2Yj5SJNwJ8XWpMH+V9r1Q5x7Uffo7G1D6TCtlq0h+Fv4O67Sd
+ gUhW8aQ4BT9dnshfdFd0OTF1sOiFcrEZP/uGrgvGtM+aP1RatJKtbMJp7X1QS45eDPa2
+ vcj9QVeUFMt8MmZKdIHti/cHV5BRUmxOyc3QVgJMwHepDrWLctU7mijouPTAoQQV2aKc
+ IN/UbX9MwiTp0negOa8fhbrRAMXo9DGg9yonkyqVe+gruRIAqi9vyQY7p5E2WqqhKoUm
+ GzX8kq+N3w+36Vt3RNDfYSKM32iHiq5ftETEscl/E/W5XB7Ip66SxzcihEaeOB9T80ek
+ wQPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=+xx+IsgWfDEJZZLaLx35Qq+1dxYMxIiXBSLwD7Wsyhc=;
- b=Ncynizgpa0Y+uLs0SK4pPgtctdHE21Abo1HWsuBDOhNzr7AqZ8gs9gPyZUWnAO3h3U
- b0y5hTmJVOgvX/aQUZTpGziXP+k7PdtitJIvlp/G7PzBWwfCIAZJaXT1oA3jO0PBk+bc
- i1h58r70JAvbziRhUHPnW+B2XqH5W0w/QC49j5khsEN9I6YivWy209FUTD0T4spuLE4T
- qWzDJZFoFpuIbPS2BVzWDmE1yZqH+xoDPlD11pQFdyAeK6NKN1WTKZ5XX8blks0rUx+4
- 7cS/e6unRCehpR+leXy0YbWXEHDGHWqBuKHb6OwPZWe6Ai5R0SnAi6HmUR37d5gB1qg7
- fxuw==
-X-Gm-Message-State: AOAM533XdwyU4+KWIZFuCOxGwYRh3KJQ3tnJi9YgvJjoPXFCOHE/eqSw
- ZPbbigsg9MhejJaXxDh/MBeiuhZtEsE=
-X-Google-Smtp-Source: ABdhPJyaTGTJ0RBqw8Iy44GRZJiqEBPYZ9SpQskQ6/+L8XmpZkE2YtEYff//KO91gAQFuBmi2MqYZQ==
-X-Received: by 2002:adf:e944:0:b0:210:30cf:6e42 with SMTP id
- m4-20020adfe944000000b0021030cf6e42mr48338285wrn.258.1654952429237; 
- Sat, 11 Jun 2022 06:00:29 -0700 (PDT)
+ bh=tHMR9vQLUZMMFn0cGf6xGgbX+KUaXA1PPSIHCV9Jl7U=;
+ b=NyXZUPNNCq2iktvMBdx8XW9U7Ntdt5nYGRdhC0QDnzji9iII8GHlv0xFmxnDCP9cY+
+ rjylkH5nsGqh+YRUEZACpTrncM5x72c+Qm61EM413iuw7W1BTEsx9XJhoTTs7xzBEQo+
+ qSC9SuBrtUkyCPccxsSyCEyFmb8Bs08ai57lDW86p2FfYALueQfmLld7kVwvFBaevBdg
+ 7go+8OofZ3F91rXsc7N4wjpNw+3a0qCCvXMu8m68IpJk/ZOgViYjYnzr1ucQ+txnhhr7
+ irJWOYFRm6/m+ANhs0h9Vb4bSvroLugwePzM5EuVpbkCTVHSQM5yIxbugAA1yXxgRRLB
+ mkDA==
+X-Gm-Message-State: AOAM532BcD/s/TjMKuGSW5Ei8mY+W2H3ECv7H3mmNylq73jHKwdspO/p
+ iHbTRmzHjtWq0MUyVZrYmIcceIzX594=
+X-Google-Smtp-Source: ABdhPJxYmr/esWG/V22OHIAOtp2oYZXW9BOHPoLcfTVCZP9ZEkpMUUzAHRdxKMBb18eDKpdPez2O0A==
+X-Received: by 2002:a05:6000:1861:b0:216:4519:18a1 with SMTP id
+ d1-20020a056000186100b00216451918a1mr38228279wri.293.1654952951968; 
+ Sat, 11 Jun 2022 06:09:11 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- s8-20020a05600c384800b0039756cdc8e1sm2353583wmr.37.2022.06.11.06.00.28
+ m10-20020a5d56ca000000b0020c5253d8f7sm2548727wrw.67.2022.06.11.06.09.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Jun 2022 06:00:28 -0700 (PDT)
+ Sat, 11 Jun 2022 06:09:10 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jun 2022 14:57:52 +0200
-Message-Id: <20220611125752.355351-1-fontaine.fabrice@gmail.com>
+Date: Sat, 11 Jun 2022 15:06:31 +0200
+Message-Id: <20220611130631.359062-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pcsc-lite: bump to version 1.9.8
+Subject: [Buildroot] [PATCH 1/1] package/libabseil-cpp: drop unrecognized
+ option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,38 +94,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/LudovicRousseau/PCSC/releases/tag/1.9.8
-https://github.com/LudovicRousseau/PCSC/releases/tag/1.9.7
+ABSL_RUN_TESTS has been replaced by the standard BUILD_TESTING option
+(which is already passed by cmake infrastructure) since version
+20210324.0 and
+https://github.com/abseil/abseil-cpp/commit/a50ae369a30f99f79d7559002aba3413dac1bd48
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pcsc-lite/pcsc-lite.hash | 2 +-
- package/pcsc-lite/pcsc-lite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libabseil-cpp/libabseil-cpp.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/pcsc-lite/pcsc-lite.hash b/package/pcsc-lite/pcsc-lite.hash
-index 10a8d92fa7..340a9edbea 100644
---- a/package/pcsc-lite/pcsc-lite.hash
-+++ b/package/pcsc-lite/pcsc-lite.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  fdb3fe8f68049019523801909b2a336d0d4ee315edafe363c30d375e3706537a  pcsc-lite-1.9.6.tar.bz2
-+sha256  502d80c557ecbee285eb99fe8703eeb667bcfe067577467b50efe3420d1b2289  pcsc-lite-1.9.8.tar.bz2
- sha256  40d4358bb8dc8d30f5365ae6d999b6f820bbc051b292912482f2e4d0ebd837e1  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-3.0.txt
-diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
-index 5bf9ce7f30..ad34bb4b90 100644
---- a/package/pcsc-lite/pcsc-lite.mk
-+++ b/package/pcsc-lite/pcsc-lite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
+index 738cd03c39..7c6bda7659 100644
+--- a/package/libabseil-cpp/libabseil-cpp.mk
++++ b/package/libabseil-cpp/libabseil-cpp.mk
+@@ -13,14 +13,12 @@ LIBABSEIL_CPP_INSTALL_STAGING = YES
+ LIBABSEIL_CPP_CONF_OPTS = \
+ 	-DCMAKE_CXX_STANDARD=11 \
+ 	-DABSL_ENABLE_INSTALL=ON \
+-	-DABSL_USE_GOOGLETEST_HEAD=OFF \
+-	-DABSL_RUN_TESTS=OFF
++	-DABSL_USE_GOOGLETEST_HEAD=OFF
  
--PCSC_LITE_VERSION = 1.9.6
-+PCSC_LITE_VERSION = 1.9.8
- PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
- PCSC_LITE_SITE = https://pcsclite.apdu.fr/files
- PCSC_LITE_INSTALL_STAGING = YES
+ HOST_LIBABSEIL_CPP_CONF_OPTS = \
+ 	-DCMAKE_CXX_STANDARD=11 \
+ 	-DABSL_ENABLE_INSTALL=ON \
+-	-DABSL_USE_GOOGLETEST_HEAD=OFF \
+-	-DABSL_RUN_TESTS=OFF
++	-DABSL_USE_GOOGLETEST_HEAD=OFF
+ 
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.35.1
 
