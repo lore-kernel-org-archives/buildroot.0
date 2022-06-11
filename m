@@ -1,88 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72991C43334
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jun 2022 17:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FDD4C43334
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jun 2022 17:40:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1341A844A4;
-	Sat, 11 Jun 2022 17:38:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B14C642564;
+	Sat, 11 Jun 2022 17:40:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bmRcjfjruGz4; Sat, 11 Jun 2022 17:38:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2Rt21QxVacpO; Sat, 11 Jun 2022 17:40:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 224788405D;
-	Sat, 11 Jun 2022 17:38:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 58EED1BF82C
- for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 17:38:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEA1542555;
+	Sat, 11 Jun 2022 17:40:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 199241BF82C
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 17:40:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F017404CA
- for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 17:38:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0714B8412F
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 17:40:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xIwxJf6LQOCA for <buildroot@lists.busybox.net>;
- Sat, 11 Jun 2022 17:38:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F3sNG5TqSIZi for <buildroot@lists.busybox.net>;
+ Sat, 11 Jun 2022 17:40:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2C10040448
- for <buildroot@buildroot.org>; Sat, 11 Jun 2022 17:38:10 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id fu3so3623620ejc.7
- for <buildroot@buildroot.org>; Sat, 11 Jun 2022 10:38:10 -0700 (PDT)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 05CA584129
+ for <buildroot@buildroot.org>; Sat, 11 Jun 2022 17:40:31 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id u12so3613950eja.8
+ for <buildroot@buildroot.org>; Sat, 11 Jun 2022 10:40:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=Su/ppJOI8o/7j5hUkprW22tR+j1pXz8N/TqTeUOlX6o=;
- b=E6MAgsLOBrmI/WYalCfT+lDqAaJQNSwSYueVhFdXX9ukMz02SHNh1tS6SjFAu53CW5
- Gz1agxOyNYsoAROhwo+y8CKCttzhVfhiWQahXtSwGfvS99bxWeD5/ccL3V/zNHqb/c05
- /47U6KMtYMmCrDFVc8gHgQQYX7pOfBlBZ2svuUvNVfpFxlhrrq73B0XJKYooy/N0roPD
- R7U2lAv9PgeoJ1BiDNyJmefvBzxAGSdA1N6RTaACW4150YFhixYz3DTtmDKODc77YyRz
- S3rwzs8FHWjhQkZslXDUrRV5COEj5PUxnfIOO8du+Iu8tyTSKY9AyZLKPMvTjPqG+Ekt
- rt0g==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=uSWEplzlA7kSrPhhfbB2didYy/QofHx8MgWliO/nV2A=;
+ b=azBV0R1dZk62f84zv5cDX5lVclf/s4v2TkMvAlUEQwFmlg5ywzliqeVlVKkAyNiiby
+ L8/3nE9ZyVmV/0cQHkIYEG0AIlDBfEwrfH7Ofa3HJLNREIMFYsNXPa8uml5VY/mPE1rL
+ Xm5xOuhqeL88oWMLB53pZv3t8AcQYZJPq5M1nlwcQP8u6IjLj9FhpVaav+1mcyIK04vL
+ sLW3wq9kfJ5FmN4ZFwNWOOWKCRZtPF4idtMAjv4UeoF2QcHA9ljMJmtTaERYJPnjX8zR
+ EIRrXOBcbuuvZaWO2/CKGyll7ddCvni4FkAbiKkN7et7lPgDcCnOaawvvTFXNq/SFPZO
+ DaeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=Su/ppJOI8o/7j5hUkprW22tR+j1pXz8N/TqTeUOlX6o=;
- b=vIZrnpV0EOfTagBCvjdMX6q2CGrPTAsn+UF6jZW3zRrW6vPwfVslam/PID028bnN2G
- ovwgeCLS/RmZOHIetdSXV9izpyroP//Okoy9NKGRvRa96wg/gtXjZX/VKV+tZFMYxWRO
- rV6LQ/JzNJGCtk2FeXRkEiXkpJRXmqxMaM58+Sw9fupdrYGhNJGS8Qv8v72SfdHGx7nT
- hTSXTT32yrMcdzfbIsFzmXieQY+I0CI7p9ts4xSKRd9CE/S8ExkDYqGcJfhyovhFF+2W
- o1GqKFoNnhCe9MKSo/xkL+UvIMpOg86MroYWUaTIEhGC0yMcNX+R54NQVJpAboVIh2kN
- DlJg==
-X-Gm-Message-State: AOAM53322o+xUpFZsfGI8K5G6lHagpUdQc+tY5bUDQcKae6axWn6CHkb
- rtyTNRpI2GtdX+l6sxs0lb7J8PiMgtczBA==
-X-Google-Smtp-Source: ABdhPJzDrudowLGxLLuN6uDJYkvaZYk2hncQbcMvPM/UwBSm2aFJoiNygXjJECPciMtiyNJZ6yf/Rg==
-X-Received: by 2002:a17:906:9c82:b0:6df:baa2:9f75 with SMTP id
- fj2-20020a1709069c8200b006dfbaa29f75mr44745232ejc.762.1654969089080; 
- Sat, 11 Jun 2022 10:38:09 -0700 (PDT)
+ bh=uSWEplzlA7kSrPhhfbB2didYy/QofHx8MgWliO/nV2A=;
+ b=t5/d/z23JEVH/BGF4nFut8WrJEbENmVFj3SUT5SLskJ8gcz3TnAUwnRj9thuiCE4MW
+ hJ8bMFTAfdFhhHHRuThoaQHq8qEY60ICOqrAXxb/NJC8N0G6dl+cLRNA2JuQfLsBqsWE
+ fHhb1AGlJ0nIn57aQ5jrmELsWjGFe+ZockKrNYgfhzeiUqgspgLv4wLapRJHhBlqjMjo
+ wCq3svhHoPYmP2Jms9mca87h2etR0PhoRZqCdKkjA1oSj2LkZLXsZuWCMZ0Z3BJDTy2X
+ fyqaI4YmPvyyvSdxa7k/aZXKnMilVkF50SJWPEbokyZvoflYD3ucISdMFJQFdjJ/LddL
+ 3C6w==
+X-Gm-Message-State: AOAM530D9g7V78Dead8wNyEONyS0aeKlSoIYRVP+xI/Mfcs7XL7gakvk
+ 1lHz7lXrX7YPidkVzoRje/1S3Q==
+X-Google-Smtp-Source: ABdhPJxkyH493Lc/iYCgvfy4HTMGEmhrDQbWe4/Hs25+At7XVtmGebYCtGxPJyob1N3Km+T+pxHvwQ==
+X-Received: by 2002:a17:906:9f1c:b0:711:cdda:a01f with SMTP id
+ fy28-20020a1709069f1c00b00711cddaa01fmr29295659ejc.372.1654969230219; 
+ Sat, 11 Jun 2022 10:40:30 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- f24-20020a170906085800b00711c7cca428sm1283327ejd.155.2022.06.11.10.38.08
+ k8-20020a056402048800b0042cf43e1937sm1752965edv.75.2022.06.11.10.40.25
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 11 Jun 2022 10:38:08 -0700 (PDT)
-Message-ID: <d459a460-312b-3daf-4b9f-a36974334b6b@mind.be>
-Date: Sat, 11 Jun 2022 19:38:06 +0200
+ Sat, 11 Jun 2022 10:40:29 -0700 (PDT)
+Message-ID: <b190b147-d669-855a-c5a4-0046586e0fc6@mind.be>
+Date: Sat, 11 Jun 2022 19:40:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
 Content-Language: en-GB
-To: Charles Steinkuehler <charles@steinkuehler.net>, buildroot@buildroot.org
-References: <7dfaf383-9700-4b0a-83fb-952c5116e7b0@steinkuehler.net>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220606142118.1055501-1-fontaine.fabrice@gmail.com>
+ <55581997-b9da-7187-204c-3a47b32d6350@mind.be>
+ <20220606211315.GA427639@scaer>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <7dfaf383-9700-4b0a-83fb-952c5116e7b0@steinkuehler.net>
-Subject: Re: [Buildroot] Patching Package Dependencies
+In-Reply-To: <20220606211315.GA427639@scaer>
+Subject: Re: [Buildroot] [PATCH 1/1] package/openssl: libopenssl needs atomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,48 +97,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>,
+ Gustavo Heinz <gustavo@gsthnz.com>,
+ Sven Haardiek <sven.haardiek@iotec-gmbh.de>,
+ Yair Ben Avraham <yairba@protonmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Mauro Condarelli <mc5686@mclink.it>, Matt Weber <matthew.weber@collins.com>,
+ Bernd Kuhls <bernd.kuhls@t-online.de>,
+ =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
+ Sergey Matyukevich <geomatsi@gmail.com>,
+ Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Peter Seiderer <ps.report@gmx.net>, Norbert Lange <nolange79@gmail.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>,
+ =?UTF-8?Q?Jos=c3=a9_Pekkarinen?= <jose.pekkarinen@unikie.com>,
+ =?UTF-8?Q?Manuel_V=c3=b6gele?= <develop@manuel-voegele.de>,
+ Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Philippe Reynes <philippe.reynes@softathome.com>,
+ Asaf Kahlon <asafka7@gmail.com>, Lionel Flandrin <lionel@svkt.org>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ICBIaSBDaGFybGVzLAoKT24gMDkvMDYvMjAyMiAyMzoyMSwgQ2hhcmxlcyBTdGVpbmt1ZWhsZXIg
-d3JvdGU6Cj4gSSBhbSB1c2luZyBCdWlsZHJvb3QgKDIwMjIuMDIuMikgd2l0aCBhIGNvdXBsZSBC
-UjJfRVhFUk5BTCBkaXJlY3RvcmllcyBhbmQgSSAKPiBuZWVkIHRvIG1vZGlmeSBhIHBhY2thZ2Ug
-cHJvdmlkZWQgd2l0aCBCdWlsZHJvb3QgKGF2cmR1ZGUpLsKgIEkgY2FuIGVhc2lseSBwYXRjaCAK
-PiB0aGUgY29kZSBieSBhZGRpbmcgYSBwYXRjaCBmaWxlIHRvIG15IEJSMl9FWFRFUk5BTF9GT09f
-UEFUSC9wYXRjaGVzIGRpcmVjdG9yeSAKPiB3aGljaCBpcyBhZGRlZCB0byBCUjJfR0xPQkFMX1BB
-VENIX0RJUi7CoCBUaGUgcHJvYmxlbSBpcyBteSBjb2RlIGNoYW5nZXMgcmVxdWlyZSAKPiBhIG5l
-dyBsaWJyYXJ5IChsaWJncGlvZCkgd2hpY2ggaXMgcGFydCBvZiBteSBjb25maWd1cmF0aW9uIGJ1
-dCBpcyBub3QgbGlzdGVkIGFzIAo+IGEgcGFja2FnZSBkZXBlbmRlbmN5IGZvciBhdnJkdWRlIGJ5
-IEJ1aWxkcm9vdCwgc28gYnVpbGRzIGZhaWwuCj4gCj4gSXMgdGhlcmUgYSB3YXkgdG8gZXh0ZW5k
-IHRoZSBmaWxlcyB1bmRlciBCdWlsZHJvb3QvcGFja2FnZSB1c2luZyBhIEJSMl9FeHRlcm5hbCAK
-PiBkaXJlY3Rvcnk/CgogIE9mZmljaWFsbHksIG5vIHRoZXJlIGlzbid0LiBJZiB5b3Ugd2FudCB0
-byBvdmVycmlkZSBhbiBleGlzdGluZyBwYWNrYWdlIChvdGhlciAKdGhhbiBwYXRjaGluZyBpdCks
-IHRoZSBvbmx5IHRoaW5nIHlvdSBjYW4gZG8gaXMgdG8gY3JlYXRlIGFuIGVudGlyZWx5IG5ldyAK
-cGFja2FnZSB3aXRoIGEgZGlmZmVyZW50IG5hbWUuCgogIFRoaXMgaXMganVzdCBhIHRlY2huaWNh
-bCBsaW1pdGF0aW9uIGJlY2F1c2UgZXZlcnl0aGluZyBpcyBpbmNsdWRlZCB0b2dldGhlciBpbiAK
-b25lIGJpZyBgbWFrZWAgZGF0YWJhc2UsIGFuZCBgbWFrZWAgZG9lc24ndCBoYXZlIGEgd2F5IHRv
-IG92ZXJyaWRlIGV2ZXJ5dGhpbmcgCmZyb20gYSBwcmV2aW91c2x5IGluY2x1ZGVkIG1ha2VmaWxl
-LiBJbiBhZGRpdGlvbiwgc29tZSBvZiB0aGUgdmFyaWFibGVzIGFyZSB1c2VkIAppbW1lZGlhdGVs
-eSB0byBkZWZpbmUgZGVwZW5kZW5jaWVzLCBzbyBpZiB5b3Ugd291bGQgb3ZlcnJpZGUgdGhlbSBp
-biB0aGUgCmV4dGVybmFsLCB0aGF0IGRvZXNuJ3QgaGF2ZSB0aGUgZGVzaXJlZCBlZmZlY3QuIFRo
-aXMgaXMgdGhlIGNhc2UgZm9yIF9WRVJTSU9OIAphbmQgX0RFUEVOREVOQ0lFUy4gU28geW91J3Jl
-IG91dCBvZiBsdWNrLgoKICBUaGVyZSBpcyBvbmUgaGFjayB5b3UgY291bGQgdG8sIGFuZCB0aGF0
-IGlzIHRvIGFidXNlIGxvY2FsLm1rICh0aGUgCkJSMl9QQUNLQUdFX09WRVJSSURFX0ZJTEUsIG5v
-cm1hbGx5IHVzZWQgZm9yIHNldHRpbmcgT1ZFUlJJREVfU1JDRElSKS4gVGhpcyBmaWxlIAppcyBy
-ZWFkIGJlZm9yZSB0aGUgcGFja2FnZSBtYWtlZmlsZS4gT2YgY291cnNlLCBhdnJkdWRlLm1rIGFs
-cmVhZHkgZGVmaW5lcyAKQVZSRFVERV9ERVBFTkRFTkNJRVMsIHNvIGlmIHlvdSdkIHNldCBzb21l
-dGhpbmcgaW4gbG9jYWwubWssIGl0IHdvdWxkIGp1c3QgZ2V0IApsb3N0LiBCdXQgeW91IGNvdWxk
-IChhZ2FpbikgYWJ1c2UgQVZSRFVERV9FWFRSQUNUX0RFUEVOREVOQ0lFUyB3aGljaCBpcyBub3Qg
-c2V0IApieSBhdnJkdWRlLm1rLgoKICBIb3dldmVyLCBzaW5jZSBubyBwYWNrYWdlIGRlcGVuZHMg
-b24gYXZyZHVkZSwgaXQncyBtdWNoIHNpbXBsZXIgYW5kIGNsZWFuZXIgdG8gCnNpbXBseSBhZGQg
-YSBuZXcgcGFja2FnZSBteWF2cmR1ZGUgdG8geW91ciBleHRlcm5hbC4KCiAgUmVnYXJkcywKICBB
-cm5vdXQKCgo+IAo+IEFsdGVybmF0ZWx5LCBpcyBkZWZpbmluZyBhIHBhY2thZ2UgaW4gbXkgQlIy
-X0V4dGVybmFsIGRpcmVjdG9yeSB3aXRoIHRoZSBzYW1lIAo+IG5hbWUgYXMgYW4gb2ZmaWNpYWwg
-QnVpbGRyb290IHBhY2thZ2UgYWxsb3dlZC9yZWNvbW1lbmRlZD8KPiAKPiAuLi5vciBhcmUgdGhl
-cmUgYW55IG90aGVyIHN1Z2dlc3Rpb25zIGZvciBtb2RpZnlpbmcgYSBCdWlsZHJvb3QgcGFja2Fn
-ZSB3aXRob3V0IAo+IG1ha2luZyBhIGxvY2FsIGJyYW5jaCBhbmQgYXBwbHlpbmcgbXkgbmVlZGVk
-IGNoYW5nZXM/Cj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 06/06/2022 23:13, Yann E. MORIN wrote:
+> Fabrice, Arnout, All,
+> 
+> On 2022-06-06 21:06 +0200, Arnout Vandecappelle spake thusly:
+>> On 06/06/2022 16:21, Fabrice Fontaine wrote:
+>>> libopenssl needs atomic or the build will fail (e.g. on sparcv8 without
+>>> libatomic):
+>>
+>>   I don't understand how it's possible that this error happens only with
+>> James' fully random configs, and not with e.g. bootlin-m68k-5208-uclibc
+>> (which I double checked does still have autobuilder results, and does not
+>> have libatomic). In fact, there are successful builds of libopenssl without
+>> libatomic, e.g. [1]. I found this with the autobuild query [2] (there's no
+>> way to search for the absence of a symbol in the advanced search, but
+>> m68k_cf5208 can't have atomic so it's a good way to search it).
+> 
+> I did some test, and indeed, sparc v8 fails to build. But leon builds
+> successfully.
+> 
+> For sparc v8, there are indeed references to __atomic_fetch_sub_4 and
+> __atomic_fetch_add_4. But for leon, none.
+
+  I've had a look as well, and it looks like this is from
+include/internal/refcount.h, which uses atomics under this condition:
+
+# elif defined(__GNUC__) && defined(__ATOMIC_RELAXED) && 
+__GCC_ATOMIC_INT_LOCK_FREE > 0
+
+I guess GCC incorrectly sets one of these options?
+
+
+
+>>> ${LDCMD:-/nvmedata/autobuild/instance-7/output-1/host/bin/sparc-buildroot-linux-uclibc-gcc}  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O0 -g2  -g2  -L.   \
+>>> 	-o apps/openssl apps/asn1pars.o apps/ca.o apps/ciphers.o apps/cms.o apps/crl.o apps/crl2p7.o apps/dgst.o apps/dhparam.o apps/dsa.o apps/dsaparam.o apps/ec.o apps/ecparam.o apps/enc.o apps/engine.o apps/errstr.o apps/gendsa.o apps/genpkey.o apps/genrsa.o apps/nseq.o apps/ocsp.o apps/openssl.o apps/passwd.o apps/pkcs12.o apps/pkcs7.o apps/pkcs8.o apps/pkey.o apps/pkeyparam.o apps/pkeyutl.o apps/prime.o apps/rand.o apps/rehash.o apps/req.o apps/rsa.o apps/rsautl.o apps/s_client.o apps/s_server.o apps/s_time.o apps/sess_id.o apps/smime.o apps/speed.o apps/spkac.o apps/srp.o apps/storeutl.o apps/ts.o apps/verify.o apps/version.o apps/x509.o \
+>>> 	 apps/libapps.a -lssl -lcrypto -ldl
+>>> /nvmedata/autobuild/instance-7/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ./libssl.so: undefined reference to `__atomic_fetch_sub_4'
+>>>
+>>> It should be noted that openssl3 has added OPENSSL_DEV_NO_ATOMICS but
+>>> "this is intended for internal development only, to check the
+>>> refcounting is properly coded.  It should never become a configuration
+>>> option, hence the name of the macro.":
+>>> https://github.com/openssl/openssl/commit/503d4745a115b82db01c1fb22baaddb153d27cdb
+>>>
+>>> Fixes:
+>>>   - http://autobuild.buildroot.org/results/bce526d538f43a541fdfbc0c9b4a7cecebbbc539
+>>>
+>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>
+>> [snip]
+>>> diff --git a/package/openssl/Config.in b/package/openssl/Config.in
+>>> index 7bf49b05f6..ed165569f0 100644
+>>> --- a/package/openssl/Config.in
+>>> +++ b/package/openssl/Config.in
+>>> @@ -16,6 +16,7 @@ choice
+>>>   config BR2_PACKAGE_LIBOPENSSL
+>>>   	bool "openssl"
+>>> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+>>
+>>   Unfortunately, this is not enough (and it is already a huge patch...).
+>>
+>>   The result of this new dependency is that openssl is only available if
+>> BR2_TOOLCHAIN_HAS_ATOMIC (libopenssl) ||
+>> (!BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL && BR2_TOOLCHAIN_HAS_THREADS &&
+>>   !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU))
+>>
+>>   So, in addition to the packages that select
+>> BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL, all the packages that select
+>> BR2_PACKAGE_OPENSSL have to be updated as well...
+> 
+> This is going to be a huge change...
+> 
+> Can we maybe instead add an exception in the autobuilders, so that
+> "fringe" architectures or variants just get excluded?
+
+  Yeah, that's a good fallback. We already have a bunch of exception handling 
+like that in genrandconfig.
+
+  Regards,
+  Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
