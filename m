@@ -1,55 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FA5DC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jun 2022 17:27:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72991C43334
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jun 2022 17:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 336D341225;
-	Sat, 11 Jun 2022 17:27:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gZf_NhuBj2w8; Sat, 11 Jun 2022 17:27:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E77E408D1;
-	Sat, 11 Jun 2022 17:27:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C0E71BF82C
- for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 17:27:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0993C844B0
- for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 17:27:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1341A844A4;
+	Sat, 11 Jun 2022 17:38:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zT8zxYZvlr8H for <buildroot@lists.busybox.net>;
- Sat, 11 Jun 2022 17:27:35 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 06D32844AF
- for <buildroot@buildroot.org>; Sat, 11 Jun 2022 17:27:34 +0000 (UTC)
-Received: from fwd73.dcpf.telekom.de (fwd73.aul.t-online.de [10.223.144.99])
- by mailout12.t-online.de (Postfix) with SMTP id 0719085AC
- for <buildroot@buildroot.org>; Sat, 11 Jun 2022 19:27:33 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.12.97]) by fwd73.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1o04tX-1zAXCr0; Sat, 11 Jun 2022 19:27:31 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56822)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1o04tX-0006jf-Gp
- for buildroot@buildroot.org; Sat, 11 Jun 2022 19:27:31 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Sat, 11 Jun 2022 19:27:31 +0200
-Message-Id: <20220611172731.2980548-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bmRcjfjruGz4; Sat, 11 Jun 2022 17:38:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 224788405D;
+	Sat, 11 Jun 2022 17:38:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 58EED1BF82C
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 17:38:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F017404CA
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 17:38:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xIwxJf6LQOCA for <buildroot@lists.busybox.net>;
+ Sat, 11 Jun 2022 17:38:11 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2C10040448
+ for <buildroot@buildroot.org>; Sat, 11 Jun 2022 17:38:10 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id fu3so3623620ejc.7
+ for <buildroot@buildroot.org>; Sat, 11 Jun 2022 10:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=Su/ppJOI8o/7j5hUkprW22tR+j1pXz8N/TqTeUOlX6o=;
+ b=E6MAgsLOBrmI/WYalCfT+lDqAaJQNSwSYueVhFdXX9ukMz02SHNh1tS6SjFAu53CW5
+ Gz1agxOyNYsoAROhwo+y8CKCttzhVfhiWQahXtSwGfvS99bxWeD5/ccL3V/zNHqb/c05
+ /47U6KMtYMmCrDFVc8gHgQQYX7pOfBlBZ2svuUvNVfpFxlhrrq73B0XJKYooy/N0roPD
+ R7U2lAv9PgeoJ1BiDNyJmefvBzxAGSdA1N6RTaACW4150YFhixYz3DTtmDKODc77YyRz
+ S3rwzs8FHWjhQkZslXDUrRV5COEj5PUxnfIOO8du+Iu8tyTSKY9AyZLKPMvTjPqG+Ekt
+ rt0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Su/ppJOI8o/7j5hUkprW22tR+j1pXz8N/TqTeUOlX6o=;
+ b=vIZrnpV0EOfTagBCvjdMX6q2CGrPTAsn+UF6jZW3zRrW6vPwfVslam/PID028bnN2G
+ ovwgeCLS/RmZOHIetdSXV9izpyroP//Okoy9NKGRvRa96wg/gtXjZX/VKV+tZFMYxWRO
+ rV6LQ/JzNJGCtk2FeXRkEiXkpJRXmqxMaM58+Sw9fupdrYGhNJGS8Qv8v72SfdHGx7nT
+ hTSXTT32yrMcdzfbIsFzmXieQY+I0CI7p9ts4xSKRd9CE/S8ExkDYqGcJfhyovhFF+2W
+ o1GqKFoNnhCe9MKSo/xkL+UvIMpOg86MroYWUaTIEhGC0yMcNX+R54NQVJpAboVIh2kN
+ DlJg==
+X-Gm-Message-State: AOAM53322o+xUpFZsfGI8K5G6lHagpUdQc+tY5bUDQcKae6axWn6CHkb
+ rtyTNRpI2GtdX+l6sxs0lb7J8PiMgtczBA==
+X-Google-Smtp-Source: ABdhPJzDrudowLGxLLuN6uDJYkvaZYk2hncQbcMvPM/UwBSm2aFJoiNygXjJECPciMtiyNJZ6yf/Rg==
+X-Received: by 2002:a17:906:9c82:b0:6df:baa2:9f75 with SMTP id
+ fj2-20020a1709069c8200b006dfbaa29f75mr44745232ejc.762.1654969089080; 
+ Sat, 11 Jun 2022 10:38:09 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ f24-20020a170906085800b00711c7cca428sm1283327ejd.155.2022.06.11.10.38.08
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 11 Jun 2022 10:38:08 -0700 (PDT)
+Message-ID: <d459a460-312b-3daf-4b9f-a36974334b6b@mind.be>
+Date: Sat, 11 Jun 2022 19:38:06 +0200
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1654968452-01432E2F-E8A06D06/0/0 CLEAN NORMAL
-X-TOI-MSGID: 6c16f49d-ec03-441b-bdc1-fbd3241db406
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.111
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-GB
+To: Charles Steinkuehler <charles@steinkuehler.net>, buildroot@buildroot.org
+References: <7dfaf383-9700-4b0a-83fb-952c5116e7b0@steinkuehler.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <7dfaf383-9700-4b0a-83fb-952c5116e7b0@steinkuehler.net>
+Subject: Re: [Buildroot] Patching Package Dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,51 +94,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.freedesktop.org/archives/dri-devel/2022-June/357686.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdrm/libdrm.hash | 6 +++---
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index e0fac3a4d1..48b60f66cd 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2022-February/342405.html
--sha256  eecee4c4b47ed6d6ce1a9be3d6d92102548ea35e442282216d47d05293cf9737  libdrm-2.4.110.tar.xz
--sha512  52f92ef1fe4c218a1d7dba53ef43334dbfca80e3209afe59f3a32c4bf67473126534e990df07a931a12d46a3b997c21ef17c1c4d8a0c88d44d5c6c040e3b6be3  libdrm-2.4.110.tar.xz
-+# From https://lists.freedesktop.org/archives/dri-devel/2022-June/357686.html
-+sha256  1ad7164f77424de6f4ecba7c262bde196a214c6e19a6fbf497f0815f4d7ab2a9  libdrm-2.4.111.tar.xz
-+sha512  17e92e9e4ded8031ac222764bed7e9ff430a1a377f5e435f6b62b4a7f45cb4c4b769b3b79fbcba11512c1ac973abf8cdcca8e0b9659ae095e915d3d5efcf5516  libdrm-2.4.111.tar.xz
- 
- # Hash for license file
- sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index b64db06931..5cfd2d56eb 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDRM_VERSION = 2.4.110
-+LIBDRM_VERSION = 2.4.111
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+ICBIaSBDaGFybGVzLAoKT24gMDkvMDYvMjAyMiAyMzoyMSwgQ2hhcmxlcyBTdGVpbmt1ZWhsZXIg
+d3JvdGU6Cj4gSSBhbSB1c2luZyBCdWlsZHJvb3QgKDIwMjIuMDIuMikgd2l0aCBhIGNvdXBsZSBC
+UjJfRVhFUk5BTCBkaXJlY3RvcmllcyBhbmQgSSAKPiBuZWVkIHRvIG1vZGlmeSBhIHBhY2thZ2Ug
+cHJvdmlkZWQgd2l0aCBCdWlsZHJvb3QgKGF2cmR1ZGUpLsKgIEkgY2FuIGVhc2lseSBwYXRjaCAK
+PiB0aGUgY29kZSBieSBhZGRpbmcgYSBwYXRjaCBmaWxlIHRvIG15IEJSMl9FWFRFUk5BTF9GT09f
+UEFUSC9wYXRjaGVzIGRpcmVjdG9yeSAKPiB3aGljaCBpcyBhZGRlZCB0byBCUjJfR0xPQkFMX1BB
+VENIX0RJUi7CoCBUaGUgcHJvYmxlbSBpcyBteSBjb2RlIGNoYW5nZXMgcmVxdWlyZSAKPiBhIG5l
+dyBsaWJyYXJ5IChsaWJncGlvZCkgd2hpY2ggaXMgcGFydCBvZiBteSBjb25maWd1cmF0aW9uIGJ1
+dCBpcyBub3QgbGlzdGVkIGFzIAo+IGEgcGFja2FnZSBkZXBlbmRlbmN5IGZvciBhdnJkdWRlIGJ5
+IEJ1aWxkcm9vdCwgc28gYnVpbGRzIGZhaWwuCj4gCj4gSXMgdGhlcmUgYSB3YXkgdG8gZXh0ZW5k
+IHRoZSBmaWxlcyB1bmRlciBCdWlsZHJvb3QvcGFja2FnZSB1c2luZyBhIEJSMl9FeHRlcm5hbCAK
+PiBkaXJlY3Rvcnk/CgogIE9mZmljaWFsbHksIG5vIHRoZXJlIGlzbid0LiBJZiB5b3Ugd2FudCB0
+byBvdmVycmlkZSBhbiBleGlzdGluZyBwYWNrYWdlIChvdGhlciAKdGhhbiBwYXRjaGluZyBpdCks
+IHRoZSBvbmx5IHRoaW5nIHlvdSBjYW4gZG8gaXMgdG8gY3JlYXRlIGFuIGVudGlyZWx5IG5ldyAK
+cGFja2FnZSB3aXRoIGEgZGlmZmVyZW50IG5hbWUuCgogIFRoaXMgaXMganVzdCBhIHRlY2huaWNh
+bCBsaW1pdGF0aW9uIGJlY2F1c2UgZXZlcnl0aGluZyBpcyBpbmNsdWRlZCB0b2dldGhlciBpbiAK
+b25lIGJpZyBgbWFrZWAgZGF0YWJhc2UsIGFuZCBgbWFrZWAgZG9lc24ndCBoYXZlIGEgd2F5IHRv
+IG92ZXJyaWRlIGV2ZXJ5dGhpbmcgCmZyb20gYSBwcmV2aW91c2x5IGluY2x1ZGVkIG1ha2VmaWxl
+LiBJbiBhZGRpdGlvbiwgc29tZSBvZiB0aGUgdmFyaWFibGVzIGFyZSB1c2VkIAppbW1lZGlhdGVs
+eSB0byBkZWZpbmUgZGVwZW5kZW5jaWVzLCBzbyBpZiB5b3Ugd291bGQgb3ZlcnJpZGUgdGhlbSBp
+biB0aGUgCmV4dGVybmFsLCB0aGF0IGRvZXNuJ3QgaGF2ZSB0aGUgZGVzaXJlZCBlZmZlY3QuIFRo
+aXMgaXMgdGhlIGNhc2UgZm9yIF9WRVJTSU9OIAphbmQgX0RFUEVOREVOQ0lFUy4gU28geW91J3Jl
+IG91dCBvZiBsdWNrLgoKICBUaGVyZSBpcyBvbmUgaGFjayB5b3UgY291bGQgdG8sIGFuZCB0aGF0
+IGlzIHRvIGFidXNlIGxvY2FsLm1rICh0aGUgCkJSMl9QQUNLQUdFX09WRVJSSURFX0ZJTEUsIG5v
+cm1hbGx5IHVzZWQgZm9yIHNldHRpbmcgT1ZFUlJJREVfU1JDRElSKS4gVGhpcyBmaWxlIAppcyBy
+ZWFkIGJlZm9yZSB0aGUgcGFja2FnZSBtYWtlZmlsZS4gT2YgY291cnNlLCBhdnJkdWRlLm1rIGFs
+cmVhZHkgZGVmaW5lcyAKQVZSRFVERV9ERVBFTkRFTkNJRVMsIHNvIGlmIHlvdSdkIHNldCBzb21l
+dGhpbmcgaW4gbG9jYWwubWssIGl0IHdvdWxkIGp1c3QgZ2V0IApsb3N0LiBCdXQgeW91IGNvdWxk
+IChhZ2FpbikgYWJ1c2UgQVZSRFVERV9FWFRSQUNUX0RFUEVOREVOQ0lFUyB3aGljaCBpcyBub3Qg
+c2V0IApieSBhdnJkdWRlLm1rLgoKICBIb3dldmVyLCBzaW5jZSBubyBwYWNrYWdlIGRlcGVuZHMg
+b24gYXZyZHVkZSwgaXQncyBtdWNoIHNpbXBsZXIgYW5kIGNsZWFuZXIgdG8gCnNpbXBseSBhZGQg
+YSBuZXcgcGFja2FnZSBteWF2cmR1ZGUgdG8geW91ciBleHRlcm5hbC4KCiAgUmVnYXJkcywKICBB
+cm5vdXQKCgo+IAo+IEFsdGVybmF0ZWx5LCBpcyBkZWZpbmluZyBhIHBhY2thZ2UgaW4gbXkgQlIy
+X0V4dGVybmFsIGRpcmVjdG9yeSB3aXRoIHRoZSBzYW1lIAo+IG5hbWUgYXMgYW4gb2ZmaWNpYWwg
+QnVpbGRyb290IHBhY2thZ2UgYWxsb3dlZC9yZWNvbW1lbmRlZD8KPiAKPiAuLi5vciBhcmUgdGhl
+cmUgYW55IG90aGVyIHN1Z2dlc3Rpb25zIGZvciBtb2RpZnlpbmcgYSBCdWlsZHJvb3QgcGFja2Fn
+ZSB3aXRob3V0IAo+IG1ha2luZyBhIGxvY2FsIGJyYW5jaCBhbmQgYXBwbHlpbmcgbXkgbmVlZGVk
+IGNoYW5nZXM/Cj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
