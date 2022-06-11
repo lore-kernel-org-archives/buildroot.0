@@ -1,57 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8347DC43334
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jun 2022 12:16:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51FD6C43334
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jun 2022 12:21:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19A5E41958;
-	Sat, 11 Jun 2022 12:16:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E33A861298;
+	Sat, 11 Jun 2022 12:21:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l9n0OIZiSM4d; Sat, 11 Jun 2022 12:16:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Fpo5y4U981e9; Sat, 11 Jun 2022 12:21:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4FEC418DE;
-	Sat, 11 Jun 2022 12:16:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8B98D1BF418
- for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 12:16:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10A8C61291;
+	Sat, 11 Jun 2022 12:21:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A65961BF418
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 12:21:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 791C140492
- for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 12:16:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9512161290
+ for <buildroot@lists.busybox.net>; Sat, 11 Jun 2022 12:21:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C7Uq7bImy2F4 for <buildroot@lists.busybox.net>;
- Sat, 11 Jun 2022 12:16:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UFLSENnJFK78 for <buildroot@lists.busybox.net>;
+ Sat, 11 Jun 2022 12:21:00 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4D80F400EF
- for <buildroot@buildroot.org>; Sat, 11 Jun 2022 12:16:21 +0000 (UTC)
-Received: from fwd84.dcpf.telekom.de (fwd84.aul.t-online.de [10.223.144.110])
- by mailout12.t-online.de (Postfix) with SMTP id 0F9CF709E
- for <buildroot@buildroot.org>; Sat, 11 Jun 2022 14:16:19 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.12.97]) by fwd84.t-online.de
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9D7A46128F
+ for <buildroot@buildroot.org>; Sat, 11 Jun 2022 12:21:00 +0000 (UTC)
+Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
+ by mailout12.t-online.de (Postfix) with SMTP id 097C89044
+ for <buildroot@buildroot.org>; Sat, 11 Jun 2022 14:20:58 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([91.58.12.97]) by fwd72.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1o002I-4L4M410; Sat, 11 Jun 2022 14:16:14 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49876)
+ esmtp id 1o006r-4gFOb30; Sat, 11 Jun 2022 14:20:57 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38588)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1o002I-0003m7-I1
- for buildroot@buildroot.org; Sat, 11 Jun 2022 14:16:14 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1o006r-0004Zq-Eb
+ for buildroot@buildroot.org; Sat, 11 Jun 2022 14:20:57 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jun 2022 14:16:14 +0200
-Message-Id: <20220611121614.1172869-3-bernd.kuhls@t-online.de>
+Date: Sat, 11 Jun 2022 14:20:57 +0200
+Message-Id: <20220611122057.1226707-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220611121614.1172869-1-bernd.kuhls@t-online.de>
-References: <20220611121614.1172869-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1654949775-0143F118-2592A648/0/0 CLEAN NORMAL
-X-TOI-MSGID: 2c1e94d6-3628-4499-b9af-a90493bc231f
-Subject: [Buildroot] [PATCH 3/3] package/php: security bump version to 8.0.20
+X-TOI-EXPURGATEID: 150726::1654950057-01439E5E-85D52BC6/0/0 CLEAN NORMAL
+X-TOI-MSGID: 09db20a4-db5a-45ee-b3c6-363e2b296614
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,40 +66,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.0.20
+Changelog:
+https://github.com/OpenVPN/openvpn/blob/release/2.5/Changes.rst
 
-Fixes CVE-2022-31625 and CVE-2022-31626.
+Removed patch which is now included in this release.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...h-pam-c-add-missing-include-limits-h.patch | 41 -------------------
+ package/openvpn/openvpn.hash                  |  2 +-
+ package/openvpn/openvpn.mk                    |  2 +-
+ 3 files changed, 2 insertions(+), 43 deletions(-)
+ delete mode 100644 package/openvpn/0001-auth-pam-c-add-missing-include-limits-h.patch
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index e0aca101b4..2e9aa6880b 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  ba62219c4b0486cbb2a04f0796749a46b0ee1f5a142ed454212b4e2460cb0fab  php-8.0.19.tar.xz
-+sha256  973fec765336ee01f47536a5db1c2eee98df9d34a41522b7b6c760159bf0a77b  php-8.0.20.tar.xz
- 
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 5053f34b85..f649a9bb8b 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/openvpn/0001-auth-pam-c-add-missing-include-limits-h.patch b/package/openvpn/0001-auth-pam-c-add-missing-include-limits-h.patch
+deleted file mode 100644
+index 34a6dbd034..0000000000
+--- a/package/openvpn/0001-auth-pam-c-add-missing-include-limits-h.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 0fed64a91d894b46105bf7e8b16edea4d90ab70c Mon Sep 17 00:00:00 2001
+-From: Antonio Quartulli <a@unstable.cc>
+-Date: Thu, 21 Apr 2022 15:19:09 +0200
+-Subject: [PATCH] auth-pam.c: add missing include limits.h
+-
+-On most systems limits.h is pulled in by some other header and thus no
+-error is ever triggered, but it's possible to find the right environment
+-which lackis this and prevents compiling auth-pam.c (possibly when using
+-LibreSSL).
+-
+-Include the header explicitly as it includes the definition of PATH_MAX.
+-
+-(note that this bug is fixed in Gentoo since 2020 by including a custom
+-patch, but apparently the issue was never reported upstream)
+-
+-Reported-by: Michelangelo Scopelliti <kernelpanic@gmx.com>
+-Signed-off-by: Antonio Quartulli <a@unstable.cc>
+-Acked-by: Gert Doering <gert@greenie.muc.de>
+-Message-Id: <20220421131909.32053-1-a@unstable.cc>
+-URL: https://www.mail-archive.com/openvpn-devel@lists.sourceforge.net/msg24136.html
+-Signed-off-by: Gert Doering <gert@greenie.muc.de>
+-
+-[Retrieved from:
+-https://github.com/OpenVPN/openvpn/commit/0fed64a91d894b46105bf7e8b16edea4d90ab70c]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/plugins/auth-pam/auth-pam.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/plugins/auth-pam/auth-pam.c b/src/plugins/auth-pam/auth-pam.c
+-index f893b51fe3..7033944568 100644
+---- a/src/plugins/auth-pam/auth-pam.c
+-+++ b/src/plugins/auth-pam/auth-pam.c
+-@@ -47,6 +47,7 @@
+- #include <fcntl.h>
+- #include <signal.h>
+- #include <syslog.h>
+-+#include <limits.h>
+- #include "utils.h"
+- 
+- #include <openvpn-plugin.h>
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index bd598a5186..0959b7f838 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256  333a7ef3d5b317968aca2c77bdc29aa7c6d6bb3316eb3f79743b59c53242ad3d  openvpn-2.5.6.tar.gz
++sha256  08340a389905c84196b6cd750add1bc0fa2d46a1afebfd589c24120946c13e68  openvpn-2.5.7.tar.gz
+ sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index db2f53a5f3..5c602e0448 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.0.19
-+PHP_VERSION = 8.0.20
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-OPENVPN_VERSION = 2.5.6
++OPENVPN_VERSION = 2.5.7
+ OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf
+ OPENVPN_LICENSE = GPL-2.0
 -- 
 2.30.2
 
