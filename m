@@ -1,82 +1,177 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D16E8C43334
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jun 2022 21:24:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02B5AC43334
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jun 2022 21:31:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84542416D7;
-	Mon, 13 Jun 2022 21:24:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 958BD606F9;
+	Mon, 13 Jun 2022 21:31:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zbaMYMBdCvsO; Mon, 13 Jun 2022 21:24:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 93WXRuhNWT5l; Mon, 13 Jun 2022 21:31:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 243DC41677;
-	Mon, 13 Jun 2022 21:24:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8C7FB1BF27C
- for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 21:24:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C82760BB0;
+	Mon, 13 Jun 2022 21:31:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D17BE1BF27C
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 21:31:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89D20826B4
- for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 21:24:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BFD4F60BB0
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 21:31:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cmz9E4VM_giy for <buildroot@lists.busybox.net>;
- Mon, 13 Jun 2022 21:24:15 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7207B826A8
- for <buildroot@buildroot.org>; Mon, 13 Jun 2022 21:24:15 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- m125-20020a1ca383000000b0039c63fe5f64so3791699wme.0
- for <buildroot@buildroot.org>; Mon, 13 Jun 2022 14:24:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=z5Yq95mJQ39Ne3iCCNDOVM5aNNo0mV3z++PJn8xUmuY=;
- b=Jv4/rLHT+ZbaFQ5v0Ags75Fx5QaR5djxr1YuemG6TWAD0uvg1wWaTcSBhSiIA15Hh3
- rv34Xvr5oBnqvD/kfg8xmSYJSEQedjbqawC74lsjRG/qzaEoOL44Q/WSOD1wifCnYhzl
- R62DqWdJRux5go3X+a3GEvXGGUiwrpnv0r1Sd0w9ROxTh/3Tfjyv69yWr7Vymw8CwXe2
- ahuKUsKX/Pze6f+Ik7+yvYZUqbO2yX28g7BBMlURZxL1F8wYQrFXlfFRkyDxrhxNZt45
- /yGgCL62lMRn1e2R/Q10Nr8XvQqctid/E+ntrRsPI0AS5xrTyRk9JpoPVvTtvvCEh5iY
- 81jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=z5Yq95mJQ39Ne3iCCNDOVM5aNNo0mV3z++PJn8xUmuY=;
- b=Ao6+bYqTtNZSDufsToclDo2x/cphpzBqN9cjKfezKaZwPfBDBbyvNBpRv2qtZpoc7I
- jdE8BPm+3392KAN79MqA7Lu3VZEYm5S9UgKqEIUk+mINX/3QEuxBjlr7IyU3XCfWuxUe
- ndh5V7zFJWAbb4gq2H+5SVoMO7XxxdPwTos+XpuQqxtayHYYPNOwOA13VwU5TFcBJTus
- A3sWrg/aVSGDpb6+B7/GiudwzutVslffgccIgI8JhFJNkFrzAxmE1eP2kT26x8r0lNxZ
- TNH3wefBI5W7qP/f6Xjn5q9dKg+9WPIcFBTh4b/rsT55WmAsRzLtA23eB6Rdl9FPDrlj
- +h+Q==
-X-Gm-Message-State: AOAM53383jDVzkv6o4JxsN3eIQ7E2naDmL/oISdvKhVMC1HlWr2U8zBH
- NSh4mYFRpQWBoP4XDCuocXcb97hSGK8=
-X-Google-Smtp-Source: ABdhPJwFT+EZtl2XWK4MGXa5Q/ieFVgRolSIq8SqA6wlG4XX7xKzGMrBguKIUN5hv9hKt7eJRiE00A==
-X-Received: by 2002:a05:600c:1d91:b0:39c:544b:abdd with SMTP id
- p17-20020a05600c1d9100b0039c544babddmr675538wms.70.1655155453444; 
- Mon, 13 Jun 2022 14:24:13 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- b2-20020a056000054200b0020c5253d8dcsm9575698wrf.40.2022.06.13.14.24.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 13 Jun 2022 14:24:12 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 13 Jun 2022 23:21:37 +0200
-Message-Id: <20220613212137.298885-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lu3ZINGHCzDj for <buildroot@lists.busybox.net>;
+ Mon, 13 Jun 2022 21:31:03 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
+ [149.117.73.133])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 11438606F9
+ for <buildroot@buildroot.org>; Mon, 13 Jun 2022 21:31:02 +0000 (UTC)
+Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com
+ [10.192.0.17])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+ by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7923840BBC
+ for <buildroot@buildroot.org>; Mon, 13 Jun 2022 21:31:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+ t=1655155862; bh=8OcjgvDRji0EWjaCdQGk2kcWpL2wt+mxnoKBPQQTFeY=;
+ h=From:To:Subject:Date:From;
+ b=UTCwfPbEXKaMm/tPyQMXmxJ/Sc/pJ1xDl4o47N1etTIh4yslAw49Cz7zSNDuao/LN
+ Mkl71FLvO7A7NTfuACvGfxIMgty9yxqWmXVtv0lbfhH9OAsvWqxYruyxJVUnH/0mbe
+ q6Xm/WODevt7gxynK50ot5Ktph8q2beSCpoSubrofZUkFf8h6ZGGLrhbrb/q8CXLwl
+ H5CtdEkCvisWRQW5UJ5LuIN0CTyHA0Lc8f/jy0sOm4qJMdM0UUtnyZWDeJQr9WuEJ9
+ EVkJkT9DfzJoZ17/JVi5CgTqJaeRGd5dmFju1n0vpygOYhdiC6njHuH/xwDc/h+QOR
+ f1D8/dz73TUhw==
+Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com
+ [10.4.161.139])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client CN "o365relay-in.synopsys.com",
+ Issuer "Entrust Certification Authority - L1K" (verified OK))
+ by mailhost.synopsys.com (Postfix) with ESMTPS id 61765A0071
+ for <buildroot@buildroot.org>; Mon, 13 Jun 2022 21:31:01 +0000 (UTC)
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam11lp2173.outbound.protection.outlook.com [104.47.58.173])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (Client CN "mail.protection.outlook.com",
+ Issuer "DigiCert Cloud Services CA-1" (verified OK))
+ by o365relay-in.synopsys.com (Postfix) with ESMTPS id 680B5800CA
+ for <buildroot@buildroot.org>; Mon, 13 Jun 2022 21:31:01 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com;
+ dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+ spf=pass smtp.mailfrom=shahab@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; dkim=pass (1024-bit key;
+ unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="XGQRSQ/i";
+ dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EZD6rwpgsCgJHz/2jeEYRJN5UEc+/4FHBIvIEoSLrKGtxFV3Eh+zzx9NDZ28cQZ6SyViNuj/oCyfX7tQD7YFK23ts5TM2DyvNef/pbbmLrzZIj/yoWSqTx9zLWvNYTl19yZ8Qotirfxhfc7WfyJmb54FPQxg4/e4pVXVzADvCaaoNtPzg3RBkjuergkfpvSZdJE3KGpDngYNM77c86ll93pDQNEP2uGTqVyMphcTrqR45k1+A//Iuy82qVYi+yTWXzC8nGAscg+FiMpCPPBOdjG3zVUl3WGJGam+nTfOVZTZDMG+wEMDHGzhUnl9JwOCDoYXFAPmX3+TXqA0UNt8Mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8OcjgvDRji0EWjaCdQGk2kcWpL2wt+mxnoKBPQQTFeY=;
+ b=cBnfO9SXg7uoXgvDgFDLXQ9GojpiG/ZJrMVtroTRvbL67+L+QOT/nyDwA6gPFBKqEfyLv15X988/uo/HW8SUg6wZZJySyTUthbcJ8OmY/5NoN2FzYCtL6tQz89CcaW2btILGNPBepYQlkAheDTmVnKYP/b2Hdk7IiVhnQIeJTFS0oIcf338E4T/GJiMK/z1S+4cdSuIiQPIuzPTgePSQRTn6q7a2Kg9ceWAKL/Qk4diMZ3LPKm6phC9WhfkwhCH0JNwcUyPOWXXjgoSLPtYnd3ibqG4XFrs/uTTiwZnwdVld4uzuAvYthdKzMVSRjBRX0nRQFLTYUEuGYw06mMCKsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8OcjgvDRji0EWjaCdQGk2kcWpL2wt+mxnoKBPQQTFeY=;
+ b=XGQRSQ/iVGvqJNAICbfNAdi+0mlxGqgc2CfdoAawRwqMfmWllEyBuz9nCIIxbuINVd/TI2McnvbriyxG0P66+I1TD7/VNfMNJCN5py+ECAiEVWdQAVNSZ2wBWgB1VrqeBvK1aefdJFl0KG/rS+seNjeCLAJ5rMomhCdwaQUiK4o=
+Received: from SN6PR12MB2782.namprd12.prod.outlook.com (2603:10b6:805:73::19)
+ by DM6PR12MB3657.namprd12.prod.outlook.com (2603:10b6:5:149::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.16; Mon, 13 Jun
+ 2022 21:30:57 +0000
+Received: from SN6PR12MB2782.namprd12.prod.outlook.com
+ ([fe80::887b:e58:cad3:ce9d]) by SN6PR12MB2782.namprd12.prod.outlook.com
+ ([fe80::887b:e58:cad3:ce9d%4]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
+ 21:30:57 +0000
+X-SNPS-Relay: synopsys.com
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [PATCH] package/bpftool: revert bpf_cookie patch to allow
+ building
+Thread-Index: AQHYf2zemrUYoe1+2UGHv8Rw+I7+Xw==
+Date: Mon, 13 Jun 2022 21:30:57 +0000
+Message-ID: <97ea44bb-58fe-d6cb-6c79-9be0b245f2c6@synopsys.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synopsys.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9dde3725-c851-422e-0df6-08da4d840129
+x-ms-traffictypediagnostic: DM6PR12MB3657:EE_
+x-microsoft-antispam-prvs: <DM6PR12MB3657C3FAA54527F14DB7748AA6AB9@DM6PR12MB3657.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VGw+aSWuU8bi5afAQ4w3l1iqVy75ZyAYxHiFscXISLvkd6OrTEv0Yb90M/2YsYKIXubewFFjOdISo3uH7UQADXj1Sslwh30mREayae900pZwCPBAB6ScoQeLlzCc5RYH+rPa+pysC7Q4KffZx/UBguGtQmTvyIVrpA3ioMZ+3Plxv6W4PIBevnRh9kVGEay3Nfgg5uOb32OnFz4VPNFkEYafwYMxniz4hn31P6PRX5m7xKLgZfe2oZLbbRq4L50Pip3F/V81/GpMYK7Q5V2BGSCiGRgH56rhSVvfpv/3Z+mwuKYbydPCnVi7Roz/wJunuZfP5X8Rmm1dgsrH/jwIVFrTmA3p869o6dlCdHVkKBoHqpz9xAKI1lfI0l2HD7JcI2Q07viH3CV/KWfCHWcWFOhYIvpMxT6HYPhOWw6hhNZxLl0J4p0eJu/z4EXiNnk+8Z+DmjvD1mJT7m1/TlFdPOSC47LxeNBLWvOzsgIUQK0eforaXi1EXsswml8Ghq7yKuveezArnC+KPcTOc35HBzqqKmD0ZgupHt/7TDPZUl8p/Dc0tHpIZJPZ5vb5EVafawBq066jnhEuKYcsRGeRopUMulTWlkqmqySBhnE+ZtX2YeD9XYnZIC/N1eEUqhqJRfufSkuWDsPYOSCSGE+oM46O+klU4g9N/vQ+b/1aOoKfQd4QtuA8pQ3QnHu3MZZ3cEEQlrqDoFKTRtf0mYwoS2C8b0ymNRBwF+nQtGR5LZdL60ZJeSncH9vgAX9ggk0TNUkeHeLafaNbOsZYSZelwnTmENOYhtELlt0MLVLbmiA8MP9pSHkAPROzcpxdex5pJAd2i8GJ+sWiVBVQyrokXWYwQ8xcln5jAjoluFCj//s=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SN6PR12MB2782.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230016)(366004)(31686004)(64756008)(8676002)(66446008)(86362001)(36756003)(5660300002)(122000001)(8936002)(71200400001)(66556008)(6916009)(66476007)(66946007)(6486002)(966005)(316002)(2906002)(38070700005)(91956017)(76116006)(508600001)(2616005)(186003)(6506007)(31696002)(6512007)(38100700002)(45980500001);
+ DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bkh6WUtvMEJseDJEbndVb2JaN0h6UGROR3dHWUs5alE2dkJzU29TMHRmODJj?=
+ =?utf-8?B?VDFpM05mOGlsd3BCMTIva1cwckF6NlBPQytnVzBib3hyRmJsaTB2TGl1NXRs?=
+ =?utf-8?B?ZFlwazN2ZWZzWWczOCtTSEFVTGM2QlJoVzRLelFVTm5rY2RWSm04aTBhMWlC?=
+ =?utf-8?B?Q0lGQVNqbDExSXlOaEsyVXlHZ3hWY01LamF0WkNraVJNd2NZZUt4WWhKVHgy?=
+ =?utf-8?B?cWpSa1VuYktuTGcyMWh6dHhpREFwSHV1ZXkyazJvSnlBMk5ET01KcS9zV0Vh?=
+ =?utf-8?B?REZqYzZOYi8zZnJOdmlNN0FsYXh6OWVieWdXcmtQbXY3VlN1V0dxWVh3WDFJ?=
+ =?utf-8?B?ZzFBc2RWWDgzRERQcDFvSkpoRGFXUm9uTEZTS2hPb1hyaFRYNHFvWUpJc2pz?=
+ =?utf-8?B?VHZmNGx2bkc0MkhmMDRWTUVKU3FBcVdJeWwxWW53bE1SZEJweC9BYmMxMEZp?=
+ =?utf-8?B?bno5ckFyMm95MnFJUlF0Z3NlQzA3ZTZTZStpemNkd2k5RjRvVzRVN3pwSXAw?=
+ =?utf-8?B?Wjd3SnpMVUFtdnU3c1Y5OUllZWpiUENzTkV4OXViZ0tySndBcHJiNW5IajF2?=
+ =?utf-8?B?OUxlbHNsSEIvYzVoMmVKdjkwajFRS1Mxay9EZDZiRzRYM2lEYnlUT29LdTJY?=
+ =?utf-8?B?OHZDdkZWenk0bkYzQUprRkszM2YxMitIb0sxUWdTUWRWN080U0lHU2Yvbytj?=
+ =?utf-8?B?U0JVTmN5UGthWDVEQmVxYWI3QmR6SEdLRWUyWGJQbmhzeWo5NW05aHpZTnRR?=
+ =?utf-8?B?ZkRDTHlsRWhBbWVsV2JISDg0TklaSW5PTHpjcEk3bERsYWJFb3lhbHpXa0NH?=
+ =?utf-8?B?OGdmcTI0V0Q4NXhaR3lDOUlneHRBN0psd096eU1nMVhYSU92OU9oZkFNWGwr?=
+ =?utf-8?B?eUVaQTRwVnFEMldUZXFYbzhkSGRjSHFnSlVoMU55R3UrM0NLOWs3cCs3UnRo?=
+ =?utf-8?B?TWluN0VRSXB3bUxZc0dkdlNPUWlFcmk4YUlGSWZwZW4xbWZOYUZPbENqQTV4?=
+ =?utf-8?B?VjRJNE1oRTZDU25jZWpIVWs3QW5Ga3JhV0N1R3dZVXJoTTd3aDVWQjAwMHJ4?=
+ =?utf-8?B?QldZV1Zpbkh6R09qN3pxMEZPaS9Tb0tlb0svOCtrMzh2OW51MW1VWnVvRi83?=
+ =?utf-8?B?OCsyZjUrTUJTa3Q1M3FhaGdyalFPc2dKQ25rN2NOV0owV0pySVV0YVE0ZGFj?=
+ =?utf-8?B?QzRYVW14cGpiSjRoMlN3TVU5RW5XekFLdnU4cjltdmVhdXJFWlFUenNuVTJa?=
+ =?utf-8?B?ajA3SzVvaFpQRFBodnQ3K0hNeitBcTFRMEQ0WmVYeXJkZG9yQ3NmdkFNTUFk?=
+ =?utf-8?B?eGxrbDI3N2x1dnA3blJaRmpSanYrc01GZ05ueTFQSytGQm5IeFFUTHZwK0Nn?=
+ =?utf-8?B?UDYzNlUzbXBJV1NPL2VRQmVWRlRNaTFLU3IrK1VvblpjTXd4T3B4bUFXNHVL?=
+ =?utf-8?B?a2lKVnNWU2kzdm9tVWZPZHB0eTFLOUZLYXMvYlg1S3JZbk5JY20yV0wySU8y?=
+ =?utf-8?B?WFBDMXpnaVpweW1IcE1vQU5sQnNsekQzQk9JaVlXd2VUSXJ6Tm8vMDhweHF2?=
+ =?utf-8?B?WDN5aFpIdEtEbi9iNTJOTkRtUjFjYm5qYWpPT0l3ZXc5TzYzZm5FZ09JRkU0?=
+ =?utf-8?B?dENuOHBidGhFSG5NV2RzdCtleFNwTzFTdTM2NUVOcER0T0tMaUd4MWZyNmRt?=
+ =?utf-8?B?OTdEdGlRcnJ1bnBOVyswVXBhNll0TU5BMkZDYmJybEhjRmVqdER4bWp6YkF6?=
+ =?utf-8?B?MkJuV3hzMjJ3R2UrL2FTL2VGWEpDL0VGKzVnQVExOUpDUVRTb21FV0NuWmNX?=
+ =?utf-8?B?d2o0bjBpVnFKQmppNU5Nb3E4Y1htTWNXQkhCQVN3c2xOWk1tVDJZR3NzcWJS?=
+ =?utf-8?B?dVk4djBEb0JLemk3L3A3TTlwUVdCanhNYjFFaVk0ZnhoNnhIbWJKZ3ZOZnRO?=
+ =?utf-8?B?TlphMXhxQzQxanIxdWlJMlg3SmYwemprR0RwZ1NaeU9zdDBteG1ScDJPVkF4?=
+ =?utf-8?B?RlRqYTh2MDVnTHFHMUFUMU4xcGNwL1V4cUczNW0rTkx2d0Q4SFdYV2x6bWly?=
+ =?utf-8?B?R2l5V3RvSTlFS1JBSER3eTVnbjRNci9zY1E1S0l6RVRFaEJkU0ZCVGpCbVZn?=
+ =?utf-8?B?dmtVUmdQK2lwQXduNlAzZlQ0YUJNdU1LWWNuRHZBSE1MOUloMEVWbDJtQWUz?=
+ =?utf-8?B?clE3dnhoZkVXYTRhOTdkUDZJeXhucVRBNkFqQ2RiYllqa3E2czVObzFaWG5q?=
+ =?utf-8?B?VmhtT0NUczhuNlp1T280dUp2VDZOQjE0b1RIdXFXa3hrTHdSZDYreWZqN2JZ?=
+ =?utf-8?B?Qys3a3R6L0tnTWVybnUrVHFWTGtEVXJBTS9uc0J4anFETHdoVG9QU0VCTW85?=
+ =?utf-8?Q?Nz813nHO1uhEWd6o=3D?=
+Content-ID: <F69630BAA4B64B42A6E6A84E9B8F7355@namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/evtest: bump to version 1.35
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2782.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9dde3725-c851-422e-0df6-08da4d840129
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2022 21:30:57.6367 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vJ6y4MuMrl5ZuSYgWaAfoSMmBUGU0wIq0Dbo8bwzsoBDFXbQ7wT684l2FaYH+OyUMmr6mVnawmIphzh/yIHy8Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3657
+Subject: [Buildroot] [PATCH] package/bpftool: revert bpf_cookie patch to
+ allow building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,102 +183,180 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Shahab Vahedi via buildroot <buildroot@buildroot.org>
+Reply-To: Shahab Vahedi <Shahab.Vahedi@synopsys.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LSBEcm9wIHBhdGNoZXMgKGFscmVhZHkgaW4gdmVyc2lvbikKLSBob3N0LXBrZ2NvbmYgaXMgbm90
-IG5lZWRlZCBzaW5jZQogIGh0dHBzOi8vY2dpdC5mcmVlZGVza3RvcC5vcmcvZXZ0ZXN0L2NvbW1p
-dC8/aWQ9MmNlYmMwYWI1YzM2YzRmODFkMzU2NzdjNDZiMjQ1ZGU4NDllZDA2MgotIFVwZGF0ZSBp
-bmRlbnRhdGlvbiBpbiBoYXNoIGZpbGUgKHR3byBzcGFjZXMpCgpodHRwczovL2xpc3RzLmZyZWVk
-ZXNrdG9wLm9yZy9hcmNoaXZlcy9pbnB1dC10b29scy8yMDIyLU1heS8wMDE1NzguaHRtbAoKU2ln
-bmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+
-Ci0tLQogLi4uLzAwMDEtQWRkLW1pc3NpbmctbGltaXRzLmgtaW5jbHVkZS5wYXRjaCAgIHwgMzgg
-LS0tLS0tLS0tLS0tLS0tCiAuLi5sZC1vbi0zMmJpdC1hcmNoZXMtd2l0aC02NGJpdC10aW1lX3Qu
-cGF0Y2ggfCA0NiAtLS0tLS0tLS0tLS0tLS0tLS0tCiBwYWNrYWdlL2V2dGVzdC9ldnRlc3QuaGFz
-aCAgICAgICAgICAgICAgICAgICAgfCAgNCArLQogcGFja2FnZS9ldnRlc3QvZXZ0ZXN0Lm1rICAg
-ICAgICAgICAgICAgICAgICAgIHwgIDMgKy0KIDQgZmlsZXMgY2hhbmdlZCwgMyBpbnNlcnRpb25z
-KCspLCA4OCBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2V2dGVzdC8w
-MDAxLUFkZC1taXNzaW5nLWxpbWl0cy5oLWluY2x1ZGUucGF0Y2gKIGRlbGV0ZSBtb2RlIDEwMDY0
-NCBwYWNrYWdlL2V2dGVzdC8wMDAyLUZpeC1idWlsZC1vbi0zMmJpdC1hcmNoZXMtd2l0aC02NGJp
-dC10aW1lX3QucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2V2dGVzdC8wMDAxLUFkZC1taXNz
-aW5nLWxpbWl0cy5oLWluY2x1ZGUucGF0Y2ggYi9wYWNrYWdlL2V2dGVzdC8wMDAxLUFkZC1taXNz
-aW5nLWxpbWl0cy5oLWluY2x1ZGUucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
-IDZjN2ZjOTA0ODIuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9ldnRlc3QvMDAwMS1BZGQtbWlz
-c2luZy1saW1pdHMuaC1pbmNsdWRlLnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsMzggKzAsMCBA
-QAotRnJvbSA3ZDdjNWE4MWIwZTJmMzMyMWQyNjliN2FjYzQ1MGQxZWVjN2E5MTBiIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQotRnJvbTogQmFydWNoIFNpYWNoIDxiYXJ1Y2hAdGtvcy5jby5pbD4K
-LURhdGU6IFN1biwgMTggQXVnIDIwMTkgMDk6NTc6MjMgKzAzMDAKLVN1YmplY3Q6IFtQQVRDSF0g
-QWRkIG1pc3NpbmcgbGltaXRzLmggaW5jbHVkZQotTUlNRS1WZXJzaW9uOiAxLjAKLUNvbnRlbnQt
-VHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAotQ29udGVudC1UcmFuc2Zlci1FbmNvZGlu
-ZzogOGJpdAotCi1GaXhlcyBidWlsZCB3aXRoIG11c2wgbGliYyB0aGF0IGRvZXMgbm90IGluY2x1
-ZGUgbGltaXRzLmggaW5kaXJlY3RseSB2aWEKLW90aGVyIGhlYWRlcnMuCi0KLWV2dGVzdC5jOiBJ
-biBmdW5jdGlvbiDigJhzY2FuX2RldmljZXPigJk6Ci1ldnRlc3QuYzo4ODY6MTQ6IGVycm9yOiDi
-gJhQQVRIX01BWOKAmSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbik7IGRp
-ZCB5b3UgbWVhbiAgSU5UOF9NQVjigJk/Ci0gICBjaGFyIGZuYW1lW1BBVEhfTUFYXTsKLSAgICAg
-ICAgICAgICAgXn5+fn5+fn4KLQotU2lnbmVkLW9mZi1ieTogQmFydWNoIFNpYWNoIDxiYXJ1Y2hA
-dGtvcy5jby5pbD4KLS0tLQotVXBzdHJlYW0gc3RhdHVzOiBzZW50IHRvIGlucHV0LXRvb2xzQGxp
-c3RzLmZyZWVkZXNrdG9wLm9yZyAobW9kZXJhdGVkKQotCi0gZXZ0ZXN0LmMgfCAxICsKLSAxIGZp
-bGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKLQotZGlmZiAtLWdpdCBhL2V2dGVzdC5jIGIvZXZ0
-ZXN0LmMKLWluZGV4IDM3ZDRmODU0MDMzMy4uNTQ4YzIwMzU2NGQzIDEwMDY0NAotLS0tIGEvZXZ0
-ZXN0LmMKLSsrKyBiL2V2dGVzdC5jCi1AQCAtNTYsNiArNTYsNyBAQAotICNpbmNsdWRlIDxnZXRv
-cHQuaD4KLSAjaW5jbHVkZSA8Y3R5cGUuaD4KLSAjaW5jbHVkZSA8c2lnbmFsLmg+Ci0rI2luY2x1
-ZGUgPGxpbWl0cy5oPgotICNpbmNsdWRlIDxzeXMvdGltZS5oPgotICNpbmNsdWRlIDxzeXMvdHlw
-ZXMuaD4KLSAjaW5jbHVkZSA8dW5pc3RkLmg+Ci0tLSAKLTIuMjMuMC5yYzEKLQpkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9ldnRlc3QvMDAwMi1GaXgtYnVpbGQtb24tMzJiaXQtYXJjaGVzLXdpdGgtNjRi
-aXQtdGltZV90LnBhdGNoIGIvcGFja2FnZS9ldnRlc3QvMDAwMi1GaXgtYnVpbGQtb24tMzJiaXQt
-YXJjaGVzLXdpdGgtNjRiaXQtdGltZV90LnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NApp
-bmRleCBlMzljY2I2NDFmLi4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvZXZ0ZXN0LzAwMDItRml4
-LWJ1aWxkLW9uLTMyYml0LWFyY2hlcy13aXRoLTY0Yml0LXRpbWVfdC5wYXRjaAorKysgL2Rldi9u
-dWxsCkBAIC0xLDQ2ICswLDAgQEAKLUZyb20gNzBjNWRkOWU4NThlZDU3N2E0YmJlN2VjODkyMDkz
-NGM4OWRmMDhmYyBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IEtoZW0gUmFqIDxyYWou
-a2hlbUBnbWFpbC5jb20+Ci1EYXRlOiBTYXQsIDMwIE5vdiAyMDE5IDExOjU4OjU4IC0wODAwCi1T
-dWJqZWN0OiBbUEFUQ0hdIEZpeCBidWlsZCBvbiAzMmJpdCBhcmNoZXMgd2l0aCA2NGJpdCB0aW1l
-X3QKLQotdGltZSBlbGVtZW50IGlzIGRlcHJlY2F0ZWQgb24gbmV3IGlucHV0X2V2ZW50IHN0cnVj
-dHVyZSBpbiBrZXJuZWwncwotaW5wdXQuaCBbMV0KLQotWzFdIGh0dHBzOi8vZ2l0Lmtlcm5lbC5v
-cmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC9jb21taXQ/aWQ9
-MTUyMTk0ZmU5YzNmCi0KLVNpZ25lZC1vZmYtYnk6IEtoZW0gUmFqIDxyYWoua2hlbUBnbWFpbC5j
-b20+Ci1TaWduZWQtb2ZmLWJ5OiBCYXJ1Y2ggU2lhY2ggPGJhcnVjaEB0a29zLmNvLmlsPgotLS0t
-Ci1VcHN0cmVhbSBzdGF0dXM6IGNvbW1pdCA2NDhmNWMxYTllMAotCi0gZXZ0ZXN0LmMgfCA3ICsr
-KysrKy0KLSAxIGZpbGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCi0K
-LWRpZmYgLS1naXQgYS9ldnRlc3QuYyBiL2V2dGVzdC5jCi1pbmRleCA1NDhjMjAzNTY0ZDMuLjhk
-NTkyZjQyYmRjYSAxMDA2NDQKLS0tLSBhL2V2dGVzdC5jCi0rKysgYi9ldnRlc3QuYwotQEAgLTYx
-LDYgKzYxLDExIEBACi0gI2luY2x1ZGUgPHN5cy90eXBlcy5oPgotICNpbmNsdWRlIDx1bmlzdGQu
-aD4KLSAKLSsjaWZuZGVmIGlucHV0X2V2ZW50X3NlYwotKyNkZWZpbmUgaW5wdXRfZXZlbnRfc2Vj
-IHRpbWUudHZfc2VjCi0rI2RlZmluZSBpbnB1dF9ldmVudF91c2VjIHRpbWUudHZfdXNlYwotKyNl
-bmRpZgotKwotICNkZWZpbmUgQklUU19QRVJfTE9ORyAoc2l6ZW9mKGxvbmcpICogOCkKLSAjZGVm
-aW5lIE5CSVRTKHgpICgoKCh4KS0xKS9CSVRTX1BFUl9MT05HKSsxKQotICNkZWZpbmUgT0ZGKHgp
-ICAoKHgpJUJJVFNfUEVSX0xPTkcpCi1AQCAtMTE0MCw3ICsxMTQ1LDcgQEAgc3RhdGljIGludCBw
-cmludF9ldmVudHMoaW50IGZkKQotIAkJCXR5cGUgPSBldltpXS50eXBlOwotIAkJCWNvZGUgPSBl
-dltpXS5jb2RlOwotIAotLQkJCXByaW50ZigiRXZlbnQ6IHRpbWUgJWxkLiUwNmxkLCAiLCBldltp
-XS50aW1lLnR2X3NlYywgZXZbaV0udGltZS50dl91c2VjKTsKLSsJCQlwcmludGYoIkV2ZW50OiB0
-aW1lICVsZC4lMDZsZCwgIiwgZXZbaV0uaW5wdXRfZXZlbnRfc2VjLCBldltpXS5pbnB1dF9ldmVu
-dF91c2VjKTsKLSAKLSAJCQlpZiAodHlwZSA9PSBFVl9TWU4pIHsKLSAJCQkJaWYgKGNvZGUgPT0g
-U1lOX01UX1JFUE9SVCkKLS0tIAotMi4yNS4xCi0KZGlmZiAtLWdpdCBhL3BhY2thZ2UvZXZ0ZXN0
-L2V2dGVzdC5oYXNoIGIvcGFja2FnZS9ldnRlc3QvZXZ0ZXN0Lmhhc2gKaW5kZXggYjFlZTI0Mzcx
-ZS4uMGVkNTFkZjRlNCAxMDA2NDQKLS0tIGEvcGFja2FnZS9ldnRlc3QvZXZ0ZXN0Lmhhc2gKKysr
-IGIvcGFja2FnZS9ldnRlc3QvZXZ0ZXN0Lmhhc2gKQEAgLTEsNSArMSw1IEBACiAjIGxvY2FsbHkg
-Y29tcHV0ZWQKLXNoYTI1NiAwZTdhMmVlZmYzODBhZjc5NmU1ZTliMjFiNmY0OGZkNzA2YzU4Yzkz
-MTE2MmMxNTFjMmMxMDc0YmRmZWI4NWM2IGV2dGVzdC1ldnRlc3QtMS4zNC50YXIuZ3oKK3NoYTI1
-NiAgMDZkZmU2Yjk3NjBiNzhmM2Y3M2FjYTIxMjBjYmNiNzkzMzliMzNlNTlkNWM3OWE0OWI0YmQ1
-ZDM0ODQ0YjA1NCAgZXZ0ZXN0LWV2dGVzdC0xLjM1LnRhci5negogCiAjIExpY2Vuc2UgZmlsZXMK
-LXNoYTI1NiBhYjE1ZmQ1MjZiZDhkZDE4YTllNzdlYmMxMzk2NTZiZjRkMzNlOTdmYzcyMzhjZDEx
-YmY2MGUyYjliODY2NmM2IENPUFlJTkcKK3NoYTI1NiAgYWIxNWZkNTI2YmQ4ZGQxOGE5ZTc3ZWJj
-MTM5NjU2YmY0ZDMzZTk3ZmM3MjM4Y2QxMWJmNjBlMmI5Yjg2NjZjNiAgQ09QWUlORwpkaWZmIC0t
-Z2l0IGEvcGFja2FnZS9ldnRlc3QvZXZ0ZXN0Lm1rIGIvcGFja2FnZS9ldnRlc3QvZXZ0ZXN0Lm1r
-CmluZGV4IDhiODY2N2UwNDUuLjY1ODk3YTQxZTYgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvZXZ0ZXN0
-L2V2dGVzdC5taworKysgYi9wYWNrYWdlL2V2dGVzdC9ldnRlc3QubWsKQEAgLTQsMTIgKzQsMTEg
-QEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLUVWVEVTVF9WRVJTSU9OID0gMS4zNAor
-RVZURVNUX1ZFUlNJT04gPSAxLjM1CiBFVlRFU1RfU09VUkNFID0gZXZ0ZXN0LWV2dGVzdC0kKEVW
-VEVTVF9WRVJTSU9OKS50YXIuZ3oKIEVWVEVTVF9TSVRFID0gaHR0cHM6Ly9naXRsYWIuZnJlZWRl
-c2t0b3Aub3JnL2xpYmV2ZGV2L2V2dGVzdC8tL2FyY2hpdmUvZXZ0ZXN0LSQoRVZURVNUX1ZFUlNJ
-T04pCiBFVlRFU1RfTElDRU5TRSA9IEdQTC0yLjArCiBFVlRFU1RfTElDRU5TRV9GSUxFUyA9IENP
-UFlJTkcKLUVWVEVTVF9ERVBFTkRFTkNJRVMgPSBob3N0LXBrZ2NvbmYKICMgbmVlZGVkIGJlY2F1
-c2Ugc291cmNlIHBhY2thZ2UgY29udGFpbnMgbm8gZ2VuZXJhdGVkIGZpbGVzCiBFVlRFU1RfQVVU
-T1JFQ09ORiA9IFlFUwogCi0tIAoyLjM1LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
-bGRyb290Cg==
+Building bpftool on Debian 11 (bullseye) with kernel v5.10 fails:
+
+-----------------------------------8<-----------------------------------
+$ make
+  .
+  .
+  .
+  CLANG    pid_iter.bpf.o
+skeleton/pid_iter.bpf.c:47:14: error: incomplete definition of type
+                               'struct bpf_perf_link'
+        perf_link = container_of(link, struct bpf_perf_link, link);
+  .
+  .
+  .
+skeleton/pid_iter.bpf.c:49:30: error: no member named 'bpf_cookie' in
+                               'struct perf_event'
+        return BPF_CORE_READ(event, bpf_cookie);
+  .
+  .
+  .
+10 errors generated.
+make: *** [Makefile:176: pid_iter.bpf.o] Error 1
+----------------------------------->8-----------------------------------
+
+There are changes in bpftool v6.8.0 that assumes the existence of
+particular data structures in generated vmlinux.h that is obtained
+from the host machine. See [1] for further details. This commit adds
+a patch to revert that additional change in v6.8.0.
+
+There's a patch series pending to be submitted upstream [2]. Hopefully,
+those will take care of the problem if they land in the next release.
+
+[1]
+https://lore.kernel.org/bpf/c47f732d-dba8-2c13-7c72-3a651bf72353@synopsys.com/t/#u
+
+[2]
+https://lore.kernel.org/bpf/20220421003152.339542-1-alobakin@pm.me/
+
+Signed-off-by: Shahab Vahedi <shahab@synopsys.com>
+---
+ .../0002-revert-bpf_cookie-change.patch       | 114 ++++++++++++++++++
+ 1 file changed, 114 insertions(+)
+ create mode 100644 package/bpftool/0002-revert-bpf_cookie-change.patch
+
+diff --git a/package/bpftool/0002-revert-bpf_cookie-change.patch b/package/bpftool/0002-revert-bpf_cookie-change.patch
+new file mode 100644
+index 0000000000..8c9c6d84b1
+--- /dev/null
++++ b/package/bpftool/0002-revert-bpf_cookie-change.patch
+@@ -0,0 +1,114 @@
++Revert commit "bpftool: Add bpf_cookie to link output"
++
++Building bpftool on Debian bullseye fails [1]. This patch
++reverts the offending commit [2].
++
++[1] Building release 6.8.0 on Debian 11
++https://lore.kernel.org/bpf/c47f732d-dba8-2c13-7c72-3a651bf72353@synopsys.com/t/#u
++
++[2] bpftool: Add bpf_cookie to link output
++https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=cbdaf71f
++
++Signed-off-by: Shahab Vahedi <shahab@synopsys.com>
++diff --git a/src/main.h b/src/main.h
++index aa99ffa..2f2b638 100644
++--- a/src/main.h
+++++ b/src/main.h
++@@ -111,9 +111,7 @@ struct obj_ref {
++ 
++ struct obj_refs {
++ 	int ref_cnt;
++-	bool has_bpf_cookie;
++ 	struct obj_ref *refs;
++-	__u64 bpf_cookie;
++ };
++ 
++ struct btf;
++diff --git a/src/pids.c b/src/pids.c
++index e2d00d3..57f0d1b 100644
++--- a/src/pids.c
+++++ b/src/pids.c
++@@ -78,8 +78,6 @@ static void add_ref(struct hashmap *map, struct pid_iter_entry *e)
++ 	ref->pid = e->pid;
++ 	memcpy(ref->comm, e->comm, sizeof(ref->comm));
++ 	refs->ref_cnt = 1;
++-	refs->has_bpf_cookie = e->has_bpf_cookie;
++-	refs->bpf_cookie = e->bpf_cookie;
++ 
++ 	err = hashmap__append(map, u32_as_hash_field(e->id), refs);
++ 	if (err)
++@@ -206,9 +204,6 @@ void emit_obj_refs_json(struct hashmap *map, __u32 id,
++ 		if (refs->ref_cnt == 0)
++ 			break;
++ 
++-		if (refs->has_bpf_cookie)
++-			jsonw_lluint_field(json_writer, "bpf_cookie", refs->bpf_cookie);
++-
++ 		jsonw_name(json_writer, "pids");
++ 		jsonw_start_array(json_writer);
++ 		for (i = 0; i < refs->ref_cnt; i++) {
++@@ -238,9 +233,6 @@ void emit_obj_refs_plain(struct hashmap *map, __u32 id, const char *prefix)
++ 		if (refs->ref_cnt == 0)
++ 			break;
++ 
++-		if (refs->has_bpf_cookie)
++-			printf("\n\tbpf_cookie %llu", (unsigned long long) refs->bpf_cookie);
++-
++ 		printf("%s", prefix);
++ 		for (i = 0; i < refs->ref_cnt; i++) {
++ 			struct obj_ref *ref = &refs->refs[i];
++diff --git a/src/skeleton/pid_iter.bpf.c b/src/skeleton/pid_iter.bpf.c
++index eb05ea5..f70702f 100644
++--- a/src/skeleton/pid_iter.bpf.c
+++++ b/src/skeleton/pid_iter.bpf.c
++@@ -38,17 +38,6 @@ static __always_inline __u32 get_obj_id(void *ent, enum bpf_obj_type type)
++ 	}
++ }
++ 
++-/* could be used only with BPF_LINK_TYPE_PERF_EVENT links */
++-static __u64 get_bpf_cookie(struct bpf_link *link)
++-{
++-	struct bpf_perf_link *perf_link;
++-	struct perf_event *event;
++-
++-	perf_link = container_of(link, struct bpf_perf_link, link);
++-	event = BPF_CORE_READ(perf_link, perf_file, private_data);
++-	return BPF_CORE_READ(event, bpf_cookie);
++-}
++-
++ SEC("iter/task_file")
++ int iter(struct bpf_iter__task_file *ctx)
++ {
++@@ -80,19 +69,8 @@ int iter(struct bpf_iter__task_file *ctx)
++ 	if (file->f_op != fops)
++ 		return 0;
++ 
++-	__builtin_memset(&e, 0, sizeof(e));
++ 	e.pid = task->tgid;
++ 	e.id = get_obj_id(file->private_data, obj_type);
++-
++-	if (obj_type == BPF_OBJ_LINK) {
++-		struct bpf_link *link = (struct bpf_link *) file->private_data;
++-
++-		if (BPF_CORE_READ(link, type) == BPF_LINK_TYPE_PERF_EVENT) {
++-			e.has_bpf_cookie = true;
++-			e.bpf_cookie = get_bpf_cookie(link);
++-		}
++-	}
++-
++ 	bpf_probe_read_kernel_str(&e.comm, sizeof(e.comm),
++ 				  task->group_leader->comm);
++ 	bpf_seq_write(ctx->meta->seq, &e, sizeof(e));
++diff --git a/src/skeleton/pid_iter.h b/src/skeleton/pid_iter.h
++index bbb570d..5692cf2 100644
++--- a/src/skeleton/pid_iter.h
+++++ b/src/skeleton/pid_iter.h
++@@ -6,8 +6,6 @@
++ struct pid_iter_entry {
++ 	__u32 id;
++ 	int pid;
++-	__u64 bpf_cookie;
++-	bool has_bpf_cookie;
++ 	char comm[16];
++ };
++ 
+-- 
+2.30.2
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
