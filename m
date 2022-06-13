@@ -1,81 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7E83C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jun 2022 20:20:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07E53C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jun 2022 20:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E8BA41686;
-	Mon, 13 Jun 2022 20:20:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B0EA640A12;
+	Mon, 13 Jun 2022 20:21:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ELKcfAHBfUZU; Mon, 13 Jun 2022 20:20:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AnTfGtsvzJ57; Mon, 13 Jun 2022 20:21:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22E9241676;
-	Mon, 13 Jun 2022 20:20:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BA81D1BF37C
- for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 20:20:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA3BB408EA;
+	Mon, 13 Jun 2022 20:21:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ECED31BF37C
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 20:21:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B75F160E76
- for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 20:20:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC42E41685
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 20:21:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R7MQ55tJIisq for <buildroot@lists.busybox.net>;
- Mon, 13 Jun 2022 20:20:36 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W8gNjMn1QeTU for <buildroot@lists.busybox.net>;
+ Mon, 13 Jun 2022 20:21:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8B1DF60E48
- for <buildroot@buildroot.org>; Mon, 13 Jun 2022 20:20:36 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id k19so8474587wrd.8
- for <buildroot@buildroot.org>; Mon, 13 Jun 2022 13:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7188541674
+ for <buildroot@buildroot.org>; Mon, 13 Jun 2022 20:21:07 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id bg6so13372794ejb.0
+ for <buildroot@buildroot.org>; Mon, 13 Jun 2022 13:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=h1Y9LyDZr71NWJFlMvML4q5fbt2WmkY071UDdEyxPj4=;
- b=FnL3zmyvEmd0h31sudBS99zFu7dSkValYLvAzqf5M4hJrZL9cz9LsFCy8dsmXiSztB
- Sl7UD4ArdXDv8Un/3W+k/p10/QvSF4tOaLcl0Hg5M3y6zEMdHN0H8RDkzxYotpg1oVOE
- MEWdt2Fy8of0uO+olPnNpq1zFXcxW9FN2PoULFgYM/BNFknf8WlPk6co8dHEapDUaE5z
- lXF4Ct58PZfRBE6n5jbYW6qDqXEEWpxaX/P/7BAJZDuq2BkIPnnyfytAjS6ByzWgRXnq
- Ougdc2ok05E8JifNBvM2B1KT10SOd2y1Pw4QnyRWN0B5uV2WdTBlRlkc8U3qwWTbe0NU
- mWbA==
+ bh=vdHR5u0Y/WUe354D3UsX3wwTe7/Q75pMc/+2sz4JvDA=;
+ b=YxW7K98mqz/9VVV/eKMbku9zNWu4Ng9ZJBXRcnUVAxBGtbMlQe1hQ3azQennl5+cCz
+ Cd4NwAk2oAO5igG9PAgA79IBzmB4ldr3p87Vp9MKtHh8HAmFNSWuwwWbmT/1GUizQVDt
+ FKMXx2Xh0Yfmk0+Pp0sXPpKv+KxEe0cVp63oFMS9WX33nP/36AC2wYPV5Bd253MdLo1b
+ R0ucnGmdraYu6HfCDqQ5uUF03Cra/mb8QMPFB96NGsgiAm2xxg0JlGzkaYpEJYT8euYd
+ v/OMoyXnUt5V609JVApwXNNZkT9DYf10vkVCFWA3ZlCPsO7HZzMMlBaPWz09d0VE0R+f
+ nOxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=h1Y9LyDZr71NWJFlMvML4q5fbt2WmkY071UDdEyxPj4=;
- b=pCUUvDM+jtGxowLHbOkOvjtiUjS9/sxyMJ31OlR79LaA5NaHSIxYR6PJFeOFTVbart
- c/0PZYTaDks6LPHsv1UzCS2P54RjgUXwfoBe8cYTIY8emhsGd+x2y8pmCQ95Iw0qI9un
- VUjOiIvhXI2425hwvisuB8NXjbEBJAxw2rxtCO2RRGoa1f1J2QQgbvuXPdCo68lP8t5v
- uLQ3zoxPxGxo0Iu67LI3CMVCAdwW6HKfgRYUvQWU5HllV/SO/z/zTCqRoG46zK3d/WwY
- ChxAE5POkVivDDFUTgBkxou8gXuGi9VCoMGgSzIrqM/lg13yFvSzzahO46j5KHM7p/hh
- tvdQ==
-X-Gm-Message-State: AJIora+4W3vDxc4iTUZK8q0r3CMz0N77ySBJaoi81NQZ44PShder6kaN
- Fi5HFbR7ICWjOkPk7FDwwCmKB0d8qz4=
-X-Google-Smtp-Source: AGRyM1sLx1MK2g6jbOftPI2J4++n2gBUXXrFiTmCPANyXLv+RcEnd56qA8atqzFw4UspJckXDE/yBQ==
-X-Received: by 2002:a5d:5a94:0:b0:218:531a:eea with SMTP id
- bp20-20020a5d5a94000000b00218531a0eeamr1394465wrb.703.1655151634589; 
- Mon, 13 Jun 2022 13:20:34 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ bh=vdHR5u0Y/WUe354D3UsX3wwTe7/Q75pMc/+2sz4JvDA=;
+ b=tYaVbmTiRwyDzXn4vn3clu6VG760Dn14BhIHyQC4TfKOXz62s1QX0v1GrD4lBUtkbA
+ JyosAz+p7AohzbsexxxpO1LNcx8CSCFOxipZ4Ej1hfN0WbEehj2WNoswIGA8wL3ttr+f
+ 1wQrac2H+5X2jg1fukgTZsxMou3jm5dDow9gSE5/IaXekBeuGFTrxW/GyIetSRVwjPkH
+ 2udABmwrjGCO8zi5nHuB6GPh8cwYCBV9d4jJ9leEFw7NWTMqmjCzKs4EONXVaOBn/0jR
+ 1j3tQqtKMbGCSqNSZMhXchST6yiUFESTtXYZkSTDyG0T4yAL5LH1UEfSa7cbCEh3Xq57
+ aI9A==
+X-Gm-Message-State: AOAM532e4cKFIV/+jZQ/Y8bHuhlYcLxW47hhv9uH6Wnf/NE006tevUy1
+ jwvHEl0mEHzbP/IXycuYOF6z+A==
+X-Google-Smtp-Source: ABdhPJzdKM9yzZd3JOwPxf2pghfME69kZ5BD60dmvQ2Nm2Y2tv85QmPulCEh4qbHeMwwOfJwwJa+lA==
+X-Received: by 2002:a17:906:c7c1:b0:711:d2e9:99d0 with SMTP id
+ dc1-20020a170906c7c100b00711d2e999d0mr1272853ejb.639.1655151665495; 
+ Mon, 13 Jun 2022 13:21:05 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- bh8-20020a05600c3d0800b003942a244ee6sm10542843wmb.43.2022.06.13.13.20.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 13 Jun 2022 13:20:33 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 13 Jun 2022 22:17:58 +0200
-Message-Id: <20220613201758.293344-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ hy18-20020a1709068a7200b006f3ef214debsm4173644ejc.81.2022.06.13.13.21.04
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 13 Jun 2022 13:21:04 -0700 (PDT)
+Message-ID: <6592891c-1b2d-d1cb-f34b-3e96f23e74cb@mind.be>
+Date: Mon, 13 Jun 2022 22:21:02 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libtalloc: fix build wihout SSP
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-GB
+To: Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <48ac54a1-f946-8f98-42e4-e39d2ab7130d@synopsys.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <48ac54a1-f946-8f98-42e4-e39d2ab7130d@synopsys.com>
+Subject: Re: [Buildroot] [PATCH] package/bpftool: add a patch to fix cross
+ compilation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,166 +97,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David GOUARIN <dgouarin@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: "linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure without SSP raised since the addition of
-the package in commit f0d37e275a915539a581c4ac7fd066eddc41fc8c:
 
-/home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/i686-buildroot-linux-musl/9.4.0/../../../../i686-buildroot-linux-musl/bin/ld: talloc.c.5.o: in function `_vasprintf_tc':
-talloc.c:(.text+0x427d): undefined reference to `__stack_chk_fail_local'
 
-Fixes:
- - http://autobuild.buildroot.org/results/e221bde25c7622db99761d0adcd56663296beb15
+On 10/06/2022 15:33, Shahab Vahedi via buildroot wrote:
+> If on the host machine the "co-re" is supported, bpftool will
+> build a bootstrap version of itself as well. In that case, the
+> cross compilation can fail. This commit adds a patch to remedy
+> that. The fix that you see here is already upsteamed [1].
+> 
+> [1]
+> https://lore.kernel.org/bpf/165477661272.11342.13015777410417612477.git-patchwork-notify@kernel.org/T/#t
+> 
+> Signed-off-by: Shahab Vahedi <shahab@synopsys.com>
+> ---
+>   package/bpftool/0001-fix-bootsrap.patch | 32 +++++++++++++++++++++++++
+>   1 file changed, 32 insertions(+)
+>   create mode 100644 package/bpftool/0001-fix-bootsrap.patch
+> 
+> diff --git a/package/bpftool/0001-fix-bootsrap.patch b/package/bpftool/0001-fix-bootsrap.patch
+> new file mode 100644
+> index 0000000000..03f4231cca
+> --- /dev/null
+> +++ b/package/bpftool/0001-fix-bootsrap.patch
+> @@ -0,0 +1,32 @@
+> +This is an adapted version of an upstreamed patch [1], else it won't be
+> +possible to cross compile bpftool if "clang-bpf-co-re" feature is enabled.
+> +
+> +[1] bpftool: Fix bootstrapping during a cross compilation
+> +https://lore.kernel.org/bpf/8d297f0c-cfd0-ef6f-3970-6dddb3d9a87a@synopsys.com/t/#u
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...mba-add-disable-stack-protector-opti.patch | 116 ++++++++++++++++++
- package/libtalloc/libtalloc.mk                |   1 +
- 2 files changed, 117 insertions(+)
- create mode 100644 package/libtalloc/0001-buildtools-wafsamba-add-disable-stack-protector-opti.patch
+  The patch file should be git-formatted and have your Signed-off-by. I simply 
+took the patch from [1] (which has your signoff) and added the additional 
+Makefile.include changes (of which I don't really understand BTW why they're 
+relevant for Buildroot).
 
-diff --git a/package/libtalloc/0001-buildtools-wafsamba-add-disable-stack-protector-opti.patch b/package/libtalloc/0001-buildtools-wafsamba-add-disable-stack-protector-opti.patch
-new file mode 100644
-index 0000000000..839479a3fa
---- /dev/null
-+++ b/package/libtalloc/0001-buildtools-wafsamba-add-disable-stack-protector-opti.patch
-@@ -0,0 +1,116 @@
-+From 5885ed8e6db7648e6842d9811aace7edc4e8aba7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 20 Apr 2022 11:16:52 +0200
-+Subject: [PATCH] buildtools/wafsamba: add --disable-stack-protector option
-+
-+Allow the user to disable stack-protector through
-+--disable-stack-protector to avoid the following build failure with
-+libtalloc on embedded toolchains which don't support stack-protector:
-+
-+/home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/i686-buildroot-linux-musl/9.4.0/../../../../i686-buildroot-linux-musl/bin/ld: talloc.c.5.o: in function `_vasprintf_tc':
-+talloc.c:(.text+0x427d): undefined reference to `__stack_chk_fail_local'
-+
-+This build failure is raised since
-+https://gitlab.com/ffontaine/samba/-/commit/38e97f8b52e85bdfcf2d74a4fb3c848fa46ba371
-+because stack-protector is enabled on libtalloc despite the fact that
-+libssp is not available:
-+
-+Checking if compiler accepts -fstack-protector-strong                                           : yes
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e221bde25c7622db99761d0adcd56663296beb15
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.com/samba-team/samba/-/merge_requests/2493]
-+---
-+ buildtools/wafsamba/samba_autoconf.py | 49 ++++++++++++++-------------
-+ buildtools/wafsamba/wscript           |  3 ++
-+ 2 files changed, 28 insertions(+), 24 deletions(-)
-+
-+diff --git a/buildtools/wafsamba/samba_autoconf.py b/buildtools/wafsamba/samba_autoconf.py
-+index 78927d85193..23a995e1c34 100644
-+--- a/buildtools/wafsamba/samba_autoconf.py
-++++ b/buildtools/wafsamba/samba_autoconf.py
-+@@ -703,9 +703,28 @@ def SAMBA_CONFIG_H(conf, path=None):
-+     if not IN_LAUNCH_DIR(conf):
-+         return
-+ 
-+-    # we need to build real code that can't be optimized away to test
-+-    stack_protect_list = ['-fstack-protector-strong', '-fstack-protector']
-+-    for stack_protect_flag in stack_protect_list:
-++    if not Options.options.disable_stack_protector:
-++        # we need to build real code that can't be optimized away to test
-++        stack_protect_list = ['-fstack-protector-strong', '-fstack-protector']
-++        for stack_protect_flag in stack_protect_list:
-++            flag_supported = conf.check(fragment='''
-++                                        #include <stdio.h>
-++
-++                                        int main(void)
-++                                        {
-++                                            char t[100000];
-++                                            while (fgets(t, sizeof(t), stdin));
-++                                            return 0;
-++                                        }
-++                                        ''',
-++                                        execute=0,
-++                                        cflags=[ '-Werror', '-Wp,-D_FORTIFY_SOURCE=2', stack_protect_flag],
-++                                        mandatory=False,
-++                                        msg='Checking if compiler accepts %s' % (stack_protect_flag))
-++            if flag_supported:
-++                conf.ADD_CFLAGS('%s' % (stack_protect_flag))
-++                break
-++
-+         flag_supported = conf.check(fragment='''
-+                                     #include <stdio.h>
-+ 
-+@@ -717,29 +736,11 @@ def SAMBA_CONFIG_H(conf, path=None):
-+                                     }
-+                                     ''',
-+                                     execute=0,
-+-                                    cflags=[ '-Werror', '-Wp,-D_FORTIFY_SOURCE=2', stack_protect_flag],
-++                                    cflags=[ '-Werror', '-fstack-clash-protection'],
-+                                     mandatory=False,
-+-                                    msg='Checking if compiler accepts %s' % (stack_protect_flag))
-++                                    msg='Checking if compiler accepts -fstack-clash-protection')
-+         if flag_supported:
-+-            conf.ADD_CFLAGS('%s' % (stack_protect_flag))
-+-            break
-+-
-+-    flag_supported = conf.check(fragment='''
-+-                                #include <stdio.h>
-+-
-+-                                int main(void)
-+-                                {
-+-                                    char t[100000];
-+-                                    while (fgets(t, sizeof(t), stdin));
-+-                                    return 0;
-+-                                }
-+-                                ''',
-+-                                execute=0,
-+-                                cflags=[ '-Werror', '-fstack-clash-protection'],
-+-                                mandatory=False,
-+-                                msg='Checking if compiler accepts -fstack-clash-protection')
-+-    if flag_supported:
-+-        conf.ADD_CFLAGS('-fstack-clash-protection')
-++            conf.ADD_CFLAGS('-fstack-clash-protection')
-+ 
-+     if Options.options.debug:
-+         conf.ADD_CFLAGS('-g', testflags=True)
-+diff --git a/buildtools/wafsamba/wscript b/buildtools/wafsamba/wscript
-+index 8729b0829da..d75bb3b1c0c 100644
-+--- a/buildtools/wafsamba/wscript
-++++ b/buildtools/wafsamba/wscript
-+@@ -165,6 +165,9 @@ Currently the only tested value is 'smbtorture,smbd/smbd' for Samba'''),
-+     gr.add_option('--disable-warnings-as-errors',
-+                    help=("Do not treat all warnings as errors (disable -Werror)"),
-+                    action="store_true", dest='disable_warnings_as_errors', default=False)
-++    gr.add_option('--disable-stack-protector',
-++                   help=("Disable stack-protector"),
-++                   action="store_true", dest='disable_stack_protector', default=False)
-+     opt.add_option('--enable-coverage',
-+                    help=("enable options necessary for code coverage "
-+                          "reporting on selftest (default=no)"),
-+-- 
-+2.35.1
-+
-diff --git a/package/libtalloc/libtalloc.mk b/package/libtalloc/libtalloc.mk
-index 79bcf94947..8cba699ea1 100644
---- a/package/libtalloc/libtalloc.mk
-+++ b/package/libtalloc/libtalloc.mk
-@@ -20,6 +20,7 @@ LIBTALLOC_INSTALL_STAGING = YES
- # libtalloc since it's optional.
- LIBTALLOC_CONF_OPTS += --cross-compile \
- 		--cross-answers=$(@D)/cache.txt \
-+		--disable-stack-protector \
- 		--hostcc=gcc \
- 		--with-libiconv=$(STAGING_DIR)/usr
- 
--- 
-2.35.1
 
+  Regards,
+  Arnout
+
+[1] 
+https://github.com/libbpf/bpftool/commit/189f777ea4829bede0bf92f572c22fe1f2c37522
+
+
+> +--- bpftool-v6.8.0/src/Makefile
+> ++++ bpftool-v6.8.0/src/Makefile
+> +@@ -51,7 +51,7 @@
+> + $(LIBBPF_BOOTSTRAP): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_BOOTSTRAP_OUTPUT)
+> + 	$(Q)$(MAKE) -C $(BPF_DIR) OBJDIR=$(patsubst %/,%,$(LIBBPF_BOOTSTRAP_OUTPUT)) \
+> + 		PREFIX=$(LIBBPF_BOOTSTRAP_DESTDIR:/=) \
+> +-		ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) $@ install_headers
+> ++		ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) AR=$(HOSTAR) $@ install_headers
+> +
+> + $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS): $(LIBBPF_BOOTSTRAP_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_BOOTSTRAP_HDRS_DIR)
+> + 	$(call QUIET_INSTALL, $@)
+> +--- bpftool-v6.8.0/src/Makefile.include
+> ++++ bpftool-v6.8.0/src/Makefile.include
+> +@@ -12,11 +12,13 @@
+> + ifneq ($(LLVM),)
+> +   $(if $(findstring default,$(origin CC)),$(eval CC := clang$(LLVM_VERSION)))
+> +   $(if $(findstring default,$(origin LD)),$(eval LD := ld.lld$(LLVM_VERSION)))
+> ++  HOSTAR ?= llvm-ar
+> +   HOSTCC ?= clang
+> +   HOSTLD ?= ld.lld
+> + else
+> +   $(if $(findstring default,$(origin CC)),$(eval CC = $(CROSS_COMPILE)$(CC)))
+> +   $(if $(findstring default,$(origin LD)),$(eval LD = $(CROSS_COMPILE)$(LD)))
+> ++  HOSTAR ?= ar
+> +   HOSTCC ?= gcc
+> +   HOSTLD ?= ld
+> + endif
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
