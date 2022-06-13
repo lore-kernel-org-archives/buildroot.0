@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE422C43334
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jun 2022 20:24:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11361C43334
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jun 2022 20:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A10B2409C8;
-	Mon, 13 Jun 2022 20:24:13 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rc2Ls3Fle17E; Mon, 13 Jun 2022 20:24:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B49734048F;
-	Mon, 13 Jun 2022 20:24:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 910C51BF37C
- for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 20:24:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E39A41638
- for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 20:24:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCF5F416A5;
+	Mon, 13 Jun 2022 20:24:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FP-u4nwGbLae for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fJ_H-CjpUbMM; Mon, 13 Jun 2022 20:24:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 431FB41697;
+	Mon, 13 Jun 2022 20:24:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9562F1BF990
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 20:24:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 841EC4048F
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 20:24:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EZnVhjU5lcAR for <buildroot@lists.busybox.net>;
  Mon, 13 Jun 2022 20:24:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5CE96408BA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9414240002
  for <buildroot@buildroot.org>; Mon, 13 Jun 2022 20:24:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 6515986F77; Mon, 13 Jun 2022 20:12:02 +0000 (UTC)
+ id A465D86F7A; Mon, 13 Jun 2022 20:12:02 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 13 Jun 2022 21:55:02 +0200
+Date: Mon, 13 Jun 2022 22:18:32 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dcf695206ed3fb61d2828b6e40c91aa7c4c52fe3
-X-Git-Newrev: bd396de5ecd0c26be64e3c8fcd6edc9afe8dec1b
+X-Git-Oldrev: f0fa9990d334bc0a10ca5dbf50f126c49bd901e0
+X-Git-Newrev: ef65d04ccdb1fffd0151fa7b2979e000e586145d
 X-Patchwork-Hint: ignore
-Message-Id: <20220613201202.6515986F77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmediaart: link with -latomic if
- needed
+Message-Id: <20220613201202.A465D86F7A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bpftool: add a patch to fix cross
+ compilation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,39 +59,126 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd396de5ecd0c26be64e3c8fcd6edc9afe8dec1b
+commit: https://git.buildroot.net/buildroot/commit/?id=ef65d04ccdb1fffd0151fa7b2979e000e586145d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with BR2_PACKAGE_LIBMEDIAART_BACKEND_QT
-raised since bump to version 1.9.5 in commit
-3db4d486d689b4a9d59c8f7637211893b0a1cb1b:
+If on the host machine the "co-re" is supported, bpftool will
+build a bootstrap version of itself as well. In that case, the
+cross compilation can fail. This commit adds a patch to remedy
+that. The fix that you see here is already upsteamed [1].
 
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: libmediaart/libmediaart-2.0.so.0.905.0.p/extractqt.cpp.o: in function `std::__atomic_base<int>::operator--()':
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/sparc-buildroot-linux-uclibc/include/c++/10.3.0/bits/atomic_base.h:334: undefined reference to `__atomic_fetch_sub_4'
+[1]
+https://lore.kernel.org/bpf/165477661272.11342.13015777410417612477.git-patchwork-notify@kernel.org/T/#t
 
-Fixes:
- - http://autobuild.buildroot.org/results/39aa4ecd37de774e06f67a6e1c4495dc1f0917b4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Shahab Vahedi <shahab@synopsys.com>
+[Arnout: use upstream metadata for the patch]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libmediaart/libmediaart.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ ...-bootstrapping-during-a-cross-compilation.patch | 96 ++++++++++++++++++++++
+ 1 file changed, 96 insertions(+)
 
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index 77665fd95b..de92cde849 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -24,6 +24,9 @@ else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_QT),y)
- LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- LIBMEDIAART_DEPENDENCIES += qt5base
- LIBMEDIAART_CONF_OPTS += -Dimage_library=qt5
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBMEDIAART_LDFLAGS += -latomic
-+endif
- endif
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+diff --git a/package/bpftool/0001-bpftool-Fix-bootstrapping-during-a-cross-compilation.patch b/package/bpftool/0001-bpftool-Fix-bootstrapping-during-a-cross-compilation.patch
+new file mode 100644
+index 0000000000..fc192681e3
+--- /dev/null
++++ b/package/bpftool/0001-bpftool-Fix-bootstrapping-during-a-cross-compilation.patch
+@@ -0,0 +1,96 @@
++From 189f777ea4829bede0bf92f572c22fe1f2c37522 Mon Sep 17 00:00:00 2001
++From: Shahab Vahedi <Shahab.Vahedi@synopsys.com>
++Date: Wed, 8 Jun 2022 14:29:28 +0000
++Subject: [PATCH] bpftool: Fix bootstrapping during a cross compilation
++
++This change adjusts the Makefile to use "HOSTAR" as the archive tool
++to keep the sanity of the build process for the bootstrap part in
++check. For the rationale, please continue reading.
++
++When cross compiling bpftool with buildroot, it leads to an invocation
++like:
++
++$ AR="/path/to/buildroot/host/bin/arc-linux-gcc-ar" \
++  CC="/path/to/buildroot/host/bin/arc-linux-gcc"    \
++  ...
++  make
++
++Which in return fails while building the bootstrap section:
++
++----------------------------------8<----------------------------------
++
++  make: Entering directory '/src/bpftool-v6.7.0/src'
++  ...                        libbfd: [ on  ]
++  ...        disassembler-four-args: [ on  ]
++  ...                          zlib: [ on  ]
++  ...                        libcap: [ OFF ]
++  ...               clang-bpf-co-re: [ on  ] <-- triggers bootstrap
++
++  .
++  .
++  .
++
++    LINK     /src/bpftool-v6.7.0/src/bootstrap/bpftool
++  /usr/bin/ld: /src/bpftool-v6.7.0/src/bootstrap/libbpf/libbpf.a:
++               error adding symbols: archive has no index; run ranlib
++               to add one
++  collect2: error: ld returned 1 exit status
++  make: *** [Makefile:211: /src/bpftool-v6.7.0/src/bootstrap/bpftool]
++            Error 1
++  make: *** Waiting for unfinished jobs....
++    AR       /src/bpftool-v6.7.0/src/libbpf/libbpf.a
++    make[1]: Leaving directory '/src/bpftool-v6.7.0/libbpf/src'
++    make: Leaving directory '/src/bpftool-v6.7.0/src'
++
++---------------------------------->8----------------------------------
++
++This occurs because setting "AR" confuses the build process for the
++bootstrap section and it calls "arc-linux-gcc-ar" to create and index
++"libbpf.a" instead of the host "ar".
++
++Signed-off-by: Shahab Vahedi <shahab@synopsys.com>
++Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
++Reviewed-by: Quentin Monnet <quentin@isovalent.com>
++Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>
++Link: https://lore.kernel.org/bpf/8d297f0c-cfd0-ef6f-3970-6dddb3d9a87a@synopsys.com
++Upstream: https://github.com/libbpf/bpftool/commit/189f777ea4829bede0bf92f572c22fe1f2c37522
++
++This is an adapted version, else it won't be possible to cross compile
++bpftool if "clang-bpf-co-re" feature is enabled.
++---
++ src/Makefile | 2 +-
++ src/Makefile.include       | 2 ++
++ 2 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/Makefile b/src/Makefile
++index b657502..b8b0808 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -51,7 +51,7 @@ $(LIBBPF_INTERNAL_HDRS): $(LIBBPF_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_HDRS_
++ $(LIBBPF_BOOTSTRAP): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_BOOTSTRAP_OUTPUT)
++ 	$(Q)$(MAKE) -C $(BPF_DIR) OBJDIR=$(patsubst %/,%,$(LIBBPF_BOOTSTRAP_OUTPUT)) \
++ 		PREFIX=$(LIBBPF_BOOTSTRAP_DESTDIR:/=) \
++-		ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) $@ install_headers
+++		ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) AR=$(HOSTAR) $@ install_headers
++ 
++ $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS): $(LIBBPF_BOOTSTRAP_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_BOOTSTRAP_HDRS_DIR)
++ 	$(call QUIET_INSTALL, $@)
++--- a/src/Makefile.include
+++++ b/src/Makefile.include
++@@ -12,11 +12,13 @@
++ ifneq ($(LLVM),)
++   $(if $(findstring default,$(origin CC)),$(eval CC := clang$(LLVM_VERSION)))
++   $(if $(findstring default,$(origin LD)),$(eval LD := ld.lld$(LLVM_VERSION)))
+++  HOSTAR ?= llvm-ar
++   HOSTCC ?= clang
++   HOSTLD ?= ld.lld
++ else
++   $(if $(findstring default,$(origin CC)),$(eval CC = $(CROSS_COMPILE)$(CC)))
++   $(if $(findstring default,$(origin LD)),$(eval LD = $(CROSS_COMPILE)$(LD)))
+++  HOSTAR ?= ar
++   HOSTCC ?= gcc
++   HOSTLD ?= ld
++ endif
++--
++2.35.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
