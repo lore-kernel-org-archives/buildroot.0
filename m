@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDAEDC43334
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jun 2022 23:20:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 864C5C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jun 2022 23:20:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 657A160EA1;
-	Mon, 13 Jun 2022 23:20:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2AFF3408FB;
+	Mon, 13 Jun 2022 23:20:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6cVf_s3NaK3m; Mon, 13 Jun 2022 23:20:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sQVA7E-W7597; Mon, 13 Jun 2022 23:20:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE25360E48;
-	Mon, 13 Jun 2022 23:20:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A3E771BF255
- for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 23:20:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9ABAB401C2;
+	Mon, 13 Jun 2022 23:20:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 075401BF255
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 23:20:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A0C40826FF
- for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 23:20:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E80474155C
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 23:20:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=seznam.cz
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yRexnUwBVlnb for <buildroot@lists.busybox.net>;
- Mon, 13 Jun 2022 23:20:17 +0000 (UTC)
-X-Greylist: delayed 00:12:45 by SQLgrey-1.8.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WSJgpipmlnJo for <buildroot@lists.busybox.net>;
+ Mon, 13 Jun 2022 23:20:31 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 45C0681D0B
- for <buildroot@buildroot.org>; Mon, 13 Jun 2022 23:20:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8B77941517
+ for <buildroot@buildroot.org>; Mon, 13 Jun 2022 23:20:30 +0000 (UTC)
 Received: from email.seznam.cz
- by email-smtpc29b.ng.seznam.cz (email-smtpc29b.ng.seznam.cz [10.23.18.43])
- id 71cd577bc7ede82071cae90c; Tue, 14 Jun 2022 01:20:15 +0200 (CEST)
+ by email-smtpc30b.ng.seznam.cz (email-smtpc30b.ng.seznam.cz [10.23.18.45])
+ id 7b4c9f07cd6c205c7b4b2170; Tue, 14 Jun 2022 01:20:28 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
- t=1655162415; bh=48ZOXmMT2IaQ8mp2HPlwPt9dO4nMskicn7Br3FzKvyI=;
+ t=1655162428; bh=48ZOXmMT2IaQ8mp2HPlwPt9dO4nMskicn7Br3FzKvyI=;
  h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
  Content-Transfer-Encoding:X-szn-frgn:X-szn-frgc;
- b=P+6nClPfLIldU1qVIZM7LLnZmcrg6lhc0qpBlUGe27hWRn/dgUTc3/pMrslyLMSBr
- mffdbw2tyvBudZ0JgM8clAXK5LTL9OKU6Lssi6gh5IwpZ17Tzld/g3WmDjO6WxFWtw
- /4eN0Ry/MHQhve0DnuezeDBc/LOyyzezM/pVWvno=
+ b=IspWZzzKS2Iahb+mMNHua+yP6SdtAMPCEBMZQ+/6mjT26Zr/0XZZ7Pz3SaQW4TvWv
+ DRzuwFqFo13UscLYs1eIOp+LmVhxnySiLcQJu/Ar6nIl4Oz0otXeEJJvWJNzirUJzx
+ 05J2l368Pqv9oF0Wit+cResw4epwCLgKM6uAHBc8=
 Received: from localhost.localdomain (mail.ms-free.net [185.147.46.46])
- by email-relay24.ng.seznam.cz (Seznam SMTPD 1.3.136) with ESMTP;
- Tue, 14 Jun 2022 01:07:26 +0200 (CEST)  
+ by email-relay30.ng.seznam.cz (Seznam SMTPD 1.3.136) with ESMTP;
+ Tue, 14 Jun 2022 01:20:25 +0200 (CEST)  
 From: Petr Vorel <pevik@seznam.cz>
 To: buildroot@buildroot.org
-Date: Tue, 14 Jun 2022 01:07:20 +0200
-Message-Id: <20220613230720.164137-1-pevik@seznam.cz>
+Date: Tue, 14 Jun 2022 01:20:05 +0200
+Message-Id: <20220613232005.166636-1-pevik@seznam.cz>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-szn-frgn: <e7a10b68-07d6-4ad9-a112-d50e37a78277>
+X-szn-frgn: <73371e4c-68c3-493a-93f7-e657f703a54c>
 X-szn-frgc: <0>
 Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: bump version to 20220527
 X-BeenThere: buildroot@buildroot.org
