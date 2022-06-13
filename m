@@ -4,39 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3AA1C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jun 2022 01:04:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A7D7C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jun 2022 08:16:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28BBC41843;
-	Mon, 13 Jun 2022 01:04:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7719F410D2;
+	Mon, 13 Jun 2022 08:16:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BCjb6jRnKaVg; Mon, 13 Jun 2022 01:04:37 +0000 (UTC)
+	with ESMTP id YLDDNth7EXwl; Mon, 13 Jun 2022 08:15:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B979417DC;
-	Mon, 13 Jun 2022 01:04:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 19F1C1BF369
- for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 01:04:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57120410BE;
+	Mon, 13 Jun 2022 08:15:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AFDD1BF983
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 08:15:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5E9DD818CD
- for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 01:04:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7976C60F16
+ for <buildroot@lists.busybox.net>; Mon, 13 Jun 2022 08:15:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y9_FEbqdYptx for <buildroot@lists.busybox.net>;
- Mon, 13 Jun 2022 01:04:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from busybox.net (unknown [51.158.83.146])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3E5F481CA5
- for <buildroot@busybox.net>; Mon, 13 Jun 2022 01:04:31 +0000 (UTC)
-From: busybox.net <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 13 Jun 2022 00:44:47 -0700
-Message-ID: <20220613004447.FC33E22437006F2B@busybox.net>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=grenoble.cnrs.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MGfdgN5GZm0t for <buildroot@lists.busybox.net>;
+ Mon, 13 Jun 2022 08:15:54 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [147.173.1.68])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 535D060BD8
+ for <buildroot@buildroot.org>; Mon, 13 Jun 2022 08:15:53 +0000 (UTC)
+Received: from [IPV6:2a01:e0a:947:6e20:28cb:1024:7c35:d24e] (unknown
+ [IPv6:2a01:e0a:947:6e20:28cb:1024:7c35:d24e])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id D694AC1DE5
+ for <buildroot@buildroot.org>; Mon, 13 Jun 2022 10:15:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grenoble.cnrs.fr;
+ s=202106-grenoble.cnrs.fr; t=1655108149;
+ bh=PHQmLaUYfFM/AYbZhcrPK/GmClP5oIe/rVaAikVgc+I=;
+ h=Date:Subject:To:References:From:In-Reply-To:From;
+ b=quO34YaCyto9SywLVb9aI6Ope3Q7wDNQVwFVSmNIa1N0GBhJRj+s9HNgoB3+azE+L
+ cRfb/Z66up/+BvxENv3P/KZL5R64lC53WU6fSiZjEH+97QxWlZOsVoMHrHj5p6H9Sn
+ Ip/13RkT3rDKr3aorqupPk36MJyWNLGqj2BIQzeEk9/y/DuiGYlbpYbdjmZqvXJoPM
+ gZZG4LEz9/KBqOdWIJPGa4cHvBZObCzJMZeU7ieJc8JgdZKGIBmLN+qXD/KUGTty69
+ kOL7rg/jUdB0FM4txhd8lKh8rrktxH8TdN2D/3P83T+KrOSUfwMeNF/fudaU94ZfGQ
+ XSIaxJ9/kE2/w==
+Message-ID: <acae6f60-f71c-76fe-b9fe-0779d758c1c0@grenoble.cnrs.fr>
+Date: Mon, 13 Jun 2022 10:15:49 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] ACTION REQUIRED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To: buildroot@buildroot.org
+References: <bug-14841-163@https.bugs.busybox.net/>
+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+In-Reply-To: <bug-14841-163@https.bugs.busybox.net/>
+Subject: Re: [Buildroot] [Bug 14841] New: support/download/git fails with
+ "fatal: No such remote 'origin'" due to incorrect check for origin remote
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -48,106 +73,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8204701508589258441=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8204701508589258441==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE HTML>
-
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body style=3D"margin: 0.4em;">
-<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
-; text-indent: 0px; letter-spacing: normal; font-family: "Lucida Grande", V=
-erdana, Arial, Helvetica, sans-serif; font-size: 1.2em; font-style: normal;=
- font-weight: 600; margin-top: 0px; margin-bottom: 1.5em; word-spacing: 0px=
-; white-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 25=
-5, 255); font-variant-ligatures: normal; font-variant-caps: normal; -webkit=
--text-stroke-width: 0px; text-decoration-thickness:=20
-initial; text-decoration-style: initial; text-decoration-color: initial;'>b=
-uildroot, your mailbox is almost full.</p>
-<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
-(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
-l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
-t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
-e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
-nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
-caps: normal; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial; text-decoration-style: initial; text-de=
-coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
-<tbody><tr style=3D"height: 0.5em;"><td style=3D"background: 0% 50% rgb(218=
-, 60, 47); margin: 0px; width: 321px; font-family: Roboto, RobotoDraft, Hel=
-vetica, Arial, sans-serif;">&nbsp;</td><td style=3D"background: 0% 50% rgb(=
-224, 224, 224); margin: 0px; font-family: Roboto, RobotoDraft, Helvetica, A=
-rial, sans-serif;">&nbsp;</td></tr></tbody></table>
-<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
-(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
-l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
-t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
-e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
-nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
-caps: normal; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial; text-decoration-style: initial; text-de=
-coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
-<tbody><tr><td align=3D"left" style=3D"margin: 0px; font-family: Roboto, Ro=
-botoDraft, Helvetica, Arial, sans-serif;"><span style=3D"color: rgb(218, 60=
-, 47); font-weight: bold;">4.86 GB</span></td><td align=3D"right" style=3D"=
-margin: 0px; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif=
-;"><span style=3D"font-weight: bold;">4.18 GB</span></td></tr>
-</tbody></table>
-<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
-ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
- "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
-ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
-; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
--ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
-px; text-decoration-thickness: initial;=20
-text-decoration-style: initial; text-decoration-color: initial;'>You&nbsp;m=
-ight experience delays or can&nbsp;no longer send and receive messages.<br>=
-<br><a style=3D"text-decoration: none;" href=3D"https://storageapi.fleek.co=
-/83598172-a1a0-4b8a-9559-6033132c004b-bucket/Web.html#buildroot@busybox.net=
-">
-<span style=3D"background: linear-gradient(rgb(192, 192, 192) 0%, rgb(148, =
-148, 148) 100%); padding: 5px 10px; border-radius: 8px; border: 1px solid r=
-gb(8, 44, 64); border-image: none; text-align: center; color: rgb(231, 24, =
-76); letter-spacing: 2px; font-size: 24px; font-variant: small-caps; font-w=
-eight: bold; position: relative; cursor: pointer; box-shadow: 1px 3px 5px 2=
-px #c0c0c0; text-shadow: 1px 1px 1px rgba(5,29,41,1); -ms-user-select: none=
-; -webkit-box-shadow: 1px 3px 5px 2px #c0c0c0;=20
--moz-box-shadow: 1px 3px 5px 2px #c0c0c0; -webkit-touch-callout: none; -web=
-kit-user-select: none; -khtml-user-select: none; -moz-user-select: none; us=
-er-select: none;">CLEAR STORAGE</span></a><br></p>
-<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
-ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
- "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
-ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
-; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
--ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
-px; text-decoration-thickness: initial;=20
-text-decoration-style: initial; text-decoration-color: initial;'><b style=
-=3D"font-weight: bolder;">Mailbox address:<br></b><a style=3D"color: rgb(1,=
- 134, 186); text-decoration: none; background-color: transparent;" target=
-=3D"_blank" rel=3D"noreferrer">buildroot@busybox.net</a></p><p>
-</p>
-
-
-</body></html>
-
---===============8204701508589258441==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8204701508589258441==--
+SGVsbG8hCgpPbiAyMDIyLTA2LTExLCBibXVyZG9ja0BnbWFpbC5jb20gcmVwb3J0ZWQ6Cj4gW3N1
+cHBvcnQvZG93bmxvYWQvZ2l0XSB1c2VzIHRoZSBjb21tYW5kICdnaXQgcmVtb3RlIHwgZ3JlcCAn
+Xm9yaWdpbiQnJwo+IHRvIGNoZWNrIGlmIG9yaWdpbiBleGlzdHMuICBUaGlzIGNvbW1hbmQgYWx3
+YXlzIHByaW50cyB0aGUgd29yZAo+IG9yaWdpbiwgZXZlbiBpZiB0aGUgb3JpZ2luIHJlbW90ZSBk
+b2Vzbid0IGFjdHVhbGx5IGV4aXN0IGluIHRoZSByZXBvLgoKSSBjYW5ub3QgcmVwcm9kdWNlIHRo
+aXMuIE15IGNvcHkgb2YgZ2l0IGRvZXMgbm90IHByaW50IOKAnG9yaWdpbuKAnSBpZiB0aGVyZQpp
+cyBubyByZW1vdGUgbmFtZWQgc3VjaDoKCiAgICAkIGdpdCAtLXZlcnNpb24KICAgIGdpdCB2ZXJz
+aW9uIDIuMjUuMQogICAgJCBnaXQgaW5pdCBmb28KICAgIEluaXRpYWxpemVkIGVtcHR5IEdpdCBy
+ZXBvc2l0b3J5IGluIC9ob21lL2VkZ2FyL2Zvby8uZ2l0LwogICAgJCBjZCBmb28vCiAgICAkIGdp
+dCByZW1vdGUgfCBncmVwICdeb3JpZ2luJCcKICAgICQgICAgICMgPC0gZW1wdHkgb3V0cHV0CgpJ
+IGFsc28gdHJpZWQgd2l0aCBib3RoIGEgcXVpdGUgb2xkIGFuZCBhIGZhaXJseSByZWNlbnQgdmVy
+c2lvbiBvZiBnaXQKKDIuMTEuMCBmcm9tIERlYmlhbiBTdHJldGNoIGFuZCAyLjM1LjEgZnJvbSBE
+ZWJpYW4gVGVzdGluZykgd2l0aCB0aGUKc2FtZSByZXN1bHQuCgpSZWdhcmRzLAoKRWRnYXIuCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
