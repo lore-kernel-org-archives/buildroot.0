@@ -1,84 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE2ADC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 16:55:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48BE5C43334
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 16:55:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 815F283332;
-	Tue, 14 Jun 2022 16:55:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F1C6E40B74;
+	Tue, 14 Jun 2022 16:55:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J0YWIiX2H91W; Tue, 14 Jun 2022 16:55:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OpP9O0fATPC3; Tue, 14 Jun 2022 16:55:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A562A83312;
-	Tue, 14 Jun 2022 16:55:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 22B3140B72;
+	Tue, 14 Jun 2022 16:55:38 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0EA121BF37A
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:55:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E63EE1BF37A
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:55:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F29268330B
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:55:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5AEB8331B
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:55:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kx7-JIrIz00K for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 16:55:13 +0000 (UTC)
+ with ESMTP id gtgX133ikBp1 for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 16:55:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 09D5F832B3
- for <buildroot@busybox.net>; Tue, 14 Jun 2022 16:55:12 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id n28so12498719edb.9
- for <buildroot@busybox.net>; Tue, 14 Jun 2022 09:55:12 -0700 (PDT)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DA4A2832B3
+ for <buildroot@busybox.net>; Tue, 14 Jun 2022 16:55:14 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id s12so18387039ejx.3
+ for <buildroot@busybox.net>; Tue, 14 Jun 2022 09:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=aVKFp30fk0MafaBefYOb+2QU1YVj8kPQBLJVQA5RrnA=;
- b=TBxAqkWn9t26NZt7Akpg9asOCkZElcpuncgIY7Yej2Vn8sWYZ60TLwgApgLjWJO9KF
- yjn0Jcgq4NfxiyX4OMgJIcMnA9QBQh0H3GxoHX6cP0knqNYWFUo+5KVKarjjD9dpHfv9
- ISycAWjH1AHs5ADfVOZtH6qiB1PtlAvQFDTOJjEzzyxAeXB2O/9Exz6Lp1MxgKJrWF8J
- Gwp/9Z2pDCT1/75zzZjYf+1LKMFvZK0O89Ph94zUn1JijX60MmY2k+BN3aaHZnUwtwJD
- iT/6BZ3oxytyBlrxm7H9ksXn0gzfNt7Pm8mr/8Ur1uf2ziHst0RDK0f+qaV6dd3CYCww
- cYGA==
+ bh=3hzmxxsoCgRKCakFhuRXVVVpgFw4/Zzn+1jmac87NTg=;
+ b=ZI7Le0c4CTYvYooqTJLjJIYfux1z7C2yF0Ca4dD5Sk/9nRGAaZ8Q4X8Li7pLnmiy6p
+ nKBOiU3SSj1y0bxUvwLpOE62Kf85l5VnUJp0hZhkTyJjei+IzfzUdE2m675fzdVO/jjM
+ zx3L5h5fGMWeb7UNsbn4PFNwtNUuAVBWkLx2cGW8xLnsnA5QjFA38GAay6je5VjL5qFm
+ oZzWGaGrIJTvzlmX9J2Ui/s0bEnThUa5tNi+6qxNB0yTpU+Gr448LyMhPeXK7sBRusM9
+ DL58sI5/p+Yj1wa/bPMPmYcPi93AqJNTsJdVY669+ubWZ3oyZFOjZSajw7MXcaDaGq4v
+ z/Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=aVKFp30fk0MafaBefYOb+2QU1YVj8kPQBLJVQA5RrnA=;
- b=U/Ty83gu2oolObOuH/LopOpc9FPC7rCy08D8dGXlP0kCYZgRn6oYAN3P+bbuQ0WxK1
- l7mjEKRuwgkFbzVsqW76QWjs6nhY+v4m+kUtgYt4DYzdsuXQuppBOz2v/5T9IDmW6s1i
- RSD2IrO4BLKnlSEs42CKLBw7DD0xxlf80NMAc+xzVxrWF/nrrBNdnW3/6jWC5QVVy+OF
- MUp0SuGILrg6iKfYq074JTShMmReb9fleKwCFmJWOAUL4yR1bWT5grJxcctAzxiSmARP
- 3Yhwmk5xlT7cfWLjs81+GkfS3AVacvmwuuJyvauv3KKFqHmn5xTDiPcnWeieCDvt36sC
- ktyA==
-X-Gm-Message-State: AJIora8dCAZnVUTfAYDchA1DD6qe5GXy2zaURPb78IbchTsbPJmCOdtE
- 8tu5N04L5Z1xK/tFY7wLoTNeUA==
-X-Google-Smtp-Source: AGRyM1vWmbpDQ7k8VuIXqjNk4aOhU8mTpzT3CTXSz51P1Rxx3aJ+LA8eVQ7xF+xVSPeEsceYaL96cw==
-X-Received: by 2002:a05:6402:2553:b0:431:6e08:56de with SMTP id
- l19-20020a056402255300b004316e0856demr7294512edb.406.1655225711291; 
- Tue, 14 Jun 2022 09:55:11 -0700 (PDT)
+ bh=3hzmxxsoCgRKCakFhuRXVVVpgFw4/Zzn+1jmac87NTg=;
+ b=Yblty6MinrzruOjHtYnXrcslgZEMFqKqVMf9AhBnWWVfmPHTDxL7O/bdB/io4cy2xS
+ kBJacpnkcpav4aNDUwLxOc6iE8co9JW6d0NOl1uRm8zLTDWlmxXLL8HKLC9jz/JsptUF
+ O9afhDAfOafBP01P1yXLKEA84HfAoyuUjjpDNEfVxzg4lhJM+NssBc/0XUb7vP/L9hq9
+ VJ/XmvrysNxaGEA5mo7/ER1mbE2anUZp7tjBX1QouXQB7rL21gBJ9a2+5kXOz8ADSzH2
+ UcpjgKYg8JDIP4tTNSAtu15U/sP3bJo/WJPVCGeXygGVUTfWQ6UnlcQhV+cgv/+M1esH
+ 2lFQ==
+X-Gm-Message-State: AOAM530QjmLNY+MVYVhSqDD0kz8xvHiYjcW3iy76w6svUsyKEzAUW9dh
+ 1oFdZ+QTb+Ns0LLQkr2ffnuqmDf5nty7ng==
+X-Google-Smtp-Source: AGRyM1vVOvA0T+4N2wJGhKSqqE2f4/Y8xgLZMJkTCs1E7gdzHueF/K6MTSgMqlL6FRoiieTA9R6RDQ==
+X-Received: by 2002:a17:907:6e88:b0:707:ea6b:5e15 with SMTP id
+ sh8-20020a1709076e8800b00707ea6b5e15mr5135132ejc.57.1655225713096; 
+ Tue, 14 Jun 2022 09:55:13 -0700 (PDT)
 Received: from [10.1.0.138] (ip-188-118-3-185.reverse.destiny.be.
  [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- q4-20020a50aa84000000b0042617ba638esm7430337edc.24.2022.06.14.09.55.10
+ zo19-20020a170906ff5300b0070b7875aa6asm5231915ejb.166.2022.06.14.09.55.12
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Jun 2022 09:55:10 -0700 (PDT)
-Message-ID: <6cf3d23a-d030-7a29-6bb0-98ce094e119b@mind.be>
-Date: Tue, 14 Jun 2022 17:57:36 +0200
+ Tue, 14 Jun 2022 09:55:12 -0700 (PDT)
+Message-ID: <eb934421-ab30-4a55-1d7c-657eeffdd2b6@mind.be>
+Date: Tue, 14 Jun 2022 18:36:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
 Content-Language: en-GB
 To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
-References: <20220610165541.2574405-1-francois.perrad@gadz.org>
+References: <20220610165641.2574429-1-francois.perrad@gadz.org>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220610165541.2574405-1-francois.perrad@gadz.org>
-Subject: Re: [Buildroot] [PATCH] package/gnutls: bump to version 3.7.6
+In-Reply-To: <20220610165641.2574429-1-francois.perrad@gadz.org>
+Subject: Re: [Buildroot] [PATCH] package/htop: bump to version 3.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,7 +99,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 10/06/2022 18:55, Francois Perrad wrote:
+On 10/06/2022 18:56, Francois Perrad wrote:
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
   Applied to master, thanks.
@@ -106,36 +108,35 @@ On 10/06/2022 18:55, Francois Perrad wrote:
   Arnout
 
 > ---
->   package/gnutls/gnutls.hash | 4 ++--
->   package/gnutls/gnutls.mk   | 2 +-
+>   package/htop/htop.hash | 4 ++--
+>   package/htop/htop.mk   | 2 +-
 >   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-> index c09e4665e..ff191278c 100644
-> --- a/package/gnutls/gnutls.hash
-> +++ b/package/gnutls/gnutls.hash
-> @@ -1,6 +1,6 @@
->   # Locally calculated after checking pgp signature
-> -# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.4.tar.xz.sig
-> -sha256  e6adbebcfbc95867de01060d93c789938cf89cc1d1f6ef9ef661890f6217451f  gnutls-3.7.4.tar.xz
-> +# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.6.tar.xz.sig
-> +sha256  77065719a345bfb18faa250134be4c53bef70c1bd61f6c0c23ceb8b44f0262ff  gnutls-3.7.6.tar.xz
->   # Locally calculated
->   sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
->   sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-> diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-> index f7f3e046e..f1af1e7b3 100644
-> --- a/package/gnutls/gnutls.mk
-> +++ b/package/gnutls/gnutls.mk
-> @@ -6,7 +6,7 @@
+> diff --git a/package/htop/htop.hash b/package/htop/htop.hash
+> index 908dd32c4..d43da1344 100644
+> --- a/package/htop/htop.hash
+> +++ b/package/htop/htop.hash
+> @@ -1,5 +1,5 @@
+> -# From https://github.com/htop-dev/htop/releases/download/3.2.0/htop-3.2.0.tar.xz.sha256
+> -sha256  e0f645d4ac324f2c4c48aaa7a3a96d007b95516559550be0b56e423fc5b6d783  htop-3.2.0.tar.xz
+> +# From https://github.com/htop-dev/htop/releases/download/3.2.1/htop-3.2.1.tar.xz.sha256
+> +sha256  5a17121cf1c69d2f2e557c0b29d45a2c353ab983f644742e1c2e4ece15aa6cbb  htop-3.2.1.tar.xz
 >   
->   # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
->   GNUTLS_VERSION_MAJOR = 3.7
-> -GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).4
-> +GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).6
->   GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
->   GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
->   GNUTLS_LICENSE = LGPL-2.1+ (core library)
+>   # Locally calculated
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+> index cb8170a0a..df2ec2590 100644
+> --- a/package/htop/htop.mk
+> +++ b/package/htop/htop.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -HTOP_VERSION = 3.2.0
+> +HTOP_VERSION = 3.2.1
+>   HTOP_SOURCE = htop-$(HTOP_VERSION).tar.xz
+>   HTOP_SITE = https://github.com/htop-dev/htop/releases/download/$(HTOP_VERSION)
+>   HTOP_DEPENDENCIES = ncurses
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
