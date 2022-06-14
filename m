@@ -1,48 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBB43C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 15:45:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 964D7C43334
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 15:45:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0B03409E5;
-	Tue, 14 Jun 2022 15:45:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58ACB83281;
+	Tue, 14 Jun 2022 15:45:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 34Gy-k7YGEms; Tue, 14 Jun 2022 15:45:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J-yJ7Hwx08Ne; Tue, 14 Jun 2022 15:45:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C697409B1;
-	Tue, 14 Jun 2022 15:45:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 67DD61BF4D7
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFD5D83022;
+	Tue, 14 Jun 2022 15:45:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DFF3B1BF4D7
  for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 15:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 39AD560C29
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 15:44:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D2C6A83312
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 15:44:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hjoPvQpbVQP2 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xcXhekYcGPhu for <buildroot@lists.busybox.net>;
  Tue, 14 Jun 2022 15:44:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B79B660B3C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D82782FF9
  for <buildroot@buildroot.org>; Tue, 14 Jun 2022 15:44:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id F14FB86FFA; Tue, 14 Jun 2022 15:32:00 +0000 (UTC)
+ id C742786FFB; Tue, 14 Jun 2022 15:32:00 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 14 Jun 2022 17:28:30 +0200
+Date: Tue, 14 Jun 2022 16:49:32 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a5599d727e542d065784090830efaf99f1677df7
-X-Git-Newrev: 34676320a212fc5bd9753aed1a78d1e40e6859fa
+X-Git-Oldrev: b079f584c0cc33c57b1b1a12b8b8eb1fe47d0b98
+X-Git-Newrev: 26dee54e428679920336f0fcbece826f8cbf23ec
 X-Patchwork-Hint: ignore
-Message-Id: <20220614153200.F14FB86FFA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- toolchain/toolchain-external/toolchain-external-bootlin: regenerate with
- BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
+Message-Id: <20220614153200.C742786FFB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/gen-bootlin-toolchains:
+ adjust dependencies of i686 toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,151 +59,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34676320a212fc5bd9753aed1a78d1e40e6859fa
+commit: https://git.buildroot.net/buildroot/commit/?id=26dee54e428679920336f0fcbece826f8cbf23ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+The Bootlin i686 toolchain was already made available only on BR2_i386
+with !BR2_x86_i486 && !BR2_x86_i586 && !BR2_x86_1000. However, this
+was not sufficient as a few other architecture variants of BR2_i386
+are "lower" than i686, and they need to be excluded as well.
 
-  http://autobuild.buildroot.net/results/6315ef7b66ee4ae8f870c92186bc674d65f62f2c/
+Allows to fix:
+
+  http://autobuild.buildroot.net/results/56ac1a8fa5b34a9ca10eef98ae9fb090b8c762c4/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../toolchain-external-bootlin/Config.in.options         | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ support/scripts/gen-bootlin-toolchains | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-index 6e98a1dfda..7ee61d3c36 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-@@ -1029,6 +1029,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_GLIBC_BLEEDING_EDGE
- 	depends on BR2_microblazebe
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -1052,6 +1053,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_GLIBC_STABLE
- 	depends on BR2_microblazebe
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -1074,6 +1076,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_MUSL_BLEEDING_EDGE
- 	bool "microblazebe musl bleeding-edge 2021.11-1"
- 	depends on BR2_microblazebe
- 	depends on BR2_USE_MMU
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -1096,6 +1099,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_MUSL_STABLE
- 	bool "microblazebe musl stable 2021.11-1"
- 	depends on BR2_microblazebe
- 	depends on BR2_USE_MMU
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -1117,6 +1121,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_MUSL_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_UCLIBC_BLEEDING_EDGE
- 	bool "microblazebe uclibc bleeding-edge 2021.11-1"
- 	depends on BR2_microblazebe
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	select BR2_USE_WCHAR
-@@ -1140,6 +1145,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_UCLIBC_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_UCLIBC_STABLE
- 	bool "microblazebe uclibc stable 2021.11-1"
- 	depends on BR2_microblazebe
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	select BR2_USE_WCHAR
-@@ -1165,6 +1171,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_GLIBC_BLEEDING_EDGE
- 	depends on BR2_microblazeel
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -1188,6 +1195,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_GLIBC_STABLE
- 	depends on BR2_microblazeel
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -1210,6 +1218,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_MUSL_BLEEDING_EDGE
- 	bool "microblazeel musl bleeding-edge 2021.11-1"
- 	depends on BR2_microblazeel
- 	depends on BR2_USE_MMU
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -1232,6 +1241,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_MUSL_STABLE
- 	bool "microblazeel musl stable 2021.11-1"
- 	depends on BR2_microblazeel
- 	depends on BR2_USE_MMU
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -1253,6 +1263,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_MUSL_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_UCLIBC_BLEEDING_EDGE
- 	bool "microblazeel uclibc bleeding-edge 2021.11-1"
- 	depends on BR2_microblazeel
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	select BR2_USE_WCHAR
-@@ -1276,6 +1287,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_UCLIBC_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_UCLIBC_STABLE
- 	bool "microblazeel uclibc stable 2021.11-1"
- 	depends on BR2_microblazeel
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	select BR2_USE_WCHAR
-@@ -2428,6 +2440,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_MUSL_BLEEDING_EDGE
- 	bool "openrisc musl bleeding-edge 2021.11-5"
- 	depends on BR2_or1k
- 	depends on BR2_USE_MMU
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -2451,6 +2464,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_MUSL_STABLE
- 	bool "openrisc musl stable 2021.11-5"
- 	depends on BR2_or1k
- 	depends on BR2_USE_MMU
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -2472,6 +2486,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_MUSL_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_BLEEDING_EDGE
- 	bool "openrisc uclibc bleeding-edge 2021.11-5"
- 	depends on BR2_or1k
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	select BR2_USE_WCHAR
-@@ -2495,6 +2510,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_STABLE
- 	bool "openrisc uclibc stable 2021.11-5"
- 	depends on BR2_or1k
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	select BR2_USE_WCHAR
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index df1c000f9b..c96a388f84 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -257,7 +257,12 @@ arches = {
+         'conditions': ['BR2_i386',
+                        '!BR2_x86_i486',
+                        '!BR2_x86_i586',
+-                       '!BR2_x86_x1000'],
++                       '!BR2_x86_x1000',
++                       '!BR2_x86_pentium_mmx',
++                       '!BR2_x86_geode',
++                       '!BR2_x86_c3',
++                       '!BR2_x86_winchip_c6',
++                       '!BR2_x86_winchip2'],
+         'test_options': ['BR2_i386',
+                          'BR2_x86_i686'],
+         'prefix': 'i686',
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
