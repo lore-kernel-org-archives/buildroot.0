@@ -1,46 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0406C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 18:51:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 844B7CCA47B
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 19:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 871574184E;
-	Tue, 14 Jun 2022 18:51:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E0CE60EA2;
+	Tue, 14 Jun 2022 19:09:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RWa41ADOddIe; Tue, 14 Jun 2022 18:51:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6w8PeuEC-SGr; Tue, 14 Jun 2022 19:09:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B11F4182F;
-	Tue, 14 Jun 2022 18:51:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 144A11BF306
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 18:48:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7992B60E70;
+	Tue, 14 Jun 2022 19:09:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D39561BF5B4
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 19:09:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5FCFE40E46
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 18:48:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0731409E3
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 19:09:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id epUCVWmePW13 for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 18:48:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F208841296
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 18:48:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id E0781870E1; Tue, 14 Jun 2022 18:36:34 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XNYsIH1ZM8Pl for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 19:09:44 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 358B04056D
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 19:09:32 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id y19so19006302ejq.6
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 12:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=15QdfKzeLTOzwNtwM2T2CblP6TaYZnk21a2yjw+kxvE=;
+ b=HimErb+SiOZ2BCmpa4gahJkxiRiZnhXd9rYkh1jGcT6X9LqS5vUbgoUHsVCv7guTHK
+ q549E9avtX1dpXd0pfwJoNBSgts3l/4A2bxESKY+14KpNubylBswzU15EVbF5EHur175
+ /wq+0Mpxvr+0h7mkQhvSmaqAablpjT55UqJeb55h0i7q8/0kG0juNgaDDzj9ZALfn6om
+ xQzyXqpOrDA1roWnde9e/3Q6uCPYj7PfKpQU78sd9lhOlzHqabBw6C6W9zfVRt5xbVt2
+ /aS0BpJP1zA4LBLyvyzVtSrPp02COBhmhzFnJ8Fftp/bNP39cJRyy9cZtTWRDQT8Wy0h
+ Fisw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=15QdfKzeLTOzwNtwM2T2CblP6TaYZnk21a2yjw+kxvE=;
+ b=gGbMn9nYmtrT1+QdJLaXh4MJrZosA02vvh/H41U/Ovyp6FmDg9XU8WT68UccNSQBzJ
+ Ej13Y9uliGKyT5U3Lf3vnp9BLDvxq+HhVJm3B6jRZ7zi3Y7oxDczw6bQ7CjMLDo0Grk2
+ kZoyBtgUEa/GDjkrjNRsUnlTu3Xmq6mgVM0NpE+T8nstKvgZ10GQkiaWvLX7harCRdsj
+ aSERuqNIChk9aAwF5gEV7FI6NWgDOPi40qzmk4gTS9kG8zsYEsSWb+CTUX3t/S4gKX4Z
+ p0QUNuBk+K5hj0nyoYFzwRPshqdMVvPHBF4YMTfGRFpb7yxx0xb7aRklr0gOnJc/bapP
+ h3NQ==
+X-Gm-Message-State: AJIora9gQyYyZ1lUC54TQecHZe62P/4UxvtV+vm6L0kajl0BDldqBNpE
+ Nk19NABcWzgLztBvDVeHESkB8x1s33jsGCrO
+X-Google-Smtp-Source: AGRyM1vABrMVySAXu4Qq1mWRIQk1PYIEkeDGRaYQRh6kkyKfjMsKqvVC8hyAwJDpUiUQykb58u4I/g==
+X-Received: by 2002:a17:906:1d5:b0:715:78c9:df83 with SMTP id
+ 21-20020a17090601d500b0071578c9df83mr5548526ejj.285.1655233420447; 
+ Tue, 14 Jun 2022 12:03:40 -0700 (PDT)
+Received: from localhost.localdomain (ip-188-118-3-185.reverse.destiny.be.
+ [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
+ g4-20020a17090670c400b00711d5bc20d5sm5326600ejk.221.2022.06.14.12.03.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 14 Jun 2022 12:03:39 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue, 14 Jun 2022 20:33:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f26f32882ed90401863646927fd24a236156f846
-X-Git-Newrev: a113597fe39b7728a1c9b29500aeb59f9b3f02fd
-X-Patchwork-Hint: ignore
-Message-Id: <20220614183634.E0781870E1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/alsa-lib: bump version to 1.2.7
+Date: Tue, 14 Jun 2022 21:03:24 +0200
+Message-Id: <20220614190325.723977-2-raphael.melotte@mind.be>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220614190325.723977-1-raphael.melotte@mind.be>
+References: <20220614190325.723977-1-raphael.melotte@mind.be>
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 2/2] package/python-s3transfer: bump to version
+ 0.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,362 +88,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3767160037316340236=="
+From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
+ <buildroot@buildroot.org>
+Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3767160037316340236==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=a113597fe39b7728a1c9b29500aeb59f9b3f02fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Removed patches which were applied upstream, added uClibc build fix.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../0001-Don-t-use-fork-on-noMMU-platforms.patch   |  6 +-
- ...ix-PyTuple_SET_ITEM-usage-no-return-value.patch | 70 -----------------
- .../alsa-lib/0002-output-include-stdarg.h.patch    | 40 ++++++++++
- ...y-parser.c-drop-duplicate-safe_strtol_bas.patch | 51 -------------
- ...rt-of-safe_strto-functions-from-libasound.patch | 88 ----------------------
- package/alsa-lib/alsa-lib.hash                     |  2 +-
- package/alsa-lib/alsa-lib.mk                       |  2 +-
- 7 files changed, 45 insertions(+), 214 deletions(-)
-
-diff --git a/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch b/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch
-index 17b57d1f3d..0d2b479534 100644
---- a/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch
-+++ b/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch
-@@ -10,7 +10,7 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- [Jörg: update patch for 1.1.6]
- Signed-off-by: Jörg Krause <joerg.krause@embedded.rocks>
- Upstream: http://mailman.alsa-project.org/pipermail/alsa-devel/2018-November/141376.html
--[Bernd: update patch for 1.2.4]
-+[Bernd: update patch for 1.2.4 & 1.2.7]
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  configure.ac         |  2 ++
-@@ -21,9 +21,9 @@ diff --git a/configure.ac b/configure.ac
- index cce195ae..0c852434 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -51,6 +51,8 @@ dnl Checks for library functions.
-- AC_PROG_GCC_TRADITIONAL
-+@@ -52,6 +52,8 @@ dnl Checks for library functions.
-  AC_CHECK_FUNCS([uselocale])
-+ AC_CHECK_FUNCS([eaccess])
-  
- +AC_CHECK_FUNC([fork])
- +
-diff --git a/package/alsa-lib/0002-fix-PyTuple_SET_ITEM-usage-no-return-value.patch b/package/alsa-lib/0002-fix-PyTuple_SET_ITEM-usage-no-return-value.patch
-deleted file mode 100644
-index a1c9f3b80d..0000000000
---- a/package/alsa-lib/0002-fix-PyTuple_SET_ITEM-usage-no-return-value.patch
-+++ /dev/null
-@@ -1,70 +0,0 @@
--From 1da2ede2d8b01a8851648e774a4c3c5779c0bafa Mon Sep 17 00:00:00 2001
--From: Adam Duskett <aduskett@rivian.com>
--Date: Tue, 7 Dec 2021 13:55:54 -0800
--Subject: [PATCH] Fix PyTuple_SET_ITEM() usage - no return value
--
--As noted in bpo-30459 (link bellow) the PyTuple_SET_ITEM() macro
--has not a return value. Make the code compatible with python 3.10.
--
--Link: https://bugs.python.org/issue30459
--Signed-off-by: Adam Duskett <aduskett@rivian.com>
-----
-- modules/mixer/simple/python.c | 20 ++++++++++----------
-- 1 file changed, 10 insertions(+), 10 deletions(-)
--
--diff --git a/modules/mixer/simple/python.c b/modules/mixer/simple/python.c
--index 8a7264d..c7c1ce7 100644
----- a/modules/mixer/simple/python.c
--+++ b/modules/mixer/simple/python.c
--@@ -775,8 +775,8 @@ pymixer_melement_new(struct pymixer *pymixer, PyObject *args)
-- 	obj = PyDict_GetItemString(pymixer->mdict, class);
-- 	if (obj) {
-- 		obj1 = PyTuple_New(4);
---		if (PyTuple_SET_ITEM(obj1, 0, (PyObject *)pymixer))
---			Py_INCREF((PyObject *)pymixer);
--+		PyTuple_SET_ITEM(obj1, 0, (PyObject *)pymixer);
--+		Py_INCREF((PyObject *)pymixer);
-- 		PyTuple_SET_ITEM(obj1, 1, PyUnicode_FromString(name));
-- 		PyTuple_SET_ITEM(obj1, 2, PyInt_FromLong(index));
-- 		PyTuple_SET_ITEM(obj1, 3, PyInt_FromLong(weight));
--@@ -920,8 +920,8 @@ static PyObject *new_helem(struct python_priv *priv, snd_hctl_elem_t *helem)
-- 	obj = PyDict_GetItemString(priv->py_mdict, "HElement");
-- 	if (obj) {
-- 		obj1 = PyTuple_New(3);
---		if (PyTuple_SET_ITEM(obj1, 0, py_hctl))
---			Py_INCREF(py_hctl);
--+		PyTuple_SET_ITEM(obj1, 0, py_hctl);
--+		Py_INCREF(py_hctl);
-- 		PyTuple_SET_ITEM(obj1, 1, PyFloat_FromDouble(1));
-- 		PyTuple_SET_ITEM(obj1, 2, PyInt_FromLong((long)helem));
-- 		obj2 = PyObject_CallObject(obj, obj1);
--@@ -995,11 +995,11 @@ int alsa_mixer_simple_event(snd_mixer_class_t *class, unsigned int mask,
-- 		}
--         	if (o == NULL)
--         		return 0;
---        	if (PyTuple_SET_ITEM(t, 1, o))
---        		Py_INCREF(o);
--+        	PyTuple_SET_ITEM(t, 1, o);
--+        	Py_INCREF(o);
--         	o = melem ? find_melem(priv, melem) : Py_None;
---        	if (PyTuple_SET_ITEM(t, 2, o))
---        		Py_INCREF(o);
--+        	PyTuple_SET_ITEM(t, 2, o);
--+        	Py_INCREF(o);
-- 		r = PyObject_CallObject(priv->py_event_func, t);
-- 		Py_DECREF(t);
-- 		if (r) {
--@@ -1066,8 +1066,8 @@ static int alsa_mixer_simple_pyinit(struct python_priv *priv,
-- 		obj1 = PyTuple_New(3);
-- 		PyTuple_SET_ITEM(obj1, 0, PyInt_FromLong((long)class));
-- 		PyTuple_SET_ITEM(obj1, 1, PyInt_FromLong((long)mixer));
---		if (PyTuple_SET_ITEM(obj1, 2, mdict))
---			Py_INCREF(mdict);
--+		PyTuple_SET_ITEM(obj1, 2, mdict);
--+		Py_INCREF(mdict);
-- 		obj2 = PyObject_CallObject(obj, obj1);
-- 		Py_XDECREF(obj1);
-- 		PyDict_SetItemString(mdict, "mixer", obj2);
---- 
--2.33.1
--
-diff --git a/package/alsa-lib/0002-output-include-stdarg.h.patch b/package/alsa-lib/0002-output-include-stdarg.h.patch
-new file mode 100644
-index 0000000000..cf7c25becd
---- /dev/null
-+++ b/package/alsa-lib/0002-output-include-stdarg.h.patch
-@@ -0,0 +1,40 @@
-+From b7c0169a62d4e6ad1a0a9de4ef8ae8089ee98872 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 11 Jun 2022 19:12:19 +0200
-+Subject: [PATCH] output: include stdarg.h
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes a build error with alsa-utils when build with a uClibc toolchain:
-+
-+alsa-utils/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/alsa/output.h:75:66:
-+ error: unknown type name ‘va_list’
-+   75 | int snd_output_vprintf(snd_output_t *output, const char *format, va_list args);
-+      |                                                                  ^~~~~~~
-+alsa-utils/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/alsa/output.h:1:1:
-+ note: ‘va_list’ is defined in header ‘<stdarg.h>’; did you forget to ‘#include <stdarg.h>’?
-+
-+Patch sent upstream: https://github.com/alsa-project/alsa-lib/pull/237
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ include/output.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/include/output.h b/include/output.h
-+index 4a970dc4..5e16420b 100644
-+--- a/include/output.h
-++++ b/include/output.h
-+@@ -28,6 +28,8 @@
-+ #ifndef __ALSA_OUTPUT_H
-+ #define __ALSA_OUTPUT_H
-+ 
-++#include <stdarg.h>
-++
-+ #ifdef __cplusplus
-+ extern "C" {
-+ #endif
-+-- 
-+2.30.2
-+
-diff --git a/package/alsa-lib/0003-src-topology-parser.c-drop-duplicate-safe_strtol_bas.patch b/package/alsa-lib/0003-src-topology-parser.c-drop-duplicate-safe_strtol_bas.patch
-deleted file mode 100644
-index a3741c42c0..0000000000
---- a/package/alsa-lib/0003-src-topology-parser.c-drop-duplicate-safe_strtol_bas.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 47252054b4a2d5c8382cb1342f5d4eb89dabf95f Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 1 Jan 2022 17:20:47 +0100
--Subject: [PATCH] src/topology/parser.c: drop duplicate safe_strtol_base
--
--The safe_strtol_base() function is defined twice since
--	f547b2e3 ("conf: introduce safe_strtol_base()") and
--	5fab157a ("topology: do not call strtol directly")
--resulting in the following build failure when alsa-utils is built
--statically because safe_strtol_base is defined twice.
--
--Fixes: http://autobuild.buildroot.org/results/08d028004090b2a8292f03910cb9bf80a73ac804
--Fixes: https://github.com/alsa-project/alsa-lib/pull/207
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Signed-off-by: Jaroslav Kysela <perex@perex.cz>
--[Retrieved from:
--https://github.com/alsa-project/alsa-lib/commit/47252054b4a2d5c8382cb1342f5d4eb89dabf95f]
-----
-- src/topology/parser.c | 19 -------------------
-- 1 file changed, 19 deletions(-)
--
--diff --git a/src/topology/parser.c b/src/topology/parser.c
--index 01c95afa..e70173f6 100644
----- a/src/topology/parser.c
--+++ b/src/topology/parser.c
--@@ -21,25 +21,6 @@
-- #include "list.h"
-- #include "tplg_local.h"
-- 
---/*
--- * Safe strtol call
--- */
---int safe_strtol_base(const char *str, long *val, int base)
---{
---	char *end;
---	long v;
---	if (!*str)
---		return -EINVAL;
---	errno = 0;
---	v = strtol(str, &end, base);
---	if (errno)
---		return -errno;
---	if (*end)
---		return -EINVAL;
---	*val = v;
---	return 0;
---}
---
-- /*
--  * Get integer value
--  */
-diff --git a/package/alsa-lib/0004-conf-fix-the-export-of-safe_strto-functions-from-libasound.patch b/package/alsa-lib/0004-conf-fix-the-export-of-safe_strto-functions-from-libasound.patch
-deleted file mode 100644
-index 3dfcb78b5c..0000000000
---- a/package/alsa-lib/0004-conf-fix-the-export-of-safe_strto-functions-from-libasound.patch
-+++ /dev/null
-@@ -1,88 +0,0 @@
--From c687c482107f746332dd18f7407f6c6efbffccb2 Mon Sep 17 00:00:00 2001
--From: Jaroslav Kysela <perex@perex.cz>
--Date: Sat, 1 Jan 2022 19:18:25 +0100
--Subject: [PATCH] conf: fix the export of safe_strto* functions from libasound
--
--Only one library should define the safe_strto function. Export it
--correctly and add _snd_ prefix to avoid possible clashes with the other
--application code.
--
--Fixes: 47252054 ("src/topology/parser.c: drop duplicate safe_strtol_base")
--Fixes: https://github.com/alsa-project/alsa-lib/pull/208
--Signed-off-by: Jaroslav Kysela <perex@perex.cz>
--
--[Retrieved from:
--https://github.com/alsa-project/alsa-lib/commit/c687c482107f746332dd18f7407f6c6efbffccb2]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- include/local.h | 8 ++++++--
-- src/Versions.in | 6 ++++++
-- src/conf.c      | 6 +++---
-- 3 files changed, 15 insertions(+), 5 deletions(-)
--
--diff --git a/include/local.h b/include/local.h
--index ebc9350c..f64fe9d8 100644
----- a/include/local.h
--+++ b/include/local.h
--@@ -232,10 +232,14 @@ size_t page_align(size_t size);
-- size_t page_size(void);
-- size_t page_ptr(size_t object_offset, size_t object_size, size_t *offset, size_t *mmap_offset);
-- 
---int safe_strtoll_base(const char *str, long long *val, int base);
--+#define safe_strtoll_base _snd_safe_strtoll_base
--+int _snd_safe_strtoll_base(const char *str, long long *val, int base);
-- static inline int safe_strtoll(const char *str, long long *val) { return safe_strtoll_base(str, val, 0); }
---int safe_strtol_base(const char *str, long *val, int base);
--+#define safe_strtol_base _snd_safe_strtol_base
--+int _snd_safe_strtol_base(const char *str, long *val, int base);
-- static inline int safe_strtol(const char *str, long *val) { return safe_strtol_base(str, val, 0); }
--+#define safe_strtod _snd_safe_strtod
--+int _snd_safe_strtod(const char *str, double *val);
-- 
-- int snd_send_fd(int sock, void *data, size_t len, int fd);
-- int snd_receive_fd(int sock, void *data, size_t len, int *fd);
--diff --git a/src/Versions.in b/src/Versions.in
--index 5daccbd4..85031b38 100644
----- a/src/Versions.in
--+++ b/src/Versions.in
--@@ -134,3 +134,9 @@ ALSA_1.1.6 {
-- 
--     @SYMBOL_PREFIX@snd_dlopen;
-- } ALSA_0.9.7;
--+
--+ALSA_1.2.6 {
--+  global:
--+
--+    @SYMBOL_PREFIX@_snd_safe_strto*;
--+} ALSA_1.1.6;
--diff --git a/src/conf.c b/src/conf.c
--index d3597cbc..098ebd63 100644
----- a/src/conf.c
--+++ b/src/conf.c
--@@ -663,7 +663,7 @@ static int input_stdio_open(snd_input_t **inputp, const char *file,
-- 	return err;
-- }
-- 
---int safe_strtoll_base(const char *str, long long *val, int base)
--+int _snd_safe_strtoll_base(const char *str, long long *val, int base)
-- {
-- 	char *end;
-- 	long v;
--@@ -679,7 +679,7 @@ int safe_strtoll_base(const char *str, long long *val, int base)
-- 	return 0;
-- }
-- 
---int safe_strtol_base(const char *str, long *val, int base)
--+int _snd_safe_strtol_base(const char *str, long *val, int base)
-- {
-- 	char *end;
-- 	long v;
--@@ -695,7 +695,7 @@ int safe_strtol_base(const char *str, long *val, int base)
-- 	return 0;
-- }
-- 
---static int safe_strtod(const char *str, double *val)
--+int _snd_safe_strtod(const char *str, double *val)
-- {
-- 	char *end;
-- 	double v;
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index 42040d631b..a859505372 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  ad582993d52cdb5fb159a0beab60a6ac57eab0cc1bdf85dc4db6d6197f02333f  alsa-lib-1.2.6.1.tar.bz2
-+sha256  8814e61f7ec6812c76e23a85cab00e0b0d3bba40816af36b726beb1bc04c74a7  alsa-lib-1.2.7.tar.bz2
- sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
- sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index 1aa1b4c276..d6054bb000 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ALSA_LIB_VERSION = 1.2.6.1
-+ALSA_LIB_VERSION = 1.2.7
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
- ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
-
---===============3767160037316340236==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3767160037316340236==--
+V2hpbGUgYXQgaXQsIHJlbW92ZSB0aGUgbWQ1IGhhc2ggYXMgdGhlcmUgaXMgYWxyZWFkeSBhIHNo
+YTI1NiBoYXNoLgoKTm90ZSB0aGF0IHRoZSBjaGVja3N1bSBvZiB0aGUgbGljZW5zZSBjaGFuZ2Vk
+LCBidXQgdGhlIGxpY2Vuc2UgaXMKc3RpbGwgdGhlIHNhbWUgKHRoZSBvbmx5IGNoYW5nZSBpbiB0
+aGUgbGljZW5zZSBmaWxlIGlzIHRoZSByZW1vdmFsIG9mCmEgYmxhbmsgbGluZSBhdCB0aGUgZW5k
+IG9mIHRoZSBmaWxlKS4KCkNoYW5nZWxvZzogaHR0cHM6Ly9naXRodWIuY29tL2JvdG8vczN0cmFu
+c2Zlci9ibG9iL2RldmVsb3AvQ0hBTkdFTE9HLnJzdAoKU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wg
+TcOpbG90dGUgPHJhcGhhZWwubWVsb3R0ZUBtaW5kLmJlPgotLS0KIHBhY2thZ2UvcHl0aG9uLXMz
+dHJhbnNmZXIvcHl0aG9uLXMzdHJhbnNmZXIuaGFzaCB8IDcgKysrLS0tLQogcGFja2FnZS9weXRo
+b24tczN0cmFuc2Zlci9weXRob24tczN0cmFuc2Zlci5tayAgIHwgNCArKy0tCiAyIGZpbGVzIGNo
+YW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNr
+YWdlL3B5dGhvbi1zM3RyYW5zZmVyL3B5dGhvbi1zM3RyYW5zZmVyLmhhc2ggYi9wYWNrYWdlL3B5
+dGhvbi1zM3RyYW5zZmVyL3B5dGhvbi1zM3RyYW5zZmVyLmhhc2gKaW5kZXggYjhmNGE1N2FiOC4u
+MTZmMGZhY2U3MiAxMDA2NDQKLS0tIGEvcGFja2FnZS9weXRob24tczN0cmFuc2Zlci9weXRob24t
+czN0cmFuc2Zlci5oYXNoCisrKyBiL3BhY2thZ2UvcHl0aG9uLXMzdHJhbnNmZXIvcHl0aG9uLXMz
+dHJhbnNmZXIuaGFzaApAQCAtMSw1ICsxLDQgQEAKLSMgbWQ1LCBzaGEyNTYgZnJvbSBodHRwczov
+L3B5cGkub3JnL3B5cGkvczN0cmFuc2Zlci9qc29uCi1tZDUgIDk0MTZkMWM3ZDMzNTA2NTAxYTg2
+MjdiYjFmN2JhZjY2ICBzM3RyYW5zZmVyLTAuNS4wLnRhci5negotc2hhMjU2ICA1MGVkODIzZTFk
+YzU4NjhhZDQwYzhkYzkyMDcyZjc1N2FhMGU2NTNhMTkyODQ1Yzk0YTNiNjc2ZjRhNjJkYTRjICBz
+M3RyYW5zZmVyLTAuNS4wLnRhci5negorIyBzaGEyNTYgZnJvbSBodHRwczovL3B5cGkub3JnL3B5
+cGkvczN0cmFuc2Zlci9qc29uCitzaGEyNTYgIDJlZDA3ZDM4NjZmNTIzY2M1NjFiZjRhMDBmYzU1
+MzU4Mjc5ODFiMTE3ZGQ3ODc2ZjAzNmIwYzFhY2E0MmM5NDcgIHMzdHJhbnNmZXItMC42LjAudGFy
+Lmd6CiAjIExvY2FsbHkgY29tcHV0ZWQgc2hhMjU2IGNoZWNrc3Vtcwotc2hhMjU2ICA4YzZkYjM0
+MDQ3NTEzNmRmM2MxMjAxZDQ1OGZhNTc1NTY5OGVhY2U3NmU1MTA0NzFlY2M5ZDg1N2Q2MDgzZGFj
+ICBMSUNFTlNFLnR4dAorc2hhMjU2ICBjZmM3NzQ5Yjk2ZjYzYmQzMWMzYzQyYjVjNDcxYmY3NTY4
+MTQwNTNlODQ3YzEwZjNlYjAwMzQxN2JjNTIzZDMwICBMSUNFTlNFLnR4dApkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9weXRob24tczN0cmFuc2Zlci9weXRob24tczN0cmFuc2Zlci5tayBiL3BhY2thZ2Uv
+cHl0aG9uLXMzdHJhbnNmZXIvcHl0aG9uLXMzdHJhbnNmZXIubWsKaW5kZXggOGI4ZTAyZGI1Ny4u
+NjBhNzJkYTcyOSAxMDA2NDQKLS0tIGEvcGFja2FnZS9weXRob24tczN0cmFuc2Zlci9weXRob24t
+czN0cmFuc2Zlci5taworKysgYi9wYWNrYWdlL3B5dGhvbi1zM3RyYW5zZmVyL3B5dGhvbi1zM3Ry
+YW5zZmVyLm1rCkBAIC00LDkgKzQsOSBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAot
+UFlUSE9OX1MzVFJBTlNGRVJfVkVSU0lPTiA9IDAuNS4wCitQWVRIT05fUzNUUkFOU0ZFUl9WRVJT
+SU9OID0gMC42LjAKIFBZVEhPTl9TM1RSQU5TRkVSX1NPVVJDRSA9IHMzdHJhbnNmZXItJChQWVRI
+T05fUzNUUkFOU0ZFUl9WRVJTSU9OKS50YXIuZ3oKLVBZVEhPTl9TM1RSQU5TRkVSX1NJVEUgPSBo
+dHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvODgvZWYvNGQxYjNmNTJhZTIw
+YTdlNzIxNTFmZGU1YzlmMjU0Y2Q4M2Y4YTQ5MDQ3MzUxZjM0MDA2ZTUxN2UxNjU1CitQWVRIT05f
+UzNUUkFOU0ZFUl9TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2Vz
+L2UxL2ViL2U1N2M5M2Q1Y2Q1ZWRmOGMxZDEyNGM4MzFlZjkxNjYwMTU0MGRiNzBhY2Q5NmZhMjFm
+ZTYwY2VmMTM2NQogUFlUSE9OX1MzVFJBTlNGRVJfU0VUVVBfVFlQRSA9IHNldHVwdG9vbHMKIFBZ
+VEhPTl9TM1RSQU5TRkVSX0xJQ0VOU0UgPSBBcGFjaGUtMi4wCiBQWVRIT05fUzNUUkFOU0ZFUl9M
+SUNFTlNFX0ZJTEVTID0gTElDRU5TRS50eHQKLS0gCjIuMzUuMQoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
