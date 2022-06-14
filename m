@@ -1,84 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCBD6C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 18:45:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35E57CCA47B
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 18:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B5FA83218;
-	Tue, 14 Jun 2022 18:45:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0AF860EC6;
+	Tue, 14 Jun 2022 18:45:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oJdhxE_ZYbYw; Tue, 14 Jun 2022 18:45:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cEYqZjAp_r0Y; Tue, 14 Jun 2022 18:45:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 791C7831DA;
-	Tue, 14 Jun 2022 18:45:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2D65D1BF306
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 18:45:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D2AC60E70;
+	Tue, 14 Jun 2022 18:45:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AD96C1BF306
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 18:45:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 17C4D831DA
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 18:45:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AAC3A60E70
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 18:45:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BjQPPYjrcftq for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 18:45:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GrTbPihA9A5K for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 18:45:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 06A8682FB1
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 18:45:08 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id u12so18867079eja.8
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 11:45:08 -0700 (PDT)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DF67B60A78
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 18:45:34 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id h23so18863447ejj.12
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 11:45:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=2rV0JvD5q6G+znd+3kw7XqpAq3lp1N8iniCD5jMAJTI=;
- b=e/Hc00q2iL7uAEw7RQMqlG9o1Kx1mW6QKWcZw7Yl8oSxk0m1TlOJ5iY3wX9pZSutME
- C+RVK0DfL9PyRlRl6E2/7SBVgUx6aVDdQ4NvfpkOYGxlDtUIIB9/UjmJuxQ2AtsrjrFz
- +4kfq3gMOiFv1AeeGrRyeSrntndiMw/AhMz/LQgI6OQLlnfEHvTi2qsOBWLT2x98NWk5
- w4pW1wPOc+MTIfyYppWCy9b6oJy3MNQU4IAZ0+u9hBr4ITaJEBsvL93NR1zZ3HlV6eZL
- bGGBBeu+pqRcBIwCBiBWSIk+I4K4VXmUxsP/O1O2RqSuVEbaBu8/kNyR4TeNb069yKGg
- C5Xw==
+ bh=ZiQ6bGzit4jsCmUfh/HW0gUJ0aXkDoGAU0WVl45HIwk=;
+ b=JmeGlIi4IePy5qMD0kF44zIW1IjbEM+zvr+jTj2f/gE5mfRxzpkf6XDkAq3ufLTBpB
+ 13h48A+FdGAMd4Z+d5dsHCmHqg8BXtfjDblQfdEaa1YoKHB96m4W9wri122y5a+dKlNy
+ 9PLlidewndNo9lo6oCHNDqMcT9WswDdFlbIkTp1V9YTGOGMB9GcMqAQiGuwZ/mPX37P7
+ efZjhz5W9s7XwvhIdLIWcdkwvKynZJPEnLVIwV4tzOJUMAy/af6rm9YopxxSTN3fCqXE
+ 6Gf856yDIGYseNG+XghEaymGAP0G3BshU+jDupCr4O5g7RyiR1o3mI5xBsw8p8hf84rY
+ YKKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=2rV0JvD5q6G+znd+3kw7XqpAq3lp1N8iniCD5jMAJTI=;
- b=eLGgBkCpVcJPf0QSgnwwvDYzF/f9KKrVc86pi5MhAgHSf5q0NJNe9S7J0LE1qbHbiS
- sup8mk5cZgy1VbTY2DQKBvAD8ZKxEQNWqqE+OdCo5ZgxzkEdDNmY/Kdl0M1CA2t4/4np
- 2/GpgW0xc1TjfOmDysc3UNkCGhzblktRd6wPpNZFp8KrHGI4J0BHWeYjBVHjrBxJEtjF
- 2pKuiyqAp2x39ZoBsgttMjOA6bza7IYGWahOCNUOsOONslrOY5nLCob3Xux5XD/kKFjP
- 1qlOVs+6EslFO/tmVsoEe8vZaURW5el3Kls766aOnCr+da6LhqjWa3kqa/EbNBh/dH30
- Jjyg==
-X-Gm-Message-State: AOAM533i3eRgISD0azMF4DO0z/ZaMRi9r9/yyDH6yf8N0pafPkKWFq0b
- i4WXbL4AxGyWlDT233nOJ7CsLw==
-X-Google-Smtp-Source: AGRyM1s3G9daZZJm4yc3bvVRC5dkhOMKDqgspu8upF9NGoSl2lnVQr/iSdBOi8ZVL2nLIVm8h6Gf7Q==
-X-Received: by 2002:a17:907:d24:b0:712:1142:88c7 with SMTP id
- gn36-20020a1709070d2400b00712114288c7mr5701485ejc.435.1655232307231; 
- Tue, 14 Jun 2022 11:45:07 -0700 (PDT)
+ bh=ZiQ6bGzit4jsCmUfh/HW0gUJ0aXkDoGAU0WVl45HIwk=;
+ b=XnvPlCxhBsTPyugEjmGmEnLWH0O0womW7qoIGJg79z2Rf6PhbtbIIERuln8c5HdfOB
+ zIYUPdFaBy5qzaBLuXzgPzxh7fUGiAlGM0xdudfcVfuqkiYsWMABjALWwd7wdh40c6IY
+ Ie8n/f60OLkd/ej2GYM4V+i1uBNHF0vWbWwyJypTVg04yNLt0oBTKlUU30RwNB4xcMQv
+ aI1XXT4AGUCjwS7HOD/ZBRuhKL4TEE9wD1bQMmQeIPL9c6CpvuM/hUXYeeMKPkboIfBI
+ ELf9mKjPmHQESHjHqamEn9QeUKCThUI7MiPdkhsFS8Xi2pkBndOTYrCr1PSRPG62LHYO
+ j3pA==
+X-Gm-Message-State: AOAM5323gVInEdTfZ7k/6pAUl4SZ32dhQMZXtWqqrC4OZGBArW1/Tixq
+ xW99DobyPFnccz6rtT2naloIfg==
+X-Google-Smtp-Source: AGRyM1vaBHvwbe4ZY6m4hqM9alfgA9380OFcXvVR54FlLxwbXP2ON9eoJsEyfc3UOCecx7pkha/S8Q==
+X-Received: by 2002:a17:907:2d24:b0:711:d584:f118 with SMTP id
+ gs36-20020a1709072d2400b00711d584f118mr5685565ejc.238.1655232333123; 
+ Tue, 14 Jun 2022 11:45:33 -0700 (PDT)
 Received: from [10.1.0.138] (ip-188-118-3-185.reverse.destiny.be.
  [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- ge9-20020a170907908900b00711e60256cesm5293802ejb.196.2022.06.14.11.45.06
+ q4-20020a50aa84000000b0042617ba638esm7601384edc.24.2022.06.14.11.45.32
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Jun 2022 11:45:06 -0700 (PDT)
-Message-ID: <ba3d563b-e049-93b7-6642-5f37594e9ed4@mind.be>
-Date: Tue, 14 Jun 2022 20:45:05 +0200
+ Tue, 14 Jun 2022 11:45:32 -0700 (PDT)
+Message-ID: <946385ba-a194-313d-120a-0f80cc515677@mind.be>
+Date: Tue, 14 Jun 2022 20:45:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
 Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20220611122057.1226707-1-bernd.kuhls@t-online.de>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220611125752.355351-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220611122057.1226707-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.5.7
+In-Reply-To: <20220611125752.355351-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/pcsc-lite: bump to version 1.9.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,13 +97,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 11/06/2022 14:20, Bernd Kuhls wrote:
-> Changelog:
-> https://github.com/OpenVPN/openvpn/blob/release/2.5/Changes.rst
+On 11/06/2022 14:57, Fabrice Fontaine wrote:
+> https://github.com/LudovicRousseau/PCSC/releases/tag/1.9.8
+> https://github.com/LudovicRousseau/PCSC/releases/tag/1.9.7
 > 
-> Removed patch which is now included in this release.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
@@ -111,81 +109,33 @@ On 11/06/2022 14:20, Bernd Kuhls wrote:
   Arnout
 
 > ---
->   ...h-pam-c-add-missing-include-limits-h.patch | 41 -------------------
->   package/openvpn/openvpn.hash                  |  2 +-
->   package/openvpn/openvpn.mk                    |  2 +-
->   3 files changed, 2 insertions(+), 43 deletions(-)
->   delete mode 100644 package/openvpn/0001-auth-pam-c-add-missing-include-limits-h.patch
+>   package/pcsc-lite/pcsc-lite.hash | 2 +-
+>   package/pcsc-lite/pcsc-lite.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/openvpn/0001-auth-pam-c-add-missing-include-limits-h.patch b/package/openvpn/0001-auth-pam-c-add-missing-include-limits-h.patch
-> deleted file mode 100644
-> index 34a6dbd034..0000000000
-> --- a/package/openvpn/0001-auth-pam-c-add-missing-include-limits-h.patch
-> +++ /dev/null
-> @@ -1,41 +0,0 @@
-> -From 0fed64a91d894b46105bf7e8b16edea4d90ab70c Mon Sep 17 00:00:00 2001
-> -From: Antonio Quartulli <a@unstable.cc>
-> -Date: Thu, 21 Apr 2022 15:19:09 +0200
-> -Subject: [PATCH] auth-pam.c: add missing include limits.h
-> -
-> -On most systems limits.h is pulled in by some other header and thus no
-> -error is ever triggered, but it's possible to find the right environment
-> -which lackis this and prevents compiling auth-pam.c (possibly when using
-> -LibreSSL).
-> -
-> -Include the header explicitly as it includes the definition of PATH_MAX.
-> -
-> -(note that this bug is fixed in Gentoo since 2020 by including a custom
-> -patch, but apparently the issue was never reported upstream)
-> -
-> -Reported-by: Michelangelo Scopelliti <kernelpanic@gmx.com>
-> -Signed-off-by: Antonio Quartulli <a@unstable.cc>
-> -Acked-by: Gert Doering <gert@greenie.muc.de>
-> -Message-Id: <20220421131909.32053-1-a@unstable.cc>
-> -URL: https://www.mail-archive.com/openvpn-devel@lists.sourceforge.net/msg24136.html
-> -Signed-off-by: Gert Doering <gert@greenie.muc.de>
-> -
-> -[Retrieved from:
-> -https://github.com/OpenVPN/openvpn/commit/0fed64a91d894b46105bf7e8b16edea4d90ab70c]
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - src/plugins/auth-pam/auth-pam.c | 1 +
-> - 1 file changed, 1 insertion(+)
-> -
-> -diff --git a/src/plugins/auth-pam/auth-pam.c b/src/plugins/auth-pam/auth-pam.c
-> -index f893b51fe3..7033944568 100644
-> ---- a/src/plugins/auth-pam/auth-pam.c
-> -+++ b/src/plugins/auth-pam/auth-pam.c
-> -@@ -47,6 +47,7 @@
-> - #include <fcntl.h>
-> - #include <signal.h>
-> - #include <syslog.h>
-> -+#include <limits.h>
-> - #include "utils.h"
-> -
-> - #include <openvpn-plugin.h>
-> diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-> index bd598a5186..0959b7f838 100644
-> --- a/package/openvpn/openvpn.hash
-> +++ b/package/openvpn/openvpn.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated after checking signature
-> -sha256  333a7ef3d5b317968aca2c77bdc29aa7c6d6bb3316eb3f79743b59c53242ad3d  openvpn-2.5.6.tar.gz
-> +sha256  08340a389905c84196b6cd750add1bc0fa2d46a1afebfd589c24120946c13e68  openvpn-2.5.7.tar.gz
->   sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-> diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-> index db2f53a5f3..5c602e0448 100644
-> --- a/package/openvpn/openvpn.mk
-> +++ b/package/openvpn/openvpn.mk
+> diff --git a/package/pcsc-lite/pcsc-lite.hash b/package/pcsc-lite/pcsc-lite.hash
+> index 10a8d92fa7..340a9edbea 100644
+> --- a/package/pcsc-lite/pcsc-lite.hash
+> +++ b/package/pcsc-lite/pcsc-lite.hash
+> @@ -1,4 +1,4 @@
+>   # Locally calculated
+> -sha256  fdb3fe8f68049019523801909b2a336d0d4ee315edafe363c30d375e3706537a  pcsc-lite-1.9.6.tar.bz2
+> +sha256  502d80c557ecbee285eb99fe8703eeb667bcfe067577467b50efe3420d1b2289  pcsc-lite-1.9.8.tar.bz2
+>   sha256  40d4358bb8dc8d30f5365ae6d999b6f820bbc051b292912482f2e4d0ebd837e1  COPYING
+>   sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-3.0.txt
+> diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
+> index 5bf9ce7f30..ad34bb4b90 100644
+> --- a/package/pcsc-lite/pcsc-lite.mk
+> +++ b/package/pcsc-lite/pcsc-lite.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -OPENVPN_VERSION = 2.5.6
-> +OPENVPN_VERSION = 2.5.7
->   OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
->   OPENVPN_DEPENDENCIES = host-pkgconf
->   OPENVPN_LICENSE = GPL-2.0
+> -PCSC_LITE_VERSION = 1.9.6
+> +PCSC_LITE_VERSION = 1.9.8
+>   PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
+>   PCSC_LITE_SITE = https://pcsclite.apdu.fr/files
+>   PCSC_LITE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
