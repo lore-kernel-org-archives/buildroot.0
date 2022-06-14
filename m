@@ -1,82 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83350C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 17:51:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C320C43334
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 18:03:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 223CF40B7A;
-	Tue, 14 Jun 2022 17:51:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDE07605A9;
+	Tue, 14 Jun 2022 18:03:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sBBUopTZxzKb; Tue, 14 Jun 2022 17:51:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 34D8740B74;
-	Tue, 14 Jun 2022 17:51:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9A5B91BF23C
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:51:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 893AD60B19
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:51:43 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=googlemail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id smny0S0qS06f for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 17:51:42 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1dt2WAGFICY3; Tue, 14 Jun 2022 18:03:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4195C60E82;
+	Tue, 14 Jun 2022 18:03:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 61C2E1BF23C
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 18:03:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 506E240B77
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 18:03:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=googlemail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HS2HES3-QihT for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 18:03:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6A81560A70
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 17:51:42 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- o37-20020a05600c512500b0039c4ba4c64dso6644481wms.2
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 10:51:42 -0700 (PDT)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D4B0240191
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 18:03:22 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id q15so12264633wrc.11
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 11:03:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=googlemail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=r6dtqHe68Ka9auvhax4ueY50t/DCev7bcCDpWhrutgM=;
- b=LiLmJnpEnpy/xxdZrX/fNQw27ui7iodlMX9/SylrCkjfPl+vfsNBeCW7+G4c13z/ko
- hHodJiDYLHWW3IPnQhMc7tH4PIyn6F4vCyHYX0uHnGaiX4p1tbw4Bvwb3WWvGGtdokqQ
- nCcuAP5debQu/9tqYKC/wNaIRzI8lJJJI3DK23xAyP1CWBoEL+OoAslTrE7kSd0gDTgF
- 2wQxxsTDVGWEsqk05/mmU98qFzrWSQu55bN+V+J8cXMjwqQObVBGRzBdwfFiDHf9b2ux
- WyFihakiopUPgzG2oB4hWSvyNC3rtVM6rxK2Ebqn+KpMQmdL2XTjXI8mlYF1jwXxp8VA
- ZPAw==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=lWq4Hr7Bskv/d+tC2RrEDnypWL1XRcXs6H5ZE0n3j8s=;
+ b=KC84uvTNiMLYuqyADOIb1a9D0ZtLFR7lDkB+Js3tk9ofQrnpi/tbqZ9j8JhBRocygi
+ 4eH0M+WwhIp2VepvuV/nxFUEvjhM1Teu3N1LwFLcqMXClWz11taqeHgKXsxhCU2v44wV
+ TdhcnPbyZAl5Mo6NbY01qyWgqKtOcQXjMa1bIAyU/WYfYlau2Y0GokHgAkeXFvjOzhM6
+ fTGrkmNdpgeiSvUwoYM5lqiu43R5uajnZ01M1zimTcDY8vlYeKpnh8E/kCRneumYT1Su
+ cVEB9CUh6/RsekOAr+XABozRW4zNRDm57JjORdpSoU9v4+soVQjFaDjxLToFsE53He8r
+ rpBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=r6dtqHe68Ka9auvhax4ueY50t/DCev7bcCDpWhrutgM=;
- b=SsqOtQ/UWtVR4+vG9BYNDSBCfGtTueuQjX53o/1qPNhyWuaSngPyXdZAYKQVVdkZCy
- s6hy5SM1BPMhAAnqJLZp+5+Mg3l0iJNFZLEUpY4HnHDBoTdQhFG2OymUnn+/yLC8TOTh
- kNMxXwWVnpKFzRk9+QLNAERHsyHOwlJjck4ola8di37+bNC8ICBdKuQ+rJnVZYiE7GEj
- zyb0xA6IIUL9CIXrYtAeyMR9lw24EXX2kBLyrZaT7FwnG4kFC7qXF/snbr2OUiWH/94B
- j85e4VOEuupUpOWBIc6AiRZdeI7SfpOGo6q3FvvAs5r+Udoh5/oUFOf+1sl6aV+CfptR
- 35kQ==
-X-Gm-Message-State: AOAM530FIG9L8/5BEKVbZC9ImAIY+GouOj22/NcYNIyu1bt4YowcQwwi
- k0n9TGBI3PeM4T+NGABum5OXspMwrPpBfQ==
-X-Google-Smtp-Source: ABdhPJyzaIKGn9e47IwVPUJ7XYVt6PislhdxcKo4s7RhcoXW3VhYCZvd0vXuj2AQqIg3wL7AXv53SA==
-X-Received: by 2002:a05:600c:1906:b0:39c:7f82:3090 with SMTP id
- j6-20020a05600c190600b0039c7f823090mr5360952wmq.152.1655229100693; 
- Tue, 14 Jun 2022 10:51:40 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=lWq4Hr7Bskv/d+tC2RrEDnypWL1XRcXs6H5ZE0n3j8s=;
+ b=gGktyUor+cTlwFvC4kLGBbWRqITDCtAHGBseloDPF1eWH17lzYnHUkRub9VftJfTLB
+ UkMfrhSfueEe2ttHihvb1+uDVxP9nf038Et9HgjI6OhUgnmdI2xEtQr1JM6jyUBEYZ1O
+ yP2ymnXuygAPCCMroU1/5qGkzY1O4L/8t33edJ9/y7vu0ZexZVTU2IrxoIEafzUaHzTQ
+ H7/GjmiDX/Hp0Ui/C2IW7YQW/cvRk/3UfTBXT5o5A/m9Pw2LfAFbz2RAMgFbZ4pgeFVO
+ UgkQJ/plZdYP9MkwlDkWyNjOk7qpVJv+ux02aqaFy0CyW284Xjq4Uwe0bk2F5MCUy7uC
+ mDiQ==
+X-Gm-Message-State: AJIora91dp4fkxpqBMjO6LQa10jalVb/XSQaUyCUuYYMCXPhoi312UG+
+ s/s0LqUbdl6gnL5SUt7wSHy1jW6rYFwtOdHV
+X-Google-Smtp-Source: AGRyM1usf5Mrb1S1o4ChhJax6cenY/KKgVQ+z2EZcLS6vahkZPYcEazKEWauC1uqBSSXAvtv7Peu1g==
+X-Received: by 2002:adf:f5c4:0:b0:210:2ac2:6aa0 with SMTP id
+ k4-20020adff5c4000000b002102ac26aa0mr5957160wrp.300.1655229801055; 
+ Tue, 14 Jun 2022 11:03:21 -0700 (PDT)
 Received: from LinkTed.fritz.box ([2a02:8070:41a4:2c00:5e48:90c:7bda:e6d5])
  by smtp.gmail.com with ESMTPSA id
- n4-20020a05600c4f8400b0039c362311d2sm19162792wmq.9.2022.06.14.10.51.39
+ m17-20020adfc591000000b0020fff0ea0a3sm12840988wrg.116.2022.06.14.11.03.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Jun 2022 10:51:40 -0700 (PDT)
+ Tue, 14 Jun 2022 11:03:20 -0700 (PDT)
 X-Google-Original-From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Jun 2022 19:50:48 +0200
-Message-Id: <20220614175048.6352-1-raphael.pavlidis@gmail.com>
+Date: Tue, 14 Jun 2022 20:01:52 +0200
+Message-Id: <20220614180152.15846-1-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220614175048.6352-1-raphael.pavlidis@gmail.com>
+References: <20220614175048.6352-1-raphael.pavlidis@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/slirp4netns: new package
+Subject: [Buildroot] [PATCH v2] package/slirp4netns: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,6 +103,9 @@ namespace.
 
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
+Changes v1 -> v2:
+  - Fix typo in SLIRP4NETNS_LICENSE_FILES
+
  package/Config.in                    |  1 +
  package/slirp4netns/Config.in        | 20 ++++++++++++++++++++
  package/slirp4netns/slirp4netns.hash |  3 +++
@@ -160,7 +164,7 @@ index 0000000000..e3115c1be0
 +sha256  58db3cfabf8ec806bc060e54ab5466a31de4a3ae80fe4a8aa02fb6b1c053c93f  COPYING
 diff --git a/package/slirp4netns/slirp4netns.mk b/package/slirp4netns/slirp4netns.mk
 new file mode 100644
-index 0000000000..89fe275a74
+index 0000000000..7ff594cc44
 --- /dev/null
 +++ b/package/slirp4netns/slirp4netns.mk
 @@ -0,0 +1,15 @@
@@ -173,7 +177,7 @@ index 0000000000..89fe275a74
 +SLIRP4NETNS_VERSION = 1.2.0
 +SLIRP4NETNS_SITE = $(call github,rootless-containers,slirp4netns,v$(SLIRP4NETNS_VERSION))
 +SLIRP4NETNS_LICENSE = GPL-2.0
-+SLIRP4NETNS_LICENSE_FILES = COPYRIGHT
++SLIRP4NETNS_LICENSE_FILES = COPYING
 +SLIRP4NETNS_DEPENDENCIES = libcap libglib2 libseccomp slirp
 +
 +SLIRP4NETNS_AUTORECONF = YES
