@@ -1,81 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DB9AC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 17:38:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83350C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 17:51:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DA33410AD;
-	Tue, 14 Jun 2022 17:38:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 223CF40B7A;
+	Tue, 14 Jun 2022 17:51:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rA2-p35LeGfo; Tue, 14 Jun 2022 17:38:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sBBUopTZxzKb; Tue, 14 Jun 2022 17:51:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77E4A409A5;
-	Tue, 14 Jun 2022 17:38:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 34D8740B74;
+	Tue, 14 Jun 2022 17:51:45 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 802061BF23C
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:38:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9A5B91BF23C
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:51:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 782F3607F2
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:38:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 893AD60B19
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:51:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=googlemail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id djF_nVwyD80J for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 17:38:45 +0000 (UTC)
+ with ESMTP id smny0S0qS06f for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 17:51:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1AD486074C
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 17:38:44 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id z9so5057914wmf.3
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 10:38:44 -0700 (PDT)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6A81560A70
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 17:51:42 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ o37-20020a05600c512500b0039c4ba4c64dso6644481wms.2
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 10:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=googlemail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=e2sxOqkrRlUS9RpKdu5SNO01bq0nM6ZZnWOTYW8Ghww=;
- b=me/IG3zKL9DC2fx9WWaMz4BSSQhylLdOMUUA9eQciCKPq3l0HFUKVsdSOVxtiQ7mu8
- eo7kNKMtQCysralOFNj7+VS0o4ORUxQ+S9gcGP75QcGgC9R8+PRFAuCLBXmKFOXxO59n
- iHuYfCaun7TQXk9yEaxCFzbAHSKW7EkL+RaNFVYpT/0SWt9Q5je1qT3JWenHmR+/Ik6L
- fOfEhO5zs5yOjF+QFsQvJpIxqtSsKQEJfNIBvfpecHzF1/hY3DL90NtdglrUDSoi2cmP
- RXZvcchrfL9hbdE7nCuWt7kkF5W2oeaDrVED91HX+r7hm99L98XMWBH66SGIWJH9dPRX
- P6rA==
+ bh=r6dtqHe68Ka9auvhax4ueY50t/DCev7bcCDpWhrutgM=;
+ b=LiLmJnpEnpy/xxdZrX/fNQw27ui7iodlMX9/SylrCkjfPl+vfsNBeCW7+G4c13z/ko
+ hHodJiDYLHWW3IPnQhMc7tH4PIyn6F4vCyHYX0uHnGaiX4p1tbw4Bvwb3WWvGGtdokqQ
+ nCcuAP5debQu/9tqYKC/wNaIRzI8lJJJI3DK23xAyP1CWBoEL+OoAslTrE7kSd0gDTgF
+ 2wQxxsTDVGWEsqk05/mmU98qFzrWSQu55bN+V+J8cXMjwqQObVBGRzBdwfFiDHf9b2ux
+ WyFihakiopUPgzG2oB4hWSvyNC3rtVM6rxK2Ebqn+KpMQmdL2XTjXI8mlYF1jwXxp8VA
+ ZPAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=e2sxOqkrRlUS9RpKdu5SNO01bq0nM6ZZnWOTYW8Ghww=;
- b=savcWyB1lt6XDI/5Qyr5ik7+BbA9AKPdkQeibsPSSDbh7+7nJvwJXFrriqac8XpWPH
- 2ULSUJkGIFiHylTZilZ5/rfQzog/rBcUJxnPpshcONUb7lgzIBiBluusEdonNTk19nBg
- OxrN9Y4IY43ei6cQfGWsay7gr9ZGVv++1un1RMslnASUc/0hb6U3g6jrq9ieaxr/3WwS
- 7tdHKCZge0FFkfsuBV04leyKlEgePBjvgpx6nLs/YePSRseNIGQDVONd68L6I021bGMt
- jwPNqnYkpmGr+Y07wKayRlg24XRb6cI1IrC8xPWliuurp2oDWJgYVqVGscK9ICHbEhqu
- 3npQ==
-X-Gm-Message-State: AOAM5324mHFGvTqCFWn1KVliDMrmOECUVMFCI1mlRyiSF2lAFu2wFjRi
- 6Tb33mUt/8vcagTCVob2laI/uzuCcSwRpw==
-X-Google-Smtp-Source: ABdhPJwrpDAhpZYtUTlkKv9J0WzJIYqu95nCkQq+/thawHKoRK99/tfhHIwFu2dwOoJc+va0QL9few==
-X-Received: by 2002:a7b:cd16:0:b0:39c:4fff:88cc with SMTP id
- f22-20020a7bcd16000000b0039c4fff88ccmr5260724wmj.122.1655228322932; 
- Tue, 14 Jun 2022 10:38:42 -0700 (PDT)
+ bh=r6dtqHe68Ka9auvhax4ueY50t/DCev7bcCDpWhrutgM=;
+ b=SsqOtQ/UWtVR4+vG9BYNDSBCfGtTueuQjX53o/1qPNhyWuaSngPyXdZAYKQVVdkZCy
+ s6hy5SM1BPMhAAnqJLZp+5+Mg3l0iJNFZLEUpY4HnHDBoTdQhFG2OymUnn+/yLC8TOTh
+ kNMxXwWVnpKFzRk9+QLNAERHsyHOwlJjck4ola8di37+bNC8ICBdKuQ+rJnVZYiE7GEj
+ zyb0xA6IIUL9CIXrYtAeyMR9lw24EXX2kBLyrZaT7FwnG4kFC7qXF/snbr2OUiWH/94B
+ j85e4VOEuupUpOWBIc6AiRZdeI7SfpOGo6q3FvvAs5r+Udoh5/oUFOf+1sl6aV+CfptR
+ 35kQ==
+X-Gm-Message-State: AOAM530FIG9L8/5BEKVbZC9ImAIY+GouOj22/NcYNIyu1bt4YowcQwwi
+ k0n9TGBI3PeM4T+NGABum5OXspMwrPpBfQ==
+X-Google-Smtp-Source: ABdhPJyzaIKGn9e47IwVPUJ7XYVt6PislhdxcKo4s7RhcoXW3VhYCZvd0vXuj2AQqIg3wL7AXv53SA==
+X-Received: by 2002:a05:600c:1906:b0:39c:7f82:3090 with SMTP id
+ j6-20020a05600c190600b0039c7f823090mr5360952wmq.152.1655229100693; 
+ Tue, 14 Jun 2022 10:51:40 -0700 (PDT)
 Received: from LinkTed.fritz.box ([2a02:8070:41a4:2c00:5e48:90c:7bda:e6d5])
  by smtp.gmail.com with ESMTPSA id
- f187-20020a1c38c4000000b003973ea7e725sm21640889wma.0.2022.06.14.10.38.42
+ n4-20020a05600c4f8400b0039c362311d2sm19162792wmq.9.2022.06.14.10.51.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Jun 2022 10:38:42 -0700 (PDT)
+ Tue, 14 Jun 2022 10:51:40 -0700 (PDT)
 X-Google-Original-From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Jun 2022 19:38:35 +0200
-Message-Id: <20220614173835.3207-1-raphael.pavlidis@gmail.com>
+Date: Tue, 14 Jun 2022 19:50:48 +0200
+Message-Id: <20220614175048.6352-1-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/slirp: bump to version 4.7.0
+Subject: [Buildroot] [PATCH 1/1] package/slirp4netns: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,46 +90,95 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Raphael Pavlidis via buildroot <buildroot@buildroot.org>
 Reply-To: Raphael Pavlidis <raphael.pavlidis@googlemail.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://gitlab.freedesktop.org/slirp/libslirp/-/blob/v4.7.0/CHANGELOG.md
+slirp4netns is for user-mode networking for unprivileged network
+namespace.
+
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/slirp/slirp.hash | 2 +-
- package/slirp/slirp.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                    |  1 +
+ package/slirp4netns/Config.in        | 20 ++++++++++++++++++++
+ package/slirp4netns/slirp4netns.hash |  3 +++
+ package/slirp4netns/slirp4netns.mk   | 15 +++++++++++++++
+ 4 files changed, 39 insertions(+)
+ create mode 100644 package/slirp4netns/Config.in
+ create mode 100644 package/slirp4netns/slirp4netns.hash
+ create mode 100644 package/slirp4netns/slirp4netns.mk
 
-diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
-index 326b2ad246..b391462d9b 100644
---- a/package/slirp/slirp.hash
-+++ b/package/slirp/slirp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b8a22ac4d601ba16122a67827c0f4361785d4d283f21ff8ed48d4aa1e7693477  libslirp-4.6.1.tar.xz
-+sha256  9398f0ec5a581d4e1cd6856b88ae83927e458d643788c3391a39e61b75db3d3b  libslirp-v4.7.0.tar.gz
- sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index 43d2c520e9..8017b7a636 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--SLIRP_VERSION = 4.6.1
--SLIRP_SOURCE = libslirp-$(SLIRP_VERSION).tar.xz
--SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/uploads/83b199ea6fcdfc0c243dfde8546ee4c9
-+SLIRP_VERSION = 4.7.0
-+SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.gz
-+SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
- SLIRP_LICENSE = BSD-3-Clause
- SLIRP_LICENSE_FILES = COPYRIGHT
- SLIRP_CPE_ID_VENDOR = libslirp_project
+diff --git a/package/Config.in b/package/Config.in
+index 3b089166da..216e04e98b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1903,6 +1903,7 @@ menu "Networking"
+ 	source "package/rtmpdump/Config.in"
+ 	source "package/siproxd/Config.in"
+ 	source "package/slirp/Config.in"
++	source "package/slirp4netns/Config.in"
+ 	source "package/snmppp/Config.in"
+ 	source "package/sofia-sip/Config.in"
+ 	source "package/sysrepo/Config.in"
+diff --git a/package/slirp4netns/Config.in b/package/slirp4netns/Config.in
+new file mode 100644
+index 0000000000..22414dfbc9
+--- /dev/null
++++ b/package/slirp4netns/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_SLIRP4NETNS
++	bool "slirp4netns"
++	depends on BR2_USE_MMU # libcap, libglib2, slirp
++	depends on BR2_USE_WCHAR # libglib2, slirp
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, slirp
++	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccomp
++	select BR2_PACKAGE_LIBCAP
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBSECCOMP
++	select BR2_PACKAGE_SLIRP
++	help
++	  User-mode networking for unprivileged network namespaces.
++
++	  https://github.com/rootless-containers/slirp4netns
++
++comment "slirp4netns needs a toolchain w/ wchar, threads, headers >= 3.17"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+diff --git a/package/slirp4netns/slirp4netns.hash b/package/slirp4netns/slirp4netns.hash
+new file mode 100644
+index 0000000000..e3115c1be0
+--- /dev/null
++++ b/package/slirp4netns/slirp4netns.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  b584edde686d3cfbac210cbdb93c4b0ba5d8cc0a6a4d92b9dfc3c5baec99c727  slirp4netns-1.2.0.tar.gz
++sha256  58db3cfabf8ec806bc060e54ab5466a31de4a3ae80fe4a8aa02fb6b1c053c93f  COPYING
+diff --git a/package/slirp4netns/slirp4netns.mk b/package/slirp4netns/slirp4netns.mk
+new file mode 100644
+index 0000000000..89fe275a74
+--- /dev/null
++++ b/package/slirp4netns/slirp4netns.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# slirp4netns
++#
++################################################################################
++
++SLIRP4NETNS_VERSION = 1.2.0
++SLIRP4NETNS_SITE = $(call github,rootless-containers,slirp4netns,v$(SLIRP4NETNS_VERSION))
++SLIRP4NETNS_LICENSE = GPL-2.0
++SLIRP4NETNS_LICENSE_FILES = COPYRIGHT
++SLIRP4NETNS_DEPENDENCIES = libcap libglib2 libseccomp slirp
++
++SLIRP4NETNS_AUTORECONF = YES
++
++$(eval $(autotools-package))
 -- 
 2.35.1
 
