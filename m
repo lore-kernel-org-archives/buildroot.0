@@ -4,86 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5590EC43334
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 20:21:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5554FC43334
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 21:27:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9DCD4187D;
-	Tue, 14 Jun 2022 20:21:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B858F41798;
+	Tue, 14 Jun 2022 21:27:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EQVj3JcygGZs; Tue, 14 Jun 2022 20:21:45 +0000 (UTC)
+	with ESMTP id RxPa4vpMN0nB; Tue, 14 Jun 2022 21:27:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9937E4184E;
-	Tue, 14 Jun 2022 20:21:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8AD4D41571;
+	Tue, 14 Jun 2022 21:27:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6EF7C1BF5B3
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 20:21:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 557731BF2C4
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 21:27:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D51940AA0
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 20:21:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 42A60409C1
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 21:27:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id shqX1Nu29agL for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 20:21:42 +0000 (UTC)
+ with ESMTP id Pj4nWAKvO9fl for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 21:27:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0BFAB40A9B
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 20:21:41 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id u8so12667931wrm.13
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 13:21:41 -0700 (PDT)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0307140191
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 21:27:34 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id o16so12886799wra.4
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 14:27:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:in-reply-to:content-transfer-encoding;
- bh=EWwzuxE+SWzhWIib1hzvXUGWCXmJcHPQELO98IpE5Cw=;
- b=VZpIQqKp/EMatZgmM1PVZOB7c762tJo9t9e86iQPHJh9m1p15Jt/abayf55aKx5RhK
- D8fUh2I7wUxc+PgxIMZJU4bJhsOiKU1q0HznVk+LbEED73qT9uIKnHW8ymYDdSigpnqj
- 2fbtgjRgGFrz/5omU9zBJptimwXtJ2xi3bczS6zfQAy+EZYMhvkKIXlAyQvKckPBPR+f
- DN6FzdxxQBqOjBmeNi9w6h4tG9IS0CvNTpzS1j8U5t2i3p9iU6BcHPUbqZ/x7tXVC+eW
- eZkWifE+TAmSbC1gGuRp9amJ5bj6QQ/zjzEhCg+KJfVbBbVuCKj6TBMqE8Enx9WOOsFu
- fIgw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=iZiGInQgaL7p1MER3g8h4J4fRQBJqnOO5CeVoyt19+g=;
+ b=hiQFN3j8wrkB7tZIscnqEXAcWq6cPGjxwjCPobYAgn/YuQSHIsd6oRzZXcuOR0qQuD
+ svr1yJxU2qL+YqmxVZSl+PtRme9V7oSu+pOQEeB0Nz7G4qhqgWVeURMC3u2zQbT+iRuM
+ 0SZeiOWzbUm5fYk0vjVMjjNNbnoA/yI3OP1oIqm+Kg5IlUNNMiqKum6Qy+DK2nq4jJcI
+ zZYmUVVdy+A7tgHohXBTAPM/QkOaLwfGoTMr6xSoF9i8geE1wAQp20LtjentEV7j4K7D
+ 7f7u2Budytg/noNbfxshjxwmfNC5mAb8HSv1OOkL/4gEDYBNbGHPh0lLYLhSILcuSfZL
+ as1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=EWwzuxE+SWzhWIib1hzvXUGWCXmJcHPQELO98IpE5Cw=;
- b=YYn3jQGDmOLwpIMZDulUIM2BkablJpIlP9RaDsD62VppH/1ui7T5/zDwDxCo0ofv8K
- /vAxd+xabYvujHP0H/hLEvSJCJAGxMHrpM26o1xLEgbVkgGVAHOgc+82DP/JyVTCJ4+m
- YdwpckmsS2mVW42XnWHuCWczbGCn5WeXrE4qAS+aYqSZiqjdAk1m7sGZ69MJf/Qb825L
- nqum3pnNmOIx9r8Ur8JTCqXgA27YgfJlQXgwMr6pf6YwhN9ZdOcloO89iinwLDuZ3cFd
- jjoRurmwNDBhDS5Gphm1U1Ah4Al8vA58p/ZAc7pfF3nPkDvRvTTyhT3HnAvGzDXhjHHr
- 3RuA==
-X-Gm-Message-State: AJIora8v17vB4O0VtabTP8dEXR6iE/+eW1t7TJtgd4FEqJl4nKiUXvaS
- Q4WXwXkmZZ/wZU5XcQwGahQ=
-X-Google-Smtp-Source: AGRyM1uUmirvqqO7lztPaBkL13DSL4elNHwya3EWvs8aICYIF/Jf5uQBaJcubbxcDO2UYl19RlgaSg==
-X-Received: by 2002:a5d:6daa:0:b0:216:ffb6:df1f with SMTP id
- u10-20020a5d6daa000000b00216ffb6df1fmr6560281wrs.659.1655238100142; 
- Tue, 14 Jun 2022 13:21:40 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ bh=iZiGInQgaL7p1MER3g8h4J4fRQBJqnOO5CeVoyt19+g=;
+ b=omFDNGyKKP/OAblXM7/R2Qm4L198pg/UOLt/W4cxgK/fSCaEL+PVZP/Kw4YptdMi9k
+ I65RT5hZ0M/UcvIK+4yUR/YRkzLiPZjJE8kUz0riS+l4ABgOSFecCkE63EoJ9Frq0bi8
+ m35tBzd9cGzYpHGYqN7tIXQk8fB0rn4MTrjIHWbjGWoM8zOxk7zKbf8UC9vQoaQdtJOC
+ WZMmRJmBMqHdVMBtDYqfl1yPv+SkJEMCWgS8YQTqN1MDhafN0pZnbXd3P+9/UNUcrKea
+ eJ2nrDSWgAHlmDuIjlAxW6YomcEZJ2QuV9fWQ3w2HWT9FJCkGTzVyepdR7t8SS00M6g1
+ PHrw==
+X-Gm-Message-State: AJIora9i8XrF8I8M1ZzKcwFiN6C7zgknQagiVKJJuOprTF3DBnCfkWYS
+ QWSAnpWFRxePrwNNckOwEK1uv9Bnjbg=
+X-Google-Smtp-Source: AGRyM1tI2xXsKN8qDt8TyVGngaMDgZxn8oDkmPjoNc/GWvn0Qr7sdENyy28mzgPySg97mwqob8XMjw==
+X-Received: by 2002:adf:cc8f:0:b0:213:ba72:4ca with SMTP id
+ p15-20020adfcc8f000000b00213ba7204camr6605920wrj.92.1655242051569; 
+ Tue, 14 Jun 2022 14:27:31 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- j13-20020a5d618d000000b002167efdd549sm718521wru.38.2022.06.14.13.21.39
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Jun 2022 13:21:39 -0700 (PDT)
-Message-ID: <2fbf3a91-4155-055d-7c5c-e1a56b68c6d1@gmail.com>
-Date: Tue, 14 Jun 2022 22:21:36 +0200
+ m10-20020a5d56ca000000b0020c5253d8f7sm12956033wrw.67.2022.06.14.14.27.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 14 Jun 2022 14:27:30 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 14 Jun 2022 23:24:44 +0200
+Message-Id: <20220614212446.3491084-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-References: <20220611170118.1055111-1-romain.naour@gmail.com>
- <e5057a67-610d-993f-6d67-6a4ec4ebae68@mind.be>
-From: Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <e5057a67-610d-993f-6d67-6a4ec4ebae68@mind.be>
-Subject: Re: [Buildroot] [PATCH] package/minetest{-game}: bump to version
- 5.5.1
+Subject: [Buildroot] [PATCH 1/3] package/netsniff-ng: libnl is optional,
+ not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,72 +88,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Joris Lijssens <joris.lijssens@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QXJub3V0LAoKTGUgMTQvMDYvMjAyMiDDoCAyMDo0NywgQXJub3V0IFZhbmRlY2FwcGVsbGUgYSDD
-qWNyaXTCoDoKPiAKPiAKPiBPbiAxMS8wNi8yMDIyIDE5OjAxLCBSb21haW4gTmFvdXIgd3JvdGU6
-Cj4+IFJlbGVhc2UgYW5ub3VuY2VtZW50Ogo+PiA1LjUuMDogaHR0cHM6Ly9mb3J1bS5taW5ldGVz
-dC5uZXQvdmlld3RvcGljLnBocD9mPTE4JnQ9Mjc3NTQKPj4gNS4xLjE6IGh0dHBzOi8vZm9ydW0u
-bWluZXRlc3QubmV0L3ZpZXd0b3BpYy5waHA/cD00MTAzNDQjcDQxMDM0NAo+Pgo+PiBCYWNrIGlu
-IDIwMjEsIHRoZSBtaW5ldGVzdCBwcm9qZWN0IGZvcmtlZCB0aGUgaXJybGljaHQgbGlicmFyeSBk
-dWUgdG8KPj4gbGFjayBvZiB1cHN0cmVhbSByZWxlYXNlIFsxXS4gQnV0IHRoZSBpcnJsaWNodCB1
-cHN0cmVhbSBwcm9qZWN0IGlzIG5vdAo+PiByZWFsbHkgaGFsdGVkIHNpbmNlIGEgc3RhYmxlIDEu
-OC41IHZlcnNpb24gaGFzIGJlZW4gcmVsZWFzZWQgWzJdIGFuZAo+PiB0aGVyZSBpcyBzdGlsbCBz
-dm4gYWN0aXZpdHkuCj4+Cj4+IEJ1dCB0aGUgTWludGVzdCBmb3JrIChjYWxsZWQgaXJybGljaHRN
-dCkgaXMgYXR0cmFjdGl2ZSBzaW5jZToKPj4gwqDCoCAtIEl0IHVzZSBhIENNYWtlIGJ1aWxkIHN5
-c3RlbSBpbnN0ZWFkIG9mIGhhbmQgd3JpdHRlbiBtYWtlZmlsZXMgWzNdCj4+IMKgwqAgLSBCdW5k
-bGVkIGxpYnJhcmllcyBoYXMgYmVlbiByZW1vdmVkIFs0XSBbNV0KPj4gwqDCoCAtIEl0IGFsbG93
-cyB0byByZW1vdmUgdGhlIE5FT04gc3VwcG9ydCB3b3JrYXJvdW5kIGZvciBidW5kbGVkIGxpYnBu
-Zwo+PiDCoMKgIC0gSXQgdXNlIGdpdCBhcyBWQ1MKPj4gwqDCoCAtIEltcHJvdmUgdGhlIGxpY2Vu
-c2luZyBpbmZvcm1hdGlvbgo+Pgo+PiBUaGlzIGlycmxpY2h0bXQgaXMgcmVxdWlyZWQgc2luY2Ug
-bWludGVzdCA1LjUuMCB2ZXJzaW9uIGJ1dCBjb250YWlucwo+PiBzZXZlcmFsIGNoYW5nZXMgc3Bl
-Y2lmaWMgdG8gTWluZXRlc3QsIHNvIGFkZCBpcnJsaWNodG10IGFzIGFkZGl0aW9uYWwKPj4gc291
-cmNlcyB1c2luZyBFWFRSQV9ET1dOTE9BRFMuCj4+Cj4+IG1pbmV0ZXN0Ogo+PiAtIEFkZCB6c3Rk
-IGRlcGVuZGVuY3kgZm9yIE1hcEJsb2NrIGNvbXByZXNzaW9uIFs2XQo+PiAtIEZyZWV0eXBlIGlz
-IG5vdyBhIGJ1aWxkIHJlcXVpcmVtZW50IGZvciBtaW50ZXN0IGNsaWVudCBbN10KPj4gLSBnY2Mg
-Pj0gNS54IGlzIG5vdyByZXF1aXJlZCBbOF0KPj4gLSByZW1vdmUgdXBzdHJlYW0gcGF0Y2ggWzld
-Cj4+Cj4+IG1pbmV0ZXN0LWdhbWU6Cj4+IC0gQWRkIG5ldyBsaWNlbnNlIGZpbGVzOgo+PiDCoMKg
-wqDCoCBtb2RzL2tleXMvbGljZW5zZS50eHQKPj4gwqDCoMKgwqAgbW9kcy9tdGdfY3JhZnRndWlk
-ZS9saWNlbnNlLnR4dAo+PiDCoMKgwqDCoCBtb2RzL3dlYXRoZXIvbGljZW5zZS50eHQKPj4KPj4g
-WzFdIGh0dHBzOi8vZm9ydW0ubWluZXRlc3QubmV0L3ZpZXd0b3BpYy5waHA/cD0zOTM1NjUKPj4g
-WzJdIGh0dHBzOi8vaXJybGljaHQuc291cmNlZm9yZ2UuaW8vZm9ydW0vdmlld3RvcGljLnBocD9m
-PTImdD01Mjc3NQo+PiBbM10KPj4gaHR0cHM6Ly9naXRodWIuY29tL21pbmV0ZXN0L2lycmxpY2h0
-L2NvbW1pdC82Y2U5OGRjZTc3ODljOTZkZGVkMDBmYWJmZTQwOTM1NmY5NTRlZGZlCj4+Cj4+IFs0
-XQo+PiBodHRwczovL2dpdGh1Yi5jb20vbWluZXRlc3QvaXJybGljaHQvY29tbWl0LzY3ZjE0MDI0
-MTBhNWI5MGYxMWMyYTJiZDY5YmE1ZDczZWI2ZTk0M2EKPj4KPj4gWzVdCj4+IGh0dHBzOi8vZ2l0
-aHViLmNvbS9taW5ldGVzdC9pcnJsaWNodC9jb21taXQvMjY0ZjhiNzJjMWRjZTdjMjA5YWM4ZGFh
-ZjA0ODRhYTNhZjc3NDBiNwo+Pgo+PiBbNl0KPj4gaHR0cHM6Ly9naXRodWIuY29tL21pbmV0ZXN0
-L21pbmV0ZXN0L2NvbW1pdC9kMTYyNGE1NTIxNTFiY2IxNTJiN2FiZjYzZGY2NTAxYjYzNDU4ZDc4
-Cj4+Cj4+IFs3XQo+PiBodHRwczovL2dpdGh1Yi5jb20vbWluZXRlc3QvbWluZXRlc3QvY29tbWl0
-Lzc2ZGJkMGQyZDA0NzEyZGNhZDRmN2M2YWZlY2I5N2ZhOGQ2NjJkNmQKPj4KPj4gWzhdCj4+IGh0
-dHBzOi8vZ2l0aHViLmNvbS9taW5ldGVzdC9taW5ldGVzdC9jb21taXQvYTkwYjJhNGQ0ZjM4ZTky
-YjQwMTZkOWFjODZlMDAxMzk4YmU3MjllNwo+Pgo+PiBbOV0KPj4gaHR0cHM6Ly9naXRodWIuY29t
-L21pbmV0ZXN0L21pbmV0ZXN0L2NvbW1pdC83YzI4MjZjYmMwZjM2MDI3ZDRhOTc4MWY0MzMxNTBk
-MWM1ZDBkMDNmCj4+Cj4+Cj4+IFNpZ25lZC1vZmYtYnk6IFJvbWFpbiBOYW91ciA8cm9tYWluLm5h
-b3VyQGdtYWlsLmNvbT4KPiAKPiDCoEFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCj4gCj4gW3Nu
-aXBdCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21pbmV0ZXN0L21pbmV0ZXN0Lmhhc2ggYi9wYWNr
-YWdlL21pbmV0ZXN0L21pbmV0ZXN0Lmhhc2gKPj4gaW5kZXggN2ViNTdjYjJhOS4uZTc4Zjg2NTk2
-OSAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9taW5ldGVzdC9taW5ldGVzdC5oYXNoCj4+ICsrKyBi
-L3BhY2thZ2UvbWluZXRlc3QvbWluZXRlc3QuaGFzaAo+PiBAQCAtMSw0ICsxLDYgQEAKPj4gwqAg
-IyBMb2NhbGx5IGNhbGN1bGF0ZWQKPj4gLXNoYTI1NsKgIGRlOWU0NDEwNTgzYzg0NWMxMDRiNGJl
-MjVmOWQwYjg3NDNkODU3M2MxMjAxNDliODkxMGFlMjUxOWY5YWIxNGXCoAo+PiBtaW5ldGVzdC01
-LjQuMS50YXIuZ3oKPj4gK3NoYTI1NsKgIGRjMGFlNTE4OGVmMzUxZGI4NWMzOGIyN2YzOGY4NTQ5
-YjEzM2VkODJhYTQ2ZGFlYTZkZWVlMTQ4YWEzNDU0ZjTCoAo+PiBtaW5ldGVzdC01LjUuMS50YXIu
-Z3oKPj4gK3NoYTI1NsKgIDZkMzhkZDdmM2UzYzhkNzY4ZTFmNTc3NmI5OGRkNTM1OWIxODRjMmU2
-NzQwZGRmNzMzZjRkYzg2MTUxOTFiZWbCoAo+PiBpcnJsaWNodC0xLjkuMG10NS50YXIuZ3oKPj4g
-wqAgLXNoYTI1NsKgIDViYzRiYjRmZjM2OWQ1MDM5YmNmZmY1YTgzYTM3ODMzNTI0MGNhODZjNTgy
-OTllN2RlMjUwOTcxNTNjNzAxMzLCoAo+PiBMSUNFTlNFLnR4dAo+PiArc2hhMjU2wqAgZDFkOGE2
-M2Y3ZjcwZDg5YTNhODk5ZjNiOWZiNWNhMWVhN2RiYmQ0ZWI0NDliZTJhN2IyZmY4NjFiMWYwOTE5
-MsKgCj4+IExJQ0VOU0UudHh0Cj4gCj4gwqBJIGhhdmVuJ3QgZG91YmxlLWNoZWNrZWQgd2h5IHRo
-ZSBsaWNlbnNlIGhhc2ggY2hhbmdlZCwgYW5kIGl0J3Mgbm90IGNsZWFybHkKPiBleHBsYWluZWQg
-aW4gdGhlIGNvbW1pdCBtZXNzYWdlLCBidXQgSSB0cnVzdCB5b3UgdmVyaWZpZWQgaXQuCgpTb3Jy
-eSwgdGhlIGhhc2ggY2hhbmdlZCBkdWUgdG8gSXJybGljaHRNdCAoSXJybGljaHQgTWluZXRlc3Qg
-Zm9yaykgYW5kIG5ldwppbWFnZXMgdW5kZXIgQ0MtQlkgNC4wLgoKVXN1YWxseSB0aGVyZSBhcmUg
-bW9yZSBsaWNlbnNpbmcgY2hhbmdlcyBvbiBtaW5ldGVzdC1nYW1lLgoKQmVzdCByZWdhcmRzLApS
-b21haW4KCgo+IAo+IMKgUmVnYXJkcywKPiDCoEFybm91dAo+IApfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+libnl is optional, not mandatory, since version 0.6.2 and
+https://github.com/netsniff-ng/netsniff-ng/commit/20a5e15443bfbbb7e6624a754832cdce19d462a0
+https://github.com/netsniff-ng/netsniff-ng/commit/b073c8e5fd7f8c723680b659bd81afd231ef32f5
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/netsniff-ng/Config.in      |  1 -
+ package/netsniff-ng/netsniff-ng.mk | 11 +++++++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+index 5d1407baac..6b043362ba 100644
+--- a/package/netsniff-ng/Config.in
++++ b/package/netsniff-ng/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_NETSNIFF_NG
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	select BR2_PACKAGE_LIBNL
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+ 	select BR2_PACKAGE_LIBURCU
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index 27bd707c84..3bc11b55b9 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -13,7 +13,8 @@ NETSNIFF_NG_LICENSE_FILES = README COPYING
+ NETSNIFF_NG_CONF_ENV = \
+ 	NACL_INC_DIR=/dev/null \
+ 	NACL_LIB_DIR=/dev/null
+-NETSNIFF_NG_DEPENDENCIES = host-pkgconf libnl libpcap libnetfilter_conntrack liburcu
++NETSNIFF_NG_DEPENDENCIES = host-pkgconf libpcap libnetfilter_conntrack liburcu
++NETSNIFF_NG_CONF_OPTS = --prefix=$(TARGET_DIR)/usr
+ 
+ ifeq ($(BR2_PACKAGE_NETSNIFF_NG_MAUSEZAHN),y)
+ NETSNIFF_NG_DEPENDENCIES += libcli libnet
+@@ -28,6 +29,12 @@ ifeq ($(BR2_PACKAGE_GEOIP),y)
+ NETSNIFF_NG_DEPENDENCIES += geoip
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBNL),y)
++NETSNIFF_NG_DEPENDENCIES += libnl
++else
++NETSNIFF_NG_CONF_OPTS += --disable-libnl
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ NETSNIFF_NG_DEPENDENCIES += ncurses
+ endif
+@@ -43,7 +50,7 @@ define NETSNIFF_NG_CONFIGURE_CMDS
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		./configure \
+-		--prefix=$(TARGET_DIR)/usr \
++		$(NETSNIFF_NG_CONF_OPTS) \
+ 	)
+ endef
+ 
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
