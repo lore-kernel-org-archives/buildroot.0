@@ -1,84 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6C77C43334
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 17:30:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DB9AC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 17:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9805834AE;
-	Tue, 14 Jun 2022 17:30:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DA33410AD;
+	Tue, 14 Jun 2022 17:38:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AFc9tamgME-b; Tue, 14 Jun 2022 17:30:39 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3482833CA;
-	Tue, 14 Jun 2022 17:30:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1CF7B1BF23C
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:30:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BF9D418A6
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:30:37 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TfkUTyGKL6Ko for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 17:30:35 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rA2-p35LeGfo; Tue, 14 Jun 2022 17:38:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77E4A409A5;
+	Tue, 14 Jun 2022 17:38:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 802061BF23C
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:38:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 782F3607F2
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:38:46 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=googlemail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id djF_nVwyD80J for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 17:38:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E33C641852
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 17:30:34 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id kq6so18512013ejb.11
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 10:30:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:from:subject:to
- :content-language:organization:content-transfer-encoding;
- bh=f7fLCdD13018zq+QMeTYyHXnGj70MksFUM8BPBkqBZQ=;
- b=aO25Qm8lKx1b/yit9hGhqO4eROVtJeBiWpS6OAEfDbedhSxQg1FKog3/xOLcNT1vCs
- P5A6i2tOsNlHWtjvAZq1d/mZ/TdsXn6EIL6e6WNr1Y6nFv5z+gElQ7c3JFrbjQ8KZqIN
- P2rBQHSixI1/Zwo2QbvWkXjwYkEcDl+EcsS3868xrlttwvh+1XW65CR4E6ba0Eys2TSe
- MRy5pOxGtnH9liRJgrGZLFJQX0SUaZmO6yVk0PE9XoDYY3SVO3CkCH6MpMVGKdj6CVWc
- TD+YCHIj7miupqg6S+fgoe1SeAowxw7BnLaSo3ekUdweKrSkw530k5KY8GGpvtaQG4vS
- GnRA==
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1AD486074C
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 17:38:44 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id z9so5057914wmf.3
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 10:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=e2sxOqkrRlUS9RpKdu5SNO01bq0nM6ZZnWOTYW8Ghww=;
+ b=me/IG3zKL9DC2fx9WWaMz4BSSQhylLdOMUUA9eQciCKPq3l0HFUKVsdSOVxtiQ7mu8
+ eo7kNKMtQCysralOFNj7+VS0o4ORUxQ+S9gcGP75QcGgC9R8+PRFAuCLBXmKFOXxO59n
+ iHuYfCaun7TQXk9yEaxCFzbAHSKW7EkL+RaNFVYpT/0SWt9Q5je1qT3JWenHmR+/Ik6L
+ fOfEhO5zs5yOjF+QFsQvJpIxqtSsKQEJfNIBvfpecHzF1/hY3DL90NtdglrUDSoi2cmP
+ RXZvcchrfL9hbdE7nCuWt7kkF5W2oeaDrVED91HX+r7hm99L98XMWBH66SGIWJH9dPRX
+ P6rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:from
- :subject:to:content-language:organization:content-transfer-encoding;
- bh=f7fLCdD13018zq+QMeTYyHXnGj70MksFUM8BPBkqBZQ=;
- b=U+rXs0uYu9p3+W+fXj0Aktz+YR0jVzdBNDy3KRHwSeO6IkTzTLAYwuSV337f0z4Gca
- YaHOVD1xG0FU3kdB0tVbdfc8WJ6bQA04MtlJ9fHvTTqBjO2ogDTwTM1VtC+zdFdpmbB4
- DHdWnAkYjpTjcaq0vmTeWdrlfx94K0t6FFs50yoQNOkiqh1apotxhR/k8R3aonT9aSx6
- eieXfdTwRsXTjgw0fSajWP+9ZCcidXgyMeh2UWWMzpLs1zyXxQsJ5MagxWxrJ0/wNvlg
- oSV0FFOJrcOFvnVmiOvHUz4guWWkHdZWHvQZLURBQDismfw+47rfl+bpGZaTOM29aYOt
- 3zXA==
-X-Gm-Message-State: AJIora9uUi1cnSD5YTo3pcDQ+A8KEk7ePXJyjxg76HvvlhLaaO4iqKWF
- AZH364U0iwNjdruiWijTC5GXwEH/4CamoN+K
-X-Google-Smtp-Source: AGRyM1uYYC8nsMue6Xt6/YDrV18h+PJo+Rvf6N13M8vHref3F4T+H+2oMxzPeIxC0xC+v2y/DuU1dw==
-X-Received: by 2002:a17:907:2c65:b0:70e:c2ee:781b with SMTP id
- ib5-20020a1709072c6500b0070ec2ee781bmr5249573ejc.281.1655227833021; 
- Tue, 14 Jun 2022 10:30:33 -0700 (PDT)
-Received: from [10.1.0.189] (ip-188-118-3-185.reverse.destiny.be.
- [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- gx7-20020a170906f1c700b006fe8ec44461sm5290993ejb.101.2022.06.14.10.30.32
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Jun 2022 10:30:32 -0700 (PDT)
-Message-ID: <01c15cae-b2f1-875f-ea8a-03c23269d3d0@mind.be>
-Date: Tue, 14 Jun 2022 19:30:27 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-From: Frederik Van Bogaert <frederik.vanbogaert@mind.be>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=e2sxOqkrRlUS9RpKdu5SNO01bq0nM6ZZnWOTYW8Ghww=;
+ b=savcWyB1lt6XDI/5Qyr5ik7+BbA9AKPdkQeibsPSSDbh7+7nJvwJXFrriqac8XpWPH
+ 2ULSUJkGIFiHylTZilZ5/rfQzog/rBcUJxnPpshcONUb7lgzIBiBluusEdonNTk19nBg
+ OxrN9Y4IY43ei6cQfGWsay7gr9ZGVv++1un1RMslnASUc/0hb6U3g6jrq9ieaxr/3WwS
+ 7tdHKCZge0FFkfsuBV04leyKlEgePBjvgpx6nLs/YePSRseNIGQDVONd68L6I021bGMt
+ jwPNqnYkpmGr+Y07wKayRlg24XRb6cI1IrC8xPWliuurp2oDWJgYVqVGscK9ICHbEhqu
+ 3npQ==
+X-Gm-Message-State: AOAM5324mHFGvTqCFWn1KVliDMrmOECUVMFCI1mlRyiSF2lAFu2wFjRi
+ 6Tb33mUt/8vcagTCVob2laI/uzuCcSwRpw==
+X-Google-Smtp-Source: ABdhPJwrpDAhpZYtUTlkKv9J0WzJIYqu95nCkQq+/thawHKoRK99/tfhHIwFu2dwOoJc+va0QL9few==
+X-Received: by 2002:a7b:cd16:0:b0:39c:4fff:88cc with SMTP id
+ f22-20020a7bcd16000000b0039c4fff88ccmr5260724wmj.122.1655228322932; 
+ Tue, 14 Jun 2022 10:38:42 -0700 (PDT)
+Received: from LinkTed.fritz.box ([2a02:8070:41a4:2c00:5e48:90c:7bda:e6d5])
+ by smtp.gmail.com with ESMTPSA id
+ f187-20020a1c38c4000000b003973ea7e725sm21640889wma.0.2022.06.14.10.38.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 14 Jun 2022 10:38:42 -0700 (PDT)
+X-Google-Original-From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
-Content-Language: en-US
-Organization: Mind
-Subject: [Buildroot] [PATCH] package/libunwind: Upstep to v1.6.2
+Date: Tue, 14 Jun 2022 19:38:35 +0200
+Message-Id: <20220614173835.3207-1-raphael.pavlidis@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/slirp: bump to version 4.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,17 +87,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Raphael Pavlidis via buildroot <buildroot@buildroot.org>
+Reply-To: Raphael Pavlidis <raphael.pavlidis@googlemail.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Re-sending because my mail client mangled the first attempt :-) This also removes an old patch to fix atomic_ops for ARM pre-ARMv6. atomic_ops support has been replaced with C11 atomics, so the patch did not apply anymore, and should be unnecessary. This does mean compilation will fail with systems that don't support C11 atomics, i.e. GCC versions older than 4.9 Signed-off-by: Frederik Van Bogaert <frederik.vanbogaert@mind.be> --- ...O_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch | 56 ------------------- package/libunwind/Config.in | 2 + package/libunwind/libunwind.hash | 2 +- package/libunwind/libunwind.mk | 6 +- 4 files changed, 4 insertions(+), 62 deletions(-) delete mode 100644 package/libunwind/0001-Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch diff --git a/package/libunwind/0001-Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch b/package/libunwind/0001-Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch deleted file mode 100644 index 2a37ed7784..0000000000 --- 
-a/package/libunwind/0001-Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch +++ /dev/null @@ -1,56 +0,0 @@ -From 24484e80b3e329c9edee1995e102f8612eedb79c Mon Sep 17 00:00:00 2001 -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com> -Date: Tue, 13 May 2014 23:32:27 +0200 -Subject: [PATCH] Add AO_REQUIRE_CAS to fix build on ARM < v6 - -ARM earlier than ARMv6, such as ARMv4 and ARMv5 do not provide -optimize atomic operations in libatomic_ops. Since libunwind is using -such operations, it should define AO_REQUIRE_CAS before including -<atomic_ops.h> so that libatomic_ops knows it should use emulated -atomic operations instead (even though they are obviously a lot more -expensive). - -Also, while real atomic operations are all inline functions and -therefore linking against libatomic_ops was not required, the emulated -atomic operations actually require linking against libatomic_ops, so -the commented AC_CHECK_LIB test in acinclude.m4 is uncommented to make -sure we link 
-against libatomic_ops. - -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---- - acinclude.m4 | 8 +------- - include/libunwind_i.h | 1 + - 2 files changed, 2 insertions(+), 7 deletions(-) - -diff --git a/acinclude.m4 b/acinclude.m4 -index 497f7c2..9c15af1 100644 ---- a/acinclude.m4 -+++ b/acinclude.m4 -@@ -22,11 +22,5 @@ fi]) - AC_DEFUN([CHECK_ATOMIC_OPS], - [dnl Check whether the system has the atomic_ops package installed. - AC_CHECK_HEADERS(atomic_ops.h) --# --# Don't link against libatomic_ops for now. We don't want libunwind --# to depend on libatomic_ops.so. Fortunately, none of the platforms --# we care about so far need libatomic_ops.a (everything is done via --# inline macros). --# --# AC_CHECK_LIB(atomic_ops, main) -+ AC_CHECK_LIB(atomic_ops, main) - ]) -diff --git a/include/libunwind_i.h b/include/libunwind_i.h -index 23f615e..deabdfd 100644 ---- a/include/libunwind_i.h -+++ b/include/libunwind_i.h -@@ -95,6 +95,7 @@ WITH THE SOFTWARE OR THE 
-USE OR OTHER DEALINGS IN THE SOFTWARE. */ - (pthread_mutex_unlock != NULL ? pthread_mutex_unlock (l) : 0) - - #ifdef HAVE_ATOMIC_OPS_H -+# define AO_REQUIRE_CAS - # include <atomic_ops.h> - static inline int - cmpxchg_ptr (void *addr, void *old, void *new) --- -1.9.2 - diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in index 5284b5864c..b914cd46f7 100644 --- a/package/libunwind/Config.in +++ b/package/libunwind/Config.in @@ -23,6 +23,8 @@ config BR2_PACKAGE_LIBUNWIND bool "libunwind" depends on BR2_TOOLCHAIN_HAS_THREADS depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS + # GCC 4.9 is the first to implement C11 atomics + depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # forcefully links against libgcc_s, only available in dynamic # linking configurations depends on !BR2_STATIC_LIBS diff --git a/package/libunwind/libunwind.hash b/package/libunwind/libunwind.hash index de00c59988..1d532a7830 100644 --- a/package/libunwind/libunwind.hash +++ 
-b/package/libunwind/libunwind.hash @@ -1,5 +1,5 @@ # Locally calculated after checking pgp signature -sha256 90337653d92d4a13de590781371c604f9031cdb50520366aa1e3a91e1efb1017 libunwind-1.5.0.tar.gz +sha256 4a6aec666991fb45d0889c44aede8ad6eb108071c3554fcdff671f9c94794976 libunwind-1.6.2.tar.gz # Hash for license file sha256 6a0dbbdaec2b3136b7bf045586f4212bdf74e7af688bf9dfe9154607cf5ec156 COPYING diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk index aaa33464a9..9cd587d0a3 100644 --- a/package/libunwind/libunwind.mk +++ b/package/libunwind/libunwind.mk @@ -4,7 +4,7 @@ # ################################################################################ -LIBUNWIND_VERSION = 1.5.0 +LIBUNWIND_VERSION = 1.6.2 LIBUNWIND_SITE = http://download.savannah.gnu.org/releases/libunwind LIBUNWIND_INSTALL_STAGING = YES LIBUNWIND_LICENSE_FILES = COPYING @@ -16,8 +16,4 @@ LIBUNWIND_CONF_OPTS = \ --disable-tests \ $(if 
-$(BR2_INSTALL_LIBSTDCPP),--enable-cxx-exceptions,--disable-cxx-exceptions) -ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y) -LIBUNWIND_DEPENDENCIES += libatomic_ops -endif - $(eval $(autotools-package)) -- 2.34.1
+https://gitlab.freedesktop.org/slirp/libslirp/-/blob/v4.7.0/CHANGELOG.md
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+---
+ package/slirp/slirp.hash | 2 +-
+ package/slirp/slirp.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
+index 326b2ad246..b391462d9b 100644
+--- a/package/slirp/slirp.hash
++++ b/package/slirp/slirp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  b8a22ac4d601ba16122a67827c0f4361785d4d283f21ff8ed48d4aa1e7693477  libslirp-4.6.1.tar.xz
++sha256  9398f0ec5a581d4e1cd6856b88ae83927e458d643788c3391a39e61b75db3d3b  libslirp-v4.7.0.tar.gz
+ sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
+diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
+index 43d2c520e9..8017b7a636 100644
+--- a/package/slirp/slirp.mk
++++ b/package/slirp/slirp.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-SLIRP_VERSION = 4.6.1
+-SLIRP_SOURCE = libslirp-$(SLIRP_VERSION).tar.xz
+-SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/uploads/83b199ea6fcdfc0c243dfde8546ee4c9
++SLIRP_VERSION = 4.7.0
++SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.gz
++SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
+ SLIRP_LICENSE = BSD-3-Clause
+ SLIRP_LICENSE_FILES = COPYRIGHT
+ SLIRP_CPE_ID_VENDOR = libslirp_project
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
