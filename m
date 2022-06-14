@@ -1,91 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AEC6C43334
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 16:57:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 388F9C43334
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 16:57:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D959C41845;
-	Tue, 14 Jun 2022 16:57:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E146683367;
+	Tue, 14 Jun 2022 16:57:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uT_twY-bQykR; Tue, 14 Jun 2022 16:57:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3didW_CSiQnb; Tue, 14 Jun 2022 16:57:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFA3E417CE;
-	Tue, 14 Jun 2022 16:57:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C87C81BF37A
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:56:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18B7783312;
+	Tue, 14 Jun 2022 16:57:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2AD2B1BF37A
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:56:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6E5D40B77
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:56:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18B0760B02
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:56:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ynUkjCVc20Cb for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 16:56:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JvR2S3bu_COi for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 16:56:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0E45540B70
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 16:56:06 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id c2so12513313edf.5
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 09:56:06 -0700 (PDT)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2470660AAD
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 16:56:23 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id y19so18366056ejq.6
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 09:56:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=cS0V5tUzf5AjUzuRAnK3JEFmwf2xn8hkEgxXJ+cXMUQ=;
- b=apE2WTeWiB/SGN1ViWYY1xj00s0jSlDVmHVaA0IbLxK9AiHdgTZFnjnd7IoZvEnYVL
- fD62xhZ9Hy+rajUwHDQYEIKGrZdHugweuyYO++iEICOXuxLV6e5w7ILPu5KpQoDBteGx
- Of80lDBl2rytIBrtH6ay671El5wtSEXFQSWkxoX1/5HWSYa9qex9/otxNOIliNNmgkWg
- DhHeHlcCT2psblKQIFr9tI0UH+wq2/9gGHaBtlRgLWylUiAuVl9Syq+vxDixF4S/xZnk
- XOb9jy/CYQqyITwwlnpwdqHxw/dyZ5m9/1guPQWsUtfXPjbsS4O78P3uV741Txu+gf6j
- WdwQ==
+ bh=+wXF1YoF3hYTRxVl8sVyVTD3Uat8Frx5mXAGd5OCEXA=;
+ b=an77iuqqHKkgjQGX/JtTxkhAKXf+akYWtC7V7morn77Pb2TjtZo2oKHRPmngUS+x1l
+ gDU0uWVGIN+LO8AVDagAuCM8DnAeUGPA0LdvYNRQiG2WPj0FNdSE3yZfBJ3rzy1lgS+/
+ IszGbUN3ywaD7RLRGA1/QOI/CQkZurC4QpcA9uUJrZKoX9jzcQ42eWkKEuqcAhLEC/LQ
+ As6/bCkD6UJShGLsukQf0d6yUuXhQrrUQQK2VVkgXUuM8TD5xmmX0cpWoTmi6Tu3s3/v
+ FFYG5bzBrZE68VLWj6ix8lImuJAVhPrMpTnzFOKxiBTJySD+4pxGQr6w57RHmKxaqQkA
+ Ol6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=cS0V5tUzf5AjUzuRAnK3JEFmwf2xn8hkEgxXJ+cXMUQ=;
- b=GRBDLYKCiWrvxxDmOhTaHDC2EV7WE9lpQZFdxH1HMO58VNUrr4Pm3yLDGZQRzuFemt
- jGayv4yfxbNm/hGr/jUmsgduKpYBhLMF8r9AGb3eyM6H/ukJVHKFkTlZ34SYcdP+uEnU
- megoF7Je8Wqoqvdt5ZABo/ZBReUqYi2q30xTCxhGrdmsvrOXscqHBEgUhQ3/ymWvtRjQ
- zKpD374Ik+ab55HCiAFhgeX++eXoyfOnvKMnp2lha4c35kVFGxPo7wxSXWaexGqwrZOm
- by5Ogxs56vvS90USJeZuYEmeTAP4FvjnUEQCntXUYIpfrNGS2/7TKbe555BXRJhPPQxe
- 8//Q==
-X-Gm-Message-State: AOAM533fxPQVThda6orhtG74NCE0sP2+iEUApVZXZ09RNYCsDsXL++6d
- nmTbBTI03ZV51edDz6nC8lwrKg==
-X-Google-Smtp-Source: AGRyM1u4cZHG3e9+PNRUlTA7Qj8tASJP1S7mYD9JapXwiUUSkxNvlG04w3aJmAVh9vvmUQcJT9LmCw==
-X-Received: by 2002:aa7:d586:0:b0:433:5467:8ebf with SMTP id
- r6-20020aa7d586000000b0043354678ebfmr7291579edq.214.1655225765319; 
- Tue, 14 Jun 2022 09:56:05 -0700 (PDT)
+ bh=+wXF1YoF3hYTRxVl8sVyVTD3Uat8Frx5mXAGd5OCEXA=;
+ b=YwxhmnP1WQ0dD2rfW5UMCf6ye6kkL5tzjiXL7Oex+hGaltVejeL8gbUiJyyeO2deLb
+ lUx96bJP+jOD9uCheZLo3k5+EtM3GmJF2ssNBHpnmR244PRaZWNf9dc99Sis8hiBI2b+
+ NSRyJhRoCQ+ZV89rDt/ekCot7Dow1grP3ZddF8RoDg90f59pc0OOvM0msTiLRv057b8/
+ jq3bgZX6fzu6ODUtzOVQQHh7W1rB/MU0N96V08MqV2pXPFtm0OkUfAimccIlB8Xml5mq
+ ek6/tjvgUvUdguPvd+OAjvdjbE/7vc1cUcyv3xr7xjvkwNYTqH8MiqEoARiW0NXn12t2
+ 2jIQ==
+X-Gm-Message-State: AOAM531LpyFHoowha6s6iR5UyDlZaX69z9DPrfWE9ugNUL4vK0VbC7RE
+ QBZAH3YYI6OzGIRp4P6B0UHO/w==
+X-Google-Smtp-Source: AGRyM1s474atqwnY3SPc7uwkHGVRA6k2xWXhxhnq3uxUOdKF+1f8jO6ufvBiqxsflOeSU5GWdQL8YQ==
+X-Received: by 2002:a17:907:7811:b0:6ef:a896:b407 with SMTP id
+ la17-20020a170907781100b006efa896b407mr4896363ejc.645.1655225781377; 
+ Tue, 14 Jun 2022 09:56:21 -0700 (PDT)
 Received: from [10.1.0.138] (ip-188-118-3-185.reverse.destiny.be.
  [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- o11-20020a056402438b00b0042dc9aafbfbsm7589038edc.39.2022.06.14.09.56.04
+ w17-20020a056402269100b0042de3d661d2sm7675741edd.1.2022.06.14.09.56.20
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Jun 2022 09:56:04 -0700 (PDT)
-Message-ID: <f780e253-f0da-781a-ffd8-e3381bf2d190@mind.be>
-Date: Tue, 14 Jun 2022 18:56:03 +0200
+ Tue, 14 Jun 2022 09:56:20 -0700 (PDT)
+Message-ID: <450d6d32-d279-1d7c-574d-05af03fbf846@mind.be>
+Date: Tue, 14 Jun 2022 18:56:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
 Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
- <20220608071027.3384469-8-thomas.petazzoni@bootlin.com>
- <12178427-e595-be4e-5da5-d4cf1718b9e2@mind.be>
- <20220614175844.45509426@windsurf>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220610210820.3645527-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220614175844.45509426@windsurf>
-Subject: Re: [Buildroot] [PATCH v2 07/14] toolchain/toolchain-external: add
- BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER option
+In-Reply-To: <20220610210820.3645527-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/logrotate: security bump to
+ version 3.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,11 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Buildroot List <buildroot@buildroot.org>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -109,32 +102,53 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/06/2022 17:58, Thomas Petazzoni wrote:
-> On Tue, 14 Jun 2022 17:34:20 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
+On 10/06/2022 23:08, Fabrice Fontaine wrote:
+> Fix CVE-2022-1348: A vulnerability was found in logrotate in how the
+> state file is created. The state file is used to prevent parallel
+> executions of multiple instances of logrotate by acquiring and releasing
+> a file lock. When the state file does not exist, it is created with
+> world-readable permission, allowing an unprivileged user to lock the
+> state file, stopping any rotation. This flaw affects logrotate versions
+> before 3.20.
 > 
->>    This could have been simplified to
->>
->> 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
->>
->> but this way is more flexible so better I guess.
+> https://github.com/logrotate/logrotate/blob/3.20.1/ChangeLog.md
 > 
-> Yes, I thought about this (should maybe have written it in the commit
-> log), but I thought: external toolchains can very well rely on patched
-> GDB versions that could potentially have support for an architecture
-> that's not supported in upstream GDB.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  I wrote exactly that in the commit log :-)
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
+> ---
+>   package/logrotate/logrotate.hash | 2 +-
+>   package/logrotate/logrotate.mk   | 4 ++--
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> I agree this is a corner case, so if we decide that's not worth
-> considering, I would totally support using
-> BR2_PACKAGE_GDB_ARCH_SUPPORTS.
-> 
-> Thomas
+> diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+> index 2af46d60b7..9c8e73f738 100644
+> --- a/package/logrotate/logrotate.hash
+> +++ b/package/logrotate/logrotate.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> -sha256  841f81bf09d0014e4a2e11af166bb33fcd8429cc0c2d4a7d3d9ceb3858cfccc5  logrotate-3.18.0.tar.xz
+> +sha256  742f6d6e18eceffa49a4bacd933686d3e42931cfccfb694d7f6369b704e5d094  logrotate-3.20.1.tar.xz
+> diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+> index 4d1344c2cd..453dbe477a 100644
+> --- a/package/logrotate/logrotate.mk
+> +++ b/package/logrotate/logrotate.mk
+> @@ -4,8 +4,8 @@
+>   #
+>   ################################################################################
+>   
+> -LOGROTATE_VERSION = 3.18.0
+> -LOGROTATE_SOURCE = logrotate-3.18.0.tar.xz
+> +LOGROTATE_VERSION = 3.20.1
+> +LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.xz
+>   LOGROTATE_SITE = https://github.com/logrotate/logrotate/releases/download/$(LOGROTATE_VERSION)
+>   LOGROTATE_LICENSE = GPL-2.0+
+>   LOGROTATE_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
