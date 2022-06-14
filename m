@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3749BC43334
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 18:50:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C52EDCCA47B
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 18:50:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DDC2740E46;
-	Tue, 14 Jun 2022 18:50:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 731B240933;
+	Tue, 14 Jun 2022 18:50:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u38rkydpUO0h; Tue, 14 Jun 2022 18:50:25 +0000 (UTC)
+	with ESMTP id EY0tx5MIL-Dy; Tue, 14 Jun 2022 18:50:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C19040997;
-	Tue, 14 Jun 2022 18:50:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B7E541840;
+	Tue, 14 Jun 2022 18:50:38 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6F2D91BF306
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 18:48:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3F94E1BF306
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 18:48:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8934E40933
+ by smtp4.osuosl.org (Postfix) with ESMTP id E8042409EA
  for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 18:48:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p-B_Zue_eZ_M for <buildroot@lists.busybox.net>;
+ with ESMTP id aXfxc973W3HR for <buildroot@lists.busybox.net>;
  Tue, 14 Jun 2022 18:48:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A55C9409EA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CC3A40860
  for <buildroot@buildroot.org>; Tue, 14 Jun 2022 18:48:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 95119870DF; Tue, 14 Jun 2022 18:36:34 +0000 (UTC)
+ id 8AFF8870E4; Tue, 14 Jun 2022 18:36:34 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 14 Jun 2022 20:10:30 +0200
+Date: Tue, 14 Jun 2022 20:10:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 719ba458cb5895cb75281033e97ae61be77d32c2
-X-Git-Newrev: c5b0abd3bb4b64a14c4ed473e3eb8993502ac082
+X-Git-Oldrev: 78e5a9c40e0754bbe840ef7b8da85efc28eb8b48
+X-Git-Newrev: 719ba458cb5895cb75281033e97ae61be77d32c2
 X-Patchwork-Hint: ignore
-Message-Id: <20220614183634.95119870DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openvpn: bump version to 2.5.7
+Message-Id: <20220614183634.8AFF8870E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php: security bump version to
+ 8.0.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,91 +59,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5b0abd3bb4b64a14c4ed473e3eb8993502ac082
+commit: https://git.buildroot.net/buildroot/commit/?id=719ba458cb5895cb75281033e97ae61be77d32c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/OpenVPN/openvpn/blob/release/2.5/Changes.rst
+Changelog: https://www.php.net/ChangeLog-8.php#8.0.20
 
-Removed patch which is now included in this release.
+Fixes CVE-2022-31625 and CVE-2022-31626.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...1-auth-pam-c-add-missing-include-limits-h.patch | 41 ----------------------
- package/openvpn/openvpn.hash                       |  2 +-
- package/openvpn/openvpn.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 43 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openvpn/0001-auth-pam-c-add-missing-include-limits-h.patch b/package/openvpn/0001-auth-pam-c-add-missing-include-limits-h.patch
-deleted file mode 100644
-index 34a6dbd034..0000000000
---- a/package/openvpn/0001-auth-pam-c-add-missing-include-limits-h.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 0fed64a91d894b46105bf7e8b16edea4d90ab70c Mon Sep 17 00:00:00 2001
--From: Antonio Quartulli <a@unstable.cc>
--Date: Thu, 21 Apr 2022 15:19:09 +0200
--Subject: [PATCH] auth-pam.c: add missing include limits.h
--
--On most systems limits.h is pulled in by some other header and thus no
--error is ever triggered, but it's possible to find the right environment
--which lackis this and prevents compiling auth-pam.c (possibly when using
--LibreSSL).
--
--Include the header explicitly as it includes the definition of PATH_MAX.
--
--(note that this bug is fixed in Gentoo since 2020 by including a custom
--patch, but apparently the issue was never reported upstream)
--
--Reported-by: Michelangelo Scopelliti <kernelpanic@gmx.com>
--Signed-off-by: Antonio Quartulli <a@unstable.cc>
--Acked-by: Gert Doering <gert@greenie.muc.de>
--Message-Id: <20220421131909.32053-1-a@unstable.cc>
--URL: https://www.mail-archive.com/openvpn-devel@lists.sourceforge.net/msg24136.html
--Signed-off-by: Gert Doering <gert@greenie.muc.de>
--
--[Retrieved from:
--https://github.com/OpenVPN/openvpn/commit/0fed64a91d894b46105bf7e8b16edea4d90ab70c]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/plugins/auth-pam/auth-pam.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/plugins/auth-pam/auth-pam.c b/src/plugins/auth-pam/auth-pam.c
--index f893b51fe3..7033944568 100644
----- a/src/plugins/auth-pam/auth-pam.c
--+++ b/src/plugins/auth-pam/auth-pam.c
--@@ -47,6 +47,7 @@
-- #include <fcntl.h>
-- #include <signal.h>
-- #include <syslog.h>
--+#include <limits.h>
-- #include "utils.h"
-- 
-- #include <openvpn-plugin.h>
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index bd598a5186..0959b7f838 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256  333a7ef3d5b317968aca2c77bdc29aa7c6d6bb3316eb3f79743b59c53242ad3d  openvpn-2.5.6.tar.gz
-+sha256  08340a389905c84196b6cd750add1bc0fa2d46a1afebfd589c24120946c13e68  openvpn-2.5.7.tar.gz
- sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index db2f53a5f3..5c602e0448 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
+diff --git a/package/php/php.hash b/package/php/php.hash
+index e0aca101b4..2e9aa6880b 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  ba62219c4b0486cbb2a04f0796749a46b0ee1f5a142ed454212b4e2460cb0fab  php-8.0.19.tar.xz
++sha256  973fec765336ee01f47536a5db1c2eee98df9d34a41522b7b6c760159bf0a77b  php-8.0.20.tar.xz
+ 
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 5053f34b85..f649a9bb8b 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.5.6
-+OPENVPN_VERSION = 2.5.7
- OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf
- OPENVPN_LICENSE = GPL-2.0
+-PHP_VERSION = 8.0.19
++PHP_VERSION = 8.0.20
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
