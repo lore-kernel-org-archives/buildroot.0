@@ -4,79 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 793E6C43334
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 15:19:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E7A0C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 15:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2A4B832DB;
-	Tue, 14 Jun 2022 15:19:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD7CA8331B;
+	Tue, 14 Jun 2022 15:34:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bvozG36I6wZZ; Tue, 14 Jun 2022 15:19:06 +0000 (UTC)
+	with ESMTP id E-ymRQC36udG; Tue, 14 Jun 2022 15:34:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BD4183267;
-	Tue, 14 Jun 2022 15:19:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1111F1BF4D7
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 15:19:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C32F1832EA;
+	Tue, 14 Jun 2022 15:34:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 75C921BF4D7
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 15:34:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F384B60EB6
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 15:19:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6518C83281
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 15:34:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Zcjr0bcuGOrQ for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 15:19:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UwbMkryU_crR for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 15:34:24 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DA0BD607C0
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 15:19:00 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id n28so12120526edb.9
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 08:19:00 -0700 (PDT)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4953582F57
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 15:34:24 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id m20so17886641ejj.10
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 08:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=date:from:to:subject:message-id:mime-version:content-disposition
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=IXtN43/29jF+SMRSqFeB6nBP0XEhKBvUHoPWcen+dJE=;
- b=Ul7jYSihdB84sHW/KTKP+jyX2oQITQOQS4DBxtfGxHmgsfwyZEAYB5o91gakvNvvZa
- WM++sTI6xxvXg2DeXk+qtTk7v6cBqI2Swhi5FNPMUl4nRsPotnTHGRBznXb4/tH5bt8u
- mxZy6Bg1BQnZGKguChDmE10foXRFiWjFHs0niYa/LqZmZxAes9+D1ftFUzXXaF9fSoms
- 0PDCeUww4E+55NuVxbYnZUyZU31fdWPsaqJb63HGm0nlF8Yd+Lf9v/fp5OnDEMO+kblp
- K9zR50CiBp94aqB4NOZEMJkNSXrNoEfEvMlqGxYlJJU0rmI0TEfvgzTFnGng89CrsmFt
- FG1w==
+ bh=amsi+mxEDdXClI9wRE9wLDYxRBDX6dmTLySHIHi+Yp0=;
+ b=Q2ra91K2tS9MMoZSdVKlQcOBV5rbihSw2R1MlG01QaoWWEZRH5DVCf4RmOq6h9OJg9
+ lizEqzHaqNV8iFS5s2wZtr6n5ikIX+Kap77LqmCfItV2qygQRgzl46nP+DGacJxH2P3v
+ PghRMUsOFn6k+btz55VfVHVtMdWrVVqHjIYgQZcD7afBPAR6ojszKvrVTyY5+1cs9MPG
+ HCBy0eey8/vFaf5phfP/TB8c3MzOqrwAsQFeCeLelVUb7J6T4+/0KRWjcsEealIKxgud
+ S5MSmWU40kA4pf6kXQMQhO6A44PyKPJDtdlUlRlT0kV8YEL28EABnHVRBDjYBt25ZXxu
+ qY6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:subject:message-id:mime-version
- :content-disposition:content-transfer-encoding;
- bh=IXtN43/29jF+SMRSqFeB6nBP0XEhKBvUHoPWcen+dJE=;
- b=EiCuMj7UxCK1Yz2XSNy88U7KDxwF/s/3UHDlMYu2MkjyQ1bvUpo036OtgX4iDKIDFU
- hKuHztP7/BcTxlrCCMy2sIiLgQDsooVCXnYPbFp4a1Cboja/SYRJUftK31MV+LW64nRo
- Z97bMfPJnCN65/ckZWdBIzzynSohrEjkfGCL0rUT7flxH9sZhCdklMl4/o84Z7qU5HT4
- Edsyzb3ikMPjk3n4y2aIphTiNx5S4Ac3vv10J5sZ97cG27E5sA0xN3YJmui9dYdQAF/F
- R2FV0eBGafH8Rzmw3cranm2gJw8ElQGnzr3kIlaTBaUD5N/RybixaxnNNmjk2NtLmH+R
- Y8EA==
-X-Gm-Message-State: AOAM532pFhqIEybYaxmCqLlAot3xp1AqEUauW0kOWII+vOxKZbs7R+o8
- GFqY+8WVJmRip9JXacYSauFgNe8iOgTGbQ==
-X-Google-Smtp-Source: ABdhPJyjYO7C54o6rvzM3BsR79JZpkHNl/Qg6xBLfmXPzkXL0LCRac5prZCvKy9KwPDdbtlUk0GQgA==
-X-Received: by 2002:a05:6402:2684:b0:431:497e:699e with SMTP id
- w4-20020a056402268400b00431497e699emr6520690edd.343.1655219938945; 
- Tue, 14 Jun 2022 08:18:58 -0700 (PDT)
-Received: from cephalopod (ip-188-118-3-185.reverse.destiny.be.
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=amsi+mxEDdXClI9wRE9wLDYxRBDX6dmTLySHIHi+Yp0=;
+ b=2RdipoSFC1cKxIpek0X4czF9sXtBdgqGwkWLylqh8wqBHFKcVTsTUbemMvQHrBixk+
+ yDHtZxzkqZsXe51JCCRPGOIbmBwspsCXPVVNM/sS0IWSTEJtSu/Mv07GXID1xB3dRErV
+ US+AMF1VzCtcApFRjg/4K9FHirHVyN89gqGkvdqG2+XvezUIV4WnI+972A4O3hh6N6ps
+ o2kOzsXhta2Fek8ZSX4PRLFrMpCyWlCdk12bnd9B360OCV+BQt7b2QBT5gfoszuFzxA0
+ Fd0Ai36/1HixZZD702Jf3RBL+/UZPapeNwIzoshIruzTnclNLx2IsyHEhgH8HUoZx20o
+ sDwg==
+X-Gm-Message-State: AJIora+LpILC0uHj+I5PhGJJghzC+s6kfuoAEoczaoLY2otvAZYfShMm
+ q9UgTUAruML9bK9WAHQWPAhnLg==
+X-Google-Smtp-Source: ABdhPJxv4GVwZ19k0UzM11k/TkQYqZ2+wqTxBFTFTWLVkdhw37naLgY3iPbfJ+9poyQ2zeotMDcG7A==
+X-Received: by 2002:a17:906:9414:b0:711:dc5b:e42e with SMTP id
+ q20-20020a170906941400b00711dc5be42emr4845080ejx.514.1655220862363; 
+ Tue, 14 Jun 2022 08:34:22 -0700 (PDT)
+Received: from [10.1.0.138] (ip-188-118-3-185.reverse.destiny.be.
  [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- fy38-20020a1709069f2600b00711d88ae162sm5109082ejc.24.2022.06.14.08.18.58
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Jun 2022 08:18:58 -0700 (PDT)
-Date: Tue, 14 Jun 2022 17:18:57 +0200
-From: Ben Hutchings <ben.hutchings@mind.be>
-To: buildroot@buildroot.org
-Message-ID: <Yqim4TOtcyKtFHJj@cephalopod>
+ h8-20020aa7c5c8000000b0042e21f8c412sm7258199eds.42.2022.06.14.08.34.21
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 14 Jun 2022 08:34:21 -0700 (PDT)
+Message-ID: <12178427-e595-be4e-5da5-d4cf1718b9e2@mind.be>
+Date: Tue, 14 Jun 2022 17:34:20 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-Subject: [Buildroot] [PATCH] package/zlib-ng: Add upstream patch to fix
- build with uclibc
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-GB
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Romain Naour <romain.naour@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
+References: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
+ <20220608071027.3384469-8-thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220608071027.3384469-8-thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH v2 07/14] toolchain/toolchain-external: add
+ BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,141 +96,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with uclibc on arm architectures (and
-similar on powerpc):
 
-/home/buildroot/autobuild/instance-2/output-1/build/zlib-ng-2.0.6/arch/arm/=
-armfeature.c:4:12: fatal error: sys/auxv.h: No such file or directory
-    4 | #  include <sys/auxv.h>
-      |            ^~~~~~~~~~~~
-compilation terminated.
 
-Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
----
- ...-sys-auxv.h-exists-at-configure-time.patch | 90 +++++++++++++++++++
- 1 file changed, 90 insertions(+)
- create mode 100644 package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exis=
-ts-at-configure-time.patch
+On 08/06/2022 09:10, Thomas Petazzoni via buildroot wrote:
+> Some external toolchains do not have gdbserver available, but the
+> option BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is always visible. And
+> when enabled, this option aborts with an error when gdbserver cannot
+> be found:
+> 
+>    Could not find gdbserver in external toolchain
+> 
+> Due to that, some random configurations fail to build when
+> BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y, for example with the Bootlin
+> toolchains for Microblaze or OpenRISC (because there's no GDB support
+> for those architectures).
+> 
+> One solution could be to make "Could not find gdbserver in external
+> toolchain" a warning instead of a hard error, but then nobody would
+> notice about this issue, in cases where it should legitimately abort
+> with a hard error.
+> 
+> So, the clean solution would be to add a
+> BR2_TOOLCHAIN_EXTERNAL_HAS_GDBSERVER. But that means all existing
+> external toolchains would have to be modified to select this option.
+> 
+> Instead, and as an exception, we chose to use inverted logic, and
+> create an option that is the opposite:
+> BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER. By default, we assume
+> external toolchains have gdbserver. If
+> BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER is enabled, we disallow the
+> BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY option.
+> 
+> Note that the case of custom external toolchain does not matter: by
+> definition they are not tested by the autobuilders, and by definition,
+> we cannot now in menuconfig if the custom toolchain has or does not
+> have gdbserver.
+> 
+> This will help fixing:
+> 
+>    http://autobuild.buildroot.net/results/6315ef7b66ee4ae8f870c92186bc674d65f62f2c/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> Note: if you want me to go with the positive logic option
+> BR2_TOOLCHAIN_EXTERNAL_HAS_GDBSERVER, I'll be happy to provide the
+> patches.
+> ---
+>   toolchain/toolchain-external/Config.in | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index 2177e6a678..1a67e5645f 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -155,9 +155,13 @@ source "toolchain/toolchain-external/toolchain-external-bootlin/Config.in.option
+>   # Custom toolchains
+>   source "toolchain/toolchain-external/toolchain-external-custom/Config.in.options"
+>   
+> +config BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
+> +	bool
+> +
+>   config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+>   	bool "Copy gdb server to the Target"
+>   	depends on BR2_TOOLCHAIN_EXTERNAL
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
 
-diff --git a/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-c=
-onfigure-time.patch b/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-ex=
-ists-at-configure-time.patch
-new file mode 100644
-index 0000000000..ba8297cda7
---- /dev/null
-+++ b/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-configur=
-e-time.patch
-@@ -0,0 +1,90 @@
-+From e1baa6b439c06f3d0e6be3e381cc746ffb55aee1 Mon Sep 17 00:00:00 2001
-+From: Mika Lindqvist <postmaster@raasu.org>
-+Date: Wed, 13 Apr 2022 01:22:29 +0300
-+Subject: [PATCH] Check that sys/auxv.h exists at configure time and add
-+ preprocessor define for it. * Protect including sys/auxv.h in all relevant
-+ files with the new preprocessor define * Test for both existence of both
-+ sys/auxv.h and getauxval() with both cmake and configure
-+
-+[Ben Hutchings: Backport to 2.0.6:
-+ - Drop the s390 changes
-+ - Change some filenames]
-+
-+Backported from: e1baa6b439c06f3d0e6be3e381cc746ffb55aee1
-+Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
-+---
-+ CMakeLists.txt        |    4 ++++
-+ arch/arm/armfeature.c |    2 +-
-+ arch/power/power.c    |    5 ++++-
-+ configure             |   13 +++++++++++++
-+ 4 files changed, 22 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 0dd196130..e4e4b7332 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -338,6 +338,10 @@ endif()
-+ #
-+ # Check for standard/system includes
-+ #
-++check_include_file(sys/auxv.h  HAVE_SYS_AUXV_H)
-++if(HAVE_SYS_AUXV_H)
-++    add_definitions(-DHAVE_SYS_AUXV_H)
-++endif()
-+ check_include_file(sys/sdt.h   HAVE_SYS_SDT_H)
-+ if(HAVE_SYS_SDT_H)
-+     add_definitions(-DHAVE_SYS_SDT_H)
-+diff --git a/arch/arm/arm_features.c b/arch/arm/arm_features.c
-+index 195c94992..f6b67687f 100644
-+--- a/arch/arm/armfeature.c
-++++ b/arch/arm/armfeature.c
-+@@ -1,6 +1,6 @@
-+ #include "../../zutil.h"
-+ =
+  This could have been simplified to
 
-+-#if defined(__linux__)
-++#if defined(__linux__) && defined(HAVE_SYS_AUXV_H)
-+ #  include <sys/auxv.h>
-+ #  ifdef ARM_ASM_HWCAP
-+ #    include <asm/hwcap.h>
-+diff --git a/arch/power/power_features.c b/arch/power/power_features.c
-+index 9186b40d8..65599d9a7 100644
-+--- a/arch/power/power.c
-++++ b/arch/power/power.c
-+@@ -1,9 +1,12 @@
-+ /* POWER feature check
-+  * Copyright (C) 2020 Matheus Castanho <msc@linux.ibm.com>, IBM
-++ * Copyright (C) 2021-2022 Mika T. Lindqvist <postmaster@raasu.org>
-+  * For conditions of distribution and use, see copyright notice in zlib.h
-+  */
-+ =
+	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
 
-+-#include <sys/auxv.h>
-++#ifdef HAVE_SYS_AUXV_H
-++#  include <sys/auxv.h>
-++#endif
-+ #include "../../zutil.h"
-+ =
+but this way is more flexible so better I guess.
 
-+ Z_INTERNAL int power_cpu_has_arch_2_07;
-+diff --git a/configure b/configure
-+index aed1909cc..a357e1c8a 100755
-+--- a/configure
-++++ b/configure
-+@@ -776,6 +776,19 @@ else
-+   echo "Checking for strerror... No." | tee -a configure.log
-+ fi
-+ =
+  Regards,
+  Arnout
 
-++# check for getauxval() for architecture feature detection at run-time
-++cat > $test.c <<EOF
-++#include <sys/auxv.h>
-++int main() { return getauxval(0); }
-++EOF
-++if try $CC $CFLAGS -o $test $test.c $LDSHAREDLIBC; then
-++  echo "Checking for getauxval() in sys/auxv.h... Yes." | tee -a configur=
-e.log
-++  CFLAGS=3D"${CFLAGS} -DHAVE_SYS_AUXV_H"
-++  SFLAGS=3D"${SFLAGS} -DHAVE_SYS_AUXV_H"
-++else
-++  echo "Checking for getauxval() in sys/auxv.h... No." | tee -a configure=
-.log
-++fi
-++
-+ # We need to remove zconf.h from source directory if building outside of =
-it
-+ if [ "$SRCDIR" !=3D "$BUILDDIR" ]; then
-+     rm -f $SRCDIR/zconf${SUFFIX}.h
--- =
-
-2.30.2
-
--- =
-
-Ben Hutchings =B7 Senior Embedded Software Engineer, Essensium-Mind =B7 min=
-d.be
+>   	help
+>   	  Copy the gdbserver provided by the external toolchain to the
+>   	  target.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
