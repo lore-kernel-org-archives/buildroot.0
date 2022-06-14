@@ -4,81 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DE03C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 21:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C520EC43334
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 21:41:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03E2B40B83;
-	Tue, 14 Jun 2022 21:28:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6E19E40B6A;
+	Tue, 14 Jun 2022 21:41:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6A5Tb4fIbWHE; Tue, 14 Jun 2022 21:28:05 +0000 (UTC)
+	with ESMTP id MWFN9vgmKH-B; Tue, 14 Jun 2022 21:41:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F6F540B27;
-	Tue, 14 Jun 2022 21:28:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E7A001BF2C4
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 21:27:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3592B40B27;
+	Tue, 14 Jun 2022 21:41:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CAA4F1BF28C
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 21:41:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D5A3860FAF
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 21:27:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B42C640B27
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 21:41:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HUwsSs6kF0Qp for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 21:27:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3733F60F86
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 21:27:39 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id c21so12909985wrb.1
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 14:27:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=asXWAqLgQh8s+3xsYeRk/Ugva04OhPHXs0YtW93L/bE=;
- b=hlDyzmyVZm8JhvDyLzyMN2vpepfryLI7Ybxv4rkaHSNQ3U6HalTdoQU6RIJbJSfFfH
- wfIgmPwQd7bFAQ5jySSRRwJYbH35+6kUbWpbQ3piMwN+ZNSei+C9KyQhFe8is3ej67Et
- C9o3NEXCYPRest+PFcIdhsQ80LDALf/FI2GtBD9UklucXbK1P0dWpEkPL58JJkC3cG9h
- qBYJIaGoGD0BkBPurR/DH6xcxFw3DiviiW7n63GTgwNM4x50gHvscwmODXiEIXv6Fq9V
- l6EMrkI33CPGXvRUp2U+9ZJLAEWt+GoVS69+iHuBI5IQ9KELFDCFwMyaPk9BU7K52NSN
- f9iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=asXWAqLgQh8s+3xsYeRk/Ugva04OhPHXs0YtW93L/bE=;
- b=5rARNSm3nsF5yTrxPYKSE6mT5we1HZ+tZcyaVcMvIyKLU57PF0GxVlyot6AxZS65xH
- +PyxVLpgO+sIP8u/Gu9WWW6bKbW4dWavvlLTMWr5AcVldB02XyMUN6BjvSC2ECidHPdC
- bYZwYv/0PlGKumQy1OjYsrVk66iV+gfVh5pfhzSbUESkeox765VLtr3A/ef6hA7e7qbP
- Hn21Ttib+sVuCO9vVLZWQzH34pb3rr553SAU1HCx7MFZ0J7ju5Ie1KavIF61ULXvWYFK
- hr0JtXKRl/mB9Q8+uNTvuBiBcIASQO+chtvnWdU7+CHwHHckiPObmlg/wrXPH04FAf09
- rDYQ==
-X-Gm-Message-State: AJIora9Q3bNMB3sJNHwt53C8NPiGLKBijVYX+0utMNn35P2bOuoJKp8u
- OZ2qbWQJj2LiYRj7gMa2BiJdG7Kcg/4=
-X-Google-Smtp-Source: AGRyM1siQBtxKgyX1qbvjfrMGVBoiSQJ6wWijutMflZX3SLEoxtmAIAmmPlZuGPFqXFM1HTyovCUCA==
-X-Received: by 2002:a5d:490b:0:b0:219:ea1e:1cc6 with SMTP id
- x11-20020a5d490b000000b00219ea1e1cc6mr6498330wrq.410.1655242057170; 
- Tue, 14 Jun 2022 14:27:37 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- m10-20020a5d56ca000000b0020c5253d8f7sm12956033wrw.67.2022.06.14.14.27.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Jun 2022 14:27:36 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 14 Jun 2022 23:24:46 +0200
-Message-Id: <20220614212446.3491084-3-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220614212446.3491084-1-fontaine.fabrice@gmail.com>
-References: <20220614212446.3491084-1-fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 98J2M_kL9qm1 for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 21:41:33 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7B207409C1
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 21:41:33 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 44A9D20007;
+ Tue, 14 Jun 2022 21:41:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+ t=1655242890;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=bv9sfLfO3rw2MwMUnlgbRGhVLjF+0HeBpN20uXp17Rc=;
+ b=OMMCgjQayGbTnbs3gvotOnHHnr9i7begftsTvpr/k5J8iLW+2m5JT4F8aFvgwiPZaJhEpo
+ pxkmg/yrMfpVbPs4wMBOAph45VJWLRg1/z1oXaO5i5AS2g+olsRgL+l7rKTwtYIJlGVEml
+ FC0AHWZsMUxFDNuwbMBMI//jXTe7aWiBtZiVp/mO3xMCkAkj+HHr25urGMoU+RjveRX57O
+ VQo2yOlUj3Ul3i+KCS7sdtQQiyOxDEgs17856M0d8ff5c6Ypl92UogykCgOcsntvtNWoAh
+ 3ta7+wORNUXNySZQE+OyDOLqOpOdzbVddRWyuk74XcMYhoAxVUSEmvpyWSZUzQ==
+Date: Tue, 14 Jun 2022 23:41:23 +0200
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220614234123.61e3d674@windsurf>
+In-Reply-To: <f780e253-f0da-781a-ffd8-e3381bf2d190@mind.be>
+References: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
+ <20220608071027.3384469-8-thomas.petazzoni@bootlin.com>
+ <12178427-e595-be4e-5da5-d4cf1718b9e2@mind.be>
+ <20220614175844.45509426@windsurf>
+ <f780e253-f0da-781a-ffd8-e3381bf2d190@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/3] package/netsniff-ng: fix spurious space and
- tab
+Subject: Re: [Buildroot] [PATCH v2 07/14] toolchain/toolchain-external: add
+ BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,36 +72,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Joris Lijssens <joris.lijssens@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix spurious space and tab added by commit
-b0f98d5800b288500752ef51b969d9a3cb92e897
+On Tue, 14 Jun 2022 18:56:03 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/netsniff-ng/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> > Yes, I thought about this (should maybe have written it in the commit
+> > log), but I thought: external toolchains can very well rely on patched
+> > GDB versions that could potentially have support for an architecture
+> > that's not supported in upstream GDB.  
+> 
+>   I wrote exactly that in the commit log :-)
 
-diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
-index 6b043362ba..bbb4172cd3 100644
---- a/package/netsniff-ng/Config.in
-+++ b/package/netsniff-ng/Config.in
-@@ -30,5 +30,5 @@ endif
- 
- comment "netsniff-ng needs a toolchain w/ threads, headers >= 3.0"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS  || \
--			!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+Perfect, thanks a lot!
+
+Thomas
 -- 
-2.35.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
