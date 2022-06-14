@@ -1,46 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F67AC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 17:00:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 263B6C43334
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 17:03:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5760E83410;
-	Tue, 14 Jun 2022 17:00:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C99D841899;
+	Tue, 14 Jun 2022 17:03:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id psDn0CYEMDEd; Tue, 14 Jun 2022 17:00:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Wg0SEdhF_2_G; Tue, 14 Jun 2022 17:03:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A56C83A47;
-	Tue, 14 Jun 2022 17:00:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A5B5410A4;
+	Tue, 14 Jun 2022 17:03:46 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2A8741BF9B6
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:58:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9CB041BF37A
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:03:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA93140B7F
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:58:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9937140B65
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 17:03:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ce8p2SYeVOSp for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 16:57:59 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E227040B79
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 16:57:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 080478705E; Tue, 14 Jun 2022 16:45:52 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ with ESMTP id zsYSjvqFJ-Ts for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 17:03:41 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E205640B81
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 17:03:40 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id c2so12542502edf.5
+ for <buildroot@buildroot.org>; Tue, 14 Jun 2022 10:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:from:subject:to
+ :content-language:content-transfer-encoding;
+ bh=wRolCTeJdURsIOZIoRenSXquaTpTCZTI7KuiX7edqUQ=;
+ b=fdM4/j9WYqkhbe8/I8blNyTwJoqh+fxDTVoi6T+m0JRzbNkITj8I0X6R4ydHNYgIju
+ UuLRHy7mFCUp+xpsC9rCd5a/i4QT5WKptCNMqACIOV1Y9xTVn6Y+guTaQZJY+1Su+DYv
+ 1VOmdN2XXJ1raFmKsAeJyK2+wj+FmUmDrpC3Th3KeOq57JaHyfrX429OfoFhruxH9MST
+ g79ns7o1J/cU2Ov3uVUFYCbYEzK6nVpluw2klzaV5gDGSKgvbTXW1rJ6XzZc00IMny6n
+ Qj7IfuYUfNdEL0H+7NSC0VzMHyAoHkGn1g0omCqBgkB7OgKO85QO03uoLnno3yx/8TGf
+ IaKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+ :subject:to:content-language:content-transfer-encoding;
+ bh=wRolCTeJdURsIOZIoRenSXquaTpTCZTI7KuiX7edqUQ=;
+ b=LMTyWXP2I3dav3JvOgb1Mn1jmgSkEER4zBjLb1xoparL0okbEbPtnMLDhABh8GHXIo
+ koYRFKf392Xklb/xN5eQuo3IEzBW49gsUmq7Bbv2Vtw7ZQgnDamKn8Gv3Zv3emwzhZ+9
+ FNxu+n026RpZpjOH6s3dJjmiFJoNoRylGJmfCGqFlxKsRCgPB/IpprBksgAe/yfLCbiW
+ aFnD3VcW4d3YC5zfjzDKhheqRtJ3tm9cXSbtuJAnQyBLY53xBSdnDz4hJ9knrvFgWVtx
+ xzZvcE1foLZr+V+/mkMNtc1GAGfLHSXiZRlwl+dq8+GsxKv+LvNcTaI9hYy98eiKtFh+
+ 6/zA==
+X-Gm-Message-State: AJIora+pH/kQc0wl6sQBHae0GenqYH13gTXseCeT0n/svwhNWMyvHgfH
+ uzsEfOxJo9PjlzIG1Orb4ndmfz2mM5kq15/a
+X-Google-Smtp-Source: ABdhPJwZ7RhZIl/4siWXkEhg2cEIVe1CoWxiuSL+oYYAqMTHSj+r+Jth/mI+5OZqWktfjepbxqG2EA==
+X-Received: by 2002:a05:6402:22eb:b0:42d:d578:25d9 with SMTP id
+ dn11-20020a05640222eb00b0042dd57825d9mr7287027edb.310.1655226219061; 
+ Tue, 14 Jun 2022 10:03:39 -0700 (PDT)
+Received: from [10.1.0.189] (ip-188-118-3-185.reverse.destiny.be.
+ [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
+ r20-20020a056402235400b0042bdb6a3602sm7379462eda.69.2022.06.14.10.03.38
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 14 Jun 2022 10:03:38 -0700 (PDT)
+Message-ID: <b3533f15-b70a-9c5c-7509-f372d9f60994@essensium.com>
+Date: Tue, 14 Jun 2022 19:03:34 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+From: Frederik Van Bogaert <frederik.vanbogaert@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 14 Jun 2022 17:58:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50eea7722cd3ef8d0fc7519d0e3ecbdbf00d5d74
-X-Git-Newrev: 3dd5b65681b35cadb08ac064eb97768ceba62909
-X-Patchwork-Hint: ignore
-Message-Id: <20220614164552.080478705E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gtest: needs gcc >= 5
+Content-Language: en-US
+Subject: [Buildroot] [PATCH] package/libunwind: Upstep to v1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,121 +89,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3dd5b65681b35cadb08ac064eb97768ceba62909
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit be38432532b23275869a3a914c0ad0031323259c wrongly assumed that
-is_trivially_copy_constructible was available since gcc 4.9 but it
-wasn't fully available until gcc 5.1 and
-https://github.com/gcc-mirror/gcc/commit/f5e523b76d1bdaf0df15f6bfdee602a3e153be68
-resulting in the following build failure with gcc 4.9.1:
-
-In file included from /nvmedata/autobuild/instance-13/output-1/build/gtest-1.11.0/googletest/include/gtest/internal/gtest-death-test-internal.h:39:0,
-                 from /nvmedata/autobuild/instance-13/output-1/build/gtest-1.11.0/googletest/include/gtest/gtest-death-test.h:41,
-                 from /nvmedata/autobuild/instance-13/output-1/build/gtest-1.11.0/googletest/include/gtest/gtest.h:64,
-                 from /nvmedata/autobuild/instance-13/output-1/build/gtest-1.11.0/googletest/src/gtest-all.cc:38:
-/nvmedata/autobuild/instance-13/output-1/build/gtest-1.11.0/googletest/include/gtest/gtest-matchers.h: In static member function 'static constexpr bool testing::internal::MatcherBase<T>::IsInlined()':
-/nvmedata/autobuild/instance-13/output-1/build/gtest-1.11.0/googletest/include/gtest/gtest-matchers.h:414:12: error: 'is_trivially_copy_constructible' is not a member of 'std'
-            std::is_trivially_copy_constructible<M>::value &&
-            ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/1723705cb7aea5f6fcc7e6722d866ed3bd098115
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/falcosecurity-libs/Config.in |  2 +-
- package/gtest/Config.in              | 13 ++++++-------
- package/libcamera/Config.in          |  7 +++----
- 3 files changed, 10 insertions(+), 12 deletions(-)
-
-diff --git a/package/falcosecurity-libs/Config.in b/package/falcosecurity-libs/Config.in
-index 157bc8ef6d..f101883384 100644
---- a/package/falcosecurity-libs/Config.in
-+++ b/package/falcosecurity-libs/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_FALCOSECURITY_LIBS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp, protobuf, tbb
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # grpc
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # grpc, gtest
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # jq, protobuf, tbb
- 	depends on !BR2_STATIC_LIBS # protobuf, tbb
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
-diff --git a/package/gtest/Config.in b/package/gtest/Config.in
-index 35fc9fea7b..4355e9c9c5 100644
---- a/package/gtest/Config.in
-+++ b/package/gtest/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_GTEST
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11
- 	depends on BR2_USE_MMU # fork()
- 	help
- 	  Google's framework for writing C++ tests on a variety of
-@@ -26,7 +26,7 @@ if BR2_PACKAGE_GTEST
- 
- config BR2_PACKAGE_GTEST_GMOCK
- 	bool "gmock"
--	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-gtest
-+	depends on BR2_HOST_GCC_AT_LEAST_5 # host-gtest
- 	help
- 	  Inspired by jMock, EasyMock, and Hamcrest, and designed with
- 	  C++'s specifics in mind, Google C++ Mocking Framework (or
-@@ -48,13 +48,12 @@ config BR2_PACKAGE_GTEST_GMOCK
- 	  libraries required to link/run them. The host package installs
- 	  gmock_gen, a Python script used to generate code mocks.
- 
--comment "gmock needs host gcc >= 4.9"
--	depends on !BR2_HOST_GCC_AT_LEAST_4_9
-+comment "gmock needs host gcc >= 5"
-+	depends on !BR2_HOST_GCC_AT_LEAST_5
- 
- endif # BR2_PACKAGE_GTEST
- 
--comment "gtest needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
-+comment "gtest needs a toolchain w/ C++, wchar, threads, gcc >= 5"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index 23a0040abf..fd7b3c92c4 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -77,18 +77,17 @@ config BR2_PACKAGE_LIBCAMERA_COMPLIANCE
- 	depends on BR2_USE_WCHAR # gtest
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gtest
- 	depends on BR2_INSTALL_LIBSTDCPP # gtest
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gtest
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # gtest
- 	depends on BR2_USE_MMU # gtest
- 	select BR2_PACKAGE_GTEST
- 	select BR2_PACKAGE_LIBEVENT
- 	help
- 	  lc-compliance test application
- 
--comment "lc-compliance test application needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
-+comment "lc-compliance test application needs a toolchain w/ C++, wchar, threads, gcc >= 5"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 
- endif # BR2_PACKAGE_LIBCAMERA
- 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBhbHNvIHJlbW92ZXMgYW4gb2xkIHBhdGNoIHRvIGZpeCBhdG9taWNfb3BzIGZvciBBUk0g
+cHJlLUFSTXY2LgphdG9taWNfb3BzIHN1cHBvcnQgaGFzIGJlZW4gcmVwbGFjZWQgd2l0aCBDMTEg
+YXRvbWljcywgc28gdGhlIHBhdGNoCiDCoMKgIMKgZGlkIG5vdCBhcHBseSBhbnltb3JlLCBhbmQg
+c2hvdWxkIGJlIHVubmVjZXNzYXJ5LgoKVGhpcyBkb2VzIG1lYW4gY29tcGlsYXRpb24gd2lsbCBm
+YWlsIHdpdGggc3lzdGVtcyB0aGF0IGRvbid0IHN1cHBvcnQKIMKgwqAgwqBDMTEgYXRvbWljcywg
+aS5lLiBHQ0MgdmVyc2lvbnMgb2xkZXIgdGhhbiA0LjkKClNpZ25lZC1vZmYtYnk6IEZyZWRlcmlr
+IFZhbiBCb2dhZXJ0IDxmcmVkZXJpay52YW5ib2dhZXJ0QG1pbmQuYmU+Ci0tLQogwqAuLi5PX1JF
+UVVJUkVfQ0FTLXRvLWZpeC1idWlsZC1vbi1BUk0tdjYucGF0Y2ggfCA1NiAtLS0tLS0tLS0tLS0t
+LS0tLS0tCiDCoHBhY2thZ2UvbGlidW53aW5kL0NvbmZpZy5pbsKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCB8wqAgMiArCiDCoHBhY2thZ2UvbGlidW53aW5kL2xpYnVud2luZC5o
+YXNowqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDIgKy0KIMKgcGFja2FnZS9saWJ1bndp
+bmQvbGlidW53aW5kLm1rwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCA2ICstCiDC
+oDQgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA2MiBkZWxldGlvbnMoLSkKIMKgZGVs
+ZXRlIG1vZGUgMTAwNjQ0IApwYWNrYWdlL2xpYnVud2luZC8wMDAxLUFkZC1BT19SRVFVSVJFX0NB
+Uy10by1maXgtYnVpbGQtb24tQVJNLXY2LnBhdGNoCgpkaWZmIC0tZ2l0IAphL3BhY2thZ2UvbGli
+dW53aW5kLzAwMDEtQWRkLUFPX1JFUVVJUkVfQ0FTLXRvLWZpeC1idWlsZC1vbi1BUk0tdjYucGF0
+Y2ggCmIvcGFja2FnZS9saWJ1bndpbmQvMDAwMS1BZGQtQU9fUkVRVUlSRV9DQVMtdG8tZml4LWJ1
+aWxkLW9uLUFSTS12Ni5wYXRjaApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMmEzN2Vk
+Nzc4NC4uMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL2xpYnVud2luZC8wMDAxLUFkZC1BT19SRVFV
+SVJFX0NBUy10by1maXgtYnVpbGQtb24tQVJNLXY2LnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEs
+NTYgKzAsMCBAQAotRnJvbSAyNDQ4NGU4MGIzZTMyOWM5ZWRlZTE5OTVlMTAyZjg2MTJlZWRiNzlj
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFz
+LnBldGF6em9uaUBmcmVlLWVsZWN0cm9ucy5jb20+Ci1EYXRlOiBUdWUsIDEzIE1heSAyMDE0IDIz
+OjMyOjI3ICswMjAwCi1TdWJqZWN0OiBbUEFUQ0hdIEFkZCBBT19SRVFVSVJFX0NBUyB0byBmaXgg
+YnVpbGQgb24gQVJNIDwgdjYKLQotQVJNIGVhcmxpZXIgdGhhbiBBUk12Niwgc3VjaCBhcyBBUk12
+NCBhbmQgQVJNdjUgZG8gbm90IHByb3ZpZGUKLW9wdGltaXplIGF0b21pYyBvcGVyYXRpb25zIGlu
+IGxpYmF0b21pY19vcHMuIFNpbmNlIGxpYnVud2luZCBpcyB1c2luZwotc3VjaCBvcGVyYXRpb25z
+LCBpdCBzaG91bGQgZGVmaW5lIEFPX1JFUVVJUkVfQ0FTIGJlZm9yZSBpbmNsdWRpbmcKLTxhdG9t
+aWNfb3BzLmg+IHNvIHRoYXQgbGliYXRvbWljX29wcyBrbm93cyBpdCBzaG91bGQgdXNlIGVtdWxh
+dGVkCi1hdG9taWMgb3BlcmF0aW9ucyBpbnN0ZWFkIChldmVuIHRob3VnaCB0aGV5IGFyZSBvYnZp
+b3VzbHkgYSBsb3QgbW9yZQotZXhwZW5zaXZlKS4KLQotQWxzbywgd2hpbGUgcmVhbCBhdG9taWMg
+b3BlcmF0aW9ucyBhcmUgYWxsIGlubGluZSBmdW5jdGlvbnMgYW5kCi10aGVyZWZvcmUgbGlua2lu
+ZyBhZ2FpbnN0IGxpYmF0b21pY19vcHMgd2FzIG5vdCByZXF1aXJlZCwgdGhlIGVtdWxhdGVkCi1h
+dG9taWMgb3BlcmF0aW9ucyBhY3R1YWxseSByZXF1aXJlIGxpbmtpbmcgYWdhaW5zdCBsaWJhdG9t
+aWNfb3BzLCBzbwotdGhlIGNvbW1lbnRlZCBBQ19DSEVDS19MSUIgdGVzdCBpbiBhY2luY2x1ZGUu
+bTQgaXMgdW5jb21tZW50ZWQgdG8gbWFrZQotc3VyZSB3ZSBsaW5rIGFnYWluc3QgbGliYXRvbWlj
+X29wcy4KLQotU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9u
+aUBmcmVlLWVsZWN0cm9ucy5jb20+Ci0tLS0KLSBhY2luY2x1ZGUubTTCoMKgwqDCoMKgwqDCoMKg
+wqAgfCA4ICstLS0tLS0tCi0gaW5jbHVkZS9saWJ1bndpbmRfaS5oIHwgMSArCi0gMiBmaWxlcyBj
+aGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDcgZGVsZXRpb25zKC0pCi0KLWRpZmYgLS1naXQgYS9h
+Y2luY2x1ZGUubTQgYi9hY2luY2x1ZGUubTQKLWluZGV4IDQ5N2Y3YzIuLjljMTVhZjEgMTAwNjQ0
+Ci0tLS0gYS9hY2luY2x1ZGUubTQKLSsrKyBiL2FjaW5jbHVkZS5tNAotQEAgLTIyLDExICsyMiw1
+IEBAIGZpXSkKLSBBQ19ERUZVTihbQ0hFQ0tfQVRPTUlDX09QU10sCi0gW2RubCBDaGVjayB3aGV0
+aGVyIHRoZSBzeXN0ZW0gaGFzIHRoZSBhdG9taWNfb3BzIHBhY2thZ2UgaW5zdGFsbGVkLgotwqDC
+oCBBQ19DSEVDS19IRUFERVJTKGF0b21pY19vcHMuaCkKLS0jCi0tIyBEb24ndCBsaW5rIGFnYWlu
+c3QgbGliYXRvbWljX29wcyBmb3Igbm93LsKgIFdlIGRvbid0IHdhbnQgbGlidW53aW5kCi0tIyB0
+byBkZXBlbmQgb24gbGliYXRvbWljX29wcy5zby7CoCBGb3J0dW5hdGVseSwgbm9uZSBvZiB0aGUg
+cGxhdGZvcm1zCi0tIyB3ZSBjYXJlIGFib3V0IHNvIGZhciBuZWVkIGxpYmF0b21pY19vcHMuYSAo
+ZXZlcnl0aGluZyBpcyBkb25lIHZpYQotLSMgaW5saW5lIG1hY3JvcykuCi0tIwotLSPCoCBBQ19D
+SEVDS19MSUIoYXRvbWljX29wcywgbWFpbikKLSvCoCBBQ19DSEVDS19MSUIoYXRvbWljX29wcywg
+bWFpbikKLSBdKQotZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGlidW53aW5kX2kuaCBiL2luY2x1ZGUv
+bGlidW53aW5kX2kuaAotaW5kZXggMjNmNjE1ZS4uZGVhYmRmZCAxMDA2NDQKLS0tLSBhL2luY2x1
+ZGUvbGlidW53aW5kX2kuaAotKysrIGIvaW5jbHVkZS9saWJ1bndpbmRfaS5oCi1AQCAtOTUsNiAr
+OTUsNyBAQCBXSVRIIFRIRSBTT0ZUV0FSRSBPUiBUSEUgVVNFIE9SIE9USEVSIERFQUxJTkdTIElO
+IFRIRSAKU09GVFdBUkUuwqAgKi8KLSDCoMKgwqAgKHB0aHJlYWRfbXV0ZXhfdW5sb2NrICE9IE5V
+TEwgPyBwdGhyZWFkX211dGV4X3VubG9jayAobCkgOiAwKQotCi0gI2lmZGVmIEhBVkVfQVRPTUlD
+X09QU19ICi0rIyBkZWZpbmUgQU9fUkVRVUlSRV9DQVMKLSAjIGluY2x1ZGUgPGF0b21pY19vcHMu
+aD4KLSBzdGF0aWMgaW5saW5lIGludAotIGNtcHhjaGdfcHRyICh2b2lkICphZGRyLCB2b2lkICpv
+bGQsIHZvaWQgKm5ldykKLS0tCi0xLjkuMgotCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYnVud2lu
+ZC9Db25maWcuaW4gYi9wYWNrYWdlL2xpYnVud2luZC9Db25maWcuaW4KaW5kZXggNTI4NGI1ODY0
+Yy4uYjkxNGNkNDZmNyAxMDA2NDQKLS0tIGEvcGFja2FnZS9saWJ1bndpbmQvQ29uZmlnLmluCisr
+KyBiL3BhY2thZ2UvbGlidW53aW5kL0NvbmZpZy5pbgpAQCAtMjMsNiArMjMsOCBAQCBjb25maWcg
+QlIyX1BBQ0tBR0VfTElCVU5XSU5ECiDCoMKgwqDCoCBib29sICJsaWJ1bndpbmQiCiDCoMKgwqDC
+oCBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKIMKgwqDCoMKgIGRlcGVuZHMg
+b24gQlIyX1BBQ0tBR0VfTElCVU5XSU5EX0FSQ0hfU1VQUE9SVFMKK8KgwqDCoCAjIEdDQyA0Ljkg
+aXMgdGhlIGZpcnN0IHRvIGltcGxlbWVudCBDMTEgYXRvbWljcworwqDCoMKgIGRlcGVuZHMgb24g
+QlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfNF85CiDCoMKgwqDCoCAjIGZvcmNlZnVsbHkgbGlu
+a3MgYWdhaW5zdCBsaWJnY2Nfcywgb25seSBhdmFpbGFibGUgaW4gZHluYW1pYwogwqDCoMKgwqAg
+IyBsaW5raW5nIGNvbmZpZ3VyYXRpb25zCiDCoMKgwqDCoCBkZXBlbmRzIG9uICFCUjJfU1RBVElD
+X0xJQlMKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlidW53aW5kL2xpYnVud2luZC5oYXNoIApiL3Bh
+Y2thZ2UvbGlidW53aW5kL2xpYnVud2luZC5oYXNoCmluZGV4IGRlMDBjNTk5ODguLjFkNTMyYTc4
+MzAgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbGlidW53aW5kL2xpYnVud2luZC5oYXNoCisrKyBiL3Bh
+Y2thZ2UvbGlidW53aW5kL2xpYnVud2luZC5oYXNoCkBAIC0xLDUgKzEsNSBAQAogwqAjIExvY2Fs
+bHkgY2FsY3VsYXRlZCBhZnRlciBjaGVja2luZyBwZ3Agc2lnbmF0dXJlCi1zaGEyNTYgOTAzMzc2
+NTNkOTJkNGExM2RlNTkwNzgxMzcxYzYwNGY5MDMxY2RiNTA1MjAzNjZhYTFlM2E5MWUxZWZiMTAx
+NyAKbGlidW53aW5kLTEuNS4wLnRhci5negorc2hhMjU2IDRhNmFlYzY2Njk5MWZiNDVkMDg4OWM0
+NGFlZGU4YWQ2ZWIxMDgwNzFjMzU1NGZjZGZmNjcxZjljOTQ3OTQ5NzYgCmxpYnVud2luZC0xLjYu
+Mi50YXIuZ3oKIMKgIyBIYXNoIGZvciBsaWNlbnNlIGZpbGUKIMKgc2hhMjU2IAo2YTBkYmJkYWVj
+MmIzMTM2YjdiZjA0NTU4NmY0MjEyYmRmNzRlN2FmNjg4YmY5ZGZlOTE1NDYwN2NmNWVjMTU2IENP
+UFlJTkcKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlidW53aW5kL2xpYnVud2luZC5tayBiL3BhY2th
+Z2UvbGlidW53aW5kL2xpYnVud2luZC5tawppbmRleCBhYWEzMzQ2NGE5Li45Y2Q1ODdkMGEzIDEw
+MDY0NAotLS0gYS9wYWNrYWdlL2xpYnVud2luZC9saWJ1bndpbmQubWsKKysrIGIvcGFja2FnZS9s
+aWJ1bndpbmQvbGlidW53aW5kLm1rCkBAIC00LDcgKzQsNyBAQAogwqAjCiDCoCMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjCi1MSUJVTldJTkRfVkVSU0lPTiA9IDEuNS4wCitMSUJVTldJTkRfVkVSU0lP
+TiA9IDEuNi4yCiDCoExJQlVOV0lORF9TSVRFID0gaHR0cDovL2Rvd25sb2FkLnNhdmFubmFoLmdu
+dS5vcmcvcmVsZWFzZXMvbGlidW53aW5kCiDCoExJQlVOV0lORF9JTlNUQUxMX1NUQUdJTkcgPSBZ
+RVMKIMKgTElCVU5XSU5EX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HCkBAIC0xNiw4ICsxNiw0IEBA
+IExJQlVOV0lORF9DT05GX09QVFMgPSBcCiDCoMKgwqDCoCAtLWRpc2FibGUtdGVzdHMgXAogwqDC
+oMKgwqAgJChpZiAKJChCUjJfSU5TVEFMTF9MSUJTVERDUFApLC0tZW5hYmxlLWN4eC1leGNlcHRp
+b25zLC0tZGlzYWJsZS1jeHgtZXhjZXB0aW9ucykKLWlmZXEgKCQoQlIyX1BBQ0tBR0VfTElCQVRP
+TUlDX09QUykseSkKLUxJQlVOV0lORF9ERVBFTkRFTkNJRVMgKz0gbGliYXRvbWljX29wcwotZW5k
+aWYKLQogwqAkKGV2YWwgJChhdXRvdG9vbHMtcGFja2FnZSkpCgotLSAKMi4zNC4xCgoKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
