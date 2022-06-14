@@ -1,88 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A7DEC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 16:55:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE2ADC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jun 2022 16:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0ACC40A9C;
-	Tue, 14 Jun 2022 16:55:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 815F283332;
+	Tue, 14 Jun 2022 16:55:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V6xi98ZVQEd5; Tue, 14 Jun 2022 16:55:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J0YWIiX2H91W; Tue, 14 Jun 2022 16:55:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E227840A88;
-	Tue, 14 Jun 2022 16:55:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8B3891BF37A
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:55:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A562A83312;
+	Tue, 14 Jun 2022 16:55:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EA121BF37A
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:55:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 871BA40A88
- for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:55:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F29268330B
+ for <buildroot@lists.busybox.net>; Tue, 14 Jun 2022 16:55:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pMO9JPYfoIeH for <buildroot@lists.busybox.net>;
- Tue, 14 Jun 2022 16:55:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kx7-JIrIz00K for <buildroot@lists.busybox.net>;
+ Tue, 14 Jun 2022 16:55:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AE4C340191
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 16:55:10 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id cn20so87068edb.6
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 09:55:10 -0700 (PDT)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 09D5F832B3
+ for <buildroot@busybox.net>; Tue, 14 Jun 2022 16:55:12 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id n28so12498719edb.9
+ for <buildroot@busybox.net>; Tue, 14 Jun 2022 09:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=9rGWbMzu6uswSzEKNj0gal7tDdcgDVRh6Ej+tZSNA5Q=;
- b=BZ/yqaoRUmuG53OaYTK7rVYuo1Fktew73/Dwge7+nPIH2LZCa5I8nO8Z2VT6UsyTPz
- 9U93OiPLmUrFFh5xiXOoskWgZd1IWNXdetmbqeBhjm8euczODAZOaJ1UMEQgBv1osqgO
- +vUtHl2cLPDvhLDJ2JToNrExyCMxUwEWUylnGsewEVWD/szp+mhywx8zqpdbt+OsUpZL
- VdTTD2/4OHJpHQzp6tDJQ6/zjHdAJgawqZBAvUXbscEZapZWdwaAVqmaunmMe6geHQyY
- tDqbliuPfRDVWcQqLRq67IA1cfQz4wDkscQK3sCaf3XOPsyJ+H5pLR32hOxvuTilhhHZ
- CpMg==
+ bh=aVKFp30fk0MafaBefYOb+2QU1YVj8kPQBLJVQA5RrnA=;
+ b=TBxAqkWn9t26NZt7Akpg9asOCkZElcpuncgIY7Yej2Vn8sWYZ60TLwgApgLjWJO9KF
+ yjn0Jcgq4NfxiyX4OMgJIcMnA9QBQh0H3GxoHX6cP0knqNYWFUo+5KVKarjjD9dpHfv9
+ ISycAWjH1AHs5ADfVOZtH6qiB1PtlAvQFDTOJjEzzyxAeXB2O/9Exz6Lp1MxgKJrWF8J
+ Gwp/9Z2pDCT1/75zzZjYf+1LKMFvZK0O89Ph94zUn1JijX60MmY2k+BN3aaHZnUwtwJD
+ iT/6BZ3oxytyBlrxm7H9ksXn0gzfNt7Pm8mr/8Ur1uf2ziHst0RDK0f+qaV6dd3CYCww
+ cYGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=9rGWbMzu6uswSzEKNj0gal7tDdcgDVRh6Ej+tZSNA5Q=;
- b=nbzRmbA4WhAuyCrtUhNbCDAbCrTCT9Vd1IEi2YDMugBtLtLZXq0yg7VLhiUR5I+fgK
- XQFtDkaTAnS4fTq20MNmUQzJg7MeG/Ymn2Sxs1BiBn79hCI9dHgPXkbDoHb0nAfmAXuM
- /glVu0lX1osK3VgtclZZ+ElecF9pH/upw1lJT24fKdN88s8SJJFmLqw1CGY8b1PHgRl8
- gGA4Lv/605Asgu5wW8BZVqR1QMWG9lnuwZqdS6ZU6DqlnLq/IssIxfDw9d5naiwdrKzS
- y2p7EqM+blhra7ig4pHbAtp41UMzVFdF6SGLxM7wa5ni9d6AaJBXL3q20h38kEsKvMPS
- EjYw==
-X-Gm-Message-State: AOAM530p2BEzxAglh6nwHRZLtG41k19noDC90+7RCnM4w3HV5YZ3pMJ1
- WSFnRVue5BX4nXwSK+ZkDMrpyQ==
-X-Google-Smtp-Source: ABdhPJz7xNhUN6jQNFgxwLlkEFb4SyK0tKzLwe1cmjFoFQ07onM3MG/+ZSameESDVcEzL89yDTqq4w==
-X-Received: by 2002:a05:6402:1f0e:b0:42d:e38a:51f7 with SMTP id
- b14-20020a0564021f0e00b0042de38a51f7mr7483277edb.68.1655225708878; 
- Tue, 14 Jun 2022 09:55:08 -0700 (PDT)
+ bh=aVKFp30fk0MafaBefYOb+2QU1YVj8kPQBLJVQA5RrnA=;
+ b=U/Ty83gu2oolObOuH/LopOpc9FPC7rCy08D8dGXlP0kCYZgRn6oYAN3P+bbuQ0WxK1
+ l7mjEKRuwgkFbzVsqW76QWjs6nhY+v4m+kUtgYt4DYzdsuXQuppBOz2v/5T9IDmW6s1i
+ RSD2IrO4BLKnlSEs42CKLBw7DD0xxlf80NMAc+xzVxrWF/nrrBNdnW3/6jWC5QVVy+OF
+ MUp0SuGILrg6iKfYq074JTShMmReb9fleKwCFmJWOAUL4yR1bWT5grJxcctAzxiSmARP
+ 3Yhwmk5xlT7cfWLjs81+GkfS3AVacvmwuuJyvauv3KKFqHmn5xTDiPcnWeieCDvt36sC
+ ktyA==
+X-Gm-Message-State: AJIora8dCAZnVUTfAYDchA1DD6qe5GXy2zaURPb78IbchTsbPJmCOdtE
+ 8tu5N04L5Z1xK/tFY7wLoTNeUA==
+X-Google-Smtp-Source: AGRyM1vWmbpDQ7k8VuIXqjNk4aOhU8mTpzT3CTXSz51P1Rxx3aJ+LA8eVQ7xF+xVSPeEsceYaL96cw==
+X-Received: by 2002:a05:6402:2553:b0:431:6e08:56de with SMTP id
+ l19-20020a056402255300b004316e0856demr7294512edb.406.1655225711291; 
+ Tue, 14 Jun 2022 09:55:11 -0700 (PDT)
 Received: from [10.1.0.138] (ip-188-118-3-185.reverse.destiny.be.
  [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- w4-20020a17090652c400b006f3ef214dc0sm5282014ejn.38.2022.06.14.09.55.08
+ q4-20020a50aa84000000b0042617ba638esm7430337edc.24.2022.06.14.09.55.10
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Jun 2022 09:55:08 -0700 (PDT)
-Message-ID: <c491d276-157f-61d4-28f3-edb742388b89@mind.be>
-Date: Tue, 14 Jun 2022 17:43:29 +0200
+ Tue, 14 Jun 2022 09:55:10 -0700 (PDT)
+Message-ID: <6cf3d23a-d030-7a29-6bb0-98ce094e119b@mind.be>
+Date: Tue, 14 Jun 2022 17:57:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
 Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Romain Naour <romain.naour@gmail.com>,
- Buildroot List <buildroot@buildroot.org>
-References: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
+To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
+References: <20220610165541.2574405-1-francois.perrad@gadz.org>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220608071027.3384469-1-thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH v2 00/14] Another set of Bootlin toolchain
- integration improvements
+In-Reply-To: <20220610165541.2574405-1-francois.perrad@gadz.org>
+Subject: Re: [Buildroot] [PATCH] package/gnutls: bump to version 3.7.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,91 +97,45 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 08/06/2022 09:10, Thomas Petazzoni via buildroot wrote:
-> Hello,
-> 
-> Overall summary
-> ===============
-> 
-> Patches 1 to 12 in this series are fixes for autobuilder
-> issues. Patches 13 and 14 are improvements.
-> 
-> Patches 1 and 2 fix the issue of RISC-V 64-bit toolchains being
-> available on MMU-less architectures, even though they are not
-> supported by the toolchain.
-> 
-> Patches 3 and 4 fix the issue of ARM little endian toolchains being
-> selectable for ARM big endian architectures.
-> 
-> Patches 5 and 6 fix the issue of i686 toolchains being used for < i686
-> platforms.
-> 
-> Patches 7, 8 and 9 fix the issue of an error when trying to copy
-> gdbserver, with toolchains that don't have gdbserver.
-> 
-> Patches 10, 11 and 12 fix the issue of the "mips64" Bootlin toolchains
-> being obsolete, but the gen-bootlin-toolchains still thinking they
-> were available. This caused some mips64 n64 configurations to be
-> thought of having Bootlin toolchains available, but in fact no such
-> toolchains were provided. We fix this by making sure we check if an
-> architecture has valid toolchains, and erroring out if not. And of
-> course, we remove the "mips64" toolchain config.
-> 
-> Patches 13 and 14 add support for the ARMv7 big-endian toolchains
-> provided by toolchains.bootlin.com.
-> 
-> Changes since v1
-> ================
-> 
->   - Patches 10, 11 and 12 added to fix the "mips64" issue.
-> 
-> Thomas
-> 
-> Thomas Petazzoni (14):
->    support/scripts/gen-bootlin-toolchains: fix RISC-V 64-bit toolchain
->      description
->    support/testing,toolchain/toolchain-external/toolchain-external-bootlin:
->      regenerate with latest gen-bootlin-toolchains script
->    support/scripts/gen-bootlin-toolchains: improve dependencies of ARM
->      toolchains
->    toolchain/toolchain-external/toolchain-external-bootlin: regenerate
->      with BR2_ARM dependency
->    support/scripts/gen-bootlin-toolchains: adjust dependencies of i686
->      toolchains
->    toolchain/toolchain-external/toolchain-external-bootlin: regenerate
->      after i686 toolchain dependency fixes
->    toolchain/toolchain-external: add
->      BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER option
->    support/scripts/gen-bootlin-toolchains: make use of
->      BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
->    toolchain/toolchain-external/toolchain-external-bootlin: regenerate
->      with BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
->    support/scripts/gen-bootlin-toolchains: check that toolchains exists
->      for a certain arch
->    support/scripts/gen-bootlin-toolchains: drop "mips64" architecture
->      variant
->    toolchain/toolchain-external/toolchain-external-bootlin: regenerate
->      after mips64 toolchain removal
->    support/scripts/gen-bootlin-toolchains: add support for ARMv7 big
->      endian toolchain
->    support/testing,toolchain/toolchain-external/toolchain-external-bootlin:
->      regenerate with ARMv7 big endian toolchain
-> 
->   support/scripts/gen-bootlin-toolchains        |  44 +++-
->   .../tests/toolchain/test_external_bootlin.py  | 102 ++++++++
->   toolchain/toolchain-external/Config.in        |   4 +
->   .../Config.in.options                         | 234 +++++++++++++++++-
->   .../toolchain-external-bootlin.hash           |  12 +
->   .../toolchain-external-bootlin.mk             |  36 +++
->   6 files changed, 412 insertions(+), 20 deletions(-)
-> 
+On 10/06/2022 18:55, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-
-  Series applied to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
+> ---
+>   package/gnutls/gnutls.hash | 4 ++--
+>   package/gnutls/gnutls.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+> index c09e4665e..ff191278c 100644
+> --- a/package/gnutls/gnutls.hash
+> +++ b/package/gnutls/gnutls.hash
+> @@ -1,6 +1,6 @@
+>   # Locally calculated after checking pgp signature
+> -# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.4.tar.xz.sig
+> -sha256  e6adbebcfbc95867de01060d93c789938cf89cc1d1f6ef9ef661890f6217451f  gnutls-3.7.4.tar.xz
+> +# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.6.tar.xz.sig
+> +sha256  77065719a345bfb18faa250134be4c53bef70c1bd61f6c0c23ceb8b44f0262ff  gnutls-3.7.6.tar.xz
+>   # Locally calculated
+>   sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
+>   sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
+> diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+> index f7f3e046e..f1af1e7b3 100644
+> --- a/package/gnutls/gnutls.mk
+> +++ b/package/gnutls/gnutls.mk
+> @@ -6,7 +6,7 @@
+>   
+>   # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+>   GNUTLS_VERSION_MAJOR = 3.7
+> -GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).4
+> +GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).6
+>   GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+>   GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+>   GNUTLS_LICENSE = LGPL-2.1+ (core library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
