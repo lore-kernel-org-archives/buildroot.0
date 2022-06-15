@@ -1,77 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57251C43334
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jun 2022 22:49:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29A17C43334
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jun 2022 23:17:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C33B383E8A;
-	Wed, 15 Jun 2022 22:49:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B12D24091E;
+	Wed, 15 Jun 2022 23:17:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zS1UgtWSWZRx; Wed, 15 Jun 2022 22:49:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2Mu1b5PFpjpw; Wed, 15 Jun 2022 23:17:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2882283E85;
-	Wed, 15 Jun 2022 22:49:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1E94E1BF3DB
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 22:49:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B8609404B2;
+	Wed, 15 Jun 2022 23:17:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 24F331BF3BA
+ for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 23:17:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0D51561080
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 22:49:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 13999419A6
+ for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 23:17:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OdybuxTGWfz4 for <buildroot@lists.busybox.net>;
- Wed, 15 Jun 2022 22:49:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pyx_odtB18Si for <buildroot@lists.busybox.net>;
+ Wed, 15 Jun 2022 23:17:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
- [IPv6:2607:f8b0:4864:20::32c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 109F761078
- for <buildroot@buildroot.org>; Wed, 15 Jun 2022 22:49:36 +0000 (UTC)
-Received: by mail-ot1-x32c.google.com with SMTP id
- a8-20020a05683012c800b0060c027c8afdso9890224otq.10
- for <buildroot@buildroot.org>; Wed, 15 Jun 2022 15:49:36 -0700 (PDT)
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CD54041999
+ for <buildroot@buildroot.org>; Wed, 15 Jun 2022 23:17:34 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id u2so9868998iln.2
+ for <buildroot@buildroot.org>; Wed, 15 Jun 2022 16:17:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=TdclFJBU7zAYa6a3cE5biFkJx/z5h3i1N+QmN5cXADQ=;
- b=N7uI+BPs3YyKEkkzwWYNXvwNOzLbBnNPdFxqR4D4k7PRBYb2Nuw9XF2pt1XM29tpJA
- ryy6iIZ8XAm0+sg+Bz/R/E1O3hzcqh/fKu50Qm6B033wVvPWYdihBByafhh1cFkDTNIm
- KiWBlG6KGOh6I7VKdB+u+TPSftQ9we9npopxKoj0fdFh90YbSMPsxvaDaBtUHRCWXKrF
- Olx4IgvGFU/zgLziFD+awUF859+m+DkJWsVkbC4A5qQRBD0DUvHfiFdxRQ2eEqkIPo2e
- xnQc6/A1VJGZRLFU6Ze5XRfL+pX5iFmaqdlJ+3F9CEKy/hvaTe4QRBZ/dfYAccMHSB75
- AU5w==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=2B25gutEDddwPqT6k7TdbzEyO7Zn9sCuwRmwphqEbYg=;
+ b=XXBY8SBKEDrWemKUaV1BkXIkIOsZe8DoRq56cbV517fIUD56VlCI6W23ya0viC/kF7
+ OkWojIi3AFY3PLgWkpS7qJw+sIKfPzCUTIaAVj8VlMkmf4yZ9khGLRFoRl+Dopdn12EZ
+ mcrMWu/+ZLECAmzpS7rL1WbSu1yp+V1/aWpa30TiQttDhGxnisNLf4JkbJqlwnR2Te6c
+ gonK7kjz5/j028TTeb4tk9ttvChctC4z0L/6UOEVvf+yeVaDAltyKyRi5lWbRSu0uHSf
+ qJKdNrsM3K78aqf8BqUOdS2ZeVIgs06px96XTOYn86BZzJble8b4GLhPQaggX6EcAJCz
+ np7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=TdclFJBU7zAYa6a3cE5biFkJx/z5h3i1N+QmN5cXADQ=;
- b=jgSDfz0Io1/oEkZ1U3rN0GkCCS7dZmFU4m3MGuiS8L6P5N00nBBM16PdOPqCa4Zf9h
- qDBWCwk2NNo/obohBI/Rfq9Yzow+N7ne5a4uodTmh3efXZ2FKlgCd4CXLqRQ9cT/f6YR
- duih8bO725YW+DQXcM2jxLnlSOK/V60Zfe5OJkLe71bJL40Jx1aCWoS9ziTkFH1TsCuf
- K/5VlbE54qBtej5QWAJ/etm1nm4kokQa8RbF3U2k6zyuVkgEgVOW5MKNz7o5NUMz1xxR
- 0+F37RF66FzS4U+uNZDae+wtavhD1fpjv+MSvuNjxR7nEXsbgAcWj2chHoC9/bRTphON
- k6wg==
-X-Gm-Message-State: AJIora9i9Tj7kXHWPbbnXv642sJb497Mq99+wTm/5d8s4++8iNkN2pzQ
- 64OI+1scQN+ucgmow9IrKbA+mEqMDd8/xbpK55M=
-X-Google-Smtp-Source: AGRyM1srrsrAJ/fT4al9vI4xNZusFr+yODBx1zf8cJgiFz8xxEDlVDFM86sPhaHXPrwxM04kCKG52rOD3HKh/eWp5ag=
-X-Received: by 2002:a05:6830:4411:b0:60c:5362:3e49 with SMTP id
- q17-20020a056830441100b0060c53623e49mr972590otv.151.1655333375674; Wed, 15
- Jun 2022 15:49:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220615212931.1082542-1-romain.naour@gmail.com>
-In-Reply-To: <20220615212931.1082542-1-romain.naour@gmail.com>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=2B25gutEDddwPqT6k7TdbzEyO7Zn9sCuwRmwphqEbYg=;
+ b=LWDueveHiU5smn275UeGhdkMMhH+5cuEj8jqRCkSC8FT60cWqnf69iIcGZxNCyhpTZ
+ JjFiZQdmjRhBJOau9NuM0h3aRacRr1JnCkU5r2dlc8BE1EOx6T2qVV9xh3iFNO0383tA
+ wSrLJfnzf76q0CGrWUawC2mQ1BAeNpPXbsOlNjwAIpG8bDGImPoOhqC3kiTAlRPTZUj9
+ v4AxYZ61Ub0EMKpGyw5hVNLBEr5PP2/PidhRbqZ+DpHnu/vbjYc9VDPzicp3nacPTaUX
+ NGluD1wqduHT80pL/8pSSLHycEgbyrA3hyEuRBRF0uMb1RIosWZ6sRc2iiWPUPUmyb5l
+ q81w==
+X-Gm-Message-State: AJIora8QvrXCWGGmaMwUxj3zjd05Yw6olhGUbDwTsvMQcec+zTIEtVpI
+ jkPXU3EDd3KpLjENBHXPF/XNqj/rgjI=
+X-Google-Smtp-Source: AGRyM1sIuBXGVaoCDpqAHhHn7Dj/rG1Niv6v10hETJJ9k4L9YERN7PKxdWlYg1mGEg65Un5W6VS7Hw==
+X-Received: by 2002:a05:6e02:1563:b0:2d3:c749:841e with SMTP id
+ k3-20020a056e02156300b002d3c749841emr1317445ilu.59.1655335053702; 
+ Wed, 15 Jun 2022 16:17:33 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-113-86.hlrn.qwest.net.
+ [71.218.113.86]) by smtp.gmail.com with ESMTPSA id
+ q13-20020a02c8cd000000b0033167aa9be5sm160802jao.114.2022.06.15.16.17.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 15 Jun 2022 16:17:33 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 15 Jun 2022 16:49:24 -0600
-Message-ID: <CADvTj4qgP2VXD4SHuRBoeoWk9tWg3KmZ9PAKn+Jnz=toAgO5RA@mail.gmail.com>
-To: Romain Naour <romain.naour@gmail.com>
-Subject: Re: [Buildroot] [PATCH] Revert "package/python-flask-expects-json:
- bump to version 1.7.0"
+To: buildroot@buildroot.org
+Date: Wed, 15 Jun 2022 17:17:29 -0600
+Message-Id: <20220615231730.2900335-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/2] package/python-pyrsistent: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,74 +86,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Jun 15, 2022 at 3:29 PM Romain Naour <romain.naour@gmail.com> wrote:
->
-> This reverts commit 16bfb1a3c45656da85aca892125b032befbbdbe4 since
-> python-flask-expects-json >= 1.6.0 requires at least
-> python-jsonschema 3.0.0 (v3.0.0a1) to be able to use the following
-> import introcuded by commit [1]:
->
->   from jsonschema.validators import _LATEST_VERSION as LATEST_VALIDATOR
->
-> Indeed, python-jsonschema package still at 2.5.1 version.
->
-> Revert this commit instead of trying updating python-jsonschema
-> and introduce other runtime issue.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/Config.in                                |  1 +
+ package/python-pyrsistent/Config.in              |  6 ++++++
+ package/python-pyrsistent/python-pyrsistent.hash |  5 +++++
+ package/python-pyrsistent/python-pyrsistent.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-pyrsistent/Config.in
+ create mode 100644 package/python-pyrsistent/python-pyrsistent.hash
+ create mode 100644 package/python-pyrsistent/python-pyrsistent.mk
 
-Probably best to just update python-jsonschema I'm thinking.
+diff --git a/package/Config.in b/package/Config.in
+index 3b089166da..0752ea1faf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1178,6 +1178,7 @@ menu "External python modules"
+ 	source "package/python-pyqt5/Config.in"
+ 	source "package/python-pyratemp/Config.in"
+ 	source "package/python-pyroute2/Config.in"
++	source "package/python-pyrsistent/Config.in"
+ 	source "package/python-pysendfile/Config.in"
+ 	source "package/python-pysftp/Config.in"
+ 	source "package/python-pysmb/Config.in"
+diff --git a/package/python-pyrsistent/Config.in b/package/python-pyrsistent/Config.in
+new file mode 100644
+index 0000000000..49f97a00d9
+--- /dev/null
++++ b/package/python-pyrsistent/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYRSISTENT
++	bool "python-pyrsistent"
++	help
++	  Persistent/Functional/Immutable data structures.
++
++	  http://github.com/tobgu/pyrsistent/
+diff --git a/package/python-pyrsistent/python-pyrsistent.hash b/package/python-pyrsistent/python-pyrsistent.hash
+new file mode 100644
+index 0000000000..70d1cc6fa2
+--- /dev/null
++++ b/package/python-pyrsistent/python-pyrsistent.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pyrsistent/json
++md5  cef3da08455664bf917dcf8cd00d49a4  pyrsistent-0.18.1.tar.gz
++sha256  d4d61f8b993a7255ba714df3aca52700f8125289f84f704cf80916517c46eb96  pyrsistent-0.18.1.tar.gz
++# Locally computed sha256 checksums
++sha256  3ea56753cbd0cc897d3f4414a902f5694991db7c1b3abb8230216381185f9112  LICENSE.mit
+diff --git a/package/python-pyrsistent/python-pyrsistent.mk b/package/python-pyrsistent/python-pyrsistent.mk
+new file mode 100644
+index 0000000000..27ec41028f
+--- /dev/null
++++ b/package/python-pyrsistent/python-pyrsistent.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pyrsistent
++#
++################################################################################
++
++PYTHON_PYRSISTENT_VERSION = 0.18.1
++PYTHON_PYRSISTENT_SOURCE = pyrsistent-$(PYTHON_PYRSISTENT_VERSION).tar.gz
++PYTHON_PYRSISTENT_SITE = https://files.pythonhosted.org/packages/42/ac/455fdc7294acc4d4154b904e80d964cc9aae75b087bbf486be04df9f2abd
++PYTHON_PYRSISTENT_SETUP_TYPE = setuptools
++PYTHON_PYRSISTENT_LICENSE = MIT
++PYTHON_PYRSISTENT_LICENSE_FILES = LICENSE.mit
++
++$(eval $(python-package))
+-- 
+2.25.1
 
-I'll see what's needed for that.
-
->
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/2580341645
->
-> [1] https://github.com/Fischerfredl/flask-expects-json/commit/e1d2898ab1ca7bf02ae60885f9be92b31fa8a62a
->
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  .../python-flask-expects-json/python-flask-expects-json.hash  | 4 ++--
->  .../python-flask-expects-json/python-flask-expects-json.mk    | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/package/python-flask-expects-json/python-flask-expects-json.hash b/package/python-flask-expects-json/python-flask-expects-json.hash
-> index e465bcb56a..c023222fd7 100644
-> --- a/package/python-flask-expects-json/python-flask-expects-json.hash
-> +++ b/package/python-flask-expects-json/python-flask-expects-json.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/flask-expects-json/json
-> -md5  3a77c4059f21e6e37e652c9dbbdc2e7c  flask-expects-json-1.7.0.tar.gz
-> -sha256  4ef186a86f10572a21af82e549546deda024326628b4a96cd14d3a0f71754d62  flask-expects-json-1.7.0.tar.gz
-> +md5  c1fb8ede58db312d7923212dc97b8ab4  flask-expects-json-1.5.0.tar.gz
-> +sha256  0087dc3d089f1ac75a1fc0f259f4dbd02bbb9c356e92e1a080f2309e2f75d053  flask-expects-json-1.5.0.tar.gz
->  # Locally computed sha256 checksums
->  sha256  06154a99fdc664107294a0a5e7e68f776078d075408dd32bbeaa7340fdd39e73  LICENSE.txt
-> diff --git a/package/python-flask-expects-json/python-flask-expects-json.mk b/package/python-flask-expects-json/python-flask-expects-json.mk
-> index 55c9bc9571..487f15d4e5 100644
-> --- a/package/python-flask-expects-json/python-flask-expects-json.mk
-> +++ b/package/python-flask-expects-json/python-flask-expects-json.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->
-> -PYTHON_FLASK_EXPECTS_JSON_VERSION = 1.7.0
-> +PYTHON_FLASK_EXPECTS_JSON_VERSION = 1.5.0
->  PYTHON_FLASK_EXPECTS_JSON_SOURCE = flask-expects-json-$(PYTHON_FLASK_EXPECTS_JSON_VERSION).tar.gz
-> -PYTHON_FLASK_EXPECTS_JSON_SITE = https://files.pythonhosted.org/packages/12/a5/b27cf21d62c2b5a0a32e2f92bde9658e74c34fcc2e004bb0d591f1bf7627
-> +PYTHON_FLASK_EXPECTS_JSON_SITE = https://files.pythonhosted.org/packages/4c/4a/9d9d050af700fb3feebd1f8466e73d65ce8b4709f27773e07100b0993451
->  PYTHON_FLASK_EXPECTS_JSON_SETUP_TYPE = setuptools
->  PYTHON_FLASK_EXPECTS_JSON_LICENSE = MIT
->  PYTHON_FLASK_EXPECTS_JSON_LICENSE_FILES = LICENSE.txt
-> --
-> 2.35.3
->
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
