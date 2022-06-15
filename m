@@ -1,73 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF156C43334
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jun 2022 10:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 114B1C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jun 2022 10:57:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 58AA083E20;
-	Wed, 15 Jun 2022 10:47:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 966F960FCA;
+	Wed, 15 Jun 2022 10:57:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a5dL9zD6FP2n; Wed, 15 Jun 2022 10:47:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tRoQFDtxveO3; Wed, 15 Jun 2022 10:57:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5336683E12;
-	Wed, 15 Jun 2022 10:47:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B68061BF5A8
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 10:47:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9AFBF60AA5;
+	Wed, 15 Jun 2022 10:57:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 20D591BF5A8
+ for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 10:57:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A21FA83E12
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 10:47:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E36240483
+ for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 10:57:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gKGjTXKVvE9y for <buildroot@lists.busybox.net>;
- Wed, 15 Jun 2022 10:47:18 +0000 (UTC)
-X-Greylist: delayed 00:05:13 by SQLgrey-1.8.0
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 114B483A47
- for <buildroot@buildroot.org>; Wed, 15 Jun 2022 10:47:17 +0000 (UTC)
-Received: from methusalix.internal.home.lespocky.de ([92.117.41.38]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N9doJ-1ng7v50CiT-015ai6; Wed, 15 Jun 2022 12:42:02 +0200
-Received: from falbala.internal.home.lespocky.de ([192.168.243.94])
- by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.3) tls
- TLS_AES_256_GCM_SHA384 (Exim 4.94.2)
- (envelope-from <post@lespocky.de>)
- id 1o1QTC-0008VN-25; Wed, 15 Jun 2022 12:41:59 +0200
-Date: Wed, 15 Jun 2022 12:41:52 +0200
-From: Alexander Dahl <post@lespocky.de>
-To: Michael Nosthoff <buildroot@heine.tech>
-Message-ID: <20220615104152.GD12610@falbala.internal.home.lespocky.de>
-Mail-Followup-To: Michael Nosthoff <buildroot@heine.tech>,
- buildroot@buildroot.org, Samuel Martin <s.martin49@gmail.com>
-References: <20220608081605.1141488-1-buildroot@heine.tech>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=tpm.dev
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dcXvesx0Kue3 for <buildroot@lists.busybox.net>;
+ Wed, 15 Jun 2022 10:57:09 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from delivery.mailspamprotection.com
+ (delivery.mailspamprotection.com [185.56.85.157])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D69C14017A
+ for <buildroot@buildroot.org>; Wed, 15 Jun 2022 10:57:09 +0000 (UTC)
+Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
+ helo=es87.siteground.eu)
+ by se28.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
+ (Exim 4.92) (envelope-from <dimi@tpm.dev>)
+ id 1o1Qhl-000DVB-2H; Wed, 15 Jun 2022 05:57:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tpm.dev;
+ s=default; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
+ In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=6VJ1doHiZaNOrd2esSqdUrOHb6ymN+Sv2vkoiminqyE=; b=RGpo01ydrPS+S5uFBRX5Zb9z+F
+ NK4MGBt/cVfpiaaAGmiRW7UueQ3IcOVbc6LifbZjWjY0O3z92x5wmL/ZeI2N0Vmv3LSq84NasAJKy
+ 4pe6RkGxbLhjdIMfKgJb6uCRPPb7QZTul1jU3/v6aYYWOfowtbienJonBAGXRZfGAZABZavb0naJq
+ dE/I1Bohx/TA8CG432B3aCwAPtoYhWlYr/53fc3VyKb3gPNl+uh5nAQJNTIB0CV8I9VI2h/XNWuUm
+ 5MXvGG8jeLFDgcHMtLJI3NoDOaKzKctx2fRtS7FnvV5YyCq0+6VkGKc/QXeSWbjy+WsOPpKLIpUfW
+ 9XqP+4yA==;
+Received: from [127.0.0.1] (port=54286 helo=es87.siteground.eu)
+ by es87.siteground.eu with esmtpa (Exim 4.90-.1)
+ (envelope-from <dimi@tpm.dev>)
+ id 1o1Qhi-0004SV-Fd; Wed, 15 Jun 2022 10:56:54 +0000
 MIME-Version: 1.0
-In-Reply-To: <20220608081605.1141488-1-buildroot@heine.tech>
-X-Clacks-Overhead: GNU Terry Pratchett
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scan-Signature: 064f474b8d4e20554a8c27c9e010a453
-X-Provags-ID: V03:K1:R8QQ7i5FLbA8QRzXyJ6oGXIC8tuo9jkcSgSKPN6XPg9WCqyAshg
- J5swMz7rOtk27z0Vb/WWkKqmerTeyLm8flPn5uDlnXQy9DcT509MxGgurYtcR6sMPL7zai2
- BwfebaQADI1RK12fyE2dlajQ3B33ujPLNg544CLZQVh2tq3yXfUF2aRv5jKRTJZXHa+KDB9
- SaiU/1bsa6QYBuZi5W2nw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mh71jat/ZEo=:inNqJpe3reR7hFxBHtS9Od
- II01EBLWcFvI/3bvRX9SwwJLTIBhwEv0Cl/teBBW53TP26YXTLTOsY8/Jk8HLkyD30SbVElzx
- inDnxsSLrjbl/axlTtzKzrezLMFt1dYjxVrDVTFeiY7gRvaGTWg+kc6yKK5AWH8+pa3boWZDo
- j/uSO8aVj+y0b6SDweePD/k4XhKeZB/pG9T6alJlWs8eUeFsYN8bXffseMN+C4JCSBI9LdUNV
- ewRAMnhbZ07Wz9f6TS7MynFLkwZ+I5ySZdpGBR9El2yAYMlFb7FZ4FJiQ6Ogm950D2y+iwV9Z
- jkjisuvWc24VcsYGiaE4QktRqh+DddHfahTtTKn5KKvXQFRWsnK1Yjrf/XtlDeShyo7zvXvzi
- UfGnpcJvZULmJ6IDNwDAYyE7tzB3rNlEgw36zARS5Y+2RyeG94nxKIzNnfD30+/5OLXQ4ljMj
- ak1pEgT3LSoP42s/06LNQwyxDUVRNWQFgx1gqZlEe4+0/8O9XjiucS+1i9vLn/sRo5PvUK3yU
- GqCSmjv/VCcX+hFtuEgxopR/PW4XVScj4F8/5oRmUv5CtHplFzWc6A0ktjfSty6mnr6xaZMzh
- aojrFWMDJH8eeEiPmbBgisQraPSkWvMw9osWvqsrtqdQA335gwzYMvzAlL6Yc8qSTJl12asA/
- f4OKUI8wn313DD98LPtTgg6b79Wby7x0TTBO7BVtg+dKLHfB6MYHmaCTSLny+iL2/DglAaZ5D
- pDRTIkjzofzaEKMEqV0VCSlJqlI4m1nIePdrAA==
-Subject: Re: [Buildroot] [PATCH] package/catch2: new package
+Date: Wed, 15 Jun 2022 13:56:54 +0300
+From: Dimi Tomov <dimi@tpm.dev>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <CAPi7W82YatKcPLD7+rHDKhzngo_=cMnSG7GjV8bCebCb7iz2Cw@mail.gmail.com>
+References: <20220615074543.41437-1-dimi@tpm.dev>
+ <20220615075028.41612-1-dimi@tpm.dev>
+ <2c1f96f051686a661c0a6a1fbba07e40@tpm.dev>
+ <CAPi7W82YatKcPLD7+rHDKhzngo_=cMnSG7GjV8bCebCb7iz2Cw@mail.gmail.com>
+Message-ID: <b747c1dffb31252f1567d80e88707f2f@tpm.dev>
+X-Sender: dimi@tpm.dev
+Organization: TPM.dev
+X-Originating-IP: 35.214.247.6
+X-SpamExperts-Domain: es87.siteground.eu
+X-SpamExperts-Username: 35.214.247.6
+Authentication-Results: mailspamprotection.com;
+ auth=pass smtp.auth=35.214.247.6@es87.siteground.eu
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.00194653579177)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT/l+RSTiGhsnfL1+nEfyjgpPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5zXBqNSapTpPkqU8rtpw71NFyJHgrHSwCtEjluuUWcpJy6t
+ qqQqDjtsvNgVjMorkiNpdtr/zHbEnQMJQw9jU01dAiVLZDqPW14Alsx3B9/9uz61pvrO6HwfG+rB
+ B7pDXCGmxNc1+XY5PM6T3YhB1Z6+cVoUGnt75GSZ8R01W54PlMttn5U6JgC86MA0WtuQI9YEybI1
+ sOftHmSKUCHCvcq0yXl6FMT6M3aJ/uTYw8+C6f32Pbh8IoWMnTRN/BGQ/k2Kbu4uGlhgkrfHbdZD
+ A9RTLsrrQhbj8X91aR7ya6IAIQO2STdBA5Uv2GfAI+eh/+ltON/TTWWZ967bkU57I7RG7DgzTQVm
+ jsGWMqZuQKevgUdX9lgZ8EzqS/IY6P98izRREEHiZkQtIZHw9CVYULBCZ66lhh3M+bth9ENpQs5T
+ aTYms7xC/xECurYzBZo2eH5S4gXbKfTeztNLeCGba+AGlvk+fp+1BlUr0rwQCOffuxSDr14Ng17a
+ K0KVPdLtuNBQKjk9kmwtxjkWY2Gn4kPGpt1STXBVt1dWVEn7ayxguK/4dg0fH+IxuHMdn6Aesq/+
+ 2RocPUuulq9W1PiTENQsQSonZiFodgo9fgcdxbh+YkYMQ9Z+2Got4ab2H7ZQD9xaGU/y5LAAVorG
+ kQz2Sdq7Wzvrlqr/siF7kmk0RghWw4zIacMilJyGVyjpEgOg2D+r4KgxnNw+SR321fWDrmpK+qv6
+ G3jaf3Yb4RxjRToPGnoZ/cup2uXSfMpPixnQwqcBIkUL/j1Y48GvmeURQjjE5i4UA+1oqJpF71Z4
+ FZpDm4mzlYoAYnBPHhHGmdOLYBGIQ0FFEefQVGEQ1kU10I9FcQrbO7uHDjImfZnzvmupG9VB2dcf
+ K+b+Zn4Xrg1X+GLdhCCwjbvSHPNuz2dpCGOdqXbA2PB14sFBTHQi16AFSfy2tebwJIn4LGuGA/Pn
+ 2/jbN+mC7YtR1CA4KtycBqB5UH+AUUuB4dpnvVGq0uayBqavMuQ7cEx0iSgeZQiJfvWU/aIvRGba
+ f7pN8JZ6q+0Tbmzgl5q7Sj5mtbYwvEzfeN7BAl2CeV4os8gLa/VaI9tL9YFG/dWoAfXc5c4PFCnG
+ 2AtH8UrqTqhBR2Q7J+FcnfEcVpFY6CWf3WjHFvYnm+G90vHYP0867qmSn6HwLgz+eA6scZZwpzkC
+ o4WoBCri0m3a/fo74mPtmdv83fHzXZKfUBrrJFUF4fKPESnR/E1fdl+RTjptstkzumf7rxP7qw==
+X-Report-Abuse-To: spam@quarantine1.mailspamprotection.com
+Subject: Re: [Buildroot] [PATCH v4 1/1] package/wolftpm: Add config options
+ for TPM 2.0 extra capabilities
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,197 +107,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============6588799866505044294=="
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
---===============6588799866505044294==
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="/3yNEOqWowh/8j+e"
-Content-Disposition: inline
-
-
---/3yNEOqWowh/8j+e
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello Michael,
-
-On Wed, Jun 08, 2022 at 10:16:02AM +0200, Michael Nosthoff via buildroot wr=
-ote:
-> Catch2 is a modern C++ unit testing framework which is
-> increasing in popularity.
-> This package is staging only and allows to build tests
-> to be run on the target.
->=20
-> Further it can also be built as host package (similar to
-> gtest)
->=20
-> - https://github.com/catchorg/Catch2
->=20
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> ---
->  DEVELOPERS                 |  1 +
->  package/Config.in          |  1 +
->  package/catch2/Config.in   | 28 ++++++++++++++++++++++++++++
->  package/catch2/catch2.hash |  3 +++
->  package/catch2/catch2.mk   | 19 +++++++++++++++++++
->  5 files changed, 52 insertions(+)
->  create mode 100644 package/catch2/Config.in
->  create mode 100644 package/catch2/catch2.hash
->  create mode 100644 package/catch2/catch2.mk
->=20
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 86755bfe18..211e876e16 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2027,6 +2027,7 @@ F:	package/gnuplot/
->  F:	package/sdl2/
-> =20
->  N:	Michael Nosthoff <buildroot@heine.tech>
-> +F:	package/catch2/
->  F:	package/grpc/
->  F:	package/gtest/
->  F:	package/libabseil-cpp/
-> diff --git a/package/Config.in b/package/Config.in
-> index 3b089166da..77ada20db9 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1929,6 +1929,7 @@ menu "Other"
->  	source "package/boost/Config.in"
->  	source "package/c-capnproto/Config.in"
->  	source "package/capnproto/Config.in"
-> +	source "package/catch2/Config.in"
->  	source "package/cctz/Config.in"
->  	source "package/cereal/Config.in"
->  	source "package/clang/Config.in"
-> diff --git a/package/catch2/Config.in b/package/catch2/Config.in
-> new file mode 100644
-> index 0000000000..b0eee9fa47
-> --- /dev/null
-> +++ b/package/catch2/Config.in
-> @@ -0,0 +1,28 @@
-> +config BR2_PACKAGE_CATCH2
-> +	bool "catch2"
-> +	depends on BR2_USE_WCHAR
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-> +	depends on BR2_USE_MMU # fork()
-> +	help
-> +	  Catch2 is mainly a unit testing framework for C++, but it
-> +	  also provides basic micro-benchmarking features, and simple
-> +	  BDD macros.
-> +
-> +	  Catch2's main advantage is that using it is both simple and
-> +	  natural. Tests autoregister themselves and do not have to
-> +	  be named with valid identifiers, assertions look like
-> +	  normal C++ code, and sections provide a nice way to share
-> +	  set-up and tear-down code in tests.
-> +
-> +	  This package allows running testsuites on the target which
-> +	  might be advantageous in certain cases.
-> +
-> +	  https://github.com/catchorg/Catch2
-> +
-> +comment "gtest needs a toolchain w/ C++, wchar, threads, gcc >=3D 4.9"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_INSTALL_LIBSTDCPP || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-
-That comment wording doesn't seem right.  Did you mean "catch2"
-instead of "gtest" here?
-
-Greets
-Alex
-
-> diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
-> new file mode 100644
-> index 0000000000..8d47257abe
-> --- /dev/null
-> +++ b/package/catch2/catch2.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed:
-> +sha256  8c4173c68ae7da1b5b505194a0c2d6f1b2aef4ec1e3e7463bde451f26bbaf4e7=
-  v3.0.1.tar.gz
-> +sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566=
-  LICENSE.txt
-> diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
-> new file mode 100644
-> index 0000000000..e04b8a6b0a
-> --- /dev/null
-> +++ b/package/catch2/catch2.mk
-> @@ -0,0 +1,19 @@
-> +########################################################################=
-########
-> +#
-> +# catch2
-> +#
-> +########################################################################=
-########
-> +
-> +CATCH2_VERSION =3D 3.0.1
-> +CATCH2_SOURCE =3D v$(CATCH2_VERSION).tar.gz
-> +CATCH2_SITE =3D https://github.com/catchorg/Catch2/archive
-> +CATCH2_INSTALL_STAGING =3D YES
-> +CATCH2_INSTALL_TARGET =3D NO
-> +CATCH2_LICENSE =3D BSL-1.0
-> +CATCH2_LICENSE_FILES =3D LICENSE.txt
-> +CATCH2_SUPPORTS_IN_SOURCE_BUILD =3D NO
-> +
-> +CATCH2_CONF_OPTS =3D -DCATCH_INSTALL_DOCS=3DOFF
-> +
-> +$(eval $(cmake-package))
-> +$(eval $(host-cmake-package))
-> --=20
-> 2.25.1
->=20
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
---=20
-/"\ ASCII RIBBON | =BBWith the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.=AB
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
-
---/3yNEOqWowh/8j+e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEwo7muQJjlc+Prwj6NK3NAHIhXMYFAmKpt3AACgkQNK3NAHIh
-XMawBg/+Mvm2VGJDcS1vRzxQfz3kN2/LeCCH52AtMDTDjT/kh8pGDOelzYS01tYT
-SR1FVhWhu3Yoo16o7jshK6k7V9bPY0UYpqUk2/8qheNVpHaVAN9XBcxTsa9EVm7o
-hB5vn6cZnwKPMWmOfmUSalJl+PaEvG0y1WGMxfG/8IxVuFeEcd6AMOhWWyFEDdOH
-sC09eJDSNpputrL4rTGewtdldjN1LokyGG4yWymGWG/+tOwex5TToJOWJKFybOGo
-c5yOlgSEzpyM/b6Sl60gO3vpHGwzLfyVCIdOOQ9tUX2cs/OAWbRE7dtfQ/n+yAU2
-rnr8UqCtBKTtkFfyiNvEU0+Xm7C75/wFylpWHB0dzlbgLuId2i0RQKI6JNEVPzIq
-w6K/9s1QuK3+dB/j55qyhx3U0sExDsKAsknmc+xCDBHD4hQudKOs6H/CDYvFNChe
-MMJ8vkMYNZJATT43WaGYGz31zRUlhowiC+MsLHrtulEjrqGlSPcu1WFwq2i4730i
-fl9Hn4iZJKvFXYS5cEWebf3y394RBqQwjzvsNISnjKPSOlldqUJ3zur5CxK9cmTj
-VA/XOY9oZIZZwJZkfH/J3EHqoNOrYnvrrFnPVgWYQD9dADMC+rp/pjW4CswTO2zB
-Yqd7OnEqpbxYP2kdXY2ZBIaGeU2ndbCx3b1tdGfQqOs/cEcdjk4=
-=kcQd
------END PGP SIGNATURE-----
-
---/3yNEOqWowh/8j+e--
-
---===============6588799866505044294==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6588799866505044294==--
+SGkgRmFicmljZSwKClRoYW5rIHlvdSBmb3IgdGhpcyBpbnB1dC4KCldoYXQgZG8geW91IG1lYW4g
+Ynkgc3VwZXJzZWRlZD8gSSBhbSB1c2luZyAtLWluLXJlcGx5LXRvLiBIb3cgYXJlIHlvdSAKdHlw
+aWNhbGx5IHNlbmRpbmcgZm9sbG93LXVwIHBhdGNoIHZlcnNpb25zPwoKSSB0aG91Z2h0IHdlIGFy
+ZSB1c2luZyA4MCBjaGFycyBwZXIgbGluZSBsaW1pdCwgSSB3aWxsIHVwZGF0ZSB0aGUgcGF0Y2gg
+CndpdGggNzIgY2hhcnMgcGVyIGxpbmUgbGltaXQuCgpSZWdhcmRzLAoKRGltaQoKT24gMjAyMi0w
+Ni0xNSAxMTozNCBBTSwgRmFicmljZSBGb250YWluZSB3cm90ZToKPiBIaSBEaW1pLAo+IAo+IExl
+IG1lci4gMTUganVpbiAyMDIyIMOgIDA5OjUzLCBEaW1pIFRvbW92IDxkaW1pQHRwbS5kZXY+IGEg
+w6ljcml0IDoKPj4gCj4+IEhpIFRob21hcywKPj4gCj4+IFRoaXMgcGF0Y2ggYWRkcyBuZXcgcGFj
+a2FnZSBvcHRpb25zIHRoYXQgZW5hYmxlIGV4dHJhIFRQTSAyLjAKPj4gY2FwYWJpbGl0aWVzLgo+
+PiAKPj4gcHM6IFBsZWFzZSBleGN1c2UgdGhlIGV4dHJhIHZlcnNpb25zLCBpdCBzZWVtcyBJIGFt
+IHN0aWxsIHNsZWVweSB0aGlzCj4+IG1vcm5pbmcuCj4+IAo+PiBUaGFua3MsCj4+IERpbWkKPj4g
+LS0KPj4gRm91bmRlciBvZiBUUE0uZGV2Cj4+IAo+PiBPbiAyMDIyLTA2LTE1IDEwOjUwIEFNLCBE
+aW1pIFRvbW92IHdyb3RlOgo+PiA+IEZyb206IERpbWl0YXIgVG9tb3YgPGRpbWlAdHBtLmRldj4K
+Pj4gPgo+PiA+IFNvbWUgVFBNIDIuMCBjaGlwcyBvZmZlciBleHRyYSBjYXBhYmlsaXRpZXMuIFRo
+aXMgcGF0Y2ggYWRkcyBhZGRpdGlvbmFsCj4+ID4gY29uZmlndXJhdGlvbiBvcHRpb25zIHRvIHRo
+ZSB3b2xmdHBtIHBhY2thZ2UsIHNvIHN1Y2ggY2FwYWJpbGl0aWVzIGNhbgo+PiA+IGJlIGF2YWls
+YWJsZSB0byB0aGUgdXNlci4gRm9yIGV4YW1wbGUsIHRoZSBTVE1pY3JvZWxlY3Ryb25pY3MgU1Qz
+MyBhbmQKPj4gPiBOdXZvdG9uIE5QQ1Q3NTAgYm90aCBvZmZlciBzZWN1cmUgR1BJTy4gRHVlIHRv
+IGNoaXAgZGlmZmVyZW5jZXMsCj4+ID4gd29sZlRQTQo+PiA+IHJlcXVpcmVzIGV4cGxpY2l0IGNv
+bmZpZ3VyYXRpb24gb3B0aW9ucyB0byBlbmFibGUgdGhlIGV4dHJhCj4+ID4gY2FwYWJpbGl0aWVz
+Lgo+PiA+Cj4+ID4gU2lnbmVkLW9mZi1ieTogRGltaXRhciBUb21vdiA8ZGltaUB0cG0uZGV2Pgo+
+PiA+IC0tLQo+PiA+IENoYW5nZXMgdjMgLT4gdjQ6Cj4+ID4gLSBGaXggY29tbWl0IG1lc3NhZ2Uu
+IEZvciBzb21lIHJlYXNvbiB0aGUgdXBkYXRlIHdhcyBub3QgaW5jbHVkZWQgaW4KPj4gPiBwYXRj
+aCB2My4KPj4gPiBDaGFuZ2VzIHYyIC0+IHYzOgo+PiA+IC0gQmV0dGVyIGNvbW1pdCBtZXNzYWdl
+Cj4+ID4gQ2hhbmdlcyB2MSAtPiB2MjoKPj4gPiAtIFJlbW92ZSBhIG5vdCBuZWVkZWQgcGFja2Fn
+ZSBkZXNjcmlwdGlvbiBjaGFuZ2UKPiAKPiBZb3Ugc2hvdWxkIHNldCBwcmV2aW91cyBpdGVyYXRp
+b25zIGFzIHN1cGVyc2VkZWQgaW4gcGF0Y2h3b3JrOgo+IGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFi
+cy5vcmcvcHJvamVjdC9idWlsZHJvb3QvbGlzdC8KPiAKPj4gPiAtLS0KPj4gPiAgcGFja2FnZS93
+b2xmdHBtL0NvbmZpZy5pbiAgfCAxMiArKysrKysrKysrKysKPj4gPiAgcGFja2FnZS93b2xmdHBt
+L3dvbGZ0cG0ubWsgfCAxMiArKysrKysrKysrKysKPj4gPiAgMiBmaWxlcyBjaGFuZ2VkLCAyNCBp
+bnNlcnRpb25zKCspCj4+ID4KPj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS93b2xmdHBtL0NvbmZp
+Zy5pbiBiL3BhY2thZ2Uvd29sZnRwbS9Db25maWcuaW4KPj4gPiBpbmRleCAwYjk2NGMzZDdlLi4z
+MDI3YjdlMzNkIDEwMDY0NAo+PiA+IC0tLSBhL3BhY2thZ2Uvd29sZnRwbS9Db25maWcuaW4KPj4g
+PiArKysgYi9wYWNrYWdlL3dvbGZ0cG0vQ29uZmlnLmluCj4+ID4gQEAgLTIzLDYgKzIzLDE4IEBA
+IGNvbmZpZyBCUjJfUEFDS0FHRV9XT0xGVFBNX1dPTEZDUllQVAo+PiA+ICAgICAgICAgZW5jcnlw
+dGlvbi4gRGlzYWJsaW5nIHRoaXMgb3B0aW9uIGlzIG5vdCByZWNvbW1lbmRlZCBhcyBpdAo+PiA+
+ICAgICAgICAgY291bGQgY3JlYXRlIGEgc2VjdXJpdHkgYnJlYWNoIGluIG1vc3QgZW52aXJvbm1l
+bnRzLgo+PiA+Cj4+ID4gK2NvbmZpZyBCUjJfUEFDS0FHRV9XT0xGVFBNX1NUMzMKPj4gPiArICAg
+ICBib29sICJzdDMzIgo+PiA+ICsgICAgIGRlZmF1bHQgbgo+PiA+ICsgICAgIGhlbHAKPj4gPiAr
+ICAgICAgIEVuYWJsZSBzdXBwb3J0IG9mIFRQTSAyLjAgZXh0cmEgZnVuY3Rpb25hbGl0eSBvZmZl
+cmVkIGJ5IHRoZQo+PiA+IFNUTWljcm9lbGVjdHJvbmljcyBTVDMzIGNoaXAuCj4gCj4gVGhpcyBs
+aW5lIGlzIHRvbyBsb25nIChpdCBzaG91bGQgYmUgd3JhcHBlZCB0byA3MiBjaGFyYWN0ZXJzKS4K
+PiBtYWtlIGNoZWNrLXBhY2thZ2Ugd2lsbCB3YXJuIHlvdSBhYm91dCBpdAo+IAo+PiA+ICsKPj4g
+PiArY29uZmlnIEJSMl9QQUNLQUdFX1dPTEZUUE1fTlVWT1RPTgo+PiA+ICsgICAgIGJvb2wgIm5w
+Y3Q3NTAiCj4+ID4gKyAgICAgZGVmYXVsdCBuCj4+ID4gKyAgICAgaGVscAo+PiA+ICsgICAgICAg
+RW5hYmxlIHN1cHBvcnQgb2YgVFBNIDIuMCBleHRyYSBmdW5jdGlvbmFsaXR5IG9mZmVyZWQgYnkg
+dGhlCj4+ID4gTnV2b3RvbiBOUENUNzUwIGNoaXAuCj4gCj4gVGhpcyBsaW5lIGlzIGFsc28gdG9v
+IGxvbmcuCj4gCj4+ID4gKwo+PiA+ICBjb21tZW50ICJ3b2xmQ3J5cHQgaG9va3MgbmVlZCBhIHRv
+b2xjaGFpbiB3LyB0aHJlYWRzLCBkeW5hbWljIGxpYnJhcnkiCj4+ID4gICAgICAgZGVwZW5kcyBv
+biAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyB8fCBCUjJfU1RBVElDX0xJQlMKPj4gPgo+PiA+
+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3dvbGZ0cG0vd29sZnRwbS5tayBiL3BhY2thZ2Uvd29sZnRw
+bS93b2xmdHBtLm1rCj4+ID4gaW5kZXggYTRhOWVkY2U4NS4uZDA0MjNjZDA2YiAxMDA2NDQKPj4g
+PiAtLS0gYS9wYWNrYWdlL3dvbGZ0cG0vd29sZnRwbS5tawo+PiA+ICsrKyBiL3BhY2thZ2Uvd29s
+ZnRwbS93b2xmdHBtLm1rCj4+ID4gQEAgLTM1LDQgKzM1LDE2IEBAIGVsc2UKPj4gPiAgV09MRlRQ
+TV9DT05GX09QVFMgKz0gLS1kaXNhYmxlLXdvbGZjcnlwdAo+PiA+ICBlbmRpZgo+PiA+Cj4+ID4g
+K2lmZXEgKCQoQlIyX1BBQ0tBR0VfV09MRlRQTV9TVDMzKSx5KQo+PiA+ICtXT0xGVFBNX0NPTkZf
+T1BUUyArPSAtLWVuYWJsZS1zdDMzCj4+ID4gK2Vsc2UKPj4gPiArV09MRlRQTV9DT05GX09QVFMg
+Kz0gLS1kaXNhYmxlLXN0MzMKPj4gPiArZW5kaWYKPj4gPiArCj4+ID4gK2lmZXEgKCQoQlIyX1BB
+Q0tBR0VfV09MRlRQTV9OUENUNzUwKSx5KQo+PiA+ICtXT0xGVFBNX0NPTkZfT1BUUyArPSAtLWVu
+YWJsZS1udXZvdG9uCj4+ID4gK2Vsc2UKPj4gPiArV09MRlRQTV9DT05GX09QVFMgKz0gLS1kaXNh
+YmxlLW51dm90b24KPj4gPiArZW5kaWYKPj4gPiArCj4+ID4gICQoZXZhbCAkKGF1dG90b29scy1w
+YWNrYWdlKSkKPiAKPiBCZXN0IFJlZ2FyZHMsCj4gCj4gRmFicmljZQoKLS0gCkZvdW5kZXIgb2Yg
+VFBNLmRldgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
