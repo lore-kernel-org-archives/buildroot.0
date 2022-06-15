@@ -4,77 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A274C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jun 2022 08:34:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0851DC43334
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jun 2022 10:32:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F6A840BA1;
-	Wed, 15 Jun 2022 08:34:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7149F40BA1;
+	Wed, 15 Jun 2022 10:32:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id boQljnF1_T44; Wed, 15 Jun 2022 08:34:29 +0000 (UTC)
+	with ESMTP id TXLFCebTU1d1; Wed, 15 Jun 2022 10:32:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 23F534018F;
-	Wed, 15 Jun 2022 08:34:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B62EE1BF954
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 08:34:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5691440489;
+	Wed, 15 Jun 2022 10:32:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E8A031BF5A8
+ for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 10:32:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5244416DC
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 08:34:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE8B240489
+ for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 10:32:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cxe8nDiQ6glS for <buildroot@lists.busybox.net>;
- Wed, 15 Jun 2022 08:34:25 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com
- [IPv6:2607:f8b0:4864:20::c31])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5DB5E410B7
- for <buildroot@buildroot.org>; Wed, 15 Jun 2022 08:34:25 +0000 (UTC)
-Received: by mail-oo1-xc31.google.com with SMTP id
- g9-20020a4adc89000000b0041bef879199so1957523oou.10
- for <buildroot@buildroot.org>; Wed, 15 Jun 2022 01:34:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=oRznMtmt0ynXbZHD2jx6eKwwcz6cGMDuDNbajE1NiXI=;
- b=YvqyWKTEkOkEQvIU5RzqJtOlh3kewovp1zogc0cNs5uzCzitvroCpIyu6Kcs4mpzRB
- Zt9TIdUKuLzSBpL3nPEZ4HF87LyTy6IQebIM1G7zIHfle6HIlnMCkD01SVtpRjEWzmVL
- Dp/ovh1F3MTFMI874TZj9yR3aIq5RZNd2PYgGy32NwWTpwtdIKpfI1pFZIxNUne3AsDl
- Ahs/Zsg1akRw+LRP90vmF7bJk7m6OlDClJe/HXiug2iJWavf3PYFBpauCqq95rYPiOco
- Ahxpu7fpGEk7p3XMb2wr+4/ufGCDD1FwRkfOpls2x0Fs0E/U4i478vcGEPOPLMfbgTZY
- 7iaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=oRznMtmt0ynXbZHD2jx6eKwwcz6cGMDuDNbajE1NiXI=;
- b=zZagC69DYmnG7H0CZzVFTozI5m3nxFTMh3B1ONrgZ053+zuZ3rZwYJBvVptGqCbi28
- OlOCl7LzcqyRS1bIO///kIEAisXH3pJRvOy6hT6oEz1AVim/ghcMAJiTOLkhkjZtH5sM
- 7l0rZWLKc0/kLLru7BA6vCoEL/43fgGKgBGtymARlIBohtXE1lujRMt9C1zaIKPjYpDO
- j7sueYgpxZjpIYa5SWM0WXcYcx6K1GaP/4my2cRw1sPegnIRo+GS+lZAnWyRXP7dKP4L
- rVHw9J96D9cnyklDPgRCCKjDwJhEkiejVzEvcmIVVXtDDOopTYX7wFPYKf67AeiIRGLU
- ZMJA==
-X-Gm-Message-State: AOAM532VpdcrlcARgNcRThnc9DY0bxdgSZSIEAC9hUHLH7X1KZGlw3qU
- R29JuecoJa9dIY8GHFAb9E6jxTpeAwZQwNtWtJs=
-X-Google-Smtp-Source: ABdhPJzYZdpditoV+DrWJzaLWO778kcb6HmB7Mq7u1API7hXmOpoYbN7qJ27YGRQx7D5LqWdC6NC+scQ8HGuC4YX4rQ=
-X-Received: by 2002:a4a:9d48:0:b0:41b:8abb:8987 with SMTP id
- f8-20020a4a9d48000000b0041b8abb8987mr3668757ook.0.1655282064385; Wed, 15 Jun
- 2022 01:34:24 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EJEUFlowSMZp for <buildroot@lists.busybox.net>;
+ Wed, 15 Jun 2022 10:32:11 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2DAB84017A
+ for <buildroot@buildroot.org>; Wed, 15 Jun 2022 10:32:10 +0000 (UTC)
+Received: from methusalix.internal.home.lespocky.de ([92.117.41.38]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MUD7D-1oAX8Y0lhz-00RF1g; Wed, 15 Jun 2022 12:32:05 +0200
+Received: from falbala.internal.home.lespocky.de ([192.168.243.94])
+ by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.3) tls
+ TLS_AES_256_GCM_SHA384 (Exim 4.94.2)
+ (envelope-from <post@lespocky.de>)
+ id 1o1QJc-0008M5-7C; Wed, 15 Jun 2022 12:32:03 +0200
+Date: Wed, 15 Jun 2022 12:31:59 +0200
+From: Alexander Dahl <post@lespocky.de>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220615103158.GC12610@falbala.internal.home.lespocky.de>
+Mail-Followup-To: Arnout Vandecappelle <arnout@mind.be>,
+ Buildroot Mailing List <buildroot@buildroot.org>,
+ Jens-Christoph Brendel <jens-christoph.brendel@computec.de>
+References: <8c2fc8d9-5bc7-1982-35ed-1fc31e1bb470@mind.be>
 MIME-Version: 1.0
-References: <20220615074543.41437-1-dimi@tpm.dev>
- <20220615075028.41612-1-dimi@tpm.dev>
- <2c1f96f051686a661c0a6a1fbba07e40@tpm.dev>
-In-Reply-To: <2c1f96f051686a661c0a6a1fbba07e40@tpm.dev>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 15 Jun 2022 10:34:13 +0200
-Message-ID: <CAPi7W82YatKcPLD7+rHDKhzngo_=cMnSG7GjV8bCebCb7iz2Cw@mail.gmail.com>
-To: Dimi Tomov <dimi@tpm.dev>
-Subject: Re: [Buildroot] [PATCH v4 1/1] package/wolftpm: Add config options
- for TPM 2.0 extra capabilities
+In-Reply-To: <8c2fc8d9-5bc7-1982-35ed-1fc31e1bb470@mind.be>
+X-Clacks-Overhead: GNU Terry Pratchett
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scan-Signature: b85a8e66e101ac701f0f4b979a7f64e0
+X-Provags-ID: V03:K1:4hzi9kUjitEk0QNqqE8w1hPIQd6bKSWlYlZfqt4P/OH4NZZY3B/
+ rJRFVcVO66Vo/Xv3Dq3iwmp5qubvAf58T9fKaSbEvCQ+Lpwl0VGkS2l/HxCAGhoHpEbJmWM
+ CXmuHfFWtampoc53rlMXbLehUg8vMSJctt9rh2LhoCqG2tGmfbn3d7OqIqrjHvakVsMp/LM
+ H43jDVaJ6Ij8DYbhGGebw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:t660wYIxjCI=:03RXNLMtxAlWN0oj4QtBj8
+ 2tDDMwtXWCcfZguSsVtuiuk2XIkGzwqBYEgGKHswBo09yOyMgI/bcSro89iStZY+lI3nGeEq2
+ SgIGiWKpkQ8SklNFonU7hZlvz0vSERuNXF8mXTLZQuLEOgh/xWiXt66kWS99RV/m2aVVoNn5w
+ wbFnV0+88fndddgPbrMZzuS3bYfMt6elqhUgxUf38c5v0EY67YBNOtll0bAvKdwSTZNzgpZx1
+ j1bxsuIBuRp664pz7CBeGJxspIYSFy0/KloIFFX4JJAk4JiqXRPwlU9KWDZI+e13dgPoDh4mW
+ XnelAkMQUYhCvksEfWhChzelkjMex5hzWP4cM6hxUsf/3Sq4DpSGOHHfRr8xIoqw1OhPFZiSN
+ xyY5ZfBbxUih5qNC7qlSCbJjJLlYZfI9nja3IOdC1gmSamPDGhbcP3cla6Wjl63dXzVsYnHce
+ lQn77Jo3r1Cem6dngVO5D0nNtM2bnj2vR30sJPyVwLdlw5spTbiUu4dYB4cUaptySPTXI9RhP
+ b3arWDCQhAymQ/HXhmT+6Hl4UhSvhseQJejpkV7N5Ar+Unx5jVVfWOffTXqCnKthc5/sxSssS
+ wCmKkllY14XUevi+2Zqg8DFkR4azxs8AbhY83hqz4d13ysQdXMBCT6hDHy+EhtiI9don9s/KJ
+ 00KNF9Gv7f3X7RsqkfRYe+lXMX1D2KmgVxtWD/354WUjCG8/rDjYsTmIxkAp/ZpcplQlsD8ch
+ bLQMzTiYI48gODkGFBAT6zEhpek5uxm9HUX7TA==
+Subject: Re: [Buildroot] Article for the German Linux magazine
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,68 +80,208 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+Cc: Jens-Christoph Brendel <jens-christoph.brendel@computec.de>,
  Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============2460101126434022736=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgRGltaSwKCkxlIG1lci4gMTUganVpbiAyMDIyIMOgIDA5OjUzLCBEaW1pIFRvbW92IDxkaW1p
-QHRwbS5kZXY+IGEgw6ljcml0IDoKPgo+IEhpIFRob21hcywKPgo+IFRoaXMgcGF0Y2ggYWRkcyBu
-ZXcgcGFja2FnZSBvcHRpb25zIHRoYXQgZW5hYmxlIGV4dHJhIFRQTSAyLjAKPiBjYXBhYmlsaXRp
-ZXMuCj4KPiBwczogUGxlYXNlIGV4Y3VzZSB0aGUgZXh0cmEgdmVyc2lvbnMsIGl0IHNlZW1zIEkg
-YW0gc3RpbGwgc2xlZXB5IHRoaXMKPiBtb3JuaW5nLgo+Cj4gVGhhbmtzLAo+IERpbWkKPiAtLQo+
-IEZvdW5kZXIgb2YgVFBNLmRldgo+Cj4gT24gMjAyMi0wNi0xNSAxMDo1MCBBTSwgRGltaSBUb21v
-diB3cm90ZToKPiA+IEZyb206IERpbWl0YXIgVG9tb3YgPGRpbWlAdHBtLmRldj4KPiA+Cj4gPiBT
-b21lIFRQTSAyLjAgY2hpcHMgb2ZmZXIgZXh0cmEgY2FwYWJpbGl0aWVzLiBUaGlzIHBhdGNoIGFk
-ZHMgYWRkaXRpb25hbAo+ID4gY29uZmlndXJhdGlvbiBvcHRpb25zIHRvIHRoZSB3b2xmdHBtIHBh
-Y2thZ2UsIHNvIHN1Y2ggY2FwYWJpbGl0aWVzIGNhbgo+ID4gYmUgYXZhaWxhYmxlIHRvIHRoZSB1
-c2VyLiBGb3IgZXhhbXBsZSwgdGhlIFNUTWljcm9lbGVjdHJvbmljcyBTVDMzIGFuZAo+ID4gTnV2
-b3RvbiBOUENUNzUwIGJvdGggb2ZmZXIgc2VjdXJlIEdQSU8uIER1ZSB0byBjaGlwIGRpZmZlcmVu
-Y2VzLAo+ID4gd29sZlRQTQo+ID4gcmVxdWlyZXMgZXhwbGljaXQgY29uZmlndXJhdGlvbiBvcHRp
-b25zIHRvIGVuYWJsZSB0aGUgZXh0cmEKPiA+IGNhcGFiaWxpdGllcy4KPiA+Cj4gPiBTaWduZWQt
-b2ZmLWJ5OiBEaW1pdGFyIFRvbW92IDxkaW1pQHRwbS5kZXY+Cj4gPiAtLS0KPiA+IENoYW5nZXMg
-djMgLT4gdjQ6Cj4gPiAtIEZpeCBjb21taXQgbWVzc2FnZS4gRm9yIHNvbWUgcmVhc29uIHRoZSB1
-cGRhdGUgd2FzIG5vdCBpbmNsdWRlZCBpbgo+ID4gcGF0Y2ggdjMuCj4gPiBDaGFuZ2VzIHYyIC0+
-IHYzOgo+ID4gLSBCZXR0ZXIgY29tbWl0IG1lc3NhZ2UKPiA+IENoYW5nZXMgdjEgLT4gdjI6Cj4g
-PiAtIFJlbW92ZSBhIG5vdCBuZWVkZWQgcGFja2FnZSBkZXNjcmlwdGlvbiBjaGFuZ2UKCllvdSBz
-aG91bGQgc2V0IHByZXZpb3VzIGl0ZXJhdGlvbnMgYXMgc3VwZXJzZWRlZCBpbiBwYXRjaHdvcms6
-Cmh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvbGlzdC8KCj4g
-PiAtLS0KPiA+ICBwYWNrYWdlL3dvbGZ0cG0vQ29uZmlnLmluICB8IDEyICsrKysrKysrKysrKwo+
-ID4gIHBhY2thZ2Uvd29sZnRwbS93b2xmdHBtLm1rIHwgMTIgKysrKysrKysrKysrCj4gPiAgMiBm
-aWxlcyBjaGFuZ2VkLCAyNCBpbnNlcnRpb25zKCspCj4gPgo+ID4gZGlmZiAtLWdpdCBhL3BhY2th
-Z2Uvd29sZnRwbS9Db25maWcuaW4gYi9wYWNrYWdlL3dvbGZ0cG0vQ29uZmlnLmluCj4gPiBpbmRl
-eCAwYjk2NGMzZDdlLi4zMDI3YjdlMzNkIDEwMDY0NAo+ID4gLS0tIGEvcGFja2FnZS93b2xmdHBt
-L0NvbmZpZy5pbgo+ID4gKysrIGIvcGFja2FnZS93b2xmdHBtL0NvbmZpZy5pbgo+ID4gQEAgLTIz
-LDYgKzIzLDE4IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9XT0xGVFBNX1dPTEZDUllQVAo+ID4gICAg
-ICAgICBlbmNyeXB0aW9uLiBEaXNhYmxpbmcgdGhpcyBvcHRpb24gaXMgbm90IHJlY29tbWVuZGVk
-IGFzIGl0Cj4gPiAgICAgICAgIGNvdWxkIGNyZWF0ZSBhIHNlY3VyaXR5IGJyZWFjaCBpbiBtb3N0
-IGVudmlyb25tZW50cy4KPiA+Cj4gPiArY29uZmlnIEJSMl9QQUNLQUdFX1dPTEZUUE1fU1QzMwo+
-ID4gKyAgICAgYm9vbCAic3QzMyIKPiA+ICsgICAgIGRlZmF1bHQgbgo+ID4gKyAgICAgaGVscAo+
-ID4gKyAgICAgICBFbmFibGUgc3VwcG9ydCBvZiBUUE0gMi4wIGV4dHJhIGZ1bmN0aW9uYWxpdHkg
-b2ZmZXJlZCBieSB0aGUKPiA+IFNUTWljcm9lbGVjdHJvbmljcyBTVDMzIGNoaXAuCgpUaGlzIGxp
-bmUgaXMgdG9vIGxvbmcgKGl0IHNob3VsZCBiZSB3cmFwcGVkIHRvIDcyIGNoYXJhY3RlcnMpLgpt
-YWtlIGNoZWNrLXBhY2thZ2Ugd2lsbCB3YXJuIHlvdSBhYm91dCBpdAoKPiA+ICsKPiA+ICtjb25m
-aWcgQlIyX1BBQ0tBR0VfV09MRlRQTV9OVVZPVE9OCj4gPiArICAgICBib29sICJucGN0NzUwIgo+
-ID4gKyAgICAgZGVmYXVsdCBuCj4gPiArICAgICBoZWxwCj4gPiArICAgICAgIEVuYWJsZSBzdXBw
-b3J0IG9mIFRQTSAyLjAgZXh0cmEgZnVuY3Rpb25hbGl0eSBvZmZlcmVkIGJ5IHRoZQo+ID4gTnV2
-b3RvbiBOUENUNzUwIGNoaXAuCgpUaGlzIGxpbmUgaXMgYWxzbyB0b28gbG9uZy4KCj4gPiArCj4g
-PiAgY29tbWVudCAid29sZkNyeXB0IGhvb2tzIG5lZWQgYSB0b29sY2hhaW4gdy8gdGhyZWFkcywg
-ZHluYW1pYyBsaWJyYXJ5Igo+ID4gICAgICAgZGVwZW5kcyBvbiAhQlIyX1RPT0xDSEFJTl9IQVNf
-VEhSRUFEUyB8fCBCUjJfU1RBVElDX0xJQlMKPiA+Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS93
-b2xmdHBtL3dvbGZ0cG0ubWsgYi9wYWNrYWdlL3dvbGZ0cG0vd29sZnRwbS5tawo+ID4gaW5kZXgg
-YTRhOWVkY2U4NS4uZDA0MjNjZDA2YiAxMDA2NDQKPiA+IC0tLSBhL3BhY2thZ2Uvd29sZnRwbS93
-b2xmdHBtLm1rCj4gPiArKysgYi9wYWNrYWdlL3dvbGZ0cG0vd29sZnRwbS5tawo+ID4gQEAgLTM1
-LDQgKzM1LDE2IEBAIGVsc2UKPiA+ICBXT0xGVFBNX0NPTkZfT1BUUyArPSAtLWRpc2FibGUtd29s
-ZmNyeXB0Cj4gPiAgZW5kaWYKPiA+Cj4gPiAraWZlcSAoJChCUjJfUEFDS0FHRV9XT0xGVFBNX1NU
-MzMpLHkpCj4gPiArV09MRlRQTV9DT05GX09QVFMgKz0gLS1lbmFibGUtc3QzMwo+ID4gK2Vsc2UK
-PiA+ICtXT0xGVFBNX0NPTkZfT1BUUyArPSAtLWRpc2FibGUtc3QzMwo+ID4gK2VuZGlmCj4gPiAr
-Cj4gPiAraWZlcSAoJChCUjJfUEFDS0FHRV9XT0xGVFBNX05QQ1Q3NTApLHkpCj4gPiArV09MRlRQ
-TV9DT05GX09QVFMgKz0gLS1lbmFibGUtbnV2b3Rvbgo+ID4gK2Vsc2UKPiA+ICtXT0xGVFBNX0NP
-TkZfT1BUUyArPSAtLWRpc2FibGUtbnV2b3Rvbgo+ID4gK2VuZGlmCj4gPiArCj4gPiAgJChldmFs
-ICQoYXV0b3Rvb2xzLXBhY2thZ2UpKQoKQmVzdCBSZWdhcmRzLAoKRmFicmljZQpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+
+--===============2460101126434022736==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="f0KYrhQ4vYSV2aJu"
+Content-Disposition: inline
+
+
+--f0KYrhQ4vYSV2aJu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hei hei,
+
+On Fri, May 13, 2022 at 10:45:20AM +0200, Arnout Vandecappelle wrote:
+> =A0Hi all,
+>=20
+> =A0About two weeks ago, we got a mail on the list asking for a volunteer =
+to
+> write an introductory article about Buildroot for the IoT-themed issue of
+> the German Linux magazine. I volunteered two rite such an article.
+>=20
+> =A0I have an outline or rough draft below. It's just bullet points (thoug=
+h I
+> ended up writing sentences for most of it). I'd like to get feedback on:
+>=20
+> - Is there anything missing that I should mention in the article?
+>=20
+> - Is there something in here which is incorrect?
+>=20
+> - Is there something here that we actually don't want to draw attention t=
+o?
+>=20
+> =A0Please *do not* pay attention to style or spelling or little details t=
+hat
+> are missing.
+>=20
+>=20
+> =A0Thank you for your help!
+>=20
+>=20
+> =A0Regards,
+> =A0Arnout
+>=20
+>=20
+> Buildroot for IoT
+>=20
+> For IoT distro is important:
+> - getting a basic system up and running quickly;
+> - small footprint (sometimes only 64MB of flash)
+> - control over what you build;
+> - support for all major cloud services
+> - easy integration of own components;
+> - attention for security issues.
+>=20
+> Buildroot is a build system that grew out of uClinux and busybox, so with=
+ a
+> focus on very small systems.
+> Meanwhile, it supports all kinds of different use cases, ranging from
+> (still) systems with only a few MB of flash, over docker images for cloud
+> deployments, to complex systems with a graphical stack, database, etc.
+> The principles of Buildroot are
+> - simplicity;
+> - flexibility to build exactly the system you want;
+> - reproducibility: if you rebuild the same configuration years later, you
+> should get the same result bit-for-bit;
+> - maintainability.
+>=20
+> With Buildroot, you can build a system by choosing which packages you want
+> and some other options in a menu system (based on that of the Linux kerne=
+l).
+> On that basis, Buildroot will download and build the source code of the
+> selected packages and compile it into the root file system.
+> You can also add your own extra files, for example configuration files or
+> your own application.
+> To get you started, there are sample configurations for about 230 boards
+> that you can buy off-the-shelf, plus about 40 configurations for simulati=
+on
+> in qemu.
+> However, it is easy enough to make your own configuration, as long as you
+> know which CPU variant you have and which bootloader and kernel options
+> (device tree) to use.
+>=20
+> In practice, however, you will almost always want to add your own applica=
+tion.
+> For that, you can generate an SDK that you can use to build the applicati=
+on,
+> e.g. in an IDE.
+> But it is also very easy to create a new package for your application.
+> If you use one of the supported build systems (meson, cmake, autotools,
+> qmake, waf, cargo, go, python, rebar), a few lines are usually enough.
+>=20
+> Apart from the flexibility of the choice of packages (e.g. 4 different in=
+it
+> systems, 3 different C libraries, 15 different root file systems, more th=
+an
+> 10 different web servers or web frameworks), the flexibility is mainly in
+> the possibilities to modify the root file system, to add configuration
+> files, etc. Because of the large amount of freedom, the choice of packages
+> is often limited to a few lines. However, with so much freedom, there is =
+no
+> standard way to implement some common use cases, e.g., readonly root file
+> system with a separate partition for persistence, or a verified boot proc=
+ess
+> with hardware TPM. It is possible to implement all these things, but you
+> have to figure out how.
+>=20
+> There are some projects that use buildroot to build a more managed (and t=
+hus
+> less flexible) "distro": SkiffOS, dahliaOS, Batocera Linux, Home Assistant
+> Operating System.
+
+fli4l [1] is also using buildroot, but development has stalled in the
+last two years after we could not do on site meetings anymore. :-/
+
+Greets
+Alex
+
+[1] http://www.fli4l.de/en/home/whats-that-fli4l/
+
+>=20
+> For security issues, buildroot has a system that automatically detects CV=
+Es.
+> The list of packages is updated weekly on
+> http://autobuild.buildroot.net/stats/master.html. A mail is also sent to =
+the
+> people who signed up as developers for the package.
+> In addition, Buildroot offers the classical global hardening options: sta=
+ck
+> smashing protection, PIC/PIE, RELRO, buffer overflow detection.
+>=20
+> Internally, Buildroot uses GNU make to drive the build, supported by shell
+> scripts and some C code (mostly copied and adapted from elsewhere).
+> The infrastructure consists of about 5000 lines GNU make, 5000 lines shell
+> scripts, and 20000 lines C code (mainly for the Kconfig infrastructure). =
+The
+> make code is not so easy to understand (because make is a strange languag=
+e),
+> but it is still manageable. Moreover, adjustments to the core code are
+> rarely needed - most evolution is in the packages themselves.
+>=20
+> Buildroot is maintained by volunteers. There are 4 maintainers, i.e. peop=
+le
+> with commit access. However, the biggest contribution is made by about 100
+> other people who add about 1500 changesets each release. Releases are made
+> every 3 months (20XX.02, 20XX.05, 20XX.08, 20XX.11). The last month of a
+> cycle is a stability phase where only fixes are applied - but new evoluti=
+ons
+> still end up in the 'next' branch. Twice a year there is a developer
+> meeting, although due to the known circumstances this has not taken place
+> since February 2020. The community is mainly on the mailing list
+> (lists.buildroot.org) and on IRC (#buildroot on OFTC).
+>=20
+>=20
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--=20
+/"\ ASCII RIBBON | =BBWith the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.=AB
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+
+--f0KYrhQ4vYSV2aJu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEwo7muQJjlc+Prwj6NK3NAHIhXMYFAmKptRoACgkQNK3NAHIh
+XMa/Pw/8C3IQRksajAe9OTVpftU/UdCDX3h1JPO8TF6xSMXFvt61pJYWbrCfKg0i
+7e7NzGp4Tk1cwFKtWYNT5COHW+v9XOVhSa1utqdYATMIbXinyfZaaJr16CBPTRC/
+yV5dhSORNt27JNEi8yb3czQUgQUEQ3zFnGXuvykUkASELugfPS6jyr5LuGbCfkGL
+1CFk8a51MUCbIZrTsqTYDuwPdIj37CiNcTRFhWyPDuFjihHOGKDuXBBq5YdMWufj
+ujXbTRJQN999+zuHLEkYd4/sktQTwFd0aiZoQVurB0TW/I4WPmSAF4ZLivQo0v10
+3KxubjjTgo+iw8P0P3kfkH78n0AJpocZG10FyyCtKseBolWGdWTekqb+YClyKSXE
+o8H+QsYsUqhz8EPqMx3qzhtJkInRL8v5vsKGaFcAePcyW3dv1GsKCECJRXEt8nPa
+w492e2AhP7pwhdLlQNPF7EHQYIgTSXymXGYeJqT1ncSPFwLICCdOZvi/Vd9qToSh
+q/r2iZdn4G1CzzRE4UwX3XN1GH8wY4dHJlMEhMpXYLJHaECMhHQBe02/9KSyl3dh
+hTswus67CaNPhFt0YJNNS0EaywVg8KdrargQATq2Df+VOVxomwUqgSls4rZ/lk7L
+DPUyUeTYMo7SXrhHYj4f7jFpKoVNSb7TuHvd8JiyeQyy96SZnVc=
+=IDDV
+-----END PGP SIGNATURE-----
+
+--f0KYrhQ4vYSV2aJu--
+
+--===============2460101126434022736==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2460101126434022736==--
