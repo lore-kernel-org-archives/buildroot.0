@@ -1,79 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77A56C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jun 2022 06:54:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADE60C43334
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jun 2022 07:10:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02C71418DB;
-	Wed, 15 Jun 2022 06:54:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5DBAC83DF2;
+	Wed, 15 Jun 2022 07:10:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rjLxa_UosJlw; Wed, 15 Jun 2022 06:54:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UQcqZAPHBiBd; Wed, 15 Jun 2022 07:10:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CCCF540933;
-	Wed, 15 Jun 2022 06:54:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 26D4D1BF2C5
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 06:54:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7565881A64;
+	Wed, 15 Jun 2022 07:10:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 847E41BF5A9
+ for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 07:10:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2354340933
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 06:54:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 81EE081A3B
+ for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 07:10:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Io5GMsQ5ZQEj for <buildroot@lists.busybox.net>;
- Wed, 15 Jun 2022 06:54:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com
- [IPv6:2607:f8b0:4864:20::536])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E4DE340918
- for <buildroot@buildroot.org>; Wed, 15 Jun 2022 06:54:19 +0000 (UTC)
-Received: by mail-pg1-x536.google.com with SMTP id z14so6424978pgh.0
- for <buildroot@buildroot.org>; Tue, 14 Jun 2022 23:54:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=d2ixChWO6m66EmNMWeLg8vvXgmbgSzXKWgr9Ecxfzpo=;
- b=myyBnD7LNuw93uzEqLXYPgGWbNAq9NxbqnJQH0X73f85CcS1xn+wnJLe+EW6ha3xBB
- Ax++u4E25z8/RdVIlOARxR0wtNHS8GhCHFhLn9oQ1CknuknFJST/kmLH//g6XZ4u3mmn
- Rd4oDj2wCqE6XSsM6C02awdkWyPi6Zqh5A83FQLqFq3MU/IEAfq6oq6bE/l4E7B26LA0
- U8OqhgE7xrCEQuTSmp1e0GQCaG6AycSP4pEDAfCC96ulR+GWDOv6Yv29H3hi6QtGlxeq
- xLODCygMTNk7nzOeygnrpuNc6QBsRlOUwgGNq7mtWZfaW2R+lK4FVQUM28B+4zyG2HYS
- +TqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=d2ixChWO6m66EmNMWeLg8vvXgmbgSzXKWgr9Ecxfzpo=;
- b=NtBjqHNE3B3ZNliTP9PJguEQSiJzxnclx8T/8l2P64Fi7lZKIChrr1O4o4R6f1QsDF
- Pfptd17Ab+9lV6jw+SkmRJkQ+DfyZkmbakvb72Ie3qgkwXIlV+5qbKR3T7c76xgPLtar
- u7+fa/WqGLxHJNe2mQ0YV9uPoWH+1uDcG/w2APP7bPOv3h4qcF+nzqpBhhLnULlr4Wqn
- UAuwBfYzc4H6udojGx+6JHN9MtWZwKGMCYonYV9hfZKUT3oL0oXlO/SdxPOr3FJtXKhV
- hZPe6HmFNEaya21od0AD7vsFXo9eC6aNKKitd0wNfv9GKypwCVujNXAc4z7cB61aOhKD
- fG9A==
-X-Gm-Message-State: AOAM533Y6dd3Kr08McKjwCsEB8i8W3EwXzjQXOZSfQT9hvtISb/vSmHd
- VcnTfjrTQLPLLhlrPync1iflGKyGKS4VmbOS
-X-Google-Smtp-Source: ABdhPJxGEPXW3O/uFiXbk5RlPbrizDXWE+JRNXb0BRA4Wg6hcGPaxwvx15zQ/rgbYqTr+TLI0WxdwQ==
-X-Received: by 2002:a65:668b:0:b0:3f6:4026:97cd with SMTP id
- b11-20020a65668b000000b003f6402697cdmr7636351pgw.420.1655276059058; 
- Tue, 14 Jun 2022 23:54:19 -0700 (PDT)
-Received: from localhost.localdomain ([2409:4041:e81:cda6:9ceb:fac7:7607:5d04])
- by smtp.gmail.com with ESMTPSA id
- i67-20020a62c146000000b0051c1b445094sm8867656pfg.7.2022.06.14.23.54.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Jun 2022 23:54:18 -0700 (PDT)
-From: Ankit Panchal <ankitpanchal202@gmail.com>
-X-Google-Original-From: Ankit Panchal <ankit.panchal@einfochips.com>
-To: buildroot@buildroot.org
-Date: Wed, 15 Jun 2022 12:24:06 +0530
-Message-Id: <20220615065406.2856780-1-ankit.panchal@einfochips.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f1WBl2gRaHvl for <buildroot@lists.busybox.net>;
+ Wed, 15 Jun 2022 07:10:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from delivery.mailspamprotection.com
+ (delivery.mailspamprotection.com [185.56.84.9])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B5B481A27
+ for <buildroot@buildroot.org>; Wed, 15 Jun 2022 07:10:27 +0000 (UTC)
+Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
+ helo=es87.siteground.eu)
+ by se18.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
+ (Exim 4.92) (envelope-from <dimi@tpm.dev>)
+ id 1o1NAM-0000jH-JM; Wed, 15 Jun 2022 02:10:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tpm.dev;
+ s=default; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
+ In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=xjEO+x/k/bVCfFnIbGVPkXwADuCDr6HIu2dSvrpzjJg=; b=VZf6bBv0XBUSR1jk89qVBEM0Ig
+ 40xMuiahOvXXdFUi+3xlHjJ3zuwSYh1v0Zr6AGvlYntEFrLgBFJzTqIoE+GBZ6ZfGSwgoxFiF5Uv0
+ 1GetKPEm+y+P+BJAtTOSHnMH1mi5eLip0GHjl4liEW5GafwNATA6lxO3d8WzTTBx7D2sZagbHc4lx
+ VSsytiPGzwHRdOuKoWuwuJRP4Knihlgik2/tk2eHhjXkOghAwR+bLDMsHx+2kqyZMZ+lmRJLHLOcC
+ r/QpHRpHaZ2fRcm11z3H4fcmOwqTOXoAwqHb/y7yBPJJVVtlyUFrlD5O/jTkUConFWil2tBU2/vCu
+ VF11SjJA==;
+Received: from [127.0.0.1] (port=45946 helo=es87.siteground.eu)
+ by es87.siteground.eu with esmtpa (Exim 4.90-.1)
+ (envelope-from <dimi@tpm.dev>)
+ id 1o1NAK-00081d-Rq; Wed, 15 Jun 2022 07:10:12 +0000
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/qt5webkit: fix qt-webkit-kisok
+Date: Wed, 15 Jun 2022 10:10:12 +0300
+From: Dimi Tomov <dimi@tpm.dev>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+In-Reply-To: <20220612151904.GF427639@scaer>
+References: <20220612084538.1873673-1-fontaine.fabrice@gmail.com>
+ <20220612151904.GF427639@scaer>
+Message-ID: <724114769b03de7a3f3368aeabbc10d0@tpm.dev>
+X-Sender: dimi@tpm.dev
+Organization: TPM.dev
+X-Originating-IP: 35.214.247.6
+X-SpamExperts-Domain: es87.siteground.eu
+X-SpamExperts-Username: 35.214.247.6
+Authentication-Results: mailspamprotection.com;
+ auth=pass smtp.auth=35.214.247.6@es87.siteground.eu
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.0027935271632)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9wxqGXGyESbuIrbeWApDLlPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5zpwbOo7FnRW+8Ip+np/BrogLmJmB1kdf2zdyJYrc+nY9W0
+ S8NJdHhZHyTGSP5laBeEkYZEhPZH1e9QQ25QMAK4psTXNfl2OTzOk92IQdWevo8wUiRihvC73ecr
+ qaqBbHBgv3Hg2Qxqgy66qkx4N3UuBMmyNbDn7R5kilAhwr3KtE82Y55K6y9ZgAjMP1BdBtH99j24
+ fCKFjJ00TfwRkP5Nim7uLhpYYJK3x23WQwPUUy7K60IW4/F/dWke8muiACEDtkk3QQOVL9hnwCPn
+ of/p12Kq0X+vYLUKAMtfkvFCdXwG9qS5noYi2/izXyY+xWRaG2Xk5Dlma9rwsgne6VKziWydTyuV
+ sA5kcI37RzHY9GeupYYdzPm7YfRDaULOU2kfgMf4XRgCk/48zRqgqXKN2lJzhbC5sYrXgIPy4N0E
+ H/ShdP00nxzh/m35ytL/WYih7iAUACC9x9WSYyrCeKS5bUjJJPVsoak2L6UN8XlZCQoCGrlIzmqo
+ F6CrEjw8HUvhPepG2LHjJMOL7cEyEf/vZQ6F+Hg4zpzHGe6cAOcYKEEqJ2YhaHYKPX4HHcW4fmJS
+ GPT7VoYsI2YVvkK6lGQtFUjdDqt+zJcNyHrxFv0ub1s765aq/7Ihe5JpNEYIVsOMyGnDIpSchlco
+ 6RIDoNg/kjEeNMiapTg5JX5KyFUGeq+cGqR018mIinnrbkyUvY39mkdHzbUjd6PRfLJZDPRgASJF
+ C/49WOPBr5nlEUI4xF6m56I0EEjlhs/mxHlTAcEhaep+euoQTJhdJ2HwLe1OniV+EO2UBCIEkzB+
+ GGGKd74psP3fwInntW8+pKXMGvPMNKA0p+dLpcDnf/J+k9RIP+W8A3B8nDj+/2idH/kmGN0TLeVm
+ 0LDxkp5Slw3D/dn8trXm8CSJ+CxrhgPz59v42zfpgu2LUdQgOCrcnAageSA8FNtjB5ezWYN+wb+L
+ qnzC+1oJdfQ221qaogEuSz81zuHBtSIvvSbOg5y2PaLczMXXGYstYpg1aStNjeF0icagVK7rqkdf
+ gX6DyKL6XdgR4IHYrIbYz2C4wiGCDLIKbNgLR/FK6k6oQUdkOyfhXJ192qRF9bBtNVjkzEF0Oa4o
+ uvrE/Ci1Twv+1x7iubuz8XgOrHGWcKc5AqOFqAQq4tI6O/LMoTQbFDUuZ1WtW1QKACZF8JzWBjmW
+ TydMzcZ/SbXl4lQtInzkoxKi3Rc48Do=
+X-Report-Abuse-To: spam@quarantine1.mailspamprotection.com
+Subject: Re: [Buildroot] [PATCH v2,1/2] package/wolftpm: fix dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,65 +102,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ankit Panchal <ankit.panchal@einfochips.com>,
- Peter Seiderer <ps.report@gmx.net>, Ankit Panchal <ankitpanchal202@gmail.com>,
- =?UTF-8?q?Ga=C3=ABl=20Portay?= <gael.portay@collabora.com>,
- Julien Corjon <corjon.j@ecagroup.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Ankit Panchal <ankitpanchal202@gmail.com>
+Hi Yann,
 
-While compilation of qt-webkit-kiosk package we get following error:
-ERROR: Unknown module(s) in QT: webkit webkitwidgets
+I just noticed one really bad typo. I could submit a patch that also 
+adds extra wolfTPM options, so it is not a one-word patch.
 
-more detail about the bug is provided at:
-https://bugs.buildroot.org/show_bug.cgi?id=14606
+"Enable wolfCrypt hooks for RNG, Auth Sessions and Parameter encryption. 
+"
 
-Following are the changes done:
-1. The installation paths of the qt5webkit modules in the .pri files
-has been modified.
-2. And softlinks of the webkit and webkitwidgets packages has been
-created at the expected paths.
+The TPM chip is the source of RNG. To claim that a TPM 2.0 library is 
+using a Software-based source of RNG would be a red flag for users. The 
+rest is accurate - wolfCrypt is used by wolfTPM to establish Session and 
+Parameter encryption between the Host CPU and the TPM chip.
 
-Signed-off-by: Ankit Panchal <ankit.panchal@einfochips.com>
----
- package/qt5/qt5webkit/qt5webkit.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Thanks,
+Dimi
 
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-index 6912359674..a850a03ca9 100644
---- a/package/qt5/qt5webkit/qt5webkit.mk
-+++ b/package/qt5/qt5webkit/qt5webkit.mk
-@@ -50,6 +50,23 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
- QT5WEBKIT_CONF_OPTS += -DENABLE_SAMPLING_PROFILER=OFF
- endif
- 
-+define QT5WEBKIT_CONF_PRI
-+	$(SED) 's/QT.webkit.includes =.*/QT.webkit.includes = \$$\$$QT_MODULE_INCLUDE_BASE \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKit/g' -e 's/QT.webkit.libs =.*/QT.webkit.libs = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkit.rpath =.*/QT.webkit.rpath = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkit.bins =.*/QT.webkit.bins = \$$\$$QT_MODULE_BIN_BASE/g' -e 's/QMAKE_RPATHDIR +=.*/QMAKE_RPATHDIR += \$$\$$QT_MODULE_LIB_BASE/g' $(@D)/Source/WebKit/qt_lib_webkit.pri
-+
-+	$(SED) 's/QT.webkit_private.includes =.*/QT.webkit_private.includes = \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKit\/5.212.0 \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKit\/5.212.0\/QtWebKit/g' -e 's/QT.webkit_private.libs =.*/QT.webkit_private.libs = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkit_private.bins =.*/QT.webkit_private.bins = \$$\$$QT_MODULE_BIN_BASE/g' $(@D)/Source/WebKit/qt_lib_webkit_private.pri
-+
-+	$(SED) 's/QT.webkitwidgets.includes =.*/QT.webkitwidgets.includes = \$$\$$QT_MODULE_INCLUDE_BASE \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKitWidgets/g' -e 's/QT.webkitwidgets.libs =.*/QT.webkitwidgets.libs = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkitwidgets.rpath =.*/QT.webkitwidgets.rpath = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkitwidgets.bins =.*/QT.webkitwidgets.bins = \$$\$$QT_MODULE_BIN_BASE/g' -e 's/QMAKE_RPATHDIR +=.*/QMAKE_RPATHDIR += \$$\$$QT_MODULE_LIB_BASE/g' $(@D)/Source/WebKit/qt_lib_webkitwidgets.pri
-+
-+	$(SED) 's/QT.webkitwidgets_private.includes =.*/QT.webkitwidgets_private.includes = \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKitWidgets\/5.212.0 \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKitWidgets\/5.212.0\/QtWebKitWidgets/g' -e 's/QT.webkitwidgets_private.libs =.*/QT.webkitwidgets_private.libs = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkitwidgets_private.bins =.*/QT.webkitwidgets_private.bins = \$$\$$QT_MODULE_BIN_BASE/g' $(@D)/Source/WebKit/qt_lib_webkitwidgets_private.pri
-+endef
-+QT5WEBKIT_POST_CONFIGURE_HOOKS += QT5WEBKIT_CONF_PRI
-+
-+define QT5WEBKIT_CREATE_SYMLINK
-+	ln -sf $(HOST_DIR)/arm-buildroot-linux-gnueabihf/sysroot/usr/mkspecs/modules/*.pri $(HOST_DIR)/mkspecs/modules/
-+	ln -sf $(HOST_DIR)/arm-buildroot-linux-gnueabihf/sysroot/usr/include/QtWebKit* $(HOST_DIR)/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/
-+endef
-+QT5WEBKIT_POST_INSTALL_STAGING_HOOKS += QT5WEBKIT_CREATE_SYMLINK
-+
- QT5WEBKIT_CONF_OPTS += \
- 	-DENABLE_TOOLS=OFF \
- 	-DPORT=Qt \
+On 2022-06-12 06:19 PM, Yann E. MORIN wrote:
+> Fabrice, All,
+> 
+> On 2022-06-12 10:45 +0200, Fabrice Fontaine spake thusly:
+>> pkg-config is not used by wolftpm and wolfssl dependency is missing 
+>> (and
+>> optional but highly recommended) resulting in the following build 
+>> failure
+>> since the addition of the package in commit
+>> 4bb884a3c61c6b71e33f69453a90eb2a367f64b7:
+>> 
+>> configure: error: WolfSSL library not found. You can get it from 
+>> http://www.wolfssl.com/download.html
+>>         If it's already installed, specify its path using 
+>> --with-wolfcrypt=/dir or --prefix=/dir
+>> 
+>> Fixes:
+>>  - 
+>> http://autobuild.buildroot.org/results/77a93521b909e701ef4e86f18524258b9242c721
+>> 
+>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> 
+> Both patches applied to master, thanks.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> ---
+>> Changes v1 -> v2 (after review of Dimi Tomov):
+>>  - Add a wolfcrypt option which is enabled by default
+>> 
+>>  package/wolftpm/Config.in  | 23 ++++++++++++++++++-----
+>>  package/wolftpm/wolftpm.mk | 13 ++++++++++---
+>>  2 files changed, 28 insertions(+), 8 deletions(-)
+>> 
+>> diff --git a/package/wolftpm/Config.in b/package/wolftpm/Config.in
+>> index 0fe094f277..0b964c3d7e 100644
+>> --- a/package/wolftpm/Config.in
+>> +++ b/package/wolftpm/Config.in
+>> @@ -1,9 +1,5 @@
+>>  config BR2_PACKAGE_WOLFTPM
+>>  	bool "wolftpm"
+>> -	depends on BR2_TOOLCHAIN_HAS_THREADS
+>> -	depends on !BR2_STATIC_LIBS
+>> -	select BR2_PACKAGE_WOLFSSL
+>> -	select BR2_PACKAGE_WOLFSSL_ALL
+>>  	help
+>>  	  wolfTPM is a portable, open-source TPM 2.0 stack with
+>>  	  backward API compatibility, designed for embedded use.
+>> @@ -12,5 +8,22 @@ config BR2_PACKAGE_WOLFTPM
+>> 
+>>  	  https://www.wolfssl.com/
+>> 
+>> -comment "wolftpm needs a toolchain w/ threads, dynamic library"
+>> +if BR2_PACKAGE_WOLFTPM
+>> +
+>> +config BR2_PACKAGE_WOLFTPM_WOLFCRYPT
+>> +	bool "wolfCrypt hooks"
+>> +	default y
+>> +	depends on BR2_TOOLCHAIN_HAS_THREADS # wolfssl
+>> +	depends on !BR2_STATIC_LIBS # wolfssl-all
+>> +	select BR2_PACKAGE_WOLFSSL
+>> +	# not mandatory, but needed to get all features
+>> +	select BR2_PACKAGE_WOLFSSL_ALL
+>> +	help
+>> +	  Enable wolfCrypt hooks for RNG, Auth Sessions and Parameter
+>> +	  encryption. Disabling this option is not recommended as it
+>> +	  could create a security breach in most environments.
+>> +
+>> +comment "wolfCrypt hooks need a toolchain w/ threads, dynamic 
+>> library"
+>>  	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+>> +
+>> +endif
+>> diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
+>> index ea01eaad6b..760656e134 100644
+>> --- a/package/wolftpm/wolftpm.mk
+>> +++ b/package/wolftpm/wolftpm.mk
+>> @@ -10,7 +10,6 @@ WOLFTPM_INSTALL_STAGING = YES
+>>  WOLFTPM_LICENSE = GPL-2.0+
+>>  WOLFTPM_LICENSE_FILES = LICENSE
+>>  WOLFTPM_CPE_ID_VENDOR = wolfssl
+>> -WOLFTPM_DEPENDENCIES = host-pkgconf
+>>  WOLFTPM_CONFIG_SCRIPTS = wolftpm-config
+>> 
+>>  # wolfTPM's source code is released without a configure script,
+>> @@ -19,8 +18,7 @@ WOLFTPM_AUTORECONF = YES
+>> 
+>>  WOLFTPM_CONF_OPTS = \
+>>  	--disable-examples \
+>> -	--enable-devtpm \
+>> -	--with-wolfcrypt=$(STAGING_DIR)/usr
+>> +	--enable-devtpm
+>> 
+>>  # Fix for missing config.rpath in the codebase
+>>  define WOLFTPM_TOUCH_CONFIG_RPATH
+>> @@ -29,4 +27,13 @@ define WOLFTPM_TOUCH_CONFIG_RPATH
+>>  endef
+>>  WOLFTPM_PRE_CONFIGURE_HOOKS += WOLFTPM_TOUCH_CONFIG_RPATH
+>> 
+>> +ifeq ($(BR2_PACKAGE_WOLFTPM_WOLFCRYPT),y)
+>> +WOLFTPM_CONF_OPTS += \
+>> +	--enable-wolfcrypt \
+>> +	--with-wolfcrypt=$(STAGING_DIR)/usr
+>> +WOLFTPM_DEPENDENCIES += wolfssl
+>> +else
+>> +WOLFTPM_CONF_OPTS += --disable-wolfcrypt
+>> +endif
+>> +
+>>  $(eval $(autotools-package))
+>> --
+>> 2.35.1
+>> 
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.25.1
-
+Founder of TPM.dev
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
