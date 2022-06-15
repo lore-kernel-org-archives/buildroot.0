@@ -1,84 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 068C3C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jun 2022 16:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB2E3C43334
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jun 2022 17:11:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADCF441981;
-	Wed, 15 Jun 2022 16:19:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9540482FCE;
+	Wed, 15 Jun 2022 17:11:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FInFMNtuw8uD; Wed, 15 Jun 2022 16:19:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AEF14034A;
-	Wed, 15 Jun 2022 16:19:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 00E521BF4DB
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 16:18:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4A3282DE6
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 16:18:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id stGdRXSRtksY for <buildroot@lists.busybox.net>;
- Wed, 15 Jun 2022 16:18:11 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o-4om2QILIQp; Wed, 15 Jun 2022 17:11:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A67C381757;
+	Wed, 15 Jun 2022 17:11:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 69A0B1BF300
+ for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 17:11:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 583D460D9D
+ for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 17:11:45 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w94bMH6nzcC5 for <buildroot@lists.busybox.net>;
+ Wed, 15 Jun 2022 17:11:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4623A82DD9
- for <buildroot@busybox.net>; Wed, 15 Jun 2022 16:18:11 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id k19so16040027wrd.8
- for <buildroot@busybox.net>; Wed, 15 Jun 2022 09:18:11 -0700 (PDT)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5089F60F9F
+ for <buildroot@buildroot.org>; Wed, 15 Jun 2022 17:11:44 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id o16so16250699wra.4
+ for <buildroot@buildroot.org>; Wed, 15 Jun 2022 10:11:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=6xZP0aTrk8glhmjBBtQA9YdnRMdFSWin5wzjcWYJhIA=;
- b=oUC6scyDRzGgDhtL5HRr+FNWkll7TjZm+tB1cMarkNcLJ8tdYfgq0lLzFU0O4InvED
- Dorch9SGY6TwMuAMcR872uGJv+9X5qNXVY8RHyzM6rBpJhisE4nmQMTWuizpg+jbfO1s
- Bklg4K+1xEq45K6KDF5Q62KHd/+JJ7T+B/W0c/xhgv82rT0bwVTdShA8HTewFBRJKw3+
- /syzyEt/rZ1hi3JtMLm7sv3+HVZdU5S62GxYQI1+GR1LHx7Gqi5mrFNMhyEYBBSydsOR
- PBQRsxcXP9yl4cOq8Awbekve0nbsP38jBapl8//JS7qMPZeNTpSWODm07CDsIDJiKAHQ
- hRnw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CH7uH0VvTZMZKNI/3kJ0O+5CoxZGgOY6MdntRAzY6EE=;
+ b=JvKHWSYBin2TSxZh23M3TYnZKOURCNlRyM/hem3Lnt7qNKkHyQAW6TNtG5N8aXgI6v
+ 14bigeYqBTHyhE3kpHwancAcsq9LR2X1vij5+Y1yQ6+jbGO4u01k6S/ibYidLbaPYfpV
+ J2go1Po4xo6B+HjHvEpA8NgOgJ/OxdxJIy5ou4mzBoxNeNVRZVCZ53ntAhtRjZD9f3ps
+ Ejk3M2jACNYcGdNmr+qhOzxb6/e45aTU8/CzTVG/iWApvwkAVSz0VASa9Ublm/GYCfFv
+ no+15jqEMSEQM76/QWOQAyDCwrOidoXXNgdI2DWN+6JaP2PtvWulbLQcQv7adN/YyibM
+ NG4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=6xZP0aTrk8glhmjBBtQA9YdnRMdFSWin5wzjcWYJhIA=;
- b=TlG2nk7fzRazOsK+Rxcd4cwRSB0iQ8F7U4nqAueNmhBPabQN5M+RzSOdZMrflX7JL+
- cPRrNVsgVmIJEkLxQ7QT4KXw8Pn4LLwvS86/m8KiqpP+3dX1iIbHGpWEWkG2zuIvL/3y
- 9OsUEy1+YIaBiPI6uFYHAAJUUnBPINLJQZfUVX48Jo3VSDa7VgAduvyfqetXiVvrgOUF
- ksyue3UD3qkwtaAU+tEpuIhCblwP+kTAPK+OsnaPvRZStI7obsRH5utaVbl2OS2CQ2wI
- uVqXW0bKquOSCG9b4G21jQZ4PLAj6t+FLagJIQd3F/IXXLNSVP48311/F1AB7LGkmuiP
- TFFg==
-X-Gm-Message-State: AJIora9pgNetBtX7e1x7XN6hmwplGG45W3KM/TgwhZmacGY9MxRqPP6Y
- AgV+L5BykSvSMMRUsu3mjQVPVpk+FZTGJQ==
-X-Google-Smtp-Source: AGRyM1uvk68T873C3jjgEkBLXKQ6Xn2rxA3AbSQjiLOGSEA4zBDFcAkdUhTUub4HkAECSR0Gh4TSUQ==
-X-Received: by 2002:adf:fb0d:0:b0:21a:2f42:4f0a with SMTP id
- c13-20020adffb0d000000b0021a2f424f0amr571190wrr.638.1655309889185; 
- Wed, 15 Jun 2022 09:18:09 -0700 (PDT)
-Received: from vm22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CH7uH0VvTZMZKNI/3kJ0O+5CoxZGgOY6MdntRAzY6EE=;
+ b=HTFz0SVkPwnxYuUwaADeA/+5ZgoeN7NiOSr/417mkaKTJKWhAW1DvSXQyWFDHs4TRi
+ Y+n7XAkTdz0EkHsscGix90FinaVSLTotMsm6R1gBslNsfZ8qU2BbJRH0unJp2pF02BRE
+ 4mqlsjp+cpD/volQT+aNC6NI3FmLt0fuUXopoqukRfB5jK34RipZRF1IhnHqdud5TSe9
+ skHMzCGL+gkk4FbE7hxc0ihZIRTdcYVE9qrHKdfiF8P2anlyh1x23KAAwv5C1fTkWBMB
+ I9VzPPWfp0xcjpgGX+tpKWvKKX0J9mfYyTgu1djiDxSwor5eyfzvlMMywwuOSXrJPsN1
+ tvYA==
+X-Gm-Message-State: AJIora9JL3CVL68TVKcZSykfwh9am+7T9+9OmTFeY2Ypei3FGc7oGIHj
+ hF9BzVHuOmo1K+84740VFiqxOZD0b7o=
+X-Google-Smtp-Source: AGRyM1tI9eKp5oj9EAxlX7R2HnO027CGqLLBgXxk7qFq+VPB9R7dKfIQxf/88/NmXlnAbyDHhB22Ww==
+X-Received: by 2002:a05:6000:703:b0:210:3141:c20d with SMTP id
+ bs3-20020a056000070300b002103141c20dmr788112wrb.488.1655313101986; 
+ Wed, 15 Jun 2022 10:11:41 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- g13-20020adffc8d000000b002102f2fac37sm17723325wrr.51.2022.06.15.09.18.07
+ l5-20020a05600c47c500b0039746638d6esm2758357wmo.33.2022.06.15.10.11.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 15 Jun 2022 09:18:08 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Wed, 15 Jun 2022 18:17:53 +0200
-Message-Id: <20220615161753.2580142-5-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220615161753.2580142-1-francois.perrad@gadz.org>
-References: <20220615161753.2580142-1-francois.perrad@gadz.org>
+ Wed, 15 Jun 2022 10:11:41 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 15 Jun 2022 19:08:54 +0200
+Message-Id: <20220615170854.3997869-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 5/5] package/open62541: refactor choice
- UA_NAMESPACE with a proper default
+Subject: [Buildroot] [PATCH 1/1] docs/manual: fix patchwork URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,49 +87,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/open62541/Config.in | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+http://patchwork.buildroot.org is redirecting to
+https://bugs.busybox.net so replace it by
+https://patchwork.ozlabs.org/project/buildroot/list/ as already done in
+docs/website/contribute.html
 
-diff --git a/package/open62541/Config.in b/package/open62541/Config.in
-index ceca2ca1f..1dad985a7 100644
---- a/package/open62541/Config.in
-+++ b/package/open62541/Config.in
-@@ -28,15 +28,11 @@ endchoice
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ docs/manual/contribute.txt | 18 +++++++++++-------
+ docs/manual/resources.txt  |  2 +-
+ 2 files changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index bf2aed6b51..e588c69be6 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -418,7 +418,8 @@ editing the commit message. Below the +Signed-off-by+ section, add
+ +---+ and your changelog.
  
- choice
- 	prompt "namespace zero nodes"
-+	default BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED
- 	help
- 	  Namespace zero contains the standard-defined nodes. The full
- 	  namespace zero may not be required for all applications.
+ Although the changelog will be visible for the reviewers in the mail
+-thread, as well as in http://patchwork.buildroot.org[patchwork], +git+
++thread, as well as in
++https://patchwork.ozlabs.org/project/buildroot/list/[patchwork], +git+
+ will automatically ignores lines below +---+ when the patch will be
+ merged. This is the intended behavior: the changelog is not meant to
+ be preserved forever in the +git+ history of the project.
+@@ -470,19 +471,22 @@ $ git format-patch -v4 -M -s -o outgoing origin/master
+ ---------------------
  
--config BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_DEFAULT
--	bool "default"
--	help
--	  Use the default namespace zero contents.
--
- config BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_MINIMAL
- 	bool "minimal"
- 	help
-@@ -91,8 +87,7 @@ config BR2_PACKAGE_OPEN62541_PUBSUB_DELTAFRAMES
+ When you provide a new version of a patch, please mark the old one as
+-superseded in http://patchwork.buildroot.org[patchwork]. You need to
+-create an account on http://patchwork.buildroot.org[patchwork] to be
++superseded in
++https://patchwork.ozlabs.org/project/buildroot/list/[patchwork]. You
++need to create an account on
++https://patchwork.ozlabs.org/project/buildroot/list/[patchwork] to be
+ able to modify the status of your patches. Note that you can only change
+ the status of patches you submitted yourself, which means the email
+-address you register in http://patchwork.buildroot.org[patchwork] should
++address you register in
++https://patchwork.ozlabs.org/project/buildroot/list/[patchwork] should
+ match the one you use for sending patches to the mailing list.
  
- config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
- 	bool "publish/subscribe information model"
--	depends on BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED || \
--		BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_FULL
-+	depends on !BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_MINIMAL
- 	help
- 	  Enable the information model representation of the PubSub
- 	  configuration.
+ You can also add the +--in-reply-to <message-id>+ option when
+ submitting a patch to the mailing list. The id of the mail to reply to
+ can be found under the "Message Id" tag on
+-http://patchwork.buildroot.org[patchwork].  The advantage of
+-*in-reply-to* is that patchwork will automatically mark the previous
+-version of the patch as superseded.
++https://patchwork.ozlabs.org/project/buildroot/list/[patchwork]. The
++advantage of *in-reply-to* is that patchwork will automatically mark
++the previous version of the patch as superseded.
+ 
+ [[reporting-bugs]]
+ === Reporting issues/bugs or getting help
+diff --git a/docs/manual/resources.txt b/docs/manual/resources.txt
+index e90a49b2ab..68b7eb9062 100644
+--- a/docs/manual/resources.txt
++++ b/docs/manual/resources.txt
+@@ -68,4 +68,4 @@ review comments in a clean and concise web interface, it can be useful
+ for all Buildroot developers.
+ +
+ The Buildroot patch management interface is available at
+-http://patchwork.buildroot.org[].
++https://patchwork.ozlabs.org/project/buildroot/list/[].
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
