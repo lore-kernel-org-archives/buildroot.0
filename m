@@ -1,79 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BEF0C43334
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jun 2022 23:27:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E333C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Jun 2022 02:04:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E191083E8B;
-	Wed, 15 Jun 2022 23:27:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E9264093E;
+	Thu, 16 Jun 2022 02:04:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wK1QbTYVaAj2; Wed, 15 Jun 2022 23:27:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UOaGyw9kEQ2J; Thu, 16 Jun 2022 02:04:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 077CE83E19;
-	Wed, 15 Jun 2022 23:27:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 755E01BF3BA
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 23:27:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8ADFD40921;
+	Thu, 16 Jun 2022 02:04:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 27C891BF3D7
+ for <buildroot@lists.busybox.net>; Thu, 16 Jun 2022 02:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 643EE83E19
- for <buildroot@lists.busybox.net>; Wed, 15 Jun 2022 23:27:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16EAE610F1
+ for <buildroot@lists.busybox.net>; Thu, 16 Jun 2022 02:04:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aMrufl8Te4JT for <buildroot@lists.busybox.net>;
- Wed, 15 Jun 2022 23:27:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com
- [IPv6:2607:f8b0:4864:20::233])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 834C783E05
- for <buildroot@buildroot.org>; Wed, 15 Jun 2022 23:27:34 +0000 (UTC)
-Received: by mail-oi1-x233.google.com with SMTP id w16so17445422oie.5
- for <buildroot@buildroot.org>; Wed, 15 Jun 2022 16:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=HM2LoieUoZENKJf6OlZG4ShMEcNYtOf+SIvV0njyQ7c=;
- b=BidEZ6hXHh/bo+2Yq/906SgH4X9yhuprxDwSm2GnyCL7HeqZ6t1870940Hw76wN4q0
- us1SC9IPa2YUMoMO41STkk4FXC7XLyTt0g5LKj/pyNHSrU95oLMDSeSEIaU8szpgHHmH
- BiaJfV20UEpANRk2qlr0oCrBs1kVULQ7izm/KUXPwyelddKDvouzLt7eXWEwWV1hBFpp
- zyjJh9A3qyAgcSYLVsWN5B1mdIq9JZK8tpykhRBo9ZAdR8mMnwsh+0LD0ioEv7tnYy00
- d2hF4FH4kjDdAgjJ9S/A33IodwP0G7n5Y3oU8Ciz3m3iZTNrWG4c+aJcXhC6VJGV+93t
- P2ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=HM2LoieUoZENKJf6OlZG4ShMEcNYtOf+SIvV0njyQ7c=;
- b=yQOueP6mlU25yQZl9blMAHOOcid0kfEt8iTLfefuPpW92TswHTX7JknEGD2j0CIJ8m
- LJz9qPCe5sZetz88fQ1s+TstXPVXF1hXi9DNCGgSfJZ9QvYH4v2IqhqRE1ufg3evO20z
- 8pYlQzJovAuGSbsO8YU4rUuETF6f0JlJNUb7EGMERRT8opt94cxa+BNZen2xT2DZuO9L
- zTVSIVERNcMO0jKCJ4/y7dpDgBhtqpmhNa9RtNBuMGC4SbRuoCcjlbnpqVhvjRy8nF5y
- mYYV5IVOMdL5JqS35iCJcJoMrwMFS1BKRX3Yk0dL28UdQx7ecnS/NjPukH39KlkohUfw
- kafQ==
-X-Gm-Message-State: AJIora8Yx24p2KRPuHqbOSEltbLAR6ghCae50pqO7E3iIwhRjSvMnReN
- b20NjoINV4cZCPfKPlXMrtCdjp8kbHGK+/SDQo1IotsIkvw=
-X-Google-Smtp-Source: AGRyM1vXkV0s4xPgViyFsaweOW7RHiLr1nUiYJBYtJisgmh63kGEY6rt9Y+vceNl1x4Ph7umptvgJJDkRmcaR7qkXQU=
-X-Received: by 2002:a05:6808:23c6:b0:331:3ab2:6fb9 with SMTP id
- bq6-20020a05680823c600b003313ab26fb9mr1094642oib.200.1655335653525; Wed, 15
- Jun 2022 16:27:33 -0700 (PDT)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=icenowy.me
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EJ07Lm7JSEHw for <buildroot@lists.busybox.net>;
+ Thu, 16 Jun 2022 02:04:08 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com
+ [136.143.188.18])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 624C4610F2
+ for <buildroot@buildroot.org>; Thu, 16 Jun 2022 02:04:08 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; t=1655345042; cv=none; 
+ d=zohomail.com; s=zohoarc; 
+ b=b98qTdBkMsHTdg6Zz33Ycl76gHmhteKvHhDUYc0qvg4T8Fkp1+iQ9iekCoGsAvU63g1D+8H41w9gTYg4dq/vbKsLgnph15jT5Mk+PO2hiyLdDFg0hlm3TG4BsBhD31GgVKu1AjKwICd4C2rQSO3cXyUHWB7c+bHEfBJSsM8jtDE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
+ s=zohoarc; t=1655345042;
+ h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+ bh=mZ6Mfsymx+kT5aSRlP62DZ41wUKmGItKPFgG1l3Ue4c=; 
+ b=UXaUnFJwsAbChDEyenehHiPctELXEb8lskg/pCdM3oVEAqID7PfYKQrIXnphUrc8GoGq48HuYev9vUF17tDY9w5NbRMvqhhKX0+3ZdznDsSxmB6wlaRhYneDc/c9bDJtTzptb6cDmDzywk9c0HyyUQtWV9venaOkk5Va/MROs0I=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+ dkim=pass  header.i=icenowy.me;
+ spf=pass  smtp.mailfrom=uwu@icenowy.me;
+ dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1655345042; 
+ s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+ h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+ bh=mZ6Mfsymx+kT5aSRlP62DZ41wUKmGItKPFgG1l3Ue4c=;
+ b=fxXzmDACzjG5hGwOFTeKxwM9/hg+1iea4Db4VwxyhHDoW/57ScYCzB+jnm6SdTZk
+ 7t3uuqYdWHFLt8ZOBjS8rATs4X8ToboFz/f4Xs2sSgqczpCem3jg9yy/FYH0SjXhO7/
+ FYS9dOEom3F8ynIKX6ODwsAifpAnuS3YWsFNxqUE=
+Received: from edelgard.icenowy.me (59.41.160.44 [59.41.160.44]) by
+ mx.zohomail.com with SMTPS id 1655345040915946.444761460437;
+ Wed, 15 Jun 2022 19:04:00 -0700 (PDT)
+From: Icenowy Zheng <uwu@icenowy.me>
+To: buildroot@buildroot.org
+Date: Thu, 16 Jun 2022 10:03:53 +0800
+Message-Id: <20220616020353.497241-1-uwu@icenowy.me>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <97ea44bb-58fe-d6cb-6c79-9be0b245f2c6@synopsys.com>
- <38e7fb76-2c07-6429-b803-4fd6ff2b1178@synopsys.com>
- <3062ce96-7e99-d221-61c8-4b87c87c113b@synopsys.com>
- <e8be91c7-8597-7a7e-9714-9f8045781959@mind.be>
- <aafcf149-d0b9-8c95-751c-64ec4dabf5b5@synopsys.com>
-In-Reply-To: <aafcf149-d0b9-8c95-751c-64ec4dabf5b5@synopsys.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 15 Jun 2022 17:27:22 -0600
-Message-ID: <CADvTj4qcYpo=UB2Qny7-0mXiqq9R0u6QMBgs+9hXm76SQxvEew@mail.gmail.com>
-To: Shahab Vahedi <Shahab.Vahedi@synopsys.com>
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/bpftool: revert bpf_cookie
- patch to allow building
+X-ZohoMailClient: External
+Subject: [Buildroot] [PATCH] package/pkg-generic: ignore error when
+ chmod'ing extracted source
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,47 +76,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Icenowy Zheng <uwu@icenowy.me>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Jun 15, 2022 at 5:10 AM Shahab Vahedi via buildroot
-<buildroot@buildroot.org> wrote:
->
-> Hi Arnout,
->
-> On 6/14/22 19:14, Arnout Vandecappelle wrote:
-> >
-> > On 14/06/2022 11:31, Shahab Vahedi wrote:
-> >> Building bpftool on Debian 11 (bullseye) with kernel v5.10 and clang-11
-> >
-> >  How do you build host-bpftool with clang in Buildroot context? HOSTCC is set to gcc in the Makefile... Do you supply an explicit HOSTCC= on the Buildroot command line? I'm not sure if we are really interested in carrying fixes for such exotic and not-really-supported situations...
->
-> No, I don't do any sort of trickery to build bpftool on my end. The
-> bootstrapping, if becomes available for your configuration, uses clang
-> and only clang. I tried to explain this in v4 of the patch [1], the
-> second paragraph of the commit message.
+The chmod command included in GNU coreutils 9.0 will exit with 1 when in
+a recursive a symlink is met and the mode of both itself and its target
+is retained; however this situation is usually expected (such kind of
+symlink exists in, e.g., a newly extracted tarball of Linux kernel),
+thus not a failure.
 
-I think clang/llvm support isn't going to work correctly yet since we only have
-version 9.0.1, there's a series bumping to version 11.1.0 that should fix that:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=291585
+Considering this chmod call is only kind of vanishing, ignore error for
+it.
 
-Minimum clang/llvm version for libbpf co-re is version 10:
-https://github.com/libbpf/libbpf#bpf-co-re-compile-once--run-everywhere
+Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> [1] [v4,1/1] package/bpftool: revert bpf_cookie patch to allow building
-> https://patchwork.ozlabs.org/project/buildroot/patch/29d2a8c7-44cd-da42-5fed-f17ec0f8ccf2@synopsys.com/
->
-> --
-> Shahab
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b233b07548..03e4b029b3 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -216,7 +216,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
+ 	$(Q)mkdir -p $(@D)
+ 	$($(PKG)_EXTRACT_CMDS)
+ # some packages have messed up permissions inside
+-	$(Q)chmod -R +rw $(@D)
++	-$(Q)chmod -R +rw $(@D)
+ 	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
+ 	@$(call step_end,extract)
+ 	$(Q)touch $@
+-- 
+2.36.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
