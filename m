@@ -1,73 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBFEEC43334
-	for <buildroot@archiver.kernel.org>; Thu, 16 Jun 2022 23:23:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A091C43334
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jun 2022 14:13:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E6176128A;
-	Thu, 16 Jun 2022 23:23:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E6176128A
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF8C840A06;
+	Fri, 17 Jun 2022 14:13:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF8C840A06
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cgKL3eYWNSy4; Thu, 16 Jun 2022 23:23:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Sz_U2jVTSbAC; Fri, 17 Jun 2022 14:13:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D2F761287;
-	Thu, 16 Jun 2022 23:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D2F761287
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D9D4E1BF2AB
- for <buildroot@lists.busybox.net>; Thu, 16 Jun 2022 23:23:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0864E405F4;
+	Fri, 17 Jun 2022 14:13:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0864E405F4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C8941BF373
+ for <buildroot@lists.busybox.net>; Fri, 17 Jun 2022 14:13:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B0E8F81470
- for <buildroot@lists.busybox.net>; Thu, 16 Jun 2022 23:23:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0E8F81470
+ by smtp4.osuosl.org (Postfix) with ESMTP id 061C44242E
+ for <buildroot@lists.busybox.net>; Fri, 17 Jun 2022 14:13:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 061C44242E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f8qGNbWKgvUI for <buildroot@lists.busybox.net>;
- Thu, 16 Jun 2022 23:23:18 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0A388146D
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
- [IPv6:2607:f8b0:4864:20::633])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B0A388146D
- for <buildroot@buildroot.org>; Thu, 16 Jun 2022 23:23:18 +0000 (UTC)
-Received: by mail-pl1-x633.google.com with SMTP id k7so2461215plg.7
- for <buildroot@buildroot.org>; Thu, 16 Jun 2022 16:23:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=XDE3wZ8IpikkKY35nAp05UF6aWq2rtobvyyRXnh+u04=;
- b=St4QKc50P93o5outlH9I07dJViJogD5ZiqXnsR4wy/SYCOrS9rvr+HdvyZKCQy8+uz
- qHfx7N253R/BH2sII5PVicy7LNgLblQgT9mOxxNJYOI/eKb585u2PcFL1CcMoRgAk/hP
- lcNfuLdvyB00UsldLSemKsgBhGadMuEZ1wHp53GztjBgvaUXz+J/BqZPRVh5KDJMiCTs
- Xii5U/iF1Y2jqjOtAff2sMwOQQsLuEaKG42CrNQmRkvzjg2x0M8MnlDJV1K1aRNbc6h8
- nYaOuia5mGGPMfp0ylbfdIN2U5CeTgYUaSTCxExHJ6chhJe5BXFty7C9Rwdlz8igLvsY
- cD/g==
-X-Gm-Message-State: AJIora+KzWvOtISRTfuDH9L8uDc4TgTPR9DF2Guc/XuI7psgcXe1Qvti
- iAozdDUbH2OupwU1a8ANaJJadg==
-X-Google-Smtp-Source: AGRyM1sHpUsFeJwYTShmMbQhHtLvKfpFyYT4snDjJG0Z0Ly9eislVEvePPjf8n39zryUBWXVZ44vrw==
-X-Received: by 2002:a17:90a:f483:b0:1ea:84a5:222c with SMTP id
- bx3-20020a17090af48300b001ea84a5222cmr7510000pjb.47.1655421797860; 
- Thu, 16 Jun 2022 16:23:17 -0700 (PDT)
-Received: from lbrmn-mmayer.ric.broadcom.net ([192.19.161.250])
- by smtp.gmail.com with ESMTPSA id
- ft18-20020a17090b0f9200b001e325b9a809sm4250615pjb.38.2022.06.16.16.23.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 16 Jun 2022 16:23:17 -0700 (PDT)
-Received: by lbrmn-mmayer.ric.broadcom.net (Postfix, from userid 1000)
- id AE84346A57C0; Thu, 16 Jun 2022 16:23:15 -0700 (PDT)
-To: Buildroot Mailing List <buildroot@buildroot.org>
-Date: Thu, 16 Jun 2022 16:23:11 -0700
-Message-Id: <20220616232311.2770826-1-mmayer@broadcom.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id znqek4YTNFkr for <buildroot@lists.busybox.net>;
+ Fri, 17 Jun 2022 14:13:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 444D942429
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 444D942429
+ for <buildroot@buildroot.org>; Fri, 17 Jun 2022 14:13:50 +0000 (UTC)
+Received: from evilbit.green-communications.fr ([92.154.77.116]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.119]) with ESMTPSA (Nemesis)
+ id 1N63NW-1ndysd3cMa-016Nbx; Fri, 17 Jun 2022 16:13:47 +0200
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+To: buildroot@buildroot.org
+Date: Fri, 17 Jun 2022 16:12:02 +0200
+Message-Id: <20220617141202.2260-1-nicolas.cavallari@green-communications.fr>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/iptables: add nf_log.h
+X-Provags-ID: V03:K1:f+7xAmgo16mL7UMlLLzgh+8GAEw5fmEOWCVBG9B3tXdDUj2E1dY
+ TM+RlBT+54W+jRU/QbSN9Tb7CjfJisERvNWOPirBQtCYpTuiXCioyRsj3my6VQO0oXpQntk
+ FcikPU1pq6BE/iwkDSBI1Vu+jqpJwQeGMg119NOUpbwJPrs+70uWOyP5KjKY5cMVbhwxCdk
+ aIntMb/7gJk+O0C7QEvqw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:z5OoZtZnDAI=:CyPzlmQCF/A9zxAWj98pV+
+ D2tjM5LjBAXa10LOGY8SEKMxPP3nhv6V2wm/23z7xaqK/cugZ7IALbIGyoPrQ1hhCL3UlOjG0
+ pXR5IQmD9wlLaD98aznaCetJSrLjlQ2BuWcYByGs4UFixzmsahCv3MP8yQOSB7L9DS73SUmSS
+ /TRHZswWpYA6Ve/PIHvb1v93M7Qg317xf9Ok1wu018tFATzhkdHkMWsuPh4O2/JRk/iAdpq9+
+ TTvsl3SPzpoFvFWdg9X673GhH6EDWaSArYoCbzy5lG59n9euv0Mi2uTOF3Ka7fd5pUdLtneng
+ ouAqs6CZR9TKhaSYrtjuD5GOyJHQwGJxlIIeV3SdLApcWRw+fAizzYMiBKl9QJvjSe64TZR5y
+ uNnb1y0JjBApFuPsom9n5C1r1Tqi9vzoaeqZJN8Qzkz10vOkfmzBcKWxYOAqR3dpr+pjMZkK0
+ jGVVJNkAkjNXyUIcqOvpC+dMp1KX4bJXvSHUA9xyTmWOBy0lKel+JGxOJ/6c4WI45ue3uYDNg
+ LdLK9hj60nss1No/TK8j88tUuW9OLm4/Q0BZvJjptnBQIbNTFxX1yMrPML0w8HxY92baOeuN/
+ mL9kyntODnVWdorvV8kfjNp/TSWnGJ39x+8wcv+AD9CspUEO0ID3niJ0WMZaoc0bzP7D81XuG
+ kQnTGGzhA3Wle/0zgV7OkAUnSs66qW4L6p7l3VNQGxT8e4c5EPhPpUsY+dwtRseyInyAlVcZs
+ rkJOWOFi+pcN6VBQNRhEgLGAe8hFiZ3l9474sgQ7RFn5YNasp6ap1pALY6iLCjApu+BAZQ5kb
+ Dv1Wf6P
+Subject: [Buildroot] [PATCH 1/1] package/avahi: fix GNUism in
+ S05avahi-setup.sh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,76 +74,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Markus Mayer via buildroot <buildroot@buildroot.org>
-Reply-To: Markus Mayer <mmayer@broadcom.com>
-Cc: Markus Mayer <mmayer@broadcom.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-iptables generally bundles the netfilter header files inside its own
-tar-ball.
-
-Since iptables 1.8.8, it started to make use of netfilter/nf_log.h, but
-didn't include it in the iptables tar-ball. This can lead to build
-failures.
-
-Add a patch that rectifies this for iptables 1.8.8.
-
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
----
- .../0001-netfilter-add-nf_log.h.patch         | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/iptables/0001-netfilter-add-nf_log.h.patch
-
-diff --git a/package/iptables/0001-netfilter-add-nf_log.h.patch b/package/iptables/0001-netfilter-add-nf_log.h.patch
-new file mode 100644
-index 000000000000..c014c45931e9
---- /dev/null
-+++ b/package/iptables/0001-netfilter-add-nf_log.h.patch
-@@ -0,0 +1,37 @@
-+From 15ea3fa147dea25d8cae3c2ac417142f2e0f029e Mon Sep 17 00:00:00 2001
-+From: Markus Mayer <mmayer@broadcom.com>
-+To: Netfilter Mailing List <netfilter-devel@vger.kernel.org>
-+Date: Thu, 16 Jun 2022 15:29:58 -0700
-+Subject: [PATCH] netfilter: add nf_log.h
-+
-+Since libxt_NFLOG is now using the UAPI version of nf_log.h, it should
-+be bundled alongside the other netfilter kernel headers.
-+
-+This copy of nf_log.h was taken from Linux 5.18.
-+
-+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-+---
-+diff --git a/include/linux/netfilter/nf_log.h b/include/linux/netfilter/nf_log.h
-+new file mode 100644
-+index 000000000000..2ae00932d3d2
-+--- /dev/null
-++++ b/include/linux/netfilter/nf_log.h
-+@@ -0,0 +1,15 @@
-++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-++#ifndef _NETFILTER_NF_LOG_H
-++#define _NETFILTER_NF_LOG_H
-++
-++#define NF_LOG_TCPSEQ		0x01	/* Log TCP sequence numbers */
-++#define NF_LOG_TCPOPT		0x02	/* Log TCP options */
-++#define NF_LOG_IPOPT		0x04	/* Log IP options */
-++#define NF_LOG_UID		0x08	/* Log UID owning local socket */
-++#define NF_LOG_NFLOG		0x10	/* Unsupported, don't reuse */
-++#define NF_LOG_MACDECODE	0x20	/* Decode MAC header */
-++#define NF_LOG_MASK		0x2f
-++
-++#define NF_LOG_PREFIXLEN	128
-++
-++#endif /* _NETFILTER_NF_LOG_H */
-+-- 
-+2.25.1
-+
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBzY3JpcHQgdXNlcyAiY2hvd24gdXNlci5ncm91cCIgaW5zdGVhZCBvZiB0aGUgUE9TSVgg
+ImNob3duCnVzZXI6Z3JvdXAiLiAgVGhlIGZpcnN0IHN5bnRheCBpcyBhIGRlcHJlY2F0ZWQgR05V
+IGV4dGVuc2lvbi4KU2luY2UgY29yZXV0aWxzIDkuMSwgY2hvd24gc3RhcnRlZCBpc3N1aW5nIGEg
+d2FybmluZyB3aGVuIHRoaXMgc3ludGF4IGlzCnVzZWTCuS4KClRoZSByZXN1bHQgaXMgdGhhdCBp
+ZiBib3RoIGF2YWhpIGFuZCBjb3JldXRpbHMgYXJlIGVuYWJsZWQsIHRoaXMgbWVzc2FnZQphcHBl
+YXJzIGR1cmluZyBib290OgoKY2hvd246IHdhcm5pbmc6ICcuJyBzaG91bGQgYmUgJzonOiAnYXZh
+aGkuYXZhaGknCgpbMV0gaHR0cHM6Ly9naXQuc2F2YW5uYWguZ251Lm9yZy9jZ2l0L2dudWxpYi5n
+aXQvY29tbWl0L2xpYi91c2Vyc3BlYy5jP2lkPTIzY2NhODI2OGQyMWY1ZDU4ZWQwMjA5MDAyZDU2
+NzNkMDUxOGM0MjYKClNpZ25lZC1vZmYtYnk6IE5pY29sYXMgQ2F2YWxsYXJpIDxuaWNvbGFzLmNh
+dmFsbGFyaUBncmVlbi1jb21tdW5pY2F0aW9ucy5mcj4KLS0tCiBwYWNrYWdlL2F2YWhpL1MwNWF2
+YWhpLXNldHVwLnNoIHwgMiArLQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRl
+bGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9hdmFoaS9TMDVhdmFoaS1zZXR1cC5zaCBi
+L3BhY2thZ2UvYXZhaGkvUzA1YXZhaGktc2V0dXAuc2gKaW5kZXggOTBjY2JjZWFjYy4uMmY1M2Ex
+OTJlNCAxMDA2NDQKLS0tIGEvcGFja2FnZS9hdmFoaS9TMDVhdmFoaS1zZXR1cC5zaAorKysgYi9w
+YWNrYWdlL2F2YWhpL1MwNWF2YWhpLXNldHVwLnNoCkBAIC01LDcgKzUsNyBAQCBjYXNlICIkMSIg
+aW4KIAlpZiBbICEgLWQgL3RtcC9hdmFoaS1hdXRvaXBkIF07IHRoZW4KIAkgICAgcm0gLXJmIC90
+bXAvYXZhaGktYXV0b2lwZAogCSAgICBta2RpciAvdG1wL2F2YWhpLWF1dG9pcGQKLQkgICAgY2hv
+d24gYXZhaGkuYXZhaGkgL3RtcC9hdmFoaS1hdXRvaXBkCisJICAgIGNob3duIGF2YWhpOmF2YWhp
+IC90bXAvYXZhaGktYXV0b2lwZAogCWZpCiAJOzsKICAgICBzdG9wKSA7OwotLSAKMi4zNi4xCgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
