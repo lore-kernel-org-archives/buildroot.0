@@ -1,86 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A8C1C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jun 2022 20:43:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E791FC43334
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jun 2022 20:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3CB1640186;
-	Fri, 17 Jun 2022 20:43:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CB1640186
-Authentication-Results: smtp2.osuosl.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20210112 header.b=p65IbI42
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5785860C28;
+	Fri, 17 Jun 2022 20:44:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5785860C28
+Authentication-Results: smtp3.osuosl.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20210112 header.b=jIWqvaYN
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c5bGxczyolvB; Fri, 17 Jun 2022 20:43:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ds5s25ovbmhl; Fri, 17 Jun 2022 20:44:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4B83A40150;
-	Fri, 17 Jun 2022 20:43:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B83A40150
+	by smtp3.osuosl.org (Postfix) with ESMTP id 905F060B8C;
+	Fri, 17 Jun 2022 20:44:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 905F060B8C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C8A671BF489
- for <buildroot@lists.busybox.net>; Fri, 17 Jun 2022 20:42:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 347251BF489
+ for <buildroot@lists.busybox.net>; Fri, 17 Jun 2022 20:44:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A298040150
- for <buildroot@lists.busybox.net>; Fri, 17 Jun 2022 20:42:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A298040150
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E8FE40164
+ for <buildroot@lists.busybox.net>; Fri, 17 Jun 2022 20:44:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E8FE40164
+Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=jIWqvaYN
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iBZ0KaPk_UES for <buildroot@lists.busybox.net>;
- Fri, 17 Jun 2022 20:42:59 +0000 (UTC)
+ with ESMTP id JhBWmOWhm6yY for <buildroot@lists.busybox.net>;
+ Fri, 17 Jun 2022 20:44:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B585040012
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B585040012
- for <buildroot@buildroot.org>; Fri, 17 Jun 2022 20:42:58 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- s21-20020a1cf215000000b0039ee8149524so1390404wmc.5
- for <buildroot@buildroot.org>; Fri, 17 Jun 2022 13:42:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47F4A40150
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 47F4A40150
+ for <buildroot@buildroot.org>; Fri, 17 Jun 2022 20:44:52 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id e25so3227596wrc.13
+ for <buildroot@buildroot.org>; Fri, 17 Jun 2022 13:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=iLzQaU4JdxrhvlusBM+tFGhLL1/lGwzSzcIaLcPwt3A=;
- b=p65IbI42sxMaEnzcOgvuxMUPrFD+V6Em2xPsh9fGYL6BmiX8zj1MAm5MTq/Kd500M7
- v43uaZUPtUiLZwK1sSpvTZyu3S9japiPusEfmF88S22opcAn8bLg04jzAOi0C3NF4q5G
- a1x4ueSQuqBK2w6kMySEbJcaaS6ed6haUrEHOTnCZaWfS3w9yFwiVimBw6o+B4FVtSqE
- 5LioXMGPszlWCEO/EKUmM84RBWnKzq7Jjbijl18TDCsZxh3RiNGUV+ZCxKDjvyfJ3AHC
- yyLWHT6JOOdiY3sffrZiG97UVi1nLfNgGbPjqmrpTjD4j03bMByNwxdXUygxJ/GMrJhJ
- 4D8A==
+ bh=Mz+wceAJCRvIMricBqbm0yLyYYPsgeDZxjCPP5ggvPw=;
+ b=jIWqvaYNYhnCStPfOufG2mVD8hcqKKV8sQXTpB2q5sJxhU7IIYoVt7y1SugARCt6RR
+ Ys/DxYPCLtMt9DkcXCsJYdj5cqLeeWOyQHY2dGfciw3a08rXyvz3iRngfWcAweZTT7em
+ b3E69RLTlKcBdrRPV26PKpGOpcgZv9hRFdCwYVq5sBB5IXVq5ZJ/q5sCVKrFRes58c3B
+ tK6DA1tox8rxyCrN7mLa1627br86keAIqgixBRcSqtbo7bSULJ6Aehe2GvwmaLO3j/E2
+ KsBrLG0YkWzi1F9W2KxBCfUbPEBEkA5T2l0CkvxRh+lGovG34KHLMwqunfGefMD/BOAQ
+ +zgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=iLzQaU4JdxrhvlusBM+tFGhLL1/lGwzSzcIaLcPwt3A=;
- b=Lu9RsBgsXKVmAu7tiHeCktT7aCXHEZUDpITdtLCoYX938hZXL+Mlv6x3bVAm9y4cae
- aA+5ryJWTKyWOuZ/Rxx8LZnmcXFG1gJg0TTL97R7lMFpVgly7AAMPy24RXMXCMm8+bNj
- FwjGUZ5tGNaOkP/v3KUleH0PkuUIEEb/0TJTE+LVtKZtgN9G1cHbzq/lqhoCCHAP7tBp
- BZyskikTW1x+U51CQE8UbQwahSrXSpLflKzvi1lGSYvBIJ+LWtkx6Y1RvcCU5IwS6Xbt
- ZifjesVkGlBkNzTmm2fyVnnLDO8KzDksYwNMeT4QcvEGkghXe4Foq0PN/tSRKGNGJBF9
- sqLw==
-X-Gm-Message-State: AJIora/bFZIbGC0Q//dLunyOnlY5KRO8BtyJOvT6Vh2bJ0mIejoMv31/
- 93jIw5jtGYlXB1ufk5hcL8lhASXedeQ=
-X-Google-Smtp-Source: AGRyM1vAYk9yMBRjMcerkSeOMgDDroxN8NjUlzbsMkeiXy+sUy4+YPgO659ko9hwCsaxIps/ADH45A==
-X-Received: by 2002:a7b:c755:0:b0:39c:3beb:32aa with SMTP id
- w21-20020a7bc755000000b0039c3beb32aamr12218459wmk.30.1655498576762; 
- Fri, 17 Jun 2022 13:42:56 -0700 (PDT)
+ bh=Mz+wceAJCRvIMricBqbm0yLyYYPsgeDZxjCPP5ggvPw=;
+ b=zNw+LwunlJFzGvssPCymjdE5ewCFG4LcManSt118c94SrW55O6y9bprUjDoTwtwXQE
+ 6hTNoJtv1R8R1Koe+xbSViogaAbuxFB0fIQLJRAaACYeAr74uuTyYma2URRwbmZpfpjT
+ 7v/yUCcJUcL95ZCHmlqJd6AM6gEWRZzFieoZjv2FDT7E4pxI1g5Gp3dfaMWEQQRd/Tsn
+ u0y22jFD+snjFzydSUpEsnvwI1zhyMxID5SuJyBD+Y4llum59gOHCOUkKPWHpZFb1AsZ
+ 9k/Ptw+epM3RE2efF2zBMEHuuV5mDo5iUJcDpucScLP3OwjythW4lr6NWBbG+pM9rHZA
+ IXJQ==
+X-Gm-Message-State: AJIora99xikU0LQZ+19328+Ib5c7nB+d/43YoCzM3gT5E4S8rfV6PiQD
+ TIlDGHHU3TYke1ik7CJCv3VqX3nyN04=
+X-Google-Smtp-Source: AGRyM1vgYNiFJdHnOuDBbZsi9j6qNik5ePFrG8naFT0kKKbOiutUty59qBKP3O4Ctw13CYrbSqhWBQ==
+X-Received: by 2002:a5d:5c07:0:b0:218:544d:4347 with SMTP id
+ cc7-20020a5d5c07000000b00218544d4347mr10443352wrb.107.1655498690150; 
+ Fri, 17 Jun 2022 13:44:50 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- t9-20020adfeb89000000b002103bd9c5acsm5611973wrn.105.2022.06.17.13.42.55
+ l15-20020a05600c2ccf00b003974a00697esm10502751wmc.38.2022.06.17.13.44.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Jun 2022 13:42:56 -0700 (PDT)
+ Fri, 17 Jun 2022 13:44:49 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Jun 2022 22:40:16 +0200
-Message-Id: <20220617204016.11763-1-fontaine.fabrice@gmail.com>
+Date: Fri, 17 Jun 2022 22:42:10 +0200
+Message-Id: <20220617204210.12026-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/php-imagick: bump to version 3.7.0
+Subject: [Buildroot] [PATCH 1/1] package/iptables: drop duplicated dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,44 +100,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since bump of php to version
-8.1.7 in commit 0ddfece7f7e5b10a5da89f2c462616d5deb5b1ec:
-
-/bin/sh: line 7: /home/autobuild/autobuild/instance-8/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/bin/../../usr/bin/php-cgi: cannot execute binary file: Exec format error
-
-https://github.com/Imagick/imagick/blob/refs/tags/3.7.0/ChangeLog
-
-Fixes:
- - http://autobuild.buildroot.org/results/9f82a9b95061d908e3dc10a83dd16facdbdd05b5
+libnetfilter_conntrack dependency is wrongly duplicated since commit
+b835171cf9db23095c669b872dbaa15fc1e99898
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/php-imagick/php-imagick.hash | 2 +-
- package/php-imagick/php-imagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iptables/iptables.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/php-imagick/php-imagick.hash b/package/php-imagick/php-imagick.hash
-index e915808585..97c0b2f0e0 100644
---- a/package/php-imagick/php-imagick.hash
-+++ b/package/php-imagick/php-imagick.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  795db7c36fbacd3d33a4f53ff2d38584c846e80a04dcd04c55e9e46c28f5d229  imagick-3.5.0.tgz
-+sha256  5a364354109029d224bcbb2e82e15b248be9b641227f45e63425c06531792d3e  imagick-3.7.0.tgz
- sha256  b6e00df9cb3b91977c0d64a7c4db48cb6f5041f6eeda6583c236775f70a35b78  LICENSE
-diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
-index 2dc055f0b3..925423b12a 100644
---- a/package/php-imagick/php-imagick.mk
-+++ b/package/php-imagick/php-imagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index a54194a8c3..682e23a091 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -19,11 +19,6 @@ IPTABLES_SELINUX_MODULES = iptables
+ IPTABLES_CONF_OPTS = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr \
+ 	$(if $(BR2_STATIC_LIBS),,--disable-static)
  
--PHP_IMAGICK_VERSION = 3.5.0
-+PHP_IMAGICK_VERSION = 3.7.0
- PHP_IMAGICK_SOURCE = imagick-$(PHP_IMAGICK_VERSION).tgz
- PHP_IMAGICK_SITE = http://pecl.php.net/get
- PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-# For connlabel match
+-ifeq ($(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),y)
+-IPTABLES_DEPENDENCIES += libnetfilter_conntrack
+-endif
+-
+ # For nfnl_osf
+ ifeq ($(BR2_PACKAGE_LIBNFNETLINK),y)
+ IPTABLES_DEPENDENCIES += libnfnetlink
 -- 
 2.35.1
 
