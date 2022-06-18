@@ -1,73 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6C4DC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Jun 2022 07:40:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12877C43334
+	for <buildroot@archiver.kernel.org>; Sat, 18 Jun 2022 08:59:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 036A14177E;
-	Sat, 18 Jun 2022 07:40:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 036A14177E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4BB71405C8;
+	Sat, 18 Jun 2022 08:59:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BB71405C8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E4VyKhPJAGwg; Sat, 18 Jun 2022 07:40:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zBa3msDb2cjS; Sat, 18 Jun 2022 08:59:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC601415FC;
-	Sat, 18 Jun 2022 07:40:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC601415FC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BAB6D1BF48C
- for <buildroot@lists.busybox.net>; Sat, 18 Jun 2022 07:40:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 51AEF405CD;
+	Sat, 18 Jun 2022 08:59:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51AEF405CD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CF181BF20B
+ for <buildroot@lists.busybox.net>; Sat, 18 Jun 2022 08:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A2750829FE
- for <buildroot@lists.busybox.net>; Sat, 18 Jun 2022 07:40:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2750829FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8895405B2
+ for <buildroot@lists.busybox.net>; Sat, 18 Jun 2022 08:59:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8895405B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v_c76JpHKis3 for <buildroot@lists.busybox.net>;
- Sat, 18 Jun 2022 07:40:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a1rNi9oEg423 for <buildroot@lists.busybox.net>;
+ Sat, 18 Jun 2022 08:59:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB049829F2
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AB049829F2
- for <buildroot@busybox.net>; Sat, 18 Jun 2022 07:40:53 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id z11so2671404edp.9
- for <buildroot@busybox.net>; Sat, 18 Jun 2022 00:40:53 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FADA400BF
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6FADA400BF
+ for <buildroot@buildroot.org>; Sat, 18 Jun 2022 08:59:50 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id k22so1942360wrd.6
+ for <buildroot@buildroot.org>; Sat, 18 Jun 2022 01:59:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:subject:message-id:mime-version
- :content-disposition;
- bh=YNQ0pU7BDVdruPHYx7K2dA2nRC9jOUWje9aQQA0XODw=;
- b=t9bluDhIQEfXY54p4kE6BH7kN0GQi0EFbQNXsIE3hB1B3BseQGkw4kBv5pgkIRrdyh
- IPk3/N+6ZLr4IqLkvNMeKp1KCoAYq3cxJPbnckKbzZADfQHC8ig3rFc3gleJG76FhfIy
- yr0aqak38t2Kt9o4SWq8MyOcGjUG8CuiwAs1OuB7Gh5nyQydyOViqpL2R0OPuyXGvjQv
- kSu2GaqfdRFwEZTnU0Cj0Ld1tC4noTA6GGdKpGFXATSflyXbRA41BaKC/i+lC3SNJdw0
- EnWpMEr6mqNJqJFWRFt8nZtD75DlRcGKYvJ8UCN7TiiCbcWeWTdaGLbooHLJpsKQnAUx
- iUmQ==
-X-Gm-Message-State: AJIora8faLbsnRkbhDFScapCasPVHlREUVNs04bRLeNn+6tahy0IbwPJ
- g0Xgms/nEDb5EYj+vN4sxQgJXEUeLLg=
-X-Google-Smtp-Source: AGRyM1vN4V0C13tjRmM6H0KtOLrzGofnjWZP0reM7HEyjE5tO1+vl1gXNJ2Thh4a6PTxT1Mpu/C50A==
-X-Received: by 2002:a05:6402:3448:b0:435:71ca:b46b with SMTP id
- l8-20020a056402344800b0043571cab46bmr902912edc.348.1655538051825; 
- Sat, 18 Jun 2022 00:40:51 -0700 (PDT)
-Received: from einstein.dilieto.eu (smtp.dilieto.eu. [188.68.43.228])
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=gaftXFzOOj3SapAI92DDxRkHQayNTaQYl1FaVZ8yMyo=;
+ b=0ktqgeCRPV7kakhAFAZKBrz3JPYELVc92HKBSnKzyS1m5y/S+8A2IBmyr27EaPuPlP
+ 7b3jhx3BgHCE8JUkWxn3KjXr81+9whSYoogHnd5dr1Hwab0ews+qAC4GTkxVOOXBaNQj
+ f63RKa/dPfVlgCsZUe6X6xUt1kUQGu9CPgl+uKcPaFk9HqQl+yg/RMUMxdNMVjOGknPA
+ zj7wHqbH37s0Wy67BbgQ/dfr+csZdJowqpdQUcvSm4jAYjafS6GlblwyLbrjJrZPrvrE
+ aN104cRHnlPzFGrCIBQMvDO9FA2XbKfAOo/Q4SX2/8aihBAwTqobnrwWR2Ak1okyJ6G8
+ Q45A==
+X-Gm-Message-State: AJIora8OXmvBv3gzQoexEdRMI9Qcw3GshspLn3GoFifiZlCoPxUjdQu7
+ hdxJ2P9nxPZSGEfIF6RSjxbXo6K1VqE=
+X-Google-Smtp-Source: AGRyM1vOecTsnHU5/zUJsg2Z5SSLF8Zd4YD3Zu8ytnkeqzsedLH7i9y5VvKghTBb5B8Ir9nOlxe+MA==
+X-Received: by 2002:a05:6000:244:b0:210:cc02:889a with SMTP id
+ m4-20020a056000024400b00210cc02889amr13236038wrz.141.1655542788244; 
+ Sat, 18 Jun 2022 01:59:48 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- y17-20020a170906471100b00704dccefd2bsm3017358ejq.204.2022.06.18.00.40.51
- for <buildroot@busybox.net>
- (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
- Sat, 18 Jun 2022 00:40:51 -0700 (PDT)
-Date: Sat, 18 Jun 2022 09:40:48 +0200
-From: Nicola Di Lieto <nicola.dilieto@gmail.com>
-To: buildroot@busybox.net
-Message-ID: <Yq2BgE6StduAjH5Z@einstein.dilieto.eu>
+ n23-20020a05600c3b9700b0039c5224bfcbsm12886524wms.46.2022.06.18.01.59.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 18 Jun 2022 01:59:47 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 18 Jun 2022 10:57:04 +0200
+Message-Id: <20220618085704.508506-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-Subject: [Buildroot] [PATCH] package/uacme: allow ualpn with mbedTLS
+Subject: [Buildroot] [PATCH 1/1] package/php: add
+ BR2_PACKAGE_PHP_ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,47 +80,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Following the update to mbedTLS 2.28.0 in commit 0f8aab08, ualpn can
-work with mbedTLS without restrictions.
+fiber (https://wiki.php.net/rfc/fibers) has been added in version 8.1.0
+with
+https://github.com/php/php-src/commit/c276c16b6627222c40bd43907475d664734b9abe
 
-References
-https://git.buildroot.net/buildroot/commit?id=96c3b52132b41716ca445b4c73a1a8886c26e5ee
-https://github.com/ndilieto/uacme/issues/23#issuecomment-1043409796
-https://github.com/ndilieto/uacme/commit/bbee626cf5f60908f064c123f7a9622639348c3d
-https://github.com/Mbed-TLS/mbedtls/pull/3243
+fiber uses asm on supported architectures or needs ucontext since
+https://github.com/php/php-src/commit/8fd747a2a0e9f57c12bdad22a1844a736e7b4e57
 
-Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+As result, the following build failure is raised without ucontext_t on
+architectures not supported by asm since bump to version 8.1.7 in commit
+0ddfece7f7e5b10a5da89f2c462616d5deb5b1ec:
+
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/10.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: Zend/zend_fibers.o: in function `zend_fiber_init_context':
+zend_fibers.c:(.text+0x68a): undefined reference to `getcontext'
+
+As fiber can't be disabled (only fiber-asm), add
+BR2_PACKAGE_PHP_ARCH_SUPPORTS to reflect this new dependency
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f4077bae8f879828e343475318cd2ddb99e09ba4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-  package/uacme/Config.in | 4 ----
-  1 file changed, 4 deletions(-)
+ package/php/Config.in | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/package/uacme/Config.in b/package/uacme/Config.in
-index d693436115..58b7c534e7 100644
---- a/package/uacme/Config.in
-+++ b/package/uacme/Config.in
-@@ -19,7 +19,6 @@ if BR2_PACKAGE_UACME
-  config BR2_PACKAGE_UACME_UALPN
-  	bool "enable ualpn"
-  	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_PACKAGE_OPENSSL || BR2_PACKAGE_GNUTLS
-  	select BR2_PACKAGE_LIBEV
-  	help
-  	  Build and install ualpn, the transparent proxying tls-alpn-01
-@@ -28,7 +27,4 @@ config BR2_PACKAGE_UACME_UALPN
-  comment "ualpn needs a toolchain w/ threads"
-  	depends on !BR2_TOOLCHAIN_HAS_THREADS
-  
--comment "ualpn needs either OpenSSL or GnuTLS"
--	depends on !(BR2_PACKAGE_OPENSSL || BR2_PACKAGE_GNUTLS)
--
-  endif
+diff --git a/package/php/Config.in b/package/php/Config.in
+index 226d2d5fd2..69b4268c1d 100644
+--- a/package/php/Config.in
++++ b/package/php/Config.in
+@@ -1,5 +1,18 @@
++config BR2_PACKAGE_PHP_ARCH_SUPPORTS
++	bool
++	# see fiber_cpu in configure.ac
++	default y if BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_arm || BR2_armeb
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_RISCV_64
++	default y if BR2_s390x
++	default y if BR2_TOOLCHAIN_HAS_UCONTEXT
++
+ config BR2_PACKAGE_PHP
+ 	bool "php"
++	depends on BR2_PACKAGE_PHP_ARCH_SUPPORTS
+ 	# PHP uses -export-dynamic, which breaks with elf2flt with a
+ 	# message like "ld.real: section .junk LMA [...,...] overlaps
+ 	# section .text LMA [...,...]"
+@@ -52,5 +65,6 @@ source "package/php/Config.ext"
+ endif
+ 
+ comment "php needs a toolchain w/ wchar"
++	depends on BR2_PACKAGE_PHP_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_USE_WCHAR
 -- 
-2.11.0
+2.35.1
 
 _______________________________________________
 buildroot mailing list
