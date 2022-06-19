@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8013AC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 15:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1075BC43334
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 15:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E43A410D8;
-	Sun, 19 Jun 2022 15:59:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E43A410D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA5E6408ED;
+	Sun, 19 Jun 2022 15:59:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA5E6408ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0e1JHIdehPRn; Sun, 19 Jun 2022 15:59:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A8-wLJG37ymW; Sun, 19 Jun 2022 15:59:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7BBA40933;
-	Sun, 19 Jun 2022 15:59:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7BBA40933
+	by smtp2.osuosl.org (Postfix) with ESMTP id 896EE408E9;
+	Sun, 19 Jun 2022 15:59:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 896EE408E9
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 64BE71BF990
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 15:57:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 67BD81BF32D
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 15:57:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB7D4408E6
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD5FC408EF
  for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 15:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB7D4408E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD5FC408EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E8zgi6Olvy0v for <buildroot@lists.busybox.net>;
+ with ESMTP id Nr48LsTKrdg1 for <buildroot@lists.busybox.net>;
  Sun, 19 Jun 2022 15:57:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65618408EB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5182A408E9
  for <buildroot@buildroot.org>; Sun, 19 Jun 2022 15:57:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65618408EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5182A408E9
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 30A4D873C0; Sun, 19 Jun 2022 15:45:30 +0000 (UTC)
+ id 1BEE7873C3; Sun, 19 Jun 2022 15:45:30 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 17:22:26 +0200
+Date: Sun, 19 Jun 2022 17:22:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 22b7fb8a8d86ae5ba9d247e919f94f400bc225f0
-X-Git-Newrev: 9fc652a373034118535397fdd4042ab9f8fd7adf
+X-Git-Oldrev: 978800fadbb7b3d1383e7cd7e166b1f0a35eb999
+X-Git-Newrev: d4b47d41cac1eaedefba73589a7cee361de76d48
 X-Patchwork-Hint: ignore
-Message-Id: <20220619154530.30A4D873C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmodsecurity: needs dynamic
- library with libcurl and mbedtls
+Message-Id: <20220619154530.1BEE7873C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sofia-sip: security bump to
+ version 1.13.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,68 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fc652a373034118535397fdd4042ab9f8fd7adf
+commit: https://git.buildroot.net/buildroot/commit/?id=d4b47d41cac1eaedefba73589a7cee361de76d48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libmodsecurity embeds several mbedtls source files since version 3.0.0
-and
-https://github.com/SpiderLabs/ModSecurity/commit/a3ae686f2555bdacbfc9e1889ad05065711a165d
-resulting in the following static build failure if curl is built with
-mbedtls support:
-
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real: /home/buildroot/autobuild/instance-0/output-1/host/bin/../m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libmbedcrypto.a(md5.c.o): in function `mbedtls_md5_free':
-md5.c:(.text+0x16): multiple definition of `mbedtls_md5_free'; ../../src/.libs/libmodsecurity.a(libmbedtls_la-md5.o):md5.c:(.text+0x16): first defined here
-
-Fixes:
- - http://autobuild.buildroot.org/results/98472a3a41cdbcb3d02289a437074a267f4b2e8e
+Fix CVE-2022-31001, CVE-2022-31002 and CVE-2022-31003:
+https://github.com/freeswitch/sofia-sip/security/advisories/GHSA-79jq-hh82-cv9g
+https://github.com/freeswitch/sofia-sip/security/advisories/GHSA-g3x6-p824-x6hm
+https://github.com/freeswitch/sofia-sip/security/advisories/GHSA-8w5j-6g2j-pxcp
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libmodsecurity/Config.in    | 5 +++++
- package/nginx-modsecurity/Config.in | 5 +++++
- 2 files changed, 10 insertions(+)
+ package/sofia-sip/sofia-sip.hash | 2 +-
+ package/sofia-sip/sofia-sip.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmodsecurity/Config.in b/package/libmodsecurity/Config.in
-index 87f7a9c103..f65ab3de93 100644
---- a/package/libmodsecurity/Config.in
-+++ b/package/libmodsecurity/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_LIBMODSECURITY
- 	bool "libmodsecurity"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# libmodsecurity embeds several mbedtls source files
-+	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS)
- 	select BR2_PACKAGE_PCRE
- 	help
- 	  Libmodsecurity is one component of the ModSecurity
-@@ -17,3 +19,6 @@ config BR2_PACKAGE_LIBMODSECURITY
+diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
+index 6f6ff6d052..ae2b3e725c 100644
+--- a/package/sofia-sip/sofia-sip.hash
++++ b/package/sofia-sip/sofia-sip.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  d39a3287038f1c9a747c1abc94a1379a726a9dfaf969285f955141883f7b810f  sofia-sip-1.13.6-4152840260.tar.gz
++sha256  ebd006a98a7dff6e7f4d8357c5ebeee1d3bee3ac29ff213a4909e845f230fcbe  sofia-sip-1.13.8-756ab9b5c9.tar.gz
+ sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
+ sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
+diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
+index c52045091e..80e59057c4 100644
+--- a/package/sofia-sip/sofia-sip.mk
++++ b/package/sofia-sip/sofia-sip.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- comment "libmodsecurity needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "libmodsecurity needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
-diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
-index b1fcbadd7a..5cbe57a866 100644
---- a/package/nginx-modsecurity/Config.in
-+++ b/package/nginx-modsecurity/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
- 	depends on BR2_PACKAGE_NGINX_HTTP
- 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libmodsecurity
-+	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS) # libmodsecurity
- 	select BR2_PACKAGE_LIBMODSECURITY
- 	help
- 	  The ModSecurity-nginx connector is the connection
-@@ -14,3 +15,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
- comment "nginx-modsecurity needs a toolchain w/ C++, threads"
- 	depends on BR2_PACKAGE_NGINX_HTTP
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "nginx-modsecurity needs a toolchain w/ dynamic library"
-+	depends on BR2_PACKAGE_NGINX_HTTP
-+	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
+-SOFIA_SIP_VERSION = 1.13.6
+-SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION)-4152840260.tar.gz
++SOFIA_SIP_VERSION = 1.13.8
++SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION)-756ab9b5c9.tar.gz
+ SOFIA_SIP_SITE = https://files.freeswitch.org/downloads/libs/sofia-sip
+ SOFIA_SIP_INSTALL_STAGING = YES
+ SOFIA_SIP_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
