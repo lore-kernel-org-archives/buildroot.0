@@ -1,87 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 380BEC43334
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 21:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07CD5C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 23:19:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A9517409F8;
-	Sun, 19 Jun 2022 21:21:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9517409F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6533A60E9F;
+	Sun, 19 Jun 2022 23:19:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6533A60E9F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N3nMgKKIyeQJ; Sun, 19 Jun 2022 21:21:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GF--8uI1uHAj; Sun, 19 Jun 2022 23:19:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1A6B409ED;
-	Sun, 19 Jun 2022 21:21:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1A6B409ED
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EDEA60B35;
+	Sun, 19 Jun 2022 23:19:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EDEA60B35
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8ACF71BF3A0
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 21:21:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 581721BF3DA
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 23:19:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 72ACB81516
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 21:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72ACB81516
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2FE1681916
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 23:19:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FE1681916
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3Yl1forl_Or8 for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 21:21:43 +0000 (UTC)
+ with ESMTP id wce7P-PbDvvP for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 23:19:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED67C81274
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ED67C81274
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 21:21:42 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id w17so12130427wrg.7
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 14:21:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18EE581463
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com
+ [IPv6:2607:f8b0:4864:20::22d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 18EE581463
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 23:19:28 +0000 (UTC)
+Received: by mail-oi1-x22d.google.com with SMTP id s16so1828367oie.3
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 16:19:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=eZ8pEX+iLJpR0YsuRoNrfCwE6BJuDv58vOybfQXplBU=;
- b=hSzAq1q97Lkc4D35j3Q1Hzj8HntOBiCCiLwVtMuRqqDHdIjjjASDLa454nuBW8q7zm
- Byqq4xnwlmP5bzHSUT084TlQoOW7B/FpzTjUL1LkQuRUo8o4ngtjLeYAu39W6bopT8Lf
- vcFl67q0SBi0O4FqpQzvkx/WpMOZjt1B0FS7JnVo9cRWNe/vsH0vwBarpUG6QRJY6Ru/
- jquzVmnVxy1NaZuUYC9R6Kdp9fDAH8wfm5rrh0y449zeU8EnUJtI+mWBXcPQDxjpPcSk
- 54FZfomViWRhxCY4ghMoSTO1oQnyN0MnkRFeRjRmVXEBWE9sOp70gtjESdR1brvrw1xt
- JXvQ==
-X-Gm-Message-State: AJIora+a3hUhC967pHMEanmSmXk1qigf/UidYP60o6af4342Sl4+6veQ
- 62D+SfyZHsrMgO9qwgz+SHttvk+wTE8=
-X-Google-Smtp-Source: AGRyM1tQczbMH990lqmlQW2yocOxdo4hReXBWNQVP6MFCyLnimIHfD/Lwoq7iR4A8613LNdj/SFn7Q==
-X-Received: by 2002:a5d:4889:0:b0:21b:293e:9e43 with SMTP id
- g9-20020a5d4889000000b0021b293e9e43mr12851725wrq.705.1655673700787; 
- Sun, 19 Jun 2022 14:21:40 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- b1-20020adfe301000000b00219b391c2d2sm13680778wrj.36.2022.06.19.14.21.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 Jun 2022 14:21:40 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 23:18:58 +0200
-Message-Id: <20220619211858.1048636-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=rCfiA7JUPLaCN5d4J7iJIfJPgMBlrwhZPe5EldUPCFc=;
+ b=RNvaj9TszL5czTyYQ521JhmpmPGbMtYFhB2aTqy9pwi1zXJSEqv5vSnO/KbIbyoMuo
+ GXEckIcXVx+MKfAfnUjTnXW/Ip89wNuVxsgpfvlOdNsliIK5sDqikkcg84jXWszHTU7z
+ UaVa/fAwKH3aecYPBznY+fCqWeiq5JRMif4IV2KOCLiJc5umUSRp+yAgv0AGdBJ3AFPI
+ 2ErHZbG2/jbwxcPFvlB2y6eQKaTYgNIYF0iQXZGvDreX49lbW4fRXEJn5Vu5Hn6RkFGD
+ Ez+nt68QXzJUnntmUGeCzMLChQmLc/q+RH8lYQU9lPyOhV91t3YM3fQagFHo75ZOQXqs
+ 8g7Q==
+X-Gm-Message-State: AJIora8jjWcMuREtHG7CrxST81C/HwaZsfFxjPK7cF+N0PF3Er0ib/OV
+ 2Zumc7Ezd4vNrPZHzY9/m1k4wUaNIQhDHeiiukkepII7y0w=
+X-Google-Smtp-Source: AGRyM1vMX/F84Uv5bSF22O4XDz4Qyi2czf349grOHkoNybbRKm/jchk4QmBk3dXKqIYgQOW1e+yvStd2pmldc8cfGGc=
+X-Received: by 2002:a05:6808:23c6:b0:331:3ab2:6fb9 with SMTP id
+ bq6-20020a05680823c600b003313ab26fb9mr9684052oib.200.1655680768095; Sun, 19
+ Jun 2022 16:19:28 -0700 (PDT)
 MIME-Version: 1.0
+References: <97ea44bb-58fe-d6cb-6c79-9be0b245f2c6@synopsys.com>
+ <38e7fb76-2c07-6429-b803-4fd6ff2b1178@synopsys.com>
+ <3062ce96-7e99-d221-61c8-4b87c87c113b@synopsys.com>
+ <e8be91c7-8597-7a7e-9714-9f8045781959@mind.be>
+ <aafcf149-d0b9-8c95-751c-64ec4dabf5b5@synopsys.com>
+ <CADvTj4qcYpo=UB2Qny7-0mXiqq9R0u6QMBgs+9hXm76SQxvEew@mail.gmail.com>
+ <40fe53f9-cd74-a19f-e338-2aa4d35a9ec1@synopsys.com>
+ <8c13892c-a9ed-a016-7043-6794b87a884c@mind.be>
+In-Reply-To: <8c13892c-a9ed-a016-7043-6794b87a884c@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 19 Jun 2022 17:19:16 -0600
+Message-ID: <CADvTj4rPGVpbbZTXO9J0NT6PLbT_Q8jDHhDwhH6u0jMDc4aJCg@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=eZ8pEX+iLJpR0YsuRoNrfCwE6BJuDv58vOybfQXplBU=;
- b=TVwVrlkiO0W+U2u1UjllFt0UEzn9UwtefmG7ocStvwv4Rt2CWFb4Z8et6TbgFEhegf
- TLgOSjVpqo24x2AUS21uhdNUYzayFAtmX8G5tuk2iqs2zhKKpnOKrdgRQ2M6XSq+K3Yz
- nW/Bi0YsMpFmw9hhoVvMEtPJ2gC2gznpCCd6Uhvb1AGqJIHGn6eu6KdzlfHlsGxceFG8
- fcEPY4JgUkN3VPasGqasWMLd9yHQ6ZIxqc+jeQbkjJ/IleLq56pdsL8Px4mKev44A1wc
- Y/pa+mwILuMX9hHOm9UESseGPojZYey2ItwlKYC0qjT8dlsWImEmw2jYGRaXIVu1bdcV
- yozQ==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=rCfiA7JUPLaCN5d4J7iJIfJPgMBlrwhZPe5EldUPCFc=;
+ b=oqq45wghGN1ftf+xlpZuAYiXWhAoH/YKGicUTOHuhJQt4HjI8mOY6dB5SmL3z98zdz
+ Xf0CvMHne+b/It7r1IdSBXBJE5xOME0OJt4gP4RYu+x3ea8JWRbCOUj2D9uf+np1rgwW
+ drHWc2PPhuaLFhlwW9gzPRVshEFQMuxWcIsNgQDMeJpe1Zeg7S1+vZIuuhz9+dPJIWs0
+ iLO0tqeBMlJ2XCtQlvw81OIxIv4w1PcBgeWojUc06aDLukg0NNLg6G6V26ikM2SLyF8Z
+ lw/EpVd+l2ZJiebguwWoBT7hXqYPsCkvjeyoTjk7U5PDckIYMN5lhTWg+tGhBBHLcIz4
+ 4vRQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=TVwVrlki
-Subject: [Buildroot] [PATCH 1/1] package/proxychains-ng: bump to version 4.16
+ header.a=rsa-sha256 header.s=20210112 header.b=oqq45wgh
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/bpftool: revert bpf_cookie
+ patch to allow building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,185 +96,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: "linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>,
+ Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch (already in version)
+On Sun, Jun 19, 2022 at 9:20 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 16/06/2022 10:11, Shahab Vahedi wrote:
+> > On 6/16/22 01:27, James Hilliard wrote:
+> >> On Wed, Jun 15, 2022 at 5:10 AM Shahab Vahedi via buildroot
+> >> <buildroot@buildroot.org> wrote:
+> >>>
+> >>> On 6/14/22 19:14, Arnout Vandecappelle wrote:
+> >>>>
+> >>>> On 14/06/2022 11:31, Shahab Vahedi wrote:
+> >>>>> Building bpftool on Debian 11 (bullseye) with kernel v5.10 and clang-11
+> >>>>
+> >>>>   How do you build host-bpftool with clang in Buildroot context? HOSTCC is set to gcc in the Makefile... Do you supply an explicit HOSTCC= on the Buildroot command line? I'm not sure if we are really interested in carrying fixes for such exotic and not-really-supported situations...
+> >>>
+> >>> No, I don't do any sort of trickery to build bpftool on my end. The
+> >>> bootstrapping, if becomes available for your configuration, uses clang
+> >>> and only clang. I tried to explain this in v4 of the patch [1], the
+> >>> second paragraph of the commit message.
+> >>
+> >> I think clang/llvm support isn't going to work correctly yet since we only have
+> >> version 9.0.1, there's a series bumping to version 11.1.0 that should fix that:
+> >> https://patchwork.ozlabs.org/project/buildroot/list/?series=291585
+> >>
+> >> Minimum clang/llvm version for libbpf co-re is version 10:
+> >> https://github.com/libbpf/libbpf*bpf-co-re-compile-once--run-everywhere
+> >
+> > You're right about the clang version, but it doesn't have anything to do
+> > with Buildroot's clang. The build process uses the clang that is installed
+> > on the host. For Debian bullseye, that is clang 11.
+>  >
+> > To emphasise, I am cross-building bpftool for my "arc-linux" target, and yet
+> > the bootstrap part of bpftool, uses the x86 clang of the Debian machine.
+>
+>
+>   Hm, that smells like we actually want to build host-clang (after updating it
+> to 11.1.0 of course) so that we are sure a known version of clang is used.
+> Possibly with a check-host-clang check to avoid building it if the installed
+> clang is good enough.
 
-https://github.com/rofl0r/proxychains-ng/releases/tag/v4.16
+Dealing with multiple external clang versions may be a bit tricky and difficult
+to test properly, we don't really want to use the system clang/llvm although
+clang/llvm external toolchain support may be desirable here as those could
+be tested by the autobuilders.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...OSIX-compliant-getnameinfo-signature.patch | 76 +++++++++++++++++++
- ...configure-fix-check_link_silent-test.patch | 41 ----------
- package/proxychains-ng/proxychains-ng.hash    |  4 +-
- package/proxychains-ng/proxychains-ng.mk      |  4 +-
- 4 files changed, 80 insertions(+), 45 deletions(-)
- create mode 100644 package/proxychains-ng/0001-add-configure-check-for-non-POSIX-compliant-getnameinfo-signature.patch
- delete mode 100644 package/proxychains-ng/0001-configure-fix-check_link_silent-test.patch
+It would be good to get clang/llvm updated soon as systemd is now using bpf for
+some service security/isolation features that we currently aren't able
+to support
+due to clang/llvm being too old.
 
-diff --git a/package/proxychains-ng/0001-add-configure-check-for-non-POSIX-compliant-getnameinfo-signature.patch b/package/proxychains-ng/0001-add-configure-check-for-non-POSIX-compliant-getnameinfo-signature.patch
-new file mode 100644
-index 0000000000..d111667c8b
---- /dev/null
-+++ b/package/proxychains-ng/0001-add-configure-check-for-non-POSIX-compliant-getnameinfo-signature.patch
-@@ -0,0 +1,76 @@
-+From 07c15a02f6890f56aa0b9341c27fc889956ab114 Mon Sep 17 00:00:00 2001
-+From: rofl0r <rofl0r@users.noreply.github.com>
-+Date: Tue, 25 Jan 2022 14:51:27 +0000
-+Subject: [PATCH] add configure check for non-POSIX compliant getnameinfo
-+ signature
-+
-+- glibc < 2.14 uses "unsigned" instead of "int" for flags
-+- openbsd and freebsd use "size_t" instead of socklen_t for servlen
-+  and nodelen, while still using socklen_t for salen.
-+
-+closes #430
-+
-+[Retrieved from:
-+https://github.com/rofl0r/proxychains-ng/commit/07c15a02f6890f56aa0b9341c27fc889956ab114]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure            | 16 ++++++++++++++++
-+ src/core.h           |  2 +-
-+ src/libproxychains.c |  4 ++--
-+ 3 files changed, 19 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 4c8bcbc..0102eb2 100755
-+--- a/configure
-++++ b/configure
-+@@ -175,6 +175,22 @@ ishaiku() {
-+ 
-+ check_compile 'whether C compiler works' '' 'int main() {return 0;}' || fail 'error: install a C compiler and library'
-+ 
-++if ! check_compile 'whether getnameinfo() servlen argument is POSIX compliant (socklen_t)' "-DGN_NODELEN_T=socklen_t -DGN_SERVLEN_T=socklen_t -DGN_FLAGS_T=int" \
-++'#define _GNU_SOURCE\n#include <netdb.h>\nint getnameinfo(const struct sockaddr *, socklen_t, char *, socklen_t, char *, socklen_t, int);int main() {\nreturn 0;}' ; then
-++ # GLIBC < 2.14
-++ if ! check_compile 'whether getnameinfo() flags argument is unsigned' "-DGN_NODELEN_T=socklen_t -DGN_SERVLEN_T=socklen_t -DGN_FLAGS_T=unsigned" \
-++  '#define _GNU_SOURCE\n#include <netdb.h>\nint getnameinfo(const struct sockaddr *, socklen_t, char *, socklen_t, char *, socklen_t, unsigned);int main() {\nreturn 0;}' ; then
-++  if ! check_compile 'whether getnameinfo() servlen argument is size_t' "-DGN_NODELEN_T=socklen_t -DGN_SERVLEN_T=size_t -DGN_FLAGS_T=int" \
-++   '#define _GNU_SOURCE\n#include <netdb.h>\nint getnameinfo(const struct sockaddr *, socklen_t, char *, socklen_t, char *, size_t, int);int main() {\nreturn 0;}' ; then
-++   # OpenBSD & FreeBSD
-++   if ! check_compile 'whether getnameinfo() servlen and nodelen argument is size_t' "-DGN_NODELEN_T=size_t -DGN_SERVLEN_T=size_t -DGN_FLAGS_T=int" \
-++    '#define _GNU_SOURCE\n#include <netdb.h>\nint getnameinfo(const struct sockaddr *, socklen_t, char *, size_t, char *, size_t, int);int main() {\nreturn 0;}' ; then
-++     fail "failed to detect getnameinfo signature"
-++   fi
-++  fi
-++ fi
-++fi
-++
-+ check_compile 'whether we have GNU-style getservbyname_r()' "-DHAVE_GNU_GETSERVBYNAME_R" \
-+ '#define _GNU_SOURCE\n#include <netdb.h>\nint main() {\nstruct servent *se = 0;struct servent se_buf;char buf[1024];\ngetservbyname_r("foo", (void*) 0, &se_buf, buf, sizeof(buf), &se);\nreturn 0;}'
-+ 
-+diff --git a/src/core.h b/src/core.h
-+index 31f3003..3045b86 100644
-+--- a/src/core.h
-++++ b/src/core.h
-+@@ -109,7 +109,7 @@ typedef int (*getaddrinfo_t)(const char *, const char *, const struct addrinfo *
-+ 			     struct addrinfo **);
-+ 
-+ typedef int (*getnameinfo_t) (const struct sockaddr *, socklen_t, char *, 
-+-			      socklen_t, char *, socklen_t, int);
-++			      GN_NODELEN_T, char *, GN_SERVLEN_T, GN_FLAGS_T);
-+ 
-+ typedef ssize_t (*sendto_t) (int sockfd, const void *buf, size_t len, int flags,
-+ 			     const struct sockaddr *dest_addr, socklen_t addrlen);
-+diff --git a/src/libproxychains.c b/src/libproxychains.c
-+index 001ffcd..578ff84 100644
-+--- a/src/libproxychains.c
-++++ b/src/libproxychains.c
-+@@ -729,8 +729,8 @@ HOOKFUNC(void, freeaddrinfo, struct addrinfo *res) {
-+ }
-+ 
-+ HOOKFUNC(int, getnameinfo, const struct sockaddr *sa, socklen_t salen,
-+-	           char *host, socklen_t hostlen, char *serv,
-+-	           socklen_t servlen, int flags)
-++	           char *host, GN_NODELEN_T hostlen, char *serv,
-++	           GN_SERVLEN_T servlen, GN_FLAGS_T flags)
-+ {
-+ 	INIT();
-+ 	PFUNC();
-diff --git a/package/proxychains-ng/0001-configure-fix-check_link_silent-test.patch b/package/proxychains-ng/0001-configure-fix-check_link_silent-test.patch
-deleted file mode 100644
-index aadfef9cd9..0000000000
---- a/package/proxychains-ng/0001-configure-fix-check_link_silent-test.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 4a557f242a76c6a2a3134acf1d3279818f8ab371 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 23 Jul 2021 09:50:36 +0200
--Subject: [PATCH] configure: fix check_link_silent test
--
--Replace -o /dev/null by -o "$tmpc".out when testing with
--check_link_silent otherwise test will fail with some bugged binutils
--(https://sourceware.org/bugzilla/show_bug.cgi?id=19526) since version
--4.13 and
--https://github.com/rofl0r/proxychains-ng/commit/35a674bdbc294730429a1007c9e7ce01e65b49b5:
--
--checking what's the option to use in linker to set library name ...
--cannot find an option to set library name
--package/pkg-generic.mk:249: recipe for target '/home/buildroot/autobuild/instance-2/output-1/build/proxychains-ng-4.14/.stamp_configured' failed
--
--Fixes:
-- - http://autobuild.buildroot.org/results/9320d9b2c69882e23bbe7b30057eb8bee0c9d2e5
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/rofl0r/proxychains-ng/pull/387]
-----
-- configure | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/configure b/configure
--index 8b21b97..cfe19e7 100755
----- a/configure
--+++ b/configure
--@@ -49,7 +49,8 @@ check_compile_run() {
-- 
-- check_link_silent() {
-- 	printf "$2" > "$tmpc"
---	$CC $OUR_CPPFLAGS $CPPFLAGS $1 $CFLAGS "$tmpc" -o /dev/null >/dev/null 2>&1
--+	$CC $OUR_CPPFLAGS $CPPFLAGS $1 $CFLAGS "$tmpc" -o "$tmpc".out  >/dev/null 2>&1
--+	rm -f "$tmpc".out
-- }
-- 
-- check_link() {
---- 
--2.30.2
--
-diff --git a/package/proxychains-ng/proxychains-ng.hash b/package/proxychains-ng/proxychains-ng.hash
-index 779f6b626d..e9016ffd86 100644
---- a/package/proxychains-ng/proxychains-ng.hash
-+++ b/package/proxychains-ng/proxychains-ng.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/rofl0r/proxychains-ng/releases/tag/v4.14
--sha512  75a1a4629d2b7ebac9b909a694b395339cf669fa4e23bfcc57938e46377b5619f31c9651d2bc457d1ad10ec1be7747981106392bf8bf65999cb7bb9c748d7e95  proxychains-ng-4.14.tar.xz
-+# From https://github.com/rofl0r/proxychains-ng/releases/tag/v4.16
-+sha512  c4402599043887b1481a46cec8d3ca5fcd2612b46b73a4d4ce025318640cd61b37181ad70236303933103006b313882dc57dc8838172863090f9ce33e9463a8d  proxychains-ng-4.16.tar.xz
- # Locally computed:
- sha256  86728623caeff60e9bcc37e03b432fd191de927eed48a72a3bb4ac4e53fe20df  COPYING
-diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
-index bb7c9ff687..c4d487c7db 100644
---- a/package/proxychains-ng/proxychains-ng.mk
-+++ b/package/proxychains-ng/proxychains-ng.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PROXYCHAINS_NG_VERSION = 4.14
-+PROXYCHAINS_NG_VERSION = 4.16
- PROXYCHAINS_NG_SOURCE = proxychains-ng-$(PROXYCHAINS_NG_VERSION).tar.xz
--PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
-+PROXYCHAINS_NG_SITE = https://github.com/rofl0r/proxychains-ng/releases/download/v$(PROXYCHAINS_NG_VERSION)
- PROXYCHAINS_NG_LICENSE = GPL-2.0+
- PROXYCHAINS_NG_LICENSE_FILES = COPYING
- PROXYCHAINS_NG_CPE_ID_VENDOR = proxychains-ng_project
--- 
-2.35.1
+>
+>   And we probably want a user-visible option to enable co-re then, because it's
+> going to be expensive to build.
 
+We may want to make llvm/clang part of the pre-built toolchains
+eventually, but for
+now I'd say we should just conditionally enable co-re here if we are
+already building
+a clang/llvm toolchain.
+
+There's some early GCC support for co-re in 12.1 which I was experimenting with
+as well which may reduce the need for a llvm/clang toolchain for co-re. The GCC
+toolchain BPF support build process is a bit complex however as one needs to
+sorta do a hybrid multitarget build with GCC and binutils since GCC
+treats BPF as
+a separate target(and since GCC along with the binutils GAS assembler
+don't natively
+handle multi-target toolchain builds themselves).
+
+I have an experimental branch for that here:
+https://github.com/buildroot/buildroot/compare/master...jameshilliard:ebpf
+
+I'll try and clean that up a bit once the GCC 12.1 series it is based
+on is merged:
+https://patchwork.ozlabs.org/project/buildroot/list/?series=302389
+
+>
+>   Regards,
+>   Arnout
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
