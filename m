@@ -1,56 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC1C4C43334
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A799C43334
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F80460B8D;
-	Sun, 19 Jun 2022 13:40:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F80460B8D
+	by smtp4.osuosl.org (Postfix) with ESMTP id C885241503;
+	Sun, 19 Jun 2022 13:40:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C885241503
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fDJ_1-6gkm8g; Sun, 19 Jun 2022 13:40:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B25C414E4;
+	Sun, 19 Jun 2022 13:40:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B25C414E4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F2ED41BF852
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:40:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC03460AEC
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:40:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC03460AEC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id izDn6VqJjXl6; Sun, 19 Jun 2022 13:40:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E8E060AEC;
-	Sun, 19 Jun 2022 13:40:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E8E060AEC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6A23F1BF852
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:40:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 529DD81D11
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:40:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 529DD81D11
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HNrVArpqE9JP for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 13:40:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DB8D81CE9
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4DB8D81CE9
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:40:13 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 086B0240004;
- Sun, 19 Jun 2022 13:40:10 +0000 (UTC)
-Message-ID: <d9cc1e0f-1511-5622-c290-54cee04df19b@korsgaard.com>
-Date: Sun, 19 Jun 2022 15:40:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220612160217.2210177-1-fontaine.fabrice@gmail.com>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nS8qLRpCmMJS for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 13:40:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA99560B6E
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:40:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA99560B6E
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id E5D7787303; Sun, 19 Jun 2022 13:27:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20220612160217.2210177-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH v3,
- 1/1] package/zstd: fix build without threads
+To: buildroot@buildroot.org
+Date: Sun, 19 Jun 2022 15:38:31 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 8f285e389046db9b264365c763f3aaa4bf0b5b03
+X-Git-Newrev: 734bb1b64a6ea2e0f5ceea97a54483bf5fc7c47b
+X-Patchwork-Hint: ignore
+Message-Id: <20220619132757.E5D7787303@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/zstd: fix build
+ without threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,38 +57,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/06/2022 18.02, Fabrice Fontaine wrote:
-> Move libzstd.pc in ZSTD_BUILD_LIBS so it will be suffixed by -nomt
-> without threads. As a result, libzstd.pc will not contain -pthread in
-> Libs.Private which will avoid the following static build failure with
-> zchunk) raised since commit 0f0e913f10caf21f23c2e46f210519a7a3bc0b32:
-> 
-> /home/buildroot/autobuild/instance-2/output-1/host/bin/aarch64_be-buildroot-linux-uclibc-gcc  -o src/unzck src/unzck.p/unzck.c.o src/unzck.p/util_common.c.o -Wl,--as-needed -Wl,--no-undefined -static -Wl,--start-group src/lib/libzck.a -largp /home/buildroot/autobuild/instance-2/output-1/host/aarch64_be-buildroot-linux-uclibc/sysroot/usr/lib/libzstd.a -pthread /home/buildroot/autobuild/instance-2/output-1/host/aarch64_be-buildroot-linux-uclibc/sysroot/usr/lib/libssl.a /home/buildroot/autobuild/instance-2/output-1/host/aarch64_be-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a -Wl,--end-group
-> /home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/aarch64_be-buildroot-linux-uclibc/10.3.0/../../../../aarch64_be-buildroot-linux-uclibc/bin/ld: cannot find -lpthread
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/481d1979920daaecac48dec763151e124651740f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v2 -> v3 (after review of Yann E. Morin):
->   - Drop ZSTD_BUILD_LIBS overrides
-> 
-> Changes v1 -> v2:
->   - Fix the following check-package error:
->     package/zstd/zstd.mk:67: conditional override of variable ZSTD_BUILD_LIBS
->     package/zstd/zstd.mk:70: conditional override of variable ZSTD_BUILD_LIBS
+commit: https://git.buildroot.net/buildroot/commit/?id=734bb1b64a6ea2e0f5ceea97a54483bf5fc7c47b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+Move libzstd.pc in ZSTD_BUILD_LIBS so it will be suffixed by -nomt
+without threads. As a result, libzstd.pc will not contain -pthread in
+Libs.Private which will avoid the following static build failure with
+zchunk) raised since commit 0f0e913f10caf21f23c2e46f210519a7a3bc0b32:
 
--- 
-Bye, Peter Korsgaard
+/home/buildroot/autobuild/instance-2/output-1/host/bin/aarch64_be-buildroot-linux-uclibc-gcc  -o src/unzck src/unzck.p/unzck.c.o src/unzck.p/util_common.c.o -Wl,--as-needed -Wl,--no-undefined -static -Wl,--start-group src/lib/libzck.a -largp /home/buildroot/autobuild/instance-2/output-1/host/aarch64_be-buildroot-linux-uclibc/sysroot/usr/lib/libzstd.a -pthread /home/buildroot/autobuild/instance-2/output-1/host/aarch64_be-buildroot-linux-uclibc/sysroot/usr/lib/libssl.a /home/buildroot/autobuild/instance-2/output-1/host/aarch64_be-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a -Wl,--end-group
+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/aarch64_be-buildroot-linux-uclibc/10.3.0/../../../../aarch64_be-buildroot-linux-uclibc/bin/ld: cannot find -lpthread
+
+Fixes:
+ - http://autobuild.buildroot.org/results/481d1979920daaecac48dec763151e124651740f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 253a951c4fe746306cdc3db80fae581d95ad6383)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/zstd/zstd.mk | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index a4bbada825..e8f6315222 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -38,14 +38,15 @@ endif
+ # zstd will append -O3 after $(CFLAGS), use MOREFLAGS to override again
+ ZSTD_OPTS += MOREFLAGS="$(TARGET_OPTIMIZATION)"
+ 
++ZSTD_BUILD_LIBS_BASENAMES = libzstd.pc
+ ifeq ($(BR2_STATIC_LIBS),y)
+-ZSTD_BUILD_LIBS = libzstd.a
++ZSTD_BUILD_LIBS_BASENAMES += libzstd.a
+ ZSTD_INSTALL_LIBS = install-static
+ else ifeq ($(BR2_SHARED_LIBS),y)
+-ZSTD_BUILD_LIBS = lib
++ZSTD_BUILD_LIBS_BASENAMES += lib
+ ZSTD_INSTALL_LIBS = install-shared
+ else
+-ZSTD_BUILD_LIBS = lib
++ZSTD_BUILD_LIBS_BASENAMES += lib
+ ZSTD_INSTALL_LIBS = install-static install-shared
+ endif
+ 
+@@ -63,17 +64,20 @@ endif
+ # purpose.
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ ZSTD_OPTS += HAVE_THREAD=1
+-ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
++ZSTD_BUILD_LIBS_THREAD_SUFFIX = -mt
+ else
+ ZSTD_OPTS += HAVE_THREAD=0
+-ZSTD_BUILD_LIBS := $(addsuffix -nomt,$(ZSTD_BUILD_LIBS))
++ZSTD_BUILD_LIBS_THREAD_SUFFIX = -nomt
+ endif
+ # check-package disable OverriddenVariable - override intended
+-ZSTD_BUILD_LIBS := $(addsuffix -release,$(ZSTD_BUILD_LIBS))
++ZSTD_BUILD_LIBS = \
++	$(addsuffix -release, \
++		$(addsuffix $(ZSTD_BUILD_LIBS_THREAD_SUFFIX), \
++			$(ZSTD_BUILD_LIBS_BASENAMES)))
+ 
+ define ZSTD_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		-C $(@D)/lib $(ZSTD_BUILD_LIBS) libzstd.pc
++		-C $(@D)/lib $(ZSTD_BUILD_LIBS)
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+ 		-C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
