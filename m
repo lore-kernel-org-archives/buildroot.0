@@ -1,50 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9984AC43334
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 16:37:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01E47C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 16:37:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4101C408EA;
-	Sun, 19 Jun 2022 16:37:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4101C408EA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90DD841506;
+	Sun, 19 Jun 2022 16:37:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90DD841506
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Rvzsal6LNwSR; Sun, 19 Jun 2022 16:37:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5D69408D4;
+	Sun, 19 Jun 2022 16:37:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5D69408D4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F1121BF4E7
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 388924010E
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 388924010E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FgaX2WR1QUdb; Sun, 19 Jun 2022 16:36:59 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D82C24010E;
-	Sun, 19 Jun 2022 16:36:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D82C24010E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 51AC11BF4E7
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 29C9860746
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29C9860746
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K1aNhzXNg89d for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 16:36:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D2B2C607F6
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 16:36:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2B2C607F6
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8BCBC873FA; Sun, 19 Jun 2022 16:24:08 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 18:30:45 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 18a6a38394eb582d2211c559483181fa7aa509ce
-X-Git-Newrev: 793ee1011e84bd79fa3d146dbe6c14c7fba39648
-X-Patchwork-Hint: ignore
-Message-Id: <20220619162408.8BCBC873FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Remove support for the NDS32 architecture
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HOxgIxBbeGUd for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 16:36:30 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09563400CC
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 09563400CC
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 16:36:29 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id gl15so16964426ejb.4
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 09:36:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=9lfgEy9/5PFCWrFGJe3ydrdGSUBWc7BMCcM3o9MCBu8=;
+ b=pooi7+NKOy16LZHcGWD15KpWTznFUoFQ+ko1IdsV0n+8We/ptpwCCBAj3hNGq45Y1M
+ N6Was3pMuPU4QsB6oDais4ObIRWzY12DdJ03A6SHN5Vi/P7V8RejpiePj4+nzqOgdK84
+ f3RpFKKQ7hqKTNId/w+4KX8ta9c6dpl5jA99TOJS27ljRyQ4/RIfTNKrSZWPCTyjwEE+
+ ETVAz9z3ket787CUx83AIkK3uC7aWFQRhwVg+W050uw7iRhsxVETrwaan+/zGy3S/k5Q
+ bfVB4+1eOmxwovsmwED2VDDNGyFx0G4vXsnpy6spc2Lu+1k8JvdpgO/6DJjZcCq+Y9S2
+ V0Pg==
+X-Gm-Message-State: AJIora8xwpbO14NWaMXA0NjKaT0q8LhWlXFbbCM8e+kMKMY6fYs3fR8K
+ qpWjmUEaWPqvXljg/7HnfBbQ4S+2btcDHw==
+X-Google-Smtp-Source: AGRyM1tnzJ/EvQG1ug2mvPeIQdpuIZH5vqcESAEGP2wSyFim9UuSIXTFwm70O2x30GpNDfaO5JOdHg==
+X-Received: by 2002:a17:907:3e04:b0:6f5:1132:59de with SMTP id
+ hp4-20020a1709073e0400b006f5113259demr18252150ejc.755.1655656587927; 
+ Sun, 19 Jun 2022 09:36:27 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ s18-20020a170906169200b006fec69a3978sm4672199ejd.207.2022.06.19.09.36.27
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 19 Jun 2022 09:36:27 -0700 (PDT)
+Message-ID: <72fdceba-eb04-e8c3-2679-0ca5196de5ba@mind.be>
+Date: Sun, 19 Jun 2022 18:36:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-GB
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot List <buildroot@buildroot.org>,
+ Yu Chien Peter Lin <peterlin@andestech.com>
+References: <20220607205921.3312256-1-thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220607205921.3312256-1-thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=9lfgEy9/5PFCWrFGJe3ydrdGSUBWc7BMCcM3o9MCBu8=;
+ b=VyZGJNoUHx0bjSkfpMfMV5kzRYZLRztqOAYRE3wH75+juPNakstcAZW4Rp0WNypgyL
+ 5TsYm5C/OGwzkrgSyPvUj+JQR3zfHomcd6t2JcA3Pzlu15SwCMese3HRO5X5Z2iCeS9K
+ MNI227bty8BFWXDdCToRUi4Nu8cSWC8LeC7XGRT2QkFuiDxtNkVu8xgaNugYY+TommtA
+ dWTATQ+GYmkCf9isdYseCu5o5HwwdKMIOnmtWxZBdjqH72GdI0KepcrjjXO08SWUM/td
+ 7K+esCedlIcrKhL/BZglzy4cWz7puKvHxVJ/osCLIFoa7UcNj6fKl6+wa5Kc4ejnlKcf
+ LlmQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=VyZGJNoU
+Subject: Re: [Buildroot] [PATCH 0/3] Remove NDS32 architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,256 +102,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=793ee1011e84bd79fa3d146dbe6c14c7fba39648
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The support for this architecture has been removed from the upstream
-Linux kernel, as of commit:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aec499c75cf8e0b599be4d559e6922b613085f8f
+On 07/06/2022 22:59, Thomas Petazzoni via buildroot wrote:
+> Hello,
+> 
+> The upstream Linux kernel community has removed the NDS32 architecture
+> support in commit
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aec499c75cf8e0b599be4d559e6922b613085f8f.
+> 
+> There has been very little to no activity in Buildroot around this CPU
+> architecture recently, so let's drop the support for this CPU
+> architecture.
+> 
+> Thomas
 
-Which states:
+  Series applied to master, thanks.
 
-  The nds32 architecture, also known as AndeStar V3, is a custom
-  32-bit RISC target designed by Andes Technologies. Support was added
-  to the kernel in 2016 as the replacement RISC-V based V5 processors
-  were already announced, and maintained by (current or former) Andes
-  employees.
+  Regards,
+  Arnout
 
-  As explained by Alan Kao, new customers are now all using RISC-V,
-  and all known nds32 users are already on longterm stable kernels
-  provided by Andes, with no development work going into mainline
-  support any more.
-
-There has also been little to no maintenance done in Buildroot for
-this architecture in recent times, so let's follow the Linux kernel
-community decision and drop support for this CPU architecture.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Yu Chien Peter Lin <peterlin@andestech.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in.legacy                         | 10 ++++++++++
- DEVELOPERS                               |  1 -
- arch/Config.in                           | 12 ------------
- arch/Config.in.nds32                     | 17 -----------------
- docs/manual/known-issues.txt             |  2 +-
- package/dhcpcd/Config.in                 |  1 -
- package/gdb/Config.in                    |  1 -
- package/gdb/Config.in.host               |  1 -
- package/libbsd/Config.in                 |  1 -
- package/postgresql/postgresql.mk         |  2 +-
- package/strace/Config.in                 |  2 +-
- package/uclibc-ng-test/uclibc-ng-test.mk |  2 +-
- utils/genrandconfig                      |  3 ---
- 13 files changed, 14 insertions(+), 41 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 9d7bdfab10..aea2b59abb 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -152,6 +152,16 @@ config BR2_PACKAGE_PHP_EXT_WDDX
- 	help
- 	  The WDDX extension was removed from php.
- 
-+comment "Legacy options removed in 2022.08"
-+
-+config BR2_nds32
-+	bool "nds32 architecture removed"
-+	select BR2_LEGACY
-+	help
-+	  Support for the nds32 architecture has been removed, due to
-+	  its support being removed from the upstream Linux kernel,
-+	  and its lack of maintenance in Buildroot.
-+
- comment "Legacy options removed in 2022.05"
- 
- config BR2_PACKAGE_KTAP
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f4e87eec09..c7a4b73ba7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2172,7 +2172,6 @@ F:	package/systemd/
- F:	package/tcf-agent/
- 
- N:	Yu Chien Peter Lin <peterlin@andestech.com>
--F:	arch/Config.in.nds32
- F:	board/andes
- F:	configs/andes_ae350_45_defconfig
- 
-diff --git a/arch/Config.in b/arch/Config.in
-index da499b37ab..366ce71f3a 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -153,14 +153,6 @@ config BR2_mips64el
- 	  http://www.mips.com/
- 	  http://en.wikipedia.org/wiki/MIPS_Technologies
- 
--config BR2_nds32
--	bool "nds32"
--	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
--	select BR2_ARCH_HAS_MMU_MANDATORY
--	help
--	  nds32 is a 32-bit architecture developed by Andes Technology.
--	  https://en.wikipedia.org/wiki/Andes_Technology
--
- config BR2_nios2
- 	bool "Nios II"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-@@ -449,10 +441,6 @@ if BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el
- source "arch/Config.in.mips"
- endif
- 
--if BR2_nds32
--source "arch/Config.in.nds32"
--endif
--
- if BR2_nios2
- source "arch/Config.in.nios2"
- endif
-diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
-deleted file mode 100644
-index 0babb2cf7f..0000000000
---- a/arch/Config.in.nds32
-+++ /dev/null
-@@ -1,17 +0,0 @@
--config BR2_ARCH
--	default "nds32le"
--
--config BR2_NORMALIZED_ARCH
--	default "nds32"
--
--config BR2_GCC_TARGET_ARCH
--	default "v3"
--
--config BR2_ENDIAN
--	default "LITTLE"
--
--config BR2_READELF_ARCH_NAME
--	default "Andes Technology compact code size embedded RISC processor family"
--
--# vim: ft=kconfig
--# -*- mode:kconfig; -*-
-diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
-index 616430b91c..743b794e87 100644
---- a/docs/manual/known-issues.txt
-+++ b/docs/manual/known-issues.txt
-@@ -7,7 +7,7 @@
-   if such options contain a +$+ sign. For example, the following is known
-   to break: +BR2_TARGET_LDFLAGS="-Wl,-rpath=\'$ORIGIN/../lib'"+
- 
--* The +libffi+ package is not supported on the SuperH 2, nds32, and ARMv7-M
-+* The +libffi+ package is not supported on the SuperH 2 and ARMv7-M
-   architectures.
- 
- * The +prboom+ package triggers a compiler failure with the SuperH 4
-diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
-index 3ebacb3ba2..8612d4ba81 100644
---- a/package/dhcpcd/Config.in
-+++ b/package/dhcpcd/Config.in
-@@ -20,7 +20,6 @@ config BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP
- 		BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on !(BR2_microblazeel || BR2_microblazebe) || \
- 		BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
--	depends on !BR2_nds32 || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on !BR2_nios2 || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on !BR2_or1k || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
- 	depends on !BR2_sh || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-index daad6c910d..a39837fe71 100644
---- a/package/gdb/Config.in
-+++ b/package/gdb/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_GDB_ARCH_SUPPORTS
- 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
- 	depends on !BR2_microblaze
- 	depends on !BR2_or1k
--	depends on !BR2_nds32
- 
- comment "gdb/gdbserver needs a toolchain w/ threads, threads debug"
- 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index d3dea0b0a7..43af64a1ed 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
- 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
- 	depends on !BR2_microblaze
- 	depends on !BR2_or1k
--	depends on !BR2_nds32
- 
- comment "Host GDB Options"
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index 093a2e646c..9f4b30f68c 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 	depends on !BR2_microblaze
- 	depends on !BR2_arc
- 	depends on !BR2_xtensa
--	depends on !BR2_nds32
- 
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index c893f8026c..38746eaf76 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -42,7 +42,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
- POSTGRESQL_CONF_OPTS += --disable-thread-safety
- endif
- 
--ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_riscv)$(BR2_xtensa)$(BR2_nds32),y)
-+ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_riscv)$(BR2_xtensa),y)
- POSTGRESQL_CONF_OPTS += --disable-spinlocks
- endif
- 
-diff --git a/package/strace/Config.in b/package/strace/Config.in
-index c394d4c398..dc245c7297 100644
---- a/package/strace/Config.in
-+++ b/package/strace/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_STRACE
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
- 	# needs at least kernel headers 5.0 on xtensa
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_xtensa
--	depends on !BR2_nds32 && !BR2_RISCV_32
-+	depends on !BR2_RISCV_32
- 	help
- 	  A useful diagnostic, instructional, and debugging tool.
- 	  Allows you to track what system calls a program makes
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
-index ea5f224219..6a658b4293 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.mk
-+++ b/package/uclibc-ng-test/uclibc-ng-test.mk
-@@ -39,7 +39,7 @@ ifeq ($(BR2_STATIC_LIBS),y)
- UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1 NO_NPTL=1 NO_DL=1
- endif
- # no TLS macros available
--ifeq ($(BR2_nds32)$(BR2_s390x),y)
-+ifeq ($(BR2_s390x),y)
- UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1
- endif
- 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index cf43778183..6f748fa709 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -246,9 +246,6 @@ def fixup_config(sysinfo, configfile):
-     if 'BR2_ARM_CPU_ARMV7M=y\n' in configlines and \
-        'BR2_PACKAGE_LIBFFI=y\n' in configlines:
-         return False
--    if 'BR2_nds32=y\n' in configlines and \
--       'BR2_PACKAGE_LIBFFI=y\n' in configlines:
--        return False
-     if 'BR2_PACKAGE_SUNXI_BOARDS=y\n' in configlines:
-         configlines.remove('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE=""\n')
-         configlines.append('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a10/hackberry.fex"\n')
+> 
+> Thomas Petazzoni (3):
+>    configs/andes_ae300: remove defconfig
+>    toolchain/toolchain-external/toolchain-external-andes-nds32: remove
+>      package
+>    Remove support for the NDS32 architecture
+> 
+>   Config.in.legacy                              | 10 ++++
+>   DEVELOPERS                                    |  3 --
+>   arch/Config.in                                | 12 -----
+>   arch/Config.in.nds32                          | 17 ------
+>   board/andes/ae300/ae300.fragment              |  1 -
+>   ...0001-nds32-Fix-boot-messages-garbled.patch | 28 ----------
+>   ...ve-redundant-YYLOC-global-declaratio.patch | 52 -------------------
+>   board/andes/ae300/readme.txt                  | 49 -----------------
+>   configs/andes_ae300_defconfig                 | 10 ----
+>   docs/manual/known-issues.txt                  |  2 +-
+>   package/dhcpcd/Config.in                      |  1 -
+>   package/gdb/Config.in                         |  1 -
+>   package/gdb/Config.in.host                    |  1 -
+>   package/libbsd/Config.in                      |  1 -
+>   package/postgresql/postgresql.mk              |  2 +-
+>   package/strace/Config.in                      |  2 +-
+>   package/uclibc-ng-test/uclibc-ng-test.mk      |  2 +-
+>   .../autobuild/andes-nds32.config              |  3 --
+>   .../autobuild/toolchain-configs.csv           |  1 -
+>   toolchain/toolchain-external/Config.in        |  6 ---
+>   .../toolchain-external-andes-nds32/Config.in  | 15 ------
+>   .../Config.in.options                         |  9 ----
+>   .../toolchain-external-andes-nds32.hash       |  2 -
+>   .../toolchain-external-andes-nds32.mk         | 10 ----
+>   utils/genrandconfig                           |  3 --
+>   25 files changed, 14 insertions(+), 229 deletions(-)
+>   delete mode 100644 arch/Config.in.nds32
+>   delete mode 100644 board/andes/ae300/ae300.fragment
+>   delete mode 100644 board/andes/ae300/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch
+>   delete mode 100644 board/andes/ae300/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
+>   delete mode 100644 board/andes/ae300/readme.txt
+>   delete mode 100644 configs/andes_ae300_defconfig
+>   delete mode 100644 support/config-fragments/autobuild/andes-nds32.config
+>   delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
+>   delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
+>   delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash
+>   delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
