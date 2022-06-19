@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3657C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 12:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD7CEC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 12:48:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51774410DB;
-	Sun, 19 Jun 2022 12:48:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51774410DB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9454F60B22;
+	Sun, 19 Jun 2022 12:48:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9454F60B22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MmZUbpT8VJCU; Sun, 19 Jun 2022 12:48:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KBZbju9xsG1j; Sun, 19 Jun 2022 12:48:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67D12410D1;
-	Sun, 19 Jun 2022 12:48:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67D12410D1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B99BF1BF9A4
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:47:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A348960864;
+	Sun, 19 Jun 2022 12:48:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A348960864
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F5821BF2E4
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8EE65408AE
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:47:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EE65408AE
+ by smtp3.osuosl.org (Postfix) with ESMTP id A896F607B5
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:47:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A896F607B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z2Xd3yal74DS for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aFnu4VzFHhm0 for <buildroot@lists.busybox.net>;
  Sun, 19 Jun 2022 12:47:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7AA840895
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFCD560864
  for <buildroot@buildroot.org>; Sun, 19 Jun 2022 12:47:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7AA840895
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFCD560864
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B9D9187168; Sun, 19 Jun 2022 12:34:51 +0000 (UTC)
+ id E290B87167; Sun, 19 Jun 2022 12:34:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 14:42:08 +0200
+Date: Sun, 19 Jun 2022 14:46:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ccea032c75a5a7ddbdc5b7b14957b2b4683b94fc
-X-Git-Newrev: 2579cc2cb32032c24b5f62946b05837a60340b3b
+X-Git-Oldrev: 1a6db550f50cb501f4dc0f41af4697e7fa9a97a7
+X-Git-Newrev: 30d94d4a3c39aaf251f2e7afcddb3d8d8ca2900c
 X-Patchwork-Hint: ignore
-Message-Id: <20220619123451.B9D9187168@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/postgresql: bump version to 14.4
+Message-Id: <20220619123451.E290B87167@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.3.19.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,44 +62,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2579cc2cb32032c24b5f62946b05837a60340b3b
+commit: https://git.buildroot.net/buildroot/commit/?id=30d94d4a3c39aaf251f2e7afcddb3d8d8ca2900c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://www.postgresql.org/about/news/postgresql-144-released-2470/
+https://dovecot.org/pipermail/dovecot-news/2022-June/000476.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 8ebe7b58fa..b2e94195e1 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 1862d97eef..124f834dca 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
 @@ -1,5 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v14.3/postgresql-14.3.tar.bz2.sha256
--sha256  279057368bf59a919c05ada8f95c5e04abb43e74b9a2a69c3d46a20e07a9af38  postgresql-14.3.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v14.4/postgresql-14.4.tar.bz2.sha256
-+sha256  c23b6237c5231c791511bdc79098617d6852e9e3bdf360efd8b5d15a1a3d8f6a  postgresql-14.4.tar.bz2
- 
- # License file, Locally calculated
- sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 45049f669d..c893f8026c 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally computed after checking signature
+-sha256  0173f693d441b6248b8a62aa5fd690021a1f04a12902653e0bf2e5b012fe437b  dovecot-2.3.19.tar.gz
++sha256  db5abcd87d7309659ea6b45b2cb6ee9c5f97486b2b719a5dd05a759e1f6a5c51  dovecot-2.3.19.1.tar.gz
+ sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 4a4d7a6989..7619250985 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--POSTGRESQL_VERSION = 14.3
-+POSTGRESQL_VERSION = 14.4
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).19
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).19.1
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
