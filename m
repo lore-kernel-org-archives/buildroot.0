@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D9C2C43334
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:04:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BB7EC43334
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:06:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0319E41514;
-	Sun, 19 Jun 2022 13:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0319E41514
+	by smtp3.osuosl.org (Postfix) with ESMTP id C02E260B34;
+	Sun, 19 Jun 2022 13:06:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C02E260B34
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wDhTBg1JtHQ1; Sun, 19 Jun 2022 13:04:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tDsD3O1rUkb8; Sun, 19 Jun 2022 13:06:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C405410E1;
-	Sun, 19 Jun 2022 13:04:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C405410E1
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE2FA607EC;
+	Sun, 19 Jun 2022 13:06:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE2FA607EC
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DC9CC1BF3D8
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:04:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E7E241BF3D8
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:06:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5582405A8
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:04:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5582405A8
+ by smtp2.osuosl.org (Postfix) with ESMTP id CFE53405A8
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:06:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFE53405A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o7n84lnj-KcI for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 13:04:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 12EB84012F
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:04:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12EB84012F
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 20B318717B; Sun, 19 Jun 2022 12:52:04 +0000 (UTC)
+ with ESMTP id 3oDZggLEw-cG for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 13:06:01 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7838A4012F
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7838A4012F
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:06:01 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 25C9420003;
+ Sun, 19 Jun 2022 13:05:57 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1o2ucm-006Fsa-U0; Sun, 19 Jun 2022 15:05:56 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 14:59:15 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: fb3c633cf24188b2300426201d1fe5578ebbf972
-X-Git-Newrev: f522e99e2774fb47625a0c4033f103d81b0110a4
-X-Patchwork-Hint: ignore
-Message-Id: <20220619125204.20B318717B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] arch/Config.in: armeb
- no-MMU is not supported
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220608191137.2065197-1-fontaine.fabrice@gmail.com>
+Date: Sun, 19 Jun 2022 15:05:56 +0200
+In-Reply-To: <20220608191137.2065197-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 8 Jun 2022 21:11:37 +0200")
+Message-ID: <87a6a8sszv.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/rpi-userland: fix libexecinfo
+ workaround
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,69 +64,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f522e99e2774fb47625a0c4033f103d81b0110a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-elf2flt does not support ARM big-endian, so supporting Cortex M3/M4/M7
-with armeb is not possibly.
+ > Fix libexecinfo workaround to avoid the following ffmpeg build failure
+ > with BR2_PACKAGE_RPI_USERLAND raised on uclibc and musl since commit
+ > bc4cc27705de50356d7e9945e41bd989fdc56fe8:
 
-Therefore this commit makes:
+ > /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/arm-linux-gcc
+ > --sysroot=/home/giuliobenetti/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot
+ > -mcpu=arm926ej-s -Wl,--as-needed -Wl,-z,noexecstack -o
+ > /tmp/ffconf.5K0cMIh3/test /tmp/ffconf.5K0cMIh3/test.o -lmmal_core
+ > -lmmal_util -lmmal_vc_client -lbcm_host -latomic
+ > /home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+ > /home/giuliobenetti/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libvcos.so:
+ > undefined reference to `backtrace_symbols'
 
- - MMU mandatory on armeb
- - Prevents from seeing Cortex M3/M4/M7 on armeb
+ > [...]
 
-Fixes:
+ > ERROR: mmal not found
 
-  http://autobuild.buildroot.net/results/9bca0cbfb6a66c455e74ad194526bca942665978/
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/64d21872d25fef35b72106133ed2aed300f52f2f
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c9b39a81b566f827686d41682ae29ccfdaead4ef)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- arch/Config.in     | 2 +-
- arch/Config.in.arm | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 1ea4e21413..1665009a62 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -49,7 +49,7 @@ config BR2_arm
- 
- config BR2_armeb
- 	bool "ARM (big endian)"
--	# MMU support is set by the subarchitecture file, arch/Config.in.arm
-+	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
- 	  ARM is a 32-bit reduced instruction set computer (RISC)
- 	  instruction set architecture (ISA) developed by ARM Holdings.
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 85040ac89f..657923f14b 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -259,6 +259,8 @@ config BR2_pj4
- 	select BR2_ARM_CPU_ARMV7A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 
-+# Cortex-M cores are only supported for little endian configurations
-+if BR2_arm
- comment "armv7m cores"
- config BR2_cortex_m3
- 	bool "cortex-M3"
-@@ -275,6 +277,7 @@ config BR2_cortex_m7
- 	select BR2_ARM_CPU_MAYBE_HAS_FPV5
- 	select BR2_ARM_CPU_ARMV7M
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
-+endif # BR2_arm
- endif # !BR2_ARCH_IS_64
- 
- comment "armv8 cores"
+Committed to 2022.05.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
