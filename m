@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 643CFC43334
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 16:36:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9984AC43334
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 16:37:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06AD560E56;
-	Sun, 19 Jun 2022 16:36:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06AD560E56
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4101C408EA;
+	Sun, 19 Jun 2022 16:37:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4101C408EA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FgaX2WR1QUdb; Sun, 19 Jun 2022 16:36:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D82C24010E;
+	Sun, 19 Jun 2022 16:36:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D82C24010E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 51AC11BF4E7
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 29C9860746
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29C9860746
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OhqQsVMAXKYf; Sun, 19 Jun 2022 16:36:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEB6E607F6;
-	Sun, 19 Jun 2022 16:36:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEB6E607F6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7BF311BF4E7
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 56A3740875
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56A3740875
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4BrNUPjqeypQ for <buildroot@lists.busybox.net>;
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K1aNhzXNg89d for <buildroot@lists.busybox.net>;
  Sun, 19 Jun 2022 16:36:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC32240867
+ by smtp3.osuosl.org (Postfix) with ESMTP id D2B2C607F6
  for <buildroot@buildroot.org>; Sun, 19 Jun 2022 16:36:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC32240867
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2B2C607F6
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 70366873F8; Sun, 19 Jun 2022 16:24:08 +0000 (UTC)
+ id 8BCBC873FA; Sun, 19 Jun 2022 16:24:08 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 18:26:41 +0200
+Date: Sun, 19 Jun 2022 18:30:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e122d962a1415fb595286ad71771701f9860765d
-X-Git-Newrev: 3d08d23b783fd22e3e153f3f2080d63ab2d36ea4
+X-Git-Oldrev: 18a6a38394eb582d2211c559483181fa7aa509ce
+X-Git-Newrev: 793ee1011e84bd79fa3d146dbe6c14c7fba39648
 X-Patchwork-Hint: ignore
-Message-Id: <20220619162408.70366873F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/andes_ae300: remove defconfig
+Message-Id: <20220619162408.8BCBC873FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Remove support for the NDS32 architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,206 +62,250 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d08d23b783fd22e3e153f3f2080d63ab2d36ea4
+commit: https://git.buildroot.net/buildroot/commit/?id=793ee1011e84bd79fa3d146dbe6c14c7fba39648
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As we're about to remove the nds32 architecture support, remove the
-only defconfig that used this CPU architecture.
+The support for this architecture has been removed from the upstream
+Linux kernel, as of commit:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aec499c75cf8e0b599be4d559e6922b613085f8f
+
+Which states:
+
+  The nds32 architecture, also known as AndeStar V3, is a custom
+  32-bit RISC target designed by Andes Technologies. Support was added
+  to the kernel in 2016 as the replacement RISC-V based V5 processors
+  were already announced, and maintained by (current or former) Andes
+  employees.
+
+  As explained by Alan Kao, new customers are now all using RISC-V,
+  and all known nds32 users are already on longterm stable kernels
+  provided by Andes, with no development work going into mainline
+  support any more.
+
+There has also been little to no maintenance done in Buildroot for
+this architecture in recent times, so let's follow the Linux kernel
+community decision and drop support for this CPU architecture.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: Yu Chien Peter Lin <peterlin@andestech.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS                                         |  1 -
- board/andes/ae300/ae300.fragment                   |  1 -
- .../0001-nds32-Fix-boot-messages-garbled.patch     | 28 ------------
- ...-Remove-redundant-YYLOC-global-declaratio.patch | 52 ----------------------
- board/andes/ae300/readme.txt                       | 49 --------------------
- configs/andes_ae300_defconfig                      | 10 -----
- 6 files changed, 141 deletions(-)
+ Config.in.legacy                         | 10 ++++++++++
+ DEVELOPERS                               |  1 -
+ arch/Config.in                           | 12 ------------
+ arch/Config.in.nds32                     | 17 -----------------
+ docs/manual/known-issues.txt             |  2 +-
+ package/dhcpcd/Config.in                 |  1 -
+ package/gdb/Config.in                    |  1 -
+ package/gdb/Config.in.host               |  1 -
+ package/libbsd/Config.in                 |  1 -
+ package/postgresql/postgresql.mk         |  2 +-
+ package/strace/Config.in                 |  2 +-
+ package/uclibc-ng-test/uclibc-ng-test.mk |  2 +-
+ utils/genrandconfig                      |  3 ---
+ 13 files changed, 14 insertions(+), 41 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 9d7bdfab10..aea2b59abb 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -152,6 +152,16 @@ config BR2_PACKAGE_PHP_EXT_WDDX
+ 	help
+ 	  The WDDX extension was removed from php.
+ 
++comment "Legacy options removed in 2022.08"
++
++config BR2_nds32
++	bool "nds32 architecture removed"
++	select BR2_LEGACY
++	help
++	  Support for the nds32 architecture has been removed, due to
++	  its support being removed from the upstream Linux kernel,
++	  and its lack of maintenance in Buildroot.
++
+ comment "Legacy options removed in 2022.05"
+ 
+ config BR2_PACKAGE_KTAP
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 86755bfe18..21f2fb21a5 100644
+index f4e87eec09..c7a4b73ba7 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2174,7 +2174,6 @@ F:	package/tcf-agent/
- N:	Yu Chien Peter Lin <peterlin@andestech.com>
- F:	arch/Config.in.nds32
- F:	board/andes
--F:	configs/andes_ae300_defconfig
- F:	configs/andes_ae350_45_defconfig
- F:	toolchain/toolchain-external/toolchain-external-andes-nds32/
+@@ -2172,7 +2172,6 @@ F:	package/systemd/
+ F:	package/tcf-agent/
  
-diff --git a/board/andes/ae300/ae300.fragment b/board/andes/ae300/ae300.fragment
+ N:	Yu Chien Peter Lin <peterlin@andestech.com>
+-F:	arch/Config.in.nds32
+ F:	board/andes
+ F:	configs/andes_ae350_45_defconfig
+ 
+diff --git a/arch/Config.in b/arch/Config.in
+index da499b37ab..366ce71f3a 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -153,14 +153,6 @@ config BR2_mips64el
+ 	  http://www.mips.com/
+ 	  http://en.wikipedia.org/wiki/MIPS_Technologies
+ 
+-config BR2_nds32
+-	bool "nds32"
+-	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+-	select BR2_ARCH_HAS_MMU_MANDATORY
+-	help
+-	  nds32 is a 32-bit architecture developed by Andes Technology.
+-	  https://en.wikipedia.org/wiki/Andes_Technology
+-
+ config BR2_nios2
+ 	bool "Nios II"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+@@ -449,10 +441,6 @@ if BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el
+ source "arch/Config.in.mips"
+ endif
+ 
+-if BR2_nds32
+-source "arch/Config.in.nds32"
+-endif
+-
+ if BR2_nios2
+ source "arch/Config.in.nios2"
+ endif
+diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
 deleted file mode 100644
-index 3b13d10740..0000000000
---- a/board/andes/ae300/ae300.fragment
+index 0babb2cf7f..0000000000
+--- a/arch/Config.in.nds32
 +++ /dev/null
-@@ -1 +0,0 @@
--CONFIG_NDS32_BUILTIN_DTB="ae3xx"
-diff --git a/board/andes/ae300/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch b/board/andes/ae300/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch
-deleted file mode 100644
-index adb60937bd..0000000000
---- a/board/andes/ae300/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 90d52d180dcc5d1300dc352ca709eb6453894143 Mon Sep 17 00:00:00 2001
--From: Nylon Chen <nylon7@andestech.com>
--Date: Wed, 28 Nov 2018 16:26:46 +0800
--Subject: [PATCH] nds32: Fix boot messages garbled
+@@ -1,17 +0,0 @@
+-config BR2_ARCH
+-	default "nds32le"
 -
--In order to display uart correctly we have to pass the correct setting of uart to kernel by bootarg.
--This patch will provide such settings to set the correct uart baud rate.
+-config BR2_NORMALIZED_ARCH
+-	default "nds32"
 -
--Signed-off-by: Nylon Chen <nylon7@andestech.com>
-----
-- arch/nds32/boot/dts/ae3xx.dts | 1 +
-- 1 file changed, 1 insertion(+)
+-config BR2_GCC_TARGET_ARCH
+-	default "v3"
 -
--diff --git a/arch/nds32/boot/dts/ae3xx.dts b/arch/nds32/boot/dts/ae3xx.dts
--index bb39749a6673..aefe2090926a 100644
----- a/arch/nds32/boot/dts/ae3xx.dts
--+++ b/arch/nds32/boot/dts/ae3xx.dts
--@@ -6,6 +6,7 @@
-- 	interrupt-parent = <&intc>;
-- 
-- 	chosen {
--+		bootargs = "memblock=debug earlycon console=ttyS0,38400n8 debug loglevel=7";
-- 		stdout-path = &serial0;
-- 	};
-- 
---- 
--2.18.0
+-config BR2_ENDIAN
+-	default "LITTLE"
 -
-diff --git a/board/andes/ae300/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch b/board/andes/ae300/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
-deleted file mode 100644
-index 71ae991816..0000000000
---- a/board/andes/ae300/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From f9df4186c17d686f1ca38f973d7a3a49e8e37c01 Mon Sep 17 00:00:00 2001
--From: Dirk Mueller <dmueller@suse.com>
--Date: Tue, 14 Jan 2020 18:53:41 +0100
--Subject: [PATCH] scripts/dtc: Remove redundant YYLOC global declaration
+-config BR2_READELF_ARCH_NAME
+-	default "Andes Technology compact code size embedded RISC processor family"
 -
--gcc 10 will default to -fno-common, which causes this error at link
--time:
--
--  (.text+0x0): multiple definition of `yylloc'; dtc-lexer.lex.o (symbol from plugin):(.text+0x0): first defined here
--
--This is because both dtc-lexer as well as dtc-parser define the same
--global symbol yyloc. Before with -fcommon those were merged into one
--defintion. The proper solution would be to to mark this as "extern",
--however that leads to:
--
--  dtc-lexer.l:26:16: error: redundant redeclaration of 'yylloc' [-Werror=redundant-decls]
--   26 | extern YYLTYPE yylloc;
--      |                ^~~~~~
--In file included from dtc-lexer.l:24:
--dtc-parser.tab.h:127:16: note: previous declaration of 'yylloc' was here
--  127 | extern YYLTYPE yylloc;
--      |                ^~~~~~
--cc1: all warnings being treated as errors
--
--which means the declaration is completely redundant and can just be
--dropped.
--
--Signed-off-by: Dirk Mueller <dmueller@suse.com>
--Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
--[robh: cherry-pick from upstream]
--Cc: stable@vger.kernel.org
--Signed-off-by: Rob Herring <robh@kernel.org>
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- scripts/dtc/dtc-lexer.l | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/scripts/dtc/dtc-lexer.l b/scripts/dtc/dtc-lexer.l
--index 06c040902444..d1b3810156c7 100644
----- a/scripts/dtc/dtc-lexer.l
--+++ b/scripts/dtc/dtc-lexer.l
--@@ -38,7 +38,6 @@ LINECOMMENT	"//".*\n
-- #include "srcpos.h"
-- #include "dtc-parser.tab.h"
-- 
---YYLTYPE yylloc;
-- extern bool treesource_error;
-- 
-- /* CAUTION: this will stop working if we ever use yyless() or yyunput() */
---- 
--2.25.1
--
-diff --git a/board/andes/ae300/readme.txt b/board/andes/ae300/readme.txt
-deleted file mode 100644
-index 51c05c9235..0000000000
---- a/board/andes/ae300/readme.txt
-+++ /dev/null
-@@ -1,49 +0,0 @@
--Intro
--=====
--
--Andestech(nds32) AE300 Platform
--
--The AE300 prototype demonstrates the AE300 example platform on the FPGA.
--It is composed of one Andestech(nds32) processor and AE300.
--
--How to build it
--===============
--
--Configure Buildroot
---------------------
--
--The andes_ae300_defconfig configuration is a sample configuration with
--all that is required to bring the FPGA Development Board:
--
--  $ make andes_ae300_defconfig
--
--Build everything
------------------
--Note: you will need to have access to the network, since Buildroot will
--download the packages' sources.
--
--  $ make
--
--Result of the build
---------------------
--
--After building, you should obtain this tree:
--
--output/images/
--    +-- vmlinux
--    +-- rootfs.cpio
--    +-- rootfs.tar
--
--How to run it
--=============
--
--Run
-----
--
--  Setup the Console with the rate 38400/8-N-1.
--
--  $ cd output/images
--  $ ../host/bin/nds32le-linux-gdb vmlinux
--  $ target remote [your host]
--  $ lo
--  $ c 
-diff --git a/configs/andes_ae300_defconfig b/configs/andes_ae300_defconfig
-deleted file mode 100644
-index ffcb4d7d38..0000000000
---- a/configs/andes_ae300_defconfig
-+++ /dev/null
-@@ -1,10 +0,0 @@
--BR2_nds32=y
--BR2_GLOBAL_PATCH_DIR="board/andes/ae300/patches"
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32=y
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/andes/ae300/ae300.fragment"
--BR2_TARGET_ROOTFS_INITRAMFS=y
+-# vim: ft=kconfig
+-# -*- mode:kconfig; -*-
+diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
+index 616430b91c..743b794e87 100644
+--- a/docs/manual/known-issues.txt
++++ b/docs/manual/known-issues.txt
+@@ -7,7 +7,7 @@
+   if such options contain a +$+ sign. For example, the following is known
+   to break: +BR2_TARGET_LDFLAGS="-Wl,-rpath=\'$ORIGIN/../lib'"+
+ 
+-* The +libffi+ package is not supported on the SuperH 2, nds32, and ARMv7-M
++* The +libffi+ package is not supported on the SuperH 2 and ARMv7-M
+   architectures.
+ 
+ * The +prboom+ package triggers a compiler failure with the SuperH 4
+diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
+index 3ebacb3ba2..8612d4ba81 100644
+--- a/package/dhcpcd/Config.in
++++ b/package/dhcpcd/Config.in
+@@ -20,7 +20,6 @@ config BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP
+ 		BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+ 	depends on !(BR2_microblazeel || BR2_microblazebe) || \
+ 		BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+-	depends on !BR2_nds32 || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+ 	depends on !BR2_nios2 || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+ 	depends on !BR2_or1k || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 	depends on !BR2_sh || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index daad6c910d..a39837fe71 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_or1k
+-	depends on !BR2_nds32
+ 
+ comment "gdb/gdbserver needs a toolchain w/ threads, threads debug"
+ 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index d3dea0b0a7..43af64a1ed 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
+ 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_or1k
+-	depends on !BR2_nds32
+ 
+ comment "Host GDB Options"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index 093a2e646c..9f4b30f68c 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_arc
+ 	depends on !BR2_xtensa
+-	depends on !BR2_nds32
+ 
+ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index c893f8026c..38746eaf76 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -42,7 +42,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
+ POSTGRESQL_CONF_OPTS += --disable-thread-safety
+ endif
+ 
+-ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_riscv)$(BR2_xtensa)$(BR2_nds32),y)
++ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_riscv)$(BR2_xtensa),y)
+ POSTGRESQL_CONF_OPTS += --disable-spinlocks
+ endif
+ 
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index c394d4c398..dc245c7297 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_STRACE
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
+ 	# needs at least kernel headers 5.0 on xtensa
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_xtensa
+-	depends on !BR2_nds32 && !BR2_RISCV_32
++	depends on !BR2_RISCV_32
+ 	help
+ 	  A useful diagnostic, instructional, and debugging tool.
+ 	  Allows you to track what system calls a program makes
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
+index ea5f224219..6a658b4293 100644
+--- a/package/uclibc-ng-test/uclibc-ng-test.mk
++++ b/package/uclibc-ng-test/uclibc-ng-test.mk
+@@ -39,7 +39,7 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1 NO_NPTL=1 NO_DL=1
+ endif
+ # no TLS macros available
+-ifeq ($(BR2_nds32)$(BR2_s390x),y)
++ifeq ($(BR2_s390x),y)
+ UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1
+ endif
+ 
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index cf43778183..6f748fa709 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -246,9 +246,6 @@ def fixup_config(sysinfo, configfile):
+     if 'BR2_ARM_CPU_ARMV7M=y\n' in configlines and \
+        'BR2_PACKAGE_LIBFFI=y\n' in configlines:
+         return False
+-    if 'BR2_nds32=y\n' in configlines and \
+-       'BR2_PACKAGE_LIBFFI=y\n' in configlines:
+-        return False
+     if 'BR2_PACKAGE_SUNXI_BOARDS=y\n' in configlines:
+         configlines.remove('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE=""\n')
+         configlines.append('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a10/hackberry.fex"\n')
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
