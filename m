@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C0F6C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:44:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF1DAC43334
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:44:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A8B9960E36;
-	Sun, 19 Jun 2022 13:44:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8B9960E36
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8985E824E3;
+	Sun, 19 Jun 2022 13:44:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8985E824E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wsnHWiH_M873; Sun, 19 Jun 2022 13:44:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lFbSBqx2YrlE; Sun, 19 Jun 2022 13:44:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD11960DC6;
-	Sun, 19 Jun 2022 13:44:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD11960DC6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ADAA81BF852
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89E1182451;
+	Sun, 19 Jun 2022 13:44:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89E1182451
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DC0781BF9A4
  for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:43:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85C6860E2C
+ by smtp4.osuosl.org (Postfix) with ESMTP id B629E414CB
  for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:43:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85C6860E2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B629E414CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l7kMw91u9r2u for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3jqXUIldilnn for <buildroot@lists.busybox.net>;
  Sun, 19 Jun 2022 13:43:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC7E660BDF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9EFCB4099B
  for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:43:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC7E660BDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EFCB4099B
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A2DF887318; Sun, 19 Jun 2022 13:31:25 +0000 (UTC)
+ id 99E9387317; Sun, 19 Jun 2022 13:31:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 15:42:18 +0200
+Date: Sun, 19 Jun 2022 15:41:03 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 707fa376837ef8d7e85b12b94ae9c9579a22d953
-X-Git-Newrev: 0ec408e5f3005948bb754520a7ded9ef7dbd3205
+X-Git-Oldrev: 734bb1b64a6ea2e0f5ceea97a54483bf5fc7c47b
+X-Git-Newrev: 707fa376837ef8d7e85b12b94ae9c9579a22d953
 X-Patchwork-Hint: ignore
-Message-Id: <20220619133125.A2DF887318@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libmediaart: link
- with -latomic if needed
+Message-Id: <20220619133125.99E9387317@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/dmalloc: fix
+ strndup detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ec408e5f3005948bb754520a7ded9ef7dbd3205
+commit: https://git.buildroot.net/buildroot/commit/?id=707fa376837ef8d7e85b12b94ae9c9579a22d953
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure with BR2_PACKAGE_LIBMEDIAART_BACKEND_QT
-raised since bump to version 1.9.5 in commit
-3db4d486d689b4a9d59c8f7637211893b0a1cb1b:
+Fix strndup detection as already done for strdup in commit
+f9287b263f0808c2f0632aa1560d88e39fbf970b to avoid the following build
+failure raised since bump to version 5.6.5 in commit
+736932c71552adc4dfa95c5236d1064860900e8a:
 
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: libmediaart/libmediaart-2.0.so.0.905.0.p/extractqt.cpp.o: in function `std::__atomic_base<int>::operator--()':
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/sparc-buildroot-linux-uclibc/include/c++/10.3.0/bits/atomic_base.h:334: undefined reference to `__atomic_fetch_sub_4'
+In file included from /nvmedata/autobuild/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/string.h:630:0,
+                 from append.c:34:
+dmalloc.h:396:7: error: expected identifier or '(' before '__extension__'
+ char *strndup(const char *string, const DMALLOC_SIZE max_len);
+       ^
 
 Fixes:
- - http://autobuild.buildroot.org/results/39aa4ecd37de774e06f67a6e1c4495dc1f0917b4
+ - http://autobuild.buildroot.org/results/2164dac43e2607a3570e8f98957a70f579d06cd3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit bd396de5ecd0c26be64e3c8fcd6edc9afe8dec1b)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit dcf695206ed3fb61d2828b6e40c91aa7c4c52fe3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmediaart/libmediaart.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/dmalloc/dmalloc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index 77665fd95b..de92cde849 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -24,6 +24,9 @@ else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_QT),y)
- LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- LIBMEDIAART_DEPENDENCIES += qt5base
- LIBMEDIAART_CONF_OPTS += -Dimage_library=qt5
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBMEDIAART_LDFLAGS += -latomic
-+endif
- endif
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 93dc45c15d..81ac467277 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -49,6 +49,7 @@ DMALLOC_CONF_ENV = CFLAGS="$(DMALLOC_CFLAGS)"
+ define DMALLOC_POST_PATCH
+ 	$(SED) 's/^ac_cv_page_size=0$$/ac_cv_page_size=12/' $(@D)/configure
+ 	$(SED) 's/ac_cv_strdup_macro=no$$/ac_cv_strdup_macro=yes/' $(@D)/configure
++	$(SED) 's/ac_cv_strndup_macro=no$$/ac_cv_strndup_macro=yes/' $(@D)/configure
+ 	$(SED) 's/(ld -/($${LD-ld} -/' $(@D)/configure
+ 	$(SED) 's/'\''ld -/"$${LD-ld}"'\'' -/' $(@D)/configure
+ 	$(SED) 's/ar cr/$$(AR) cr/' $(@D)/Makefile.in
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
