@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1F1CC43334
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 12:44:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E71CCC43334
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 12:45:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 669AE60B22;
-	Sun, 19 Jun 2022 12:44:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 669AE60B22
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FB9F81926;
+	Sun, 19 Jun 2022 12:45:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FB9F81926
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x_TPsoLGBI3h; Sun, 19 Jun 2022 12:44:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dXlQzV54O5zG; Sun, 19 Jun 2022 12:45:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88B76607A1;
-	Sun, 19 Jun 2022 12:44:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88B76607A1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8CB618188B;
+	Sun, 19 Jun 2022 12:45:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CB618188B
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2468C1BF2E4
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:44:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EF7ED1BF2E4
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0CCA6408B6
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:44:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CCA6408B6
+ by smtp2.osuosl.org (Postfix) with ESMTP id C789A40895
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:45:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C789A40895
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xi_4F-bqvyT4 for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 12:44:51 +0000 (UTC)
+ with ESMTP id 1-M0wrCBRkYS for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 12:45:14 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B59F40895
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4B59F40895
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 12:44:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE88D405A8
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DE88D405A8
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 12:45:13 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 17B64100003;
- Sun, 19 Jun 2022 12:44:48 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id E5535C0005;
+ Sun, 19 Jun 2022 12:45:11 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1o2uIJ-006F3X-Iy; Sun, 19 Jun 2022 14:44:47 +0200
+ id 1o2uIg-006F42-VW; Sun, 19 Jun 2022 14:45:10 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20220616174748.24361-1-bernd.kuhls@t-online.de>
- <20220616174748.24361-2-bernd.kuhls@t-online.de>
-Date: Sun, 19 Jun 2022 14:44:47 +0200
-In-Reply-To: <20220616174748.24361-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 16 Jun 2022 19:47:48 +0200")
-Message-ID: <87v8swstz4.fsf@dell.be.48ers.dk>
+References: <20220518175419.3955-1-bernd.kuhls@t-online.de>
+Date: Sun, 19 Jun 2022 14:45:10 +0200
+In-Reply-To: <20220518175419.3955-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 18 May 2022 19:54:19 +0200")
+Message-ID: <87r13kstyh.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/kodi-inputstream-ffmpegdirect:
- bump version to 19.0.2-Matrix
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: bump
+ version to 19.0.5-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
