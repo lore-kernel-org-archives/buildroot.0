@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AACF6C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 15:58:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 913B8C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 15:59:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54DCA81B26;
-	Sun, 19 Jun 2022 15:58:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54DCA81B26
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F28D8242D;
+	Sun, 19 Jun 2022 15:59:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F28D8242D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gYSl6kYriU_O; Sun, 19 Jun 2022 15:58:47 +0000 (UTC)
+	with ESMTP id aNDs6sQXieYD; Sun, 19 Jun 2022 15:59:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 64B0F8187F;
-	Sun, 19 Jun 2022 15:58:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64B0F8187F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 216B682444;
+	Sun, 19 Jun 2022 15:58:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 216B682444
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 300301BF990
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 15:57:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 336CD1BF32D
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 15:57:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94A93408EA
+ by smtp2.osuosl.org (Postfix) with ESMTP id A8DF8408F2
  for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 15:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94A93408EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8DF8408F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RplqoPB3JcKy for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 15:57:49 +0000 (UTC)
+ with ESMTP id T47cVL30Hh7i for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 15:57:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38493408E6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 90772408EF
  for <buildroot@buildroot.org>; Sun, 19 Jun 2022 15:57:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38493408E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90772408EF
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id F2645873C6; Sun, 19 Jun 2022 15:45:29 +0000 (UTC)
+ id 5A0E7873C0; Sun, 19 Jun 2022 15:45:30 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 17:22:12 +0200
+Date: Sun, 19 Jun 2022 17:22:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b4a5189b207b36bb6a827005093abe00bb44b222
-X-Git-Newrev: 613ed4a6cce8b54be94aa7763955545475e3f335
+X-Git-Oldrev: f90061fc384d42805145e0c6cfa01de0afe48f31
+X-Git-Newrev: e122d962a1415fb595286ad71771701f9860765d
 X-Patchwork-Hint: ignore
-Message-Id: <20220619154529.F2645873C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/timescaledb: bump version to 2.7.0
+Message-Id: <20220619154530.5A0E7873C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ecryptfs-utils: add libgpgme
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=613ed4a6cce8b54be94aa7763955545475e3f335
+commit: https://git.buildroot.net/buildroot/commit/?id=e122d962a1415fb595286ad71771701f9860765d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://github.com/timescale/timescaledb/releases/tag/2.7.0
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ecryptfs-utils/ecryptfs-utils.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index f186684339..6a9d7b2379 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  226af207105cc9e2d1744b303e475204a947047103f0e5697de4e8949e4dde75  timescaledb-2.6.1.tar.gz
-+sha256  9b30952da1186733f144c1ec3aa0c6332379207e5035e81037bd34e1ec9cefb3  timescaledb-2.7.0.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index 16fba11e21..dce9ea031d 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
+index 393ea4da78..6eb3add98b 100644
+--- a/package/ecryptfs-utils/ecryptfs-utils.mk
++++ b/package/ecryptfs-utils/ecryptfs-utils.mk
+@@ -16,6 +16,15 @@ ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
  
--TIMESCALEDB_VERSION = 2.6.1
-+TIMESCALEDB_VERSION = 2.7.0
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+ ECRYPTFS_UTILS_CONF_ENV = ac_cv_path_POD2MAN=true
+ 
++ifeq ($(BR2_PACKAGE_LIBGPGME),y)
++ECRYPTFS_UTILS_CONF_OPTS += \
++	--enable-gpg \
++	--with-gpgme-prefix=$(STAGING_DIR)/usr
++ECRYPTFS_UTILS_DEPENDENCIES += libgpgme
++else
++ECRYPTFS_UTILS_CONF_OPTS += --disable-gpg
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ ECRYPTFS_UTILS_CONF_OPTS += --enable-pam
+ ECRYPTFS_UTILS_DEPENDENCIES += linux-pam
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
