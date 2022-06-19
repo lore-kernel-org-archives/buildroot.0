@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39373C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:06:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AD83C43334
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D78CB60E2E;
-	Sun, 19 Jun 2022 13:06:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D78CB60E2E
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3F5681CEF;
+	Sun, 19 Jun 2022 13:06:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3F5681CEF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tj0CZhk6XQE3; Sun, 19 Jun 2022 13:06:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6lkIUSxsacWi; Sun, 19 Jun 2022 13:06:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABE7B60C33;
-	Sun, 19 Jun 2022 13:06:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABE7B60C33
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9F4861BF3D8
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:06:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4B3681CA0;
+	Sun, 19 Jun 2022 13:06:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4B3681CA0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F120B1BF3D8
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A3FE607EC
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:06:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A3FE607EC
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC71B81CA0
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC71B81CA0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E79MPoxyPdET for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 13:06:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Td5tk627362m for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 13:06:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EA77607D0
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:06:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EA77607D0
+ by smtp1.osuosl.org (Postfix) with ESMTP id B864381BB0
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:06:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B864381BB0
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6ABEF87187; Sun, 19 Jun 2022 12:53:43 +0000 (UTC)
+ id C3CFB8718A; Sun, 19 Jun 2022 12:53:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 15:05:31 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 0d9aaabd52f6d28ac481b8cd00a25233fb8e8676
-X-Git-Newrev: a6d51d0b2d8fb8fcee64fe250b8f8f543fc58931
+Date: Sun, 19 Jun 2022 15:05:09 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: f522e99e2774fb47625a0c4033f103d81b0110a4
+X-Git-Newrev: ea326b4884ab8d324c4e838573be977b0909fe5b
 X-Patchwork-Hint: ignore
-Message-Id: <20220619125343.6ABEF87187@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/rpi-userland: fix
+Message-Id: <20220619125359.C3CFB8718A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/rpi-userland: fix
  libexecinfo workaround
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6d51d0b2d8fb8fcee64fe250b8f8f543fc58931
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ea326b4884ab8d324c4e838573be977b0909fe5b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Fix libexecinfo workaround to avoid the following ffmpeg build failure
 with BR2_PACKAGE_RPI_USERLAND raised on uclibc and musl since commit
