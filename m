@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F837C43334
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:43:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7656DC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:43:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C8C660B4E;
-	Sun, 19 Jun 2022 13:43:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C8C660B4E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C71560E2C;
+	Sun, 19 Jun 2022 13:43:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C71560E2C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ocvb16kDrzeq; Sun, 19 Jun 2022 13:43:28 +0000 (UTC)
+	with ESMTP id FAEHLFs760GZ; Sun, 19 Jun 2022 13:43:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4602160AAD;
-	Sun, 19 Jun 2022 13:43:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4602160AAD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7C26C1BF852
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:43:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2989D60B6E;
+	Sun, 19 Jun 2022 13:43:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2989D60B6E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 125D31BF852
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:43:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 55CC560AAD
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:43:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55CC560AAD
+ by smtp2.osuosl.org (Postfix) with ESMTP id E0F2240157
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:43:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0F2240157
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SUhBiCgb1qp8 for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 13:43:24 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3380F607A4
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3380F607A4
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:43:23 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DBA291C0003;
- Sun, 19 Jun 2022 13:43:19 +0000 (UTC)
-Message-ID: <99103bdd-304f-5102-472d-7c64514d599e@korsgaard.com>
-Date: Sun, 19 Jun 2022 15:43:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220609211304.2939572-1-fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n_bAj-PgbC3Q for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 13:43:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD8EA4074E
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:43:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD8EA4074E
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id A397F87310; Sun, 19 Jun 2022 13:31:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20220609211304.2939572-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/libmediaart: link with -latomic
- if needed
+To: buildroot@buildroot.org
+Date: Sun, 19 Jun 2022 15:40:47 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 5ca7f462b0c2792f53d9af8ce8a7b4a88f9afeb5
+X-Git-Newrev: 3fa20a575ab30cafffbac613c727b00f8bda2f6f
+X-Patchwork-Hint: ignore
+Message-Id: <20220619133121.A397F87310@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/dmalloc: fix
+ strndup detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,28 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 09/06/2022 23.13, Fabrice Fontaine wrote:
-> Fix the following build failure with BR2_PACKAGE_LIBMEDIAART_BACKEND_QT
-> raised since bump to version 1.9.5 in commit
-> 3db4d486d689b4a9d59c8f7637211893b0a1cb1b:
-> 
-> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: libmediaart/libmediaart-2.0.so.0.905.0.p/extractqt.cpp.o: in function `std::__atomic_base<int>::operator--()':
-> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/sparc-buildroot-linux-uclibc/include/c++/10.3.0/bits/atomic_base.h:334: undefined reference to `__atomic_fetch_sub_4'
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/39aa4ecd37de774e06f67a6e1c4495dc1f0917b4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=3fa20a575ab30cafffbac613c727b00f8bda2f6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+Fix strndup detection as already done for strdup in commit
+f9287b263f0808c2f0632aa1560d88e39fbf970b to avoid the following build
+failure raised since bump to version 5.6.5 in commit
+736932c71552adc4dfa95c5236d1064860900e8a:
 
--- 
-Bye, Peter Korsgaard
+In file included from /nvmedata/autobuild/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/string.h:630:0,
+                 from append.c:34:
+dmalloc.h:396:7: error: expected identifier or '(' before '__extension__'
+ char *strndup(const char *string, const DMALLOC_SIZE max_len);
+       ^
+
+Fixes:
+ - http://autobuild.buildroot.org/results/2164dac43e2607a3570e8f98957a70f579d06cd3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit dcf695206ed3fb61d2828b6e40c91aa7c4c52fe3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dmalloc/dmalloc.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 93dc45c15d..81ac467277 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -49,6 +49,7 @@ DMALLOC_CONF_ENV = CFLAGS="$(DMALLOC_CFLAGS)"
+ define DMALLOC_POST_PATCH
+ 	$(SED) 's/^ac_cv_page_size=0$$/ac_cv_page_size=12/' $(@D)/configure
+ 	$(SED) 's/ac_cv_strdup_macro=no$$/ac_cv_strdup_macro=yes/' $(@D)/configure
++	$(SED) 's/ac_cv_strndup_macro=no$$/ac_cv_strndup_macro=yes/' $(@D)/configure
+ 	$(SED) 's/(ld -/($${LD-ld} -/' $(@D)/configure
+ 	$(SED) 's/'\''ld -/"$${LD-ld}"'\'' -/' $(@D)/configure
+ 	$(SED) 's/ar cr/$$(AR) cr/' $(@D)/Makefile.in
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
