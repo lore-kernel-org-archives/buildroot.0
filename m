@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38037C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A271C43334
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D2E7A824DD;
-	Sun, 19 Jun 2022 13:47:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2E7A824DD
+	by smtp1.osuosl.org (Postfix) with ESMTP id A759882438;
+	Sun, 19 Jun 2022 13:47:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A759882438
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F2bwmBvyQhJ2; Sun, 19 Jun 2022 13:47:08 +0000 (UTC)
+	with ESMTP id d4Tc5c-h-1Rn; Sun, 19 Jun 2022 13:47:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E4DC18244D;
-	Sun, 19 Jun 2022 13:47:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4DC18244D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BC6611BF9A4
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:46:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A2C3682660;
+	Sun, 19 Jun 2022 13:47:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2C3682660
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BE521BF852
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A3AAD40915
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:46:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3AAD40915
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6705D82444
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:46:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6705D82444
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G2F2QtDYTasg for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 13:46:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A89F40908
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:46:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A89F40908
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 752938732D; Sun, 19 Jun 2022 13:34:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EwCSviI4lopV for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 13:46:41 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4861F8244D
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4861F8244D
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:46:41 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 24E95100003;
+ Sun, 19 Jun 2022 13:46:37 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1o2vG9-006HWm-Ay; Sun, 19 Jun 2022 15:46:37 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 15:44:11 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 5b53f4072ba4adeca5d74949a0b3f3b3b2070ddb
-X-Git-Newrev: 473efeaf4ff98db68e2bf2b1cc8db120e0e701da
-X-Patchwork-Hint: ignore
-Message-Id: <20220619133410.752938732D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/ecryptfs-utils:
- add host-pkgconf dependency
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220609212510.2942019-1-fontaine.fabrice@gmail.com>
+Date: Sun, 19 Jun 2022 15:46:37 +0200
+In-Reply-To: <20220609212510.2942019-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 9 Jun 2022 23:25:10 +0200")
+Message-ID: <87a6a8rcjm.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2,1/1] package/noip: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,54 +63,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=473efeaf4ff98db68e2bf2b1cc8db120e0e701da
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Add host-pkgconf dependency to fix the following build failure (e.g. with
-BR2_PER_PACKAGE_DIRECTORIES):
+ > Pass TARGET_LDFLAGS (which will contain -static) through LIBS (as
+ > LDFLAGS is not supported) to fix the following static build failure
+ > (e.g. with musl):
 
-configure: error: OpenSSL not found
+ > /home/autobuild/autobuild/instance-15/output-1/host/lib/gcc/microblazeel-buildroot-linux-musl/10.3.0/../../../../microblazeel-buildroot-linux-musl/bin/ld:
+ > /home/autobuild/autobuild/instance-15/output-1/host/lib/gcc/microblazeel-buildroot-linux-musl/10.3.0/libgcc.a(unwind-dw2.o):
+ > in function `__gthread_once':
+ > /home/autobuild/autobuild/instance-15/output-1/build/host-gcc-final-10.3.0/build/microblazeel-buildroot-linux-musl/libgcc/gthr-default.h:700:
+ > undefined reference to `pthread_once'
 
-As a side-effect, NSS_{CFLAGS,LIBS} can be dropped
+ > While at it, alsp pass TARGET_{C,CPP}FLAGS through LIBS as suggested by Thomas
+ > Petazzoni
 
-Fixes:
- - http://autobuild.buildroot.org/results/ea16957e8f048b713f5d2713aa5f0c157b62f574
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/5ea9b1b976aecc401e0aff21eef3e31c8ed17181
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 80fc07c67a813f9b4844d4afbc562bc759b9174c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ecryptfs-utils/ecryptfs-utils.mk | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Thomas Petazzoni):
+ >  - Pass TARGET_{C,CPP}FLAGS through LIBS
 
-diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
-index f087e81a42..737c5b0ebb 100644
---- a/package/ecryptfs-utils/ecryptfs-utils.mk
-+++ b/package/ecryptfs-utils/ecryptfs-utils.mk
-@@ -11,14 +11,10 @@ ECRYPTFS_UTILS_LICENSE = GPL-2.0+
- ECRYPTFS_UTILS_LICENSE_FILES = COPYING
- ECRYPTFS_UTILS_CPE_ID_VENDOR = ecryptfs
- 
--ECRYPTFS_UTILS_DEPENDENCIES = keyutils libnss host-intltool
-+ECRYPTFS_UTILS_DEPENDENCIES = host-pkgconf keyutils libnss host-intltool
- ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
- 
--#Needed for build system to find pk11func.h and libnss3.so
--ECRYPTFS_UTILS_CONF_ENV = \
--	ac_cv_path_POD2MAN=true \
--	NSS_CFLAGS="-I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr" \
--	NSS_LIBS="-lnss3"
-+ECRYPTFS_UTILS_CONF_ENV = ac_cv_path_POD2MAN=true
- 
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- ECRYPTFS_UTILS_CONF_OPTS += --enable-pam
+Committed to 2022.05.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
