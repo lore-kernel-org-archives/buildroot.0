@@ -1,89 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D53AC43334
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 21:04:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6853C43334
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 21:11:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACDFA60EAB;
-	Sun, 19 Jun 2022 21:04:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACDFA60EAB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4460681C81;
+	Sun, 19 Jun 2022 21:11:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4460681C81
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KOVWq-uqwzMn; Sun, 19 Jun 2022 21:04:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uJvV2Yoxqbsp; Sun, 19 Jun 2022 21:11:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA2B760E9F;
-	Sun, 19 Jun 2022 21:04:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA2B760E9F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6D5C71BF292
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 21:04:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DB7381C40;
+	Sun, 19 Jun 2022 21:11:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DB7381C40
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9522E1BF3A0
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 21:11:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 469A7409E5
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 21:04:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 469A7409E5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E3E181C40
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 21:11:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E3E181C40
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZqbgLHjE2jRI for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 21:04:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dRorYLn4IQym for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 21:11:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB1D3408BE
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AB1D3408BE
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 21:04:11 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id e25so8258806wrc.13
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 14:04:11 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 011C581C11
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 011C581C11
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 21:11:15 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ i81-20020a1c3b54000000b0039c76434147so6873323wma.1
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 14:11:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=u6VTx+QzLYKrOOS0KPc6q7VltaXy2rnk+dxzB4BYDWI=;
- b=skYOOnQlaNW8mG76Lx2L4th6cHGjgeCX06+cREJMdtRr0ZZvDp4U5wIyOOf/ZRBWRt
- ZT7LSdMJtMmYnh7IqaJX+Hi4xBshVTWHyJflQvASLkNRDHQnzjmc6wav5QlPQb6THt9j
- 21/BFsRpXuGqrFT0vB1YeOxhkX7xv1I3e3oc/ybP5kmeXNiFZ5xAVsTzYKwkT9GWh/8n
- YYlYyU19v4s8ygDBaL1JN98qxZLex4RdguGBpbqitD9EN8hvCikOi6WTmLYInTcfe0Ie
- 3jPYje5In9ngf7dPb9AMdAnP90f7VAuOtBdqs/p3s9U88yoWaERGiZbrvQdcQL7UI2aP
- 8gKA==
-X-Gm-Message-State: AJIora91kPcr9vVZmJENCOQSjathFeNG4jxuf2tSHjx4HIjEA3H+brl5
- GNzmvZFhae9TTnoFAAWmSTCSKfJnBX0=
-X-Google-Smtp-Source: AGRyM1uNO/0AwKZXSCqx2IT5leV/Zm9qB+a5UZciVy+ZxKtB1niq/+MIEwyQWmd3YmxzjSUly4ndyw==
-X-Received: by 2002:a5d:4985:0:b0:21b:8d36:7669 with SMTP id
- r5-20020a5d4985000000b0021b8d367669mr3299305wrq.290.1655672649670; 
- Sun, 19 Jun 2022 14:04:09 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Mx8Diro884Z6iiNiSBFODAxK9wMDCiF87d3F1J2grGw=;
+ b=Wj93+ffCwycOsskS4rm784B0A1Lw4RWBxosq0QG/6iMk3j7EoXaifCOYL56wT59v3n
+ 2Ino5Nq1rcZiyeS/9X4RolbpBfGJ3C4xq0qhPgk36V4Et0z0p6ktngLul9K7zw2dQYrK
+ S1iM9VBzyJqnDn60LCg39PdNCOuf2jqJufGyELfPA9GNoVHHy0MXvWwrw2Cphh8ufi/i
+ lIwpHXWqqYsfO3heQGSqiB+GyCyV3F/4OTUZobF1WOF1kGwS06x7J7DtialsM+uGXPDj
+ KEKjqp1JhpwcDkktSs9vDbp9rnuQw+alfwFP1Cr3huBLyM72MVxA1UVmHJM1sALfw+aQ
+ W1cA==
+X-Gm-Message-State: AOAM530exS4WWUUkwX3iYBzZCPj4MlDlx3XpwAEt/1cdQFn8CDJ0MYhM
+ 1BYnV6YyqiEGrs4uo9/69itrwhPjVv4=
+X-Google-Smtp-Source: ABdhPJyQ98Je3RmM+DTDQRMudN5z3mEQWdNE2mn/RdhdcCM2ruc7cokiX+elvv8FV9LKE6J8LvOaJw==
+X-Received: by 2002:a7b:c1c1:0:b0:39c:58c4:c701 with SMTP id
+ a1-20020a7bc1c1000000b0039c58c4c701mr32745769wmj.117.1655673073977; 
+ Sun, 19 Jun 2022 14:11:13 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- h81-20020a1c2154000000b0039c41686421sm15677994wmh.17.2022.06.19.14.04.08
+ n6-20020adffe06000000b00213abce60e4sm10923209wrr.111.2022.06.19.14.11.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 Jun 2022 14:04:09 -0700 (PDT)
+ Sun, 19 Jun 2022 14:11:13 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 23:01:01 +0200
-Message-Id: <20220619210102.1021263-2-fontaine.fabrice@gmail.com>
+Date: Sun, 19 Jun 2022 23:08:31 +0200
+Message-Id: <20220619210831.1047319-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220619210102.1021263-1-fontaine.fabrice@gmail.com>
-References: <20220619210102.1021263-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=u6VTx+QzLYKrOOS0KPc6q7VltaXy2rnk+dxzB4BYDWI=;
- b=FO9SWozqGB5kyeinaB72XoggN5XJ4MmPCQDq5P8EFUMtmYZjr129dsQFyC4NuHE2MF
- il+UVPAkLfw7Z1obP8jOzC7nVlk0pOseuyXq7cMa4YHkPNP0l4XtTKLxsI7DiM+JyS9/
- NAP2Rk+9HdrREuKw82cv7tBluMDj9vb/uwm+Hk7OS7suYEub23g6Ev+lX6zgpF/kS1hu
- XFXsCWlPkPKEKfHe/S611MP80TrtKdTy8xWnuxE8Dmp+nHBij8IT88gaZ8kZd9BWANl1
- 9YMubbsQ3Jy6pacRKlrVGj73cRVN2JINFJRdJ74dTIKwzLY0kVJJR4NoyzVgOC+TvRRk
- YuJQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Mx8Diro884Z6iiNiSBFODAxK9wMDCiF87d3F1J2grGw=;
+ b=AMRd5fv5YNTATM48fOEOIf0BRmZfUzr2Kc88VDazpL7yfKdnCLKKHRDnraNJF6mPdV
+ zf+8fP5yZVihCRGCd0QEOLZxGiyrSjnw8EsnOVEsJmHIr/hPieP5I2BNFMJ1FWDQjJfd
+ xxJmwF+R4F7ZNy92HQiFQ3dNSCX2XBSuQKx0E9cqD+enNuVmijm7LiMwxws0czgpXnWi
+ HrI+YwgrIUaM7lwjzYBqQsLn63kQp09wL97L/zsyAH6us5JzetSNL3hR5GZK66Miqtfp
+ piXGyhMUAkME47ujvEBRlmi4rj4efM7C1YGUdca6iRPz3AokMIVIL5SdOukGJ4yVUDRW
+ JlzQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=FO9SWozq
-Subject: [Buildroot] [PATCH 2/3] package/bind: disable cmocka
+ header.a=rsa-sha256 header.s=20210112 header.b=AMRd5fv5
+Subject: [Buildroot] [PATCH 1/1] package/sudo: bump to version 1.9.11p2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,25 +100,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable cmocka (wich is enabled by default)
+License file renamed and year updated with
+https://github.com/sudo-project/sudo/commit/0ed92e6165c3f35d5188d1d0db04754fea023bcb
+https://github.com/sudo-project/sudo/commit/d02ba52fa41fcdfdd5b6500ed81419cd077cd79b
+
+https://www.sudo.ws/releases/stable/#1.9.11p2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bind/bind.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/sudo/sudo.hash | 4 ++--
+ package/sudo/sudo.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 0ce78d08cb..c84abe91a0 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -31,6 +31,7 @@ BIND_CONF_ENV = \
- 	BUILD_CFLAGS="$(TARGET_CFLAGS)" \
- 	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- BIND_CONF_OPTS = \
-+	--without-cmocka \
- 	--without-lmdb \
- 	--with-json-c=no \
- 	--enable-epoll \
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index 1b494af69c..63c98e2c4e 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,4 +1,4 @@
+ # From: http://www.sudo.ws/download.html
+-sha256  9e3b8b8da7def43b6e60c257abe80467205670fd0f7c081de1423c414b680f2d  sudo-1.9.8p2.tar.gz
++sha256  a21918eb9fc0063794f6887464fa2d924ab6d192e19063191a429605c22791d2  sudo-1.9.11p2.tar.gz
+ # Locally calculated
+-sha256  b678438594f04a7070a5fd125f7edffc871e13234baad318690b647bfc60705d  doc/LICENSE
++sha256  cf3a83366f9aabfd76d693ce03843106fcaaf6c76dfa97610f7c0b719a06e6bb  LICENSE.md
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index a752217123..2b9ba76a51 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-SUDO_VERSION_MAJOR = 1.9.8
++SUDO_VERSION_MAJOR = 1.9.11
+ SUDO_VERSION_MINOR = p2
+ SUDO_VERSION = $(SUDO_VERSION_MAJOR)$(SUDO_VERSION_MINOR)
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+-SUDO_LICENSE_FILES = doc/LICENSE
++SUDO_LICENSE_FILES = LICENSE.md
+ SUDO_CPE_ID_VERSION = $(SUDO_VERSION_MAJOR)
+ SUDO_CPE_ID_UPDATE = $(SUDO_VERSION_MINOR)
+ SUDO_SELINUX_MODULES = sudo
 -- 
 2.35.1
 
