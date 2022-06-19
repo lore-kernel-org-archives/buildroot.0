@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48695C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:43:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C0F6C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:44:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F245460E3D;
-	Sun, 19 Jun 2022 13:43:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F245460E3D
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8B9960E36;
+	Sun, 19 Jun 2022 13:44:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8B9960E36
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9uxPst7mv8Vt; Sun, 19 Jun 2022 13:43:58 +0000 (UTC)
+	with ESMTP id wsnHWiH_M873; Sun, 19 Jun 2022 13:44:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B2AA60B78;
-	Sun, 19 Jun 2022 13:43:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B2AA60B78
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD11960DC6;
+	Sun, 19 Jun 2022 13:44:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD11960DC6
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 17F6F1BF9A4
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:43:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ADAA81BF852
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:43:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F39C460AAD
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:43:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F39C460AAD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 85C6860E2C
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:43:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85C6860E2C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SBGCRoxvt0bx for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 13:43:40 +0000 (UTC)
+ with ESMTP id l7kMw91u9r2u for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 13:43:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB0FC60E2C
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:43:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB0FC60E2C
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC7E660BDF
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:43:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC7E660BDF
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B0C7487305; Sun, 19 Jun 2022 13:31:21 +0000 (UTC)
+ id A2DF887318; Sun, 19 Jun 2022 13:31:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 15:42:23 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 3fa20a575ab30cafffbac613c727b00f8bda2f6f
-X-Git-Newrev: 5b53f4072ba4adeca5d74949a0b3f3b3b2070ddb
+Date: Sun, 19 Jun 2022 15:42:18 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 707fa376837ef8d7e85b12b94ae9c9579a22d953
+X-Git-Newrev: 0ec408e5f3005948bb754520a7ded9ef7dbd3205
 X-Patchwork-Hint: ignore
-Message-Id: <20220619133121.B0C7487305@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libmediaart: link
+Message-Id: <20220619133125.A2DF887318@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libmediaart: link
  with -latomic if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b53f4072ba4adeca5d74949a0b3f3b3b2070ddb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0ec408e5f3005948bb754520a7ded9ef7dbd3205
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Fix the following build failure with BR2_PACKAGE_LIBMEDIAART_BACKEND_QT
 raised since bump to version 1.9.5 in commit
