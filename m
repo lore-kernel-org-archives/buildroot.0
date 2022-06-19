@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 673F7C43334
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:46:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4752CC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0ED9D60B4E;
-	Sun, 19 Jun 2022 13:46:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ED9D60B4E
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC33482470;
+	Sun, 19 Jun 2022 13:46:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC33482470
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uvn8QReBeq8I; Sun, 19 Jun 2022 13:46:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hY-xXw5uiQxJ; Sun, 19 Jun 2022 13:46:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3075F60AEC;
-	Sun, 19 Jun 2022 13:46:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3075F60AEC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 19EA01BF852
+	by smtp1.osuosl.org (Postfix) with ESMTP id E757F82444;
+	Sun, 19 Jun 2022 13:46:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E757F82444
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 215911BF9A4
  for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:46:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E88F04074E
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFE9D60AEC
  for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E88F04074E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFE9D60AEC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NNsf1YVyy72g for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9md_v5C6zYqb for <buildroot@lists.busybox.net>;
  Sun, 19 Jun 2022 13:46:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A8DB40157
+ by smtp3.osuosl.org (Postfix) with ESMTP id 21399607A4
  for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A8DB40157
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21399607A4
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1426387323; Sun, 19 Jun 2022 13:34:06 +0000 (UTC)
+ id 1CC4C87325; Sun, 19 Jun 2022 13:34:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 15:43:59 +0200
+Date: Sun, 19 Jun 2022 15:46:21 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0ec408e5f3005948bb754520a7ded9ef7dbd3205
-X-Git-Newrev: 00434d9d722a3431857cb09224a1a60d807d63c9
+X-Git-Oldrev: 00434d9d722a3431857cb09224a1a60d807d63c9
+X-Git-Newrev: db6a40e758f82b3caaf434204a0e2b036a18a5c1
 X-Patchwork-Hint: ignore
-Message-Id: <20220619133406.1426387323@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/ecryptfs-utils:
- add host-pkgconf dependency
+Message-Id: <20220619133406.1CC4C87325@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/noip: fix static
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00434d9d722a3431857cb09224a1a60d807d63c9
+commit: https://git.buildroot.net/buildroot/commit/?id=db6a40e758f82b3caaf434204a0e2b036a18a5c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Add host-pkgconf dependency to fix the following build failure (e.g. with
-BR2_PER_PACKAGE_DIRECTORIES):
+Pass TARGET_LDFLAGS (which will contain -static) through LIBS (as
+LDFLAGS is not supported) to fix the following static build failure
+(e.g. with musl):
 
-configure: error: OpenSSL not found
+/home/autobuild/autobuild/instance-15/output-1/host/lib/gcc/microblazeel-buildroot-linux-musl/10.3.0/../../../../microblazeel-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-15/output-1/host/lib/gcc/microblazeel-buildroot-linux-musl/10.3.0/libgcc.a(unwind-dw2.o): in function `__gthread_once':
+/home/autobuild/autobuild/instance-15/output-1/build/host-gcc-final-10.3.0/build/microblazeel-buildroot-linux-musl/libgcc/gthr-default.h:700: undefined reference to `pthread_once'
 
-As a side-effect, NSS_{CFLAGS,LIBS} can be dropped
+While at it, also pass TARGET_CFLAGS through LIBS as suggested by Thomas
+Petazzoni
 
 Fixes:
- - http://autobuild.buildroot.org/results/ea16957e8f048b713f5d2713aa5f0c157b62f574
+ - http://autobuild.buildroot.org/results/5ea9b1b976aecc401e0aff21eef3e31c8ed17181
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Arnout: remove CPPFLAGS, already in CFLAGS]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 80fc07c67a813f9b4844d4afbc562bc759b9174c)
+(cherry picked from commit c5ffe830f3bb8cadea7491b94f140ba6bd3d0486)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ecryptfs-utils/ecryptfs-utils.mk | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ package/noip/noip.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
-index f087e81a42..737c5b0ebb 100644
---- a/package/ecryptfs-utils/ecryptfs-utils.mk
-+++ b/package/ecryptfs-utils/ecryptfs-utils.mk
-@@ -11,14 +11,10 @@ ECRYPTFS_UTILS_LICENSE = GPL-2.0+
- ECRYPTFS_UTILS_LICENSE_FILES = COPYING
- ECRYPTFS_UTILS_CPE_ID_VENDOR = ecryptfs
+diff --git a/package/noip/noip.mk b/package/noip/noip.mk
+index b7fcc84e2f..8b57d82469 100644
+--- a/package/noip/noip.mk
++++ b/package/noip/noip.mk
+@@ -10,10 +10,13 @@ NOIP_SOURCE = noip-duc-linux.tar.gz
+ NOIP_LICENSE = GPL-2.0+
+ NOIP_LICENSE_FILES = COPYING
  
--ECRYPTFS_UTILS_DEPENDENCIES = keyutils libnss host-intltool
-+ECRYPTFS_UTILS_DEPENDENCIES = host-pkgconf keyutils libnss host-intltool
- ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
++# Pass TARGET_{C,LD}FLAGS through LIBS as noip doesn't rely on implicit
++# make rules
+ define NOIP_BUILD_CMDS
+ 	$(SED) "/^#define CONFIG_FILENAME/ s/PREFIX//" $(@D)/noip2.c
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" \
+-		CFLAGS="$(TARGET_CFLAGS)" PREFIX=/usr CONFDIR=/etc
++		LIBS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
++		PREFIX=/usr CONFDIR=/etc
+ endef
  
--#Needed for build system to find pk11func.h and libnss3.so
--ECRYPTFS_UTILS_CONF_ENV = \
--	ac_cv_path_POD2MAN=true \
--	NSS_CFLAGS="-I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr" \
--	NSS_LIBS="-lnss3"
-+ECRYPTFS_UTILS_CONF_ENV = ac_cv_path_POD2MAN=true
- 
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- ECRYPTFS_UTILS_CONF_OPTS += --enable-pam
+ define NOIP_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
