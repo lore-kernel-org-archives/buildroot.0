@@ -4,47 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BA0AC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 11:10:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0710BC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 12:20:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D54D415D7;
-	Sun, 19 Jun 2022 11:10:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D54D415D7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F3FF408F0;
+	Sun, 19 Jun 2022 12:20:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F3FF408F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hM9HhNFDZglK; Sun, 19 Jun 2022 11:10:34 +0000 (UTC)
+	with ESMTP id sMsL9IuOis4T; Sun, 19 Jun 2022 12:20:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B57F415C2;
-	Sun, 19 Jun 2022 11:10:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B57F415C2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 185B91BF9A4
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 11:10:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FFFE40895;
+	Sun, 19 Jun 2022 12:20:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FFFE40895
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E2D4B1BF2E4
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:20:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E672D415C2
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 11:10:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E672D415C2
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA7BA6068F
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:20:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA7BA6068F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dGwzdW97W6ee for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 11:10:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD1A6410B6
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 11:10:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD1A6410B6
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1AF7086F3E; Sun, 19 Jun 2022 10:57:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kE1G9bqjsDE2 for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 12:20:15 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7ACD860655
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7ACD860655
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 12:20:15 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 17CE1C0003;
+ Sun, 19 Jun 2022 12:20:11 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1o2tuV-006Dsu-4L; Sun, 19 Jun 2022 14:20:11 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 12:53:35 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9c0e8ace80cfb07e5181e3deeee277949bd64b30
-X-Git-Newrev: 4a3ea45da294896d812547be1339c18e1f37475e
-X-Patchwork-Hint: ignore
-Message-Id: <20220619105759.1AF7086F3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2022.02.3
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20220619064757.54361-1-bernd.kuhls@t-online.de>
+Date: Sun, 19 Jun 2022 14:20:11 +0200
+In-Reply-To: <20220619064757.54361-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 19 Jun 2022 08:47:57 +0200")
+Message-ID: <8735g0vo90.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/tor: security bump version to
+ 0.4.7.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,66 +64,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a3ea45da294896d812547be1339c18e1f37475e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fb3c633cf24188b2300426201d1fe5578ebbf972)
-[Peter: skip Makefile, Vagrantfile bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ > Fixes CVE-2022-33903.
+ > Release notes:
+ > https://raw.githubusercontent.com/torproject/tor/release-0.4.7/ReleaseNotes
 
-diff --git a/CHANGES b/CHANGES
-index 801af5b950..38e83171f2 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -89,6 +89,38 @@
- 	#14731: BR2_PACKAGE_IOSTAT
- 	#14751: LVM2 Outdated Link
- 
-+2022.02.3, released June 19th, 2022
-+
-+	Important / security related fixes.
-+
-+	Infrastructure: Fix building under paths containing regex
-+	characters (E.G. '+')
-+
-+	Toolchain: Only allow ppc64le variants for which a
-+	glibc/musl/uclibc toolchain is supported.
-+	Mark codescape mti/img mips toolchains as shared library only
-+	(glibc).
-+
-+	Updated/fixed packages: arm-trusted-firmware,
-+	at91dataflashboot, boinc, dhcp, diffutils, edk2, fbv, gensio,
-+	glibc, go, gtest, iucode-tool, janet, libcec, libcurl,
-+	libfreeimage, libnftnl, libodb-boost, linux, linux-tools,
-+	lttng-modules, mariadb, memcached, mono, mutt,
-+	network-manager, nginx, ntfs-3g, ogre, openjpeg, openvpn,
-+	qemu, qpid-proton, qt5webengine, rauc, rockchip-mali, rsyslog,
-+	ruby, runc, rustc, samba4, strace, tiff, uclibc, unrar, vim,
-+	webkitgtk, wpewebkit, xdriver_xf86-video-amdgpu,
-+	xdriver_xf86-video-ati, zlib-ng
-+
-+	New packages: qt5webengine-chromium,
-+	qt5webengine-chromium-catapult
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#14766: package dhcp on buildroot 2022.02.1 failed
-+	#14821: Samba server is failing to compile
-+	#14826: make qemu_x86_64_defconfig stopped working
-+
- 2022.02.2, released May 29th, 2022
- 
- 	Important / security related fixes.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
