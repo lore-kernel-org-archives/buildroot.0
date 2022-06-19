@@ -4,47 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD7CEC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 12:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5CA1C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 12:49:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9454F60B22;
-	Sun, 19 Jun 2022 12:48:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9454F60B22
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A8E760B64;
+	Sun, 19 Jun 2022 12:49:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A8E760B64
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KBZbju9xsG1j; Sun, 19 Jun 2022 12:48:21 +0000 (UTC)
+	with ESMTP id uKMzCJH2-6Pz; Sun, 19 Jun 2022 12:49:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A348960864;
-	Sun, 19 Jun 2022 12:48:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A348960864
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F6AE60864;
+	Sun, 19 Jun 2022 12:49:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F6AE60864
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F5821BF2E4
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:47:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D529F1BF2E4
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A896F607B5
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:47:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A896F607B5
+ by smtp3.osuosl.org (Postfix) with ESMTP id BD32C60864
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 12:49:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD32C60864
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aFnu4VzFHhm0 for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 12:47:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFCD560864
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 12:47:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFCD560864
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E290B87167; Sun, 19 Jun 2022 12:34:51 +0000 (UTC)
+ with ESMTP id yUZe8_QK3tEi for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 12:49:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A56806079D
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A56806079D
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 12:49:28 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 51AEE240002;
+ Sun, 19 Jun 2022 12:49:26 +0000 (UTC)
+Message-ID: <f9b44c8a-f183-64ee-139a-d842322e2f48@korsgaard.com>
+Date: Sun, 19 Jun 2022 14:49:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Content-Language: en-US
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220615210107.120358-1-fontaine.fabrice@gmail.com>
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 14:46:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1a6db550f50cb501f4dc0f41af4697e7fa9a97a7
-X-Git-Newrev: 30d94d4a3c39aaf251f2e7afcddb3d8d8ca2900c
-X-Patchwork-Hint: ignore
-Message-Id: <20220619123451.E290B87167@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.3.19.1
+In-Reply-To: <20220615210107.120358-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/qdecoder: security bump to
+ version 12.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,49 +62,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30d94d4a3c39aaf251f2e7afcddb3d8d8ca2900c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15/06/2022 23.01, Fabrice Fontaine wrote:
+> This is a maintenance release includes important security updates that
+> fixes possible vulnerability in URL decoding (see the report attached
+> below). All the qDecoder users are recommended to upgrade to this
+> version as soon as possible.
+> 
+> Fix CVE-2022-32265
+> 
+> Update hash of COPYING (change in year and URL removed:
+> https://github.com/wolkykim/qdecoder/commit/51bdcc2c158f2a12a817e8ebcb18f56e3121a808
+> https://github.com/wolkykim/qdecoder/commit/745878212df963a7a8081f09a747730e74faae63)
+> 
+> https://github.com/wolkykim/qdecoder/releases/tag/v12.1.0
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Release notes:
-https://dovecot.org/pipermail/dovecot-news/2022-June/000476.html
+Committed, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 1862d97eef..124f834dca 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256  0173f693d441b6248b8a62aa5fd690021a1f04a12902653e0bf2e5b012fe437b  dovecot-2.3.19.tar.gz
-+sha256  db5abcd87d7309659ea6b45b2cb6ee9c5f97486b2b719a5dd05a759e1f6a5c51  dovecot-2.3.19.1.tar.gz
- sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 4a4d7a6989..7619250985 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).19
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).19.1
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+--
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
