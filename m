@@ -1,90 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 959B7C43334
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 16:36:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88D8AC43334
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 16:36:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FB4D408E9;
-	Sun, 19 Jun 2022 16:36:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FB4D408E9
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DwpM5-qV2MgS; Sun, 19 Jun 2022 16:35:59 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36BC4408EB;
-	Sun, 19 Jun 2022 16:35:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36BC4408EB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 579C51BF4E7
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:35:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E82740A05
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:35:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E82740A05
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2122540875;
+	Sun, 19 Jun 2022 16:36:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2122540875
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NexAjf7lhcPK for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 16:35:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B24C2408AB
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B24C2408AB
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 16:35:43 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id s1so11629812wra.9
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 09:35:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=wwg8lKXhtoPSCdCkoetckCARYWaos3FtgRSz3IWlIbc=;
- b=65HoVtDIXSuBrpDZ5rxSC9hJy5WdKQLjSfFW7lk0boyJ0qQsUmvFHjmbtyZrkAvDy+
- 4KnJ8D7boGtVPSlQJZsu8jABso85Nnotrl+Xd0Uk0L5KZEQ4WVoLRdBaUD2LV1M7Tbui
- 9q1+HY70R+rT1+ww8LE5ciP9RiTdIVxMdfTXFy/+lfY4mkg+rT4anxIfwcRfg3n7+VKx
- bd/VL7VKtZRaHIuXFdWoarIZ4S/TNWyWhC8tTy8KToiCGfhrNoikN2AP5ZOn/MEAWqKE
- bc1e988+eZbLgQAxYundw3VdQvGXkNymi8qk2ZnqEjGP+IciyXN5hmoxMRuat8/PAM+9
- huYQ==
-X-Gm-Message-State: AJIora9UdVJ8V2TJTqSCuO+Re2//na9qlkAjcpK1mHH5ABpvFRCRBFGS
- SzqCNrH2cijXJW8xMeUmrcfACpukLK0=
-X-Google-Smtp-Source: AGRyM1uLHD4ZB8uThIpqJ4JGeqLjNyfVqsGAsiltEcwyE8/umdzWRJHw+8ngCPAOF+RhIR5zUGq4ZQ==
-X-Received: by 2002:a05:6000:1f8b:b0:219:bee5:6b77 with SMTP id
- bw11-20020a0560001f8b00b00219bee56b77mr18433422wrb.658.1655656541486; 
- Sun, 19 Jun 2022 09:35:41 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- y5-20020a7bcd85000000b0039c7c4a542csm11975878wmj.47.2022.06.19.09.35.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 Jun 2022 09:35:41 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N-q5iw7mEyvo; Sun, 19 Jun 2022 16:36:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B24D4087C;
+	Sun, 19 Jun 2022 16:36:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B24D4087C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 188A01BF4E7
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E6DAA60B15
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6DAA60B15
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DCjVsALua1du for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 16:36:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C2ED860746
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 16:36:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2ED860746
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 7C0B9873F9; Sun, 19 Jun 2022 16:24:08 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 18:32:55 +0200
-Message-Id: <20220619163255.636101-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220619163255.636101-1-fontaine.fabrice@gmail.com>
-References: <20220619163255.636101-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=wwg8lKXhtoPSCdCkoetckCARYWaos3FtgRSz3IWlIbc=;
- b=gg8giCYy6uvb7uZk1CM7O75bjX2eAV37AB0JcARxzUREgSSSfGoapmWcZkkDfamGZM
- HGeZACKdNs3DdBfrtUN3iNq42vVzqjEG2JssQIUqndXZcZpXPMlSyH8Is0asTh/Y/CeY
- VHRitiy5rMsAyGfec7n/t8mS4/AeQo0ZDm4FJ9UmATuygXtYaOnP4n/NIjHMsWUWXX0H
- sSQhsZHgKIarPup0ddyD+YV8/i/tbzUBnbo3z4piKdlUnzPZEADh+ZOuh34bQYop/1Mp
- 9jBBvDAtFxMvkyRKs+QI258rDKSWK8gweNixfnvacOUwo6LqSHWozO0cGBGCGW0+MB3Y
- HPrQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=gg8giCYy
-Subject: [Buildroot] [PATCH 2/2] package/tcpreplay: security bump to version
- 4.4.1
+Date: Sun, 19 Jun 2022 18:26:44 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3d08d23b783fd22e3e153f3f2080d63ab2d36ea4
+X-Git-Newrev: 18a6a38394eb582d2211c559483181fa7aa509ce
+X-Patchwork-Hint: ignore
+Message-Id: <20220619162408.7C0B9873F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ toolchain/toolchain-external/toolchain-external-andes-nds32: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,53 +57,150 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Fix CVE-2021-45386: tcpreplay 4.3.4 has a Reachable Assertion in
-  add_tree_ipv6() at tree.c
-- Fix CVE-2021-45387: tcpreplay 4.3.4 has a Reachable Assertion in
-  add_tree_ipv4() at tree.c.
+commit: https://git.buildroot.net/buildroot/commit/?id=18a6a38394eb582d2211c559483181fa7aa509ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/appneta/tcpreplay/blob/v4.4.1/docs/CHANGELOG
+As we're about to remove the nds32 architecture support from
+Buildroot, drop the toolchain-external-andes-nds32 external toolchain
+package.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Yu Chien Peter Lin <peterlin@andestech.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/tcpreplay/tcpreplay.hash | 4 ++--
- package/tcpreplay/tcpreplay.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                                |  1 -
+ support/config-fragments/autobuild/andes-nds32.config     |  3 ---
+ support/config-fragments/autobuild/toolchain-configs.csv  |  1 -
+ toolchain/toolchain-external/Config.in                    |  6 ------
+ .../toolchain-external-andes-nds32/Config.in              | 15 ---------------
+ .../toolchain-external-andes-nds32/Config.in.options      |  9 ---------
+ .../toolchain-external-andes-nds32.hash                   |  2 --
+ .../toolchain-external-andes-nds32.mk                     | 10 ----------
+ 8 files changed, 47 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index 8bcdae958c..32bfd219d4 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://github.com/appneta/tcpreplay/releases/download/v4.3.4/tcpreplay-4.3.4.tar.xz.asc
-+# https://github.com/appneta/tcpreplay/releases/download/v4.4.1/tcpreplay-4.4.1.tar.xz.asc
- # using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
--sha256  42c055106e55852c29d94bb6e1b9e001a0723349f2985eb893a47d384c85002b  tcpreplay-4.3.4.tar.xz
-+sha256  51f70ed14be5913f19c25cdfa530e98c14cedab1c76fbdd26eca7b61b57344f2  tcpreplay-4.4.1.tar.xz
- sha256  07cf5e92d475287a7d1663b33097f40cae5adf03ed8920fcd4374e3dfb48c8ad  docs/LICENSE
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 9f2da6439b..86894e468e 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 21f2fb21a5..f4e87eec09 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2175,7 +2175,6 @@ N:	Yu Chien Peter Lin <peterlin@andestech.com>
+ F:	arch/Config.in.nds32
+ F:	board/andes
+ F:	configs/andes_ae350_45_defconfig
+-F:	toolchain/toolchain-external/toolchain-external-andes-nds32/
  
--TCPREPLAY_VERSION = 4.3.4
-+TCPREPLAY_VERSION = 4.4.1
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
- TCPREPLAY_LICENSE = GPL-3.0
--- 
-2.35.1
-
+ N:	Olaf Rempel <razzor@kopf-tisch.de>
+ F:	package/ctorrent/
+diff --git a/support/config-fragments/autobuild/andes-nds32.config b/support/config-fragments/autobuild/andes-nds32.config
+deleted file mode 100644
+index 541677e002..0000000000
+--- a/support/config-fragments/autobuild/andes-nds32.config
++++ /dev/null
+@@ -1,3 +0,0 @@
+-BR2_nds32=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index f5e9bd8cf9..0b19051543 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -22,7 +22,6 @@ support/config-fragments/autobuild/br-arm-full-static.config,x86_64
+ support/config-fragments/autobuild/sourcery-arm.config,x86
+ 
+ # Toolchains used by test-pkg only when the '-a' option is passed:
+-support/config-fragments/autobuild/andes-nds32.config,x86
+ support/config-fragments/autobuild/arm-aarch64.config,x86_64
+ support/config-fragments/autobuild/bootlin-aarch64-glibc.config,x86_64
+ support/config-fragments/autobuild/bootlin-arcle-hs38-uclibc.config,x86_64
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 1a67e5645f..97cdc26df9 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -23,9 +23,6 @@ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config
+ # ARC
+ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
+ 
+-# Andes
+-source "toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in"
+-
+ # ARM (use ARM toolchain by default)
+ source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in"
+ source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in"
+@@ -130,9 +127,6 @@ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config
+ # ARC
+ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options"
+ 
+-# Andes
+-source "toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options"
+-
+ # ARM
+ source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in.options"
+ source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options"
+diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
+deleted file mode 100644
+index ecd50cc805..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
++++ /dev/null
+@@ -1,15 +0,0 @@
+-config BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32
+-	bool "Andes nds32"
+-	depends on BR2_nds32
+-	depends on !BR2_STATIC_LIBS
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_TOOLCHAIN_HAS_SSP
+-	help
+-	  nds32 toolchain for the nds32 architecture. It uses GCC
+-	  8.2.1, GDB 8.1.1, glibc 2.28, Binutils 2.30. It generates
+-	  code that runs on ae300 platform
+diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
+deleted file mode 100644
+index 7d11ae2098..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
++++ /dev/null
+@@ -1,9 +0,0 @@
+-if BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32
+-
+-config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+-	default "nds32le-linux"
+-
+-config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
+-	default "toolchain-external-andes-nds32"
+-
+-endif
+diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash
+deleted file mode 100644
+index 4314bb1f55..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# From https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521/nds32le-linux-glibc-v3-upstream.tar.gz
+-sha256 6050601df85ad93a4c211c1d57ed3773edb62aa505f7e07d7d555652e83af2cc  nds32le-linux-glibc-v3-upstream.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk
+deleted file mode 100644
+index fa29490b4f..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk
++++ /dev/null
+@@ -1,10 +0,0 @@
+-################################################################################
+-#
+-# toolchain-external-andes-nds32
+-#
+-################################################################################
+-
+-TOOLCHAIN_EXTERNAL_ANDES_NDS32_SITE = https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521
+-TOOLCHAIN_EXTERNAL_ANDES_NDS32_SOURCE = nds32le-linux-glibc-v3-upstream.tar.gz
+-
+-$(eval $(toolchain-external-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
