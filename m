@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEB11C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:11:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1F09C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A626360B64;
-	Sun, 19 Jun 2022 13:11:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A626360B64
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6CE5C60E36;
+	Sun, 19 Jun 2022 13:12:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CE5C60E36
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NSlH9bUwEcuS; Sun, 19 Jun 2022 13:11:46 +0000 (UTC)
+	with ESMTP id 5XCg7boGAlbt; Sun, 19 Jun 2022 13:11:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB4F060A98;
-	Sun, 19 Jun 2022 13:11:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB4F060A98
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 31D451BF3D8
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:11:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8675560B34;
+	Sun, 19 Jun 2022 13:11:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8675560B34
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E1C051BF3D8
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:11:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1AC9560A98
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:11:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AC9560A98
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA02F40895
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:11:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA02F40895
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yah41DQEjFly for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 13:11:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UZWXIMjgflJX for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 13:11:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F6CC605B3
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:11:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F6CC605B3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 081834012F
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:11:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 081834012F
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 59EA887279; Sun, 19 Jun 2022 12:59:14 +0000 (UTC)
+ id 129D7872D8; Sun, 19 Jun 2022 12:59:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 15:10:51 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 279c2b1a9e13c46f810658134d77c4f1027e2587
-X-Git-Newrev: 4f2657a5581b35d28a5d9762430d43519619bd58
+Date: Sun, 19 Jun 2022 15:10:13 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: abd6027aa10483086f9e5e14e632703e99076359
+X-Git-Newrev: ca6747ae72a9d3ea49901da18988b3cde1f53863
 X-Patchwork-Hint: ignore
-Message-Id: <20220619125914.59EA887279@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/luajit: disable
+Message-Id: <20220619125921.129D7872D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/luajit: disable
  on armeb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f2657a5581b35d28a5d9762430d43519619bd58
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ca6747ae72a9d3ea49901da18988b3cde1f53863
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 armeb has never been supported by luajit since its addition in version
 2.0.0 by
