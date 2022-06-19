@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8587C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:04:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D9C2C43334
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 13:04:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DD83410E6;
-	Sun, 19 Jun 2022 13:04:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DD83410E6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0319E41514;
+	Sun, 19 Jun 2022 13:04:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0319E41514
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7ZM8lMYDC8gv; Sun, 19 Jun 2022 13:04:32 +0000 (UTC)
+	with ESMTP id wDhTBg1JtHQ1; Sun, 19 Jun 2022 13:04:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5768D410D2;
-	Sun, 19 Jun 2022 13:04:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5768D410D2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C405410E1;
+	Sun, 19 Jun 2022 13:04:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C405410E1
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8342B1BF9A4
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:04:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DC9CC1BF3D8
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:04:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6BFC6408BC
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:04:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BFC6408BC
+ by smtp2.osuosl.org (Postfix) with ESMTP id C5582405A8
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 13:04:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5582405A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uX85ssDgFysi for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 13:04:14 +0000 (UTC)
+ with ESMTP id o7n84lnj-KcI for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 13:04:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 80CD2408B6
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:04:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80CD2408B6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 12EB84012F
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 13:04:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12EB84012F
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8A5B687173; Sun, 19 Jun 2022 12:51:55 +0000 (UTC)
+ id 20B318717B; Sun, 19 Jun 2022 12:52:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jun 2022 14:58:53 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 730baf05bfebac721bf5002d72787937a4da6378
-X-Git-Newrev: 6618b27113499e67be714b6080c3173665f29b34
+Date: Sun, 19 Jun 2022 14:59:15 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: fb3c633cf24188b2300426201d1fe5578ebbf972
+X-Git-Newrev: f522e99e2774fb47625a0c4033f103d81b0110a4
 X-Patchwork-Hint: ignore
-Message-Id: <20220619125155.8A5B687173@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] arch/Config.in: armeb
+Message-Id: <20220619125204.20B318717B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] arch/Config.in: armeb
  no-MMU is not supported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6618b27113499e67be714b6080c3173665f29b34
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f522e99e2774fb47625a0c4033f103d81b0110a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 elf2flt does not support ARM big-endian, so supporting Cortex M3/M4/M7
 with armeb is not possibly.
@@ -87,7 +87,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/arch/Config.in b/arch/Config.in
-index 49e16fce38..da499b37ab 100644
+index 1ea4e21413..1665009a62 100644
 --- a/arch/Config.in
 +++ b/arch/Config.in
 @@ -49,7 +49,7 @@ config BR2_arm
@@ -100,19 +100,19 @@ index 49e16fce38..da499b37ab 100644
  	  ARM is a 32-bit reduced instruction set computer (RISC)
  	  instruction set architecture (ISA) developed by ARM Holdings.
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index fa2e882550..eb71d70430 100644
+index 85040ac89f..657923f14b 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
-@@ -242,6 +242,8 @@ config BR2_pj4
- 	select BR2_ARM_CPU_HAS_VFPV3
+@@ -259,6 +259,8 @@ config BR2_pj4
  	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
  
 +# Cortex-M cores are only supported for little endian configurations
 +if BR2_arm
  comment "armv7m cores"
  config BR2_cortex_m3
  	bool "cortex-M3"
-@@ -258,6 +260,7 @@ config BR2_cortex_m7
+@@ -275,6 +277,7 @@ config BR2_cortex_m7
  	select BR2_ARM_CPU_MAYBE_HAS_FPV5
  	select BR2_ARM_CPU_ARMV7M
  	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
