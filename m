@@ -1,96 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01E47C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 16:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EC88CCA480
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 16:37:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90DD841506;
-	Sun, 19 Jun 2022 16:37:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90DD841506
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A59460E56;
+	Sun, 19 Jun 2022 16:37:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A59460E56
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rvzsal6LNwSR; Sun, 19 Jun 2022 16:37:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rtVO7tdQYzlE; Sun, 19 Jun 2022 16:37:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5D69408D4;
-	Sun, 19 Jun 2022 16:37:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5D69408D4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5F1121BF4E7
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 577F460B15;
+	Sun, 19 Jun 2022 16:37:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 577F460B15
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BD6D01BF4E7
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:37:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 388924010E
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:36:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 388924010E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 98CBE81C2F
+ for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 16:37:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98CBE81C2F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HOxgIxBbeGUd for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 16:36:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wRQlLm6I5KSX for <buildroot@lists.busybox.net>;
+ Sun, 19 Jun 2022 16:37:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09563400CC
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 09563400CC
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 16:36:29 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id gl15so16964426ejb.4
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 09:36:29 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90F3481C21
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 90F3481C21
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 16:37:00 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id a10so4629619wmj.5
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 09:37:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=9lfgEy9/5PFCWrFGJe3ydrdGSUBWc7BMCcM3o9MCBu8=;
- b=pooi7+NKOy16LZHcGWD15KpWTznFUoFQ+ko1IdsV0n+8We/ptpwCCBAj3hNGq45Y1M
- N6Was3pMuPU4QsB6oDais4ObIRWzY12DdJ03A6SHN5Vi/P7V8RejpiePj4+nzqOgdK84
- f3RpFKKQ7hqKTNId/w+4KX8ta9c6dpl5jA99TOJS27ljRyQ4/RIfTNKrSZWPCTyjwEE+
- ETVAz9z3ket787CUx83AIkK3uC7aWFQRhwVg+W050uw7iRhsxVETrwaan+/zGy3S/k5Q
- bfVB4+1eOmxwovsmwED2VDDNGyFx0G4vXsnpy6spc2Lu+1k8JvdpgO/6DJjZcCq+Y9S2
- V0Pg==
-X-Gm-Message-State: AJIora8xwpbO14NWaMXA0NjKaT0q8LhWlXFbbCM8e+kMKMY6fYs3fR8K
- qpWjmUEaWPqvXljg/7HnfBbQ4S+2btcDHw==
-X-Google-Smtp-Source: AGRyM1tnzJ/EvQG1ug2mvPeIQdpuIZH5vqcESAEGP2wSyFim9UuSIXTFwm70O2x30GpNDfaO5JOdHg==
-X-Received: by 2002:a17:907:3e04:b0:6f5:1132:59de with SMTP id
- hp4-20020a1709073e0400b006f5113259demr18252150ejc.755.1655656587927; 
- Sun, 19 Jun 2022 09:36:27 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ bh=VRgRs3DYLcOkXrEKv+W+79ZC7bBTLPjSDYGC3Xehyy0=;
+ b=nTSa/zPTsnmQrbl7Hq0C/zrWbeggCIkpvl5aiM5ROdzrwQve6HBz7LcNnqZVJJLyxh
+ TpdceeUkgpuNdnOoWicWute3PjEiUZlqNC9p6rKpT3qdl8B8fKLq5U6ivrDK0EBjNowY
+ NMch9wyhF3ISe6qayreMHquKtu1SIwlh5ETSaAUoyYmHHDTNYDYXiI/bIZ9GAYlOs0xX
+ UkumS/JxQKGEWQDHq23/X8gqS7Q5BdLOO4tmzBlOxIqaa3ZJquIOdbkLrdAASLWxrJ0p
+ isDWWV3flmxvLvoIq83rSSdjcHaPrkAOgs2ZgO/bmypDbwdWLmG0HDvST8JFQyWimqPG
+ 8TDQ==
+X-Gm-Message-State: AJIora+/aqIPZCjLyxbB1+WCXa0MtkCPrgz8VQtMSRAjlQWr2qbApGm2
+ dwGS0ZVc16NlDyM5BfvF6AZ24XP2wwM=
+X-Google-Smtp-Source: AGRyM1sL2nHIU8C6n/kVFyn1dZU5jL17bQ2wozBBkv3NxdiHwqlbVS2rNwkJCEwKfGhRRr0C1yYAEg==
+X-Received: by 2002:a05:600c:4fc6:b0:39c:9417:a8bf with SMTP id
+ o6-20020a05600c4fc600b0039c9417a8bfmr20133263wmq.26.1655656618616; 
+ Sun, 19 Jun 2022 09:36:58 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- s18-20020a170906169200b006fec69a3978sm4672199ejd.207.2022.06.19.09.36.27
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 19 Jun 2022 09:36:27 -0700 (PDT)
-Message-ID: <72fdceba-eb04-e8c3-2679-0ca5196de5ba@mind.be>
-Date: Sun, 19 Jun 2022 18:36:25 +0200
+ p33-20020a05600c1da100b0039ef836d841sm5460946wms.42.2022.06.19.09.36.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 19 Jun 2022 09:36:58 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 19 Jun 2022 18:34:15 +0200
+Message-Id: <20220619163415.636262-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot List <buildroot@buildroot.org>,
- Yu Chien Peter Lin <peterlin@andestech.com>
-References: <20220607205921.3312256-1-thomas.petazzoni@bootlin.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220607205921.3312256-1-thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=9lfgEy9/5PFCWrFGJe3ydrdGSUBWc7BMCcM3o9MCBu8=;
- b=VyZGJNoUHx0bjSkfpMfMV5kzRYZLRztqOAYRE3wH75+juPNakstcAZW4Rp0WNypgyL
- 5TsYm5C/OGwzkrgSyPvUj+JQR3zfHomcd6t2JcA3Pzlu15SwCMese3HRO5X5Z2iCeS9K
- MNI227bty8BFWXDdCToRUi4Nu8cSWC8LeC7XGRT2QkFuiDxtNkVu8xgaNugYY+TommtA
- dWTATQ+GYmkCf9isdYseCu5o5HwwdKMIOnmtWxZBdjqH72GdI0KepcrjjXO08SWUM/td
- 7K+esCedlIcrKhL/BZglzy4cWz7puKvHxVJ/osCLIFoa7UcNj6fKl6+wa5Kc4ejnlKcf
- LlmQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=VyZGJNoU
-Subject: Re: [Buildroot] [PATCH 0/3] Remove NDS32 architecture
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=VRgRs3DYLcOkXrEKv+W+79ZC7bBTLPjSDYGC3Xehyy0=;
+ b=UTi2Z/iidaSRzVZZsutq/RCOM5y1KhxaKSG+/UPAD6vxXph4tDmnWyWvFRJa3mHJmS
+ cKu+bsjJjM6ZHd6FEDOPpuFPxG/VoX7+ZkCrwSc47v1uVsWl/L8NeDuRt+55O5WR2YQT
+ OdDeaxCD6RVVN370CrHKawNABGiWHFV74N9kghsSDpfL2CNdqMS2r9kwmU7s0uCs5vxh
+ bpJug63F9q/QiYkNHe8WjDKmrp00/xFKb0y0qpjAtCEuXPLUVmIfrnUC3qSLFWz6E8ZT
+ WVJ+MSpHwC+w+5e6AyIgRN01nyZp3M2bc7GMenpstPNbOxHmS2eckOZA4UnSRPhqXSOm
+ VM0g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=UTi2Z/ii
+Subject: [Buildroot] [PATCH 1/1] package/systemd: replace
+ SYSTEMD_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,76 +94,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Norbert Lange <nolange79@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+freedesktop has been replaced by systemd_project since January 2022:
 
+<cpe-item name="cpe:/a:freedesktop:systemd:247:rc1" deprecated="true" deprecation_date="2022-01-28T19:09:42.747Z">
+    <title xml:lang="en-US">freedesktop systemd 247 Release Candidate 1</title>
+      <reference href="https://github.com/systemd/systemd/releases">Change Log</reference>
+    <cpe-23:cpe23-item name="cpe:2.3:a:freedesktop:systemd:247:rc1:*:*:*:*:*:*">
+        <cpe-23:deprecated-by name="cpe:2.3:a:systemd_project:systemd:247:rc1:*:*:*:*:*:*" type="NAME_CORRECTION"/>
 
-On 07/06/2022 22:59, Thomas Petazzoni via buildroot wrote:
-> Hello,
-> 
-> The upstream Linux kernel community has removed the NDS32 architecture
-> support in commit
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aec499c75cf8e0b599be4d559e6922b613085f8f.
-> 
-> There has been very little to no activity in Buildroot around this CPU
-> architecture recently, so let's drop the support for this CPU
-> architecture.
-> 
-> Thomas
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asystemd_project%3Asystemd
 
-  Series applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/systemd/systemd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Regards,
-  Arnout
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index b309507e12..46a4e8de2c 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -44,7 +44,7 @@ SYSTEMD_LICENSE_FILES = \
+ 	LICENSES/murmurhash2-public-domain.txt \
+ 	LICENSES/OFL-1.1.txt \
+ 	LICENSES/README.md
+-SYSTEMD_CPE_ID_VENDOR = freedesktop
++SYSTEMD_CPE_ID_VENDOR = systemd_project
+ SYSTEMD_INSTALL_STAGING = YES
+ SYSTEMD_DEPENDENCIES = \
+ 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
+-- 
+2.35.1
 
-> 
-> Thomas Petazzoni (3):
->    configs/andes_ae300: remove defconfig
->    toolchain/toolchain-external/toolchain-external-andes-nds32: remove
->      package
->    Remove support for the NDS32 architecture
-> 
->   Config.in.legacy                              | 10 ++++
->   DEVELOPERS                                    |  3 --
->   arch/Config.in                                | 12 -----
->   arch/Config.in.nds32                          | 17 ------
->   board/andes/ae300/ae300.fragment              |  1 -
->   ...0001-nds32-Fix-boot-messages-garbled.patch | 28 ----------
->   ...ve-redundant-YYLOC-global-declaratio.patch | 52 -------------------
->   board/andes/ae300/readme.txt                  | 49 -----------------
->   configs/andes_ae300_defconfig                 | 10 ----
->   docs/manual/known-issues.txt                  |  2 +-
->   package/dhcpcd/Config.in                      |  1 -
->   package/gdb/Config.in                         |  1 -
->   package/gdb/Config.in.host                    |  1 -
->   package/libbsd/Config.in                      |  1 -
->   package/postgresql/postgresql.mk              |  2 +-
->   package/strace/Config.in                      |  2 +-
->   package/uclibc-ng-test/uclibc-ng-test.mk      |  2 +-
->   .../autobuild/andes-nds32.config              |  3 --
->   .../autobuild/toolchain-configs.csv           |  1 -
->   toolchain/toolchain-external/Config.in        |  6 ---
->   .../toolchain-external-andes-nds32/Config.in  | 15 ------
->   .../Config.in.options                         |  9 ----
->   .../toolchain-external-andes-nds32.hash       |  2 -
->   .../toolchain-external-andes-nds32.mk         | 10 ----
->   utils/genrandconfig                           |  3 --
->   25 files changed, 14 insertions(+), 229 deletions(-)
->   delete mode 100644 arch/Config.in.nds32
->   delete mode 100644 board/andes/ae300/ae300.fragment
->   delete mode 100644 board/andes/ae300/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch
->   delete mode 100644 board/andes/ae300/patches/linux/0002-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
->   delete mode 100644 board/andes/ae300/readme.txt
->   delete mode 100644 configs/andes_ae300_defconfig
->   delete mode 100644 support/config-fragments/autobuild/andes-nds32.config
->   delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
->   delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
->   delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash
->   delete mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
