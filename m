@@ -1,97 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2B7EC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 18:21:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9188EC43334
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 18:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4ECFF4056E;
-	Mon, 20 Jun 2022 18:21:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4ECFF4056E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B05C82C8E;
+	Mon, 20 Jun 2022 18:27:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B05C82C8E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 69eajCuOOcpK; Mon, 20 Jun 2022 18:21:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qaqOlOsCsElw; Mon, 20 Jun 2022 18:27:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0121A405DF;
-	Mon, 20 Jun 2022 18:21:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0121A405DF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 03F331BF28A
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 18:21:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4FE081A2B;
+	Mon, 20 Jun 2022 18:27:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4FE081A2B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E2571BF28A
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 18:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D1D64405DF
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 18:21:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1D64405DF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C91D41814
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 18:27:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C91D41814
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k7FIJ2vLxT0Y for <buildroot@lists.busybox.net>;
- Mon, 20 Jun 2022 18:21:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qAIWjlhflsDO for <buildroot@lists.busybox.net>;
+ Mon, 20 Jun 2022 18:27:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C21D94056E
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C21D94056E
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 18:21:01 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id es26so14542293edb.4
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 11:21:01 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 695CD410D4
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 695CD410D4
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 18:27:26 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id z7so16235614edm.13
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 11:27:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=/qru+guVd9cwoFQqPrMkuFuxVq9mgOqM8xMsn+I6kxE=;
- b=1gsexggS1492KeNgY2hnJ+HmTCPb7VBthcbONQPY/mtHDBK9MDNySfUTeg+ThI/HNO
- VCK4ag3oqOagBmE9zn7kJyyuSguMZXP+cQgtiDPpQnuTweHoiog2x3JSfUJt0UZw7dm2
- MVHV3rnYhtjbkZcFWWMP8O8c8AeG3TNVFp8O6grP5HJ+nCI385Z9i16rluWA9gEsAQfR
- u2foh+AtWxMBYhrQnnysux/PprolhWe4WmwZis2PB6T798ftCDTkH1ONa2F+7XqBlLhp
- SH7w4hQoIeEcC48QXLGaKw80oFvYdhpymmu+Wb+GUba6le5Qb6avihuOOdmMPzzoF5H7
- A+0g==
-X-Gm-Message-State: AJIora/qzhJztdn2Iehk9Lz3SvUwHk6yGYDzqpTCYc7UbHBRU43cGjm+
- Kj0a92Y10w2T4hfzil0fos+K4A==
-X-Google-Smtp-Source: AGRyM1tW4DxbOpG5TtRFHj2OVpHZvi4jMT8CTOhDxc8SP5Ykvrl5Bwk7B0Qg3rv400U0+kmQGuWDtg==
-X-Received: by 2002:a05:6402:240e:b0:433:4642:f86a with SMTP id
- t14-20020a056402240e00b004334642f86amr30203690eda.313.1655749259754; 
- Mon, 20 Jun 2022 11:20:59 -0700 (PDT)
+ bh=vvX59+fdADCDAvFBBk9n7Cnv0TU5/FXkPzDh4YpDnkw=;
+ b=0fPX7g13O4NcHJ0ANPUFloeMCXXx15fSJpknzH0nFSsK3ykXKRFaQxF09SZ16DN0YU
+ 7mB9W/1e9xuP8/CPW+O4ZFjguAApauF9sjNvFb+7ndOTqPSVmi3tLVveF1Rq6/PSroNv
+ 91uRyktl9sG0AnOEwM+tStRp6kizRuuvXu8voholOHe/T15vRxpDGWzkKecqfLRbyb+U
+ Gwq5mv3rYtWi7g8fVuFUH3TXUErk5zoYDFkea87CDzsBJIcZc4TqtiPKxYreFYSlPlGN
+ fFxwVUaL+FYwM6VSo3aQGKFlJUYqyOIU/gba0l6ulmhyLxTP+4Al+r/n5qfW7zeecYga
+ V2DQ==
+X-Gm-Message-State: AJIora/GWGbFE5PEDbH+9t8rE+QBT+53ObZ+XqIpryRN3oeedsiBKHjb
+ ZkJHeyk6uvQzA0SSHTWnUjpWMSnVCCWnvQ==
+X-Google-Smtp-Source: AGRyM1vJxR8zIoPM3P4dR2kFFHoUOQ+9Z0Dvch9F0QiHFsPseq4wZGg2/nfCzATwd4Pi1QNmvKNyYA==
+X-Received: by 2002:a05:6402:5c9:b0:420:aac6:257b with SMTP id
+ n9-20020a05640205c900b00420aac6257bmr30659337edx.128.1655749644505; 
+ Mon, 20 Jun 2022 11:27:24 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- sb6-20020a1709076d8600b0070aaad0a173sm6335903ejc.192.2022.06.20.11.20.58
+ d4-20020a170906304400b00711eea3fa9bsm6285421ejd.42.2022.06.20.11.27.23
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 20 Jun 2022 11:20:58 -0700 (PDT)
-Message-ID: <b1780ee7-29e4-715c-f305-1b2323a57350@mind.be>
-Date: Mon, 20 Jun 2022 20:20:56 +0200
+ Mon, 20 Jun 2022 11:27:23 -0700 (PDT)
+Message-ID: <5132079e-acaa-323e-88c2-2237be612159@mind.be>
+Date: Mon, 20 Jun 2022 20:27:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
 Content-Language: en-GB
-To: Vincent Fazio <vfazio@xes-inc.com>, buildroot@buildroot.org
-References: <20211104141910.1840914-1-vfazio@xes-inc.com>
- <20220620170940.513445-1-vfazio@xes-inc.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <97ea44bb-58fe-d6cb-6c79-9be0b245f2c6@synopsys.com>
+ <38e7fb76-2c07-6429-b803-4fd6ff2b1178@synopsys.com>
+ <3062ce96-7e99-d221-61c8-4b87c87c113b@synopsys.com>
+ <e8be91c7-8597-7a7e-9714-9f8045781959@mind.be>
+ <aafcf149-d0b9-8c95-751c-64ec4dabf5b5@synopsys.com>
+ <CADvTj4qcYpo=UB2Qny7-0mXiqq9R0u6QMBgs+9hXm76SQxvEew@mail.gmail.com>
+ <40fe53f9-cd74-a19f-e338-2aa4d35a9ec1@synopsys.com>
+ <8c13892c-a9ed-a016-7043-6794b87a884c@mind.be>
+ <CADvTj4rPGVpbbZTXO9J0NT6PLbT_Q8jDHhDwhH6u0jMDc4aJCg@mail.gmail.com>
+ <ac05ab10-5b36-619c-3ccc-a619d6c0c0da@mind.be>
+ <CADvTj4rFeH6m+vq+nrM8O61UJ4d6yyifJ6NdTadxkU-kGvOCMQ@mail.gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220620170940.513445-1-vfazio@xes-inc.com>
+In-Reply-To: <CADvTj4rFeH6m+vq+nrM8O61UJ4d6yyifJ6NdTadxkU-kGvOCMQ@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=/qru+guVd9cwoFQqPrMkuFuxVq9mgOqM8xMsn+I6kxE=;
- b=fXxWQfGqoddOwPCbdBR49S3RKuLdVUyk92O2QEJeB8Qv8dEf4fms4M07HIB6W69gNE
- KF2HmugwJJPDkhf1ZF815LhaAhxomAfrJKxRDiBn0N/AX00nJnRbSpFC3T/PzpUujCQ4
- V7zIqQ8oj9zJHp55d5I01lu6ZWFjL9T2mEJ3pzFMMRAPvbc4veRM2kAgFzFhSNh2kI7p
- 3ZnuNBUb9a0P2FT1ean9U7qeSLURn0NufXGnHFNPaX9FFQs9z2TTMY3419eG3yyJ9QkA
- yOH+hIEFG0ZW+eGyIdRdsDpfBc3dzSXywAHbIJhNWVoOTNoSzL1xqrQgQEw9fpyr7uAw
- gpyQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=vvX59+fdADCDAvFBBk9n7Cnv0TU5/FXkPzDh4YpDnkw=;
+ b=fTMD3a5UQXLVI5bq8vxttmesAyi8qqOwOnKCVhTDauMAhuZbmyLuziLkFK+GLDZzan
+ YAVtSyO2A9Msg/CDYuUHX50dr1uuc+XEx2uO6WmpvK4s5M0jwrqOrMqvrLoFekkixsIo
+ smt9t0pCIHtY+HCzrigxsKcmvN6qhiaiLRXkh6pcXUrL77Gmc8Blmt+MKQ72RTmCHRjm
+ 1qyPeQj4NjVDblNBoQ6rfKvKZIiKga+Onz19XHshZMraSIAGoG1JBDts7UP4WqnaM4W2
+ j/opmKBqnMegAylFvzN41wdQ2E/0POmQ5duFf8Ftog1SdkvEEyFmrTdC4Tfnk6IQ5zkr
+ w5fA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=fXxWQfGq
-Subject: Re: [Buildroot] [PATCH 1/1] package/nvidia-driver: bump version to
- 390.151
+ header.a=rsa-sha256 header.s=google header.b=fTMD3a5U
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/bpftool: revert bpf_cookie
+ patch to allow building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,7 +112,9 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: "linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>,
+ Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -111,60 +122,155 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 20/06/2022 19:09, Vincent Fazio wrote:
-> Adds support for Linux kernel 5.17.
+On 20/06/2022 11:17, James Hilliard wrote:
+> On Mon, Jun 20, 2022 at 12:45 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>>
+>> On 20/06/2022 01:19, James Hilliard wrote:
+>>> On Sun, Jun 19, 2022 at 9:20 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 16/06/2022 10:11, Shahab Vahedi wrote:
+>>>>> On 6/16/22 01:27, James Hilliard wrote:
+>>>>>> On Wed, Jun 15, 2022 at 5:10 AM Shahab Vahedi via buildroot
+>>>>>> <buildroot@buildroot.org> wrote:
+>>>>>>>
+>>>>>>> On 6/14/22 19:14, Arnout Vandecappelle wrote:
+>>>>>>>>
+>>>>>>>> On 14/06/2022 11:31, Shahab Vahedi wrote:
+>>>>>>>>> Building bpftool on Debian 11 (bullseye) with kernel v5.10 and clang-11
+>>>>>>>>
+>>>>>>>>     How do you build host-bpftool with clang in Buildroot context? HOSTCC is set to gcc in the Makefile... Do you supply an explicit HOSTCC= on the Buildroot command line? I'm not sure if we are really interested in carrying fixes for such exotic and not-really-supported situations...
+>>>>>>>
+>>>>>>> No, I don't do any sort of trickery to build bpftool on my end. The
+>>>>>>> bootstrapping, if becomes available for your configuration, uses clang
+>>>>>>> and only clang. I tried to explain this in v4 of the patch [1], the
+>>>>>>> second paragraph of the commit message.
+>>>>>>
+>>>>>> I think clang/llvm support isn't going to work correctly yet since we only have
+>>>>>> version 9.0.1, there's a series bumping to version 11.1.0 that should fix that:
+>>>>>> https://patchwork.ozlabs.org/project/buildroot/list/?series=291585
+>>>>>>
+>>>>>> Minimum clang/llvm version for libbpf co-re is version 10:
+>>>>>> https://github.com/libbpf/libbpf*bpf-co-re-compile-once--run-everywhere
+>>>>>
+>>>>> You're right about the clang version, but it doesn't have anything to do
+>>>>> with Buildroot's clang. The build process uses the clang that is installed
+>>>>> on the host. For Debian bullseye, that is clang 11.
+>>>>    >
+>>>>> To emphasise, I am cross-building bpftool for my "arc-linux" target, and yet
+>>>>> the bootstrap part of bpftool, uses the x86 clang of the Debian machine.
+>>>>
+>>>>
+>>>>     Hm, that smells like we actually want to build host-clang (after updating it
+>>>> to 11.1.0 of course) so that we are sure a known version of clang is used.
+>>>> Possibly with a check-host-clang check to avoid building it if the installed
+>>>> clang is good enough.
+>>>
+>>> Dealing with multiple external clang versions may be a bit tricky and difficult
+>>
+>>    We do it for GCC, so we can do something similar for clang.
+>>
+>>> to test properly, we don't really want to use the system clang/llvm although
+>>> clang/llvm external toolchain support may be desirable here as those could
+>>> be tested by the autobuilders.
+>>
+>>    For GCC, the host toolchain is completely unrelated to the target toolchain.
+>> With clang, it's true that it's possible to use the target compiler for host
+>> builds as well, but don't we still need binutils? So in my mind, there would be
+>> a separate host clang toolchain and target clang toolchain.
 > 
-> Define IGNORE_CC_MISMATCH for kernel module builds to avoid an issue
-> where NVIDIA's `cc_version_check` in kernel/conftest.sh may falsely
-> detect a mismatch and fail due to matching on the pkgversion substring
-> of the GCC version string in the kernel's include/generated/compile.h.
+> BPF is kinda weird...for both clang and GCC. It's sorta a separate
+> architecture in
+> the compiler...but is also sorta not architecture specific in what it
+> builds for.
 
-  Shouldn't that part be done in a separate patch that can be applied to 
-2022.05.x and 2022.02.x? AFAIU, this error will happen even with the 5.4 kernel 
-that is supported by that version of nvidia-driver. Or doesn't it?
+  Ah! I understood from Shahab's message that host-clang was used to build a 
+host tool that is then used to build the target package. But it's actually used 
+as a cross-compiler then, just with a different target.
+
+
+>>> It would be good to get clang/llvm updated soon as systemd is now using bpf for
+>>> some service security/isolation features that we currently aren't able
+>>> to support
+>>> due to clang/llvm being too old.
+>>
+>>    Unfortunately your series is rather large and has no Reviewed or Acked by
+>> tags... So it tends to languish on patchwork.
+> 
+> The tested-by for the v12 series ended up in the wrong thread I think:
+> https://lore.kernel.org/buildroot/BN2P110MB16408DC4537E54EF7ECC7906F21A9@BN2P110MB1640.NAMP110.PROD.OUTLOOK.COM/
+
+  All right, I'll look into it!
+
+
+>>>>     And we probably want a user-visible option to enable co-re then, because it's
+>>>> going to be expensive to build.
+>>>
+>>> We may want to make llvm/clang part of the pre-built toolchains
+>>> eventually, but for
+>>> now I'd say we should just conditionally enable co-re here if we are
+>>> already building
+>>> a clang/llvm toolchain.
+>>
+>>    Although I'm usually in favour of automatic dependencies, in this case I'd say
+>> it's worth adding an explicit config option.
+>>
+>>
+>>> There's some early GCC support for co-re in 12.1 which I was experimenting with
+>>
+>>    But then it would depend on both host and target GCC >= 12...
+> 
+> I thought we don't support GCC on the target.
+
+  Yeah, terminology is difficult... With "host gcc" I meant "the gcc that builds 
+for the host, i.e. the native gcc" and with "target gcc" I meant "the gcc that 
+builds for the target, i.e. the cross-gcc".
+
+> We would essentially have a 2 architecture cross-toolchain(one real
+> target arch, and the
+> BPF virtual architecture compiler/assemblers and such).
+
+
+  Yeah, that makes sense... So the idea is that we build GCC with bpf support, 
+similar like how we build it with Fortran support, right?
+
 
   Regards,
   Arnout
 
+>>> as well which may reduce the need for a llvm/clang toolchain for co-re. The GCC
+>>> toolchain BPF support build process is a bit complex however as one needs to
+>>> sorta do a hybrid multitarget build with GCC and binutils since GCC
+>>> treats BPF as
+>>> a separate target(and since GCC along with the binutils GAS assembler
+>>> don't natively
+>>> handle multi-target toolchain builds themselves).
+>>
+>>    Ouch, so we still can't reuse the existing host toolchain for the host parts?
+>> then it doesn't help that much, does it?
 > 
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-> ---
->   package/nvidia-driver/nvidia-driver.hash | 4 ++--
->   package/nvidia-driver/nvidia-driver.mk   | 3 ++-
->   2 files changed, 4 insertions(+), 3 deletions(-)
+> We can create a GCC toolchain that can target both BPF and the normal target
+> architecture...but it's sorta a strange multiarch style toolchain.
 > 
-> diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
-> index 7f2248d0f9..6564b8e821 100644
-> --- a/package/nvidia-driver/nvidia-driver.hash
-> +++ b/package/nvidia-driver/nvidia-driver.hash
-> @@ -1,4 +1,4 @@
->   # Locally computed
-> -sha256 51adb28f0ed4548f35a88a93ad6767ebd807fa14f418bf5e51a6d63a3ff7f275  NVIDIA-Linux-x86-390.132.run
-> -sha256 b6b4b8af37e78e026c9ebdf4a5c64ea412dfcb710931dd028c22dac228de659d  NVIDIA-Linux-x86_64-390.132-no-compat32.run
-> +sha256 5226e4842044cffd9096deadaf68934c133da74e05b80ccd21236584b3afb1fc  NVIDIA-Linux-x86-390.151.run
-> +sha256 6e4fd2258465f5d5527fe80abd46de925a30348b4a84658498a6d75caf42c47c  NVIDIA-Linux-x86_64-390.151-no-compat32.run
->   sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  LICENSE
-> diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-> index 54c2aa46d8..f1217b00aa 100644
-> --- a/package/nvidia-driver/nvidia-driver.mk
-> +++ b/package/nvidia-driver/nvidia-driver.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -NVIDIA_DRIVER_VERSION = 390.132
-> +NVIDIA_DRIVER_VERSION = 390.151
->   NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
->   NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
->   NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION)$(if $(BR2_x86_64),-no-compat32).run
-> @@ -137,6 +137,7 @@ endif
->   # because they don't recognise the usual variables set by the kernel
->   # build system. We also need to tell them what modules to build.
->   NVIDIA_DRIVER_MODULE_MAKE_OPTS = \
-> +	IGNORE_CC_MISMATCH=1 \
->   	NV_KERNEL_SOURCES="$(LINUX_DIR)" \
->   	NV_KERNEL_OUTPUT="$(LINUX_DIR)" \
->   	NV_KERNEL_MODULES="$(NVIDIA_DRIVER_MODULES)"
+>>
+>>    Regards,
+>>    Arnout
+>>
+>>>
+>>> I have an experimental branch for that here:
+>>> https://github.com/buildroot/buildroot/compare/master...jameshilliard:ebpf
+>>>
+>>> I'll try and clean that up a bit once the GCC 12.1 series it is based
+>>> on is merged:
+>>> https://patchwork.ozlabs.org/project/buildroot/list/?series=302389
+>>>
+>>>>
+>>>>     Regards,
+>>>>     Arnout
+>>>>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
