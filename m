@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DC65C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:35:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88604C43334
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:36:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC95B83E4C;
-	Mon, 20 Jun 2022 19:35:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC95B83E4C
+	by smtp1.osuosl.org (Postfix) with ESMTP id F198983E6A;
+	Mon, 20 Jun 2022 19:36:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F198983E6A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XIgq7D2jFafJ; Mon, 20 Jun 2022 19:35:51 +0000 (UTC)
+	with ESMTP id qH3GFQAJxmXY; Mon, 20 Jun 2022 19:36:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CAC4B83E3C;
-	Mon, 20 Jun 2022 19:35:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAC4B83E3C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 04C3C1BF9B9
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD82983E52;
+	Mon, 20 Jun 2022 19:36:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD82983E52
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 035721BF3FD
  for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:34:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DEF004018F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A600783E18
  for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:34:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEF004018F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A600783E18
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bo5DbXERKBzI for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xk-7fRGT1rD2 for <buildroot@lists.busybox.net>;
  Mon, 20 Jun 2022 19:34:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C993C40B37
+ by smtp1.osuosl.org (Postfix) with ESMTP id BC0EC83E31
  for <buildroot@buildroot.org>; Mon, 20 Jun 2022 19:34:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C993C40B37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC0EC83E31
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id EAC4F874DC; Mon, 20 Jun 2022 19:22:31 +0000 (UTC)
+ id DDC38874DB; Mon, 20 Jun 2022 19:22:31 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Mon, 20 Jun 2022 20:59:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 56a27d7d00ea3a1851a46045bbc9472091412e76
-X-Git-Newrev: b19126c3985c4897e96e2430c813d18eae198531
+X-Git-Oldrev: 016e21eb77c98863b5bbc8e6b0b7edf44f890d94
+X-Git-Newrev: 56a27d7d00ea3a1851a46045bbc9472091412e76
 X-Patchwork-Hint: ignore
-Message-Id: <20220620192231.EAC4F874DC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libclc: bump version to 13.0.1
+Message-Id: <20220620192231.DDC38874DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/misc/toolchainfile.cmake.in: allow
+ variables to be overridden
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,185 +63,163 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b19126c3985c4897e96e2430c813d18eae198531
+commit: https://git.buildroot.net/buildroot/commit/?id=56a27d7d00ea3a1851a46045bbc9472091412e76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* Converts to the cmake pkg type
- * Updates download site
- * Adds a crosscompile fixups patch
-   * Allow prepare_builtins utility to be directly called
-     (it isn't installed into the path when cross compiling)
-   * Fix file_find() for root search limitation
+Some packages such as libclc need to override cmake toolchain
+variables, to avoid errors caused by trying to set overriden
+variables ensure that they are not defined before being set.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+This prevents difficult to debug silent dropping of overriden
+variables.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../libclc/0001-support-out-of-tree-build.patch    | 71 ++++++++++++++++++++++
- package/libclc/libclc.hash                         |  2 +-
- package/libclc/libclc.mk                           | 56 ++++++++---------
- 3 files changed, 98 insertions(+), 31 deletions(-)
+ support/misc/toolchainfile.cmake.in | 108 +++++++++++++++++++++++++++---------
+ 1 file changed, 81 insertions(+), 27 deletions(-)
 
-diff --git a/package/libclc/0001-support-out-of-tree-build.patch b/package/libclc/0001-support-out-of-tree-build.patch
-new file mode 100644
-index 0000000000..de7207bedb
---- /dev/null
-+++ b/package/libclc/0001-support-out-of-tree-build.patch
-@@ -0,0 +1,71 @@
-+From 495491e9d53bfb184c15753b5187e4bb55b19511 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Tue, 9 Mar 2021 15:55:17 -0600
-+Subject: [PATCH] support out of tree build
-+
-+(1) The package has a prepare_builtins tool which is built
-+but not placed in the path for later use in the build. This
-+fix allows the later build steps to use the binary in-place.
-+
-+(2) With cmake, find_file() when used for non-host builds is
-+limited by CMAKE_FIND_ROOT_PATH* scope.
-+
-+In $(HOST_DIR)/share/buildroot/toolchainfile.cmake we set the
-+following target settings for CMAKE_FIND_ROOT_PATH* which
-+limit the scope.
-+set(CMAKE_FIND_ROOT_PATH "${RELOCATED_HOST_DIR}/aarch64-buildroot-linux-gnu/sysroot")
-+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
-+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-+
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ CMakeLists.txt                          | 2 +-
-+ cmake/CMakeDetermineCLCCompiler.cmake   | 4 ++++
-+ cmake/CMakeDetermineLLAsmCompiler.cmake | 4 ++++
-+ 3 files changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 9472f19..a784519 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -279,7 +279,7 @@ foreach( t ${LIBCLC_TARGETS_TO_BUILD} )
-+ 
-+			# Add prepare target
-+			add_custom_command( OUTPUT "${obj_suffix}"
-+-				            COMMAND prepare_builtins -o
-++				            COMMAND ./prepare_builtins -o
-+					    "${obj_suffix}"
-+					    "builtins.opt.${obj_suffix}"
-+					    DEPENDS "opt.${obj_suffix}"
-+diff --git a/cmake/CMakeDetermineCLCCompiler.cmake b/cmake/CMakeDetermineCLCCompiler.cmake
-+index 94d85d9..5de6a48 100644
-+--- a/cmake/CMakeDetermineCLCCompiler.cmake
-++++ b/cmake/CMakeDetermineCLCCompiler.cmake
-+@@ -12,7 +12,7 @@ mark_as_advanced(CMAKE_CLC_ARCHIVE)
-+ 
-+ set(CMAKE_CLC_COMPILER_ENV_VAR "CLC_COMPILER")
-+ set(CMAKE_CLC_ARCHIVE_ENV_VAR "CLC_LINKER")
-+-find_file(clc_comp_in CMakeCLCCompiler.cmake.in PATHS ${CMAKE_ROOT}/Modules ${CMAKE_MODULE_PATH})
-++set(clc_comp_in "${CMAKE_MODULE_PATH}/CMakeCLCCompiler.cmake.in" )
-+ # configure all variables set in this file
-+ configure_file(${clc_comp_in} ${CMAKE_PLATFORM_INFO_DIR}/CMakeCLCCompiler.cmake @ONLY)
-+ mark_as_advanced(clc_comp_in)
-+diff --git a/cmake/CMakeDetermineLLAsmCompiler.cmake b/cmake/CMakeDetermineLLAsmCompiler.cmake
-+index 1c424c7..dd3bfb6 100644
-+--- a/cmake/CMakeDetermineLLAsmCompiler.cmake
-++++ b/cmake/CMakeDetermineLLAsmCompiler.cmake
-+@@ -18,7 +18,7 @@ mark_as_advanced(CMAKE_LLAsm_ARCHIVE)
-+ set(CMAKE_LLAsm_PREPROCESSOR_ENV_VAR "LL_PREPROCESSOR")
-+ set(CMAKE_LLAsm_COMPILER_ENV_VAR "LL_ASSEMBLER")
-+ set(CMAKE_LLAsm_ARCHIVE_ENV_VAR "LL_LINKER")
-+-find_file(ll_comp_in CMakeLLAsmCompiler.cmake.in PATHS ${CMAKE_ROOT}/Modules ${CMAKE_MODULE_PATH})
-++set(ll_comp_in "${CMAKE_MODULE_PATH}/CMakeLLAsmCompiler.cmake.in" )
-+ # configure all variables set in this file
-+ configure_file(${ll_comp_in} ${CMAKE_PLATFORM_INFO_DIR}/CMakeLLAsmCompiler.cmake @ONLY)
-+ mark_as_advanced(ll_comp_in)
-+-- 
-+2.17.1
-+
-diff --git a/package/libclc/libclc.hash b/package/libclc/libclc.hash
-index 2af64bc8e8..c496291d81 100644
---- a/package/libclc/libclc.hash
-+++ b/package/libclc/libclc.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  54d7ae523aabf68d533011739d6c01546cae0c294442d0f44fd657c046cb707d  libclc-d1cbc92e2ceee59963f5c3a576382e5bba31f060-br1.tar.gz
-+sha256  8f0213e52e2fcaca3dfcc438f05d0e15e9b3c96fd6b0994a802b267dc1047a1d  libclc-13.0.1.src.tar.xz
- sha256  3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479  LICENSE.TXT
-diff --git a/package/libclc/libclc.mk b/package/libclc/libclc.mk
-index 6fe8e10a77..5d246cf4f8 100644
---- a/package/libclc/libclc.mk
-+++ b/package/libclc/libclc.mk
-@@ -4,43 +4,39 @@
- #
- ################################################################################
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index be575566a4..30c0e63bf2 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -14,9 +14,15 @@ string(REPLACE "/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR
+ # so that it can find our custom platform description.
+ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
  
--# Use the latest commit from release_90 branch.
--LIBCLC_VERSION = d1cbc92e2ceee59963f5c3a576382e5bba31f060
--LIBCLC_SITE = https://github.com/llvm-mirror/libclc
--LIBCLC_SITE_METHOD = git
-+LIBCLC_VERSION = 13.0.1
-+LIBCLC_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LIBCLC_VERSION)
-+LIBCLC_SOURCE = libclc-$(LIBCLC_VERSION).src.tar.xz
- LIBCLC_LICENSE = Apache-2.0 with exceptions or MIT
- LIBCLC_LICENSE_FILES = LICENSE.TXT
+-set(CMAKE_SYSTEM_NAME Buildroot)
+-set(CMAKE_SYSTEM_VERSION 1)
+-set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
++if(NOT DEFINED CMAKE_SYSTEM_NAME)
++  set(CMAKE_SYSTEM_NAME Buildroot)
++endif()
++if(NOT DEFINED CMAKE_SYSTEM_VERSION)
++  set(CMAKE_SYSTEM_VERSION 1)
++endif()
++if(NOT DEFINED CMAKE_SYSTEM_PROCESSOR)
++  set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
++endif()
  
--LIBCLC_DEPENDENCIES = host-clang host-llvm
-+LIBCLC_DEPENDENCIES = host-clang host-llvm host-spirv-llvm-translator
- LIBCLC_INSTALL_STAGING = YES
+ # Set the {C,CXX}FLAGS appended by CMake depending on the build type
+ # defined by Buildroot. CMake defaults these variables with -g and/or
+@@ -28,11 +34,17 @@ set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+ # Note:
+ #   if the project forces some of these flag variables, Buildroot is
+ #   screwed up and there is nothing Buildroot can do about that :(
+-set(CMAKE_C_FLAGS_DEBUG "" CACHE STRING "Debug CFLAGS")
+-set(CMAKE_C_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release CFLAGS")
++if(NOT DEFINED CMAKE_C_FLAGS_DEBUG)
++  set(CMAKE_C_FLAGS_DEBUG "" CACHE STRING "Debug CFLAGS")
++endif()
++if(NOT DEFINED CMAKE_C_FLAGS_RELEASE)
++  set(CMAKE_C_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release CFLAGS")
++endif()
  
--# C++ compiler is used to build a small tool (prepare-builtins) for the host.
--# It must be built with the C++ compiler from the host.
-+# CMAKE_*_COMPILER_FORCED=ON skips testing the tools and assumes
-+# llvm-config provided values
-+#
-+# CMAKE_*_COMPILER has to be set to the host compiler to build a host
-+# 'prepare_builtins' tool used during the build process
- #
- # The headers are installed in /usr/share and not /usr/include,
- # because they are needed at runtime on the target to build the OpenCL
- # kernels.
- LIBCLC_CONF_OPTS = \
--	--with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
--	--prefix=/usr \
--	--includedir=/usr/share \
--	--pkgconfigdir=/usr/lib/pkgconfig \
--	--with-cxx-compiler=$(HOSTCXX_NOCCACHE)
--
--define LIBCLC_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.py $(LIBCLC_CONF_OPTS))
--endef
--
--define LIBCLC_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
--endef
--
--define LIBCLC_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
--endef
--
--define LIBCLC_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
--endef
--
--$(eval $(generic-package))
-+	-DCMAKE_SYSROOT="" \
-+	-DCMAKE_C_COMPILER_FORCED=ON \
-+	-DCMAKE_CXX_COMPILER_FORCED=ON \
-+	-DCMAKE_CLC_COMPILER_FORCED=ON \
-+	-DCMAKE_LLAsm_COMPILER_FORCED=ON \
-+	-DCMAKE_INSTALL_DATADIR="share" \
-+	-DCMAKE_FIND_ROOT_PATH="$(HOST_DIR)" \
-+	-DCMAKE_C_FLAGS="$(HOST_CFLAGS)" \
-+	-DCMAKE_CXX_FLAGS="$(HOST_CXXFLAGS)" \
-+	-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
-+	-DCMAKE_SHARED_LINKER_FLAGS="$(HOST_LDFLAGS)" \
-+	-DCMAKE_MODULE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
-+	-DCMAKE_C_COMPILER="$(CMAKE_HOST_C_COMPILER)" \
-+	-DCMAKE_CXX_COMPILER="$(CMAKE_HOST_CXX_COMPILER)" \
-+	-DLLVM_CONFIG="$(HOST_DIR)/bin/llvm-config"
-+
-+$(eval $(cmake-package))
+ # Build type from the Buildroot configuration
+-set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configuration")
++if(NOT DEFINED CMAKE_BUILD_TYPE)
++  set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configuration")
++endif()
+ 
+ # Buildroot defaults flags.
+ # If you are using this toolchainfile.cmake file outside of Buildroot and
+@@ -41,33 +53,75 @@ set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configur
+ #     cmake -DCMAKE_C_FLAGS="@@TARGET_CFLAGS@@ -Dsome_custom_flag" ...
+ # * and make sure the project's CMake code extends them like this if needed:
+ #     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dsome_definitions")
+-set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@" CACHE STRING "Buildroot CFLAGS")
+-set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for executables")
+-set(CMAKE_SHARED_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for shared libraries")
+-set(CMAKE_MODULE_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for module libraries")
++if(NOT DEFINED CMAKE_C_FLAGS)
++  set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@" CACHE STRING "Buildroot CFLAGS")
++endif()
++if(NOT DEFINED CMAKE_EXE_LINKER_FLAGS)
++  set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for executables")
++endif()
++if(NOT DEFINED CMAKE_SHARED_LINKER_FLAGS)
++  set(CMAKE_SHARED_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for shared libraries")
++endif()
++if(NOT DEFINED CMAKE_MODULE_LINKER_FLAGS)
++  set(CMAKE_MODULE_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for module libraries")
++endif()
+ 
+-set(CMAKE_INSTALL_SO_NO_EXE 0)
++if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
++  set(CMAKE_INSTALL_SO_NO_EXE 0)
++endif()
+ 
+-set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/bin")
+-set(CMAKE_SYSROOT "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+-set(CMAKE_FIND_ROOT_PATH "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+-set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
++if(NOT DEFINED CMAKE_PROGRAM_PATH)
++  set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/bin")
++endif()
++if(NOT DEFINED CMAKE_SYSROOT)
++  set(CMAKE_SYSROOT "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
++endif()
++if(NOT DEFINED CMAKE_FIND_ROOT_PATH)
++  set(CMAKE_FIND_ROOT_PATH "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
++endif()
++if(NOT DEFINED CMAKE_FIND_ROOT_PATH_MODE_PROGRAM)
++  set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
++endif()
++if(NOT DEFINED CMAKE_FIND_ROOT_PATH_MODE_PACKAGE)
++  set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
++endif()
++if(NOT DEFINED CMAKE_FIND_ROOT_PATH_MODE_LIBRARY)
++  set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
++endif()
++if(NOT DEFINED CMAKE_FIND_ROOT_PATH_MODE_INCLUDE)
++  set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
++endif()
+ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+ 
+ # This toolchain file can be used both inside and outside Buildroot.
+-set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
++if(NOT DEFINED CMAKE_C_COMPILER)
++  set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
++endif()
+ if(@@TOOLCHAIN_HAS_CXX@@)
+-  set(CMAKE_CXX_FLAGS_DEBUG "" CACHE STRING "Debug CXXFLAGS")
+-  set(CMAKE_CXX_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release CXXFLAGS")
+-  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@" CACHE STRING "Buildroot CXXFLAGS")
+-  set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
++  if(NOT DEFINED CMAKE_CXX_FLAGS_DEBUG)
++    set(CMAKE_CXX_FLAGS_DEBUG "" CACHE STRING "Debug CXXFLAGS")
++  endif()
++  if(NOT DEFINED CMAKE_CXX_FLAGS_RELEASE)
++    set(CMAKE_CXX_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release CXXFLAGS")
++  endif()
++  if(NOT DEFINED CMAKE_CXX_FLAGS)
++    set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@" CACHE STRING "Buildroot CXXFLAGS")
++  endif()
++  if(NOT DEFINED CMAKE_CXX_COMPILER)
++    set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
++  endif()
+ endif()
+ if(@@TOOLCHAIN_HAS_FORTRAN@@)
+-  set(CMAKE_Fortran_FLAGS_DEBUG "" CACHE STRING "Debug Fortran FLAGS")
+-  set(CMAKE_Fortran_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release Fortran FLAGS")
+-  set(CMAKE_Fortran_FLAGS "@@TARGET_FCFLAGS@@" CACHE STRING "Buildroot FCFLAGS")
+-  set(CMAKE_Fortran_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_FC@@")
++  if(NOT DEFINED CMAKE_Fortran_FLAGS_DEBUG)
++    set(CMAKE_Fortran_FLAGS_DEBUG "" CACHE STRING "Debug Fortran FLAGS")
++  endif()
++  if(NOT DEFINED CMAKE_Fortran_FLAGS_RELEASE)
++    set(CMAKE_Fortran_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release Fortran FLAGS")
++  endif()
++  if(NOT DEFINED CMAKE_Fortran_FLAGS)
++    set(CMAKE_Fortran_FLAGS "@@TARGET_FCFLAGS@@" CACHE STRING "Buildroot FCFLAGS")
++  endif()
++  if(NOT DEFINED CMAKE_Fortran_COMPILER)
++    set(CMAKE_Fortran_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_FC@@")
++  endif()
+ endif()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
