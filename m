@@ -1,59 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A53AC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FFC6C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:14:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23D0D60FEC;
-	Mon, 20 Jun 2022 19:09:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23D0D60FEC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XZ4-rFjM-Ezf; Mon, 20 Jun 2022 19:09:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0961F60FE9;
-	Mon, 20 Jun 2022 19:09:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0961F60FE9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D49BB1BF3FD
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:09:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF231418BB
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:09:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF231418BB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95BD4418CD;
+	Mon, 20 Jun 2022 19:14:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95BD4418CD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lL0mhHhaYA2B for <buildroot@lists.busybox.net>;
- Mon, 20 Jun 2022 19:09:08 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2466418C9
-Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C2466418C9
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 19:09:07 +0000 (UTC)
-Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
- by mailout12.t-online.de (Postfix) with SMTP id 002CC1BB45
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 21:09:04 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.3.84]) by fwd80.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1o3Mlk-3TMrtR0; Mon, 20 Jun 2022 21:09:04 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54574)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1o3Mlk-00072t-Dg
- for buildroot@buildroot.org; Mon, 20 Jun 2022 21:09:04 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RdvXsxQH04eh; Mon, 20 Jun 2022 19:14:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B524418C9;
+	Mon, 20 Jun 2022 19:14:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B524418C9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7450F1BF3FD
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:14:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4F34182F6F
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:14:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F34182F6F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E5mSHpdaPXuH for <buildroot@lists.busybox.net>;
+ Mon, 20 Jun 2022 19:14:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 427E682F3D
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 427E682F3D
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 19:14:34 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id z11so10261731edp.9
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 12:14:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=W7yhp1QVoCbY7q+i3fsWQZTDwdZx7t1uIYifVa/r5hs=;
+ b=NGY9B6yp5S7aFfG0wIG52J+RYarrluoHgukQ1n47jtShKcxzNFtbUq2ZomTbKR4LKM
+ gmrDGPJTyzTyGpvr7P9kNk5pbfmpBg5fdx6z+GZXWR+4sbm9yiheYUSX9lBqLgICdq54
+ W/mp5auHSP5ao+AVKRcb1ovPo1NtXske0I0KX8Z1VOP2xQOyAvN7f5834iVdEIyjLByD
+ 1KC62km7Yua+GjDlfSP2zHaCOwOBAaOrVM7sVnf4MIGS5FtMWb2OO+EInH/Sf02GDNYU
+ Sc8l3dDp3tcYL9kW9AKF6LlFMULZ/MI2+lcV0tUBaV/wclyTzsnv5iv5UJNKpjhlxrcX
+ mEdA==
+X-Gm-Message-State: AJIora9dATYgpZmRmeP7gGyMUCa4dwWB6zdugjAz+HL3c0xpbp0ttwkT
+ PsWfz/S/PnOQLk4jfPSn0r9qofo2k0gyX1Yu
+X-Google-Smtp-Source: AGRyM1vWmXZcWwFIDRgbvfVqzwd9U56/x3F7/KBwDi97wU4PWqgidpxgyaa8haoy5f92L+cUMcWCsA==
+X-Received: by 2002:a05:6402:299a:b0:435:c75:64e6 with SMTP id
+ eq26-20020a056402299a00b004350c7564e6mr30968098edb.134.1655752472553; 
+ Mon, 20 Jun 2022 12:14:32 -0700 (PDT)
+Received: from LinkTed.fritz.box ([2a02:8070:41a4:2c00:5e48:90c:7bda:e6d5])
+ by smtp.gmail.com with ESMTPSA id
+ dk12-20020a0564021d8c00b0043567edac3csm7466410edb.61.2022.06.20.12.14.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 20 Jun 2022 12:14:28 -0700 (PDT)
+X-Google-Original-From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Jun 2022 21:09:04 +0200
-Message-Id: <20220620190904.856075-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Mon, 20 Jun 2022 21:14:03 +0200
+Message-Id: <20220620191403.22187-1-raphael.pavlidis@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1655752144-0143B811-02F475FE/0/0 CLEAN NORMAL
-X-TOI-MSGID: d9897be7-29bc-43c3-87e8-6d945e59f06d
-Subject: [Buildroot] [PATCH 1/1] package/tor: fix LibreSSL build
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=W7yhp1QVoCbY7q+i3fsWQZTDwdZx7t1uIYifVa/r5hs=;
+ b=jb1Y8qkAqGU8ykQRJAG2p5GpKBXq9tEFTZaeFN4mUQrKtyLVdE0BU+Wor3N2jt4St9
+ IVe2hLAdDaNjWzQccQXuiJmUwzrkkdyw2dSclak2n2P452MkSpcz4CMDNB3pkwQMiP9M
+ xyF2n9rGn5QRBv6DPec2KqUdbu6j4uOcAkPLI4CBjtoVryyK/09F7R989/HcLYHkEuGG
+ qC1izDnyYy2ShLbHUNaBW7KdWO4AmNWQH32ysd1RLJWpsXLHAyeDfUe3Q9x1ysp8Acc7
+ 5KdhpVokF3rbF80axQNQlaUNGmTILhIPpLBRvIeOonrFBmxptnSIwE/wkv31cv4HktLa
+ 15eQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=jb1Y8qkA
+Subject: [Buildroot] [PATCH v2 1/1] package/slirp: bump to version 4.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,196 +92,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Raphael Pavlidis via buildroot <buildroot@buildroot.org>
+Reply-To: Raphael Pavlidis <raphael.pavlidis@googlemail.com>
+Cc: Thomas Huth <huth@tuxfamily.org>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/71e/71e03ee8f6e6e5a235556b85a360cbad23a22897/
-http://autobuild.buildroot.net/results/4a9/4a93bea0b83eca133ace3e3cfd2b5cb60b691d6e/
-http://autobuild.buildroot.net/results/6b8/6b8ab9c5253586426b33d2cba20e7f9f992dbee9/
-http://autobuild.buildroot.net/results/8a9/8a9c19878c2d599de6aa3bb3a849b1701f50a829/
+https://gitlab.freedesktop.org/slirp/libslirp/-/blob/v4.7.0/CHANGELOG.md
 
-and many others
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- ...rc_lib_crypt_ops_crypto_dh_openssl_c.patch | 67 +++++++++++++++++++
- ...c_lib_crypt_ops_crypto_rsa_openssl_c.patch | 58 ++++++++++++++++
- ...003-patch-src_lib_tls_x509_openssl_c.patch | 22 ++++++
- 3 files changed, 147 insertions(+)
- create mode 100644 package/tor/0001-patch-src_lib_crypt_ops_crypto_dh_openssl_c.patch
- create mode 100644 package/tor/0002-patch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch
- create mode 100644 package/tor/0003-patch-src_lib_tls_x509_openssl_c.patch
+ package/slirp/slirp.hash | 2 +-
+ package/slirp/slirp.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/tor/0001-patch-src_lib_crypt_ops_crypto_dh_openssl_c.patch b/package/tor/0001-patch-src_lib_crypt_ops_crypto_dh_openssl_c.patch
-new file mode 100644
-index 0000000000..2df7c6b6a7
---- /dev/null
-+++ b/package/tor/0001-patch-src_lib_crypt_ops_crypto_dh_openssl_c.patch
-@@ -0,0 +1,67 @@
-+Fix build with opaque structs in LibreSSL 3.5
-+
-+Downloaded from OpenBSD ports:
-+http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tor/patches/patch-src_lib_crypt_ops_crypto_dh_openssl_c?rev=1.2&content-type=text/x-cvsweb-markup
-+
-+Patch series was sent upstream:
-+https://forum.torproject.net/t/tor-relays-openbsd-stable-net-tor-and-0-4-7-7/3244
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: src/lib/crypt_ops/crypto_dh_openssl.c
-+--- a/src/lib/crypt_ops/crypto_dh_openssl.c.orig
-++++ b/src/lib/crypt_ops/crypto_dh_openssl.c
-+@@ -60,7 +60,7 @@ crypto_validate_dh_params(const BIGNUM *p, const BIGNU
-+   /* Copy into a temporary DH object, just so that DH_check() can be called. */
-+   if (!(dh = DH_new()))
-+       goto out;
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   BIGNUM *dh_p, *dh_g;
-+   if (!(dh_p = BN_dup(p)))
-+     goto out;
-+@@ -223,7 +223,7 @@ new_openssl_dh_from_params(BIGNUM *p, BIGNUM *g)
-+     goto err;
-+   }
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+ 
-+   if (!DH_set0_pqg(res_dh, dh_p, NULL, dh_g)) {
-+     goto err;
-+@@ -276,7 +276,7 @@ crypto_dh_get_bytes(crypto_dh_t *dh)
-+ int
-+ crypto_dh_generate_public(crypto_dh_t *dh)
-+ {
-+-#ifndef OPENSSL_1_1_API
-++#if !defined(OPENSSL_1_1_API) && !defined(LIBRESSL_VERSION_NUMBER)
-+  again:
-+ #endif
-+   if (!DH_generate_key(dh->dh)) {
-+@@ -286,7 +286,7 @@ crypto_dh_generate_public(crypto_dh_t *dh)
-+     return -1;
-+     /* LCOV_EXCL_STOP */
-+   }
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   /* OpenSSL 1.1.x doesn't appear to let you regenerate a DH key, without
-+    * recreating the DH object.  I have no idea what sort of aliasing madness
-+    * can occur here, so do the check, and just bail on failure.
-+@@ -327,7 +327,7 @@ crypto_dh_get_public(crypto_dh_t *dh, char *pubkey, si
-+ 
-+   const BIGNUM *dh_pub;
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   const BIGNUM *dh_priv;
-+   DH_get0_key(dh->dh, &dh_pub, &dh_priv);
-+ #else
-+@@ -338,7 +338,7 @@ crypto_dh_get_public(crypto_dh_t *dh, char *pubkey, si
-+     if (crypto_dh_generate_public(dh)<0)
-+       return -1;
-+     else {
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+       DH_get0_key(dh->dh, &dh_pub, &dh_priv);
-+ #else
-+       dh_pub = dh->dh->pub_key;
-diff --git a/package/tor/0002-patch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch b/package/tor/0002-patch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch
-new file mode 100644
-index 0000000000..1354a4221e
---- /dev/null
-+++ b/package/tor/0002-patch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch
-@@ -0,0 +1,58 @@
-+Fix build with opaque structs in LibreSSL 3.5
-+
-+Downloaded from OpenBSD ports:
-+http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tor/patches/patch-src_lib_crypt_ops_crypto_rsa_openssl_c?rev=1.2&content-type=text/x-cvsweb-markup
-+
-+Patch series was sent upstream:
-+https://forum.torproject.net/t/tor-relays-openbsd-stable-net-tor-and-0-4-7-7/3244
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: src/lib/crypt_ops/crypto_rsa_openssl.c
-+--- a/src/lib/crypt_ops/crypto_rsa_openssl.c.orig
-++++ b/src/lib/crypt_ops/crypto_rsa_openssl.c
-+@@ -47,7 +47,7 @@ struct crypto_pk_t
-+ int
-+ crypto_pk_key_is_private(const crypto_pk_t *k)
-+ {
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   if (!k || !k->key)
-+     return 0;
-+ 
-+@@ -212,7 +212,7 @@ crypto_pk_public_exponent_ok(const crypto_pk_t *env)
-+ 
-+   const BIGNUM *e;
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   const BIGNUM *n, *d;
-+   RSA_get0_key(env->key, &n, &e, &d);
-+ #else
-+@@ -242,7 +242,7 @@ crypto_pk_cmp_keys(const crypto_pk_t *a, const crypto_
-+   const BIGNUM *a_n, *a_e;
-+   const BIGNUM *b_n, *b_e;
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   const BIGNUM *a_d, *b_d;
-+   RSA_get0_key(a->key, &a_n, &a_e, &a_d);
-+   RSA_get0_key(b->key, &b_n, &b_e, &b_d);
-+@@ -279,7 +279,7 @@ crypto_pk_num_bits(crypto_pk_t *env)
-+   tor_assert(env);
-+   tor_assert(env->key);
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   /* It's so stupid that there's no other way to check that n is valid
-+    * before calling RSA_bits().
-+    */
-+@@ -572,7 +572,7 @@ static bool
-+ rsa_private_key_too_long(RSA *rsa, int max_bits)
-+ {
-+   const BIGNUM *n, *e, *p, *q, *d, *dmp1, *dmq1, *iqmp;
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+ 
-+ #if OPENSSL_VERSION_NUMBER >= OPENSSL_V_SERIES(1,1,1)
-+   n = RSA_get0_n(rsa);
-diff --git a/package/tor/0003-patch-src_lib_tls_x509_openssl_c.patch b/package/tor/0003-patch-src_lib_tls_x509_openssl_c.patch
-new file mode 100644
-index 0000000000..fe8586357a
---- /dev/null
-+++ b/package/tor/0003-patch-src_lib_tls_x509_openssl_c.patch
-@@ -0,0 +1,22 @@
-+Fix build with opaque structs in LibreSSL 3.5
-+
-+Downloaded from OpenBSD ports:
-+http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tor/patches/patch-src_lib_tls_x509_openssl_c?rev=1.2&content-type=text/x-cvsweb-markup
-+
-+Patch series was sent upstream:
-+https://forum.torproject.net/t/tor-relays-openbsd-stable-net-tor-and-0-4-7-7/3244
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: src/lib/tls/x509_openssl.c
-+--- a/src/lib/tls/x509_openssl.c.orig
-++++ b/src/lib/tls/x509_openssl.c
-+@@ -329,7 +329,7 @@ tor_tls_cert_is_valid(int severity,
-+   cert_key = X509_get_pubkey(cert->cert);
-+   if (check_rsa_1024 && cert_key) {
-+     RSA *rsa = EVP_PKEY_get1_RSA(cert_key);
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+     if (rsa && RSA_bits(rsa) == 1024) {
-+ #else
-+     if (rsa && BN_num_bits(rsa->n) == 1024) {
+diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
+index 326b2ad246..3f7abdee5a 100644
+--- a/package/slirp/slirp.hash
++++ b/package/slirp/slirp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  b8a22ac4d601ba16122a67827c0f4361785d4d283f21ff8ed48d4aa1e7693477  libslirp-4.6.1.tar.xz
++sha256  358ce8b6ea59ec9deac937cc754f0115b992839e7b0cddf30ffb8f77dc21da82  libslirp-v4.7.0.tar.bz2
+ sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
+diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
+index 43d2c520e9..10d367587d 100644
+--- a/package/slirp/slirp.mk
++++ b/package/slirp/slirp.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-SLIRP_VERSION = 4.6.1
+-SLIRP_SOURCE = libslirp-$(SLIRP_VERSION).tar.xz
+-SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/uploads/83b199ea6fcdfc0c243dfde8546ee4c9
++SLIRP_VERSION = 4.7.0
++SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.bz2
++SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
+ SLIRP_LICENSE = BSD-3-Clause
+ SLIRP_LICENSE_FILES = COPYRIGHT
+ SLIRP_CPE_ID_VENDOR = libslirp_project
 -- 
-2.30.2
+2.35.1
 
 _______________________________________________
 buildroot mailing list
