@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68B9BC43334
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06E19C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:36:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5EB9409F0;
-	Mon, 20 Jun 2022 19:36:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5EB9409F0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9CA7540B66;
+	Mon, 20 Jun 2022 19:36:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CA7540B66
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mu7nxXyPLS85; Mon, 20 Jun 2022 19:36:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id evCvjFjg5ri8; Mon, 20 Jun 2022 19:36:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19BC14091D;
-	Mon, 20 Jun 2022 19:36:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19BC14091D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 979C31BF3FD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B13F40B63;
+	Mon, 20 Jun 2022 19:36:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B13F40B63
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DC35C1BF3FD
  for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:34:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DF7CA83E31
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:34:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF7CA83E31
+ by smtp3.osuosl.org (Postfix) with ESMTP id 08CB960FF2
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:34:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08CB960FF2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S2WJ0aWQVjHu for <buildroot@lists.busybox.net>;
- Mon, 20 Jun 2022 19:34:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m10DF4TO0E-b for <buildroot@lists.busybox.net>;
+ Mon, 20 Jun 2022 19:34:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D465783E3C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0248D60FF0
  for <buildroot@buildroot.org>; Mon, 20 Jun 2022 19:34:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D465783E3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0248D60FF0
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 10D9C874DB; Mon, 20 Jun 2022 19:22:32 +0000 (UTC)
+ id 25FBD874DC; Mon, 20 Jun 2022 19:22:32 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 20 Jun 2022 21:32:21 +0200
+Date: Mon, 20 Jun 2022 21:32:43 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b1fcb596fe93f4c785f93fef58bc09ccba152406
-X-Git-Newrev: 45adbd4cd11bf6d0383c8ee713eb8eb4ad9f17b0
+X-Git-Oldrev: 5e9417e3b4a72d7c3cd00b0d7e93db47125917d6
+X-Git-Newrev: 570aa425596cc1266cd9fba9af66b3e97f48fb62
 X-Patchwork-Hint: ignore
-Message-Id: <20220620192232.10D9C874DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/clang: help host-clang to find our
- external toolchain
+Message-Id: <20220620192232.25FBD874DC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] testing/tests: CLANG compiler-rt runtime
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,192 +63,176 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45adbd4cd11bf6d0383c8ee713eb8eb4ad9f17b0
+commit: https://git.buildroot.net/buildroot/commit/?id=570aa425596cc1266cd9fba9af66b3e97f48fb62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To build libfuzzer package Matthew Weber noticed that (host) clang
-doesn't run on the host without "-B $(HOST_DIR)/opt/ext-toolchain"
-option. This option add a new search path for binaries and object
-files used implicitly.
+This patch adds a test case that
+ 1) Builds the complete LLVM and CLANG set of host tools
+ 2) Cross-compiles the compiler-rt runtime using CLANG
+ 3) Builds a cross-compiled application using CLANG and the libfuzzer
+    compiler-rt library.
+ 4) Executes the fuzz application (part of the libfuzzer package) on
+    target and checks expected output for a heap-buffer-overflow.
 
-Without -B clang fail to link due to missing crtbeging.o file and libgcc:
-output/host/bin/aarch64-linux-gnu-ld: cannot find crtbegin.o: No such file or directory
-output/host/bin/aarch64-linux-gnu-ld: cannot find -lgcc
+Note: The libfuzzer package is just a tutorial example of how to use
+      the toolkit provided by llvm (Thus not adding it as a full
+      Buildroot package).
 
-Indeed, clang search path doesn't include the dafault cross-gcc's search paths:
-
-$ output/host/bin/clang -print-search-dirs
-programs: = output/host/bin:output/host/bin:/..//bin
-libraries: = output/host/lib/clang/8.0.0:
-             output/host/bin/../lib64:
-             /lib/../lib64:
-             /usr/lib/../lib64:
-             output/host/bin/../lib:
-             /lib:/usr/lib
-
-Here is the same command for cross-gcc:
-
-$ output/host/bin/aarch64-linux-gnu-gcc -print-search-dirs
-install: output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/
-programs: = output/host/opt/ext-toolchain/bin/../libexec/gcc/aarch64-linux-gnu/8.3.0/:
-            output/host/opt/ext-toolchain/bin/../libexec/gcc/:
-            output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/aarch64-linux-gnu/8.3.0/:
-            output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/
-libraries: = output/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/:
-             output/host/opt/ext-toolchain/bin/../lib/gcc/:
-             output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/aarch64-linux-gnu/8.3.0/:
-             output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/../lib64/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/lib/aarch64-linux-gnu/8.3.0/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/lib/../lib64/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/aarch64-linux-gnu/8.3.0/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64/:
-             output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/lib/:
-             output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/
-
-We can see that gcc default search path contains
-"output/host/opt/ext-toolchain" directory where the external toolchain
-has been extracted.
-
-Since we want to use clang without additional option like -B,
-patch clang in order to use GCC_INSTALL_PREFIX instead of
-using automatic detection (which doesn't work for Buildroot).
-
-We eventually want to relocate the Buildroot SDK containing the clang
-cross-compiler, so we provide a relative path to GCC_INSTALL_PREFIX
-in order to avoid to hardcode the path to the GCC toolchain.
-
-Also the path between clang and the GCC external toolchain is not always
-the same, we have the following case:
-
-* Toolchain to be downloaded and installed
-  The toolchain is extracted into $(HOST_DIR)/opt/ext-toolchain, so the
-  path is "../opt/ext-toolchain".
-
-* Pre-installed toolchain
-  The toolchain is localed somewhere in the host filesystem and
-  defined by the user using BR2_TOOLCHAIN_EXTERNAL_PATH.
-
-So, set GCC_INSTALL_PREFIX using realpath:
-
--DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
-
-When we use a Buildroot's internal toolchain, clang will find theses
-crt*.o files and libgcc.
-
-http://lists.busybox.net/pipermail/buildroot/2019-August/256204.html
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Romain Naour <romain.naour@smile.fr>
+[Arnout: add Matt to DEVELOPERS]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch | 78 ++++++++++++++++++++++
- package/clang/clang.mk                             |  7 ++
- 2 files changed, 85 insertions(+)
+ DEVELOPERS                                         |  2 +
+ .../br2-external/clang-compiler-rt/Config.in       |  1 +
+ .../br2-external/clang-compiler-rt/external.desc   |  1 +
+ .../br2-external/clang-compiler-rt/external.mk     |  1 +
+ .../clang-compiler-rt/package/libfuzzer/Config.in  |  8 ++++
+ .../package/libfuzzer/libfuzzer.hash               |  2 +
+ .../package/libfuzzer/libfuzzer.mk                 | 24 +++++++++++
+ support/testing/tests/package/test_clang.py        | 46 ++++++++++++++++++++++
+ 8 files changed, 85 insertions(+)
 
-diff --git a/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch b/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 966751299e..63d1c3fcb6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1985,7 +1985,9 @@ F:	package/wireless_tools/
+ F:	package/xen/
+ F:	package/xml-security-c/
+ F:	support/testing/tests/fs/test_oci.py
++F:	support/testing/tests/package/br2-external/clang-compiler-rt/
+ F:	support/testing/tests/package/br2-external/openjdk/
++F:	support/testing/tests/package/test_clang.py
+ F:	support/testing/tests/package/test_openjdk.py
+ F:	support/testing/tests/package/test_opkg/
+ F:	support/testing/tests/package/test_opkg.py
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/Config.in b/support/testing/tests/package/br2-external/clang-compiler-rt/Config.in
 new file mode 100644
-index 0000000000..08371154d5
+index 0000000000..e1f9f8c598
 --- /dev/null
-+++ b/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch
-@@ -0,0 +1,78 @@
-+From fe21cede3939a435d62efbd5799547fab6af1b0a Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@smile.fr>
-+Date: Mon, 5 Aug 2019 16:06:48 +0200
-+Subject: [PATCH] lib/Driver/ToolChains/Gnu: Use GCC_INSTALL_PREFIX in the set
-+ of prefixes for searching the gcc toolchain
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/Config.in
+@@ -0,0 +1 @@
++source "$BR2_EXTERNAL_CLANG_COMPILER_RT_PATH/package/libfuzzer/Config.in"
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/external.desc b/support/testing/tests/package/br2-external/clang-compiler-rt/external.desc
+new file mode 100644
+index 0000000000..92df85911d
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/external.desc
+@@ -0,0 +1 @@
++name: CLANG_COMPILER_RT
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/external.mk b/support/testing/tests/package/br2-external/clang-compiler-rt/external.mk
+new file mode 100644
+index 0000000000..6fa55c1211
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/external.mk
+@@ -0,0 +1 @@
++include $(sort $(wildcard $(BR2_EXTERNAL_CLANG_COMPILER_RT_PATH)/package/*/*.mk))
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in
+new file mode 100644
+index 0000000000..2d335fd3c7
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBFUZZER
++	bool "libfuzzer"
++	help
++	  This project aims at hosting tutorials,
++	  examples, discussions, research proposals,
++	  and other resources related to fuzzing.
 +
-+By default, the Gnu Toolchains driver is looking at the parent
-+directory while looking for the gcc toolchain when clang is installed
-+at "D.InstalledDir"
++	  https://github.com/google/fuzzing
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash
+new file mode 100644
+index 0000000000..0601cc02c6
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash
+@@ -0,0 +1,2 @@
++sha256  c71360c3b1ba1d88b28b0b3cb3a1744d251b87a12f2881224cc53ec26eb7a2db  libfuzzer-cec02db916d21baa4db5b8d262d78848b3a35f4b.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
+new file mode 100644
+index 0000000000..0515b9da35
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# libfuzzer
++#
++################################################################################
 +
-+But this doesn't work with Buildroot since the external
-+toolchain is installed in host/opt/ext-toolchain and the sysroot is
-+moved to host/<arch>-buildroot-linux-gnu/sysroot/ directory.
++LIBFUZZER_VERSION = cec02db916d21baa4db5b8d262d78848b3a35f4b
++LIBFUZZER_SITE = $(call github,google,fuzzing,$(LIBFUZZER_VERSION))
++LIBFUZZER_LICENSE = Apache-2.0
++LIBFUZZER_LICENSE_FILES = LICENSE
++LIBFUZZER_DEPENDENCIES = compiler-rt
 +
-+We tried by setting GCC_INSTALL_PREFIX in clang.mk for host-clang
-+but it doesn't work since we already provide a sysroot [1].
++define LIBFUZZER_BUILD_CMDS
++	$(HOST_DIR)/bin/clang++ --sysroot=$(STAGING_DIR) \
++		-fsanitize=address,fuzzer \
++		$(@D)/tutorial/libFuzzer/fuzz_me.cc \
++		-o $(@D)/fuzz_me
++endef
 +
-+Help the Gnu Toolchains driver by using GCC_INSTALL_PREFIX path.
++define LIBFUZZER_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/fuzz_me $(TARGET_DIR)/usr/bin/fuzz_me
++endef
 +
-+Since we want to be able to relocate the clang toolchain,
-+allow to use a relative path with GCC_INSTALL_PREFIX.
++$(eval $(generic-package))
+diff --git a/support/testing/tests/package/test_clang.py b/support/testing/tests/package/test_clang.py
+new file mode 100644
+index 0000000000..df3990c6be
+--- /dev/null
++++ b/support/testing/tests/package/test_clang.py
+@@ -0,0 +1,46 @@
++import os
 +
-+Buildroot will provide such relative path by using:
-+HOST_CLANG_CONF_OPTS += -DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
++import infra.basetest
 +
-+Doing so allow to use clang without providing additional search
-+paths with -B option on the clang's command line.
++FUZZ_TIMEOUT = 120
 +
-+[1] https://reviews.llvm.org/D49244
-+[2] http://lists.busybox.net/pipermail/buildroot/2019-August/256204.html
 +
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+Pending, access to llvm mailing lists to submit it is pending. They
-+seem to be having issues with their listserv.
-+---
-+ lib/Driver/ToolChains/Gnu.cpp | 17 +++++++++++++++++
-+ 1 file changed, 17 insertions(+)
++class TestClangCompilerRT(infra.basetest.BRTest):
++    br2_external = [infra.filepath("tests/package/br2-external/clang-compiler-rt")]
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_COMPILER_RT=y
++        BR2_PACKAGE_LLVM=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_LIBFUZZER=y
++        """
 +
-+diff --git a/lib/Driver/ToolChains/Gnu.cpp b/lib/Driver/ToolChains/Gnu.cpp
-+index 2ad45097dc..90d6b5b748 100644
-+--- a/lib/Driver/ToolChains/Gnu.cpp
-++++ b/lib/Driver/ToolChains/Gnu.cpp
-+@@ -1725,6 +1725,8 @@ void Generic_GCC::GCCInstallationDetector::init(
-+ 
-+     Prefixes.push_back(GCCToolchainDir);
-+   } else {
-++    StringRef GccIinstallPrefix = GCC_INSTALL_PREFIX;
-++
-+     // If we have a SysRoot, try that first.
-+     if (!D.SysRoot.empty()) {
-+       Prefixes.push_back(D.SysRoot);
-+@@ -1734,6 +1736,21 @@ void Generic_GCC::GCCInstallationDetector::init(
-+     // Then look for gcc installed alongside clang.
-+     Prefixes.push_back(D.InstalledDir + "/..");
-+ 
-++    // Use GCC_INSTALL_PREFIX if provided by the buildsystem.
-++    if (!GccIinstallPrefix.empty())
-++    {
-++        if (llvm::sys::path::is_relative(GccIinstallPrefix))
-++        {
-++            // Use a relative path to gcc from clang install path.
-++            Prefixes.push_back(D.InstalledDir + "/" + GccIinstallPrefix.str());
-++        }
-++        else
-++        {
-++            // Hardcode the absolute path provided by GCC_INSTALL_PREFIX.
-++            Prefixes.push_back(GCC_INSTALL_PREFIX);
-++        }
-++    }
-++
-+     // Next, look for prefix(es) that correspond to distribution-supplied gcc
-+     // installations.
-+     if (D.SysRoot.empty()) {
-+-- 
-+2.20.1
++    def login(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        # Sanitizers overallocate memory and the minimum that seemed to work was 512MB
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a53", "-m", "512", "-initrd", img])
++        self.emulator.login()
 +
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-index d1667d79b6..95b4964be3 100644
---- a/package/clang/clang.mk
-+++ b/package/clang/clang.mk
-@@ -105,5 +105,12 @@ CLANG_CONF_OPTS += -DLLVM_LINK_LLVM_DYLIB=ON
- HOST_CLANG_CONF_OPTS += -DLLVM_DYLIB_COMPONENTS=all
- CLANG_CONF_OPTS += -DLLVM_DYLIB_COMPONENTS=all
- 
-+# Help host-clang to find our external toolchain, use a relative path from the clang
-+# installation directory to the external toolchain installation directory in order to
-+# not hardcode the toolchain absolute path.
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-+HOST_CLANG_CONF_OPTS += -DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
-+endif
++    def test_run(self):
++        self.login()
 +
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
++        # The test case verifies the application executes and that
++        # the symbolizer is working to decode the stack trace.
++        cmd = "fuzz_me 2>&1 | grep heap-buffer-overflow"
++        _, exit_code = self.emulator.run(cmd, FUZZ_TIMEOUT)
++        self.assertEqual(exit_code, 0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
