@@ -4,84 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45C8FC43334
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 21:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86603C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 21:25:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6EF94191B;
-	Mon, 20 Jun 2022 21:19:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6EF94191B
+	by smtp4.osuosl.org (Postfix) with ESMTP id F311E41925;
+	Mon, 20 Jun 2022 21:25:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F311E41925
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZiaTLAS4X7km; Mon, 20 Jun 2022 21:19:02 +0000 (UTC)
+	with ESMTP id KnHmqrwlFTbs; Mon, 20 Jun 2022 21:25:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7441741913;
-	Mon, 20 Jun 2022 21:19:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7441741913
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9985241921;
+	Mon, 20 Jun 2022 21:25:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9985241921
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A3CEA1BF398
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 21:18:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9084E1BF398
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 21:25:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E26183E61
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 21:18:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E26183E61
+ by smtp1.osuosl.org (Postfix) with ESMTP id 776C383E5F
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 21:25:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 776C383E5F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FD3kcLe443SM for <buildroot@lists.busybox.net>;
- Mon, 20 Jun 2022 21:18:55 +0000 (UTC)
+ with ESMTP id km1C4yLmco-A for <buildroot@lists.busybox.net>;
+ Mon, 20 Jun 2022 21:25:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 932E583E5F
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 932E583E5F
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 21:18:54 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id g27so9626472wrb.10
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 14:18:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C04F83E63
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com
+ [IPv6:2607:f8b0:4864:20::236])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8C04F83E63
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 21:25:17 +0000 (UTC)
+Received: by mail-oi1-x236.google.com with SMTP id p8so14887440oip.8
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 14:25:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ttI6/l94tGNHzWFm/j95ZO4Q8Uem1kstI8qROotTPEc=;
- b=1Z5ubKzVAbNfojd12tE0P2xV1Jk/7/CJhK0DwFujCqc6YtciNuY7XvOWppiQg+6kHx
- yFcjk+cFjlhjOacpP2rTajs0cdBriQ6lkby3cyhCCaLtu6acwFryeP4V5n23ZTsbb+N9
- e/NwNj4Z5rDTmveb7fcH0UkIOwBOfsaamfCRfR640EUTXsJ3HEmZ7Avc/A/wv1bn/38a
- k9GVWB5Q/H9Bk3yz+Ap6qd+WMwdqf+gEfyYI6jLWZvYCCEAWPxeXM7npjDtc/C3poN3s
- KObvHO8ms8qU8tmOrEhTYN15L35iSIMJ1Uif9F0+J+28+k984cLXUUqp209Em6dC/R0A
- SnVQ==
-X-Gm-Message-State: AJIora/qoZoJ1LmwJ3Vtib/8MClPjxYneSpvH5Y0dRZa4E6zs/G3TOcz
- miDfnYhnj09KznYa5bQCIi7MX7q5zoE=
-X-Google-Smtp-Source: AGRyM1uHsJYSbLcmE3tJy1rBHIXiArSdudDyY69Mm/717doe0v0/5ED9lIzgjttZSk78F6nZ9FT/pA==
-X-Received: by 2002:a5d:620f:0:b0:20c:c1ba:cf8e with SMTP id
- y15-20020a5d620f000000b0020cc1bacf8emr24644689wru.426.1655759932394; 
- Mon, 20 Jun 2022 14:18:52 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- h17-20020a05600c2cb100b00397393419e3sm20562518wmc.28.2022.06.20.14.18.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Jun 2022 14:18:52 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 20 Jun 2022 23:16:06 +0200
-Message-Id: <20220620211606.772454-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=hXBbtSmHAeoSFkDb9auk6kDTg/F1MZ497fEX4BJkK78=;
+ b=fT4pSSvDAgTZEMOMLCiE/hHaJRc/6i6jGjAT/WVS+4txykhqnypF5qSKclh7DiJH8g
+ nSKnopKzrKva5Rm3jN3eBXdf5om+fsYftDmA/MnfpHlMdhJ3r/opE/bbQ/M4c4jzA2Vp
+ jOOnm+LMOIw8BfRpVvLkwylyj5OTJfAg8cAYqKrszcGIaG6BbFa7nHGu6ZGy88m+HaSU
+ cPhSXx6Tw6RLU2g2wlDedzF5u248BDpsm0VOC/foZdSNYlW8/4fIzsN41SImXBUge5Wu
+ 8Zz5rrA1wkEsOHb/2hMNEA1dXFEBn2VjvjZ9encwBSjLc+nOtZVW0TjuzcURKlUIJiw2
+ phhw==
+X-Gm-Message-State: AJIora9MDOyNo54PUFv9cWIat7Hh7KGuhRom04wb+k2gK/B4gcyubak3
+ EL0x6Rdrxh6l8Q9gjoFQvjwnQay4JHuzV2gb5D5ndkQXVwQ=
+X-Google-Smtp-Source: AGRyM1v4lj9dz0F24EzzyFUE39XjAyiLBmzNphxaoDXXxBufpW9EkI+hw8OuNmf65KXESNhKGWZ7+wdOmzee3ksppOo=
+X-Received: by 2002:a05:6808:d46:b0:32f:3447:edcf with SMTP id
+ w6-20020a0568080d4600b0032f3447edcfmr12646401oik.148.1655760316320; Mon, 20
+ Jun 2022 14:25:16 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220620210856.771825-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220620210856.771825-1-fontaine.fabrice@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 20 Jun 2022 23:22:26 +0200
+Message-ID: <CAPi7W81oR4RwqWmFLq2M_EG-11N+B1sCOxhu_NT8xcTQnJ-ZCw@mail.gmail.com>
+To: Buildroot Mailing List <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ttI6/l94tGNHzWFm/j95ZO4Q8Uem1kstI8qROotTPEc=;
- b=Bm0sr/iLZ+v2iKuvVE6Czs7A3lVusMoA24x/OyTkCm5jWfGrCmVUtvec8maSna6QYH
- siciFLYz3QhMWvibLsiCeWvOfmioXbLjgMYOD/c9fxeR/Kat4Ng7yIdcqfD76EUhyj7v
- 6uJzbfj4iqE3lHEh3Tzss2wFkxtfhv8/yzXBEXx4tOvlYkAIBr67h0yZ9wTfmPtWKTWC
- DGMdt0gqujtaQv9h9HFnY1iJ6428Iip707FgLTXTr8xdl7jXLcCr62bB4cyCh+MriFVF
- qZFOKkG9VhqE/W7M1tBEYOOC9dKgt3xh7+DBD8seIsEk2mtHtePkZF7qokqKxfrKpXWb
- xRhA==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=hXBbtSmHAeoSFkDb9auk6kDTg/F1MZ497fEX4BJkK78=;
+ b=jV3rG8BiCNgoC/I90y23ojF6ojG9uPi9owqOd3Q5x4lGkwB5t5/PfU5PYvWmjW+JOM
+ 0F+bvipiWb2AaLaBpzXMFvIaBdSxvmASnnSA+bi1Uk+AR5FAwMuVeddqSsmKRkMvhnfd
+ Hn7WeT5velmPMlmBWyuBcDHcEv/KtU7ZJbNlR476Cmpo/PsSbPpbI9pT4eehx1Up5Us/
+ DBHKA8/iGQkM/6tNYvW9Ap/iy/Bhrmjz4tklXN+BW5dTGihcOwgexe06NrX2hkLVfxe7
+ oPHtA7ED6PBxswpuqffG+gChfITh7xEFCFEQwFVA8DjtOKawGKDF0U8yky2vNah9fiNc
+ bzfA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Bm0sr/iL
-Subject: [Buildroot] [PATCH 1/1] Config.in.legacy: fix 2022.08 entries
+ header.a=rsa-sha256 header.s=20210112 header.b=jV3rG8Bi
+Subject: Re: [Buildroot] [PATCH 1/2] package/x11r7/xserver_xorg-server: fix
+ xephyr build with kdrive
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,71 +89,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 7763ba7007172ceb5e928ae5902735d727aaa90d wrongly added
-BR2_PACKAGE_RTL8723BS below 2022.05 entry instead of 2022.08
-
-Commit 793ee1011e84bd79fa3d146dbe6c14c7fba39648 wrongly duplicated
-2022.08 entry
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- Config.in.legacy | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 956da10a9f..8af5c7ef14 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,13 +146,13 @@ endif
- 
- comment "Legacy options removed in 2022.08"
- 
--config BR2_PACKAGE_PHP_EXT_WDDX
--	bool "php wddx removed"
-+config BR2_PACKAGE_RTL8723BS
-+	bool "rtl8723bs removed"
- 	select BR2_LEGACY
- 	help
--	  The WDDX extension was removed from php.
--
--comment "Legacy options removed in 2022.08"
-+	  Package was removed because it is not compatible with latest
-+	  kernels and is not maintained anymore: code has been removed
-+	  in 2017 as driver is available in the linux-next tree.
- 
- config BR2_nds32
- 	bool "nds32 architecture removed"
-@@ -162,15 +162,13 @@ config BR2_nds32
- 	  its support being removed from the upstream Linux kernel,
- 	  and its lack of maintenance in Buildroot.
- 
--comment "Legacy options removed in 2022.05"
--
--config BR2_PACKAGE_RTL8723BS
--	bool "rtl8723bs removed"
-+config BR2_PACKAGE_PHP_EXT_WDDX
-+	bool "php wddx removed"
- 	select BR2_LEGACY
- 	help
--	  Package was removed because it is not compatible with latest
--	  kernels and is not maintained anymore: code has been removed
--	  in 2017 as driver is available in the linux-next tree.
-+	  The WDDX extension was removed from php.
-+
-+comment "Legacy options removed in 2022.05"
- 
- config BR2_PACKAGE_KTAP
- 	bool "ktap removed"
--- 
-2.35.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QmVybmQgYWxyZWFkeSBzZW50IHRoZSBzYW1lIHBhdGNoOgpodHRwczovL3BhdGNod29yay5vemxh
+YnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjIwNjIwMTg0OTI1LjUzODM0Mi0xLWJl
+cm5kLmt1aGxzQHQtb25saW5lLmRlLwoKSSBjYW4gc2V0IHRoaXMgb25lIGFzIHN1cGVyc2VkZWQg
+aG93ZXZlciBJIHdvdWxkIGFkdmlzZSB0byBvbmx5IGFkZAp0aG9zZSBkZXBlbmRlbmNpZXMgaWYg
+QlIyX1BBQ0tBR0VfWFNFUlZFUl9YT1JHX1NFUlZFUl9YRVBIWVIgYW5kCkJSMl9QQUNLQUdFX1hT
+RVJWRVJfWE9SR19TRVJWRVJfS0RSSVZFIGFyZSBzZXQuCkhlcmUgaXMgYW4gZXh0cmFjdCBvZiBj
+b25maWd1cmUuYWM6CgppZiB0ZXN0ICIkS0RSSVZFIiA9IHllczsgdGhlbgogICAgWEVQSFlSX1JF
+UVVJUkVEX0xJQlM9InhhdSB4ZG1jcCB4Y2IgeGNiLXNoYXBlIHhjYi1yZW5kZXIKeGNiLXJlbmRl
+cnV0aWwgeGNiLWF1eCB4Y2ItaW1hZ2UgeGNiLWljY2NtIHhjYi1zaG0gPj0gMS45LjMKeGNiLWtl
+eXN5bXMgeGNiLXJhbmRyIHhjYi14a2IiCgpMZSBsdW4uIDIwIGp1aW4gMjAyMiDDoCAyMzoxMiwg
+RmFicmljZSBGb250YWluZQo8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+IGEgw6ljcml0IDoK
+Pgo+IEZpeCB0aGUgZm9sbG93aW5nIHhlcGh5ciBidWlsZCBmYWlsdXJlIHdpdGgga2RyaXZlIHJh
+aXNlZCBzaW5jZSBjb21taXQKPiBlZWRiZDZmOTdkNTFhMDA0OWVjNTEyZGUyNjU0MTQ2NTQwM2Fi
+MDZmOgo+Cj4gY2hlY2tpbmcgZm9yIFhFUEhZUi4uLiBubwo+IGNvbmZpZ3VyZTogZXJyb3I6IFBh
+Y2thZ2UgcmVxdWlyZW1lbnRzICh4YXUgeGRtY3AgeGNiIHhjYi1zaGFwZSB4Y2ItcmVuZGVyIHhj
+Yi1yZW5kZXJ1dGlsIHhjYi1hdXggeGNiLWltYWdlIHhjYi1pY2NjbSB4Y2Itc2htID49IDEuOS4z
+IHhjYi1rZXlzeW1zIHhjYi1yYW5kciB4Y2IteGtiIHhjYi14dikgd2VyZSBub3QgbWV0Ogo+Cj4g
+UGFja2FnZSAneGNiLXJlbmRlcnV0aWwnLCByZXF1aXJlZCBieSAndmlydHVhbDp3b3JsZCcsIG5v
+dCBmb3VuZAo+IFBhY2thZ2UgJ3hjYi1hdXgnLCByZXF1aXJlZCBieSAndmlydHVhbDp3b3JsZCcs
+IG5vdCBmb3VuZAo+IFBhY2thZ2UgJ3hjYi1pbWFnZScsIHJlcXVpcmVkIGJ5ICd2aXJ0dWFsOndv
+cmxkJywgbm90IGZvdW5kCj4gUGFja2FnZSAneGNiLWljY2NtJywgcmVxdWlyZWQgYnkgJ3ZpcnR1
+YWw6d29ybGQnLCBub3QgZm91bmQKPiBQYWNrYWdlICd4Y2Ita2V5c3ltcycsIHJlcXVpcmVkIGJ5
+ICd2aXJ0dWFsOndvcmxkJywgbm90IGZvdW5kCj4KPiBGaXhlczoKPiAgLSBodHRwOi8vYXV0b2J1
+aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9iYWJhMjE4Yzg3OWI2N2JmYmFkYzljMjVkMzQzMTNh
+YmM3NjM5N2JjCj4gIC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvOTQ3
+MWI3N2RiOWFlZmEyZmQwZTViZTYxZWE4NDcwOTE4MzUxMTYyMwo+Cj4gU2lnbmVkLW9mZi1ieTog
+RmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4gLS0tCj4gIHBh
+Y2thZ2UveDExcjcveHNlcnZlcl94b3JnLXNlcnZlci9Db25maWcuaW4gICAgICAgICAgICAgIHwg
+NCArKysrCj4gIHBhY2thZ2UveDExcjcveHNlcnZlcl94b3JnLXNlcnZlci94c2VydmVyX3hvcmct
+c2VydmVyLm1rIHwgNyArKysrKysrCj4gIDIgZmlsZXMgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygr
+KQo+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UveDExcjcveHNlcnZlcl94b3JnLXNlcnZlci9Db25m
+aWcuaW4gYi9wYWNrYWdlL3gxMXI3L3hzZXJ2ZXJfeG9yZy1zZXJ2ZXIvQ29uZmlnLmluCj4gaW5k
+ZXggNGZiMDMwNTFkZC4uZGFmNGQ4MTcwMiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3gxMXI3L3hz
+ZXJ2ZXJfeG9yZy1zZXJ2ZXIvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS94MTFyNy94c2VydmVy
+X3hvcmctc2VydmVyL0NvbmZpZy5pbgo+IEBAIC04NSw2ICs4NSwxMCBAQCBjb25maWcgQlIyX1BB
+Q0tBR0VfWFNFUlZFUl9YT1JHX1NFUlZFUl9YVkZCCj4KPiAgY29uZmlnIEJSMl9QQUNLQUdFX1hT
+RVJWRVJfWE9SR19TRVJWRVJfWEVQSFlSCj4gICAgICAgICBib29sICJYZXBoeXIgc2VydmVyIgo+
+ICsgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX1hDQl9VVElMX0lNQUdFIGlmIEJSMl9QQUNLQUdF
+X1hTRVJWRVJfWE9SR19TRVJWRVJfS0RSSVZFCj4gKyAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0Vf
+WENCX1VUSUxfS0VZU1lNUyBpZiBCUjJfUEFDS0FHRV9YU0VSVkVSX1hPUkdfU0VSVkVSX0tEUklW
+RQo+ICsgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX1hDQl9VVElMX1JFTkRFUlVUSUwgaWYgQlIy
+X1BBQ0tBR0VfWFNFUlZFUl9YT1JHX1NFUlZFUl9LRFJJVkUKPiArICAgICAgIHNlbGVjdCBCUjJf
+UEFDS0FHRV9YQ0JfVVRJTF9XTSBpZiBCUjJfUEFDS0FHRV9YU0VSVkVSX1hPUkdfU0VSVkVSX0tE
+UklWRQo+ICAgICAgICAgaGVscAo+ICAgICAgICAgICBYZXBoeXIgbmVzdGVkIFggc2VydmVyOyBz
+dWNjZXNzb3IgdG8gWG5lc3QuCj4KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS94MTFyNy94c2VydmVy
+X3hvcmctc2VydmVyL3hzZXJ2ZXJfeG9yZy1zZXJ2ZXIubWsgYi9wYWNrYWdlL3gxMXI3L3hzZXJ2
+ZXJfeG9yZy1zZXJ2ZXIveHNlcnZlcl94b3JnLXNlcnZlci5tawo+IGluZGV4IDBmMTc3OWRjYWIu
+LmZhNWQyYTgwMmQgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS94MTFyNy94c2VydmVyX3hvcmctc2Vy
+dmVyL3hzZXJ2ZXJfeG9yZy1zZXJ2ZXIubWsKPiArKysgYi9wYWNrYWdlL3gxMXI3L3hzZXJ2ZXJf
+eG9yZy1zZXJ2ZXIveHNlcnZlcl94b3JnLXNlcnZlci5tawo+IEBAIC04NCw2ICs4NCwxMyBAQCBY
+U0VSVkVSX1hPUkdfU0VSVkVSX0NPTkZfT1BUUyArPSBcCj4gICAgICAgICAtLWRpc2FibGUtZ2x4
+IFwKPiAgICAgICAgIC0tZGlzYWJsZS1kcmkKPgo+ICtpZmVxICgkKEJSMl9QQUNLQUdFX1hTRVJW
+RVJfWE9SR19TRVJWRVJfWEVQSFlSKSx5KQo+ICtYU0VSVkVSX1hPUkdfU0VSVkVSX0RFUEVOREVO
+Q0lFUyArPSBcCj4gKyAgICAgICB4Y2ItdXRpbC1pbWFnZSBcCj4gKyAgICAgICB4Y2ItdXRpbC1r
+ZXlzeW1zIFwKPiArICAgICAgIHhjYi11dGlsLXJlbmRlcnV0aWwgXAo+ICsgICAgICAgeGNiLXV0
+aWwtd20KPiArZW5kaWYKPiAgZWxzZSAjIG1vZHVsYXIKPiAgWFNFUlZFUl9YT1JHX1NFUlZFUl9D
+T05GX09QVFMgKz0gLS1kaXNhYmxlLWtkcml2ZQo+ICBlbmRpZgo+IC0tCj4gMi4zNS4xCj4KX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
+aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
+dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
