@@ -1,91 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13491C43334
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 21:12:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45C8FC43334
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 21:19:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 861A66100A;
-	Mon, 20 Jun 2022 21:12:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 861A66100A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xUE5jpOcaSLq; Mon, 20 Jun 2022 21:12:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4A3460FFC;
-	Mon, 20 Jun 2022 21:12:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4A3460FFC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1441F1BF398
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 21:12:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F06BD41914
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 21:12:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F06BD41914
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6EF94191B;
+	Mon, 20 Jun 2022 21:19:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6EF94191B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cA3FBGndxQQE for <buildroot@lists.busybox.net>;
- Mon, 20 Jun 2022 21:12:29 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZiaTLAS4X7km; Mon, 20 Jun 2022 21:19:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7441741913;
+	Mon, 20 Jun 2022 21:19:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7441741913
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A3CEA1BF398
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 21:18:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E26183E61
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 21:18:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E26183E61
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FD3kcLe443SM for <buildroot@lists.busybox.net>;
+ Mon, 20 Jun 2022 21:18:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0C4E416EF
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C0C4E416EF
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 21:12:28 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- m16-20020a7bca50000000b0039c8a224c95so6265064wml.2
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 14:12:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 932E583E5F
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 932E583E5F
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 21:18:54 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id g27so9626472wrb.10
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 14:18:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=yV58Ua1xbOw3pSzn9PnH7aTeWpNfa1x0Pe21DwalMbQ=;
- b=N669b69SfTqHrrZm376whnRsbzmBZXfZX2RAoPi4dCz4++LjY8ZuFwfmWtKnTzraDj
- q3/5iWSu9P8Kkm8rETLQ0ajvOYBt25fv09HMLZ1BV1hCdps+uaZchLC69M7io+RgHTyL
- HQBs7IPT1MNqIN+k/3Ee1jf0UcgbfSyi20OgSNRFROwwrm3E5Rj65q2FPOC+NENr3i5r
- zyXqFz5a7rnv9Ld+o2RIMZhDOzEDCF/hxL2pnUnriPq8bmaJ84PgfEeczy+M9E/JRJVj
- lJMtSKMw4LRZTmTJp6m/AiugCgnPjmuIol0cW/7vn0+tbmj1UlM0JLIv2LLjLl/g03nl
- NUHg==
-X-Gm-Message-State: AOAM531id8P9hV/UEFtJtecNBbQQUXaVUnWYwdCX/9q6Pr2Ql0cfnkWH
- fFiB4s0O1VwptkhEyY3Nj/M1XL5+KKY=
-X-Google-Smtp-Source: ABdhPJxTSgOxoyqNk5iPa0pEnLNvdnROFX00a4I14iE0kH2h6g98FCXGhj5tMs3b4YnhtJA4z6hrFw==
-X-Received: by 2002:a05:600c:4c06:b0:39c:975a:a548 with SMTP id
- d6-20020a05600c4c0600b0039c975aa548mr36372254wmp.99.1655759546601; 
- Mon, 20 Jun 2022 14:12:26 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ttI6/l94tGNHzWFm/j95ZO4Q8Uem1kstI8qROotTPEc=;
+ b=1Z5ubKzVAbNfojd12tE0P2xV1Jk/7/CJhK0DwFujCqc6YtciNuY7XvOWppiQg+6kHx
+ yFcjk+cFjlhjOacpP2rTajs0cdBriQ6lkby3cyhCCaLtu6acwFryeP4V5n23ZTsbb+N9
+ e/NwNj4Z5rDTmveb7fcH0UkIOwBOfsaamfCRfR640EUTXsJ3HEmZ7Avc/A/wv1bn/38a
+ k9GVWB5Q/H9Bk3yz+Ap6qd+WMwdqf+gEfyYI6jLWZvYCCEAWPxeXM7npjDtc/C3poN3s
+ KObvHO8ms8qU8tmOrEhTYN15L35iSIMJ1Uif9F0+J+28+k984cLXUUqp209Em6dC/R0A
+ SnVQ==
+X-Gm-Message-State: AJIora/qoZoJ1LmwJ3Vtib/8MClPjxYneSpvH5Y0dRZa4E6zs/G3TOcz
+ miDfnYhnj09KznYa5bQCIi7MX7q5zoE=
+X-Google-Smtp-Source: AGRyM1uHsJYSbLcmE3tJy1rBHIXiArSdudDyY69Mm/717doe0v0/5ED9lIzgjttZSk78F6nZ9FT/pA==
+X-Received: by 2002:a5d:620f:0:b0:20c:c1ba:cf8e with SMTP id
+ y15-20020a5d620f000000b0020cc1bacf8emr24644689wru.426.1655759932394; 
+ Mon, 20 Jun 2022 14:18:52 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- bt28-20020a056000081c00b0020fcc655e4asm13729556wrb.5.2022.06.20.14.12.25
+ h17-20020a05600c2cb100b00397393419e3sm20562518wmc.28.2022.06.20.14.18.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Jun 2022 14:12:26 -0700 (PDT)
+ Mon, 20 Jun 2022 14:18:52 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Jun 2022 23:08:56 +0200
-Message-Id: <20220620210856.771825-2-fontaine.fabrice@gmail.com>
+Date: Mon, 20 Jun 2022 23:16:06 +0200
+Message-Id: <20220620211606.772454-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220620210856.771825-1-fontaine.fabrice@gmail.com>
-References: <20220620210856.771825-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=yV58Ua1xbOw3pSzn9PnH7aTeWpNfa1x0Pe21DwalMbQ=;
- b=X+6X8Do/KehB6euA9Dd75DiJk5CzNTUMaSjxhK1yXRHlIf+vlaFReltTXLGXeSs6r+
- Hpd1YmqulZn2hvO0NAUc60k2sTtopK/dmYW29mQhd37OYPaIz5HF+VT/XQgTFeNNCrLF
- OnrN73Z8XNraL6OHcs8Ah/bujSpgaH4Ft9ZHSAqaJdj+Gp1iLln7dfSpD3RxHjNM8qPX
- bxyKQ6dkPJwVKmXpRbjzQCpoJYFtEamqi/1Us0DXQdsyRSgMCXZ9jr9lo8Ddlc+fxcsC
- xDlY0U3EtygcdSom+uVsyAvrqZxi5XxaLc20kmxrD8RqywBluFYgu5vEks8n05f4VjJs
- Qcvg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ttI6/l94tGNHzWFm/j95ZO4Q8Uem1kstI8qROotTPEc=;
+ b=Bm0sr/iLZ+v2iKuvVE6Czs7A3lVusMoA24x/OyTkCm5jWfGrCmVUtvec8maSna6QYH
+ siciFLYz3QhMWvibLsiCeWvOfmioXbLjgMYOD/c9fxeR/Kat4Ng7yIdcqfD76EUhyj7v
+ 6uJzbfj4iqE3lHEh3Tzss2wFkxtfhv8/yzXBEXx4tOvlYkAIBr67h0yZ9wTfmPtWKTWC
+ DGMdt0gqujtaQv9h9HFnY1iJ6428Iip707FgLTXTr8xdl7jXLcCr62bB4cyCh+MriFVF
+ qZFOKkG9VhqE/W7M1tBEYOOC9dKgt3xh7+DBD8seIsEk2mtHtePkZF7qokqKxfrKpXWb
+ xRhA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=X+6X8Do/
-Subject: [Buildroot] [PATCH 2/2] package/x11r7/xserver_xorg-server: drop
- unrecognized option
+ header.a=rsa-sha256 header.s=20210112 header.b=Bm0sr/iL
+Subject: [Buildroot] [PATCH 1/1] Config.in.legacy: fix 2022.08 entries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,44 +93,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-dmx has been dropped since version 21.1.0 and
-https://gitlab.freedesktop.org/xorg/xserver/-/commit/b3b81c8c2090cd49410960a021baf0d27fdd2ab3
+Commit 7763ba7007172ceb5e928ae5902735d727aaa90d wrongly added
+BR2_PACKAGE_RTL8723BS below 2022.05 entry instead of 2022.08
+
+Commit 793ee1011e84bd79fa3d146dbe6c14c7fba39648 wrongly duplicated
+2022.08 entry
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ Config.in.legacy | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index fa5d2a802d..43d2038a8d 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -45,7 +45,6 @@ XSERVER_XORG_SERVER_CONF_OPTS = \
- 	--disable-config-hal \
- 	--enable-record \
- 	--disable-xnest \
--	--disable-dmx \
- 	--disable-unit-tests \
- 	--with-builder-addr=buildroot@buildroot.org \
- 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1 -O2" \
-@@ -165,10 +164,6 @@ else
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-screensaver
- endif
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 956da10a9f..8af5c7ef14 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,13 +146,13 @@ endif
  
--ifneq ($(BR2_PACKAGE_XLIB_LIBDMX),y)
--XSERVER_XORG_SERVER_CONF_OPTS += --disable-dmx
--endif
+ comment "Legacy options removed in 2022.08"
+ 
+-config BR2_PACKAGE_PHP_EXT_WDDX
+-	bool "php wddx removed"
++config BR2_PACKAGE_RTL8723BS
++	bool "rtl8723bs removed"
+ 	select BR2_LEGACY
+ 	help
+-	  The WDDX extension was removed from php.
 -
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- XSERVER_XORG_SERVER_CONF_OPTS += --with-sha1=libcrypto
- XSERVER_XORG_SERVER_DEPENDENCIES += openssl
+-comment "Legacy options removed in 2022.08"
++	  Package was removed because it is not compatible with latest
++	  kernels and is not maintained anymore: code has been removed
++	  in 2017 as driver is available in the linux-next tree.
+ 
+ config BR2_nds32
+ 	bool "nds32 architecture removed"
+@@ -162,15 +162,13 @@ config BR2_nds32
+ 	  its support being removed from the upstream Linux kernel,
+ 	  and its lack of maintenance in Buildroot.
+ 
+-comment "Legacy options removed in 2022.05"
+-
+-config BR2_PACKAGE_RTL8723BS
+-	bool "rtl8723bs removed"
++config BR2_PACKAGE_PHP_EXT_WDDX
++	bool "php wddx removed"
+ 	select BR2_LEGACY
+ 	help
+-	  Package was removed because it is not compatible with latest
+-	  kernels and is not maintained anymore: code has been removed
+-	  in 2017 as driver is available in the linux-next tree.
++	  The WDDX extension was removed from php.
++
++comment "Legacy options removed in 2022.05"
+ 
+ config BR2_PACKAGE_KTAP
+ 	bool "ktap removed"
 -- 
 2.35.1
 
