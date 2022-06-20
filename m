@@ -4,91 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B757CC43334
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:44:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EB12C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:44:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5A96440B64;
-	Mon, 20 Jun 2022 19:44:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A96440B64
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2BE49405B3;
+	Mon, 20 Jun 2022 19:44:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BE49405B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BB5A-H35eHnS; Mon, 20 Jun 2022 19:44:03 +0000 (UTC)
+	with ESMTP id PW71o_i5aEwT; Mon, 20 Jun 2022 19:44:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15D4A405B3;
-	Mon, 20 Jun 2022 19:44:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15D4A405B3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2BCA61BF3FD
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:44:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 447DF40B76;
+	Mon, 20 Jun 2022 19:44:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 447DF40B76
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 40E981BF3FD
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:44:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0674B830B8
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:44:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0674B830B8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 290DE60FD4
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:44:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 290DE60FD4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cNcscY-hpsAw for <buildroot@lists.busybox.net>;
- Mon, 20 Jun 2022 19:43:58 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A079283027
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A079283027
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 19:43:58 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id ay16so3721640ejb.6
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 12:43:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=Y3Fsfy1ah7kms6JGJP+EfvNRyRHL5dbcSfAZTjAXk7s=;
- b=XXWXeVw84tCL0OfSL/h1oB2ux8bRJuLLpQGE14EgTGY1URtnLkI1xT7WcP1yLLbGz5
- nneRzkH3udfURe1cDUzHidenB6s25wJCWEGghyl4YYZg8L4L5fTIWbjcNufl+MpCZG6y
- xTn1JG8ISBKLr+zK4medF75zo/JwOacGfDIJVaHo8/ZQkVYKRWU4uyI4+7dyRuBIzifY
- OrC0NN9dik4lKq6QsgFEbqzYdv+0A3z1XNXosLLtGnNGozpFPrO3kGFe4vpONGu1dpWf
- ZMkj2HrxvaeB1Bwz4kIBVX0u0P0pnOUN1EWQiwRmQqfPRyqXTd2OqFcgBc6tpZq/Lity
- GPqw==
-X-Gm-Message-State: AJIora9G27ntuUEyjuqIio3qhLxDaFjR7Vw5c5wzs3/kri/bqnLORtcE
- foG8LmdC83R4pXAv8Zdn6Gk9l0XFXIlh5Q==
-X-Google-Smtp-Source: AGRyM1tjy07QFKlK4WQpKDDnsNOxwg26vI1F+KE8YjWwCsjVlRhxzaGkvvCenq0CtTIlCsIS1gJ3mA==
-X-Received: by 2002:a17:907:6f07:b0:715:7e23:bbb7 with SMTP id
- sy7-20020a1709076f0700b007157e23bbb7mr21684341ejc.462.1655754236769; 
- Mon, 20 Jun 2022 12:43:56 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- d21-20020a056402517500b00435640c141esm8228537ede.93.2022.06.20.12.43.56
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 20 Jun 2022 12:43:56 -0700 (PDT)
-Message-ID: <ee3b7fcb-ec8d-900c-b0ca-c8a37188ed03@mind.be>
-Date: Mon, 20 Jun 2022 21:43:54 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220530210846.3066019-1-fontaine.fabrice@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220530210846.3066019-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=Y3Fsfy1ah7kms6JGJP+EfvNRyRHL5dbcSfAZTjAXk7s=;
- b=iNg9QBsDySu7AkrJgi+bxBySTtrFSdEMQxAKWEE4agy948ERoyuZZEAsk5dMlCtHsC
- Xpt5NUgDGL36BhHrmCRgh8ohHwfdzpEijGgr9vKaCbYyZJkDZdzlOfkrrwuHUNMvGwMT
- 876p6ML5IQe10p3BK/zzKPEaB80Bthc/FHHNesPs3t4CSazBumFlrnDfICHs4g+Yam5q
- AsbdbQstUj9p4v0AYiNSKc1P5IuIjELcYSjDrhq3H5TRXJVpXWarjQQAa6RApS3hoMj1
- AhIX/oiSKBq66QyWTzudeqAycxu5rjgU7Xz16lg6JUg8PCE3xhtYFy4bW9W3M/9ZsjKE
- E/uA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=iNg9QBsD
-Subject: Re: [Buildroot] [PATCH 1/1] package/rtl8723bs: drop package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cipVaEpP2sMi for <buildroot@lists.busybox.net>;
+ Mon, 20 Jun 2022 19:44:05 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 15D4A60F71
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 19:44:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15D4A60F71
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 2D9D0874EE; Mon, 20 Jun 2022 19:31:43 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Mon, 20 Jun 2022 21:36:54 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 570aa425596cc1266cd9fba9af66b3e97f48fb62
+X-Git-Newrev: 7763ba7007172ceb5e928ae5902735d727aaa90d
+X-Patchwork-Hint: ignore
+Message-Id: <20220620193143.2D9D0874EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8723bs: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,151 +56,202 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3275080404045573613=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAzMC8wNS8yMDIyIDIzOjA4LCBGYWJyaWNlIEZvbnRhaW5lIHdyb3RlOgo+IERyb3AgcGFj
-a2FnZSBhcyBpdCBkb2Vzbid0IGJ1aWxkIHdpdGggbGF0ZXN0IGtlcm5lbCBhbmQgcHJvamVjdCBp
-cyBub3QKPiBtYWludGFpbmVkIGFueW1vcmU6IGNvZGUgaGFzIGJlZW4gcmVtb3ZlZCBpbiAyMDE3
-IGFzIGRyaXZlciBpcyBhdmFpbGFibGUKPiBpbiB0aGUgbGludXgtbmV4dCB0cmVlIChjZi4KPiBo
-dHRwczovL2dpdGh1Yi5jb20vaGFkZXNzL3J0bDg3MjNicy9jb21taXQvM2JiMWQzM2FkOThjMWQ3
-N2I1ZTE3YTFiNzA3ZTEzN2IzNWU2ZDBhNSk6Cj4gCj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIC9o
-b21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtMy9vdXRwdXQtMS9idWlsZC9ydGw4NzIz
-YnMtMTFhYjkyZDhjY2Q3MWM4MGYwMTAyODI4MzY2YjE0ZWY2YjY3NmZiMi8uL2luY2x1ZGUvZHJ2
-X3R5cGVzLmg6MjUsCj4gICAgICAgICAgICAgICAgICAgZnJvbSAvaG9tZS9hdXRvYnVpbGQvYXV0
-b2J1aWxkL2luc3RhbmNlLTMvb3V0cHV0LTEvYnVpbGQvcnRsODcyM2JzLTExYWI5MmQ4Y2NkNzFj
-ODBmMDEwMjgyODM2NmIxNGVmNmI2NzZmYjIvLi9jb3JlL3J0d19jbWQuYzoxNzoKPiAvaG9tZS9h
-dXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNlLTMvb3V0cHV0LTEvYnVpbGQvcnRsODcyM2JzLTEx
-YWI5MmQ4Y2NkNzFjODBmMDEwMjgyODM2NmIxNGVmNmI2NzZmYjIvLi9pbmNsdWRlL2F1dG9jb25m
-Lmg6Mjc6MjogZXJyb3I6ICNlcnJvciBDT05GSUdfV0lSRUxFU1NfRVhUIG5lZWRzIHRvIGJlIGVu
-YWJsZWQgZm9yIHRoaXMgZHJpdmVyIHRvIHdvcmsKPiAgICAgMjcgfCAjZXJyb3IgQ09ORklHX1dJ
-UkVMRVNTX0VYVCBuZWVkcyB0byBiZSBlbmFibGVkIGZvciB0aGlzIGRyaXZlciB0byB3b3JrCj4g
-ICAgICAgIHwgIF5+fn5+Cj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIC9ob21lL2F1dG9idWlsZC9h
-dXRvYnVpbGQvaW5zdGFuY2UtMy9vdXRwdXQtMS9idWlsZC9ydGw4NzIzYnMtMTFhYjkyZDhjY2Q3
-MWM4MGYwMTAyODI4MzY2YjE0ZWY2YjY3NmZiMi8uL2luY2x1ZGUvb3NkZXBfc2VydmljZS5oOjIz
-LAo+ICAgICAgICAgICAgICAgICAgIGZyb20gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0
-YW5jZS0zL291dHB1dC0xL2J1aWxkL3J0bDg3MjNicy0xMWFiOTJkOGNjZDcxYzgwZjAxMDI4Mjgz
-NjZiMTRlZjZiNjc2ZmIyLy4vaW5jbHVkZS9kcnZfdHlwZXMuaDoyNywKPiAgICAgICAgICAgICAg
-ICAgICBmcm9tIC9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtMy9vdXRwdXQtMS9i
-dWlsZC9ydGw4NzIzYnMtMTFhYjkyZDhjY2Q3MWM4MGYwMTAyODI4MzY2YjE0ZWY2YjY3NmZiMi8u
-L2NvcmUvcnR3X2NtZC5jOjE3Ogo+IC9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2Ut
-My9vdXRwdXQtMS9idWlsZC9ydGw4NzIzYnMtMTFhYjkyZDhjY2Q3MWM4MGYwMTAyODI4MzY2YjE0
-ZWY2YjY3NmZiMi8uL2luY2x1ZGUvb3NkZXBfc2VydmljZV9saW51eC5oOiBJbiBmdW5jdGlvbiDi
-gJhfaW5pdF90aW1lcuKAmToKPiAvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNlLTMv
-b3V0cHV0LTEvYnVpbGQvcnRsODcyM2JzLTExYWI5MmQ4Y2NkNzFjODBmMDEwMjgyODM2NmIxNGVm
-NmI2NzZmYjIvLi9pbmNsdWRlL29zZGVwX3NlcnZpY2VfbGludXguaDo5Nzo4OiBlcnJvcjog4oCY
-X3RpbWVy4oCZIHtha2Eg4oCYc3RydWN0IHRpbWVyX2xpc3TigJl9IGhhcyBubyBtZW1iZXIgbmFt
-ZWQg4oCYZGF0YeKAmQo+ICAgICA5NyB8ICBwdGltZXItPmRhdGEgPSAodW5zaWduZWQgbG9uZylj
-bnR4Owo+ICAgICAgICB8ICAgICAgICBefgo+IC9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5z
-dGFuY2UtMy9vdXRwdXQtMS9idWlsZC9ydGw4NzIzYnMtMTFhYjkyZDhjY2Q3MWM4MGYwMTAyODI4
-MzY2YjE0ZWY2YjY3NmZiMi8uL2luY2x1ZGUvb3NkZXBfc2VydmljZV9saW51eC5oOjk4OjI6IGVy
-cm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbiDigJhpbml0X3RpbWVy4oCZOyBk
-aWQgeW91IG1lYW4g4oCYX2luaXRfdGltZXLigJk/IFstV2Vycm9yPWltcGxpY2l0LWZ1bmN0aW9u
-LWRlY2xhcmF0aW9uXQo+ICAgICA5OCB8ICBpbml0X3RpbWVyKHB0aW1lcik7Cj4gICAgICAgIHwg
-IF5+fn5+fn5+fn4KPiAgICAgICAgfCAgX2luaXRfdGltZXIKPiAKPiBGaXhlczoKPiAgIC0gaHR0
-cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvN2E0NzNlODNkNGEzZDFlMjIyOGY0
-ZWUxMjgyZTg1Njk3ZGU0YWU1ZAo+IAo+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUg
-PGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgoKICBJIHdhcyBjb25mdXNlZCBmb3IgYSBtb21l
-bnQsIEkgdGhvdWdodCB0aGUgcGFja2FnZSB3YXMganVzdCBhZGRlZCBhIGNvdXBsZSBvZiAKZGF5
-cyBiZWZvcmUuLi4gYnV0IHRoYXQncyBkcywgbm90IGJzLgoKICBBcHBsaWVkIHRvIG1hc3Rlciwg
-dGhhbmtzLgoKICBSZWdhcmRzLAogIEFybm91dAoKPiAtLS0KPiAgIENvbmZpZy5pbi5sZWdhY3kg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA4ICsrKysKPiAgIERFVkVMT1BFUlMgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxIC0KPiAgIHBhY2thZ2UvQ29uZmln
-LmluICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxIC0KPiAgIC4uLjEtcnRsODcyM2Jz
-LWFkZC1kZWJ1Zy1sZXZlbC1tb2RwYXJhbS5wYXRjaCB8IDQxIC0tLS0tLS0tLS0tLS0tLS0tLS0K
-PiAgIHBhY2thZ2UvcnRsODcyM2JzL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICB8IDEwIC0t
-LS0tCj4gICBwYWNrYWdlL3J0bDg3MjNicy9ydGw4NzIzYnMubWsgICAgICAgICAgICAgICAgfCAy
-NyAtLS0tLS0tLS0tLS0KPiAgIDYgZmlsZXMgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCA4MCBk
-ZWxldGlvbnMoLSkKPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3J0bDg3MjNicy8wMDAx
-LXJ0bDg3MjNicy1hZGQtZGVidWctbGV2ZWwtbW9kcGFyYW0ucGF0Y2gKPiAgIGRlbGV0ZSBtb2Rl
-IDEwMDY0NCBwYWNrYWdlL3J0bDg3MjNicy9Db25maWcuaW4KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0
-NCBwYWNrYWdlL3J0bDg3MjNicy9ydGw4NzIzYnMubWsKPiAKPiBkaWZmIC0tZ2l0IGEvQ29uZmln
-LmluLmxlZ2FjeSBiL0NvbmZpZy5pbi5sZWdhY3kKPiBpbmRleCA4NTNhODkxN2JlLi45MzJhNTg5
-ODJmIDEwMDY0NAo+IC0tLSBhL0NvbmZpZy5pbi5sZWdhY3kKPiArKysgYi9Db25maWcuaW4ubGVn
-YWN5Cj4gQEAgLTE0Niw2ICsxNDYsMTQgQEAgZW5kaWYKPiAgIAo+ICAgY29tbWVudCAiTGVnYWN5
-IG9wdGlvbnMgcmVtb3ZlZCBpbiAyMDIyLjA1Igo+ICAgCj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9S
-VEw4NzIzQlMKPiArCWJvb2wgInJ0bDg3MjNicyByZW1vdmVkIgo+ICsJc2VsZWN0IEJSMl9MRUdB
-Q1kKPiArCWhlbHAKPiArCSAgUGFja2FnZSB3YXMgcmVtb3ZlZCBiZWNhdXNlIGl0IGlzIG5vdCBj
-b21wYXRpYmxlIHdpdGggbGF0ZXN0Cj4gKwkgIGtlcm5lbHMgYW5kIGlzIG5vdCBtYWludGFpbmVk
-IGFueW1vcmU6IGNvZGUgaGFzIGJlZW4gcmVtb3ZlZAo+ICsJICBpbiAyMDE3IGFzIGRyaXZlciBp
-cyBhdmFpbGFibGUgaW4gdGhlIGxpbnV4LW5leHQgdHJlZS4KPiArCj4gICBjb25maWcgQlIyX1BB
-Q0tBR0VfS1RBUAo+ICAgCWJvb2wgImt0YXAgcmVtb3ZlZCIKPiAgIAlzZWxlY3QgQlIyX0xFR0FD
-WQo+IGRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+IGluZGV4IDcxY2MzZGE2
-ZDcuLmRhN2YyNmI0OGUgMTAwNjQ0Cj4gLS0tIGEvREVWRUxPUEVSUwo+ICsrKyBiL0RFVkVMT1BF
-UlMKPiBAQCAtODI0LDcgKzgyNCw2IEBAIEY6CXBhY2thZ2UvamltdGNsLwo+ICAgRjoJcGFja2Fn
-ZS9taW1pYy8KPiAgIEY6CXBhY2thZ2Uvbm9kbS8KPiAgIEY6CXBhY2thZ2Uvb3BlbmJveC8KPiAt
-RjoJcGFja2FnZS9ydGw4NzIzYnMvCj4gICBGOglwYWNrYWdlL3N1cGVydHV4a2FydC8KPiAgIAo+
-ICAgTjoJRmFiaW8gRXN0ZXZhbSA8ZmVzdGV2YW1AZ21haWwuY29tPgo+IGRpZmYgLS1naXQgYS9w
-YWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCj4gaW5kZXggMDBmMDYxMDE1Zi4u
-NjNkOWZhOTQ4OSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2th
-Z2UvQ29uZmlnLmluCj4gQEAgLTU2Myw3ICs1NjMsNiBAQCBlbmRtZW51Cj4gICAJc291cmNlICJw
-YWNrYWdlL3J0bDgxODhldS9Db25maWcuaW4iCj4gICAJc291cmNlICJwYWNrYWdlL3J0bDgxODll
-cy9Db25maWcuaW4iCj4gICAJc291cmNlICJwYWNrYWdlL3J0bDgxODlmcy9Db25maWcuaW4iCj4g
-LQlzb3VyY2UgInBhY2thZ2UvcnRsODcyM2JzL0NvbmZpZy5pbiIKPiAgIAlzb3VyY2UgInBhY2th
-Z2UvcnRsODcyM2J1L0NvbmZpZy5pbiIKPiAgIAlzb3VyY2UgInBhY2thZ2UvcnRsODgxMmF1LWFp
-cmNyYWNrLW5nL0NvbmZpZy5pbiIKPiAgIAlzb3VyY2UgInBhY2thZ2UvcnRsODgyMWF1L0NvbmZp
-Zy5pbiIKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9ydGw4NzIzYnMvMDAwMS1ydGw4NzIzYnMtYWRk
-LWRlYnVnLWxldmVsLW1vZHBhcmFtLnBhdGNoIGIvcGFja2FnZS9ydGw4NzIzYnMvMDAwMS1ydGw4
-NzIzYnMtYWRkLWRlYnVnLWxldmVsLW1vZHBhcmFtLnBhdGNoCj4gZGVsZXRlZCBmaWxlIG1vZGUg
-MTAwNjQ0Cj4gaW5kZXggMDQ0M2MxZjk5NS4uMDAwMDAwMDAwMAo+IC0tLSBhL3BhY2thZ2UvcnRs
-ODcyM2JzLzAwMDEtcnRsODcyM2JzLWFkZC1kZWJ1Zy1sZXZlbC1tb2RwYXJhbS5wYXRjaAo+ICsr
-KyAvZGV2L251bGwKPiBAQCAtMSw0MSArMCwwIEBACj4gLUZyb20gOWY3MDQyOGY1MDZhYzlkNWFm
-MzI1MDA0YzAxYzU5YzYyNjY5ZDdlYiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAtRnJvbTog
-SmFzb24gQWJlbGUgPGphc29uQGphc29uYWJlbGVjb25zdWx0aW5nLmNvbT4KPiAtRGF0ZTogU2F0
-LCAxNSBBdWcgMjAxNSAxODoyMDo1NCAtMDcwMAo+IC1TdWJqZWN0OiBbUEFUQ0hdIHJ0bDg3MjNi
-czogYWRkIGRlYnVnIGxldmVsIG1vZHBhcmFtCj4gLQo+IC1Gb3IgZWFzZSBvZiBjb250cm9sbGlu
-ZyBkZWJ1ZyBwcmludGsgdmVyYm9zaXR5LCBhZGQgYSBtb2R1bGUgcGFyYW1ldGVyCj4gLXdoaWNo
-IHNldHMgZGVidWcgbGV2ZWwgYXQgbW9kdWxlIGxvYWQuCj4gLQo+IC1TaWduZWQtb2ZmLWJ5OiBK
-YXNvbiBBYmVsZSA8amFzb25AamFzb25hYmVsZWNvbnN1bHRpbmcuY29tPgo+IC1bRml4ZWQgdG8g
-YXBwbHkgb24gY3VycmVudCB2ZXJzaW9uXQo+IC1TaWduZWQtb2ZmLWJ5OiBBcmllbCBEJ0FsZXNz
-YW5kcm8gPGFyaWVsQHZhbmd1YXJkaWFzdXIuY29tLmFyPgo+IC0tLS0KPiAtIG9zX2RlcC9vc19p
-bnRmcy5jIHwgNSArKysrKwo+IC0gMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKQo+IC0K
-PiAtZGlmZiAtLWdpdCBhL29zX2RlcC9vc19pbnRmcy5jIGIvb3NfZGVwL29zX2ludGZzLmMKPiAt
-aW5kZXggYjMwYzJhMC4uZWViODk0NiAxMDA2NDQKPiAtLS0tIGEvb3NfZGVwL29zX2ludGZzLmMK
-PiAtKysrIGIvb3NfZGVwL29zX2ludGZzLmMKPiAtQEAgLTIzMSw2ICsyMzEsMTAgQEAgbW9kdWxl
-X3BhcmFtKHJ0d19kZWNyeXB0X3BoeV9maWxlLCBpbnQsIDA2NDQpOwo+IC0gTU9EVUxFX1BBUk1f
-REVTQyhydHdfZGVjcnlwdF9waHlfZmlsZSwiRW5hYmxlIERlY3J5cHQgUEhZIEZpbGUiKTsKPiAt
-ICNlbmRpZgo+IC0KPiAtK2ludCBydHdfZGVidWdfbGV2ZWwgPSBfZHJ2X2Vycl87Cj4gLSttb2R1
-bGVfcGFyYW0ocnR3X2RlYnVnX2xldmVsLCBpbnQsIDA2NDQpOwo+IC0rTU9EVUxFX1BBUk1fREVT
-QyhydHdfZGVidWdfbGV2ZWwsIlNldCBEcml2ZXIgRGVidWcgVmVyYm9zaXR5Iik7Cj4gLSsKPiAt
-IGludCBfbmV0ZGV2X29wZW4oc3RydWN0IG5ldF9kZXZpY2UgKnBuZXRkZXYpOwo+IC0gaW50IG5l
-dGRldl9vcGVuIChzdHJ1Y3QgbmV0X2RldmljZSAqcG5ldGRldik7Cj4gLSBzdGF0aWMgaW50IG5l
-dGRldl9jbG9zZSAoc3RydWN0IG5ldF9kZXZpY2UgKnBuZXRkZXYpOwo+IC1AQCAtMzQ3LDYgKzM1
-MSw3IEBAIHN0YXRpYyB1aW50IGxvYWRwYXJhbShzdHJ1Y3QgYWRhcHRlciAqcGFkYXB0ZXIsIF9u
-aWNfaGRsIHBuZXRkZXYpCj4gLSAJcmVnaXN0cnlfcGFyLT5xb3Nfb3B0X2VuYWJsZSA9ICh1OCly
-dHdfcW9zX29wdF9lbmFibGU7Cj4gLQo+IC0gCXJlZ2lzdHJ5X3Bhci0+aGlxX2ZpbHRlciA9ICh1
-OClydHdfaGlxX2ZpbHRlcjsKPiAtKwlHbG9iYWxEZWJ1Z0xldmVsID0gcnR3X2RlYnVnX2xldmVs
-Owo+IC0gCXJldHVybiBzdGF0dXM7Cj4gLSB9Cj4gLQo+IC0tLQo+IC0yLjguMwo+IC0KPiBkaWZm
-IC0tZ2l0IGEvcGFja2FnZS9ydGw4NzIzYnMvQ29uZmlnLmluIGIvcGFja2FnZS9ydGw4NzIzYnMv
-Q29uZmlnLmluCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggM2Q1ZGVhNDBiNS4u
-MDAwMDAwMDAwMAo+IC0tLSBhL3BhY2thZ2UvcnRsODcyM2JzL0NvbmZpZy5pbgo+ICsrKyAvZGV2
-L251bGwKPiBAQCAtMSwxMCArMCwwIEBACj4gLWNvbmZpZyBCUjJfUEFDS0FHRV9SVEw4NzIzQlMK
-PiAtCWJvb2wgInJ0bDg3MjNicyIKPiAtCWRlcGVuZHMgb24gQlIyX0xJTlVYX0tFUk5FTAo+IC0J
-aGVscAo+IC0JICBydGw4NzIzYnMgd2lmaSBkcml2ZXIKPiAtCj4gLQkgIGh0dHBzOi8vZ2l0aHVi
-LmNvbS9oYWRlc3MvcnRsODcyM2JzCj4gLQo+IC1jb21tZW50ICJydGw4NzIzYnMgbmVlZHMgYSBM
-aW51eCBrZXJuZWwgdG8gYmUgYnVpbHQiCj4gLQlkZXBlbmRzIG9uICFCUjJfTElOVVhfS0VSTkVM
-Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcnRsODcyM2JzL3J0bDg3MjNicy5tayBiL3BhY2thZ2Uv
-cnRsODcyM2JzL3J0bDg3MjNicy5tawo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4
-IDRjNjMwM2MyZWYuLjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL3J0bDg3MjNicy9ydGw4NzIz
-YnMubWsKPiArKysgL2Rldi9udWxsCj4gQEAgLTEsMjcgKzAsMCBAQAo+IC0jIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIwo+IC0jCj4gLSMgcnRsODcyM2JzCj4gLSMKPiAtIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMKPiAtCj4gLVJUTDg3MjNCU19WRVJTSU9OID0gMTFhYjkyZDhjY2Q3MWM4MGYwMTAyODI4
-MzY2YjE0ZWY2YjY3NmZiMgo+IC1SVEw4NzIzQlNfU0lURSA9ICQoY2FsbCBnaXRodWIsaGFkZXNz
-LHJ0bDg3MjNicywkKFJUTDg3MjNCU19WRVJTSU9OKSkKPiAtUlRMODcyM0JTX0xJQ0VOU0UgPSBH
-UEwtMi4wLCBwcm9wcmlldGFyeSAoKi5iaW4gZmlybXdhcmUgYmxvYnMpCj4gLQo+IC1SVEw4NzIz
-QlNfTU9EVUxFX01BS0VfT1BUUyA9IFwKPiAtCUNPTkZJR19SVEw4NzIzQlM9bSBcCj4gLQlLVkVS
-PSQoTElOVVhfVkVSU0lPTl9QUk9CRUQpIFwKPiAtCUtTUkM9JChMSU5VWF9ESVIpCj4gLQo+IC1S
-VEw4NzIzQlNfQklOUyA9IHJ0bDg3MjNic19hcF93b3dsYW4uYmluIHJ0bDg3MjNic193b3dsYW4u
-YmluIFwKPiAtCXJ0bDg3MjNic19idC5iaW4gcnRsODcyM2JzX25pYy5iaW4KPiAtCj4gLWRlZmlu
-ZSBSVEw4NzIzQlNfSU5TVEFMTF9GSVJNV0FSRQo+IC0JJChmb3JlYWNoIGJpbiwgJChSVEw4NzIz
-QlNfQklOUyksIFwKPiAtCQkkKElOU1RBTEwpIC1EIC1tIDY0NCAkKEBEKS8kKGJpbikgJChUQVJH
-RVRfRElSKS9saWIvZmlybXdhcmUvcnRsd2lmaS8kKGJpbikKPiAtCSkKPiAtZW5kZWYKPiAtUlRM
-ODcyM0JTX1BPU1RfSU5TVEFMTF9UQVJHRVRfSE9PS1MgKz0gUlRMODcyM0JTX0lOU1RBTExfRklS
-TVdBUkUKPiAtCj4gLSQoZXZhbCAkKGtlcm5lbC1tb2R1bGUpKQo+IC0kKGV2YWwgJChnZW5lcmlj
-LXBhY2thZ2UpKQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============3275080404045573613==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=7763ba7007172ceb5e928ae5902735d727aaa90d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop package as it doesn't build with latest kernel and project is not
+maintained anymore: code has been removed in 2017 as driver is available
+in the linux-next tree (cf.
+https://github.com/hadess/rtl8723bs/commit/3bb1d33ad98c1d77b5e17a1b707e137b35e6d0a5):
+
+In file included from /home/autobuild/autobuild/instance-3/output-1/build/rtl8723bs-11ab92d8ccd71c80f0102828366b14ef6b676fb2/./include/drv_types.h:25,
+                 from /home/autobuild/autobuild/instance-3/output-1/build/rtl8723bs-11ab92d8ccd71c80f0102828366b14ef6b676fb2/./core/rtw_cmd.c:17:
+/home/autobuild/autobuild/instance-3/output-1/build/rtl8723bs-11ab92d8ccd71c80f0102828366b14ef6b676fb2/./include/autoconf.h:27:2: error: #error CONFIG_WIRELESS_EXT needs to be enabled for this driver to work
+   27 | #error CONFIG_WIRELESS_EXT needs to be enabled for this driver to work
+      |  ^~~~~
+In file included from /home/autobuild/autobuild/instance-3/output-1/build/rtl8723bs-11ab92d8ccd71c80f0102828366b14ef6b676fb2/./include/osdep_service.h:23,
+                 from /home/autobuild/autobuild/instance-3/output-1/build/rtl8723bs-11ab92d8ccd71c80f0102828366b14ef6b676fb2/./include/drv_types.h:27,
+                 from /home/autobuild/autobuild/instance-3/output-1/build/rtl8723bs-11ab92d8ccd71c80f0102828366b14ef6b676fb2/./core/rtw_cmd.c:17:
+/home/autobuild/autobuild/instance-3/output-1/build/rtl8723bs-11ab92d8ccd71c80f0102828366b14ef6b676fb2/./include/osdep_service_linux.h: In function ‘_init_timer’:
+/home/autobuild/autobuild/instance-3/output-1/build/rtl8723bs-11ab92d8ccd71c80f0102828366b14ef6b676fb2/./include/osdep_service_linux.h:97:8: error: ‘_timer’ {aka ‘struct timer_list’} has no member named ‘data’
+   97 |  ptimer->data = (unsigned long)cntx;
+      |        ^~
+/home/autobuild/autobuild/instance-3/output-1/build/rtl8723bs-11ab92d8ccd71c80f0102828366b14ef6b676fb2/./include/osdep_service_linux.h:98:2: error: implicit declaration of function ‘init_timer’; did you mean ‘_init_timer’? [-Werror=implicit-function-declaration]
+   98 |  init_timer(ptimer);
+      |  ^~~~~~~~~~
+      |  _init_timer
+
+Fixes:
+ - http://autobuild.buildroot.org/results/7a473e83d4a3d1e2228f4ee1282e85697de4ae5d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Config.in.legacy                                   |  8 +++++
+ DEVELOPERS                                         |  1 -
+ package/Config.in                                  |  1 -
+ .../0001-rtl8723bs-add-debug-level-modparam.patch  | 41 ----------------------
+ package/rtl8723bs/Config.in                        | 10 ------
+ package/rtl8723bs/rtl8723bs.mk                     | 27 --------------
+ 6 files changed, 8 insertions(+), 80 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index aea2b59abb..956da10a9f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -164,6 +164,14 @@ config BR2_nds32
+ 
+ comment "Legacy options removed in 2022.05"
+ 
++config BR2_PACKAGE_RTL8723BS
++	bool "rtl8723bs removed"
++	select BR2_LEGACY
++	help
++	  Package was removed because it is not compatible with latest
++	  kernels and is not maintained anymore: code has been removed
++	  in 2017 as driver is available in the linux-next tree.
++
+ config BR2_PACKAGE_KTAP
+ 	bool "ktap removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 63d1c3fcb6..fc329fec27 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -834,7 +834,6 @@ F:	package/jimtcl/
+ F:	package/mimic/
+ F:	package/nodm/
+ F:	package/openbox/
+-F:	package/rtl8723bs/
+ F:	package/supertuxkart/
+ 
+ N:	Fabio Estevam <festevam@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index 0e3eb11b24..f09da05be0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -563,7 +563,6 @@ endmenu
+ 	source "package/rtl8188eu/Config.in"
+ 	source "package/rtl8189es/Config.in"
+ 	source "package/rtl8189fs/Config.in"
+-	source "package/rtl8723bs/Config.in"
+ 	source "package/rtl8723bu/Config.in"
+ 	source "package/rtl8723ds/Config.in"
+ 	source "package/rtl8812au-aircrack-ng/Config.in"
+diff --git a/package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch b/package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch
+deleted file mode 100644
+index 0443c1f995..0000000000
+--- a/package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 9f70428f506ac9d5af325004c01c59c62669d7eb Mon Sep 17 00:00:00 2001
+-From: Jason Abele <jason@jasonabeleconsulting.com>
+-Date: Sat, 15 Aug 2015 18:20:54 -0700
+-Subject: [PATCH] rtl8723bs: add debug level modparam
+-
+-For ease of controlling debug printk verbosity, add a module parameter
+-which sets debug level at module load.
+-
+-Signed-off-by: Jason Abele <jason@jasonabeleconsulting.com>
+-[Fixed to apply on current version]
+-Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+----
+- os_dep/os_intfs.c | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/os_dep/os_intfs.c b/os_dep/os_intfs.c
+-index b30c2a0..eeb8946 100644
+---- a/os_dep/os_intfs.c
+-+++ b/os_dep/os_intfs.c
+-@@ -231,6 +231,10 @@ module_param(rtw_decrypt_phy_file, int, 0644);
+- MODULE_PARM_DESC(rtw_decrypt_phy_file,"Enable Decrypt PHY File");
+- #endif
+-
+-+int rtw_debug_level = _drv_err_;
+-+module_param(rtw_debug_level, int, 0644);
+-+MODULE_PARM_DESC(rtw_debug_level,"Set Driver Debug Verbosity");
+-+
+- int _netdev_open(struct net_device *pnetdev);
+- int netdev_open (struct net_device *pnetdev);
+- static int netdev_close (struct net_device *pnetdev);
+-@@ -347,6 +351,7 @@ static uint loadparam(struct adapter *padapter, _nic_hdl pnetdev)
+- 	registry_par->qos_opt_enable = (u8)rtw_qos_opt_enable;
+-
+- 	registry_par->hiq_filter = (u8)rtw_hiq_filter;
+-+	GlobalDebugLevel = rtw_debug_level;
+- 	return status;
+- }
+-
+---
+-2.8.3
+-
+diff --git a/package/rtl8723bs/Config.in b/package/rtl8723bs/Config.in
+deleted file mode 100644
+index 3d5dea40b5..0000000000
+--- a/package/rtl8723bs/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_RTL8723BS
+-	bool "rtl8723bs"
+-	depends on BR2_LINUX_KERNEL
+-	help
+-	  rtl8723bs wifi driver
+-
+-	  https://github.com/hadess/rtl8723bs
+-
+-comment "rtl8723bs needs a Linux kernel to be built"
+-	depends on !BR2_LINUX_KERNEL
+diff --git a/package/rtl8723bs/rtl8723bs.mk b/package/rtl8723bs/rtl8723bs.mk
+deleted file mode 100644
+index 4c6303c2ef..0000000000
+--- a/package/rtl8723bs/rtl8723bs.mk
++++ /dev/null
+@@ -1,27 +0,0 @@
+-################################################################################
+-#
+-# rtl8723bs
+-#
+-################################################################################
+-
+-RTL8723BS_VERSION = 11ab92d8ccd71c80f0102828366b14ef6b676fb2
+-RTL8723BS_SITE = $(call github,hadess,rtl8723bs,$(RTL8723BS_VERSION))
+-RTL8723BS_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
+-
+-RTL8723BS_MODULE_MAKE_OPTS = \
+-	CONFIG_RTL8723BS=m \
+-	KVER=$(LINUX_VERSION_PROBED) \
+-	KSRC=$(LINUX_DIR)
+-
+-RTL8723BS_BINS = rtl8723bs_ap_wowlan.bin rtl8723bs_wowlan.bin \
+-	rtl8723bs_bt.bin rtl8723bs_nic.bin
+-
+-define RTL8723BS_INSTALL_FIRMWARE
+-	$(foreach bin, $(RTL8723BS_BINS), \
+-		$(INSTALL) -D -m 644 $(@D)/$(bin) $(TARGET_DIR)/lib/firmware/rtlwifi/$(bin)
+-	)
+-endef
+-RTL8723BS_POST_INSTALL_TARGET_HOOKS += RTL8723BS_INSTALL_FIRMWARE
+-
+-$(eval $(kernel-module))
+-$(eval $(generic-package))
+
+--===============3275080404045573613==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3275080404045573613==--
