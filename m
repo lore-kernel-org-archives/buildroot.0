@@ -1,95 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CE72C43334
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:40:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D85EC43334
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE88C40B63;
-	Mon, 20 Jun 2022 19:40:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE88C40B63
+	by smtp1.osuosl.org (Postfix) with ESMTP id A862A83E3F;
+	Mon, 20 Jun 2022 19:41:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A862A83E3F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lhwIYYD4zsYF; Mon, 20 Jun 2022 19:40:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FIoB6r9Piwqg; Mon, 20 Jun 2022 19:41:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F3C04405B3;
-	Mon, 20 Jun 2022 19:40:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3C04405B3
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD86D83E1D;
+	Mon, 20 Jun 2022 19:41:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD86D83E1D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 960BB1BF3FD
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:40:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E4B271BF3FD
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:41:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45AF760FEE
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:40:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45AF760FEE
+ by smtp3.osuosl.org (Postfix) with ESMTP id BEDC760E1D
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:41:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEDC760E1D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UDn8Mkgv1t23 for <buildroot@lists.busybox.net>;
- Mon, 20 Jun 2022 19:40:03 +0000 (UTC)
+ with ESMTP id YM8KUYHyiOTq for <buildroot@lists.busybox.net>;
+ Mon, 20 Jun 2022 19:41:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D428660F71
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D428660F71
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 19:40:02 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id g26so1705561ejb.5
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 12:40:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEA3C60BDA
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CEA3C60BDA
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 19:41:37 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id n20so16308803ejz.10
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 12:41:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=RAK9jUIXGkKtW7BDrHMBxxnliKKE+9YJmgMQLyU+cUs=;
- b=dFwzfGPGQC63v7YTpEQwYch4mAzk0fdC6ONK5xdwZ92eBGHE+8guEDvHn6c24yjP9b
- Hgrr7xZrp+tqnhAR4gjWo6ZHZurqKHRiixWk4Gxf/g9K+BnQyWFLeWFBbqRPwfLREac7
- y1TElsJQc1+lntAoVpNQP7wKhGtFjqscSja29Em7sUA3bCOPa5jNxFCTfqAHwK2HPHDl
- Xnp2g4HXuqk467HX95GOQRXKv30V8auGutgGuVsgz8F3VIiQ4JZIeCf6YL+acWOmCsjI
- iKOU0mBK1P0U3Fn4B3krThrC1B4CRbPDU7vx3fInKBQQu8/nkgf+sgF3KE08k3aZCSNk
- l88Q==
-X-Gm-Message-State: AJIora8lFiRdPdbx8eVmUMJEHFMeqSeoV0MKSXaDPr86KVcPl3L3Pq6W
- 121MaynEA7Dw8Z44oBFtdJ9Tnt1S84/ZqA==
-X-Google-Smtp-Source: AGRyM1s/MlaGBMDMX9Dnti2HKXUkI1Ej01M2SHcxI/oVy8Notz0k1FvQh1qV9N2CJCeCuxb4Agrn6Q==
-X-Received: by 2002:a17:906:5256:b0:711:ee4d:fbe4 with SMTP id
- y22-20020a170906525600b00711ee4dfbe4mr21315049ejm.312.1655754000908; 
- Mon, 20 Jun 2022 12:40:00 -0700 (PDT)
+ bh=1rG9D2Jj6jm+adZIbHrejWbrj5HkGA9HV5AzHGF0o+c=;
+ b=X89cqC9f+FpGRVl3I0VqVo5foXCFiQ8Ypu7dobd6txd5Xs/104VZaaTu90MbYmU5nI
+ OcI7r8iK9sbrH0Siw8T4Xox/m6qn8rEdNA6P9znTLG3dDcUSFqBP08e0nkd2DtR2AZ/R
+ jRFQwby1gi6fEo2+GXaQVEDlKJFdHL/4zFHHLvNPKdCTwnqQ9f4eve4KRHK5OGxBakAi
+ quGJ3NvJK7lpOvYtlYxcM09aN5dMqJf5YGLZ+3Q3ut7IPHtlKUX57L7v1W552gxSE94B
+ muc8aOPpBXygqXQu+Pv89vdmWn+M7Sve6N639O4y7d+XBK+CQt09vZ368fzmdg5S2j+4
+ vcXg==
+X-Gm-Message-State: AJIora/Hq4ceNEi3lQXYgPWD/uEpYMtXrZrJ4V5tkRgBbUm47ZD5rdZa
+ ihevxMy3C2XeLWVbZlAAuu/Fg1higw4Zlw==
+X-Google-Smtp-Source: AGRyM1s/dJjb2X2+I/Op3EkNUWjmgl3f1K7hqokOMfu4bjvzCWEaY6qH8G3wk0oSDlPD8fMrfQA1Fw==
+X-Received: by 2002:a17:907:7f8f:b0:711:623e:b344 with SMTP id
+ qk15-20020a1709077f8f00b00711623eb344mr22840982ejc.230.1655754096103; 
+ Mon, 20 Jun 2022 12:41:36 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- u3-20020a17090626c300b006fe9e717143sm6330119ejc.94.2022.06.20.12.39.59
+ w15-20020a1709064a0f00b00703671ebe65sm6362051eju.198.2022.06.20.12.41.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 20 Jun 2022 12:40:00 -0700 (PDT)
-Message-ID: <4c9eff36-58b8-c617-b4e9-c52826aeca32@mind.be>
-Date: Mon, 20 Jun 2022 21:39:58 +0200
+ Mon, 20 Jun 2022 12:41:35 -0700 (PDT)
+Message-ID: <156e8291-d30a-86cb-0063-0fbf05369cd5@mind.be>
+Date: Mon, 20 Jun 2022 21:41:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
 Content-Language: en-GB
-To: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
-References: <20220530151612.3072914-1-thomas.devoogdt@barco.com>
+To: vsvoboda@forkoder.eu, buildroot@buildroot.org
+References: <20220531125152.135227-1-vsvoboda@forkoder.eu>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220530151612.3072914-1-thomas.devoogdt@barco.com>
+In-Reply-To: <20220531125152.135227-1-vsvoboda@forkoder.eu>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=RAK9jUIXGkKtW7BDrHMBxxnliKKE+9YJmgMQLyU+cUs=;
- b=ILOpV7S7p6LZ+1bjBv79HBSoOMpAmGyAvOgbyI+3Uhh5GvqhjM7oIiqnAA17OcHiGt
- 3P+i2l2/bzeC5tdM7VqIIbVhRQqGrEviQuDUE/1yeTlArcKzaXvElzgg300zQkL8A21E
- DCVHhBn6YqWO2lY2zJAw4ZSzuHfMSQI7ROdz2WQFQD+h6q4VbsUt+MO4ESDK9Ejr9jrZ
- SywtLKYMQZtHdg0YywCI9hmdKbTuqGz8MFJEhwLk2TUisqBE71fnKurls43BpynC5+kn
- eds91lXSSV6RwNBZ5zh+r4P3DiP7uX1w2lJyvlg6Xw80j0KpDWrJpyLmjHQ1Bpa7ojLu
- GmhA==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=1rG9D2Jj6jm+adZIbHrejWbrj5HkGA9HV5AzHGF0o+c=;
+ b=Zfrea0Y5MUEETuwpL+hxY9SGPINksvGQK06iei+Ym/XOhek0YBqJNMOOCIQjOLG2tm
+ k327cqzX8gGhVatmlz7PAacloNdbAnnlE6svVkibEC5RDL4jViPLs7Zo3QdlvA3VgJWu
+ JjPoR3kvQUE/FQ40NOIyMCnZ6QnacGoAhVa7WJopk5Gv6meniK3TJOaHVA8uPEu4mPGy
+ vN3ApNA8+uT/htuItTnikqQV1HFgjKncCDFDZ+vyQANNTTrqBMCq6Js+W6GSJQrS53LE
+ zx8r+90M4RPQ8y6TrVW24c03h6ALntK/cNge4dhj1Alac3PhJ17nOqKHwrmVthltIFRA
+ iEEg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ILOpV7S7
-Subject: Re: [Buildroot] [PATCH 1/1] package/qemu: add qemu host tools
+ header.a=rsa-sha256 header.s=google header.b=Zfrea0Y5
+Subject: Re: [Buildroot] [PATCH 1/2] fs/ext2: add option for zstd compression
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,69 +100,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Devoogdt <thomas.devoogdt@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Thomas,
+  Hi Vladimir
 
-On 30/05/2022 17:16, Thomas Devoogdt wrote:
-> From: Thomas Devoogdt <thomas.devoogdt@gmail.com>
-> 
-> Allow host tools e.g. qemu-img to be built.
-> Similar to the BR2_PACKAGE_QEMU_TOOLS option.
-> 
-> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
-> ---
->   package/qemu/Config.in.host | 6 ++++++
->   package/qemu/qemu.mk        | 6 ++++++
->   2 files changed, 12 insertions(+)
-> 
-> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-> index f9cdb9b703..2aa6991263 100644
-> --- a/package/qemu/Config.in.host
-> +++ b/package/qemu/Config.in.host
-> @@ -102,4 +102,10 @@ config BR2_PACKAGE_HOST_QEMU_USB
->   	help
->   	  Enables USB passthrough support from guest to host.
->   
-> +config BR2_PACKAGE_HOST_QEMU_TOOLS
-> +	bool "Enable tools"
-> +	help
-> +	  Say 'y' here to include tools packaged with QEMU
-> +	  (e.g. qemu-img).
+On 31/05/2022 14:51, vsvoboda@forkoder.eu wrote:
+> From: Vladimir Svoboda <vsvoboda@forkoder.eu>
 
-  For host packages, there's no rootfs size constraint, so there is normally no 
-reason to have sub-options. Only if it would dramatically increase the build 
-time, it's worth to make an option for this feature.
-
-  In other words: simply do --enable-tools unconditionally.
+Add a Signed-off-by line for yourself.  This is a short way for you to
+assert that you are entitled to contribute the patch under buildroot's
+GPL license.  See [1] for more details. Without this, we can't apply the
+patch.
 
   Regards,
   Arnout
 
-> +
->   endif
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 1bcffc2340..9623068c93 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -348,6 +348,12 @@ else
->   HOST_QEMU_OPTS += --disable-libusb
->   endif
+[1] http://elinux.org/Developer_Certificate_Of_Origin
+
+> 
+> ---
+>   fs/ext2/Config.in | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+> index 333ead95fe..705446df57 100644
+> --- a/fs/ext2/Config.in
+> +++ b/fs/ext2/Config.in
+> @@ -131,6 +131,11 @@ config BR2_TARGET_ROOTFS_EXT2_XZ
+>   	help
+>   	  Do compress the ext2 filesystem with xz.
 >   
-> +ifeq ($(BR2_PACKAGE_HOST_QEMU_TOOLS),y)
-> +HOST_QEMU_OPTS += --enable-tools
-> +else
-> +HOST_QEMU_OPTS += --disable-tools
-> +endif
+> +config BR2_TARGET_ROOTFS_EXT2_ZSTD
+> +	bool "zstd"
+> +	help
+> +	  Do compress the ext2 filesystem with zstd.
 > +
->   # Override CPP, as it expects to be able to call it like it'd
->   # call the compiler.
->   define HOST_QEMU_CONFIGURE_CMDS
+>   endchoice
+>   
+>   endif # BR2_TARGET_ROOTFS_EXT2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
