@@ -1,90 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07CD5C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jun 2022 23:19:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AE4DC43334
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 05:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6533A60E9F;
-	Sun, 19 Jun 2022 23:19:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6533A60E9F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 61A7E40AA6;
+	Mon, 20 Jun 2022 05:42:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61A7E40AA6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f7KWW6SPyXcW; Mon, 20 Jun 2022 05:42:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B257F40141;
+	Mon, 20 Jun 2022 05:42:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B257F40141
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 973B01BF282
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 05:42:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 70E7B60F0E
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 05:42:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70E7B60F0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GF--8uI1uHAj; Sun, 19 Jun 2022 23:19:33 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EDEA60B35;
-	Sun, 19 Jun 2022 23:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EDEA60B35
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 581721BF3DA
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 23:19:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FE1681916
- for <buildroot@lists.busybox.net>; Sun, 19 Jun 2022 23:19:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FE1681916
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wce7P-PbDvvP for <buildroot@lists.busybox.net>;
- Sun, 19 Jun 2022 23:19:29 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SYWaDjT3WrWh for <buildroot@lists.busybox.net>;
+ Mon, 20 Jun 2022 05:42:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18EE581463
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com
- [IPv6:2607:f8b0:4864:20::22d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 18EE581463
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 23:19:28 +0000 (UTC)
-Received: by mail-oi1-x22d.google.com with SMTP id s16so1828367oie.3
- for <buildroot@buildroot.org>; Sun, 19 Jun 2022 16:19:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A76F60DFA
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com
+ [IPv6:2001:4860:4864:20::34])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8A76F60DFA
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 05:42:29 +0000 (UTC)
+Received: by mail-oa1-x34.google.com with SMTP id
+ 586e51a60fabf-101ec2d6087so2519847fac.3
+ for <buildroot@buildroot.org>; Sun, 19 Jun 2022 22:42:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=rCfiA7JUPLaCN5d4J7iJIfJPgMBlrwhZPe5EldUPCFc=;
- b=RNvaj9TszL5czTyYQ521JhmpmPGbMtYFhB2aTqy9pwi1zXJSEqv5vSnO/KbIbyoMuo
- GXEckIcXVx+MKfAfnUjTnXW/Ip89wNuVxsgpfvlOdNsliIK5sDqikkcg84jXWszHTU7z
- UaVa/fAwKH3aecYPBznY+fCqWeiq5JRMif4IV2KOCLiJc5umUSRp+yAgv0AGdBJ3AFPI
- 2ErHZbG2/jbwxcPFvlB2y6eQKaTYgNIYF0iQXZGvDreX49lbW4fRXEJn5Vu5Hn6RkFGD
- Ez+nt68QXzJUnntmUGeCzMLChQmLc/q+RH8lYQU9lPyOhV91t3YM3fQagFHo75ZOQXqs
- 8g7Q==
-X-Gm-Message-State: AJIora8jjWcMuREtHG7CrxST81C/HwaZsfFxjPK7cF+N0PF3Er0ib/OV
- 2Zumc7Ezd4vNrPZHzY9/m1k4wUaNIQhDHeiiukkepII7y0w=
-X-Google-Smtp-Source: AGRyM1vMX/F84Uv5bSF22O4XDz4Qyi2czf349grOHkoNybbRKm/jchk4QmBk3dXKqIYgQOW1e+yvStd2pmldc8cfGGc=
-X-Received: by 2002:a05:6808:23c6:b0:331:3ab2:6fb9 with SMTP id
- bq6-20020a05680823c600b003313ab26fb9mr9684052oib.200.1655680768095; Sun, 19
- Jun 2022 16:19:28 -0700 (PDT)
+ h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+ :mime-version:content-transfer-encoding;
+ bh=XeAkc7ngdS0uNZ6XtzNNCENrY/7RihWoLV0ITk+LGhY=;
+ b=B6XaElq/ayRohDoyI8LSuXeDz9BAUmb/bo+L9s2nzopffdx4BtZ5dghPoyPkEeWHTc
+ Zi7AuaL2fmIy6cOXS9kMi4rDTepGoUID3f+IsZ/q8iKAaRnAaT+bI77P0K/V1atbmKED
+ 80v4gJ1NsSE4X4v0WVtBYvdvyusMUvEOJ2bI3Sn0Xkwi0H3iFNTbZNIu58YK175mSHLZ
+ f84+DbBm7kwhn+zlpOgxd0CXo1Z1MLHO+r68IiaWAcH1N41NhsOwk9T8ChAy9qMHqRdA
+ zFmXsHL1wLDC+iR0hO3VaomtSF3P1T8MCQ3LYSdsJ+aUHXYoG9ZGqrI81RUScDgYXwXe
+ kWOA==
+X-Gm-Message-State: AJIora+GzTctrr12lGCZHHCCPjQWFFHTN/MVta0d8PkzQHTJzIya704a
+ KZPowwl+5T4LRbC8jZl0W4RtLSoHlVfd2Q==
+X-Google-Smtp-Source: AGRyM1tKZq90gcHjSlBvmlmhQEKmZZIzw+DYa17jC/jqOvncxaun74PLUlfXOYc8ICk5oZiBuboFIQ==
+X-Received: by 2002:a05:6870:b616:b0:e2:f8bb:5eb with SMTP id
+ cm22-20020a056870b61600b000e2f8bb05ebmr17585614oab.218.1655703748452; 
+ Sun, 19 Jun 2022 22:42:28 -0700 (PDT)
+Received: from rawyouth.ads.eso.org (ppbla15.hq.eso.org. [134.171.6.19])
+ by smtp.gmail.com with ESMTPSA id
+ w19-20020a056870431300b000f5e33aaa66sm6793259oah.0.2022.06.19.22.42.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 19 Jun 2022 22:42:27 -0700 (PDT)
+From: Federico Pellegrin <fede@evolware.org>
+To: buildroot@buildroot.org
+Date: Mon, 20 Jun 2022 07:42:17 +0200
+Message-Id: <20220620054217.92028-1-fede@evolware.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <97ea44bb-58fe-d6cb-6c79-9be0b245f2c6@synopsys.com>
- <38e7fb76-2c07-6429-b803-4fd6ff2b1178@synopsys.com>
- <3062ce96-7e99-d221-61c8-4b87c87c113b@synopsys.com>
- <e8be91c7-8597-7a7e-9714-9f8045781959@mind.be>
- <aafcf149-d0b9-8c95-751c-64ec4dabf5b5@synopsys.com>
- <CADvTj4qcYpo=UB2Qny7-0mXiqq9R0u6QMBgs+9hXm76SQxvEew@mail.gmail.com>
- <40fe53f9-cd74-a19f-e338-2aa4d35a9ec1@synopsys.com>
- <8c13892c-a9ed-a016-7043-6794b87a884c@mind.be>
-In-Reply-To: <8c13892c-a9ed-a016-7043-6794b87a884c@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 19 Jun 2022 17:19:16 -0600
-Message-ID: <CADvTj4rPGVpbbZTXO9J0NT6PLbT_Q8jDHhDwhH6u0jMDc4aJCg@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=rCfiA7JUPLaCN5d4J7iJIfJPgMBlrwhZPe5EldUPCFc=;
- b=oqq45wghGN1ftf+xlpZuAYiXWhAoH/YKGicUTOHuhJQt4HjI8mOY6dB5SmL3z98zdz
- Xf0CvMHne+b/It7r1IdSBXBJE5xOME0OJt4gP4RYu+x3ea8JWRbCOUj2D9uf+np1rgwW
- drHWc2PPhuaLFhlwW9gzPRVshEFQMuxWcIsNgQDMeJpe1Zeg7S1+vZIuuhz9+dPJIWs0
- iLO0tqeBMlJ2XCtQlvw81OIxIv4w1PcBgeWojUc06aDLukg0NNLg6G6V26ikM2SLyF8Z
- lw/EpVd+l2ZJiebguwWoBT7hXqYPsCkvjeyoTjk7U5PDckIYMN5lhTWg+tGhBBHLcIz4
- 4vRQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=sender:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=XeAkc7ngdS0uNZ6XtzNNCENrY/7RihWoLV0ITk+LGhY=;
+ b=p8mv1OTIg0AwcVcufE4S8HciTFJe5nP+I3AgZy7vvGPsCFV6HpPlooHoEs43NyuQlW
+ e9Xj5jvlrspAaV1QP0/iw/SPjje8pQtQrtnArS752Pp5MDA2wC5aYBU6UDQDs++p5AY4
+ Hu33HilWvFOrvUAUtHa6iM99C7ysdnc1yropYoTfhDwdrT5sVTbLMxdd5Sc7lmWPdVNf
+ 9hfbCEq6q5BKlhlMkLHCZ7o9XHHxK7JNP5i1p7FAaWCKS87HQPxt1pdZ3AY9u62PG3NI
+ 8lCcTWa73GC3wGbMOgKTCBasn0PkRZGPaUweppVzhmQHZgDEuoqUS8/07ZV1Y7RxrVpU
+ MNLg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=oqq45wgh
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/bpftool: revert bpf_cookie
- patch to allow building
+ header.a=rsa-sha256 header.s=20210112 header.b=p8mv1OTI
+Subject: [Buildroot] [PATCH 1/1] package/kexec: bump to version 2.0.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,95 +93,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>,
- Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Federico Pellegrin <fede@evolware.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Jun 19, 2022 at 9:20 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 16/06/2022 10:11, Shahab Vahedi wrote:
-> > On 6/16/22 01:27, James Hilliard wrote:
-> >> On Wed, Jun 15, 2022 at 5:10 AM Shahab Vahedi via buildroot
-> >> <buildroot@buildroot.org> wrote:
-> >>>
-> >>> On 6/14/22 19:14, Arnout Vandecappelle wrote:
-> >>>>
-> >>>> On 14/06/2022 11:31, Shahab Vahedi wrote:
-> >>>>> Building bpftool on Debian 11 (bullseye) with kernel v5.10 and clang-11
-> >>>>
-> >>>>   How do you build host-bpftool with clang in Buildroot context? HOSTCC is set to gcc in the Makefile... Do you supply an explicit HOSTCC= on the Buildroot command line? I'm not sure if we are really interested in carrying fixes for such exotic and not-really-supported situations...
-> >>>
-> >>> No, I don't do any sort of trickery to build bpftool on my end. The
-> >>> bootstrapping, if becomes available for your configuration, uses clang
-> >>> and only clang. I tried to explain this in v4 of the patch [1], the
-> >>> second paragraph of the commit message.
-> >>
-> >> I think clang/llvm support isn't going to work correctly yet since we only have
-> >> version 9.0.1, there's a series bumping to version 11.1.0 that should fix that:
-> >> https://patchwork.ozlabs.org/project/buildroot/list/?series=291585
-> >>
-> >> Minimum clang/llvm version for libbpf co-re is version 10:
-> >> https://github.com/libbpf/libbpf*bpf-co-re-compile-once--run-everywhere
-> >
-> > You're right about the clang version, but it doesn't have anything to do
-> > with Buildroot's clang. The build process uses the clang that is installed
-> > on the host. For Debian bullseye, that is clang 11.
->  >
-> > To emphasise, I am cross-building bpftool for my "arc-linux" target, and yet
-> > the bootstrap part of bpftool, uses the x86 clang of the Debian machine.
->
->
->   Hm, that smells like we actually want to build host-clang (after updating it
-> to 11.1.0 of course) so that we are sure a known version of clang is used.
-> Possibly with a check-host-clang check to avoid building it if the installed
-> clang is good enough.
+https://www.spinics.net/lists/kexec/msg28922.html
 
-Dealing with multiple external clang versions may be a bit tricky and difficult
-to test properly, we don't really want to use the system clang/llvm although
-clang/llvm external toolchain support may be desirable here as those could
-be tested by the autobuilders.
+Signed-off-by: Federico Pellegrin <fede@evolware.org>
+---
+ package/kexec/kexec.hash | 2 +-
+ package/kexec/kexec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-It would be good to get clang/llvm updated soon as systemd is now using bpf for
-some service security/isolation features that we currently aren't able
-to support
-due to clang/llvm being too old.
+diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
+index 05eb9e3d02..dcf661cce4 100644
+--- a/package/kexec/kexec.hash
++++ b/package/kexec/kexec.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
+-sha256  aa63cd6c7dd95b06ceba6240a7fdc6792789cada75a655e6714987175224241b  kexec-tools-2.0.23.tar.xz
++sha256  af230ce6430deb6c2ab35762f8028888ac9d6ebefc2c4c83224a9c109143c0e8  kexec-tools-2.0.24.tar.xz
+ # locally calculated
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index b3b4e56546..c08a9155f2 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KEXEC_VERSION = 2.0.23
++KEXEC_VERSION = 2.0.24
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
+-- 
+2.36.1
 
->
->   And we probably want a user-visible option to enable co-re then, because it's
-> going to be expensive to build.
-
-We may want to make llvm/clang part of the pre-built toolchains
-eventually, but for
-now I'd say we should just conditionally enable co-re here if we are
-already building
-a clang/llvm toolchain.
-
-There's some early GCC support for co-re in 12.1 which I was experimenting with
-as well which may reduce the need for a llvm/clang toolchain for co-re. The GCC
-toolchain BPF support build process is a bit complex however as one needs to
-sorta do a hybrid multitarget build with GCC and binutils since GCC
-treats BPF as
-a separate target(and since GCC along with the binutils GAS assembler
-don't natively
-handle multi-target toolchain builds themselves).
-
-I have an experimental branch for that here:
-https://github.com/buildroot/buildroot/compare/master...jameshilliard:ebpf
-
-I'll try and clean that up a bit once the GCC 12.1 series it is based
-on is merged:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=302389
-
->
->   Regards,
->   Arnout
->
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
