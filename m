@@ -1,85 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 840C4C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 12:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5683BC43334
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 17:16:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E513940B2E;
-	Mon, 20 Jun 2022 12:56:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E513940B2E
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2ECC83E06;
+	Mon, 20 Jun 2022 17:16:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2ECC83E06
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p8P98zcwSxFm; Mon, 20 Jun 2022 17:16:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A12A983E0F;
+	Mon, 20 Jun 2022 17:16:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A12A983E0F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 841DF1BF371
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 17:16:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CD3740A4B
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 17:16:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CD3740A4B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zfQsyVyNsydc; Mon, 20 Jun 2022 12:56:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CEF4140AF3;
-	Mon, 20 Jun 2022 12:56:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEF4140AF3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF6371BF2A3
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 12:56:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B9B3260B93
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 12:56:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9B3260B93
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4B3aXmDSGLgG for <buildroot@lists.busybox.net>;
- Mon, 20 Jun 2022 12:56:50 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D365605B1
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4D365605B1
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 12:56:50 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id h23so20897852ejj.12
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 05:56:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=hW/NcRLQFjPaBSMWJXaRxFu8TI2DeT85WUSbPXnVXL8=;
- b=u4sKQz4r3/X6Z/YKMNJtnh6P9ADwuQ5bJVFFAq1oJ80ev+oUHnD8GKRSOMCRAqy8BE
- hOnC8RSJZ1KPLjbGpGMU+dj64l4Qy13lOHz8sBA4h3uB/pYQ3DrW1dcwbyiNs5CfLNWQ
- z65WlRxNuG1OUjqz0lG2Wgo4Xnxb3hzv2vF323BibunoSbgp2PiSDAb7ZGI90Du93y7g
- /JwhvFz0b9wymCLG7EcMnYaVGQmDGmVJ5Snn2ey5/AQmRwuXYS5B9w2Y8vpNZ1OOwZIe
- nKckbW8CGjFqrPhpMaOf4VRDgzS4MBguQx8d2kNO3Yr4FKqK1NcNb4uC7T44ILoAsf+y
- aKYw==
-X-Gm-Message-State: AJIora8oNhlM+JnClmipyOAX5A+PZkTDblyj/ypEZ+fnrPOqr6T9J7z6
- hsu0enQit0F6yGPl7TBZ30Y40wTDIcvATQ==
-X-Google-Smtp-Source: AGRyM1uP0Moi/vMeZKtYbMS/lmQ4bNOj29zt2Uu+6YB2JMDlP8ez74j/mIUEAKjntSto6+wHNKo+pQ==
-X-Received: by 2002:a17:906:3c07:b0:718:e1a7:b834 with SMTP id
- h7-20020a1709063c0700b00718e1a7b834mr20326042ejg.635.1655729807974; 
- Mon, 20 Jun 2022 05:56:47 -0700 (PDT)
-Received: from development1.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- c5-20020a056402158500b004356b8ad003sm6231221edv.60.2022.06.20.05.56.47
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Mon, 20 Jun 2022 05:56:47 -0700 (PDT)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z4B0ASQHWpYL for <buildroot@lists.busybox.net>;
+ Mon, 20 Jun 2022 17:16:33 +0000 (UTC)
+X-Greylist: delayed 00:06:46 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B4E540286
+Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8B4E540286
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 17:16:33 +0000 (UTC)
+Received: from vfazio2.xes-mad.com (vfazio2.xes-mad.com [10.52.16.113])
+ by mail.xes-mad.com (Postfix) with ESMTP id C85FB245DD;
+ Mon, 20 Jun 2022 12:09:45 -0500 (CDT)
+From: Vincent Fazio <vfazio@xes-inc.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Jun 2022 14:56:36 +0200
-Message-Id: <20220620125636.29944-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.17.0
+Date: Mon, 20 Jun 2022 12:09:40 -0500
+Message-Id: <20220620170940.513445-1-vfazio@xes-inc.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211104141910.1840914-1-vfazio@xes-inc.com>
+References: <20211104141910.1840914-1-vfazio@xes-inc.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=hW/NcRLQFjPaBSMWJXaRxFu8TI2DeT85WUSbPXnVXL8=;
- b=oXRBwnutNjEhS7qKD4krjZvXPJ4kCOYMGlZbSBjZUjPdD9C2h+fPJ1A7baUMXblQB/
- S1CXZrdYAUywLmsWgXHIc0K1JXHNCaMW1VKGT9mblSABeCnF6e1Iyndgj8X5tAO6J0qV
- Ks4BCfefqcH5Kzy+f0m298dyj9sVDwOq2WiKGAeJNYWFRaqu9+eAIOtKprXTuxaTGnzh
- ldqUVvM5mQQR14UFMsnc9ZjpJ3HIkdlmxW6FnDUgnxYuHFYjOBMwc2JSY95L6EySk6hB
- OrCM6W6OaDpiPUqGkPf+7yp6Ak68Oh1LT/AfOXmHQwdxyyb6IIt3keOOf+Nfo5FE9hZ1
- BCMg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=oXRBwnut
-Subject: [Buildroot] [PATCH] package/libusb: bump to version 1.0.26
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=xes-inc.com; s=mail; 
+ t=1655744985; bh=GY3FBwQH8M7ekuvjIu6zb/fFfN/TBru9RiFDUeI9G6Q=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=wPzS4Hw591xixiPNCuQ8KMomfPSi9p7aYfd2oh+qzn1j82mIFfTfw2wTHS+0tdor4
+ V2632pzDWhTFlFYUJV5D4CRoA9y5tgmKPySalfaKJ9vQo/DgZhTCoThy9GnA7kdq2K
+ EqVFog60SABu2tDOu2O+0sbirAmN3QAMqMMNG1MU=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=xes-inc.com header.i=@xes-inc.com
+ header.a=rsa-sha256 header.s=mail header.b=wPzS4Hw5
+Subject: [Buildroot] [PATCH 1/1] package/nvidia-driver: bump version to
+ 390.151
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,110 +69,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Vincent Fazio <vfazio@xes-inc.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbTogWWVnb3IgWWVmcmVtb3YgPHllZ29yc2xpc3RzQGdvb2dsZW1haWwuY29tPgoKUmVtb3Zl
-IHVwc3RyZWFtZWQgcGF0Y2hlcy4KClNpZ25lZC1vZmYtYnk6IFllZ29yIFllZnJlbW92IDx5ZWdv
-cnNsaXN0c0Bnb29nbGVtYWlsLmNvbT4KLS0tCiAuLi5pZ3VyZS5hYy1saW5rLXdpdGgtbGF0b21p
-Yy1pZi1uZWVkZWQucGF0Y2ggfCAzOSAtLS0tLS0tLS0tLS0tLS0tLS0tCiAuLi5fdXNiZnMtZml4
-LW1heWJlLXVuaW5pdGlhbGl6ZWQtZXJyb3IucGF0Y2ggfCAzNyAtLS0tLS0tLS0tLS0tLS0tLS0K
-IHBhY2thZ2UvbGlidXNiL2xpYnVzYi5oYXNoICAgICAgICAgICAgICAgICAgICB8ICAyICstCiBw
-YWNrYWdlL2xpYnVzYi9saWJ1c2IubWsgICAgICAgICAgICAgICAgICAgICAgfCAgMiArLQogNCBm
-aWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDc4IGRlbGV0aW9ucygtKQogZGVsZXRlIG1v
-ZGUgMTAwNjQ0IHBhY2thZ2UvbGlidXNiLzAwMDEtY29uZmlndXJlLmFjLWxpbmstd2l0aC1sYXRv
-bWljLWlmLW5lZWRlZC5wYXRjaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGlidXNiLzAw
-MDItbGludXhfdXNiZnMtZml4LW1heWJlLXVuaW5pdGlhbGl6ZWQtZXJyb3IucGF0Y2gKCmRpZmYg
-LS1naXQgYS9wYWNrYWdlL2xpYnVzYi8wMDAxLWNvbmZpZ3VyZS5hYy1saW5rLXdpdGgtbGF0b21p
-Yy1pZi1uZWVkZWQucGF0Y2ggYi9wYWNrYWdlL2xpYnVzYi8wMDAxLWNvbmZpZ3VyZS5hYy1saW5r
-LXdpdGgtbGF0b21pYy1pZi1uZWVkZWQucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cmlu
-ZGV4IDVmNmM4OGU1N2QuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9saWJ1c2IvMDAwMS1jb25m
-aWd1cmUuYWMtbGluay13aXRoLWxhdG9taWMtaWYtbmVlZGVkLnBhdGNoCisrKyAvZGV2L251bGwK
-QEAgLTEsMzkgKzAsMCBAQAotRnJvbSAwYjg1NzA4MWQ2ODdmN2VlNDE0ODNhM2Q3ZTk4NDZhZjQ0
-YTViYTdkIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogRmFicmljZSBGb250YWluZSA8
-Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Ci1EYXRlOiBNb24sIDcgRmViIDIwMjIgMTE6NTU6
-NTQgKzAxMDAKLVN1YmplY3Q6IFtQQVRDSF0gY29uZmlndXJlLmFjOiBsaW5rIHdpdGggLWxhdG9t
-aWMgaWYgbmVlZGVkCi0KLWxpYnVzYiB1bmNvbmRpdGlvbmFsbHkgdXNlcyBhdG9taWNfZmV0Y2hf
-YWRkIHNpbmNlIHZlcnNpb24gMS4wLjI1IGFuZAotaHR0cHM6Ly9naXRodWIuY29tL2xpYnVzYi9s
-aWJ1c2IvY29tbWl0LzFhMDhhYTg0ZDk2Mzk3YTM4NDBhNzVhYmU2NjA1MWY1MzYwYzJjODQKLWh0
-dHBzOi8vZ2l0aHViLmNvbS9saWJ1c2IvbGlidXNiL2NvbW1pdC9lZWQ4YTM3MWVhNTM5MzkwOTZi
-YTk0ZDQ0MDAxZTA2MzdkMDQyNTcyCi1idXQgc29tZSBhcmNoaXRlY3R1cmVzIChlLmcuIHNwYXJj
-KSBuZWVkcyB0byBsaW5rIHdpdGggLWxhdG9taWMgdG8gYmUKLWFibGUgdG8gdXNlIGl0LiBTbyBj
-aGVjayBpZiAtbGF0b21pYyBpcyBuZWVkZWQgYW5kIHVwZGF0ZSBsaWJ1c2ItMS4wLnBjCi1hY2Nv
-cmRpbmdseSB0byBhdm9pZCB0aGUgZm9sbG93aW5nIGJ1aWxkIGZhaWx1cmUgd2l0aCBvcGVub2Nk
-OgotCi0vaG9tZS9idWlsZHJvb3QvYXV0b2J1aWxkL2luc3RhbmNlLTAvb3V0cHV0LTEvaG9zdC9v
-cHQvZXh0LXRvb2xjaGFpbi9iaW4vLi4vbGliL2djYy9zcGFyYy1idWlsZHJvb3QtbGludXgtdWNs
-aWJjLzEwLjMuMC8uLi8uLi8uLi8uLi9zcGFyYy1idWlsZHJvb3QtbGludXgtdWNsaWJjL2Jpbi9s
-ZDogL2hvbWUvYnVpbGRyb290L2F1dG9idWlsZC9pbnN0YW5jZS0wL291dHB1dC0xL2hvc3Qvc3Bh
-cmMtYnVpbGRyb290LWxpbnV4LXVjbGliYy9zeXNyb290L3Vzci9saWIvbGlidXNiLTEuMC5zbzog
-dW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgX19hdG9taWNfZmV0Y2hfYWRkXzQnCi1jb2xsZWN0Mjog
-ZXJyb3I6IGxkIHJldHVybmVkIDEgZXhpdCBzdGF0dXMKLQotRml4ZXM6Ci0gLSBodHRwOi8vYXV0
-b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy80YTI3YTc2OWJiM2NkZjc4NjQzYzMwNDliODdk
-NzkyMTc4ZDY1MTJjCi0KLVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5l
-LmZhYnJpY2VAZ21haWwuY29tPgotW1Vwc3RyZWFtIHN0YXR1czogaHR0cHM6Ly9naXRodWIuY29t
-L2xpYnVzYi9saWJ1c2IvcHVsbC8xMDY0XQotLS0tCi0gY29uZmlndXJlLmFjIHwgMSArCi0gMSBm
-aWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCi0KLWRpZmYgLS1naXQgYS9jb25maWd1cmUuYWMg
-Yi9jb25maWd1cmUuYWMKLWluZGV4IGY2Y2YyZjkuLjAwMmJjZjYgMTAwNjQ0Ci0tLS0gYS9jb25m
-aWd1cmUuYWMKLSsrKyBiL2NvbmZpZ3VyZS5hYwotQEAgLTE1Miw2ICsxNTIsNyBAQCBpZiB0ZXN0
-ICJ4JHBsYXRmb3JtIiA9IHhwb3NpeDsgdGhlbgotIAlBQ19TRUFSQ0hfTElCUyhbcHRocmVhZF9j
-cmVhdGVdLCBbcHRocmVhZF0sCi0gCQlbdGVzdCAieCRhY19jdl9zZWFyY2hfcHRocmVhZF9jcmVh
-dGUiICE9ICJ4bm9uZSByZXF1aXJlZCIgJiYgQUNfU1VCU1QoVEhSRUFEX0xJQlMsIFstbHB0aHJl
-YWRdKV0sCi0gCQlbXSwgW10pCi0rCUFDX1NFQVJDSF9MSUJTKFtfX2F0b21pY19mZXRjaF9hZGRf
-NF0sIFthdG9taWNdKQotIGVsaWYgdGVzdCAieCRwbGF0Zm9ybSIgPSB4d2luZG93czsgdGhlbgot
-IAlBQ19ERUZJTkUoW1BMQVRGT1JNX1dJTkRPV1NdLCBbMV0sIFtEZWZpbmUgdG8gMSBpZiBjb21w
-aWxpbmcgZm9yIGEgV2luZG93cyBwbGF0Zm9ybS5dKQotIGVsc2UKLS0tIAotMi4zNC4xCi0KZGlm
-ZiAtLWdpdCBhL3BhY2thZ2UvbGlidXNiLzAwMDItbGludXhfdXNiZnMtZml4LW1heWJlLXVuaW5p
-dGlhbGl6ZWQtZXJyb3IucGF0Y2ggYi9wYWNrYWdlL2xpYnVzYi8wMDAyLWxpbnV4X3VzYmZzLWZp
-eC1tYXliZS11bmluaXRpYWxpemVkLWVycm9yLnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0
-NAppbmRleCBlYTI5OTA4MWFhLi4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvbGlidXNiLzAwMDIt
-bGludXhfdXNiZnMtZml4LW1heWJlLXVuaW5pdGlhbGl6ZWQtZXJyb3IucGF0Y2gKKysrIC9kZXYv
-bnVsbApAQCAtMSwzNyArMCwwIEBACi1Gcm9tIGJlYTU4OTE1OTE0MDJmMTQ5NDBhNjA3ZWFmYmRj
-ZDE2OWZmODgyN2YgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiBZZWdvciBZZWZyZW1v
-diA8eWVnb3JzbGlzdHNAZ29vZ2xlbWFpbC5jb20+Ci1EYXRlOiBTdW4sIDYgRmViIDIwMjIgMDc6
-MTI6MTQgKzAxMDAKLVN1YmplY3Q6IFtQQVRDSF0gbGludXhfdXNiZnM6IGZpeCBtYXliZS11bmlu
-aXRpYWxpemVkIGVycm9yCi1NSU1FLVZlcnNpb246IDEuMAotQ29udGVudC1UeXBlOiB0ZXh0L3Bs
-YWluOyBjaGFyc2V0PVVURi04Ci1Db250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0Ci0KLUlu
-aXRpYWxpemUgYWN0aXZlX2NvbmZpZyB0byBhbiBpbnZhbGlkIHZhbHVlIHRvIGF2b2lkIHRoZSBm
-b2xsb3dpbmcKLWNvbXBpbGF0aW9uIGVycm9yOgotCi1vcy9saW51eF91c2Jmcy5jOiBJbiBmdW5j
-dGlvbiDigJhvcF9nZXRfY29uZmlndXJhdGlvbuKAmToKLW9zL2xpbnV4X3VzYmZzLmM6MTQ1Mjox
-MjogZXJyb3I6IOKAmGFjdGl2ZV9jb25maWfigJkgbWF5IGJlIHVzZWQgdW5pbml0aWFsaXplZCBp
-biB0aGlzIGZ1bmN0aW9uIFstV2Vycm9yPW1heWJlLXVuaW5pdGlhbGl6ZWRdCi0gMTQ1MiB8ICAq
-Y29uZmlnID0gKHVpbnQ4X3QpYWN0aXZlX2NvbmZpZzsKLQotU2lnbmVkLW9mZi1ieTogWWVnb3Ig
-WWVmcmVtb3YgPHllZ29yc2xpc3RzQGdvb2dsZW1haWwuY29tPgotVXBzdHJlYW06IGh0dHBzOi8v
-Z2l0aHViLmNvbS9saWJ1c2IvbGlidXNiL3B1bGwvMTA2MgotLS0tCi0gbGlidXNiL29zL2xpbnV4
-X3VzYmZzLmMgfCAyICstCi0gMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0
-aW9uKC0pCi0KLWRpZmYgLS1naXQgYS9saWJ1c2Ivb3MvbGludXhfdXNiZnMuYyBiL2xpYnVzYi9v
-cy9saW51eF91c2Jmcy5jCi1pbmRleCBjMzAwNjc1Li4yODVkOWNhIDEwMDY0NAotLS0tIGEvbGli
-dXNiL29zL2xpbnV4X3VzYmZzLmMKLSsrKyBiL2xpYnVzYi9vcy9saW51eF91c2Jmcy5jCi1AQCAt
-MTQyOSw3ICsxNDI5LDcgQEAgc3RhdGljIGludCBvcF9nZXRfY29uZmlndXJhdGlvbihzdHJ1Y3Qg
-bGlidXNiX2RldmljZV9oYW5kbGUgKmhhbmRsZSwKLSAJdWludDhfdCAqY29uZmlnKQotIHsKLSAJ
-c3RydWN0IGxpbnV4X2RldmljZV9wcml2ICpwcml2ID0gdXNiaV9nZXRfZGV2aWNlX3ByaXYoaGFu
-ZGxlLT5kZXYpOwotLQlpbnQgYWN0aXZlX2NvbmZpZzsKLSsJaW50IGFjdGl2ZV9jb25maWcgPSAt
-MTsgLyogdG8gcGxlYXNlIGNvbXBpbGVyICovCi0gCWludCByOwotIAotIAlpZiAocHJpdi0+c3lz
-ZnNfZGlyKSB7Ci0tLSAKLTIuMTcuMAotCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYnVzYi9saWJ1
-c2IuaGFzaCBiL3BhY2thZ2UvbGlidXNiL2xpYnVzYi5oYXNoCmluZGV4IGExODkzNWZlMDMuLmJi
-YjBjY2Y1YjkgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbGlidXNiL2xpYnVzYi5oYXNoCisrKyBiL3Bh
-Y2thZ2UvbGlidXNiL2xpYnVzYi5oYXNoCkBAIC0xLDMgKzEsMyBAQAogIyBMb2NhbGx5IGNvbXB1
-dGVkOgotc2hhMjU2ICA4YTI4ZWYxOTdhNzk3ZWJhYzI3MDJmMDk1ZTgxOTc1ZTJiMDJiMmVlZmYy
-Nzc0ZmE5MDljNzhhNzRlZjUwODQ5ICBsaWJ1c2ItMS4wLjI1LnRhci5iejIKK3NoYTI1NiAgMTJj
-ZTdhNjFmYzk4NTRkMWQyYTFmZmUwOTVmN2I1ZmFjMTlkZGJhMDk1YzI1OWU2MDY3YTQ2NTAwMzgx
-YjVhNSAgbGlidXNiLTEuMC4yNi50YXIuYnoyCiBzaGEyNTYgIDVkZjA3MDA3MTk4OTg5YzYyMmY1
-ZDQxZGU4ZDcwM2U3YmVmM2QwZTc5ZDYyZTI0MzMyZWU3MzlhNDUyYWY2MmEgIENPUFlJTkcKZGlm
-ZiAtLWdpdCBhL3BhY2thZ2UvbGlidXNiL2xpYnVzYi5tayBiL3BhY2thZ2UvbGlidXNiL2xpYnVz
-Yi5tawppbmRleCBhYTMwNmUyOTVkLi44Yzc5ZWJiMjNhIDEwMDY0NAotLS0gYS9wYWNrYWdlL2xp
-YnVzYi9saWJ1c2IubWsKKysrIGIvcGFja2FnZS9saWJ1c2IvbGlidXNiLm1rCkBAIC01LDcgKzUs
-NyBAQAogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAogTElCVVNCX1ZFUlNJT05fTUFKT1IgPSAx
-LjAKLUxJQlVTQl9WRVJTSU9OID0gJChMSUJVU0JfVkVSU0lPTl9NQUpPUikuMjUKK0xJQlVTQl9W
-RVJTSU9OID0gJChMSUJVU0JfVkVSU0lPTl9NQUpPUikuMjYKIExJQlVTQl9TT1VSQ0UgPSBsaWJ1
-c2ItJChMSUJVU0JfVkVSU0lPTikudGFyLmJ6MgogTElCVVNCX1NJVEUgPSBodHRwczovL2dpdGh1
-Yi5jb20vbGlidXNiL2xpYnVzYi9yZWxlYXNlcy9kb3dubG9hZC92JChMSUJVU0JfVkVSU0lPTikK
-IExJQlVTQl9MSUNFTlNFID0gTEdQTC0yLjErCi0tIAoyLjE3LjAKCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Adds support for Linux kernel 5.17.
+
+Define IGNORE_CC_MISMATCH for kernel module builds to avoid an issue
+where NVIDIA's `cc_version_check` in kernel/conftest.sh may falsely
+detect a mismatch and fail due to matching on the pkgversion substring
+of the GCC version string in the kernel's include/generated/compile.h.
+
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+---
+ package/nvidia-driver/nvidia-driver.hash | 4 ++--
+ package/nvidia-driver/nvidia-driver.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
+index 7f2248d0f9..6564b8e821 100644
+--- a/package/nvidia-driver/nvidia-driver.hash
++++ b/package/nvidia-driver/nvidia-driver.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 51adb28f0ed4548f35a88a93ad6767ebd807fa14f418bf5e51a6d63a3ff7f275  NVIDIA-Linux-x86-390.132.run
+-sha256 b6b4b8af37e78e026c9ebdf4a5c64ea412dfcb710931dd028c22dac228de659d  NVIDIA-Linux-x86_64-390.132-no-compat32.run
++sha256 5226e4842044cffd9096deadaf68934c133da74e05b80ccd21236584b3afb1fc  NVIDIA-Linux-x86-390.151.run
++sha256 6e4fd2258465f5d5527fe80abd46de925a30348b4a84658498a6d75caf42c47c  NVIDIA-Linux-x86_64-390.151-no-compat32.run
+ sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  LICENSE
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index 54c2aa46d8..f1217b00aa 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NVIDIA_DRIVER_VERSION = 390.132
++NVIDIA_DRIVER_VERSION = 390.151
+ NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
+ NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
+ NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION)$(if $(BR2_x86_64),-no-compat32).run
+@@ -137,6 +137,7 @@ endif
+ # because they don't recognise the usual variables set by the kernel
+ # build system. We also need to tell them what modules to build.
+ NVIDIA_DRIVER_MODULE_MAKE_OPTS = \
++	IGNORE_CC_MISMATCH=1 \
+ 	NV_KERNEL_SOURCES="$(LINUX_DIR)" \
+ 	NV_KERNEL_OUTPUT="$(LINUX_DIR)" \
+ 	NV_KERNEL_MODULES="$(NVIDIA_DRIVER_MODULES)"
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
