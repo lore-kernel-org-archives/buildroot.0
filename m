@@ -4,47 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3A3FC43334
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:36:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CE72C43334
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jun 2022 19:40:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8C43C40B95;
-	Mon, 20 Jun 2022 19:36:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C43C40B95
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE88C40B63;
+	Mon, 20 Jun 2022 19:40:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE88C40B63
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 04b4hz8ZUPRD; Mon, 20 Jun 2022 19:36:57 +0000 (UTC)
+	with ESMTP id lhwIYYD4zsYF; Mon, 20 Jun 2022 19:40:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7499A40B83;
-	Mon, 20 Jun 2022 19:36:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7499A40B83
+	by smtp2.osuosl.org (Postfix) with ESMTP id F3C04405B3;
+	Mon, 20 Jun 2022 19:40:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3C04405B3
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF2171BF3FD
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:34:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 960BB1BF3FD
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:40:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B556360F71
- for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:34:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B556360F71
+ by smtp3.osuosl.org (Postfix) with ESMTP id 45AF760FEE
+ for <buildroot@lists.busybox.net>; Mon, 20 Jun 2022 19:40:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45AF760FEE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dM8iSWyFmLe0 for <buildroot@lists.busybox.net>;
- Mon, 20 Jun 2022 19:34:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C8B3160FEC
- for <buildroot@buildroot.org>; Mon, 20 Jun 2022 19:34:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8B3160FEC
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 05F71874DD; Mon, 20 Jun 2022 19:22:32 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Mon, 20 Jun 2022 21:11:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b19126c3985c4897e96e2430c813d18eae198531
-X-Git-Newrev: b1fcb596fe93f4c785f93fef58bc09ccba152406
-X-Patchwork-Hint: ignore
-Message-Id: <20220620192232.05F71874DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/compiler-rt: new package
+ with ESMTP id UDn8Mkgv1t23 for <buildroot@lists.busybox.net>;
+ Mon, 20 Jun 2022 19:40:03 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D428660F71
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D428660F71
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 19:40:02 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id g26so1705561ejb.5
+ for <buildroot@buildroot.org>; Mon, 20 Jun 2022 12:40:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=RAK9jUIXGkKtW7BDrHMBxxnliKKE+9YJmgMQLyU+cUs=;
+ b=dFwzfGPGQC63v7YTpEQwYch4mAzk0fdC6ONK5xdwZ92eBGHE+8guEDvHn6c24yjP9b
+ Hgrr7xZrp+tqnhAR4gjWo6ZHZurqKHRiixWk4Gxf/g9K+BnQyWFLeWFBbqRPwfLREac7
+ y1TElsJQc1+lntAoVpNQP7wKhGtFjqscSja29Em7sUA3bCOPa5jNxFCTfqAHwK2HPHDl
+ Xnp2g4HXuqk467HX95GOQRXKv30V8auGutgGuVsgz8F3VIiQ4JZIeCf6YL+acWOmCsjI
+ iKOU0mBK1P0U3Fn4B3krThrC1B4CRbPDU7vx3fInKBQQu8/nkgf+sgF3KE08k3aZCSNk
+ l88Q==
+X-Gm-Message-State: AJIora8lFiRdPdbx8eVmUMJEHFMeqSeoV0MKSXaDPr86KVcPl3L3Pq6W
+ 121MaynEA7Dw8Z44oBFtdJ9Tnt1S84/ZqA==
+X-Google-Smtp-Source: AGRyM1s/MlaGBMDMX9Dnti2HKXUkI1Ej01M2SHcxI/oVy8Notz0k1FvQh1qV9N2CJCeCuxb4Agrn6Q==
+X-Received: by 2002:a17:906:5256:b0:711:ee4d:fbe4 with SMTP id
+ y22-20020a170906525600b00711ee4dfbe4mr21315049ejm.312.1655754000908; 
+ Mon, 20 Jun 2022 12:40:00 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ u3-20020a17090626c300b006fe9e717143sm6330119ejc.94.2022.06.20.12.39.59
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 20 Jun 2022 12:40:00 -0700 (PDT)
+Message-ID: <4c9eff36-58b8-c617-b4e9-c52826aeca32@mind.be>
+Date: Mon, 20 Jun 2022 21:39:58 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-GB
+To: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
+References: <20220530151612.3072914-1-thomas.devoogdt@barco.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220530151612.3072914-1-thomas.devoogdt@barco.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=RAK9jUIXGkKtW7BDrHMBxxnliKKE+9YJmgMQLyU+cUs=;
+ b=ILOpV7S7p6LZ+1bjBv79HBSoOMpAmGyAvOgbyI+3Uhh5GvqhjM7oIiqnAA17OcHiGt
+ 3P+i2l2/bzeC5tdM7VqIIbVhRQqGrEviQuDUE/1yeTlArcKzaXvElzgg300zQkL8A21E
+ DCVHhBn6YqWO2lY2zJAw4ZSzuHfMSQI7ROdz2WQFQD+h6q4VbsUt+MO4ESDK9Ejr9jrZ
+ SywtLKYMQZtHdg0YywCI9hmdKbTuqGz8MFJEhwLk2TUisqBE71fnKurls43BpynC5+kn
+ eds91lXSSV6RwNBZ5zh+r4P3DiP7uX1w2lJyvlg6Xw80j0KpDWrJpyLmjHQ1Bpa7ojLu
+ GmhA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=ILOpV7S7
+Subject: Re: [Buildroot] [PATCH 1/1] package/qemu: add qemu host tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,183 +101,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Devoogdt <thomas.devoogdt@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1fcb596fe93f4c785f93fef58bc09ccba152406
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+  Hi Thomas,
 
-This patch adds support for the compiler-rt (CLANG runtime) library.
-It builds a set of static libraries and installs them into the
-CLANG/LLVM toolchain resource folder. These libraries can then be
-used by developers in the SDK for building target applications for
-analysis.
+On 30/05/2022 17:16, Thomas Devoogdt wrote:
+> From: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+> 
+> Allow host tools e.g. qemu-img to be built.
+> Similar to the BR2_PACKAGE_QEMU_TOOLS option.
+> 
+> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+> ---
+>   package/qemu/Config.in.host | 6 ++++++
+>   package/qemu/qemu.mk        | 6 ++++++
+>   2 files changed, 12 insertions(+)
+> 
+> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+> index f9cdb9b703..2aa6991263 100644
+> --- a/package/qemu/Config.in.host
+> +++ b/package/qemu/Config.in.host
+> @@ -102,4 +102,10 @@ config BR2_PACKAGE_HOST_QEMU_USB
+>   	help
+>   	  Enables USB passthrough support from guest to host.
+>   
+> +config BR2_PACKAGE_HOST_QEMU_TOOLS
+> +	bool "Enable tools"
+> +	help
+> +	  Say 'y' here to include tools packaged with QEMU
+> +	  (e.g. qemu-img).
 
-What is fuzzing and why libfuzzer?
-https://www.moritz.systems/blog/an-introduction-to-llvm-libfuzzer/
+  For host packages, there's no rootfs size constraint, so there is normally no 
+reason to have sub-options. Only if it would dramatically increase the build 
+time, it's worth to make an option for this feature.
 
-The compiler-rt fuzzer and address sanitizer tools require additional
-LLVM binary tools installed to allow stack trace decoding actively during
-executable analysis.  This patch conditionally enables these tools.
-https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
+  In other words: simply do --enable-tools unconditionally.
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Cc: Romain Naour <romain.naour@smile.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-Cc: Michael Drake <michael.drake@codethink.co.uk>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/compiler-rt/Config.in        | 14 ++++++++++++++
- package/compiler-rt/compiler-rt.hash |  3 +++
- package/compiler-rt/compiler-rt.mk   | 37 ++++++++++++++++++++++++++++++++++++
- package/llvm/llvm.mk                 | 21 ++++++++++++++++----
- 6 files changed, 73 insertions(+), 4 deletions(-)
+  Regards,
+  Arnout
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 62191e554c..966751299e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1903,6 +1903,7 @@ F:	package/bridge-utils/
- F:	package/checkpolicy/
- F:	package/checksec/
- F:	package/cgroupfs-mount/
-+F:	package/compiler-rt/
- F:	package/crda/
- F:	package/cunit/
- F:	package/dacapo/
-diff --git a/package/Config.in b/package/Config.in
-index 8b4f5570c4..0e3eb11b24 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1934,6 +1934,7 @@ menu "Other"
- 	source "package/cereal/Config.in"
- 	source "package/clang/Config.in"
- 	source "package/cmocka/Config.in"
-+	source "package/compiler-rt/Config.in"
- 	source "package/cppcms/Config.in"
- 	source "package/cracklib/Config.in"
- 	source "package/dawgdic/Config.in"
-diff --git a/package/compiler-rt/Config.in b/package/compiler-rt/Config.in
-new file mode 100644
-index 0000000000..9afc0d9d60
---- /dev/null
-+++ b/package/compiler-rt/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_COMPILER_RT
-+	bool "compiler-rt"
-+	depends on BR2_PACKAGE_LLVM
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # asan lib requires
-+	help
-+	  A collection of runtime libraries primarily used by clang and
-+	  llvm to provide builtins, sanitizer runtimes, and profiling
-+	  at runtime.
-+
-+	  https://compiler-rt.llvm.org/
-+
-+comment "compiler-rt requires llvm to be enabled and a glibc toolchain"
-+	depends on !BR2_PACKAGE_LLVM
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/compiler-rt/compiler-rt.hash b/package/compiler-rt/compiler-rt.hash
-new file mode 100644
-index 0000000000..8ee010ac5a
---- /dev/null
-+++ b/package/compiler-rt/compiler-rt.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  def1fc00c764cd3abbba925c712ac38860a756a43b696b291f46fee09e453274  compiler-rt-11.1.0.src.tar.xz
-+sha256  1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d  LICENSE.TXT
-diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
-new file mode 100644
-index 0000000000..57f9c26854
---- /dev/null
-+++ b/package/compiler-rt/compiler-rt.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# compiler-rt
-+#
-+################################################################################
-+
-+# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
-+# tied to the version of those tools
-+COMPILER_RT_VERSION = 11.1.0
-+COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
-+COMPILER_RT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(COMPILER_RT_VERSION)
-+COMPILER_RT_LICENSE = NCSA MIT
-+COMPILER_RT_LICENSE_FILES = LICENSE.TXT
-+COMPILER_RT_DEPENDENCIES = host-clang llvm
-+
-+COMPILER_RT_INSTALL_STAGING = YES
-+COMPILER_RT_INSTALL_TARGET = NO
-+
-+COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_STANDALONE_BUILD=OFF \
-+	-DCOMPILER_RT_STANDALONE_BUILD=ON \
-+	-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
-+	-DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config
-+
-+# The installation of the target runtime libraries defaults to DESTDIR, however
-+# host-clang resources directory needs a link so Clang can find the runtime
-+# libraries in the same location they would be if built as part of the Clang
-+# build. The "resources" directory is loosely documented and seems to be
-+# assumed, as compiler-rt is usually build at the same time as Clang and not
-+# standalone.
-+define COMPILER_RT_SETUP_RUNTIME_LIBS
-+	mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
-+	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
-+	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share
-+endef
-+COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
-+
-+$(eval $(cmake-package))
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 825de96392..4670773ca3 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -214,8 +214,7 @@ HOST_LLVM_CONF_OPTS += \
- # We need to activate LLVM_INCLUDE_TOOLS, otherwise it does not generate
- # libLLVM.so
- LLVM_CONF_OPTS += \
--	-DLLVM_INCLUDE_TOOLS=ON \
--	-DLLVM_BUILD_TOOLS=OFF
-+	-DLLVM_INCLUDE_TOOLS=ON
- 
- ifeq ($(BR2_PACKAGE_LLVM_RTTI),y)
- HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=ON
-@@ -278,11 +277,25 @@ LLVM_CONF_OPTS += \
- # directories from STAGING_DIR.
- # output/staging/usr/bin/llvm-config --includedir
- # output/staging/usr/include
--define HOST_LLVM_COPY_LLVM_CONFIG_TO_STAGING_DIR
-+define LLVM_COPY_LLVM_CONFIG_TO_STAGING_DIR
- 	$(INSTALL) -D -m 0755 $(HOST_DIR)/bin/llvm-config \
- 		$(STAGING_DIR)/usr/bin/llvm-config
- endef
--HOST_LLVM_POST_INSTALL_HOOKS = HOST_LLVM_COPY_LLVM_CONFIG_TO_STAGING_DIR
-+HOST_LLVM_POST_INSTALL_HOOKS = LLVM_COPY_LLVM_CONFIG_TO_STAGING_DIR
-+
-+# The llvm-symbolizer binary is used by the Compiler-RT Fuzzer
-+# and AddressSanitizer tools on the target for stack traces.
-+# If we set -DLLVM_BUILD_TOOLS=ON this will also install the llvm-config
-+# target binary to STAGING_DIR, which means we can no longer run it.
-+# Therefore, overwrite it again with the host llvm-config.
-+ifeq ($(BR2_PACKAGE_COMPILER_RT),y)
-+LLVM_CONF_OPTS += \
-+	-DLLVM_BUILD_TOOLS=ON
-+LLVM_POST_INSTALL_STAGING_HOOKS = LLVM_COPY_LLVM_CONFIG_TO_STAGING_DIR
-+else
-+LLVM_CONF_OPTS += \
-+	-DLLVM_BUILD_TOOLS=OFF
-+endif
- 
- # By default llvm-tblgen is built and installed on the target but it is
- # not necessary. Also erase LLVMHello.so from /usr/lib
+> +
+>   endif
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index 1bcffc2340..9623068c93 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -348,6 +348,12 @@ else
+>   HOST_QEMU_OPTS += --disable-libusb
+>   endif
+>   
+> +ifeq ($(BR2_PACKAGE_HOST_QEMU_TOOLS),y)
+> +HOST_QEMU_OPTS += --enable-tools
+> +else
+> +HOST_QEMU_OPTS += --disable-tools
+> +endif
+> +
+>   # Override CPP, as it expects to be able to call it like it'd
+>   # call the compiler.
+>   define HOST_QEMU_CONFIGURE_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
