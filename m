@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBE12C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 21 Jun 2022 08:43:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51DDBC43334
+	for <buildroot@archiver.kernel.org>; Tue, 21 Jun 2022 12:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 452014199E;
-	Tue, 21 Jun 2022 08:43:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 452014199E
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2C4183ED1;
+	Tue, 21 Jun 2022 12:02:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2C4183ED1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ELQ6RBALb9fQ; Tue, 21 Jun 2022 08:43:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jqF06fF2McjG; Tue, 21 Jun 2022 12:02:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28A754198E;
-	Tue, 21 Jun 2022 08:43:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28A754198E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C74FC1BF32A
- for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 08:43:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9453A83ECE;
+	Tue, 21 Jun 2022 12:02:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9453A83ECE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CE3E1BF2A1
+ for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 12:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF4BF60B5B
- for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 08:43:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF4BF60B5B
+ by smtp1.osuosl.org (Postfix) with ESMTP id EAB4D818D7
+ for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 12:02:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAB4D818D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1U-k8oajRSRG for <buildroot@lists.busybox.net>;
- Tue, 21 Jun 2022 08:43:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j6w30NrRZkDT for <buildroot@lists.busybox.net>;
+ Tue, 21 Jun 2022 12:02:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E24BC60B48
- for <buildroot@uclibc.org>; Tue, 21 Jun 2022 08:43:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E24BC60B48
+ by smtp1.osuosl.org (Postfix) with ESMTP id 527FC817B3
+ for <buildroot@uclibc.org>; Tue, 21 Jun 2022 12:02:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 527FC817B3
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id C0561865AA; Tue, 21 Jun 2022 08:31:28 +0000 (UTC)
+ id D76A083D76; Tue, 21 Jun 2022 11:50:29 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 21 Jun 2022 08:43:51 +0000
+Date: Tue, 21 Jun 2022 12:02:53 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,15 +47,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2022.05
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ian_ormshaw@waters.com
+X-Bugzilla-Who: vfazio@xes-inc.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-14856-163-EVXLB1HKCL@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14856-163-s0W5Q9RRNp@https.bugs.busybox.net/>
 In-Reply-To: <bug-14856-163@https.bugs.busybox.net/>
 References: <bug-14856-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -80,13 +80,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14856
 
---- Comment #6 from Dr I J Ormshaw <ian_ormshaw@waters.com> ---
-Created attachment 9336
-  --> https://bugs.busybox.net/attachment.cgi?id=9336&action=edit
-source tree patch
+--- Comment #7 from Vincent Fazio <vfazio@xes-inc.com> ---
+I've submitted
+https://patchwork.ozlabs.org/project/buildroot/list/?series=305651
 
-I've applied this patch to the source tree and it now build for me on my
-system.
+Which uses the upstream 390.151 package. I was able to successfully compile the
+driver using the vanilla 5.17 kernel
 
 -- 
 You are receiving this mail because:
