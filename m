@@ -4,81 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0C58C43334
-	for <buildroot@archiver.kernel.org>; Tue, 21 Jun 2022 21:34:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A33EFC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 21 Jun 2022 22:52:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5649C8454A;
-	Tue, 21 Jun 2022 21:34:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5649C8454A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FAB983F90;
+	Tue, 21 Jun 2022 22:52:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FAB983F90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aRbPsfrEhVi1; Tue, 21 Jun 2022 21:34:34 +0000 (UTC)
+	with ESMTP id AnW8Ns1AFVIP; Tue, 21 Jun 2022 22:52:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 761A384543;
-	Tue, 21 Jun 2022 21:34:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 761A384543
+	by smtp1.osuosl.org (Postfix) with ESMTP id 082B383F74;
+	Tue, 21 Jun 2022 22:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 082B383F74
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A9F521BF2F3
- for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 21:34:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2D54E1BF396
+ for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 22:52:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9230E61120
- for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 21:34:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9230E61120
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0741C610E7
+ for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 22:52:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0741C610E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F_AA_RHiqKOI for <buildroot@lists.busybox.net>;
- Tue, 21 Jun 2022 21:34:27 +0000 (UTC)
+ with ESMTP id 1RP9rj92XYgK for <buildroot@lists.busybox.net>;
+ Tue, 21 Jun 2022 22:52:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 304A86111E
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 304A86111E
- for <buildroot@buildroot.org>; Tue, 21 Jun 2022 21:34:27 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id e40so8610526eda.2
- for <buildroot@buildroot.org>; Tue, 21 Jun 2022 14:34:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DA66610D1
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
+ [IPv6:2607:f8b0:4864:20::132])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5DA66610D1
+ for <buildroot@buildroot.org>; Tue, 21 Jun 2022 22:52:41 +0000 (UTC)
+Received: by mail-il1-x132.google.com with SMTP id h20so4330453ilj.13
+ for <buildroot@buildroot.org>; Tue, 21 Jun 2022 15:52:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=YFSpXsNGmCKy07WRnOB64Yju/K+XoKrOZzVlJM9jdRU=;
- b=dzu15BWeVrzgpn1jzfrMYbtoSPiV7e6SMGrJzu9VMq7Ib2Lx1f2WnEru0dzyMhJdV1
- KVBu/eMYP+JUvoOq5LqJFtbdJnu/cdCv1aL2YxSsuejAH465578+5gq7w6KcWtftzudE
- NZNUM8rUcHyZhSm7eS8rHOiFujxa4N441v734kzWZeN5upOyAuaEgBTa1KBniEHfYajz
- 1BC+D3mIlXjccyNgAlNsqR4dqrVlP/tVioEsGPN01pH1OH2AT/nET1z7G3jQwvlM4YeH
- AjwXKX67jn1SPUGeNsCiBm2uUAJd+tZ89bGn/WGMH64++/hdw3KvOnGVzo4oeceHlSNT
- 9dXw==
-X-Gm-Message-State: AJIora/rpRA+9N6Zy9tDYWhyn7zK+6pryniTtZuyePWAT+Td02+F/5B/
- zXbGIO4eQiOB3u0UqanLXykQNE7IClPclQ==
-X-Google-Smtp-Source: AGRyM1sr/AacO31sJfYXxB+4gFcLPqfxHRa7P8I9ZS5j8VX7EsIytqUdbmFbpf/mb7LWn4d4O5US6A==
-X-Received: by 2002:a05:6402:4390:b0:42e:b7e:e9ac with SMTP id
- o16-20020a056402439000b0042e0b7ee9acmr144485edc.97.1655847265337; 
- Tue, 21 Jun 2022 14:34:25 -0700 (PDT)
-Received: from angelo-ThinkPad-X270.. (host085115199111.static.fidoka.tech.
- [85.115.199.111]) by smtp.gmail.com with ESMTPSA id
- 2-20020a170906328200b00722dceb3f8bsm2305140ejw.151.2022.06.21.14.34.24
+ bh=kO+E16P2pm3FVxqGvRb16tObKYhBUXD7yUPJwkMTyJY=;
+ b=6a8Sqr1GfebhC2s/V9rpN/6q8kaShGGqdRqIibrwNlWjLwI8tsJEthN8g5X2wAL8om
+ If6isXM2dGDJ3lt8Ab0rN+Mb2XHFd0nsxjJibhjQijLmeVZwwZjsfrZwjxAY3fBofknS
+ 3K2fbcUOhaJqDsPVNLGAmJXkkmRMnJMefqLi5iZjBaf0k81hJGNc9my9NxeN3h/dX67Z
+ gvyFVU7Teh5kZYOXblZnQ8hj+iRWVLycf0SjKmbZ+3dfhxKh19lb/aMY4BeOma+X5YQk
+ MZEX37iNMJll1WdCNYLFlk4QX4gf8VoYXV+P2sMuNoh0sRRpZhHvL+YtwsHCtDvDjnk7
+ g+Kg==
+X-Gm-Message-State: AJIora/OUj7n6iof43QFNoPVE8EacFEETD7TFR19zFfBiWmN2Lvvnev/
+ A6d7SHPhUdOIa+1mLfyRk1Xn5RqFQUY=
+X-Google-Smtp-Source: AGRyM1vKCZ7hJfCtuD0B1TbqqHFX74Kns+gy7aUeJ7GePQYNHrN3xnlf/fWdAtzCz2qMeqJeMDvvvg==
+X-Received: by 2002:a05:6e02:144f:b0:2d1:90c9:9047 with SMTP id
+ p15-20020a056e02144f00b002d190c99047mr339271ilo.211.1655851960231; 
+ Tue, 21 Jun 2022 15:52:40 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-113-86.hlrn.qwest.net.
+ [71.218.113.86]) by smtp.gmail.com with ESMTPSA id
+ a18-20020a921a12000000b002d90ae7b6a3sm3770275ila.12.2022.06.21.15.52.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Jun 2022 14:34:25 -0700 (PDT)
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
+ Tue, 21 Jun 2022 15:52:39 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Jun 2022 23:34:21 +0200
-Message-Id: <20220621213421.2192237-1-angelo@amarulasolutions.com>
+Date: Tue, 21 Jun 2022 16:52:09 -0600
+Message-Id: <20220621225209.2899559-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
+ d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=YFSpXsNGmCKy07WRnOB64Yju/K+XoKrOZzVlJM9jdRU=;
- b=GbwsYjGjDfRvAZ43ArHj6MsnQgM7VrxSuEY9kgSgbvJ4Nvy/Lhn0gc9B4t6oxNbZLq
- WR6885ExWF2hHt971xePT6QzBoMJyPhCToev4Sze+QykF1onFOVkCgUktNpcdQ13PO8z
- KoOKR62i9adb8t80cWngMI+7nDlbC6p26Og10=
+ bh=kO+E16P2pm3FVxqGvRb16tObKYhBUXD7yUPJwkMTyJY=;
+ b=achWNtqoC2H6eBPe33+i52KzYoMOwu0+wAUWbQBgOTYXQC6Chx+AQnvmBIpjNN7GQu
+ Zzu5QuA2vhjsCQ2+dohU0WY9D1XAVD+4hJoRih9GlSL+OCGFsmQJih59vJ4uN+k5+nif
+ HJRzcxDe83kzw2wC2z0VTWMzTrs0ll3tQTNiB14n430l0PVrbkWRe4krwqQODbXwIyjV
+ ivdduoRWDDdXan+Qu/DnmYPJcYFeWQpfpzWfDdnlbK5N4OVDduyh8gOfAj4Vyf0wFPsn
+ 6VZ3XkRXU33Y0nniwL8o8zBaVA00cxIU0ccr3XzU380t/CwLQ6FwNb5b+R0i+VjfRSh8
+ 73DA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=GbwsYjGj
-Subject: [Buildroot] [PATCH] Eckage/python-web2py: bump version to 2.22.5
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=achWNtqo
+Subject: [Buildroot] [PATCH 1/1] package/spirv-llvm-translator: set CMP0077
+ policy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,40 +93,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/python-web2py/python-web2py.hash | 2 +-
- package/python-web2py/python-web2py.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Set this to the new behavior for consistency.
 
-diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
-index 3f781a7016..dbf85437f2 100644
---- a/package/python-web2py/python-web2py.hash
-+++ b/package/python-web2py/python-web2py.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  a779adc5626999c854e9abc976296c2c1059bf6988a421c0bfba923f9b08d8cb  python-web2py-2.22.3.tar.gz
-+sha256  d4a15fc15254d3fa9e9e9b5a726ae51a0989b7d740d53fd7c3d5b81ac6b8274e  python-web2py-2.22.5.tar.gz
- sha256  2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index b1897978af..b9a4e95609 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_WEB2PY_VERSION = 2.22.3
-+PYTHON_WEB2PY_VERSION = 2.22.5
- PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,v$(PYTHON_WEB2PY_VERSION))
- PYTHON_WEB2PY_LICENSE = LGPL-3.0
- PYTHON_WEB2PY_LICENSE_FILES = LICENSE
+Fixes:
+CMake Warning (dev) at /home/buildroot/buildroot/output/per-package/host-spirv-llvm-translator/host/lib/cmake/llvm/HandleLLVMOptions.cmake:852 (option):
+  Policy CMP0077 is not set: option() honors normal variables.  Run "cmake
+  --help-policy CMP0077" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+  For compatibility with older versions of CMake, option is clearing the
+  normal variable 'LLVM_ENABLE_EH'.
+Call Stack (most recent call first):
+  CMakeLists.txt:53 (include)
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/spirv-llvm-translator/spirv-llvm-translator.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.mk b/package/spirv-llvm-translator/spirv-llvm-translator.mk
+index 22f8765582..46704b3f8d 100644
+--- a/package/spirv-llvm-translator/spirv-llvm-translator.mk
++++ b/package/spirv-llvm-translator/spirv-llvm-translator.mk
+@@ -10,6 +10,7 @@ SPIRV_LLVM_TRANSLATOR_LICENSE = NCSA
+ SPIRV_LLVM_TRANSLATOR_LICENSE_FILES = LICENSE.TXT
+ HOST_SPIRV_LLVM_TRANSLATOR_DEPENDENCIES = host-clang host-llvm
+ HOST_SPIRV_LLVM_TRANSLATOR_CONF_OPTS = \
++	-DCMAKE_POLICY_DEFAULT_CMP0077=NEW \
+ 	-DLLVM_BUILD_TOOLS=ON \
+ 	-DLLVM_DIR=$(HOST_DIR)/lib/cmake/llvm \
+ 	-DLLVM_SPIRV_BUILD_EXTERNAL=YES \
 -- 
 2.34.1
 
