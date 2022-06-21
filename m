@@ -1,72 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7C46C43334
-	for <buildroot@archiver.kernel.org>; Tue, 21 Jun 2022 14:02:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97456C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 21 Jun 2022 14:04:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25E67415CA;
-	Tue, 21 Jun 2022 14:02:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25E67415CA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22BF983E88;
+	Tue, 21 Jun 2022 14:04:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22BF983E88
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jVbDf0Jhgs9m; Tue, 21 Jun 2022 14:02:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id F6YCdu7IXTAp; Tue, 21 Jun 2022 14:04:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D4EC3418FF;
-	Tue, 21 Jun 2022 14:02:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4EC3418FF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 49DC71BF2CF
- for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 14:02:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 519E883EA7;
+	Tue, 21 Jun 2022 14:04:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 519E883EA7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D66A61BF5A5
+ for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 14:04:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 23CA060B89
- for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 14:02:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23CA060B89
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E70440445
+ for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 14:04:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E70440445
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ngsDanw9tGHT for <buildroot@lists.busybox.net>;
- Tue, 21 Jun 2022 14:02:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rxPdL56C3zPW for <buildroot@lists.busybox.net>;
+ Tue, 21 Jun 2022 14:04:41 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0788360B31
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0788360B31
- for <buildroot@buildroot.org>; Tue, 21 Jun 2022 14:02:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B32F5403D6
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B32F5403D6
+ for <buildroot@buildroot.org>; Tue, 21 Jun 2022 14:04:40 +0000 (UTC)
+Received: from relay12.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::232])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 35478D0807
+ for <buildroot@buildroot.org>; Tue, 21 Jun 2022 13:58:40 +0000 (UTC)
 Received: (Authenticated sender: kory.maincent@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2526F20000B;
- Tue, 21 Jun 2022 14:02:16 +0000 (UTC)
-Date: Tue, 21 Jun 2022 16:02:16 +0200
-To: Etienne Carriere <etienne.carriere@linaro.org>
-Message-ID: <20220621160216.5f3d03fe@kmaincent-XPS-13-7390>
-In-Reply-To: <CAN5uoS9ssQz6NBaRZ2avNiafm_dgYbp-3QL1p5p-LG02OxVd+g@mail.gmail.com>
-References: <20220621130636.1100016-1-kory.maincent@bootlin.com>
- <CAN5uoS9XgxK9-A8-QKGCuifxXAS6-EUMHDJsfBrUdjYB3qcPdA@mail.gmail.com>
- <20220621154533.4f5e7c0e@kmaincent-XPS-13-7390>
- <CAN5uoS9ssQz6NBaRZ2avNiafm_dgYbp-3QL1p5p-LG02OxVd+g@mail.gmail.com>
-Organization: bootlin
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+ by mail.gandi.net (Postfix) with ESMTPSA id D873420000A;
+ Tue, 21 Jun 2022 13:58:33 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 21 Jun 2022 15:58:33 +0200
+Message-Id: <20220621135833.1148493-1-kory.maincent@bootlin.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1655820137;
+ d=bootlin.com; s=gm1; t=1655819914;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=JztusPAPQFZ+HjB0XE0ETrmM0TIDn5VuUy4oYo5SrTE=;
- b=nJQcNBjs7otNgZP+JFSO1gMpVF1LfErudsezPixZMXW2/LB3ChXsWA82Iuqm5ZEnvk2Scc
- CuieoAb8tPsFcEgoctn7vhqtksS0YUZZR+DKNpyKZcajNv4BdcSs2EME0JjSbs0kWl3ADe
- ITHpwROb0Bca/q/EoJiEiDWO0eU97Av+buRdyN5JYFWvjP5BTXYRMYFhDkGMVAkEzNfY1v
- kPxnqRC0ZPGNnezTgLUxPQF9fDtZ7gDV2xg8GNPEfY7b303Dhs7/irf9UbhBzxf3enagqT
- qO/gIXi/fB38pebwBDoiky4zarXj2GZXkfIiqiYT52k4guA2bQAkMrXQT2MI1w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=3Q26RhEPVbQZK5A9UUAmohu2lHLeh4m/By4CIC2P7uw=;
+ b=alygbWSYVfpBbPKXZ3ZFWZaeU2Nw2I+6z/qpqeisl5C38xaBLhB7GGc+c2AmqhPzZU6I+z
+ AA4g66gq6RGzRzNKyY0i/Kix87mTeXohqXnDR6bMdvH31WSRFGp/f4639THVYSylKOQSW7
+ V4LLtzBJeKVxZQEnhaXnmsli9y2zMVLUiQeWCV7q6RJ+Cxk8gUZA5tfXKG90wf0dhfP7Y8
+ MpI/fHjxna9xv5CzqoAyARlOLunj/qLUfk/51asI2PZOGjzgZymvUlA59zU4DeLkfr4xpr
+ p3HlB/Dr8pmpYCoryTfxBUEyWqoANAh5qmqxqKr+b6VZV7z+jVa/Y0wsvIUriA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nJQcNBjs
-Subject: Re: [Buildroot] [PATCH] boot/optee-os: add support for custom
- tarball URL
+ header.s=gm1 header.b=alygbWSY
+Subject: [Buildroot] [PATCH] boot/arm-trusted-firmware: remove extra ending
+ parentheses
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,44 +74,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?K=C3=B6ry_Maincent_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Kory Maincent via buildroot <buildroot@buildroot.org>
+Reply-To: kory.maincent@bootlin.com
+Cc: Kory Maincent <kory.maincent@bootlin.com>, geomatsi@gmail.com,
+ thomas.petazzoni@bootlin.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCAyMSBKdW4gMjAyMiAxNTo1NDozMiArMDIwMApFdGllbm5lIENhcnJpZXJlIDxldGll
-bm5lLmNhcnJpZXJlQGxpbmFyby5vcmc+IHdyb3RlOgoKPiBPbiBUdWUsIDIxIEp1biAyMDIyIGF0
-IDE1OjQ1LCBLw7ZyeSBNYWluY2VudCA8a29yeS5tYWluY2VudEBib290bGluLmNvbT4gd3JvdGU6
-Cj4gPgo+ID4gSGVsbG8gRXRpZW5uZSwKPiA+Cj4gPiBUaGFua3MgZm9yIHRoZSByZXZpZXchCj4g
-PiAgCj4gPiA+ID4gZGlmZiAtLWdpdCBhL2Jvb3Qvb3B0ZWUtb3Mvb3B0ZWUtb3MubWsgYi9ib290
-L29wdGVlLW9zL29wdGVlLW9zLm1rCj4gPiA+ID4gaW5kZXggODhmMTRiNDhlNC4uY2M5MGNmZjJj
-YiAxMDA2NDQKPiA+ID4gPiAtLS0gYS9ib290L29wdGVlLW9zL29wdGVlLW9zLm1rCj4gPiA+ID4g
-KysrIGIvYm9vdC9vcHRlZS1vcy9vcHRlZS1vcy5tawo+ID4gPiA+IEBAIC0xMywxNCArMTMsMjIg
-QEAgZW5kaWYKPiA+ID4gPiAgT1BURUVfT1NfSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4gPiA+ID4g
-IE9QVEVFX09TX0lOU1RBTExfSU1BR0VTID0gWUVTCj4gPiA+ID4KPiA+ID4gPiAtaWZlcSAoJChC
-UjJfVEFSR0VUX09QVEVFX09TX0NVU1RPTV9HSVQpLHkpCj4gPiA+ID4gK2lmZXEgKCQoT1BURUVf
-T1NfVkVSU0lPTiksY3VzdG9tKSAgCj4gPiA+Cj4gPiA+IEl0IGxvb2tzIHN0cmFuZ2UgdG8gbWUg
-dGhhdCAiY3VzdG9tIiBpcyBhIHJlc2VydmVkIHZlcnNpb24gaWRlbnRpZmllcgo+ID4gPiB3aGVu
-IHVzaW5nIGEgY3VzdG9tIHRhcmJhbGwuCj4gPiA+IEknZCByYXRoZXIgdXNlOgo+ID4gPiAgICBp
-ZmVxICgkKEJSMl9UQVJHRVRfT1BURUVfT1NfQ1VTVE9NX1RBUkJBTEwpLHkpICAKPiA+Cj4gPiBJ
-IGhhdmUgY29waWVkIHRoZSBzYW1lIG1lY2hhbmlzbSBhcyBVLWJvb3QgYW5kIFRGLUEuCj4gPiBJ
-IGRvbid0IGtub3cgd2hhdCdzIHRoZSBiZXR0ZXIgd2F5LCBpZiB5b3UgcHJlZmVyIHRoaXMgSSBj
-YW4gY2hhbmdlIGl0Lgo+ID4gIAo+IAo+IEkgcmVhbGx5IHByZWZlciBteSBwcm9wb3NhbC4KPiBJ
-cyAiY3VzdG9tIiBhIHJlc2VydmVkIHZlcnNpb24gaWRlbnRpZmllciBpbiBCdWlsZHJvb3QgY29u
-ZmlndXJhdGlvbgo+IHN3aXRjaGVzPyBJIGNhbid0IHRlbGwgYnV0IGkgdGhpbmsgaXQnZCBiZSBh
-IGJpdCBmcmFnaWxlLgoKQWxyaWdodC4gSWYgdGhlcmUgaXMgbm8gZ29vZCBleHBsYW5hdGlvbiBm
-b3IgdGhlICJjdXN0b20iIHZlcnNpb24KaWRlbnRpZmllciBiZWZvcmUgdGhlIGVuZCBvZiB0aGUg
-ZGF5cyB0aGVuIEkgd2lsbCBnbyBmb3IgeW91ciBwcm9wb3NhbCBpbiB0aGUKVjIuCgo+ID4gPiA+
-ICtpZmVxICgkKGNhbGwgcXN0cmlwLCQoQlIyX1RBUkdFVF9PUFRFRV9PU19DVVNUT01fVEFSQkFM
-TF9MT0NBVElPTikpKSwpCj4gPiA+ID4gKyQoZXJyb3IgTm8gdGFyYmFsbCBsb2NhdGlvbiBzcGVj
-aWZpZWQuIFBsZWFzZSBjaGVjawo+ID4gPiA+IEJSMl9UQVJHRVRfT1BURUVfT1NfQ1VTVE9NX1RB
-UkJBTExfTE9DQVRJT04pKSAgCj4gPiA+Cj4gPiA+IFRoZXJlIGlzIGEgZXh0cmEgZW5kaW5nIHBh
-cmVudGhlc2VzIHRvIGJlIHJlbW92ZWQgaW4gZWFjaCBvZiB0aGUgMiBhYm92ZQo+ID4gPiBsaW5l
-cy4gIAo+ID4KPiA+IFRydWUsIGFuZCBURi1BIGhhcyB0aGUgc2FtZSBpc3N1ZSEgOikgIAo+IAo+
-IE1heWJlIHlvdSBjYW4gZml4IGl0IGJ5IHRoZSB3YXkhCgpZZXMsIGZpeCBzZW50IQoKS8O2cnkK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+From: Kory Maincent <kory.maincent@bootlin.com>
+
+There are two extra ending parentheses to be removed.
+They are present from the beggining of TF-A package. I suppose extra
+ending parenthese does not bring any issue, but it seems relevant to
+remove them.
+
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+---
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 998de4b814..965b1a2eb5 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -191,8 +191,8 @@ endef
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE)$(BR_BUILDING),yy)
+ 
+ ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
+-ifeq ($(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION))),)
+-$(error No tarball location specified. Please check BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION))
++ifeq ($(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION)),)
++$(error No tarball location specified. Please check BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION)
+ endif
+ endif
+ 
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
