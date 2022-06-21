@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 240E1C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 21 Jun 2022 09:05:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D762C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 21 Jun 2022 09:05:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E992419A0;
-	Tue, 21 Jun 2022 09:05:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E992419A0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J_4f4WVYYrrT; Tue, 21 Jun 2022 09:05:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40E9341993;
-	Tue, 21 Jun 2022 09:05:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40E9341993
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 27E491BF429
- for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 09:05:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 00D7060BC0
- for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 09:05:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00D7060BC0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15A0E6101F;
+	Tue, 21 Jun 2022 09:05:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15A0E6101F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VkK16MYl3M72 for <buildroot@lists.busybox.net>;
- Tue, 21 Jun 2022 09:05:05 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v4DchwB35k14; Tue, 21 Jun 2022 09:05:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2434F60BC0;
+	Tue, 21 Jun 2022 09:05:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2434F60BC0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CC3FC1BF429
+ for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 09:05:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A762383E52
+ for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 09:05:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A762383E52
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6Y9yU78Jh8Tl for <buildroot@lists.busybox.net>;
+ Tue, 21 Jun 2022 09:05:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2970C60AE6
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com
- [IPv6:2607:f8b0:4864:20::102d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2970C60AE6
- for <buildroot@buildroot.org>; Tue, 21 Jun 2022 09:05:05 +0000 (UTC)
-Received: by mail-pj1-x102d.google.com with SMTP id
- t3-20020a17090a510300b001ea87ef9a3dso12695237pjh.4
- for <buildroot@buildroot.org>; Tue, 21 Jun 2022 02:05:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6BCA83E19
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
+ [IPv6:2607:f8b0:4864:20::634])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C6BCA83E19
+ for <buildroot@buildroot.org>; Tue, 21 Jun 2022 09:05:20 +0000 (UTC)
+Received: by mail-pl1-x634.google.com with SMTP id r1so11944160plo.10
+ for <buildroot@buildroot.org>; Tue, 21 Jun 2022 02:05:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=mYZzfs0SLV5uvN3HhOcwOn3eLxuMPu5nSQA8vEED+80=;
- b=fyFT82Ow0gWOvYKUBUfNnRfjehod4PeQklMjH/6cBvobLNFpVoviYmxJsTl6ITqop0
- ohrL+RnZd3yfbXb8waEsso5oy7JJFk3FdJlKTL+u8aQ4bkStW1mC1HD6Lcws2QwI/T36
- SMDpuaLNC7MJ+GHA45LK92x0BnX5PThxGTF4RnKWWqhm29z61AF26fZ/237h9fVHjDSb
- fmaOZrPQlwPO9rV/g1HVTK6H/r5/53OSg8o5FBhO607Xqo6JErQ7NxrW04P6N43lf0ny
- F5gU1/0sBfYORxjkN5IaecHiaDMHv00EX5FSFYYdYba/Q1EJllxUEBAkeDMfdqur8OM/
- 1aWg==
-X-Gm-Message-State: AJIora8Livwte6PJSGpOQCEbClY2E/d+GUUgfCWrAhubTvh1dY+0HmeH
- XJhICaWsMGXhRAXkAY6kvr+Sr5b9XV9oEw==
-X-Google-Smtp-Source: AGRyM1tn554swtoseN6VEr6GVicuc56czYPwn32ydXTeB/1UWVy5X0jRSBmUdmPXZN4CL1xCbs2X4Q==
-X-Received: by 2002:a17:902:8ec9:b0:168:c341:847e with SMTP id
- x9-20020a1709028ec900b00168c341847emr27365903plo.170.1655802304427; 
- Tue, 21 Jun 2022 02:05:04 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=2VGltKPleiCs+ms2+GLu3fD+K5vY/4tKtNRv9gCDdjs=;
+ b=I5ybIBsiPJ57ZztyS7DIhU54E+CYHkcjnrv9DUWO1qdJmHddfIR1UD4gyfoCngJIIm
+ +orrGv4xupXxZmX0XpoUbdh421YUctprBeOX3D50n1AjV1HcVbkRXyRlvr0SEk0u/ETT
+ xpjR5mxN3JK6/++wgxWZVQMZeUd7DaYpOLZBp5MrXs42JLm+I4ZE0HvWr/PDORDtJZZf
+ oGDPYMn9hsXpaPScsFRUyw9RaW4PG70hiYVKXSrFU3+HWt8nQJ0QOSw+u+tkuv9CXyBP
+ 8CF9f5JVv3k3BJA9MMgYUa3RndctP8052W2kfBTEvMj6c+PCawJojRR8ulyrbcAAd4du
+ kS7Q==
+X-Gm-Message-State: AJIora8gZvPkEM7fuaz8i01hA9GMYd2naurlZwZGHEYmNNBCWkKMnbhH
+ h4yPFpoqmwp13w8TTzVsdGG6ofvB1qJqMA==
+X-Google-Smtp-Source: AGRyM1ssXWmBHUubij74Pn5DlMteH5LzsMXcPkMIzGOqmlBDy+E+XCKSONk2jyxRjGe3+kRwlz0j3g==
+X-Received: by 2002:a17:902:a60a:b0:168:b5f7:4148 with SMTP id
+ u10-20020a170902a60a00b00168b5f74148mr28370659plq.47.1655802320027; 
+ Tue, 21 Jun 2022 02:05:20 -0700 (PDT)
 Received: from chrisp-dl.atlnz.lc ([2001:df5:b000:22:e0e9:8c58:f9e2:5377])
  by smtp.gmail.com with ESMTPSA id
- z24-20020a17090abd9800b001ec85441515sm6233690pjr.24.2022.06.21.02.05.02
+ z24-20020a17090abd9800b001ec85441515sm6233690pjr.24.2022.06.21.02.05.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Jun 2022 02:05:04 -0700 (PDT)
+ Tue, 21 Jun 2022 02:05:19 -0700 (PDT)
 From: Chris Packham <judge.packham@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Jun 2022 21:04:52 +1200
-Message-Id: <20220621090453.3078403-1-judge.packham@gmail.com>
+Date: Tue, 21 Jun 2022 21:04:53 +1200
+Message-Id: <20220621090453.3078403-2-judge.packham@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220621090453.3078403-1-judge.packham@gmail.com>
+References: <20220621090453.3078403-1-judge.packham@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=mYZzfs0SLV5uvN3HhOcwOn3eLxuMPu5nSQA8vEED+80=;
- b=VlxrMo0AFQIIqpaS5Al8J4r1XPdBCz8/jtgDTl0+PL0NX9JXgx5UcSAnqNF88eWhkz
- KVOaGMNrWmeduZNIj4X6i8L3vIDT61ZdVZBpG0rMPuOHRObDvxAwFq1c8rptfPTFAiVq
- kotcJVKKXwVcA5JlyG+JdMs/q3X8CChTsMIoOwGmG2Z2yR85WwXGWZdQWoKBhSWCpvcC
- Hk0/Tk6Af1QHNkoQB7rwZH9xg0+NaxrKzWAOpBxE0FCRT4ShbJv4UzDSKqSHwBDwv4AN
- phHnAPnzM2kPlaATVS0hIV8ogngTXHOb3cF0W/i2FmXGWx0KyQtGo9S7RyyhCqkrpkmP
- SpVA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=2VGltKPleiCs+ms2+GLu3fD+K5vY/4tKtNRv9gCDdjs=;
+ b=qvbw5pwqKU9qIgzHKzwNQmJnMnhqMug9Trh6h88h/j4QXGz76cucDim8JHYZkQjaD/
+ LHN+1GLsrjwPj+gIfKpQ9W+C6pb8pKG4FpTh7mUbFv1x2iOFHsddyMJ8+MWWH8HBXwzL
+ zyqHQspIhuAd9ORS/vrKTjgK49RHe1Tcag2MqavFxnlV9DwnOoFg0dcjPQXnt8at7Fgy
+ gCapRZ7QJqq7AhjVOd6678p3HLERkO93iakXIfKG3CIGAnH+PSvUceahZ9lRUv4q9FHo
+ 4LaLim9mnzp0qWf1LP1h4BzKtxMPxeXzI5ojPeqDNziembdYXrZL+RkOdGr6TGnfShsk
+ FSRg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=VlxrMo0A
-Subject: [Buildroot] [PATCH 1/2] package/syslog-ng: Bump to version 3.37.1
+ header.a=rsa-sha256 header.s=20210112 header.b=qvbw5pwq
+Subject: [Buildroot] [PATCH 2/2] package/micropython: Bump version to 1.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,53 +100,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump to syslog-ng 3.37.1 and update sample config.
+https://github.com/micropython/micropython/releases/tag/v1.19
 
 Signed-off-by: Chris Packham <judge.packham@gmail.com>
 ---
+ package/micropython/micropython.hash | 2 +-
+ package/micropython/micropython.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Notes:
-    This obsoletes the previously submitted http://patchwork.ozlabs.org/project/buildroot/patch/20220607093243.2806482-1-judge.packham@gmail.com/
-
- package/syslog-ng/syslog-ng.conf | 2 +-
- package/syslog-ng/syslog-ng.hash | 2 +-
- package/syslog-ng/syslog-ng.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
-index 64ff980593..45b94facf9 100644
---- a/package/syslog-ng/syslog-ng.conf
-+++ b/package/syslog-ng/syslog-ng.conf
-@@ -1,4 +1,4 @@
--@version: 3.35
-+@version: 3.37
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index 6beea78bc7..09bc574ebc 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
+@@ -1,3 +1,3 @@
+ #locally computed
+-sha256  d804a422872c6fe283c6e4fd392698472035b34b5a683ac26adbd5c7582267f9  micropython-1.18.tar.gz
++sha256  128b6fb13b518b4d3e75b4f0c04f175dc336c762d8c6360f647e91dc4d25e5d0  micropython-1.19.tar.gz
+ sha256  0f678c2abd7fe2cfca36693630506bbcbdfc219bd04bf4a02fe3b094ae4c666f  LICENSE
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index d8ba5ac0c0..f7af9bfc32 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- source s_sys {
- 	file("/proc/kmsg" program_override("kernel"));
-diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-index ab643627e8..764ff45733 100644
---- a/package/syslog-ng/syslog-ng.hash
-+++ b/package/syslog-ng/syslog-ng.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  1d0238b06b3e5987c859e5b529ecee738f75bacff04b149398b1fe8cbb121e53  syslog-ng-3.35.1.tar.gz
-+sha256  d67a320cb896cd5d62f24d9e1bec138847fa4618ae13a3946cae2b75c528ee14  syslog-ng-3.37.1.tar.gz
- sha256  e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
- sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index fc57a56820..6cad6a5ecd 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please check at runtime if the version in
- # syslog-ng.conf header needs to be updated
--SYSLOG_NG_VERSION = 3.35.1
-+SYSLOG_NG_VERSION = 3.37.1
- SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
- SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
+-MICROPYTHON_VERSION = 1.18
++MICROPYTHON_VERSION = 1.19
+ MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
+ # Micropython has a lot of code copied from other projects, and also a number
+ # of submodules for various libs. However, we don't even clone the submodules,
 -- 
 2.36.1
 
