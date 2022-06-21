@@ -1,64 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D65A9C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 21 Jun 2022 21:05:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37968C43334
+	for <buildroot@archiver.kernel.org>; Tue, 21 Jun 2022 21:11:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54D6F8402E;
-	Tue, 21 Jun 2022 21:05:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54D6F8402E
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE7CB40BDE;
+	Tue, 21 Jun 2022 21:11:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE7CB40BDE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rcFp9ZIbyKbO; Tue, 21 Jun 2022 21:05:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K0omPMJj3nk5; Tue, 21 Jun 2022 21:11:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43C7A83FF1;
-	Tue, 21 Jun 2022 21:05:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43C7A83FF1
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC4E24059C;
+	Tue, 21 Jun 2022 21:11:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC4E24059C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB8301BF2F3
- for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 21:05:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EA8901BF2F3
+ for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 21:11:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C2094059C
- for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 21:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C2094059C
+ by smtp2.osuosl.org (Postfix) with ESMTP id C485A4059C
+ for <buildroot@lists.busybox.net>; Tue, 21 Jun 2022 21:11:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C485A4059C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5kEhbDerHw9O for <buildroot@lists.busybox.net>;
- Tue, 21 Jun 2022 21:05:46 +0000 (UTC)
+ with ESMTP id hOcFrqcQwrBZ for <buildroot@lists.busybox.net>;
+ Tue, 21 Jun 2022 21:11:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E63C74023B
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E63C74023B
- for <buildroot@buildroot.org>; Tue, 21 Jun 2022 21:05:45 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.166.28.156])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id EC85513F85F;
- Tue, 21 Jun 2022 23:05:38 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5B364023B
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B5B364023B
+ for <buildroot@buildroot.org>; Tue, 21 Jun 2022 21:11:41 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id eo8so21142842edb.0
+ for <buildroot@buildroot.org>; Tue, 21 Jun 2022 14:11:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=WfHgGFqY5Gc6LS3uIAdt5qu0ZS4tiQ4+S1DilzWVOaA=;
+ b=Ean/s8y/5eg5SkUz8d1ZNfb94A1ZHDV0cKXK2qeyJzz/JE9sh2P7Prx1XufBuUEqI3
+ HOl3Z6Rngk3H5vGxCfWlj6q7M/iPhipNThJVGZ80hk8De9XBLaZfm544JrQlHnVSYKA7
+ Ow1zRpJGb//OKAD3CGrWfrzszhBDVXv49i065KiAp78cmJXdEdeSO3xPBQtenlao4nSz
+ js6HATxX61NNVnAxKzMQIczRM7KNRy6iPPm4s6PTCXiNxhZzdOxARODMZMGSwdFg2uuq
+ XWj4/QtUKgt4hHX0IOKfBWnjaFPYVzJgZEjup6u7Im6cFnldy9OQFLFUW0m/E8Fnysby
+ M0sg==
+X-Gm-Message-State: AJIora+W77j8G31itUScClllZgksGsVwxJHc+lVuz7hOypdiZDewXa43
+ 7spz8xFxpP6GM7sLC6HS+X7ZKGEv4ZwpjQ==
+X-Google-Smtp-Source: AGRyM1v/WtMqB5XxX7HGPpWXeonP1pKSAD58tA5adBVBG9BNTZDc/cLgRLxX3Xi9cVk4RGruM++lkQ==
+X-Received: by 2002:aa7:d795:0:b0:435:7fc8:2d1b with SMTP id
+ s21-20020aa7d795000000b004357fc82d1bmr24093edq.201.1655845899949; 
+ Tue, 21 Jun 2022 14:11:39 -0700 (PDT)
+Received: from angelo-ThinkPad-X270.. (host085115199111.static.fidoka.tech.
+ [85.115.199.111]) by smtp.gmail.com with ESMTPSA id
+ 18-20020a170906201200b00705fa7087bbsm8348850ejo.142.2022.06.21.14.11.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 21 Jun 2022 14:11:39 -0700 (PDT)
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Jun 2022 23:05:29 +0200
-Message-Id: <20220621210529.251477-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.36.1
+Date: Tue, 21 Jun 2022 23:11:40 +0200
+Message-Id: <20220621211140.2043539-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1655845542;
- bh=0TEpSUMP0VnqRds9wWQiQ6UxjlUqZM7MKAR9aR33P3M=;
- h=From:To:Cc:Subject:Date:From;
- b=siTRE+mWlqLhUzpsit6c6HQkngW29sE7IaxyCfjS1Xe9E69mEB+ZNKvHVRa54nv8g
- 0rIkKytISjTXdcj5vzKpnPBJCLQ95UJyxsFdADAwLb/M4/ZDXU7IHnqHn9HVNLaGRF
- GXFnB48dYibPMEUBeDs9AYgg57bXYZEL2sp7QoGDALwbULO9uElWMBoOPl0CqSjvRw
- /IaOs5BR/rd85myhfo0hA/TcxbZMUDQfc5aRoZQ5NlnJfSlfrJfZMEhSGq/LayrWIW
- Yb3+nd4nt619VSrw4jhQWDF3Ndjv0o8NfobiWdIQa1oKmSXgLA3uP6qATq5RjiRpHX
- HsPMscRJ4tjjQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=WfHgGFqY5Gc6LS3uIAdt5qu0ZS4tiQ4+S1DilzWVOaA=;
+ b=CJMvmvpEtF+1IGUZqCSNUpYaUwnOTXIwxBbmz61LmJ9iXn92ONLpXTY9d0a10tqlMp
+ dGHnbrbgeX8MuPgiaSsSlwClTTKp5Vngd/7hQ+mmH+T6ejZUlglVMBXgOA7Au+kdvG4o
+ xgwWST6zeNb1AW63bV+R5dab1hm9FDFaStpno=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=siTRE+mW
-Subject: [Buildroot] [PATCH 1/1] package/python-gnupg: bump to version 0.4.9
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=CJMvmvpE
+Subject: [Buildroot] [PATCH] package/cups: security bump to version 2.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,62 +90,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://github.com/vsajip/python-gnupg/blob/0.4.9/README.rst#049
+Fixes CVE-2022-26691
+https://github.com/OpenPrinting/cups/blob/master/CHANGES.md
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
-Tested with:
+ package/cups/cups.hash | 2 +-
+ package/cups/cups.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-    make check-package
-    ...
-    0 warnings generated
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_python_gnupg.TestPythonPy3GnuPG
-    ...
-    OK
----
- package/python-gnupg/python-gnupg.hash | 4 ++--
- package/python-gnupg/python-gnupg.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-gnupg/python-gnupg.hash b/package/python-gnupg/python-gnupg.hash
-index fa0e8ae6e5..71deeedcee 100644
---- a/package/python-gnupg/python-gnupg.hash
-+++ b/package/python-gnupg/python-gnupg.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-gnupg/json
--md5  02c5d77b8db9dfba0741627560d89bd5  python-gnupg-0.4.8.tar.gz
--sha256  b64de1ae5cedf872b437201a566fa2c62ce0c95ea2e30177eb53aee1258507d7  python-gnupg-0.4.8.tar.gz
-+md5  e27cd8c6ce3b5c9197e931b65bbb4c9a  python-gnupg-0.4.9.tar.gz
-+sha256  aaa748795572591aaf127b4ac8985684f3673ff82b39f370c836b006e68fc537  python-gnupg-0.4.9.tar.gz
- # Locally computed sha256 checksums
- sha256  9620da3d3afdfca7dea53c4375c1507ab2d3a4af4e706827023acb49a9ec4a5e  LICENSE.txt
-diff --git a/package/python-gnupg/python-gnupg.mk b/package/python-gnupg/python-gnupg.mk
-index fda264a0ed..582a649f9a 100644
---- a/package/python-gnupg/python-gnupg.mk
-+++ b/package/python-gnupg/python-gnupg.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index 8308b7b803..ba220e903e 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  c7339f75f8d4f2dec50c673341a45fc06b6885bb6d4366d6bf59a4e6c10ae178  cups-2.4.1-source.tar.gz
++sha256  f03ccb40b087d1e30940a40e0141dcbba263f39974c20eb9f2521066c9c6c908  cups-2.4.2-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  7a7bd639e3a8457ae40b0dcfb74ea3cc6a8132b06c726142e993625d33eb6de5  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 298a6ed879..ab56b23bcd 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_GNUPG_VERSION = 0.4.8
--PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/b1/90/75e15ead9693028c05fc7abd25c756c0d1da27bf04a27d6f5c4139d8ee10
-+PYTHON_GNUPG_VERSION = 0.4.9
-+PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/c8/cb/46fb80639cf0dd4251aeb075a1a5e2ebbb8c9656f28ddfe9d8c99b68b6da
- PYTHON_GNUPG_LICENSE = BSD-3-Clause
- PYTHON_GNUPG_LICENSE_FILES = LICENSE.txt
- PYTHON_GNUPG_CPE_ID_VENDOR = python
+-CUPS_VERSION = 2.4.1
++CUPS_VERSION = 2.4.2
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
 -- 
-2.36.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
