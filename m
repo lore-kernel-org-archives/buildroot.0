@@ -4,47 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A700EC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 20:41:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDD52C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 20:42:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F053841BE;
-	Wed, 22 Jun 2022 20:41:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F053841BE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CFFA8142C;
+	Wed, 22 Jun 2022 20:42:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CFFA8142C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CE7wugpuHgJX; Wed, 22 Jun 2022 20:40:58 +0000 (UTC)
+	with ESMTP id gGKJTh04WkoZ; Wed, 22 Jun 2022 20:42:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61849841D7;
-	Wed, 22 Jun 2022 20:40:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61849841D7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 565921BF3B9
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 20:40:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A2F4813EF;
+	Wed, 22 Jun 2022 20:42:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A2F4813EF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E4FC1BF3B9
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 20:42:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F8B9841D7
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 20:40:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F8B9841D7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 48BAB400D8
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 20:42:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48BAB400D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XYep-62sNvlh for <buildroot@lists.busybox.net>;
- Wed, 22 Jun 2022 20:40:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 88D80841BE
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 20:40:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88D80841BE
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id E8B3F8752C; Wed, 22 Jun 2022 20:28:13 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EFurH8IIhgzt for <buildroot@lists.busybox.net>;
+ Wed, 22 Jun 2022 20:42:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF44A400D6
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EF44A400D6
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 20:42:45 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id q9so25051391wrd.8
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 13:42:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=RclDbRqpiFCT7gs1THPZmXI2CLRUGP8jn/bnZRuzevA=;
+ b=2VySL3j/Wy9eHZILuBdaGTvZKtVaXuQFN9frWlN+jlDPvFR6rHfwrksrWUXqtox3J2
+ TgCDyeZ/SCsRG/c1prGoFP8TUIJZAvNLY4uphOcHrdIEIjhwYHufio+luCa4PTWZok/8
+ M46jlcTO+ajCdsjbeURF+wCV2rQNWNBccr9uSHlC++Dn+iaQ9Tzh5cBoWok0PtdI1UwS
+ K/yxKkiKVajDghBpYqgLlwl8PGBrSHvPt5N4Z8+WRlbxRhvFkmBDo3G5ahgjARms2JpN
+ GHQEJaWq12t2JuvUWRtP3HcdRCT51UA2a3Lkfp2AFHXwQXSc3AjbSsNypFbN8aSVigZM
+ KcEg==
+X-Gm-Message-State: AJIora/pG0QSCSkHUBYmxXFRBr5k/TCIvVEHHIHbvKxyHmTbZWSkg1x3
+ 9y2GjUD7nsoPQ4/4QnfT/4Io/DE4nDE=
+X-Google-Smtp-Source: AGRyM1vGUKPWV5eY5pySUw0AAek+aTxq4lmCBZb2frCRqqJwRc9AgpHnCOBjLo49ub69EheCu3cMyQ==
+X-Received: by 2002:adf:e9c4:0:b0:21b:8397:860b with SMTP id
+ l4-20020adfe9c4000000b0021b8397860bmr4799704wrn.546.1655930563868; 
+ Wed, 22 Jun 2022 13:42:43 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ k5-20020a05600c1c8500b0039c84c05d88sm674275wms.23.2022.06.22.13.42.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 22 Jun 2022 13:42:43 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Jun 2022 22:40:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0b350cf7569005d3eec6bb55a3acd4688d2fbd4e
-X-Git-Newrev: efd215c79705b84fc9782604fdcd142b8985c3b6
-X-Patchwork-Hint: ignore
-Message-Id: <20220622202813.E8B3F8752C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/uboot: remove patches to old versions
+Date: Wed, 22 Jun 2022 22:40:00 +0200
+Message-Id: <20220622204000.269660-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=RclDbRqpiFCT7gs1THPZmXI2CLRUGP8jn/bnZRuzevA=;
+ b=HClkakIQGRtQhKjJf9s/DcZ3Qa4HGziL9zBjNthPneCd7RdwcioAuqsNtox8qnHflp
+ zN2LCqxGFl8WmAFNlAjXgFQKky/v1/Sebr6QcnWhOxhoZ+lIOSlwVPNzmE1mD8HtSt9x
+ tkbR98rIItzww7IttFP4J30mjMlA5kxTDUg05aDFRBFdYPOAytTHhAN8AhZyvqS4y032
+ /wCAdIz3RapH2LrMiUTmmApGIf7CyMcGJ13uqc45ZMExlUtQeomYmfly0vbv+1Fd1zw1
+ x+LA2RSFmxw3OkBuc3CzkMwixgo+4BHUwPFbcsU3v+LXGvSEcRblhVKpSgpREOivyqTL
+ p+hg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=HClkakIQ
+Subject: [Buildroot] [PATCH 1/1] package/dos2unix: bump to version 7.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,867 +93,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: David Bachelart <david.bachelart@bbright.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efd215c79705b84fc9782604fdcd142b8985c3b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- Update hash of COPYING.txt (update in year)
+- Update indentation in hash file (two spaces)
 
-More than five years ago, we added some patches to specific versions of
-U-Boot. There is actually little point in maintaining patches for some
-versions but not others. In addition, it's pretty unlikely that anyone
-is using those specific old versions nowadays. Therefore, get rid of
-those patches.
+https://waterlan.home.xs4all.nl/dos2unix/NEWS.txt
+https://waterlan.home.xs4all.nl/dos2unix/ChangeLog.txt
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...rch-Make-board-selection-choices-optional.patch | 742 ---------------------
- ...-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch |  39 --
- ...-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch |  39 --
- 3 files changed, 820 deletions(-)
+ package/dos2unix/dos2unix.hash | 6 +++---
+ package/dos2unix/dos2unix.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/boot/uboot/2015.07/0001-Revert-arch-Make-board-selection-choices-optional.patch b/boot/uboot/2015.07/0001-Revert-arch-Make-board-selection-choices-optional.patch
-deleted file mode 100644
-index 8b814f2d69..0000000000
---- a/boot/uboot/2015.07/0001-Revert-arch-Make-board-selection-choices-optional.patch
-+++ /dev/null
-@@ -1,742 +0,0 @@
--From ee11fed43e2bd029f71af1e72ab9bb5652f5fc54 Mon Sep 17 00:00:00 2001
--From: Alexey Brodkin <abrodkin@synopsys.com>
--Date: Wed, 29 Jul 2015 20:32:59 +0300
--Subject: [PATCH] Revert "arch: Make board selection choices optional"
--
--This reverts commit a26cd04920dc069fd6e91abb785426cf6c29f45f.
--
--Reverted commit caused an issue with "make oldconfig" - default prompt
--for target selection was set as No that lead to missing platform
--selection by automated scripts like that:
-------------------->8------------------
--"yes "" | make oldconfig" on defconfig
-------------------->8------------------
--
--And that lead to build failure:
-------------------->8------------------
--$ make
--scripts/kconfig/conf --silentoldconfig Kconfig
--  CHK     include/config.h
--  UPD     include/config.h
--  GEN     include/autoconf.mk
--In file included from ./include/common.h:18:0:
--include/config.h:5:22: fatal error: configs/.h: No such file or directory
-- #include <configs/.h>
--                      ^
--compilation terminated.
--scripts/Makefile.autoconf:72: recipe for target 'include/autoconf.mk' failed
--make[1]: *** [include/autoconf.mk] Error 1
-------------------->8------------------
--
--Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-----
-- arch/arc/Kconfig                     | 1 -
-- arch/arm/Kconfig                     | 1 -
-- arch/arm/cpu/armv7/exynos/Kconfig    | 1 -
-- arch/arm/cpu/armv7/mx5/Kconfig       | 1 -
-- arch/arm/cpu/armv7/mx6/Kconfig       | 1 -
-- arch/arm/cpu/armv7/omap3/Kconfig     | 1 -
-- arch/arm/cpu/armv7/omap4/Kconfig     | 1 -
-- arch/arm/cpu/armv7/omap5/Kconfig     | 1 -
-- arch/arm/cpu/armv7/rmobile/Kconfig   | 1 -
-- arch/arm/cpu/armv7/s5pc1xx/Kconfig   | 1 -
-- arch/arm/mach-at91/Kconfig           | 1 -
-- arch/arm/mach-bcm283x/Kconfig        | 1 -
-- arch/arm/mach-davinci/Kconfig        | 1 -
-- arch/arm/mach-integrator/Kconfig     | 2 --
-- arch/arm/mach-keystone/Kconfig       | 1 -
-- arch/arm/mach-kirkwood/Kconfig       | 1 -
-- arch/arm/mach-nomadik/Kconfig        | 1 -
-- arch/arm/mach-orion5x/Kconfig        | 1 -
-- arch/arm/mach-socfpga/Kconfig        | 1 -
-- arch/arm/mach-tegra/Kconfig          | 1 -
-- arch/arm/mach-tegra/tegra114/Kconfig | 1 -
-- arch/arm/mach-tegra/tegra124/Kconfig | 1 -
-- arch/arm/mach-tegra/tegra20/Kconfig  | 1 -
-- arch/arm/mach-tegra/tegra30/Kconfig  | 1 -
-- arch/arm/mach-zynq/Kconfig           | 1 -
-- arch/avr32/Kconfig                   | 1 -
-- arch/blackfin/Kconfig                | 1 -
-- arch/m68k/Kconfig                    | 1 -
-- arch/microblaze/Kconfig              | 1 -
-- arch/mips/Kconfig                    | 1 -
-- arch/nds32/Kconfig                   | 1 -
-- arch/nios2/Kconfig                   | 1 -
-- arch/openrisc/Kconfig                | 1 -
-- arch/powerpc/Kconfig                 | 1 -
-- arch/powerpc/cpu/mpc512x/Kconfig     | 1 -
-- arch/powerpc/cpu/mpc5xx/Kconfig      | 1 -
-- arch/powerpc/cpu/mpc5xxx/Kconfig     | 1 -
-- arch/powerpc/cpu/mpc8260/Kconfig     | 1 -
-- arch/powerpc/cpu/mpc83xx/Kconfig     | 1 -
-- arch/powerpc/cpu/mpc85xx/Kconfig     | 1 -
-- arch/powerpc/cpu/mpc86xx/Kconfig     | 1 -
-- arch/powerpc/cpu/mpc8xx/Kconfig      | 1 -
-- arch/powerpc/cpu/ppc4xx/Kconfig      | 1 -
-- arch/sh/Kconfig                      | 1 -
-- arch/sparc/Kconfig                   | 1 -
-- board/amcc/canyonlands/Kconfig       | 1 -
-- board/coreboot/Kconfig               | 1 -
-- board/dbau1x00/Kconfig               | 1 -
-- board/google/Kconfig                 | 1 -
-- board/intel/Kconfig                  | 1 -
-- board/micronas/vct/Kconfig           | 1 -
-- board/seco/Kconfig                   | 2 --
-- board/sunxi/Kconfig                  | 1 -
-- 53 files changed, 55 deletions(-)
--
--diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
--index 925e312..640cda8 100644
----- a/arch/arc/Kconfig
--+++ b/arch/arc/Kconfig
--@@ -129,7 +129,6 @@ config ARC_CACHE_LINE_SHIFT
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_TB100
-- 	bool "Support tb100"
--diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
--index 9908b43..8eeb46c 100644
----- a/arch/arm/Kconfig
--+++ b/arch/arm/Kconfig
--@@ -64,7 +64,6 @@ config SEMIHOSTING
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config ARCH_AT91
-- 	bool "Atmel AT91"
--diff --git a/arch/arm/cpu/armv7/exynos/Kconfig b/arch/arm/cpu/armv7/exynos/Kconfig
--index 4a7d82f..f2fe748 100644
----- a/arch/arm/cpu/armv7/exynos/Kconfig
--+++ b/arch/arm/cpu/armv7/exynos/Kconfig
--@@ -2,7 +2,6 @@ if ARCH_EXYNOS
-- 
-- choice
-- 	prompt "EXYNOS board select"
---	optional
-- 
-- config TARGET_SMDKV310
-- 	select SUPPORT_SPL
--diff --git a/arch/arm/cpu/armv7/mx5/Kconfig b/arch/arm/cpu/armv7/mx5/Kconfig
--index 9f250c6..2d6c0ce 100644
----- a/arch/arm/cpu/armv7/mx5/Kconfig
--+++ b/arch/arm/cpu/armv7/mx5/Kconfig
--@@ -12,7 +12,6 @@ config MX53
-- 
-- choice
-- 	prompt "MX5 board select"
---	optional
-- 
-- config TARGET_USBARMORY
-- 	bool "Support USB armory"
--diff --git a/arch/arm/cpu/armv7/mx6/Kconfig b/arch/arm/cpu/armv7/mx6/Kconfig
--index 10908c4..662596f 100644
----- a/arch/arm/cpu/armv7/mx6/Kconfig
--+++ b/arch/arm/cpu/armv7/mx6/Kconfig
--@@ -27,7 +27,6 @@ config MX6SX
-- 
-- choice
-- 	prompt "MX6 board select"
---	optional
-- 
-- config TARGET_SECOMX6
-- 	bool "Support secomx6 boards"
--diff --git a/arch/arm/cpu/armv7/omap3/Kconfig b/arch/arm/cpu/armv7/omap3/Kconfig
--index b32a6b0..cc82c50 100644
----- a/arch/arm/cpu/armv7/omap3/Kconfig
--+++ b/arch/arm/cpu/armv7/omap3/Kconfig
--@@ -2,7 +2,6 @@ if OMAP34XX
-- 
-- choice
-- 	prompt "OMAP3 board select"
---	optional
-- 
-- config TARGET_AM3517_EVM
-- 	bool "AM3517 EVM"
--diff --git a/arch/arm/cpu/armv7/omap4/Kconfig b/arch/arm/cpu/armv7/omap4/Kconfig
--index df27ea1..eccf897 100644
----- a/arch/arm/cpu/armv7/omap4/Kconfig
--+++ b/arch/arm/cpu/armv7/omap4/Kconfig
--@@ -2,7 +2,6 @@ if OMAP44XX
-- 
-- choice
-- 	prompt "OMAP4 board select"
---	optional
-- 
-- config TARGET_DUOVERO
-- 	bool "OMAP4430 Gumstix Duovero"
--diff --git a/arch/arm/cpu/armv7/omap5/Kconfig b/arch/arm/cpu/armv7/omap5/Kconfig
--index 20c3bd9..aca862d 100644
----- a/arch/arm/cpu/armv7/omap5/Kconfig
--+++ b/arch/arm/cpu/armv7/omap5/Kconfig
--@@ -2,7 +2,6 @@ if OMAP54XX
-- 
-- choice
-- 	prompt "OMAP5 board select"
---	optional
-- 
-- config TARGET_CM_T54
-- 	bool "CompuLab CM-T54"
--diff --git a/arch/arm/cpu/armv7/rmobile/Kconfig b/arch/arm/cpu/armv7/rmobile/Kconfig
--index ef56286..638b63d 100644
----- a/arch/arm/cpu/armv7/rmobile/Kconfig
--+++ b/arch/arm/cpu/armv7/rmobile/Kconfig
--@@ -2,7 +2,6 @@ if RMOBILE
-- 
-- choice
-- 	prompt "Renesus ARM SoCs board select"
---	optional
-- 
-- config TARGET_ARMADILLO_800EVA
-- 	bool "armadillo 800 eva board"
--diff --git a/arch/arm/cpu/armv7/s5pc1xx/Kconfig b/arch/arm/cpu/armv7/s5pc1xx/Kconfig
--index 792ef59..65cc9eb 100644
----- a/arch/arm/cpu/armv7/s5pc1xx/Kconfig
--+++ b/arch/arm/cpu/armv7/s5pc1xx/Kconfig
--@@ -2,7 +2,6 @@ if ARCH_S5PC1XX
-- 
-- choice
-- 	prompt "S5PC1XX board select"
---	optional
-- 
-- config TARGET_S5P_GONI
-- 	bool "S5P Goni board"
--diff --git a/arch/arm/mach-at91/Kconfig b/arch/arm/mach-at91/Kconfig
--index bbf4228..5dc2cb2 100644
----- a/arch/arm/mach-at91/Kconfig
--+++ b/arch/arm/mach-at91/Kconfig
--@@ -2,7 +2,6 @@ if ARCH_AT91
-- 
-- choice
-- 	prompt "Atmel AT91 board select"
---	optional
-- 
-- config TARGET_AT91RM9200EK
-- 	bool "Atmel AT91RM9200 evaluation kit"
--diff --git a/arch/arm/mach-bcm283x/Kconfig b/arch/arm/mach-bcm283x/Kconfig
--index 2315a13..d40f505 100644
----- a/arch/arm/mach-bcm283x/Kconfig
--+++ b/arch/arm/mach-bcm283x/Kconfig
--@@ -3,7 +3,6 @@ menu "Broadcom BCM283X family"
-- 
-- choice
-- 	prompt "Broadcom BCM283X board select"
---	optional
-- 
-- config TARGET_RPI
-- 	bool "Raspberry Pi"
--diff --git a/arch/arm/mach-davinci/Kconfig b/arch/arm/mach-davinci/Kconfig
--index e6cb390..3ef55d3 100644
----- a/arch/arm/mach-davinci/Kconfig
--+++ b/arch/arm/mach-davinci/Kconfig
--@@ -2,7 +2,6 @@ if ARCH_DAVINCI
-- 
-- choice
-- 	prompt "DaVinci board select"
---	optional
-- 
-- config TARGET_ENBW_CMC
-- 	bool "EnBW CMC board"
--diff --git a/arch/arm/mach-integrator/Kconfig b/arch/arm/mach-integrator/Kconfig
--index c54d69d..8ffc544 100644
----- a/arch/arm/mach-integrator/Kconfig
--+++ b/arch/arm/mach-integrator/Kconfig
--@@ -3,7 +3,6 @@ menu "Integrator Options"
-- 
-- choice
-- 	prompt "Integrator platform select"
---	optional
-- 
-- config ARCH_INTEGRATOR_AP
-- 	bool "Support Integrator/AP platform"
--@@ -19,7 +18,6 @@ config ARCH_CINTEGRATOR
-- 
-- choice
-- 	prompt "Integrator core module select"
---	optional
-- 
-- config CM720T
-- 	bool "Core Module for ARM720T"
--diff --git a/arch/arm/mach-keystone/Kconfig b/arch/arm/mach-keystone/Kconfig
--index 67f1a33..134ae87 100644
----- a/arch/arm/mach-keystone/Kconfig
--+++ b/arch/arm/mach-keystone/Kconfig
--@@ -2,7 +2,6 @@ if ARCH_KEYSTONE
-- 
-- choice
-- 	prompt "TI Keystone board select"
---	optional
-- 
-- config TARGET_K2HK_EVM
-- 	bool "TI Keystone 2 Kepler/Hawking EVM"
--diff --git a/arch/arm/mach-kirkwood/Kconfig b/arch/arm/mach-kirkwood/Kconfig
--index 1261885..45c6687 100644
----- a/arch/arm/mach-kirkwood/Kconfig
--+++ b/arch/arm/mach-kirkwood/Kconfig
--@@ -2,7 +2,6 @@ if KIRKWOOD
-- 
-- choice
-- 	prompt "Marvell Kirkwood board select"
---	optional
-- 
-- config TARGET_OPENRD
-- 	bool "Marvell OpenRD Board"
--diff --git a/arch/arm/mach-nomadik/Kconfig b/arch/arm/mach-nomadik/Kconfig
--index ba72a41..265f336 100644
----- a/arch/arm/mach-nomadik/Kconfig
--+++ b/arch/arm/mach-nomadik/Kconfig
--@@ -2,7 +2,6 @@ if ARCH_NOMADIK
-- 
-- choice
-- 	prompt "Nomadik board select"
---	optional
-- 
-- config NOMADIK_NHK8815
-- 	bool "ST 8815 Nomadik Hardware Kit"
--diff --git a/arch/arm/mach-orion5x/Kconfig b/arch/arm/mach-orion5x/Kconfig
--index 7644b8d..291c511 100644
----- a/arch/arm/mach-orion5x/Kconfig
--+++ b/arch/arm/mach-orion5x/Kconfig
--@@ -2,7 +2,6 @@ if ORION5X
-- 
-- choice
-- 	prompt "Marvell Orion board select"
---	optional
-- 
-- config TARGET_EDMINIV2
-- 	bool "LaCie Ethernet Disk mini V2"
--diff --git a/arch/arm/mach-socfpga/Kconfig b/arch/arm/mach-socfpga/Kconfig
--index e46c348..204efca 100644
----- a/arch/arm/mach-socfpga/Kconfig
--+++ b/arch/arm/mach-socfpga/Kconfig
--@@ -2,7 +2,6 @@ if ARCH_SOCFPGA
-- 
-- choice
-- 	prompt "Altera SOCFPGA board select"
---	optional
-- 
-- config TARGET_SOCFPGA_ARRIA5
-- 	bool "Altera SOCFPGA Arria V"
--diff --git a/arch/arm/mach-tegra/Kconfig b/arch/arm/mach-tegra/Kconfig
--index 54bd648..ef77c84 100644
----- a/arch/arm/mach-tegra/Kconfig
--+++ b/arch/arm/mach-tegra/Kconfig
--@@ -2,7 +2,6 @@ if TEGRA
-- 
-- choice
-- 	prompt "Tegra SoC select"
---	optional
-- 
-- config TEGRA20
-- 	bool "Tegra20 family"
--diff --git a/arch/arm/mach-tegra/tegra114/Kconfig b/arch/arm/mach-tegra/tegra114/Kconfig
--index 1047b92..31012bc 100644
----- a/arch/arm/mach-tegra/tegra114/Kconfig
--+++ b/arch/arm/mach-tegra/tegra114/Kconfig
--@@ -2,7 +2,6 @@ if TEGRA114
-- 
-- choice
-- 	prompt "Tegra114 board select"
---	optional
-- 
-- config TARGET_DALMORE
-- 	bool "NVIDIA Tegra114 Dalmore evaluation board"
--diff --git a/arch/arm/mach-tegra/tegra124/Kconfig b/arch/arm/mach-tegra/tegra124/Kconfig
--index f3324ff..86c1301 100644
----- a/arch/arm/mach-tegra/tegra124/Kconfig
--+++ b/arch/arm/mach-tegra/tegra124/Kconfig
--@@ -2,7 +2,6 @@ if TEGRA124
-- 
-- choice
-- 	prompt "Tegra124 board select"
---	optional
-- 
-- config TARGET_JETSON_TK1
-- 	bool "NVIDIA Tegra124 Jetson TK1 board"
--diff --git a/arch/arm/mach-tegra/tegra20/Kconfig b/arch/arm/mach-tegra/tegra20/Kconfig
--index 1bb8dff..7f09f81 100644
----- a/arch/arm/mach-tegra/tegra20/Kconfig
--+++ b/arch/arm/mach-tegra/tegra20/Kconfig
--@@ -2,7 +2,6 @@ if TEGRA20
-- 
-- choice
-- 	prompt "Tegra20 board select"
---	optional
-- 
-- config TARGET_HARMONY
-- 	bool "NVIDIA Tegra20 Harmony evaluation board"
--diff --git a/arch/arm/mach-tegra/tegra30/Kconfig b/arch/arm/mach-tegra/tegra30/Kconfig
--index e78331e..3abdc7b 100644
----- a/arch/arm/mach-tegra/tegra30/Kconfig
--+++ b/arch/arm/mach-tegra/tegra30/Kconfig
--@@ -2,7 +2,6 @@ if TEGRA30
-- 
-- choice
-- 	prompt "Tegra30 board select"
---	optional
-- 
-- config TARGET_APALIS_T30
-- 	bool "Toradex Apalis T30 board"
--diff --git a/arch/arm/mach-zynq/Kconfig b/arch/arm/mach-zynq/Kconfig
--index 1de5b07..6b0e295 100644
----- a/arch/arm/mach-zynq/Kconfig
--+++ b/arch/arm/mach-zynq/Kconfig
--@@ -10,7 +10,6 @@ config ZYNQ_CUSTOM_INIT
-- 
-- choice
-- 	prompt "Xilinx Zynq board select"
---	optional
-- 
-- config TARGET_ZYNQ_ZED
-- 	bool "Zynq ZedBoard"
--diff --git a/arch/avr32/Kconfig b/arch/avr32/Kconfig
--index eb33774..801b9cc 100644
----- a/arch/avr32/Kconfig
--+++ b/arch/avr32/Kconfig
--@@ -6,7 +6,6 @@ config SYS_ARCH
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_ATNGW100
-- 	bool "Support atngw100"
--diff --git a/arch/blackfin/Kconfig b/arch/blackfin/Kconfig
--index 0a2fb4d..31913fe 100644
----- a/arch/blackfin/Kconfig
--+++ b/arch/blackfin/Kconfig
--@@ -6,7 +6,6 @@ config SYS_ARCH
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_BCT_BRETTL2
-- 	bool "Support bct-brettl2"
--diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
--index 26509b7..69cb0f7 100644
----- a/arch/m68k/Kconfig
--+++ b/arch/m68k/Kconfig
--@@ -114,7 +114,6 @@ config M548x
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_M52277EVB
-- 	bool "Support M52277EVB"
--diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
--index 077b2a7..6f419f0 100644
----- a/arch/microblaze/Kconfig
--+++ b/arch/microblaze/Kconfig
--@@ -6,7 +6,6 @@ config SYS_ARCH
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_MICROBLAZE_GENERIC
-- 	bool "Support microblaze-generic"
--diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
--index 7f7e258..87b94ac 100644
----- a/arch/mips/Kconfig
--+++ b/arch/mips/Kconfig
--@@ -10,7 +10,6 @@ config SYS_CPU
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_QEMU_MIPS
-- 	bool "Support qemu-mips"
--diff --git a/arch/nds32/Kconfig b/arch/nds32/Kconfig
--index 98b0282..81b0a01 100644
----- a/arch/nds32/Kconfig
--+++ b/arch/nds32/Kconfig
--@@ -6,7 +6,6 @@ config SYS_ARCH
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_ADP_AG101
-- 	bool "Support adp-ag101"
--diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
--index 8ae7f6e..b3be7b5 100644
----- a/arch/nios2/Kconfig
--+++ b/arch/nios2/Kconfig
--@@ -6,7 +6,6 @@ config SYS_ARCH
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_NIOS2_GENERIC
-- 	bool "Support nios2-generic"
--diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
--index 11014d1..4d62b4c 100644
----- a/arch/openrisc/Kconfig
--+++ b/arch/openrisc/Kconfig
--@@ -6,7 +6,6 @@ config SYS_ARCH
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_OPENRISC_GENERIC
-- 	bool "Support openrisc-generic"
--diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
--index 3b3f446..8e5a3e2 100644
----- a/arch/powerpc/Kconfig
--+++ b/arch/powerpc/Kconfig
--@@ -6,7 +6,6 @@ config SYS_ARCH
-- 
-- choice
-- 	prompt "CPU select"
---	optional
-- 
-- config MPC512X
-- 	bool "MPC512X"
--diff --git a/arch/powerpc/cpu/mpc512x/Kconfig b/arch/powerpc/cpu/mpc512x/Kconfig
--index 53450ae..a0f0ede 100644
----- a/arch/powerpc/cpu/mpc512x/Kconfig
--+++ b/arch/powerpc/cpu/mpc512x/Kconfig
--@@ -6,7 +6,6 @@ config SYS_CPU
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_PDM360NG
-- 	bool "Support pdm360ng"
--diff --git a/arch/powerpc/cpu/mpc5xx/Kconfig b/arch/powerpc/cpu/mpc5xx/Kconfig
--index 5275447..aad4a7c 100644
----- a/arch/powerpc/cpu/mpc5xx/Kconfig
--+++ b/arch/powerpc/cpu/mpc5xx/Kconfig
--@@ -6,7 +6,6 @@ config SYS_CPU
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_CMI_MPC5XX
-- 	bool "Support cmi_mpc5xx"
--diff --git a/arch/powerpc/cpu/mpc5xxx/Kconfig b/arch/powerpc/cpu/mpc5xxx/Kconfig
--index 5d49228..eec9d7d 100644
----- a/arch/powerpc/cpu/mpc5xxx/Kconfig
--+++ b/arch/powerpc/cpu/mpc5xxx/Kconfig
--@@ -6,7 +6,6 @@ config SYS_CPU
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_A3M071
-- 	bool "Support a3m071"
--diff --git a/arch/powerpc/cpu/mpc8260/Kconfig b/arch/powerpc/cpu/mpc8260/Kconfig
--index e93732d..55941c8 100644
----- a/arch/powerpc/cpu/mpc8260/Kconfig
--+++ b/arch/powerpc/cpu/mpc8260/Kconfig
--@@ -6,7 +6,6 @@ config SYS_CPU
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_KM82XX
-- 	bool "Support km82xx"
--diff --git a/arch/powerpc/cpu/mpc83xx/Kconfig b/arch/powerpc/cpu/mpc83xx/Kconfig
--index 3fb901f..88a3bd6 100644
----- a/arch/powerpc/cpu/mpc83xx/Kconfig
--+++ b/arch/powerpc/cpu/mpc83xx/Kconfig
--@@ -6,7 +6,6 @@ config SYS_CPU
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_MPC8308_P1M
-- 	bool "Support mpc8308_p1m"
--diff --git a/arch/powerpc/cpu/mpc85xx/Kconfig b/arch/powerpc/cpu/mpc85xx/Kconfig
--index 3e8d0b1..aff5fdb 100644
----- a/arch/powerpc/cpu/mpc85xx/Kconfig
--+++ b/arch/powerpc/cpu/mpc85xx/Kconfig
--@@ -6,7 +6,6 @@ config SYS_CPU
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_SBC8548
-- 	bool "Support sbc8548"
--diff --git a/arch/powerpc/cpu/mpc86xx/Kconfig b/arch/powerpc/cpu/mpc86xx/Kconfig
--index fe1859d..14e8b1a 100644
----- a/arch/powerpc/cpu/mpc86xx/Kconfig
--+++ b/arch/powerpc/cpu/mpc86xx/Kconfig
--@@ -6,7 +6,6 @@ config SYS_CPU
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_SBC8641D
-- 	bool "Support sbc8641d"
--diff --git a/arch/powerpc/cpu/mpc8xx/Kconfig b/arch/powerpc/cpu/mpc8xx/Kconfig
--index 79cee35..e8bcbe9 100644
----- a/arch/powerpc/cpu/mpc8xx/Kconfig
--+++ b/arch/powerpc/cpu/mpc8xx/Kconfig
--@@ -6,7 +6,6 @@ config SYS_CPU
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_TQM823L
-- 	bool "Support TQM823L"
--diff --git a/arch/powerpc/cpu/ppc4xx/Kconfig b/arch/powerpc/cpu/ppc4xx/Kconfig
--index 10b86e0..4d5954a 100644
----- a/arch/powerpc/cpu/ppc4xx/Kconfig
--+++ b/arch/powerpc/cpu/ppc4xx/Kconfig
--@@ -6,7 +6,6 @@ config SYS_CPU
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_CSB272
-- 	bool "Support csb272"
--diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
--index 6ac22af..ff8f5b5 100644
----- a/arch/sh/Kconfig
--+++ b/arch/sh/Kconfig
--@@ -29,7 +29,6 @@ config SH_32BIT
-- 
-- choice
-- 	prompt "Target select"
---	optional
-- 
-- config TARGET_RSK7203
-- 	bool "RSK+ 7203"
--diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
--index 04dc08f..2df09b2 100644
----- a/arch/sparc/Kconfig
--+++ b/arch/sparc/Kconfig
--@@ -14,7 +14,6 @@ config LEON3
-- 
-- choice
-- 	prompt "Board select"
---	optional
-- 
-- config TARGET_GRSIM_LEON2
-- 	bool "GRSIM simulating a LEON2 board"
--diff --git a/board/amcc/canyonlands/Kconfig b/board/amcc/canyonlands/Kconfig
--index a655dbc..ef66ad4 100644
----- a/board/amcc/canyonlands/Kconfig
--+++ b/board/amcc/canyonlands/Kconfig
--@@ -11,7 +11,6 @@ config SYS_CONFIG_NAME
-- 
-- choice BOARD_TYPE
-- 	prompt "Select which board to build for"
---	optional
-- 
-- config CANYONLANDS
-- 	bool "Glacier"
--diff --git a/board/coreboot/Kconfig b/board/coreboot/Kconfig
--index ede6065..dc9b70f 100644
----- a/board/coreboot/Kconfig
--+++ b/board/coreboot/Kconfig
--@@ -8,7 +8,6 @@ if VENDOR_COREBOOT
-- 
-- choice
-- 	prompt "Mainboard model"
---	optional
-- 
-- config TARGET_COREBOOT
-- 	bool "coreboot"
--diff --git a/board/dbau1x00/Kconfig b/board/dbau1x00/Kconfig
--index b813adb..1286e45 100644
----- a/board/dbau1x00/Kconfig
--+++ b/board/dbau1x00/Kconfig
--@@ -13,7 +13,6 @@ menu "dbau1x00 board options"
-- 
-- choice
-- 	prompt "Select au1x00 SoC type"
---	optional
-- 
-- config DBAU1100
-- 	bool "Select AU1100"
--diff --git a/board/google/Kconfig b/board/google/Kconfig
--index e9559c9..302f68e 100644
----- a/board/google/Kconfig
--+++ b/board/google/Kconfig
--@@ -8,7 +8,6 @@ if VENDOR_GOOGLE
-- 
-- choice
-- 	prompt "Mainboard model"
---	optional
-- 
-- config TARGET_CHROMEBOOK_LINK
-- 	bool "Chromebook link"
--diff --git a/board/intel/Kconfig b/board/intel/Kconfig
--index 3d9ecf0..7fe21b9 100644
----- a/board/intel/Kconfig
--+++ b/board/intel/Kconfig
--@@ -8,7 +8,6 @@ if VENDOR_INTEL
-- 
-- choice
-- 	prompt "Mainboard model"
---	optional
-- 
-- config TARGET_CROWNBAY
-- 	bool "Crown Bay"
--diff --git a/board/micronas/vct/Kconfig b/board/micronas/vct/Kconfig
--index c518079..288a1ae 100644
----- a/board/micronas/vct/Kconfig
--+++ b/board/micronas/vct/Kconfig
--@@ -13,7 +13,6 @@ menu "vct board options"
-- 
-- choice
-- 	prompt "Board variant"
---	optional
-- 
-- config VCT_PLATINUM
-- 	bool "Enable VCT_PLATINUM"
--diff --git a/board/seco/Kconfig b/board/seco/Kconfig
--index af16697..dcb1ac8 100644
----- a/board/seco/Kconfig
--+++ b/board/seco/Kconfig
--@@ -2,7 +2,6 @@ if TARGET_SECOMX6
-- 
-- choice
-- 	prompt "SECO i.MX6 Board variant"
---	optional
-- 
-- config SECOMX6_Q7
-- 	bool "Q7"
--@@ -17,7 +16,6 @@ endchoice
-- 
-- choice
-- 	prompt "SECO i.MX6 SoC variant"
---	optional
-- 
-- config SECOMX6Q
-- 	bool "i.MX6Q"
--diff --git a/board/sunxi/Kconfig b/board/sunxi/Kconfig
--index 2a1cd3c..808de26 100644
----- a/board/sunxi/Kconfig
--+++ b/board/sunxi/Kconfig
--@@ -18,7 +18,6 @@ config SUNXI_GEN_SUN6I
-- 
-- choice
-- 	prompt "Sunxi SoC Variant"
---	optional
-- 
-- config MACH_SUN4I
-- 	bool "sun4i (Allwinner A10)"
---- 
--2.4.3
--
-diff --git a/boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch b/boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
-deleted file mode 100644
-index eded9a3128..0000000000
---- a/boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 7c8d81605302e7d7fdd3e7d8eb69302bddc64a2c Mon Sep 17 00:00:00 2001
--From: Alexey Brodkin <abrodkin@synopsys.com>
--Date: Fri, 16 Sep 2016 12:12:26 +0300
--Subject: [PATCH] arc: Use -mcpu=XXX instead of obsolete -marcXXX
--
--With newer ARC tools old way of CPU specification gets obsolete,
--so we're switching to newer and more common way of setting "-mcpu".
--
--Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-----
-- arch/arc/config.mk | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/arch/arc/config.mk b/arch/arc/config.mk
--index 7c974f0..13676bd 100644
----- a/arch/arc/config.mk
--+++ b/arch/arc/config.mk
--@@ -31,15 +31,15 @@ CONFIG_MMU = 1
-- endif
-- 
-- ifdef CONFIG_CPU_ARC750D
---PLATFORM_CPPFLAGS += -marc700
--+PLATFORM_CPPFLAGS += -mcpu=arc700
-- endif
-- 
-- ifdef CONFIG_CPU_ARC770D
---PLATFORM_CPPFLAGS += -marc700 -mlock -mswape
--+PLATFORM_CPPFLAGS += -mcpu=arc700 -mlock -mswape
-- endif
-- 
-- ifdef CONFIG_CPU_ARCEM6
---PLATFORM_CPPFLAGS += -marcem
--+PLATFORM_CPPFLAGS += -mcpu=arcem
-- endif
-- 
-- ifdef CONFIG_CPU_ARCHS34
---- 
--2.7.4
--
-diff --git a/boot/uboot/2016.09.01/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch b/boot/uboot/2016.09.01/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
-deleted file mode 100644
-index eded9a3128..0000000000
---- a/boot/uboot/2016.09.01/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 7c8d81605302e7d7fdd3e7d8eb69302bddc64a2c Mon Sep 17 00:00:00 2001
--From: Alexey Brodkin <abrodkin@synopsys.com>
--Date: Fri, 16 Sep 2016 12:12:26 +0300
--Subject: [PATCH] arc: Use -mcpu=XXX instead of obsolete -marcXXX
--
--With newer ARC tools old way of CPU specification gets obsolete,
--so we're switching to newer and more common way of setting "-mcpu".
--
--Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-----
-- arch/arc/config.mk | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/arch/arc/config.mk b/arch/arc/config.mk
--index 7c974f0..13676bd 100644
----- a/arch/arc/config.mk
--+++ b/arch/arc/config.mk
--@@ -31,15 +31,15 @@ CONFIG_MMU = 1
-- endif
-- 
-- ifdef CONFIG_CPU_ARC750D
---PLATFORM_CPPFLAGS += -marc700
--+PLATFORM_CPPFLAGS += -mcpu=arc700
-- endif
-- 
-- ifdef CONFIG_CPU_ARC770D
---PLATFORM_CPPFLAGS += -marc700 -mlock -mswape
--+PLATFORM_CPPFLAGS += -mcpu=arc700 -mlock -mswape
-- endif
-- 
-- ifdef CONFIG_CPU_ARCEM6
---PLATFORM_CPPFLAGS += -marcem
--+PLATFORM_CPPFLAGS += -mcpu=arcem
-- endif
-- 
-- ifdef CONFIG_CPU_ARCHS34
---- 
--2.7.4
--
+diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
+index 493011fce4..a16c1aecac 100644
+--- a/package/dos2unix/dos2unix.hash
++++ b/package/dos2unix/dos2unix.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.2.tar.gz.asc
+-sha256	6035c58df6ea2832e868b599dfa0d60ad41ca3ecc8aa27822c4b7a9789d3ae01  dos2unix-7.4.2.tar.gz
+-sha256	db8888b7d1454348aca0c6ca851327245ef60e57afa8a6555761c8b95d24af77  COPYING.txt
++# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.3.tar.gz.asc
++sha256  b68db41956daf933828423aa30510e00c12d29ef5916e715e8d4e694fe66ca72  dos2unix-7.4.3.tar.gz
++sha256  275ce1371734904b275e83bf760e3e6d2a520614545a3850c9568d1892b940fd  COPYING.txt
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 1f3e79ec4e..f16a527f2e 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOS2UNIX_VERSION = 7.4.2
++DOS2UNIX_VERSION = 7.4.3
+ DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
+ DOS2UNIX_LICENSE = BSD-2-Clause
+ DOS2UNIX_LICENSE_FILES = COPYING.txt
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
