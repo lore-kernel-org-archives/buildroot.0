@@ -1,86 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F370DC43334
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 13:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B574AC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 13:52:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50CDA41C7B;
-	Wed, 22 Jun 2022 13:01:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50CDA41C7B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 483F560B2C;
+	Wed, 22 Jun 2022 13:52:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 483F560B2C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XasSbvQnjdBg; Wed, 22 Jun 2022 13:01:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jHhROJzJWWsj; Wed, 22 Jun 2022 13:52:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B0E641A1A;
-	Wed, 22 Jun 2022 13:01:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B0E641A1A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32367607F7;
+	Wed, 22 Jun 2022 13:52:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32367607F7
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 973621BF3EF
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 13:01:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2C8C21C1135
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 13:52:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7174E40012
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 13:01:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7174E40012
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0F8640199
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 13:52:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0F8640199
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QZ_YscQDUAXJ for <buildroot@lists.busybox.net>;
- Wed, 22 Jun 2022 13:01:06 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC01B4053C
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com
- [IPv6:2001:4860:4864:20::30])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BC01B4053C
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 13:01:05 +0000 (UTC)
-Received: by mail-oa1-x30.google.com with SMTP id
- 586e51a60fabf-101ec2d6087so11868526fac.3
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 06:01:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=Wrm2s0cGtgpnEeCB66Y4QB/whGPxeCo6AmQMRUC6nWk=;
- b=2gxOdx4DGSZGC2rKDfaPOc+2TUIB2k3p4vsYizfCsrRCogu7MxMKQlwEyKqgYlfaxv
- GSQHHTzmFAMYRmIMVKYabnevkDdOe5EA0InMBwvHJeh4rmN2yz4BI0ewQ5mhCC/6VNSq
- gfLiAyxq95IigzHWZ3EfAoZgUVCweHIKhAH18qr5N/A+o/OUx8u86RSgM2Vy5r/lyN00
- fJVdY1ESlZ0fM7ngSiuurAs/kVUskouvSpwvtPO4Cs81Ua6ilz55ZHcpTJegXgg58CdX
- ylITPaWTiN0hhG2oKeuUyJRC7ifJL4c48SEvZ9OSY3+m0i4xWZqyxKcqggfxXGCuoFRK
- Psvg==
-X-Gm-Message-State: AJIora+WoiCKpykqLCgN3G5zpX4zS4N9uyy7gDp0Bj+yeH6otWU+cllO
- cNqBeCldhfUOAJ73chRYdMqKF7V6Mr6YX3is3E+8dg==
-X-Google-Smtp-Source: AGRyM1uYCd6wZzTL0nTCbZ90WDsdrQIK+rlBbiAPpYCuETQIMfkTS9AHFuUS85N7pQAle2Sa0ejqG5lgjSPsgkCN9SQ=
-X-Received: by 2002:a05:6870:51cb:b0:fb:5c97:bd1b with SMTP id
- b11-20020a05687051cb00b000fb5c97bd1bmr1988985oaj.104.1655902864203; Wed, 22
- Jun 2022 06:01:04 -0700 (PDT)
+ with ESMTP id wb3hXzz-kb1O for <buildroot@lists.busybox.net>;
+ Wed, 22 Jun 2022 13:52:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D4D040012
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5D4D040012
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 13:52:51 +0000 (UTC)
+Received: (Authenticated sender: kory.maincent@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 00C8C1C0011;
+ Wed, 22 Jun 2022 13:52:48 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 22 Jun 2022 15:52:48 +0200
+Message-Id: <20220622135248.1246416-1-kory.maincent@bootlin.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220622083433.1201789-1-kory.maincent@bootlin.com>
- <CAN5uoS8OHpbtwOY8N0a0ECGO-7LU6VWA1v57ECTZBYNtnWWBXw@mail.gmail.com>
- <20220622143617.649fb05a@kmaincent-XPS-13-7390>
-In-Reply-To: <20220622143617.649fb05a@kmaincent-XPS-13-7390>
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Wed, 22 Jun 2022 15:00:53 +0200
-Message-ID: <CAN5uoS-y5ni5mAr2esyoFpctPwpsQwEDU7eGowXGJqHVqBRy2A@mail.gmail.com>
-To: =?UTF-8?Q?K=C3=B6ry_Maincent?= <kory.maincent@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=linaro.org; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=Wrm2s0cGtgpnEeCB66Y4QB/whGPxeCo6AmQMRUC6nWk=;
- b=qsVhsM/Q40kljPGSZAXFanZ4xNArGc7dthvIbRXTbKBUo5jvUBb04NOFwr9wqqGtyX
- oJkz/yX3ML5Z5IckJn0kIWeNdPTeibVaMzn+VoAXxdoSJbQg7TkOiF+vCOOvlC+JLenU
- UB5igKeeBcFIbNWAfgQEdga5SUiWaaI7MgW6tbNBJvv3am3zlzsDFrQNHV9/wNqTrHfg
- E2WzGOaO1hjZeRNkdo5bYNvyhbNmBieAx9EG6n6qG3sUQQBwzTmtNcSM7vvg+sbJeaok
- ZElJMk6Fsx3FjtF2Th1jmVinwXDZDF4WitM2HTMnAY4Y/r9zV9ex7Q28lQRKFWgyF98m
- 0qRw==
+ d=bootlin.com; s=gm1; t=1655905969;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Dt3ss382M3qTig8G9yEekMFyCbeuyOMQ4kM/P0YoWC8=;
+ b=g+MmDpYk+iX/lDWdv9MH1jGYk7MIIEfoUldVYVYEV2g9dJmHaDmiRGs8bVU+uXXehtHYt0
+ 86tT+yKturCOsX1vpyhJFYVxRgWWxyDadDzocRmZBayOqVXxfOjvdgyeAKF2qjBHvNQioJ
+ e9eoNbniWtKOJ5rp68I7jldQaDIgkeBbQvYPSk7i5Pv9UNhBPH0IUA7zZXkvdiJYF2h1cw
+ Ro2BqHhuW77bLwllzUMJ6liONbzkKO3pQykdeiz90l+zOcy+1xTg4mG2x92osTdeABElGA
+ MITEFBjN0S6BshHKSMO9gzzUSh8vlE3KuQq7AQlI4GQfvIXAiCqap2aVX794KQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org
- header.a=rsa-sha256 header.s=google header.b=qsVhsM/Q
-Subject: Re: [Buildroot] [PATCH v2] boot/optee-os: add support for custom
- tarball URL
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=g+MmDpYk
+Subject: [Buildroot] [PATCH v2] package/gcnano-binaries: bump version to
+ 6.4.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,25 +72,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Kory Maincent via buildroot <buildroot@buildroot.org>
+Reply-To: kory.maincent@bootlin.com
+Cc: Kory Maincent <kory.maincent@bootlin.com>, scooby22@web.de,
+ thomas.petazzoni@bootlin.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCAyMiBKdW4gMjAyMiBhdCAxNDozNiwgS8O2cnkgTWFpbmNlbnQgPGtvcnkubWFpbmNl
-bnRAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gSGVsbG8gRXRpZW5uZSwKPgo+IE9uIFdlZCwgMjIg
-SnVuIDIwMjIgMTI6Mjk6MDUgKzAyMDAKPiBFdGllbm5lIENhcnJpZXJlIDxldGllbm5lLmNhcnJp
-ZXJlQGxpbmFyby5vcmc+IHdyb3RlOgo+Cj4gPiA+ICtpZmVxICgkKEJSMl9UQVJHRVRfT1BURUVf
-T1NfQ1VTVE9NX1RBUkJBTEwpLHkpCj4gPiA+ICtpZmVxICgkKGNhbGwgcXN0cmlwLCQoQlIyX1RB
-UkdFVF9PUFRFRV9PU19DVVNUT01fVEFSQkFMTF9MT0NBVElPTikpLCkKPiA+Cj4gPiBIZXJlIHdl
-IGV4cGVjdCBhIHRhcmJhbGwgZmlsZSBwYXRoLiBTaW5jZSB0aGUgY29uZmlnIHN3aXRjaCBpcyBk
-ZWZhdWx0Cj4gPiBwb3B1bGF0ZWQgd2l0aCBhIHN0cmluZywgSSB0aGluayB0aGlzIHNob3VsZCB0
-ZXN0IGZpbGUgcHJlc2VuY2UgcmF0aGVyCj4gPiB0aGFuIHN0cmluZyBleGlzdGVuY2U6Cj4KPiBO
-bywgd2UgY2FuIGFsc28gdXNlIHRhcmJhbGwgd2ViIFVSTCwgdGhlbiB0aGUgd2lsZGNhcmQgZnVu
-Y3Rpb24gd29uJ3Qgd29yayBpbgo+IGNhc2Ugb2Ygd2ViIFVSTC4KCk9rLCBmaW5lLgpSZXZpZXdl
-ZC1ieTogRXRpZW5uZSBDYXJyaWVyZSA8ZXRpZW5uZS5jYXJyaWVyZUBsaW5hcm8ucm9nPiBmb3Ig
-dGhlIHYyLgoKQmVzdCByZWdhcmRzLApldGllbm5lCgo+Cj4gUmVnYXJkcywKPgo+IEvDtnJ5Cl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+From: Kory Maincent <kory.maincent@bootlin.com>
+
+Update to the latest version of the gcnano-binaries blobs, which are
+compatible with the soon-to-be-released 5.15 kernel from the
+STMicroelectronics BSP.
+
+As we are installing all the libraries and the pkgconfig files we do not
+need to list them anymore. Therefore this patch removes
+GCNANO_BINARIES_LIBRARIES and GCNANO_BINARIES_PKG_CONFIGS variables.
+It also updates the installation command to follow the path and naming
+of the new version and the pkgconfig files to fill the prefix variable with
+the right value.
+
+The new version of gcnano has gbm.h header installed in a gbm folder,
+this break the build of other packages. The patch fixes it with a simple
+link.
+
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+---
+
+Change since v1:
+- fix subject version error.
+- made few code cleaning from Thomas review.
+- add "-f" to link creation to avoid "File exists" message error.
+
+ package/gcnano-binaries/gcnano-binaries.hash |  2 +-
+ package/gcnano-binaries/gcnano-binaries.mk   | 36 ++++++++------------
+ 2 files changed, 15 insertions(+), 23 deletions(-)
+
+diff --git a/package/gcnano-binaries/gcnano-binaries.hash b/package/gcnano-binaries/gcnano-binaries.hash
+index d4ad96672a..1ed66e3753 100644
+--- a/package/gcnano-binaries/gcnano-binaries.hash
++++ b/package/gcnano-binaries/gcnano-binaries.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  32d91d6ce6e6551cb7ad0eee4698041fdeb10a4f216e6564adb06408476edc38  gcnano-binaries-969d11518529bb70a132909b02ddcc5736c92d91.tar.gz
++sha256  d3aebbc87ca27e743fdd21d71025cdf0761af748907bbdd7b193262eb48ab3c7  gcnano-binaries-a20611434ef048d3d0c04f55b6cd7d75a2156d43.tar.gz
+ sha256  7d209718473d18f69f75adb7caf9cb5d4b0a31da068756aa011bea617de3dc57  EULA
+diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
+index affe0a6063..dc309ec3c2 100644
+--- a/package/gcnano-binaries/gcnano-binaries.mk
++++ b/package/gcnano-binaries/gcnano-binaries.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-GCNANO_BINARIES_LIB_VERSION = 6.4
+-GCNANO_BINARIES_LIB_REVISION = 3
+-GCNANO_BINARIES_LIB_FULL_VERSION = $(GCNANO_BINARIES_LIB_VERSION).$(GCNANO_BINARIES_LIB_REVISION)
+-GCNANO_BINARIES_DRIVER_VERSION = $(GCNANO_BINARIES_LIB_FULL_VERSION)
+-GCNANO_BINARIES_USERLAND_VERSION = $(GCNANO_BINARIES_LIB_FULL_VERSION)-20210726
+-GCNANO_BINARIES_VERSION = 969d11518529bb70a132909b02ddcc5736c92d91
++GCNANO_BINARIES_LIB_VERSION = 6.4.7
++GCNANO_BINARIES_DRIVER_VERSION = $(GCNANO_BINARIES_LIB_VERSION)
++GCNANO_BINARIES_USERLAND_VERSION = $(GCNANO_BINARIES_LIB_VERSION)-20220524
++GCNANO_BINARIES_VERSION = a20611434ef048d3d0c04f55b6cd7d75a2156d43
+ GCNANO_BINARIES_SITE = $(call github,STMicroelectronics,gcnano-binaries,$(GCNANO_BINARIES_VERSION))
+ 
+ GCNANO_BINARIES_LICENSE = MIT, Vivante End User Software License Terms
+@@ -44,26 +42,20 @@ GCNANO_BINARIES_MODULE_MAKE_OPTS = \
+ 	AQROOT=$(@D) \
+ 	DEBUG=0
+ 
+-GCNANO_BINARIES_LIBRARIES = \
+-	libgbm_viv libEGL libGAL libgbm libGLESv1_CM \
+-	libGLESv2 libGLSLC libOpenVG libVSC
+-
+ GCNANO_BINARIES_USERLAND_SUBDIR = gcnano-userland-multi-$(GCNANO_BINARIES_USERLAND_VERSION)
+ 
+-GCNANO_BINARIES_PKG_CONFIGS = egl gbm glesv1_cm glesv2 vg
+-
+ define GCNANO_BINARIES_INSTALL
+-	$(foreach lib,$(GCNANO_BINARIES_LIBRARIES), \
+-		$(INSTALL) -D -m 0755 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so \
+-			$(1)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so ; \
+-		cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).so* $(1)/usr/lib
+-	)
++	cd $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/release/drivers/ ; \
++	find . -type f -exec $(INSTALL) -D -m 0755 {} $(1)/usr/lib/{} \; ; \
++	find . -type l -exec cp -a {} $(1)/usr/lib \;
+ 	mkdir -p $(1)/usr/include
+-	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/include/* $(1)/usr/include/
+-	$(foreach pkgconfig,$(GCNANO_BINARIES_PKG_CONFIGS), \
+-		$(INSTALL) -D -m 0644 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/pkgconfig/$(pkgconfig).pc \
+-			$(1)/usr/lib/pkgconfig/$(pkgconfig).pc
+-	)
++	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/release/include/* $(1)/usr/include/
++	ln -sf gbm/gbm.h $(1)/usr/include/gbm.h
++	cd $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/pkgconfig/ ; \
++	for file in *.pc ; do \
++		sed -e "s|#PREFIX#|/usr|" $$file > $$file.temp ; \
++		$(INSTALL) -D -m 0644 $$file.temp $(1)/usr/lib/pkgconfig/$$file ; \
++	done
+ endef
+ 
+ define GCNANO_BINARIES_INSTALL_TARGET_CMDS
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
