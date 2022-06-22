@@ -1,66 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B29E7C43334
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 08:34:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DC99C43334
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 10:09:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5043F6126D;
-	Wed, 22 Jun 2022 08:34:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5043F6126D
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9CB5404F9;
+	Wed, 22 Jun 2022 10:09:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9CB5404F9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id chDyT99ZoZCx; Wed, 22 Jun 2022 08:34:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LdKSi28D0mDI; Wed, 22 Jun 2022 10:09:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C362611BD;
-	Wed, 22 Jun 2022 08:34:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C362611BD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E1DE21BF410
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 08:34:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD5C4404B3;
+	Wed, 22 Jun 2022 10:09:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD5C4404B3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F4A81BF335
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 10:09:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC2BB611BD
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 08:34:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC2BB611BD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 76C288418E
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 10:09:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76C288418E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f1-wOdyAaISm for <buildroot@lists.busybox.net>;
- Wed, 22 Jun 2022 08:34:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fsmVI5guBEuQ for <buildroot@lists.busybox.net>;
+ Wed, 22 Jun 2022 10:09:06 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 698D560BBA
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 698D560BBA
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 08:34:36 +0000 (UTC)
-Received: (Authenticated sender: kory.maincent@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1FE5B40011;
- Wed, 22 Jun 2022 08:34:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5C44844DA
+Received: from smtp-outgoing-1901.laposte.net (smtp-outgoing-1901.laposte.net
+ [160.92.124.105])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D5C44844DA
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 10:09:05 +0000 (UTC)
+X-mail-filterd: {"version":"1.4.3", "queueID":"4LSfHL3CzCzYcmV",
+ "contextId":"54e1c514-5f48-4367-a0f4-aeb2aba8ad06"}
+Received: from outgoing-mail.laposte.net (localhost.localdomain [127.0.0.1])
+ by mlpnf0118.laposte.net (SMTP Server) with ESMTP id 4LSfHL3CzCzYcmV;
+ Wed, 22 Jun 2022 12:09:02 +0200 (CEST)
+X-mail-filterd: {"version":"1.4.3", "queueID":"4LSfHL1jY0zYcmC",
+ "contextId":"273883c9-1b8b-4e1b-a7ba-4d7de98373b3"}
+X-lpn-mailing: LEGIT
+X-lpn-spamrating: 50
+X-lpn-spamlevel: not-spam
+Received: from localhost.localdomain (unknown [88.121.255.194])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mlpnf0118.laposte.net (SMTP Server) with ESMTPSA id 4LSfHL1jY0zYcmC;
+ Wed, 22 Jun 2022 12:09:02 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Wed, 22 Jun 2022 10:34:33 +0200
-Message-Id: <20220622083433.1201789-1-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.25.1
+Date: Wed, 22 Jun 2022 12:08:04 +0200
+Message-Id: <20220622100804.810-1-ni.poirot@laposte.net>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1655886874;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=elkRS2Gb4ufoiaVpCs4cTcNdzLACNXonTl9zNmzCXC0=;
- b=XUGkstmXpQLWApxaR6lYKdTuQ05tVil7E+jWHpiWj6gJV3SBn7q4ZDkm/Nkgp0DB0jz5b9
- 7dDUJY0xhEeOYLK0fAfHw7ia3bmdkrRe5KrGQh6yt9nE1LcV1kv1vtqqyOR25NXPcEWd8P
- Wbt2BorcfIyTK1XknLdDUd7mMvnMig3oGdeOxH5KLHwQRthcui66MDmo2VVaCEkT/PIyff
- Z/B2e1lYBw6DmXqy8r8YWCm1pdBFg4vAa06EPZ6egYvuhX8/0a0kNQTSB9TRL+gEjd8yz9
- QS5uMrsWrTlu2fZRq7918sLk0dxUJcPiJrhqY5lCIe5DO/R60C8cSqCSSHyQKw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XUGkstmX
-Subject: [Buildroot] [PATCH v2] boot/optee-os: add support for custom
- tarball URL
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=laposte.net; s=lpn-wlmd; t=1655892543;
+ bh=aGA/gxnAz7/ZVyu5HQIG2np1cZ8lsudl2aKu0NKzA/I=;
+ h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Transfer-Encoding;
+ b=csE6beDI+iwqYpC7/RPzyZEE6GSN5ROkq5m2Jb3YL9sq1mm6nPcw4GY5Yyg9oLe8U1+JhB7zU7PJAgSvDl2ykpevHNJK1Q6BppdDGwTP5wzmPwcLzjaZwNYjqI+/5gsCWxwwgeTBo5wepWjbl32iegb6EAx2OxNfQ7NWHIuRfK62QFwN0a3hG1CTcPGAeZCqGmzBFndWox3cgVigdWpdTpTgMueEJeDEACof3bSCNaGHtpa0MsyE+celi73YHZo2Fe8ZwObtJcmXRXF+i79CunFdvN1hs/BW84PAtCPTre3CYrpVl+YYLJBYBB5CwUdUZLb547cma2WUVnSKHpISPQ==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=laposte.net header.i=@laposte.net
+ header.a=rsa-sha256 header.s=lpn-wlmd header.b=csE6beDI
+Subject: [Buildroot] [PATCH 1/1] support/scripts/br2-external: add kernel
+ extensions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,121 +77,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kory Maincent via buildroot <buildroot@buildroot.org>
-Reply-To: kory.maincent@bootlin.com
-Cc: Kory Maincent <kory.maincent@bootlin.com>, etienne.carriere@linaro.org,
- thomas.petazzoni@bootlin.com
+From: Nicolas POIROT via buildroot <buildroot@buildroot.org>
+Reply-To: Nicolas POIROT <ni.poirot@laposte.net>
+Cc: Nicolas POIROT <ni.poirot@laposte.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Kory Maincent <kory.maincent@bootlin.com>
+Buildroot documentation section 9.2.1.6 "Additional kernel extensions"
+indicates support for kernel extensions defined in external buildroot
+trees but unfortunately, there didn't seem to be any support in
+br2-external script.
+This patch copies 'init' code support to include external kernel
+extensions defined in 'linux' dir at the br2-external root directory as
+explained in documentation.
 
-For now only latest release and custom git repository was supported.
-This patch adds support for custom tarball URL.
-
-It also adds configuration verification for custom git repository and
-tarball URL.
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Nicolas POIROT <ni.poirot@laposte.net>
 ---
+ linux/Config.ext.in          | 3 +++
+ support/scripts/br2-external | 9 +++++++++
+ 2 files changed, 12 insertions(+)
 
-Change since v1:
-- Update the test condition on custom tarball selection.
-- Remeved extra ending parentheses.
-
- boot/optee-os/Config.in   | 11 +++++++++++
- boot/optee-os/optee-os.mk | 25 +++++++++++++++++++++++--
- 2 files changed, 34 insertions(+), 2 deletions(-)
-
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 0be6e68b0c..d56cf53c8a 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -25,6 +25,9 @@ config BR2_TARGET_OPTEE_OS_LATEST
- 	  Use the latest release tag from the OP-TEE OS official Git
- 	  repository.
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 5b968b0bcb..3cbf42d344 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -148,4 +148,7 @@ config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
  
-+config BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
-+	bool "Custom tarball"
+ endif # aufs
+ 
++# kernel extensions from br2-external trees, if any
++source "$BR2_BASE_DIR/.br2-external.in.linux"
 +
- config BR2_TARGET_OPTEE_OS_CUSTOM_GIT
- 	bool "Custom Git repository"
- 	help
-@@ -32,6 +35,13 @@ config BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+ endmenu
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index 56dc6f53ca..2c33e6eacc 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -163,6 +163,7 @@ do_kconfig() {
+         openssl
+         skeleton
+         init
++        linux
+     )
  
- endchoice
- 
-+if BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
+     for br2 in "${items[@]}"; do
+@@ -242,6 +243,14 @@ do_kconfig() {
+         else
+             printf '# No init from: %s\n\n' "${br2_desc}"
+         fi >>"${outputdir}/.br2-external.in.init"
 +
-+config BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom OP-TEE OS tarball"
-+
-+endif
-+
- if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
++        if [ -f "${br2_ext}/linux/Config.ext.in" ]; then
++            printf 'comment "linux extension from: %s"\n' "${br2_desc}"
++            printf 'source "%s/linux/Config.ext.in"\n' "${br2_ext}"
++            printf '\n'
++        else
++            printf '# No linux extension from: %s\n\n' "${br2_desc}"
++        fi >>"${outputdir}/.br2-external.in.linux"
+     done
  
- config BR2_TARGET_OPTEE_OS_CUSTOM_REPO_URL
-@@ -53,6 +63,7 @@ endif
- config BR2_TARGET_OPTEE_OS_VERSION
- 	string
- 	default "3.17.0"	if BR2_TARGET_OPTEE_OS_LATEST
-+	default "custom"	if BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
- 
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index 88f14b48e4..cddc1f2448 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -13,14 +13,22 @@ endif
- OPTEE_OS_INSTALL_STAGING = YES
- OPTEE_OS_INSTALL_IMAGES = YES
- 
--ifeq ($(BR2_TARGET_OPTEE_OS_CUSTOM_GIT),y)
-+ifeq ($(BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL),y)
-+# Handle custom U-Boot tarballs as specified by the configuration
-+OPTEE_OS_TARBALL = $(call qstrip,$(BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL_LOCATION))
-+OPTEE_OS_SITE = $(patsubst %/,%,$(dir $(OPTEE_OS_TARBALL)))
-+OPTEE_OS_SOURCE = $(notdir $(OPTEE_OS_TARBALL))
-+else ifeq ($(BR2_TARGET_OPTEE_OS_CUSTOM_GIT),y)
- OPTEE_OS_SITE = $(call qstrip,$(BR2_TARGET_OPTEE_OS_CUSTOM_REPO_URL))
- OPTEE_OS_SITE_METHOD = git
--BR_NO_CHECK_HASH_FOR += $(OPTEE_OS_SOURCE)
- else
- OPTEE_OS_SITE = $(call github,OP-TEE,optee_os,$(OPTEE_OS_VERSION))
- endif
- 
-+ifeq ($(BR2_TARGET_OPTEE_OS)$(BR2_TARGET_OPTEE_OS_LATEST_VERSION),y)
-+BR_NO_CHECK_HASH_FOR += $(OPTEE_OS_SOURCE)
-+endif
-+
- OPTEE_OS_DEPENDENCIES = host-openssl host-python3 host-python-pyelftools
- 
- ifeq ($(BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY),y)
-@@ -130,6 +138,19 @@ ifeq ($(BR2_TARGET_OPTEE_OS)$(BR_BUILDING),yy)
- ifeq ($(call qstrip,$(BR2_TARGET_OPTEE_OS_PLATFORM)),)
- $(error No OP-TEE OS platform set. Check your BR2_TARGET_OPTEE_OS_PLATFORM setting)
- endif
-+
-+ifeq ($(BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL),y)
-+ifeq ($(call qstrip,$(BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL_LOCATION)),)
-+$(error No tarball location specified. Please check BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL_LOCATION)
-+endif
-+endif
-+
-+ifeq ($(BR2_TARGET_OPTEE_OS_CUSTOM_GIT),y)
-+ifeq ($(call qstrip,$(BR2_TARGET_OPTEE_OS_CUSTOM_REPO_URL)),)
-+$(error No repository specified. Please check BR2_TARGET_OPTEE_OS_CUSTOM_REPO_URL)
-+endif
-+endif
-+
- endif # BR2_TARGET_OPTEE_OS && BR2_BUILDING
- 
- $(eval $(generic-package))
+     printf 'endmenu\n' >>"${outputdir}/.br2-external.in.menus"
 -- 
-2.25.1
+2.36.1
 
 _______________________________________________
 buildroot mailing list
