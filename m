@@ -1,66 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B574AC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 13:52:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73950C43334
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 16:45:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 483F560B2C;
-	Wed, 22 Jun 2022 13:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 483F560B2C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99DB94176D;
+	Wed, 22 Jun 2022 16:45:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99DB94176D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tBTVWtFa2EDW; Wed, 22 Jun 2022 16:45:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4289141763;
+	Wed, 22 Jun 2022 16:45:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4289141763
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F9081BF47F
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 16:44:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 24CC960AC3
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 16:44:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24CC960AC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jHhROJzJWWsj; Wed, 22 Jun 2022 13:52:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32367607F7;
-	Wed, 22 Jun 2022 13:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32367607F7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2C8C21C1135
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 13:52:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F0F8640199
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 13:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0F8640199
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wb3hXzz-kb1O for <buildroot@lists.busybox.net>;
- Wed, 22 Jun 2022 13:52:52 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D4D040012
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5D4D040012
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 13:52:51 +0000 (UTC)
-Received: (Authenticated sender: kory.maincent@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 00C8C1C0011;
- Wed, 22 Jun 2022 13:52:48 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e4jsT7AQ0u8A for <buildroot@lists.busybox.net>;
+ Wed, 22 Jun 2022 16:44:54 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8663060758
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8663060758
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 16:44:54 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id n1so23988577wrg.12
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 09:44:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=LS1ysRy0y66CVMrJOoZK/btJ5Y46t1GG3Xq7GYvLk1k=;
+ b=V5GC7/6JCYmPnDvNLjvzlUdRGYphkkQwo4b/IpO9BjOizlc+HgFMcgnMlu60suEedr
+ UFHmefXwarWDJXAt05YWHg6CX49R4EzdvrELPVMac5vdjTl6j/zbkxBb03Qq7iFaih9l
+ hcLD7z1T7jaQELoQe7wQUH1prVzd/VmPlMJcHwTA4RbSse4/Jbbf/PKr8gFQRDLjbX0G
+ l+cjPZDv72tKLPIbOsPUAaQP0SkGo1rMQ4uaHpYMuYa26qyfdTykzSV9gPN7zfSV6XaK
+ yPZwDUEToJ21AXJgiCzAlwFTLmrJ2zeuHtoMsNYTCTpEyK6BEc6nji0Q7HOkNj8qRnBF
+ lgOQ==
+X-Gm-Message-State: AJIora+68l6SzZW4gZrI1pfyaFpXcPU2nHx0Lohd3CknmMw8RlUEXNdb
+ 8QN8y81clSW9OA4JGqqCxOZvuwtMTG8=
+X-Google-Smtp-Source: AGRyM1va31IRdmjX9YMofKzQ5kCfNjrfuEn1IAKvV08aTrjO1Ji76jbRYx3E52v4UZaor/+LM6OCIA==
+X-Received: by 2002:a05:6000:1f87:b0:21b:970b:e88c with SMTP id
+ bw7-20020a0560001f8700b0021b970be88cmr4246183wrb.320.1655916292445; 
+ Wed, 22 Jun 2022 09:44:52 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ u25-20020adfa199000000b002184a3a3641sm20408408wru.100.2022.06.22.09.44.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 22 Jun 2022 09:44:51 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Jun 2022 15:52:48 +0200
-Message-Id: <20220622135248.1246416-1-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.25.1
+Date: Wed, 22 Jun 2022 18:41:28 +0200
+Message-Id: <20220622164128.61528-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1655905969;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=Dt3ss382M3qTig8G9yEekMFyCbeuyOMQ4kM/P0YoWC8=;
- b=g+MmDpYk+iX/lDWdv9MH1jGYk7MIIEfoUldVYVYEV2g9dJmHaDmiRGs8bVU+uXXehtHYt0
- 86tT+yKturCOsX1vpyhJFYVxRgWWxyDadDzocRmZBayOqVXxfOjvdgyeAKF2qjBHvNQioJ
- e9eoNbniWtKOJ5rp68I7jldQaDIgkeBbQvYPSk7i5Pv9UNhBPH0IUA7zZXkvdiJYF2h1cw
- Ro2BqHhuW77bLwllzUMJ6liONbzkKO3pQykdeiz90l+zOcy+1xTg4mG2x92osTdeABElGA
- MITEFBjN0S6BshHKSMO9gzzUSh8vlE3KuQq7AQlI4GQfvIXAiCqap2aVX794KQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=g+MmDpYk
-Subject: [Buildroot] [PATCH v2] package/gcnano-binaries: bump version to
- 6.4.7
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=LS1ysRy0y66CVMrJOoZK/btJ5Y46t1GG3Xq7GYvLk1k=;
+ b=cQidwOmOqgSD2tlc70s2KHeNfXAqk/7FYLVsjrkO9dNdGGAJzQ8jzAHgB+vKCbMjhR
+ BvjYADtTH177wmKLgBVwvA1N/75vpE0D7ZNe2RXoNuot8ho6GsRVM/owzVV1j46CBpJ/
+ hYRmvCiEOH4QzJgnkHQyrU76P3kqDcthd/voG50pr0MwnnACo6OF5pvwXQR1/s/8fr9P
+ I0kF9O+OiSklgnCP1EqgGplQ7OSwbu3hBp33jnPpQ+GIMqcAJy68vGMcXWE2hXgrFW3D
+ FnxsPgQZ91QhMrxSijONi0Tdnqkh6hWNGp9REsC+FWD3pacFvtwEKdqC6QnNhcP4vxcf
+ ibIA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=cQidwOmO
+Subject: [Buildroot] [PATCH 1/1] package/libnetfilter_cthelper: bump to
+ version 1.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,113 +94,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kory Maincent via buildroot <buildroot@buildroot.org>
-Reply-To: kory.maincent@bootlin.com
-Cc: Kory Maincent <kory.maincent@bootlin.com>, scooby22@web.de,
- thomas.petazzoni@bootlin.com
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Kory Maincent <kory.maincent@bootlin.com>
+- Drop patch (already in version) and so also drop autoreconf
+- Update indentation in hash file (two spaces)
 
-Update to the latest version of the gcnano-binaries blobs, which are
-compatible with the soon-to-be-released 5.15 kernel from the
-STMicroelectronics BSP.
-
-As we are installing all the libraries and the pkgconfig files we do not
-need to list them anymore. Therefore this patch removes
-GCNANO_BINARIES_LIBRARIES and GCNANO_BINARIES_PKG_CONFIGS variables.
-It also updates the installation command to follow the path and naming
-of the new version and the pkgconfig files to fill the prefix variable with
-the right value.
-
-The new version of gcnano has gbm.h header installed in a gbm folder,
-this break the build of other packages. The patch fixes it with a simple
-link.
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+ .../libnetfilter_cthelper/0001-uclinux.patch  | 26 -------------------
+ .../libnetfilter_cthelper.hash                |  7 +++--
+ .../libnetfilter_cthelper.mk                  |  3 +--
+ 3 files changed, 4 insertions(+), 32 deletions(-)
+ delete mode 100644 package/libnetfilter_cthelper/0001-uclinux.patch
 
-Change since v1:
-- fix subject version error.
-- made few code cleaning from Thomas review.
-- add "-f" to link creation to avoid "File exists" message error.
-
- package/gcnano-binaries/gcnano-binaries.hash |  2 +-
- package/gcnano-binaries/gcnano-binaries.mk   | 36 ++++++++------------
- 2 files changed, 15 insertions(+), 23 deletions(-)
-
-diff --git a/package/gcnano-binaries/gcnano-binaries.hash b/package/gcnano-binaries/gcnano-binaries.hash
-index d4ad96672a..1ed66e3753 100644
---- a/package/gcnano-binaries/gcnano-binaries.hash
-+++ b/package/gcnano-binaries/gcnano-binaries.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  32d91d6ce6e6551cb7ad0eee4698041fdeb10a4f216e6564adb06408476edc38  gcnano-binaries-969d11518529bb70a132909b02ddcc5736c92d91.tar.gz
-+sha256  d3aebbc87ca27e743fdd21d71025cdf0761af748907bbdd7b193262eb48ab3c7  gcnano-binaries-a20611434ef048d3d0c04f55b6cd7d75a2156d43.tar.gz
- sha256  7d209718473d18f69f75adb7caf9cb5d4b0a31da068756aa011bea617de3dc57  EULA
-diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
-index affe0a6063..dc309ec3c2 100644
---- a/package/gcnano-binaries/gcnano-binaries.mk
-+++ b/package/gcnano-binaries/gcnano-binaries.mk
-@@ -4,12 +4,10 @@
+diff --git a/package/libnetfilter_cthelper/0001-uclinux.patch b/package/libnetfilter_cthelper/0001-uclinux.patch
+deleted file mode 100644
+index 7a6ca70b53..0000000000
+--- a/package/libnetfilter_cthelper/0001-uclinux.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From d028334281b218209412ec6e1dba56ca96320bd9 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 10 Sep 2013 16:08:29 -0300
+-Subject: [PATCH] configure: uclinux is also linux
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index d52b1ce..9389b70 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -22,7 +22,7 @@ AC_DISABLE_STATIC
+- LT_INIT
+- CHECK_GCC_FVISIBILITY
+- case "$host" in
+--*-*-linux*) ;;
+-+*-*-linux* | *-*-uclinux*) ;;
+- *) AC_MSG_ERROR([Linux only, dude!]);;
+- esac
+- 
+--- 
+-1.8.1.5
+-
+diff --git a/package/libnetfilter_cthelper/libnetfilter_cthelper.hash b/package/libnetfilter_cthelper/libnetfilter_cthelper.hash
+index 42deade7dd..f390bf4936 100644
+--- a/package/libnetfilter_cthelper/libnetfilter_cthelper.hash
++++ b/package/libnetfilter_cthelper/libnetfilter_cthelper.hash
+@@ -1,6 +1,5 @@
+-# From ftp://ftp.netfilter.org/pub/libnetfilter_cthelper/libnetfilter_cthelper-1.0.0.tar.bz2.{md5sum,sha1sum}
+-md5	b2efab1a3a198a5add448960ba011acd	libnetfilter_cthelper-1.0.0.tar.bz2
+-sha1	5d0a82794bd46aafde20c16800edca23d563de66	libnetfilter_cthelper-1.0.0.tar.bz2
++# From ftp://ftp.netfilter.org/pub/libnetfilter_cthelper/libnetfilter_cthelper-1.0.1.tar.bz2.sha256sum
++sha256  14073d5487233897355d3ff04ddc1c8d03cc5ba8d2356236aa88161a9f2dc912  libnetfilter_cthelper-1.0.1.tar.bz2
+ 
+ # Hash for license file:
+-sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	COPYING
++sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+diff --git a/package/libnetfilter_cthelper/libnetfilter_cthelper.mk b/package/libnetfilter_cthelper/libnetfilter_cthelper.mk
+index d74ea4d0fd..e0bbbab833 100644
+--- a/package/libnetfilter_cthelper/libnetfilter_cthelper.mk
++++ b/package/libnetfilter_cthelper/libnetfilter_cthelper.mk
+@@ -4,12 +4,11 @@
  #
  ################################################################################
  
--GCNANO_BINARIES_LIB_VERSION = 6.4
--GCNANO_BINARIES_LIB_REVISION = 3
--GCNANO_BINARIES_LIB_FULL_VERSION = $(GCNANO_BINARIES_LIB_VERSION).$(GCNANO_BINARIES_LIB_REVISION)
--GCNANO_BINARIES_DRIVER_VERSION = $(GCNANO_BINARIES_LIB_FULL_VERSION)
--GCNANO_BINARIES_USERLAND_VERSION = $(GCNANO_BINARIES_LIB_FULL_VERSION)-20210726
--GCNANO_BINARIES_VERSION = 969d11518529bb70a132909b02ddcc5736c92d91
-+GCNANO_BINARIES_LIB_VERSION = 6.4.7
-+GCNANO_BINARIES_DRIVER_VERSION = $(GCNANO_BINARIES_LIB_VERSION)
-+GCNANO_BINARIES_USERLAND_VERSION = $(GCNANO_BINARIES_LIB_VERSION)-20220524
-+GCNANO_BINARIES_VERSION = a20611434ef048d3d0c04f55b6cd7d75a2156d43
- GCNANO_BINARIES_SITE = $(call github,STMicroelectronics,gcnano-binaries,$(GCNANO_BINARIES_VERSION))
- 
- GCNANO_BINARIES_LICENSE = MIT, Vivante End User Software License Terms
-@@ -44,26 +42,20 @@ GCNANO_BINARIES_MODULE_MAKE_OPTS = \
- 	AQROOT=$(@D) \
- 	DEBUG=0
- 
--GCNANO_BINARIES_LIBRARIES = \
--	libgbm_viv libEGL libGAL libgbm libGLESv1_CM \
--	libGLESv2 libGLSLC libOpenVG libVSC
--
- GCNANO_BINARIES_USERLAND_SUBDIR = gcnano-userland-multi-$(GCNANO_BINARIES_USERLAND_VERSION)
- 
--GCNANO_BINARIES_PKG_CONFIGS = egl gbm glesv1_cm glesv2 vg
--
- define GCNANO_BINARIES_INSTALL
--	$(foreach lib,$(GCNANO_BINARIES_LIBRARIES), \
--		$(INSTALL) -D -m 0755 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so \
--			$(1)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so ; \
--		cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).so* $(1)/usr/lib
--	)
-+	cd $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/release/drivers/ ; \
-+	find . -type f -exec $(INSTALL) -D -m 0755 {} $(1)/usr/lib/{} \; ; \
-+	find . -type l -exec cp -a {} $(1)/usr/lib \;
- 	mkdir -p $(1)/usr/include
--	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/include/* $(1)/usr/include/
--	$(foreach pkgconfig,$(GCNANO_BINARIES_PKG_CONFIGS), \
--		$(INSTALL) -D -m 0644 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/pkgconfig/$(pkgconfig).pc \
--			$(1)/usr/lib/pkgconfig/$(pkgconfig).pc
--	)
-+	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/release/include/* $(1)/usr/include/
-+	ln -sf gbm/gbm.h $(1)/usr/include/gbm.h
-+	cd $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/pkgconfig/ ; \
-+	for file in *.pc ; do \
-+		sed -e "s|#PREFIX#|/usr|" $$file > $$file.temp ; \
-+		$(INSTALL) -D -m 0644 $$file.temp $(1)/usr/lib/pkgconfig/$$file ; \
-+	done
- endef
- 
- define GCNANO_BINARIES_INSTALL_TARGET_CMDS
+-LIBNETFILTER_CTHELPER_VERSION = 1.0.0
++LIBNETFILTER_CTHELPER_VERSION = 1.0.1
+ LIBNETFILTER_CTHELPER_SOURCE = libnetfilter_cthelper-$(LIBNETFILTER_CTHELPER_VERSION).tar.bz2
+ LIBNETFILTER_CTHELPER_SITE = http://www.netfilter.org/projects/libnetfilter_cthelper/files
+ LIBNETFILTER_CTHELPER_INSTALL_STAGING = YES
+ LIBNETFILTER_CTHELPER_DEPENDENCIES = host-pkgconf libmnl
+-LIBNETFILTER_CTHELPER_AUTORECONF = YES
+ LIBNETFILTER_CTHELPER_LICENSE = GPL-2.0+
+ LIBNETFILTER_CTHELPER_LICENSE_FILES = COPYING
+ LIBNETFILTER_CTHELPER_CPE_ID_VENDOR = netfilter
 -- 
-2.25.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
