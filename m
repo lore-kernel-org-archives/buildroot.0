@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24816C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 20:23:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50ACFC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 20:26:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B497F409BC;
-	Wed, 22 Jun 2022 20:23:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B497F409BC
+	by smtp2.osuosl.org (Postfix) with ESMTP id D35AC409E9;
+	Wed, 22 Jun 2022 20:26:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D35AC409E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L_2mM8engyRx; Wed, 22 Jun 2022 20:23:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A1mtuJf-K8k8; Wed, 22 Jun 2022 20:26:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 401B440942;
-	Wed, 22 Jun 2022 20:23:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 401B440942
+	by smtp2.osuosl.org (Postfix) with ESMTP id D8DFF40C96;
+	Wed, 22 Jun 2022 20:26:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8DFF40C96
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6919D1BF3B9
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 20:23:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BB1EB1BF3B9
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 20:26:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4359660F26
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 20:23:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4359660F26
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95D3260BFD
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 20:26:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95D3260BFD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4RdErXmYApyC for <buildroot@lists.busybox.net>;
- Wed, 22 Jun 2022 20:23:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD07360C1D
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BD07360C1D
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 20:23:29 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:d108:8c48:c119:a22b])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 17D4FB004EE;
- Wed, 22 Jun 2022 22:23:24 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 22 Jun 2022 22:23:23 +0200
-Date: Wed, 22 Jun 2022 22:23:23 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Nicolas POIROT <ni.poirot@laposte.net>
-Message-ID: <20220622202323.GB2608@scaer>
-References: <20220622100804.810-1-ni.poirot@laposte.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220622100804.810-1-ni.poirot@laposte.net>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1655929406;
- bh=W1+mDHve0FgtUoeBTIvUFCI81ly8+k1JxKesbnKYjE4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=RnFLS2YaL/LgSCV8eLTKQbM8EAsyGZn7na/nazEo9dCbv4k0Mhvz58BH6Mjfyj72j
- 87nykP+XJyTR7CHhsaSpQuqvDj4b3QEC3E1NvvuSY2EhCLa2ZEloVOa1a1jmsQvYam
- VS1TAeMvE5lI6GKJgL4VHRludcjhgaKbqFDG01GLiVLG78P0GjkTMelp6T/nMMfCc1
- ZbQPUYWK+8TEBf5gnVekjv5q5F3y+j+o+oDkzA53kPHDnUyRRS4tQZNtP9ManGghVA
- emSbR8dtLEXaPQpFuzwcLae/V5kwYfMNx0thIt8M686U0rwWWXjfHquwNn90zuL+9G
- ty2J0vcEHIZUA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=RnFLS2Ya
-Subject: Re: [Buildroot] [PATCH 1/1] support/scripts/br2-external: add
- kernel extensions
+ with ESMTP id NzXyEbRBNDJR for <buildroot@lists.busybox.net>;
+ Wed, 22 Jun 2022 20:26:20 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B804D607DE
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 20:26:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B804D607DE
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 2A83F87523; Wed, 22 Jun 2022 20:13:54 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 22 Jun 2022 22:24:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4de196a1cecbf74fd64a5660898abe7f49cb3fc9
+X-Git-Newrev: f67720baa397698520fe5fd0903bb063eec680cb
+X-Patchwork-Hint: ignore
+Message-Id: <20220622201354.2A83F87523@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynqmp_kria_kv260_defconfig: fix
+ to u-boot.itb generation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,89 +57,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Nicolas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f67720baa397698520fe5fd0903bb063eec680cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-06-22 12:08 +0200, Nicolas POIROT via buildroot spake thusly:
-> Buildroot documentation section 9.2.1.6 "Additional kernel extensions"
-> indicates support for kernel extensions defined in external buildroot
-> trees but unfortunately, there didn't seem to be any support in
-> br2-external script.
-> This patch copies 'init' code support to include external kernel
-> extensions defined in 'linux' dir at the br2-external root directory as
-> explained in documentation.
-> 
-> Signed-off-by: Nicolas POIROT <ni.poirot@laposte.net>
+This patch is a temporary fix for the kv260 u-boot.itb generation
+until a proper fix has been implemented within u-boot.
 
-Applied to master, thanks.
+The problem is u-boot can only be configured to use the kria k26
+som dts configuration at build time, and the kv260 carrier board
+overlay is missing from the build.  Without this, all of the carrier
+board drivers are missing.
 
-Regards,
-Yann E. MORIN.
+This patch will be removed from buildroot once u-boot can build a
+correct u-boot.itb for the kria kv260 starter kit including the
+carrier board overlay and corresponding drivers:
 
-> ---
->  linux/Config.ext.in          | 3 +++
->  support/scripts/br2-external | 9 +++++++++
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-> index 5b968b0bcb..3cbf42d344 100644
-> --- a/linux/Config.ext.in
-> +++ b/linux/Config.ext.in
-> @@ -148,4 +148,7 @@ config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
->  
->  endif # aufs
->  
-> +# kernel extensions from br2-external trees, if any
-> +source "$BR2_BASE_DIR/.br2-external.in.linux"
-> +
->  endmenu
-> diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-> index 56dc6f53ca..2c33e6eacc 100755
-> --- a/support/scripts/br2-external
-> +++ b/support/scripts/br2-external
-> @@ -163,6 +163,7 @@ do_kconfig() {
->          openssl
->          skeleton
->          init
-> +        linux
->      )
->  
->      for br2 in "${items[@]}"; do
-> @@ -242,6 +243,14 @@ do_kconfig() {
->          else
->              printf '# No init from: %s\n\n' "${br2_desc}"
->          fi >>"${outputdir}/.br2-external.in.init"
-> +
-> +        if [ -f "${br2_ext}/linux/Config.ext.in" ]; then
-> +            printf 'comment "linux extension from: %s"\n' "${br2_desc}"
-> +            printf 'source "%s/linux/Config.ext.in"\n' "${br2_ext}"
-> +            printf '\n'
-> +        else
-> +            printf '# No linux extension from: %s\n\n' "${br2_desc}"
-> +        fi >>"${outputdir}/.br2-external.in.linux"
->      done
->  
->      printf 'endmenu\n' >>"${outputdir}/.br2-external.in.menus"
-> -- 
-> 2.36.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+    https://lore.kernel.org/all/20920b0df6b067aca4040459a9677d7d1d6d766a.1615354376.git.viresh.kumar@linaro.org/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Neal Frager <neal.frager@xilinx.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+[yann.morin.1998@free.fr: add URL provided by Luca]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ board/zynqmp/kria/kv260/kv260.sh    | 12 ++++++++++++
+ configs/zynqmp_kria_kv260_defconfig |  4 ++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/board/zynqmp/kria/kv260/kv260.sh b/board/zynqmp/kria/kv260/kv260.sh
+new file mode 100755
+index 0000000000..e3467f3068
+--- /dev/null
++++ b/board/zynqmp/kria/kv260/kv260.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
++
++# This is a temporary work around for generating kv260 u-boot.itb.
++# The problem is there is no way to currently configure u-boot to apply 
++# the carrier board dtb overlay during build, so all kv260 carrier board 
++# drivers are missing.
++# This will be removed when u-boot can build the kv260 u-boot.itb natively.
++
++UBOOT_DIR=$4
++
++fdtoverlay -o ${UBOOT_DIR}/fit-dtb.blob -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
++${UBOOT_DIR}/tools/mkimage -E -f ${UBOOT_DIR}/u-boot.its -B 0x8 ${BINARIES_DIR}/u-boot.itb
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index c1366b705c..d98ac89c63 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -1,8 +1,8 @@
+ BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kv260/kv260.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2"
++BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2 ${UBOOT_DIR}"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.1)/xlnx_rebase_v5.15_LTS_2022.1.tar.gz"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
