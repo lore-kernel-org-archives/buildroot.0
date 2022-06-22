@@ -1,87 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6754EC43334
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 21:03:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7916AC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 22:09:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3E8960C1D;
-	Wed, 22 Jun 2022 21:03:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3E8960C1D
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAF1D4244C;
+	Wed, 22 Jun 2022 22:09:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAF1D4244C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iqbdmGSVBc7A; Wed, 22 Jun 2022 21:03:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id srt3PLmv97UF; Wed, 22 Jun 2022 22:09:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EAF7460B9B;
-	Wed, 22 Jun 2022 21:03:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAF7460B9B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7FF011BF3B9
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 21:03:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 893D141CC0;
+	Wed, 22 Jun 2022 22:09:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 893D141CC0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1ECC81BF3A8
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 22:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67BA660B9B
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 21:03:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67BA660B9B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0204941CC0
+ for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 22:09:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0204941CC0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v_dNnlUu1FEP for <buildroot@lists.busybox.net>;
- Wed, 22 Jun 2022 21:03:27 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F032606A9
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5F032606A9
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 21:03:27 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id g27so18465302wrb.10
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 14:03:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=hvcl4InZvEu2l8+4Qb2/pJKpDUZGBqJmQFWQBxE7/wQ=;
- b=3Z0bid8CLw1LXvziBH5Lge+VAKfMs6stNlbR9dVQkG0t6H8YfDsA0jMiwwG1fm7+hB
- aPgOU+s/6y+1YK7ZXikNoPSIKr7twOaYkpNNOrZIyvpLz+EdUXzh3vpz1j/mAxbDg3GJ
- utFfxTr9PeyKWHrvHJmYPqBUJsaRFbzMYOichRRtGsBIoZAp3yqg1qEZRn3CV2dD89iY
- RKAfOHC2CMMWqg4l5WgKFTslmbVG8IX9IHv2qhDVbgNqZkvWwyBfe+PWBFcLx5me/iCH
- 3gsEH3s3uk1L6hnKDh39Hzwc2MLdsn7g+ZZMozye6peW7/3qDlWt4VWvASReEBwJ6Nrv
- XthQ==
-X-Gm-Message-State: AJIora/k1NMRWfjtumD3nSoFfSex3U5fs3MSihB8PzTSDsFXrFd4aNB1
- zRcEXS5+lzNtcrRb2yv+qQVCIG0KNl4=
-X-Google-Smtp-Source: AGRyM1vQQtjK/2aCecRYOYxvIj7rfZDWqT+eYhzo7/eqTD79z1v+8G5g0xNYJXx64i+W8lE5aLltUw==
-X-Received: by 2002:a05:6000:18e:b0:21b:89a8:fb49 with SMTP id
- p14-20020a056000018e00b0021b89a8fb49mr5091998wrx.680.1655931805460; 
- Wed, 22 Jun 2022 14:03:25 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- q21-20020a1cf315000000b00397623ff335sm648330wmq.10.2022.06.22.14.03.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 22 Jun 2022 14:03:25 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ryUqYe6_qIJ4 for <buildroot@lists.busybox.net>;
+ Wed, 22 Jun 2022 22:09:31 +0000 (UTC)
+X-Greylist: delayed 00:48:36 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBA3841A24
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CBA3841A24
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 22:09:30 +0000 (UTC)
+Received: from pps.filterd (m0075793.ppops.net [127.0.0.1])
+ by mx0b-00105401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id
+ 25MLALWM041202
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 21:20:53 GMT
+Received: from xnwpv35.utc.com ([167.17.239.15])
+ by mx0b-00105401.pphosted.com with ESMTP id 3gsrf70844-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 21:20:53 +0000
+Received: from qusnwady.utcapp.com (QUSNWADY.utcapp.com [10.161.48.89])
+ by xnwpv35.utc.com (8.16.1.2/8.16.1.2) with ESMTPS id 25MLKqnL134675
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 21:20:52 GMT
+Received: from crulimr01.rockwellcollins.com ([10.172.224.19])
+ by qusnwady.utcapp.com (8.16.1.2/8.16.1.2) with ESMTPS id 25MLKqsI029817
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
+ for <buildroot@buildroot.org>; Wed, 22 Jun 2022 21:20:52 GMT
+X-Received: from jdknight-dev2.rccalab.inside (unknown [10.197.250.171])
+ by crulimr01.rockwellcollins.com (Postfix) with ESMTP id 959856057C;
+ Wed, 22 Jun 2022 16:20:51 -0500 (CDT)
 To: buildroot@buildroot.org
-Date: Wed, 22 Jun 2022 23:00:36 +0200
-Message-Id: <20220622210036.280557-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Wed, 22 Jun 2022 17:20:45 -0400
+Message-Id: <20220622212045.573-2-james.knight@collins.com>
+X-Mailer: git-send-email 2.30.0.windows.1
+In-Reply-To: <20220622212045.573-1-james.knight@collins.com>
+References: <20220622212045.573-1-james.knight@collins.com>
 MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: aPGIi4LhVZSkH6EpswY69BKMcl5o0TwT
+X-Proofpoint-GUID: aPGIi4LhVZSkH6EpswY69BKMcl5o0TwT
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 clxscore=1015
+ lowpriorityscore=0 priorityscore=1501 adultscore=0 bulkscore=0
+ impostorscore=0 spamscore=0 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206220097
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=hvcl4InZvEu2l8+4Qb2/pJKpDUZGBqJmQFWQBxE7/wQ=;
- b=ftZ4yleRuj2no1j59lR3bi23v5LBmbn2YdhNSzwVF0pORAe6Hs23OVZ6343kX7NqES
- L96Mj5RsosJfdl/IP6wxZWRZzWXw+E40DWOR6oJRlfayO4KPYIIGLfOQDIwRsq9Rf75J
- 7g8dTVZlXpwZC8icSdUbGsxH3EuQKn7v4Aqsswhae1kAPZ9ybOuRwJWNkzZINHO0jiys
- GlTVaK7BmsHFHxA+96qNGPaUHSMnj+x5+fSL+BmykswXeXdQiXke039TnrkRmGZ5N4aS
- nVai9cGo+lc21sR4G+mo3tanNX0bPDGDTknCBu+cr9vu7YC7100qppz7ISMfCYjb3ybF
- XPkA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ftZ4yleR
-Subject: [Buildroot] [PATCH 1/1] package/ncdu: bump to version 1.17
+ d=collins.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=POD051818;
+ bh=PQrR+BejCwY41QPG997jDQAs5fn25VajGOlv9Clo46c=;
+ b=cMN+IzzpkkYYPO11PuS3Un4mx6yLQBqaMNqu9g4dmLfeqtS/l0NSq6XC0spWwalPXZtK
+ IhSwjeDCaz9rPP1V/I4RJ6oVRt1OE+KFM3VwzpWj/eotLSzLnYVllynUrab+Cp2VzC40
+ qSU/okMg0/CxyfH03/Lk2/KvrA3cFdDDYNg4EZio9QAeKLOjMwNQrSQK8qLCAqcYCNM6
+ 4rz7OChF3JNFuQBBroojb4IO7emPzL3f8N8EPISrlN7HtqEJHld0I/KM9izZB5iqMvGn
+ aYasMSmJMb2iOqVNClYFkc3jCBqOwl3vlPoJx5L+zsBLLkQcHefJmtTWqtpeZdXmsRQ3 PQ== 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=collins.com header.i=@collins.com
+ header.a=rsa-sha256 header.s=POD051818 header.b=cMN+Izzp
+Subject: [Buildroot] [PATCH 2/2] .gitattributes: default lf line endings for
+ text files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,50 +97,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bogdan Radulescu <bogdan@nimblex.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: James Knight via buildroot <buildroot@buildroot.org>
+Reply-To: James Knight <james.knight@collins.com>
+Cc: James Knight <james.knight@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update hash of COPYING (update in year)
+Default the line endings for text files to be LF. The building of a
+Buildroot project is most likely always invoked from an environment
+using LF line endings. For developers working with various environments
+(e.g. Linux and Windows), defaulting to LF can help improve a
+developer's user experience. For example, with a clean checkout on a
+Windows environment, a developer can trigger a configure and build with
+two commands in their desired VM/container, without having to worry
+about configuring `core.autocrlf`:
 
-https://dev.yorhel.nl/ncdu/changes
+    make O=~/buildtest qemu_x86_defconfig
+    make O=~/buildtest
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Knight <james.knight@collins.com>
 ---
- package/ncdu/ncdu.hash | 4 ++--
- package/ncdu/ncdu.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .gitattributes | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 .gitattributes
 
-diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
-index c2d367f15a..c47b4f9bac 100644
---- a/package/ncdu/ncdu.hash
-+++ b/package/ncdu/ncdu.hash
-@@ -1,5 +1,5 @@
- # From https://dev.yorhel.nl/ncdu
--sha256  2b915752a183fae014b5e5b1f0a135b4b408de7488c716e325217c2513980fd4  ncdu-1.16.tar.gz
-+sha256  810745a8ed1ab3788c87d3aea4cc1a14edf6ee226f764bcc383e024ba56adbf1  ncdu-1.17.tar.gz
- 
- # computed locally
--sha256  e9ed7095eee84ad6804450495738277b539da0c0b2006f50faf8e6e67a0a15aa  COPYING
-+sha256  4590cb935ff8a50cee76ce12c2cb0411c0b06e84c267b478579785dcf328660d  COPYING
-diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
-index 59fa8deb25..acfd496ec8 100644
---- a/package/ncdu/ncdu.mk
-+++ b/package/ncdu/ncdu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NCDU_VERSION = 1.16
-+NCDU_VERSION = 1.17
- NCDU_SITE = http://dev.yorhel.nl/download
- 
- NCDU_DEPENDENCIES = ncurses
+diff --git a/.gitattributes b/.gitattributes
+new file mode 100644
+index 0000000000000000000000000000000000000000..74dcc97d294192e61f4b241dbf4aa10449de5626
+--- /dev/null
++++ b/.gitattributes
+@@ -0,0 +1,2 @@
++# default lf for text files to help with cross platform development
++* text=auto eol=lf
 -- 
-2.35.1
+2.30.0.windows.1
 
 _______________________________________________
 buildroot mailing list
