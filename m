@@ -1,48 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30954C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 23 Jun 2022 05:54:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44A12C43334
+	for <buildroot@archiver.kernel.org>; Thu, 23 Jun 2022 05:57:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A77E41754;
-	Thu, 23 Jun 2022 05:54:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A77E41754
+	by smtp2.osuosl.org (Postfix) with ESMTP id C4E3940535;
+	Thu, 23 Jun 2022 05:57:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4E3940535
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L7hpDSw9zUBh; Thu, 23 Jun 2022 05:57:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id A78B74017E;
+	Thu, 23 Jun 2022 05:57:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A78B74017E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E30E1BF20F
+ for <buildroot@lists.busybox.net>; Thu, 23 Jun 2022 05:57:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3433E4175E
+ for <buildroot@lists.busybox.net>; Thu, 23 Jun 2022 05:57:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3433E4175E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PaqVWOJWgOrR; Thu, 23 Jun 2022 05:54:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 313F541734;
-	Thu, 23 Jun 2022 05:54:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 313F541734
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0B6091BF20F
- for <buildroot@lists.busybox.net>; Thu, 23 Jun 2022 05:54:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7576A60BF2
- for <buildroot@lists.busybox.net>; Thu, 23 Jun 2022 05:54:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7576A60BF2
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pq2cTS9TMbuK for <buildroot@lists.busybox.net>;
- Thu, 23 Jun 2022 05:54:44 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yO6TzTTGB4OE for <buildroot@lists.busybox.net>;
+ Thu, 23 Jun 2022 05:57:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C231960BB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B27E741756
 Received: from NAM12-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam12on2086.outbound.protection.outlook.com [40.107.237.86])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C231960BB9
- for <buildroot@buildroot.org>; Thu, 23 Jun 2022 05:54:43 +0000 (UTC)
+ (mail-bn8nam12on2078.outbound.protection.outlook.com [40.107.237.78])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B27E741756
+ for <buildroot@buildroot.org>; Thu, 23 Jun 2022 05:57:32 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TnITSAOzERCqBi/AF4pY926WVi7vZR9CLgPsLpd1af3yAMHVCwdUYQ3nEZHWRiwZrhGHwYTgRNfgsJyo+SEHkN67AqRzfrDsnvP6puHZi0OTHhp/LJX95iPbD6X2/BVjsb0ZAEgkcfO3Ds24r3eNFnff6rGD41jRTymxjjE0C+DatnWMEmlCFvD7mlEDcPyscEOAmT/REkSHMsvQ0waokNZR0xyscXrOfcyoVC/VYIp9+HEoddNpAKyWKCBueQGslncaJAC7M5Di3bzmRt+zr25dcEwQT33m442sOy8Tm0Uky51f7M7QSHqJFGYdG8wFvGUq6hmtSfSaXJoKp5AXEQ==
+ b=TP6LcMNAkP67Pud0/HUmA1nxTwwZODYXp6SxJg2H3QsHd00jqKhKJPAEQ42IYIXHG80hVyY607T05Vax/+gNbbXDDCbvj7QMyjqjs8k578v3x9LNR4Le5CrY8s3XZLeDOPYuPHTF+9DZK9jZLYrngp8Z8z5yQdEVOVWoTuO20lfJwe6AwzQB3Huu69qCt+EZPaN8iXxVI5BPitioARq419302JueU+V8VqfOa2bYavHkWCrZdhS/6KYJz9II4i7/3fV4zX3njpjXAMcD1c8KNNzsfMmAzf3OcqTfIAYbPAUdl8vGrsR3Ok+uKHZ98Jh7cIv3OytfSnclGuR6S6Uimw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ktLAE+a6Z7TY5wrfKz/jX1ivms6btkytn3KhrzJqqOw=;
- b=mnY1NlXIN5ApmEfnOZYdndwJ04m8Wq++fAJAq0natN0ak8OXvN1Lr5wpkBQcZ6FvN38Fhipvi/jzM/3qNwoFojlOmuaAH0F14Px1SFHC6MQ770QxoB3VGZrneKxzK/SuYsAqefgEU8hPv+hs0GhOOROtAASo2L+H0ToE5bYIrPXt0/nWB8iANKeC7BIkW38cp0GBHwGisoKYHF7FxJ8AZIYd3jaWN3pIRRy0Rrp+21vDib1gAVvLLN27QSPz7r0jMTdossEWsuScJ/6WUqIcaAhJHYDJpPovqNrRdRE5gfJFGlqAqgKtMkzFvWplkHb0dw5nV+kjI5jaSUwedl49LA==
+ bh=zP0ozVoWxzF6zBcfbvsHBb8p10I/q/gv3uwzZuJxzgY=;
+ b=Z8XxxCTh7FFNdaK+AGUYoUS8xVJdOP8bBCEJWIGh4jXxRjHKFi60IxliXIAf8NkjyYPBPC+k7COf2J0fowkI2R8kXl/1/ASQRGPlMO0+6fLHi3S8gdfxMwqkl8+4QL7Rfczqv7PiSs5YfjfjJ0pd3twAqX3eUxtoQB6TUdAjiDpNwFDXhXlh/pAMZxjo3GL2XQmNCKSaGW2rRj3QDbx+OSWCz/SOgt5FTqv1vuVQrxKx1yBVn+bWgProguPiB8Wl5CDB7g1CImIp9zfoxuLQA/PokOBTKN9Dclrxk8uZMz6SCaRr4luR68Sg2THSWSQmu7iH4QXzJxQKMEUB7LPERA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
@@ -50,67 +50,67 @@ Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
  by MWHPR12MB1199.namprd12.prod.outlook.com (2603:10b6:300:10::11)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.18; Thu, 23 Jun
- 2022 05:54:39 +0000
+ 2022 05:57:28 +0000
 Received: from CH2PR12MB5004.namprd12.prod.outlook.com
  ([fe80::250d:5a1d:c45:222b]) by CH2PR12MB5004.namprd12.prod.outlook.com
  ([fe80::250d:5a1d:c45:222b%6]) with mapi id 15.20.5353.022; Thu, 23 Jun 2022
- 05:54:39 +0000
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>, "giulio.benetti@benettiengineering.com"
+ 05:57:28 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>, Luca Ceresoli
+ <luca.ceresoli@bootlin.com>, "giulio.benetti@benettiengineering.com"
  <giulio.benetti@benettiengineering.com>, "peter@korsgaard.com"
  <peter@korsgaard.com>, "Simek, Michal" <michal.simek@amd.com>,
  "wesley@sonifex.co.uk" <wesley@sonifex.co.uk>
-Thread-Topic: [PATCH v1 1/1] configs/zynqmp_kria_xxx_defconfig: uboot dp pll
- patch
-Thread-Index: AQHYbmd9gaU+9UDylEGY0VVZaYvTQK0vqcaAgBdOTICAFbZYsA==
-Date: Thu, 23 Jun 2022 05:54:39 +0000
-Message-ID: <CH2PR12MB5004B1F5774DC5F8B21D2F87F0B59@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20220523053921.4076488-1-neal.frager@amd.com>
- <16f0674d-b933-730c-7600-45453d1d21f7@lucaceresoli.net>
- <SJ0PR02MB7758323D519C1EAAC34AAFEAD7A79@SJ0PR02MB7758.namprd02.prod.outlook.com>
-In-Reply-To: <SJ0PR02MB7758323D519C1EAAC34AAFEAD7A79@SJ0PR02MB7758.namprd02.prod.outlook.com>
+Thread-Topic: [PATCH v4 1/3] board/zynqmp/kria/readme.txt: improve
+ documentation for qspi programming
+Thread-Index: AQHYah1tiFdiPPWAx0+uXmyvtsxZ4q0kNRUAgCLMGVCAFbaZQA==
+Date: Thu, 23 Jun 2022 05:57:28 +0000
+Message-ID: <CH2PR12MB5004D62BEAB0A7EC22197E97F0B59@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20220517183842.1389395-1-neal.frager@amd.com>
+ <431dc45e-07fc-c615-9928-e0dccd3d1a27@xilinx.com>
+ <SJ0PR02MB77581F883F1EE62C2CAF72CAD7A79@SJ0PR02MB7758.namprd02.prod.outlook.com>
+In-Reply-To: <SJ0PR02MB77581F883F1EE62C2CAF72CAD7A79@SJ0PR02MB7758.namprd02.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 554f2c34-f2c1-45e6-b068-08da54dcdca0
+x-ms-office365-filtering-correlation-id: f08387f5-4aa9-405c-28f2-08da54dd4150
 x-ms-traffictypediagnostic: MWHPR12MB1199:EE_
-x-microsoft-antispam-prvs: <MWHPR12MB119925FC43752C93EF6376D7F0B59@MWHPR12MB1199.namprd12.prod.outlook.com>
+x-microsoft-antispam-prvs: <MWHPR12MB1199B333E6BAD6647082F869F0B59@MWHPR12MB1199.namprd12.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xv3Uu9rEOdLSSMNfPvvTBWAvqOHCkM10Y6Bgvlo8bY7MEkpnvBSwaN8oqjwMXuIkVYHHJQRj7/bgWo+GJ906qiwZKOgRBKVTlqgM3ae4RCagqBd5UpHS+N8H51VNc6UOIdXhXwXroq9kAMnP81zv3V0i/xyMOYGULdQ301OX1uFQ69uu1l/UbStQ+pTSoWIvvekffQ+K4zvuxuvjYU5xfVkDCDZSlYScC0m3vlF8v67INHrTXTYihN1WAj+qOUFUJYMrALEd83wgUzcKo7MB1Iou1TwFEgkV0YFrLJD1KLHlf3DuwUD2iijiiwQo0L0jeKxu3RbOR3ROjZ2395OpgCu7PqPBHdNv7HLFk0N7DVIuRh46ZvWLUXGSi+UfKQRIEyzmwBjfZpr9IddRXtCWhs2OmxG/H3rpUNqZSaUPSCyB/1gGQxFak9hYJNzJ4jWp+Jzv0Zw5adF30ZCsqAn6XWyaAjnicWRVeVHLsv59YiY67sfrvQnHiKMMf3S6/YtaHdYzfR8B+MI6A9VTz1vPdNhXQcrqTNB/J+YFLq1wLVso5iryFQyQCxNbuYy65/hj3Dqy/rxSfc+uopWKzhq6rskZgzrxANadtb+asPu/biLcWReb0AGfYZclTf1KD+g+ziq49J4eAnBGMwIwPeQbsC7Z6JbKjdF8YjDUqGO9ifbNYdXn433e2gSPfszMDDPBUwaXX0n0qlgKlvcmbIl3Xx1iwX+GPA6/ymrWLiDotSypPeY7gzkEquw1l7YRqw7kJh61rqj8iMIYxShdrSj6C1YbBzRUuWVlb1hyxuzMQpY=
+x-microsoft-antispam-message-info: s4VMTrIWdEZg1N77gzWJqAaX/wCrBL7O2WSS3RWi63+Vf8uQrjkk4Fb4WcUnhgmSYCbqzq6OApmimOJExjCJPzMI1H0KUAKHVVpQwuk0GCq8/uhSn/zcq1cijWXTGmNfmV5roLpohZQD23QjXbPBtMIQjJW0XHBx7pT+/SUaZGUkWSRXNUjloRDaX8SFq/3ZZAXLU82Vcesj89mxgkL5JmMXdAkzadux/zNFlyWehV0S/D8Q1BxGEm+omMybX7kH75ypGYqPZGHjy6/vVWMY1inb7d78Qt4Trc6e1Pa2SGEwsh7dNcPoulEM7jfiX1cDmj+r4XXr22+RLpABsUEQYmHi8SFIGlp/0DQHkYwLHd7FoLIXNAhw95Gdy856EQm2JBO27ukkKTc0ZBJD8LWADjMP8v5mQnqedjiKJggiPZIv8q57VlgpSrakEm9twu7cl45C4yr9xyi68EbC1/cRtVZ7S0QTS/u+P2jDApd6Oj2G03TUwHA9ts7LVqwHTlOFvy0qT2U9aMmqZZifwEuACFr3IUd1ZFgZSEy8N8RrMb/xTsLgTH0DB09qeGDEHKjN0S1EMUNJL5MKPlRXdYUfMICV5w2yG/X1Fwz5ilUk8WiEYEFclNaDG62FlHCnOuoCXNXND3fDc2dmdEXSMvngr4G86VqqBH8e0d1x3GB0n8FlY7xuJX5PMjugMp+ZsRI4W65EGCAPPG9CCkZqjwTLpYTVTNU759YTuXdIeOLnMzpt1nsAmTMGarZ1mIbWkeMr3/91BY/zr8tfF3N+FI8MXXeDK8dkzir4Rm4TRbnKfq8=
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(4636009)(376002)(346002)(396003)(366004)(136003)(39860400002)(52536014)(5660300002)(41300700001)(186003)(38100700002)(83380400001)(8936002)(33656002)(478600001)(110136005)(7696005)(66446008)(86362001)(71200400001)(2906002)(6506007)(66946007)(66476007)(38070700005)(26005)(76116006)(55016003)(122000001)(64756008)(66556008)(316002)(9686003)(8676002);
+ SFS:(13230016)(4636009)(366004)(39860400002)(136003)(396003)(346002)(376002)(2906002)(86362001)(71200400001)(7696005)(110136005)(66446008)(316002)(66556008)(9686003)(8676002)(66476007)(38070700005)(6506007)(66946007)(122000001)(64756008)(966005)(26005)(76116006)(55016003)(38100700002)(83380400001)(52536014)(5660300002)(41300700001)(186003)(478600001)(33656002)(8936002);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: SZX7d1OCf1/sVKIf8dybbeRYTBwERu9RWJNBaF+PfNfxotAR8LJFdXRbhp3MmvKGedlQrLCEqXUJZoD7zsYkhZsHPRtndCodez2z0XXU8pd3Ol0SE3m047/eY6vky6AJQbjert7U8DcWUdDtivlw4v9cPIbbZ8prHjjLataZyTxE2G6HrWbPpjfAdqwa8ot+gp4e2NPsEVdbfaohEKOxVa0CjEpO2YDoOmCICE+gew5VYyR4v0q332pAGJMSDoXTk0bdBgPESKqMrFDDhe9xLPntsJ0H5Bo3waywClvkqcld3TZNmQs0hmMkei2eZmygyeXvNSX+/yBnLWoqyD5WLQ1EPKydDq+FtQ+8ts6y3jHmPd6CHKmBDB7ufyUcPz9+1QTbWH6mMuSl+VvezBHTPxVT6noLzZbOe7OJAd8RyivH4YVsO8UMdRCCI+5P7AymFdJ8vVtzFrNaoQFE1VRAdoI2SjSzSFMpBBKUrzseukWIwxoEU3YmUSi2xeHgD9PWEsHLuR+coanrvyatJI2LVu+R0LTWa75DN1WAvkf2CUt4/E6lvHcdfL3uTtuXxKQiMZAFLeTEKGRXOzF2RbrA84MYhujmwU2n1sm9q0ax59AUdbFmOeQ0Yd5H6ncLfcRhpb9aM2wYvcQ5iER3/f0XmSD4bKD3UPrmgDIn/R/B9UHeiek0VpXFcH9jNbal/W+YmvBeipj/jcLvjMPbh1Ttyin9eqliYVgxgg+VDkY2qlpk5DyVgjNpQ/v5BICAD5Hy
+x-ms-exchange-antispam-messagedata-0: 0ayJbubijI50m1WUt4N1XVmdQusZ738sKD8kHI4pde+maOVflWSnnmfCezOxB08P8BbtsErfj8EDzC1Jq/h4DaW/UGhAcNdvCw11lZAqPr0QGZK4nHpfLzGRZeYeKBuskAx0d3kl+rzTSxPh1NogL082slDRHlnE4EOxoi1ht0OX9KHkfQhjontXVZq3LnGTEUbuDzmNvy98ytDuuRBSLNOGKxx0s3lrLEjTS6o9kvQTTresrOgqQfMaIBMSCpc93yhdfHp99Ry7SGNtHcCaAuDnmF5rNzmsGWZw/OxKmKnrJPv5Hq/T3NhaJsIeyYxgaw/QI1nDhSn8Thmx03fCjnWsA8B1gdLGQIJfsxfRB4qXK1sHkX6BpylnYyaZGaxjFRggaE/wuA2rzV8QoSvNS7UKU4Xkgf0jBjCPoaEzp+ho5zdvQIka3Hl3Vfie5U9rcKzj0BGK5c5yZRMfEm/3R0EcZVm76aYYy9wzR1DWWSbO8Mvoi3cM3GNOTsGQ0Dk1q7TPzrfEPBNUJoufraReFpyt1DKQsJw5953ayGlolvSh7exTPgO7tujZsqc496fSkDbSsWUm5FUtbLDMpE4hdwgfA4cpsDLxJX2ndAZY50E7YRQdfWHeICJyskxCw/aJZnmmLgTBOvExCWlrHzP1nuqZ2Gh4AvccwcFoPCe1Y2+PKft0Av3hW6P00v4eavTShrau4CgEtcaR1jw1PbUYdFlRuuYavRd2YiJUi4jqQzb05HX4cYY3uEgCrcW0nNumEcrc+x5QqvFKqCKsUpdotA==
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 554f2c34-f2c1-45e6-b068-08da54dcdca0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2022 05:54:39.6934 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f08387f5-4aa9-405c-28f2-08da54dd4150
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2022 05:57:28.6155 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZLTZPeuK4bW8MHPrmBncq+gEUqjSMDKq8LAjXJmdr1X5dEO53gZovRFdkXjs/wN6
+X-MS-Exchange-CrossTenant-userprincipalname: lzqIkXcYIkW0QhNKFJNqciIfoAaIVpytYviKOj1Al/ygSCiMXzhJlJ1DzR7r+4hQ
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1199
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ktLAE+a6Z7TY5wrfKz/jX1ivms6btkytn3KhrzJqqOw=;
- b=OZAB5q5ENVTMW0Cu+lbREwbhP8cBOxtGEjRhpg3Hs2n+i/R4FxjuVN6OGqGYs2OoebX8zsNVc9xdxmvHiHQNV6ydP2HuAQYfrOnVcprxdzS/0ANxrZhjBcsbMDP7YeUV1+KUetHkKLYRYrtRduU9IQss8FayrMzZdg3tt6FsyAk=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=zP0ozVoWxzF6zBcfbvsHBb8p10I/q/gv3uwzZuJxzgY=;
+ b=L9ER9BWf7YbDMpTRnKV6sT9okPq08NYaD+cwAecpY+f8jXXJep2nIQz6mZ4fUQSZdKDKG9vmIF+69FgUCywlplSGP5F2TlsfzNJoX9s3+KTkzLQXqviXS6iRzHnQG1PHZoJysCgqaE3pAXYUq5mNuRldYY0mmPotFh0AP/bbi7Q=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=OZAB5q5E
+ header.s=selector1 header.b=L9ER9BWf
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v1 1/1] configs/zynqmp_kria_xxx_defconfig:
- uboot dp pll patch
+Subject: Re: [Buildroot] [PATCH v4 1/3] board/zynqmp/kria/readme.txt:
+ improve documentation for qspi programming
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -131,28 +131,77 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi,
 
-> This patch fixes the DP audio and video PLL configurations for the zynqmp-sm-k26-revA som.
-> It needs to be applied for both the kv260 and kr260 starter kits.
->
-> The Linux DP driver expects the DP to be using the following PLL config:
->   - DP video PLL should use the VPLL (0x0)
->   - DP audio PLL should use the RPLL (0x3)
->   - DP system time clock PLL should use RPLL (0x3)
->
-> Register 0xFD1A0070 configures the DP video PLL.
-> Register 0xFD1A0074 configures the DP audio PLL.
-> Register 0xFD1A007C configures the DP system time clock PLL.
->
-> This patch was build and run tested on a zynqmp-kria-kv260 target board.
->
-> Upstream-Status: submitted (https://lore.kernel.org/all/fa7e9abc419c9d7648405d1c62367dbe701d09b8.1652709736.git.michal.simek@amd.com/)
-> This patch will be removed from buildroot in a future release when no longer necessary.
->
+> This patch improves the documentation for kria k26 som qspi programming.
+> 
 > Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+> V1->V2:
+> V2->V3:
+>    - fixes boot.bin file name spelling error
+> V3->V4:
+>    - improved documentation to use $filesize
+> ---
+>   board/zynqmp/kria/readme.txt | 28 ++++++++++++++++++++++------
+>   1 file changed, 22 insertions(+), 6 deletions(-)
+> 
+> diff --git a/board/zynqmp/kria/readme.txt 
+> b/board/zynqmp/kria/readme.txt index a3a4b5e65a..977e88491c 100644
+> --- a/board/zynqmp/kria/readme.txt
+> +++ b/board/zynqmp/kria/readme.txt
+> @@ -56,23 +56,39 @@ Where 'sdX' is the device node of the SD.
+> 
+>   Eject the SD card, insert it in the board, and power it up.
+> 
+> -How to write the boot.bn to QSPI boot flash 
+> -===========================================
+> +How to write the boot.bin and u-boot.itb to QSPI boot flash 
+> +==========================================================
+> 
+>   The Kria SOMs are preconfigured to boot initially from QSPI.
+>   This makes these boards different from other ZynqMP boards -in that 
+> the boot.bin needs to be flashed into the QSPI boot -flash such that 
+> the U-Boot SPL can then load all of the -remaining images from the SD 
+> card.
+> +in that the boot.bin and u-boot.itb files need to be flashed into the 
+> +QSPI boot flash such that U-Boot can then load all of the remaining 
+> +images from the SD card.
+> 
+>   In addition, the KV260 Starter Kit QSPI comes pre-flashed with
+>   a utility designed to make updating the QSPI flash memory
+>   easier.
+> 
+> -Instructions for using these utilities to update the boot.bin
+> +Instructions for using these utilities to update the files
+>   in QSPI flash can be found on the wiki link below.
+> 
+>   
+> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+
+> K26+SOM#Boot-Firmware-Updates
+> 
+> +Additionally, it is possible to use u-boot for updating the QSPI with 
+> +new boot.bin and u-boot.itb images with the u-boot commands below:
+> +
+> +Flashing u-boot.itb:
+> +    $ sf probe
+> +    $ fatload mmc 1 0x1000000 u-boot.itb
+> +    $ sf erase 0xf80000 +$filesize
+> +    $ sf write 0x1000000 0xf80000 $filesize
+> +
+> +Flashing boot.bin:
+> +    $ sf probe
+> +    $ fatload mmc 1 0x1000000 boot.bin
+> +    $ sf erase 0x200000 +$filesize
+> +    $ sf write 0x1000000 0x200000 $filesize
+> +
+>   It is possible to boot the Buildroot generated SD card image without
+>   updating the QSPI boot.bin image, so this is an optional step.
+> --
+> 2.17.1
+> 
 
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Acked-by: Michal Simek <michal.simek@amd.com>
 
-Just a friendly reminder regarding this patch.  Any additional changes needed before committing?
+Just a friendly reminder regarding this patch set.  Any additional changes needed before committing?
 
 Best regards,
 Neal Frager
