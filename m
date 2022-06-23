@@ -1,73 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D42CC43334
-	for <buildroot@archiver.kernel.org>; Thu, 23 Jun 2022 13:12:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A25BC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Jun 2022 14:00:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D751A813B0;
-	Thu, 23 Jun 2022 13:12:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D751A813B0
+	by smtp3.osuosl.org (Postfix) with ESMTP id A096F61405;
+	Thu, 23 Jun 2022 14:00:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A096F61405
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 41Vd7l3asXTh; Thu, 23 Jun 2022 13:12:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M3dxQBNThDxO; Thu, 23 Jun 2022 14:00:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAFB18473B;
-	Thu, 23 Jun 2022 13:12:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAFB18473B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 00F751BF405
- for <buildroot@lists.busybox.net>; Thu, 23 Jun 2022 13:12:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF85D613F7;
+	Thu, 23 Jun 2022 14:00:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF85D613F7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 37DE51BF405
+ for <buildroot@lists.busybox.net>; Thu, 23 Jun 2022 14:00:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A8FC78473B
- for <buildroot@lists.busybox.net>; Thu, 23 Jun 2022 13:12:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8FC78473B
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6C3D424D9
+ for <buildroot@lists.busybox.net>; Thu, 23 Jun 2022 14:00:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6C3D424D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6MOGlGLCgLJx for <buildroot@lists.busybox.net>;
- Thu, 23 Jun 2022 13:12:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8tTJSzuDVy81 for <buildroot@lists.busybox.net>;
+ Thu, 23 Jun 2022 14:00:33 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24C6083E2E
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 24C6083E2E
- for <buildroot@buildroot.org>; Thu, 23 Jun 2022 13:12:17 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (unknown [217.70.183.200])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id AFFE3D70C8
- for <buildroot@buildroot.org>; Thu, 23 Jun 2022 13:06:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 841A6424D4
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 841A6424D4
+ for <buildroot@buildroot.org>; Thu, 23 Jun 2022 14:00:33 +0000 (UTC)
 Received: (Authenticated sender: kory.maincent@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5BC4120009;
- Thu, 23 Jun 2022 13:06:46 +0000 (UTC)
-Date: Thu, 23 Jun 2022 15:06:46 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220623150646.42c41949@kmaincent-XPS-13-7390>
-In-Reply-To: <20220623020757.7852c97c@windsurf>
-References: <20220622083433.1201789-1-kory.maincent@bootlin.com>
- <20220623020757.7852c97c@windsurf>
-Organization: bootlin
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6813E1C001C;
+ Thu, 23 Jun 2022 14:00:31 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 23 Jun 2022 16:00:26 +0200
+Message-Id: <20220623140028.1315712-3-kory.maincent@bootlin.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220623140028.1315712-1-kory.maincent@bootlin.com>
+References: <20220623140028.1315712-1-kory.maincent@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1655989607;
+ d=bootlin.com; s=gm1; t=1655992831;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=JX9fdOzIndwBU5+RH/oQDAU6xdaN7zUJiKY5ZbxN6lg=;
- b=E9DXjxELj8TVqLCjlJrsq9mmoQjShhaUzCYa9Kl2MdmwUSSMOx4dANqfBD0yI/MwMC33Um
- 4PfcI7wRM3zVONzj8h6KrQOJtr7DWjktJLipjnp/C7AvBbyh7nrdOmY5/RRHlA4ft193xl
- B8Xa/cYGG37FTnZ5sSmC+5lOLw6Rd76ySW3pqnf2EaumYg5Ugk0hB2UrjKSWLeMyDoSRGb
- FubkAm5Yky+C5/sBjOAg/Br+lnuJWsmtnK+CwfMGNcv21cV0WgTL7tuIGbAq6npXn1AHGD
- zjW46N6x717cqcZ82ty6MuTcCG2Syylr9ulzxvQEZjKxoYbgVL+wKzTLyIRb8A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=1PO8QI/MR/TN1pT0UkEYzQNTL/p2+P4ctzhjydRcnGw=;
+ b=Q4+z5sqm59/x83JsTiPQUG9GBMys+gnf7Kq9L9EY2vKQJEdxDcQphZmYURxqatLymQkie3
+ Fwmf/OTmdRGrRUFNNuy8SYO6ynu1et78tm9KsWEZ14SKtntc/DWgtwIKErjlZ2BW8MuQtV
+ Vmp9JL6YxwMP4B9GE3bP5mCvCaram4Rxo3ozDvsC0VeNBR91nlX5SjNKoQmioCe/NTMdVh
+ uGTPqUCZB+FjFLJTxVl6VU2AmgnVSzhKDlf4iG4gV4SqZB37pkUKZaPE5jQgWh91Zhly1I
+ 54jcXJG6ZyF8RbGxbBvc8QoT7PE36YxNkNW3ZctLsyj+dWJA3yKII76rxRCrLw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=E9DXjxEL
-Subject: Re: [Buildroot] [PATCH v2] boot/optee-os: add support for custom
- tarball URL
+ header.s=gm1 header.b=Q4+z5sqm
+Subject: [Buildroot] [PATCH 3/4] boot/barebox: update condition for custom
+ tarball management
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,39 +75,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?K=C3=B6ry_Maincent_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Cc: etienne.carriere@linaro.org, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Kory Maincent via buildroot <buildroot@buildroot.org>
+Reply-To: kory.maincent@bootlin.com
+Cc: Kory Maincent <kory.maincent@bootlin.com>, thomas.petazzoni@bootlin.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVGhvbWFzLAoKT24gVGh1LCAyMyBKdW4gMjAyMiAwMjowNzo1NyArMDIwMApUaG9tYXMg
-UGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKCj4gSGVsbG8s
-Cj4gCj4gT24gV2VkLCAyMiBKdW4gMjAyMiAxMDozNDozMyArMDIwMAo+IGtvcnkubWFpbmNlbnRA
-Ym9vdGxpbi5jb20gd3JvdGU6Cj4gCj4gPiAtaWZlcSAoJChCUjJfVEFSR0VUX09QVEVFX09TX0NV
-U1RPTV9HSVQpLHkpCj4gPiAraWZlcSAoJChCUjJfVEFSR0VUX09QVEVFX09TX0NVU1RPTV9UQVJC
-QUxMKSx5KQo+ID4gKyMgSGFuZGxlIGN1c3RvbSBVLUJvb3QgdGFyYmFsbHMgYXMgc3BlY2lmaWVk
-IGJ5IHRoZSBjb25maWd1cmF0aW9uICAKPiAKPiBJIGZvbGxvd2VkIHRoZSBkaXNjdXNzaW9uIG9u
-IHRoZSB2MSB3aGV0aGVyIHdlIHNob3VsZCB0ZXN0IHRoZSB2ZXJzaW9uCj4gdG8gYmUgImN1c3Rv
-bSIgb3Igd2hldGhlciB3ZSBzaG91bGQgdGVzdAo+IEJSMl9UQVJHRVRfT1BURUVfT1NfQ1VTVE9N
-X1RBUkJBTEw9PXkuIEkgaW5pdGlhbGx5IHRob3VnaCB0aGVyZSB3YXMgYQo+IHJlYXNvbiBmb3Ig
-dGVzdGluZyB2ZXJzaW9uPT1jdXN0b20sIGJ1dCBJIHdhcyBub3QgYWJsZSB0byBmaW5kIHdoeSwg
-YW5kCj4gc29tZSBwYWNrYWdlcyAobGludXggZm9yIGV4YW1wbGUpIGRvIG5vdCB0ZXN0IHZlcnNp
-b249PWN1c3RvbS4KPiAKPiBTbyBJIGFncmVlIHRoYXQgdGVzdGluZyBCUjJfVEFSR0VUX09QVEVF
-X09TX0NVU1RPTV9UQVJCQUxMPT15IGlzIGEKPiBiZXR0ZXIgc29sdXRpb24sIHdoaWNoIGlzIHdo
-YXQgeW91IGhhdmUgZG9uZSBoZXJlLgo+IAo+IEhvd2V2ZXIsIEkgd291bGQgaWRlYWxseSBsaWtl
-IHRoaXMgdG8gYmUgY29uc2lzdGVudCB0aHJvdWdob3V0IHRoZQo+IHRyZWUsIHdoaWNoIG1lYW5z
-IHdlIHNob3VsZCBjaGFuZ2UgdGhlIGZvbGxvd2luZyBvbmVzOgo+IAo+IGJvb3QvYXJtLXRydXN0
-ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQtZmlybXdhcmUubWs6aWZlcQo+ICgkKEFSTV9UUlVTVEVE
-X0ZJUk1XQVJFX1ZFUlNJT04pLGN1c3RvbSkKPiBib290L2FybS10cnVzdGVkLWZpcm13YXJlL2Fy
-bS10cnVzdGVkLWZpcm13YXJlLm1rOmlmZXEKPiAoJChBUk1fVFJVU1RFRF9GSVJNV0FSRV9WRVJT
-SU9OKSxjdXN0b20pIGJvb3QvYmFyZWJveC9iYXJlYm94Lm1rOmlmZXEKPiAoJCQoJCgxKV9WRVJT
-SU9OKSxjdXN0b20pIGJvb3Qvb3BlbnNiaS9vcGVuc2JpLm1rOmlmZXEKPiAoJChPUEVOU0JJX1ZF
-UlNJT04pLGN1c3RvbSkgYm9vdC91Ym9vdC91Ym9vdC5tazppZmVxICgkKFVCT09UX1ZFUlNJT04p
-LGN1c3RvbSkKCk9rLCBJIHdpbGwgc2VuZCBwYXRjaGVzIHRvIGhhdmUgY29uc2lzdGVuY3kgaW4g
-dGhlc2UgcGFja2FnZXMuCgpSZWdhcmRzLApLw7ZyeQpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+From: Kory Maincent <kory.maincent@bootlin.com>
+
+This patch updates the condition to handle custom tarballs as specified by
+the configuration. This change is made to have cleaner condition and for
+consistency.
+
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+---
+ boot/barebox/barebox.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 6506294d6d..da151d3c25 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -17,7 +17,7 @@ define inner-barebox-package
+ 
+ $(1)_VERSION = $$(call qstrip,$$(BR2_TARGET_BAREBOX_VERSION))
+ 
+-ifeq ($$($(1)_VERSION),custom)
++ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL),y)
+ # Handle custom Barebox tarballs as specified by the configuration
+ $(1)_TARBALL = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
+ $(1)_SITE = $$(patsubst %/,%,$$(dir $$($(1)_TARBALL)))
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
