@@ -1,87 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ABBCC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jun 2022 22:25:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6A66C43334
+	for <buildroot@archiver.kernel.org>; Thu, 23 Jun 2022 00:08:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1872B410D0;
-	Wed, 22 Jun 2022 22:25:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1872B410D0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CA7742413;
+	Thu, 23 Jun 2022 00:08:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CA7742413
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KAGAASVksXou; Wed, 22 Jun 2022 22:25:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PbVNW1sDrG2S; Thu, 23 Jun 2022 00:08:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E2184012E;
-	Wed, 22 Jun 2022 22:25:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E2184012E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E7E791BF3A8
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 22:25:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCB384240F;
+	Thu, 23 Jun 2022 00:08:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCB384240F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EDE461BF59D
+ for <buildroot@lists.busybox.net>; Thu, 23 Jun 2022 00:08:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C19D94012E
- for <buildroot@lists.busybox.net>; Wed, 22 Jun 2022 22:25:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C19D94012E
+ by smtp1.osuosl.org (Postfix) with ESMTP id C7F548413A
+ for <buildroot@lists.busybox.net>; Thu, 23 Jun 2022 00:08:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7F548413A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nQjKVJdheXUP for <buildroot@lists.busybox.net>;
- Wed, 22 Jun 2022 22:25:04 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D58184002B
-Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
- [67.231.152.184])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D58184002B
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 22:25:03 +0000 (UTC)
-Received: from pps.filterd (m0074334.ppops.net [127.0.0.1])
- by mx0b-00105401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id
- 25MLA955015347
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 21:20:53 GMT
-Received: from xnwpv36.utc.com ([167.17.239.16])
- by mx0b-00105401.pphosted.com with ESMTP id 3gv28e6dtr-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 21:20:52 +0000
-Received: from qusnwadw.utcapp.com (QUSNWADW.utcapp.com [10.161.48.87])
- by xnwpv36.utc.com (8.16.1.2/8.16.1.2) with ESMTPS id 25MLKp5a093253
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 21:20:51 GMT
-Received: from crulimr01.rockwellcollins.com ([10.172.224.19])
- by qusnwadw.utcapp.com (8.16.1.2/8.16.1.2) with ESMTPS id 25MLKpZR018974
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
- for <buildroot@buildroot.org>; Wed, 22 Jun 2022 21:20:51 GMT
-X-Received: from jdknight-dev2.rccalab.inside (unknown [10.197.250.171])
- by crulimr01.rockwellcollins.com (Postfix) with ESMTP id 1362F60585;
- Wed, 22 Jun 2022 16:20:50 -0500 (CDT)
-To: buildroot@buildroot.org
-Date: Wed, 22 Jun 2022 17:20:44 -0400
-Message-Id: <20220622212045.573-1-james.knight@collins.com>
-X-Mailer: git-send-email 2.30.0.windows.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5_g_CXI-UKaJ for <buildroot@lists.busybox.net>;
+ Thu, 23 Jun 2022 00:08:05 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C9A584116
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0C9A584116
+ for <buildroot@buildroot.org>; Thu, 23 Jun 2022 00:08:04 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7D08560006;
+ Thu, 23 Jun 2022 00:08:01 +0000 (UTC)
+Date: Thu, 23 Jun 2022 02:07:57 +0200
+To: kory.maincent@bootlin.com
+Message-ID: <20220623020757.7852c97c@windsurf>
+In-Reply-To: <20220622083433.1201789-1-kory.maincent@bootlin.com>
+References: <20220622083433.1201789-1-kory.maincent@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Proofpoint-GUID: MA2DpyAtBQBS6XEIVHD536-2x7nny1Rh
-X-Proofpoint-ORIG-GUID: MA2DpyAtBQBS6XEIVHD536-2x7nny1Rh
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0 mlxscore=0
- priorityscore=1501 mlxlogscore=911 suspectscore=0 adultscore=0
- malwarescore=0 impostorscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
- clxscore=1011 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206220097
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=POD051818; bh=fprRBV9YkWTesdNIyp1Aqu2W5b9cwfdfa6Y+iQXVqpc=;
- b=QnSmhmPdZXfekLAs+zvlQOnzVGtfzC6HtJRFioN8MPnsolGlAgzqX9JRSvcFGJltkNnn
- wLkFfiCtjTrjrPc19p7Wu3NK1BT9WFxPcwvhSf5OtBP/hdM+w4VZFPLDa6qMM40b8ky1
- dlPsyHxW4AnF90Fc0///unq7XaMH6TK6ZjowJpHpAVNlCad3I5GkA2UPSr3lmcT2BArj
- 5FxmiBGwwSACadieeggFBKhVcLRM1ufaLRLzoPdRuAup+POVB+jKZZwhj2My9ccocKFt
- tZdk/npsbS1Jo3UAdY/8Te06aEuEGD70dXEbNai/9IhrmiLeEyGipbnyiM+Xv9HEG0tJ bQ== 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=collins.com header.i=@collins.com
- header.a=rsa-sha256 header.s=POD051818 header.b=QnSmhmPd
-Subject: [Buildroot] [PATCH 1/2] package/skeleton-init-openrc: prepare
- runlevels from make over skeleton
+ d=bootlin.com; s=gm1; t=1655942882;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=NkFFrDZ/OexOdlq7LPs+LOm8ShL9lp0rg4oNQeR9X0c=;
+ b=i2GMcRuLpD4PORX0wrBYEYdkv7p8ld/mtt2aP5BYX9mObnt/InhhFsu11kviNkQEy0rBHO
+ sq7UacURhy7tcTw0lwuQMLk6a1LieKDDwFW5YLU6q1Y1wGiKVZAAbppmjc8hv5V9y1VU2z
+ 2pHOTdGK4vmL+decbd6/m39N5M9gFAGk0iWm/UZ6feyRENylx9XhG/1fM/0eyEblwBVO6c
+ V8HiqLjZmBGfT2ZFiKlvJSswWOxzP02pb26UtvxEnP5LT9fCsDXsKoYfHJVNfcq9iRUixL
+ hjwaP10VreaCMvS6wS8bqxKXm+cGxdGECZVnll6LJEB7jxHIf4CauJyFB93BQg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=i2GMcRuL
+Subject: Re: [Buildroot] [PATCH v2] boot/optee-os: add support for custom
+ tarball URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,90 +76,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: James Knight via buildroot <buildroot@buildroot.org>
-Reply-To: James Knight <james.knight@collins.com>
-Cc: James Knight <james.knight@collins.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: etienne.carriere@linaro.org, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The following commit changes the creation of an OpenRC environment's
-`/etc/runlevels/default/sysv-rcs` symbolic link from the skeleton to
-inside the package's Makefile (triggered from the
-`SKELETON_INIT_OPENRC_INSTALL_TARGET_CMDS` call). The original symlink
-to a `/etc/init.d/sysv-rcs` path may not gracefully work for all
-developer environments. For example, on a fresh checkout in a Windows
-environment, the symbolic link may be automatically updated to
-include a drive specification. For example:
+Hello,
 
-    $ git diff
-    diff --git a/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-    index ef5e00823c..e417b4bb44 120000
-    --- a/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-    +++ b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-    @@ -1 +1 @@
-    -/etc/init.d/sysv-rcs
-    \ No newline at end of file
-    +G:/etc/init.d/sysv-rcs
-    \ No newline at end of file
+On Wed, 22 Jun 2022 10:34:33 +0200
+kory.maincent@bootlin.com wrote:
 
-If a developer built with fresh checkout using an example
-`qemu_x86_defconfig` tailored to target an OpenRC init system, an
-improper symlink can be observed in the target system:
+> -ifeq ($(BR2_TARGET_OPTEE_OS_CUSTOM_GIT),y)
+> +ifeq ($(BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL),y)
+> +# Handle custom U-Boot tarballs as specified by the configuration
 
-    ...
-    Welcome to Buildroot
-    buildroot login: root
-    Jun 22 20:42:34 login[971]: root login on 'console'
-    # /etc/runlevels/default/sysv-rcs  --version
-    -sh: /etc/runlevels/default/sysv-rcs: not found
-    # readlink /etc/runlevels/default/sysv-rcs
-    /??/G:/etc/init.d/sysv-rcs
-    #  /etc/init.d/sysv-rcs --version
-    sysv-rcs (OpenRC) 0.43.3 (Buildroot 2022.05-225-g64390b6c42-dirty)
+I followed the discussion on the v1 whether we should test the version
+to be "custom" or whether we should test
+BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL==y. I initially though there was a
+reason for testing version==custom, but I was not able to find why, and
+some packages (linux for example) do not test version==custom.
 
-By switching from having the symbolic link in the skeleton file to
-building it during the package's install stage, this (1) prevents
-oddities with a Git working environment on environments like Windows,
-as well as (2) ensures a proper symlink is created in a Windows
-environment. For example:
+So I agree that testing BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL==y is a
+better solution, which is what you have done here.
 
-    # readlink /etc/runlevels/default/sysv-rcs
-    /etc/init.d/sysv-rcs
-    # /etc/runlevels/default/sysv-rcs --version
-    sysv-rcs (OpenRC) 0.43.3 (Buildroot 2022.05-225-g64390b6c42-dirty)
+However, I would ideally like this to be consistent throughout the
+tree, which means we should change the following ones:
 
-Signed-off-by: James Knight <james.knight@collins.com>
----
- package/skeleton-init-openrc/skeleton-init-openrc.mk             | 1 +
- .../skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs | 1 -
- 2 files changed, 1 insertion(+), 1 deletion(-)
- delete mode 120000 package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
+boot/arm-trusted-firmware/arm-trusted-firmware.mk:ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
+boot/arm-trusted-firmware/arm-trusted-firmware.mk:ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
+boot/barebox/barebox.mk:ifeq ($$($(1)_VERSION),custom)
+boot/opensbi/opensbi.mk:ifeq ($(OPENSBI_VERSION),custom)
+boot/uboot/uboot.mk:ifeq ($(UBOOT_VERSION),custom)
 
-diff --git a/package/skeleton-init-openrc/skeleton-init-openrc.mk b/package/skeleton-init-openrc/skeleton-init-openrc.mk
-index b0538ad03ff6203cbe24ebc2e2e4bd2a5af4bed9..625c5d8a8ea0476f9574da9718083c3de69a3c1f 100644
---- a/package/skeleton-init-openrc/skeleton-init-openrc.mk
-+++ b/package/skeleton-init-openrc/skeleton-init-openrc.mk
-@@ -32,6 +32,7 @@ endif # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- define SKELETON_INIT_OPENRC_INSTALL_TARGET_CMDS
- 	$(call SYSTEM_RSYNC,$(SKELETON_INIT_OPENRC_PKGDIR)/skeleton,$(TARGET_DIR))
- 	$(SKELETON_INIT_OPENRC_ROOT_RO_OR_RW)
-+	ln -s /etc/init.d/sysv-rcs $(TARGET_DIR)/etc/runlevels/default/sysv-rcs
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-deleted file mode 120000
-index ef5e00823c63ed0244be26e6082e17d8e135f5ea..0000000000000000000000000000000000000000
---- a/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-+++ /dev/null
-@@ -1 +0,0 @@
--/etc/init.d/sysv-rcs
-\ No newline at end of file
+Thomas
 -- 
-2.30.0.windows.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
