@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 787E2C43334
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jun 2022 20:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9756C43334
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jun 2022 20:07:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D835142605;
-	Fri, 24 Jun 2022 20:07:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D835142605
+	by smtp2.osuosl.org (Postfix) with ESMTP id 810EA4097E;
+	Fri, 24 Jun 2022 20:07:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 810EA4097E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Al6_0SWNZ7YK; Fri, 24 Jun 2022 20:07:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8986B4058F;
+	Fri, 24 Jun 2022 20:07:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8986B4058F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 33F3F1BF2C0
+ for <buildroot@lists.busybox.net>; Fri, 24 Jun 2022 20:07:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A1C14172A
+ for <buildroot@lists.busybox.net>; Fri, 24 Jun 2022 20:07:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A1C14172A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bC_Z4t2TsbNR; Fri, 24 Jun 2022 20:07:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 951BC4172A;
-	Fri, 24 Jun 2022 20:07:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 951BC4172A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 599F91BF2C0
- for <buildroot@lists.busybox.net>; Fri, 24 Jun 2022 20:06:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 343658497A
- for <buildroot@lists.busybox.net>; Fri, 24 Jun 2022 20:06:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 343658497A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dacFBvnoMHZJ for <buildroot@lists.busybox.net>;
- Fri, 24 Jun 2022 20:06:57 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id acVv4uqI8Jvm for <buildroot@lists.busybox.net>;
+ Fri, 24 Jun 2022 20:06:59 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BDC284981
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0BDC284981
- for <buildroot@buildroot.org>; Fri, 24 Jun 2022 20:06:56 +0000 (UTC)
-Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
- by mailout04.t-online.de (Postfix) with SMTP id 0A77539A5
- for <buildroot@buildroot.org>; Fri, 24 Jun 2022 22:06:54 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.192.81]) by fwd89.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E917D41720
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E917D41720
+ for <buildroot@buildroot.org>; Fri, 24 Jun 2022 20:06:58 +0000 (UTC)
+Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
+ by mailout07.t-online.de (Postfix) with SMTP id CCC7D116F8
+ for <buildroot@buildroot.org>; Fri, 24 Jun 2022 22:06:53 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.192.81]) by fwd88.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1o4pZt-4MKj0E0; Fri, 24 Jun 2022 22:06:53 +0200
+ esmtp id 1o4pZt-145moj0; Fri, 24 Jun 2022 22:06:53 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:43194)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1o4pZt-0007EC-6v
+ (envelope-from <bernd.kuhls@t-online.de>) id 1o4pZs-0007EC-WC
  for buildroot@buildroot.org; Fri, 24 Jun 2022 22:06:53 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 24 Jun 2022 22:06:52 +0200
-Message-Id: <20220624200652.35922-4-bernd.kuhls@t-online.de>
+Date: Fri, 24 Jun 2022 22:06:50 +0200
+Message-Id: <20220624200652.35922-2-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220624200652.35922-1-bernd.kuhls@t-online.de>
 References: <20220624200652.35922-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1656101213-0143AB67-B12E2A7A/0/0 CLEAN NORMAL
-X-TOI-MSGID: 71405e21-1f18-414e-bc03-343ed55d33b4
-Subject: [Buildroot] [PATCH 4/4] package/kodi-pvr-vdr-vnsi: bump version to
- 19.0.5-Matrix
+X-TOI-EXPURGATEID: 150726::1656101213-01436587-3C72B7C0/0/0 CLEAN NORMAL
+X-TOI-MSGID: c4f619a4-68a3-4863-a4ac-316909afb90d
+Subject: [Buildroot] [PATCH 2/4] package/kodi-inputstream-ffmpegdirect: bump
+ version to 19.0.3-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,32 +75,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash | 2 +-
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk   | 2 +-
+ .../kodi-inputstream-ffmpegdirect.hash                          | 2 +-
+ .../kodi-inputstream-ffmpegdirect.mk                            | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-index 178e2e1921..3e17fd553d 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
+diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
+index f738ab920e..888c0ca918 100644
+--- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
++++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  bae48132304b990f802744a1e9856d47c2747830b60a587945cd8e5a3460f35b  kodi-pvr-vdr-vnsi-19.0.4-Matrix.tar.gz
-+sha256  521add432b7fe38b6019f99547a440b1a2927d10f1420d518235c1c6d2e95b6b  kodi-pvr-vdr-vnsi-19.0.5-Matrix.tar.gz
+-sha256  b35582304eb5dcfb394de9cf323ec1edb825b5525200292223bf423a84558e1d  kodi-inputstream-ffmpegdirect-19.0.2-Matrix.tar.gz
++sha256  4693793a44b54204884c676a285bd371b354c426162736e5adae4ad2aa6088cf  kodi-inputstream-ffmpegdirect-19.0.3-Matrix.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-index 0a4ac986d5..ebb5f117b8 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
+diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
+index f98b26c4b5..39347010b5 100644
+--- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
++++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_VDR_VNSI_VERSION = 19.0.4-Matrix
-+KODI_PVR_VDR_VNSI_VERSION = 19.0.5-Matrix
- KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
- KODI_PVR_VDR_VNSI_LICENSE = GPL-2.0+
- KODI_PVR_VDR_VNSI_LICENSE_FILES = LICENSE.md
+-KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 19.0.2-Matrix
++KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 19.0.3-Matrix
+ KODI_INPUTSTREAM_FFMPEGDIRECT_SITE = $(call github,xbmc,inputstream.ffmpegdirect,$(KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION))
+ KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE_FILES = LICENSE.md
 -- 
 2.30.2
 
