@@ -1,83 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C906CCA488
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jun 2022 14:40:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B16ADC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jun 2022 14:47:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9459E61482;
-	Fri, 24 Jun 2022 14:40:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9459E61482
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rs-EdWonG4bO; Fri, 24 Jun 2022 14:40:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4050C60E06;
-	Fri, 24 Jun 2022 14:40:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4050C60E06
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9514B1BF40F
- for <buildroot@lists.busybox.net>; Fri, 24 Jun 2022 14:40:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6C2D282EA4
- for <buildroot@lists.busybox.net>; Fri, 24 Jun 2022 14:40:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C2D282EA4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3011D83EF8;
+	Fri, 24 Jun 2022 14:47:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3011D83EF8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XvpomfxQHgWQ for <buildroot@lists.busybox.net>;
- Fri, 24 Jun 2022 14:40:16 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mINk6EFCg3ia; Fri, 24 Jun 2022 14:47:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1071B8006F;
+	Fri, 24 Jun 2022 14:47:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1071B8006F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5952F1BF40F
+ for <buildroot@lists.busybox.net>; Fri, 24 Jun 2022 14:47:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E43D3408D2
+ for <buildroot@lists.busybox.net>; Fri, 24 Jun 2022 14:47:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E43D3408D2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Eneejo0eHFOy for <buildroot@lists.busybox.net>;
+ Fri, 24 Jun 2022 14:47:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 114378478A
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
- [IPv6:2a00:1450:4864:20::12a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 114378478A
- for <buildroot@buildroot.org>; Fri, 24 Jun 2022 14:40:15 +0000 (UTC)
-Received: by mail-lf1-x12a.google.com with SMTP id j21so4883364lfe.1
- for <buildroot@buildroot.org>; Fri, 24 Jun 2022 07:40:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A98FE40157
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A98FE40157
+ for <buildroot@buildroot.org>; Fri, 24 Jun 2022 14:47:18 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id fd6so3806422edb.5
+ for <buildroot@buildroot.org>; Fri, 24 Jun 2022 07:47:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=EKi4b8gqH/Z6TRBl/xlkay9RBmn/rmNAYAsgH+FnkvI=;
- b=wAZ57Ibf/MJ5kx+snW7LOiOfjN77A9YMA7iNQu2kYHSG87TErB0+1YFRol96/Ms1c3
- Xs5kypfZxuw3GxyrsRt/si6nMuGQWKuREkYuYggw9pS6+VniT1J7zTIdyPrSgk/nJGXB
- hoqrdvkBnPmFdNXdBi3aBR7ojh/a/TRzFnjNXVohakr/0YmOxTUKPKoFsA+UYVfZagyA
- KS9Tn53gLbayfRHBdaRfXthwqP2QNGnaXpv8o4PPlCuL4RSaFu8+vcH920S1JJ6JWTuf
- Wk5na7+c8eas/VZComNhYTAR3r3hbA7XrSs40teFOw0WqrSn3oq+SifdU2omhEqb9Hqt
- aIuw==
-X-Gm-Message-State: AJIora/faOuUEscGZiWvt4xDV8H068UBxydH3Xhc4ow9Yj7yZneFcKUz
- eBOTNocVvhYd8RiFVjczlZFrlkymtFL54SwWKzgZmQ==
-X-Google-Smtp-Source: AGRyM1vW+fIm+wYdoC1uQ4+OxdFC9pZi1eJz3Ne0bAIT5W3WVEu+YZjNgPLEf2BbBXkjyA0CAVXADYTAWZpE5oahs08=
-X-Received: by 2002:a05:6512:3c96:b0:47f:62ba:dda8 with SMTP id
- h22-20020a0565123c9600b0047f62badda8mr9320301lfv.662.1656081613748; Fri, 24
- Jun 2022 07:40:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220607072852.1007185-1-dario.binacchi@amarulasolutions.com>
- <20220607072852.1007185-3-dario.binacchi@amarulasolutions.com>
- <eada84a9-2cb9-69f9-de48-a04ce7a05f7a@mind.be>
-In-Reply-To: <eada84a9-2cb9-69f9-de48-a04ce7a05f7a@mind.be>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=EsrlWgQEOQ5sRj1J7fsQZfcrl5/8f1fmcDVnLgkosyk=;
+ b=HehOzG7OXZADdkS+rLFTCzQgX1HJSOcG07Q4gP4Z5iJL+Voy+NmvcKipwmXS9IqwtO
+ 0Ngqd2Y8FWWXgEgbdhCiduOzQYtlDSC28eZ6HHa6i+wtZvLYiIHFpH37soWB+UgMYRaf
+ 0b0vJ2eG3UuOiS9E/kp9d++lvqcZs83VS4ViLlEubj2STGLskCwxOXq/TTZBKl+0AWYU
+ eYSqrqj4Dt3oHK2bFcGEzJpGbi9KlRZLbyX7ijPDxzx3510yBV0gP04YhVE34yZhP54K
+ xOpng5BkLwTiRVZrgHIQmUB/t0BqfANWLcVbUqZTTEbRlXupSG+6g1dzhxmjg6sR6e4D
+ UunA==
+X-Gm-Message-State: AJIora+/QL7pg+UbUdhsgoihTy+TMv/9vFHsFn7SS9Smlh5siu2oXqWq
+ dYu/l7bADVr8sSuDXmmUKtQZA3sP0ZmSkw==
+X-Google-Smtp-Source: AGRyM1sqKSMh3dYn+5KhufPaaz+89enLmHp9qH2kEnsdSy9QRleBlZs+zAKRfELJJmeo93WNmoMyyA==
+X-Received: by 2002:aa7:c857:0:b0:433:5c62:ddbc with SMTP id
+ g23-20020aa7c857000000b004335c62ddbcmr18117706edt.218.1656082036643; 
+ Fri, 24 Jun 2022 07:47:16 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch
+ (host-80-116-90-174.retail.telecomitalia.it. [80.116.90.174])
+ by smtp.gmail.com with ESMTPSA id
+ m16-20020a1709061ed000b006fe8ac6bc69sm1254274ejj.140.2022.06.24.07.47.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 24 Jun 2022 07:47:16 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Fri, 24 Jun 2022 16:40:02 +0200
-Message-ID: <CABGWkvpCSL=40sZysO_BB=Uv=eHWdUb3iUssbGqw026EVqWFVw@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Fri, 24 Jun 2022 16:46:59 +0200
+Message-Id: <20220624144701.1404198-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=EKi4b8gqH/Z6TRBl/xlkay9RBmn/rmNAYAsgH+FnkvI=;
- b=Ggrt5Xzxs2uvuub2cr8z/A3PnAIoABI9Sxx8P/ack0kjQuG/j1qMiDfvpjL3PEFe0K
- VALqC70jOIRAi6Q0CUZt8Anxm57loJ53Zb2AWWzYO5A5IPRlsw3Bk1eUIXAR1J9LzJfJ
- 5b0+W9vVcAKCOppySsaqgI2cxAN/L6ADGO4qc=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=EsrlWgQEOQ5sRj1J7fsQZfcrl5/8f1fmcDVnLgkosyk=;
+ b=PxRADSjZIGEUNynXiiHkpvcAU+8Daui1HXC5lvgWFAcsCh2SybZPAcMJxw2CB1+tNy
+ bIaeFDGhuZoS+nlmI7Fe5bu2/ahQwpNaYWnZ4iG1O4OvWY15mmardvuwkeLA8IIwgKzJ
+ NQ3LyCbLL21oU4Fj9ZiPIODWLpfmlhp1WagR8=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=Ggrt5Xzx
-Subject: Re: [Buildroot] [PATCH 2/3] board/bsh: add support for iMX8MN BSH
- SMM S2 board
+ header.b=PxRADSjZ
+Subject: [Buildroot] [PATCH v2 0/2] Add support for BSH smm s2 [pro] boards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,198 +91,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
- Samuel Martin <s.martin49@gmail.com>, Jagan Teki <jagan@amarulasolutions.com>,
- buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
- Heiko Thiery <heiko.thiery@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Dario Binacchi <dario.binacchi@amarula.solutions.com>,
+ Ariel D'Alessandro <ariel@vanguardiasur.com.ar>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQXJub3V0LAoKT24gTW9uLCBKdW4gMjAsIDIwMjIgYXQgODo0NSBBTSBBcm5vdXQgVmFuZGVj
-YXBwZWxsZSA8YXJub3V0QG1pbmQuYmU+IHdyb3RlOgo+Cj4gICBIaSBEYXJpbywKPgo+ICAgQSBi
-ZXR0ZXIgc3ViamVjdCBsaW5lIGlzOgo+Cj4gY29uZmlncy9pbXg4bW5fYnNoX3NtbV9zMl9kZWZj
-b25maWc6IG5ldyBkZWZjb25maWcgZm9yIEJTSCBTTU0gUzIKCkknbGwgY2hhbmdlIGl0IGluIHYy
-LgoKPgo+IE9uIDA3LzA2LzIwMjIgMDk6MjgsIERhcmlvIEJpbmFjY2hpIHdyb3RlOgo+ID4gQlNI
-IFNNTSBTMiAoU3lzdGVtTWFzdGVyIFMyKSBCb2FyZCBpcyBhbiBhZGQtb24gYm9hcmQgd2hpY2gg
-cHJvdmlkZQo+ID4gaW5wdXQgYW5kIG91dHB1dCBpbnRlcmZhY2VzIHRvIGEgZGVkaWNhdGVkIGNh
-cnJpZXIgYm9hcmQuIEl0IGlzIGRlc2lnbmVkCj4gPiBtYWlubHkgdG8gcHJvdmlkZSBncmFwaGlj
-YWwvdmlkZW8gYW5kIGNvbm5lY3Rpdml0eSBpbnRlcmZhY2VzIHRvIHRoZQo+ID4gYXBwbGlhbmNl
-Lgo+ID4KPiA+IEJvYXJkIHN1cHBvcnQgcGFja2FnZSBpbmNsdWRlcyB0aGUgZm9sbG93aW5nIGNv
-bXBvbmVudHM6Cj4gPiAtIG1haW5saW5lIExpbnV4IGtlcm5lbCA1LjE4Cj4gPiAtIG1haW5saW5l
-IFUtQm9vdCAyMDIyLTA3LXJjMgo+ID4gLSBkZWZhdWx0IHBhY2thZ2VzIGZyb20gYnVpbGRyb290
-Cj4gPgo+ID4gUGF0Y2hlcyBhcHBsaWVkIHRvIHRoZSBMaW51eCBrZXJuZWwgYW5kIFUtQm9vdCBo
-YXZlIGJlZW4gc3VibWl0dGVkIGJ1dAo+ID4gbm90IG1lcmdlZCB5ZXQuCj4KPiAgIEhvdyBhYm91
-dCBub3c/CgpUaGUgdS1ib290IHBhdGNoZXMgaGF2ZSBub3QgeWV0IGJlZW4gcmV2aWV3ZWQuIFRo
-ZSBwYXRjaCBmb3IgbGludXggaGFzIGFycml2ZWQKYXQgdmVyc2lvbiA0LiBZb3UnbGwgZmluZCBp
-dCBpbiB2Mi4KCj4KPiA+Cj4gPiBNaWNoYWVsIFRyaW1hcmNoaSBoYXMgYmVlbiBhZGRlZCBhcyBj
-by1tYWludGFpbmVyLgo+Cj4gICBUaGlzIGlzIHJlZHVuZGFudCB3aXRoIHRoZSBDby1kZXZlbG9w
-ZWQtYnkgbGluZSBiZWxvdy4KPgo+Cj4gPiBDby1kZXZlbG9wZWQtYnk6IE1pY2hhZWwgVHJpbWFy
-Y2hpIDxtaWNoYWVsQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+Cj4gICBUaGVyZSBpcyBubyBhZ3Jl
-ZWQgc3RhbmRhcmQsIGJ1dCBJIHRoaW5rIENvLWF1dGhvcmVkLWJ5IGlzIHVzZWQgbW9yZS4KCk9r
-LgoKPgo+ID4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBUcmltYXJjaGkgPG1pY2hhZWxAYW1hcnVs
-YXNvbHV0aW9ucy5jb20+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBEYXJpbyBCaW5hY2NoaSA8ZGFyaW8u
-YmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4KPiBbc25pcF0KPiA+IGRpZmYgLS1naXQg
-YS9ib2FyZC9ic2gvaW14OG1uLWJzaC1zbW0tczIvZmxhc2guc2ggYi9ib2FyZC9ic2gvaW14OG1u
-LWJzaC1zbW0tczIvZmxhc2guc2gKPiA+IG5ldyBmaWxlIG1vZGUgMTAwNzU1Cj4gPiBpbmRleCAw
-MDAwMDAwMDAwMDAuLjM1MzU0ZjYyMjUwMAo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysrIGIvYm9h
-cmQvYnNoL2lteDhtbi1ic2gtc21tLXMyL2ZsYXNoLnNoCj4gPiBAQCAtMCwwICsxLDIyIEBACj4g
-PiArIyEvYmluL2Jhc2gKPiA+ICsKPiA+ICtPVVRQVVRfRElSPSQxCj4KPiAgIChuaXRwaWNrKSBp
-dCdzIG5pY2VyIHRvIGFzc3VtZSB0aGF0IHRoZSBjdXJyZW50IGRpcmVjdG9yeSBpcyB0aGUgb3V0
-cHV0Cj4gZGlyZWN0b3J5IGlmIGl0IGlzIG5vdCBnaXZlbi4KCllvdSdsbCBmaW5kIGl0IGluIHYy
-LgoKPgo+ID4gKwo+ID4gK2lmICEgdGVzdCAtZCAiJHtPVVRQVVRfRElSfSIgOyB0aGVuCj4gPiAr
-ICAgIGVjaG8gIkVSUk9SOiBubyBvdXRwdXQgZGlyZWN0b3J5IHNwZWNpZmllZC4iCj4gPiArICAg
-IGVjaG8gIlVzYWdlOiAkMCBPVVRQVVRfRElSIgo+ID4gKyAgICBlY2hvICIiCj4gPiArICAgIGVj
-aG8gIkFyZ3VtZW50czoiCj4gPiArICAgIGVjaG8gIiAgICBPVVRQVVRfRElSICAgIFRoZSBCdWls
-ZHJvb3Qgb3V0cHV0IGRpcmVjdG9yeS4iCj4gPiArICAgIGV4aXQgMQo+ID4gK2ZpCj4gPiArCj4g
-PiArSU1BR0VTX0RJUj0ke09VVFBVVF9ESVJ9L2ltYWdlcwo+ID4gKwo+ID4gKyR7T1VUUFVUX0RJ
-Un0vaG9zdC9iaW4vdXV1IC12IC1iICR7SU1BR0VTX0RJUn0vbmFuZC1mdWxsLmxzdCBcCj4gPiAr
-ICAke0lNQUdFU19ESVJ9L2ZsYXNoLmJpbiBcCj4gPiArICAke0lNQUdFU19ESVJ9L2ZsYXNoLmJp
-biBcCj4gPiArICAke0lNQUdFU19ESVJ9L3Jvb3Rmcy51YmlmcyBcCj4gPiArICAke0lNQUdFU19E
-SVJ9L0ltYWdlIFwKPiA+ICsgICR7SU1BR0VTX0RJUn0vZnJlZXNjYWxlL2lteDhtbi1ic2gtc21t
-LXMyLmR0Ygo+ID4gKwo+ID4gZGlmZiAtLWdpdCBhL2JvYXJkL2JzaC9pbXg4bW4tYnNoLXNtbS1z
-Mi9saW51eC5jb25maWcgYi9ib2FyZC9ic2gvaW14OG1uLWJzaC1zbW0tczIvbGludXguY29uZmln
-Cj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAwMDAwLi42MzgzNTIx
-NDZkYTEKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL2JvYXJkL2JzaC9pbXg4bW4tYnNoLXNt
-bS1zMi9saW51eC5jb25maWcKPiA+IEBAIC0wLDAgKzEsODMzIEBACj4KPiAgIFdlIGdlbmVyYWxs
-eSBwcmVmZXIgdG8gdXNlIGFuIGluLXRyZWUgZGVmY29uZmlnIGFuZCBhIGNvbmZpZyBmcmFnbWVu
-dCBvbmx5IGZvcgo+IHRoZSBjaGFuZ2VzLiBUaGF0J3MgbXVjaCBzbWFsbGVyLgoKWW91J2xsIGZp
-bmQgaXQgaW4gdjIuCgo+Cj4gW3NuaXBdCj4gPiBkaWZmIC0tZ2l0IGEvYm9hcmQvYnNoL2lteDht
-bi1ic2gtc21tLXMyL25hbmQtZnVsbC5sc3QgYi9ib2FyZC9ic2gvaW14OG1uLWJzaC1zbW0tczIv
-bmFuZC1mdWxsLmxzdAo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAwMDAw
-MDAwMC4uZjAwYWEwODQ4YTVmCj4gPiAtLS0gL2Rldi9udWxsCj4gPiArKysgYi9ib2FyZC9ic2gv
-aW14OG1uLWJzaC1zbW0tczIvbmFuZC1mdWxsLmxzdAo+ID4gQEAgLTAsMCArMSw0OCBAQAo+ID4g
-KyMgQF9mbGFzaC5iaW4gICAgICAgICAgICB8IGJvb3Rsb2FkZXIKPiA+ICsjIEBfaW1hZ2UgICBb
-X2ZsYXNoLmJpbl0gfCBpbWFnZSBidXJuIHRvIG5hbmQsIGRlZmF1bHQgaXMgdGhlIHNhbWUgYXMg
-Ym9vdGxvYWRlcgo+ID4gKyMgQF9maWxlc3lzdGVtICAgICAgICAgICB8IGZpbGVzeXN0ZW0gdG8g
-YnVybgo+ID4gKyMgQF9rZXJuZWwgICAgICAgICAgICAgICB8IGtlcm5lbCBpbWFnZQo+ID4gKyMg
-QF9kdGIgICAgICAgICAgICAgICAgICB8IGR0YiBpbWFnZQo+ID4gKwo+ID4gKyMgVGhpcyBjb21t
-YW5kIHdpbGwgYmUgcnVuIHdoZW4gaS5NWDYvNyBpLk1YOE1NLCBpLk1YOE1RCj4gPiArU0RQOiBi
-b290IC1mIF9mbGFzaC5iaW4KPiA+ICsKPiA+ICsjIFRoaXMgY29tbWFuZCB3aWxsIGJlIHJ1biB3
-aGVuIFJPTSBzdXBwb3J0IHN0cmVhbSBtb2RlCj4gPiArIyBpLk1YOFFYUCwgaS5NWDhRTQo+ID4g
-K1NEUFM6IGJvb3QgLWYgX2ZsYXNoLmJpbgo+ID4gKwo+ID4gKyMgVGhlc2UgY29tbWFuZHMgd2ls
-bCBiZSBydW4gd2hlbiB1c2UgU1BMIGFuZCB3aWxsIGJlIHNraXBwZWQgaWYgbm8gc3BsCj4gPiAr
-IyBTRFBVIHdpbGwgYmUgZGVwcmVjYXRlZC4gcGxlYXNlIHVzZSBTRFBWIGluc3RlYWQgb2YgU0RQ
-VQo+Cj4gICBTbywgd2h5IGRvIHdlIHN0aWxsIGhhdmUgdGhpcz8KCkknbGwgcmVtb3ZlIHRoZSBk
-ZXByZWNhdGVkIGFuZCB1c2VsZXNzIHN0YXRlbWVudHMgaW4gdjIuCgo+Cj4gPiArIyB7Cj4gPiAr
-U0RQVTogZGVsYXkgMTAwMAo+ID4gK1NEUFU6IHdyaXRlIC1mIF9mbGFzaC5iaW4gLW9mZnNldCAw
-eDU3YzAwCj4gPiArU0RQVToganVtcAo+ID4gKyMgfQo+ID4gKwo+ID4gKyMgVGhlc2UgY29tbWFu
-ZHMgd2lsbCBiZSBydW4gd2hlbiB1c2UgU1BMIGFuZCB3aWxsIGJlIHNraXBwZWQgaWYgbm8gc3Bs
-Cj4gPiArIyBpZiAoU1BMIHN1cHBvcnQgU0RQVikKPiA+ICsjIHsKPiA+ICtTRFBWOiBkZWxheSAx
-MDAwCj4gPiArU0RQVjogd3JpdGUgLWYgX2ZsYXNoLmJpbiAtc2tpcHNwbAo+ID4gK1NEUFY6IGp1
-bXAKPiA+ICsjIH0KPiA+ICsKPiA+ICtGQjogdWNtZCBzZXRlbnYgZmFzdGJvb3RfYnVmZmVyICR7
-bG9hZGFkZHJ9Cj4gPiArRkI6IGRvd25sb2FkIC1mIF9pbWFnZQo+ID4gKyMgQnVybiBpbWFnZSB0
-byBuYW5kZml0IHBhcnRpdGlvbiBpZiBuZWVkZWQKPiA+ICtGQjogdWNtZCBpZiBlbnYgZXhpc3Rz
-IG5hbmRmaXRfcGFydDsgdGhlbiBuYW5kIGVyYXNlLnBhcnQgbmFuZGZpdDsgbmFuZCB3cml0ZSAk
-e2Zhc3Rib290X2J1ZmZlcn0gbmFuZGZpdCAke2ZpbGVzaXplfTsgZWxzZSB0cnVlOyBmaTsKPiA+
-ICtGQjogdWNtZCBuYW5kYmNiIGluaXQgJHtmYXN0Ym9vdF9idWZmZXJ9IG5hbmRib290ICR7Zmls
-ZXNpemV9Cj4gPiArCj4gPiArRkJbLXQgMTAwMDBdOiB1Y21kIHViaSBwYXJ0IG5hbmRyb290ZnMK
-PiA+ICtGQlstdCAxMDAwMF06IHVjbWQgdWJpIGNyZWF0ZSByb290IC0KPiA+ICtGQjogZG93bmxv
-YWQgLWYgX2ZpbGVzeXN0ZW0KPiA+ICtGQlstdCA2MDAwMF06IHVjbWQgdWJpIHdyaXRlICR7bG9h
-ZGFkZHJ9IHJvb3QgJHtmaWxlc2l6ZX0KPiA+ICsKPiA+ICtGQjogZG93bmxvYWQgLWYgX2tlcm5l
-bAo+ID4gK0ZCWy10IDEwMDAwXTogdWNtZCBuYW5kIHdyaXRlICR7bG9hZGFkZHJ9IG5hbmRrZXJu
-ZWwgJHtmaWxlc2l6ZX0KPiA+ICsKPiA+ICtGQjogZG93bmxvYWQgLWYgX2R0Ygo+ID4gK0ZCWy10
-IDgwMDBdOiB1Y21kIG5hbmQgd3JpdGUgJHtsb2FkYWRkcn0gbmFuZGR0YiAke2ZpbGVzaXplfQo+
-ID4gKwo+ID4gK0ZCOiByZWJvb3QKPiA+ICtGQjogZG9uZQo+Cj4gW3NuaXBdCj4gPiBkaWZmIC0t
-Z2l0IGEvYm9hcmQvYnNoL2lteDhtbi1ic2gtc21tLXMyL3Bvc3QtYnVpbGQuc2ggYi9ib2FyZC9i
-c2gvaW14OG1uLWJzaC1zbW0tczIvcG9zdC1idWlsZC5zaAo+ID4gbmV3IGZpbGUgbW9kZSAxMDA3
-NTUKPiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uNDlkZjRjZDZmYjEwCj4gPiAtLS0gL2Rldi9udWxs
-Cj4gPiArKysgYi9ib2FyZC9ic2gvaW14OG1uLWJzaC1zbW0tczIvcG9zdC1idWlsZC5zaAo+ID4g
-QEAgLTAsMCArMSw0IEBACj4gPiArIyEvYmluL3NoCj4gPiArQk9BUkRfRElSPSIkKGRpcm5hbWUg
-JDApIgo+ID4gKwo+ID4gK2NwICR7Qk9BUkRfRElSfS9uYW5kLWZ1bGwubHN0ICR7QklOQVJJRVNf
-RElSfQo+ID4gZGlmZiAtLWdpdCBhL2JvYXJkL2JzaC9pbXg4bW4tYnNoLXNtbS1zMi9yZWFkbWUu
-dHh0IGIvYm9hcmQvYnNoL2lteDhtbi1ic2gtc21tLXMyL3JlYWRtZS50eHQKPiA+IG5ldyBmaWxl
-IG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCAwMDAwMDAwMDAwMDAuLjM3MDgxMDkxZTg0OQo+ID4gLS0t
-IC9kZXYvbnVsbAo+ID4gKysrIGIvYm9hcmQvYnNoL2lteDhtbi1ic2gtc21tLXMyL3JlYWRtZS50
-eHQKPiA+IEBAIC0wLDAgKzEsNzUgQEAKPiA+ICtpLk1YOE1OIEJTSCBTTU0gUzIKPiA+ICs9PT09
-PT09PT09PT09PT09PT0KPiA+ICsKPiA+ICtUaGlzIHR1dG9yaWFsIGRlc2NyaWJlcyBob3cgdG8g
-dXNlIHRoZSBwcmVkZWZpbmVkIEJ1aWxkcm9vdAo+ID4gK2NvbmZpZ3VyYXRpb24gZm9yIHRoZSBp
-Lk1YOE1OIEJTSCBTTU0gUzIgUFJPIGJvYXJkLgo+ID4gKwo+ID4gK0J1aWxkaW5nCj4gPiArLS0t
-LS0tLS0KPiA+ICsKPiA+ICtDb25maWd1cmUgYnVpbGRyb290Ogo+ID4gKwo+ID4gKyAgJCBtYWtl
-IGlteDhtbl9ic2hfc21tX3MyX2RlZmNvbmZpZwo+ID4gKwo+ID4gK0NoYW5nZSBzZXR0aW5ncyB0
-byBmaXQgeW91ciBuZWVkcyAob3B0aW9uYWwpOgo+ID4gKwo+ID4gKyAgJCBtYWtlIG1lbnVjb25m
-aWcKPiA+ICsKPiA+ICtDb21waWxlIGV2ZXJ5dGhpbmcgYW5kIGJ1aWxkIHRoZSByb290ZnMgaW1h
-Z2U6Cj4gPiArCj4gPiArICAkIG1ha2UKPiA+ICsKPiA+ICsKPiA+ICtSZXN1bHQgb2YgdGhlIGJ1
-aWxkCj4gPiArLS0tLS0tLS0tLS0tLS0tLS0tLQo+ID4gKwo+ID4gK0FmdGVyIGJ1aWxkaW5nLCB0
-aGUgb3V0cHV0L2ltYWdlcyBkaXJlY3RvcnkgY29udGFpbnM6Cj4gPiArCj4gPiArICBvdXRwdXQv
-aW1hZ2VzLwo+ID4gKyAgICDilJzilIDilIAgYmwzMS5iaW4KPiA+ICsgICAg4pSc4pSA4pSAIGRk
-cjMqCj4gPiArICAgIOKUnOKUgOKUgCBmbGFzaC5iaW4KPiA+ICsgICAg4pSc4pSA4pSAIGZyZWVz
-Y2FsZS9pbXg4bW4tYnNoLXNtbS1zMi5kdGIKPiA+ICsgICAg4pSc4pSA4pSAIEltYWdlCj4gPiAr
-ICAgIOKUnOKUgOKUgCBuYW5kLWZ1bGwubHN0Cj4gPiArICAgIOKUnOKUgOKUgCByb290ZnMuZXh0
-Mgo+ID4gKyAgICDilJzilIDilIAgcm9vdGZzLmV4dDQgLT4gcm9vdGZzLmV4dDIKPiA+ICsgICAg
-4pSc4pSA4pSAIHJvb3Rmcy50YXIKPiA+ICsgICAg4pSc4pSA4pSAIHJvb3Rmcy51Ymlmcwo+ID4g
-KyAgICDilJzilIDilIAgdS1ib290LmJpbgo+ID4gKyAgICDilJTilIDilIAgdS1ib290LXNwbC5i
-aW4KPiA+ICsKPiA+ICsKPiA+ICtQcmVwYXJpbmcgdGhlIGJvYXJkCj4gPiArLS0tLS0tLS0tLS0t
-LS0tLS0tLQo+ID4gKwo+ID4gK1BsdWcgdGhlIFVTQiB0eXBlIEEgdG8gbWljcm8gQiBjYWJsZSBp
-bnRvIHRoZSBVU0IgRGVidWcKPiA+ICtDb25uZWN0b3IgKERCRyBVQVJUKS4gVXNlIHNlcmlhbCBw
-b3J0IHNldHRpbmdzIDExNTIwMCA4TjEKPiA+ICt0byBhY2Nlc3MgdGhlIGRlYnVnIGNvbnNvbGUu
-Cj4gPiArCj4gPiArUGx1ZyBhbm90aGVyIFVTQiB0eXBlIEEgdG8gbWljcm8gQiBjYWJsZSBpbnRv
-IHRoZSBVU0ItT1RHCj4gPiArQ29ubmVjdG9yIChVU0IxKS4gVGhpcyBjb25uZWN0aW9uIGlzIHVz
-ZWQgdG8gZmxhc2ggdGhlIGJvYXJkCj4gPiArZmlybXdhcmUgdXNpbmcgdGhlIEZyZWVzY2FsZS9O
-WFAgVVVVIHRvb2wuCj4gPiArCj4gPiArQ29ubmVjdCB0aGUgcG93ZXIgc3VwcGx5L2FkYXB0b3Ig
-dG8gdGhlIERDIFBvd2VyIEphY2sgKGxhYmVsbGVkCj4gPiArKzVWKS4KPiA+ICsKPiA+ICsKPiA+
-ICtGbGFzaGluZwo+ID4gKy0tLS0tLS0tCj4gPiArCj4gPiArUG93ZXIgdXAgdGhlIGJvYXJkIGJ5
-IHN3aXRjaGluZyBvbiB0aGUgUG93ZXIgT04gU3dpdGNoLCB3aGljaCBpcwo+ID4gK3BsYWNlZCBy
-aWdodCBuZXh0IHRvIHRoZSBEQyBKYWNrLgo+ID4gKwo+ID4gK0VudGVyIHRoZSBmb2xsb3dpbmcg
-VS1Cb290IGNvbW1hbmRzIG9uIHRoZSBkZWJ1ZyBzZXJpYWwgY29uc29sZToKPiA+ICsKPiA+ICsg
-ICQgbmFuZCBlcmFzZS5jaGlwCj4gPiArICAkIHJlc2V0Cj4gPiArCj4gPiArRmxhc2ggdGhlIGJ1
-aWx0IGltYWdlcyBkaXJlY3RseSB0byBib2FyZOKAmXMgbWVtb3J5LiBPbiB5b3VyIGNvbXB1dGVy
-LAo+ID4gK3J1bjoKPiA+ICsKPiA+ICsgICQgYm9hcmQvYnNoL2lteDhtbi1ic2gtc21tLXMyL2Zs
-YXNoLnNoIG91dHB1dC8KPiA+ICsKPiA+ICtJdCB3aWxsIGZsYXNoIHRoZSBib290bG9hZGVyLCB0
-aGUgRGV2aWNlIFRyZWUgQmxvYiwgdGhlIGtlcm5lbCBpbWFnZQo+ID4gK2FuZCB0aGUgVUJJIHJv
-b3QgZmlsZSBzeXN0ZW0uCj4gPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9pbXg4bW5fYnNoX3NtbV9z
-Ml9kZWZjb25maWcgYi9jb25maWdzL2lteDhtbl9ic2hfc21tX3MyX2RlZmNvbmZpZwo+ID4gbmV3
-IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uZDUwMGYyZmM3Yjk5Cj4g
-PiAtLS0gL2Rldi9udWxsCj4gPiArKysgYi9jb25maWdzL2lteDhtbl9ic2hfc21tX3MyX2RlZmNv
-bmZpZwo+ID4gQEAgLTAsMCArMSw0NCBAQAo+ID4gK0JSMl9hYXJjaDY0PXkKPiA+ICtCUjJfR0xP
-QkFMX1BBVENIX0RJUj0iYm9hcmQvYnNoL2lteDhtbi1ic2gtc21tLXMyL3BhdGNoZXMiCj4gPiAr
-QlIyX1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eW14YzMiCj4gPiArQlIyX1JPT1RGU19Q
-T1NUX0JVSUxEX1NDUklQVD0iYm9hcmQvYnNoL2lteDhtbi1ic2gtc21tLXMyL3Bvc3QtYnVpbGQu
-c2giCj4gPiArQlIyX0xJTlVYX0tFUk5FTD15Cj4gPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01f
-VkVSU0lPTj15Cj4gPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNS4x
-OCIKPiA+ICtCUjJfTElOVVhfS0VSTkVMX1VTRV9DVVNUT01fQ09ORklHPXkKPiA+ICtCUjJfTElO
-VVhfS0VSTkVMX0NVU1RPTV9DT05GSUdfRklMRT0iYm9hcmQvYnNoL2lteDhtbi1ic2gtc21tLXMy
-L2xpbnV4LmNvbmZpZyIKPiA+ICtCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKPiA+ICtC
-UjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0iZnJlZXNjYWxlL2lteDhtbi1ic2gtc21t
-LXMyIgo+ID4gK0JSMl9MSU5VWF9LRVJORUxfRFRCX0tFRVBfRElSTkFNRT15Cj4gPiArQlIyX0xJ
-TlVYX0tFUk5FTF9JTlNUQUxMX1RBUkdFVD15Cj4KPiAgIEF0IGZpcnN0IGdsYW5jZSwgVS1Cb290
-IHVzZXMgdGhlIGtlcm5lbCBhbmQgZHRiIGZyb20gYSBzZXBhcmF0ZSBOQU5ECj4gcGFydGl0aW9u
-LCBzbyB3aHkgZG8geW91IGhhdmUgdGhpcz8KClJpZ2h0LCBpbiB2MiBpdCB3aWxsIGJlIHJlbW92
-ZWQuCgo+Cj4gPiArQlIyX0xJTlVYX0tFUk5FTF9ORUVEU19IT1NUX09QRU5TU0w9eQo+ID4gK0JS
-Ml9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVg9eQo+ID4gK0JSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhf
-UExBVEZPUk1fSU1YOE1OPXkKPiA+ICtCUjJfUEFDS0FHRV9GSVJNV0FSRV9JTVg9eQo+ID4gK0JS
-Ml9QQUNLQUdFX0ZJUk1XQVJFX0lNWF9ERFIzPXkKPiA+ICtCUjJfVEFSR0VUX1JPT1RGU19FWFQy
-PXkKPiA+ICtCUjJfVEFSR0VUX1JPT1RGU19FWFQyXzQ9eQo+ID4gK0JSMl9UQVJHRVRfUk9PVEZT
-X0VYVDJfU0laRT0iMTIwTSIKPiA+ICtCUjJfVEFSR0VUX1JPT1RGU19VQklGUz15Cj4gPiArQlIy
-X1RBUkdFVF9ST09URlNfVUJJRlNfTEVCU0laRT0weDFmMDAwCj4gPiArQlIyX1RBUkdFVF9ST09U
-RlNfVUJJRlNfUlRfTk9ORT15Cj4KPiAgIFdoeSBoYXZlIHRhciAqYW5kKiBleHQ0ICphbmQqIHVi
-aWZzPyBJIHRoaW5rIG9ubHkgdWJpZnMgaXMgZW5vdWdoLgoKUmlnaHQsIHYyIHdpbGwgcmVtb3Zl
-IHRoZXNlIGNvbmZpZ3VyYXRpb25zLgoKPgo+ID4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklS
-TVdBUkU9eQo+ID4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1ZFUlNJ
-T049eQo+ID4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1ZFUlNJT05f
-VkFMVUU9InYyLjUiCj4gPiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFURk9S
-TT0iaW14OG1uIgo+ID4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQURESVRJT05B
-TF9WQVJJQUJMRVM9IklNWF9CT09UX1VBUlRfQkFTRT0weDMwYTYwMDAwIgo+ID4gK0JSMl9UQVJH
-RVRfQVJNX1RSVVNURURfRklSTVdBUkVfREVCVUc9eQo+Cj4gICBJcyB0aGlzIG5lZWRlZD8KClll
-cywgSSBhbHNvIHRlc3RlZCBpdC4KClRoYW5rcyBhbmQgcmVnYXJkcywKRGFyaW8KCj4KPiAgIFJl
-Z2FyZHMsCj4gICBBcm5vdXQKPgo+ID4gK0JSMl9UQVJHRVRfVUJPT1Q9eQo+ID4gK0JSMl9UQVJH
-RVRfVUJPT1RfQlVJTERfU1lTVEVNX0tDT05GSUc9eQo+ID4gK0JSMl9UQVJHRVRfVUJPT1RfQ1VT
-VE9NX1ZFUlNJT049eQo+ID4gK0JSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9
-IjIwMjIuMDctcmMyIgo+ID4gK0JSMl9UQVJHRVRfVUJPT1RfQk9BUkRfREVGQ09ORklHPSJpbXg4
-bW5fYnNoX3NtbV9zMiIKPiA+ICtCUjJfVEFSR0VUX1VCT09UX05FRURTX0RUQz15Cj4gPiArQlIy
-X1RBUkdFVF9VQk9PVF9ORUVEU19QWUxJQkZEVD15Cj4gPiArQlIyX1RBUkdFVF9VQk9PVF9ORUVE
-U19PUEVOU1NMPXkKPiA+ICtCUjJfVEFSR0VUX1VCT09UX05FRURTX0FURl9CTDMxPXkKPiA+ICtC
-UjJfVEFSR0VUX1VCT09UX05FRURTX0lNWF9GSVJNV0FSRT15Cj4gPiArQlIyX1RBUkdFVF9VQk9P
-VF9GT1JNQVRfQ1VTVE9NPXkKPiA+ICtCUjJfVEFSR0VUX1VCT09UX0ZPUk1BVF9DVVNUT01fTkFN
-RT0iZmxhc2guYmluIgo+ID4gK0JSMl9UQVJHRVRfVUJPT1RfU1BMPXkKPiA+ICtCUjJfUEFDS0FH
-RV9IT1NUX1VVVT15CgoKCi0tIAoKRGFyaW8gQmluYWNjaGkKCkVtYmVkZGVkIExpbnV4IERldmVs
-b3BlcgoKZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20KCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KCgpBbWFydWxhIFNvbHV0aW9ucyBTUkwKClZpYSBMZSBDYW5l
-dmFyZSAzMCwgMzExMDAgVHJldmlzbywgVmVuZXRvLCBJVAoKVC4gKzM5IDA0MiAyNDMgNTMxMApp
-bmZvQGFtYXJ1bGFzb2x1dGlvbnMuY29tCgp3d3cuYW1hcnVsYXNvbHV0aW9ucy5jb20KX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+The series applies the changes requested by Arnout Vandecappelle to the
+V3 patch for adding support to BSH smm s2 pro board ([1]). It also adds
+the support for the BSH smm s2 board and It builds the uuu package, used
+for flashing the boards, as part of buildroot.
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20220131145555.2819020-1-michael@amarulasolutions.com/
+
+Changes in v2:
+- Drop the patch that added the 'uuu' package. It has been merged.
+- Patch 1/2: "configs/imx8mn_bsh_smm_s2_defconfig: new defconfig":
+  - Change commit subject and description.
+  - Update linux patch to version 4. It hasn't been merged yet but has
+    been reviewed. This is the most up-to-date version.
+  - Replace `Co-developed-by:' tag with `Co-authored-by'.
+  - Use the buildroot's output directory if the binaries directory is
+    not passed as a parameter to the `flash.sh' script.
+  - Replace the linux.config file with an architectural defconfig and
+    a config fragment for the changes.
+  - Remove useless and deprecated statements in nand-full.lst.
+  - Remove the buildroot configurations for ext2/ext4 filesystem creation.
+- Patch 2/2: "configs/imx8mn_bsh_smm_s2_pro_defconfig: new defconfig":
+  - Change commit subject line.
+  - Use the buildroot's output directory if the binaries directory is
+    not passed as a parameter to the `flash.sh' script.
+  - Replace the linux.config file with an architectural defconfig and
+    a config fragment for the changes.
+
+Dario Binacchi (1):
+  configs/imx8mn_bsh_smm_s2_defconfig: new defconfig
+
+Michael Trimarchi (1):
+  configs/imx8mn_bsh_smm_s2_pro_defconfig: new defconfig
+
+ DEVELOPERS                                    |   8 +
+ .../common/imx8mn-bsh-smm-s2/linux.fragment   | 931 ++++++++++++++++++
+ board/bsh/imx8mn-bsh-smm-s2-pro/extlinux.conf |   4 +
+ board/bsh/imx8mn-bsh-smm-s2-pro/flash.sh      |  23 +
+ board/bsh/imx8mn-bsh-smm-s2-pro/genimage.cfg  |  17 +
+ board/bsh/imx8mn-bsh-smm-s2-pro/post-build.sh |   7 +
+ board/bsh/imx8mn-bsh-smm-s2-pro/post-image.sh |   3 +
+ board/bsh/imx8mn-bsh-smm-s2-pro/readme.txt    |  73 ++
+ board/bsh/imx8mn-bsh-smm-s2/flash.sh          |  26 +
+ board/bsh/imx8mn-bsh-smm-s2/nand-full.lst     |  29 +
+ ...dmaengine-mxs-fix-driver-registering.patch |  69 ++
+ ..._nand-Fix-specific-hook-registration.patch |  78 ++
+ ...-mxs_nand_spl-Fix-bad-block-skipping.patch | 165 ++++
+ ...x-cmd_nandbcb-fix-bad-block-handling.patch |  95 ++
+ ...d-Fix-bad-block-handling-in-fitImage.patch |  42 +
+ ...h-to-nand-spl-load-instead-of-romapi.patch |  30 +
+ ...Remove-rootwait-1-to-all-the-affecte.patch | 159 +++
+ ...gs-imx8mn_bsh_smm_s2-add-NAND-driver.patch |  42 +
+ ...s-imx8mn_bsh_smm_s2-add-UBI-commands.patch |  29 +
+ ...sh_smm_s2-remove-console-from-bootar.patch |  32 +
+ ..._bsh_smm_s2-add-mtdparts-to-bootargs.patch |  30 +
+ board/bsh/imx8mn-bsh-smm-s2/post-build.sh     |   4 +
+ board/bsh/imx8mn-bsh-smm-s2/readme.txt        |  75 ++
+ configs/imx8mn_bsh_smm_s2_defconfig           |  40 +
+ configs/imx8mn_bsh_smm_s2_pro_defconfig       |  41 +
+ 25 files changed, 2052 insertions(+)
+ create mode 100644 board/bsh/common/imx8mn-bsh-smm-s2/linux.fragment
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2-pro/extlinux.conf
+ create mode 100755 board/bsh/imx8mn-bsh-smm-s2-pro/flash.sh
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2-pro/genimage.cfg
+ create mode 100755 board/bsh/imx8mn-bsh-smm-s2-pro/post-build.sh
+ create mode 100755 board/bsh/imx8mn-bsh-smm-s2-pro/post-image.sh
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2-pro/readme.txt
+ create mode 100755 board/bsh/imx8mn-bsh-smm-s2/flash.sh
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/nand-full.lst
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/linux/0001-dmaengine-mxs-fix-driver-registering.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0001-nand-raw-mxs_nand-Fix-specific-hook-registration.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0002-mtd-nand-mxs_nand_spl-Fix-bad-block-skipping.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0003-arm-mach-imx-cmd_nandbcb-fix-bad-block-handling.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0004-spl-spl_nand-Fix-bad-block-handling-in-fitImage.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0005-board-bsh-Switch-to-nand-spl-load-instead-of-romapi.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0006-include-configs-Remove-rootwait-1-to-all-the-affecte.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0007-configs-imx8mn_bsh_smm_s2-add-NAND-driver.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0008-configs-imx8mn_bsh_smm_s2-add-UBI-commands.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0009-configs-imx8mn_bsh_smm_s2-remove-console-from-bootar.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0010-configs-imx8mn_bsh_smm_s2-add-mtdparts-to-bootargs.patch
+ create mode 100755 board/bsh/imx8mn-bsh-smm-s2/post-build.sh
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/readme.txt
+ create mode 100644 configs/imx8mn_bsh_smm_s2_defconfig
+ create mode 100644 configs/imx8mn_bsh_smm_s2_pro_defconfig
+
+-- 
+2.32.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
