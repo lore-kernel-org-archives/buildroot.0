@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4D08C43334
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jun 2022 06:47:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3686EC43334
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jun 2022 06:47:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 41D3B40A9C;
-	Sat, 25 Jun 2022 06:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41D3B40A9C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZgYeriOsAsVe; Sat, 25 Jun 2022 06:47:19 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4B4B540AA0;
-	Sat, 25 Jun 2022 06:47:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B4B540AA0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6D6641BF2C6
- for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 06:46:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 480A642640
- for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 06:46:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 480A642640
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0B8C4263D;
+	Sat, 25 Jun 2022 06:47:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0B8C4263D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X0GQ9l0pfPFP for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m1ucnXgW43_r; Sat, 25 Jun 2022 06:47:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A7004262F;
+	Sat, 25 Jun 2022 06:47:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A7004262F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3DFE71BF2C6
+ for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 06:46:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4956060F0D
+ for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 06:46:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4956060F0D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jE06mUcf97ir for <buildroot@lists.busybox.net>;
  Sat, 25 Jun 2022 06:46:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BA28410B3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 72F1C60F13
  for <buildroot@buildroot.org>; Sat, 25 Jun 2022 06:46:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BA28410B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72F1C60F13
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 080D187539; Sat, 25 Jun 2022 06:34:18 +0000 (UTC)
+ id 46C998754F; Sat, 25 Jun 2022 06:34:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jun 2022 08:23:59 +0200
+Date: Sat, 25 Jun 2022 08:42:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: efd215c79705b84fc9782604fdcd142b8985c3b6
-X-Git-Newrev: df27a9daa68f2f9dae1315df5aed026f0e8df58d
+X-Git-Oldrev: 0fb9b97ca452e6f0c6404c532bb856ca4b69f0a8
+X-Git-Newrev: 48d8b00a3c032d7bb1237c65bce1da97ccbc49d5
 X-Patchwork-Hint: ignore
-Message-Id: <20220625063418.080D187539@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
- version to 1.0.20211208
+Message-Id: <20220625063418.46C998754F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnl: bump to version 3.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +62,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df27a9daa68f2f9dae1315df5aed026f0e8df58d
+commit: https://git.buildroot.net/buildroot/commit/?id=48d8b00a3c032d7bb1237c65bce1da97ccbc49d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2021-December/007369.html
+- Drop first patch (already in version)
+- Update indentation in hash file (two spaces)
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...usl-workaround-to-the-libc-compat.h-copy.patch} |  0
+ ...ibs.private-field-in-libnl-pkg-config-fil.patch | 30 ----------------------
+ package/libnl/libnl.hash                           |  8 +++---
+ package/libnl/libnl.mk                             |  2 +-
+ 4 files changed, 4 insertions(+), 36 deletions(-)
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index e18bd10cf7..3072b66e92 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2021-June/006781.html
--sha256  3f5d990006e6eabfd692d925ec314fff2c5ee7dcdb869a6510d579acfdd84ec0  wireguard-linux-compat-1.0.20210606.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2021-December/007369.html
-+sha256  c0e607138a17daac656f508d8e63ea3737b5221fa5d9288191ddeb099f5a3b92  wireguard-linux-compat-1.0.20211208.tar.xz
+diff --git a/package/libnl/0002-Add-musl-workaround-to-the-libc-compat.h-copy.patch b/package/libnl/0001-Add-musl-workaround-to-the-libc-compat.h-copy.patch
+similarity index 100%
+rename from package/libnl/0002-Add-musl-workaround-to-the-libc-compat.h-copy.patch
+rename to package/libnl/0001-Add-musl-workaround-to-the-libc-compat.h-copy.patch
+diff --git a/package/libnl/0001-build-add-Libs.private-field-in-libnl-pkg-config-fil.patch b/package/libnl/0001-build-add-Libs.private-field-in-libnl-pkg-config-fil.patch
+deleted file mode 100644
+index 2419ae282c..0000000000
+--- a/package/libnl/0001-build-add-Libs.private-field-in-libnl-pkg-config-fil.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From db0d59cd06f3ffd350379847c0885e1bfb85af0f Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sat, 7 Mar 2015 11:34:42 +0100
+-Subject: [PATCH] build: add Libs.private field in libnl pkg-config file
+-
+-In order to support static linking, the libnl pkg-config file should
+-indicate in its Libs.private field the libraries that libnl-3.0.a
+-requires. The LIBS variable contains the appropriate list of
+-libraries: -lm in all cases, and -lpthread when pthread support is
+-enabled. This allows to statically link applications against libnl
+-properly.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- libnl-3.0.pc.in | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/libnl-3.0.pc.in b/libnl-3.0.pc.in
+-index b87e3dc..ddbc999 100644
+---- a/libnl-3.0.pc.in
+-+++ b/libnl-3.0.pc.in
+-@@ -7,4 +7,5 @@ Name: libnl
+- Description: Convenience library for netlink sockets
+- Version: @PACKAGE_VERSION@
+- Libs: -L${libdir} -lnl-@MAJ_VERSION@
+-+Libs.private: @LIBS@
+- Cflags: -I${includedir}/libnl@MAJ_VERSION@
+--- 
+-2.1.0
+-
+diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
+index d7cd5c9532..a0f1388528 100644
+--- a/package/libnl/libnl.hash
++++ b/package/libnl/libnl.hash
+@@ -1,6 +1,4 @@
+-# From https://github.com/thom311/libnl/releases/download/libnl3_5_0/libnl-3.5.0.tar.gz.md5sum
+-md5 74ba57b1b1d6f9f92268aa8141d8e8e4  libnl-3.5.0.tar.gz
+-# From https://github.com/thom311/libnl/releases/download/libnl3_5_0/libnl-3.5.0.tar.gz.sha256sum
+-sha256 352133ec9545da76f77e70ccb48c9d7e5324d67f6474744647a7ed382b5e05fa  libnl-3.5.0.tar.gz
++# From https://github.com/thom311/libnl/releases/download/libnl3_6_0/libnl-3.6.0.tar.gz.sha256sum
++sha256  532155fd011e5a805bd67121b87a01c757e2bb24112ac17e69cb86013b970009  libnl-3.6.0.tar.gz
  # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 1b7ec941db..44cc30f36e 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+-sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index fc9398b29a..d3bd185093 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210606
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20211208
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+-LIBNL_VERSION = 3.5.0
++LIBNL_VERSION = 3.6.0
+ LIBNL_SITE = https://github.com/thom311/libnl/releases/download/libnl$(subst .,_,$(LIBNL_VERSION))
+ LIBNL_LICENSE = LGPL-2.1+
+ LIBNL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
