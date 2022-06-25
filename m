@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7A41C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jun 2022 06:48:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B83AC43334
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jun 2022 06:48:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61E21844F8;
-	Sat, 25 Jun 2022 06:48:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61E21844F8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3774740AA6;
+	Sat, 25 Jun 2022 06:48:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3774740AA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id waTdL4sDoBo3; Sat, 25 Jun 2022 06:47:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DRuPegB2tAs5; Sat, 25 Jun 2022 06:48:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B3148406A;
-	Sat, 25 Jun 2022 06:47:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B3148406A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C50E410AE;
+	Sat, 25 Jun 2022 06:48:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C50E410AE
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 566BC1BF962
- for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 06:46:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 967861BF2C6
+ for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 06:46:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 63551410B3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83B4E42640
  for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 06:46:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63551410B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83B4E42640
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r9-I9kJIHXTR for <buildroot@lists.busybox.net>;
+ with ESMTP id hbylYJBM7z5J for <buildroot@lists.busybox.net>;
  Sat, 25 Jun 2022 06:46:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 653414262F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8800B4263C
  for <buildroot@buildroot.org>; Sat, 25 Jun 2022 06:46:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 653414262F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8800B4263C
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 31E3C87561; Sat, 25 Jun 2022 06:34:18 +0000 (UTC)
+ id 59E1787560; Sat, 25 Jun 2022 06:34:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jun 2022 08:40:52 +0200
+Date: Sat, 25 Jun 2022 08:43:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: abfca98ea223397ed502640d6171845f331614a3
-X-Git-Newrev: 9f6a98d959585aef74491b0b9f35c94df096ff80
+X-Git-Oldrev: e51d503bcd9fabba539f3adb7df4000248b10400
+X-Git-Newrev: aca69596a8463772912b5f28815d8bca71157401
 X-Patchwork-Hint: ignore
-Message-Id: <20220625063418.31E3C87561@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/strace: bump to version 5.18
+Message-Id: <20220625063418.59E1787560@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/git-crypt: bump to version 0.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +62,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f6a98d959585aef74491b0b9f35c94df096ff80
+commit: https://git.buildroot.net/buildroot/commit/?id=aca69596a8463772912b5f28815d8bca71157401
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Update indentation in hash file (two spaces)
+
+https://github.com/AGWA/git-crypt/blob/0.7.0/NEWS.md
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/git-crypt/git-crypt.hash | 6 +++---
+ package/git-crypt/git-crypt.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index f3567db637..c044563b33 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
+diff --git a/package/git-crypt/git-crypt.hash b/package/git-crypt/git-crypt.hash
+index 973432d7d0..5957a0273d 100644
+--- a/package/git-crypt/git-crypt.hash
++++ b/package/git-crypt/git-crypt.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/5.17/strace-5.17.tar.xz.asc
--sha256  5fb298dbd1331fd1e1bc94c5c32395860d376101b87c6cd3d1ba9f9aa15c161f  strace-5.17.tar.xz
-+# https://strace.io/files/5.18/strace-5.18.tar.xz.asc
-+sha256  60293ea79ac9253d600cdc9be077ad2988ca22284a439c9e66be5150db3d1187  strace-5.18.tar.xz
- sha256  d92f973d08c8466993efff1e500453add0c038c20b4d2cbce3297938a296aea9  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 4eef43a419..0e1cb04c44 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
+ # Locally calculated after checking pgp signature
+-sha256 6d30fcd99442d50f4b3c8d554067ff1d980cdf9f3120ee774131172dba98fd6f  git-crypt-0.6.0.tar.gz
++sha256  50f100816a636a682404703b6c23a459e4d30248b2886a5cf571b0d52527c7d8  git-crypt-0.7.0.tar.gz
+ # Locally calculated
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+-sha256 506657e7a381165550e6c33e35b3b03bbef3e1feb68ba5529e264bd75ed2dc64  parse_options.hpp
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  506657e7a381165550e6c33e35b3b03bbef3e1feb68ba5529e264bd75ed2dc64  parse_options.hpp
+diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
+index 37e3d885a9..d562522485 100644
+--- a/package/git-crypt/git-crypt.mk
++++ b/package/git-crypt/git-crypt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRACE_VERSION = 5.17
-+STRACE_VERSION = 5.18
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+-GIT_CRYPT_VERSION = 0.6.0
++GIT_CRYPT_VERSION = 0.7.0
+ GIT_CRYPT_SITE = https://www.agwa.name/projects/git-crypt/downloads
+ GIT_CRYPT_DEPENDENCIES = host-pkgconf openssl
+ GIT_CRYPT_LICENSE = GPL-3.0+, MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
