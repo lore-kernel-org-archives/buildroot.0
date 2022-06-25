@@ -1,78 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5158C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jun 2022 17:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A3A3C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jun 2022 17:54:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1385D60F53;
-	Sat, 25 Jun 2022 17:24:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1385D60F53
+	by smtp4.osuosl.org (Postfix) with ESMTP id C38B3416BE;
+	Sat, 25 Jun 2022 17:54:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C38B3416BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JhhtfPO61nET; Sat, 25 Jun 2022 17:24:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id noVYPYNWpvPA; Sat, 25 Jun 2022 17:54:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2075460F3C;
-	Sat, 25 Jun 2022 17:24:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2075460F3C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32E8A416C5;
+	Sat, 25 Jun 2022 17:54:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32E8A416C5
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 213461BF389
- for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 17:24:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D70EE1BF389
+ for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 17:54:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF51D60F3C
- for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 17:24:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF51D60F3C
+ by smtp3.osuosl.org (Postfix) with ESMTP id A3CC96079D
+ for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 17:54:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3CC96079D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AEI_OTIRyZCW for <buildroot@lists.busybox.net>;
- Sat, 25 Jun 2022 17:24:40 +0000 (UTC)
-X-Greylist: delayed 00:05:43 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74ACD60C20
-Received: from forward104o.mail.yandex.net (forward104o.mail.yandex.net
- [37.140.190.179])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 74ACD60C20
- for <buildroot@buildroot.org>; Sat, 25 Jun 2022 17:24:37 +0000 (UTC)
-Received: from forward103q.mail.yandex.net (forward103q.mail.yandex.net
- [IPv6:2a02:6b8:c0e:50:0:640:b21c:d009])
- by forward104o.mail.yandex.net (Yandex) with ESMTP id 1764165D7DB8
- for <buildroot@buildroot.org>; Sat, 25 Jun 2022 20:18:48 +0300 (MSK)
-Received: from vla1-2e2fe8fd096a.qloud-c.yandex.net
- (vla1-2e2fe8fd096a.qloud-c.yandex.net
- [IPv6:2a02:6b8:c0d:3495:0:640:2e2f:e8fd])
- by forward103q.mail.yandex.net (Yandex) with ESMTP id 1336C56A0B8A
- for <buildroot@buildroot.org>; Sat, 25 Jun 2022 20:18:48 +0300 (MSK)
-Received: from vla3-3dd1bd6927b2.qloud-c.yandex.net
- (vla3-3dd1bd6927b2.qloud-c.yandex.net [2a02:6b8:c15:350f:0:640:3dd1:bd69])
- by vla1-2e2fe8fd096a.qloud-c.yandex.net (mxback/Yandex) with ESMTP id
- BZu5jZY1WO-IlgSj4lD; Sat, 25 Jun 2022 20:18:48 +0300
-X-Yandex-Fwd: 2
-Received: by vla3-3dd1bd6927b2.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA
- id X5UxHRnqrV-IlN8nUa5; Sat, 25 Jun 2022 20:18:47 +0300
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client certificate not present)
-From: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?=
- <leo@yuriev.ru>
-To: buildroot@buildroot.org
-Date: Sat, 25 Jun 2022 20:18:29 +0300
-Message-Id: <20220625171830.4009753-1-leo@yuriev.ru>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id OLopBMol46b5 for <buildroot@lists.busybox.net>;
+ Sat, 25 Jun 2022 17:54:02 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D91160777
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2D91160777
+ for <buildroot@buildroot.org>; Sat, 25 Jun 2022 17:54:02 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:61fc:46f7:8c1:31c2])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id AC5A05FF88;
+ Sat, 25 Jun 2022 19:53:55 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 25 Jun 2022 19:53:55 +0200
+Date: Sat, 25 Jun 2022 19:53:55 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Stefan Agner <stefan@agner.ch>
+Message-ID: <20220625175355.GF2608@scaer>
+References: <82b5bbe664c06c5864debb660850e0cf@agner.ch>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yuriev.ru; s=mail; t=1656177528; 
- bh=ArFCoYywSVbUj6uNTXCwrvV8lQO/DJO2pMB7yFdxFbc=;
- h=Date:Subject:Cc:To:From:Message-Id;
- b=SdV7IX/1RqGEilD6XnpxwRcVn26lUoxOqDHZsx6uQf88d7MDLjp2oqzBKk9/OJA4v
- KEi/F4KTDOeEOU0lth/wo89MEGKIFhyfC7cI0OQSkE7vtP/E2U55Y5dO8UKFqFwiE5
- Xj8t5I7tmQ9S6tJ4ZV8a2IJHI5vMsVziK8hrAhFg=
+Content-Disposition: inline
+In-Reply-To: <82b5bbe664c06c5864debb660850e0cf@agner.ch>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1656179638;
+ bh=zHYIKP4oMTATMUapbLCtRmwDsrMQ9S6GkVFipqacC9A=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=YCitR3pdT8U1OFktuT0YeoC6IEtVsMOUrj814+h9vzrEYrTJOrF7o4GObZD5O8pi7
+ PYR5ggpzbMVqsqYUGdvgI9rETqVZ0/Wgc/Iw0Jbl/nZzZ0d81QTVhlUYSU3M+mpeYR
+ vUhRNocNzkPhjGebC6BCfOauftArlj3ZF81842DpdBjg4PCE2GgEHMc90235RQA0yd
+ 7sTfnYd2drhRs1v7nDQMqrRTNZ7F3iwx8I4erPV9dvlQHHA5qYyfU1QTsyaCop/cML
+ 8zGUJy/Hypkpm/hOuDXvE9RnDKMdtf/1RJ2WK005DvqYq0pd/vryLK6G06LXDsfOyc
+ octd9P13eLb1A==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=yuriev.ru header.i=@yuriev.ru
- header.a=rsa-sha256 header.s=mail header.b=SdV7IX/1
-X-Mailman-Original-Authentication-Results: vla1-2e2fe8fd096a.qloud-c.yandex.net; dkim=pass header.i=@yuriev.ru
-Subject: [Buildroot] [PATCH] package/libmdbx: bump version to 0.11.8
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YCitR3pd
+Subject: Re: [Buildroot] Build error when building two GRUB2 configurations
+ (race condition)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,51 +77,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C?=
- =?UTF-8?q?=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?= <leo@yuriev.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: kory.maincent@bootlin.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBpcyBzdGFibGUgYnVnZml4IHJlbGVhc2Ugb2YgbGlibWRieC4KVGhlIHByb2plY3QncyB3
-ZWJzaXRlIG5vdyBpcyBvbiBodHRwczovL2xpYm1kYnguZHFka2ZhLnJ1LwoKUmVsZWFzZSBub3Rl
-cyBmb3IgdjAuMTEuOCBodHRwczovL2dpdGZsaWMucnUvcHJvamVjdC9lcnRoaW5rL2xpYm1kYngv
-cmVsZWFzZS8wNjI2ODAzOC0zOWZmLTQyNzAtOWJlOC05ZjI2ZDU1NDMwMTUKClRoZSBjb21wbGV0
-ZSBDaGFuZ2VMb2c6IGh0dHBzOi8vZ2l0ZmxpYy5ydS9wcm9qZWN0L2VydGhpbmsvbGlibWRieC9i
-bG9iP2ZpbGU9Q2hhbmdlTG9nLm1kCgpTaWduZWQtb2ZmLWJ5OiDQm9C10L7QvdC40LQg0K7RgNGM
-0LXQsiAoTGVvbmlkIFl1cmlldikgPGxlb0B5dXJpZXYucnU+Ci0tLQogcGFja2FnZS9saWJtZGJ4
-L0NvbmZpZy5pbiAgICB8IDIgKy0KIHBhY2thZ2UvbGlibWRieC9saWJtZGJ4Lmhhc2ggfCAzICsr
-LQogcGFja2FnZS9saWJtZGJ4L2xpYm1kYngubWsgICB8IDQgKystLQogMyBmaWxlcyBjaGFuZ2Vk
-LCA1IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9s
-aWJtZGJ4L0NvbmZpZy5pbiBiL3BhY2thZ2UvbGlibWRieC9Db25maWcuaW4KaW5kZXggNDg0OWQ2
-MGI5Mi4uYTlhNGFjNDVjNSAxMDA2NDQKLS0tIGEvcGFja2FnZS9saWJtZGJ4L0NvbmZpZy5pbgor
-KysgYi9wYWNrYWdlL2xpYm1kYngvQ29uZmlnLmluCkBAIC0xMyw3ICsxMyw3IEBAIGNvbmZpZyBC
-UjJfUEFDS0FHRV9MSUJNREJYCiAJICBsaWJtZGJ4IHN1cnBhc3NlcyB0aGUgbGVnZW5kYXJ5IExN
-REIgaW4gdGVybXMgb2YKIAkgIHJlbGlhYmlsaXR5LCBmZWF0dXJlcyBhbmQgcGVyZm9ybWFuY2Uu
-CiAKLQkgIGh0dHBzOi8vbGlibWRieC53ZWJzaXRlLnlhbmRleGNsb3VkLm5ldC8KKwkgIGh0dHBz
-Oi8vbGlibWRieC5kcWRrZmEucnUKIAogaWYgQlIyX1BBQ0tBR0VfTElCTURCWAogCmRpZmYgLS1n
-aXQgYS9wYWNrYWdlL2xpYm1kYngvbGlibWRieC5oYXNoIGIvcGFja2FnZS9saWJtZGJ4L2xpYm1k
-YnguaGFzaAppbmRleCA3ZDY2M2IzZGEwLi4zZjJiZTEzNGMzIDEwMDY0NAotLS0gYS9wYWNrYWdl
-L2xpYm1kYngvbGlibWRieC5oYXNoCisrKyBiL3BhY2thZ2UvbGlibWRieC9saWJtZGJ4Lmhhc2gK
-QEAgLTEsNCArMSw1IEBACi0jIEhhc2hlcyBmcm9tOiBodHRwczovL2xpYm1kYngud2Vic2l0ZS55
-YW5kZXhjbG91ZC5uZXQvcmVsZWFzZS9TSEEyNTZTVU1TCisjIEhhc2hlcyBmcm9tOiBodHRwczov
-L2xpYm1kYnguZHFka2ZhLnJ1L3JlbGVhc2UvU0hBMjU2U1VNUworc2hhMjU2ICAwNjAxMWYzNjE0
-ODFlZTdhZGMyMTExZTQ4YjdiMTIxMzg0Mjk0ZTBiNmI4ZjEwYzc1ZTc4ODY2MjkyOTdiMjc5ICBs
-aWJtZGJ4LWFtYWxnYW1hdGVkLTAuMTEuOC50YXIueHoKIHNoYTI1NiAgM2E5ZmI2YTRjZDk0MWU2
-NDY1OTcyMzU1MTg3MTQzNzNmZGExY2E2ZDRjNWUyMzY2OWFmZTcwZWE4N2MyMDk0MCAgbGlibWRi
-eC1hbWFsZ2FtYXRlZC0wLjExLjcudGFyLnh6CiAKICMgTG9jYWxseSBjYWxjdWxhdGVkCmRpZmYg
-LS1naXQgYS9wYWNrYWdlL2xpYm1kYngvbGlibWRieC5tayBiL3BhY2thZ2UvbGlibWRieC9saWJt
-ZGJ4Lm1rCmluZGV4IGE3MDU2YjI4NTAuLjEzMGZlOTY3OTMgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uv
-bGlibWRieC9saWJtZGJ4Lm1rCisrKyBiL3BhY2thZ2UvbGlibWRieC9saWJtZGJ4Lm1rCkBAIC00
-LDkgKzQsOSBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotTElCTURCWF9WRVJTSU9O
-ID0gMC4xMS43CitMSUJNREJYX1ZFUlNJT04gPSAwLjExLjgKIExJQk1EQlhfU09VUkNFID0gbGli
-bWRieC1hbWFsZ2FtYXRlZC0kKExJQk1EQlhfVkVSU0lPTikudGFyLnh6Ci1MSUJNREJYX1NJVEUg
-PSBodHRwczovL2xpYm1kYngud2Vic2l0ZS55YW5kZXhjbG91ZC5uZXQvcmVsZWFzZQorTElCTURC
-WF9TSVRFID0gaHR0cHM6Ly9saWJtZGJ4LmRxZGtmYS5ydS9yZWxlYXNlCiBMSUJNREJYX1NVUFBP
-UlRTX0lOX1NPVVJDRV9CVUlMRCA9IE5PCiBMSUJNREJYX0xJQ0VOU0UgPSBPTERBUC0yLjgKIExJ
-Qk1EQlhfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKLS0gCjIuMzQuMQoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+Stefan, All,
+
+On 2022-06-25 09:44 -0700, Stefan Agner spake thusly:
+> In Home Assistant OS we use the capability to build two GRUB2 binaries
+> by enabling these two configurations:
+> 
+> BR2_TARGET_GRUB2_I386_EFI=y  
+> BR2_TARGET_GRUB2_X86_64_EFI=y
+> 
+> Every now and then a from scratch build seems to fail with the following
+> error:
+> 
+> config.status: creating config-util.h
+> In file included from ../include/grub/disk.h:***,
+>                  from ../include/grub/file.h:26,
+>                  from ../grub-core/kern/emu/hostfs.c:23:
+> ./config.h:38:10: fatal error: ./config-util.h: No such file or
+> directory
+>    38 | #include <config-util.h>
+>       |          ^~~~~~~~~~~~~~~
+> compilation terminated.
+
+I had the same issue even with a single grub2 config enabled. This is a
+grub2 issue, and it was supposedly fixed with upstream commit
+42f4054faf3c (Makefile: Make libgrub.pp depend on config-util.h) and we
+do have this patch backported as:
+boot/grub2/0150-Makefile-Make-libgrub.pp-depend-on-config-util.h.patch
+
+We currently have grub2 2.04, almost three years old now; we currently
+carry 149 backported patches. This is getting insane. We should update.
+
+grub 2.06 has been out for a year now, but there are already a lot of
+commits applied in the tree.
+
+I think we should just bite the bullet and bump to the current HEAD of
+the repository.
+
+We have (indirect) runtime testing for grub2, so we can at least check
+if bumping is not breaing those (TestIso9660Grub2Hybrid is a two-grub2
+build configuration):
+    support/testing/tests/boot/test_edk2.py
+    support/testing/tests/fs/test_iso9660.py
+
+New runtime tests to explicitly test grub2, added before we bump, then a
+bump, would be nice. Hint, hint. ;-)
+
+> At least in this instance it seems to be the second configuration
+> x86_64-efi which fails (as the previous >>> grub2 2.04 Building i386-efi
+> succeeds).
+
+This is a race condition. As all good race conditions, who wins and who
+lose is totally arbitrary... :-/
+
+> The full build log can be found here:
+> https://pipelines.actions.githubusercontent.com/serviceHosts/dff1d65b-5367-4f4f-a0ee-c2bf0f874fbd/_apis/pipelines/1/runs/8778/signedlogcontent/14?urlExpires=2022-06-25T16%3A32%3A02.7601449Z&urlSigningMethod=HMACV1&urlSignature=c9ayjKpOOIoTexbMMXYB8A1G6UwmGfhBwTdtxTE3wmI%3D
+> 
+> I haven't dig into it really, maybe someone with some familiarity of the
+> GRUB2 (multi-platform) build system has some idea?
+
+Their Makefiles are, err... interesting. I did have a look a while back
+to try and solve that exact issue, and was relieved to see that they
+supposedly had a patch already. Once I found it was not enough, I did
+not dare look back at the Makefiles again, sadly...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
