@@ -1,55 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF55FC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jun 2022 05:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D092C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jun 2022 05:32:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4409A40A80;
-	Sat, 25 Jun 2022 05:02:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4409A40A80
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81710847FD;
+	Sat, 25 Jun 2022 05:32:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81710847FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o1QuXN0TlyBq; Sat, 25 Jun 2022 05:02:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t0KN3aFayjdz; Sat, 25 Jun 2022 05:32:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 266BB40A68;
-	Sat, 25 Jun 2022 05:02:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 266BB40A68
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 86FDC1BF279
- for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 05:02:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9EA17847FB;
+	Sat, 25 Jun 2022 05:32:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EA17847FB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A4CD71BF3F9
+ for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 05:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D3364179B
- for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 05:02:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D3364179B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7FE82847D4
+ for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 05:32:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FE82847D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bp5p2FLbFNNA for <buildroot@lists.busybox.net>;
- Sat, 25 Jun 2022 05:02:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bx-A03ytgYwc for <buildroot@lists.busybox.net>;
+ Sat, 25 Jun 2022 05:32:37 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 408CA41781
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A93F84778
 Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 408CA41781
- for <buildroot@buildroot.org>; Sat, 25 Jun 2022 05:02:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2A93F84778
+ for <buildroot@buildroot.org>; Sat, 25 Jun 2022 05:32:37 +0000 (UTC)
 Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id C388FBDE0093;
- Sat, 25 Jun 2022 07:02:32 +0200 (CEST)
+ by serv15.avernis.de (Postfix) with ESMTPSA id 6AF03BDE002A;
+ Sat, 25 Jun 2022 07:32:34 +0200 (CEST)
 MIME-Version: 1.0
-Date: Sat, 25 Jun 2022 05:02:32 +0000
+Date: Sat, 25 Jun 2022 05:32:34 +0000
 From: Andreas Ziegler <br015@umbiko.net>
 To: Angelo Compagnucci <angelo@amarulasolutions.com>
 In-Reply-To: <mailman.2285.1655818273.17960.buildroot@buildroot.org>
 References: <mailman.2285.1655818273.17960.buildroot@buildroot.org>
-Message-ID: <f68f04d611f75d87d9fae2a0a04a3896@umbiko.net>
+Message-ID: <2093f3aaa52cabf675b461f1cf93c5f5@umbiko.net>
 X-Sender: br015@umbiko.net
 X-Virus-Scanned: clamav-milter 0.103.6 at serv15.avernis.de
 X-Virus-Status: Clean
-Subject: Re: [Buildroot] [PATCH 4/4] package/busybox: add service to load
- kernel modules at boot
+Subject: Re: [Buildroot] [PATCH 1/4] system: adding options for configuring
+ wifi
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,176 +71,52 @@ Hi Angelo,
 
 On 2022-06-21 13:31, Angelo Compagnucci <angelo@amarulasolutions.com> 
 wrote:
+> 
+> These options can be used by packages to configure a wifi card
+> to connect at boot.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  system/Config.in | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index 888c24ce81..9a5bdb2932 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -418,6 +418,21 @@ comment "automatic network configuration via DHCP
+> needs ifupdown or busybox or n
+>  	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || \
+>  		BR2_PACKAGE_SYSTEMD_NETWORKD || BR2_PACKAGE_NETIFRC)
+> 
+> +config BR2_SYSTEM_CONNECT_WIFI
+> +	bool "Connect to a default wifi access point"
+> +	default n
+> +	depends on BR2_PACKAGE_WPA_SUPPLICANT
+> +
+> +config BR2_SYSTEM_CONNECT_WIFI_SSID
+> +	string "Access point SSID"
+> +	default ""
+> +	depends on BR2_SYSTEM_CONNECT_WIFI
+> +
+> +config BR2_SYSTEM_CONNECT_WIFI_PASSWORD
+> +	string "Access point password"
+> +	default ""
+> +	depends on BR2_SYSTEM_CONNECT_WIFI
+> +
 
->> 
->> 
->> On 20/06/2022 23:40, Angelo Compagnucci wrote:
->> > In cases where no hotplug is available (by choice or by the lack of a
->> > proper hotplug method for a device), this service can be used to load
->> > kernel module drivers by reading the /etc/modules file.
->> 
->>   Do you have a concrete example of something that needs this? It's 
->> kind
->> of a
->> hack for e.g. a device connected to a serial port that isn't described 
->> in
->> DT
->> (e.g. on an x86 platform), right?
->> 
-> 
-> Wifi card connected on SDIO with an out of tree kernel module.
-> 
-> 
->>   I'm not altogether sure if it is worth making an init script for 
->> that.
->> 
-> 
-> Most distros out there have the /etc/modules loaded at boot time.
-> 
-> 
->>   Also, this would belong to the initscripts package because it would 
->> also
->> be
->> needed if busybox isn't used at all (it would of course require kmod).
->> 
-> 
-> Right, I'll fix it
-> 
-> 
->> 
->> 
->> >
->> > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
->> > ---
->> >   package/busybox/S02modules | 56 ++++++++++++++++++++++++++++++++++++++
->> >   package/busybox/busybox.mk |  2 ++
->> >   2 files changed, 58 insertions(+)
->> >   create mode 100644 package/busybox/S02modules
->> >
->> > diff --git a/package/busybox/S02modules b/package/busybox/S02modules
-
-S02 is a bit early, [mu]dev use S10.
-
->> > new file mode 100644
->> > index 0000000000..f25712e1ca
->> > --- /dev/null
->> > +++ b/package/busybox/S02modules
->> > @@ -0,0 +1,56 @@
->> > +#!/bin/sh
->> > +
->> > +MODULES="modules"
->> > +
->> > +load_unload() {
->> > +     [ ! -f /etc/${MODULES} ] && echo ' OK' && exit 0
->> > +
->> > +     while read module args; do
->> > +
->> > +             case "$module" in
->> > +                     ""|"#"*) continue ;;
->> > +             esac
->> > +
->> > +             if [ "$1" = "load" ]; then
->> > +                     modprobe -q ${module} ${args} >/dev/null && \
->> > +                             printf ' %s success,' "$module" ||
->> > +                             printf ' %s failed,' "$module"
->> > +             else
->> > +                     rmmod ${module} >/dev/null
->> > +             fi
->> > +
->> > +     done < /etc/${MODULES}
->> > +}
->> > +
->> > +start() {
->> > +     printf 'Starting %s:' "$MODULES"
->> > +
->> > +     load_unload load
->> > +
->> > +     echo ' OK'
->> > +}
->> > +
->> > +stop() {
->> > +     printf 'Stopping %s: ' "$MODULES"
->> > +
->> > +     load_unload unload
->> > +
->> > +     echo 'OK'
->> > +}
->> > +
->> > +restart() {
->> > +     stop
->> > +     sleep 1
->> > +     start
->> > +}
->> > +
->> > +case "$1" in
->> > +     start|stop|restart)
->> > +             "$1";;
->> > +     reload)
->> > +             # Restart, since there is no true "reload" feature.
->> > +             restart;;
->> > +     *)
->> > +             echo "Usage: $0 {start|stop|restart|reload}"
->> > +             exit 1
->> > +esac
->> > diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
->> > index 3e49de0a84..40490e866a 100644
->> > --- a/package/busybox/busybox.mk
->> > +++ b/package/busybox/busybox.mk
->> > @@ -382,6 +382,8 @@ define BUSYBOX_INSTALL_TARGET_CMDS
->> >       $(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
->> >       $(BUSYBOX_INSTALL_ZCIP_SCRIPT)
->> >       $(BUSYBOX_INSTALL_MDEV_CONF)
->> > +     $(INSTALL) -m 0755 -D package/busybox/S02modules \
->> > +                     $(TARGET_DIR)/etc/init.d/S02modules;
-
-Since this is intended for systems without dynamic device handling, you 
-might use an optional script, similar to BUSYBOX_INSTALL_*_SCRIPT:
-
-# Copy S22modules to /etc/init.d if no dynamic device handling is used
-ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
-define BUSYBOX_INSTALL_MODULES_SCRIPT
-	$(INSTALL) -m 0755 -D package/busybox/S22modules \
-		$(TARGET_DIR)/etc/init.d/S22modules;
-endef # BUSYBOX_INSTALL_MODULES_SCRIPT
-
-Probably a default /etc/modules could also be installed.
+Just nagging, but this is how security breaches get born. If I want to 
+do something like this, I use a private overlay outside the region under 
+backup or version control ...
 
 Kind regards,
 Andreas
 
->> 
->>   This is a sysvinit script, so it should be installed in
->> BUSYBOX_INSTALL_INIT_SYSV.
->> 
->> 
->> 
->>   Regards,
->>   Arnout
->> 
->> >   endef
->> >
->> >   # Install the sysvinit scripts, for the moment, but not those that
->> already
->> 
+>  endif # BR2_ROOTFS_SKELETON_DEFAULT
 > 
-> 
+>  config BR2_SYSTEM_DEFAULT_PATH
 > --
-> 
-> Angelo Compagnucci
-> 
-> Software Engineer
-> 
-> angelo@amarulasolutions.com
-> __________________________________
-> Amarula Solutions SRL
-> 
-> Via le Canevare 30, 31100 Treviso, Veneto, IT
-> 
-> T. +39 (0)42 243 5310
-> info@amarulasolutions.com
-> 
-> www.amarulasolutions.com
-> [`as] https://www.amarulasolutions.com|
+> 2.25.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
