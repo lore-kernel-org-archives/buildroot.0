@@ -1,55 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D092C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jun 2022 05:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 691FBC43334
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jun 2022 06:24:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81710847FD;
-	Sat, 25 Jun 2022 05:32:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81710847FD
+	by smtp4.osuosl.org (Postfix) with ESMTP id A991A417CF;
+	Sat, 25 Jun 2022 06:24:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A991A417CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t0KN3aFayjdz; Sat, 25 Jun 2022 05:32:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6FfCwEcb65oe; Sat, 25 Jun 2022 06:24:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EA17847FB;
-	Sat, 25 Jun 2022 05:32:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EA17847FB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72B15417BA;
+	Sat, 25 Jun 2022 06:24:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72B15417BA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A4CD71BF3F9
- for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 05:32:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D36FF1BF2C6
+ for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 06:24:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7FE82847D4
- for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 05:32:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FE82847D4
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE84E83F1E
+ for <buildroot@lists.busybox.net>; Sat, 25 Jun 2022 06:24:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE84E83F1E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bx-A03ytgYwc for <buildroot@lists.busybox.net>;
- Sat, 25 Jun 2022 05:32:37 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A93F84778
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2A93F84778
- for <buildroot@buildroot.org>; Sat, 25 Jun 2022 05:32:37 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id 6AF03BDE002A;
- Sat, 25 Jun 2022 07:32:34 +0200 (CEST)
+ with ESMTP id Xqp4JiqYOhCz for <buildroot@lists.busybox.net>;
+ Sat, 25 Jun 2022 06:24:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5889C83F1C
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5889C83F1C
+ for <buildroot@buildroot.org>; Sat, 25 Jun 2022 06:24:13 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 81A7B240005
+ for <buildroot@buildroot.org>; Sat, 25 Jun 2022 06:24:11 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>) id 1o4zDG-00BbeP-Co
+ for buildroot@buildroot.org; Sat, 25 Jun 2022 08:24:10 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+References: <20220620214653.1865454-1-peter@korsgaard.com>
+Date: Sat, 25 Jun 2022 08:24:10 +0200
+In-Reply-To: <20220620214653.1865454-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 20 Jun 2022 23:46:52 +0200")
+Message-ID: <87zgi12rcl.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Date: Sat, 25 Jun 2022 05:32:34 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: Angelo Compagnucci <angelo@amarulasolutions.com>
-In-Reply-To: <mailman.2285.1655818273.17960.buildroot@buildroot.org>
-References: <mailman.2285.1655818273.17960.buildroot@buildroot.org>
-Message-ID: <2093f3aaa52cabf675b461f1cf93c5f5@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.6 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: Re: [Buildroot] [PATCH 1/4] system: adding options for configuring
- wifi
+Subject: Re: [Buildroot] [PATCH] package/wireguard-linux-compat: bump
+ version to 1.0.20211208
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,62 +64,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Angelo,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On 2022-06-21 13:31, Angelo Compagnucci <angelo@amarulasolutions.com> 
-wrote:
-> 
-> These options can be used by packages to configure a wifi card
-> to connect at boot.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  system/Config.in | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/system/Config.in b/system/Config.in
-> index 888c24ce81..9a5bdb2932 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -418,6 +418,21 @@ comment "automatic network configuration via DHCP
-> needs ifupdown or busybox or n
->  	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || \
->  		BR2_PACKAGE_SYSTEMD_NETWORKD || BR2_PACKAGE_NETIFRC)
-> 
-> +config BR2_SYSTEM_CONNECT_WIFI
-> +	bool "Connect to a default wifi access point"
-> +	default n
-> +	depends on BR2_PACKAGE_WPA_SUPPLICANT
-> +
-> +config BR2_SYSTEM_CONNECT_WIFI_SSID
-> +	string "Access point SSID"
-> +	default ""
-> +	depends on BR2_SYSTEM_CONNECT_WIFI
-> +
-> +config BR2_SYSTEM_CONNECT_WIFI_PASSWORD
-> +	string "Access point password"
-> +	default ""
-> +	depends on BR2_SYSTEM_CONNECT_WIFI
-> +
+ > For details, see the announcement:
+ > https://lists.zx2c4.com/pipermail/wireguard/2021-December/007369.html
 
-Just nagging, but this is how security breaches get born. If I want to 
-do something like this, I use a private overlay outside the region under 
-backup or version control ...
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Kind regards,
-Andreas
+Committed to 2022.05.x, thanks.
 
->  endif # BR2_ROOTFS_SKELETON_DEFAULT
-> 
->  config BR2_SYSTEM_DEFAULT_PATH
-> --
-> 2.25.1
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
