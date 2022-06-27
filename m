@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56C27C43334
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 20:44:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96658C43334
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 20:44:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7A744159A;
-	Mon, 27 Jun 2022 20:44:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7A744159A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4796E41797;
+	Mon, 27 Jun 2022 20:44:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4796E41797
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5KWREaHVViFa; Mon, 27 Jun 2022 20:44:17 +0000 (UTC)
+	with ESMTP id gedOqld6xPRk; Mon, 27 Jun 2022 20:44:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D76B40946;
-	Mon, 27 Jun 2022 20:44:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D76B40946
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D85981BF9B5
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 20:44:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BB6841588;
+	Mon, 27 Jun 2022 20:44:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BB6841588
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EF471BF2B0
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 20:44:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B2AF160E33
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE81283F8F
  for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 20:44:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2AF160E33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE81283F8F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dgf2UKM1pCjd for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qyGHLTf-Ljny for <buildroot@lists.busybox.net>;
  Mon, 27 Jun 2022 20:44:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0326E60C0A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 25D0382C3C
  for <buildroot@buildroot.org>; Mon, 27 Jun 2022 20:44:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0326E60C0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25D0382C3C
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C1E3D875B4; Mon, 27 Jun 2022 20:31:35 +0000 (UTC)
+ id E46CD875B3; Mon, 27 Jun 2022 20:31:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Jun 2022 22:39:26 +0200
+Date: Mon, 27 Jun 2022 22:41:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7601ca8a6280bb17b96c9a8728a506cae9554f18
-X-Git-Newrev: f95e593c0127951c870221b812553b23ade06d9d
+X-Git-Oldrev: ff4c9cebfe18b5beb7d3f9571223a22996ee90c9
+X-Git-Newrev: c59a9d12b7805f2ac08be81fe18a4ebc197d5cd9
 X-Patchwork-Hint: ignore
-Message-Id: <20220627203135.C1E3D875B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/speexdsp: bump to version 1.2.1
+Message-Id: <20220627203135.E46CD875B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsndfile: security bump to
+ version 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,54 +63,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f95e593c0127951c870221b812553b23ade06d9d
+commit: https://git.buildroot.net/buildroot/commit/?id=c59a9d12b7805f2ac08be81fe18a4ebc197d5cd9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Use official tarball and so drop autoreconf
-- Update hash of COPYING (trailing white space removed:
-  https://gitlab.xiph.org/xiph/speexdsp/-/commit/68311d46785be76d2a186c75578d51108bff6dfb)
+Fix the following security issues:
+ - Heap buffer overflow in wavlike_ima_decode_block()
+ - Heap buffer overflow in msadpcm_decode_block()
+ - Heap buffer overflow in psf_binheader_readf()
+ - Index out of bounds in psf_nms_adpcm_decode_block()
+ - Heap buffer overflow in flac_buffer_copy()
+ - Heap buffer overflow in copyPredictorTo24()
+ - Uninitialized variable in psf_binheader_readf()
 
-https://gitlab.xiph.org/xiph/speexdsp/-/tags/SpeexDSP-1.2.1
+Drop patch (already in version)
+
+While at it, also drop mention of CVE-2018-13419 which is correctly
+tagged as only affecting version 1.0.28 in NVD NIST database:
+https://nvd.nist.gov/vuln/detail/CVE-2018-13419
+
+https://github.com/libsndfile/libsndfile/releases/tag/1.1.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/speexdsp/speexdsp.hash | 6 ++++--
- package/speexdsp/speexdsp.mk   | 6 ++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../0001-ms_adpcm-Fix-and-extend-size-checks.patch | 40 ----------------------
+ package/libsndfile/libsndfile.hash                 |  2 +-
+ package/libsndfile/libsndfile.mk                   | 10 ++----
+ 3 files changed, 3 insertions(+), 49 deletions(-)
 
-diff --git a/package/speexdsp/speexdsp.hash b/package/speexdsp/speexdsp.hash
-index 82e054d4d4..b46df791b4 100644
---- a/package/speexdsp/speexdsp.hash
-+++ b/package/speexdsp/speexdsp.hash
-@@ -1,3 +1,5 @@
-+# From https://ftp.osuosl.org/pub/xiph/releases/speex/SHA256SUMS.txt
-+sha256  8c777343e4a6399569c72abc38a95b24db56882c83dbdb6c6424a5f4aeb54d3d  speexdsp-1.2.1.tar.gz
-+
- # Locally computed
--sha256  0fe0e31be215f820bed0f9c913c673997773fce3a03a4555658e7b73a54eed7b  speexdsp-SpeexDSP-1.2.0.tar.bz2
--sha256  671bb5d8fd3c6b05a2e831d90f978ac27965c92bd8ea6d16b3df76e3440c0e9f  COPYING
-+sha256  2654a4264b2bfe298dedc508748d140111840c315cc8eb646a3a68c13fa75b01  COPYING
-diff --git a/package/speexdsp/speexdsp.mk b/package/speexdsp/speexdsp.mk
-index 8e886b2b21..8edad7c0d2 100644
---- a/package/speexdsp/speexdsp.mk
-+++ b/package/speexdsp/speexdsp.mk
-@@ -4,13 +4,11 @@
+diff --git a/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch b/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch
+deleted file mode 100644
+index edacbda01a..0000000000
+--- a/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From deb669ee8be55a94565f6f8a6b60890c2e7c6f32 Mon Sep 17 00:00:00 2001
+-From: bobsayshilol <bobsayshilol@live.co.uk>
+-Date: Thu, 18 Feb 2021 21:52:09 +0000
+-Subject: [PATCH] ms_adpcm: Fix and extend size checks
+-
+-'blockalign' is the size of a block, and each block contains 7 samples
+-per channel as part of the preamble, so check against 'samplesperblock'
+-rather than 'blockalign'. Also add an additional check that the block
+-is big enough to hold the samples it claims to hold.
+-
+-https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=26803
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/ms_adpcm.c | 10 ++++++++--
+- 1 file changed, 8 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/ms_adpcm.c b/src/ms_adpcm.c
+-index 5e8f1a31..a21cb994 100644
+---- a/src/ms_adpcm.c
+-+++ b/src/ms_adpcm.c
+-@@ -128,8 +128,14 @@ wavlike_msadpcm_init	(SF_PRIVATE *psf, int blockalign, int samplesperblock)
+- 	if (psf->file.mode == SFM_WRITE)
+- 		samplesperblock = 2 + 2 * (blockalign - 7 * psf->sf.channels) / psf->sf.channels ;
+- 
+--	if (blockalign < 7 * psf->sf.channels)
+--	{	psf_log_printf (psf, "*** Error blockalign (%d) should be > %d.\n", blockalign, 7 * psf->sf.channels) ;
+-+	/* There's 7 samples per channel in the preamble of each block */
+-+	if (samplesperblock < 7 * psf->sf.channels)
+-+	{	psf_log_printf (psf, "*** Error samplesperblock (%d) should be >= %d.\n", samplesperblock, 7 * psf->sf.channels) ;
+-+		return SFE_INTERNAL ;
+-+		} ;
+-+
+-+	if (2 * blockalign < samplesperblock * psf->sf.channels)
+-+	{	psf_log_printf (psf, "*** Error blockalign (%d) should be >= %d.\n", blockalign, samplesperblock * psf->sf.channels / 2) ;
+- 		return SFE_INTERNAL ;
+- 		} ;
+- 
+--- 
+-2.20.1
+-
+diff --git a/package/libsndfile/libsndfile.hash b/package/libsndfile/libsndfile.hash
+index 14dfe823f9..67d10d03c4 100644
+--- a/package/libsndfile/libsndfile.hash
++++ b/package/libsndfile/libsndfile.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  a8cfb1c09ea6e90eff4ca87322d4168cdbe5035cb48717b40bf77e751cc02163  libsndfile-1.0.31.tar.bz2
++sha256  0f98e101c0f7c850a71225fb5feaf33b106227b3d331333ddc9bacee190bcf41  libsndfile-1.1.0.tar.xz
+ # Locally calculated
+ sha256  ad01ea5cd2755f6048383c8d54c88459cd6fcb17757c5c8892f8c5ea060f6140  COPYING
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index ed9e8e3d14..12a6601b6b 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
+@@ -4,20 +4,14 @@
  #
  ################################################################################
  
--SPEEXDSP_VERSION = 1.2.0
--SPEEXDSP_SOURCE = speexdsp-SpeexDSP-$(SPEEXDSP_VERSION).tar.bz2
--SPEEXDSP_SITE = https://gitlab.xiph.org/xiph/speexdsp/-/archive/SpeexDSP-$(SPEEXDSP_VERSION)
-+SPEEXDSP_VERSION = 1.2.1
-+SPEEXDSP_SITE = https://downloads.xiph.org/releases/speex
- SPEEXDSP_LICENSE = BSD-3-Clause
- SPEEXDSP_LICENSE_FILES = COPYING
- SPEEXDSP_INSTALL_STAGING = YES
- SPEEXDSP_DEPENDENCIES = host-pkgconf
--SPEEXDSP_AUTORECONF = YES
+-LIBSNDFILE_VERSION = 1.0.31
+-LIBSNDFILE_SOURCE = libsndfile-$(LIBSNDFILE_VERSION).tar.bz2
++LIBSNDFILE_VERSION = 1.1.0
++LIBSNDFILE_SOURCE = libsndfile-$(LIBSNDFILE_VERSION).tar.xz
+ LIBSNDFILE_SITE = https://github.com/libsndfile/libsndfile/releases/download/$(LIBSNDFILE_VERSION)
+ LIBSNDFILE_INSTALL_STAGING = YES
+ LIBSNDFILE_LICENSE = LGPL-2.1+
+ LIBSNDFILE_LICENSE_FILES = COPYING
+ LIBSNDFILE_CPE_ID_VENDOR = libsndfile_project
  
- $(eval $(autotools-package))
+-# 0001-ms_adpcm-Fix-and-extend-size-checks.patch
+-LIBSNDFILE_IGNORE_CVES += CVE-2021-3246
+-
+-# disputed, https://github.com/erikd/libsndfile/issues/398
+-LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
+-
+ LIBSNDFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ LIBSNDFILE_CONF_OPTS = \
+ 	--disable-sqlite \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
