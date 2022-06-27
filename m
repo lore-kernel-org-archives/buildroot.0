@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 885FDC43334
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 21:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BF95C43334
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 21:00:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B3E140603;
-	Mon, 27 Jun 2022 21:00:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B3E140603
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0241A60E6D;
+	Mon, 27 Jun 2022 21:00:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0241A60E6D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UEHUKei1NyNG; Mon, 27 Jun 2022 21:00:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CsRTMVqktj2N; Mon, 27 Jun 2022 21:00:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A99E040289;
-	Mon, 27 Jun 2022 21:00:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A99E040289
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBC1F60C0A;
+	Mon, 27 Jun 2022 21:00:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBC1F60C0A
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 86E361BF2B0
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 21:00:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 70B791BF2B0
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 21:00:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 60904408C9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 60510405CB
  for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 21:00:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60904408C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60510405CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QrD0lBtHEUyB for <buildroot@lists.busybox.net>;
+ with ESMTP id Vn15yJ51Wabp for <buildroot@lists.busybox.net>;
  Mon, 27 Jun 2022 21:00:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D52740612
+ by smtp2.osuosl.org (Postfix) with ESMTP id 350D3408B1
  for <buildroot@buildroot.org>; Mon, 27 Jun 2022 21:00:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D52740612
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 350D3408B1
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id E2AA2875CF; Mon, 27 Jun 2022 20:47:27 +0000 (UTC)
+ id EC829875D0; Mon, 27 Jun 2022 20:47:27 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Mon, 27 Jun 2022 22:59:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c59a9d12b7805f2ac08be81fe18a4ebc197d5cd9
-X-Git-Newrev: 1409d4b0c44b8c8370e2df1e24d11242e0de51f6
+X-Git-Oldrev: 1409d4b0c44b8c8370e2df1e24d11242e0de51f6
+X-Git-Newrev: f089aa9877b0f31bd206714449cf41ade196f8e5
 X-Patchwork-Hint: ignore
-Message-Id: <20220627204727.E2AA2875CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/aspeed_ast2600evb: new defconfig
+Message-Id: <20220627204727.EC829875D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/aspeed_ast2500evb: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,132 +57,123 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7393404352209001845=="
+Content-Type: multipart/mixed; boundary="===============8037460038727718587=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7393404352209001845==
+--===============8037460038727718587==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1409d4b0c44b8c8370e2df1e24d11242e0de51f6
+commit: https://git.buildroot.net/buildroot/commit/?id=f089aa9877b0f31bd206714449cf41ade196f8e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The kernel is from upstream and U-Boot is from the OpenBMC branch
-because mainline doesn't have the required support for HW, yet.
+The kernel is from upstream with a few extras to reduce the size of
+the 'aspeed_g5' zImage because it is too big for the flash layout.
+Mainline U-Boot has enough support to load the kernel from the flash
+device and from network but it is still behind the OpenBMC branch
+where most the development is done.
 
 The main resulting file from the build is a flash image. The partition
-layout matches the OpenBMC one for 64M chips. It makes it easier to
+layout matches the OpenBMC one for 32M chips. It makes it easier to
 update the different partitions from Linux. Intermediate files can be
-used to boot from U-boot over the network or to boot QEMU using
+used to boot from U-Boot over the network or to boot QEMU using
 -kernel/-initrd/-dtb.
 
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
 Reviewed-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Cédric Le Goater <clg@kaod.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS                             |  4 ++
- board/aspeed/ast2600-evb/genimage.cfg  | 40 +++++++++++++++++
- board/aspeed/ast2600-evb/readme.txt    | 80 ++++++++++++++++++++++++++++++++++
- board/aspeed/common/image.its.template | 56 ++++++++++++++++++++++++
- board/aspeed/common/post-image.sh      | 27 ++++++++++++
- configs/aspeed_ast2600evb_defconfig    | 44 +++++++++++++++++++
- 6 files changed, 251 insertions(+)
+ board/aspeed/ast2500-evb/genimage.cfg   | 40 +++++++++++++++++
+ board/aspeed/ast2500-evb/linux.fragment |  7 +++
+ board/aspeed/ast2500-evb/readme.txt     | 80 +++++++++++++++++++++++++++++++++
+ board/aspeed/ast2500-evb/uboot.fragment |  3 ++
+ configs/aspeed_ast2500evb_defconfig     | 43 ++++++++++++++++++
+ 5 files changed, 173 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fc329fec27..2ed43a1c16 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -500,8 +500,10 @@ N:	Cédric Chépied <cedric.chepied@gmail.com>
- F:	package/znc/
- 
- N:	Cédric Le Goater <clg@kaod.org>
-+F:	board/aspeed/
- F:	board/qemu/ppc-bamboo/
- F:	board/qemu/ppc64le-powernv8/readme.txt
-+F:	configs/aspeed*
- F:	configs/qemu_ppc_bamboo_defconfig
- F:	configs/qemu_ppc64le_powernv8_defconfig
- 
-@@ -1460,6 +1462,8 @@ F:	board/qemu/ppc64le-pseries/
- F:	configs/qemu_ppc64le_pseries_defconfig
- F:	board/qemu/ppc-mac99/
- F:	configs/qemu_ppc_mac99_defconfig
-+F:	board/aspeed/
-+F:	configs/aspeed*
- 
- N:	Johan Derycke <johanderycke@gmail.com>
- F:	package/python-libconfig/
-diff --git a/board/aspeed/ast2600-evb/genimage.cfg b/board/aspeed/ast2600-evb/genimage.cfg
+diff --git a/board/aspeed/ast2500-evb/genimage.cfg b/board/aspeed/ast2500-evb/genimage.cfg
 new file mode 100644
-index 0000000000..56932d4787
+index 0000000000..498a71e4d7
 --- /dev/null
-+++ b/board/aspeed/ast2600-evb/genimage.cfg
++++ b/board/aspeed/ast2500-evb/genimage.cfg
 @@ -0,0 +1,40 @@
 +#
 +# This config reproduces the OpenBMC flash layout defined in Linux :
 +#
-+#    arch/arm/boot/dts/openbmc-flash-layout-64.dtsi
++#    arch/arm/boot/dts/openbmc-flash-layout.dtsi
 +#
-+# and included by aspeed-ast2600-evb.dts
++# and included by aspeed-ast2500-evb.dts
 +#
-+flash nor-64M-256 {
++flash nor-32M-256 {
 +	pebsize = 4K
-+	numpebs = 16K
++	numpebs = 8K
 +	minimum-io-unit-size = 256
 +}
 +
 +image flash.img {
 +	flash {
 +	}
-+	flashtype = "nor-64M-256"
++	flashtype = "nor-32M-256"
 +
 +	partition uboot {
 +		image = "u-boot.bin"
-+		size = 896K
++		size = 384K
 +	}
 +
 +	partition ubootenv {
 +		/* TODO */
-+		offset = 896K
++		offset = 384K
 +		size = 128K
 +	}
 +
 +	partition fitimage {
 +		image = "image.itb"
-+		offset = 1M
-+		size = 9M
++		offset = 512K
++		size = 4352K
 +	}
 +
 +	partition spare {
-+		offset = 10M
-+		size = 54M
++		offset = 4864K
++		size = 27904K
 +	}
 +}
-diff --git a/board/aspeed/ast2600-evb/readme.txt b/board/aspeed/ast2600-evb/readme.txt
+diff --git a/board/aspeed/ast2500-evb/linux.fragment b/board/aspeed/ast2500-evb/linux.fragment
 new file mode 100644
-index 0000000000..1f7ba13d5d
+index 0000000000..1cee95f842
 --- /dev/null
-+++ b/board/aspeed/ast2600-evb/readme.txt
++++ b/board/aspeed/ast2500-evb/linux.fragment
+@@ -0,0 +1,7 @@
++CONFIG_KERNEL_XZ=y
++CONFIG_ARCH_MULTI_V7=n
++CONFIG_MACH_ASPEED_G6=n
++CONFIG_SMP=n
++CONFIG_EXT4_FS=n
++CONFIG_DEBUG_FS=n
++CONFIG_SUSPEND=n
+diff --git a/board/aspeed/ast2500-evb/readme.txt b/board/aspeed/ast2500-evb/readme.txt
+new file mode 100644
+index 0000000000..f509be553b
+--- /dev/null
++++ b/board/aspeed/ast2500-evb/readme.txt
 @@ -0,0 +1,80 @@
-+Aspeed AST2600 EVB
++Aspeed AST2500 EVB
 +
 +Introduction
 +============
 +
-+The AST2600 EVB is an evaluation board for the AST2600 SoC, most
-+commonly used as a Server Management Processor. It includes a
-+Dual-core ARM Cortex A7 processor with DDR4 SDRAM (up to 2GB), SPI
-+flash memory devices for BMC and host firmwares and numerous
-+controllers to drive the server board.
++The AST2500 EVB is an evaluation board for the AST2500 SoC, most
++commonly used as a Server Management Processor. It includes an 800MHz
++ARM11 processor with DDR3 or DDR4 SDRAM (up to 1GB), SPI flash memory
++devices for BMC and host firmwares and numerous controllers to drive
++the server board.
 +
-+  https://www.aspeedtech.com/server_ast2600/
++  https://www.aspeedtech.com/server_ast2500/
 +
 +How to build it
 +===============
 +
 +Configure buildroot:
 +
-+  $ make aspeed_ast2600evb_defconfig
++  $ make aspeed_ast2500evb_defconfig
 +
 +Compile everything and build the rootfs image:
 +
@@ -194,7 +185,7 @@ index 0000000000..1f7ba13d5d
 +After building, the output/images directory contains:
 +
 +  output/images/
-+    ├── aspeed-ast2600-evb.dtb
++    ├── aspeed-ast2500-evb.dtb
 +    ├── flash.img
 +    ├── image.itb
 +    ├── rootfs.cpio
@@ -223,7 +214,7 @@ index 0000000000..1f7ba13d5d
 +Booting the board
 +=================
 +
-+The AST2600 EVB boots from the SPI flash device directly and loads a
++The AST2500 EVB boots from the SPI flash device directly and loads a
 +first bootloader (usually U-Boot). U-Boot will attempt to load a Linux
 +kernel from the same flash device by default but other storage could
 +be used.
@@ -235,120 +226,32 @@ index 0000000000..1f7ba13d5d
 +
 + * with QEMU
 +
-+   $ qemu-system-arm -M ast2600-evb \
++   $ qemu-system-arm -M ast2500-evb \
 +	-drive file=output/images/flash.img,format=raw,if=mtd \
 +	-nographic
 +
-+   $ qemu-system-arm -M ast2600-evb \
++   $ qemu-system-arm -M ast2500-evb \
 +	-kernel output/images/zImage \
 +	-initrd output/images/rootfs.cpio \
-+	-dtb output/images/aspeed-ast2600-evb.dtb \
++	-dtb output/images/aspeed-ast2500-evb.dtb \
 +	-nographic
-diff --git a/board/aspeed/common/image.its.template b/board/aspeed/common/image.its.template
+diff --git a/board/aspeed/ast2500-evb/uboot.fragment b/board/aspeed/ast2500-evb/uboot.fragment
 new file mode 100644
-index 0000000000..e3200e2407
+index 0000000000..8463252e59
 --- /dev/null
-+++ b/board/aspeed/common/image.its.template
-@@ -0,0 +1,56 @@
-+/dts-v1/;
-+
-+/ {
-+	description = "Kernel and buildroot image";
-+	#address-cells = <1>;
-+
-+	images {
-+		kernel-1 {
-+			description = "Linux kernel";
-+			data = /incbin/("zImage");
-+			type = "kernel";
-+			arch = "arm";
-+			os = "linux";
-+			compression = "none";
-+			load = <0x80001000>;
-+			entry = <0x80001000>;
-+			hash-1 {
-+				algo = "sha256";
-+			};
-+		};
-+		fdt-1 {
-+			description = "Flattened Device Tree blob";
-+			data = /incbin/("%BOARD_DTB%");
-+			type = "flat_dt";
-+			arch = "arm";
-+			compression = "none";
-+			hash-1 {
-+				algo = "sha256";
-+			};
-+		};
-+		ramdisk-1 {
-+			description = "ramdisk";
-+			data = /incbin/("rootfs.cpio.xz");
-+			type = "ramdisk";
-+			arch = "arm";
-+			os = "linux";
-+			compression = "none";
-+			hash-1 {
-+				algo = "sha256";
-+			};
-+		};
-+	};
-+
-+	configurations {
-+		default = "conf-1";
-+		conf-1 {
-+			description = "Boot Linux kernel with FDT blob, ramdisk";
-+			kernel = "kernel-1";
-+			fdt = "fdt-1";
-+			ramdisk = "ramdisk-1";
-+			hash-1 {
-+				algo = "sha256";
-+			};
-+		};
-+	};
-+};
-diff --git a/board/aspeed/common/post-image.sh b/board/aspeed/common/post-image.sh
-new file mode 100755
-index 0000000000..ea65a49aff
---- /dev/null
-+++ b/board/aspeed/common/post-image.sh
-@@ -0,0 +1,27 @@
-+#!/bin/bash
-+
-+BOARD_DIR="$(dirname $0)"
-+mkimage=$HOST_DIR/bin/mkimage
-+
-+BOARD_DT=$(sed -n \
-+           's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9\-]*\).*"$/\1/p' \
-+           ${BR2_CONFIG})
-+
-+sed -e "s/%BOARD_DTB%/${BOARD_DT}.dtb/" \
-+    $BOARD_DIR/image.its.template > $BINARIES_DIR/image.its
-+
-+(cd $BINARIES_DIR && $mkimage -f image.its image.itb)
-+
-+GENIMAGE_CFG="board/aspeed/${BOARD_DT#aspeed-*}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage \
-+  --rootpath "${TARGET_DIR}" \
-+  --tmppath "${GENIMAGE_TMP}" \
-+  --inputpath "${BINARIES_DIR}" \
-+  --outputpath "${BINARIES_DIR}" \
-+  --config "${GENIMAGE_CFG}"
-+
-+rm -f $BINARIES_DIR/image.its
-diff --git a/configs/aspeed_ast2600evb_defconfig b/configs/aspeed_ast2600evb_defconfig
++++ b/board/aspeed/ast2500-evb/uboot.fragment
+@@ -0,0 +1,3 @@
++CONFIG_BOOTCOMMAND="bootm 20080000"
++CONFIG_FIT=y
++CONFIG_SHA256=y
+diff --git a/configs/aspeed_ast2500evb_defconfig b/configs/aspeed_ast2500evb_defconfig
 new file mode 100644
-index 0000000000..cd058ad0ac
+index 0000000000..c969f18d07
 --- /dev/null
-+++ b/configs/aspeed_ast2600evb_defconfig
-@@ -0,0 +1,44 @@
++++ b/configs/aspeed_ast2500evb_defconfig
+@@ -0,0 +1,43 @@
 +# Architecture
 +BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_VFPV4=y
 +
 +# System
 +BR2_TARGET_GENERIC_HOSTNAME="aspeed-evb"
@@ -370,19 +273,20 @@ index 0000000000..cd058ad0ac
 +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
 +BR2_LINUX_KERNEL_DEFCONFIG="aspeed_g5"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/aspeed/ast2500-evb/linux.fragment"
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="aspeed-ast2600-evb"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="aspeed-ast2500-evb"
++BR2_LINUX_KERNEL_XZ=y
 +
 +# Boot
 +BR2_TARGET_UBOOT=y
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/openbmc/u-boot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="f2b82fa4ba17ed8091fe76c284220006645a293b"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="evb-ast2600"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="evb-ast2500"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=ast2600a1-evb"
-+
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=ast2500-evb"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/aspeed/ast2500-evb/uboot.fragment"
 +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 +BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
 +BR2_PACKAGE_HOST_GENIMAGE=y
@@ -390,7 +294,7 @@ index 0000000000..cd058ad0ac
 +# Target tools
 +BR2_PACKAGE_MTD=y
 
---===============7393404352209001845==
+--===============8037460038727718587==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -401,4 +305,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7393404352209001845==--
+--===============8037460038727718587==--
