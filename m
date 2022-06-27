@@ -1,58 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA50AC43334
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75A26C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:21:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D22F82690;
-	Mon, 27 Jun 2022 22:20:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D22F82690
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1AC50409FF;
+	Mon, 27 Jun 2022 22:21:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AC50409FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Pt2hCI7E_6ly; Mon, 27 Jun 2022 22:20:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7IDqJh6dO141; Mon, 27 Jun 2022 22:21:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57BBF82628;
-	Mon, 27 Jun 2022 22:20:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57BBF82628
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7DFE91BF2F0
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:20:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 163E940574;
+	Mon, 27 Jun 2022 22:21:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 163E940574
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CCB41BF2F0
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:21:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 66BE882628
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:20:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66BE882628
+ by smtp2.osuosl.org (Postfix) with ESMTP id 477F14050C
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:21:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 477F14050C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5csl0g5tY_SX for <buildroot@lists.busybox.net>;
- Mon, 27 Jun 2022 22:20:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70F3482611
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 70F3482611
- for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:20:46 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4A0EBE0004;
- Mon, 27 Jun 2022 22:20:44 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1o5x63-00D59Y-EV; Tue, 28 Jun 2022 00:20:43 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nP1RgXSnDBsx for <buildroot@lists.busybox.net>;
+ Mon, 27 Jun 2022 22:21:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8BDB7400D7
+ for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:21:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BDB7400D7
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 31A2987693; Mon, 27 Jun 2022 22:08:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220627213612.2104825-1-fontaine.fabrice@gmail.com>
-Date: Tue, 28 Jun 2022 00:20:43 +0200
-In-Reply-To: <20220627213612.2104825-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 27 Jun 2022 23:36:12 +0200")
-Message-ID: <874k05vjd0.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/multipath-tools: bump to
- version 0.9.0
+To: buildroot@buildroot.org
+Date: Tue, 28 Jun 2022 00:21:08 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4246d5055946b4e4c503fe69b5eab95fc6069b56
+X-Git-Newrev: 8bb0753345aa4d1b550230c25a28c527f51ac110
+X-Patchwork-Hint: ignore
+Message-Id: <20220627220845.31A2987693@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cereal: bump to version 1.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +56,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Egorenkov <egorenar-dev@posteo.net>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8bb0753345aa4d1b550230c25a28c527f51ac110
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > - Renumber patch
- > - Update hash of README.md (changes not related to license)
- > - FPIN support is fixed by setting LINUX_HEADERS_INCDIR and
- >   https://github.com/opensvc/multipath-tools/commit/63aa47d0327de2beacf86f6a8e2fd7575d62dadf
- >   FPIN support is (wrongly) enabled if ELS_DTAG_LNK_INTEGRITY is defined
- >   in /usr/include/scsi/fc/fc_els.h since bump to version 0.8.9 in commit
- >   b790ff27d5461df4de22732611a1eb4beee68f91 and
- >   https://github.com/opensvc/multipath-tools/commit/cfff03efbca753ef485ad717087464dced9c721a
- >   resulting in the following build failure:
+doc and examples can be disabled since
+https://github.com/USCiLab/cereal/commit/6e1c66a94cfb2dd7d726afbe270681b7b19763cd
+so set BUILD_SANDBOX=OFF as BUILD_DOC=OFF is already passed by
+cmake-infrastructure
 
- >   In file included from /nvmedata/autobuild/instance-7/output-1/host/nios2-buildroot-linux-gnu/sysroot/usr/include/scsi/scsi_netlink_fc.h:25,
- >                    from fpin_handlers.c:6:
- >   /nvmedata/autobuild/instance-7/output-1/host/nios2-buildroot-linux-gnu/sysroot/usr/include/scsi/scsi_netlink.h:44:2: error: unknown type name 'uint8_t'
- >      44 |  uint8_t version;
- >         |  ^~~~~~~
+https://github.com/USCiLab/cereal/releases/tag/v1.3.2
 
- > https://github.com/opensvc/multipath-tools/compare/0.8.9...0.9.0
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cereal/cereal.hash | 2 +-
+ package/cereal/cereal.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/32f4ada6c49261924ca78f62dee43241bda379a3
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cereal/cereal.hash b/package/cereal/cereal.hash
+index 18889b4d42..1ddb504a72 100644
+--- a/package/cereal/cereal.hash
++++ b/package/cereal/cereal.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  65ea6ddda98f4274f5c10fb3e07b2269ccdd1e5cbb227be6a2fd78b8f382c976  cereal-1.3.1.tar.gz
++sha256  16a7ad9b31ba5880dac55d62b5d6f243c3ebc8d46a3514149e56b5e7ea81f85f  cereal-1.3.2.tar.gz
+ sha256  58604a126af6a671ea390ee3d5b3e42228aa59b2858fb7af1d5b20b31739ccbb  LICENSE
+ sha256  d9e523e8736ac0c68064c7ad312a222f285e82bf6c96a1b1c2cadaffff9fc64f  include/cereal/external/base64.hpp
+ sha256  7fb69c707f0ed3a8b59b8f949f0928a9cc06d67bc15d599094693703ff70ea26  include/cereal/external/rapidjson/rapidjson.h
+diff --git a/package/cereal/cereal.mk b/package/cereal/cereal.mk
+index a44f09c743..6da7df9360 100644
+--- a/package/cereal/cereal.mk
++++ b/package/cereal/cereal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CEREAL_VERSION = 1.3.1
++CEREAL_VERSION = 1.3.2
+ CEREAL_SITE = $(call github,USCiLab,cereal,v$(CEREAL_VERSION))
+ # For licensing, see also: https://github.com/USCiLab/cereal/issues/609
+ CEREAL_LICENSE = BSD-3-Clause (cereal), Zlib (base64.hpp), MIT (rapidjson), BSL-1.0 or MIT (rapidxml)
+@@ -13,6 +13,7 @@ CEREAL_CPE_ID_VENDOR = usc
+ CEREAL_INSTALL_STAGING = YES
+ CEREAL_INSTALL_TARGET = NO
+ CEREAL_CONF_OPTS = \
++	-DBUILD_SANDBOX=OFF \
+ 	-DTHREAD_SAFE=ON \
+ 	-DJUST_INSTALL_CEREAL=ON
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
