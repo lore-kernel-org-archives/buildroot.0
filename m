@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65B90C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:42:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90742C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0574F415B6;
-	Mon, 27 Jun 2022 22:42:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0574F415B6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BA5582BE5;
+	Mon, 27 Jun 2022 22:43:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BA5582BE5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8voENgjB05Us; Mon, 27 Jun 2022 22:42:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3FdXKWVKc8d9; Mon, 27 Jun 2022 22:43:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE51D4155F;
-	Mon, 27 Jun 2022 22:42:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE51D4155F
+	by smtp1.osuosl.org (Postfix) with ESMTP id E644682BC3;
+	Mon, 27 Jun 2022 22:43:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E644682BC3
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C6DA11BF2F0
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:40:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CA92E1BF2F0
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F00C4159A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 796AD415A8
  for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:40:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F00C4159A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 796AD415A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id izTOjEqsy57r for <buildroot@lists.busybox.net>;
+ with ESMTP id SxGN7QbWr9Ex for <buildroot@lists.busybox.net>;
  Mon, 27 Jun 2022 22:40:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E114A415B6
- for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:40:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E114A415B6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C328415C2
+ for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:40:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C328415C2
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8BF50876FB; Mon, 27 Jun 2022 22:28:07 +0000 (UTC)
+ id A3526876FF; Mon, 27 Jun 2022 22:28:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jun 2022 00:37:49 +0200
+Date: Tue, 28 Jun 2022 00:39:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3bd30f4a131d368ba3e3e158ae3aec768fe80d68
-X-Git-Newrev: e5189a09d7a2667bf4e12020a262c449949a53a5
+X-Git-Oldrev: 4cdbec6e6ee75c90b4554d9bb0660ce2a4934f2e
+X-Git-Newrev: 22a333f91e0a976603e98516e7f683ad0b345cc2
 X-Patchwork-Hint: ignore
-Message-Id: <20220627222807.8BF50876FB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rabbitmq-server: replace
- RABBITMQ_SERVER_CPE_ID_VENDOR
+Message-Id: <20220627222807.A3526876FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/spice-protocol: bump to version
+ 0.14.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5189a09d7a2667bf4e12020a262c449949a53a5
+commit: https://git.buildroot.net/buildroot/commit/?id=22a333f91e0a976603e98516e7f683ad0b345cc2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pivotal_software has been replaced by vmware in March 2022:
-
- <cpe-item name="cpe:/a:pivotal_software:rabbitmq:3.7.28" deprecated="true" deprecation_date="2022-03-17T14:05:30.170Z">
-      <reference href="https://www.rabbitmq.com/">Product</reference>
-      <reference href="https://github.com/rabbitmq/rabbitmq-server/releases">Change Log</reference>
-    <cpe-23:cpe23-item name="cpe:2.3:a:pivotal_software:rabbitmq:3.7.28:*:*:*:*:*:*:*">
-        <cpe-23:deprecated-by name="cpe:2.3:a:vmware:rabbitmq:3.7.28:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
-
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Avmware%3Arabbitmq
+https://gitlab.freedesktop.org/spice/spice-protocol/-/blob/v0.14.4/CHANGELOG.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rabbitmq-server/rabbitmq-server.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/spice-protocol/spice-protocol.hash | 4 ++--
+ package/spice-protocol/spice-protocol.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rabbitmq-server/rabbitmq-server.mk b/package/rabbitmq-server/rabbitmq-server.mk
-index 33c3359429..969e61e2b5 100644
---- a/package/rabbitmq-server/rabbitmq-server.mk
-+++ b/package/rabbitmq-server/rabbitmq-server.mk
-@@ -32,7 +32,7 @@ RABBITMQ_SERVER_LICENSE_FILES = \
- 	LICENSE-MPL-RabbitMQ \
- 	LICENSE-MPL2 \
- 	LICENSE-rabbitmq_aws
--RABBITMQ_SERVER_CPE_ID_VENDOR = pivotal_software
-+RABBITMQ_SERVER_CPE_ID_VENDOR = vmware
- RABBITMQ_SERVER_CPE_ID_PRODUCT = rabbitmq
- RABBITMQ_SERVER_SELINUX_MODULES = rabbitmq
+diff --git a/package/spice-protocol/spice-protocol.hash b/package/spice-protocol/spice-protocol.hash
+index f02cf7f0e2..cd74c84ec7 100644
+--- a/package/spice-protocol/spice-protocol.hash
++++ b/package/spice-protocol/spice-protocol.hash
+@@ -1,5 +1,5 @@
+-# From https://www.spice-space.org/download/releases/spice-protocol-0.14.3.tar.xz.sha256sum
+-sha256  f986e5bc2a1598532c4897f889afb0df9257ac21c160c083703ae7c8de99487a  spice-protocol-0.14.3.tar.xz
++# From https://www.spice-space.org/download/releases/spice-protocol-0.14.4.tar.xz.sha256sum
++sha256  04ffba610d9fd441cfc47dfaa135d70096e60b1046d2119d8db2f8ea0d17d912  spice-protocol-0.14.4.tar.xz
  
+ # Hash for license file
+ sha256  eb55ea746be694c449224c7ddce6340648b075fd377281712a19094e7fb7ef92  COPYING
+diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
+index 172d45687d..dbeeb90b1d 100644
+--- a/package/spice-protocol/spice-protocol.mk
++++ b/package/spice-protocol/spice-protocol.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPICE_PROTOCOL_VERSION = 0.14.3
++SPICE_PROTOCOL_VERSION = 0.14.4
+ SPICE_PROTOCOL_SOURCE = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.xz
+ SPICE_PROTOCOL_SITE = http://www.spice-space.org/download/releases
+ SPICE_PROTOCOL_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
