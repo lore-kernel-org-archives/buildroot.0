@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38BC7C43334
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:40:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C2D3C43334
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D806982C35;
-	Mon, 27 Jun 2022 22:40:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D806982C35
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB18F82BEB;
+	Mon, 27 Jun 2022 22:41:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB18F82BEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5tj0OSxo1B1J; Mon, 27 Jun 2022 22:40:55 +0000 (UTC)
+	with ESMTP id Qr7J6B8Y2JRq; Mon, 27 Jun 2022 22:41:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB82C82BED;
-	Mon, 27 Jun 2022 22:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB82C82BED
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7CBB31BF2F0
+	by smtp1.osuosl.org (Postfix) with ESMTP id D876F82C1E;
+	Mon, 27 Jun 2022 22:41:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D876F82C1E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 945651BF9B5
  for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:40:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6552882BF5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E93C60A6F
  for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6552882BF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E93C60A6F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0w4sxZsPhYfi for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0o97YDGzbS_u for <buildroot@lists.busybox.net>;
  Mon, 27 Jun 2022 22:40:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A46AF82BC8
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1285607FF
  for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:40:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A46AF82BC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1285607FF
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3F3F2876FD; Mon, 27 Jun 2022 22:28:07 +0000 (UTC)
+ id 4D91C876FE; Mon, 27 Jun 2022 22:28:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jun 2022 00:32:36 +0200
+Date: Tue, 28 Jun 2022 00:33:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bbf50195d7f4863cc924d0e140be46417edd23e4
-X-Git-Newrev: 7ea3831685484e3cf7da86f6d33b5ee120b67230
+X-Git-Oldrev: 7ea3831685484e3cf7da86f6d33b5ee120b67230
+X-Git-Newrev: b27b4adaa435fa559e2353db4150c2eea630f602
 X-Patchwork-Hint: ignore
-Message-Id: <20220627222807.3F3F2876FD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libpjsip: fix CVE-2022-31031
+Message-Id: <20220627222807.4D91C876FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/darkhttpd: add
+ DARKHTTPD_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,91 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ea3831685484e3cf7da86f6d33b5ee120b67230
+commit: https://git.buildroot.net/buildroot/commit/?id=b27b4adaa435fa559e2353db4150c2eea630f602
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-PJSIP is a free and open source multimedia communication library written
-in C language implementing standard based protocols such as SIP, SDP,
-RTP, STUN, TURN, and ICE. In versions prior to and including 2.12.1 a
-stack buffer overflow vulnerability affects PJSIP users that use STUN in
-their applications, either by: setting a STUN server in their
-account/media config in PJSUA/PJSUA2 level, or directly using
-`pjlib-util/stun_simple` API.
+cpe:2.3:a:darkhttpd_project:darkhttpd is a valid CPE identifier for this
+package:
 
-https://github.com/pjsip/pjproject/security/advisories/GHSA-26j7-ww69-c4qj
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adarkhttpd_project%3Adarkhttpd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...rge-pull-request-from-GHSA-26j7-ww69-c4qj.patch | 44 ++++++++++++++++++++++
- package/libpjsip/libpjsip.mk                       |  3 ++
- 2 files changed, 47 insertions(+)
+ package/darkhttpd/darkhttpd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libpjsip/0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch b/package/libpjsip/0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch
-new file mode 100644
-index 0000000000..42b842a616
---- /dev/null
-+++ b/package/libpjsip/0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch
-@@ -0,0 +1,44 @@
-+From 450baca94f475345542c6953832650c390889202 Mon Sep 17 00:00:00 2001
-+From: sauwming <ming@teluu.com>
-+Date: Tue, 7 Jun 2022 12:00:13 +0800
-+Subject: [PATCH] Merge pull request from GHSA-26j7-ww69-c4qj
-+
-+[Retrieved from:
-+https://github.com/pjsip/pjproject/commit/450baca94f475345542c6953832650c390889202]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ pjlib-util/src/pjlib-util/stun_simple.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/pjlib-util/src/pjlib-util/stun_simple.c b/pjlib-util/src/pjlib-util/stun_simple.c
-+index 722519584..d0549176d 100644
-+--- a/pjlib-util/src/pjlib-util/stun_simple.c
-++++ b/pjlib-util/src/pjlib-util/stun_simple.c
-+@@ -54,6 +54,7 @@ PJ_DEF(pj_status_t) pjstun_parse_msg( void *buf, pj_size_t buf_len,
-+ {
-+     pj_uint16_t msg_type, msg_len;
-+     char *p_attr;
-++    int attr_max_cnt = PJ_ARRAY_SIZE(msg->attr);
-+ 
-+     PJ_CHECK_STACK();
-+ 
-+@@ -83,7 +84,7 @@ PJ_DEF(pj_status_t) pjstun_parse_msg( void *buf, pj_size_t buf_len,
-+     msg->attr_count = 0;
-+     p_attr = (char*)buf + sizeof(pjstun_msg_hdr);
-+ 
-+-    while (msg_len > 0) {
-++    while (msg_len > 0 && msg->attr_count < attr_max_cnt) {
-+ 	pjstun_attr_hdr **attr = &msg->attr[msg->attr_count];
-+ 	pj_uint32_t len;
-+ 	pj_uint16_t attr_type;
-+@@ -111,6 +112,10 @@ PJ_DEF(pj_status_t) pjstun_parse_msg( void *buf, pj_size_t buf_len,
-+ 	p_attr += len;
-+ 	++msg->attr_count;
-+     }
-++    if (msg->attr_count == attr_max_cnt) {
-++	PJ_LOG(4, (THIS_FILE, "Warning: max number attribute %d reached.",
-++		   attr_max_cnt));
-++    }
-+ 
-+     return PJ_SUCCESS;
-+ }
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index a3303d1e8a..4134d40da8 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -16,6 +16,9 @@ LIBPJSIP_CPE_ID_PRODUCT = pjsip
- LIBPJSIP_INSTALL_STAGING = YES
- LIBPJSIP_MAKE = $(MAKE1)
+diff --git a/package/darkhttpd/darkhttpd.mk b/package/darkhttpd/darkhttpd.mk
+index 56e5a6ecd6..bc68d43ef9 100644
+--- a/package/darkhttpd/darkhttpd.mk
++++ b/package/darkhttpd/darkhttpd.mk
+@@ -8,6 +8,7 @@ DARKHTTPD_VERSION = 1.13
+ DARKHTTPD_SITE = $(call github,emikulic,darkhttpd,v$(DARKHTTPD_VERSION))
+ DARKHTTPD_LICENSE = MIT
+ DARKHTTPD_LICENSE_FILES = darkhttpd.c
++DARKHTTPD_CPE_ID_VENDOR = darkhttpd_project
  
-+# 0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch
-+LIBPJSIP_IGNORE_CVES += CVE-2022-31031
-+
- LIBPJSIP_CFLAGS = $(TARGET_CFLAGS) -DPJ_HAS_IPV6=1
- 
- # relocation truncated to fit: R_68K_GOT16O
+ define DARKHTTPD_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
