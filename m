@@ -4,94 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDF4AC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 19:56:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D89A6C43334
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 20:12:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EB7760E4B;
-	Mon, 27 Jun 2022 19:56:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EB7760E4B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57A1C60E29;
+	Mon, 27 Jun 2022 20:12:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57A1C60E29
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6L2v1jKYe37R; Mon, 27 Jun 2022 19:56:37 +0000 (UTC)
+	with ESMTP id BxcFru5Bs72g; Mon, 27 Jun 2022 20:12:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F67C607C7;
-	Mon, 27 Jun 2022 19:56:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F67C607C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CB3F60ACF;
+	Mon, 27 Jun 2022 20:12:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CB3F60ACF
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 000871BF358
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 19:56:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D9F781BF2B0
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 20:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9212417B9
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 19:56:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9212417B9
+ by smtp4.osuosl.org (Postfix) with ESMTP id B37D64150E
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 20:12:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B37D64150E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nuTlJ_7sYJ4w for <buildroot@lists.busybox.net>;
- Mon, 27 Jun 2022 19:56:31 +0000 (UTC)
+ with ESMTP id X0hlWdX68FKW for <buildroot@lists.busybox.net>;
+ Mon, 27 Jun 2022 20:12:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FF5D410AF
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4FF5D410AF
- for <buildroot@buildroot.org>; Mon, 27 Jun 2022 19:56:30 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id g26so21357359ejb.5
- for <buildroot@buildroot.org>; Mon, 27 Jun 2022 12:56:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FF4E414CE
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6FF4E414CE
+ for <buildroot@buildroot.org>; Mon, 27 Jun 2022 20:12:38 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id ej4so14646112edb.7
+ for <buildroot@buildroot.org>; Mon, 27 Jun 2022 13:12:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=KPKciAnirYjnNxTglZ//tAFc3IY3UoX3ix3I+uc1mKA=;
- b=Q9Z8HkIIZN9FRaK/h64U13Joww1xW138eZ0wq7hSchoR2T5IvBtBcH6MxPXAX+KRc4
- Ut26euxBqz5gp1+jvEGeoSIBdjhM6EBPJ0qWABk1JFvnamWhFBaaIiiuY+fisdhgg8HF
- sB+VHrPXCi6mbuSLvXRVfmmO8UGTtBu3AlPeUcI2CZkwLokBAS9TBzq0iz7hlTL6gyCC
- eEy7SXpJyjeqXINq4PC1XGVFofZMBFJYR0HJKs3UbQyGfaIsBrL118qc2j99d6qbjnk1
- KrqMyIdYO9vjsQgRrc/z60bTL6Z/fr1koeazS/tn5nzsqvmRxFbF38p80Y8hufa5oscb
- O6IA==
-X-Gm-Message-State: AJIora/1izPnVu8RVF44UdxONjOoXZsOoEAG8wHLXEK+i61NKpOcan1P
- WjnK3NmRCm/xNyW4zGh11n0/Oa1KIz2STQ==
-X-Google-Smtp-Source: AGRyM1sG+A+Cg4UczsJEyoUCPe5S2j1EX6p0rGtUxgEro5tWT/97/lmIRN+oOdb4fAhfRWka0qMn6g==
-X-Received: by 2002:a17:906:604f:b0:718:e9e8:9d2a with SMTP id
- p15-20020a170906604f00b00718e9e89d2amr13975206ejj.315.1656359789027; 
- Mon, 27 Jun 2022 12:56:29 -0700 (PDT)
+ bh=8tZBKmorzGUZSFvgWQFtOI6nQAzQUv52p6kzyky9esM=;
+ b=IsgvLQwwmoKJxMpaY/Qz+7B5NOQvaoOLs21bo5SADgotecfyWSQP9HwycH3YnfSL8y
+ 3FB0K9yDZMhrnkUfDAjmldH8xyOHxgcwF/euOW7ZOSAL9/4sF7/CyVZ8lPSNhbaSiLmd
+ lowNOHCOWBPBgF0WfASziyIrrbEpgMhFbr1L4uPbqTRiBpXJ+duusj9sAHtaTu7F4pI2
+ rHSz2V4vE8gsdFiVIg9ocwKsnJCt+dGpuGxT9aelaDS0OUnzOnIEJ9VQqCVon9ijQMab
+ wVuV6d+BM6a1FVsGITfLPD634dcNci2NowkdengmbuLy3+2qST/AP9RHJdl/PyJaugEP
+ jGeg==
+X-Gm-Message-State: AJIora9a1ctjgcfe+0IvzWu4i10DiBRiSMpn05B/+pm6SX6CaUV9x8RT
+ boW/kel65hZ+JskiMK+iRZpH7Q==
+X-Google-Smtp-Source: AGRyM1tVvX2A0x7l8KlYp+0Gwq0lTg7fGLlUnPyCt1CgaJ84WQutRNfKJj+Gpda08Deg8leFOS987g==
+X-Received: by 2002:a05:6402:2549:b0:437:788d:b363 with SMTP id
+ l9-20020a056402254900b00437788db363mr14376669edb.406.1656360756433; 
+ Mon, 27 Jun 2022 13:12:36 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- h26-20020aa7c61a000000b00435cfa7c6f5sm7950192edq.46.2022.06.27.12.56.28
+ jz18-20020a17090775f200b0070fd7da3e47sm5417771ejc.127.2022.06.27.13.12.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 27 Jun 2022 12:56:28 -0700 (PDT)
-Message-ID: <cf5bc691-d405-c34c-34d5-d85b86469117@mind.be>
-Date: Mon, 27 Jun 2022 21:56:26 +0200
+ Mon, 27 Jun 2022 13:12:35 -0700 (PDT)
+Message-ID: <742cf792-e320-dc72-c6f8-e647ab4e2402@mind.be>
+Date: Mon, 27 Jun 2022 22:12:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
 Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Christian Stewart <christian@paral.in>
-References: <CA+h8R2rjW4aTmTObDpKyrdMX1e=CqGzyeGHSg5sB-eeonz3LTg@mail.gmail.com>
- <20220626012022.48814280@windsurf>
+To: Raphael Pavlidis <raphael.pavlidis@googlemail.com>, buildroot@buildroot.org
+References: <20220620191403.22187-1-raphael.pavlidis@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220626012022.48814280@windsurf>
+In-Reply-To: <20220620191403.22187-1-raphael.pavlidis@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=KPKciAnirYjnNxTglZ//tAFc3IY3UoX3ix3I+uc1mKA=;
- b=IZiqHxs3m5NETcenhRSHErYPZCYBRj1X7opbrbnk2xqyannm2rTSpw6vuTGIIkaqEQ
- V6q7XR2U4+uJuAX7YQ1AVkNj8+KIE9Lh02TYKKoQGQwAiTnxfZTqR/ePWZkEbhyeZGds
- hj2ghNIZWp8t6Rw3QNto9qlKbf62bZ9EFtbcnJhgH2Yl/94K4Q0DYcHGriVvqcqhNwQT
- ed3FK9O+tbOEouDv8Kj9YWgZFALTIXjL9Bn2qoaNQpWTFr8fni9Zl9G7Ux7CC8ixaP17
- f/67N0HsV5Rtm4AjMAmN3JSJqIxVfQpl42Rneqp2WlVVGwPLeIflAzAeWeMHLBZXtY77
- RwzA==
+ bh=8tZBKmorzGUZSFvgWQFtOI6nQAzQUv52p6kzyky9esM=;
+ b=eHSo31uMrjWYmhQIH1VdXKViiIjPs7MuJ+bguy3XnQtLpxVTYFrlVTKvKfMnKmXr8s
+ pFv+7gBmZeHbYbw4MxqlmQ+Zz7ZBVQPCv0/UA/vdOjVJKvqdOPcS38/trI3gsjnTMjwl
+ VK3cRhBbD6kGvVzuncN29TbbWesiPCzwBTO8OcxeCpB7vCGNAg0OnB8nDgnAkCKAw715
+ lBUhlDZmWY1hFe1pwhulS8Q51usTPOI04jo8f7JTuIMo3/Qp8jhR/pQtkOTcfATyKp1r
+ ZHL+50Qfg68rPSUs/FKXAREZPJvhE6AQx5b6ZHgJxzqm1OCmeZsABvRLTA7LYC5nq8bh
+ AvjA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=IZiqHxs3
-Subject: Re: [Buildroot] go: patching dependency versions w/ go modules?
+ header.a=rsa-sha256 header.s=google header.b=eHSo31uM
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/slirp: bump to version 4.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,8 +101,9 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Buildroot Mailing List <buildroot@buildroot.org>
+Cc: Thomas Huth <huth@tuxfamily.org>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -112,69 +111,47 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 26/06/2022 01:20, Thomas Petazzoni via buildroot wrote:
-> Hello,
+On 20/06/2022 21:14, Raphael Pavlidis via buildroot wrote:
+> https://gitlab.freedesktop.org/slirp/libslirp/-/blob/v4.7.0/CHANGELOG.md
 > 
-> On Sat, 25 Jun 2022 15:37:36 -0700
-> Christian Stewart <christian@paral.in> wrote:
-> 
->> There's a particular issue I've run into with the Go implementation
->> while trying to fix the gocryptfs package.
->>
->> Currently the process is:
->>
->>   1. Download the package source code.
->>   2. Run "go mod vendor" and re-bundle into a .tar.gz.
->>   3. Hash the resulting .tar.gz
->>   4. Extract it to the build/ tree
->>   5. Apply any patches
->>   6. Run the build.
->>
->> The problem with this is, if we try to patch the versions of any
->> dependencies, for example by editing go.mod and go.sum, this is after
->> the download step at #2.
->>
->> So currently it is not possible to change the version of dependencies
->> with a patch.
-> 
-> Correct.
-> 
->> Is there any clean way to fix this?
-> 
-> No, not with the current infrastructure indeed.
-> 
->> The only thing I can think of is to add a new variable which contains
->> a list of "go mod edit" commands to run just before "go mod vendor" in
->> the download & extract step.
->>
->> go mod edit -replace
->> github.com/jacobsa/crypto=github.com/piggynl/jacobsa-crypto@xorblock-generic
-> 
-> I don't really have a good idea here, but whatever solution we come up
-> with should not be Go-specific, as it should also work for the Cargo
-> use-case (and possibly other similar situations in the future).
+> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 
-  I vaguely remember something like this was discussed by some people and the 
-idea we came up with was to add some kind of pre-post-process step that would be 
-called before the {cargo,go}-post-process. Well, it would actually have to be 
-called from within the post-process script, because the script itself is 
-responsible for detecting if the tarball was already post-processed or not (and 
-any patches should only be applied to the raw tarball, not the post-processed one).
-
-  Come to think of it, because any patching anyway needs to be done in the 
-post-process script itself, it's not so crazy to make the patching specific for 
-the post-processor as well. We just need to add yet another argument to 
-dl-wrapper that propagates down to the post-processor - similar to the arguments 
-after -- that are passed down to the backend. With that, you could do e.g.
-
-GOCRYPTFS_DOWNLOAD_POST_PROCESS_ARGS = \
-	-m '-replace 
-github.com/jacobsa/crypto=github.com/piggynl/jacobsa-crypto@xorblock-generic'
-
-  Quoting is going to be complicated though...
+  Applied to master, thanks.
 
   Regards,
   Arnout
+
+> ---
+>   package/slirp/slirp.hash | 2 +-
+>   package/slirp/slirp.mk   | 6 +++---
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
+> index 326b2ad246..3f7abdee5a 100644
+> --- a/package/slirp/slirp.hash
+> +++ b/package/slirp/slirp.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed:
+> -sha256  b8a22ac4d601ba16122a67827c0f4361785d4d283f21ff8ed48d4aa1e7693477  libslirp-4.6.1.tar.xz
+> +sha256  358ce8b6ea59ec9deac937cc754f0115b992839e7b0cddf30ffb8f77dc21da82  libslirp-v4.7.0.tar.bz2
+>   sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
+> diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
+> index 43d2c520e9..10d367587d 100644
+> --- a/package/slirp/slirp.mk
+> +++ b/package/slirp/slirp.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -SLIRP_VERSION = 4.6.1
+> -SLIRP_SOURCE = libslirp-$(SLIRP_VERSION).tar.xz
+> -SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/uploads/83b199ea6fcdfc0c243dfde8546ee4c9
+> +SLIRP_VERSION = 4.7.0
+> +SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.bz2
+> +SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
+>   SLIRP_LICENSE = BSD-3-Clause
+>   SLIRP_LICENSE_FILES = COPYRIGHT
+>   SLIRP_CPE_ID_VENDOR = libslirp_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
