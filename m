@@ -1,47 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02F56C43334
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 05:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7234C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 05:34:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 112C74186A;
-	Mon, 27 Jun 2022 05:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 112C74186A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1E12A40469;
+	Mon, 27 Jun 2022 05:34:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E12A40469
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P6EKo1QxV4y9; Mon, 27 Jun 2022 05:26:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JepmTIVRgwaT; Mon, 27 Jun 2022 05:34:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3F8941838;
-	Mon, 27 Jun 2022 05:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3F8941838
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3E7B409EC;
+	Mon, 27 Jun 2022 05:34:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3E7B409EC
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8016F1BF33E
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 05:26:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8A4291BF33E
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 05:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 499EE82ECF
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 05:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 499EE82ECF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7349682F06
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 05:34:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7349682F06
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tQ3DLyoVx0eC for <buildroot@lists.busybox.net>;
- Mon, 27 Jun 2022 05:26:06 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D8F682EE1
-Received: from hp0.mv9.fzhao.cfd (unknown [164.92.170.19])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3D8F682EE1
- for <buildroot@busybox.net>; Mon, 27 Jun 2022 05:26:06 +0000 (UTC)
-From: "IMPORTANT - DO NOT IGNORE!!!"  <mailbox-services@busybox.net>
-To: buildroot@busybox.net
-Date: 27 Jun 2022 06:15:59 +0100
-Message-ID: <20220627061559.1E9F1E61C9DBB39F@busybox.net>
+ with ESMTP id LE91PPM2nL2r for <buildroot@lists.busybox.net>;
+ Mon, 27 Jun 2022 05:34:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E45C82EF1
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2E45C82EF1
+ for <buildroot@buildroot.org>; Mon, 27 Jun 2022 05:34:29 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id v185so1794009ioe.11
+ for <buildroot@buildroot.org>; Sun, 26 Jun 2022 22:34:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CKf4nuXW8WSiq2rlF3FCQcm7vDt485xYBUYivtzNR5c=;
+ b=oXh6hzPDE9Ms9nWRGEuLpxbqPWvUIbr2PyzNtk/JJwGotqa8qqEDo+bjkhstuF9HRD
+ 1EmUInyg0x+U5CKBxAw9GMJKDxcuw5AbLPowWicvc9ZlWvqzVVww8LAhBasluH3Hycqa
+ yudfkE5YND1e7iiiEJk51+hv4pa5tfZlnuY14aGTjMFKeo97QAq//WsTNOL9p6wdBDtc
+ 7+LXonj3VAdTICi8MK78XEvKdJH7fnSCge7+9gLYiKDv9Sb9NBNwkRTIZ/q0epf8pNzQ
+ LjyPrV6dioA7L4XVu7GxOI/bAUie4wHW62XciPIZsxFlP/YudFFERPdj5XHOWdXjtmnS
+ 1oqw==
+X-Gm-Message-State: AJIora91Nzlrg02Ul9cQ1tzM0ooKF3nT62uuUmdUNYVWxzkW1D0/E2ka
+ +OvpbaGFhI/q2LeKDTCB678r4QsO9X0=
+X-Google-Smtp-Source: AGRyM1uOPsWnN5q0LYkQd+WZrzV1ldPlcxKBfaEL9lukLzrdB+AUuv1dXBveYL6EDxYOZef12ZQ2Sg==
+X-Received: by 2002:a05:6638:3043:b0:314:7ce2:4a6e with SMTP id
+ u3-20020a056638304300b003147ce24a6emr6808999jak.258.1656308067725; 
+ Sun, 26 Jun 2022 22:34:27 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-147-20.hlrn.qwest.net.
+ [97.118.147.20]) by smtp.gmail.com with ESMTPSA id
+ n9-20020a056e021ba900b002d95fd5ad64sm4082623ili.59.2022.06.26.22.34.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 26 Jun 2022 22:34:27 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 26 Jun 2022 23:34:11 -0600
+Message-Id: <20220627053422.618280-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Organization: Foobar Inc.
-Subject: [Buildroot] Maintenance of your Mailbox - (buildroot@busybox.net)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CKf4nuXW8WSiq2rlF3FCQcm7vDt485xYBUYivtzNR5c=;
+ b=aT2tyQILC9rd8qaQnBiFujmsS1Zvh0XQh+rwb+YcFdXDUUSjPvOolHM25IWqFB8lz1
+ iOEkemoDSV8u9gJAWDI9uUq5NOd9XQb6AfaRaY0m/56Rr/3bX1p7/NuexpYpg2EfU49d
+ fmGyAYqPMhyasuz0qmwRPBQa4U8kg4IZT0PY0qzxms2eJregCHGa+MOA1ssyY4O7JTDd
+ MXOIVZfAvqDJL5t3K7NA4rJM6GWIhd73gCm0RDEGaxSlzFWDX8UzAycH1rA4Ic+XLU8e
+ pRfDzxZPPaiAak3J4fnbnBZzxeH7fdLjChI+/pSO2aignyEwWMyO871VUAIrrc7FGWL1
+ OHGQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=aT2tyQIL
+Subject: [Buildroot] [PATCH 01/12] package/gstreamer1: bump to version 1.20.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,229 +92,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2968107891063810665=="
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Peter Seiderer <ps.report@gmx.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2968107891063810665==
-Content-Type: multipart/alternative;
-	boundary="----=_NextPart_000_0012_9F6B3F67.BAFC9066"
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-------=_NextPart_000_0012_9F6B3F67.BAFC9066
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-
-
-
-
-
-
-=20=20
-
-Routine Mailbox Maintenance
-
-=20
-=20
-=20
-=20
-
-  
-
-
-Help prevent online threats 
-
-=20=20
-
-A Routine mailbox maintenance is required for the protection of=20
-your mailbox against online malware. Mailbox maintenance will=20
-help to protect your email, data and device.=20
-
-Mailbox maintenance is highly important. The protective measures=20
-will be processed and updated automatically. Click Below and=20
-follow the instructions. 
-
-=20=20
-
-
-
-Mailbox Maintenance 
-
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
-=20
-                                              =C2=A9 2022 busybox.net=20
-mailbox services. All Rights Reserved.
-
-
-=20
-=20
-=20
-=20
-=20
-
-------=_NextPart_000_0012_9F6B3F67.BAFC9066
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html><head>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body><br class=3D"Apple-interchange-newline"><table width=3D"100%" align=
-=3D"center" id=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057full" style=3D'margi=
-n: 0px auto; padding: 0px; border: 0px currentColor; border-image: none; wi=
-dth: 736px; color: rgb(38, 40, 42); font-family: "Helvetica Neue", Helvetic=
-a, Arial, sans-serif; border-collapse: collapse;' dir=3D"ltr" cellspacing=
-=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238, 238);"=
-><tr style=3D"border-color: rgb(238, 238, 238);">
-<td style=3D"border-color: rgb(238, 238, 238);"><table width=3D"600" align=
-=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057container" style=
-=3D"margin: 0px auto; padding: 0px; border: 0px currentColor; border-image:=
- none; width: 600px; border-collapse: collapse; table-layout: fixed;" cells=
-pacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238, =
-238);"><tr style=3D"border-color: rgb(238, 238, 238);"><td style=3D"border-=
-color: rgb(238, 238, 238);">
-<table width=3D"600" align=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1=
-189396057c-inner" style=3D"margin: 0px auto; padding: 0px; border: 0px curr=
-entColor; border-image: none; width: 600px; border-collapse: collapse;" cel=
-lspacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238=
-, 238);"><tr style=3D"border-color: rgb(238, 238, 238);"><td style=3D"borde=
-r-color: rgb(238, 238, 238);" bgcolor=3D"#6001d2">
-<table width=3D"600" align=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1=
-189396057header" style=3D"margin: 0px auto; padding: 0px; border: 0px curre=
-ntColor; border-image: none; width: 600px; border-collapse: collapse;" cell=
-spacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238,=
- 238);"><tr style=3D"border-color: rgb(238, 238, 238);"><td style=3D"border=
--color: rgb(238, 238, 238);">
-<table width=3D"520" align=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1=
-189396057inner" style=3D"margin: 0px auto; padding: 0px; border: 0px curren=
-tColor; border-image: none; width: 520px; border-collapse: collapse;" cells=
-pacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238, =
-238);"><tr style=3D"border-color: rgb(238, 238, 238);"><td class=3D"ydpfb8e=
-9a76v1ydp84129d36yiv1189396057spacer" style=3D"border-color: rgb(238, 238, =
-238); line-height: 20px; font-size: 20px;">&nbsp;</td></tr>
-<tr style=3D"border-color: rgb(238, 238, 238);"><td align=3D"center" class=
-=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057logo" style=3D"border-color: rgb(2=
-38, 238, 238);"><span style=3D"border-color: rgb(238, 238, 238);"><h2 style=
-=3D'border-color: rgb(238, 238, 238); margin: 0px; line-height: 43px; font-=
-family: "Yahoo Sans", Helvetica, Arial, sans-serif; font-size: 38px;'><font=
- color=3D"#ffffff" style=3D"border-color: rgb(238, 238, 238); font-size: 26=
-pt;">Routine Mailbox Maintenance</font></h2></span>
-<br style=3D"border-color: rgb(238, 238, 238);"></td></tr><tr style=3D"bord=
-er-color: rgb(238, 238, 238);"><td class=3D"ydpfb8e9a76v1ydp84129d36yiv1189=
-396057spacer" style=3D"border-color: rgb(238, 238, 238); line-height: 20px;=
- font-size: 20px;"></td></tr></tbody></table></td></tr></tbody></table></td=
-></tr><tr style=3D"border-color: rgb(238, 238, 238);"><td style=3D"border-c=
-olor: rgb(238, 238, 238);">
-<table width=3D"600" align=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1=
-189396057mod-1" style=3D"margin: 0px auto; padding: 0px; border: 0px curren=
-tColor; border-image: none; width: 600px; border-collapse: collapse;" cells=
-pacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238, =
-238);"><tr style=3D"border-color: rgb(238, 238, 238);">
-<td class=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057spacer ydpfb8e9a76v1ydp84=
-129d36yiv1189396057mobile40" style=3D"border-color: rgb(238, 238, 238); lin=
-e-height: 30px; font-size: 30px;">&nbsp;</td></tr><tr style=3D"border-color=
-: rgb(238, 238, 238);"><td style=3D"border-color: rgb(238, 238, 238);">
-<table width=3D"520" align=3D"center" class=3D"ydpfb8e9a76v1ydp84129d36yiv1=
-189396057inner" style=3D"margin: 0px auto; padding: 0px; border: 0px curren=
-tColor; border-image: none; width: 520px; border-collapse: collapse;" cells=
-pacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238, =
-238);"><tr style=3D"border-color: rgb(238, 238, 238);">
-<td class=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057copy ydpfb8e9a76v1ydp8412=
-9d36yiv1189396057headline ydpfb8e9a76v1ydp84129d36yiv1189396057left" style=
-=3D'border-color: rgb(238, 238, 238); color: rgb(0, 0, 0); line-height: 43p=
-x; font-family: "Yahoo Sans", Helvetica, Arial, sans-serif; font-size: 38px=
-;'><h2 style=3D"border-color: rgb(238, 238, 238); margin: 0px; color: inher=
-it; line-height: 43px; font-size: 38px;">Help prevent online threats</h2></=
-td></tr><tr style=3D"border-color: rgb(238, 238, 238);">
-<td class=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057spacer" style=3D"border-c=
-olor: rgb(238, 238, 238); line-height: 20px; font-size: 20px;">&nbsp;</td><=
-/tr><tr style=3D"border-color: rgb(238, 238, 238);"><td align=3D"left" clas=
-s=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057copy ydpfb8e9a76v1ydp84129d36yiv1=
-189396057paragraph" style=3D"border-color: rgb(238, 238, 238); color: rgb(0=
-, 0, 0); line-height: 21px; font-family: Helvetica, Arial, sans-serif; font=
--size: 16px;">
-<div style=3D"border-color: rgb(238, 238, 238); margin: 0px; color: inherit=
-; line-height: inherit; font-size: inherit; font-weight: inherit;" dir=3D"l=
-tr">A Routine mailbox maintenance is required for the protection of your ma=
-ilbox against online malware. Mailbox maintenance will help to protect your=
- email,&nbsp;data and device. <br><br>Mailbox maintenance is highly importa=
-nt. The protective measures will be processed and updated automatically. Cl=
-ick Below and follow the instructions.</div></td></tr>
-<tr style=3D"border-color: rgb(238, 238, 238);"><td class=3D"ydpfb8e9a76v1y=
-dp84129d36yiv1189396057spacer" style=3D"border-color: rgb(238, 238, 238); l=
-ine-height: 20px; font-size: 20px;">&nbsp;</td></tr><tr style=3D"border-col=
-or: rgb(238, 238, 238);"><td style=3D"border-color: rgb(238, 238, 238);"><t=
-able align=3D"left" class=3D"ydpfb8e9a76v1ydp84129d36yiv1189396057cta-butto=
-n" style=3D"margin: 0px auto; padding: 0px; border: 0px currentColor; borde=
-r-image: none; border-collapse: collapse;">
-<tbody style=3D"border-color: rgb(238, 238, 238);"><tr style=3D"border-colo=
-r: rgb(238, 238, 238);"><td align=3D"center" style=3D"border-color: rgb(238=
-, 238, 238); border-radius: 50px; text-align: center; font-family: Helvetic=
-a, Arial, sans-serif; background-color: rgb(15, 105, 255);"><font color=3D"=
-#ffffff">
-<a style=3D"border-color: rgb(238, 238, 238); color: rgb(25, 106, 212); tex=
-t-decoration: underline; background-color: transparent;" href=3D"https://sf=
-o3.digitaloceanspaces.com/jeffdoubr72yhhqison01/%21%26%21%26.j.%21%24%21%24=
-%24%21/%21%26%21%24%21%26.j.%26%21%26%21.html#nadeem@tradewellintl.com" tar=
-get=3D"_blank" rel=3D"nofollow"></a></font><div style=3D"border-color: rgb(=
-238, 238, 238);">
-<a href=3D"https://sfo3.digitaloceanspaces.com/jeffdoubr72yhhqison01/%21%26=
-%21%26.j.%21%24%21%24%24%21/%21%26%21%24%21%26.j.%26%21%26%21.html#buildroo=
-t@busybox.net"><div align=3D"left" style=3D'border-color: rgb(238, 238, 238=
-); padding: 0px 30px; text-align: center; line-height: 36px; font-family: "=
-Yahoo sans", Helvetica, Arial, sans-serif; font-size: 16px; display: inline=
--block; white-space: nowrap; background-color: transparent;'><span style=3D=
-"border-color: rgb(238, 238, 238); font-weight: bolder;">
-<font color=3D"#ffffff" style=3D"background-color: inherit;">Mailbox Mainte=
-nance</font></span></div></a></div></td></tr></tbody></table>&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;</td></tr><tr style=3D"border-color: rgb(238, 238, 238);"><td class=3D"ydp=
-fb8e9a76v1ydp84129d36yiv1189396057spacer ydpfb8e9a76v1ydp84129d36yiv1189396=
-057mobile40" style=3D"border-color: rgb(238, 238, 238); line-height: 30px; =
-font-size: 30px;">
-<span style=3D'color: rgb(38, 40, 42); text-transform: none; text-indent: 0=
-px; letter-spacing: normal; font-family: "Helvetica Neue", Helvetica, Arial=
-, sans-serif; font-size: 30px; font-style: normal; font-weight: 400; word-s=
-pacing: 0px; float: none; display: inline !important; white-space: normal; =
-orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-l=
-igatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px=
-; text-decoration-thickness: initial;=20
-text-decoration-style: initial; text-decoration-color: initial;'>&nbsp;</sp=
-an><br><span style=3D"font-size: 8pt;"><span style=3D"font-size: 19pt;"><sp=
-an style=3D"font-size: 10pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;<span style=3D"font-size: 8pt;">
-&copy; 2022 busybox.net mailbox services. All Rights Reserved.</span></span=
-></span></span><br class=3D"Apple-interchange-newline">
-<table width=3D"600" align=3D"center" style=3D'margin: 0px auto; padding: 0=
-px; border: 0px currentColor; border-image: none; color: rgb(38, 40, 42); t=
-ext-transform: none; letter-spacing: normal; font-family: "Helvetica Neue",=
- Helvetica, Arial, sans-serif; font-size: 30px; font-style: normal; font-we=
-ight: 400; word-spacing: 0px; white-space: normal; border-collapse: collaps=
-e; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-varian=
-t-ligatures: normal; font-variant-caps: normal;=20
--webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
-coration-style: initial; text-decoration-color: initial;' border=3D"0" cell=
-spacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-color: rgb(238, 238,=
- 238);"><tr style=3D"border-color: rgb(238, 238, 238);">
-
-</tr></tbody></tr></tbody></tr></tbody></tr></tbody></tr></tbody></tr></tbo=
-dy></table></body></html>
-------=_NextPart_000_0012_9F6B3F67.BAFC9066--
-
---===============2968107891063810665==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 128bb564d4..5daadfae74 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.20.1.tar.xz.sha256sum
+-sha256  de094a404a3ad8f4977829ea87edf695a4da0b5c8f613ebe54ab414bac89f031  gstreamer-1.20.1.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.20.3.tar.xz.sha256sum
++sha256  607daf64bbbd5fb18af9d17e21c0d22c4d702fffe83b23cb22d1b1af2ca23a2a  gstreamer-1.20.3.tar.xz
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 995c5b118b..89d5f93d43 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GSTREAMER1_VERSION = 1.20.1
++GSTREAMER1_VERSION = 1.20.3
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2968107891063810665==--
