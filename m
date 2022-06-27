@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99DB7C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:09:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6854EC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:09:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49DAF409F8;
-	Mon, 27 Jun 2022 22:09:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49DAF409F8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0CB0F40A06;
+	Mon, 27 Jun 2022 22:09:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CB0F40A06
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Er-qz_krWwao; Mon, 27 Jun 2022 22:09:14 +0000 (UTC)
+	with ESMTP id KHteADqkRjOY; Mon, 27 Jun 2022 22:09:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4647B4050C;
-	Mon, 27 Jun 2022 22:09:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4647B4050C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AFF441BF2F0
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:08:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 18B1E40AB4;
+	Mon, 27 Jun 2022 22:09:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18B1E40AB4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C84D81BF2F0
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F87E60736
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:07:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F87E60736
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0960408D4
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:08:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0960408D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zWd-TzSCNY-y for <buildroot@lists.busybox.net>;
- Mon, 27 Jun 2022 22:07:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9FD8A6077D
- for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:07:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FD8A6077D
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 493738764C; Mon, 27 Jun 2022 21:55:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HDyEQ7dLEn3m for <buildroot@lists.busybox.net>;
+ Mon, 27 Jun 2022 22:08:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 827F8408D0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 827F8408D0
+ for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:08:29 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id C44401C0002;
+ Mon, 27 Jun 2022 22:08:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1o5wu8-00D4Rg-UA; Tue, 28 Jun 2022 00:08:24 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 28 Jun 2022 00:05:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dfb92d1f14db4dd4e578d309c478147fc6c1749d
-X-Git-Newrev: 992afb85914b16cb2c053f5c056bbf975a02cc6f
-X-Patchwork-Hint: ignore
-Message-Id: <20220627215520.493738764C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-vdr-vnsi: bump version to
- 19.0.5-Matrix
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20220625043409.70939-1-bernd.kuhls@t-online.de>
+Date: Tue, 28 Jun 2022 00:08:24 +0200
+In-Reply-To: <20220625043409.70939-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 25 Jun 2022 06:34:09 +0200")
+Message-ID: <87h745vjxj.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/xmrig: bump version to 6.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,44 +63,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=992afb85914b16cb2c053f5c056bbf975a02cc6f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash | 2 +-
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Removed patch, not needed anymore due to upstream removal of astrobwt:
+ > https://github.com/xmrig/xmrig/commit/22d6a7525e0e5d117d2518906ae86adbc4e65be9
 
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-index 178e2e1921..3e17fd553d 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bae48132304b990f802744a1e9856d47c2747830b60a587945cd8e5a3460f35b  kodi-pvr-vdr-vnsi-19.0.4-Matrix.tar.gz
-+sha256  521add432b7fe38b6019f99547a440b1a2927d10f1420d518235c1c6d2e95b6b  kodi-pvr-vdr-vnsi-19.0.5-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-index 0a4ac986d5..ebb5f117b8 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_VDR_VNSI_VERSION = 19.0.4-Matrix
-+KODI_PVR_VDR_VNSI_VERSION = 19.0.5-Matrix
- KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
- KODI_PVR_VDR_VNSI_LICENSE = GPL-2.0+
- KODI_PVR_VDR_VNSI_LICENSE_FILES = LICENSE.md
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
