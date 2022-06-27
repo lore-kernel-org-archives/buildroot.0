@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BDA5C43334
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3454BC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 973FE81A29;
-	Mon, 27 Jun 2022 22:10:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 973FE81A29
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W7lo3Ax0BmD5; Mon, 27 Jun 2022 22:10:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA18981773;
-	Mon, 27 Jun 2022 22:10:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA18981773
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2A7C01BF2F0
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:10:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0455840500
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:10:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0455840500
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA171408C9;
+	Mon, 27 Jun 2022 22:10:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA171408C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MbcpTOot5knR for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SuTniGmDkrmo; Mon, 27 Jun 2022 22:10:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A9F140500;
+	Mon, 27 Jun 2022 22:10:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A9F140500
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 576381BF9B5
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:10:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 32835410E7
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:10:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32835410E7
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iEfI1WvrSuma for <buildroot@lists.busybox.net>;
  Mon, 27 Jun 2022 22:10:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 23D3C4010C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C300410E3
  for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:10:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23D3C4010C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C300410E3
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BD7C087687; Mon, 27 Jun 2022 21:57:33 +0000 (UTC)
+ id C6B3B87673; Mon, 27 Jun 2022 21:57:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jun 2022 00:08:07 +0200
+Date: Tue, 28 Jun 2022 00:09:56 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 992afb85914b16cb2c053f5c056bbf975a02cc6f
-X-Git-Newrev: 381a1af2dd63ffb9390c9747d5843846929a2dbb
+X-Git-Oldrev: 381a1af2dd63ffb9390c9747d5843846929a2dbb
+X-Git-Newrev: 41d60d016461d90deeaacd31e1f66c6333fcca06
 X-Patchwork-Hint: ignore
-Message-Id: <20220627215733.BD7C087687@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xmrig: bump version to 6.18.0
+Message-Id: <20220627215733.C6B3B87673@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bdwgc: fix build without NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,88 +62,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=381a1af2dd63ffb9390c9747d5843846929a2dbb
+commit: https://git.buildroot.net/buildroot/commit/?id=41d60d016461d90deeaacd31e1f66c6333fcca06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch, not needed anymore due to upstream removal of astrobwt:
-https://github.com/xmrig/xmrig/commit/22d6a7525e0e5d117d2518906ae86adbc4e65be9
+Fix the following guile build failure without NPTL raised since the
+addition of bdwgc in commit b0476427f6c0036b7803d591a5394923c4b07142 and
+https://github.com/ivmai/bdwgc/commit/7896408d4149347588ed0e36319b53bcea70115b:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+configure:60776: checking for GC_is_heap_ptr
+configure:60776: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-uclibcgnueabi-gcc -std=gnu11 -o conftest  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O1 -g0  -DHAVE_GC_SET_FINALIZER_NOTIFIER -DHAVE_GC_GET_HEAP_USAGE_SAFE -DHAVE_GC_GET_FREE_SPACE_DIVISOR -DHAVE_GC_SET_FINALIZE_ON_DEMAND -flto -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -L/home/buildroot/autobuild/instance-2/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -latomic_ops -lgc -lpthread -ldl  -latomic -lm >&5
+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-2/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgc.so: undefined reference to `pthread_getattr_np'
+
+[...]
+
+In file included from ../libguile/alist.h:26,
+                 from ../libguile.h:31,
+                 from guile.c:38:
+../libguile/pairs.h:205:1: error: conflicting types for 'GC_is_heap_ptr'
+  205 | GC_is_heap_ptr (void *ptr)
+      | ^~~~~~~~~~~~~~
+In file included from ../libguile/bdw-gc.h:48,
+                 from ../libguile/gc.h:142,
+                 from ../libguile/pairs.h:26,
+                 from ../libguile/alist.h:26,
+                 from ../libguile.h:31,
+                 from guile.c:38:
+/home/buildroot/autobuild/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/gc/gc.h:551:20: note: previous declaration of 'GC_is_heap_ptr' was here
+  551 | GC_API int GC_CALL GC_is_heap_ptr(const void *);
+      |                    ^~~~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/819f231a60fc81f9a8dd07bf5411aa9d8f78c3bb
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-astrobwt-fix-build-with-gcc-4.8.patch     | 40 ----------------------
- package/xmrig/xmrig.hash                           |  2 +-
- package/xmrig/xmrig.mk                             |  2 +-
- 3 files changed, 2 insertions(+), 42 deletions(-)
+ package/bdwgc/bdwgc.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/xmrig/0001-astrobwt-fix-build-with-gcc-4.8.patch b/package/xmrig/0001-astrobwt-fix-build-with-gcc-4.8.patch
-deleted file mode 100644
-index 694d7b203c..0000000000
---- a/package/xmrig/0001-astrobwt-fix-build-with-gcc-4.8.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 72234ae73590fa93d837034a3fb48b71eb071a2a Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 22 May 2022 20:24:14 +0200
--Subject: [PATCH] astrobwt: fix build with gcc-4.8
--
--Fixes build error:
--
--xmrig-6.17.0/src/crypto/astrobwt/sort_indices2.cpp:40:24: error: missing binary operator before token "("
-- #if __has_cpp_attribute(unlikely)
--
--found with the buildroot toolchain
--arm-none-linux-gnueabi-gcc (Sourcery CodeBench Lite 2014.05-29) 4.8.3 20140320 (prerelease)
--
--Inspired by
--https://reviews.llvm.org/rG91c32fd8c8fa395971a028f7091273fa2c8f44e6
--
--Patch sent upstream: https://github.com/xmrig/xmrig/pull/3057
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/crypto/astrobwt/sort_indices2.cpp | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/src/crypto/astrobwt/sort_indices2.cpp b/src/crypto/astrobwt/sort_indices2.cpp
--index 2d86d462..3a70f619 100644
----- a/src/crypto/astrobwt/sort_indices2.cpp
--+++ b/src/crypto/astrobwt/sort_indices2.cpp
--@@ -36,6 +36,9 @@
-- #define RESTRICT
-- #endif
-- 
--+#ifndef __has_cpp_attribute
--+#define __has_cpp_attribute(x) 0
--+#endif
-- 
-- #if __has_cpp_attribute(unlikely)
-- #define UNLIKELY(X) (X) [[unlikely]]
---- 
--2.30.2
--
-diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
-index 7863c0319d..5b9d4402b5 100644
---- a/package/xmrig/xmrig.hash
-+++ b/package/xmrig/xmrig.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  748a989390202ba2d1ccbd9d9a6b8cbd6551149cbab63b347fd1ed6df0254faa  xmrig-6.17.0.tar.gz
-+sha256  4531a31c0c095fcae18fdef0157f1e2a6694408abbcff6789c8f3cd6ab2c3ca0  xmrig-6.18.0.tar.gz
- sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
-diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
-index 6e21e550a4..40db428b56 100644
---- a/package/xmrig/xmrig.mk
-+++ b/package/xmrig/xmrig.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index d1c9d4dfdc..cefa975998 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -21,6 +21,9 @@ endif
+ ifeq ($(BR2_STATIC_LIBS),y)
+ BDWGC_CFLAGS_EXTRA += -DGC_NO_DLOPEN
+ endif
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
++BDWGC_CFLAGS_EXTRA += -DNO_PTHREAD_GETATTR_NP
++endif
  
--XMRIG_VERSION = 6.17.0
-+XMRIG_VERSION = 6.18.0
- XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
- XMRIG_LICENSE = GPL-3.0+
- XMRIG_LICENSE_FILES = LICENSE
+ # Ensure we use the system libatomic_ops, and not the internal one.
+ BDWGC_CONF_OPTS += --with-libatomic-ops=yes
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
