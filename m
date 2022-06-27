@@ -1,50 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F9FAC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39FD5C43334
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:43:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D0F4D40574;
-	Mon, 27 Jun 2022 22:43:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0F4D40574
+	by smtp1.osuosl.org (Postfix) with ESMTP id D81B481466;
+	Mon, 27 Jun 2022 22:43:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D81B481466
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5xR9UReZTLPJ; Mon, 27 Jun 2022 22:43:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3tL_zsDrlnb5; Mon, 27 Jun 2022 22:43:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC432400D7;
-	Mon, 27 Jun 2022 22:43:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC432400D7
+	by smtp1.osuosl.org (Postfix) with ESMTP id B285981461;
+	Mon, 27 Jun 2022 22:43:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B285981461
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DC07B1BF2F0
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:40:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F11031BF2F0
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:41:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A231415B6
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:40:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A231415B6
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC128415A8
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:41:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC128415A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8KMK6H1ugUJ0 for <buildroot@lists.busybox.net>;
- Mon, 27 Jun 2022 22:40:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F374415C7
- for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F374415C7
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AE1B0876FB; Mon, 27 Jun 2022 22:28:07 +0000 (UTC)
+ with ESMTP id l-xGtDW7Ns1N for <buildroot@lists.busybox.net>;
+ Mon, 27 Jun 2022 22:41:59 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C967E4155F
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C967E4155F
+ for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:41:58 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 89B11240002;
+ Mon, 27 Jun 2022 22:41:56 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1o5xQZ-00D6Zf-OC; Tue, 28 Jun 2022 00:41:55 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 28 Jun 2022 00:40:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 22a333f91e0a976603e98516e7f683ad0b345cc2
-X-Git-Newrev: 9b7f8da96be549a52630cd87b30851d600f163a4
-X-Patchwork-Hint: ignore
-Message-Id: <20220627222807.AE1B0876FB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sudo: bump to version 1.9.11p2
+To: yegorslists--- via buildroot <buildroot@buildroot.org>
+References: <20220620125636.29944-1-yegorslists@googlemail.com>
+Date: Tue, 28 Jun 2022 00:41:55 +0200
+In-Reply-To: <20220620125636.29944-1-yegorslists@googlemail.com>
+ (yegorslists's message of "Mon, 20 Jun 2022 14:56:36 +0200")
+Message-ID: <871qv9sp8s.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/libusb: bump to version 1.0.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,58 +63,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b7f8da96be549a52630cd87b30851d600f163a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "yegorslists---" == yegorslists--- via buildroot <buildroot@buildroot.org> writes:
 
-License file renamed and year updated with
-https://github.com/sudo-project/sudo/commit/0ed92e6165c3f35d5188d1d0db04754fea023bcb
-https://github.com/sudo-project/sudo/commit/d02ba52fa41fcdfdd5b6500ed81419cd077cd79b
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Remove upstreamed patches.
 
-https://www.sudo.ws/releases/stable/#1.9.11p2
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > ---
+ >  ...igure.ac-link-with-latomic-if-needed.patch | 39 -------------------
+ >  ..._usbfs-fix-maybe-uninitialized-error.patch | 37 ------------------
+ >  package/libusb/libusb.hash                    |  2 +-
+ >  package/libusb/libusb.mk                      |  2 +-
+ >  4 files changed, 2 insertions(+), 78 deletions(-)
+ >  delete mode 100644 package/libusb/0001-configure.ac-link-with-latomic-if-needed.patch
+ >  delete mode 100644 package/libusb/0002-linux_usbfs-fix-maybe-uninitialized-error.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sudo/sudo.hash | 4 ++--
- package/sudo/sudo.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > diff --git a/package/libusb/0001-configure.ac-link-with-latomic-if-needed.patch b/package/libusb/0001-configure.ac-link-with-latomic-if-needed.patch
+ > deleted file mode 100644
 
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index 1b494af69c..63c98e2c4e 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
-@@ -1,4 +1,4 @@
- # From: http://www.sudo.ws/download.html
--sha256  9e3b8b8da7def43b6e60c257abe80467205670fd0f7c081de1423c414b680f2d  sudo-1.9.8p2.tar.gz
-+sha256  a21918eb9fc0063794f6887464fa2d924ab6d192e19063191a429605c22791d2  sudo-1.9.11p2.tar.gz
- # Locally calculated
--sha256  b678438594f04a7070a5fd125f7edffc871e13234baad318690b647bfc60705d  doc/LICENSE
-+sha256  cf3a83366f9aabfd76d693ce03843106fcaaf6c76dfa97610f7c0b719a06e6bb  LICENSE.md
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index a752217123..2b9ba76a51 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--SUDO_VERSION_MAJOR = 1.9.8
-+SUDO_VERSION_MAJOR = 1.9.11
- SUDO_VERSION_MINOR = p2
- SUDO_VERSION = $(SUDO_VERSION_MAJOR)$(SUDO_VERSION_MINOR)
- SUDO_SITE = https://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC, BSD-3-Clause
--SUDO_LICENSE_FILES = doc/LICENSE
-+SUDO_LICENSE_FILES = LICENSE.md
- SUDO_CPE_ID_VERSION = $(SUDO_VERSION_MAJOR)
- SUDO_CPE_ID_UPDATE = $(SUDO_VERSION_MINOR)
- SUDO_SELINUX_MODULES = sudo
+This presumably also means that we can drop _AUTORECONF. Committed with
+that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
