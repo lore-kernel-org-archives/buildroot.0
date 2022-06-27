@@ -1,91 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B21DAC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 14:48:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37570C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 15:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E48281959;
-	Mon, 27 Jun 2022 14:48:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E48281959
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F966408FC;
+	Mon, 27 Jun 2022 15:23:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F966408FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gyNLziBzJxlb; Mon, 27 Jun 2022 14:48:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WD6Vax20JtIt; Mon, 27 Jun 2022 15:23:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 163AE818C0;
-	Mon, 27 Jun 2022 14:48:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 163AE818C0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DFEDB1BF2C2
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 14:48:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9FD5D408C1;
+	Mon, 27 Jun 2022 15:23:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FD5D408C1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D5CE1BF97F
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 15:23:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B88EE8186A
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 14:48:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B88EE8186A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 316B2408C1
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 15:23:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 316B2408C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DuYFrU3vs-gh for <buildroot@lists.busybox.net>;
- Mon, 27 Jun 2022 14:48:35 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AAE3817D3
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9AAE3817D3
- for <buildroot@buildroot.org>; Mon, 27 Jun 2022 14:48:34 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id sb34so19629778ejc.11
- for <buildroot@buildroot.org>; Mon, 27 Jun 2022 07:48:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
- :content-transfer-encoding;
- bh=XIdiTx8JL4BZQH00+qsODu223RWDUBPET3m+MNzRIHo=;
- b=ikg2kPorbo6nMJmpe11aeDoV/zMtAKe3uXXRtHADJ3lB0wHBpxjEN6pxYTCmynp7y9
- x+68pJqYcXTKX54PuFDZbUvq/jqkKVByQJWOYj9FSP1DE86CcYTHeIf5hRzPOQfVNeyf
- fqkRsWjxs1u4DH45flfaOsP0RlRiX29w6GirOYxJzz8mSmxFtmAG1whTScxYxrPgiwCk
- NMpQBV+6vwtvezDGPVQqsg2rQjCHWdPsCoozHznrHWuL7oiFLbpeYttZ+InANj+nhANP
- E7nskC84iYhI98pxP+KoheWlfqXfW63i/4fdsLQsAAm3753jwtgJ83IESdCm0PeqEPv+
- 9pZw==
-X-Gm-Message-State: AJIora/n+CcuKVO4oG25i/3Cq5ti8vEaOqhXIGtyoGPWB2Z7YZkuMBbd
- nQkXEU8L/PhXecrZL3VZSF4=
-X-Google-Smtp-Source: AGRyM1tYW0J3gxmr+HNPNvpnh/+4pKJgYStBH/1Xk302t+5inVKDxOrPNBbEUFJtUxO7cMnAte6YhA==
-X-Received: by 2002:a17:907:7e82:b0:726:4211:60e7 with SMTP id
- qb2-20020a1709077e8200b00726421160e7mr12877913ejc.665.1656341312654; 
- Mon, 27 Jun 2022 07:48:32 -0700 (PDT)
-Received: from ?IPV6:2a02:8070:41a4:2c00:b6c6:fe17:60a3:53ae?
- ([2a02:8070:41a4:2c00:b6c6:fe17:60a3:53ae])
- by smtp.gmail.com with ESMTPSA id
- s3-20020a1709067b8300b0070efa110afcsm5065076ejo.83.2022.06.27.07.48.29
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 27 Jun 2022 07:48:32 -0700 (PDT)
-Message-ID: <2128cc33-8540-d034-761a-d3cf824608c1@googlemail.com>
-Date: Mon, 27 Jun 2022 16:48:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To: Vincent Fazio <vfazio@xes-inc.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BM0q1RMRh7cr for <buildroot@lists.busybox.net>;
+ Mon, 27 Jun 2022 15:23:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D704C41949
+Received: from USG02-BN3-obe.outbound.protection.office365.us
+ (mail-bn3usg02on0138.outbound.protection.office365.us [23.103.208.138])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D704C41949
+ for <buildroot@buildroot.org>; Mon, 27 Jun 2022 15:23:12 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
+ b=n3ikASLvrbSXfmaK0WtRqg+6qyXyKTsrc14X3AarDjQyKLOViSZzY+oJ5TPUkPdCtvb9hFCk/l4+zIIxs+VNsh9ZIbHmdunGfzi5cIAlWY3fU0Z9X2mY0LG7Qka9Q0WYDoIWnqdha4dgC78plxVjXFEe8gtxJdszJGiZ7GGw1fhfrl53cUgxHWshuxSQGMPygAy0wSZQ5AnpJgWlUuVrkgu6yha5FkcH2hhi+eWb37w5cQGGdUH86esPODGNiYPbVT/9fTgUKvcrFRoUM0Pp8yli2+ZHETB4H39M+/LWehsAbS1auTYfaY4TdC37ftIHxUryDrS4uSON30qnCySEbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector5401;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BeiTq/xEshHwrLF+S1CVRFBgtYPosWyVDB18jE4uU/o=;
+ b=T6SeZS0TtO9WQOk2akOsz7+OZgyxaHaOqr/GMdnkyHgnXBIqPFr/NYgYYGDf6Dx8YT+OpwLNEPH4aVtOByX/Rr1xeUG5amSdRdZXwwXkAaUTSyynmdDwO4XSFonW9YpdbrhyCoJrToGLgLgFTH6BH/WlHbt0ZeOltEIrE30nMY2Mf57a/JavT/HSXrNlCFqwDO5J6rWG8SppyCgNPa0C+3IoxwyKybthrNy0Eu6cp0FztUROZjY46LtLCGnOvGdyovCG6Z4K6OHDx1Sctb62gIN5VpeW2LIqr9sf5A2ZwK/SB4Fb8fSroCt1viJQMXW5+GScwtNYoDLP+M8OD28wdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xes-inc.com; dmarc=pass action=none header.from=xes-inc.com;
+ dkim=pass header.d=xes-inc.com; arc=none
+Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM (52.145.24.207) by
+ PH1P110MB1726.NAMP110.PROD.OUTLOOK.COM (52.145.34.134) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5353.14; Mon, 27 Jun 2022 15:23:07 +0000
+Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
+ ([fe80::e89b:a042:1655:b423]) by PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
+ ([fe80::e89b:a042:1655:b423%6]) with mapi id 15.20.5353.024; Mon, 27 Jun 2022
+ 15:23:07 +0000
+From: Vincent Fazio <vfazio@xes-inc.com>
+To: Raphael Pavlidis <raphael.pavlidis@googlemail.com>
+Thread-Topic: [External] - [Buildroot] [PATCH v1 1/1] package/nvidia-driver:
+ bump verstion to 515.48.07
+Thread-Index: AQHYiWKUUxSSStL/L0KgwZXpPMqCvq1jLvrAgAAoKACAAATiMA==
+Date: Mon, 27 Jun 2022 15:23:07 +0000
+Message-ID: <PH1P110MB1603D62DC87CC08ED593E2979FB99@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
 References: <20220626134142.9304-1-raphael.pavlidis@gmail.com>
  <PH1P110MB1603A57FB018D70B7354613F9FB99@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
-In-Reply-To: <PH1P110MB1603A57FB018D70B7354613F9FB99@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
+ <2128cc33-8540-d034-761a-d3cf824608c1@googlemail.com>
+In-Reply-To: <2128cc33-8540-d034-761a-d3cf824608c1@googlemail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: afd8374e-96a5-418f-7660-08da5850f029
+x-ms-traffictypediagnostic: PH1P110MB1726:EE_
+x-ms-exchange-atpmessageproperties: SA|SL
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ivLWp7AyptesEiRuzBcfq1RxcM1UZWMRLtaoMoQ6ol6eWwTcNwYkX02ncPrksBzARDiOvlWvqddyOhry3qjW/efMvR34Mhhyx59nFUcUHKNGRXafwk8NFDMe928JyYAvwIxVPwxP67vT/AOSCSEGSm77B7rTxerBnjFRd5aG5yDnLlVhjXTm5ZM6sKbkXd7/NtSkS1nm14fX+C87XCVTY2qrecL2Wz7ucDPmNyv6Vm0A8K8trJZSSiXI2FOxUBa6kTEXSbuWHmBot/jJpT/TELMFrOsgAC9gAuKgTnCfD3olClMgKRrc71WRjAvktyafVaI0yPsUOQYn2PFrYpm4bVxpYxNt1VjlIcOaC0OhKMoisBWL5ZZPLms1BQRbCq+9g9n3TuKbxN7pSi3NY4qb56ev20YhnkGVHgu5owDZyRKhRLUefvK9xuEQ9rg4td6nDeQrARfI9Akc/KxRJT8TeQ3by+bWUDaMnFP36Fh+zAbD6W6/xDZY1ygIz/YsxC/xYcntz03IrKrXJsZ1yYLdzg1zHB9Ak1/AOSaTWvQfWtHlr5Vyh9Kd5rED6AVpKzsIfOYiFYc/CobMzOieIJVWREA2qQK2ZlKC/TvZt6IvwCO3pJBM10N0Gnqb4G4NIp7xIA2OzgBkeZiCsBDU2BA/6tY8WtU5dFhiklKePz1tIsA5jKlkTZMduXf+JLpjLsaTQpYG7nCchDe7GL2vJPdTX9PyOjTPruuN8kzLYYB9mLepWSealFmlLP0sLznPcgANKE32qt5fLE3SjDBdFFTGwt0TKXP9FsDNyQW0uH+PXXpCN31uQM6WCMY7i3gEtS10
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230016)(4636009)(396003)(39830400003)(136003)(366004)(508600001)(71200400001)(122000001)(41320700001)(8936002)(8676002)(64756008)(38070700005)(2906002)(66556008)(186003)(4326008)(66476007)(5660300002)(76116006)(66946007)(966005)(66446008)(33656002)(19625735003)(26005)(52536014)(38100700002)(54906003)(6916009)(83380400001)(55016003)(6506007)(41300700001)(7696005)(86362001)(53546011)(9686003)(15866825006)(41080700001);
+ DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: chOgYW++2fiDt7myP/B3GkFMGDvms3tqHVpTayULWrl/NULGnDzHzG2LjqfOgfYEz/POltaitl7YpqnqvjK5oHjXTo2Kif4fBpb7bxf4F+HuCHstjS3jjBmr/etWBV5H+1/WLhyt/7dve1TQHMwG/KQ/0Yf08oEnr5KZEGLKUouqC1ZTnP1FM+5no4uzMr72CdqSsHH7Omu1pOfybMwyY4g6Pf1lqfY7Bfy9XNuUQfbX+S9pJ9VgGEaEN3pDTvedVLFr5LTJKoyIPEhaRRPeRzwaW3P0AY36Xb4SLAGcVXlRPyuITF4G+R7kmoX7RZLP60UbjorzQISUdd/+uCDJzsXbGLnrGkmOFXXokbyQlpybL47sVED2TqECkUxyESBG0LM2S4/9l3M7FPlq8TtDZT4Amqz6X0Svlv6V7EPvrv0=
+MIME-Version: 1.0
+X-OriginatorOrg: xes-inc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: afd8374e-96a5-418f-7660-08da5850f029
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 15:23:07.6067 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 2925f1cd-bdc3-4a76-bb38-6159e20a17f1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH1P110MB1726
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=XIdiTx8JL4BZQH00+qsODu223RWDUBPET3m+MNzRIHo=;
- b=f1bELs3V/TXyJl6WXUkUJobYsOVoKV8EqRjjKddiRm7Ywx4m3vZaUz0srU83/uvfM5
- OQmrNRWrq8UtgsG6iW6gvZPWrHfvuqGbldrNs4npmbO6G88PGLNEO45h93JhLhGblmYr
- lPrR3gdBlhveWHca/lzmYpnFZ9F5kx3qGahTfMFkP+g/qYody9FBCdduRxpB9rt+rIO1
- MsNghsXRKlRa5hwPBReubs3ynk02+TbySUFRstBdmvquvGodXT0zkNo1zmTxw18KQ9gK
- u791xoQ61C+fbGPJqPjrakZ6MYFryW9T2iBo3D+Ibt4wRRsKsfpo7DgXQDde+E+OZuXy
- PWSw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=f1bELs3V
+ d=xes-inc.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BeiTq/xEshHwrLF+S1CVRFBgtYPosWyVDB18jE4uU/o=;
+ b=W6cfGOeoZRm1KUYuVsmOaedOMGsCvn2wcLxzEtcAQPsiXq//UgfSdPP4ErmdaLvkXeH+w1jF8T8F+UeQm0PKmDvGegGM4vtP8am4IInIgLS8nwV0S2puYSefuBAnI0K1KHj8yiuTh2MNVBDDTPSUja0YypvVwWzEZCv6PTDiXQQm3dOwmIRIJdeBlZYbMJsySb8rH6n2fAzt/0UmkfMxvKuVOCVZ64i+qzuqa7CKT71y/VkCNvilzWh9TELtzDl/vH54L0JsYSNGjeFCAyCAllEll0lE06EEXFf7PPt0FpEQcCnUYDw6Gk2msCLXsL1xOKmtGZhVK2pTu95zGS0ywQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
+ header.s=selector1 header.b=W6cfGOeo
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xes-inc.com;
 Subject: Re: [Buildroot] [External] - [PATCH v1 1/1] package/nvidia-driver:
  bump verstion to 515.48.07
 X-BeenThere: buildroot@buildroot.org
@@ -99,178 +115,177 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Raphael Pavlidis via buildroot <buildroot@buildroot.org>
-Reply-To: Raphael Pavlidis <raphael.pavlidis@googlemail.com>
 Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
  Raphael Pavlidis <raphael.pavlidis@gmail.com>,
  "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Vincent,
-thanks for the info. I did not know that the newest Nvidia driver does 
-not support legacy GPUs. Alternatively, I could create a new package 
-with the name nvidia-driver-latest.
-
-What do you mean by: "replicates the C implementation in Python that 
-works for the BR package(s)"
-
-On 27.06.22 14:36, Vincent Fazio wrote:
-> Raphael
-> 
->> -----Original Message-----
->> From: buildroot <buildroot-bounces@buildroot.org> On Behalf Of Raphael
->> Pavlidis via buildroot
->> Sent: Sunday, June 26, 2022 8:42 AM
->> To: buildroot@buildroot.org
->> Cc: Yann E . MORIN <yann.morin.1998@free.fr>; Raphael Pavlidis
->> <raphael.pavlidis@gmail.com>
->> Subject: [External] - [Buildroot] [PATCH v1 1/1] package/nvidia-driver: bump
->> verstion to 515.48.07
->>
->> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
->> ---
->>   package/nvidia-driver/nvidia-driver.hash |  6 +++---
->>   package/nvidia-driver/nvidia-driver.mk   | 24 +++++++-----------------
->>   2 files changed, 10 insertions(+), 20 deletions(-)
->>
->> diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-
->> driver/nvidia-driver.hash
->> index 7f2248d0f9..06cf292c58 100644
->> --- a/package/nvidia-driver/nvidia-driver.hash
->> +++ b/package/nvidia-driver/nvidia-driver.hash
->> @@ -1,4 +1,4 @@
->>   # Locally computed
->> -sha256
->> 51adb28f0ed4548f35a88a93ad6767ebd807fa14f418bf5e51a6d63a3ff7f275
->> NVIDIA-Linux-x86-390.132.run
->> -sha256
->> b6b4b8af37e78e026c9ebdf4a5c64ea412dfcb710931dd028c22dac228de659d
->> NVIDIA-Linux-x86_64-390.132-no-compat32.run
->> -sha256
->> bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526
->> LICENSE
->> +sha256
->> e28764cc5b13c32e76370513daeafc05c289b77ee0511552450f1a00e31ae1e3
->> NVIDIA-Linux-x86_64-515.48.07.run
->> +sha256
->> 9ec1515cb214261ae4081a6fc9489800b5fef41c6a8d669e84e4ab1de7f3dc14
->> NVIDIA-Linux-x86_64-515.48.07-no-compat32.run
->> +sha256
->> bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526
->> LICENSE
->> diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-
->> driver/nvidia-driver.mk
->> index 54c2aa46d8..d12fa543bd 100644
->> --- a/package/nvidia-driver/nvidia-driver.mk
->> +++ b/package/nvidia-driver/nvidia-driver.mk
->> @@ -4,7 +4,7 @@
->>   #
->>
->> ##########################################################
->> ######################
->>
->> -NVIDIA_DRIVER_VERSION = 390.132
->> +NVIDIA_DRIVER_VERSION = 515.48.07
-> 
-> I don't think the discussion has been had on the ML, but I know we've discussed in the IRC channel that there may be a need to duplicate the nvidia-driver package and differentiate between the latest production branch and the legacy branch.
-> 
-> It's my understanding the new production branch does not support older GPUs which have been historically used in embedded systems [1]
-> 
->>   NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
->>   NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-
->> x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
->>   NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-
->> $(NVIDIA_DRIVER_VERSION)$(if $(BR2_x86_64),-no-compat32).run
->> @@ -42,7 +42,7 @@ NVIDIA_DRIVER_PROVIDES += libgl libegl libgles
->>   # So we only install the legacy library for now.
->>   NVIDIA_DRIVER_LIBS_GL = \
->>          libGLX.so.0 \
->> -       libGL.so.$(NVIDIA_DRIVER_VERSION) \
->> +       libGL.so.1.7.0 \
->>          libGLX_nvidia.so.$(NVIDIA_DRIVER_VERSION)
->>
->>   NVIDIA_DRIVER_LIBS_EGL = \
->> @@ -57,11 +57,13 @@ NVIDIA_DRIVER_LIBS_GLES = \
->>          libGLESv2_nvidia.so.$(NVIDIA_DRIVER_VERSION)
->>
->>   NVIDIA_DRIVER_LIBS_MISC = \
->> +       libnvidia-allocator.so.$(NVIDIA_DRIVER_VERSION) \
->> +       libnvidia-cfg.so.$(NVIDIA_DRIVER_VERSION) \
->>          libnvidia-eglcore.so.$(NVIDIA_DRIVER_VERSION) \
->> -       libnvidia-egl-wayland.so.1.0.2 \
->> +       libnvidia-egl-wayland.so.1.1.9 \
->>          libnvidia-glcore.so.$(NVIDIA_DRIVER_VERSION) \
->>          libnvidia-glsi.so.$(NVIDIA_DRIVER_VERSION) \
->> -       tls/libnvidia-tls.so.$(NVIDIA_DRIVER_VERSION) \
->> +       libnvidia-tls.so.$(NVIDIA_DRIVER_VERSION) \
->>          libvdpau_nvidia.so.$(NVIDIA_DRIVER_VERSION):vdpau/ \
->>          libnvidia-ml.so.$(NVIDIA_DRIVER_VERSION)
->>
->> @@ -71,30 +73,19 @@ NVIDIA_DRIVER_LIBS += \
->>          $(NVIDIA_DRIVER_LIBS_GLES) \
->>          $(NVIDIA_DRIVER_LIBS_MISC)
->>
->> -# Install the gl.pc file
->> -define NVIDIA_DRIVER_INSTALL_GL_DEV
->> -       $(INSTALL) -D -m 0644 $(@D)/libGL.la $(STAGING_DIR)/usr/lib/libGL.la
->> -       $(SED) 's:__GENERATED_BY__:Buildroot:'
->> $(STAGING_DIR)/usr/lib/libGL.la
->> -       $(SED) 's:__LIBGL_PATH__:/usr/lib:' $(STAGING_DIR)/usr/lib/libGL.la
->> -       $(SED) 's:-L[^[:space:]]\+::' $(STAGING_DIR)/usr/lib/libGL.la
->> -       $(INSTALL) -D -m 0644 package/nvidia-driver/gl.pc
->> $(STAGING_DIR)/usr/lib/pkgconfig/gl.pc
->> -       $(INSTALL) -D -m 0644 package/nvidia-driver/egl.pc
->> $(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
->> -endef
->> -
->>   # Those libraries are 'private' libraries requiring an agreement with
->>   # NVidia to develop code for those libs. There seems to be no restriction
->>   # on using those libraries (e.g. if the user has such an agreement, or
->>   # wants to run a third-party program developed under such an agreement).
->>   ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS),y)
->>   NVIDIA_DRIVER_LIBS += \
->> -       libnvidia-ifr.so.$(NVIDIA_DRIVER_VERSION) \
->>          libnvidia-fbc.so.$(NVIDIA_DRIVER_VERSION)
->>   endif
->>
->>   # We refer to the destination path; the origin file has no directory
->> component
->>   NVIDIA_DRIVER_LIBS += \
->>          nvidia_drv.so:xorg/modules/drivers/ \
->> -       libglx.so.$(NVIDIA_DRIVER_VERSION):xorg/modules/extensions/
->> +
->> libglxserver_nvidia.so.$(NVIDIA_DRIVER_VERSION):xorg/modules/extensio
->> ns/
->>
->>   # libglx needs a symlink according to the driver README. It has no SONAME
->>   define NVIDIA_DRIVER_SYMLINK_LIBGLX
->> @@ -109,7 +100,6 @@ NVIDIA_DRIVER_LIBS += \
->>          libcuda.so.$(NVIDIA_DRIVER_VERSION) \
->>          libnvidia-compiler.so.$(NVIDIA_DRIVER_VERSION) \
->>          libnvcuvid.so.$(NVIDIA_DRIVER_VERSION) \
->> -       libnvidia-fatbinaryloader.so.$(NVIDIA_DRIVER_VERSION) \
->>          libnvidia-ptxjitcompiler.so.$(NVIDIA_DRIVER_VERSION) \
->>          libnvidia-encode.so.$(NVIDIA_DRIVER_VERSION)
->>   ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_CUDA_PROGS),y)
->> --
->> 2.35.1
-> 
-> The installer framework for both drivers are similar and I have a branch languishing somewhere that abstracts this and replicates the C implementation in Python that works for the BR package(s). I need to find the time to update it and submit it.
-> 
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
->> CAUTION: This email originated from outside of the organization. Do not click
->> links or open attachments unless you recognize the sender and know the
->> content is safe.
-> 
-> 1: https://www.nvidia.com/en-us/drivers/unix/legacy-gpu/
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+UmFwaGFlbA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFJhcGhhZWwg
+UGF2bGlkaXMgPHJhcGhhZWwucGF2bGlkaXNAZ29vZ2xlbWFpbC5jb20+DQo+IFNlbnQ6IE1vbmRh
+eSwgSnVuZSAyNywgMjAyMiA5OjQ4IEFNDQo+IFRvOiBWaW5jZW50IEZhemlvIDx2ZmF6aW9AeGVz
+LWluYy5jb20+DQo+IENjOiBZYW5uIEUgLiBNT1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+
+OyBSYXBoYWVsIFBhdmxpZGlzDQo+IDxyYXBoYWVsLnBhdmxpZGlzQGdtYWlsLmNvbT47IGJ1aWxk
+cm9vdEBidWlsZHJvb3Qub3JnDQo+IFN1YmplY3Q6IFJlOiBbRXh0ZXJuYWxdIC0gW0J1aWxkcm9v
+dF0gW1BBVENIIHYxIDEvMV0gcGFja2FnZS9udmlkaWEtZHJpdmVyOg0KPiBidW1wIHZlcnN0aW9u
+IHRvIDUxNS40OC4wNw0KPiANCj4gSGkgVmluY2VudCwNCj4gdGhhbmtzIGZvciB0aGUgaW5mby4g
+SSBkaWQgbm90IGtub3cgdGhhdCB0aGUgbmV3ZXN0IE52aWRpYSBkcml2ZXIgZG9lcw0KPiBub3Qg
+c3VwcG9ydCBsZWdhY3kgR1BVcy4gQWx0ZXJuYXRpdmVseSwgSSBjb3VsZCBjcmVhdGUgYSBuZXcg
+cGFja2FnZQ0KPiB3aXRoIHRoZSBuYW1lIG52aWRpYS1kcml2ZXItbGF0ZXN0Lg0KDQpXZSBtYXkg
+d2FudCB0byBuYW1lIGl0IGFmdGVyIHRoZSBkcml2ZXIgc2VyaWVzPyAiTGF0ZXN0IiBtYXkgY2hh
+bmdlIGFuZCBkcm9wIHN1cHBvcnQgZm9yIEdQVXMgcHJldmlvdXNseSBzdXBwb3J0ZWQsIHdoaWNo
+IGNvdWxkIGJyZWFrIEJSIGNvbmZpZ3VyYXRpb25zIHRpZWQgdG8gIm52aWRpYS1kcml2ZXItbGF0
+ZXN0Ii4gVGhlcmUgbWF5IGJlIGEgYmV0dGVyIGFsdGVybmF0aXZlIHN1Y2ggYXMgaGF2aW5nIGEg
+bWVudSB3aGVyZSBtdWx0aXBsZSBvcHRpb25zIGFyZSBhdmFpbGFibGUgbGlrZSB3ZSBkbyB3aXRo
+LCBzYXksIEdDQywgb3Igb3RoZXIgc2ltaWxhciBwYWNrYWdlcyB3aGVyZSBtdWx0aXBsZSB2ZXJz
+aW9ucyBhcmUgYXZhaWxhYmxlLiBJIGhhdmVuJ3QgcmVhbGx5IHRha2VuIHRoZSB0aW1lIHRvIHRo
+aW5rIHRoaXMgcGFydCBvdXQuDQoNCj4gDQo+IFdoYXQgZG8geW91IG1lYW4gYnk6ICJyZXBsaWNh
+dGVzIHRoZSBDIGltcGxlbWVudGF0aW9uIGluIFB5dGhvbiB0aGF0DQo+IHdvcmtzIGZvciB0aGUg
+QlIgcGFja2FnZShzKSINCg0KVGhlIE5WSURJQSBpbnN0YWxsZXIgaXMgYSBzbWFsbCBDIGJpbmFy
+eSB0aGF0IHBhcnNlcyBhIG1hbmlmZXN0IGZpbGUgdG8gZmlndXJlIG91dCBob3cgdG8gZGVwbG95
+IHRoZSBiaW5hcmllcyBjb250YWluZWQgaW4gdGhlIGRyaXZlciBwYWNrYWdlLiBVbmZvcnR1bmF0
+ZWx5IGl0J3MgY29tcGlsZWQgZm9yIHRoZSB0YXJnZXQgYXJjaGl0ZWN0dXJlIGFuZCBpdCBoYXMg
+YSBmZXcgaGFyZC1jb2RlZCBhc3N1bXB0aW9ucyBpbiBpdCB0aGF0IGRvbuKAmXQgd29yayBmb3Ig
+QlIgYmFzZWQgZGVwbG95bWVudHMgd2hpY2ggaXMgd2h5IG52aWRpYS1kcml2ZXIgY3VycmVudGx5
+IHVzZXMgdGhlIC5tayB0byBjb3B5IHRoZSBhcHByb3ByaWF0ZSBmaWxlcyBvdXQuIEkgd3JvdGUg
+YW4gaW1wbGVtZW50YXRpb24gaW4gUHl0aG9uIHRoYXQgY291bGQgYmUgdXNlZCBieSB0aGUgY3Vy
+cmVudCBudmlkaWEtZHJpdmVyIGFuZCBhbnkgc3Vic2VxdWVudCBwYWNrYWdlIHRoYXQgdXNlcyB0
+aGUgc2FtZSBtYW5pZmVzdCBsb2dpYy4gVGhpcyBvYnZpb3VzbHkgcmVxdWlyZXMgYSBob3N0LXB5
+dGhvbiBidXQgbWVhbnMgdGhlIGRlcGxveW1lbnQgbG9naWMgZm9yIHRoZSBiaW5hcmllcyBkb2Vz
+bid0IG5lZWQgdG8gYmUgaGFuZCByb2xsZWQgZm9yIGVhY2ggbnZpZGlhLWRyaXZlci08cGFja2Fn
+ZT4ubWsgZmlsZSBhcyB0aGV5IGNhbiB1c2UgYSBzaGFyZWQgaW5zdGFsbGVyIGJhY2tlbmQgZm9y
+IGFsbCB2ZXJzaW9ucyB3ZSBkZWNpZGUgdG8gYWRkIGEgc3VwcG9ydCBmb3IuIFVuZm9ydHVuYXRl
+bHkgSSBoYXZlbid0IGxvb2tlZCBhdCBpdCBpbiBuZWFybHkgMiB5ZWFycyBzbyBpdCB3aWxsIHRh
+a2Ugc29tZSB0aW1lIHRvIGdldCBpdCByZWZyZXNoZWQgYW5kIHVwZGF0ZWQuDQoNCj4gDQo+IE9u
+IDI3LjA2LjIyIDE0OjM2LCBWaW5jZW50IEZhemlvIHdyb3RlOg0KPiA+IFJhcGhhZWwNCj4gPg0K
+PiA+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+PiBGcm9tOiBidWlsZHJvb3QgPGJ1
+aWxkcm9vdC1ib3VuY2VzQGJ1aWxkcm9vdC5vcmc+IE9uIEJlaGFsZiBPZg0KPiBSYXBoYWVsDQo+
+ID4+IFBhdmxpZGlzIHZpYSBidWlsZHJvb3QNCj4gPj4gU2VudDogU3VuZGF5LCBKdW5lIDI2LCAy
+MDIyIDg6NDIgQU0NCj4gPj4gVG86IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnDQo+ID4+IENjOiBZ
+YW5uIEUgLiBNT1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+OyBSYXBoYWVsIFBhdmxpZGlz
+DQo+ID4+IDxyYXBoYWVsLnBhdmxpZGlzQGdtYWlsLmNvbT4NCj4gPj4gU3ViamVjdDogW0V4dGVy
+bmFsXSAtIFtCdWlsZHJvb3RdIFtQQVRDSCB2MSAxLzFdIHBhY2thZ2UvbnZpZGlhLWRyaXZlcjoN
+Cj4gYnVtcA0KPiA+PiB2ZXJzdGlvbiB0byA1MTUuNDguMDcNCj4gPj4NCj4gPj4gU2lnbmVkLW9m
+Zi1ieTogUmFwaGFlbCBQYXZsaWRpcyA8cmFwaGFlbC5wYXZsaWRpc0BnbWFpbC5jb20+DQo+ID4+
+IC0tLQ0KPiA+PiAgIHBhY2thZ2UvbnZpZGlhLWRyaXZlci9udmlkaWEtZHJpdmVyLmhhc2ggfCAg
+NiArKystLS0NCj4gPj4gICBwYWNrYWdlL252aWRpYS1kcml2ZXIvbnZpZGlhLWRyaXZlci5tayAg
+IHwgMjQgKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tDQo+ID4+ICAgMiBmaWxlcyBjaGFuZ2VkLCAx
+MCBpbnNlcnRpb25zKCspLCAyMCBkZWxldGlvbnMoLSkNCj4gPj4NCj4gPj4gZGlmZiAtLWdpdCBh
+L3BhY2thZ2UvbnZpZGlhLWRyaXZlci9udmlkaWEtZHJpdmVyLmhhc2ggYi9wYWNrYWdlL252aWRp
+YS0NCj4gPj4gZHJpdmVyL252aWRpYS1kcml2ZXIuaGFzaA0KPiA+PiBpbmRleCA3ZjIyNDhkMGY5
+Li4wNmNmMjkyYzU4IDEwMDY0NA0KPiA+PiAtLS0gYS9wYWNrYWdlL252aWRpYS1kcml2ZXIvbnZp
+ZGlhLWRyaXZlci5oYXNoDQo+ID4+ICsrKyBiL3BhY2thZ2UvbnZpZGlhLWRyaXZlci9udmlkaWEt
+ZHJpdmVyLmhhc2gNCj4gPj4gQEAgLTEsNCArMSw0IEBADQo+ID4+ICAgIyBMb2NhbGx5IGNvbXB1
+dGVkDQo+ID4+IC1zaGEyNTYNCj4gPj4gNTFhZGIyOGYwZWQ0NTQ4ZjM1YTg4YTkzYWQ2NzY3ZWJk
+ODA3ZmExNGY0MThiZjVlNTFhNmQ2M2EzZmY3ZjI3NQ0KPiA+PiBOVklESUEtTGludXgteDg2LTM5
+MC4xMzIucnVuDQo+ID4+IC1zaGEyNTYNCj4gPj4NCj4gYjZiNGI4YWYzN2U3OGUwMjZjOWViZGY0
+YTVjNjRlYTQxMmRmY2I3MTA5MzFkZDAyOGMyMmRhYzIyOGRlNjU5ZA0KPiA+PiBOVklESUEtTGlu
+dXgteDg2XzY0LTM5MC4xMzItbm8tY29tcGF0MzIucnVuDQo+ID4+IC1zaGEyNTYNCj4gPj4NCj4g
+YmQyOGIwYzVhZWViMDBlYjExZDNlYzZmNmYzNDQ5ZDRiM2E0MDEwMDkxNDI1ODMzMjczNGE1MzUy
+Nzk5NzUyNg0KPiA+PiBMSUNFTlNFDQo+ID4+ICtzaGEyNTYNCj4gPj4gZTI4NzY0Y2M1YjEzYzMy
+ZTc2MzcwNTEzZGFlYWZjMDVjMjg5Yjc3ZWUwNTExNTUyNDUwZjFhMDBlMzFhZTFlMw0KPiA+PiBO
+VklESUEtTGludXgteDg2XzY0LTUxNS40OC4wNy5ydW4NCj4gPj4gK3NoYTI1Ng0KPiA+PiA5ZWMx
+NTE1Y2IyMTQyNjFhZTQwODFhNmZjOTQ4OTgwMGI1ZmVmNDFjNmE4ZDY2OWU4NGU0YWIxZGU3ZjNk
+YzE0DQo+ID4+IE5WSURJQS1MaW51eC14ODZfNjQtNTE1LjQ4LjA3LW5vLWNvbXBhdDMyLnJ1bg0K
+PiA+PiArc2hhMjU2DQo+ID4+DQo+IGJkMjhiMGM1YWVlYjAwZWIxMWQzZWM2ZjZmMzQ0OWQ0YjNh
+NDAxMDA5MTQyNTgzMzI3MzRhNTM1Mjc5OTc1MjYNCj4gPj4gTElDRU5TRQ0KPiA+PiBkaWZmIC0t
+Z2l0IGEvcGFja2FnZS9udmlkaWEtZHJpdmVyL252aWRpYS1kcml2ZXIubWsgYi9wYWNrYWdlL252
+aWRpYS0NCj4gPj4gZHJpdmVyL252aWRpYS1kcml2ZXIubWsNCj4gPj4gaW5kZXggNTRjMmFhNDZk
+OC4uZDEyZmE1NDNiZCAxMDA2NDQNCj4gPj4gLS0tIGEvcGFja2FnZS9udmlkaWEtZHJpdmVyL252
+aWRpYS1kcml2ZXIubWsNCj4gPj4gKysrIGIvcGFja2FnZS9udmlkaWEtZHJpdmVyL252aWRpYS1k
+cml2ZXIubWsNCj4gPj4gQEAgLTQsNyArNCw3IEBADQo+ID4+ICAgIw0KPiA+Pg0KPiA+Pg0KPiAj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+DQo+ID4+ICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMNCj4gPj4NCj4gPj4gLU5WSURJQV9EUklWRVJf
+VkVSU0lPTiA9IDM5MC4xMzINCj4gPj4gK05WSURJQV9EUklWRVJfVkVSU0lPTiA9IDUxNS40OC4w
+Nw0KPiA+DQo+ID4gSSBkb24ndCB0aGluayB0aGUgZGlzY3Vzc2lvbiBoYXMgYmVlbiBoYWQgb24g
+dGhlIE1MLCBidXQgSSBrbm93IHdlJ3ZlDQo+IGRpc2N1c3NlZCBpbiB0aGUgSVJDIGNoYW5uZWwg
+dGhhdCB0aGVyZSBtYXkgYmUgYSBuZWVkIHRvIGR1cGxpY2F0ZSB0aGUNCj4gbnZpZGlhLWRyaXZl
+ciBwYWNrYWdlIGFuZCBkaWZmZXJlbnRpYXRlIGJldHdlZW4gdGhlIGxhdGVzdCBwcm9kdWN0aW9u
+DQo+IGJyYW5jaCBhbmQgdGhlIGxlZ2FjeSBicmFuY2guDQo+ID4NCj4gPiBJdCdzIG15IHVuZGVy
+c3RhbmRpbmcgdGhlIG5ldyBwcm9kdWN0aW9uIGJyYW5jaCBkb2VzIG5vdCBzdXBwb3J0IG9sZGVy
+DQo+IEdQVXMgd2hpY2ggaGF2ZSBiZWVuIGhpc3RvcmljYWxseSB1c2VkIGluIGVtYmVkZGVkIHN5
+c3RlbXMgWzFdDQo+ID4NCj4gPj4gICBOVklESUFfRFJJVkVSX1NVRkZJWCA9ICQoaWYgJChCUjJf
+eDg2XzY0KSxfNjQpDQo+ID4+ICAgTlZJRElBX0RSSVZFUl9TSVRFID0gaHR0cDovL2Rvd25sb2Fk
+Lm52aWRpYS5jb20vWEZyZWU4Ni9MaW51eC0NCj4gPj4geDg2JChOVklESUFfRFJJVkVSX1NVRkZJ
+WCkvJChOVklESUFfRFJJVkVSX1ZFUlNJT04pDQo+ID4+ICAgTlZJRElBX0RSSVZFUl9TT1VSQ0Ug
+PSBOVklESUEtTGludXgtDQo+IHg4NiQoTlZJRElBX0RSSVZFUl9TVUZGSVgpLQ0KPiA+PiAkKE5W
+SURJQV9EUklWRVJfVkVSU0lPTikkKGlmICQoQlIyX3g4Nl82NCksLW5vLWNvbXBhdDMyKS5ydW4N
+Cj4gPj4gQEAgLTQyLDcgKzQyLDcgQEAgTlZJRElBX0RSSVZFUl9QUk9WSURFUyArPSBsaWJnbCBs
+aWJlZ2wgbGliZ2xlcw0KPiA+PiAgICMgU28gd2Ugb25seSBpbnN0YWxsIHRoZSBsZWdhY3kgbGli
+cmFyeSBmb3Igbm93Lg0KPiA+PiAgIE5WSURJQV9EUklWRVJfTElCU19HTCA9IFwNCj4gPj4gICAg
+ICAgICAgbGliR0xYLnNvLjAgXA0KPiA+PiAtICAgICAgIGxpYkdMLnNvLiQoTlZJRElBX0RSSVZF
+Ul9WRVJTSU9OKSBcDQo+ID4+ICsgICAgICAgbGliR0wuc28uMS43LjAgXA0KPiA+PiAgICAgICAg
+ICBsaWJHTFhfbnZpZGlhLnNvLiQoTlZJRElBX0RSSVZFUl9WRVJTSU9OKQ0KPiA+Pg0KPiA+PiAg
+IE5WSURJQV9EUklWRVJfTElCU19FR0wgPSBcDQo+ID4+IEBAIC01NywxMSArNTcsMTMgQEAgTlZJ
+RElBX0RSSVZFUl9MSUJTX0dMRVMgPSBcDQo+ID4+ICAgICAgICAgIGxpYkdMRVN2Ml9udmlkaWEu
+c28uJChOVklESUFfRFJJVkVSX1ZFUlNJT04pDQo+ID4+DQo+ID4+ICAgTlZJRElBX0RSSVZFUl9M
+SUJTX01JU0MgPSBcDQo+ID4+ICsgICAgICAgbGlibnZpZGlhLWFsbG9jYXRvci5zby4kKE5WSURJ
+QV9EUklWRVJfVkVSU0lPTikgXA0KPiA+PiArICAgICAgIGxpYm52aWRpYS1jZmcuc28uJChOVklE
+SUFfRFJJVkVSX1ZFUlNJT04pIFwNCj4gPj4gICAgICAgICAgbGlibnZpZGlhLWVnbGNvcmUuc28u
+JChOVklESUFfRFJJVkVSX1ZFUlNJT04pIFwNCj4gPj4gLSAgICAgICBsaWJudmlkaWEtZWdsLXdh
+eWxhbmQuc28uMS4wLjIgXA0KPiA+PiArICAgICAgIGxpYm52aWRpYS1lZ2wtd2F5bGFuZC5zby4x
+LjEuOSBcDQo+ID4+ICAgICAgICAgIGxpYm52aWRpYS1nbGNvcmUuc28uJChOVklESUFfRFJJVkVS
+X1ZFUlNJT04pIFwNCj4gPj4gICAgICAgICAgbGlibnZpZGlhLWdsc2kuc28uJChOVklESUFfRFJJ
+VkVSX1ZFUlNJT04pIFwNCj4gPj4gLSAgICAgICB0bHMvbGlibnZpZGlhLXRscy5zby4kKE5WSURJ
+QV9EUklWRVJfVkVSU0lPTikgXA0KPiA+PiArICAgICAgIGxpYm52aWRpYS10bHMuc28uJChOVklE
+SUFfRFJJVkVSX1ZFUlNJT04pIFwNCj4gPj4gICAgICAgICAgbGlidmRwYXVfbnZpZGlhLnNvLiQo
+TlZJRElBX0RSSVZFUl9WRVJTSU9OKTp2ZHBhdS8gXA0KPiA+PiAgICAgICAgICBsaWJudmlkaWEt
+bWwuc28uJChOVklESUFfRFJJVkVSX1ZFUlNJT04pDQo+ID4+DQo+ID4+IEBAIC03MSwzMCArNzMs
+MTkgQEAgTlZJRElBX0RSSVZFUl9MSUJTICs9IFwNCj4gPj4gICAgICAgICAgJChOVklESUFfRFJJ
+VkVSX0xJQlNfR0xFUykgXA0KPiA+PiAgICAgICAgICAkKE5WSURJQV9EUklWRVJfTElCU19NSVND
+KQ0KPiA+Pg0KPiA+PiAtIyBJbnN0YWxsIHRoZSBnbC5wYyBmaWxlDQo+ID4+IC1kZWZpbmUgTlZJ
+RElBX0RSSVZFUl9JTlNUQUxMX0dMX0RFVg0KPiA+PiAtICAgICAgICQoSU5TVEFMTCkgLUQgLW0g
+MDY0NCAkKEBEKS9saWJHTC5sYQ0KPiAkKFNUQUdJTkdfRElSKS91c3IvbGliL2xpYkdMLmxhDQo+
+ID4+IC0gICAgICAgJChTRUQpICdzOl9fR0VORVJBVEVEX0JZX186QnVpbGRyb290OicNCj4gPj4g
+JChTVEFHSU5HX0RJUikvdXNyL2xpYi9saWJHTC5sYQ0KPiA+PiAtICAgICAgICQoU0VEKSAnczpf
+X0xJQkdMX1BBVEhfXzovdXNyL2xpYjonICQoU1RBR0lOR19ESVIpL3Vzci9saWIvbGliR0wubGEN
+Cj4gPj4gLSAgICAgICAkKFNFRCkgJ3M6LUxbXls6c3BhY2U6XV1cKzo6JyAkKFNUQUdJTkdfRElS
+KS91c3IvbGliL2xpYkdMLmxhDQo+ID4+IC0gICAgICAgJChJTlNUQUxMKSAtRCAtbSAwNjQ0IHBh
+Y2thZ2UvbnZpZGlhLWRyaXZlci9nbC5wYw0KPiA+PiAkKFNUQUdJTkdfRElSKS91c3IvbGliL3Br
+Z2NvbmZpZy9nbC5wYw0KPiA+PiAtICAgICAgICQoSU5TVEFMTCkgLUQgLW0gMDY0NCBwYWNrYWdl
+L252aWRpYS1kcml2ZXIvZWdsLnBjDQo+ID4+ICQoU1RBR0lOR19ESVIpL3Vzci9saWIvcGtnY29u
+ZmlnL2VnbC5wYw0KPiA+PiAtZW5kZWYNCj4gPj4gLQ0KPiA+PiAgICMgVGhvc2UgbGlicmFyaWVz
+IGFyZSAncHJpdmF0ZScgbGlicmFyaWVzIHJlcXVpcmluZyBhbiBhZ3JlZW1lbnQgd2l0aA0KPiA+
+PiAgICMgTlZpZGlhIHRvIGRldmVsb3AgY29kZSBmb3IgdGhvc2UgbGlicy4gVGhlcmUgc2VlbXMg
+dG8gYmUgbm8gcmVzdHJpY3Rpb24NCj4gPj4gICAjIG9uIHVzaW5nIHRob3NlIGxpYnJhcmllcyAo
+ZS5nLiBpZiB0aGUgdXNlciBoYXMgc3VjaCBhbiBhZ3JlZW1lbnQsIG9yDQo+ID4+ICAgIyB3YW50
+cyB0byBydW4gYSB0aGlyZC1wYXJ0eSBwcm9ncmFtIGRldmVsb3BlZCB1bmRlciBzdWNoIGFuDQo+
+IGFncmVlbWVudCkuDQo+ID4+ICAgaWZlcSAoJChCUjJfUEFDS0FHRV9OVklESUFfRFJJVkVSX1BS
+SVZBVEVfTElCUykseSkNCj4gPj4gICBOVklESUFfRFJJVkVSX0xJQlMgKz0gXA0KPiA+PiAtICAg
+ICAgIGxpYm52aWRpYS1pZnIuc28uJChOVklESUFfRFJJVkVSX1ZFUlNJT04pIFwNCj4gPj4gICAg
+ICAgICAgbGlibnZpZGlhLWZiYy5zby4kKE5WSURJQV9EUklWRVJfVkVSU0lPTikNCj4gPj4gICBl
+bmRpZg0KPiA+Pg0KPiA+PiAgICMgV2UgcmVmZXIgdG8gdGhlIGRlc3RpbmF0aW9uIHBhdGg7IHRo
+ZSBvcmlnaW4gZmlsZSBoYXMgbm8gZGlyZWN0b3J5DQo+ID4+IGNvbXBvbmVudA0KPiA+PiAgIE5W
+SURJQV9EUklWRVJfTElCUyArPSBcDQo+ID4+ICAgICAgICAgIG52aWRpYV9kcnYuc286eG9yZy9t
+b2R1bGVzL2RyaXZlcnMvIFwNCj4gPj4gLSAgICAgICBsaWJnbHguc28uJChOVklESUFfRFJJVkVS
+X1ZFUlNJT04pOnhvcmcvbW9kdWxlcy9leHRlbnNpb25zLw0KPiA+PiArDQo+ID4+DQo+IGxpYmds
+eHNlcnZlcl9udmlkaWEuc28uJChOVklESUFfRFJJVkVSX1ZFUlNJT04pOnhvcmcvbW9kdWxlcy9l
+eHRlbnNpbw0KPiA+PiBucy8NCj4gPj4NCj4gPj4gICAjIGxpYmdseCBuZWVkcyBhIHN5bWxpbmsg
+YWNjb3JkaW5nIHRvIHRoZSBkcml2ZXIgUkVBRE1FLiBJdCBoYXMgbm8NCj4gU09OQU1FDQo+ID4+
+ICAgZGVmaW5lIE5WSURJQV9EUklWRVJfU1lNTElOS19MSUJHTFgNCj4gPj4gQEAgLTEwOSw3ICsx
+MDAsNiBAQCBOVklESUFfRFJJVkVSX0xJQlMgKz0gXA0KPiA+PiAgICAgICAgICBsaWJjdWRhLnNv
+LiQoTlZJRElBX0RSSVZFUl9WRVJTSU9OKSBcDQo+ID4+ICAgICAgICAgIGxpYm52aWRpYS1jb21w
+aWxlci5zby4kKE5WSURJQV9EUklWRVJfVkVSU0lPTikgXA0KPiA+PiAgICAgICAgICBsaWJudmN1
+dmlkLnNvLiQoTlZJRElBX0RSSVZFUl9WRVJTSU9OKSBcDQo+ID4+IC0gICAgICAgbGlibnZpZGlh
+LWZhdGJpbmFyeWxvYWRlci5zby4kKE5WSURJQV9EUklWRVJfVkVSU0lPTikgXA0KPiA+PiAgICAg
+ICAgICBsaWJudmlkaWEtcHR4aml0Y29tcGlsZXIuc28uJChOVklESUFfRFJJVkVSX1ZFUlNJT04p
+IFwNCj4gPj4gICAgICAgICAgbGlibnZpZGlhLWVuY29kZS5zby4kKE5WSURJQV9EUklWRVJfVkVS
+U0lPTikNCj4gPj4gICBpZmVxICgkKEJSMl9QQUNLQUdFX05WSURJQV9EUklWRVJfQ1VEQV9QUk9H
+UykseSkNCj4gPj4gLS0NCj4gPj4gMi4zNS4xDQo+ID4NCj4gPiBUaGUgaW5zdGFsbGVyIGZyYW1l
+d29yayBmb3IgYm90aCBkcml2ZXJzIGFyZSBzaW1pbGFyIGFuZCBJIGhhdmUgYSBicmFuY2gNCj4g
+bGFuZ3Vpc2hpbmcgc29tZXdoZXJlIHRoYXQgYWJzdHJhY3RzIHRoaXMgYW5kIHJlcGxpY2F0ZXMg
+dGhlIEMNCj4gaW1wbGVtZW50YXRpb24gaW4gUHl0aG9uIHRoYXQgd29ya3MgZm9yIHRoZSBCUiBw
+YWNrYWdlKHMpLiBJIG5lZWQgdG8gZmluZA0KPiB0aGUgdGltZSB0byB1cGRhdGUgaXQgYW5kIHN1
+Ym1pdCBpdC4NCj4gPg0KPiA+Pg0KPiA+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXw0KPiA+PiBidWlsZHJvb3QgbWFpbGluZyBsaXN0DQo+ID4+IGJ1aWxk
+cm9vdEBidWlsZHJvb3Qub3JnDQo+ID4+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdA0KPiA+PiBDQVVUSU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0
+ZWQgZnJvbSBvdXRzaWRlIG9mIHRoZSBvcmdhbml6YXRpb24uIERvIG5vdA0KPiBjbGljaw0KPiA+
+PiBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3UgcmVjb2duaXplIHRoZSBzZW5k
+ZXIgYW5kIGtub3cgdGhlDQo+ID4+IGNvbnRlbnQgaXMgc2FmZS4NCj4gPg0KPiA+IDE6IGh0dHBz
+Oi8vd3d3Lm52aWRpYS5jb20vZW4tdXMvZHJpdmVycy91bml4L2xlZ2FjeS1ncHUvDQpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
