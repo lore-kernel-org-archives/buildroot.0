@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98E99C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 20:13:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D69C1C43334
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 20:14:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2891640603;
-	Mon, 27 Jun 2022 20:13:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2891640603
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5393F4150E;
+	Mon, 27 Jun 2022 20:14:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5393F4150E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q0IxdlPEUwGd; Mon, 27 Jun 2022 20:13:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PRi20IZupjXO; Mon, 27 Jun 2022 20:14:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 341EC405A7;
-	Mon, 27 Jun 2022 20:13:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 341EC405A7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CA0CE1BF2B0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B1D0410D1;
+	Mon, 27 Jun 2022 20:14:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B1D0410D1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CECEB1BF9B5
  for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 20:13:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A481C405A7
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA63F829A9
  for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 20:13:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A481C405A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA63F829A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 99T6iWx3yLq7 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xUCJqV-pgntT for <buildroot@lists.busybox.net>;
  Mon, 27 Jun 2022 20:13:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 941B04036A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 997B0828B5
  for <buildroot@buildroot.org>; Mon, 27 Jun 2022 20:13:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 941B04036A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 997B0828B5
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 6750187592; Mon, 27 Jun 2022 20:01:09 +0000 (UTC)
+ id 6FAC58752F; Mon, 27 Jun 2022 20:01:09 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 27 Jun 2022 22:11:02 +0200
+Date: Mon, 27 Jun 2022 22:12:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a0bf8777bf890ff8b70c3153197a4a89c9e46e55
-X-Git-Newrev: c660a163198018bb7f2e9f16d9628dab4a3cd01e
+X-Git-Oldrev: c660a163198018bb7f2e9f16d9628dab4a3cd01e
+X-Git-Newrev: 154727350ee1959651b8e933f692b81fc5c24022
 X-Patchwork-Hint: ignore
-Message-Id: <20220627200109.6750187592@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/slirp: bump to version 4.7.0
+Message-Id: <20220627200109.6FAC58752F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: add qemu host tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,45 +62,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c660a163198018bb7f2e9f16d9628dab4a3cd01e
+commit: https://git.buildroot.net/buildroot/commit/?id=154727350ee1959651b8e933f692b81fc5c24022
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://gitlab.freedesktop.org/slirp/libslirp/-/blob/v4.7.0/CHANGELOG.md
+Always build host qemu-tools e.g. qemu-img.
+https://qemu.readthedocs.io/en/latest/tools/index.html
 
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
 Reviewed-by: Thomas Huth <huth@tuxfamily.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/slirp/slirp.hash | 2 +-
- package/slirp/slirp.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/qemu/qemu.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
-index 326b2ad246..3f7abdee5a 100644
---- a/package/slirp/slirp.hash
-+++ b/package/slirp/slirp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b8a22ac4d601ba16122a67827c0f4361785d4d283f21ff8ed48d4aa1e7693477  libslirp-4.6.1.tar.xz
-+sha256  358ce8b6ea59ec9deac937cc754f0115b992839e7b0cddf30ffb8f77dc21da82  libslirp-v4.7.0.tar.bz2
- sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index 43d2c520e9..10d367587d 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 290186ec4e..9e1bec3836 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -390,6 +390,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--disable-vnc-jpeg \
+ 		--disable-vnc-png \
+ 		--disable-vnc-sasl \
++		--enable-tools \
+ 		$(HOST_QEMU_OPTS)
+ endef
  
--SLIRP_VERSION = 4.6.1
--SLIRP_SOURCE = libslirp-$(SLIRP_VERSION).tar.xz
--SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/uploads/83b199ea6fcdfc0c243dfde8546ee4c9
-+SLIRP_VERSION = 4.7.0
-+SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.bz2
-+SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
- SLIRP_LICENSE = BSD-3-Clause
- SLIRP_LICENSE_FILES = COPYRIGHT
- SLIRP_CPE_ID_VENDOR = libslirp_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
