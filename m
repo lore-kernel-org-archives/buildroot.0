@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88086C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:43:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78E57C43334
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:46:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3207E41581;
-	Mon, 27 Jun 2022 22:43:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3207E41581
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98DBA41581;
+	Mon, 27 Jun 2022 22:46:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98DBA41581
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0NUjnc3fF_v8; Mon, 27 Jun 2022 22:43:46 +0000 (UTC)
+	with ESMTP id TnESN1fiE-0L; Mon, 27 Jun 2022 22:46:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E202403B4;
-	Mon, 27 Jun 2022 22:43:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E202403B4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 17DB51BF2F0
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:43:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2834041511;
+	Mon, 27 Jun 2022 22:46:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2834041511
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 931E61BF2F0
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:46:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E6F644155F
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:43:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6F644155F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A4F482451
+ for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:46:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A4F482451
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kMsQD5xRvuCO for <buildroot@lists.busybox.net>;
- Mon, 27 Jun 2022 22:43:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pnXYRu7SY88m for <buildroot@lists.busybox.net>;
+ Mon, 27 Jun 2022 22:46:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B61DC4159A
- for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:43:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B61DC4159A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5204C81C38
+ for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:46:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5204C81C38
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4714487705; Mon, 27 Jun 2022 22:30:26 +0000 (UTC)
+ id D4A558770C; Mon, 27 Jun 2022 22:34:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jun 2022 00:42:46 +0200
+Date: Tue, 28 Jun 2022 00:46:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9b7f8da96be549a52630cd87b30851d600f163a4
-X-Git-Newrev: b1fe952835ba0113f0f6f4f54686e29d6e1fc73b
+X-Git-Oldrev: b1fe952835ba0113f0f6f4f54686e29d6e1fc73b
+X-Git-Newrev: c099842544248b10f4284a5d47084db8f476fcda
 X-Patchwork-Hint: ignore
-Message-Id: <20220627223026.4714487705@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libusb: bump to version 1.0.26
+Message-Id: <20220627223409.D4A558770C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmdbx: bump version to 0.11.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,149 +57,73 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4122121673520956359=="
+Content-Type: multipart/mixed; boundary="===============5012572713451347557=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4122121673520956359==
+--===============5012572713451347557==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1fe952835ba0113f0f6f4f54686e29d6e1fc73b
+commit: https://git.buildroot.net/buildroot/commit/?id=c099842544248b10f4284a5d47084db8f476fcda
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove upstreamed patches.
+This is stable bugfix release of libmdbx.
+The project's website now is on https://libmdbx.dqdkfa.ru/
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Peter: drop _AUTORECONF]
+Release notes for v0.11.8 https://gitflic.ru/project/erthink/libmdbx/release/06268038-39ff-4270-9be8-9f26d5543015
+
+The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
+
+Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-configure.ac-link-with-latomic-if-needed.patch | 39 ----------------------
- ...linux_usbfs-fix-maybe-uninitialized-error.patch | 37 --------------------
- package/libusb/libusb.hash                         |  2 +-
- package/libusb/libusb.mk                           |  4 +--
- 4 files changed, 2 insertions(+), 80 deletions(-)
+ package/libmdbx/Config.in    | 2 +-
+ package/libmdbx/libmdbx.hash | 3 ++-
+ package/libmdbx/libmdbx.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/libusb/0001-configure.ac-link-with-latomic-if-needed.patch b/package/libusb/0001-configure.ac-link-with-latomic-if-needed.patch
-deleted file mode 100644
-index 5f6c88e57d..0000000000
---- a/package/libusb/0001-configure.ac-link-with-latomic-if-needed.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 0b857081d687f7ee41483a3d7e9846af44a5ba7d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 7 Feb 2022 11:55:54 +0100
--Subject: [PATCH] configure.ac: link with -latomic if needed
--
--libusb unconditionally uses atomic_fetch_add since version 1.0.25 and
--https://github.com/libusb/libusb/commit/1a08aa84d96397a3840a75abe66051f5360c2c84
--https://github.com/libusb/libusb/commit/eed8a371ea53939096ba94d44001e0637d042572
--but some architectures (e.g. sparc) needs to link with -latomic to be
--able to use it. So check if -latomic is needed and update libusb-1.0.pc
--accordingly to avoid the following build failure with openocd:
--
--/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libusb-1.0.so: undefined reference to `__atomic_fetch_add_4'
--collect2: error: ld returned 1 exit status
--
--Fixes:
-- - http://autobuild.buildroot.org/results/4a27a769bb3cdf78643c3049b87d792178d6512c
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/libusb/libusb/pull/1064]
-----
-- configure.ac | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/configure.ac b/configure.ac
--index f6cf2f9..002bcf6 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -152,6 +152,7 @@ if test "x$platform" = xposix; then
-- 	AC_SEARCH_LIBS([pthread_create], [pthread],
-- 		[test "x$ac_cv_search_pthread_create" != "xnone required" && AC_SUBST(THREAD_LIBS, [-lpthread])],
-- 		[], [])
--+	AC_SEARCH_LIBS([__atomic_fetch_add_4], [atomic])
-- elif test "x$platform" = xwindows; then
-- 	AC_DEFINE([PLATFORM_WINDOWS], [1], [Define to 1 if compiling for a Windows platform.])
-- else
---- 
--2.34.1
--
-diff --git a/package/libusb/0002-linux_usbfs-fix-maybe-uninitialized-error.patch b/package/libusb/0002-linux_usbfs-fix-maybe-uninitialized-error.patch
-deleted file mode 100644
-index ea299081aa..0000000000
---- a/package/libusb/0002-linux_usbfs-fix-maybe-uninitialized-error.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From bea5891591402f14940a607eafbdcd169ff8827f Mon Sep 17 00:00:00 2001
--From: Yegor Yefremov <yegorslists@googlemail.com>
--Date: Sun, 6 Feb 2022 07:12:14 +0100
--Subject: [PATCH] linux_usbfs: fix maybe-uninitialized error
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Initialize active_config to an invalid value to avoid the following
--compilation error:
--
--os/linux_usbfs.c: In function ‘op_get_configuration’:
--os/linux_usbfs.c:1452:12: error: ‘active_config’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
-- 1452 |  *config = (uint8_t)active_config;
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
--Upstream: https://github.com/libusb/libusb/pull/1062
-----
-- libusb/os/linux_usbfs.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/libusb/os/linux_usbfs.c b/libusb/os/linux_usbfs.c
--index c300675..285d9ca 100644
----- a/libusb/os/linux_usbfs.c
--+++ b/libusb/os/linux_usbfs.c
--@@ -1429,7 +1429,7 @@ static int op_get_configuration(struct libusb_device_handle *handle,
-- 	uint8_t *config)
-- {
-- 	struct linux_device_priv *priv = usbi_get_device_priv(handle->dev);
---	int active_config;
--+	int active_config = -1; /* to please compiler */
-- 	int r;
-- 
-- 	if (priv->sysfs_dir) {
---- 
--2.17.0
--
-diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
-index a18935fe03..bbb0ccf5b9 100644
---- a/package/libusb/libusb.hash
-+++ b/package/libusb/libusb.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  8a28ef197a797ebac2702f095e81975e2b02b2eeff2774fa909c78a74ef50849  libusb-1.0.25.tar.bz2
-+sha256  12ce7a61fc9854d1d2a1ffe095f7b5fac19ddba095c259e6067a46500381b5a5  libusb-1.0.26.tar.bz2
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index aa306e295d..98a4a578b2 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libmdbx/Config.in b/package/libmdbx/Config.in
+index 4849d60b92..a9a4ac45c5 100644
+--- a/package/libmdbx/Config.in
++++ b/package/libmdbx/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_LIBMDBX
+ 	  libmdbx surpasses the legendary LMDB in terms of
+ 	  reliability, features and performance.
+ 
+-	  https://libmdbx.website.yandexcloud.net/
++	  https://libmdbx.dqdkfa.ru
+ 
+ if BR2_PACKAGE_LIBMDBX
+ 
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+index 7d663b3da0..3f2be134c3 100644
+--- a/package/libmdbx/libmdbx.hash
++++ b/package/libmdbx/libmdbx.hash
+@@ -1,4 +1,5 @@
+-# Hashes from: https://libmdbx.website.yandexcloud.net/release/SHA256SUMS
++# Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
++sha256  06011f361481ee7adc2111e48b7b121384294e0b6b8f10c75e7886629297b279  libmdbx-amalgamated-0.11.8.tar.xz
+ sha256  3a9fb6a4cd941e646597235518714373fda1ca6d4c5e23669afe70ea87c20940  libmdbx-amalgamated-0.11.7.tar.xz
+ 
+ # Locally calculated
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index a7056b2850..130fe96793 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- LIBUSB_VERSION_MAJOR = 1.0
--LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).25
-+LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).26
- LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
- LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
- LIBUSB_LICENSE = LGPL-2.1+
-@@ -13,8 +13,6 @@ LIBUSB_LICENSE_FILES = COPYING
- LIBUSB_CPE_ID_VENDOR = libusb
- LIBUSB_DEPENDENCIES = host-pkgconf
- LIBUSB_INSTALL_STAGING = YES
--# We're patching configure.ac
--LIBUSB_AUTORECONF = YES
- 
- # Avoid the discovery of udev for the host variant
- HOST_LIBUSB_CONF_OPTS = --disable-udev
+-LIBMDBX_VERSION = 0.11.7
++LIBMDBX_VERSION = 0.11.8
+ LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
+-LIBMDBX_SITE = https://libmdbx.website.yandexcloud.net/release
++LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
+ LIBMDBX_LICENSE = OLDAP-2.8
+ LIBMDBX_LICENSE_FILES = LICENSE
 
---===============4122121673520956359==
+--===============5012572713451347557==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -210,4 +134,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4122121673520956359==--
+--===============5012572713451347557==--
