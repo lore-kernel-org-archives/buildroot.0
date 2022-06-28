@@ -1,93 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31CF9C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jun 2022 18:10:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8214CC43334
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jun 2022 18:36:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B967741993;
-	Tue, 28 Jun 2022 18:10:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B967741993
+	by smtp2.osuosl.org (Postfix) with ESMTP id DFBBA405FD;
+	Tue, 28 Jun 2022 18:36:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFBBA405FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xw3ghMdLQECF; Tue, 28 Jun 2022 18:10:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mpRukT3hCQ1h; Tue, 28 Jun 2022 18:36:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CC0F41978;
-	Tue, 28 Jun 2022 18:10:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CC0F41978
+	by smtp2.osuosl.org (Postfix) with ESMTP id C67264054B;
+	Tue, 28 Jun 2022 18:35:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C67264054B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EF2001BF57B
- for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 18:10:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B28C31BF5DB
+ for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 18:35:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3EBD4197F
- for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 18:10:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3EBD4197F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A69F4194E
+ for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 18:35:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A69F4194E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UrQgcJOMFzyZ for <buildroot@lists.busybox.net>;
- Tue, 28 Jun 2022 18:10:16 +0000 (UTC)
+ with ESMTP id tZB1TKi9vtsQ for <buildroot@lists.busybox.net>;
+ Tue, 28 Jun 2022 18:35:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9EE541928
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C9EE541928
- for <buildroot@buildroot.org>; Tue, 28 Jun 2022 18:10:15 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- o19-20020a05600c4fd300b003a0489f414cso4535372wmq.4
- for <buildroot@buildroot.org>; Tue, 28 Jun 2022 11:10:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F23441947
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4F23441947
+ for <buildroot@buildroot.org>; Tue, 28 Jun 2022 18:35:55 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ v193-20020a1cacca000000b003a051f41541so1765439wme.5
+ for <buildroot@buildroot.org>; Tue, 28 Jun 2022 11:35:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:to
- :references:content-language:from:subject:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=NejKQDI0uyPbOPkcsyQ2Jb/3yUBq3V0Vlm3e2+fwhnQ=;
- b=idV8twnZtCFfpDdpC6R5vV6r3R2Bw1eMlzbuGTbfvyj83UA0DaDrSK+1+MX8b53WAD
- W8FnhjdEhvXURiqAFU2SLYy4QyPpaZfFYCKrJC3ULXMqHLXMJz9zT1zaxt9JZ9RWDs0I
- 2E7+MoKDF1Ao+RqmRWC5tFD5NQYdX1eKhDfjbfYLc2DsnRoOTGclybVCQLwI87RDxaKn
- bWPP7V9DLFPpq3OU6ElEcv5UWqhXVLHlLwWNAUNzvkKtm8MyY+9fbyeEqBtQe9h08R9G
- sv/uxdbbCmHsBsLXYDYgFFTADDc2+7cYtP5qup8Ua9ABuJn5BgT3nGc4wCNcl1dFHYmJ
- 4i+Q==
-X-Gm-Message-State: AJIora+TscXdCz5IqYsYwPmyv1U6MLV+k09Q22GbxJsw6Z0jyhZufE33
- ZePxolc9S1QAEKjRYrAswlYo/ZbV3ktZ9Q==
-X-Google-Smtp-Source: AGRyM1uNxXG2zHhIQpNsgegBdVwHJpM+IlhLjUqpEjY01PtnB4y5esya0l1S8f34GfTeaFjVAzFdMQ==
-X-Received: by 2002:a05:600c:8a9:b0:3a0:3d78:21a4 with SMTP id
- l41-20020a05600c08a900b003a03d7821a4mr1000986wmp.112.1656439813944; 
- Tue, 28 Jun 2022 11:10:13 -0700 (PDT)
-Received: from ?IPV6:2a02:8070:41a4:2c00:cb21:3fa8:230c:d355?
- ([2a02:8070:41a4:2c00:cb21:3fa8:230c:d355])
+ bh=ZlPyT2B+Kjcd6AVq2CB9UnTArBpjB2pQqtAHTr9yFoY=;
+ b=xod6JbT6uiilD+bhmdfZOhYSG1y0DyXJXsWi0/kL8xcnJeQbROWpUpBcG2YPPLfKnF
+ MaE188yaxvKQK/yzrI/jAS1DAwuS02nLBwna8sGZQTZhbGI//hOJJK19KkJw0cI7W9sm
+ x7GcJXKA+Eo5wpK7rOzXNtxqDkebkCUUb1x5sghRIbht4QUyyDgQUpTD4JarbDjms61Q
+ 4mU3Lu9cMji9KfOSbkH0u/vrY8Bell++BPXc9108gt5SMPzUHg9LOFLwdmEhbtsGeq/A
+ N5z++wkod1QcQb6kwcyz8hN8AItb3haxbGhhT2Fv5fc7S0+SvCnQ2d3ffLfjxls4/+5m
+ kC7A==
+X-Gm-Message-State: AJIora/08Y0zXt6aURSdVO8m+hZSDlZ7nlFXt0L0IW55DnMDipsRClTF
+ xNAke0e7JwEXLiFs7saS2liauyegmHo=
+X-Google-Smtp-Source: AGRyM1uRHqaOce9LM2GW3qD9WHH9mpaj50+KEeGMpdCuArfdd089xWOwATaPlKAczl/Rs6cNccbt9Q==
+X-Received: by 2002:a7b:cb82:0:b0:39e:f9cf:12b7 with SMTP id
+ m2-20020a7bcb82000000b0039ef9cf12b7mr1083480wmi.135.1656441353229; 
+ Tue, 28 Jun 2022 11:35:53 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- r16-20020a05600c35d000b003a0375c4f73sm251698wmq.44.2022.06.28.11.10.13
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 28 Jun 2022 11:10:13 -0700 (PDT)
-Message-ID: <703d2f07-9c45-9bfa-2278-8bcec8f584ba@googlemail.com>
-Date: Tue, 28 Jun 2022 20:10:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
+ z21-20020a1c4c15000000b0039c871d3191sm426509wmf.3.2022.06.28.11.35.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 28 Jun 2022 11:35:52 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-References: <20220619210102.1021263-2-fontaine.fabrice@gmail.com>
-Content-Language: de-DE
-In-Reply-To: <20220619210102.1021263-2-fontaine.fabrice@gmail.com>
+Date: Tue, 28 Jun 2022 20:32:11 +0200
+Message-Id: <20220628183213.2838372-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:to:references
- :content-language:from:subject:in-reply-to:content-transfer-encoding;
- bh=NejKQDI0uyPbOPkcsyQ2Jb/3yUBq3V0Vlm3e2+fwhnQ=;
- b=eWnxTP+D3xoewhBafcCwI9cMLoG1Wa3GwHr0XoFl7lo7gYpoN5Sh3AsElxBgZ3pe+r
- SehRh3Bum+R4k1E43a57Uzpi18dDPmM2kjl9yLRLR3cQ3gPAej9Gh49GjBuku7ZsLitb
- PYQ/mmpHV2c0B0Cb3P24VxsWBGUP5K2Ix83ZLXRndqvEXXzIPo0z1/UBSZia580QmA+2
- lzVfQrH2fCkQwkSDumo7aSaDpEUSLE5pRuHpoGXblhK75u7XD3f4xR1meZ47Mpmr0YbD
- mIvlKHexBDzHwlrbkxpdwhz++h8vB815J+sDD7qufFhQR+jSf6N/ry2euMiaiwx5hu0F
- 0mWw==
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ZlPyT2B+Kjcd6AVq2CB9UnTArBpjB2pQqtAHTr9yFoY=;
+ b=OMuldeMiGOI3EO4SRDd4pdfgnXER4UnC65bfjk3VdcpH9NtjP3f26g87muQ5UFoTXu
+ HTKsfE+fm8ljmWUedCbp2JIuF15sqhi3MiTzqxW3x6NuyqQ/TvBRGcoYRuW7pr7qFllG
+ JZ5wbyySs5ycMudDlcOYE2A2tmZgqYXJNUKwwK05vgrKoc/MaDrATZD2QgeevRSUtLZ0
+ /OrCWAH6F86/odCRyoKQobmAmAFfSPS3Ekbtxv3Nx4QeRugLmxaBU4KIwDdLzCJUruxq
+ jmhxVKekCp2jtJ1QWjPVIcVIxfrAl1MFe2JaNrWKANEw59m66NkWRAxwCqjZGJJU60WQ
+ zwpw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=eWnxTP+D
-Subject: Re: [Buildroot] [PATCH 2/3] package/bind: disable cmocka
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=OMuldeMi
+Subject: [Buildroot] [PATCH 1/3] package/libsamplerate: use --{dis,
+ en}able-alsa
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,24 +95,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Raphael Pavlidis via buildroot <buildroot@buildroot.org>
-Reply-To: Raphael Pavlidis <raphael.pavlidis@googlemail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Maybe we could make this dependency dynamically, if the 
-BR2_PACKAGE_CMOCKA is enabled.
+Commit 5b679d7806767206f2c7bd7ff69b412bebb504f8 forgot to set
+--{dis,en}able-alsa
 
-For Example:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libsamplerate/libsamplerate.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-ifeq ($(BR2_PACKAGE_CMOCKA),y)
-BIND_CONF_OPTS += --with-cmocka
-BIND_DEPENDENCIES += cmocka
-else
-BIND_CONF_OPTS += --without-cmocka
-endif
+diff --git a/package/libsamplerate/libsamplerate.mk b/package/libsamplerate/libsamplerate.mk
+index 146d57d15e..9d6b6a5ca5 100644
+--- a/package/libsamplerate/libsamplerate.mk
++++ b/package/libsamplerate/libsamplerate.mk
+@@ -15,6 +15,9 @@ LIBSAMPLERATE_CPE_ID_VENDOR = libsamplerate_project
+ 
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ LIBSAMPLERATE_DEPENDENCIES += alsa-lib
++LIBSAMPLERATE_CONF_OPTS += --enable-alsa
++else
++LIBSAMPLERATE_CONF_OPTS += --disable-alsa
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
