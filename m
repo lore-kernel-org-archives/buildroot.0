@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 774FDC43334
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jun 2022 06:09:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74B5BC43334
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jun 2022 06:09:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16D3C4148F;
-	Tue, 28 Jun 2022 06:09:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16D3C4148F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1FAB682EF1;
+	Tue, 28 Jun 2022 06:09:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FAB682EF1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DLWJo86gMVBJ; Tue, 28 Jun 2022 06:09:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7tPgugKGe7FG; Tue, 28 Jun 2022 06:09:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CA61411C6;
-	Tue, 28 Jun 2022 06:09:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CA61411C6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 99F281BF293
+	by smtp1.osuosl.org (Postfix) with ESMTP id 289BD81756;
+	Tue, 28 Jun 2022 06:09:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 289BD81756
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A57881BF9C6
  for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 06:09:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 829A34148F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 804D740227
  for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 06:09:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 829A34148F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 804D740227
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K6afUier_rTh for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0066sSs1allc for <buildroot@lists.busybox.net>;
  Tue, 28 Jun 2022 06:09:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA205411C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF802401A4
  for <buildroot@buildroot.org>; Tue, 28 Jun 2022 06:09:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA205411C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF802401A4
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 861E18779F; Tue, 28 Jun 2022 05:56:36 +0000 (UTC)
+ id 9C04D877A5; Tue, 28 Jun 2022 05:56:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jun 2022 08:05:25 +0200
+Date: Tue, 28 Jun 2022 08:07:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4bb0008aa57b083dca523064ff5eaffffe93a81a
-X-Git-Newrev: 3f7afc40e15f9d74f2705265de23b2d16ec80265
+X-Git-Oldrev: 5b1a438995bfdc688bcb2cacd61b33dbefbecb6a
+X-Git-Newrev: 8aa0ef41cbd2033414aa465f7a216fa8b253396d
 X-Patchwork-Hint: ignore
-Message-Id: <20220628055636.861E18779F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: fix email of Dario Binacchi
+Message-Id: <20220628055636.9C04D877A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kexec: bump to version 2.0.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,30 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f7afc40e15f9d74f2705265de23b2d16ec80265
+commit: https://git.buildroot.net/buildroot/commit/?id=8aa0ef41cbd2033414aa465f7a216fa8b253396d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix email typo added by commit 776385d645b37cfc43479b37e106244aa9ab2e85
+https://www.spinics.net/lists/kexec/msg28922.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Federico Pellegrin <fede@evolware.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kexec/kexec.hash | 2 +-
+ package/kexec/kexec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2ed43a1c16..c3312eec34 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -656,7 +656,7 @@ F:	package/lua-cjson/
- F:	package/luaexpat/
- F:	package/xinetd/
+diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
+index 05eb9e3d02..dcf661cce4 100644
+--- a/package/kexec/kexec.hash
++++ b/package/kexec/kexec.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
+-sha256  aa63cd6c7dd95b06ceba6240a7fdc6792789cada75a655e6714987175224241b  kexec-tools-2.0.23.tar.xz
++sha256  af230ce6430deb6c2ab35762f8028888ac9d6ebefc2c4c83224a9c109143c0e8  kexec-tools-2.0.24.tar.xz
+ # locally calculated
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index b3b4e56546..c08a9155f2 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	Dario Binacchi <dario.binacchi@amarula.solutions.com>
-+N:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
- F:	package/uuu/
- 
- N:	Dario Binacchi <dariobin@libero.it>
+-KEXEC_VERSION = 2.0.23
++KEXEC_VERSION = 2.0.24
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
