@@ -1,57 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B60FC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jun 2022 06:08:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 774FDC43334
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jun 2022 06:09:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA53B81570;
-	Tue, 28 Jun 2022 06:08:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA53B81570
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16D3C4148F;
+	Tue, 28 Jun 2022 06:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16D3C4148F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c_L3-ts_uSD6; Tue, 28 Jun 2022 06:08:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DLWJo86gMVBJ; Tue, 28 Jun 2022 06:09:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DB478144B;
-	Tue, 28 Jun 2022 06:08:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DB478144B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F03C51BF293
- for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 06:08:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CA61411C6;
+	Tue, 28 Jun 2022 06:09:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CA61411C6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 99F281BF293
+ for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 06:09:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D8F5A60B71
- for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 06:08:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8F5A60B71
+ by smtp4.osuosl.org (Postfix) with ESMTP id 829A34148F
+ for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 06:09:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 829A34148F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Spw-_g9TjsFW for <buildroot@lists.busybox.net>;
- Tue, 28 Jun 2022 06:08:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85B8260087
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 85B8260087
- for <buildroot@buildroot.org>; Tue, 28 Jun 2022 06:08:31 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 78174240005;
- Tue, 28 Jun 2022 06:08:29 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1o64Oi-00DKSI-KR; Tue, 28 Jun 2022 08:08:28 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K6afUier_rTh for <buildroot@lists.busybox.net>;
+ Tue, 28 Jun 2022 06:09:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA205411C6
+ for <buildroot@buildroot.org>; Tue, 28 Jun 2022 06:09:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA205411C6
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 861E18779F; Tue, 28 Jun 2022 05:56:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20220620190904.856075-1-bernd.kuhls@t-online.de>
-Date: Tue, 28 Jun 2022 08:08:28 +0200
-In-Reply-To: <20220620190904.856075-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 20 Jun 2022 21:09:04 +0200")
-Message-ID: <8735fpqq03.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/tor: fix LibreSSL build
+To: buildroot@buildroot.org
+Date: Tue, 28 Jun 2022 08:05:25 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4bb0008aa57b083dca523064ff5eaffffe93a81a
+X-Git-Newrev: 3f7afc40e15f9d74f2705265de23b2d16ec80265
+X-Patchwork-Hint: ignore
+Message-Id: <20220628055636.861E18779F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: fix email of Dario Binacchi
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,28 +56,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3f7afc40e15f9d74f2705265de23b2d16ec80265
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > http://autobuild.buildroot.net/results/71e/71e03ee8f6e6e5a235556b85a360cbad23a22897/
- > http://autobuild.buildroot.net/results/4a9/4a93bea0b83eca133ace3e3cfd2b5cb60b691d6e/
- > http://autobuild.buildroot.net/results/6b8/6b8ab9c5253586426b33d2cba20e7f9f992dbee9/
- > http://autobuild.buildroot.net/results/8a9/8a9c19878c2d599de6aa3bb3a849b1701f50a829/
+Fix email typo added by commit 776385d645b37cfc43479b37e106244aa9ab2e85
 
- > and many others
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2ed43a1c16..c3312eec34 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -656,7 +656,7 @@ F:	package/lua-cjson/
+ F:	package/luaexpat/
+ F:	package/xinetd/
+ 
+-N:	Dario Binacchi <dario.binacchi@amarula.solutions.com>
++N:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ F:	package/uuu/
+ 
+ N:	Dario Binacchi <dariobin@libero.it>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
