@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB6D6C43334
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jun 2022 06:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38851C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jun 2022 06:10:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 73B874037C;
-	Tue, 28 Jun 2022 06:10:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73B874037C
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF670415F0;
+	Tue, 28 Jun 2022 06:10:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF670415F0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0nb-GKPQ6URx; Tue, 28 Jun 2022 06:09:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qQc03BtBePPv; Tue, 28 Jun 2022 06:10:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3B4CB40496;
-	Tue, 28 Jun 2022 06:09:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B4CB40496
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F234A1BF293
- for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 06:09:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79B0441581;
+	Tue, 28 Jun 2022 06:10:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79B0441581
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A0281BF293
+ for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 06:09:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE22F81699
+ by smtp4.osuosl.org (Postfix) with ESMTP id 847034154F
  for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 06:09:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE22F81699
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 847034154F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XgB7u4cEyhaG for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i3KEeCBKXqMm for <buildroot@lists.busybox.net>;
  Tue, 28 Jun 2022 06:09:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9FAD81499
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9EEE8410DB
  for <buildroot@buildroot.org>; Tue, 28 Jun 2022 06:09:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9FAD81499
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EEE8410DB
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A78C48779D; Tue, 28 Jun 2022 05:56:36 +0000 (UTC)
+ id 78AF98779D; Tue, 28 Jun 2022 05:56:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jun 2022 08:08:16 +0200
+Date: Tue, 28 Jun 2022 08:05:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8aa0ef41cbd2033414aa465f7a216fa8b253396d
-X-Git-Newrev: 23e1e04d5448e17da7ec0a65199740ad1cf923a0
+X-Git-Oldrev: e62db6c7cca5438d029ce89d5685f17cb6129a9e
+X-Git-Newrev: 4bb0008aa57b083dca523064ff5eaffffe93a81a
 X-Patchwork-Hint: ignore
-Message-Id: <20220628055636.A78C48779D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tor: fix LibreSSL build
+Message-Id: <20220628055636.78AF98779D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uuu: use official tarball
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,190 +62,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23e1e04d5448e17da7ec0a65199740ad1cf923a0
+commit: https://git.buildroot.net/buildroot/commit/?id=4bb0008aa57b083dca523064ff5eaffffe93a81a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/71e/71e03ee8f6e6e5a235556b85a360cbad23a22897/
-http://autobuild.buildroot.net/results/4a9/4a93bea0b83eca133ace3e3cfd2b5cb60b691d6e/
-http://autobuild.buildroot.net/results/6b8/6b8ab9c5253586426b33d2cba20e7f9f992dbee9/
-http://autobuild.buildroot.net/results/8a9/8a9c19878c2d599de6aa3bb3a849b1701f50a829/
+Use official tarball and so drop UUU_SET_VERSION
 
-and many others
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tch-src_lib_crypt_ops_crypto_dh_openssl_c.patch | 67 ++++++++++++++++++++++
- ...ch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch | 58 +++++++++++++++++++
- .../0003-patch-src_lib_tls_x509_openssl_c.patch    | 22 +++++++
- 3 files changed, 147 insertions(+)
+ package/uuu/uuu.hash | 2 +-
+ package/uuu/uuu.mk   | 9 ++-------
+ 2 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/tor/0001-patch-src_lib_crypt_ops_crypto_dh_openssl_c.patch b/package/tor/0001-patch-src_lib_crypt_ops_crypto_dh_openssl_c.patch
-new file mode 100644
-index 0000000000..2df7c6b6a7
---- /dev/null
-+++ b/package/tor/0001-patch-src_lib_crypt_ops_crypto_dh_openssl_c.patch
-@@ -0,0 +1,67 @@
-+Fix build with opaque structs in LibreSSL 3.5
-+
-+Downloaded from OpenBSD ports:
-+http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tor/patches/patch-src_lib_crypt_ops_crypto_dh_openssl_c?rev=1.2&content-type=text/x-cvsweb-markup
-+
-+Patch series was sent upstream:
-+https://forum.torproject.net/t/tor-relays-openbsd-stable-net-tor-and-0-4-7-7/3244
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: src/lib/crypt_ops/crypto_dh_openssl.c
-+--- a/src/lib/crypt_ops/crypto_dh_openssl.c.orig
-++++ b/src/lib/crypt_ops/crypto_dh_openssl.c
-+@@ -60,7 +60,7 @@ crypto_validate_dh_params(const BIGNUM *p, const BIGNU
-+   /* Copy into a temporary DH object, just so that DH_check() can be called. */
-+   if (!(dh = DH_new()))
-+       goto out;
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   BIGNUM *dh_p, *dh_g;
-+   if (!(dh_p = BN_dup(p)))
-+     goto out;
-+@@ -223,7 +223,7 @@ new_openssl_dh_from_params(BIGNUM *p, BIGNUM *g)
-+     goto err;
-+   }
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+ 
-+   if (!DH_set0_pqg(res_dh, dh_p, NULL, dh_g)) {
-+     goto err;
-+@@ -276,7 +276,7 @@ crypto_dh_get_bytes(crypto_dh_t *dh)
-+ int
-+ crypto_dh_generate_public(crypto_dh_t *dh)
-+ {
-+-#ifndef OPENSSL_1_1_API
-++#if !defined(OPENSSL_1_1_API) && !defined(LIBRESSL_VERSION_NUMBER)
-+  again:
-+ #endif
-+   if (!DH_generate_key(dh->dh)) {
-+@@ -286,7 +286,7 @@ crypto_dh_generate_public(crypto_dh_t *dh)
-+     return -1;
-+     /* LCOV_EXCL_STOP */
-+   }
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   /* OpenSSL 1.1.x doesn't appear to let you regenerate a DH key, without
-+    * recreating the DH object.  I have no idea what sort of aliasing madness
-+    * can occur here, so do the check, and just bail on failure.
-+@@ -327,7 +327,7 @@ crypto_dh_get_public(crypto_dh_t *dh, char *pubkey, si
-+ 
-+   const BIGNUM *dh_pub;
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   const BIGNUM *dh_priv;
-+   DH_get0_key(dh->dh, &dh_pub, &dh_priv);
-+ #else
-+@@ -338,7 +338,7 @@ crypto_dh_get_public(crypto_dh_t *dh, char *pubkey, si
-+     if (crypto_dh_generate_public(dh)<0)
-+       return -1;
-+     else {
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+       DH_get0_key(dh->dh, &dh_pub, &dh_priv);
-+ #else
-+       dh_pub = dh->dh->pub_key;
-diff --git a/package/tor/0002-patch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch b/package/tor/0002-patch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch
-new file mode 100644
-index 0000000000..1354a4221e
---- /dev/null
-+++ b/package/tor/0002-patch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch
-@@ -0,0 +1,58 @@
-+Fix build with opaque structs in LibreSSL 3.5
-+
-+Downloaded from OpenBSD ports:
-+http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tor/patches/patch-src_lib_crypt_ops_crypto_rsa_openssl_c?rev=1.2&content-type=text/x-cvsweb-markup
-+
-+Patch series was sent upstream:
-+https://forum.torproject.net/t/tor-relays-openbsd-stable-net-tor-and-0-4-7-7/3244
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: src/lib/crypt_ops/crypto_rsa_openssl.c
-+--- a/src/lib/crypt_ops/crypto_rsa_openssl.c.orig
-++++ b/src/lib/crypt_ops/crypto_rsa_openssl.c
-+@@ -47,7 +47,7 @@ struct crypto_pk_t
-+ int
-+ crypto_pk_key_is_private(const crypto_pk_t *k)
-+ {
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   if (!k || !k->key)
-+     return 0;
-+ 
-+@@ -212,7 +212,7 @@ crypto_pk_public_exponent_ok(const crypto_pk_t *env)
-+ 
-+   const BIGNUM *e;
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   const BIGNUM *n, *d;
-+   RSA_get0_key(env->key, &n, &e, &d);
-+ #else
-+@@ -242,7 +242,7 @@ crypto_pk_cmp_keys(const crypto_pk_t *a, const crypto_
-+   const BIGNUM *a_n, *a_e;
-+   const BIGNUM *b_n, *b_e;
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   const BIGNUM *a_d, *b_d;
-+   RSA_get0_key(a->key, &a_n, &a_e, &a_d);
-+   RSA_get0_key(b->key, &b_n, &b_e, &b_d);
-+@@ -279,7 +279,7 @@ crypto_pk_num_bits(crypto_pk_t *env)
-+   tor_assert(env);
-+   tor_assert(env->key);
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   /* It's so stupid that there's no other way to check that n is valid
-+    * before calling RSA_bits().
-+    */
-+@@ -572,7 +572,7 @@ static bool
-+ rsa_private_key_too_long(RSA *rsa, int max_bits)
-+ {
-+   const BIGNUM *n, *e, *p, *q, *d, *dmp1, *dmq1, *iqmp;
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+ 
-+ #if OPENSSL_VERSION_NUMBER >= OPENSSL_V_SERIES(1,1,1)
-+   n = RSA_get0_n(rsa);
-diff --git a/package/tor/0003-patch-src_lib_tls_x509_openssl_c.patch b/package/tor/0003-patch-src_lib_tls_x509_openssl_c.patch
-new file mode 100644
-index 0000000000..fe8586357a
---- /dev/null
-+++ b/package/tor/0003-patch-src_lib_tls_x509_openssl_c.patch
-@@ -0,0 +1,22 @@
-+Fix build with opaque structs in LibreSSL 3.5
-+
-+Downloaded from OpenBSD ports:
-+http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tor/patches/patch-src_lib_tls_x509_openssl_c?rev=1.2&content-type=text/x-cvsweb-markup
-+
-+Patch series was sent upstream:
-+https://forum.torproject.net/t/tor-relays-openbsd-stable-net-tor-and-0-4-7-7/3244
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: src/lib/tls/x509_openssl.c
-+--- a/src/lib/tls/x509_openssl.c.orig
-++++ b/src/lib/tls/x509_openssl.c
-+@@ -329,7 +329,7 @@ tor_tls_cert_is_valid(int severity,
-+   cert_key = X509_get_pubkey(cert->cert);
-+   if (check_rsa_1024 && cert_key) {
-+     RSA *rsa = EVP_PKEY_get1_RSA(cert_key);
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+     if (rsa && RSA_bits(rsa) == 1024) {
-+ #else
-+     if (rsa && BN_num_bits(rsa->n) == 1024) {
+diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
+index 10efff0337..245c38879c 100644
+--- a/package/uuu/uuu.hash
++++ b/package/uuu/uuu.hash
+@@ -1,4 +1,4 @@
+ # locally computed
+-sha256  4fda8db488c4d3a98c2480c47b41907ad26b714c6400dd0a202baab4c17b0a9b  uuu-1.4.193.tar.gz
++sha256  a9b8b74e32e6718d591c66951b8b52276df7862db80ee943e046947f7313e57f  uuu_source-1.4.193.tar.gz
+ sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
+ sha256  77b90738ae98b7958d34d9f96caf2671210a133427f8f6b784914b54f406c29b  README.md
+diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
+index d8c480034a..d1d7824018 100644
+--- a/package/uuu/uuu.mk
++++ b/package/uuu/uuu.mk
+@@ -5,15 +5,10 @@
+ ################################################################################
+ 
+ UUU_VERSION = 1.4.193
+-UUU_SITE = $(call github,NXPmicro,mfgtools,uuu_$(UUU_VERSION))
++UUU_SOURCE = uuu_source-$(UUU_VERSION).tar.gz
++UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
+ UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
+ UUU_LICENSE_FILES = LICENSE README.md
+ HOST_UUU_DEPENDENCIES = host-bzip2 host-zlib host-libusb
+ 
+-define UUU_SET_VERSION
+-	echo $(UUU_VERSION) > $(@D)/.tarball-version
+-endef
+-
+-HOST_UUU_POST_EXTRACT_HOOKS += UUU_SET_VERSION
+-
+ $(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
