@@ -4,47 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78E57C43334
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jun 2022 22:46:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEF45C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jun 2022 00:15:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98DBA41581;
-	Mon, 27 Jun 2022 22:46:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98DBA41581
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76F0C4155A;
+	Tue, 28 Jun 2022 00:15:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76F0C4155A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TnESN1fiE-0L; Mon, 27 Jun 2022 22:46:52 +0000 (UTC)
+	with ESMTP id rtx1d2UHCI-T; Tue, 28 Jun 2022 00:15:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2834041511;
-	Mon, 27 Jun 2022 22:46:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2834041511
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 931E61BF2F0
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:46:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 487864154A;
+	Tue, 28 Jun 2022 00:15:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 487864154A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AFC141BF2FF
+ for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 00:15:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A4F482451
- for <buildroot@lists.busybox.net>; Mon, 27 Jun 2022 22:46:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A4F482451
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8A5E34025F
+ for <buildroot@lists.busybox.net>; Tue, 28 Jun 2022 00:15:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A5E34025F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pnXYRu7SY88m for <buildroot@lists.busybox.net>;
- Mon, 27 Jun 2022 22:46:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5204C81C38
- for <buildroot@buildroot.org>; Mon, 27 Jun 2022 22:46:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5204C81C38
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D4A558770C; Mon, 27 Jun 2022 22:34:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QHOb0OHvRJpi for <buildroot@lists.busybox.net>;
+ Tue, 28 Jun 2022 00:15:00 +0000 (UTC)
+X-Greylist: delayed 00:07:02 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB062400D6
+Received: from smtpcmd11117.aruba.it (smtpcmd11117.aruba.it [62.149.156.117])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB062400D6
+ for <buildroot@buildroot.org>; Tue, 28 Jun 2022 00:14:59 +0000 (UTC)
+Received: from localhost.localdomain ([151.36.180.201])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id 5yllofpMjAaN95ylmog1UB; Tue, 28 Jun 2022 02:07:54 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jun 2022 00:46:41 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b1fe952835ba0113f0f6f4f54686e29d6e1fc73b
-X-Git-Newrev: c099842544248b10f4284a5d47084db8f476fcda
-X-Patchwork-Hint: ignore
-Message-Id: <20220627223409.D4A558770C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmdbx: bump version to 0.11.8
+Date: Tue, 28 Jun 2022 02:07:52 +0200
+Message-Id: <20220628000752.378643-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfA3pQH2Nn1bTgJIGj4+DxcEPmM7OAoZ1PGR2d9roTKiMRHUVMyY6uv9X5Ah01ImA2g30yLNyNgjkk/kxuvqkE3ntN9a3v5p//TKUxsoDlvCDcfH6lH7j
+ 3UO96sr4l+MPIWYsL0t1qB6mS5hJyHD1ErqzB/XZ+KKduDY8+9eXHkFmfy3+UNk2zbxJ3Imhl8POwloN/BZkHDtx4pRmNys4jyWChweQ4ByVqztcYn6Ctge4
+ Boi4eWEP7w4tWmxEX0g3xssesT+uNloW6qsqPkK4cByFJS90S4uCrOpiR0gNTRXr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1656374874; bh=uQGrlMe0ZamBvseG2Eh2RgQQwJL7/m5xnww5+CAiHm0=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=Kh/nZhgyXngi0n3k1jUFJA1X9Edeur9oVPGlwtYiuaYPb2W2JPNjBfPQ6V58E+Gp6
+ uDW74EeShjOwTjSpO+/JwmjptIr8r1yjENC09dm3vWoo1mUc//eAuNR3QE2SR1mI6w
+ O4zL8YLIMmZKtxvRzQWImge1YzNibIe4CYy0ORW6rGWgBBOCVbH6BX+20CSqSWXGd0
+ Dul8QZKHOjF+zTn0c+APbe/bNmDdVfXUxDWF2o4QOVOMkyTmRaWcqxyfVmPglunKUO
+ 0plqOAHb+GkukqfTS0bAaZ6CqdCl8CuHFXVHlVu1yodGvA8sOA2J0b62rJrpgslPvd
+ jqm96Ar6mVoMQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=Kh/nZhgy
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 4.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,82 +72,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5012572713451347557=="
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5012572713451347557==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=c099842544248b10f4284a5d47084db8f476fcda
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This is stable bugfix release of libmdbx.
-The project's website now is on https://libmdbx.dqdkfa.ru/
-
-Release notes for v0.11.8 https://gitflic.ru/project/erthink/libmdbx/release/06268038-39ff-4270-9be8-9f26d5543015
-
-The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
-
-Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libmdbx/Config.in    | 2 +-
- package/libmdbx/libmdbx.hash | 3 ++-
- package/libmdbx/libmdbx.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmdbx/Config.in b/package/libmdbx/Config.in
-index 4849d60b92..a9a4ac45c5 100644
---- a/package/libmdbx/Config.in
-+++ b/package/libmdbx/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_LIBMDBX
- 	  libmdbx surpasses the legendary LMDB in terms of
- 	  reliability, features and performance.
- 
--	  https://libmdbx.website.yandexcloud.net/
-+	  https://libmdbx.dqdkfa.ru
- 
- if BR2_PACKAGE_LIBMDBX
- 
-diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-index 7d663b3da0..3f2be134c3 100644
---- a/package/libmdbx/libmdbx.hash
-+++ b/package/libmdbx/libmdbx.hash
-@@ -1,4 +1,5 @@
--# Hashes from: https://libmdbx.website.yandexcloud.net/release/SHA256SUMS
-+# Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
-+sha256  06011f361481ee7adc2111e48b7b121384294e0b6b8f10c75e7886629297b279  libmdbx-amalgamated-0.11.8.tar.xz
- sha256  3a9fb6a4cd941e646597235518714373fda1ca6d4c5e23669afe70ea87c20940  libmdbx-amalgamated-0.11.7.tar.xz
- 
- # Locally calculated
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-index a7056b2850..130fe96793 100644
---- a/package/libmdbx/libmdbx.mk
-+++ b/package/libmdbx/libmdbx.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 29ef89719d..66743326a0 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a49628f4c4c8e6d8df95ef44935a93446cf2e46366915b0e3ca30df21fffb530  harfbuzz-4.3.0.tar.xz
++sha256  02035eddb9d84112834abd1654ce0e177d14f41fd8ce0c29d5b4376888890790  harfbuzz-4.4.0.tar.xz
+ sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 8abce91537..e74657234c 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMDBX_VERSION = 0.11.7
-+LIBMDBX_VERSION = 0.11.8
- LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
--LIBMDBX_SITE = https://libmdbx.website.yandexcloud.net/release
-+LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
- LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
- LIBMDBX_LICENSE = OLDAP-2.8
- LIBMDBX_LICENSE_FILES = LICENSE
-
---===============5012572713451347557==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-HARFBUZZ_VERSION = 4.3.0
++HARFBUZZ_VERSION = 4.4.0
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5012572713451347557==--
