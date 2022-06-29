@@ -1,86 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17AC6C43334
-	for <buildroot@archiver.kernel.org>; Wed, 29 Jun 2022 12:12:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13E6EC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 29 Jun 2022 12:23:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A783541A4F;
-	Wed, 29 Jun 2022 12:12:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A783541A4F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9187A4114D;
+	Wed, 29 Jun 2022 12:23:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9187A4114D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QOHKukO7jK_Z; Wed, 29 Jun 2022 12:12:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id S_2l92A2op0k; Wed, 29 Jun 2022 12:23:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60CD041A49;
-	Wed, 29 Jun 2022 12:12:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60CD041A49
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 625051BF407
- for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 12:12:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8EEDF408A7;
+	Wed, 29 Jun 2022 12:23:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EEDF408A7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C061B1BF407
+ for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 12:22:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 350EF8403C
- for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 12:12:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 350EF8403C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A7A7408A7
+ for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 12:22:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A7A7408A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6hWIe7GUJcHx for <buildroot@lists.busybox.net>;
- Wed, 29 Jun 2022 12:12:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VW2pKltH1sbQ for <buildroot@lists.busybox.net>;
+ Wed, 29 Jun 2022 12:22:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51C0984029
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
- [IPv6:2607:f8b0:4864:20::d2d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 51C0984029
- for <buildroot@buildroot.org>; Wed, 29 Jun 2022 12:12:07 +0000 (UTC)
-Received: by mail-io1-xd2d.google.com with SMTP id a10so15734742ioe.9
- for <buildroot@buildroot.org>; Wed, 29 Jun 2022 05:12:07 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3DBA40002
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A3DBA40002
+ for <buildroot@buildroot.org>; Wed, 29 Jun 2022 12:22:57 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id h20so10137753ilj.13
+ for <buildroot@buildroot.org>; Wed, 29 Jun 2022 05:22:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=L6cuAqcBZvYHmGESGzvuO/82r/TPbb++tceuz3BFPec=;
- b=F8M83UYC2EH8GmhTX7meHxbg1mPuTyQGp4FMPyS6CKGw0QzaUzk+L0REBzQRByQ35z
- R2ZgbkQpcAjLoi53T003BZmI1YnQ0OU8wy/db8BkpNotR17AXaIo3a0pqx0saZsnLit9
- 2ZsWmPMjG+diPqCYEjFSPlcaYeL9j4Dx3kHJTOBTuTBK8t3PIzkV5tLpd4utVKdMnaPE
- KCnMxFoMJVvN+5WRNBzEzt4jMcUj+YFN9jgxp/v6DxTsqS/Gx5/LT5+1UWsqC7gGTPFa
- pt3u1/q5WLGfKXGCsJcH3OuhSBuLg4SN67msdBewxp1yWpkUfCFMbHsOA5EjoHwpFdyo
- 3qng==
-X-Gm-Message-State: AJIora8n8h6MOO13cqMJt0i6bVbCFyJPKhRabv1PTx2r8lzRjI0CM+Yf
- 2HfafHseDhSAIk4lkU/CPXhO98w5NgQ=
-X-Google-Smtp-Source: AGRyM1t/hg45WGGU61OIhnlqxrYT5AOg4x+HP0cLIpQuLOM9l0aWmLxxWDLJfXnwy3t+EcjMfskzQw==
-X-Received: by 2002:a5d:8b96:0:b0:674:f65c:a12d with SMTP id
- p22-20020a5d8b96000000b00674f65ca12dmr1550254iol.180.1656504726323; 
- Wed, 29 Jun 2022 05:12:06 -0700 (PDT)
+ bh=FfqhhEHvigwx8V8+plj7XUtrPz7y6JeEOtl4S/1w6bo=;
+ b=hBH1aYhV52AwPLByurTcqZjwugUpA9SV0oX5WohrMzOlY8IVFw7Pn+U6Hb8FEKdgrb
+ HzhSLZx5EcS9Flhj7NDLOUo0yb3KxyMC8LIm31vxOJXVFzhdSP36BTgAZC3p8CFfuXJS
+ baSWa4XQQqUH/HRG9/oAoik9qztFbUu9XJzs8THNXdyBcG0rcA3gPGV3Tiw5qn5IwSkX
+ +zRIlKNpstkDReyqL9BYxmwpOg0cvoZPWBgQdleGE371HKLU/TbPKRypkLhXE6GIbLLq
+ /LROBcUlmma5xwDySYM5jYR3yYxpwpfUFd06iZwK/Pvv2LpqeqZ0W8IKV1pwL3+CT9zb
+ 2mkQ==
+X-Gm-Message-State: AJIora+RqUglhC1ej/lvZYAjVBMDlfpL6UHxxutACglveD257TSdQ1uy
+ XIW9nV0fMdq9MMM5xKvU1YzVvmCjNas=
+X-Google-Smtp-Source: AGRyM1syzih2dQglrs4/ncDwM2K+/6YcVuZu4eejtsnx2M7P48uh4MKobq7kfPFi+7mTff4Qjf25iw==
+X-Received: by 2002:a92:d786:0:b0:2d5:3707:e446 with SMTP id
+ d6-20020a92d786000000b002d53707e446mr1750074iln.244.1656505376591; 
+ Wed, 29 Jun 2022 05:22:56 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-105-112.hlrn.qwest.net.
  [71.218.105.112]) by smtp.gmail.com with ESMTPSA id
- o62-20020a022241000000b00339de279a5bsm7121730jao.126.2022.06.29.05.12.05
+ q4-20020a6b7104000000b0067276d38121sm7870955iog.47.2022.06.29.05.22.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Jun 2022 05:12:05 -0700 (PDT)
+ Wed, 29 Jun 2022 05:22:56 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Jun 2022 06:12:04 -0600
-Message-Id: <20220629121204.2347138-1-james.hilliard1@gmail.com>
+Date: Wed, 29 Jun 2022 06:22:53 -0600
+Message-Id: <20220629122253.2407926-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=L6cuAqcBZvYHmGESGzvuO/82r/TPbb++tceuz3BFPec=;
- b=BstjmjQ8U7o4k6Ede0TL+IMHT+/flf077Nboo0yep6p5HCcDdRuI+bNkmMW3C8sGKx
- SLAKUWHmtUQnlfSMEMfyhTHpYOusY4yCm/4K8kwy9L8b0/X7D9qJ0h9jR/UQFmILpQ/l
- 3vpyHi4eTQfRzAT856Yn8P/S12SKHWzPC1+J6d+gMfND0lEZj2OhE+z6ZG2YG2x8urDa
- KAPX3GoXJtu7L6F4gqxdtTG0w9/ttjkAe2J9MG5R5PYIwZAh42zuFqZ7HElmLNCNJDBR
- DK+9YjS27B0ovCmRuDJnr1y4WOK/Ud6N/bp3aMCZFHW7SB1oxvBKZOcctehHj0dInGpy
- SWww==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=FfqhhEHvigwx8V8+plj7XUtrPz7y6JeEOtl4S/1w6bo=;
+ b=bwfW5W6Eyr/dsjET/RJrOVJQ4dllBY9EbevNsVFpKTC1/bYR0ha0nQoORRQ/CJ+8AO
+ yEcM7KBQIOjRcXyvfbV+C1BJk86bnLFYBkLNAyBRb9124rxpo1emjZLAb7dt2gDOngYn
+ 7n3d7wLt2mSMk755QZ1BrcDq65oCWZFZwrHrQol4XAKq6SjRJKiXJ4mPDAdspoIBjv2x
+ +4X9nMi1BzMdZj637ckDcxoI4vadEEJUsO5vKA9iJ38hHZPgeFinZO6Yz3OyS+rKdxRW
+ aVpOZS5yznr1n6Kv3BRTmGtsEK+hxCN5xRm9TvAvqtWz3ONtlucWEV99hXRf5w4viNia
+ ijMw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=BstjmjQ8
-Subject: [Buildroot] [PATCH 1/1] package/python-pillow: bump to version 9.1.1
+ header.a=rsa-sha256 header.s=20210112 header.b=bwfW5W6E
+Subject: [Buildroot] [PATCH 1/1] package/python-pypa-build: bump to version
+ 0.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,8 +93,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,38 +101,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pillow/python-pillow.hash | 4 ++--
- package/python-pillow/python-pillow.mk   | 4 ++--
+ package/python-pypa-build/python-pypa-build.hash | 4 ++--
+ package/python-pypa-build/python-pypa-build.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 2e259c1caf..ff23ed6299 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pillow/json
--md5  a9ebd39b3482993474872757d317e26f  Pillow-9.1.0.tar.gz
--sha256  f401ed2bbb155e1ade150ccc63db1a4f6c1909d3d378f7d1235a44e90d75fb97  Pillow-9.1.0.tar.gz
-+md5  f0d347298e72b403fbc3198677f394bb  Pillow-9.1.1.tar.gz
-+sha256  7502539939b53d7565f3d11d87c78e7ec900d3c72945d4ee0e2f250d598309a0  Pillow-9.1.1.tar.gz
- 
+diff --git a/package/python-pypa-build/python-pypa-build.hash b/package/python-pypa-build/python-pypa-build.hash
+index c7daedc6b3..c0856c2abf 100644
+--- a/package/python-pypa-build/python-pypa-build.hash
++++ b/package/python-pypa-build/python-pypa-build.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/build/json
+-md5  ec3dbe55359ee735b45766b30dfad877  build-0.7.0.tar.gz
+-sha256  1aaadcd69338252ade4f7ec1265e1a19184bf916d84c9b7df095f423948cb89f  build-0.7.0.tar.gz
++md5  307632355e32c3769c99da66f92fe020  build-0.8.0.tar.gz
++sha256  887a6d471c901b1a6e6574ebaeeebb45e5269a79d095fe9a8f88d6614ed2e5f0  build-0.8.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a6554cb737ba6c9b47d3301f78de03b4ed0d3f08d6cf9400714f3d4c894f6943  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 2abe5e04ef..8c9cb86863 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
+ sha256  aaf9a29ca5907971ccf07de025375db34539a8d5eeebce20b46099805722106f  LICENSE
+diff --git a/package/python-pypa-build/python-pypa-build.mk b/package/python-pypa-build/python-pypa-build.mk
+index dc8363f59e..de4894dc3a 100644
+--- a/package/python-pypa-build/python-pypa-build.mk
++++ b/package/python-pypa-build/python-pypa-build.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 9.1.0
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/4b/83/090146d7871d90a2643d469c319c1d014e41b315ab5cf0f8b4b6a764ef31
-+PYTHON_PILLOW_VERSION = 9.1.1
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/43/6e/59853546226ee6200f9ba6e574d11604b60ad0754d2cbd1c8f3246b70418
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
+-PYTHON_PYPA_BUILD_VERSION = 0.7.0
++PYTHON_PYPA_BUILD_VERSION = 0.8.0
+ PYTHON_PYPA_BUILD_SOURCE = build-$(PYTHON_PYPA_BUILD_VERSION).tar.gz
+-PYTHON_PYPA_BUILD_SITE = https://files.pythonhosted.org/packages/f0/62/c73b775216bb1f34962beaf005f38460c6161177fef6e068a7a0c30a1597
++PYTHON_PYPA_BUILD_SITE = https://files.pythonhosted.org/packages/52/fa/931038182be739955cf83179d9b9a6ce9832bc5f9a917a006f765cb53a1f
+ PYTHON_PYPA_BUILD_LICENSE = MIT
+ PYTHON_PYPA_BUILD_LICENSE_FILES = LICENSE
+ PYTHON_PYPA_BUILD_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
