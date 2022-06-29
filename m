@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A150FC43334
-	for <buildroot@archiver.kernel.org>; Wed, 29 Jun 2022 11:32:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A5FDC43334
+	for <buildroot@archiver.kernel.org>; Wed, 29 Jun 2022 12:04:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD10F4112E;
-	Wed, 29 Jun 2022 11:32:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD10F4112E
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDFDC612CB;
+	Wed, 29 Jun 2022 12:04:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDFDC612CB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZmJ2wAMtQyAg; Wed, 29 Jun 2022 12:04:54 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8AF3612D0;
+	Wed, 29 Jun 2022 12:04:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8AF3612D0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D8DC61BF407
+ for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 12:04:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B30714049F
+ for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 12:04:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B30714049F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wq4hgNLKMWvg; Wed, 29 Jun 2022 11:32:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF62240605;
-	Wed, 29 Jun 2022 11:32:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF62240605
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21D9F1BF4DA
- for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 11:32:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF87341A31
- for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 11:32:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF87341A31
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o4GAlxCtwZIk for <buildroot@lists.busybox.net>;
- Wed, 29 Jun 2022 11:32:51 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cf2hDUv78yCy for <buildroot@lists.busybox.net>;
+ Wed, 29 Jun 2022 12:04:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA42F41A2F
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com
- [IPv6:2607:f8b0:4864:20::32e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AA42F41A2F
- for <buildroot@buildroot.org>; Wed, 29 Jun 2022 11:32:51 +0000 (UTC)
-Received: by mail-ot1-x32e.google.com with SMTP id
- q18-20020a9d7c92000000b00616b27cda7cso10320448otn.9
- for <buildroot@buildroot.org>; Wed, 29 Jun 2022 04:32:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C4C040002
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
+ [IPv6:2607:f8b0:4864:20::136])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6C4C040002
+ for <buildroot@buildroot.org>; Wed, 29 Jun 2022 12:04:49 +0000 (UTC)
+Received: by mail-il1-x136.google.com with SMTP id k7so10115891ils.8
+ for <buildroot@buildroot.org>; Wed, 29 Jun 2022 05:04:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=+dIp/U77k0BV+oeQePKcycVyOUzz2CKe0gc5mo53kWM=;
- b=6owQg32/ZWhLKAfCH/cQ6Y02sSu52BALSsunpMwNNM4/GjLi6JG00TivgiOJl0anXU
- WXH2a8QDusrs83kClGojlOLq46z/EXlayR5faMaAA8WirsEeE7J4hiFOm8/+sjHK4UrG
- 9KFC9jp7W0ocMFY62JsvNDkpD5Zkh4N7LB52zvuyp45dnLF1hPev58uOsJ+VVAyrFk9N
- A2VwFitHsMlXsFlTwYmqZ1Vo2JvN6Rpj5drqG2WzB1GHhvEhKdlwsrF/hNbpGXHOgDfO
- TPMrPEZaM4dEj/44QlEq+NfuF39f9u9fydhkQdLfV0yjG5m2ad71bf8N1/oaFeO8zPUM
- FCnw==
-X-Gm-Message-State: AJIora9Td5LfSQf0HIkh5kXvqJxJq49bvBnIdHNog5BnvTrOJC64F90m
- q4jJm8Nt99goBCiu/j/dLHF5B7nQuj0=
-X-Google-Smtp-Source: AGRyM1sx8u8lg9LF3QlOHK2m4ozqGpCoLUv1lrWxqt8sX2pjpESPf8QYaR2as+5jGIQdQTjd4qFLCg==
-X-Received: by 2002:a9d:1c6:0:b0:617:865:c204 with SMTP id
- e64-20020a9d01c6000000b006170865c204mr387151ote.17.1656502370446; 
- Wed, 29 Jun 2022 04:32:50 -0700 (PDT)
+ bh=1Mq774gXY/bkuGYrYn6hjQeHW9aL/vVKwxFnd5hdFss=;
+ b=NwzceAHBWMTMz9fEvqvjrURHCKygRCJxvlwF2Tu7UyNI+mUs39BXVrrpN5tV6zHgrZ
+ q0I0QNmBd6XEyLEDVe5htOQYgLnWkK1cVsuRE1DR52RrZSKwuCLIwxSCxwTK1g4decWj
+ wtEgx5YXc3uMec4jYu9Ol1L5CE0t87pgnjD8gJJ72ChAZuJ4qqUsvXNVL1NHiMnR4cZ2
+ 1ec8h8lEQaOFg/kZ/+rc+XbjBY/3kL/ZvQwc7BIP0DUA6alLBbccLW5D347PNaUvezJr
+ Zh1PJaayoufeilR12qNbbsWBNJeELm31PNI4dUL/ak3S2Zh5FuQehGJ/myg545eJlRvj
+ s7lw==
+X-Gm-Message-State: AJIora/Lqq/4vx8y3I6yA4+2pTqC1GnhkyHoL0/As2ltHpK9whLm9Bcu
+ OHs2qUJ+udSseg86r48M5EhIIJ5aAO8=
+X-Google-Smtp-Source: AGRyM1vr3Xk3HJuB4KVRii2uWnS7W30Qp/OsLFfp6ys1MkeoxRXmUkxkA5QfLtsZVVa0ktGq1s7b1Q==
+X-Received: by 2002:a05:6e02:118f:b0:2da:6c3b:d56c with SMTP id
+ y15-20020a056e02118f00b002da6c3bd56cmr1833639ili.297.1656504288235; 
+ Wed, 29 Jun 2022 05:04:48 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-105-112.hlrn.qwest.net.
  [71.218.105.112]) by smtp.gmail.com with ESMTPSA id
- m13-20020a056870a40d00b001067f7f5004sm10918915oal.39.2022.06.29.04.32.49
+ n2-20020a5e8c02000000b00669ab35d790sm7824433ioj.8.2022.06.29.05.04.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Jun 2022 04:32:50 -0700 (PDT)
+ Wed, 29 Jun 2022 05:04:47 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Jun 2022 05:32:48 -0600
-Message-Id: <20220629113248.2317891-1-james.hilliard1@gmail.com>
+Date: Wed, 29 Jun 2022 06:04:45 -0600
+Message-Id: <20220629120445.2341504-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=+dIp/U77k0BV+oeQePKcycVyOUzz2CKe0gc5mo53kWM=;
- b=EowdSecaAFquOGTaKguhZb4pTHQ4D8qQzEJEKRsF3XjpM9F9lyJRa6QokN0OkKcXdv
- WevkvQayl0ssXHm58JklPxpq7xTO5+hKNF309cZJHc/TBLIN3Kx723FghiGhfHbTT2Tb
- Y0lCX63rfPKMxH/iwHkY0uuwOYt4BCH6eNY0YY47ADXxJyBuNnlUWJhb3T508JVzGOlR
- BrNtZOdiXVQDNd9vCaOA7SON5Dl3AE4AgQGVPylmTbu8ePXdO4qljmpkwwR6VTBcV6uF
- m+/P6FU6OIrdZZD/xGqEwZk0OG9yK7U0kfXgtFkc9vU+1yPilhVERY9elxS3vUOxLpI7
- HZlw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=1Mq774gXY/bkuGYrYn6hjQeHW9aL/vVKwxFnd5hdFss=;
+ b=QnIIMAeKLdnH42on36h1oxM8XJBKFxTcvWVvVbIvKUYHl3VAjTQBc/IldPAmIS7Uxn
+ 7ep7IwfK7ckyV5jetevVAw7enPHftU62KpaAvwEz/rZqUcmWdm2n68U/ReTChWEpXgby
+ o6GdO7La6ekpgre/aHg+lxbOKxjEywphEBTufJjfRlrQiFLsOtxdsM66dmF86Nmz4s91
+ irROWaEZTLF+PZo8bVC/RidRDoHwyBD/5o5KDuCJ54UyI9CMYXkCSg4tF1sP9u/asDmn
+ +Ne2BIGVH8a/kbFN1G1+gfl1pgcWFZkK4BxNnySPiy2P+6lMCD6DdzR0C7gzVvFPPXo7
+ u3Xw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=EowdSeca
-Subject: [Buildroot] [PATCH 1/1] package/weston: bump to version 10.0.1
+ header.a=rsa-sha256 header.s=20210112 header.b=QnIIMAeK
+Subject: [Buildroot] [PATCH 1/1] package/python-cssutils: bump to version
+ 2.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,9 +93,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,41 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/weston/weston.hash | 10 +++++-----
- package/weston/weston.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-cssutils/python-cssutils.hash | 4 ++--
+ package/python-cssutils/python-cssutils.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index b78a7c7550..951d62a100 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2022-February/042103.html
--md5  bc4abe2ee6904a4890a0c641c6257f91  weston-10.0.0.tar.xz
--sha1  b1a51e3bb7ee1d75bbf728c8071771e07fc97fdd  weston-10.0.0.tar.xz
--sha256  5c23964112b90238bed39e5dd1e41cd71a79398813cdc3bbb15a9fdc94e547ae  weston-10.0.0.tar.xz
--sha512  77e05530751e4f743eebf015ab5b78a1fcc66b774713b5e296cfffc488be84e459f811c85ac4280b7b63eebf4ff5c958dd7306376ab343e6b80feae16c8c35a4  weston-10.0.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2022-June/042260.html
-+md5  dac91aecc97a85bf9664dec0d5c90ae3  weston-10.0.1.tar.xz
-+sha1  87cc339503f01317a0ca8d986b1b211c8aae99bb  weston-10.0.1.tar.xz
-+sha256  8a9e52506a865a7410981b04f8341b89b84106db8531ab1f9fdd37b5dc034115  weston-10.0.1.tar.xz
-+sha512  688d843096a95b463161b98e85ca3443b31ba2ee49fc8d456a2780cc96f576e9d097054e9f361997a66e9cc8373cf29e406a742dae3884b3b50b26acf1710c8c  weston-10.0.1.tar.xz
- sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 90cf160688..76df9bf2dd 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/python-cssutils/python-cssutils.hash b/package/python-cssutils/python-cssutils.hash
+index 13459f7270..065c8ac1f3 100644
+--- a/package/python-cssutils/python-cssutils.hash
++++ b/package/python-cssutils/python-cssutils.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/cssutils/json
+-md5  4ae0e6c670483043260363f593e96a69  cssutils-2.4.0.tar.gz
+-sha256  2d97210a83b0a3fe1e4469f5ff9a6420b078572035188b1bab7103c3a36dc89b  cssutils-2.4.0.tar.gz
++md5  3b9acf80a22c44d2d12eb7e20533934a  cssutils-2.4.2.tar.gz
++sha256  877818bfa9668cc535773f46e6b6a46de28436191211741b3f7b4aaa64d9afbb  cssutils-2.4.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  03c570a068086ee577dcd795519ea93462b2ed2fcb6dcc4dfce56a71a2fd6e5a  COPYING.LESSER
+diff --git a/package/python-cssutils/python-cssutils.mk b/package/python-cssutils/python-cssutils.mk
+index fc65c893ac..beb5f1c8ff 100644
+--- a/package/python-cssutils/python-cssutils.mk
++++ b/package/python-cssutils/python-cssutils.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--WESTON_VERSION = 10.0.0
--WESTON_SITE = https://wayland.freedesktop.org/releases
-+WESTON_VERSION = 10.0.1
-+WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
+-PYTHON_CSSUTILS_VERSION = 2.4.0
++PYTHON_CSSUTILS_VERSION = 2.4.2
+ PYTHON_CSSUTILS_SOURCE = cssutils-$(PYTHON_CSSUTILS_VERSION).tar.gz
+-PYTHON_CSSUTILS_SITE = https://files.pythonhosted.org/packages/f4/ea/d09b04b5cf6ad84f45ca4c523d3e153dd9be1f12650c825d1c92ca0618a2
++PYTHON_CSSUTILS_SITE = https://files.pythonhosted.org/packages/d4/12/1aba9a6c91d92de011ff97a9320ad37e5565adfe0cc324deee58d5891d7a
+ PYTHON_CSSUTILS_LICENSE = LGPL-3.0+
+ PYTHON_CSSUTILS_LICENSE_FILES = COPYING.LESSER
+ PYTHON_CSSUTILS_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
