@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB630C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 29 Jun 2022 12:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4145FC43334
+	for <buildroot@archiver.kernel.org>; Wed, 29 Jun 2022 12:37:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A72741599;
-	Wed, 29 Jun 2022 12:32:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A72741599
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6617612DB;
+	Wed, 29 Jun 2022 12:37:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6617612DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1F1uVdquAh9s; Wed, 29 Jun 2022 12:32:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EeHMeN47NASV; Wed, 29 Jun 2022 12:37:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB9DF4158C;
-	Wed, 29 Jun 2022 12:32:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB9DF4158C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6D4E81BF407
- for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 12:32:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D450612DE;
+	Wed, 29 Jun 2022 12:37:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D450612DE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E6601BF407
+ for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 12:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47D87840A0
- for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 12:32:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47D87840A0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3654B41760
+ for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 12:37:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3654B41760
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QvPbjbiSE5Ov for <buildroot@lists.busybox.net>;
- Wed, 29 Jun 2022 12:32:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HVp7aYqXkhHl for <buildroot@lists.busybox.net>;
+ Wed, 29 Jun 2022 12:37:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5586784094
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
- [IPv6:2607:f8b0:4864:20::133])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5586784094
- for <buildroot@buildroot.org>; Wed, 29 Jun 2022 12:32:35 +0000 (UTC)
-Received: by mail-il1-x133.google.com with SMTP id f15so9702551ilj.11
- for <buildroot@buildroot.org>; Wed, 29 Jun 2022 05:32:35 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03381408EA
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 03381408EA
+ for <buildroot@buildroot.org>; Wed, 29 Jun 2022 12:37:31 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id i17so10141737ils.12
+ for <buildroot@buildroot.org>; Wed, 29 Jun 2022 05:37:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=ntaA4flUmlLxuEOtXf4PgIds6K033X07aIqERUdGyac=;
- b=jpuvdWkkA03rHZugjT2BAV3nBeoSpM1nKZC2LAy0AZ0WyOerI0f7AzoaES3vIfEJlZ
- s3NqPmj2VurOdQwpqnmPwqtGfyhgAbJhLptbQjGWkYZvb45Y9TMzcdjrZA2yLjiU3MQl
- DcMR9VZSDQzFS9D+oDppn5aMj9krTFzjf/EDCt1JxYUfdTKugDJYKuqmWIqANDNsl1Va
- IZcoi3Rf7jH0XsCbaWjOjLJIMiwKuwHSjKlxR+rOpY8sGy0YfWdKd8v4HL74FUl2Go+2
- 4+XE5C9+xOOE/n81VeaWQgh6m+ij6Hxi419GoVQdr4/0kNce7UBqULEuo8TJKe1K5md/
- R/GA==
-X-Gm-Message-State: AJIora8pRRkrHCYW6QsQ2UBZxKvZS7J3XLr44cIlv2YuZdpBqgn6b65K
- 9pwcWhtWrrnpJ/j8loVpWSBtsgPCwBQ=
-X-Google-Smtp-Source: AGRyM1suT6NVzFZ3ZufNl4kcacNbsD3bT1UtyvWtmixDxR3E6GN5pEMx0ixKsJjmG0t8J7rRriE1sw==
-X-Received: by 2002:a92:c547:0:b0:2da:9950:1402 with SMTP id
- a7-20020a92c547000000b002da99501402mr1754661ilj.301.1656505954298; 
- Wed, 29 Jun 2022 05:32:34 -0700 (PDT)
+ bh=lRqg+Tdv1jvYehFc3ulGH3YnK9Mmt2sAveIpUxoFZ2I=;
+ b=jKUl6ZZLICtZ3BpfGBeeBBzkGl3y36+6vEAtzxhsTzfmmhRYWNvTlXIYUEBlpOsJi/
+ IuFwGrC9iYedorqksHV4hcTQf9Qpf5Xk5BuT5t8viaq8ZUX2BB4sQkj25wNnLHwmmk9e
+ j7Ff8hdcyFWhIYaYV70LQE+2HfB7Z7QE0Jb5By2y5SBg1Z6JV2GJsvmfzQkRasIOA7m1
+ XIBBISznyheKW0pw/9+VQ3ZcSNJhRH1IAv5EyYBTyAFY9Hl3iCCZ2jPXlyA4XtBhhrkC
+ jul050pbIpYtUnaFymgYAhdeLtn52D3XCOXPodszwQ9CTP+Pdnr1yTv2j5kFU20JaKxs
+ jKzg==
+X-Gm-Message-State: AJIora/MKgLZgVvPe4HfoxddGCAQosh8uCA+Y6vYC1Twhqm9MqFQZXRY
+ r4Oq+zx9pBoWNaL9zrHFqs3iZswvq4k=
+X-Google-Smtp-Source: AGRyM1uR0J3bV9ujNVesuEA/a9F23ixukir9Z2+B8R23F5kRCU5658LAbZRK3/b/ClsBzbTbTKXNSQ==
+X-Received: by 2002:a92:ca45:0:b0:2da:823a:5f17 with SMTP id
+ q5-20020a92ca45000000b002da823a5f17mr1811436ilo.155.1656506250949; 
+ Wed, 29 Jun 2022 05:37:30 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-105-112.hlrn.qwest.net.
  [71.218.105.112]) by smtp.gmail.com with ESMTPSA id
- u194-20020a0223cb000000b0033197f42be0sm7238577jau.157.2022.06.29.05.32.33
+ s12-20020a92d90c000000b002d92c91da91sm6921697iln.77.2022.06.29.05.37.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Jun 2022 05:32:33 -0700 (PDT)
+ Wed, 29 Jun 2022 05:37:30 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Jun 2022 06:32:31 -0600
-Message-Id: <20220629123231.2413887-1-james.hilliard1@gmail.com>
+Date: Wed, 29 Jun 2022 06:37:26 -0600
+Message-Id: <20220629123726.2418018-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=ntaA4flUmlLxuEOtXf4PgIds6K033X07aIqERUdGyac=;
- b=Gn9FiHqu5AxfqiAhCfiS1XRAwdNb1uByVIRHxXc08sftx0QUHN3bhFXQkjnlsroysY
- Z68css0cYc0jW/3fCk/mZtCcrCOOjfc4qcZSchvVIqnHzgtoF2NOY4mfr7xibJOh4GL7
- 8XthfDhWhkuW3b797o4caa1380wYVSaAMl8BDpUyQkSgi3GAcO1qxDltWFHVCRQwqsp/
- z3mjo1r6y8h6zQsn+vu1bm08ZPz787Ulua/8dGumhoUjGfVkO43hKMD/kjw3qk8DiiXr
- rdVQrxLkiXzhf9xTq6ssDmF2aGjEK1OYwPOp+5SjB99shgTvl+1AugocgJVxL60iZXC3
- 7qaA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=lRqg+Tdv1jvYehFc3ulGH3YnK9Mmt2sAveIpUxoFZ2I=;
+ b=l1CJ6SbqfKcxmRvLqa/7R1ENXPtlv44n4mXhyL3CvjWVPcRazAzCViceJKVTPvfeAN
+ 2bPC2rumb1BPPbM6Fs4rQQESJ2swTzCA9B5/fhufuWx2PkEECey5hwp3OTfaFa9lCa17
+ z0QiN0fak6ZSRkUG2bsMRC+db495dFsuG2GrARQhESM8HZJ71jQcX6TXbTEEwoCpyEBE
+ PSZGvAyOrUCRv25ocV1O8I15FJ8ZDWbDnUGBawCm5u1oQw/c+4vgIvog3ndeQyFS5Fvv
+ k587OXjfsO2MdgmbgkOfNT4uKVrKueAL+6dotvPUjJwnESSjI2rkV+XIifesP05+hsl4
+ Yl/w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Gn9FiHqu
-Subject: [Buildroot] [PATCH 1/1] package/python-pyparsing: bump to version
- 3.0.9
+ header.a=rsa-sha256 header.s=20210112 header.b=l1CJ6Sbq
+Subject: [Buildroot] [PATCH 1/1] package/python-setuptools-scm: bump to
+ version 7.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,8 +93,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,38 +101,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyparsing/python-pyparsing.hash | 4 ++--
- package/python-pyparsing/python-pyparsing.mk   | 4 ++--
+ package/python-setuptools-scm/python-setuptools-scm.hash | 4 ++--
+ package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-index e7137d55c9..90242bb2e2 100644
---- a/package/python-pyparsing/python-pyparsing.hash
-+++ b/package/python-pyparsing/python-pyparsing.hash
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
+index 934c505442..d8ec915862 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.hash
++++ b/package/python-setuptools-scm/python-setuptools-scm.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyparsing/json
--md5  971252e99e1e02a4c27f001894e0422d  pyparsing-3.0.8.tar.gz
--sha256  7bf433498c016c4314268d95df76c81b842a4cb2b276fa3312cfb1e1d85f6954  pyparsing-3.0.8.tar.gz
-+md5  fadc2f3bf5872bf6310576a86c3566e0  pyparsing-3.0.9.tar.gz
-+sha256  2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb  pyparsing-3.0.9.tar.gz
- # Locally computed sha256 checksums
- sha256  10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index 7e458042f5..55516c3ce8 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
+ # md5, sha256 from https://pypi.org/pypi/setuptools-scm/json
+-md5  b4e02bf8e62ed49142ea7b42a68671d7  setuptools_scm-6.4.2.tar.gz
+-sha256  6833ac65c6ed9711a4d5d2266f8024cfa07c533a0e55f4c12f6eff280a5a9e30  setuptools_scm-6.4.2.tar.gz
++md5  86fe71422781939dd492cd73c93cebac  setuptools_scm-7.0.3.tar.gz
++sha256  cf8ab8e235bed840cd4559b658af0d8e8a70896a191bbc510ee914ec5325332d  setuptools_scm-7.0.3.tar.gz
+ # sha256 locally computed
+ sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSE
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
+index 132eb398aa..890ee0c9c1 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.mk
++++ b/package/python-setuptools-scm/python-setuptools-scm.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPARSING_VERSION = 3.0.8
-+PYTHON_PYPARSING_VERSION = 3.0.9
- PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
--PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/31/df/789bd0556e65cf931a5b87b603fcf02f79ff04d5379f3063588faaf9c1e4
-+PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/71/22/207523d16464c40a0310d2d4d8926daffa00ac1f5b1576170a32db749636
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
- PYTHON_PYPARSING_SETUP_TYPE = flit
+-PYTHON_SETUPTOOLS_SCM_VERSION = 6.4.2
++PYTHON_SETUPTOOLS_SCM_VERSION = 7.0.3
+ PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/4a/18/477d3d9eb2f88230ff2a41de9d8ffa3554b706352787d289f57f76bfba0b
++PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/bc/e6/ac8b0c5076321b9b3e4318c32a8911a260d019be6584556a0b83a47dab4b
+ PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
+ PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
