@@ -1,89 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B51AC43334
-	for <buildroot@archiver.kernel.org>; Thu, 30 Jun 2022 22:03:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65856C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Jun 2022 22:04:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C78D460B68;
-	Thu, 30 Jun 2022 22:03:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C78D460B68
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD73684633;
+	Thu, 30 Jun 2022 22:04:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD73684633
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v6ogeje-odOH; Thu, 30 Jun 2022 22:03:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cflXFzBz-JiR; Thu, 30 Jun 2022 22:04:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD21360F97;
-	Thu, 30 Jun 2022 22:03:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD21360F97
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0A6731BF349
- for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 22:03:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0AFA184514;
+	Thu, 30 Jun 2022 22:04:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AFA184514
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CF8E1BF27C
+ for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 22:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E67C4408F2
- for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 22:03:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E67C4408F2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04CF140B51
+ for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 22:04:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04CF140B51
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NhfYPX9CDPI7 for <buildroot@lists.busybox.net>;
- Thu, 30 Jun 2022 22:03:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hxkBZGI3xjkB for <buildroot@lists.busybox.net>;
+ Thu, 30 Jun 2022 22:04:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C879408F1
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9C879408F1
- for <buildroot@buildroot.org>; Thu, 30 Jun 2022 22:03:26 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- u12-20020a05600c210c00b003a02b16d2b8so428370wml.2
- for <buildroot@buildroot.org>; Thu, 30 Jun 2022 15:03:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1914D40B49
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1914D40B49
+ for <buildroot@buildroot.org>; Thu, 30 Jun 2022 22:04:44 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id b26so537110wrc.2
+ for <buildroot@buildroot.org>; Thu, 30 Jun 2022 15:04:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=/TiPerWAunI+HKbj5JQYWkGnySc4yag9pv/s8dQThYA=;
- b=y8qeUZ2bKnwx52OKvIN3QnfmTgS03sYeuw9DDcRVXsIZwSCfyM8xvGK2EeiLWhKcGY
- daEdVLH0rbwtdTGDdx8WwmJpu6Sa7j4lwx5y0h+dGHEFrGuovj9wG+frqvyWAxvEEy3M
- +hx/h6pix5tj2vgQAfTFWm462FQAOTctBApDoZztwE282AcB/pA3lSK6//QuJwRQm9E4
- 4bWFaefOhr+VB8dGHbr1mE6t2YlBEh+/yEXG3aiGlsZwpytLqGyJ/YSS9gmjJe6HVbHT
- pU8v8MCrzKwACwiYL2+/TvToZ/uhLFhDZ9xSV/kKcMVFkeNnPxyEGtxk4eWvmO+3lfQc
- ePnw==
-X-Gm-Message-State: AJIora8w32stDlyG3oS0KoKDh1HjJHAdUTQ0qYlnihtVOkz85YP+ShkK
- DgWk036YegcVwE9OEKk8AH77zWP/9RI=
-X-Google-Smtp-Source: AGRyM1tgBATfeIVprqWkitkQFm1tT18EoR8o+eFbc/6cU2kl1TYoyNLONvEnvhIDENGP6bETS6OgSw==
-X-Received: by 2002:a05:600c:4fd4:b0:3a0:334e:241e with SMTP id
- o20-20020a05600c4fd400b003a0334e241emr14750508wmq.73.1656626604521; 
- Thu, 30 Jun 2022 15:03:24 -0700 (PDT)
+ bh=5xuCB4jY12Nc6AMh6ksgh2a2aSZduPxssxRzD1bspbU=;
+ b=YQMgiTdxKE6jbbvntubN/NI3CfKhpZfkqgNl14b1bw59dAXYNNOZu7dqS3KSxF9zm6
+ iZO6PjBYx+vDWdTQ7KJ3mt+qXLFCh/r1mavR4L2Cefoj6KzhC8+T2VZTMHtsGE9eXYdF
+ gMcl6qWtHMc96AuIo0VjsoplNUr45VOOPGo9yhuostOEfDUU0yULJOLXNykJA52a8Ogv
+ /v2qtIEw9wp6HkFmHJh6nsadR1vbeKiTJwNuSkzZlDv9kja92x1p6UNPAbUwHDEugQXj
+ MFMAnODxgOLBkJcHPkDx8+sE7WQGfWZk04QX2tLVfevETkG4r+tzfB5/53yDn9ZeEttL
+ mRyA==
+X-Gm-Message-State: AJIora8lmeTZWJHUXFWy/tMQLMWEbYlb3i/eQOC29TNlHYUw6cWR6KGO
+ u3Yo6/aGe2+G/aeyOdNjquWhdKjg9+w=
+X-Google-Smtp-Source: AGRyM1uWMdCxWtJfqJYQddqQrGRB8YRf2+B+RpbS2/k9mKrsidTThMXAv6W8rboK5rslNmQEHiVSdQ==
+X-Received: by 2002:a5d:6888:0:b0:21b:b983:de53 with SMTP id
+ h8-20020a5d6888000000b0021bb983de53mr10834591wru.0.1656626683177; 
+ Thu, 30 Jun 2022 15:04:43 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- l34-20020a05600c1d2200b003a03e63e428sm5392439wms.36.2022.06.30.15.03.23
+ bn24-20020a056000061800b0020fe35aec4bsm19610969wrb.70.2022.06.30.15.04.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Jun 2022 15:03:23 -0700 (PDT)
+ Thu, 30 Jun 2022 15:04:42 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  1 Jul 2022 00:00:26 +0200
-Message-Id: <20220630220026.707180-1-fontaine.fabrice@gmail.com>
+Date: Fri,  1 Jul 2022 00:01:53 +0200
+Message-Id: <20220630220153.707462-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=/TiPerWAunI+HKbj5JQYWkGnySc4yag9pv/s8dQThYA=;
- b=qEeXWShowCBczZckHOHwQhobl2HEyfQW1em4STzSASoVuz1/u1YdsNzaa1BaTA6p5n
- 6PZPkoPCOo2a1/Q8KL6TuIV13R6+5K4UFwYnW/qDm343HHOeDpxARmcgHBR00IivLunR
- S4pcEkKWNhwzZV7xr6RJOqb39ejclqhy1sWLRVhhuef81wUMa0a2tJAbvwDgXrzx985y
- +cgB1ttRlFaywFYp56s08PFzPApy1IR6j+EpTDXRecQlCwoc4Q/ScdUIJCPd+SfihRgH
- nI3jWSWOC2GNMEK3cTqA/90w9EiMKwZAA3f/Cn6WCBqVXoH7LoQZ/a8dzAiJlNzGsIg6
- qq1Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=5xuCB4jY12Nc6AMh6ksgh2a2aSZduPxssxRzD1bspbU=;
+ b=UbCBSaUg/ujwvpNrjKUbxzHUMu9d611cUESp9TsmlhIhA+Rb4usZ+EPuPTvbfvUlGM
+ eSc0MDmdWJDzJQ1uwn469MkjQfKhJcoQOP/lnwQxWrhLtzgAhtXm/sQEQZVHWcEBGPVC
+ L4U+jOvVD/NrDGxPmvNOjGxbHxpqUyS+72cySt6dW0IK40a8OLNkvXhMR/0G+SbGmFt+
+ 7y+TWMYnuvFS905cwvPOnALDrUMmACaEzbZfEQQM1WO8yBpM4oRfNhG/h9OJ5Y99hhlX
+ NAnIWhkP0sBO+/mAjGXUoPuuaTXmFHactbghUKU/qzQvLwNVyhcWrX85kEZhFh/OQ6EE
+ MQNw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=qEeXWSho
-Subject: [Buildroot] [PATCH 1/1] package/libgpgme: fix
- LIBGPGME_CPE_ID_PRODUCT
+ header.a=rsa-sha256 header.s=20210112 header.b=UbCBSaUg
+Subject: [Buildroot] [PATCH 1/1] package/keyutils: add KEYUTILS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,32 +93,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix typo added by commit 6b79c8fb05bf1ae569d8b8e8c9f6f516e97c9ae0
+cpe:2.3:a:keyutils_project:keyutils is a valid CPE identifier for this
+package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akeyutils_project%3Akeyutils
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libgpgme/libgpgme.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/keyutils/keyutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index f61e9fe41a..b42a1a363a 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
-@@ -10,7 +10,7 @@ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
- LIBGPGME_LICENSE = LGPL-2.1+
- LIBGPGME_LICENSE_FILES = COPYING.LESSER
- LIBGPGME_CPE_ID_VENDOR = gnupg
--LIBGPGME_CPE_ID_PRODUCT = gpgpme
-+LIBGPGME_CPE_ID_PRODUCT = gpgme
- LIBGPGME_INSTALL_STAGING = YES
- LIBGPGME_DEPENDENCIES = libassuan libgpg-error
- LIBGPGME_CONFIG_SCRIPTS = gpgme-config
+diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
+index cba57cf199..5af5c4e92c 100644
+--- a/package/keyutils/keyutils.mk
++++ b/package/keyutils/keyutils.mk
+@@ -8,6 +8,7 @@ KEYUTILS_VERSION = 1.6.3
+ KEYUTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot
+ KEYUTILS_LICENSE = GPL-2.0+, LGPL-2.1+
+ KEYUTILS_LICENSE_FILES = LICENCE.GPL LICENCE.LGPL
++KEYUTILS_CPE_ID_VENDOR = keyutils_project
+ KEYUTILS_INSTALL_STAGING = YES
+ 
+ KEYUTILS_MAKE_PARAMS = \
 -- 
 2.35.1
 
