@@ -4,74 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE61EC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 29 Jun 2022 22:10:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4124AC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Jun 2022 03:51:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18490402D7;
-	Wed, 29 Jun 2022 22:10:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18490402D7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8E33D404A8;
+	Thu, 30 Jun 2022 03:51:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E33D404A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gA-XQVt2ZH97; Wed, 29 Jun 2022 22:10:07 +0000 (UTC)
+	with ESMTP id KnTh2hKeSO9Z; Thu, 30 Jun 2022 03:51:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E3A3402E5;
-	Wed, 29 Jun 2022 22:10:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E3A3402E5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CE04E1BF3AF
- for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 22:10:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A9B0740949;
+	Thu, 30 Jun 2022 03:50:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9B0740949
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 49D771BF9C2
+ for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 03:50:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7B3A402D7
- for <buildroot@lists.busybox.net>; Wed, 29 Jun 2022 22:10:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7B3A402D7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1DAA041B60
+ for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 03:50:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DAA041B60
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4Zmw2M4wHMu7 for <buildroot@lists.busybox.net>;
- Wed, 29 Jun 2022 22:10:02 +0000 (UTC)
-X-Greylist: delayed 00:05:52 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF13C40131
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.181])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AF13C40131
- for <buildroot@buildroot.org>; Wed, 29 Jun 2022 22:10:02 +0000 (UTC)
-Received: from 1o6fn6-0001Ja-UA by out3b.electric.net with emc1-ok (Exim
- 4.94.2) (envelope-from <kris@embeddedTS.com>)
- id 1o6fn7-0001L3-Tc; Wed, 29 Jun 2022 15:04:09 -0700
-Received: by emcmailer; Wed, 29 Jun 2022 15:04:09 -0700
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
- by out3b.electric.net with esmtps (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2)
- (envelope-from <kris@embeddedTS.com>)
- id 1o6fn6-0001Ja-UA; Wed, 29 Jun 2022 15:04:08 -0700
-Received: from tsdebian.Massive (97-120-89-198.ptld.qwest.net [97.120.89.198])
- by mail.embeddedts.com (Postfix) with ESMTPSA id A893318C22;
- Wed, 29 Jun 2022 15:04:07 -0700 (MST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RlkvvRk0FVhF for <buildroot@lists.busybox.net>;
+ Thu, 30 Jun 2022 03:50:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 757CC41B5D
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com
+ [IPv6:2a00:1450:4864:20::641])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 757CC41B5D
+ for <buildroot@buildroot.org>; Thu, 30 Jun 2022 03:50:55 +0000 (UTC)
+Received: by mail-ej1-x641.google.com with SMTP id lw20so36490266ejb.4
+ for <buildroot@buildroot.org>; Wed, 29 Jun 2022 20:50:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Wy1/KXmbLVp7R+/6sfbg/6Kxrq+jIjvwRcPMj7+iSOk=;
+ b=EkxAZr+cZFs3CJe14D9UwHgUruuGD49AOxvGuyUddm9vXcY64ij2KRRHEMJ31OQYhk
+ y9n0QSqUwIdUujpH1j9YuAXTh4wgdED0JcFBqMkLPugovXmOft2arpiE3Zl2om4cn51L
+ rZiaeyNDPwtThRzb6QMGUcLUDw170eEgKdgZRLQhtYPOobCi/kX0sDaVRDxMEe7NVIiP
+ qeqXzrQN+3TzOs+u/oPz3u/lTrc2voJBqWH07Qn8rOQornuPVMhWNV76+lgajRsDJhJs
+ MBk+7yBdHrY5xs0ofcuFhGNQKH1WVEH5wnIp8ejYRt0iqDBWKSjnG20uyDR9Nn+e2L5C
+ kSqw==
+X-Gm-Message-State: AJIora+l08eOp9otuIqwFPhtrPDVxJQ0YE+M9mHKvVNbDHofjS0fj9tM
+ TjymYZFnW9Y5XZrRt0FfKQDtZX0lYknczd1R
+X-Google-Smtp-Source: AGRyM1tGhol0PaKbqMYzHa+C+AL6DpqWhkVWL+k6GS7EjB16lOBnAWwbIkdaCnYXWM4AnYlOJL8ShA==
+X-Received: by 2002:a17:907:3e13:b0:726:eebc:3461 with SMTP id
+ hp19-20020a1709073e1300b00726eebc3461mr6519295ejc.528.1656561053216; 
+ Wed, 29 Jun 2022 20:50:53 -0700 (PDT)
+Received: from smartcross-dev.lan ([185.217.109.52])
+ by smtp.gmail.com with ESMTPSA id
+ w3-20020a1709067c8300b00722fc0779e3sm8555001ejo.85.2022.06.29.20.50.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 29 Jun 2022 20:50:52 -0700 (PDT)
+From: SmartCross Developer <andreadaoud6@gmail.com>
+X-Google-Original-From: SmartCross Developer <dev@smartcross.io>
 To: buildroot@buildroot.org
-Date: Wed, 29 Jun 2022 15:03:32 -0700
-Message-Id: <20220629220332.14157-1-kris@embeddedTS.com>
-X-Mailer: git-send-email 2.11.0
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS: TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
-X-Authenticated_ID: 
-X-Virus-Status: Scanned by VirusSMART (c)
-X-Virus-Status: Scanned by VirusSMART (b)
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;
- h=Message-Id:Date:To:From; bh=KOVyv5EjKFtQH4DAHiOeNxNKKvJyHrNtRa6KI7bc7B0=;
- b=PdZj+341f4xNqqzhgNrSFJHprAflpaL8iUQTkp9OQypXmeTQPb2Fst0DLH2/qtomScTFRZA5k4ZJczXf+pd/nWVKu/O4wNl0GeOHYmdjIVM4VU4wm7m8mCDNzijNnodkLQaUs1LOrr23toKhk9QUIpeO26H5QkhZtcNJi9Hloo1e1Z1BdvFP3v+J4y38fulYdxM3Nke6XB7E/QUrVLO6FtuRsfwWNLGPRyb/oyAEdkviLeSVQgsgkucTaeEokOz5VKoLcCQKLShGDNTACyLcRxIG98YNdSyUrtjxToMK1IG6/CupvynzKsHpcJ2GYz2BzYlI5y2yd1gKBlUzeAbwIg==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=embeddedTS.com header.i=@embeddedTS.com
- header.a=rsa-sha256 header.s=mailanyone20220121 header.b=PdZj+341
-Subject: [Buildroot] [PATCH 1/1] package/wilc-firmware: bump version to 15.7
+Date: Thu, 30 Jun 2022 11:50:28 +0800
+Message-Id: <20220630035028.3090253-1-dev@smartcross.io>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Wy1/KXmbLVp7R+/6sfbg/6Kxrq+jIjvwRcPMj7+iSOk=;
+ b=ea860PFEnh0TDtWYONxA1WNRuYqLFC5S2kRbtV9oFWIo7eziSakSNgt4wDLxSJBOGU
+ jBvpro2U68AckjQypc9JAeCvUdK0Eb0XNK+cDKZUWjSVrB/CoNs9tTvEpK1Lw3lbqE6F
+ 2h2+gD2wGLaNWpH7miiQLAE1dXn2CxhGavYvHL47CdjUYGxUMglOOn7xfgwdxNzwHo8a
+ HaZ9A5CKDK4s6Ufhg3KUK4C4ueA56j0yPRUgZHUiPBfDyf1cgBI1BqB6OxA8Lu2cX25o
+ b+skUaooo5NCHD/81jOQolW/uxRIO7Tjcc7LWbPKzDZc6N1fDHFm4GLQGkV2/NBKlqX+
+ NrLg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=ea860PFE
+Subject: [Buildroot] [PATCH 1/1] package/stm32flash: bump to version 0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,46 +93,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kris Bahnsen via buildroot <buildroot@buildroot.org>
-Reply-To: Kris Bahnsen <kris@embeddedTS.com>
-Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
- Kris Bahnsen <kris@embeddedTS.com>, Mark Featherston <mark@embeddedTS.com>
-MIME-Version: 1.0
+Cc: Andrea Daoud <andreadaoud6@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Bernhard Petschina <bernhard.petschina@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+From: Andrea Daoud <andreadaoud6@gmail.com>
+
+    Bump to latest official version.
+
+Signed-off-by: Andrea Daoud <andreadaoud6@gmail.com>
 ---
- package/wilc-firmware/wilc-firmware.hash | 2 +-
- package/wilc-firmware/wilc-firmware.mk   | 2 +-
+ package/stm32flash/stm32flash.hash | 2 +-
+ package/stm32flash/stm32flash.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wilc-firmware/wilc-firmware.hash b/package/wilc-firmware/wilc-firmware.hash
-index 874766aec0..6e7850df16 100644
---- a/package/wilc-firmware/wilc-firmware.hash
-+++ b/package/wilc-firmware/wilc-firmware.hash
+diff --git a/package/stm32flash/stm32flash.hash b/package/stm32flash/stm32flash.hash
+index 7039f06eec..afffbc68ac 100644
+--- a/package/stm32flash/stm32flash.hash
++++ b/package/stm32flash/stm32flash.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  29bb5739136cdb4088cb52af59badce05cc7e562bca40e9f29fef7f8f7c19cb8  wilc-firmware-wilc_linux_15_6.tar.gz
-+sha256  2c2e2927a65fe4d7ec2f9872fca35c6b7bf12090ac62116d63c5f17b95a3a786  wilc-firmware-wilc_linux_15_7.tar.gz
- sha256  71355eee947a312594dbdaac039827544f93d23949b65c356b7b0ce09e2600fb  LICENSE.wilc_fw
-diff --git a/package/wilc-firmware/wilc-firmware.mk b/package/wilc-firmware/wilc-firmware.mk
-index 1a7ceca18e..e31829d430 100644
---- a/package/wilc-firmware/wilc-firmware.mk
-+++ b/package/wilc-firmware/wilc-firmware.mk
+ # Locally computed:
+-sha256  ee9b40d4d3e5cd28b993e08ae2a2c3c559b6bea8730cd7e1d40727dedb1dda09  stm32flash-0.6.tar.gz
++sha256  c4c9cd8bec79da63b111d15713ef5cc2cd947deca411d35d6e3065e227dc414a  stm32flash-0.7.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  gpl-2.0.txt
+diff --git a/package/stm32flash/stm32flash.mk b/package/stm32flash/stm32flash.mk
+index 6e38e09d98..1fff27df76 100644
+--- a/package/stm32flash/stm32flash.mk
++++ b/package/stm32flash/stm32flash.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WILC_FIRMWARE_VERSION = wilc_linux_15_6
-+WILC_FIRMWARE_VERSION = wilc_linux_15_7
- WILC_FIRMWARE_SITE = $(call github,linux4wilc,firmware,$(WILC_FIRMWARE_VERSION))
- 
- WILC_FIRMWARE_LICENSE = PROPRIETARY
+-STM32FLASH_VERSION = 0.6
++STM32FLASH_VERSION = 0.7
+ STM32FLASH_SITE = http://downloads.sourceforge.net/project/stm32flash
+ STM32FLASH_LICENSE = GPL-2.0+
+ STM32FLASH_LICENSE_FILES = gpl-2.0.txt
 -- 
-2.11.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
