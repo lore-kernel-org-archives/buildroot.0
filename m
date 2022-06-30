@@ -1,77 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F6FC43334
-	for <buildroot@archiver.kernel.org>; Thu, 30 Jun 2022 21:21:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B51AC43334
+	for <buildroot@archiver.kernel.org>; Thu, 30 Jun 2022 22:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FF6540B48;
-	Thu, 30 Jun 2022 21:21:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FF6540B48
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vx0hAKveHL28; Thu, 30 Jun 2022 21:21:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4F5FE40B42;
-	Thu, 30 Jun 2022 21:21:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F5FE40B42
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D9DD41BF37C
- for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 21:21:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B397960F7E
- for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 21:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B397960F7E
+	by smtp3.osuosl.org (Postfix) with ESMTP id C78D460B68;
+	Thu, 30 Jun 2022 22:03:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C78D460B68
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ozVyAAG8JJAK for <buildroot@lists.busybox.net>;
- Thu, 30 Jun 2022 21:21:13 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v6ogeje-odOH; Thu, 30 Jun 2022 22:03:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD21360F97;
+	Thu, 30 Jun 2022 22:03:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD21360F97
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A6731BF349
+ for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 22:03:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E67C4408F2
+ for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 22:03:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E67C4408F2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NhfYPX9CDPI7 for <buildroot@lists.busybox.net>;
+ Thu, 30 Jun 2022 22:03:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40A0060B6C
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com
- [IPv6:2607:f8b0:4864:20::f2f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 40A0060B6C
- for <buildroot@buildroot.org>; Thu, 30 Jun 2022 21:21:13 +0000 (UTC)
-Received: by mail-qv1-xf2f.google.com with SMTP id cu16so1151245qvb.7
- for <buildroot@buildroot.org>; Thu, 30 Jun 2022 14:21:13 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C879408F1
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9C879408F1
+ for <buildroot@buildroot.org>; Thu, 30 Jun 2022 22:03:26 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ u12-20020a05600c210c00b003a02b16d2b8so428370wml.2
+ for <buildroot@buildroot.org>; Thu, 30 Jun 2022 15:03:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to;
- bh=VrD2H0rFuJlIBwuvI3hblHmg4V+KvYX3+PEhNC/ON7A=;
- b=SxuBeFonzkjXXHWfaBNWJFhqzyLtg1DD/CBOE6Yip2ihGKUvUOGe4YWMFfaczb2qJ7
- y5b8p+zOCPIvqoDKi6ufvkR+2nztcwqwca4EHb1T7DA1pLf4WrmLCW36TyMvw+HNQMWe
- MaZKzvLfQp2v92Drv6EB2Jff+J0ZKR//RHTH7lX5RH0XRejtUkeca/tQ02fH6/rXlPbS
- eDgkY3TNb7wqsGHm71szbB9GhoSEHcC6PLzGcX5NHT4rne5Saoy01VlL00mCqXM7kuGt
- cmD6iAX/o0jVV7jbXi+3phrwbUPmhdeLx9WTZVsTUpbMm0xNWq7s5ZH91c9iWlJrlWwA
- Y9PQ==
-X-Gm-Message-State: AJIora+8g7tKxwODpGZoG9h4rbef9Gq0b1TB08a58SuJpmjMUWShWatP
- /jvFz+jtRjodPSesOYLXyrRur1PxvAk7VSCLQIE8qhYXfwsFPyAx
-X-Google-Smtp-Source: AGRyM1snhwHcTnnA3z7bDK0nuy/YjQ9aCzrfb7lLADYgrgMqwhe7IxrB4FiEnNuAYBc4Q9ls5sRltHBOWhZkQMZ/QyU=
-X-Received: by 2002:ad4:5bc1:0:b0:42d:758c:f694 with SMTP id
- t1-20020ad45bc1000000b0042d758cf694mr14426962qvt.99.1656624071600; Thu, 30
- Jun 2022 14:21:11 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=/TiPerWAunI+HKbj5JQYWkGnySc4yag9pv/s8dQThYA=;
+ b=y8qeUZ2bKnwx52OKvIN3QnfmTgS03sYeuw9DDcRVXsIZwSCfyM8xvGK2EeiLWhKcGY
+ daEdVLH0rbwtdTGDdx8WwmJpu6Sa7j4lwx5y0h+dGHEFrGuovj9wG+frqvyWAxvEEy3M
+ +hx/h6pix5tj2vgQAfTFWm462FQAOTctBApDoZztwE282AcB/pA3lSK6//QuJwRQm9E4
+ 4bWFaefOhr+VB8dGHbr1mE6t2YlBEh+/yEXG3aiGlsZwpytLqGyJ/YSS9gmjJe6HVbHT
+ pU8v8MCrzKwACwiYL2+/TvToZ/uhLFhDZ9xSV/kKcMVFkeNnPxyEGtxk4eWvmO+3lfQc
+ ePnw==
+X-Gm-Message-State: AJIora8w32stDlyG3oS0KoKDh1HjJHAdUTQ0qYlnihtVOkz85YP+ShkK
+ DgWk036YegcVwE9OEKk8AH77zWP/9RI=
+X-Google-Smtp-Source: AGRyM1tgBATfeIVprqWkitkQFm1tT18EoR8o+eFbc/6cU2kl1TYoyNLONvEnvhIDENGP6bETS6OgSw==
+X-Received: by 2002:a05:600c:4fd4:b0:3a0:334e:241e with SMTP id
+ o20-20020a05600c4fd400b003a0334e241emr14750508wmq.73.1656626604521; 
+ Thu, 30 Jun 2022 15:03:24 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ l34-20020a05600c1d2200b003a03e63e428sm5392439wms.36.2022.06.30.15.03.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 30 Jun 2022 15:03:23 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri,  1 Jul 2022 00:00:26 +0200
+Message-Id: <20220630220026.707180-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220616232311.2770826-1-mmayer@broadcom.com>
-In-Reply-To: <20220616232311.2770826-1-mmayer@broadcom.com>
-Date: Thu, 30 Jun 2022 14:21:00 -0700
-Message-ID: <CAGt4E5tHObKWfyU9pJpEa8GEV_gqKuDMsV5YeF3+zWUL9aULhA@mail.gmail.com>
-To: Buildroot Mailing List <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=broadcom.com; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
- bh=VrD2H0rFuJlIBwuvI3hblHmg4V+KvYX3+PEhNC/ON7A=;
- b=cu1UehIwRor/HaFhULHV9myt5peWQ2qu/0CCoj+qhYolt/oPA/FLgJ/oBdfNc59kC/
- 3XcvluR0+Mbfe/Bubim0ZRpgo4bZd58ebAGTAA/ViGFEgGBXoaF/4vlLKSmc7puah4kp
- WO+ILG7ccGYmjU+PAsblfeD/1BbQ4rGs2KjWE=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com
- header.a=rsa-sha256 header.s=google header.b=cu1UehIw
-Subject: Re: [Buildroot] [PATCH] package/iptables: add nf_log.h
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=/TiPerWAunI+HKbj5JQYWkGnySc4yag9pv/s8dQThYA=;
+ b=qEeXWShowCBczZckHOHwQhobl2HEyfQW1em4STzSASoVuz1/u1YdsNzaa1BaTA6p5n
+ 6PZPkoPCOo2a1/Q8KL6TuIV13R6+5K4UFwYnW/qDm343HHOeDpxARmcgHBR00IivLunR
+ S4pcEkKWNhwzZV7xr6RJOqb39ejclqhy1sWLRVhhuef81wUMa0a2tJAbvwDgXrzx985y
+ +cgB1ttRlFaywFYp56s08PFzPApy1IR6j+EpTDXRecQlCwoc4Q/ScdUIJCPd+SfihRgH
+ nI3jWSWOC2GNMEK3cTqA/90w9EiMKwZAA3f/Cn6WCBqVXoH7LoQZ/a8dzAiJlNzGsIg6
+ qq1Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=qEeXWSho
+Subject: [Buildroot] [PATCH 1/1] package/libgpgme: fix
+ LIBGPGME_CPE_ID_PRODUCT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,87 +95,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Markus Mayer via buildroot <buildroot@buildroot.org>
-Reply-To: Markus Mayer <mmayer@broadcom.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 16 Jun 2022 at 16:23, Markus Mayer <mmayer@broadcom.com> wrote:
->
-> iptables generally bundles the netfilter header files inside its own
-> tar-ball.
->
-> Since iptables 1.8.8, it started to make use of netfilter/nf_log.h, but
-> didn't include it in the iptables tar-ball. This can lead to build
-> failures.
->
-> Add a patch that rectifies this for iptables 1.8.8.
+Fix typo added by commit 6b79c8fb05bf1ae569d8b8e8c9f6f516e97c9ae0
 
-This change has now been accepted upstream.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libgpgme/libgpgme.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://git.netfilter.org/iptables/commit/?id=9ea7e6aa638d0dfa14613f6f97e6dc06c857e609
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index f61e9fe41a..b42a1a363a 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -10,7 +10,7 @@ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPL-2.1+
+ LIBGPGME_LICENSE_FILES = COPYING.LESSER
+ LIBGPGME_CPE_ID_VENDOR = gnupg
+-LIBGPGME_CPE_ID_PRODUCT = gpgpme
++LIBGPGME_CPE_ID_PRODUCT = gpgme
+ LIBGPGME_INSTALL_STAGING = YES
+ LIBGPGME_DEPENDENCIES = libassuan libgpg-error
+ LIBGPGME_CONFIG_SCRIPTS = gpgme-config
+-- 
+2.35.1
 
-Since there isn't an iptables 1.8.9 yet, would it be possible to
-accept the patch below into Buildroot for now, until the next iptables
-release becomes available?
-
-Thanks,
--Markus
-
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> ---
->  .../0001-netfilter-add-nf_log.h.patch         | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/iptables/0001-netfilter-add-nf_log.h.patch
->
-> diff --git a/package/iptables/0001-netfilter-add-nf_log.h.patch b/package/iptables/0001-netfilter-add-nf_log.h.patch
-> new file mode 100644
-> index 000000000000..c014c45931e9
-> --- /dev/null
-> +++ b/package/iptables/0001-netfilter-add-nf_log.h.patch
-> @@ -0,0 +1,37 @@
-> +From 15ea3fa147dea25d8cae3c2ac417142f2e0f029e Mon Sep 17 00:00:00 2001
-> +From: Markus Mayer <mmayer@broadcom.com>
-> +To: Netfilter Mailing List <netfilter-devel@vger.kernel.org>
-> +Date: Thu, 16 Jun 2022 15:29:58 -0700
-> +Subject: [PATCH] netfilter: add nf_log.h
-> +
-> +Since libxt_NFLOG is now using the UAPI version of nf_log.h, it should
-> +be bundled alongside the other netfilter kernel headers.
-> +
-> +This copy of nf_log.h was taken from Linux 5.18.
-> +
-> +Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> +---
-> +diff --git a/include/linux/netfilter/nf_log.h b/include/linux/netfilter/nf_log.h
-> +new file mode 100644
-> +index 000000000000..2ae00932d3d2
-> +--- /dev/null
-> ++++ b/include/linux/netfilter/nf_log.h
-> +@@ -0,0 +1,15 @@
-> ++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> ++#ifndef _NETFILTER_NF_LOG_H
-> ++#define _NETFILTER_NF_LOG_H
-> ++
-> ++#define NF_LOG_TCPSEQ         0x01    /* Log TCP sequence numbers */
-> ++#define NF_LOG_TCPOPT         0x02    /* Log TCP options */
-> ++#define NF_LOG_IPOPT          0x04    /* Log IP options */
-> ++#define NF_LOG_UID            0x08    /* Log UID owning local socket */
-> ++#define NF_LOG_NFLOG          0x10    /* Unsupported, don't reuse */
-> ++#define NF_LOG_MACDECODE      0x20    /* Decode MAC header */
-> ++#define NF_LOG_MASK           0x2f
-> ++
-> ++#define NF_LOG_PREFIXLEN      128
-> ++
-> ++#endif /* _NETFILTER_NF_LOG_H */
-> +--
-> +2.25.1
-> +
-> --
-> 2.25.1
->
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
