@@ -1,51 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3982BC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  1 Jul 2022 15:04:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 611E5C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  1 Jul 2022 21:42:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAF586140A;
-	Fri,  1 Jul 2022 15:03:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAF586140A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C9434185B;
+	Fri,  1 Jul 2022 21:42:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C9434185B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8lNbYBQYdSmM; Fri,  1 Jul 2022 15:03:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nDFFSj9Z3I0I; Fri,  1 Jul 2022 21:42:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C19D460D68;
-	Fri,  1 Jul 2022 15:03:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C19D460D68
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0E10A1C11A0
- for <buildroot@lists.busybox.net>; Fri,  1 Jul 2022 15:03:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 507534097D;
+	Fri,  1 Jul 2022 21:42:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 507534097D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 401691BF2FF
+ for <buildroot@lists.busybox.net>; Fri,  1 Jul 2022 21:42:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DC1CC607F2
- for <buildroot@lists.busybox.net>; Fri,  1 Jul 2022 15:03:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC1CC607F2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A3A2403E9
+ for <buildroot@lists.busybox.net>; Fri,  1 Jul 2022 21:42:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A3A2403E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SSG01Uh7U_sr for <buildroot@lists.busybox.net>;
- Fri,  1 Jul 2022 15:03:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A57060768
- for <buildroot@buildroot.org>; Fri,  1 Jul 2022 15:03:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A57060768
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2893687865; Fri,  1 Jul 2022 14:50:56 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p9Xyxz4Rv608 for <buildroot@lists.busybox.net>;
+ Fri,  1 Jul 2022 21:42:53 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3F984011F
+Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F3F984011F
+ for <buildroot@buildroot.org>; Fri,  1 Jul 2022 21:42:52 +0000 (UTC)
+Received: from fwd73.dcpf.telekom.de (fwd73.aul.t-online.de [10.223.144.99])
+ by mailout10.t-online.de (Postfix) with SMTP id 0610D445D;
+ Fri,  1 Jul 2022 23:42:50 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([84.161.183.239]) by fwd73.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1o7OPX-21hpBJ0; Fri, 1 Jul 2022 23:42:47 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53198)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1o7OPX-0000id-4d;
+ Fri, 01 Jul 2022 23:42:47 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 1 Jul 2022 17:02:15 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d488c94630c9e10976b737b682e222f2f809122c
-X-Git-Newrev: da7b674d91e541fdde64cff9181d328562720026
-X-Patchwork-Hint: ignore
-Message-Id: <20220701145056.2893687865@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynqmp_kria_xxx_defconfig: uboot
- dp pll patch
+Date: Fri,  1 Jul 2022 23:42:45 +0200
+Message-Id: <20220701214247.97032-2-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220701214247.97032-1-bernd.kuhls@t-online.de>
+References: <20220701214247.97032-1-bernd.kuhls@t-online.de>
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1656711767-01432E2F-BE69DC5D/0/0 CLEAN NORMAL
+X-TOI-MSGID: a66394f1-d4de-4247-b439-2b9872447c84
+Subject: [Buildroot] [PATCH 2/4] package/libva-utils: bump version to 2.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,94 +67,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da7b674d91e541fdde64cff9181d328562720026
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This patch fixes the DP audio and video PLL configurations for the zynqmp-sm-k26-revA som.
-It needs to be applied for both the kv260 and kr260 starter kits.
-
-The Linux DP driver expects the DP to be using the following PLL config:
-  - DP video PLL should use the VPLL (0x0)
-  - DP audio PLL should use the RPLL (0x3)
-  - DP system time clock PLL should use RPLL (0x3)
-
-Register 0xFD1A0070 configures the DP video PLL.
-Register 0xFD1A0074 configures the DP audio PLL.
-Register 0xFD1A007C configures the DP system time clock PLL.
-
-This patch was build and run tested on a zynqmp-kria-kv260 target board.
-
-Upstream-Status: submitted (https://lore.kernel.org/all/fa7e9abc419c9d7648405d1c62367dbe701d09b8.1652709736.git.michal.simek@amd.com/)
-This patch will be removed from buildroot in a future release when no longer necessary.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...p-zynqmp-sm-k26-revA-Fix-DP-PLL-configura.patch | 39 ++++++++++++++++++++++
- configs/zynqmp_kria_kv260_defconfig                |  1 +
- 2 files changed, 40 insertions(+)
+ package/libva-utils/libva-utils.hash | 2 +-
+ package/libva-utils/libva-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/zynqmp/kria/patches/uboot/0001-arm64-zynqmp-zynqmp-sm-k26-revA-Fix-DP-PLL-configura.patch b/board/zynqmp/kria/patches/uboot/0001-arm64-zynqmp-zynqmp-sm-k26-revA-Fix-DP-PLL-configura.patch
-new file mode 100644
-index 0000000000..99dc056115
---- /dev/null
-+++ b/board/zynqmp/kria/patches/uboot/0001-arm64-zynqmp-zynqmp-sm-k26-revA-Fix-DP-PLL-configura.patch
-@@ -0,0 +1,39 @@
-+From c6677ee92c05e3f0f22cc08e3b309a996292562f Mon Sep 17 00:00:00 2001
-+From: Neal Frager <neal.frager@amd.com>
-+Date: Fri, 13 May 2022 14:02:07 +0100
-+Subject: [PATCH 1/1] arm64: zynqmp: zynqmp-sm-k26-revA: Fix DP PLL
-+ configuration
-+
-+This patch fixes the DP audio and video PLL configurations for the zynqmp-sm-k26-revA som.
-+
-+The Linux DP driver expects the DP to be using the following PLL config:
-+  - DP video PLL should use the VPLL (0x0)
-+  - DP audio PLL should use the RPLL (0x3)
-+  - DP system time clock PLL should use RPLL (0x3)
-+
-+Register 0xFD1A0070 configures the DP video PLL.
-+Register 0xFD1A0074 configures the DP audio PLL.
-+Register 0xFD1A007C configures the DP system time clock PLL.
-+
-+Signed-off-by: Neal Frager <neal.frager@amd.com>
-+---
-+ board/xilinx/zynqmp/zynqmp-sm-k26-revA/psu_init_gpl.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/board/xilinx/zynqmp/zynqmp-sm-k26-revA/psu_init_gpl.c b/board/xilinx/zynqmp/zynqmp-sm-k26-revA/psu_init_gpl.c
-+index ed025790bc..e5598807e8 100644
-+--- a/board/xilinx/zynqmp/zynqmp-sm-k26-revA/psu_init_gpl.c
-++++ b/board/xilinx/zynqmp/zynqmp-sm-k26-revA/psu_init_gpl.c
-+@@ -74,6 +74,9 @@ static unsigned long psu_clock_init_data(void)
-+ 	psu_mask_write(0xFF5E0128, 0x01003F07U, 0x01000A00U);
-+ 	psu_mask_write(0xFD1A0060, 0x03003F07U, 0x03000100U);
-+ 	psu_mask_write(0xFD1A0068, 0x01003F07U, 0x01000200U);
-++	psu_mask_write(0xFD1A0070, 0x013F3F07U, 0x01010500U);
-++	psu_mask_write(0xFD1A0074, 0x013F3F07U, 0x01013C03U);
-++	psu_mask_write(0xFD1A007C, 0x013F3F07U, 0x01013803U);
-+ 	psu_mask_write(0xFD1A0080, 0x00003F07U, 0x00000200U);
-+ 	psu_mask_write(0xFD1A0084, 0x07003F07U, 0x07000100U);
-+ 	psu_mask_write(0xFD1A00B8, 0x01003F07U, 0x01000203U);
-+-- 
-+2.17.1
-+
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index 0ff12df232..4700e651dc 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -37,3 +37,4 @@ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches"
+diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
+index 5f21af800e..3ff6a488fb 100644
+--- a/package/libva-utils/libva-utils.hash
++++ b/package/libva-utils/libva-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0ad6410aaa27d7b15dadee0f4d775d54d6394b582bf315353a4657b49c78ac31  libva-utils-2.14.0.tar.gz
++sha256  73609a24fe1dbf99e1472e20af1398d910f64c88b8615272f9f3539ffc5d2efc  libva-utils-2.15.0.tar.gz
+ sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
+diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
+index 4c527a748c..0d6a3c062e 100644
+--- a/package/libva-utils/libva-utils.mk
++++ b/package/libva-utils/libva-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBVA_UTILS_VERSION = 2.14.0
++LIBVA_UTILS_VERSION = 2.15.0
+ LIBVA_UTILS_SITE = $(call github,intel,libva-utils,$(LIBVA_UTILS_VERSION))
+ LIBVA_UTILS_LICENSE = MIT
+ LIBVA_UTILS_LICENSE_FILES = COPYING
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
