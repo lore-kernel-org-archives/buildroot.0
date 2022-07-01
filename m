@@ -1,87 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7B8BC43334
-	for <buildroot@archiver.kernel.org>; Thu, 30 Jun 2022 22:18:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A990EC43334
+	for <buildroot@archiver.kernel.org>; Fri,  1 Jul 2022 04:58:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53FDF840BB;
-	Thu, 30 Jun 2022 22:18:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53FDF840BB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DaogqfMPUjO7; Thu, 30 Jun 2022 22:18:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B93F84081;
-	Thu, 30 Jun 2022 22:18:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B93F84081
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C37B91BF27C
- for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 22:18:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABA6A40B43
- for <buildroot@lists.busybox.net>; Thu, 30 Jun 2022 22:18:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABA6A40B43
+	by smtp2.osuosl.org (Postfix) with ESMTP id 14E3340217;
+	Fri,  1 Jul 2022 04:58:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14E3340217
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MMduEgDzPRdz for <buildroot@lists.busybox.net>;
- Thu, 30 Jun 2022 22:18:10 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oyiXbsDK1TCw; Fri,  1 Jul 2022 04:58:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E2B440135;
+	Fri,  1 Jul 2022 04:58:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E2B440135
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 63C2D1BF94D
+ for <buildroot@lists.busybox.net>; Fri,  1 Jul 2022 04:58:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4BDD683E6F
+ for <buildroot@lists.busybox.net>; Fri,  1 Jul 2022 04:58:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BDD683E6F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jHSmpMWefGyA for <buildroot@lists.busybox.net>;
+ Fri,  1 Jul 2022 04:58:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B07E4402F7
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B07E4402F7
- for <buildroot@buildroot.org>; Thu, 30 Jun 2022 22:18:09 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id o4so567644wrh.3
- for <buildroot@buildroot.org>; Thu, 30 Jun 2022 15:18:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EC9D83E6D
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com
+ [IPv6:2a00:1450:4864:20::12f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4EC9D83E6D
+ for <buildroot@buildroot.org>; Fri,  1 Jul 2022 04:58:16 +0000 (UTC)
+Received: by mail-lf1-x12f.google.com with SMTP id f39so1918424lfv.3
+ for <buildroot@buildroot.org>; Thu, 30 Jun 2022 21:58:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:in-reply-to
  :content-transfer-encoding;
- bh=F7KIMy12LxLrIzFH/10tuvcc+LJXis0ePvY4MFCw4HQ=;
- b=rLHuDZqKDN4aS5uJ/li8+FXFDm5hjveX7Eq4iamxaZWywnafkSSaOQOgiSW3WFlwxy
- lsGZbf24evoYH92BzoBWbAwLevO0X+THRo0MepIaSjlrP7uTJarUGTABw4U36mqLERXW
- VNqybElpoU0Q1xd9Ahyz4eK4w8nCwwmXSVsuj+nv3z1l5DoqkNtxi+StnYb1i0/jLqo4
- i2W3kVnJjyVO5Qns4Y9jEAHm5UZZSH6VrG+OmuRYIlaXrZYMYNnE4the1dWiE5ZIHdJE
- 74xQi7Zg1GEyxLeIZuNddCPyyMYmxoaAsZ+OdvrXRlOfOfYAfHmqDENlmGBjt2Yjwad1
- JLAg==
-X-Gm-Message-State: AJIora9Q56rCXlUtbbufqd6MIv9ho7r0PnIPJhZIimzkdYdqBUzrUoE7
- AJeqSR77weRzcrHpwINUa90ieKiv2bY=
-X-Google-Smtp-Source: AGRyM1tqaZVk9J4CaeDq3E+WYQez/ebplL9eUnMPcGhpke0atr71gUBJlv3b7gjPsE7FRnuTL8TsvQ==
-X-Received: by 2002:adf:e8c7:0:b0:21d:1c7a:a45f with SMTP id
- k7-20020adfe8c7000000b0021d1c7aa45fmr10532844wrn.168.1656627487784; 
- Thu, 30 Jun 2022 15:18:07 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- 190-20020a1c19c7000000b003a04912351fsm8410886wmz.17.2022.06.30.15.18.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Jun 2022 15:18:06 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri,  1 Jul 2022 00:15:17 +0200
-Message-Id: <20220630221517.801556-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ bh=DpLONtsiWCVIC02h5bx41j7AdhJHsDjKo78D/ql8DI0=;
+ b=HKvXT+tL71N9bJozizZ9+hZnhcJMYbVyIh3Avottws/vVPAZpEEJczRA1fOk06lMOB
+ dUxF00L/eEEB8VJYazklnoWfUk5XWbVS/kghbu5oCBFhvm9DsMiTpaPz0qjARcIPzje1
+ KeMmhlRSfOf0ZmmuOGNwdM0fOHBcjABcYTwql9kVR7bK7zaVvaRgYxIUMeMMHzaEnQIM
+ aIn8xcs1gK+szV83UQbvgzXPSKiHdsxEZmHbz7m/HnscIYrarKXEJ05axyqf8HpcY/9z
+ 4+0q5bkW0ZxKe61Dzb1mCdqz7L+mSAEnuUYrbTvmG8gfJRHP01BukFZeCqhBOZFVJiyh
+ 3wdA==
+X-Gm-Message-State: AJIora/U80+e2+nq1ZUSk6YPK5XZAclfVKJH+hswxkPXAuiK3MQR3z5U
+ u7PR8DlYYJBxJ2/wHgqAIBc=
+X-Google-Smtp-Source: AGRyM1sF8f34/twt3TWBJqCW9zB/bLHrwfyOhEqZHvg1bzJQKzphXP+v/odkvJsY0zZIAvgx6rwsGw==
+X-Received: by 2002:a05:6512:3d9e:b0:47f:8e0a:dd78 with SMTP id
+ k30-20020a0565123d9e00b0047f8e0add78mr7667175lfv.48.1656651494025; 
+ Thu, 30 Jun 2022 21:58:14 -0700 (PDT)
+Received: from [10.0.196.136] ([98.128.186.90])
+ by smtp.googlemail.com with ESMTPSA id
+ a8-20020ac25208000000b0047f74ee6a1fsm3440519lfl.63.2022.06.30.21.58.12
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 30 Jun 2022 21:58:13 -0700 (PDT)
+Message-ID: <aa55d5de-3b21-c462-f17f-7a4f72301333@gmail.com>
+Date: Fri, 1 Jul 2022 06:58:11 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220629203655.577286-1-fontaine.fabrice@gmail.com>
+From: Joachim Wiberg <troglobit@gmail.com>
+In-Reply-To: <20220629203655.577286-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=F7KIMy12LxLrIzFH/10tuvcc+LJXis0ePvY4MFCw4HQ=;
- b=pH4AAU7r/G3AlzzDQ85CR1npgsKhwkeRTMG/ErduJULdZgjC34/bfeikRAosOOVYf5
- g7VBdF5NB3x/XbcCg133NnFDLbom5qiMqQ7JwxioLWPp3HfO5pyrHbBBMHynrbpFD7LI
- Kt0iWuN+6e4BfqggohlnHxpKLVn3EvYzYXsuyCDPuNO7X4C1+Bsp4Kzgqk/PxLkoVpgl
- zvN5Y/M5vO6Aki90KSKpT2eYtoNQ/gmHmthhEqmubujDiAneEusaG9osV6gdqvBtP4ME
- HiaBWDvTqBUi4EROB4wg7TI5eZVGw/ibet/PdCIKymWxGJ8r34KDw5sLZD/wj01gzXIK
- 3R8Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:in-reply-to:content-transfer-encoding;
+ bh=DpLONtsiWCVIC02h5bx41j7AdhJHsDjKo78D/ql8DI0=;
+ b=U0EwLa+lp+yF/BW1sKJGSQ97GxSTNVIboD/fNXUqBbw82bMdmH5PsrzWpHlcNzc5s1
+ UsFddG1byx4o1xNFsnWPxZUT4vAAii8t26RQAiBSFXFkX2TtBYtUVg3k14ozdiPDXIoK
+ Vib3JrohZkJI9Aop2S3xxG9zQ3XVBsmIecf3theMpGdo0T296PfuDR58nlfMgRsgHPO6
+ o8aV3UM+zFlAxWybDWn99ajOyMQcnowZsXyYtuI+4eg8wKFqLJv82w4DLygbXV90c3+2
+ 05vMJuWTcnJ6KOLLJGzywb5P5vPcRvbVaTMh9HHIjotyXGGqm8bVR74PVuDBdRRXuvnw
+ XLgQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=pH4AAU7r
-Subject: [Buildroot] [PATCH 1/1] package/inih: bump to version 55
+ header.a=rsa-sha256 header.s=20210112 header.b=U0EwLa+l
+Subject: Re: [Buildroot] [PATCH 1/1] package/watchdogd: install to staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,47 +97,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/benhoyt/inih/releases/tag/r54
-https://github.com/benhoyt/inih/releases/tag/r55
+On 6/29/22 22:36, Fabrice Fontaine wrote:
+> Fixes:
+>   - https://bugs.buildroot.org/show_bug.cgi?id=14881
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/inih/inih.hash | 2 +-
- package/inih/inih.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/inih/inih.hash b/package/inih/inih.hash
-index 21234e156d..af921b294d 100644
---- a/package/inih/inih.hash
-+++ b/package/inih/inih.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  01b0366fdfdf6363efc070c2f856f1afa33e7a6546548bada5456ad94a516241  inih-53.tar.gz
-+sha256  ba55f8ae2a8caf0653f30f48567241e14ea916acfc13481f502d8a9c8f507f68  inih-55.tar.gz
- sha256  9ae3b39e83e9158e44b67733baa3bb2d84e80efdcfb14a5820210a42c7abdf7f  LICENSE.txt
-diff --git a/package/inih/inih.mk b/package/inih/inih.mk
-index dec9465121..7f36175576 100644
---- a/package/inih/inih.mk
-+++ b/package/inih/inih.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INIH_VERSION = 53
-+INIH_VERSION = 55
- INIH_SITE = $(call github,benhoyt,inih,r$(INIH_VERSION))
- INIH_INSTALL_STAGING = YES
- INIH_LICENSE = BSD-3-Clause
--- 
-2.35.1
-
+Acked-by: Joachim Wiberg <troglobit@gmail.com>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
