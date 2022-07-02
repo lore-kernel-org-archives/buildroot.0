@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 449B8C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  2 Jul 2022 13:54:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB48AC43334
+	for <buildroot@archiver.kernel.org>; Sat,  2 Jul 2022 13:55:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB4BB408D8;
-	Sat,  2 Jul 2022 13:54:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB4BB408D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 93AA6405AB;
+	Sat,  2 Jul 2022 13:55:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93AA6405AB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hs2RJB4KBkfy; Sat,  2 Jul 2022 13:54:54 +0000 (UTC)
+	with ESMTP id Ea3K01r1tpFb; Sat,  2 Jul 2022 13:55:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 62236405AB;
-	Sat,  2 Jul 2022 13:54:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62236405AB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C815409E7;
+	Sat,  2 Jul 2022 13:55:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C815409E7
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 901BE1BF5A1
- for <buildroot@lists.busybox.net>; Sat,  2 Jul 2022 13:52:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0235B1BF5A1
+ for <buildroot@lists.busybox.net>; Sat,  2 Jul 2022 13:52:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E2E182542
+ by smtp1.osuosl.org (Postfix) with ESMTP id 737A081B3E
  for <buildroot@lists.busybox.net>; Sat,  2 Jul 2022 13:52:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E2E182542
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 737A081B3E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qez7N67HRTGl for <buildroot@lists.busybox.net>;
+ with ESMTP id GtjeK6jK_LPv for <buildroot@lists.busybox.net>;
  Sat,  2 Jul 2022 13:52:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5575981A8E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7948481BC6
  for <buildroot@buildroot.org>; Sat,  2 Jul 2022 13:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5575981A8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7948481BC6
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4A41287866; Sat,  2 Jul 2022 13:39:39 +0000 (UTC)
+ id 700488788B; Sat,  2 Jul 2022 13:39:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 2 Jul 2022 15:48:50 +0200
+Date: Sat, 2 Jul 2022 15:50:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ae879f6300ac83b7ecfce5281be064d8921998f5
-X-Git-Newrev: f9ee9635623ca2ac6661671b3bafbef214e739ba
+X-Git-Oldrev: 7186fdb51f8219fc9ec0965c05cbfdbddf6ed033
+X-Git-Newrev: bf46a455bf56084fb06cd41ea6558296481cba9d
 X-Patchwork-Hint: ignore
-Message-Id: <20220702133939.4A41287866@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyparsing: bump to version
- 3.0.9
+Message-Id: <20220702133939.700488788B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/weston: bump to version 10.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +62,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9ee9635623ca2ac6661671b3bafbef214e739ba
+commit: https://git.buildroot.net/buildroot/commit/?id=bf46a455bf56084fb06cd41ea6558296481cba9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyparsing/python-pyparsing.hash | 4 ++--
- package/python-pyparsing/python-pyparsing.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/weston/weston.hash | 10 +++++-----
+ package/weston/weston.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-index e7137d55c9..90242bb2e2 100644
---- a/package/python-pyparsing/python-pyparsing.hash
-+++ b/package/python-pyparsing/python-pyparsing.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyparsing/json
--md5  971252e99e1e02a4c27f001894e0422d  pyparsing-3.0.8.tar.gz
--sha256  7bf433498c016c4314268d95df76c81b842a4cb2b276fa3312cfb1e1d85f6954  pyparsing-3.0.8.tar.gz
-+md5  fadc2f3bf5872bf6310576a86c3566e0  pyparsing-3.0.9.tar.gz
-+sha256  2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb  pyparsing-3.0.9.tar.gz
- # Locally computed sha256 checksums
- sha256  10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index 7e458042f5..55516c3ce8 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index b78a7c7550..951d62a100 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2022-February/042103.html
+-md5  bc4abe2ee6904a4890a0c641c6257f91  weston-10.0.0.tar.xz
+-sha1  b1a51e3bb7ee1d75bbf728c8071771e07fc97fdd  weston-10.0.0.tar.xz
+-sha256  5c23964112b90238bed39e5dd1e41cd71a79398813cdc3bbb15a9fdc94e547ae  weston-10.0.0.tar.xz
+-sha512  77e05530751e4f743eebf015ab5b78a1fcc66b774713b5e296cfffc488be84e459f811c85ac4280b7b63eebf4ff5c958dd7306376ab343e6b80feae16c8c35a4  weston-10.0.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2022-June/042260.html
++md5  dac91aecc97a85bf9664dec0d5c90ae3  weston-10.0.1.tar.xz
++sha1  87cc339503f01317a0ca8d986b1b211c8aae99bb  weston-10.0.1.tar.xz
++sha256  8a9e52506a865a7410981b04f8341b89b84106db8531ab1f9fdd37b5dc034115  weston-10.0.1.tar.xz
++sha512  688d843096a95b463161b98e85ca3443b31ba2ee49fc8d456a2780cc96f576e9d097054e9f361997a66e9cc8373cf29e406a742dae3884b3b50b26acf1710c8c  weston-10.0.1.tar.xz
+ sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 90cf160688..76df9bf2dd 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_PYPARSING_VERSION = 3.0.8
-+PYTHON_PYPARSING_VERSION = 3.0.9
- PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
--PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/31/df/789bd0556e65cf931a5b87b603fcf02f79ff04d5379f3063588faaf9c1e4
-+PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/71/22/207523d16464c40a0310d2d4d8926daffa00ac1f5b1576170a32db749636
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
- PYTHON_PYPARSING_SETUP_TYPE = flit
+-WESTON_VERSION = 10.0.0
+-WESTON_SITE = https://wayland.freedesktop.org/releases
++WESTON_VERSION = 10.0.1
++WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
+ WESTON_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
