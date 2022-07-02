@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C2C2C43334
-	for <buildroot@archiver.kernel.org>; Sat,  2 Jul 2022 13:57:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10529C43334
+	for <buildroot@archiver.kernel.org>; Sat,  2 Jul 2022 13:57:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C67E3813A9;
-	Sat,  2 Jul 2022 13:57:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C67E3813A9
+	by smtp2.osuosl.org (Postfix) with ESMTP id B03E040920;
+	Sat,  2 Jul 2022 13:57:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B03E040920
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6GJcI4VksodQ; Sat,  2 Jul 2022 13:57:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 10Sir_B7umtx; Sat,  2 Jul 2022 13:57:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D61D281319;
-	Sat,  2 Jul 2022 13:57:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D61D281319
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 002DD1BF5A1
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB12F409EC;
+	Sat,  2 Jul 2022 13:57:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB12F409EC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DBB51BF962
  for <buildroot@lists.busybox.net>; Sat,  2 Jul 2022 13:56:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CEC9982882
- for <buildroot@lists.busybox.net>; Sat,  2 Jul 2022 13:56:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEC9982882
+ by smtp2.osuosl.org (Postfix) with ESMTP id 08549409B0
+ for <buildroot@lists.busybox.net>; Sat,  2 Jul 2022 13:56:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08549409B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9s37pmu_McaT for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wb8QF2_vvWQi for <buildroot@lists.busybox.net>;
  Sat,  2 Jul 2022 13:56:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25C4483EB0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 420BB40538
  for <buildroot@buildroot.org>; Sat,  2 Jul 2022 13:56:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25C4483EB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 420BB40538
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 123B8878A8; Sat,  2 Jul 2022 13:43:13 +0000 (UTC)
+ id 35FD3878B4; Sat,  2 Jul 2022 13:43:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 2 Jul 2022 15:53:10 +0200
+Date: Sat, 2 Jul 2022 15:55:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bf46a455bf56084fb06cd41ea6558296481cba9d
-X-Git-Newrev: a336b731af5979a25213b33c5840de6d1ed88bdc
+X-Git-Oldrev: 017dbc770c4fd58d7d52cf290dd3fc39a3603e0d
+X-Git-Newrev: faeebe0858f40d18d7527b7d1de6a6868004c9e6
 X-Patchwork-Hint: ignore
-Message-Id: <20220702134313.123B8878A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gtest: bump to version 1.12
+Message-Id: <20220702134313.35FD3878B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/watchdogd: install to staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +62,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a336b731af5979a25213b33c5840de6d1ed88bdc
+commit: https://git.buildroot.net/buildroot/commit/?id=faeebe0858f40d18d7527b7d1de6a6868004c9e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/google/googletest/releases/tag/release-1.12.0
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=14881
+
+The package provides a library and a .pc file, so install it into staging as
+well.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gtest/gtest.hash | 2 +-
- package/gtest/gtest.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/watchdogd/watchdogd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
-index d21fea7142..1a93684aeb 100644
---- a/package/gtest/gtest.hash
-+++ b/package/gtest/gtest.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b4870bf121ff7795ba20d20bcdd8627b8e088f2d1dab299a031c1034eddc93d5  gtest-1.11.0.tar.gz
-+sha256  2a4f11dce6188b256f3650061525d0fe352069e5c162452818efbbf8d0b5fe1c  gtest-1.12.0.tar.gz
- sha256  9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  LICENSE
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index 8ec5e9c535..f3f3f9c296 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GTEST_VERSION = 1.11.0
-+GTEST_VERSION = 1.12.0
- GTEST_SITE = $(call github,google,googletest,release-$(GTEST_VERSION))
- GTEST_INSTALL_STAGING = YES
- GTEST_INSTALL_TARGET = NO
+diff --git a/package/watchdogd/watchdogd.mk b/package/watchdogd/watchdogd.mk
+index 1a9d04d938..ea033b4e71 100644
+--- a/package/watchdogd/watchdogd.mk
++++ b/package/watchdogd/watchdogd.mk
+@@ -9,6 +9,7 @@ WATCHDOGD_SITE = https://github.com/troglobit/watchdogd/releases/download/$(WATC
+ WATCHDOGD_LICENSE = ISC
+ WATCHDOGD_LICENSE_FILES = LICENSE
+ WATCHDOGD_CPE_ID_VENDOR = troglobit
++WATCHDOGD_INSTALL_STAGING = YES
+ WATCHDOGD_DEPENDENCIES = host-pkgconf libconfuse libite libuev
+ WATCHDOGD_CONF_OPTS = --disable-compat --disable-examples --disable-test-mode
+ WATCHDOGD_SELINUX_MODULES = watchdog
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
