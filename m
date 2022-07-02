@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D039C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  1 Jul 2022 16:55:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2770FC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  2 Jul 2022 13:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF3E3418D1;
-	Fri,  1 Jul 2022 16:55:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF3E3418D1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LAL4FOZtkgQt; Fri,  1 Jul 2022 16:55:34 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B6BC418C8;
-	Fri,  1 Jul 2022 16:55:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B6BC418C8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D1D641BF4D7
- for <buildroot@lists.busybox.net>; Fri,  1 Jul 2022 16:55:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABDFE403C2
- for <buildroot@lists.busybox.net>; Fri,  1 Jul 2022 16:55:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABDFE403C2
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF09D408C8;
+	Sat,  2 Jul 2022 13:58:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF09D408C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MDuj5vIC4dRd for <buildroot@lists.busybox.net>;
- Fri,  1 Jul 2022 16:55:31 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 16UU0nmwLkLA; Sat,  2 Jul 2022 13:58:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D06E240390;
+	Sat,  2 Jul 2022 13:58:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D06E240390
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 30F041BF5A1
+ for <buildroot@lists.busybox.net>; Sat,  2 Jul 2022 13:57:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15EBC415B5
+ for <buildroot@lists.busybox.net>; Sat,  2 Jul 2022 13:57:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15EBC415B5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JR2hAdtBpqEP for <buildroot@lists.busybox.net>;
+ Sat,  2 Jul 2022 13:57:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EFB4C400EF
- for <buildroot@uclibc.org>; Fri,  1 Jul 2022 16:55:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFB4C400EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37F17415B1
+ for <buildroot@uclibc.org>; Sat,  2 Jul 2022 13:57:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37F17415B1
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id E0F8187868; Fri,  1 Jul 2022 16:42:43 +0000 (UTC)
+ id 2A6AB7F8BF; Sat,  2 Jul 2022 13:44:11 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 01 Jul 2022 16:55:30 +0000
+Date: Sat, 02 Jul 2022 13:56:59 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,22 +47,21 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2022.02.3
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: pscheie@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: jacmet@uclibc.org
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14886-163-UPQI48kXcZ@https.bugs.busybox.net/>
-In-Reply-To: <bug-14886-163@https.bugs.busybox.net/>
-References: <bug-14886-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: resolution bug_status
+Message-ID: <bug-14881-163-W7q7yS6GG3@https.bugs.busybox.net/>
+In-Reply-To: <bug-14881-163@https.bugs.busybox.net/>
+References: <bug-14881-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14886] Python ctypes find_library() not working
- correctly.
+Subject: [Buildroot] [Bug 14881] Watchdogd Package missing INSTALL_STAGING
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,20 +78,19 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14886
+https://bugs.busybox.net/show_bug.cgi?id=14881
 
---- Comment #1 from Peter Scheie <pscheie@gmail.com> ---
-I have seen this bug, too, in building an image for the Beaglebone Black.  It
-appears in the iio package in the python binding: In iio.py, CDLL calls
-find_library with the argument "iio" to get the name of the libiio.so.0
-library, but fails.  Some folks on #beagle said using find_library() this way
-was a bad idea because it produces unpredictable results (which I can attest
-to).  Instead, it was recommended that CDLL be called with libiio.so.0
-directly, removing find_libary().  This works and I am using a patch to
-implement it.  BR currently uses version 0.19 of libiio but even in the most
-current version, 0.24, it still uses find_library().
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-I tried find_library() on a few other libs and got the same None result.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=faeebe0858f40d18d7527b7d1de6a6868004c9e6,
+thanks
 
 -- 
 You are receiving this mail because:
