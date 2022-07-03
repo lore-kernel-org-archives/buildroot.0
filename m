@@ -4,77 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E59BC43334
-	for <buildroot@archiver.kernel.org>; Sun,  3 Jul 2022 23:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C04C7C43334
+	for <buildroot@archiver.kernel.org>; Sun,  3 Jul 2022 23:26:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BCA141061;
-	Sun,  3 Jul 2022 23:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BCA141061
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F7B9410C2;
+	Sun,  3 Jul 2022 23:26:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F7B9410C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i-48H129fP2x; Sun,  3 Jul 2022 23:25:32 +0000 (UTC)
+	with ESMTP id yT0-23eaA57w; Sun,  3 Jul 2022 23:26:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A154E409BE;
-	Sun,  3 Jul 2022 23:25:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A154E409BE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 080C7409BE;
+	Sun,  3 Jul 2022 23:26:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 080C7409BE
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1112E1BF215
- for <buildroot@lists.busybox.net>; Sun,  3 Jul 2022 23:25:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4AAFE1BF215
+ for <buildroot@lists.busybox.net>; Sun,  3 Jul 2022 23:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E6A63409BE
- for <buildroot@lists.busybox.net>; Sun,  3 Jul 2022 23:25:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6A63409BE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30B47409FC
+ for <buildroot@lists.busybox.net>; Sun,  3 Jul 2022 23:26:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30B47409FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i8R9x3DRBuxE for <buildroot@lists.busybox.net>;
- Sun,  3 Jul 2022 23:25:27 +0000 (UTC)
+ with ESMTP id 7uueUCm2DLJt for <buildroot@lists.busybox.net>;
+ Sun,  3 Jul 2022 23:26:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 560664099F
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com
- [IPv6:2607:f8b0:4864:20::b2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 560664099F
- for <buildroot@buildroot.org>; Sun,  3 Jul 2022 23:25:27 +0000 (UTC)
-Received: by mail-yb1-xb2c.google.com with SMTP id e80so6783873ybb.4
- for <buildroot@buildroot.org>; Sun, 03 Jul 2022 16:25:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11435409BE
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com
+ [IPv6:2607:f8b0:4864:20::b30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 11435409BE
+ for <buildroot@buildroot.org>; Sun,  3 Jul 2022 23:26:19 +0000 (UTC)
+Received: by mail-yb1-xb30.google.com with SMTP id r3so14023659ybr.6
+ for <buildroot@buildroot.org>; Sun, 03 Jul 2022 16:26:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
- bh=16Z7sgQ+nAEo1KBZ5xC4Ic7pP00+dep6g5lwSBnBHKQ=;
- b=yviYLAXybJyvdSFKJ1kw3J9dlZP51Y8tAG1Yl0S4q1zbkZl+BHOgw/+CS6Wk1q1RTJ
- JWiP+7j+JcLoJStDqltcrlBwreG/FCb5nGMp5x89jNoRxZhlfVQewtVukCsIu3MJz+tX
- GqN5anmSVUY/kBOebW7/u9sJxnwUsNITNMuaiXpEG9p7N/MZEfaCfHUGOGnTgEJMnWm3
- d8WZF6fDUW37uXOLKuEgiiYjaPIVkvNuqhzB8pc9727+ks0mIIGJIK6BMiIoGTZ4iLUy
- rk1FsHxHDwT1anvNJ7wC3hF7Efil5oxkwQqZVDFOPNkH5zQOO1uBq35rzd8tNcBuYQc4
- 9WQg==
-X-Gm-Message-State: AJIora9561mCFCxfBrEFxMwaGlX5nzJqyTYK/Vc6Np95O1P1QZJoYhmT
- OIF6zJ2jPQC9Bj4LtB160tm4eWJgGRkoq4Nu6KZKk+G/WBYN0w==
-X-Google-Smtp-Source: AGRyM1vvuair1ATzNkiwdX5Xsw2gN1F7xv9teBJOJPTcYb5YCZ1mGGktqalW/9GP1B3w8Yf83NWIW2rKuHqZg6GunKs=
-X-Received: by 2002:a05:6902:70d:b0:66d:5d26:6502 with SMTP id
- k13-20020a056902070d00b0066d5d266502mr29495351ybt.556.1656890725961; Sun, 03
- Jul 2022 16:25:25 -0700 (PDT)
+ bh=FpTpM5cg+LppQin8G4TEGwveQN0cqVRDwiEygV/Mo0g=;
+ b=FKGtGfZjAIQ+FsK3yCmkYhsObOdRyghjb6za5p+oiTZl2oz7H+495VIJWSLr/hBk2O
+ RAycwNLkayr3VQJ/AmjC/6jJ8ofktuS7V5LRT5EnU7rPPbHMRTn4c6EcVy//e8ouTjl9
+ Q4cNZPZ8+kGaz6GUyW2h7bt+inU6Mib8piJIq97vsk5Cogx6G6vX8wEf5lqLF/GKLGIM
+ SCg49FoJgFUU8b7qZQ+IIkgXXtFuAehGd/dZ6z7TjmbkuwbUFXivrdbLjmVm1L+/Yc7s
+ JsMwd0W73R8l5ntZrIUYiKp3WlaRjOrS6RGkyzvgtZnu9j2kqoUGX+6jMI88pDy4khAH
+ hDHA==
+X-Gm-Message-State: AJIora+OXIEhfbY78n2oPG+ddndVzEShJ8ybagBMRxaYajxxu6ys5NFs
+ DZNNxB8OEI6dLvmDCBog/AHdbrUsupnvxrUroULG0ezhMsC9Wg==
+X-Google-Smtp-Source: AGRyM1vQjXe02ijsbxORuDeb+TK4H8IKsMP0n+0xi6cPfkXlyppuw7ULWBwncRFI1GBPQAbm9sAkBfnHUwW9Jkd4ruE=
+X-Received: by 2002:a25:b90b:0:b0:664:a584:faf5 with SMTP id
+ x11-20020a25b90b000000b00664a584faf5mr27210319ybj.144.1656890777950; Sun, 03
+ Jul 2022 16:26:17 -0700 (PDT)
 MIME-Version: 1.0
 From: Abel Bernabeu <abel@x-silicon.com>
-Date: Mon, 4 Jul 2022 01:25:15 +0200
-Message-ID: <CAF2ART8VPT7JNXMOOPsDVrKD89JGhjkfrAGZs-eyxo-aQb=7NQ@mail.gmail.com>
+Date: Mon, 4 Jul 2022 01:26:07 +0200
+Message-ID: <CAF2ART_=XUWL8bgtdV7vUgz5SQJXVyBAAS0ixcYLVbaaA++_4w@mail.gmail.com>
 To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=x-silicon-com.20210112.gappssmtp.com; s=20210112;
  h=mime-version:from:date:message-id:subject:to;
- bh=16Z7sgQ+nAEo1KBZ5xC4Ic7pP00+dep6g5lwSBnBHKQ=;
- b=ISVfen0XOKMCrm9rae71suD19T64kmC6kA0wxauy1kqrK0RQ2jUnWIPYLDSgmarjbJ
- H4ETe9Zs1N0zXt/I6HLQ9mYn/+27qhRjN9Rvsi4Snh25mhIDZCl9htIGx2MBaJPM7Sq6
- pPFODtHqWKrETrMbnIYcuP7T41NGkvyMQNCecAX3LwG94PPXQZijcS+Gn4Gzvoudro55
- LTXMopmRqhmtLgG30sfIueFFAQTLbRehOrcipUWPUDZELVMQGsigZO4Flv1iSS0YIZ3g
- YPifq45R3aIfIquPJCa9pmHP6Ps5xwG+g6R/Na6ftM5w/AmbS+a61caSZvAGwiGVmT6F
- QI6g==
+ bh=FpTpM5cg+LppQin8G4TEGwveQN0cqVRDwiEygV/Mo0g=;
+ b=cuNxWAm254jclCqvNUZV23k6/lcLndEYpnf9krO78oDtW+zR9Vvi4Yd9evQHIQ49Ff
+ Fp9YrHIKHPs7R1YtbijI5o62gS6db6msu79j9DFjmAda+PwBFiYqHw5FlPReubeap3uM
+ NnSNZ/5+7AyqbRf62OEXYI3KEQgYvpY1I151EnDu6RIUlVF73Gmhw1Ssnk2QZCnUmPbn
+ yWSGMEeh5ZyZVpVDfQET2XOkRgX6HiQd/nmgyOQMdNgqf/TSnp90+dj5PhWhp0xM592i
+ s/wGKMzmHcFND+L5DhPeJavr3QsMR4DCAm8j3IFgayHlrytLzwAH31NYgQvpDHE6s1+G
+ Qk4g==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=x-silicon-com.20210112.gappssmtp.com
  header.i=@x-silicon-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=ISVfen0X
-Subject: [Buildroot] [PATCH 1/2] package/llvm: Support for RISC-V on the
- LLVM package
+ header.s=20210112 header.b=cuNxWAm2
+Subject: [Buildroot] [PATCH 2/2] arch/riscv: Added support for RISC-V vector
+ extension on the architecture menu.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,141 +86,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0675485163675043468=="
+Content-Type: multipart/mixed; boundary="===============7296368764346417844=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0675485163675043468==
-Content-Type: multipart/alternative; boundary="000000000000272a7505e2eeefa8"
+--===============7296368764346417844==
+Content-Type: multipart/alternative; boundary="00000000000040703e05e2eef2a1"
 
---000000000000272a7505e2eeefa8
+--00000000000040703e05e2eef2a1
 Content-Type: text/plain; charset="UTF-8"
 
-From 254bc67341f9180a1068551a5beeeaab0be06301 Mon Sep 17 00:00:00 2001
+From d8f288513e88cfb7f78f090ad0c02e6122a99097 Mon Sep 17 00:00:00 2001
 From: Abel Bernabeu <abel@x-silicon.com>
-Date: Mon, 4 Jul 2022 00:32:47 +0200
-Subject: [PATCH 1/2] package/llvm: Support for RISC-V on the LLVM package
+Date: Mon, 4 Jul 2022 00:41:09 +0200
+Subject: [PATCH 2/2] arch/riscv: Added support for RISC-V vector extension
+on
+ the architecture menu.
 
-The initial support for the LLVM package did not include RISC-V, and
-needed to be added.
-
-There is a new configuration parameter added
-(BR2_PACKAGE_LLVM_TARGETS_TO_BUILD) for dealing with the fact that
-the LLVM target and the architecture have different naming for RISC-V.
-While the target for RISC-V is "RISCV" irrespective of the ISA being
-32 or 64 bits, the architecture does contain the number of bits
-leading to "riscv32" and "riscv64".
-
-For previously supported architectures the naming for target and
-architecture matched and thus this parameter had not been needed, but
-it is now needed for RISC-V.
+This new setting will allow to test new toolchains already available
+that support the vector extension (more patches coming soon).
 ---
- package/llvm/Config.in | 10 ++++++++++
- package/llvm/llvm.mk   |  2 +-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ arch/Config.in.riscv | 7 +++++++
+ arch/arch.mk.riscv   | 4 ++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index c1887e36dd..5f2864b802 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -4,12 +4,22 @@ config BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-        default y if BR2_x86_64
-        default y if BR2_aarch64
-        default y if BR2_arm || BR2_armeb
-+       default y if BR2_riscv
+diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+index 288ed833eb..e4dc936cf8 100644
+--- a/arch/Config.in.riscv
++++ b/arch/Config.in.riscv
+@@ -18,6 +18,9 @@ config BR2_RISCV_ISA_RVD
+ config BR2_RISCV_ISA_RVC
+        bool
 
- config BR2_PACKAGE_LLVM_TARGET_ARCH
-        string
-        default "AArch64" if BR2_aarch64
-        default "ARM" if BR2_arm || BR2_armeb
-        default "X86" if BR2_i386 || BR2_x86_64
-+       default "riscv32" if BR2_riscv && !BR2_ARCH_IS_64
-+        default "riscv64" if BR2_riscv && BR2_ARCH_IS_64
++config BR2_RISCV_ISA_RVV
++       bool
 +
-+config BR2_PACKAGE_LLVM_TARGETS_TO_BUILD
-+       string
-+       default "AArch64" if BR2_aarch64
-+       default "ARM" if BR2_arm || BR2_armeb
-+       default "X86" if BR2_i386 || BR2_x86_64
-+       default "RISCV" if BR2_riscv
+ choice
+        prompt "Target Architecture Variant"
+        default BR2_riscv_g
+@@ -63,6 +66,10 @@ config BR2_RISCV_ISA_CUSTOM_RVD
+ config BR2_RISCV_ISA_CUSTOM_RVC
+        bool "Compressed Instructions (C)"
+        select BR2_RISCV_ISA_RVC
++
++config BR2_RISCV_ISA_CUSTOM_RVV
++       bool "Vector Instructions (V)"
++       select BR2_RISCV_ISA_RVV
+ endif
 
- config BR2_PACKAGE_LLVM
-        bool "llvm"
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 4670773ca3..dbf1f7b813 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -42,7 +42,7 @@ HOST_LLVM_CONF_OPTS +=
--DCMAKE_INSTALL_RPATH="$(HOST_DIR)/lib"
- LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
+ choice
+diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv
+index f3bf2b3467..07a94aa6a4 100644
+--- a/arch/arch.mk.riscv
++++ b/arch/arch.mk.riscv
+@@ -26,5 +26,9 @@ endif
+ ifeq ($(BR2_RISCV_ISA_RVC),y)
+ GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)c
+ endif
++ifeq ($(BR2_RISCV_ISA_RVV),y)
++GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)v
++endif
++
 
- # Build backend for target architecture. This include backends like AMDGPU.
--LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
-+LLVM_TARGETS_TO_BUILD = $(BR2_PACKAGE_LLVM_TARGETS_TO_BUILD)
- HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst
-$(space),;,$(LLVM_TARGETS_TO_BUILD))"
- LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst
-$(space),;,$(LLVM_TARGETS_TO_BUILD))"
-
+ endif
 -- 
 2.25.1
 
---000000000000272a7505e2eeefa8
+--00000000000040703e05e2eef2a1
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">From 254bc67341f9180a1068551a5beeeaab0be06301 Mon Sep 17 0=
+<div dir=3D"ltr">From d8f288513e88cfb7f78f090ad0c02e6122a99097 Mon Sep 17 0=
 0:00:00 2001<br>From: Abel Bernabeu &lt;<a href=3D"mailto:abel@x-silicon.co=
-m">abel@x-silicon.com</a>&gt;<br>Date: Mon, 4 Jul 2022 00:32:47 +0200<br>Su=
-bject: [PATCH 1/2] package/llvm: Support for RISC-V on the LLVM package<br>=
-<br>The initial support for the LLVM package did not include RISC-V, and<br=
->needed to be added.<br><br>There is a new configuration parameter added<br=
->(BR2_PACKAGE_LLVM_TARGETS_TO_BUILD) for dealing with the fact that<br>the =
-LLVM target and the architecture have different naming for RISC-V.<br>While=
- the target for RISC-V is &quot;RISCV&quot; irrespective of the ISA being<b=
-r>32 or 64 bits, the architecture does contain the number of bits<br>leadin=
-g to &quot;riscv32&quot; and &quot;riscv64&quot;.<br><br>For previously sup=
-ported architectures the naming for target and<br>architecture matched and =
-thus this parameter had not been needed, but<br>it is now needed for RISC-V=
-.<br>---<br>=C2=A0package/llvm/Config.in | 10 ++++++++++<br>=C2=A0package/l=
-lvm/<a href=3D"http://llvm.mk">llvm.mk</a> =C2=A0 | =C2=A02 +-<br>=C2=A02 f=
-iles changed, 11 insertions(+), 1 deletion(-)<br><br>diff --git a/package/l=
-lvm/Config.in b/package/llvm/Config.in<br>index c1887e36dd..5f2864b802 1006=
-44<br>--- a/package/llvm/Config.in<br>+++ b/package/llvm/Config.in<br>@@ -4=
-,12 +4,22 @@ config BR2_PACKAGE_LLVM_ARCH_SUPPORTS<br>=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 default y if BR2_x86_64<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 default y if =
-BR2_aarch64<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 default y if BR2_arm || BR2_arme=
-b<br>+ =C2=A0 =C2=A0 =C2=A0 default y if BR2_riscv<br>=C2=A0<br>=C2=A0confi=
-g BR2_PACKAGE_LLVM_TARGET_ARCH<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 string<br>=C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 default &quot;AArch64&quot; if BR2_aarch64<br>=C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 default &quot;ARM&quot; if BR2_arm || BR2_armeb<br=
->=C2=A0 =C2=A0 =C2=A0 =C2=A0 default &quot;X86&quot; if BR2_i386 || BR2_x86=
-_64<br>+ =C2=A0 =C2=A0 =C2=A0 default &quot;riscv32&quot; if BR2_riscv &amp=
-;&amp; !BR2_ARCH_IS_64<br>+ =C2=A0 =C2=A0 =C2=A0 =C2=A0default &quot;riscv6=
-4&quot; if BR2_riscv &amp;&amp; BR2_ARCH_IS_64<br>+<br>+config BR2_PACKAGE_=
-LLVM_TARGETS_TO_BUILD<br>+ =C2=A0 =C2=A0 =C2=A0 string<br>+ =C2=A0 =C2=A0 =
-=C2=A0 default &quot;AArch64&quot; if BR2_aarch64<br>+ =C2=A0 =C2=A0 =C2=A0=
- default &quot;ARM&quot; if BR2_arm || BR2_armeb<br>+ =C2=A0 =C2=A0 =C2=A0 =
-default &quot;X86&quot; if BR2_i386 || BR2_x86_64<br>+ =C2=A0 =C2=A0 =C2=A0=
- default &quot;RISCV&quot; if BR2_riscv<br>=C2=A0<br>=C2=A0config BR2_PACKA=
-GE_LLVM<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 bool &quot;llvm&quot;<br>diff --git =
-a/package/llvm/<a href=3D"http://llvm.mk">llvm.mk</a> b/package/llvm/<a hre=
-f=3D"http://llvm.mk">llvm.mk</a><br>index 4670773ca3..dbf1f7b813 100644<br>=
---- a/package/llvm/<a href=3D"http://llvm.mk">llvm.mk</a><br>+++ b/package/=
-llvm/<a href=3D"http://llvm.mk">llvm.mk</a><br>@@ -42,7 +42,7 @@ HOST_LLVM_=
-CONF_OPTS +=3D -DCMAKE_INSTALL_RPATH=3D&quot;$(HOST_DIR)/lib&quot;<br>=C2=
-=A0LLVM_TARGET_ARCH =3D $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))<br>=
-=C2=A0<br>=C2=A0# Build backend for target architecture. This include backe=
-nds like AMDGPU.<br>-LLVM_TARGETS_TO_BUILD =3D $(LLVM_TARGET_ARCH)<br>+LLVM=
-_TARGETS_TO_BUILD =3D $(BR2_PACKAGE_LLVM_TARGETS_TO_BUILD)<br>=C2=A0HOST_LL=
-VM_CONF_OPTS +=3D -DLLVM_TARGETS_TO_BUILD=3D&quot;$(subst $(space),;,$(LLVM=
-_TARGETS_TO_BUILD))&quot;<br>=C2=A0LLVM_CONF_OPTS +=3D -DLLVM_TARGETS_TO_BU=
-ILD=3D&quot;$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))&quot;<br>=C2=A0<br=
->-- <br>2.25.1<br></div>
+m">abel@x-silicon.com</a>&gt;<br>Date: Mon, 4 Jul 2022 00:41:09 +0200<br>Su=
+bject: [PATCH 2/2] arch/riscv: Added support for RISC-V vector extension on=
+<br>=C2=A0the architecture menu.<br><br>This new setting will allow to test=
+ new toolchains already available<br>that support the vector extension (mor=
+e patches coming soon).<br>---<br>=C2=A0arch/Config.in.riscv | 7 +++++++<br=
+>=C2=A0arch/arch.mk.riscv =C2=A0 | 4 ++++<br>=C2=A02 files changed, 11 inse=
+rtions(+)<br><br>diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv<b=
+r>index 288ed833eb..e4dc936cf8 100644<br>--- a/arch/Config.in.riscv<br>+++ =
+b/arch/Config.in.riscv<br>@@ -18,6 +18,9 @@ config BR2_RISCV_ISA_RVD<br>=C2=
+=A0config BR2_RISCV_ISA_RVC<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 bool<br>=C2=A0<b=
+r>+config BR2_RISCV_ISA_RVV<br>+ =C2=A0 =C2=A0 =C2=A0 bool<br>+<br>=C2=A0ch=
+oice<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 prompt &quot;Target Architecture Varian=
+t&quot;<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 default BR2_riscv_g<br>@@ -63,6 +66,=
+10 @@ config BR2_RISCV_ISA_CUSTOM_RVD<br>=C2=A0config BR2_RISCV_ISA_CUSTOM_=
+RVC<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 bool &quot;Compressed Instructions (C)&q=
+uot;<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 select BR2_RISCV_ISA_RVC<br>+<br>+confi=
+g BR2_RISCV_ISA_CUSTOM_RVV<br>+ =C2=A0 =C2=A0 =C2=A0 bool &quot;Vector Inst=
+ructions (V)&quot;<br>+ =C2=A0 =C2=A0 =C2=A0 select BR2_RISCV_ISA_RVV<br>=
+=C2=A0endif<br>=C2=A0<br>=C2=A0choice<br>diff --git a/arch/arch.mk.riscv b/=
+arch/arch.mk.riscv<br>index f3bf2b3467..07a94aa6a4 100644<br>--- a/arch/arc=
+h.mk.riscv<br>+++ b/arch/arch.mk.riscv<br>@@ -26,5 +26,9 @@ endif<br>=C2=A0=
+ifeq ($(BR2_RISCV_ISA_RVC),y)<br>=C2=A0GCC_TARGET_ARCH :=3D $(GCC_TARGET_AR=
+CH)c<br>=C2=A0endif<br>+ifeq ($(BR2_RISCV_ISA_RVV),y)<br>+GCC_TARGET_ARCH :=
+=3D $(GCC_TARGET_ARCH)v<br>+endif<br>+<br>=C2=A0<br>=C2=A0endif<br>-- <br>2=
+.25.1<br></div>
 
---000000000000272a7505e2eeefa8--
+--00000000000040703e05e2eef2a1--
 
---===============0675485163675043468==
+--===============7296368764346417844==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -231,4 +197,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0675485163675043468==--
+--===============7296368764346417844==--
