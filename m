@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA923C43334
-	for <buildroot@archiver.kernel.org>; Mon,  4 Jul 2022 10:22:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 034F7C43334
+	for <buildroot@archiver.kernel.org>; Mon,  4 Jul 2022 10:48:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73CB18187F;
-	Mon,  4 Jul 2022 10:22:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73CB18187F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9721782695;
+	Mon,  4 Jul 2022 10:48:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9721782695
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pdHuTGsJ-qs2; Mon,  4 Jul 2022 10:22:55 +0000 (UTC)
+	with ESMTP id 0FOtGIoPOv6t; Mon,  4 Jul 2022 10:48:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D1D481852;
-	Mon,  4 Jul 2022 10:22:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D1D481852
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DBC831BF295
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 10:22:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC43182572;
+	Mon,  4 Jul 2022 10:48:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC43182572
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 54BBC1BF295
+ for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 10:48:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B5C9760E0B
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 10:22:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5C9760E0B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2F60F82572
+ for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 10:48:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F60F82572
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AHcI-6nJZnVw for <buildroot@lists.busybox.net>;
- Mon,  4 Jul 2022 10:22:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4ZxkH4q-tSX9 for <buildroot@lists.busybox.net>;
+ Mon,  4 Jul 2022 10:48:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E43C460E1E
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com
- [IPv6:2607:f8b0:4864:20::b35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E43C460E1E
- for <buildroot@buildroot.org>; Mon,  4 Jul 2022 10:22:51 +0000 (UTC)
-Received: by mail-yb1-xb35.google.com with SMTP id e80so8832828ybb.4
- for <buildroot@buildroot.org>; Mon, 04 Jul 2022 03:22:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B38848268B
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B38848268B
+ for <buildroot@buildroot.org>; Mon,  4 Jul 2022 10:48:29 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id q6so15954697eji.13
+ for <buildroot@buildroot.org>; Mon, 04 Jul 2022 03:48:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=Yeud2vKfrfp+DGbXfj5tqN5e54e45moFrxTyz0/AFjI=;
- b=Y2UewlkLeGiMwTHTV8P2j/wNE63kqS8FN5Fmv5XXtM6YHb1bIDRc1etMHQTQquRamK
- wPIGHh8f8PvjPFF9sJ0PDvfgCiy9IzVcEIfPmJvCV6jYfMtfsgt3jkW6urzEXgG0kkaP
- RBIFJn/xbf24wH5HoqKKtyfZWctP16C9chSyhXpeu1dsvWSwTRadXTN4CuZpNOKC4tAA
- jbyWrONIh98I+hFCkyROMuuWjUxRQPotB67E2SFmH2wCbIKZzDz2OHwPNLDBhqiKDz9N
- H6SYCZKjMGppddeYEr9qYJSY3tGH5xDOf52YpzsVjc+pyMSPUfsrT9K9ULOavTbdWMl+
- Rtuw==
-X-Gm-Message-State: AJIora8pf2AZMBlVhM34TVRgZofKqg1FKuJvenEbTbCbP2xrRpuDqqWt
- YXpiuijg0O1JUOIQiCObUotz/91ngrjEgQ4RlyPmdvHq2Ik=
-X-Google-Smtp-Source: AGRyM1vyi2oNnA7ACQlGbl5IuNzhtW8sIIq54MD73B38AQkI+OxmNFJ2Qpi8hO5TbrpRlNMLVmfU/7ka4+hSZHRQg3s=
-X-Received: by 2002:a25:2182:0:b0:66e:2a27:7d30 with SMTP id
- h124-20020a252182000000b0066e2a277d30mr11508569ybh.491.1656930170588; Mon, 04
- Jul 2022 03:22:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220704094613.5636-1-yegorslists@googlemail.com>
-In-Reply-To: <20220704094613.5636-1-yegorslists@googlemail.com>
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 4 Jul 2022 12:22:39 +0200
-Message-ID: <CAGm1_kt3Epd-12OiwzVD6H4U9-V=uD-pCrP8RxHVK0x5nia-5A@mail.gmail.com>
-To: buildroot <buildroot@buildroot.org>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id;
+ bh=AteGpqP9XbtBqmsXwktq2+D/SJGjiKJGlHZN40F9s3U=;
+ b=33XqIBRqN8yyeiL65wOM1JA3y6LuGBzK0jEICqukB/Sd/QgbSQrko8srLR/C6Hecyk
+ 1IIfRalackYL12yKiG9AzyKe5FwFVUK8H/nJQTljdCkP/VW4CbuzFSw/6mRV+GvfeLZP
+ 9Qsx2YCer+cno4hfxfyjkKXoduUljLLcZ5CIXYZro6uF3c7OXm7ck/5l6AsQLqSkLX6O
+ 2IlHWc3j/0/puGIdu8RbjY0ZeKMo1QVnrKMFiEf/0HRU1MU4KnFz+7RUamg4rdwYaXkJ
+ yWvEZ7/I27l2/Sic2vh8LhH6skexWSlNId9NzcLrbJvDODRn1LKPJh8yRVqJOYttXmHK
+ lQXw==
+X-Gm-Message-State: AJIora+oF7U0klzq1KI5pDpTK/FqMRLxe/9lxhIlUb/i9EE68Ee/EKpo
+ sfGfi189NhV0CtQXfiRmrMa1HEp72lSljA==
+X-Google-Smtp-Source: AGRyM1sIZ21njuVl2FkBSFQFH9D91RJlRm/EHNUakEmqdLe36kIsSowkggHN+d0qXQHQ2yXzyeXr9g==
+X-Received: by 2002:a17:906:d54f:b0:726:2c7c:c0f9 with SMTP id
+ cr15-20020a170906d54f00b007262c7cc0f9mr28180109ejc.441.1656931707711; 
+ Mon, 04 Jul 2022 03:48:27 -0700 (PDT)
+Received: from development1.visionsystems.de (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ i23-20020aa7c9d7000000b0042de3d661d2sm20262921edt.1.2022.07.04.03.48.27
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Mon, 04 Jul 2022 03:48:27 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Mon,  4 Jul 2022 12:48:20 +0200
+Message-Id: <20220704104820.5332-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.17.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=googlemail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=Yeud2vKfrfp+DGbXfj5tqN5e54e45moFrxTyz0/AFjI=;
- b=WvrHsQ8N7iXkYoJDXWKrLqfbBbHBZVhUD9ck8Et8wmq9NZ1yp12nuR1mcJgC/1B6x/
- eLuIB88tIM/vIOdJ6GvZZV7OF4ji/Sjfx0veyeDmkfBKX4xuziWrC5Cv+A0MnIaMLwkW
- 0YFWoCaV9OlTDiChSFLYV0QtciP9Hdx2CnbQyzh4mHsV9WD/m4GOx3j0CtWLFWVgEK8O
- KS4EKMrbWFcL5fq8+eZ7GG8RKZgxC//S50vzwD5ChO8mbDVYwYWrADQc3LrCBBgs+5uW
- H3ferMOfLLObT+oPYC/SiX+GZJXXMbh+4JXoj3NVeP5ZBT2l44/QWF08eBZBRflJWWas
- Auvg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=from:to:cc:subject:date:message-id;
+ bh=AteGpqP9XbtBqmsXwktq2+D/SJGjiKJGlHZN40F9s3U=;
+ b=n5wMF4a8ipEpAauKlFwkZI2oF7bH/9Ib1vqJ+SJvDlSOQTuCif0jpJy8K4l1OHnGRr
+ 6sEvg/io8uTJGnauu3dICaMJcrgfxfVZweUSGgbSE16S4VnyOlUMGxbXsBlj6u9+AkES
+ rdGz5Crvw7ZrswLRG38zjews5xm+kZ1zczxCypVGmFtcxl1fqsbeqXTTeF/goVl96lQH
+ CiPns2MB/rGJKnMHEgdEvZ4+yUX8Y7ZMbiCV53LP+5HG2/772j2I4hm4B1r2WAZbje4n
+ 4dWixRM9BbR/020d5+LOLx4Mt0T0KpH4cVCGp1irEGZ2PcgMJ6Re6W4arKTUbTalg/xj
+ Sk4g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=WvrHsQ8N
-Subject: Re: [Buildroot] [PATCH v2] package/python-automat: add missing
- build-time dependency
+ header.a=rsa-sha256 header.s=20210112 header.b=n5wMF4a8
+Subject: [Buildroot] [PATCH] package/python-setuptools-scm: add missing
+ runtime dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,46 +89,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>
+From: yegorslists--- via buildroot <buildroot@buildroot.org>
+Reply-To: yegorslists@googlemail.com
+Cc: james.hilliard1@gmail.com, Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Jul 4, 2022 at 11:46 AM <yegorslists@googlemail.com> wrote:
->
-> From: Yegor Yefremov <yegorslists@googlemail.com>
->
-> python-automat needs host-python-typing-extensions.
->
-> Fixes: http://autobuild.buildroot.net/results/a4a52da24032222860ad6abe89bf66839cc2e812/
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes:
->         v1 -> v2: add Fixes tag
->
->  package/python-automat/python-automat.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/python-automat/python-automat.mk b/package/python-automat/python-automat.mk
-> index b94fd2e1c4..03d6759718 100644
-> --- a/package/python-automat/python-automat.mk
-> +++ b/package/python-automat/python-automat.mk
-> @@ -10,6 +10,6 @@ PYTHON_AUTOMAT_SITE = https://files.pythonhosted.org/packages/80/c5/82c63bad570f
->  PYTHON_AUTOMAT_SETUP_TYPE = setuptools
->  PYTHON_AUTOMAT_LICENSE = MIT
->  PYTHON_AUTOMAT_LICENSE_FILES = LICENSE
-> -PYTHON_AUTOMAT_DEPENDENCIES = host-python-m2r host-python-setuptools-scm
-> +PYTHON_AUTOMAT_DEPENDENCIES = host-python-m2r host-python-setuptools-scm host-python-typing-extensions
->
->  $(eval $(python-package))
-> --
-> 2.17.0
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Please, ignore this patch.
+Since version 7.0.4 python-setuptools-scm requires
+host-python-typing-extensions package.
 
-Yegor
+Fixes:
+http://autobuild.buildroot.net/results/a4a52da24032222860ad6abe89bf66839cc2e812/
+http://autobuild.buildroot.net/results/2b381cd32671db4aa0b281ece5569667bae0f923/
+http://autobuild.buildroot.net/results/a3c5208224cc7825152d9a27b64fd82fb000a259/
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-setuptools-scm/python-setuptools-scm.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
+index 890ee0c9c1..a3de013cc5 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.mk
++++ b/package/python-setuptools-scm/python-setuptools-scm.mk
+@@ -10,6 +10,6 @@ PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/bc/e6/ac8b0
+ PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
+ PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
+-HOST_PYTHON_SETUPTOOLS_SCM_DEPENDENCIES = host-python-packaging host-python-tomli
++HOST_PYTHON_SETUPTOOLS_SCM_DEPENDENCIES = host-python-packaging host-python-tomli host-python-typing-extensions
+ 
+ $(eval $(host-python-package))
+-- 
+2.17.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
