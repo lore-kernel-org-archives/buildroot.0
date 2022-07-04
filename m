@@ -4,115 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C353C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Jul 2022 11:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D204DC43334
+	for <buildroot@archiver.kernel.org>; Mon,  4 Jul 2022 12:08:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4D344155F;
-	Mon,  4 Jul 2022 11:30:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4D344155F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E0CC40860;
+	Mon,  4 Jul 2022 12:08:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E0CC40860
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ctszae9e9fK7; Mon,  4 Jul 2022 11:30:13 +0000 (UTC)
+	with ESMTP id uzsj_6AfaYWE; Mon,  4 Jul 2022 12:07:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F7C74051E;
-	Mon,  4 Jul 2022 11:30:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F7C74051E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A969D1BF375
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 11:30:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 676D840861;
+	Mon,  4 Jul 2022 12:07:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 676D840861
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5AA9A1BF368
+ for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 12:07:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 76491827FA
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 11:30:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76491827FA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42D5560E11
+ for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 12:07:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42D5560E11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V4xNANPr4Fng for <buildroot@lists.busybox.net>;
- Mon,  4 Jul 2022 11:30:09 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6494F82741
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6494F82741
- for <buildroot@buildroot.org>; Mon,  4 Jul 2022 11:30:09 +0000 (UTC)
-X-IronPort-AV: E=Sophos;i="5.92,243,1650902400"; d="scan'208";a="205474859"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com)
- ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 04 Jul 2022 19:30:08 +0800
-IronPort-SDR: 3oBP4/n3huG2f/mPfILvqsEnhsOfT+MfhON71gycNSY6N4nDZW8SqGad3fA7H7TR35TvhsEqbF
- dtxMJQ/YhPEytp8TpAfxNLO+Ru1vWBwPI1EL/q89brEjNDVTjPgguyOCyEby+YSHOdfjSLxD+B
- 2hb8Cssupiybn0RAF1K9mdgzead/5VVJskU2L2Ma9iNKTyjZJMoN6PT6V5YdKD+pJd+HH9aeue
- uPA/craKYklQ2JdML2a30KYqh+r/APLyxpwZ07/Lz1ZUQKZfxgN6SseKoR1BnuqkejjhlnGZjS
- 2A1/Mu/UD5PpfhyfulPHkT53
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
- by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 04 Jul 2022 03:52:00 -0700
-IronPort-SDR: LP+pEIsIQiy4vFPAh9pIIXqoj8zFvfYNidXPBPeBeXVzGew3Bgv2f6u3Ck5XWXZ7oyFy5YKIhS
- 1up4Dqhu1WRhWqaEnp/+QkPWHfQoEiF7CoCUo+OjmiDjdqCKngLmn4O/LWmYR41eQb+TdNiM6R
- g60RjDGkPHeZRCplyJbtY5tnD8kQta3qLnyjROExdqVA95kI0kIK4GXX81DJASSUiXoyxB+SYR
- z/Sr0CBOaC6PBtVZBriBgA3yxmUzCXPkZeKMTHp52xjdu3mLuqfErRD+8fYaPk0qNNDnAAw7Tu
- P4o=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
- by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 04 Jul 2022 04:30:09 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Lc3WN2NqMz1Rw4L
- for <buildroot@buildroot.org>; Mon,  4 Jul 2022 04:30:08 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
- by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new,
- port 10026) with ESMTP id K5kdbd5KgEdR for <buildroot@buildroot.org>;
- Mon,  4 Jul 2022 04:30:07 -0700 (PDT)
-Received: from [10.225.163.105] (unknown [10.225.163.105])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Lc3WL5FWsz1RtVk;
- Mon,  4 Jul 2022 04:30:06 -0700 (PDT)
-Message-ID: <bd4eeaff-f4ce-ecd3-8e3b-03d5a924b53a@opensource.wdc.com>
-Date: Mon, 4 Jul 2022 20:30:05 +0900
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GEIGF62Qo6sL for <buildroot@lists.busybox.net>;
+ Mon,  4 Jul 2022 12:07:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17F4660C2C
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.35])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 17F4660C2C
+ for <buildroot@buildroot.org>; Mon,  4 Jul 2022 12:07:51 +0000 (UTC)
+Received: from opfednr03.francetelecom.fr (unknown [xx.xx.xx.67])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by opfednr27.francetelecom.fr (ESMTP service) with ESMTPS id 4Lc4Ls5r4Pz4wv5; 
+ Mon,  4 Jul 2022 14:07:49 +0200 (CEST)
+Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
+ Mon, 04 Jul 2022 14:07:47 +0200
+Date: Mon, 4 Jul 2022 14:07:47 +0200
+From: <yann.morin@orange.com>
+To: Norbert Lange <nolange79@gmail.com>
+Message-ID: <32605_1656936469_62C2D815_32605_488_1_20220704120747.GA4115093@tl-lnx-nyma7486>
+References: <20220109110736.3963-1-nolange79@gmail.com>
+ <20220704064121.GA2889@tl-lnx-nyma7486>
+ <5037_1656917160_62C28CA8_5037_313_1_20220704064557.GB2889@tl-lnx-nyma7486>
+ <CADYdroPEbds5DXt=Ez9y33nuV4KnBYkg4pOiVBUSTQuhLNS=fg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To: buildroot <buildroot@buildroot.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220531054926.373713-1-damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220531054926.373713-1-damien.lemoal@opensource.wdc.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1656934209; x=1688470209;
- h=message-id:date:mime-version:subject:to:cc:references:
- from:in-reply-to:content-transfer-encoding;
- bh=rA7OXpc7AZTQn6BYGJqup0zEeqEloWx5dv9jSKuxtNM=;
- b=kIGG7xZEQMHMM0W689tnj5V7S9iHv1IssjCw/YmnrL7ODdx7+bfP5qJ3
- F8l4HRZoZ7rZ/QWsTPIJCGnk3oIbfi6EPSVIMgEd3UluPCiyM2jLDOgVD
- AMinOikGGd7HmwoPwGOldEcw0m7L8AxNFp/2y+B9Klx6xG/C26Gcf9Y4U
- AlyurRQpYWi3Z3MYvWIHyf+ALKUmFyo1zgK4vLJ5xkrc/tFlVw04/xPfy
- tdpvX2sGFKwNNJp+o9xS/eW2pOEREOZL2z8RrpkRyoSXVnnv0NHjBlyyZ
- 13L/IL+JMmeeSi4eE48hR3RoHFyRctBYzQOijTJqxGcbMXu4w9ms5Mun0
- w==;
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
- opensource.wdc.com; h=content-transfer-encoding:content-type
- :in-reply-to:organization:from:references:to:content-language
- :subject:user-agent:mime-version:date:message-id; s=dkim; t=
- 1656934207; x=1659526208; bh=rA7OXpc7AZTQn6BYGJqup0zEeqEloWx5dv9
- jSKuxtNM=; b=FY3Zdh+hTuay5CIlh/FiIPVzMglrcPWsTNV1ZUegDRHLRDfU/N+
- VcN09GBxMFtD4lZgXgwDp+y8gnqHGNwuonuugva+UVx5EL9Z0VzyRNJFyeWPtTwj
- ciRoQDXscC6uSGnHAXDwxrUVEc8MD9RwW0yZOCCWbkAb+SvDMsLjZJyga2hEoQPe
- /8H490rHw4cFzyA62zP0mFY2pD3/IzI1oJZwU6YmB/DKKkvKMSWpfWYmm9e/GWeG
- OonlE4zYZmm/SToJ2HMUuuiWaFvXQP9kpWZsmKUgeDiCWQsWqeEjIfWh8P5dmm75
- nSHpyeqQKVHUfHfV9kNloOc1iJ04Fbb2TLQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com
- header.a=rsa-sha256 header.s=dkim.wdc.com header.b=kIGG7xZE; 
- dkim=pass (2048-bit key) header.d=opensource.wdc.com
- header.i=@opensource.wdc.com header.a=rsa-sha256 header.s=dkim
- header.b=FY3Zdh+h
-X-Mailman-Original-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
- reason="pass (just generated, assumed good)"
- header.d=opensource.wdc.com
-Subject: Re: [Buildroot] [PATCH v3 0/7] Fix RV64 NOMMU and add Canaan K210
- SoC support
+Content-Disposition: inline
+In-Reply-To: <CADYdroPEbds5DXt=Ez9y33nuV4KnBYkg4pOiVBUSTQuhLNS=fg@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Originating-IP: [10.115.26.50]
+X-ClientProxiedBy: OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; s=ORANGE001; t=1656936469;
+ bh=MzWsiyyAJJK6dZEruwsaSyc+0uV5u+SKhk2GFxTnVJI=;
+ h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+ b=ewky2+A9SwQXMz9OaQpIKZsaiwU5RPmR1jxoMppD+2gFWvz5dnGESC9QkXLRfnMJs
+ uIl4MPTkLGMeDd+HaEERkwc6y2cMf4HvHejQrvJHcOkJuQb4Hzh7lmZ74Ol/yQdljf
+ ple2IMq70bBo1uNsV0H1qo+ViSFOOLXhYldmy9SxwPdq1j9Eb+/yiDnX+OHyDzDUKx
+ HYy61AORlNw653YZVuNz/mwgZcMIeLfEDHF8jVWeWoj3VLcjWHMnuPOVLWFZ/xuzBB
+ 3wUerOE4c0W+OxkwUNcaVYQTuqbrlw36e5ElP1/ZdUqq6chBNexH2rp3SOM4Nt3wqi
+ Vj3rObLk5xCqA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=ORANGE001 header.b=ewky2+A9
+Subject: Re: [Buildroot] [PATCH v3] package/systemd: invoke
+ systemd-tmpfilesd on final image
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -124,139 +85,197 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Damien Le Moal via buildroot <buildroot@buildroot.org>
-Reply-To: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc: Niklas Cassel <niklas.cassel@wdc.com>,
- Alistair Francis <alistair@alistair23.me>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ =?utf-8?B?SsOpcsOpbXk=?= ROSEN <jeremy.rosen@smile.fr>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 5/31/22 14:49, Damien Le Moal via buildroot wrote:
-> This patch series is a rework of the old v5 series "Add RV64 NOMMU and
-> Canaan K210 SoC support" already posted some (long) time ago.
-> 
-> This series adds support for building 64-bits RISC-V NOMMU kernels (both
-> bootable kernels and u-boot sdcard boot envronements) for NOMMU RISC-V
-> 64-bits boards. The board supported include QEMU and many boards using
-> the dual-core RISC-V 64-bits Cannan Kendryte K210 SoC.
-> 
-> The first patch is a simple fix of elf2flt configuration.
-> 
-> Patch 2 adds the configurations files common to all K210-based boards.
-> 
-> The last 5 patches add support for the following K210-based boards:
-> * Sipeed MAIX Bit
-> * Sipeed MAIXDUINO
-> * Sipeed MAIX Dock (dan)
-> * Sipeed MAIX Go
-> * Canaan KD233 development board
-> 
-> For each board, a readme.txt file is added to document how to build and
-> install images for these boards.
+Norbert, All,
 
-Ping ? This was sent at the end of May and still not applied nor
-commented. Any blocker here ?
+On 2022-07-04 13:05 +0200, Norbert Lange spake thusly:
+> Am Mo., 4. Juli 2022 um 08:46 Uhr schrieb <yann.morin@orange.com>:
+> > On 2022-07-04 08:41 +0200, MORIN Yann INNOV/IT-S spake thusly:
+> > > On 2022-01-09 12:07 +0100, Norbert Lange spake thusly:
+> > > > Especially for read-only filesystems it is helpfull to
+> > > > pre-create all folders for non-volatile paths.
+> > > I'm revisiting this old change of yours, and I have some issues
+> > > understanding the original issue this is supposed to fix...
+> Often if a directory is readonly, the service will still start (and
+> have limited functionality),
+> but if its missing it wont be even attempted or fails early, taking
+> down more services that depend on it.
 
-> 
-> Changes from v2:
-> * Rebased patches on next branch
-> * Modified patch 1 to address Thomas comments
-> * Removed patches already applied
-> * Modified patches 2 to 7 to remove the BR2_PACKAGE_HOST_ELF2FLT and
->   reference the global patch directory in boar/riscv/nommu
-> 
-> Changes from v1:
-> * Modified patch 5 to add the python-kflash utility as a host package as
->   the new 1.1.5 version of this utility fixes the previously identified
->   problems with python dependencies.
-> * Fixed patch 4 (qemu riscv nommu) to have buildroot configuration file
->   reference kernel 5.18.
-> * Fixed patch 11 (kd233 board) to have buildroot configuration file
->   reference kernel 5.18.
-> * Modified patch 7 to 11 to add the python-kflash host package to the
->   buildroot configuration files. The instructions in the readme.txt
->   file for each board are also updated accordingly.
-> 
-> Damien Le Moal (7):
->   package/elf2flt: Remove Config.in.host
->   board: Add common support for Canaan K210 SoC-based boards
->   board: Add Sipeed MAIX-Bit board support
->   board: Add Sipeed MAIXDUINO board support
->   board: Add Sipeed MAIX-Dock board support
->   board: Add Sipeed MAIX-Go board support
->   board: Add Canaan KD233 board support
-> 
->  Config.in                                     |   2 +-
->  DEVELOPERS                                    |  11 +
->  arch/Config.in                                |   1 +
->  board/canaan/k210-soc/busybox-tiny.config     | 231 +++++++++++++
->  board/canaan/k210-soc/genimage.cfg            |  30 ++
->  board/canaan/k210-soc/linux-sdcard.config     |   4 +
->  board/canaan/k210-soc/post-build.sh           |  28 ++
->  board/canaan/k210-soc/rootfs_overlay/init     |   1 +
->  .../canaan/k210-soc/rootfs_overlay/sbin/init  |  41 +++
->  board/canaan/k210-soc/uboot.config            |   1 +
->  board/canaan/kd233/linux-cpio.config          |   2 +
->  board/canaan/kd233/readme.txt                 | 149 ++++++++
->  board/sipeed/maix-bit/linux-cpio.config       |   2 +
->  board/sipeed/maix-bit/readme.txt              | 316 +++++++++++++++++
->  board/sipeed/maix-dock/linux-cpio.config      |   2 +
->  board/sipeed/maix-dock/readme.txt             | 321 ++++++++++++++++++
->  board/sipeed/maix-go/linux-cpio.config        |   2 +
->  board/sipeed/maix-go/readme.txt               | 320 +++++++++++++++++
->  board/sipeed/maixduino/linux-cpio.config      |   2 +
->  board/sipeed/maixduino/readme.txt             | 292 ++++++++++++++++
->  configs/canaan_kd233_defconfig                |  39 +++
->  configs/qemu_arm_versatile_nommu_defconfig    |   1 -
->  configs/qemu_riscv64_nommu_virt_defconfig     |   1 -
->  configs/qemu_xtensa_lx60_nommu_defconfig      |   1 -
->  configs/sipeed_maix_bit_defconfig             |  39 +++
->  configs/sipeed_maix_bit_sdcard_defconfig      |  57 ++++
->  configs/sipeed_maix_dock_defconfig            |  39 +++
->  configs/sipeed_maix_dock_sdcard_defconfig     |  57 ++++
->  configs/sipeed_maix_go_defconfig              |  39 +++
->  configs/sipeed_maix_go_sdcard_defconfig       |  57 ++++
->  configs/sipeed_maixduino_defconfig            |  39 +++
->  configs/sipeed_maixduino_sdcard_defconfig     |  57 ++++
->  package/elf2flt/Config.in.host                |  13 -
->  toolchain/toolchain-buildroot/Config.in       |   1 -
->  34 files changed, 2180 insertions(+), 18 deletions(-)
->  create mode 100644 board/canaan/k210-soc/busybox-tiny.config
->  create mode 100644 board/canaan/k210-soc/genimage.cfg
->  create mode 100644 board/canaan/k210-soc/linux-sdcard.config
->  create mode 100755 board/canaan/k210-soc/post-build.sh
->  create mode 120000 board/canaan/k210-soc/rootfs_overlay/init
->  create mode 100755 board/canaan/k210-soc/rootfs_overlay/sbin/init
->  create mode 100644 board/canaan/k210-soc/uboot.config
->  create mode 100644 board/canaan/kd233/linux-cpio.config
->  create mode 100644 board/canaan/kd233/readme.txt
->  create mode 100644 board/sipeed/maix-bit/linux-cpio.config
->  create mode 100644 board/sipeed/maix-bit/readme.txt
->  create mode 100644 board/sipeed/maix-dock/linux-cpio.config
->  create mode 100644 board/sipeed/maix-dock/readme.txt
->  create mode 100644 board/sipeed/maix-go/linux-cpio.config
->  create mode 100644 board/sipeed/maix-go/readme.txt
->  create mode 100644 board/sipeed/maixduino/linux-cpio.config
->  create mode 100644 board/sipeed/maixduino/readme.txt
->  create mode 100644 configs/canaan_kd233_defconfig
->  create mode 100644 configs/sipeed_maix_bit_defconfig
->  create mode 100644 configs/sipeed_maix_bit_sdcard_defconfig
->  create mode 100644 configs/sipeed_maix_dock_defconfig
->  create mode 100644 configs/sipeed_maix_dock_sdcard_defconfig
->  create mode 100644 configs/sipeed_maix_go_defconfig
->  create mode 100644 configs/sipeed_maix_go_sdcard_defconfig
->  create mode 100644 configs/sipeed_maixduino_defconfig
->  create mode 100644 configs/sipeed_maixduino_sdcard_defconfig
->  delete mode 100644 package/elf2flt/Config.in.host
-> 
+But again, what exactly is broken?
 
+Our var factory is supposed to make that working, so if it is broken,
+I'd rather that it is fixed (somehow), rather than some orthogonal
+change be implemented. Can you provide an actual defconfig that exhibits
+the issue, that the factory does not solve?
+
+And as I explained: with the factory, the entries added in /var are
+anyway totally useless because we anyway mount a tmpfs on there. So, in
+a sense, this change conflicts with the var factory.
+
+And from http://0pointer.de/blog/projects/stateless.html, I understand
+that it it is totally expected that one may want to mount a filesystem,
+like a tmpfs, on /var, so what we are doing is perfectly legit.
+
+And as I (my non-work alterego) explained in 26085bbbd500 (system: make
+systemd work on a read-only rootfs), people who want persistent /var can
+change the fstab (but see below) to something else, to have /var an
+actual filesystem.
+
+So, I still do no tunderstand the initial issue your change was trying
+to fix...
+
+> > > Indeed, for read-only filesystems, we do generate a factory for /var.
+> > > This code is guarded by a condition on BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW,
+> > > so indeed, if BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is set, we do not
+> > > create the factory. But if it is set, then we do create the factory:
+> > *if it is _unset_, then we do create the factory.
+> Yeah, and this is an insanely fragile method, which I brought up
+> multiple times (see [1]),
+> and prevents other solutions that work above or below your initsystem.
+
+I agree that BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is fragile. However,
+we do not have a bette rsolution to know whether /var is on a r/w
+filesystem, or if we need to explicitly mount one there.
+
+We should also expand the help entry for BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+and add some explanations in the manual, probably.
+
+> Some versions I personally cooked up:
+> -   precreate the directories, or add some symlinks to /tmp.
+>     (I got a debian USB Setup/Rescue stick with Gnome running that way)
+> -   deal with the issue in the initramfs (mount tmpf/ overlayfs)
+> -   add a systemd unit + mount creating the overlayfs.
+> 
+> Any of these are just as viable and more robust than that weird
+> tmpfiles solution,
+> why is that one forced down to be the only one?
+
+First it is not the only one. But we need something, and that is
+something minimalist. It is not covering 100% cases, but that is not
+possible in a generic way.
+
+Buildroto is all about providing a working base system, that user can
+extend and customise at will. But the premises is that it shold work out
+of the box.
+
+> Look for example on the BR2_PACKAGE_SYSTEMD_CATALOGDB config
+> which depends on BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW to
+> avoid a huge mess.
+
+Sorry, but I do not understand what the issue here is. If there are
+conflicts with tmpfiles.d entries, we need to find a solution, rather
+than hide them under the rug...
+
+> > >   - move /var away to /usr/share/factory/var
+> > >   - register its content as a tmpfiles.d:
+> > >     https://github.com/buildroot/buildroot/blob/master/package/skeleton-init-systemd/skeleton-init-systemd.mk#L37
+> >
+> > Note: this tmpfiles.d is currently stored in /etc/tmpfiles.d, but it
+> > really belong to /usr/lib/tmpfiles.d (to later allow for an empty /etc
+> > too).
+> The whole feature belongs behind its own option, or even better: own package.
+
+Sorry, but we need a way to provide a r/w /var by default, for those
+packages that expect it to be, and that are not systemd-aware, but do
+install stuff in /var at build-time. I don't see how that can be done if
+the factory is moved to its own package...
+
+I also don't see why it should be a separate option either. Indeed, on
+aread-only rootfs (either by design, like squashfs, or by configuration,
+like passing 'ro' on the kernel command line), we still need a r/w /var.
+
+So the best option is to correlate it to BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+even if it feels a bit kludgy...
+
+> I attached an archive implementing the systemd unit + mount. Some
+> equivalent would be possible
+> for other init systems. You wont need ANY complicated trickery that way,
+> just unpack that into /usr/lib/systemd/system
+
+Ah, I see that you switched to var.mout. This is *exactly* the change I
+am doing right now, and it is working very nice. Here's my var.mount:
+
+    # SPDX-License-Identifier: LGPL-2.1-or-later
+    # Modelled after systemd's tmp.mount
+
+    [Unit]
+    Description=Buildroot /var tmpfs
+    DefaultDependencies=no
+    Conflicts=umount.target
+    Before=basic.target local-fs.target umount.target systemd-tmpfiles-setup.service
+    After=swap.target
+
+    [Mount]
+    What=tmpfs
+    Where=/var
+    Type=tmpfs
+    Options=mode=1777,strictatime,nosuid,nodev,size=50%%,nr_inodes=1m
+
+    [Install]
+    WantedBy=basic.target
+
+I can see a few lines that yours has that could be interesting to add
+in there, like (but why is that latter one commented out?):
+  - ConditionPathIsSymbolicLink=!/var and
+  - ConditionPathIsReadWrite=!/var
+
+(we could also maybe use ConditionPathIsMountPoint=!/var)
+
+(also note that systemd will complain that /var is not empty, but will
+still proceed to mount a tmpfs on /var anyway).
+
+Thus, people that want to moun tsomething else can ovide a drop-in to
+complement our var.mount, or even provide their own that overrides ours.
+
+With my var.mount, and with this change reverted, I validate that all
+the processes running on my system do have /var mounted:
+
+    # for i in /proc/*/mountinfo; do grep -q ' /var ' ${i} || echo ${i}; done
+
+The only such process is the one running [kdevtmpfs], but that is a
+kernel thread that is running for the /dev devtmpfs mount, and thus is
+started before the init process is, and the factory is workign nicely.
+
+I'd be interested to see how the systemd catalogs are broken, though,
+and see how we can unbreak them.
+
+Regards,
+Yann E. MORIN.
+
+> Regards, Norbert
+> 
+> [1] - http://lists.busybox.net/pipermail/buildroot/2020-July/287016.html
 
 -- 
-Damien Le Moal
-Western Digital Research
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
