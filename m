@@ -4,87 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 475BAC43334
-	for <buildroot@archiver.kernel.org>; Mon,  4 Jul 2022 08:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BED6C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Jul 2022 09:39:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD3B260D77;
-	Mon,  4 Jul 2022 08:56:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD3B260D77
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F23760B96;
+	Mon,  4 Jul 2022 09:39:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F23760B96
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ikagNUmMqYCp; Mon,  4 Jul 2022 08:56:16 +0000 (UTC)
+	with ESMTP id rboPw5RM4c2S; Mon,  4 Jul 2022 09:39:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E229860D8C;
-	Mon,  4 Jul 2022 08:56:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E229860D8C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E3B371BF338
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 08:56:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5BEE60AC2;
+	Mon,  4 Jul 2022 09:39:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5BEE60AC2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AD90C1BF2A5
+ for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 09:39:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD62E82443
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 08:56:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD62E82443
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7A40560AC2
+ for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 09:39:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A40560AC2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PCHZh5pHgWHu for <buildroot@lists.busybox.net>;
- Mon,  4 Jul 2022 08:56:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fny43m-Id6yC for <buildroot@lists.busybox.net>;
+ Mon,  4 Jul 2022 09:39:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 261EB81A24
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 261EB81A24
- for <buildroot@buildroot.org>; Mon,  4 Jul 2022 08:56:02 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id z12so2835173wrq.7
- for <buildroot@buildroot.org>; Mon, 04 Jul 2022 01:56:01 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4086260A9C
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4086260A9C
+ for <buildroot@buildroot.org>; Mon,  4 Jul 2022 09:39:31 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id o25so15736547ejm.3
+ for <buildroot@buildroot.org>; Mon, 04 Jul 2022 02:39:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=XEcwkc6CukaKyaQvKEoM2mjWb0wdqLDUqxUGanRWMZ8=;
- b=XgkuiW9Npzr/hNrHSDuuSEm7r7ISKDEjMFMuwIE2cSwWQSjAK/kYzg1ilENjYh+qaJ
- qtvVVYArJmQHCqdD+Hqw+hj1yGy+uCh6aM2Tyi+38x4EcQspunQ+j2BxfaejAC12lEZ4
- QXjWv9tTQcXGEw03n5rle/DYk/xd82ZvdP3AHQJLUfkj1yqKEHylVWti1ZSsFWILRYVB
- JIpv2tiPMpvzYJVVQVMn25dloevJTeD9OHlkA7ofpJJxrRC1o0czQg0c7y6LlIlCRzmU
- bfq3GFYJjjmjANlW8comviPzADfAY4HtrICQgBQ74CO9pV3zo3f4wywQFU3QrGfgVPaz
- D/jg==
-X-Gm-Message-State: AJIora8VolgmpEdXBlgrrzwy1otzObjurDY0k9bL2jvd92u2g6vIVDH1
- ff6TsE/olg/vMXLAT8G7PtgILCqkC9pv8g==
-X-Google-Smtp-Source: AGRyM1sxyPSmP72XR3epU7NkqzS45AIaHLj4G9xy+TGctelB5WmV7nEuGtmqVN+b38qRKAMMEwy2hw==
-X-Received: by 2002:a5d:484c:0:b0:21d:6c71:a053 with SMTP id
- n12-20020a5d484c000000b0021d6c71a053mr2263698wrs.449.1656924960233; 
- Mon, 04 Jul 2022 01:56:00 -0700 (PDT)
-Received: from jupiter.home (14.5.23.95.dynamic.jazztel.es. [95.23.5.14])
- by smtp.gmail.com with ESMTPSA id
- f18-20020adff992000000b0021b9416fa13sm6624967wrr.90.2022.07.04.01.55.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Jul 2022 01:55:59 -0700 (PDT)
-From: Abel Bernabeu <abel@x-silicon.com>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id;
+ bh=15q04+bBSlFH2EqepZun68D05cnsvkCQaV0QYc9+jDY=;
+ b=dRydCgmvp5K8R3RV3egPCnpwIFY2JT/m74Rr20/WuoZEOa317GuT+vAWCkRtMGfTvf
+ zkPyLASZ8vVS6iD8D8WUBIs1l+Nt9LcEsKu05KAn8x9nJALpvV6QgVRuzKb7IMqtzlRy
+ /TXuE36aiD77X7VBpNmzPZIsq1IRwUygJfxWTYoXb0KhAQ6/b5A2Syfkx8aQs1WEC5Md
+ 7q7XOTwM4/w6EZbq+twem4ILqU1J5QcKwdtipmHrxVuuzlRbwaC4BGxrRNUxbvE9v1ZR
+ xARIcRPHonEb+8xo8cQJGla7+X7kXIPz/sjm3smfGlql3dOFOd1mGCwulzIbroxMSVnH
+ +haA==
+X-Gm-Message-State: AJIora+W2zKncuTmi9z4wzWolPrwW2SoHH6mGZuh9RU8t1fyQgjEGHrN
+ p0pC0GMz/uoscDf+AQgjUjfMkrm/iPc33Q==
+X-Google-Smtp-Source: AGRyM1tLjb+hF3XuUVWMhvk20SlAi32OOmZ4hll9vB9evnlD6fgQy8/dKL8aCw8KGUo+mOdJIj9ZSw==
+X-Received: by 2002:a17:907:3e82:b0:6ff:1e04:a365 with SMTP id
+ hs2-20020a1709073e8200b006ff1e04a365mr26603478ejc.617.1656927569111; 
+ Mon, 04 Jul 2022 02:39:29 -0700 (PDT)
+Received: from development1.visionsystems.de (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a9-20020aa7d909000000b0043a706d3a48sm58751edr.76.2022.07.04.02.39.28
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Mon, 04 Jul 2022 02:39:28 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Mon,  4 Jul 2022 10:55:52 +0200
-Message-Id: <20220704085552.3499243-2-abel@x-silicon.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220704085552.3499243-1-abel@x-silicon.com>
-References: <20220704085552.3499243-1-abel@x-silicon.com>
-MIME-Version: 1.0
+Date: Mon,  4 Jul 2022 11:39:22 +0200
+Message-Id: <20220704093922.4195-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.17.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=x-silicon-com.20210112.gappssmtp.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=XEcwkc6CukaKyaQvKEoM2mjWb0wdqLDUqxUGanRWMZ8=;
- b=QiujlS33dv9ISRHM1xlKOnxnNKcSdC9l9NvCw1V01Kp6hpIbo/FmAqVs/e2NmQJRL0
- przYfTuHdR2ww1RIHEZ117g9+f+/CMGD6f2rcJ9odwlutTpeodwTiT45aJ+jYYBAcWNi
- HVoIUoznkZyFC0iLpOITK6JLo4qvYK9HyqCWGRin9dn7hpoChYjM479CgOjoM9YEELQT
- uc2DbHRpsLdJ/B0gwLkh0ix4Z8vPLSjo40UTs/Y88GohU9d01rpmilg5ePuYzWTkDtQt
- Y58RxlleScmvkvFvLrCq1n3aegVveS88WLmZHiyanZ3DGLOSAzQvI/h32A/NRjifWn41
- aMgg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=x-silicon-com.20210112.gappssmtp.com
- header.i=@x-silicon-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=QiujlS33
-Subject: [Buildroot] [PATCH 2/2] arch/riscv: Added support for RISC-V vector
- extension on the architecture menu.
+ d=googlemail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id;
+ bh=15q04+bBSlFH2EqepZun68D05cnsvkCQaV0QYc9+jDY=;
+ b=X90cEgnlhVCD+bEnG7SrXbdVJLGj6IlzhowNWqI/+lnqYMVaM6VCrLmQ8c/FDjhTVW
+ pomwO/lLO6DYp2Rj8OC0+Kw/wV7DieVN6HxRb/La15Gf97dANHdZCM3eMSxCfkodfbPu
+ 3T3BlEGp7gllycItYBTeZ9LM1d8hugJumUPXY+YIT5Ryr32h3CuCLe7WqiQsMxfWnvNP
+ rE0xxmQA4M+iwMgzfHsT7MytKlXkFCC+ViPUgXGqN/x+bQXWq+SHPS41w7cVrePxp74a
+ ++X4PiY5LrbPkIK0RtNBGFITxWqPhYwP5KK6dxK0I5bZXU7rIdld1J0PPRPDaSRS/42s
+ HHdA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=X90cEgnl
+Subject: [Buildroot] [PATCH] package/python-automat: add missing build-time
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,65 +89,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>, Mark Corbin <mark@dibsco.co.uk>,
- Abel Bernabeu <abel@x-silicon.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
+From: yegorslists--- via buildroot <buildroot@buildroot.org>
+Reply-To: yegorslists@googlemail.com
+Cc: Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This new setting will allow to test new toolchains already available
-that support the vector extension (more patches coming soon).
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Abel Bernabeu <abel@x-silicon.com>
+python-automat needs host-python-typing-extensions.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- arch/Config.in.riscv | 7 +++++++
- arch/arch.mk.riscv   | 4 ++++
- 2 files changed, 11 insertions(+)
+ package/python-automat/python-automat.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
-index 288ed833eb..e4dc936cf8 100644
---- a/arch/Config.in.riscv
-+++ b/arch/Config.in.riscv
-@@ -18,6 +18,9 @@ config BR2_RISCV_ISA_RVD
- config BR2_RISCV_ISA_RVC
- 	bool
+diff --git a/package/python-automat/python-automat.mk b/package/python-automat/python-automat.mk
+index b94fd2e1c4..03d6759718 100644
+--- a/package/python-automat/python-automat.mk
++++ b/package/python-automat/python-automat.mk
+@@ -10,6 +10,6 @@ PYTHON_AUTOMAT_SITE = https://files.pythonhosted.org/packages/80/c5/82c63bad570f
+ PYTHON_AUTOMAT_SETUP_TYPE = setuptools
+ PYTHON_AUTOMAT_LICENSE = MIT
+ PYTHON_AUTOMAT_LICENSE_FILES = LICENSE
+-PYTHON_AUTOMAT_DEPENDENCIES = host-python-m2r host-python-setuptools-scm
++PYTHON_AUTOMAT_DEPENDENCIES = host-python-m2r host-python-setuptools-scm host-python-typing-extensions
  
-+config BR2_RISCV_ISA_RVV
-+	bool
-+
- choice
- 	prompt "Target Architecture Variant"
- 	default BR2_riscv_g
-@@ -63,6 +66,10 @@ config BR2_RISCV_ISA_CUSTOM_RVD
- config BR2_RISCV_ISA_CUSTOM_RVC
- 	bool "Compressed Instructions (C)"
- 	select BR2_RISCV_ISA_RVC
-+
-+config BR2_RISCV_ISA_CUSTOM_RVV
-+	bool "Vector Instructions (V)"
-+	select BR2_RISCV_ISA_RVV
- endif
- 
- choice
-diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv
-index f3bf2b3467..07a94aa6a4 100644
---- a/arch/arch.mk.riscv
-+++ b/arch/arch.mk.riscv
-@@ -26,5 +26,9 @@ endif
- ifeq ($(BR2_RISCV_ISA_RVC),y)
- GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)c
- endif
-+ifeq ($(BR2_RISCV_ISA_RVV),y)
-+GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)v
-+endif
-+
- 
- endif
+ $(eval $(python-package))
 -- 
-2.34.1
+2.17.0
 
 _______________________________________________
 buildroot mailing list
