@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BED6C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Jul 2022 09:39:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2C7AC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Jul 2022 09:46:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F23760B96;
-	Mon,  4 Jul 2022 09:39:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F23760B96
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84CFE60B96;
+	Mon,  4 Jul 2022 09:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84CFE60B96
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rboPw5RM4c2S; Mon,  4 Jul 2022 09:39:34 +0000 (UTC)
+	with ESMTP id yZ4lE8QwnYYp; Mon,  4 Jul 2022 09:46:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5BEE60AC2;
-	Mon,  4 Jul 2022 09:39:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5BEE60AC2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AD90C1BF2A5
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 09:39:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8902260B91;
+	Mon,  4 Jul 2022 09:46:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8902260B91
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9AE581BF2A5
+ for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 09:46:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A40560AC2
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 09:39:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A40560AC2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 748A640941
+ for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 09:46:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 748A640941
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fny43m-Id6yC for <buildroot@lists.busybox.net>;
- Mon,  4 Jul 2022 09:39:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U3u4_RNa6svo for <buildroot@lists.busybox.net>;
+ Mon,  4 Jul 2022 09:46:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4086260A9C
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4086260A9C
- for <buildroot@buildroot.org>; Mon,  4 Jul 2022 09:39:31 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id o25so15736547ejm.3
- for <buildroot@buildroot.org>; Mon, 04 Jul 2022 02:39:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 250DD4093F
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 250DD4093F
+ for <buildroot@buildroot.org>; Mon,  4 Jul 2022 09:46:19 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id ej4so10972420edb.7
+ for <buildroot@buildroot.org>; Mon, 04 Jul 2022 02:46:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id;
- bh=15q04+bBSlFH2EqepZun68D05cnsvkCQaV0QYc9+jDY=;
- b=dRydCgmvp5K8R3RV3egPCnpwIFY2JT/m74Rr20/WuoZEOa317GuT+vAWCkRtMGfTvf
- zkPyLASZ8vVS6iD8D8WUBIs1l+Nt9LcEsKu05KAn8x9nJALpvV6QgVRuzKb7IMqtzlRy
- /TXuE36aiD77X7VBpNmzPZIsq1IRwUygJfxWTYoXb0KhAQ6/b5A2Syfkx8aQs1WEC5Md
- 7q7XOTwM4/w6EZbq+twem4ILqU1J5QcKwdtipmHrxVuuzlRbwaC4BGxrRNUxbvE9v1ZR
- xARIcRPHonEb+8xo8cQJGla7+X7kXIPz/sjm3smfGlql3dOFOd1mGCwulzIbroxMSVnH
- +haA==
-X-Gm-Message-State: AJIora+W2zKncuTmi9z4wzWolPrwW2SoHH6mGZuh9RU8t1fyQgjEGHrN
- p0pC0GMz/uoscDf+AQgjUjfMkrm/iPc33Q==
-X-Google-Smtp-Source: AGRyM1tLjb+hF3XuUVWMhvk20SlAi32OOmZ4hll9vB9evnlD6fgQy8/dKL8aCw8KGUo+mOdJIj9ZSw==
-X-Received: by 2002:a17:907:3e82:b0:6ff:1e04:a365 with SMTP id
- hs2-20020a1709073e8200b006ff1e04a365mr26603478ejc.617.1656927569111; 
- Mon, 04 Jul 2022 02:39:29 -0700 (PDT)
+ bh=4roaYDBsiKCQZ3y3nVzrW6zihG0JBAnsi1jMIwE2r8w=;
+ b=LWPPNg1j6i9Y03OHw1rXIDLj3yXTWgJ4QGj0ZNT8Ahx8mwig3jKMi/GRjhoMzuLa6I
+ vH8Y8KHbPn7LscbDtETeczaEXG6nbUlmSZKzxEnq8jZWSgU307BwlEfTcPnkku7B0sS3
+ fDDaWqNnBR8LqhGJuryw8jCkiKrP8ayDnQj3M3MLqF2bK6jaRBK/F/P7pmP7c6Inp9RT
+ NLDwljxya3VItYhFSf2NE/KKqWBhk4qn3Y0BpZGwfPCWl0/ybYzea+CVACvYeBgLhkCb
+ +PHlzc6ptf3O7ey8wO/LufntjOTJY8mvdDLUsqApBqqD0LLWP8SM3pAkXlqKNVeht49U
+ RelA==
+X-Gm-Message-State: AJIora/YMK/i+4qBe1O+detuFW/b2poEhHUmqudetMRCgTVFsfoKOhpC
+ vRD5s27589HL/0xqEQH5ZItLaRdGBygU1Q==
+X-Google-Smtp-Source: AGRyM1vKJWk3y6+BJC/ePEROMKjY0zscCIUZNKICqlAUMJdRfiTeqv3OydSAH1RHlZ0Ki7ChmtjJMg==
+X-Received: by 2002:a05:6402:2b88:b0:43a:6c58:6c64 with SMTP id
+ fj8-20020a0564022b8800b0043a6c586c64mr2821010edb.348.1656927976941; 
+ Mon, 04 Jul 2022 02:46:16 -0700 (PDT)
 Received: from development1.visionsystems.de (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a9-20020aa7d909000000b0043a706d3a48sm58751edr.76.2022.07.04.02.39.28
+ j24-20020aa7de98000000b00435726bd375sm20062211edv.57.2022.07.04.02.46.16
  (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Mon, 04 Jul 2022 02:39:28 -0700 (PDT)
+ Mon, 04 Jul 2022 02:46:16 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Mon,  4 Jul 2022 11:39:22 +0200
-Message-Id: <20220704093922.4195-1-yegorslists@googlemail.com>
+Date: Mon,  4 Jul 2022 11:46:13 +0200
+Message-Id: <20220704094613.5636-1-yegorslists@googlemail.com>
 X-Mailer: git-send-email 2.17.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=googlemail.com; s=20210112;
  h=from:to:cc:subject:date:message-id;
- bh=15q04+bBSlFH2EqepZun68D05cnsvkCQaV0QYc9+jDY=;
- b=X90cEgnlhVCD+bEnG7SrXbdVJLGj6IlzhowNWqI/+lnqYMVaM6VCrLmQ8c/FDjhTVW
- pomwO/lLO6DYp2Rj8OC0+Kw/wV7DieVN6HxRb/La15Gf97dANHdZCM3eMSxCfkodfbPu
- 3T3BlEGp7gllycItYBTeZ9LM1d8hugJumUPXY+YIT5Ryr32h3CuCLe7WqiQsMxfWnvNP
- rE0xxmQA4M+iwMgzfHsT7MytKlXkFCC+ViPUgXGqN/x+bQXWq+SHPS41w7cVrePxp74a
- ++X4PiY5LrbPkIK0RtNBGFITxWqPhYwP5KK6dxK0I5bZXU7rIdld1J0PPRPDaSRS/42s
- HHdA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=4roaYDBsiKCQZ3y3nVzrW6zihG0JBAnsi1jMIwE2r8w=;
+ b=IfEJfSnZMJJiApHse/9niXnqT/yrH7LnnDEn5gyHsdij7owIcdh69r/++BQiLiROEh
+ HxUdK9xzmKDQv4HTZunaE4thI1GbPO4KGHiylP1ds5FRYNLDXiU9rJ1qtEbx9uR17ZXH
+ 8n5Pny7AeJbDnje+848aKDm2wcCvILXIfzRaAZV2fqpCBTjW1Tqd+piTWI8Cz7euAVnd
+ Xe3Zod8Hv/xvQ5NRUI6XJVtgD4MWo406ceDdL/d7cLnjNk4EcMa4rec+Fka3bOK/TqZI
+ yOU6R78mxYZpTYZudjXtIB/+BhicCxJPj/KfrehPFWDa8FIVXkdlwEMu8zRc3yLFnuAX
+ fvfg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=X90cEgnl
-Subject: [Buildroot] [PATCH] package/python-automat: add missing build-time
- dependency
+ header.a=rsa-sha256 header.s=20210112 header.b=IfEJfSnZ
+Subject: [Buildroot] [PATCH v2] package/python-automat: add missing
+ build-time dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,8 +102,13 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 python-automat needs host-python-typing-extensions.
 
+Fixes: http://autobuild.buildroot.net/results/a4a52da24032222860ad6abe89bf66839cc2e812/
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
+Changes:
+	v1 -> v2: add Fixes tag
+
  package/python-automat/python-automat.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
