@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9CA1C43334
-	for <buildroot@archiver.kernel.org>; Mon,  4 Jul 2022 16:51:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66F45C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Jul 2022 16:52:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 32ABC4000B;
-	Mon,  4 Jul 2022 16:51:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32ABC4000B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bd9nAx1yMQp7; Mon,  4 Jul 2022 16:51:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C37E440644;
-	Mon,  4 Jul 2022 16:51:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C37E440644
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C79D51BF373
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 16:51:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C5D981C18
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 16:51:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C5D981C18
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF95D81501;
+	Mon,  4 Jul 2022 16:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF95D81501
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3YCoBwQotU74 for <buildroot@lists.busybox.net>;
- Mon,  4 Jul 2022 16:51:07 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8C1D81BF5
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D8C1D81BF5
- for <buildroot@busybox.net>; Mon,  4 Jul 2022 16:51:06 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:8dbc:d4c9:1472:395c])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 93D4B78038C;
- Mon,  4 Jul 2022 18:51:01 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 04 Jul 2022 18:51:00 +0200
-Date: Mon, 4 Jul 2022 18:51:00 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Baruch Siach <baruch@tkos.co.il>
-Message-ID: <20220704165100.GG2521@scaer>
-References: <cc1dcb8324d7acd35eb562b941474c601b28fc17.1656909285.git.baruch@tkos.co.il>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <cc1dcb8324d7acd35eb562b941474c601b28fc17.1656909285.git.baruch@tkos.co.il>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1656953464;
- bh=vZZCR/+4XiLEMC97pixTDpUTP0SiMOecCYhDRtllsjo=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=XKR52wmqb0cEpEuQX/0ArF3U0dnupa8AhojUM4a+1bG5kR41h0CkChqhBWWsNlpPx
- h88z2HVlWvErFKqhh8hg3O6ADBj/LncXbcBuRXYthymhrMdlHY6lBFMZxHpDNuhLzD
- x7eDs3GMs3AA0VJc2xfju3r4mEFV4GRQQoSxLiV9zpJsRRdi8nnAwfwOaAUMTEsftI
- ov8zIWYY1zKYiYnfsq4rUnJSXWYl6A0Y9APiZlSvzhpP33lwJgQ/6lxDa402BJZJlX
- pfQEAMl881U5hlNNoc7mkbcKlyhaz3EphCAmXDzO7kW1jcx9jspq6Ny2ROskHNZkft
- HZC3gLBWPsrVg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=XKR52wmq
-Subject: Re: [Buildroot] [PATCH] package/iptables: fix build with musl libc
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XA8ioLOiZ52R; Mon,  4 Jul 2022 16:52:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95F8A8142C;
+	Mon,  4 Jul 2022 16:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95F8A8142C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ABCB11BF373
+ for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 16:52:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94BD660B00
+ for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 16:52:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94BD660B00
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u3WHlJmejhxu for <buildroot@lists.busybox.net>;
+ Mon,  4 Jul 2022 16:52:26 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7002D60BDF
+ for <buildroot@buildroot.org>; Mon,  4 Jul 2022 16:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7002D60BDF
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 8B1CE82210; Mon,  4 Jul 2022 16:39:32 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 4 Jul 2022 18:50:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a49d70a3f2e02e08333d716547ec9e0d59cb1371
+X-Git-Newrev: a0b8eee63599d95cdfe16bb560d55938f3d1887d
+X-Patchwork-Hint: ignore
+Message-Id: <20220704163932.8B1CE82210@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iptables: fix build with musl libc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,215 +56,293 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2706216182393896397=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QmFydWNoLCBBbGwsCgpPbiAyMDIyLTA3LTA0IDA3OjM0ICswMzAwLCBCYXJ1Y2ggU2lhY2ggdmlh
-IGJ1aWxkcm9vdCBzcGFrZSB0aHVzbHk6Cj4gQWRkIHVwc3RyZWFtIHBhdGNoIGZpeGluZyBjb2xs
-aXNpb24gb2Ygc3RydWN0IGV0aGhkciBkZWZpbml0aW9uIHdpdGgKPiBrZXJuZWwgaGVhZGVycy4K
-PiAKPiBBZGQgYW5vdGhlciB1cHN0cmVhbSBwYXRjaCB0byByZW1vdmUgdW5kZWZpbmVkIHVfaW50
-MTZfdCB0eXBlIGJ1aWxkCj4gYnJlYWthZ2UuCj4gCj4gRml4ZXM6Cj4gaHR0cDovL2F1dG9idWls
-ZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvMmE0NDk3NTJlZTUxZWVkOGI4ZDU2OWE1MmViNjlmNjM1
-ZTAzNjljZC8KPiBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy8yM2U5N2Y4
-ODI1OTg1MGVjYjEyZjI0NDQzNjViMzRmYTZmYWM4MjExLwo+IGh0dHA6Ly9hdXRvYnVpbGQuYnVp
-bGRyb290Lm5ldC9yZXN1bHRzL2I4ZTM4MDlkNDY5Yzk0OWE3NTU4MDhiNzEzMjcxN2IwMzI1ZWJh
-ZmEvCj4gCj4gU2lnbmVkLW9mZi1ieTogQmFydWNoIFNpYWNoIDxiYXJ1Y2hAdGtvcy5jby5pbD4K
-CkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiAt
-LS0KPiAgLi4udWlsZC1mb3ItbWlzc2luZy1FVEhfQUxFTi1kZWZpbml0aW9uLnBhdGNoIHwgIDY5
-ICsrKysrKysrCj4gIC4uLjItdHJlZXdpZGUtdXNlLXVpbnQtaW5zdGVhZC1vZi11X2ludC5wYXRj
-aCB8IDE2NyArKysrKysrKysrKysrKysrKysKPiAgMiBmaWxlcyBjaGFuZ2VkLCAyMzYgaW5zZXJ0
-aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9pcHRhYmxlcy8wMDAxLVJldmVy
-dC1maXgtYnVpbGQtZm9yLW1pc3NpbmctRVRIX0FMRU4tZGVmaW5pdGlvbi5wYXRjaAo+ICBjcmVh
-dGUgbW9kZSAxMDA2NDQgcGFja2FnZS9pcHRhYmxlcy8wMDAyLXRyZWV3aWRlLXVzZS11aW50LWlu
-c3RlYWQtb2YtdV9pbnQucGF0Y2gKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9pcHRhYmxlcy8w
-MDAxLVJldmVydC1maXgtYnVpbGQtZm9yLW1pc3NpbmctRVRIX0FMRU4tZGVmaW5pdGlvbi5wYXRj
-aCBiL3BhY2thZ2UvaXB0YWJsZXMvMDAwMS1SZXZlcnQtZml4LWJ1aWxkLWZvci1taXNzaW5nLUVU
-SF9BTEVOLWRlZmluaXRpb24ucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAw
-MDAwMDAwMDAwMC4uNGYzODMxZDllNDFmCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2Uv
-aXB0YWJsZXMvMDAwMS1SZXZlcnQtZml4LWJ1aWxkLWZvci1taXNzaW5nLUVUSF9BTEVOLWRlZmlu
-aXRpb24ucGF0Y2gKPiBAQCAtMCwwICsxLDY5IEBACj4gK0Zyb20gMGU3Y2YwYWQzMDZjZGY5NWRj
-M2MyOGQxNWEyNTQ1MzIyMDZhODg4ZSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArTWVzc2Fn
-ZS1JZDogPDBlN2NmMGFkMzA2Y2RmOTVkYzNjMjhkMTVhMjU0NTMyMjA2YTg4OGUuMTY1NjkwODgx
-NS5naXQuYmFydWNoQHRrb3MuY28uaWw+Cj4gK0Zyb206IFBoaWwgU3V0dGVyIDxwaGlsQG53bC5j
-Yz4KPiArRGF0ZTogV2VkLCAxOCBNYXkgMjAyMiAxNjowNDowOSArMDIwMAo+ICtTdWJqZWN0OiBb
-UEFUQ0hdIFJldmVydCAiZml4IGJ1aWxkIGZvciBtaXNzaW5nIEVUSF9BTEVOIGRlZmluaXRpb24i
-Cj4gK01JTUUtVmVyc2lvbjogMS4wCj4gK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNl
-dD1VVEYtOAo+ICtDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0Cj4gKwo+ICtUaGlzIHJl
-dmVydHMgY29tbWl0IGM1ZDlhNzIzYjUxNTlhMjhmNTQ3YjU3NzcxMTc4NzI5NWExNGZkODQgYXMg
-aXQgYnJva2UKPiArY29tcGlsaW5nIGFnYWluc3QgbXVzbCBsaWJjLiBNaWdodCBiZSBhIGJ1ZyBp
-biB0aGUgbGF0dGVyLCBidXQgZm9yIHRoZQo+ICt0aW1lIGJlaW5nIHRyeSB0byBwbGVhc2UgYm90
-aCBieSBhdm9pZGluZyB0aGUgaW5jbHVkZSBhbmQgaW5zdGVhZAo+ICtkZWZpbmluZyBFVEhfQUxF
-TiBpZiB1bnNldC4KPiArCj4gK1doaWxlIGJlaW5nIGF0IGl0LCBtb3ZlIG5ldGluZXQvZXRoZXIu
-aCBpbmNsdWRlIHVwLgo+ICsKPiArRml4ZXM6IDFiZGI1NTM1ZjU2MWEgKCJsaWJ4dGFibGVzOiBF
-eHRlbmQgTUFDIGFkZHJlc3MgcHJpbnRpbmcvcGFyc2luZyBzdXBwb3J0IikKPiArU2lnbmVkLW9m
-Zi1ieTogUGhpbCBTdXR0ZXIgPHBoaWxAbndsLmNjPgo+ICtSZXZpZXdlZC1ieTogTWFjaWVqIMW7
-ZW5jenlrb3dza2kgPG1hemVAZ29vZ2xlLmNvbT4KPiArU2lnbmVkLW9mZi1ieTogQmFydWNoIFNp
-YWNoIDxiYXJ1Y2hAdGtvcy5jby5pbD4KPiArLS0tCj4gK1Vwc3RyZWFtIHN0YXR1czogY29tbWl0
-IDBlN2NmMGFkMzA2Y2RmOTVkYzNjMjhkMTVhMjU0NTMyMjA2YTg4OGUKPiArCj4gKyBsaWJ4dGFi
-bGVzL3h0YWJsZXMuYyB8IDggKysrKystLS0KPiArIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlv
-bnMoKyksIDMgZGVsZXRpb25zKC0pCj4gKwo+ICtkaWZmIC0tZ2l0IGEvbGlieHRhYmxlcy94dGFi
-bGVzLmMgYi9saWJ4dGFibGVzL3h0YWJsZXMuYwo+ICtpbmRleCA5NmZkNzgzYTA2NmMuLjA2Mzhm
-OTI3MWM2MCAxMDA2NDQKPiArLS0tIGEvbGlieHRhYmxlcy94dGFibGVzLmMKPiArKysrIGIvbGli
-eHRhYmxlcy94dGFibGVzLmMKPiArQEAgLTI4LDYgKzI4LDcgQEAKPiArICNpbmNsdWRlIDxzdGRs
-aWIuaD4KPiArICNpbmNsdWRlIDxzdHJpbmcuaD4KPiArICNpbmNsdWRlIDx1bmlzdGQuaD4KPiAr
-KyNpbmNsdWRlIDxuZXRpbmV0L2V0aGVyLmg+Cj4gKyAjaW5jbHVkZSA8c3lzL3NvY2tldC5oPgo+
-ICsgI2luY2x1ZGUgPHN5cy9zdGF0Lmg+Cj4gKyAjaW5jbHVkZSA8c3lzL3N0YXRmcy5oPgo+ICtA
-QCAtNDUsNyArNDYsNiBAQAo+ICsgCj4gKyAjaW5jbHVkZSA8eHRhYmxlcy5oPgo+ICsgI2luY2x1
-ZGUgPGxpbWl0cy5oPiAvKiBJTlRfTUFYIGluIGlwX3RhYmxlcy5oL2lwNl90YWJsZXMuaCAqLwo+
-ICstI2luY2x1ZGUgPGxpbnV4L2lmX2V0aGVyLmg+IC8qIEVUSF9BTEVOICovCj4gKyAjaW5jbHVk
-ZSA8bGludXgvbmV0ZmlsdGVyX2lwdjQvaXBfdGFibGVzLmg+Cj4gKyAjaW5jbHVkZSA8bGludXgv
-bmV0ZmlsdGVyX2lwdjYvaXA2X3RhYmxlcy5oPgo+ICsgI2luY2x1ZGUgPGxpYmlwdGMvbGlieHRj
-Lmg+Cj4gK0BAIC03Miw2ICs3MiwxMCBAQAo+ICsgI2RlZmluZSBQUk9DX1NZU19NT0RQUk9CRSAi
-L3Byb2Mvc3lzL2tlcm5lbC9tb2Rwcm9iZSIKPiArICNlbmRpZgo+ICsgCj4gKysjaWZuZGVmIEVU
-SF9BTEVOCj4gKysjZGVmaW5lIEVUSF9BTEVOIDYKPiArKyNlbmRpZgo+ICsrCj4gKyAvKiB3ZSBu
-ZWVkIHRoaXMgZm9yIGlwNj90YWJsZXMtcmVzdG9yZS4gIGlwNj90YWJsZXMtcmVzdG9yZS5jIHNl
-dHMgbGluZSB0byB0aGUKPiArICAqIGN1cnJlbnQgbGluZSBvZiB0aGUgaW5wdXQgZmlsZSwgaW4g
-b3JkZXIgIHRvIGdpdmUgYSBtb3JlIHByZWNpc2UgZXJyb3IKPiArICAqIG1lc3NhZ2UuICBpcDY/
-dGFibGVzIGl0c2VsZiBkb2Vzbid0IG5lZWQgdGhpcywgc28gaXQgaXMgaW5pdGlhbGl6ZWQgdG8g
-dGhlCj4gK0BAIC0yMjQ1LDggKzIyNDksNiBAQCB2b2lkIHh0YWJsZXNfcHJpbnRfbnVtKHVpbnQ2
-NF90IG51bWJlciwgdW5zaWduZWQgaW50IGZvcm1hdCkKPiArIAlwcmludGYoRk1UKCIlNGxsdVQg
-IiwiJWxsdVQgIiksICh1bnNpZ25lZCBsb25nIGxvbmcpbnVtYmVyKTsKPiArIH0KPiArIAo+ICst
-I2luY2x1ZGUgPG5ldGluZXQvZXRoZXIuaD4KPiArLQo+ICsgc3RhdGljIGNvbnN0IHVuc2lnbmVk
-IGNoYXIgbWFjX3R5cGVfdW5pY2FzdFtFVEhfQUxFTl0gPSAgIHt9Owo+ICsgc3RhdGljIGNvbnN0
-IHVuc2lnbmVkIGNoYXIgbXNrX3R5cGVfdW5pY2FzdFtFVEhfQUxFTl0gPSAgIHsxfTsKPiArIHN0
-YXRpYyBjb25zdCB1bnNpZ25lZCBjaGFyIG1hY190eXBlX211bHRpY2FzdFtFVEhfQUxFTl0gPSB7
-MX07Cj4gKy0tIAo+ICsyLjM1LjEKPiArCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvaXB0YWJsZXMv
-MDAwMi10cmVld2lkZS11c2UtdWludC1pbnN0ZWFkLW9mLXVfaW50LnBhdGNoIGIvcGFja2FnZS9p
-cHRhYmxlcy8wMDAyLXRyZWV3aWRlLXVzZS11aW50LWluc3RlYWQtb2YtdV9pbnQucGF0Y2gKPiBu
-ZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMC4uZTI1NGMwNjFhZjc3Cj4g
-LS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvaXB0YWJsZXMvMDAwMi10cmVld2lkZS11c2Ut
-dWludC1pbnN0ZWFkLW9mLXVfaW50LnBhdGNoCj4gQEAgLTAsMCArMSwxNjcgQEAKPiArRnJvbSBm
-MzE5Mzg5NTI1YjA2NmI3ZGM2ZDM4OWM4OGYxNmEwZGYzYjhmMTg5IE1vbiBTZXAgMTcgMDA6MDA6
-MDAgMjAwMQo+ICtNZXNzYWdlLUlkOiA8ZjMxOTM4OTUyNWIwNjZiN2RjNmQzODljODhmMTZhMGRm
-M2I4ZjE4OS4xNjU2OTA4OTE1LmdpdC5iYXJ1Y2hAdGtvcy5jby5pbD4KPiArRnJvbTogTmljayBI
-YWlua2UgPHZpbmNlbnRAc3lzdGVtbGkub3JnPgo+ICtEYXRlOiBNb24sIDE2IE1heSAyMDIyIDE4
-OjE2OjQxICswMjAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gdHJlZXdpZGU6IHVzZSB1aW50KiBpbnN0
-ZWFkIG9mIHVfaW50Kgo+ICsKPiArR2NjIGNvbXBsYWlucyBhYm91dCBtaXNzaW5nIHR5cGVzLiBT
-b21lIGNvbW1pdHMgaW50cm9kdWNlZCB1X2ludCogaW5zdGVhZAo+ICtvZiB1aW50Ki4gVXNlIHVp
-bnQgdHJlZXdpZGUuCj4gKwo+ICtGaXhlcyBlcnJvcnMgaW4gdGhlIGZvcm0gb2Y6Cj4gK0luIGZp
-bGUgaW5jbHVkZWQgZnJvbSB4dGFibGVzLWxlZ2FjeS1tdWx0aS5jOjU6Cj4gK3hzaGFyZWQuaDo4
-Mzo1NjogZXJyb3I6IHVua25vd24gdHlwZSBuYW1lICd1X2ludDE2X3QnOyBkaWQgeW91IG1lYW4g
-J3VpbnQxNl90Jz8KPiArICAgIDgzIHwgc2V0X29wdGlvbih1bnNpZ25lZCBpbnQgKm9wdGlvbnMs
-IHVuc2lnbmVkIGludCBvcHRpb24sIHVfaW50MTZfdCAqaW52ZmxnLAo+ICsgICAgICAgIHwgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+
-fn5+fgo+ICsgICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIHVpbnQxNl90Cj4gK21ha2VbNl06ICoqKiBbTWFrZWZpbGU6NzEyOiB4
-dGFibGVzX2xlZ2FjeV9tdWx0aS14dGFibGVzLWxlZ2FjeS1tdWx0aS5vXSBFcnJvciAxCj4gKwo+
-ICtBdm9pZCBsaWJpcHEgQVBJIGJyZWFrYWdlIGJ5IGFkanVzdGluZyBsaWJpcHEuaCBpbmNsdWRl
-IGFjY29yZGluZ2x5LiBGb3IKPiArYXJwdF9tYW5nbGUuaCBrZXJuZWwgdUFQSSBoZWFkZXIsIGFw
-cGx5IHNhbWUgY2hhbmdlIGFzIGluIGtlcm5lbCBjb21taXQKPiArZTkxZGVkOGRiNTc0NyAoInVh
-cGk6IG5ldGZpbHRlcl9hcnA6IHVzZSBfX3U4IGluc3RlYWQgb2YgdV9pbnQ4X3QiKS4KPiArCj4g
-K1NpZ25lZC1vZmYtYnk6IE5pY2sgSGFpbmtlIDx2aW5jZW50QHN5c3RlbWxpLm9yZz4KPiArU2ln
-bmVkLW9mZi1ieTogUGhpbCBTdXR0ZXIgPHBoaWxAbndsLmNjPgo+ICtTaWduZWQtb2ZmLWJ5OiBC
-YXJ1Y2ggU2lhY2ggPGJhcnVjaEB0a29zLmNvLmlsPgo+ICstLS0KPiArVXBzdHJlYW0gc3RhdHVz
-OiBjb21taXQgZjMxOTM4OTUyNWIwNjZiN2RjNmQzODljODhmMTZhMGRmM2I4ZjE4OQo+ICsKPiAr
-IGV4dGVuc2lvbnMvbGlieHRfY29ubnRyYWNrLmMgICAgICAgICAgICAgIHwgMiArLQo+ICsgaW5j
-bHVkZS9saWJpcHEvbGliaXBxLmggICAgICAgICAgICAgICAgICAgfCA4ICsrKystLS0tCj4gKyBp
-bmNsdWRlL2xpYmlwdGMvbGlieHRjLmggICAgICAgICAgICAgICAgICB8IDIgKy0KPiArIGluY2x1
-ZGUvbGludXgvbmV0ZmlsdGVyX2FycC9hcnB0X21hbmdsZS5oIHwgMiArLQo+ICsgaXB0YWJsZXMv
-eHNoYXJlZC5jICAgICAgICAgICAgICAgICAgICAgICAgfCAyICstCj4gKyBpcHRhYmxlcy94c2hh
-cmVkLmggICAgICAgICAgICAgICAgICAgICAgICB8IDIgKy0KPiArIGxpYmlwcS9pcHFfY3JlYXRl
-X2hhbmRsZS4zICAgICAgICAgICAgICAgIHwgMiArLQo+ICsgbGliaXBxL2lwcV9zZXRfbW9kZS4z
-ICAgICAgICAgICAgICAgICAgICAgfCAyICstCj4gKyA4IGZpbGVzIGNoYW5nZWQsIDExIGluc2Vy
-dGlvbnMoKyksIDExIGRlbGV0aW9ucygtKQo+ICsKPiArZGlmZiAtLWdpdCBhL2V4dGVuc2lvbnMv
-bGlieHRfY29ubnRyYWNrLmMgYi9leHRlbnNpb25zL2xpYnh0X2Nvbm50cmFjay5jCj4gK2luZGV4
-IDY0MDE4Y2UxNTJiNy4uMjM0MDg1YzUyMTFjIDEwMDY0NAo+ICstLS0gYS9leHRlbnNpb25zL2xp
-Ynh0X2Nvbm50cmFjay5jCj4gKysrKyBiL2V4dGVuc2lvbnMvbGlieHRfY29ubnRyYWNrLmMKPiAr
-QEAgLTc3OCw3ICs3NzgsNyBAQCBtYXRjaGluZm9fcHJpbnQoY29uc3Qgdm9pZCAqaXAsIGNvbnN0
-IHN0cnVjdCB4dF9lbnRyeV9tYXRjaCAqbWF0Y2gsIGludCBudW1lcmljLAo+ICsgCj4gKyBzdGF0
-aWMgdm9pZAo+ICsgY29ubnRyYWNrX2R1bXBfcG9ydHMoY29uc3QgY2hhciAqcHJlZml4LCBjb25z
-dCBjaGFyICpvcHQsCj4gKy0JCSAgICAgdV9pbnQxNl90IHBvcnRfbG93LCB1X2ludDE2X3QgcG9y
-dF9oaWdoKQo+ICsrCQkgICAgIHVpbnQxNl90IHBvcnRfbG93LCB1aW50MTZfdCBwb3J0X2hpZ2gp
-Cj4gKyB7Cj4gKyAJaWYgKHBvcnRfaGlnaCA9PSAwIHx8IHBvcnRfbG93ID09IHBvcnRfaGlnaCkK
-PiArIAkJcHJpbnRmKCIgJXMlcyAldSIsIHByZWZpeCwgb3B0LCBwb3J0X2xvdyk7Cj4gK2RpZmYg
-LS1naXQgYS9pbmNsdWRlL2xpYmlwcS9saWJpcHEuaCBiL2luY2x1ZGUvbGliaXBxL2xpYmlwcS5o
-Cj4gK2luZGV4IDNjZDEzMjkyMTdhMC4uZGQwY2IyMDUxNzljIDEwMDY0NAo+ICstLS0gYS9pbmNs
-dWRlL2xpYmlwcS9saWJpcHEuaAo+ICsrKysgYi9pbmNsdWRlL2xpYmlwcS9saWJpcHEuaAo+ICtA
-QCAtMjQsNyArMjQsNyBAQAo+ICsgI2luY2x1ZGUgPGVycm5vLmg+Cj4gKyAjaW5jbHVkZSA8dW5p
-c3RkLmg+Cj4gKyAjaW5jbHVkZSA8ZmNudGwuaD4KPiArLSNpbmNsdWRlIDxzeXMvdHlwZXMuaD4K
-PiArKyNpbmNsdWRlIDxzdGRpbnQuaD4KPiArICNpbmNsdWRlIDxzeXMvc29ja2V0Lmg+Cj4gKyAj
-aW5jbHVkZSA8c3lzL3Vpby5oPgo+ICsgI2luY2x1ZGUgPGFzbS90eXBlcy5oPgo+ICtAQCAtNDgs
-MTkgKzQ4LDE5IEBAIHR5cGVkZWYgdW5zaWduZWQgbG9uZyBpcHFfaWRfdDsKPiArIHN0cnVjdCBp
-cHFfaGFuZGxlCj4gKyB7Cj4gKyAJaW50IGZkOwo+ICstCXVfaW50OF90IGJsb2NraW5nOwo+ICsr
-CXVpbnQ4X3QgYmxvY2tpbmc7Cj4gKyAJc3RydWN0IHNvY2thZGRyX25sIGxvY2FsOwo+ICsgCXN0
-cnVjdCBzb2NrYWRkcl9ubCBwZWVyOwo+ICsgfTsKPiArIAo+ICstc3RydWN0IGlwcV9oYW5kbGUg
-KmlwcV9jcmVhdGVfaGFuZGxlKHVfaW50MzJfdCBmbGFncywgdV9pbnQzMl90IHByb3RvY29sKTsK
-PiArK3N0cnVjdCBpcHFfaGFuZGxlICppcHFfY3JlYXRlX2hhbmRsZSh1aW50MzJfdCBmbGFncywg
-dWludDMyX3QgcHJvdG9jb2wpOwo+ICsgCj4gKyBpbnQgaXBxX2Rlc3Ryb3lfaGFuZGxlKHN0cnVj
-dCBpcHFfaGFuZGxlICpoKTsKPiArIAo+ICsgc3NpemVfdCBpcHFfcmVhZChjb25zdCBzdHJ1Y3Qg
-aXBxX2hhbmRsZSAqaCwKPiArICAgICAgICAgICAgICAgICB1bnNpZ25lZCBjaGFyICpidWYsIHNp
-emVfdCBsZW4sIGludCB0aW1lb3V0KTsKPiArIAo+ICstaW50IGlwcV9zZXRfbW9kZShjb25zdCBz
-dHJ1Y3QgaXBxX2hhbmRsZSAqaCwgdV9pbnQ4X3QgbW9kZSwgc2l6ZV90IGxlbik7Cj4gKytpbnQg
-aXBxX3NldF9tb2RlKGNvbnN0IHN0cnVjdCBpcHFfaGFuZGxlICpoLCB1aW50OF90IG1vZGUsIHNp
-emVfdCBsZW4pOwo+ICsgCj4gKyBpcHFfcGFja2V0X21zZ190ICppcHFfZ2V0X3BhY2tldChjb25z
-dCB1bnNpZ25lZCBjaGFyICpidWYpOwo+ICsgCj4gK2RpZmYgLS1naXQgYS9pbmNsdWRlL2xpYmlw
-dGMvbGlieHRjLmggYi9pbmNsdWRlL2xpYmlwdGMvbGlieHRjLmgKPiAraW5kZXggMzcwMTAxODhi
-NjRmLi5hMWQxNmVmOTk2ZDcgMTAwNjQ0Cj4gKy0tLSBhL2luY2x1ZGUvbGliaXB0Yy9saWJ4dGMu
-aAo+ICsrKysgYi9pbmNsdWRlL2xpYmlwdGMvbGlieHRjLmgKPiArQEAgLTEwLDcgKzEwLDcgQEAg
-ZXh0ZXJuICJDIiB7Cj4gKyAjZW5kaWYKPiArIAo+ICsgI2lmbmRlZiBYVF9NSU5fQUxJR04KPiAr
-LS8qIHh0X2VudHJ5IGhhcyBwb2ludGVycyBhbmQgdV9pbnQ2NF90J3MgaW4gaXQsIHNvIGlmIHlv
-dSBhbGlnbiB0bwo+ICsrLyogeHRfZW50cnkgaGFzIHBvaW50ZXJzIGFuZCB1aW50NjRfdCdzIGlu
-IGl0LCBzbyBpZiB5b3UgYWxpZ24gdG8KPiArICAgIGl0LCB5b3UnbGwgYWxzbyBhbGlnbiB0byBh
-bnkgY3JhenkgbWF0Y2hlcyBhbmQgdGFyZ2V0cyBzb21lb25lCj4gKyAgICBtaWdodCB3cml0ZSAq
-Lwo+ICsgI2RlZmluZSBYVF9NSU5fQUxJR04gKF9fYWxpZ25vZl9fKHN0cnVjdCB4dF9lbnRyeSkp
-Cj4gK2RpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L25ldGZpbHRlcl9hcnAvYXJwdF9tYW5nbGUu
-aCBiL2luY2x1ZGUvbGludXgvbmV0ZmlsdGVyX2FycC9hcnB0X21hbmdsZS5oCj4gK2luZGV4IDI1
-MGY1MDI5MDJiYi4uOGMyYjE2YTFmNWEwIDEwMDY0NAo+ICstLS0gYS9pbmNsdWRlL2xpbnV4L25l
-dGZpbHRlcl9hcnAvYXJwdF9tYW5nbGUuaAo+ICsrKysgYi9pbmNsdWRlL2xpbnV4L25ldGZpbHRl
-cl9hcnAvYXJwdF9tYW5nbGUuaAo+ICtAQCAtMTMsNyArMTMsNyBAQCBzdHJ1Y3QgYXJwdF9tYW5n
-bGUKPiArIAl1bmlvbiB7Cj4gKyAJCXN0cnVjdCBpbl9hZGRyIHRndF9pcDsKPiArIAl9IHVfdDsK
-PiArLQl1X2ludDhfdCBmbGFnczsKPiArKwlfX3U4IGZsYWdzOwo+ICsgCWludCB0YXJnZXQ7Cj4g
-KyB9Owo+ICsgCj4gK2RpZmYgLS1naXQgYS9pcHRhYmxlcy94c2hhcmVkLmMgYi9pcHRhYmxlcy94
-c2hhcmVkLmMKPiAraW5kZXggYTg1MTJkMzgwODE1Li45YjVlNWI1YmRkYzIgMTAwNjQ0Cj4gKy0t
-LSBhL2lwdGFibGVzL3hzaGFyZWQuYwo+ICsrKysgYi9pcHRhYmxlcy94c2hhcmVkLmMKPiArQEAg
-LTEwMjUsNyArMTAyNSw3IEBAIHN0YXRpYyBjb25zdCBpbnQgaW52ZXJzZV9mb3Jfb3B0aW9uc1tO
-VU1CRVJfT0ZfT1BUXSA9Cj4gKyB9Owo+ICsgCj4gKyB2b2lkCj4gKy1zZXRfb3B0aW9uKHVuc2ln
-bmVkIGludCAqb3B0aW9ucywgdW5zaWduZWQgaW50IG9wdGlvbiwgdV9pbnQxNl90ICppbnZmbGcs
-Cj4gKytzZXRfb3B0aW9uKHVuc2lnbmVkIGludCAqb3B0aW9ucywgdW5zaWduZWQgaW50IG9wdGlv
-biwgdWludDE2X3QgKmludmZsZywKPiArIAkgICBib29sIGludmVydCkKPiArIHsKPiArIAlpZiAo
-Km9wdGlvbnMgJiBvcHRpb24pCj4gK2RpZmYgLS1naXQgYS9pcHRhYmxlcy94c2hhcmVkLmggYi9p
-cHRhYmxlcy94c2hhcmVkLmgKPiAraW5kZXggMTQ1NjhiYjAwZmI2Li5mODIxMjk4ODM5NjggMTAw
-NjQ0Cj4gKy0tLSBhL2lwdGFibGVzL3hzaGFyZWQuaAo+ICsrKysgYi9pcHRhYmxlcy94c2hhcmVk
-LmgKPiArQEAgLTgwLDcgKzgwLDcgQEAgc3RydWN0IHh0YWJsZXNfdGFyZ2V0Owo+ICsgI2RlZmlu
-ZSBJUFRfSU5WX0FSUEhSRAkJMHgwODAwCj4gKyAKPiArIHZvaWQKPiArLXNldF9vcHRpb24odW5z
-aWduZWQgaW50ICpvcHRpb25zLCB1bnNpZ25lZCBpbnQgb3B0aW9uLCB1X2ludDE2X3QgKmludmZs
-ZywKPiArK3NldF9vcHRpb24odW5zaWduZWQgaW50ICpvcHRpb25zLCB1bnNpZ25lZCBpbnQgb3B0
-aW9uLCB1aW50MTZfdCAqaW52ZmxnLAo+ICsgCSAgIGJvb2wgaW52ZXJ0KTsKPiArIAo+ICsgLyoq
-Cj4gK2RpZmYgLS1naXQgYS9saWJpcHEvaXBxX2NyZWF0ZV9oYW5kbGUuMyBiL2xpYmlwcS9pcHFf
-Y3JlYXRlX2hhbmRsZS4zCj4gK2luZGV4IDExZWY5NWM0Yjc5Zi4uZWJlNDZkYWFiOTJkIDEwMDY0
-NAo+ICstLS0gYS9saWJpcHEvaXBxX2NyZWF0ZV9oYW5kbGUuMwo+ICsrKysgYi9saWJpcHEvaXBx
-X2NyZWF0ZV9oYW5kbGUuMwo+ICtAQCAtMjQsNyArMjQsNyBAQCBpcHFfY3JlYXRlX2hhbmRsZSwg
-aXBxX2Rlc3Ryb3lfaGFuZGxlIFwoZW0gY3JlYXRlIGFuZCBkZXN0cm95IGxpYmlwcSBoYW5kbGVz
-Lgo+ICsgLmJyCj4gKyAuQiAjaW5jbHVkZSA8bGliaXBxLmg+Cj4gKyAuc3AKPiArLS5CSSAic3Ry
-dWN0IGlwcV9oYW5kbGUgKmlwcV9jcmVhdGVfaGFuZGxlKHVfaW50MzJfdCAiIGZsYWdzICIsIHVf
-aW50MzJfdCAiIHByb3RvY29sICIpOyIKPiArKy5CSSAic3RydWN0IGlwcV9oYW5kbGUgKmlwcV9j
-cmVhdGVfaGFuZGxlKHVpbnQzMl90ICIgZmxhZ3MgIiwgdWludDMyX3QgIiBwcm90b2NvbCAiKTsi
-Cj4gKyAuYnIKPiArIC5CSSAiaW50IGlwcV9kZXN0cm95X2hhbmRsZShzdHJ1Y3QgaXBxX2hhbmRs
-ZSAqIiBoICk7Cj4gKyAuU0ggREVTQ1JJUFRJT04KPiArZGlmZiAtLWdpdCBhL2xpYmlwcS9pcHFf
-c2V0X21vZGUuMyBiL2xpYmlwcS9pcHFfc2V0X21vZGUuMwo+ICtpbmRleCAwZWRkM2MwMGE4NGYu
-LmUyMDY4ODZjOGM2MiAxMDA2NDQKPiArLS0tIGEvbGliaXBxL2lwcV9zZXRfbW9kZS4zCj4gKysr
-KyBiL2xpYmlwcS9pcHFfc2V0X21vZGUuMwo+ICtAQCAtMjQsNyArMjQsNyBAQCBpcHFfc2V0X21v
-ZGUgXChlbSBzZXQgdGhlIGlwX3F1ZXVlIHF1ZXVpbmcgbW9kZQo+ICsgLmJyCj4gKyAuQiAjaW5j
-bHVkZSA8bGliaXBxLmg+Cj4gKyAuc3AKPiArLS5CSSAiaW50IGlwcV9zZXRfbW9kZShjb25zdCBz
-dHJ1Y3QgaXBxX2hhbmRsZSAqIiBoICIsIHVfaW50OF90ICIgbW9kZSAiLCBzaXplX3QgIiByYW5n
-ZSApOwo+ICsrLkJJICJpbnQgaXBxX3NldF9tb2RlKGNvbnN0IHN0cnVjdCBpcHFfaGFuZGxlICoi
-IGggIiwgdWludDhfdCAiIG1vZGUgIiwgc2l6ZV90ICIgcmFuZ2UgKTsKPiArIC5TSCBERVNDUklQ
-VElPTgo+ICsgVGhlCj4gKyAuQiBpcHFfc2V0X21vZGUKPiArLS0gCj4gKzIuMzUuMQo+ICsKPiAt
-LSAKPiAyLjM1LjEKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9y
-Zwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0t
-LS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1U
-aW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8Cnwg
-KzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8
-ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0t
-LS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3lt
-b3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNv
-bnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0t
-LS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+--===============2706216182393896397==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=a0b8eee63599d95cdfe16bb560d55938f3d1887d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add upstream patch fixing collision of struct ethhdr definition with
+kernel headers.
+
+Add another upstream patch to remove undefined u_int16_t type build
+breakage.
+
+Fixes:
+http://autobuild.buildroot.net/results/2a449752ee51eed8b8d569a52eb69f635e0369cd/
+http://autobuild.buildroot.net/results/23e97f88259850ecb12f2444365b34fa6fac8211/
+http://autobuild.buildroot.net/results/b8e3809d469c949a755808b7132717b0325ebafa/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...fix-build-for-missing-ETH_ALEN-definition.patch |  69 +++++++++
+ .../0002-treewide-use-uint-instead-of-u_int.patch  | 167 +++++++++++++++++++++
+ 2 files changed, 236 insertions(+)
+
+diff --git a/package/iptables/0001-Revert-fix-build-for-missing-ETH_ALEN-definition.patch b/package/iptables/0001-Revert-fix-build-for-missing-ETH_ALEN-definition.patch
+new file mode 100644
+index 0000000000..4f3831d9e4
+--- /dev/null
++++ b/package/iptables/0001-Revert-fix-build-for-missing-ETH_ALEN-definition.patch
+@@ -0,0 +1,69 @@
++From 0e7cf0ad306cdf95dc3c28d15a254532206a888e Mon Sep 17 00:00:00 2001
++Message-Id: <0e7cf0ad306cdf95dc3c28d15a254532206a888e.1656908815.git.baruch@tkos.co.il>
++From: Phil Sutter <phil@nwl.cc>
++Date: Wed, 18 May 2022 16:04:09 +0200
++Subject: [PATCH] Revert "fix build for missing ETH_ALEN definition"
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This reverts commit c5d9a723b5159a28f547b577711787295a14fd84 as it broke
++compiling against musl libc. Might be a bug in the latter, but for the
++time being try to please both by avoiding the include and instead
++defining ETH_ALEN if unset.
++
++While being at it, move netinet/ether.h include up.
++
++Fixes: 1bdb5535f561a ("libxtables: Extend MAC address printing/parsing support")
++Signed-off-by: Phil Sutter <phil@nwl.cc>
++Reviewed-by: Maciej Żenczykowski <maze@google.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit 0e7cf0ad306cdf95dc3c28d15a254532206a888e
++
++ libxtables/xtables.c | 8 +++++---
++ 1 file changed, 5 insertions(+), 3 deletions(-)
++
++diff --git a/libxtables/xtables.c b/libxtables/xtables.c
++index 96fd783a066c..0638f9271c60 100644
++--- a/libxtables/xtables.c
+++++ b/libxtables/xtables.c
++@@ -28,6 +28,7 @@
++ #include <stdlib.h>
++ #include <string.h>
++ #include <unistd.h>
+++#include <netinet/ether.h>
++ #include <sys/socket.h>
++ #include <sys/stat.h>
++ #include <sys/statfs.h>
++@@ -45,7 +46,6 @@
++ 
++ #include <xtables.h>
++ #include <limits.h> /* INT_MAX in ip_tables.h/ip6_tables.h */
++-#include <linux/if_ether.h> /* ETH_ALEN */
++ #include <linux/netfilter_ipv4/ip_tables.h>
++ #include <linux/netfilter_ipv6/ip6_tables.h>
++ #include <libiptc/libxtc.h>
++@@ -72,6 +72,10 @@
++ #define PROC_SYS_MODPROBE "/proc/sys/kernel/modprobe"
++ #endif
++ 
+++#ifndef ETH_ALEN
+++#define ETH_ALEN 6
+++#endif
+++
++ /* we need this for ip6?tables-restore.  ip6?tables-restore.c sets line to the
++  * current line of the input file, in order  to give a more precise error
++  * message.  ip6?tables itself doesn't need this, so it is initialized to the
++@@ -2245,8 +2249,6 @@ void xtables_print_num(uint64_t number, unsigned int format)
++ 	printf(FMT("%4lluT ","%lluT "), (unsigned long long)number);
++ }
++ 
++-#include <netinet/ether.h>
++-
++ static const unsigned char mac_type_unicast[ETH_ALEN] =   {};
++ static const unsigned char msk_type_unicast[ETH_ALEN] =   {1};
++ static const unsigned char mac_type_multicast[ETH_ALEN] = {1};
++-- 
++2.35.1
++
+diff --git a/package/iptables/0002-treewide-use-uint-instead-of-u_int.patch b/package/iptables/0002-treewide-use-uint-instead-of-u_int.patch
+new file mode 100644
+index 0000000000..e254c061af
+--- /dev/null
++++ b/package/iptables/0002-treewide-use-uint-instead-of-u_int.patch
+@@ -0,0 +1,167 @@
++From f319389525b066b7dc6d389c88f16a0df3b8f189 Mon Sep 17 00:00:00 2001
++Message-Id: <f319389525b066b7dc6d389c88f16a0df3b8f189.1656908915.git.baruch@tkos.co.il>
++From: Nick Hainke <vincent@systemli.org>
++Date: Mon, 16 May 2022 18:16:41 +0200
++Subject: [PATCH] treewide: use uint* instead of u_int*
++
++Gcc complains about missing types. Some commits introduced u_int* instead
++of uint*. Use uint treewide.
++
++Fixes errors in the form of:
++In file included from xtables-legacy-multi.c:5:
++xshared.h:83:56: error: unknown type name 'u_int16_t'; did you mean 'uint16_t'?
++    83 | set_option(unsigned int *options, unsigned int option, u_int16_t *invflg,
++        |                                                        ^~~~~~~~~
++        |                                                        uint16_t
++make[6]: *** [Makefile:712: xtables_legacy_multi-xtables-legacy-multi.o] Error 1
++
++Avoid libipq API breakage by adjusting libipq.h include accordingly. For
++arpt_mangle.h kernel uAPI header, apply same change as in kernel commit
++e91ded8db5747 ("uapi: netfilter_arp: use __u8 instead of u_int8_t").
++
++Signed-off-by: Nick Hainke <vincent@systemli.org>
++Signed-off-by: Phil Sutter <phil@nwl.cc>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit f319389525b066b7dc6d389c88f16a0df3b8f189
++
++ extensions/libxt_conntrack.c              | 2 +-
++ include/libipq/libipq.h                   | 8 ++++----
++ include/libiptc/libxtc.h                  | 2 +-
++ include/linux/netfilter_arp/arpt_mangle.h | 2 +-
++ iptables/xshared.c                        | 2 +-
++ iptables/xshared.h                        | 2 +-
++ libipq/ipq_create_handle.3                | 2 +-
++ libipq/ipq_set_mode.3                     | 2 +-
++ 8 files changed, 11 insertions(+), 11 deletions(-)
++
++diff --git a/extensions/libxt_conntrack.c b/extensions/libxt_conntrack.c
++index 64018ce152b7..234085c5211c 100644
++--- a/extensions/libxt_conntrack.c
+++++ b/extensions/libxt_conntrack.c
++@@ -778,7 +778,7 @@ matchinfo_print(const void *ip, const struct xt_entry_match *match, int numeric,
++ 
++ static void
++ conntrack_dump_ports(const char *prefix, const char *opt,
++-		     u_int16_t port_low, u_int16_t port_high)
+++		     uint16_t port_low, uint16_t port_high)
++ {
++ 	if (port_high == 0 || port_low == port_high)
++ 		printf(" %s%s %u", prefix, opt, port_low);
++diff --git a/include/libipq/libipq.h b/include/libipq/libipq.h
++index 3cd1329217a0..dd0cb205179c 100644
++--- a/include/libipq/libipq.h
+++++ b/include/libipq/libipq.h
++@@ -24,7 +24,7 @@
++ #include <errno.h>
++ #include <unistd.h>
++ #include <fcntl.h>
++-#include <sys/types.h>
+++#include <stdint.h>
++ #include <sys/socket.h>
++ #include <sys/uio.h>
++ #include <asm/types.h>
++@@ -48,19 +48,19 @@ typedef unsigned long ipq_id_t;
++ struct ipq_handle
++ {
++ 	int fd;
++-	u_int8_t blocking;
+++	uint8_t blocking;
++ 	struct sockaddr_nl local;
++ 	struct sockaddr_nl peer;
++ };
++ 
++-struct ipq_handle *ipq_create_handle(u_int32_t flags, u_int32_t protocol);
+++struct ipq_handle *ipq_create_handle(uint32_t flags, uint32_t protocol);
++ 
++ int ipq_destroy_handle(struct ipq_handle *h);
++ 
++ ssize_t ipq_read(const struct ipq_handle *h,
++                 unsigned char *buf, size_t len, int timeout);
++ 
++-int ipq_set_mode(const struct ipq_handle *h, u_int8_t mode, size_t len);
+++int ipq_set_mode(const struct ipq_handle *h, uint8_t mode, size_t len);
++ 
++ ipq_packet_msg_t *ipq_get_packet(const unsigned char *buf);
++ 
++diff --git a/include/libiptc/libxtc.h b/include/libiptc/libxtc.h
++index 37010188b64f..a1d16ef996d7 100644
++--- a/include/libiptc/libxtc.h
+++++ b/include/libiptc/libxtc.h
++@@ -10,7 +10,7 @@ extern "C" {
++ #endif
++ 
++ #ifndef XT_MIN_ALIGN
++-/* xt_entry has pointers and u_int64_t's in it, so if you align to
+++/* xt_entry has pointers and uint64_t's in it, so if you align to
++    it, you'll also align to any crazy matches and targets someone
++    might write */
++ #define XT_MIN_ALIGN (__alignof__(struct xt_entry))
++diff --git a/include/linux/netfilter_arp/arpt_mangle.h b/include/linux/netfilter_arp/arpt_mangle.h
++index 250f502902bb..8c2b16a1f5a0 100644
++--- a/include/linux/netfilter_arp/arpt_mangle.h
+++++ b/include/linux/netfilter_arp/arpt_mangle.h
++@@ -13,7 +13,7 @@ struct arpt_mangle
++ 	union {
++ 		struct in_addr tgt_ip;
++ 	} u_t;
++-	u_int8_t flags;
+++	__u8 flags;
++ 	int target;
++ };
++ 
++diff --git a/iptables/xshared.c b/iptables/xshared.c
++index a8512d380815..9b5e5b5bddc2 100644
++--- a/iptables/xshared.c
+++++ b/iptables/xshared.c
++@@ -1025,7 +1025,7 @@ static const int inverse_for_options[NUMBER_OF_OPT] =
++ };
++ 
++ void
++-set_option(unsigned int *options, unsigned int option, u_int16_t *invflg,
+++set_option(unsigned int *options, unsigned int option, uint16_t *invflg,
++ 	   bool invert)
++ {
++ 	if (*options & option)
++diff --git a/iptables/xshared.h b/iptables/xshared.h
++index 14568bb00fb6..f82129883968 100644
++--- a/iptables/xshared.h
+++++ b/iptables/xshared.h
++@@ -80,7 +80,7 @@ struct xtables_target;
++ #define IPT_INV_ARPHRD		0x0800
++ 
++ void
++-set_option(unsigned int *options, unsigned int option, u_int16_t *invflg,
+++set_option(unsigned int *options, unsigned int option, uint16_t *invflg,
++ 	   bool invert);
++ 
++ /**
++diff --git a/libipq/ipq_create_handle.3 b/libipq/ipq_create_handle.3
++index 11ef95c4b79f..ebe46daab92d 100644
++--- a/libipq/ipq_create_handle.3
+++++ b/libipq/ipq_create_handle.3
++@@ -24,7 +24,7 @@ ipq_create_handle, ipq_destroy_handle \(em create and destroy libipq handles.
++ .br
++ .B #include <libipq.h>
++ .sp
++-.BI "struct ipq_handle *ipq_create_handle(u_int32_t " flags ", u_int32_t " protocol ");"
+++.BI "struct ipq_handle *ipq_create_handle(uint32_t " flags ", uint32_t " protocol ");"
++ .br
++ .BI "int ipq_destroy_handle(struct ipq_handle *" h );
++ .SH DESCRIPTION
++diff --git a/libipq/ipq_set_mode.3 b/libipq/ipq_set_mode.3
++index 0edd3c00a84f..e206886c8c62 100644
++--- a/libipq/ipq_set_mode.3
+++++ b/libipq/ipq_set_mode.3
++@@ -24,7 +24,7 @@ ipq_set_mode \(em set the ip_queue queuing mode
++ .br
++ .B #include <libipq.h>
++ .sp
++-.BI "int ipq_set_mode(const struct ipq_handle *" h ", u_int8_t " mode ", size_t " range );
+++.BI "int ipq_set_mode(const struct ipq_handle *" h ", uint8_t " mode ", size_t " range );
++ .SH DESCRIPTION
++ The
++ .B ipq_set_mode
++-- 
++2.35.1
++
+
+--===============2706216182393896397==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2706216182393896397==--
