@@ -1,57 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AD09C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 09:59:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ABAAC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 12:33:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5827640A1D;
-	Tue,  5 Jul 2022 09:59:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5827640A1D
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA22C41776;
+	Tue,  5 Jul 2022 12:33:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA22C41776
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id akAE1r1atVRb; Tue,  5 Jul 2022 09:59:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JCjbiCA-2JD6; Tue,  5 Jul 2022 12:33:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 480D140396;
-	Tue,  5 Jul 2022 09:59:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 480D140396
+	by smtp4.osuosl.org (Postfix) with ESMTP id B18D041733;
+	Tue,  5 Jul 2022 12:33:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B18D041733
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 296631BF20B
- for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 09:59:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 182701BF859
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 12:33:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 041A582FC9
- for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 09:59:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 041A582FC9
+ by smtp1.osuosl.org (Postfix) with ESMTP id E773581DCB
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 12:33:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E773581DCB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iIBZAih4ztcJ for <buildroot@lists.busybox.net>;
- Tue,  5 Jul 2022 09:59:23 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D23F82CF9
-Received: from mail.desaster-games.net (mail.desaster-games.net [176.9.84.136])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D23F82CF9
- for <buildroot@busybox.net>; Tue,  5 Jul 2022 09:59:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by mail.desaster-games.net (Postfix) with ESMTP id D4D0420005;
- Tue,  5 Jul 2022 11:59:19 +0200 (CEST)
-X-Virus-Scanned: Amavis at mail.desaster-games.com
-Received: from mail.desaster-games.net ([127.0.0.1])
- by localhost (mail.desaster-games.net [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5f8OxRfIPD0z; Tue,  5 Jul 2022 11:59:06 +0200 (CEST)
-Received: from linux-es2v.suse.de (unknown [81.95.8.244])
- by mail.desaster-games.net (Postfix) with ESMTPSA id 7D8DB20006;
- Tue,  5 Jul 2022 11:54:18 +0200 (CEST)
-From: Michael Vetter <jubalh@iodoru.org>
-To: buildroot@busybox.net
-Date: Tue,  5 Jul 2022 11:54:17 +0200
-Message-Id: <20220705095417.12765-1-jubalh@iodoru.org>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version 0.12.1
+ with ESMTP id UDDjCVu7vmqF for <buildroot@lists.busybox.net>;
+ Tue,  5 Jul 2022 12:33:07 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18AAF81422
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 18AAF81422
+ for <buildroot@buildroot.org>; Tue,  5 Jul 2022 12:33:07 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id bk26so2273193wrb.11
+ for <buildroot@buildroot.org>; Tue, 05 Jul 2022 05:33:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id;
+ bh=Zc/FXruGHxTVPKJNnWRkh8gtdpEXDEVBR15TJYnECDE=;
+ b=H9YK696Q+4MJpkA4FMCWt311LKvZ1nj2gNCo3G6U26HBlmVcQpBjkXCV2YKKDtMsBE
+ 00l0b0cLZVPfwYXtSbTgu4oZWFgH+Sh7e9fg1nX4swI+yoNcYpVjJcUYpd50WAuFbhTS
+ ns9fl69E2aYBsCTn6jd0+eOUyIy8LZoC0kz2MVX0c1K5OT81B2i7O4CCg5qAayu4vZcr
+ M4wC2N3nL2WLB4WkCs/qqNfSlLxlUw7QLt0RPHnMw/GkXPSbVzWc8ss/0KHIGE23uLdR
+ 5W5Ez+pp/Q1tMldFRBCQAZ+6/67ALeKZ3p6dColMPXCbvniNawL+OIAFBwDsP/2jpe2d
+ VWPg==
+X-Gm-Message-State: AJIora8OcScAEsh6s3nwPsrFwJokwaYcHG0WGqMlsAUspibZeQSxrtUy
+ zwWB1l1MXj2aVwh+V9rBqgOPkCqD/Ns=
+X-Google-Smtp-Source: AGRyM1uqHUa3MvI4RppeaLkjcC02EVgbZ1T0ogU8BzQSsONDiumbTNUpXLGixd1J/ZdUDjk+e1lDkQ==
+X-Received: by 2002:a5d:534e:0:b0:21b:adf3:dc19 with SMTP id
+ t14-20020a5d534e000000b0021badf3dc19mr30910352wrv.543.1657024384870; 
+ Tue, 05 Jul 2022 05:33:04 -0700 (PDT)
+Received: from localhost.localdomain
+ ([2a04:cec0:11d2:38f8:9191:99da:ee67:6052])
+ by smtp.gmail.com with ESMTPSA id
+ p5-20020a5d59a5000000b0021d20461bbbsm22549317wrr.88.2022.07.05.05.33.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 05 Jul 2022 05:33:04 -0700 (PDT)
+From: David GOUARIN <dgouarin@gmail.com>
+X-Google-Original-From: David GOUARIN <david.gouarin@thalesgroup.com>
+To: buildroot@buildroot.org
+Date: Tue,  5 Jul 2022 15:44:00 +0200
+Message-Id: <20220705134402.5914-1-david.gouarin@thalesgroup.com>
+X-Mailer: git-send-email 2.17.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id;
+ bh=Zc/FXruGHxTVPKJNnWRkh8gtdpEXDEVBR15TJYnECDE=;
+ b=kFMLQcEGuB2e3RLhGLX55hvqTrA+Mll32Sq8SinsMxps4UZ/fRc/gueoe0PNBw89Wg
+ p4zsRKymZEiswxsqvjTODX+2OK6BdvYPg9x6FyUW36mnMFAjoIe4wo5p2ombUTvJnjlg
+ 6vFb3FIUMmnQzfYk+/qXBTvkrJIo1HJuJaGx4760ukWlSRnUJ1fNDd3XzijPiS2Jf8jo
+ 33ef3VlJOktayIX/K3wGtfVLP4AnytWKYvvoVRf4pw5rxYRnAOeydn62M0cctFdsdi75
+ zcMJ7LU9LNW/tfk1mNf3EmbWDvR4lxH6uWGqUDrjClQJa/Z95TZeCssAzzYBpIDEe/lk
+ UERA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kFMLQcEG
+Subject: [Buildroot] [PATCH 1/2] package/pkg-waf.mk: enable definiton of
+ env. variables in every build steps
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,67 +92,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Vetter <jubalh@iodoru.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: David GOUARIN <david.gouarin@thalesgroup.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmVtb3ZlIHVwc3RyZWFtZWQgcGF0Y2ggMDAwMS1maXgtc3NpemVfdC5wYXRjaAoKU2lnbmVkLW9m
-Zi1ieTogTWljaGFlbCBWZXR0ZXIgPGp1YmFsaEBpb2RvcnUub3JnPgotLS0KIHBhY2thZ2UvbGli
-c3Ryb3BoZS8wMDAxLWZpeC1zc2l6ZV90LnBhdGNoIHwgNDkgLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0KIHBhY2thZ2UvbGlic3Ryb3BoZS9saWJzdHJvcGhlLmhhc2ggICAgICAgIHwgIDIgKy0KIHBh
-Y2thZ2UvbGlic3Ryb3BoZS9saWJzdHJvcGhlLm1rICAgICAgICAgIHwgIDIgKy0KIDMgZmlsZXMg
-Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCA1MSBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEw
-MDY0NCBwYWNrYWdlL2xpYnN0cm9waGUvMDAwMS1maXgtc3NpemVfdC5wYXRjaAoKZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvbGlic3Ryb3BoZS8wMDAxLWZpeC1zc2l6ZV90LnBhdGNoIGIvcGFja2FnZS9s
-aWJzdHJvcGhlLzAwMDEtZml4LXNzaXplX3QucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0
-CmluZGV4IDM5YjQ1NmRlNTcuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9saWJzdHJvcGhlLzAw
-MDEtZml4LXNzaXplX3QucGF0Y2gKKysrIC9kZXYvbnVsbApAQCAtMSw0OSArMCwwIEBACi1Gcm9t
-IGYzMWVmOWMzNWM5YmJhODMxNTEwNzc3ZDU1MWM0MTc5Mjk1YjIwOGYgTW9uIFNlcCAxNyAwMDow
-MDowMCAyMDAxCi1Gcm9tOiBNaWNoYWVsIFZldHRlciA8anViYWxoQGlvZG9ydS5vcmc+Ci1EYXRl
-OiBNb24sIDMwIE1heSAyMDIyIDE0OjQ3OjQ0ICswMjAwCi1TdWJqZWN0OiBbUEFUQ0hdIEluY2x1
-ZGUgc3lzL3R5cGVzLmggZm9yIHNzaXplX3QKLU1JTUUtVmVyc2lvbjogMS4wCi1Db250ZW50LVR5
-cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKLUNvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6
-IDhiaXQKLQotV2hlbiBjb21waWxpbmcgb24gYnVpbGRyb290IEkgZ2V0OgotYHNyYy90bHMuYzoy
-MzU6Mjg6IGVycm9yOiDigJhzc2l6ZV904oCZIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlz
-Ci1mdW5jdGlvbik7IGRpZCB5b3UgbWVhbiDigJhzaXplX3TigJk/IGAKLQotVG8gaGF2ZSB0aGlz
-IFBPU0lYIHR5cGUgYXZhaWxhYmxlIHdlIHdpbGwgbmVlZCB0byBpbmNsdWRlCi1gc3lzL3R5cGVz
-LmhgIG9uIExpbnV4LiBVbnN1cmUgYWJvdXQgb3RoZXIgc3lzdGVtcy4KLQotVXBzdHJlYW06IGh0
-dHBzOi8vZ2l0aHViLmNvbS9zdHJvcGhlL2xpYnN0cm9waGUvcHVsbC8yMDcKLVNpZ25lZC1vZmYt
-Ynk6IE1pY2hhZWwgVmV0dGVyIDxqdWJhbGhAaW9kb3J1Lm9yZz4KLS0tLQotIHNyYy9yYW5kLmMg
-fCAxICsKLSBzcmMvdGxzLmMgIHwgNCArKysrCi0gMiBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlv
-bnMoKykKLQotZGlmZiAtLWdpdCBhL3NyYy9yYW5kLmMgYi9zcmMvcmFuZC5jCi1pbmRleCAwNjFl
-ODVlZS4uMjVlNDYxNGEgMTAwNjQ0Ci0tLS0gYS9zcmMvcmFuZC5jCi0rKysgYi9zcmMvcmFuZC5j
-Ci1AQCAtMjgsNiArMjgsNyBAQAotICNpZiBfX0dMSUJDX1BSRVJFUSgyLCAyNSkKLSAjZGVmaW5l
-IFVTRV9HRVRSQU5ET00KLSAjaW5jbHVkZSA8c3lzL3JhbmRvbS5oPgotKyNpbmNsdWRlIDxzeXMv
-dHlwZXMuaD4KLSAjaW5jbHVkZSA8ZXJybm8uaD4KLSAjZW5kaWYKLSAjZW5kaWYKLWRpZmYgLS1n
-aXQgYS9zcmMvdGxzLmMgYi9zcmMvdGxzLmMKLWluZGV4IDE3ZDg1ZGRhLi41NDc0NmJhYSAxMDA2
-NDQKLS0tLSBhL3NyYy90bHMuYwotKysrIGIvc3JjL3Rscy5jCi1AQCAtMjEsNiArMjEsMTAgQEAK
-LSAjaW5jbHVkZSA8c3RkYXJnLmg+Ci0gI2luY2x1ZGUgPHN0cmluZy5oPgotIAotKyNpZiBkZWZp
-bmVkKF9fbGludXhfXykKLSsjaW5jbHVkZSA8c3lzL3R5cGVzLmg+Ci0rI2VuZGlmCi0rCi0gI2lu
-Y2x1ZGUgInN0cm9waGUuaCIKLSAKLSAjaW5jbHVkZSAiY29tbW9uLmgiCmRpZmYgLS1naXQgYS9w
-YWNrYWdlL2xpYnN0cm9waGUvbGlic3Ryb3BoZS5oYXNoIGIvcGFja2FnZS9saWJzdHJvcGhlL2xp
-YnN0cm9waGUuaGFzaAppbmRleCA2NmZmMGU3ZTdlLi5mYTkxNDhlZDBmIDEwMDY0NAotLS0gYS9w
-YWNrYWdlL2xpYnN0cm9waGUvbGlic3Ryb3BoZS5oYXNoCisrKyBiL3BhY2thZ2UvbGlic3Ryb3Bo
-ZS9saWJzdHJvcGhlLmhhc2gKQEAgLTEsNCArMSw0IEBACiAjIExvY2FsbHkgY2FsY3VsYXRlZAot
-c2hhMjU2ICA4ZTQ0YWNiMjYwMTg4MTZmOTg1NjYyNmJkNWZmOTI0YTM2Y2M2MTJkMmIzNzQ3ZWU2
-MzRkNjI2MzI2YjcyZGY3ICBsaWJzdHJvcGhlLTAuMTIuMC50YXIueHoKK3NoYTI1NiAgNWRhMGE0
-ZTEyZTM4MzM5MzYxNDM3NmY4YjQ3ZjhiOTE3MDNjOGZjNWE1NjRhYWNmYzlkYjZiOThkNmE2YTli
-ZiAgbGlic3Ryb3BoZS0wLjEyLjEudGFyLnh6CiBzaGEyNTYgIDgyNDc2ZjM2ZmZkNWU4OTVhMTc2
-MDEzYzA4MTIxNjZiYTdiN2Q5OWYzZDUzNmZjN2Y1ZWQyZTMzZTlmNzRhMDggIE1JVC1MSUNFTlNF
-LnR4dAogc2hhMjU2ICA4Y2ViNGI5ZWU1YWRlZGRlNDdiMzFlOTc1YzFkOTBjNzNhZDI3YjZiMTY1
-YTFkY2Q4MGM3YzU0NWViNjViOTAzICBHUEwtTElDRU5TRS50eHQKZGlmZiAtLWdpdCBhL3BhY2th
-Z2UvbGlic3Ryb3BoZS9saWJzdHJvcGhlLm1rIGIvcGFja2FnZS9saWJzdHJvcGhlL2xpYnN0cm9w
-aGUubWsKaW5kZXggZjQ4ZDA3Mzc3MC4uY2U5OWM5ZmU0OCAxMDA2NDQKLS0tIGEvcGFja2FnZS9s
-aWJzdHJvcGhlL2xpYnN0cm9waGUubWsKKysrIGIvcGFja2FnZS9saWJzdHJvcGhlL2xpYnN0cm9w
-aGUubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1MSUJT
-VFJPUEhFX1ZFUlNJT04gPSAwLjEyLjAKK0xJQlNUUk9QSEVfVkVSU0lPTiA9IDAuMTIuMQogTElC
-U1RST1BIRV9TT1VSQ0UgPSBsaWJzdHJvcGhlLSQoTElCU1RST1BIRV9WRVJTSU9OKS50YXIueHoK
-IExJQlNUUk9QSEVfU0lURSA9IGh0dHBzOi8vZ2l0aHViLmNvbS9zdHJvcGhlL2xpYnN0cm9waGUv
-cmVsZWFzZXMvZG93bmxvYWQvJChMSUJTVFJPUEhFX1ZFUlNJT04pCiBMSUJTVFJPUEhFX0RFUEVO
-REVOQ0lFUyA9IGhvc3QtcGtnY29uZgotLSAKMi4zMS4xCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+It might be necessary for some packages to define environment variables when calling waf build and waf install.
+This is done the same way as the others package types, by defining $(PKG)_MAKE_ENV in .mk.
+
+Signed-off-by: David GOUARIN <david.gouarin@thalesgroup.com>
+---
+ package/pkg-waf.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+index d546b4a817..e090afa9e6 100644
+--- a/package/pkg-waf.mk
++++ b/package/pkg-waf.mk
+@@ -75,7 +75,7 @@ endif
+ ifndef $(2)_BUILD_CMDS
+ define $(2)_BUILD_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+ 		build $$(WAF_OPTS) $$($(2)_BUILD_OPTS) \
+ 		$$($(2)_WAF_OPTS)
+ endef
+@@ -88,7 +88,7 @@ endif
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+ 		install --destdir=$$(STAGING_DIR) \
+ 		$$($(2)_INSTALL_STAGING_OPTS) \
+ 		$$($(2)_WAF_OPTS)
+@@ -102,7 +102,7 @@ endif
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+ 		install --destdir=$$(TARGET_DIR) \
+ 		$$($(2)_INSTALL_TARGET_OPTS) \
+ 		$$($(2)_WAF_OPTS)
+-- 
+2.17.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
