@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2E3DC43334
-	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 17:12:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A662C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 17:22:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 202B160F2B;
-	Tue,  5 Jul 2022 17:12:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 202B160F2B
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD8E381AA7;
+	Tue,  5 Jul 2022 17:22:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD8E381AA7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cg4NuCfIILuy; Tue,  5 Jul 2022 17:12:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C-wB81YNNQls; Tue,  5 Jul 2022 17:22:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0DE2E60ED5;
-	Tue,  5 Jul 2022 17:11:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DE2E60ED5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7BF891BF31C
- for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 17:11:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E467481A99;
+	Tue,  5 Jul 2022 17:22:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E467481A99
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 18AF11BF31C
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 17:22:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55B95408DC
- for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 17:11:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55B95408DC
+ by smtp1.osuosl.org (Postfix) with ESMTP id E86AB81A99
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 17:22:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E86AB81A99
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FHWBiAl2mG1j for <buildroot@lists.busybox.net>;
- Tue,  5 Jul 2022 17:11:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QWkx1ZHCwsZv for <buildroot@lists.busybox.net>;
+ Tue,  5 Jul 2022 17:22:43 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEEB2408D5
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BEEB2408D5
- for <buildroot@buildroot.org>; Tue,  5 Jul 2022 17:11:54 +0000 (UTC)
-Received: from fwd81.dcpf.telekom.de (fwd81.aul.t-online.de [10.223.144.107])
- by mailout01.t-online.de (Postfix) with SMTP id 331A86412
- for <buildroot@buildroot.org>; Tue,  5 Jul 2022 19:11:49 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([84.161.181.254]) by fwd81.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD2CD81A8E
+Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD2CD81A8E
+ for <buildroot@buildroot.org>; Tue,  5 Jul 2022 17:22:42 +0000 (UTC)
+Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
+ by mailout08.t-online.de (Postfix) with SMTP id D13324831
+ for <buildroot@buildroot.org>; Tue,  5 Jul 2022 19:22:39 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([84.161.181.254]) by fwd70.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1o8m5U-0GrCtd0; Tue, 5 Jul 2022 19:11:49 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37882)
+ esmtp id 1o8mFz-2M7ZIn0; Tue, 5 Jul 2022 19:22:39 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40108)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1o8m5U-0001hZ-JT
- for buildroot@buildroot.org; Tue, 05 Jul 2022 19:11:48 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1o8mFz-0003bo-6P
+ for buildroot@buildroot.org; Tue, 05 Jul 2022 19:22:39 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Tue,  5 Jul 2022 19:11:48 +0200
-Message-Id: <20220705171148.1122924-1-bernd.kuhls@t-online.de>
+Date: Tue,  5 Jul 2022 19:22:39 +0200
+Message-Id: <20220705172239.1272897-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1657041109-0143E336-B58A844F/0/0 CLEAN NORMAL
-X-TOI-MSGID: c9e6eb6e-a02f-4b72-8f53-b2b75a374c7c
-Subject: [Buildroot] [PATCH 1/1] package/alsa-lib: bump version to 1.2.7.1
+X-TOI-EXPURGATEID: 150726::1657041759-0143FF0B-FB5EFB2C/0/0 CLEAN NORMAL
+X-TOI-MSGID: 89ce6716-1814-4cde-bea5-c76d0c8dfa9f
+Subject: [Buildroot] [PATCH 1/1] package/bcg729: bump version to 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,69 +65,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Q2hhbmdlbG9nOiBodHRwczovL3d3dy5hbHNhLXByb2plY3Qub3JnL3dpa2kvQ2hhbmdlc192MS4y
-LjdfdjEuMi43LjEKClJlbW92ZWQgcGF0Y2ggd2hpY2ggd2FzIGFwcGxpZWQgdXBzdHJlYW06Cmh0
-dHBzOi8vZ2l0aHViLmNvbS9hbHNhLXByb2plY3QvYWxzYS1saWIvY29tbWl0LzkyZmZmNGU5ZDA2
-OTIyZmEzNjQ4ZDg1Yzg1MDE2MzhjODY5ZDYxODQKClNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxz
-IDxiZXJuZC5rdWhsc0B0LW9ubGluZS5kZT4KLS0tCiAuLi4vMDAwMi1vdXRwdXQtaW5jbHVkZS1z
-dGRhcmcuaC5wYXRjaCAgICAgICAgfCA0MCAtLS0tLS0tLS0tLS0tLS0tLS0tCiBwYWNrYWdlL2Fs
-c2EtbGliL2Fsc2EtbGliLmhhc2ggICAgICAgICAgICAgICAgfCAgMiArLQogcGFja2FnZS9hbHNh
-LWxpYi9hbHNhLWxpYi5tayAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIDMgZmlsZXMgY2hhbmdl
-ZCwgMiBpbnNlcnRpb25zKCspLCA0MiBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBw
-YWNrYWdlL2Fsc2EtbGliLzAwMDItb3V0cHV0LWluY2x1ZGUtc3RkYXJnLmgucGF0Y2gKCmRpZmYg
-LS1naXQgYS9wYWNrYWdlL2Fsc2EtbGliLzAwMDItb3V0cHV0LWluY2x1ZGUtc3RkYXJnLmgucGF0
-Y2ggYi9wYWNrYWdlL2Fsc2EtbGliLzAwMDItb3V0cHV0LWluY2x1ZGUtc3RkYXJnLmgucGF0Y2gK
-ZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGNmN2MyNWJlY2QuLjAwMDAwMDAwMDAKLS0t
-IGEvcGFja2FnZS9hbHNhLWxpYi8wMDAyLW91dHB1dC1pbmNsdWRlLXN0ZGFyZy5oLnBhdGNoCisr
-KyAvZGV2L251bGwKQEAgLTEsNDAgKzAsMCBAQAotRnJvbSBiN2MwMTY5YTYyZDRlNmFkMWEwYTlk
-ZTRlZjhhZTgwODllZTk4ODcyIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogQmVybmQg
-S3VobHMgPGJlcm5kLmt1aGxzQHQtb25saW5lLmRlPgotRGF0ZTogU2F0LCAxMSBKdW4gMjAyMiAx
-OToxMjoxOSArMDIwMAotU3ViamVjdDogW1BBVENIXSBvdXRwdXQ6IGluY2x1ZGUgc3RkYXJnLmgK
-LU1JTUUtVmVyc2lvbjogMS4wCi1Db250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRG
-LTgKLUNvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKLQotRml4ZXMgYSBidWlsZCBlcnJv
-ciB3aXRoIGFsc2EtdXRpbHMgd2hlbiBidWlsZCB3aXRoIGEgdUNsaWJjIHRvb2xjaGFpbjoKLQot
-YWxzYS11dGlscy9ob3N0L3g4Nl82NC1idWlsZHJvb3QtbGludXgtdWNsaWJjL3N5c3Jvb3QvdXNy
-L2luY2x1ZGUvYWxzYS9vdXRwdXQuaDo3NTo2NjoKLSBlcnJvcjogdW5rbm93biB0eXBlIG5hbWUg
-4oCYdmFfbGlzdOKAmQotICAgNzUgfCBpbnQgc25kX291dHB1dF92cHJpbnRmKHNuZF9vdXRwdXRf
-dCAqb3V0cHV0LCBjb25zdCBjaGFyICpmb3JtYXQsIHZhX2xpc3QgYXJncyk7Ci0gICAgICB8ICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgXn5+fn5+fgotYWxzYS11dGlscy9ob3N0L3g4Nl82NC1idWlsZHJvb3QtbGludXgtdWNs
-aWJjL3N5c3Jvb3QvdXNyL2luY2x1ZGUvYWxzYS9vdXRwdXQuaDoxOjE6Ci0gbm90ZTog4oCYdmFf
-bGlzdOKAmSBpcyBkZWZpbmVkIGluIGhlYWRlciDigJg8c3RkYXJnLmg+4oCZOyBkaWQgeW91IGZv
-cmdldCB0byDigJgjaW5jbHVkZSA8c3RkYXJnLmg+4oCZPwotCi1QYXRjaCBzZW50IHVwc3RyZWFt
-OiBodHRwczovL2dpdGh1Yi5jb20vYWxzYS1wcm9qZWN0L2Fsc2EtbGliL3B1bGwvMjM3Ci0KLVNp
-Z25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZC5rdWhsc0B0LW9ubGluZS5kZT4KLS0tLQot
-IGluY2x1ZGUvb3V0cHV0LmggfCAyICsrCi0gMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygr
-KQotCi1kaWZmIC0tZ2l0IGEvaW5jbHVkZS9vdXRwdXQuaCBiL2luY2x1ZGUvb3V0cHV0LmgKLWlu
-ZGV4IDRhOTcwZGM0Li41ZTE2NDIwYiAxMDA2NDQKLS0tLSBhL2luY2x1ZGUvb3V0cHV0LmgKLSsr
-KyBiL2luY2x1ZGUvb3V0cHV0LmgKLUBAIC0yOCw2ICsyOCw4IEBACi0gI2lmbmRlZiBfX0FMU0Ff
-T1VUUFVUX0gKLSAjZGVmaW5lIF9fQUxTQV9PVVRQVVRfSAotIAotKyNpbmNsdWRlIDxzdGRhcmcu
-aD4KLSsKLSAjaWZkZWYgX19jcGx1c3BsdXMKLSBleHRlcm4gIkMiIHsKLSAjZW5kaWYKLS0tIAot
-Mi4zMC4yCi0KZGlmZiAtLWdpdCBhL3BhY2thZ2UvYWxzYS1saWIvYWxzYS1saWIuaGFzaCBiL3Bh
-Y2thZ2UvYWxzYS1saWIvYWxzYS1saWIuaGFzaAppbmRleCBhODU5NTA1MzcyLi43YzE3ZTE4ZWMz
-IDEwMDY0NAotLS0gYS9wYWNrYWdlL2Fsc2EtbGliL2Fsc2EtbGliLmhhc2gKKysrIGIvcGFja2Fn
-ZS9hbHNhLWxpYi9hbHNhLWxpYi5oYXNoCkBAIC0xLDQgKzEsNCBAQAogIyBMb2NhbGx5IGNhbGN1
-bGF0ZWQKLXNoYTI1NiAgODgxNGU2MWY3ZWM2ODEyYzc2ZTIzYTg1Y2FiMDBlMGIwZDNiYmE0MDgx
-NmFmMzZiNzI2YmViMWJjMDRjNzRhNyAgYWxzYS1saWItMS4yLjcudGFyLmJ6Mgorc2hhMjU2ICAw
-NDZkYzQyZGZjZmFkMjY5MjE3YmUwNTk1NDY4NjEzN2U1ZTczOTdmMzA0MTM3MmY4YzZkY2Q3ZDc5
-NDYxZTYxICBhbHNhLWxpYi0xLjIuNy4xLnRhci5iejIKIHNoYTI1NiAgMzI0MzRhZmNjODY2NmJh
-MDYwZTExMWQ3MTViZmRiNmMyZDVkZDhhMzVmYTRkM2FiOGFkNjdkOGY4NTBkMmYyYiAgQ09QWUlO
-Rwogc2hhMjU2ICBiZmUxNmNmODIzYmNmZjI2MWZjNmEwNjJjMDdlZTk2NjYwZTNjMzk2NzhmNDJm
-MzlhNzg4YTY4ZGJjMjM0Y2VkICBhc2VydmVyL0NPUFlJTkcKZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
-YWxzYS1saWIvYWxzYS1saWIubWsgYi9wYWNrYWdlL2Fsc2EtbGliL2Fsc2EtbGliLm1rCmluZGV4
-IGQ2MDU0YmIwMDAuLjYxZjYyNWJjZmYgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvYWxzYS1saWIvYWxz
-YS1saWIubWsKKysrIGIvcGFja2FnZS9hbHNhLWxpYi9hbHNhLWxpYi5tawpAQCAtNCw3ICs0LDcg
-QEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLUFMU0FfTElCX1ZFUlNJT04gPSAxLjIu
-NworQUxTQV9MSUJfVkVSU0lPTiA9IDEuMi43LjEKIEFMU0FfTElCX1NPVVJDRSA9IGFsc2EtbGli
-LSQoQUxTQV9MSUJfVkVSU0lPTikudGFyLmJ6MgogQUxTQV9MSUJfU0lURSA9IGh0dHBzOi8vd3d3
-LmFsc2EtcHJvamVjdC5vcmcvZmlsZXMvcHViL2xpYgogQUxTQV9MSUJfTElDRU5TRSA9IExHUEwt
-Mi4xKyAobGlicmFyeSksIEdQTC0yLjArIChhc2VydmVyKQotLSAKMi4zMC4yCgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Changelog:
+https://github.com/BelledonneCommunications/bcg729/blob/master/CHANGELOG.md
+
+Updated license to GPL-3.0+:
+https://github.com/BelledonneCommunications/bcg729/commit/2c3ff1ae1af9b1571e3e8644c067965def39b747
+
+License file was changed to LICENSE.txt:
+https://github.com/BelledonneCommunications/bcg729/commit/089bb3454409d2cd630a6b3890a602b084e7ca89
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/bcg729/bcg729.hash | 4 ++--
+ package/bcg729/bcg729.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/bcg729/bcg729.hash b/package/bcg729/bcg729.hash
+index 4dbfbbbbb2..2eb80a0407 100644
+--- a/package/bcg729/bcg729.hash
++++ b/package/bcg729/bcg729.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 94b3542a06cbd96306efc19f959f9febae62806a22599063f82a8c33e989d48b  bcg729-1.0.4.tar.gz
+-sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  68599a850535d1b182932b3f86558ac8a76d4b899a548183b062956c5fdc916d  bcg729-1.1.1.tar.gz
++sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
+diff --git a/package/bcg729/bcg729.mk b/package/bcg729/bcg729.mk
+index 426cfd90af..f89e535546 100644
+--- a/package/bcg729/bcg729.mk
++++ b/package/bcg729/bcg729.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-BCG729_VERSION = 1.0.4
++BCG729_VERSION = 1.1.1
+ BCG729_SITE = $(call github,BelledonneCommunications,bcg729,$(BCG729_VERSION))
+-BCG729_LICENSE = GPL-2.0+
+-BCG729_LICENSE_FILES = COPYING
++BCG729_LICENSE = GPL-3.0+
++BCG729_LICENSE_FILES = LICENSE.txt
+ BCG729_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-- 
+2.30.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
