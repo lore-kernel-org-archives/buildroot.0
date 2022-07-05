@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02470C43334
-	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 07:33:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0282ACCA47C
+	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 07:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 87BFB40327;
-	Tue,  5 Jul 2022 07:33:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87BFB40327
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D93C40A19;
+	Tue,  5 Jul 2022 07:33:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D93C40A19
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZHz7UOgnx1Lj; Tue,  5 Jul 2022 07:33:13 +0000 (UTC)
+	with ESMTP id D_RUF-7FSyJv; Tue,  5 Jul 2022 07:33:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 977DB404C9;
-	Tue,  5 Jul 2022 07:33:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 977DB404C9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0916C1BF9B5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9B89340A09;
+	Tue,  5 Jul 2022 07:33:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B89340A09
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 968541BF2B3
  for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 07:32:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D19944176C
- for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 07:32:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D19944176C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7EB32605B1
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 07:32:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EB32605B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Dn841bHFPn37 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qvUlyAhWkL9u for <buildroot@lists.busybox.net>;
  Tue,  5 Jul 2022 07:32:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8EBD41763
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D8EBD41763
- for <buildroot@buildroot.org>; Tue,  5 Jul 2022 07:32:18 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id z19so14110045edb.11
- for <buildroot@buildroot.org>; Tue, 05 Jul 2022 00:32:18 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6B07605C9
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A6B07605C9
+ for <buildroot@buildroot.org>; Tue,  5 Jul 2022 07:32:19 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id g1so6517011edb.12
+ for <buildroot@buildroot.org>; Tue, 05 Jul 2022 00:32:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=DfWCxSgYwqIh9O3bxJaS3BSLgdhGOqg5CgJ7XyOxv/8=;
- b=PWvuGo6SLyxuJrcn60cO6dkACDM7U09ushR6+yZ87nbQ6AK7SRgoIkraWRALAgsaeb
- aB/VmhrJPIbGf6B5NUova38NE4afzH5ztN8E7SdXi7QvAA9KnG/SoutQZF3FQseUuH9G
- bhIvszYF5LA0RRXfCDaTIirrLxoTg2VNpjqA1YvAw4AIGqMSLIaDz1HgTBfNvBANzqzu
- 5INN1UnYkIx0PuZo3EIPvpL5QFkcspRjR+2Tttl+ELSWhfsurwHC56wcyH49mwynFcg7
- 0qKwC9PrNEcGXC1GOQ8iwlRpzaM6XAksEMuPDIuzMva1ePfXrbY698LAL7ZsLUOvIYQp
- VPyQ==
-X-Gm-Message-State: AJIora/zK95spF65JPjh/9cc0heXqgMHYarW0sxlUkdKu+zpRTxPocT8
- cVlL1/L2fdgaVDwP7R3MXlp6OLanebleuw==
-X-Google-Smtp-Source: AGRyM1sns+WBkdIwOg8VVAUZ0KaHxix63xfS5LZ4bsIQOPxkU/0cIzpJfeSmGnQCL7fROr5fHrJ92Q==
-X-Received: by 2002:aa7:de88:0:b0:435:9a54:168a with SMTP id
- j8-20020aa7de88000000b004359a54168amr43349403edv.73.1657006337048; 
+ bh=Qvi6hB5jpDDJ8wVe4EmHtFbcs/mkSh/0stDdeDDPLNM=;
+ b=0AtNzj6UaplyyfK6tpX63LeiRogDlLpgNPpI8CE8C3IsJ7ZxpfhMgIDzF6Gk2gPm/p
+ gShvRjctIJd+QWiBywoigJ/quQF+fcqaSS/7XueeWiqVUPEb64mWaNsfvzz82/c+rYjX
+ sN9AiGr2guIqCVfgk70dnO52YK7tTxQNmqZYfmVLU1x15OjcnoGBLDnJzVL0W+RtNwGK
+ EIcR8hkSEQZA8ZjckDX/mZ595pptQJt0zvi8dkfcAzsQi4LC8fUJT5lDLqZHXGioJNjK
+ n9nQJMVzLxMT49AGlbxguXGr28TMbO/RFKIu7ZheznhgQEpWy9yL5P0RTO3NGTxaV5dv
+ F26g==
+X-Gm-Message-State: AJIora/ImtofFZhcGpwy7A1sV/D2WaFE0x5rh67krMaO43y46kCQinYr
+ WQYbrwsgE8x0JWR2dL75jyNrEQcN24WtdQ==
+X-Google-Smtp-Source: AGRyM1tPsSgFTiS3v/BGU315bAU63CsdCaypoy7f1mNypM++KjFA8BFr3G+OMuPiVvm7LUfdr/oWPw==
+X-Received: by 2002:a05:6402:5188:b0:437:618c:c124 with SMTP id
+ q8-20020a056402518800b00437618cc124mr44187847edd.233.1657006337886; 
  Tue, 05 Jul 2022 00:32:17 -0700 (PDT)
 Received: from angeloc.pdxnet.pdxeng.ch (host085115199111.static.fidoka.tech.
  [85.115.199.111]) by smtp.gmail.com with ESMTPSA id
- t27-20020a17090616db00b0071cbc7487e1sm15274562ejd.69.2022.07.05.00.32.16
+ t27-20020a17090616db00b0071cbc7487e1sm15274562ejd.69.2022.07.05.00.32.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 Jul 2022 00:32:16 -0700 (PDT)
+ Tue, 05 Jul 2022 00:32:17 -0700 (PDT)
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue,  5 Jul 2022 09:32:05 +0200
-Message-Id: <20220705073206.1442280-5-angelo@amarulasolutions.com>
+Date: Tue,  5 Jul 2022 09:32:06 +0200
+Message-Id: <20220705073206.1442280-6-angelo@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220705073206.1442280-1-angelo@amarulasolutions.com>
 References: <20220705073206.1442280-1-angelo@amarulasolutions.com>
@@ -72,16 +72,16 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=DfWCxSgYwqIh9O3bxJaS3BSLgdhGOqg5CgJ7XyOxv/8=;
- b=jpEkUN5d782Uiql3/qnnm0k7gQbKr1NTt+CFZGUzoqF2hYUFkoXY5JiMnGx7wJJP0P
- nP/mAFhSgpesSnXKAohV2aOQFXx3NdY8nxlCMo5UEvqXZyeZHl5yRIbTEel4jmRgzI38
- EqvTPjyJtKjoQ0B+M/gvGqhCCF6Y8L9q0+uLU=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=Qvi6hB5jpDDJ8wVe4EmHtFbcs/mkSh/0stDdeDDPLNM=;
+ b=Z6tNuRw5n1gJh4eBIl1LudDZ6NAn9UOx4PQpiPqxa0SQUf4JsrKil27HnX8bPeT1V2
+ i2hk4Kx+oCaYMSqc7DhIomkZW5h4GIqJK0SbzfIHIcOV6lr7+ol/RukCQsMkdiBnCFe7
+ nK8y3HENVWMB8XvIe/WbqG6a+8jVq/246Uhwc=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=jpEkUN5d
-Subject: [Buildroot] [PATCH v3 4/5] package/ifupdown-scripts: add wifi
- configuration when enabled
+ header.b=Z6tNuRw5
+Subject: [Buildroot] [PATCH v3 5/5] package/initscripts: add service to load
+ kernel modules at boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,32 +99,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a proper wpa-conf line to the interfaces files to let the system
-bringup the wifi interface and the related wpa supplicant.
+In cases where no hotplug is available (by choice or by the lack of a
+proper hotplug method for a device), this service can be used to load
+kernel module drivers by reading the /etc/modules file.
+The modules files matches the one used by systemd, which in turn has
+a builtin mechanism to load a module at boot, therefore making systemv
+init on par with systemd features.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
-Changes:
-v3:
-* add "|| true" lo let the command exit without error when
-  BR2_SYSTEM_CONNECT_WIFI is empty (me)
+Changes
 
- package/ifupdown-scripts/ifupdown-scripts.mk | 2 ++
- 1 file changed, 2 insertions(+)
+v2:
+* Moved script to initscripts (Arnout)
+* Moved script to S11modules, after S10[mu]dev (Andreas)
+* Use /etc/modules-load.d/ to share the same setup with systemd (me)
 
-diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
-index 5ef032142c..ebaf234143 100644
---- a/package/ifupdown-scripts/ifupdown-scripts.mk
-+++ b/package/ifupdown-scripts/ifupdown-scripts.mk
-@@ -28,6 +28,8 @@ define IFUPDOWN_SCRIPTS_DHCP
- 		echo "  pre-up /etc/network/nfs_check"; \
- 		echo "  wait-delay 15"; \
- 		echo "  hostname \$$(hostname)"; \
-+		test -n "$(BR2_SYSTEM_CONNECT_WIFI)" && \
-+			echo "  wpa-conf /etc/wpa_supplicant.conf" || true; \
- 	) >> $(TARGET_DIR)/etc/network/interfaces
- endef
- define IFUPDOWN_SCRIPTS_DHCP_OPENRC
+ package/initscripts/init.d/S11modules | 59 +++++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/initscripts/init.d/S11modules
+
+diff --git a/package/initscripts/init.d/S11modules b/package/initscripts/init.d/S11modules
+new file mode 100644
+index 0000000000..3937945596
+--- /dev/null
++++ b/package/initscripts/init.d/S11modules
+@@ -0,0 +1,59 @@
++#!/bin/sh
++
++MODULES="*.conf"
++MODULES_DIR="/etc/modules-load.d"
++
++[ -z "$(ls -A ${MODULES_DIR}/${MODULES} 2> /dev/null)" ] && exit 0
++
++load_unload() {
++	for module_file in $(ls -1 ${MODULES_DIR}); do
++		while read module args; do
++
++			case "$module" in
++				""|"#"*) continue ;;
++			esac
++
++			if [ "$1" = "load" ]; then
++				modprobe -q ${module} ${args} >/dev/null && \
++					printf ' %s success,' "$module" ||
++					printf ' %s failed,' "$module"
++			else
++				rmmod ${module} >/dev/null
++			fi
++
++		done < ${MODULES_DIR}/${module_file}
++	done
++}
++
++start() {
++	printf 'Starting modules:'
++
++	load_unload load
++
++	echo ' OK'
++}
++
++stop() {
++	printf 'Stopping modules:'
++
++	load_unload unload
++
++	echo 'OK'
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
 -- 
 2.25.1
 
