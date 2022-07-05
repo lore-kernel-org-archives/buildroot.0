@@ -4,57 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B821AC43334
-	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 06:41:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 815BCC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 07:32:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 315E982425;
-	Tue,  5 Jul 2022 06:41:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 315E982425
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3EC581384;
+	Tue,  5 Jul 2022 07:32:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3EC581384
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WqrwzqtoRGFj; Tue,  5 Jul 2022 06:41:28 +0000 (UTC)
+	with ESMTP id E06eWtZezRIC; Tue,  5 Jul 2022 07:32:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4310B81DBF;
-	Tue,  5 Jul 2022 06:41:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4310B81DBF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 39D5F1BF2FA
- for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 06:41:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D74EB81353;
+	Tue,  5 Jul 2022 07:32:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D74EB81353
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CD1D01BF2B3
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 07:32:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 135E960EB9
- for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 06:41:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 135E960EB9
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4B1F41763
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 07:32:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4B1F41763
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xRB0Ahh-g91h for <buildroot@lists.busybox.net>;
- Tue,  5 Jul 2022 06:41:23 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C7A660687
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8C7A660687
- for <buildroot@buildroot.org>; Tue,  5 Jul 2022 06:41:23 +0000 (UTC)
-Received: from fwd82.dcpf.telekom.de (fwd82.aul.t-online.de [10.223.144.108])
- by mailout03.t-online.de (Postfix) with SMTP id AD4CD407A;
- Tue,  5 Jul 2022 08:41:20 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([84.161.181.254]) by fwd82.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1o8cFL-0dW5lR0; Tue, 5 Jul 2022 08:41:19 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42948)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1o8cFL-0003eB-C8;
- Tue, 05 Jul 2022 08:41:19 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OATb9TcRr31E for <buildroot@lists.busybox.net>;
+ Tue,  5 Jul 2022 07:32:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 990C14175E
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 990C14175E
+ for <buildroot@buildroot.org>; Tue,  5 Jul 2022 07:32:15 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id z41so14172478ede.1
+ for <buildroot@buildroot.org>; Tue, 05 Jul 2022 00:32:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=71V61QhG7F3UM1NvfJIx4CexReh9mQN89EAK+KTwV0c=;
+ b=VBDBrI980CSlfZ7gV7LO5FG9D7cc6KXCFZ1irBilD/XdJw2Yo4KIdA4tEMuenI8bGD
+ ozJems0U/sEzUYYyYF8wLIlAj2gcOnkWJfuwSEijeItO21GdbR09IobeCL4PTM8MnAOP
+ enTTJMhnSnFME6nyLMUYO+E91N4Uhx7pPiFfMphhkFypUogIOQgeLVMgPw9FErqAxCc5
+ OuIufldLC3H8DqHcgjabc9AuG+GzHpmRlb3e4XczwrH4yooyIuq1Om+4KNNASnkwvzd7
+ ZdmwvLxeDw1bLMBBK8pzXXeIUc5mZQhNsiFje4lpWlD3b7iLTDH0gE4rXVZYPd9lHSwS
+ srLw==
+X-Gm-Message-State: AJIora+/lwLOpqwdgpUBbTgDBdTvmOQjo6uRTs4az9JQcyeeCcDPzkzn
+ E5v/YfDknpaUED9wR3eP2M3uZp3dOLnw2A==
+X-Google-Smtp-Source: AGRyM1vxQkVzx8cFdMzmm6Cb2abClat15oMvazh99GIVeDrtvV//0ffRB+0Etd/eRY1iBvheT5qq1A==
+X-Received: by 2002:a50:e613:0:b0:439:fd34:32db with SMTP id
+ y19-20020a50e613000000b00439fd3432dbmr20519078edm.291.1657006333430; 
+ Tue, 05 Jul 2022 00:32:13 -0700 (PDT)
+Received: from angeloc.pdxnet.pdxeng.ch (host085115199111.static.fidoka.tech.
+ [85.115.199.111]) by smtp.gmail.com with ESMTPSA id
+ t27-20020a17090616db00b0071cbc7487e1sm15274562ejd.69.2022.07.05.00.32.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 05 Jul 2022 00:32:12 -0700 (PDT)
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue,  5 Jul 2022 08:41:19 +0200
-Message-Id: <20220705064119.1041728-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Tue,  5 Jul 2022 09:32:01 +0200
+Message-Id: <20220705073206.1442280-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1657003279-014275D8-C88A18B2/0/0 CLEAN NORMAL
-X-TOI-MSGID: a1e1ec5f-ec60-45a5-9845-b765e30bef02
-Subject: [Buildroot] [PATCH 1/1] package/libpsl: require libiconv if
- !BR2_ENABLE_LOCALE
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=71V61QhG7F3UM1NvfJIx4CexReh9mQN89EAK+KTwV0c=;
+ b=YyZzyMWeSZvdqY4MwZTQFASflVz5ldX23ScIt9j5MZMlEnP2lm+oY/ysGFEcAM9LMW
+ s0reEMzGDfiD+jQNWqg4UcyweJ5TEau7p85fIYBplFqiY9MneL+Qru+O32Hk6WIB/Ppt
+ JP525kBSI9kDha49M2t05K+0/s8d6/ngBR/q8=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=YyZzyMWe
+Subject: [Buildroot] [PATCH v3 0/5] Configure default wifi through kconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,60 +90,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
+Cc: br015@umbiko.net, Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes build error
+This series was born while adding support for a board and feeling the
+necessity to have the networking options available in .config.
+I understand that something like that could be done by adding an
+overlay, but it requires a lot of boilerplate only to be able to connect
+to a wifi network.
 
-Checking for function "iconv_open" : NO
-Header <iconv.h> has symbol "iconv_open" : NO
+Angelo Compagnucci (5):
+  system: adding options for configuring wifi
+  package/wpa_supplicant: configure wifi on systemv when enabled
+  package/wpa_supplicant: configure wifi on systemd when enabled
+  package/ifupdown-scripts: add wifi configuration when enabled
+  package/initscripts: add service to load kernel modules at boot
 
-output/build/libpsl-0.21.1/meson.build:101:4:
- ERROR: Problem encountered: iconv implementation not found
+ package/ifupdown-scripts/ifupdown-scripts.mk |  2 +
+ package/initscripts/init.d/S11modules        | 59 ++++++++++++++++++++
+ package/wpa_supplicant/wpa_supplicant.mk     | 24 ++++++++
+ system/Config.in                             | 16 ++++++
+ 4 files changed, 101 insertions(+)
+ create mode 100644 package/initscripts/init.d/S11modules
 
-using this defconfig:
-
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PACKAGE_LIBPSL=y
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libpsl/Config.in | 1 +
- package/libpsl/libpsl.mk | 4 ++++
- 2 files changed, 5 insertions(+)
-
-diff --git a/package/libpsl/Config.in b/package/libpsl/Config.in
-index a4cbce6b43..7b02d961c8 100644
---- a/package/libpsl/Config.in
-+++ b/package/libpsl/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBPSL
- 	bool "libpsl"
- 	depends on BR2_USE_WCHAR # libunistring, icu
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBIDN2 if !BR2_PACKAGE_ICU && !BR2_PACKAGE_LIBIDN
- 	select BR2_PACKAGE_LIBUNISTRING if !BR2_PACKAGE_ICU
- 	help
-diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
-index 5dc03a7c24..742117e8ea 100644
---- a/package/libpsl/libpsl.mk
-+++ b/package/libpsl/libpsl.mk
-@@ -11,6 +11,10 @@ LIBPSL_LICENSE_FILES = COPYING src/LICENSE.chromium
- LIBPSL_DEPENDENCIES = host-pkgconf
- LIBPSL_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_ENABLE_LOCALE),)
-+LIBPSL_DEPENDENCIES += libiconv
-+endif
-+
- # The order of checks is the same as done by libpsl when configured.
- ifeq ($(BR2_PACKAGE_LIBIDN2)$(BR2_PACKAGE_LIBUNISTRING),yy)
- LIBPSL_CONF_OPTS += -Druntime=libidn2 -Dbuiltin=libidn2
 -- 
-2.30.2
+2.25.1
 
 _______________________________________________
 buildroot mailing list
