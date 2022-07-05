@@ -1,86 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6B5DC43334
-	for <buildroot@archiver.kernel.org>; Mon,  4 Jul 2022 22:24:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CD5BC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 01:21:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 424B34091C;
-	Mon,  4 Jul 2022 22:24:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 424B34091C
+	by smtp1.osuosl.org (Postfix) with ESMTP id E7EAE82D12;
+	Tue,  5 Jul 2022 01:21:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7EAE82D12
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OO2h5Ly0k-Hb; Tue,  5 Jul 2022 01:21:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0667E82CF9;
+	Tue,  5 Jul 2022 01:21:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0667E82CF9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BD671BF36D
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 01:21:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 260CF4097E
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 01:21:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 260CF4097E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xVLGmA5NWht2; Mon,  4 Jul 2022 22:24:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1898440605;
-	Mon,  4 Jul 2022 22:24:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1898440605
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E90001BF3EB
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 22:23:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D111260E09
- for <buildroot@lists.busybox.net>; Mon,  4 Jul 2022 22:23:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D111260E09
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OZ4snJ7HbhdT for <buildroot@lists.busybox.net>;
- Mon,  4 Jul 2022 22:23:56 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC1B660D4B
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com
- [IPv6:2001:4860:4864:20::2a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BC1B660D4B
- for <buildroot@buildroot.org>; Mon,  4 Jul 2022 22:23:56 +0000 (UTC)
-Received: by mail-oa1-x2a.google.com with SMTP id
- 586e51a60fabf-10bd4812c29so9080883fac.11
- for <buildroot@buildroot.org>; Mon, 04 Jul 2022 15:23:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=TDOuO2cShtNpfC8c7XdzgRcvnwvI70x6bFyl5NaJ3zk=;
- b=JRIG79cjIGeL29G1tPO6z/+0kc6Buw8g5ocafjG3Trl7OaOvdGdRva2khB1/lw9N1U
- zXYv4W4u3TmvEE4SVPEC/al/b80fOVYIUmUSBuDk5fpffr0myckhp0mIyRKrMymyhHAN
- Mil6ROEgmxCxq1kDyp94y745RIpyhP7tpzL7sDU+d+NlJHO+eoraMOTUtHeQ//5H5Adz
- j+IOtsbzTP0L6nqvCHHfHHpUE+MjGvBhhk8Gu5NrSDWYPDVPAvnz2KuSO9m8isg2lJto
- XTcDrdAYiD6sD3x/jDsr8ap9L0BZ6ZvJS+JeJmQp3WhfMwaUBH0Upu5omzVKtksKJHww
- XQ8Q==
-X-Gm-Message-State: AJIora8XHxdzE8+JvtSyK8EYOzbDi4SHyqEXmwwr1hgGq7ZFww3zPajg
- ghRgZlHQRWpGElyjjswtwgJ+fjTe3QK1CuDL3aazikvMzmc=
-X-Google-Smtp-Source: AGRyM1tL+xfph3CIAtcoJTmzE2I+H+5aJNN75pOy6EJ8J2a3sbcABb5Q31BFB+Qbf4BD3yD7dbx+KBUA05jCfQS+m10=
-X-Received: by 2002:a05:6870:538b:b0:101:17f2:d6e with SMTP id
- h11-20020a056870538b00b0010117f20d6emr20529350oan.200.1656973435745; Mon, 04
- Jul 2022 15:23:55 -0700 (PDT)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1_igmywuUXQc for <buildroot@lists.busybox.net>;
+ Tue,  5 Jul 2022 01:21:41 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07EFB40131
+Received: from sonic314-43.consmr.mail.bf2.yahoo.com
+ (sonic314-43.consmr.mail.bf2.yahoo.com [74.6.132.217])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 07EFB40131
+ for <buildroot@buildroot.org>; Tue,  5 Jul 2022 01:21:40 +0000 (UTC)
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048;
+ t=1656984099; bh=NNtzI12fZpSwtTUvCvaSFOPKq9/UOtZc2a3PGRmitH3=;
+ h=X-Sonic-MF:Date:From:To:Subject:From:Subject;
+ b=F7gzfeYBdIcNFCTMTIyZfsP29sNMDJ15ttdHvPRG/Ea5i8sC8bbhh7LQOlNqo10OJJWoyy8MwQ8WldWTP3RjFoXd1cpPfDsFFfKUJrocREAgfAoK+nmpTAlDzlY+PByIb5HitIjiA/1byzGZKBaO8tTQ6Bv+d7W4R9D5JkH5pXdsRrGDmKg0xvYsdaEuvcA755EnZ4yAYIBYyiLm7BZ74ElvdNRXcG3M4E4/Iw7V5ACYfA/iZNRTx+EUwoTbD4UYSYcLCxgjVE0VddmqHC4GB+zjjJaf8HVltskmR+9X+bz+y7QU/eAM22LkLj61T/qCFs9Huontcq28oC2FAFN77w==
+X-YMail-OSG: 99tKhSUVM1kdEVQPm01RzEf8lHFC0H3KJhs1YryQbRKtamceI8LRxlODlMMVtcI
+ lm.ZOaUuwtQHs1Os8Vcm1.gGxTT2fy4zTeCPcbHDUybXm1nfdDd_.kSjWuVDmh3yVztTAVB4FghQ
+ .mkcVWk.6DM2lGjme4KOG_FdNJZOP.A92UE2.x9zImvht4LQEjsIULSlWb8TQSGhWM54_Xnb5xOf
+ bMbTKGFhcDZ1lA17Jm0wUg_GbjtQnPw1OKOTOn6jiuYo7QdDekJA0NUZ9GCoXSJOQTwvATVBfdR1
+ 1UT6bygWNYVpoh_wBNj7GvPQYqlwGbJ0j16.vo.e.h067PoCtawY2f3F1PPP_1mMX.12ATIg2VO2
+ O35ShMz.ApfMWV.8sZ54bq1narWM2Ir6hov38S99mt0Q48tbWxnklrMAZh978LBuUDMza79o8dFX
+ 26yyIAcG_tgSX4ljK4PITkrmbttqlPNRYd6AovNH2C2v.MDgMKduMNhG7uUX0DW5U6sRICnf4tzM
+ DFRpCns3.6rOani6O.cFej4dcBtL6tmK4pqaxcOhKkXCC2woRDYzE7NCithhqWYl9Wcruwjsr1hZ
+ eIXI6A3JPoIKVxdFMDusiqL9CnG09e4SRn0jNEtV4o.tryC9r8jlusLW0IG9jIaA2ehwjKNcDrCd
+ 1IMtFTZWh3EAXsauPDGs8PAuEv8Fvy8PkmU.TVk7WGVDgJpa8k5RFChS3nSvv3Rupd6VC4EE5xH7
+ rK1RlqNp.ZgINL9VMU41pYGBcos6JYoqWNh140JzDfctR3XPQV5R8pPZRWHjSSE9hiSbynjGu3rJ
+ c08.tmmxN02Fqh9FDve4KhRvQf.8Nvao5aIfMKKJxsX0dDhVpQfmNrsJNiFkjjyHsGxLcAjqrnSY
+ P6jybGacdfIJcA7NcV.C877_GYVVJ_sMWGh2tV54Mltu3od__6v2sOWRUcf_GijJ8HZXfy6XbhP_
+ vlwmy4hM74_OVTUqvn9kAnJU1FaeFZGoHzWHrE_7t7jUYfu_YlDPqS2hNnnvn5iDxasFdo5Jm6qV
+ 0wXodkEpS6Jh2eD0Uw3n4m1iWDTMF4npqvErjnsEAyn3j4Ubm5ePyehJhvdHxigbZ1dyxj_yfB.L
+ wgOhd.SlWBxUbZ1FyFsyXelev1GpDL_GL_lvNaGQ_GFuiAQJ.3ac6Hkem7B13wO.uLCN7faD9THz
+ BSvjJOB28pco6rRX9l0J4fFi_8GXVBPlKOHnPwdRNKfyXClsTg5QESsjpCk41i7h2czg.lEUqgLk
+ jH6OgwDskHxPjGmLU2n0t12aXxaHYgsqM.oJPVu7mr4sM2BLluJ4l2km0AGah5BSKxYds1GtZU_d
+ P9KNITl1IXqUmh7LlFkgZq5I.f6tjuU_7Cna91w8XA4.VF0y1yRaeHhOBM8u7mIzZBNw.SG_j3_I
+ 4.Cr0vLFKe_QQ8AQ0XEWGSWj1TFJPQXi8_UwFe4rPfgXG45g7G1BiDNrgClLC_EZ99jckkhXeNOJ
+ YKFX4Kc7kShPBlDCLliW4n_jk6TynCkw8seqMfDicVMqfjgv.IBYTCWSO3Tf109V4IhZL58k5DzO
+ t8BDdah.t2FjItWsdFAVW5lOFJQ_mLdEB5ue4DCfzen_qMyi3X.ZSeFzU2CS2ArQIvxRcVvxQy82
+ k_yK2BaVy4jsDowY9XiWxaCLPsfdi6tb6_KsHWVi4nqrnb5MB7WyuJr7tlEDehy5hDN7hAK3di7I
+ MZwHEn1Gz6_Hn.tRu7Mo6GsOQSLVIjrQzpSobXU7fW6ctG16GSUvAyIFT.u0p55iW3ei3WjSkCfz
+ zhxiPsogMLbOKC3ry7a1CoD4T0moKauzzqxWfrFTvgBqu05XiFpekBht70V58MvImLVg.XNjsAIq
+ fWRlpHT_eJGZDjJZAqMfw5YcDEKoLuglG19VZDzaif.Gjdk7G5Cq3ahHWBaAwBhOPkh5SW2SqFPi
+ 2gTaM605TM3CMPhJjMODOw_loGxb2b7TEzXDV8uCVy3.EgniVLMR8OhDL27wpmc.2xhbcd7OACst
+ 83och4jeEc71EcGYNm30d3OYB0BIVgk4W5WTiqXzOkXppfq4RlJ.HWXjiWs0SG420uM3NdE289vX
+ JYYitEyBI3BHW2P4Gwa6LFOxCUEkLVcwYbgnA.qCM9zFY7pfR0IPgBIyrx0Pi1m6rIwh0iX8jQh0
+ 0EamSkKmJZjA0HeCE9p2Oiw2I_ALMvXF2K6ei8wKjVJqeSwTTPtkZICYdVWVVHN.0kt16QwxarJo
+ XQB8yhCktSnXjkRQ0o5hQ_R_h8uNOved4Hdrqa4F.6fiDjbfMVcX8DVaZORohPPg6tAhAo0Y8Vi6
+ ERNZhJRm94h6_TxGEe0Ee8bslQ3xK7usXnpp.YHR5Z8zYvcEkcKg7l9L6sK.wy3MQP4SOFCY-
+X-Sonic-MF: <hsiangkao@aol.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by
+ sonic314.consmr.mail.bf2.yahoo.com with HTTP; Tue, 5 Jul 2022 01:21:39 +0000
+Received: by hermes--production-gq1-56bb98dbc7-x97s6 (Yahoo Inc. Hermes SMTP
+ Server) with ESMTPA ID 9bb6e3d1f5e57a63b95a6bbd13402d47; 
+ Tue, 05 Jul 2022 01:09:34 +0000 (UTC)
+Date: Tue, 5 Jul 2022 09:09:28 +0800
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <YsOPSCutgJC27E7M@debian>
+References: <20220703093952.1300768-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-References: <20220506104658.3174243-1-foss+buildroot@0leil.net>
- <20220704200426.GJ2521@scaer>
- <165697299387.1729656.13686816775756809776@Monstersaurus>
-In-Reply-To: <165697299387.1729656.13686816775756809776@Monstersaurus>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 4 Jul 2022 16:23:44 -0600
-Message-ID: <CADvTj4oWNe=EpE_etEEpv43AGgi0fQq0vBcU8Q6RPbRTeO-4JQ@mail.gmail.com>
-To: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Content-Disposition: inline
+In-Reply-To: <20220703093952.1300768-1-fontaine.fabrice@gmail.com>
+X-Mailer: WebService/1.1.20381
+ mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=TDOuO2cShtNpfC8c7XdzgRcvnwvI70x6bFyl5NaJ3zk=;
- b=OPgrq8+mPoeTNTcT6+S0eQgAYPd7mzSbp/145dkgrtSS34PVAtTHo6b+BldPjPABft
- XSVu9ksIHFM8bQVQePSm5GdW113nfZwFPYfLKjFOyw/dL185uEIaEn6lu+kDG+dx7HHi
- y1ztw/JRSC2STwOBnWZqwDS1ofMTHyZL5v/Dl7CsRDkzuFTCBrNnBeaHySQXtZ1HJO6C
- aQVEhrgRh2tidA/+Uc384D3KdrY7fSpsFvZwy0vV3SheHVM/qWu6hvZxDYCX8jHqzx3v
- gJLkru9pLX1H6KCEut0XzKHiTiW2fwehpBJKCuMHCPmSAKFE8LsMezZLlMywYqUKcg2D
- skdA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=OPgrq8+m
-Subject: Re: [Buildroot] [PATCH v2] package/libcamera: strip symbols before
- signing IPA libs
+ d=aol.com; s=a2048; t=1656984099;
+ bh=Zz4B7iTOXtpKQLoU0G8OOpRR2qMSGaD2p3byut29Qvg=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From:Subject:Reply-To;
+ b=GcAeW1O789VrN8frzjC7zT/z5pg1Ko8+S72fkVP0PJzaoExZwRCpQ9lieRNeDeAYB8Rt9VsRVACTSK1uElh7q/q8L4RTog+4pv7FP1Z5FSkDqaRbDeYn8y3O8vxug2/4g1pRNXLago5e3PjKYCCKqT1UprKzK/BeAGCZaz2EbWhidwZUWq2cyFADE3g+LvhSvNDgkrxq20shc0Fv8VFXJ82y+X7+XV0JJVaUeLJIKcZ42EzlXLTdiLTsYc0ButKjdWyPtLaQfHFrRZ65KBERbnlIpQeATU772pwezMUIIrcM9WCQE7tKjdiTljcmfyn1Y1ZilkH/ohMY0M67IUSWAg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aol.com header.i=@aol.com
+ header.a=rsa-sha256 header.s=a2048 header.b=GcAeW1O7
+Subject: Re: [Buildroot] [PATCH 1/1] package/erofs-utils: bump to version 1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,142 +107,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- Quentin Schulz <foss+buildroot@0leil.net>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot <buildroot@buildroot.org>
+From: Gao Xiang via buildroot <buildroot@buildroot.org>
+Reply-To: Gao Xiang <hsiangkao@aol.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Jul 4, 2022 at 4:16 PM Kieran Bingham
-<kieran.bingham@ideasonboard.com> wrote:
->
-> Quoting Yann E. MORIN (2022-07-04 21:04:26)
-> > Quentin, All,
-> >
-> > Kieran, some question for you toward the end... ;-)
-> >
-> > On 2022-05-06 12:46 +0200, Quentin Schulz spake thusly:
-> > > From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> > >
-> > > Open-Source IPA shlibs need to be signed in order to be runnable within
-> > > the same process, otherwise they are deemed Closed-Source and run in
-> > > another process and communicate over IPC.
-> > >
-> > > The shlib installed on the target should be the same as the one signed
-> > > by libcamera during package creation otherwise the signature won't match
-> > > the shlib.
-> > >
-> > > Buildroot sanitizes RPATH in a post build process. meson gets rid of
-> > > rpath while installing so we don't need to do it manually.
-> > >
-> > > Buildroot may strip symbols, so we need to do the same before signing.
-> > > Since meson install target is also signing the IPA shlibs, let's strip
-> > > them before this happens.
-> > >
-> > > Cc: Quentin Schulz <foss+buildroot@0leil.net>
-> > > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> >
-> > Applied to master, thanks.
-> >
-> > However, this is a bit fragile, since libcamera may ultimately decide to
-> > do the signing during the build phase (the install step is supposed to
-> > be just about copying files around in theory).
-> >
-> > So maybe:
-> >  1. Buildroot needs to learn about FOO_STRIP_EXCLUDE_FILES/DIRS
-> >  2. libcamera needs an option -Dstip-ipa=true/false
-> >  3. libcamera.mk needs to set LIBCAMERA_STRIP_EXCLUDE_FILES/DIRS
-> >
-> > Kieran, what do you think?
->
-> I think if we change how or when the signing happens on the libcamera
-> side - it would/should only be towards a path to simplify things so we
-> don't need to strip, so I don't think we need to do anything extra here
-> at the moment.
->
-> I think tracking the stripping of files is a pain, and we should find a
-> way to sign only the relevant sections which don't get stripped ;-) But
-> unfortunately - that's a bit more work, and not likely to happen in the
-> near-ish future, unless anyone thinks 'that sounds easy' and wants to try.
+On Sun, Jul 03, 2022 at 11:39:52AM +0200, Fabrice Fontaine wrote:
+> - Drop patches (already in version)
+> - liberofs is now released under GPL-2.0+ OR Apache-2.0 license:
+>   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/commit/?id=49b344c5531a7819f282b0b1b6eb01682c0e41ae
+> - This bump will fix the following build failure on or1k thanks to
+>   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/commit/?id=100cae2b98a70ac69ae7a09ed94f86ddf8c89fe2
+> 
+>   In file included from ../include/erofs/cache.h:11,
+>                    from cache.c:9:
+>   ../include/erofs/internal.h:34:2: error: #error incompatible PAGE_SIZE is already defined
+>      34 | #error incompatible PAGE_SIZE is already defined
+>         |  ^~~~~
+> 
+> https://lists.ozlabs.org/pipermail/linux-erofs/2022-June/006462.html
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/755f8d736b8ad96b213bb3975b26f1143e60e5b5
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Easiest option for now IMO is probably a 3 state meson flag like:
--Dsandbox={on,off,signature}
+Thanks for this!
 
-That way one can default to -Dsandbox=off when not using closed source
-components and only enable the signature validation when using them.
+Looks good to me,
+Reviewed-by: Gao Xiang <hsiangkao@aol.com>
 
->
-> --
-> Kieran
->
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > > ---
-> > >
-> > > v2:
-> > >  - use LIBCAMERA_POST_BUILD_HOOKS instead of replacing
-> > >  LIBCAMERA_INSTALL_TARGET_CMDS,
-> > >  - add handling of BR2_STRIP_EXCLUDE_FILES to not strip files which
-> > >  shouldn't,
-> > >  - added --no-run-if-empty to xargs, in case no IPA is selected,
-> > >  - removed stderr redirect and pipe to true to not hide useful
-> > >  information or fail the build if strip does not work,
-> > >
-> > >  package/libcamera/libcamera.mk | 20 ++++++++++++++++++++
-> > >  1 file changed, 20 insertions(+)
-> > >
-> > > diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-> > > index 77381ab3ca..41d6a5abef 100644
-> > > --- a/package/libcamera/libcamera.mk
-> > > +++ b/package/libcamera/libcamera.mk
-> > > @@ -104,4 +104,24 @@ LIBCAMERA_DEPENDENCIES += libexecinfo
-> > >  LIBCAMERA_LDFLAGS = $(TARGET_LDFLAGS) -lexecinfo
-> > >  endif
-> > >
-> > > +# Open-Source IPA shlibs need to be signed in order to be runnable within the
-> > > +# same process, otherwise they are deemed Closed-Source and run in another
-> > > +# process and communicate over IPC.
-> > > +# Buildroot sanitizes RPATH in a post build process. meson gets rid of rpath
-> > > +# while installing so we don't need to do it manually here.
-> > > +# Buildroot may strip symbols, so we need to do the same before signing
-> > > +# otherwise the signature won't match the shlib on the rootfs. Since meson
-> > > +# install target is signing the shlibs, we need to strip them before.
-> > > +LIBCAMERA_STRIP_FIND_CMD = \
-> > > +     find $(@D)/build/src/ipa \
-> > > +     $(if $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)), \
-> > > +             -not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) ) \
-> > > +     -type f -name 'ipa_*.so' -print0
-> > > +
-> > > +define LIBCAMERA_BUILD_STRIP_IPA_SO
-> > > +     $(LIBCAMERA_STRIP_FIND_CMD) | xargs --no-run-if-empty -0 $(STRIPCMD)
-> > > +endef
-> > > +
-> > > +LIBCAMERA_POST_BUILD_HOOKS += LIBCAMERA_BUILD_STRIP_IPA_SO
-> > > +
-> > >  $(eval $(meson-package))
-> > > --
-> > > 2.35.1
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot@buildroot.org
-> > > https://lists.buildroot.org/mailman/listinfo/buildroot
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Thanks,
+Gao Xiang
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
