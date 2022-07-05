@@ -1,85 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5F00C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 06:16:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B821AC43334
+	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 06:41:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C8E340597;
-	Tue,  5 Jul 2022 06:16:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C8E340597
+	by smtp1.osuosl.org (Postfix) with ESMTP id 315E982425;
+	Tue,  5 Jul 2022 06:41:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 315E982425
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bkBKtL_JOCfM; Tue,  5 Jul 2022 06:16:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WqrwzqtoRGFj; Tue,  5 Jul 2022 06:41:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E43340139;
-	Tue,  5 Jul 2022 06:16:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E43340139
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A57A91BF2FA
- for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 06:16:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4310B81DBF;
+	Tue,  5 Jul 2022 06:41:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4310B81DBF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 39D5F1BF2FA
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 06:41:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F5AA40139
- for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 06:16:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F5AA40139
+ by smtp3.osuosl.org (Postfix) with ESMTP id 135E960EB9
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 06:41:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 135E960EB9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fvSKYsV79Xcw for <buildroot@lists.busybox.net>;
- Tue,  5 Jul 2022 06:16:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20C7B4011C
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 20C7B4011C
- for <buildroot@buildroot.org>; Tue,  5 Jul 2022 06:16:34 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id sb34so19774625ejc.11
- for <buildroot@buildroot.org>; Mon, 04 Jul 2022 23:16:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zF5a1qXx6w8HB4ypAmivibDEhQ/zLb+MFqmfITZl8u8=;
- b=AtpxP+uGpVEYN4toO3SLEtc+OatxLB0PYWYbBfkDDrR5MMf0dLPg16kyCgAR56qnKf
- qlq2HPIIV8B6yKQ1wlZIssekaoO6mZWucGzD4Ykg2d0vYRdYVN0qKPmbY1s2NwmWkPa/
- xckq2OZYsp8rs1nS49Ztm0uLqPRsBvA9/rR2K7oEbXNlfCyUvjKdpdJtF5TDZx7sgYjU
- en0pHIbqRrVEVVBDtCdCgWth9WldicKOsm05RJWrFdB933jXtiKKUkVWsazLQFMaLTgJ
- J3+tf5tCdZK2hVoK3GsGGJotsnwUUDK+3TCFv7iJNR4QEz46t55wr7lb06wW9t4GVhDR
- vzUA==
-X-Gm-Message-State: AJIora9x/iX/5BiUokF/vgMG6bZ5/7xhX1snA+aPgEaFsyCqYQw7qoEN
- JHTsZ/JPCW4kbjKvCGDI4F09tq2DF6NQ7A==
-X-Google-Smtp-Source: AGRyM1tkyyvwd2KiewczFyBWpoWPyhOBHvmoLIgdVXTsXuSuGkBww3iWRLWIO0ZFg5IHuopYjq7kiQ==
-X-Received: by 2002:a17:907:2d22:b0:726:34e6:52f6 with SMTP id
- gs34-20020a1709072d2200b0072634e652f6mr30747946ejc.371.1657001792099; 
- Mon, 04 Jul 2022 23:16:32 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-80-116-90-174.pool80116.interbusiness.it. [80.116.90.174])
- by smtp.gmail.com with ESMTPSA id
- p26-20020a1709061b5a00b00727c6da57cesm8677990ejg.147.2022.07.04.23.16.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Jul 2022 23:16:31 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xRB0Ahh-g91h for <buildroot@lists.busybox.net>;
+ Tue,  5 Jul 2022 06:41:23 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C7A660687
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8C7A660687
+ for <buildroot@buildroot.org>; Tue,  5 Jul 2022 06:41:23 +0000 (UTC)
+Received: from fwd82.dcpf.telekom.de (fwd82.aul.t-online.de [10.223.144.108])
+ by mailout03.t-online.de (Postfix) with SMTP id AD4CD407A;
+ Tue,  5 Jul 2022 08:41:20 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([84.161.181.254]) by fwd82.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1o8cFL-0dW5lR0; Tue, 5 Jul 2022 08:41:19 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42948)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1o8cFL-0003eB-C8;
+ Tue, 05 Jul 2022 08:41:19 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Tue,  5 Jul 2022 08:16:27 +0200
-Message-Id: <20220705061627.146616-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
+Date: Tue,  5 Jul 2022 08:41:19 +0200
+Message-Id: <20220705064119.1041728-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zF5a1qXx6w8HB4ypAmivibDEhQ/zLb+MFqmfITZl8u8=;
- b=AutOgullaUeMjopKi9QZV3/ukBwvqEZxhAq7x9Zx9fQyrdNLGY+2r5KRsNTvIRCziY
- jxuKFNHeizy4NZhUC5NgeDCkGnlKl+k/bbVJRFU1w9vGs9RKx4/kgZ5k9DVnYiN0oawA
- /omTns1TSRyNr/bDvhntOOpo9IsxNLBie8BPc=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=AutOgull
-Subject: [Buildroot] [PATCH 1/1] package/uuu: bump to version 1.4.224
+X-TOI-EXPURGATEID: 150726::1657003279-014275D8-C88A18B2/0/0 CLEAN NORMAL
+X-TOI-MSGID: a1e1ec5f-ec60-45a5-9845-b765e30bef02
+Subject: [Buildroot] [PATCH 1/1] package/libpsl: require libiconv if
+ !BR2_ENABLE_LOCALE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,52 +66,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-It requires the host-zstd package.
+Fixes build error
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Checking for function "iconv_open" : NO
+Header <iconv.h> has symbol "iconv_open" : NO
+
+output/build/libpsl-0.21.1/meson.build:101:4:
+ ERROR: Problem encountered: iconv implementation not found
+
+using this defconfig:
+
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PACKAGE_LIBPSL=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/uuu/uuu.hash | 2 +-
- package/uuu/uuu.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libpsl/Config.in | 1 +
+ package/libpsl/libpsl.mk | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
-index 245c38879c63..a57b4dc46ea1 100644
---- a/package/uuu/uuu.hash
-+++ b/package/uuu/uuu.hash
-@@ -1,4 +1,4 @@
- # locally computed
--sha256  a9b8b74e32e6718d591c66951b8b52276df7862db80ee943e046947f7313e57f  uuu_source-1.4.193.tar.gz
-+sha256  b8b7fcd0e8eca64a255bf2b964bfb39a97599670e5258858421b27ff86aac80f  uuu_source-1.4.224.tar.gz
- sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
- sha256  77b90738ae98b7958d34d9f96caf2671210a133427f8f6b784914b54f406c29b  README.md
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 9bf9ff123be4..647254446fa6 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+diff --git a/package/libpsl/Config.in b/package/libpsl/Config.in
+index a4cbce6b43..7b02d961c8 100644
+--- a/package/libpsl/Config.in
++++ b/package/libpsl/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBPSL
+ 	bool "libpsl"
+ 	depends on BR2_USE_WCHAR # libunistring, icu
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_LIBIDN2 if !BR2_PACKAGE_ICU && !BR2_PACKAGE_LIBIDN
+ 	select BR2_PACKAGE_LIBUNISTRING if !BR2_PACKAGE_ICU
+ 	help
+diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
+index 5dc03a7c24..742117e8ea 100644
+--- a/package/libpsl/libpsl.mk
++++ b/package/libpsl/libpsl.mk
+@@ -11,6 +11,10 @@ LIBPSL_LICENSE_FILES = COPYING src/LICENSE.chromium
+ LIBPSL_DEPENDENCIES = host-pkgconf
+ LIBPSL_INSTALL_STAGING = YES
  
--UUU_VERSION = 1.4.193
-+UUU_VERSION = 1.4.224
- UUU_SOURCE = uuu_source-$(UUU_VERSION).tar.gz
- UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
- UUU_LICENSE_FILES = LICENSE README.md
--HOST_UUU_DEPENDENCIES = host-bzip2 host-openssl host-zlib host-libusb
-+HOST_UUU_DEPENDENCIES = host-bzip2 host-openssl host-zlib host-libusb host-zstd
- 
- $(eval $(host-cmake-package))
++ifeq ($(BR2_ENABLE_LOCALE),)
++LIBPSL_DEPENDENCIES += libiconv
++endif
++
+ # The order of checks is the same as done by libpsl when configured.
+ ifeq ($(BR2_PACKAGE_LIBIDN2)$(BR2_PACKAGE_LIBUNISTRING),yy)
+ LIBPSL_CONF_OPTS += -Druntime=libidn2 -Dbuiltin=libidn2
 -- 
-2.32.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
