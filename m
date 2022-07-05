@@ -4,57 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F45BC43334
-	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 17:44:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E12A4C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Jul 2022 20:18:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0601881B48;
-	Tue,  5 Jul 2022 17:44:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0601881B48
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50B1381AEF;
+	Tue,  5 Jul 2022 20:18:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50B1381AEF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kYP-5yGBYPDf; Tue,  5 Jul 2022 17:44:25 +0000 (UTC)
+	with ESMTP id JO7QrMwXJDIU; Tue,  5 Jul 2022 20:18:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F29368145E;
-	Tue,  5 Jul 2022 17:44:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F29368145E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5745D81A92;
+	Tue,  5 Jul 2022 20:18:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5745D81A92
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 66DD51BF31C
- for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 17:44:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CF2AC1BF271
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 20:18:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F40C408DA
- for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 17:44:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F40C408DA
+ by smtp2.osuosl.org (Postfix) with ESMTP id A9C0940546
+ for <buildroot@lists.busybox.net>; Tue,  5 Jul 2022 20:18:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9C0940546
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S1CoeIDn9tEu for <buildroot@lists.busybox.net>;
- Tue,  5 Jul 2022 17:44:21 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D527400A8
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5D527400A8
- for <buildroot@buildroot.org>; Tue,  5 Jul 2022 17:44:21 +0000 (UTC)
-Received: from fwd87.dcpf.telekom.de (fwd87.aul.t-online.de [10.223.144.113])
- by mailout04.t-online.de (Postfix) with SMTP id F2D1646CC;
- Tue,  5 Jul 2022 19:44:18 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([84.161.181.254]) by fwd87.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1o8maw-16a3Fp0; Tue, 5 Jul 2022 19:44:18 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35256)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1o8maw-0007Ly-4W;
- Tue, 05 Jul 2022 19:44:18 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ with ESMTP id uIzMRVCBYJ-H for <buildroot@lists.busybox.net>;
+ Tue,  5 Jul 2022 20:18:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D3D63400A8
+ for <buildroot@buildroot.org>; Tue,  5 Jul 2022 20:18:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3D63400A8
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 5ADDF8261F; Tue,  5 Jul 2022 20:05:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue,  5 Jul 2022 19:44:18 +0200
-Message-Id: <20220705174418.1367060-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1657043058-0142618F-6DF663A8/0/0 CLEAN NORMAL
-X-TOI-MSGID: 63ba8606-a7b6-4164-b024-14ce91ce7943
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xkeyboard-config: bump
- version to 2.36
+Date: Tue, 5 Jul 2022 22:17:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bba4dad9aa8e7eb497e7f83b7722b8c10596e34e
+X-Git-Newrev: dedc1b71d90b56d98ee56f36f69f81cf23f18d5f
+X-Patchwork-Hint: ignore
+Message-Id: <20220705200522.5ADDF8261F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libostree: bump to version 2022.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,57 +55,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://cgit.freedesktop.org/xkeyboard-config/tree/NEWS
+commit: https://git.buildroot.net/buildroot/commit/?id=dedc1b71d90b56d98ee56f36f69f81cf23f18d5f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream switched to meson.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xkeyboard-config/xkeyboard-config.hash | 2 +-
- package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 8 +++-----
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ ...deploy-add-a-missing-include-for-stdint-h.patch | 24 ----------------------
+ package/libostree/libostree.hash                   |  2 +-
+ package/libostree/libostree.mk                     |  2 +-
+ 3 files changed, 2 insertions(+), 26 deletions(-)
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-index a5ae7a7039..e7e3765e59 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+diff --git a/package/libostree/0001-lib-ostree-sysroot-deploy-add-a-missing-include-for-stdint-h.patch b/package/libostree/0001-lib-ostree-sysroot-deploy-add-a-missing-include-for-stdint-h.patch
+deleted file mode 100644
+index 35f92c37ff..0000000000
+--- a/package/libostree/0001-lib-ostree-sysroot-deploy-add-a-missing-include-for-stdint-h.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-From 4b7fc4f1e90bbeac89d2f939cde3070e69b4787a Mon Sep 17 00:00:00 2001
+-From: Luca BRUNO <luca.bruno@coreos.com>
+-Date: Fri, 6 May 2022 10:07:23 +0000
+-Subject: [PATCH] lib/ostree-sysroot-deploy: add a missing include for stdint.h
+-
+-[Retrieved from:
+-https://github.com/ostreedev/ostree/commit/4b7fc4f1e90bbeac89d2f939cde3070e69b4787a]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/libostree/ostree-sysroot-deploy.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/libostree/ostree-sysroot-deploy.c b/src/libostree/ostree-sysroot-deploy.c
+-index 404f336fb5..96cc07531e 100644
+---- a/src/libostree/ostree-sysroot-deploy.c
+-+++ b/src/libostree/ostree-sysroot-deploy.c
+-@@ -22,6 +22,7 @@
+- #include <gio/gunixinputstream.h>
+- #include <gio/gunixoutputstream.h>
+- #include <glib-unix.h>
+-+#include <stdint.h>
+- #include <sys/mount.h>
+- #include <sys/statvfs.h>
+- #include <sys/socket.h>
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 0395c1247d..d85b82f35c 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  b321d27686ee7e6610ffe7b56e28d5bbf60625a1f595124cd320c0caa717b8ce  xkeyboard-config-2.34.tar.bz2
-+sha256  1f1bb1292a161d520a3485d378609277d108cd07cde0327c16811ff54c3e1595  xkeyboard-config-2.36.tar.xz
- sha256  6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index fe46dae3b7..0f45d9f74a 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated
+-sha256  b823fd9dcd5503c5caf9febde24b0ed63ff46ca95188032ac567a2a95624f612  libostree-2022.3.tar.xz
++sha256  14bbd351a95066f68c3b283e0bd0ddd03562e862af66f6f6d894c6c328d7eb81  libostree-2022.4.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 75485a79e0..3210ed3707 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XKEYBOARD_CONFIG_VERSION = 2.34
--XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
-+XKEYBOARD_CONFIG_VERSION = 2.36
-+XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.xz
- XKEYBOARD_CONFIG_SITE = https://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
- XKEYBOARD_CONFIG_LICENSE_FILES = COPYING
-@@ -18,6 +18,4 @@ XKEYBOARD_CONFIG_DEPENDENCIES = \
- # xkeyboard-config.pc
- XKEYBOARD_CONFIG_INSTALL_STAGING = YES
+-LIBOSTREE_VERSION = 2022.3
++LIBOSTREE_VERSION = 2022.4
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
  
--XKEYBOARD_CONFIG_CONF_OPTS = --disable-runtime-deps
--
--$(eval $(autotools-package))
-+$(eval $(meson-package))
--- 
-2.30.2
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
