@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C154C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Jul 2022 21:15:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88EAFC43334
+	for <buildroot@archiver.kernel.org>; Wed,  6 Jul 2022 21:17:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89D9961121;
-	Wed,  6 Jul 2022 21:15:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89D9961121
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PqUk9eWHcwW7; Wed,  6 Jul 2022 21:15:37 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BC846111B;
-	Wed,  6 Jul 2022 21:15:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BC846111B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 38CD81BF401
- for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:15:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 131EB408A0
- for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:15:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 131EB408A0
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA4074194F;
+	Wed,  6 Jul 2022 21:17:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA4074194F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rMPrfCn_0k-3 for <buildroot@lists.busybox.net>;
- Wed,  6 Jul 2022 21:15:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF56B408FA
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AF56B408FA
- for <buildroot@buildroot.org>; Wed,  6 Jul 2022 21:15:32 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 786A21BF206;
- Wed,  6 Jul 2022 21:15:30 +0000 (UTC)
-Date: Wed, 6 Jul 2022 23:15:29 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220706231529.715687a5@windsurf>
-In-Reply-To: <20220630221517.801556-1-fontaine.fabrice@gmail.com>
-References: <20220630221517.801556-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1657142130;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=qaq5+s4/6cgkRdPMCHZiDViNAUii70NeSylNzR71mRM=;
- b=AKtcZ6MDpaX7F0DDh/ReeSBL8xHYNOILLpXzD3m5h2GV/ULjVb3Jw5DjPIa2w04uFtlTwr
- YnwQLOWNfgEq4E2Arx2X10p2AFONdVnOf+xuFU4lXSb75LtGV5P23K6CJHhLF7Uq/hCX7o
- 48pAy+kvKggrH9tNh92Sbfa/PrEFBtrjKI22nDJHsfucv2KvU0vnU3ituv1UWEu4Aek1c9
- DWvggS880TLAM35bp6Z+g3oySB/8sb/GpsCb22m6ILkMObx3lixc3SlUFG/TPPQ9CKqtKa
- finXEtfftmhXn3eg0j/epz7ANORaosYelp2xgfld51VM8lHUwZoDDqAknzAvNA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AKtcZ6MD
-Subject: Re: [Buildroot] [PATCH 1/1] package/inih: bump to version 55
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FC9TbFaq5X0m; Wed,  6 Jul 2022 21:17:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D40A41730;
+	Wed,  6 Jul 2022 21:17:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D40A41730
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 84EDD1C1135
+ for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:17:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6087D813F9
+ for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:17:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6087D813F9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TgKlPPpvro9n for <buildroot@lists.busybox.net>;
+ Wed,  6 Jul 2022 21:17:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE51C81385
+ for <buildroot@buildroot.org>; Wed,  6 Jul 2022 21:17:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE51C81385
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id D05F782A68; Wed,  6 Jul 2022 21:04:20 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 6 Jul 2022 23:16:42 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3cfdd0777d0206eff487645007294b6657be3530
+X-Git-Newrev: 480da9965249f7852f96bc0c4a5ab83ddac45355
+X-Patchwork-Hint: ignore
+Message-Id: <20220706210420.D05F782A68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediasdk: bump version to
+ 22.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,31 +58,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  1 Jul 2022 00:15:17 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=480da9965249f7852f96bc0c4a5ab83ddac45355
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://github.com/benhoyt/inih/releases/tag/r54
-> https://github.com/benhoyt/inih/releases/tag/r55
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/inih/inih.hash | 2 +-
->  package/inih/inih.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index d0604cebd2..111c1ddbb7 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  edaba06c0d190d8029ae1eed039f3c6c4cdc60ced3fe2e88788659294c31c23c  intel-mediasdk-22.4.3.tar.gz
++sha256  7f5394170e3eabdbe2f8d5608a612a71a892be199f73bc505a7588d11dbb6087  intel-mediasdk-22.4.4.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 17f06b1f92..47ea78326f 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_MEDIASDK_VERSION = 22.4.3
++INTEL_MEDIASDK_VERSION = 22.4.4
+ INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
