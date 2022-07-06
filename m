@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E098CC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Jul 2022 21:46:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEB31C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  6 Jul 2022 21:46:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96270817B0;
-	Wed,  6 Jul 2022 21:46:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96270817B0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F53383E62;
+	Wed,  6 Jul 2022 21:46:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F53383E62
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zOUjP8HYXfJW; Wed,  6 Jul 2022 21:46:37 +0000 (UTC)
+	with ESMTP id 46gbdYHDwVcZ; Wed,  6 Jul 2022 21:46:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A2C7F81749;
-	Wed,  6 Jul 2022 21:46:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2C7F81749
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AD91D1BF401
- for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:46:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94BCB81763;
+	Wed,  6 Jul 2022 21:46:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94BCB81763
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C23E91BF401
+ for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:46:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 88BA781749
- for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:46:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88BA781749
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D11F60E0A
+ for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:46:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D11F60E0A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LjCD3gmiI7DW for <buildroot@lists.busybox.net>;
- Wed,  6 Jul 2022 21:46:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D1BE5815CD
- for <buildroot@buildroot.org>; Wed,  6 Jul 2022 21:46:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1BE5815CD
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EB1C28323E; Wed,  6 Jul 2022 21:33:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 6 Jul 2022 23:45:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4138151e447e69771e2579ea5a3daa89c56d41a8
-X-Git-Newrev: 0d566b8cc7146ad57dfdf7ef13aceb80b85acd9e
-X-Patchwork-Hint: ignore
-Message-Id: <20220706213335.EB1C28323E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bind: fix indentation of options
- in menuconfig
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ojtL0GMdwznC for <buildroot@lists.busybox.net>;
+ Wed,  6 Jul 2022 21:46:37 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9263660D62
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9263660D62
+ for <buildroot@buildroot.org>; Wed,  6 Jul 2022 21:46:37 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6E16C1BF203;
+ Wed,  6 Jul 2022 21:46:35 +0000 (UTC)
+Date: Wed, 6 Jul 2022 23:46:34 +0200
+To: Danomi Manchego <danomimanchego123@gmail.com>
+Message-ID: <20220706234634.506ae9e4@windsurf>
+In-Reply-To: <20220706030236.3818-1-danomimanchego123@gmail.com>
+References: <20220706030236.3818-1-danomimanchego123@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1657143995;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=kRKGotNUAsf2YcDLdwdw75Ak4zVMkyq+c22/GO/VaaU=;
+ b=ScekrlJ2oSCbjzPPk8hyxXvsBggFgW4g+tsTE0AVlX10IMyZmYcqvgkbIjiiZxH4a5Gyxr
+ G7eNfLqIKEl3lcss6u4Qup69kj+VotTU6BWIRjAWx5mRGT+UB+ujiBFNrJ8+pvzD3uSTQg
+ OhYR/LxbyAtau6LwSQNeDnHUfUsLXdDDI1hjRLTnWt/HO+J1KHIWCglKDiARsUKznghdlt
+ kuC7TN00Nymu46VJJ6V1NxQznTmuBbG5h5UoANjjhQDhddwE9OJCIcyxML/1HuU1ptBNcp
+ jLadW5XOczfeYQNwmmHaNt6hitH39sdOmgnu2rCXSduFKhZvmSBsNlPi24XYqg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ScekrlJ2
+Subject: Re: [Buildroot] [PATCH 1/1] bind: keep suboptions below option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,51 +77,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d566b8cc7146ad57dfdf7ef13aceb80b85acd9e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  5 Jul 2022 23:02:36 -0400
+Danomi Manchego <danomimanchego123@gmail.com> wrote:
 
-Move kconfig comment below the "if BR2_PACKAGE_BIND...endif" block so
-that the two sub-options are presented in menuconfig as subordinate to
-"bind" package selection rather than equal to it as if they were
-unrelated.
+> Move kconfig comment to are "if BR2_PACKAGE_BIND" so that the two sub
+> options are presented in menuconfig as subordinate to "bind" package
+> selection rather than equal to it as if they were unrelated.
+> 
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  package/bind/Config.in | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/bind/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/bind/Config.in b/package/bind/Config.in
-index 9887403ed9..63ccd57db7 100644
---- a/package/bind/Config.in
-+++ b/package/bind/Config.in
-@@ -29,11 +29,6 @@ config BR2_PACKAGE_BIND
- 
- 	  https://www.isc.org/bind/
- 
--comment "bind needs a toolchain w/ NPTL, dynamic library"
--	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
--
- if BR2_PACKAGE_BIND
- 
- config BR2_PACKAGE_BIND_SERVER
-@@ -47,3 +42,8 @@ config BR2_PACKAGE_BIND_TOOLS
- 	  Install tools (dig, host, nslookup, nsupdate)
- 
- endif
-+
-+comment "bind needs a toolchain w/ NPTL, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
