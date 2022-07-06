@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3637C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Jul 2022 21:18:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AB9DC43334
+	for <buildroot@archiver.kernel.org>; Wed,  6 Jul 2022 21:18:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43E6A61131;
-	Wed,  6 Jul 2022 21:18:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43E6A61131
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C95540B67;
+	Wed,  6 Jul 2022 21:18:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C95540B67
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 98Ph1RtvqWDr; Wed,  6 Jul 2022 21:18:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JV2X6vhB4Zno; Wed,  6 Jul 2022 21:18:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32D6761123;
-	Wed,  6 Jul 2022 21:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32D6761123
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 574E41BF401
- for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:17:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 32DBD403E2;
+	Wed,  6 Jul 2022 21:18:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32DBD403E2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 54D2A1BF401
+ for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:17:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F7E46111F
- for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:17:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F7E46111F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 214CA40278
+ for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:17:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 214CA40278
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZWtI4GnL-7U6 for <buildroot@lists.busybox.net>;
- Wed,  6 Jul 2022 21:17:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8BC2D6058A
- for <buildroot@buildroot.org>; Wed,  6 Jul 2022 21:17:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BC2D6058A
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id AFE2E82A4F; Wed,  6 Jul 2022 21:04:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 6 Jul 2022 23:15:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 569873ae9d7caa7e33e72109314a3a3892c8ecd1
-X-Git-Newrev: 0cd5902030958e356317cca4f398fc4e16ebc726
-X-Patchwork-Hint: ignore
-Message-Id: <20220706210420.AFE2E82A4F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libva: bump version to 2.15.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nZTdl9Klht5N for <buildroot@lists.busybox.net>;
+ Wed,  6 Jul 2022 21:17:56 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF0B14024D
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CF0B14024D
+ for <buildroot@buildroot.org>; Wed,  6 Jul 2022 21:17:55 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 00AB1240002;
+ Wed,  6 Jul 2022 21:17:53 +0000 (UTC)
+Date: Wed, 6 Jul 2022 23:17:51 +0200
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20220706231751.207dcbba@windsurf>
+In-Reply-To: <20220701214247.97032-1-bernd.kuhls@t-online.de>
+References: <20220701214247.97032-1-bernd.kuhls@t-online.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1657142274;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=wB/YDOuaHNVltN5Fgz8IDT2EZd4wGwYhh45Vnl5EhbE=;
+ b=ZdP32ialrgGVWf71+eRRKXD+3r0a7ji2vu+l9TcJSRvfPVcsiqCtS0kRE7K+H+AMk6zmMb
+ 7j3J6ZtXPbl7lo3CLgEDFf6P03lkTv3YsK3O62LxMGBG58eMWiW1Ho3IJfON8kxhVr14KR
+ hWGRkt6OAqpabTF8ahxyurIsm0wJmdr3yQXBMXBsZi/kI41uyy7/kl8wcrKSnt0K09s3Uc
+ duHAliDZ/dsJf/rSBK/RXIqIS5fCrqJxfxW34NmM2BCXf9ghQ2McSkO8oZDAjBcwiFh29J
+ sS3TNh5Ei1Z3m/j+OaBvPlTqPKgTcWrYUoet73czCKCneqLWBMY2TgWqjtjm1Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZdP32ial
+Subject: Re: [Buildroot] [PATCH 1/4] package/libva: bump version to 2.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +77,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cd5902030958e356317cca4f398fc4e16ebc726
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  1 Jul 2022 23:42:44 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Release notes: https://github.com/intel/libva/blob/v2.15-branch/NEWS
+> Release notes: https://github.com/intel/libva/blob/v2.15-branch/NEWS
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libva/libva.hash | 6 +++---
+>  package/libva/libva.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libva/libva.hash | 6 +++---
- package/libva/libva.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Series applied, thanks a lot!
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 4646a816bb..ecca9271cc 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/intel/libva/releases/download/2.14.0/libva-2.14.0.tar.bz2.sha1sum
--sha1  36b482ec8c361a6c3a6198f4777409b136f2713c  libva-2.14.0.tar.bz2
-+# From https://github.com/intel/libva/releases/download/2.15.0/libva-2.15.0.tar.bz2.sha1sum
-+sha1  b4fca8600961336b246e80552f9b0278c187051b  libva-2.15.0.tar.bz2
- # Locally computed
--sha256  511e9a74d1ccfb548bc192290603082c11074ac59b17aadfd5d56a3f93e58454  libva-2.14.0.tar.bz2
-+sha256  258ed409458d3e7a000e1908bc852619615ee6a933359c745fcd93eb3e461eca  libva-2.15.0.tar.bz2
- sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index db1cfd29be..f89dac335f 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVA_VERSION = 2.14.0
-+LIBVA_VERSION = 2.15.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
