@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A6FAC43334
-	for <buildroot@archiver.kernel.org>; Wed,  6 Jul 2022 21:12:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D98A8C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  6 Jul 2022 21:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91CDD60FFF;
-	Wed,  6 Jul 2022 21:12:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91CDD60FFF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B5A3404DD;
+	Wed,  6 Jul 2022 21:12:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B5A3404DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QgypxpvsTxWC; Wed,  6 Jul 2022 21:12:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iT1ApBFfXdz0; Wed,  6 Jul 2022 21:12:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1EDF60EC6;
-	Wed,  6 Jul 2022 21:12:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1EDF60EC6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9344740B14;
+	Wed,  6 Jul 2022 21:12:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9344740B14
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6C1F61BF401
- for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:12:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1F95B1BF401
+ for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:12:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F83C8124A
- for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F83C8124A
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA61A8124A
+ for <buildroot@lists.busybox.net>; Wed,  6 Jul 2022 21:12:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA61A8124A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ukfe0YUfke-6 for <buildroot@lists.busybox.net>;
- Wed,  6 Jul 2022 21:12:17 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A36C581002
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A36C581002
- for <buildroot@buildroot.org>; Wed,  6 Jul 2022 21:12:16 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 65F7B240005;
- Wed,  6 Jul 2022 21:12:13 +0000 (UTC)
-Date: Wed, 6 Jul 2022 23:12:12 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220706231212.0bf052d5@windsurf>
-In-Reply-To: <20220630220026.707180-1-fontaine.fabrice@gmail.com>
-References: <20220630220026.707180-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1657141933;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=7asMVPP2uOcyxrZCHJbQwaf+iAHym2tL8IIZ56pPH8Y=;
- b=PvV4d7X3OUUjQEOqnnmX3rVtbxCxEpC4BlszVXzYt0tS7+xb24EL1tL6KT6qrtNozIqToh
- RSFSMrvjwGnXQvdyakqKv/UzAFZ6/sJs/niD+oKS1h+2CYUu7qq0TDdFy/VqzY2uA5/CI8
- 87INWqCLX+R2h5yzOnVJ9JbZDccysbTqUd4iuDDywj/p14+ebdb0lGxqmZTOX3V97LZ5Ec
- WDmXgm4OeVgIaQdQ6jhHBou2P1xhWesGSWOdS14zZCKQ+9EmddLAIxfVDf7BR29VSycEmq
- xjJeN6aX3Sf79T/RT8uUgNfnyPbRs0hzx+t1Fs9jctqHg4ZF5Yt7KIrQ0pDJ2Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PvV4d7X3
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgpgme: fix
- LIBGPGME_CPE_ID_PRODUCT
+ with ESMTP id SJ3cbw8MByhG for <buildroot@lists.busybox.net>;
+ Wed,  6 Jul 2022 21:12:35 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F03FD81002
+ for <buildroot@buildroot.org>; Wed,  6 Jul 2022 21:12:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F03FD81002
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 22E0182852; Wed,  6 Jul 2022 20:59:36 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 6 Jul 2022 23:12:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 03920e842bc5f8e7387f76ed7058d5c176fa65f3
+X-Git-Newrev: 876be2b0f32e9618aede307e78204105d37f3bc5
+X-Patchwork-Hint: ignore
+Message-Id: <20220706205936.22E0182852@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/keyutils: add
+ KEYUTILS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,29 +58,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  1 Jul 2022 00:00:26 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=876be2b0f32e9618aede307e78204105d37f3bc5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix typo added by commit 6b79c8fb05bf1ae569d8b8e8c9f6f516e97c9ae0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libgpgme/libgpgme.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+cpe:2.3:a:keyutils_project:keyutils is a valid CPE identifier for this
+package:
 
-Applied to master, thanks.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akeyutils_project%3Akeyutils
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/keyutils/keyutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
+index cba57cf199..5af5c4e92c 100644
+--- a/package/keyutils/keyutils.mk
++++ b/package/keyutils/keyutils.mk
+@@ -8,6 +8,7 @@ KEYUTILS_VERSION = 1.6.3
+ KEYUTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot
+ KEYUTILS_LICENSE = GPL-2.0+, LGPL-2.1+
+ KEYUTILS_LICENSE_FILES = LICENCE.GPL LICENCE.LGPL
++KEYUTILS_CPE_ID_VENDOR = keyutils_project
+ KEYUTILS_INSTALL_STAGING = YES
+ 
+ KEYUTILS_MAKE_PARAMS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
