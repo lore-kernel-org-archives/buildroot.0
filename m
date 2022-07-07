@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 875BBC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Jul 2022 15:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 298C0C43334
+	for <buildroot@archiver.kernel.org>; Thu,  7 Jul 2022 15:13:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14B46408AF;
-	Thu,  7 Jul 2022 15:13:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14B46408AF
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8lCDXVDWXkLp; Thu,  7 Jul 2022 15:13:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E38D41005;
-	Thu,  7 Jul 2022 15:13:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E38D41005
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4CCA11BF5DE
- for <buildroot@lists.busybox.net>; Thu,  7 Jul 2022 15:13:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 273A541695
- for <buildroot@lists.busybox.net>; Thu,  7 Jul 2022 15:13:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 273A541695
+	by smtp4.osuosl.org (Postfix) with ESMTP id AC80D41B7E;
+	Thu,  7 Jul 2022 15:13:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC80D41B7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X7g5Tpal5yhZ for <buildroot@lists.busybox.net>;
- Thu,  7 Jul 2022 15:13:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5FDC410B7
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D5FDC410B7
- for <buildroot@buildroot.org>; Thu,  7 Jul 2022 15:13:04 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A973B200011;
- Thu,  7 Jul 2022 15:13:00 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1o9TBb-000BDV-Aj; Thu, 07 Jul 2022 17:12:59 +0200
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hTCLPmK2sjiU; Thu,  7 Jul 2022 15:13:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A4A341B7D;
+	Thu,  7 Jul 2022 15:13:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A4A341B7D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A527E1BF5DE
+ for <buildroot@lists.busybox.net>; Thu,  7 Jul 2022 15:13:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7F39340FE2
+ for <buildroot@lists.busybox.net>; Thu,  7 Jul 2022 15:13:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F39340FE2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HNRAQ3_h6HDI for <buildroot@lists.busybox.net>;
+ Thu,  7 Jul 2022 15:13:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD8C6404B0
+ for <buildroot@buildroot.org>; Thu,  7 Jul 2022 15:13:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD8C6404B0
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 467C7835DC; Thu,  7 Jul 2022 15:00:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Neal Frager <neal.frager@amd.com>
-References: <20220517183842.1389395-1-neal.frager@amd.com>
- <20220517183842.1389395-2-neal.frager@amd.com>
-Date: Thu, 07 Jul 2022 17:12:59 +0200
-In-Reply-To: <20220517183842.1389395-2-neal.frager@amd.com> (Neal Frager's
- message of "Tue, 17 May 2022 12:38:41 -0600")
-Message-ID: <87wncpneh0.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v4 2/3]
- board/zynqmp/kria/kv260/uboot.fragment: add addl uboot build options
+To: buildroot@buildroot.org
+Date: Thu, 7 Jul 2022 17:10:37 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b3990050c8ba8161689aca7a21ce1600291c6de3
+X-Git-Newrev: b38fff43a7d54dcddd02114cb32bcb82a061fa64
+X-Patchwork-Hint: ignore
+Message-Id: <20220707150015.467C7835DC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/zynqmp/kria/kv260/uboot.fragment:
+ add additional uboot build options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,29 +57,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: luca@lucaceresoli.net, giulio.benetti@benettiengineering.com,
- wesley@sonifex.co.uk, michal.simek@amd.com, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b38fff43a7d54dcddd02114cb32bcb82a061fa64
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This patch adds additional uboot build options that are
- > required for kria k26 soms.
+This patch adds additional uboot build options that are
+required for kria k26 soms.
 
- > Signed-off-by: Neal Frager <neal.frager@amd.com>
- > ---
- > V1-> V2:
- > V2-> V3:
- > V3-> V4:
- >   - added CONFIG_DTB_RESELECT and CONFIG_MULTI_DTB_FIT
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/zynqmp/kria/kv260/uboot.fragment | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/zynqmp/kria/kv260/uboot.fragment b/board/zynqmp/kria/kv260/uboot.fragment
+index e1aca68692..874eb470ac 100644
+--- a/board/zynqmp/kria/kv260/uboot.fragment
++++ b/board/zynqmp/kria/kv260/uboot.fragment
+@@ -1 +1,16 @@
+ CONFIG_DEFAULT_DEVICE_TREE="zynqmp-smk-k26-revA"
++CONFIG_SYS_SPI_U_BOOT_OFFS=0xF80000
++CONFIG_DTB_RESELECT=y
++CONFIG_MULTI_DTB_FIT=y
++CONFIG_DMA=y
++CONFIG_XILINX_DPDMA=y
++CONFIG_PHY=y
++CONFIG_PHY_XILINX_ZYNQMP=y
++CONFIG_PINCTRL=y
++CONFIG_PINCONF=y
++CONFIG_POWER_DOMAIN=y
++CONFIG_ZYNQMP_POWER_DOMAIN=y
++CONFIG_DM_RESET=y
++CONFIG_RESET_ZYNQMP=y
++CONFIG_VIDEO_ZYNQMP_DPSUB=y
++CONFIG_SF_DEFAULT_SPEED=40000000
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
