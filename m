@@ -1,57 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 971DDC43334
-	for <buildroot@archiver.kernel.org>; Thu,  7 Jul 2022 13:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D7D6C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Jul 2022 13:14:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1CB6141A6B;
-	Thu,  7 Jul 2022 13:14:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CB6141A6B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3332040D01;
+	Thu,  7 Jul 2022 13:14:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3332040D01
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u4imiKsI5pUv; Thu,  7 Jul 2022 13:14:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o9XHPqJ47o57; Thu,  7 Jul 2022 13:14:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1707F41B48;
-	Thu,  7 Jul 2022 13:14:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1707F41B48
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C8F741BF40E
- for <buildroot@lists.busybox.net>; Thu,  7 Jul 2022 13:14:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8432B40FDE;
+	Thu,  7 Jul 2022 13:14:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8432B40FDE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9409E1BF40E
+ for <buildroot@lists.busybox.net>; Thu,  7 Jul 2022 13:14:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A31CA41B3D
- for <buildroot@lists.busybox.net>; Thu,  7 Jul 2022 13:14:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A31CA41B3D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7AD6561209
+ for <buildroot@lists.busybox.net>; Thu,  7 Jul 2022 13:14:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AD6561209
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EON0ZDQR4ioK for <buildroot@lists.busybox.net>;
- Thu,  7 Jul 2022 13:14:04 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 496FA41A24
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 496FA41A24
- for <buildroot@buildroot.org>; Thu,  7 Jul 2022 13:14:04 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EC4EF1BF20A;
- Thu,  7 Jul 2022 13:14:00 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1o9RKR-0008Xq-Qn; Thu, 07 Jul 2022 15:13:59 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UUXhySzYcYKm for <buildroot@lists.busybox.net>;
+ Thu,  7 Jul 2022 13:14:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8272D61217
+ for <buildroot@buildroot.org>; Thu,  7 Jul 2022 13:14:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8272D61217
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 2599983517; Thu,  7 Jul 2022 13:01:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220703093952.1300768-1-fontaine.fabrice@gmail.com>
-Date: Thu, 07 Jul 2022 15:13:59 +0200
-In-Reply-To: <20220703093952.1300768-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 3 Jul 2022 11:39:52 +0200")
-Message-ID: <87sfndoyjs.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/erofs-utils: bump to version 1.5
+To: buildroot@buildroot.org
+Date: Thu, 7 Jul 2022 15:11:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d594c1612381da528f8121758962e52ab231f3dc
+X-Git-Newrev: 587578442acff5afda73f028d21f774840e9f2a0
+X-Patchwork-Hint: ignore
+Message-Id: <20220707130112.2599983517@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pipewire: bump to version 0.3.53
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +56,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gao Xiang <hsiangkao@aol.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=587578442acff5afda73f028d21f774840e9f2a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > - Drop patches (already in version)
- > - liberofs is now released under GPL-2.0+ OR Apache-2.0 license:
- >   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/commit/?id=49b344c5531a7819f282b0b1b6eb01682c0e41ae
- > - This bump will fix the following build failure on or1k thanks to
- >   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/commit/?id=100cae2b98a70ac69ae7a09ed94f86ddf8c89fe2
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pipewire/pipewire.hash | 2 +-
+ package/pipewire/pipewire.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- >   In file included from ../include/erofs/cache.h:11,
- >                    from cache.c:9:
- >   ../include/erofs/internal.h:34:2: error: #error incompatible PAGE_SIZE is already defined
- >      34 | #error incompatible PAGE_SIZE is already defined
- >         |  ^~~~~
-
- > https://lists.ozlabs.org/pipermail/linux-erofs/2022-June/006462.html
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/755f8d736b8ad96b213bb3975b26f1143e60e5b5
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 6112c7b5b5..9de0ac0421 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  11b9de7eec5a5735ed1641630019f8cd2691d6200db227c0299497c107d29285  pipewire-0.3.52.tar.bz2
++sha256  f7fdc30b8c6eba1d7a5740d0e493ed079336037cfd88e71ab04eb92416c0ab8c  pipewire-0.3.53.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index 9f93437813..464929f38d 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PIPEWIRE_VERSION = 0.3.52
++PIPEWIRE_VERSION = 0.3.53
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
