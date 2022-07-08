@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B131C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 07:38:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F371CC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 07:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 032326135D;
-	Fri,  8 Jul 2022 07:38:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 032326135D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DCE76136A;
+	Fri,  8 Jul 2022 07:38:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DCE76136A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gxEXwVC-dYGU; Fri,  8 Jul 2022 07:38:36 +0000 (UTC)
+	with ESMTP id qxgF7T4qDZie; Fri,  8 Jul 2022 07:38:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1D8860B12;
-	Fri,  8 Jul 2022 07:38:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1D8860B12
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0951161373;
+	Fri,  8 Jul 2022 07:38:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0951161373
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EE1731BF403
- for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:38:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9B0FC1BF403
+ for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9725423C4
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7567423BA
  for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:38:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9725423C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7567423BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FPWRLtBVvDWu for <buildroot@lists.busybox.net>;
+ with ESMTP id pnPUvUxQ3zti for <buildroot@lists.busybox.net>;
  Fri,  8 Jul 2022 07:38:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B8BF541A07
+ by smtp4.osuosl.org (Postfix) with ESMTP id BDA3D41A0F
  for <buildroot@buildroot.org>; Fri,  8 Jul 2022 07:38:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8BF541A07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDA3D41A0F
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 988E281F75; Fri,  8 Jul 2022 07:25:29 +0000 (UTC)
+ id A2ADC80E37; Fri,  8 Jul 2022 07:25:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 8 Jul 2022 09:37:00 +0200
+Date: Fri, 8 Jul 2022 09:37:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 227b162728782ff501085984afe6be9ec69d013c
-X-Git-Newrev: 3ad7ba90c0e87212b710376dcf61eeabbe4470f5
+X-Git-Oldrev: 3ad7ba90c0e87212b710376dcf61eeabbe4470f5
+X-Git-Newrev: 73491bf4ecd573ca789ec466f8096e4afe59d571
 X-Patchwork-Hint: ignore
-Message-Id: <20220708072529.988E281F75@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libstrophe: bump to version 0.12.1
+Message-Id: <20220708072529.A2ADC80E37@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/alsa-lib: bump version to 1.2.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,106 +57,100 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2427852161624040587=="
+Content-Type: multipart/mixed; boundary="===============6794694725082262967=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2427852161624040587==
+--===============6794694725082262967==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ad7ba90c0e87212b710376dcf61eeabbe4470f5
+commit: https://git.buildroot.net/buildroot/commit/?id=73491bf4ecd573ca789ec466f8096e4afe59d571
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove upstreamed patch 0001-fix-ssize_t.patch
+Changelog: https://www.alsa-project.org/wiki/Changes_v1.2.7_v1.2.7.1
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Removed patch which was applied upstream:
+https://github.com/alsa-project/alsa-lib/commit/92fff4e9d06922fa3648d85c8501638c869d6184
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libstrophe/0001-fix-ssize_t.patch | 49 -------------------------------
- package/libstrophe/libstrophe.hash        |  2 +-
- package/libstrophe/libstrophe.mk          |  2 +-
- 3 files changed, 2 insertions(+), 51 deletions(-)
+ .../alsa-lib/0002-output-include-stdarg.h.patch    | 40 ----------------------
+ package/alsa-lib/alsa-lib.hash                     |  2 +-
+ package/alsa-lib/alsa-lib.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 42 deletions(-)
 
-diff --git a/package/libstrophe/0001-fix-ssize_t.patch b/package/libstrophe/0001-fix-ssize_t.patch
+diff --git a/package/alsa-lib/0002-output-include-stdarg.h.patch b/package/alsa-lib/0002-output-include-stdarg.h.patch
 deleted file mode 100644
-index 39b456de57..0000000000
---- a/package/libstrophe/0001-fix-ssize_t.patch
+index cf7c25becd..0000000000
+--- a/package/alsa-lib/0002-output-include-stdarg.h.patch
 +++ /dev/null
-@@ -1,49 +0,0 @@
--From f31ef9c35c9bba831510777d551c4179295b208f Mon Sep 17 00:00:00 2001
--From: Michael Vetter <jubalh@iodoru.org>
--Date: Mon, 30 May 2022 14:47:44 +0200
--Subject: [PATCH] Include sys/types.h for ssize_t
+@@ -1,40 +0,0 @@
+-From b7c0169a62d4e6ad1a0a9de4ef8ae8089ee98872 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sat, 11 Jun 2022 19:12:19 +0200
+-Subject: [PATCH] output: include stdarg.h
 -MIME-Version: 1.0
 -Content-Type: text/plain; charset=UTF-8
 -Content-Transfer-Encoding: 8bit
 -
--When compiling on buildroot I get:
--`src/tls.c:235:28: error: ‘ssize_t’ undeclared (first use in this
--function); did you mean ‘size_t’? `
+-Fixes a build error with alsa-utils when build with a uClibc toolchain:
 -
--To have this POSIX type available we will need to include
--`sys/types.h` on Linux. Unsure about other systems.
+-alsa-utils/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/alsa/output.h:75:66:
+- error: unknown type name ‘va_list’
+-   75 | int snd_output_vprintf(snd_output_t *output, const char *format, va_list args);
+-      |                                                                  ^~~~~~~
+-alsa-utils/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/alsa/output.h:1:1:
+- note: ‘va_list’ is defined in header ‘<stdarg.h>’; did you forget to ‘#include <stdarg.h>’?
 -
--Upstream: https://github.com/strophe/libstrophe/pull/207
--Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+-Patch sent upstream: https://github.com/alsa-project/alsa-lib/pull/237
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ----
-- src/rand.c | 1 +
-- src/tls.c  | 4 ++++
-- 2 files changed, 5 insertions(+)
+- include/output.h | 2 ++
+- 1 file changed, 2 insertions(+)
 -
--diff --git a/src/rand.c b/src/rand.c
--index 061e85ee..25e4614a 100644
----- a/src/rand.c
--+++ b/src/rand.c
--@@ -28,6 +28,7 @@
-- #if __GLIBC_PREREQ(2, 25)
-- #define USE_GETRANDOM
-- #include <sys/random.h>
--+#include <sys/types.h>
-- #include <errno.h>
-- #endif
-- #endif
--diff --git a/src/tls.c b/src/tls.c
--index 17d85dda..54746baa 100644
----- a/src/tls.c
--+++ b/src/tls.c
--@@ -21,6 +21,10 @@
-- #include <stdarg.h>
-- #include <string.h>
+-diff --git a/include/output.h b/include/output.h
+-index 4a970dc4..5e16420b 100644
+---- a/include/output.h
+-+++ b/include/output.h
+-@@ -28,6 +28,8 @@
+- #ifndef __ALSA_OUTPUT_H
+- #define __ALSA_OUTPUT_H
 - 
--+#if defined(__linux__)
--+#include <sys/types.h>
--+#endif
+-+#include <stdarg.h>
 -+
-- #include "strophe.h"
-- 
-- #include "common.h"
-diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
-index 66ff0e7e7e..fa9148ed0f 100644
---- a/package/libstrophe/libstrophe.hash
-+++ b/package/libstrophe/libstrophe.hash
+- #ifdef __cplusplus
+- extern "C" {
+- #endif
+--- 
+-2.30.2
+-
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index a859505372..7c17e18ec3 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
 @@ -1,4 +1,4 @@
  # Locally calculated
--sha256  8e44acb26018816f9856626bd5ff924a36cc612d2b3747ee634d626326b72df7  libstrophe-0.12.0.tar.xz
-+sha256  5da0a4e12e383393614376f8b47f8b91703c8fc5a564aacfc9db6b98d6a6a9bf  libstrophe-0.12.1.tar.xz
- sha256  82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
-diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
-index f48d073770..ce99c9fe48 100644
---- a/package/libstrophe/libstrophe.mk
-+++ b/package/libstrophe/libstrophe.mk
+-sha256  8814e61f7ec6812c76e23a85cab00e0b0d3bba40816af36b726beb1bc04c74a7  alsa-lib-1.2.7.tar.bz2
++sha256  046dc42dfcfad269217be05954686137e5e7397f3041372f8c6dcd7d79461e61  alsa-lib-1.2.7.1.tar.bz2
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index d6054bb000..61f625bcff 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSTROPHE_VERSION = 0.12.0
-+LIBSTROPHE_VERSION = 0.12.1
- LIBSTROPHE_SOURCE = libstrophe-$(LIBSTROPHE_VERSION).tar.xz
- LIBSTROPHE_SITE = https://github.com/strophe/libstrophe/releases/download/$(LIBSTROPHE_VERSION)
- LIBSTROPHE_DEPENDENCIES = host-pkgconf
+-ALSA_LIB_VERSION = 1.2.7
++ALSA_LIB_VERSION = 1.2.7.1
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
 
---===============2427852161624040587==
+--===============6794694725082262967==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -167,4 +161,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2427852161624040587==--
+--===============6794694725082262967==--
