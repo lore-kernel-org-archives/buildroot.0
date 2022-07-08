@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17218C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 07:36:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50C2CC43334
+	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 07:36:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AAD8941176;
-	Fri,  8 Jul 2022 07:36:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAD8941176
+	by smtp2.osuosl.org (Postfix) with ESMTP id E6A0F411AA;
+	Fri,  8 Jul 2022 07:36:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6A0F411AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5JjZ36vTJ_zu; Fri,  8 Jul 2022 07:36:33 +0000 (UTC)
+	with ESMTP id Roanf8r1swTA; Fri,  8 Jul 2022 07:36:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B5B6940500;
-	Fri,  8 Jul 2022 07:36:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5B6940500
+	by smtp2.osuosl.org (Postfix) with ESMTP id D423A4158D;
+	Fri,  8 Jul 2022 07:36:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D423A4158D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C82BA1C11A5
- for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:36:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 22A581BF403
+ for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1A8A423AF
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA9A941BBE
  for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:36:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1A8A423AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA9A941BBE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q7teatUxaF6s for <buildroot@lists.busybox.net>;
- Fri,  8 Jul 2022 07:36:15 +0000 (UTC)
+ with ESMTP id xXfyvR8yE4UE for <buildroot@lists.busybox.net>;
+ Fri,  8 Jul 2022 07:36:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6B2F41BBE
+ by smtp4.osuosl.org (Postfix) with ESMTP id DCB2441BD8
  for <buildroot@buildroot.org>; Fri,  8 Jul 2022 07:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6B2F41BBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCB2441BD8
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AD10982DC8; Fri,  8 Jul 2022 07:23:13 +0000 (UTC)
+ id C313C83233; Fri,  8 Jul 2022 07:23:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 8 Jul 2022 09:34:12 +0200
+Date: Fri, 8 Jul 2022 09:35:01 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a5adc9b658fc137d5952f9bdea8dc9a4d007d5fc
-X-Git-Newrev: f941dfb61f008ade087130f0c82d80d32c57af2c
+X-Git-Oldrev: 70532a8e09ee369e4a589089b0f09b2cc648099a
+X-Git-Newrev: 227b162728782ff501085984afe6be9ec69d013c
 X-Patchwork-Hint: ignore
-Message-Id: <20220708072313.AD10982DC8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x264: bump version
+Message-Id: <20220708072313.C313C83233@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dtv-scan-tables: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,38 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f941dfb61f008ade087130f0c82d80d32c57af2c
+commit: https://git.buildroot.net/buildroot/commit/?id=227b162728782ff501085984afe6be9ec69d013c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x264/x264.hash | 2 +-
- package/x264/x264.mk   | 2 +-
+ package/dtv-scan-tables/dtv-scan-tables.hash | 2 +-
+ package/dtv-scan-tables/dtv-scan-tables.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-index f1396279f8..f8b26b6910 100644
---- a/package/x264/x264.hash
-+++ b/package/x264/x264.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.hash b/package/dtv-scan-tables/dtv-scan-tables.hash
+index 8d4290fc53..e53a168832 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.hash
++++ b/package/dtv-scan-tables/dtv-scan-tables.hash
+@@ -1,4 +1,4 @@
  # Locally computed
--sha256  58f39bf23a4e38ac3dd841a3f9ccf2aa16d2b0c35df9aecd9f3b5062780e5d74  x264-35417dcd65a57321fbadf98c9a4cff1cb741db4b-br1.tar.gz
-+sha256  e83cda2a69e72bc45bcb14aa7ca5e689cf0f67dc29fc6f1dce63abe2a428fc01  x264-baee400fa9ced6f5481a728138fed6e867b0ff7f-br1.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index 9de618eb5e..97caf19466 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
+-sha256  186a6fe1755d83d583590de3f83013c2e4df47b258c88180dffd1afb0d36d4d6  dtv-scan-tables-25ee9e0ce4bbacdb278d4cff306ceb6528c4f548-br1.tar.gz
++sha256  b77c6bcbbc20f6b6bdbf735fb75cf9bec8634e1e6d3a32e6db2573deeb7a2212  dtv-scan-tables-57ed2982275045ea5e92ef2a40b9fa58255852e5-br1.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+ sha256  4fd46f32582c29007657e2daad8d0a6d954cf4e9d2e47bae8f8d8c32765fc987  COPYING.LGPL
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
+index 4150abd1a0..45264a41c5 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.mk
++++ b/package/dtv-scan-tables/dtv-scan-tables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--X264_VERSION = 35417dcd65a57321fbadf98c9a4cff1cb741db4b
-+X264_VERSION = baee400fa9ced6f5481a728138fed6e867b0ff7f
- X264_SITE = https://code.videolan.org/videolan/x264.git
- X264_SITE_METHOD = git
- X264_LICENSE = GPL-2.0+
+-DTV_SCAN_TABLES_VERSION = 25ee9e0ce4bbacdb278d4cff306ceb6528c4f548
++DTV_SCAN_TABLES_VERSION = 57ed2982275045ea5e92ef2a40b9fa58255852e5
+ DTV_SCAN_TABLES_SITE = https://git.linuxtv.org/dtv-scan-tables.git
+ DTV_SCAN_TABLES_SITE_METHOD = git
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
