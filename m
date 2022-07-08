@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0BF5C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 09:01:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E69BEC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 09:01:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E5BF84653;
-	Fri,  8 Jul 2022 09:01:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E5BF84653
+	by smtp1.osuosl.org (Postfix) with ESMTP id 735C28463C;
+	Fri,  8 Jul 2022 09:01:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 735C28463C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VktRos2y-9wj; Fri,  8 Jul 2022 09:01:04 +0000 (UTC)
+	with ESMTP id 2pwq5O0SeTIK; Fri,  8 Jul 2022 09:01:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C6218463B;
-	Fri,  8 Jul 2022 09:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C6218463B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 45C101BF276
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E35D84687;
+	Fri,  8 Jul 2022 09:01:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E35D84687
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F03071BF276
  for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 09:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 203CE42511
- for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 09:00:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 203CE42511
+ by smtp2.osuosl.org (Postfix) with ESMTP id C34FC40567
+ for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 09:00:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C34FC40567
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gaMvrOVNxNpj for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8iWFSIX8HvTw for <buildroot@lists.busybox.net>;
  Fri,  8 Jul 2022 09:00:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3324F42503
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13EE740483
  for <buildroot@buildroot.org>; Fri,  8 Jul 2022 09:00:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3324F42503
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13EE740483
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id ECD008352F; Fri,  8 Jul 2022 08:47:25 +0000 (UTC)
+ id CD9A67FF33; Fri,  8 Jul 2022 08:47:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 8 Jul 2022 11:00:16 +0200
+Date: Fri, 8 Jul 2022 10:59:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 350e866589daf43ecb19aa25f3c7dfd3b421418c
-X-Git-Newrev: 298d3e2c7e6b7531ffcfa72bac9aef6cd92ce2bc
+X-Git-Oldrev: 72ea8185b0fd25d02bedda24a91826d9398c6d22
+X-Git-Newrev: 350e866589daf43ecb19aa25f3c7dfd3b421418c
 X-Patchwork-Hint: ignore
-Message-Id: <20220708084725.ECD008352F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/luarocks: bump to version 3.9.1
+Message-Id: <20220708084725.CD9A67FF33@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/4th: bump to version 3.64.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,38 +62,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=298d3e2c7e6b7531ffcfa72bac9aef6cd92ce2bc
+commit: https://git.buildroot.net/buildroot/commit/?id=350e866589daf43ecb19aa25f3c7dfd3b421418c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
+ package/4th/4th.hash | 2 +-
+ package/4th/4th.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index 14809402d2..7136456923 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
+diff --git a/package/4th/4th.hash b/package/4th/4th.hash
+index ae08a6bf5e..8a31263479 100644
+--- a/package/4th/4th.hash
++++ b/package/4th/4th.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  5e840f0224891de96be4139e9475d3b1de7af3a32b95c1bdf05394563c60175f  luarocks-3.9.0.tar.gz
-+sha256  ffafd83b1c42aa38042166a59ac3b618c838ce4e63f4ace9d961a5679ef58253  luarocks-3.9.1.tar.gz
- sha256  542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index b28a1bd577..2bec2fca25 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
+ # Locally computed:
+-sha256  c0905e92316c151224858fcfff21c143c85efa4f9f1b2ade3c64cfd988e0a6a8  4th-3.64.0-unix.tar.gz
++sha256  f96ea74cdb2aadfdc3bebf8d6d2cf7b8976b5d56c1237387479bffaecede9fe3  4th-3.64.1-unix.tar.gz
+ sha256  8c6111b645a02219579ea66e84aa8e78a0ed4f4dd80857ffb91bcda5528717d4  COPYING
+diff --git a/package/4th/4th.mk b/package/4th/4th.mk
+index d031c0e4b4..276423b255 100644
+--- a/package/4th/4th.mk
++++ b/package/4th/4th.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAROCKS_VERSION = 3.9.0
-+LUAROCKS_VERSION = 3.9.1
- LUAROCKS_SITE = https://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+-4TH_VERSION = 3.64.0
++4TH_VERSION = 3.64.1
+ 4TH_SOURCE = 4th-$(4TH_VERSION)-unix.tar.gz
+ 4TH_SITE = http://downloads.sourceforge.net/project/forth-4th/4th-$(4TH_VERSION)
+ 4TH_LICENSE = GPL-3.0+, LGPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
