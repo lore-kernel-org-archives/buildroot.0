@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 844BEC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 09:00:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0BF5C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 09:01:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06DB742514;
-	Fri,  8 Jul 2022 09:00:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06DB742514
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E5BF84653;
+	Fri,  8 Jul 2022 09:01:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E5BF84653
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VktRos2y-9wj; Fri,  8 Jul 2022 09:01:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C6218463B;
+	Fri,  8 Jul 2022 09:01:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C6218463B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 45C101BF276
+ for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 09:00:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 203CE42511
+ for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 09:00:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 203CE42511
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3bI0_b8g2GOt; Fri,  8 Jul 2022 09:00:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1B3A4250A;
-	Fri,  8 Jul 2022 09:00:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1B3A4250A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DAC1B1BF276
- for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 09:00:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C34C640155
- for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 09:00:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C34C640155
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QYg3qzf-xrmd for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gaMvrOVNxNpj for <buildroot@lists.busybox.net>;
  Fri,  8 Jul 2022 09:00:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F1FC4017E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3324F42503
  for <buildroot@buildroot.org>; Fri,  8 Jul 2022 09:00:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F1FC4017E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3324F42503
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C4278834D2; Fri,  8 Jul 2022 08:47:25 +0000 (UTC)
+ id ECD008352F; Fri,  8 Jul 2022 08:47:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 8 Jul 2022 10:59:19 +0200
+Date: Fri, 8 Jul 2022 11:00:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 73491bf4ecd573ca789ec466f8096e4afe59d571
-X-Git-Newrev: 72ea8185b0fd25d02bedda24a91826d9398c6d22
+X-Git-Oldrev: 350e866589daf43ecb19aa25f3c7dfd3b421418c
+X-Git-Newrev: 298d3e2c7e6b7531ffcfa72bac9aef6cd92ce2bc
 X-Patchwork-Hint: ignore
-Message-Id: <20220708084725.C4278834D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ethtool: bump to version 5.18
+Message-Id: <20220708084725.ECD008352F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luarocks: bump to version 3.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +62,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72ea8185b0fd25d02bedda24a91826d9398c6d22
+commit: https://git.buildroot.net/buildroot/commit/?id=298d3e2c7e6b7531ffcfa72bac9aef6cd92ce2bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
+ package/luarocks/luarocks.hash | 2 +-
+ package/luarocks/luarocks.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index f317a1fb12..052a87d978 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256  64ab914b9c6b45047245d91f40b8760b2728992a9e5af22717c644238e889133  ethtool-5.17.tar.xz
-+sha256  9577b2ffbce710b659fb239598ec92bced1ca400ca0f1286762bfa44e4784270  ethtool-5.18.tar.xz
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 14809402d2..7136456923 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 10f0c802a6..9fd4c31c7b 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
+-sha256  5e840f0224891de96be4139e9475d3b1de7af3a32b95c1bdf05394563c60175f  luarocks-3.9.0.tar.gz
++sha256  ffafd83b1c42aa38042166a59ac3b618c838ce4e63f4ace9d961a5679ef58253  luarocks-3.9.1.tar.gz
+ sha256  542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index b28a1bd577..2bec2fca25 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ETHTOOL_VERSION = 5.17
-+ETHTOOL_VERSION = 5.18
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+-LUAROCKS_VERSION = 3.9.0
++LUAROCKS_VERSION = 3.9.1
+ LUAROCKS_SITE = https://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
