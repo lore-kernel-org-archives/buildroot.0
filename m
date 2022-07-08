@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C02FC43334
-	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 05:49:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 539DEC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 05:50:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC746404F9;
-	Fri,  8 Jul 2022 05:49:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC746404F9
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1DBC84662;
+	Fri,  8 Jul 2022 05:50:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1DBC84662
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s_f9VC7QNbZF; Fri,  8 Jul 2022 05:49:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FZdWOeRYKGr0; Fri,  8 Jul 2022 05:50:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E208B402E0;
-	Fri,  8 Jul 2022 05:49:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E208B402E0
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE30C8465F;
+	Fri,  8 Jul 2022 05:50:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE30C8465F
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9B7751BF44C
- for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 05:49:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 614171BF44C
+ for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 05:50:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7663A8465F
- for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 05:49:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7663A8465F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A6BA8465F
+ for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 05:50:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A6BA8465F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X03qVeWw4rnG for <buildroot@lists.busybox.net>;
- Fri,  8 Jul 2022 05:49:50 +0000 (UTC)
+ with ESMTP id KFpZy5Y_cWuq for <buildroot@lists.busybox.net>;
+ Fri,  8 Jul 2022 05:50:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E1F68465B
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2E1F68465B
- for <buildroot@busybox.net>; Fri,  8 Jul 2022 05:49:50 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id h17so15914836wrx.0
- for <buildroot@busybox.net>; Thu, 07 Jul 2022 22:49:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B5AF8465B
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4B5AF8465B
+ for <buildroot@busybox.net>; Fri,  8 Jul 2022 05:50:01 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id d16so22738912wrv.10
+ for <buildroot@busybox.net>; Thu, 07 Jul 2022 22:50:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OQ4qrqQDIoeqtjknNIgnvnM98Xh1ZJ0p1UPom+4/NJU=;
- b=tCPapmXSQYUmKyZWf8OCL4TnBUfdgUzy3fHvvoJEZYAeWMTX1LMRjJfhyccc/N6cBN
- ee/O0SuSt91ysuXPLLpb8OYl95rkEryefrHWpcNU6iyplXKtPYaFN+7sj+7631XQF39S
- T3Oby2Al/HxAuG019+r/75ptNCtd8SXgnwBms+wECGSyH/TwW6XyxWo4kWpLOib6ICfZ
- Gel8QetOzmZjHK+dFnQLCYPrgFeRx8JPC7oZOZ9EzozKZv5Al8b76SCcJRWXjyZZmBpk
- gyEACQu/MakT7ntRtbZmBEJ0sQtujgks1oq3FR68UDud9Rtsa/lzQdBCe2/TCvqwd+WP
- 4GIA==
-X-Gm-Message-State: AJIora+pzFFVt4ekzWKwQlwbWZLrzxHMk+yd9ijctUxK9xN3qsoc1obx
- IZxOLMKmK89hu48Vdm9gsYvyrH7zigs=
-X-Google-Smtp-Source: AGRyM1tdREyHow3u47uNnth2YzwS19zZsQJ3rANOKIlnKSPbhu7tuaDiOe/6Pm0pdtBTePI6xiJADg==
-X-Received: by 2002:a5d:5d89:0:b0:21d:407a:d8d3 with SMTP id
- ci9-20020a5d5d89000000b0021d407ad8d3mr1451433wrb.369.1657259388237; 
- Thu, 07 Jul 2022 22:49:48 -0700 (PDT)
+ bh=bdyaQb75cYDvCXpr5K+i15HRluf87R86oB8EwjW6ZOA=;
+ b=Q6H9DUkWQx6yVBjMkg4dNYHrWOL5PTScjIBhgM9HN1Mdel88gQMj+6lrEVia0yJ7Qx
+ lWuGbtPp60/ytNhRX9+yHoroC7/OB/OYWlldOQhz4RZclCIh2x9w3AnjTnbRE2Lnwd2y
+ hJGKvAY6X2RYCx+KMFfOMV0/vZNz62PYeD5LqXrq01cHz0eb0Va7u1qAdCuLJ8fNxnny
+ A/RvCkQkTn20ACJN/XPgmDYmldeLKgBS12CvrvcAqbrJrZs5QKeSxLJ+s+y3pHP8mx6v
+ suyMObeeVGCYtLHbrA/FcxOd8gcXj1buvj09eBfHspcfdeHYR3tVxKGi//hwoBtwPRp0
+ iAQg==
+X-Gm-Message-State: AJIora+p+xc/ivxCEHIgq4uAqVon6qutSQ8J9sW7Y7aOZZIRzinYT8vF
+ c5P8oPI3wtcor8RiHzfm9uQybmXXyOk=
+X-Google-Smtp-Source: AGRyM1sTlYaFKGHdJFwi4K/jcaN1rn0ZI/fTz5jOk5+LbQCNmFQG+QO/0qxFqZZ/nWGRbQ/FYbKl5g==
+X-Received: by 2002:adf:e0c9:0:b0:21b:8271:2348 with SMTP id
+ m9-20020adfe0c9000000b0021b82712348mr1407200wri.222.1657259399443; 
+ Thu, 07 Jul 2022 22:49:59 -0700 (PDT)
 Received: from vm22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- r129-20020a1c4487000000b003a0499df21asm981911wma.25.2022.07.07.22.49.47
+ j9-20020a05600c190900b0039db31f6372sm1058683wmq.2.2022.07.07.22.49.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Jul 2022 22:49:47 -0700 (PDT)
+ Thu, 07 Jul 2022 22:49:59 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Fri,  8 Jul 2022 07:48:58 +0200
-Message-Id: <20220708054858.2613054-1-francois.perrad@gadz.org>
+Date: Fri,  8 Jul 2022 07:49:56 +0200
+Message-Id: <20220708054956.2613095-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OQ4qrqQDIoeqtjknNIgnvnM98Xh1ZJ0p1UPom+4/NJU=;
- b=QhExh/qpgEiX0bnBlwKEcvUHKcAj6plFlhcy41aTe6659FoCim5uIDIs3FYXX23lNt
- YtJ57BmbmEnN8mjdfFWseCeZygkrKfndtw217rnkmz2PvtIvvXAivGVh10AG2dxFz64C
- d5uGcZWEglnYC7IGuLPRnUeilcxRq/BDP0cD4XAFkXb3h/5+BG3GhcKndr7Ekr6FSgBz
- kLSM4denuTcTem1MHZFrjjSav6cQGnebf08f8/YzFvEi+S8wwxe/6e3K/UiaSIi0ao0+
- yIf35fbPy2z1GkC27/xxAFlLZ19tmOlSTydr3dm51KE1qTnKS4a3IfvKxfE6Gw0g9ov5
- OUvQ==
+ bh=bdyaQb75cYDvCXpr5K+i15HRluf87R86oB8EwjW6ZOA=;
+ b=aUZCbpqhjGmY2apMaoNGGmn0NA17PXNhSXR/akTSXWnIKAWdGr1mm3oEkZCaoCFFsL
+ ykqGQ0mxMphcLmq8OE8b8W5SkPIaI9odhl6t3SskhvJOKUnWJEvDuZzXqeFYv3ADg69d
+ WsbB9lp29sehY+I74ohFQb/eeby6cBYH57H9YNlcPkb7F1u/G6q55RjYea8fIYO0Ysek
+ 4c8b/vRdfYpMOqT5Sp5SPFNehQepXtjbjL9bPjn8NtL0N1L5hZ0ZrOSC/VU81240S9bF
+ t9WrJZBdsyRUHhWX/zsHcejov29qzcd96GxdWYoaK1Zmfe3eIFz3vIRddn/U2PT+QNu6
+ A2qQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=QhExh/qp
-Subject: [Buildroot] [PATCH] package/4th: bump to version 3.64.1
+ header.a=rsa-sha256 header.s=20210112 header.b=aUZCbpqh
+Subject: [Buildroot] [PATCH] package/ethtool: bump to version 5.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,32 +100,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/4th/4th.hash | 2 +-
- package/4th/4th.mk   | 2 +-
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/4th/4th.hash b/package/4th/4th.hash
-index ae08a6bf5..8a3126347 100644
---- a/package/4th/4th.hash
-+++ b/package/4th/4th.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  c0905e92316c151224858fcfff21c143c85efa4f9f1b2ade3c64cfd988e0a6a8  4th-3.64.0-unix.tar.gz
-+sha256  f96ea74cdb2aadfdc3bebf8d6d2cf7b8976b5d56c1237387479bffaecede9fe3  4th-3.64.1-unix.tar.gz
- sha256  8c6111b645a02219579ea66e84aa8e78a0ed4f4dd80857ffb91bcda5528717d4  COPYING
-diff --git a/package/4th/4th.mk b/package/4th/4th.mk
-index d031c0e4b..276423b25 100644
---- a/package/4th/4th.mk
-+++ b/package/4th/4th.mk
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index f317a1fb1..052a87d97 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  64ab914b9c6b45047245d91f40b8760b2728992a9e5af22717c644238e889133  ethtool-5.17.tar.xz
++sha256  9577b2ffbce710b659fb239598ec92bced1ca400ca0f1286762bfa44e4784270  ethtool-5.18.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 10f0c802a..9fd4c31c7 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--4TH_VERSION = 3.64.0
-+4TH_VERSION = 3.64.1
- 4TH_SOURCE = 4th-$(4TH_VERSION)-unix.tar.gz
- 4TH_SITE = http://downloads.sourceforge.net/project/forth-4th/4th-$(4TH_VERSION)
- 4TH_LICENSE = GPL-3.0+, LGPL-3.0+
+-ETHTOOL_VERSION = 5.17
++ETHTOOL_VERSION = 5.18
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
 -- 
 2.34.1
 
