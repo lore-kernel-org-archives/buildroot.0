@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 732B9C43334
-	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 07:35:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94B64C43334
+	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 07:36:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 146D584613;
-	Fri,  8 Jul 2022 07:35:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 146D584613
+	by smtp4.osuosl.org (Postfix) with ESMTP id 367D64245F;
+	Fri,  8 Jul 2022 07:36:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 367D64245F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tgHHwuOIgCy9; Fri,  8 Jul 2022 07:36:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBC9341BD8;
+	Fri,  8 Jul 2022 07:36:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBC9341BD8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B5EE71BF403
+ for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:36:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9192C84613
+ for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:36:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9192C84613
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m7LeIY6Rd7Xq; Fri,  8 Jul 2022 07:35:34 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22380845C9;
-	Fri,  8 Jul 2022 07:35:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22380845C9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 94E9F1BF403
- for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:35:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F67540500
- for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:35:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F67540500
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zdBOIdgefrwa for <buildroot@lists.busybox.net>;
- Fri,  8 Jul 2022 07:35:22 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B827740192
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B827740192
- for <buildroot@buildroot.org>; Fri,  8 Jul 2022 07:35:21 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6F1E1C0008;
- Fri,  8 Jul 2022 07:35:19 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1o9iWE-000USF-CR; Fri, 08 Jul 2022 09:35:18 +0200
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JJEWOmjYLX_5 for <buildroot@lists.busybox.net>;
+ Fri,  8 Jul 2022 07:36:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE8828457C
+ for <buildroot@buildroot.org>; Fri,  8 Jul 2022 07:36:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE8828457C
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id A372E826E7; Fri,  8 Jul 2022 07:23:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20220703130151.98702-1-bernd.kuhls@t-online.de>
-Date: Fri, 08 Jul 2022 09:35:18 +0200
-In-Reply-To: <20220703130151.98702-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 3 Jul 2022 15:01:51 +0200")
-Message-ID: <87wncom4zt.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/dtv-scan-tables: bump version
+To: buildroot@buildroot.org
+Date: Fri, 8 Jul 2022 09:33:40 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b1d6180442412778564f5c7e81ae23c87d19ffa7
+X-Git-Newrev: a5adc9b658fc137d5952f9bdea8dc9a4d007d5fc
+X-Patchwork-Hint: ignore
+Message-Id: <20220708072313.A372E826E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcurl: fix build without
+ sched_yield
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,20 +57,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a5adc9b658fc137d5952f9bdea8dc9a4d007d5fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fix the following build failure without sched_yield raised since bump to
+version 7.84.0 in commit b034109dd60a429690acf9c5501c6658c53eae13:
 
-Committed, thanks.
+In file included from easy.c:89:
+easy_lock.h: In function 'curl_simple_lock_lock':
+easy_lock.h:56:7: error: implicit declaration of function 'sched_yield' [-Werror=implicit-function-declaration]
+   56 |       sched_yield();
+      |       ^~~~~~~~~~~
 
--- 
-Bye, Peter Korsgaard
+Fixes:
+ - http://autobuild.buildroot.org/results/fbc80a0002d640210c81a4c518856c02669059b7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...include-sched-h-if-available-to-fix-build.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch b/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch
+new file mode 100644
+index 0000000000..b5f0a87218
+--- /dev/null
++++ b/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch
+@@ -0,0 +1,30 @@
++From e2e7f54b7bea521fa8373095d0f43261a720cda0 Mon Sep 17 00:00:00 2001
++From: Daniel Stenberg <daniel@haxx.se>
++Date: Mon, 27 Jun 2022 08:46:21 +0200
++Subject: [PATCH] easy_lock.h: include sched.h if available to fix build
++
++Patched-by: Harry Sintonen
++
++Closes #9054
++
++[Retrieved from:
++https://github.com/curl/curl/commit/e2e7f54b7bea521fa8373095d0f43261a720cda0]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/easy_lock.h | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/lib/easy_lock.h b/lib/easy_lock.h
++index 819f50ce815b8..1f54289ceb2d3 100644
++--- a/lib/easy_lock.h
+++++ b/lib/easy_lock.h
++@@ -36,6 +36,9 @@
++ 
++ #elif defined (HAVE_ATOMIC)
++ #include <stdatomic.h>
+++#if defined(HAVE_SCHED_YIELD)
+++#include <sched.h>
+++#endif
++ 
++ #define curl_simple_lock atomic_bool
++ #define CURL_SIMPLE_LOCK_INIT false
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
