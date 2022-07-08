@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94B64C43334
-	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 07:36:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17218C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  8 Jul 2022 07:36:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 367D64245F;
-	Fri,  8 Jul 2022 07:36:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 367D64245F
+	by smtp2.osuosl.org (Postfix) with ESMTP id AAD8941176;
+	Fri,  8 Jul 2022 07:36:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAD8941176
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5JjZ36vTJ_zu; Fri,  8 Jul 2022 07:36:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B5B6940500;
+	Fri,  8 Jul 2022 07:36:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5B6940500
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C82BA1C11A5
+ for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:36:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1A8A423AF
+ for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:36:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1A8A423AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tgHHwuOIgCy9; Fri,  8 Jul 2022 07:36:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBC9341BD8;
-	Fri,  8 Jul 2022 07:36:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBC9341BD8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B5EE71BF403
- for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:36:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9192C84613
- for <buildroot@lists.busybox.net>; Fri,  8 Jul 2022 07:36:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9192C84613
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JJEWOmjYLX_5 for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q7teatUxaF6s for <buildroot@lists.busybox.net>;
  Fri,  8 Jul 2022 07:36:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BE8828457C
+ by smtp4.osuosl.org (Postfix) with ESMTP id C6B2F41BBE
  for <buildroot@buildroot.org>; Fri,  8 Jul 2022 07:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE8828457C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6B2F41BBE
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A372E826E7; Fri,  8 Jul 2022 07:23:13 +0000 (UTC)
+ id AD10982DC8; Fri,  8 Jul 2022 07:23:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 8 Jul 2022 09:33:40 +0200
+Date: Fri, 8 Jul 2022 09:34:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b1d6180442412778564f5c7e81ae23c87d19ffa7
-X-Git-Newrev: a5adc9b658fc137d5952f9bdea8dc9a4d007d5fc
+X-Git-Oldrev: a5adc9b658fc137d5952f9bdea8dc9a4d007d5fc
+X-Git-Newrev: f941dfb61f008ade087130f0c82d80d32c57af2c
 X-Patchwork-Hint: ignore
-Message-Id: <20220708072313.A372E826E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: fix build without
- sched_yield
+Message-Id: <20220708072313.AD10982DC8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x264: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,65 +62,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5adc9b658fc137d5952f9bdea8dc9a4d007d5fc
+commit: https://git.buildroot.net/buildroot/commit/?id=f941dfb61f008ade087130f0c82d80d32c57af2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure without sched_yield raised since bump to
-version 7.84.0 in commit b034109dd60a429690acf9c5501c6658c53eae13:
-
-In file included from easy.c:89:
-easy_lock.h: In function 'curl_simple_lock_lock':
-easy_lock.h:56:7: error: implicit declaration of function 'sched_yield' [-Werror=implicit-function-declaration]
-   56 |       sched_yield();
-      |       ^~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/fbc80a0002d640210c81a4c518856c02669059b7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...include-sched-h-if-available-to-fix-build.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/x264/x264.hash | 2 +-
+ package/x264/x264.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch b/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch
-new file mode 100644
-index 0000000000..b5f0a87218
---- /dev/null
-+++ b/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch
-@@ -0,0 +1,30 @@
-+From e2e7f54b7bea521fa8373095d0f43261a720cda0 Mon Sep 17 00:00:00 2001
-+From: Daniel Stenberg <daniel@haxx.se>
-+Date: Mon, 27 Jun 2022 08:46:21 +0200
-+Subject: [PATCH] easy_lock.h: include sched.h if available to fix build
-+
-+Patched-by: Harry Sintonen
-+
-+Closes #9054
-+
-+[Retrieved from:
-+https://github.com/curl/curl/commit/e2e7f54b7bea521fa8373095d0f43261a720cda0]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/easy_lock.h | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/lib/easy_lock.h b/lib/easy_lock.h
-+index 819f50ce815b8..1f54289ceb2d3 100644
-+--- a/lib/easy_lock.h
-++++ b/lib/easy_lock.h
-+@@ -36,6 +36,9 @@
-+ 
-+ #elif defined (HAVE_ATOMIC)
-+ #include <stdatomic.h>
-++#if defined(HAVE_SCHED_YIELD)
-++#include <sched.h>
-++#endif
-+ 
-+ #define curl_simple_lock atomic_bool
-+ #define CURL_SIMPLE_LOCK_INIT false
+diff --git a/package/x264/x264.hash b/package/x264/x264.hash
+index f1396279f8..f8b26b6910 100644
+--- a/package/x264/x264.hash
++++ b/package/x264/x264.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  58f39bf23a4e38ac3dd841a3f9ccf2aa16d2b0c35df9aecd9f3b5062780e5d74  x264-35417dcd65a57321fbadf98c9a4cff1cb741db4b-br1.tar.gz
++sha256  e83cda2a69e72bc45bcb14aa7ca5e689cf0f67dc29fc6f1dce63abe2a428fc01  x264-baee400fa9ced6f5481a728138fed6e867b0ff7f-br1.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index 9de618eb5e..97caf19466 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-X264_VERSION = 35417dcd65a57321fbadf98c9a4cff1cb741db4b
++X264_VERSION = baee400fa9ced6f5481a728138fed6e867b0ff7f
+ X264_SITE = https://code.videolan.org/videolan/x264.git
+ X264_SITE_METHOD = git
+ X264_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
