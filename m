@@ -4,56 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7954AC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Jul 2022 07:07:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D879C43334
+	for <buildroot@archiver.kernel.org>; Sat,  9 Jul 2022 15:56:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BE2C74019E;
-	Sat,  9 Jul 2022 07:07:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE2C74019E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 65C6340524;
+	Sat,  9 Jul 2022 15:56:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65C6340524
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MIsKa_0FsmI3; Sat,  9 Jul 2022 07:07:18 +0000 (UTC)
+	with ESMTP id j6MbjvfGwMYK; Sat,  9 Jul 2022 15:56:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C745040186;
-	Sat,  9 Jul 2022 07:07:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C745040186
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67BD34049E;
+	Sat,  9 Jul 2022 15:56:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67BD34049E
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 28D371BF5AA
- for <buildroot@lists.busybox.net>; Sat,  9 Jul 2022 07:07:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 329041BF27A
+ for <buildroot@lists.busybox.net>; Sat,  9 Jul 2022 15:56:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03902817A6
- for <buildroot@lists.busybox.net>; Sat,  9 Jul 2022 07:07:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03902817A6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0DF02846CE
+ for <buildroot@lists.busybox.net>; Sat,  9 Jul 2022 15:56:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DF02846CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 11QUs5Y9keeB for <buildroot@lists.busybox.net>;
- Sat,  9 Jul 2022 07:07:13 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B047C8151E
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B047C8151E
- for <buildroot@buildroot.org>; Sat,  9 Jul 2022 07:07:13 +0000 (UTC)
-Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
- by mailout05.t-online.de (Postfix) with SMTP id ADF2D1A24D;
- Sat,  9 Jul 2022 09:07:09 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.9.36]) by fwd88.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1oA4YX-1Ihqy10; Sat, 9 Jul 2022 09:07:09 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:33122)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1oA4YW-0004kL-KR;
- Sat, 09 Jul 2022 09:07:08 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Sat,  9 Jul 2022 09:07:08 +0200
-Message-Id: <20220709070708.212797-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+ with ESMTP id 0q7wEQe9Q_xT for <buildroot@lists.busybox.net>;
+ Sat,  9 Jul 2022 15:56:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39AB7846CA
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 39AB7846CA
+ for <buildroot@busybox.net>; Sat,  9 Jul 2022 15:56:24 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id q9so1903650wrd.8
+ for <buildroot@busybox.net>; Sat, 09 Jul 2022 08:56:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=P9/LucTL04E3JzK+hTzeDKPdTs5OPSoj6tzb5urzepE=;
+ b=ZnANoZHyeF7iT7htb28xZHn34QyPcvxMiotp+FVms70y9ixoo1fZOe2OoP2JiQ4aq8
+ qo0dUjA7uLstkELa4q0J17xVO7mCZIebZxhv+KYuzjmd3L+Zq4m35l2qcswWT86byJFm
+ Kyz/wnlLWd/3gSWrPSOIb8imUuK02gz4BTkjs2iyB17peA60cegKhjU82DbtP9F6rzug
+ i5bfHMB9hPGGz3DxgLMygx3k2szeZaOgxyqMYEDO3p5WD/40aOP4tHvrdFenkjX9+Vng
+ CWt7AChtPhZ+eeDoSb2S4BkDwv3KsJYdDr05De1aiuLZn1dWCswBEs/bsoAGXqlElgiZ
+ 9o+w==
+X-Gm-Message-State: AJIora9Hlyso/B0VPf8WgoS9eh1p77r8EWNFdXPtAVBmFYBPs92QsqsA
+ 694MnVEwJasNEfI8tWlN8JktUiFg6KA=
+X-Google-Smtp-Source: AGRyM1seHmXc+nhJYkkap+JGUr1Vr61LEcGD7jqUjp9xg+DPtdPcqz3jelY7OZGKQQKcOYL6toGBXg==
+X-Received: by 2002:a5d:47a7:0:b0:21d:12fe:6203 with SMTP id
+ 7-20020a5d47a7000000b0021d12fe6203mr8931304wrb.638.1657382182371; 
+ Sat, 09 Jul 2022 08:56:22 -0700 (PDT)
+Received: from vm22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ c9-20020a05600c0a4900b0039c4ba160absm16891163wmq.2.2022.07.09.08.56.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 09 Jul 2022 08:56:22 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sat,  9 Jul 2022 17:55:57 +0200
+Message-Id: <20220709155557.2907518-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1657350429-01436587-3D08EE25/0/0 CLEAN NORMAL
-X-TOI-MSGID: 5f7627e7-7ada-4928-aac6-b5c6928df1c6
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: vp8 encoder needs c++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=P9/LucTL04E3JzK+hTzeDKPdTs5OPSoj6tzb5urzepE=;
+ b=esaPXHr8SV/z3aM40hiGTSE7M+pbJDSagr9TnVhu+Z30WV/ZS7B9Tco9cH5buY8Ft+
+ 7DR/FHMC7BQ8jCpKM900Zgv2G6qNBk+A0c5r5qNToYd5aRt6WykID9wapoDZ+sYpOsDQ
+ w2fGrSvvFyQbj3tTp/hXFf/HpTexJWhhWC7zCiaYVIZM+49vJcC5C5O9nR1BW6b2BQMf
+ VGYb6WEN18d6R37E62Sj2103N1RQguwGaZUTgrvt9fth3Rdw/pJFQyBAEwy3Bl7Qyfcn
+ 2Y89N51TdHUGtgB7SFekDIv+/ptuMtzt89DWXLtVWoCVPTqfZUlTrUuLA99JWH7+PTjt
+ dRDg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=esaPXHr8
+Subject: [Buildroot] [PATCH] package/mstpd: fix install path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +93,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Spenser Gilliland <spenser@gillilanding.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Encoding rate control interface for v8 is implemented in c++:
-https://github.com/webmproject/libvpx/commit/65a1751e5b98bf7f1d21bcbfdef352af34fb205d
-and was added to libvpx in v1.12.0 which was added to buildroot with
-https://git.busybox.net/buildroot/commit/?id=e4ff284ba88ea0cb41c190165cb42a174c5faa23
-
-Disable vp8 encoding when toolchain lacks c++.
-
-Fixes:
-http://autobuild.buildroot.net/results/a3524b954e53002973b423ce23b4c43ff5281ab5/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+note: the current configuration works only if BR2_ROOTFS_MERGED_USR is enabled
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libvpx/libvpx.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mstpd/mstpd.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index 1845f2bc5e..c8a22b9ab2 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
-@@ -21,11 +21,11 @@ LIBVPX_CONF_OPTS = \
- 	--disable-docs \
- 	--disable-unit-tests
+diff --git a/package/mstpd/mstpd.mk b/package/mstpd/mstpd.mk
+index 907d09424..22c91a639 100644
+--- a/package/mstpd/mstpd.mk
++++ b/package/mstpd/mstpd.mk
+@@ -10,4 +10,7 @@ MSTPD_AUTORECONF = YES
+ MSTPD_LICENSE = GPL-2.0, RSA Data Security (md5)
+ MSTPD_LICENSE_FILES = LICENSE hmac_md5.c
  
--# vp9/ratectrl_rtc.cc
-+# vp8/ratectrl_rtc.cc vp9/ratectrl_rtc.cc
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--LIBVPX_CONF_OPTS += --enable-vp9-encoder
-+LIBVPX_CONF_OPTS += --enable-vp8-encoder --enable-vp9-encoder
- else
--LIBVPX_CONF_OPTS += --disable-vp9-encoder
-+LIBVPX_CONF_OPTS += --disable-vp8-encoder --disable-vp9-encoder
- endif
- 
- # This is not a true autotools package.  It is based on the ffmpeg build system
++# mstpd requires that it is installed into /sbin, not /usr/sbin
++MSTPD_CONF_OPTS = --sbindir=/sbin
++
+ $(eval $(autotools-package))
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
