@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 720CFC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Jul 2022 08:09:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BF00C43334
+	for <buildroot@archiver.kernel.org>; Sun, 10 Jul 2022 08:49:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 034F660C33;
-	Sun, 10 Jul 2022 08:09:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 034F660C33
+	by smtp2.osuosl.org (Postfix) with ESMTP id D672B4060D;
+	Sun, 10 Jul 2022 08:49:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D672B4060D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ol5ySHHdPP3K; Sun, 10 Jul 2022 08:09:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N5CWLOrqfLtl; Sun, 10 Jul 2022 08:49:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D46260D60;
-	Sun, 10 Jul 2022 08:09:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D46260D60
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9440E1BF372
- for <buildroot@lists.busybox.net>; Sun, 10 Jul 2022 08:09:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DCDAB405DC;
+	Sun, 10 Jul 2022 08:49:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCDAB405DC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 55D821BF372
+ for <buildroot@lists.busybox.net>; Sun, 10 Jul 2022 08:49:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79BB541680
- for <buildroot@lists.busybox.net>; Sun, 10 Jul 2022 08:09:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79BB541680
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2FF41405DC
+ for <buildroot@lists.busybox.net>; Sun, 10 Jul 2022 08:49:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FF41405DC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XAcHKBCGnRAk for <buildroot@lists.busybox.net>;
- Sun, 10 Jul 2022 08:09:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mFyhmhIkcj4P for <buildroot@lists.busybox.net>;
+ Sun, 10 Jul 2022 08:49:34 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 178434160A
-Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 178434160A
- for <buildroot@buildroot.org>; Sun, 10 Jul 2022 08:09:48 +0000 (UTC)
-Received: from fwd87.dcpf.telekom.de (fwd87.aul.t-online.de [10.223.144.113])
- by mailout02.t-online.de (Postfix) with SMTP id 4B007373E
- for <buildroot@buildroot.org>; Sun, 10 Jul 2022 10:09:45 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.11.100]) by fwd87.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1oAS0Z-0fAf0T0; Sun, 10 Jul 2022 10:09:39 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54426)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1oAS0Z-0008BS-0R
- for buildroot@buildroot.org; Sun, 10 Jul 2022 10:09:39 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E595840327
+Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E595840327
+ for <buildroot@buildroot.org>; Sun, 10 Jul 2022 08:49:33 +0000 (UTC)
+X-Virus-Scanned: by amavisd-new using ClamAV (24)
+Received: from bartekk-pc.lan (unknown [78.8.136.46])
+ by server220076.nazwa.pl (Postfix) with ESMTP id 2A42E1BC26A;
+ Sun, 10 Jul 2022 10:49:30 +0200 (CEST)
+From: Bartosz Bilas <b.bilas@grinn-global.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Jul 2022 10:09:38 +0200
-Message-Id: <20220710080938.1318330-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Sun, 10 Jul 2022 10:49:28 +0200
+Message-Id: <20220710084928.537249-1-b.bilas@grinn-global.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1657440579-0142618F-BC11E818/0/0 CLEAN NORMAL
-X-TOI-MSGID: ba0c67ef-2035-4a84-8ef0-7724b83a5cf2
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 8.1.8
+Subject: [Buildroot] [PATCH] package/python-esptool: bump version to 4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,47 +57,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Bartosz Bilas <bartosz.bilas@hotmail.com>,
+ Bartosz Bilas <b.bilas@grinn-global.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.1.8
-
-Fixes CVE-2022-31627.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bartosz Bilas <bartosz.bilas@hotmail.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-esptool/python-esptool.hash | 4 ++--
+ package/python-esptool/python-esptool.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 996a0152a8..ce94383be5 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
+diff --git a/package/python-esptool/python-esptool.hash b/package/python-esptool/python-esptool.hash
+index 354955b2f3..4f19fbde41 100644
+--- a/package/python-esptool/python-esptool.hash
++++ b/package/python-esptool/python-esptool.hash
 @@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  f042322f1b5a9f7c2decb84b7086ef676896c2f7178739b9672afafa964ed0e5  php-8.1.7.tar.xz
-+sha256  04c065515bc347bc68e0bb1ac7182669a98a731e4a17727e5731650ad3d8de4c  php-8.1.8.tar.xz
- 
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 2bcc3fcfc3..cb7a8d71d4 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/esptool/json
+-md5  4e36d267401de7ef80ed84c141d8d41d  esptool-4.0.tar.gz
+-sha256  bf6ed90864a02da70fe20132ab589e892ec0af7437df9e0bc4844afd2fc2dac0  esptool-4.0.tar.gz
++md5  60bf3a49a794ff5627552f642f28ea3d  esptool-4.1.tar.gz
++sha256  51a41655187780cb802a5827fab68a3db0d6206330560459c55fcf0e222f277f  esptool-4.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/python-esptool/python-esptool.mk b/package/python-esptool/python-esptool.mk
+index de7669d057..51bc563c5c 100644
+--- a/package/python-esptool/python-esptool.mk
++++ b/package/python-esptool/python-esptool.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.1.7
-+PHP_VERSION = 8.1.8
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-PYTHON_ESPTOOL_VERSION = 4.0
++PYTHON_ESPTOOL_VERSION = 4.1
+ PYTHON_ESPTOOL_SOURCE = esptool-$(PYTHON_ESPTOOL_VERSION).tar.gz
+-PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/2d/91/76dac7a2c87172ee01e3e6e9ee17afb0b732065d49b476fef65c1ff8a386
++PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/bb/d5/9d000803520b68fd9f6447cd7c15352a79984196f57f0519839b0f80fb8f
+ PYTHON_ESPTOOL_SETUP_TYPE = setuptools
+ PYTHON_ESPTOOL_LICENSE = GPL-2.0+
+ PYTHON_ESPTOOL_LICENSE_FILES = LICENSE
 -- 
-2.30.2
+2.37.0
 
 _______________________________________________
 buildroot mailing list
