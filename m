@@ -1,57 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C399C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 07:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAB9CC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 10:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0775741634;
-	Mon, 11 Jul 2022 07:40:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0775741634
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A4008333F;
+	Mon, 11 Jul 2022 10:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A4008333F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C6NUqC4EzaCf; Mon, 11 Jul 2022 07:40:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9zpGbpu65mRu; Mon, 11 Jul 2022 10:44:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8ACBC415AB;
-	Mon, 11 Jul 2022 07:40:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ACBC415AB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0D7D61BF40F
- for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 07:40:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27A49832C9;
+	Mon, 11 Jul 2022 10:44:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27A49832C9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 97F6F1BF30C
+ for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 10:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DAE9A6072A
- for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 07:40:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAE9A6072A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 806B540385
+ for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 10:44:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 806B540385
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CzWzIRuZwO7v for <buildroot@lists.busybox.net>;
- Mon, 11 Jul 2022 07:40:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Zy4hcPYG0QLg for <buildroot@lists.busybox.net>;
+ Mon, 11 Jul 2022 10:44:11 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CCCE6060A
-Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6CCCE6060A
- for <buildroot@buildroot.org>; Mon, 11 Jul 2022 07:40:24 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (8)
-Received: from [192.168.65.245] (95.143.241.142.ultranet.net.pl
- [95.143.241.142])
- by server220076.nazwa.pl (Postfix) with ESMTP id 4E8361BC2AF;
- Mon, 11 Jul 2022 09:40:21 +0200 (CEST)
-Message-ID: <b7e3bad2-990b-659b-745e-bf75b8ad59d3@grinn-global.com>
-Date: Mon, 11 Jul 2022 09:40:21 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCD1C40A68
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CCD1C40A68
+ for <buildroot@buildroot.org>; Mon, 11 Jul 2022 10:44:07 +0000 (UTC)
+Received: from iago.. (ip5f5bf989.dynamic.kabel-deutschland.de [95.91.249.137])
+ by serv15.avernis.de (Postfix) with ESMTPSA id D7891BDE2082;
+ Mon, 11 Jul 2022 12:38:35 +0200 (CEST)
+From: Andreas Ziegler <br015@umbiko.net>
+To: buildroot@buildroot.org
+Date: Mon, 11 Jul 2022 12:38:14 +0200
+Message-Id: <20220711103814.19895-1-br015@umbiko.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220711053921.499C01BBBA2@server220076.nazwa.pl>
-From: =?UTF-8?Q?Bartosz_Bi=c5=82as?= <b.bilas@grinn-global.com>
-In-Reply-To: <20220711053921.499C01BBBA2@server220076.nazwa.pl>
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2022-07-10
+X-Virus-Scanned: clamav-milter 0.103.6 at serv15.avernis.de
+X-Virus-Status: Clean
+Subject: [Buildroot] [PATCH 1/1] package/mpd: update to version 0.23.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,187 +58,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============5449483262209165522=="
+Cc: Andreas Ziegler <br015@umbiko.net>,
+ =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
---===============5449483262209165522==
-Content-Type: multipart/alternative;
- boundary="------------2YvGPCNqDLlcsXUEpD0AM4h1"
-Content-Language: en-US
+Minor bug fixes and corrections; add fmt 9.0.0 support.
 
-This is a multi-part message in MIME format.
---------------2YvGPCNqDLlcsXUEpD0AM4h1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Full change log:
+  https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.8/NEWS
 
-Hello Thomas,
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 7/11/22 07:39, Thomas Petazzoni wrote:
-> Hello,
->
-> Outdated packages
-> =================
->
-> This is the list of packages for which a new version has been detected
-> and for which you are a registered developer. Please help us improving
-> the quality of Buildroot by bumping these packages to their latest
-> version.
->
->               name              | found by |        link to release-monitoring.org        |   version    |   upstream
-> -------------------------------+----------+----------------------------------------------+--------------+--------------
->                  python-esptool |  DISTRO  |https://release-monitoring.org/project/11619  | 4.0          | 4.1
-
-https://patchwork.ozlabs.org/project/buildroot/patch/20220710084928.537249-1-b.bilas@grinn-global.com/ 
-patch already sent.
-
-Best
-Bartek
->
-> Thanks for your contribution to Buildroot!
->
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 353df25b39..e5f587fefc 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  960dcbac717c388f5dcc4fd945e3af19a476f2b15f367e9653d4c7a948768211  mpd-0.23.7.tar.xz
++sha256  86bb569bf3b519821f36f6bb5564e484e85d2564411b34b200fe2cd3a04e78cf  mpd-0.23.8.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 20c8f77fa8..e265a9fc4f 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.23
+-MPD_VERSION = $(MPD_VERSION_MAJOR).7
++MPD_VERSION = $(MPD_VERSION_MAJOR).8
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost fmt
 -- 
-*BARTOSZ BIŁAS*
-Embedded Software Developer 	GRINN
-
-TEL.+48 71 716 40 99
-WEB. grinn-global.com
-	Grinn sp. z o.o.
-Strzegomska 140a
-54-429 Wrocław
-	KRS:0000230049
-NIP:8992730302
-REGON:020047322 	Sąd Rejonowy we Wrocławiu
-VI Wydział Gospodarczy
-Kapitał zakładowy: 125.000,00 zł
-
-
---------------2YvGPCNqDLlcsXUEpD0AM4h1
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  </head>
-  <body>
-    <p>Hello Thomas,<br>
-    </p>
-    <div class="moz-cite-prefix">On 7/11/22 07:39, Thomas Petazzoni
-      wrote:<br>
-    </div>
-    <blockquote type="cite"
-      cite="mid:20220711053921.499C01BBBA2@server220076.nazwa.pl">
-      <pre class="moz-quote-pre" wrap="">Hello,
-
-Outdated packages
-=================
-
-This is the list of packages for which a new version has been detected
-and for which you are a registered developer. Please help us improving
-the quality of Buildroot by bumping these packages to their latest
-version.
-
-             name              | found by |        link to release-monitoring.org        |   version    |   upstream  
--------------------------------+----------+----------------------------------------------+--------------+--------------
-                python-esptool |  DISTRO  | <a class="moz-txt-link-freetext" href="https://release-monitoring.org/project/11619">https://release-monitoring.org/project/11619</a> | 4.0          | 4.1         </pre>
-    </blockquote>
-    <p><a class="moz-txt-link-freetext" href="https://patchwork.ozlabs.org/project/buildroot/patch/20220710084928.537249-1-b.bilas@grinn-global.com/">https://patchwork.ozlabs.org/project/buildroot/patch/20220710084928.537249-1-b.bilas@grinn-global.com/</a>
-      patch already sent.</p>
-    Best<br>
-    Bartek<br>
-    <blockquote type="cite"
-      cite="mid:20220711053921.499C01BBBA2@server220076.nazwa.pl">
-      <pre class="moz-quote-pre" wrap="">
-
-Thanks for your contribution to Buildroot!
-
-</pre>
-    </blockquote>
-    <div class="moz-signature">-- <br>
-      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-      <title></title>
-      <table width="800" height="115" cellspacing="2" cellpadding="2"
-        border="0">
-        <tbody>
-          <tr>
-            <td rowspan="1" colspan="4" valign="top"><font size="+1"
-                face="Arial"><b>BARTOSZ BIŁAS</b></font><font size="+1"
-                face="Arial"><br>
-              </font></td>
-          </tr>
-          <tr>
-            <td width="250" valign="top"><font face="Arial">Embedded
-                Software Developer</font></td>
-            <td rowspan="1" colspan="3" style="border-left-color:
-              rgb(182, 193, 52); border-left-width: 2px;
-              border-left-style: solid;" valign="top"><font face="Arial">GRINN
-              </font></td>
-          </tr>
-          <tr>
-            <td rowspan="1" colspan="4" valign="top"> <br>
-            </td>
-          </tr>
-          <tr>
-            <td style="border-left-width: 2px; border-left-style: solid;
-              border-left-color: rgb(182, 193, 52);" valign="top"> <font
-                size="-1" face="Arial" color="#b6c134">TEL.</font><font
-                size="-1" face="Arial"> +48 71 716 40 99<br>
-                <font color="#b6c134">WEB.</font> grinn-global.com<br>
-              </font></td>
-            <td style="border-left-style: solid; border-left-color:
-              rgb(182, 193, 52); border-left-width: 2px;" valign="top"><font
-                size="-1" face="Arial">Grinn sp. z o.o.<br>
-              </font><font size="-1" face="Arial">Strzegomska 140a<br>
-                54-429 Wrocław</font><font size="-1" face="Arial"><br>
-              </font></td>
-            <td style="border-left-style: solid; border-left-width: 2px;
-              border-left-color: rgb(182, 193, 52);" valign="top"><font
-                style="font-style: normal; font-variant-ligatures:
-                normal; font-variant-caps: normal; font-weight: 400;
-                letter-spacing: normal; text-align: start; text-indent:
-                0px; text-transform: none; white-space: normal;
-                word-spacing: 0px; -webkit-text-stroke-width: 0px;
-                background-color: rgb(255, 255, 255);
-                text-decoration-style: initial; text-decoration-color:
-                initial;" size="-1" face="Arial" color="#b6c134">KRS:</font><font
-                style="color: rgb(0, 0, 0); font-style: normal;
-                font-variant-ligatures: normal; font-variant-caps:
-                normal; font-weight: 400; letter-spacing: normal;
-                text-align: start; text-indent: 0px; text-transform:
-                none; white-space: normal; word-spacing: 0px;
-                -webkit-text-stroke-width: 0px; background-color:
-                rgb(255, 255, 255); text-decoration-style: initial;
-                text-decoration-color: initial;" size="-1" face="Arial"><span> </span>0000230049<br>
-                <font color="#b6c134">NIP:</font><span> </span>8992730302<br>
-                <font color="#b6c134">REGON:</font><span> </span>020047322</font></td>
-            <td style="border-left-color: rgb(182, 193, 52);
-              border-left-style: solid; border-left-width: 2px;"
-              valign="top"><font size="-1" face="Arial">Sąd Rejonowy we
-                Wrocławiu<br>
-                VI Wydział Gospodarczy<br>
-                Kapitał zakładowy: 125.000,00 zł</font></td>
-          </tr>
-        </tbody>
-      </table>
-      <br>
-    </div>
-  </body>
-</html>
-
---------------2YvGPCNqDLlcsXUEpD0AM4h1--
-
---===============5449483262209165522==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5449483262209165522==--
