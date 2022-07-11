@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4751CCA47B
-	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 17:30:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FE0DC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 17:30:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5BBAC4059C;
-	Mon, 11 Jul 2022 17:30:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BBAC4059C
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEE45417C4;
+	Mon, 11 Jul 2022 17:30:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEE45417C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kGDrOgFDje3Q; Mon, 11 Jul 2022 17:30:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nPWn2Xv8kdlo; Mon, 11 Jul 2022 17:30:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 62128409E2;
-	Mon, 11 Jul 2022 17:30:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62128409E2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 17DF51BF31D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73A2D417A9;
+	Mon, 11 Jul 2022 17:30:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73A2D417A9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 322911BF983
  for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 39DC682FE4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F2A140926
  for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39DC682FE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F2A140926
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CRlJME46MmNY for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y0OjkUHCArO6 for <buildroot@lists.busybox.net>;
  Mon, 11 Jul 2022 17:28:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B0A88294A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6BF1240948
  for <buildroot@buildroot.org>; Mon, 11 Jul 2022 17:28:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B0A88294A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BF1240948
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9EA4283746; Mon, 11 Jul 2022 17:14:57 +0000 (UTC)
+ id 8F2A183747; Mon, 11 Jul 2022 17:14:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Jul 2022 19:13:24 +0200
+Date: Mon, 11 Jul 2022 19:13:07 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 6a4f95cc52766359c5360ec2199ddcdc3e1b0a54
-X-Git-Newrev: c0091eb3cb0b4fc881e878a0c1f8aa780769b3cf
+X-Git-Oldrev: c29ad301f58dbfef0de69037ec017f4b65e08790
+X-Git-Newrev: 6a4f95cc52766359c5360ec2199ddcdc3e1b0a54
 X-Patchwork-Hint: ignore
-Message-Id: <20220711171457.9EA4283746@busybox.osuosl.org>
+Message-Id: <20220711171457.8F2A183747@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.05.x]
- support/scripts/gen-bootlin-toolchains: drop "mips64" architecture variant
+ support/scripts/gen-bootlin-toolchains: check that toolchains exists for a
+ certain arch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +64,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0091eb3cb0b4fc881e878a0c1f8aa780769b3cf
+commit: https://git.buildroot.net/buildroot/commit/?id=6a4f95cc52766359c5360ec2199ddcdc3e1b0a54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-These toolchains have been marked obsolete by toolchains.bootlin.com
-as they are replaced by the mips64-n32 toolchains. See commit:
+The "arches" dict lists the architectures for which Bootlin toolchains
+are available, along with the corresponding Buildroot conditions for
+those architecture variants.
 
-  https://github.com/bootlin/toolchains-builder/commit/121e78806b4968858f22ebea317767883752a456
+However, there is nothing that checks that such architectures really
+have Bootlin toolchains available. Even if no toolchain is available,
+the architecture is considered as support, and will be listed in the
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS option, making menuconfig
+believe that some Bootlin toolchain is available for the selected
+architecture variant.
 
-Will allow to fix:
+This is currently the case with the "mips64" architecture (as
+identified by the Bootlin toolchains project). Such toolchains have
+been made obsolete in toolchains.bootlin.com and replaced by the
+mips64-n32 toolchains. But "mips64" is still listed in "arches",
+causing this architecture to be considered as having Bootlin
+toolchains available.
 
-  http://autobuild.buildroot.net/results/d13b35ba5a0f68f72e6592bdd9218b625a3c6554/
+To avoid this to happen in the future, this commit adds a check that
+verifies that an architecture listed in "arches" really has at least
+one toolchain available.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit db37e75aa3e9adf4cf2745682a5d29d246d88880)
+(cherry picked from commit 3c11e6f3c8de5482ddb36809b129179022f520a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/gen-bootlin-toolchains | 5 -----
- 1 file changed, 5 deletions(-)
+ support/scripts/gen-bootlin-toolchains | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index 36727c8fea..5e1e315f6d 100755
+index ad65f9fe5e..36727c8fea 100755
 --- a/support/scripts/gen-bootlin-toolchains
 +++ b/support/scripts/gen-bootlin-toolchains
-@@ -99,11 +99,6 @@ arches = {
-         'conditions': ['BR2_mipsel', 'BR2_mips_32r6', '!BR2_MIPS_SOFT_FLOAT'],
-         'prefix': 'mipsel',
-     },
--    'mips64': {
--        # Not sure it could be used by other mips64 variants?
--        'conditions': ['BR2_mips64', 'BR2_mips_64', '!BR2_MIPS_SOFT_FLOAT'],
--        'prefix': 'mips64',
--    },
-     'mips64-n32': {
-         # Not sure it could be used by other mips64 variants?
-         'conditions': ['BR2_mips64', 'BR2_mips_64', 'BR2_MIPS_NABI32', '!BR2_MIPS_SOFT_FLOAT'],
+@@ -4,6 +4,7 @@ import os.path
+ import re
+ import requests
+ import textwrap
++import sys
+ 
+ BASE_URL = "https://toolchains.bootlin.com/downloads/releases/toolchains"
+ 
+@@ -483,6 +484,10 @@ def get_toolchains():
+                 version = parts[2][len("bleeding-edge-"):]
+             tmp[(arch, libc, variant)] = version
+ 
++        if len(tmp) == 0:
++            print("ERROR: no toolchains found for architecture %s" % arch)
++            sys.exit(1)
++
+         toolchains += [Toolchain(k[0], k[1], k[2], v) for k, v in tmp.items()]
+ 
+     return toolchains
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
