@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C519C43334
-	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 17:34:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 735E6C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 17:34:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 42AD283455;
-	Mon, 11 Jul 2022 17:34:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42AD283455
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F1A460F4E;
+	Mon, 11 Jul 2022 17:34:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F1A460F4E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3-9A9-3EseDX; Mon, 11 Jul 2022 17:34:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jNSsLuB-rHQH; Mon, 11 Jul 2022 17:34:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B54C833C6;
-	Mon, 11 Jul 2022 17:34:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B54C833C6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37AF060758;
+	Mon, 11 Jul 2022 17:34:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37AF060758
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CF8B81BF31D
- for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E06AA1BF31D
+ for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73C1660F42
+ by smtp3.osuosl.org (Postfix) with ESMTP id 839D760F49
  for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73C1660F42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 839D760F49
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id au9s1RDr5P8s for <buildroot@lists.busybox.net>;
+ with ESMTP id 1ODz82PhL3eh for <buildroot@lists.busybox.net>;
  Mon, 11 Jul 2022 17:28:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1DC8360F46
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D30A60F4A
  for <buildroot@buildroot.org>; Mon, 11 Jul 2022 17:28:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DC8360F46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D30A60F4A
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 50C83837E8; Mon, 11 Jul 2022 17:15:17 +0000 (UTC)
+ id 6CAE7837ED; Mon, 11 Jul 2022 17:15:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Jul 2022 19:11:59 +0200
+Date: Mon, 11 Jul 2022 19:13:58 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0c20ce05407df5aa547acca1ed155a7a3749d8e9
-X-Git-Newrev: cedc23e7835c473787e03e2c9a35208878ff730c
+X-Git-Oldrev: a9a3971550361f7cb8871800fcff52dfa8bfa0b9
+X-Git-Newrev: ae98c1c7c558596a4fbd09445eeb7a7544ac7c34
 X-Patchwork-Hint: ignore
-Message-Id: <20220711171517.50C83837E8@busybox.osuosl.org>
+Message-Id: <20220711171517.6CAE7837ED@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.02.x]
- toolchain/toolchain-external: add BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- option
+ support/scripts/gen-bootlin-toolchains: drop "mips64" architecture variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,79 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cedc23e7835c473787e03e2c9a35208878ff730c
+commit: https://git.buildroot.net/buildroot/commit/?id=ae98c1c7c558596a4fbd09445eeb7a7544ac7c34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Some external toolchains do not have gdbserver available, but the
-option BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is always visible. And
-when enabled, this option aborts with an error when gdbserver cannot
-be found:
+These toolchains have been marked obsolete by toolchains.bootlin.com
+as they are replaced by the mips64-n32 toolchains. See commit:
 
-  Could not find gdbserver in external toolchain
+  https://github.com/bootlin/toolchains-builder/commit/121e78806b4968858f22ebea317767883752a456
 
-Due to that, some random configurations fail to build when
-BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y, for example with the Bootlin
-toolchains for Microblaze or OpenRISC (because there's no GDB support
-for those architectures).
+Will allow to fix:
 
-One solution could be to make "Could not find gdbserver in external
-toolchain" a warning instead of a hard error, but then nobody would
-notice about this issue, in cases where it should legitimately abort
-with a hard error.
-
-So, the clean solution would be to add a
-BR2_TOOLCHAIN_EXTERNAL_HAS_GDBSERVER. But that means all existing
-external toolchains would have to be modified to select this option.
-
-Instead, and as an exception, we chose to use inverted logic, and
-create an option that is the opposite:
-BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER. By default, we assume
-external toolchains have gdbserver. If
-BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER is enabled, we disallow the
-BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY option.
-
-Note that the case of custom external toolchain does not matter: by
-definition they are not tested by the autobuilders, and by definition,
-we cannot know in menuconfig if the custom toolchain has or does not
-have gdbserver. We could make a user-visible option for it, but that
-adds no value over simply erroring out because the gdbserver binary
-can't be found.
-
-Similarly, we could add
-default y if BR2_PACKAGE_GDB_ARCH_SUPPORTS
-but that would make it impossible for someone to include a custom
-gdbserver in their external toolchain, and gives no benefit at all.
-
-This will help fixing:
-
-  http://autobuild.buildroot.net/results/6315ef7b66ee4ae8f870c92186bc674d65f62f2c/
+  http://autobuild.buildroot.net/results/d13b35ba5a0f68f72e6592bdd9218b625a3c6554/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 80a24d0965c543a7e32d338bd42c4ab10b71ae81)
+(cherry picked from commit db37e75aa3e9adf4cf2745682a5d29d246d88880)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ support/scripts/gen-bootlin-toolchains | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 2177e6a678..1a67e5645f 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -155,9 +155,13 @@ source "toolchain/toolchain-external/toolchain-external-bootlin/Config.in.option
- # Custom toolchains
- source "toolchain/toolchain-external/toolchain-external-custom/Config.in.options"
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
-+	bool
-+
- config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
- 	bool "Copy gdb server to the Target"
- 	depends on BR2_TOOLCHAIN_EXTERNAL
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	help
- 	  Copy the gdbserver provided by the external toolchain to the
- 	  target.
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index 5ed6c1111a..60154abe90 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -99,11 +99,6 @@ arches = {
+         'conditions': ['BR2_mipsel', 'BR2_mips_32r6', '!BR2_MIPS_SOFT_FLOAT'],
+         'prefix': 'mipsel',
+     },
+-    'mips64': {
+-        # Not sure it could be used by other mips64 variants?
+-        'conditions': ['BR2_mips64', 'BR2_mips_64', '!BR2_MIPS_SOFT_FLOAT'],
+-        'prefix': 'mips64',
+-    },
+     'mips64-n32': {
+         # Not sure it could be used by other mips64 variants?
+         'conditions': ['BR2_mips64', 'BR2_mips_64', 'BR2_MIPS_NABI32', '!BR2_MIPS_SOFT_FLOAT'],
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
