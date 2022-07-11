@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03606C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 17:31:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24B46C43334
+	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 17:32:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A129F83337;
-	Mon, 11 Jul 2022 17:31:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A129F83337
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAE1C417CE;
+	Mon, 11 Jul 2022 17:32:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAE1C417CE
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y6ByvDhTyzQj; Mon, 11 Jul 2022 17:32:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 731A3417C9;
+	Mon, 11 Jul 2022 17:32:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 731A3417C9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 032231BF31D
+ for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7B0E8294A
+ for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7B0E8294A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RBAE_BVEZdEf; Mon, 11 Jul 2022 17:31:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 410EF8332A;
-	Mon, 11 Jul 2022 17:31:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 410EF8332A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A9E4D1BF983
- for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 84E8B60F56
- for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84E8B60F56
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QnDC1M5LFltF for <buildroot@lists.busybox.net>;
- Mon, 11 Jul 2022 17:28:26 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hA_XJRVqXIdG for <buildroot@lists.busybox.net>;
+ Mon, 11 Jul 2022 17:28:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB6E660F31
+ by smtp1.osuosl.org (Postfix) with ESMTP id E3337830A8
  for <buildroot@buildroot.org>; Mon, 11 Jul 2022 17:28:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB6E660F31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3337830A8
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F0040837E8; Mon, 11 Jul 2022 17:15:16 +0000 (UTC)
+ id 10AF0837E6; Mon, 11 Jul 2022 17:15:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Jul 2022 19:09:58 +0200
+Date: Mon, 11 Jul 2022 19:09:59 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 197fa0f944b2d59b5d22485065cc9ca110d88f96
-X-Git-Newrev: ec13f64b46060d6fe712a93adfefb032c2ec09fe
+X-Git-Oldrev: 4cb1662a9a85ba76362b1dad1528d5bf8921f9e1
+X-Git-Newrev: aecfe0ed3429850477a1267ab49bb50f55b7d5f3
 X-Patchwork-Hint: ignore
-Message-Id: <20220711171516.F0040837E8@busybox.osuosl.org>
+Message-Id: <20220711171517.10AF0837E6@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.02.x]
- support/scripts/gen-bootlin-toolchains: properly take into account
- !BR2_STATIC_LIBS for glibc toolchains
+ support/scripts/gen-bootlin-toolchains: fix RISC-V 64-bit toolchain
+ description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,47 +64,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec13f64b46060d6fe712a93adfefb032c2ec09fe
+commit: https://git.buildroot.net/buildroot/commit/?id=aecfe0ed3429850477a1267ab49bb50f55b7d5f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-The Config.in options created for each toolchain were properly taking
-into account the !BR2_STATIC_LIBS dependency of glibc
-toolchains. However, this dependency was not taken into account into
-the main BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
-option. Consequently, if an architecture is only supported by glibc,
-but BR2_STATIC_LIBS is enabled, the main "Bootlin toolchain" option
-was visible... but with no selectable toolchain.
+We now support both MMU-enabled and MMU-less RISC-V 64-bit
+configurations. However, the Bootlin toolchain for RISC-V 64-bit only
+supports MMU-enabled configurations, but the current logic in
+toolchain/toolchain-external/toolchain-external-bootlin/ does not take
+this into account, and allows selecting the Booltin toolchain for
+MMU-less RISC-V 64-bit configurations.
 
-We fix this by making sure that
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS is only true for all
-architectures supported, taking into account the fact that some
-architectures can only be supported if !BR2_STATIC_LIBS, when the only
-available C library is glibc.
+To fix this, the gen-bootlin-toolchains script is modified to add the
+BR2_USE_MMU dependency to the description of the RISC-V 64-bit
+toolchain.
+
+However, the BR2_USE_MMU dependency was also added for glibc and musl
+toolchains unconditionally, so to avoid duplicating the dependency, we
+now only add it only if not already present in the list of
+dependencies for this toolchain.
+
+This will allow to fix:
+
+  http://autobuild.buildroot.net/results/d6aee9b275b1ec399aea59758ac8f69fdc5691fc/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit fc63ec92928909d34c121817f0aa24d77412667e)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 1f4bba5967f793add3bfd051c96926224b73eebd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/gen-bootlin-toolchains | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ support/scripts/gen-bootlin-toolchains | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index dc173fa949..404f14831e 100755
+index 404f14831e..9a81f0ac0c 100755
 --- a/support/scripts/gen-bootlin-toolchains
 +++ b/support/scripts/gen-bootlin-toolchains
-@@ -478,7 +478,10 @@ def gen_config_in_options(toolchains, fpath):
-         f.write("config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS\n")
-         f.write("\tbool\n")
-         for arch, details in arches.items():
--            f.write("\tdefault y if %s\n" % " && ".join(details['conditions']))
-+            conditions = details['conditions'].copy()
-+            if set([t.libc for t in toolchains if t.arch == arch]) == set(['glibc']):
-+                conditions.append("!BR2_STATIC_LIBS")
-+            f.write("\tdefault y if %s\n" % " && ".join(conditions))
-         f.write("\n")
+@@ -159,7 +159,7 @@ arches = {
+         'prefix': 'riscv32',
+     },
+     'riscv64-lp64d': {
+-        'conditions': ['BR2_riscv', 'BR2_riscv_g', 'BR2_RISCV_64', 'BR2_RISCV_ABI_LP64D'],
++        'conditions': ['BR2_riscv', 'BR2_riscv_g', 'BR2_RISCV_64', 'BR2_RISCV_ABI_LP64D', 'BR2_USE_MMU'],
+         'prefix': 'riscv64',
+     },
+     'sh-sh4': {
+@@ -308,13 +308,15 @@ class Toolchain:
+                 selects.append("BR2_TOOLCHAIN_EXTERNAL_UCLIBC")
+             elif frag.startswith("BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC"):
+                 # glibc needs mmu support
+-                depends.append("BR2_USE_MMU")
++                if "BR2_USE_MMU" not in depends:
++                    depends.append("BR2_USE_MMU")
+                 # glibc doesn't support static only configuration
+                 depends.append("!BR2_STATIC_LIBS")
+                 selects.append("BR2_TOOLCHAIN_EXTERNAL_GLIBC")
+             elif frag.startswith("BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL"):
+                 # musl needs mmu support
+-                depends.append("BR2_USE_MMU")
++                if "BR2_USE_MMU" not in depends:
++                    depends.append("BR2_USE_MMU")
+                 selects.append("BR2_TOOLCHAIN_EXTERNAL_MUSL")
  
-         f.write("if BR2_TOOLCHAIN_EXTERNAL_BOOTLIN\n\n")
+             # gcc version
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
