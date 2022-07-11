@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0F14C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 06:49:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D13E0C43334
+	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 06:49:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5219160EBC;
-	Mon, 11 Jul 2022 06:49:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5219160EBC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68F9F60EB1;
+	Mon, 11 Jul 2022 06:49:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68F9F60EB1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ahrS7AWL52M4; Mon, 11 Jul 2022 06:49:38 +0000 (UTC)
+	with ESMTP id 3xKLjCB9gMZi; Mon, 11 Jul 2022 06:49:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F55460EB7;
-	Mon, 11 Jul 2022 06:49:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F55460EB7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 775A61BF41C
- for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 06:48:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5221660EAA;
+	Mon, 11 Jul 2022 06:49:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5221660EAA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 46C381BF9A3
+ for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 06:48:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 51DE8405BA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 206E7826E5
  for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 06:48:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51DE8405BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 206E7826E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D3tlZ9I26gwa for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JcuXKYk6nRB5 for <buildroot@lists.busybox.net>;
  Mon, 11 Jul 2022 06:48:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 768FD404DF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C6A780BDE
  for <buildroot@buildroot.org>; Mon, 11 Jul 2022 06:48:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 768FD404DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C6A780BDE
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9DCB283669; Mon, 11 Jul 2022 06:35:46 +0000 (UTC)
+ id 7F8C58366C; Mon, 11 Jul 2022 06:35:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Jul 2022 08:46:52 +0200
+Date: Mon, 11 Jul 2022 08:45:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c38ea2e43a90b7cc5e0c6ab6c3c44513f94ff2e3
-X-Git-Newrev: 274dd1db3c92e30d2dd12e08a38a981440003b0f
+X-Git-Oldrev: e2418feca7829c6af77d38cd59538ec46af0d72e
+X-Git-Newrev: 16e2b05ff1b293ece8210d1ee6bac2af0208f039
 X-Patchwork-Hint: ignore
-Message-Id: <20220711063546.9DCB283669@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-crypt-openssl-rsa: bump
- version to 0.33
+Message-Id: <20220711063546.7F8C58366C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pipewire: bump version to 0.3.54
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +62,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=274dd1db3c92e30d2dd12e08a38a981440003b0f
+commit: https://git.buildroot.net/buildroot/commit/?id=16e2b05ff1b293ece8210d1ee6bac2af0208f039
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed md5 hash, reformatted license hash.
-
 Changelog:
-https://github.com/toddr/Crypt-OpenSSL-RSA/blob/master/Changes
-
-This bump fixes a build error with LibreSSL 3.5.
-
-Fixes:
-http://autobuild.buildroot.net/results/6625daef1a9d44b9925aecd6e98e3a59bc2ce8f4/
+https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash | 7 +++----
- package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/pipewire/pipewire.hash | 2 +-
+ package/pipewire/pipewire.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
-index fe2a578583..946f879c21 100644
---- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
-+++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
-@@ -1,6 +1,5 @@
--# retrieved by scancpan from http://cpan.metacpan.org/
--md5    d33681e19d2094df7c26bc7a4509265e Crypt-OpenSSL-RSA-0.31.tar.gz
--sha256 4173403ad4cf76732192099f833fbfbf3cd8104e0246b3844187ae384d2c5436 Crypt-OpenSSL-RSA-0.31.tar.gz
-+# From https://cpan.metacpan.org/authors/id/T/TO/TODDR/CHECKSUMS
-+sha256  bdbe630f6d6f540325746ad99977272ac8664ff81bd19f0adaba6d6f45efd864  Crypt-OpenSSL-RSA-0.33.tar.gz
- 
- # computed by scancpan
--sha256 8a693ad3f52daeeb5ac5deceb1e1109c9c87095ed5ba6506d6d5c106e4066f5a LICENSE
-+sha256  8a693ad3f52daeeb5ac5deceb1e1109c9c87095ed5ba6506d6d5c106e4066f5a  LICENSE
-diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-index 23fd1ac381..e1bfd6a76d 100644
---- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-+++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 9de0ac0421..a525c1b212 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  f7fdc30b8c6eba1d7a5740d0e493ed079336037cfd88e71ab04eb92416c0ab8c  pipewire-0.3.53.tar.bz2
++sha256  7b47d3a0c3ff2abf9551be6b35cdb4baafbd328290b05dbba2075a6d8cf14b89  pipewire-0.3.54.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index 464929f38d..bdf99e5789 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_CRYPT_OPENSSL_RSA_VERSION = 0.31
-+PERL_CRYPT_OPENSSL_RSA_VERSION = 0.33
- PERL_CRYPT_OPENSSL_RSA_SOURCE = Crypt-OpenSSL-RSA-$(PERL_CRYPT_OPENSSL_RSA_VERSION).tar.gz
- PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
- PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = \
+-PIPEWIRE_VERSION = 0.3.53
++PIPEWIRE_VERSION = 0.3.54
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
