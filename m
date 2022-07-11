@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92115C43334
-	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 17:29:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 873D5C43334
+	for <buildroot@archiver.kernel.org>; Mon, 11 Jul 2022 17:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B1B2417AE;
-	Mon, 11 Jul 2022 17:29:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B1B2417AE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2641160F49;
+	Mon, 11 Jul 2022 17:30:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2641160F49
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FwnHMsQR-bHu; Mon, 11 Jul 2022 17:30:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2A1360F3C;
+	Mon, 11 Jul 2022 17:30:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2A1360F3C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 032011BF31D
+ for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50A6040922
+ for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50A6040922
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FprjPaRvv9QL; Mon, 11 Jul 2022 17:29:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D52814091E;
-	Mon, 11 Jul 2022 17:29:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D52814091E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 476C81BF983
- for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2030340488
- for <buildroot@lists.busybox.net>; Mon, 11 Jul 2022 17:28:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2030340488
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rt3AKm-ycsPC for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lKUxoXwKiOSI for <buildroot@lists.busybox.net>;
  Mon, 11 Jul 2022 17:28:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5C5B0405D9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0631C40926
  for <buildroot@buildroot.org>; Mon, 11 Jul 2022 17:28:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C5B0405D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0631C40926
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8065A83748; Mon, 11 Jul 2022 17:14:57 +0000 (UTC)
+ id 34D6F83748; Mon, 11 Jul 2022 17:14:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Jul 2022 19:12:13 +0200
+Date: Mon, 11 Jul 2022 19:10:43 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: d398d4e59a3eaa201b2e51a4fa290fb929b22aeb
-X-Git-Newrev: c29ad301f58dbfef0de69037ec017f4b65e08790
+X-Git-Oldrev: 9038e5d1c8203b222e5d768fcbb6d1e417bb0e0f
+X-Git-Newrev: 0e9ee998737b8d18488651ab92957feac8a814ee
 X-Patchwork-Hint: ignore
-Message-Id: <20220711171457.8065A83748@busybox.osuosl.org>
+Message-Id: <20220711171457.34D6F83748@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.05.x]
- support/scripts/gen-bootlin-toolchains: make use of
- BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
+ toolchain/toolchain-external/toolchain-external-bootlin: regenerate with
+ BR2_ARM dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,59 +64,204 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c29ad301f58dbfef0de69037ec017f4b65e08790
+commit: https://git.buildroot.net/buildroot/commit/?id=0e9ee998737b8d18488651ab92957feac8a814ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-The microblazeel, microblazebe and openrisc toolchains need to select
-this option as they don't have any gdb/gdbserver.
+This commit regenerates the toolchain-external-bootlin Config.in file
+after the ARM toolchain description was modified to make sure they
+only match the ARM little endian configurations.
 
-Helps in fixing:
+Fixes:
 
-  http://autobuild.buildroot.net/results/6315ef7b66ee4ae8f870c92186bc674d65f62f2c/
+  http://autobuild.buildroot.net/results/7befbb686bb972016ba4e742976dcdb3fed1be11/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit a5599d727e542d065784090830efaf99f1677df7)
+(cherry picked from commit b079f584c0cc33c57b1b1a12b8b8eb1fe47d0b98)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/gen-bootlin-toolchains | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../toolchain-external-bootlin/Config.in.options   | 28 ++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index c96a388f84..ad65f9fe5e 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -73,10 +73,12 @@ arches = {
-     'microblazebe': {
-         'conditions': ['BR2_microblazebe'],
-         'prefix': 'microblaze',
-+        'gdbserver': False
-     },
-     'microblazeel': {
-         'conditions': ['BR2_microblazeel'],
-         'prefix': 'microblazeel',
-+        'gdbserver': False
-     },
-     'mips32': {
-         # Not sure it could be used by other mips32 variants?
-@@ -122,6 +124,7 @@ arches = {
-     'openrisc': {
-         'conditions': ['BR2_or1k'],
-         'prefix': 'or1k',
-+        'gdbserver': False,
-     },
-     'powerpc-440fp': {
-         # Not sure it could be used by other powerpc variants?
-@@ -311,6 +314,9 @@ class Toolchain:
-         for c in arches[self.arch]['conditions']:
-             depends.append(c)
+diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+index 7b65dc4893..825556a5da 100644
+--- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+@@ -6,10 +6,10 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
+ 	default y if BR2_aarch64_be
+ 	default y if BR2_arcle && BR2_arc750d
+ 	default y if BR2_arcle && BR2_archs38
+-	default y if BR2_ARM_CPU_ARMV5 && BR2_ARM_EABI
+-	default y if BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF
+-	default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF
+-	default y if BR2_ARM_CPU_ARMV7M
++	default y if BR2_arm && BR2_ARM_CPU_ARMV5 && BR2_ARM_EABI
++	default y if BR2_arm && BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF
++	default y if BR2_arm && BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF
++	default y if BR2_arm && BR2_ARM_CPU_ARMV7M
+ 	default y if BR2_m68k_m68k
+ 	default y if BR2_m68k_cf
+ 	default y if BR2_microblazebe
+@@ -438,6 +438,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCLE_HS38_UCLIBC_STABLE
  
-+        if not arches[self.arch].get('gdbserver', True):
-+            selects.append("BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER")
-+
-         for frag in self.fragment:
-             # libc type
-             if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC"):
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_BLEEDING_EDGE
+ 	bool "armv5-eabi glibc bleeding-edge 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV5
+ 	depends on BR2_ARM_EABI
+ 	depends on BR2_USE_MMU
+@@ -463,6 +464,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_BLEEDING_EDGE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE
+ 	bool "armv5-eabi glibc stable 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV5
+ 	depends on BR2_ARM_EABI
+ 	depends on BR2_USE_MMU
+@@ -488,6 +490,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_MUSL_BLEEDING_EDGE
+ 	bool "armv5-eabi musl bleeding-edge 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV5
+ 	depends on BR2_ARM_EABI
+ 	depends on BR2_USE_MMU
+@@ -512,6 +515,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_MUSL_BLEEDING_EDGE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_MUSL_STABLE
+ 	bool "armv5-eabi musl stable 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV5
+ 	depends on BR2_ARM_EABI
+ 	depends on BR2_USE_MMU
+@@ -536,6 +540,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_MUSL_STABLE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_UCLIBC_BLEEDING_EDGE
+ 	bool "armv5-eabi uclibc bleeding-edge 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV5
+ 	depends on BR2_ARM_EABI
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+@@ -560,6 +565,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_UCLIBC_BLEEDING_EDGE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_UCLIBC_STABLE
+ 	bool "armv5-eabi uclibc stable 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV5
+ 	depends on BR2_ARM_EABI
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+@@ -584,6 +590,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_UCLIBC_STABLE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_GLIBC_BLEEDING_EDGE
+ 	bool "armv6-eabihf glibc bleeding-edge 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV6
+ 	depends on BR2_ARM_EABIHF
+ 	depends on BR2_USE_MMU
+@@ -609,6 +616,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_GLIBC_BLEEDING_EDGE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_GLIBC_STABLE
+ 	bool "armv6-eabihf glibc stable 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV6
+ 	depends on BR2_ARM_EABIHF
+ 	depends on BR2_USE_MMU
+@@ -634,6 +642,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_GLIBC_STABLE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_MUSL_BLEEDING_EDGE
+ 	bool "armv6-eabihf musl bleeding-edge 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV6
+ 	depends on BR2_ARM_EABIHF
+ 	depends on BR2_USE_MMU
+@@ -658,6 +667,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_MUSL_BLEEDING_EDGE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_MUSL_STABLE
+ 	bool "armv6-eabihf musl stable 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV6
+ 	depends on BR2_ARM_EABIHF
+ 	depends on BR2_USE_MMU
+@@ -682,6 +692,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_MUSL_STABLE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_UCLIBC_BLEEDING_EDGE
+ 	bool "armv6-eabihf uclibc bleeding-edge 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV6
+ 	depends on BR2_ARM_EABIHF
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+@@ -706,6 +717,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_UCLIBC_BLEEDING_EDGE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_UCLIBC_STABLE
+ 	bool "armv6-eabihf uclibc stable 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV6
+ 	depends on BR2_ARM_EABIHF
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+@@ -730,6 +742,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_UCLIBC_STABLE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_BLEEDING_EDGE
+ 	bool "armv7-eabihf glibc bleeding-edge 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A
+ 	depends on BR2_ARM_EABIHF
+ 	depends on BR2_USE_MMU
+@@ -755,6 +768,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_BLEEDING_EDGE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE
+ 	bool "armv7-eabihf glibc stable 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A
+ 	depends on BR2_ARM_EABIHF
+ 	depends on BR2_USE_MMU
+@@ -780,6 +794,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_BLEEDING_EDGE
+ 	bool "armv7-eabihf musl bleeding-edge 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A
+ 	depends on BR2_ARM_EABIHF
+ 	depends on BR2_USE_MMU
+@@ -804,6 +819,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_BLEEDING_EDGE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE
+ 	bool "armv7-eabihf musl stable 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A
+ 	depends on BR2_ARM_EABIHF
+ 	depends on BR2_USE_MMU
+@@ -828,6 +844,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_BLEEDING_EDGE
+ 	bool "armv7-eabihf uclibc bleeding-edge 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A
+ 	depends on BR2_ARM_EABIHF
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+@@ -852,6 +869,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_BLEEDING_EDGE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_STABLE
+ 	bool "armv7-eabihf uclibc stable 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A
+ 	depends on BR2_ARM_EABIHF
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+@@ -876,6 +894,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_STABLE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_BLEEDING_EDGE
+ 	bool "armv7m uclibc bleeding-edge 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7M
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+@@ -897,6 +916,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_BLEEDING_EDGE
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE
+ 	bool "armv7m uclibc stable 2021.11-1"
++	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7M
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
