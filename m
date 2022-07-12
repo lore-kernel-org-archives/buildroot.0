@@ -1,87 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DEB1C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 12 Jul 2022 20:35:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 502ADC43334
+	for <buildroot@archiver.kernel.org>; Tue, 12 Jul 2022 21:08:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4FA661299;
-	Tue, 12 Jul 2022 20:35:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4FA661299
+	by smtp2.osuosl.org (Postfix) with ESMTP id CDBC34103A;
+	Tue, 12 Jul 2022 21:08:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDBC34103A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QpqokZ_1lT1O; Tue, 12 Jul 2022 21:08:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF82140462;
+	Tue, 12 Jul 2022 21:08:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF82140462
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FA211BF389
+ for <buildroot@lists.busybox.net>; Tue, 12 Jul 2022 21:08:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD83C612B3
+ for <buildroot@lists.busybox.net>; Tue, 12 Jul 2022 21:08:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD83C612B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xw07Gtu8WPU1; Tue, 12 Jul 2022 20:35:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EAE9461292;
-	Tue, 12 Jul 2022 20:35:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAE9461292
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9FEED1BF39F
- for <buildroot@lists.busybox.net>; Tue, 12 Jul 2022 20:35:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A3D284042
- for <buildroot@lists.busybox.net>; Tue, 12 Jul 2022 20:35:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A3D284042
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B9tY01qlGwEq for <buildroot@lists.busybox.net>;
- Tue, 12 Jul 2022 20:35:01 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8BB78402C
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E8BB78402C
- for <buildroot@buildroot.org>; Tue, 12 Jul 2022 20:35:00 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id d16so12742478wrv.10
- for <buildroot@buildroot.org>; Tue, 12 Jul 2022 13:35:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=JsnA5m5QfXZe3UH2Zng/qU/jTfdz2ImzZL+lmT6mOwE=;
- b=ggigwSjfQ4vBduvPWPjM9+V9My64ueGA+1yr82zGDu/olzjPBYBb01wGgxpU9Om/Sg
- hRIuJK3JTmXelNfJ91SpbEuIPCBrXvQydS88tL9rsGK2md3F+QA6NeR0H/pB4HdJfWqD
- 8p3qQw7IDdCgQR1BhEZdwxEokriNrVs+LB0b1QmlXxJPnZEiOjvswuQ86/4GO8X2DN7H
- Xk7smVUOuyxRkwiDADWDkmfIWO4EHZB095aSa6KkaOM4b8Qg3JoW2WTrqxp42xzrQG0q
- UCDCeK2V7Hz8hoOF+otUzhxNksWxYQ/5hJ6jUGsuId2xXmMp1fnldLQRMm0+7TIzSXBB
- ztjg==
-X-Gm-Message-State: AJIora+1rSOXkhqNicvDn2mqg/7EXXwpRR4ti3mu8JqOhOys0h2J3qi6
- w+g3nFLADGNYLz8+P2Kidn0VkbwSjqY=
-X-Google-Smtp-Source: AGRyM1v8ixlIuIlrycbeFDeOftF6oapcKe9H7oD1p1Dg06LI/x9mC02xhNgunhV9YrW1+/p6tsY5Ug==
-X-Received: by 2002:a5d:6dae:0:b0:21d:ac34:d087 with SMTP id
- u14-20020a5d6dae000000b0021dac34d087mr6736883wrs.336.1657658098788; 
- Tue, 12 Jul 2022 13:34:58 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- m22-20020a7bcb96000000b003a2cf5eb900sm7846142wmi.40.2022.07.12.13.34.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 12 Jul 2022 13:34:58 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 12 Jul 2022 22:31:51 +0200
-Message-Id: <20220712203151.1891202-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 24ltPDbaMvkt for <buildroot@lists.busybox.net>;
+ Tue, 12 Jul 2022 21:08:15 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03209612AF
+Received: from smtpcmd15177.aruba.it (smtpcmd15177.aruba.it [62.149.156.177])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 03209612AF
+ for <buildroot@buildroot.org>; Tue, 12 Jul 2022 21:08:14 +0000 (UTC)
+Received: from [192.168.50.225] ([146.241.49.253])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id BN76og1jNXOlABN77oNcoG; Tue, 12 Jul 2022 23:08:13 +0200
+Message-ID: <d0608d3b-51f0-d069-866f-11efcd1240f1@benettiengineering.com>
+Date: Tue, 12 Jul 2022 23:08:12 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=JsnA5m5QfXZe3UH2Zng/qU/jTfdz2ImzZL+lmT6mOwE=;
- b=J1kQZf6IybFesfyUAUMgnWQWVixNzWVNehpFjp/DxX6wjc2ATkkmdyrS1+4ZnzKxh2
- i+MWcQjBoEeemPZUebqxO4QOlIwUqUR8ferrN94wnYsBAEPoNGB3jacJYDSWFsrkF+kP
- IbvgjT/VJVage6lKJUeWRRCeYF84hrHEI4f8Os5O18TCXgKAuqEP05E2e2zMYj8oI6DC
- Ie7eYpqGAO/UlN8pSmtekPtQU8H9Cx6WhSlmk5spq8AqLYXa2X255ka2gWHpMOM7t2nR
- 2d6nTaXZ8JruLycevlTBtNpnpwpHf128PadeuUTZxlcXOGGAEZYewW3s8K9bBWeFnQga
- 8SRA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=J1kQZf6I
-Subject: [Buildroot] [PATCH 1/1] package/gtest: drop host-gtest
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220712162712.1582871-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220712162712.1582871-1-fontaine.fabrice@gmail.com>
+X-CMAE-Envelope: MS4xfPfqrdRduz71JHMd5vYQCWDYZ4Se7YH+ihJzSIgxpBnt7T1yjyaWP4JGcWJ6BaQ2ODAeEaHMjTyGLYnC8jDbc5tmCgJ9a51Y8kv0IomYQXofy1HaAaMY
+ PnnC1pM25FzcOmIoUgbLj0Q/vhLf2AYe3WAND5wI+DhJgYhOQ2IDNt4K/S5CRAorfFgJWA82/I6oH47U3Uz3iSgRd+Ciamxs0n/RlvIJTV/o2fO84+mgS5/0
+ KZDxHJgVvQfqlTyi+0pWm9JnBuaXXMNUba3MubiLMqA=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1657660093; bh=4714dAU4O3XJpA89zq75kPs6VMD4B8e4bS4zHviK2G0=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=H1HfRjXJypPQY4/YOKEBdpchAzaSMKJOPluUk6+4Cwpwc4iagPYl7SDs8/QZUqqdE
+ E5mgE9stNS+UDLbGxUa/Gh1PaA82BLfUA4OjFQ8kqNFHhhao6AZZqv+WAvNDDU9fVx
+ GEJivErc3BByccPXWb9KUgE8zWLbbwm34G2KT48KB71xnBwbPXDDelL+DhsLdWfevM
+ GGYejNLDT+13aBU/Jfy0Y39OgDxMULA7I+vhfnbJL32nnOuy6A4YpWlHsNIna+RfES
+ 6x/68T1HJ7XKRsidNzZ0xEcg3rwFkDz6jK/fHyskOQ658H/GqlNYaUrayYOtAFrOLD
+ DjEt7wzA16esg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=H1HfRjXJ
+Subject: Re: [Buildroot] [PATCH 1/1] package/harfbuzz: fix build with gcc < 7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,94 +76,162 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stephan Hoffmann <sho@relinux.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop host-gtest to avoid the following build failure raised since bump
-to version 1.12.0 in commit a336b731af5979a25213b33c5840de6d1ed88bdc and
-https://github.com/google/googletest/commit/6202251f0963187a7781f181365cf8c19bf343d5:
+Hi Fabrice,
 
-/usr/bin/install -D -m 0755 /home/giuliobenetti/autobuild/run/instance-1/output-1/build/host-gtest-1.12.0/googlemock/scripts/generator/gmock_gen.py /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/gmock_gen
-/usr/bin/install: cannot stat '/home/giuliobenetti/autobuild/run/instance-1/output-1/build/host-gtest-1.12.0/googlemock/scripts/generator/gmock_gen.py': No such file or directory
+On 12/07/22 18:27, Fabrice Fontaine wrote:
+> Fix the following build failure with gcc < 7 raised since bump to
+> version 4.4.0 in commit e186b4d89dcd3eb9fae557959181d7176e7c873c:
+> 
+> In file included from ../src/hb.hh:473:0,
+>                   from ../src/hb-buffer-verify.cc:27:
+> ../src/hb-cplusplus.hh:170:13: error: specialization of 'template<class _Tp> struct std::hash' in different namespace [-fpermissive]
+>   struct std::hash<hb::shared_ptr<T>>
+>               ^
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/3fe7526b685368007ae0f66e15ef2b27d30d5063
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/6a8fb259760f84c67a3482cc5964c6610f9b70a4
+thank you for providing such fix.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gtest/Config.in |  9 ---------
- package/gtest/gtest.mk  | 15 ---------------
- 2 files changed, 24 deletions(-)
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-diff --git a/package/gtest/Config.in b/package/gtest/Config.in
-index 4355e9c9c5..4591cb5e48 100644
---- a/package/gtest/Config.in
-+++ b/package/gtest/Config.in
-@@ -26,7 +26,6 @@ if BR2_PACKAGE_GTEST
- 
- config BR2_PACKAGE_GTEST_GMOCK
- 	bool "gmock"
--	depends on BR2_HOST_GCC_AT_LEAST_5 # host-gtest
- 	help
- 	  Inspired by jMock, EasyMock, and Hamcrest, and designed with
- 	  C++'s specifics in mind, Google C++ Mocking Framework (or
-@@ -43,14 +42,6 @@ config BR2_PACKAGE_GTEST_GMOCK
- 	    * works on Linux, Mac OS X, Windows, Windows Mobile, minGW,
- 	      and Symbian.
- 
--	  There are both host and target packages. The target one has
--	  include files required to compile the tests and the static
--	  libraries required to link/run them. The host package installs
--	  gmock_gen, a Python script used to generate code mocks.
--
--comment "gmock needs host gcc >= 5"
--	depends on !BR2_HOST_GCC_AT_LEAST_5
--
- endif # BR2_PACKAGE_GTEST
- 
- comment "gtest needs a toolchain w/ C++, wchar, threads, gcc >= 5"
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index 8ec5e9c535..a9ac49957b 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
-@@ -13,10 +13,6 @@ GTEST_LICENSE_FILES = LICENSE
- GTEST_CPE_ID_VENDOR = google
- GTEST_CPE_ID_PRODUCT = google_test
- 
--HOST_GTEST_LICENSE = Apache-2.0
--HOST_GTEST_LICENSE_FILES = googlemock/scripts/generator/LICENSE
--HOST_GTEST_DEPENDENCIES = host-python3
--
- # While it is possible to build gtest as shared library, using this gtest shared
- # library requires to set some special configure option in the project using
- # gtest.
-@@ -34,20 +30,9 @@ GTEST_CONF_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
- endif
- 
- ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
--GTEST_DEPENDENCIES += host-gtest
- GTEST_CONF_OPTS += -DBUILD_GMOCK=ON
- else
- GTEST_CONF_OPTS += -DBUILD_GMOCK=OFF
- endif
- 
--define HOST_GTEST_POST_INSTALL_PYTHON
--	$(INSTALL) -D -m 0755 $(@D)/googlemock/scripts/generator/gmock_gen.py \
--		$(HOST_DIR)/bin/gmock_gen
--	cp -rp $(@D)/googlemock/scripts/generator/cpp \
--		$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
--endef
--
--HOST_GTEST_POST_INSTALL_HOOKS += HOST_GTEST_POST_INSTALL_PYTHON
--
- $(eval $(cmake-package))
--$(eval $(host-cmake-package))
+Best regards
 -- 
-2.35.1
+Giulio Benetti
+CTO/CEO@Benetti Engineering sas
+
+> ---
+>   .../0002-cplusplus-Fix-build-on-GCC-7.patch   | 50 +++++++++++++++++
+>   .../0003-GSUB-Fix-build-on-GCC-7.patch        | 56 +++++++++++++++++++
+>   2 files changed, 106 insertions(+)
+>   create mode 100644 package/harfbuzz/0002-cplusplus-Fix-build-on-GCC-7.patch
+>   create mode 100644 package/harfbuzz/0003-GSUB-Fix-build-on-GCC-7.patch
+> 
+> diff --git a/package/harfbuzz/0002-cplusplus-Fix-build-on-GCC-7.patch b/package/harfbuzz/0002-cplusplus-Fix-build-on-GCC-7.patch
+> new file mode 100644
+> index 0000000000..de2955d8b5
+> --- /dev/null
+> +++ b/package/harfbuzz/0002-cplusplus-Fix-build-on-GCC-7.patch
+> @@ -0,0 +1,50 @@
+> +From 7b51bc95d9cf0d9a2e91a37319fa34e4e5f26927 Mon Sep 17 00:00:00 2001
+> +From: Kleis Auke Wolthuizen <github@kleisauke.nl>
+> +Date: Wed, 6 Jul 2022 12:58:15 +0200
+> +Subject: [PATCH] [cplusplus] Fix build on GCC < 7
+> +
+> +[Retrieved from:
+> +https://github.com/harfbuzz/harfbuzz/commit/7b51bc95d9cf0d9a2e91a37319fa34e4e5f26927]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + src/hb-cplusplus.hh | 12 ++++++++++--
+> + 1 file changed, 10 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/src/hb-cplusplus.hh b/src/hb-cplusplus.hh
+> +index 86d0452080..f06a32d912 100644
+> +--- a/src/hb-cplusplus.hh
+> ++++ b/src/hb-cplusplus.hh
+> +@@ -166,8 +166,14 @@ HB_DEFINE_VTABLE (unicode_funcs);
+> +
+> + } // namespace hb
+> +
+> ++/* Workaround for GCC < 7, see:
+> ++ * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56480
+> ++ * https://stackoverflow.com/a/25594741 */
+> ++namespace std {
+> ++
+> ++
+> + template<typename T>
+> +-struct std::hash<hb::shared_ptr<T>>
+> ++struct hash<hb::shared_ptr<T>>
+> + {
+> +     std::size_t operator()(const hb::shared_ptr<T>& v) const noexcept
+> +     {
+> +@@ -177,7 +183,7 @@ struct std::hash<hb::shared_ptr<T>>
+> + };
+> +
+> + template<typename T>
+> +-struct std::hash<hb::unique_ptr<T>>
+> ++struct hash<hb::unique_ptr<T>>
+> + {
+> +     std::size_t operator()(const hb::unique_ptr<T>& v) const noexcept
+> +     {
+> +@@ -187,6 +193,8 @@ struct std::hash<hb::unique_ptr<T>>
+> + };
+> +
+> +
+> ++} // namespace std
+> ++
+> + #endif /* __cplusplus */
+> +
+> + #endif /* HB_CPLUSPLUS_HH */
+> diff --git a/package/harfbuzz/0003-GSUB-Fix-build-on-GCC-7.patch b/package/harfbuzz/0003-GSUB-Fix-build-on-GCC-7.patch
+> new file mode 100644
+> index 0000000000..d3355443b7
+> --- /dev/null
+> +++ b/package/harfbuzz/0003-GSUB-Fix-build-on-GCC-7.patch
+> @@ -0,0 +1,56 @@
+> +From 79eb0f74860fb6309e3162b4f17f98481c05a318 Mon Sep 17 00:00:00 2001
+> +From: Kleis Auke Wolthuizen <github@kleisauke.nl>
+> +Date: Wed, 6 Jul 2022 13:29:55 +0200
+> +Subject: [PATCH] [GSUB] Fix build on GCC < 7
+> +
+> +[Retrieved (and backported) from:
+> +https://github.com/harfbuzz/harfbuzz/commit/79eb0f74860fb6309e3162b4f17f98481c05a318]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + src/OT/Layout/GSUB/GSUB.hh     | 5 +++--
+> + src/hb-ot-layout-gsub-table.hh | 8 ++++----
+> + 2 files changed, 7 insertions(+), 6 deletions(-)
+> +
+> +diff --git a/src/OT/Layout/GSUB/GSUB.hh b/src/OT/Layout/GSUB/GSUB.hh
+> +index 372862e2bb..750dca1da3 100644
+> +--- a/src/OT/Layout/GSUB/GSUB.hh
+> ++++ b/src/OT/Layout/GSUB/GSUB.hh
+> +@@ -5,9 +5,10 @@
+> + #include "Common.hh"
+> + #include "SubstLookup.hh"
+> +
+> +-using OT::Layout::GSUB::SubstLookup;
+> +-
+> + namespace OT {
+> ++
+> ++using Layout::GSUB::SubstLookup;
+> ++
+> + namespace Layout {
+> +
+> + /*
+> +diff --git a/src/hb-ot-layout-gsub-table.hh b/src/hb-ot-layout-gsub-table.hh
+> +index 1eca613b6a..50301ff1d9 100644
+> +--- a/src/hb-ot-layout-gsub-table.hh
+> ++++ b/src/hb-ot-layout-gsub-table.hh
+> +@@ -32,9 +32,8 @@
+> + #include "OT/Layout/GSUB/GSUB.hh"
+> +
+> + namespace OT {
+> +-
+> +-using Layout::GSUB::SubstLookup;
+> +-using Layout::GSUB::ExtensionSubst;
+> ++namespace Layout {
+> ++namespace GSUB {
+> +
+> + // TODO(garretrieger): Move into the new layout directory.
+> + /* Out-of-class implementation for methods recursing */
+> +@@ -82,7 +81,8 @@ inline bool SubstLookup::dispatch_recurse_func<hb_ot_apply_context_t> (hb_ot_app
+> + }
+> + #endif
+> +
+> +-
+> ++} /* namespace GSUB */
+> ++} /* namespace Layout */
+> + } /* namespace OT */
+> +
+> +
 
 _______________________________________________
 buildroot mailing list
