@@ -4,83 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEF49C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 12 Jul 2022 11:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55240C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 12 Jul 2022 16:30:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2FB3F40C61;
-	Tue, 12 Jul 2022 11:46:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FB3F40C61
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96D3C4018B;
+	Tue, 12 Jul 2022 16:30:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96D3C4018B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ryBo7CcPntxO; Tue, 12 Jul 2022 11:46:51 +0000 (UTC)
+	with ESMTP id UVBt0MbxQCTu; Tue, 12 Jul 2022 16:30:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2CC7B40C67;
-	Tue, 12 Jul 2022 11:46:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CC7B40C67
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C6B5401FB;
+	Tue, 12 Jul 2022 16:30:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C6B5401FB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5D7101BF30B
- for <buildroot@lists.busybox.net>; Tue, 12 Jul 2022 11:46:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CE3261BF3C8
+ for <buildroot@lists.busybox.net>; Tue, 12 Jul 2022 16:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35AFE6117D
- for <buildroot@lists.busybox.net>; Tue, 12 Jul 2022 11:46:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35AFE6117D
+ by smtp3.osuosl.org (Postfix) with ESMTP id A833560C30
+ for <buildroot@lists.busybox.net>; Tue, 12 Jul 2022 16:30:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A833560C30
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KW4Dm25TLAuF for <buildroot@lists.busybox.net>;
- Tue, 12 Jul 2022 11:46:47 +0000 (UTC)
+ with ESMTP id xHUz35NbWCRB for <buildroot@lists.busybox.net>;
+ Tue, 12 Jul 2022 16:30:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4050661179
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4050661179
- for <buildroot@buildroot.org>; Tue, 12 Jul 2022 11:46:47 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id y4so9755415edc.4
- for <buildroot@buildroot.org>; Tue, 12 Jul 2022 04:46:47 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F45E600CD
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7F45E600CD
+ for <buildroot@buildroot.org>; Tue, 12 Jul 2022 16:30:18 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 9-20020a1c0209000000b003a2dfdebe47so4272200wmc.3
+ for <buildroot@buildroot.org>; Tue, 12 Jul 2022 09:30:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=8YckjPg68lyRSyX2vjLA2DPlTewWCX+bScR+RE4v0mQ=;
- b=A855ousT46waJYoEPBbQCdoeRdzHJMqJWzRUNUOs0NSxq1WX+aZ078yOLF0Ud3bWrk
- tV4ha9r2bOTzdm3JoyPnkOfluUYH6mibQxL8HKRtGj/+P76CXyJxZ0SWmVblOLvmH+T8
- fdQE3Nb0/MkdDBxhrAGvPSb3dJptGRXXF6ef72drhQYM61Fk4rhvZ0VLvsKHJo7IxSK7
- kGvQygc8fmYC9DF0Zu2Zm2GkycsKq3E51RdnYG0iMAXNmLf9Q1UpO+METzryzqpu3Ln0
- VFs7pMlMPM9AuXMdcL+m38snM4iFJVm6yIf+x4wWb6mI9jxIvLvkaZDBNp8OMKZo84Qp
- Qogw==
-X-Gm-Message-State: AJIora/hIT4mc2Z5+ThR7QJ2gc3XE/mne/jEcSFky8G9UKFd5SXDYUq0
- 7z8MxFG3oUm9fa29kjpmyCgZCmXEMGo=
-X-Google-Smtp-Source: AGRyM1t+RhQvlir7gFWaKSqW4/Go2iQ4KX8WQOIsAnIAi8jZ2LVC3tRpNySnju8IjHkRkRhY1DqEwQ==
-X-Received: by 2002:a05:6402:438f:b0:43a:cee2:a081 with SMTP id
- o15-20020a056402438f00b0043acee2a081mr16023813edc.298.1657626405258; 
- Tue, 12 Jul 2022 04:46:45 -0700 (PDT)
-Received: from localhost.localdomain (cust-178-252-109-94.dyn.as47377.net.
- [94.109.252.178]) by smtp.gmail.com with ESMTPSA id
- i8-20020a170906a28800b0072b13fa5e4csm3750092ejz.58.2022.07.12.04.46.43
+ bh=a+ffjXRaXascOmXN6PtRnJNV/XJal2xHi05onDzg0Go=;
+ b=0gbpyknp3HNevP5gTCvLOzILbmAupmRJ7AMT1fZLP3ROh6/NN4acB0zNYnKIeQSaQB
+ 0mDzm6uXq7NcEYwZf9itBSc9NViRTspWLJxM0dy2iUXwt+BY5v/bu1j6bzLBpOFFekzD
+ 6enpNpZRtsN3Lfg3GUCjQsfWrxIUrWb2LfFXDfe8+SfvxoJK98PCdwJPLXHjc2+QF3Aw
+ SelqQ1RKh/rNIQrW7gw5GKmoN0fnrgcFVTFs22+IzrHz13N3aq7wY5n9zZ66V4NXHrVX
+ OwgGgrfi3YbFNhKj9woxaNRf221RXBbmX/H19skR+Ydall8HFLaUejGBgL846OULdGO0
+ 9VHw==
+X-Gm-Message-State: AJIora9CyVjfz0xeTe1yvSPT9/f/ULwy/WTqOR1vLOvX0A+pk1lqkgCx
+ S0pW+re+Pb07F1dkMXuRy7iQZF2jidQ=
+X-Google-Smtp-Source: AGRyM1tko3CjuUaFSLFvU3gylQthnEMhw9f0h9ehJiHsg1rwUL2uf+PgflJFNO2v5z2aH4BjjBBjxg==
+X-Received: by 2002:a05:600c:4f05:b0:3a1:67df:a116 with SMTP id
+ l5-20020a05600c4f0500b003a167dfa116mr4891160wmq.103.1657643416179; 
+ Tue, 12 Jul 2022 09:30:16 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ bg30-20020a05600c3c9e00b003a2e86ef806sm6006051wmb.11.2022.07.12.09.30.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 12 Jul 2022 04:46:44 -0700 (PDT)
-From: Titouan Christophe <titouanchristophe@gmail.com>
+ Tue, 12 Jul 2022 09:30:15 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Jul 2022 13:45:10 +0200
-Message-Id: <20220712114510.1434413-1-titouanchristophe@gmail.com>
-X-Mailer: git-send-email 2.36.1
+Date: Tue, 12 Jul 2022 18:27:12 +0200
+Message-Id: <20220712162712.1582871-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=8YckjPg68lyRSyX2vjLA2DPlTewWCX+bScR+RE4v0mQ=;
- b=AE2bjYriNPn1JtS38T8V81YJTng5+Qtd+kLZdFG70V7g+RY7FkBDbZNSQE82O6cnky
- UKWXOqSYKTlwkQTDYhpyl7SJbCYP1+La+JZrW265RqakbgC8zq2UULOfbimNEo2tZKD0
- Lbvl58i6KoQWvAo2n7dH19Vp0vGOnKBruGt1KiPdFJ9Ro8VKrviP/YsQEnPR5pquta3S
- s96tvD2MXjYTIgR4a/7JfKhUAp+v4ENgZHJo1tq4RRLfkbC7atlFioEGIE2fcRKzIm8L
- MTwxuLCBwzHArq4x9R0Puub4+KM/crbQDERVQWIwjiwW7TiWngCNCDK3lPz0lP5Wi6Ar
- lYvw==
+ bh=a+ffjXRaXascOmXN6PtRnJNV/XJal2xHi05onDzg0Go=;
+ b=KW1C5Sjgscw4zfwqHb8npgt7v4sdR+2r4RfNzi+aLuQA7dtE66/kbSyw+HlaDxsXJk
+ 4VsunxTLEc2AUDgeM7oP5+o8vBNNuLHj7jDn3Pux34SCtCSqQp524NkEt7IPa/4ktArW
+ ZPk0o41KEAHfL4jlO6LfttdSJX4Ht7zLG1hEA2rsh21QhpMMAAUw0k6yMSa3RTnfWz6d
+ oOzmo30zAEIBRq3Sz5IGnR4ruYLssTA0vqL/KeNFkidYI0o/80f7+cP2pXeUSiIckjZB
+ 4bMSDOgPocf9jRvHEv5MAD0yjHJaAvyz8obd21eTxPhIhaq8qXnoq42bYwRcmXejGV1U
+ BWNw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=AE2bjYri
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v7.0.3
+ header.a=rsa-sha256 header.s=20210112 header.b=KW1C5Sjg
+Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: fix build with gcc < 7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,45 +94,153 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Titouan Christophe <titouanchristophe@gmail.com>,
- Daniel Price <daniel.price@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fix the following build failure with gcc < 7 raised since bump to
+version 4.4.0 in commit e186b4d89dcd3eb9fae557959181d7176e7c873c:
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 582c3afa03..bff478fe7c 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  284d8bd1fd85d6a55a05ee4e7c31c31977ad56cbf344ed83790beeb148baa720  redis-7.0.0.tar.gz
-+sha256  2cde7d17214ffe305953da9fff12333e8a72caa57fd4923e4872f6362a208e73  redis-7.0.3.tar.gz
- 
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 3b91fbf8c8..b292782acf 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 7.0.0
-+REDIS_VERSION = 7.0.3
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+In file included from ../src/hb.hh:473:0,
+                 from ../src/hb-buffer-verify.cc:27:
+../src/hb-cplusplus.hh:170:13: error: specialization of 'template<class _Tp> struct std::hash' in different namespace [-fpermissive]
+ struct std::hash<hb::shared_ptr<T>>
+             ^
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3fe7526b685368007ae0f66e15ef2b27d30d5063
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0002-cplusplus-Fix-build-on-GCC-7.patch   | 50 +++++++++++++++++
+ .../0003-GSUB-Fix-build-on-GCC-7.patch        | 56 +++++++++++++++++++
+ 2 files changed, 106 insertions(+)
+ create mode 100644 package/harfbuzz/0002-cplusplus-Fix-build-on-GCC-7.patch
+ create mode 100644 package/harfbuzz/0003-GSUB-Fix-build-on-GCC-7.patch
+
+diff --git a/package/harfbuzz/0002-cplusplus-Fix-build-on-GCC-7.patch b/package/harfbuzz/0002-cplusplus-Fix-build-on-GCC-7.patch
+new file mode 100644
+index 0000000000..de2955d8b5
+--- /dev/null
++++ b/package/harfbuzz/0002-cplusplus-Fix-build-on-GCC-7.patch
+@@ -0,0 +1,50 @@
++From 7b51bc95d9cf0d9a2e91a37319fa34e4e5f26927 Mon Sep 17 00:00:00 2001
++From: Kleis Auke Wolthuizen <github@kleisauke.nl>
++Date: Wed, 6 Jul 2022 12:58:15 +0200
++Subject: [PATCH] [cplusplus] Fix build on GCC < 7
++
++[Retrieved from:
++https://github.com/harfbuzz/harfbuzz/commit/7b51bc95d9cf0d9a2e91a37319fa34e4e5f26927]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/hb-cplusplus.hh | 12 ++++++++++--
++ 1 file changed, 10 insertions(+), 2 deletions(-)
++
++diff --git a/src/hb-cplusplus.hh b/src/hb-cplusplus.hh
++index 86d0452080..f06a32d912 100644
++--- a/src/hb-cplusplus.hh
+++++ b/src/hb-cplusplus.hh
++@@ -166,8 +166,14 @@ HB_DEFINE_VTABLE (unicode_funcs);
++ 
++ } // namespace hb
++ 
+++/* Workaround for GCC < 7, see:
+++ * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56480
+++ * https://stackoverflow.com/a/25594741 */
+++namespace std {
+++
+++
++ template<typename T>
++-struct std::hash<hb::shared_ptr<T>>
+++struct hash<hb::shared_ptr<T>>
++ {
++     std::size_t operator()(const hb::shared_ptr<T>& v) const noexcept
++     {
++@@ -177,7 +183,7 @@ struct std::hash<hb::shared_ptr<T>>
++ };
++ 
++ template<typename T>
++-struct std::hash<hb::unique_ptr<T>>
+++struct hash<hb::unique_ptr<T>>
++ {
++     std::size_t operator()(const hb::unique_ptr<T>& v) const noexcept
++     {
++@@ -187,6 +193,8 @@ struct std::hash<hb::unique_ptr<T>>
++ };
++ 
++ 
+++} // namespace std
+++
++ #endif /* __cplusplus */
++ 
++ #endif /* HB_CPLUSPLUS_HH */
+diff --git a/package/harfbuzz/0003-GSUB-Fix-build-on-GCC-7.patch b/package/harfbuzz/0003-GSUB-Fix-build-on-GCC-7.patch
+new file mode 100644
+index 0000000000..d3355443b7
+--- /dev/null
++++ b/package/harfbuzz/0003-GSUB-Fix-build-on-GCC-7.patch
+@@ -0,0 +1,56 @@
++From 79eb0f74860fb6309e3162b4f17f98481c05a318 Mon Sep 17 00:00:00 2001
++From: Kleis Auke Wolthuizen <github@kleisauke.nl>
++Date: Wed, 6 Jul 2022 13:29:55 +0200
++Subject: [PATCH] [GSUB] Fix build on GCC < 7
++
++[Retrieved (and backported) from:
++https://github.com/harfbuzz/harfbuzz/commit/79eb0f74860fb6309e3162b4f17f98481c05a318]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/OT/Layout/GSUB/GSUB.hh     | 5 +++--
++ src/hb-ot-layout-gsub-table.hh | 8 ++++----
++ 2 files changed, 7 insertions(+), 6 deletions(-)
++
++diff --git a/src/OT/Layout/GSUB/GSUB.hh b/src/OT/Layout/GSUB/GSUB.hh
++index 372862e2bb..750dca1da3 100644
++--- a/src/OT/Layout/GSUB/GSUB.hh
+++++ b/src/OT/Layout/GSUB/GSUB.hh
++@@ -5,9 +5,10 @@
++ #include "Common.hh"
++ #include "SubstLookup.hh"
++ 
++-using OT::Layout::GSUB::SubstLookup;
++-
++ namespace OT {
+++
+++using Layout::GSUB::SubstLookup;
+++
++ namespace Layout {
++ 
++ /*
++diff --git a/src/hb-ot-layout-gsub-table.hh b/src/hb-ot-layout-gsub-table.hh
++index 1eca613b6a..50301ff1d9 100644
++--- a/src/hb-ot-layout-gsub-table.hh
+++++ b/src/hb-ot-layout-gsub-table.hh
++@@ -32,9 +32,8 @@
++ #include "OT/Layout/GSUB/GSUB.hh"
++ 
++ namespace OT {
++-
++-using Layout::GSUB::SubstLookup;
++-using Layout::GSUB::ExtensionSubst;
+++namespace Layout {
+++namespace GSUB {
++ 
++ // TODO(garretrieger): Move into the new layout directory.
++ /* Out-of-class implementation for methods recursing */
++@@ -82,7 +81,8 @@ inline bool SubstLookup::dispatch_recurse_func<hb_ot_apply_context_t> (hb_ot_app
++ }
++ #endif
++ 
++-
+++} /* namespace GSUB */
+++} /* namespace Layout */
++ } /* namespace OT */
++ 
++ 
 -- 
-2.36.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
