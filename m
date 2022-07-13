@@ -4,84 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61CEAC43334
-	for <buildroot@archiver.kernel.org>; Wed, 13 Jul 2022 16:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA9ACC43334
+	for <buildroot@archiver.kernel.org>; Wed, 13 Jul 2022 17:20:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B21E8409E7;
-	Wed, 13 Jul 2022 16:33:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B21E8409E7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D5F9409E7;
+	Wed, 13 Jul 2022 17:20:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D5F9409E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cgn_FHzR1Q_z; Wed, 13 Jul 2022 16:33:43 +0000 (UTC)
+	with ESMTP id S4u-z0WkpLIJ; Wed, 13 Jul 2022 17:20:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A98D1405AE;
-	Wed, 13 Jul 2022 16:33:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A98D1405AE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A302E1BF35B
- for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 16:33:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 53693405D1;
+	Wed, 13 Jul 2022 17:20:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53693405D1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 197711BF3DD
+ for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 17:20:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 793BC41975
- for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 16:33:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 793BC41975
+ by smtp1.osuosl.org (Postfix) with ESMTP id E8CD18414E
+ for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 17:20:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8CD18414E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I8thFhoBX04T for <buildroot@lists.busybox.net>;
- Wed, 13 Jul 2022 16:33:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CA5C41902
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com
- [IPv6:2001:4860:4864:20::34])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1CA5C41902
- for <buildroot@buildroot.org>; Wed, 13 Jul 2022 16:33:38 +0000 (UTC)
-Received: by mail-oa1-x34.google.com with SMTP id
- 586e51a60fabf-10bec750eedso14676012fac.8
- for <buildroot@buildroot.org>; Wed, 13 Jul 2022 09:33:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=IxsS5F8gFCXIqs75Ll8dVS8DXsqJoOi30gpS9kFoJNU=;
- b=sLcgYnegY10JMJ9BoCyt1IBOAmKGDZwGtOKM/CGHnDMyqjHmsb4l4sHrLOxbw3GZll
- QT1EmfBQL62621XCH6a1MRv4KpWL0pyP3D1T0h6xkKvT85jPsBPnf2ZjDxjnEKLAZ6J6
- QK5ccmQRTJLpc1q/HteyU5jhQHpz7PYgHyNjoacvOt/mMVATgcA82YkkMcogUDDbB60f
- yAavgwp7DXkUXCNLUJx+B3agdyBzxLczimVp4LCj6rqgLFOqHbT5lu6UVm+QMDeM8TLW
- Tj3/SffN4OO1dn+lDb3G4DLqnnIwP6pjNLCwEeG/SFn3Qa115gKSwIVZFdUoKg6sog4g
- 4wWw==
-X-Gm-Message-State: AJIora8cLSQT6CsGLb5OLM8NvocxUiwW15045me7bG2JLvFAe8b08qJk
- Aw+zOLRkF3rnDGd195K37PfEfGma2fQtEg==
-X-Google-Smtp-Source: AGRyM1szXbrrunPWeVGaYdaTEXLBgbff4yKTNIuAXB40vdm0dFsQOWL6McfYGwMX8e7JfF2qZPKetg==
-X-Received: by 2002:a05:6870:23a3:b0:101:a0da:f478 with SMTP id
- e35-20020a05687023a300b00101a0daf478mr4912514oap.181.1657730017739; 
- Wed, 13 Jul 2022 09:33:37 -0700 (PDT)
-Received: from localhost.localdomain ([2804:14c:485:4b69:9851:da7e:97fa:f32f])
- by smtp.gmail.com with ESMTPSA id
- bi3-20020a056808188300b0033a169f9282sm2256987oib.52.2022.07.13.09.33.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 13 Jul 2022 09:33:37 -0700 (PDT)
-From: Fabio Estevam <festevam@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UsrigiMC-LJX for <buildroot@lists.busybox.net>;
+ Wed, 13 Jul 2022 17:20:30 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E538184144
+Received: from smtp-outgoing-1902.laposte.net (smtp-outgoing-1902.laposte.net
+ [160.92.124.106])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E538184144
+ for <buildroot@buildroot.org>; Wed, 13 Jul 2022 17:20:29 +0000 (UTC)
+X-mail-filterd: {"version":"1.4.3", "queueID":"4LjksL4pQlzPjdF",
+ "contextId":"46a0cf5f-f1a3-4e12-9b3a-402ece8e7177"}
+Received: from outgoing-mail.laposte.net (localhost.localdomain [127.0.0.1])
+ by mlpnf0117.laposte.net (SMTP Server) with ESMTP id 4LjksL4pQlzPjdF;
+ Wed, 13 Jul 2022 19:20:22 +0200 (CEST)
+X-mail-filterd: {"version":"1.4.3", "queueID":"4LjksL43GyzPjd8",
+ "contextId":"6b18385f-d115-45da-8eb2-094e6eabe142"}
+X-lpn-mailing: LEGIT
+X-lpn-spamrating: 50
+X-lpn-spamlevel: not-spam
+Received: from romuald.bergerie (unknown [88.169.129.225])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mlpnf0117.laposte.net (SMTP Server) with ESMTPSA id 4LjksL43GyzPjd8;
+ Wed, 13 Jul 2022 19:20:22 +0200 (CEST)
+Received: from radicelle.bergerie (radicelle.bergerie [192.168.124.12])
+ by romuald.bergerie (Postfix) with ESMTP id 3D9BC4B95FB7;
+ Wed, 13 Jul 2022 19:20:22 +0200 (CEST)
+Received: from vincent by radicelle.bergerie with local (Exim 4.96)
+ (envelope-from <vincent@radicelle.bergerie>) id 1oBg24-0006s8-2h;
+ Wed, 13 Jul 2022 19:20:16 +0200
 To: buildroot@buildroot.org
-Date: Wed, 13 Jul 2022 13:33:32 -0300
-Message-Id: <20220713163332.3079691-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Wed, 13 Jul 2022 19:20:06 +0200
+Message-Id: <20220713172006.26411-1-vincent.stehle@laposte.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=IxsS5F8gFCXIqs75Ll8dVS8DXsqJoOi30gpS9kFoJNU=;
- b=MDeAfjJdZ4zRueSVu5UiyZB0q36YQYVTbR4UE28jQNItOPb/WahlmSdb4qaFcU7V0U
- aMEihGbU2M+BEqK7KJxjulb68nHkCq8D3Ll9D6kcyfzt6xeMfOtdUnHc0/TWdyDaIiiR
- voNDJ6XoHBVBVkW8AKkNQbFaCo324XF7kODOknHoOn3ko7cH2NasOcA5DK8iUYf6KVlB
- 4YZUoTQYUbL9sBGh9ainrWrmvKa+cEEQflkllh/TYsUDNHGBgb+wIvXc+ZYhr1EqAz0U
- dlgJJC8vzJuzqMTTqOvdlo4b0HnK8I5nsthxBplHupsK9GjPcvAqsns5q+sygARe86XC
- LP2g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=MDeAfjJd
-Subject: [Buildroot] [PATCH] package/crucible: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=laposte.net; s=lpn-wlmd; t=1657732827;
+ bh=G53gTFfYfz4XgHH6n7/FjxVq7qsFVUeLwWkM2z0TJg0=;
+ h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding;
+ b=mME+uOmB5/bk0oSo+fMg3+HfyEa6tXTMrWEKOI412M7JK185v26mdYt8b62X51gWosg0ufNo20M0zihFOXDhjYJNmGwsG6eh/Wrhcsic9nMrVfIN3UL32nkYNunoAyx0pt+GUM6cWqsx2F1byWg/psXSTG6TelI8uZqp6XoYahtXHo462YrkIdrn9iExMKoy1IkJ0q6d3ARzRosEFn2HrbivfcbDg5v9SjCdPW35rTtPwQyRGT0xsKw+t8j7jMMuoY2vdJwkkdNv60zg/DuaN4YvQIkSQCey+aJhG/mtaKf70W7XJYso2xCnMfpBZFUG9j2Ip3OVRqs7ofJpoQXkdQ==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=laposte.net header.i=@laposte.net
+ header.a=rsa-sha256 header.s=lpn-wlmd header.b=mME+uOmB
+Subject: [Buildroot] [PATCH] support/testing: add test for pixz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,97 +82,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: andrea.barisani@withsecure.com, Fabio Estevam <festevam@gmail.com>,
- andrej.rosano@withsecure.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Vincent_Stehl=C3=A9_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-crucible is a useful tool that allows reading and writing
-to the i.MX fuses via the Linux NVMEM framework.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/crucible/Config.in     |  8 ++++++++
- package/crucible/crucible.hash |  2 ++
- package/crucible/crucible.mk   | 13 +++++++++++++
- 5 files changed, 25 insertions(+)
- create mode 100644 package/crucible/Config.in
- create mode 100644 package/crucible/crucible.hash
- create mode 100644 package/crucible/crucible.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0afd697b6c..4eab444a43 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -862,6 +862,7 @@ F:	configs/wandboard_defconfig
- F:	configs/warp7_defconfig
- F:	configs/warpboard_defconfig
- F:	package/atest/
-+F:	package/crucible/
- F:	package/kmscube/
- 
- N:	Fabio Porcedda <fabio.porcedda@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 230aa7a2c2..652577faf6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -455,6 +455,7 @@ endmenu
- 	source "package/cc-tool/Config.in"
- 	source "package/cdrkit/Config.in"
- 	source "package/cpuburn-arm/Config.in"
-+	source "package/crucible/Config.in"
- 	source "package/cryptsetup/Config.in"
- 	source "package/cwiid/Config.in"
- 	source "package/dahdi-linux/Config.in"
-diff --git a/package/crucible/Config.in b/package/crucible/Config.in
-new file mode 100644
-index 0000000000..06f7d5913c
---- /dev/null
-+++ b/package/crucible/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_CRUCIBLE
-+	bool "crucible"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	help
-+	  Crucible is a One-Time-Programmable (OTP) fusing tool for the
-+	  i.MX family.
-+	  
-+	  https://github.com/usbarmory/crucible
-diff --git a/package/crucible/crucible.hash b/package/crucible/crucible.hash
-new file mode 100644
-index 0000000000..ad8a2cb35c
---- /dev/null
-+++ b/package/crucible/crucible.hash
-@@ -0,0 +1,2 @@
-+sha256  51e911ce5e2a9f182a737b71f6e2bbf46fb80bb3252220cd99ffaf54d38e6c64  crucible-v2022.05.25.tar.gz
-+sha256  d88514630470aec9fa7abdc990a1e0a8751a752321bffa868188c49009d64d59  LICENSE
-diff --git a/package/crucible/crucible.mk b/package/crucible/crucible.mk
-new file mode 100644
-index 0000000000..e9038f8cff
---- /dev/null
-+++ b/package/crucible/crucible.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# crucible
-+#
-+################################################################################
-+
-+CRUCIBLE_VERSION = v2022.05.25
-+CRUCIBLE_SITE = $(call github,usbarmory,crucible,$(CRUCIBLE_VERSION))
-+CRUCIBLE_LICENSE = GPL-3.0
-+CRUCIBLE_LICENSE_FILES = LICENSE
-+CRUCIBLE_GOMOD = ./cmd/crucible
-+
-+$(eval $(golang-package))
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QWRkIGEgc2ltcGxlIGNvbXByZXNzLXVuY29tcHJlc3MgdGVzdCB0byB2ZXJpZnkgdGhhdCBwaXh6
+IGlzIHdvcmtpbmcuCgpTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3Rl
+aGxlQGxhcG9zdGUubmV0PgotLS0KCgpIaSwKCkkgaGF2ZSB2ZXJpZmllZCB0aGF0IHRoaXMgdGVz
+dCB3b3JrcyBmaW5lIGxvY2FsbHkgYW5kIG9uIGdpdGxhYi4KQmVzdCByZWdhcmRzLAoKVmluY2Vu
+dC4KCgogREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwog
+c3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9waXh6LnB5IHwgNDAgKysrKysrKysr
+KysrKysrKysrKysrKwogMiBmaWxlcyBjaGFuZ2VkLCA0MSBpbnNlcnRpb25zKCspCiBjcmVhdGUg
+bW9kZSAxMDA2NDQgc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9waXh6LnB5Cgpk
+aWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKaW5kZXggMGFmZDY5N2I2Yy4uOWE3
+NDBkNjUwZCAxMDA2NDQKLS0tIGEvREVWRUxPUEVSUworKysgYi9ERVZFTE9QRVJTCkBAIC0yOTE3
+LDYgKzI5MTcsNyBAQCBGOgljb25maWdzL3Vldm01NDMyX2RlZmNvbmZpZwogRjoJcGFja2FnZS9p
+N3ovCiBGOglwYWNrYWdlL21zci10b29scy8KIEY6CXBhY2thZ2UvcGl4ei8KK0Y6CXN1cHBvcnQv
+dGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcGl4ei5weQogCiBOOglWaW5pY2l1cyBUaW50aSA8
+dmluaWNpdXN0aW50aUBnbWFpbC5jb20+CiBGOglwYWNrYWdlL3B5dGhvbi10aHJpZnQvCmRpZmYg
+LS1naXQgYS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3BpeHoucHkgYi9zdXBw
+b3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3BpeHoucHkKbmV3IGZpbGUgbW9kZSAxMDA2
+NDQKaW5kZXggMDAwMDAwMDAwMC4uZWVmZjEwZWFhMQotLS0gL2Rldi9udWxsCisrKyBiL3N1cHBv
+cnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcGl4ei5weQpAQCAtMCwwICsxLDQwIEBACitp
+bXBvcnQgb3MKKworaW1wb3J0IGluZnJhLmJhc2V0ZXN0CisKKworY2xhc3MgVGVzdFBpeHooaW5m
+cmEuYmFzZXRlc3QuQlJUZXN0KToKKyAgICBjb25maWcgPSBpbmZyYS5iYXNldGVzdC5CQVNJQ19U
+T09MQ0hBSU5fQ09ORklHICsgXAorICAgICAgICAiIiIKKyAgICAgICAgQlIyX1BBQ0tBR0VfUElY
+Wj15CisgICAgICAgIEJSMl9UQVJHRVRfUk9PVEZTX0NQSU89eQorICAgICAgICAjIEJSMl9UQVJH
+RVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0CisgICAgICAgICIiIgorCisgICAgZGVmIHRlc3RfcnVu
+KHNlbGYpOgorICAgICAgICBjcGlvX2ZpbGUgPSBvcy5wYXRoLmpvaW4oc2VsZi5idWlsZGRpciwg
+ImltYWdlcyIsICJyb290ZnMuY3BpbyIpCisgICAgICAgIHNlbGYuZW11bGF0b3IuYm9vdChhcmNo
+PSJhcm12NSIsCisgICAgICAgICAgICAgICAgICAgICAgICAgICBrZXJuZWw9ImJ1aWx0aW4iLAor
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgb3B0aW9ucz1bIi1pbml0cmQiLCBjcGlvX2ZpbGVd
+KQorICAgICAgICBzZWxmLmVtdWxhdG9yLmxvZ2luKCkKKworICAgICAgICAjIFByZXBhcmUgaW5w
+dXQgZmlsZSB3aXRoIHJhbmRvbSBkYXRhIGFuZCB6ZXJvZXMuCisgICAgICAgICMgV2Uga2VlcCB0
+aGUgc2l6ZSBzbWFsbCAoNCBNQikgZm9yIHRoZSBzYWtlIG9mIHRlc3QgdGltZS4KKyAgICAgICAg
+Y21kID0gImRkIGlmPS9kZXYvdXJhbmRvbSBvZj1vcmlnIGJzPTFNIGNvdW50PTIgJiYgIiBcCisg
+ICAgICAgICAgICAgICJkZCBpZj0vZGV2L3plcm8gb2Y9b3JpZyBicz0xTSBjb3VudD0yIHNlZWs9
+MiIKKyAgICAgICAgc2VsZi5hc3NlcnRSdW5PayhjbWQpCisKKyAgICAgICAgIyBDb21wcmVzcy4K
+KyAgICAgICAgIyBXZSBhc2sgZm9yIDMgdGhyZWFkcyBmb3IgZ29vZCBtZWFzdXJlIGJ1dCB3aXRo
+IGEgdmVyeSBzbWFsbCBmaWxlIG9uIGEKKyAgICAgICAgIyB1bmlwcm9jZXNzb3IgcWVtdSB0aGlz
+IGlzIG9ubHkgYSBsaWdodCB2YWxpZGF0aW9uLgorICAgICAgICBjbWQgPSAiY3AgLXYgb3JpZyBj
+b21wcmVzc2VkICYmIHBpeHogLXAgMyBjb21wcmVzc2VkIgorICAgICAgICBzZWxmLmFzc2VydFJ1
+bk9rKGNtZCwgdGltZW91dD02MCkKKworICAgICAgICAjIFVuY29tcHJlc3MuCisgICAgICAgIGNt
+ZCA9ICJjcCAtdiBjb21wcmVzc2VkLnh6IHVuY29tcHJlc3NlZC54eiAmJiBwaXh6IC1kIHVuY29t
+cHJlc3NlZC54eiIKKyAgICAgICAgc2VsZi5hc3NlcnRSdW5PayhjbWQpCisKKyAgICAgICAgIyBW
+ZXJpZnkuCisgICAgICAgICMgVGhlIGxzIGlzIHRoZXJlIGZvciBkZWJ1Z2dpbmcuCisgICAgICAg
+IGNtZCA9ICJscyAtbCAmJiBjbXAgb3JpZyB1bmNvbXByZXNzZWQiCisgICAgICAgIHNlbGYuYXNz
+ZXJ0UnVuT2soY21kKQotLSAKMi4zNS4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
