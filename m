@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 197EBC43334
-	for <buildroot@archiver.kernel.org>; Wed, 13 Jul 2022 08:57:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4BD0C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Jul 2022 08:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1F8184048;
-	Wed, 13 Jul 2022 08:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1F8184048
+	by smtp2.osuosl.org (Postfix) with ESMTP id 56BA14159B;
+	Wed, 13 Jul 2022 08:59:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56BA14159B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cB24rjLcy-pt; Wed, 13 Jul 2022 08:57:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id g61_ctEGaOqF; Wed, 13 Jul 2022 08:59:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C306A83F90;
-	Wed, 13 Jul 2022 08:57:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C306A83F90
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7BB4C1BF392
- for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:57:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5575F4158C;
+	Wed, 13 Jul 2022 08:59:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5575F4158C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C1CD1BF20F
+ for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64F7283F90
- for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:57:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64F7283F90
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23E53423AA
+ for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:59:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23E53423AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6E1hhvquTmtl for <buildroot@lists.busybox.net>;
- Wed, 13 Jul 2022 08:57:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HR03UL1uOXMD for <buildroot@lists.busybox.net>;
+ Wed, 13 Jul 2022 08:59:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id ABC3483F66
- for <buildroot@buildroot.org>; Wed, 13 Jul 2022 08:57:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABC3483F66
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C972423A4
+ for <buildroot@buildroot.org>; Wed, 13 Jul 2022 08:59:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C972423A4
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 08A1583850; Wed, 13 Jul 2022 08:44:33 +0000 (UTC)
+ id 5F71983854; Wed, 13 Jul 2022 08:46:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Jul 2022 10:57:39 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 70ef70aabc0bd4b57b61bb08f00e5fb59f4a105f
-X-Git-Newrev: 1dfaf41d9d25acc451fe2e83d8125af405ba44fa
+Date: Wed, 13 Jul 2022 10:59:45 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 97f4b9eefad54ee60cfee2890992504a5e9939f2
+X-Git-Newrev: 453ee1af2d0bc721459d54bff6e7bcfdc9274a47
 X-Patchwork-Hint: ignore
-Message-Id: <20220713084433.08A1583850@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/logrotate:
+Message-Id: <20220713084636.5F71983854@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/logrotate:
  security bump to version 3.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dfaf41d9d25acc451fe2e83d8125af405ba44fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=453ee1af2d0bc721459d54bff6e7bcfdc9274a47
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 Fix CVE-2022-1348: A vulnerability was found in logrotate in how the
 state file is created. The state file is used to prevent parallel
