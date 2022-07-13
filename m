@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D901FC43334
-	for <buildroot@archiver.kernel.org>; Wed, 13 Jul 2022 08:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAECBC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Jul 2022 08:55:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D20A84677;
-	Wed, 13 Jul 2022 08:55:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D20A84677
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E48084685;
+	Wed, 13 Jul 2022 08:55:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E48084685
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vB7UVsTr0tHY; Wed, 13 Jul 2022 08:55:32 +0000 (UTC)
+	with ESMTP id ShtrPkDaB7Qt; Wed, 13 Jul 2022 08:55:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6FB9D84672;
-	Wed, 13 Jul 2022 08:55:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FB9D84672
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 47D431BF392
- for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:55:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64A0884679;
+	Wed, 13 Jul 2022 08:55:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64A0884679
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E82151BF392
+ for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:55:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30578614F2
- for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:55:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30578614F2
+ by smtp1.osuosl.org (Postfix) with ESMTP id D12EA8451E
+ for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:55:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D12EA8451E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wbmpxy-oVSji for <buildroot@lists.busybox.net>;
- Wed, 13 Jul 2022 08:55:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4781B614F1
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4781B614F1
- for <buildroot@buildroot.org>; Wed, 13 Jul 2022 08:55:26 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 89567200010;
- Wed, 13 Jul 2022 08:55:22 +0000 (UTC)
-Message-ID: <b0281498-b659-9ef9-655b-8866ce0051d5@korsgaard.com>
-Date: Wed, 13 Jul 2022 10:55:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To: Alexander Mukhin <alexander.i.mukhin@gmail.com>, buildroot@buildroot.org
-References: <YqN7MemqvW0pXxC3@hs>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3SrnumI4RsmF for <buildroot@lists.busybox.net>;
+ Wed, 13 Jul 2022 08:55:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 21CD284672
+ for <buildroot@buildroot.org>; Wed, 13 Jul 2022 08:55:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21CD284672
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 703B583827; Wed, 13 Jul 2022 08:42:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <YqN7MemqvW0pXxC3@hs>
-Subject: Re: [Buildroot] [PATCH 1/1] package/tinyproxy: bump to version
- 1.11.1
+To: buildroot@buildroot.org
+Date: Wed, 13 Jul 2022 10:54:06 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: fd2056909c527c2ff4274aba21f5383c3aa229f6
+X-Git-Newrev: 97f4b9eefad54ee60cfee2890992504a5e9939f2
+X-Patchwork-Hint: ignore
+Message-Id: <20220713084216.703B583827@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/tinyproxy: bump
+ to version 1.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,22 +57,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/06/2022 19.11, Alexander Mukhin wrote:
-> 
-> https://github.com/tinyproxy/tinyproxy/releases/tag/1.11.1
-> 
-> Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=97f4b9eefad54ee60cfee2890992504a5e9939f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
+https://github.com/tinyproxy/tinyproxy/releases/tag/1.11.1
 
-Committed to 2022.02.x and 2022.05.x given the fixes, thanks.
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 96de6bfa7098bb0e856cadce151f8c668eff6e4f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tinyproxy/tinyproxy.hash | 4 ++--
+ package/tinyproxy/tinyproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tinyproxy/tinyproxy.hash b/package/tinyproxy/tinyproxy.hash
+index 8c58b98ca2..84e98a84ce 100644
+--- a/package/tinyproxy/tinyproxy.hash
++++ b/package/tinyproxy/tinyproxy.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/tinyproxy/tinyproxy/releases/tag/1.11.0
+-sha256  c1ec81cfc4c551d2c24e0227a5aeeaad8723bd9a39b61cd729e516b82eaa3f32  tinyproxy-1.11.0.tar.xz
++# From https://github.com/tinyproxy/tinyproxy/releases/tag/1.11.1
++sha512  2e3435bbfece3797c11ccce222eef494ed92e00dd82bea2c40a54e454b7e03c8abc8e09b244f2da7192209c39047369439d08974b79eebc996fb3095230d0374  tinyproxy-1.11.1.tar.xz
+ # locally computed
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
+index 3930e90d72..6b5a3f9625 100644
+--- a/package/tinyproxy/tinyproxy.mk
++++ b/package/tinyproxy/tinyproxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TINYPROXY_VERSION = 1.11.0
++TINYPROXY_VERSION = 1.11.1
+ TINYPROXY_SITE = https://github.com/tinyproxy/tinyproxy/releases/download/$(TINYPROXY_VERSION)
+ TINYPROXY_SOURCE = tinyproxy-$(TINYPROXY_VERSION).tar.xz
+ TINYPROXY_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
