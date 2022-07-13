@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAECBC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 13 Jul 2022 08:55:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA1C6C43334
+	for <buildroot@archiver.kernel.org>; Wed, 13 Jul 2022 08:56:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E48084685;
-	Wed, 13 Jul 2022 08:55:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E48084685
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8152C84679;
+	Wed, 13 Jul 2022 08:56:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8152C84679
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ShtrPkDaB7Qt; Wed, 13 Jul 2022 08:55:45 +0000 (UTC)
+	with ESMTP id kAPX27OODmyE; Wed, 13 Jul 2022 08:56:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 64A0884679;
-	Wed, 13 Jul 2022 08:55:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64A0884679
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E82151BF392
- for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:55:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E7038467C;
+	Wed, 13 Jul 2022 08:56:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E7038467C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D0AE1BF392
+ for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:56:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D12EA8451E
- for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:55:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D12EA8451E
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9D474239D
+ for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 08:56:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9D474239D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3SrnumI4RsmF for <buildroot@lists.busybox.net>;
- Wed, 13 Jul 2022 08:55:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id slDyykX2s9TH for <buildroot@lists.busybox.net>;
+ Wed, 13 Jul 2022 08:56:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 21CD284672
- for <buildroot@buildroot.org>; Wed, 13 Jul 2022 08:55:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21CD284672
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC1AF423A3
+ for <buildroot@buildroot.org>; Wed, 13 Jul 2022 08:56:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC1AF423A3
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 703B583827; Wed, 13 Jul 2022 08:42:16 +0000 (UTC)
+ id 3797783846; Wed, 13 Jul 2022 08:43:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Jul 2022 10:54:06 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: fd2056909c527c2ff4274aba21f5383c3aa229f6
-X-Git-Newrev: 97f4b9eefad54ee60cfee2890992504a5e9939f2
+Date: Wed, 13 Jul 2022 10:54:00 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 41690b67199545b6319f164fd8d8beffed4422f5
+X-Git-Newrev: 70ef70aabc0bd4b57b61bb08f00e5fb59f4a105f
 X-Patchwork-Hint: ignore
-Message-Id: <20220713084216.703B583827@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/tinyproxy: bump
+Message-Id: <20220713084315.3797783846@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/tinyproxy: bump
  to version 1.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97f4b9eefad54ee60cfee2890992504a5e9939f2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=70ef70aabc0bd4b57b61bb08f00e5fb59f4a105f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 https://github.com/tinyproxy/tinyproxy/releases/tag/1.11.1
 
