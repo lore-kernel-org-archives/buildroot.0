@@ -4,48 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7653C43334
-	for <buildroot@archiver.kernel.org>; Wed, 13 Jul 2022 10:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4205CC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Jul 2022 11:59:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74702612FD;
-	Wed, 13 Jul 2022 10:57:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74702612FD
+	by smtp3.osuosl.org (Postfix) with ESMTP id B827F6135D;
+	Wed, 13 Jul 2022 11:59:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B827F6135D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RfuIM-6gRrC6; Wed, 13 Jul 2022 10:57:16 +0000 (UTC)
+	with ESMTP id 4blANXMq6vbJ; Wed, 13 Jul 2022 11:59:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E26E61302;
-	Wed, 13 Jul 2022 10:57:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E26E61302
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 91B671BF484
- for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 10:57:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8232607C7;
+	Wed, 13 Jul 2022 11:59:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8232607C7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C84CF1BF20F
+ for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 11:59:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C96D60D4C
- for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 10:57:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C96D60D4C
+ by smtp2.osuosl.org (Postfix) with ESMTP id A28B740C5E
+ for <buildroot@lists.busybox.net>; Wed, 13 Jul 2022 11:59:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A28B740C5E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QToXWejrGydo for <buildroot@lists.busybox.net>;
- Wed, 13 Jul 2022 10:57:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A81C8610C6
- for <buildroot@buildroot.org>; Wed, 13 Jul 2022 10:57:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A81C8610C6
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CA34183884; Wed, 13 Jul 2022 10:43:54 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 13 Jul 2022 12:57:03 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 43420d58531eea43bdf71eb9343f2a376d245924
-X-Git-Newrev: 7b4ac44b3517fc36c95de5cf9591ed3322bf5096
-X-Patchwork-Hint: ignore
-Message-Id: <20220713104354.CA34183884@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/php: security
- bump version to 8.0.20
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OLeEWj3beoVq for <buildroot@lists.busybox.net>;
+ Wed, 13 Jul 2022 11:59:01 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55F824041C
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 55F824041C
+ for <buildroot@buildroot.org>; Wed, 13 Jul 2022 11:59:00 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 9D63240005;
+ Wed, 13 Jul 2022 11:58:57 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>
+Date: Wed, 13 Jul 2022 13:58:51 +0200
+Message-Id: <20220713115851.620731-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1657713538;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=6kewBAsM/FEOzfM3qCywaZYoBA2xMkTpu9aFI3KGjSE=;
+ b=INRu7qr2On4WA2nrcyV0nm7B0Hqs0k/i+eqBQgcabMU7yCVmNJBfZ+Tq5Ueow68f0Vroy1
+ L726AwxEtO0CxMiE1m+Z4LlY6klDteZ5hyvhHIfUyE89P+KMB42anE46z1dFskf23zGFj6
+ IbF9rSUJypbRGufJNZ0n1asgELnmhLnP8u8f86dw2ViIu5MBm7fNF7BWmVQ+SmUvWBoFg0
+ H6XDWUBLYPzFy4yV/WQBQe2IdESN47p6Ephd1cqrs3howDzzlG217R5k0VFN3pjuTwHD/A
+ GnRLQalIwMSODKQmA0F0FNI8WQmpAvXiqRygbPXH7ISQKc0cDWJvJ6wlLz761w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=INRu7qr2
+Subject: [Buildroot] [PATCH] package/python-pillow: fix host package build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +71,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: kory.maincent@bootlin.com,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b4ac44b3517fc36c95de5cf9591ed3322bf5096
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+In commit
+d8c5d9b53437741c79cd3d759de1fe81af9055fd ("package/python-pillow:
+enable host variant"), when support for the host variant of
+python-pillow was added, the fact that python-pillow has optional
+dependencies was not handled, and left python-pillow to autodetect its
+optional dependencies.
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.0.20
+Unfortunately, without some config options, some of its dependencies
+are made mandatory, such as the JPEG library. Since for now such
+support is not needed in the host variant of python-pillow, we simply
+disable all optional dependencies.
 
-Fixes CVE-2022-31625 and CVE-2022-31626.
+To be consistent with the target variant, we also ensure to have
+host-pkgconf as a dependency of the host variant.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 719ba458cb5895cb75281033e97ae61be77d32c2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pillow/python-pillow.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index e0aca101b4..2e9aa6880b 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  ba62219c4b0486cbb2a04f0796749a46b0ee1f5a142ed454212b4e2460cb0fab  php-8.0.19.tar.xz
-+sha256  973fec765336ee01f47536a5db1c2eee98df9d34a41522b7b6c760159bf0a77b  php-8.0.20.tar.xz
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 8c9cb86863..0d189ac0ca 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -71,5 +71,18 @@ else
+ PYTHON_PILLOW_BUILD_OPTS += --disable-webp --disable-webpmux
+ endif
  
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 5053f34b85..f649a9bb8b 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.0.19
-+PHP_VERSION = 8.0.20
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
++HOST_PYTHON_PILLOW_DEPENDENCIES = host-pkgconf
++HOST_PYTHON_PILLOW_BUILD_OPTS = \
++	build_ext \
++	--disable-freetype \
++	--disable-jpeg \
++	--disable-lcms \
++	--disable-xcb \
++	--disable-jpeg2000 \
++	--disable-tiff \
++	--disable-webp \
++	--disable-webpmux
++HOST_PYTHON_PILLOW_INSTALL_OPTS = $(HOST_PYTHON_PILLOW_BUILD_OPTS)
++
+ $(eval $(python-package))
+ $(eval $(host-python-package))
+-- 
+2.36.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
