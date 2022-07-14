@@ -1,65 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3F8CC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 14 Jul 2022 05:49:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55329C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Jul 2022 08:05:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EB2B4251F;
-	Thu, 14 Jul 2022 05:49:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EB2B4251F
+	by smtp1.osuosl.org (Postfix) with ESMTP id B29F784743;
+	Thu, 14 Jul 2022 08:05:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B29F784743
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gUm4nqcGHF5g; Thu, 14 Jul 2022 05:49:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EB1O3RtXG3TL; Thu, 14 Jul 2022 08:05:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B802A424E3;
-	Thu, 14 Jul 2022 05:49:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B802A424E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB5A08471A;
+	Thu, 14 Jul 2022 08:05:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB5A08471A
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2E8261BF395
- for <buildroot@lists.busybox.net>; Thu, 14 Jul 2022 05:49:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BE2311BF2A9
+ for <buildroot@lists.busybox.net>; Thu, 14 Jul 2022 08:05:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0339E84719
- for <buildroot@lists.busybox.net>; Thu, 14 Jul 2022 05:49:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0339E84719
+ by smtp1.osuosl.org (Postfix) with ESMTP id A6A0D8471A
+ for <buildroot@lists.busybox.net>; Thu, 14 Jul 2022 08:05:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6A0D8471A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YA8VqXuSF106 for <buildroot@lists.busybox.net>;
- Thu, 14 Jul 2022 05:49:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 479D384718
-Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 479D384718
- for <buildroot@busybox.net>; Thu, 14 Jul 2022 05:49:16 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.4])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id BBFF14409F0;
- Thu, 14 Jul 2022 08:48:53 +0300 (IDT)
-To: buildroot@busybox.net
-Date: Thu, 14 Jul 2022 08:49:05 +0300
-Message-Id: <55f81de26c9b74283245f427bc7dd7ff4db09c06.1657777745.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id 4LNt9QG6sLOF for <buildroot@lists.busybox.net>;
+ Thu, 14 Jul 2022 08:05:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15EFB846E4
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
+ [IPv6:2607:f8b0:4864:20::130])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 15EFB846E4
+ for <buildroot@busybox.net>; Thu, 14 Jul 2022 08:05:27 +0000 (UTC)
+Received: by mail-il1-x130.google.com with SMTP id a20so559885ilk.9
+ for <buildroot@busybox.net>; Thu, 14 Jul 2022 01:05:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to;
+ bh=KZenXhSwUMlB+ZyDMFYkIZuEUyt2fAhOgyjhQVBr3SE=;
+ b=czAK52hMYO+irUb0BJNTC+nc81FCyqR4GTj9jdRKCc64+/hAtaydxff/LnLl8ihbTF
+ qdOMH4c0BPccrAMXo7SrYS/TslX8EV3OWRuXjs2tHxTMxe2Zil92vw5Dc2ypxGzeXnBE
+ OVLf6Z8mB5tmJtFaJWvW7v2KCzk5dF2i4vJK14HJ+/678UGGXhNDhx3j5u8T/iow3W8G
+ xBFXeJEF9o+VjQVIUH8Ji7Mjqe6a7SW9N0jAP1VxvfEJTvPjgsN0AHYdQ7GErdvU135y
+ 9MzWrzvZbhg36T2COt1yldgQxIaiNN0GU6NXGNrsnrKjcKYAXLw/2kBXC6S3hikYUa3N
+ 4FRQ==
+X-Gm-Message-State: AJIora+mhDSYh2vHYHIhfWiLm7XvGRBBvobPyxXUPWhFNR/3R100Kip9
+ ZVK/B/uSJBhgixkTxIHTdlFMJWHqU3A=
+X-Google-Smtp-Source: AGRyM1tT/A33ISYeFoXpoeQj/0JgG04/HFANKlw+VmrPCjjpQP9eqH22WfP8NO5WG74E3z/Vev/JnA==
+X-Received: by 2002:a05:6e02:1a0d:b0:2dc:9b49:b59e with SMTP id
+ s13-20020a056e021a0d00b002dc9b49b59emr4081483ild.75.1657785927149; 
+ Thu, 14 Jul 2022 01:05:27 -0700 (PDT)
+Received: from einstein.dilieto.eu (smtp.dilieto.eu. [188.68.43.228])
+ by smtp.gmail.com with ESMTPSA id
+ r11-20020a02aa0b000000b00339ead526e5sm442899jam.19.2022.07.14.01.05.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 14 Jul 2022 01:05:26 -0700 (PDT)
+Date: Thu, 14 Jul 2022 10:05:22 +0200
+From: Nicola Di Lieto <nicola.dilieto@gmail.com>
+To: Baruch Siach <baruch@tkos.co.il>
+Message-ID: <Ys/OQuHfT2vyOdnF@einstein.dilieto.eu>
+References: <55f81de26c9b74283245f427bc7dd7ff4db09c06.1657777745.git.baruch@tkos.co.il>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1657777733;
- bh=bMzd1Nu5RwIjVsrmUEjfBdHgV1sduKHs6xV8Z6wdQPg=;
- h=From:To:Cc:Subject:Date:From;
- b=Hxn/sy/1D/5DQ7Ue6tjWWp3PFFml5/G37s0l3/dP9DfBzr1I5JWb5DeNnb8tTppMF
- 5UWw7l2A2Yqg8k/ertICiFHDNsYGbkazBwA2wpn/r/wtqxV++3mrAAeUrdFWfMPvRp
- nNj3ozvTWB3AdFGx7l3tzUTZbzU82McDy0TbfS5/RvX+/zmt1Nvx/b2mWaB47IOD/+
- QKhsMxcl0WkySdTXf42VgmartTHcr/YSXf4ZQb3gBR47b298OE4pYFPvC8asGaBaZB
- G1RRth1/M1fsYKxDiG+JTwoyr2H5NFmSZhMtTYJPc09fo2+8raKiN51GtvEFU2u3By
- 5c2Z6LaIAmvkw==
+Content-Disposition: inline
+In-Reply-To: <55f81de26c9b74283245f427bc7dd7ff4db09c06.1657777745.git.baruch@tkos.co.il>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=date:from:to:cc:subject:message-id:references:mime-version
+ :content-disposition:in-reply-to;
+ bh=KZenXhSwUMlB+ZyDMFYkIZuEUyt2fAhOgyjhQVBr3SE=;
+ b=A/A+NqRTHENh5vGffSeXqTQjEFDbB9DiqOWVKH4V7xqd6mu8Ns2GBA51mOTgqsv2n7
+ K29g5S4gDAc5hz23h60P/uPv++GZcLBUJarpYD5lQpY2QENC0KZyI/fCR9F8meA5xssD
+ RrMsvGOq/6Vvw8+FF20gi0hqVTmZzr4qO3LLj2cqD+6Z9JvmBqyxbnUJChRVFQvq4o1q
+ jG5D4ugYaoz6MTpgZAIc8Ov34h3lDP6dk59p12agi4qx8SPWqH0De8Cw2wb9nA/3wvRi
+ FXrEIVJuXQMnfIYsiv9rB5SXmOJDxRR1kV3snUHGLBtn+izdttQL6EyFgt2tO2h8F0Il
+ EdjA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=Hxn/sy/1
-Subject: [Buildroot] [RFC PATCH v2] package/uacme: requires TLS support in
- libcurl
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=A/A+NqRT
+Subject: Re: [Buildroot] [RFC PATCH v2] package/uacme: requires TLS support
+ in libcurl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,71 +95,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Nicola Di Lieto <nicola.dilieto@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@busybox.net
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-uacme configure script fails when libcurl does not support TLS. This
-means that BR2_PACKAGE_LIBCURL_TLS_NONE is incompatible with uacme. But
-there is no way to change the choice to something other than
-BR2_PACKAGE_LIBCURL_TLS_NONE. So instead make uacme depend on libcurl
-and !BR2_PACKAGE_LIBCURL_TLS_NONE.
+Hello Baruch
 
-As a result we can no longer select BR2_PACKAGE_OPENSSL since it causes
-recursive dependency. Use 'depend on' instead, and add a comment to
-explain this uncommon choice.
+On Thu, Jul 14, 2022 at 08:49:05AM +0300, Baruch Siach wrote:
+>v2:
+>  Add dependency on crypto back end for uacme itself (Nicola Di Lieto)
 
-Fixes:
-http://autobuild.buildroot.net/results/4e16f1d958ac3d30e26e7f17bdffc47834b0e2bd/
-http://autobuild.buildroot.net/results/4e16f1d958ac3d30e26e7f17bdffc47834b0e2bd/
-http://autobuild.buildroot.net/results/25280409b32282b4dd40b1e88127051439380f3d/
-
-Cc: Nicola Di Lieto <nicola.dilieto@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2:
-  Add dependency on crypto back end for uacme itself (Nicola Di Lieto)
----
- package/uacme/Config.in | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/package/uacme/Config.in b/package/uacme/Config.in
-index 58b7c534e73d..815ab5da7d61 100644
---- a/package/uacme/Config.in
-+++ b/package/uacme/Config.in
-@@ -1,8 +1,9 @@
- config BR2_PACKAGE_UACME
- 	bool "uacme"
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_GNUTLS || BR2_PACKAGE_MBEDTLS)
--	select BR2_PACKAGE_LIBCURL
-+	# We can not use select here as it causes recursive dependency
-+	depends on BR2_PACKAGE_OPENSSL || BR2_PACKAGE_GNUTLS || BR2_PACKAGE_MBEDTLS
-+	depends on BR2_PACKAGE_LIBCURL && !BR2_PACKAGE_LIBCURL_TLS_NONE
- 	help
- 	  uacme is a client for the ACMEv2 protocol described in
- 	  RFC8555, written in plain C with minimal dependencies
-@@ -14,6 +15,13 @@ config BR2_PACKAGE_UACME
- 
- 	  https://github.com/ndilieto/uacme
- 
-+comment "uacme needs one of openssl, gnutls or mbedtls"
-+	depends on !BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_GNUTLS && !BR2_PACKAGE_MBEDTLS
-+
-+comment "uacme needs libcurl with TLS support"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_PACKAGE_LIBCURL || BR2_PACKAGE_LIBCURL_TLS_NONE
-+
- if BR2_PACKAGE_UACME
- 
- config BR2_PACKAGE_UACME_UALPN
--- 
-2.35.1
-
+This should work. It's perhaps not ideal but I can't see any other way 
+to work around the circular dependency issue.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
