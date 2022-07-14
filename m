@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E45F8C43334
-	for <buildroot@archiver.kernel.org>; Thu, 14 Jul 2022 10:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E29D1CCA47C
+	for <buildroot@archiver.kernel.org>; Thu, 14 Jul 2022 16:42:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 654DD60A93;
-	Thu, 14 Jul 2022 10:00:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 654DD60A93
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3563B8188A;
+	Thu, 14 Jul 2022 16:42:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3563B8188A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RK3B1_FDdBys; Thu, 14 Jul 2022 10:00:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gSQA3YFMnpFr; Thu, 14 Jul 2022 16:42:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DE8A6151F;
-	Thu, 14 Jul 2022 10:00:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DE8A6151F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4F8D51BF33E
- for <buildroot@lists.busybox.net>; Thu, 14 Jul 2022 10:00:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CE99817A5;
+	Thu, 14 Jul 2022 16:42:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CE99817A5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A95E11BF315
+ for <buildroot@lists.busybox.net>; Thu, 14 Jul 2022 16:42:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36C5760D59
- for <buildroot@lists.busybox.net>; Thu, 14 Jul 2022 10:00:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36C5760D59
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8338640198
+ for <buildroot@lists.busybox.net>; Thu, 14 Jul 2022 16:42:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8338640198
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LqZmO_FnjHmh for <buildroot@lists.busybox.net>;
- Thu, 14 Jul 2022 10:00:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id njtYAbJzbJo0 for <buildroot@lists.busybox.net>;
+ Thu, 14 Jul 2022 16:42:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FC2E60A93
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5FC2E60A93
- for <buildroot@buildroot.org>; Thu, 14 Jul 2022 10:00:09 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id v14so1847056wra.5
- for <buildroot@buildroot.org>; Thu, 14 Jul 2022 03:00:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE81640114
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE81640114
+ for <buildroot@buildroot.org>; Thu, 14 Jul 2022 16:42:15 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id r10so3329534wrv.4
+ for <buildroot@buildroot.org>; Thu, 14 Jul 2022 09:42:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Iy1UpNvjSyOm24QNYHiwsLjs+R6aB9PdQqwEFiOoYiI=;
- b=03FDj+mKZp96gZbAM7P/Mpixbbxhqvu27fIhvBIz9Maze7RA2BciYLZf4FzeQNhJZW
- v2JFkpLCoivk69dR1SncniwVhdcSCbv/SMwkIGnJDlNc2FpUpAlcvp/7CqcZFWfccDo2
- enyqO+ZrDPSUviVjuLErDNuFt7bXu8YQ9brzRD9uziTLfY337rCipz7DkhKWyk0/orBp
- eaB2zREyvowSkFc4q/xquuapzyswcTTD3pVcA2ssDxaonzP4soeeSdtesz+PF8BjEWd5
- SirwrvgVCqJaZih1OEFK8Rc9HcSi8PPKDhZohT+DIBdJ0CLG2K/LUlWreczpfBQmJFI2
- mZHw==
-X-Gm-Message-State: AJIora/0JS637eoE42CYpDGD2z3IYU1GpKsVn9RalC1gp6imgfZX8rkt
- YHm8wQ7z6gn2Qe/XilwmJ33dSmpxjok=
-X-Google-Smtp-Source: AGRyM1vofLhJhSn302mIoQGJO8JqeeYcznFDGjWqM4ctKkt19VbMc/MtsCxFJNuZ7ZDK4gY/LkZgNw==
-X-Received: by 2002:adf:f705:0:b0:21d:74fa:c043 with SMTP id
- r5-20020adff705000000b0021d74fac043mr7824829wrp.77.1657792807422; 
- Thu, 14 Jul 2022 03:00:07 -0700 (PDT)
+ bh=oimP7c5XZe2qUoIGAtywmIMKTrVH8UUZjXg+1EUXMjI=;
+ b=cQca8vtBfSXJsYMHfRqpLM+lHlKphrsMh2TFuq7g64zue3AgVsNhmHU3p3tNqVFLri
+ Rm/QkK9avagWLmef27JoDVWOCHBIDtNLkU6CZ6VyknYsaQBJnwVS362mj5oTyWql+xo2
+ cPvQIQgHHTZxCdvOz3jSvSFOQ/D+DbJUgzWPfUxWzMqs7th/19JCu8Z8yZ4FWzcDUpfE
+ K++sd08UbpzcOL7vnqLnlnlxrNN5PCAe3atHKUd7rrD6jNoXH7eFBVgvNvX4PyfzctRB
+ rl1taHc6tc0gXh/u2ihb0jaNBqksI9UslwjeLZS5unySTBB8FMT4Y+902+7XpFg3CDgg
+ BVtw==
+X-Gm-Message-State: AJIora/L/fPQJ+VVh4TUkVAJWzR+w6bJWzIMYds68AKhiktvDPCaDENA
+ Myck9gOlUaGBNCKvRUvoLFy1P3KyrlI=
+X-Google-Smtp-Source: AGRyM1tgni9ffocNnpzYbzA+a0znd5J7FrJCOWrih5r6nl+0VCggb4iEIwJSuZQz6dstJhwkvMdKbg==
+X-Received: by 2002:a05:6000:1a53:b0:21d:7308:f7f9 with SMTP id
+ t19-20020a0560001a5300b0021d7308f7f9mr9203459wry.197.1657816933821; 
+ Thu, 14 Jul 2022 09:42:13 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- m17-20020a05600c3b1100b003976fbfbf00sm1583115wms.30.2022.07.14.03.00.06
+ q6-20020a1cf306000000b003a2e92edeccsm5897148wmq.46.2022.07.14.09.42.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Jul 2022 03:00:07 -0700 (PDT)
+ Thu, 14 Jul 2022 09:42:13 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Jul 2022 11:57:01 +0200
-Message-Id: <20220714095701.746554-1-fontaine.fabrice@gmail.com>
+Date: Thu, 14 Jul 2022 18:38:36 +0200
+Message-Id: <20220714163836.14576-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Iy1UpNvjSyOm24QNYHiwsLjs+R6aB9PdQqwEFiOoYiI=;
- b=HbQX3eZPk8D+pHTp5VTvpAB3jo1fV7V1b0vdzIHezsloQen3YjcsePNzv57tzEJOuo
- TEcy8jVrnSOu1y3NpFvoq7WCwR/sWHLaizZwmKNr4xlKOtiF6EU/XXD9HXJVRiJvrsWO
- 9lJiNHj9BAD8BJ2pzZ3mPIcnb+5lKbSPII9ZN20yc7VHe8v0RMuWCSbeEo2qDG0VCZYw
- sRjGaE2qfcbOzeuNkhWp7GBmAQGmJo/Rx2nUkuLT3kygEFuP776vdnYcc1SlF+EVymbM
- ZbTlU734YnulBfVF3gNxSSe67k+s2a5RB7AdRTe5rddhP7VjYw0u8WXMaZjG9VHajtL6
- LPgg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=oimP7c5XZe2qUoIGAtywmIMKTrVH8UUZjXg+1EUXMjI=;
+ b=EocMh5wNFjQ+gVsSFywuPfTJI2EqF5E4DjC2uw3I8X+WBnk4SAEdGr9hOaXsizmZq/
+ jfdC3SO7zS2ocfIEqoRUeNRH621toHXKwIdrmik/d4sX03MJaTSD5gw2GX+VE1LYtq4N
+ fNA4UxL5xrJCRtfkV8ZzsmZXtGb8WwS6PybovvHP5r4dsyLNfK0G1nzA55ZfPeNMr4LY
+ RTVzdQroQ9qyWR3Pr8dimYhDcmrOcuz4VlF/+z6m3OIYFlBBRgSQOtx3spBM8MONyIY0
+ fd1oTlHzbG+LCaQoFVfImdOpmb4PDrpPj7pQuz02ZINYw+Jn5kQhTBmLLjCo5nEGLaig
+ d6iQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=HbQX3eZP
-Subject: [Buildroot] [PATCH 1/1] package/lxc: add linux-pam optional
- dependency
+ header.a=rsa-sha256 header.s=20210112 header.b=EocMh5wN
+Subject: [Buildroot] [PATCH 1/1] package/assimp: add ASSIMP_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,36 +93,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+cpe:2.3:a:assimp:assimp is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aassimp%3Aassimp
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/lxc/lxc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/assimp/assimp.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 9311dc8775..abe4f0804a 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -51,6 +51,13 @@ else
- LXC_CONF_OPTS += --disable-liburing
- endif
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index 42440f0fa9..79865673ac 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -8,6 +8,7 @@ ASSIMP_VERSION = 5.2.1
+ ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
+ ASSIMP_LICENSE = BSD-3-Clause
+ ASSIMP_LICENSE_FILES = LICENSE
++ASSIMP_CPE_ID_VENDOR = assimp
+ ASSIMP_DEPENDENCIES = zlib
+ ASSIMP_INSTALL_STAGING = YES
  
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+LXC_CONF_OPTS += --enable-pam
-+LXC_DEPENDENCIES += linux-pam
-+else
-+LXC_DEPENDENCIES += --disable-pam
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LXC_CONF_OPTS += --enable-openssl
- LXC_DEPENDENCIES += openssl
 -- 
 2.35.1
 
