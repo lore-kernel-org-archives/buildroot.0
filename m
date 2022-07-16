@@ -1,93 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0463BC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 12:23:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5160CCA479
+	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 13:10:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7C551405BF;
-	Sat, 16 Jul 2022 12:23:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C551405BF
+	by smtp4.osuosl.org (Postfix) with ESMTP id D461A42345;
+	Sat, 16 Jul 2022 13:10:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D461A42345
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6rwbkLy78ulh; Sat, 16 Jul 2022 12:23:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JQug5VYh3eoG; Sat, 16 Jul 2022 13:10:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 82BC440385;
-	Sat, 16 Jul 2022 12:23:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82BC440385
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7749C1BF963
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 12:23:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B55424230F;
+	Sat, 16 Jul 2022 13:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B55424230F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E65C1BF390
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 13:10:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F28860E9B
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 12:23:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F28860E9B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 86E9284DA4
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 13:10:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86E9284DA4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x8X6iUKt_rkI for <buildroot@lists.busybox.net>;
- Sat, 16 Jul 2022 12:22:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HjFEuNU95pYe for <buildroot@lists.busybox.net>;
+ Sat, 16 Jul 2022 13:10:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F147660E29
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F147660E29
- for <buildroot@buildroot.org>; Sat, 16 Jul 2022 12:22:58 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id f2so10149671wrr.6
- for <buildroot@buildroot.org>; Sat, 16 Jul 2022 05:22:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C69E84DA3
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1C69E84DA3
+ for <buildroot@buildroot.org>; Sat, 16 Jul 2022 13:10:22 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id bk26so10248318wrb.11
+ for <buildroot@buildroot.org>; Sat, 16 Jul 2022 06:10:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=koJBDs4nOKPBV8j9fPIUAbx+Md0d6SrCCnSvHG/c0n4=;
- b=yIgjekrTnYDRVV9hgoKlHMpe1WOLWrh8CUaCVXWLaPoG1rLex/JGq1233ilEkSFwkf
- UdQx9FN+BfngopoGMG9RJ9Cgyttm+CfRkS97KaaV0y/RAC7Bnh2q06fXU14OVWN8+qAr
- 5JaRWHRYIeNXxwXKj31dYxR18hOUHaBfNwCYSbb4SkB2SvJ+mX+LKluh0SQJZUnNkKjd
- xEh0fs87KfSKs3mk5gmjz42ahgeF/sqWz++tpAmyVbRObeUBkjYxbrm+6F2n+lVGYCIp
- yBxjXSr5qziA+lq0jZLRdKXhLkBLXlucGw8EHb18aM8PScsV5HgnpqMphqd6zwHgHghr
- QuEw==
-X-Gm-Message-State: AJIora9XpAkhD921apgGLHUzfy93nx2S6StdSO+3tUXW9hvQY1fwl1z2
- eKPKjHVhuU7pHQJhQ5w9MUY=
-X-Google-Smtp-Source: AGRyM1tFib8LWgnf2XSEKqhoqtqJs3DppBMkM2tV7c1xjFJjnkvE/t+azVo5wbiHCPn9sVutwlbzyQ==
-X-Received: by 2002:a5d:4e08:0:b0:21d:a689:7dd1 with SMTP id
- p8-20020a5d4e08000000b0021da6897dd1mr16190791wrt.477.1657974176264; 
- Sat, 16 Jul 2022 05:22:56 -0700 (PDT)
-Received: from [192.168.1.43]
- (amontpellier-554-1-90-79.w92-145.abo.wanadoo.fr. [92.145.201.79])
+ bh=Sf1ITeOXGZtcU/74yE75es4BI3xEDtDHC8D48Xe10qI=;
+ b=COV+6DsEbWPEixY66/EuVhNN2M/5mp99UOkGjDwiRo6olgtAjYHmdYAF/WjMNqw/dP
+ 0inzzj+S/BnCFNkNZGwt6orU5AywzmVqt0W6xwx0en/5rBeZX7gXeG/+603evEL5S8Cd
+ ZWUaX4xL+pM/pLsRNtNF4rGlLUjSVnT/LrpTwvapIi+zEyyFyQibzjujhi8DzuMx25cy
+ NxPzQrL4+NP7Ecl2+BYuwbmJzkQSz97aE0oO2s7UAPSAWbp+ajWBGDZfnWa3RXR5DEmz
+ JJruoF73jAK5+V+9Gxbo8JiDLrqq5KhKESQ9WwVcPZVfbFa0hvr9k26prLIwxqsJxNXQ
+ BWKw==
+X-Gm-Message-State: AJIora+kzQF7ll6wJI+Jh1Q3XgRT+DyrS9ieFMXSpaZWpYsgFYKN9dJg
+ C/hkJzhpuD9NcTsruouZMJbVpwpUItI=
+X-Google-Smtp-Source: AGRyM1s67UvsM4oPul0XKI0L4PiDc1Np8aHM97GvgHp5yLREUcKROff4KwAiruT+EhSshrTsARDseQ==
+X-Received: by 2002:a05:6000:1092:b0:21d:6df8:d082 with SMTP id
+ y18-20020a056000109200b0021d6df8d082mr16246519wrw.68.1657977019999; 
+ Sat, 16 Jul 2022 06:10:19 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- i4-20020a05600c354400b003a2c7bf0497sm6809678wmq.16.2022.07.16.05.22.55
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 16 Jul 2022 05:22:55 -0700 (PDT)
-Message-ID: <8a677c96-16ff-600a-b5da-f77b74c862dd@gmail.com>
-Date: Sat, 16 Jul 2022 14:23:00 +0200
+ o3-20020adfeac3000000b0021d6ac977fasm6104539wrn.69.2022.07.16.06.10.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 16 Jul 2022 06:10:19 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 16 Jul 2022 15:07:07 +0200
+Message-Id: <20220716130707.390985-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To: Frank Hunleth <fhunleth@troodon-software.com>, buildroot@buildroot.org
-References: <20220627135359.2232222-1-fhunleth@troodon-software.com>
-From: Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <20220627135359.2232222-1-fhunleth@troodon-software.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=koJBDs4nOKPBV8j9fPIUAbx+Md0d6SrCCnSvHG/c0n4=;
- b=bcswEtqp5amLWkcRocA8sVI+riBoxH+OqqXHmenoKn7ntAxfxeAc0YqrTCOvzq0Z+k
- zl9Po8UmFRh/hiuP/nF8Yk3qJ9h37kpa/5UTegkjAedGQGDog+woX2OvX6G5iwPMDaH0
- GFX4B/bBhC9BAltYbk1mJfOw554nUh4NQgLmX2k6VeO2ltoDPyGWZd2o8jThBuHIxkjp
- DW2ZqSTxEs2Y3kA2E0E996FY635wfPRXrRMJsZklXjsInmAeTk9oUn308NByZKV8G4Fc
- DK6sBzNtSlIvkzGbKENCDcepdod//eMb7vIUIOTcxxMmzAnw98lNGmtvrvB6V+PP2I/p
- Gk7Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Sf1ITeOXGZtcU/74yE75es4BI3xEDtDHC8D48Xe10qI=;
+ b=V7usP9W4lj8JtmVvn4ZCbCbqWNw6dxaZorriYbIB1YJTUP2X8FyMuPdbcHj+gPsGJJ
+ r4jygZIZWzyCsDLx7pONwHFExC4MTuAmFF14LxgtTujbnjI8yrdbHoqT/2bi2ts14KfT
+ G/JFqYjT//6QYjizGKjyDEBbVNpkXBUvaRmRSlR3jqKYdBnwIHHRPZPsbNKhRNCt3wyN
+ ZV7WkMe8kkMjX8acugZ4FqNPllF4aQTqp7dwRRAotVsPS0HIcg0PqByr5aQQ31wgvflV
+ eXm+o95ADEQk3Tl5PzO9P7n7/X2B5c3y5FNt53S7yApFyMjAuVtbT/0vqNRkbrhGWEVg
+ zmzQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=bcswEtqp
-Subject: Re: [Buildroot] [PATCH 1/1] arch/riscv: support the vector
- operations extension
+ header.a=rsa-sha256 header.s=20210112 header.b=V7usP9W4
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: fix
+ ifupdown-scripts build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,45 +94,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mark Corbin <mark@dibsco.co.uk>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Matt Weber <matthew.weber@collins.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRnJhbmssCgpMZSAyNy8wNi8yMDIyIMOgIDE1OjU0LCBGcmFuayBIdW5sZXRoIHZpYSBi
-dWlsZHJvb3QgYSDDqWNyaXTCoDoKPiBTaWduZWQtb2ZmLWJ5OiBGcmFuayBIdW5sZXRoIDxmaHVu
-bGV0aEB0cm9vZG9uLXNvZnR3YXJlLmNvbT4KPiAtLS0KPiAgYXJjaC9Db25maWcuaW4ucmlzY3Yg
-fCA3ICsrKysrKysKPiAgYXJjaC9hcmNoLm1rLnJpc2N2ICAgfCAzICsrKwo+ICAyIGZpbGVzIGNo
-YW5nZWQsIDEwIGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvYXJjaC9Db25maWcuaW4u
-cmlzY3YgYi9hcmNoL0NvbmZpZy5pbi5yaXNjdgo+IGluZGV4IDI4OGVkODMzZWIuLmU0ZGM5MzZj
-ZjggMTAwNjQ0Cj4gLS0tIGEvYXJjaC9Db25maWcuaW4ucmlzY3YKPiArKysgYi9hcmNoL0NvbmZp
-Zy5pbi5yaXNjdgo+IEBAIC0xOCw2ICsxOCw5IEBAIGNvbmZpZyBCUjJfUklTQ1ZfSVNBX1JWRAo+
-ICBjb25maWcgQlIyX1JJU0NWX0lTQV9SVkMKPiAgCWJvb2wKPiAKPiArY29uZmlnIEJSMl9SSVND
-Vl9JU0FfUlZWCj4gKwlib29sCj4gKwo+ICBjaG9pY2UKPiAgCXByb21wdCAiVGFyZ2V0IEFyY2hp
-dGVjdHVyZSBWYXJpYW50Igo+ICAJZGVmYXVsdCBCUjJfcmlzY3ZfZwo+IEBAIC02Myw2ICs2Niwx
-MCBAQCBjb25maWcgQlIyX1JJU0NWX0lTQV9DVVNUT01fUlZECj4gIGNvbmZpZyBCUjJfUklTQ1Zf
-SVNBX0NVU1RPTV9SVkMKPiAgCWJvb2wgIkNvbXByZXNzZWQgSW5zdHJ1Y3Rpb25zIChDKSIKPiAg
-CXNlbGVjdCBCUjJfUklTQ1ZfSVNBX1JWQwo+ICsKPiArY29uZmlnIEJSMl9SSVNDVl9JU0FfQ1VT
-VE9NX1JWVgo+ICsJYm9vbCAiVmVjdG9yIEluc3RydWN0aW9ucyAoVikiCj4gKwlzZWxlY3QgQlIy
-X1JJU0NWX0lTQV9SVlYKPiAgZW5kaWYKPiAKPiAgY2hvaWNlCj4gZGlmZiAtLWdpdCBhL2FyY2gv
-YXJjaC5tay5yaXNjdiBiL2FyY2gvYXJjaC5tay5yaXNjdgo+IGluZGV4IGYzYmYyYjM0NjcuLmNl
-YTViMGYyNjMgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9hcmNoLm1rLnJpc2N2Cj4gKysrIGIvYXJjaC9h
-cmNoLm1rLnJpc2N2Cj4gQEAgLTI2LDUgKzI2LDggQEAgZW5kaWYKPiAgaWZlcSAoJChCUjJfUklT
-Q1ZfSVNBX1JWQykseSkKPiAgR0NDX1RBUkdFVF9BUkNIIDo9ICQoR0NDX1RBUkdFVF9BUkNIKWMK
-PiAgZW5kaWYKPiAraWZlcSAoJChCUjJfUklTQ1ZfSVNBX1JWVikseSkKPiArR0NDX1RBUkdFVF9B
-UkNIIDo9ICQoR0NDX1RBUkdFVF9BUkNIKXYKCkFGQUlLIHRoaXMgcmVxdWlyZXMgYXQgbGVhc3Qg
-Z2NjIDEyIFsxXSB0byBzdXBwb3J0IHRoaXMgZXh0ZW5zaW9uIChtaXNzaW5nCmRlcGVuZGVuY3kg
-b24gQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfMTIpLgoKQWxzbyBnY2MgMTIgbmVlZHMgdG8g
-YmUgbWVyZ2VkIGludG8gQnVpbGRyb290IGZpcnN0IFsyXSAoaGVscCB3ZWxjb21lKSA7LSkKCkkg
-aGF2ZSBtYXJrZWQgdGhpcyBwYXRjaCBhcyAiQ2hhbmdlcyBSZXF1ZXN0ZWQiLgoKWzFdCmh0dHBz
-Oi8vZ2NjLmdudS5vcmcvZ2l0Lz9wPWdjYy5naXQ7YT1jb21taXRkaWZmO2g9ZTdkYTMxYmEyMDMw
-Yjg1ZmYwZDE1YTBjNGFhYzMzMThjYjY2YjY0YQoKWzJdIGh0dHA6Ly9wYXRjaHdvcmsub3psYWJz
-Lm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9saXN0Lz9zZXJpZXM9MzAyMzg5CgpCZXN0IHJlZ2FyZHMs
-ClJvbWFpbgoKCj4gK2VuZGlmCj4gCj4gIGVuZGlmCj4gLS0KPiAyLjI1LjEKPiAKPiAKPiBfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+Fix the following build failure with ifupdown-scripts and
+BR2_PER_PACKAGE_DIRECTORIES raised since commit
+eed183e67e02a35e98fbf6baead9c9ee559b493e:
+
+ln -sf ../if-up.d/wpasupplicant /nvmedata/autobuild/instance-11/output-1/per-package/wpa_supplicant/target/etc/network/if-down.d/wpasupplicant
+ln: failed to create symbolic link '/nvmedata/autobuild/instance-11/output-1/per-package/wpa_supplicant/target/etc/network/if-down.d/wpasupplicant': No such file or directory
+
+Fixes:
+ - http://autobuild.buildroot.org/results/fb35c29a966e21a29df5923e6d27ca372a4b4909
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/wpa_supplicant/wpa_supplicant.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index afcd6502e3..e5e3938be1 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -260,7 +260,9 @@ ifeq ($(BR2_PACKAGE_IFUPDOWN_SCRIPTS),y)
+ define WPA_SUPPLICANT_INSTALL_IFUP_SCRIPTS
+ 	$(INSTALL) -m 0755 -D package/wpa_supplicant/ifupdown.sh \
+ 		$(TARGET_DIR)/etc/network/if-up.d/wpasupplicant
+-	ln -sf ../if-up.d/wpasupplicant $(TARGET_DIR)/etc/network/if-down.d/wpasupplicant
++	mkdir -p $(TARGET_DIR)/etc/network/if-down.d
++	ln -sf ../if-up.d/wpasupplicant \
++		$(TARGET_DIR)/etc/network/if-down.d/wpasupplicant
+ endef
+ endif
+ 
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
