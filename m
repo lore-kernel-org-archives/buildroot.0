@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A376C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 14:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F031FC43334
+	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 15:05:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 971C6607C1;
-	Sat, 16 Jul 2022 14:57:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 971C6607C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DE1142481;
+	Sat, 16 Jul 2022 15:05:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DE1142481
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xLeqOqCMip1u; Sat, 16 Jul 2022 14:57:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l-rIZmT7sHpc; Sat, 16 Jul 2022 15:05:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0565A60A80;
-	Sat, 16 Jul 2022 14:57:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0565A60A80
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 828E11BF5DD
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 14:57:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DBFB41C1E;
+	Sat, 16 Jul 2022 15:05:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DBFB41C1E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 34A3A1BF4DA
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 15:05:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F3BD6066D
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 14:57:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F3BD6066D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0EAAA84E55
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 15:05:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EAAA84E55
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JQ1MAU-AWOv7 for <buildroot@lists.busybox.net>;
- Sat, 16 Jul 2022 14:57:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WMwAogFKoeuc for <buildroot@lists.busybox.net>;
+ Sat, 16 Jul 2022 15:05:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 313D56064D
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 313D56064D
- for <buildroot@buildroot.org>; Sat, 16 Jul 2022 14:57:30 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id v16so10505400wrd.13
- for <buildroot@buildroot.org>; Sat, 16 Jul 2022 07:57:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4A1684E51
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C4A1684E51
+ for <buildroot@buildroot.org>; Sat, 16 Jul 2022 15:05:53 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id f2so10534432wrr.6
+ for <buildroot@buildroot.org>; Sat, 16 Jul 2022 08:05:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=1eo1yw083wEurAzD2E8Ttky0sbLZySy5YkkMsYSEM0s=;
- b=KyPsv85iR12Rs7QVQX6X2DQ3F7SEUz+Xy+nfinP5Uy7AtjMGCaRiN+sTnkzEDIUHoO
- cHhfwPJ11gfM9igOuwKsWwXsDMYzmo59kDgdvPefjyXptMHQATOw81AxHGmHdnn6W/di
- jW9mv5l8INebRIaEUWD69knNGhV2ykOWZh3o+OCn06mdfeKewtUVGRMj0ctsl8nzGV5A
- dkzNBDStX7+sAIEmwpmaZ5ZgfPugTF0d+bgDvgDdgQkRvqGfHLncjcz4e+w5Jd2iLILO
- ixnLnIDHgWsXNY06wzbXEQO2Hg0paT7oGvDrK8PlSUgMvQE3UsMYInYgVF5qMTbrVhoR
- SHYg==
-X-Gm-Message-State: AJIora9gchDCc1Z0L/I4Uo30ZnmMk8BFz6T/tQ5mYu5ZFQ4F1BLo2fTM
- orxyIUJpNbCLoOMzOSA9kxzXeUYWO7Q=
-X-Google-Smtp-Source: AGRyM1tZZi2GVh2XfwBC2UGeWwzzhfISJ1ctku17CidsoYcRyMbbyZWqSKjTa+uD3gs4sOaTq+EgOQ==
-X-Received: by 2002:a05:6000:1688:b0:21d:7b36:926a with SMTP id
- y8-20020a056000168800b0021d7b36926amr16306102wrd.303.1657983448191; 
- Sat, 16 Jul 2022 07:57:28 -0700 (PDT)
+ bh=X3C7/empGtyuCFa7rEBkahEZG1unIBNz+g+Ljwl5IKE=;
+ b=ZfTpyMZkUoEztVeo6CFyDYekManXys18t64e3EO3N5rwweQZF+gZejs9FueA2NHMEj
+ sqsYqf1o3ByKca60gH2uc9D5FFTrxgm1PDjGLyM055z2DyspohkpCtDQpIO219/5A3GV
+ r5GDAd5omlKpzm6++v9EiYVWpa+GsW2jTw44Kcj9R5xWrzyJjXJT5sq0rr2JYqtGmoeT
+ Y1YDIGwsltrZm2dztY/hqRFADcw/8VKCZXhDlELYUWCzXo3S5WHzC5glC6Ck1B5DwzYd
+ L2to/jUgB6N0aHcZS21SotKzT5A0F4D+hj+v1lBpyQAh8bXw0M+W9SA6VwcWh+CySt0p
+ 3Ung==
+X-Gm-Message-State: AJIora9m6ExLqWNc5uH8gvGweQbf3pfIIAdcE3acos+OOJ+bP/nACoeU
+ tZ7dYYt0ItXFgchWr1vwzDz0kPSvebI=
+X-Google-Smtp-Source: AGRyM1t10ieaVKEoj8x+iwK25YqIgxba3+q1X6yhhqis2WPEPAnPY7R6cL0RSHAP5VFRYwcAXzVcJQ==
+X-Received: by 2002:a05:6000:15c8:b0:21d:babe:e75c with SMTP id
+ y8-20020a05600015c800b0021dbabee75cmr17494291wry.32.1657983951421; 
+ Sat, 16 Jul 2022 08:05:51 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- c5-20020a056000104500b0021d69860b66sm7748154wrx.9.2022.07.16.07.57.27
+ d3-20020adfe883000000b0021d7ff34df7sm7625105wrm.117.2022.07.16.08.05.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Jul 2022 07:57:27 -0700 (PDT)
+ Sat, 16 Jul 2022 08:05:51 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Jul 2022 16:54:19 +0200
-Message-Id: <20220716145419.727270-1-fontaine.fabrice@gmail.com>
+Date: Sat, 16 Jul 2022 17:02:47 +0200
+Message-Id: <20220716150247.753062-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=1eo1yw083wEurAzD2E8Ttky0sbLZySy5YkkMsYSEM0s=;
- b=miPdu6RBwAI8Gmxf5e8V7nWvhlABXpJi0nr+3v6TpyXGyYWiDzakfABQiWQ3mCC0bv
- q7kReoIWr8x0DCqjaqf2lP7h8efzCrGzRB8xBX1qYoEqADrW0oP+zqoXbqkNC+NKHqmS
- 9pJ2AzfNhcUSJIl1UCpQ6zvEkdBsdkhb+7Gmy2RpFmQWp42NF3SOhdB4tphuq5ZJf1F8
- GH4Vi8d2vwQfHcg9FcFlSh/cyH0GowFEZN35qKsPvhLIo0k9nJ2568/J34nYkK5oZXTq
- Kqh2d2O0a5PK94+IyhapKpK7gX6l4NQI6qdMkIfjc5iSPBf+HEGfdg5y/sCTcrOu5KtJ
- 6lSQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=X3C7/empGtyuCFa7rEBkahEZG1unIBNz+g+Ljwl5IKE=;
+ b=G5XZhK5eiVQ4EhmzslQ9xE170C72jYztfLFUHdpEFuUkgFINzAOzwjw47xreh2j3qH
+ fLq+gGrf3NEgkn7LRW28FSeydjuyY48ETT8RvyXRDTAxs2Gv9CwacGZ9wcVMqlJBr6Fz
+ g1CF8Lde0pqCROTWo54D++m80pNtg1tF65Z3g0uj3LGJuN8Z9C+JFK96dT9pZtHESTZQ
+ +eRyPaPPDi8j9fQYE2DDl0HuyxVtPSlwhrTJ8BpaBD965k+di204Tqnt0fhwG0DWaCdV
+ uMi7tmfsMOV60RU5KjKmJHCT2JhTQBwU+bhYdJnWNM4ARE7iV6eRS8cvTMdnowWedIIB
+ XYjQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=miPdu6RB
-Subject: [Buildroot] [PATCH 1/1] package/libgpgme: bump to version 1.17.1
+ header.a=rsa-sha256 header.s=20210112 header.b=G5XZhK5e
+Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: bump to version 1.45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,87 +99,139 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch (already in version)
+Drop patches (already in version)
 
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;h=a460ddfe78f18a03143c8dd87ef2c138392104e6;hb=ee50a38823daaa16b151a549a7dafef34bbd1e81
+https://dev.gnupg.org/T5352
+https://dev.gnupg.org/T5676
+https://dev.gnupg.org/T5802
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ore-Support-closefrom-also-for-glibc.patch | 36 -------------------
- package/libgpgme/libgpgme.hash                |  6 ++--
- package/libgpgme/libgpgme.mk                  |  2 +-
- 3 files changed, 4 insertions(+), 40 deletions(-)
- delete mode 100644 package/libgpgme/0001-core-Support-closefrom-also-for-glibc.patch
+ ...tion-of-lock-obj-pub.native.h-for-cr.patch | 34 ----------------
+ .../0002-build-Fix-disable-threads.patch      | 39 -------------------
+ package/libgpg-error/libgpg-error.hash        |  8 ++--
+ package/libgpg-error/libgpg-error.mk          |  2 +-
+ 4 files changed, 5 insertions(+), 78 deletions(-)
+ delete mode 100644 package/libgpg-error/0001-build-Fix-generation-of-lock-obj-pub.native.h-for-cr.patch
+ delete mode 100644 package/libgpg-error/0002-build-Fix-disable-threads.patch
 
-diff --git a/package/libgpgme/0001-core-Support-closefrom-also-for-glibc.patch b/package/libgpgme/0001-core-Support-closefrom-also-for-glibc.patch
+diff --git a/package/libgpg-error/0001-build-Fix-generation-of-lock-obj-pub.native.h-for-cr.patch b/package/libgpg-error/0001-build-Fix-generation-of-lock-obj-pub.native.h-for-cr.patch
 deleted file mode 100644
-index b8db949cef..0000000000
---- a/package/libgpgme/0001-core-Support-closefrom-also-for-glibc.patch
+index 621f070ee2..0000000000
+--- a/package/libgpg-error/0001-build-Fix-generation-of-lock-obj-pub.native.h-for-cr.patch
 +++ /dev/null
-@@ -1,36 +0,0 @@
--From 4b64774b6d13ffa4f59dddf947a97d61bcfa2f2e Mon Sep 17 00:00:00 2001
--From: Jiri Kucera <sanczes@gmail.com>
--Date: Sun, 25 Jul 2021 11:35:54 +0200
--Subject: [PATCH] core: Support closefrom also for glibc.
+@@ -1,34 +0,0 @@
+-From 7350874f6f62314af4c8ec1973c91d305a6f4ddc Mon Sep 17 00:00:00 2001
+-From: David Michael <fedora.dm0@gmail.com>
+-Date: Fri, 26 Mar 2021 16:06:50 +0900
+-Subject: [PATCH] build: Fix generation of lock-obj-pub.native.h for cross
+- build.
 -
--* src/posix-io.c (_gpgme_io_spawn): Use glibc's closefrom.
+-* src/gen-lock-obj.sh: Capture echo output with quotes.
+-
 ---
 -
--Since 2.34, glibc introduces closefrom (the implementation
--follows *BSD standard).
--
--Signed-off-by: Werner Koch <wk@gnupg.org>
--
--[Retrieved from:
--https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=commit;h=4b64774b6d13ffa4f59dddf947a97d61bcfa2f2e]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Fixes-commit: 99ae862a96a569724f49a604ebb7d3f6d2c2d374
+-Signed-off-by: David Michael <fedora.dm0@gmail.com>
+-Upstream: 33593864cd54143db594c4237bba41e14179061c
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ----
-- src/posix-io.c | 2 +-
+- src/gen-lock-obj.sh | 2 +-
 - 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/src/posix-io.c b/src/posix-io.c
--index e712ef28..2a3a81fc 100644
----- a/src/posix-io.c
--+++ b/src/posix-io.c
--@@ -570,7 +570,7 @@ _gpgme_io_spawn (const char *path, char *const argv[], unsigned int flags,
--               if (fd_list[i].fd > fd)
--                 fd = fd_list[i].fd;
--             fd++;
---#if defined(__sun) || defined(__FreeBSD__)
--+#if defined(__sun) || defined(__FreeBSD__) || defined(__GLIBC__)
--             closefrom (fd);
--             max_fds = fd;
-- #else /*!__sun */
+-diff --git a/src/gen-lock-obj.sh b/src/gen-lock-obj.sh
+-index a710f0c..258eec6 100755
+---- a/src/gen-lock-obj.sh
+-+++ b/src/gen-lock-obj.sh
+-@@ -38,7 +38,7 @@
+- #     AWK=gawk ./gen-lock-obj.sh
+- #
+- 
+--if test -n `echo -n`; then
+-+if test -n "`echo -n`"; then
+-     ECHO_C='\c'
+-     ECHO_N=''
+- else
 --- 
--2.11.0
+-2.31.1
 -
-diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
-index ca2a79496c..7d02b9e139 100644
---- a/package/libgpgme/libgpgme.hash
-+++ b/package/libgpgme/libgpgme.hash
-@@ -1,6 +1,6 @@
+diff --git a/package/libgpg-error/0002-build-Fix-disable-threads.patch b/package/libgpg-error/0002-build-Fix-disable-threads.patch
+deleted file mode 100644
+index 6ed0f83070..0000000000
+--- a/package/libgpg-error/0002-build-Fix-disable-threads.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 7ede0d4ce19e0ed14cd1cec81ba7df4e467f1eeb Mon Sep 17 00:00:00 2001
+-From: NIIBE Yutaka <gniibe@fsij.org>
+-Date: Mon, 21 Jun 2021 12:16:20 +0900
+-Subject: [PATCH] build: Fix --disable-threads.
+-
+-* src/gen-lock-obj.sh: Fix generating '}}}'.
+-
+---
+-
+-GnuPG-bug-id: 5495
+-Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Fixes-commit: 1fb90a7da186ee2ee098a666f6f3a35bb1720e59
+-Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
+-[Retrieved from:
+-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commit;h=220a427b4f997ef6af1b2d4e82ef1dc96e0cd6ff]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/gen-lock-obj.sh | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/gen-lock-obj.sh b/src/gen-lock-obj.sh
+-index 258eec6..014667f 100755
+---- a/src/gen-lock-obj.sh
+-+++ b/src/gen-lock-obj.sh
+-@@ -121,10 +121,10 @@ while test "$i" -lt $ac_mtx_size; do
+-     fi
+-     i=$(( i + 1 ))
+- done
+-+echo '}}}'
+- fi
+- 
+- cat <<'EOF'
+--}}}
+- ##
+- ## Local Variables:
+- ## mode: c
+--- 
+-2.31.1
+-
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index 4e124941cd..b29ec37598 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
+@@ -1,10 +1,10 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  5e620d71fc24d287a7ac2460b1d819074bb8b9bb  libgpg-error-1.42.tar.bz2
++sha1  fe724ed37b4935964059a47b7c64d5f8246659d8  libgpg-error-1.45.tar.bz2
+ 
  # Locally calculated after checking pgp signature
--# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.16.0.tar.bz2.sig
+-# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.42.tar.bz2.sig
 -# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  6c8cc4aedb10d5d4c905894ba1d850544619ee765606ac43df7405865de29ed0  gpgme-1.16.0.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.17.1.tar.bz2.sig
+-sha256  fc07e70f6c615f8c4f590a8e37a9b8dd2e2ca1e9408f8e60459c67452b925e23  libgpg-error-1.42.tar.bz2
++# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.45.tar.bz2.sig
 +# using key 6DAA6E64A76D2840571B4902528897B826403ADA
-+sha256  711eabf5dd661b9b04be9edc9ace2a7bc031f6bd9d37a768d02d0efdef108f5f  gpgme-1.17.1.tar.bz2
++sha256  570f8ee4fb4bff7b7495cff920c275002aea2147e9a1d220c068213267f80a26  libgpg-error-1.45.tar.bz2
  # Locally calculated
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index b42a1a363a..1b57b18872 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index babcbdaded..86dea6ad2a 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPGME_VERSION = 1.16.0
-+LIBGPGME_VERSION = 1.17.1
- LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
- LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
- LIBGPGME_LICENSE = LGPL-2.1+
+-LIBGPG_ERROR_VERSION = 1.42
++LIBGPG_ERROR_VERSION = 1.45
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
 2.35.1
 
