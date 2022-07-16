@@ -1,90 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 488A8C43334
-	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 21:19:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 126F3C43334
+	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 21:30:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA89460F34;
-	Sat, 16 Jul 2022 21:19:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA89460F34
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6302E847D2;
+	Sat, 16 Jul 2022 21:30:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6302E847D2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 91INgffe06QA; Sat, 16 Jul 2022 21:19:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0xyNUVDWE7ud; Sat, 16 Jul 2022 21:30:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BAF8F60F3A;
-	Sat, 16 Jul 2022 21:19:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAF8F60F3A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E4EBA1BF487
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 21:19:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D9E98418B;
+	Sat, 16 Jul 2022 21:30:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D9E98418B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3BF251BF487
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 21:30:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCD92418A2
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 21:19:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCD92418A2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 156A884168
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 21:30:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 156A884168
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KTYWsbcdz2Mq for <buildroot@lists.busybox.net>;
- Sat, 16 Jul 2022 21:19:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id edDHt8AK070B for <buildroot@lists.busybox.net>;
+ Sat, 16 Jul 2022 21:30:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 473974188C
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 473974188C
- for <buildroot@buildroot.org>; Sat, 16 Jul 2022 21:19:35 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id d16so11586522wrv.10
- for <buildroot@buildroot.org>; Sat, 16 Jul 2022 14:19:35 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A85484100
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8A85484100
+ for <buildroot@buildroot.org>; Sat, 16 Jul 2022 21:30:05 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id v16so11610007wrd.13
+ for <buildroot@buildroot.org>; Sat, 16 Jul 2022 14:30:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=o3+y8nlABN0HDBu1dCB3xrmht9vG3ce8a7WjogKcvlo=;
- b=Cg7bs4nmkPyFRd+7D/ntdYKSYx8MRvENK+HOIrFjDZljK/GZNEuJhlXqL3/1WnazU5
- +cf+EFzdEG4UMaT1t2nB0GvHjbG18PNOKSE/sBlfEq3wnYq6sPfXo57en73hdGZAd8iC
- zMDhWp3qsn3vgWau81Iy87OEFUt9TbYuRrxEp3ixuTb2/+dF3UrAaT9zuFya5CUN58qG
- Ew2eYDbXqJHXwU9WQZlGp07KnZokSo66NJaVNjRLZFIrM2UZmPC0fOKiAG8CCJa/305v
- vRtlCCnWoV1tiF7zipz4iRVl4/PpF4p0nW4X1mG4q6BIW5PQxMxT7HsoMvCR8PEnFfRR
- KHqQ==
-X-Gm-Message-State: AJIora9l7B2J88ivl+7XfDNRjoZJ6uDmH3FimWdfRuHXijwmfEB4YSXb
- FsX0ONUypoUqM/ScQYK9tmsD3+JvKxw=
-X-Google-Smtp-Source: AGRyM1tjf23asWZ210OoA8iTHWA0ZOvr0BnmXwnQxt5luu8AxlUd+IvAYD9G0sG87W/JDz7b1fm0sw==
-X-Received: by 2002:a05:6000:1547:b0:21d:9252:3f72 with SMTP id
- 7-20020a056000154700b0021d92523f72mr17125126wry.600.1658006373017; 
- Sat, 16 Jul 2022 14:19:33 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+ :mime-version:content-transfer-encoding;
+ bh=momSzj9RjIBsqz1KvwKgheYLYKCUUE4lAAaG7MqIaWQ=;
+ b=aGOiKG9QtVbVxEZSeS2KbPwZk0bi+TwO3S66Q+0eJJyhZlImtrnlsbYd6B/7sexVVZ
+ AYqzjXjQduiDQClWW0WU+Pgocb6r4BtYSWrcyIpz+wvZ1Ga8yzOtmiBn5k2/mlsK46Fo
+ xZ5IjTQ8hOKtNKLXJPEwTp8QxRZSY3ouqjs+fvJPD0ioQwW6BsK5w9VVV7ceT5H9MR++
+ HFciCmGDOCNfaDXEkD5Vf/VqkKYCHU52idmabWgrwdYDTjZSgw0IWsgLxCQbb0x/E60Q
+ doJeuHtS5D0QqmoLFmNzUN+555Ak9i9a/LMFLp3UxT5xpQtI9WJXmlzI7gyNROL63USH
+ PdBA==
+X-Gm-Message-State: AJIora9RBL39Jt/LiOV7lQx252Qg4hSM4wjb8btfJS4ZqKeV/Uv5ylyH
+ 6JzO8PktISPl0g5c/YSnQdJSwzjWfJ4=
+X-Google-Smtp-Source: AGRyM1u5Kku46WDPAH3iANt4PC1ShuNikvN+NFMB2YJi+afpRsfJN8QkjOXGDCQVMkwqQQGVSv7oVw==
+X-Received: by 2002:a05:6000:156b:b0:21d:9daf:3cdb with SMTP id
+ 11-20020a056000156b00b0021d9daf3cdbmr17713417wrz.492.1658007003425; 
+ Sat, 16 Jul 2022 14:30:03 -0700 (PDT)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:4985:d730:3c09:77ac])
  by smtp.gmail.com with ESMTPSA id
- d10-20020adfa34a000000b00210bac248c8sm7109517wrb.11.2022.07.16.14.19.32
+ t64-20020a1c4643000000b003a30c3d0c9csm6869988wma.8.2022.07.16.14.30.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Jul 2022 14:19:32 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sat, 16 Jul 2022 14:30:03 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 16 Jul 2022 23:16:05 +0200
-Message-Id: <20220716211605.1650338-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220716211605.1650338-1-fontaine.fabrice@gmail.com>
-References: <20220716211605.1650338-1-fontaine.fabrice@gmail.com>
+Date: Sat, 16 Jul 2022 23:30:01 +0200
+Message-Id: <cover.1658007000.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=o3+y8nlABN0HDBu1dCB3xrmht9vG3ce8a7WjogKcvlo=;
- b=KTJY5xf4ZDtcyrePxU9puzNX+htDeX7Ydffg0qY9wzbxg0xP3Yo8n9W+2HkDMpLRVX
- W/2Ac2F9PrVZ5SGPUPqbeChvvmgCZQpstiS9lxJ5Z1UQ0pDenrO9KmKCCl1b+sG0D1p0
- Om7qrQ+FtkEwVn2PYE/X4oKBn8C6v9YpnbUo5IPY1fgptMK7XQinrgO/+Ek71U9Y48fb
- aFZrY51zUb03YouvyK8/DlWp8MhpM6AlWXuJ1drZPbvLxhHoMZsNQq5XTElEgXZYKc0G
- avx8ROsJq6TVNZ+qvGxV5BaCM1tvzjOLtiuX7PWlTYliebVqMvpHcG20H8r5OW7TQ+Mv
- i72Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=sender:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=momSzj9RjIBsqz1KvwKgheYLYKCUUE4lAAaG7MqIaWQ=;
+ b=M0f8zI87U0gIFlaU/89vJ/P7QdhOo06qgp3u0D8Pfc9S2tbX4u6TvNrjefXyk4QamD
+ da3Uzbbjvtawx95ow2ysdn7efG+4lzJqqmxtReFg5AxaliTmhRuXtef+bOebj/+QGplW
+ nP3NLwryGsWcPh8tQgvyzU85v7nqwitxp5o8wOPcrbD5AzbmaY2JxTrjeuM/395zVFmn
+ c0a+V+yrOfBCvvz4in31370HZWX+VWSQW6ah1uhWm0fWn7ApdCf4Hz/yasAHZ5Lt2VFl
+ Qs/SwzwDe19dMg9rrNnmqSZyE2R4G/Xf8HIcZGkqJDfWkf7HGQaZG/L/T8f+VFe0PxuL
+ XDew==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=KTJY5xf4
-Subject: [Buildroot] [PATCH 2/2] package/libwebsockets: fix openssl build
- without threads
+ header.a=rsa-sha256 header.s=20210112 header.b=M0f8zI87
+Subject: [Buildroot] [PATCH 0/2] pacakge: drop remnants of $(HOST_DIR)/usr
+ (branch yem/no-host-dir-usr)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,88 +93,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ =?UTF-8?q?Herv=C3=A9=20Codina?= <herve.codina@bootlin.com>,
+ Julien Olivain <ju.o@free.fr>, Antoine Tenart <atenart@kernel.org>,
+ =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?= <salvador.joseluis@gmail.com>,
+ Anisse Astier <anisse@astier.eu>, Asaf Kahlon <asafka7@gmail.com>,
+ Guillaume William Brs <guillaume.bressaix@gmail.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Vadim Kochan <vadim4j@gmail.com>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Julien Boibessot <julien.boibessot@armadeus.com>,
+ Matt Weber <matthew.weber@collins.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following openssl build failure without threads raised since
-bump to version 4.3.1 in commit 3a9cf51ab38b6a3a095241b8e87eab7e5b5bd617 and
-https://github.com/warmcat/libwebsockets/commit/471dbf5280b2d0770cdf2803642586cee37a335d:
+Hello All!
 
-In file included from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/include/libwebsockets.h:661,
-                 from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/lib/core/./private-lib-core.h:140,
-                 from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/lib/plat/unix/unix-misc.c:28:
-/home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/include/libwebsockets/lws-genhash.h:85:18: error: field 'ctx' has incomplete type
-   85 |         HMAC_CTX ctx;
-      |                  ^~~
+Back in 2017.08, we dropped the use of $(HOST_DIR)/usr as a prefix, and
+just installed with $(HOST_DIR) as a prefix. At least, the migration
+information was added as c8f51a00d8ec for 2017.08.
 
-Fixes:
- - http://autobuild.buildroot.org/results/2ae9e3249b6fcc9e6c30e7783e264fc6599e61df
+5 years ago.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...eLists.txt-fix-build-without-threads.patch | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
+And we still had a few packages that installed stuff in there, or used
+stuff from there.
 
-diff --git a/package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch b/package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
-new file mode 100644
-index 0000000000..ae46602a53
---- /dev/null
-+++ b/package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
-@@ -0,0 +1,47 @@
-+From c83cf48b9095a6914a0844bec4439763bb0c9138 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 28 May 2022 23:15:40 +0200
-+Subject: [PATCH] lib/tls/CMakeLists.txt: fix build without threads
-+
-+openssl can be built without threads resulting in the following build
-+failure:
-+
-+-- Looking for HMAC_CTX_new
-+-- Looking for HMAC_CTX_new - not found
-+
-+[...]
-+
-+In file included from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/include/libwebsockets.h:661,
-+                 from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/lib/core/./private-lib-core.h:140,
-+                 from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/lib/plat/unix/unix-misc.c:28:
-+/home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/include/libwebsockets/lws-genhash.h:85:18: error: field 'ctx' has incomplete type
-+   85 |         HMAC_CTX ctx;
-+      |                  ^~~
-+
-+To fix this build failure, don't unconditionally add pthread if openssl
-+has been found through pkg-config as openssl.pc will contain the
-+appropriate dependencies (i.e. -lpthread but also -lz or -latomic)
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2ae9e3249b6fcc9e6c30e7783e264fc6599e61df
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/warmcat/libwebsockets/commit/c83cf48b9095a6914a0844bec4439763bb0c9138]
-+---
-+ lib/tls/CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/tls/CMakeLists.txt b/lib/tls/CMakeLists.txt
-+index 559be9abb..a2b78c252 100644
-+--- a/lib/tls/CMakeLists.txt
-++++ b/lib/tls/CMakeLists.txt
-+@@ -311,7 +311,7 @@ endif()
-+ if (UNIX AND NOT (${CMAKE_SYSTEM_NAME} MATCHES "QNX"))
-+ 	set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${CMAKE_DL_LIBS})
-+ endif()
-+-if ((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT (${CMAKE_SYSTEM_NAME} MATCHES "QNX"))
-++if ((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT ((${CMAKE_SYSTEM_NAME} MATCHES "QNX") OR PC_OPENSSL_FOUND))
-+ 	set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} pthread)
-+ endif()
-+ 
+Fix those.
+
+In the process of testing the change, we noticed that the conditions for
+the rustc tier-1 and tier-2 platforms were incorrect, so we fixed them
+too.
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/rustc: fix target names for i586 and i686
+      pacakge: drop remnants of $(HOST_DIR)/usr
+
+ boot/grub2/grub2.mk                                               | 2 +-
+ package/abootimg/abootimg.mk                                      | 2 +-
+ package/bind/bind.mk                                              | 2 +-
+ package/compiler-rt/compiler-rt.mk                                | 2 +-
+ package/dbus-python/dbus-python.mk                                | 6 +++---
+ package/gawk/gawk.mk                                              | 2 +-
+ package/gettext-tiny/gettext-tiny.mk                              | 2 +-
+ package/go/go.mk                                                  | 6 +++---
+ package/jimtcl/jimtcl.mk                                          | 6 +++---
+ package/libapparmor/libapparmor.mk                                | 2 +-
+ package/libva/libva.mk                                            | 2 +-
+ package/lua/lua.mk                                                | 2 +-
+ package/ola/ola.mk                                                | 4 ++--
+ package/openjdk-bin/openjdk-bin.mk                                | 2 +-
+ package/php-apcu/php-apcu.mk                                      | 4 ++--
+ package/php-lua/php-lua.mk                                        | 4 ++--
+ package/php-pam/php-pam.mk                                        | 4 ++--
+ package/php-pecl-dbus/php-pecl-dbus.mk                            | 4 ++--
+ package/python-cryptography/python-cryptography.mk                | 2 +-
+ package/python-pybind/python-pybind.mk                            | 2 +-
+ package/refpolicy/refpolicy.mk                                    | 2 +-
+ package/rustc/Config.in.host                                      | 8 ++++----
+ package/zfs/zfs.mk                                                | 2 +-
+ .../package/python-pybind-example/python-pybind-example.mk        | 2 +-
+ 24 files changed, 38 insertions(+), 38 deletions(-)
+
 -- 
-2.35.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
