@@ -4,87 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EB8BCCA479
-	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 14:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A6ECC43334
+	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 14:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 302ED60EEE;
-	Sat, 16 Jul 2022 14:36:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 302ED60EEE
+	by smtp3.osuosl.org (Postfix) with ESMTP id F012F60D75;
+	Sat, 16 Jul 2022 14:47:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F012F60D75
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 42OYnn7edMYJ; Sat, 16 Jul 2022 14:36:43 +0000 (UTC)
+	with ESMTP id 37EUvje6QaGt; Sat, 16 Jul 2022 14:47:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C31860AC4;
-	Sat, 16 Jul 2022 14:36:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C31860AC4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 23D3A1BF5DD
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 14:36:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03B90605AF;
+	Sat, 16 Jul 2022 14:47:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03B90605AF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8ACFF1BF5DD
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 14:47:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1AEA42427
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 14:36:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1AEA42427
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6590681D16
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 14:47:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6590681D16
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fJurJnfw_vvm for <buildroot@lists.busybox.net>;
- Sat, 16 Jul 2022 14:36:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BqCzJvC8CjDF for <buildroot@lists.busybox.net>;
+ Sat, 16 Jul 2022 14:47:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C79842421
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8C79842421
- for <buildroot@buildroot.org>; Sat, 16 Jul 2022 14:36:26 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id f2so10462333wrr.6
- for <buildroot@buildroot.org>; Sat, 16 Jul 2022 07:36:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AEF181CEF
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com
+ [IPv6:2607:f8b0:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4AEF181CEF
+ for <buildroot@buildroot.org>; Sat, 16 Jul 2022 14:47:17 +0000 (UTC)
+Received: by mail-pf1-x42d.google.com with SMTP id 70so7016514pfx.1
+ for <buildroot@buildroot.org>; Sat, 16 Jul 2022 07:47:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=6VLPrK/sgY8qsbjjdnEq3plWKWLLW4LSz8w8PIQcpgM=;
- b=zhF3y83ixdfUN9nXITpI+92BMQnQ/2jVskD4q/BTwtUSOzyHp5BspJeLNpNHNPaMjJ
- iJrdZ8lHJn3PwFfWobcNWVx9F+XrvB085ofPMT0h80eaAY445O6Kq1uHu+LCEsXhIfgq
- Qwz+DdM7bqEp2bhpyrSqFuRsdq3hIpXkyjizZ4aXZExRSCX020ZqwuGn+f+KR2OOJOK2
- IO1TxeQXuOHekzxwVGCmixm/qNJbeWGZ7Mii8j2FXibfnHSm0L7aK7tHNw69WOXOq4py
- QT3ZMnW/3BlpdOa20Wi3URfA83RN9H4eKTVLumWDMQbJKmoPOdTnPxpTGlAcRc/0sCtg
- e9xw==
-X-Gm-Message-State: AJIora9k4ODMiCZpOqsPzq/qfzuiky+Y33TCNVJE0A3jlc8dsIh7tfV8
- PuL0c+6ciIAPwChsT86bfwgqwYWNbJ0=
-X-Google-Smtp-Source: AGRyM1s6hswNDjBcN3yPiADCwuCy+sxIElPoJbYa1Oddf4SeZdQhHN7Uc8Kc+tKyOUS7uTYsclFerA==
-X-Received: by 2002:a5d:5005:0:b0:21d:7ff7:fd2d with SMTP id
- e5-20020a5d5005000000b0021d7ff7fd2dmr16535669wrt.660.1657982184558; 
- Sat, 16 Jul 2022 07:36:24 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- t9-20020a05600c198900b003a04722d745sm13592682wmq.23.2022.07.16.07.36.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Jul 2022 07:36:24 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 16 Jul 2022 16:33:11 +0200
-Message-Id: <20220716143311.711343-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220716143311.711343-1-fontaine.fabrice@gmail.com>
-References: <20220716143311.711343-1-fontaine.fabrice@gmail.com>
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=+4NkwSCq+/voU6hrFo2PMGUjPt0kH5X4z8GbA43zQlE=;
+ b=Xr5CXPpCUfXX+PFMvxLvj7CUDx3EhcfgKnuG1yOulB2b2MrER5IA/qKPoT+UqmAgpO
+ Q7/80a374Jt6Q0DvU5FXLfTfc8HlONpuehxtdEKwgnVz/FFi42XL8JeHD/NFNzUlZefP
+ f87JjRCogcDpdsP1NDPdwaT2ScXuiLuLRHMOSx7302StDtClj1A9yA3E1Uf7VtucSur+
+ U4B2mNevIRkiHHPgG+aQYzdtD4Q+d2X7Ygf6fODz8pXql6X1iTIAGnL101EYYwn97qVe
+ y+sHxM278ggPDTKF60Eu/EsXwFARLop9B6BuD1jQO4w7Yn9o8QdlA7Xc6POztPxFZX9J
+ earg==
+X-Gm-Message-State: AJIora8PdU7UJS6NeR6xQlsW5iPhTe36v6sbaUpl99qFTxxdDUUjS1CL
+ 6xpXCaev36SOAJFhfqguaLUDEBKC4mZvnyGWurtB5ebdXGc=
+X-Google-Smtp-Source: AGRyM1tYXdNei6n4X8TDvfZ2mY1RhZQDYfvcJuEMptZNV00BTEXpzOvMnE+qTKSRNbLUKAhgW11FltJS3B/NXXMOBEY=
+X-Received: by 2002:a05:6a00:23c9:b0:52a:cedd:3992 with SMTP id
+ g9-20020a056a0023c900b0052acedd3992mr19242800pfc.43.1657982836326; Sat, 16
+ Jul 2022 07:47:16 -0700 (PDT)
 MIME-Version: 1.0
+From: Ritvik <ritviktanksalkar@gmail.com>
+Date: Sat, 16 Jul 2022 20:16:40 +0530
+Message-ID: <CAJxTgFwAMUZVo3dmnLoLtzNmc1USC2XgQ0tHaebZEYsUdrKrpw@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=6VLPrK/sgY8qsbjjdnEq3plWKWLLW4LSz8w8PIQcpgM=;
- b=BBBUdhmMaG3Fno7IOzDpTT0OrmgT/GwHQCZWFTRhtXp4hWYp6AZ5u+23R4jvISSzg9
- Qa3AjoaaPJIrr22BoVBaqXE0XhIMeuoNASPCCvbMZUcz5xrbGrFzlay96zLnNMssJ+dg
- 4G7QXoM/ipfT0A6e9pxPDXgAN8m9qw1ZXholKqY9Mq0ertaf2XnOtUdNjRnXGu9uswUK
- yhoANje8UJnF10bCnRIHaekjlcVeyg5tN+yj56jcfMQqpNzwM60PK/KScHyZaKK+ZuEc
- +4lcQlobIRs/2pjRQbWnwcYjYTBBc6TwvPd9/STY1eRx3jerNB4xm/e+at+mbgGtUVCB
- PGZA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=mime-version:from:date:message-id:subject:to;
+ bh=+4NkwSCq+/voU6hrFo2PMGUjPt0kH5X4z8GbA43zQlE=;
+ b=DTOtEzRPzYGO0waGplpHkWfquCiprhN81Lpxq2a6rgECLzysIVYlNeEI0s3DZfP3JW
+ NlHssHQcAGZJftcytir8ESAaMSXNR6D7E9Chw/ctvz76ObiJN2bVlWBeisxmMIQ0wNU1
+ oXl+508BqE9ORrFTShdAJitfivZ6R+SrAR46tHKpUyJZZPF3nwbmcuKkw3jz1dOUP55w
+ +iFD90pC1QYvhicGA/C9s9ZozvM4oEY4dM3aG2eOAhxZzf7bGjTjlnTL4r+rStb1qIRk
+ n68ddyAfZaTFzRLgRhEsU0e7JeByqqlRpWj+NnynoIpfQiWL2fUXk8FPmEv5utilWxhD
+ joiA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=BBBUdhmM
-Subject: [Buildroot] [PATCH 2/2] package/gnupg2: security bump to version
- 2.3.7
+ header.a=rsa-sha256 header.s=20210112 header.b=DTOtEzRP
+Subject: [Buildroot] aufs-util patching raises duplicate patch issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,59 +84,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6625086039664166478=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2022-34903: GnuPG through 2.3.6, in unusual situations where an
-attacker possesses any secret-key information from a victim's keyring
-and other constraints (e.g., use of GPGME) are met, allows signature
-forgery via injection into the status line.
+--===============6625086039664166478==
+Content-Type: multipart/alternative; boundary="00000000000000c6ec05e3ed361d"
 
-https://lists.gnupg.org/pipermail/gnupg-announce/2022q3/000474.html
+--00000000000000c6ec05e3ed361d
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gnupg2/gnupg2.hash | 10 +++++-----
- package/gnupg2/gnupg2.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Hello all,
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index caf5dcc883..ec2654be7b 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,7 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2021q2/000460.html
--sha1  81684626720c91060ae9920936c768df9fc8b2f6  gnupg-2.2.32.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2022q3/000474.html
-+sha1  9255a70a984bfbfa5312a9a52a1cf47cb0d1fc84  gnupg-2.3.7.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.32.tar.bz2.sig
--# using key 6DAA6E64A76D2840571B4902528897B826403ADA
--sha256  b2571b35f82c63e7d278aa6a1add0d73453dc14d3f0854be490c844fca7e0614  gnupg-2.2.32.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.3.7.tar.bz2.sig
-+# using key 02F38DFF731FF97CB039A1DA549E695E905BA208
-+sha256  ee163a5fb9ec99ffc1b18e65faef8d086800c5713d15a672ab57d3799da83669  gnupg-2.3.7.tar.bz2
- sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 0a2cebfab3..7d8424c136 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG2_VERSION = 2.2.32
-+GNUPG2_VERSION = 2.3.7
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
--- 
-2.35.1
+While compiling buildroot with linux kernel 5.10.115-cip7, the compilation
+stops while applying a aufs-utils specific patch "0002-no-check-ver.patch"
+saying that there are conflicting files. Below are the details. Any help in
+this regard would be highly appreciated.
+
+
+*>>> aufs-util  Patching*
+Applying 0002-no-check-ver.patch using patch:
+Error: duplicate filename '0002-no-check-ver.patch'
+Conflicting files are:
+  already applied:
+/home/ubuntu/buildroot-2022.02.3/package/aufs-util//0002-no-check-ver.patch
+  to be applied  :
+/home/ubuntu/buildroot-2022.02.3/package/aufs-util//0002-no-check-ver.patch
+make[1]: *** [package/pkg-generic.mk:251:
+/home/ubuntu/buildroot-2022.02.3/output/build/aufs-util/.stamp_patched]
+Error 1
+make: *** [Makefile:84: _all] Error 2
+
+Warm Regards,
+Cyb0rG
+
+--00000000000000c6ec05e3ed361d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello all,<div><div><br></div><div>While compiling buildro=
+ot with linux kernel=C2=A05.10.115-cip7, the compilation stops while applyi=
+ng a aufs-utils specific patch &quot;0002-no-check-ver.patch&quot; saying t=
+hat there are conflicting files. Below are the details. Any help in this re=
+gard would be highly appreciated.</div><div><br></div><div><b>&gt;&gt;&gt; =
+aufs-util =C2=A0Patching<br></b><br>Applying 0002-no-check-ver.patch using =
+patch:<br>Error: duplicate filename &#39;0002-no-check-ver.patch&#39;<br>Co=
+nflicting files are:<br>=C2=A0 already applied: /home/ubuntu/buildroot-2022=
+.02.3/package/aufs-util//0002-no-check-ver.patch<br>=C2=A0 to be applied =
+=C2=A0: /home/ubuntu/buildroot-2022.02.3/package/aufs-util//0002-no-check-v=
+er.patch<br>make[1]: *** [package/<a href=3D"http://pkg-generic.mk:251">pkg=
+-generic.mk:251</a>: /home/ubuntu/buildroot-2022.02.3/output/build/aufs-uti=
+l/.stamp_patched] Error 1<br>make: *** [Makefile:84: _all] Error 2<br></div=
+><div><br clear=3D"all"><div><div dir=3D"ltr" class=3D"gmail_signature" dat=
+a-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div dir=3D"ltr">Warm Rega=
+rds,<div>Cyb0rG</div><div><br></div></div></div></div></div></div></div></d=
+iv>
+
+--00000000000000c6ec05e3ed361d--
+
+--===============6625086039664166478==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6625086039664166478==--
