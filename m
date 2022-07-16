@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C914C43334
-	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 22:24:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4113DC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 22:24:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 08579404F6;
-	Sat, 16 Jul 2022 22:24:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08579404F6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cb7a4VQlwFNx; Sat, 16 Jul 2022 22:24:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 02B5540A12;
-	Sat, 16 Jul 2022 22:24:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02B5540A12
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 883B71BF3D0
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 22:24:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 60C6F60B1C
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 22:24:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60C6F60B1C
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9BFB60EC5;
+	Sat, 16 Jul 2022 22:24:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9BFB60EC5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ug74hjqq4DB8 for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id W2O8aNf3eltx; Sat, 16 Jul 2022 22:24:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 05E5F60F22;
+	Sat, 16 Jul 2022 22:24:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05E5F60F22
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 904E71BF964
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 22:24:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79515813FF
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 22:24:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79515813FF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iC49ObcG8xVR for <buildroot@lists.busybox.net>;
  Sat, 16 Jul 2022 22:24:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF50460A75
+ by smtp1.osuosl.org (Postfix) with ESMTP id B780D81393
  for <buildroot@buildroot.org>; Sat, 16 Jul 2022 22:24:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF50460A75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B780D81393
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id D65578398D; Sat, 16 Jul 2022 22:10:38 +0000 (UTC)
+ id E55188398E; Sat, 16 Jul 2022 22:10:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 00:23:00 +0200
+Date: Sun, 17 Jul 2022 00:23:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33677fb46e5d2f50e750b5aaf36da0d756ebd0b2
-X-Git-Newrev: 6f9283d696820dab746a97a0411bf6d83bd424c7
+X-Git-Oldrev: 6f9283d696820dab746a97a0411bf6d83bd424c7
+X-Git-Newrev: 107cff4616e31acc97890643df5fc689665649cb
 X-Patchwork-Hint: ignore
-Message-Id: <20220716221038.D65578398D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/assimp: add ASSIMP_CPE_ID_VENDOR
+Message-Id: <20220716221038.E55188398E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/i2pd: add I2PD_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,31 +62,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f9283d696820dab746a97a0411bf6d83bd424c7
+commit: https://git.buildroot.net/buildroot/commit/?id=107cff4616e31acc97890643df5fc689665649cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:assimp:assimp is a valid CPE identifier for this package:
+cpe:2.3:a:i2pd:i2pd is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aassimp%3Aassimp
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ai2pd%3Ai2pd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/assimp/assimp.mk | 1 +
+ package/i2pd/i2pd.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-index 42440f0fa9..79865673ac 100644
---- a/package/assimp/assimp.mk
-+++ b/package/assimp/assimp.mk
-@@ -8,6 +8,7 @@ ASSIMP_VERSION = 5.2.1
- ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
- ASSIMP_LICENSE = BSD-3-Clause
- ASSIMP_LICENSE_FILES = LICENSE
-+ASSIMP_CPE_ID_VENDOR = assimp
- ASSIMP_DEPENDENCIES = zlib
- ASSIMP_INSTALL_STAGING = YES
- 
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index 8eea09493f..2b5c6a1f54 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -8,6 +8,7 @@ I2PD_VERSION = 2.40.0
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
++I2PD_CPE_ID_VENDOR = i2pd
+ I2PD_SUBDIR = build
+ I2PD_DEPENDENCIES = \
+ 	boost \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
