@@ -1,87 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 126F3C43334
-	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 21:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09EF4C43334
+	for <buildroot@archiver.kernel.org>; Sat, 16 Jul 2022 21:30:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6302E847D2;
-	Sat, 16 Jul 2022 21:30:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6302E847D2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CE0560F31;
+	Sat, 16 Jul 2022 21:30:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CE0560F31
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0xyNUVDWE7ud; Sat, 16 Jul 2022 21:30:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y7CsOKHXiqTo; Sat, 16 Jul 2022 21:30:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D9E98418B;
-	Sat, 16 Jul 2022 21:30:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D9E98418B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3BF251BF487
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 21:30:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CE0D60A97;
+	Sat, 16 Jul 2022 21:30:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CE0D60A97
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 502DA1BF487
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 21:30:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 156A884168
- for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 21:30:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 156A884168
+ by smtp3.osuosl.org (Postfix) with ESMTP id 382EB60A97
+ for <buildroot@lists.busybox.net>; Sat, 16 Jul 2022 21:30:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 382EB60A97
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id edDHt8AK070B for <buildroot@lists.busybox.net>;
- Sat, 16 Jul 2022 21:30:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cQyDJ0Cymu_k for <buildroot@lists.busybox.net>;
+ Sat, 16 Jul 2022 21:30:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A85484100
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8A85484100
- for <buildroot@buildroot.org>; Sat, 16 Jul 2022 21:30:05 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id v16so11610007wrd.13
- for <buildroot@buildroot.org>; Sat, 16 Jul 2022 14:30:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8301860681
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8301860681
+ for <buildroot@buildroot.org>; Sat, 16 Jul 2022 21:30:07 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id z12so11649600wrq.7
+ for <buildroot@buildroot.org>; Sat, 16 Jul 2022 14:30:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=momSzj9RjIBsqz1KvwKgheYLYKCUUE4lAAaG7MqIaWQ=;
- b=aGOiKG9QtVbVxEZSeS2KbPwZk0bi+TwO3S66Q+0eJJyhZlImtrnlsbYd6B/7sexVVZ
- AYqzjXjQduiDQClWW0WU+Pgocb6r4BtYSWrcyIpz+wvZ1Ga8yzOtmiBn5k2/mlsK46Fo
- xZ5IjTQ8hOKtNKLXJPEwTp8QxRZSY3ouqjs+fvJPD0ioQwW6BsK5w9VVV7ceT5H9MR++
- HFciCmGDOCNfaDXEkD5Vf/VqkKYCHU52idmabWgrwdYDTjZSgw0IWsgLxCQbb0x/E60Q
- doJeuHtS5D0QqmoLFmNzUN+555Ak9i9a/LMFLp3UxT5xpQtI9WJXmlzI7gyNROL63USH
- PdBA==
-X-Gm-Message-State: AJIora9RBL39Jt/LiOV7lQx252Qg4hSM4wjb8btfJS4ZqKeV/Uv5ylyH
- 6JzO8PktISPl0g5c/YSnQdJSwzjWfJ4=
-X-Google-Smtp-Source: AGRyM1u5Kku46WDPAH3iANt4PC1ShuNikvN+NFMB2YJi+afpRsfJN8QkjOXGDCQVMkwqQQGVSv7oVw==
-X-Received: by 2002:a05:6000:156b:b0:21d:9daf:3cdb with SMTP id
- 11-20020a056000156b00b0021d9daf3cdbmr17713417wrz.492.1658007003425; 
- Sat, 16 Jul 2022 14:30:03 -0700 (PDT)
+ :in-reply-to:references:mime-version:content-transfer-encoding;
+ bh=jc4QBCZ3UfpoE2JHmavTXYnv8OJpWbCFDYnIOdeCwRU=;
+ b=zS3AT8S4OBDArUyPZ5p9fHssTNDYTXs11EI3pK6qW+dsRwL221e1t1XncJ0+B1sUbe
+ v+t9bzcEg+EqSUAPRwEm1+RKiXMtcaWQY7+JjP4h2dNG0etbK0/nLjQaNN4uCyMu/wGg
+ 1DO9DsH1Ex0RX9fyz8BewPanFR2i2lqr8TF01mCgC5qpxs6UnCf5nKtVYGkTE640NkP0
+ HVGtvlQi9hH1qNE0l+kf1uu2blfs8vEl5HEN9zKUhWjiON5M0KMVS7MvNk6yWQhiudBo
+ ZTiRM03jeFSVF0OA5cknBNA57DwN0KwkTKzdEq90Xhlo5RAEhhFopMvOQ89QS11EQkIe
+ w7xQ==
+X-Gm-Message-State: AJIora/KGxRfpkWRHCQ5ZLoz8CcWx1fPEbCmOjyAVEod4VhyBZ6skWmx
+ 5gbxduvx4hkadlUNk6cG+LX7Jw0mJHc=
+X-Google-Smtp-Source: AGRyM1uGFJvYN/W+84WBli08rOBoIIVkdrLI8EJji2EIofCgUGLgqfJU7yxYVIeKoAytg6FWPBdvQQ==
+X-Received: by 2002:a5d:648b:0:b0:21d:a61c:a9c9 with SMTP id
+ o11-20020a5d648b000000b0021da61ca9c9mr17676240wri.268.1658007005539; 
+ Sat, 16 Jul 2022 14:30:05 -0700 (PDT)
 Received: from scaer.home ([2a01:cb19:8b51:cb00:4985:d730:3c09:77ac])
  by smtp.gmail.com with ESMTPSA id
- t64-20020a1c4643000000b003a30c3d0c9csm6869988wma.8.2022.07.16.14.30.02
+ d13-20020adfe84d000000b0020fcaba73bcsm6860385wrn.104.2022.07.16.14.30.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Jul 2022 14:30:03 -0700 (PDT)
+ Sat, 16 Jul 2022 14:30:05 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 16 Jul 2022 23:30:01 +0200
-Message-Id: <cover.1658007000.git.yann.morin.1998@free.fr>
+Date: Sat, 16 Jul 2022 23:30:03 +0200
+Message-Id: <e2f23070c85c1d2fcf5ad74c88eae23723d18916.1658007000.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1658007000.git.yann.morin.1998@free.fr>
+References: <cover.1658007000.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=momSzj9RjIBsqz1KvwKgheYLYKCUUE4lAAaG7MqIaWQ=;
- b=M0f8zI87U0gIFlaU/89vJ/P7QdhOo06qgp3u0D8Pfc9S2tbX4u6TvNrjefXyk4QamD
- da3Uzbbjvtawx95ow2ysdn7efG+4lzJqqmxtReFg5AxaliTmhRuXtef+bOebj/+QGplW
- nP3NLwryGsWcPh8tQgvyzU85v7nqwitxp5o8wOPcrbD5AzbmaY2JxTrjeuM/395zVFmn
- c0a+V+yrOfBCvvz4in31370HZWX+VWSQW6ah1uhWm0fWn7ApdCf4Hz/yasAHZ5Lt2VFl
- Qs/SwzwDe19dMg9rrNnmqSZyE2R4G/Xf8HIcZGkqJDfWkf7HGQaZG/L/T8f+VFe0PxuL
- XDew==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=jc4QBCZ3UfpoE2JHmavTXYnv8OJpWbCFDYnIOdeCwRU=;
+ b=UpGWclgqJlZ9FaOB1EePGyB4hcpNYzxRhcs8BjA19PxN/16ei4xgbdaMwdJlZtY1dd
+ YU6bU8p9WmAsTaINGAorCzXa55exeolJq9okmYnUs7M0ZG/XQ7iaPHxDEnGi7WKjiXU3
+ RfaO0bcZI3f3vNhnBBrgOVLlLOFG0dMyzPQfExSxLzYTH+VExLSqwCPWek3jE5Vcm2HR
+ ky4dOlG4rqpw32e6pGf27mkHd8SupfxnJ+SklIwbdSBbY6whH7goUp3aeTXAWVCNsabF
+ y6giPsR7/RVDVItOp9zFVUUsgZv3AO2uEjndD0L1mXSil10mv70LkStZ2qTBNSKTnPhP
+ 81fA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=M0f8zI87
-Subject: [Buildroot] [PATCH 0/2] pacakge: drop remnants of $(HOST_DIR)/usr
- (branch yem/no-host-dir-usr)
+ header.a=rsa-sha256 header.s=20210112 header.b=UpGWclgq
+Subject: [Buildroot] [PATCH 1/2] package/rustc: fix target names for i586
+ and i686
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,83 +95,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- =?UTF-8?q?Herv=C3=A9=20Codina?= <herve.codina@bootlin.com>,
- Julien Olivain <ju.o@free.fr>, Antoine Tenart <atenart@kernel.org>,
- =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?= <salvador.joseluis@gmail.com>,
- Anisse Astier <anisse@astier.eu>, Asaf Kahlon <asafka7@gmail.com>,
- Guillaume William Brs <guillaume.bressaix@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Vadim Kochan <vadim4j@gmail.com>,
- Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Julien Boibessot <julien.boibessot@armadeus.com>,
- Matt Weber <matthew.weber@collins.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All!
+Commit d69d40c029dc (package/rustc: add support for Tier 1 and Tier 2
+platforms) misspelled the config options for i586 and i686.
 
-Back in 2017.08, we dropped the use of $(HOST_DIR)/usr as a prefix, and
-just installed with $(HOST_DIR) as a prefix. At least, the migration
-information was added as c8f51a00d8ec for 2017.08.
+They are BR2_i386_i586 and BR2_i386_i686, not BR2_i586 or BR2_i686.
 
-5 years ago.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rustc/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-And we still had a few packages that installed stuff in there, or used
-stuff from there.
-
-Fix those.
-
-In the process of testing the change, we noticed that the conditions for
-the rustc tier-1 and tier-2 platforms were incorrect, so we fixed them
-too.
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/rustc: fix target names for i586 and i686
-      pacakge: drop remnants of $(HOST_DIR)/usr
-
- boot/grub2/grub2.mk                                               | 2 +-
- package/abootimg/abootimg.mk                                      | 2 +-
- package/bind/bind.mk                                              | 2 +-
- package/compiler-rt/compiler-rt.mk                                | 2 +-
- package/dbus-python/dbus-python.mk                                | 6 +++---
- package/gawk/gawk.mk                                              | 2 +-
- package/gettext-tiny/gettext-tiny.mk                              | 2 +-
- package/go/go.mk                                                  | 6 +++---
- package/jimtcl/jimtcl.mk                                          | 6 +++---
- package/libapparmor/libapparmor.mk                                | 2 +-
- package/libva/libva.mk                                            | 2 +-
- package/lua/lua.mk                                                | 2 +-
- package/ola/ola.mk                                                | 4 ++--
- package/openjdk-bin/openjdk-bin.mk                                | 2 +-
- package/php-apcu/php-apcu.mk                                      | 4 ++--
- package/php-lua/php-lua.mk                                        | 4 ++--
- package/php-pam/php-pam.mk                                        | 4 ++--
- package/php-pecl-dbus/php-pecl-dbus.mk                            | 4 ++--
- package/python-cryptography/python-cryptography.mk                | 2 +-
- package/python-pybind/python-pybind.mk                            | 2 +-
- package/refpolicy/refpolicy.mk                                    | 2 +-
- package/rustc/Config.in.host                                      | 8 ++++----
- package/zfs/zfs.mk                                                | 2 +-
- .../package/python-pybind-example/python-pybind-example.mk        | 2 +-
- 24 files changed, 38 insertions(+), 38 deletions(-)
-
+diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+index 27c3a3cdeb..fec8726aee 100644
+--- a/package/rustc/Config.in.host
++++ b/package/rustc/Config.in.host
+@@ -25,7 +25,7 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER1_PLATFORMS
+ 	# aarch64-unknown-linux-gnu
+ 	default y if BR2_aarch64 && BR2_TOOLCHAIN_USES_GLIBC
+ 	# i686-unknown-linux-gnu
+-	default y if (BR2_i686 || BR2_x86_pentiumpro || BR2_X86_CPU_HAS_MMX) && BR2_TOOLCHAIN_USES_GLIBC
++	default y if (BR2_x86_i686 || BR2_x86_pentiumpro || BR2_X86_CPU_HAS_MMX) && BR2_TOOLCHAIN_USES_GLIBC
+ 	# x86_64-unknown-linux-gnu
+ 	default y if BR2_x86_64 && BR2_TOOLCHAIN_USES_GLIBC
+ 
+@@ -93,11 +93,11 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_PLATFORMS
+ 	# userspace
+ 	default y if BR2_arm && BR2_ARM_CPU_ARMV8A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_MUSL
+ 	# i586-unknown-linux-gnu
+-	default y if BR2_i586 && BR2_TOOLCHAIN_USES_GLIBC
++	default y if BR2_x86_i586 && BR2_TOOLCHAIN_USES_GLIBC
+ 	# i586-unknown-linux-musl
+-	default y if BR2_i586 && BR2_TOOLCHAIN_USES_MUSL
++	default y if BR2_x86_i586 && BR2_TOOLCHAIN_USES_MUSL
+ 	# i686-unknown-linux-musl
+-	default y if (BR2_i686 || BR2_x86_pentiumpro || BR2_X86_CPU_HAS_MMX) && BR2_TOOLCHAIN_USES_MUSL
++	default y if (BR2_x86_i686 || BR2_x86_pentiumpro || BR2_X86_CPU_HAS_MMX) && BR2_TOOLCHAIN_USES_MUSL
+ 	# mips-unknown-linux-musl
+ 	default y if BR2_mips && BR2_TOOLCHAIN_USES_MUSL && !BR2_MIPS_CPU_MIPS32R6
+ 	# mips64-unknown-linux-muslabi64
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
