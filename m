@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45EFCC43334
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 12:07:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40852C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 12:14:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BAC6260B29;
-	Sun, 17 Jul 2022 12:07:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAC6260B29
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB5DB41795;
+	Sun, 17 Jul 2022 12:14:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB5DB41795
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O8KqSoqRy-6e; Sun, 17 Jul 2022 12:07:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X8dyCpxkRqP5; Sun, 17 Jul 2022 12:14:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93D5B6080A;
-	Sun, 17 Jul 2022 12:07:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93D5B6080A
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8A6941796;
+	Sun, 17 Jul 2022 12:14:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8A6941796
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0FEA01BF3D1
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 12:07:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DB85A1BF3D1
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 12:14:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E41A840190
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 12:07:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E41A840190
+ by smtp2.osuosl.org (Postfix) with ESMTP id B46D040393
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 12:14:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B46D040393
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qJ_o1lz3-jAO for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 12:07:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E87C8400DD
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 12:07:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E87C8400DD
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id CEA0E83A68; Sun, 17 Jul 2022 11:54:14 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 14:05:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4f25bbb7a758d4deee8216e25485ad113bae0f2c
-X-Git-Newrev: 98ecdd1d1125f2529a8d61c01a2bec6d8dbc48d1
-X-Patchwork-Hint: ignore
-Message-Id: <20220717115414.CEA0E83A68@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zerofree: new package
+ with ESMTP id YeacmEcW9pxq for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 12:14:53 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FC87400DD
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3FC87400DD
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 12:14:53 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:4985:d730:3c09:77ac])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 0743878051C;
+ Sun, 17 Jul 2022 14:14:45 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 17 Jul 2022 14:14:45 +0200
+Date: Sun, 17 Jul 2022 14:14:45 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Vincent =?utf-8?Q?Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Message-ID: <20220717121445.GC2107091@scaer>
+References: <20220717091411.8598-1-vincent.stehle@laposte.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220717091411.8598-1-vincent.stehle@laposte.net>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1658060090;
+ bh=wapVhu8Q4ezw5rB758fPlSkRyjAENkj5wC3e8RMaBQY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=pGH8M8JQFmIgewwIl9V7hk2oxqd0ZTT+jDEriLGCakQcElw9EPjqzQlAo/eoQlMzo
+ X/5UcCxTEWKFtwm4u46xHTbqe8bD3xDC51XLU+ILwVDXKaN4N09VNT1UuCBiI0anCR
+ eUKPKs4806pWjKVyGc1YOHMFofTGnnF4soqekW2j1aOKeGu1tIvQ44Q5H8rzl6bwo8
+ 14RsStezeb3Rg+ZdStMhI83AHz5dccHVuRGWX/oKpgyBNyL31KG1WSUH0kjCzrTH31
+ pg55RrHmPK6e6VtVuPerxUjFfPDwGk/pv6FL5GgyYqfT7PbjOO0OwVR0QVO+PSiwZp
+ xfpBZ72Wq9aXA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pGH8M8JQ
+Subject: Re: [Buildroot] [PATCH v3] package/zerofree: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,196 +76,155 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7801483500225703992=="
+Cc: Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7801483500225703992==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=98ecdd1d1125f2529a8d61c01a2bec6d8dbc48d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-zerofree is a utility which scans the free blocks in an ext2 filesystem
-and fills any non-zero blocks with zeroes.
-
-https://frippery.org/uml/
-
-The ext2fs/ext2fs.h header guards the inclusion of <sys/types.h> behind
-HAVE_SYS_TYPES_H, which is an autotools-defined macro that is only
-supposed to be defined by the package itself, i.e. e2fsprogs, and that
-should not leak into installed headers. However, e2fsprogs does leak it,
-so we work it around, liek gentoo does.
-
-Tested-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998@free.fr:
-  - fix MMU dependency for comment; reword comment
-  - fix multi-line assignment of ZEROFREE_CFLAGS
-  - do not add comment trailing after assignment
-  - extend commit log to explain why we need the workaround
-  - use TARGET_CONFIGURE_OPTS, drop explicit CC=
-  - install to explicit destination file
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS                                     |  2 ++
- package/Config.in                              |  1 +
- package/zerofree/Config.in                     | 14 +++++++++
- package/zerofree/zerofree.hash                 |  3 ++
- package/zerofree/zerofree.mk                   | 28 ++++++++++++++++++
- support/testing/tests/package/test_zerofree.py | 41 ++++++++++++++++++++++++++
- 6 files changed, 89 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 71dd7d3d6c..0fc73f311f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2917,8 +2917,10 @@ F:	configs/uevm5432_defconfig
- F:	package/i7z/
- F:	package/msr-tools/
- F:	package/pixz/
-+F:	package/zerofree/
- F:	support/testing/tests/package/test_msr_tools*
- F:	support/testing/tests/package/test_pixz.py
-+F:	support/testing/tests/package/test_zerofree.py
- 
- N:	Vinicius Tinti <viniciustinti@gmail.com>
- F:	package/python-thrift/
-diff --git a/package/Config.in b/package/Config.in
-index 230aa7a2c2..3feb47c534 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -239,6 +239,7 @@ menu "Filesystem and flash utilities"
- 	source "package/udftools/Config.in"
- 	source "package/unionfs/Config.in"
- 	source "package/xfsprogs/Config.in"
-+	source "package/zerofree/Config.in"
- 	source "package/zfs/Config.in"
- endmenu
- 
-diff --git a/package/zerofree/Config.in b/package/zerofree/Config.in
-new file mode 100644
-index 0000000000..99466d6bae
---- /dev/null
-+++ b/package/zerofree/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_ZEROFREE
-+	bool "zerofree"
-+	depends on BR2_USE_MMU # e2fsprogs
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_E2FSPROGS
-+	help
-+	  zerofree is a utility which scans the free blocks in an ext2
-+	  filesystem and fills any non-zero blocks with zeroes.
-+
-+	  https://frippery.org/uml/
-+
-+comment "zerofree needs  a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/zerofree/zerofree.hash b/package/zerofree/zerofree.hash
-new file mode 100644
-index 0000000000..3399611787
---- /dev/null
-+++ b/package/zerofree/zerofree.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  956bc861b55ba0a2b7593c58d32339dab1a0e7da6ea2b813d27c80f08b723867  zerofree-1.1.1.tgz
-+sha256  90daae00475a992a367da5b0658469a5d1c4449dbbe964c5b7246e1aec92f491  COPYING
-diff --git a/package/zerofree/zerofree.mk b/package/zerofree/zerofree.mk
-new file mode 100644
-index 0000000000..f26280cc2a
---- /dev/null
-+++ b/package/zerofree/zerofree.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# zerofree
-+#
-+################################################################################
-+
-+ZEROFREE_VERSION = 1.1.1
-+ZEROFREE_SOURCE = zerofree-$(ZEROFREE_VERSION).tgz
-+ZEROFREE_SITE = https://frippery.org/uml
-+ZEROFREE_LICENSE = GPL-2.0
-+ZEROFREE_LICENSE_FILE = COPYING
-+ZEROFREE_DEPENDENCIES = e2fsprogs
-+
-+# We use the same workaround as in https://bugs.gentoo.org/716136
-+# to build with musl.
-+ZEROFREE_CFLAGS = \
-+	$(TARGET_CFLAGS) \
-+	$(if $(BR2_TOOLCHAIN_USES_MUSL),-DHAVE_SYS_TYPES_H)
-+
-+define ZEROFREE_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(ZEROFREE_CFLAGS)" -C $(@D)
-+endef
-+
-+define ZEROFREE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/zerofree $(TARGET_DIR)/usr/bin/zerofree
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/package/test_zerofree.py b/support/testing/tests/package/test_zerofree.py
-new file mode 100644
-index 0000000000..75eea346d3
---- /dev/null
-+++ b/support/testing/tests/package/test_zerofree.py
-@@ -0,0 +1,41 @@
-+import os
-+import infra.basetest
-+import subprocess
-+
-+
-+class TestZerofree(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_ZEROFREE=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        # Prepare disk image.
-+        # We keep it small (8 MB) for the sake of test time.
-+        disk_file = os.path.join(self.outputdir, "disk.img")
-+        subprocess.check_call(
-+            ["dd", "if=/dev/zero", f"of={disk_file}", "bs=1M", "count=8"],
-+            stdout=self.emulator.logfile,
-+            stderr=self.emulator.logfile)
-+
-+        # Run the emulator with a drive.
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=[
-+                                "-initrd", cpio_file,
-+                                "-drive", f"file={disk_file},format=raw"])
-+        self.emulator.login()
-+
-+        # Prepare filesystem.
-+        output, exit_code = self.emulator.run("mkfs.ext4 /dev/sda")
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn('Creating filesystem', output[2])
-+
-+        # Run zerofree on newly created filesystem.
-+        cmd = "zerofree -v /dev/sda"
-+        output, exit_code = self.emulator.run(cmd, timeout=60)
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn('/8192', output[-1])  # total number of blocks
-
---===============7801483500225703992==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7801483500225703992==--
+VmluY2VudCwgQWxsLAoKT24gMjAyMi0wNy0xNyAxMToxNCArMDIwMCwgVmluY2VudCBTdGVobMOp
+IHZpYSBidWlsZHJvb3Qgc3Bha2UgdGh1c2x5Ogo+IHplcm9mcmVlIGlzIGEgdXRpbGl0eSB3aGlj
+aCBzY2FucyB0aGUgZnJlZSBibG9ja3MgaW4gYW4gZXh0MiBmaWxlc3lzdGVtIGFuZAo+IGZpbGxz
+IGFueSBub24temVybyBibG9ja3Mgd2l0aCB6ZXJvZXMuCj4gCj4gaHR0cHM6Ly9mcmlwcGVyeS5v
+cmcvdW1sLwo+IAo+IFRlc3RlZC1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KPiBT
+aWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGxhcG9zdGUubmV0
+Pgo+IENjOiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgoK
+QXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcywgd2l0aCBhIGZldyBmaXhlcyAob2Ygd2hpY2ggdGhl
+IHJldmlldyBieQpCZXJuZCk6CgogIC0gZml4IE1NVSBkZXBlbmRlbmN5IGZvciBjb21tZW50OyBy
+ZXdvcmQgY29tbWVudAogIC0gZml4IG11bHRpLWxpbmUgYXNzaWdubWVudCBvZiBaRVJPRlJFRV9D
+RkxBR1MKICAtIGRvIG5vdCBhZGQgY29tbWVudCB0cmFpbGluZyBhZnRlciBhc3NpZ25tZW50CiAg
+LSBleHRlbmQgY29tbWl0IGxvZyB0byBleHBsYWluIHdoeSB3ZSBuZWVkIHRoZSB3b3JrYXJvdW5k
+CiAgLSB1c2UgVEFSR0VUX0NPTkZJR1VSRV9PUFRTLCBkcm9wIGV4cGxpY2l0IENDPQogIC0gaW5z
+dGFsbCB0byBleHBsaWNpdCBkZXN0aW5hdGlvbiBmaWxlCgpQbGVhc2Ugbm90ZSB0aGF0IHdlIG1h
+eSBuZWVkIHRvIHBhdGNoIHRoZSBNYWtlZmlsZSwgdG8gYmUgYWJsZSB0byBwYXNzCnRoZSBMREZM
+QUdTLgoKSW5kZWVkLCBzaW5jZSB0aGUgY29tcGlsZSBhbmQgbGluayBzdGVwcyBhcmUgZG9uZSB3
+aXRoIGEgc2luZ2xlIGNhbGwgdG8KZ2NjICh0aGF0J3MgT0shKSwgd2UnZCBiZSBtaXNzaW5nIFRB
+UkdFVF9MREZMQUdTIHdoZW4gdGV5IGFyZSBub3QgZW1wdHkuCgpIb3dldmVyLCBhc3NpbmcgdGhv
+c2UgYXMgcGFydCBvZiB0aGUgQ0ZMQUdTIGlzIG5vdCBnb2luZyB0byBtYWtlIGl0OgpMREZMQUdT
+IHNob3VsZCBiZSBhZnRlciB0aGUgbGlua2VkIGxpYnJhcmllcyAoZS5nLiBpbiBjYXNlIHdlIHdh
+bnQgdG8Kc2hvZS1ob3JuIGEgc2VjaWZpYyBsaWJyYXJ5IGZvciBsaW5raW5nIGFmdGVyIC1sZXh0
+MikuCgpDYXJlIHRvIGhhdmUgYSBsb29rIGF0IHRoYXQ/CgpSZWdhcmRzLApZYW5uIEUuIE1PUklO
+LgoKPiAtLS0KPiAKPiAKPiBIaSwKPiAKPiBUaGlzIGlzIHRoZSB0aGlyZCB2ZXJzaW9uIG9mIGEg
+cGF0Y2ggYWRkaW5nIGEgemVyb2ZyZWUgcGFja2FnZS4gVGhpcyB2ZXJzaW9uCj4gYWRkcyBhIHNp
+bXBsZSB0ZXN0LCB3aGljaCB3b3JrcyBmb3IgbWUgYm90aCBsb2NhbGx5IGFuZCBvbiBnaXRsYWIu
+Cj4gCj4gQXMgdGhlIHBhY2thZ2UgaXRzZWxmIGhhcyBub3QgY2hhbmdlZCBzaW5jZSB2MlsxXSBJ
+IGhhdmUgYWRkZWQgSnVsaWVuJ3MKPiAiVGVzdGVkLWJ5IiBmb2xsb3dpbmcgaGlzIGUtbWFpbFsy
+XSAodGhhbmtzISkuCj4gCj4gQmVzdCByZWdhcmRzLAo+IFZpbmNlbnQuCj4gCj4gQ2hhbmdlcyBp
+biB2MzoKPiAtIEFkZCBhIHNpbXBsZSB0ZXN0IHRvIHZlcmlmeSB0aGF0IHplcm9mcmVlIGlzIHdv
+cmtpbmcuCj4gCj4gQ2hhbmdlcyBpbiB2MjoKPiAtIFVzZSBhIHdvcmthcm91bmQgdG8gYWxsb3cg
+YnVpbGRpbmcgd2l0aCBtdXNsLgo+IAo+IFsxXTogaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L3BpcGVybWFpbC9idWlsZHJvb3QvMjAyMi1KdW5lLzY0NTMzOC5odG1sCj4gWzJdOiBodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvcGlwZXJtYWlsL2J1aWxkcm9vdC8yMDIyLUp1bmUvNjQ1MzM4
+Lmh0bWwKPiAKPiAKPiAgREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDIgKwo+ICBwYWNrYWdlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgfCAgMSArCj4gIHBhY2thZ2UvemVyb2ZyZWUvQ29uZmlnLmluICAgICAgICAgICAgICAgICAg
+ICB8IDEzICsrKysrKwo+ICBwYWNrYWdlL3plcm9mcmVlL3plcm9mcmVlLmhhc2ggICAgICAgICAg
+ICAgICAgfCAgMyArKwo+ICBwYWNrYWdlL3plcm9mcmVlL3plcm9mcmVlLm1rICAgICAgICAgICAg
+ICAgICAgfCAyNyArKysrKysrKysrKysKPiAgLi4uL3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0
+X3plcm9mcmVlLnB5ICAgIHwgNDEgKysrKysrKysrKysrKysrKysrKwo+ICA2IGZpbGVzIGNoYW5n
+ZWQsIDg3IGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvemVyb2Zy
+ZWUvQ29uZmlnLmluCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3plcm9mcmVlL3plcm9m
+cmVlLmhhc2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvemVyb2ZyZWUvemVyb2ZyZWUu
+bWsKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rl
+c3RfemVyb2ZyZWUucHkKPiAKPiBkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMK
+PiBpbmRleCA3MWRkN2QzZDZjLi4wZmM3M2YzMTFmIDEwMDY0NAo+IC0tLSBhL0RFVkVMT1BFUlMK
+PiArKysgYi9ERVZFTE9QRVJTCj4gQEAgLTI5MTcsOCArMjkxNywxMCBAQCBGOgljb25maWdzL3Vl
+dm01NDMyX2RlZmNvbmZpZwo+ICBGOglwYWNrYWdlL2k3ei8KPiAgRjoJcGFja2FnZS9tc3ItdG9v
+bHMvCj4gIEY6CXBhY2thZ2UvcGl4ei8KPiArRjoJcGFja2FnZS96ZXJvZnJlZS8KPiAgRjoJc3Vw
+cG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9tc3JfdG9vbHMqCj4gIEY6CXN1cHBvcnQv
+dGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcGl4ei5weQo+ICtGOglzdXBwb3J0L3Rlc3Rpbmcv
+dGVzdHMvcGFja2FnZS90ZXN0X3plcm9mcmVlLnB5Cj4gIAo+ICBOOglWaW5pY2l1cyBUaW50aSA8
+dmluaWNpdXN0aW50aUBnbWFpbC5jb20+Cj4gIEY6CXBhY2thZ2UvcHl0aG9uLXRocmlmdC8KPiBk
+aWZmIC0tZ2l0IGEvcGFja2FnZS9Db25maWcuaW4gYi9wYWNrYWdlL0NvbmZpZy5pbgo+IGluZGV4
+IDIzMGFhN2EyYzIuLjNmZWI0N2M1MzQgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9Db25maWcuaW4K
+PiArKysgYi9wYWNrYWdlL0NvbmZpZy5pbgo+IEBAIC0yMzksNiArMjM5LDcgQEAgbWVudSAiRmls
+ZXN5c3RlbSBhbmQgZmxhc2ggdXRpbGl0aWVzIgo+ICAJc291cmNlICJwYWNrYWdlL3VkZnRvb2xz
+L0NvbmZpZy5pbiIKPiAgCXNvdXJjZSAicGFja2FnZS91bmlvbmZzL0NvbmZpZy5pbiIKPiAgCXNv
+dXJjZSAicGFja2FnZS94ZnNwcm9ncy9Db25maWcuaW4iCj4gKwlzb3VyY2UgInBhY2thZ2UvemVy
+b2ZyZWUvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL3pmcy9Db25maWcuaW4iCj4gIGVu
+ZG1lbnUKPiAgCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvemVyb2ZyZWUvQ29uZmlnLmluIGIvcGFj
+a2FnZS96ZXJvZnJlZS9Db25maWcuaW4KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAw
+MDAwMDAwMDAuLjJjZTI5MDFhMjcKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS96ZXJv
+ZnJlZS9Db25maWcuaW4KPiBAQCAtMCwwICsxLDEzIEBACj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9a
+RVJPRlJFRQo+ICsJYm9vbCAiemVyb2ZyZWUiCj4gKwlkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMg
+ZTJmc3Byb2dzCj4gKwlkZXBlbmRzIG9uICFCUjJfU1RBVElDX0xJQlMKPiArCXNlbGVjdCBCUjJf
+UEFDS0FHRV9FMkZTUFJPR1MKPiArCWhlbHAKPiArCSAgemVyb2ZyZWUgaXMgYSB1dGlsaXR5IHdo
+aWNoIHNjYW5zIHRoZSBmcmVlIGJsb2NrcyBpbiBhbiBleHQyCj4gKwkgIGZpbGVzeXN0ZW0gYW5k
+IGZpbGxzIGFueSBub24temVybyBibG9ja3Mgd2l0aCB6ZXJvZXMuCj4gKwo+ICsJICBodHRwczov
+L2ZyaXBwZXJ5Lm9yZy91bWwvCj4gKwo+ICtjb21tZW50ICJ6ZXJvZnJlZSBuZWVkcyBNTVUgYW5k
+IGR5bmFtaWMgbGlicmFyeSIKPiArCWRlcGVuZHMgb24gIUJSMl9VU0VfTU1VIHx8IEJSMl9TVEFU
+SUNfTElCUwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3plcm9mcmVlL3plcm9mcmVlLmhhc2ggYi9w
+YWNrYWdlL3plcm9mcmVlL3plcm9mcmVlLmhhc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGlu
+ZGV4IDAwMDAwMDAwMDAuLjMzOTk2MTE3ODcKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2Fn
+ZS96ZXJvZnJlZS96ZXJvZnJlZS5oYXNoCj4gQEAgLTAsMCArMSwzIEBACj4gKyMgTG9jYWxseSBj
+YWxjdWxhdGVkCj4gK3NoYTI1NiAgOTU2YmM4NjFiNTViYTBhMmI3NTkzYzU4ZDMyMzM5ZGFiMWEw
+ZTdkYTZlYTJiODEzZDI3YzgwZjA4YjcyMzg2NyAgemVyb2ZyZWUtMS4xLjEudGd6Cj4gK3NoYTI1
+NiAgOTBkYWFlMDA0NzVhOTkyYTM2N2RhNWIwNjU4NDY5YTVkMWM0NDQ5ZGJiZTk2NGM1YjcyNDZl
+MWFlYzkyZjQ5MSAgQ09QWUlORwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3plcm9mcmVlL3plcm9m
+cmVlLm1rIGIvcGFja2FnZS96ZXJvZnJlZS96ZXJvZnJlZS5tawo+IG5ldyBmaWxlIG1vZGUgMTAw
+NjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uY2E1YTAxOWRlNwo+IC0tLSAvZGV2L251bGwKPiArKysg
+Yi9wYWNrYWdlL3plcm9mcmVlL3plcm9mcmVlLm1rCj4gQEAgLTAsMCArMSwyNyBAQAo+ICsjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjCj4gKyMgemVyb2ZyZWUKPiArIwo+ICsjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIwo+ICsKPiArWkVST0ZSRUVfVkVSU0lPTiA9IDEuMS4xCj4gK1pFUk9GUkVF
+X1NPVVJDRSA9IHplcm9mcmVlLSQoWkVST0ZSRUVfVkVSU0lPTikudGd6Cj4gK1pFUk9GUkVFX1NJ
+VEUgPSBodHRwczovL2ZyaXBwZXJ5Lm9yZy91bWwKPiArWkVST0ZSRUVfTElDRU5TRSA9IEdQTC0y
+LjAKPiArWkVST0ZSRUVfTElDRU5TRV9GSUxFID0gQ09QWUlORwo+ICtaRVJPRlJFRV9ERVBFTkRF
+TkNJRVMgPSBlMmZzcHJvZ3MKPiArCj4gKyMgV2UgdXNlIHRoZSBzYW1lIHdvcmthcm91bmQgYXMg
+aW4gaHR0cHM6Ly9idWdzLmdlbnRvby5vcmcvNzE2MTM2Cj4gKyMgdG8gYnVpbGQgd2l0aCBtdXNs
+Lgo+ICtaRVJPRlJFRV9DRkxBR1MgPSAkKFRBUkdFVF9DRkxBR1MpIFwKPiArCSQoaWYgJChCUjJf
+VE9PTENIQUlOX1VTRVNfTVVTTCksLURIQVZFX1NZU19UWVBFU19IKSAjIGRldl90Cj4gKwo+ICtk
+ZWZpbmUgWkVST0ZSRUVfQlVJTERfQ01EUwo+ICsJJChNQUtFKSBDQz0iJChUQVJHRVRfQ0MpIiBD
+RkxBR1M9IiQoWkVST0ZSRUVfQ0ZMQUdTKSIgLUMgJChARCkgYWxsCj4gK2VuZGVmCj4gKwo+ICtk
+ZWZpbmUgWkVST0ZSRUVfSU5TVEFMTF9UQVJHRVRfQ01EUwo+ICsJJChJTlNUQUxMKSAtRCAtbSAw
+NzU1ICQoQEQpL3plcm9mcmVlICQoVEFSR0VUX0RJUikvdXNyL2Jpbgo+ICtlbmRlZgo+ICsKPiAr
+JChldmFsICQoZ2VuZXJpYy1wYWNrYWdlKSkKPiBkaWZmIC0tZ2l0IGEvc3VwcG9ydC90ZXN0aW5n
+L3Rlc3RzL3BhY2thZ2UvdGVzdF96ZXJvZnJlZS5weSBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9w
+YWNrYWdlL3Rlc3RfemVyb2ZyZWUucHkKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAw
+MDAwMDAwMDAuLjc1ZWVhMzQ2ZDMKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvc3VwcG9ydC90ZXN0
+aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF96ZXJvZnJlZS5weQo+IEBAIC0wLDAgKzEsNDEgQEAKPiAr
+aW1wb3J0IG9zCj4gK2ltcG9ydCBpbmZyYS5iYXNldGVzdAo+ICtpbXBvcnQgc3VicHJvY2Vzcwo+
+ICsKPiArCj4gK2NsYXNzIFRlc3RaZXJvZnJlZShpbmZyYS5iYXNldGVzdC5CUlRlc3QpOgo+ICsg
+ICAgY29uZmlnID0gaW5mcmEuYmFzZXRlc3QuQkFTSUNfVE9PTENIQUlOX0NPTkZJRyArIFwKPiAr
+ICAgICAgICAiIiIKPiArICAgICAgICBCUjJfUEFDS0FHRV9aRVJPRlJFRT15Cj4gKyAgICAgICAg
+QlIyX1RBUkdFVF9ST09URlNfQ1BJTz15Cj4gKyAgICAgICAgIyBCUjJfVEFSR0VUX1JPT1RGU19U
+QVIgaXMgbm90IHNldAo+ICsgICAgICAgICIiIgo+ICsKPiArICAgIGRlZiB0ZXN0X3J1bihzZWxm
+KToKPiArICAgICAgICAjIFByZXBhcmUgZGlzayBpbWFnZS4KPiArICAgICAgICAjIFdlIGtlZXAg
+aXQgc21hbGwgKDggTUIpIGZvciB0aGUgc2FrZSBvZiB0ZXN0IHRpbWUuCj4gKyAgICAgICAgZGlz
+a19maWxlID0gb3MucGF0aC5qb2luKHNlbGYub3V0cHV0ZGlyLCAiZGlzay5pbWciKQo+ICsgICAg
+ICAgIHN1YnByb2Nlc3MuY2hlY2tfY2FsbCgKPiArICAgICAgICAgICAgWyJkZCIsICJpZj0vZGV2
+L3plcm8iLCBmIm9mPXtkaXNrX2ZpbGV9IiwgImJzPTFNIiwgImNvdW50PTgiXSwKPiArICAgICAg
+ICAgICAgc3Rkb3V0PXNlbGYuZW11bGF0b3IubG9nZmlsZSwKPiArICAgICAgICAgICAgc3RkZXJy
+PXNlbGYuZW11bGF0b3IubG9nZmlsZSkKPiArCj4gKyAgICAgICAgIyBSdW4gdGhlIGVtdWxhdG9y
+IHdpdGggYSBkcml2ZS4KPiArICAgICAgICBjcGlvX2ZpbGUgPSBvcy5wYXRoLmpvaW4oc2VsZi5i
+dWlsZGRpciwgImltYWdlcyIsICJyb290ZnMuY3BpbyIpCj4gKyAgICAgICAgc2VsZi5lbXVsYXRv
+ci5ib290KGFyY2g9ImFybXY1IiwKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAga2VybmVs
+PSJidWlsdGluIiwKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgb3B0aW9ucz1bCj4gKyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIi1pbml0cmQiLCBjcGlvX2ZpbGUsCj4gKyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIi1kcml2ZSIsIGYiZmlsZT17ZGlza19maWxl
+fSxmb3JtYXQ9cmF3Il0pCj4gKyAgICAgICAgc2VsZi5lbXVsYXRvci5sb2dpbigpCj4gKwo+ICsg
+ICAgICAgICMgUHJlcGFyZSBmaWxlc3lzdGVtLgo+ICsgICAgICAgIG91dHB1dCwgZXhpdF9jb2Rl
+ID0gc2VsZi5lbXVsYXRvci5ydW4oIm1rZnMuZXh0NCAvZGV2L3NkYSIpCj4gKyAgICAgICAgc2Vs
+Zi5hc3NlcnRFcXVhbChleGl0X2NvZGUsIDApCj4gKyAgICAgICAgc2VsZi5hc3NlcnRJbignQ3Jl
+YXRpbmcgZmlsZXN5c3RlbScsIG91dHB1dFsyXSkKPiArCj4gKyAgICAgICAgIyBSdW4gemVyb2Zy
+ZWUgb24gbmV3bHkgY3JlYXRlZCBmaWxlc3lzdGVtLgo+ICsgICAgICAgIGNtZCA9ICJ6ZXJvZnJl
+ZSAtdiAvZGV2L3NkYSIKPiArICAgICAgICBvdXRwdXQsIGV4aXRfY29kZSA9IHNlbGYuZW11bGF0
+b3IucnVuKGNtZCwgdGltZW91dD02MCkKPiArICAgICAgICBzZWxmLmFzc2VydEVxdWFsKGV4aXRf
+Y29kZSwgMCkKPiArICAgICAgICBzZWxmLmFzc2VydEluKCcvODE5MicsIG91dHB1dFstMV0pICAj
+IHRvdGFsIG51bWJlciBvZiBibG9ja3MKPiAtLSAKPiAyLjM1LjEKPiAKPiBfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0t
+LS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0u
+CnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJP
+TiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERl
+c2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2
+MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8g
+IFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwg
+LyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0t
+LS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
