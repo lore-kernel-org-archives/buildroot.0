@@ -1,67 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5596C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 19:50:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5080C43334
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 20:04:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32B7160B24;
-	Sun, 17 Jul 2022 19:50:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32B7160B24
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33B8083E89;
+	Sun, 17 Jul 2022 20:04:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33B8083E89
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eNHo2O-J369s; Sun, 17 Jul 2022 19:50:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DvkERirgjCKn; Sun, 17 Jul 2022 20:04:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C36A60A8D;
-	Sun, 17 Jul 2022 19:50:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C36A60A8D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 14C621BF255
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 19:50:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 315F683E7A;
+	Sun, 17 Jul 2022 20:04:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 315F683E7A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 45B9A1BF35C
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 20:04:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E362560A8D
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 19:50:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E362560A8D
+ by smtp4.osuosl.org (Postfix) with ESMTP id D3B9441619
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 20:04:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3B9441619
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nRrVnzJW1ZOo for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 19:50:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NtbHQGdf8YF2 for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 20:04:18 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C273F607B5
-Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C273F607B5
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 19:50:29 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 7D1444403CD;
- Sun, 17 Jul 2022 22:50:02 +0300 (IDT)
-References: <20220717193719.2429999-1-yann.morin.1998@free.fr>
-User-agent: mu4e 1.8.5; emacs 27.1
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2022 22:41:11 +0300
-In-reply-to: <20220717193719.2429999-1-yann.morin.1998@free.fr>
-Message-ID: <87lesry0vz.fsf@tarshish>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD8BD41612
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CD8BD41612
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 20:04:17 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 6EEB31BF204;
+ Sun, 17 Jul 2022 20:04:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 17 Jul 2022 22:04:06 +0200
+Message-Id: <20220717200407.1400318-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1658087402;
- bh=ukVdWcnmUp4aSRVtcA8rtRoXmDVRh6t2ZoMKoH7K4zk=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=BJYk/z3HA3a9Qjhx7Eacqv6PzsuTEAEo2ByfNPhWr9GANh80yQqmi+fyry3rtl+Ay
- ndT1IEGx9sQzupqOZlD2sL0MeutSpX/RbFt/F4YwQtmG2lC+vdJB7L4+HZ3s8hNpQP
- 8Kgo3lg6FC1QHYAXc2dEYEqAfXeMNA6swOTrh8h6u/wYexEcs5UdXchKrYrWPconEb
- ngOapzyNO6siaw8RgHl3auXpirUB1yjXHmSnl9ytSzuIqbKLWVGt3vEsNLskNsRcf4
- EBkPYhmGCEi7jwoUsUlt59QauWivBtE4j8zQMH65vmouyCM/KVwv5++zp6PwEj3rCN
- X47NdpEh5oJ5A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=BJYk/z3H
-Subject: Re: [Buildroot] [PATCHv4] package/uacme: requires TLS support in
- libcurl
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658088254;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=QcUQ+DX/TFJGj2nMvgcf+k4KS5TIkiPbQ5GRumuohoE=;
+ b=fHodbzB6H/UqRNQndO3VHfysqzIwIkcCCXNK+bikerUzFsAnmJiJnsuz9hmw0gqO5FZ9Wx
+ OWPXcIbD+8SnSeOUTCFHdjabD7rweBt0HmECJjfJmWX0CM8E4EsWD5RmjGgO+GCcKa3RSR
+ +xlN8mMcyKTXcGVNuqvm/+uSTZ6hci7IfZ4xBWS+SqXkciMS17D3vSdrctk8gmon94CBHD
+ sYX4qU3DJp4gLVwFnnWYapiUZ+pBG6JX5bG4z6xUP35GYv1wkwBzuI3I+4JiXDyx3apA0/
+ Wwe32MgLQ9c24PxEV44O6pYzJDFBZE/JNZ+E2t4e2yWdS/wRAJkM6F7gn3Oswg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fHodbzB6
+Subject: [Buildroot] [PATCH] arch: remove support for BR2_ARC_PAGE_SIZE_4K
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,109 +71,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Nicola Di Lieto <nicola.dilieto@gmail.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: ARC Maintainers <arc-buildroot@synopsys.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+BR2_ARC_PAGE_SIZE_4K=y is broken with both glibc and uClibc. The link
+of the C library fails with:
 
-On Sun, Jul 17 2022, Yann E. MORIN wrote:
-> From: Baruch Siach <baruch@tkos.co.il>
->
-> uacme configure script fails when libcurl does not support TLS. This
-> means that BR2_PACKAGE_LIBCURL_TLS_NONE is incompatible with uacme.
->
-> Add a kconfig knob to libcurl so that no_TLS is not an option. Select
-> that from uacme.
+ld: common page size (0x2000) > maximum page size (0x1000)
 
-Looks much more elegant. Thanks.
+This is due to BR2_ARC_PAGE_SIZE_4K=y settings
+-Wl,-z,max-page-size=4096, but binutils apparently defaulting to
+common-page-size=8192.
 
-Some comments below.
+While this could potentially be fixed by passing
+-Wl,-z,common-page-size=4096, these failures indicates that nobody has
+tested 4KB page sizes on ARC in the context of Buildroot, so it is
+more sensible to drop support for this feature. Should anybody need
+this, and have the ability to ensure that it works, we would certainly
+be able to re-introduce the feature.
 
-> Fixes:
-> http://autobuild.buildroot.net/results/4e16f1d958ac3d30e26e7f17bdffc47834b0e2bd/
-> http://autobuild.buildroot.net/results/4e16f1d958ac3d30e26e7f17bdffc47834b0e2bd/
-> http://autobuild.buildroot.net/results/25280409b32282b4dd40b1e88127051439380f3d/
->
-> Cc: Nicola Di Lieto <nicola.dilieto@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> [yann.morin.1998@free.fr:
->   - keep the current forward select
->   - add the kconfig knob
-> ]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
->
-> ---
-> v4 (Yann E. MORIN)
->   Restore forward select
->   Add the force-ssl-tls kconfig knob; use it from uacme
->
-> v3:
->   Move comments up to fix suboption indentation (Yann)
->   Add missing MMU comment dependency (Yann)
->
-> v2:
->   Add dependency on crypto back end for uacme itself (Nicola Di Lieto)
-> ---
->  package/libcurl/Config.in | 5 +++++
->  package/uacme/Config.in   | 1 +
->  2 files changed, 6 insertions(+)
->
-> diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-> index 3381decca8..a3148e086d 100644
-> --- a/package/libcurl/Config.in
-> +++ b/package/libcurl/Config.in
-> @@ -45,6 +45,10 @@ config BR2_PACKAGE_LIBCURL_EXTRA_PROTOCOLS_FEATURES
->  	  - DICT
->  	  - Gopher
->  
-> +# Packages must select that if they require a SSL/TLS-enabled libcurl
+Fixes:
 
-Said package must also select one of the crypto back ends that libcurl
-supports. This part is somewhat fragile as libcurl might remove support
-for any given back end like it recently did for NSS.
+  http://autobuild.buildroot.net/results/c8b2f331c98453670cd982558144c4fd84674a3d/ (uclibc)
+  http://autobuild.buildroot.net/results/3a22f7aac38145b26c549254b819f87329e7a77e/ (glibc)
 
-> +config BR2_PACKAGE_LIBCURL_FORCE_SSL_TLS
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy   | 7 +++++++
+ arch/Config.in.arc | 5 -----
+ arch/arch.mk.arc   | 4 +---
+ linux/linux.mk     | 4 ----
+ 4 files changed, 8 insertions(+), 12 deletions(-)
 
-[Bikeshed] Why not just BR2_PACKAGE_LIBCURL_FORCE_TLS ?
-
-baruch
-
-> +	bool
-> +
->  choice
->  	prompt "SSL/TLS library to use"
->  
-> @@ -77,6 +81,7 @@ comment "WolfSSL needs a toolchain w/ dynamic library"
->  
->  config BR2_PACKAGE_LIBCURL_TLS_NONE
->  	bool "None"
-> +	depends on !BR2_PACKAGE_LIBCURL_FORCE_SSL_TLS
->  
->  endchoice
->  
-> diff --git a/package/uacme/Config.in b/package/uacme/Config.in
-> index 58b7c534e7..1458e74d28 100644
-> --- a/package/uacme/Config.in
-> +++ b/package/uacme/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_UACME
->  	depends on BR2_USE_MMU # fork()
->  	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_GNUTLS || BR2_PACKAGE_MBEDTLS)
->  	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_LIBCURL_FORCE_SSL_TLS
->  	help
->  	  uacme is a client for the ACMEv2 protocol described in
->  	  RFC8555, written in plain C with minimal dependencies
-
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 956da10a9f..1590a9fa25 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2022.08"
+ 
++config BR2_ARC_PAGE_SIZE_4K
++	bool "Support for 4KB pages on ARC removed"
++	select BR2_LEGACY
++	help
++	  The support to use 4KB pages on the ARC architecture has
++	  been removed, as it was broken with both glibc and uClibc.
++
+ config BR2_PACKAGE_PHP_EXT_WDDX
+ 	bool "php wddx removed"
+ 	select BR2_LEGACY
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 388d3496bc..58103ad171 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -103,10 +103,6 @@ choice
+ 	  size matching the hardware configuration. Otherwise
+ 	  user-space applications will fail at runtime.
+ 
+-config BR2_ARC_PAGE_SIZE_4K
+-	bool "4KB"
+-	depends on !BR2_arc750d
+-
+ config BR2_ARC_PAGE_SIZE_8K
+ 	bool "8KB"
+ 	help
+@@ -121,7 +117,6 @@ endchoice
+ 
+ config BR2_ARC_PAGE_SIZE
+ 	string
+-	default "4K" if BR2_ARC_PAGE_SIZE_4K
+ 	default "8K" if BR2_ARC_PAGE_SIZE_8K
+ 	default "16K" if BR2_ARC_PAGE_SIZE_16K
+ 
+diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
+index 32b818b0e0..697c0ff524 100644
+--- a/arch/arch.mk.arc
++++ b/arch/arch.mk.arc
+@@ -6,9 +6,7 @@ ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
+ endif
+ 
+ # Explicitly set LD's "max-page-size" instead of relying on some defaults
+-ifeq ($(BR2_ARC_PAGE_SIZE_4K),y)
+-ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=4096
+-else ifeq ($(BR2_ARC_PAGE_SIZE_8K),y)
++ifeq ($(BR2_ARC_PAGE_SIZE_8K),y)
+ ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=8192
+ else ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
+ ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 322ccabbd9..f012689a9e 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -362,10 +362,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI))
+ 	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR))
+-	$(if $(BR2_ARC_PAGE_SIZE_4K),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K)
+-		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K)
+-		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K))
+ 	$(if $(BR2_ARC_PAGE_SIZE_8K),
+ 		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K)
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.36.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
