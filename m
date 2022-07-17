@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A86AC43334
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:24:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13165C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:25:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F290860773;
-	Sun, 17 Jul 2022 13:24:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F290860773
+	by smtp4.osuosl.org (Postfix) with ESMTP id A05B4416FD;
+	Sun, 17 Jul 2022 13:25:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A05B4416FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xc0j_de7Z1JO; Sun, 17 Jul 2022 13:24:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ssJC84lbTc51; Sun, 17 Jul 2022 13:25:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D60BA606A9;
-	Sun, 17 Jul 2022 13:24:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D60BA606A9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A676416F7;
+	Sun, 17 Jul 2022 13:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A676416F7
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 103E81BF97A
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:23:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F37341BF3D5
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:23:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC186400DD
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:23:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC186400DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id DBD94409D3
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:23:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBD94409D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GYMMDgBRd98q for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 13:23:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C80EE400F2
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C80EE400F2
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:23:19 +0000 (UTC)
+ with ESMTP id IPHp2bC0yskk for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 13:23:40 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9962400DD
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A9962400DD
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:23:40 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:4985:d730:3c09:77ac])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 16E637804FE;
- Sun, 17 Jul 2022 15:23:16 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id C7534780501;
+ Sun, 17 Jul 2022 15:23:36 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 17 Jul 2022 15:23:15 +0200
-Date: Sun, 17 Jul 2022 15:23:15 +0200
+ Sun, 17 Jul 2022 15:23:36 +0200
+Date: Sun, 17 Jul 2022 15:23:36 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220717132315.GK2249625@scaer>
-References: <20220710180522.472809-1-fontaine.fabrice@gmail.com>
+Message-ID: <20220717132336.GL2249625@scaer>
+References: <20220710134822.373689-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220710180522.472809-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220710134822.373689-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658064198;
- bh=3cYWoqRZgEJbqqumNEYIECySYYlomLhPjCSjmlzzFfo=;
+ d=free.fr; s=smtp-20201208; t=1658064218;
+ bh=mTuSwxrW4omaDY8+suc/lnx2qOHMXjY1hZJEqHoMyVo=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=GuONqGLdmAG1Mln42iOzdDLYaTN8gosjOPGfNzCpyXYmIxYhHfdkqoQlY3/YimoSY
- BAsXoHky287lf9TtbYIkgTq9xzymDqv+ao6QnoYVCjL3MK7zqw5UXCN3o2yDHaN9lr
- jB0Li4cRrPKqh9tywoKSmhUkqoE6tYagBH8nIyxR30x4m6c4+WQcAzL0g+XTRdS1Ce
- O28pi614RwqOncskjmaFd+ighLNNiR7fBSacohsu/jFaNRhxVrka9ij0uNooRU50zw
- mJ9VBhOxxWmRG8ps9qnmhgAr+zoI83T2J9oXvojSdQpGIJiWaY+PWAxeJyOS6OdAID
- 8zZuQtMWZAtjQ==
+ b=UTmGY9yXrwZOHbYIi7n1ZO1cd9qOnLNsaKFqnMnup8ybU13xan74Epdgvi/xWh850
+ dHBq9MAGKzeEphk/Jwh//wWypfjITCyOW36mGYWCPxu+UPPLqgGZ1bAsGdDO42mJZ3
+ imXtKerdXil/AgvdnM5zJGY3xIFEUEJKCGEALtROdvTdXvGQKGlS/Q7JcilsiZqijO
+ DztAl2XlY8hSfgAoTFcdNqWRcxgF7734goq2pBy62wUgy2jVOWkSHxHncqHujqohQ0
+ 88Q01vqMMfGWJT+oWHfMTVA27MDpNWFt1xbEVxAj/FGT/CkAnW/s4TywpVMGr9e0/W
+ vHmK+tI6Ukj/w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=GuONqGLd
-Subject: Re: [Buildroot] [PATCH 1/1] package/minizip: bump to version 3.0.6
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=UTmGY9yX
+Subject: Re: [Buildroot] [PATCH 1/1] package/wavpack: bump to version 5.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,10 +84,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2022-07-10 20:05 +0200, Fabrice Fontaine spake thusly:
-> Drop patch (already in version)
+On 2022-07-10 15:48 +0200, Fabrice Fontaine spake thusly:
+> - Drop patch (already in version)
+> - Update hash of license file (update in year:
+>   https://github.com/dbry/WavPack/commit/30d4161c47e135bda2c25a2161b9e3e44e4980ce)
 > 
-> https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.6
+> https://github.com/dbry/WavPack/releases/tag/5.5.0
+> https://github.com/dbry/WavPack/blob/5.5.0/NEWS
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -97,81 +100,93 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  ...1-CMakeLists.txt-fix-build-without-C.patch | 41 -------------------
->  package/minizip/minizip.hash                  |  2 +-
->  package/minizip/minizip.mk                    |  2 +-
->  3 files changed, 2 insertions(+), 43 deletions(-)
->  delete mode 100644 package/minizip/0001-CMakeLists.txt-fix-build-without-C.patch
+>  ...e-DSD-file-types-for-invalid-lengths.patch | 42 -------------------
+>  package/wavpack/wavpack.hash                  |  4 +-
+>  package/wavpack/wavpack.mk                    |  5 +--
+>  3 files changed, 3 insertions(+), 48 deletions(-)
+>  delete mode 100644 package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
 > 
-> diff --git a/package/minizip/0001-CMakeLists.txt-fix-build-without-C.patch b/package/minizip/0001-CMakeLists.txt-fix-build-without-C.patch
+> diff --git a/package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch b/package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
 > deleted file mode 100644
-> index b0cb6a6c1e..0000000000
-> --- a/package/minizip/0001-CMakeLists.txt-fix-build-without-C.patch
+> index 76c1e81674..0000000000
+> --- a/package/wavpack/0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
 > +++ /dev/null
-> @@ -1,41 +0,0 @@
-> -From 4e7899f3d0533f83b7230ffa787087b65ddd45c0 Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Tue, 5 Apr 2022 18:20:14 +0200
-> -Subject: [PATCH] CMakeLists.txt: fix build without C++
+> @@ -1,42 +0,0 @@
+> -From 773f9d0803c6888ae7d5391878d7337f24216f4a Mon Sep 17 00:00:00 2001
+> -From: David Bryant <david@wavpack.com>
+> -Date: Tue, 23 Nov 2021 13:14:35 -0800
+> -Subject: [PATCH] issue #110: sanitize DSD file types for invalid lengths
 > -
-> -Fix the following build failure without a working C++ compiler raised
-> -since version 2.0.0 and
-> -https://github.com/zlib-ng/minizip-ng/commit/d383a5f2fca127d24407ff26adce579d63b85310:
-> -
-> -CMake Error at /nvmedata/autobuild/instance-20/output-1/host/share/cmake-3.18/Modules/CMakeTestCXXCompiler.cmake:59 (message):
-> -  The C++ compiler
-> -
-> -    "/usr/bin/c++"
-> -
-> -  is not able to compile a simple test program.
-> -
-> -Fixes:
-> - - http://autobuild.buildroot.org/results/4452bc35b41414a5e8a0e9831b0854228df5fba4
-> -
+> -[Retrieved from:
+> -https://github.com/dbry/WavPack/commit/773f9d0803c6888ae7d5391878d7337f24216f4a]
 > -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: https://github.com/zlib-ng/minizip-ng/pull/621]
 > ----
-> - CMakeLists.txt | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> - cli/dsdiff.c | 6 ++++++
+> - cli/dsf.c    | 1 +
+> - 2 files changed, 7 insertions(+)
 > -
-> -diff --git a/CMakeLists.txt b/CMakeLists.txt
-> -index fef46c3..83adaf3 100644
-> ---- a/CMakeLists.txt
-> -+++ b/CMakeLists.txt
-> -@@ -661,7 +661,7 @@ endif()
-> - list(APPEND MINIZIP_INC ${CMAKE_CURRENT_SOURCE_DIR})
+> -diff --git a/cli/dsdiff.c b/cli/dsdiff.c
+> -index d7adb6a..5bdcae3 100644
+> ---- a/cli/dsdiff.c
+> -+++ b/cli/dsdiff.c
+> -@@ -278,6 +278,12 @@ int ParseDsdiffHeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpa
+> -             }
 > - 
-> - # Create minizip library
-> --project(minizip${MZ_PROJECT_SUFFIX} VERSION ${VERSION})
-> -+project(minizip${MZ_PROJECT_SUFFIX} LANGUAGES C VERSION ${VERSION})
+> -             total_samples = dff_chunk_header.ckDataSize / config->num_channels;
+> -+
+> -+            if (total_samples <= 0 || total_samples > MAX_WAVPACK_SAMPLES) {
+> -+                error_line ("%s is not a valid .DFF file!", infilename);
+> -+                return WAVPACK_SOFT_ERROR;
+> -+            }
+> -+
+> -             break;
+> -         }
+> -         else {          // just copy unknown chunks to output file
+> -diff --git a/cli/dsf.c b/cli/dsf.c
+> -index e1d7973..dddd488 100644
+> ---- a/cli/dsf.c
+> -+++ b/cli/dsf.c
+> -@@ -113,6 +113,7 @@ int ParseDsfHeaderConfig (FILE *infile, char *infilename, char *fourcc, WavpackC
 > - 
-> - if(NOT ${MZ_PROJECT_SUFFIX} STREQUAL "")
-> -     message(STATUS "Project configured as ${PROJECT_NAME}")
-> --- 
-> -2.35.1
-> -
-> diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
-> index e73637670c..0c6e218488 100644
-> --- a/package/minizip/minizip.hash
-> +++ b/package/minizip/minizip.hash
+> -     if (format_chunk.ckSize != sizeof (DSFFormatChunk) || format_chunk.formatVersion != 1 ||
+> -         format_chunk.formatID != 0 || format_chunk.blockSize != DSF_BLOCKSIZE || format_chunk.reserved ||
+> -+        format_chunk.sampleCount <= 0 || format_chunk.sampleCount > MAX_WAVPACK_SAMPLES * 8 ||
+> -         (format_chunk.bitsPerSample != 1 && format_chunk.bitsPerSample != 8) ||
+> -         format_chunk.numChannels < 1 || format_chunk.numChannels > 6 ||
+> -         format_chunk.chanType < 1 || format_chunk.chanType > NUM_CHAN_TYPES) {
+> diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
+> index abc9ab6905..021703df74 100644
+> --- a/package/wavpack/wavpack.hash
+> +++ b/package/wavpack/wavpack.hash
 > @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  1a248c378fdf4ef6c517024bb65577603d5146cffaebe81900bec9c0a5035d4d  minizip-3.0.5.tar.gz
-> +sha256  383fa1bdc28c482828a8a8db53f758dbd44291b641182724fda5df5b59cce543  minizip-3.0.6.tar.gz
->  sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
-> diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-> index b9259f0c54..61936e0568 100644
-> --- a/package/minizip/minizip.mk
-> +++ b/package/minizip/minizip.mk
+>  # locally computed hash
+> -sha256  4bde6a6b2a86614a6bd2579e60dcc974e2c8f93608d2281110a717c1b3c28b79  wavpack-5.4.0.tar.xz
+> -sha256  f38defde000d62c4ff158f1445cb85a0c2f67cbc1d3cfa34ed882f439f6e3b43  COPYING
+> +sha256  ef749d98df46925bc2916993e601cc7ee9114d99653e63e0e304f031ba73b8e6  wavpack-5.5.0.tar.xz
+> +sha256  275d65ec11a78d552d078b9c26d950e3075892bca895a415ceaaec33bcfabff9  COPYING
+> diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
+> index 2e0438ac80..a3d952e29b 100644
+> --- a/package/wavpack/wavpack.mk
+> +++ b/package/wavpack/wavpack.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -MINIZIP_VERSION = 3.0.5
-> +MINIZIP_VERSION = 3.0.6
->  MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
->  MINIZIP_DEPENDENCIES = host-pkgconf
->  MINIZIP_INSTALL_STAGING = YES
+> -WAVPACK_VERSION = 5.4.0
+> +WAVPACK_VERSION = 5.5.0
+>  WAVPACK_SITE = \
+>  	https://github.com/dbry/WavPack/releases/download/$(WAVPACK_VERSION)
+>  WAVPACK_SOURCE = wavpack-$(WAVPACK_VERSION).tar.xz
+> @@ -14,9 +14,6 @@ WAVPACK_LICENSE = BSD-3-Clause
+>  WAVPACK_LICENSE_FILES = COPYING
+>  WAVPACK_CPE_ID_VENDOR = wavpack
+>  
+> -# 0001-issue-110-sanitize-DSD-file-types-for-invalid-lengths.patch
+> -WAVPACK_IGNORE_CVES += CVE-2021-44269
+> -
+>  ifeq ($(BR2_PACKAGE_LIBICONV),y)
+>  WAVPACK_CONF_OPTS += LIBS=-liconv
+>  endif
 > -- 
 > 2.35.1
 > 
