@@ -1,70 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C725C43334
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 07:48:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA5BCC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 07:53:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08C4960B24;
-	Sun, 17 Jul 2022 07:48:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08C4960B24
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6253A40A18;
+	Sun, 17 Jul 2022 07:53:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6253A40A18
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IlFLdYVbcZ-r; Sun, 17 Jul 2022 07:48:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c8EYU1xBW6B4; Sun, 17 Jul 2022 07:53:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE9D860ACC;
-	Sun, 17 Jul 2022 07:48:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE9D860ACC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A994F1BF2CA
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 07:48:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3426940190;
+	Sun, 17 Jul 2022 07:53:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3426940190
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 187E01BF2CA
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 07:53:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8360F60ACC
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 07:48:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8360F60ACC
+ by smtp4.osuosl.org (Postfix) with ESMTP id F3FF541859
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 07:53:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3FF541859
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bv0I-JlO7wVT for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 07:48:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fNJzwCe8AZIR for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 07:53:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4939E6068F
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4939E6068F
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 07:48:01 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4985:d730:3c09:77ac])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 80F2F780503;
- Sun, 17 Jul 2022 09:47:56 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 17 Jul 2022 09:47:56 +0200
-Date: Sun, 17 Jul 2022 09:47:56 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220717074756.GA2543@scaer>
-References: <20220715053853.527195-1-james.hilliard1@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48D5441779
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 48D5441779
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 07:53:50 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ ay11-20020a05600c1e0b00b003a3013da120so5792105wmb.5
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 00:53:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=HuL8j8HUjHKdxj0CrH+OwwL54ZlaUlPcCzixy6Ui/N4=;
+ b=OO+Lqf4+lEKkcuUnJconnkO49b0c16wD7h9BGQy9itDW1Y2Ux+iAKRa0+JgfU6Tc2e
+ eSy19e2oFy2HU5l0XgfD3Ac57yf3FW8CwlmR/Ws5oJqcfzhmGMJis6ZZy70HCk64SvOW
+ Dj8L1PZYoR5REeUZDJ1mFR42GzZqP5Iqommi81wc0urwre/YWs8pUCihZGwzfmawu8SO
+ i80op4Pwh6XdK4I/0MZhGfmeX1oaZD+QnKs0xWllNh4h7cVICG3BngA+JqM27T1elmq0
+ b/bZrk+qG5QJRp2dYfZnA0pR3rL4XG14pU2DnDf9kqbDQdOJkCcp4etX+REBdsRDymJG
+ Xt4g==
+X-Gm-Message-State: AJIora9HDUz7WapDkSytPO1CPMcB/INunKiypFgIux04+8h5LvqTqJ26
+ z/S8VLAofAfszxVw9e1m8zFXOdaQx5g=
+X-Google-Smtp-Source: AGRyM1tXC4ZYXgTFVVFceYAGT6ylzEMchzcNxt0PS6z/EGHrkqD3yo40GtkwsDz6nwTGmPP9zEqLqg==
+X-Received: by 2002:a05:600c:1c2a:b0:3a2:ed0a:420c with SMTP id
+ j42-20020a05600c1c2a00b003a2ed0a420cmr27585663wms.126.1658044427998; 
+ Sun, 17 Jul 2022 00:53:47 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ a6-20020adfdd06000000b0021b970a68f9sm7642292wrm.26.2022.07.17.00.53.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 17 Jul 2022 00:53:47 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 17 Jul 2022 09:50:33 +0200
+Message-Id: <20220717075034.2246639-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220715053853.527195-1-james.hilliard1@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658044079;
- bh=zKjdBD6CJTcetN4FGvIDYseERs8yvP5uEVYhlQFZRv4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=pFOffHeIGj7n7e7Vlnl4eas7NHEJkoeeRE0pvb//D5049ZiCpos0R/ESygwL2TMi8
- 6j2jx6C5mLHvtoMTBNH4QOvHL1q1eKOaCk38W99HxyxK8I4/irgkUyp85IueFHUBOH
- TrjFyUvtlWX7CTwapUKdjPVdvxUxESnTxXsDTryo54OnVmqp7HQ5UKpTRHdg5/UIPg
- JFbQ0FJ3PjvSKFvDo1IJRQPS2TlreEiw5Isxv98WCPdLVo/HZ1rAvNWU2gRq1Sbx02
- UyX+d2UepO2Q0G/P8h6mbw1mRvGNgfgPTdrgkHhXCL8IjnFRgeTUZxp5WhJothgZks
- pT41T1S/+WOtw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=pFOffHeI
-Subject: Re: [Buildroot] [PATCH 1/1] package/libglib2: bump to version 2.72.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=HuL8j8HUjHKdxj0CrH+OwwL54ZlaUlPcCzixy6Ui/N4=;
+ b=gUGP9L7pKKtqlxJ3kr5Qp4f14xnaN8kXBuH+VGn8OgGPWNAWkqh3s4OmN49u/3jnmm
+ /Sy3A0Zao/E82IcjhC3u8nsDBhrrQ+EwUddHWRsPcLdHUc0jJOa9RLKgb9VlsjyX4n3+
+ GKFVMLdtRxMpBYVAh3LtGwPXC3z5KZWAIjUiMh8deVFbv3xWg93sP4EDtcT3/s5wUVur
+ /Y7fJIpfNla5DKsscrW1LJQ7m3j+dAgDWCVu253yh5G8Mkw5vMsSQ1FPybliednfzLiS
+ 3Qn6cOaepyah7pi/c3JMLRpq6TPVv2D1eqpAPD/JMydcH6PQkAeJPvlca3F9boQj+iFH
+ 6/gQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=gUGP9L7p
+Subject: [Buildroot] [PATCH 1/2] package/libwebsockets: bump to version 4.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,174 +94,137 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+Drop first and second patches (already in version)
 
-On 2022-07-14 23:38 -0600, James Hilliard spake thusly:
-> Rebase remove cpp requirement patch.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...1-CMakeLists.txt-fix-build-without-C.patch | 44 -------------------
+ ...Lists.txt-fix-build-without-threads.patch} |  0
+ ...emove-duplicate-LwsCheckRequirements.patch | 26 -----------
+ package/libwebsockets/libwebsockets.hash      |  2 +-
+ package/libwebsockets/libwebsockets.mk        |  2 +-
+ 5 files changed, 2 insertions(+), 72 deletions(-)
+ delete mode 100644 package/libwebsockets/0001-CMakeLists.txt-fix-build-without-C.patch
+ rename package/libwebsockets/{0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch => 0001-lib-tls-CMakeLists.txt-fix-build-without-threads.patch} (100%)
+ delete mode 100644 package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch
 
-Why did you not just replace it with an actual backport of the upstream
-commit d0b9ebbaacb5 (meson: fix build without cpp toolchain), which you
-authored?
-
-And: cool that you managed to get that upstreamed! :-)
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  .../0002-remove-cpp-requirement.patch         | 49 ++++++++-----------
->  package/libglib2/libglib2.hash                |  4 +-
->  package/libglib2/libglib2.mk                  |  4 +-
->  3 files changed, 24 insertions(+), 33 deletions(-)
-> 
-> diff --git a/package/libglib2/0002-remove-cpp-requirement.patch b/package/libglib2/0002-remove-cpp-requirement.patch
-> index b5603c92f4..84511dea32 100644
-> --- a/package/libglib2/0002-remove-cpp-requirement.patch
-> +++ b/package/libglib2/0002-remove-cpp-requirement.patch
-> @@ -1,4 +1,4 @@
-> -From 2f168951df1feebeac549ada1ea44ea092484c54 Mon Sep 17 00:00:00 2001
-> +From dd65a8cfdeafeb18b72d8d1eb676c7ca43ae505f Mon Sep 17 00:00:00 2001
->  From: Adam Duskett <Aduskett@gmail.com>
->  Date: Mon, 16 Sep 2019 10:12:38 -0700
->  Subject: [PATCH] remove cpp requirement
-> @@ -12,15 +12,14 @@ Upstream status: Denied (Buildroot specific)
->  https://gitlab.gnome.org/GNOME/glib/issues/1748
->  ---
->   glib/glibconfig.h.in |  1 -
-> - meson.build          | 18 +-----------------
-> - tests/meson.build    |  5 -----
-> - 3 files changed, 1 insertion(+), 23 deletions(-)
-> + meson.build          | 19 +------------------
-> + 2 files changed, 1 insertion(+), 19 deletions(-)
->  
->  diff --git a/glib/glibconfig.h.in b/glib/glibconfig.h.in
-> -index 7ef8c48..128e65d 100644
-> +index e66748d95..2173d8be6 100644
->  --- a/glib/glibconfig.h.in
->  +++ b/glib/glibconfig.h.in
-> -@@ -117,7 +117,6 @@ typedef unsigned @glib_intptr_type_define@ guintptr;
-> +@@ -119,7 +119,6 @@ typedef unsigned @glib_intptr_type_define@ guintptr;
->   @glib_vacopy@
->   
->   @g_have_iso_c_varargs@
-> @@ -29,15 +28,15 @@ index 7ef8c48..128e65d 100644
->   /* gcc-2.95.x supports both gnu style and ISO varargs, but if -ansi
->    * is passed ISO vararg support is turned off, and there is no work
->  diff --git a/meson.build b/meson.build
-> -index 4bbf4c2..ac59f4e 100644
-> +index 48fdfe864..5df242e39 100644
->  --- a/meson.build
->  +++ b/meson.build
->  @@ -1,4 +1,4 @@
->  -project('glib', 'c', 'cpp',
->  +project('glib', 'c',
-> -   version : '2.70.4',
-> -   # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
-> -   meson_version : '>= 0.49.2',
-> +   version : '2.72.3',
-> +   # NOTE: We keep this pinned at 0.52 because that's what Debian Stable ships
-> +   meson_version : '>= 0.52.0',
->  @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
->   )
->   
-> @@ -46,7 +45,15 @@ index 4bbf4c2..ac59f4e 100644
->   
->   cc_can_run = not meson.is_cross_build() or meson.has_exe_wrapper()
->   
-> -@@ -1696,20 +1695,6 @@ if g_have_iso_c_varargs
-> +@@ -495,7 +494,6 @@ else
-> + endif
-> + 
-> + add_project_arguments(cc.get_supported_arguments(warning_c_args), language: 'c')
-> +-add_project_arguments(cxx.get_supported_arguments(warning_cxx_args), language: 'cpp')
-> + 
-> + # FIXME: We cannot build some of the GResource tests with -z nodelete, which
-> + # means we cannot use that flag in add_project_link_arguments(), and must add
-> +@@ -1734,20 +1732,6 @@ if g_have_iso_c_varargs
->   #endif''')
->   endif
->   
-> @@ -67,7 +74,7 @@ index 4bbf4c2..ac59f4e 100644
->   g_have_gnuc_varargs = cc.compiles('''
->     void some_func (void) {
->       int a(int p1, int p2, int p3);
-> -@@ -2339,7 +2324,6 @@ subdir('gobject')
-> +@@ -2381,7 +2365,6 @@ subdir('gobject')
->   subdir('gthread')
->   subdir('gmodule')
->   subdir('gio')
-> @@ -75,22 +82,6 @@ index 4bbf4c2..ac59f4e 100644
->   if build_tests
->     subdir('tests')
->   endif
-> -diff --git a/tests/meson.build b/tests/meson.build
-> -index e4ea226..7fd974c 100644
-> ---- a/tests/meson.build
-> -+++ b/tests/meson.build
-> -@@ -55,11 +55,6 @@ tests = {
-> -     'source': 'module-test.c',
-> -     'c_args': ['-DMODULE_TYPE="plugin"'],
-> -   },
-> --  'cxx-test' : {
-> --    'source' : 'cxx-test.cpp',
-> --    'include_directories' : gmoduleinc,
-> --    'dependencies' : [libgio_dep],
-> --  },
-> - }
-> - 
-> - test_extra_programs = {
->  -- 
-> -2.23.0
-> +2.34.1
->  
-> diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-> index f0f0cb55ad..0395ff234a 100644
-> --- a/package/libglib2/libglib2.hash
-> +++ b/package/libglib2/libglib2.hash
-> @@ -1,4 +1,4 @@
-> -# https://download.gnome.org/sources/glib/2.70/glib-2.70.4.sha256sum
-> -sha256  ab3d176f3115dcc4e5d02db795984e04e4f4b48d836252e23e8c468e9d423c33  glib-2.70.4.tar.xz
-> +# https://download.gnome.org/sources/glib/2.72/glib-2.72.3.sha256sum
-> +sha256  4a39a2f624b8512d500d5840173eda7fa85f51c109052eae806acece85d345f0  glib-2.72.3.tar.xz
->  # License files, locally calculated
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> index 18f5b329c7..2970d5a7a9 100644
-> --- a/package/libglib2/libglib2.mk
-> +++ b/package/libglib2/libglib2.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -LIBGLIB2_VERSION_MAJOR = 2.70
-> -LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
-> +LIBGLIB2_VERSION_MAJOR = 2.72
-> +LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
->  LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
->  LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
->  LIBGLIB2_LICENSE = LGPL-2.1+
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libwebsockets/0001-CMakeLists.txt-fix-build-without-C.patch b/package/libwebsockets/0001-CMakeLists.txt-fix-build-without-C.patch
+deleted file mode 100644
+index c6d6d07dcc..0000000000
+--- a/package/libwebsockets/0001-CMakeLists.txt-fix-build-without-C.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 726b36eca158063d8871c91ad99a29113ea35aea Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 13 Apr 2022 21:03:26 +0200
+-Subject: [PATCH] CMakeLists.txt: fix build without C++
+-
+-Fix the following build failure without C++ raised since version 4.2.0
+-and
+-https://github.com/warmcat/libwebsockets/commit/962e9ee345bc28749577c1fca2542a273404627d:
+-
+-CMake Error at /nvmedata/autobuild/instance-11/output-1/per-package/libwebsockets/host/share/cmake-3.18/Modules/CMakeTestCXXCompiler.cmake:59 (message):
+-  The C++ compiler
+-
+-    "/usr/bin/clang++"
+-
+-  is not able to compile a simple test program.
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/550e7f7d54adf74f8cc078be5b91b3567d622ede
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/warmcat/libwebsockets/pull/2613]
+----
+- CMakeLists.txt | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 08aaf8c6..96e3ad18 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -71,7 +71,10 @@ if (ESP_PLATFORM)
+- endif()
+- 
+- # it's at this point any toolchain file is brought in
+--project(libwebsockets C CXX)
+-+project(libwebsockets C)
+-+if (LWS_WITH_SECURE_STREAMS_CPP)
+-+	enable_language(CXX)
+-+endif()
+- include(CTest)
+- 
+- if (PICO_SDK_PATH)
+--- 
+-2.35.1
+-
+diff --git a/package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch b/package/libwebsockets/0001-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
+similarity index 100%
+rename from package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
+rename to package/libwebsockets/0001-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
+diff --git a/package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch b/package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch
+deleted file mode 100644
+index fc76a2b610..0000000000
+--- a/package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 99a8b9c4422bed45c8b7412a1e121056f2a6132a Mon Sep 17 00:00:00 2001
+-From: Andy Green <andy@warmcat.com>
+-Date: Mon, 7 Feb 2022 14:48:55 +0000
+-Subject: [PATCH] cmake: remove duplicate LwsCheckRequirements
+-
+-Signed-off-by: Andy Green <andy@warmcat.com>
+-Signed-off-by: Bartosz Bilas <bartosz.bilas@hotmail.com>
+-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+----
+- cmake/libwebsockets-config.cmake.in | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/cmake/libwebsockets-config.cmake.in b/cmake/libwebsockets-config.cmake.in
+-index 6247b2cb..8ba97e6f 100644
+---- a/cmake/libwebsockets-config.cmake.in
+-+++ b/cmake/libwebsockets-config.cmake.in
+-@@ -32,6 +32,5 @@ endforeach()
+- 
+- include(CheckIncludeFile)
+- include(CheckCSourceCompiles)
+--include(LwsCheckRequirements)
+- set(requirements 1)
+- 
+--- 
+-2.35.3
+-
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index e39d6e1853..4bff068241 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  8fdb1454a1b34cd9a6351beaab237a485e6853806101de7e62bd2bc250bb50af  libwebsockets-4.3.1.tar.gz
++sha256  6a85a1bccf25acc7e8e5383e4934c9b32a102880d1e4c37c70b27ae2a42406e1  libwebsockets-4.3.2.tar.gz
+ sha256  2b5dd8030691f3d1870a040f085c37e45d9ab9c684a7f1284f5f379c1e829b28  LICENSE
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 3a9b9ea88f..f5cde37109 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBWEBSOCKETS_VERSION = 4.3.1
++LIBWEBSOCKETS_VERSION = 4.3.2
+ LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
+ LIBWEBSOCKETS_LICENSE = MIT with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
