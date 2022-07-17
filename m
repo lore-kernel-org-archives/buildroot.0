@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36D56C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 720AEC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB35740A15;
-	Sun, 17 Jul 2022 13:02:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB35740A15
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11CDC60EC1;
+	Sun, 17 Jul 2022 13:02:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11CDC60EC1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9McEjKNeEXQ5; Sun, 17 Jul 2022 13:02:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id P7Tx44aIzlbY; Sun, 17 Jul 2022 13:02:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8DE5240412;
-	Sun, 17 Jul 2022 13:02:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DE5240412
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F1C191BF3D1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09C4360BF5;
+	Sun, 17 Jul 2022 13:02:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09C4360BF5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F312E1BF97A
  for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:02:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5AAF409D3
+ by smtp4.osuosl.org (Postfix) with ESMTP id CBF6C408B4
  for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:02:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5AAF409D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBF6C408B4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jKxmuk-uGPgX for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J-C4giwr_TRs for <buildroot@lists.busybox.net>;
  Sun, 17 Jul 2022 13:02:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D240D400F2
+ by smtp4.osuosl.org (Postfix) with ESMTP id D86C140106
  for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:02:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D240D400F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D86C140106
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 9D60183AAC; Sun, 17 Jul 2022 12:49:17 +0000 (UTC)
+ id A76E583A8F; Sun, 17 Jul 2022 12:49:17 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 15:01:35 +0200
+Date: Sun, 17 Jul 2022 15:01:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0f50b833160e451199a1a9c5b0a17f77075f873a
-X-Git-Newrev: 891bba3ce22ba56be7b124179c368401d57a1568
+X-Git-Oldrev: 891bba3ce22ba56be7b124179c368401d57a1568
+X-Git-Newrev: d6319d97a7864314088dcc6d1199f35029cfcecb
 X-Patchwork-Hint: ignore
-Message-Id: <20220717124917.9D60183AAC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libwebsockets: bump to version
- 4.3.2
+Message-Id: <20220717124917.A76E583A8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libwebsockets: add wolfssl
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,129 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=891bba3ce22ba56be7b124179c368401d57a1568
+commit: https://git.buildroot.net/buildroot/commit/?id=d6319d97a7864314088dcc6d1199f35029cfcecb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop first and second patches (already in version)
+wolfssl is an optional dependency since version 1.5.1 and
+https://github.com/warmcat/libwebsockets/commit/c3bcb89d01da0c3ce9915cd73451399ec005b535
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0001-CMakeLists.txt-fix-build-without-C.patch  | 44 ----------------------
- ...CMakeLists.txt-fix-build-without-threads.patch} |  0
- ...ake-remove-duplicate-LwsCheckRequirements.patch | 26 -------------
- package/libwebsockets/libwebsockets.hash           |  2 +-
- package/libwebsockets/libwebsockets.mk             |  2 +-
- 5 files changed, 2 insertions(+), 72 deletions(-)
+ package/libwebsockets/libwebsockets.mk | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/package/libwebsockets/0001-CMakeLists.txt-fix-build-without-C.patch b/package/libwebsockets/0001-CMakeLists.txt-fix-build-without-C.patch
-deleted file mode 100644
-index c6d6d07dcc..0000000000
---- a/package/libwebsockets/0001-CMakeLists.txt-fix-build-without-C.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 726b36eca158063d8871c91ad99a29113ea35aea Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 13 Apr 2022 21:03:26 +0200
--Subject: [PATCH] CMakeLists.txt: fix build without C++
--
--Fix the following build failure without C++ raised since version 4.2.0
--and
--https://github.com/warmcat/libwebsockets/commit/962e9ee345bc28749577c1fca2542a273404627d:
--
--CMake Error at /nvmedata/autobuild/instance-11/output-1/per-package/libwebsockets/host/share/cmake-3.18/Modules/CMakeTestCXXCompiler.cmake:59 (message):
--  The C++ compiler
--
--    "/usr/bin/clang++"
--
--  is not able to compile a simple test program.
--
--Fixes:
-- - http://autobuild.buildroot.org/results/550e7f7d54adf74f8cc078be5b91b3567d622ede
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/warmcat/libwebsockets/pull/2613]
-----
-- CMakeLists.txt | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 08aaf8c6..96e3ad18 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -71,7 +71,10 @@ if (ESP_PLATFORM)
-- endif()
-- 
-- # it's at this point any toolchain file is brought in
---project(libwebsockets C CXX)
--+project(libwebsockets C)
--+if (LWS_WITH_SECURE_STREAMS_CPP)
--+	enable_language(CXX)
--+endif()
-- include(CTest)
-- 
-- if (PICO_SDK_PATH)
---- 
--2.35.1
--
-diff --git a/package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch b/package/libwebsockets/0001-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
-similarity index 100%
-rename from package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
-rename to package/libwebsockets/0001-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
-diff --git a/package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch b/package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch
-deleted file mode 100644
-index fc76a2b610..0000000000
---- a/package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 99a8b9c4422bed45c8b7412a1e121056f2a6132a Mon Sep 17 00:00:00 2001
--From: Andy Green <andy@warmcat.com>
--Date: Mon, 7 Feb 2022 14:48:55 +0000
--Subject: [PATCH] cmake: remove duplicate LwsCheckRequirements
--
--Signed-off-by: Andy Green <andy@warmcat.com>
--Signed-off-by: Bartosz Bilas <bartosz.bilas@hotmail.com>
--Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-----
-- cmake/libwebsockets-config.cmake.in | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/cmake/libwebsockets-config.cmake.in b/cmake/libwebsockets-config.cmake.in
--index 6247b2cb..8ba97e6f 100644
----- a/cmake/libwebsockets-config.cmake.in
--+++ b/cmake/libwebsockets-config.cmake.in
--@@ -32,6 +32,5 @@ endforeach()
-- 
-- include(CheckIncludeFile)
-- include(CheckCSourceCompiles)
---include(LwsCheckRequirements)
-- set(requirements 1)
-- 
---- 
--2.35.3
--
-diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
-index e39d6e1853..4bff068241 100644
---- a/package/libwebsockets/libwebsockets.hash
-+++ b/package/libwebsockets/libwebsockets.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  8fdb1454a1b34cd9a6351beaab237a485e6853806101de7e62bd2bc250bb50af  libwebsockets-4.3.1.tar.gz
-+sha256  6a85a1bccf25acc7e8e5383e4934c9b32a102880d1e4c37c70b27ae2a42406e1  libwebsockets-4.3.2.tar.gz
- sha256  2b5dd8030691f3d1870a040f085c37e45d9ab9c684a7f1284f5f379c1e829b28  LICENSE
 diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 3a9b9ea88f..f5cde37109 100644
+index f5cde37109..79624948a5 100644
 --- a/package/libwebsockets/libwebsockets.mk
 +++ b/package/libwebsockets/libwebsockets.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -34,16 +34,25 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBWEBSOCKETS_DEPENDENCIES += openssl host-openssl
+ LIBWEBSOCKETS_CONF_OPTS += \
+ 	-DLWS_WITH_SSL=ON \
+-	-DLWS_WITH_MBEDTLS=OFF
++	-DLWS_WITH_MBEDTLS=OFF \
++	-DLWS_WITH_WOLFSSL=OFF
+ else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+ LIBWEBSOCKETS_DEPENDENCIES += mbedtls
+ LIBWEBSOCKETS_CONF_OPTS += \
+ 	-DLWS_WITH_SSL=ON \
+-	-DLWS_WITH_MBEDTLS=ON
++	-DLWS_WITH_MBEDTLS=ON \
++	-DLWS_WITH_WOLFSSL=OFF
++else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
++LIBWEBSOCKETS_DEPENDENCIES += host-pkgconf wolfssl
++LIBWEBSOCKETS_CONF_OPTS += \
++	-DLWS_WITH_SSL=ON \
++	-DLWS_WITH_MBEDTLS=OFF \
++	-DLWS_WITH_WOLFSSL=ON
+ else
+ LIBWEBSOCKETS_CONF_OPTS += \
+ 	-DLWS_WITH_SSL=OFF \
+-	-DLWS_WITH_MBEDTLS=OFF
++	-DLWS_WITH_MBEDTLS=OFF \
++	-DLWS_WITH_WOLFSSL=OFF
+ endif
  
--LIBWEBSOCKETS_VERSION = 4.3.1
-+LIBWEBSOCKETS_VERSION = 4.3.2
- LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
- LIBWEBSOCKETS_LICENSE = MIT with exceptions
- LIBWEBSOCKETS_LICENSE_FILES = LICENSE
+ ifeq ($(BR2_PACKAGE_LIBEV),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
