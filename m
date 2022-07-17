@@ -4,48 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BF42C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 07:15:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C58FC43334
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 07:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77D1141870;
-	Sun, 17 Jul 2022 07:15:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77D1141870
+	by smtp4.osuosl.org (Postfix) with ESMTP id C46534187B;
+	Sun, 17 Jul 2022 07:15:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C46534187B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6He1ZMO5-s8T; Sun, 17 Jul 2022 07:15:17 +0000 (UTC)
+	with ESMTP id YwK3LhvJeuiz; Sun, 17 Jul 2022 07:15:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 098C441869;
-	Sun, 17 Jul 2022 07:15:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 098C441869
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D63D4186D;
+	Sun, 17 Jul 2022 07:15:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D63D4186D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 346681BF2CA
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 07:15:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 692F61BF2CA
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 07:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2366260EFE
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 07:15:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2366260EFE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4319460BD6
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 07:15:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4319460BD6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B91n3qLxFFLz for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 07:15:00 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5140060BF5
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 07:15:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5140060BF5
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id A8C6C83902; Sun, 17 Jul 2022 07:01:37 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 09:14:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2025d665eca18a00da47b83bb333b6207281f5e3
-X-Git-Newrev: 490768cc8ca746a4a3956dee7a39853e868d8510
-X-Patchwork-Hint: ignore
-Message-Id: <20220717070137.A8C6C83902@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libwebsockets: fix openssl build
- without threads
+ with ESMTP id XNbVZLfNfw1O for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 07:15:44 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59DC260BF5
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 59DC260BF5
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 07:15:44 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:4985:d730:3c09:77ac])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 9BE36780515;
+ Sun, 17 Jul 2022 09:15:40 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 17 Jul 2022 09:15:40 +0200
+Date: Sun, 17 Jul 2022 09:15:40 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220717071540.GU2543@scaer>
+References: <20220716211605.1650338-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220716211605.1650338-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1658042142;
+ bh=8lelWahJkGwCHv/iWsdsRgKep7xKmkCWnNIQkmSREpU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Qa3jThL4iBC178mKvOB8QSnbga4NZ+DywJzw5BC0JHjZhUHnv539rzGhCwuIPDU2P
+ b5FgkAtT7qqqTzP8vrlKFTJug16PDI/YDOTMk/xEYiJdTxdgZIgWpng3AISJWXkffW
+ ui2bAQjyHHx9BeeHHmbiuAPtk0r7moR2aFFF/xQ5xs7+fqmpSjSv0LLnbhrd+tD1cC
+ dX4EzjTpmf9OW/pCWAAllfqohE7b2Xuc0GnEqWn/D2U3FPzxtWd/ooRYhjvbeMFz/H
+ odLyQa5CCdjEyS18KD82YbDwXxKT6PXq1wO/vZJHCCclmXicS6th15zIZiCYUtMmSN
+ Nuy1XdzBQhLsQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Qa3jThL4
+Subject: Re: [Buildroot] [PATCH 1/2] package/libwebsockets: renumber patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,88 +76,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=490768cc8ca746a4a3956dee7a39853e868d8510
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Fix the following openssl build failure without threads raised since
-bump to version 4.3.1 in commit 3a9cf51ab38b6a3a095241b8e87eab7e5b5bd617 and
-https://github.com/warmcat/libwebsockets/commit/471dbf5280b2d0770cdf2803642586cee37a335d:
+On 2022-07-16 23:16 +0200, Fabrice Fontaine spake thusly:
+> Fix wrong patch number added by commit
+> 2097e1ba3904be8f7cd388fe1d16a099da83ef99
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-In file included from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/include/libwebsockets.h:661,
-                 from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/lib/core/./private-lib-core.h:140,
-                 from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/lib/plat/unix/unix-misc.c:28:
-/home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/include/libwebsockets/lws-genhash.h:85:18: error: field 'ctx' has incomplete type
-   85 |         HMAC_CTX ctx;
-      |                  ^~~
+Series of two patches applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/2ae9e3249b6fcc9e6c30e7783e264fc6599e61df
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...-CMakeLists.txt-fix-build-without-threads.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+> ---
+>  ...tch => 0002-cmake-remove-duplicate-LwsCheckRequirements.patch} | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename package/libwebsockets/{0001-cmake-remove-duplicate-LwsCheckRequirements.patch => 0002-cmake-remove-duplicate-LwsCheckRequirements.patch} (100%)
+> 
+> diff --git a/package/libwebsockets/0001-cmake-remove-duplicate-LwsCheckRequirements.patch b/package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch
+> similarity index 100%
+> rename from package/libwebsockets/0001-cmake-remove-duplicate-LwsCheckRequirements.patch
+> rename to package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch
+> -- 
+> 2.35.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-diff --git a/package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch b/package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
-new file mode 100644
-index 0000000000..ae46602a53
---- /dev/null
-+++ b/package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
-@@ -0,0 +1,47 @@
-+From c83cf48b9095a6914a0844bec4439763bb0c9138 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 28 May 2022 23:15:40 +0200
-+Subject: [PATCH] lib/tls/CMakeLists.txt: fix build without threads
-+
-+openssl can be built without threads resulting in the following build
-+failure:
-+
-+-- Looking for HMAC_CTX_new
-+-- Looking for HMAC_CTX_new - not found
-+
-+[...]
-+
-+In file included from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/include/libwebsockets.h:661,
-+                 from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/lib/core/./private-lib-core.h:140,
-+                 from /home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/lib/plat/unix/unix-misc.c:28:
-+/home/buildroot/autobuild/instance-0/output-1/build/libwebsockets-4.3.1/include/libwebsockets/lws-genhash.h:85:18: error: field 'ctx' has incomplete type
-+   85 |         HMAC_CTX ctx;
-+      |                  ^~~
-+
-+To fix this build failure, don't unconditionally add pthread if openssl
-+has been found through pkg-config as openssl.pc will contain the
-+appropriate dependencies (i.e. -lpthread but also -lz or -latomic)
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2ae9e3249b6fcc9e6c30e7783e264fc6599e61df
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/warmcat/libwebsockets/commit/c83cf48b9095a6914a0844bec4439763bb0c9138]
-+---
-+ lib/tls/CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/tls/CMakeLists.txt b/lib/tls/CMakeLists.txt
-+index 559be9abb..a2b78c252 100644
-+--- a/lib/tls/CMakeLists.txt
-++++ b/lib/tls/CMakeLists.txt
-+@@ -311,7 +311,7 @@ endif()
-+ if (UNIX AND NOT (${CMAKE_SYSTEM_NAME} MATCHES "QNX"))
-+ 	set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${CMAKE_DL_LIBS})
-+ endif()
-+-if ((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT (${CMAKE_SYSTEM_NAME} MATCHES "QNX"))
-++if ((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT ((${CMAKE_SYSTEM_NAME} MATCHES "QNX") OR PC_OPENSSL_FOUND))
-+ 	set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} pthread)
-+ endif()
-+ 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
