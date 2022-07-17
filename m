@@ -1,132 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 691AAC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 17:23:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2648C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 17:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADD8660F8C;
-	Sun, 17 Jul 2022 17:23:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADD8660F8C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D8C383F44;
+	Sun, 17 Jul 2022 17:35:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D8C383F44
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OVoof_mzLaLF; Sun, 17 Jul 2022 17:23:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MRExqjaoz59N; Sun, 17 Jul 2022 17:35:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B7AE60F86;
-	Sun, 17 Jul 2022 17:23:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B7AE60F86
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3AC211BF3CA
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 17:23:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 430AA83F28;
+	Sun, 17 Jul 2022 17:35:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 430AA83F28
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 855891BF3CA
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 17:35:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F33C40538
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 17:23:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F33C40538
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C99F41779
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 17:35:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C99F41779
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sSOKPZGzbaRy for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 17:23:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FE8E40002
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com
- (mail-co1nam11on2136.outbound.protection.outlook.com [40.107.220.136])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9FE8E40002
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 17:23:10 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WViABndTW9ylPjlrl1anKG8rTcyqpEF4lXK7NVhoHFcXY/j3JDyOCS6TOQ8fyD1c6FeJnO3De2gV71cM7s0CvGff7G+0VYS9hxT4mXvketLGF4RT5sv8okG21YOpY7X7lVoQIVgw2nu/vgcOLL2BZViajcYEN1vZyY4CRpn4DrpZMvY4Rvn5pCwARMND8E7+x6xWD6bDJMBF5rJa/MnEWr6+ftWAuaKiH7PwimuQLQLqq+qqog/02YqRUvjrOa21AZf41WjgYfQxAe6VOXVKSB0ZsUHX83vYR06dz0egclUu5nGiG3DYk3OeRwRSFeNkuq32/3CT9KY6xRssIhGSbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=proNNvffUUpLngCYBVlo11faq8b2cP39Vg6UqCmEMoM=;
- b=foAK/Nh6ApB7IM8thqEx+7jgSeiplGy7dn7jHon68vlyOPWJXllqnCdzdrT4776hD8iJN/rhXH8Djgisg5uPCrdoqk4QsUvKIrnft21pd2IPQyAO4hxKEJtiQhyCqSFZKa+CRGhcHNMjQx36OyWdcw+6N87UirUOPzE5N3IVEZwEKz/9ghtMDTgztmhbsD0lxY3L6rNNqHpJJtyDIEn5HHNtC9xYmnhUyPEZAV2SgsfnSfS8Pihh43Zsq/xpBOk6Qdg/q0j7GQlNQ+htNQk4JNVEvH/AVP2qUv6SxQbUSIIzdpK9+uj62jYHltJw23rSbjOxx1rEd7aKewMP7jYd5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=phobosdpl.com; dmarc=pass action=none
- header.from=phobosdpl.com; dkim=pass header.d=phobosdpl.com; arc=none
-Received: from DM6PR17MB3515.namprd17.prod.outlook.com (2603:10b6:5:1de::16)
- by DM4PR17MB6160.namprd17.prod.outlook.com (2603:10b6:8:8d::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.21; Sun, 17 Jul
- 2022 17:23:06 +0000
-Received: from DM6PR17MB3515.namprd17.prod.outlook.com
- ([fe80::3493:363e:3674:fb0f]) by DM6PR17MB3515.namprd17.prod.outlook.com
- ([fe80::3493:363e:3674:fb0f%7]) with mapi id 15.20.5438.023; Sun, 17 Jul 2022
- 17:23:05 +0000
-From: Sen Hastings <sen@phobosdpl.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yhWo3HJRaxqr for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 17:35:16 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDDEE4176D
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DDDEE4176D
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 17:35:15 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 7779760005;
+ Sun, 17 Jul 2022 17:35:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 12:22:10 -0500
-Message-Id: <20220717172210.381711-1-sen@phobosdpl.com>
-X-Mailer: git-send-email 2.34.1
-X-ClientProxiedBy: SN7P222CA0006.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:124::19) To DM6PR17MB3515.namprd17.prod.outlook.com
- (2603:10b6:5:1de::16)
+Date: Sun, 17 Jul 2022 19:35:09 +0200
+Message-Id: <20220717173510.1388390-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 73a89643-3fce-429a-e490-08da681902c5
-X-MS-TrafficTypeDiagnostic: DM4PR17MB6160:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y/sZ2AQGADbt/Yqsh6zJ5aN4Ap8+dfXBzjVF6/lMv1MRs4VrUxV3Q92WCZBGDeQkl8s6kIqn4JlRztrCaA6a9A1vTNpeZ9yYfmMZpr47/JCnR+g/VF4rcaPKhQUOymlHCmfoRqfuHhWpw0FSWn4bYHwaVOBwXuk207kquLEyEWRTb+kbNXFqsDq2fU6wIUp/bD9ijri/0w4bwgXT7TPO3278rJkr3uWtIIgpT1PwAPYetfJzvFI+ChET5BQXSNgO21fFOELfxxS2Y86Kf39YQeiFtGiYZTy0+tO9SQATvFbQSszyM/KHIOcenks0txGq59eCgDD+GcLChXJ0EsoU5Hpx7G78J6cNJh/Vv6Ep8Szj65bIsFltzV9rIhG/2Iq6eoOzERV/BDQ2NMSW8TXu/cGftWWRJ7pulMAUam98BdGtP0J4UYLdtLqIKNddUdzM2cQ6Bnc4zytf4i3x/tCEywYQUmg3EOZabmqbodc33edn64ClPPGGA0xH1ENiXYauV0dWVYawvA6eWCpNF4Htikz6BiNb6uRXuBorx0+kJdbaKmA9AIl5dIPusiw3fhsjdwV8a2GJCLaSxHaSknOG28UuyQiDPcjfnaXGLv7/1Q36hJoApjPSH+IvyZYjr9GVBzbblu4jkmpKtV9lDz5B6YrPeL5TV/hyOC3TQpXNmQtE7kFb4khmQBGkx0GSH0ap/zHj/G9DjmXABNn2uNOCoX0fmgJAEgRLeE2B16+AtIbV3HtoyoBqooeHqSrWoHH0qwn+0cKUf6ExkAekcjuxykWLfM7nKJYBnWtOGvX0+By4ZDu0rL3s9UaAfzA+vNaD
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DM6PR17MB3515.namprd17.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(396003)(39830400003)(346002)(376002)(366004)(136003)(316002)(5660300002)(4744005)(66946007)(38350700002)(8676002)(86362001)(41300700001)(2906002)(38100700002)(6916009)(186003)(66476007)(66556008)(107886003)(1076003)(4326008)(478600001)(2616005)(6512007)(26005)(8936002)(6506007)(52116002)(6666004)(6486002)(36756003);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?l9cvcFjY6ANCcnsIYkjCHpq0CYq/GHfF2+0zL99uE56Ssidx7DtnXr13K/GQ?=
- =?us-ascii?Q?gYvQcyxmv5uDG5FyxcnQz6bVMHn4HjjF0HyX35d+9y9E5BC+zgIAjx+mrhP6?=
- =?us-ascii?Q?N5kjXxcudkB7nZL78LAIRly4fOG26fpmx7R/w0iDYVZ0unO2AHNyJCfoEip7?=
- =?us-ascii?Q?gAzQKN+M15Knq//UsJHfq2gbUhUyIscUze6Si10nT+8vzFaWpir1H/RRdd/r?=
- =?us-ascii?Q?OjF/Uq5sl3kONNE9KVPFh98IJhGJosOLgGQSvwtYDp/YkGFcRf1NdVVDsIYN?=
- =?us-ascii?Q?mlWd2s64V+/8I3BcY3316UhqCNk/5xN+uc4Ko6rBLsxhX7Ai46mZHf/awCr/?=
- =?us-ascii?Q?KT9YkoPIBE4tS7gQmazYheFMkmoBeeZDX00IR8eFnF6sjwmaraCYkelgJi1e?=
- =?us-ascii?Q?A4LhemxUHGqsAAb3y310T4Z61hRaBJa75WHcoFKwj+F/jmPzRyDazAXDcnuc?=
- =?us-ascii?Q?VGyhKls3MLfd053wFJ2WoTBf/L65olW3SK6OWkMOhEYtztBSdbuJ07IVoUSo?=
- =?us-ascii?Q?QrXHbTgeBLIyXm4vTPxZxuR8vv/GywT78VeUafDEBtfOQjxtN+qZ+76OZuQD?=
- =?us-ascii?Q?M/rYBcm34hQyMc+02uFwKi2j6HW1E8NO/Ll+bnNsL9qQx1uTE5F3p0QUAqao?=
- =?us-ascii?Q?wdNNmV/tEtHjdINER2YGUCYXYEo8HbV8Di5FtJ5Z72608Q3PCDoySVt5aJTL?=
- =?us-ascii?Q?REJhmo0nK46Jbkcace0PaGsfy1e1onfgPwoYmQ+nlbW8qzvvZmn1qN9mHgWB?=
- =?us-ascii?Q?bRRkB77IbEgH9MP35x9V7Wh+iHvv0ngu7EGbEQilTznJfwqj9IzcIqcnfYlL?=
- =?us-ascii?Q?8gH+OXpvHeKLAvOc2cFLrP9I6heTtTvmcJq1+ReHyTubmkvicEaCfU7/dqiw?=
- =?us-ascii?Q?67qW3txEvbwWWuuC33VPckYtEMvQaOufdtuzMJJf7Hfth6SrH6qXV2W48YAn?=
- =?us-ascii?Q?UgkClRBaSeQaC2EfbwJG8PFaYe5i2lw7pX0k34sQieQzWbm9rZgvJJmnmfFD?=
- =?us-ascii?Q?JmMR6UDubTpQHjgreeuLC4K1IUUIr9cCtPZizdVsEou5HAAuTM4UwnJJAZJM?=
- =?us-ascii?Q?z8xCFg+5oD7KrTVzd6XH+6AJVagU7KLJhNn13Ogz9kY7wxonpIKyvbx7lM0o?=
- =?us-ascii?Q?jvZBEzdqTe6Qmy51GhZEPy+rxEG1ycC6moUJacRJnIDKH0KzH2qC6nHk2uSv?=
- =?us-ascii?Q?A2fzCGK039cjR8LY+PV3JM236sYJXbosQq989QQB2YD9a4fiugyik7904bvy?=
- =?us-ascii?Q?eCuo4TMxZ/2FAuHo3snEEspZ2ZjDEoZfjFvE1ULTPnTy1CWoPz60it78wHEj?=
- =?us-ascii?Q?WNPdGzTkqF6JBkmvQBzjGT2YaA3pzNxFKftxaDvm4Da5OPqi6hUxthLJvHrP?=
- =?us-ascii?Q?2KHIzgHelOKyJioHLwIrNE1rtiTVCfKfABjXGAm9IqLwJewFfXhvFv/QfuAj?=
- =?us-ascii?Q?TkyfEa6QGDl8uaFSoQNkUXtVAjZInxrUFwhMDb9CZ2f7Ddn0kX+Tazu85D+F?=
- =?us-ascii?Q?3EZHnePYPv0Wo+EWLZcC0d2bZibrIBc4l8UcF1iHfY/ft77H2BKA77z7JAIi?=
- =?us-ascii?Q?i8x87YrbSfQJDEIVDosofo3OflX/wtj78DvbObF3?=
-X-OriginatorOrg: phobosdpl.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73a89643-3fce-429a-e490-08da681902c5
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR17MB3515.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2022 17:23:05.8059 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 07b76dd5-c518-427b-a15a-2e07dfd0130a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qBe5baz9rU/wfM2BFBxLZPbxMXLSt5bIOlHR8nhz7/pNZGWF7TODCjd8LU+XmVfZV/LdVu60OPCvN03tFBsI0w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR17MB6160
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=centc.onmicrosoft.com; 
- s=selector2-centc-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=proNNvffUUpLngCYBVlo11faq8b2cP39Vg6UqCmEMoM=;
- b=OVsEZcE8J+w68PGedVGcUYMaMhT1+i4GYiyzFCYmi8JmPaBmuvc4pESIxBnofi02tkdkmMNGmE0jF8hGxx15mWdSY/HBtsTQ0lRisa/f4gbyX5aJPqTlCqsQFGiSOzbmr6x9Aoxc9wA52tmXQUrFEv18l5iXWpeel5NAW5GDYS0=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=centc.onmicrosoft.com
- header.i=@centc.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-centc-onmicrosoft-com header.b=OVsEZcE8
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=phobosdpl.com;
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for systemd and
- pkg-stats
+ d=bootlin.com; s=gm1; t=1658079312;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=ro+XiDLF6ZA0JiHJSnDanikDNG6FLyZsUvAd2GhZ+4A=;
+ b=UKTpvWNf2lY0LMYVotBN4L1M7C/PXprzIjkaiJwfz4mwihyknLODpIKeWca00NVZB9t0k5
+ qkxd+fX+O1w7uUNidNNk32qhtp5q6Jaai1DevkzcpMEqT+3nzpwdgbIASL6W7o97ynQmtG
+ JRik6JdYjVqCNKPyVRnqPW1F9Hg+Tm9h82/XzIwnehnBwmrJkelxMIGasfKVzMBwTiQNbt
+ 10QELFWsz2gQrBzxevl6nbnF2Jr3jUfDqUx8s114661tTYn24fORW+j5k4ZFVCXUmysfPe
+ lUlvP8yRil4pb2HJsvGULfX+LhCHFevoKyAL9lwuK8aZrV0VzzsMVM+uQsJagw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UKTpvWNf
+Subject: [Buildroot] [PATCH] package/alsa-utils: fix two build issues
+ following 1.2.7 bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -138,34 +72,249 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sen Hastings <sen@phobosdpl.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Sen Hastings <sen@phobosdpl.com>
----
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+Commit 4dc8563363d639255217ffc59482eaccf93a1b51 ("package/alsa-utils:
+bump version to 1.2.7") has bumped alsa-utils to 1.2.7, triggering
+several build failures in the autobuilders.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5c3c24ff7a..a004a72a38 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2565,6 +2565,10 @@ F:	package/libbson/
- F:	package/lua-resty-http/
- F:	package/mpir/
- 
-+N:	Sen Hastings <sen@phobosdpl.com>
-+F:	package/systemd
-+F:	support/scripts/pkg-stats
+The two build issues are fixed by two different patches, both of which
+have been submitted upstream.
+
+The first patch fixes:
+
+  http://autobuild.buildroot.net/results/c185ad120eb95cb3af0cd3be5fe47c924c565d3e/
+
+The second patch fixes:
+
+  http://autobuild.buildroot.net/results/31f52013db927511bbf0ad8e9d8701ac70e27be0/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ix-conditionals-on-__ALSA_PCM_H-and-.patch | 108 ++++++++++++++++++
+ ...ay-aplay.c-make-UCM-support-optional.patch |  89 +++++++++++++++
+ 2 files changed, 197 insertions(+)
+ create mode 100644 package/alsa-utils/0001-alsactl-info.c-fix-conditionals-on-__ALSA_PCM_H-and-.patch
+ create mode 100644 package/alsa-utils/0002-aplay-aplay.c-make-UCM-support-optional.patch
+
+diff --git a/package/alsa-utils/0001-alsactl-info.c-fix-conditionals-on-__ALSA_PCM_H-and-.patch b/package/alsa-utils/0001-alsactl-info.c-fix-conditionals-on-__ALSA_PCM_H-and-.patch
+new file mode 100644
+index 0000000000..97c4729bf9
+--- /dev/null
++++ b/package/alsa-utils/0001-alsactl-info.c-fix-conditionals-on-__ALSA_PCM_H-and-.patch
+@@ -0,0 +1,108 @@
++From 4bfd1f15114550e1be7e43ae37a61906e1bff809 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 17 Jul 2022 18:59:48 +0200
++Subject: [PATCH] alsactl/info.c: fix conditionals on __ALSA_PCM_H and
++ __ALSA_RAWMIDI_H
 +
- N:	Sergey Bobrenok <bobrofon@gmail.com>
- F:	package/sdbus-cpp/
- 
++Commit bbc74a61ac7c35e506c3d7f76ecf943cb55736a6 ("alsactl: implement
++'info' command") implemented an alsactl info command. In this
++implementation, there was an attempt to properly address optional
++features from alsa-lib by using conditions on __ALSA_PCM_H,
++__ALSA_RAWMIDI_H.
++
++Unfortunately, this attempt does not work entirely: only the code
++inside pcm_device_list(), rawmidi_device_list() was conditionally
++compiled, but their very prototype also use type definitions provided
++in pcm.h and rawmidi.h. So really, it's the entire function that needs
++to be conditionally implemented.
++
++Also, snd_rawmidi_stream_name() was not handled properly, for the same
++reason.
++
++This commit implements pcm_device_list() only if __ALSA_PCM_H is
++defined, and implements snd_rawmidi_stream_name() and
++rawmidi_device_list() only if __ALSA_RAWMIDI_H is defined.
++
++general_card_info() is modified to not call the PCM or raw MIDI
++functions when support is not available.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: https://mailman.alsa-project.org/pipermail/alsa-devel/2022-July/203846.html
++---
++ alsactl/info.c | 14 ++++++++++----
++ 1 file changed, 10 insertions(+), 4 deletions(-)
++
++diff --git a/alsactl/info.c b/alsactl/info.c
++index 253539d..9bd72af 100644
++--- a/alsactl/info.c
+++++ b/alsactl/info.c
++@@ -22,9 +22,9 @@
++ #include "aconfig.h"
++ #include "alsactl.h"
++ 
+++#ifdef __ALSA_PCM_H
++ static int pcm_device_list(snd_ctl_t *ctl, snd_pcm_stream_t stream, bool *first)
++ {
++-#ifdef __ALSA_PCM_H
++ 	int err, dev, idx;
++ 	unsigned int count;
++ 	snd_pcm_info_t *pcminfo;
++@@ -76,10 +76,12 @@ static int pcm_device_list(snd_ctl_t *ctl, snd_pcm_stream_t stream, bool *first)
++ 						idx, snd_pcm_info_get_subdevice_name(pcminfo));
++ 		}
++ 	}
++-#endif
+++
++ 	return 0;
++ }
+++#endif
++ 
+++#ifdef __ALSA_RAWMIDI_H
++ static const char *snd_rawmidi_stream_name(snd_rawmidi_stream_t stream)
++ {
++ 	if (stream == SND_RAWMIDI_STREAM_INPUT)
++@@ -91,7 +93,6 @@ static const char *snd_rawmidi_stream_name(snd_rawmidi_stream_t stream)
++ 
++ static int rawmidi_device_list(snd_ctl_t *ctl, snd_rawmidi_stream_t stream, bool *first)
++ {
++-#ifdef __ALSA_RAWMIDI_H
++ 	int err, dev, idx;
++ 	unsigned int count;
++ 	snd_rawmidi_info_t *info;
++@@ -143,9 +144,10 @@ static int rawmidi_device_list(snd_ctl_t *ctl, snd_rawmidi_stream_t stream, bool
++ 						idx, snd_rawmidi_info_get_subdevice_name(info));
++ 		}
++ 	}
++-#endif
+++
++ 	return 0;
++ }
+++#endif
++ 
++ static int hwdep_device_list(snd_ctl_t *ctl)
++ {
++@@ -227,17 +229,21 @@ int general_card_info(int cardno)
++ 	}
++ 	err = card_info(ctl);
++ 
+++#ifdef __ALSA_PCM_H
++ 	first = true;
++ 	if (err >= 0)
++ 		err = pcm_device_list(ctl, SND_PCM_STREAM_PLAYBACK, &first);
++ 	if (err >= 0)
++ 		err = pcm_device_list(ctl, SND_PCM_STREAM_CAPTURE, &first);
+++#endif
++ 
+++#ifdef __ALSA_RAWMIDI_H
++ 	first = true;
++ 	if (err >= 0)
++ 		err = rawmidi_device_list(ctl, SND_PCM_STREAM_PLAYBACK, &first);
++ 	if (err >= 0)
++ 		err = rawmidi_device_list(ctl, SND_PCM_STREAM_CAPTURE, &first);
+++#endif
++ 
++ 	if (err >= 0)
++ 		err = hwdep_device_list(ctl);
++-- 
++2.36.1
++
+diff --git a/package/alsa-utils/0002-aplay-aplay.c-make-UCM-support-optional.patch b/package/alsa-utils/0002-aplay-aplay.c-make-UCM-support-optional.patch
+new file mode 100644
+index 0000000000..cd5c96bd55
+--- /dev/null
++++ b/package/alsa-utils/0002-aplay-aplay.c-make-UCM-support-optional.patch
+@@ -0,0 +1,89 @@
++From 1921efacfe1a230021849b83b2877c8f239b44ab Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 17 Jul 2022 19:09:04 +0200
++Subject: [PATCH] aplay/aplay.c: make UCM support optional
++
++Commit 90f59671784a7e47b40485095cd66892d4840ed7 ("topology:
++pre-processor: Move the call to expand variables") modified aplay by
++unconditionally invoking features of the use case manager (UCM) from
++alsa-lib. However, alsa-lib can be compiled with UCM support.
++
++In order to properly support this situation, this commit changes aplay
++to only conditionally compile the UCM related code.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: https://mailman.alsa-project.org/pipermail/alsa-devel/2022-July/203847.html
++---
++ aplay/aplay.c | 10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/aplay/aplay.c b/aplay/aplay.c
++index b3b3635..59f937d 100644
++--- a/aplay/aplay.c
+++++ b/aplay/aplay.c
++@@ -41,7 +41,9 @@
++ #include <time.h>
++ #include <locale.h>
++ #include <alsa/asoundlib.h>
+++#ifdef HAVE_ALSA_USE_CASE_H
++ #include <alsa/use-case.h>
+++#endif
++ #include <assert.h>
++ #include <termios.h>
++ #include <signal.h>
++@@ -453,6 +455,7 @@ static ssize_t xwrite(int fd, const void *buf, size_t count)
++ 	return offset;
++ }
++ 
+++#ifdef HAVE_ALSA_USE_CASE_H
++ static int open_ucm(snd_use_case_mgr_t **uc_mgr, char **pcm_name, const char *name)
++ {
++ 	char *s, *p;
++@@ -476,6 +479,7 @@ static int open_ucm(snd_use_case_mgr_t **uc_mgr, char **pcm_name, const char *na
++ 	}
++ 	return err;
++ }
+++#endif
++ 
++ static long parse_long(const char *str, int *err)
++ {
++@@ -553,7 +557,9 @@ int main(int argc, char *argv[])
++ 	int do_device_list = 0, do_pcm_list = 0, force_sample_format = 0;
++ 	snd_pcm_info_t *info;
++ 	FILE *direction;
+++#ifdef HAVE_ALSA_USE_CASE_H
++ 	snd_use_case_mgr_t *uc_mgr = NULL;
+++#endif
++ 
++ #ifdef ENABLE_NLS
++ 	setlocale(LC_ALL, "");
++@@ -852,6 +858,7 @@ int main(int argc, char *argv[])
++ 		goto __end;
++ 	}
++ 
+++#ifdef HAVE_ALSA_USE_CASE_H
++ 	if (strncmp(pcm_name, "ucm.", 4) == 0) {
++ 		err = open_ucm(&uc_mgr, &pcm_name, pcm_name + 4);
++ 		if (err < 0) {
++@@ -861,6 +868,7 @@ int main(int argc, char *argv[])
++ 		if (verbose)
++ 			fprintf(stderr, _("Found UCM PCM device: %s\n"), pcm_name);
++ 	}
+++#endif
++ 
++ 	err = snd_pcm_open(&handle, pcm_name, stream, open_mode);
++ 	if (err < 0) {
++@@ -951,8 +959,10 @@ int main(int argc, char *argv[])
++ 	if (verbose==2)
++ 		putchar('\n');
++ 	snd_pcm_close(handle);
+++#ifdef HAVE_ALSA_USE_CASE_H
++ 	if (uc_mgr)
++ 		snd_use_case_mgr_close(uc_mgr);
+++#endif
++ 	handle = NULL;
++ 	free(audiobuf);
++       __end:
++-- 
++2.36.1
++
 -- 
-2.34.1
+2.36.1
 
 _______________________________________________
 buildroot mailing list
