@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DB1CC43334
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 17:43:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BE0BC43334
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 17:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30E7060F49;
-	Sun, 17 Jul 2022 17:43:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30E7060F49
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2581340A63;
+	Sun, 17 Jul 2022 17:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2581340A63
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U_V4RoapT-Bb; Sun, 17 Jul 2022 17:43:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O19oJTwRagVK; Sun, 17 Jul 2022 17:44:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D02360F86;
-	Sun, 17 Jul 2022 17:43:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D02360F86
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7D3324023B;
+	Sun, 17 Jul 2022 17:44:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D3324023B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A78781BF3CA
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 17:43:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4ABC61BF3CA
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 17:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67DA84168F
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 17:43:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67DA84168F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 32836416D9
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 17:44:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32836416D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aSqyqUm-2D9P for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 17:43:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 61C2E40986
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 17:43:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61C2E40986
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B6ACA83C1A; Sun, 17 Jul 2022 17:30:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 19:42:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7ff22c698a0ddb5a4424f09368c5523c2058c1a4
-X-Git-Newrev: 9a51381cedc16e6d70cb85e1144f6e0fa89af69a
-X-Patchwork-Hint: ignore
-Message-Id: <20220717173015.B6ACA83C1A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: prevent config with
+ with ESMTP id VvDwp-hXNE_f for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 17:44:11 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA4FC416C4
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BA4FC416C4
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 17:44:10 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D8EFF1BF204;
+ Sun, 17 Jul 2022 17:44:07 +0000 (UTC)
+Date: Sun, 17 Jul 2022 19:44:06 +0200
+To: Ben Hutchings <ben.hutchings@mind.be>
+Message-ID: <20220717194406.6112905b@windsurf>
+In-Reply-To: <20220614171015.878311-1-ben.hutchings@mind.be>
+References: <20220614171015.878311-1-ben.hutchings@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658079848;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Q3uddSkMXwH/JB4dqr6JxN7p3cioSaYe3qf4Rmdf4PY=;
+ b=TU3FWkL5Kl3LiLxZP3f+Km9lQ+EgORqZG285fSynuzFBgmv9Z5TDi0iRrw+riCpJPeFO3F
+ A2qjp6etI3+Zs+uWUKUCeMNe4LlsaEiOIiAJrj6DqpPFA2tjP75csg9f1OL6aWF5T9v0pd
+ 5jAxNMhsy2BsnfSnzKkqVof3a6xKGDrc/zUZL1S8zIUholqjHwPt3g9cF1oqUYNoX8pOH1
+ /zKJHr2FqDhP3EmnFr9rT4/8B7YaYIJqPXAXeMr/bd4y9QoIz4QMoiP9ofY0MS9PkBoswr
+ TtyLZDQPGkOfY/F3zzdSPfIqM9EoKieV3nPSMWwmgAVtqgBrEdrnij0D+CNQPg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TU3FWkL5
+Subject: Re: [Buildroot] [PATCH] package/uclibc: Prevent config with
  unsupported RISC-V float ABI
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,52 +78,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a51381cedc16e6d70cb85e1144f6e0fa89af69a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 14 Jun 2022 19:10:15 +0200
+Ben Hutchings <ben.hutchings@mind.be> wrote:
 
-uClibc currently supports RISC-V with a soft-float or 64-bit
-hard-float ABI, but not 32-bit hard-float. Selecting
-BR2_RISCV_ABI_LP64F results in a build failure:
+> uClibc currently supports RISC-V with a soft-float or 64-bit
+> hard-float ABI, but not 32-bit hard-float.  Selecting
+> BR2_RISCV_ABI_LP64F results in a build failure:
+> 
+> ./include/sys/asm.h:42:4: error: #error unsupported FLEN
+>    42 | #  error unsupported FLEN
+>       |    ^~~~~
+> 
+> Change the conditions for BR2_PACKAGE_UCLIBC_ARCH_SUPPORTS
+> accordingly.
+> 
+> Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
+> ---
+>  package/uclibc/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-./include/sys/asm.h:42:4: error: #error unsupported FLEN
-   42 | #  error unsupported FLEN
-      |    ^~~~~
+Thanks a lot for this patch! I have changed the !LP64F to a LP64 ||
+LP64D, and added a reference to a build failure in our autobuilders.
+Patch committed with those changes, many thanks!
 
-Change the conditions for BR2_PACKAGE_UCLIBC_ARCH_SUPPORTS
-accordingly.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/ac6e2c4369df46bad9a2ad46ce073e3f15f22ee6/
-
-Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
-[Thomas: instead of !BR2_RISCV_ABI_LP64F, use BR2_RISCV_ABI_LP64 ||
-BR2_RISCV_ABI_LP64D]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/uclibc/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 754c3ea014..2eea4d30f3 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -15,7 +15,8 @@ config BR2_PACKAGE_UCLIBC_ARCH_SUPPORTS
- 	default y if BR2_mips64el
- 	default y if BR2_or1k
- 	default y if BR2_powerpc
--	default y if BR2_RISCV_64
-+	# see libc/sysdeps/linux/riscv64/sys/asm.h
-+	default y if BR2_RISCV_64 && (BR2_RISCV_ABI_LP64 || BR2_RISCV_ABI_LP64D)
- 	default y if BR2_sh4
- 	default y if BR2_sh4eb
- 	default y if BR2_sparc
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
