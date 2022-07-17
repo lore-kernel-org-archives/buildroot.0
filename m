@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FBAAC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10818C43334
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1DB2660F2F;
-	Sun, 17 Jul 2022 13:20:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DB2660F2F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9994240412;
+	Sun, 17 Jul 2022 13:20:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9994240412
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ngAZtr4NkrI6; Sun, 17 Jul 2022 13:20:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nPYicTwpZVsh; Sun, 17 Jul 2022 13:20:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06B4C60EC0;
-	Sun, 17 Jul 2022 13:20:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06B4C60EC0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E7DFA1BF3D5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D9E9400F2;
+	Sun, 17 Jul 2022 13:20:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D9E9400F2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E92451BF97A
  for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:20:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C30C9840B9
+ by smtp2.osuosl.org (Postfix) with ESMTP id C2A20408DD
  for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:20:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C30C9840B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2A20408DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7zHQLftOdeQW for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 13:20:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vLTjJyLM4JkD for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 13:20:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0CD558333E
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB3C1400DD
  for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:20:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CD558333E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB3C1400DD
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id CD5F483BCC; Sun, 17 Jul 2022 13:06:54 +0000 (UTC)
+ id 953A883BCB; Sun, 17 Jul 2022 13:06:54 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 15:15:29 +0200
+Date: Sun, 17 Jul 2022 15:15:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d07edd1e4f4e790196bf31f87e071aa9de1cc789
-X-Git-Newrev: f6506162c41d8cc2c18f3b07aff2ce483e1b2f88
+X-Git-Oldrev: 9612c20a1a52c0f241d9d6c31329aa1b602a12e2
+X-Git-Newrev: e19616fb59352f3f27405806fbb9e8cd7c36cf98
 X-Patchwork-Hint: ignore
-Message-Id: <20220717130654.CD5F483BCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gupnp-tools: bump to version 0.10.3
+Message-Id: <20220717130654.953A883BCB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/exim: bump version to 4.96
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +57,155 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4259560765206068560=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6506162c41d8cc2c18f3b07aff2ce483e1b2f88
+--===============4259560765206068560==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e19616fb59352f3f27405806fbb9e8cd7c36cf98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://gitlab.gnome.org/GNOME/gupnp-tools/-/blob/gupnp-tools-0.10.3/NEWS
+Changelog:
+https://github.com/Exim/exim/blob/22ed7a5295f196fce32563f6e9c669110dd36f4d/doc/doc-txt/ChangeLog
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Removed patch 0004 which was applied upstream:
+https://github.com/Exim/exim/commit/3083c9ca60beb9aacae81d0d108117251da5f276
+
+Renumbered remaining patches.
+
+Switched from pcre to pcre2:
+https://github.com/Exim/exim/commit/22ed7a5295f196fce32563f6e9c669110dd36f4d
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gupnp-tools/gupnp-tools.hash | 4 ++--
- package/gupnp-tools/gupnp-tools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/exim/0004-Fix-uClibc-build.patch           | 35 ----------------------
+ ...exim_lock-fix-lstat-related-build-errors.patch} |  0
+ ...ors.patch => 0005-sieve-fix-build-errors.patch} |  0
+ package/exim/Config.in                             |  2 +-
+ package/exim/exim.hash                             |  4 +--
+ package/exim/exim.mk                               |  8 ++---
+ 6 files changed, 7 insertions(+), 42 deletions(-)
 
-diff --git a/package/gupnp-tools/gupnp-tools.hash b/package/gupnp-tools/gupnp-tools.hash
-index 28a1d26ede..37983b0c92 100644
---- a/package/gupnp-tools/gupnp-tools.hash
-+++ b/package/gupnp-tools/gupnp-tools.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.10/gupnp-tools-0.10.2.sha256sum:
--sha256  6de49ef4b375b8a164f74b766168b1184e0d28196b6b07a4f5341f08dfd85d6c  gupnp-tools-0.10.2.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.10/gupnp-tools-0.10.3.sha256sum:
-+sha256  457f4d923935b078415cd2ba88d78db60079b725926b7ee106e4565efe3204de  gupnp-tools-0.10.3.tar.xz
- 
- # Locally computed:
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
-index 7b34de52a0..96bcbffa49 100644
---- a/package/gupnp-tools/gupnp-tools.mk
-+++ b/package/gupnp-tools/gupnp-tools.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/exim/0004-Fix-uClibc-build.patch b/package/exim/0004-Fix-uClibc-build.patch
+deleted file mode 100644
+index 9d5452bb56..0000000000
+--- a/package/exim/0004-Fix-uClibc-build.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 68ea4fc7ca53bf010e5ec738ad078452f0eaa639 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Tue, 23 Jul 2019 18:48:06 +0200
+-Subject: [PATCH] Fix uClibc build
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-structs.h:757:18: error: ‘NS_MAXMSG’ undeclared here (not in a function); did you mean ‘N_MASC’?
+-   uschar  answer[NS_MAXMSG];      /* the answer itself */
+-
+-Patch sent upstream: https://github.com/Exim/exim/pull/70
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- OS/os.h-Linux | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/OS/os.h-Linux b/OS/os.h-Linux
+-index 63cf9babd..1d82e9bad 100644
+---- a/OS/os.h-Linux
+-+++ b/OS/os.h-Linux
+-@@ -87,5 +87,9 @@ then change the 0 to 1 in the next block. */
+- # define TCPI_OPT_SYN_DATA 32
+- #endif
+- 
+-+/* Needed for uClibc */
+-+#ifndef NS_MAXMSG
+-+# define NS_MAXMSG 65535
+-+#endif
+- 
+- /* End */
+--- 
+-2.20.1
+-
+diff --git a/package/exim/0005-exim_lock-fix-lstat-related-build-errors.patch b/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
+similarity index 100%
+rename from package/exim/0005-exim_lock-fix-lstat-related-build-errors.patch
+rename to package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
+diff --git a/package/exim/0006-sieve-fix-build-errors.patch b/package/exim/0005-sieve-fix-build-errors.patch
+similarity index 100%
+rename from package/exim/0006-sieve-fix-build-errors.patch
+rename to package/exim/0005-sieve-fix-build-errors.patch
+diff --git a/package/exim/Config.in b/package/exim/Config.in
+index aa50a86736..2557251fd1 100644
+--- a/package/exim/Config.in
++++ b/package/exim/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_EXIM
+ 	bool "exim"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_BERKELEYDB
+ 	help
+ 	  Exim is a message transfer agent (MTA) developed at the
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index 5cbad08a4b..2336aaa5c6 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  cc9cb653fff2ea947c3702680b59c99ac0bd1bbf19976d37e22a463cd804f167  exim-4.95.tar.xz
++sha256  299a56927b2eb3477daafd3c5bda02bc67e5c4e5898a7aeaf2740875278cf1a3  exim-4.96.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  93d09c20d99f27da5edbe3e6dc7d25aa4548faa2b67ca26f2cc0b4aeaf58398dd468e0263714fcf0df97531f05d16fcd3f1f0e9d0656ead7858a66b248a44a65  exim-4.95.tar.xz
++sha512  6b863661465a0b9897c1b71875c5196a1903cf560dd85de45b08242b9731edb2bc10eb56945d62e477e5d15cc7a8d493915bff2ca81689673a8091c66f62c89e  exim-4.96.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index b45458b21b..e0fcd83fb0 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,14 +4,14 @@
+ #
  ################################################################################
  
- GUPNP_TOOLS_VERSION_MAJOR = 0.10
--GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).2
-+GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).3
- GUPNP_TOOLS_SOURCE = gupnp-tools-$(GUPNP_TOOLS_VERSION).tar.xz
- GUPNP_TOOLS_SITE = \
- 	http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
+-EXIM_VERSION = 4.95
++EXIM_VERSION = 4.96
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
+ EXIM_LICENSE_FILES = LICENCE
+ EXIM_CPE_ID_VENDOR = exim
+ EXIM_SELINUX_MODULES = exim mta
+-EXIM_DEPENDENCIES = host-berkeleydb host-pcre pcre berkeleydb host-pkgconf
++EXIM_DEPENDENCIES = host-berkeleydb host-pcre2 pcre2 berkeleydb host-pkgconf
+ 
+ # Modify a variable value. It must already exist in the file, either
+ # commented or not.
+@@ -46,8 +46,8 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
+ 	$(call exim-config-change,EXIM_USER,ref:exim)
+ 	$(call exim-config-change,EXIM_GROUP,mail)
+ 	$(call exim-config-change,TRANSPORT_LMTP,yes)
+-	$(call exim-config-change,PCRE_LIBS,-lpcre)
+-	$(call exim-config-change,PCRE_CONFIG,no)
++	$(call exim-config-change,PCRE_LIBS,-lpcre2-8)
++	$(call exim-config-change,PCRE2_CONFIG,no)
+ 	$(call exim-config-change,HAVE_ICONV,no)
+ 	$(call exim-config-unset,EXIM_MONITOR)
+ 	$(call exim-config-change,AUTH_PLAINTEXT,yes)
+
+--===============4259560765206068560==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4259560765206068560==--
