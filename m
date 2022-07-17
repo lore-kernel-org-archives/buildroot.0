@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2941EC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2543CC43334
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:24:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B274B4170A;
-	Sun, 17 Jul 2022 13:23:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B274B4170A
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9C23416F7;
+	Sun, 17 Jul 2022 13:24:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9C23416F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9c4-yJ6kxO6e; Sun, 17 Jul 2022 13:23:56 +0000 (UTC)
+	with ESMTP id Jyoi1iLr6Uvp; Sun, 17 Jul 2022 13:24:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C035416F7;
-	Sun, 17 Jul 2022 13:23:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C035416F7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C635F1BF3D5
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:22:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 585A0417AA;
+	Sun, 17 Jul 2022 13:24:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 585A0417AA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 05F2F1BF3D5
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:22:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AC2A6400DD
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:22:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC2A6400DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF17B41793
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF17B41793
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wc44yikoP4ws for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 13:22:08 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0A1F400F2
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A0A1F400F2
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:22:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MfWi68jXb09p for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 13:22:25 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F7F14177F
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9F7F14177F
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:22:25 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:4985:d730:3c09:77ac])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 95C72780502;
- Sun, 17 Jul 2022 15:22:03 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id D21A978051E;
+ Sun, 17 Jul 2022 15:22:20 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 17 Jul 2022 15:22:03 +0200
-Date: Sun, 17 Jul 2022 15:22:03 +0200
+ Sun, 17 Jul 2022 15:22:20 +0200
+Date: Sun, 17 Jul 2022 15:22:20 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Andreas Ziegler <br015@umbiko.net>
-Message-ID: <20220717132203.GG2249625@scaer>
-References: <20220711103814.19895-1-br015@umbiko.net>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20220717132220.GH2249625@scaer>
+References: <20220711054702.27680-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220711103814.19895-1-br015@umbiko.net>
+In-Reply-To: <20220711054702.27680-1-bernd.kuhls@t-online.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658064126;
- bh=8Adme1oZlFK7heHsZyabwp82P4gp9RudAPlZ5j1fROM=;
+ d=free.fr; s=smtp-20201208; t=1658064144;
+ bh=TvXf7GLBnkb4jO3Y0d/ohLwiAHZ21WSxpuvES8bcm1s=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=EI5+CCM1jhBB5k+eK6PtFvNErcXvYv6rNQHk5l5qM8fK6H8gbWdwwGEbBkZEimZjW
- tsspGUYD8q/rbNybCtCTKqfUvBv3JvP5/G4CacMdn22gEyYEoZPVRMYSBQlMBtx0aD
- EEV3LuFo+wT0sLzdWNuGnN04G371ysdX37aqppJX0cjvT8YNnq6BMA7TBGnfJgyADO
- STCkzvn9R4dF6a1pHhddyEMnJoZzoqyDPJRZGxWBRW7NTBZnHvzr0S4fNpdzvU1OjX
- JXzVB4xq85r7PYw2UTYUnRRSes0m6Hidcu5ehixpydx7lLvcCBgHOYwh+r3M+P+ReK
- gJd80Az1sylRw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=Eqr4P4tT205lSRdRTPWXwoq9OmsjpU53JM8mqkuhFByTwQ93UAuG/3lLm5Kqez76C
+ ghk3xV+haNxT+irnuOzOkhmy2sF9QY3i5GQdSNVifI3pVs9tsw6cQkNkoF8FXeAOST
+ RrtvNWgYXFr+VCb8E9q5mLEHFDOEs2iQeBBTnMaFmlg/yzcPEOFVAaJ9NM5pf6ArUm
+ ySPBjJdaU2pXQ/OE4VGbw/EJxlUgd4V5hOggtW6arofHq80CMtUNIekyOL/M5vSfzH
+ 8dwBcC36MFCi8y5fZ0aRg6IvTwou+ZV5dLs6hqh5gc4p37JMFjzl+XLSUZbdYX66Lp
+ qSt4tIgg8bQvw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=EI5+CCM1
-Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: update to version 0.23.8
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Eqr4P4tT
+Subject: Re: [Buildroot] [PATCH 1/1] package/intel-gmmlib: bump version to
+ 22.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,22 +77,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?B?SsO2cmc=?= Krause <joerg.krause@embedded.rocks>,
- buildroot@buildroot.org
+Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Andreas, All,
+Bernd, All,
 
-On 2022-07-11 12:38 +0200, Andreas Ziegler spake thusly:
-> Minor bug fixes and corrections; add fmt 9.0.0 support.
-> 
-> Full change log:
->   https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.8/NEWS
-> 
-> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+On 2022-07-11 07:47 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Applied to master, thanks.
 
@@ -99,34 +94,34 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/mpd/mpd.hash | 2 +-
->  package/mpd/mpd.mk   | 2 +-
+>  package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+>  package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-> index 353df25b39..e5f587fefc 100644
-> --- a/package/mpd/mpd.hash
-> +++ b/package/mpd/mpd.hash
+> diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+> index 776eb86d8d..676375601a 100644
+> --- a/package/intel-gmmlib/intel-gmmlib.hash
+> +++ b/package/intel-gmmlib/intel-gmmlib.hash
 > @@ -1,3 +1,3 @@
->  # Locally calculated after checking pgp signature
-> -sha256  960dcbac717c388f5dcc4fd945e3af19a476f2b15f367e9653d4c7a948768211  mpd-0.23.7.tar.xz
-> +sha256  86bb569bf3b519821f36f6bb5564e484e85d2564411b34b200fe2cd3a04e78cf  mpd-0.23.8.tar.xz
->  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-> index 20c8f77fa8..e265a9fc4f 100644
-> --- a/package/mpd/mpd.mk
-> +++ b/package/mpd/mpd.mk
-> @@ -5,7 +5,7 @@
+>  # Locally computed
+> -sha256  18f291b6d5c9a170468e050e301f23760bb5b20b79d28a49a791ace2f22880c9  intel-gmmlib-22.1.4.tar.gz
+> +sha256  b429cdff2c236274f2b9a32ac4ac2ed5d1655d3c87c557fe0fb7de6b6c906f18  intel-gmmlib-22.1.5.tar.gz
+>  sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+> diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+> index 7af3e6999d..cc4b200104 100644
+> --- a/package/intel-gmmlib/intel-gmmlib.mk
+> +++ b/package/intel-gmmlib/intel-gmmlib.mk
+> @@ -4,7 +4,7 @@
+>  #
 >  ################################################################################
 >  
->  MPD_VERSION_MAJOR = 0.23
-> -MPD_VERSION = $(MPD_VERSION_MAJOR).7
-> +MPD_VERSION = $(MPD_VERSION_MAJOR).8
->  MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
->  MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
->  MPD_DEPENDENCIES = host-pkgconf boost fmt
+> -INTEL_GMMLIB_VERSION = 22.1.4
+> +INTEL_GMMLIB_VERSION = 22.1.5
+>  INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+>  INTEL_GMMLIB_LICENSE = MIT
+>  INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 > -- 
-> 2.34.1
+> 2.30.2
 > 
 > _______________________________________________
 > buildroot mailing list
