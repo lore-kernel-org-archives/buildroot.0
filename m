@@ -1,50 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C61C3C43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 17:46:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C2BEC43334
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 11:12:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AFF160A77;
-	Fri, 22 Jul 2022 17:46:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AFF160A77
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lZxTr9F8yAWs; Fri, 22 Jul 2022 17:46:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 519B260F4B;
-	Fri, 22 Jul 2022 17:46:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 519B260F4B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4182F1BF316
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 17:46:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1BD3441598
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 17:46:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BD3441598
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC74B4097E;
+	Sun, 17 Jul 2022 11:12:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC74B4097E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kbk2I_4dlTjY for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 17:46:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6B60340A60
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 17:46:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B60340A60
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5C45984171; Fri, 22 Jul 2022 17:32:54 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 19:45:38 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9b6714bf2aa828ded86e1ca63a42f86793d6b8c2
-X-Git-Newrev: bf1c9174aca83becc9f44828a8832f04c138fd23
-X-Patchwork-Hint: ignore
-Message-Id: <20220722173254.5C45984171@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: fix dependency symbol typo
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oe7rAGenXEZL; Sun, 17 Jul 2022 11:12:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 84D3340A37;
+	Sun, 17 Jul 2022 11:12:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84D3340A37
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 568331BF299
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 11:12:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2CA5780A7B
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 11:12:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CA5780A7B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lDfVwGhNn9mL for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 11:12:05 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECB648407C
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ECB648407C
+ for <buildroot@uclibc.org>; Sun, 17 Jul 2022 11:12:04 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1oD2Bu-0000Es-4K
+ for buildroot@uclibc.org; Sun, 17 Jul 2022 13:12:02 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@uclibc.org
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 17 Jul 2022 13:10:03 +0200
+Message-ID: <pan$a6c35$9568ed86$741e2858$a95da17c@ID-313208.user.individual.net>
+References: <20220712162712.1582871-1-fontaine.fabrice__39469.849776809$1657643442$gmane$org@gmail.com>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [PATCH 1/1] package/harfbuzz: fix build with gcc < 7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,44 +58,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf1c9174aca83becc9f44828a8832f04c138fd23
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am Tue, 12 Jul 2022 18:27:12 +0200 schrieb Fabrice Fontaine:
 
-Commit 6d07e2618c0 ("package/uacme: requires TLS support in libcurl")
-mistyped the BR2_PACKAGE_LIBCURL_FORCE_TLS dependency making the fix
-ineffective.
+> Fix the following build failure with gcc < 7 raised since bump to
+> version 4.4.0 in commit e186b4d89dcd3eb9fae557959181d7176e7c873c:
 
-Fixes:
-http://autobuild.buildroot.net/results/56ea6cb146df63d1575da9dae3035b3220de875f/
-http://autobuild.buildroot.net/results/280b0ed7f9cdb424917373f98c3e4e6b593c6d21/
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+(build-tested using x86_64-buildroot-linux-uclibc-gcc.br_real (Buildroot 
+2022.05-482-gbfcae2469a) 4.9.4)
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Matt Weber <matthew.weber@collins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/libcurl/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index bc2f8f47f2..218309ed56 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -83,7 +83,7 @@ comment "WolfSSL needs a toolchain w/ dynamic library"
- 
- config BR2_PACKAGE_LIBCURL_TLS_NONE
- 	bool "None"
--	depends on !BR2_PACKAGE_LIBCURL_FORCE_SSL_TLS
-+	depends on !BR2_PACKAGE_LIBCURL_FORCE_TLS
- 
- endchoice
- 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
