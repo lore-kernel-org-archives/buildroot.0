@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7F8FCCA481
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:23:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DFF6C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:23:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91EE160F45;
-	Sun, 17 Jul 2022 13:23:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91EE160F45
+	by smtp4.osuosl.org (Postfix) with ESMTP id 180C0416F7;
+	Sun, 17 Jul 2022 13:23:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 180C0416F7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uMtWlz92-t9l; Sun, 17 Jul 2022 13:23:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0zHLLhpxLvOQ; Sun, 17 Jul 2022 13:23:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7935660F34;
-	Sun, 17 Jul 2022 13:23:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7935660F34
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EB4FB1BF3D5
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:21:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A49FB416D5;
+	Sun, 17 Jul 2022 13:23:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A49FB416D5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D43371BF3D5
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:21:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D2B5B60C1D
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:21:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2B5B60C1D
+ by smtp4.osuosl.org (Postfix) with ESMTP id BB0294177E
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:21:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB0294177E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bEM5iBk7w8ND for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 13:21:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YKv_x2mNBQxE for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 13:21:29 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1D5D60AFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58B6941779
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D1D5D60AFD
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:21:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 58B6941779
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:21:29 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:4985:d730:3c09:77ac])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id B6629780502;
- Sun, 17 Jul 2022 15:21:02 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 67772780500;
+ Sun, 17 Jul 2022 15:21:25 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 17 Jul 2022 15:21:02 +0200
-Date: Sun, 17 Jul 2022 15:21:02 +0200
+ Sun, 17 Jul 2022 15:21:25 +0200
+Date: Sun, 17 Jul 2022 15:21:25 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Message-ID: <20220717132102.GD2249625@scaer>
-References: <20220713084648.1941220-1-damien.lemoal@opensource.wdc.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220717132125.GE2249625@scaer>
+References: <20220712214356.1976809-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220713084648.1941220-1-damien.lemoal@opensource.wdc.com>
+In-Reply-To: <20220712214356.1976809-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658064067;
- bh=dx7tVD11+fmZF6vjg1O9E+6lTYAsvgfieUljUnz8nqU=;
+ d=free.fr; s=smtp-20201208; t=1658064087;
+ bh=kHKG2FLOOybtO30LLHxdGn+YhfMGqzlqk83UplwEBjE=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=XlMKoIAJoXEZkn8/1c+W/skjxNVxfi7q+yTv/ufiVZxtwdAAL0ES0YuCuHcSiSux0
- hSxDPPGhWvmJlbyK8L4XLztjlWut3afY+nN34AnxP5Y9Oq4XpYbvwFSBMAccvw8/TL
- ZizoP0uVvlFztKUv3eW6d8aAqof9Gs/oxFrgSNGbsgl9r07MJGdzo6+yP2YB1uBeGp
- 46owZmwsaGE1ngpwaI1iIURz/vxH6D3G9p80k6iLsSQvvJtile/NoGM7l0HSR0rJyb
- s0iRHtfXGoR37cIqDCa4LCh9hFIwEsThcuzg/GL45Zx6PXH/kyu7vI5FssdX1oP50G
- LhQkicn60P6Iw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=hTL2vdCrDK6XERWCFDVQl0HhjF9X9OIwgXx5kq6COu6ROhcVkCiInOE2gMyOZRWqT
+ RQehpgz9iiB6uIj/siTdpaDotgeh/FrcWlri9vyRJATw5JED6tHQF2pVnDO5qGf6/0
+ uiZEPEKCAvB2EQBFNKdZxERTUG++v3wugvnQIWXWlZEfFPwK8Wy9c6YkwdRS2pk2z4
+ sW7Gz5vkqvTv12Q/k2OUadtJhSyDVuNXDIcoAQy1hrR3/pPth39XaYXl7N6nkBbrqN
+ itiNEoOwZfdCh/ihfevAq3WfgTprIHk+9zjTbOpJbLCYL9w/WTx/ch0z1YMawlo7OJ
+ DlNKLw/sVHvDQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=XlMKoIAJ
-Subject: Re: [Buildroot] [PATCH] package/python-kflash: Update to version
- 1.1.6
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=hTL2vdCr
+Subject: Re: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,20 +76,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Niklas Cassel <Niklas.Cassel@wdc.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Damien, All,
+Fabrice, All,
 
-On 2022-07-13 17:46 +0900, Damien Le Moal via buildroot spake thusly:
-> Update the python-kflash package to the new verseion 1.1.6 (from 1.1.5).
+On 2022-07-12 23:43 +0200, Fabrice Fontaine spake thusly:
+> https://www.mail-archive.com/haproxy@formilux.org/msg42473.html
 > 
-> Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Applied to master, thanks.
 
@@ -98,40 +95,37 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/python-kflash/python-kflash.hash | 4 ++--
->  package/python-kflash/python-kflash.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/haproxy/haproxy.hash | 4 ++--
+>  package/haproxy/haproxy.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/python-kflash/python-kflash.hash b/package/python-kflash/python-kflash.hash
-> index 722c4e879b..a4e5238635 100644
-> --- a/package/python-kflash/python-kflash.hash
-> +++ b/package/python-kflash/python-kflash.hash
+> diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+> index 4b00438190..7a870d7c0c 100644
+> --- a/package/haproxy/haproxy.hash
+> +++ b/package/haproxy/haproxy.hash
 > @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/kflash/json
-> -md5  85549bcc1faa0f2cd5ebe3b04759e7fa  kflash-1.1.5.tar.gz
-> -sha256  40a0976b52942c7a3bdfa2d9e2bdc8d7526cf6deb0759c8384281240c8fb404e  kflash-1.1.5.tar.gz
-> +md5  5b4376ea60f20368852d0c4743e6ed08  kflash-1.1.6.tar.gz
-> +sha256  ec5fbb35ea81a91c89f458d375e24a6dab3d3865c69a7e6250511b2e93f4b695  kflash-1.1.6.tar.gz
->  # Locally computed sha256 checksums
->  sha256  c48133d7a08d743c2c01c6190fc1860f7d73777afa2199ed8d0a035b754d8bf9  LICENSE
-> diff --git a/package/python-kflash/python-kflash.mk b/package/python-kflash/python-kflash.mk
-> index adbf6b30b0..efc0f52eba 100644
-> --- a/package/python-kflash/python-kflash.mk
-> +++ b/package/python-kflash/python-kflash.mk
-> @@ -4,9 +4,9 @@
->  #
+> -# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.0.tar.gz.sha256
+> -sha256  90f8e608aacd513b0f542e0438fa12e7fb4622cf58bd4375f3fe0350146eaa59  haproxy-2.6.0.tar.gz
+> +# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.1.tar.gz.sha256
+> +sha256  915b351e6450d183342c4cdcda7771eac4f0f72bf90582adcd15a01c700d29b1  haproxy-2.6.1.tar.gz
+>  # Locally computed:
+>  sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+>  sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+> diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+> index ef144053d6..de7accf4ce 100644
+> --- a/package/haproxy/haproxy.mk
+> +++ b/package/haproxy/haproxy.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -PYTHON_KFLASH_VERSION = 1.1.5
-> +PYTHON_KFLASH_VERSION = 1.1.6
->  PYTHON_KFLASH_SOURCE = kflash-$(PYTHON_KFLASH_VERSION).tar.gz
-> -PYTHON_KFLASH_SITE = https://files.pythonhosted.org/packages/c4/b3/1c25a92922bfd3dbc05d972352c071167cad035c615f6f068f75c2f0fd01
-> +PYTHON_KFLASH_SITE = https://files.pythonhosted.org/packages/4f/80/d2eaa114bf4434b18fcf8960a907ffce12c9400b08c05902b36007d545b7
->  PYTHON_KFLASH_SETUP_TYPE = setuptools
->  PYTHON_KFLASH_LICENSE = MIT
->  PYTHON_KFLASH_LICENSE_FILES = LICENSE
+>  HAPROXY_VERSION_MAJOR = 2.6
+> -HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).0
+> +HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).1
+>  HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+>  HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+>  HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 > -- 
-> 2.36.1
+> 2.35.1
 > 
 > _______________________________________________
 > buildroot mailing list
