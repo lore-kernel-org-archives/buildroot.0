@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AB30C43334
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:00:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36D56C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:02:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1704484098;
-	Sun, 17 Jul 2022 13:00:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1704484098
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB35740A15;
+	Sun, 17 Jul 2022 13:02:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB35740A15
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z1oiEV4-JnvT; Sun, 17 Jul 2022 13:00:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9McEjKNeEXQ5; Sun, 17 Jul 2022 13:02:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AA1F83F10;
-	Sun, 17 Jul 2022 13:00:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AA1F83F10
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 801EF1BF3D1
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:00:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8DE5240412;
+	Sun, 17 Jul 2022 13:02:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DE5240412
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F1C191BF3D1
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:02:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51D9860B09
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:00:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51D9860B09
+ by smtp2.osuosl.org (Postfix) with ESMTP id C5AAF409D3
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:02:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5AAF409D3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4UYMxOYXefTB for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 13:00:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jKxmuk-uGPgX for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 13:02:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8776A60AFD
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:00:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8776A60AFD
+ by smtp2.osuosl.org (Postfix) with ESMTP id D240D400F2
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:02:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D240D400F2
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 54A7A83A90; Sun, 17 Jul 2022 12:46:55 +0000 (UTC)
+ id 9D60183AAC; Sun, 17 Jul 2022 12:49:17 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 14:59:41 +0200
+Date: Sun, 17 Jul 2022 15:01:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 030baf89fc9467329907abe07c292567e2f05c0f
-X-Git-Newrev: 0f50b833160e451199a1a9c5b0a17f77075f873a
+X-Git-Oldrev: 0f50b833160e451199a1a9c5b0a17f77075f873a
+X-Git-Newrev: 891bba3ce22ba56be7b124179c368401d57a1568
 X-Patchwork-Hint: ignore
-Message-Id: <20220717124655.54A7A83A90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcamera: bump to latest master
- commit ba6435930f08e802cffc688d90f156a8959a0f86
+Message-Id: <20220717124917.9D60183AAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libwebsockets: bump to version
+ 4.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,71 +63,129 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f50b833160e451199a1a9c5b0a17f77075f873a
+commit: https://git.buildroot.net/buildroot/commit/?id=891bba3ce22ba56be7b124179c368401d57a1568
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This brings in support for OV5675 and IMX477 camera sensors, exposes
-autofocus controls through the libcamera API, adds support for more
-pixel and media bus formats, fixes AWB on IPU3, improves gstreamer
-support and numerous other improvements and fixes.
+Drop first and second patches (already in version)
 
-Since commit fcb0ea001a2d "libcamera: Introduce YamlParser as a helper
-to parse yaml files", libyaml is a required dependency since YAML is
-used for configuration/tuning files.
-
-Cc: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libcamera/Config.in      | 1 +
- package/libcamera/libcamera.hash | 2 +-
- package/libcamera/libcamera.mk   | 3 ++-
- 3 files changed, 4 insertions(+), 2 deletions(-)
+ .../0001-CMakeLists.txt-fix-build-without-C.patch  | 44 ----------------------
+ ...CMakeLists.txt-fix-build-without-threads.patch} |  0
+ ...ake-remove-duplicate-LwsCheckRequirements.patch | 26 -------------
+ package/libwebsockets/libwebsockets.hash           |  2 +-
+ package/libwebsockets/libwebsockets.mk             |  2 +-
+ 5 files changed, 2 insertions(+), 72 deletions(-)
 
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index fd7b3c92c4..0febfef4bc 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -14,6 +14,7 @@ menuconfig BR2_PACKAGE_LIBCAMERA
- 	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_WCHAR # gnutls
- 	select BR2_PACKAGE_GNUTLS
-+	select BR2_PACKAGE_LIBYAML
- 	select BR2_PACKAGE_LIBCAMERA_PIPELINE_UVCVIDEO if !BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
- 	help
- 	  libcamera provides a software stack to support
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index 181bb1349a..68c9c1f005 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,4 +1,4 @@
--sha256  9aa62d41470238ac8c3bb847601d1a803ac7a270d3b5e87f722e9c93c867d18d  libcamera-8a845ab078c3fe12ac4edd16c8cbac5b7ec03b98-br1.tar.gz
-+sha256  59318208a9c1b183cacaf5a7175568d8a9fa094f2dd8c9794269bb6e9636986e  libcamera-ba6435930f08e802cffc688d90f156a8959a0f86-br1.tar.gz
- 
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 3f336cb797..9c03d3a3b3 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libwebsockets/0001-CMakeLists.txt-fix-build-without-C.patch b/package/libwebsockets/0001-CMakeLists.txt-fix-build-without-C.patch
+deleted file mode 100644
+index c6d6d07dcc..0000000000
+--- a/package/libwebsockets/0001-CMakeLists.txt-fix-build-without-C.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 726b36eca158063d8871c91ad99a29113ea35aea Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 13 Apr 2022 21:03:26 +0200
+-Subject: [PATCH] CMakeLists.txt: fix build without C++
+-
+-Fix the following build failure without C++ raised since version 4.2.0
+-and
+-https://github.com/warmcat/libwebsockets/commit/962e9ee345bc28749577c1fca2542a273404627d:
+-
+-CMake Error at /nvmedata/autobuild/instance-11/output-1/per-package/libwebsockets/host/share/cmake-3.18/Modules/CMakeTestCXXCompiler.cmake:59 (message):
+-  The C++ compiler
+-
+-    "/usr/bin/clang++"
+-
+-  is not able to compile a simple test program.
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/550e7f7d54adf74f8cc078be5b91b3567d622ede
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/warmcat/libwebsockets/pull/2613]
+----
+- CMakeLists.txt | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 08aaf8c6..96e3ad18 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -71,7 +71,10 @@ if (ESP_PLATFORM)
+- endif()
+- 
+- # it's at this point any toolchain file is brought in
+--project(libwebsockets C CXX)
+-+project(libwebsockets C)
+-+if (LWS_WITH_SECURE_STREAMS_CPP)
+-+	enable_language(CXX)
+-+endif()
+- include(CTest)
+- 
+- if (PICO_SDK_PATH)
+--- 
+-2.35.1
+-
+diff --git a/package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch b/package/libwebsockets/0001-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
+similarity index 100%
+rename from package/libwebsockets/0003-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
+rename to package/libwebsockets/0001-lib-tls-CMakeLists.txt-fix-build-without-threads.patch
+diff --git a/package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch b/package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch
+deleted file mode 100644
+index fc76a2b610..0000000000
+--- a/package/libwebsockets/0002-cmake-remove-duplicate-LwsCheckRequirements.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 99a8b9c4422bed45c8b7412a1e121056f2a6132a Mon Sep 17 00:00:00 2001
+-From: Andy Green <andy@warmcat.com>
+-Date: Mon, 7 Feb 2022 14:48:55 +0000
+-Subject: [PATCH] cmake: remove duplicate LwsCheckRequirements
+-
+-Signed-off-by: Andy Green <andy@warmcat.com>
+-Signed-off-by: Bartosz Bilas <bartosz.bilas@hotmail.com>
+-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+----
+- cmake/libwebsockets-config.cmake.in | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/cmake/libwebsockets-config.cmake.in b/cmake/libwebsockets-config.cmake.in
+-index 6247b2cb..8ba97e6f 100644
+---- a/cmake/libwebsockets-config.cmake.in
+-+++ b/cmake/libwebsockets-config.cmake.in
+-@@ -32,6 +32,5 @@ endforeach()
+- 
+- include(CheckIncludeFile)
+- include(CheckCSourceCompiles)
+--include(LwsCheckRequirements)
+- set(requirements 1)
+- 
+--- 
+-2.35.3
+-
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index e39d6e1853..4bff068241 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  8fdb1454a1b34cd9a6351beaab237a485e6853806101de7e62bd2bc250bb50af  libwebsockets-4.3.1.tar.gz
++sha256  6a85a1bccf25acc7e8e5383e4934c9b32a102880d1e4c37c70b27ae2a42406e1  libwebsockets-4.3.2.tar.gz
+ sha256  2b5dd8030691f3d1870a040f085c37e45d9ab9c684a7f1284f5f379c1e829b28  LICENSE
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 3a9b9ea88f..f5cde37109 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = 8a845ab078c3fe12ac4edd16c8cbac5b7ec03b98
-+LIBCAMERA_VERSION = ba6435930f08e802cffc688d90f156a8959a0f86
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
-@@ -13,6 +13,7 @@ LIBCAMERA_DEPENDENCIES = \
- 	host-python-jinja2 \
- 	host-python-ply \
- 	host-python-pyyaml \
-+	libyaml \
- 	gnutls
- LIBCAMERA_CONF_OPTS = \
- 	-Dandroid=disabled \
+-LIBWEBSOCKETS_VERSION = 4.3.1
++LIBWEBSOCKETS_VERSION = 4.3.2
+ LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
+ LIBWEBSOCKETS_LICENSE = MIT with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
