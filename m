@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50DA9C43334
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 07:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D67AC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 07:21:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E4BB2846CC;
-	Sun, 17 Jul 2022 07:20:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4BB2846CC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01B1060EFE;
+	Sun, 17 Jul 2022 07:21:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01B1060EFE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p-CeC7j2kJjB; Sun, 17 Jul 2022 07:20:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L93NCkAHTJJE; Sun, 17 Jul 2022 07:21:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8383846A1;
-	Sun, 17 Jul 2022 07:20:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8383846A1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8EBD01BF2CA
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 07:20:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE4F760F01;
+	Sun, 17 Jul 2022 07:21:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE4F760F01
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D84ED1BF2CA
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 07:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 76B3340A14
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4BA59607CE
  for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 07:20:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76B3340A14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BA59607CE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SGuMHqtrNdJu for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2EkUCjmq3pJu for <buildroot@lists.busybox.net>;
  Sun, 17 Jul 2022 07:20:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A03A40A0D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E43760BF5
  for <buildroot@buildroot.org>; Sun, 17 Jul 2022 07:20:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A03A40A0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E43760BF5
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id CDB4483904; Sun, 17 Jul 2022 07:06:52 +0000 (UTC)
+ id C063683903; Sun, 17 Jul 2022 07:06:52 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 09:19:39 +0200
+Date: Sun, 17 Jul 2022 09:19:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3f121357ae225be9ac2fbf4505027c2cc690626b
-X-Git-Newrev: 1af0f9d255b78a45d6a68b1db0dcfef589988389
+X-Git-Oldrev: 86ab91483dcb4b60de8c1daa20e2f42bd95ab5fb
+X-Git-Newrev: 3f121357ae225be9ac2fbf4505027c2cc690626b
 X-Patchwork-Hint: ignore
-Message-Id: <20220717070652.CDB4483904@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgpg-error: bump to version 1.45
+Message-Id: <20220717070652.C063683903@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgpgme: bump to version 1.17.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,141 +62,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1af0f9d255b78a45d6a68b1db0dcfef589988389
+commit: https://git.buildroot.net/buildroot/commit/?id=3f121357ae225be9ac2fbf4505027c2cc690626b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patches (already in version)
+Drop patch (already in version)
 
-https://dev.gnupg.org/T5352
-https://dev.gnupg.org/T5676
-https://dev.gnupg.org/T5802
+https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;h=a460ddfe78f18a03143c8dd87ef2c138392104e6;hb=ee50a38823daaa16b151a549a7dafef34bbd1e81
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...eneration-of-lock-obj-pub.native.h-for-cr.patch | 34 -------------------
- .../0002-build-Fix-disable-threads.patch           | 39 ----------------------
- package/libgpg-error/libgpg-error.hash             |  8 ++---
- package/libgpg-error/libgpg-error.mk               |  2 +-
- 4 files changed, 5 insertions(+), 78 deletions(-)
+ ...001-core-Support-closefrom-also-for-glibc.patch | 36 ----------------------
+ package/libgpgme/libgpgme.hash                     |  6 ++--
+ package/libgpgme/libgpgme.mk                       |  2 +-
+ 3 files changed, 4 insertions(+), 40 deletions(-)
 
-diff --git a/package/libgpg-error/0001-build-Fix-generation-of-lock-obj-pub.native.h-for-cr.patch b/package/libgpg-error/0001-build-Fix-generation-of-lock-obj-pub.native.h-for-cr.patch
+diff --git a/package/libgpgme/0001-core-Support-closefrom-also-for-glibc.patch b/package/libgpgme/0001-core-Support-closefrom-also-for-glibc.patch
 deleted file mode 100644
-index 621f070ee2..0000000000
---- a/package/libgpg-error/0001-build-Fix-generation-of-lock-obj-pub.native.h-for-cr.patch
+index b8db949cef..0000000000
+--- a/package/libgpgme/0001-core-Support-closefrom-also-for-glibc.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From 7350874f6f62314af4c8ec1973c91d305a6f4ddc Mon Sep 17 00:00:00 2001
--From: David Michael <fedora.dm0@gmail.com>
--Date: Fri, 26 Mar 2021 16:06:50 +0900
--Subject: [PATCH] build: Fix generation of lock-obj-pub.native.h for cross
-- build.
+@@ -1,36 +0,0 @@
+-From 4b64774b6d13ffa4f59dddf947a97d61bcfa2f2e Mon Sep 17 00:00:00 2001
+-From: Jiri Kucera <sanczes@gmail.com>
+-Date: Sun, 25 Jul 2021 11:35:54 +0200
+-Subject: [PATCH] core: Support closefrom also for glibc.
 -
--* src/gen-lock-obj.sh: Capture echo output with quotes.
--
+-* src/posix-io.c (_gpgme_io_spawn): Use glibc's closefrom.
 ---
 -
--Fixes-commit: 99ae862a96a569724f49a604ebb7d3f6d2c2d374
--Signed-off-by: David Michael <fedora.dm0@gmail.com>
--Upstream: 33593864cd54143db594c4237bba41e14179061c
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- src/gen-lock-obj.sh | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+-Since 2.34, glibc introduces closefrom (the implementation
+-follows *BSD standard).
 -
--diff --git a/src/gen-lock-obj.sh b/src/gen-lock-obj.sh
--index a710f0c..258eec6 100755
----- a/src/gen-lock-obj.sh
--+++ b/src/gen-lock-obj.sh
--@@ -38,7 +38,7 @@
-- #     AWK=gawk ./gen-lock-obj.sh
-- #
-- 
---if test -n `echo -n`; then
--+if test -n "`echo -n`"; then
--     ECHO_C='\c'
--     ECHO_N=''
-- else
---- 
--2.31.1
+-Signed-off-by: Werner Koch <wk@gnupg.org>
 -
-diff --git a/package/libgpg-error/0002-build-Fix-disable-threads.patch b/package/libgpg-error/0002-build-Fix-disable-threads.patch
-deleted file mode 100644
-index 6ed0f83070..0000000000
---- a/package/libgpg-error/0002-build-Fix-disable-threads.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 7ede0d4ce19e0ed14cd1cec81ba7df4e467f1eeb Mon Sep 17 00:00:00 2001
--From: NIIBE Yutaka <gniibe@fsij.org>
--Date: Mon, 21 Jun 2021 12:16:20 +0900
--Subject: [PATCH] build: Fix --disable-threads.
--
--* src/gen-lock-obj.sh: Fix generating '}}}'.
--
----
--
--GnuPG-bug-id: 5495
--Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Fixes-commit: 1fb90a7da186ee2ee098a666f6f3a35bb1720e59
--Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
 -[Retrieved from:
--https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commit;h=220a427b4f997ef6af1b2d4e82ef1dc96e0cd6ff]
+-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=commit;h=4b64774b6d13ffa4f59dddf947a97d61bcfa2f2e]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- src/gen-lock-obj.sh | 2 +-
+- src/posix-io.c | 2 +-
 - 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/src/gen-lock-obj.sh b/src/gen-lock-obj.sh
--index 258eec6..014667f 100755
----- a/src/gen-lock-obj.sh
--+++ b/src/gen-lock-obj.sh
--@@ -121,10 +121,10 @@ while test "$i" -lt $ac_mtx_size; do
--     fi
--     i=$(( i + 1 ))
-- done
--+echo '}}}'
-- fi
-- 
-- cat <<'EOF'
---}}}
-- ##
-- ## Local Variables:
-- ## mode: c
+-diff --git a/src/posix-io.c b/src/posix-io.c
+-index e712ef28..2a3a81fc 100644
+---- a/src/posix-io.c
+-+++ b/src/posix-io.c
+-@@ -570,7 +570,7 @@ _gpgme_io_spawn (const char *path, char *const argv[], unsigned int flags,
+-               if (fd_list[i].fd > fd)
+-                 fd = fd_list[i].fd;
+-             fd++;
+--#if defined(__sun) || defined(__FreeBSD__)
+-+#if defined(__sun) || defined(__FreeBSD__) || defined(__GLIBC__)
+-             closefrom (fd);
+-             max_fds = fd;
+- #else /*!__sun */
 --- 
--2.31.1
+-2.11.0
 -
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index 4e124941cd..b29ec37598 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
-@@ -1,10 +1,10 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  5e620d71fc24d287a7ac2460b1d819074bb8b9bb  libgpg-error-1.42.tar.bz2
-+sha1  fe724ed37b4935964059a47b7c64d5f8246659d8  libgpg-error-1.45.tar.bz2
- 
+diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
+index ca2a79496c..7d02b9e139 100644
+--- a/package/libgpgme/libgpgme.hash
++++ b/package/libgpgme/libgpgme.hash
+@@ -1,6 +1,6 @@
  # Locally calculated after checking pgp signature
--# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.42.tar.bz2.sig
+-# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.16.0.tar.bz2.sig
 -# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  fc07e70f6c615f8c4f590a8e37a9b8dd2e2ca1e9408f8e60459c67452b925e23  libgpg-error-1.42.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.45.tar.bz2.sig
+-sha256  6c8cc4aedb10d5d4c905894ba1d850544619ee765606ac43df7405865de29ed0  gpgme-1.16.0.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.17.1.tar.bz2.sig
 +# using key 6DAA6E64A76D2840571B4902528897B826403ADA
-+sha256  570f8ee4fb4bff7b7495cff920c275002aea2147e9a1d220c068213267f80a26  libgpg-error-1.45.tar.bz2
++sha256  711eabf5dd661b9b04be9edc9ace2a7bc031f6bd9d37a768d02d0efdef108f5f  gpgme-1.17.1.tar.bz2
  # Locally calculated
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index babcbdaded..86dea6ad2a 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index b42a1a363a..1b57b18872 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPG_ERROR_VERSION = 1.42
-+LIBGPG_ERROR_VERSION = 1.45
- LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
- LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+-LIBGPGME_VERSION = 1.16.0
++LIBGPGME_VERSION = 1.17.1
+ LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
+ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
