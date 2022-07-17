@@ -4,56 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C4DEC43334
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 10:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0AF7C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 11:31:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03F0041727;
-	Sun, 17 Jul 2022 10:38:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03F0041727
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39FE64174F;
+	Sun, 17 Jul 2022 11:31:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39FE64174F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J0mnpLpMmDRK; Sun, 17 Jul 2022 10:38:22 +0000 (UTC)
+	with ESMTP id 86iODxF7fF0X; Sun, 17 Jul 2022 11:31:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD732416FC;
-	Sun, 17 Jul 2022 10:38:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD732416FC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 51ABA1BF40B
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 10:38:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F29264173B;
+	Sun, 17 Jul 2022 11:31:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F29264173B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 454F01BF325
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 11:31:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 252D840154
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 10:38:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 252D840154
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E88083E49
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 11:31:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E88083E49
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LNnWLGf-iLf7 for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 10:38:17 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AB0C4013E
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1AB0C4013E
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 10:38:16 +0000 (UTC)
-Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
- by mailout01.t-online.de (Postfix) with SMTP id 5B9C190E9;
- Sun, 17 Jul 2022 12:38:13 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([91.58.11.100]) by fwd83.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1oD1fB-0GppeT0; Sun, 17 Jul 2022 12:38:13 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36900)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1oD1fA-0004Ra-LX;
- Sun, 17 Jul 2022 12:38:12 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q0aszFx9M0vq for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 11:31:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 509A683E47
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 11:31:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 509A683E47
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 436968399D; Sun, 17 Jul 2022 11:17:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 12:38:12 +0200
-Message-Id: <20220717103812.9747-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1658054293-0144B102-B2C58C4B/0/0 CLEAN NORMAL
-X-TOI-MSGID: 0d231566-3f0d-484e-a609-9dc33001ec2f
-Subject: [Buildroot] [PATCH 1/1] package/cwiid: fix comment dependency for
+Date: Sun, 17 Jul 2022 13:30:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 86deafe8635738c3f9efcbda5b22883504d59129
+X-Git-Newrev: 4f25bbb7a758d4deee8216e25485ad113bae0f2c
+X-Patchwork-Hint: ignore
+Message-Id: <20220717111751.436968399D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cwiid: fix comment dependency for
  MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -66,16 +57,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=4f25bbb7a758d4deee8216e25485ad113bae0f2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixed broken logic added with ceedd670d8ac54321c3c8b5b882346a035073e67
 back in 2015.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/cwiid/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -90,9 +85,6 @@ index 7e8cdc3086..44148eb188 100644
  		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
 -	depends on !BR2_USE_MMU
 +	depends on BR2_USE_MMU
--- 
-2.30.2
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
