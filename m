@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 232A9C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:20:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FBAAC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:20:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC5E360AFD;
-	Sun, 17 Jul 2022 13:20:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC5E360AFD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1DB2660F2F;
+	Sun, 17 Jul 2022 13:20:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DB2660F2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6O6qTY4hzB7C; Sun, 17 Jul 2022 13:20:21 +0000 (UTC)
+	with ESMTP id ngAZtr4NkrI6; Sun, 17 Jul 2022 13:20:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C3BDA60B04;
-	Sun, 17 Jul 2022 13:20:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3BDA60B04
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A7DA31BF3D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06B4C60EC0;
+	Sun, 17 Jul 2022 13:20:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06B4C60EC0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E7DFA1BF3D5
  for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:20:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FF3C60BF5
+ by smtp1.osuosl.org (Postfix) with ESMTP id C30C9840B9
  for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:20:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FF3C60BF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C30C9840B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fGXtQZlE6C6q for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 13:20:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7zHQLftOdeQW for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 13:20:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4716600D1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0CD558333E
  for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:20:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4716600D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CD558333E
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 9FDCF83BCC; Sun, 17 Jul 2022 13:06:54 +0000 (UTC)
+ id CD5F483BCC; Sun, 17 Jul 2022 13:06:54 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 15:15:20 +0200
+Date: Sun, 17 Jul 2022 15:15:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e19616fb59352f3f27405806fbb9e8cd7c36cf98
-X-Git-Newrev: f7a16ee3beb5192a5e745026af777b05496d5114
+X-Git-Oldrev: d07edd1e4f4e790196bf31f87e071aa9de1cc789
+X-Git-Newrev: f6506162c41d8cc2c18f3b07aff2ce483e1b2f88
 X-Patchwork-Hint: ignore
-Message-Id: <20220717130654.9FDCF83BCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/log4cplus: bump to version 2.0.8
+Message-Id: <20220717130654.CD5F483BCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gupnp-tools: bump to version 0.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +62,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7a16ee3beb5192a5e745026af777b05496d5114
+commit: https://git.buildroot.net/buildroot/commit/?id=f6506162c41d8cc2c18f3b07aff2ce483e1b2f88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/log4cplus/log4cplus/releases/tag/REL_2_0_8
+https://gitlab.gnome.org/GNOME/gupnp-tools/-/blob/gupnp-tools-0.10.3/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/log4cplus/log4cplus.hash | 2 +-
- package/log4cplus/log4cplus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gupnp-tools/gupnp-tools.hash | 4 ++--
+ package/gupnp-tools/gupnp-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/log4cplus/log4cplus.hash b/package/log4cplus/log4cplus.hash
-index a668eca37a..c4540c9d56 100644
---- a/package/log4cplus/log4cplus.hash
-+++ b/package/log4cplus/log4cplus.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/gupnp-tools/gupnp-tools.hash b/package/gupnp-tools/gupnp-tools.hash
+index 28a1d26ede..37983b0c92 100644
+--- a/package/gupnp-tools/gupnp-tools.hash
++++ b/package/gupnp-tools/gupnp-tools.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.10/gupnp-tools-0.10.2.sha256sum:
+-sha256  6de49ef4b375b8a164f74b766168b1184e0d28196b6b07a4f5341f08dfd85d6c  gupnp-tools-0.10.2.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.10/gupnp-tools-0.10.3.sha256sum:
++sha256  457f4d923935b078415cd2ba88d78db60079b725926b7ee106e4565efe3204de  gupnp-tools-0.10.3.tar.xz
+ 
  # Locally computed:
--sha256  8f74a0a5920ba044b24e2ebeb0f1e5e36d85d5c23ed48d9fe328882b16130db8  log4cplus-2.0.7.tar.xz
-+sha256  f5949e713cf8635fc554384ab99b04716e3430f28eed6dd7d71ad03d959b91a0  log4cplus-2.0.8.tar.xz
- sha256  91d7e42ff80e74c4c94e5ad353375fa0358cd0abbf43f5fe957097cdbd4e2c4d  LICENSE
-diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
-index 56a85025cb..b2e9ac3ed1 100644
---- a/package/log4cplus/log4cplus.mk
-+++ b/package/log4cplus/log4cplus.mk
-@@ -4,7 +4,7 @@
- #
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
+index 7b34de52a0..96bcbffa49 100644
+--- a/package/gupnp-tools/gupnp-tools.mk
++++ b/package/gupnp-tools/gupnp-tools.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LOG4CPLUS_VERSION = 2.0.7
-+LOG4CPLUS_VERSION = 2.0.8
- LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
- LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
- LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
+ GUPNP_TOOLS_VERSION_MAJOR = 0.10
+-GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).2
++GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).3
+ GUPNP_TOOLS_SOURCE = gupnp-tools-$(GUPNP_TOOLS_VERSION).tar.xz
+ GUPNP_TOOLS_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
