@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10818C43334
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83400C43334
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:21:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9994240412;
-	Sun, 17 Jul 2022 13:20:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9994240412
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2553F40A4B;
+	Sun, 17 Jul 2022 13:21:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2553F40A4B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nPYicTwpZVsh; Sun, 17 Jul 2022 13:20:47 +0000 (UTC)
+	with ESMTP id wjNuZw0h9u8w; Sun, 17 Jul 2022 13:21:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D9E9400F2;
-	Sun, 17 Jul 2022 13:20:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D9E9400F2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E92451BF97A
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:20:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E595B40A60;
+	Sun, 17 Jul 2022 13:20:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E595B40A60
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C6CD1BF97C
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:20:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C2A20408DD
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:20:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2A20408DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04A5341779
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:20:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04A5341779
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vLTjJyLM4JkD for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 13:20:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZFxTApRJtjsJ for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 13:20:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB3C1400DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED30641775
  for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:20:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB3C1400DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED30641775
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 953A883BCB; Sun, 17 Jul 2022 13:06:54 +0000 (UTC)
+ id B52F083BD0; Sun, 17 Jul 2022 13:06:54 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Jul 2022 15:15:18 +0200
+Date: Sun, 17 Jul 2022 15:15:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9612c20a1a52c0f241d9d6c31329aa1b602a12e2
-X-Git-Newrev: e19616fb59352f3f27405806fbb9e8cd7c36cf98
+X-Git-Oldrev: 86ddd028c42918cf327f6cafec4620c0a9d36f45
+X-Git-Newrev: b35ee9bace28892238e92d04922fb5e7bba8e9f6
 X-Patchwork-Hint: ignore
-Message-Id: <20220717130654.953A883BCB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/exim: bump version to 4.96
+Message-Id: <20220717130654.B52F083BD0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/minizip: bump to version 3.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,155 +57,96 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4259560765206068560=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4259560765206068560==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e19616fb59352f3f27405806fbb9e8cd7c36cf98
+commit: https://git.buildroot.net/buildroot/commit/?id=b35ee9bace28892238e92d04922fb5e7bba8e9f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/Exim/exim/blob/22ed7a5295f196fce32563f6e9c669110dd36f4d/doc/doc-txt/ChangeLog
+Drop patch (already in version)
 
-Removed patch 0004 which was applied upstream:
-https://github.com/Exim/exim/commit/3083c9ca60beb9aacae81d0d108117251da5f276
+https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.6
 
-Renumbered remaining patches.
-
-Switched from pcre to pcre2:
-https://github.com/Exim/exim/commit/22ed7a5295f196fce32563f6e9c669110dd36f4d
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/exim/0004-Fix-uClibc-build.patch           | 35 ----------------------
- ...exim_lock-fix-lstat-related-build-errors.patch} |  0
- ...ors.patch => 0005-sieve-fix-build-errors.patch} |  0
- package/exim/Config.in                             |  2 +-
- package/exim/exim.hash                             |  4 +--
- package/exim/exim.mk                               |  8 ++---
- 6 files changed, 7 insertions(+), 42 deletions(-)
+ .../0001-CMakeLists.txt-fix-build-without-C.patch  | 41 ----------------------
+ package/minizip/minizip.hash                       |  2 +-
+ package/minizip/minizip.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 43 deletions(-)
 
-diff --git a/package/exim/0004-Fix-uClibc-build.patch b/package/exim/0004-Fix-uClibc-build.patch
+diff --git a/package/minizip/0001-CMakeLists.txt-fix-build-without-C.patch b/package/minizip/0001-CMakeLists.txt-fix-build-without-C.patch
 deleted file mode 100644
-index 9d5452bb56..0000000000
---- a/package/exim/0004-Fix-uClibc-build.patch
+index b0cb6a6c1e..0000000000
+--- a/package/minizip/0001-CMakeLists.txt-fix-build-without-C.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From 68ea4fc7ca53bf010e5ec738ad078452f0eaa639 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Tue, 23 Jul 2019 18:48:06 +0200
--Subject: [PATCH] Fix uClibc build
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+@@ -1,41 +0,0 @@
+-From 4e7899f3d0533f83b7230ffa787087b65ddd45c0 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 5 Apr 2022 18:20:14 +0200
+-Subject: [PATCH] CMakeLists.txt: fix build without C++
 -
--structs.h:757:18: error: ‘NS_MAXMSG’ undeclared here (not in a function); did you mean ‘N_MASC’?
--   uschar  answer[NS_MAXMSG];      /* the answer itself */
+-Fix the following build failure without a working C++ compiler raised
+-since version 2.0.0 and
+-https://github.com/zlib-ng/minizip-ng/commit/d383a5f2fca127d24407ff26adce579d63b85310:
 -
--Patch sent upstream: https://github.com/Exim/exim/pull/70
+-CMake Error at /nvmedata/autobuild/instance-20/output-1/host/share/cmake-3.18/Modules/CMakeTestCXXCompiler.cmake:59 (message):
+-  The C++ compiler
 -
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-    "/usr/bin/c++"
+-
+-  is not able to compile a simple test program.
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/4452bc35b41414a5e8a0e9831b0854228df5fba4
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/zlib-ng/minizip-ng/pull/621]
 ----
-- OS/os.h-Linux | 4 ++++
-- 1 file changed, 4 insertions(+)
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/OS/os.h-Linux b/OS/os.h-Linux
--index 63cf9babd..1d82e9bad 100644
----- a/OS/os.h-Linux
--+++ b/OS/os.h-Linux
--@@ -87,5 +87,9 @@ then change the 0 to 1 in the next block. */
-- # define TCPI_OPT_SYN_DATA 32
-- #endif
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index fef46c3..83adaf3 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -661,7 +661,7 @@ endif()
+- list(APPEND MINIZIP_INC ${CMAKE_CURRENT_SOURCE_DIR})
 - 
--+/* Needed for uClibc */
--+#ifndef NS_MAXMSG
--+# define NS_MAXMSG 65535
--+#endif
+- # Create minizip library
+--project(minizip${MZ_PROJECT_SUFFIX} VERSION ${VERSION})
+-+project(minizip${MZ_PROJECT_SUFFIX} LANGUAGES C VERSION ${VERSION})
 - 
-- /* End */
+- if(NOT ${MZ_PROJECT_SUFFIX} STREQUAL "")
+-     message(STATUS "Project configured as ${PROJECT_NAME}")
 --- 
--2.20.1
+-2.35.1
 -
-diff --git a/package/exim/0005-exim_lock-fix-lstat-related-build-errors.patch b/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
-similarity index 100%
-rename from package/exim/0005-exim_lock-fix-lstat-related-build-errors.patch
-rename to package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
-diff --git a/package/exim/0006-sieve-fix-build-errors.patch b/package/exim/0005-sieve-fix-build-errors.patch
-similarity index 100%
-rename from package/exim/0006-sieve-fix-build-errors.patch
-rename to package/exim/0005-sieve-fix-build-errors.patch
-diff --git a/package/exim/Config.in b/package/exim/Config.in
-index aa50a86736..2557251fd1 100644
---- a/package/exim/Config.in
-+++ b/package/exim/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_EXIM
- 	bool "exim"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_PCRE2
- 	select BR2_PACKAGE_BERKELEYDB
- 	help
- 	  Exim is a message transfer agent (MTA) developed at the
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 5cbad08a4b..2336aaa5c6 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,6 +1,6 @@
- # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
--sha256  cc9cb653fff2ea947c3702680b59c99ac0bd1bbf19976d37e22a463cd804f167  exim-4.95.tar.xz
-+sha256  299a56927b2eb3477daafd3c5bda02bc67e5c4e5898a7aeaf2740875278cf1a3  exim-4.96.tar.xz
- # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
--sha512  93d09c20d99f27da5edbe3e6dc7d25aa4548faa2b67ca26f2cc0b4aeaf58398dd468e0263714fcf0df97531f05d16fcd3f1f0e9d0656ead7858a66b248a44a65  exim-4.95.tar.xz
-+sha512  6b863661465a0b9897c1b71875c5196a1903cf560dd85de45b08242b9731edb2bc10eb56945d62e477e5d15cc7a8d493915bff2ca81689673a8091c66f62c89e  exim-4.96.tar.xz
- # Locally calculated
- sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index b45458b21b..e0fcd83fb0 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,14 +4,14 @@
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
+index e73637670c..0c6e218488 100644
+--- a/package/minizip/minizip.hash
++++ b/package/minizip/minizip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  1a248c378fdf4ef6c517024bb65577603d5146cffaebe81900bec9c0a5035d4d  minizip-3.0.5.tar.gz
++sha256  383fa1bdc28c482828a8a8db53f758dbd44291b641182724fda5df5b59cce543  minizip-3.0.6.tar.gz
+ sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index b9259f0c54..61936e0568 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXIM_VERSION = 4.95
-+EXIM_VERSION = 4.96
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
- EXIM_LICENSE_FILES = LICENCE
- EXIM_CPE_ID_VENDOR = exim
- EXIM_SELINUX_MODULES = exim mta
--EXIM_DEPENDENCIES = host-berkeleydb host-pcre pcre berkeleydb host-pkgconf
-+EXIM_DEPENDENCIES = host-berkeleydb host-pcre2 pcre2 berkeleydb host-pkgconf
- 
- # Modify a variable value. It must already exist in the file, either
- # commented or not.
-@@ -46,8 +46,8 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
- 	$(call exim-config-change,EXIM_USER,ref:exim)
- 	$(call exim-config-change,EXIM_GROUP,mail)
- 	$(call exim-config-change,TRANSPORT_LMTP,yes)
--	$(call exim-config-change,PCRE_LIBS,-lpcre)
--	$(call exim-config-change,PCRE_CONFIG,no)
-+	$(call exim-config-change,PCRE_LIBS,-lpcre2-8)
-+	$(call exim-config-change,PCRE2_CONFIG,no)
- 	$(call exim-config-change,HAVE_ICONV,no)
- 	$(call exim-config-unset,EXIM_MONITOR)
- 	$(call exim-config-change,AUTH_PLAINTEXT,yes)
-
---===============4259560765206068560==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-MINIZIP_VERSION = 3.0.5
++MINIZIP_VERSION = 3.0.6
+ MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
+ MINIZIP_DEPENDENCIES = host-pkgconf
+ MINIZIP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4259560765206068560==--
