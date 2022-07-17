@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F8EC43334
-	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07BE9C43334
+	for <buildroot@archiver.kernel.org>; Sun, 17 Jul 2022 13:07:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54F1C60671;
-	Sun, 17 Jul 2022 13:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54F1C60671
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C2BB415AB;
+	Sun, 17 Jul 2022 13:07:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C2BB415AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HNpYvXsSSoNJ; Sun, 17 Jul 2022 13:04:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 28kVAhe0VCLl; Sun, 17 Jul 2022 13:07:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 797C560681;
-	Sun, 17 Jul 2022 13:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 797C560681
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7F50F1BF3D5
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:04:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A9C641592;
+	Sun, 17 Jul 2022 13:07:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A9C641592
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EB181BF3D5
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:07:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6819060681
- for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:04:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6819060681
+ by smtp2.osuosl.org (Postfix) with ESMTP id DCB1F40412
+ for <buildroot@lists.busybox.net>; Sun, 17 Jul 2022 13:07:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCB1F40412
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4ska2cD9z0bJ for <buildroot@lists.busybox.net>;
- Sun, 17 Jul 2022 13:04:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7301F60671
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7301F60671
- for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:04:23 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4985:d730:3c09:77ac])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id C69D8780511;
- Sun, 17 Jul 2022 15:04:19 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 17 Jul 2022 15:04:19 +0200
-Date: Sun, 17 Jul 2022 15:04:19 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Ritvik <ritviktanksalkar@gmail.com>
-Message-ID: <20220717130419.GH2107091@scaer>
-References: <CAJxTgFwAMUZVo3dmnLoLtzNmc1USC2XgQ0tHaebZEYsUdrKrpw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAJxTgFwAMUZVo3dmnLoLtzNmc1USC2XgQ0tHaebZEYsUdrKrpw@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658063061;
- bh=RuiI+ZGj4rQY7uo8/jznAOkKU/d9TVjpdWB+FROFjAw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=CA2JYHpVho9hUhNGkfBUwwWZOU0Blcomj6wr2KE/kNwpK6IeFvKrnJ9DKvRdMU8Nz
- dA5aWPGLMM76hrqhbo/ENpIUszfEIw1Yrq0Wad+pljTqXnuy0c4Sf8y1dBWqr0p4D8
- DLyP/GwjMuTJlqAeL9mp86CeJaaNYtg/cOcGC6+hq0SkvEx4gaUzK48EUM8i6QEYU7
- RnPNRr5VPFD4z/ee37kDItFEEQLdYMiI2rt2nR0WMysEz0vRTEW2z6QkySY/tFBVHQ
- WegNTB3qgb/BiS2mdISdjF0qWQLtlZkQu4NH+HKwd3KRfQ8hr/jf+W1bu33ICOXzZj
- l02eYeWrEPdpg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CA2JYHpV
-Subject: Re: [Buildroot] aufs-util patching raises duplicate patch issue
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V3udGCf6Tqgs for <buildroot@lists.busybox.net>;
+ Sun, 17 Jul 2022 13:07:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA78D400F2
+ for <buildroot@buildroot.org>; Sun, 17 Jul 2022 13:07:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA78D400F2
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 96B0983AD4; Sun, 17 Jul 2022 12:54:26 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 17 Jul 2022 15:07:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d6319d97a7864314088dcc6d1199f35029cfcecb
+X-Git-Newrev: 7f55bdc216beaa24611463e5861bb629d79efefc
+X-Patchwork-Hint: ignore
+Message-Id: <20220717125426.96B0983AD4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/crucible: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,42 +56,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Uml0dmlrLCBBbGwsCgpPbiAyMDIyLTA3LTE2IDIwOjE2ICswNTMwLCBSaXR2aWsgc3Bha2UgdGh1
-c2x5Ogo+IEhlbGxvIGFsbCwKPiBXaGlsZSBjb21waWxpbmcgYnVpbGRyb290IHdpdGggbGludXgg
-a2VybmVswqA1LjEwLjExNS1jaXA3LCB0aGUgY29tcGlsYXRpb24gc3RvcHMgd2hpbGUgYXBwbHlp
-bmcgYSBhdWZzLXV0aWxzIHNwZWNpZmljIHBhdGNoCj4gIjAwMDItbm8tY2hlY2stdmVyLnBhdGNo
-IiBzYXlpbmcgdGhhdCB0aGVyZSBhcmUgY29uZmxpY3RpbmcgZmlsZXMuIEJlbG93IGFyZSB0aGUg
-ZGV0YWlscy4gQW55IGhlbHAgaW4gdGhpcyByZWdhcmQgd291bGQgYmUgaGlnaGx5Cj4gYXBwcmVj
-aWF0ZWQuCj4gPj4+IGF1ZnMtdXRpbCDCoFBhdGNoaW5nCj4gQXBwbHlpbmcgMDAwMi1uby1jaGVj
-ay12ZXIucGF0Y2ggdXNpbmcgcGF0Y2g6Cj4gRXJyb3I6IGR1cGxpY2F0ZSBmaWxlbmFtZSAnMDAw
-Mi1uby1jaGVjay12ZXIucGF0Y2gnCj4gQ29uZmxpY3RpbmcgZmlsZXMgYXJlOgo+IMKgIGFscmVh
-ZHkgYXBwbGllZDogL2hvbWUvdWJ1bnR1L2J1aWxkcm9vdC0yMDIyLjAyLjMvcGFja2FnZS9hdWZz
-LXV0aWwvLzAwMDItbm8tY2hlY2stdmVyLnBhdGNoCj4gwqAgdG8gYmUgYXBwbGllZCDCoDogL2hv
-bWUvdWJ1bnR1L2J1aWxkcm9vdC0yMDIyLjAyLjMvcGFja2FnZS9hdWZzLXV0aWwvLzAwMDItbm8t
-Y2hlY2stdmVyLnBhdGNoCj4gbWFrZVsxXTogKioqIFtwYWNrYWdlLyBbMV1wa2ctZ2VuZXJpYy5t
-azoyNTE6IC9ob21lL3VidW50dS9idWlsZHJvb3QtMjAyMi4wMi4zL291dHB1dC9idWlsZC9hdWZz
-LXV0aWwvLnN0YW1wX3BhdGNoZWRdIEVycm9yIDEKPiBtYWtlOiAqKiogW01ha2VmaWxlOjg0OiBf
-YWxsXSBFcnJvciAyCgpEb2VzIHRoYXQgc3RpbGwgaGFwcGVuIGFmdGVyIHlvdSBydToKICAgICQg
-bWFrZSBhdWZzLXV0aWwtZGlyY2xlYW4KICAgICQgbWFrZSBhdWZzLXV0aWwtcGF0Y2gKClJlZ2Fy
-ZHMsCllhbm4gRS4gTU9SSU4uCgo+IFdhcm0gUmVnYXJkcywKPiBDeWIwckcKPiAKPiBMaW5rczoK
-PiAxLiBodHRwOi8vcGtnLWdlbmVyaWMubWs6MjUxCgo+IF9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290CgoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0t
-LS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4g
-RS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNz
-JyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwg
-XCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3
-IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlz
-IG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwg
-TUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=7f55bdc216beaa24611463e5861bb629d79efefc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+crucible is a useful tool that allows reading and writing
+to the i.MX fuses via the Linux NVMEM framework.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+[yann.morin.1998@free.fr: fix check-package]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/crucible/Config.in     |  8 ++++++++
+ package/crucible/crucible.hash |  2 ++
+ package/crucible/crucible.mk   | 13 +++++++++++++
+ 5 files changed, 25 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0fc73f311f..5c3c24ff7a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -862,6 +862,7 @@ F:	configs/wandboard_defconfig
+ F:	configs/warp7_defconfig
+ F:	configs/warpboard_defconfig
+ F:	package/atest/
++F:	package/crucible/
+ F:	package/kmscube/
+ 
+ N:	Fabio Porcedda <fabio.porcedda@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index 3feb47c534..1a55e10f79 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -456,6 +456,7 @@ endmenu
+ 	source "package/cc-tool/Config.in"
+ 	source "package/cdrkit/Config.in"
+ 	source "package/cpuburn-arm/Config.in"
++	source "package/crucible/Config.in"
+ 	source "package/cryptsetup/Config.in"
+ 	source "package/cwiid/Config.in"
+ 	source "package/dahdi-linux/Config.in"
+diff --git a/package/crucible/Config.in b/package/crucible/Config.in
+new file mode 100644
+index 0000000000..b27eb31ae5
+--- /dev/null
++++ b/package/crucible/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CRUCIBLE
++	bool "crucible"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	help
++	  Crucible is a One-Time-Programmable (OTP) fusing tool for the
++	  i.MX family.
++
++	  https://github.com/usbarmory/crucible
+diff --git a/package/crucible/crucible.hash b/package/crucible/crucible.hash
+new file mode 100644
+index 0000000000..ad8a2cb35c
+--- /dev/null
++++ b/package/crucible/crucible.hash
+@@ -0,0 +1,2 @@
++sha256  51e911ce5e2a9f182a737b71f6e2bbf46fb80bb3252220cd99ffaf54d38e6c64  crucible-v2022.05.25.tar.gz
++sha256  d88514630470aec9fa7abdc990a1e0a8751a752321bffa868188c49009d64d59  LICENSE
+diff --git a/package/crucible/crucible.mk b/package/crucible/crucible.mk
+new file mode 100644
+index 0000000000..e9038f8cff
+--- /dev/null
++++ b/package/crucible/crucible.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# crucible
++#
++################################################################################
++
++CRUCIBLE_VERSION = v2022.05.25
++CRUCIBLE_SITE = $(call github,usbarmory,crucible,$(CRUCIBLE_VERSION))
++CRUCIBLE_LICENSE = GPL-3.0
++CRUCIBLE_LICENSE_FILES = LICENSE
++CRUCIBLE_GOMOD = ./cmd/crucible
++
++$(eval $(golang-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
