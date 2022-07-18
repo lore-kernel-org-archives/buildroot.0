@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C5F3C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:34:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63241C43334
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:34:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D6FB240C64;
-	Tue, 19 Jul 2022 15:34:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6FB240C64
+	by smtp2.osuosl.org (Postfix) with ESMTP id 16C1C40C5E;
+	Tue, 19 Jul 2022 15:34:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16C1C40C5E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E2VBR7RNP7G3; Tue, 19 Jul 2022 15:34:00 +0000 (UTC)
+	with ESMTP id AIF6cCWWrmgl; Tue, 19 Jul 2022 15:34:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 908E840C61;
-	Tue, 19 Jul 2022 15:33:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 908E840C61
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C04801BF4D7
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:33:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 72923401F8;
+	Tue, 19 Jul 2022 15:34:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72923401F8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BCD511BF4D7
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A81B340C61
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:33:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A81B340C61
+ by smtp3.osuosl.org (Postfix) with ESMTP id 97299611A9
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97299611A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ex2OEH8aMziA for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 15:33:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5KpFWujGWcKG for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 15:34:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BFEF040C5F
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 15:33:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFEF040C5F
+ by smtp3.osuosl.org (Postfix) with ESMTP id C328960B7D
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 15:34:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C328960B7D
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C234E83D0D; Tue, 19 Jul 2022 15:20:27 +0000 (UTC)
+ id C7FC483D50; Tue, 19 Jul 2022 15:20:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 17:33:48 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: c18a3e1d56e3644c805c6b43ff6d191ca8167ac9
-X-Git-Newrev: 21a3af7d653f8e1234ef216e255cf495e6c0bb67
+Date: Mon, 18 Jul 2022 12:18:08 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: c46c686e9fc6ccd04baa2a59c3e91cfd171c38fc
+X-Git-Newrev: 6f4a110a741cba9a280c17a67edab4ad91ed5e1f
 X-Patchwork-Hint: ignore
-Message-Id: <20220719152027.C234E83D0D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/postgresql: bump
- version to 14.4
+Message-Id: <20220719152049.C7FC483D50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/php: simplify icu
+ configure options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21a3af7d653f8e1234ef216e255cf495e6c0bb67
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6f4a110a741cba9a280c17a67edab4ad91ed5e1f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Release notes:
-https://www.postgresql.org/about/news/postgresql-144-released-2470/
+Since php-7.4 upstream switched to pkg-config to detect icu:
+https://github.com/php/php-src/commit/20fa2e7b58c519cc148d9658456b695884b1ecf4
+
+Remove all unneeded code from php.mk.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2579cc2cb32032c24b5f62946b05837a60340b3b)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit f939cf7c8cb1f08f0fa43aa20c8d98b01f32ac7e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/php/php.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 8ebe7b58fa..b2e94195e1 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v14.3/postgresql-14.3.tar.bz2.sha256
--sha256  279057368bf59a919c05ada8f95c5e04abb43e74b9a2a69c3d46a20e07a9af38  postgresql-14.3.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v14.4/postgresql-14.4.tar.bz2.sha256
-+sha256  c23b6237c5231c791511bdc79098617d6852e9e3bdf360efd8b5d15a1a3d8f6a  postgresql-14.4.tar.bz2
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 39db9d3a7c..d9c2edd839 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -176,13 +176,8 @@ endif
+ endif
  
- # License file, Locally calculated
- sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 45049f669d..c893f8026c 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ ifeq ($(BR2_PACKAGE_PHP_EXT_INTL),y)
+-PHP_CONF_OPTS += --enable-intl --with-icu-dir=$(STAGING_DIR)/usr
+-PHP_CXXFLAGS += "`$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
++PHP_CONF_OPTS += --enable-intl
+ PHP_DEPENDENCIES += icu
+-# The intl module is implemented in C++, but PHP fails to use
+-# g++ as the compiler for the final link. As a workaround,
+-# tell it to link libstdc++.
+-PHP_EXTRA_LIBS += -lstdc++
+ endif
  
--POSTGRESQL_VERSION = 14.3
-+POSTGRESQL_VERSION = 14.4
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+ ifeq ($(BR2_PACKAGE_PHP_EXT_GMP),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
