@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27C6DC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Jul 2022 22:05:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC482C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 18 Jul 2022 22:05:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A00A861039;
-	Mon, 18 Jul 2022 22:05:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A00A861039
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DOUQZP1pzW3y; Mon, 18 Jul 2022 22:05:28 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACE5360ACF;
-	Mon, 18 Jul 2022 22:05:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACE5360ACF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 47ABE1BF39D
- for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 22:05:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21B794160B
- for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 22:05:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21B794160B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5112341622;
+	Mon, 18 Jul 2022 22:05:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5112341622
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GegazjiU6rC4 for <buildroot@lists.busybox.net>;
- Mon, 18 Jul 2022 22:05:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2426F415D0
- for <buildroot@buildroot.org>; Mon, 18 Jul 2022 22:05:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2426F415D0
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id C299083CCF; Mon, 18 Jul 2022 21:51:58 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 00:05:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 520c440b4b4f39cca2ca80b7eb7b014c6458e477
-X-Git-Newrev: 079fccdee5a2a10fc8275094512b8423548ea147
-X-Patchwork-Hint: ignore
-Message-Id: <20220718215158.C299083CCF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sudo: fix
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yw2WbJS1qxWR; Mon, 18 Jul 2022 22:05:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E638D4160B;
+	Mon, 18 Jul 2022 22:05:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E638D4160B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 13A5D1BF39D
+ for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 22:05:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4156660ACF
+ for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 22:05:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4156660ACF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pl1Daf5RegP0 for <buildroot@lists.busybox.net>;
+ Mon, 18 Jul 2022 22:05:48 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D9C960F2B
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4D9C960F2B
+ for <buildroot@buildroot.org>; Mon, 18 Jul 2022 22:05:48 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:5d47:1bcb:9db:ce0f])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6084813F8A7;
+ Tue, 19 Jul 2022 00:05:41 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 19 Jul 2022 00:05:41 +0200
+Date: Tue, 19 Jul 2022 00:05:41 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20220718220541.GH2249625@scaer>
+References: <20220718215158.2167845-1-thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220718215158.2167845-1-thomas.petazzoni@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1658181944;
+ bh=l7i3GObKVPFgUHzQ8BpBYkCSd/3pGLs3A9IxaaiBizE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=DP29MCdepLaPmmRrI5HmTW9OVdWmd7ZCmhvfb9MhAKBNZOqTbODhAS1op47NLRvQ+
+ B6x2Ic/x8jK16AHuWw+aXxRTb/oPudLx0KJ4Sr1v4MW0icnWl2oT99eaJk5JwmTUm7
+ HTqE65QWrobdCLfJsqDq7WqzjeqcZdZZiExs8Rwdo09x0ImMIr1ErRXkTZN70HVfW2
+ iS5BCwIIQGa6vRif057LE1cdZWy1mW2FrbvpdtjjDm1wb0efHOrNiVjepEtvOIpeWT
+ uFjFLMRMdQvBJJ8ft5gae0abP3RCmjuXEEiTOOYGZ8Ds4GCdTynv63bTiJtV4Nvgqq
+ E8Jc3VVnMquPg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DP29MCde
+Subject: Re: [Buildroot] [PATCH] package/sudo: fix
  SUDO_ENABLE_SUDO_GROUP_RULE following version bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,44 +77,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Matthias Hardt <mhardt@berlinux-solutions.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=079fccdee5a2a10fc8275094512b8423548ea147
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Since the version bump of sudo to v1.9.11p2 in commit 9b7f8da96b, the
-sed magic in SUDO_ENABLE_SUDO_GROUP_RULE no longer does its job, due
-to a slight change in the example sudoers file provided by upstream
-sudo.
+On 2022-07-18 23:51 +0200, Thomas Petazzoni via buildroot spake thusly:
+> Since the version bump of sudo to v1.9.11p2 in commit 9b7f8da96b, the
+> sed magic in SUDO_ENABLE_SUDO_GROUP_RULE no longer does its job, due
+> to a slight change in the example sudoers file provided by upstream
+> sudo.
+> 
+> This commit fixes the regexp to match the new sudoers file.
+> 
+> Fixes bug #14891 (https://bugs.busybox.net/show_bug.cgi?id=14891)
+> 
+> Reported-by: Matthias Hardt <mhardt@berlinux-solutions.de>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-This commit fixes the regexp to match the new sudoers file.
+Applied to master, thanks.
 
-Fixes bug #14891 (https://bugs.busybox.net/show_bug.cgi?id=14891)
+Regards,
+Yann E. MORIN.
 
-Reported-by: Matthias Hardt <mhardt@berlinux-solutions.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/sudo/sudo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ---
+>  package/sudo/sudo.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+> index 2b9ba76a51..4f9fdb4b2c 100644
+> --- a/package/sudo/sudo.mk
+> +++ b/package/sudo/sudo.mk
+> @@ -80,7 +80,7 @@ define SUDO_USERS
+>  endef
+>  
+>  define SUDO_ENABLE_SUDO_GROUP_RULE
+> -	$(SED) '/^# \%sudo\tALL=(ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
+> +	$(SED) '/^# \%sudo\tALL=(ALL:ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
+>  endef
+>  SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_ENABLE_SUDO_GROUP_RULE
+>  
+> -- 
+> 2.36.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 2b9ba76a51..4f9fdb4b2c 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -80,7 +80,7 @@ define SUDO_USERS
- endef
- 
- define SUDO_ENABLE_SUDO_GROUP_RULE
--	$(SED) '/^# \%sudo\tALL=(ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
-+	$(SED) '/^# \%sudo\tALL=(ALL:ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
- endef
- SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_ENABLE_SUDO_GROUP_RULE
- 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
