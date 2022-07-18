@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5910C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Jul 2022 06:25:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C068CC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 18 Jul 2022 21:43:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 128B860FC2;
-	Mon, 18 Jul 2022 06:25:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 128B860FC2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5605040B1D;
+	Mon, 18 Jul 2022 21:43:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5605040B1D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LHDouDwKrQlM; Mon, 18 Jul 2022 21:43:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5DEA54063C;
+	Mon, 18 Jul 2022 21:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DEA54063C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 59BA11BF3C1
+ for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 21:43:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 41B7E60F6B
+ for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 21:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41B7E60F6B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fxs6Xv4HIAhY; Mon, 18 Jul 2022 06:25:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E85360FAF;
-	Mon, 18 Jul 2022 06:25:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E85360FAF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0038B1BF97C
- for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 06:25:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE61883298
- for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 06:25:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE61883298
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C_OGCOxNCilm for <buildroot@lists.busybox.net>;
- Mon, 18 Jul 2022 06:25:35 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oYaQ93lx9z_e for <buildroot@lists.busybox.net>;
+ Mon, 18 Jul 2022 21:43:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C26782CA3
- for <buildroot@uclibc.org>; Mon, 18 Jul 2022 06:25:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C26782CA3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8338F60F2B
+ for <buildroot@uclibc.org>; Mon, 18 Jul 2022 21:43:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8338F60F2B
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 414EC83A34; Mon, 18 Jul 2022 06:12:10 +0000 (UTC)
+ id 386058192F; Mon, 18 Jul 2022 21:29:44 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 18 Jul 2022 06:25:34 +0000
+Date: Mon, 18 Jul 2022 21:43:10 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,15 +47,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2022.02.3
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: major
-X-Bugzilla-Who: tgeh23@qq.com
+X-Bugzilla-Who: thomas.petazzoni@bootlin.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: 2022.02
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: target_milestone
-Message-ID: <bug-14916-163-aDPlYPTG80@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14916-163-qp3mLkzsUX@https.bugs.busybox.net/>
 In-Reply-To: <bug-14916-163@https.bugs.busybox.net/>
 References: <bug-14916-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,11 +81,29 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14916
 
-Fugui Liu <tgeh23@qq.com> changed:
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+Thanks for the bug report. I am surprised we never realized this before.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Target Milestone|---                         |2022.02
+Isn't the solution as simple as:
+
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index f3a08fbf24..6c54d044a5 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -99,7 +99,7 @@ GLIBC_MAKE = $(BR2_MAKE)
+ GLIBC_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
+
+ ifeq ($(BR2_PACKAGE_GLIBC_KERNEL_COMPAT),)
+-GLIBC_CONF_OPTS += --enable-kernel=$(call
+qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))
++GLIBC_CONF_OPTS += --enable-kernel=$(call
+qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)).0
+ endif
+
+ # Even though we use the autotools-package infrastructure, we have to
+
+Indeed, $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) never includes the minor version as
+far as I can see. Yann, any opinion?
 
 -- 
 You are receiving this mail because:
