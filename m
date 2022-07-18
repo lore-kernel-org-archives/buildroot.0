@@ -1,86 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAF21C43334
-	for <buildroot@archiver.kernel.org>; Mon, 18 Jul 2022 11:45:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4647C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 18 Jul 2022 12:08:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E01183422;
-	Mon, 18 Jul 2022 11:45:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E01183422
+	by smtp3.osuosl.org (Postfix) with ESMTP id 723C560FD7;
+	Mon, 18 Jul 2022 12:08:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 723C560FD7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zqmZwnx3aSsE; Mon, 18 Jul 2022 11:45:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t5lUQdRVExCO; Mon, 18 Jul 2022 12:08:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9DD6781B48;
-	Mon, 18 Jul 2022 11:45:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DD6781B48
+	by smtp3.osuosl.org (Postfix) with ESMTP id B448B60FF4;
+	Mon, 18 Jul 2022 12:08:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B448B60FF4
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A043A1BF32E
- for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 11:45:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 666A31BF317
+ for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 12:08:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79A8E60F9F
- for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 11:45:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79A8E60F9F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 40AC960FBC
+ for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 12:08:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40AC960FBC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h77o5JPrOyl9 for <buildroot@lists.busybox.net>;
- Mon, 18 Jul 2022 11:45:46 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79C4560B47
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com
- [IPv6:2607:f8b0:4864:20::f2f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 79C4560B47
- for <buildroot@buildroot.org>; Mon, 18 Jul 2022 11:45:46 +0000 (UTC)
-Received: by mail-qv1-xf2f.google.com with SMTP id l2so8529845qvt.2
- for <buildroot@buildroot.org>; Mon, 18 Jul 2022 04:45:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=DTGlZaK9XzR2m4rMYXBItq5YK6debmHv+ICtnitl8r4=;
- b=qoTGqgdnu6bp/boj1Cg/SoYcsclmabqkl13gJ3D9CvhkLzVcaAgvFg+S5au3YBIpOh
- y+WJOhu2OFLUdNm3aZF3vIJiB0CVTf7E1jxvHhOG70z+CKGaWjxyiGkaTYpVdwOgpCie
- +djG2Gw04AqT5g5h80o+EHOwQPjYhjHghCR5cDNdRbyFpxxgY4UYyv6pbAy/K2YhVPEy
- Yz+D8yoRh8ZYYgShruLXLMvg/5UFVQUn6JfnKVhhSJQBgVL0MKEF4moG8x83Xk61u7Vm
- SZ7ZL3OP5W0tWDR3Q0qe6cpg7DDlOsuJuC9FecS+bLxAvSZR5lmBSQrj7FLRHFGxy0y3
- rMEg==
-X-Gm-Message-State: AJIora/2y0YqAtuwX8y1yiex7mO6MI929Y3+eWDPmoGT4L3xTI7ELNHH
- wpjKZsoN2waUhCGRljw8iozdW/Ld/N8=
-X-Google-Smtp-Source: AGRyM1s7isNW6ipavCD807hiZR1Dx1ATVRLxzM0gCj01hfAF/iOf2CkAQq6klGyUcfmLjKOhqJatug==
-X-Received: by 2002:a05:6214:d05:b0:473:6cf1:5882 with SMTP id
- 5-20020a0562140d0500b004736cf15882mr20051649qvh.118.1658144744814; 
- Mon, 18 Jul 2022 04:45:44 -0700 (PDT)
-Received: from desktop.qscaudio.com (pool181-019.domashka.kiev.ua.
- [78.27.181.19]) by smtp.gmail.com with ESMTPSA id
- bp13-20020a05622a1b8d00b0031e9fa40c2esm9309145qtb.27.2022.07.18.04.45.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Jul 2022 04:45:44 -0700 (PDT)
-From: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+ with ESMTP id ggmigBB6UjOQ for <buildroot@lists.busybox.net>;
+ Mon, 18 Jul 2022 12:08:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B1EB60F14
+ for <buildroot@buildroot.org>; Mon, 18 Jul 2022 12:08:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B1EB60F14
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id B0A8B83CAB; Mon, 18 Jul 2022 11:55:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 18 Jul 2022 14:45:40 +0300
-Message-Id: <20220718114540.257654-1-aleksandr.o.makarov@gmail.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=DTGlZaK9XzR2m4rMYXBItq5YK6debmHv+ICtnitl8r4=;
- b=CWd+e+iMF6b1Fz4uWwTaWE7A7aonsw8UpxwCRDM+PNton9bdYAyeiI1RPG1n3bgkxy
- V+JaCzGYwuijDnBj5mhxxlJVPCcOoV4fGHnHXGUCpRcSf4jnAZmTk1oANf+LZ9pG78H2
- CJUnfaA+BVHsRhXHx3U0KyC6c/0d/frrZhQ+ZvA8D+RTrxaMrBWPcOL9Z6OOoGivCxC4
- IVunu3jNcbfnOKxCBA0ROGJytLi3Jf/hxDUfj/yYDd2aOFx8PcCrf5gqQmg9jjzsyxa7
- 3TLvpHZ7w09LN5QGJSPApqZ/5IMWS7NedUh0RGxuZAhQa/O6ODpEiIhA9GTE9yMgQI2n
- KNKA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=CWd+e+iM
-Subject: [Buildroot] [PATCH 1/1] package/libest: bump version
+Date: Mon, 18 Jul 2022 14:07:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4351da28a4c0de53bf6e4fece48afcb9566590cb
+X-Git-Newrev: 725d1b045345a0f5455fcf5a8222c10222e9fb59
+X-Patchwork-Hint: ignore
+Message-Id: <20220718115510.B0A8B83CAB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sam-ba: bump version to 3.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,598 +55,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove upstream patches
+commit: https://git.buildroot.net/buildroot/commit/?id=725d1b045345a0f5455fcf5a8222c10222e9fb59
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...without-system-libsafec-mistakenly-u.patch |  27 +++
- ...client.c-add-support-for-OpenSSL-1.1.patch | 112 ------------
- ...le-examples-flag-to-toggle-examples-.patch |  90 ----------
- ...libsafec-flag-to-link-against-system.patch | 109 ------------
- ...Fix-AC_ARG_ENABLE-AC_ARG_WITH-macros.patch | 164 ------------------
- package/libest/libest.hash                    |   2 +-
- package/libest/libest.mk                      |   6 +-
- 7 files changed, 32 insertions(+), 478 deletions(-)
- create mode 100644 package/libest/0001-Fix-.-configure-without-system-libsafec-mistakenly-u.patch
- delete mode 100644 package/libest/0001-java-jni-client.c-add-support-for-OpenSSL-1.1.patch
- delete mode 100644 package/libest/0002-Add-enable-disable-examples-flag-to-toggle-examples-.patch
- delete mode 100644 package/libest/0003-Add-with-system-libsafec-flag-to-link-against-system.patch
- delete mode 100644 package/libest/0004-configure.ac-Fix-AC_ARG_ENABLE-AC_ARG_WITH-macros.patch
+ package/sam-ba/sam-ba.hash | 2 +-
+ package/sam-ba/sam-ba.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libest/0001-Fix-.-configure-without-system-libsafec-mistakenly-u.patch b/package/libest/0001-Fix-.-configure-without-system-libsafec-mistakenly-u.patch
-new file mode 100644
-index 0000000000..a16cd4ba77
---- /dev/null
-+++ b/package/libest/0001-Fix-.-configure-without-system-libsafec-mistakenly-u.patch
-@@ -0,0 +1,27 @@
-+From 353df199bbcdae487f3476b65f35ab0383f6ba6b Mon Sep 17 00:00:00 2001
-+From: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-+Date: Mon, 18 Jul 2022 12:43:43 +0300
-+Subject: [PATCH] Fix './configure --without-system-libsafec' mistakenly using
-+ system-installed libsafec
-+
-+Signed-off-by: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 60626d8..cad3daa 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -195,7 +195,7 @@ AC_SUBST(SAFEC_STUB_DIR)
-+ AC_ARG_WITH(system-libsafec,
-+             AS_HELP_STRING([--with-system-libsafec],
-+                            [select to use libsafec installed in the system]),
-+-            [with_system_libsafec="yes"],
-++            [],
-+             [with_system_libsafec="no"])
-+ 
-+ AC_ARG_WITH([safec-dir],
-+-- 
-+2.36.1
-+
-diff --git a/package/libest/0001-java-jni-client.c-add-support-for-OpenSSL-1.1.patch b/package/libest/0001-java-jni-client.c-add-support-for-OpenSSL-1.1.patch
-deleted file mode 100644
-index 3c0d890d3f..0000000000
---- a/package/libest/0001-java-jni-client.c-add-support-for-OpenSSL-1.1.patch
-+++ /dev/null
-@@ -1,112 +0,0 @@
--From 8f152a6e47484056968973a71a16e4f2142213a9 Mon Sep 17 00:00:00 2001
--From: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
--Date: Mon, 13 Jul 2020 23:05:26 +0000
--Subject: [PATCH] java/jni/client.c: add support for OpenSSL 1.1
--
--This shall allow the java/jni to build with and link against OpenSSL 1.1.
--
--Additionally, the configuration program will not attempt to process the
--java/jni/ subdirectory if no --enable-jni has been specified.
--
--Upstream: https://github.com/cisco/libest/pull/81/. It was merged
--upstream in commit 4fd7e74dc556519132b9ea4c8a0f022bd1254a31, but this
--commit mixes multiple patches in one.
--
--Signed-off-by: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-----
-- Makefile.am       |  8 ++++++--
-- configure.ac      | 10 ++++++----
-- java/jni/client.c | 21 ++++++++++++++++-----
-- 3 files changed, 28 insertions(+), 11 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 10e38fd..9601de6 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -1,9 +1,13 @@
-- ACLOCAL_AMFLAGS = -I m4
-- 
--+if ENABLE_JNI
--+libest_jni = java/jni
--+endif
--+
-- if ENABLE_CLIENT_ONLY 
---SUBDIRS = safe_c_stub src java/jni example/client example/client-simple example/client-brski
--+SUBDIRS = safe_c_stub src $(libest_jni) example/client example/client-simple example/client-brski
-- else 
---SUBDIRS = safe_c_stub src java/jni example/client example/client-simple example/server example/proxy example/client-brski
--+SUBDIRS = safe_c_stub src $(libest_jni) example/client example/client-simple example/server example/proxy example/client-brski
-- endif
-- 
-- EXTRA_DIST = autogen.sh example/util LICENSE README.brski $(srcdir)/build.gradle $(srcdir)/example/build_examples.gradle
--diff --git a/configure.ac b/configure.ac
--index e02a54d..d648030 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -35,9 +35,9 @@ AM_COND_IF([FREEBSD], AC_MSG_RESULT([Skipping libdl check]),
-- AC_ARG_ENABLE([jni], 
-- 	       [AS_HELP_STRING([--enable-jni],
-- 			       [Enable support for JNI library])],
---		[jni_on=1],
---		[jni_on=0])
---AM_CONDITIONAL([ENABLE_JNI], [test x$jni_on = x1])
--+		[],
--+		[enable_jni="no"])
--+AM_CONDITIONAL([ENABLE_JNI], [test "$enable_jni" = "yes"])
-- AM_COND_IF([ENABLE_JNI], 
-- 	   AC_MSG_RESULT([JNI support enabled])
-- 	   AC_DEFINE([ENABLE_JNI]),
--@@ -198,5 +198,7 @@ AC_PREFIX_DEFAULT([/usr/local/est])
-- 
-- cp confdefs.h est_config.h
-- 
---AC_CONFIG_FILES([Makefile version safe_c_stub/Makefile safe_c_stub/lib/Makefile java/jni/Makefile src/Makefile src/est/Makefile example/client/Makefile example/client-simple/Makefile example/client-brski/Makefile example/server/Makefile example/proxy/Makefile])
--+AC_CONFIG_FILES([Makefile version safe_c_stub/Makefile safe_c_stub/lib/Makefile src/Makefile src/est/Makefile example/client/Makefile example/client-simple/Makefile example/client-brski/Makefile example/server/Makefile example/proxy/Makefile])
--+AM_COND_IF([ENABLE_JNI],
--+           [AC_CONFIG_FILES([java/jni/Makefile])])
-- AC_OUTPUT
--diff --git a/java/jni/client.c b/java/jni/client.c
--index 9a8a34e..f7aeefc 100644
----- a/java/jni/client.c
--+++ b/java/jni/client.c
--@@ -130,11 +130,18 @@ static int jni_est_client_X509_REQ_sign (X509_REQ *x, EVP_PKEY *pkey, const EVP_
-- {
--     int rv;
--     EVP_PKEY_CTX *pkctx = NULL;
---    EVP_MD_CTX mctx;
--+    EVP_MD_CTX *mctx;
-- 
---    EVP_MD_CTX_init(&mctx);
--+#ifdef HAVE_OLD_OPENSSL
--+    EVP_MD_CTX md_ctx;
--+    mctx = &md_ctx;
-- 
---    if (!EVP_DigestSignInit(&mctx, &pkctx, md, NULL, pkey)) {
--+    EVP_MD_CTX_init(mctx);
--+#else
--+    mctx = EVP_MD_CTX_new();
--+#endif
--+
--+    if (!EVP_DigestSignInit(mctx, &pkctx, md, NULL, pkey)) {
--         return 0;
--     }
-- 
--@@ -150,9 +157,13 @@ static int jni_est_client_X509_REQ_sign (X509_REQ *x, EVP_PKEY *pkey, const EVP_
--     x->req_info->enc.modified = 1;
-- #endif
-- 
---    rv = X509_REQ_sign_ctx(x, &mctx);
--+    rv = X509_REQ_sign_ctx(x, mctx);
-- 
---    EVP_MD_CTX_cleanup(&mctx);
--+#ifdef HAVE_OLD_OPENSSL
--+    EVP_MD_CTX_cleanup(mctx);
--+#else
--+    EVP_MD_CTX_free(mctx);
--+#endif
-- 
--     return (rv);
-- }
---- 
--2.17.1
--
-diff --git a/package/libest/0002-Add-enable-disable-examples-flag-to-toggle-examples-.patch b/package/libest/0002-Add-enable-disable-examples-flag-to-toggle-examples-.patch
-deleted file mode 100644
-index 9b35e8831d..0000000000
---- a/package/libest/0002-Add-enable-disable-examples-flag-to-toggle-examples-.patch
-+++ /dev/null
-@@ -1,90 +0,0 @@
--From 4bd41ea12924161baca48add39ba5ecfab2cae30 Mon Sep 17 00:00:00 2001
--From: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
--Date: Mon, 13 Jul 2020 23:42:42 +0000
--Subject: [PATCH] Add --{enable,disable}-examples flag to toggle examples
-- compilation
--
--Upstream: https://github.com/cisco/libest/pull/81/. It was merged
--upstream in commit 4fd7e74dc556519132b9ea4c8a0f022bd1254a31, but this
--commit mixes multiple patches in one.
--
--Signed-off-by: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-----
-- Makefile.am  | 11 +++++++----
-- configure.ac | 24 ++++++++++++++++++------
-- 2 files changed, 25 insertions(+), 10 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 9601de6..e2561e7 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -4,10 +4,13 @@ if ENABLE_JNI
-- libest_jni = java/jni
-- endif
-- 
---if ENABLE_CLIENT_ONLY 
---SUBDIRS = safe_c_stub src $(libest_jni) example/client example/client-simple example/client-brski
---else 
---SUBDIRS = safe_c_stub src $(libest_jni) example/client example/client-simple example/server example/proxy example/client-brski
--+if ENABLE_EXAMPLES
--+if ENABLE_CLIENT_ONLY
--+examples = example/client example/client-simple example/client-brski
--+else
--+examples = example/client example/client-simple example/client-brski example/server example/proxy
--+endif
-- endif
-- 
--+SUBDIRS = safe_c_stub src $(libest_jni) $(examples)
-- EXTRA_DIST = autogen.sh example/util LICENSE README.brski $(srcdir)/build.gradle $(srcdir)/example/build_examples.gradle
--diff --git a/configure.ac b/configure.ac
--index d648030..95b3223 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -2,11 +2,6 @@ dnl Process this file with autoconf to produce a configure script.
-- AC_INIT([libest],[3.2.0p],[libest-dev])
-- AC_CONFIG_AUX_DIR(config)
-- AC_CONFIG_SRCDIR(src/est/est.c)
---AC_CONFIG_SRCDIR(example/client/estclient.c)
---AC_CONFIG_SRCDIR(example/client-simple/estclient-simple.c)
---AC_CONFIG_SRCDIR(example/client-brski/estclient-brski.c)
---AC_CONFIG_SRCDIR(example/server/estserver.c)
---AC_CONFIG_SRCDIR(example/proxy/estproxy.c)
-- AC_CONFIG_MACRO_DIR([m4])
-- 
-- AM_INIT_AUTOMAKE
--@@ -80,6 +75,15 @@ AM_COND_IF([DISABLE_PTHREAD], [],
-- 	    [AC_CHECK_LIB([pthread], [pthread_create], [],
--              [AC_MSG_FAILURE([can't find pthread lib])])])
-- 
--+AC_ARG_ENABLE([examples],
--+	       [AS_HELP_STRING([--disable-examples],
--+			       [Disable examples compilation])],
--+		[],
--+		[enable_examples="yes"])
--+AC_MSG_CHECKING(whether to build examples)
--+AM_CONDITIONAL([ENABLE_EXAMPLES], [test "$enable_examples" = "yes"])
--+AM_COND_IF([ENABLE_EXAMPLES], AC_MSG_RESULT([yes]), AC_MSG_RESULT([no]))
--+
-- AC_ARG_WITH([ssl-dir],
-- 	    [AS_HELP_STRING([--with-ssl-dir],
-- 		[location of OpenSSL install folder, defaults to /usr/local/ssl])],
--@@ -198,7 +202,15 @@ AC_PREFIX_DEFAULT([/usr/local/est])
-- 
-- cp confdefs.h est_config.h
-- 
---AC_CONFIG_FILES([Makefile version safe_c_stub/Makefile safe_c_stub/lib/Makefile src/Makefile src/est/Makefile example/client/Makefile example/client-simple/Makefile example/client-brski/Makefile example/server/Makefile example/proxy/Makefile])
--+AC_CONFIG_FILES([Makefile version safe_c_stub/Makefile safe_c_stub/lib/Makefile src/Makefile src/est/Makefile])
-- AM_COND_IF([ENABLE_JNI],
--            [AC_CONFIG_FILES([java/jni/Makefile])])
--+AM_COND_IF([ENABLE_EXAMPLES],
--+[
--+            AC_CONFIG_FILES([example/client/Makefile example/client-simple/Makefile example/client-brski/Makefile])
--+            AM_COND_IF([ENABLE_CLIENT_ONLY],
--+                       [],
--+                       [AC_CONFIG_FILES([example/server/Makefile example/proxy/Makefile])])
--+])
--+
-- AC_OUTPUT
---- 
--2.17.1
--
-diff --git a/package/libest/0003-Add-with-system-libsafec-flag-to-link-against-system.patch b/package/libest/0003-Add-with-system-libsafec-flag-to-link-against-system.patch
-deleted file mode 100644
-index 66574cd937..0000000000
---- a/package/libest/0003-Add-with-system-libsafec-flag-to-link-against-system.patch
-+++ /dev/null
-@@ -1,109 +0,0 @@
--From 017155b98ff3722816a52953b1079c9c8704d2ff Mon Sep 17 00:00:00 2001
--From: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
--Date: Tue, 14 Jul 2020 10:03:14 +0000
--Subject: [PATCH] Add --with-system-libsafec flag to link against system
-- libsafec
--
--Specifying the --with-system-libsafec flag shall allow the configuration
--program to search for and, if found, to link against the libsafec library
--that is installed in the system.
--
--Upstream: https://github.com/cisco/libest/pull/81/. It was merged
--upstream in commit 4fd7e74dc556519132b9ea4c8a0f022bd1254a31, but this
--commit mixes multiple patches in one.
--
--Signed-off-by: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-----
-- Makefile.am  |  6 +++++-
-- configure.ac | 41 +++++++++++++++++++++++++++++++----------
-- 2 files changed, 36 insertions(+), 11 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index e2561e7..d53b0d5 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -12,5 +12,9 @@ examples = example/client example/client-simple example/client-brski example/ser
-- endif
-- endif
-- 
---SUBDIRS = safe_c_stub src $(libest_jni) $(examples)
--+if ! WITH_SYSTEM_LIBSAFEC
--+builtin_libsafec = safe_c_stub
--+endif
--+
--+SUBDIRS = $(builtin_libsafec) src $(libest_jni) $(examples)
-- EXTRA_DIST = autogen.sh example/util LICENSE README.brski $(srcdir)/build.gradle $(srcdir)/example/build_examples.gradle
--diff --git a/configure.ac b/configure.ac
--index 95b3223..048aa3c 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -10,6 +10,7 @@ AM_INIT_AUTOMAKE([subdir-objects])
-- 
-- AC_PROG_CC
-- AM_PROG_CC_C_O
--+PKG_PROG_PKG_CONFIG
-- LT_INIT
-- AC_CANONICAL_HOST
-- case $host in
--@@ -187,22 +188,39 @@ AC_ARG_WITH([libcoap-dir],
--         ]
--        )
-- 
---SAFEC_STUB_DIR='$(abs_top_builddir)/safe_c_stub'
---AC_SUBST(SAFEC_STUB_DIR)
---safecdir="$SAFEC_STUB_DIR" 
---AC_SUBST([SAFEC_DIR], "$safecdir")
---AC_SUBST([SAFEC_CFLAGS], "$safecdir/include")
---AC_SUBST([SAFEC_LDFLAGS], "$safecdir/lib")
--+AC_ARG_WITH(system-libsafec,
--+            AS_HELP_STRING([--with-system-libsafec],
--+                           [select to use libsafec installed in the system]),
--+            [],
--+            [with_system_libsafec="no"])
-- 
---CFLAGS="$CFLAGS -Wall -I$safecdir/include"
---LDFLAGS="$LDFLAGS -L$safecdir/lib"
---LIBS="$LIBS -lsafe_lib"
--+AC_MSG_CHECKING(which libsafec to use)
--+AM_CONDITIONAL([WITH_SYSTEM_LIBSAFEC], [test "$with_system_libsafec" = "yes"])
--+AM_COND_IF([WITH_SYSTEM_LIBSAFEC], AC_MSG_RESULT([system]), AC_MSG_RESULT([built-in]))
--+AM_COND_IF([WITH_SYSTEM_LIBSAFEC],
--+[
--+           PKG_CHECK_MODULES([libsafec], [libsafec])
--+           LIBS="$LIBS $libsafec_LIBS"
--+           CFLAGS="$CFLAGS $libsafec_CFLAGS"
--+           CPPFLAGS="$CPPFLAGS $libsafec_CFLAGS"
--+],[
--+           SAFEC_STUB_DIR='$(abs_top_builddir)/safe_c_stub'
--+           AC_SUBST(SAFEC_STUB_DIR)
--+           safecdir="$SAFEC_STUB_DIR"
--+           AC_SUBST([SAFEC_DIR], "$safecdir")
--+           AC_SUBST([SAFEC_CFLAGS], "$safecdir/include")
--+           AC_SUBST([SAFEC_LDFLAGS], "$safecdir/lib")
--+
--+           CFLAGS="$CFLAGS -Wall -I$safecdir/include"
--+           LDFLAGS="$LDFLAGS -L$safecdir/lib"
--+           LIBS="$LIBS -lsafe_lib"
--+])
-- 
-- AC_PREFIX_DEFAULT([/usr/local/est])
-- 
-- cp confdefs.h est_config.h
-- 
---AC_CONFIG_FILES([Makefile version safe_c_stub/Makefile safe_c_stub/lib/Makefile src/Makefile src/est/Makefile])
--+AC_CONFIG_FILES([Makefile version src/Makefile src/est/Makefile])
-- AM_COND_IF([ENABLE_JNI],
--            [AC_CONFIG_FILES([java/jni/Makefile])])
-- AM_COND_IF([ENABLE_EXAMPLES],
--@@ -212,5 +230,8 @@ AM_COND_IF([ENABLE_EXAMPLES],
--                        [],
--                        [AC_CONFIG_FILES([example/server/Makefile example/proxy/Makefile])])
-- ])
--+AM_COND_IF([WITH_SYSTEM_LIBSAFEC],
--+           [],
--+           [AC_CONFIG_FILES([safe_c_stub/Makefile safe_c_stub/lib/Makefile])])
-- 
-- AC_OUTPUT
---- 
--2.17.1
--
-diff --git a/package/libest/0004-configure.ac-Fix-AC_ARG_ENABLE-AC_ARG_WITH-macros.patch b/package/libest/0004-configure.ac-Fix-AC_ARG_ENABLE-AC_ARG_WITH-macros.patch
-deleted file mode 100644
-index f5e1b0c41a..0000000000
---- a/package/libest/0004-configure.ac-Fix-AC_ARG_ENABLE-AC_ARG_WITH-macros.patch
-+++ /dev/null
-@@ -1,164 +0,0 @@
--From 9a76187aa4d779de39afa12024d5a73a14175371 Mon Sep 17 00:00:00 2001
--From: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
--Date: Wed, 15 Jul 2020 11:25:05 +0000
--Subject: [PATCH] configure.ac: Fix AC_ARG_ENABLE/AC_ARG_WITH macros
--
--Multiple tests in configure.ac are flawed:
--
--[--snip--]
--    AC_ARG_ENABLE([pthreads],
--            [AS_HELP_STRING([--disable-pthreads],
--                            [Disable support for pthreads])],
--            [pthreads_on=1],
--            [pthreads_on=0])
--[--snip--]
--
--The third argument is "action-if-given" and the fourth argument
--is "action-if-not-given" [0]. Which means that, whether you pass
----enable-pthreads or --disable-pthreads, the third argument will be
--executed, that is "pthreads_on=1". And if you pass neither, the fourth
--argument will be executed, i.e. "pthreads_on=0".
--
--We want `--enable-pthreads` and `--disable-pthreads` flags to do their job.
--The right way to do that will be to eliminate "action-if-given" and replace
--the user-defined `FEATURE_on=0|1` shell variables with the `enable_FEATURE`
--and `with_PACKAGE` shell variables provided by Autotools.
--
--[0] https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.69/autoconf.html#Package-Options
--
--Upstream: https://github.com/cisco/libest/pull/81/. It was merged
--upstream in commit 4fd7e74dc556519132b9ea4c8a0f022bd1254a31, but this
--commit mixes multiple patches in one.
--
--Signed-off-by: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-----
-- configure.ac | 60 ++++++++++++++++++++++++++--------------------------
-- 1 file changed, 30 insertions(+), 30 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 048aa3c..0b930bf 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -43,9 +43,9 @@ AM_CONDITIONAL([JAVA_HOME_SET], [test ! -z "$JAVA_HOME"])
-- AC_ARG_ENABLE([client-only], 
-- 	       [AS_HELP_STRING([--enable-client-only],
-- 			       [Enable the building of only the client mode of libEST])],
---		[clientonly_on=1],
---		[clientonly_on=0])
---AM_CONDITIONAL([ENABLE_CLIENT_ONLY], [test x$clientonly_on = x1])
--+		[],
--+		[enable_client_only="no"])
--+AM_CONDITIONAL([ENABLE_CLIENT_ONLY], [test "$enable_client_only" = "yes"])
-- AM_COND_IF([ENABLE_CLIENT_ONLY], 
-- 	   AC_MSG_RESULT([Client only build enabled])
-- 	   AC_DEFINE([ENABLE_CLIENT_ONLY]),
--@@ -54,9 +54,9 @@ AM_COND_IF([ENABLE_CLIENT_ONLY],
-- AC_ARG_ENABLE([brski], 
-- 	       [AS_HELP_STRING([--enable-brski],
-- 			       [Enable support for brski bootstrap functionality])],
---		[brski_on=1],
---		[brski_on=0])
---AM_CONDITIONAL([ENABLE_BRSKI], [test x$brski_on = x1])
--+		[],
--+		[enable_brski="no"])
--+AM_CONDITIONAL([ENABLE_BRSKI], [test "$enable_brski" = "yes"])
-- AM_COND_IF([ENABLE_BRSKI], 
-- 	   AC_MSG_RESULT([BRSKI support enabled])
-- 	   AC_DEFINE([ENABLE_BRSKI]),
--@@ -65,9 +65,9 @@ AM_COND_IF([ENABLE_BRSKI],
-- AC_ARG_ENABLE([pthreads], 
-- 	       [AS_HELP_STRING([--disable-pthreads],
-- 			       [Disable support for pthreads])],
---		[pthreads_on=1],
---		[pthreads_on=0])
---AM_CONDITIONAL([DISABLE_PTHREAD], [test x$pthreads_on = x1])
--+		[],
--+		[enable_pthreads="yes"])
--+AM_CONDITIONAL([DISABLE_PTHREAD], [test "$enable_pthreads" = "no"])
-- AM_COND_IF([DISABLE_PTHREAD], 
-- 	   AC_MSG_RESULT([pthread support disabled])
-- 	   AC_DEFINE([DISABLE_PTHREADS]), 
--@@ -88,13 +88,13 @@ AM_COND_IF([ENABLE_EXAMPLES], AC_MSG_RESULT([yes]), AC_MSG_RESULT([no]))
-- AC_ARG_WITH([ssl-dir],
-- 	    [AS_HELP_STRING([--with-ssl-dir],
-- 		[location of OpenSSL install folder, defaults to /usr/local/ssl])],
---	    [ssldir="$withval"],
---	    [ssldir="/usr/local/ssl"])
---AC_SUBST([SSL_CFLAGS], "$ssldir/include")
---AC_SUBST([SSL_LDFLAGS], "$ssldir/lib")
--+	    [],
--+	    [with_ssl_dir="/usr/local/ssl"])
--+AC_SUBST([SSL_CFLAGS], "$with_ssl_dir/include")
--+AC_SUBST([SSL_LDFLAGS], "$with_ssl_dir/lib")
-- 
---CFLAGS="$CFLAGS -Wall -I$ssldir/include"
---LDFLAGS="$LDFLAGS -L$ssldir/lib"
--+CFLAGS="$CFLAGS -Wall -I$with_ssl_dir/include"
--+LDFLAGS="$LDFLAGS -L$with_ssl_dir/lib"
-- if test "$is_freebsd" = "1" ; then
-- AC_CHECK_LIB([crypto], [EVP_EncryptInit], [],
--              [AC_MSG_FAILURE([can't find openssl crypto lib])]
--@@ -120,13 +120,13 @@ AC_CHECK_LIB([crypto], [EVP_CIPHER_CTX_reset], [],
-- AC_ARG_WITH([libcurl-dir],
--  [AS_HELP_STRING([--with-libcurl-dir],
-- 				 [enable support for client proxy using libcurl])],
--- [libcurldir="$withval"],
--- [with_libcurldir=no])
--+ [],
--+ [with_libcurl_dir=no])
-- 
--   AS_IF(
---        [test "x$with_libcurldir" != xno],
---        [[CFLAGS="$CFLAGS -I$libcurldir/include"]
---         [LDFLAGS="$LDFLAGS -L$libcurldir/lib -lcurl"]
--+        [test "$with_libcurl_dir" != "no"],
--+        [[CFLAGS="$CFLAGS -I$with_libcurl_dir/include"]
--+         [LDFLAGS="$LDFLAGS -L$with_libcurl_dir/lib -lcurl"]
--          AC_CHECK_LIB(
--               [curl],
--               [curl_easy_init],
--@@ -143,17 +143,17 @@ AC_ARG_WITH([libcurl-dir],
-- AC_ARG_WITH([uriparser-dir],
--  [AS_HELP_STRING([--with-uriparser-dir],
-- 				 [enable support for path segments using uriparser])],
--- [uriparserdir="$withval"],
--- [with_uriparserdir=no])
--+ [],
--+ [with_uriparser_dir=no])
--           
--  dnl CFLAGS="$CFLAGS -Wall -I$uriparserdir/include"
--  dnl CPPFLAGS="$CPPFLAGS -I$uriparser/include"
--  dnl LDFLAGS="$LDFLAGS -L$uriparserdir/lib -luriparser"
-- 
--   AS_IF(
---        [test "x$with_uriparserdir" != xno],
---        [[CFLAGS="$CFLAGS -I$uriparserdir/include"]
---         [LDFLAGS="$LDFLAGS -L$uriparserdir/lib -luriparser"]
--+        [test "$with_uriparser_dir" != "no"],
--+        [[CFLAGS="$CFLAGS -I$with_uriparser_dir/include"]
--+         [LDFLAGS="$LDFLAGS -L$with_uriparser_dir/lib -luriparser"]
--          AC_CHECK_LIB(
--               [uriparser], 
--               [uriParseUriA],
--@@ -170,13 +170,13 @@ AC_ARG_WITH([uriparser-dir],
-- AC_ARG_WITH([libcoap-dir],
--  [AS_HELP_STRING([--with-libcoap-dir],
-- 				 [enable support for ESToCoAP using libcoap library])],
--- [libcoapdir="$withval"],
--- [with_libcoapdir=no])          
--+ [],
--+ [with_libcoap_dir=no])
-- 
--   AS_IF(
---        [test "x$with_libcoapdir" != xno],
---        [[CFLAGS="$CFLAGS -I$libcoapdir/include"]
---         [LDFLAGS="$LDFLAGS -L$libcoapdir/lib -lcoap-2-openssl"]
--+        [test "$with_libcoap_dir" != "no"],
--+        [[CFLAGS="$CFLAGS -I$with_libcoap_dir/include"]
--+         [LDFLAGS="$LDFLAGS -L$with_libcoap_dir/lib -lcoap-2-openssl"]
--          AC_CHECK_LIB(
--               [coap-2-openssl], 
--               [coap_startup],
---- 
--2.17.1
--
-diff --git a/package/libest/libest.hash b/package/libest/libest.hash
-index c902a9568f..dc9bc05255 100644
---- a/package/libest/libest.hash
-+++ b/package/libest/libest.hash
+diff --git a/package/sam-ba/sam-ba.hash b/package/sam-ba/sam-ba.hash
+index 10b95c9c0e..252a60dbb8 100644
+--- a/package/sam-ba/sam-ba.hash
++++ b/package/sam-ba/sam-ba.hash
 @@ -1,3 +1,3 @@
- # Computed locally
--sha256  324b3a2b16cd14ea4234d75fa90f08b29509bac9cd3795c44268e22f906ee0ad  libest-3.2.0.tar.gz
-+sha256  83983ac05137fd73586ddcb4874e30689fe694ee9a329797b60b3defc9a87327  libest-f8a6e5b53a5f70e72fe4029981df0693b17cbb32.tar.gz
- sha256  fbdb055f98babf8d86095d6f9b9e34d2ff21a8212e442b8f18bdcb403e44366c  LICENSE
-diff --git a/package/libest/libest.mk b/package/libest/libest.mk
-index d9f3cf87bc..243cd61099 100644
---- a/package/libest/libest.mk
-+++ b/package/libest/libest.mk
-@@ -4,8 +4,8 @@
+ # sha256 locally computed
+-sha256  f66e431f0401b197e80599156ea93aa3aab050bc4d16523c95fae1107ef9101c  sam-ba_3.5-linux_x86_64.tar.gz
++sha256  d295567701914e21318f4c48ff3a57374c7c91f65f0814158e84bb07dd4d07c2  sam-ba_v3.7-linux_x86_64.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.txt
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index 10bea8ef70..0928c8f9ca 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBEST_VERSION = 3.2.0
--LIBEST_SITE = $(call github,cisco,libest,r$(LIBEST_VERSION))
-+LIBEST_VERSION = f8a6e5b53a5f70e72fe4029981df0693b17cbb32
-+LIBEST_SITE = $(call github,cisco,libest,$(LIBEST_VERSION))
- # We don't build examples, so we're not affected by the OpenSSL
- # license
- LIBEST_LICENSE = BSD-3-Clause, MIT, W3C
-@@ -60,6 +60,8 @@ LIBEST_CONF_OPTS += --with-system-libsafec
- LIBEST_DEPENDENCIES += safeclib
- else
- LIBEST_CONF_OPTS += --without-system-libsafec
-+# Falling back to built-in libsafec with --disable-safec
-+LIBEST_CONF_OPTS += --disable-safec
- endif
+-SAM_BA_VERSION = 3.5
+-SAM_BA_SITE = https://www.microchip.com/content/dam/mchp/documents/MPU32/ProductDocuments/SoftwareTools
+-SAM_BA_SOURCE = sam-ba_$(SAM_BA_VERSION)-linux_x86_64.tar.gz
++SAM_BA_VERSION = 3.7
++SAM_BA_SITE = https://ww1.microchip.com/downloads/aemDocuments/documents/MPU32/ProductDocuments/SoftwareLibraries/Firmware
++SAM_BA_SOURCE = sam-ba_v$(SAM_BA_VERSION)-linux_x86_64.tar.gz
+ SAM_BA_LICENSE = GPLv2
+ SAM_BA_LICENSE_FILES = LICENSE.txt
  
- define LIBEST_INSTALL_PC
--- 
-2.36.1
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
