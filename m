@@ -1,87 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 112AAC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Jul 2022 22:25:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D42D5C43334
+	for <buildroot@archiver.kernel.org>; Mon, 18 Jul 2022 23:05:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C6EF83E01;
-	Mon, 18 Jul 2022 22:25:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C6EF83E01
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3244840B51;
+	Mon, 18 Jul 2022 23:05:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3244840B51
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3EkFyJ_k7e3J; Mon, 18 Jul 2022 23:05:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2050B4058D;
+	Mon, 18 Jul 2022 23:05:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2050B4058D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 98CCF1BF37A
+ for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 23:05:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B5CA83E6F
+ for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 23:05:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B5CA83E6F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yh-mX3Wpiese; Mon, 18 Jul 2022 22:25:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9055383A47;
-	Mon, 18 Jul 2022 22:25:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9055383A47
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8CE7B1BF39D
- for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 22:25:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 675216109A
- for <buildroot@lists.busybox.net>; Mon, 18 Jul 2022 22:25:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 675216109A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IM-lCuvofi75 for <buildroot@lists.busybox.net>;
- Mon, 18 Jul 2022 22:25:18 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kDNaZYx2_wzN for <buildroot@lists.busybox.net>;
+ Mon, 18 Jul 2022 23:05:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A6D661078
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6A6D661078
- for <buildroot@buildroot.org>; Mon, 18 Jul 2022 22:25:18 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id h17so19105023wrx.0
- for <buildroot@buildroot.org>; Mon, 18 Jul 2022 15:25:18 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8752A83E63
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com
+ [IPv6:2607:f8b0:4864:20::530])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8752A83E63
+ for <buildroot@buildroot.org>; Mon, 18 Jul 2022 23:05:09 +0000 (UTC)
+Received: by mail-pg1-x530.google.com with SMTP id bh13so11951278pgb.4
+ for <buildroot@buildroot.org>; Mon, 18 Jul 2022 16:05:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
  :content-transfer-encoding;
- bh=6fTBNcJKdlMRhLnwUi5pLvHM4wds2ildVRPvRze4vPY=;
- b=cpvSsk+TEfIDLliJ9otvIBXeZQse3qQDTrUtaJESmsbjtJL0U/97FWiun0pNhai3aO
- WfGIUiWRJvmMlG1SUvn2pJ0ociz/VqNT10FeIR71kt4IdvNsvfadonXNsHMwmCZwtZ9T
- +k2HHx8f/eVd7koERILQV6EKzDx5B3F87fD2FPRQE3j4phxhpFls8k+bkCWeOc45t9MU
- ezwOIJLyJSbGBgr/A6J/iwwe2ZMe//dI1ZAkTVMu7N/aeXpV3Sj0Tlda/D9LWHBYfoAB
- i8MUQiwf7EKWy8d0X2YKsWHPXSfY43/OmgV9HEdVpjst6veGZ8aR+dnbshOgbqd1cw2q
- rOGA==
-X-Gm-Message-State: AJIora/z35z/+VLN7gePwzgR4HycDboEBuCPEflZl6xL4mq64oFg2JgT
- o0tw152HKqlmO///N9KdBaazaKsXXEI=
-X-Google-Smtp-Source: AGRyM1uW0Ck5nNAsduGW10pcZkRTU/3yO4K2TnJMglfqyipnu1+5Vl5jZVPKYi2rYIo0psJNuBddvg==
-X-Received: by 2002:a05:6000:144b:b0:21d:a57d:8000 with SMTP id
- v11-20020a056000144b00b0021da57d8000mr24808286wrx.204.1658183116422; 
- Mon, 18 Jul 2022 15:25:16 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- x5-20020a05600c21c500b003a3188bef63sm7051354wmj.11.2022.07.18.15.25.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Jul 2022 15:25:16 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 00:22:08 +0200
-Message-Id: <20220718222208.3119150-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ bh=7GjjVniihTejbSH7pFTYgVhlKtgl+KwngR/Bj8Dae08=;
+ b=fo8Fam/wV0145Unw7zzVye1/pUe1UlMGl6Nvmvs0rIdTvOY4tguKm8x8sGRYf3sZ4p
+ 5mMDYZESmazO+txxtsRDRQfvUsuC8RE0+k0xWMUhtTjY4BrWFq3UUuoQsG2gXQF/JVnY
+ umAJWuI0u+Y0WvcKyt55eQ5ipinxpJ4VQHXIgRmdO/1iiWhTtzl6//gUtqXsZQsQ/tAa
+ niy/V2o/8Hsftj9BVu5M440AmJOvkj3XLs/0Ubl9+7SlyZ1l6aHDdAf1GO+fHVtxP/lf
+ tPg3PL3oDYC6TFZQ/o6pivYrzqe0kYPbhfYnLYp1hVAt3AWPre8AWFWZ5FTZEmcIQ+qR
+ IFwA==
+X-Gm-Message-State: AJIora8HE79WhZ6lho6RZ5fkKvJD/FVbLaOmXGG/IzYqmrDldoIZnMli
+ Fwpg8l11OmGv0rJuMmkfjN8=
+X-Google-Smtp-Source: AGRyM1u5boAZW200KY964GJuUeV2C45BmOI3otrSwlrPlE1dlbPnsLQ3DY68YFAhwgmglBxtTnDFGA==
+X-Received: by 2002:a05:6a00:23d4:b0:52a:e5c1:caa7 with SMTP id
+ g20-20020a056a0023d400b0052ae5c1caa7mr30449177pfc.62.1658185508785; 
+ Mon, 18 Jul 2022 16:05:08 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+ by smtp.googlemail.com with ESMTPSA id
+ d9-20020aa797a9000000b0052add461d2esm9766716pfq.103.2022.07.18.16.05.07
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 18 Jul 2022 16:05:08 -0700 (PDT)
+Message-ID: <0da32d38-4d49-3c07-b35b-ac7641516b43@gmail.com>
+Date: Mon, 18 Jul 2022 16:05:06 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220706210621.284257-1-f.fainelli@gmail.com>
+ <20220718150145.4867a519@windsurf> <20220718202103.GD2249625@scaer>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220718202103.GD2249625@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6fTBNcJKdlMRhLnwUi5pLvHM4wds2ildVRPvRze4vPY=;
- b=Og7PEQFB/sm6BIv3+KhaFzY+oo9cfEoBYM9vRxzDnxjksI5lz3yInvDpWEhIiwsdAM
- YWnibBhisXUleensxMS/5hAvVKYFNkLqn8rEdZ0NvPqusoAzqOZNWR345U8C0aOkjuN7
- +O8rDQpjKy4N5Qg9NuvZMq7spjg2sbKxE5/KOYZ8Kky8Hmk4P2Z6/LTDY0xrLtlQIhGe
- gpzEkC03L4Rpl8FzCH8AXxr7oV9nO8ywH2jO8Q8YoDDZKI4Wrx/xU34ybfPfofOZ26SS
- X3chr6wfELC4FMfa1E113PN4WkaV0TucFruBZLJXa/GPzOmYXke88Hl8BXgSMfPXfaBi
- AXvQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=7GjjVniihTejbSH7pFTYgVhlKtgl+KwngR/Bj8Dae08=;
+ b=Ddus6EqWxb2OJtgBQQeA5IItASouXCZPCydwPLLXnw7Qr2fUCimhcZcxPIRiBBMSTS
+ +OJ5TuvV/LJRCwhcmQ4fA6ok7UsU7mBH29Gj66aQyo3rYyR0l0HNi+yiff9K33CtLjDD
+ zupaafe3HTpc4QmiP8AncGjxnHALt2/9cNc644XTk/afyRPaKHjaV2dBS0XlCa5kyOYt
+ xWQheG3Y+C8RJ3FaIaEUuqMkl1WjV0/buUw9oWgcmZbMd2ojDigpd9tvv3QQf82o347Z
+ 0Y/P4TmPLsuue3dfw30clqMM4hUvMr44637AUci71EClCq3PtWGy0BGMF6wyOWlQfgBm
+ UIpg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Og7PEQFB
-Subject: [Buildroot] [PATCH 1/1] package/python-smmap2: bump to version 5.0.0
+ header.a=rsa-sha256 header.s=20210112 header.b=Ddus6EqW
+Subject: Re: [Buildroot] [RFC] linux: Make CONFIG_LOCALVERSION_AUTO work
+ with OVERRIDE_SRCDIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,55 +100,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: mmayer@broadcom.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update indentation in hash file (two spaces)
+On 7/18/22 13:21, Yann E. MORIN wrote:
+> Florian, Thomas, All,
+> 
+> On 2022-07-18 15:01 +0200, Thomas Petazzoni via buildroot spake thusly:
+>> On Wed,  6 Jul 2022 14:06:21 -0700
+>> Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>> Linux is able to generate an automic version based upon the git tree
+>>> that is being used which is very useful for making sure that the kernel
+>>> being used is truly the one that we intend to be using.
+>>>
+>>> When using LINUX_OVERRIDE_SRCDIR however, since we do not rsync the .git
+>>> folder, all of the necessary information for scripts/setlocalversion to
+>>> compute the exact version and git commit id is lost.
+>>>
+>>> Add a post rsync hook that copies it over in order to allow 'git
+>>> rev-parse' to work and produce an usable version.
+>>>
+>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>>
+>> Thanks for your patch. What bothers me is that it is a Linux-specific
+>> solution for a problem that isn't Linux-specific. Many other packages
+>> also use Git commands to generate a version string that they embed in
+>> their binaries. So this problem really is global and I'm not sure we
+>> want a Linux-specific fixup for it.
+> 
+> Indeed.
+> 
+>> To me the long term solution is to enable out of tree build of
+>> packages. This way, instead of rsync'ing the code, we would directly
+>> build it from its original location. Some initial work was done in this
+>> area, but it's obviously a much larger endeavor than the fixup you are
+>> proposing. A more immediate alternative would be to also rsync the .git
+>> folder instead of excluding it, but do that globally for all packages
+>> that use override-srcdir. The .git directory was explicitly excluded to
+>> reduce the amount of data to rsync.
+> 
+> And in any case, it is still possible to hack this for now:
+> 
+>   - set LINUX_OVERRIDE_SRC_DIR in your local.mk
+>   - define the post-rsync hook there as well
+> 
+> Note: it is usualy possible to add the hook in local.mk, but it is
+> fragile: if the package itself uses post-rsync hooks, but its first
+> assignment is not an append-assignment +=, then your hook in local.mk is
+> ignored. In practice, we have no package [*] that uses post-rsync hooks,
+> so it shoiuld be safe to do define one in local.mk.
 
-https://github.com/gitpython-developers/smmap/blob/v5.0.0/doc/source/changes.rst
+I suppose that works for now.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-smmap2/python-smmap2.hash | 6 +++---
- package/python-smmap2/python-smmap2.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+What I am really after anyway are out of tree build support for Linux, which ought to be taking care of two birds with the same stone here. Thanks!
 
-diff --git a/package/python-smmap2/python-smmap2.hash b/package/python-smmap2/python-smmap2.hash
-index 9ae758fc62..424fa58e8c 100644
---- a/package/python-smmap2/python-smmap2.hash
-+++ b/package/python-smmap2/python-smmap2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/smmap/json
--md5	61882572be57023980c36f5493523077  smmap-4.0.0.tar.gz
--sha256	7e65386bd122d45405ddf795637b7f7d2b532e7e401d46bbe3fb49b9986d5182  smmap-4.0.0.tar.gz
-+md5  82b22288dcabfe257d4c1f04c83c7fdd  smmap-5.0.0.tar.gz
-+sha256  c840e62059cd3be204b0c9c9f74be2c09d5648eddd4580d9314c3ecde0b30936  smmap-5.0.0.tar.gz
- # Locally computed sha256 checksums
--sha256	88e9d93f708d110b328a834302dd1d5c6afbda530e7721d15d80b3511d86f235  LICENSE
-+sha256  88e9d93f708d110b328a834302dd1d5c6afbda530e7721d15d80b3511d86f235  LICENSE
-diff --git a/package/python-smmap2/python-smmap2.mk b/package/python-smmap2/python-smmap2.mk
-index bcf20206ce..489cf0f758 100644
---- a/package/python-smmap2/python-smmap2.mk
-+++ b/package/python-smmap2/python-smmap2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SMMAP2_VERSION = 4.0.0
-+PYTHON_SMMAP2_VERSION = 5.0.0
- PYTHON_SMMAP2_SOURCE = smmap-$(PYTHON_SMMAP2_VERSION).tar.gz
--PYTHON_SMMAP2_SITE = https://files.pythonhosted.org/packages/dd/d4/2b4f196171674109f0fbb3951b8beab06cd0453c1b247ec0c4556d06648d
-+PYTHON_SMMAP2_SITE = https://files.pythonhosted.org/packages/21/2d/39c6c57032f786f1965022563eec60623bb3e1409ade6ad834ff703724f3
- PYTHON_SMMAP2_SETUP_TYPE = setuptools
- PYTHON_SMMAP2_LICENSE = BSD-3-Clause
- PYTHON_SMMAP2_LICENSE_FILES = LICENSE
+> 
+> [*] of course, there is one exception: uboot, and I wonder if we should
+> not have a better solution nowadays.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+
 -- 
-2.35.1
-
+Florian
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
