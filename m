@@ -1,51 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BEA4C43334
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 20:46:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DC19C43334
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 20:47:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C65FD400B8;
-	Tue, 19 Jul 2022 20:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C65FD400B8
+	by smtp3.osuosl.org (Postfix) with ESMTP id F347660B1D;
+	Tue, 19 Jul 2022 20:47:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F347660B1D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X2PiaNx47EtH; Tue, 19 Jul 2022 20:46:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ePNgIX0FUogX; Tue, 19 Jul 2022 20:47:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A2B1F40CE2;
-	Tue, 19 Jul 2022 20:46:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2B1F40CE2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0392660AF7;
+	Tue, 19 Jul 2022 20:47:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0392660AF7
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4978D1BF267
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 20:46:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CA6D21BF267
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 20:47:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FA54400B8
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 20:46:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FA54400B8
+ by smtp2.osuosl.org (Postfix) with ESMTP id A3E8A40CE3
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 20:47:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3E8A40CE3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ORmrQ6P2epog for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 20:46:00 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B16D40CDB
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 20:46:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B16D40CDB
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id BB05083EE8; Tue, 19 Jul 2022 20:32:31 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 22:45:30 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39a19ee2e269014f00fb9611669c6e7d128351d7
-X-Git-Newrev: 5bdf0799df45b52123faade4a4847859e7591eb6
-X-Patchwork-Hint: ignore
-Message-Id: <20220719203231.BB05083EE8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/kontron/pitx-imx8m: add U-Boot
- 2022.04 patch
+ with ESMTP id A4QQ51o5u0-T for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 20:47:24 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0679340CE2
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0679340CE2
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 20:47:23 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:7136:88c4:7807:8cd3])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 0DFF26012A;
+ Tue, 19 Jul 2022 22:47:18 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 19 Jul 2022 22:47:17 +0200
+Date: Tue, 19 Jul 2022 22:47:17 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Heiko Thiery <heiko.thiery@gmail.com>
+Message-ID: <20220719204717.GO2249625@scaer>
+References: <20220719190051.555180-1-heiko.thiery@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220719190051.555180-1-heiko.thiery@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1658263640;
+ bh=tuhcB5OGJD21twWViK+2BWbuMObGsuFKKv7NRWpzkow=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=ezRRnbZCE4S1v75FJUsObnJ/98T4u5xy+cxLDD/j/Hr13BlldtXBF2kvEHNUPX0rJ
+ UDnkD9k1CbJl9eJah9ZLfYWMNlrCwKcDNFXObKi1tXwcGJXC2YmkUOCDFx76c77Iig
+ 0W92MzPK8+JM/H37OX6O/XO101iHBAr7d5Bo8ZDUHFAyowqhR5bTBdPJf+4cBQQc1R
+ GoszHXOs70ykyiMwOfIfyGYE0OwTi5cjMMHpMclZhJxVQDPh66bsXUD6+e+q4jLxEm
+ H9HzfFdCyqeyrp0dvg2ShdVudoN4+TuHEq9kDMfFNJSWSICYbNTNpBWLtge0Gacp/S
+ UsKFe/riOf21Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ezRRnbZC
+Subject: Re: [Buildroot] [PATCH 1/3] boot/uboot: add
+ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,65 +77,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bdf0799df45b52123faade4a4847859e7591eb6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Heiko, All,
 
-The patch is required to fix an issue in U-Boot for linking
-the mkeficapsule tool against -luuid and -lgnutls.
+On 2022-07-19 21:00 +0200, Heiko Thiery spake thusly:
+> Since U-Boot 2022.04 a host dependency to util-linux (-luuid) is required if
+> the U-Boot board configuration has CONFIG_TOOLS_MKEFICAPSULE enabled. So
+> introduce a new BR U-Boot config option
+> BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX to solve this problem.
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+>  boot/uboot/Config.in | 8 ++++++++
+>  boot/uboot/uboot.mk  | 4 ++++
+>  2 files changed, 12 insertions(+)
+> 
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 91d98c7e63..340b2d17ff 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -190,6 +190,14 @@ config BR2_TARGET_UBOOT_NEEDS_GNUTLS
+>  	  typically the case when the board configuration has
+>  	  CONFIG_TOOLS_MKEFICAPSULE enabled.
+>  
+> +config BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX
+> +	bool "U-Boot needs util-linux"
+> +	help
+> +	  Select this option if your U-Boot board configuration
+> +	  requires util-linux (-luuid) to be available on the host. This is
+> +	  typically the case when the board configuration has
+> +	  CONFIG_TOOLS_MKEFICAPSULE enabled.
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/2720001065
+    $ make check-package
+    boot/uboot/Config.in:197: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...capsule-use-pkg-config-to-get-luuid-and-l.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+Fixed, and applied to master, as well as the two following patches.
+Thanks.
 
-diff --git a/board/kontron/pitx-imx8m/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch b/board/kontron/pitx-imx8m/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch
-new file mode 100644
-index 0000000000..9530a45efe
---- /dev/null
-+++ b/board/kontron/pitx-imx8m/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch
-@@ -0,0 +1,33 @@
-+From f3523977e8f5f6b2173708777001332431ebc609 Mon Sep 17 00:00:00 2001
-+From: Heiko Thiery <heiko.thiery@gmail.com>
-+Date: Tue, 19 Jul 2022 16:17:09 +0200
-+Subject: [PATCH 1/2] tools: mkeficapsule: use pkg-config to get -luuid and -lgnutls
-+
-+Instead of hardcoding -luuid -lgnutls as the flags needed to build
-+mkeficapsule, use pkg-config when available.
-+
-+We gracefully fallback on the previous behavior of hardcoding -luuid
-+-lgnutls if pkg-config is not available or fails with an error.
-+
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+---
-+ tools/Makefile | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/tools/Makefile b/tools/Makefile
-+index 9f2339666a..9f6b282ad8 100644
-+--- a/tools/Makefile
-++++ b/tools/Makefile
-+@@ -242,7 +242,8 @@ hostprogs-$(CONFIG_MIPS) += mips-relocs
-+ hostprogs-$(CONFIG_ASN1_COMPILER)	+= asn1_compiler
-+ HOSTCFLAGS_asn1_compiler.o = -idirafter $(srctree)/include
-+ 
-+-HOSTLDLIBS_mkeficapsule += -lgnutls -luuid
-++HOSTLDLIBS_mkeficapsule += \
-++	$(shell pkg-config --libs gnutls uuid 2> /dev/null || echo "-lgnutls -luuid")
-+ hostprogs-$(CONFIG_TOOLS_MKEFICAPSULE) += mkeficapsule
-+ 
-+ # We build some files with extra pedantic flags to try to minimize things
-+-- 
-+2.30.2
-+
+Regards,
+Yann E. MORIN.
+
+>  config BR2_TARGET_UBOOT_NEEDS_ATF_BL31
+>  	bool "U-Boot needs ATF BL31"
+>  	depends on BR2_TARGET_ARM_TRUSTED_FIRMWARE
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 5808e30818..70d4d585f7 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -231,6 +231,10 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_GNUTLS),y)
+>  UBOOT_DEPENDENCIES += host-gnutls
+>  endif
+>  
+> +ifeq ($(BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX),y)
+> +UBOOT_DEPENDENCIES += host-util-linux
+> +endif
+> +
+>  # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
+>  # legal-info finds it
+>  define UBOOT_COPY_OLD_LICENSE_FILE
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
