@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76745CCA47F
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:35:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCE61C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:35:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23C4A82D57;
-	Tue, 19 Jul 2022 15:35:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23C4A82D57
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D7B2409E5;
+	Tue, 19 Jul 2022 15:35:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D7B2409E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ePNDJ5lk4kCm; Tue, 19 Jul 2022 15:35:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DWG1k6hFQ3vL; Tue, 19 Jul 2022 15:35:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAC2982CFA;
-	Tue, 19 Jul 2022 15:35:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAC2982CFA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 03ADD1BF4D7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D8D9409F9;
+	Tue, 19 Jul 2022 15:35:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D8D9409F9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 80D4A1BF9B5
  for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B613360B7D
+ by smtp2.osuosl.org (Postfix) with ESMTP id CBEE240C6D
  for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B613360B7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBEE240C6D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c4p0PyQDCZt4 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6F3V88iYz9Zl for <buildroot@lists.busybox.net>;
  Tue, 19 Jul 2022 15:34:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F0B7F61041
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 15:34:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0B7F61041
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13AAE40C63
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 15:34:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13AAE40C63
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 00EA583D50; Tue, 19 Jul 2022 15:20:49 +0000 (UTC)
+ id 1329483D5F; Tue, 19 Jul 2022 15:20:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 17:05:38 +0200
+Date: Tue, 19 Jul 2022 17:09:06 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 9451dd8dc09ba04d9f79f7c7722148abe66bcc60
-X-Git-Newrev: 47718f7a1bf946e8cfd53cc7622ad14a8f305d75
+X-Git-Oldrev: 3bb7408b5feda6665892b33514d02a5fce000e8b
+X-Git-Newrev: 2f0a8aa0c101e07e7cca3528831e16bc88739c18
 X-Patchwork-Hint: ignore
-Message-Id: <20220719152050.00EA583D50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libeastl: needs
- threads
+Message-Id: <20220719152050.1329483D5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/iptables: drop
+ duplicated dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47718f7a1bf946e8cfd53cc7622ad14a8f305d75
+commit: https://git.buildroot.net/buildroot/commit/?id=2f0a8aa0c101e07e7cca3528831e16bc88739c18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-libeastl needs threads since its addition in commit
-ed9ddaafb2c4d3ac44e46390248f5c9af08076b1 and
-https://github.com/electronicarts/EASTL/commit/800bc26659f834354e38ee3de4c7300e739ed255:
-
-In file included from /home/autobuild/autobuild/instance-7/output-1/build/libeastl-45469730d641868ce05433fff2e199510c7d45c3/source/thread_support.cpp:7:
-/home/autobuild/autobuild/instance-7/output-1/build/libeastl-45469730d641868ce05433fff2e199510c7d45c3/include/EASTL/internal/thread_support.h:37:18: fatal error: pthread.h: No such file or directory
-   37 |         #include <pthread.h>
-      |                  ^~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/54ff018467d157530bde4d35602fd1820d9eb348
+libnetfilter_conntrack dependency is wrongly duplicated since commit
+b835171cf9db23095c669b872dbaa15fc1e99898
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Peter: drop from "main" _DEPENDENCIES instead]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4c478bb0554e8cd8faf62fe2d3a6dc2e68fa7c7b)
+(cherry picked from commit 857447d2d29912abfc11a79854f1299096d7d34a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libeastl/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/iptables/iptables.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/libeastl/Config.in b/package/libeastl/Config.in
-index 5abea8f810..738b293be4 100644
---- a/package/libeastl/Config.in
-+++ b/package/libeastl/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_LIBEASTL
- 	depends on BR2_PACKAGE_LIBEASTL_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  EASTL stands for Electronic Arts Standard Template
- 	  Library. It is a C++ template library of containers,
-@@ -21,6 +22,7 @@ config BR2_PACKAGE_LIBEASTL
- 
- 	  https://github.com/electronicarts/EASTL
- 
--comment "libeastl needs a toolchain w/ C++, gcc >= 4.9"
-+comment "libeastl needs a toolchain w/ C++, threads, gcc >= 4.9"
- 	depends on BR2_PACKAGE_LIBEASTL_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 555bb384fd..f6c1248057 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -8,8 +8,7 @@ IPTABLES_VERSION = 1.8.7
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = https://netfilter.org/projects/iptables/files
+ IPTABLES_INSTALL_STAGING = YES
+-IPTABLES_DEPENDENCIES = host-pkgconf \
+-	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
++IPTABLES_DEPENDENCIES = host-pkgconf
+ IPTABLES_LICENSE = GPL-2.0
+ IPTABLES_LICENSE_FILES = COPYING
+ IPTABLES_CPE_ID_VENDOR = netfilter
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
