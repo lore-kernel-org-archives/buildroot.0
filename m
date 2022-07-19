@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C47B5C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:36:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BE73C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:36:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77815401F8;
-	Tue, 19 Jul 2022 15:36:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77815401F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0631E611BD;
+	Tue, 19 Jul 2022 15:36:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0631E611BD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0GmJzddzj97L; Tue, 19 Jul 2022 15:36:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VM9JbfUFnbdy; Tue, 19 Jul 2022 15:36:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E75640C63;
-	Tue, 19 Jul 2022 15:36:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E75640C63
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A3A9F1BF4D7
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22A4460B7D;
+	Tue, 19 Jul 2022 15:36:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22A4460B7D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6DA471BF4D7
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C6FA409E5
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C6FA409E5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4806861041
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4806861041
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OAUkoowHLVsN for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 15:34:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC2174050F
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 15:34:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC2174050F
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EC32E83D5C; Tue, 19 Jul 2022 15:20:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YleH_Qc2JRQh for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 15:34:41 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 037B060B7D
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 037B060B7D
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 15:34:40 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 22C1B200009;
+ Tue, 19 Jul 2022 15:34:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oDpF5-002r8D-JN; Tue, 19 Jul 2022 17:34:35 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 17:03:58 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d5c522a49d2869f201c0e71253d36909b5436936
-X-Git-Newrev: 9451dd8dc09ba04d9f79f7c7722148abe66bcc60
-X-Patchwork-Hint: ignore
-Message-Id: <20220719152049.EC32E83D5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/tor: fix LibreSSL
- build
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20220616175549.64686-1-bernd.kuhls@t-online.de>
+Date: Tue, 19 Jul 2022 17:34:35 +0200
+In-Reply-To: <20220616175549.64686-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 16 Jun 2022 19:55:49 +0200")
+Message-ID: <874jzd3ylw.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: bump version to 14.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,198 +63,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9451dd8dc09ba04d9f79f7c7722148abe66bcc60
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/71e/71e03ee8f6e6e5a235556b85a360cbad23a22897/
-http://autobuild.buildroot.net/results/4a9/4a93bea0b83eca133ace3e3cfd2b5cb60b691d6e/
-http://autobuild.buildroot.net/results/6b8/6b8ab9c5253586426b33d2cba20e7f9f992dbee9/
-http://autobuild.buildroot.net/results/8a9/8a9c19878c2d599de6aa3bb3a849b1701f50a829/
+ > Release notes:
+ > https://www.postgresql.org/about/news/postgresql-144-released-2470/
 
-and many others
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 23e1e04d5448e17da7ec0a65199740ad1cf923a0)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...tch-src_lib_crypt_ops_crypto_dh_openssl_c.patch | 67 ++++++++++++++++++++++
- ...ch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch | 58 +++++++++++++++++++
- .../0003-patch-src_lib_tls_x509_openssl_c.patch    | 22 +++++++
- 3 files changed, 147 insertions(+)
+Committed to 2022.05.x and 2022.02.x, thanks.
 
-diff --git a/package/tor/0001-patch-src_lib_crypt_ops_crypto_dh_openssl_c.patch b/package/tor/0001-patch-src_lib_crypt_ops_crypto_dh_openssl_c.patch
-new file mode 100644
-index 0000000000..2df7c6b6a7
---- /dev/null
-+++ b/package/tor/0001-patch-src_lib_crypt_ops_crypto_dh_openssl_c.patch
-@@ -0,0 +1,67 @@
-+Fix build with opaque structs in LibreSSL 3.5
-+
-+Downloaded from OpenBSD ports:
-+http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tor/patches/patch-src_lib_crypt_ops_crypto_dh_openssl_c?rev=1.2&content-type=text/x-cvsweb-markup
-+
-+Patch series was sent upstream:
-+https://forum.torproject.net/t/tor-relays-openbsd-stable-net-tor-and-0-4-7-7/3244
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: src/lib/crypt_ops/crypto_dh_openssl.c
-+--- a/src/lib/crypt_ops/crypto_dh_openssl.c.orig
-++++ b/src/lib/crypt_ops/crypto_dh_openssl.c
-+@@ -60,7 +60,7 @@ crypto_validate_dh_params(const BIGNUM *p, const BIGNU
-+   /* Copy into a temporary DH object, just so that DH_check() can be called. */
-+   if (!(dh = DH_new()))
-+       goto out;
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   BIGNUM *dh_p, *dh_g;
-+   if (!(dh_p = BN_dup(p)))
-+     goto out;
-+@@ -223,7 +223,7 @@ new_openssl_dh_from_params(BIGNUM *p, BIGNUM *g)
-+     goto err;
-+   }
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+ 
-+   if (!DH_set0_pqg(res_dh, dh_p, NULL, dh_g)) {
-+     goto err;
-+@@ -276,7 +276,7 @@ crypto_dh_get_bytes(crypto_dh_t *dh)
-+ int
-+ crypto_dh_generate_public(crypto_dh_t *dh)
-+ {
-+-#ifndef OPENSSL_1_1_API
-++#if !defined(OPENSSL_1_1_API) && !defined(LIBRESSL_VERSION_NUMBER)
-+  again:
-+ #endif
-+   if (!DH_generate_key(dh->dh)) {
-+@@ -286,7 +286,7 @@ crypto_dh_generate_public(crypto_dh_t *dh)
-+     return -1;
-+     /* LCOV_EXCL_STOP */
-+   }
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   /* OpenSSL 1.1.x doesn't appear to let you regenerate a DH key, without
-+    * recreating the DH object.  I have no idea what sort of aliasing madness
-+    * can occur here, so do the check, and just bail on failure.
-+@@ -327,7 +327,7 @@ crypto_dh_get_public(crypto_dh_t *dh, char *pubkey, si
-+ 
-+   const BIGNUM *dh_pub;
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   const BIGNUM *dh_priv;
-+   DH_get0_key(dh->dh, &dh_pub, &dh_priv);
-+ #else
-+@@ -338,7 +338,7 @@ crypto_dh_get_public(crypto_dh_t *dh, char *pubkey, si
-+     if (crypto_dh_generate_public(dh)<0)
-+       return -1;
-+     else {
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+       DH_get0_key(dh->dh, &dh_pub, &dh_priv);
-+ #else
-+       dh_pub = dh->dh->pub_key;
-diff --git a/package/tor/0002-patch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch b/package/tor/0002-patch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch
-new file mode 100644
-index 0000000000..1354a4221e
---- /dev/null
-+++ b/package/tor/0002-patch-src_lib_crypt_ops_crypto_rsa_openssl_c.patch
-@@ -0,0 +1,58 @@
-+Fix build with opaque structs in LibreSSL 3.5
-+
-+Downloaded from OpenBSD ports:
-+http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tor/patches/patch-src_lib_crypt_ops_crypto_rsa_openssl_c?rev=1.2&content-type=text/x-cvsweb-markup
-+
-+Patch series was sent upstream:
-+https://forum.torproject.net/t/tor-relays-openbsd-stable-net-tor-and-0-4-7-7/3244
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: src/lib/crypt_ops/crypto_rsa_openssl.c
-+--- a/src/lib/crypt_ops/crypto_rsa_openssl.c.orig
-++++ b/src/lib/crypt_ops/crypto_rsa_openssl.c
-+@@ -47,7 +47,7 @@ struct crypto_pk_t
-+ int
-+ crypto_pk_key_is_private(const crypto_pk_t *k)
-+ {
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   if (!k || !k->key)
-+     return 0;
-+ 
-+@@ -212,7 +212,7 @@ crypto_pk_public_exponent_ok(const crypto_pk_t *env)
-+ 
-+   const BIGNUM *e;
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   const BIGNUM *n, *d;
-+   RSA_get0_key(env->key, &n, &e, &d);
-+ #else
-+@@ -242,7 +242,7 @@ crypto_pk_cmp_keys(const crypto_pk_t *a, const crypto_
-+   const BIGNUM *a_n, *a_e;
-+   const BIGNUM *b_n, *b_e;
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   const BIGNUM *a_d, *b_d;
-+   RSA_get0_key(a->key, &a_n, &a_e, &a_d);
-+   RSA_get0_key(b->key, &b_n, &b_e, &b_d);
-+@@ -279,7 +279,7 @@ crypto_pk_num_bits(crypto_pk_t *env)
-+   tor_assert(env);
-+   tor_assert(env->key);
-+ 
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+   /* It's so stupid that there's no other way to check that n is valid
-+    * before calling RSA_bits().
-+    */
-+@@ -572,7 +572,7 @@ static bool
-+ rsa_private_key_too_long(RSA *rsa, int max_bits)
-+ {
-+   const BIGNUM *n, *e, *p, *q, *d, *dmp1, *dmq1, *iqmp;
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+ 
-+ #if OPENSSL_VERSION_NUMBER >= OPENSSL_V_SERIES(1,1,1)
-+   n = RSA_get0_n(rsa);
-diff --git a/package/tor/0003-patch-src_lib_tls_x509_openssl_c.patch b/package/tor/0003-patch-src_lib_tls_x509_openssl_c.patch
-new file mode 100644
-index 0000000000..fe8586357a
---- /dev/null
-+++ b/package/tor/0003-patch-src_lib_tls_x509_openssl_c.patch
-@@ -0,0 +1,22 @@
-+Fix build with opaque structs in LibreSSL 3.5
-+
-+Downloaded from OpenBSD ports:
-+http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tor/patches/patch-src_lib_tls_x509_openssl_c?rev=1.2&content-type=text/x-cvsweb-markup
-+
-+Patch series was sent upstream:
-+https://forum.torproject.net/t/tor-relays-openbsd-stable-net-tor-and-0-4-7-7/3244
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: src/lib/tls/x509_openssl.c
-+--- a/src/lib/tls/x509_openssl.c.orig
-++++ b/src/lib/tls/x509_openssl.c
-+@@ -329,7 +329,7 @@ tor_tls_cert_is_valid(int severity,
-+   cert_key = X509_get_pubkey(cert->cert);
-+   if (check_rsa_1024 && cert_key) {
-+     RSA *rsa = EVP_PKEY_get1_RSA(cert_key);
-+-#ifdef OPENSSL_1_1_API
-++#if defined(OPENSSL_1_1_API) || defined(LIBRESSL_VERSION_NUMBER)
-+     if (rsa && RSA_bits(rsa) == 1024) {
-+ #else
-+     if (rsa && BN_num_bits(rsa->n) == 1024) {
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
