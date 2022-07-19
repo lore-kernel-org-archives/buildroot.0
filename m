@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A74B2C43334
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 16:37:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F31F4C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 17:01:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F25434094E;
-	Tue, 19 Jul 2022 16:37:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F25434094E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4UZj17mYUG75; Tue, 19 Jul 2022 16:37:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85C7240923;
-	Tue, 19 Jul 2022 16:37:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85C7240923
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 71A1C1BF417
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59EE840133
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59EE840133
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C8C7404DA;
+	Tue, 19 Jul 2022 17:01:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C8C7404DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4c8zVV3zLqok for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 16:36:58 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w3GnTeVt9cam; Tue, 19 Jul 2022 17:01:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D50440574;
+	Tue, 19 Jul 2022 17:01:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D50440574
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B99C41BF417
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:01:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94008410E8
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:01:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94008410E8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I-lkCiRF4wuv for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 17:01:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77FC340126
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 16:36:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77FC340126
+ by smtp4.osuosl.org (Postfix) with ESMTP id 48DE1410B6
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 17:01:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48DE1410B6
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6439783DFD; Tue, 19 Jul 2022 16:23:30 +0000 (UTC)
+ id 2714183E23; Tue, 19 Jul 2022 16:47:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 18:35:44 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: dc13edb0d58b9075e8cd3bbc6dc929f38b606911
-X-Git-Newrev: 97052fb2db81bb8d8856cea2225907759023d6e6
+Date: Tue, 19 Jul 2022 19:01:21 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 2d021a7e7163d13b604d508602288e7190ab63dc
+X-Git-Newrev: 1f484313c5ae7a327d0e9f7e7bd47e2bcef9c676
 X-Patchwork-Hint: ignore
-Message-Id: <20220719162330.6439783DFD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libmodsecurity:
- needs dynamic library with libcurl and mbedtls
+Message-Id: <20220719164757.2714183E23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libtalloc: fix
+ build wihout SSP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,70 +63,161 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97052fb2db81bb8d8856cea2225907759023d6e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1f484313c5ae7a327d0e9f7e7bd47e2bcef9c676
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-libmodsecurity embeds several mbedtls source files since version 3.0.0
-and
-https://github.com/SpiderLabs/ModSecurity/commit/a3ae686f2555bdacbfc9e1889ad05065711a165d
-resulting in the following static build failure if curl is built with
-mbedtls support:
+Fix the following build failure without SSP raised since the addition of
+the package in commit f0d37e275a915539a581c4ac7fd066eddc41fc8c:
 
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real: /home/buildroot/autobuild/instance-0/output-1/host/bin/../m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libmbedcrypto.a(md5.c.o): in function `mbedtls_md5_free':
-md5.c:(.text+0x16): multiple definition of `mbedtls_md5_free'; ../../src/.libs/libmodsecurity.a(libmbedtls_la-md5.o):md5.c:(.text+0x16): first defined here
+/home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/i686-buildroot-linux-musl/9.4.0/../../../../i686-buildroot-linux-musl/bin/ld: talloc.c.5.o: in function `_vasprintf_tc':
+talloc.c:(.text+0x427d): undefined reference to `__stack_chk_fail_local'
 
 Fixes:
- - http://autobuild.buildroot.org/results/98472a3a41cdbcb3d02289a437074a267f4b2e8e
+ - http://autobuild.buildroot.org/results/e221bde25c7622db99761d0adcd56663296beb15
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 9fc652a373034118535397fdd4042ab9f8fd7adf)
+(cherry picked from commit 6a8dae6ddd5f23c391ff4dd1c63cb6f5bb010417)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmodsecurity/Config.in    | 5 +++++
- package/nginx-modsecurity/Config.in | 5 +++++
- 2 files changed, 10 insertions(+)
+ ...wafsamba-add-disable-stack-protector-opti.patch | 116 +++++++++++++++++++++
+ package/libtalloc/libtalloc.mk                     |   1 +
+ 2 files changed, 117 insertions(+)
 
-diff --git a/package/libmodsecurity/Config.in b/package/libmodsecurity/Config.in
-index 87f7a9c103..f65ab3de93 100644
---- a/package/libmodsecurity/Config.in
-+++ b/package/libmodsecurity/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_LIBMODSECURITY
- 	bool "libmodsecurity"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# libmodsecurity embeds several mbedtls source files
-+	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS)
- 	select BR2_PACKAGE_PCRE
- 	help
- 	  Libmodsecurity is one component of the ModSecurity
-@@ -17,3 +19,6 @@ config BR2_PACKAGE_LIBMODSECURITY
+diff --git a/package/libtalloc/0001-buildtools-wafsamba-add-disable-stack-protector-opti.patch b/package/libtalloc/0001-buildtools-wafsamba-add-disable-stack-protector-opti.patch
+new file mode 100644
+index 0000000000..839479a3fa
+--- /dev/null
++++ b/package/libtalloc/0001-buildtools-wafsamba-add-disable-stack-protector-opti.patch
+@@ -0,0 +1,116 @@
++From 5885ed8e6db7648e6842d9811aace7edc4e8aba7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 20 Apr 2022 11:16:52 +0200
++Subject: [PATCH] buildtools/wafsamba: add --disable-stack-protector option
++
++Allow the user to disable stack-protector through
++--disable-stack-protector to avoid the following build failure with
++libtalloc on embedded toolchains which don't support stack-protector:
++
++/home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/i686-buildroot-linux-musl/9.4.0/../../../../i686-buildroot-linux-musl/bin/ld: talloc.c.5.o: in function `_vasprintf_tc':
++talloc.c:(.text+0x427d): undefined reference to `__stack_chk_fail_local'
++
++This build failure is raised since
++https://gitlab.com/ffontaine/samba/-/commit/38e97f8b52e85bdfcf2d74a4fb3c848fa46ba371
++because stack-protector is enabled on libtalloc despite the fact that
++libssp is not available:
++
++Checking if compiler accepts -fstack-protector-strong                                           : yes
++
++Fixes:
++ - http://autobuild.buildroot.org/results/e221bde25c7622db99761d0adcd56663296beb15
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.com/samba-team/samba/-/merge_requests/2493]
++---
++ buildtools/wafsamba/samba_autoconf.py | 49 ++++++++++++++-------------
++ buildtools/wafsamba/wscript           |  3 ++
++ 2 files changed, 28 insertions(+), 24 deletions(-)
++
++diff --git a/buildtools/wafsamba/samba_autoconf.py b/buildtools/wafsamba/samba_autoconf.py
++index 78927d85193..23a995e1c34 100644
++--- a/buildtools/wafsamba/samba_autoconf.py
+++++ b/buildtools/wafsamba/samba_autoconf.py
++@@ -703,9 +703,28 @@ def SAMBA_CONFIG_H(conf, path=None):
++     if not IN_LAUNCH_DIR(conf):
++         return
++ 
++-    # we need to build real code that can't be optimized away to test
++-    stack_protect_list = ['-fstack-protector-strong', '-fstack-protector']
++-    for stack_protect_flag in stack_protect_list:
+++    if not Options.options.disable_stack_protector:
+++        # we need to build real code that can't be optimized away to test
+++        stack_protect_list = ['-fstack-protector-strong', '-fstack-protector']
+++        for stack_protect_flag in stack_protect_list:
+++            flag_supported = conf.check(fragment='''
+++                                        #include <stdio.h>
+++
+++                                        int main(void)
+++                                        {
+++                                            char t[100000];
+++                                            while (fgets(t, sizeof(t), stdin));
+++                                            return 0;
+++                                        }
+++                                        ''',
+++                                        execute=0,
+++                                        cflags=[ '-Werror', '-Wp,-D_FORTIFY_SOURCE=2', stack_protect_flag],
+++                                        mandatory=False,
+++                                        msg='Checking if compiler accepts %s' % (stack_protect_flag))
+++            if flag_supported:
+++                conf.ADD_CFLAGS('%s' % (stack_protect_flag))
+++                break
+++
++         flag_supported = conf.check(fragment='''
++                                     #include <stdio.h>
++ 
++@@ -717,29 +736,11 @@ def SAMBA_CONFIG_H(conf, path=None):
++                                     }
++                                     ''',
++                                     execute=0,
++-                                    cflags=[ '-Werror', '-Wp,-D_FORTIFY_SOURCE=2', stack_protect_flag],
+++                                    cflags=[ '-Werror', '-fstack-clash-protection'],
++                                     mandatory=False,
++-                                    msg='Checking if compiler accepts %s' % (stack_protect_flag))
+++                                    msg='Checking if compiler accepts -fstack-clash-protection')
++         if flag_supported:
++-            conf.ADD_CFLAGS('%s' % (stack_protect_flag))
++-            break
++-
++-    flag_supported = conf.check(fragment='''
++-                                #include <stdio.h>
++-
++-                                int main(void)
++-                                {
++-                                    char t[100000];
++-                                    while (fgets(t, sizeof(t), stdin));
++-                                    return 0;
++-                                }
++-                                ''',
++-                                execute=0,
++-                                cflags=[ '-Werror', '-fstack-clash-protection'],
++-                                mandatory=False,
++-                                msg='Checking if compiler accepts -fstack-clash-protection')
++-    if flag_supported:
++-        conf.ADD_CFLAGS('-fstack-clash-protection')
+++            conf.ADD_CFLAGS('-fstack-clash-protection')
++ 
++     if Options.options.debug:
++         conf.ADD_CFLAGS('-g', testflags=True)
++diff --git a/buildtools/wafsamba/wscript b/buildtools/wafsamba/wscript
++index 8729b0829da..d75bb3b1c0c 100644
++--- a/buildtools/wafsamba/wscript
+++++ b/buildtools/wafsamba/wscript
++@@ -165,6 +165,9 @@ Currently the only tested value is 'smbtorture,smbd/smbd' for Samba'''),
++     gr.add_option('--disable-warnings-as-errors',
++                    help=("Do not treat all warnings as errors (disable -Werror)"),
++                    action="store_true", dest='disable_warnings_as_errors', default=False)
+++    gr.add_option('--disable-stack-protector',
+++                   help=("Disable stack-protector"),
+++                   action="store_true", dest='disable_stack_protector', default=False)
++     opt.add_option('--enable-coverage',
++                    help=("enable options necessary for code coverage "
++                          "reporting on selftest (default=no)"),
++-- 
++2.35.1
++
+diff --git a/package/libtalloc/libtalloc.mk b/package/libtalloc/libtalloc.mk
+index 79bcf94947..8cba699ea1 100644
+--- a/package/libtalloc/libtalloc.mk
++++ b/package/libtalloc/libtalloc.mk
+@@ -20,6 +20,7 @@ LIBTALLOC_INSTALL_STAGING = YES
+ # libtalloc since it's optional.
+ LIBTALLOC_CONF_OPTS += --cross-compile \
+ 		--cross-answers=$(@D)/cache.txt \
++		--disable-stack-protector \
+ 		--hostcc=gcc \
+ 		--with-libiconv=$(STAGING_DIR)/usr
  
- comment "libmodsecurity needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "libmodsecurity needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
-diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
-index b1fcbadd7a..5cbe57a866 100644
---- a/package/nginx-modsecurity/Config.in
-+++ b/package/nginx-modsecurity/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
- 	depends on BR2_PACKAGE_NGINX_HTTP
- 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libmodsecurity
-+	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS) # libmodsecurity
- 	select BR2_PACKAGE_LIBMODSECURITY
- 	help
- 	  The ModSecurity-nginx connector is the connection
-@@ -14,3 +15,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
- comment "nginx-modsecurity needs a toolchain w/ C++, threads"
- 	depends on BR2_PACKAGE_NGINX_HTTP
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "nginx-modsecurity needs a toolchain w/ dynamic library"
-+	depends on BR2_PACKAGE_NGINX_HTTP
-+	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
