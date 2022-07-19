@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAC76C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:35:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8E4DC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B93B4148B;
-	Tue, 19 Jul 2022 15:35:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B93B4148B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 559F640C61;
+	Tue, 19 Jul 2022 15:35:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 559F640C61
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O8KKwZ-W-CP0; Tue, 19 Jul 2022 15:35:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SWnsOIONAwDa; Tue, 19 Jul 2022 15:35:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC1B7410B3;
-	Tue, 19 Jul 2022 15:35:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC1B7410B3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8AD741BF9BA
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C0A9401F8;
+	Tue, 19 Jul 2022 15:35:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C0A9401F8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C7E21BF4D7
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 44BE440936
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44BE440936
+ by smtp3.osuosl.org (Postfix) with ESMTP id D004761041
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:34:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D004761041
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QniSdRonJP6p for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ADpPoXNoI1CX for <buildroot@lists.busybox.net>;
  Tue, 19 Jul 2022 15:34:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22FC4409F9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1AE0D611A0
  for <buildroot@buildroot.org>; Tue, 19 Jul 2022 15:34:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22FC4409F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AE0D611A0
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2667183D5A; Tue, 19 Jul 2022 15:20:50 +0000 (UTC)
+ id 2F4C183D50; Tue, 19 Jul 2022 15:20:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 17:10:59 +0200
+Date: Tue, 19 Jul 2022 17:34:12 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 9363299e19a9b2a257edc0715e9f5b66e7a114d6
-X-Git-Newrev: 6ad9faf26a7b339d592329b022589dc56fb828f8
+X-Git-Oldrev: 6ad9faf26a7b339d592329b022589dc56fb828f8
+X-Git-Newrev: 4f8f9c1506bd857acc029b8387abd6b80d4d4f03
 X-Patchwork-Hint: ignore
-Message-Id: <20220719152050.2667183D5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/avahi: fix GNUism
- in S05avahi-setup.sh
+Message-Id: <20220719152050.2F4C183D50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/postgresql: bump
+ version to 14.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,59 +58,52 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4125593804292313403=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4125593804292313403==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=6ad9faf26a7b339d592329b022589dc56fb828f8
+commit: https://git.buildroot.net/buildroot/commit/?id=4f8f9c1506bd857acc029b8387abd6b80d4d4f03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-This script uses "chown user.group" instead of the POSIX "chown
-user:group".  The first syntax is a deprecated GNU extension.
-Since coreutils 9.1, chown started issuing a warning when this syntax is
-used¹.
+Release notes:
+https://www.postgresql.org/about/news/postgresql-144-released-2470/
 
-The result is that if both avahi and coreutils are enabled, this message
-appears during boot:
-
-chown: warning: '.' should be ':': 'avahi.avahi'
-
-[1] https://git.savannah.gnu.org/cgit/gnulib.git/commit/lib/userspec.c?id=23cca8268d21f5d58ed0209002d5673d0518c426
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ccea032c75a5a7ddbdc5b7b14957b2b4683b94fc)
+(cherry picked from commit 2579cc2cb32032c24b5f62946b05837a60340b3b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/avahi/S05avahi-setup.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/avahi/S05avahi-setup.sh b/package/avahi/S05avahi-setup.sh
-index 90ccbceacc..2f53a192e4 100644
---- a/package/avahi/S05avahi-setup.sh
-+++ b/package/avahi/S05avahi-setup.sh
-@@ -5,7 +5,7 @@ case "$1" in
- 	if [ ! -d /tmp/avahi-autoipd ]; then
- 	    rm -rf /tmp/avahi-autoipd
- 	    mkdir /tmp/avahi-autoipd
--	    chown avahi.avahi /tmp/avahi-autoipd
-+	    chown avahi:avahi /tmp/avahi-autoipd
- 	fi
- 	;;
-     stop) ;;
-
---===============4125593804292313403==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 8ebe7b58fa..b2e94195e1 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v14.3/postgresql-14.3.tar.bz2.sha256
+-sha256  279057368bf59a919c05ada8f95c5e04abb43e74b9a2a69c3d46a20e07a9af38  postgresql-14.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v14.4/postgresql-14.4.tar.bz2.sha256
++sha256  c23b6237c5231c791511bdc79098617d6852e9e3bdf360efd8b5d15a1a3d8f6a  postgresql-14.4.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 45049f669d..c893f8026c 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 14.3
++POSTGRESQL_VERSION = 14.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4125593804292313403==--
