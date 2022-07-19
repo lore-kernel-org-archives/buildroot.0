@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEE2BC43334
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 13:17:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B9DEC43334
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 13:17:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 385F640C44;
-	Tue, 19 Jul 2022 13:17:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 385F640C44
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8916B41552;
+	Tue, 19 Jul 2022 13:17:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8916B41552
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wy4jHivLrcd6; Tue, 19 Jul 2022 13:17:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X-2xE5YHUs82; Tue, 19 Jul 2022 13:17:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4170B40C50;
-	Tue, 19 Jul 2022 13:17:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4170B40C50
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C98E1BF31E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 604804152D;
+	Tue, 19 Jul 2022 13:17:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 604804152D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 93C881BF31E
  for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 13:17:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB51181D16
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 13:17:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB51181D16
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DA374152D
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 13:17:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DA374152D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EJMc5kRXjBxo for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 13:17:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wABWAADrllpr for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 13:17:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C116981CA5
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C116981CA5
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 13:17:02 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- c187-20020a1c35c4000000b003a30d88fe8eso7799820wma.2
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 06:17:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC2B541497
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EC2B541497
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 13:17:03 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id h17so21608743wrx.0
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 06:17:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=2Cy7ZMCelk/1o8/yqirSwLlvu9tI0+EgFOEBPmszDio=;
- b=awP81STY+cIqsjQMRylVNCPHvXk9TweMjWqYFTXP6sgLI4S8bRwF31/I353tGHoUKx
- 3Gve8DMCliKkTzDg9hyGEzFHSRb2xho26L9s47k+QuHLrIueEVapxHSK53vCHIfhFUMS
- 7rdCYmdvuZXKRgIObT/mMr49IdDLPgMgk+rA/+AO6ID4Mn1C+G2Wkqbdddb51cabKFSp
- ok+C5FPE9oEkjm9YVB9NNMftCwbRjdbH1/tD+RQ+fxSaifKWQPDAbpKd0JnMehLglOYx
- y8LeN1Ag32NnBDp2GEKY+uPjJexaTVI0Q1Qk9je3qAh43UdszluVBH8Yw6P1MT7lfoRU
- QioA==
-X-Gm-Message-State: AJIora+1V3pBVyP2MeH0t8hSuO9VFX8W143z5Ev+0+Qi4JqDfHxn9lR3
- FEqCUIlQE6R65iKump8Tu8pM4zQCk/4=
-X-Google-Smtp-Source: AGRyM1tGD8o5PFINr/XjogjWlpeYBAQ4QJ565kIrbB6upqlHOCzPeU74T8Kmb4yYjlOqXIar4LM7Rw==
-X-Received: by 2002:a7b:cc14:0:b0:3a3:2213:e653 with SMTP id
- f20-20020a7bcc14000000b003a32213e653mr3487313wmh.52.1658236620804; 
- Tue, 19 Jul 2022 06:17:00 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=zgXnbc/OFty3xWCbsXwnamU5DQ4mNA97jbIIykb49Pg=;
+ b=vKeyYxCgHp5sLKRNy3liSgTtKyFB+LnLgBtnhJC28m0jzd5vOhKz53Ex/YVx74mwSA
+ CnJghUhAZQIzGQ+u9IMKoZAUCryRRhMy/8ZcY0x8DNbR5pVEWFYDRQuBdovJiAEbdUj9
+ hoS9ua1uN+H+IRIAKgdcYmsbMP4Bg/fPjcjwr2z+hKRGFuH1AUVTTJiYgFMgYtXnbrOS
+ Ofd0r2OXf5ViicQQPQBh35Vo3AFPFDHr4o2De++NMTbgn3/WHXjy0+AZCcc2xyEma398
+ 18jD6SWPq7Ea3MWsc9oMIodBLuoOxzdHXYF0u9FxCv7BnoIHif0fG4o+atplFOGz/HHF
+ /OrQ==
+X-Gm-Message-State: AJIora/x9ZLk9XPvzBv3vhCgArR0rtQdz4eFPr3N8wLUOr4/BsjOJl8S
+ iADbUH+ivl+0fHYElg8v9kC2FaHGGIU=
+X-Google-Smtp-Source: AGRyM1vp8Zuabc7TfxfTbnD2b4m3l31Oy9GYO2UHSVWS7SznMfsWQsDkOkw0nNSx/JfO2TkR0nIJ2A==
+X-Received: by 2002:adf:ed41:0:b0:210:20a5:26c2 with SMTP id
+ u1-20020adfed41000000b0021020a526c2mr25864926wro.603.1658236622171; 
+ Tue, 19 Jul 2022 06:17:02 -0700 (PDT)
 Received: from lano-work.. ([80.120.136.76]) by smtp.gmail.com with ESMTPSA id
- d16-20020a05600c34d000b0039c5642e430sm14609496wmq.20.2022.07.19.06.17.00
+ d16-20020a05600c34d000b0039c5642e430sm14609496wmq.20.2022.07.19.06.17.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Jul 2022 06:17:00 -0700 (PDT)
+ Tue, 19 Jul 2022 06:17:01 -0700 (PDT)
 From: Norbert Lange <nolange79@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 15:16:03 +0200
-Message-Id: <20220719131605.337057-1-nolange79@gmail.com>
+Date: Tue, 19 Jul 2022 15:16:04 +0200
+Message-Id: <20220719131605.337057-2-nolange79@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220719131605.337057-1-nolange79@gmail.com>
+References: <20220719131605.337057-1-nolange79@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=2Cy7ZMCelk/1o8/yqirSwLlvu9tI0+EgFOEBPmszDio=;
- b=T7kZvgXxkUL/qd4QPogl65b+c+LtUD7A3ZIudAtykTlbC+UX5HV1f75FLKxzUJyZam
- SIWZkIzLPKIZb/CzNnjU9apqeCbu+7fKNq8USMzuRR0Ufb+Pi8s4KeH70yhF5D48HN8z
- sSNdjm+OUtA6EQ4fJckQg2PUS9ru1wyb3N76Udd8GjMrKr1D3Ts8ZRcT4aXN8dxWBr7s
- z/6eRTaSOmA8d2LUtRgQKFCLpuI2MSsAMNfWAYBYcNdNrpUNAGIiA4MaN5pzRekvd77v
- 1q7G4l5R+0pYmS07AfldXEPpAsf/lDb6cF7LpvRT+tlqaA0w4vALLe9GAbGQgF968GBe
- uJ4w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=zgXnbc/OFty3xWCbsXwnamU5DQ4mNA97jbIIykb49Pg=;
+ b=SDV2bso9sJShVhI8P9eC61zH0zeZRRb7IbhcKf/biYNDLRuOuc2OMjGJ1+86r1A8sl
+ VjSgzZpHIIzo2/ejk2MDeMzSfQEhgX7qjughszFvF8Totpi2imRnzsRKuKIv2+u38zfn
+ YV6aZ8ffpCqcQpKmsu9MR4l6a7HWkNy4jAPqi+y7c3mggN/QKi9GXd6dfIdgakw8eCtC
+ 5HbVicJtd5kVd5tXU3P7aoZbuWIfnUYxkFhdsKCVq/LCd1AT+6yGOcpPL6j3U4gvXWo4
+ rJdhArtqCMc3KpMWkTaH8GEriLKi7IvgaDa1zFTllc5AUImpgyGYjzyWlT1EtXWSIRnP
+ DDCA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=T7kZvgXx
-Subject: [Buildroot] [PATCH 1/2] package/systemd: allow empty
- SYSTEMD_DEFAULT_TARGET
+ header.a=rsa-sha256 header.s=20210112 header.b=SDV2bso9
+Subject: [Buildroot] [PATCH 2/2] package/systemd: allow package to be used
+ without init system
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,27 +101,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Once you allow systemd to be build while not using it as init
-system, the variable will be mpty and the build fails.
+Allow systemd to be built as normal package, this for example
+allows building systemd-boot without any init system.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/systemd/systemd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/systemd/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index b6fffc553f..1510437617 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -586,7 +586,7 @@ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
- endif
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 9f1a778e59..e0f5dbce0d 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -16,7 +16,6 @@ config BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
  
- define SYSTEMD_INSTALL_INIT_HOOK
--	ln -fs "$(call qstrip,$(BR2_PACKAGE_SYSTEMD_DEFAULT_TARGET))" \
-+	ln -fs "$(or $(call qstrip,$(BR2_PACKAGE_SYSTEMD_DEFAULT_TARGET)),multi-user.target)" \
- 		$(TARGET_DIR)/usr/lib/systemd/system/default.target
- endef
- 
+ menuconfig BR2_PACKAGE_SYSTEMD
+ 	bool "systemd"
+-	depends on BR2_INIT_SYSTEMD
+ 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS # kmod
 -- 
 2.35.1
 
