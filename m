@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FF99C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 17:10:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69459C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 17:10:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 879D382B94;
-	Tue, 19 Jul 2022 17:10:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 879D382B94
+	by smtp2.osuosl.org (Postfix) with ESMTP id EB73E404D5;
+	Tue, 19 Jul 2022 17:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB73E404D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2AKGJH8N1iy5; Tue, 19 Jul 2022 17:10:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7D2X9kxlKwRZ; Tue, 19 Jul 2022 17:10:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A2B8823DD;
-	Tue, 19 Jul 2022 17:10:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A2B8823DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id A646A40C66;
+	Tue, 19 Jul 2022 17:10:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A646A40C66
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 23EB11BF5A8
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:10:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 36AEB1BF5A8
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:10:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F238E60ADE
+ by smtp3.osuosl.org (Postfix) with ESMTP id F299B60B91
  for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:10:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F238E60ADE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F299B60B91
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3aLJ4V99p0ub for <buildroot@lists.busybox.net>;
+ with ESMTP id 8PN7Lus7fBu8 for <buildroot@lists.busybox.net>;
  Tue, 19 Jul 2022 17:10:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54E5B60B3A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 502CA60AD3
  for <buildroot@buildroot.org>; Tue, 19 Jul 2022 17:10:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54E5B60B3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 502CA60AD3
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 341E483E3D; Tue, 19 Jul 2022 16:56:38 +0000 (UTC)
+ id 2BA6283E54; Tue, 19 Jul 2022 16:56:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 19:09:32 +0200
+Date: Tue, 19 Jul 2022 19:09:28 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 59e7917e6194c62a18acb1a3e4ccb9c248222cf2
-X-Git-Newrev: 8f6aebdb2e163f681a43ab1175b7c7bdfd25d086
+X-Git-Oldrev: c3a3cf97e93906e9479a27c572e1b62e01680598
+X-Git-Newrev: 59e7917e6194c62a18acb1a3e4ccb9c248222cf2
 X-Patchwork-Hint: ignore
-Message-Id: <20220719165638.341E483E3D@busybox.osuosl.org>
+Message-Id: <20220719165638.2BA6283E54@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.02.x] package/ecryptfs-utils:
- add libgpgme optional dependency
+ add pkcs11-helper optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f6aebdb2e163f681a43ab1175b7c7bdfd25d086
+commit: https://git.buildroot.net/buildroot/commit/?id=59e7917e6194c62a18acb1a3e4ccb9c248222cf2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+
+pkcs11-helper is an optional dependency which needs openssl
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit e122d962a1415fb595286ad71771701f9860765d)
+(cherry picked from commit f90061fc384d42805145e0c6cfa01de0afe48f31)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ecryptfs-utils/ecryptfs-utils.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/ecryptfs-utils/ecryptfs-utils.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
-index 393ea4da78..6eb3add98b 100644
+index 737c5b0ebb..393ea4da78 100644
 --- a/package/ecryptfs-utils/ecryptfs-utils.mk
 +++ b/package/ecryptfs-utils/ecryptfs-utils.mk
-@@ -16,6 +16,15 @@ ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
- 
- ECRYPTFS_UTILS_CONF_ENV = ac_cv_path_POD2MAN=true
- 
-+ifeq ($(BR2_PACKAGE_LIBGPGME),y)
-+ECRYPTFS_UTILS_CONF_OPTS += \
-+	--enable-gpg \
-+	--with-gpgme-prefix=$(STAGING_DIR)/usr
-+ECRYPTFS_UTILS_DEPENDENCIES += libgpgme
+@@ -26,6 +26,14 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ ECRYPTFS_UTILS_CONF_OPTS += --enable-openssl
+ ECRYPTFS_UTILS_DEPENDENCIES += openssl
++
++ifeq ($(BR2_PACKAGE_PKCS11_HELPER),y)
++ECRYPTFS_UTILS_CONF_OPTS += --enable-pkcs11-helper
++ECRYPTFS_UTILS_DEPENDENCIES += pkcs11-helper
 +else
-+ECRYPTFS_UTILS_CONF_OPTS += --disable-gpg
++ECRYPTFS_UTILS_CONF_OPTS += --disable-pkcs11-helper
 +endif
 +
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- ECRYPTFS_UTILS_CONF_OPTS += --enable-pam
- ECRYPTFS_UTILS_DEPENDENCIES += linux-pam
+ else
+ ECRYPTFS_UTILS_CONF_OPTS += --disable-openssl
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
