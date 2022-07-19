@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCE90C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 16:36:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A74B2C43334
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 16:37:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AEBC60B91;
-	Tue, 19 Jul 2022 16:36:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AEBC60B91
+	by smtp4.osuosl.org (Postfix) with ESMTP id F25434094E;
+	Tue, 19 Jul 2022 16:37:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F25434094E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id etXz4xvfmmcD; Tue, 19 Jul 2022 16:36:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4UZj17mYUG75; Tue, 19 Jul 2022 16:37:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19A87611A0;
-	Tue, 19 Jul 2022 16:36:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19A87611A0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1EDE11BF417
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85C7240923;
+	Tue, 19 Jul 2022 16:37:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85C7240923
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 71A1C1BF417
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED89260B91
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED89260B91
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59EE840133
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59EE840133
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MAv1l6LN7rGi for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 16:36:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4c8zVV3zLqok for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 16:36:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1CA4660B3A
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 16:36:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CA4660B3A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 77FC340126
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 16:36:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77FC340126
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 01D1283DF5; Tue, 19 Jul 2022 16:23:22 +0000 (UTC)
+ id 6439783DFD; Tue, 19 Jul 2022 16:23:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 18:35:54 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: a087851b4e5b5717ae96de637f333c9c8cded724
-X-Git-Newrev: 2d021a7e7163d13b604d508602288e7190ab63dc
+Date: Tue, 19 Jul 2022 18:35:44 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: dc13edb0d58b9075e8cd3bbc6dc929f38b606911
+X-Git-Newrev: 97052fb2db81bb8d8856cea2225907759023d6e6
 X-Patchwork-Hint: ignore
-Message-Id: <20220719162323.01D1283DF5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libmodsecurity:
+Message-Id: <20220719162330.6439783DFD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libmodsecurity:
  needs dynamic library with libcurl and mbedtls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d021a7e7163d13b604d508602288e7190ab63dc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=97052fb2db81bb8d8856cea2225907759023d6e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 libmodsecurity embeds several mbedtls source files since version 3.0.0
 and
