@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84FE5C43334
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:13:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A810DC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:14:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1504F40C5E;
-	Tue, 19 Jul 2022 15:13:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1504F40C5E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w6dhTVtzr0sI; Tue, 19 Jul 2022 15:13:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1367740585;
-	Tue, 19 Jul 2022 15:13:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1367740585
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EFB2C1BF9B5
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:12:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3BE52819BC
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:12:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BE52819BC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 590F58271D;
+	Tue, 19 Jul 2022 15:14:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 590F58271D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qnPZhmMlVN_h for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XxMTp4UnWlci; Tue, 19 Jul 2022 15:14:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60F82813AE;
+	Tue, 19 Jul 2022 15:14:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60F82813AE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 291CD1BF951
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:12:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 943864090C
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:12:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 943864090C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fRAMs4132L8Q for <buildroot@lists.busybox.net>;
  Tue, 19 Jul 2022 15:12:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A888826E5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9436F40995
  for <buildroot@buildroot.org>; Tue, 19 Jul 2022 15:12:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A888826E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9436F40995
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 75C5983D0A; Tue, 19 Jul 2022 14:59:20 +0000 (UTC)
+ id 9430583D04; Tue, 19 Jul 2022 14:59:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 17:05:26 +0200
+Date: Tue, 19 Jul 2022 17:11:10 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: d5708c051a1647beb02423a64af3b118214f5799
-X-Git-Newrev: c4eb3dd0a683a45bf946f3e60c68d358c9a05c90
+X-Git-Oldrev: 8428f5430bc682efa16b90756853b3429460cbc1
+X-Git-Newrev: c18a3e1d56e3644c805c6b43ff6d191ca8167ac9
 X-Patchwork-Hint: ignore
-Message-Id: <20220719145920.75C5983D0A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libeastl: needs
- threads
+Message-Id: <20220719145920.9430583D04@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/avahi: fix GNUism
+ in S05avahi-setup.sh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,57 +58,59 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8972361434643425385=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4eb3dd0a683a45bf946f3e60c68d358c9a05c90
+--===============8972361434643425385==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=c18a3e1d56e3644c805c6b43ff6d191ca8167ac9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-libeastl needs threads since its addition in commit
-ed9ddaafb2c4d3ac44e46390248f5c9af08076b1 and
-https://github.com/electronicarts/EASTL/commit/800bc26659f834354e38ee3de4c7300e739ed255:
+This script uses "chown user.group" instead of the POSIX "chown
+user:group".  The first syntax is a deprecated GNU extension.
+Since coreutils 9.1, chown started issuing a warning when this syntax is
+used¹.
 
-In file included from /home/autobuild/autobuild/instance-7/output-1/build/libeastl-45469730d641868ce05433fff2e199510c7d45c3/source/thread_support.cpp:7:
-/home/autobuild/autobuild/instance-7/output-1/build/libeastl-45469730d641868ce05433fff2e199510c7d45c3/include/EASTL/internal/thread_support.h:37:18: fatal error: pthread.h: No such file or directory
-   37 |         #include <pthread.h>
-      |                  ^~~~~~~~~~~
+The result is that if both avahi and coreutils are enabled, this message
+appears during boot:
 
-Fixes:
- - http://autobuild.buildroot.org/results/54ff018467d157530bde4d35602fd1820d9eb348
+chown: warning: '.' should be ':': 'avahi.avahi'
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://git.savannah.gnu.org/cgit/gnulib.git/commit/lib/userspec.c?id=23cca8268d21f5d58ed0209002d5673d0518c426
+
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4c478bb0554e8cd8faf62fe2d3a6dc2e68fa7c7b)
+(cherry picked from commit ccea032c75a5a7ddbdc5b7b14957b2b4683b94fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libeastl/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/avahi/S05avahi-setup.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libeastl/Config.in b/package/libeastl/Config.in
-index 5abea8f810..738b293be4 100644
---- a/package/libeastl/Config.in
-+++ b/package/libeastl/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_LIBEASTL
- 	depends on BR2_PACKAGE_LIBEASTL_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  EASTL stands for Electronic Arts Standard Template
- 	  Library. It is a C++ template library of containers,
-@@ -21,6 +22,7 @@ config BR2_PACKAGE_LIBEASTL
- 
- 	  https://github.com/electronicarts/EASTL
- 
--comment "libeastl needs a toolchain w/ C++, gcc >= 4.9"
-+comment "libeastl needs a toolchain w/ C++, threads, gcc >= 4.9"
- 	depends on BR2_PACKAGE_LIBEASTL_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/avahi/S05avahi-setup.sh b/package/avahi/S05avahi-setup.sh
+index 90ccbceacc..2f53a192e4 100644
+--- a/package/avahi/S05avahi-setup.sh
++++ b/package/avahi/S05avahi-setup.sh
+@@ -5,7 +5,7 @@ case "$1" in
+ 	if [ ! -d /tmp/avahi-autoipd ]; then
+ 	    rm -rf /tmp/avahi-autoipd
+ 	    mkdir /tmp/avahi-autoipd
+-	    chown avahi.avahi /tmp/avahi-autoipd
++	    chown avahi:avahi /tmp/avahi-autoipd
+ 	fi
+ 	;;
+     stop) ;;
+
+--===============8972361434643425385==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8972361434643425385==--
