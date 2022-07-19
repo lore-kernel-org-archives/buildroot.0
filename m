@@ -1,69 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BD3FC43334
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 07:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90F10CCA47F
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 07:46:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4F3C83E1C;
-	Tue, 19 Jul 2022 07:41:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4F3C83E1C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 249676112C;
+	Tue, 19 Jul 2022 07:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 249676112C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6wMyBAh3izcT; Tue, 19 Jul 2022 07:41:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RgEEIp2J4KMY; Tue, 19 Jul 2022 07:46:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 97DBC83E11;
-	Tue, 19 Jul 2022 07:41:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97DBC83E11
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11A0260D60;
+	Tue, 19 Jul 2022 07:46:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11A0260D60
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4F05C1BF355
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 07:40:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2E2161BF355
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 07:46:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1AF08410E9
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 07:40:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AF08410E9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FB0541554
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 07:46:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FB0541554
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uAI9eM6TiEzN for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 07:40:54 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AE004152A
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6AE004152A
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 07:40:54 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 978A71C0008;
- Tue, 19 Jul 2022 07:40:52 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 09:40:42 +0200
-Message-Id: <20220719074042.2214649-5-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220719074042.2214649-1-thomas.petazzoni@bootlin.com>
-References: <20220719074042.2214649-1-thomas.petazzoni@bootlin.com>
+ with ESMTP id 5zmwlraxEAwF for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 07:46:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C129C4154D
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C129C4154D
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 07:46:18 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id n12so7467453wrc.8
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 00:46:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=jaZB+vp3iyZ5lqiWumjnSgVBSE2o7HOvcvdXrukM72E=;
+ b=L7sdEX7nFCBSTGBWJ1kntI4kJNclzfDwNVbK+65C+ENdcBq0eJZI6B6Lcl3ab0ca7P
+ zFxGw6Cj04ax4tca98N8RoTeHmvdEzcrXfKl3b/TC4YwVrd8RCHea0nDiONRgQbxXYOZ
+ 9obuL73FLFfEBt4QZAx/zj+Gn0n0mLdi/MJ8Bj/kA6AZMCHqTBPgopxLMenuykmXxYQq
+ ixKdVTgOQj0lay6jZfE4X3UmT239gRoj7aT+9HMf2f9ig183Q81MU9LY1AUplEIQjlk5
+ pGeyb4PNTS862nmA6WtReVO9uOatYqBWGW0kammNqtbs+hFUu1fmrI1HulVf5VyibM+W
+ lJKg==
+X-Gm-Message-State: AJIora+Z78j1XEeI+FSgAqyGrpkmChBXV5TGGSLhEFKEk/OHRpgFCE1c
+ 3Iu406dOu5bG0+w0LCncxvaXnOtGfaFYDsGOeg7Y4LoTPHA=
+X-Google-Smtp-Source: AGRyM1vChRm6u+Mf/RKtW8i3Pboxa+2r8O9yc5V7VaLX2Fe8goX0KucIdovnIkeXCknXZ0Ldq20XY0+sIgFKYZyUjcw=
+X-Received: by 2002:a5d:6f0d:0:b0:21e:3c6f:f67c with SMTP id
+ ay13-20020a5d6f0d000000b0021e3c6ff67cmr1069855wrb.606.1658216776731; Tue, 19
+ Jul 2022 00:46:16 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220708142150.234611-1-bernd.kuhls@t-online.de>
+ <20220718141453.23c89337@windsurf>
+In-Reply-To: <20220718141453.23c89337@windsurf>
+From: Joel Stanley <joel@jms.id.au>
+Date: Tue, 19 Jul 2022 07:46:03 +0000
+Message-ID: <CACPK8XeFVxsENuo9uWCzQiaOOSfDvkrSMVTQfUU5me_Xzsw-gg@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658216452;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=aDDzB2qgH8S6S+TcLRy7Xj3xjIr3jAhYwLFL1sdUMcY=;
- b=Kqm+Ma1301M/+lvwJhLPY/YJzk+Hcq3yA/l4MZgsoQsQDEEol1/abZgdvPOKyjGFWH6BaQ
- m0DJuw5kvUQfa/6ccf2NN3UMxLroCuquVFrwV4YJCfrwTLbJfyXK+/fMqdsUs0ZagnZvcY
- c/RRipQdXFA+qJJLgmC5zBt0xDcjR2G16iXuB9OgZNnWnPqC4aG2Rzzty9tBIKpHgVeuiU
- CPuSbtIv3H6UYg3t0FGkes/bUL61eLWjs3Vo4fqRKJhrEOLAqPLaBb5Vg/sRN0bNGwHtQq
- 1g2/cLVA3nRKSpO6l8HCAshN4Rc3ZfvMPOWY3LJwtAIGiVMd+G/14atnvYVBig==
+ d=jms.id.au; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=jaZB+vp3iyZ5lqiWumjnSgVBSE2o7HOvcvdXrukM72E=;
+ b=g2jMpmVvl0JGvCzYSlrKGpRHzfuOop+O9UGdtTCPe4O00JV00LaIpZxnjsrXPiq+xe
+ WwBDkBN7/kijHBOiiAI/2E51ZNsAeJ5NDQWytk3AcUEUevtetSWIxWASyWfAqkdbebgK
+ VAZoLjzjDlaNdVUIofmw49GJd3OLWA3hO4avE=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Kqm+Ma13
-Subject: [Buildroot] [PATCH 4/4] support/testing/tests/boot: new test cases
- for Grub
+ dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au
+ header.a=rsa-sha256 header.s=google header.b=g2jMpmVv
+Subject: Re: [Buildroot] [PATCH 1/1] package/pixman: fix powerpc64le build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,306 +86,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit adds four test cases for Grub:
-
- - Grub i386 legacy BIOS
- - Grub i386 UEFI
- - Grub x86-64 UEFI
- - Grub AArch64 UEFI
-
-There is some overlap with the ISO9660 filesystem test cases, some of
-which use Grub, but we found it relevant to have separate test cases
-for Grub, which were useful to test Grub in non-ISO9660 situations.
-
-The Grub ARM UEFI case is not tested, as it requires Grub to be
-chain-loaded by U-Boot. Implementing this test case is left as an
-exercise for the reader.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                    |   2 +
- support/testing/tests/boot/test_grub.py       | 153 ++++++++++++++++++
- .../boot/test_grub/genimage-aarch64-efi.cfg   |  32 ++++
- .../tests/boot/test_grub/grub-aarch64-efi.cfg |   6 +
- .../boot/test_grub/linux-aarch64-efi.config   |   1 +
- .../tests/boot/test_grub/post-build.sh        |   7 +
- .../boot/test_grub/post-image-aarch64-efi.sh  |   8 +
- 7 files changed, 209 insertions(+)
- create mode 100644 support/testing/tests/boot/test_grub.py
- create mode 100644 support/testing/tests/boot/test_grub/genimage-aarch64-efi.cfg
- create mode 100644 support/testing/tests/boot/test_grub/grub-aarch64-efi.cfg
- create mode 100644 support/testing/tests/boot/test_grub/linux-aarch64-efi.config
- create mode 100755 support/testing/tests/boot/test_grub/post-build.sh
- create mode 100755 support/testing/tests/boot/test_grub/post-image-aarch64-efi.sh
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 34effa6005..3f697e63ec 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2855,6 +2855,8 @@ F:	package/squashfs/
- F:	package/tinifier/
- F:	package/wayland/
- F:	package/weston/
-+F:	support/testing/tests/boot/test_grub.py
-+F:	support/testing/tests/boot/test_grub/
- F:	support/testing/tests/boot/test_syslinux.py
- F:	support/testing/tests/package/sample_python_augeas.py
- F:	support/testing/tests/package/sample_python_flask.py
-diff --git a/support/testing/tests/boot/test_grub.py b/support/testing/tests/boot/test_grub.py
-new file mode 100644
-index 0000000000..33476f212e
---- /dev/null
-+++ b/support/testing/tests/boot/test_grub.py
-@@ -0,0 +1,153 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestGrubi386BIOS(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_x86_core2=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_UCLIBC_STABLE=y
-+        BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh {}"
-+        BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+        BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
-+        BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_GRUB2=y
-+        BR2_TARGET_GRUB2_I386_PC=y
-+        BR2_TARGET_GRUB2_INSTALL_TOOLS=y
-+        BR2_PACKAGE_HOST_GENIMAGE=y
-+        """.format(infra.filepath("tests/boot/test_grub/post-build.sh"))
-+
-+    def test_run(self):
-+        hda = os.path.join(self.builddir, "images", "disk.img")
-+        self.emulator.boot(arch="i386", options=["-hda", hda])
-+        self.emulator.login()
-+
-+
-+class TestGrubi386EFI(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_x86_core2=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_UCLIBC_STABLE=y
-+        BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh {}"
-+        BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image-efi.sh"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
-+        BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_EFIVAR=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_GRUB2=y
-+        BR2_TARGET_GRUB2_I386_EFI=y
-+        BR2_TARGET_GRUB2_INSTALL_TOOLS=y
-+        BR2_TARGET_OVMF_BIN=y
-+        BR2_PACKAGE_HOST_GENIMAGE=y
-+        BR2_PACKAGE_HOST_MTOOLS=y
-+        """.format(infra.filepath("tests/boot/test_grub/post-build.sh"))
-+
-+    def test_run(self):
-+        hda = os.path.join(self.builddir, "images", "disk.img")
-+        bios = os.path.join(self.builddir, "images", "RELEASEIa32_OVMF.fd")
-+        self.emulator.boot(arch="i386", options=["-bios", bios, "-hda", hda])
-+        self.emulator.login()
-+
-+        cmd = "modprobe efivarfs"
-+        self.assertRunOk(cmd)
-+
-+        cmd = "mount -t efivarfs none /sys/firmware/efi/efivars"
-+        self.assertRunOk(cmd)
-+
-+        cmd = "efivar -l"
-+        self.assertRunOk(cmd)
-+
-+
-+class TestGrubX8664EFI(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_x86_64=y
-+        BR2_x86_corei7=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_UCLIBC_STABLE=y
-+        BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh {}"
-+        BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image-efi.sh"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
-+        BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_EFIVAR=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_GRUB2=y
-+        BR2_TARGET_GRUB2_X86_64_EFI=y
-+        BR2_TARGET_GRUB2_INSTALL_TOOLS=y
-+        BR2_TARGET_OVMF_BIN=y
-+        BR2_PACKAGE_HOST_GENIMAGE=y
-+        BR2_PACKAGE_HOST_MTOOLS=y
-+        """.format(infra.filepath("tests/boot/test_grub/post-build.sh"))
-+
-+    def test_run(self):
-+        hda = os.path.join(self.builddir, "images", "disk.img")
-+        bios = os.path.join(self.builddir, "images", "RELEASEX64_OVMF.fd")
-+        self.emulator.boot(arch="x86_64", options=["-bios", bios, "-hda", hda])
-+        self.emulator.login()
-+
-+        cmd = "modprobe efivarfs"
-+        self.assertRunOk(cmd)
-+
-+        cmd = "mount -t efivarfs none /sys/firmware/efi/efivars"
-+        self.assertRunOk(cmd)
-+
-+        cmd = "efivar -l"
-+        self.assertRunOk(cmd)
-+
-+
-+class TestGrubAArch64EFI(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_ROOTFS_POST_IMAGE_SCRIPT="{post_image}"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{linux_fragment}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_EFIVAR=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_GRUB2=y
-+        BR2_TARGET_OVMF_BIN=y
-+        BR2_PACKAGE_HOST_GENIMAGE=y
-+        BR2_PACKAGE_HOST_MTOOLS=y
-+        """.format(post_image=infra.filepath("tests/boot/test_grub/post-image-aarch64-efi.sh"),
-+                   linux_fragment=infra.filepath("tests/boot/test_grub/linux-aarch64-efi.config"))
-+
-+    def test_run(self):
-+        hda = os.path.join(self.builddir, "images", "disk.img")
-+        bios = os.path.join(self.builddir, "images", "RELEASEAARCH64_QEMU_EFI.fd")
-+        self.emulator.boot(arch="aarch64", options=["-M", "virt", "-cpu", "cortex-a53", "-bios", bios, "-hda", hda])
-+        self.emulator.login()
-+
-+        cmd = "modprobe efivarfs"
-+        self.assertRunOk(cmd)
-+
-+        cmd = "mount -t efivarfs none /sys/firmware/efi/efivars"
-+        self.assertRunOk(cmd)
-+
-+        cmd = "efivar -l"
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/boot/test_grub/genimage-aarch64-efi.cfg b/support/testing/tests/boot/test_grub/genimage-aarch64-efi.cfg
-new file mode 100644
-index 0000000000..11615c885a
---- /dev/null
-+++ b/support/testing/tests/boot/test_grub/genimage-aarch64-efi.cfg
-@@ -0,0 +1,32 @@
-+image efi-part.vfat {
-+	vfat {
-+		file EFI {
-+			image = "efi-part/EFI"
-+		}
-+
-+		file Image {
-+			image = "Image"
-+		}
-+	}
-+
-+	size = 16352K # 16MB - 32KB
-+}
-+
-+image disk.img {
-+	hdimage {
-+		partition-table-type = "gpt"
-+	}
-+
-+	partition boot {
-+		image = "efi-part.vfat"
-+		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
-+		offset = 32K
-+		bootable = true
-+	}
-+
-+	partition root {
-+		partition-type-uuid = 44479540-f297-41b2-9af7-d131d5f0458a
-+		partition-uuid = UUID_TMP
-+		image = "rootfs.ext2"
-+	}
-+}
-diff --git a/support/testing/tests/boot/test_grub/grub-aarch64-efi.cfg b/support/testing/tests/boot/test_grub/grub-aarch64-efi.cfg
-new file mode 100644
-index 0000000000..d40af0df24
---- /dev/null
-+++ b/support/testing/tests/boot/test_grub/grub-aarch64-efi.cfg
-@@ -0,0 +1,6 @@
-+set default="0"
-+set timeout="5"
-+
-+menuentry "Buildroot" {
-+ linux /Image root=PARTUUID=UUID_TMP rootwait console=ttyAMA0
-+}
-diff --git a/support/testing/tests/boot/test_grub/linux-aarch64-efi.config b/support/testing/tests/boot/test_grub/linux-aarch64-efi.config
-new file mode 100644
-index 0000000000..839566bae0
---- /dev/null
-+++ b/support/testing/tests/boot/test_grub/linux-aarch64-efi.config
-@@ -0,0 +1 @@
-+CONFIG_ACPI=y
-diff --git a/support/testing/tests/boot/test_grub/post-build.sh b/support/testing/tests/boot/test_grub/post-build.sh
-new file mode 100755
-index 0000000000..8d6f0318de
---- /dev/null
-+++ b/support/testing/tests/boot/test_grub/post-build.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+
-+if [ -d "$BINARIES_DIR/efi-part/" ]; then
-+    sed -i 's%tty1%ttyS0,115200%' "$BINARIES_DIR/efi-part/EFI/BOOT/grub.cfg"
-+else
-+    sed -i 's%tty1%ttyS0,115200%' "$TARGET_DIR/boot/grub/grub.cfg"
-+fi
-diff --git a/support/testing/tests/boot/test_grub/post-image-aarch64-efi.sh b/support/testing/tests/boot/test_grub/post-image-aarch64-efi.sh
-new file mode 100755
-index 0000000000..2db516ef2d
---- /dev/null
-+++ b/support/testing/tests/boot/test_grub/post-image-aarch64-efi.sh
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+
-+set -e
-+
-+UUID=$(dumpe2fs "$BINARIES_DIR/rootfs.ext2" 2>/dev/null | sed -n 's/^Filesystem UUID: *\(.*\)/\1/p')
-+sed "s/UUID_TMP/$UUID/g" support/testing/tests/boot/test_grub/grub-aarch64-efi.cfg > "$BINARIES_DIR/efi-part/EFI/BOOT/grub.cfg"
-+sed "s/UUID_TMP/$UUID/g" support/testing/tests/boot/test_grub/genimage-aarch64-efi.cfg > "$BINARIES_DIR/genimage-aarch64-efi.cfg"
-+support/scripts/genimage.sh -c "$BINARIES_DIR/genimage-aarch64-efi.cfg"
--- 
-2.36.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gTW9uLCAxOCBKdWwgMjAyMiBhdCAxMjoxNCwgVGhvbWFzIFBldGF6em9uaQo8dGhvbWFzLnBl
+dGF6em9uaUBib290bGluLmNvbT4gd3JvdGU6Cj4KPiBIZWxsbywKPgo+IExldCdzIGFkZCBzb21l
+IFBvd2VyUEMgZm9sa3MgaW50byB0aGUgbG9vcC4gSm9lbCwgQ8OpZHJpYywgY291bGQgeW91Cj4g
+aGF2ZSBhIGxvb2sgYXQgdGhlIGJlbG93IHBhdGNoLCBhbmQgaG93IHRvIGhhbmRsZSBWTVggc3Vw
+cG9ydCBpbiB0aGUKPiBwaXhtYW4gcGFja2FnZT8KPgo+IEl0IGZlZWxzIGEgYml0IHVuZm9ydHVu
+YXRlIHRvIHVuY29uZGl0aW9uYWxseSBkaXNhYmxlIFZNWCBzdXBwb3J0Ogo+IHRoZXJlIGlzIHNv
+bWUgbG9naWMgaW4gdGhlIHBpeG1hbiBjb25maWd1cmUgc2NyaXB0IHRvIGRldGVjdCB0aGUKPiBh
+dmFpbGFiaWxpdHkgb2YgVk1YLCBidXQgYXBwYXJlbnRseSB0aGlzIGxvZ2ljIGFzc3VtZXMgaXQg
+d29ya3Mgb24KPiBwb3dlcnBjNjRsZSwgZXZlbiB0aG91Z2ggYXQgYnVpbGQgdGltZSBpdCBicmVh
+a3MuCgpUaGFua3MhCgpUaGVyZSdzIGEgZmV3IGJ1aWxkIGZhaWx1cmVzIGdvaW5nIGFyb3VuZCBk
+dWUgdG8gbm9uc2Vuc2UKY29uZmlndXJhdGlvbnMuIEluIG1vc3QgY2FzZXMgdGhlIGNvbmZpZyBo
+YXMgQlIyX3Bvd2VycGM2NGxlPXkgd2l0aG91dApzZWxlY3RpbmcgYSBDUFUuIFRoaXMgZGVmYXVs
+dHMgdXMgdG8gQlIyX3Bvd2VycGNfOTcwPXksIHdoaWNoIGlzIGEgQ1BVCnRoYXQgaXNuJ3Qgc3Vw
+cG9ydGVkIHRvIHJ1biBwcGM2NGxlLgoKVGhlIGZpeCBpcyB0byBvbmx5IGFsbG93IENQVXMgdGhh
+dCBzdXBwb3J0IHBwYzY0bGUgdG8gYmUgY29uZmlndXJlZApmb3IgdGhhdCBwbGF0Zm9ybS4gSSd2
+ZSBwcmVwYXJlZCBzb21lIHBhdGNoZXMgdGhhdCBJJ20gcnVubmluZyB0aG91Z2gKQ0kgbm93LCBh
+bmQgSSdsbCBzZW5kIHRoZW0gb3V0IG9uY2UgdGhleSdyZSB0ZXN0ZWQuCgpJZiBteSBjaGFuZ2Vz
+IGRvbid0IGZpeCB0aGlzIHBpeG1hbiBpc3N1ZSB0aGVuIHdlIGNhbiB1c2UgdGhlCkJSMl9QT1dF
+UlBDX0NQVV9IQVNfQUxUSVZFQyB0byBmb3JjZSBBbHRpVmVjL1ZNWCBvZmYgd2hlbiB3ZSBrbm93
+IHRoZQpDUFUgZG9lcyBub3Qgc3VwcG9ydCBpdC4KCkNoZWVycywKCkpvZWwKCgoKCgo+Cj4gQ291
+bGQgeW91IGhhdmUgYSBsb29rIGFuZCBnaXZlIHVzIHlvdXIgYWR2aWNlPwo+Cj4gVGhhbmtzIGEg
+bG90IQo+Cj4gVGhvbWFzIFBldGF6em9uaQo+Cj4gT24gRnJpLCAgOCBKdWwgMjAyMiAxNjoyMTo1
+MCArMDIwMAo+IEJlcm5kIEt1aGxzIDxiZXJuZC5rdWhsc0B0LW9ubGluZS5kZT4gd3JvdGU6Cj4K
+PiA+IERpc2FibGUgdm14IHN1cHBvcnQgdG8gZml4IGJ1aWxkIGVycm9yOgo+ID4KPiA+IHBpeG1h
+bi12bXguYzoyNjg6NTogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvICdMT0FEX1ZFQ1RPUicK
+PiA+ICAgMjY4IHwgICAgIExPQURfVkVDVE9SIChzcmMpOwo+ID4gICAgICAgfCAgICAgXn5+fn5+
+fn5+fn4KPiA+IHBpeG1hbi12bXguYzoyNjg6NTogZXJyb3I6IGNhbm5vdCBjb252ZXJ0IGEgdmFs
+dWUgb2YgdHlwZSAnaW50JyB0bwo+ID4gIHZlY3RvciB0eXBlICdfX3ZlY3Rvcig0KSB1bnNpZ25l
+ZCBpbnQnIHdoaWNoIGhhcyBkaWZmZXJlbnQgc2l6ZQo+ID4KPiA+IEZpeGVzOgo+ID4gaHR0cDov
+L2F1dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvZmRhODg2NzY4ZmNlMjVjY2Q5YjUyYjYz
+NWZmNWIxM2RhN2JhMmQwYy8KPiA+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBCZXJuZCBLdWhscyA8YmVy
+bmQua3VobHNAdC1vbmxpbmUuZGU+Cj4gPiAtLS0KPiA+ICBwYWNrYWdlL3BpeG1hbi9waXhtYW4u
+bWsgfCAzICsrLQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRp
+b24oLSkKPiA+Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9waXhtYW4vcGl4bWFuLm1rIGIvcGFj
+a2FnZS9waXhtYW4vcGl4bWFuLm1rCj4gPiBpbmRleCA2NDMwMmZhNDlhLi4wZjAwYTIwY2Q4IDEw
+MDY0NAo+ID4gLS0tIGEvcGFja2FnZS9waXhtYW4vcGl4bWFuLm1rCj4gPiArKysgYi9wYWNrYWdl
+L3BpeG1hbi9waXhtYW4ubWsKPiA+IEBAIC0yMSw3ICsyMSw4IEBAIFBJWE1BTl9BVVRPUkVDT05G
+ID0gWUVTCj4gPiAgIyBkb24ndCBidWlsZCBndGsgYmFzZWQgZGVtb3MKPiA+ICBQSVhNQU5fQ09O
+Rl9PUFRTID0gXAo+ID4gICAgICAgLS1kaXNhYmxlLWd0ayBcCj4gPiAtICAgICAtLWRpc2FibGUt
+bG9vbmdzb24tbW1pCj4gPiArICAgICAtLWRpc2FibGUtbG9vbmdzb24tbW1pIFwKPiA+ICsgICAg
+IC0tZGlzYWJsZS12bXgKPiA+Cj4gPiAgIyBUaGUgQVJNIFNJTUQgY29kZSBmcm9tIHBpeG1hbiBy
+ZXF1aXJlcyBhIHJlY2VudCBlbm91Z2ggQVJNIGNvcmUsIGJ1dAo+ID4gICMgdGhlcmUgaXMgYSBy
+dW50aW1lIENQVSBjaGVjayB0aGF0IG1ha2VzIHN1cmUgaXQgZG9lc24ndCBnZXQgdXNlZCBpZgo+
+Cj4KPgo+IC0tCj4gVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgo+
+IEVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCj4gaHR0
+cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
