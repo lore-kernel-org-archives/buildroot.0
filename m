@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1900DC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 17:09:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FF99C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 17:10:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DB09410E8;
-	Tue, 19 Jul 2022 17:09:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DB09410E8
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8MQvmjq8kI-W; Tue, 19 Jul 2022 17:09:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7289D410DE;
-	Tue, 19 Jul 2022 17:09:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7289D410DE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6CC181BF5A8
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:09:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 55409823DD
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:09:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55409823DD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 879D382B94;
+	Tue, 19 Jul 2022 17:10:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 879D382B94
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q-qlxw-IiEfW for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 17:09:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E6DD823C6
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5E6DD823C6
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 17:09:50 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7AF01200006;
- Tue, 19 Jul 2022 17:09:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oDqjB-002utU-7T; Tue, 19 Jul 2022 19:09:45 +0200
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2AKGJH8N1iy5; Tue, 19 Jul 2022 17:10:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A2B8823DD;
+	Tue, 19 Jul 2022 17:10:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A2B8823DD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 23EB11BF5A8
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:10:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F238E60ADE
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:10:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F238E60ADE
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3aLJ4V99p0ub for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 17:10:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 54E5B60B3A
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 17:10:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54E5B60B3A
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 341E483E3D; Tue, 19 Jul 2022 16:56:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <20220613203113.294535-1-fontaine.fabrice@gmail.com>
- <30a5f007-d471-ca5f-0073-573c3962baf2@mind.be>
-Date: Tue, 19 Jul 2022 19:09:45 +0200
-In-Reply-To: <30a5f007-d471-ca5f-0073-573c3962baf2@mind.be> (Arnout
- Vandecappelle's message of "Sun, 19 Jun 2022 17:57:18 +0200")
-Message-ID: <87sfmx112e.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/ecryptfs-utils: add
- pkcs11-helper optional dependency
+To: buildroot@buildroot.org
+Date: Tue, 19 Jul 2022 19:09:32 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 59e7917e6194c62a18acb1a3e4ccb9c248222cf2
+X-Git-Newrev: 8f6aebdb2e163f681a43ab1175b7c7bdfd25d086
+X-Patchwork-Hint: ignore
+Message-Id: <20220719165638.341E483E3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/ecryptfs-utils:
+ add libgpgme optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,25 +57,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcin Bis <marcin@bis.org.pl>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8f6aebdb2e163f681a43ab1175b7c7bdfd25d086
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > On 13/06/2022 22:31, Fabrice Fontaine wrote:
- >> pkcs11-helper is an optional dependency which needs openssl
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit e122d962a1415fb595286ad71771701f9860765d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ecryptfs-utils/ecryptfs-utils.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
- >  Applied both to master, thanks.
-
-Committed series to 2022.05.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
+index 393ea4da78..6eb3add98b 100644
+--- a/package/ecryptfs-utils/ecryptfs-utils.mk
++++ b/package/ecryptfs-utils/ecryptfs-utils.mk
+@@ -16,6 +16,15 @@ ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
+ 
+ ECRYPTFS_UTILS_CONF_ENV = ac_cv_path_POD2MAN=true
+ 
++ifeq ($(BR2_PACKAGE_LIBGPGME),y)
++ECRYPTFS_UTILS_CONF_OPTS += \
++	--enable-gpg \
++	--with-gpgme-prefix=$(STAGING_DIR)/usr
++ECRYPTFS_UTILS_DEPENDENCIES += libgpgme
++else
++ECRYPTFS_UTILS_CONF_OPTS += --disable-gpg
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ ECRYPTFS_UTILS_CONF_OPTS += --enable-pam
+ ECRYPTFS_UTILS_DEPENDENCIES += linux-pam
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
