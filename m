@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88179C43334
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 17:02:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91010C43334
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 17:03:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F6B681317;
-	Tue, 19 Jul 2022 17:02:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F6B681317
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B8FB6104A;
+	Tue, 19 Jul 2022 17:03:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B8FB6104A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oNJ-a3dz3bfx; Tue, 19 Jul 2022 17:02:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DT2C_gA-A87z; Tue, 19 Jul 2022 17:03:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B8B4812F5;
-	Tue, 19 Jul 2022 17:02:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B8B4812F5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F12501BF417
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:02:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C63160AD3;
+	Tue, 19 Jul 2022 17:03:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C63160AD3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 39F5E1BF417
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:03:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C7D2640A7A
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:02:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7D2640A7A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21F974049E
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 17:03:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21F974049E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id okwhcwx63RF4 for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 17:02:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E65240A06
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4E65240A06
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 17:02:32 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1E3F61BF206;
- Tue, 19 Jul 2022 17:02:29 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oDqc8-002uVT-Vg; Tue, 19 Jul 2022 19:02:28 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n1yNxwocu1iJ for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 17:03:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 463B540126
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 17:03:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 463B540126
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 2564083E3A; Tue, 19 Jul 2022 16:49:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <20220613201758.293344-1-fontaine.fabrice@gmail.com>
- <bf145aa4-0370-91a5-4583-0932e531091a@mind.be>
-Date: Tue, 19 Jul 2022 19:02:28 +0200
-In-Reply-To: <bf145aa4-0370-91a5-4583-0932e531091a@mind.be> (Arnout
- Vandecappelle's message of "Sun, 19 Jun 2022 17:55:27 +0200")
-Message-ID: <871quh2fyz.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libtalloc: fix build wihout SSP
+To: buildroot@buildroot.org
+Date: Tue, 19 Jul 2022 19:03:23 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 8d125066c283e45981fa388c844ab57db107abd2
+X-Git-Newrev: ab90fa796c7f59494ed0c738ce47baeb8b0d31b1
+X-Patchwork-Hint: ignore
+Message-Id: <20220719164959.2564083E3A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/fxload: fix
+ static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,35 +57,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David GOUARIN <dgouarin@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ab90fa796c7f59494ed0c738ce47baeb8b0d31b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
- > On 13/06/2022 22:17, Fabrice Fontaine wrote:
- >> Fix the following build failure without SSP raised since the addition of
- >> the package in commit f0d37e275a915539a581c4ac7fd066eddc41fc8c:
- >> /home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/i686-buildroot-linux-musl/9.4.0/../../../../i686-buildroot-linux-musl/bin/ld:
- >> talloc.c.5.o: in function `_vasprintf_tc':
- >> talloc.c:(.text+0x427d): undefined reference to `__stack_chk_fail_local'
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/e221bde25c7622db99761d0adcd56663296beb15
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fix the following static build failure:
 
+/home/buildroot/autobuild/instance-3/output-1/host/bin/sh4-buildroot-linux-musl-gcc -o fxload ezusb.o main.o
+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/sh4-buildroot-linux-musl/10.3.0/../../../../sh4-buildroot-linux-musl/bin/ld: /home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/sh4-buildroot-linux-musl/10.3.0/libgcc.a(unwind-dw2.o): in function `size_of_encoded_value':
+/home/buildroot/autobuild/instance-3/output-1/build/host-gcc-final-10.3.0/build/sh4-buildroot-linux-musl/libgcc/../../../libgcc/unwind-pe.h:89: undefined reference to `abort'
 
- >  Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/bca28d7a6d2b324fb61fe99b8af4b86caa2350ee
 
- >  Since upstream seemed to risk not accepting the package, I added a
- >  comment that hopefully will tickle them (for real this time).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit dbfb753749807d54df5d2d2ad8ab9f10ab554043)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/fxload/0001-fix-static-build.patch | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-Committed to 2022.05.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/fxload/0001-fix-static-build.patch b/package/fxload/0001-fix-static-build.patch
+new file mode 100644
+index 0000000000..9ce49baa6e
+--- /dev/null
++++ b/package/fxload/0001-fix-static-build.patch
+@@ -0,0 +1,25 @@
++fix static build
++
++Fix the following static build failure:
++
++/home/buildroot/autobuild/instance-3/output-1/host/bin/sh4-buildroot-linux-musl-gcc -o fxload ezusb.o main.o
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/sh4-buildroot-linux-musl/10.3.0/../../../../sh4-buildroot-linux-musl/bin/ld: /home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/sh4-buildroot-linux-musl/10.3.0/libgcc.a(unwind-dw2.o): in function `size_of_encoded_value':
++/home/buildroot/autobuild/instance-3/output-1/build/host-gcc-final-10.3.0/build/sh4-buildroot-linux-musl/libgcc/../../../libgcc/unwind-pe.h:89: undefined reference to `abort'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/bca28d7a6d2b324fb61fe99b8af4b86caa2350ee
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -Naur fxload-2008_10_13.orig/Makefile fxload-2008_10_13/Makefile
++--- fxload-2008_10_13.orig/Makefile	2022-06-11 22:11:02.845916977 +0200
+++++ fxload-2008_10_13/Makefile	2022-06-11 22:12:25.118006070 +0200
++@@ -39,7 +39,7 @@
++ 
++ # object files
++ $(PROG): $(FILES_OBJ)
++-	$(CC) -o $(PROG) $(FILES_OBJ)
+++	$(CC) $(LDFLAGS) -o $(PROG) $(FILES_OBJ)
++ 
++ %.o: %.c
++ 	$(CC) -c $(CFLAGS)  $< -o $@
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
