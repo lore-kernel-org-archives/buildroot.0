@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3299C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA14C43334
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:06:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 665D982628;
-	Tue, 19 Jul 2022 15:05:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 665D982628
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0ACE82553;
+	Tue, 19 Jul 2022 15:06:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0ACE82553
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X-fEsX5xiD9z; Tue, 19 Jul 2022 15:05:14 +0000 (UTC)
+	with ESMTP id aPOzKxUpGktN; Tue, 19 Jul 2022 15:06:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8160682553;
-	Tue, 19 Jul 2022 15:05:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8160682553
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 608701BF951
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:05:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFC07824EE;
+	Tue, 19 Jul 2022 15:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFC07824EE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CD9A41BF951
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:06:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3ADA140C5B
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:05:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ADA140C5B
+ by smtp3.osuosl.org (Postfix) with ESMTP id A84476116B
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:06:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A84476116B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xFrsycMg6H7v for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 15:05:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 30l1e4mevdws for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 15:06:16 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1885440490
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1885440490
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 15:05:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A43A16104A
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A43A16104A
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 15:06:15 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 847741BF21C;
- Tue, 19 Jul 2022 15:05:06 +0000 (UTC)
-Message-ID: <fbd04b0f-a468-427c-8d74-26fa1cc1ca05@korsgaard.com>
-Date: Tue, 19 Jul 2022 17:05:05 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20220619064757.54361-1-bernd.kuhls@t-online.de>
+ by mail.gandi.net (Postfix) with ESMTPSA id 0AAC560004;
+ Tue, 19 Jul 2022 15:06:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oDonb-002pyF-R8; Tue, 19 Jul 2022 17:06:11 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20220619064757.54361-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/tor: security bump version to
- 0.4.7.8
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220618121456.511183-1-fontaine.fabrice@gmail.com>
+Date: Tue, 19 Jul 2022 17:06:11 +0200
+In-Reply-To: <20220618121456.511183-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 18 Jun 2022 14:14:56 +0200")
+Message-ID: <87pmi13zx8.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/libeastl: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,20 +63,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/06/2022 08.47, Bernd Kuhls wrote:
-> Fixes CVE-2022-33903.
-> 
-> Release notes:
-> https://raw.githubusercontent.com/torproject/tor/release-0.4.7/ReleaseNotes
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Committed to 2022.02.x and 2022.05.x, thanks.
+ > libeastl needs threads since its addition in commit
+ > ed9ddaafb2c4d3ac44e46390248f5c9af08076b1 and
+ > https://github.com/electronicarts/EASTL/commit/800bc26659f834354e38ee3de4c7300e739ed255:
+
+ > In file included from /home/autobuild/autobuild/instance-7/output-1/build/libeastl-45469730d641868ce05433fff2e199510c7d45c3/source/thread_support.cpp:7:
+ > /home/autobuild/autobuild/instance-7/output-1/build/libeastl-45469730d641868ce05433fff2e199510c7d45c3/include/EASTL/internal/thread_support.h:37:18: fatal error: pthread.h: No such file or directory
+ >    37 |         #include <pthread.h>
+ >       |                  ^~~~~~~~~~~
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/54ff018467d157530bde4d35602fd1820d9eb348
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.05.x and 2022.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
