@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28E45C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 16:36:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCE90C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 16:36:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCB40827C6;
-	Tue, 19 Jul 2022 16:36:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCB40827C6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6AEBC60B91;
+	Tue, 19 Jul 2022 16:36:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AEBC60B91
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jugIIPk4cSfv; Tue, 19 Jul 2022 16:36:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id etXz4xvfmmcD; Tue, 19 Jul 2022 16:36:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC55C8270B;
-	Tue, 19 Jul 2022 16:36:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC55C8270B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4E8311BF417
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19A87611A0;
+	Tue, 19 Jul 2022 16:36:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19A87611A0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EDE11BF417
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 28F44826FF
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28F44826FF
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED89260B91
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED89260B91
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hhcvKrc_EeTr for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 16:36:17 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F35808270B
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F35808270B
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 16:36:16 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2D1761C0005;
- Tue, 19 Jul 2022 16:36:12 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oDqCh-002thY-T6; Tue, 19 Jul 2022 18:36:11 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MAv1l6LN7rGi for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 16:36:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1CA4660B3A
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 16:36:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CA4660B3A
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 01D1283DF5; Tue, 19 Jul 2022 16:23:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <20220613200620.292365-1-fontaine.fabrice@gmail.com>
- <ee3bb199-4f03-b816-bf00-a979874b52b7@mind.be>
-Date: Tue, 19 Jul 2022 18:36:11 +0200
-In-Reply-To: <ee3bb199-4f03-b816-bf00-a979874b52b7@mind.be> (Arnout
- Vandecappelle's message of "Sun, 19 Jun 2022 17:53:54 +0200")
-Message-ID: <875yjt2h6s.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libmodsecurity: needs dynamic
- library with libcurl and mbedtls
+To: buildroot@buildroot.org
+Date: Tue, 19 Jul 2022 18:35:54 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: a087851b4e5b5717ae96de637f333c9c8cded724
+X-Git-Newrev: 2d021a7e7163d13b604d508602288e7190ab63dc
+X-Patchwork-Hint: ignore
+Message-Id: <20220719162323.01D1283DF5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libmodsecurity:
+ needs dynamic library with libcurl and mbedtls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,37 +57,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Frank Vanbever <frank.vanbever@essensium.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2d021a7e7163d13b604d508602288e7190ab63dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > On 13/06/2022 22:06, Fabrice Fontaine wrote:
- >> libmodsecurity embeds several mbedtls source files since version 3.0.0
- >> and
- >> https://github.com/SpiderLabs/ModSecurity/commit/a3ae686f2555bdacbfc9e1889ad05065711a165d
- >> resulting in the following static build failure if curl is built with
- >> mbedtls support:
- >> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real:
- >> /home/buildroot/autobuild/instance-0/output-1/host/bin/../m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libmbedcrypto.a(md5.c.o):
- >> in function `mbedtls_md5_free':
- >> md5.c:(.text+0x16): multiple definition of `mbedtls_md5_free';
- >> ../../src/.libs/libmodsecurity.a(libmbedtls_la-md5.o):md5.c:(.text+0x16):
- >> first defined here
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/98472a3a41cdbcb3d02289a437074a267f4b2e8e
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+libmodsecurity embeds several mbedtls source files since version 3.0.0
+and
+https://github.com/SpiderLabs/ModSecurity/commit/a3ae686f2555bdacbfc9e1889ad05065711a165d
+resulting in the following static build failure if curl is built with
+mbedtls support:
 
- >  Applied to master, thanks.
+/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real: /home/buildroot/autobuild/instance-0/output-1/host/bin/../m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libmbedcrypto.a(md5.c.o): in function `mbedtls_md5_free':
+md5.c:(.text+0x16): multiple definition of `mbedtls_md5_free'; ../../src/.libs/libmodsecurity.a(libmbedtls_la-md5.o):md5.c:(.text+0x16): first defined here
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/98472a3a41cdbcb3d02289a437074a267f4b2e8e
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 9fc652a373034118535397fdd4042ab9f8fd7adf)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libmodsecurity/Config.in    | 5 +++++
+ package/nginx-modsecurity/Config.in | 5 +++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/package/libmodsecurity/Config.in b/package/libmodsecurity/Config.in
+index 87f7a9c103..f65ab3de93 100644
+--- a/package/libmodsecurity/Config.in
++++ b/package/libmodsecurity/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_LIBMODSECURITY
+ 	bool "libmodsecurity"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# libmodsecurity embeds several mbedtls source files
++	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS)
+ 	select BR2_PACKAGE_PCRE
+ 	help
+ 	  Libmodsecurity is one component of the ModSecurity
+@@ -17,3 +19,6 @@ config BR2_PACKAGE_LIBMODSECURITY
+ 
+ comment "libmodsecurity needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++
++comment "libmodsecurity needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
+diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
+index b1fcbadd7a..5cbe57a866 100644
+--- a/package/nginx-modsecurity/Config.in
++++ b/package/nginx-modsecurity/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ 	depends on BR2_PACKAGE_NGINX_HTTP
+ 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libmodsecurity
++	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS) # libmodsecurity
+ 	select BR2_PACKAGE_LIBMODSECURITY
+ 	help
+ 	  The ModSecurity-nginx connector is the connection
+@@ -14,3 +15,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ comment "nginx-modsecurity needs a toolchain w/ C++, threads"
+ 	depends on BR2_PACKAGE_NGINX_HTTP
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++
++comment "nginx-modsecurity needs a toolchain w/ dynamic library"
++	depends on BR2_PACKAGE_NGINX_HTTP
++	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
