@@ -1,71 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9248FC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 16:34:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28E45C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 16:36:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38AE660C27;
-	Tue, 19 Jul 2022 16:34:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38AE660C27
+	by smtp1.osuosl.org (Postfix) with ESMTP id BCB40827C6;
+	Tue, 19 Jul 2022 16:36:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCB40827C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bCatL3lCPguI; Tue, 19 Jul 2022 16:34:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jugIIPk4cSfv; Tue, 19 Jul 2022 16:36:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D3C960B3A;
-	Tue, 19 Jul 2022 16:33:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D3C960B3A
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC55C8270B;
+	Tue, 19 Jul 2022 16:36:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC55C8270B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E16831BF417
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:33:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4E8311BF417
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9A058268F
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:33:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9A058268F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 28F44826FF
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 16:36:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28F44826FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BKVZ3HNxB6Zc for <buildroot@lists.busybox.net>;
- Tue, 19 Jul 2022 16:33:55 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B71198247F
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B71198247F
- for <buildroot@buildroot.org>; Tue, 19 Jul 2022 16:33:55 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:5d47:1bcb:9db:ce0f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id C584113FA3C;
- Tue, 19 Jul 2022 18:33:50 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 19 Jul 2022 18:33:50 +0200
-Date: Tue, 19 Jul 2022 18:33:50 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Quentin Schulz <foss+buildroot@0leil.net>
-Message-ID: <20220719163350.GN2249625@scaer>
-References: <20220719133144.2787205-1-foss+buildroot@0leil.net>
+ with ESMTP id hhcvKrc_EeTr for <buildroot@lists.busybox.net>;
+ Tue, 19 Jul 2022 16:36:17 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F35808270B
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F35808270B
+ for <buildroot@buildroot.org>; Tue, 19 Jul 2022 16:36:16 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2D1761C0005;
+ Tue, 19 Jul 2022 16:36:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oDqCh-002thY-T6; Tue, 19 Jul 2022 18:36:11 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <20220613200620.292365-1-fontaine.fabrice@gmail.com>
+ <ee3bb199-4f03-b816-bf00-a979874b52b7@mind.be>
+Date: Tue, 19 Jul 2022 18:36:11 +0200
+In-Reply-To: <ee3bb199-4f03-b816-bf00-a979874b52b7@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 19 Jun 2022 17:53:54 +0200")
+Message-ID: <875yjt2h6s.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220719133144.2787205-1-foss+buildroot@0leil.net>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658248433;
- bh=0NWPQR4agJ49n50MDv0webyzuyXKs1+uAG2Dg8HZ7DQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Psr97KEVI/8gaEaEqREUqKiMPI72m/B/0dMrMG9919LaEWvLOFZQinKEW1HCqhXby
- hjMsnwmX0K8HR4VKEudPqiDswhZ12O8LYOkQH8DOqYRxnwfDHWbzYt4BT4LPCU7JcP
- uO233HK243dyuSBw//JDqsjtYI6arCFnx7UTjZ844qSerDkz384vNBwYkpRVSvfrxv
- IdHTrt7r2uq/NsPizFYV6LbeKYNwynvYUlwkuxJFvU4EIDGHTxAPRBAOHAFzww2RJ8
- xZSZNFy+D3N1Cod26/rC9wFevhDYNDBoE61O/AGhWekNRMFNRx5541GsFbWN32SqUE
- F47qWd0/6WCMg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Psr97KEV
-Subject: Re: [Buildroot] [PATCH] package: pcsc-lite: pcsc_demo is under
- BSD-3-Clause and not GPL-3.0-or-later
+Subject: Re: [Buildroot] [PATCH 1/1] package/libmodsecurity: needs dynamic
+ library with libcurl and mbedtls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,67 +65,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- buildroot@buildroot.org
+Cc: Frank Vanbever <frank.vanbever@essensium.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Quentin, All,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On 2022-07-19 15:31 +0200, Quentin Schulz spake thusly:
-> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> 
-> Since commit b01f19fb9361 ("pcsc_demo: change licence from GPLv3 to
-> BSD") in pcsclite, the license of pcsc_demo is BSD-3-Clause and not
-> GPL-3.0-or-later, so let's update the package license information.
-> 
-> Cc: Quentin Schulz <foss+buildroot@0leil.net>
-> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+ > On 13/06/2022 22:06, Fabrice Fontaine wrote:
+ >> libmodsecurity embeds several mbedtls source files since version 3.0.0
+ >> and
+ >> https://github.com/SpiderLabs/ModSecurity/commit/a3ae686f2555bdacbfc9e1889ad05065711a165d
+ >> resulting in the following static build failure if curl is built with
+ >> mbedtls support:
+ >> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real:
+ >> /home/buildroot/autobuild/instance-0/output-1/host/bin/../m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libmbedcrypto.a(md5.c.o):
+ >> in function `mbedtls_md5_free':
+ >> md5.c:(.text+0x16): multiple definition of `mbedtls_md5_free';
+ >> ../../src/.libs/libmodsecurity.a(libmbedtls_la-md5.o):md5.c:(.text+0x16):
+ >> first defined here
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/98472a3a41cdbcb3d02289a437074a267f4b2e8e
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to master, thanks.
+ >  Applied to master, thanks.
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> 
-> Cc'ing Peter as maintainer of stable branches since this commit can be
-> backported to 2022.02.x and 2022.05.x branches since the commit in
-> pcsclite is in the tree since 1.9.2 (and 2022.02.x has 1.9.5).
-> 
->  package/pcsc-lite/pcsc-lite.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
-> index ad34bb4b90..d007d8da2f 100644
-> --- a/package/pcsc-lite/pcsc-lite.mk
-> +++ b/package/pcsc-lite/pcsc-lite.mk
-> @@ -9,7 +9,7 @@ PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
->  PCSC_LITE_SITE = https://pcsclite.apdu.fr/files
->  PCSC_LITE_INSTALL_STAGING = YES
->  PCSC_LITE_DEPENDENCIES = host-pkgconf host-flex
-> -PCSC_LITE_LICENSE = BSD-2-Clause (auth), BSD-3-Clause, GPL-3.0+ (demo, spy, tests), ISC (simclist)
-> +PCSC_LITE_LICENSE = BSD-2-Clause (auth), BSD-3-Clause, GPL-3.0+ (spy, tests), ISC (simclist)
->  PCSC_LITE_LICENSE_FILES = COPYING GPL-3.0.txt
->  PCSC_LITE_SELINUX_MODULES = pcscd
->  PCSC_LITE_CONF_OPTS = --disable-strict
-> -- 
-> 2.36.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Committed to 2022.05.x and 2022.02.x, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
