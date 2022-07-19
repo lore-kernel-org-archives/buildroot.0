@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8805C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 20:46:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BEA4C43334
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 20:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53A2540CE3;
-	Tue, 19 Jul 2022 20:46:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53A2540CE3
+	by smtp2.osuosl.org (Postfix) with ESMTP id C65FD400B8;
+	Tue, 19 Jul 2022 20:46:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C65FD400B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MoXIQF4jGdbV; Tue, 19 Jul 2022 20:46:19 +0000 (UTC)
+	with ESMTP id X2PiaNx47EtH; Tue, 19 Jul 2022 20:46:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 650C440CE8;
-	Tue, 19 Jul 2022 20:46:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 650C440CE8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3CABC1BF9B5
- for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 20:46:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2B1F40CE2;
+	Tue, 19 Jul 2022 20:46:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2B1F40CE2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4978D1BF267
+ for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 20:46:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 17B5A83268
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2FA54400B8
  for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 20:46:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17B5A83268
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FA54400B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rv0mnkZQYLfa for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ORmrQ6P2epog for <buildroot@lists.busybox.net>;
  Tue, 19 Jul 2022 20:46:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 32BB983224
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B16D40CDB
  for <buildroot@buildroot.org>; Tue, 19 Jul 2022 20:46:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32BB983224
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B16D40CDB
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id B138C83ED5; Tue, 19 Jul 2022 20:32:31 +0000 (UTC)
+ id BB05083EE8; Tue, 19 Jul 2022 20:32:31 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 19 Jul 2022 22:45:26 +0200
+Date: Tue, 19 Jul 2022 22:45:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 25edf486060092a1805ff821d325af495781c37f
-X-Git-Newrev: 39a19ee2e269014f00fb9611669c6e7d128351d7
+X-Git-Oldrev: 39a19ee2e269014f00fb9611669c6e7d128351d7
+X-Git-Newrev: 5bdf0799df45b52123faade4a4847859e7591eb6
 X-Patchwork-Hint: ignore
-Message-Id: <20220719203231.B138C83ED5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/kontron_pitx_imx8m_defconfig: add
- BR2_TARGET_UBOOT_NEEDS_GNUTLS
+Message-Id: <20220719203231.BB05083EE8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/kontron/pitx-imx8m: add U-Boot
+ 2022.04 patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +63,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39a19ee2e269014f00fb9611669c6e7d128351d7
+commit: https://git.buildroot.net/buildroot/commit/?id=5bdf0799df45b52123faade4a4847859e7591eb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With U-Boot 2022.04 libuuid is required for building the host tool
-mkeficapsule. The lib is included in the util-linux package. Thus the
-BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX config is needed.
+The patch is required to fix an issue in U-Boot for linking
+the mkeficapsule tool against -luuid and -lgnutls.
+
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/2720001065
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/kontron_pitx_imx8m_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ ...capsule-use-pkg-config-to-get-luuid-and-l.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/configs/kontron_pitx_imx8m_defconfig b/configs/kontron_pitx_imx8m_defconfig
-index 7448f27980..ac03871682 100644
---- a/configs/kontron_pitx_imx8m_defconfig
-+++ b/configs/kontron_pitx_imx8m_defconfig
-@@ -48,6 +48,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN=y
- BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
-+BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
- BR2_TARGET_UBOOT_SPL=y
+diff --git a/board/kontron/pitx-imx8m/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch b/board/kontron/pitx-imx8m/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch
+new file mode 100644
+index 0000000000..9530a45efe
+--- /dev/null
++++ b/board/kontron/pitx-imx8m/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch
+@@ -0,0 +1,33 @@
++From f3523977e8f5f6b2173708777001332431ebc609 Mon Sep 17 00:00:00 2001
++From: Heiko Thiery <heiko.thiery@gmail.com>
++Date: Tue, 19 Jul 2022 16:17:09 +0200
++Subject: [PATCH 1/2] tools: mkeficapsule: use pkg-config to get -luuid and -lgnutls
++
++Instead of hardcoding -luuid -lgnutls as the flags needed to build
++mkeficapsule, use pkg-config when available.
++
++We gracefully fallback on the previous behavior of hardcoding -luuid
++-lgnutls if pkg-config is not available or fails with an error.
++
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ tools/Makefile | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/tools/Makefile b/tools/Makefile
++index 9f2339666a..9f6b282ad8 100644
++--- a/tools/Makefile
+++++ b/tools/Makefile
++@@ -242,7 +242,8 @@ hostprogs-$(CONFIG_MIPS) += mips-relocs
++ hostprogs-$(CONFIG_ASN1_COMPILER)	+= asn1_compiler
++ HOSTCFLAGS_asn1_compiler.o = -idirafter $(srctree)/include
++ 
++-HOSTLDLIBS_mkeficapsule += -lgnutls -luuid
+++HOSTLDLIBS_mkeficapsule += \
+++	$(shell pkg-config --libs gnutls uuid 2> /dev/null || echo "-lgnutls -luuid")
++ hostprogs-$(CONFIG_TOOLS_MKEFICAPSULE) += mkeficapsule
++ 
++ # We build some files with extra pedantic flags to try to minimize things
++-- 
++2.30.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
