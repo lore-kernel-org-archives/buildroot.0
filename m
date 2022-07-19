@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EA50C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 635E4C43334
+	for <buildroot@archiver.kernel.org>; Tue, 19 Jul 2022 15:13:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C27138271A;
-	Tue, 19 Jul 2022 15:13:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C27138271A
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED33C611AA;
+	Tue, 19 Jul 2022 15:13:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED33C611AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x7_zk65wG7NR; Tue, 19 Jul 2022 15:13:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id urUwByeKEYqd; Tue, 19 Jul 2022 15:13:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7903826C2;
-	Tue, 19 Jul 2022 15:13:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7903826C2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5E5DE1BF9B5
+	by smtp3.osuosl.org (Postfix) with ESMTP id E89046119A;
+	Tue, 19 Jul 2022 15:13:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E89046119A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7EEC51BF9BA
  for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:12:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 46280402AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59B5C611A0
  for <buildroot@lists.busybox.net>; Tue, 19 Jul 2022 15:12:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46280402AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59B5C611A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EQXJUbpO8nkf for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BP7Sp2XwtKXA for <buildroot@lists.busybox.net>;
  Tue, 19 Jul 2022 15:12:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 596924090C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 78E5061198
  for <buildroot@buildroot.org>; Tue, 19 Jul 2022 15:12:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 596924090C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78E5061198
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 53B2A83D04; Tue, 19 Jul 2022 14:59:20 +0000 (UTC)
+ id 7FBAB83D0D; Tue, 19 Jul 2022 14:59:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Jul 2022 12:18:15 +0200
+Date: Tue, 19 Jul 2022 17:07:48 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 40037b32f6ce29a6119f6f3c5a290dc5a8fc564e
-X-Git-Newrev: 3678ad62f0f4392b063932d9786d87b3d165c47e
+X-Git-Oldrev: c4eb3dd0a683a45bf946f3e60c68d358c9a05c90
+X-Git-Newrev: 78b3a2b33e72bd4ef2a42b495297a6bdb8ec4e5c
 X-Patchwork-Hint: ignore
-Message-Id: <20220719145920.53B2A83D04@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/php: simplify icu
- configure options
+Message-Id: <20220719145920.7FBAB83D0D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/uacme: allow
+ ualpn with mbedTLS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3678ad62f0f4392b063932d9786d87b3d165c47e
+commit: https://git.buildroot.net/buildroot/commit/?id=78b3a2b33e72bd4ef2a42b495297a6bdb8ec4e5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Since php-7.4 upstream switched to pkg-config to detect icu:
-https://github.com/php/php-src/commit/20fa2e7b58c519cc148d9658456b695884b1ecf4
+Following the update to mbedTLS 2.28.0 in commit 0f8aab08, ualpn can
+work with mbedTLS without restrictions.
 
-Remove all unneeded code from php.mk.
+References
+https://git.buildroot.net/buildroot/commit?id=96c3b52132b41716ca445b4c73a1a8886c26e5ee
+https://github.com/ndilieto/uacme/issues/23#issuecomment-1043409796
+https://github.com/ndilieto/uacme/commit/bbee626cf5f60908f064c123f7a9622639348c3d
+https://github.com/Mbed-TLS/mbedtls/pull/3243
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit f939cf7c8cb1f08f0fa43aa20c8d98b01f32ac7e)
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6c7b46945e656e03713ffeb1230211ec81791478)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ package/uacme/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 39db9d3a7c..d9c2edd839 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -176,13 +176,8 @@ endif
- endif
+diff --git a/package/uacme/Config.in b/package/uacme/Config.in
+index d693436115..58b7c534e7 100644
+--- a/package/uacme/Config.in
++++ b/package/uacme/Config.in
+@@ -19,7 +19,6 @@ if BR2_PACKAGE_UACME
+ config BR2_PACKAGE_UACME_UALPN
+ 	bool "enable ualpn"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_PACKAGE_OPENSSL || BR2_PACKAGE_GNUTLS
+ 	select BR2_PACKAGE_LIBEV
+ 	help
+ 	  Build and install ualpn, the transparent proxying tls-alpn-01
+@@ -28,7 +27,4 @@ config BR2_PACKAGE_UACME_UALPN
+ comment "ualpn needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
- ifeq ($(BR2_PACKAGE_PHP_EXT_INTL),y)
--PHP_CONF_OPTS += --enable-intl --with-icu-dir=$(STAGING_DIR)/usr
--PHP_CXXFLAGS += "`$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
-+PHP_CONF_OPTS += --enable-intl
- PHP_DEPENDENCIES += icu
--# The intl module is implemented in C++, but PHP fails to use
--# g++ as the compiler for the final link. As a workaround,
--# tell it to link libstdc++.
--PHP_EXTRA_LIBS += -lstdc++
+-comment "ualpn needs either OpenSSL or GnuTLS"
+-	depends on !(BR2_PACKAGE_OPENSSL || BR2_PACKAGE_GNUTLS)
+-
  endif
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_GMP),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
