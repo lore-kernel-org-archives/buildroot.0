@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 020D7C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 21:23:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22682C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 21:24:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84DC941B4E;
-	Wed, 20 Jul 2022 21:23:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84DC941B4E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F9AA41041;
+	Wed, 20 Jul 2022 21:24:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F9AA41041
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vAnV2iKStnwZ; Wed, 20 Jul 2022 21:23:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lDL3RcHP6CAn; Wed, 20 Jul 2022 21:24:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2545441521;
-	Wed, 20 Jul 2022 21:23:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2545441521
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 13BB81C1135
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 21:23:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A9A254103A;
+	Wed, 20 Jul 2022 21:23:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9A254103A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 69DD91BF3A1
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 21:23:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E22FF60A8C
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 21:23:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E22FF60A8C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 425B341029
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 21:23:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 425B341029
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MwmWdNroTmkH for <buildroot@lists.busybox.net>;
- Wed, 20 Jul 2022 21:23:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4065F60737
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 21:23:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4065F60737
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6A261840AE; Wed, 20 Jul 2022 21:09:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 20 Jul 2022 23:23:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fb77daa909a83d1d5815c27af0900a1b2eb79cc1
-X-Git-Newrev: d8358ae1787f661e19dfe968993492c06afaa7b3
-X-Patchwork-Hint: ignore
-Message-Id: <20220720210950.6A261840AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{webkitgtk,
- wpewebkit}: select subenc for multimedia
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t6-YOjpDzkdF for <buildroot@lists.busybox.net>;
+ Wed, 20 Jul 2022 21:23:38 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F263B4015A
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F263B4015A
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 21:23:37 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3FC8C60002;
+ Wed, 20 Jul 2022 21:23:35 +0000 (UTC)
+Date: Wed, 20 Jul 2022 23:23:34 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220720232334.091286d6@windsurf>
+In-Reply-To: <20220627072336.2673298-1-james.hilliard1@gmail.com>
+References: <20220627072336.2673298-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658352216;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=LY71nyIybH47L1deDIIrVGNwAOiyAqrt9y1fDgaODpo=;
+ b=HovUItUxWkk271sKqt7+5wtRNYgIPtkXZ6/EVBFZGS6otjJjRImYbVq439YQfze18w40+V
+ am89U8ZJLYYqEgaXBDPlZf5zJoF+j9be1GOcOLIBhNHBok54kn136RkAa9nURU6tSTnSIY
+ GWdvdvXM2DQI0yStDxVlpe7MCETS0ri9T7LcsWGZbGwzLkDGnIv5AwlufDmF1BbW3y1YJz
+ JVUh50Qo2e8LxzbWLPE69xTJVEidmiI0b+cphSFHZgmBaecantfZjCfqOl3UUkV0u70pqx
+ K1JvweFU9fl7VIhnqBQr1Ks4JipQpicfDDfZDzmfnwo7TP9LJ9Ot6I9S+rIogg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HovUItUx
+Subject: Re: [Buildroot] [PATCH 1/1] package/{webkitgtk,
+ wpewebkit}: select audiofx for multimedia
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,57 +78,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8358ae1787f661e19dfe968993492c06afaa7b3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 27 Jun 2022 01:23:36 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-When using webkit with multimedia support the subenc element may
-be needed, as such we should select the subenc plugin.
+> When using webkit with multimedia support the scaletempo element may
+> be needed, select the audiofx plugin which provides scaletempo.
+> 
+> Fixes runtime warning:
+> createGSTPlayBin: Failed to create scaletempo
+> 
+> See:
+> https://github.com/WebKit/WebKit/blob/72b59ad50e079037073722bbdf469c0952e399fa/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamer.cpp#L2813
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/webkitgtk/Config.in | 1 +
+>  package/wpewebkit/Config.in | 1 +
+>  2 files changed, 2 insertions(+)
 
-Fixes runtime warning:
-isGStreamerPluginAvailable: Plugin subenc not found. Please check your GStreamer installation
-WebKit wasn't able to find a WebVTT encoder. Subtitles handling will be degraded unless gst-plugins-bad is installed.
+Applied to master, thanks.
 
-See:
-https://github.com/WebKit/WebKit/blob/72b59ad50e079037073722bbdf469c0952e399fa/Source/WebCore/platform/graphics/gstreamer/TextCombinerGStreamer.cpp#L221
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/webkitgtk/Config.in | 1 +
- package/wpewebkit/Config.in | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index d0c73f3f29..cafe497491 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -97,6 +97,7 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SUBENC
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index a205e6276f..04ed40bd92 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -90,6 +90,7 @@ config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SUBENC
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
