@@ -4,61 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D06E7C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 08:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64924C43334
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 10:13:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 335D561113;
-	Wed, 20 Jul 2022 08:54:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 335D561113
+	by smtp3.osuosl.org (Postfix) with ESMTP id B85AD6124A;
+	Wed, 20 Jul 2022 10:13:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B85AD6124A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1dyyBwbdAYoN; Wed, 20 Jul 2022 08:54:37 +0000 (UTC)
+	with ESMTP id 8z1wyX51-qGY; Wed, 20 Jul 2022 10:13:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B28A610EE;
-	Wed, 20 Jul 2022 08:54:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B28A610EE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7B86C1BF300
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 08:54:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5B8A61257;
+	Wed, 20 Jul 2022 10:13:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5B8A61257
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B06BB1BF2B5
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 10:13:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5630E827D2
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 08:54:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5630E827D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 443EE40C23
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 10:13:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 443EE40C23
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1EoAbElltbQh for <buildroot@lists.busybox.net>;
- Wed, 20 Jul 2022 08:54:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DE2E827CA
-Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8DE2E827CA
- for <buildroot@busybox.net>; Wed, 20 Jul 2022 08:54:32 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id CDAB9440F3B;
- Wed, 20 Jul 2022 11:53:56 +0300 (IDT)
-To: buildroot@busybox.net
-Date: Wed, 20 Jul 2022 11:54:05 +0300
-Message-Id: <7e2b2434ee6372f950cce9f78a113fc1ef71d047.1658307245.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4KRJhXmldoaj for <buildroot@lists.busybox.net>;
+ Wed, 20 Jul 2022 10:13:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5236400AB
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E5236400AB
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 10:13:12 +0000 (UTC)
+Received: by mail-lf1-x131.google.com with SMTP id z22so15816239lfu.7
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 03:13:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :organization:content-transfer-encoding;
+ bh=RvZ2UZ4qZaYUChd6BOHCEVjDC0cISlfgPNz4BHwdaB4=;
+ b=g8FMLKlLvSQJEPO8KAJU6chnLeNY4qODTsNoakEq30fssD1Cg6rzszrlqWp2dTRqg/
+ xKTDBG1SNHl4mxFvw7iunkhMQpRyDptQqLKMxLB3po/FwDVFGw5BVWQqRg1TXpv+i6zv
+ JsRQ5MjWQ5o1B3UeX1CMPxWxL4VdZoO1yHQS86mFFcn8RyHjjNMcPKxMC9TRXdjl4VTc
+ UHeCJwa3tls/s16xxklERHZsu8G/CF+UwxD7fwSStx6ItlDwyOIT56bfZms/vP5diYRE
+ qhFuh0LMHgeZCP78i8ePI2gxp1eqt9efzA/AoEKG0A9G+aXl5nWshJkGJjTbR2gsk4hY
+ Fauw==
+X-Gm-Message-State: AJIora80k85WdJhl9KLS4Ulp7sAzzAuHYoAaPg/SrtZynzkhxwMwBPIU
+ Sa8JTTla0m6THEt6kIxa/VPx4fDTTug=
+X-Google-Smtp-Source: AGRyM1uKMVaSjMz/fZr7LIGoZuB5JJs+agRXW9eMcy8nnztS7WuP1Jlm9xTed/x4CaHLTrynp5qQjw==
+X-Received: by 2002:a05:6512:1191:b0:48a:2269:e87 with SMTP id
+ g17-20020a056512119100b0048a22690e87mr12679014lfr.122.1658311988470; 
+ Wed, 20 Jul 2022 03:13:08 -0700 (PDT)
+Received: from gimli.lan ([2001:9b0:21f:7700::af3])
+ by smtp.gmail.com with ESMTPSA id
+ a14-20020a19e30e000000b0047f7bd03943sm3706363lfh.264.2022.07.20.03.13.07
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 20 Jul 2022 03:13:07 -0700 (PDT)
+From: Joachim Wiberg <troglobit@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 20 Jul 2022 12:13:06 +0200
+Message-Id: <20220720101306.669862-1-troglobit@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1658307242;
- bh=RKJjzNNjUNTuf6K3cd9YEZJRVVCfTyXw4q6dn0D23S8=;
- h=From:To:Cc:Subject:Date:From;
- b=RIUS1k1k4qtpUJkpGo73ydmJvR+BowUAKB0D0dEj6QUBOC8MVLoKiHNmDZqLMNOTZ
- JCqgEbKu+uCMFJFgDTDr6+22AEHBtk2WNdfY8wBtL7PUZvnqiHfSAyL5ARHL3AuABE
- aImgOkmMkNf2zCYm98J0OgwR9uwKJz/OhGYkzuPSZoBdwrtmP9mmZ/gpx9k+wOBIIn
- daBN8i6ZHZjDhEu6le2DldhQQQmAiaj5YPpU4YCnnBgQgyVg21ZKgsYlZBFe/WMr5I
- 9gvhBZQgybfYbTIsXaCEy52upuptzRm4iBbfRZtqV60hA/UEjiL2CojT2kfWxNtw7p
- +rcmlElZSbVUA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=RIUS1k1k
-Subject: [Buildroot] [PATCH] package/zeromq: drop libuuid dependency
+Organization: Addiva Elektronik
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version:organization
+ :content-transfer-encoding;
+ bh=RvZ2UZ4qZaYUChd6BOHCEVjDC0cISlfgPNz4BHwdaB4=;
+ b=WfQkPXLgPVhUYmyQsTwSVJdgWbPudlfgy4Cetu6XR177t7wFAUpc9Tp94KjnQzvDsE
+ X68bUcIqcJGaoeMy5vjks7Djnj5/geKYV2mtmHeigPnF8Efl0Gk4bM7wzziDdhATNTAl
+ tk+IhIy0hcTgJm7ph25+9JbJQfKuMXuMBcCLq3N09cGMj+hKfHTDNmo7Kl2/To86Hf+4
+ 3APh/rbPCjnuAJE4VlQO9cgKuv9VsT2P8R15v3qTPpxYAe1e36niHB3+Hd9iCCKpeSoA
+ a7XDyIUivP+ZM8UI6wZd0u3bssJGpL8h8nF2KQvJuW4/oOAcoS+Snnwnpb/Ty4tM5NK6
+ 9e1g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=WfQkPXLg
+Subject: [Buildroot] [PATCH 1/2] package/sysklogd: install to staging,
+ provides syslog() replacement
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,37 +94,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Joachim Wiberg <troglobit@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-WmVyb01RIHJlbW92ZWQgdGhlIGxpYnV1aWQgZGVwZW5kZW5jeSBpbiB2ZXJzaW9uIDMuMS4wLCAx
-MCsgeWVhcnMgYWdvLgoKQ2M6IEFzYWYgS2FobG9uIDxhc2Fma2E3QGdtYWlsLmNvbT4KU2lnbmVk
-LW9mZi1ieTogQmFydWNoIFNpYWNoIDxiYXJ1Y2hAdGtvcy5jby5pbD4KLS0tCiBwYWNrYWdlL3pl
-cm9tcS9Db25maWcuaW4gfCAyIC0tCiBwYWNrYWdlL3plcm9tcS96ZXJvbXEubWsgfCAxIC0KIDIg
-ZmlsZXMgY2hhbmdlZCwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3plcm9t
-cS9Db25maWcuaW4gYi9wYWNrYWdlL3plcm9tcS9Db25maWcuaW4KaW5kZXggY2Y1YzY0NGMzOWJm
-Li4yMDlhY2YxYTU3YmUgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvemVyb21xL0NvbmZpZy5pbgorKysg
-Yi9wYWNrYWdlL3plcm9tcS9Db25maWcuaW4KQEAgLTUsOCArNSw2IEBAIGNvbmZpZyBCUjJfUEFD
-S0FHRV9aRVJPTVEKIAlib29sICJ6ZXJvbXEiCiAJZGVwZW5kcyBvbiBCUjJfSU5TVEFMTF9MSUJT
-VERDUFAKIAlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKLQlzZWxlY3QgQlIy
-X1BBQ0tBR0VfVVRJTF9MSU5VWAotCXNlbGVjdCBCUjJfUEFDS0FHRV9VVElMX0xJTlVYX0xJQlVV
-SUQKIAloZWxwCiAJICDDmE1RIChaZXJvTVEsIDBNUSwgem1xKSBsb29rcyBsaWtlIGFuIGVtYmVk
-ZGFibGUgbmV0d29ya2luZwogCSAgbGlicmFyeSBidXQgYWN0cyBsaWtlIGEgY29uY3VycmVuY3kg
-ZnJhbWV3b3JrLiBJdCBnaXZlcyB5b3UKZGlmZiAtLWdpdCBhL3BhY2thZ2UvemVyb21xL3plcm9t
-cS5tayBiL3BhY2thZ2UvemVyb21xL3plcm9tcS5tawppbmRleCAxODI2OTk0MDNjYjIuLmMyMmY2
-OWVjNjZjMSAxMDA2NDQKLS0tIGEvcGFja2FnZS96ZXJvbXEvemVyb21xLm1rCisrKyBiL3BhY2th
-Z2UvemVyb21xL3plcm9tcS5tawpAQCAtNyw3ICs3LDYgQEAKIFpFUk9NUV9WRVJTSU9OID0gNC4z
-LjQKIFpFUk9NUV9TSVRFID0gaHR0cHM6Ly9naXRodWIuY29tL3plcm9tcS9saWJ6bXEvcmVsZWFz
-ZXMvZG93bmxvYWQvdiQoWkVST01RX1ZFUlNJT04pCiBaRVJPTVFfSU5TVEFMTF9TVEFHSU5HID0g
-WUVTCi1aRVJPTVFfREVQRU5ERU5DSUVTID0gdXRpbC1saW51eAogWkVST01RX0NPTkZfT1BUUyA9
-IC0tZGlzYWJsZS1XZXJyb3IgLS13aXRob3V0LWRvY3VtZW50YXRpb24KIFpFUk9NUV9MSUNFTlNF
-ID0gTEdQTC0zLjArIHdpdGggZXhjZXB0aW9ucwogWkVST01RX0xJQ0VOU0VfRklMRVMgPSBDT1BZ
-SU5HIENPUFlJTkcuTEVTU0VSCi0tIAoyLjM1LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cg==
+Since v2.0 the sysklogd project has provided an interposing library
+libsyslog.{a,so} with a syslog() replacement, including the NetBSD
+syslogp() API for RFC5424 logging.
+
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+---
+ package/sysklogd/sysklogd.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index d6db71e50c..9e5932f8fa 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -8,6 +8,7 @@ SYSKLOGD_VERSION = 2.4.0
+ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
+ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
++SYSKLOGD_INSTALL_STAGING = YES
+ SYSKLOGD_CPE_ID_VENDOR = sysklogd_project
+ 
+ # Busybox install logger in /usr/bin, and syslogd in /sbin, so install in
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
