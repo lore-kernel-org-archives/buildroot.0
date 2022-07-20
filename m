@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71386C43334
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 20:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CDD7C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 20:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 067D0418DD;
-	Wed, 20 Jul 2022 20:56:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 067D0418DD
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7F1383F5E;
+	Wed, 20 Jul 2022 20:56:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7F1383F5E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KUir06GOB4r2; Wed, 20 Jul 2022 20:56:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 54NIpVOdwpUP; Wed, 20 Jul 2022 20:56:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9801418D4;
-	Wed, 20 Jul 2022 20:56:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9801418D4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6956F1C1135
+	by smtp1.osuosl.org (Postfix) with ESMTP id B295A82423;
+	Wed, 20 Jul 2022 20:56:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B295A82423
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6AAE91C115D
  for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 20:56:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BEC741B45
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F1E241042
  for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 20:56:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BEC741B45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F1E241042
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kOkkGsJvL0LB for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aWTl8tKcRFv3 for <buildroot@lists.busybox.net>;
  Wed, 20 Jul 2022 20:56:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B74E418CB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5896F4103C
  for <buildroot@buildroot.org>; Wed, 20 Jul 2022 20:56:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B74E418CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5896F4103C
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 996D68407C; Wed, 20 Jul 2022 20:42:35 +0000 (UTC)
+ id 8BFF684079; Wed, 20 Jul 2022 20:42:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 20 Jul 2022 22:45:38 +0200
+Date: Wed, 20 Jul 2022 22:42:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 463996d052d51028f719461f2b01ec69203ddf5d
-X-Git-Newrev: f29aecc64de0c42359daaf21bcbe337ffa383222
+X-Git-Oldrev: 35befff3be8d8d03d9eb52d24a8998109cf4c3b7
+X-Git-Newrev: 463996d052d51028f719461f2b01ec69203ddf5d
 X-Patchwork-Hint: ignore
-Message-Id: <20220720204235.996D68407C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/open62541: more PubSub options
+Message-Id: <20220720204235.8BFF684079@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/open62541: more options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,64 +63,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f29aecc64de0c42359daaf21bcbe337ffa383222
+commit: https://git.buildroot.net/buildroot/commit/?id=463996d052d51028f719461f2b01ec69203ddf5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/open62541/Config.in    | 14 ++++++++++++++
+ package/open62541/Config.in    | 12 ++++++++++++
  package/open62541/open62541.mk | 12 ++++++++++++
- 2 files changed, 26 insertions(+)
+ 2 files changed, 24 insertions(+)
 
 diff --git a/package/open62541/Config.in b/package/open62541/Config.in
-index 6045a5954d..3f5eb78d52 100644
+index 220fb3dfa6..6045a5954d 100644
 --- a/package/open62541/Config.in
 +++ b/package/open62541/Config.in
-@@ -78,6 +78,20 @@ config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
- 	  Enable the information model representation of the PubSub
- 	  configuration.
+@@ -39,8 +39,20 @@ config BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_FULL
  
-+if BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
-+
-+config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL_METHODS
-+	bool "publish/subscribe information model methods"
-+	help
-+	  Enable PubSub informationmodel methods
-+
-+endif
-+
-+config BR2_PACKAGE_OPEN62541_PUBSUB_ETH_UADP
-+	bool "publish/subscribe UADP"
-+	help
-+	  Enable publish/subscribe UADP over Ethernet
-+
- endif # BR2_PACKAGE_OPEN62541_PUBSUB
+ endchoice
  
- endif
++config BR2_PACKAGE_OPEN62541_HISTORIZING
++	bool "historizing"
++	help
++	  Enable basic support for historical access (client and server)
++
++config BR2_PACKAGE_OPEN62541_DISCOVERY
++	bool "discovery"
++	help
++	  Enable Discovery Service (LDS)
++
+ config BR2_PACKAGE_OPEN62541_JSON_ENCODING
+ 	bool "json encoding"
++	help
++	  Enable JSON encoding
+ 
+ config BR2_PACKAGE_OPEN62541_PUBSUB
+ 	bool "publish/subscribe"
 diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 00e7236c0e..9757aa18cb 100644
+index 1958befae5..00e7236c0e 100644
 --- a/package/open62541/open62541.mk
 +++ b/package/open62541/open62541.mk
-@@ -67,6 +67,18 @@ else
- OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
+@@ -31,6 +31,18 @@ else ifeq ($(BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_FULL),y)
+ OPEN62541_CONF_OPTS += -DUA_NAMESPACE_ZERO=FULL
  endif
  
-+ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL_METHODS),y)
-+OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS=ON
++ifeq ($(BR2_PACKAGE_OPEN62541_HISTORIZING),y)
++OPEN62541_CONF_OPTS += -DUA_ENABLE_HISTORIZING=ON
 +else
-+OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS=OFF
++OPEN62541_CONF_OPTS += -DUA_ENABLE_HISTORIZING=OFF
 +endif
 +
-+ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_ETH_UADP),y)
-+OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_ETH_UADP=ON
++ifeq ($(BR2_PACKAGE_OPEN62541_DISCOVERY),y)
++OPEN62541_CONF_OPTS += -DUA_ENABLE_DISCOVERY=ON
 +else
-+OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_ETH_UADP=OFF
++OPEN62541_CONF_OPTS += -DUA_ENABLE_DISCOVERY=OFF
 +endif
 +
- # Remove unneeded files
- define OPEN62541_REMOVE_UNNEEDED_FILES
- 	$(RM) -r $(TARGET_DIR)/usr/share/open62541
+ ifeq ($(BR2_PACKAGE_OPEN62541_JSON_ENCODING),y)
+ OPEN62541_CONF_OPTS += -DUA_ENABLE_JSON_ENCODING=ON
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
