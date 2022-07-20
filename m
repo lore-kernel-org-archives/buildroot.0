@@ -4,62 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 871F6C43334
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 16:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 266F2C43334
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 16:27:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CF9F832C6;
-	Wed, 20 Jul 2022 16:23:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CF9F832C6
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF68E83396;
+	Wed, 20 Jul 2022 16:27:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF68E83396
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SteXJVUA-Cma; Wed, 20 Jul 2022 16:23:48 +0000 (UTC)
+	with ESMTP id fAjBkyxVQIHS; Wed, 20 Jul 2022 16:27:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FD3682983;
-	Wed, 20 Jul 2022 16:23:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FD3682983
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 934FE1BF352
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:23:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE44982EF1;
+	Wed, 20 Jul 2022 16:27:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE44982EF1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 58F221BF352
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:27:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B2CE60D76
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:23:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B2CE60D76
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E78882EF1
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:27:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E78882EF1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VYTZnDZDKUMH for <buildroot@lists.busybox.net>;
- Wed, 20 Jul 2022 16:23:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6409B60AE3
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6409B60AE3
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 16:23:43 +0000 (UTC)
-Received: from [81.174.171.191] (helo=donbot)
- by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
- (Exim 4.95) (envelope-from <john@metanate.com>) id 1oECU6-00006U-Kv;
- Wed, 20 Jul 2022 17:23:39 +0100
-Date: Wed, 20 Jul 2022 17:23:38 +0100
-From: John Keeping <john@metanate.com>
-To: buildroot@buildroot.org, Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <YtgsCjq5XQU1x1kX@donbot>
-MIME-Version: 1.0
-Content-Disposition: inline
-X-Authenticated: YES
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; 
- d=metanate.com; s=stronger; h=Content-Type:Message-ID:Subject:To:From:Date:
- Reply-To:Cc:Content-Transfer-Encoding:Content-ID:Content-Description:
- In-Reply-To:References; bh=Rg+BCXAvzct9UpHMc8DQjajgrj7K3Gj2VF0wUhGA2Ng=; b=cq
- kOrT6cnoABl7Vo6R3vTRfndgrf9o2Di+5jQs0JS8Yt14KpXVPMz5nzeTcVm3P+O3g6/GphEYmxGc3
- oGpJURKQsfrrvcwy2Nmoq//WS06HbbMeUv6KT694jC9VyOIj71ByDU6KqQiDgkPlrp0NDVAHYKahR
- Kwz2nVI345jEHP9JioR32qvCF3omVktfCnajahnecikWInLqeicnUQaQM0x4nLW6ubwbaBgG1fKwM
- U7Lh0hzVVrLkIj0gGysrmxod1baW0wN3JEe/nHHB3gX6Wg4tjvx0c9RRq/NwlFpmiCo4S4SDIHKCv
- I8mGzew26grp8qxdfpu7VeAyK6DMbn+Q==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=metanate.com header.i=@metanate.com
- header.a=rsa-sha256 header.s=stronger header.b=cqkOrT6c
-Subject: [Buildroot] package/fscryptctl: how to update with breaking changes?
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kP_sPZFB2k9b for <buildroot@lists.busybox.net>;
+ Wed, 20 Jul 2022 16:27:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5FFE982E14
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 16:27:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FFE982E14
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 00BE083FFA; Wed, 20 Jul 2022 16:14:21 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 20 Jul 2022 18:26:58 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4245a28f0e63de48be7a198fa3ec2d53f1f0607f
+X-Git-Newrev: c70601762104d6d2beba51bc5804fcd204bd6bd3
+X-Patchwork-Hint: ignore
+Message-Id: <20220720161422.00BE083FFA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bayer2rgb-neon: fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,35 +55,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=c70601762104d6d2beba51bc5804fcd204bd6bd3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-fscryptctl is currently pointing to a commit SHA from 2017 and there is
-now a v1.0.0 tag from 2021 (with the only subsequent changes being
-documentation & test related).
+Fix the following build failure:
 
-However, updating isn't straightforward as Buildroot's current version
-only supports v1 encryption policies but upstream has introduced v2
-policies and then deprecated and removed support for v1 policies before
-the v1.0.0 release [1].
+/home/autobuild/autobuild/instance-12/output-1/host/lib/gcc/aarch64-buildroot-linux-uclibc/10.3.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld: ./.libs/libbayer2rgb3.so: undefined reference to `__bayer2rgb_missing_convert_dumb_implementation'
 
-What is the best way to handle this in Buildroot?
+Fixes:
+ - http://autobuild.buildroot.org/results/69a637b7f1422ce2bf04dda573abb09388b9a02d
 
-Do we need to provide a choice to keep support for v1 policies if anyone
-needs them?  Or do we just update and pull in the breaking change?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-src-convert.c-remove-have_cplusplus.patch | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-(There are no package changes needs to update to v1.0.0, it's just a
-case of changing the version and hash.)
-
-[1] https://github.com/google/fscryptctl/commit/d2066cded914860164ffacebc24ea0afc0b57963
-
-
-Thanks,
-John
+diff --git a/package/bayer2rgb-neon/0001-src-convert.c-remove-have_cplusplus.patch b/package/bayer2rgb-neon/0001-src-convert.c-remove-have_cplusplus.patch
+new file mode 100644
+index 0000000000..71a6291a3c
+--- /dev/null
++++ b/package/bayer2rgb-neon/0001-src-convert.c-remove-have_cplusplus.patch
+@@ -0,0 +1,56 @@
++From ca68dadf585aadb8adf582cd94f8fcdd4592e09f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 26 Jun 2022 10:31:49 +0200
++Subject: [PATCH] src/convert.c: remove have_cplusplus
++
++Remove have_cplusplus function for simplicity and to avoid the following
++build failure:
++
++/home/autobuild/autobuild/instance-12/output-1/host/lib/gcc/aarch64-buildroot-linux-uclibc/10.3.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld: ./.libs/libbayer2rgb3.so: undefined reference to `__bayer2rgb_missing_convert_dumb_implementation'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/69a637b7f1422ce2bf04dda573abb09388b9a02d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/convert.c | 19 +++++--------------
++ 1 file changed, 5 insertions(+), 14 deletions(-)
++
++diff --git a/src/convert.c b/src/convert.c
++index c852a14..83d631d 100644
++--- a/src/convert.c
+++++ b/src/convert.c
++@@ -27,25 +27,16 @@ static bool have_neon()
++ #endif
++ }
++ 
++-static bool have_cplusplus()
++-{
++-#ifdef HAVE_CPLUSPLUS
++-	return true;
++-#else
++-	return false;
++-#endif
++-}
++-
++ void bayer2rgb_convert_dumb(struct image_in const *input,
++ 			    struct image_out const *output,
++ 			    struct image_conversion_info *info)
++ {
+++#ifdef HAVE_CPLUSPLUS
+++	return bayer2rgb_convert_cc(input, output, info);
+++#else
++ 	extern void __bayer2rgb_missing_convert_dumb_implementation();
++-
++-	if (have_cplusplus())
++-		return bayer2rgb_convert_cc(input, output, info);
++-	else
++-		__bayer2rgb_missing_convert_dumb_implementation();
+++	__bayer2rgb_missing_convert_dumb_implementation();
+++#endif
++ }
++ 
++ void bayer2rgb_convert(struct image_in const *input,
++-- 
++2.35.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
