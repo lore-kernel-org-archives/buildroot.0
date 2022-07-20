@@ -4,68 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1DDAC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 20:24:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4457FC43334
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 20:34:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 102D241B43;
-	Wed, 20 Jul 2022 20:24:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 102D241B43
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99B8241B41;
+	Wed, 20 Jul 2022 20:34:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99B8241B41
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z881mLkpOVY1; Wed, 20 Jul 2022 20:24:39 +0000 (UTC)
+	with ESMTP id 5W7FxrzwBFxB; Wed, 20 Jul 2022 20:34:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3E2141B32;
-	Wed, 20 Jul 2022 20:24:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3E2141B32
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D96141978;
+	Wed, 20 Jul 2022 20:34:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D96141978
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D1BFA1BF473
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 20:24:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3C59E1BF473
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 20:34:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9357A83F82
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 20:24:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9357A83F82
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2545B8249E
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 20:34:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2545B8249E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GozE2YUDHg_4 for <buildroot@lists.busybox.net>;
- Wed, 20 Jul 2022 20:24:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E3C383F81
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4E3C383F81
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 20:24:34 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 01BF360002;
- Wed, 20 Jul 2022 20:24:30 +0000 (UTC)
-Date: Wed, 20 Jul 2022 22:24:30 +0200
-To: "Barisani, Andrea" <andrea.barisani@withsecure.com>
-Message-ID: <20220720222430.7eb519f6@windsurf>
-In-Reply-To: <8CF2C8F5-F7EA-43C2-80BA-1D4122D22A66@withsecure.com>
-References: <20220720125707.1899437-1-festevam@gmail.com>
- <20220720183856.742c4a09@windsurf>
- <8CF2C8F5-F7EA-43C2-80BA-1D4122D22A66@withsecure.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658348671;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=8AvO+Eo5Mi3yI42M8Ud3NOELkp0USA+AcSYIV5pu4x8=;
- b=gQLqjXbg8l0nEu6IjDis5kKpNL6nBEE/fWNbZNlInpIvE1faX+Q5sqhTD959NV4J9StZDS
- t+W2r75Ie0XPle4EppIVnPU2Uvk7ZhhpNC6X4tiRUXHkCW5HWkAwmog0JUbrtZut1hwdTt
- 5oTrqdFjEHn6W9KoLLcu8HUlDZ6x8WlTiIGhLGoNBsJwStwmKwMGfqgag2yrgqrjyrwV0x
- b9CWGjy0kvx6UwMPbXHJrEyMld2A1Hz1XcmaAEDV/cWAhrX1tPci+QP3iWHpBIj9eiWr9F
- va8tbVSimoiUBTjUB0wvBHAqIzNS+KdSLjEuILgZCY4SxlLbkDDYdRv8XKVTdQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gQLqjXbg
-Subject: Re: [Buildroot] [PATCH] package/crucible: Pass 'osusergo netgo' tags
+ with ESMTP id govlS151iLI7 for <buildroot@lists.busybox.net>;
+ Wed, 20 Jul 2022 20:34:46 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7CA7E83F5D
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 20:34:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CA7E83F5D
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id AFA168403E; Wed, 20 Jul 2022 20:21:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 20 Jul 2022 22:34:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 62a94cbd8f0a2cf6cb8fe2b491a77bfb1a142305
+X-Git-Newrev: 14c093d25845aa657caea83e954eb36235e471c7
+X-Patchwork-Hint: ignore
+Message-Id: <20220720202115.AFA168403E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wine: needs NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,38 +57,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabio Estevam <festevam@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=14c093d25845aa657caea83e954eb36235e471c7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 20 Jul 2022 17:05:42 +0000
-"Barisani, Andrea" <andrea.barisani@withsecure.com> wrote:
+wine unconditionally uses pthread_attr_setstack resulting in the
+following build failure without NPTL:
 
-> These flags are not crucible specific but they are necessary when
-> compiling static Go binaries with CGO enabled (which crucible does
-> not require by the way) to ensure portability as cgo versions of net
-> and os/users are not portable. 
+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/i586-buildroot-linux-uclibc/11.3.0/../../../../i586-buildroot-linux-uclibc/bin/ld: dlls/ntdll/unix/thread.o: in function `NtCreateThreadEx':
+thread.c:(.text+0x61b): undefined reference to `pthread_attr_setstack'
 
-Thanks for your feedback, much appreciated!
+Fixes:
+ - http://autobuild.buildroot.org/results/a866d65cda97845a8c829acad2c057bab00cde08
 
-So, I see we're passing CGO_ENABLED=1 (when thread support is
-available) to all packages, and you're saying that this is incorrect as
-not all Go packages need CGO? Passing CGO_ENABLED=1/0 should be a
-per-package decision?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wine/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-However, when CGO is enabled and we need static linking, passing
-osusergo and netgo tags is needed, correct?
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/wine/Config.in b/package/wine/Config.in
+index 9de8cf0f6d..18fb0a64a2 100644
+--- a/package/wine/Config.in
++++ b/package/wine/Config.in
+@@ -13,6 +13,8 @@ config BR2_PACKAGE_WINE
+ 	depends on BR2_PACKAGE_WINE_ARCH_SUPPORTS
+ 	# Wine unconditionally builds shared libraries
+ 	depends on !BR2_STATIC_LIBS
++	# pthread_attr_setstack
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	help
+ 	  Wine is a compatibility layer capable of running Windows
+ 	  applications on Linux. Instead of simulating internal
+@@ -23,6 +25,6 @@ config BR2_PACKAGE_WINE
+ 
+ 	  http://www.winehq.org
+ 
+-comment "wine needs a toolchain w/ dynamic library"
++comment "wine needs a toolchain w/ dynamic library, NPTL"
+ 	depends on BR2_PACKAGE_WINE_ARCH_SUPPORTS
+-	depends on BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
