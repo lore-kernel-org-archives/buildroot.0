@@ -4,67 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C36A7C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 16:43:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9B0FC43334
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 16:52:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 552BB81CDC;
-	Wed, 20 Jul 2022 16:43:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 552BB81CDC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 403448137E;
+	Wed, 20 Jul 2022 16:52:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 403448137E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kbXNkjwQB95V; Wed, 20 Jul 2022 16:43:31 +0000 (UTC)
+	with ESMTP id 8KoK0r2iVc-5; Wed, 20 Jul 2022 16:52:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E16681948;
-	Wed, 20 Jul 2022 16:43:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E16681948
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8ECA81344;
+	Wed, 20 Jul 2022 16:52:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8ECA81344
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AA5C91BF352
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:43:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5721D1BF352
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:52:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7651A60B43
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:43:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7651A60B43
+ by smtp3.osuosl.org (Postfix) with ESMTP id 31B2360B9D
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:52:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31B2360B9D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id flCUYrKE0GzP for <buildroot@lists.busybox.net>;
- Wed, 20 Jul 2022 16:43:28 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41C106080A
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 41C106080A
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 16:43:27 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E917524000C;
- Wed, 20 Jul 2022 16:43:24 +0000 (UTC)
-Date: Wed, 20 Jul 2022 18:43:23 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220720184323.02e79e32@windsurf>
-In-Reply-To: <20220615205026.117274-1-fontaine.fabrice@gmail.com>
-References: <20220615205026.117274-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id jTeKUBh1cfxw for <buildroot@lists.busybox.net>;
+ Wed, 20 Jul 2022 16:52:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD6B460B43
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
+ [IPv6:2607:f8b0:4864:20::22f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DD6B460B43
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 16:52:13 +0000 (UTC)
+Received: by mail-oi1-x22f.google.com with SMTP id j70so11542764oih.10
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 09:52:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=yIzZSLb7dKcAo30EZ2B43Yx354Hi/MHbitY/U+NbA3M=;
+ b=Ql+4P9nCTRcRxcgM65gReKQS1WoIiI/VDPfu9N6QRncZTkIU9JZVBFChjkukuz163q
+ VRqleefq/GITNO2WdZQuxjUkd0yqrQEEnkNdheORnVvpXed1Iwp4MVHrOpj/rSMLgnpM
+ eJQ0IBiaGdLWZg0iN59BVOJaZutPhqbhoPsz2pPOuwkYZf5TFJVJ95/EE2BYKc8FgLr6
+ MbeFxGDz2sL0a6OaEqnS/PamJPg/tcjnnKQgXPif4mEidqL6vLE8wRr6XoDIz17TE+Xm
+ f4g18hoEjqm0UNOzKmJCuGf36TtiR8lZqoWn51LoE//+YsRKCdqNB9nRZp/lVIr299GP
+ jUfg==
+X-Gm-Message-State: AJIora9y3uCCKJor0YDQggjiDz0GO4udwKCmBI7czeUPQQat6D6taecn
+ 6Nlv4v+ElGA1Qd2EvdtgogLH4T8+voHH1fJIfSUjC0YmhclBgg==
+X-Google-Smtp-Source: AGRyM1spONJpcA64+v7s1v5noi8M3q9hiyCO9UlRaOjppqbS7ngyVMe76+JAzHGyZptRiMRMBdHDC4kxLiptgWwJYO4=
+X-Received: by 2002:a05:6808:19a0:b0:33a:694a:cd3d with SMTP id
+ bj32-20020a05680819a000b0033a694acd3dmr2764883oib.99.1658335932619; Wed, 20
+ Jul 2022 09:52:12 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220719130449.334694-1-nolange79@gmail.com>
+ <20220719162138.GL2249625@scaer>
+ <CADvTj4oVSUD8pRRo=iwoMX3u_ABxf2QX1nr9RpBEOO8w2saOfA@mail.gmail.com>
+ <CADYdroOkry3uXZ2vw171SWD5jr6qEKDxEuS5ZSfDEw74MSpgug@mail.gmail.com>
+In-Reply-To: <CADYdroOkry3uXZ2vw171SWD5jr6qEKDxEuS5ZSfDEw74MSpgug@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 20 Jul 2022 10:52:01 -0600
+Message-ID: <CADvTj4pdxz_kYDVG8PryXJ7yASFxgbweWXPEL=E8OqobFBYxBA@mail.gmail.com>
+To: Norbert Lange <nolange79@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658335405;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=TV2OD0XVcpQTl5TgGr18RkyWgXOyqxuYFCGMKV77lGY=;
- b=OI/UFRxOAO6BQL+lqIywsUYFTMmev9mbhnDhzmu/ZhTeANQbN4TVRO4xdpzbzTF+LPgeQo
- L23mC+pxmt8iTN+DjCIAJsy9eDgwbFPhzHJHGAjKoP+gwQV7qED6BeCFOnG3vY8vbENCoy
- VWYlOLIdGR90F2rMI73/M8MT+9GMJ8smhgHV9VNp9stECUXEN+xwFIasJhFLds3vbyiag8
- N7g9fPu7bFhi4xhrWoQA18TK7oHay6l9QJWyuwPhIU+H2D22rgzUSxPFoILa4AqOZS2bX6
- AXOULlHvf8SGGUHx8g7dWm97TGvvBEcfd2csHxWmseofzPaD2aJBDZriHCp2oQ==
+ d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=yIzZSLb7dKcAo30EZ2B43Yx354Hi/MHbitY/U+NbA3M=;
+ b=R+iS0SIvyU0rgMU2l7SWTdn0XqvKG5jzR0TtRinB1NjCpNX/CEdnQrRynMtGSHa+S1
+ RxuS3IxpR/iJHkBY3bqCF7Ss4UnHqcbUSnEh/OfPB0XHDZGdzYXNWa2ztCdiRTYYFWhA
+ 3P8oRJRo9xlO6+s1W4KnqRqlkk3sBA5aXQy6MJW7QuyKhF9V7JnboXdA9mZr6Fn/zZIm
+ pF4QaF7fJzuEslrScR/N5EwSDk7XbEQsiCpiMl3oCs6RpamkuDiq/kjtDX0d9RwsbONL
+ XiR8TauVKDcUtvhQLiq4GScwxsLlaRTDt/C7f7QJWXTeO2uk5wBUnfJiv9WxXD9EL3PN
+ b3VQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OI/UFRxO
-Subject: Re: [Buildroot] [PATCH 1/1] package/alsa-utils: selects
- BR2_PACKAGE_ALSA_LIB_{PCM, RAWMIDI}
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=R+iS0SIv
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: bump to version 251.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,53 +91,215 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 15 Jun 2022 22:50:26 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Wed, Jul 20, 2022 at 8:51 AM Norbert Lange <nolange79@gmail.com> wrote:
+>
+> Am Di., 19. Juli 2022 um 23:56 Uhr schrieb James Hilliard
+> <james.hilliard1@gmail.com>:
+> >
+> > FYI I had sent a similar bump earlier:
+> > https://patchwork.ozlabs.org/project/buildroot/patch/20220522011729.117324-1-james.hilliard1@gmail.com/
+> >
+> > On Tue, Jul 19, 2022 at 10:22 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > >
+> > > Norbert, All,
+> > >
+> > > On 2022-07-19 15:04 +0200, Norbert Lange spake thusly:
+> > > > Add config option for the new sysupdate feature.
+> > >
+> > > Honestly, with a package so complex and critical like systemd, I would
+> > > prefer that new features not be added during the bump, but as followup
+> > > patches. The bump should add a force-disable of new features (when
+> > > known), or just leave them as auto-detected or upstream-decided
+> > > defaults.
+>
+> Honestly, I got scolded every time I just left it force-disabled ;)
+> Someone even got to the great lengths of typing the steps into systemd.mk:
+>
+> # - If there are new services:
+> #   - create new options for them (if they really are optional);
+>
+> The features are disabled by default though, so it should not
+> cause havoc.
+>
+> > >
+> > > > Remove upstreamed patch.
+> > > >
+> > > > Update options, manually setdefault options, remove option
+> > >
+> > > Sorry, I don't immediately see what "manually setdefault" means...
+> > > Is there a missing space, and this should be "manually set default" ?
+> > > Or is "setdefault" and actual systemd concept?
+> > >
+> > > (genuinely asking)
+>
+> Missing space
+>
+> > >
+> > > > not available anymore.
+> > > >
+> > > > Set default-user-shell based on wether a couple packages
+> > > > are enabled.
+> > > >
+> > > > Set default-locale to C, this seems the only safe default,
+> > >
+> > > How does that play with BR2_ENABLE_LOCALE_WHITELIST? I think that we
+> > > would want to use the first word of BR2_ENABLE_LOCALE_WHITELIST is it is
+> > > set, falling back to just 'C' otherwise.
+> >
+> > Yeah, we should use 'C.UTF-8' since it's now supported by localedef, I had
+> > sent a patch earlier changing the default but there were uclibc compatibility
+> > issues, since systemd is incompatible with uclibc there's probably a better
+> > approach:
+> > https://patchwork.ozlabs.org/project/buildroot/patch/20220517192439.1034654-1-james.hilliard1@gmail.com/
+> >
+>
+> I on not really familiar how this should be detected, especially if
+> there is an external
+> toolchain used and it should definitely only be one of 'C' or 'C.UTF-8'.
+>
+> The /usr/lib/C.UTF-8 directory has around 2MB, and for my usecase
+> I don't need or want it - unless you need to correctly display/sort strings,
+> apps just copy a binary blob and don't need to know any details.
 
-> alsactl (which is unconditionally built) needs
-> BR2_PACKAGE_ALSA_LIB_RAWMIDI since bump to version 1.2.7 in commit
-> 4dc8563363d639255217ffc59482eaccf93a1b51 and
-> https://github.com/alsa-project/alsa-utils/commit/bbc74a61ac7c35e506c3d7f76ecf943cb55736a6:
-> 
-> info.c:83:44: error: unknown type name 'snd_rawmidi_stream_t'; did you mean 'snd_pcm_stream_t'?
->    83 | static const char *snd_rawmidi_stream_name(snd_rawmidi_stream_t stream)
->       |                                            ^~~~~~~~~~~~~~~~~~~~
->       |                                            snd_pcm_stream_t
-> 
-> aplay (which is always built as BR2_PACKAGE_ALSA_LIB_PCM is selected by
-> BR2_PACKAGE_ALSA_LIB) needs BR2_PACKAGE_ALSA_LIB_UCM since bump to
-> version 1.2.7 in commit 4dc8563363d639255217ffc59482eaccf93a1b51 and
-> https://github.com/alsa-project/alsa-utils/commit/90f59671784a7e47b40485095cd66892d4840ed7:
-> 
-> aplay.c:44:10: fatal error: alsa/use-case.h: No such file or directory
->    44 | #include <alsa/use-case.h>
->       |          ^~~~~~~~~~~~~~~~~
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/708aecfafccecd99f8a4178412a9dd0cf9123f72
->  - http://autobuild.buildroot.org/results/366aa43e82615e2a5a36fcb98b3bdfbc5e99786f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Main issue is that the regular 'C' locale tends to cause lots of
+issues for anything
+that needs UTF-8 support, which can include a lot of rather unexpected things
+such as simply extracting tar archives with libarchive.
 
-This has been fixed differently in:
+I think python may also not work correctly without a UTF-8 locale:
+https://peps.python.org/pep-0538/
 
-  https://git.buildroot.org/buildroot/commit/?id=83bad5e0f00df3b03fd55916f5e03e64946ff177
+I think the only reliably sane locale is C.UTF-8 which is what most distros
+have been moving towards. However there may be cases where just a C
+locale is desired so we may want to have an option for that still, it should not
+however be the default IMO.
 
-Best regards,
+>
+> if there is *any* doubt it should be C, and currently there is alot doubt.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Upstream considers C.UTF-8 the preferred default locale:
+https://github.com/systemd/systemd/commit/c9bd01ae902d66acd8647a1cc0167bc0d246cbc8
+
+>
+> > >
+> > > Furthermore, that is not a novelty with v251; v250 already had that
+> > > option, so that should be a separate, preliminary patch.
+> > >
+> > > > users can override this in `/etc/locale.conf`.
+> > >
+> > > > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > > > ---
+> > > [--SNIP--]
+> > > > diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+> > > > index 3572b25965..838ed13fd5 100644
+> > > > --- a/package/systemd/systemd.hash
+> > > > +++ b/package/systemd/systemd.hash
+> > > > @@ -1,5 +1,5 @@
+> > > >  # sha256 locally computed
+> > > > -sha256  d2bda9d225da11dc9ff48b48e59fc36798d3e66902ed400a9f78fa370c596864  systemd-250.4.tar.gz
+> > > > +sha256  11c9c3fcc13d689615dd2ea79161d1b992087cf1e2a23856d7d7ade0efbddc54  systemd-251.3.tar.gz
+> > > >  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+> > > >  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+> > > >  sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
+> > > > @@ -11,4 +11,4 @@ sha256  790ac93fb2859097bdda4cf08b5a4feb5e479d0cb2c74f403248241bc3e7c216  LICENS
+> > > >  sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
+> > > >  sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
+> > > >  sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
+> > > > -sha256  11801e931f252252a16eac8299465510d0a82c36bfd9ac8aea9b202b76d2f82b  LICENSES/README.md
+> > > > +sha256  177ff657698bc940f9888b7f69e5d734b0933c2859ea264fde8de1700cec40dd  LICENSES/README.md
+> > >
+> > > What has changed in that license file? How does it impact (or not) the
+> > > licensing info we carry?
+> > >
+> > > We have hashes for license files, so that we know they licensing terms
+> > > change when a package is updated. Silently changing the hash kind of
+> > > defeats the purpose for those hashes...
+>
+> One line got added, no changes in the license text itself :
+>
+>  * the following sources are licensed under the **CC0-1.0** license:
+>     - src/systemctl/systemd-sysv-install.SKELETON
+>     - tools/check-includes.pl
+>     - all examples under man/
+> +   - config files and examples under /network
+>
+> The line is still valid IMHO:
+> "CC0-1.0 (few source files, see LICENSES/README.md)"
+>
+> > >
+> > > > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> > > > index 46a4e8de2c..b6fffc553f 100644
+> > > > --- a/package/systemd/systemd.mk
+> > > > +++ b/package/systemd/systemd.mk
+> > > [--SNIP--]
+> > > > @@ -472,6 +474,20 @@ else
+> > > >  SYSTEMD_CONF_OPTS += -Dsysext=false
+> > > >  endif
+> > > >
+> > > > +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUPDATE),y)
+> > > > +SYSTEMD_CONF_OPTS += -Dsysupdate=true
+> > > > +else
+> > > > +SYSTEMD_CONF_OPTS += -Dsysupdate=false
+> > > > +endif
+> > > > +
+> > > > +ifeq ($(BR2_PACKAGE_BASH),y)
+> > > > +SYSTEMD_CONF_OPTS += -Ddefault-user-shell=/bin/bash
+> > > > +else ifeq ($(BR2_PACKAGE_ZSH),y)
+> > > > +SYSTEMD_CONF_OPTS += -Ddefault-user-shell=/bin/zsh
+> > > > +else
+> > > > +SYSTEMD_CONF_OPTS += -Ddefault-user-shell=/bin/sh
+> > > > +endif
+> > >
+> > > We already have BR2_SYSTEM_BIN_SH which defines what /bin/sh is, and so
+> > > I think we should use exactly /bin/sh as the default shell:
+> > >
+> > >     ifneq ($(BR2_SYSTEM_BIN_SH_NONE),y)
+> > >     SYSTEMD_CONF_OPTS += -Ddefault-user-shell=/bin/sh
+> > >     endif
+> > >
+> > > If there is not default shell for the system, then there is none for
+> > > users as well. Systemd-defined users that want a specific shell will
+> > > have to explicitly request it: if they have a requirement for a specific
+> > > shell, they can't rely on whatever the default is, so usng /bin/sh is
+> > > exactly what we want.
+> > >
+> > > If BR2_SYSTEM_BIN_SH is empty, it is perfectly possible that there is no
+> > > shell available at all (no standalone shell, no shell in busybox), so we
+> > > don't want to set any default either.
+>
+> If you don't set anything, then '/bin/sh' will be used, so I guess ill
+> just set that
+> unconditionally.
+
+Well /bin/bash is the default if nothing is specified so we should
+override that:
+https://github.com/systemd/systemd-stable/blob/v251.3/meson_options.txt#L223-L224
+
+>
+> > >
+> > > Regards,
+> > > Yann E. MORIN.
+> > >
+> > > --
+> > > .-----------------.--------------------.------------------.--------------------.
+> > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > > '------------------------------^-------^------------------^--------------------'
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot@buildroot.org
+> > > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+> Regards, Norbert
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
