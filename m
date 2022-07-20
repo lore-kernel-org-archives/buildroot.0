@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A008C43334
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 16:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7831CC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 16:39:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11523419E4;
-	Wed, 20 Jul 2022 16:33:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11523419E4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02FE641A1E;
+	Wed, 20 Jul 2022 16:39:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02FE641A1E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XoAthLZwC2fq; Wed, 20 Jul 2022 16:33:34 +0000 (UTC)
+	with ESMTP id 8jMAnLcOeipJ; Wed, 20 Jul 2022 16:39:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFBE3408A5;
-	Wed, 20 Jul 2022 16:33:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFBE3408A5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7168F1BF352
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:33:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A77DC41A14;
+	Wed, 20 Jul 2022 16:39:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A77DC41A14
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CB9411BF352
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:39:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3240B408A5
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:33:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3240B408A5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7679B818A1
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:39:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7679B818A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VGhGTJAZ2A2P for <buildroot@lists.busybox.net>;
- Wed, 20 Jul 2022 16:33:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HousPkNvefYL for <buildroot@lists.busybox.net>;
+ Wed, 20 Jul 2022 16:39:01 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DCFC40893
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6DCFC40893
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 16:33:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F326C81871
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F326C81871
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 16:39:00 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5E0651BF204;
- Wed, 20 Jul 2022 16:33:24 +0000 (UTC)
-Date: Wed, 20 Jul 2022 18:33:23 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220720183323.0eb28663@windsurf>
-In-Reply-To: <20220626084517.970430-1-fontaine.fabrice@gmail.com>
-References: <20220626084517.970430-1-fontaine.fabrice@gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 4FA3720002;
+ Wed, 20 Jul 2022 16:38:57 +0000 (UTC)
+Date: Wed, 20 Jul 2022 18:38:56 +0200
+To: Fabio Estevam <festevam@gmail.com>
+Message-ID: <20220720183856.742c4a09@windsurf>
+In-Reply-To: <20220720125707.1899437-1-festevam@gmail.com>
+References: <20220720125707.1899437-1-festevam@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658334804;
+ d=bootlin.com; s=gm1; t=1658335137;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=62bPWX+e3L/VtOpYp+cH1DiuIZNGj1qf8mqLxQeiQgQ=;
- b=OCrvZv6nWtOFSMI/oozMM2H2SViIsjTONWoyWs+vRTgC6EMhgDjnniYAzh847llb3JXWYy
- f3DFflC/OMsB1uAZ/sQYpAVHY6xDw9BgULCPiPVUdzMY2dyCMDu2Imu6mLi4+kNVD2LvLf
- wFwzW2wr7AuU5DpoWXm5mOKYErPlWfeU1awRB+AL1bEvtTMjf3MgZ13pxGGMsRgzfmoNif
- 7n++1OQK6cMQMcmygJAR6d1y0RQvZeIFPv6banAfOHTEbAEdkdCplMzujwRVTNLnbQC86p
- mGbObtfOsgldrdVsBKtgvcdyxi/TK21VJga0xOLue6G1pUbxjH5jJ5WOWYA8Ow==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ueI1JtO8cV8YbCYOcIIH3/NGMjmeDoEPyP+owG4Smt8=;
+ b=iQDhepsEVynYsg+025aTV1K0Ey42FdFOmgl4HUEDeOGUlsm3NyTV8yHlB6Xkl3KqOc5SPR
+ kF3VcXcVXxih6WUAe6OIRSlSSbGHCzaVPtnCoaZF6hwuloOiP2xJeKoY62f9pHZetC1QGZ
+ PFx3YUWW/nZZBhc7HoEwrBN5zAh7K/g61fpT4dIY2SzbpWw8lqWCfetWF+5kR9W/SVEUoK
+ 1IahAKr72juWQ7cJN4+sz/D7ykg00m5nwu8TSR2EV8M6UwtxGvYwWdRVgH1JjqxMLvkJwp
+ MYpMs7S8zNPqoaSMX89uvPOq7bRj5X7KDa3VBiXEdmsYitcsWVwN1EEY4tjfTQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OCrvZv6n
-Subject: Re: [Buildroot] [PATCH 1/1] package/bayer2rgb-neon: fix build
+ header.s=gm1 header.b=iQDhepsE
+Subject: Re: [Buildroot] [PATCH] package/crucible: Pass 'osusergo netgo' tags
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,51 +77,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eloi Bail <eloi.bail@savoirfairelinux.com>, buildroot@buildroot.org
+Cc: andrea.barisani@withsecure.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 26 Jun 2022 10:45:17 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Fabio, Hello Andrea,
 
-> Fix the following build failure:
-> 
-> /home/autobuild/autobuild/instance-12/output-1/host/lib/gcc/aarch64-buildroot-linux-uclibc/10.3.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld: ./.libs/libbayer2rgb3.so: undefined reference to `__bayer2rgb_missing_convert_dumb_implementation'
+On Wed, 20 Jul 2022 09:57:07 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
+
+> The 'osusergo netgo' tags need to be passed when CGO_ENABLED=1.
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/69a637b7f1422ce2bf04dda573abb09388b9a02d
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-src-convert.c-remove-have_cplusplus.patch | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 package/bayer2rgb-neon/0001-src-convert.c-remove-have_cplusplus.patch
+> http://autobuild.buildroot.net/results/48a39341ca3dcb3675b2876e680718c3e43f55aa
+> http://autobuild.buildroot.net/results/897b4803f4f221c52899641a45708b49b7cb5f5c
+> http://autobuild.buildroot.net/results/3a75c6b73a1f583d6db666eacc45c4debd9218e9
+> 
+> Suggested-by: Andrea Barisani <andrea.barisani@withsecure.com>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-I have applied to fix the immediate build issue, but I am not entirely
-convinced this is the completely correct fix.
+Could you provide more background about these osusergo and netgo tags?
+Indeed, they don't seem to be specific to the crucible package, but are
+apparently generic Go tags, at least according to
+https://www.arp242.net/static-go.html, and they seem to be needed when
+statically linking Go programs.
 
-Indeed, the function __bayer2rgb_missing_convert_dumb_implementation()
-is not implemented anywhere. So as soon as C++ support is not
-available, bayer2rgb-neon doesn't build. So the correct fix would be
-(IMO) to drop this logic, and make C++ a requirement in the
-configure.ac script.
+If that is the case, then I don't think the solution is to change
+crucible.mk, but probably to have a more generic solution in
+package/pkg-golang.mk. Or is that package-specific in some way?
 
-Normally, this call to
-__bayer2rgb_missing_convert_dumb_implementation() gets optimized away
-by the dead code elimination gcc optimizations. But when you build with
--Og as it is the case in the autobuilder failure you're pointing to,
-such optimization does not take place, and the call to
-__bayer2rgb_missing_convert_dumb_implementation() is preserved, even
-though it is never invoked practically at runtime.
+Do we understand under which conditions these tags are needed?
 
-Best regards,
+Thanks in advance for your feedback!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
