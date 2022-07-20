@@ -1,59 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1210FC43334
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 17:18:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1DDAC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 20:24:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9DA3B8249E;
-	Wed, 20 Jul 2022 17:18:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DA3B8249E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 102D241B43;
+	Wed, 20 Jul 2022 20:24:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 102D241B43
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z881mLkpOVY1; Wed, 20 Jul 2022 20:24:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3E2141B32;
+	Wed, 20 Jul 2022 20:24:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3E2141B32
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D1BFA1BF473
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 20:24:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9357A83F82
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 20:24:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9357A83F82
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A2IcPBgydH71; Wed, 20 Jul 2022 17:18:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8F218244D;
-	Wed, 20 Jul 2022 17:18:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8F218244D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9F2341BF47A
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 17:18:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7923760B9D
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 17:18:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7923760B9D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BbPOSUp-EBdS for <buildroot@lists.busybox.net>;
- Wed, 20 Jul 2022 17:18:00 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GozE2YUDHg_4 for <buildroot@lists.busybox.net>;
+ Wed, 20 Jul 2022 20:24:34 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CA8D60671
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9CA8D60671
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 17:18:00 +0000 (UTC)
-Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
- by mailout11.t-online.de (Postfix) with SMTP id AB2D31A471;
- Wed, 20 Jul 2022 19:17:57 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.202.112]) by fwd75.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1oEDKe-2j90BF0; Wed, 20 Jul 2022 19:17:57 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37674)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1oEDKe-0005Oy-1k;
- Wed, 20 Jul 2022 19:17:56 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Wed, 20 Jul 2022 19:17:56 +0200
-Message-Id: <20220720171756.307458-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E3C383F81
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4E3C383F81
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 20:24:34 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 01BF360002;
+ Wed, 20 Jul 2022 20:24:30 +0000 (UTC)
+Date: Wed, 20 Jul 2022 22:24:30 +0200
+To: "Barisani, Andrea" <andrea.barisani@withsecure.com>
+Message-ID: <20220720222430.7eb519f6@windsurf>
+In-Reply-To: <8CF2C8F5-F7EA-43C2-80BA-1D4122D22A66@withsecure.com>
+References: <20220720125707.1899437-1-festevam@gmail.com>
+ <20220720183856.742c4a09@windsurf>
+ <8CF2C8F5-F7EA-43C2-80BA-1D4122D22A66@withsecure.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1658337477-01453B16-A215600B/0/0 CLEAN NORMAL
-X-TOI-MSGID: 475c64f8-6385-4f1e-8935-081caea3f0c2
-Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: fix build with gcc < 7
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658348671;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=8AvO+Eo5Mi3yI42M8Ud3NOELkp0USA+AcSYIV5pu4x8=;
+ b=gQLqjXbg8l0nEu6IjDis5kKpNL6nBEE/fWNbZNlInpIvE1faX+Q5sqhTD959NV4J9StZDS
+ t+W2r75Ie0XPle4EppIVnPU2Uvk7ZhhpNC6X4tiRUXHkCW5HWkAwmog0JUbrtZut1hwdTt
+ 5oTrqdFjEHn6W9KoLLcu8HUlDZ6x8WlTiIGhLGoNBsJwStwmKwMGfqgag2yrgqrjyrwV0x
+ b9CWGjy0kvx6UwMPbXHJrEyMld2A1Hz1XcmaAEDV/cWAhrX1tPci+QP3iWHpBIj9eiWr9F
+ va8tbVSimoiUBTjUB0wvBHAqIzNS+KdSLjEuILgZCY4SxlLbkDDYdRv8XKVTdQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gQLqjXbg
+Subject: Re: [Buildroot] [PATCH] package/crucible: Pass 'osusergo netgo' tags
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,137 +77,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabio Estevam <festevam@gmail.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes various build errors
+Hello,
 
-In file included from ../src/hb-kern.hh:32:0,
-                 from ../src/hb-ot-shape-fallback.cc:32:
-../src/hb-ot-layout-gpos-table.hh:50:117: error: specialization of 'template<class context_t> static typename context_t::return_t OT::Layout::GPOS_impl::PosLookup::dispatch_recurse_func(context_t*, unsigned int)' in different namespace [-fpermissive]
+On Wed, 20 Jul 2022 17:05:42 +0000
+"Barisani, Andrea" <andrea.barisani@withsecure.com> wrote:
 
-introduced by bumping harfbuzz to 4.4.1 in
-03022329e02332c22f44e0e0a9b17d8454ba26ae
+> These flags are not crucible specific but they are necessary when
+> compiling static Go binaries with CGO enabled (which crucible does
+> not require by the way) to ensure portability as cgo versions of net
+> and os/users are not portable. 
 
-The build error was not yet caught by the autobuilders but can be
-reproduced using this defconfig:
-http://autobuild.buildroot.org/results/3fe7526b685368007ae0f66e15ef2b27d30d5063/
+Thanks for your feedback, much appreciated!
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../0004-GPOS-Fix-build-on-GCC-7.patch        | 97 +++++++++++++++++++
- 1 file changed, 97 insertions(+)
- create mode 100644 package/harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch
+So, I see we're passing CGO_ENABLED=1 (when thread support is
+available) to all packages, and you're saying that this is incorrect as
+not all Go packages need CGO? Passing CGO_ENABLED=1/0 should be a
+per-package decision?
 
-diff --git a/package/harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch b/package/harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch
-new file mode 100644
-index 0000000000..ead6fc024f
---- /dev/null
-+++ b/package/harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch
-@@ -0,0 +1,97 @@
-+From 3238cb744bb570a75326ab4438968c59069e9af2 Mon Sep 17 00:00:00 2001
-+From: Kleis Auke Wolthuizen <github@kleisauke.nl>
-+Date: Wed, 6 Jul 2022 13:18:14 +0200
-+Subject: [PATCH] [GPOS] Fix build on GCC < 7
-+
-+[Retrieved (and backported) from:
-+https://github.com/harfbuzz/harfbuzz/commit/3238cb744bb570a75326ab4438968c59069e9af2]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/OT/Layout/GPOS/GPOS.hh     | 17 ++++++++++-------
-+ src/hb-ot-layout-gpos-table.hh |  6 ++++--
-+ 2 files changed, 14 insertions(+), 9 deletions(-)
-+
-+diff --git a/src/OT/Layout/GPOS/GPOS.hh b/src/OT/Layout/GPOS/GPOS.hh
-+index 7fb97d7568..23b0b090a2 100644
-+--- a/src/OT/Layout/GPOS.hh
-++++ b/src/OT/Layout/GPOS.hh
-+@@ -7,6 +7,9 @@
-+ #include "GPOS/PosLookup.hh"
-+ 
-+ namespace OT {
-++
-++using Layout::GPOS_impl::PosLookup;
-++
-+ namespace Layout {
-+ 
-+ static void
-+@@ -25,10 +28,10 @@ struct GPOS : GSUBGPOS
-+ {
-+   static constexpr hb_tag_t tableTag = HB_OT_TAG_GPOS;
-+ 
-+-  using Lookup = GPOS_impl::PosLookup;
-++  using Lookup = PosLookup;
-+ 
-+-  const GPOS_impl::PosLookup& get_lookup (unsigned int i) const
-+-  { return static_cast<const GPOS_impl::PosLookup &> (GSUBGPOS::get_lookup (i)); }
-++  const PosLookup& get_lookup (unsigned int i) const
-++  { return static_cast<const PosLookup &> (GSUBGPOS::get_lookup (i)); }
-+ 
-+   static inline void position_start (hb_font_t *font, hb_buffer_t *buffer);
-+   static inline void position_finish_advances (hb_font_t *font, hb_buffer_t *buffer);
-+@@ -37,11 +40,11 @@ struct GPOS : GSUBGPOS
-+   bool subset (hb_subset_context_t *c) const
-+   {
-+     hb_subset_layout_context_t l (c, tableTag, c->plan->gpos_lookups, c->plan->gpos_langsys, c->plan->gpos_features);
-+-    return GSUBGPOS::subset<GPOS_impl::PosLookup> (&l);
-++    return GSUBGPOS::subset<PosLookup> (&l);
-+   }
-+ 
-+   bool sanitize (hb_sanitize_context_t *c) const
-+-  { return GSUBGPOS::sanitize<GPOS_impl::PosLookup> (c); }
-++  { return GSUBGPOS::sanitize<PosLookup> (c); }
-+ 
-+   HB_INTERNAL bool is_blocklisted (hb_blob_t *blob,
-+                                    hb_face_t *face) const;
-+@@ -51,7 +54,7 @@ struct GPOS : GSUBGPOS
-+     for (unsigned i = 0; i < GSUBGPOS::get_lookup_count (); i++)
-+     {
-+       if (!c->gpos_lookups->has (i)) continue;
-+-      const GPOS_impl::PosLookup &l = get_lookup (i);
-++      const PosLookup &l = get_lookup (i);
-+       l.dispatch (c);
-+     }
-+   }
-+@@ -59,7 +62,7 @@ struct GPOS : GSUBGPOS
-+   void closure_lookups (hb_face_t      *face,
-+                         const hb_set_t *glyphs,
-+                         hb_set_t       *lookup_indexes /* IN/OUT */) const
-+-  { GSUBGPOS::closure_lookups<GPOS_impl::PosLookup> (face, glyphs, lookup_indexes); }
-++  { GSUBGPOS::closure_lookups<PosLookup> (face, glyphs, lookup_indexes); }
-+ 
-+   typedef GSUBGPOS::accelerator_t<GPOS> accelerator_t;
-+ };
-+diff --git a/src/hb-ot-layout-gpos-table.hh b/src/hb-ot-layout-gpos-table.hh
-+index f5059cfa83..8fe987fc50 100644
-+--- a/src/hb-ot-layout-gpos-table.hh
-++++ b/src/hb-ot-layout-gpos-table.hh
-+@@ -32,8 +32,8 @@
-+ #include "OT/Layout/GPOS.hh"
-+ 
-+ namespace OT {
-+-
-+-using Layout::GPOS_impl::PosLookup;
-++namespace Layout {
-++namespace GPOS_impl {
-+ 
-+ // TODO(garretrieger): Move into new layout directory.
-+ /* Out-of-class implementation for methods recursing */
-+@@ -68,6 +68,8 @@ inline bool PosLookup::dispatch_recurse_func<hb_ot_apply_context_t> (hb_ot_apply
-+ }
-+ #endif
-+ 
-++} /* namespace GPOS_impl */
-++} /* namespace Layout */
-+ } /* namespace OT */
-+ 
-+ 
+However, when CGO is enabled and we need static linking, passing
+osusergo and netgo tags is needed, correct?
+
+Thomas
 -- 
-2.30.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
