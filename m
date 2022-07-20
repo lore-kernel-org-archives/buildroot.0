@@ -4,129 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D216BC43334
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 17:11:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1210FC43334
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 17:18:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B8CC8244D;
-	Wed, 20 Jul 2022 17:11:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B8CC8244D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DA3B8249E;
+	Wed, 20 Jul 2022 17:18:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DA3B8249E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k_pr7Z-3BO-Y; Wed, 20 Jul 2022 17:11:47 +0000 (UTC)
+	with ESMTP id A2IcPBgydH71; Wed, 20 Jul 2022 17:18:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 512FA82422;
-	Wed, 20 Jul 2022 17:11:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 512FA82422
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 58BB61BF47A
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 17:11:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A8F218244D;
+	Wed, 20 Jul 2022 17:18:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8F218244D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F2341BF47A
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 17:18:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3FC4C4182C
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 17:11:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FC4C4182C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7923760B9D
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 17:18:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7923760B9D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7wwU4QeTTiGX for <buildroot@lists.busybox.net>;
- Wed, 20 Jul 2022 17:11:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 263FD4186C
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam10on2109.outbound.protection.outlook.com [40.107.94.109])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 263FD4186C
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 17:11:42 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KmnmUSpZAohJyeT9I0UoVck4IYpoAJN0VNFvS0oJE0HtOKwIgigjaoboJjP9GFpRd2L/48rieqDkBHgho+F5lotgS/HJy3NT7iLqBEOxVUsKyE6MF8Is80kG8TzSjlluKwu/4v7N/ZrWmNdIU9JlDa+PfFSZNzhhovr0QOLpeNUaGRi3Y7w9dvCzG01jZETWfStBBcsBi+oOb+cjYrM6trNnFxlNtJ//DgDfi3WZCrDeNaNTx92hO7HQThPkU3jcePzRDX2jAebH3eYQrwCHRB+uwRVu9P44PT6G0/ITwZu1/aXTp6549S+dse8cAxFl7rESeAGd0lPX5VZ7u7tyiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wfv2TX4SCNLrFzS1+mOd7Z0AyVUNqyVCjngVKDwEsEc=;
- b=D09ZEs0W+D9y5U6m+PlfYcL2uf+x6z3oVLpLUu2M6bnkFk0t4EHA1zCB4n/tJAKBkPovwwHNmZ4oRceuy/qtyCgeHb/8Nlp6Hm+vIJP/fd5G6jSThxtf7gGTkjSI5CepRyzeb+1ocDfxWZnrAuZNCnsZ/VAL3GY8uMzWAKjeyVAod1QudLFqJett+UcxqnHTiidvXJn0/3E35URO+iXXlMsBMG55mAseHi9AudnxyLTmi3F/e3kK/uof6NogKdu3mcmplCeHyNnuwd9Qd0dXqzK24RgWiy39LmC/yXryf9CehfyUYHYoatCwrgD4sCdjlyY/IGc497qFPCVnVeZ0/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by SN6PR10MB3456.namprd10.prod.outlook.com
- (2603:10b6:805:d0::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.21; Wed, 20 Jul
- 2022 17:11:38 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::7451:2903:45de:3912]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::7451:2903:45de:3912%7]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
- 17:11:37 +0000
-From: Colin Foster <colin.foster@in-advantage.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BbPOSUp-EBdS for <buildroot@lists.busybox.net>;
+ Wed, 20 Jul 2022 17:18:00 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CA8D60671
+Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9CA8D60671
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 17:18:00 +0000 (UTC)
+Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
+ by mailout11.t-online.de (Postfix) with SMTP id AB2D31A471;
+ Wed, 20 Jul 2022 19:17:57 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.202.112]) by fwd75.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1oEDKe-2j90BF0; Wed, 20 Jul 2022 19:17:57 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37674)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1oEDKe-0005Oy-1k;
+ Wed, 20 Jul 2022 19:17:56 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Wed, 20 Jul 2022 10:11:25 -0700
-Message-Id: <20220720171125.2914642-1-colin.foster@in-advantage.com>
-X-Mailer: git-send-email 2.25.1
-X-ClientProxiedBy: BYAPR05CA0010.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::23) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+Date: Wed, 20 Jul 2022 19:17:56 +0200
+Message-Id: <20220720171756.307458-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a893002d-d036-4d27-ea93-08da6a72e7e2
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3456:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8Xg3DmLq47K+cy2ZixE5j7fxw4i3Zz/TaxLckfFNwAEwyAfkfNLgQQDZfwcUGstQa8lLVrbc/LTkOGRv3TF39wXUgAK3uawWobrB5mCoqhC3eOVAslaX70Hv4quK+71Mo5kzCfIiuICJXrlgS+FmgmBf8tPSo4j8xh7a+a23iqY/ps2wv4bqx8Xhpb7gIodAsnOrF1ZF4bCKlBhG528g8SOy0ZOf0WPw/+mQFgT6GoBNZbLVPuhJBsvOE9VK+NdymdGsfhLbR6fBxq2ICN0kl7NAAMPh3K1uDS0cplObaxbUBWq+sJdZW4h7T022FqSygWgvJO0DWhU0v1j6kraUpQb/AXFbbvHNGqB1NSjPtZ05UDUNOkJs5NiQmQj4DkKL9O7ulAP8YTA04pxSVqKrvTtyJUgaVD0JoHvogczkJCeCw1dYpxcuFhi8DfHiIuyEnJgdsNqa5jUrtQIqBJAdxGJNpln4ev+TVNySCfR5d5jR9eXr+TIWjsE4uSas3oCmw2reIi5Q8Vt6tcMRgWVZWRlTzC4iH2S+5TBJipPuoqvFbvmdP/ovZXosmFmXXGzYpKoRWlhrj30/XPNA2/AMNFjjIDVxVRjppIN++UzVtok5VND/w5QeB5LlobS6Rmo3HTs3Q0HRIacJdRLK9X641pv5RI+ED8jIfBawZ8pyN4vp1JYov0gOvQGE8y6WZ5FDjNmXD6I2LWMlDfBXE7oBA6Mz0JJfcYXxis1+ui0mnGqpe8ChGpI0jJctqFr9Jeg2ySZEO1d8M5Ix30nZNx9nultbBbXv0Ji0eTFKstZde9s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:MWHPR1001MB2351.namprd10.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(376002)(136003)(366004)(396003)(39830400003)(346002)(2906002)(66556008)(83380400001)(6486002)(478600001)(38100700002)(38350700002)(41300700001)(6506007)(316002)(6916009)(6666004)(6512007)(1076003)(2616005)(4326008)(8936002)(66476007)(44832011)(186003)(52116002)(66946007)(86362001)(5660300002)(36756003)(26005)(8676002);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ETfTR39tM4gF8VzYCjV4KD7gMPOAAzQwHt8LANzwCkLloU6J7YEcK2eoKb5+?=
- =?us-ascii?Q?7F3fn8T97/9U6sWoJBOmchCmYTWPjCcFGmD9VIo1eKKsiSx3UQ2hM2pvnXNA?=
- =?us-ascii?Q?dHG7BGvAtU20em4rZizLswqd4HMcKfl0EWuqkBia6hBHEBMyRvMDzPAK29n9?=
- =?us-ascii?Q?zt1rU0zL9EMG5aMXs2AtJNFUqJ0CUosj2sGlnClWYUNoUWgzE9Wj2RFiLaxk?=
- =?us-ascii?Q?fsTYYY53xctcypftaY04pz+xnQ0bOZgCtBg3rJ1GvmfkhGX3L2DmKxDoSlI/?=
- =?us-ascii?Q?HFotG+kv7ks0tpQkB/JDHAAgS8lhZ7mMajPlTn9kei3hXG/9VKX8xDBEMArj?=
- =?us-ascii?Q?7pxZvOcedw6P5hWJVvsHCMnRx65Jj/M/fTsRg6T3d/OImrUq0yUQBPRBS5DO?=
- =?us-ascii?Q?Lp785n+pU9bzaB7aYr+ulEI+8jgJcmiS/bUdVYly1YKpKfbRyV0JW2+IJrxf?=
- =?us-ascii?Q?k8hioMYHQ/tSukv94zA2dko4oNkY5eVGvzxowCwi9/EuH1zVoKeB9EcZM36N?=
- =?us-ascii?Q?FkSCk/ZUMmUtTlEkZLWHpyaQcysxByJfqnaD7SLkNCnQ2ZskAuMWVZdSHYYv?=
- =?us-ascii?Q?vcu2tP9tll45lIaZDue+L6CGWNfDI+38N2lq1LcV6l32AIqIi14gsH8qJ6P7?=
- =?us-ascii?Q?vIOUZrerAEy/E2TN7lqmd50T05+pjnOWu/EGoQYVMyL941rYQsDpn9cw7/wz?=
- =?us-ascii?Q?Bm90xK4aiLOYW+woN0BprTTWZfxEL+ymK0wE5g1TPbJL+vJPyGV2S9d0skew?=
- =?us-ascii?Q?st6xqEI2S/Oqd34h8RlPkiM6EmO3/6gUXNHimEkrqxjj8N3ml5iM84fbz9XT?=
- =?us-ascii?Q?zWwr4DAoEkdaJLcc1c/KfXel37S42Pp7hHx4y50fxDracNrCib9mX+xwQeT9?=
- =?us-ascii?Q?aK+fy5YUQYbZ4uL7nqdj2nF/M6elcJFN3jV3Y+IbVcFhCOymzDVh5mWYcUlY?=
- =?us-ascii?Q?dcAPrQ629Dw4x3dFgay6nuesQnUam1s90Y2ZdbhZaxYIAtdAFPi496BR+uKr?=
- =?us-ascii?Q?sdOVYP5vqneq64/aNBckj/jzXBKEpBouMTz2eSlB+M2gEUI69q7qkJ1brXHD?=
- =?us-ascii?Q?7PaKWFdKPwbAAb13m9zHN6HsBblWQRHf8vHuWQym+oGaxlNFO8sZ6Bdjk6ig?=
- =?us-ascii?Q?iltSd4VI5i4MQcXb26zjWKWXi1FH1sa6tNz4AViDx2uSHBf6rYITxRG6FEpu?=
- =?us-ascii?Q?7GDe4zUIAcPsrpPqp22VR+0VrSc1VC7O7iG0/USUi44zRqy/p/MST5W0Dwfd?=
- =?us-ascii?Q?5kWX06X7vr8EBQPQ4bO7rnUzz9SfnBR/4kN41v90nsHnaCTX3NaEbupsSfXW?=
- =?us-ascii?Q?o59RchEjlW/XcQAbjSkdnJUkN487EXO1VunOt9Cj55ZTGUPPCCvXj7udFdeN?=
- =?us-ascii?Q?lnOiYhPDpsE43Wyrq24b3ZVX6ZloIqxR1w+q3J1X4tv3vkWb7ff8fyBQTc69?=
- =?us-ascii?Q?QR7iFSfv0SCdDro6H2lKlOwS/BWrV6M8W/ZlIj2JvpiCLFfnD/jiSlIoYUHg?=
- =?us-ascii?Q?4oNnPIdpEZ+Ku89VAQr+Xo/Y4WZ7Alf5SkGmm08HNxxNRVFL4+qZaAz6cF1N?=
- =?us-ascii?Q?rYQLmNqGRyVSMKjk7ZSAbsdtPSnXHqp7CBVYkzEnrpYvJqifommCRUCLVlhF?=
- =?us-ascii?Q?ow=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a893002d-d036-4d27-ea93-08da6a72e7e2
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 17:11:37.7289 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WTpy4w+R/WwVsYKRpYUL1Y+XqjLnm5FOaGuQU2Wu4Vrd/37uRwQtQKaO9uZyZxZbgN+4eOri2IPnJMq0aQQPjE/EBANwivcKtckDdxao8SM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB3456
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Wfv2TX4SCNLrFzS1+mOd7Z0AyVUNqyVCjngVKDwEsEc=;
- b=H33C/SAn6erKt0B1IexRi9Q71EEDh3v0YztEJECs+5tADP6lOI4Po/8i+1/G91caE/rR/fwTqqtXsBAgM8U1yFWVTm6NTI6ZRzhxBjYO2r+bd8vJHcl9lrrCiE6o4OGXQmwGYEPI7sGnAZKpGlyRY1RDmYUj7LQo63zWL5AQk1g=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=inadvantage.onmicrosoft.com
- header.i=@inadvantage.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-inadvantage-onmicrosoft-com header.b=H33C/SAn
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Subject: [Buildroot] [PATCH v1] package/mstpd: fix mstpd bridge-stp use of
- pidof
+X-TOI-EXPURGATEID: 150726::1658337477-01453B16-A215600B/0/0 CLEAN NORMAL
+X-TOI-MSGID: 475c64f8-6385-4f1e-8935-081caea3f0c2
+Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: fix build with gcc < 7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -138,81 +65,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Through mstpd version 0.1.0, the bridge-stp script uses the '-c'
-option to the pidof command. Busybox does not support this option, so
-mstpd does not work.
+Fixes various build errors
 
-This has been fixed in the main development branch of mstpd, but it is
-unclear when the next release will be. In the meantime, apply the fix
-here so that mstpd will be useable until the next version release.
+In file included from ../src/hb-kern.hh:32:0,
+                 from ../src/hb-ot-shape-fallback.cc:32:
+../src/hb-ot-layout-gpos-table.hh:50:117: error: specialization of 'template<class context_t> static typename context_t::return_t OT::Layout::GPOS_impl::PosLookup::dispatch_recurse_func(context_t*, unsigned int)' in different namespace [-fpermissive]
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+introduced by bumping harfbuzz to 4.4.1 in
+03022329e02332c22f44e0e0a9b17d8454ba26ae
+
+The build error was not yet caught by the autobuilders but can be
+reproduced using this defconfig:
+http://autobuild.buildroot.org/results/3fe7526b685368007ae0f66e15ef2b27d30d5063/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...pport-different-versions-of-pidof-13.patch | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch
+ .../0004-GPOS-Fix-build-on-GCC-7.patch        | 97 +++++++++++++++++++
+ 1 file changed, 97 insertions(+)
+ create mode 100644 package/harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch
 
-diff --git a/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch b/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch
+diff --git a/package/harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch b/package/harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch
 new file mode 100644
-index 0000000000..daa591131b
+index 0000000000..ead6fc024f
 --- /dev/null
-+++ b/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch
-@@ -0,0 +1,48 @@
-+From 181c453fc1a00573e19f14960dcc54ad84beea7c Mon Sep 17 00:00:00 2001
-+From: colin-foster-in-advantage <colin.foster@in-advantage.com>
-+Date: Tue, 12 Jul 2022 23:01:09 -0700
-+Subject: [PATCH] bridge-stp.in: support different versions of pidof (#137)
++++ b/package/harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch
+@@ -0,0 +1,97 @@
++From 3238cb744bb570a75326ab4438968c59069e9af2 Mon Sep 17 00:00:00 2001
++From: Kleis Auke Wolthuizen <github@kleisauke.nl>
++Date: Wed, 6 Jul 2022 13:18:14 +0200
++Subject: [PATCH] [GPOS] Fix build on GCC < 7
 +
-+* bridge-stp.in: support different versions of pidof
-+
-+Busybox uses a version of pdiof that doesn't support the -c option. As
-+such, this renders mstpd non-functional on any Busybox system.
-+
-+Just use the standard form of pidof to detect any running instances of mstpd.
-+
-+Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
++[Retrieved (and backported) from:
++https://github.com/harfbuzz/harfbuzz/commit/3238cb744bb570a75326ab4438968c59069e9af2]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ bridge-stp.in | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
++ src/OT/Layout/GPOS/GPOS.hh     | 17 ++++++++++-------
++ src/hb-ot-layout-gpos-table.hh |  6 ++++--
++ 2 files changed, 14 insertions(+), 9 deletions(-)
 +
-+diff --git a/bridge-stp.in b/bridge-stp.in
-+index 47cbe79..3807873 100755
-+--- a/bridge-stp.in
-++++ b/bridge-stp.in
-+@@ -139,7 +139,7 @@ case "$action" in
-+         fi
++diff --git a/src/OT/Layout/GPOS/GPOS.hh b/src/OT/Layout/GPOS/GPOS.hh
++index 7fb97d7568..23b0b090a2 100644
++--- a/src/OT/Layout/GPOS.hh
+++++ b/src/OT/Layout/GPOS.hh
++@@ -7,6 +7,9 @@
++ #include "GPOS/PosLookup.hh"
 + 
-+         # Start mstpd if necessary.
-+-        if ! pidof -c -s mstpd >/dev/null; then
-++        if ! pidof -s mstpd >/dev/null; then
-+             if [ "$MANAGE_MSTPD" != 'y' ]; then
-+                 errmsg 'mstpd is not running'
-+                 exit 3
-+@@ -212,12 +212,12 @@ case "$action" in
-+         done
++ namespace OT {
+++
+++using Layout::GPOS_impl::PosLookup;
+++
++ namespace Layout {
 + 
-+         # Kill mstpd, since no bridges are currently using it.
-+-        kill $(pidof -c mstpd)
-++        kill $(pidof mstpd)
-+         ;;
-+     restart|restart_config)
-+         if [ "$action" = 'restart' ]; then
-+             # Kill mstpd.
-+-            pids="$(pidof -c mstpd)" ; Err=$?
-++            pids="$(pidof mstpd)" ; Err=$?
-+             if [ $Err -eq 0 ]; then
-+                 echo 'Stopping mstpd ...'
-+                 kill $pids
-+-- 
-+2.25.1
-+
++ static void
++@@ -25,10 +28,10 @@ struct GPOS : GSUBGPOS
++ {
++   static constexpr hb_tag_t tableTag = HB_OT_TAG_GPOS;
++ 
++-  using Lookup = GPOS_impl::PosLookup;
+++  using Lookup = PosLookup;
++ 
++-  const GPOS_impl::PosLookup& get_lookup (unsigned int i) const
++-  { return static_cast<const GPOS_impl::PosLookup &> (GSUBGPOS::get_lookup (i)); }
+++  const PosLookup& get_lookup (unsigned int i) const
+++  { return static_cast<const PosLookup &> (GSUBGPOS::get_lookup (i)); }
++ 
++   static inline void position_start (hb_font_t *font, hb_buffer_t *buffer);
++   static inline void position_finish_advances (hb_font_t *font, hb_buffer_t *buffer);
++@@ -37,11 +40,11 @@ struct GPOS : GSUBGPOS
++   bool subset (hb_subset_context_t *c) const
++   {
++     hb_subset_layout_context_t l (c, tableTag, c->plan->gpos_lookups, c->plan->gpos_langsys, c->plan->gpos_features);
++-    return GSUBGPOS::subset<GPOS_impl::PosLookup> (&l);
+++    return GSUBGPOS::subset<PosLookup> (&l);
++   }
++ 
++   bool sanitize (hb_sanitize_context_t *c) const
++-  { return GSUBGPOS::sanitize<GPOS_impl::PosLookup> (c); }
+++  { return GSUBGPOS::sanitize<PosLookup> (c); }
++ 
++   HB_INTERNAL bool is_blocklisted (hb_blob_t *blob,
++                                    hb_face_t *face) const;
++@@ -51,7 +54,7 @@ struct GPOS : GSUBGPOS
++     for (unsigned i = 0; i < GSUBGPOS::get_lookup_count (); i++)
++     {
++       if (!c->gpos_lookups->has (i)) continue;
++-      const GPOS_impl::PosLookup &l = get_lookup (i);
+++      const PosLookup &l = get_lookup (i);
++       l.dispatch (c);
++     }
++   }
++@@ -59,7 +62,7 @@ struct GPOS : GSUBGPOS
++   void closure_lookups (hb_face_t      *face,
++                         const hb_set_t *glyphs,
++                         hb_set_t       *lookup_indexes /* IN/OUT */) const
++-  { GSUBGPOS::closure_lookups<GPOS_impl::PosLookup> (face, glyphs, lookup_indexes); }
+++  { GSUBGPOS::closure_lookups<PosLookup> (face, glyphs, lookup_indexes); }
++ 
++   typedef GSUBGPOS::accelerator_t<GPOS> accelerator_t;
++ };
++diff --git a/src/hb-ot-layout-gpos-table.hh b/src/hb-ot-layout-gpos-table.hh
++index f5059cfa83..8fe987fc50 100644
++--- a/src/hb-ot-layout-gpos-table.hh
+++++ b/src/hb-ot-layout-gpos-table.hh
++@@ -32,8 +32,8 @@
++ #include "OT/Layout/GPOS.hh"
++ 
++ namespace OT {
++-
++-using Layout::GPOS_impl::PosLookup;
+++namespace Layout {
+++namespace GPOS_impl {
++ 
++ // TODO(garretrieger): Move into new layout directory.
++ /* Out-of-class implementation for methods recursing */
++@@ -68,6 +68,8 @@ inline bool PosLookup::dispatch_recurse_func<hb_ot_apply_context_t> (hb_ot_apply
++ }
++ #endif
++ 
+++} /* namespace GPOS_impl */
+++} /* namespace Layout */
++ } /* namespace OT */
++ 
++ 
 -- 
-2.25.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
