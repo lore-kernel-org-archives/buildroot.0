@@ -4,82 +4,129 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9B0FC43334
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 16:52:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D216BC43334
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 17:11:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 403448137E;
-	Wed, 20 Jul 2022 16:52:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 403448137E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B8CC8244D;
+	Wed, 20 Jul 2022 17:11:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B8CC8244D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8KoK0r2iVc-5; Wed, 20 Jul 2022 16:52:18 +0000 (UTC)
+	with ESMTP id k_pr7Z-3BO-Y; Wed, 20 Jul 2022 17:11:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8ECA81344;
-	Wed, 20 Jul 2022 16:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8ECA81344
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5721D1BF352
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:52:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 512FA82422;
+	Wed, 20 Jul 2022 17:11:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 512FA82422
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 58BB61BF47A
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 17:11:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 31B2360B9D
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31B2360B9D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3FC4C4182C
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 17:11:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FC4C4182C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jTeKUBh1cfxw for <buildroot@lists.busybox.net>;
- Wed, 20 Jul 2022 16:52:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7wwU4QeTTiGX for <buildroot@lists.busybox.net>;
+ Wed, 20 Jul 2022 17:11:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD6B460B43
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
- [IPv6:2607:f8b0:4864:20::22f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DD6B460B43
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 16:52:13 +0000 (UTC)
-Received: by mail-oi1-x22f.google.com with SMTP id j70so11542764oih.10
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 09:52:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=yIzZSLb7dKcAo30EZ2B43Yx354Hi/MHbitY/U+NbA3M=;
- b=Ql+4P9nCTRcRxcgM65gReKQS1WoIiI/VDPfu9N6QRncZTkIU9JZVBFChjkukuz163q
- VRqleefq/GITNO2WdZQuxjUkd0yqrQEEnkNdheORnVvpXed1Iwp4MVHrOpj/rSMLgnpM
- eJQ0IBiaGdLWZg0iN59BVOJaZutPhqbhoPsz2pPOuwkYZf5TFJVJ95/EE2BYKc8FgLr6
- MbeFxGDz2sL0a6OaEqnS/PamJPg/tcjnnKQgXPif4mEidqL6vLE8wRr6XoDIz17TE+Xm
- f4g18hoEjqm0UNOzKmJCuGf36TtiR8lZqoWn51LoE//+YsRKCdqNB9nRZp/lVIr299GP
- jUfg==
-X-Gm-Message-State: AJIora9y3uCCKJor0YDQggjiDz0GO4udwKCmBI7czeUPQQat6D6taecn
- 6Nlv4v+ElGA1Qd2EvdtgogLH4T8+voHH1fJIfSUjC0YmhclBgg==
-X-Google-Smtp-Source: AGRyM1spONJpcA64+v7s1v5noi8M3q9hiyCO9UlRaOjppqbS7ngyVMe76+JAzHGyZptRiMRMBdHDC4kxLiptgWwJYO4=
-X-Received: by 2002:a05:6808:19a0:b0:33a:694a:cd3d with SMTP id
- bj32-20020a05680819a000b0033a694acd3dmr2764883oib.99.1658335932619; Wed, 20
- Jul 2022 09:52:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 263FD4186C
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam10on2109.outbound.protection.outlook.com [40.107.94.109])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 263FD4186C
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 17:11:42 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KmnmUSpZAohJyeT9I0UoVck4IYpoAJN0VNFvS0oJE0HtOKwIgigjaoboJjP9GFpRd2L/48rieqDkBHgho+F5lotgS/HJy3NT7iLqBEOxVUsKyE6MF8Is80kG8TzSjlluKwu/4v7N/ZrWmNdIU9JlDa+PfFSZNzhhovr0QOLpeNUaGRi3Y7w9dvCzG01jZETWfStBBcsBi+oOb+cjYrM6trNnFxlNtJ//DgDfi3WZCrDeNaNTx92hO7HQThPkU3jcePzRDX2jAebH3eYQrwCHRB+uwRVu9P44PT6G0/ITwZu1/aXTp6549S+dse8cAxFl7rESeAGd0lPX5VZ7u7tyiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Wfv2TX4SCNLrFzS1+mOd7Z0AyVUNqyVCjngVKDwEsEc=;
+ b=D09ZEs0W+D9y5U6m+PlfYcL2uf+x6z3oVLpLUu2M6bnkFk0t4EHA1zCB4n/tJAKBkPovwwHNmZ4oRceuy/qtyCgeHb/8Nlp6Hm+vIJP/fd5G6jSThxtf7gGTkjSI5CepRyzeb+1ocDfxWZnrAuZNCnsZ/VAL3GY8uMzWAKjeyVAod1QudLFqJett+UcxqnHTiidvXJn0/3E35URO+iXXlMsBMG55mAseHi9AudnxyLTmi3F/e3kK/uof6NogKdu3mcmplCeHyNnuwd9Qd0dXqzK24RgWiy39LmC/yXryf9CehfyUYHYoatCwrgD4sCdjlyY/IGc497qFPCVnVeZ0/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by SN6PR10MB3456.namprd10.prod.outlook.com
+ (2603:10b6:805:d0::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.21; Wed, 20 Jul
+ 2022 17:11:38 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::7451:2903:45de:3912]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::7451:2903:45de:3912%7]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
+ 17:11:37 +0000
+From: Colin Foster <colin.foster@in-advantage.com>
+To: buildroot@buildroot.org
+Date: Wed, 20 Jul 2022 10:11:25 -0700
+Message-Id: <20220720171125.2914642-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
+X-ClientProxiedBy: BYAPR05CA0010.namprd05.prod.outlook.com
+ (2603:10b6:a03:c0::23) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-References: <20220719130449.334694-1-nolange79@gmail.com>
- <20220719162138.GL2249625@scaer>
- <CADvTj4oVSUD8pRRo=iwoMX3u_ABxf2QX1nr9RpBEOO8w2saOfA@mail.gmail.com>
- <CADYdroOkry3uXZ2vw171SWD5jr6qEKDxEuS5ZSfDEw74MSpgug@mail.gmail.com>
-In-Reply-To: <CADYdroOkry3uXZ2vw171SWD5jr6qEKDxEuS5ZSfDEw74MSpgug@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 20 Jul 2022 10:52:01 -0600
-Message-ID: <CADvTj4pdxz_kYDVG8PryXJ7yASFxgbweWXPEL=E8OqobFBYxBA@mail.gmail.com>
-To: Norbert Lange <nolange79@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a893002d-d036-4d27-ea93-08da6a72e7e2
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3456:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8Xg3DmLq47K+cy2ZixE5j7fxw4i3Zz/TaxLckfFNwAEwyAfkfNLgQQDZfwcUGstQa8lLVrbc/LTkOGRv3TF39wXUgAK3uawWobrB5mCoqhC3eOVAslaX70Hv4quK+71Mo5kzCfIiuICJXrlgS+FmgmBf8tPSo4j8xh7a+a23iqY/ps2wv4bqx8Xhpb7gIodAsnOrF1ZF4bCKlBhG528g8SOy0ZOf0WPw/+mQFgT6GoBNZbLVPuhJBsvOE9VK+NdymdGsfhLbR6fBxq2ICN0kl7NAAMPh3K1uDS0cplObaxbUBWq+sJdZW4h7T022FqSygWgvJO0DWhU0v1j6kraUpQb/AXFbbvHNGqB1NSjPtZ05UDUNOkJs5NiQmQj4DkKL9O7ulAP8YTA04pxSVqKrvTtyJUgaVD0JoHvogczkJCeCw1dYpxcuFhi8DfHiIuyEnJgdsNqa5jUrtQIqBJAdxGJNpln4ev+TVNySCfR5d5jR9eXr+TIWjsE4uSas3oCmw2reIi5Q8Vt6tcMRgWVZWRlTzC4iH2S+5TBJipPuoqvFbvmdP/ovZXosmFmXXGzYpKoRWlhrj30/XPNA2/AMNFjjIDVxVRjppIN++UzVtok5VND/w5QeB5LlobS6Rmo3HTs3Q0HRIacJdRLK9X641pv5RI+ED8jIfBawZ8pyN4vp1JYov0gOvQGE8y6WZ5FDjNmXD6I2LWMlDfBXE7oBA6Mz0JJfcYXxis1+ui0mnGqpe8ChGpI0jJctqFr9Jeg2ySZEO1d8M5Ix30nZNx9nultbBbXv0Ji0eTFKstZde9s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:MWHPR1001MB2351.namprd10.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230016)(376002)(136003)(366004)(396003)(39830400003)(346002)(2906002)(66556008)(83380400001)(6486002)(478600001)(38100700002)(38350700002)(41300700001)(6506007)(316002)(6916009)(6666004)(6512007)(1076003)(2616005)(4326008)(8936002)(66476007)(44832011)(186003)(52116002)(66946007)(86362001)(5660300002)(36756003)(26005)(8676002);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ETfTR39tM4gF8VzYCjV4KD7gMPOAAzQwHt8LANzwCkLloU6J7YEcK2eoKb5+?=
+ =?us-ascii?Q?7F3fn8T97/9U6sWoJBOmchCmYTWPjCcFGmD9VIo1eKKsiSx3UQ2hM2pvnXNA?=
+ =?us-ascii?Q?dHG7BGvAtU20em4rZizLswqd4HMcKfl0EWuqkBia6hBHEBMyRvMDzPAK29n9?=
+ =?us-ascii?Q?zt1rU0zL9EMG5aMXs2AtJNFUqJ0CUosj2sGlnClWYUNoUWgzE9Wj2RFiLaxk?=
+ =?us-ascii?Q?fsTYYY53xctcypftaY04pz+xnQ0bOZgCtBg3rJ1GvmfkhGX3L2DmKxDoSlI/?=
+ =?us-ascii?Q?HFotG+kv7ks0tpQkB/JDHAAgS8lhZ7mMajPlTn9kei3hXG/9VKX8xDBEMArj?=
+ =?us-ascii?Q?7pxZvOcedw6P5hWJVvsHCMnRx65Jj/M/fTsRg6T3d/OImrUq0yUQBPRBS5DO?=
+ =?us-ascii?Q?Lp785n+pU9bzaB7aYr+ulEI+8jgJcmiS/bUdVYly1YKpKfbRyV0JW2+IJrxf?=
+ =?us-ascii?Q?k8hioMYHQ/tSukv94zA2dko4oNkY5eVGvzxowCwi9/EuH1zVoKeB9EcZM36N?=
+ =?us-ascii?Q?FkSCk/ZUMmUtTlEkZLWHpyaQcysxByJfqnaD7SLkNCnQ2ZskAuMWVZdSHYYv?=
+ =?us-ascii?Q?vcu2tP9tll45lIaZDue+L6CGWNfDI+38N2lq1LcV6l32AIqIi14gsH8qJ6P7?=
+ =?us-ascii?Q?vIOUZrerAEy/E2TN7lqmd50T05+pjnOWu/EGoQYVMyL941rYQsDpn9cw7/wz?=
+ =?us-ascii?Q?Bm90xK4aiLOYW+woN0BprTTWZfxEL+ymK0wE5g1TPbJL+vJPyGV2S9d0skew?=
+ =?us-ascii?Q?st6xqEI2S/Oqd34h8RlPkiM6EmO3/6gUXNHimEkrqxjj8N3ml5iM84fbz9XT?=
+ =?us-ascii?Q?zWwr4DAoEkdaJLcc1c/KfXel37S42Pp7hHx4y50fxDracNrCib9mX+xwQeT9?=
+ =?us-ascii?Q?aK+fy5YUQYbZ4uL7nqdj2nF/M6elcJFN3jV3Y+IbVcFhCOymzDVh5mWYcUlY?=
+ =?us-ascii?Q?dcAPrQ629Dw4x3dFgay6nuesQnUam1s90Y2ZdbhZaxYIAtdAFPi496BR+uKr?=
+ =?us-ascii?Q?sdOVYP5vqneq64/aNBckj/jzXBKEpBouMTz2eSlB+M2gEUI69q7qkJ1brXHD?=
+ =?us-ascii?Q?7PaKWFdKPwbAAb13m9zHN6HsBblWQRHf8vHuWQym+oGaxlNFO8sZ6Bdjk6ig?=
+ =?us-ascii?Q?iltSd4VI5i4MQcXb26zjWKWXi1FH1sa6tNz4AViDx2uSHBf6rYITxRG6FEpu?=
+ =?us-ascii?Q?7GDe4zUIAcPsrpPqp22VR+0VrSc1VC7O7iG0/USUi44zRqy/p/MST5W0Dwfd?=
+ =?us-ascii?Q?5kWX06X7vr8EBQPQ4bO7rnUzz9SfnBR/4kN41v90nsHnaCTX3NaEbupsSfXW?=
+ =?us-ascii?Q?o59RchEjlW/XcQAbjSkdnJUkN487EXO1VunOt9Cj55ZTGUPPCCvXj7udFdeN?=
+ =?us-ascii?Q?lnOiYhPDpsE43Wyrq24b3ZVX6ZloIqxR1w+q3J1X4tv3vkWb7ff8fyBQTc69?=
+ =?us-ascii?Q?QR7iFSfv0SCdDro6H2lKlOwS/BWrV6M8W/ZlIj2JvpiCLFfnD/jiSlIoYUHg?=
+ =?us-ascii?Q?4oNnPIdpEZ+Ku89VAQr+Xo/Y4WZ7Alf5SkGmm08HNxxNRVFL4+qZaAz6cF1N?=
+ =?us-ascii?Q?rYQLmNqGRyVSMKjk7ZSAbsdtPSnXHqp7CBVYkzEnrpYvJqifommCRUCLVlhF?=
+ =?us-ascii?Q?ow=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a893002d-d036-4d27-ea93-08da6a72e7e2
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 17:11:37.7289 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WTpy4w+R/WwVsYKRpYUL1Y+XqjLnm5FOaGuQU2Wu4Vrd/37uRwQtQKaO9uZyZxZbgN+4eOri2IPnJMq0aQQPjE/EBANwivcKtckDdxao8SM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB3456
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=yIzZSLb7dKcAo30EZ2B43Yx354Hi/MHbitY/U+NbA3M=;
- b=R+iS0SIvyU0rgMU2l7SWTdn0XqvKG5jzR0TtRinB1NjCpNX/CEdnQrRynMtGSHa+S1
- RxuS3IxpR/iJHkBY3bqCF7Ss4UnHqcbUSnEh/OfPB0XHDZGdzYXNWa2ztCdiRTYYFWhA
- 3P8oRJRo9xlO6+s1W4KnqRqlkk3sBA5aXQy6MJW7QuyKhF9V7JnboXdA9mZr6Fn/zZIm
- pF4QaF7fJzuEslrScR/N5EwSDk7XbEQsiCpiMl3oCs6RpamkuDiq/kjtDX0d9RwsbONL
- XiR8TauVKDcUtvhQLiq4GScwxsLlaRTDt/C7f7QJWXTeO2uk5wBUnfJiv9WxXD9EL3PN
- b3VQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=R+iS0SIv
-Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: bump to version 251.3
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Wfv2TX4SCNLrFzS1+mOd7Z0AyVUNqyVCjngVKDwEsEc=;
+ b=H33C/SAn6erKt0B1IexRi9Q71EEDh3v0YztEJECs+5tADP6lOI4Po/8i+1/G91caE/rR/fwTqqtXsBAgM8U1yFWVTm6NTI6ZRzhxBjYO2r+bd8vJHcl9lrrCiE6o4OGXQmwGYEPI7sGnAZKpGlyRY1RDmYUj7LQo63zWL5AQk1g=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=inadvantage.onmicrosoft.com
+ header.i=@inadvantage.onmicrosoft.com header.a=rsa-sha256
+ header.s=selector2-inadvantage-onmicrosoft-com header.b=H33C/SAn
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Subject: [Buildroot] [PATCH v1] package/mstpd: fix mstpd bridge-stp use of
+ pidof
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,215 +138,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Jul 20, 2022 at 8:51 AM Norbert Lange <nolange79@gmail.com> wrote:
->
-> Am Di., 19. Juli 2022 um 23:56 Uhr schrieb James Hilliard
-> <james.hilliard1@gmail.com>:
-> >
-> > FYI I had sent a similar bump earlier:
-> > https://patchwork.ozlabs.org/project/buildroot/patch/20220522011729.117324-1-james.hilliard1@gmail.com/
-> >
-> > On Tue, Jul 19, 2022 at 10:22 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > >
-> > > Norbert, All,
-> > >
-> > > On 2022-07-19 15:04 +0200, Norbert Lange spake thusly:
-> > > > Add config option for the new sysupdate feature.
-> > >
-> > > Honestly, with a package so complex and critical like systemd, I would
-> > > prefer that new features not be added during the bump, but as followup
-> > > patches. The bump should add a force-disable of new features (when
-> > > known), or just leave them as auto-detected or upstream-decided
-> > > defaults.
->
-> Honestly, I got scolded every time I just left it force-disabled ;)
-> Someone even got to the great lengths of typing the steps into systemd.mk:
->
-> # - If there are new services:
-> #   - create new options for them (if they really are optional);
->
-> The features are disabled by default though, so it should not
-> cause havoc.
->
-> > >
-> > > > Remove upstreamed patch.
-> > > >
-> > > > Update options, manually setdefault options, remove option
-> > >
-> > > Sorry, I don't immediately see what "manually setdefault" means...
-> > > Is there a missing space, and this should be "manually set default" ?
-> > > Or is "setdefault" and actual systemd concept?
-> > >
-> > > (genuinely asking)
->
-> Missing space
->
-> > >
-> > > > not available anymore.
-> > > >
-> > > > Set default-user-shell based on wether a couple packages
-> > > > are enabled.
-> > > >
-> > > > Set default-locale to C, this seems the only safe default,
-> > >
-> > > How does that play with BR2_ENABLE_LOCALE_WHITELIST? I think that we
-> > > would want to use the first word of BR2_ENABLE_LOCALE_WHITELIST is it is
-> > > set, falling back to just 'C' otherwise.
-> >
-> > Yeah, we should use 'C.UTF-8' since it's now supported by localedef, I had
-> > sent a patch earlier changing the default but there were uclibc compatibility
-> > issues, since systemd is incompatible with uclibc there's probably a better
-> > approach:
-> > https://patchwork.ozlabs.org/project/buildroot/patch/20220517192439.1034654-1-james.hilliard1@gmail.com/
-> >
->
-> I on not really familiar how this should be detected, especially if
-> there is an external
-> toolchain used and it should definitely only be one of 'C' or 'C.UTF-8'.
->
-> The /usr/lib/C.UTF-8 directory has around 2MB, and for my usecase
-> I don't need or want it - unless you need to correctly display/sort strings,
-> apps just copy a binary blob and don't need to know any details.
+Through mstpd version 0.1.0, the bridge-stp script uses the '-c'
+option to the pidof command. Busybox does not support this option, so
+mstpd does not work.
 
-Main issue is that the regular 'C' locale tends to cause lots of
-issues for anything
-that needs UTF-8 support, which can include a lot of rather unexpected things
-such as simply extracting tar archives with libarchive.
+This has been fixed in the main development branch of mstpd, but it is
+unclear when the next release will be. In the meantime, apply the fix
+here so that mstpd will be useable until the next version release.
 
-I think python may also not work correctly without a UTF-8 locale:
-https://peps.python.org/pep-0538/
+Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+---
+ ...pport-different-versions-of-pidof-13.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch
 
-I think the only reliably sane locale is C.UTF-8 which is what most distros
-have been moving towards. However there may be cases where just a C
-locale is desired so we may want to have an option for that still, it should not
-however be the default IMO.
+diff --git a/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch b/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch
+new file mode 100644
+index 0000000000..daa591131b
+--- /dev/null
++++ b/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch
+@@ -0,0 +1,48 @@
++From 181c453fc1a00573e19f14960dcc54ad84beea7c Mon Sep 17 00:00:00 2001
++From: colin-foster-in-advantage <colin.foster@in-advantage.com>
++Date: Tue, 12 Jul 2022 23:01:09 -0700
++Subject: [PATCH] bridge-stp.in: support different versions of pidof (#137)
++
++* bridge-stp.in: support different versions of pidof
++
++Busybox uses a version of pdiof that doesn't support the -c option. As
++such, this renders mstpd non-functional on any Busybox system.
++
++Just use the standard form of pidof to detect any running instances of mstpd.
++
++Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
++---
++ bridge-stp.in | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/bridge-stp.in b/bridge-stp.in
++index 47cbe79..3807873 100755
++--- a/bridge-stp.in
+++++ b/bridge-stp.in
++@@ -139,7 +139,7 @@ case "$action" in
++         fi
++ 
++         # Start mstpd if necessary.
++-        if ! pidof -c -s mstpd >/dev/null; then
+++        if ! pidof -s mstpd >/dev/null; then
++             if [ "$MANAGE_MSTPD" != 'y' ]; then
++                 errmsg 'mstpd is not running'
++                 exit 3
++@@ -212,12 +212,12 @@ case "$action" in
++         done
++ 
++         # Kill mstpd, since no bridges are currently using it.
++-        kill $(pidof -c mstpd)
+++        kill $(pidof mstpd)
++         ;;
++     restart|restart_config)
++         if [ "$action" = 'restart' ]; then
++             # Kill mstpd.
++-            pids="$(pidof -c mstpd)" ; Err=$?
+++            pids="$(pidof mstpd)" ; Err=$?
++             if [ $Err -eq 0 ]; then
++                 echo 'Stopping mstpd ...'
++                 kill $pids
++-- 
++2.25.1
++
+-- 
+2.25.1
 
->
-> if there is *any* doubt it should be C, and currently there is alot doubt.
-
-Upstream considers C.UTF-8 the preferred default locale:
-https://github.com/systemd/systemd/commit/c9bd01ae902d66acd8647a1cc0167bc0d246cbc8
-
->
-> > >
-> > > Furthermore, that is not a novelty with v251; v250 already had that
-> > > option, so that should be a separate, preliminary patch.
-> > >
-> > > > users can override this in `/etc/locale.conf`.
-> > >
-> > > > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > > > ---
-> > > [--SNIP--]
-> > > > diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-> > > > index 3572b25965..838ed13fd5 100644
-> > > > --- a/package/systemd/systemd.hash
-> > > > +++ b/package/systemd/systemd.hash
-> > > > @@ -1,5 +1,5 @@
-> > > >  # sha256 locally computed
-> > > > -sha256  d2bda9d225da11dc9ff48b48e59fc36798d3e66902ed400a9f78fa370c596864  systemd-250.4.tar.gz
-> > > > +sha256  11c9c3fcc13d689615dd2ea79161d1b992087cf1e2a23856d7d7ade0efbddc54  systemd-251.3.tar.gz
-> > > >  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
-> > > >  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-> > > >  sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
-> > > > @@ -11,4 +11,4 @@ sha256  790ac93fb2859097bdda4cf08b5a4feb5e479d0cb2c74f403248241bc3e7c216  LICENS
-> > > >  sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
-> > > >  sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
-> > > >  sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
-> > > > -sha256  11801e931f252252a16eac8299465510d0a82c36bfd9ac8aea9b202b76d2f82b  LICENSES/README.md
-> > > > +sha256  177ff657698bc940f9888b7f69e5d734b0933c2859ea264fde8de1700cec40dd  LICENSES/README.md
-> > >
-> > > What has changed in that license file? How does it impact (or not) the
-> > > licensing info we carry?
-> > >
-> > > We have hashes for license files, so that we know they licensing terms
-> > > change when a package is updated. Silently changing the hash kind of
-> > > defeats the purpose for those hashes...
->
-> One line got added, no changes in the license text itself :
->
->  * the following sources are licensed under the **CC0-1.0** license:
->     - src/systemctl/systemd-sysv-install.SKELETON
->     - tools/check-includes.pl
->     - all examples under man/
-> +   - config files and examples under /network
->
-> The line is still valid IMHO:
-> "CC0-1.0 (few source files, see LICENSES/README.md)"
->
-> > >
-> > > > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> > > > index 46a4e8de2c..b6fffc553f 100644
-> > > > --- a/package/systemd/systemd.mk
-> > > > +++ b/package/systemd/systemd.mk
-> > > [--SNIP--]
-> > > > @@ -472,6 +474,20 @@ else
-> > > >  SYSTEMD_CONF_OPTS += -Dsysext=false
-> > > >  endif
-> > > >
-> > > > +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUPDATE),y)
-> > > > +SYSTEMD_CONF_OPTS += -Dsysupdate=true
-> > > > +else
-> > > > +SYSTEMD_CONF_OPTS += -Dsysupdate=false
-> > > > +endif
-> > > > +
-> > > > +ifeq ($(BR2_PACKAGE_BASH),y)
-> > > > +SYSTEMD_CONF_OPTS += -Ddefault-user-shell=/bin/bash
-> > > > +else ifeq ($(BR2_PACKAGE_ZSH),y)
-> > > > +SYSTEMD_CONF_OPTS += -Ddefault-user-shell=/bin/zsh
-> > > > +else
-> > > > +SYSTEMD_CONF_OPTS += -Ddefault-user-shell=/bin/sh
-> > > > +endif
-> > >
-> > > We already have BR2_SYSTEM_BIN_SH which defines what /bin/sh is, and so
-> > > I think we should use exactly /bin/sh as the default shell:
-> > >
-> > >     ifneq ($(BR2_SYSTEM_BIN_SH_NONE),y)
-> > >     SYSTEMD_CONF_OPTS += -Ddefault-user-shell=/bin/sh
-> > >     endif
-> > >
-> > > If there is not default shell for the system, then there is none for
-> > > users as well. Systemd-defined users that want a specific shell will
-> > > have to explicitly request it: if they have a requirement for a specific
-> > > shell, they can't rely on whatever the default is, so usng /bin/sh is
-> > > exactly what we want.
-> > >
-> > > If BR2_SYSTEM_BIN_SH is empty, it is perfectly possible that there is no
-> > > shell available at all (no standalone shell, no shell in busybox), so we
-> > > don't want to set any default either.
->
-> If you don't set anything, then '/bin/sh' will be used, so I guess ill
-> just set that
-> unconditionally.
-
-Well /bin/bash is the default if nothing is specified so we should
-override that:
-https://github.com/systemd/systemd-stable/blob/v251.3/meson_options.txt#L223-L224
-
->
-> > >
-> > > Regards,
-> > > Yann E. MORIN.
-> > >
-> > > --
-> > > .-----------------.--------------------.------------------.--------------------.
-> > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > > '------------------------------^-------^------------------^--------------------'
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot@buildroot.org
-> > > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> Regards, Norbert
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
