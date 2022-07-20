@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56E11C43334
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 16:39:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55FD9C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 16:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4B2E60F21;
-	Wed, 20 Jul 2022 16:39:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4B2E60F21
+	by smtp1.osuosl.org (Postfix) with ESMTP id EACC7818BE;
+	Wed, 20 Jul 2022 16:40:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EACC7818BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jRufPRCY__CF; Wed, 20 Jul 2022 16:39:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UsfKVIpJp2H0; Wed, 20 Jul 2022 16:40:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E238760B43;
-	Wed, 20 Jul 2022 16:39:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E238760B43
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6805B1BF352
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:39:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19C85818C0;
+	Wed, 20 Jul 2022 16:40:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19C85818C0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 466711BF352
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:40:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40F8A41A14
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:39:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40F8A41A14
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1EBD5818C0
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 16:40:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EBD5818C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KlbCVquiufF5 for <buildroot@lists.busybox.net>;
- Wed, 20 Jul 2022 16:39:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55DC3418C4
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 16:39:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55DC3418C4
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E9C9284001; Wed, 20 Jul 2022 16:26:02 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 20 Jul 2022 18:39:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c70601762104d6d2beba51bc5804fcd204bd6bd3
-X-Git-Newrev: 3d4a5a77e54dba425824a6434a05b3a3b8e88c05
-X-Patchwork-Hint: ignore
-Message-Id: <20220720162602.E9C9284001@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zeromq: force detection of more
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X0t5alvhS9Nk for <buildroot@lists.busybox.net>;
+ Wed, 20 Jul 2022 16:40:08 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24543818A1
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 24543818A1
+ for <buildroot@busybox.net>; Wed, 20 Jul 2022 16:40:07 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4364F1C0006;
+ Wed, 20 Jul 2022 16:40:04 +0000 (UTC)
+Date: Wed, 20 Jul 2022 18:40:03 +0200
+To: Baruch Siach via buildroot <buildroot@buildroot.org>
+Message-ID: <20220720184003.13569d23@windsurf>
+In-Reply-To: <3aa0ac234bc829d21b0a2c3fcafa0bf3a19cb210.1658328437.git.baruch@tkos.co.il>
+References: <3aa0ac234bc829d21b0a2c3fcafa0bf3a19cb210.1658328437.git.baruch@tkos.co.il>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658335205;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Ptdun5Ss4hSQvmYUPifCzGSJqzJ0RWv58/hYDYJYkEA=;
+ b=gUC3LaQiQROlailjDh7U7qtuxMpxiJNz4hg1IDT/nmuP8cl7on/+WELYXEYp+vguHTmrtJ
+ C4GOQPmKdbuUScTYkrJQJsWKzZIR7aJgFAFWkSwzD4537Of8DgyOg4ByCayRK5j31nlW5O
+ X+NjnDzzGKrQCzFbzPvAfYr43+SrWUQOYrY4CTkgv3MTWwVzTbbWpsA7eS39HgsW6/Jh54
+ 2zc/l0zsZ8leLijji5CPQvjvsbrwKLCgWE0Tcusr6mY+IezjVa/YvTK5Y5oFAjA5nOF6O7
+ TDH7m8ucnXVOZ5YecnVERxWwn07k/Jp6MMdfhG1VA73pOOF9xD78mpyyp0x9Rg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gUC3LaQi
+Subject: Re: [Buildroot] [PATCH] package/zeromq: force detection of more
  features
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,43 +78,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d4a5a77e54dba425824a6434a05b3a3b8e88c05
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 20 Jul 2022 17:47:17 +0300
+Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
 
-ZeroMQ added SO_PRIORITY in version 4.3.4, SO_BINDTODEVICE in 4.2.3, and
-O_CLOEXEC since before 2.1.11. Checks for these feature are incompatible
-with cross compilation. Linux supports SO_PRIORITY, and SO_BINDTODEVICE
-since before 2.6. O_CLOEXEC is supported since 2.6.23. Keep them always
-enabled.
+> ZeroMQ added SO_PRIORITY in version 4.3.4, SO_BINDTODEVICE in 4.2.3, and
+> O_CLOEXEC since before 2.1.11. Checks for these feature are incompatible
+> with cross compilation. Linux supports SO_PRIORITY, and SO_BINDTODEVICE
+> since before 2.6. O_CLOEXEC is supported since 2.6.23. Keep them always
+> enabled.
+> 
+> Cc: Asaf Kahlon <asafka7@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/zeromq/zeromq.mk | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/zeromq/zeromq.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 182699403c..219827b42b 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -18,7 +18,10 @@ ZEROMQ_CPE_ID_PRODUCT = libzmq
- # SOCK_CLOEXEC, since linux v2.6.27.
- # Note: the flag TCP_KEEPALIVE is NOT available so we do not include it.
- ZEROMQ_CONF_ENV = libzmq_cv_sock_cloexec=yes \
-+	libzmq_cv_o_cloexec=yes \
- 	libzmq_cv_so_keepalive=yes \
-+	libzmq_cv_so_priority=yes \
-+	libzmq_cv_so_bindtodevice=yes \
- 	libzmq_cv_tcp_keepcnt=yes \
- 	libzmq_cv_tcp_keepidle=yes \
- 	libzmq_cv_tcp_keepintvl=yes
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
