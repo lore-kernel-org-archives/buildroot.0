@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C6D4C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 21:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4FF8C43334
+	for <buildroot@archiver.kernel.org>; Wed, 20 Jul 2022 21:15:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B089E612D7;
-	Wed, 20 Jul 2022 21:15:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B089E612D7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 495AD612D9;
+	Wed, 20 Jul 2022 21:15:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 495AD612D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i7ZdRAnR2Bjg; Wed, 20 Jul 2022 21:15:29 +0000 (UTC)
+	with ESMTP id 8OybRXfsI8W6; Wed, 20 Jul 2022 21:15:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C937612DA;
-	Wed, 20 Jul 2022 21:15:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C937612DA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 08F141BF3A1
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 21:15:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F9A4612DE;
+	Wed, 20 Jul 2022 21:15:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F9A4612DE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1246D1BF3A1
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 21:15:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D780383FA3
- for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 21:15:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D780383FA3
+ by smtp4.osuosl.org (Postfix) with ESMTP id DFEF44179A
+ for <buildroot@lists.busybox.net>; Wed, 20 Jul 2022 21:15:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFEF44179A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 89jl-_UQ1bPM for <buildroot@lists.busybox.net>;
- Wed, 20 Jul 2022 21:15:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E4AD83F9A
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 21:15:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E4AD83F9A
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 494788408C; Wed, 20 Jul 2022 21:01:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 20 Jul 2022 23:15:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ee6ceaf397f5e3a9f0270b687ca31e96234a019e
-X-Git-Newrev: 499f34abe966d6e7d11d64f7ffbf6fe348ef039a
-X-Patchwork-Hint: ignore
-Message-Id: <20220720210155.494788408C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wilc-firmware: bump version to 15.7
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vm4zWkJLUrN4 for <buildroot@lists.busybox.net>;
+ Wed, 20 Jul 2022 21:15:35 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2618741576
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2618741576
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 21:15:34 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 78085240002;
+ Wed, 20 Jul 2022 21:15:32 +0000 (UTC)
+Date: Wed, 20 Jul 2022 23:15:31 +0200
+To: Kris Bahnsen via buildroot <buildroot@buildroot.org>
+Message-ID: <20220720231531.56e6f398@windsurf>
+In-Reply-To: <20220629220332.14157-1-kris@embeddedTS.com>
+References: <20220629220332.14157-1-kris@embeddedTS.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658351733;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=wijxi7pf3sK3ewyhzRo1+oL9FMaMFjudXHN3MSRUo3A=;
+ b=B2EZapqR8gG6ovgPcAea7QilECPuBtyNE80wH/wWnIB0RVJYJhTrk4bpvpsCNeI1ZrqJo+
+ kCQR/hYiV3AcHkbAmZjFnBs4JM53ge6d7LZOd4lnZ4jZoZXpfvqLJCl+Xj4OZew0h38s6a
+ jHlXpnK1ZKGRym4M+jH4UUxnJqikq059ZUNfYINSgO+bf5Kv6tW8W/N9/qAgmQBBjKGqFx
+ V5hMtxGxRBlXZc+MVvesczwzSO5T1jVR732VgT6o0xT2ILElKmUSAiNgH3cfCaNLLgxrqq
+ C+0aASs+rxJAQEZxor2u6GgabKp7gPEovXHcMEDB0jBFKshCCCJJZvNlGYYSnA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=B2EZapqR
+Subject: Re: [Buildroot] [PATCH 1/1] package/wilc-firmware: bump version to
+ 15.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,44 +78,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Mark Featherston <mark@embeddedTS.com>, Kris Bahnsen <kris@embeddedTS.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=499f34abe966d6e7d11d64f7ffbf6fe348ef039a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 29 Jun 2022 15:03:32 -0700
+Kris Bahnsen via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wilc-firmware/wilc-firmware.hash | 2 +-
- package/wilc-firmware/wilc-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+> ---
+>  package/wilc-firmware/wilc-firmware.hash | 2 +-
+>  package/wilc-firmware/wilc-firmware.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wilc-firmware/wilc-firmware.hash b/package/wilc-firmware/wilc-firmware.hash
-index 874766aec0..6e7850df16 100644
---- a/package/wilc-firmware/wilc-firmware.hash
-+++ b/package/wilc-firmware/wilc-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  29bb5739136cdb4088cb52af59badce05cc7e562bca40e9f29fef7f8f7c19cb8  wilc-firmware-wilc_linux_15_6.tar.gz
-+sha256  2c2e2927a65fe4d7ec2f9872fca35c6b7bf12090ac62116d63c5f17b95a3a786  wilc-firmware-wilc_linux_15_7.tar.gz
- sha256  71355eee947a312594dbdaac039827544f93d23949b65c356b7b0ce09e2600fb  LICENSE.wilc_fw
-diff --git a/package/wilc-firmware/wilc-firmware.mk b/package/wilc-firmware/wilc-firmware.mk
-index 1a7ceca18e..e31829d430 100644
---- a/package/wilc-firmware/wilc-firmware.mk
-+++ b/package/wilc-firmware/wilc-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WILC_FIRMWARE_VERSION = wilc_linux_15_6
-+WILC_FIRMWARE_VERSION = wilc_linux_15_7
- WILC_FIRMWARE_SITE = $(call github,linux4wilc,firmware,$(WILC_FIRMWARE_VERSION))
- 
- WILC_FIRMWARE_LICENSE = PROPRIETARY
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
