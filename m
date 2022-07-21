@@ -4,89 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D145C43334
-	for <buildroot@archiver.kernel.org>; Thu, 21 Jul 2022 03:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64738C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Jul 2022 03:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9BDF140734;
-	Thu, 21 Jul 2022 03:27:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BDF140734
+	by smtp2.osuosl.org (Postfix) with ESMTP id C570D408E8;
+	Thu, 21 Jul 2022 03:55:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C570D408E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IWk2OttEaUNL; Thu, 21 Jul 2022 03:27:30 +0000 (UTC)
+	with ESMTP id B-525O0IPa5f; Thu, 21 Jul 2022 03:55:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9EDB440447;
-	Thu, 21 Jul 2022 03:27:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EDB440447
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D418B1BF37A
- for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 03:27:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BA45A40480;
+	Thu, 21 Jul 2022 03:55:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA45A40480
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1182F1BF37A
+ for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 03:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB72F41B93
- for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 03:27:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB72F41B93
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA6AD60E7E
+ for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 03:55:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA6AD60E7E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vJyOiswtICYd for <buildroot@lists.busybox.net>;
- Thu, 21 Jul 2022 03:27:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wbn2VNAVdcDv for <buildroot@lists.busybox.net>;
+ Thu, 21 Jul 2022 03:55:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B812141B91
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com
- [IPv6:2607:f8b0:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B812141B91
- for <buildroot@buildroot.org>; Thu, 21 Jul 2022 03:27:27 +0000 (UTC)
-Received: by mail-pf1-x430.google.com with SMTP id c139so592169pfc.2
- for <buildroot@buildroot.org>; Wed, 20 Jul 2022 20:27:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC43E60E44
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com
+ [IPv6:2607:f8b0:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CC43E60E44
+ for <buildroot@buildroot.org>; Thu, 21 Jul 2022 03:55:30 +0000 (UTC)
+Received: by mail-ot1-x329.google.com with SMTP id
+ y10-20020a9d634a000000b006167f7ce0c5so322942otk.0
+ for <buildroot@buildroot.org>; Wed, 20 Jul 2022 20:55:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
- :content-transfer-encoding;
- bh=l3abVeX13ZK90VxvtaBTNYEetc6LSE27MUDM9SFHlOs=;
- b=UGey+IHwePoZ3T4FIIZKgMtmTk+bxUn+CAaAr/L5iZ4J1ApcmHTuml4KfnmeYQ+gRF
- 7KVuM058JIHVebFKGn0uoBINf2gE99f1JT+zRrQUth9AtS+W+77BQE7JzB7Qf6+bkuQd
- wJJYF5k/CSBTDvALfhYDZfeXFjszcoCSpg88pUTc1FmCACo7iZTJaSlrybBmwudFI1mW
- DACf+rKvDQ2IE6DEwlnjeNJc4VYVlxMbPHjBIwyd4RM2omLAvylh76H/0UHHnjBeTK/p
- 6QZKYTNymmzNwu+KHRdawxFj5Orv6QFn30NsE4yWVCkumnYadO4mpmj3Rqm/E8p5ZS9J
- Cc/Q==
-X-Gm-Message-State: AJIora8O4HhVlNU9uVtX0gPQwBUzOmYTVnBwM5G8cCmxyGC5H1IQBE+Y
- 5KEMfB0Pme0Wz3NtVkKIbKqYdUfhQ80=
-X-Google-Smtp-Source: AGRyM1t34w/XYyszDw5JUiFN4O5scJSUOTBkliu4eQSu4WlLJCto5MQPa9573M6UYA0ExkqQVxl51w==
-X-Received: by 2002:a63:8743:0:b0:41a:6f6b:db7b with SMTP id
- i64-20020a638743000000b0041a6f6bdb7bmr4201999pge.594.1658374046555; 
- Wed, 20 Jul 2022 20:27:26 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
- by smtp.gmail.com with ESMTPSA id
- 6-20020a620606000000b005255489187fsm395708pfg.135.2022.07.20.20.27.24
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 20 Jul 2022 20:27:26 -0700 (PDT)
-Message-ID: <f7f93cd8-a062-19a6-0707-fe847f0fad0b@gmail.com>
-Date: Wed, 20 Jul 2022 20:27:23 -0700
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=OV/KabQmk/2zTGcKHjkmNGds+dzxlS8IoLF81BLuhfE=;
+ b=0soW6fgm8CuYpeS5JZhKh14hSBbtkhGAUSLN8VwybHwsGKXSs37xUvN1e8vCdh5tUv
+ rzBXHfskjUD1p0BTVtUOL+r0Tebx8CqkCVoX3oY940bfB9dyG0ZIRwbvKojb4JS4uU00
+ lFfYK91c7BvuJuvfcEt9/idA5h+vdgU3tR5VhGWS6nVHOxcW7uIK8xSjgbTmqz+L0bPk
+ KCeAE+i4eddtx6AsWzMvg+xYdz4RHJsg+LLfj1HtR48PzEXG5qAYyC5n+mXgbE/Xlg2C
+ FdgSdP749Ygj2hNtVQqfm+lKTqj2875J2kHqnmX85qOBXAxTc3N1fruKHthQdwhyUS6B
+ PR+g==
+X-Gm-Message-State: AJIora/sN12Ok9dEaekP96+hM6073Rd5LON+6PBqaRC/XAqBJaJxaNOj
+ H8yzV6hjpPNmcRH2ntNwExtKOwKfB/Tt7BlDriY=
+X-Google-Smtp-Source: AGRyM1tB9UCwDUsBsIcuK+WbvwsGTbz9m/YdagPdofG9LwXI8Yqd6o5kWkSVQeohZBn65XXJJNS7NmVfq44p7+ws87w=
+X-Received: by 2002:a9d:4f0a:0:b0:61c:ae80:3d36 with SMTP id
+ d10-20020a9d4f0a000000b0061cae803d36mr6263219otl.151.1658375729770; Wed, 20
+ Jul 2022 20:55:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Content-Language: en-US
-To: buildroot@buildroot.org
-References: <20220720205915.2346283-1-f.fainelli@gmail.com>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220720205915.2346283-1-f.fainelli@gmail.com>
+References: <20220101214034.2152144-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220101214034.2152144-1-giulio.benetti@benettiengineering.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 20 Jul 2022 21:55:18 -0600
+Message-ID: <CADvTj4r09-gBxrbbJCd-gXCaOzZsMGUgv=E-SELMUieGdTorcA@mail.gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=l3abVeX13ZK90VxvtaBTNYEetc6LSE27MUDM9SFHlOs=;
- b=grJsbqAJL8tAwcb2HhkqcsOJ7RhjsQZIUkFCSJ8cBV8DVIFfkW0Syj2F1jTh8E7VUK
- wtZ0yPH5CnyQtd6Gt+vJu4GfpJRY5vzHO3auz8CX+YjcqLKFpIGQi0sk1svXUVwd/o1i
- IJpOmUEC8w/s+XST/GeCFM3FJb+Pu+T5Uu14B/Nz+XxcbiYwrDdk6qNRw/UabagiRsd7
- tPK/jaXT0to16rojf+mGiZKxXUs4GesAq9i+qHLIfmkitDRjt/mgUNhiq7ddzzXj7z5P
- ixi/9Zsjb+dsNpQGyhqXBxMsgbZFM47/Jx+Z+o0JGVPSvVY2IfdyTC+L1JCt82edfYrr
- kKJw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=OV/KabQmk/2zTGcKHjkmNGds+dzxlS8IoLF81BLuhfE=;
+ b=mcHPaHrkhHMZum76Vx4plgqz3PyrfMvRtGOAqN2pdwx/rnZjhpwPOOevDJw2CHx3Up
+ gh2bq43d4y3ftKoV0CQionU9Fx64/yrXLOW4mMgJHBvlpHzNfupaJjfsIO6agvrclgfd
+ yRek9GTO1myucfR5qTNrRebS/09TF2DlBMaX12psMjzSRc9dh3NN+D8EOIGMGhh6q5SE
+ kmmKiFLuMDt5CMdrg9t7nr6d8ru/Vf7he9G05KZeM8gm/XbH7+SLsDbBL/VL7nKFvzP8
+ A37Q9MWXyyxszdO+/E9jH0Ykq5gEF0OqAN0Fuz/YUvt1vLD7Ac3OCnmEVu7Tkr9Wl955
+ LDmg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=grJsbqAJ
-Subject: Re: [Buildroot] [PATCH] package/xfsprogs: Fix builds for
- architectures without MAP_SYNC
+ header.a=rsa-sha256 header.s=20210112 header.b=mcHPaHrk
+Subject: Re: [Buildroot] [PATCH] Makefile: disable 'printvars' and
+ 'show-vars' recipes for Make 4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,35 +90,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: bernd.kuhls@t-online.de, chrismcc@gmail.com, yann.morin.1998@free.fr,
- thomas.petazzoni@bootlin.com, fontaine.fabrice@gmail.com
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Sat, Jan 1, 2022 at 2:40 PM Giulio Benetti
+<giulio.benetti@benettiengineering.com> wrote:
+>
+> Make 4.3 is buggy and leads to a "Segmentation fault (core dumped)" when
+> calling 'make printvars' or 'make show-vars', so let's refuse to execute
+> those recipes if Make 4.3 by adding 'check-make-version' recipe as
+> depedendency of 'printvars' and 'show-vars' as suggested by Yann E. Morin.
 
+FYI autobuilder threads seem to die when this gets hit:
+make: *** [Makefile:1056: check-make-version] Error 1
+Process Process-12:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/autobuild/buildroot-test/scripts/autobuild-run", line
+748, in run_instance
+    self.run_one_build()
+  File "/home/autobuild/buildroot-test/scripts/autobuild-run", line
+731, in run_one_build
+    ret = self.do_reproducible_build()
+  File "/home/autobuild/buildroot-test/scripts/autobuild-run", line
+524, in do_reproducible_build
+    ret = self.check_reproducibility()
+  File "/home/autobuild/buildroot-test/scripts/autobuild-run", line
+416, in check_reproducibility
+    prefix = subprocess.check_output(["make", "--no-print-directory",
+"O=%s" % self.outputdir,
+  File "/usr/lib/python3.10/subprocess.py", line 420, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+  File "/usr/lib/python3.10/subprocess.py", line 524, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['make',
+'--no-print-directory',
+'O=/home/autobuild/autobuild/instance-11/output-1', '-C',
+'instance-11/buildroot', 'printvars', 'VARS=TARGET_CROSS']' returned
+non-zero exit status 2.
 
-On 7/20/2022 1:59 PM, Florian Fainelli wrote:
-> Include a patch that was submitted to the linux-xfs mailing list to
-> address build failures for io/mmap.c:
-> 
-> https://lore.kernel.org/linux-xfs/20220720205307.2345230-1-f.fainelli@gmail.com/
-> 
-> Fixes:
-> autobuild.buildroot.net/results/407131b767fc8241e8f5f5001c0b5d4e2c488dea
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Looks like we got the attention of a few XFS developers, and sorry 
-Fabrice for not having seen your earlier attempt. Assuming Darrick's 
-patch get accepted I will provide a backport shortly after:
-
-https://lore.kernel.org/all/YtiPgDT3imEyU2aF@magnolia/
-
-Please do not apply this patch.
--- 
-Florian
+>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  Makefile | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 0b8c7b2867..ac98b84425 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1058,13 +1058,20 @@ ifeq ($(NEED_WRAPPER),y)
+>         $(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
+>  endif
+>
+> +.PHONY: check-make-version
+> +check-make-version:
+> +ifneq ($(filter $(RUNNING_MAKE_VERSION),4.3),)
+> +       @echo "Make 4.3 doesn't support 'printvars' and 'show-vars' recipes"
+> +       @exit 1
+> +endif
+> +
+>  # printvars prints all the variables currently defined in our
+>  # Makefiles. Alternatively, if a non-empty VARS variable is passed,
+>  # only the variables matching the make pattern passed in VARS are
+>  # displayed.
+>  # show-vars does the same, but as a JSON dictionnary.
+>  .PHONY: printvars
+> -printvars:
+> +printvars: check-make-version
+>         @:
+>         $(foreach V, \
+>                 $(sort $(filter $(VARS),$(.VARIABLES))), \
+> @@ -1077,7 +1084,7 @@ printvars:
+>
+>  .PHONY: show-vars
+>  show-vars: VARS?=%
+> -show-vars:
+> +show-vars: check-make-version
+>         @:
+>         $(info $(call clean-json, { \
+>                         $(foreach V, \
+> --
+> 2.25.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
