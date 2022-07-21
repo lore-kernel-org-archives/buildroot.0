@@ -4,61 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91F6DC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Jul 2022 08:26:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 307CAC43334
+	for <buildroot@archiver.kernel.org>; Thu, 21 Jul 2022 10:24:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D81FA60FF6;
-	Thu, 21 Jul 2022 08:26:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D81FA60FF6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 822B26100E;
+	Thu, 21 Jul 2022 10:24:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 822B26100E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AQp_cHqMJYBs; Thu, 21 Jul 2022 08:26:55 +0000 (UTC)
+	with ESMTP id T1qrSpmlPOY9; Thu, 21 Jul 2022 10:24:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0EBC60FB2;
-	Thu, 21 Jul 2022 08:26:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0EBC60FB2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8A4241BF42E
- for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 08:26:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A98E260EBB;
+	Thu, 21 Jul 2022 10:24:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A98E260EBB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C8DA1BF3CD
+ for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 10:24:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5812E60FB2
- for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 08:26:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5812E60FB2
+ by smtp1.osuosl.org (Postfix) with ESMTP id E8BA284012
+ for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 10:24:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8BA284012
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5496Fnl030mB for <buildroot@lists.busybox.net>;
- Thu, 21 Jul 2022 08:26:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O8BbaFK07BUj for <buildroot@lists.busybox.net>;
+ Thu, 21 Jul 2022 10:24:34 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47D2160F81
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 47D2160F81
- for <buildroot@buildroot.org>; Thu, 21 Jul 2022 08:26:48 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 670F0240005;
- Thu, 21 Jul 2022 08:26:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 21 Jul 2022 10:26:44 +0200
-Message-Id: <20220721082645.2593370-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.36.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C434983FBB
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.40])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C434983FBB
+ for <buildroot@buildroot.org>; Thu, 21 Jul 2022 10:24:33 +0000 (UTC)
+Received: from opfedar05.francetelecom.fr (unknown [xx.xx.xx.7])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by opfedar24.francetelecom.fr (ESMTP service) with ESMTPS id 4LpTFp6slbz62Km; 
+ Thu, 21 Jul 2022 12:24:30 +0200 (CEST)
+Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
+ Thu, 21 Jul 2022 12:24:28 +0200
+Date: Thu, 21 Jul 2022 12:24:28 +0200
+From: <yann.morin@orange.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <21739_1658399070_62D9295E_21739_128_1_20220721102428.GA2882@tl-lnx-nyma7486>
+References: <20220719074042.2214649-1-thomas.petazzoni@bootlin.com>
+ <20220719074042.2214649-3-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220719074042.2214649-3-thomas.petazzoni@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Originating-IP: [10.115.27.51]
+X-ClientProxiedBy: OPE16NORMBX208.corporate.adroot.infra.ftgroup (10.115.27.9)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658392006;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=mfrHRoYbk32m5VXnHnwIg2WgfBQdMuXsHR8tAjV3kHc=;
- b=Xq9y/+01tc4Z8Md3qXK0fImKeSD72mW7cgcQ8l/S1PHLx6HxnisC5iStP9dHn09RZ5/Hc+
- VbJOOr11Ul9gh8LJ7zHUOk/zkGvElIXJWXWOiaiERBUUu0Jl17GQVNECNnUBvQIGTr1vP6
- D18vP5UkAr5HWdJ4YASE5IsMSxIbnxxq2BHkoAv211d0U6rppexdMad1I1A22h9grYvSZp
- dpheYoHpTuz61yThhmK/BMhKA0fHi7Wu+k2qZSfId89nPL47Xm1CMmlHX2CddpzA5folSQ
- Mi+PZZB8M6tuWjhLkDY3RkCra1YQqeUd6ULcHsHpffekr0xr9R5jjAGPqkmwPQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Xq9y/+01
-Subject: [Buildroot] [PATCH] package/gnu-efi: bump to version 3.0.14
+ d=orange.com; s=ORANGE001; t=1658399071;
+ bh=Qrss52J2o91c7blvpRbNfdb7N7TDsQEKGdTF2Uqhmi4=;
+ h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+ b=xGlX7TZiOXahv8qn4F6Dl4ZbSssR/vS1NGYPLWYZ1eT9Tf1HJgMGaFO7UjQ+o4n3z
+ J+gBoizfoo22PqO9CiJTR64Pr5M6XmwNvFm0CGuSNxIak6UxgpRdnoim5Pons+GMD5
+ hZzh6TQZDkf5xj7Yy5bxT9+5dEjuIJTGp2rvVpQx45iuRYh3w2mrirKMqktRA1YEyx
+ UIchatorb9nk1Rjsm4SQrgtSMLgee6eFYxw3hTwBoRe5Kf0Dsc7m7FNLWQuf11Oxmd
+ Ynwpd6vJtKYrHc3GgyY/73KvbFDedmu/IoEPlGz+DAUkoShwF+vYZnbjf71CKjshl5
+ G4j0KFDnTRyrQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=ORANGE001 header.b=xGlX7TZi
+Subject: Re: [Buildroot] [PATCH 2/4] boot/grub2: update to 2.06
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,216 +82,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Patch 0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
-is refreshed to accommodate with conflicting upstream changes.
+Thomas, All,
 
-Patch 0002-Revert-efilink-fix-build-with-gcc-4.8.patch is dropped as
-it is upstream as of commit
-8b2da2c2247af28bd681a9c8e3231559964c80a6 ("Revert "efilink: fix build
-with gcc 4.8"").
+On 2022-07-19 09:40 +0200, Thomas Petazzoni via buildroot spake thusly:
+> The update is very straightforward, as no changes in grub2.mk are
+> needed beyond the version bump.
+> 
+> Spacing in the hash file is adjusted to the new Buildroot standard.
+> 
+> All patches are dropped as they have all been upstreamed between 2.04
+> and 2.06. Here is the full list of patches and their corresponding
+> upstream commit:
+[--SNIP--]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[--SNIP--]
+> diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+> index d93e383422..ce0594d1d3 100644
+> --- a/boot/grub2/grub2.mk
+> +++ b/boot/grub2/grub2.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -GRUB2_VERSION = 2.04
+> +GRUB2_VERSION = 2.06
 
-A new patch is needed to fix the build on mips64.
+Tested on an actual, physical PC, x86_64 and EFI.
+Tested-by: Yann E. MORIN <yann.morin@orange.com>
 
-While at it, fix the hash file to use the new spacing convention.
+>  GRUB2_SITE = http://ftp.gnu.org/gnu/grub
+>  GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
+>  GRUB2_LICENSE = GPL-3.0+
+> @@ -13,32 +13,6 @@ GRUB2_DEPENDENCIES = host-bison host-flex host-grub2
+>  HOST_GRUB2_DEPENDENCIES = host-bison host-flex
+>  GRUB2_INSTALL_IMAGES = YES
+[--SNIP--]
+> -# 0002-yylex-Make-lexer-fatal-errors-actually-be-fatal.patch
+> -GRUB2_IGNORE_CVES += CVE-2020-10713
+> -# 0005-calloc-Use-calloc-at-most-places.patch
+> -GRUB2_IGNORE_CVES += CVE-2020-14308
+> -# 0006-malloc-Use-overflow-checking-primitives-where-we-do-.patch
+> -GRUB2_IGNORE_CVES += CVE-2020-14309 CVE-2020-14310 CVE-2020-14311
+> -# 0019-script-Avoid-a-use-after-free-when-redefining-a-func.patch
+> -GRUB2_IGNORE_CVES += CVE-2020-15706
+> -# 0028-linux-Fix-integer-overflows-in-initrd-size-handling.patch
+> -GRUB2_IGNORE_CVES += CVE-2020-15707
+> -# 2021/03/02 security fixes - patches 0029-0149
+> -GRUB2_IGNORE_CVES += CVE-2020-25632 CVE-2020-25647 CVE-2020-27749 \
+> -	CVE-2020-27779 CVE-2021-3418 CVE-2021-20225 CVE-2021-20233
+> -# 0039-acpi-Don-t-register-the-acpi-command-when-locked-dow.patch
+> -GRUB2_IGNORE_CVES += CVE-2020-14372
 
-Fixes:
+Reviewed-by: Yann E. MORIN <yann.morin@orange.com>
 
-  http://autobuild.buildroot.net/results/a9a7372615e3fbe4b8abda946706d1ccadf28931/
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-Note: the new patch has been submitted usptream, but the Sourceforge
-mailing list archive is so slow that the mail hasn't appeared yet.
+>  # CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
+>  # doesn't exist upstream, but is added by the Redhat/Fedora
+>  # packaging. Not applicable to Buildroot.
+> -- 
+> 2.36.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
- ...n-t-override-ARCH-when-cross-compili.patch | 10 ++--
- ...evert-efilink-fix-build-with-gcc-4.8.patch | 38 ------------
- ...support-__mips64-to-recognize-mips64.patch | 59 +++++++++++++++++++
- package/gnu-efi/gnu-efi.hash                  |  8 +--
- package/gnu-efi/gnu-efi.mk                    |  2 +-
- 5 files changed, 69 insertions(+), 48 deletions(-)
- delete mode 100644 package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch
- create mode 100644 package/gnu-efi/0002-inc-efi-.h-also-support-__mips64-to-recognize-mips64.patch
-
-diff --git a/package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch b/package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
-index c256541781..2eb9c5a062 100644
---- a/package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
-+++ b/package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
-@@ -1,4 +1,4 @@
--From 3452721eafae90749f4af63264c412f398460b15 Mon Sep 17 00:00:00 2001
-+From b2dbeec5063265eb0121342c24a900a4888712a7 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Sun, 20 Jan 2019 21:07:11 +0100
- Subject: [PATCH] Make.defaults: don't override ARCH when cross-compiling
-@@ -15,18 +15,18 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/Make.defaults b/Make.defaults
--index ba743f1..a0e5632 100755
-+index 47ed361..7420344 100755
- --- a/Make.defaults
- +++ b/Make.defaults
- @@ -67,7 +67,7 @@ ARCH         ?= $(shell $(HOSTCC) -dumpmachine | cut -f1 -d- | sed -e s,i[345678
-  
-  # Get ARCH from the compiler if cross compiling 
-  ifneq ($(CROSS_COMPILE),)
---  override ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed -e s,i[3456789]86,ia32, -e 's,armv7.*,arm,' )
--+  ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed -e s,i[3456789]86,ia32, -e 's,armv7.*,arm,' )
-+-  override ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed -e s,i[3456789]86,ia32, -e 's,armv[67].*,arm,' )
-++  ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed -e s,i[3456789]86,ia32, -e 's,armv[67].*,arm,' )
-  endif
-  
-  # FreeBSD (and possibly others) reports amd64 instead of x86_64
- -- 
--2.14.1
-+2.36.1
- 
-diff --git a/package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch
-deleted file mode 100644
-index 5a08c24254..0000000000
---- a/package/gnu-efi/0002-Revert-efilink-fix-build-with-gcc-4.8.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 1f7b2e5bd6603b30202a66b6317a41e2be85742b Mon Sep 17 00:00:00 2001
--From: Esben Haabendal <esben@haabendal.dk>
--Date: Tue, 26 Mar 2019 13:37:02 +0100
--Subject: [PATCH] Revert "efilink: fix build with gcc 4.8"
--
--This reverts commit 6335e5c697c57d8b5854b8202de3733bcb151ca6, as it breaks
--gcc builds with '-nostdinc' flag.
--
--The fix in 1a53d8f88a452847b25f9689f9a08dbcf82c86e4
--(Fix for problem with undeclared intptr_t type), which is also merged
--fixes the same problem, without causing breakage.
--
--Signed-off-by: Esben Haabendal <esben@haabendal.dk>
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[Upstream status:
--https://sourceforge.net/p/gnu-efi/code/merge-requests/6/]
-----
-- inc/efilink.h | 4 ----
-- 1 file changed, 4 deletions(-)
--
--diff --git a/inc/efilink.h b/inc/efilink.h
--index b69a6fd..cc5aa2d 100644
----- a/inc/efilink.h
--+++ b/inc/efilink.h
--@@ -1,10 +1,6 @@
-- #ifndef _EFI_LINK_H
-- #define _EFI_LINK_H
-- 
---#if defined(__GNUC__)
---#include <stdint.h>
---#endif
---
-- /*++
-- 
-- Copyright (c) 1998  Intel Corporation
---- 
--2.20.1
--
-diff --git a/package/gnu-efi/0002-inc-efi-.h-also-support-__mips64-to-recognize-mips64.patch b/package/gnu-efi/0002-inc-efi-.h-also-support-__mips64-to-recognize-mips64.patch
-new file mode 100644
-index 0000000000..1a3693c040
---- /dev/null
-+++ b/package/gnu-efi/0002-inc-efi-.h-also-support-__mips64-to-recognize-mips64.patch
-@@ -0,0 +1,59 @@
-+From 2c0ad0d7547558be59ef10dd289e619373341704 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 21 Jul 2022 09:47:49 +0200
-+Subject: [PATCH] inc/efi*.h: also support __mips64 to recognize mips64
-+
-+gcc built-in define for the MIPS64 architecture is __mips64, not
-+__mips64__, so the current condition did not match for gcc. See
-+https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/mips/mips.h;h=47aac9d3d61245c4d3df5dbd0bbcd833190de7c3;hb=2d280e7eafc086e9df85f50ed1a6526d6a3a204d#l431
-+in the gcc source.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ inc/efi.h      | 2 +-
-+ inc/efilib.h   | 2 +-
-+ inc/efirtlib.h | 2 +-
-+ 3 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/inc/efi.h b/inc/efi.h
-+index 43c832e..b193932 100644
-+--- a/inc/efi.h
-++++ b/inc/efi.h
-+@@ -48,7 +48,7 @@ Revision History
-+ #include "aarch64/efibind.h"
-+ #elif defined (_M_ARM) || defined(__arm__)
-+ #include "arm/efibind.h"
-+-#elif defined (_M_MIPS64) || defined(__mips64__)
-++#elif defined (_M_MIPS64) || defined(__mips64__) || defined(__mips64)
-+ #include "mips64el/efibind.h"
-+ #elif defined (__riscv) && __riscv_xlen == 64
-+ #include "riscv64/efibind.h"
-+diff --git a/inc/efilib.h b/inc/efilib.h
-+index 9f748ad..a2b39b2 100644
-+--- a/inc/efilib.h
-++++ b/inc/efilib.h
-+@@ -31,7 +31,7 @@ Revision History
-+ #include "aarch64/efilibplat.h"
-+ #elif defined (_M_ARM) || defined(__arm__)
-+ #include "arm/efilibplat.h"
-+-#elif defined (_M_MIPS64) || defined(__mips64__)
-++#elif defined (_M_MIPS64) || defined(__mips64__) || defined(__mips64)
-+ #include "mips64el/efilibplat.h"
-+ #elif defined (__riscv) && __riscv_xlen == 64
-+ #include "riscv64/efilibplat.h"
-+diff --git a/inc/efirtlib.h b/inc/efirtlib.h
-+index 8643061..518859e 100644
-+--- a/inc/efirtlib.h
-++++ b/inc/efirtlib.h
-+@@ -30,7 +30,7 @@ Revision History
-+ #include "aarch64/efilibplat.h"
-+ #elif defined (_M_ARM) || defined(__arm__)
-+ #include "arm/efilibplat.h"
-+-#elif defined (_M_MIPS64) || defined(__mips64__)
-++#elif defined (_M_MIPS64) || defined(__mips64__) || defined(__mips64)
-+ #include "mips64el/efilibplat.h"
-+ #elif defined (__riscv) && __riscv_xlen == 64
-+ #include "riscv64/efilibplat.h"
-+-- 
-+2.36.1
-+
-diff --git a/package/gnu-efi/gnu-efi.hash b/package/gnu-efi/gnu-efi.hash
-index bf9792b290..599d234436 100644
---- a/package/gnu-efi/gnu-efi.hash
-+++ b/package/gnu-efi/gnu-efi.hash
-@@ -1,6 +1,6 @@
- # From http://sourceforge.net/projects/gnu-efi/files
--md5 960a8379b6f95ee73d7778b70bf2a089 gnu-efi-3.0.10.tar.bz2
--sha1 a51b81eda97c0acbf3ac86123f298d3c0e396ce5 gnu-efi-3.0.10.tar.bz2
-+md5  e2902ad09d53d7a94dc96a449dbb4058  gnu-efi-3.0.14.tar.bz2
-+sha1  e46b3726478838e85d0a79d0a0d3508c4f2995cf  gnu-efi-3.0.14.tar.bz2
- # Locally computed
--sha256 f12082a3a5f0c3e38c67262a9f34245d139ac2cdfc0a0bdcf03c9b1f56fa4fed  gnu-efi-3.0.10.tar.bz2
--sha256 42d352e9c28dd446fd0209cd6f75588c8e41f0934540bb382bbd61c752360265  README.efilib
-+sha256  b73b643a0d5697d1f396d7431448e886dd805668789578e3e1a28277c9528435  gnu-efi-3.0.14.tar.bz2
-+sha256  42d352e9c28dd446fd0209cd6f75588c8e41f0934540bb382bbd61c752360265  README.efilib
-diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
-index 06bf254738..13e925302d 100644
---- a/package/gnu-efi/gnu-efi.mk
-+++ b/package/gnu-efi/gnu-efi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNU_EFI_VERSION = 3.0.10
-+GNU_EFI_VERSION = 3.0.14
- GNU_EFI_SOURCE = gnu-efi-$(GNU_EFI_VERSION).tar.bz2
- GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi
- GNU_EFI_INSTALL_STAGING = YES
 -- 
-2.36.1
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 
 _______________________________________________
 buildroot mailing list
