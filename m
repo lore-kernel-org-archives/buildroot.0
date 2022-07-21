@@ -1,58 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FAC8C43334
-	for <buildroot@archiver.kernel.org>; Thu, 21 Jul 2022 10:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FD04C43334
+	for <buildroot@archiver.kernel.org>; Thu, 21 Jul 2022 11:04:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB05F84750;
-	Thu, 21 Jul 2022 10:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB05F84750
+	by smtp2.osuosl.org (Postfix) with ESMTP id E732141171;
+	Thu, 21 Jul 2022 11:04:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E732141171
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2cH5b4P6GF6w; Thu, 21 Jul 2022 10:51:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OMBgEL1yCsCQ; Thu, 21 Jul 2022 11:04:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4EA084751;
-	Thu, 21 Jul 2022 10:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4EA084751
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7011B1BF3CD
- for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 10:51:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 07674405B6;
+	Thu, 21 Jul 2022 11:04:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07674405B6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E3591BF3C0
+ for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 11:04:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4772160D8C
- for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 10:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4772160D8C
+ by smtp2.osuosl.org (Postfix) with ESMTP id D394A405B6
+ for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 11:04:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D394A405B6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rGgVY-tssfo0 for <buildroot@lists.busybox.net>;
- Thu, 21 Jul 2022 10:51:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EperE4Cp3iz1 for <buildroot@lists.busybox.net>;
+ Thu, 21 Jul 2022 11:04:26 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2B9460DC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6114A4018F
 Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A2B9460DC6
- for <buildroot@buildroot.org>; Thu, 21 Jul 2022 10:51:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6114A4018F
+ for <buildroot@buildroot.org>; Thu, 21 Jul 2022 11:04:26 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 7789F1814B9; Thu, 21 Jul 2022 12:51:45 +0200 (CEST)
+ with ESMTPSA id B17B91814B9; Thu, 21 Jul 2022 13:04:23 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Thu, 21 Jul 2022 12:47:25 +0200
-Message-Id: <20220721104733.3603090-1-buildroot@heine.tech>
+Date: Thu, 21 Jul 2022 13:03:42 +0200
+Message-Id: <20220721110342.3624588-1-buildroot@heine.tech>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=heine.tech; s=dkim; 
- t=1658400711; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=vAFCWgl0qtjjq8ySvmDJ/Apk42XavXBirZ7ajSdNhJ8=;
- b=abZXe4ukdW9+IvdW9T/2ZiQX1tUe6sDw5/mTYP65DsWQSSrydUUIvg+mqiBlDqM7OkIYt/
- 0Gpf9P5DKl+GDpCoqwuusXwAI2sUW0BeaZsvz2jPi59Hkgu5gOWQJDpIt65J+rOnWzd0h0
- WE0fOCZYcMDVRkSqKIR3DhReeqWiXWs=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ t=1658401463; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=rCyKwWS5kWPmi10IL8Rlbzlc8BSZWhsDHK4AB+Ky2Wg=;
+ b=SyJaxWIR0xd2yEdclYQR1sCDXZMGTYkxT4NwdYq3y1Ky+ImDQvzGN26724wpE+lK0sDN0E
+ nCgzntbdBwG0ZX8dlsS/0G1mrNpAJVsnmrfJXRWw48qDmduExYEftCkWJ/6I1wjoEpHnTE
+ M0xmbXLaxKiGBVvIxYKoWgUO52nMYlM=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=abZXe4uk
-Subject: [Buildroot] [PATCH] package/{python-}protobuf: bump to version 21.3
+ header.a=rsa-sha256 header.s=dkim header.b=SyJaxWIR
+Subject: [Buildroot] [PATCH] package/libabseil-cpp: bump version to
+ 20220623.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,79 +67,174 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
 Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Matt Weber <matthew.weber@collins.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-protobuf changed its versioning scheme [1]. The Release version is now only
-the Minor.Patch version of the language specific version.
-
-C++ stays on version 3, but python got bumped to 4. So the handling in the .mk
-files changed to reflect that.
-
-[1] https://developers.google.com/protocol-buffers/docs/news/2022-05-06
+- drop upstreamed patches
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 6 ++++--
- package/python-protobuf/python-protobuf.hash | 2 +-
- package/python-protobuf/python-protobuf.mk   | 3 ++-
- 4 files changed, 8 insertions(+), 5 deletions(-)
+ .../0002-fix-build-with-uclibc-ng.patch       | 62 -------------------
+ ...direct_mmap-h-fix-musl-build-on-mips.patch | 55 ----------------
+ package/libabseil-cpp/libabseil-cpp.hash      |  2 +-
+ package/libabseil-cpp/libabseil-cpp.mk        |  2 +-
+ 4 files changed, 2 insertions(+), 119 deletions(-)
+ delete mode 100644 package/libabseil-cpp/0002-fix-build-with-uclibc-ng.patch
+ delete mode 100644 package/libabseil-cpp/0003-PR-1197-absl-base-internal-direct_mmap-h-fix-musl-build-on-mips.patch
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index f37b2dee40..1006fd3d64 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
+diff --git a/package/libabseil-cpp/0002-fix-build-with-uclibc-ng.patch b/package/libabseil-cpp/0002-fix-build-with-uclibc-ng.patch
+deleted file mode 100644
+index 0797d8e51b..0000000000
+--- a/package/libabseil-cpp/0002-fix-build-with-uclibc-ng.patch
++++ /dev/null
+@@ -1,62 +0,0 @@
+-From b9ad9bbfed92199a1a58504306d026cd2597539e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 30 Mar 2022 21:56:20 +0200
+-Subject: [PATCH] Fix build with uclibc-ng (#1145)
+-
+-uclibc-ng doesn't provide getauxval which results in the following build
+-failure on arm or ppc with any user of abseil-cpp such as grpc:
+-
+-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libabsl_random_internal_randen_hwaes.so.2111.0.0: undefined reference to `getauxval'
+-
+-To fix this build failure, check that __UCLIBC__ is not defined before
+-using getauxval (as Babel is not able to check function availability)
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/775f3ca3dedebff29e212b29dfa896b7613b7a02
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/abseil/abseil-cpp/commit/b9ad9bbfed92199a1a58504306d026cd2597539e]
+----
+- absl/debugging/internal/vdso_support.cc | 2 +-
+- absl/random/internal/randen_detect.cc   | 7 ++++++-
+- 2 files changed, 7 insertions(+), 2 deletions(-)
+-
+-diff --git a/absl/debugging/internal/vdso_support.cc b/absl/debugging/internal/vdso_support.cc
+-index c655cf452..e63ac4a3b 100644
+---- a/absl/debugging/internal/vdso_support.cc
+-+++ b/absl/debugging/internal/vdso_support.cc
+-@@ -33,7 +33,7 @@
+- #endif
+- #include <unistd.h>
+- 
+--#if defined(__GLIBC__) && \
+-+#if !defined(__UCLIBC__) && defined(__GLIBC__) && \
+-     (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16))
+- #define ABSL_HAVE_GETAUXVAL
+- #endif
+-diff --git a/absl/random/internal/randen_detect.cc b/absl/random/internal/randen_detect.cc
+-index 9bb58fc68..6dababa35 100644
+---- a/absl/random/internal/randen_detect.cc
+-+++ b/absl/random/internal/randen_detect.cc
+-@@ -24,6 +24,11 @@
+- 
+- #include "absl/random/internal/platform.h"
+- 
+-+#if !defined(__UCLIBC__) && defined(__GLIBC__) && \
+-+    (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16))
+-+#define ABSL_HAVE_GETAUXVAL
+-+#endif
+-+
+- #if defined(ABSL_ARCH_X86_64)
+- #define ABSL_INTERNAL_USE_X86_CPUID
+- #elif defined(ABSL_ARCH_PPC) || defined(ABSL_ARCH_ARM) || \
+-@@ -31,7 +36,7 @@
+- #if defined(__ANDROID__)
+- #define ABSL_INTERNAL_USE_ANDROID_GETAUXVAL
+- #define ABSL_INTERNAL_USE_GETAUXVAL
+--#elif defined(__linux__)
+-+#elif defined(__linux__) && defined(ABSL_HAVE_GETAUXVAL)
+- #define ABSL_INTERNAL_USE_LINUX_GETAUXVAL
+- #define ABSL_INTERNAL_USE_GETAUXVAL
+- #endif
+diff --git a/package/libabseil-cpp/0003-PR-1197-absl-base-internal-direct_mmap-h-fix-musl-build-on-mips.patch b/package/libabseil-cpp/0003-PR-1197-absl-base-internal-direct_mmap-h-fix-musl-build-on-mips.patch
+deleted file mode 100644
+index 0f77236843..0000000000
+--- a/package/libabseil-cpp/0003-PR-1197-absl-base-internal-direct_mmap-h-fix-musl-build-on-mips.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 53a90f079af7ab491530d432bb318a95371ba877 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 16 Jun 2022 14:28:53 -0700
+-Subject: [PATCH] PR #1197: absl/base/internal/direct_mmap.h: fix musl build on
+- mips
+-
+-Imported from GitHub PR https://github.com/abseil/abseil-cpp/pull/1197
+-
+-Fix the following musl build failure on mips:
+-
+-```
+-In file included from /nvmedata/autobuild/instance-15/output-1/build/libabseil-cpp-20211102.0/absl/base/internal/low_level_alloc.cc:26:
+-/nvmedata/autobuild/instance-15/output-1/build/libabseil-cpp-20211102.0/absl/base/internal/direct_mmap.h:49:10: fatal error: sgidefs.h: No such file or directory
+-   49 | #include <sgidefs.h>
+-      |          ^~~~~~~~~~~
+-```
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/3fa027e602bacb22316fb5d9b233baa0b0f0e845
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Merge c9b5b5c5471213a871f7d6d1d2fc8f6899effbac into a184bab83ffcffc2aaac49a3900361158ab3890f
+-
+-Merging this change closes #1197
+-
+-COPYBARA_INTEGRATE_REVIEW=https://github.com/abseil/abseil-cpp/pull/1197 from ffontaine:master c9b5b5c5471213a871f7d6d1d2fc8f6899effbac
+-PiperOrigin-RevId: 455467767
+-Change-Id: I1905f7d70e914288bc1524a52adce3476a779fd8
+-
+-[Retrieved from:
+-https://github.com/abseil/abseil-cpp/commit/53a90f079af7ab491530d432bb318a95371ba877]
+----
+- absl/base/internal/direct_mmap.h | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/absl/base/internal/direct_mmap.h b/absl/base/internal/direct_mmap.h
+-index a01d61220..e492bb004 100644
+---- a/absl/base/internal/direct_mmap.h
+-+++ b/absl/base/internal/direct_mmap.h
+-@@ -41,13 +41,13 @@
+- 
+- #ifdef __mips__
+- // Include definitions of the ABI currently in use.
+--#ifdef __BIONIC__
+-+#if defined(__BIONIC__) || !defined(__GLIBC__)
+- // Android doesn't have sgidefs.h, but does have asm/sgidefs.h, which has the
+- // definitions we need.
+- #include <asm/sgidefs.h>
+- #else
+- #include <sgidefs.h>
+--#endif  // __BIONIC__
+-+#endif  // __BIONIC__ || !__GLIBC__
+- #endif  // __mips__
+- 
+- // SYS_mmap and SYS_munmap are not defined in Android.
+diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
+index 2d6c598880..14be313137 100644
+--- a/package/libabseil-cpp/libabseil-cpp.hash
++++ b/package/libabseil-cpp/libabseil-cpp.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  dddd73664306d7d895a95e1cf18925b31b52785e468727e4635b45edae5166f9  protobuf-cpp-3.20.1.tar.gz
-+sha256  c98a4f17ed57e9e4dafc4a52e76ee012f9a6a13750488b20b4c370a3eb1561fc  protobuf-cpp-3.21.3.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index c4c33ba7da..5c08421bbc 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,9 +7,11 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 3.20.1
-+PROTOBUF_VERSION_MAJOR = 3
-+PROTOBUF_VERSION_MINOR = 21.3
-+PROTOBUF_VERSION = ${PROTOBUF_VERSION_MAJOR}.${PROTOBUF_VERSION_MINOR}
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
--PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
-+PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION_MINOR)
- PROTOBUF_LICENSE = BSD-3-Clause
- PROTOBUF_LICENSE_FILES = LICENSE
- PROTOBUF_CPE_ID_VENDOR = google
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index ddfa48b491..06ec32c5b5 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d3449b4df32ca155f8cd71051db916b2bf74cc925760e269c0acf09b48ec1cb8  protobuf-python-3.20.1.tar.gz
-+sha256  ab5cda843c1fa2a34c5cdd30b65ae8bd148d8063e7f1b2bfe7daf23e763b0ff2  protobuf-python-4.21.3.tar.gz
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-index b91ba49339..8c21779faf 100644
---- a/package/python-protobuf/python-protobuf.mk
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -4,7 +4,8 @@
+ # Locally computed
+-sha256  dcf71b9cba8dc0ca9940c4b316a0c796be8fab42b070bb6b7cab62b48f0e66c4  libabseil-cpp-20211102.0.tar.gz
++sha256  4208129b49006089ba1d6710845a45e31c59b0ab6bff9e5788a87f55c5abd602  libabseil-cpp-20220623.0.tar.gz
+ sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
+diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
+index 7c6bda7659..eb22da3e2b 100644
+--- a/package/libabseil-cpp/libabseil-cpp.mk
++++ b/package/libabseil-cpp/libabseil-cpp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
-+PYTHON_PROTOBUF_VERSION_MAJOR = 4
-+PYTHON_PROTOBUF_VERSION = $(PYTHON_PROTOBUF_VERSION_MAJOR).$(PROTOBUF_VERSION_MINOR)
- PYTHON_PROTOBUF_SOURCE = protobuf-python-$(PYTHON_PROTOBUF_VERSION).tar.gz
- PYTHON_PROTOBUF_SITE = $(PROTOBUF_SITE)
- PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
+-LIBABSEIL_CPP_VERSION = 20211102.0
++LIBABSEIL_CPP_VERSION = 20220623.0
+ LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
+ LIBABSEIL_CPP_LICENSE = Apache-2.0
+ LIBABSEIL_CPP_LICENSE_FILES = LICENSE
 -- 
 2.25.1
 
