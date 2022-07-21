@@ -4,67 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB4A2C43334
-	for <buildroot@archiver.kernel.org>; Thu, 21 Jul 2022 16:16:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FDE6C43334
+	for <buildroot@archiver.kernel.org>; Thu, 21 Jul 2022 18:35:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7928B60E33;
-	Thu, 21 Jul 2022 16:16:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7928B60E33
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5169C60AA7;
+	Thu, 21 Jul 2022 18:35:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5169C60AA7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YS4U_mAFye2j; Thu, 21 Jul 2022 16:16:58 +0000 (UTC)
+	with ESMTP id Jfvs3R29aXNX; Thu, 21 Jul 2022 18:35:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7639760D65;
-	Thu, 21 Jul 2022 16:16:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7639760D65
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 09FC91BF2A5
- for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 16:16:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 524DE60AAC;
+	Thu, 21 Jul 2022 18:35:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 524DE60AAC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BCF81BF368
+ for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 18:35:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFD33847AB
- for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 16:16:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFD33847AB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 11D0A41940
+ for <buildroot@lists.busybox.net>; Thu, 21 Jul 2022 18:35:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11D0A41940
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ye4mCGGx4reG for <buildroot@lists.busybox.net>;
- Thu, 21 Jul 2022 16:16:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nLyIv2X2hZss for <buildroot@lists.busybox.net>;
+ Thu, 21 Jul 2022 18:35:17 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21C7A847A1
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 21C7A847A1
- for <buildroot@buildroot.org>; Thu, 21 Jul 2022 16:16:53 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C797424000E;
- Thu, 21 Jul 2022 16:16:49 +0000 (UTC)
-Date: Thu, 21 Jul 2022 18:16:48 +0200
-To: Alexandru Ardelean <ardeleanalex@gmail.com>
-Message-ID: <20220721181648.7eedcb41@windsurf>
-In-Reply-To: <20220721144939.1265027-1-ardeleanalex@gmail.com>
-References: <20220721144939.1265027-1-ardeleanalex@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D67041503
+Received: from aposti.net (aposti.net [89.234.176.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7D67041503
+ for <buildroot@buildroot.org>; Thu, 21 Jul 2022 18:35:17 +0000 (UTC)
+From: Paul Cercueil <paul@crapouillou.net>
+To: buildroot@buildroot.org
+Date: Thu, 21 Jul 2022 19:35:03 +0100
+Message-Id: <20220721183503.369200-1-paul@crapouillou.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658420211;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=uzTlG0L4h58Xp2QdBy332zL8HrdzK0FhpqkqnHvgfNU=;
- b=n1/4Sl+DAiTMVYyIBqCadtoiKi1JIylAIpATjEcG4gLcsqucAFSDgIOB/pOOi4FsaeSG0h
- Hx2DSTwkxVo91u/j3U7edZmum4GD3Dnr1XHO71KwXBM/G1apFFjifKMNoo0PxGpBeTFOk/
- FkTa8VfzSJ6TRHFF4TO1nVQkXbkj7UcYxhY6zYfY5qwKk511edPv9vYdjPvf9XaMXn7Cit
- GmOLXYB1QQl2F1/20bWC4FgPz6J0KeOcYHUJ3DyakPR3od05lZD/JXjf3qZj2vZIy9sxfo
- atf+EW5q78Re4OY3rSiFxzhThUmIj9G3u1F1bA8fiR74h0pEiFrNIFoCVcEJ4g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=n1/4Sl+D
-Subject: Re: [Buildroot] [PATCH] package/cog: add libgbm as dependency when
- building with DRM support
+ d=crapouillou.net; 
+ s=mail; t=1658428513; h=from:from:sender:reply-to:subject:subject:date:date:
+ message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+ content-type:content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:references; bh=2QWZT3nJgP5wEboeo25W6k42/0K93wS4BWpj9Suw3V4=;
+ b=U98yTmPD96k+C3VoGDzJmSboyVzuE1qN76TSNvosi2FPyOaKOoHv7UsK0KAjFefH9+eY4A
+ bEDTiVwekyEIlL/4E587vjaTzYbQkfPK+PyB660uRoLoosnbTvb8PdXntczmL+pxjD4+6e
+ pEaencmdZPKlmRAUCiR4B7oC29n8LtA=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net
+ header.a=rsa-sha256 header.s=mail header.b=U98yTmPD
+Subject: [Buildroot] [PATCH 1/1] linux: allow modules install path to be
+ overriden
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,79 +65,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
+Cc: Paul Cercueil <paul@crapouillou.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexandru,
+On my system the modules are not installed in the root filesystem
+directly, but in a separate squashfs image that is then shipped
+alongside the kernel.
 
-On Thu, 21 Jul 2022 17:49:39 +0300
-Alexandru Ardelean <ardeleanalex@gmail.com> wrote:
+Support this setup by allowing board files to override the install path
+for the kernel modules.
 
-> When building with DRM support, it can happen that the libgbm library
-> is not yet built by the provider of libgbm (specified by
-> BR2_PACKAGE_PROVIDES_LIBGBM).
-> 
-> The docs in cog `docs/platform-drm.md` specify this dep-list:
-> - **WPEBackend-fdo**:
-> - **Wayland**:
-> - **libdrm**:
-> - **libgbm**:
-> - **libinput**:
-> - **libudev**:
-> 
-> libgbm needs to be added, whereas `libudev` is provided by systemd (in my
-> case).
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ linux/linux.mk | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-Then udev should also be in the dependencies when
-BR2_PACKAGE_COG_PLATFORM_DRM=y.
-
->  ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
->  COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
-> -COG_DEPENDENCIES += libdrm libinput
-> +COG_DEPENDENCIES += libdrm libinput libgbm
-
-That is correct, but not complete. The DRM platform code in Cog also
-uses EGL, so we would also need libegl in the list of dependencies. In
-pratice, libgbm and libegl are most likely implemented by the same
-package, but for the sake of correctness, it would be better to have
-both.
-
-Another thing that is wrong is:
-
-	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # gbm
-
-in the Config.in file. This used to be the only way to detect the
-availability of gbm, but since quite some time now, we have the libgbm
-virtual package.
-
-So this should be instead:
-
-	depends on BR2_PACKAGE_HAS_LIBGBM
-
-and I'm pretty sure Cog uses some "advanced" features of libgbm, so
-most likely at least depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
-is needed, and probably also depends on
-BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT is needed.
-See package/opengl/libgbm/Config.in for details.
-
-Of course, this aspect should be in a different patch: your change to
-add "libgbm" in the DEPENDENCIES variable is really a fix, while my
-proposed change in the Config.in file is really an improvement, that
-will allow using Cog on libgbm-capable platforms that don't use mesa3d
-as their OpenGL/libgbm implementation.
-
-Best regards,
-
-Thomas
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 322ccabbd9..36896a3b4d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -145,6 +145,8 @@ LINUX_POST_EXTRACT_HOOKS += LINUX_XTENSA_OVERLAY_EXTRACT
+ LINUX_EXTRA_DOWNLOADS += $(ARCH_XTENSA_OVERLAY_URL)
+ endif
+ 
++INSTALL_MOD_PATH = $(TARGET_DIR)
++
+ # We don't want to run depmod after installing the kernel. It's done in a
+ # target-finalize hook, to encompass modules installed by packages.
+ # Disable building host tools with -Werror: newer gcc versions can be
+@@ -152,7 +154,7 @@ endif
+ LINUX_MAKE_FLAGS = \
+ 	HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
+ 	ARCH=$(KERNEL_ARCH) \
+-	INSTALL_MOD_PATH=$(TARGET_DIR) \
++	INSTALL_MOD_PATH=$(INSTALL_MOD_PATH) \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	WERROR=0 \
+ 	DEPMOD=$(HOST_DIR)/sbin/depmod
+@@ -519,8 +521,8 @@ define LINUX_INSTALL_TARGET_CMDS
+ 	# directories, not relevant on the target
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
+ 		$(LINUX_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) modules_install; \
+-		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ; \
+-		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ; \
++		rm -f $(INSTALL_MOD_PATH)/lib/modules/$(LINUX_VERSION_PROBED)/build ; \
++		rm -f $(INSTALL_MOD_PATH)/lib/modules/$(LINUX_VERSION_PROBED)/source ; \
+ 	fi
+ 	$(LINUX_INSTALL_HOST_TOOLS)
+ endef
+@@ -528,9 +530,9 @@ endef
+ # Run depmod in a target-finalize hook, to encompass modules installed by
+ # packages.
+ define LINUX_RUN_DEPMOD
+-	if test -d $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
++	if test -d $(INSTALL_MOD_PATH)/lib/modules/$(LINUX_VERSION_PROBED) \
+ 		&& grep -q "CONFIG_MODULES=y" $(LINUX_DIR)/.config; then \
+-		$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED); \
++		$(HOST_DIR)/sbin/depmod -a -b $(INSTALL_MOD_PATH) $(LINUX_VERSION_PROBED); \
+ 	fi
+ endef
+ LINUX_TARGET_FINALIZE_HOOKS += LINUX_RUN_DEPMOD
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
