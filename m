@@ -1,51 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1182C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 621E0C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:36:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 511D360EF6;
-	Fri, 22 Jul 2022 07:13:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 511D360EF6
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA6FB41A67;
+	Fri, 22 Jul 2022 07:36:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA6FB41A67
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uhQDnSHU4hFE; Fri, 22 Jul 2022 07:36:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78987419AE;
+	Fri, 22 Jul 2022 07:36:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78987419AE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0AC891BF36D
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:36:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D999F60EE8
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:36:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D999F60EE8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CnI2MM6zEnKD; Fri, 22 Jul 2022 07:13:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DC8F60EEB;
-	Fri, 22 Jul 2022 07:13:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DC8F60EEB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11C391BF36D
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:11:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0F1E409FA
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:11:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0F1E409FA
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8I3VM6TvZJrh for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 07:11:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 056AE403C8
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:11:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 056AE403C8
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EDE2A840C4; Fri, 22 Jul 2022 06:58:04 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1xRJ_20eBXZg for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 07:36:15 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B29E660E28
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B29E660E28
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:36:14 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BD3341C000A;
+ Fri, 22 Jul 2022 07:36:11 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oEnCk-0032nC-Fw; Fri, 22 Jul 2022 09:36:10 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 09:10:41 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 83e32e4dfdcab10fb7882a11a0742c0340755080
-X-Git-Newrev: b720e8c6bafa7d6ff16b1b1784e753b87e69ed39
-X-Patchwork-Hint: ignore
-Message-Id: <20220722065804.EDE2A840C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libmdbx: bump
- version to 0.11.8
+To: Neal Frager <neal.frager@amd.com>
+References: <20220517183842.1389395-1-neal.frager@amd.com>
+ <20220517183842.1389395-3-neal.frager@amd.com>
+Date: Fri, 22 Jul 2022 09:36:10 +0200
+In-Reply-To: <20220517183842.1389395-3-neal.frager@amd.com> (Neal Frager's
+ message of "Tue, 17 May 2022 12:38:42 -0600")
+Message-ID: <87r12dwqdx.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v4 3/3] configs/zynqmp_kria_kv260_defconfig:
+ build atf with uart1 console
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,84 +65,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6315872019101000916=="
+Cc: luca@lucaceresoli.net, giulio.benetti@benettiengineering.com,
+ wesley@sonifex.co.uk, michal.simek@amd.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6315872019101000916==
-Content-Type: text/plain
+>>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b720e8c6bafa7d6ff16b1b1784e753b87e69ed39
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+ > This patch fixes an ATF issue by building the ATF for uart1 instead
+ > of uart0 for the Kria KV260 Starter Kit.
 
-This is stable bugfix release of libmdbx.
-The project's website now is on https://libmdbx.dqdkfa.ru/
+ > Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-Release notes for v0.11.8 https://gitflic.ru/project/erthink/libmdbx/release/06268038-39ff-4270-9be8-9f26d5543015
+Committed to 2022.05.x, thanks.
 
-The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
-
-Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c099842544248b10f4284a5d47084db8f476fcda)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libmdbx/Config.in    | 2 +-
- package/libmdbx/libmdbx.hash | 3 ++-
- package/libmdbx/libmdbx.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/package/libmdbx/Config.in b/package/libmdbx/Config.in
-index 4849d60b92..a9a4ac45c5 100644
---- a/package/libmdbx/Config.in
-+++ b/package/libmdbx/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_LIBMDBX
- 	  libmdbx surpasses the legendary LMDB in terms of
- 	  reliability, features and performance.
- 
--	  https://libmdbx.website.yandexcloud.net/
-+	  https://libmdbx.dqdkfa.ru
- 
- if BR2_PACKAGE_LIBMDBX
- 
-diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-index 7d663b3da0..3f2be134c3 100644
---- a/package/libmdbx/libmdbx.hash
-+++ b/package/libmdbx/libmdbx.hash
-@@ -1,4 +1,5 @@
--# Hashes from: https://libmdbx.website.yandexcloud.net/release/SHA256SUMS
-+# Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
-+sha256  06011f361481ee7adc2111e48b7b121384294e0b6b8f10c75e7886629297b279  libmdbx-amalgamated-0.11.8.tar.xz
- sha256  3a9fb6a4cd941e646597235518714373fda1ca6d4c5e23669afe70ea87c20940  libmdbx-amalgamated-0.11.7.tar.xz
- 
- # Locally calculated
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-index a7056b2850..130fe96793 100644
---- a/package/libmdbx/libmdbx.mk
-+++ b/package/libmdbx/libmdbx.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LIBMDBX_VERSION = 0.11.7
-+LIBMDBX_VERSION = 0.11.8
- LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
--LIBMDBX_SITE = https://libmdbx.website.yandexcloud.net/release
-+LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
- LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
- LIBMDBX_LICENSE = OLDAP-2.8
- LIBMDBX_LICENSE_FILES = LICENSE
-
---===============6315872019101000916==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6315872019101000916==--
