@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5418C43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 21:21:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41C72C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 21:21:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50FCC42406;
-	Fri, 22 Jul 2022 21:21:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50FCC42406
+	by smtp1.osuosl.org (Postfix) with ESMTP id CAAEC8493E;
+	Fri, 22 Jul 2022 21:21:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAAEC8493E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1KM5iE4S55I2; Fri, 22 Jul 2022 21:21:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uxBa6cvwh3pi; Fri, 22 Jul 2022 21:21:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ECF7F42402;
-	Fri, 22 Jul 2022 21:21:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECF7F42402
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 09C6D1BF215
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C0E584889;
+	Fri, 22 Jul 2022 21:21:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C0E584889
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 195CE1C11A9
  for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBEA760768
+ by smtp1.osuosl.org (Postfix) with ESMTP id E852584887
  for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:21:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBEA760768
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E852584887
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q7vu4Kh-pi0c for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d8gfez2uQUqz for <buildroot@lists.busybox.net>;
  Fri, 22 Jul 2022 21:21:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1EC86605BA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 180B08480F
  for <buildroot@buildroot.org>; Fri, 22 Jul 2022 21:21:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EC86605BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 180B08480F
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B37B6841FC; Fri, 22 Jul 2022 21:08:03 +0000 (UTC)
+ id A9DB3841FA; Fri, 22 Jul 2022 21:08:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 23:19:16 +0200
+Date: Fri, 22 Jul 2022 23:18:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dfa0c8e3a876af16a0b57e49683c5f420c23678d
-X-Git-Newrev: d7ec0f7e97019c9b198f49d8c46ed9ee95fab375
+X-Git-Oldrev: a38da5e3cae6b786bb193d317a0e5e89466d9f6e
+X-Git-Newrev: dfa0c8e3a876af16a0b57e49683c5f420c23678d
 X-Patchwork-Hint: ignore
-Message-Id: <20220722210803.B37B6841FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-jmespath: bump to version
- 1.0.0
+Message-Id: <20220722210803.A9DB3841FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add new test for
+ python-jmespath
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,56 +59,75 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8115240703857467525=="
+Content-Type: multipart/mixed; boundary="===============0147040956983818548=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8115240703857467525==
+--===============0147040956983818548==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7ec0f7e97019c9b198f49d8c46ed9ee95fab375
+commit: https://git.buildroot.net/buildroot/commit/?id=dfa0c8e3a876af16a0b57e49683c5f420c23678d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While at it, remove the md5 hash as there is already a sha256 hash.
+Add a new rudimentary test inspired by the examples from jmespath's
+README file ([1]).
 
-Changelog: https://github.com/jmespath/jmespath.py/blob/develop/CHANGELOG.rst
+[1]: https://github.com/jmespath/jmespath.py/blob/develop/README.rst
+
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+[Thomas: add entry in DEVELOPERS file]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-jmespath/python-jmespath.hash | 5 ++---
- package/python-jmespath/python-jmespath.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ DEVELOPERS                                              |  2 ++
+ support/testing/tests/package/sample_python_jmespath.py |  4 ++++
+ support/testing/tests/package/test_python_jmespath.py   | 12 ++++++++++++
+ 3 files changed, 18 insertions(+)
 
-diff --git a/package/python-jmespath/python-jmespath.hash b/package/python-jmespath/python-jmespath.hash
-index 986db2e002..a1c64a121e 100644
---- a/package/python-jmespath/python-jmespath.hash
-+++ b/package/python-jmespath/python-jmespath.hash
-@@ -1,5 +1,4 @@
--# md5, sha256 from https://pypi.org/pypi/jmespath/json
--md5  65bdcb5fa5bcf1cc710ffa508e78e408  jmespath-0.10.0.tar.gz
--sha256  b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9  jmespath-0.10.0.tar.gz
-+# sha256 from https://pypi.org/pypi/jmespath/json
-+sha256  a490e280edd1f57d6de88636992d05b71e97d69a26a19f058ecf7d304474bf5e  jmespath-1.0.0.tar.gz
- # Locally computed sha256 checksums
- sha256  66b313cce80ed0623fc7db3f24863a0c80fd83eb341a46b57864158ae74faa56  LICENSE.txt
-diff --git a/package/python-jmespath/python-jmespath.mk b/package/python-jmespath/python-jmespath.mk
-index cf11dedb60..48b19e8494 100644
---- a/package/python-jmespath/python-jmespath.mk
-+++ b/package/python-jmespath/python-jmespath.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 55406892c7..54eb08c1d6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2435,8 +2435,10 @@ F:	package/python-jmespath/
+ F:	package/python-pymupdf/
+ F:	package/python-rsa/
+ F:	package/python-s3transfer/
++F:	support/testing/tests/package/sample_python_jmespath.py
+ F:	support/testing/tests/package/sample_python_rsa.py
+ F:	support/testing/tests/package/sample_python_s3transfer.py
++F:	support/testing/tests/package/test_python_jmespath.py
+ F:	support/testing/tests/package/test_python_rsa.py
+ F:	support/testing/tests/package/test_python_s3transfer.py
  
--PYTHON_JMESPATH_VERSION = 0.10.0
-+PYTHON_JMESPATH_VERSION = 1.0.0
- PYTHON_JMESPATH_SOURCE = jmespath-$(PYTHON_JMESPATH_VERSION).tar.gz
--PYTHON_JMESPATH_SITE = https://files.pythonhosted.org/packages/3c/56/3f325b1eef9791759784aa5046a8f6a1aff8f7c898a2e34506771d3b99d8
-+PYTHON_JMESPATH_SITE = https://files.pythonhosted.org/packages/06/7e/44686b986ef9ca6069db224651baaa8300b93af2a085a5b135997bf659b3
- PYTHON_JMESPATH_SETUP_TYPE = setuptools
- PYTHON_JMESPATH_LICENSE = MIT
- PYTHON_JMESPATH_LICENSE_FILES = LICENSE.txt
+diff --git a/support/testing/tests/package/sample_python_jmespath.py b/support/testing/tests/package/sample_python_jmespath.py
+new file mode 100644
+index 0000000000..aefccd4fd8
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_jmespath.py
+@@ -0,0 +1,4 @@
++import jmespath
++expression = jmespath.compile('foo.bar')
++res = expression.search({'foo': {'bar': 'baz'}})
++assert res == "baz", "expression.search failed"
+diff --git a/support/testing/tests/package/test_python_jmespath.py b/support/testing/tests/package/test_python_jmespath.py
+new file mode 100644
+index 0000000000..80fd09fdde
+--- /dev/null
++++ b/support/testing/tests/package/test_python_jmespath.py
+@@ -0,0 +1,12 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Jmespath(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_JMESPATH=y
++        """
++    sample_scripts = ["tests/package/sample_python_jmespath.py"]
++    timeout = 10
 
---===============8115240703857467525==
+--===============0147040956983818548==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -119,4 +138,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8115240703857467525==--
+--===============0147040956983818548==--
