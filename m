@@ -4,95 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37C39C43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 21:30:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1431C43334
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 21:31:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CB5344163C;
-	Fri, 22 Jul 2022 21:30:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB5344163C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5F58B41640;
+	Fri, 22 Jul 2022 21:31:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F58B41640
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4BKXcb9h5IJ7; Fri, 22 Jul 2022 21:30:05 +0000 (UTC)
+	with ESMTP id n7vumm2JPaFl; Fri, 22 Jul 2022 21:31:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC0FC4159A;
-	Fri, 22 Jul 2022 21:30:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC0FC4159A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 98D491BF215
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:30:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4EC5B4159A;
+	Fri, 22 Jul 2022 21:31:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EC5B4159A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 87FD31BF215
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:31:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7DC4960F45
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:30:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DC4960F45
+ by smtp2.osuosl.org (Postfix) with ESMTP id 527D74163C
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:31:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 527D74163C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 17u83EEd5fFF for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 21:30:01 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39DA360ADD
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 39DA360ADD
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 21:30:01 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id b26so8140011wrc.2
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 14:30:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=/MyigQF2W5fXI5vkVgupWLlppbXzRJ5T2liSKwNUEgg=;
- b=QQQ3AMim8yNINGW2nhRGiHi3wJon/rV6ND3K6DfCxDGewwlQ+DroDpMtrmlm36rIY0
- BiwUoJht0sGCd1PDWsJdCHibohRmnIL1LnKTt4dWHzOVYRmXyzQCFdrWFThpMVGUO1Fn
- JcUayXfdtEggB1XGLh6C69RASqDccqaFq8vzEt9tE1LxYepoUQYDUZNEgj+DZx2RGkOF
- BzKdOXXSOie6tURAD0CTzqoOdef7we/gmCRXMjiNjB1cFNpEYb+88+6+qx/iVf1ddy7J
- sbiqHUAHFANgA2qFw8VRYVFbjWQ1EKDvonH1GECpNnkneleeHAzHNxZHqSD0cnkQscnk
- BLBA==
-X-Gm-Message-State: AJIora9OFurH17djl1d/71jp4ZXVmzN6xWdKB1++RSFuZDoLsqinmaIp
- ObA6yKTrFkhnFXL8y1QFUHE+gw==
-X-Google-Smtp-Source: AGRyM1ucypirDHPYwkSd0QSmGpaMyhFzQEI7GF4bJ8zs4Hz5khG2aadkLJz6eUIK54eDG7Pt2I2RYA==
-X-Received: by 2002:adf:f345:0:b0:21e:4d32:18b1 with SMTP id
- e5-20020adff345000000b0021e4d3218b1mr1108549wrp.197.1658525399320; 
- Fri, 22 Jul 2022 14:29:59 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- z12-20020a5d654c000000b0021e463e4017sm5203136wrv.55.2022.07.22.14.29.58
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 22 Jul 2022 14:29:58 -0700 (PDT)
-Message-ID: <bdd21bf7-754c-2fb1-995e-f2d13cfddbb7@mind.be>
-Date: Fri, 22 Jul 2022 23:29:57 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z5TqIWnSoozg for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 21:31:16 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C93144159A
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C93144159A
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 21:31:15 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id DF833240004;
+ Fri, 22 Jul 2022 21:31:12 +0000 (UTC)
+Date: Fri, 22 Jul 2022 23:31:12 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20220722233112.7c00f940@windsurf>
+In-Reply-To: <20211228095539.25395-1-giulio.benetti@benettiengineering.com>
+References: <CAPi7W825_W9CaJKSSY4DW9qT2GjWtfvTOP9KaCz2KCAyKF8LiA@mail.gmail.com>
+ <20211228095539.25395-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Norbert Lange <nolange79@gmail.com>
-References: <20220719131605.337057-1-nolange79@gmail.com>
- <20220719131605.337057-2-nolange79@gmail.com>
- <20220719154504.GJ2249625@scaer>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220719154504.GJ2249625@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=/MyigQF2W5fXI5vkVgupWLlppbXzRJ5T2liSKwNUEgg=;
- b=CiCopjlRj8k/CHrEiRk0ynQc1Dnz5Km2VQZlwRWVGpFJ9y7ckQbpTjoRAwRgWv0/en
- /UTcTFf+uhpodtRchRdlVlWYsI36deiIVwPOSSapVhIW4ktvvpe0MNi0Rl72X+oOhvHZ
- P9dXTnLwTyy0tCt2Jrf6f4q8BNwBOmM2xlusEV9fNCC2kXWgR4C6rIa1XqtCWKVcop3W
- TSNIHdY5R8t0oK/sFB/QKFhCvTximeygTneKBtgef4VJl7PRNFbS3OJDxlTcOJW6wY06
- sv2cNXyiFkzYbQufTaxBLWyn0I1PVZ1GWZa8qp1cCy0FjOZ6UAma7D9TeD94L/8rs6ON
- Tyig==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=CiCopjlR
-Subject: Re: [Buildroot] [PATCH 2/2] package/systemd: allow package to be
- used without init system
+ d=bootlin.com; s=gm1; t=1658525474;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Wx2VgeAcFcildLpGUKiIhJQya5t33U4Pgut5bTTpi7k=;
+ b=V2V5M5Jhs/FdzHlZtvfNvUTSLQxqTj9mxj2sDXzTu4Rig1g8URAEbGtDiuMQQrVbIb6I1D
+ RJ9z4SXSY8h311KKeiAiZN4hlJBiK+1O/F+G8DL70YGctl+5pMZG4kEia4fGbVBr4aP4NX
+ UC/pbSTXJEZ1zhAUfQ17E2dkJeMvIt9en33JJ9swxCEv2yy/I1lNKcK3vOA9ydVAvdTn7z
+ Vx9LXTJLeqMAMKtoHeyG6tdxFeP3zeUmMSnoHt9Kz3rAOh3ZUXSTqt48OQpoQ8nfV5jCr/
+ odbNl5ASxHO5gDseYkyjFwxeffYwJzaDC0vHwCGC3LypDNEZ9UvjJPQRkoDDOA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=V2V5M5Jh
+Subject: Re: [Buildroot] [PATCH v3] package/harfbuzz: fix host build failure
+ due to C++11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,88 +76,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
+ Samuel Martin <s.martin49@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Peter Seiderer <ps.report@gmx.net>, Simon Dawson <spdawson@gmail.com>,
+ Julien Corjon <corjon.j@ecagroup.com>, James Knight <james.knight@collins.com>,
+ buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hello Giulio,
 
+On Tue, 28 Dec 2021 10:55:39 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-On 19/07/2022 17:45, Yann E. MORIN wrote:
-> Norbert, All,
+> Package harfbuzz fails to build for host with error:
+> ```
+> ../src/hb-map.hh:67:18: error: 'is_trivially_copyable' is not a member of 'std'
+>    static_assert (std::is_trivially_copyable<K>::value, "");
+> ```
 > 
-> On 2022-07-19 15:16 +0200, Norbert Lange spake thusly:
->> Allow systemd to be built as normal package, this for example
->> allows building systemd-boot without any init system.
+> Only starting from gcc version 5.0 we have 'is_trivially_copyable' member
+> of std. So let's depend on BR2_HOST_GCC_AT_LEAST_5 for harfbuzz itself
+> and all host-harfbuzz dependencies, but let's also depend on
+> BR2_TOOLCHAIN_GCC_AT_LEAST_5 for all the harfbuzz direct and reverse
+> dependencies since the configure/build statements are the same for host
+> and target harfbuzz package.
 > 
-> How has the situation with upstream evolved since last time the topic
-> was raised here:
->      https://lore.kernel.org/buildroot/cover.1545814334.git.yann.morin.1998@free.fr/#t
-> and especially the sub-thread:
->      https://lore.kernel.org/buildroot/d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr/
+> Fixes:
+> http://autobuild.buildroot.net/results/89e1194c1659d7e1af9db8ffe5feee770c448f76
 > 
-> As far as I know (and understand), upstream has decided to tie the build
-> of systemd-boot (formerly the standalone gummiboot) to the build of the
-> rest of the systemd suite; they did not accept to make it possible to
-> only build systemd-boot to use it outside the systemd ecosystem.
-> 
->  From Buildroot's perspective, allowing to build systemd without it being
-> an init system, and without the possibility to just build systemd-boot,
-> is asking for troubles down the line.
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+> V1->V2:
+> * add BR2_TOOLCHAIN_GCC_AT_LEAST_5 to harfbuzz and its dependencies
+> V2->V3:
+> * add BR2_HOST_GCC_AT_LEAST_5 to all host-harfbuzz dependencies
+> ---
+>  package/adwaita-icon-theme/Config.in           |  5 +++++
+>  package/cwiid/Config.in                        |  2 +-
+>  package/efl/Config.in                          |  1 +
+>  package/enlightenment/Config.in                |  6 +++---
+>  package/gstreamer1/gst1-plugins-bad/Config.in  | 17 +++++++++--------
+>  package/gstreamer1/gst1-plugins-base/Config.in |  6 +++---
+>  package/gtkmm3/Config.in                       |  2 +-
+>  package/harfbuzz/Config.in                     |  8 +++++---
+>  package/imagemagick/Config.in.host             |  4 ++++
+>  package/kodi/Config.in                         |  2 +-
+>  package/libass/Config.in                       |  6 +++---
+>  package/libfm/Config.in                        |  6 +++---
+>  package/libgtk2/Config.in                      |  6 +++---
+>  package/libgtk3/Config.in                      |  2 +-
+>  package/librsvg/Config.in                      |  6 +++---
+>  package/mupdf/Config.in                        |  6 +++---
+>  package/openbox/Config.in                      |  6 +++---
+>  package/pango/Config.in                        |  8 +++++---
+>  package/pangomm/Config.in                      |  8 ++++----
+>  package/pcmanfm/Config.in                      |  6 +++---
+>  package/pinentry/Config.in                     |  6 +++---
+>  package/python-pymupdf/Config.in               |  6 +++---
+>  package/qt5/qt5base/Config.in                  |  2 +-
+>  package/rrdtool/Config.in                      |  6 +++---
+>  package/supertuxkart/Config.in                 |  6 +++---
+>  package/xscreensaver/Config.in                 |  6 +++---
+>  26 files changed, 80 insertions(+), 65 deletions(-)
 
-  However, it does make sense if you're not actually building a full system. 
-That's not a use case that is really well supported by buildroot, but we 
-shouldn't go out of our way to actively block that use case.
+This patch is no longer needed since harfbuzz upstream commit
+c657c4e1f8e6f23828fefbc441b01f7bee685c79, which is upstream since
+release 4.3.0.
 
-  I've been thinking for a while to make an explicit option for this, which 
-would basically override/disable all the system/Config.in stuff. There's just 
-one thing though: in such a use case, ou probably do still want to install the 
-appropriate init scripts, so setting BR2_INIT_NONE is not exactly the correct 
-either...
+This commit goes like this:
 
-  Regards,
-  Arnout
+commit c657c4e1f8e6f23828fefbc441b01f7bee685c79
+Author: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Date:   Tue May 10 10:00:06 2022 +0200
 
-> 
-> The triviality of your patch does not make it possible to only just
-> build systemd-boot; instead, it still builds the whole systemd suite,
-> which hints that upstream did not make it possible to do separate
-> builds.
-> 
-> So, unless things have evolved substantially, I am not very fond of
-> alowing this, and stand by the decision that was made back then (i.e.
-> abide by upstream decision and tie systemd-boot to the systemd
-> ecosystem).
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> Signed-off-by: Norbert Lange <nolange79@gmail.com>
->> ---
->>   package/systemd/Config.in | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
->> index 9f1a778e59..e0f5dbce0d 100644
->> --- a/package/systemd/Config.in
->> +++ b/package/systemd/Config.in
->> @@ -16,7 +16,6 @@ config BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
->>   
->>   menuconfig BR2_PACKAGE_SYSTEMD
->>   	bool "systemd"
->> -	depends on BR2_INIT_SYSTEMD
->>   	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
->>   	depends on BR2_USE_MMU
->>   	depends on !BR2_STATIC_LIBS # kmod
->> -- 
->> 2.35.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
+    [meta] fix type traits on gcc 4.9 #3526
+    
+    Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+
+Much simpler than having to propagate this crazy host gcc dependency!
+:-)
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
