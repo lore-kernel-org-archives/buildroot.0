@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8569C43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 20:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ECF7C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 21:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D0AA84AD8;
-	Fri, 22 Jul 2022 20:54:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D0AA84AD8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 128BE82F39;
+	Fri, 22 Jul 2022 21:00:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 128BE82F39
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fKynz5EfwH9r; Fri, 22 Jul 2022 20:54:35 +0000 (UTC)
+	with ESMTP id GQGL4weqoZyb; Fri, 22 Jul 2022 21:00:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8BA22849D5;
-	Fri, 22 Jul 2022 20:54:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BA22849D5
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB20A82564;
+	Fri, 22 Jul 2022 21:00:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB20A82564
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 01AA91BF3DE
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 20:54:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F40421BF3DE
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:00:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D5D5F60A6A
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 20:54:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5D5F60A6A
+ by smtp3.osuosl.org (Postfix) with ESMTP id CDC4460AB2
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:00:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDC4460AB2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cEe7mVBpnbih for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 20:54:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66410608B7
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 66410608B7
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 20:54:30 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CE25120005;
- Fri, 22 Jul 2022 20:54:27 +0000 (UTC)
-Date: Fri, 22 Jul 2022 22:54:26 +0200
-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= via buildroot
- <buildroot@buildroot.org>
-Message-ID: <20220722225426.0eb1e223@windsurf>
-In-Reply-To: <20220614190325.723977-1-raphael.melotte@mind.be>
-References: <20220614190325.723977-1-raphael.melotte@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658523268;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=sDYld29gJ2F4RANQwkORIC3kkTDB1pe01TjEkFb9/rM=;
- b=csuNJZ2qpJc06TYppGNDAK5OQNHiAygeIV5U/lyXxl7CE5IeWbg3ogT7d/r8jK6DUknmcA
- ZZpGL0YAGmA6ETOvnCtl5L4CLMd4i/8HBA8tRnzAKZ6/JTZMfGi6NBhZmBb4r1aeOKZlch
- w7tQtwkjWrk8w+xJgFGIcL86uw3uZSTW/MOTWwVjFZ06JPfWsbjqUcPaMMYlZzUKR2SYu0
- s5+yif2EHsj5cZf9+7HQ0rCGPlaiWhnzfUaiwQQeUS6H63OgIpEczNLflb0b6a2Pul1S1f
- dn9VBKRenHsyGe2oS+jgPzA4Cj5dqP8JPhEQX14/iTseCRUzt++dfwpXoQvuvg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=csuNJZ2q
-Subject: Re: [Buildroot] [PATCH 1/2] support/testing: add new test for
- python-s3transfer
+ with ESMTP id fOVEcRK3BBNA for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 21:00:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E8AB560644
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 21:00:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8AB560644
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 8F0BB841BA; Fri, 22 Jul 2022 20:46:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 22 Jul 2022 22:59:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: be58fd1e0cd941e186e1bfc6c5fb9d33786fd017
+X-Git-Newrev: 1666b661c6c103d05bbbea05f0f2b89ee4560527
+X-Patchwork-Hint: ignore
+Message-Id: <20220722204643.8F0BB841BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zlib-ng: add upstream patch to fix
+ build with uclibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,30 +58,130 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCAxNCBKdW4gMjAyMiAyMTowMzoyMyArMDIwMApSYXBoYcOrbCBNw6lsb3R0ZSB2aWEg
-YnVpbGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IE1hbnkgYWN0dWFs
-IHRlc3RzIHJlcXVpcmUgbmV0d29yayB1c2FnZSwgc28ganVzdCBpbXBvcnQgdGhlIG1vZHVsZSB0
-bwo+IGNoZWNrIHRoYXQgYXQgbGVhc3QgdGhhdCBwYXJ0IHdvcmtzLgo+IAo+IFNpZ25lZC1vZmYt
-Ynk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT4KPiAtLS0KPiAg
-Li4uL3Rlc3RzL3BhY2thZ2Uvc2FtcGxlX3B5dGhvbl9zM3RyYW5zZmVyLnB5ICAgICAgICB8ICAx
-ICsKPiAgLi4uL3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3B5dGhvbl9zM3RyYW5zZmVyLnB5
-ICB8IDEyICsrKysrKysrKysrKwo+ICAyIGZpbGVzIGNoYW5nZWQsIDEzIGluc2VydGlvbnMoKykK
-PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3NhbXBs
-ZV9weXRob25fczN0cmFuc2Zlci5weQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgc3VwcG9ydC90ZXN0
-aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9weXRob25fczN0cmFuc2Zlci5weQoKU2VyaWVzIGFwcGxp
-ZWQgdG8gbWFzdGVyLiBPbiB0aGUgZmlyc3QgcGF0Y2gsIHlvdSBzaG91bGQgaGF2ZSBhZGRlZAp5
-b3Vyc2VsZiB0byB0aGUgREVWRUxPUEVSUyBmaWxlLCBidXQgSSBoYWQgZm9yZ290dGVuIHRoYXQg
-bXlzZWxmIHdoZW4KcmV2aWV3aW5nL2FwcGx5aW5nLCBzbyBJIHB1c2hlZCBhbm90aGVyIHNlcGFy
-YXRlIHBhdGNoIHRoYXQgYWRkcyB5b3UgaW4KdGhlIERFVkVMT1BFUlMgZmlsZSBhcyBleHBlY3Rl
-ZC4KClRoYW5rcyBhIGxvdCEKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290
-bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGlu
-LmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=1666b661c6c103d05bbbea05f0f2b89ee4560527
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fix the following build failure with uclibc on arm architectures (and
+similar on powerpc):
+
+/home/buildroot/autobuild/instance-2/output-1/build/zlib-ng-2.0.6/arch/arm/armfeature.c:4:12: fatal error: sys/auxv.h: No such file or directory
+    4 | #  include <sys/auxv.h>
+      |            ^~~~~~~~~~~~
+compilation terminated.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/1ac782825e897981d932b405ca60cd2ec4b3b8cb/
+
+Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-that-sys-auxv.h-exists-at-configure-time.patch | 90 ++++++++++++++++++++++
+ 1 file changed, 90 insertions(+)
+
+diff --git a/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-configure-time.patch b/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-configure-time.patch
+new file mode 100644
+index 0000000000..ba8297cda7
+--- /dev/null
++++ b/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-configure-time.patch
+@@ -0,0 +1,90 @@
++From e1baa6b439c06f3d0e6be3e381cc746ffb55aee1 Mon Sep 17 00:00:00 2001
++From: Mika Lindqvist <postmaster@raasu.org>
++Date: Wed, 13 Apr 2022 01:22:29 +0300
++Subject: [PATCH] Check that sys/auxv.h exists at configure time and add
++ preprocessor define for it. * Protect including sys/auxv.h in all relevant
++ files with the new preprocessor define * Test for both existence of both
++ sys/auxv.h and getauxval() with both cmake and configure
++
++[Ben Hutchings: Backport to 2.0.6:
++ - Drop the s390 changes
++ - Change some filenames]
++
++Backported from: e1baa6b439c06f3d0e6be3e381cc746ffb55aee1
++Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
++---
++ CMakeLists.txt        |    4 ++++
++ arch/arm/armfeature.c |    2 +-
++ arch/power/power.c    |    5 ++++-
++ configure             |   13 +++++++++++++
++ 4 files changed, 22 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 0dd196130..e4e4b7332 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -338,6 +338,10 @@ endif()
++ #
++ # Check for standard/system includes
++ #
+++check_include_file(sys/auxv.h  HAVE_SYS_AUXV_H)
+++if(HAVE_SYS_AUXV_H)
+++    add_definitions(-DHAVE_SYS_AUXV_H)
+++endif()
++ check_include_file(sys/sdt.h   HAVE_SYS_SDT_H)
++ if(HAVE_SYS_SDT_H)
++     add_definitions(-DHAVE_SYS_SDT_H)
++diff --git a/arch/arm/arm_features.c b/arch/arm/arm_features.c
++index 195c94992..f6b67687f 100644
++--- a/arch/arm/armfeature.c
+++++ b/arch/arm/armfeature.c
++@@ -1,6 +1,6 @@
++ #include "../../zutil.h"
++ 
++-#if defined(__linux__)
+++#if defined(__linux__) && defined(HAVE_SYS_AUXV_H)
++ #  include <sys/auxv.h>
++ #  ifdef ARM_ASM_HWCAP
++ #    include <asm/hwcap.h>
++diff --git a/arch/power/power_features.c b/arch/power/power_features.c
++index 9186b40d8..65599d9a7 100644
++--- a/arch/power/power.c
+++++ b/arch/power/power.c
++@@ -1,9 +1,12 @@
++ /* POWER feature check
++  * Copyright (C) 2020 Matheus Castanho <msc@linux.ibm.com>, IBM
+++ * Copyright (C) 2021-2022 Mika T. Lindqvist <postmaster@raasu.org>
++  * For conditions of distribution and use, see copyright notice in zlib.h
++  */
++ 
++-#include <sys/auxv.h>
+++#ifdef HAVE_SYS_AUXV_H
+++#  include <sys/auxv.h>
+++#endif
++ #include "../../zutil.h"
++ 
++ Z_INTERNAL int power_cpu_has_arch_2_07;
++diff --git a/configure b/configure
++index aed1909cc..a357e1c8a 100755
++--- a/configure
+++++ b/configure
++@@ -776,6 +776,19 @@ else
++   echo "Checking for strerror... No." | tee -a configure.log
++ fi
++ 
+++# check for getauxval() for architecture feature detection at run-time
+++cat > $test.c <<EOF
+++#include <sys/auxv.h>
+++int main() { return getauxval(0); }
+++EOF
+++if try $CC $CFLAGS -o $test $test.c $LDSHAREDLIBC; then
+++  echo "Checking for getauxval() in sys/auxv.h... Yes." | tee -a configure.log
+++  CFLAGS="${CFLAGS} -DHAVE_SYS_AUXV_H"
+++  SFLAGS="${SFLAGS} -DHAVE_SYS_AUXV_H"
+++else
+++  echo "Checking for getauxval() in sys/auxv.h... No." | tee -a configure.log
+++fi
+++
++ # We need to remove zconf.h from source directory if building outside of it
++ if [ "$SRCDIR" != "$BUILDDIR" ]; then
++     rm -f $SRCDIR/zconf${SUFFIX}.h
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
