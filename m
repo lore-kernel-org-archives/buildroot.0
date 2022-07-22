@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92AF9C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:10:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 869B1C43334
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:10:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3631B41A67;
-	Fri, 22 Jul 2022 07:10:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3631B41A67
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F86760AE0;
+	Fri, 22 Jul 2022 07:10:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F86760AE0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id knGRC6qxQn7x; Fri, 22 Jul 2022 07:10:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i7hopdrAwa4N; Fri, 22 Jul 2022 07:10:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD50941916;
-	Fri, 22 Jul 2022 07:10:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD50941916
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 05C531BF36D
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:09:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27E8C60ED7;
+	Fri, 22 Jul 2022 07:10:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27E8C60ED7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A6AE71BF36D
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E3068409FA
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:09:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3068409FA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8176E60E28
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:09:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8176E60E28
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0xgvxU_FSDzM for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 07:09:16 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0B8E409E3
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E0B8E409E3
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:09:15 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0B6FF240002;
- Fri, 22 Jul 2022 07:09:12 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oEmme-003220-2z; Fri, 22 Jul 2022 09:09:12 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ocZBmc1CwVMk for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 07:09:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC31160A7B
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC31160A7B
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id C1F508414C; Fri, 22 Jul 2022 06:55:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220619163508.636307-1-fontaine.fabrice@gmail.com>
-Date: Fri, 22 Jul 2022 09:09:12 +0200
-In-Reply-To: <20220619163508.636307-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 19 Jun 2022 18:35:08 +0200")
-Message-ID: <875yjpy67b.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/nginx: replace
- NGINX_CPE_ID_VENDOR
+To: buildroot@buildroot.org
+Date: Fri, 22 Jul 2022 09:07:10 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 1f1b283c69cf6aa1b5cbac28a1f7349566b1921e
+X-Git-Newrev: 0c565bccd53caa9cad1632a10a1e040e225a75b7
+X-Patchwork-Hint: ignore
+Message-Id: <20220722065547.C1F508414C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/tcpreplay:
+ replace TCPREPLAY_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,28 +57,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0c565bccd53caa9cad1632a10a1e040e225a75b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > nginx has been replaced by f5 since February 2022:
- > <cpe-item name="cpe:/a:nginx:nginx:1.18.0" deprecated="true" deprecation_date="2022-02-22T19:26:32.967Z">
- >       <reference href="https://nginx.org/en/CHANGES-1.18">Change Log</reference>
- >     <cpe-23:cpe23-item name="cpe:2.3:a:nginx:nginx:1.18.0:*:*:*:*:*:*:*">
- >         <cpe-23:deprecated-by name="cpe:2.3:a:f5:nginx:1.18.0:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
+tcpreplay has been replaced by broadcom since April 2022:
 
- > https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Af5%3Anginx
+<cpe-item name="cpe:/a:tcpreplay:tcpreplay:4.3.1" deprecated="true" deprecation_date="2022-04-02T03:29:17.303Z">
+    <title xml:lang="en-US">tcpreplay 4.3.1</title>
+      <reference href="http://tcpreplay.synfin.net/wiki/Download">Vendor</reference>
+      <reference href="https://sourceforge.net/projects/tcpreplay/">Product</reference>
+    <cpe-23:cpe23-item name="cpe:2.3:a:tcpreplay:tcpreplay:4.3.1:*:*:*:*:*:*:*">
+        <cpe-23:deprecated-by name="cpe:2.3:a:broadcom:tcpreplay:4.3.1:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Abroadcom%3Atcpreplay
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 77bf0a1e630da4d9c597cd92c9f2c49b6738da31)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tcpreplay/tcpreplay.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index ef65403974..9f2da6439b 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -9,7 +9,7 @@ TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPRE
+ TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
+ TCPREPLAY_LICENSE = GPL-3.0
+ TCPREPLAY_LICENSE_FILES = docs/LICENSE
+-TCPREPLAY_CPE_ID_VENDOR = tcpreplay
++TCPREPLAY_CPE_ID_VENDOR = broadcom
+ TCPREPLAY_CONF_ENV = \
+ 	ac_cv_path_ac_pt_PCAP_CONFIG="$(STAGING_DIR)/usr/bin/pcap-config"
+ TCPREPLAY_CONF_OPTS = --with-libpcap=$(STAGING_DIR)/usr \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
