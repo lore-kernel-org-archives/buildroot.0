@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54A82C43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 08:37:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46982C43334
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 08:38:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E26FD40BF1;
-	Fri, 22 Jul 2022 08:37:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E26FD40BF1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bHqlzE23b5UF; Fri, 22 Jul 2022 08:37:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF82640BEE;
-	Fri, 22 Jul 2022 08:37:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF82640BEE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4E27D1BF34F
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 08:36:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 28C0241918
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 08:36:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28C0241918
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB3C341922;
+	Fri, 22 Jul 2022 08:38:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB3C341922
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RFCueltt_fUk for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 08:36:11 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EFaz3bUbxkVY; Fri, 22 Jul 2022 08:38:53 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94AE341916;
+	Fri, 22 Jul 2022 08:38:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94AE341916
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 53DB01C11A9
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 08:38:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2F56783F65
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 08:38:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F56783F65
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 54EO48Q7VetA for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 08:38:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1257841903
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 08:36:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1257841903
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6AE4983F54
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 08:38:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AE4983F54
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D5CED840C4; Fri, 22 Jul 2022 08:22:36 +0000 (UTC)
+ id 3BBFF819CF; Fri, 22 Jul 2022 08:25:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 10:32:35 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: e5f21808976f13c906ab24878026e1c614c70b25
-X-Git-Newrev: eae44eff3d1cbe22f3b53e09b4d9c518114007e6
+Date: Fri, 22 Jul 2022 10:35:13 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 5f725c0c2713c240bf549ed71b051e46dd974647
+X-Git-Newrev: 4ee62081954d4dbbd8e7684cdfdb699ead7ac3bc
 X-Patchwork-Hint: ignore
-Message-Id: <20220722082236.D5CED840C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libcamera: strip
- symbols before signing IPA libs
+Message-Id: <20220722082516.3BBFF819CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libgpgme: fix
+ LIBGPGME_CPE_ID_PRODUCT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,65 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eae44eff3d1cbe22f3b53e09b4d9c518114007e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4ee62081954d4dbbd8e7684cdfdb699ead7ac3bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Open-Source IPA shlibs need to be signed in order to be runnable within
-the same process, otherwise they are deemed Closed-Source and run in
-another process and communicate over IPC.
+Fix typo added by commit 6b79c8fb05bf1ae569d8b8e8c9f6f516e97c9ae0
 
-The shlib installed on the target should be the same as the one signed
-by libcamera during package creation otherwise the signature won't match
-the shlib.
-
-Buildroot sanitizes RPATH in a post build process. meson gets rid of
-rpath while installing so we don't need to do it manually.
-
-Buildroot may strip symbols, so we need to do the same before signing.
-
-Signing the IPA shlibs is done by the meson install target, so we need
-to strip the IPA shlibs, so after the build but before the install,
-which a post-build hooks fits the best.
-
-Cc: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-[yann.morin.1998@free.fr: slight rewording of commit log]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit bba4dad9aa8e7eb497e7f83b7722b8c10596e34e)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 03920e842bc5f8e7387f76ed7058d5c176fa65f3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcamera/libcamera.mk | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ package/libgpgme/libgpgme.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 9cbb1910dc..6db81f1758 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -104,4 +104,24 @@ LIBCAMERA_DEPENDENCIES += libexecinfo
- LIBCAMERA_LDFLAGS = $(TARGET_LDFLAGS) -lexecinfo
- endif
- 
-+# Open-Source IPA shlibs need to be signed in order to be runnable within the
-+# same process, otherwise they are deemed Closed-Source and run in another
-+# process and communicate over IPC.
-+# Buildroot sanitizes RPATH in a post build process. meson gets rid of rpath
-+# while installing so we don't need to do it manually here.
-+# Buildroot may strip symbols, so we need to do the same before signing
-+# otherwise the signature won't match the shlib on the rootfs. Since meson
-+# install target is signing the shlibs, we need to strip them before.
-+LIBCAMERA_STRIP_FIND_CMD = \
-+	find $(@D)/build/src/ipa \
-+	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)), \
-+		-not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) ) \
-+	-type f -name 'ipa_*.so' -print0
-+
-+define LIBCAMERA_BUILD_STRIP_IPA_SO
-+	$(LIBCAMERA_STRIP_FIND_CMD) | xargs --no-run-if-empty -0 $(STRIPCMD)
-+endef
-+
-+LIBCAMERA_POST_BUILD_HOOKS += LIBCAMERA_BUILD_STRIP_IPA_SO
-+
- $(eval $(meson-package))
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index f61e9fe41a..b42a1a363a 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -10,7 +10,7 @@ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPL-2.1+
+ LIBGPGME_LICENSE_FILES = COPYING.LESSER
+ LIBGPGME_CPE_ID_VENDOR = gnupg
+-LIBGPGME_CPE_ID_PRODUCT = gpgpme
++LIBGPGME_CPE_ID_PRODUCT = gpgme
+ LIBGPGME_INSTALL_STAGING = YES
+ LIBGPGME_DEPENDENCIES = libassuan libgpg-error
+ LIBGPGME_CONFIG_SCRIPTS = gpgme-config
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
