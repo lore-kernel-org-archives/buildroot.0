@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFF7DC43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:42:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71C32C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:42:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65B2B847F8;
-	Fri, 22 Jul 2022 07:42:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65B2B847F8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28FAF81751;
+	Fri, 22 Jul 2022 07:42:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28FAF81751
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WyhMakc75E8B; Fri, 22 Jul 2022 07:42:05 +0000 (UTC)
+	with ESMTP id GNcp1NsZR3aS; Fri, 22 Jul 2022 07:42:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6630D847FD;
-	Fri, 22 Jul 2022 07:42:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6630D847FD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2EAC88144A;
+	Fri, 22 Jul 2022 07:42:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EAC88144A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 77D5A1C11A9
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:41:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 890E31BF36D
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:41:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49A8760EEB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5307660EEC
  for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:40:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49A8760EEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5307660EEC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xR-2yOiBVRQd for <buildroot@lists.busybox.net>;
+ with ESMTP id 7i8H3G0CqwPh for <buildroot@lists.busybox.net>;
  Fri, 22 Jul 2022 07:40:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 89F0D60E28
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E5A060EEE
  for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:40:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89F0D60E28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E5A060EEE
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7207B8414E; Fri, 22 Jul 2022 07:27:24 +0000 (UTC)
+ id 7B2FC8414F; Fri, 22 Jul 2022 07:27:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 09:38:40 +0200
+Date: Fri, 22 Jul 2022 09:39:02 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 89c216dd6eccd21c23b4066cc233d61033627edc
-X-Git-Newrev: fcd5e110cf286fa9ebd2a38c367a7d85cd25f945
+X-Git-Oldrev: fcd5e110cf286fa9ebd2a38c367a7d85cd25f945
+X-Git-Newrev: c4c7386d321edfb6a1c72f94bbffb6201b1b692b
 X-Patchwork-Hint: ignore
-Message-Id: <20220722072724.7207B8414E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libcurl: security
- bump to version 7.84.0
+Message-Id: <20220722072724.7B2FC8414F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libcurl: fix
+ build without sched_yield
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,72 +63,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcd5e110cf286fa9ebd2a38c367a7d85cd25f945
+commit: https://git.buildroot.net/buildroot/commit/?id=c4c7386d321edfb6a1c72f94bbffb6201b1b692b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Fixes the following security issues:
+Fix the following build failure without sched_yield raised since bump to
+version 7.84.0 in commit b034109dd60a429690acf9c5501c6658c53eae13:
 
-- CVE-2022-32205: Set-Cookie denial of service
-  https://curl.se/docs/CVE-2022-32205.html
+In file included from easy.c:89:
+easy_lock.h: In function 'curl_simple_lock_lock':
+easy_lock.h:56:7: error: implicit declaration of function 'sched_yield' [-Werror=implicit-function-declaration]
+   56 |       sched_yield();
+      |       ^~~~~~~~~~~
 
-- CVE-2022-32206: HTTP compression denial of service
-  https://curl.se/docs/CVE-2022-32206.html
+Fixes:
+ - http://autobuild.buildroot.org/results/fbc80a0002d640210c81a4c518856c02669059b7
 
-- CVE-2022-32207: Unpreserved file permissions
-  https://curl.se/docs/CVE-2022-32207.html
-
-- CVE-2022-32208: FTP-KRB bad message verification
-  https://curl.se/docs/CVE-2022-32208.html
-
-Changelog: https://curl.se/changes.html
-
-Upstream removed configure option --enable-hidden-symbols:
-https://github.com/curl/curl/commit/0c2d3118aa2bc040411203d33ab6034067fd9d62
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Peter: mark as security bump]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b034109dd60a429690acf9c5501c6658c53eae13)
+(cherry picked from commit a5adc9b658fc137d5952f9bdea8dc9a4d007d5fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...include-sched-h-if-available-to-fix-build.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 8672380f09..672591e470 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-7.83.1.tar.xz.asc
-+# https://curl.se/download/curl-7.84.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  2cb9c2356e7263a1272fd1435ef7cdebf2cd21400ec287b068396deb705c22c4  curl-7.83.1.tar.xz
-+sha256  2d118b43f547bfe5bae806d8d47b4e596ea5b25a6c1f080aef49fbcd817c5db8  curl-7.84.0.tar.xz
- sha256  321b1a09ebc30410f2e837c072e5521cf7095b757193af4a7dae1086e36ed31a  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 11f1e4de59..e241bd1c88 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.83.1
-+LIBCURL_VERSION = 7.84.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
-@@ -23,7 +23,7 @@ LIBCURL_INSTALL_STAGING = YES
- # Likewise, there is no compiler on the target, so libcurl-option (to
- # generate C code) isn't very useful
- LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
--	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug \
-+	--with-random=/dev/urandom --disable-curldebug \
- 	--disable-libcurl-option --disable-ldap --disable-ldaps
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+diff --git a/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch b/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch
+new file mode 100644
+index 0000000000..b5f0a87218
+--- /dev/null
++++ b/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch
+@@ -0,0 +1,30 @@
++From e2e7f54b7bea521fa8373095d0f43261a720cda0 Mon Sep 17 00:00:00 2001
++From: Daniel Stenberg <daniel@haxx.se>
++Date: Mon, 27 Jun 2022 08:46:21 +0200
++Subject: [PATCH] easy_lock.h: include sched.h if available to fix build
++
++Patched-by: Harry Sintonen
++
++Closes #9054
++
++[Retrieved from:
++https://github.com/curl/curl/commit/e2e7f54b7bea521fa8373095d0f43261a720cda0]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/easy_lock.h | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/lib/easy_lock.h b/lib/easy_lock.h
++index 819f50ce815b8..1f54289ceb2d3 100644
++--- a/lib/easy_lock.h
+++++ b/lib/easy_lock.h
++@@ -36,6 +36,9 @@
++ 
++ #elif defined (HAVE_ATOMIC)
++ #include <stdatomic.h>
+++#if defined(HAVE_SCHED_YIELD)
+++#include <sched.h>
+++#endif
++ 
++ #define curl_simple_lock atomic_bool
++ #define CURL_SIMPLE_LOCK_INIT false
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
