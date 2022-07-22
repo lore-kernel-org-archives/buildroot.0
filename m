@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3DFFC43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E13AC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:27:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 844F58149B;
-	Fri, 22 Jul 2022 06:27:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 844F58149B
+	by smtp2.osuosl.org (Postfix) with ESMTP id C5275409DA;
+	Fri, 22 Jul 2022 06:27:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5275409DA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6mq-6iFMh1Dp; Fri, 22 Jul 2022 06:27:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s45hX-gY-xcZ; Fri, 22 Jul 2022 06:27:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75FCB8148F;
-	Fri, 22 Jul 2022 06:27:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75FCB8148F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 65A801C11A9
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2BA9409F3;
+	Fri, 22 Jul 2022 06:27:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2BA9409F3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9FEAE1BF855
  for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4EFE360E96
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83ACD41952
  for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EFE360E96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83ACD41952
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pcyg0SU8ojQ8 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jLKKBQzW4kzW for <buildroot@lists.busybox.net>;
  Fri, 22 Jul 2022 06:25:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E98460BDC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9418141858
  for <buildroot@buildroot.org>; Fri, 22 Jul 2022 06:25:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E98460BDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9418141858
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 84F8C83F2A; Fri, 22 Jul 2022 06:12:10 +0000 (UTC)
+ id 988FC840F1; Fri, 22 Jul 2022 06:12:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 08:15:20 +0200
+Date: Fri, 22 Jul 2022 08:18:46 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 76d1ac024a7178d46ce76351015cc0941122596c
-X-Git-Newrev: 8e06b8c130c297381bb1e39c037bf51c49603cea
+X-Git-Oldrev: 9e40974572452ebbb2688cda3fb712a2d10a91ef
+X-Git-Newrev: 4e0f1b1f80a34a4d4d429888b5b564c3218e5b37
 X-Patchwork-Hint: ignore
-Message-Id: <20220722061210.84F8C83F2A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/{webkitgtk,
- wpewebkit}: select debugutils for multimedia
+Message-Id: <20220722061210.988FC840F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/cups: security
+ bump to version 2.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,56 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e06b8c130c297381bb1e39c037bf51c49603cea
+commit: https://git.buildroot.net/buildroot/commit/?id=4e0f1b1f80a34a4d4d429888b5b564c3218e5b37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-When using webkit with multimedia support the fakevideosink element
-is used in some places, as such we should select debugutils which
-provides fakevideosink when building with multimedia support.
+Fixes CVE-2022-26691
+https://github.com/OpenPrinting/cups/blob/master/CHANGES.md
 
-See:
-https://github.com/WebKit/WebKit/blob/12086bcde7a296a07dbb4ac6d2ff0030b297305a/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamer.cpp#L3863
-
-Additionally webkit may also use the fpsdisplaysink element which
-is also provided by debugutils.
-
-See:
-https://github.com/WebKit/WebKit/blob/12086bcde7a296a07dbb4ac6d2ff0030b297305a/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamer.cpp#L3897
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e82614287407f18c1029bb26e49b0bcdbea2bf95)
+(cherry picked from commit 433fd541eaa37db3241eed16df6ae1f51d81335b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/Config.in | 1 +
- package/wpewebkit/Config.in | 1 +
- 2 files changed, 2 insertions(+)
+ package/cups/cups.hash | 2 +-
+ package/cups/cups.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index bc8207d93b..eb2ebb9de0 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -91,6 +91,7 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
- 	bool "multimedia support"
- 	select BR2_PACKAGE_GSTREAMER1
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 36523bdb41..ecf5c40313 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -84,6 +84,7 @@ config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
- 	bool "multimedia support"
- 	select BR2_PACKAGE_GSTREAMER1
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index 8308b7b803..ba220e903e 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  c7339f75f8d4f2dec50c673341a45fc06b6885bb6d4366d6bf59a4e6c10ae178  cups-2.4.1-source.tar.gz
++sha256  f03ccb40b087d1e30940a40e0141dcbba263f39974c20eb9f2521066c9c6c908  cups-2.4.2-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  7a7bd639e3a8457ae40b0dcfb74ea3cc6a8132b06c726142e993625d33eb6de5  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 298a6ed879..ab56b23bcd 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CUPS_VERSION = 2.4.1
++CUPS_VERSION = 2.4.2
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
