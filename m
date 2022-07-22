@@ -1,90 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 784F6C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 08:55:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DBF2C43334
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 09:25:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 183D3422E5;
-	Fri, 22 Jul 2022 08:55:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 183D3422E5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1138B84915;
+	Fri, 22 Jul 2022 09:25:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1138B84915
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nObYhbYiG1_s; Fri, 22 Jul 2022 08:55:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ywo97X5ITvmY; Fri, 22 Jul 2022 09:25:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BA85422BE;
-	Fri, 22 Jul 2022 08:55:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BA85422BE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1937484912;
+	Fri, 22 Jul 2022 09:25:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1937484912
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 87C241BF34F
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 08:54:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A98881BF852
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 09:25:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6034340BF1
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 08:54:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6034340BF1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8354B415D2
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 09:25:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8354B415D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id od0c9GvFy3o6 for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 08:54:44 +0000 (UTC)
+ with ESMTP id PgJXcoob4lqX for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 09:25:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 684CF40A1B
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 684CF40A1B
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 08:54:44 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id bp15so7463825ejb.6
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 01:54:44 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77EE740187
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com
+ [IPv6:2607:f8b0:4864:20::e2a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 77EE740187
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 09:25:42 +0000 (UTC)
+Received: by mail-vs1-xe2a.google.com with SMTP id 125so3809740vsx.7
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 02:25:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=+N2AkPGnbp/n65wWvbgBi65N0YykBETytuMkQVXO00c=;
- b=MmEDgD3xI+lbioye6x147JYr4NqczFdvtVe7dfJgEL+hDvPgvxJUGbhgBsE+AcCCK+
- dLwbSHYbH2sDUyLC4kGnJFOK01wZf55qmB+CgnE3Xgei0jtLbWj/UxFITKkvjKGFz8P3
- PaD+3mOtAAn/rC5tB2vV1GNFTOma/5dhLvHfy5V1N0knK196YG9s9x7Q7w235niB+mho
- mbdInCgqYWDqpKxvC83WEJoH4rue7iRtB+GvFsq+9Ht6bdY9VORsVTDjuamCAAl2+DMl
- /zvut8+W4GC4YdnuxjC4lF4OWJpVD/BkWtiJmG6WbehB04eoIfXoPeG5UZgY5aNADQ3n
- MyGw==
-X-Gm-Message-State: AJIora/pwA1jEkJBofqQg4e5cfq7Rf2TE8it4u8gD6pjHDZr1dv9Y9Sk
- WnOvvksOURajRWbaJrAeGprdZJIFLgqSYDey
-X-Google-Smtp-Source: AGRyM1uqqPp4OskOUSQwKcV3Db2YD8Aun4r814mSH6LwAMyvDrCxHjFdOCUtzXR5WRJ/C247wpsaeA==
-X-Received: by 2002:a17:907:2d8b:b0:72b:7152:aa8e with SMTP id
- gt11-20020a1709072d8b00b0072b7152aa8emr2202699ejc.377.1658480082296; 
- Fri, 22 Jul 2022 01:54:42 -0700 (PDT)
-Received: from lmecxl1178.lme.st.com
- ([2a04:cec0:10fe:4180:33f2:cfe8:3447:ab97])
- by smtp.gmail.com with ESMTPSA id
- t25-20020aa7d719000000b0043a6c9e50f4sm2205718edq.29.2022.07.22.01.54.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 22 Jul 2022 01:54:42 -0700 (PDT)
-From: Etienne Carriere <etienne.carriere@linaro.org>
-To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 10:53:48 +0200
-Message-Id: <20220722085348.645793-5-etienne.carriere@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220722085348.645793-1-etienne.carriere@linaro.org>
-References: <20220722085348.645793-1-etienne.carriere@linaro.org>
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=JGcHvV6jU2Tz2r1/8ma+vbql3KK0i/0+WRJug8p0xa4=;
+ b=7zxllmfndr9x96StEsRWwrokTUU1OLKkmTXfkuFU/oQjO5IsRxQAZ0X4WbphUOf+XF
+ zik5cwrhMj3C2wJWPuVgha8njs4Su0/GbGtHoZfYcfMsOSI5+zlzC3RInc3fvNpcrOMH
+ awLKh0OzrJkn6PYO1MPQkfVhGv9caoSLuEcsRGreiPviB+ZPKAtYf7WOzfJSI89NMsJN
+ hXFp0g9NazzNKx3UvgaiSec/6uRsE9QR/TR3FXl7TLAwH2N7Zhd4OUgGPpZG9zebJ/uk
+ KJJZBADFwqcaMAkyrEzLSgoVwXkuVnGK9ERRLkofQMvrOzcIxjCCjVoXWKZaWJ0pTKos
+ +8DQ==
+X-Gm-Message-State: AJIora9LQ0D08wScYHgzJDDa2o5EC4RlQCzuUpSXh1KHd7YVmSc1WnZm
+ 1IwTJyaSeQLuUAUrqsA4YLr7cBIbi5lg/BktogQ=
+X-Google-Smtp-Source: AGRyM1tEWIwVZ9BfQq8j503KcLIugbiXB2Yo2cQHGh4EoO+hdggVOhSyOrAXJ1HZn97Av8ozVwMzZmiO+daqXzouCpQ=
+X-Received: by 2002:a05:6102:5345:b0:358:405b:d804 with SMTP id
+ bq5-20020a056102534500b00358405bd804mr353345vsb.32.1658481941194; Fri, 22 Jul
+ 2022 02:25:41 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220721151907.212216-1-nolange79@gmail.com>
+ <CADvTj4rXWb=_3kTFCdbmJ2hjNZ_GEGq3O+f-VP=_u6tK5D4o4w@mail.gmail.com>
+In-Reply-To: <CADvTj4rXWb=_3kTFCdbmJ2hjNZ_GEGq3O+f-VP=_u6tK5D4o4w@mail.gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Fri, 22 Jul 2022 11:25:30 +0200
+Message-ID: <CADYdroP7heqppp8ye20rv9ovgDG=NmVn8N3zi-Ln1KvU_DEwuQ@mail.gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=linaro.org; s=google;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=+N2AkPGnbp/n65wWvbgBi65N0YykBETytuMkQVXO00c=;
- b=woz/9xu6U8hgXQ+eQUol6TZgPWNRZpCcpu5QoM2nt5bV1nOA3xfMi5iqmEB7c2a7p/
- 8q/jC42hpjM4roG7oQANLFEob7bs8eY89T8UxIqWZdCb+gFEFwvucujD1FrB4nXNj/Fc
- CJNJ0euLRHHFxu5IzklUSnGyQO3QW20aLBBBwi+QxgUOvwOhb67R9VNYH3t9oZJMNQAY
- cJvzH9RM/Cxkbs0NdbrBogCgSe4Jnkxw/LkemN6PsBESRt3yYycXC5+RYLNVl2+9B6/G
- 5snpOVwi6hfsadHDw7sXfjklTkSE9qkUmeVNJHVptKQo8748t8HdO4O3PsGeMNwqEOc+
- wE4w==
+ d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=JGcHvV6jU2Tz2r1/8ma+vbql3KK0i/0+WRJug8p0xa4=;
+ b=FkfQD7BUwvFA3V/wH2IJgKD4rhrqRG38dzOSZvIgjgDLz8xvgzXR4EhY5YIdRbnmwR
+ ajRgq8RjAaFaeFGs8RLazE5AnuIbkJf6l2Z041zJbSL6uqcn3xTVDOyY+qaJwOdgHU0T
+ +h2zhx9P4wzuhac71CF0sM8pCarSif+9+AMWonRqyISkfVbPDAITzh/0AZ3r7+PmVmYq
+ G32OFSBJ25xt5fzkNRjj5PKzywz81mk87RhHR2lpB5ZQQ+iQMdQf0dY1JKm2r0przewW
+ Xj3p4NcoOQ/opNH6QMaoc36fm2rXdUVsrDVtyyXn6Xdrhp/DkRsSv/gTsViFsbMUOce+
+ 9+bw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org
- header.a=rsa-sha256 header.s=google header.b=woz/9xu6
-Subject: [Buildroot] [PATCH 5/5] package/optee-examples: bump to version
- 3.18.0
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=FkfQD7BU
+Subject: Re: [Buildroot] [PATCH v3 1/3] package/systemd: bump to version
+ 251.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,47 +90,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Etienne Carriere <etienne.carriere@linaro.org>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bumps OP-TEE examples package version to OP-TEE release 3.18.0.
+Am Do., 21. Juli 2022 um 21:32 Uhr schrieb James Hilliard
+<james.hilliard1@gmail.com>:
+>
+> On Thu, Jul 21, 2022 at 9:20 AM Norbert Lange <nolange79@gmail.com> wrote:
+> >
+> > LICENSES/README.md hash updated, this line got added in
+> > regards to files covered by CC0-1.0:
+> >
+> > >   -config files and examples under /network
+> >
+> > Add config option for the new sysupdate feature.
+> >
+> > Remove upstreamed patch.
+> >
+> > Update options: set new options to their default,
+> > remove option not available anymore.
+> >
+> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> >
+> > ---
+> > v1->v2:
+> > *   note about changed LICENSES/README.md
+> > *   always set default-user-shell to /bin/sh
+> > *   always set default-locale to C-UTF-8
+> > *   fix typos in commit message
+>
+> You're missing a few things still, take a look at my patch here:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20220522011729.117324-1-james.hilliard1@gmail.com/
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
----
- package/optee-examples/optee-examples.hash | 4 ++--
- package/optee-examples/optee-examples.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Sorry, missed that line before.
 
-diff --git a/package/optee-examples/optee-examples.hash b/package/optee-examples/optee-examples.hash
-index 0433c72752..876584c5e9 100644
---- a/package/optee-examples/optee-examples.hash
-+++ b/package/optee-examples/optee-examples.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/linaro-swg/optee_examples/archive/3.17.0/optee-examples-3.17.0.tar.gz
--sha256  03d18a0439cfe99ed1ceefc9af000b39b28424c8747e0d92a2701e7fbb6c519a  optee-examples-3.17.0.tar.gz
-+# From https://github.com/linaro-swg/optee_examples/archive/3.18.0/optee-examples-3.18.0.tar.gz
-+sha256  6c64fbc6c5d1282b6311b4076351abbbfab10ac918c6cfc60e45ec705bb5a9ec  optee-examples-3.18.0.tar.gz
- # Locally computed
- sha256  6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
-diff --git a/package/optee-examples/optee-examples.mk b/package/optee-examples/optee-examples.mk
-index ebb0688af5..17adce0fe0 100644
---- a/package/optee-examples/optee-examples.mk
-+++ b/package/optee-examples/optee-examples.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPTEE_EXAMPLES_VERSION = 3.17.0
-+OPTEE_EXAMPLES_VERSION = 3.18.0
- OPTEE_EXAMPLES_SITE = $(call github,linaro-swg,optee_examples,$(OPTEE_EXAMPLES_VERSION))
- OPTEE_EXAMPLES_LICENSE = BSD-2-Clause
- OPTEE_EXAMPLES_LICENSE_FILES = LICENSE
--- 
-2.25.1
+>
+> Make sure you pick up the following changes from my patch:
+>  - dbus config option settings(to prevent dbus from becoming a build
+> time dependency)
 
+Ok.
+
+>  - dnssec changes(so that we pull in new dnssec backends properly)
+
+I don't understand those options, but I will bake them into lines ~510 following
+"ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)"
+
+>  - kernel headers minimum version bump
+
+The minimum it 3.15 (up from 3.13) according to the README,
+4.15 is highly recommended.
+Probably better to flash a warning in kconfig for now, would make a
+seperate commit.
+
+Expect a v4 shortly.
+
+Regards, Norbert
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
