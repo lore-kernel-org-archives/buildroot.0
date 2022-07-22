@@ -1,68 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49FADCCA48B
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 10:24:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6BBBC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 19:00:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C37B46112F;
-	Fri, 22 Jul 2022 10:24:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C37B46112F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5ED5A84989;
+	Fri, 22 Jul 2022 19:00:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5ED5A84989
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8BJPW514duZ0; Fri, 22 Jul 2022 10:24:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vIsgVAz9kaWH; Fri, 22 Jul 2022 19:00:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4547A610D6;
-	Fri, 22 Jul 2022 10:24:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4547A610D6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75040848BB;
+	Fri, 22 Jul 2022 19:00:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75040848BB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0E5201BF32B
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 10:24:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 798DF1BF83C
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 19:00:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA6D7610D6
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 10:24:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA6D7610D6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4591A60B01
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 19:00:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4591A60B01
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CH8jtXiDFnaD for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 10:24:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 16BC860EE5
- for <buildroot@uclibc.org>; Fri, 22 Jul 2022 10:24:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16BC860EE5
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id B1D4E8414F; Fri, 22 Jul 2022 10:10:43 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Fri, 22 Jul 2022 10:24:17 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.02.3
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: buildroot@heine.tech
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-14921-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+ with ESMTP id ysZOf9PhmQlN for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 19:00:08 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05CAE60F4B
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
+ [IPv6:2607:f8b0:4864:20::22e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 05CAE60F4B
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 19:00:07 +0000 (UTC)
+Received: by mail-oi1-x22e.google.com with SMTP id s204so6513485oif.5
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 12:00:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=8l27oTFT7HB9xKqD6Hb51zHQZy5TGCJnwTbaXu+j1ks=;
+ b=EC2oOFpZsrQcYVyY8mR+Vh14PEjk6CvHYRzqb7pdck01Y3H6vBKfe2TJlkOEWfKXHv
+ fIjGYEkMRDyYR940bz3z0RWhXpbaK4bMOXWelMGvNTg42ngW5aifsS8L2B3tPCQsZznz
+ 84qYcyJYg04qir9XmTeQjdMgKrmu/pxObdtS7PrglDM+eiXLWqSYVKjShuVIcgsVDvUK
+ uaF1XuPuftm+++nW0p9WWfSh3rZgaMQ1vM9ldAJ62XpqwrTGJOmy6TTiK0R8Hvkt5buk
+ m+wYO04ZxZBuZLa2lE+Ma+BbgtGQ6y+U/qdX0CQO3bUTPK/9ywNJyiKHwqGqATwGLrYP
+ 0ouQ==
+X-Gm-Message-State: AJIora81O/VqXl4okwtIrYoqBbHhdG8tf+/M9VSfBP4ylE7ILFJ8laqv
+ CuFfnRr90Z2C6ut5slU3L5L12ZqyUjcVnUv1HoI=
+X-Google-Smtp-Source: AGRyM1vxIgOWgr1sjSlOB6791HccXQnAvPxYPllc3/KKTwXaTDaZi/Yl1GCGtUIs84exLFp5Ag9VUj2u3N0MSQw68Yc=
+X-Received: by 2002:a05:6808:211a:b0:33a:9a59:fb31 with SMTP id
+ r26-20020a056808211a00b0033a9a59fb31mr530685oiw.147.1658516407028; Fri, 22
+ Jul 2022 12:00:07 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14921] New: wpewebkit build fails because of
- internal build order
+References: <20220721151907.212216-1-nolange79@gmail.com>
+ <CADvTj4rXWb=_3kTFCdbmJ2hjNZ_GEGq3O+f-VP=_u6tK5D4o4w@mail.gmail.com>
+ <CADYdroP7heqppp8ye20rv9ovgDG=NmVn8N3zi-Ln1KvU_DEwuQ@mail.gmail.com>
+In-Reply-To: <CADYdroP7heqppp8ye20rv9ovgDG=NmVn8N3zi-Ln1KvU_DEwuQ@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 22 Jul 2022 12:59:55 -0600
+Message-ID: <CADvTj4pKCBxXhsJN9=KJ5bct9CwpnnhYyXxZP8rxqeCWbdLCXA@mail.gmail.com>
+To: Norbert Lange <nolange79@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=8l27oTFT7HB9xKqD6Hb51zHQZy5TGCJnwTbaXu+j1ks=;
+ b=Um/gVu6JjjEeScrH7leW4FP1n5DKWJuY6Eem7x4186KccmW/x9u6oNZs2rUY5JBTAU
+ 0zti/rtTlE0y9bUEEGwfjOspGP/4UOWUWwn2n0dHSdszG+U73Y0XGkxgpise9NNCLtkM
+ qnkRH5KLaxR3rMa5OPP5WdFqU4kKV0WuSOqCNw/yadINvccq2hA8r+ipJUvCK7dDMJQU
+ XohXk8aphxPZysJsk12HO9a2Qp+ytqANi7VFnJdRF4ok8Rx/Hg/bVv3KwULSHOIdTBN7
+ ayGpml1WKc1o+305RM2hPD+FJXKvnBh/5CG+dwfdMOGhaO6YzzPm49sycPxHx1zI5KzZ
+ XZEg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Um/gVu6J
+Subject: Re: [Buildroot] [PATCH v3 1/3] package/systemd: bump to version
+ 251.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,116 +91,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14921
+On Fri, Jul 22, 2022 at 3:25 AM Norbert Lange <nolange79@gmail.com> wrote:
+>
+> Am Do., 21. Juli 2022 um 21:32 Uhr schrieb James Hilliard
+> <james.hilliard1@gmail.com>:
+> >
+> > On Thu, Jul 21, 2022 at 9:20 AM Norbert Lange <nolange79@gmail.com> wrote:
+> > >
+> > > LICENSES/README.md hash updated, this line got added in
+> > > regards to files covered by CC0-1.0:
+> > >
+> > > >   -config files and examples under /network
+> > >
+> > > Add config option for the new sysupdate feature.
+> > >
+> > > Remove upstreamed patch.
+> > >
+> > > Update options: set new options to their default,
+> > > remove option not available anymore.
+> > >
+> > > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > >
+> > > ---
+> > > v1->v2:
+> > > *   note about changed LICENSES/README.md
+> > > *   always set default-user-shell to /bin/sh
+> > > *   always set default-locale to C-UTF-8
+> > > *   fix typos in commit message
+> >
+> > You're missing a few things still, take a look at my patch here:
+> > https://patchwork.ozlabs.org/project/buildroot/patch/20220522011729.117324-1-james.hilliard1@gmail.com/
+>
+> Sorry, missed that line before.
+>
+> >
+> > Make sure you pick up the following changes from my patch:
+> >  - dbus config option settings(to prevent dbus from becoming a build
+> > time dependency)
+>
+> Ok.
+>
+> >  - dnssec changes(so that we pull in new dnssec backends properly)
+>
+> I don't understand those options, but I will bake them into lines ~510 following
+> "ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)"
 
-            Bug ID: 14921
-           Summary: wpewebkit build fails because of internal build order
-           Product: buildroot
-           Version: 2022.02.3
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: buildroot@heine.tech
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+I don't think that will work correctly.
 
-Hi,
-
-since wpewebkit was bumped to 2.36.x (which is the case for 2022.05 as well as
-2022.02.3) the build fails with my config. This bug was already briefly
-mentioned on the ML but I file it here for visibility.
-
-This bug happens depending on the defconfig and the configuration of the
-buildsystem (I'm building on a 24-core machine). When I restart the build it
-succeeds because the missing dependency was then already build.
-
-Two traces I recorded:
-
-Scanning dependencies of target jsc
-[ 39%] Building CXX object
-Source/JavaScriptCore/shell/CMakeFiles/jsc.dir/__/jsc.cpp.o
-[ 39%] Linking CXX executable ../../../bin/jsc
-/builds/chp/bsp/buildroot/build/per-package/wpewebkit/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/10.3.1/../../../../arm-none-linux-gnueabihf/bin/ld:
-../CMakeFiles/JavaScriptCore.dir/__/__/JavaScriptCore/DerivedSources/unified-sources/UnifiedSource-6e4525b9-1.cpp.o:
-in function `JSC::LLInt::CLoop::initialize()':
-UnifiedSource-6e4525b9-1.cpp:(.text+0x2f4): undefined reference to
-`JSC::LLInt::CLoop::execute(JSC::OpcodeID, void*, JSC::VM*,
-JSC::ProtoCallFrame*, bool)'
-/builds/chp/bsp/buildroot/build/per-package/wpewebkit/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/10.3.1/../../../../arm-none-linux-gnueabihf/bin/ld:
-../CMakeFiles/JavaScriptCore.dir/__/__/JavaScriptCore/DerivedSources/unified-sources/UnifiedSource-6e4525b9-1.cpp.o:
-in function `vmEntryToJavaScript':
-UnifiedSource-6e4525b9-1.cpp:(.text+0xb40): undefined reference to
-`JSC::LLInt::CLoop::execute(JSC::OpcodeID, void*, JSC::VM*,
-JSC::ProtoCallFrame*, bool)'
-/builds/chp/bsp/buildroot/build/per-package/wpewebkit/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/10.3.1/../../../../arm-none-linux-gnueabihf/bin/ld:
-../CMakeFiles/JavaScriptCore.dir/__/__/JavaScriptCore/DerivedSources/unified-sources/UnifiedSource-6e4525b9-1.cpp.o:
-in function `vmEntryToNative':
-UnifiedSource-6e4525b9-1.cpp:(.text+0xbc0): undefined reference to
-`JSC::LLInt::CLoop::execute(JSC::OpcodeID, void*, JSC::VM*,
-JSC::ProtoCallFrame*, bool)'
-collect2: error: ld returned 1 exit status
-
-
-[ 39%] Built target JavaScriptCore_CopyPrivateHeaders
-Scanning dependencies of target jsc
-make[4]: *** No rule to make target
-'Source/JavaScriptCore/CMakeFiles/LowLevelInterpreterLib.dir/llint/LowLevelInterpreter.cpp.o',
-needed by 'bin/jsc'.  Stop.
-make[4]: *** Waiting for unfinished jobs....
-[ 39%] Building CXX object
-Source/JavaScriptCore/shell/CMakeFiles/jsc.dir/__/jsc.cpp.o
-make[3]: *** [CMakeFiles/Makefile2:775:
-Source/JavaScriptCore/shell/CMakeFiles/jsc.dir/all] Error 2
-make[3]: *** Waiting for unfinished jobs....
-Scanning dependencies of target LowLevelInterpreterLib
-[ 39%] Building CXX object
-Source/JavaScriptCore/CMakeFiles/LowLevelInterpreterLib.dir/llint/LowLevelInterpreter.cpp.o
-[ 39%] Built target LowLevelInterpreterLib
-[ 39%] Built target WebInspectorUI
-make[2]: *** [Makefile:152: all] Error 2
-make[1]: *** [package/pkg-generic.mk:293:
-/home/mheinemann/buildroot/build/build/wpewebkit-2.36.3/.stamp_built] Error 2
-make: *** [Makefile:23: _all] Error 2
-
-
-So it seems JSC is depending on LowLevelInterpreterLib which is built in
-parallel and thus not (always) finished in time.
-
-Defconfig with which I can reproduce this but it might depend on the system you
-are building on:
-
-BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2711-rpi-4-b"
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_PACKAGE_COG=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_RPI_FIRMWARE=y
-BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
-BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi4/config_4.txt"
-BR2_PACKAGE_WPEWEBKIT=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+>
+> >  - kernel headers minimum version bump
+>
+> The minimum it 3.15 (up from 3.13) according to the README,
+> 4.15 is highly recommended.
+> Probably better to flash a warning in kconfig for now, would make a
+> seperate commit.
+>
+> Expect a v4 shortly.
+>
+> Regards, Norbert
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
