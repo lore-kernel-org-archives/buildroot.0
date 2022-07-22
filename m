@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52576C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:27:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9527C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:27:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB775847C2;
-	Fri, 22 Jul 2022 06:27:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB775847C2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6242440743;
+	Fri, 22 Jul 2022 06:27:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6242440743
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xbXqMGcbN_W5; Fri, 22 Jul 2022 06:27:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 93qjV1yKhwf6; Fri, 22 Jul 2022 06:27:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E415E847C1;
-	Fri, 22 Jul 2022 06:27:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E415E847C1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AA75A1C11A9
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A1E7405E7;
+	Fri, 22 Jul 2022 06:27:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A1E7405E7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BDF71BF855
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 858B7409D9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 814DA60BDC
  for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 858B7409D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 814DA60BDC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4lqCvmY3CgEn for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4s0c3xPzYKFG for <buildroot@lists.busybox.net>;
  Fri, 22 Jul 2022 06:25:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C458409D7
+ by smtp3.osuosl.org (Postfix) with ESMTP id A66E160E95
  for <buildroot@buildroot.org>; Fri, 22 Jul 2022 06:25:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C458409D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A66E160E95
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A29218414C; Fri, 22 Jul 2022 06:12:10 +0000 (UTC)
+ id AD02183F2A; Fri, 22 Jul 2022 06:12:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 08:24:03 +0200
+Date: Fri, 22 Jul 2022 08:24:10 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 4e0f1b1f80a34a4d4d429888b5b564c3218e5b37
-X-Git-Newrev: 1e8370d5fb5b87e2819d29b448a9a90de1fdb48b
+X-Git-Oldrev: 1e8370d5fb5b87e2819d29b448a9a90de1fdb48b
+X-Git-Newrev: 0873184f3de72b62560c83745e5ecd7c8dd6b6b1
 X-Patchwork-Hint: ignore
-Message-Id: <20220722061210.A29218414C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libsndfile:
- security bump to version 1.1.0
+Message-Id: <20220722061210.AD02183F2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libsndfile: fix
+ libsndfile.pc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,119 +63,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e8370d5fb5b87e2819d29b448a9a90de1fdb48b
+commit: https://git.buildroot.net/buildroot/commit/?id=0873184f3de72b62560c83745e5ecd7c8dd6b6b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Fix the following security issues:
- - Heap buffer overflow in wavlike_ima_decode_block()
- - Heap buffer overflow in msadpcm_decode_block()
- - Heap buffer overflow in psf_binheader_readf()
- - Index out of bounds in psf_nms_adpcm_decode_block()
- - Heap buffer overflow in flac_buffer_copy()
- - Heap buffer overflow in copyPredictorTo24()
- - Uninitialized variable in psf_binheader_readf()
+Fix the following build failure with libsamplerate or minimodem raised
+since bump to version 1.1.0 in commit
+c59a9d12b7805f2ac08be81fe18a4ebc197d5cd9:
 
-Drop patch (already in version)
+powerpc-buildroot-linux-uclibc-gcc.br_real: error: EXTERNAL_MPEG_LIBS@: No such file or directory
 
-While at it, also drop mention of CVE-2018-13419 which is correctly
-tagged as only affecting version 1.0.28 in NVD NIST database:
-https://nvd.nist.gov/vuln/detail/CVE-2018-13419
+Add host-pkgconf dependency to avoid the following build failure when
+running autoreconf:
 
-https://github.com/libsndfile/libsndfile/releases/tag/1.1.0
+configure.ac:345: error: macro PKG_INSTALLDIR is not defined; is a m4 file missing?
+m4/ax_require_defined.m4:35: AX_REQUIRE_DEFINED is expanded from...
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6de2d7634b1958693b7cf96fbcc79121f92347e9
+ - http://autobuild.buildroot.org/results/bf66b19cacd6394957f534035af647ddd8037d60
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c59a9d12b7805f2ac08be81fe18a4ebc197d5cd9)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit affabe47a22769b717979f854a1028e567d35e36)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-ms_adpcm-Fix-and-extend-size-checks.patch | 40 ----------------------
- package/libsndfile/libsndfile.hash                 |  2 +-
- package/libsndfile/libsndfile.mk                   | 10 ++----
- 3 files changed, 3 insertions(+), 49 deletions(-)
+ ...bstitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch | 24 ++++++++++++++++++++++
+ package/libsndfile/libsndfile.mk                   |  3 +++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch b/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch
-deleted file mode 100644
-index edacbda01a..0000000000
---- a/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From deb669ee8be55a94565f6f8a6b60890c2e7c6f32 Mon Sep 17 00:00:00 2001
--From: bobsayshilol <bobsayshilol@live.co.uk>
--Date: Thu, 18 Feb 2021 21:52:09 +0000
--Subject: [PATCH] ms_adpcm: Fix and extend size checks
--
--'blockalign' is the size of a block, and each block contains 7 samples
--per channel as part of the preamble, so check against 'samplesperblock'
--rather than 'blockalign'. Also add an additional check that the block
--is big enough to hold the samples it claims to hold.
--
--https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=26803
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/ms_adpcm.c | 10 ++++++++--
-- 1 file changed, 8 insertions(+), 2 deletions(-)
--
--diff --git a/src/ms_adpcm.c b/src/ms_adpcm.c
--index 5e8f1a31..a21cb994 100644
----- a/src/ms_adpcm.c
--+++ b/src/ms_adpcm.c
--@@ -128,8 +128,14 @@ wavlike_msadpcm_init	(SF_PRIVATE *psf, int blockalign, int samplesperblock)
-- 	if (psf->file.mode == SFM_WRITE)
-- 		samplesperblock = 2 + 2 * (blockalign - 7 * psf->sf.channels) / psf->sf.channels ;
-- 
---	if (blockalign < 7 * psf->sf.channels)
---	{	psf_log_printf (psf, "*** Error blockalign (%d) should be > %d.\n", blockalign, 7 * psf->sf.channels) ;
--+	/* There's 7 samples per channel in the preamble of each block */
--+	if (samplesperblock < 7 * psf->sf.channels)
--+	{	psf_log_printf (psf, "*** Error samplesperblock (%d) should be >= %d.\n", samplesperblock, 7 * psf->sf.channels) ;
--+		return SFE_INTERNAL ;
--+		} ;
--+
--+	if (2 * blockalign < samplesperblock * psf->sf.channels)
--+	{	psf_log_printf (psf, "*** Error blockalign (%d) should be >= %d.\n", blockalign, samplesperblock * psf->sf.channels / 2) ;
-- 		return SFE_INTERNAL ;
-- 		} ;
-- 
---- 
--2.20.1
--
-diff --git a/package/libsndfile/libsndfile.hash b/package/libsndfile/libsndfile.hash
-index 14dfe823f9..67d10d03c4 100644
---- a/package/libsndfile/libsndfile.hash
-+++ b/package/libsndfile/libsndfile.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  a8cfb1c09ea6e90eff4ca87322d4168cdbe5035cb48717b40bf77e751cc02163  libsndfile-1.0.31.tar.bz2
-+sha256  0f98e101c0f7c850a71225fb5feaf33b106227b3d331333ddc9bacee190bcf41  libsndfile-1.1.0.tar.xz
- # Locally calculated
- sha256  ad01ea5cd2755f6048383c8d54c88459cd6fcb17757c5c8892f8c5ea060f6140  COPYING
+diff --git a/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch b/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch
+new file mode 100644
+index 0000000000..44ed6dc2cb
+--- /dev/null
++++ b/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch
+@@ -0,0 +1,24 @@
++From e4fdaeefddd39bae1db27d48ccb7db7733e0c009 Mon Sep 17 00:00:00 2001
++From: Michael Cho <cho-m@tuta.io>
++Date: Sun, 17 Apr 2022 21:31:07 -0700
++Subject: [PATCH] configure.ac: substitute EXTERNAL_MPEG_LIBS in sndfile.pc
++
++[Retrieved from:
++https://github.com/libsndfile/libsndfile/commit/e4fdaeefddd39bae1db27d48ccb7db7733e0c009]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/configure.ac b/configure.ac
++index 727b67bc0..a4c776d70 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -739,6 +739,7 @@ AC_SUBST(SNDIO_LIBS)
++ AC_SUBST(EXTERNAL_XIPH_CFLAGS)
++ AC_SUBST(EXTERNAL_XIPH_LIBS)
++ AC_SUBST(EXTERNAL_XIPH_REQUIRE)
+++AC_SUBST(EXTERNAL_MPEG_LIBS)
++ AC_SUBST(EXTERNAL_MPEG_REQUIRE)
++ AC_SUBST(MPG123_CFLAGS)
++ AC_SUBST(MPG123_LIBS)
 diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index ed9e8e3d14..12a6601b6b 100644
+index 12a6601b6b..0b57a1fdd8 100644
 --- a/package/libsndfile/libsndfile.mk
 +++ b/package/libsndfile/libsndfile.mk
-@@ -4,20 +4,14 @@
- #
- ################################################################################
- 
--LIBSNDFILE_VERSION = 1.0.31
--LIBSNDFILE_SOURCE = libsndfile-$(LIBSNDFILE_VERSION).tar.bz2
-+LIBSNDFILE_VERSION = 1.1.0
-+LIBSNDFILE_SOURCE = libsndfile-$(LIBSNDFILE_VERSION).tar.xz
- LIBSNDFILE_SITE = https://github.com/libsndfile/libsndfile/releases/download/$(LIBSNDFILE_VERSION)
- LIBSNDFILE_INSTALL_STAGING = YES
+@@ -11,6 +11,9 @@ LIBSNDFILE_INSTALL_STAGING = YES
  LIBSNDFILE_LICENSE = LGPL-2.1+
  LIBSNDFILE_LICENSE_FILES = COPYING
  LIBSNDFILE_CPE_ID_VENDOR = libsndfile_project
++# We're patching configure.ac
++LIBSNDFILE_AUTORECONF = YES
++LIBSNDFILE_DEPENDENCIES = host-pkgconf
  
--# 0001-ms_adpcm-Fix-and-extend-size-checks.patch
--LIBSNDFILE_IGNORE_CVES += CVE-2021-3246
--
--# disputed, https://github.com/erikd/libsndfile/issues/398
--LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
--
  LIBSNDFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
  LIBSNDFILE_CONF_OPTS = \
- 	--disable-sqlite \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
