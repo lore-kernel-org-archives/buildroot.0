@@ -1,50 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ADE8C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 17:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C954C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 17:46:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 823DA423C0;
-	Fri, 22 Jul 2022 17:24:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 823DA423C0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UIG3zNTrHpGt; Fri, 22 Jul 2022 17:24:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F352C423AF;
-	Fri, 22 Jul 2022 17:24:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F352C423AF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 59BA81BF316
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 17:24:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 406B140AD4
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 17:24:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 406B140AD4
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB9EB41620;
+	Fri, 22 Jul 2022 17:46:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB9EB41620
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kQ1yO4PClZHp for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 17:24:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1AA28403A9
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 17:24:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AA28403A9
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 1442F8416A; Fri, 22 Jul 2022 17:11:03 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 19:22:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8d6e07e525617ee0c4ccc4f07345b1b1a70526f7
-X-Git-Newrev: 9b6714bf2aa828ded86e1ca63a42f86793d6b8c2
-X-Patchwork-Hint: ignore
-Message-Id: <20220722171103.1442F8416A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/harfbuzz: fix build with gcc < 7
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id liGe1p-rCPOp; Fri, 22 Jul 2022 17:46:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACAEB41598;
+	Fri, 22 Jul 2022 17:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACAEB41598
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C84F1BF316
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 17:46:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26A6F84989
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 17:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26A6F84989
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fjDLplFEGdC3 for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 17:46:22 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDAB98498A
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DDAB98498A
+ for <buildroot@busybox.net>; Fri, 22 Jul 2022 17:46:21 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id n12so7470854wrc.8
+ for <buildroot@busybox.net>; Fri, 22 Jul 2022 10:46:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=aenX/8AFGINK2j5Jz8AZqvg3BmDwLOxW+mQ0cYGUlIA=;
+ b=wlcTjdsaXJfAkT0/T5+aMu0oNSaC72VP87gfeI7HGDALRtijm/TCynavpbkU8ONyvP
+ UPJeHU/VAwpibNlw96upPsFUuXlNwrYqGgXFO7ZfRtBeO3MbiuOf9y5CahgiWug6HgH3
+ Co/WABngODZRcgoX/UYPhC/AhnaHVBDvcYXsbNzl/m0iTgIzClTeOSXnEmeEA2+POBbN
+ UJlf/Kgv6LMFKoVBg9mnQUuhT6yr4QBP1yKVoozan7klgbitG2c4GsS0AEYLILcg2mff
+ 9o0GzwLVCKLnq6D0I5SFLn223vu4OENfMAUJs0jX88lsY37uZCZWIGBdaod1Y0H/GdUn
+ sCTw==
+X-Gm-Message-State: AJIora92Wkfd5d3L8rb+WcQU3ywLbee1caVOQZDeMZWTQuztEPgsdblR
+ bXUdLQSokjCZCvPh0yYMqjtIMQ==
+X-Google-Smtp-Source: AGRyM1uzUYzFn/TUjJ51HmIwNCp5UHs5C/u+q7gvXyMkCE0R5c9qJTzbpSry6m1H97vhCUcPCuEXyQ==
+X-Received: by 2002:a05:6000:d1:b0:21d:ad67:c320 with SMTP id
+ q17-20020a05600000d100b0021dad67c320mr684675wrx.27.1658511979715; 
+ Fri, 22 Jul 2022 10:46:19 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ d16-20020adff2d0000000b0021d4aca9d1esm6043685wrp.99.2022.07.22.10.46.19
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 22 Jul 2022 10:46:19 -0700 (PDT)
+Message-ID: <25e1a7d1-4c1b-3d6a-ce81-24d23dc91d0b@mind.be>
+Date: Fri, 22 Jul 2022 19:46:17 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Content-Language: en-GB
+To: Baruch Siach <baruch@tkos.co.il>, buildroot@busybox.net
+References: <4a323dc9772af9a5b5295ae2d1a65f0d314765d3.1658478797.git.baruch@tkos.co.il>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <4a323dc9772af9a5b5295ae2d1a65f0d314765d3.1658478797.git.baruch@tkos.co.il>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=aenX/8AFGINK2j5Jz8AZqvg3BmDwLOxW+mQ0cYGUlIA=;
+ b=XEmLDScbG+2MipT73JHmVXDJibP2yfVQAXDdQr/AGDlsli2oC36lTPLnAYnlPW36dZ
+ wBjVrNNAe1qSh+mdXS4qqRbFulEqv0YmEpLPrsYhkMrqI/cV6tlR99BXn6DcLBVv1yZh
+ AlL6FBg0+KWRqknl57WTKKo/M66g6vHAlJsQGOFAt8YNS8vkq0ZaBlmXXJo2644IhSNO
+ l+xEsfYseAhDPbjJLPYoA6eTqp+Cvl7kCwLMe6LEIbkw9EEC/6/8cew221DNAE8qOhBf
+ 8t8Q7ognhfH0MhCyoRZCLTsAe+Jjkh/6IgpxxmFpf5lNF//XJDy/o7Vv2nR6T9gzxUyU
+ vWNw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=XEmLDScb
+Subject: Re: [Buildroot] [PATCH] package/libcurl: fix dependency symbol typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,138 +100,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Matt Weber <matthew.weber@collins.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b6714bf2aa828ded86e1ca63a42f86793d6b8c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes various build errors
 
-In file included from ../src/hb-kern.hh:32:0,
-                 from ../src/hb-ot-shape-fallback.cc:32:
-../src/hb-ot-layout-gpos-table.hh:50:117: error: specialization of 'template<class context_t> static typename context_t::return_t OT::Layout::GPOS_impl::PosLookup::dispatch_recurse_func(context_t*, unsigned int)' in different namespace [-fpermissive]
+On 22/07/2022 10:33, Baruch Siach via buildroot wrote:
+> Commit 6d07e2618c0 ("package/uacme: requires TLS support in libcurl")
+> mistyped the BR2_PACKAGE_LIBCURL_FORCE_TLS dependency making the fix
+> ineffective.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/56ea6cb146df63d1575da9dae3035b3220de875f/
+> http://autobuild.buildroot.net/results/280b0ed7f9cdb424917373f98c3e4e6b593c6d21/
+> 
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Matt Weber <matthew.weber@collins.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-introduced by bumping harfbuzz to 4.4.1 in
-03022329e02332c22f44e0e0a9b17d8454ba26ae
+  Applied to master, thanks.
 
-The build error was not yet caught by the autobuilders but can be
-reproduced using this defconfig:
-http://autobuild.buildroot.org/results/3fe7526b685368007ae0f66e15ef2b27d30d5063/
+  Regards,
+  Arnout
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch    | 97 ++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
-
-diff --git a/package/harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch b/package/harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch
-new file mode 100644
-index 0000000000..ead6fc024f
---- /dev/null
-+++ b/package/harfbuzz/0004-GPOS-Fix-build-on-GCC-7.patch
-@@ -0,0 +1,97 @@
-+From 3238cb744bb570a75326ab4438968c59069e9af2 Mon Sep 17 00:00:00 2001
-+From: Kleis Auke Wolthuizen <github@kleisauke.nl>
-+Date: Wed, 6 Jul 2022 13:18:14 +0200
-+Subject: [PATCH] [GPOS] Fix build on GCC < 7
-+
-+[Retrieved (and backported) from:
-+https://github.com/harfbuzz/harfbuzz/commit/3238cb744bb570a75326ab4438968c59069e9af2]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/OT/Layout/GPOS/GPOS.hh     | 17 ++++++++++-------
-+ src/hb-ot-layout-gpos-table.hh |  6 ++++--
-+ 2 files changed, 14 insertions(+), 9 deletions(-)
-+
-+diff --git a/src/OT/Layout/GPOS/GPOS.hh b/src/OT/Layout/GPOS/GPOS.hh
-+index 7fb97d7568..23b0b090a2 100644
-+--- a/src/OT/Layout/GPOS.hh
-++++ b/src/OT/Layout/GPOS.hh
-+@@ -7,6 +7,9 @@
-+ #include "GPOS/PosLookup.hh"
-+ 
-+ namespace OT {
-++
-++using Layout::GPOS_impl::PosLookup;
-++
-+ namespace Layout {
-+ 
-+ static void
-+@@ -25,10 +28,10 @@ struct GPOS : GSUBGPOS
-+ {
-+   static constexpr hb_tag_t tableTag = HB_OT_TAG_GPOS;
-+ 
-+-  using Lookup = GPOS_impl::PosLookup;
-++  using Lookup = PosLookup;
-+ 
-+-  const GPOS_impl::PosLookup& get_lookup (unsigned int i) const
-+-  { return static_cast<const GPOS_impl::PosLookup &> (GSUBGPOS::get_lookup (i)); }
-++  const PosLookup& get_lookup (unsigned int i) const
-++  { return static_cast<const PosLookup &> (GSUBGPOS::get_lookup (i)); }
-+ 
-+   static inline void position_start (hb_font_t *font, hb_buffer_t *buffer);
-+   static inline void position_finish_advances (hb_font_t *font, hb_buffer_t *buffer);
-+@@ -37,11 +40,11 @@ struct GPOS : GSUBGPOS
-+   bool subset (hb_subset_context_t *c) const
-+   {
-+     hb_subset_layout_context_t l (c, tableTag, c->plan->gpos_lookups, c->plan->gpos_langsys, c->plan->gpos_features);
-+-    return GSUBGPOS::subset<GPOS_impl::PosLookup> (&l);
-++    return GSUBGPOS::subset<PosLookup> (&l);
-+   }
-+ 
-+   bool sanitize (hb_sanitize_context_t *c) const
-+-  { return GSUBGPOS::sanitize<GPOS_impl::PosLookup> (c); }
-++  { return GSUBGPOS::sanitize<PosLookup> (c); }
-+ 
-+   HB_INTERNAL bool is_blocklisted (hb_blob_t *blob,
-+                                    hb_face_t *face) const;
-+@@ -51,7 +54,7 @@ struct GPOS : GSUBGPOS
-+     for (unsigned i = 0; i < GSUBGPOS::get_lookup_count (); i++)
-+     {
-+       if (!c->gpos_lookups->has (i)) continue;
-+-      const GPOS_impl::PosLookup &l = get_lookup (i);
-++      const PosLookup &l = get_lookup (i);
-+       l.dispatch (c);
-+     }
-+   }
-+@@ -59,7 +62,7 @@ struct GPOS : GSUBGPOS
-+   void closure_lookups (hb_face_t      *face,
-+                         const hb_set_t *glyphs,
-+                         hb_set_t       *lookup_indexes /* IN/OUT */) const
-+-  { GSUBGPOS::closure_lookups<GPOS_impl::PosLookup> (face, glyphs, lookup_indexes); }
-++  { GSUBGPOS::closure_lookups<PosLookup> (face, glyphs, lookup_indexes); }
-+ 
-+   typedef GSUBGPOS::accelerator_t<GPOS> accelerator_t;
-+ };
-+diff --git a/src/hb-ot-layout-gpos-table.hh b/src/hb-ot-layout-gpos-table.hh
-+index f5059cfa83..8fe987fc50 100644
-+--- a/src/hb-ot-layout-gpos-table.hh
-++++ b/src/hb-ot-layout-gpos-table.hh
-+@@ -32,8 +32,8 @@
-+ #include "OT/Layout/GPOS.hh"
-+ 
-+ namespace OT {
-+-
-+-using Layout::GPOS_impl::PosLookup;
-++namespace Layout {
-++namespace GPOS_impl {
-+ 
-+ // TODO(garretrieger): Move into new layout directory.
-+ /* Out-of-class implementation for methods recursing */
-+@@ -68,6 +68,8 @@ inline bool PosLookup::dispatch_recurse_func<hb_ot_apply_context_t> (hb_ot_apply
-+ }
-+ #endif
-+ 
-++} /* namespace GPOS_impl */
-++} /* namespace Layout */
-+ } /* namespace OT */
-+ 
-+ 
+> ---
+>   package/libcurl/Config.in | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+> index bc2f8f47f21d..218309ed56ff 100644
+> --- a/package/libcurl/Config.in
+> +++ b/package/libcurl/Config.in
+> @@ -83,7 +83,7 @@ comment "WolfSSL needs a toolchain w/ dynamic library"
+>   
+>   config BR2_PACKAGE_LIBCURL_TLS_NONE
+>   	bool "None"
+> -	depends on !BR2_PACKAGE_LIBCURL_FORCE_SSL_TLS
+> +	depends on !BR2_PACKAGE_LIBCURL_FORCE_TLS
+>   
+>   endchoice
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
