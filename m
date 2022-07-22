@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02A73C43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35E56C43334
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:47:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E9F6817ED;
-	Fri, 22 Jul 2022 07:47:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E9F6817ED
+	by smtp2.osuosl.org (Postfix) with ESMTP id D6A6640A0D;
+	Fri, 22 Jul 2022 07:47:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6A6640A0D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HB-WAvVeTtU3; Fri, 22 Jul 2022 07:47:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zNWAFgbUiQzI; Fri, 22 Jul 2022 07:47:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C11578146B;
-	Fri, 22 Jul 2022 07:47:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C11578146B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 45E081BF36D
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:47:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D794F40A07;
+	Fri, 22 Jul 2022 07:47:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D794F40A07
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AB4F61BF36D
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:47:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F36341B88
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:47:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F36341B88
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86D704011A
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:47:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86D704011A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rjzxyZPkN6Fr for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 07:47:12 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF25141B73
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CF25141B73
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:47:11 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BF972240006;
- Fri, 22 Jul 2022 07:47:09 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oEnNM-0033V0-Qh; Fri, 22 Jul 2022 09:47:08 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9DJEsYqfM5Iv for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 07:47:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2BC740A07
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:47:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2BC740A07
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id B65368414E; Fri, 22 Jul 2022 07:33:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20220704073820.3B2DF81F75@busybox.osuosl.org>
-Date: Fri, 22 Jul 2022 09:47:08 +0200
-In-Reply-To: <20220704073820.3B2DF81F75@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Mon, 4 Jul 2022 09:50:43 +0200")
-Message-ID: <87ilnpvbb7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] =?utf-8?q?=5Bgit_commit=5D_DEVELOPERS=3A_drop_Ga?=
- =?utf-8?q?=C3=ABl_Portay?=
+To: buildroot@buildroot.org
+Date: Fri, 22 Jul 2022 09:45:05 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: cf01912c4f04a37493ba4f5540ea30bac74ba18c
+X-Git-Newrev: 8b53ad4a8eff206038873b1273616a54c61db36e
+X-Patchwork-Hint: ignore
+Message-Id: <20220722073353.B65368414E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/vim: security
+ bump to version 9.0.0008
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,24 +57,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlRob21hcyIgPT0gVGhvbWFzIFBldGF6em9uaSB2aWEgYnVpbGRyb290IDxidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZz4gd3JpdGVzOgoKID4gY29tbWl0OiBodHRwczovL2dpdC5idWlsZHJv
-b3QubmV0L2J1aWxkcm9vdC9jb21taXQvP2lkPTkxNTYyYzkwNDVlYWJlNTBiMWJmNzhkNmNkZTk4
-MjBhMzRhMjEzOTEKID4gYnJhbmNoOiBodHRwczovL2dpdC5idWlsZHJvb3QubmV0L2J1aWxkcm9v
-dC9jb21taXQvP2lkPXJlZnMvaGVhZHMvbWFzdGVyCgogPiBHYcOrbCBQb3J0YXkgaXMgYXBwYXJl
-bnRseSBubyBsb25nZXIgYXQgQ29sbGFib3JhOgoKID4gPGdhZWwucG9ydGF5QGNvbGxhYm9yYS5j
-b20+OiBob3N0IG1haWwuY29sbGFib3JhLmNvLnVrWzQ2LjIzNS4yMjcuMTcyXSBzYWlkOgogPiAg
-ICAgNTUwIDUuMS4xIDxnYWVsLnBvcnRheUBjb2xsYWJvcmEuY29tPjogUmVjaXBpZW50IGFkZHJl
-c3MgcmVqZWN0ZWQ6IFVzZXIKID4gICAgIHVua25vd24gaW4gbG9jYWwgcmVjaXBpZW50IHRhYmxl
-IChpbiByZXBseSB0byBSQ1BUIFRPIGNvbW1hbmQpCgogPiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMg
-UGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgoKQ29tbWl0dGVkIHRvIDIw
-MjIuMDUueCBhbmQgMjAyMi4wMi54LCB0aGFua3MuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=8b53ad4a8eff206038873b1273616a54c61db36e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+
+- Fix CVE-2022-2124, CVE-2022-2125, CVE-2022-2126 and CVE-2022-2129
+- Update hash of README.txt (version updated with
+  https://github.com/vim/vim/commit/eb49041875118be5fe60f07750c7c86cb26dccef)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 17f568f39948a0abc57337473dd8eb13ac4266fb)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vim/vim.hash | 4 ++--
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 55e5643b90..62b11fea7b 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  3052bc702cfb49571dbcf9824827ae6032c37c7bf1a2aa0d3f7cc18c8f085dfb  vim-8.2.5062.tar.gz
++sha256  86aa403632beea5827f305e471a245d14ee9c79072f67ce8e9536169a1deaad9  vim-9.0.0008.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+-sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
++sha256  4afae7c984ab1a4ccd0b474a695f316e7435ab6ed46537648af925c18835d853  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 6dbb32d27b..c3308b4542 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = 8.2.5062
++VIM_VERSION = 9.0.0008
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
