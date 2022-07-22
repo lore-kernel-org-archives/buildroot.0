@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F015C43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82E3CC43334
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:37:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C645D409DA;
-	Fri, 22 Jul 2022 06:36:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C645D409DA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F0D3847D2;
+	Fri, 22 Jul 2022 06:37:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F0D3847D2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8g8NhGCbKQ9t; Fri, 22 Jul 2022 06:36:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8sWIyCVlb6tc; Fri, 22 Jul 2022 06:37:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBB1940A09;
-	Fri, 22 Jul 2022 06:36:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBB1940A09
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1982C1BF855
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:34:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 37AAB847C9;
+	Fri, 22 Jul 2022 06:37:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37AAB847C9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C6411BF855
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:34:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4EC51409EE
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:34:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EC51409EE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 55E79847CB
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:34:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55E79847CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lfUEXAXpWYwD for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 06:34:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bjP63N4oL5jg for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 06:34:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6032A409FA
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 06:34:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6032A409FA
+ by smtp1.osuosl.org (Postfix) with ESMTP id A180B84695
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 06:34:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A180B84695
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 70F7A81309; Fri, 22 Jul 2022 06:20:32 +0000 (UTC)
+ id A4A6083F2A; Fri, 22 Jul 2022 06:20:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 08:32:59 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 0ecd08ed2f9d99772dd49cfd19cbcd517b348126
-X-Git-Newrev: 271b75b87547b0ce66987831fe8ab0babcf18bd3
+Date: Fri, 22 Jul 2022 08:32:30 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 1597bcd13698c73f1f9d1a219c372ab155794187
+X-Git-Newrev: 49cf74f45791bead64a595cfe6f3b082809d6856
 X-Patchwork-Hint: ignore
-Message-Id: <20220722062032.70F7A81309@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/cups: fix
- CUPS_CPE_ID_VENDOR
+Message-Id: <20220722062038.A4A6083F2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/gstreamer1: bump
+ to version 1.20.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=271b75b87547b0ce66987831fe8ab0babcf18bd3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=49cf74f45791bead64a595cfe6f3b082809d6856
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-CUPS_CPE_ID_VENDOR is wrong since switch to OpenPrinting upstream
-repository in commit 8cf034ab0f686d0a3891b6fe5bb5a2d1bdf381d5:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopenprinting%3Acups
-
-While at it, also fix URL in Config.in
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b598a284f120d9bda2a018e145f50ef5758a24f6)
+(cherry picked from commit d8376fc31e7526045c00f542a0936b66559e4b1a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cups/Config.in | 2 +-
- package/cups/cups.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cups/Config.in b/package/cups/Config.in
-index e23f069a8a..51cf10b073 100644
---- a/package/cups/Config.in
-+++ b/package/cups/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_CUPS
- 	help
- 	  The Common Unix Printing System
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 128bb564d4..5daadfae74 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.20.1.tar.xz.sha256sum
+-sha256  de094a404a3ad8f4977829ea87edf695a4da0b5c8f613ebe54ab414bac89f031  gstreamer-1.20.1.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.20.3.tar.xz.sha256sum
++sha256  607daf64bbbd5fb18af9d17e21c0d22c4d702fffe83b23cb22d1b1af2ca23a2a  gstreamer-1.20.3.tar.xz
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 995c5b118b..89d5f93d43 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	  http://www.cups.org
-+	  https://openprinting.github.io/cups
- 
- comment "cups needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index ab56b23bcd..2bd5f3bbb6 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -9,7 +9,7 @@ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
- CUPS_LICENSE_FILES = LICENSE NOTICE
--CUPS_CPE_ID_VENDOR = cups
-+CUPS_CPE_ID_VENDOR = openprinting
- CUPS_SELINUX_MODULES = cups
- CUPS_INSTALL_STAGING = YES
- 
+-GSTREAMER1_VERSION = 1.20.1
++GSTREAMER1_VERSION = 1.20.3
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
