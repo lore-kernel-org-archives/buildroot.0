@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9875C43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 21:17:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9339C43334
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 21:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BC7C60768;
-	Fri, 22 Jul 2022 21:17:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BC7C60768
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64D0C60BEB;
+	Fri, 22 Jul 2022 21:18:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64D0C60BEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 03aZp8iMqEku; Fri, 22 Jul 2022 21:17:41 +0000 (UTC)
+	with ESMTP id Wkaa135jFUDR; Fri, 22 Jul 2022 21:18:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 543A66072A;
-	Fri, 22 Jul 2022 21:17:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 543A66072A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 555871BF215
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:17:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B93F608B7;
+	Fri, 22 Jul 2022 21:18:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B93F608B7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 00A7F1BF215
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F5036072A
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:17:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F5036072A
+ by smtp4.osuosl.org (Postfix) with ESMTP id CDAFB41726
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:18:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDAFB41726
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l09SMOUSRuBl for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 21:17:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R-pCjqmV7Smo for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 21:18:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54863605BA
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 21:17:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54863605BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id D4D4C41688
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 21:18:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4D4C41688
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E442D841D7; Fri, 22 Jul 2022 21:03:53 +0000 (UTC)
+ id 76AA0841DF; Fri, 22 Jul 2022 21:04:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 23:16:58 +0200
+Date: Fri, 22 Jul 2022 23:17:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3d867408b012788d264735a6a71fa362863e081e
-X-Git-Newrev: 13dbb736e1e6b2eb39a2f005b57440564a949ab3
+X-Git-Oldrev: 13dbb736e1e6b2eb39a2f005b57440564a949ab3
+X-Git-Newrev: a38da5e3cae6b786bb193d317a0e5e89466d9f6e
 X-Patchwork-Hint: ignore
-Message-Id: <20220722210353.E442D841D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-rsa: bump to version 4.8
+Message-Id: <20220722210426.76AA0841DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-boto3: bump to version
+ 1.24.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,58 +59,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0026900856103496274=="
+Content-Type: multipart/mixed; boundary="===============8608866310811291815=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0026900856103496274==
+--===============8608866310811291815==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13dbb736e1e6b2eb39a2f005b57440564a949ab3
+commit: https://git.buildroot.net/buildroot/commit/?id=a38da5e3cae6b786bb193d317a0e5e89466d9f6e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While at it, update the indentation of the license hash (two spaces).
-
-Changelog:
-https://github.com/sybrenstuvel/python-rsa/blob/main/CHANGELOG.md
+Changelog: https://github.com/boto/boto3/blob/master/CHANGELOG.rst
 
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-rsa/python-rsa.hash | 4 ++--
- package/python-rsa/python-rsa.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-boto3/python-boto3.hash | 2 +-
+ package/python-boto3/python-boto3.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-rsa/python-rsa.hash b/package/python-rsa/python-rsa.hash
-index 9fbbf0ac88..2ea1245667 100644
---- a/package/python-rsa/python-rsa.hash
-+++ b/package/python-rsa/python-rsa.hash
-@@ -1,5 +1,5 @@
- # From https://pypi.org/project/rsa/
--sha256  9d689e6ca1b3038bc82bf8d23e944b6b6037bc02301a574935b2dd946e0353b9  rsa-4.7.2.tar.gz
-+sha256  5c6bd9dc7a543b7fe4304a631f8a8a3b674e2bbfc49c2ae96200cdbe55df6b17  rsa-4.8.tar.gz
- 
- # Locally computed
--sha256	073f28b7d389c8fe74f607e17c27f81eaa5ace69edc43a884f23f41b41c5c726  LICENSE
-+sha256  073f28b7d389c8fe74f607e17c27f81eaa5ace69edc43a884f23f41b41c5c726  LICENSE
-diff --git a/package/python-rsa/python-rsa.mk b/package/python-rsa/python-rsa.mk
-index a3d4bb8235..0de35fe43e 100644
---- a/package/python-rsa/python-rsa.mk
-+++ b/package/python-rsa/python-rsa.mk
+diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
+index 358fabd39b..96c03be61c 100644
+--- a/package/python-boto3/python-boto3.hash
++++ b/package/python-boto3/python-boto3.hash
+@@ -1,4 +1,4 @@
+ # sha256 from https://pypi.org/pypi/boto3/json
+-sha256  11a6035060230e92327d4f10fef6bc44188b2cd68504012bc25ed62ac31d670b  boto3-1.19.2.tar.gz
++sha256  833e67edfb73f2cc22ff27a1c33728686dc90a9e81ba2551f9462ea2d1b04f41  boto3-1.24.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
+index 8e10aa482d..c5f9133573 100644
+--- a/package/python-boto3/python-boto3.mk
++++ b/package/python-boto3/python-boto3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_RSA_VERSION = 4.7.2
-+PYTHON_RSA_VERSION = 4.8
- PYTHON_RSA_SOURCE = rsa-$(PYTHON_RSA_VERSION).tar.gz
--PYTHON_RSA_SITE = https://files.pythonhosted.org/packages/db/b5/475c45a58650b0580421746504b680cd2db4e81bc941e94ca53785250269
-+PYTHON_RSA_SITE = https://files.pythonhosted.org/packages/8c/ee/4022542e0fed77dd6ddade38e1e4dea3299f873b7fd4e6d78319953b0f83
- PYTHON_RSA_SETUP_TYPE = setuptools
- PYTHON_RSA_LICENSE = Apache-2.0
- PYTHON_RSA_LICENSE_FILES = LICENSE
+-PYTHON_BOTO3_VERSION = 1.19.2
++PYTHON_BOTO3_VERSION = 1.24.8
+ PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
+-PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/ec/45/d12f9c09b5c4dad8bcb098dfae5e9e1253ed6408efbbd9a3e60bff55b824
++PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/60/3b/6fed306341003fd059f402d22747ba33d07b8ac8bfe53dbedb2c6e42ee3b
+ PYTHON_BOTO3_SETUP_TYPE = setuptools
+ PYTHON_BOTO3_LICENSE = Apache-2.0
+ PYTHON_BOTO3_LICENSE_FILES = LICENSE
 
---===============0026900856103496274==
+--===============8608866310811291815==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -120,4 +116,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0026900856103496274==--
+--===============8608866310811291815==--
