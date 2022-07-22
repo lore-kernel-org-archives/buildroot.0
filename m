@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D9D4C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 21:18:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5418C43334
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 21:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9DA44239F;
-	Fri, 22 Jul 2022 21:18:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9DA44239F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50FCC42406;
+	Fri, 22 Jul 2022 21:21:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50FCC42406
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XdSY3QmXP-BY; Fri, 22 Jul 2022 21:18:19 +0000 (UTC)
+	with ESMTP id 1KM5iE4S55I2; Fri, 22 Jul 2022 21:21:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B927542384;
-	Fri, 22 Jul 2022 21:18:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B927542384
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 598051BF215
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:18:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ECF7F42402;
+	Fri, 22 Jul 2022 21:21:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECF7F42402
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 09C6D1BF215
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25ADB84180
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:18:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25ADB84180
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBEA760768
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:21:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBEA760768
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9n4aTUjsVe5A for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 21:18:13 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1C9883F28
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F1C9883F28
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 21:18:12 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3BECE60002;
- Fri, 22 Jul 2022 21:18:09 +0000 (UTC)
-Date: Fri, 22 Jul 2022 23:18:08 +0200
-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
-Message-ID: <20220722231808.63a74eab@windsurf>
-In-Reply-To: <20220614124020.710305-1-raphael.melotte@mind.be>
-References: <20220614124020.710305-1-raphael.melotte@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658524689;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=GqYArZtqIuCnAmob5vPF5K290stR5m32MmczXVLCVag=;
- b=f94sOZet8x+Dz9vQiyrQwNmEqazpkh2yyYluGsS8uZX+8/fkNa+ajcsKgXGjqXZqEeGyfs
- JsldwoMbCNsS598NO1JMriRG3kGbKEbCfjYr+BS8z0zCtlrqz6Lu9O68hiybwi6jcJDGLu
- qXV3U4irKpnsCoXKNBFiXafLmpLeVqndhpNqJzLRUauBipm3dbTAqkv9/Tinl8KhjBN6Gi
- 17PJU8ZYWYN6BJFz3fOJBD3FLHhhGtwVaDeDQAkXkXfGMI6kRKjjnyhVe+2v3dywvdFWJ2
- UnhYnMaqmBxQhySXnKI4AdnddJh8lcVJ9Bk5LhwmMohHnUhQjj/hiav17ZjhZQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=f94sOZet
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-boto3: bump to version
- 1.24.8
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q7vu4Kh-pi0c for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 21:21:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1EC86605BA
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 21:21:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EC86605BA
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id B37B6841FC; Fri, 22 Jul 2022 21:08:03 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 22 Jul 2022 23:19:16 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dfa0c8e3a876af16a0b57e49683c5f420c23678d
+X-Git-Newrev: d7ec0f7e97019c9b198f49d8c46ed9ee95fab375
+X-Patchwork-Hint: ignore
+Message-Id: <20220722210803.B37B6841FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jmespath: bump to version
+ 1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,21 +58,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8115240703857467525=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCAxNCBKdW4gMjAyMiAxNDo0MDoxOCArMDIwMApSYXBoYcOrbCBNw6lsb3R0ZSA8cmFw
-aGFlbC5tZWxvdHRlQG1pbmQuYmU+IHdyb3RlOgoKPiBDaGFuZ2Vsb2c6IGh0dHBzOi8vZ2l0aHVi
-LmNvbS9ib3RvL2JvdG8zL2Jsb2IvbWFzdGVyL0NIQU5HRUxPRy5yc3QKPiAKPiBTaWduZWQtb2Zm
-LWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFlbC5tZWxvdHRlQG1pbmQuYmU+Cj4gLS0tCj4g
-IHBhY2thZ2UvcHl0aG9uLWJvdG8zL3B5dGhvbi1ib3RvMy5oYXNoIHwgMiArLQo+ICBwYWNrYWdl
-L3B5dGhvbi1ib3RvMy9weXRob24tYm90bzMubWsgICB8IDQgKystLQo+ICAyIGZpbGVzIGNoYW5n
-ZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCkFwcGxpZWQgdG8gbWFzdGVyLCB0
-aGFua3MuCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywgQm9vdGxpbgpFbWJlZGRl
-ZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============8115240703857467525==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d7ec0f7e97019c9b198f49d8c46ed9ee95fab375
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+While at it, remove the md5 hash as there is already a sha256 hash.
+
+Changelog: https://github.com/jmespath/jmespath.py/blob/develop/CHANGELOG.rst
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-jmespath/python-jmespath.hash | 5 ++---
+ package/python-jmespath/python-jmespath.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/python-jmespath/python-jmespath.hash b/package/python-jmespath/python-jmespath.hash
+index 986db2e002..a1c64a121e 100644
+--- a/package/python-jmespath/python-jmespath.hash
++++ b/package/python-jmespath/python-jmespath.hash
+@@ -1,5 +1,4 @@
+-# md5, sha256 from https://pypi.org/pypi/jmespath/json
+-md5  65bdcb5fa5bcf1cc710ffa508e78e408  jmespath-0.10.0.tar.gz
+-sha256  b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9  jmespath-0.10.0.tar.gz
++# sha256 from https://pypi.org/pypi/jmespath/json
++sha256  a490e280edd1f57d6de88636992d05b71e97d69a26a19f058ecf7d304474bf5e  jmespath-1.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  66b313cce80ed0623fc7db3f24863a0c80fd83eb341a46b57864158ae74faa56  LICENSE.txt
+diff --git a/package/python-jmespath/python-jmespath.mk b/package/python-jmespath/python-jmespath.mk
+index cf11dedb60..48b19e8494 100644
+--- a/package/python-jmespath/python-jmespath.mk
++++ b/package/python-jmespath/python-jmespath.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JMESPATH_VERSION = 0.10.0
++PYTHON_JMESPATH_VERSION = 1.0.0
+ PYTHON_JMESPATH_SOURCE = jmespath-$(PYTHON_JMESPATH_VERSION).tar.gz
+-PYTHON_JMESPATH_SITE = https://files.pythonhosted.org/packages/3c/56/3f325b1eef9791759784aa5046a8f6a1aff8f7c898a2e34506771d3b99d8
++PYTHON_JMESPATH_SITE = https://files.pythonhosted.org/packages/06/7e/44686b986ef9ca6069db224651baaa8300b93af2a085a5b135997bf659b3
+ PYTHON_JMESPATH_SETUP_TYPE = setuptools
+ PYTHON_JMESPATH_LICENSE = MIT
+ PYTHON_JMESPATH_LICENSE_FILES = LICENSE.txt
+
+--===============8115240703857467525==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8115240703857467525==--
