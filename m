@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E8FAC43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:45:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81483C43334
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:46:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D842340A07;
-	Fri, 22 Jul 2022 07:45:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D842340A07
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2C68940151;
+	Fri, 22 Jul 2022 07:46:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C68940151
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tbYmERqEK3AQ; Fri, 22 Jul 2022 07:45:44 +0000 (UTC)
+	with ESMTP id JcU-yuYHw86P; Fri, 22 Jul 2022 07:46:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 75D0840151;
-	Fri, 22 Jul 2022 07:45:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75D0840151
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4FD2540289;
+	Fri, 22 Jul 2022 07:46:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FD2540289
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9D9E91BF36D
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:45:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B48D91BF36D
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:46:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77FAD40151
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:45:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77FAD40151
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FCF84011A
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:46:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FCF84011A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QJzNZBE3BQgi for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 07:45:40 +0000 (UTC)
+ with ESMTP id plzk3Og8VTSY for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 07:46:14 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A5B74011A
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7A5B74011A
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:45:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 805B840151
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 805B840151
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:46:14 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A1C761C0002;
- Fri, 22 Jul 2022 07:45:38 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5835F60006;
+ Fri, 22 Jul 2022 07:46:12 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oEnLt-0033Lj-Lf; Fri, 22 Jul 2022 09:45:37 +0200
+ id 1oEnMR-0033PZ-8P; Fri, 22 Jul 2022 09:46:11 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220629195535.340078-1-fontaine.fabrice@gmail.com>
-Date: Fri, 22 Jul 2022 09:45:37 +0200
-In-Reply-To: <20220629195535.340078-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 29 Jun 2022 21:55:35 +0200")
-Message-ID: <87v8rpvbdq.fsf@dell.be.48ers.dk>
+References: <20220629201756.571047-1-fontaine.fabrice@gmail.com>
+Date: Fri, 22 Jul 2022 09:46:11 +0200
+In-Reply-To: <20220629201756.571047-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 29 Jun 2022 22:17:56 +0200")
+Message-ID: <87r12dvbcs.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/vim: security bump to version
- 9.0.0008
+Subject: Re: [Buildroot] [PATCH 1/1] package/ghostscript: security bump to
+ version 9.56.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +64,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -72,9 +72,20 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > - Fix CVE-2022-2124, CVE-2022-2125, CVE-2022-2126 and CVE-2022-2129
- > - Update hash of README.txt (version updated with
- >   https://github.com/vim/vim/commit/eb49041875118be5fe60f07750c7c86cb26dccef)
+ > Fix CVE-2022-2085: A NULL pointer dereference vulnerability was found in
+ > Ghostscript, which occurs when it tries to render a large number of bits
+ > in memory. When allocating a buffer device, it relies on an
+ > init_device_procs defined for the device that uses it as a prototype
+ > that depends upon the number of bits per pixel. For bpp > 64,
+ > mem_x_device is used and does not have an init_device_procs defined.
+ > This flaw allows an attacker to parse a large number of bits (more than
+ > 64 bits per pixel), which triggers a NULL pointer dereference flaw,
+ > causing an application to crash.
+
+ > Drop patch (already in version)
+
+ > https://www.ghostscript.com/doc/9.56.0/News.htm
+ > https://www.ghostscript.com/doc/9.56.1/News.htm
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
