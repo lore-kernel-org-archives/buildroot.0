@@ -1,51 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57867C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:51:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91537C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:55:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EBEA14028D;
-	Fri, 22 Jul 2022 07:51:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBEA14028D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33D1A84813;
+	Fri, 22 Jul 2022 07:55:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33D1A84813
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qt-R-VDV3i4b; Fri, 22 Jul 2022 07:51:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JLUBwCTI39RV; Fri, 22 Jul 2022 07:55:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB92B40C00;
-	Fri, 22 Jul 2022 07:51:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB92B40C00
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5A3A01BF36D
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:51:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3608C847C9;
+	Fri, 22 Jul 2022 07:55:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3608C847C9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 535021BF36D
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:55:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3351242178
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:51:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3351242178
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D64D847C1
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:55:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D64D847C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iuG0uyOG0F1j for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 07:51:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F33741B73
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:51:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F33741B73
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 11AA9840C4; Fri, 22 Jul 2022 07:37:45 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 09:50:20 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 9f0e851d4991fc228838ee8590cb880878334067
-X-Git-Newrev: 4a13baf05fffeed6d536e538da0cb2cabd18d390
-X-Patchwork-Hint: ignore
-Message-Id: <20220722073745.11AA9840C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libopenssl:
- security bump to version 1.1.1p
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vAKrHAmEiAFN for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 07:55:08 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF0AD8418D
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EF0AD8418D
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:55:07 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BE44324000F;
+ Fri, 22 Jul 2022 07:55:04 +0000 (UTC)
+Date: Fri, 22 Jul 2022 09:55:03 +0200
+To: Xuanhao Shi via buildroot <buildroot@buildroot.org>
+Message-ID: <20220722095503.27868873@windsurf>
+In-Reply-To: <91ff193c-5e66-b80c-538c-7ebcddd9bd87@ti.com>
+References: <20220721203307.30488-1-x-shi@ti.com>
+ <91ff193c-5e66-b80c-538c-7ebcddd9bd87@ti.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658476506;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=2kFDCOLFcs4k1qLwxXkAfKd3pefJFEKBQnoqNspDUrQ=;
+ b=BSc1NRmVMXQRG6nbrllYaUIawaYOSicHAOjcPFD1Z/76P7fUnG8drzW6omyoFaPW/BJXL0
+ BL/+R2IhcUkwdqa3MVEK3mVE7Kd8s0OFcNmMTjYQqU8jLwcEsr6W5Z0dRwPFpbZFZGMr09
+ u5nqXkEnmJ9j71iXgejPgR7KOceQMkLM5u5K6g7xYAfNtG4NFr4dLvv9dzXit0jWVmID8c
+ Mu/px/WqDUVPGQjhnaPEDhnn+qcFF+bgbbT7B/RSlyCUzLIg+fm1KcWW688VT0xpL4GBs4
+ cVFf3osk82dmRmZ0KXz4NIRWWQf90i6x5QY/4uYKEKvCoj7qrw6S6rrM0RYoWw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=BSc1NRmV
+Subject: Re: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: add target
+ board options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,73 +77,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Alden Benedick Agcon <alden@ti.com>, Xuanhao Shi <x-shi@ti.com>,
+ Sergey Ostrovsky <sergeyo@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a13baf05fffeed6d536e538da0cb2cabd18d390
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+Hello,
 
-The c_rehash script allows command injection (CVE-2022-2068)
-============================================================
+On Thu, 21 Jul 2022 15:38:56 -0500
+Xuanhao Shi via buildroot <buildroot@buildroot.org> wrote:
 
-Severity: Moderate
+> Some platforms such as TI's k3 outputs a TARGET_BOARD directory
+> in their ATF build output paths after PLATFORM.
+> $(@D)/build/<PLATFORM>/ does not contain the debug or release
+> directories for these platforms.
+> They are under $(@D)/build/<PLATFORM>/<TARGET_BOARD>/
+> 
+> Signed-off-by: Xuanhao Shi <x-shi@ti.com>
 
-In addition to the c_rehash shell command injection identified in
-CVE-2022-1292, further circumstances where the c_rehash script does not
-properly sanitise shell metacharacters to prevent command injection were
-found by code review.
+Thanks for your patch. Could you resend it with "git send-email"?
+Indeed, your e-mail client has mangled the patch, so it cannot be
+applied.
 
-When the CVE-2022-1292 was fixed it was not discovered that there
-are other places in the script where the file names of certificates
-being hashed were possibly passed to a command executed through the
-shell.
+Thanks!
 
-This script is distributed by some operating systems in a manner where
-it is automatically executed.  On such operating systems, an attacker
-could execute arbitrary commands with the privileges of the script.
-
-Use of the c_rehash script is considered obsolete and should be replaced
-by the OpenSSL rehash command line tool.
-
-https://www.openssl.org/news/secadv/20220621.txt
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 026f35d9e7294bdf51aa11932f74c9c4cf257250)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index ec5fd0fe84..2f76241c72 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1o.tar.gz.sha256
--sha256  9384a2b0570dd80358841464677115df785edb941c71211f75076d72fe6b438f  openssl-1.1.1o.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1p.tar.gz.sha256
-+sha256  bf61b62aaa66c7c7639942a94de4c9ae8280c08f17d4eac2e44644d9fc8ace6f  openssl-1.1.1p.tar.gz
- 
- # License files
- sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 0c039dc7d6..195438c6b5 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENSSL_VERSION = 1.1.1o
-+LIBOPENSSL_VERSION = 1.1.1p
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
