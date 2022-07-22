@@ -1,51 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9527C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3381CC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:28:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6242440743;
-	Fri, 22 Jul 2022 06:27:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6242440743
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 93qjV1yKhwf6; Fri, 22 Jul 2022 06:27:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A1E7405E7;
-	Fri, 22 Jul 2022 06:27:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A1E7405E7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1BDF71BF855
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 814DA60BDC
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 814DA60BDC
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6A1560E8C;
+	Fri, 22 Jul 2022 06:28:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6A1560E8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4s0c3xPzYKFG for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 06:25:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A66E160E95
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 06:25:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A66E160E95
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AD02183F2A; Fri, 22 Jul 2022 06:12:10 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 08:24:10 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 1e8370d5fb5b87e2819d29b448a9a90de1fdb48b
-X-Git-Newrev: 0873184f3de72b62560c83745e5ecd7c8dd6b6b1
-X-Patchwork-Hint: ignore
-Message-Id: <20220722061210.AD02183F2A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libsndfile: fix
- libsndfile.pc
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id daFoImP7C1ix; Fri, 22 Jul 2022 06:28:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D21F560EF3;
+	Fri, 22 Jul 2022 06:28:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D21F560EF3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C337C1BF855
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:26:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E11840989
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:26:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E11840989
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c0IXK9UfB7aU for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 06:26:02 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E4F2409D7
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
+ [IPv6:2a00:1450:4864:20::136])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8E4F2409D7
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 06:26:02 +0000 (UTC)
+Received: by mail-lf1-x136.google.com with SMTP id p11so1288027lfu.5
+ for <buildroot@buildroot.org>; Thu, 21 Jul 2022 23:26:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=TX3ylvoT63RoY1BE4f7WhxGKbFA5YIk9sXXTj3SlMFs=;
+ b=AK+RWRaalqjeza5vXmsqKOgETuPX7HeJtpyBOkTf1GvkG/pDlCfBTutSmJp42WRkqz
+ XQiW57dp4CLZo4m/+0O4DYouJolbvxXbzqyHC2C0ao+2sEgFo8T7eWxKIoR3q37qev3f
+ 94idTA2DpnhRfWU0oQlqNeDtCR5ZLbmzSiH594Wt8o3OmiNVP2uDCdI7HSClXGNBnnOq
+ wWAq9pQHUNKZvTFY1jwiDHhouwNplnMhsnB4kRWKENX+tnAGUx2OclBFV3/dJyMEw04X
+ zz4IlB7zRKUlTTqnwGBajYb0tK+4+pReDKhnnBbHi6LqooC3mt1GNvQct0MnEJdy1Zx3
+ kbIw==
+X-Gm-Message-State: AJIora/dRRl1r+4vJ01Ea9VNG7npkm63bETwC1QwPWeAse9ES+git++a
+ RavO1J5HbOGffZ3a48mffS+bQjeOkorGyCpKnDRvXFYn0dttJg==
+X-Google-Smtp-Source: AGRyM1uu+/HyofS/T9LiD0hZy+prRAFH79lqk/3dp9t7bkNAKjbni1hhokI/j2nk2cO6VQQlr7p1vT5RtOz5swwrbWg=
+X-Received: by 2002:ac2:544a:0:b0:48a:7195:1224 with SMTP id
+ d10-20020ac2544a000000b0048a71951224mr784148lfn.519.1658471160287; Thu, 21
+ Jul 2022 23:26:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220721144939.1265027-1-ardeleanalex@gmail.com>
+ <20220721181648.7eedcb41@windsurf>
+In-Reply-To: <20220721181648.7eedcb41@windsurf>
+From: Alexandru Ardelean <ardeleanalex@gmail.com>
+Date: Fri, 22 Jul 2022 09:25:49 +0300
+Message-ID: <CA+U=DsqEoXWjdBNFUQVLLWhABgqcFVLCF8FicwHw96Rq=bN3OA@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=TX3ylvoT63RoY1BE4f7WhxGKbFA5YIk9sXXTj3SlMFs=;
+ b=Ooxrwi2s/PK+lNyS9F+UGa5OGYaQgYDHahVVl5+fJCAwnKwEZRuYAitSaQFJ0ZGnp9
+ kzUgHooKKv+NM0Xe2hfRuh1uIiOcOEen5h+iRmGwXOAvIh29KvseziOZ7YVxPoD4oNup
+ hzkAFTsSgHTXjxL0j2YSa+hYg9rXP6+5NPnsn1OwdQXPFXGYbMoCM6S6Io3Jxl24tUzI
+ w1TijcE6eZhQNKzbE9WwH1MdohRqFBrl1pbB3yuqsFrmlq4AwIj/ASLpNK3rdufK+0vx
+ V3mg2bucPkzQR68xQpGeqp7fTsSOcq5QIy8e0AmCeyfnwRQz6vixFG0MoQ/MRr0IhwOr
+ KRZQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Ooxrwi2s
+Subject: Re: [Buildroot] [PATCH] package/cog: add libgbm as dependency when
+ building with DRM support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,84 +90,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0873184f3de72b62560c83745e5ecd7c8dd6b6b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+On Thu, Jul 21, 2022 at 7:16 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Alexandru,
+>
+> On Thu, 21 Jul 2022 17:49:39 +0300
+> Alexandru Ardelean <ardeleanalex@gmail.com> wrote:
+>
+> > When building with DRM support, it can happen that the libgbm library
+> > is not yet built by the provider of libgbm (specified by
+> > BR2_PACKAGE_PROVIDES_LIBGBM).
+> >
+> > The docs in cog `docs/platform-drm.md` specify this dep-list:
+> > - **WPEBackend-fdo**:
+> > - **Wayland**:
+> > - **libdrm**:
+> > - **libgbm**:
+> > - **libinput**:
+> > - **libudev**:
+> >
+> > libgbm needs to be added, whereas `libudev` is provided by systemd (in my
+> > case).
+>
+> Then udev should also be in the dependencies when
+> BR2_PACKAGE_COG_PLATFORM_DRM=y.
+>
+> >  ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+> >  COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
+> > -COG_DEPENDENCIES += libdrm libinput
+> > +COG_DEPENDENCIES += libdrm libinput libgbm
+>
+> That is correct, but not complete. The DRM platform code in Cog also
+> uses EGL, so we would also need libegl in the list of dependencies. In
+> pratice, libgbm and libegl are most likely implemented by the same
+> package, but for the sake of correctness, it would be better to have
+> both.
+>
+> Another thing that is wrong is:
+>
+>         depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # gbm
+>
+> in the Config.in file. This used to be the only way to detect the
+> availability of gbm, but since quite some time now, we have the libgbm
+> virtual package.
+>
+> So this should be instead:
+>
+>         depends on BR2_PACKAGE_HAS_LIBGBM
 
-Fix the following build failure with libsamplerate or minimodem raised
-since bump to version 1.1.0 in commit
-c59a9d12b7805f2ac08be81fe18a4ebc197d5cd9:
+So, I'm assuming a V2, would contain adding BR2_PACKAGE_HAS_LIBGBM to
+the Config.in and libegl to the DEPENDENCIES var.
 
-powerpc-buildroot-linux-uclibc-gcc.br_real: error: EXTERNAL_MPEG_LIBS@: No such file or directory
+I can also do the second version, after the fix is agreed upon.
+But no promises :)
 
-Add host-pkgconf dependency to avoid the following build failure when
-running autoreconf:
-
-configure.ac:345: error: macro PKG_INSTALLDIR is not defined; is a m4 file missing?
-m4/ax_require_defined.m4:35: AX_REQUIRE_DEFINED is expanded from...
-
-Fixes:
- - http://autobuild.buildroot.org/results/6de2d7634b1958693b7cf96fbcc79121f92347e9
- - http://autobuild.buildroot.org/results/bf66b19cacd6394957f534035af647ddd8037d60
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit affabe47a22769b717979f854a1028e567d35e36)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...bstitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch | 24 ++++++++++++++++++++++
- package/libsndfile/libsndfile.mk                   |  3 +++
- 2 files changed, 27 insertions(+)
-
-diff --git a/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch b/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch
-new file mode 100644
-index 0000000000..44ed6dc2cb
---- /dev/null
-+++ b/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch
-@@ -0,0 +1,24 @@
-+From e4fdaeefddd39bae1db27d48ccb7db7733e0c009 Mon Sep 17 00:00:00 2001
-+From: Michael Cho <cho-m@tuta.io>
-+Date: Sun, 17 Apr 2022 21:31:07 -0700
-+Subject: [PATCH] configure.ac: substitute EXTERNAL_MPEG_LIBS in sndfile.pc
-+
-+[Retrieved from:
-+https://github.com/libsndfile/libsndfile/commit/e4fdaeefddd39bae1db27d48ccb7db7733e0c009]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 727b67bc0..a4c776d70 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -739,6 +739,7 @@ AC_SUBST(SNDIO_LIBS)
-+ AC_SUBST(EXTERNAL_XIPH_CFLAGS)
-+ AC_SUBST(EXTERNAL_XIPH_LIBS)
-+ AC_SUBST(EXTERNAL_XIPH_REQUIRE)
-++AC_SUBST(EXTERNAL_MPEG_LIBS)
-+ AC_SUBST(EXTERNAL_MPEG_REQUIRE)
-+ AC_SUBST(MPG123_CFLAGS)
-+ AC_SUBST(MPG123_LIBS)
-diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index 12a6601b6b..0b57a1fdd8 100644
---- a/package/libsndfile/libsndfile.mk
-+++ b/package/libsndfile/libsndfile.mk
-@@ -11,6 +11,9 @@ LIBSNDFILE_INSTALL_STAGING = YES
- LIBSNDFILE_LICENSE = LGPL-2.1+
- LIBSNDFILE_LICENSE_FILES = COPYING
- LIBSNDFILE_CPE_ID_VENDOR = libsndfile_project
-+# We're patching configure.ac
-+LIBSNDFILE_AUTORECONF = YES
-+LIBSNDFILE_DEPENDENCIES = host-pkgconf
- 
- LIBSNDFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- LIBSNDFILE_CONF_OPTS = \
+>
+> and I'm pretty sure Cog uses some "advanced" features of libgbm, so
+> most likely at least depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
+> is needed, and probably also depends on
+> BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT is needed.
+> See package/opengl/libgbm/Config.in for details.
+>
+> Of course, this aspect should be in a different patch: your change to
+> add "libgbm" in the DEPENDENCIES variable is really a fix, while my
+> proposed change in the Config.in file is really an improvement, that
+> will allow using Cog on libgbm-capable platforms that don't use mesa3d
+> as their OpenGL/libgbm implementation.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
