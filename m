@@ -4,48 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66671C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:39:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F21D4C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:40:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D21660DFD;
-	Fri, 22 Jul 2022 06:39:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D21660DFD
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0DC760ED7;
+	Fri, 22 Jul 2022 06:40:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0DC760ED7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RJ4Yxls_dB65; Fri, 22 Jul 2022 06:39:45 +0000 (UTC)
+	with ESMTP id kEPiNF9jTXf0; Fri, 22 Jul 2022 06:40:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11D24607FF;
-	Fri, 22 Jul 2022 06:39:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11D24607FF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0937C1BF855
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:34:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3D3F60DFD;
+	Fri, 22 Jul 2022 06:40:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3D3F60DFD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C4571BF855
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:38:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 129EE847C3
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:34:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 129EE847C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB3C240989
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:38:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB3C240989
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F8nM3j0FMFgn for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 06:34:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 20D82847C9
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 06:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20D82847C9
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 32BD8840F1; Fri, 22 Jul 2022 06:20:39 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 08:32:32 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d1f700b3f1c6f8e38956bb561c279bb88a43314c
-X-Git-Newrev: 977644b7d1a62997bf7c4368c4198652f9cf21bb
-X-Patchwork-Hint: ignore
-Message-Id: <20220722062039.32BD8840F1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/cups: fix
- CUPS_CPE_ID_VENDOR
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 83YUvGV1n91k for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 06:38:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B03D403C8
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
+ [IPv6:2a00:1450:4864:20::135])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5B03D403C8
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 06:38:16 +0000 (UTC)
+Received: by mail-lf1-x135.google.com with SMTP id o7so6187466lfq.9
+ for <buildroot@buildroot.org>; Thu, 21 Jul 2022 23:38:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=kHZUfX55pHX8eUYG4sSwXOUKvVUkkdAWz9wRNnhLZss=;
+ b=6Z/G9DtfJwmvWPX6w9WBCy5WmsBn/NLic8E/uZQiM1Y+NOZP2ppvkxQRg70TNi3sSO
+ tvJNIUKbfRX6a01YcnvH80HrhJgtlLt41KR4oPeZrgZwlmo2sR5WkFJeCe+gMu1dGo9U
+ J9n7i/x4tgmM/ZFwYUy7uSSMZjcQAHTsqx50NBQbw/yj2/ft/4I3ty1vzsb8Mm23/JZf
+ awGJIGnWnw03vc5mhLkftkk1sjd487LlfAHUBv7xq8RBUaoEsmFgYL+oGAJX47SOWATY
+ UswYUk6JYW5Ad8hSYkJMnxrVNl5AxSWT06+LgrMH2O0bmJsCX7dLGJYX8vd6VLCmY8z6
+ Q9fg==
+X-Gm-Message-State: AJIora8H7XAKEsewNn5ZuG4Yemi3J6MZNv2CaKR/ULT+Lqcc5VSN2NjG
+ Me3UNVIfMXJNf17inWFUxNPClpgSH18a3udzRw2gM1KoiLg3Lg==
+X-Google-Smtp-Source: AGRyM1ufcaNb4/09YH03vYVcT7/K+xPOUOw/x9LFWGUyte7AckxfdX6KKFy4F+KEKXDDCbWwDHUhanR+6v27AYVd3rg=
+X-Received: by 2002:ac2:456c:0:b0:489:fc8d:e23f with SMTP id
+ k12-20020ac2456c000000b00489fc8de23fmr784985lfm.234.1658471893956; Thu, 21
+ Jul 2022 23:38:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220721144939.1265027-1-ardeleanalex@gmail.com>
+ <20220721181648.7eedcb41@windsurf>
+ <CA+U=DsqEoXWjdBNFUQVLLWhABgqcFVLCF8FicwHw96Rq=bN3OA@mail.gmail.com>
+In-Reply-To: <CA+U=DsqEoXWjdBNFUQVLLWhABgqcFVLCF8FicwHw96Rq=bN3OA@mail.gmail.com>
+From: Alexandru Ardelean <ardeleanalex@gmail.com>
+Date: Fri, 22 Jul 2022 09:38:02 +0300
+Message-ID: <CA+U=Dsr60t8_dfdAL7CAbtbGL2i8+WyWD-byyEFQg=vpc5dHBg@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=kHZUfX55pHX8eUYG4sSwXOUKvVUkkdAWz9wRNnhLZss=;
+ b=GUfbqRqUp467DZJWD6VAdeJMm5FIrP2FjrqsM22g1Eky/XT2jgpsG9FZEY9oG1CoPt
+ GNU2kfifHg14z7qWaRLhIj2OF4QCoqERpHOrXLVIMUSBNxp5rO+4mF8HPApxz1BfY3D/
+ z795xFLByrv/sLx4dW540HGxmqQ60LwtC1dx1CPXV6mITJmFhWK+ydX/9yHZq+b6UxKB
+ N9AsOfsa/v1Mc9nG3YjaENlsSC6p/O6RT6cu2C6iXVpZdiozCVGguW6xmhxxdUI/Tv1N
+ ZCj73ZFB+aJ3EBvXAcjB5Ngsq9eH6KFgWS0ozH5D55rUbtka3wkO9vlnhhxne9mqKF9A
+ jI9A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=GUfbqRqU
+Subject: Re: [Buildroot] [PATCH] package/cog: add libgbm as dependency when
+ building with DRM support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,57 +91,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=977644b7d1a62997bf7c4368c4198652f9cf21bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+On Fri, Jul 22, 2022 at 9:25 AM Alexandru Ardelean
+<ardeleanalex@gmail.com> wrote:
+>
+> On Thu, Jul 21, 2022 at 7:16 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Hello Alexandru,
+> >
+> > On Thu, 21 Jul 2022 17:49:39 +0300
+> > Alexandru Ardelean <ardeleanalex@gmail.com> wrote:
+> >
+> > > When building with DRM support, it can happen that the libgbm library
+> > > is not yet built by the provider of libgbm (specified by
+> > > BR2_PACKAGE_PROVIDES_LIBGBM).
+> > >
+> > > The docs in cog `docs/platform-drm.md` specify this dep-list:
+> > > - **WPEBackend-fdo**:
+> > > - **Wayland**:
+> > > - **libdrm**:
+> > > - **libgbm**:
+> > > - **libinput**:
+> > > - **libudev**:
+> > >
+> > > libgbm needs to be added, whereas `libudev` is provided by systemd (in my
+> > > case).
+> >
+> > Then udev should also be in the dependencies when
+> > BR2_PACKAGE_COG_PLATFORM_DRM=y.
+> >
+> > >  ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+> > >  COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
+> > > -COG_DEPENDENCIES += libdrm libinput
+> > > +COG_DEPENDENCIES += libdrm libinput libgbm
+> >
+> > That is correct, but not complete. The DRM platform code in Cog also
+> > uses EGL, so we would also need libegl in the list of dependencies. In
+> > pratice, libgbm and libegl are most likely implemented by the same
+> > package, but for the sake of correctness, it would be better to have
+> > both.
+> >
+> > Another thing that is wrong is:
+> >
+> >         depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # gbm
+> >
+> > in the Config.in file. This used to be the only way to detect the
+> > availability of gbm, but since quite some time now, we have the libgbm
+> > virtual package.
+> >
+> > So this should be instead:
+> >
+> >         depends on BR2_PACKAGE_HAS_LIBGBM
+>
+> So, I'm assuming a V2, would contain adding BR2_PACKAGE_HAS_LIBGBM to
+> the Config.in and libegl to the DEPENDENCIES var.
+>
+> I can also do the second version, after the fix is agreed upon.
+> But no promises :)
+>
+> >
+> > and I'm pretty sure Cog uses some "advanced" features of libgbm, so
+> > most likely at least depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
+> > is needed, and probably also depends on
+> > BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT is needed.
+> > See package/opengl/libgbm/Config.in for details.
+> >
+> > Of course, this aspect should be in a different patch: your change to
+> > add "libgbm" in the DEPENDENCIES variable is really a fix, while my
+> > proposed change in the Config.in file is really an improvement, that
+> > will allow using Cog on libgbm-capable platforms that don't use mesa3d
+> > as their OpenGL/libgbm implementation.
 
-CUPS_CPE_ID_VENDOR is wrong since switch to OpenPrinting upstream
-repository in commit 8cf034ab0f686d0a3891b6fe5bb5a2d1bdf381d5:
+Apologies for not including this part in the second email.
+So, at least cog 0.12.4 that is currently packaged in Buildroot
+doesn't seem to support (yet)
+BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
+and
+BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopenprinting%3Acups
+at least what 'package/opengl/libgbm/Config.in ' mentions:
+- i can't see any use of gbm_device_get_format_modifier_plane_count in
+cog 0.12.4
+- i can't see any use of gbm_bo_get_fd in cog 0.12.4
 
-While at it, also fix URL in Config.in
+And also looking now through the code, I see that EGL is used in all 3
+platforms (DRM, X11 and Wayland).
+Buildroot builds for Wayland and DRM (AFAICT).
+So, I guess libegl is explicitly required for the DRM platform.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b598a284f120d9bda2a018e145f50ef5758a24f6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cups/Config.in | 2 +-
- package/cups/cups.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/cups/Config.in b/package/cups/Config.in
-index e23f069a8a..51cf10b073 100644
---- a/package/cups/Config.in
-+++ b/package/cups/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_CUPS
- 	help
- 	  The Common Unix Printing System
- 
--	  http://www.cups.org
-+	  https://openprinting.github.io/cups
- 
- comment "cups needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index ab56b23bcd..2bd5f3bbb6 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -9,7 +9,7 @@ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
- CUPS_LICENSE_FILES = LICENSE NOTICE
--CUPS_CPE_ID_VENDOR = cups
-+CUPS_CPE_ID_VENDOR = openprinting
- CUPS_SELINUX_MODULES = cups
- CUPS_INSTALL_STAGING = YES
- 
+> >
+> > Best regards,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, co-owner and CEO, Bootlin
+> > Embedded Linux and Kernel engineering and training
+> > https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
