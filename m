@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBC5BC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:05:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47AF6C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:05:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 544824197D;
-	Fri, 22 Jul 2022 07:05:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 544824197D
+	by smtp2.osuosl.org (Postfix) with ESMTP id E1ED640A19;
+	Fri, 22 Jul 2022 07:05:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1ED640A19
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZgGdor5zqCPk; Fri, 22 Jul 2022 07:05:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NAxR2rYGCNdH; Fri, 22 Jul 2022 07:05:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBC2842163;
-	Fri, 22 Jul 2022 07:05:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBC2842163
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C5591BF36D
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF05140A06;
+	Fri, 22 Jul 2022 07:05:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF05140A06
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2239A1C11A9
  for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:04:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E76FC841FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDBFE41922
  for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:04:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E76FC841FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDBFE41922
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ymgRFy-QE5Nw for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DFo86UhoW1M3 for <buildroot@lists.busybox.net>;
  Fri, 22 Jul 2022 07:04:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0DF39847EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0739E418A3
  for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:04:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DF39847EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0739E418A3
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 018E181D63; Fri, 22 Jul 2022 06:51:21 +0000 (UTC)
+ id EC83F82745; Fri, 22 Jul 2022 06:51:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 09:03:54 +0200
+Date: Fri, 22 Jul 2022 09:01:02 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 2c2a10f5b4e1474251284d812cc5dad4856b487a
-X-Git-Newrev: 8b64f613ba2067a3c514b58a50a6bf89b171b063
+X-Git-Oldrev: 271b75b87547b0ce66987831fe8ab0babcf18bd3
+X-Git-Newrev: 2c2a10f5b4e1474251284d812cc5dad4856b487a
 X-Patchwork-Hint: ignore
-Message-Id: <20220722065121.018E181D63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libpjsip: fix
- CVE-2022-31031
+Message-Id: <20220722065120.EC83F82745@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/bdwgc: fix build
+ without NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,93 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b64f613ba2067a3c514b58a50a6bf89b171b063
+commit: https://git.buildroot.net/buildroot/commit/?id=2c2a10f5b4e1474251284d812cc5dad4856b487a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-PJSIP is a free and open source multimedia communication library written
-in C language implementing standard based protocols such as SIP, SDP,
-RTP, STUN, TURN, and ICE. In versions prior to and including 2.12.1 a
-stack buffer overflow vulnerability affects PJSIP users that use STUN in
-their applications, either by: setting a STUN server in their
-account/media config in PJSUA/PJSUA2 level, or directly using
-`pjlib-util/stun_simple` API.
+Fix the following guile build failure without NPTL raised since the
+addition of bdwgc in commit b0476427f6c0036b7803d591a5394923c4b07142 and
+https://github.com/ivmai/bdwgc/commit/7896408d4149347588ed0e36319b53bcea70115b:
 
-https://github.com/pjsip/pjproject/security/advisories/GHSA-26j7-ww69-c4qj
+configure:60776: checking for GC_is_heap_ptr
+configure:60776: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-uclibcgnueabi-gcc -std=gnu11 -o conftest  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O1 -g0  -DHAVE_GC_SET_FINALIZER_NOTIFIER -DHAVE_GC_GET_HEAP_USAGE_SAFE -DHAVE_GC_GET_FREE_SPACE_DIVISOR -DHAVE_GC_SET_FINALIZE_ON_DEMAND -flto -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -L/home/buildroot/autobuild/instance-2/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -latomic_ops -lgc -lpthread -ldl  -latomic -lm >&5
+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-2/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgc.so: undefined reference to `pthread_getattr_np'
+
+[...]
+
+In file included from ../libguile/alist.h:26,
+                 from ../libguile.h:31,
+                 from guile.c:38:
+../libguile/pairs.h:205:1: error: conflicting types for 'GC_is_heap_ptr'
+  205 | GC_is_heap_ptr (void *ptr)
+      | ^~~~~~~~~~~~~~
+In file included from ../libguile/bdw-gc.h:48,
+                 from ../libguile/gc.h:142,
+                 from ../libguile/pairs.h:26,
+                 from ../libguile/alist.h:26,
+                 from ../libguile.h:31,
+                 from guile.c:38:
+/home/buildroot/autobuild/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/gc/gc.h:551:20: note: previous declaration of 'GC_is_heap_ptr' was here
+  551 | GC_API int GC_CALL GC_is_heap_ptr(const void *);
+      |                    ^~~~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/819f231a60fc81f9a8dd07bf5411aa9d8f78c3bb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7ea3831685484e3cf7da86f6d33b5ee120b67230)
+(cherry picked from commit 41d60d016461d90deeaacd31e1f66c6333fcca06)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...rge-pull-request-from-GHSA-26j7-ww69-c4qj.patch | 44 ++++++++++++++++++++++
- package/libpjsip/libpjsip.mk                       |  3 ++
- 2 files changed, 47 insertions(+)
+ package/bdwgc/bdwgc.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libpjsip/0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch b/package/libpjsip/0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch
-new file mode 100644
-index 0000000000..42b842a616
---- /dev/null
-+++ b/package/libpjsip/0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch
-@@ -0,0 +1,44 @@
-+From 450baca94f475345542c6953832650c390889202 Mon Sep 17 00:00:00 2001
-+From: sauwming <ming@teluu.com>
-+Date: Tue, 7 Jun 2022 12:00:13 +0800
-+Subject: [PATCH] Merge pull request from GHSA-26j7-ww69-c4qj
-+
-+[Retrieved from:
-+https://github.com/pjsip/pjproject/commit/450baca94f475345542c6953832650c390889202]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ pjlib-util/src/pjlib-util/stun_simple.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/pjlib-util/src/pjlib-util/stun_simple.c b/pjlib-util/src/pjlib-util/stun_simple.c
-+index 722519584..d0549176d 100644
-+--- a/pjlib-util/src/pjlib-util/stun_simple.c
-++++ b/pjlib-util/src/pjlib-util/stun_simple.c
-+@@ -54,6 +54,7 @@ PJ_DEF(pj_status_t) pjstun_parse_msg( void *buf, pj_size_t buf_len,
-+ {
-+     pj_uint16_t msg_type, msg_len;
-+     char *p_attr;
-++    int attr_max_cnt = PJ_ARRAY_SIZE(msg->attr);
-+ 
-+     PJ_CHECK_STACK();
-+ 
-+@@ -83,7 +84,7 @@ PJ_DEF(pj_status_t) pjstun_parse_msg( void *buf, pj_size_t buf_len,
-+     msg->attr_count = 0;
-+     p_attr = (char*)buf + sizeof(pjstun_msg_hdr);
-+ 
-+-    while (msg_len > 0) {
-++    while (msg_len > 0 && msg->attr_count < attr_max_cnt) {
-+ 	pjstun_attr_hdr **attr = &msg->attr[msg->attr_count];
-+ 	pj_uint32_t len;
-+ 	pj_uint16_t attr_type;
-+@@ -111,6 +112,10 @@ PJ_DEF(pj_status_t) pjstun_parse_msg( void *buf, pj_size_t buf_len,
-+ 	p_attr += len;
-+ 	++msg->attr_count;
-+     }
-++    if (msg->attr_count == attr_max_cnt) {
-++	PJ_LOG(4, (THIS_FILE, "Warning: max number attribute %d reached.",
-++		   attr_max_cnt));
-++    }
-+ 
-+     return PJ_SUCCESS;
-+ }
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index a3303d1e8a..4134d40da8 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -16,6 +16,9 @@ LIBPJSIP_CPE_ID_PRODUCT = pjsip
- LIBPJSIP_INSTALL_STAGING = YES
- LIBPJSIP_MAKE = $(MAKE1)
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index d1c9d4dfdc..cefa975998 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -21,6 +21,9 @@ endif
+ ifeq ($(BR2_STATIC_LIBS),y)
+ BDWGC_CFLAGS_EXTRA += -DGC_NO_DLOPEN
+ endif
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
++BDWGC_CFLAGS_EXTRA += -DNO_PTHREAD_GETATTR_NP
++endif
  
-+# 0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch
-+LIBPJSIP_IGNORE_CVES += CVE-2022-31031
-+
- LIBPJSIP_CFLAGS = $(TARGET_CFLAGS) -DPJ_HAS_IPV6=1
- 
- # relocation truncated to fit: R_68K_GOT16O
+ # Ensure we use the system libatomic_ops, and not the internal one.
+ BDWGC_CONF_OPTS += --with-libatomic-ops=yes
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
