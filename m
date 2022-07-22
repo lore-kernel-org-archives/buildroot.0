@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6F13C43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE5C0C43334
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3AE23409D8;
-	Fri, 22 Jul 2022 06:26:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AE23409D8
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GZXZIkTciYJy; Fri, 22 Jul 2022 06:26:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4981409D7;
-	Fri, 22 Jul 2022 06:26:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4981409D7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 32ECC1BF855
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0CAB541952
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CAB541952
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FEB641B89;
+	Fri, 22 Jul 2022 06:27:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FEB641B89
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SIqrwtR1t4MU for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 06:25:38 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tntb4PwVl23D; Fri, 22 Jul 2022 06:27:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EBD741952;
+	Fri, 22 Jul 2022 06:27:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EBD741952
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F7531BF855
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A61184792
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A61184792
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KB3swg2pXtGo for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 06:25:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0440F41858
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 06:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0440F41858
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8832484782
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 06:25:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8832484782
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 077828414D; Fri, 22 Jul 2022 06:12:04 +0000 (UTC)
+ id 8E3AC840C4; Fri, 22 Jul 2022 06:12:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 08:24:23 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 50fda395388e84c7752be68e6900f9f0d9ee34e0
-X-Git-Newrev: 1597bcd13698c73f1f9d1a219c372ab155794187
+Date: Fri, 22 Jul 2022 08:15:51 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 8e06b8c130c297381bb1e39c037bf51c49603cea
+X-Git-Newrev: 9e40974572452ebbb2688cda3fb712a2d10a91ef
 X-Patchwork-Hint: ignore
-Message-Id: <20220722061204.077828414D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libsndfile: fix
- libsndfile.pc
+Message-Id: <20220722061210.8E3AC840C4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/paxtest: disable
+ on microblaze
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,78 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1597bcd13698c73f1f9d1a219c372ab155794187
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9e40974572452ebbb2688cda3fb712a2d10a91ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Fix the following build failure with libsamplerate or minimodem raised
-since bump to version 1.1.0 in commit
-c59a9d12b7805f2ac08be81fe18a4ebc197d5cd9:
+Disable paxtest on microblaze to avoid the following build failure:
 
-powerpc-buildroot-linux-uclibc-gcc.br_real: error: EXTERNAL_MPEG_LIBS@: No such file or directory
+shlibtest.c:9:1: error: requested alignment '65536' exceeds object file maximum 32768
+    9 | char shbss[PAGE_SIZE_MAX] __pagealigned;
+      | ^~~~
 
-Add host-pkgconf dependency to avoid the following build failure when
-running autoreconf:
+Updating second patch to set PAGE_SIZE_MAX to 32768 will raise another
+build failure:
 
-configure.ac:345: error: macro PKG_INSTALLDIR is not defined; is a m4 file missing?
-m4/ax_require_defined.m4:35: AX_REQUIRE_DEFINED is expanded from...
+/tmp/cccMSYDr.s: Assembler messages:
+/tmp/cccMSYDr.s: Error: PC relative branch to label buf which is not in the instruction space
 
 Fixes:
- - http://autobuild.buildroot.org/results/6de2d7634b1958693b7cf96fbcc79121f92347e9
- - http://autobuild.buildroot.org/results/bf66b19cacd6394957f534035af647ddd8037d60
+ - http://autobuild.buildroot.org/results/aba489143b4017617f67c1012bba1f4687708380
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit affabe47a22769b717979f854a1028e567d35e36)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit abfca98ea223397ed502640d6171845f331614a3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...bstitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch | 24 ++++++++++++++++++++++
- package/libsndfile/libsndfile.mk                   |  3 +++
- 2 files changed, 27 insertions(+)
+ package/paxtest/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch b/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch
-new file mode 100644
-index 0000000000..44ed6dc2cb
---- /dev/null
-+++ b/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch
-@@ -0,0 +1,24 @@
-+From e4fdaeefddd39bae1db27d48ccb7db7733e0c009 Mon Sep 17 00:00:00 2001
-+From: Michael Cho <cho-m@tuta.io>
-+Date: Sun, 17 Apr 2022 21:31:07 -0700
-+Subject: [PATCH] configure.ac: substitute EXTERNAL_MPEG_LIBS in sndfile.pc
-+
-+[Retrieved from:
-+https://github.com/libsndfile/libsndfile/commit/e4fdaeefddd39bae1db27d48ccb7db7733e0c009]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 727b67bc0..a4c776d70 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -739,6 +739,7 @@ AC_SUBST(SNDIO_LIBS)
-+ AC_SUBST(EXTERNAL_XIPH_CFLAGS)
-+ AC_SUBST(EXTERNAL_XIPH_LIBS)
-+ AC_SUBST(EXTERNAL_XIPH_REQUIRE)
-++AC_SUBST(EXTERNAL_MPEG_LIBS)
-+ AC_SUBST(EXTERNAL_MPEG_REQUIRE)
-+ AC_SUBST(MPG123_CFLAGS)
-+ AC_SUBST(MPG123_LIBS)
-diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index 12a6601b6b..0b57a1fdd8 100644
---- a/package/libsndfile/libsndfile.mk
-+++ b/package/libsndfile/libsndfile.mk
-@@ -11,6 +11,9 @@ LIBSNDFILE_INSTALL_STAGING = YES
- LIBSNDFILE_LICENSE = LGPL-2.1+
- LIBSNDFILE_LICENSE_FILES = COPYING
- LIBSNDFILE_CPE_ID_VENDOR = libsndfile_project
-+# We're patching configure.ac
-+LIBSNDFILE_AUTORECONF = YES
-+LIBSNDFILE_DEPENDENCIES = host-pkgconf
+diff --git a/package/paxtest/Config.in b/package/paxtest/Config.in
+index 1e09820ba3..565c45cc19 100644
+--- a/package/paxtest/Config.in
++++ b/package/paxtest/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PAXTEST
+ 	bool "paxtest"
++	depends on !BR2_microblaze
+ 	# No UCLIBC or MUSL because __NO_A_OUT_SUPPORT
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+@@ -8,4 +9,5 @@ config BR2_PACKAGE_PAXTEST
+ 	  http://pax.grsecurity.net/docs
  
- LIBSNDFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- LIBSNDFILE_CONF_OPTS = \
+ comment "paxtest needs a glibc toolchain"
++	depends on !BR2_microblaze
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
