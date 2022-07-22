@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 806A7C43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 21:17:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3109CCA473
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 21:17:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1737A423CF;
-	Fri, 22 Jul 2022 21:17:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1737A423CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4691B423CF;
+	Fri, 22 Jul 2022 21:17:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4691B423CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 65_9Eri89-Um; Fri, 22 Jul 2022 21:16:59 +0000 (UTC)
+	with ESMTP id dLPiE9npLZmA; Fri, 22 Jul 2022 21:17:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA88742384;
-	Fri, 22 Jul 2022 21:16:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA88742384
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B10791BF215
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:16:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B575422E2;
+	Fri, 22 Jul 2022 21:17:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B575422E2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D68F11BF215
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:17:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 66DC242384
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:16:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66DC242384
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF01E819D2
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 21:17:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF01E819D2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NoimjIF5qfso for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 21:16:54 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 203D4422E2
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 203D4422E2
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 21:16:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Otd-7GtMA1SE for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 21:17:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B607819CC
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7B607819CC
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 21:17:22 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E2D28240007;
- Fri, 22 Jul 2022 21:16:51 +0000 (UTC)
-Date: Fri, 22 Jul 2022 23:16:50 +0200
-To: Petr Vorel <pevik@seznam.cz>
-Message-ID: <20220722231650.0fe7223f@windsurf>
-In-Reply-To: <20220613232005.166636-1-pevik@seznam.cz>
-References: <20220613232005.166636-1-pevik@seznam.cz>
+ by mail.gandi.net (Postfix) with ESMTPSA id 1DCA6240003;
+ Fri, 22 Jul 2022 21:17:17 +0000 (UTC)
+Date: Fri, 22 Jul 2022 23:17:17 +0200
+To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
+Message-ID: <20220722231717.64292580@windsurf>
+In-Reply-To: <20220614110211.706283-1-raphael.melotte@mind.be>
+References: <20220614110211.706283-1-raphael.melotte@mind.be>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658524612;
+ d=bootlin.com; s=gm1; t=1658524639;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=Y9pQ9eWhe+xhQIY5F419pNZ7UDDxp7fbh7FjNoZzlf0=;
- b=hHgE6kHQlw3byeZ1LFlY1Yzd8l/zXSfJDtIwMr4Y3keZgnh8f6dT9k5LJVzoQe19xW5Zt5
- ZQ9FLnSDts8zPhBHBDoglePkr9mNp78B02V5TjNbvEhV9KHovpNtuN+yaC1ucwuIxPDJu6
- svbxPsOPoIEkn9DxcS4j8M0ODOnGxntcLM1siD+p2QnLXTsdoL4CN6PyeU2/571EmKcWRO
- aRhBXYvmRKKd/4N+fz0MacjAwREeG+tLJOCbEzR5oLOS2GGOoUam6+nwYHnCa2kBE6XC7f
- A4El/XPI2EUO0nqJcavttCFMNNvtnPjgvCIe8MZEyn1raTwSEdHhb1j5aO69Ew==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=zJpPvf56QUeEH60aPbLPwmX7pCuuPXtxtDgtRJtJtic=;
+ b=Te2ifPHZfQ+cJsChdR31zB4T4zrFmEZliubT8rBYbIFxr7JsE3fKOtnjoH6SqDqclWSt2q
+ vhkw1xImqx66INYFQBugFm7uFQ372ieYcwFpwcC55y58ZWa7Qz5T2T+XfttI3796oq2nsX
+ WZG74EJA8t1AI/RKYxMs6npSG440pJX9kd2nGGuJkcGaEsAJ29vskwdtRr7ESRz8NfB7sK
+ 8OTYNISRxOHwFq9nh0CRTMkzdzpvCPOg2ml+7WWqXycPs9/EWN9xpuvxG/2myQDknveiqF
+ cLDFx+mWL6Er0B3NP/gbPHGrZUfdP1tyR6k6eIjLT0B/Wqe3ad/2EEWUg0Zy1Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hHgE6kHQ
-Subject: Re: [Buildroot] [PATCH 1/1] ltp-testsuite: bump version to 20220527
+ header.s=gm1 header.b=Te2ifPHZ
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-rsa: bump to version 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,55 +77,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 14 Jun 2022 01:20:05 +0200
-Petr Vorel <pevik@seznam.cz> wrote:
-
-> From: Petr Vorel <petr.vorel@gmail.com>
-> 
-> Add 2 patches from upstream which are required to fix compilation,
-> Remove patch accepted upstream.
-> 
-> Update list of broken tests under musl (confstr01.c was fixed).
-> 
-> Refresh 0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-> (still carry it case there is somebody using old musl based toolchain).
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  ...ysinfo.h-to-fix-build-with-MUSL-libc.patch | 50 ++++++------
->  .../0002-kvm-Fix-compilation-on-x86.patch     | 40 ++++++++++
->  ...nel-fs-declare-int-openlog-as-static.patch | 77 -------------------
->  ...efined-reference-to-__stack_chk_fail.patch | 41 ++++++++++
->  package/ltp-testsuite/ltp-testsuite.hash      |  6 +-
->  package/ltp-testsuite/ltp-testsuite.mk        |  3 +-
->  6 files changed, 110 insertions(+), 107 deletions(-)
->  create mode 100644 package/ltp-testsuite/0002-kvm-Fix-compilation-on-x86.patch
->  delete mode 100644 package/ltp-testsuite/0002-testcases-kernel-fs-declare-int-openlog-as-static.patch
->  create mode 100644 package/ltp-testsuite/0003-kvm-Fix-undefined-reference-to-__stack_chk_fail.patch
-
-Thanks applied to master. There were two minor nits:
-
- (1) package/ prefix was missing in the commit title.
-
- (2) Patch 0002 has a inside itself: [PATCH 1/2], we want that to be
-     [PATCH]... precisely for the reason that those 1/2 are often wrong...
-     as it was the case here! This issue is spotted by "make
-     check-package" that you can run before sending a patch.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVHVlLCAxNCBKdW4gMjAyMiAxMzowMjowOSArMDIwMApSYXBoYcOrbCBNw6lsb3R0ZSA8cmFw
+aGFlbC5tZWxvdHRlQG1pbmQuYmU+IHdyb3RlOgoKPiBXaGlsZSBhdCBpdCwgdXBkYXRlIHRoZSBp
+bmRlbnRhdGlvbiBvZiB0aGUgbGljZW5zZSBoYXNoICh0d28gc3BhY2VzKS4KPiAKPiBDaGFuZ2Vs
+b2c6Cj4gaHR0cHM6Ly9naXRodWIuY29tL3N5YnJlbnN0dXZlbC9weXRob24tcnNhL2Jsb2IvbWFp
+bi9DSEFOR0VMT0cubWQKPiAKPiBTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFw
+aGFlbC5tZWxvdHRlQG1pbmQuYmU+Cj4gLS0tCj4gIHBhY2thZ2UvcHl0aG9uLXJzYS9weXRob24t
+cnNhLmhhc2ggfCA0ICsrLS0KPiAgcGFja2FnZS9weXRob24tcnNhL3B5dGhvbi1yc2EubWsgICB8
+IDQgKystLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMo
+LSkKCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpv
+bmksIENUTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0
+dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
