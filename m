@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E20CC43334
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:13:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1182C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 07:13:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB55660EE5;
-	Fri, 22 Jul 2022 07:13:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB55660EE5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 511D360EF6;
+	Fri, 22 Jul 2022 07:13:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 511D360EF6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3RSTo8bEgOPP; Fri, 22 Jul 2022 07:13:02 +0000 (UTC)
+	with ESMTP id CnI2MM6zEnKD; Fri, 22 Jul 2022 07:13:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B366960BFC;
-	Fri, 22 Jul 2022 07:13:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B366960BFC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1440E1BF36D
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:11:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DC8F60EEB;
+	Fri, 22 Jul 2022 07:13:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DC8F60EEB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 11C391BF36D
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:11:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2294419AE
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:11:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2294419AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id E0F1E409FA
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 07:11:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0F1E409FA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6Ey6w9sv2k5Y for <buildroot@lists.busybox.net>;
- Fri, 22 Jul 2022 07:11:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8I3VM6TvZJrh for <buildroot@lists.busybox.net>;
+ Fri, 22 Jul 2022 07:11:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3CBD42176
- for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:11:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3CBD42176
+ by smtp2.osuosl.org (Postfix) with ESMTP id 056AE403C8
+ for <buildroot@buildroot.org>; Fri, 22 Jul 2022 07:11:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 056AE403C8
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A6A74840C4; Fri, 22 Jul 2022 06:57:39 +0000 (UTC)
+ id EDE2A840C4; Fri, 22 Jul 2022 06:58:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 09:10:55 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 06b3e897e0f38b057e15c6924b075ddb5df53914
-X-Git-Newrev: d1dd5f6f54e8df6867e638de5f09dc0e82212d3f
+Date: Fri, 22 Jul 2022 09:10:41 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 83e32e4dfdcab10fb7882a11a0742c0340755080
+X-Git-Newrev: b720e8c6bafa7d6ff16b1b1784e753b87e69ed39
 X-Patchwork-Hint: ignore
-Message-Id: <20220722065739.A6A74840C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libmdbx: bump
+Message-Id: <20220722065804.EDE2A840C4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libmdbx: bump
  version to 0.11.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,15 +58,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2279054680482618318=="
+Content-Type: multipart/mixed; boundary="===============6315872019101000916=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2279054680482618318==
+--===============6315872019101000916==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1dd5f6f54e8df6867e638de5f09dc0e82212d3f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b720e8c6bafa7d6ff16b1b1784e753b87e69ed39
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 This is stable bugfix release of libmdbx.
 The project's website now is on https://libmdbx.dqdkfa.ru/
@@ -126,7 +126,7 @@ index a7056b2850..130fe96793 100644
  LIBMDBX_LICENSE = OLDAP-2.8
  LIBMDBX_LICENSE_FILES = LICENSE
 
---===============2279054680482618318==
+--===============6315872019101000916==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -137,4 +137,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2279054680482618318==--
+--===============6315872019101000916==--
