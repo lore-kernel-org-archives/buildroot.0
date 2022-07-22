@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D0DAC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:25:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF3FDC43334
+	for <buildroot@archiver.kernel.org>; Fri, 22 Jul 2022 06:26:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C519660E96;
-	Fri, 22 Jul 2022 06:25:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C519660E96
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D174419D8;
+	Fri, 22 Jul 2022 06:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D174419D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mSJQLVsAN-kq; Fri, 22 Jul 2022 06:25:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id I04QAc20M_Hk; Fri, 22 Jul 2022 06:26:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDF4F60E28;
-	Fri, 22 Jul 2022 06:25:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDF4F60E28
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D02561C11A9
- for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 052984198B;
+	Fri, 22 Jul 2022 06:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 052984198B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 06C0B1BF855
+ for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B209560ED6
+ by smtp2.osuosl.org (Postfix) with ESMTP id E32D5409D7
  for <buildroot@lists.busybox.net>; Fri, 22 Jul 2022 06:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B209560ED6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E32D5409D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id naErkdzRudjQ for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jYZm9RSGTLbj for <buildroot@lists.busybox.net>;
  Fri, 22 Jul 2022 06:25:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA9A560E96
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED3CC40989
  for <buildroot@buildroot.org>; Fri, 22 Jul 2022 06:25:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA9A560E96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED3CC40989
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D112A83ED4; Fri, 22 Jul 2022 06:12:03 +0000 (UTC)
+ id F179E840C4; Fri, 22 Jul 2022 06:12:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Jul 2022 08:16:01 +0200
+Date: Fri, 22 Jul 2022 08:24:21 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 8cd128da92b10c851407bfc547694b3863e512f6
-X-Git-Newrev: 2a01961719bec7dc1bb6be51dd885f3ff5dcdf25
+X-Git-Oldrev: f431001592d32bc99e2d735d079dffa267ae6491
+X-Git-Newrev: 50fda395388e84c7752be68e6900f9f0d9ee34e0
 X-Patchwork-Hint: ignore
-Message-Id: <20220722061203.D112A83ED4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/paxtest: disable
- on microblaze
+Message-Id: <20220722061203.F179E840C4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libsndfile:
+ security bump to version 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a01961719bec7dc1bb6be51dd885f3ff5dcdf25
+commit: https://git.buildroot.net/buildroot/commit/?id=50fda395388e84c7752be68e6900f9f0d9ee34e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Disable paxtest on microblaze to avoid the following build failure:
+Fix the following security issues:
+ - Heap buffer overflow in wavlike_ima_decode_block()
+ - Heap buffer overflow in msadpcm_decode_block()
+ - Heap buffer overflow in psf_binheader_readf()
+ - Index out of bounds in psf_nms_adpcm_decode_block()
+ - Heap buffer overflow in flac_buffer_copy()
+ - Heap buffer overflow in copyPredictorTo24()
+ - Uninitialized variable in psf_binheader_readf()
 
-shlibtest.c:9:1: error: requested alignment '65536' exceeds object file maximum 32768
-    9 | char shbss[PAGE_SIZE_MAX] __pagealigned;
-      | ^~~~
+Drop patch (already in version)
 
-Updating second patch to set PAGE_SIZE_MAX to 32768 will raise another
-build failure:
+While at it, also drop mention of CVE-2018-13419 which is correctly
+tagged as only affecting version 1.0.28 in NVD NIST database:
+https://nvd.nist.gov/vuln/detail/CVE-2018-13419
 
-/tmp/cccMSYDr.s: Assembler messages:
-/tmp/cccMSYDr.s: Error: PC relative branch to label buf which is not in the instruction space
-
-Fixes:
- - http://autobuild.buildroot.org/results/aba489143b4017617f67c1012bba1f4687708380
+https://github.com/libsndfile/libsndfile/releases/tag/1.1.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit abfca98ea223397ed502640d6171845f331614a3)
+(cherry picked from commit c59a9d12b7805f2ac08be81fe18a4ebc197d5cd9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/paxtest/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ .../0001-ms_adpcm-Fix-and-extend-size-checks.patch | 40 ----------------------
+ package/libsndfile/libsndfile.hash                 |  2 +-
+ package/libsndfile/libsndfile.mk                   | 10 ++----
+ 3 files changed, 3 insertions(+), 49 deletions(-)
 
-diff --git a/package/paxtest/Config.in b/package/paxtest/Config.in
-index 1e09820ba3..565c45cc19 100644
---- a/package/paxtest/Config.in
-+++ b/package/paxtest/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PAXTEST
- 	bool "paxtest"
-+	depends on !BR2_microblaze
- 	# No UCLIBC or MUSL because __NO_A_OUT_SUPPORT
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	help
-@@ -8,4 +9,5 @@ config BR2_PACKAGE_PAXTEST
- 	  http://pax.grsecurity.net/docs
+diff --git a/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch b/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch
+deleted file mode 100644
+index edacbda01a..0000000000
+--- a/package/libsndfile/0001-ms_adpcm-Fix-and-extend-size-checks.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From deb669ee8be55a94565f6f8a6b60890c2e7c6f32 Mon Sep 17 00:00:00 2001
+-From: bobsayshilol <bobsayshilol@live.co.uk>
+-Date: Thu, 18 Feb 2021 21:52:09 +0000
+-Subject: [PATCH] ms_adpcm: Fix and extend size checks
+-
+-'blockalign' is the size of a block, and each block contains 7 samples
+-per channel as part of the preamble, so check against 'samplesperblock'
+-rather than 'blockalign'. Also add an additional check that the block
+-is big enough to hold the samples it claims to hold.
+-
+-https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=26803
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/ms_adpcm.c | 10 ++++++++--
+- 1 file changed, 8 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/ms_adpcm.c b/src/ms_adpcm.c
+-index 5e8f1a31..a21cb994 100644
+---- a/src/ms_adpcm.c
+-+++ b/src/ms_adpcm.c
+-@@ -128,8 +128,14 @@ wavlike_msadpcm_init	(SF_PRIVATE *psf, int blockalign, int samplesperblock)
+- 	if (psf->file.mode == SFM_WRITE)
+- 		samplesperblock = 2 + 2 * (blockalign - 7 * psf->sf.channels) / psf->sf.channels ;
+- 
+--	if (blockalign < 7 * psf->sf.channels)
+--	{	psf_log_printf (psf, "*** Error blockalign (%d) should be > %d.\n", blockalign, 7 * psf->sf.channels) ;
+-+	/* There's 7 samples per channel in the preamble of each block */
+-+	if (samplesperblock < 7 * psf->sf.channels)
+-+	{	psf_log_printf (psf, "*** Error samplesperblock (%d) should be >= %d.\n", samplesperblock, 7 * psf->sf.channels) ;
+-+		return SFE_INTERNAL ;
+-+		} ;
+-+
+-+	if (2 * blockalign < samplesperblock * psf->sf.channels)
+-+	{	psf_log_printf (psf, "*** Error blockalign (%d) should be >= %d.\n", blockalign, samplesperblock * psf->sf.channels / 2) ;
+- 		return SFE_INTERNAL ;
+- 		} ;
+- 
+--- 
+-2.20.1
+-
+diff --git a/package/libsndfile/libsndfile.hash b/package/libsndfile/libsndfile.hash
+index 14dfe823f9..67d10d03c4 100644
+--- a/package/libsndfile/libsndfile.hash
++++ b/package/libsndfile/libsndfile.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  a8cfb1c09ea6e90eff4ca87322d4168cdbe5035cb48717b40bf77e751cc02163  libsndfile-1.0.31.tar.bz2
++sha256  0f98e101c0f7c850a71225fb5feaf33b106227b3d331333ddc9bacee190bcf41  libsndfile-1.1.0.tar.xz
+ # Locally calculated
+ sha256  ad01ea5cd2755f6048383c8d54c88459cd6fcb17757c5c8892f8c5ea060f6140  COPYING
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index ed9e8e3d14..12a6601b6b 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
+@@ -4,20 +4,14 @@
+ #
+ ################################################################################
  
- comment "paxtest needs a glibc toolchain"
-+	depends on !BR2_microblaze
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC
+-LIBSNDFILE_VERSION = 1.0.31
+-LIBSNDFILE_SOURCE = libsndfile-$(LIBSNDFILE_VERSION).tar.bz2
++LIBSNDFILE_VERSION = 1.1.0
++LIBSNDFILE_SOURCE = libsndfile-$(LIBSNDFILE_VERSION).tar.xz
+ LIBSNDFILE_SITE = https://github.com/libsndfile/libsndfile/releases/download/$(LIBSNDFILE_VERSION)
+ LIBSNDFILE_INSTALL_STAGING = YES
+ LIBSNDFILE_LICENSE = LGPL-2.1+
+ LIBSNDFILE_LICENSE_FILES = COPYING
+ LIBSNDFILE_CPE_ID_VENDOR = libsndfile_project
+ 
+-# 0001-ms_adpcm-Fix-and-extend-size-checks.patch
+-LIBSNDFILE_IGNORE_CVES += CVE-2021-3246
+-
+-# disputed, https://github.com/erikd/libsndfile/issues/398
+-LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
+-
+ LIBSNDFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ LIBSNDFILE_CONF_OPTS = \
+ 	--disable-sqlite \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
