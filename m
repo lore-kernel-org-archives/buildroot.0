@@ -4,93 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1BF6C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FBF7C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4672241916;
-	Sat, 23 Jul 2022 16:56:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4672241916
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0D9D42415;
+	Sat, 23 Jul 2022 16:56:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0D9D42415
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g8K_vhle-OmF; Sat, 23 Jul 2022 16:56:18 +0000 (UTC)
+	with ESMTP id eeDq7zVhXgPG; Sat, 23 Jul 2022 16:56:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A86F2416F8;
-	Sat, 23 Jul 2022 16:56:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A86F2416F8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F05B61BF31A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:56:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2AAC342426;
+	Sat, 23 Jul 2022 16:56:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AAC342426
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 20F9C1BF31A
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:56:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB0014055E
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:56:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB0014055E
+ by smtp3.osuosl.org (Postfix) with ESMTP id F02B060F90
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:56:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F02B060F90
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lz1emKcZq5ys for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 16:56:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5B68404DF
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C5B68404DF
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:56:13 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- a18-20020a05600c349200b003a30de68697so6190991wmq.0
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 09:56:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=r6NKMzICQHGVi9UIxUeN61nRAanXvZYj0TN64raCaJ4=;
- b=k29v0i+tKEpAX8ci5auR+6UI7+sOOBdKebo7mwSVSy6bpqKGZA6eJH8cILuZulmJl5
- aQMg307SsRyxivCwQUxzZCvwTRWSr924gMO8+0o2BFu3zVzvPnOc5UC+M52A3erSi4v+
- fOBM8TWqVxmbyMZsXAN46hGGSHG5SJF2oZ7ZvpAD9AjvA/VUf3uMzNhDtXVAPpPqdVEK
- ag5xdAH+gSznVLQbI1SjB64CfQmPrBZEQFMZSa0ZBbxp4FXQ0szpgRk+9atJEu3DJenO
- MU8IOhCxQepV2/R76avYiZCAQeT9G56QbmviPPUz6UEom0UeDgTcR2l479Up3M9YOP8y
- 415g==
-X-Gm-Message-State: AJIora93B/1iQH80R4qK2SSu95HkFxVMW1/tNoZouTiljYIHnqzH7qwq
- ADpXVabmMj1LQ4gmsYuyQdVXvQ==
-X-Google-Smtp-Source: AGRyM1vUUXhqZE9h5p7sLXKV8PYyJGEUJjxSHoAPBeJIGriw8vZY9wlwtH0P8PVNNkD3A8HmtSjnkQ==
-X-Received: by 2002:a1c:21c3:0:b0:3a2:fdba:3f39 with SMTP id
- h186-20020a1c21c3000000b003a2fdba3f39mr3508464wmh.194.1658595371714; 
- Sat, 23 Jul 2022 09:56:11 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- o27-20020a5d58db000000b0021d80f53324sm7316878wrf.7.2022.07.23.09.56.11
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Jul 2022 09:56:11 -0700 (PDT)
-Message-ID: <bdadf135-c8ee-74bc-f3c5-bf323565c150@mind.be>
-Date: Sat, 23 Jul 2022 18:56:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220614212446.3491084-1-fontaine.fabrice@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220614212446.3491084-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=r6NKMzICQHGVi9UIxUeN61nRAanXvZYj0TN64raCaJ4=;
- b=A2eKasRtxwCj6apc13PJbglR7N6Jl50fbOqFH5WfGzP0FpNMmcPL4JK6PI52JoYL9K
- WhKgrDsob2Ictm0lzaWL7j7NfN9Ybknzw7hMzz7HUOtinEC5w2JmKCSQ8zrlxeLBf/5G
- 59dcQE7C7Wek+iyY03b7ew/1zRtVMkqEOy7o2s10j+tCZ6Y6uqDmls3zQwBPU9eHjp+I
- SsaBo7Kyd3R/uT3CAJWXw24zqr/2GrXpu/9h43NcR4oqXjJ3OGfQ6wjMf0suXh/UG2uz
- o303I77zl/3GECnyfJ0qYnXpiHt9zk33Wt5C/LSQmIqgOhxSxn3SZ8Lt8IginL89VgGE
- h9hQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=A2eKasRt
-Subject: Re: [Buildroot] [PATCH 1/3] package/netsniff-ng: libnl is optional,
- not mandatory
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0KrbHZPL52LN for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 16:56:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D12DC60ECE
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:56:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D12DC60ECE
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 9302B84705; Sat, 23 Jul 2022 16:42:54 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 23 Jul 2022 18:56:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dad510abd17c7c4a6fdab08d9c71dcf3be3eb1f5
+X-Git-Newrev: 825b56371601611b812faf532d0f10a61916882f
+X-Patchwork-Hint: ignore
+Message-Id: <20220723164254.9302B84705@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/librtas: bump to v2.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,79 +55,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joris Lijssens <joris.lijssens@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=825b56371601611b812faf532d0f10a61916882f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Includes build fixes for musl, so remove the glibc restriction, as it
+now builds fine for both musl and uclibc.
 
-On 14/06/2022 23:24, Fabrice Fontaine wrote:
-> libnl is optional, not mandatory, since version 0.6.2 and
-> https://github.com/netsniff-ng/netsniff-ng/commit/20a5e15443bfbbb7e6624a754832cdce19d462a0
-> https://github.com/netsniff-ng/netsniff-ng/commit/b073c8e5fd7f8c723680b659bd81afd231ef32f5
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...001-configure.ac-remove-LOCAL_CHECK_FLAGS.patch | 46 ++++++++++++++++++++++
+ package/librtas/Config.in                          |  5 ---
+ package/librtas/librtas.hash                       |  2 +-
+ package/librtas/librtas.mk                         |  2 +-
+ 4 files changed, 48 insertions(+), 7 deletions(-)
 
-  Applied all three to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/netsniff-ng/Config.in      |  1 -
->   package/netsniff-ng/netsniff-ng.mk | 11 +++++++++--
->   2 files changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
-> index 5d1407baac..6b043362ba 100644
-> --- a/package/netsniff-ng/Config.in
-> +++ b/package/netsniff-ng/Config.in
-> @@ -3,7 +3,6 @@ config BR2_PACKAGE_NETSNIFF_NG
->   	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
->   	depends on BR2_TOOLCHAIN_HAS_THREADS
->   	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
-> -	select BR2_PACKAGE_LIBNL
->   	select BR2_PACKAGE_LIBPCAP
->   	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
->   	select BR2_PACKAGE_LIBURCU
-> diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-> index 27bd707c84..3bc11b55b9 100644
-> --- a/package/netsniff-ng/netsniff-ng.mk
-> +++ b/package/netsniff-ng/netsniff-ng.mk
-> @@ -13,7 +13,8 @@ NETSNIFF_NG_LICENSE_FILES = README COPYING
->   NETSNIFF_NG_CONF_ENV = \
->   	NACL_INC_DIR=/dev/null \
->   	NACL_LIB_DIR=/dev/null
-> -NETSNIFF_NG_DEPENDENCIES = host-pkgconf libnl libpcap libnetfilter_conntrack liburcu
-> +NETSNIFF_NG_DEPENDENCIES = host-pkgconf libpcap libnetfilter_conntrack liburcu
-> +NETSNIFF_NG_CONF_OPTS = --prefix=$(TARGET_DIR)/usr
->   
->   ifeq ($(BR2_PACKAGE_NETSNIFF_NG_MAUSEZAHN),y)
->   NETSNIFF_NG_DEPENDENCIES += libcli libnet
-> @@ -28,6 +29,12 @@ ifeq ($(BR2_PACKAGE_GEOIP),y)
->   NETSNIFF_NG_DEPENDENCIES += geoip
->   endif
->   
-> +ifeq ($(BR2_PACKAGE_LIBNL),y)
-> +NETSNIFF_NG_DEPENDENCIES += libnl
-> +else
-> +NETSNIFF_NG_CONF_OPTS += --disable-libnl
-> +endif
-> +
->   ifeq ($(BR2_PACKAGE_NCURSES),y)
->   NETSNIFF_NG_DEPENDENCIES += ncurses
->   endif
-> @@ -43,7 +50,7 @@ define NETSNIFF_NG_CONFIGURE_CMDS
->   		$(TARGET_CONFIGURE_ARGS) \
->   		$(TARGET_CONFIGURE_OPTS) \
->   		./configure \
-> -		--prefix=$(TARGET_DIR)/usr \
-> +		$(NETSNIFF_NG_CONF_OPTS) \
->   	)
->   endef
->   
+diff --git a/package/librtas/0001-configure.ac-remove-LOCAL_CHECK_FLAGS.patch b/package/librtas/0001-configure.ac-remove-LOCAL_CHECK_FLAGS.patch
+new file mode 100644
+index 0000000000..dd5f944317
+--- /dev/null
++++ b/package/librtas/0001-configure.ac-remove-LOCAL_CHECK_FLAGS.patch
+@@ -0,0 +1,46 @@
++From 148712f8a559cc613236e9e72b3ce6c24b83c373 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sat, 23 Jul 2022 18:51:37 +0200
++Subject: [PATCH] configure.ac: remove LOCAL_CHECK_FLAGS
++
++These cause problems with Buildroot (the -fstack-protector-all check
++does only a compile test, it should do a link test), and generally the
++decision of using those flags or not should be left to Buildroot.
++
++An issue has been reported upstream at
++https://github.com/ibm-power-utilities/librtas/issues/25 to hopefully
++get a better solution.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ configure.ac | 14 --------------
++ 1 file changed, 14 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index c3429e8..b7208ee 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -24,20 +24,6 @@ AC_TYPE_UID_T
++ AC_TYPE_UINT32_T
++ AC_TYPE_UINT64_T
++ 
++-AC_DEFUN([LOCAL_CHECK_FLAGS],[
++-  AC_REQUIRE([AX_CHECK_LINK_FLAG])
++-  AC_REQUIRE([AX_APPEND_COMPILE_FLAGS])
++-  AC_LANG_PUSH([C])
++-  AX_APPEND_COMPILE_FLAGS([-Wall])
++-  AX_APPEND_COMPILE_FLAGS([-D_FORTIFY_SOURCE=2 -fstack-protector-all])
++-  AX_APPEND_COMPILE_FLAGS([-fwrapv -fPIE -Wstack-protector])
++-  AX_APPEND_COMPILE_FLAGS([--param=ssp-buffer-size=1])
++-  AX_CHECK_LINK_FLAG([-z relro -z now])
++-  AX_CHECK_LINK_FLAG([-pie])
++-  AC_LANG_POP
++-])
++-LOCAL_CHECK_FLAGS
++-
++ LT_INIT
++ LT_LANG([C])
++ 
++-- 
++2.37.1
++
+diff --git a/package/librtas/Config.in b/package/librtas/Config.in
+index 11660eb281..2f8219ee98 100644
+--- a/package/librtas/Config.in
++++ b/package/librtas/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBRTAS
+ 	bool "librtas"
+ 	depends on BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  The librtas package provides an interface for Run-Time
+ 	  Abstraction Services (RTAS) calls on PAPR platforms.
+@@ -9,7 +8,3 @@ config BR2_PACKAGE_LIBRTAS
+ 	  and parse RTAS events.
+ 
+ 	  http://librtas.sourceforge.net/
+-
+-comment "librtas needs a glibc toolchain"
+-	depends on BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/librtas/librtas.hash b/package/librtas/librtas.hash
+index de0c0a476c..8d4c4e1912 100644
+--- a/package/librtas/librtas.hash
++++ b/package/librtas/librtas.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b47b2a6f140347ac265e2c66ddf68293f6cdcc7c0c9a78c6e21ff52846465415  librtas-2.0.2.tar.gz
++sha256  1b951422ec9553fa9d5e5e158fd8e298f867f561189fff6817a9540d5661f145  librtas-2.0.3.tar.gz
+ sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING.LESSER
+diff --git a/package/librtas/librtas.mk b/package/librtas/librtas.mk
+index c92a9e2fa4..458d7a0e47 100644
+--- a/package/librtas/librtas.mk
++++ b/package/librtas/librtas.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRTAS_VERSION = 2.0.2
++LIBRTAS_VERSION = 2.0.3
+ LIBRTAS_SITE = $(call github,ibm-power-utilities,librtas,v$(LIBRTAS_VERSION))
+ LIBRTAS_LICENSE = LGPL-2.1+
+ LIBRTAS_LICENSE_FILES = COPYING.LESSER
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
