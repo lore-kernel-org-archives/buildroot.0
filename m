@@ -4,92 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7349C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 19:10:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 737BFC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 19:11:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8267240354;
-	Sat, 23 Jul 2022 19:10:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8267240354
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF2334168B;
+	Sat, 23 Jul 2022 19:11:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF2334168B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nUa7vVukl98B; Sat, 23 Jul 2022 19:10:56 +0000 (UTC)
+	with ESMTP id EjJoW6eH83AB; Sat, 23 Jul 2022 19:11:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C12440566;
-	Sat, 23 Jul 2022 19:10:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C12440566
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E44B1BF5A5
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 19:10:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C89F64168D;
+	Sat, 23 Jul 2022 19:11:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C89F64168D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D29581BF5A5
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 19:11:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 44D4842471
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 19:10:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44D4842471
+ by smtp1.osuosl.org (Postfix) with ESMTP id ACECF84C15
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 19:11:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACECF84C15
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KFakdPOv3SSp for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 19:10:35 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A22A04245F
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A22A04245F
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 19:10:35 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id k11so10170402wrx.5
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 12:10:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=TqSbpDjpxxxPLz7l04UhDdu1cv+/JCoRR/wBiNSUHI8=;
- b=WuRLHddq/PAXrdFpaUE8dp/4VAPRqHriRMe9QYQT7XeRjN0IHwGP3Q14w8Dd6rqbUK
- x2XYdLgXkcoDPUVIEiuTmNNg08F4AS/l+8STWWuqOYtvctDtt1Oq4sGnnNBpodBidmE5
- D8qhBr71fD+cQg4enzNwmZNCZ+shrR5UbNv6hsQjZAWBSjLmwgeF2me2u7e/W/sxgpIb
- OShdrBLzQbfMAbSa/ql9D/l6mcup9nLjxzg6e8Vm0iqP9oW8axlKwq0lj5q/9FE130SX
- trezmKa9xAvlXDl3tv20VP7LslHM2O/DY6jvPhgyuuq6Df2fCTAbK1RsUKAaWlZXLml2
- /27g==
-X-Gm-Message-State: AJIora/uZH0+xwkUDU/545+oz0l+Jcz4A+fArjJicGBF6X5Bn5efoNPr
- aNgsMFDfhTOZ6m/ocKa/3lbPVjAW44aAbw==
-X-Google-Smtp-Source: AGRyM1vEehWyYzqkHqeMbzRH21NcH3FvXenwLHotYvnM0diG/THpEVJp6uFJzpyGcU8LDc9S6BxiWA==
-X-Received: by 2002:a05:6000:1789:b0:21e:619c:2c5c with SMTP id
- e9-20020a056000178900b0021e619c2c5cmr3575794wrg.270.1658603433783; 
- Sat, 23 Jul 2022 12:10:33 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- m20-20020a05600c4f5400b003976fbfbf00sm9643847wmq.30.2022.07.23.12.10.33
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Jul 2022 12:10:33 -0700 (PDT)
-Message-ID: <81ff877d-7b32-bc2d-c98b-2677187609b6@mind.be>
-Date: Sat, 23 Jul 2022 21:10:31 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7NTBM0-p2Pg2 for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 19:10:59 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2386E84B8D
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2386E84B8D
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 19:10:58 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BE98160005;
+ Sat, 23 Jul 2022 19:10:55 +0000 (UTC)
+Date: Sat, 23 Jul 2022 21:10:53 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220723211053.69edd126@windsurf>
+In-Reply-To: <20220517215933.1553086-1-james.hilliard1@gmail.com>
+References: <20220517215933.1553086-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220618085704.508506-1-fontaine.fabrice@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220618085704.508506-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=TqSbpDjpxxxPLz7l04UhDdu1cv+/JCoRR/wBiNSUHI8=;
- b=SC2Za7fGwMc5UZYYXKZAfQV1GCDW7WxU4AgkZwx9kUeOwoqd6UzycllGHfaLye5qie
- 5i7rSlMy7mP+q9m/4m1pqn8ziOi/Et1miLOG9roQvctCUnvCkoSfYGAwv4rSfXag5alh
- PSsscS/LQUfnXKTDgwEE1W0LMtOx7w68CeQ6D5X9lvOesu8PYBr1/rHLJVobgENypljK
- /LOt3MGi3TKefx6tg+6XZTlEz3Ec2jvZGtFQ0/SK+UW3wLN2FDadRx6+DbUw4m7aPHUc
- c7u/t/+DV2Q7/4jaLB7aGIjbLJGxAeIRYhG7wiu537Y/RQWUlIT/vr9y74CULkgHkncf
- 67hA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=SC2Za7fG
-Subject: Re: [Buildroot] [PATCH 1/1] package/php: add
- BR2_PACKAGE_PHP_ARCH_SUPPORTS
+ d=bootlin.com; s=gm1; t=1658603456;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=KeLbH465W21c/bSkxYNXo/sLSx9iaLcRf3Lrxek1RCo=;
+ b=ZoTOvBLqjKr0elYsIGDMvq29K6LKgTAdZid309LsaXaDK8aPDjWkXrtuZD3BB8CYap0ALH
+ ZOZ9X8OXkFytw6HqZenEQO/SqqFVlodtduFn8ruOe1C3CfItwcOtDOldMmzJ0te3LsmmGo
+ 0wE8w6/mHYh3MWCLmqUom4HI6NdR5F2dt6szglAlwKSBSBscnbBfaKkj3zZrydvcszNf0i
+ XOjcodIb5cIfp6wLCdHvwvFlemFzckfSyndDP3Xtngzybia0InlGFxv/GZtOjul2cgW5kW
+ i1pedOwpiZ3qh0gqabIN44nwPmIc4ee0uzwwZH2NDvbxA8s9VBd5ReO4VDY6TA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZoTOvBLq
+Subject: Re: [Buildroot] [PATCH 1/4] package/python-typeguard: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,76 +75,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Tue, 17 May 2022 15:59:30 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-
-On 18/06/2022 10:57, Fabrice Fontaine wrote:
-> fiber (https://wiki.php.net/rfc/fibers) has been added in version 8.1.0
-> with
-> https://github.com/php/php-src/commit/c276c16b6627222c40bd43907475d664734b9abe
-> 
-> fiber uses asm on supported architectures or needs ucontext since
-> https://github.com/php/php-src/commit/8fd747a2a0e9f57c12bdad22a1844a736e7b4e57
-> 
-> As result, the following build failure is raised without ucontext_t on
-> architectures not supported by asm since bump to version 8.1.7 in commit
-> 0ddfece7f7e5b10a5da89f2c462616d5deb5b1ec:
-> 
-> /home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/10.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: Zend/zend_fibers.o: in function `zend_fiber_init_context':
-> zend_fibers.c:(.text+0x68a): undefined reference to `getcontext'
-> 
-> As fiber can't be disabled (only fiber-asm), add
-> BR2_PACKAGE_PHP_ARCH_SUPPORTS to reflect this new dependency
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/f4077bae8f879828e343475318cd2ddb99e09ba4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->   package/php/Config.in | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
-> 
-> diff --git a/package/php/Config.in b/package/php/Config.in
-> index 226d2d5fd2..69b4268c1d 100644
-> --- a/package/php/Config.in
-> +++ b/package/php/Config.in
-> @@ -1,5 +1,18 @@
-> +config BR2_PACKAGE_PHP_ARCH_SUPPORTS
-> +	bool
-> +	# see fiber_cpu in configure.ac
-> +	default y if BR2_aarch64 || BR2_aarch64_be
-> +	default y if BR2_arm || BR2_armeb
-> +	default y if BR2_i386 || BR2_x86_64
-> +	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-> +	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-> +	default y if BR2_RISCV_64
-> +	default y if BR2_s390x
-> +	default y if BR2_TOOLCHAIN_HAS_UCONTEXT
-> +
->   config BR2_PACKAGE_PHP
->   	bool "php"
-> +	depends on BR2_PACKAGE_PHP_ARCH_SUPPORTS
->   	# PHP uses -export-dynamic, which breaks with elf2flt with a
->   	# message like "ld.real: section .junk LMA [...,...] overlaps
->   	# section .text LMA [...,...]"
-> @@ -52,5 +65,6 @@ source "package/php/Config.ext"
->   endif
->   
->   comment "php needs a toolchain w/ wchar"
-> +	depends on BR2_PACKAGE_PHP_ARCH_SUPPORTS
->   	depends on !BR2_BINFMT_FLAT
->   	depends on !BR2_USE_WCHAR
+>  package/Config.in                              |  1 +
+>  package/python-typeguard/Config.in             |  6 ++++++
+>  package/python-typeguard/python-typeguard.hash |  5 +++++
+>  package/python-typeguard/python-typeguard.mk   | 15 +++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/python-typeguard/Config.in
+>  create mode 100644 package/python-typeguard/python-typeguard.hash
+>  create mode 100644 package/python-typeguard/python-typeguard.mk
+
+Series applied, thanks. However, you had forgotten to add yourself in
+the DEVELOPERS for the 3 new packages, so I have done so. Could you try
+to remember for your next new packages to do that?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
