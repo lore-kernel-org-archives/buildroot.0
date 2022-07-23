@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FC7EC43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 17:00:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA18FC43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 17:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4791442447;
-	Sat, 23 Jul 2022 17:00:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4791442447
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BEC484C0B;
+	Sat, 23 Jul 2022 17:00:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BEC484C0B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k7SRExdt1sVS; Sat, 23 Jul 2022 17:00:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uRfdmje9uw_U; Sat, 23 Jul 2022 17:00:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C73B242426;
-	Sat, 23 Jul 2022 17:00:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C73B242426
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DE0584C08;
+	Sat, 23 Jul 2022 17:00:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DE0584C08
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 02A781BF955
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 25C141BF31A
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C887684BDB
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C887684BDB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A71484BEF
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A71484BEF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uq0KnfdF0mvJ for <buildroot@lists.busybox.net>;
+ with ESMTP id FR1CQAbLWrzb for <buildroot@lists.busybox.net>;
  Sat, 23 Jul 2022 16:57:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E451384BFE
+ by smtp1.osuosl.org (Postfix) with ESMTP id EDDAB84BFF
  for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:57:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E451384BFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDDAB84BFF
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B70FB8484A; Sat, 23 Jul 2022 16:44:12 +0000 (UTC)
+ id C02CC847EF; Sat, 23 Jul 2022 16:44:12 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 23 Jul 2022 18:57:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 76a6008b8a21f45fb8355861421cd84d1d24eda9
-X-Git-Newrev: 002f0e927d857e51595cedf3d2a44613b4f7e5f1
+X-Git-Oldrev: 002f0e927d857e51595cedf3d2a44613b4f7e5f1
+X-Git-Newrev: e49122a58d8c6cbf61fb9c1fc16be7a3fa712d09
 X-Patchwork-Hint: ignore
-Message-Id: <20220723164412.B70FB8484A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual: fix patchwork URL
+Message-Id: <20220723164412.C02CC847EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-botocore: bump to version
+ 1.27.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,80 +58,59 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4622183499382217394=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=002f0e927d857e51595cedf3d2a44613b4f7e5f1
+--===============4622183499382217394==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e49122a58d8c6cbf61fb9c1fc16be7a3fa712d09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http://patchwork.buildroot.org is redirecting to
-https://bugs.busybox.net so replace it by
-https://patchwork.ozlabs.org/project/buildroot/list/ as already done in
-docs/website/contribute.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- docs/manual/contribute.txt | 18 +++++++++++-------
- docs/manual/resources.txt  |  2 +-
- 2 files changed, 12 insertions(+), 8 deletions(-)
+ package/python-botocore/python-botocore.hash | 2 +-
+ package/python-botocore/python-botocore.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index bf2aed6b51..e588c69be6 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -418,7 +418,8 @@ editing the commit message. Below the +Signed-off-by+ section, add
- +---+ and your changelog.
+diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
+index 9d5f706fef..bb806fe251 100644
+--- a/package/python-botocore/python-botocore.hash
++++ b/package/python-botocore/python-botocore.hash
+@@ -1,4 +1,4 @@
+ # sha256 from https://pypi.org/pypi/botocore/json
+-sha256  011360e79a4b843aa6591573cfa61e8eddc99b91adab1dfdb9a2b7f2c8511193  botocore-1.22.2.tar.gz
++sha256  db6667b8dfd175d16187653942cd91dd1f0cf36adc0ea9d7a0805ba4d2a3321f  botocore-1.27.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
+diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
+index 1628e05562..459eefeab1 100644
+--- a/package/python-botocore/python-botocore.mk
++++ b/package/python-botocore/python-botocore.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- Although the changelog will be visible for the reviewers in the mail
--thread, as well as in http://patchwork.buildroot.org[patchwork], +git+
-+thread, as well as in
-+https://patchwork.ozlabs.org/project/buildroot/list/[patchwork], +git+
- will automatically ignores lines below +---+ when the patch will be
- merged. This is the intended behavior: the changelog is not meant to
- be preserved forever in the +git+ history of the project.
-@@ -470,19 +471,22 @@ $ git format-patch -v4 -M -s -o outgoing origin/master
- ---------------------
- 
- When you provide a new version of a patch, please mark the old one as
--superseded in http://patchwork.buildroot.org[patchwork]. You need to
--create an account on http://patchwork.buildroot.org[patchwork] to be
-+superseded in
-+https://patchwork.ozlabs.org/project/buildroot/list/[patchwork]. You
-+need to create an account on
-+https://patchwork.ozlabs.org/project/buildroot/list/[patchwork] to be
- able to modify the status of your patches. Note that you can only change
- the status of patches you submitted yourself, which means the email
--address you register in http://patchwork.buildroot.org[patchwork] should
-+address you register in
-+https://patchwork.ozlabs.org/project/buildroot/list/[patchwork] should
- match the one you use for sending patches to the mailing list.
- 
- You can also add the +--in-reply-to <message-id>+ option when
- submitting a patch to the mailing list. The id of the mail to reply to
- can be found under the "Message Id" tag on
--http://patchwork.buildroot.org[patchwork].  The advantage of
--*in-reply-to* is that patchwork will automatically mark the previous
--version of the patch as superseded.
-+https://patchwork.ozlabs.org/project/buildroot/list/[patchwork]. The
-+advantage of *in-reply-to* is that patchwork will automatically mark
-+the previous version of the patch as superseded.
- 
- [[reporting-bugs]]
- === Reporting issues/bugs or getting help
-diff --git a/docs/manual/resources.txt b/docs/manual/resources.txt
-index e90a49b2ab..68b7eb9062 100644
---- a/docs/manual/resources.txt
-+++ b/docs/manual/resources.txt
-@@ -68,4 +68,4 @@ review comments in a clean and concise web interface, it can be useful
- for all Buildroot developers.
- +
- The Buildroot patch management interface is available at
--http://patchwork.buildroot.org[].
-+https://patchwork.ozlabs.org/project/buildroot/list/[].
+-PYTHON_BOTOCORE_VERSION = 1.22.2
++PYTHON_BOTOCORE_VERSION = 1.27.8
+ PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
+-PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/0d/95/f2e74e4a91994d9ebe45746f75a8c5cafd723a88270a9772d8d66e1a8ba1
++PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/d1/b0/ea92703bbbf82353d571636fe6697b162c3881576986d6474119d03fce53
+ PYTHON_BOTOCORE_SETUP_TYPE = setuptools
+ PYTHON_BOTOCORE_LICENSE = Apache-2.0
+ PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt
+
+--===============4622183499382217394==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4622183499382217394==--
