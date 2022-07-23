@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EC4CC43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 08:51:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ABA0C43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 08:51:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36FC661AB0;
-	Sat, 23 Jul 2022 08:51:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36FC661AB0
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC4F484B22;
+	Sat, 23 Jul 2022 08:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC4F484B22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zxj9lsakJFwb; Sat, 23 Jul 2022 08:51:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fA2fpEn0TWxa; Sat, 23 Jul 2022 08:51:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43F2E617BB;
-	Sat, 23 Jul 2022 08:51:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43F2E617BB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 22CD01BF2C7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 67E2584B21;
+	Sat, 23 Jul 2022 08:51:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67E2584B21
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 36B661BF955
  for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 08:49:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2616E423EB
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 08:49:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2616E423EB
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC7A340142
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 08:49:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC7A340142
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HLg5n0VPtJYq for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8VCC1Io9ZQ2Y for <buildroot@lists.busybox.net>;
  Sat, 23 Jul 2022 08:49:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2BF3842304
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23DB141633
  for <buildroot@buildroot.org>; Sat, 23 Jul 2022 08:49:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BF3842304
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23DB141633
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id AAAF9842C3; Sat, 23 Jul 2022 08:36:12 +0000 (UTC)
+ id A2567842C2; Sat, 23 Jul 2022 08:36:12 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 23 Jul 2022 10:34:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1d207e4c3ccc18f6d977fdded7a5f7c0874603cc
-X-Git-Newrev: eb284ba92c754ca3c0b7f133b1804ed00e3ed244
+X-Git-Oldrev: 6354a7a29d9c6f0d3014913df846b708dac3847f
+X-Git-Newrev: 1d207e4c3ccc18f6d977fdded7a5f7c0874603cc
 X-Patchwork-Hint: ignore
-Message-Id: <20220723083612.AAAF9842C3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/optee-os: bump to version 3.18.0
+Message-Id: <20220723083612.A2567842C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cog: add libgbm as dependency when
+ building with DRM support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,51 +63,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb284ba92c754ca3c0b7f133b1804ed00e3ed244
+commit: https://git.buildroot.net/buildroot/commit/?id=1d207e4c3ccc18f6d977fdded7a5f7c0874603cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bumps OP-TEE OS package version to OP-TEE release 3.18.0.
+When building with the DRM support, it can happen that the libgbm library
+is not yet built by the provider of this lib (specified by
+BR2_PACKAGE_PROVIDES_LIBGBM).
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+The docs in cog `docs/platform-drm.md` specify this dep-list:
+- **WPEBackend-fdo**:
+- **Wayland**:
+- **libdrm**:
+- **libgbm**:
+- **libinput**:
+- **libudev**:
+
+libgbm needs to be added.
+Adding libegl as well.
+
+Updated package/cog/Config.in to define the dependencies (for DRM)
+according to libegl & libgbm.
+
+Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- boot/optee-os/Config.in     | 4 ++--
- boot/optee-os/optee-os.hash | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/cog/Config.in | 9 ++++++---
+ package/cog/cog.mk    | 2 +-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index f199de31eb..db7a93c10c 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -18,7 +18,7 @@ choice
- 	  Select the version of OP-TEE OS you want to use
- 
- config BR2_TARGET_OPTEE_OS_LATEST
--	bool "3.17.0"
-+	bool "3.18.0"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	select BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY
+diff --git a/package/cog/Config.in b/package/cog/Config.in
+index d4238750f9..484eb85c70 100644
+--- a/package/cog/Config.in
++++ b/package/cog/Config.in
+@@ -39,7 +39,8 @@ config BR2_PACKAGE_COG_PLATFORM_FDO
+ config BR2_PACKAGE_COG_PLATFORM_DRM
+ 	bool "DRM backend"
+ 	depends on BR2_PACKAGE_HAS_UDEV # libinput
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # gbm
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_HAS_LIBGBM
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBINPUT
  	help
-@@ -70,7 +70,7 @@ endif
+@@ -52,7 +53,9 @@ config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
+ 	help
+ 	  Expose remote control interface on system bus
  
- config BR2_TARGET_OPTEE_OS_VERSION
- 	string
--	default "3.17.0"	if BR2_TARGET_OPTEE_OS_LATEST
-+	default "3.18.0"	if BR2_TARGET_OPTEE_OS_LATEST
- 	default "custom"	if BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
-diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-index 5c1047bac3..38f68bec5d 100644
---- a/boot/optee-os/optee-os.hash
-+++ b/boot/optee-os/optee-os.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_os/archive/3.17.0/optee-os-3.16.0.tar.gz
--sha256  5d5a3bda83abddfeb5ee765a15525f23adf2709ba2475a05e0c5f25790c1883f  optee-os-3.17.0.tar.gz
-+# From https://github.com/OP-TEE/optee_os/archive/3.18.0/optee-os-3.18.0.tar.gz
-+sha256  bdd309697745ec4406951652094b50d9adb06c3612f01bd8a3d72682ec8e03e8  optee-os-3.18.0.tar.gz
- # Locally computed
- sha256  1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
+-comment "DRM platform needs mesa3d w/ EGL driver and GBM"
+-	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
++comment "DRM platform needs EGL and GBM"
++	depends on \
++		!BR2_PACKAGE_HAS_LIBEGL || \
++		!BR2_PACKAGE_HAS_LIBGBM
+ 
+ endif
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index f2ca0af93d..da660eb7c1 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
+@@ -28,7 +28,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+ COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
+-COG_DEPENDENCIES += libdrm libinput
++COG_DEPENDENCIES += libdrm libinput libgbm libegl
+ else
+ COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
