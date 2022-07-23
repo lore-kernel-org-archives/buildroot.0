@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3BDCC43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C7B0C43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:21:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D75C84B9C;
-	Sat, 23 Jul 2022 16:19:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D75C84B9C
+	by smtp3.osuosl.org (Postfix) with ESMTP id CDE9761035;
+	Sat, 23 Jul 2022 16:21:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDE9761035
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VPmMAm2k07X6; Sat, 23 Jul 2022 16:19:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CvWYhuCxncOe; Sat, 23 Jul 2022 16:21:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AF778493E;
-	Sat, 23 Jul 2022 16:19:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AF778493E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F36451BF271
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:19:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0B1A60ECE;
+	Sat, 23 Jul 2022 16:21:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0B1A60ECE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B4D81BF271
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:21:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DBF6A8490B
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:19:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBF6A8490B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 83CC660ECE
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:21:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83CC660ECE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bTFpSdL3QR3r for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 16:19:53 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89D4C84974
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 89D4C84974
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:19:53 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [86.206.242.79])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 76A7D78050A;
- Sat, 23 Jul 2022 18:19:48 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 23 Jul 2022 18:19:48 +0200
-Date: Sat, 23 Jul 2022 18:19:48 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20220723161948.GE2641@scaer>
-References: <20220723121538.14409-1-heiko.thiery@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220723121538.14409-1-heiko.thiery@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658593190;
- bh=Cg8g2/E1N8is7FoZpek+GAQQBHvsV5bWgE7PSQTWh64=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=JxjA8+CLroOu7di/SE5F2YoNObT2BpFUXWVF7gJOZ2WU3P6NixBMsN5hc3RtkJ6K/
- dPiYNpzSCWafEsMhdtn6mql3L9lEwI3JtbqGsOf2eN0IfeLFxkGROiB1gMlgcU8Giy
- L7l/Dc9dmPBh+BunOVLE/Ipo2QtA86ibyHah3mNuo+0E7uuAnhEe9b6bNwyANr/1vo
- /zSs4UQC1kVpgS7RIbWtjjfGoo/E1cyjheAoXZ6Tw3OTJ6JCWXZC8CNzC5XE3Qq6SJ
- vKvhLjthTWUbR6MOmZbP/cQbogg5oUhQ/U6SGCGu//n5mWLvqUZXPX/AiGVJPwKEV5
- CkmZbUoskmicw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=JxjA8+CL
-Subject: Re: [Buildroot] [PATCH] package/nettle: switch _SITE to ftp.gnu.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oDs3_DBPnBBV for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 16:21:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7A7460E79
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:21:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7A7460E79
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 96DB6846D4; Sat, 23 Jul 2022 16:08:04 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 23 Jul 2022 18:21:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 92f0ef5eaa74af28b2b7b7abbe021bce2aba4875
+X-Git-Newrev: b58e2cde5ccc955eb02f627688f49cc7af5f23a1
+X-Patchwork-Hint: ignore
+Message-Id: <20220723160804.96DB6846D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/readme.txt: Fix typo "get-developers"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,56 +56,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Heiko, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b58e2cde5ccc955eb02f627688f49cc7af5f23a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-07-23 14:15 +0200, Heiko Thiery spake thusly:
-> The former _SITE is not longer accessible with authentication.
+Fix typo on line 23 `get-developpers` to `get-developers`
 
-As suggested by Arnout, I also changes the homepage, to point to the FSF
-directory:
-    https://directory.fsf.org/wiki/Nettle
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ utils/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/nettle/nettle.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-> index c3d5fcec64..05b8b0bea5 100644
-> --- a/package/nettle/nettle.mk
-> +++ b/package/nettle/nettle.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  NETTLE_VERSION = 3.8
-> -NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
-> +NETTLE_SITE = https://ftp.gnu.org/gnu/nettle
->  NETTLE_DEPENDENCIES = gmp
->  NETTLE_INSTALL_STAGING = YES
->  NETTLE_LICENSE = Dual GPL-2.0+/LGPL-3.0+
-> -- 
-> 2.20.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/utils/readme.txt b/utils/readme.txt
+index 3064ecec32..3e8833c4ea 100644
+--- a/utils/readme.txt
++++ b/utils/readme.txt
+@@ -20,7 +20,7 @@ genrandconfig
+     (http://autobuild.buildroot.org). It selects a random toolchain from
+     support/config-fragments/autobuild and randomly selects packages to build.
+ 
+-get-developpers
++get-developers
+     a script to return the list of people interested in a specific part
+     of Buildroot, so they can be Cc:ed on a mail. Accepts a patch as
+     input, a package name or and architecture name.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
