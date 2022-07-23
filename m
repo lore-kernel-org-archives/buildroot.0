@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21774C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:30:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6528C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:32:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 934DB418A9;
-	Sat, 23 Jul 2022 16:30:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 934DB418A9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33A414240F;
+	Sat, 23 Jul 2022 16:32:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33A414240F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JPu4ZQchj62n; Sat, 23 Jul 2022 16:30:10 +0000 (UTC)
+	with ESMTP id ElNG1FEFQ84w; Sat, 23 Jul 2022 16:32:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1F27141880;
-	Sat, 23 Jul 2022 16:30:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F27141880
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9356C1BF271
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:29:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F363741A10;
+	Sat, 23 Jul 2022 16:32:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F363741A10
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ABCFF1BF271
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:32:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 690B2417E2
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:29:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 690B2417E2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D51360BFB
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:32:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D51360BFB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rWmlg0sdBTaz for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 16:29:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 470634185D
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:29:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 470634185D
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 11B44846E0; Sat, 23 Jul 2022 16:16:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 18:29:25 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b58e2cde5ccc955eb02f627688f49cc7af5f23a1
-X-Git-Newrev: 380d9ad503d552dac2817d3a487f681530030752
-X-Patchwork-Hint: ignore
-Message-Id: <20220723161616.11B44846E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/shadowsocks-libev: fix build in
- shared library mode
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OjJlDEp8Gc5N for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 16:32:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11B6060B59
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 11B6060B59
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:32:18 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 94BD2240006;
+ Sat, 23 Jul 2022 16:32:15 +0000 (UTC)
+Date: Sat, 23 Jul 2022 18:32:14 +0200
+To: Min Xu <xuminready@gmail.com>
+Message-ID: <20220723183214.5d1a74e6@windsurf>
+In-Reply-To: <20220519074438.462-1-xuminready@gmail.com>
+References: <20220519074438.462-1-xuminready@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658593936;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=DBLqOey6l5GX24FATRJNeYPcqlSo1q/O9yUtK2NTXJo=;
+ b=LWnlHe2qx6YMpIhFthrcPNOy/qdynCxOzi/7ElLuzFabWOVAv9z/tPAQoTITjLA9z+2u+b
+ rQR0ZCsW+6qgLC5byr4bpI4Mj7Itud7RrmabgoopIFq5tRJCNU+7PThIZN14TeTOVG0cyK
+ Tr9GRSnAXDXAw0sSey/baAoliKpr3Txje7x0tpDL4RK/nAYOUJDRcC1KP/ihce5ESueOP3
+ QXMmnIqk+8ww0raaWCHz0PU7EvpdSUdG4y+uw0t+fz/DSHwXfX7rT+C7DdI5JN8h3zW6A6
+ CpItz+1ihcGKYt8bK/yHPmOl8IGID9I99F/zsX3kMHp5uniOIpDh684cVLLkOg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LWnlHe2q
+Subject: Re: [Buildroot] [PATCH 1/1] package/shadowsocks-libev: remove this
+ package. No longer maintained.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,101 +77,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=380d9ad503d552dac2817d3a487f681530030752
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Min,
 
-shadowsocks-libev builds a number of static libraries, which end up
-being used in a shared library. Unfortunately, the code of those
-static libraries is built without fPIC due to a bogus usage of
-libtool.
+On Thu, 19 May 2022 00:44:38 -0700
+Min Xu <xuminready@gmail.com> wrote:
 
-This commit adds a patch that fixes how libtool is used, to make sure
-its produce correct convenience libraries, than can in-turn be linked
-into shared libraries.
+> Signed-off-by: Min Xu <xuminready@gmail.com>
+> ---
+>  DEVELOPERS                                    |  3 -
+>  package/Config.in                             |  1 -
+>  ...-pkg-config-to-find-netfilter_conntr.patch | 62 -------------
+>  .../0002-fix-maybe-uninitialized-errors.patch | 93 -------------------
+>  package/shadowsocks-libev/Config.in           | 34 -------
+>  .../shadowsocks-libev/shadowsocks-libev.hash  |  7 --
+>  .../shadowsocks-libev/shadowsocks-libev.mk    | 27 ------
+>  7 files changed, 227 deletions(-)
+>  delete mode 100644 package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch
+>  delete mode 100644 package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.patch
+>  delete mode 100644 package/shadowsocks-libev/Config.in
+>  delete mode 100644 package/shadowsocks-libev/shadowsocks-libev.hash
+>  delete mode 100644 package/shadowsocks-libev/shadowsocks-libev.mk
 
-Fixes:
+Thanks for your patch. As there has been recent commits (25 days ago)
+to shadowsocks-libev, and James has expressed that the package could
+potentially be useful, I have instead:
 
-  http://autobuild.buildroot.net/results/75ca164903b8d47fa67343a4c2df11ce3f91d2bd/
-  and many similar other build failures
+ (1) Fixed the recurring build issue:
+     https://git.buildroot.org/buildroot/commit/?id=380d9ad503d552dac2817d3a487f681530030752
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ib-Makefile.am-remove-static-from-LDFLAGS.patch | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ (2) Removed you from the DEVELOPERS to make sure you no longer receive
+     e-mail notifications:
+     https://git.buildroot.org/buildroot/commit/?id=f704ec56f85b4aebb75a76fd7dbd9db800bf1b9e
 
-diff --git a/package/shadowsocks-libev/0003-lib-Makefile.am-remove-static-from-LDFLAGS.patch b/package/shadowsocks-libev/0003-lib-Makefile.am-remove-static-from-LDFLAGS.patch
-new file mode 100644
-index 0000000000..aebdb2305b
---- /dev/null
-+++ b/package/shadowsocks-libev/0003-lib-Makefile.am-remove-static-from-LDFLAGS.patch
-@@ -0,0 +1,61 @@
-+From e8ba4d6fd11ce795d9ed7b7a2c0ee0f6bf50f352 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 23 Jul 2022 18:20:00 +0200
-+Subject: [PATCH] lib*/Makefile.am: remove -static from LDFLAGS
-+
-+The libbloom, libcork and libipset libraries are "convenience
-+libraries" in libtool speak, and their code ends up being used in a
-+shared library, so building them with -static does not work as it
-+causes the code to be built without fPIC.
-+
-+https://www.gnu.org/software/libtool/manual/html_node/Static-libraries.html
-+explains:
-+
-+"""
-+If you omit both -rpath and -static, libtool will create a convenience
-+library that can be used to create other libtool libraries, even
-+shared ones. Just like in the static case, the library behaves as an
-+alias to a set of object files and dependency libraries, but in this
-+case the object files are suitable for inclusion in shared libraries.
-+"""
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ libbloom/Makefile.am | 2 --
-+ libcork/Makefile.am  | 2 --
-+ libipset/Makefile.am | 2 --
-+ 3 files changed, 6 deletions(-)
-+
-+diff --git a/libbloom/Makefile.am b/libbloom/Makefile.am
-+index 17c0761..6b2eddd 100644
-+--- a/libbloom/Makefile.am
-++++ b/libbloom/Makefile.am
-+@@ -2,5 +2,3 @@ noinst_LTLIBRARIES = libbloom.la
-+ 
-+ libbloom_la_SOURCES = bloom.c murmur2/MurmurHash2.c
-+ libbloom_la_CFLAGS = -I$(top_srcdir)/libbloom -I$(top_srcdir)/libbloom/murmur2
-+-
-+-libbloom_la_LDFLAGS = -static
-+diff --git a/libcork/Makefile.am b/libcork/Makefile.am
-+index 82ce062..e466a68 100644
-+--- a/libcork/Makefile.am
-++++ b/libcork/Makefile.am
-+@@ -17,5 +17,3 @@ endif
-+ 
-+ libcork_la_SOURCES = $(cli_src) $(core_src) $(ds_src) $(pthreads_src) $(posix_src)
-+ libcork_la_CFLAGS = -I$(top_srcdir)/libcork/include -DCORK_API=CORK_LOCAL
-+-					 
-+-libcork_la_LDFLAGS = -static
-+diff --git a/libipset/Makefile.am b/libipset/Makefile.am
-+index 3edfde6..bee8493 100644
-+--- a/libipset/Makefile.am
-++++ b/libipset/Makefile.am
-+@@ -23,5 +23,3 @@ set_src = src/libipset/set/allocation.c \
-+ 
-+ libipset_la_SOURCES = src/libipset/general.c ${bdd_src} ${map_src} ${set_src}
-+ libipset_la_CFLAGS = -I$(top_srcdir)/libipset/include -I$(top_srcdir)/libcork/include
-+-
-+-libipset_la_LDFLAGS = -static
-+-- 
-+2.37.1
-+
+     Note that this commit is for now only in our master branch, but we
+     also test older branches. So you may continue to receive e-mail
+     notifications for a little while, until the update to the
+     DEVELOPERS file is propagated to older branches.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
