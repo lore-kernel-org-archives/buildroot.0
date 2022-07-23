@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DF77C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 13:37:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E15FC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 13:38:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EEBF884AE9;
-	Sat, 23 Jul 2022 13:37:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEBF884AE9
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAC01408BE;
+	Sat, 23 Jul 2022 13:38:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAC01408BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xWzkS86DwVeS; Sat, 23 Jul 2022 13:37:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZBpWLxJhCBAQ; Sat, 23 Jul 2022 13:38:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00F1E84950;
-	Sat, 23 Jul 2022 13:37:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00F1E84950
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7E1B11BF955
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B63E41503;
+	Sat, 23 Jul 2022 13:38:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B63E41503
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AB45E1BF31A
  for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:36:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 56E8B40143
+ by smtp1.osuosl.org (Postfix) with ESMTP id 802EC848DD
  for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:36:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56E8B40143
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 802EC848DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lqgMrRj239c7 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M99dpKte-NTO for <buildroot@lists.busybox.net>;
  Sat, 23 Jul 2022 13:36:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8EDB640B04
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0009848E5
  for <buildroot@buildroot.org>; Sat, 23 Jul 2022 13:36:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EDB640B04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0009848E5
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 9E58E84459; Sat, 23 Jul 2022 13:23:08 +0000 (UTC)
+ id B0F688445C; Sat, 23 Jul 2022 13:23:08 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
 Date: Sat, 23 Jul 2022 15:36:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f57d4c5b9f96141836681396dcc91d2b95b0dc78
-X-Git-Newrev: 025d8ac80d06ad46ec3042c4af85ddd6a5e09b80
+X-Git-Oldrev: c6afdc173c7bfc4064607d03c8f2aaa35338fbe8
+X-Git-Newrev: a87ae216305059efdef9e43a3bda7bd557c46da0
 X-Patchwork-Hint: ignore
-Message-Id: <20220723132308.9E58E84459@busybox.osuosl.org>
+Message-Id: <20220723132308.B0F688445C@busybox.osuosl.org>
 Subject: [Buildroot] [git commit] board/*/genimage.cfg: use
- partition-type-uuid U where relevant
+ partition-type-uuid = F for some FAT partitions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=025d8ac80d06ad46ec3042c4af85ddd6a5e09b80
+commit: https://git.buildroot.net/buildroot/commit/?id=a87ae216305059efdef9e43a3bda7bd557c46da0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit changes to use partition-type-uuid = U instead of
-c12a7328-f81f-11d2-ba4b-00a0c93ec93b where relevant for the EFI System
-Partition.
+The genimage.cfg modified by this commit used the partition-type-uuid
+c12a7328-f81f-11d2-ba4b-00a0c93ec93b, which identifies the EFI System
+Partition, for a partition that isn't the EFI System Partition, but
+just a regular FAT partition, for which GUID
+ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 is more appropriate.
+
+So we switch these to use partition-type-uuid = F, as it makes more
+sense.
+
+Please note that this commit introduces a difference in the resulting
+output, as those partitions will now have a different GUID.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/aarch64-efi/genimage-efi.cfg   | 2 +-
- board/pc/genimage-efi.cfg            | 2 +-
- board/qemu/aarch64-sbsa/genimage.cfg | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ board/friendlyarm/nanopc-t4/genimage.cfg | 2 +-
+ board/friendlyarm/nanopi-m4/genimage.cfg | 2 +-
+ board/pine64/rockpro64/genimage.cfg      | 2 +-
+ board/radxa/rockpi-4/genimage.cfg        | 2 +-
+ board/radxa/rockpi-n10/genimage.cfg      | 2 +-
+ board/radxa/rockpi-n8/genimage.cfg       | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/board/aarch64-efi/genimage-efi.cfg b/board/aarch64-efi/genimage-efi.cfg
-index 87e85816bc..158deab87d 100644
---- a/board/aarch64-efi/genimage-efi.cfg
-+++ b/board/aarch64-efi/genimage-efi.cfg
-@@ -18,7 +18,7 @@ image disk.img {
+diff --git a/board/friendlyarm/nanopc-t4/genimage.cfg b/board/friendlyarm/nanopc-t4/genimage.cfg
+index 98dc2f3892..1787322260 100644
+--- a/board/friendlyarm/nanopc-t4/genimage.cfg
++++ b/board/friendlyarm/nanopc-t4/genimage.cfg
+@@ -26,7 +26,7 @@ image sdcard.img {
+ 	}
  
  	partition boot {
- 		image = "efi-part.vfat"
 -		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
-+		partition-type-uuid = U
- 		offset = 32K
- 		bootable = true
++		partition-type-uuid = F
+ 		bootable = "true"
+ 		image = "boot.vfat"
+ 		offset = 16M
+diff --git a/board/friendlyarm/nanopi-m4/genimage.cfg b/board/friendlyarm/nanopi-m4/genimage.cfg
+index 8d0e6ad13b..3e6818eab9 100644
+--- a/board/friendlyarm/nanopi-m4/genimage.cfg
++++ b/board/friendlyarm/nanopi-m4/genimage.cfg
+@@ -26,7 +26,7 @@ image sdcard.img {
  	}
-diff --git a/board/pc/genimage-efi.cfg b/board/pc/genimage-efi.cfg
-index 035a077a78..c231e1b9b2 100644
---- a/board/pc/genimage-efi.cfg
-+++ b/board/pc/genimage-efi.cfg
-@@ -19,7 +19,7 @@ image disk.img {
  
  	partition boot {
- 		image = "efi-part.vfat"
 -		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
-+		partition-type-uuid = U
- 		offset = 32K
- 		bootable = true
++		partition-type-uuid = F
+ 		bootable = "true"
+ 		image = "boot.vfat"
+ 		offset = 16M
+diff --git a/board/pine64/rockpro64/genimage.cfg b/board/pine64/rockpro64/genimage.cfg
+index d3926f2df6..94fa2f7c06 100644
+--- a/board/pine64/rockpro64/genimage.cfg
++++ b/board/pine64/rockpro64/genimage.cfg
+@@ -26,7 +26,7 @@ image sdcard.img {
  	}
-diff --git a/board/qemu/aarch64-sbsa/genimage.cfg b/board/qemu/aarch64-sbsa/genimage.cfg
-index bdf8a89d75..e7ac7f2ee1 100644
---- a/board/qemu/aarch64-sbsa/genimage.cfg
-+++ b/board/qemu/aarch64-sbsa/genimage.cfg
-@@ -19,7 +19,7 @@ image disk.img {
  
  	partition boot {
- 		image = "efi-part.vfat"
 -		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
-+		partition-type-uuid = U
- 		offset = 32K
- 		bootable = true
++		partition-type-uuid = F
+ 		bootable = "true"
+ 		image = "boot.vfat"
+ 		offset = 16M
+diff --git a/board/radxa/rockpi-4/genimage.cfg b/board/radxa/rockpi-4/genimage.cfg
+index 68cc4d61a8..9f64e96970 100644
+--- a/board/radxa/rockpi-4/genimage.cfg
++++ b/board/radxa/rockpi-4/genimage.cfg
+@@ -26,7 +26,7 @@ image sdcard.img {
  	}
+ 
+ 	partition boot {
+-		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
++		partition-type-uuid = F
+ 		bootable = "true"
+ 		image = "boot.vfat"
+ 		offset = 16M
+diff --git a/board/radxa/rockpi-n10/genimage.cfg b/board/radxa/rockpi-n10/genimage.cfg
+index 7f4b639bbc..fe6fa3f8f9 100644
+--- a/board/radxa/rockpi-n10/genimage.cfg
++++ b/board/radxa/rockpi-n10/genimage.cfg
+@@ -26,7 +26,7 @@ image sdcard.img {
+ 	}
+ 
+ 	partition boot {
+-		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
++		partition-type-uuid = F
+ 		bootable = "true"
+ 		image = "boot.vfat"
+ 		offset = 16M
+diff --git a/board/radxa/rockpi-n8/genimage.cfg b/board/radxa/rockpi-n8/genimage.cfg
+index 909a646499..bfcd92f590 100644
+--- a/board/radxa/rockpi-n8/genimage.cfg
++++ b/board/radxa/rockpi-n8/genimage.cfg
+@@ -26,7 +26,7 @@ image sdcard.img {
+ 	}
+ 
+ 	partition boot {
+-		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
++		partition-type-uuid = F
+ 		bootable = "true"
+ 		image = "boot.vfat"
+ 		offset = 16M
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
