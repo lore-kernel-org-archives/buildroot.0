@@ -1,50 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 350BCC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 20:33:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BCAAC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 20:34:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C86A340934;
-	Sat, 23 Jul 2022 20:33:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C86A340934
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D1C7416AA;
+	Sat, 23 Jul 2022 20:34:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D1C7416AA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gyaihQ0g67ce; Sat, 23 Jul 2022 20:34:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B9304049B;
+	Sat, 23 Jul 2022 20:34:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B9304049B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9CE581BF59C
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 20:34:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 742CE42489
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 20:34:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 742CE42489
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BTv9BEDToK3K; Sat, 23 Jul 2022 20:33:10 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 187BE40928;
-	Sat, 23 Jul 2022 20:33:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 187BE40928
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C8131BF59C
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 20:33:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DAC8884C34
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 20:33:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAC8884C34
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3FWeIUuDeMJd for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 20:33:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F82084C2E
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 20:33:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F82084C2E
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id F1184852E0; Sat, 23 Jul 2022 20:19:26 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Dygyg3AZRQDX for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 20:34:31 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CDE442464
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2CDE442464
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 20:34:31 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id z13so10785272wro.13
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 13:34:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=jsYwxcvUUXPs2JkjedlxVV/bLNSjgI7Sr2Ie4CVFfho=;
+ b=f9noQW6qkrlQYgepFgLlTVBlfCLJWNRs2gwBresV1/vTIgLUDyaynCUtOLj60/e/1S
+ r+ojb66SGQrNer7Ue+623268ZbqXzd1BNBLDyBvG52xr5pr+6QuGpof/AdDMS/omoZ9b
+ BqiY8KdJuu6vmxerUrgZjJCMumhToFVyx4O96XuXveqI+UCM7TWihVxF6oQRSMS9HNoN
+ v0ZIigNjUf94H/LvXLxGh/flhEAQfmd4Pfu/rsvR68FUXMqGErfNPvmYGErXywvh6BPD
+ nHaM6HRbnUZi7c1LqqRn4+E0ncYggD2CjTzX863TseH/C7fW/IMdH0rhguKpT1Ivw572
+ gVLA==
+X-Gm-Message-State: AJIora9/Ts6O5WAPP4FGxUAZSLSygOmNEKrcIfodZz4raAIOjD1k2gij
+ OxbQ21NiPGJtBKI5hj9UK/ihZlZxH1k=
+X-Google-Smtp-Source: AGRyM1vdwyuaDNRX3vjb+iBIQBkGjWhCzG0yBkCHEoMfWp/2+S3vNakXAhuZbH94tXjUGk4ktBhMNw==
+X-Received: by 2002:a5d:6c63:0:b0:21e:61f3:de34 with SMTP id
+ r3-20020a5d6c63000000b0021e61f3de34mr3645447wrz.13.1658608468869; 
+ Sat, 23 Jul 2022 13:34:28 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ o8-20020a05600c378800b003a2e7c13a3asm8691463wmr.42.2022.07.23.13.34.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 23 Jul 2022 13:34:28 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 22:32:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b9bc22ee8a1b98e3d2ab2a4c135e969423eb9d62
-X-Git-Newrev: 1ce86404419c0a356a5bd9e726e681b23d53c866
-X-Patchwork-Hint: ignore
-Message-Id: <20220723201926.F1184852E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nut: bump version to 2.8.0
+Date: Sat, 23 Jul 2022 22:34:23 +0200
+Message-Id: <20220723203423.264553-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=jsYwxcvUUXPs2JkjedlxVV/bLNSjgI7Sr2Ie4CVFfho=;
+ b=e59uLULnI594Q73DAw/DuPjgMD1V8TpBISMSzoTxf+cNRMOe9U/zz3TGUW0ptDnD8b
+ WzlFZyXzYfXg0ZBnzzINeKfqkR3sQ0aDyRApooKBsfVz9cCzqQVinOV7AsBWFVS4IigR
+ G9mok9kt1ua7xurJsw4H6XXdp/1Aaf0UHUJ8AtetLrwErqURGA1XipmSZzYrIEEpXIkQ
+ Ao4Q2IaQIPbw+uF11tvUkYTbS6ZGzVh2i75EWNfYy6kcDYe4Un1L5dvAJExSHfbp5v1D
+ aBe8Ay+LqMkxzp2fT9REj5VGbIkRNS9NiPlofUXfXTyPy+p6OyWcSkrhrYADHybhzsrD
+ hWOQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=e59uLULn
+Subject: [Buildroot] [PATCH v2,1/1] package/ntpsec: fix dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,150 +93,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ce86404419c0a356a5bd9e726e681b23d53c866
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add python3 dependencies to avoid the following build failure raised
+since the addition of the package in commit
+27b8d0ba8c4004819e092fb81c0f64f284b3aa4a:
 
-Removed dependency to host-perl, not needed anymore after
-https://github.com/networkupstools/nut/commit/3f7d05093ba589e1b05b9a6a88c03637472b5847
+Makefile:576: *** libffi is in the dependency chain of python3 that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
 
-Removed autoreconf, the tarball provided by upstream contains a
-configure script.
+Fixes:
+ - http://autobuild.buildroot.org/results/2893c213f49d37a0878dcf14ec68ef991471c70f
 
-This configure script however adds /usr/local/include to some tests
-which fail for us, instead of patching configure.ac and going through
-the autoreconf nightmare again we patch the configure script directly.
-
-Added configure option --without-doc
-
-Added more autoreconf variables to fix cross-compile issues.
-
-Changed "--with-drivers=all" to "--with-drivers=auto" because some new
-drivers need packages not provided by buildroot, for example:
-configure: error: Powerman client libraries not found, required for
- Powerman PDU client driver
-
-Added optional dependency to freeipmi.
-
-Added optional dependency to libusb, for details see
-https://github.com/networkupstools/nut/issues/300
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nut/nut.hash |  2 +-
- package/nut/nut.mk   | 54 ++++++++++++++++++++++++++++------------------------
- 2 files changed, 30 insertions(+), 26 deletions(-)
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Add python3 dependencies instead of depending on it
 
-diff --git a/package/nut/nut.hash b/package/nut/nut.hash
-index a4e84244b5..3dda340a1b 100644
---- a/package/nut/nut.hash
-+++ b/package/nut/nut.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  7129b2df45f9a9df3943f4d09f2b95b5a63d66ca4913431352570206968ca97b  nut-03c3bbe8df9a2caf3c09c120ae7045d35af99b76.tar.gz
-+sha256  c3e5a708da797b7c70b653d37b1206a000fcb503b85519fe4cdf6353f792bfe5  nut-2.8.0.tar.gz
- sha256  9f562d0e6be5108a06684dd249686d378abe1653df14b1944e971e084f6751f0  COPYING
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE-GPL2
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  LICENSE-GPL3
-diff --git a/package/nut/nut.mk b/package/nut/nut.mk
-index cd31cd886a..fb98ba04f0 100644
---- a/package/nut/nut.mk
-+++ b/package/nut/nut.mk
-@@ -4,44 +4,38 @@
- #
- ################################################################################
+ package/ntpsec/Config.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/package/ntpsec/Config.in b/package/ntpsec/Config.in
+index 1e88046420..c81673481e 100644
+--- a/package/ntpsec/Config.in
++++ b/package/ntpsec/Config.in
+@@ -1,5 +1,9 @@
+ config BR2_PACKAGE_NTPSEC
+ 	bool "ntpsec"
++	depends on BR2_USE_MMU # python3
++	depends on BR2_USE_WCHAR # python3
++	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
++	depends on !BR2_STATIC_LIBS # python3
+ 	select BR2_PACKAGE_LIBCAP
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PYTHON3
+@@ -26,3 +30,8 @@ config BR2_PACKAGE_NTPSEC_NTS
+ 	  Enable Network Time Security (NTS) support.
  
--NUT_VERSION = 03c3bbe8df9a2caf3c09c120ae7045d35af99b76
--NUT_SITE = $(call github,networkupstools,nut,$(NUT_VERSION))
-+NUT_VERSION = 2.8.0
-+NUT_SITE = https://github.com/networkupstools/nut/releases/download/v$(NUT_VERSION)
- NUT_LICENSE = GPL-2.0+, GPL-3.0+ (python scripts), GPL/Artistic (perl client)
- NUT_LICENSE_FILES = COPYING LICENSE-GPL2 LICENSE-GPL3
- NUT_SELINUX_MODULES = apache nut
- NUT_INSTALL_STAGING = YES
--NUT_DEPENDENCIES = host-pkgconf host-perl
-+NUT_DEPENDENCIES = host-pkgconf
- 
--# From git:
--NUT_AUTORECONF = YES
--
--# Generate files otherwise generated by autogen.sh
--# buildroot does not support augeas, creating an empty file prevents
--# us from adding a dependency to host-python
--define NUT_PREGEN
--	touch $(@D)/scripts/augeas/nutupsconf.aug.in
--	cd $(@D)/tools && PATH=$(BR_PATH) ./nut-usbinfo.pl
-+# prevent usage of unsafe paths
-+define NUT_FIX_CONFIGURE
-+	$(SED) 's%CFLAGS="-isystem /usr/local/include%_UNUSED_CFLAGS="-isystem /usr/local/include%' $(@D)/configure
-+	$(SED) 's%CXXFLAGS="-isystem /usr/local/include%_UNUSED_CXXFLAGS="-isystem /usr/local/include%' $(@D)/configure
- endef
--NUT_PRE_CONFIGURE_HOOKS += NUT_PREGEN
--
--# Race condition in tools generation
--NUT_MAKE = $(MAKE1)
-+NUT_POST_PATCH_HOOKS += NUT_FIX_CONFIGURE
- 
- # Put the PID files in a read-write place (/var/run is a tmpfs)
- # since the default location (/var/state/ups) maybe readonly.
- NUT_CONF_OPTS = \
- 	--with-altpidpath=/var/run/upsd \
--	--with-dev
-+	--with-dev \
-+	--without-doc
- 
--NUT_CONF_ENV = ax_cv__printf_string_null=yes
--
--# For uClibc-based toolchains, nut forgets to link with -lm
--ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
--NUT_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lm"
--endif
-+NUT_CONF_ENV = \
-+	ax_cv_check_cflags__Werror__Wno_unknown_warning_option=no \
-+	ax_cv_check_cxxflags__Werror__Wno_unknown_warning_option=no \
-+	ac_cv_func_strcasecmp=yes \
-+	ac_cv_func_strdup=yes \
-+	ac_cv_func_strncasecmp=yes \
-+	ax_cv__printf_string_null=yes
- 
- ifeq ($(call qstrip,$(BR2_PACKAGE_NUT_DRIVERS)),)
--NUT_CONF_OPTS += --with-drivers=all
-+NUT_CONF_OPTS += --with-drivers=auto
- else
- NUT_CONF_OPTS += --with-drivers=$(BR2_PACKAGE_NUT_DRIVERS)
  endif
-@@ -53,6 +47,13 @@ else
- NUT_CONF_OPTS += --without-avahi
- endif
- 
-+ifeq ($(BR2_PACKAGE_FREEIPMI),y)
-+NUT_CONF_OPTS += --with-freeipmi
-+NUT_DEPENDENCIES += freeipmi
-+else
-+NUT_CONF_OPTS += --without-freeipmi
-+endif
 +
- # gd with support for png is required for the CGI
- ifeq ($(BR2_PACKAGE_GD)$(BR2_PACKAGE_LIBPNG),yy)
- NUT_DEPENDENCIES += gd libpng
-@@ -72,7 +73,10 @@ else
- NUT_CONF_OPTS += --without-libltdl
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
-+ifeq ($(BR2_PACKAGE_LIBUSB),y)
-+NUT_DEPENDENCIES += libusb
-+NUT_CONF_OPTS += --with-usb
-+else ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
- NUT_DEPENDENCIES += libusb-compat
- NUT_CONF_OPTS += --with-usb
- else
++comment "ntpsec needs a toolchain w/ wchar, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
