@@ -1,51 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64A69C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 12:50:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0036C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 12:50:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1074F849C3;
-	Sat, 23 Jul 2022 12:50:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1074F849C3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8468040AD1;
+	Sat, 23 Jul 2022 12:50:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8468040AD1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 52ZSCuEnRbSQ; Sat, 23 Jul 2022 12:50:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JQUZZX5iDAqz; Sat, 23 Jul 2022 12:50:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 065098499E;
-	Sat, 23 Jul 2022 12:50:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 065098499E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DFEC31BF36E
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:49:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 62DCB40AEA;
+	Sat, 23 Jul 2022 12:50:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62DCB40AEA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 384361BF36E
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:50:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6B30418BE
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:49:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6B30418BE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 044F860FE0
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:50:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 044F860FE0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xkrbVP9-0u7Y for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 12:49:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5A0F417D1
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 12:49:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5A0F417D1
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id C67368434E; Sat, 23 Jul 2022 12:36:10 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 14:49:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b467aa1cd6a5d341dfc2bbdfb75ecf409ec2493d
-X-Git-Newrev: e19051a1a1573da7f250e00f8a3877606717a34c
-X-Patchwork-Hint: ignore
-Message-Id: <20220723123610.C67368434E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mstpd: fix mstpd bridge-stp use of
- pidof
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oZ7cHKFPtWyb for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 12:50:11 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD8AA60FDE
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AD8AA60FDE
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 12:50:10 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 68C6720000B;
+ Sat, 23 Jul 2022 12:50:07 +0000 (UTC)
+Date: Sat, 23 Jul 2022 14:50:06 +0200
+To: Erik Larsson <who+buildroot@cnackers.org>
+Message-ID: <20220723145006.2533b748@windsurf>
+In-Reply-To: <20220101223900.2970405-3-who+buildroot@cnackers.org>
+References: <20220101223900.2970405-1-who+buildroot@cnackers.org>
+ <20220101223900.2970405-3-who+buildroot@cnackers.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658580607;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Sa4zVgrDWV35CI+Ydabn2jHiWV75jnqmOYqcpsVnLy4=;
+ b=gmwQuwxIBZrlhOmTnko6JT1E8lKAS+RH/E8uRoAGXVunP04NN3nIYVtHpvjD8fzSUa7s6p
+ MuDRQHTYJ3V0wn7YJMfxLICZuDaiE+JnejrpF88BuWbCFUb/oRgrxJ6vPE168G0OlBsYer
+ ZPu+m3ghTOGmualkBLRreMC1erUlXZyxKYi9gEZs7FGJrOOg0aSQXfq4Y0MRGklB3xEDcz
+ zXEoSVaKx5IWIbcccmo+qHXwy92zAmRTrlUNHO+6yAOomz9Wk25areBZqe84E1NmP1IbNc
+ IIgDLpbzmjrc6ll1kRvKmaBKKoPPDIV41M2GtWF2c5MfCRYp5FTuFdu+r8s4SQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gmwQuwxI
+Subject: Re: [Buildroot] [PATCH 3/3] package/tpm2-tools: add option for
+ enabling FAPI tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,83 +77,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e19051a1a1573da7f250e00f8a3877606717a34c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Erik,
 
-Through mstpd version 0.1.0, the bridge-stp script uses the '-c'
-option to the pidof command. Busybox does not support this option, so
-mstpd does not work.
+On Sat,  1 Jan 2022 23:39:00 +0100
+Erik Larsson <who+buildroot@cnackers.org> wrote:
 
-This has been fixed in the main development branch of mstpd, but it is
-unclear when the next release will be. In the meantime, apply the fix
-here so that mstpd will be useable until the next version release.
+> Signed-off-by: Erik Larsson <who+buildroot@cnackers.org>
+> ---
+>  package/tpm2-tools/Config.in     | 11 +++++++++++
+>  package/tpm2-tools/tpm2-tools.mk |  6 ++++++
+>  2 files changed, 17 insertions(+)
+> 
+> diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+> index 1a6698570a..cb3eb2b0a5 100644
+> --- a/package/tpm2-tools/Config.in
+> +++ b/package/tpm2-tools/Config.in
+> @@ -21,6 +21,17 @@ config BR2_PACKAGE_TPM2_TOOLS
+>  
+>  	  https://github.com/tpm2-software/tpm2-tools
+>  
+> +if BR2_PACKAGE_TPM2_TOOLS
+> +
+> +config BR2_PACKAGE_TPM2_TOOLS_FAPI
+> +	bool "tpm2-tools fapi support"
+> +	select BR2_PACKAGE_TPM2_TSS_FAPI
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...in-support-different-versions-of-pidof-13.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+This was missing a:
 
-diff --git a/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch b/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch
-new file mode 100644
-index 0000000000..daa591131b
---- /dev/null
-+++ b/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch
-@@ -0,0 +1,48 @@
-+From 181c453fc1a00573e19f14960dcc54ad84beea7c Mon Sep 17 00:00:00 2001
-+From: colin-foster-in-advantage <colin.foster@in-advantage.com>
-+Date: Tue, 12 Jul 2022 23:01:09 -0700
-+Subject: [PATCH] bridge-stp.in: support different versions of pidof (#137)
-+
-+* bridge-stp.in: support different versions of pidof
-+
-+Busybox uses a version of pdiof that doesn't support the -c option. As
-+such, this renders mstpd non-functional on any Busybox system.
-+
-+Just use the standard form of pidof to detect any running instances of mstpd.
-+
-+Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-+---
-+ bridge-stp.in | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/bridge-stp.in b/bridge-stp.in
-+index 47cbe79..3807873 100755
-+--- a/bridge-stp.in
-++++ b/bridge-stp.in
-+@@ -139,7 +139,7 @@ case "$action" in
-+         fi
-+ 
-+         # Start mstpd if necessary.
-+-        if ! pidof -c -s mstpd >/dev/null; then
-++        if ! pidof -s mstpd >/dev/null; then
-+             if [ "$MANAGE_MSTPD" != 'y' ]; then
-+                 errmsg 'mstpd is not running'
-+                 exit 3
-+@@ -212,12 +212,12 @@ case "$action" in
-+         done
-+ 
-+         # Kill mstpd, since no bridges are currently using it.
-+-        kill $(pidof -c mstpd)
-++        kill $(pidof mstpd)
-+         ;;
-+     restart|restart_config)
-+         if [ "$action" = 'restart' ]; then
-+             # Kill mstpd.
-+-            pids="$(pidof -c mstpd)" ; Err=$?
-++            pids="$(pidof mstpd)" ; Err=$?
-+             if [ $Err -eq 0 ]; then
-+                 echo 'Stopping mstpd ...'
-+                 kill $pids
-+-- 
-+2.25.1
-+
+        depends on BR2_TOOLCHAIN_HAS_SYNC_4
+
+which we inherit because we select BR2_PACKAGE_TPM2_TSS_FAPI.
+
+Also I changed the prompt to "fapi tools", as repeating "tpm2-tools" is
+not useful, and the option is more about "fapi tools" than "fapi
+support" I believe.
+
+With these small changes, applied to master. Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
