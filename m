@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD239C43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 14:33:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EC9DC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 14:34:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E06060A83;
-	Sat, 23 Jul 2022 14:33:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E06060A83
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9F1E41652;
+	Sat, 23 Jul 2022 14:33:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9F1E41652
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jTB_KA_th9S8; Sat, 23 Jul 2022 14:33:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cA_SkM4Fs2mQ; Sat, 23 Jul 2022 14:33:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8ADBB606DC;
-	Sat, 23 Jul 2022 14:33:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8ADBB606DC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C7FD21BF955
+	by smtp2.osuosl.org (Postfix) with ESMTP id C462B4164E;
+	Sat, 23 Jul 2022 14:33:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C462B4164E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CF2651BF957
  for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 14:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A19E281447
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA1AC40B1A
  for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 14:33:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A19E281447
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA1AC40B1A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vIMjYep67BIP for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IIoShpaEur6w for <buildroot@lists.busybox.net>;
  Sat, 23 Jul 2022 14:33:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CBA1F81385
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9718400AC
  for <buildroot@buildroot.org>; Sat, 23 Jul 2022 14:33:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBA1F81385
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9718400AC
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C0EEE844C4; Sat, 23 Jul 2022 14:19:49 +0000 (UTC)
+ id D2693844C9; Sat, 23 Jul 2022 14:19:49 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 23 Jul 2022 16:32:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9f1b4d24ce2845242b2c1c497558a56cb3c2fb14
-X-Git-Newrev: 0a4ac1e7fa715669aa2ab2a58b564fc875c07c68
+X-Git-Oldrev: a2380157f6688c5c065fa19060a2c33145bab95b
+X-Git-Newrev: 242b87e2996fcc464789835b96e0fa5b1d4e531f
 X-Patchwork-Hint: ignore
-Message-Id: <20220723141949.C0EEE844C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu_riscv{32,
- 64}_virt: kernel bump version to 5.15.43
+Message-Id: <20220723141949.D2693844C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: add missing
+ --enable-libquadmath-support option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,54 +59,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0172202305613245145=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a4ac1e7fa715669aa2ab2a58b564fc875c07c68
+--===============0172202305613245145==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=242b87e2996fcc464789835b96e0fa5b1d4e531f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To build this defconfig with gcc 12, we need a patch from v5.15.24 [1]
-fixing the build with gcc 12.
+When BR2_TOOLCHAIN_HAS_LIBQUADMATH is set, --enable-libquadmath-support
+option is missing. So the float128 support is not fully enabled in gcc.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=7486227fa47aa84b102be18fd9985f6e8e11e756
+This lead to a build issue with gcc 12 on PowerPC power8 due to missing
+M_2_SQRTPIq definition (provided by libquadmath.h).
+
+../../../libgfortran/intrinsics/erfc_scaled.c: In function ‘erfc_scaled_r17’:
+../../../libgfortran/intrinsics/erfc_scaled.c:143:22: error: ‘M_2_SQRTPIq’ undeclared (first use in this function); did you mean ‘M_2_SQRTPIf’?
+  143 | # define _M_2_SQRTPI M_2_SQRTPIq
+      |                      ^~~~~~~~~~~
+
+This is fixed by adding --enable-libquadmath-support (like crosstool-ng
+handling [1]).
+
+Fixes:
+https://gitlab.com/kubu93/toolchains-builder/-/jobs/2510178766
+
+[1] https://github.com/crosstool-ng/crosstool-ng/blob/crosstool-ng-1.25.0/scripts/build/cc/gcc.sh#L370
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/qemu_riscv32_virt_defconfig | 2 +-
- configs/qemu_riscv64_virt_defconfig | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/gcc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-index dff87ef342..faf4e1e312 100644
---- a/configs/qemu_riscv32_virt_defconfig
-+++ b/configs/qemu_riscv32_virt_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.43"
- BR2_LINUX_KERNEL_DEFCONFIG="rv32"
- BR2_LINUX_KERNEL_IMAGE=y
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 128cf8421d..42484f539b 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -118,7 +118,7 @@ endif
  
-diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-index d67d070185..c455680ee0 100644
---- a/configs/qemu_riscv64_virt_defconfig
-+++ b/configs/qemu_riscv64_virt_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.43"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_IMAGE=y
- 
+ # quadmath support requires wchar
+ ifeq ($(BR2_USE_WCHAR)$(BR2_TOOLCHAIN_HAS_LIBQUADMATH),yy)
+-HOST_GCC_COMMON_CONF_OPTS += --enable-libquadmath
++HOST_GCC_COMMON_CONF_OPTS += --enable-libquadmath --enable-libquadmath-support
+ else
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libquadmath --disable-libquadmath-support
+ endif
+
+--===============0172202305613245145==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0172202305613245145==--
