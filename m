@@ -1,87 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E90CC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 21:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BF5DC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 22:05:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BAD5061B2C;
-	Sat, 23 Jul 2022 21:55:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAD5061B2C
+	by smtp2.osuosl.org (Postfix) with ESMTP id D031E4063C;
+	Sat, 23 Jul 2022 22:05:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D031E4063C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KPwI1ax3ttBl; Sat, 23 Jul 2022 21:55:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9UmdxIfpwRQr; Sat, 23 Jul 2022 22:05:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95D6561B2B;
-	Sat, 23 Jul 2022 21:55:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95D6561B2B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A71E11BF419
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:55:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C5C26404BF;
+	Sat, 23 Jul 2022 22:05:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5C26404BF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CD9B41BF3AD
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 22:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F31A61B2B
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:55:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F31A61B2B
+ by smtp2.osuosl.org (Postfix) with ESMTP id B509F404BF
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 22:05:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B509F404BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LC-sRy4VP4hK for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 21:55:03 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A64ED61B28
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A64ED61B28
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 21:55:03 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- b21-20020a05600c4e1500b003a32bc8612fso4274328wmq.3
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 14:55:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=XEcwkc6CukaKyaQvKEoM2mjWb0wdqLDUqxUGanRWMZ8=;
- b=o3xuxsSiPi6MQ0neSjGawFq5s01OLTVdOUhnjifYgYFIgw43nRbB3Wmrpz+5fHMVr2
- 5fbBVhumbIZiDWZbkJwI/IJuVImn2mVJfx+lFqYhPNByUvOxbhgftjnKCMloANH0O+Z4
- HQ0vOZc/Hfl+KYLqaMGeRL/BaUICHT7HuM4cTLfLtHNat4QmgUY82XRnh0fOs6oMG94r
- OWb+bK2cxruiNzPyOQsgnHlZgE8rd7oqlw7X7adhMVWikXSXKexvs7pKSwCVwdu21oAc
- PzdreBW7AlYH/B6aAd3rU2zoIVLf8Hw3YU0dkGhJwqIM3GEKzlQPACVid1XTmcBplAzL
- 2xpg==
-X-Gm-Message-State: AJIora+KwhL440JvnzHqKzWm9jnz1H0YBjZ6SHsDdKfc2Rmv2w6OLEFu
- 42ZKWaW0iZueNU2fETsZgtrHk6Mv533YVg==
-X-Google-Smtp-Source: AGRyM1t+Lwc2cUrF6UQfwzOsqA9kSi4Khuiu4yWbtw8+pQenLVI6MRpKzuZHCFA587t1DdL9F42KMg==
-X-Received: by 2002:a05:600c:3004:b0:3a3:12b4:24c5 with SMTP id
- j4-20020a05600c300400b003a312b424c5mr3782812wmh.123.1658613301538; 
- Sat, 23 Jul 2022 14:55:01 -0700 (PDT)
-Received: from jupiter.home (14.5.23.95.dynamic.jazztel.es. [95.23.5.14])
- by smtp.gmail.com with ESMTPSA id
- f12-20020a5d568c000000b0021e5cc26dd0sm6227959wrv.62.2022.07.23.14.55.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Jul 2022 14:55:01 -0700 (PDT)
-From: Abel Bernabeu <abel@x-silicon.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M5QjYCnKWkJA for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 22:05:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D0E540190
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 22:05:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D0E540190
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id BB768853CE; Sat, 23 Jul 2022 21:51:30 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 23:54:48 +0200
-Message-Id: <20220723215448.2532160-2-abel@x-silicon.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220723215448.2532160-1-abel@x-silicon.com>
-References: <20220723215448.2532160-1-abel@x-silicon.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=x-silicon.com; s=google;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=XEcwkc6CukaKyaQvKEoM2mjWb0wdqLDUqxUGanRWMZ8=;
- b=gDEo+MKEcT/afx12iRad0renxwbjUPFNb+oAGFA0xcabjRxfyHMk+Go9dhJ2fs/axG
- ifv4mN2UJXZK2vw0NUrC0XEJItei9PogE2nrOJ2f3NZCQT/NhBRSPoOWFhOszYhwLing
- KzTO5cx1MxjtkZruTMaN9hIlFS4NV5PwPYSv0=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=x-silicon.com header.i=@x-silicon.com
- header.a=rsa-sha256 header.s=google header.b=gDEo+MKE
-Subject: [Buildroot] [PATCH 2/2] arch/riscv: Added support for RISC-V vector
- extension on the architecture menu.
+Date: Sun, 24 Jul 2022 00:03:33 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a0460cb46e5a706032959074b46f807010d0684f
+X-Git-Newrev: ed97f60c3a363e461608cf843c564111134d0541
+X-Patchwork-Hint: ignore
+Message-Id: <20220723215130.BB768853CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_ppc*: bump kernel version to
+ 5.17.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,67 +57,213 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>, Mark Corbin <mark@dibsco.co.uk>,
- Abel Bernabeu <abel@x-silicon.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1098440872412863517=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This new setting will allow to test new toolchains already available
-that support the vector extension (more patches coming soon).
+--===============1098440872412863517==
+Content-Type: text/plain
 
-Signed-off-by: Abel Bernabeu <abel@x-silicon.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=ed97f60c3a363e461608cf843c564111134d0541
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Cédric Le Goater <clg@kaod.org>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- arch/Config.in.riscv | 7 +++++++
- arch/arch.mk.riscv   | 4 ++++
- 2 files changed, 11 insertions(+)
+ configs/qemu_ppc64_e5500_defconfig      | 4 ++--
+ configs/qemu_ppc64_pseries_defconfig    | 4 ++--
+ configs/qemu_ppc64le_powernv8_defconfig | 4 ++--
+ configs/qemu_ppc64le_pseries_defconfig  | 4 ++--
+ configs/qemu_ppc_bamboo_defconfig       | 4 ++--
+ configs/qemu_ppc_e500mc_defconfig       | 4 ++--
+ configs/qemu_ppc_g3beige_defconfig      | 4 ++--
+ configs/qemu_ppc_mac99_defconfig        | 4 ++--
+ configs/qemu_ppc_mpc8544ds_defconfig    | 4 ++--
+ 9 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
-index 288ed833eb..e4dc936cf8 100644
---- a/arch/Config.in.riscv
-+++ b/arch/Config.in.riscv
-@@ -18,6 +18,9 @@ config BR2_RISCV_ISA_RVD
- config BR2_RISCV_ISA_RVC
- 	bool
+diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
+index c455fcffe4..8458f2739a 100644
+--- a/configs/qemu_ppc64_e5500_defconfig
++++ b/configs/qemu_ppc64_e5500_defconfig
+@@ -12,12 +12,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
  
-+config BR2_RISCV_ISA_RVV
-+	bool
-+
- choice
- 	prompt "Target Architecture Variant"
- 	default BR2_riscv_g
-@@ -63,6 +66,10 @@ config BR2_RISCV_ISA_CUSTOM_RVD
- config BR2_RISCV_ISA_CUSTOM_RVC
- 	bool "Compressed Instructions (C)"
- 	select BR2_RISCV_ISA_RVC
-+
-+config BR2_RISCV_ISA_CUSTOM_RVV
-+	bool "Vector Instructions (V)"
-+	select BR2_RISCV_ISA_RVV
- endif
+ # Linux headers same as the kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
  
- choice
-diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv
-index f3bf2b3467..07a94aa6a4 100644
---- a/arch/arch.mk.riscv
-+++ b/arch/arch.mk.riscv
-@@ -26,5 +26,9 @@ endif
- ifeq ($(BR2_RISCV_ISA_RVC),y)
- GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)c
- endif
-+ifeq ($(BR2_RISCV_ISA_RVV),y)
-+GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)v
-+endif
-+
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
+index efa8106ff1..480ebea29d 100644
+--- a/configs/qemu_ppc64_pseries_defconfig
++++ b/configs/qemu_ppc64_pseries_defconfig
+@@ -16,12 +16,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
  
- endif
--- 
-2.34.1
+ # Linux headers same as kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="pseries"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+diff --git a/configs/qemu_ppc64le_powernv8_defconfig b/configs/qemu_ppc64le_powernv8_defconfig
+index 773ee4023f..8de4cf5189 100644
+--- a/configs/qemu_ppc64le_powernv8_defconfig
++++ b/configs/qemu_ppc64le_powernv8_defconfig
+@@ -16,12 +16,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ 
+ # Linux headers same as kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="powernv"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
+index 8a20f58f1e..98c6afdf93 100644
+--- a/configs/qemu_ppc64le_pseries_defconfig
++++ b/configs/qemu_ppc64le_pseries_defconfig
+@@ -16,12 +16,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ 
+ # Linux headers same as kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+diff --git a/configs/qemu_ppc_bamboo_defconfig b/configs/qemu_ppc_bamboo_defconfig
+index 6129c4a663..f4cc5589e7 100644
+--- a/configs/qemu_ppc_bamboo_defconfig
++++ b/configs/qemu_ppc_bamboo_defconfig
+@@ -14,12 +14,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ 
+ # Linux headers same as kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="44x/bamboo"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-bamboo/linux.fragment"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_e500mc_defconfig b/configs/qemu_ppc_e500mc_defconfig
+index 1853e538bb..0a1877c44b 100644
+--- a/configs/qemu_ppc_e500mc_defconfig
++++ b/configs/qemu_ppc_e500mc_defconfig
+@@ -11,12 +11,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ 
+ # Linux headers same as the kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="corenet32_smp"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-e500mc/linux.fragment"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+index 9bbebede1b..1c11bcf77d 100644
+--- a/configs/qemu_ppc_g3beige_defconfig
++++ b/configs/qemu_ppc_g3beige_defconfig
+@@ -14,12 +14,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ 
+ # Linux headers same as kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
+index e9629ff233..2331041c2a 100644
+--- a/configs/qemu_ppc_mac99_defconfig
++++ b/configs/qemu_ppc_mac99_defconfig
+@@ -6,12 +6,12 @@ BR2_powerpc_7400=y
+ BR2_SYSTEM_DHCP="eth0"
+ 
+ # Linux headers same as kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
+index 2b51573da9..b9a0812d52 100644
+--- a/configs/qemu_ppc_mpc8544ds_defconfig
++++ b/configs/qemu_ppc_mpc8544ds_defconfig
+@@ -15,12 +15,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ 
+ # Linux headers same as kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-mpc8544ds/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+
+--===============1098440872412863517==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1098440872412863517==--
