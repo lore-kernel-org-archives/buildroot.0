@@ -1,67 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D911C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 09:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E51DC43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 09:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90B058482A;
-	Sat, 23 Jul 2022 09:55:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90B058482A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02B5B422CF;
+	Sat, 23 Jul 2022 09:59:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02B5B422CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UszOYW8s79n7; Sat, 23 Jul 2022 09:55:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ql-pJw-paXum; Sat, 23 Jul 2022 09:59:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECEF9848B4;
-	Sat, 23 Jul 2022 09:55:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECEF9848B4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E9A521BF38A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 09:55:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 18A9B422E2;
+	Sat, 23 Jul 2022 09:59:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18A9B422E2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF2331BF215
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 09:59:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D209F4019F
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 09:55:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D209F4019F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 87765422E2
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 09:59:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87765422E2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 07iaJ5hL6-sn for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 09:54:59 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 335094010C
-Received: from mxd1.seznam.cz (mxd1.seznam.cz [77.75.78.210])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 335094010C
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 09:54:58 +0000 (UTC)
-Received: from email.seznam.cz
- by email-smtpc27a.ko.seznam.cz (email-smtpc27a.ko.seznam.cz [10.53.18.38])
- id 5fc2320ce9e28d575fc58c7b; Sat, 23 Jul 2022 11:54:48 +0200 (CEST)
-Received: from localhost.localdomain (mail.ms-free.net [185.147.46.46])
- by email-relay19.ko.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
- Sat, 23 Jul 2022 11:54:43 +0200 (CEST)  
-From: Petr Vorel <pevik@seznam.cz>
-To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 11:54:36 +0200
-Message-Id: <20220723095436.4467-1-pevik@seznam.cz>
-X-Mailer: git-send-email 2.36.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5rCExFPs-IIj for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 09:59:21 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2314422CF
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C2314422CF
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 09:59:20 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id id17so4051637wmb.1
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 02:59:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=eUWASN4wejsjP9l9crZsUxVjRiEb74b2ixPzBL9nwec=;
+ b=uFiBgUIHbUfwOz96JJPSb8BmALt+HN1tKJTwBHvzAioZrjju3paIAgMh5k+r18IQHo
+ hO+uukwvSdYbr4AHETkPJp/iONzMdJ7REwLIImbCpb586PdPyN0KMpVEEUcavUhzOiPB
+ ur1tmES1R3BQMIPWZuJm4XjIF6o9+0PWSF5RWoBojMZZsRwLp3df+5zZhkBIB4UpQXO2
+ yjnXk8G9IpJW6LSi3bwR1agSdcWixTMsHvIZFSPtfzyBNukPvVjIS3Ho7b7sakQQteUa
+ +r3YV9/Ho/d5lwarSCQnqpCn4Gv6dDmJOayOchnJrf1KS9ZUHmpxFDaQdbGgwiyjk0CY
+ Yo0A==
+X-Gm-Message-State: AJIora8NfQGHcAHgEH4xwkSKIQDe+IO3m1ovZBr/HmISiTqzZoPZWmsU
+ p/ktrGXKSr7zF3fSsGCkxST/pA==
+X-Google-Smtp-Source: AGRyM1sJZpzufDkgTkH+bGQztWeOvviAxb2uYrxnDytYhJqPkhaxni2mfsV3lEGwC52qWckQtC5uQA==
+X-Received: by 2002:a05:600c:4f0e:b0:3a3:44ee:d40b with SMTP id
+ l14-20020a05600c4f0e00b003a344eed40bmr3383801wmq.199.1658570358489; 
+ Sat, 23 Jul 2022 02:59:18 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f?
+ (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
+ by smtp.gmail.com with ESMTPSA id
+ j10-20020a05600c190a00b003a342933727sm4692072wmq.3.2022.07.23.02.59.17
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 23 Jul 2022 02:59:18 -0700 (PDT)
+Message-ID: <e71affee-6663-3097-076a-1704fd465c39@smile.fr>
+Date: Sat, 23 Jul 2022 11:59:17 +0200
 MIME-Version: 1.0
-X-szn-frgn: <17e545a7-0bfd-45fc-ac0d-ad3083c762fe>
-X-szn-frgc: <0>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: fr
+To: Matt Weber <matt@thewebers.ws>, buildroot@buildroot.org
+References: <20210215053258.3323654-1-matt@thewebers.ws>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20210215053258.3323654-1-matt@thewebers.ws>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=seznam.cz; s=beta; 
- t=1658570088; bh=beL2NXL6KAcvjAEUoDKdV3ka/DOafMe+PJchAfc+4YQ=;
- h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
- Content-Transfer-Encoding:X-szn-frgn:X-szn-frgc;
- b=Wwj+LqONCb3qjRwmt0Lm+l6cNPT9Fw1N+U4rY85iWP5bhMiaq1Rr2S5nQzC1fbRgA
- bW+do6ASRc4DNLR9B+oP0D25FkiVPvQDCJSrgiz9upSYgOoX0ZmEai5OlKvocZO7ki
- k0mjysZaA75+ILDJ99BTsegwOL5pfIBzt/5a35CA=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=seznam.cz header.i=@seznam.cz
- header.a=rsa-sha256 header.s=beta header.b=Wwj+LqON
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: Add post release
- runtime fixes
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=eUWASN4wejsjP9l9crZsUxVjRiEb74b2ixPzBL9nwec=;
+ b=3gGkjdn2UELv8YXrpsC0tazSAuOBrGpqmDEWauFcHR6OMPxFoC9NDTVMxIjzj3Y1bK
+ U5aw9Abg9OsBFe7l0rOD1UozljHYEBtynJs0WHPVSND6PYyfq7Yg5/NJOioGzIYOJg38
+ sQJsp6FNNYMzGIjEybDtC/r/NhMopot1qLl57hEMs0YAB9mZrSn1YSS942K7U7ZYe2LR
+ S1gE75GnLC63ZWeSQr4aETq0ef8RJgoizLEMXLD29OpsmRDp9qC6aGAVjNECslgcMjyg
+ w93PTMJIhYR820bcye4H4mVwMM9bd5ui6v5jQ6sNrmiD3N7uH2xTCn8cR9L6VZsYVMmb
+ G4bw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=3gGkjdn2
+Subject: Re: [Buildroot] [[Next]RFC] sdk-docker: new make target using
+ Dockcross
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,540 +101,231 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: konrad.schwarz@siemens.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ angelo@amarulasolutions.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Petr Vorel <petr.vorel@gmail.com>
-
-Backport various post 20220527 release runtime fixes:
-* The concept of max runtime
-* tst_test.sh: Cleanup getopts usage
-* mountns0[1-3]: wait for umount completed in thread_b
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- ...fs05_make_tree-Restore-5-min-timeout.patch |  31 ++++
- ...igrate_pages03-restore-runtime-to-5m.patch |  44 +++++
- ...ait-for-umount-completed-in-thread_b.patch |  63 +++++++
- ...0007-netstress-Restore-runtime-to-5m.patch |  53 ++++++
- ...x-usage-of-variables-from-tst_net.sh.patch | 154 ++++++++++++++++++
- ...-Fix-usage-of-PAGESIZE-from-memcg_li.patch | 121 ++++++++++++++
- 6 files changed, 466 insertions(+)
- create mode 100644 package/ltp-testsuite/0004-nfs05_make_tree-Restore-5-min-timeout.patch
- create mode 100644 package/ltp-testsuite/0005-syscalls-migrate_pages03-restore-runtime-to-5m.patch
- create mode 100644 package/ltp-testsuite/0006-mountns0-1-3-wait-for-umount-completed-in-thread_b.patch
- create mode 100644 package/ltp-testsuite/0007-netstress-Restore-runtime-to-5m.patch
- create mode 100644 package/ltp-testsuite/0008-net_stress-Fix-usage-of-variables-from-tst_net.sh.patch
- create mode 100644 package/ltp-testsuite/0009-memcg-functional-Fix-usage-of-PAGESIZE-from-memcg_li.patch
-
-diff --git a/package/ltp-testsuite/0004-nfs05_make_tree-Restore-5-min-timeout.patch b/package/ltp-testsuite/0004-nfs05_make_tree-Restore-5-min-timeout.patch
-new file mode 100644
-index 0000000000..c12449d814
---- /dev/null
-+++ b/package/ltp-testsuite/0004-nfs05_make_tree-Restore-5-min-timeout.patch
-@@ -0,0 +1,31 @@
-+From 463da729537faa6d5ef206912fdec871c1059dac Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <pvorel@suse.cz>
-+Date: Thu, 16 Jun 2022 16:33:31 +0200
-+Subject: [PATCH] nfs05_make_tree: Restore 5 min timeout
-+
-+nfs05_make_tree is a long running test. The previous default timeout 5
-+min was enough after reducing runtime in 05be61cf6.
-+
-+But the new default 30 sec introduced in the concept of max runtime is
-+definitely not enough. Restore the previous timeout 5 min.
-+
-+Signed-off-by: Petr Vorel <pvorel@suse.cz>
-+
-+[ upstream status: 463da729537faa6d5ef206912fdec871c1059dac ]
-+---
-+ testcases/network/nfs/nfs_stress/nfs05_make_tree.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/testcases/network/nfs/nfs_stress/nfs05_make_tree.c b/testcases/network/nfs/nfs_stress/nfs05_make_tree.c
-+index fdc13bd5d..5456c1bf0 100644
-+--- a/testcases/network/nfs/nfs_stress/nfs05_make_tree.c
-++++ b/testcases/network/nfs/nfs_stress/nfs05_make_tree.c
-+@@ -215,4 +215,5 @@ static struct tst_test test = {
-+ 	.options = opts,
-+ 	.test_all = do_test,
-+ 	.setup = setup,
-++	.max_runtime = 300,
-+ };
-+-- 
-+2.37.1
-+
-diff --git a/package/ltp-testsuite/0005-syscalls-migrate_pages03-restore-runtime-to-5m.patch b/package/ltp-testsuite/0005-syscalls-migrate_pages03-restore-runtime-to-5m.patch
-new file mode 100644
-index 0000000000..8229f98d26
---- /dev/null
-+++ b/package/ltp-testsuite/0005-syscalls-migrate_pages03-restore-runtime-to-5m.patch
-@@ -0,0 +1,44 @@
-+From 9fb28002bb2ce988b99d1756ff7b902f76e3472a Mon Sep 17 00:00:00 2001
-+From: Jan Stancek <jstancek@redhat.com>
-+Date: Tue, 21 Jun 2022 10:37:17 +0200
-+Subject: [PATCH] syscalls/migrate_pages03: restore runtime to 5m
-+
-+Arches with large pages have trouble completing all loops in 30s,
-+restore runtime to 5m. Also check for remaining runtime and
-+exit if we run out.
-+
-+Signed-off-by: Jan Stancek <jstancek@redhat.com>
-+Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
-+Signed-off-by: Li Wang <liwang@redhat.com>
-+[ upstream status: 9fb28002bb2ce988b99d1756ff7b902f76e3472a ]
-+---
-+ testcases/kernel/syscalls/migrate_pages/migrate_pages03.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/testcases/kernel/syscalls/migrate_pages/migrate_pages03.c b/testcases/kernel/syscalls/migrate_pages/migrate_pages03.c
-+index c6afb4cce..2866c96e6 100644
-+--- a/testcases/kernel/syscalls/migrate_pages/migrate_pages03.c
-++++ b/testcases/kernel/syscalls/migrate_pages/migrate_pages03.c
-+@@ -127,6 +127,11 @@ static void migrate_test(void)
-+ 			tst_res(TFAIL | TERRNO, "migrate_pages() failed");
-+ 			return;
-+ 		}
-++
-++		if (!tst_remaining_runtime()) {
-++			tst_res(TINFO, "Out of runtime, exitting...");
-++			break;
-++		}
-+ 	}
-+ 	SAFE_SETEUID(0);
-+ 
-+@@ -134,6 +139,7 @@ static void migrate_test(void)
-+ }
-+ 
-+ static struct tst_test test = {
-++	.max_runtime = 300,
-+ 	.min_kver = "2.6.32",
-+ 	.needs_root = 1,
-+ 	.setup = setup,
-+-- 
-+2.37.1
-+
-diff --git a/package/ltp-testsuite/0006-mountns0-1-3-wait-for-umount-completed-in-thread_b.patch b/package/ltp-testsuite/0006-mountns0-1-3-wait-for-umount-completed-in-thread_b.patch
-new file mode 100644
-index 0000000000..73904806fd
---- /dev/null
-+++ b/package/ltp-testsuite/0006-mountns0-1-3-wait-for-umount-completed-in-thread_b.patch
-@@ -0,0 +1,63 @@
-+From 6d4c8343d33e7d8fa059246310413f029a9e8573 Mon Sep 17 00:00:00 2001
-+From: Li Wang <liwang@redhat.com>
-+Date: Thu, 7 Jul 2022 17:38:45 +0800
-+Subject: [PATCH] mountns0[1-3]: wait for umount completed in thread_b
-+
-+To get rid of race condition (occurs with umount_folders):
-+
-+    mountns01.c:42: TPASS: shared mount in parent passed
-+    mountns01.c:83: TPASS: shared mount in child passed
-+    tst_device.c:394: TWARN: umount('B') failed with EINVAL
-+    mountns.h:39: TWARN: umount(B) failed: EINVAL (22)
-+
-+Signed-off-by: Li Wang <liwang@redhat.com>
-+Reviewed-by: Yang Xu <xuyang2018.jy@fujitsu.com>
-+[ upstream status: 6d4c8343d33e7d8fa059246310413f029a9e8573 ]
-+---
-+ testcases/kernel/containers/mountns/mountns01.c | 2 ++
-+ testcases/kernel/containers/mountns/mountns02.c | 2 ++
-+ testcases/kernel/containers/mountns/mountns03.c | 2 ++
-+ 3 files changed, 6 insertions(+)
-+
-+diff --git a/testcases/kernel/containers/mountns/mountns01.c b/testcases/kernel/containers/mountns/mountns01.c
-+index e99134aba..e8f176920 100644
-+--- a/testcases/kernel/containers/mountns/mountns01.c
-++++ b/testcases/kernel/containers/mountns/mountns01.c
-+@@ -86,6 +86,8 @@ static void run(void)
-+ 
-+ 	TST_CHECKPOINT_WAKE(0);
-+ 
-++	SAFE_WAIT(NULL);
-++
-+ 	SAFE_UMOUNT(DIRA);
-+ }
-+ 
-+diff --git a/testcases/kernel/containers/mountns/mountns02.c b/testcases/kernel/containers/mountns/mountns02.c
-+index 258b61217..4b85fa79b 100644
-+--- a/testcases/kernel/containers/mountns/mountns02.c
-++++ b/testcases/kernel/containers/mountns/mountns02.c
-+@@ -87,6 +87,8 @@ static void run(void)
-+ 
-+ 	TST_CHECKPOINT_WAKE(0);
-+ 
-++	SAFE_WAIT(NULL);
-++
-+ 	SAFE_UMOUNT(DIRA);
-+ }
-+ 
-+diff --git a/testcases/kernel/containers/mountns/mountns03.c b/testcases/kernel/containers/mountns/mountns03.c
-+index f37ae7902..1d26a25d8 100644
-+--- a/testcases/kernel/containers/mountns/mountns03.c
-++++ b/testcases/kernel/containers/mountns/mountns03.c
-+@@ -97,6 +97,8 @@ static void run(void)
-+ 
-+ 	TST_CHECKPOINT_WAKE(0);
-+ 
-++	SAFE_WAIT(NULL);
-++
-+ 	SAFE_UMOUNT(DIRA);
-+ }
-+ 
-+-- 
-+2.37.1
-+
-diff --git a/package/ltp-testsuite/0007-netstress-Restore-runtime-to-5m.patch b/package/ltp-testsuite/0007-netstress-Restore-runtime-to-5m.patch
-new file mode 100644
-index 0000000000..acaccf1e1f
---- /dev/null
-+++ b/package/ltp-testsuite/0007-netstress-Restore-runtime-to-5m.patch
-@@ -0,0 +1,53 @@
-+From cc4a27c235d0cf69a55cd8829b232566b0223333 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <pvorel@suse.cz>
-+Date: Wed, 13 Jul 2022 09:46:14 +0200
-+Subject: [PATCH] netstress: Restore runtime to 5m
-+
-+netstress requires the previous default timeout 5m due longer timeout
-+for higher message sizes (e.g. 65535):
-+
-+./sctp_ipsec.sh -6 -p comp -m transport -s 100:1000:65535:R65535
-+sctp_ipsec 1 TPASS: netstress passed, median time 5 ms, data: 5 9 6 5 5
-+sctp_ipsec 2 TINFO: run server 'netstress -T sctp -S fd00:1:1:1::1 -D ltp_ns_veth1 -R 500000 -B /tmp/LTP_sctp_ipsec.ARZbGkvjPa'
-+sctp_ipsec 2 TINFO: run client 'netstress -l -T sctp -H fd00:1:1:1::1 -n 1000 -N 1000 -S fd00:1:1:1::2 -D ltp_ns_veth2 -a 2 -r 100 -d /tmp/LTP_sctp_ipsec.ARZbGkvjPa/tst_netload.res' 5 times
-+sctp_ipsec 2 TPASS: netstress passed, median time 6 ms, data: 8 6 6 5 6
-+sctp_ipsec 3 TINFO: run server 'netstress -T sctp -S fd00:1:1:1::1 -D ltp_ns_veth1 -R 500000 -B /tmp/LTP_sctp_ipsec.ARZbGkvjPa'
-+sctp_ipsec 3 TINFO: run client 'netstress -l -T sctp -H fd00:1:1:1::1 -n 65535 -N 65535 -S fd00:1:1:1::2 -D ltp_ns_veth2 -a 2 -r 100 -d /tmp/LTP_sctp_ipsec.ARZbGkvjPa/tst_netload.res' 5 times
-+sctp_ipsec 3 TWARN: netstress failed, ret: 2
-+tst_test.c:1526: TINFO: Timeout per run is 0h 00m 30s
-+netstress.c:896: TINFO: IP_BIND_ADDRESS_NO_PORT is used
-+netstress.c:898: TINFO: connection: addr 'fd00:1:1:1::1', port '55097'
-+netstress.c:900: TINFO: client max req: 100
-+netstress.c:901: TINFO: clients num: 2
-+netstress.c:906: TINFO: client msg size: 65535
-+netstress.c:907: TINFO: server msg size: 65535
-+netstress.c:979: TINFO: SCTP client
-+netstress.c:475: TINFO: Running the test over IPv6
-+Test timeouted, sending SIGKILL!
-+tst_test.c:1577: TINFO: If you are running on slow machine, try exporting LTP_TIMEOUT_MUL > 1
-+tst_test.c:1579: TBROK: Test killed! (timeout?)
-+
-+Converting netstress.c to use TST_NO_DEFAULT_MAIN (i.e. implementing main)
-+would require more changes, because it uses .forks_child, .needs_checkpoints,
-+cleanup function.
-+
-+Signed-off-by: Petr Vorel <pvorel@suse.cz>
-+[ upstream status: cc4a27c235d0cf69a55cd8829b232566b0223333 ]
-+---
-+ testcases/network/netstress/netstress.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/testcases/network/netstress/netstress.c b/testcases/network/netstress/netstress.c
-+index 6c9e83112..7c222531d 100644
-+--- a/testcases/network/netstress/netstress.c
-++++ b/testcases/network/netstress/netstress.c
-+@@ -1028,5 +1028,6 @@ static struct tst_test test = {
-+ 		{"B:", &server_bg, "Run in background, arg is the process directory"},
-+ 		{}
-+ 	},
-++	.max_runtime = 300,
-+ 	.needs_checkpoints = 1,
-+ };
-+-- 
-+2.37.1
-+
-diff --git a/package/ltp-testsuite/0008-net_stress-Fix-usage-of-variables-from-tst_net.sh.patch b/package/ltp-testsuite/0008-net_stress-Fix-usage-of-variables-from-tst_net.sh.patch
-new file mode 100644
-index 0000000000..ba187366ff
---- /dev/null
-+++ b/package/ltp-testsuite/0008-net_stress-Fix-usage-of-variables-from-tst_net.sh.patch
-@@ -0,0 +1,154 @@
-+From 33c156e295e35d4839a135d8ba5db485b7712ced Mon Sep 17 00:00:00 2001
-+From: Joerg Vehlow <joerg.vehlow@aox.de>
-+Date: Mon, 27 Jun 2022 09:27:09 +0200
-+Subject: [PATCH] net_stress: Fix usage of variables from tst_net.sh
-+
-+These tests use variables (NS_TIMES, IP_TOTAL, ROUTE_TOTAL
-+and IF_UPDOWN_TIMES) from tst_net.sh, before sourcing it.
-+
-+Fixes: 04021637f ("tst_test.sh: Cleanup getopts usage")
-+
-+Reviewed-by: Petr Vorel <pvorel@suse.cz>
-+Signed-off-by: Joerg Vehlow <joerg.vehlow@aox.de>
-+[ upstream status: 33c156e295e35d4839a135d8ba5db485b7712ced ]
-+---
-+ testcases/network/stress/interface/if-addr-adddel.sh    | 7 ++++---
-+ testcases/network/stress/interface/if-addr-addlarge.sh  | 7 ++++---
-+ testcases/network/stress/interface/if-route-adddel.sh   | 5 +++--
-+ testcases/network/stress/interface/if-route-addlarge.sh | 5 +++--
-+ testcases/network/stress/interface/if-updown.sh         | 5 +++--
-+ testcases/network/stress/interface/if4-addr-change.sh   | 4 +++-
-+ 6 files changed, 20 insertions(+), 13 deletions(-)
-+
-+diff --git a/testcases/network/stress/interface/if-addr-adddel.sh b/testcases/network/stress/interface/if-addr-adddel.sh
-+index cb453e612..0750501f0 100755
-+--- a/testcases/network/stress/interface/if-addr-adddel.sh
-++++ b/testcases/network/stress/interface/if-addr-adddel.sh
-+@@ -7,9 +7,6 @@
-+ 
-+ IF_CMD='ifconfig'
-+ 
-+-# The interval of the check interface activity
-+-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
-+-
-+ test_body()
-+ {
-+ 	local cmd="$CMD"
-+@@ -89,4 +86,8 @@ test_body()
-+ }
-+ 
-+ . if-lib.sh
-++
-++# The interval of the check interface activity
-++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
-++
-+ tst_run
-+diff --git a/testcases/network/stress/interface/if-addr-addlarge.sh b/testcases/network/stress/interface/if-addr-addlarge.sh
-+index 3c876c17d..d0759c86b 100755
-+--- a/testcases/network/stress/interface/if-addr-addlarge.sh
-++++ b/testcases/network/stress/interface/if-addr-addlarge.sh
-+@@ -7,9 +7,6 @@
-+ 
-+ IF_CMD='ifconfig'
-+ 
-+-# The interval of the check interface activity
-+-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($IP_TOTAL / 20))}
-+-
-+ test_body()
-+ {
-+ 	local cmd="$CMD"
-+@@ -110,4 +107,8 @@ test_body()
-+ }
-+ 
-+ . if-lib.sh
-++
-++# The interval of the check interface activity
-++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($IP_TOTAL / 20))}
-++
-+ tst_run
-+diff --git a/testcases/network/stress/interface/if-route-adddel.sh b/testcases/network/stress/interface/if-route-adddel.sh
-+index b50da268a..51445e4f7 100755
-+--- a/testcases/network/stress/interface/if-route-adddel.sh
-++++ b/testcases/network/stress/interface/if-route-adddel.sh
-+@@ -7,8 +7,6 @@
-+ 
-+ IF_CMD='route'
-+ 
-+-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
-+-
-+ test_body()
-+ {
-+ 	local cmd="$CMD"
-+@@ -64,4 +62,7 @@ test_body()
-+ }
-+ 
-+ . if-lib.sh
-++
-++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
-++
-+ tst_run
-+diff --git a/testcases/network/stress/interface/if-route-addlarge.sh b/testcases/network/stress/interface/if-route-addlarge.sh
-+index 7d09d1216..355b6b4ab 100755
-+--- a/testcases/network/stress/interface/if-route-addlarge.sh
-++++ b/testcases/network/stress/interface/if-route-addlarge.sh
-+@@ -7,8 +7,6 @@
-+ 
-+ IF_CMD='route'
-+ 
-+-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($ROUTE_TOTAL / 20))}
-+-
-+ test_body()
-+ {
-+ 	local cmd="$CMD"
-+@@ -76,4 +74,7 @@ test_body()
-+ }
-+ 
-+ . if-lib.sh
-++
-++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($ROUTE_TOTAL / 20))}
-++
-+ tst_run
-+diff --git a/testcases/network/stress/interface/if-updown.sh b/testcases/network/stress/interface/if-updown.sh
-+index 9a5709c85..71c78d785 100755
-+--- a/testcases/network/stress/interface/if-updown.sh
-++++ b/testcases/network/stress/interface/if-updown.sh
-+@@ -8,8 +8,6 @@
-+ IF_CMD='ifconfig'
-+ TST_CLEANUP="if_cleanup_restore"
-+ 
-+-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($IF_UPDOWN_TIMES / 20))}
-+-
-+ test_body()
-+ {
-+ 	local cmd="$CMD"
-+@@ -47,4 +45,7 @@ test_body()
-+ }
-+ 
-+ . if-lib.sh
-++
-++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($IF_UPDOWN_TIMES / 20))}
-++
-+ tst_run
-+diff --git a/testcases/network/stress/interface/if4-addr-change.sh b/testcases/network/stress/interface/if4-addr-change.sh
-+index b9ece2af9..f162e6a51 100755
-+--- a/testcases/network/stress/interface/if4-addr-change.sh
-++++ b/testcases/network/stress/interface/if4-addr-change.sh
-+@@ -9,7 +9,6 @@ TST_CLEANUP="do_cleanup"
-+ TST_TESTFUNC="test_body"
-+ TST_NEEDS_CMDS="ifconfig"
-+ 
-+-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
-+ # Maximum host portion of the IPv4 address on the local host
-+ LHOST_IPV4_HOST_MAX="254"
-+ 
-+@@ -61,4 +60,7 @@ test_body()
-+ }
-+ 
-+ . tst_net.sh
-++
-++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
-++
-+ tst_run
-+-- 
-+2.37.1
-+
-diff --git a/package/ltp-testsuite/0009-memcg-functional-Fix-usage-of-PAGESIZE-from-memcg_li.patch b/package/ltp-testsuite/0009-memcg-functional-Fix-usage-of-PAGESIZE-from-memcg_li.patch
-new file mode 100644
-index 0000000000..6cc36cda79
---- /dev/null
-+++ b/package/ltp-testsuite/0009-memcg-functional-Fix-usage-of-PAGESIZE-from-memcg_li.patch
-@@ -0,0 +1,121 @@
-+From bda92ad659a52d38ac810099f69adff626b064c6 Mon Sep 17 00:00:00 2001
-+From: Joerg Vehlow <joerg.vehlow@aox.de>
-+Date: Mon, 27 Jun 2022 10:44:49 +0200
-+Subject: [PATCH] memcg/functional: Fix usage of PAGESIZE from memcg_lib.sh
-+
-+$PAGESIZES is set in memcg_lib.sh, which was moved to the bottom of the file.
-+
-+Fixes: 04021637f ("tst_test.sh: Cleanup getopts usage")
-+
-+Reviewed-by: Petr Vorel <pvorel@suse.cz>
-+Signed-off-by: Joerg Vehlow <joerg.vehlow@aox.de>
-+[ upstream status: bda92ad659a52d38ac810099f69adff626b064c6 ]
-+---
-+ .../controllers/memcg/functional/memcg_failcnt.sh      |  7 ++++---
-+ .../memcg/functional/memcg_max_usage_in_bytes_test.sh  | 10 +++++-----
-+ .../memcg/functional/memcg_subgroup_charge.sh          |  8 ++++----
-+ .../memcg/functional/memcg_usage_in_bytes_test.sh      | 10 +++++-----
-+ 4 files changed, 18 insertions(+), 17 deletions(-)
-+
-+diff --git a/testcases/kernel/controllers/memcg/functional/memcg_failcnt.sh b/testcases/kernel/controllers/memcg/functional/memcg_failcnt.sh
-+index 1fed01569..1be98a056 100755
-+--- a/testcases/kernel/controllers/memcg/functional/memcg_failcnt.sh
-++++ b/testcases/kernel/controllers/memcg/functional/memcg_failcnt.sh
-+@@ -12,9 +12,6 @@ MEMCG_TESTFUNC=test
-+ MEMCG_SHMMAX=1
-+ TST_TEST_DATA="--mmap-anon --mmap-file --shm"
-+ 
-+-MEMORY_LIMIT=$PAGESIZE
-+-MEMORY_TO_ALLOCATE=$((MEMORY_LIMIT * 2))
-+-
-+ test()
-+ {
-+ 	ROD echo $MEMORY_LIMIT \> memory.limit_in_bytes
-+@@ -36,4 +33,8 @@ test()
-+ }
-+ 
-+ . memcg_lib.sh
-++
-++MEMORY_LIMIT=$PAGESIZE
-++MEMORY_TO_ALLOCATE=$((MEMORY_LIMIT * 2))
-++
-+ tst_run
-+diff --git a/testcases/kernel/controllers/memcg/functional/memcg_max_usage_in_bytes_test.sh b/testcases/kernel/controllers/memcg/functional/memcg_max_usage_in_bytes_test.sh
-+index d1ffbe053..302810513 100755
-+--- a/testcases/kernel/controllers/memcg/functional/memcg_max_usage_in_bytes_test.sh
-++++ b/testcases/kernel/controllers/memcg/functional/memcg_max_usage_in_bytes_test.sh
-+@@ -9,11 +9,6 @@
-+ MEMCG_TESTFUNC=test
-+ TST_CNT=4
-+ 
-+-
-+-MEM_TO_ALLOC=$((PAGESIZE * 1024))
-+-MEM_EXPECTED_UPPER=$((MEM_TO_ALLOC + MEM_USAGE_RANGE))
-+-MEM_LIMIT=$((MEM_TO_ALLOC * 2))
-+-
-+ # Run test cases which checks memory.[memsw.]max_usage_in_bytes after make
-+ # some memory allocation
-+ test_max_usage_in_bytes()
-+@@ -88,4 +83,9 @@ test4()
-+ }
-+ 
-+ . memcg_lib.sh
-++
-++MEM_TO_ALLOC=$((PAGESIZE * 1024))
-++MEM_EXPECTED_UPPER=$((MEM_TO_ALLOC + MEM_USAGE_RANGE))
-++MEM_LIMIT=$((MEM_TO_ALLOC * 2))
-++
-+ tst_run
-+diff --git a/testcases/kernel/controllers/memcg/functional/memcg_subgroup_charge.sh b/testcases/kernel/controllers/memcg/functional/memcg_subgroup_charge.sh
-+index 08b6697d4..9bcc01258 100755
-+--- a/testcases/kernel/controllers/memcg/functional/memcg_subgroup_charge.sh
-++++ b/testcases/kernel/controllers/memcg/functional/memcg_subgroup_charge.sh
-+@@ -12,10 +12,6 @@
-+ MEMCG_TESTFUNC=test
-+ TST_CNT=3
-+ 
-+-
-+-# Allocate memory bigger than per-cpu kernel memory
-+-MEM_TO_ALLOC=$((PAGESIZES * 2))
-+-
-+ # Test the memory charge won't move to subgroup
-+ # $1 - memory.limit_in_bytes in sub group
-+ test_subgroup()
-+@@ -67,4 +63,8 @@ test3()
-+ }
-+ 
-+ . memcg_lib.sh
-++
-++# Allocate memory bigger than per-cpu kernel memory
-++MEM_TO_ALLOC=$((PAGESIZES * 2))
-++
-+ tst_run
-+diff --git a/testcases/kernel/controllers/memcg/functional/memcg_usage_in_bytes_test.sh b/testcases/kernel/controllers/memcg/functional/memcg_usage_in_bytes_test.sh
-+index 6f932124e..125d88e55 100755
-+--- a/testcases/kernel/controllers/memcg/functional/memcg_usage_in_bytes_test.sh
-++++ b/testcases/kernel/controllers/memcg/functional/memcg_usage_in_bytes_test.sh
-+@@ -9,11 +9,6 @@
-+ MEMCG_TESTFUNC=test
-+ TST_CNT=2
-+ 
-+-
-+-MEM_TO_ALLOC=$((PAGESIZE * 1024))
-+-MEM_EXPECTED_UPPER=$((MEM_TO_ALLOC + MEM_USAGE_RANGE))
-+-MEM_LIMIT=$((MEM_TO_ALLOC * 2))
-+-
-+ test1()
-+ {
-+ 	tst_res TINFO "Test memory.usage_in_bytes"
-+@@ -35,4 +30,9 @@ test2()
-+ }
-+ 
-+ . memcg_lib.sh
-++
-++MEM_TO_ALLOC=$((PAGESIZE * 1024))
-++MEM_EXPECTED_UPPER=$((MEM_TO_ALLOC + MEM_USAGE_RANGE))
-++MEM_LIMIT=$((MEM_TO_ALLOC * 2))
-++
-+ tst_run
-+-- 
-+2.37.1
-+
--- 
-2.36.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gTWF0dCwKCkxlIDE1LzAyLzIwMjEgw6AgMDY6MzIsIE1hdHQgV2ViZXIgYSDDqWNyaXTC
+oDoKPiBUaGlzIHBhdGNoIGFkZHMgYSBuZXcgbWFrZSB0YXJnZXQgZm9yIGJ1aWxkaW5nIGEgRG9j
+a2VyIHdpdGgKPiBhbiBTREsgaW5zdGFsbGVkLiBUaGlzIHBhdGNoIGhhcyBub3QgYmVlbiBicm9r
+ZW4gdXAgYW5kIGlzIGZvcgo+IFJGQyBvbmx5IHRvIGdldCBmZWVkYmFjayBvbiB0aGUgdGVjaG5p
+Y2FsIGFwcHJvYWNoLgo+IAo+ICAtIGBtYWtlIHNkay1kb2NrZXJgIGZpcnN0IHNldHMgdXAgdGhl
+IGRvY2tjcm9zcyBwYWNrYWdlIGFuZAo+ICAgIHRoZSBlbnZpcm9ubWVudC1zZXR1cCBzY3JpcHQg
+dG8gc3RhZ2UgdGhlIGVudmlyb25tZW50Lgo+IAo+ICAtIFRoZSBkb2NrY3Jvc3MgcGFja2FnZSBp
+biBCdWlsZHJvb3QgaW5jbHVkZXMgYSBmb2xkZXIgd2l0aAo+ICAgIGEgY3VzdG9tIERvY2tlcmZp
+bGUgYW5kIHByZS1leGVjIHNldHVwIHNjcmlwdHMgd2hpY2ggYXJlCj4gICAgY29waWVkIGludG8g
+dGhlIGRvY2tjcm9zcyBidWlsZCBmb2xkZXIgYXQgY29uZmlndXJlIHRpbWUuCj4gICAgVGhpcyBE
+b2NrZXJmaWxlIHVzZXMgdGhlIEJ1aWxkcm9vdCBiYXNlIGFuZCBzZXRzIHVwIG90aGVyCj4gICAg
+dG9vbHMgdG8gYWxsb3cgYSBwcm9qZWN0IHRvIGNvbXBsZXRlbHkgZXhlY3V0ZSBhIGJ1aWxkIGZs
+b3cKPiAgICB3aXRoIG1ha2UgLyBjbWFrZSAvIG1lc29uIC8gc2NvbnMuCgpVc3VhbGx5IG1lc29u
+LCBzY29ucyBhbmQgc29tZXRpbWUgY21ha2UgYXJlIHByb3ZpZGVkIGJ5IEJ1aWxkcm9vdCBhcyBo
+b3N0CnBhY2thZ2UuIFRoZSBCdWlsZHJvb3QgU0RLIHJlbHkgb24gQnVpbGRyb290IHByb3ZpZGVk
+IGhvc3QgYnVpbGQgdG9vbHMuCgo+IAo+ICAtIFdpdGhpbiB0aGUgRG9ja2Nyb3NzIHBhY2thZ2Us
+IHRoZSBlbnRyeXBvaW50IGFuZCBzdWRvCj4gICAgc2NyaXB0aW5nIGFyZSByZXVzZWQgYnV0IGEg
+bmV3IHN0YW5kYXJkIGltYWdlL2N1c3RvbSBpbWFnZQo+ICAgIGlzIG5vdCBkZWZpbmVkLgoKSXQg
+c2VlbXMgdGhhdCBsYWJlbC1zY2hlbWEgKHJjMSkgaXMgZGVwcmVjYXRlZCBpbiBmYXZvdXIgb2Yg
+b2NpIGltYWdlIHNwZWMgOgoKaHR0cDovL2xhYmVsLXNjaGVtYS5vcmcvcmMxLwoKPiAgICBJbnN0
+ZWFkIHRoaXMgcGF0Y2hzZXQgZHVwbGljYXRlcyB0aGUKPiAgICBkb2NrZXIgYnVpbGQgc3RlcCBp
+biB0aGUgQnVpbGRyb290IHRvcC1sZXZlbCBNYWtlZmlsZS4KPiAgICBUaGUgZW50cnlwb2ludCAv
+IHN1ZG8gc2NyaXB0aW5nIHdlcmUgcmV1c2VkIGJlY2F1c2UgaXQKPiAgICBoYW5kbGVzIHNlYW1s
+ZXNzIG1hcHBpbmcgb2YgdGhlIGNhbGxpbmcgdXNlciBpbnRvIHRoZQo+ICAgIGNvbnRhaW5lciBm
+b3IgdGhlIGJ1aWxkIGFuZCBiYWNrIHdpdGggYWxsIHRoZSBmaWxlcyB1aWQvZ2lkCj4gICAgaW50
+YWN0ZWQuCj4gCj4gIC0gT25lIG9mIHRoZSBiZXN0IGFkdmFudGFnZXMgb2YgdGhpcyBlbnZpcm9u
+bWVudCBpcyB0aGUKPiAgICBmYWN0IGl0IHJlc2V0cyBvbiBlYWNoIG5ldyBsYXVjaCBhbmQgaXMg
+Y2xlYW4gZm9yIGEgbmV3Cj4gICAgYnVpbGQuICBJLmUuIGp1c3QgdGhlIFBXRCB3aGljaCBpcyBt
+YXBwZWQgYXMgL3dvcmsgaW5zaWRlCj4gICAgaXMgbWFpbnRhaW5lZCBhZnRlciB0aGUgY29udGFp
+bmVyIHRlYXJzIGRvd24uCj4gCj4gIC0gSSdtIHVuc3VyZSBpZiBpdCBtYWtlcyBzZW5zZSB0byB1
+c2UgZG9ja2Nyb3NzIG9yIGp1c3QgcHVsbAo+ICAgIG92ZXIgdGhlIGNvbmNlcHRzIHRoZXkgdXNl
+IGludG8gQnVpbGRyb290IGRpcmVjdGx5Li4uLgoKSSdtIG5vdCBzdXJlIGVpdGhlci4gZG9ja2Ny
+b3NzIHByb3ZpZGUgYSBjcm9zcy10b29sY2hhaW4gYWxvbmcgd2l0aCBidWlsZCB0b29scwpidXQg
+d2l0aG91dCB0YXJnZXQgbGlicmFyaWVzLiBIZXJlIHlvdSBleHRlbmQgZG9ja2Nyb3NzIHdpdGgg
+dGhlIEJ1aWxkcm9vdCBTREsKKGNyb3NzLXRvb2xjaGFpbiArIHN0YWdpbmcgdGhhdCBjb250YWlu
+cyB0YXJnZXQgbGlicmFyaWVzIHNlbGVjdGVkIGluIHRoZQpCdWlsZHJvb3QgY29uZmlndXJhdGlv
+biB1c2VkIHRvIGdlbmVyYXRlIHRoZSBTREspLgoKTWF5YmUgd2UgbmVlZCBhIG5ldyBuYW1lIGJ1
+dCAiYnVpbGRyb290Y3Jvc3MiIGlzIGFscmVhZHkgYSBwbGVvbmFzbSA6KQoKPiAgICBJIHRoaW5r
+IEkgZm91bmQgYSBnb29kIGJhbGFuY2UgY29uc2lkZXJpbmcgZWFjaCBCdWlsZHJvb3QKPiAgICBk
+ZWZjb25maWcgYnVpbGQgaXMgdW5pcXVlIHNvIGl0IGRvZXNuJ3Qgc2VlbSBsaWtlIHRoZXJlIGlz
+Cj4gICAgYSBjaGFuY2UgdG8gdXBzdHJlYW0gYSBCdWlsZHJvb3QgY29uZmlndXJhdGlvbiB0byBk
+b2NrY3Jvc3MuCj4gCj4gIC0gVE9ETzogQWRkIGEgbWFudWFsIHNlY3Rpb24gdGhhdCBpbmNsdWRl
+cyB1c2FnZSBub3Rlcwo+IAo+ICAtIEhvdyB0byB0ZXN0Cj4gICAgbWFrZSBxZW11X2FhcmNoNjRf
+dmlydF9kZWZjb25maWcKPiAgICBtYWtlIHNkay1kb2NrZXIKPiAgICAjIFVzYWdlIGZyb20gaHR0
+cHM6Ly9naXRodWIuY29tL2RvY2tjcm9zcy9kb2NrY3Jvc3MKPiAgICAjIFNldHVwIGNvbnRhaW5l
+ciBsYXVuY2ggc2NyaXB0Cj4gICAgZG9ja2VyIHJ1biAtLXJtIGRvY2tjcm9zcy9idWlsZHJvb3Qt
+c2RrLWFhcmNoNjQtYnVpbGRyb290LWxpbnV4LWdudSAgPiAuL2RvY2tjcm9zcwo+ICAgICMgVGhp
+cyBkb2NrY3Jvc3Mgc2NyaXB0IG1hcHMgdGhlIHB3ZCBpbnRvIHRoZSBjb250YWluZXIgYXMgL3dv
+cmsKPiAgICAjIGFzIHdlbGwgYXMgdGhlIGN1cnJlbnQgdXNlcnMgJEhPTUUgYXMgJEhPTUUgaW5z
+aWRlLgo+ICAgICMgRXhlY3V0aW5nIHRoZSBzY3JpcHQgdG8gZHVtcCB0aGUgZW52LCBzaG91bGQg
+bGlzdCBhbGwgdGhlCj4gICAgIyBlbnZpcm9ubWVudC1zZXR1cCBleHBvcnRlZCB2YWx1ZXMgZm9y
+IHVzZQo+ICAgIC4vZG9ja2Nyb3NzIGJhc2ggLWMgJ2V4cG9ydCcKPiAgICAjIENoZWNrIHRoYXQg
+dGhlIGNyb3NzIHRvb2xjaGFpbiBleGVjdXRlcwo+ICAgIC4vZG9ja2Nyb3NzIGJhc2ggLWMgJyRD
+QyAtdmVyc2lvbicKPiAKPiBTaWduZWQtb2ZmLWJ5OiBNYXR0IFdlYmVyIDxtYXR0QHRoZXdlYmVy
+cy53cz4KPiAtLS0KPiAgTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+fCAxNiArKysrKwo+ICBkb2NzL21hbnVhbC91c2luZy1idWlsZHJvb3QtdG9vbGNoYWluLnR4dCB8
+ICAyICsKPiAgcGFja2FnZS9kb2NrY3Jvc3MvYnVpbGRyb290L0RvY2tlcmZpbGUgICAgfCA4OCAr
+KysrKysrKysrKysrKysrKysrKysrKwo+ICBwYWNrYWdlL2RvY2tjcm9zcy9idWlsZHJvb3QvcHJl
+X2V4ZWMuc2ggICB8ICA5ICsrKwo+ICBwYWNrYWdlL2RvY2tjcm9zcy9kb2NrY3Jvc3MuaGFzaCAg
+ICAgICAgICB8ICAzICsKPiAgcGFja2FnZS9kb2NrY3Jvc3MvZG9ja2Nyb3NzLm1rICAgICAgICAg
+ICAgfCAyNCArKysrKysrCj4gIDYgZmlsZXMgY2hhbmdlZCwgMTQyIGluc2VydGlvbnMoKykKPiAg
+Y3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZG9ja2Nyb3NzL2J1aWxkcm9vdC9Eb2NrZXJmaWxl
+Cj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2RvY2tjcm9zcy9idWlsZHJvb3QvcHJlX2V4
+ZWMuc2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZG9ja2Nyb3NzL2RvY2tjcm9zcy5o
+YXNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2RvY2tjcm9zcy9kb2NrY3Jvc3MubWsK
+PiAKPiBkaWZmIC0tZ2l0IGEvTWFrZWZpbGUgYi9NYWtlZmlsZQo+IGluZGV4IDE0ZTEwMjIzZWQu
+LmYzYTM3ZGZmMjYgMTAwNjQ0Cj4gLS0tIGEvTWFrZWZpbGUKPiArKysgYi9NYWtlZmlsZQo+IEBA
+IC02MTcsNiArNjE3LDIxIEBAIHNkazogcHJlcGFyZS1zZGsgJChCUjJfVEFSX0hPU1RfREVQRU5E
+RU5DWSkKPiAgCQktLXRyYW5zZm9ybT0ncyNeJChwYXRzdWJzdCAvJSwlLCQoSE9TVF9ESVIpKSMk
+KEJSMl9TREtfUFJFRklYKSMnIFwKPiAgCQktQyAvICQocGF0c3Vic3QgLyUsJSwkKEhPU1RfRElS
+KSkKPiAgCj4gKy5QSE9OWTogc2RrLWRvY2tlcgo+ICtzZGstZG9ja2VyOiBzZGsgaG9zdC1kb2Nr
+Y3Jvc3MgaG9zdC1lbnZpcm9ubWVudC1zZXR1cAo+ICsJQCQoY2FsbCBNRVNTQUdFLCJHZW5lcmF0
+aW5nIFNESyBEb2NrZXIgaW1hZ2UiKQo+ICsJY2QgJChIT1NUX0RPQ0tDUk9TU19TUkNESVIpICYm
+IFwKPiArCWNwIC1hICIkKEJJTkFSSUVTX0RJUikvJChCUjJfU0RLX1BSRUZJWCkudGFyLmd6IiBi
+dWlsZHJvb3QvICYmIFwKPiArCWRvY2tlciBidWlsZCAtdCBkb2NrY3Jvc3MvYnVpbGRyb290LXNk
+ay0kKEdOVV9UQVJHRVRfTkFNRSk6bGF0ZXN0IFwKCkkgd291bGQgdXNlIGFuIHVuaXF1ZSB0YWcg
+aGVyZSBpbnN0ZWFkIHVzaW5nIGxhdGVzdC4KCj4gKwkJLS1idWlsZC1hcmcgQlVJTERST09UX1NE
+S19GSUxFPSQoQlIyX1NES19QUkVGSVgpLnRhci5neiBcCj4gKwkJLS1idWlsZC1hcmcgSU1BR0U9
+ZG9ja2Nyb3NzL2J1aWxkcm9vdC1zZGstJChHTlVfVEFSR0VUX05BTUUpIFwKPiArCQktLWJ1aWxk
+LWFyZyBWQ1NfUkVGPWBnaXQgLUMgJChUT1BESVIpIHJldi1wYXJzZSAtLXNob3J0IEhFQURgIFwK
+PiArCQktLWJ1aWxkLWFyZyBWQ1NfVVJMPWBnaXQgLUMgJChUT1BESVIpIGNvbmZpZyAtLWdldCBy
+ZW1vdGUub3JpZ2luLnVybGAgXAoKVXNpbmcgZ2l0IGhlcmUgcmVxdWlyZXMgcnVubmluZyBzZGst
+ZG9ja2VyIGZyb20gYSBCdWlsZHJvb3QgZ2l0IHJlcG9zaXRvcnkuIEl0CndpbGwgbm90IHdvcmsg
+ZnJvbSBhIHJlbGVhc2UgYXJjaGl2ZS4KCj4gKwkJLS1idWlsZC1hcmcgQlVJTERfREFURT1gZGF0
+ZSAtdSArIiVZLSVtLSVkVCVIOiVNOiVTWiJgIFwKPiArCQktZiBidWlsZHJvb3QvRG9ja2VyZmls
+ZSAuCj4gKwlkb2NrZXIgc2F2ZSBkb2NrY3Jvc3MvYnVpbGRyb290LXNkay0kKEdOVV9UQVJHRVRf
+TkFNRSk6bGF0ZXN0IHwgXAo+ICsJCWd6aXAgPiAkKEJJTkFSSUVTX0RJUikvJChCUjJfU0RLX1BS
+RUZJWClfZG9ja2VyLnRhci5nego+ICsKPiAgUlNZTkNfVkNTX0VYQ0xVU0lPTlMgPSBcCj4gIAkt
+LWV4Y2x1ZGUgLnN2biAtLWV4Y2x1ZGUgLmdpdCAtLWV4Y2x1ZGUgLmhnIC0tZXhjbHVkZSAuYnpy
+IFwKPiAgCS0tZXhjbHVkZSBDVlMKPiBAQCAtMTA5OSw2ICsxMTE0LDcgQEAgaGVscDoKPiAgCUBl
+Y2hvICcgIGFsbCAgICAgICAgICAgICAgICAgICAgLSBtYWtlIHdvcmxkJwo+ICAJQGVjaG8gJyAg
+dG9vbGNoYWluICAgICAgICAgICAgICAtIGJ1aWxkIHRvb2xjaGFpbicKPiAgCUBlY2hvICcgIHNk
+ayAgICAgICAgICAgICAgICAgICAgLSBidWlsZCByZWxvY2F0YWJsZSBTREsnCj4gKwlAZWNobyAn
+ICBzZGstZG9ja2VyICAgICAgICAgICAgIC0gYnVpbGQgYSBEb2NrZXIgZm9yIFNESyBEZXBsb3lt
+ZW50Jwo+ICAJQGVjaG8KPiAgCUBlY2hvICdDb25maWd1cmF0aW9uOicKPiAgCUBlY2hvICcgIG1l
+bnVjb25maWcgICAgICAgICAgICAgLSBpbnRlcmFjdGl2ZSBjdXJzZXMtYmFzZWQgY29uZmlndXJh
+dG9yJwo+IGRpZmYgLS1naXQgYS9kb2NzL21hbnVhbC91c2luZy1idWlsZHJvb3QtdG9vbGNoYWlu
+LnR4dCBiL2RvY3MvbWFudWFsL3VzaW5nLWJ1aWxkcm9vdC10b29sY2hhaW4udHh0Cj4gaW5kZXgg
+MDk0MDhlZjA1YS4uMDE3ZTJkZjQ5NiAxMDA2NDQKPiAtLS0gYS9kb2NzL21hbnVhbC91c2luZy1i
+dWlsZHJvb3QtdG9vbGNoYWluLnR4dAo+ICsrKyBiL2RvY3MvbWFudWFsL3VzaW5nLWJ1aWxkcm9v
+dC10b29sY2hhaW4udHh0Cj4gQEAgLTQ2LDMgKzQ2LDUgQEAgY3Jvc3MtY29tcGlsZSBfYXV0b3Rv
+b2xzXyBwcm9qZWN0cy4gSXQgYWxzbyBwcm92aWRlcyBzb21lIHVzZWZ1bAo+ICBjb21tYW5kcy4g
+Tm90ZSBob3dldmVyIHRoYXQgb25jZSB0aGlzIHNjcmlwdCBpcyBzb3VyY2VkLCB0aGUKPiAgZW52
+aXJvbm1lbnQgaXMgc2V0dXAgb25seSBmb3IgY3Jvc3MtY29tcGlsYXRpb24sIGFuZCBubyBsb25n
+ZXIgZm9yCj4gIG5hdGl2ZSBjb21waWxhdGlvbi4KPiArCj4gK0RvY2tlciBub3Rlcz8/Cj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2UvZG9ja2Nyb3NzL2J1aWxkcm9vdC9Eb2NrZXJmaWxlIGIvcGFja2Fn
+ZS9kb2NrY3Jvc3MvYnVpbGRyb290L0RvY2tlcmZpbGUKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+
+IGluZGV4IDAwMDAwMDAwMDAuLjNjN2EyZWQ1MjIKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFj
+a2FnZS9kb2NrY3Jvc3MvYnVpbGRyb290L0RvY2tlcmZpbGUKPiBAQCAtMCwwICsxLDg4IEBACj4g
+KyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICtGUk9NIGJ1aWxkcm9v
+dC9iYXNlOjIwMjAwODE0LjIyMjgKPiArIyBSZXZlcnQgZGVmYXVsdHMgb2YgdGhlIGJ1aWxkcm9v
+dC9iYXNlCj4gK1VTRVIgMAo+ICtFTlYgSE9NRSAvcm9vdAo+ICtSVU4gZWNobyAicm9vdDpyb290
+IiB8IGNocGFzc3dkCj4gK1JVTiBkZWx1c2VyIGJyLXVzZXIgJiYgcm0gLXJmIC9ob21lL2JyLXVz
+ZXIKCkZvciB0aGUgZmluYWwgdmVyc2lvbiBvZiBzZGstZG9ja2VyLCB3ZSBzaG91bGQgYXZvaWQg
+dXNpbmcgdGhlIEJ1aWxkcm9vdC9iYXNlCmltYWdlIGJ1dCBidWlsZGluZyBhIG5ldyBpbWFnZSBm
+cm9tIERlYmlhbiBkb2NrZXIgaW1hZ2UgaXMgc2xvdy4KCgo+ICtXT1JLRElSIC93b3JrCj4gKyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsKPiArIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKyMgQWRkIGRldiBlbnZpcm9ubWVudCBleHRy
+YXMKPiArUlVOIGFwdC1nZXQgdXBkYXRlICYmIGFwdC1nZXQgaW5zdGFsbCAteSBcCj4gKwljdXJs
+IGdwZyBnaXQtZW1haWwgb3BlbnNzbCB2aW0gc2NvbnMgbWVzb24gXAo+ICsJc3F1YXNoZnMtdG9v
+bHMgCgpJJ20gbm90IHN1cmUgd2h5IHdlIG5lZWQgdG8gaW5zdGFsbCBtb3JlIHBhY2thZ2UgaGVy
+ZSwgc2NvbnMgbWVzb24gZXRjIHNob3VsZCBiZQpwcm92aWRlZCBieSBCdWlsZHJvb3QgU0RLIGFs
+cmVhZHkuCgpXaHkgZ2l0LWVtYWlsID8KCj4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMKPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIwo+ICsKPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIwo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+Cj4gKyMgQWRkIGluIGNvbW1vbi5kb2NrY3Jvc3MgZmVhdHVyZXMgZm9yIGhhbmRsaW5nCj4gKyMg
+Y3VycmVudCB1c2VyIHRyYW5zcGFyZW5jeQo+ICtDT1BZIFwKPiArICBpbWFnZWZpbGVzL2luc3Rh
+bGwtZ29zdS1iaW5hcnkuc2ggXAo+ICsgIGltYWdlZmlsZXMvaW5zdGFsbC1nb3N1LWJpbmFyeS13
+cmFwcGVyLnNoIFwKPiArICAvYnVpbGRzY3JpcHRzLwo+ICtSVU4gXAo+ICsgIHNldCAteCAmJiBc
+Cj4gKyAgL2J1aWxkc2NyaXB0cy9pbnN0YWxsLWdvc3UtYmluYXJ5LnNoICYmIFwKPiArICAvYnVp
+bGRzY3JpcHRzL2luc3RhbGwtZ29zdS1iaW5hcnktd3JhcHBlci5zaCAmJiBcCj4gKyAgcm0gLXJm
+IC9idWlsZHNjcmlwdHMKPiArQ09QWSBpbWFnZWZpbGVzL2VudHJ5cG9pbnQuc2ggaW1hZ2VmaWxl
+cy9kb2NrY3Jvc3MgL2RvY2tjcm9zcy8KPiArRU5UUllQT0lOVCBbIi9kb2NrY3Jvc3MvZW50cnlw
+b2ludC5zaCJdCgpPaywgd2UgbmVlZHMgY3VybCBhbmQgZ3BnIGluc3RhbGxlZCB0byB1c2UgdGhl
+c2Ugc2NyaXB0cy4KCkJ1dCBnb3N1IHBhY2thZ2UgaXMgbm93IGF2YWlsYWJsZSBpbiBEZWJpYW4g
+c2luY2UgYnVzdGVyOgoKaHR0cHM6Ly9yZXBvbG9neS5vcmcvcHJvamVjdC9nb3N1L3ZlcnNpb25z
+CgpSdW5uaW5nIHRoZXNlIHNjcmlwdCBzaG91bGQgbm90IGJlIG5lY2Vzc2FyeSBhbnltb3JlLgoK
+PiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKwo+ICsjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArIyBTZXR1cCB0aGUgQnVpbGRyb290
+IFNESwo+ICsjCj4gKyMgVGhpcyBEb2NrZXJmaWxlIGNhbiBiZSBjYWxsZWQgZnJvbSB3aXRoaW4g
+dGhlCj4gKyMgaG9zdC1kb2NrY3Jvc3MgZm9sZGVyIGJ1dCBhIHBhdGggaGFzIHRvIGJlCj4gKyMg
+c2V0IHRvIHRoZSBzZGsgdGFyYmFsbCBsaWtlIHRoZSBUT1BESVIvTWFrZWZpbGUKPiArIyB0YXJn
+ZXQgZG9lcy4KPiArIwo+ICtBUkcgQlVJTERST09UX1NES19GSUxFCj4gK1JVTiB0ZXN0IC1uICIk
+QlVJTERST09UX1NES19GSUxFIgo+ICtFTlYgQ1JPU1NfU0RLX0ZJTEUgJEJVSUxEUk9PVF9TREtf
+RklMRQo+ICtFTlYgQ1JPU1NfUk9PVCAvb3B0L3Rvb2xjaGFpbgo+ICtDT1BZIGJ1aWxkcm9vdC8k
+e0NST1NTX1NES19GSUxFfSAvb3B0Cj4gK1JVTiBjZCAvb3B0ICYmIFwKPiArICAgIG1rZGlyIC1w
+ICR7Q1JPU1NfUk9PVH0gJiYgXAo+ICsgICAgdGFyIHhmICR7Q1JPU1NfU0RLX0ZJTEV9IC1DICR7
+Q1JPU1NfUk9PVH0gXAo+ICsJLS1zdHJpcC1jb21wb25lbnRzPTEgJiYgXAo+ICsgICAgcm0gJHtD
+Uk9TU19TREtfRklMRX0gJiYgXAo+ICsgICAgY2QgJHtDUk9TU19ST09UfSAmJiBcCj4gKyAgICAu
+L3JlbG9jYXRlLXNkay5zaCAmJiBcCj4gKyAgICBjZCAvICYmIFwKPiArICAgIGZpbmQgJHtDUk9T
+U19ST09UfSAteHR5cGUgbCAhIC1leGVjIHRlc3QgLWUge30gXDsgLWRlbGV0ZSAmJiBcCj4gKyAg
+ICBmaW5kICR7Q1JPU1NfUk9PVH0gLWV4ZWMgY2htb2QgYStyICd7fScgXDsgJiYgXAo+ICsgICAg
+ZmluZCAke0NST1NTX1JPT1R9IC1leGVjdXRhYmxlIC1leGVjIGNobW9kIGEreCAne30nIFw7CgpN
+YXliZSBhIGNvbW1lbnQgaGVyZSBzaG91bGQgaGVscCB0byB1bmRlcmRhbnQgd2h5IHRoZXNlIHRo
+cmVlIGZpbmQgY29tbWFuZCBhcmUKbmVlZGVkLgoKPiArCj4gKyMgUGxhY2UgZml4dXBzIGZpbGUg
+dGhhdCdzIGV4ZWMgYnkgZW50cnlwb2ludC5zaCBiZWZvcmUgdGhlIDxjb21tYW5kPgo+ICsjIGlu
+IC4vZG9ja2Nyb3NzIGJhc2ggLWMgJzxjb21tYW5kPicKPiArQ09QWSBidWlsZHJvb3QvcHJlX2V4
+ZWMuc2ggL2RvY2tjcm9zcwo+ICtSVU4gY2htb2QgNzc3IC9kb2NrY3Jvc3MvcHJlX2V4ZWMuc2gK
+PiArIyBGb3JjZXMgdGhlIC9ldGMvcHJvZmlsZS5kIHRvIGJlIHNvdXJjZWQgYW5kIHBpY2t1cCBz
+Y3JpcHQocykgc3RhZ2VkCj4gKyMgYnkgcHJlX2V4ZWMuc2gKPiArRU5WIEJBU0hfRU5WPS9ldGMv
+cHJvZmlsZQo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+Cj4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArCj4g
+KyMgQnVpbGQtdGltZSBtZXRhZGF0YSBhcyBkZWZpbmVkIGF0IGh0dHA6Ly9sYWJlbC1zY2hlbWEu
+b3JnCj4gK0FSRyBCVUlMRF9EQVRFCj4gK0FSRyBJTUFHRT1kb2NrY3Jvc3MvYnVpbGRyb290Cj4g
+K0FSRyBWRVJTSU9OPWxhdGVzdAo+ICtBUkcgVkNTX1JFRgo+ICtBUkcgVkNTX1VSTAo+ICtMQUJF
+TCBvcmcubGFiZWwtc2NoZW1hLmJ1aWxkLWRhdGU9JEJVSUxEX0RBVEUgXAo+ICsgICAgICBvcmcu
+bGFiZWwtc2NoZW1hLm5hbWU9JElNQUdFIFwKPiArICAgICAgb3JnLmxhYmVsLXNjaGVtYS52ZXJz
+aW9uPSRWRVJTSU9OIFwKPiArICAgICAgb3JnLmxhYmVsLXNjaGVtYS52Y3MtcmVmPSRWQ1NfUkVG
+IFwKPiArICAgICAgb3JnLmxhYmVsLXNjaGVtYS52Y3MtdXJsPSRWQ1NfVVJMIFwKPiArICAgICAg
+b3JnLmxhYmVsLXNjaGVtYS5zY2hlbWEtdmVyc2lvbj0iMS4wIgo+ICtFTlYgREVGQVVMVF9ET0NL
+Q1JPU1NfSU1BR0UgJHtJTUFHRX06JHtWRVJTSU9OfQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2Rv
+Y2tjcm9zcy9idWlsZHJvb3QvcHJlX2V4ZWMuc2ggYi9wYWNrYWdlL2RvY2tjcm9zcy9idWlsZHJv
+b3QvcHJlX2V4ZWMuc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAu
+Ljg2YTcxYzY3YTkKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9kb2NrY3Jvc3MvYnVp
+bGRyb290L3ByZV9leGVjLnNoCj4gQEAgLTAsMCArMSw5IEBACj4gKyMhL2Jpbi9iYXNoCj4gKwo+
+ICtpZiBbIC1lICIvb3B0L3Rvb2xjaGFpbi9lbnZpcm9ubWVudC1zZXR1cCIgXTsgdGhlbgo+ICsJ
+ZWNobyAiIyEvYmluL2Jhc2giID4gL2V0Yy9wcm9maWxlLmQvc2V0dXAtYnVpbGRyb290LXNoZWxs
+LnNoCj4gKwllY2hvICJjZCAvb3B0L3Rvb2xjaGFpbiIgPj4gL2V0Yy9wcm9maWxlLmQvc2V0dXAt
+YnVpbGRyb290LXNoZWxsLnNoCj4gKwllY2hvICJzb3VyY2UgLi9lbnZpcm9ubWVudC1zZXR1cCIg
+Pj4gL2V0Yy9wcm9maWxlLmQvc2V0dXAtYnVpbGRyb290LXNoZWxsLnNoCj4gKwljaG1vZCA3Nzcg
+L2V0Yy9wcm9maWxlLmQvc2V0dXAtYnVpbGRyb290LXNoZWxsLnNoCj4gK2ZpCj4gKwo+IGRpZmYg
+LS1naXQgYS9wYWNrYWdlL2RvY2tjcm9zcy9kb2NrY3Jvc3MuaGFzaCBiL3BhY2thZ2UvZG9ja2Ny
+b3NzL2RvY2tjcm9zcy5oYXNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAw
+MDAwLi41MDU4MDg5ZTg1Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvZG9ja2Nyb3Nz
+L2RvY2tjcm9zcy5oYXNoCj4gQEAgLTAsMCArMSwzIEBACj4gKyMgTG9jYWxseSBjYWxjdWxhdGVk
+Cj4gK3NoYTI1NiAgZGIwZmNjMTE0NmE3NDQyNTMxNTEyZmE3NjQ4ZTYzNGFjYTIyM2EwNjdiZGM2
+ZTIzZjZkNGIyYjI2YjA1NWZlMiAgZG9ja2Nyb3NzLTU0MTc5NGQ0MWQwNGI5YjNlOTE3M2QxMzY4
+YThmNDNkMzhjOTQxOWMudGFyLmd6Cj4gK3NoYTI1NiAgNGUwMzdjNmI5NTA2Y2E3MmRkMDc2Njg2
+NDY4YzA3NjFhZGRhN2ZiMGUxMDJlM2JkNmViNDE2NTBhNDE5M2YzOCAgTElDRU5TRQo+IGRpZmYg
+LS1naXQgYS9wYWNrYWdlL2RvY2tjcm9zcy9kb2NrY3Jvc3MubWsgYi9wYWNrYWdlL2RvY2tjcm9z
+cy9kb2NrY3Jvc3MubWsKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAu
+LmRjNWM2ZWI0NGIKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9kb2NrY3Jvc3MvZG9j
+a2Nyb3NzLm1rCj4gQEAgLTAsMCArMSwyNCBAQAo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+
+ICsjCj4gKyMgZG9ja2Nyb3NzCj4gKyMKPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArCj4g
+K0RPQ0tDUk9TU19WRVJTSU9OID0gNTQxNzk0ZDQxZDA0YjliM2U5MTczZDEzNjhhOGY0M2QzOGM5
+NDE5Ywo+ICtET0NLQ1JPU1NfU0lURSA9ICQoY2FsbCBnaXRodWIsZG9ja2Nyb3NzLGRvY2tjcm9z
+cywkKERPQ0tDUk9TU19WRVJTSU9OKSkKPiArRE9DS0NST1NTX0xJQ0VOU0UgPSBNSVQKPiArRE9D
+S0NST1NTX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4gKwo+ICtkZWZpbmUgSE9TVF9ET0NLQ1JP
+U1NfQ09ORklHVVJFX0NNRFMKPiArCWNwICQoVE9QRElSKS9wYWNrYWdlL2RvY2tjcm9zcy9idWls
+ZHJvb3QgJChARCkvIC1hCgpUaGUgY29weSBzaG91bGQgYmVsb25nIHRvIEhPU1RfRE9DS0NST1NT
+X0VYVFJBQ1RfQ01EUyBzdGVwIElNSE8uCgo+ICsJCj4gKwlAaWQgLW5HICR7VVNFUn0gfCBncmVw
+IC1xdyBkb2NrZXIgfHwgZXhpdCAxCgpUaGlzIGNoZWNrIGlzIGRvbmUgdG9vIGxhdGUgKGFmdGVy
+IGdlbmVyYXRpbmcgdGhlIHNkayksIHVzdWFsbHkgc3VjaCBjaGVjawpzaG91bGQgYmUgZG9uZSBl
+YXJseSBhcyBwb3NzaWJsZS4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiArCSMJZWNobyAtZSAi
+XG5cbiMgQ2hlY2sgaWYgRG9ja2VyIGlzIGluc3RhbGxlZCBcbiBcCj4gKwkjCQl3aGljaCBkb2Nr
+ZXIgXG4gXAo+ICsJIwkJIyBBZGQgeW91ciBub24tcm9vdCB1c2VyIHRvIHRoZSBEb2NrZXIgZ3Jv
+dXAgXAo+ICsJIyMJCShSZXF1aXJlcyB5b3UgdG8gbG9nb3V0IGZvciBpdCB0byB0YWtlIGFmZmVj
+dCkgXG4gXAo+ICsJIwlzdWRvIHVzZXJtb2QgLWEgLUcgZG9ja2VyICR7VVNFUn0gXG5cbiIgJiYg
+XAo+ICsJIwlleGl0IDEKPiArZW5kZWYKPiArCj4gKyQoZXZhbCAkKGhvc3QtZ2VuZXJpYy1wYWNr
+YWdlKSkKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
