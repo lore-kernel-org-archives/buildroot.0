@@ -1,64 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAE6CC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 12:06:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D580C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 12:16:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 607E1848E5;
-	Sat, 23 Jul 2022 12:06:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 607E1848E5
+	by smtp2.osuosl.org (Postfix) with ESMTP id C39AB40AEA;
+	Sat, 23 Jul 2022 12:16:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C39AB40AEA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FhhNtNwUHZlu; Sat, 23 Jul 2022 12:16:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF3B840AE6;
+	Sat, 23 Jul 2022 12:15:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF3B840AE6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AF531BF36E
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:15:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 51A83848F6
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:15:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51A83848F6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bDm52bzOJYSa; Sat, 23 Jul 2022 12:06:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63003848B7;
-	Sat, 23 Jul 2022 12:06:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63003848B7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E417A1BF36E
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:06:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C30854174C
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:06:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C30854174C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uD8EjjUfoKOF for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 12:06:17 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0CB9416F8
-Received: from aposti.net (aposti.net [89.234.176.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A0CB9416F8
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 12:06:17 +0000 (UTC)
-Date: Sat, 23 Jul 2022 13:06:04 +0100
-From: Paul Cercueil <paul@crapouillou.net>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-Id: <4Y2HFR.1A53UFE79W2J2@crapouillou.net>
-In-Reply-To: <a96703d8-83e8-fc44-0d89-0d5e7e0ba395@mind.be>
-References: <20220721183503.369200-1-paul@crapouillou.net>
- <a96703d8-83e8-fc44-0d89-0d5e7e0ba395@mind.be>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id faHMCYNi2xbS for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 12:15:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3459F847EC
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3459F847EC
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 12:15:57 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id sz17so12751126ejc.9
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 05:15:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=EiNFcWZ4kp4rPsluw6XjClUoj5dlDx/33rRp6worVLY=;
+ b=jmQJZKvzUBPAq+zVGx+KVYN7xs8qnQScIYhh5bf1g8mnTmqujr91ZFoOkRKjQmX10w
+ wlA3492cozzuf5StBebEGmlBVlOvFNTMfe4mQ33NrafZEvzJkWjkavr4FIoldxAvSiZx
+ OdbwOeuvVHP9AHqI+rqYPJu4Yvj5zTzarHRCMcLaub/VWQXtpeQhPvWP5fM1/hjLIgSw
+ BFiCZQM0JI+gbz33p8Od1xFUvbB2mTlNZrYfQT2uFnqxK1GibR/WnodB8SbKT352xUhw
+ 1lQwqxGrAAoTiA1MjwjRcNgL4GBydwcGW1KZZmc7FsOrOElNoHZgYi23KGv8XdLL6yTK
+ ss1A==
+X-Gm-Message-State: AJIora8vXwr06FgrsPF6kalwEZOvOCEboNqcCAqW4ixwLXS0fQQiIbvM
+ ap0uOFYUF3EA7/XfylaEf3/raMltwwlueg==
+X-Google-Smtp-Source: AGRyM1sKFjS+U8N6jpTw6KGLwuiHop2uoYnJnwhU62/Ll+swQq5Wy26igbBvvc382ANpBJC+h7yZPg==
+X-Received: by 2002:a17:906:6a26:b0:72e:cee5:d1b0 with SMTP id
+ qw38-20020a1709066a2600b0072ecee5d1b0mr3338205ejc.404.1658578554429; 
+ Sat, 23 Jul 2022 05:15:54 -0700 (PDT)
+Received: from t450s.mch2022.camp ([151.217.111.208])
+ by smtp.gmail.com with ESMTPSA id
+ b7-20020aa7c6c7000000b0043a78236cd2sm3995632eds.89.2022.07.23.05.15.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 23 Jul 2022 05:15:53 -0700 (PDT)
+From: Heiko Thiery <heiko.thiery@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 23 Jul 2022 14:15:40 +0200
+Message-Id: <20220723121538.14409-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=crapouillou.net; 
- s=mail; t=1658577973; h=from:from:sender:reply-to:subject:subject:date:date:
- message-id:message-id:to:to:cc:cc:mime-version:mime-version:
- content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=hi6T+Sqk9N03AbKQH21yZPkWddYj1r5uVoW+2ADnVjU=;
- b=WwqyV134RGz/Ku/blX4TgaKC6ug7fT/DmsawzU7qAhu1xSY1ZBAs2ABKPv0aP8JUPI9Cba
- 97meVen/KvOrupw7n95SQMI560ZbzRwvVs4gBmOo0VwW9r500Lv+fUJgoXZ3ruvcVH1Uz4
- nuXrNVIQdchCor4y0UQ2pa/DMlGahn8=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net
- header.a=rsa-sha256 header.s=mail header.b=WwqyV134
-Subject: Re: [Buildroot] [PATCH 1/1] linux: allow modules install path to be
- overriden
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=EiNFcWZ4kp4rPsluw6XjClUoj5dlDx/33rRp6worVLY=;
+ b=iSKoEWcXh0NQBqg/+uKPPOpZMVxiKtz8aLQVBDPRo8tGvj9CNoAf/hV8WgR/sWAwX7
+ 937dXuSBbYf/tpxC4XWP+mA8sHMUf6q5F5t5G8vPUXkFTRvq4jVGZ/BXmUws0UylaY07
+ bEnGtYLkQpDKRbGuotpBFJVMrRuKGxhGM6USoftyfLvpFD+cxwLnPEuZL8C+wbOqhrM9
+ VVvFeKQTW3pPRhWq01lZKw5ybQKZlRZvF0mvte2nZMVMxh2/8tEKQ1HD1YYCnq69CnF/
+ /7iKZ1QyPDsxPAClFAxYIZDW0qqPs82Zm6MXRFppfbh7L8MV4lrFeoUl3qwhosNAqCA1
+ 34xQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=iSKoEWcX
+Subject: [Buildroot] [PATCH] package/nettle: switch _SITE to ftp.gnu.org
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,132 +92,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
+Cc: Heiko Thiery <heiko.thiery@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+The former _SITE is not longer accessible with authentication.
 
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ package/nettle/nettle.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Le sam., juil. 23 2022 at 14:01:12 +0200, Arnout Vandecappelle =
-
-<arnout@mind.be> a =E9crit :
-> =
-
-> =
-
-> On 21/07/2022 20:35, Paul Cercueil wrote:
->> On my system the modules are not installed in the root filesystem
->> directly, but in a separate squashfs image that is then shipped
->> alongside the kernel.
-> =
-
->  That use case is way too specific to add support for it...
-> =
-
->> Support this setup by allowing board files to override the install =
-
->> path
->> for the kernel modules.
-> =
-
->  This works for in-tree modules, but it stops working if you have any =
-
-> out-of-tree modules.
-
-Fair enough.
-
->  The proper way to do this would be to add a post-build script that =
-
-> moves TARGET_DIR/lib/modules to where you want it - or probably just =
-
-> run mksquashfs on it and remove it afterwards.
-
-But this would only work once and then it would be impossible to =
-
-rebuild.
-
--Paul
-
->  Therefore, I've marked this patch as Rejected in patchwork.
-> =
-
->  Regards,
->  Arnout
-> =
-
->> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->> ---
->>   linux/linux.mk | 12 +++++++-----
->>   1 file changed, 7 insertions(+), 5 deletions(-)
->> =
-
->> diff --git a/linux/linux.mk b/linux/linux.mk
->> index 322ccabbd9..36896a3b4d 100644
->> --- a/linux/linux.mk
->> +++ b/linux/linux.mk
->> @@ -145,6 +145,8 @@ LINUX_POST_EXTRACT_HOOKS +=3D =
-
->> LINUX_XTENSA_OVERLAY_EXTRACT
->>   LINUX_EXTRA_DOWNLOADS +=3D $(ARCH_XTENSA_OVERLAY_URL)
->>   endif
->>   =7F+INSTALL_MOD_PATH =3D $(TARGET_DIR)
->> +
->>   # We don't want to run depmod after installing the kernel. It's =
-
->> done in a
->>   # target-finalize hook, to encompass modules installed by packages.
->>   # Disable building host tools with -Werror: newer gcc versions can =
-
->> be
->> @@ -152,7 +154,7 @@ endif
->>   LINUX_MAKE_FLAGS =3D \
->>   	HOSTCC=3D"$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
->>   	ARCH=3D$(KERNEL_ARCH) \
->> -	INSTALL_MOD_PATH=3D$(TARGET_DIR) \
->> +	INSTALL_MOD_PATH=3D$(INSTALL_MOD_PATH) \
->>   	CROSS_COMPILE=3D"$(TARGET_CROSS)" \
->>   	WERROR=3D0 \
->>   	DEPMOD=3D$(HOST_DIR)/sbin/depmod
->> @@ -519,8 +521,8 @@ define LINUX_INSTALL_TARGET_CMDS
->>   	# directories, not relevant on the target
->>   	@if grep -q "CONFIG_MODULES=3Dy" $(@D)/.config; then \
->>   		$(LINUX_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) =
-
->> modules_install; \
->> -		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ; \
->> -		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ; \
->> +		rm -f =
-
->> $(INSTALL_MOD_PATH)/lib/modules/$(LINUX_VERSION_PROBED)/build ; \
->> +		rm -f =
-
->> $(INSTALL_MOD_PATH)/lib/modules/$(LINUX_VERSION_PROBED)/source ; \
->>   	fi
->>   	$(LINUX_INSTALL_HOST_TOOLS)
->>   endef
->> @@ -528,9 +530,9 @@ endef
->>   # Run depmod in a target-finalize hook, to encompass modules =
-
->> installed by
->>   # packages.
->>   define LINUX_RUN_DEPMOD
->> -	if test -d $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
->> +	if test -d $(INSTALL_MOD_PATH)/lib/modules/$(LINUX_VERSION_PROBED) =
-
->> \
->>   		&& grep -q "CONFIG_MODULES=3Dy" $(LINUX_DIR)/.config; then \
->> -		$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) =
-
->> $(LINUX_VERSION_PROBED); \
->> +		$(HOST_DIR)/sbin/depmod -a -b $(INSTALL_MOD_PATH) =
-
->> $(LINUX_VERSION_PROBED); \
->>   	fi
->>   endef
->>   LINUX_TARGET_FINALIZE_HOOKS +=3D LINUX_RUN_DEPMOD
-
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index c3d5fcec64..05b8b0bea5 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NETTLE_VERSION = 3.8
+-NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
++NETTLE_SITE = https://ftp.gnu.org/gnu/nettle
+ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
+ NETTLE_LICENSE = Dual GPL-2.0+/LGPL-3.0+
+-- 
+2.20.1
 
 _______________________________________________
 buildroot mailing list
