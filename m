@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86D42C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 15:33:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A788C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 15:33:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 33B0A4166B;
-	Sat, 23 Jul 2022 15:33:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33B0A4166B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8EB834092A;
+	Sat, 23 Jul 2022 15:33:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EB834092A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZlWvPI_naw9b; Sat, 23 Jul 2022 15:33:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TFoWiVXVT9MW; Sat, 23 Jul 2022 15:33:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 41E3541665;
-	Sat, 23 Jul 2022 15:33:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41E3541665
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8C5AA1BF46A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:31:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CA0040362;
+	Sat, 23 Jul 2022 15:33:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CA0040362
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 44DED1BF955
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:31:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 541C541669
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:31:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 541C541669
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2104484BDD
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:31:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2104484BDD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LbHrOK9kh8Nc for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A8mJ07fO9sog for <buildroot@lists.busybox.net>;
  Sat, 23 Jul 2022 15:31:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4DC3841665
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3AD8984BDC
  for <buildroot@buildroot.org>; Sat, 23 Jul 2022 15:31:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DC3841665
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AD8984BDC
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 30DB0846A2; Sat, 23 Jul 2022 15:18:06 +0000 (UTC)
+ id 1E6D4846A0; Sat, 23 Jul 2022 15:18:06 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 23 Jul 2022 17:31:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0f1ad4fc93286adaba852c99d6e1c2565b5c4258
-X-Git-Newrev: f9536761668f377a02d810a4a2029a692de58cb6
+X-Git-Oldrev: e0ff7f5351d508b07ba478dd9fc7317007c76a60
+X-Git-Newrev: 4011ff535e28e5641074380acffff3378a460dac
 X-Patchwork-Hint: ignore
-Message-Id: <20220723151806.30DB0846A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] arch: add BR2_ARCH_NEEDS_GCC_AT_LEAST_12
+Message-Id: <20220723151806.1E6D4846A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: disable libsanitizer for
+ mips{el} and gcc > 12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +64,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9536761668f377a02d810a4a2029a692de58cb6
+commit: https://git.buildroot.net/buildroot/commit/?id=4011ff535e28e5641074380acffff3378a460dac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This new symbol will be used by architectures introduced with gcc 12.
+Since [1], gcc contains a workaround for struct_kernel_stat_sz
+definition and apply a local patch when updating libsanitizer with
+upstream (llvm-project) [2].
+
+Since gcc 12, the workaround is not enough and trigger the following
+error:
+
+In file included from ../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_linux.cpp:21:
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_linux.cpp:75:38: error: static assertion failed
+   75 | COMPILER_CHECK(struct_kernel_stat_sz == sizeof(struct stat));
+      |                ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+
+Disable libsanitizer for now.
+
+Note: Only glibc toolchains are affected since libsanitizer is
+disabled for musl and uClibc-ng	toolchains [3].
+
+Fixes:
+https://gitlab.com/kubu93/toolchains-builder/-/jobs/2510178606
+
+[1] http://gcc.gnu.org/ml/gcc/2018-03/msg00133.html
+[2] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=9f943b2446f2d0a345bbf9b4be3d3a4316372270
+[3] https://git.buildroot.net/buildroot/commit/?id=5f4d658d888b539de9a6247ae5b1a0999de5d4ec
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in             | 4 ++++
- package/gcc/Config.in.host | 1 +
- 2 files changed, 5 insertions(+)
+ package/gcc/gcc.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 26293d4986..442d6b0075 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -313,6 +313,10 @@ config BR2_ARCH_NEEDS_GCC_AT_LEAST_11
- 	bool
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_10
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 3719bfb004..114e774503 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -142,6 +142,12 @@ ifeq ($(BR2_mips64)$(BR2_mips64el):$(BR2_MIPS_NABI32),y:y)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
+ endif
  
-+config BR2_ARCH_NEEDS_GCC_AT_LEAST_12
-+	bool
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
++# libsanitizer bundled in gcc 12 fails to build for mips32 due to
++# mixing kernel and user struct stat.
++ifeq ($(BR2_mips)$(BR2_mipsel):$(BR2_TOOLCHAIN_GCC_AT_LEAST_12),y:y)
++HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
++endif
 +
- # The following string values are defined by the individual
- # Config.in.$ARCH files
- config BR2_ARCH
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 2d9eaef102..4e906acc5b 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -51,6 +51,7 @@ config BR2_GCC_VERSION_10_X
- 
- config BR2_GCC_VERSION_11_X
- 	bool "gcc 11.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_12
- 	# powerpc spe support has been deprecated since gcc 8.x.
- 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
- 	depends on !BR2_powerpc_SPE
+ # The logic in libbacktrace/configure.ac to detect if __sync builtins
+ # are available assumes they are as soon as target_subdir is not
+ # empty, i.e when cross-compiling. However, some platforms do not have
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
