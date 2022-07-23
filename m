@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EC6DC43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA9B2C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 17:00:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D1D2E84020;
-	Sat, 23 Jul 2022 16:59:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1D2E84020
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86FF142410;
+	Sat, 23 Jul 2022 17:00:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86FF142410
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zBI9pYfr1t-L; Sat, 23 Jul 2022 16:59:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j3x0FpkF_N9Z; Sat, 23 Jul 2022 16:59:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00F0583F9E;
-	Sat, 23 Jul 2022 16:59:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00F0583F9E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 71A091BF31A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2717E417BC;
+	Sat, 23 Jul 2022 16:59:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2717E417BC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 077961BF957
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A95EB84BFC
+ by smtp2.osuosl.org (Postfix) with ESMTP id BAF3E4055E
  for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A95EB84BFC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAF3E4055E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i7YhOU7jEWmV for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 16:57:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B9qxXuiq8WkZ for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 16:57:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D01A784BFD
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:57:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D01A784BFD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0148C40A59
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:57:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0148C40A59
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 942C3847EF; Sat, 23 Jul 2022 16:44:12 +0000 (UTC)
+ id C8D84847F3; Sat, 23 Jul 2022 16:44:12 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 18:57:21 +0200
+Date: Sat, 23 Jul 2022 18:57:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7b29d6dc77304db19a4a6cb82f05d30ab68abf78
-X-Git-Newrev: bb2e5e2f76508cfccf6315e142601d3ccc790522
+X-Git-Oldrev: e49122a58d8c6cbf61fb9c1fc16be7a3fa712d09
+X-Git-Newrev: 7f3debbc370a48fc2f408701088162041bcf1f7c
 X-Patchwork-Hint: ignore
-Message-Id: <20220723164412.942C3847EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libbsd: fix sh4aeb build
+Message-Id: <20220723164412.C8D84847F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-xmltodict: bump to version
+ 0.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,71 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb2e5e2f76508cfccf6315e142601d3ccc790522
+commit: https://git.buildroot.net/buildroot/commit/?id=7f3debbc370a48fc2f408701088162041bcf1f7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following sh4aeb build failure:
+Update indentation in hash file (two spaces)
 
-In file included from nlist.c:44:
-nlist.c: In function '__elf_is_okay__':
-local-elf.h:223:25: error: 'ELFDATA2LMSB' undeclared (first use in this function); did you mean 'ELFDATA2LSB'?
-  223 | #define ELF_TARG_DATA   ELFDATA2LMSB
-      |                         ^~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/2980fb79c208454195d77383f1ece9afbd7f981b
+https://github.com/martinblech/xmltodict/blob/v0.13.0/CHANGELOG.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0001-src-local-elf.h-fix-big-endian-sh.patch   | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/python-xmltodict/python-xmltodict.hash | 6 +++---
+ package/python-xmltodict/python-xmltodict.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libbsd/0001-src-local-elf.h-fix-big-endian-sh.patch b/package/libbsd/0001-src-local-elf.h-fix-big-endian-sh.patch
-new file mode 100644
-index 0000000000..8612d268f8
---- /dev/null
-+++ b/package/libbsd/0001-src-local-elf.h-fix-big-endian-sh.patch
-@@ -0,0 +1,39 @@
-+From 93c9f8aa72349a4fe33e2a732100c76f3904eb80 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 7 Jun 2022 19:27:13 +0200
-+Subject: [PATCH] src/local-elf.h: fix big endian sh
-+
-+Fix the following build failure with big endian sh (e.g. sh4aeb):
-+
-+In file included from nlist.c:44:
-+nlist.c: In function '__elf_is_okay__':
-+local-elf.h:223:25: error: 'ELFDATA2LMSB' undeclared (first use in this function); did you mean 'ELFDATA2LSB'?
-+  223 | #define ELF_TARG_DATA   ELFDATA2LMSB
-+      |                         ^~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2980fb79c208454195d77383f1ece9afbd7f981b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/libbsd/libbsd/-/merge_requests/19]
-+---
-+ src/local-elf.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/local-elf.h b/src/local-elf.h
-+index 1dd3b42..8c4794f 100644
-+--- a/src/local-elf.h
-++++ b/src/local-elf.h
-+@@ -230,7 +230,7 @@
-+ #if defined(__LITTLE_ENDIAN__)
-+ #define ELF_TARG_DATA	ELFDATA2LSB
-+ #elif defined(__BIG_ENDIAN__)
-+-#define ELF_TARG_DATA	ELFDATA2LMSB
-++#define ELF_TARG_DATA	ELFDATA2MSB
-+ #else
-+ #error Unknown SH endianness
-+ #endif
-+-- 
-+2.35.1
-+
+diff --git a/package/python-xmltodict/python-xmltodict.hash b/package/python-xmltodict/python-xmltodict.hash
+index 16422d78c9..48fb5265f6 100644
+--- a/package/python-xmltodict/python-xmltodict.hash
++++ b/package/python-xmltodict/python-xmltodict.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/xmltodict/json
+-md5	ddb2bd078cef4f7e3021a578034ad941  xmltodict-0.12.0.tar.gz
+-sha256	50d8c638ed7ecb88d90561beedbf720c9b4e851a9fa6c47ebd64e99d166d8a21  xmltodict-0.12.0.tar.gz
++md5  1ece0a5bbd494bac414058405606475e  xmltodict-0.13.0.tar.gz
++sha256  341595a488e3e01a85a9d8911d8912fd922ede5fecc4dce437eb4b6c8d037e56  xmltodict-0.13.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	d66d5eb8f83a0ba21d3dd04318b8817588e8764daabea852d1035e3f07ffda55  LICENSE
++sha256  d66d5eb8f83a0ba21d3dd04318b8817588e8764daabea852d1035e3f07ffda55  LICENSE
+diff --git a/package/python-xmltodict/python-xmltodict.mk b/package/python-xmltodict/python-xmltodict.mk
+index 05be4b3c6c..9201bc1507 100644
+--- a/package/python-xmltodict/python-xmltodict.mk
++++ b/package/python-xmltodict/python-xmltodict.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_XMLTODICT_VERSION = 0.12.0
++PYTHON_XMLTODICT_VERSION = 0.13.0
+ PYTHON_XMLTODICT_SOURCE = xmltodict-$(PYTHON_XMLTODICT_VERSION).tar.gz
+-PYTHON_XMLTODICT_SITE = https://files.pythonhosted.org/packages/58/40/0d783e14112e064127063fbf5d1fe1351723e5dfe9d6daad346a305f6c49
++PYTHON_XMLTODICT_SITE = https://files.pythonhosted.org/packages/39/0d/40df5be1e684bbaecdb9d1e0e40d5d482465de6b00cbb92b84ee5d243c7f
+ PYTHON_XMLTODICT_SETUP_TYPE = setuptools
+ PYTHON_XMLTODICT_LICENSE = MIT
+ PYTHON_XMLTODICT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
