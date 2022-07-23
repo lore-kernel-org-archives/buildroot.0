@@ -4,67 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8973C43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 14:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54715C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 15:01:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F82A84BB3;
-	Sat, 23 Jul 2022 14:58:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F82A84BB3
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE01784BB3;
+	Sat, 23 Jul 2022 15:01:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE01784BB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2N_C7gNuci2u; Sat, 23 Jul 2022 14:58:10 +0000 (UTC)
+	with ESMTP id BhWJn3WZVA6t; Sat, 23 Jul 2022 15:01:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20D1B84BA6;
-	Sat, 23 Jul 2022 14:58:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20D1B84BA6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7C9081BF314
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 14:58:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFEC784B9C;
+	Sat, 23 Jul 2022 15:01:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFEC784B9C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5216C1BF859
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:01:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 63D0840554
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 14:58:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63D0840554
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A6A560F58
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:01:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A6A560F58
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hRKxkoEoLsoT for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 14:58:05 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 379BB40045
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 379BB40045
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 14:58:04 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 079EC240003;
- Sat, 23 Jul 2022 14:58:00 +0000 (UTC)
-Date: Sat, 23 Jul 2022 16:58:00 +0200
-To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Message-ID: <20220723165800.54811fe3@windsurf>
-In-Reply-To: <20220528014832.289907-1-ricardo.martincoski@gmail.com>
-References: <20220528014832.289907-1-ricardo.martincoski@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8gZzWtbKqn2Z for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 15:01:53 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F97B60B59
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7F97B60B59
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 15:01:53 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id m17so9804759wrw.7
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 08:01:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=8GbWYIurZ2HD2ukAshbc25DR3lOwxkQcbVsm6DVIEDQ=;
+ b=oUM7w5Yrr+2o03mgCgvD0x7yMthxhGewBbUykosPd6rTkBLfsPVlNLnw6ZndUebdpz
+ LFwXYRUkUBgYtXngInM6m0z2k6Ald55qAirya5gguw7P6Gr65cs2FqbKgRkwZ6McHdkk
+ gK86xpckGyCQcBST9ki43frrAffpjFdDVoRBT2iGJwoQgV8f0gu4p3jy/pJT/kOmFaSu
+ cuTzZBB8WG7FGkpkLkR2Xu/KWoTyW/3uHW5B6+OZ7cUwC6PLcokPxxCszvYLvPLam1S1
+ AlsfVt6HuItHnk9Y/gciLny8JqRlF0CVluqoffjaLb4d7uoH/DyEjiqmIjiFW9xp2Oui
+ y6Mw==
+X-Gm-Message-State: AJIora9nj9VQELbq4Dj+1fJil6tXsfUzDVHNqDTVY2wcK3UkIVlIX0YW
+ OkHA7Jd3s6TR3lbi3WSIJ4hl/KR/dDgaHg==
+X-Google-Smtp-Source: AGRyM1tsRIfJndKRTmKbX2kTyryTZUpV1UzHItAsG56FfDX+NSQx6kCFRUa2vqBnLHDafgV3vVo/ag==
+X-Received: by 2002:a5d:6908:0:b0:21e:4fe3:cd1f with SMTP id
+ t8-20020a5d6908000000b0021e4fe3cd1fmr3018342wru.476.1658588511393; 
+ Sat, 23 Jul 2022 08:01:51 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ x3-20020a05600c420300b003a3200bc788sm11627364wmh.33.2022.07.23.08.01.50
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 23 Jul 2022 08:01:51 -0700 (PDT)
+Message-ID: <7658571b-ff98-c4a3-0fce-137cc839ebbd@mind.be>
+Date: Sat, 23 Jul 2022 17:01:49 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: Sen Hastings <sen@phobosdpl.com>, buildroot@buildroot.org
+References: <20220717172210.381711-1-sen@phobosdpl.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220717172210.381711-1-sen@phobosdpl.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658588282;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Sp46Zjf0hCd5vPxGHsnswah8E6lUzuly1aGq39xnqS8=;
- b=euHQawCFOAUJr7eeIU3PPMF/RXloGF25S3l0cRgamMnAOwiJpO+p0243nNCuMrUh9suaTp
- 8qoXw5nGVt6+wFdgjpwdwpS8v1WedigufZ0Ux3VGkDX4oHGILw3ivc+QRXzbxrve9XNBTM
- EIudv7OCvoBIJ2NWAdH+O80FNupcJm70/H2VM+yDQ1li26vhsh6DsH1f9XciizGnJKx8iO
- 2OyFPAXGsuPWvfN56T1my8s0cjMYaFgbW8hwbe76KwBPzqpgqrl89a2O90Rh4jhK0UgQwN
- mUG52CGWwm7xu28gSz1mhi5IewsOojg2nFOyZKBu/IQGnGI8LgMfiSlwlshnSQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=euHQawCF
-Subject: Re: [Buildroot] [master, next,
- lts] utils/get-developer: fix DEVELOPERS syntax check on GitLab CI
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=8GbWYIurZ2HD2ukAshbc25DR3lOwxkQcbVsm6DVIEDQ=;
+ b=O6L0us3b7DkhCFV1vylNYbJGLx9hoKl7ETp2BCyjSAjIZzkCHixmVyjGkhfi9ZFWxp
+ 8Navvw00II/lypcBareup5kIq0zHiOn9r8RWXahXLc86dUGcaed47HwhnE9OGziG0NvQ
+ RYjvvHs9M4RDwlcK90NZEeyRSB5MYf1dyvBliJq+Pfi+L9+blLTH/orLXNooqADLQbau
+ 48a1h5c+Q3rQY5axjnMWuAIiy375OS1rlf4paqFpudUpPLfjmEe60cUdFe77++S6ykyr
+ mmgVtIl5TgfT6TbMJ/lkJKIfdLdTmA55vFtC4jakt9gTuGtfJlQYpa+HpdirL3+T4v2q
+ WACA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=O6L0us3b
+Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for systemd and
+ pkg-stats
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,91 +100,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Ricardo,
 
-On Fri, 27 May 2022 22:48:32 -0300
-Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
 
-> Commit "45aabcddc5 utils/get-developers: really make it callable from
-> elsewhere than the toplevel directory" ended up making check-DEVELOPERS
-> in GitLab-CI to always get a false PASS result, since the job was
-> trusting that calling get-developers with no arguments would parse
-> DEVELOPERS file and generate error or warning messages.
+On 17/07/2022 19:22, Sen Hastings wrote:
+> Signed-off-by: Sen Hastings <sen@phobosdpl.com>
+
+  I changed "myself" to your name in the subject line.
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   DEVELOPERS | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
-> There is need to revert that change, we only need to recover the syntax
-> check coverage it had before the change.
-> 
-> Make the option -c from get-developers to generate a non-zero return
-> code when there is parsing errors or warnings.
-> Adapt the manual accordingly and use the -c argument in the
-> check-DEVELOPERS job.
-> 
-> In the same commit, add a runtime test in order to detect undesired
-> changes in behavior of the get-developers script.
-> The test uses a .patch file generated against the buildroot tree as a
-> fixture to check how get-developers operates when called to check it.
-> The test also overrides the DEVELOPERS file in order to be fully
-> reproducible and a -d option is added to get-developers in order to
-> allow this.
-> Since get-developers only looks to already committed files to compare
-> against patch files, the fixture uses a package that is very unlikely to
-> be removed from buildroot tree: binutils.
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Thanks a lot for the patch! I ended up applying it, but with some
-fairly significant differences.
-
-The most important thing is that I didn't like the idea of re-using the
-existing "-c" option as the way of validating the DEVELOPERS file. -c
-is used to list files that don't have any associated developer.
-
-So instead, I've added a -v (v for validate) option in get-developers
-that simply does the validation step. I didn't introduce the extra
-complexity of making parse_developers() return the number of errors and
-warnings, since this was anyway not used anywhere. So I simply rely on
-parse_developers() returning None when there is a validation failure.
-
-See:
-
-  https://git.buildroot.org/buildroot/commit/?id=47f359a615ae4772ea9d03a5134785aec230c317
-
-Then I used this new -v option in gitlab-ci.yml:
-
-  https://git.buildroot.org/buildroot/commit/?id=4ed7bca6a05a7878fdb73a973d098a6b64586848
-
-Then I re-used your patch adding a -d option to get-developers, to pass
-a custom DEVELOPERS file:
-
-  https://git.buildroot.org/buildroot/commit/?id=7082b0585d5a231a062087d3e44007742b9165d4
-
-Finally, I added your test cases, after changing them according to the
-modifications I had done. Another change I did is put the binutils
-patch not in the br2-external (it's not related to it), but into a
-test_get_developers/ fixture sub-directory, like we do for package
-tests that have test fixtures.
-
-  https://git.buildroot.org/buildroot/commit/?id=9bb647297a6c48a7a79c20f4403be0dbea811a6c
-
-Thanks a lot for this contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 5c3c24ff7a..a004a72a38 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2565,6 +2565,10 @@ F:	package/libbson/
+>   F:	package/lua-resty-http/
+>   F:	package/mpir/
+>   
+> +N:	Sen Hastings <sen@phobosdpl.com>
+> +F:	package/systemd
+> +F:	support/scripts/pkg-stats
+> +
+>   N:	Sergey Bobrenok <bobrofon@gmail.com>
+>   F:	package/sdbus-cpp/
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
