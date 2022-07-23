@@ -1,71 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57D6DC43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 13:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2083C43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 14:07:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEA4C41845;
-	Sat, 23 Jul 2022 13:59:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEA4C41845
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8532161003;
+	Sat, 23 Jul 2022 14:07:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8532161003
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tMy6WWxUbsP5; Sat, 23 Jul 2022 13:59:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IqUYEEVrJn0P; Sat, 23 Jul 2022 14:07:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F83641846;
-	Sat, 23 Jul 2022 13:59:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F83641846
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6153F60FF0;
+	Sat, 23 Jul 2022 14:07:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6153F60FF0
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 490C31BF859
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:59:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C56F61BF85D
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 14:07:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 238BF403A5
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:59:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 238BF403A5
+ by smtp2.osuosl.org (Postfix) with ESMTP id ACB6F403A5
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 14:07:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACB6F403A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Zz-oUDtCYIli for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 13:59:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7101340143
-Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7101340143
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 13:59:09 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.73.23])
- by Aruba Outgoing Smtp  with ESMTPSA
- id FFetoo1BpbMeiFFetoJ930; Sat, 23 Jul 2022 15:59:07 +0200
-Message-ID: <6b001b9a-7afd-2760-ef9e-1d2f16ae643a@benettiengineering.com>
-Date: Sat, 23 Jul 2022 15:59:07 +0200
+ with ESMTP id vjhcXfBg1kDq for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 14:07:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5295A40143
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5295A40143
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 14:07:04 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id z13so9962571wro.13
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 07:07:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=zyDobT9LG7qIjmRiqmYC5mmOPR/kgvxUa4UsgPUEM4c=;
+ b=5RUmUfxElHlUpBsUbPfZ+7Wq9fRbnRkDZYV7ZrmiYB2MsmjFhbnBod4Ice6LC1kFMf
+ ZhM36uarwZh5g+PnBMDec6UB5wn58Ah4AkST4bU8J4lP4VQ2jp1XqRhhMjEAOmRi55XN
+ SgOpF+mDuh4vuwaSiIcbYCP8mI1Mi2KqFVeqQQMc6WsH19SPFqx/mGuGaHxOdu0M57oO
+ QAKJCb8NT0zlYMfkvlx3OjA0dy8pavQXbRMKvIDWEjwSwXtT5WmWScHbl9lymS0hnK7C
+ u5WyfgN9O1k4O6qweakAETdqRBOZrVPb6F/2rUtDh2NhmYHB48/dLQqb40rcpR66/ZRV
+ orHg==
+X-Gm-Message-State: AJIora9BVguDJcb8Vza1sQpSf4avQF80of6fWjApL4U7oBT7S172wx9d
+ NbtCGNW3rwnd6sb5Z2gfSL54qg==
+X-Google-Smtp-Source: AGRyM1tbo4NCzLeTOkp0LYamcGlk7J+OIvZZbqiSAyp/fCapRGGF1JDdzuOuBV0cjduImEutoJ29lA==
+X-Received: by 2002:adf:fccf:0:b0:21e:4bb7:4c64 with SMTP id
+ f15-20020adffccf000000b0021e4bb74c64mr2850099wrs.382.1658585222466; 
+ Sat, 23 Jul 2022 07:07:02 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f?
+ (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
+ by smtp.gmail.com with ESMTPSA id
+ y8-20020a5d6148000000b0021e46d518c7sm7071740wrt.106.2022.07.23.07.07.01
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 23 Jul 2022 07:07:02 -0700 (PDT)
+Message-ID: <8fc9a7e8-13eb-8771-5f48-6a21e9a6aefa@smile.fr>
+Date: Sat, 23 Jul 2022 16:07:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+ Thunderbird/91.9.0
 Content-Language: en-US
-To: Jesse Taube <mr.bossman075@gmail.com>, buildroot@buildroot.org
-References: <20220723133313.236907-1-Mr.Bossman075@gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220723133313.236907-1-Mr.Bossman075@gmail.com>
-X-CMAE-Envelope: MS4xfMXECCxsawm/m6Fj0zXJets65FMmLJk0E8kqXuONsOI9eqZwMEtJxZxhGmmrJ2a9K6ZyaZdDjae2MNbnK/9b0UMSeLUvh9NfICs4EORAzuve4UsyqUwM
- MxQQOU4beyGqvBgS+nEDZFlzOBPmC1/HcLmkrDFqVdaKnDroEFrXz+50ufiBgil6O8gD39V0dOgDWjv1iS71YYjFfbMy0kaPlUjdWTetez+hB2+UdJPJcyn8
- Lq1+2XIbgj0GPahTc4vBrZGOgaHxpVd4+5rxj2ZyceGroZ4+YGzI7DyhgAIljM2Xarv6DlqIFnU2O28JBoOqj1ejdT08RDxjpQtm0ePq2ue8HCSAuZY4u8Li
- V2PPTqw5
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1658584747; bh=cVwK24kD4+w5lGsISYI8MMZZTpxk29l6fql2gAAHZmM=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=NRPrmfd8TYcMQPIxVMLL5La9UozHk6OcocSs2HlIKsdymrEFu4402IxK2yaeC5hVW
- BdEOrykLS6IaARqxSY2VmeNhRWROe/ls78YeKAs6cY7M/R08ChrzpaulsBBH22KxNP
- DWWbsySa5npmVjxQ6+C37MJpv5dcqw0avE+13u/snB5mrICXtdK4TQoQnSN08oDz5O
- TZRDa6uIdRBZQu1L3LN/us9w5A+OeuTV9ve12y3tJP7Y0PGB6i9fhkt/wp937pkhxJ
- XMhAaXnrnVKI9FsEwMXjh9Ih052APkzfGjR7G7kNEjDMLwh5yzbPwEj3n6jZW3X/l2
- R7pcUJyddDNew==
+To: Abel Bernabeu <abel@x-silicon.com>, buildroot@buildroot.org
+References: <20220704085552.3499243-1-abel@x-silicon.com>
+ <20220704085552.3499243-2-abel@x-silicon.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20220704085552.3499243-2-abel@x-silicon.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=zyDobT9LG7qIjmRiqmYC5mmOPR/kgvxUa4UsgPUEM4c=;
+ b=0pLB7FAmhoDYa0nfr/JG332bsWhOnAlGY0+gZncSSisC4Yn5kebJli8sjXd6imuJcg
+ S8aODxIZ4TG/pLQRoMZqiF/jLk11HphEsjCqjvKsvtH4o4r8cdAl5myYxmNpyKebTGDg
+ ee/qgFPdVLsRi7Kv0k92bh4VVXGDyaj7Bj5kCijW6plOrFT/lhypDTWzRaEc8UiN30Ga
+ YZlW7JOR0BoQFYc08EwsnpZe3Hfrmleqyy9VeDbFaLpDmIYytDs79u0OfHH8YaVRzHt1
+ LHiKxAS9gXl6WLcf9jb79JGqdmXxxjupq9tORj0DGfYQYymYX8NFvbfNS037f/cokU0Y
+ IiHA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=NRPrmfd8
-Subject: Re: [Buildroot] [PATCH v1] configs/imxrt1050-evk: new defconfig
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=0pLB7FAm
+Subject: Re: [Buildroot] [PATCH 2/2] arch/riscv: Added support for RISC-V
+ vector extension on the architecture menu.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,208 +102,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: maeva.manuel@oss.nxp.com, festevam@gmail.com, stephane.viau@oss.nxp.com
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>, Mark Corbin <mark@dibsco.co.uk>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Jesse,
-
-you have to subscribe to Buildroot ML before sending patches for
-Buildroot.
-
-I don't review until it's in ML, otherwise informations get lost.
-
-Kind regards!
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-On 23/07/22 15:33, Jesse Taube wrote:
-> The imxrt1050-evk is a development board from NXP.
-> 
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   DEVELOPERS                                  |  6 ++++
->   board/freescale/imxrt1050evk/genimage.cfg   | 34 ++++++++++++++++++
->   board/freescale/imxrt1050evk/post-build.sh  |  4 +++
->   board/freescale/imxrt1050evk/readme.txt     | 23 ++++++++++++
->   board/freescale/imxrt1050evk/uboot.fragment |  2 ++
->   configs/imxrt1050-evk_defconfig             | 40 +++++++++++++++++++++
->   6 files changed, 109 insertions(+)
->   create mode 100644 board/freescale/imxrt1050evk/genimage.cfg
->   create mode 100755 board/freescale/imxrt1050evk/post-build.sh
->   create mode 100644 board/freescale/imxrt1050evk/readme.txt
->   create mode 100644 board/freescale/imxrt1050evk/uboot.fragment
->   create mode 100644 configs/imxrt1050-evk_defconfig
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 0afd697b6c..206bac99e0 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1096,9 +1096,11 @@ F:	package/webp/
->   F:	package/xapian/
->   
->   N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +F:	board/freescale/imxrt1050evk/*
->   F:	board/olimex/a*
->   F:	configs/amarula_vyasa_rk3288_defconfig
->   F:	configs/asus_tinker_rk3288_defconfig
-> +F:	configs/imxrt1050-evk_defconfig
-
-
-
->   F:	configs/olimex_a*
->   F:	package/at/
->   F:	package/binutils/
-> @@ -1421,6 +1423,10 @@ F:	package/wmctrl/
->   F:	package/x11r7/xdriver_xf86-video-imx/
->   F:	package/x11r7/xdriver_xf86-video-imx-viv/
->   
-> +N:	Jesse Taube <Mr.Bossman075@gmail.com>
-> +F:	board/freescale/imxrt1050evk/*
-> +F:	configs/imxrt1050-evk_defconfig
-> +
->   N:	Jianhui Zhao <zhaojh329@gmail.com>
->   F:	package/libuhttpd/
->   F:	package/libuwsc/
-> diff --git a/board/freescale/imxrt1050evk/genimage.cfg b/board/freescale/imxrt1050evk/genimage.cfg
-> new file mode 100644
-> index 0000000000..e9f224516f
-> --- /dev/null
-> +++ b/board/freescale/imxrt1050evk/genimage.cfg
-> @@ -0,0 +1,34 @@
-> +image boot.vfat {
-> +	vfat {
-> +		files = {
-> +			"uImage",
-> +			"imxrt1050-evk.dtb",
-> +		}
-> +	}
-> +	size = 6M
-> +}
-> +
-> +image sdcard.img {
-> +	hdimage {}
-> +	partition SPL {
-> +		in-partition-table = "no"
-> +		image = "SPL"
-> +		offset = 1K
-> +		size = 127K
-> +	}
-> +	partition u-boot {
-> +		in-partition-table = "no"
-> +		image = "u-boot.img"
-> +		offset = 128K
-> +		size = 512K
-> +	}
-> +	partition boot {
-> +		partition-type = 0xc
-> +		bootable = "true"
-> +		image = "boot.vfat"
-> +	}
-> +	partition rootfs {
-> +		partition-type = 0x83
-> +		image = "rootfs.ext4"
-> +	}
-> +}
-> diff --git a/board/freescale/imxrt1050evk/post-build.sh b/board/freescale/imxrt1050evk/post-build.sh
-> new file mode 100755
-> index 0000000000..47557566f9
-> --- /dev/null
-> +++ b/board/freescale/imxrt1050evk/post-build.sh
-> @@ -0,0 +1,4 @@
-> +#!/bin/sh
-> +rm output/images/uImage
-> +mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 -n "Linux kernel" -d output/images/Image output/images/uImage
-> +./support/scripts/genimage.sh $2 $3
-> diff --git a/board/freescale/imxrt1050evk/readme.txt b/board/freescale/imxrt1050evk/readme.txt
-> new file mode 100644
-> index 0000000000..d9c183a38f
-> --- /dev/null
-> +++ b/board/freescale/imxrt1050evk/readme.txt
-> @@ -0,0 +1,23 @@
-> +NXP i.MXRT1050 EVK board
-> +---------------------
-> +
-> +To build a minimal support for this board:
-> +
-> +$ make imxrt1050-evk_defconfig
-> +$ make
-> +
-> +Buildroot prepares a bootable "sdcard.img" image in the output/images/
-> +directory, ready to be flashed into the SD card:
-> +
-> +$ sudo dd status=progress oflag=sync bs=4k if=output/images/sdcard.img of=/dev/<sd-card-device>; sync
-> +
-> +Jumper settings:
-> +
-> +   SW7: 1 0 1 0
-> +
-> +Where 0 means bottom position and 1 means top position (from the
-> +switch label numbers reference).
-> +
-> +Connect the USB cable between the EVK and the PC for the console.
-> +
-> +Insert the micro SD card in the board, power it up and U-Boot messages should come up.
-> diff --git a/board/freescale/imxrt1050evk/uboot.fragment b/board/freescale/imxrt1050evk/uboot.fragment
-> new file mode 100644
-> index 0000000000..1c5bb6af35
-> --- /dev/null
-> +++ b/board/freescale/imxrt1050evk/uboot.fragment
-> @@ -0,0 +1,2 @@
-> +CONFIG_USE_BOOTCOMMAND=y
-> +CONFIG_BOOTCOMMAND="setenv bootargs console=ttyLP0 root=/dev/mmcblk0p2 rw earlycon rootwait;load mmc 0:1 0x80800000 imxrt1050-evk.dtb;load mmc 0:1 0x80000000 uImage;bootm 0x80000000 - 0x80800000"
-> diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
-> new file mode 100644
-> index 0000000000..03a47c1fd6
-> --- /dev/null
-> +++ b/configs/imxrt1050-evk_defconfig
-> @@ -0,0 +1,40 @@
-> +# Architecture
-> +BR2_arm=y
-> +BR2_cortex_m7=y
-> +
-> +# Image
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imxrt1050evk/post-build.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
-> +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19-rc5"
-> +BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
-> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
-> +BR2_LINUX_KERNEL_IMAGE_NAME="Image"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imxrt1050-evk"
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_LABEL="root"
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="3M"
-> +
-> +
-> +# Bootloader
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imxrt1050-evk"
-> +BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imxrt1050evk/uboot.fragment"
-> +BR2_TARGET_UBOOT_FORMAT_IMG=y
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="SPL"
-> +
-> +# Required tools to create the SD card image
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MKPASSWD=y
-> +
-> +# Misc
-> +BR2_BINUTILS_VERSION_2_36_X=y
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQWRlbCwKCkxlIDA0LzA3LzIwMjIgw6AgMTA6NTUsIEFiZWwgQmVybmFiZXUgYSDDqWNy
+aXTCoDoKPiBUaGlzIG5ldyBzZXR0aW5nIHdpbGwgYWxsb3cgdG8gdGVzdCBuZXcgdG9vbGNoYWlu
+cyBhbHJlYWR5IGF2YWlsYWJsZQo+IHRoYXQgc3VwcG9ydCB0aGUgdmVjdG9yIGV4dGVuc2lvbiAo
+bW9yZSBwYXRjaGVzIGNvbWluZyBzb29uKS4KCldlIHJlY2VpdmVkIGEgc2ltaWxhciBwYXRjaCBb
+MV0gZnJvbSBhbm90aGVyIGNvbnRyaWJ1dG9yLgpBY3R1YWxseSB0aGlzIGlzIHRoZSBzYW1lIGNv
+bnRlbnQgd2l0aCB0aGUgc2FtZSBtaXNzaW5nIGRlcGVuZGVuY3kgb24gZ2NjLTEyLgoKU2VlIGFs
+c28gYSBjb21tZW50IFsyXToKCiJZZXMsIFYgZGVmaW5pdGVseSBuZWVkcyBhbiBvcHRpb24sIGFz
+IHRoZXJlIHdpbGwgY2xlYXJseSBiZQpMaW51eC1jYXBhYmxlIFJJU0MtViBjb3JlcyB0aGF0IGRv
+IG5vdCBpbXBsZW1lbnQgdGhlIFYgZXh0ZW5zaW9uLgoKVGhlIG9wdGlvbiBmb3IgdGhlIFYgZXh0
+ZW5zaW9uIHdpbGwgaGF2ZSB0byBzZWxlY3QKQlIyX0FSQ0hfTkVFRFNfR0NDX0FUX0xFQVNUXzEy
+LiIKClsxXSBodHRwOi8vbGlzdHMuYnVzeWJveC5uZXQvcGlwZXJtYWlsL2J1aWxkcm9vdC8yMDIy
+LUp1bmUvNjQ1MzgxLmh0bWwKWzJdIGh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9waXBlcm1haWwv
+YnVpbGRyb290LzIwMjItSnVseS82NDY3MjQuaHRtbAoKU2VlIGhvdyB0byByZXZpZXcgcGF0Y2hl
+czoKaHR0cHM6Ly9uaWdodGx5LmJ1aWxkcm9vdC5vcmcvbWFudWFsLmh0bWwjX3Jldmlld2luZ19h
+bmRfdGVzdGluZ19wYXRjaGVzCgpJIGhhdmUgbWFya2VkIHRoaXMgcGF0Y2ggYXMgIkNoYW5nZXMg
+UmVxdWVzdGVkIi4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgo+IAo+IFNpZ25lZC1vZmYtYnk6IEFi
+ZWwgQmVybmFiZXUgPGFiZWxAeC1zaWxpY29uLmNvbT4KPiAtLS0KPiAgYXJjaC9Db25maWcuaW4u
+cmlzY3YgfCA3ICsrKysrKysKPiAgYXJjaC9hcmNoLm1rLnJpc2N2ICAgfCA0ICsrKysKPiAgMiBm
+aWxlcyBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL2FyY2gvQ29u
+ZmlnLmluLnJpc2N2IGIvYXJjaC9Db25maWcuaW4ucmlzY3YKPiBpbmRleCAyODhlZDgzM2ViLi5l
+NGRjOTM2Y2Y4IDEwMDY0NAo+IC0tLSBhL2FyY2gvQ29uZmlnLmluLnJpc2N2Cj4gKysrIGIvYXJj
+aC9Db25maWcuaW4ucmlzY3YKPiBAQCAtMTgsNiArMTgsOSBAQCBjb25maWcgQlIyX1JJU0NWX0lT
+QV9SVkQKPiAgY29uZmlnIEJSMl9SSVNDVl9JU0FfUlZDCj4gIAlib29sCj4gIAo+ICtjb25maWcg
+QlIyX1JJU0NWX0lTQV9SVlYKPiArCWJvb2wKPiArCj4gIGNob2ljZQo+ICAJcHJvbXB0ICJUYXJn
+ZXQgQXJjaGl0ZWN0dXJlIFZhcmlhbnQiCj4gIAlkZWZhdWx0IEJSMl9yaXNjdl9nCj4gQEAgLTYz
+LDYgKzY2LDEwIEBAIGNvbmZpZyBCUjJfUklTQ1ZfSVNBX0NVU1RPTV9SVkQKPiAgY29uZmlnIEJS
+Ml9SSVNDVl9JU0FfQ1VTVE9NX1JWQwo+ICAJYm9vbCAiQ29tcHJlc3NlZCBJbnN0cnVjdGlvbnMg
+KEMpIgo+ICAJc2VsZWN0IEJSMl9SSVNDVl9JU0FfUlZDCj4gKwo+ICtjb25maWcgQlIyX1JJU0NW
+X0lTQV9DVVNUT01fUlZWCj4gKwlib29sICJWZWN0b3IgSW5zdHJ1Y3Rpb25zIChWKSIKPiArCXNl
+bGVjdCBCUjJfUklTQ1ZfSVNBX1JWVgo+ICBlbmRpZgo+ICAKPiAgY2hvaWNlCj4gZGlmZiAtLWdp
+dCBhL2FyY2gvYXJjaC5tay5yaXNjdiBiL2FyY2gvYXJjaC5tay5yaXNjdgo+IGluZGV4IGYzYmYy
+YjM0NjcuLjA3YTk0YWE2YTQgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9hcmNoLm1rLnJpc2N2Cj4gKysr
+IGIvYXJjaC9hcmNoLm1rLnJpc2N2Cj4gQEAgLTI2LDUgKzI2LDkgQEAgZW5kaWYKPiAgaWZlcSAo
+JChCUjJfUklTQ1ZfSVNBX1JWQykseSkKPiAgR0NDX1RBUkdFVF9BUkNIIDo9ICQoR0NDX1RBUkdF
+VF9BUkNIKWMKPiAgZW5kaWYKPiAraWZlcSAoJChCUjJfUklTQ1ZfSVNBX1JWVikseSkKPiArR0ND
+X1RBUkdFVF9BUkNIIDo9ICQoR0NDX1RBUkdFVF9BUkNIKXYKPiArZW5kaWYKPiArCj4gIAo+ICBl
+bmRpZgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
