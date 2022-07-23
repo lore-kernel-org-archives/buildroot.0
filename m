@@ -4,91 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEB33C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9924BC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:57:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 571994241D;
-	Sat, 23 Jul 2022 16:56:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 571994241D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 338534242B;
+	Sat, 23 Jul 2022 16:57:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 338534242B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Anmgxgk_pTBE; Sat, 23 Jul 2022 16:56:52 +0000 (UTC)
+	with ESMTP id dvRJtRxeZ429; Sat, 23 Jul 2022 16:57:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D93194242B;
-	Sat, 23 Jul 2022 16:56:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D93194242B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4CD4D1BF31A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:56:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BADAE42427;
+	Sat, 23 Jul 2022 16:57:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BADAE42427
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4332B1BF31A
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2770460F5D
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:56:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2770460F5D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2CC1984BED
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CC1984BED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IknQt6qpf0TL for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 16:56:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z858tbJtq41d for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 16:57:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C724E60ECE
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C724E60ECE
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:56:39 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id l15so6296008wro.11
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 09:56:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4996084BDB
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4996084BDB
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:57:02 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ w8-20020a05600c014800b003a32e89bc4eso4040388wmm.5
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 09:57:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=32rwg48kaSlBpL1uRhAToYJiNlel10zbY7rDGFv9skc=;
- b=EEHDNk2iPigGqiNLLkyE9bdPf6VpPpDgEpSHLwpSBDCDQVdpOUHal4Zg5x8qRe04vK
- 9x2nMDXdcpdZ/lUsDaYLqQ2So9pOboR99Y+0TfxLa1oDRIo4BOvNJ4PF3YwTFHh7Ej6H
- vo5fAkYOdRTKNQpYrP7dSL6ptYeqarj1ZRHIpOFZSzkvoo01f0JtaXGpKoo8GOTQig7f
- rUTB2x/WZa6XtmgALsHJwhwAf/FnyyZDSd2JaUXuBd8I+Cs+dCGszZMXKB1cEZi9NQTn
- j/uwQB8ok1EJG0l2jS7ipUILcczxzMEQHLo1Ga/lLshZUAPB4ca7kvveLxRZA9Iwd8nc
- 5Hbg==
-X-Gm-Message-State: AJIora/vaO1aCQH0eKW+bGU3g91xWc2V5DRvtaR78xfHgwQDeHCaBHz8
- UrnFhYVV98ylhfJezzde7tDG1Q==
-X-Google-Smtp-Source: AGRyM1tK0Plnt6yIrzx8cOZ0JtlsC/5yWXKeeMfAxlQboyQAYfO2rFOSD2iH1/mYv5u1hbQbSIF42g==
-X-Received: by 2002:adf:e312:0:b0:21e:5d66:e0f1 with SMTP id
- b18-20020adfe312000000b0021e5d66e0f1mr3023467wrj.428.1658595397768; 
- Sat, 23 Jul 2022 09:56:37 -0700 (PDT)
+ bh=8EfwwBR6FnYUlD35WO5bS0jRlJTFC2WY9nVtHu0PeZo=;
+ b=GASX765ZeXS/w/vMscOgChXJf/Rk6bmjBtKazPdkdvXHXWjYh1Rgvulwsdrlap6s7j
+ 5voIxfj8SvKzXy3/OEhZBXiGIhSMEp3dYFi/TfyedH2OsOJpsohDaIVHEt9WGveY7d9u
+ dmAZl+3E/41j7LkYrmwTeZyQPE9siEeRtZI0PlEZwG2sZeTzHMCiSQgHdlNUidfo++KR
+ Q8Q1TDftkw+dY5fQ817WGBdhgRKlJyvA48enAQ/zQgddoY+6KdRrn4BJJO2dm6AaSQ4B
+ 1jZxv7quAw5rGHHPKY7E3lqRM5z73yv6OzKKR2kyvVgsIy87BnyJY95ZkYo+pT5SeCEz
+ eJtw==
+X-Gm-Message-State: AJIora8fa/EjoJzpem2avA+gawr/OSTZaj43emLNnaUsABN1CYfNNN4q
+ KizwkqG/lvkIpUdNc5qxsGOXaw==
+X-Google-Smtp-Source: AGRyM1sAT/18/c31OpXd0ArgwTcaQmGHosVdVIWRZ4kMDKspV2cud8+nAhjfa9Lz4Y3k9nGOnR0gnQ==
+X-Received: by 2002:a05:600c:19cc:b0:3a3:10bd:9211 with SMTP id
+ u12-20020a05600c19cc00b003a310bd9211mr3374131wmq.106.1658595420410; 
+ Sat, 23 Jul 2022 09:57:00 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- d12-20020adf9c8c000000b0021e1a801e30sm7444922wre.22.2022.07.23.09.56.37
+ z4-20020adfd0c4000000b0021d7b41255esm7317077wrh.98.2022.07.23.09.56.58
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Jul 2022 09:56:37 -0700 (PDT)
-Message-ID: <e4770b70-f07d-d4d1-8a1a-7a3ad5fe82c3@mind.be>
-Date: Sat, 23 Jul 2022 18:56:35 +0200
+ Sat, 23 Jul 2022 09:57:00 -0700 (PDT)
+Message-ID: <713caf65-1c3c-f1e0-90c5-a2ee598d5f53@mind.be>
+Date: Sat, 23 Jul 2022 18:56:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220615170854.3997869-1-fontaine.fabrice@gmail.com>
+To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
+ buildroot@buildroot.org
+References: <20220615171218.1032413-1-raphael.melotte@mind.be>
+ <20220615171218.1032413-2-raphael.melotte@mind.be>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220615170854.3997869-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220615171218.1032413-2-raphael.melotte@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=32rwg48kaSlBpL1uRhAToYJiNlel10zbY7rDGFv9skc=;
- b=W1x2zB+fwgSsZjArmM3lQ2Oy46l+tfxXpbz5gnVJt+4WvVXv1hFzW0tLFuLQ89bYVq
- UA6lhh5K0REUruPDEKwklbWzM1qSVlkam9DNJ7wXn++Emq320Umyse8ap2KF4VTM740g
- RC3qn2x/KlCmba1QwxQ99XCT8lV8DV00gWaN5f/Poh+8DvTT24OFg2/TZa/NAjgeuabw
- 76cf67e3bWRyl4xwjJ6ThAKRemH3mp5LedJUjf3d9Bc2u+Cn9kJq+uU8FKKIe5Rj2VKS
- LGueMN1WMhZxobwGLNhdjbBKSUsS0cZS2YPkjFvpuKUaCcTcU2FyLf0sX1y0UfOn79l3
- JWsQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=8EfwwBR6FnYUlD35WO5bS0jRlJTFC2WY9nVtHu0PeZo=;
+ b=PbXFuuz8246lq4RwL/nEcnrBywsD35VVYpyGyHSp0wsFqHW2iykl+Mszf6bl5/RDUK
+ yasQiSJo/EPWpZR30ZPsBMMX+mXI36UOdtUaEJWnKsKQhMTxOIpJjbudkjO4Fh44En5E
+ LeiuppjfgWMPAxj25sO+nqNadb8rgwjqyJCYK3uYkutlH0mA9VKlJFj6ZiFfHquEEYYT
+ kfmehxIBdjFjT8KTesAjXlxOqG7zrEJdRazPqVt6u0iRSv3luxkdhmpw5CafUvxMoSi0
+ rjKMqqsyoYw91nmeOHuJGNec//O5/mossIlHldPvFpPUMug933/hHjmGriJNMt9WdEDr
+ jx/g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=W1x2zB+f
-Subject: Re: [Buildroot] [PATCH 1/1] docs/manual: fix patchwork URL
+ header.a=rsa-sha256 header.s=google header.b=PbXFuuz8
+Subject: Re: [Buildroot] [PATCH 2/2] package/python-botocore: bump to
+ version 1.27.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,86 +104,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 15/06/2022 19:08, Fabrice Fontaine wrote:
-> http://patchwork.buildroot.org is redirecting to
-> https://bugs.busybox.net so replace it by
-> https://patchwork.ozlabs.org/project/buildroot/list/ as already done in
-> docs/website/contribute.html
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   docs/manual/contribute.txt | 18 +++++++++++-------
->   docs/manual/resources.txt  |  2 +-
->   2 files changed, 12 insertions(+), 8 deletions(-)
-> 
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> index bf2aed6b51..e588c69be6 100644
-> --- a/docs/manual/contribute.txt
-> +++ b/docs/manual/contribute.txt
-> @@ -418,7 +418,8 @@ editing the commit message. Below the +Signed-off-by+ section, add
->   +---+ and your changelog.
->   
->   Although the changelog will be visible for the reviewers in the mail
-> -thread, as well as in http://patchwork.buildroot.org[patchwork], +git+
-> +thread, as well as in
-> +https://patchwork.ozlabs.org/project/buildroot/list/[patchwork], +git+
->   will automatically ignores lines below +---+ when the patch will be
->   merged. This is the intended behavior: the changelog is not meant to
->   be preserved forever in the +git+ history of the project.
-> @@ -470,19 +471,22 @@ $ git format-patch -v4 -M -s -o outgoing origin/master
->   ---------------------
->   
->   When you provide a new version of a patch, please mark the old one as
-> -superseded in http://patchwork.buildroot.org[patchwork]. You need to
-> -create an account on http://patchwork.buildroot.org[patchwork] to be
-> +superseded in
-> +https://patchwork.ozlabs.org/project/buildroot/list/[patchwork]. You
-> +need to create an account on
-> +https://patchwork.ozlabs.org/project/buildroot/list/[patchwork] to be
->   able to modify the status of your patches. Note that you can only change
->   the status of patches you submitted yourself, which means the email
-> -address you register in http://patchwork.buildroot.org[patchwork] should
-> +address you register in
-> +https://patchwork.ozlabs.org/project/buildroot/list/[patchwork] should
->   match the one you use for sending patches to the mailing list.
->   
->   You can also add the +--in-reply-to <message-id>+ option when
->   submitting a patch to the mailing list. The id of the mail to reply to
->   can be found under the "Message Id" tag on
-> -http://patchwork.buildroot.org[patchwork].  The advantage of
-> -*in-reply-to* is that patchwork will automatically mark the previous
-> -version of the patch as superseded.
-> +https://patchwork.ozlabs.org/project/buildroot/list/[patchwork]. The
-> +advantage of *in-reply-to* is that patchwork will automatically mark
-> +the previous version of the patch as superseded.
->   
->   [[reporting-bugs]]
->   === Reporting issues/bugs or getting help
-> diff --git a/docs/manual/resources.txt b/docs/manual/resources.txt
-> index e90a49b2ab..68b7eb9062 100644
-> --- a/docs/manual/resources.txt
-> +++ b/docs/manual/resources.txt
-> @@ -68,4 +68,4 @@ review comments in a clean and concise web interface, it can be useful
->   for all Buildroot developers.
->   +
->   The Buildroot patch management interface is available at
-> -http://patchwork.buildroot.org[].
-> +https://patchwork.ozlabs.org/project/buildroot/list/[].
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAxNS8wNi8yMDIyIDE5OjEyLCBSYXBoYcOrbCBNw6lsb3R0ZSB3cm90ZToKPiBTaWduZWQt
+b2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFlbC5tZWxvdHRlQG1pbmQuYmU+CgogIEFw
+cGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+IC0tLQo+ICAg
+cGFja2FnZS9weXRob24tYm90b2NvcmUvcHl0aG9uLWJvdG9jb3JlLmhhc2ggfCAyICstCj4gICBw
+YWNrYWdlL3B5dGhvbi1ib3RvY29yZS9weXRob24tYm90b2NvcmUubWsgICB8IDQgKystLQo+ICAg
+MiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCj4gCj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLWJvdG9jb3JlL3B5dGhvbi1ib3RvY29yZS5oYXNoIGIv
+cGFja2FnZS9weXRob24tYm90b2NvcmUvcHl0aG9uLWJvdG9jb3JlLmhhc2gKPiBpbmRleCA5ZDVm
+NzA2ZmVmLi5iYjgwNmZlMjUxIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLWJvdG9jb3Jl
+L3B5dGhvbi1ib3RvY29yZS5oYXNoCj4gKysrIGIvcGFja2FnZS9weXRob24tYm90b2NvcmUvcHl0
+aG9uLWJvdG9jb3JlLmhhc2gKPiBAQCAtMSw0ICsxLDQgQEAKPiAgICMgc2hhMjU2IGZyb20gaHR0
+cHM6Ly9weXBpLm9yZy9weXBpL2JvdG9jb3JlL2pzb24KPiAtc2hhMjU2ICAwMTEzNjBlNzlhNGI4
+NDNhYTY1OTE1NzNjZmE2MWU4ZWRkYzk5YjkxYWRhYjFkZmRiOWEyYjdmMmM4NTExMTkzICBib3Rv
+Y29yZS0xLjIyLjIudGFyLmd6Cj4gK3NoYTI1NiAgZGI2NjY3YjhkZmQxNzVkMTYxODc2NTM5NDJj
+ZDkxZGQxZjBjZjM2YWRjMGVhOWQ3YTA4MDViYTRkMmEzMzIxZiAgYm90b2NvcmUtMS4yNy44LnRh
+ci5nego+ICAgIyBMb2NhbGx5IGNvbXB1dGVkIHNoYTI1NiBjaGVja3N1bXMKPiAgIHNoYTI1NiAg
+MGQ1NDJlMGM4ODA0ZTM5YWE3ZjM3ZWIwMGRhNWE3NjIxNDlkYzY4MmQ3ODI5NDUxMjg3ZTExYjkz
+OGU5NDU5NCAgTElDRU5TRS50eHQKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tYm90b2Nv
+cmUvcHl0aG9uLWJvdG9jb3JlLm1rIGIvcGFja2FnZS9weXRob24tYm90b2NvcmUvcHl0aG9uLWJv
+dG9jb3JlLm1rCj4gaW5kZXggMTYyOGUwNTU2Mi4uNDU5ZWVmZWFiMSAxMDA2NDQKPiAtLS0gYS9w
+YWNrYWdlL3B5dGhvbi1ib3RvY29yZS9weXRob24tYm90b2NvcmUubWsKPiArKysgYi9wYWNrYWdl
+L3B5dGhvbi1ib3RvY29yZS9weXRob24tYm90b2NvcmUubWsKPiBAQCAtNCw5ICs0LDkgQEAKPiAg
+ICMKPiAgICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gICAKPiAtUFlUSE9OX0JPVE9DT1JFX1ZF
+UlNJT04gPSAxLjIyLjIKPiArUFlUSE9OX0JPVE9DT1JFX1ZFUlNJT04gPSAxLjI3LjgKPiAgIFBZ
+VEhPTl9CT1RPQ09SRV9TT1VSQ0UgPSBib3RvY29yZS0kKFBZVEhPTl9CT1RPQ09SRV9WRVJTSU9O
+KS50YXIuZ3oKPiAtUFlUSE9OX0JPVE9DT1JFX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhv
+c3RlZC5vcmcvcGFja2FnZXMvMGQvOTUvZjJlNzRlNGE5MTk5NGQ5ZWJlNDU3NDZmNzVhOGM1Y2Fm
+ZDcyM2E4ODI3MGE5NzcyZDhkNjZlMWE4YmExCj4gK1BZVEhPTl9CT1RPQ09SRV9TSVRFID0gaHR0
+cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2VzL2QxL2IwL2VhOTI3MDNiYmJmODIz
+NTNkNTcxNjM2ZmU2Njk3YjE2MmMzODgxNTc2OTg2ZDY0NzQxMTlkMDNmY2U1Mwo+ICAgUFlUSE9O
+X0JPVE9DT1JFX1NFVFVQX1RZUEUgPSBzZXR1cHRvb2xzCj4gICBQWVRIT05fQk9UT0NPUkVfTElD
+RU5TRSA9IEFwYWNoZS0yLjAKPiAgIFBZVEhPTl9CT1RPQ09SRV9MSUNFTlNFX0ZJTEVTID0gTElD
+RU5TRS50eHQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
