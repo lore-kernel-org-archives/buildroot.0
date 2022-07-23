@@ -4,95 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE81AC43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 21:29:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BF29C43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 21:35:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2DF2D84988;
-	Sat, 23 Jul 2022 21:29:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DF2D84988
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9036984B7E;
+	Sat, 23 Jul 2022 21:35:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9036984B7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tPiRGnIoK82l; Sat, 23 Jul 2022 21:28:58 +0000 (UTC)
+	with ESMTP id RUEUNJzVuEHR; Sat, 23 Jul 2022 21:35:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A7AB84963;
-	Sat, 23 Jul 2022 21:28:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A7AB84963
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E1C2B1BF419
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:28:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F20484B56;
+	Sat, 23 Jul 2022 21:35:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F20484B56
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A6671BF419
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:35:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BAA1542493
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:28:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAA1542493
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5E50E84B56
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:35:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E50E84B56
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WWvLwWMDEz9n for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 21:28:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qcFjnUMxdkPh for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 21:35:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85C8342490
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 85C8342490
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 21:28:53 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id v13so3122898wru.12
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 14:28:53 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3A8B84B52
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C3A8B84B52
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 21:35:19 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id v13so3134383wru.12
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 14:35:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:from:to:cc:references:in-reply-to
  :content-transfer-encoding;
- bh=hN+WJmG1R4ZZmXuP5Gg1blNV7gx+NhV+SFVTC7TfodU=;
- b=7J0eu5LrOiSsIJUaKw5S6/Pb+nS/QsyUWYlnHwXz4xqv53IQlxmbYlAO8mFteUXkE4
- X87OkWGyGXSCoyAbjujf+5IP5f85DmM4OJkNEY0lXGYHvoNRbX9ayS4xol/mz5sxGQ6M
- XTj+giISNdgHe8R2hCoEOdth4iBKqpSdarbDyLTrvrgU8Dw1pky2a87DNT2ZYolR0EN/
- rKAiUdyIhG/0CD/ViClItmCJ7FwWPylXtUIMG0ffxurS7vMkd7H9N2zVgKejqtpNqd6I
- Ef+bJCDSJxVvwKZD/bb4g2rLMpmZENhOOpqvGaVXl//fD2DAGXq7v3o2p+xBm+nXquGm
- 9t1g==
-X-Gm-Message-State: AJIora/wjmsz8Tco8pItIkWM4DYj47T5EIA1kb0R9vzl5A+Z7yTvQ0dI
- E9qtdZutLFWcomgeEMmcJTfiYQ==
-X-Google-Smtp-Source: AGRyM1vjlL37sKqs75n3vOou7oIguAVTAg++BxxhgA2XZZePXB8nPZhSoIyu2LNuYuUrVkw/ZkX1Hg==
-X-Received: by 2002:a5d:4dc8:0:b0:21e:660f:8dfe with SMTP id
- f8-20020a5d4dc8000000b0021e660f8dfemr3580704wru.468.1658611731315; 
- Sat, 23 Jul 2022 14:28:51 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ bh=5zCsR/9KdmsWl7ySC/dmL8v0krSFhQM+IToDiG8gGW4=;
+ b=PAEqW8him6BcnfMjucqFiUZuuUrqeq531/W8DXa1+kXDI5W9P7h5nkno1QjMoZ2sfj
+ XtG5zYKnGXVn40EhCAWuWyXS5mQgJ2I/mrZYmJVB3G7xsgyLH++gD77T8Bf5QGVMyoBu
+ D+YTo/27HPFh9AGsB1h9ATaeAHPnB2ZdJ5te+v7+Na92NdhWy5cWoVthoQBJ6HwvIh9E
+ MkvvxwjFjUfdMpJ4scLzLeIag1QlQG49TFIgBVi7vvnvy1xKxMaLhzswRsEKvrOD41Gl
+ /O4DZ1I2h4946Nv3aYOkYu6hR1piVtaeOna276JIdIRBrosxBKOKkMOyhVmRMWJn+++q
+ sVCg==
+X-Gm-Message-State: AJIora8Q26T2JV892q7F35kGRAu3mUEhx4bte9EoXEf6UDkAvvcEiqG2
+ 6s7oJQ2lyhfvACRW+f5iSj7wLhNW6D8Zwg==
+X-Google-Smtp-Source: AGRyM1uqxA9OiqTWhPjdPCrFV34tViBIdaaC1MJpjElhvkBcYsfbBqi9neybrOeLKcg6QF4+Rd5rOw==
+X-Received: by 2002:a5d:4e82:0:b0:21e:482a:705f with SMTP id
+ e2-20020a5d4e82000000b0021e482a705fmr3427542wru.543.1658612117269; 
+ Sat, 23 Jul 2022 14:35:17 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f?
+ (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
  by smtp.gmail.com with ESMTPSA id
- e1-20020a5d5301000000b0021e5b5a68f8sm7963143wrv.45.2022.07.23.14.28.50
+ h6-20020a5d4fc6000000b0021d76a1b0e3sm7822212wrw.6.2022.07.23.14.35.16
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Jul 2022 14:28:50 -0700 (PDT)
-Message-ID: <8581ea46-4f5f-b56a-c60b-d1f0b6ad95e1@mind.be>
-Date: Sat, 23 Jul 2022 23:28:49 +0200
+ Sat, 23 Jul 2022 14:35:16 -0700 (PDT)
+Message-ID: <df67ea80-c938-0eae-94bf-96f7e7b82a9c@smile.fr>
+Date: Sat, 23 Jul 2022 23:35:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: Petr Vorel <petr.vorel@gmail.com>, "Yann E. MORIN"
- <yann.morin.1998@free.fr>
-References: <20211011220025.7998-1-petr.vorel@gmail.com>
- <20211011220025.7998-2-petr.vorel@gmail.com> <20211111080014.GR2084998@scaer>
- <YY7iy2xQUcMBPqsx@pevik>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <YY7iy2xQUcMBPqsx@pevik>
+ Thunderbird/91.9.0
+Content-Language: en-US
+From: Romain Naour <romain.naour@smile.fr>
+To: Nicolas Tran <nicolas.tran@smile.fr>, buildroot@buildroot.org
+References: <20220519140453.1546982-1-nicolas.tran@smile.fr>
+ <adbf3b21-b5c7-29d0-3a7b-2288c0c249fa@smile.fr>
+In-Reply-To: <adbf3b21-b5c7-29d0-3a7b-2288c0c249fa@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=hN+WJmG1R4ZZmXuP5Gg1blNV7gx+NhV+SFVTC7TfodU=;
- b=W4f6jYOsT1+GHnx6fQbFOO/I8p4Mzbm0iFbezV+rWix6vxJJog35+7nT7PFOsXUKUW
- cX5xvBF7AnW7lKLjKqBuiT1hM5bkD36RRIbGCL71dwBmTCIf961M8MQVWFVAAhvPdlYB
- UML2E1fltsTUjiU0RM7yJNNGYK0J7CBgH4rrzaFK/xLCufqHJta+WGOuZpcHaYScz6dg
- mFyacT9cwAEG6hGGqcDnbq5JHFjY5zp/ArJ7BuZmgaxMJDFlu6bZvsRpa+VHaRzesPb6
- n/rIPPV4gSy+5SgFT2L53S/qgRrfXUjix7z4zSg7w/D9MywSIz4Tdo5Tb25/Lwv/DzkM
- ecjQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=W4f6jYOs
-Subject: Re: [Buildroot] [RFC PATCH 1/3] make: support: use `command -v'
- instead of `which'
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language
+ :from:to:cc:references:in-reply-to:content-transfer-encoding;
+ bh=5zCsR/9KdmsWl7ySC/dmL8v0krSFhQM+IToDiG8gGW4=;
+ b=ig4pAMOoDW5qoQQEjp3x5Y8DGZL63HureWNEM/QfI9lAB/64XTlMktOHp0IvYJh90m
+ C6VgoSU3LkAaJm4eHddK2j91X/Om+nKWPxJgOgiuX+8ZVzfEJsqxXwMRJI9MIn86j+uw
+ mffC4xY9tshWqsZe10jTagbs8hdMyTEzL+W/4NG5lzaLHJypmJpj9WLAI1BqpbXmNffK
+ EULgjFX/DXQpC4gj8OftYuGk7I35JrFTB6LGGZQFTRR6gYdJ+1acb9cwYxKSNiFvQPdC
+ RsaZOpPqrHmt7poer/DqGaJTtq2bWcZKTEzmutUmVMRevc741UG5uwTkvzHQduy8oN+h
+ XAZw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=ig4pAMOo
+Subject: Re: [Buildroot] [PATCH 1/1] package/rust-coreutils: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,386 +101,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Markus Mayer <mmayer@broadcom.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 12/11/2021 22:55, Petr Vorel wrote:
-> Hi Yann,
-> 
->> Petr, All,
-> 
->> On 2021-10-12 00:00 +0200, Petr Vorel spake thusly:
->>> `which' has been discontinued after 2.21 release in 2015 due this (git
->>> repository is empty [1]) and version shipped in Debian produces warning
->>> [2]:
-> 
->>> /usr/bin/which: this version of `which' is deprecated; use `command -v' in scripts instead.
-> 
->> In the meantime, this is supposed to have been overrdien by the
->> technical committee:
-> 
->>      https://lwn.net/ml/debian-ctte/handler.994275.D994275.163536015027825.ackdone@bugs.debian.org/
-> Yep, I've noticed this on LWN as well.
-> 
->> Excerpt:
-> 
->>   --8<---
->>   1. The debianutils package must continue to provide the which(1) program
->>      until a compatible utility is available in a package that is at least
->>      transitively essential in Debian 12.
-> 
->>      For the Debian 12 release, we expect which(1) to be in either an
->>      Essential package or a transitively Essential package (that is, a
->>      package that is depended on by an Essential package).
-> 
->>   2. The which(1) program must not print any deprecation warnings.
->>   --8<---
-> 
->> As such, the situation is a calmer for now and is less urgent, and we
->> can address it for after 2021.11 (given that Debian 11 was released only
->> 3 months ago, we have a bit of time ahead of us before Debian 12 finally
->> ships! ;-] )
-> 
-> Well, some people use Debian testing :). But sure, it was never urgent,
-> the issue does not break build. This time I'm quite confident it works,
-> but one revert was enough => it can wait till more people find time to test it.
-
-  In the end, it got reverted in debian testing as well, so we can drop this 
-series (for now). I've marked them as Rejected in patchwork.
-
-  Regards,
-  Arnout
-
-> 
-> Kind regards,
-> Petr
-> 
->> Regards,
->> Yann E. MORIN.
-> 
->>> `command is POSIX [3] and supported on all common shells (bash, zsh,
->>> dash, busybox sh, mksh).
-> 
->>> NOTE: originally merged as ca6a2907c2, but it had to be reverted due
->>> errors [4] (originally reported [5]). Problems were:
-> 
->>> 1) Main problem was that make sometimes expected `command' as a
->>>     binary/script and run it with execve() (or any other exec*()
->>>     wrapper), instead of running it through a shell via system() [4]:
-> 
->>>      $ make defconfig
->>>      [...]
->>>      $ make help
->>>      make[1]: command: Command not found
->>>      [...]
-> 
->>>     Fixed by not relying to $(shell command -v ...) but shell with:
->>>     $(shell $(SHELL) -c "command -v ...").
-> 
->>> 2) `command -v' handles only first parameter (unlike `which') [4].
->>>     Hopefully fixed with quoting variables. Quoting variables is also
->>>     needed, because both `command -v' without args and `type -p' exit 0.
-> 
->>> Patch tested on both bash and dash as /bin/sh on various distros with
->>> having different make versions, including these previously affected
->>> (4.2.1, 4.0, 3.81).
-> 
->>> [1] https://git.savannah.gnu.org/cgit/which.git
->>> [2] https://salsa.debian.org/debian/debianutils/-/commit/3a8dd10b4502f7bae8fc6973c13ce23fc9da7efb
->>> [3] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/command.html
->>> [4] https://lore.kernel.org/buildroot/20210930200402.GO1504958@scaer/
->>> [5] https://lore.kernel.org/buildroot/YVTIghzHs82uFBIe@pevik/T/#m95c17eb8374e4e3dd6eee700d397aa12cca0739e
-> 
->>> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
->>> ---
->>>   Makefile                                      | 22 +++++++++----------
->>>   package/Makefile.in                           |  8 +++----
->>>   support/dependencies/check-host-bison-flex.mk |  4 ++--
->>>   support/dependencies/check-host-cmake.sh      |  2 +-
->>>   support/dependencies/check-host-gzip.sh       |  2 +-
->>>   support/dependencies/check-host-lzip.sh       |  4 ++--
->>>   support/dependencies/check-host-python3.sh    |  2 +-
->>>   support/dependencies/check-host-tar.sh        |  4 ++--
->>>   support/dependencies/check-host-xzcat.sh      |  4 ++--
->>>   support/dependencies/dependencies.sh          | 16 +++++++-------
->>>   .../pkg-toolchain-external.mk                 |  2 +-
->>>   11 files changed, 35 insertions(+), 35 deletions(-)
-> 
->>> diff --git a/Makefile b/Makefile
->>> index c960b53a6d..2317655272 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -284,12 +284,12 @@ HOSTAS := as
->>>   endif
->>>   ifndef HOSTCC
->>>   HOSTCC := gcc
->>> -HOSTCC := $(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
->>> +HOSTCC := $(shell $(SHELL) -c "command -v '$(HOSTCC)' || type -p '$(HOSTCC)' || echo gcc")
->>>   endif
->>>   HOSTCC_NOCCACHE := $(HOSTCC)
->>>   ifndef HOSTCXX
->>>   HOSTCXX := g++
->>> -HOSTCXX := $(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
->>> +HOSTCXX := $(shell $(SHELL) -c "command -v '$(HOSTCXX)' || type -p '$(HOSTCXX)' || echo g++")
->>>   endif
->>>   HOSTCXX_NOCCACHE := $(HOSTCXX)
->>>   ifndef HOSTCPP
->>> @@ -310,15 +310,15 @@ endif
->>>   ifndef HOSTRANLIB
->>>   HOSTRANLIB := ranlib
->>>   endif
->>> -HOSTAR := $(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
->>> -HOSTAS := $(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
->>> -HOSTCPP := $(shell which $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
->>> -HOSTLD := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
->>> -HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
->>> -HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
->>> -HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
->>> -HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
->>> -SED := $(shell which sed || type -p sed) -i -e
->>> +HOSTAR := $(shell '$(SHELL)' -c "command -v '$(HOSTAR)' || type -p '$(HOSTAR)' || echo ar")
->>> +HOSTAS := $(shell '$(SHELL)' -c "command -v '$(HOSTAS)' || type -p '$(HOSTAS)' || echo as")
->>> +HOSTCPP := $(shell '$(SHELL)' -c "command -v '$(HOSTCPP)' || type -p '$(HOSTCPP)' || echo cpp")
->>> +HOSTLD := $(shell '$(SHELL)' -c "command -v '$(HOSTLD)' || type -p '$(HOSTLD)' || echo ld")
->>> +HOSTLN := $(shell '$(SHELL)' -c "command -v '$(HOSTLN)' || type -p '$(HOSTLN)' || echo ln")
->>> +HOSTNM := $(shell '$(SHELL)' -c "command -v '$(HOSTNM)' || type -p '$(HOSTNM)' || echo nm")
->>> +HOSTOBJCOPY := $(shell '$(SHELL)' -c "command -v '$(HOSTOBJCOPY)' || type -p '$(HOSTOBJCOPY)' || echo objcopy")
->>> +HOSTRANLIB := $(shell '$(SHELL)' -c "command -v '$(HOSTRANLIB)' || type -p '$(HOSTRANLIB)' || echo ranlib")
->>> +SED := $(shell $(SHELL) -c "command -v sed || type -p sed") -i -e
-> 
->>>   export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
->>>   export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
->>> diff --git a/package/Makefile.in b/package/Makefile.in
->>> index 86db62ba5b..2ba4d8b381 100644
->>> --- a/package/Makefile.in
->>> +++ b/package/Makefile.in
->>> @@ -4,7 +4,7 @@ endif
->>>   ifndef HOSTMAKE
->>>   HOSTMAKE = $(MAKE)
->>>   endif
->>> -HOSTMAKE := $(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
->>> +HOSTMAKE := $(shell $(SHELL) -c "command -v '$(HOSTMAKE)' || type -p '$(HOSTMAKE)' || echo make")
-> 
->>>   # If BR2_JLEVEL is 0, scale the maximum concurrency with the number of
->>>   # CPUs. An additional job is used in order to keep processors busy
->>> @@ -222,8 +222,8 @@ else
->>>   TARGET_STRIP = /bin/true
->>>   STRIPCMD = $(TARGET_STRIP)
->>>   endif
->>> -INSTALL := $(shell which install || type -p install)
->>> -UNZIP := $(shell which unzip || type -p unzip) -q
->>> +INSTALL := $(shell $(SHELL) -c "command -v install || type -p install")
->>> +UNZIP := $(shell $(SHELL) -c "command -v unzip || type -p unzip") -q
-> 
->>>   APPLY_PATCHES = PATH=$(HOST_DIR)/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
-> 
->>> @@ -237,7 +237,7 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
->>>   # the path to the system perl, before a host-perl built by Buildroot
->>>   # might get installed into $(HOST_DIR)/bin and therefore appears
->>>   # in our PATH. This system perl will be used as INTLTOOL_PERL.
->>> -export PERL=$(shell which perl)
->>> +export PERL=$(shell $(SHELL) -c "command -v perl")
-> 
->>>   # host-intltool needs libxml-parser-perl, which Buildroot installs in
->>>   # $(HOST_DIR)/lib/perl, so we must make sure that the system perl
->>> diff --git a/support/dependencies/check-host-bison-flex.mk b/support/dependencies/check-host-bison-flex.mk
->>> index 14a232fd44..b6cec369f1 100644
->>> --- a/support/dependencies/check-host-bison-flex.mk
->>> +++ b/support/dependencies/check-host-bison-flex.mk
->>> @@ -5,10 +5,10 @@
->>>   # that runs on host, e.g. Kconfig. To build code for target use plain
->>>   # host-{bison,flex}.
-> 
->>> -ifeq ($(shell which bison 2>/dev/null),)
->>> +ifeq ($(shell $(SHELL) -c "command -v bison 2>/dev/null"),)
->>>   BR2_BISON_HOST_DEPENDENCY = host-bison
->>>   endif
-> 
->>> -ifeq ($(shell which flex 2>/dev/null),)
->>> +ifeq ($(shell $(SHELL) -c "command -v flex 2>/dev/null"),)
->>>   BR2_FLEX_HOST_DEPENDENCY = host-flex
->>>   endif
->>> diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
->>> index fadeae9f6b..f202d72a98 100755
->>> --- a/support/dependencies/check-host-cmake.sh
->>> +++ b/support/dependencies/check-host-cmake.sh
->>> @@ -11,7 +11,7 @@ shift
->>>   for candidate; do
-> 
->>>       # Try to locate the candidate. Discard it if not located.
->>> -    cmake=`which "${candidate}" 2>/dev/null`
->>> +    cmake=`command -v "${candidate}" 2>/dev/null`
->>>       [ -n "${cmake}" ] || continue
-> 
->>>       # Extract version X.Y from versions in the form X.Y or X.Y.Z
->>> diff --git a/support/dependencies/check-host-gzip.sh b/support/dependencies/check-host-gzip.sh
->>> index 5f344c5f9b..4dbce72676 100755
->>> --- a/support/dependencies/check-host-gzip.sh
->>> +++ b/support/dependencies/check-host-gzip.sh
->>> @@ -2,7 +2,7 @@
-> 
->>>   candidate="$1" # ignored
-> 
->>> -gzip="$(which gzip)"
->>> +gzip="$(command -v gzip)"
->>>   if [ ! -x "${gzip}" ]; then
->>>       # echo nothing: no suitable gzip found
->>>       exit 1
->>> diff --git a/support/dependencies/check-host-lzip.sh b/support/dependencies/check-host-lzip.sh
->>> index 4f8a2ba3de..5cdfb8252a 100755
->>> --- a/support/dependencies/check-host-lzip.sh
->>> +++ b/support/dependencies/check-host-lzip.sh
->>> @@ -2,9 +2,9 @@
-> 
->>>   candidate="$1"
-> 
->>> -lzip=`which $candidate 2>/dev/null`
->>> +lzip=`command -v "$candidate" 2>/dev/null`
->>>   if [ ! -x "$lzip" ]; then
->>> -	lzip=`which lzip 2>/dev/null`
->>> +	lzip=`command -v lzip 2>/dev/null`
->>>   	if [ ! -x "$lzip" ]; then
->>>   		# echo nothing: no suitable lzip found
->>>   		exit 1
->>> diff --git a/support/dependencies/check-host-python3.sh b/support/dependencies/check-host-python3.sh
->>> index 17cafd2883..ca504da6ac 100755
->>> --- a/support/dependencies/check-host-python3.sh
->>> +++ b/support/dependencies/check-host-python3.sh
->>> @@ -14,7 +14,7 @@ shift
->>>   # a more recent version.
-> 
->>>   for candidate in "${@}" ; do
->>> -	python3=`which $candidate 2>/dev/null`
->>> +	python3=`command -v "$candidate" 2>/dev/null`
->>>   	if [ ! -x "$python3" ]; then
->>>   		continue
->>>   	fi
->>> diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
->>> index b7d607a47a..0f0f80038d 100755
->>> --- a/support/dependencies/check-host-tar.sh
->>> +++ b/support/dependencies/check-host-tar.sh
->>> @@ -2,9 +2,9 @@
-> 
->>>   candidate="$1"
-> 
->>> -tar=`which $candidate`
->>> +tar=`command -v "$candidate"`
->>>   if [ ! -x "$tar" ]; then
->>> -	tar=`which tar`
->>> +	tar=`command -v tar`
->>>   	if [ ! -x "$tar" ]; then
->>>   		# echo nothing: no suitable tar found
->>>   		exit 1
->>> diff --git a/support/dependencies/check-host-xzcat.sh b/support/dependencies/check-host-xzcat.sh
->>> index 10f1c4562a..a022c64faf 100755
->>> --- a/support/dependencies/check-host-xzcat.sh
->>> +++ b/support/dependencies/check-host-xzcat.sh
->>> @@ -2,9 +2,9 @@
-> 
->>>   candidate="$1"
-> 
->>> -xzcat=`which $candidate 2>/dev/null`
->>> +xzcat=`command -v "$candidate" 2>/dev/null`
->>>   if [ ! -x "$xzcat" ]; then
->>> -	xzcat=`which xzcat 2>/dev/null`
->>> +	xzcat=`command -v xzcat 2>/dev/null`
->>>   	if [ ! -x "$xzcat" ]; then
->>>   		# echo nothing: no suitable xzcat found
->>>   		exit 1
->>> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
->>> index c604a9efcc..e720e9372e 100755
->>> --- a/support/dependencies/dependencies.sh
->>> +++ b/support/dependencies/dependencies.sh
->>> @@ -58,7 +58,7 @@ fi
->>>   check_prog_host()
->>>   {
->>>   	prog="$1"
->>> -	if ! which $prog > /dev/null ; then
->>> +	if ! command -v "$prog" > /dev/null ; then
->>>   		echo >&2
->>>   		echo "You must install '$prog' on your build machine" >&2
->>>   		exit 1
->>> @@ -75,7 +75,7 @@ check_prog_host "sed"
->>>   check_prog_host "/usr/bin/file"
-> 
->>>   # Check make
->>> -MAKE=$(which make 2> /dev/null)
->>> +MAKE=$(command -v make 2> /dev/null)
->>>   if [ -z "$MAKE" ] ; then
->>>   	echo
->>>   	echo "You must install 'make' on your build machine";
->>> @@ -96,9 +96,9 @@ if [ $MAKE_MAJOR -lt 3 ] || [ $MAKE_MAJOR -eq 3 -a $MAKE_MINOR -lt 81 ] ; then
->>>   fi;
-> 
->>>   # Check host gcc
->>> -COMPILER=$(which $HOSTCC_NOCCACHE 2> /dev/null)
->>> +COMPILER=$(command -v "$HOSTCC_NOCCACHE" 2> /dev/null)
->>>   if [ -z "$COMPILER" ] ; then
->>> -	COMPILER=$(which cc 2> /dev/null)
->>> +	COMPILER=$(command -v cc 2> /dev/null)
->>>   fi;
->>>   if [ -z "$COMPILER" ] ; then
->>>   	echo
->>> @@ -122,9 +122,9 @@ if [ $COMPILER_MAJOR -lt 4 -o $COMPILER_MAJOR -eq 4 -a $COMPILER_MINOR -lt 8 ] ;
->>>   fi;
-> 
->>>   # check for host CXX
->>> -CXXCOMPILER=$(which $HOSTCXX_NOCCACHE 2> /dev/null)
->>> +CXXCOMPILER=$(command -v "$HOSTCXX_NOCCACHE" 2> /dev/null)
->>>   if [ -z "$CXXCOMPILER" ] ; then
->>> -	CXXCOMPILER=$(which c++ 2> /dev/null)
->>> +	CXXCOMPILER=$(command -v c++ 2> /dev/null)
->>>   fi
-> 
->>>   if [ -z "$CXXCOMPILER" ] ; then
->>> @@ -164,7 +164,7 @@ fi
->>>   # Check that a few mandatory programs are installed
->>>   missing_progs="no"
->>>   for prog in perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
->>> -	if ! which $prog > /dev/null ; then
->>> +	if ! command -v "$prog" > /dev/null ; then
->>>   		echo "You must install '$prog' on your build machine";
->>>   		missing_progs="yes"
->>>   		if test $prog = "svn" ; then
->>> @@ -198,7 +198,7 @@ if [ "${PATCH_MAJOR}" -lt 2 ] || [ "${PATCH_MAJOR}" -eq 2 -a "${PATCH_MINOR}" -l
->>>   fi
-> 
->>>   if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
->>> -	if ! which locale > /dev/null ; then
->>> +	if ! command -v locale > /dev/null ; then
->>>   		echo
->>>   		echo "You need locale support on your build machine to build a toolchain supporting locales"
->>>   		exit 1 ;
->>> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
->>> index 68d7a3fe21..2d9d9a5d49 100644
->>> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
->>> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
->>> @@ -74,7 +74,7 @@ endif
->>>   ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
->>>   ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
->>>   # if no path set, figure it out from path
->>> -TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
->>> +TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell $(SHELL) -c "command -v '$(TOOLCHAIN_EXTERNAL_PREFIX)-gcc)'")
->>>   endif
->>>   else
->>>   TOOLCHAIN_EXTERNAL_REL_BIN_PATH = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_REL_BIN_PATH))
->>> -- 
->>> 2.33.0
-> 
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot@buildroot.org
->>> https://lists.buildroot.org/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gTmljb2xhcywKCkxlIDIzLzA1LzIwMjIgw6AgMTI6MTIsIFJvbWFpbiBOYW91ciBhIMOp
+Y3JpdMKgOgo+IEhlbGxvIE5pY29sYXMsCj4gCj4gTGUgMTkvMDUvMjAyMiDDoCAxNjowNCwgTmlj
+b2xhcyBUcmFuIGEgw6ljcml0wqA6Cj4+IHJ1c3QtY29yZXV0aWxzIGlzIGEgcGFja2FnZSBmcm9t
+IHRoZSBHaXRodWIgcHJvamVjdAo+PiB1dXRpbHMvY29yZXV0aWxzIGNvbnRhaW5pbmcgdGhlIGVx
+dWl2YWxlbnQgb2YKPj4gdGhlIEdOVSBjb3JldXRpbHMgYmFzaWMgc2hlbGwgY29tbWFuZHMgaW50
+ZWdyYXRlZAo+PiBpbiBSdXN0IGxhbmd1YWdlLgo+IAo+IElzIHJ1c3QtY29yZXV0aWxzIHBhY2th
+Z2UgaXMgYSBjb21wbGV0ZSByZXBsYWNlbWVudCBmb3IgdGhlIEdOVSBjb3JldXRpbHMgPwoKSSBo
+YXZlIG1hcmtlZCB0aGlzIHBhdGNoIGFzICJDaGFuZ2VzIFJlcXVlc3RlZCIuCgpJIGtub3cgd2Ug
+ZGlzY3Vzc2VkIGFib3V0IHRoaXMgcGF0Y2ggcHJpdmF0ZWx5IGJ1dCBwbGVhc2UgcmVwbHkgdG8g
+Y29tbWVudHMKKGV2ZW4gZnJvbSBtZSBzaW5jZSBpdCBjYW4gYmUgaW50ZXJlc3RpbmcgZm9yIG90
+aGVycykuCgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKPiAKPj4gSXQgY2FuIGJlIGNvbnZpbmllbnQg
+Zm9yIHB1cnBvc2VzIG9mIFJ1c3Qtd3JpdHRlbiBzeXN0ZW1zIGFzCj4+IGl0IHJ1bnMgaW4gYSBz
+dGFibGUgdmVyc2lvbiBvZiBSdXN0Lgo+Pgo+PiBUaGUgcGFja2FnZSBoYXMgYmVlbiBjaGVja2Vk
+IHdpdGggY29ycmVjdCBmb3JtYXR0aW5nIGFuZAo+PiB3aXRob3V0IHR5cG9zOgo+PiAkIC4vdXRp
+bHMvY2hlY2stcGFja2FnZSBwYWNrYWdlL3J1c3QtY29yZXV0aWxzLyoKPj4KPj4gVGVzdHMgaGF2
+ZSBiZWVuIHJ1biB0byBlbnN1cmUgdG9vbGNoYWluIGNvbXBhdGliaWxpdGllczoKPj4gJCAuL3V0
+aWxzL3Rlc3QtcGtnIHBhY2thZ2UvcnVzdC1jb3JldXRpbHMKPj4gICBib290bGluLWFybXY1LXVj
+bGliYyBbMS82XTogU0tJUFBFRAo+PiAgICBib290bGluLWFybXY3LWdsaWJjIFsyLzZdOiBPSwo+
+PiAgYm9vdGxpbi1hcm12N20tdWNsaWJjIFszLzZdOiBTS0lQUEVECj4+ICAgIGJvb3RsaW4teDg2
+LTY0LW11c2wgWzQvNl06IE9LCj4+ICAgICBici1hcm0tZnVsbC1zdGF0aWMgWzUvNl06IFNLSVBQ
+RUQKPj4gICAgICAgICAgIHNvdXJjZXJ5LWFybSBbNi82XTogT0sKPj4KPj4gU2lnbmVkLW9mZi1i
+eTogTmljb2xhcyBUcmFuIDxuaWNvbGFzLnRyYW5Ac21pbGUuZnI+Cj4+IC0tLQo+PiAgcGFja2Fn
+ZS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KPj4gIHBhY2thZ2Uv
+cnVzdC1jb3JldXRpbHMvQ29uZmlnLmluICAgICAgICAgICB8IDE3ICsrKysrKysrKysrKysrKysr
+Cj4+ICBwYWNrYWdlL3J1c3QtY29yZXV0aWxzL3J1c3QtY29yZXV0aWxzLmhhc2ggfCAgMyArKysK
+Pj4gIHBhY2thZ2UvcnVzdC1jb3JldXRpbHMvcnVzdC1jb3JldXRpbHMubWsgICB8IDEyICsrKysr
+KysrKysrKwo+PiAgNCBmaWxlcyBjaGFuZ2VkLCAzMyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9u
+KC0pCj4+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9ydXN0LWNvcmV1dGlscy9Db25maWcu
+aW4KPj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3J1c3QtY29yZXV0aWxzL3J1c3QtY29y
+ZXV0aWxzLmhhc2gKPj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3J1c3QtY29yZXV0aWxz
+L3J1c3QtY29yZXV0aWxzLm1rCj4gCj4gQnVzeWJveCBwYWNrYWdlIHNob3VsZCBkZXBlbmQgb24g
+cnVzdC1jb3JldXRpbHMgaWYgYm90aCBwYWNrYWdlcyBhcmUgc2VsZWN0ZWQgaW4KPiB0aGUgY29u
+ZmlndXJhdGlvbi4KPiAKPiBTZWUgbm9jbG9iYmVyIGluc3RhbGwgaW4gYnVzeWJveC5tawo+IGh0
+dHBzOi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L2NvbW1pdC8/aWQ9NTBkYzM1MGM2NWY0
+YjE2NjJiYTk4NmQ2ZWIyNWIyNGE3MGM0MzEyOAo+IAo+IEFsc28sIHdoYXQgYWJvdXQgdGhlIGNv
+bmZsaWN0IHdpdGggKEdOVSkgY29yZXV0aWxzIHBhY2thZ2UgaXRzZWxmID8KPiAKPiBEbyB3ZSB3
+YW50IHRvIGNvbnZlcnQgY29yZXV0aWxzIHRvIGEgdmlydHVhbCBwYWNrYWdlIFsxXS4KPiBXZSBt
+YXkgaGF2ZSB0aGUgc2FtZSBpc3N1ZSBmb3IgZWFjaCBwYWNrYWdlcyByZWNvZGVkIGludG8gYW5v
+dGhlciBsYW5ndWFnZS4KPiAKPiAKPiAKPiBbMV0gaHR0cHM6Ly9uaWdodGx5LmJ1aWxkcm9vdC5v
+cmcvbWFudWFsLmh0bWwjX2luZnJhc3RydWN0dXJlX2Zvcl92aXJ0dWFsX3BhY2thZ2VzCj4gCj4+
+Cj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCj4+
+IGluZGV4IDg4OTIxMzQxMzMuLjk0ZjkyYjM1YjQgMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2UvQ29u
+ZmlnLmluCj4+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCj4+IEBAIC0xLDUgKzEsNCBAQAo+PiAg
+bWVudSAiVGFyZ2V0IHBhY2thZ2VzIgo+PiAtCj4+ICAJc291cmNlICJwYWNrYWdlL2J1c3lib3gv
+Q29uZmlnLmluIgo+PiAgCXNvdXJjZSAicGFja2FnZS9za2VsZXRvbi9Db25maWcuaW4iCj4+ICAJ
+c291cmNlICJwYWNrYWdlL3NrZWxldG9uLWN1c3RvbS9Db25maWcuaW4iCj4+IEBAIC0yNTc5LDYg
+KzI1NzgsNyBAQCBtZW51ICJTeXN0ZW0gdG9vbHMiCj4+ICAJc291cmNlICJwYWNrYWdlL3JhdWMv
+Q29uZmlnLmluIgo+PiAgCXNvdXJjZSAicGFja2FnZS9yc3lzbG9nL0NvbmZpZy5pbiIKPj4gIAlz
+b3VyY2UgInBhY2thZ2UvcnVuYy9Db25maWcuaW4iCj4+ICsJc291cmNlICJwYWNrYWdlL3J1c3Qt
+Y29yZXV0aWxzL0NvbmZpZy5pbiIKPj4gIAlzb3VyY2UgInBhY2thZ2UvczM5MC10b29scy9Db25m
+aWcuaW4iCj4+ICAJc291cmNlICJwYWNrYWdlL3M2L0NvbmZpZy5pbiIKPj4gIAlzb3VyY2UgInBh
+Y2thZ2UvczYtbGludXgtaW5pdC9Db25maWcuaW4iCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3J1
+c3QtY29yZXV0aWxzL0NvbmZpZy5pbiBiL3BhY2thZ2UvcnVzdC1jb3JldXRpbHMvQ29uZmlnLmlu
+Cj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+IGluZGV4IDAwMDAwMDAwMDAuLmFmNmU4NzA3MDkK
+Pj4gLS0tIC9kZXYvbnVsbAo+PiArKysgYi9wYWNrYWdlL3J1c3QtY29yZXV0aWxzL0NvbmZpZy5p
+bgo+PiBAQCAtMCwwICsxLDE3IEBACj4+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+PiArIwo+
+PiArIyBydXN0LWNvcmV1dGlscwo+PiArIwo+PiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPj4g
+Kwo+PiArY29uZmlnIEJSMl9QQUNLQUdFX1JVU1RfQ09SRVVUSUxTCj4+ICsJYm9vbCAicnVzdC1j
+b3JldXRpbHMiCj4+ICsJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NUX1JVU1RDX1RBUkdFVF9B
+UkNIX1NVUFBPUlRTCj4gCj4gImRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfQlVTWUJPWF9TSE9XX09U
+SEVSUyIgaXMgbWlzc2luZwo+IAo+IElmIGNvcmV1dGlscyBpcyBub3QgY29udmVydGVkIHRvIGEg
+dmlydHVhbCBwYWNrYWdlLCAiZGVwZW5kcyBvbgo+ICFCUjJfUEFDS0FHRV9DT1JFVVRJTFMiIHNo
+b3VsZCBiZSB1c2VkIGhlcmUuCj4gCj4gQmVzdCByZWdhcmRzLAo+IFJvbWFpbgo+IAo+IAo+PiAr
+CXNlbGVjdCBCUjJfUEFDS0FHRV9IT1NUX1JVU1RDCj4+ICsJaGVscAo+PiArCSAgcnVzdC1jb3Jl
+dXRpbHMgaXMgYSBwYWNrYWdlIGZyb20gdGhlIEdpdGh1YiBwcm9qZWN0Cj4+ICsJICB1dXRpbHMv
+Y29yZXV0aWxzIGNvbnRhaW5pbmcgdGhlIGVxdWl2YWxlbnQgb2YKPj4gKwkgIHRoZSBHTlUgY29y
+ZXV0aWxzIGJhc2ljIHNoZWxsIGNvbW1hbmRzIGludGVncmF0ZWQKPj4gKwkgIGluIFJ1c3QgbGFu
+Z3VhZ2UuCj4+ICsKPj4gKwkgIGh0dHBzOi8vZ2l0aHViLmNvbS91dXRpbHMvY29yZXV0aWxzCj4+
+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3J1c3QtY29yZXV0aWxzL3J1c3QtY29yZXV0aWxzLmhhc2gg
+Yi9wYWNrYWdlL3J1c3QtY29yZXV0aWxzL3J1c3QtY29yZXV0aWxzLmhhc2gKPj4gbmV3IGZpbGUg
+bW9kZSAxMDA2NDQKPj4gaW5kZXggMDAwMDAwMDAwMC4uMDY1ZGUwZWVjNQo+PiAtLS0gL2Rldi9u
+dWxsCj4+ICsrKyBiL3BhY2thZ2UvcnVzdC1jb3JldXRpbHMvcnVzdC1jb3JldXRpbHMuaGFzaAo+
+PiBAQCAtMCwwICsxLDMgQEAKPj4gKyMgTG9jYWxseSBnZW5lcmF0ZWQKPj4gK3NoYTI1NiAgN2Nk
+MDVlYmRlMTMwMmEyN2U3YTI2NDMwZWZjN2Q1MjJiODZlM2Q4ZjIyYWQ2MDYyNzVhMWE5NjQ4NTQy
+NGU0NiAgcnVzdC1jb3JldXRpbHMtMC4wLjEzLnRhci5nego+PiArc2hhMjU2ICBhODM2ZWIzMzYw
+ZDBlODBmNmExNjIwNDk1NTQzYWQyYTRlMjBlNGNmNzJhZjg5ZmY1MjhmY2NmOWU2M2JlODFlICBM
+SUNFTlNFCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3J1c3QtY29yZXV0aWxzL3J1c3QtY29yZXV0
+aWxzLm1rIGIvcGFja2FnZS9ydXN0LWNvcmV1dGlscy9ydXN0LWNvcmV1dGlscy5tawo+PiBuZXcg
+ZmlsZSBtb2RlIDEwMDY0NAo+PiBpbmRleCAwMDAwMDAwMDAwLi4xMjk2ZGIwZmYyCj4+IC0tLSAv
+ZGV2L251bGwKPj4gKysrIGIvcGFja2FnZS9ydXN0LWNvcmV1dGlscy9ydXN0LWNvcmV1dGlscy5t
+awo+PiBAQCAtMCwwICsxLDEyIEBACj4+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+PiArIwo+
+PiArIyBydXN0LWNvcmV1dGlscwo+PiArIwo+PiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPj4g
+Kwo+PiArUlVTVF9DT1JFVVRJTFNfVkVSU0lPTiA9IDAuMC4xMwo+PiArUlVTVF9DT1JFVVRJTFNf
+U0lURSA9ICQoY2FsbCBnaXRodWIsdXV0aWxzLGNvcmV1dGlscywkKFJVU1RfQ09SRVVUSUxTX1ZF
+UlNJT04pKQo+PiArUlVTVF9DT1JFVVRJTFNfTElDRU5TRSA9IE1JVAo+PiArUlVTVF9DT1JFVVRJ
+TFNfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKPj4gKwo+PiArJChldmFsICQoY2FyZ28tcGFja2Fn
+ZSkpCj4gCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
