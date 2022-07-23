@@ -1,49 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F694C43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 19:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7349C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 19:10:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6DEB42462;
-	Sat, 23 Jul 2022 19:10:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6DEB42462
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8267240354;
+	Sat, 23 Jul 2022 19:10:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8267240354
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0tMZoYm6VecR; Sat, 23 Jul 2022 19:10:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nUa7vVukl98B; Sat, 23 Jul 2022 19:10:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D88F42465;
-	Sat, 23 Jul 2022 19:10:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D88F42465
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C12440566;
+	Sat, 23 Jul 2022 19:10:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C12440566
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4526F1BF5A5
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 19:09:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6E44B1BF5A5
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 19:10:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C07C94245D
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 19:09:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C07C94245D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 44D4842471
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 19:10:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44D4842471
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1MiyANkQnjvd for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 19:09:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 83C294245B
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 19:09:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83C294245B
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0ECA084329; Sat, 23 Jul 2022 18:56:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 21:07:16 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fbc17cc59dfe253a61d646fb592842f16493b50d
-X-Git-Newrev: b7d854bf060632e8bcd4fbe3b8ab8074dad472f6
-X-Patchwork-Hint: ignore
-Message-Id: <20220723185616.0ECA084329@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-typeguard: new package
+ with ESMTP id KFakdPOv3SSp for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 19:10:35 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A22A04245F
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A22A04245F
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 19:10:35 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id k11so10170402wrx.5
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 12:10:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=TqSbpDjpxxxPLz7l04UhDdu1cv+/JCoRR/wBiNSUHI8=;
+ b=WuRLHddq/PAXrdFpaUE8dp/4VAPRqHriRMe9QYQT7XeRjN0IHwGP3Q14w8Dd6rqbUK
+ x2XYdLgXkcoDPUVIEiuTmNNg08F4AS/l+8STWWuqOYtvctDtt1Oq4sGnnNBpodBidmE5
+ D8qhBr71fD+cQg4enzNwmZNCZ+shrR5UbNv6hsQjZAWBSjLmwgeF2me2u7e/W/sxgpIb
+ OShdrBLzQbfMAbSa/ql9D/l6mcup9nLjxzg6e8Vm0iqP9oW8axlKwq0lj5q/9FE130SX
+ trezmKa9xAvlXDl3tv20VP7LslHM2O/DY6jvPhgyuuq6Df2fCTAbK1RsUKAaWlZXLml2
+ /27g==
+X-Gm-Message-State: AJIora/uZH0+xwkUDU/545+oz0l+Jcz4A+fArjJicGBF6X5Bn5efoNPr
+ aNgsMFDfhTOZ6m/ocKa/3lbPVjAW44aAbw==
+X-Google-Smtp-Source: AGRyM1vEehWyYzqkHqeMbzRH21NcH3FvXenwLHotYvnM0diG/THpEVJp6uFJzpyGcU8LDc9S6BxiWA==
+X-Received: by 2002:a05:6000:1789:b0:21e:619c:2c5c with SMTP id
+ e9-20020a056000178900b0021e619c2c5cmr3575794wrg.270.1658603433783; 
+ Sat, 23 Jul 2022 12:10:33 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ m20-20020a05600c4f5400b003976fbfbf00sm9643847wmq.30.2022.07.23.12.10.33
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 23 Jul 2022 12:10:33 -0700 (PDT)
+Message-ID: <81ff877d-7b32-bc2d-c98b-2677187609b6@mind.be>
+Date: Sat, 23 Jul 2022 21:10:31 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220618085704.508506-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220618085704.508506-1-fontaine.fabrice@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=TqSbpDjpxxxPLz7l04UhDdu1cv+/JCoRR/wBiNSUHI8=;
+ b=SC2Za7fGwMc5UZYYXKZAfQV1GCDW7WxU4AgkZwx9kUeOwoqd6UzycllGHfaLye5qie
+ 5i7rSlMy7mP+q9m/4m1pqn8ziOi/Et1miLOG9roQvctCUnvCkoSfYGAwv4rSfXag5alh
+ PSsscS/LQUfnXKTDgwEE1W0LMtOx7w68CeQ6D5X9lvOesu8PYBr1/rHLJVobgENypljK
+ /LOt3MGi3TKefx6tg+6XZTlEz3Ec2jvZGtFQ0/SK+UW3wLN2FDadRx6+DbUw4m7aPHUc
+ c7u/t/+DV2Q7/4jaLB7aGIjbLJGxAeIRYhG7wiu537Y/RQWUlIT/vr9y74CULkgHkncf
+ 67hA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=SC2Za7fG
+Subject: Re: [Buildroot] [PATCH 1/1] package/php: add
+ BR2_PACKAGE_PHP_ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,95 +101,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7d854bf060632e8bcd4fbe3b8ab8074dad472f6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/python-typeguard/Config.in             |  6 ++++++
- package/python-typeguard/python-typeguard.hash |  5 +++++
- package/python-typeguard/python-typeguard.mk   | 15 +++++++++++++++
- 5 files changed, 28 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 62053c4b64..55e27edf83 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1359,6 +1359,7 @@ F:	package/python-sockjs/
- F:	package/python-terminaltables/
- F:	package/python-tinycss2/
- F:	package/python-tomli/
-+F:	package/python-typeguard/
- F:	package/python-weasyprint/
- F:	package/python-yarl/
- F:	package/python-zopfli/
-diff --git a/package/Config.in b/package/Config.in
-index 75a756ba6f..75516dd453 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1269,6 +1269,7 @@ menu "External python modules"
- 	source "package/python-txaio/Config.in"
- 	source "package/python-txdbus/Config.in"
- 	source "package/python-txtorcon/Config.in"
-+	source "package/python-typeguard/Config.in"
- 	source "package/python-typepy/Config.in"
- 	source "package/python-typing-extensions/Config.in"
- 	source "package/python-u-msgpack/Config.in"
-diff --git a/package/python-typeguard/Config.in b/package/python-typeguard/Config.in
-new file mode 100644
-index 0000000000..6fd8351570
---- /dev/null
-+++ b/package/python-typeguard/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_TYPEGUARD
-+	bool "python-typeguard"
-+	help
-+	  Run-time type checker for Python.
-+
-+	  https://github.com/agronholm/typeguard
-diff --git a/package/python-typeguard/python-typeguard.hash b/package/python-typeguard/python-typeguard.hash
-new file mode 100644
-index 0000000000..76394bcb19
---- /dev/null
-+++ b/package/python-typeguard/python-typeguard.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/typeguard/json
-+md5  22d49971f62f3baa3525349b1e03723d  typeguard-2.13.3.tar.gz
-+sha256  00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4  typeguard-2.13.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256  6163f7987dfb38d6bc320ce2b70b2f02b862bc41126516d552ef1cd43247e758  LICENSE
-diff --git a/package/python-typeguard/python-typeguard.mk b/package/python-typeguard/python-typeguard.mk
-new file mode 100644
-index 0000000000..8471f2e4fd
---- /dev/null
-+++ b/package/python-typeguard/python-typeguard.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-typeguard
-+#
-+################################################################################
-+
-+PYTHON_TYPEGUARD_VERSION = 2.13.3
-+PYTHON_TYPEGUARD_SOURCE = typeguard-$(PYTHON_TYPEGUARD_VERSION).tar.gz
-+PYTHON_TYPEGUARD_SITE = https://files.pythonhosted.org/packages/3a/38/c61bfcf62a7b572b5e9363a802ff92559cb427ee963048e1442e3aef7490
-+PYTHON_TYPEGUARD_SETUP_TYPE = setuptools
-+PYTHON_TYPEGUARD_LICENSE = MIT
-+PYTHON_TYPEGUARD_LICENSE_FILES = LICENSE
-+PYTHON_TYPEGUARD_DEPENDENCIES = host-python-setuptools-scm
-+
-+$(eval $(python-package))
+On 18/06/2022 10:57, Fabrice Fontaine wrote:
+> fiber (https://wiki.php.net/rfc/fibers) has been added in version 8.1.0
+> with
+> https://github.com/php/php-src/commit/c276c16b6627222c40bd43907475d664734b9abe
+> 
+> fiber uses asm on supported architectures or needs ucontext since
+> https://github.com/php/php-src/commit/8fd747a2a0e9f57c12bdad22a1844a736e7b4e57
+> 
+> As result, the following build failure is raised without ucontext_t on
+> architectures not supported by asm since bump to version 8.1.7 in commit
+> 0ddfece7f7e5b10a5da89f2c462616d5deb5b1ec:
+> 
+> /home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/10.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: Zend/zend_fibers.o: in function `zend_fiber_init_context':
+> zend_fibers.c:(.text+0x68a): undefined reference to `getcontext'
+> 
+> As fiber can't be disabled (only fiber-asm), add
+> BR2_PACKAGE_PHP_ARCH_SUPPORTS to reflect this new dependency
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/f4077bae8f879828e343475318cd2ddb99e09ba4
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/php/Config.in | 14 ++++++++++++++
+>   1 file changed, 14 insertions(+)
+> 
+> diff --git a/package/php/Config.in b/package/php/Config.in
+> index 226d2d5fd2..69b4268c1d 100644
+> --- a/package/php/Config.in
+> +++ b/package/php/Config.in
+> @@ -1,5 +1,18 @@
+> +config BR2_PACKAGE_PHP_ARCH_SUPPORTS
+> +	bool
+> +	# see fiber_cpu in configure.ac
+> +	default y if BR2_aarch64 || BR2_aarch64_be
+> +	default y if BR2_arm || BR2_armeb
+> +	default y if BR2_i386 || BR2_x86_64
+> +	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+> +	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+> +	default y if BR2_RISCV_64
+> +	default y if BR2_s390x
+> +	default y if BR2_TOOLCHAIN_HAS_UCONTEXT
+> +
+>   config BR2_PACKAGE_PHP
+>   	bool "php"
+> +	depends on BR2_PACKAGE_PHP_ARCH_SUPPORTS
+>   	# PHP uses -export-dynamic, which breaks with elf2flt with a
+>   	# message like "ld.real: section .junk LMA [...,...] overlaps
+>   	# section .text LMA [...,...]"
+> @@ -52,5 +65,6 @@ source "package/php/Config.ext"
+>   endif
+>   
+>   comment "php needs a toolchain w/ wchar"
+> +	depends on BR2_PACKAGE_PHP_ARCH_SUPPORTS
+>   	depends on !BR2_BINFMT_FLAT
+>   	depends on !BR2_USE_WCHAR
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
