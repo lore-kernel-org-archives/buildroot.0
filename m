@@ -1,51 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BF5DC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 22:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42C60C43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 22:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D031E4063C;
-	Sat, 23 Jul 2022 22:05:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D031E4063C
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0F3442178;
+	Sat, 23 Jul 2022 22:06:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0F3442178
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9UmdxIfpwRQr; Sat, 23 Jul 2022 22:05:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UqpMvPAlbt5Q; Sat, 23 Jul 2022 22:06:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C5C26404BF;
-	Sat, 23 Jul 2022 22:05:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5C26404BF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CD9B41BF3AD
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 22:05:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B24C4244D;
+	Sat, 23 Jul 2022 22:06:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B24C4244D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 15F8B1BF3AD
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 22:06:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B509F404BF
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 22:05:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B509F404BF
+ by smtp1.osuosl.org (Postfix) with ESMTP id E44BF847FA
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 22:06:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E44BF847FA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M5QjYCnKWkJA for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 22:05:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D0E540190
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 22:05:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D0E540190
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id BB768853CE; Sat, 23 Jul 2022 21:51:30 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 00:03:33 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a0460cb46e5a706032959074b46f807010d0684f
-X-Git-Newrev: ed97f60c3a363e461608cf843c564111134d0541
-X-Patchwork-Hint: ignore
-Message-Id: <20220723215130.BB768853CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu_ppc*: bump kernel version to
- 5.17.7
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B2obe-_SXzS0 for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 22:06:06 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99F1F847E2
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 99F1F847E2
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 22:06:05 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id q18so539403wrx.8
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 15:06:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=ZBbhuY8ABHdpU+Lq1pTp+L52E/FWLl0oPBgk5UNyPgI=;
+ b=tXOkv2l1C6AaEghb+86vmpoOyeMqAWs00hDZTdbH/ExR1OSwIDAM2SDHcHFF6ltQlN
+ E6LGl6h4TceyTIT8++fL17OiLq+bwoRoJgNFYxz73tlIkzbF8IxtjqVsZYBOz8+8pHzc
+ 1gHBANmOoXKMjZgePJFNXCNJAANEpdqCpGKEf7wpeSrH3hHsBVZizE1AZIf2kmAJLGio
+ abCLE1/8wssjg0Nv2V1uXzx8lDWzJ6a3PBHosemdxQZrOkPEUyFDmQ15YAUkX07N8wwr
+ rWw+z6R7H/BHBKsGNnSyHsePdlOsVTGKkaP5fCSQoxxu0aUVEyqFuGF0NmTkcmYeNMSV
+ tShA==
+X-Gm-Message-State: AJIora+Hgdi0VE9guvGgDkyc72STKRW8TBn2BcIijd1fT2WgKUwj25zI
+ PrIBMKni4+tgQ1D3dUkGaNl+azFNgXPPOA==
+X-Google-Smtp-Source: AGRyM1vqi8mKXCuaPEA36q2R9qFVS7PBEoJyraQ3womsKFGBtVnYyjS9BKYOLPtiDeTINzbWziAvXQ==
+X-Received: by 2002:a5d:434a:0:b0:21d:aa7e:b1bb with SMTP id
+ u10-20020a5d434a000000b0021daa7eb1bbmr3884477wrr.619.1658613963318; 
+ Sat, 23 Jul 2022 15:06:03 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ o27-20020a5d58db000000b0021d80f53324sm7860522wrf.7.2022.07.23.15.06.02
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 23 Jul 2022 15:06:02 -0700 (PDT)
+Message-ID: <b05731e0-4f16-46f0-0fbd-96436501db4d@mind.be>
+Date: Sun, 24 Jul 2022 00:06:00 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>, buildroot@buildroot.org
+References: <20220518044859.2901762-1-clg@kaod.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220518044859.2901762-1-clg@kaod.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=ZBbhuY8ABHdpU+Lq1pTp+L52E/FWLl0oPBgk5UNyPgI=;
+ b=cfEl8jdfzQuzmnFMd2Bfz8t3e7ZMihllBjg9XpZjzd4xGntTUvRyzKfviPmzQlA/xc
+ RJXftwKueZFWeoIF5cl96dQBYMl/tUHhjz935/n4xwPR4TelLZcood3b5mImMXA35GgQ
+ 9KPlCBkrP7mlBJu54ewAF7QCInFgSxJ/JdmpFpFq8mFwbX5edXtWDUFThJT6XdQ0N1bv
+ SexEVzx7ntumQBxpauY1xcCDfcZir70Mmhj6+JLW2CFLKT6fqGyBRDpuLCtaTEq0saFp
+ lA6JmdYfqc+mNvNw9dKHJiZhFzNMTDoQGdOIzpV1ObzK1SMwTYQNS4Bwku8eflCBLSM4
+ xZOg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=cfEl8jdf
+Subject: Re: [Buildroot] [PATCH v2 1/2] configs/qemu_ppc*: bump kernel
+ version to 5.17.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,213 +101,153 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1098440872412863517=="
+Cc: Gerome Burlats <gerome.burlats@smile.fr>,
+ Romain Naour <romain.naour@gmail.com>, Joel Stanley <joel@jms.id.au>,
+ Matt Weber <matthew.weber@collins.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1098440872412863517==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=ed97f60c3a363e461608cf843c564111134d0541
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- configs/qemu_ppc64_e5500_defconfig      | 4 ++--
- configs/qemu_ppc64_pseries_defconfig    | 4 ++--
- configs/qemu_ppc64le_powernv8_defconfig | 4 ++--
- configs/qemu_ppc64le_pseries_defconfig  | 4 ++--
- configs/qemu_ppc_bamboo_defconfig       | 4 ++--
- configs/qemu_ppc_e500mc_defconfig       | 4 ++--
- configs/qemu_ppc_g3beige_defconfig      | 4 ++--
- configs/qemu_ppc_mac99_defconfig        | 4 ++--
- configs/qemu_ppc_mpc8544ds_defconfig    | 4 ++--
- 9 files changed, 18 insertions(+), 18 deletions(-)
-
-diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
-index c455fcffe4..8458f2739a 100644
---- a/configs/qemu_ppc64_e5500_defconfig
-+++ b/configs/qemu_ppc64_e5500_defconfig
-@@ -12,12 +12,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- 
- # Linux headers same as the kernel
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
- BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
-index efa8106ff1..480ebea29d 100644
---- a/configs/qemu_ppc64_pseries_defconfig
-+++ b/configs/qemu_ppc64_pseries_defconfig
-@@ -16,12 +16,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- 
- # Linux headers same as kernel
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
-diff --git a/configs/qemu_ppc64le_powernv8_defconfig b/configs/qemu_ppc64le_powernv8_defconfig
-index 773ee4023f..8de4cf5189 100644
---- a/configs/qemu_ppc64le_powernv8_defconfig
-+++ b/configs/qemu_ppc64le_powernv8_defconfig
-@@ -16,12 +16,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- 
- # Linux headers same as kernel
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
- BR2_LINUX_KERNEL_DEFCONFIG="powernv"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
-diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
-index 8a20f58f1e..98c6afdf93 100644
---- a/configs/qemu_ppc64le_pseries_defconfig
-+++ b/configs/qemu_ppc64le_pseries_defconfig
-@@ -16,12 +16,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- 
- # Linux headers same as kernel
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
-diff --git a/configs/qemu_ppc_bamboo_defconfig b/configs/qemu_ppc_bamboo_defconfig
-index 6129c4a663..f4cc5589e7 100644
---- a/configs/qemu_ppc_bamboo_defconfig
-+++ b/configs/qemu_ppc_bamboo_defconfig
-@@ -14,12 +14,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- 
- # Linux headers same as kernel
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
- BR2_LINUX_KERNEL_DEFCONFIG="44x/bamboo"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-bamboo/linux.fragment"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_e500mc_defconfig b/configs/qemu_ppc_e500mc_defconfig
-index 1853e538bb..0a1877c44b 100644
---- a/configs/qemu_ppc_e500mc_defconfig
-+++ b/configs/qemu_ppc_e500mc_defconfig
-@@ -11,12 +11,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- 
- # Linux headers same as the kernel
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
- BR2_LINUX_KERNEL_DEFCONFIG="corenet32_smp"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-e500mc/linux.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index 9bbebede1b..1c11bcf77d 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -14,12 +14,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- 
- # Linux headers same as kernel
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
-index e9629ff233..2331041c2a 100644
---- a/configs/qemu_ppc_mac99_defconfig
-+++ b/configs/qemu_ppc_mac99_defconfig
-@@ -6,12 +6,12 @@ BR2_powerpc_7400=y
- BR2_SYSTEM_DHCP="eth0"
- 
- # Linux headers same as kernel
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
- BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index 2b51573da9..b9a0812d52 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -15,12 +15,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- 
- # Linux headers same as kernel
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.17.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-mpc8544ds/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-
---===============1098440872412863517==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1098440872412863517==--
+CgpPbiAxOC8wNS8yMDIyIDA2OjQ4LCBDw6lkcmljIExlIEdvYXRlciB3cm90ZToKPiBTaWduZWQt
+b2ZmLWJ5OiBDw6lkcmljIExlIEdvYXRlciA8Y2xnQGthb2Qub3JnPgoKICBCeSBub3csIG9mIGNv
+dXJzZSwgNS4xNyBoYXMgYWxyZWFkeSBiZWVuIHN0b3BwZWQgYW5kIDUuMTguMTQgaXMgY3VycmVu
+dCAKc3RhYmxlLiBBbnl3YXksIGFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgogIFJlZ2FyZHMs
+CiAgQXJub3V0Cgo+IC0tLQo+ICAgY29uZmlncy9xZW11X3BwYzY0X2U1NTAwX2RlZmNvbmZpZyAg
+ICAgIHwgNCArKy0tCj4gICBjb25maWdzL3FlbXVfcHBjNjRfcHNlcmllc19kZWZjb25maWcgICAg
+fCA0ICsrLS0KPiAgIGNvbmZpZ3MvcWVtdV9wcGM2NGxlX3Bvd2VybnY4X2RlZmNvbmZpZyB8IDQg
+KystLQo+ICAgY29uZmlncy9xZW11X3BwYzY0bGVfcHNlcmllc19kZWZjb25maWcgIHwgNCArKy0t
+Cj4gICBjb25maWdzL3FlbXVfcHBjX2JhbWJvb19kZWZjb25maWcgICAgICAgfCA0ICsrLS0KPiAg
+IGNvbmZpZ3MvcWVtdV9wcGNfZTUwMG1jX2RlZmNvbmZpZyAgICAgICB8IDQgKystLQo+ICAgY29u
+Zmlncy9xZW11X3BwY19nM2JlaWdlX2RlZmNvbmZpZyAgICAgIHwgNCArKy0tCj4gICBjb25maWdz
+L3FlbXVfcHBjX21hYzk5X2RlZmNvbmZpZyAgICAgICAgfCA0ICsrLS0KPiAgIGNvbmZpZ3MvcWVt
+dV9wcGNfbXBjODU0NGRzX2RlZmNvbmZpZyAgICB8IDQgKystLQo+ICAgOSBmaWxlcyBjaGFuZ2Vk
+LCAxOCBpbnNlcnRpb25zKCspLCAxOCBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvY29u
+Zmlncy9xZW11X3BwYzY0X2U1NTAwX2RlZmNvbmZpZyBiL2NvbmZpZ3MvcWVtdV9wcGM2NF9lNTUw
+MF9kZWZjb25maWcKPiBpbmRleCAwNzIyNDBjOTljMzIuLjA4MjVkMGFiOWIzMCAxMDA2NDQKPiAt
+LS0gYS9jb25maWdzL3FlbXVfcHBjNjRfZTU1MDBfZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9x
+ZW11X3BwYzY0X2U1NTAwX2RlZmNvbmZpZwo+IEBAIC0xMSwxMiArMTEsMTIgQEAgQlIyX1JPT1RG
+U19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVtdS9wb3N0LWltYWdlLnNoIgo+ICAgQlIyX1JP
+T1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICAgCj4gICAjIExpbnV4
+IGhlYWRlcnMgc2FtZSBhcyB0aGUga2VybmVsCj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVB
+REVSU19DVVNUT01fNV8xNT15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNU
+T01fNV8xNz15Cj4gICAKPiAgICMgS2VybmVsCj4gICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgIEJS
+Ml9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RP
+TV9WRVJTSU9OX1ZBTFVFPSI1LjE1LjE4Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJT
+SU9OX1ZBTFVFPSI1LjE3LjciCj4gICBCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0iY29yZW5l
+dDY0X3NtcCIKPiAgIEJSMl9MSU5VWF9LRVJORUxfQ09ORklHX0ZSQUdNRU5UX0ZJTEVTPSJib2Fy
+ZC9xZW11L3BwYzY0LWU1NTAwL2xpbnV4LmZyYWdtZW50Igo+ICAgQlIyX0xJTlVYX0tFUk5FTF9O
+RUVEU19IT1NUX09QRU5TU0w9eQo+IGRpZmYgLS1naXQgYS9jb25maWdzL3FlbXVfcHBjNjRfcHNl
+cmllc19kZWZjb25maWcgYi9jb25maWdzL3FlbXVfcHBjNjRfcHNlcmllc19kZWZjb25maWcKPiBp
+bmRleCBhZDUyM2VjMmVmZWIuLmM0NTAxNGYyYWMzZiAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3Fl
+bXVfcHBjNjRfcHNlcmllc19kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVfcHBjNjRfcHNl
+cmllc19kZWZjb25maWcKPiBAQCAtMTUsMTIgKzE1LDEyIEBAIEJSMl9ST09URlNfUE9TVF9JTUFH
+RV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIKPiAgIEJSMl9ST09URlNfUE9TVF9T
+Q1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSIKPiAgIAo+ICAgIyBMaW51eCBoZWFkZXJzIHNh
+bWUgYXMga2VybmVsCj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8x
+NT15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8xNz15Cj4gICAK
+PiAgICMgS2VybmVsCj4gICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgIEJSMl9MSU5VWF9LRVJORUxf
+Q1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVF
+PSI1LjE1LjE4Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI1LjE3
+LjciCj4gICBCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0icHNlcmllcyIKPiAgIEJSMl9MSU5V
+WF9LRVJORUxfVk1MSU5VWD15Cj4gICAKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X3BwYzY0
+bGVfcG93ZXJudjhfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X3BwYzY0bGVfcG93ZXJudjhfZGVm
+Y29uZmlnCj4gaW5kZXggYTc4NDY5NWRkZjA2Li44MjIxNDVlOTI3YTEgMTAwNjQ0Cj4gLS0tIGEv
+Y29uZmlncy9xZW11X3BwYzY0bGVfcG93ZXJudjhfZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9x
+ZW11X3BwYzY0bGVfcG93ZXJudjhfZGVmY29uZmlnCj4gQEAgLTE1LDEyICsxNSwxMiBAQCBCUjJf
+Uk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2giCj4gICBC
+UjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJRykiCj4gICAKPiAgICMg
+TGludXggaGVhZGVycyBzYW1lIGFzIGtlcm5lbAo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hF
+QURFUlNfQ1VTVE9NXzVfMTU9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VT
+VE9NXzVfMTc9eQo+ICAgCj4gICAjIEtlcm5lbAo+ICAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gICBC
+UjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNU
+T01fVkVSU0lPTl9WQUxVRT0iNS4xNS4xOCIKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVS
+U0lPTl9WQUxVRT0iNS4xNy43Igo+ICAgQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9InBvd2Vy
+bnYiCj4gICBCUjJfTElOVVhfS0VSTkVMX1ZNTElOVVg9eQo+ICAgCj4gZGlmZiAtLWdpdCBhL2Nv
+bmZpZ3MvcWVtdV9wcGM2NGxlX3BzZXJpZXNfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X3BwYzY0
+bGVfcHNlcmllc19kZWZjb25maWcKPiBpbmRleCBmMTBiMGZkZjQwODkuLjVlYWEzZTk1M2Y3OCAx
+MDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfcHBjNjRsZV9wc2VyaWVzX2RlZmNvbmZpZwo+ICsr
+KyBiL2NvbmZpZ3MvcWVtdV9wcGM2NGxlX3BzZXJpZXNfZGVmY29uZmlnCj4gQEAgLTE1LDEyICsx
+NSwxMiBAQCBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9xZW11L3Bvc3QtaW1h
+Z2Uuc2giCj4gICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJRyki
+Cj4gICAKPiAgICMgTGludXggaGVhZGVycyBzYW1lIGFzIGtlcm5lbAo+IC1CUjJfUEFDS0FHRV9I
+T1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzVfMTU9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVY
+X0hFQURFUlNfQ1VTVE9NXzVfMTc9eQo+ICAgCj4gICAjIEtlcm5lbAo+ICAgQlIyX0xJTlVYX0tF
+Uk5FTD15Cj4gICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVY
+X0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNS4xNS4xOCIKPiArQlIyX0xJTlVYX0tFUk5F
+TF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNS4xNy43Igo+ICAgQlIyX0xJTlVYX0tFUk5FTF9ERUZD
+T05GSUc9InBzZXJpZXNfbGUiCj4gICBCUjJfTElOVVhfS0VSTkVMX1ZNTElOVVg9eQo+ICAgCj4g
+ZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9wcGNfYmFtYm9vX2RlZmNvbmZpZyBiL2NvbmZpZ3Mv
+cWVtdV9wcGNfYmFtYm9vX2RlZmNvbmZpZwo+IGluZGV4IDYxMjljNGE2NjMzNC4uZjRjYzU1ODll
+N2I0IDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9wcGNfYmFtYm9vX2RlZmNvbmZpZwo+ICsr
+KyBiL2NvbmZpZ3MvcWVtdV9wcGNfYmFtYm9vX2RlZmNvbmZpZwo+IEBAIC0xNCwxMiArMTQsMTIg
+QEAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVtdS9wb3N0LWltYWdlLnNo
+Igo+ICAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICAg
+Cj4gICAjIExpbnV4IGhlYWRlcnMgc2FtZSBhcyBrZXJuZWwKPiAtQlIyX1BBQ0tBR0VfSE9TVF9M
+SU5VWF9IRUFERVJTX0NVU1RPTV81XzE1PXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFE
+RVJTX0NVU1RPTV81XzE3PXkKPiAgIAo+ICAgIyBLZXJuZWwKPiAgIEJSMl9MSU5VWF9LRVJORUw9
+eQo+ICAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJO
+RUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjUuMTUuMTgiCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VT
+VE9NX1ZFUlNJT05fVkFMVUU9IjUuMTcuNyIKPiAgIEJSMl9MSU5VWF9LRVJORUxfREVGQ09ORklH
+PSI0NHgvYmFtYm9vIgo+ICAgQlIyX0xJTlVYX0tFUk5FTF9DT05GSUdfRlJBR01FTlRfRklMRVM9
+ImJvYXJkL3FlbXUvcHBjLWJhbWJvby9saW51eC5mcmFnbWVudCIKPiAgIEJSMl9MSU5VWF9LRVJO
+RUxfVk1MSU5VWD15Cj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9wcGNfZTUwMG1jX2RlZmNv
+bmZpZyBiL2NvbmZpZ3MvcWVtdV9wcGNfZTUwMG1jX2RlZmNvbmZpZwo+IGluZGV4IDE4NTNlNTM4
+YmIzOC4uMGExODc3YzQ0YjQyIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9wcGNfZTUwMG1j
+X2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcWVtdV9wcGNfZTUwMG1jX2RlZmNvbmZpZwo+IEBA
+IC0xMSwxMiArMTEsMTIgQEAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVt
+dS9wb3N0LWltYWdlLnNoIgo+ICAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9E
+RUZDT05GSUcpIgo+ICAgCj4gICAjIExpbnV4IGhlYWRlcnMgc2FtZSBhcyB0aGUga2VybmVsCj4g
+LUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8xNT15Cj4gK0JSMl9QQUNL
+QUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8xNz15Cj4gICAKPiAgICMgS2VybmVsCj4g
+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049
+eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI1LjE1LjE4Igo+ICtC
+UjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI1LjE3LjciCj4gICBCUjJfTElO
+VVhfS0VSTkVMX0RFRkNPTkZJRz0iY29yZW5ldDMyX3NtcCIKPiAgIEJSMl9MSU5VWF9LRVJORUxf
+Q09ORklHX0ZSQUdNRU5UX0ZJTEVTPSJib2FyZC9xZW11L3BwYy1lNTAwbWMvbGludXguZnJhZ21l
+bnQiCj4gICBCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfT1BFTlNTTD15Cj4gZGlmZiAtLWdp
+dCBhL2NvbmZpZ3MvcWVtdV9wcGNfZzNiZWlnZV9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfcHBj
+X2czYmVpZ2VfZGVmY29uZmlnCj4gaW5kZXggOWJiZWJlZGUxYjllLi4xYzExYmNmNzdkMDMgMTAw
+NjQ0Cj4gLS0tIGEvY29uZmlncy9xZW11X3BwY19nM2JlaWdlX2RlZmNvbmZpZwo+ICsrKyBiL2Nv
+bmZpZ3MvcWVtdV9wcGNfZzNiZWlnZV9kZWZjb25maWcKPiBAQCAtMTQsMTIgKzE0LDEyIEBAIEJS
+Ml9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIKPiAg
+IEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSIKPiAgIAo+ICAg
+IyBMaW51eCBoZWFkZXJzIHNhbWUgYXMga2VybmVsCj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhf
+SEVBREVSU19DVVNUT01fNV8xNT15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19D
+VVNUT01fNV8xNz15Cj4gICAKPiAgICMgS2VybmVsCj4gICBCUjJfTElOVVhfS0VSTkVMPXkKPiAg
+IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NV
+U1RPTV9WRVJTSU9OX1ZBTFVFPSI1LjE1LjE4Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9W
+RVJTSU9OX1ZBTFVFPSI1LjE3LjciCj4gICBCUjJfTElOVVhfS0VSTkVMX1VTRV9DVVNUT01fQ09O
+RklHPXkKPiAgIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0NPTkZJR19GSUxFPSJib2FyZC9xZW11
+L3BwYy1nM2JlaWdlL2xpbnV4LmNvbmZpZyIKPiAgIEJSMl9MSU5VWF9LRVJORUxfVk1MSU5VWD15
+Cj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9wcGNfbWFjOTlfZGVmY29uZmlnIGIvY29uZmln
+cy9xZW11X3BwY19tYWM5OV9kZWZjb25maWcKPiBpbmRleCBlOTYyOWZmMjMzMDkuLjIzMzEwNDFj
+MmE4OCAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfcHBjX21hYzk5X2RlZmNvbmZpZwo+ICsr
+KyBiL2NvbmZpZ3MvcWVtdV9wcGNfbWFjOTlfZGVmY29uZmlnCj4gQEAgLTYsMTIgKzYsMTIgQEAg
+QlIyX3Bvd2VycGNfNzQwMD15Cj4gICBCUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCj4gICAKPiAgICMg
+TGludXggaGVhZGVycyBzYW1lIGFzIGtlcm5lbAo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hF
+QURFUlNfQ1VTVE9NXzVfMTU9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VT
+VE9NXzVfMTc9eQo+ICAgCj4gICAjIEtlcm5lbAo+ICAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gICBC
+UjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNU
+T01fVkVSU0lPTl9WQUxVRT0iNS4xNS4xOCIKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVS
+U0lPTl9WQUxVRT0iNS4xNy43Igo+ICAgQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9InBtYWMz
+MiIKPiAgIEJSMl9MSU5VWF9LRVJORUxfQ09ORklHX0ZSQUdNRU5UX0ZJTEVTPSJib2FyZC9xZW11
+L3BwYy1tYWM5OS9saW51eC5mcmFnbWVudCIKPiAgIEJSMl9MSU5VWF9LRVJORUxfVk1MSU5VWD15
+Cj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9wcGNfbXBjODU0NGRzX2RlZmNvbmZpZyBiL2Nv
+bmZpZ3MvcWVtdV9wcGNfbXBjODU0NGRzX2RlZmNvbmZpZwo+IGluZGV4IDJiNTE1NzNkYTliYi4u
+YjlhMDgxMmQ1MjU0IDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9wcGNfbXBjODU0NGRzX2Rl
+ZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcWVtdV9wcGNfbXBjODU0NGRzX2RlZmNvbmZpZwo+IEBA
+IC0xNSwxMiArMTUsMTIgQEAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVt
+dS9wb3N0LWltYWdlLnNoIgo+ICAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9E
+RUZDT05GSUcpIgo+ICAgCj4gICAjIExpbnV4IGhlYWRlcnMgc2FtZSBhcyBrZXJuZWwKPiAtQlIy
+X1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzE1PXkKPiArQlIyX1BBQ0tBR0Vf
+SE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzE3PXkKPiAgIAo+ICAgIyBLZXJuZWwKPiAgIEJS
+Ml9MSU5VWF9LRVJORUw9eQo+ICAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4g
+LUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjUuMTUuMTgiCj4gK0JSMl9M
+SU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjUuMTcuNyIKPiAgIEJSMl9MSU5VWF9L
+RVJORUxfVVNFX0NVU1RPTV9DT05GSUc9eQo+ICAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fQ09O
+RklHX0ZJTEU9ImJvYXJkL3FlbXUvcHBjLW1wYzg1NDRkcy9saW51eC5jb25maWciCj4gICBCUjJf
+TElOVVhfS0VSTkVMX1ZNTElOVVg9eQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
+b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAo=
