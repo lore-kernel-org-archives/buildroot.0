@@ -1,72 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 284DBC43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 13:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F39F1C43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 13:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBA9F81AF5;
-	Sat, 23 Jul 2022 13:38:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBA9F81AF5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CC0560FE7;
+	Sat, 23 Jul 2022 13:41:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CC0560FE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iTsEX2Xb5LEm; Sat, 23 Jul 2022 13:38:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SmIUs_ORVXJf; Sat, 23 Jul 2022 13:41:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5F0D81A95;
-	Sat, 23 Jul 2022 13:38:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5F0D81A95
+	by smtp3.osuosl.org (Postfix) with ESMTP id 033B260FF0;
+	Sat, 23 Jul 2022 13:41:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 033B260FF0
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ADC2D1BF31A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:38:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C2181BF31A
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A20D760B59
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:38:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A20D760B59
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA42B60FE9
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:41:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA42B60FE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dORwkmugEOfn for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 13:38:12 +0000 (UTC)
+ with ESMTP id KGAFxLcRexGb for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 13:41:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 890D360FE9
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 890D360FE9
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 13:38:12 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8acf:5600:bc2c:46eb:561c:827])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 6116878050E;
- Sat, 23 Jul 2022 15:38:04 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 23 Jul 2022 15:38:04 +0200
-Date: Sat, 23 Jul 2022 15:38:04 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220723133804.GB2641@scaer>
-References: <20220722202151.76235-1-thomas.petazzoni@bootlin.com>
- <20220722202151.76235-4-thomas.petazzoni@bootlin.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E96660FE7
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8E96660FE7
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 13:41:41 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id l15so5870436wro.11
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 06:41:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:from:to:cc:references:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=L1r7NoPpj6mtopvYoOBIt5S/q2frBWzVRQlmtY6wL4A=;
+ b=Go1SitPAeJEl10np4aHNUttPv4FdUikPnun1xVTxJtcDVJWm+Y9WeyUFeh7bD8uxng
+ IP2F7Rwh+ogDOAVo9Sb8pYB/PKeVa46Skz3OACXI0lhoIz6eiaWz7NEh1CFdwQpqwqfh
+ F01B2o3UXu4VYkuPss32+wvkQCFGx4A21Rwiv/26gOjD+cL9URzx/cm/3IiavqpOUOil
+ 5LXTIyb1St+OV2f0Jev43SDT+K40gZJRvICQ28sE81ITDOMDbVxXzYpPXj9CdbqqhW0r
+ X/nc3OFNC67xbzrTrX5NUZMH9yBobDUFA7mCo3QHWk/BDtCOIpwwcMGhH0ziDMxrc5II
+ 9CcA==
+X-Gm-Message-State: AJIora8iCdmnJSNGk4SxcIETbdVOdC4imlnDmN7Yizs52T/AzNPC0poT
+ ZSl4DfzoWhwP954c6OebINOJCg==
+X-Google-Smtp-Source: AGRyM1vXWxsOT6E3tSY1oRsOTFxHyUgI9ZCdmxCSgKVhgvivAXA3my6nNrPGPywS2ZtZgdEbtjT/Jg==
+X-Received: by 2002:adf:fc8a:0:b0:21e:47f5:be99 with SMTP id
+ g10-20020adffc8a000000b0021e47f5be99mr2812105wrr.168.1658583699481; 
+ Sat, 23 Jul 2022 06:41:39 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ i14-20020a05600011ce00b0021d82a6095bsm6698453wrx.95.2022.07.23.06.41.38
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 23 Jul 2022 06:41:39 -0700 (PDT)
+Message-ID: <2b27ec0b-ef6d-9540-062c-04d6f75c2cd3@mind.be>
+Date: Sat, 23 Jul 2022 15:41:37 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220722202151.76235-4-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658583490;
- bh=dCm7OVXajUqpnvWDY68kAz7ASkEMVFIL5XeQtH0gOTk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=fcqjgtddSKowyRAm+1hLmGFJPy0ACn2hUD/dELXs2vyKTzf5UspasAc4/l/N/PvE0
- atqtdhd9cGw8bixJ2t6P1uCz7OHwMGH+A/N0XOPlMdxVpqmGVDHtbOvQcYvyvHD0iV
- xx9OjUCllnHVOmsWIuRPddIkfhtpM1AfwFNzpmJXVJMhfciRuJVTlqJgA6Sjed5+aJ
- ZTVGPIp6osDESIWsQOlpGCZ+2icZZsuPXJHKT8bBO1cP4dhN89dOgGgrNNoxDOVwnL
- aTNejSNWmhZ+ueohexCDLTPZPS50ESDs6kPvGFl+ANoKWF2sXzJ9uJOwXDtnoU3T4W
- ZH3hJX2l7AUgQ==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+From: Arnout Vandecappelle <arnout@mind.be>
+To: Michael Zimmermann <sigmaepsilon92@gmail.com>, buildroot@buildroot.org
+References: <20220720152440.1568667-1-sigmaepsilon92@gmail.com>
+ <2569cf83-d180-41ea-ad10-d053528d462d@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <2569cf83-d180-41ea-ad10-d053528d462d@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language
+ :from:to:cc:references:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=L1r7NoPpj6mtopvYoOBIt5S/q2frBWzVRQlmtY6wL4A=;
+ b=TqgcAVM7HQtUu2b12mq13+uugHo0GQJI5Aj6fy/lg9XufEBiDs7Buh62AbmHvvdA6q
+ 7sYxCMuB8gpxe+srvDQskN05kizXd0ksU8v4ccDTlLg6lnLvKBHnZ5cPzoh9CZEElPvl
+ C8Vc3q/QgwgjqEwKPL85ChHr1QhnvsMzSxQMNs9h+rT+xQABpjzYw0PEHcX1Enr/wwt5
+ uwoScvCreeXhfv4uQ5KxTahbotDKkx2QN6flydvYXK0zLFH+jCR7y7DXqGlKLXn1/3GO
+ uTysp5lT2xJeIhzBZpvsmLwJmgbRXuCLMLI2m3qJ+Fb3/zPX2WqE87UlBLK76YixAA3G
+ hnJQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=fcqjgtdd
-Subject: Re: [Buildroot] [PATCH 3/8] docs/manual: update documentation about
- partition-type-uuid convention in genimage.cfg
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=TqgcAVM7
+Subject: Re: [Buildroot] [PATCH 1/1] package/zfs: fix cross-compilation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,83 +101,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Buildroot List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?Q?Jos=c3=a9_Luis_Salvador_Rufo?= <salvador.joseluis@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas,, Giulio, All,
-
-On 2022-07-22 22:21 +0200, Thomas Petazzoni via buildroot spake thusly:
-> Whenever possible, we want to use the "shortcuts" provided by genimage
-> for the partition-type-uuid values:
-> 
->  - U for the EFI System Partition
->  - F for FAT32 partitions
->  - L for root filesystem partitions and other Linux filesystems
-> 
-> In follow-up commits, we will convert existing genimage.cfg to this
-> convention, except for the root filesystem, if the existing
-> genimage.cfg specifies a partition-type-uuid that doesn't match the
-> one that "L" would imply. In this case, we will things as-is to not
-
-*we will _keep_ things...
-
-Fixed when applying.
-
-Regards,
-Yann E. MORIN.
-
-> break existing setups. However, for all future genimage.cfg files, we
-> recommend to use "L" for the root filesystem.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  docs/manual/writing-rules.txt | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-> index 84d8f76431..758965d80a 100644
-> --- a/docs/manual/writing-rules.txt
-> +++ b/docs/manual/writing-rules.txt
-> @@ -198,6 +198,18 @@ image sdimage.img {
->    chance, the byte count.  In comments instead use +GB+, +MB+, +KB+
->    (not +kb+) in place of +G+, +M+, +K+.
->  
-> +* For GPT partitions, the +partition-type-uuid+ value must be +U+ for
-> +  the EFI System Partition (expanded to
-> +  +c12a7328-f81f-11d2-ba4b-00a0c93ec93b+ by _genimage_), +F+ for a FAT
-> +  partition (expanded to +ebd0a0a2-b9e5-4433-87c0-68b6b72699c7+ by
-> +  _genimage_) or +L+ for the root filesystem or other filesystems
-> +  (expanded to +0fc63daf-8483-4772-8e79-3d69d8477de4+ by
-> +  _genimage_). Even though +L+ is the default value of _genimage_, we
-> +  prefer to have it explicitly specified in our +genimage.cfg+
-> +  files. Finally, these shortcuts should be used without double
-> +  quotes, e.g +partition-type-uuid = U+. If an explicit GUID is
-> +  specified, lower-case letters should be used.
-> +
->  The +genimage.cfg+ files are the input for the genimage tool used in
->  Buildroot to generate the final image file(i.e. sdcard.img). For further
->  details about the _genimage_ language, refer to
-> -- 
-> 2.37.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Ck9uIDIzLzA3LzIwMjIgMTQ6NDIsIEFybm91dCBWYW5kZWNhcHBlbGxlIHdyb3RlOgo+Cj4KPiBP
+biAyMC8wNy8yMDIyIDE3OjI0LCBNaWNoYWVsIFppbW1lcm1hbm4gd3JvdGU6Cj4+IEN1cnJlbnRs
+eSwgdGhlIGtlcm5lbCBtb2R1bGUgZ2V0cyBidWlsdCB1c2luZyB0aGUgaG9zdC1jb21waWxlcihm
+cm9tIHRoZQo+PiB1c2VyIGRpc3Rybywgbm90IGZyb20gYnVpbGRyb290KS4gCj4KPiDCoFRoYXQg
+c2hvdWxkbid0IGhhcHBlbi4gVGhlIGtlcm5lbC1tb2R1bGUgaW5mcmFzdHJ1Y3R1cmUgcGFzc2Vz
+IAo+IExJTlVYX01BS0VfRkxBR1MgaW4gdGhlIGVudmlyb25tZW50IGFscmVhZHkuIEFuZCBpZiB0
+aGUgbW9kdWxlIHdlcmUgYnVpbHQgCj4gZHVyaW5nIHRoZSB1c2Vyc3BhY2UgYnVpbGQgc3RhZ2Us
+IHRoYXQgb25lIGFscmVhZHkgaGFzIHRoZSBjcm9zcy1jb21waWxlciBhcyAKPiB3ZWxsIHRocm91
+Z2ggdGhlIGF1dG90b29scyBpbmZyYXN0cnVjdHVyZS4KPgo+IMKgQ2FuIHlvdSBnaXZlIGEgYml0
+IG1vcmUgZGV0YWlsIGFib3V0IHRoZSBjb25maWcgd2hlcmUgeW91IGdldCB0aGUgaXNzdWUsIGFu
+ZCAKPiBob3cgZXhhY3RseSBpdCBmYWlscz8KCiDCoEl0J3MgYWN0dWFsbHkgZWFzeSB0byByZXBy
+b2R1Y2UsIGp1c3QgY2hhbmdlIHRoZSBhcmNoaXRlY3R1cmUgdG8gYW55dGhpbmcgCm90aGVyIHRo
+YW4geDg2LgoKCiDCoEkndmUgbG9va2VkIGFyb3VuZCBhIGJpdCBhbmQgaXQgc2VlbXMgdG8gbWUg
+dGhhdCB6ZnMgYWxyZWFkeSBidWlsZHMgdGhlIGtlcm5lbCAKbW9kdWxlIGZyb20gdGhlIGF1dG90
+b29scyBpbmZyYXN0cnVjdHVyZSwgc28gd2UncmUgYWN0dWFsbHkgYnVpbGRpbmcgaXQgdHdpY2Uu
+IEkgCnRoaW5rIHdlIHNob3VsZCB0aGVyZWZvcmUgcmVtb3ZlIHRoZSBrZXJuZWwtbW9kdWxlIGlu
+ZnJhIGZvciB0aGlzIHBhY2thZ2UsIGFuZCAKaW5zdGVhZCBhZGQgYSBkZXBlbmRlbmN5IG9uIGxp
+bnV4IGFuZCBjb3B5IHRoaXMgcGFydDoKCiMgSWYgdGhlIHBhY2thZ2UgaXMgZW5hYmxlZCwgZW5z
+dXJlIHRoZSBrZXJuZWwgd2lsbCBzdXBwb3J0IG1vZHVsZXMKaWZlcSAoJCQoQlIyX1BBQ0tBR0Vf
+JCgyKSkseSkKTElOVVhfTkVFRFNfTU9EVUxFUyA9IHkKZW5kaWYKCgogwqBSZWdhcmRzLAogwqBB
+cm5vdXQKCgo+Cj4gwqBSZWdhcmRzLAo+IMKgQXJub3V0Cj4KPj4gVGhhdCBtaWdodCB3b3JrIHdo
+ZW4gdGFyZ2V0IGFuZCBob3N0Cj4+IGFyY2ggYXJlIHRoZSBzYW1lIGJ1dCBkdXJpbmcgY3Jvc3Mg
+Y29tcGlsYXRpb24gdGhhdCByZXN1bHRzIGluIHRoZQo+PiBtZXNzYWdlIGBVbmFibGUgdG8gYnVp
+bGQgYW4gZW1wdHkgbW9kdWxlLmAgYmVjYXVzZSB0ZXN0cyBmb3IgY29tcGlsaW5nCj4+IG1vZHVs
+ZXMgZmFpbCBkdWUgdG8gbWlzc2luZyBoZWFkZXJzLgo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBNaWNo
+YWVsIFppbW1lcm1hbm4gPHNpZ21hZXBzaWxvbjkyQGdtYWlsLmNvbT4KPj4gLS0tCj4+IMKgIHBh
+Y2thZ2UvemZzL3pmcy5tayB8IDMgKysrCj4+IMKgIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlv
+bnMoKykKPj4KPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvemZzL3pmcy5tayBiL3BhY2thZ2UvemZz
+L3pmcy5tawo+PiBpbmRleCAwN2NlMzI5NWVjLi4zMGY5NjZiZGViIDEwMDY0NAo+PiAtLS0gYS9w
+YWNrYWdlL3pmcy96ZnMubWsKPj4gKysrIGIvcGFja2FnZS96ZnMvemZzLm1rCj4+IEBAIC01Nyw2
+ICs1Nyw5IEBAIGVsc2UKPj4gwqAgWkZTX0NPTkZfT1BUUyArPSAtLWRpc2FibGUtcGFtCj4+IMKg
+IGVuZGlmCj4+IMKgICtaRlNfQ09ORl9FTlYgKz0gJChMSU5VWF9NQUtFX0ZMQUdTKQo+PiArWkZT
+X01BS0VfRU5WICs9ICQoTElOVVhfTUFLRV9GTEFHUykKPj4gKwo+PiDCoCAjIFpGUyB1c2VybGFu
+ZCB0b29scyBhcmUgdW5mdW5jdGlvbmFsIHdpdGhvdXQgdGhlIExpbnV4IGtlcm5lbCBtb2R1bGVz
+Lgo+PiDCoCBaRlNfTU9EVUxFX1NVQkRJUlMgPSBcCj4+IMKgwqDCoMKgwqAgbW9kdWxlL2F2bCBc
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
+dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
+ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
