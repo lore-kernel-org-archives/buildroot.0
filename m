@@ -4,86 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3832FC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 21:14:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D508C43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 21:21:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA22540587;
-	Sat, 23 Jul 2022 21:14:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA22540587
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C24E416BB;
+	Sat, 23 Jul 2022 21:21:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C24E416BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZmLswT8_y79X; Sat, 23 Jul 2022 21:14:28 +0000 (UTC)
+	with ESMTP id SK8FyWiLKk4i; Sat, 23 Jul 2022 21:21:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 48706416A6;
-	Sat, 23 Jul 2022 21:14:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48706416A6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DA9191BF419
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:14:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F1818416A6;
+	Sat, 23 Jul 2022 21:21:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1818416A6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AE88B1BF419
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:21:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B5088847EA
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:14:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5088847EA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8833461B15
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:21:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8833461B15
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fanvqk9do2ov for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 21:14:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nC4r6wpj6Xe1 for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 21:21:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EE28847BA
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7EE28847BA
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 21:14:15 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id a11so4615725wmq.3
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 14:14:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 315E261B1E
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 315E261B1E
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 21:21:27 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ r188-20020a1c44c5000000b003a34ac64bdfso192755wma.1
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 14:21:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=o1OPs+pUyYxNkCN5LDb6CoU89mchox1xbnh75uPQM8Y=;
- b=yL1tf6Jh3IBMzFD9KjFpC4IKB7wTROdDbuZCWJMJw/h9WhcKs/Y3+KLyehvE9AB+Bq
- vpDv2FC8uIQXtLCMeEF9YoUpRaeznbCmuUkJA5VgFtxkehigvn6X0E91rovwejaouEjN
- ZDgtTwFn2vwsuHzFcHc5PfGewSxAM6kniy5TJz/krG5kGSCF19jd2QQwaaUEFtnBVdfe
- +EtOe6LgPXrX3nJqboXzWAVoZ4CwQYC/dMAtQB/71Uye77Z3/Q2OggHYi8W9bY7WoRd+
- DtAyon6z1YAQjOl1qvfsbq9NS7cbBH8ErPkvWW+QQ6za8uRBUTseuHFMbshjh+vS9Elk
- NpPg==
-X-Gm-Message-State: AJIora+vqWa+zhN5leSYv9+6ygcjDpH3r21MTIe4CpDL18v6gQQhibPq
- gTGHTk7Ke2ze7LpQ4ySn/DurI9YjOEI=
-X-Google-Smtp-Source: AGRyM1vqJh0vy2hWPhAM7uFjVsylWDVezzL6hfBAzCnGtOe0yqwkLZLuOy5KipZ0QFT+/mh4s3iGgA==
-X-Received: by 2002:a05:600c:4e4d:b0:3a3:1fe6:6b20 with SMTP id
- e13-20020a05600c4e4d00b003a31fe66b20mr3805092wmq.197.1658610853507; 
- Sat, 23 Jul 2022 14:14:13 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=+NhyQzh6yLL15A2xPbO3QNn+7Mavkv7p4cWpWQfT1JY=;
+ b=xvwYn6C4Ri96V8ORdB8Vvlaq7yGVwwrLorKXJu3f98GxucDvshSni5Pzu65EnqZRfu
+ KfG8eHqK+eh30Feah0F2P95trPQ0cVSgGqxExp/wk75J4oDIITX7N68RjzkCBry14U1z
+ FNC74qwV4TYx5bJ3zmI9sMdfmC5+XE7wesjGnRGNZDdxbVS8ZaaQ00ZAPU52hTtoX/7W
+ EHb/BDP3n9Gjq6ZJVWi2GF22jv6Dj8CE9V04hV3V9vSWD1RgA/grVJCWXVb7sGCWB9Jo
+ daWHKNGlOXBiRKOhmv9YEHxvYtzFkXlKvP7PmJMns8pej8zLFUQ3RTWPphfZiHIL6Q3F
+ 1OKw==
+X-Gm-Message-State: AJIora/nhEFFCb6cnBatQS87ISqWnwt3SM5U1fH/q1SITA+0jP0Sehqs
+ Ish7m4oP5FnkntCxB/Y6DXV1NA==
+X-Google-Smtp-Source: AGRyM1uFYTS3xkKhZQ6Rz1psbrOP2SfqVCnK1WyU0do9ab5QjIy96Tjm9GkhUrqSAOMygh35mSbFWw==
+X-Received: by 2002:a05:600c:21d7:b0:3a3:2088:bbc6 with SMTP id
+ x23-20020a05600c21d700b003a32088bbc6mr16304024wmj.68.1658611286152; 
+ Sat, 23 Jul 2022 14:21:26 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- r11-20020a5d498b000000b0021e42e7c7dbsm8040205wrq.83.2022.07.23.14.14.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Jul 2022 14:14:13 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 23:14:04 +0200
-Message-Id: <20220723211404.487090-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220723211404.487090-1-fontaine.fabrice@gmail.com>
-References: <20220723211404.487090-1-fontaine.fabrice@gmail.com>
+ b18-20020adff912000000b0021d65675583sm7727937wrr.52.2022.07.23.14.21.25
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 23 Jul 2022 14:21:25 -0700 (PDT)
+Message-ID: <54f4c154-910c-66b9-1c6a-173997565863@mind.be>
+Date: Sat, 23 Jul 2022 23:21:15 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: James Knight <james.d.knight@live.com>,
+ Romain Naour <romain.naour@smile.fr>
+References: <BYAPR06MB4805F290E2B4224008BC23EAA08D9@BYAPR06MB4805.namprd06.prod.outlook.com>
+ <b7b3bb6f-af5d-1987-0bf0-4da328e1bc77@smile.fr>
+ <CALAjcgW56=jP5-h048PwsGezdYhFTPcDhH+uPLbUbp0vrhkn=g@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CALAjcgW56=jP5-h048PwsGezdYhFTPcDhH+uPLbUbp0vrhkn=g@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=o1OPs+pUyYxNkCN5LDb6CoU89mchox1xbnh75uPQM8Y=;
- b=Ml3wj3I8H91nbdgn6KqpCFqaV0ZovDalhplZljC1CrgIF5a69TUwQa7bfIik4h9COq
- fObalmXrLccxSt2AQV+qDky9mlgkqRyuwoKZ8fqFmqjgfWA7ynSN0gC3lKinYQ4aCb7r
- pf3OmokYbZI82KbJ6M8JlrRM8StWwiwa5YfuxErUnBtGTG6TWHYBmW+ofgJxb/lj+hDL
- 9hUpF8LtDxeUAlBBNAwz0pp2J8R6Abof6EPVQkpXDOlZfBF8dvNcvzjYsy2agAQ+QQtW
- SrfyWFXTBVWEFh077VO3hJb/O7wdcSTl8N/yPXu50Hu/K1aIBwh0k5YrAvYOV8vJJ4kr
- TEqQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Ml3wj3I8
-Subject: [Buildroot] [PATCH 2/2] package/hackrf: bump to version 2021.03.1
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=+NhyQzh6yLL15A2xPbO3QNn+7Mavkv7p4cWpWQfT1JY=;
+ b=CyOv3W7BalZt/oNxdlstdFq8xEhGlg0OK6xvA2b3hh7JxdFblFNZis1fVHAS7GDdgK
+ xfwYs53usv7sy6vs7RFunDKQ23OZzyRa/Nna7Mr8inJvcu2xpDn97R7AvPUSjBZyDbnE
+ 42TYQfEbvvu4w0ueUMwf0WwPxAsI+S4qCzttpYrFM77JsWFZcnoqNda3pTqy3j0HLL6c
+ mUGPkjrJHDvvI81SSgp/Dy6BtYXSZtGGbc5LTz87kD9qKMQ5R5BY6YNVmc/yoSJ6YYHB
+ ZCNe+3/F+RKptkIFVDnUYVghRi6dR3qVoEGJc3OppWlW9eQGW5FOS538TWunRZmVlP55
+ i3UA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=CyOv3W7B
+Subject: Re: [Buildroot] [PATCH 1/1] board/qemu/post-image.sh: flexible qemu
+ launch options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,134 +105,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch (already in version)
+  Hi James,
 
-https://github.com/greatscottgadgets/hackrf/releases/tag/v2021.03.1
+On 23/07/2022 22:48, James Knight wrote:
+> Romain,
+> 
+> On Sat, Jul 23, 2022 at 12:33 PM Romain Naour <romain.naour@smile.fr> wrote:
+>>
+>> The start-qemu.sh script is actually used by the Buildroot gitlab-ci to test do
+>> a runtime test (boot test) for all Qemu defconfigs.
+> 
+> My reasons for presenting changes to this script was under the
+> assumption that this was a generic helper for QEMU-supported images.
+> Trying to play around with Buildroot again (it has been awhile), I
+> just selected the `qemu_x86_defconfig` configuration as an easy way to
+> get things started. I noticed the `start-qemu.sh` script in the
+> `output/images/` folder and thought "This is a nice script to help me
+> test my images with".
+> 
+> If the intent is to only use this script for CI-related work, that's
+> fine by me -- and we can drop the patch if desired.
+> 
+>> So only this qemu command line command line is supposed to work out of the box.
+>> If you let the used customize the qemu command line, it can raise some issue.
+> 
+> I can agree, injection custom options will void the warranty. The main
+> reason for introducing these changes was to test a QEMU tweaked
+> configuration which utilized some display-related changes which
+> sometimes required additional modifications. For example, providing an
+> environment with more memory (e.g. `-m 1G`) or customizing the
+> graphics driver (e.g. `-vga virtio`). I would apply modifications,
+> test things which may require a rebuild on a kernel/component, which
+> would replace the script and I would have to modify it again.
+> 
+>> I would throw a warning if $@ is not empty, just to warn the user.
+> 
+> This would be fine for me (to help promote the idea that extra
+> arguments are not officially supported).
+> 
+>> Naming stuff is hard, here we want an option to use Qemu installed on the host system, not from host-qemu (--host may be misleading).
+>> ...
+>> Using Qemu installed on the host may be really old and not able to boot the system.
+> 
+> I can agree that this may be the case for some distributions, but I
+> find some distributions (like Arch) provide a fast turnaround time for
+> newer versions. The only intention of providing a way to use a
+> system's version (if available) was to maybe utilize some options that
+> may have not been enabled on the host-qemu package. For example, I was
+> trying to utilize the `-display gtk` option that was available on the
+> host, but not supported with the built host-qemu package. Having the
+> option may also provide flexibility if the system's QEMU is a newer
+> version then that of Buildroots (i.e. when dealing with older tags/LTS
+> builds).
+> 
+> We could tweak the argument to something like `--use-system-qemu`, to
+> be a bit more explicit. And also, generating the same type of warnings
+> that using such options is officially unsupported and for advanced
+> testing.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-Don-t-require-a-C-compiler.patch     | 37 -------------------
- ...ndFFTW.cmake-fix-build-without-fftw3.patch | 34 +++++++++++++++++
- package/hackrf/hackrf.hash                    |  2 +-
- package/hackrf/hackrf.mk                      |  2 +-
- 4 files changed, 36 insertions(+), 39 deletions(-)
- delete mode 100644 package/hackrf/0001-Don-t-require-a-C-compiler.patch
- create mode 100644 package/hackrf/0001-cmake-modules-FindFFTW.cmake-fix-build-without-fftw3.patch
+  Those sound like good ideas, would you like to respin the patch to include them?
 
-diff --git a/package/hackrf/0001-Don-t-require-a-C-compiler.patch b/package/hackrf/0001-Don-t-require-a-C-compiler.patch
-deleted file mode 100644
-index 3369dca670..0000000000
---- a/package/hackrf/0001-Don-t-require-a-C-compiler.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 8b0a8b2be8cf2e4a76c03d3bcdf99bff5025ba22 Mon Sep 17 00:00:00 2001
--From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
--Date: Sat, 31 Mar 2018 22:50:37 +0200
--Subject: [PATCH] Don't require a C++ compiler
--
--By default, CMake assumes that the project is using both C and C++.  By
--explicitly passing 'C' as argument of the project() macro, we tell CMake
--that only C is used, which prevents CMake from erroring out if a C++
--compiler doesn't exist.
--
--Upstream status: https://github.com/mossmann/hackrf/pull/469
--
--This patch differs from upstream because:
--- project name upstream has been changed into HackRF;
--- in Buildroot, we are only interested in host, not firmware.
--
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- host/CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/host/CMakeLists.txt b/host/CMakeLists.txt
--index 874163f..d9cbe31 100644
----- a/host/CMakeLists.txt
--+++ b/host/CMakeLists.txt
--@@ -1,7 +1,7 @@
-- #top dir cmake project for libhackrf + tools
-- 
-- cmake_minimum_required(VERSION 2.8)
---project (hackrf_all)
--+project (hackrf_all C)
-- 
-- add_subdirectory(libhackrf)
-- add_subdirectory(hackrf-tools)
---- 
--2.16.3
--
-diff --git a/package/hackrf/0001-cmake-modules-FindFFTW.cmake-fix-build-without-fftw3.patch b/package/hackrf/0001-cmake-modules-FindFFTW.cmake-fix-build-without-fftw3.patch
-new file mode 100644
-index 0000000000..2b1f34879b
---- /dev/null
-+++ b/package/hackrf/0001-cmake-modules-FindFFTW.cmake-fix-build-without-fftw3.patch
-@@ -0,0 +1,34 @@
-+From 3e32f46c7948f6b26476558905995ebec9b01760 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 15 Oct 2021 23:36:54 +0200
-+Subject: [PATCH] cmake/modules/FindFFTW.cmake: fix build without fftw3
-+
-+Build on Linux fails if libfftw3 is not available since commit
-+https://github.com/greatscottgadgets/hackrf/commit/a8c1fc92e9fa10843cb4aafd68c52f9903ebd05d
-+which replaced
-+pkg_check_modules(FFTW REQUIRED fftw3f)
-+by
-+find_package(FFTW REQUIRED)
-+
-+Fix this build failure by updating FindFFTW.cmake to check for fftw3f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/greatscottgadgets/hackrf/commit/3e32f46c7948f6b26476558905995ebec9b01760]
-+---
-+ host/cmake/modules/FindFFTW.cmake | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/host/cmake/modules/FindFFTW.cmake b/host/cmake/modules/FindFFTW.cmake
-+index b9f3bfb81..802db4f5b 100644
-+--- a/host/cmake/modules/FindFFTW.cmake
-++++ b/host/cmake/modules/FindFFTW.cmake
-+@@ -16,7 +16,7 @@ IF (WIN32)
-+ include_directories(${FFTW_INCLUDES})
-+ find_library (FFTW_LIBRARIES NAMES ${FFTW_LIBRARIES})
-+ ELSE(WIN32)
-+-find_library (FFTW_LIBRARIES NAMES fftw3)
-++find_library (FFTW_LIBRARIES NAMES fftw3f)
-+ ENDIF(WIN32)
-+ 
-+ 
-diff --git a/package/hackrf/hackrf.hash b/package/hackrf/hackrf.hash
-index c0cf732213..9053858f76 100644
---- a/package/hackrf/hackrf.hash
-+++ b/package/hackrf/hackrf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a89badc09a1d2fa18367b3b2c974580ad5f6ce93aaa4e54557dc3d013c029d14  hackrf-2018.01.1.tar.xz
-+sha256  a43e5080c11efdfe69ddebcc35a02b018e30e820de0e0ebdc7948cf7b0cd93a3  hackrf-2021.03.1.tar.xz
- sha256  49b60a6288f90f49074228cc1fae0fb16871ba36b756013abdf7c2fc92f01fad  COPYING
-diff --git a/package/hackrf/hackrf.mk b/package/hackrf/hackrf.mk
-index 6d694f5fbc..c224afc332 100644
---- a/package/hackrf/hackrf.mk
-+++ b/package/hackrf/hackrf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HACKRF_VERSION = 2018.01.1
-+HACKRF_VERSION = 2021.03.1
- HACKRF_SITE = https://github.com/mossmann/hackrf/releases/download/v$(HACKRF_VERSION)
- HACKRF_SOURCE = hackrf-$(HACKRF_VERSION).tar.xz
- HACKRF_LICENSE = GPL-2.0+, BSD-3-Clause
--- 
-2.35.1
+  It would also be nice to split it in two: first one that just does refactoring 
+of how arguments are parsed, and second one that adds the --use-system-qemu option.
 
+  Also, it would perhaps be nice to move the script into a separate file instead 
+of cat-ing it from the post-build script. You can use sed to replace the 
+variables (just QEMU_CMD_LINE I think) from start-qemu.sh.in to the final 
+start-qemu script. This would be a patch that comes before the two others.
+
+  Regards,
+  Arnout
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
