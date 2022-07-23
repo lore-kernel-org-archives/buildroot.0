@@ -1,58 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 080BAC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 14:33:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B7F5C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 14:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D72E84BA8;
-	Sat, 23 Jul 2022 14:33:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D72E84BA8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 06D4940B1A;
+	Sat, 23 Jul 2022 14:33:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06D4940B1A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V_IBeXOkVKqj; Sat, 23 Jul 2022 14:33:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 58LEO7AwGohI; Sat, 23 Jul 2022 14:33:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA92284BA4;
-	Sat, 23 Jul 2022 14:33:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA92284BA4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 54EEA1BF314
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 14:33:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 04D2440164;
+	Sat, 23 Jul 2022 14:33:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04D2440164
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B19C51BF314
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 14:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E9C884BA5
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 14:33:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E9C884BA5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9AAF960759
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 14:33:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AAF960759
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pKr6djDP2a_w for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 14:33:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4049684BA3
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4049684BA3
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 14:33:10 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2A5F660009;
- Sat, 23 Jul 2022 14:33:06 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oFGBl-003OFI-Jc; Sat, 23 Jul 2022 16:33:05 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220628183213.2838372-1-fontaine.fabrice@gmail.com>
- <20220628183213.2838372-2-fontaine.fabrice@gmail.com>
-Date: Sat, 23 Jul 2022 16:33:05 +0200
-In-Reply-To: <20220628183213.2838372-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 28 Jun 2022 20:32:12 +0200")
-Message-ID: <87mtczucf2.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/3] package/libsamplerate: disable sndfile
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Haxd9UBfb444 for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 14:33:26 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF6D360644
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 14:33:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF6D360644
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id C97868447B; Sat, 23 Jul 2022 14:19:49 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 23 Jul 2022 16:32:58 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0a4ac1e7fa715669aa2ab2a58b564fc875c07c68
+X-Git-Newrev: a2380157f6688c5c065fa19060a2c33145bab95b
+X-Patchwork-Hint: ignore
+Message-Id: <20220723141949.C97868447B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain: enable libquadmath for PowerPC
+ with VSX
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,22 +56,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8367198413737927414=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+--===============8367198413737927414==
+Content-Type: text/plain
 
- > libsndfile is only used for examples and tests so disable it
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=a2380157f6688c5c065fa19060a2c33145bab95b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+float128 is available on PowerPC with VSX [1] but it requires
+libquadmath support.
 
--- 
-Bye, Peter Korsgaard
+[1] https://gcc.gnu.org/onlinedocs/gcc-9.1.0/gcc/Floating-Types.html
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Cyril Bur <cyrilbur@gmail.com>
+Cc: Cédric Le Goater <clg@kaod.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ toolchain/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index ea59ca2960..414c3eb275 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -833,9 +833,11 @@ config BR2_TOOLCHAIN_HAS_ATOMIC
+ # - At least, libquadmath is available on:
+ #   - i*86
+ #   - x86_64
++#   - PowerPC with vector scalar (VSX) instruction set
+ # - When available, libquadmath requires wchar support.
+ config BR2_TOOLCHAIN_HAS_LIBQUADMATH
+ 	bool
+ 	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_POWERPC_CPU_HAS_VSX
+ 
+ endmenu
+
+--===============8367198413737927414==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8367198413737927414==--
