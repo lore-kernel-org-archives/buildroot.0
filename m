@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E894C43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 13:04:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 455A2C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 13:05:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 19AF040AEC;
-	Sat, 23 Jul 2022 13:04:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19AF040AEC
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1CF3418EB;
+	Sat, 23 Jul 2022 13:05:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1CF3418EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7C_vKo1uAKyH; Sat, 23 Jul 2022 13:04:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vquxLFNKWVSl; Sat, 23 Jul 2022 13:05:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 433D440576;
-	Sat, 23 Jul 2022 13:04:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 433D440576
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5EFBA1BF31A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:04:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A76FF4173E;
+	Sat, 23 Jul 2022 13:05:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A76FF4173E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 17BF71BF31A
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:04:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 39EC584A2D
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:04:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39EC584A2D
+ by smtp4.osuosl.org (Postfix) with ESMTP id E3DC3416F6
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:04:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3DC3416F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UeBNeVcsNmvA for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 13:04:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q0YYCVzGUs1O for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 13:04:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4762847FD
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D4762847FD
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 13:04:41 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id m17so9560986wrw.7
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 06:04:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E370D416FD
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E370D416FD
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 13:04:43 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id g2so1798658wru.3
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 06:04:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=5SZwBS7tn/eI9FmZj04P3DYHDNNtv0irVWip7TdR1rQ=;
- b=zz71himIRrCSLXTzMQnw3aycAHKPNbN9GdGeHNUymCwfJGv/G9keMvQ3C+J1Sfsx8P
- ogrdMRu3PA3kj1+ul3WZuoxgmL0TEtT7jPNmCbKbPXRQuqGxdU7YG2Ji6sYQiu28eYID
- wEPtywXe5vnsFSQmhbrV64qc6vGebJlk2mQnms7ep3ueumPZ9PcSx1ltWCLtTTZO2Sf9
- gcGI2fCK9EiyEQjrw5uHFphsIlJAPFmQae1IcrYFD50sAgn+3NSpm1IWEMlqcuBM3v19
- tPZpuWDsPuH4N4VJhWtAiJgE5e1xSpu2rdMDw4EWFYPRo6zvXQr9H4fEvM/4sLjMmU/u
- z5HA==
-X-Gm-Message-State: AJIora8Y+OAsj3Y4xL5dzoRgN67TPXjpkOyASOmlQCLpY4YeaimVK10I
- 6bd9Q9B+5SpPoNdaRmLTBtASKIiW5Q8=
-X-Google-Smtp-Source: AGRyM1v4EecvapwOYZuwUdbcj37abwXeWH0XiWa1bqy3tXKjkYauKJmUo8/0svYc6n93jYhI7BOn8w==
-X-Received: by 2002:a5d:47ca:0:b0:21e:813f:e8d3 with SMTP id
- o10-20020a5d47ca000000b0021e813fe8d3mr206488wrc.416.1658581479786; 
- Sat, 23 Jul 2022 06:04:39 -0700 (PDT)
+ :in-reply-to:references:mime-version:content-transfer-encoding;
+ bh=Id03wUEquZVLr1JJZ54Rs5lwaxTUhu9STm0YXieL9PM=;
+ b=nvfcv5oIm9lhbZx2j0oy1NGxD77LhaQOceFapulxNrcP/BeMBKpjZp+GY7tV3cxz22
+ RhFfGqc7sPNkO34Gcrqwbzdrc7qKh3cODbddYvOQbYpnngvR2WbNkO8lOyo8J6znNCa9
+ XG1MgcXjfpMxyr3UK3knR54xhnutYa2HFPXetFxmy7CO5mEG8RbDpozSl2QniYgqvVO1
+ IEp5uTlypUSZVnle2T/xB8xPyTqq7L8gTn3ydkq5Vc4ZejHcnaidIAy0XdMu4Ppl279q
+ sJbGptzP785BEcg5MpLtTSA4Uy/PRzMLWFUoheujtQIhzZ4K/C2fBJ5B3FUHA8lK3B4z
+ Gc9A==
+X-Gm-Message-State: AJIora/DtcqmPRMqvphG1jv/weEvVcaE54mAI5IzivX5Cu44lHPkN4dn
+ Ru4RXFlpOtwvnslq1xONMKTJs63FgrE=
+X-Google-Smtp-Source: AGRyM1tWr/P0VEv8KJd5biYDKBsQFwq0AMT5tk0BTC/SlqrUAEpKD5hyQUMOOstHN+A9Zw6GTnd2gg==
+X-Received: by 2002:adf:f90c:0:b0:21e:5293:4390 with SMTP id
+ b12-20020adff90c000000b0021e52934390mr2730538wrr.167.1658581482059; 
+ Sat, 23 Jul 2022 06:04:42 -0700 (PDT)
 Received: from scaer.home ([2a01:cb19:8acf:5600:bc2c:46eb:561c:827])
  by smtp.gmail.com with ESMTPSA id
- m9-20020a056000024900b0021d746d4820sm6992218wrz.37.2022.07.23.06.04.39
+ b12-20020a5d550c000000b0021e4fd8e10bsm512075wrv.11.2022.07.23.06.04.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Jul 2022 06:04:39 -0700 (PDT)
+ Sat, 23 Jul 2022 06:04:41 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 15:04:38 +0200
-Message-Id: <cover.1658581474.git.yann.morin.1998@free.fr>
+Date: Sat, 23 Jul 2022 15:04:39 +0200
+Message-Id: <63cce688a1678382e065dcd1905b7ed6a48d7ce5.1658581474.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1658581474.git.yann.morin.1998@free.fr>
+References: <cover.1658581474.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5SZwBS7tn/eI9FmZj04P3DYHDNNtv0irVWip7TdR1rQ=;
- b=GBvyIsq8uJq+XVwVuSJzlKeXXJlfWGQndy+yanCP8KYvDw0uBs08FOrv4Iu5R+tRiL
- nNBLtZeegTdwoGzC3s7AlvBlAr3B4YRV1HqCyNBqUe5t8HK0SWuSzlVlGJtpda1PMQ8d
- 2y0ddYMaaZ12yomrma7R6NXe4VhWkb53Wf1T6wCd0ahUQ6ueiYgiXIPglqGDrfbV7DlF
- KjSH8KGOUpKJcq40nR0jg/6N2OrFQjDnsokNnQ1c6Kzd9ywafNnqAOTB/krV5kNtHJXD
- yf5SjCgdx07HLWLipEefdDHSfrSoAvZ0KeEWpVMGiVlknS6dtpvjI7g/v31loY0ylrUo
- iwwA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=Id03wUEquZVLr1JJZ54Rs5lwaxTUhu9STm0YXieL9PM=;
+ b=iz+9oZSLCqzJnyHM6tH8WyHiildJi0dFeHkOOTjLjHhVxh78RNeH1RAdQRmE4CiXQH
+ uYN+YzK6CjMp9UfSr+OuEV6GfQM0TjoE5JWXJl+vy38s54aEnQbOd6lr7vNNX4X9oXYf
+ U8ntfykLCVBfg4goNsDyrvHDdnldGAHn/ZUIt+aFYgXL6dbeSwNz78Ukq3EZB8huxL2K
+ gm9PgTRtV7tiOIerrTjwe5SM7/G3YyNL+yCFwX7dWo00G73VNJzUbWRBgMf5b/LM12VV
+ KhmzA3Q5YqIlHGz7JIAp6HBADuZJQkv086+4H2flCW7NzK9tgrvIyqQTkJYK7RXjCumc
+ 55pQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=GBvyIsq8
-Subject: [Buildroot] [PATCH 0/3] package/python: allow building without
- python on the host (branch yem/python)
+ header.a=rsa-sha256 header.s=20210112 header.b=iz+9oZSL
+Subject: [Buildroot] [PATCH 1/3] support/testing: drop legacy python2 code
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,96 +94,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Vincent Fazio <vfazio@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Vincent Fazio <vfazio@xes-inc.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All!
+Now that we only have python3, we will never have to test a
+python2-based build, so we can drop python2 compatibility
+cruft.
 
-This small series fixes #14911: building python3 requires host-python3,
-which itself requires that the host already has a python interpreter.
+In python3, print already is a function, we don't need to
+import it from the future.
 
-With a little cleanup patch, new runtime tests, and a nice patch from
-Vincent, we can now drop the requirement on python being available on
-the host. It also drop one of our patch and some crazy and fragile hacks
-to regenerate python internals.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/package/test_python.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Vincent Fazio (1):
-      package/python3: use the provided pyc compiler
-
-Yann E. MORIN (2):
-      support/testing: drop legacy python2 code
-      support/testing: introduce py-only and py-pyc tests
-
- ...h => 0011-Add-an-option-to-disable-pydoc.patch} |   0
- ...0011-Add-importlib-fix-for-PEP-3147-issue.patch | 105 ---------------------
- ...=> 0012-Add-an-option-to-disable-lib2to3.patch} |   0
- ...Add-option-to-disable-the-sqlite3-module.patch} |   0
- ...4-Add-an-option-to-disable-the-tk-module.patch} |   0
- ...d-an-option-to-disable-the-curses-module.patch} |   0
- ...h => 0016-Add-an-option-to-disable-expat.patch} |   0
- ...0017-Add-an-option-to-disable-CJK-codecs.patch} |   0
- ...tch => 0018-Add-an-option-to-disable-NIS.patch} |   0
- ...019-Add-an-option-to-disable-unicodedata.patch} |   0
- ...ch => 0020-Add-an-option-to-disable-IDLE.patch} |   0
- ...=> 0021-Add-an-option-to-disable-decimal.patch} |   0
- ...option-to-disable-the-ossaudiodev-module.patch} |   0
- ...Add-an-option-to-disable-openssl-support.patch} |   0
- ...an-option-to-disable-the-readline-module.patch} |   0
- ...ons-to-disable-zlib-bzip2-and-xz-modules.patch} |   0
- ...6-python-config.sh-don-t-reassign-prefix.patch} |   0
- ...0027-Fix-cross-compiling-the-uuid-module.patch} |   0
- ...028-Add-an-option-to-disable-uuid-module.patch} |   0
- ...0029-fix-building-on-older-distributions.patch} |   0
- ...-fixup-CC-print-multiarch-output-for-mus.patch} |   0
- ...-option-to-disable-the-berkeleydb-module.patch} |   0
- ...libc-ng-doesn-t-set-errno-when-encryptio.patch} |   0
- package/python3/python3.mk                         |  47 +--------
- support/scripts/pycompile.py                       |  91 ------------------
- support/testing/tests/package/test_python.py       |  34 ++++++-
- 26 files changed, 35 insertions(+), 242 deletions(-)
- rename package/python3/{0012-Add-an-option-to-disable-pydoc.patch => 0011-Add-an-option-to-disable-pydoc.patch} (100%)
- delete mode 100644 package/python3/0011-Add-importlib-fix-for-PEP-3147-issue.patch
- rename package/python3/{0013-Add-an-option-to-disable-lib2to3.patch => 0012-Add-an-option-to-disable-lib2to3.patch} (100%)
- rename package/python3/{0014-Add-option-to-disable-the-sqlite3-module.patch => 0013-Add-option-to-disable-the-sqlite3-module.patch} (100%)
- rename package/python3/{0015-Add-an-option-to-disable-the-tk-module.patch => 0014-Add-an-option-to-disable-the-tk-module.patch} (100%)
- rename package/python3/{0016-Add-an-option-to-disable-the-curses-module.patch => 0015-Add-an-option-to-disable-the-curses-module.patch} (100%)
- rename package/python3/{0017-Add-an-option-to-disable-expat.patch => 0016-Add-an-option-to-disable-expat.patch} (100%)
- rename package/python3/{0018-Add-an-option-to-disable-CJK-codecs.patch => 0017-Add-an-option-to-disable-CJK-codecs.patch} (100%)
- rename package/python3/{0019-Add-an-option-to-disable-NIS.patch => 0018-Add-an-option-to-disable-NIS.patch} (100%)
- rename package/python3/{0020-Add-an-option-to-disable-unicodedata.patch => 0019-Add-an-option-to-disable-unicodedata.patch} (100%)
- rename package/python3/{0021-Add-an-option-to-disable-IDLE.patch => 0020-Add-an-option-to-disable-IDLE.patch} (100%)
- rename package/python3/{0022-Add-an-option-to-disable-decimal.patch => 0021-Add-an-option-to-disable-decimal.patch} (100%)
- rename package/python3/{0023-Add-an-option-to-disable-the-ossaudiodev-module.patch => 0022-Add-an-option-to-disable-the-ossaudiodev-module.patch} (100%)
- rename package/python3/{0024-Add-an-option-to-disable-openssl-support.patch => 0023-Add-an-option-to-disable-openssl-support.patch} (100%)
- rename package/python3/{0025-Add-an-option-to-disable-the-readline-module.patch => 0024-Add-an-option-to-disable-the-readline-module.patch} (100%)
- rename package/python3/{0026-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch => 0025-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch} (100%)
- rename package/python3/{0027-python-config.sh-don-t-reassign-prefix.patch => 0026-python-config.sh-don-t-reassign-prefix.patch} (100%)
- rename package/python3/{0028-Fix-cross-compiling-the-uuid-module.patch => 0027-Fix-cross-compiling-the-uuid-module.patch} (100%)
- rename package/python3/{0029-Add-an-option-to-disable-uuid-module.patch => 0028-Add-an-option-to-disable-uuid-module.patch} (100%)
- rename package/python3/{0030-fix-building-on-older-distributions.patch => 0029-fix-building-on-older-distributions.patch} (100%)
- rename package/python3/{0031-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch => 0030-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch} (100%)
- rename package/python3/{0032-Add-an-option-to-disable-the-berkeleydb-module.patch => 0031-Add-an-option-to-disable-the-berkeleydb-module.patch} (100%)
- rename package/python3/{0033-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch => 0032-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch} (100%)
- delete mode 100644 support/scripts/pycompile.py
-
+diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
+index f29aff6624..c4f5d66d59 100644
+--- a/support/testing/tests/package/test_python.py
++++ b/support/testing/tests/package/test_python.py
+@@ -27,7 +27,7 @@ class TestPythonBase(infra.basetest.BRTest):
+         self.assertRunOk(cmd, timeout)
+ 
+     def libc_time_test(self, timeout=-1):
+-        cmd = self.interpreter + " -c 'from __future__ import print_function;"
++        cmd = self.interpreter + " -c '"
+         cmd += "import ctypes;"
+         cmd += "libc = ctypes.cdll.LoadLibrary(\"libc.so.1\");"
+         cmd += "print(libc.time(None))'"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
