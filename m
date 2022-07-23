@@ -4,92 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75A29C43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 15:02:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE06AC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 15:02:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11CFB61AC3;
-	Sat, 23 Jul 2022 15:02:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11CFB61AC3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7962661AD2;
+	Sat, 23 Jul 2022 15:02:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7962661AD2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jlo-q07KlzfW; Sat, 23 Jul 2022 15:02:26 +0000 (UTC)
+	with ESMTP id 67NUHuKbCKLi; Sat, 23 Jul 2022 15:02:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24CFB60D58;
-	Sat, 23 Jul 2022 15:02:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24CFB60D58
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 47C011BF859
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:02:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AC8E61AC5;
+	Sat, 23 Jul 2022 15:02:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AC8E61AC5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 22E9A1BF859
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:02:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C88F4241C
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:02:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C88F4241C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B58861AC5
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:02:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B58861AC5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u5PEQHOn7S4O for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 15:02:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MFuSWE1S1lVE for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 15:02:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A722942415
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A722942415
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 15:02:22 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id d13so2433138wrn.10
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 08:02:22 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04D8E60D58
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 04D8E60D58
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 15:02:39 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id d8so10068957wrp.6
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 08:02:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=6a5jV2uVvjT2or0Rxvi4FIBGEe5EBL7/XptE1P/XW9E=;
- b=fudBljMzgMAVD+Y2PS6r6Hk7LpXsT4hOD4WXvJsZ0eNu6fY3ywaVuSmq6Lh/o5/iY/
- IknIt3PB06DPI1IBx0zftwAo36LVBywOzI55khYEIJvV5Km+EG8JhPJcIPrYHPAFOvse
- /WWgELdQUIJxXujJ3tNEaIA0xRMld6kqXUKgtQlFggoImrYC0xc/gDR/oqcnnarwlqzx
- xfdCevELScbdiAYz/fxIdUV5TitbFI6Qh+c0E1W1b48W1TJEVymjTndvNRP7RDTRbcG5
- 3dBZKxo0YDoZG1A2rsqTT0KZi3Zu0X1/bITPoCLvI/PTQJcWvFg4FCQRvlvoKZyWrIgM
- IAag==
-X-Gm-Message-State: AJIora8X3heelKR56kf7JNCb5p/v6Mh3iYBUvPZ3h/BT1TTaGAlEF2/F
- rdf9+CaqHAWd20jYkfmIl3N/FuHc6hV9Pw==
-X-Google-Smtp-Source: AGRyM1uMVhWH+90TLGgKeMN7vcb4oGtfTpesZAtgZjxWpixkWwoBtNi16IMWxnVkHeFJfp6+C3yTzA==
-X-Received: by 2002:a05:6000:c2:b0:21d:9e90:80dc with SMTP id
- q2-20020a05600000c200b0021d9e9080dcmr2888650wrx.14.1658588540846; 
- Sat, 23 Jul 2022 08:02:20 -0700 (PDT)
+ bh=eejixLiHhT7pBJlO5LmFrIEU/RlVv/vISQPWrDbvogA=;
+ b=65xYW3/t/4xt+PhN+Bt+qalDDqwbpUP/yoPg31JbxQGsSQtkjq4wMHs+QTrXxMQC9y
+ FweEOpOMGhR+kOkLIez1e+jeTMvRs3+ANCJ0bkiWbOoKvb34z2LtotpHlRrV4VkO5v9j
+ Ci2k+er1v7+AYJkBau5/onBo2sILECEC7CtHqkBCIJKhqH3ETMS/6Fs5/M/Q8xsvIcW4
+ hQ7NICagg3WFU4cTd34gP7vmn5Ko3VJfDGXaeAwcfqHMGOpaiLFVQghuLmcTKlXphsYs
+ 3IiaKAsweGYWXV37G63vNTMhK3DZUlOKp98ZxpMVQfdxTFDvojTmAPT+kAkdQcSC0obN
+ U0Eg==
+X-Gm-Message-State: AJIora+m62Hbo8YfcVfD5wk7yjCWESrGiVY/g5diaTXVO0PAWf/LWmSI
+ L5cryWZRknmRnezoDnYq2rhE0Q==
+X-Google-Smtp-Source: AGRyM1tSp49VFWiMSVXHKNn+YDuk4KCWHlS3mMXC5JHKlhzzkUQ0f0fgHpkzAZpN69iX5/fI/KZluw==
+X-Received: by 2002:a05:6000:1acb:b0:21d:ad71:3585 with SMTP id
+ i11-20020a0560001acb00b0021dad713585mr2876301wry.156.1658588558186; 
+ Sat, 23 Jul 2022 08:02:38 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- v1-20020adfe281000000b0021e5adb92desm6167786wri.60.2022.07.23.08.02.20
+ e10-20020adfe7ca000000b0021dbaa4f38dsm8701935wrn.18.2022.07.23.08.02.37
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Jul 2022 08:02:20 -0700 (PDT)
-Message-ID: <b5654d11-97cc-18a5-fcd1-73be54f59db2@mind.be>
-Date: Sat, 23 Jul 2022 17:02:18 +0200
+ Sat, 23 Jul 2022 08:02:37 -0700 (PDT)
+Message-ID: <b72e4878-9526-3847-629d-81621a3616a1@mind.be>
+Date: Sat, 23 Jul 2022 17:02:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-To: Dimi Tomov <dimi@tpm.dev>, buildroot@buildroot.org
-References: <20220717224524.8771-1-dimi@tpm.dev>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220718221102.3034495-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220717224524.8771-1-dimi@tpm.dev>
+In-Reply-To: <20220718221102.3034495-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=6a5jV2uVvjT2or0Rxvi4FIBGEe5EBL7/XptE1P/XW9E=;
- b=IUdZ0rQwitx52G67Off88npXncUtBXbHP21N+FImY7PrVtnKoSxAMW1bX3eYKBxK0W
- 1EIOxxNU8VxaS9pyhqqqBfQ3EFOltbC9v3G6KT0jgstnReoFhVoEn1y3A5pYm9r1dEW9
- qisTsphiAwhOvqmFS8OYkf0Y5ud9CR6gdDgpc8r8w7eDJvs/Zrb7W8hAajsyg6us1xNH
- HsliiSJVHQQdB9DXCjmV0JQtchPUacM8m0WqQ9r/hQKAiqqlt2sw1gcRuT+lHwd3V3GQ
- SjEa1T4Pxds+GKR8gbroccURLICHTdmAIJLpBMUpoWg6x39rpA30TEjqu7BA5mpzKnHN
- VWuQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=eejixLiHhT7pBJlO5LmFrIEU/RlVv/vISQPWrDbvogA=;
+ b=GVsYT+X3PnezJpEKxGEPRwgdgXJ1uO1hQdo4rH1D1kBO04lx8HNCSxJvY/UryYY/Sj
+ 6IErxfwT6kY2rEweAQfGwcwm5gxNJ4Uytk3aVNLagH/edL6vsj/Ifrk5FaCYsXK+c9Bw
+ Sz3kel2nmkAfMo6ckxsbfTDvgDykRYf6KfTfu+4cjEh981Yz7Abo/Uq2F79niHIJBryo
+ 1uDvdm0zmT2d8Pne9chSw8yxRyE/7+NkKy5xMJBbd7/nBoXmCWGDY+1EvGUkUdMeWUr5
+ dQhiskbjN0G6gG1HCExvWeF2RYBlY8uW67SLL5gBTnv27ZDDmgrciZtlPSxLPOg3OMWz
+ KowA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=IUdZ0rQw
-Subject: Re: [Buildroot] [PATCH 1/2] package/wolftpm: Update version to
- v2.4.0
+ header.a=rsa-sha256 header.s=google header.b=GVsYT+X3
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-django: security bump to
+ version 4.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,7 +101,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Oli Vogt <oli.vogt.pub01@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -109,45 +109,56 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 18/07/2022 00:45, Dimi Tomov wrote:
-> From: Dimitar Tomov <dimi@tpm.dev>
+On 19/07/2022 00:11, Fabrice Fontaine wrote:
+> Fix CVE-2022-34265: An issue was discovered in Django 3.2 before 3.2.14
+> and 4.0 before 4.0.6. The Trunc() and Extract() database functions are
+> subject to SQL injection if untrusted data is used as a kind/lookup_name
+> value. Applications that constrain the lookup name and kind choice to a
+> known safe list are unaffected.
 > 
-> Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
+> https://www.djangoproject.com/weblog/2022/jul/04/security-releases
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  Applied both to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/wolftpm/wolftpm.hash | 4 ++--
->   package/wolftpm/wolftpm.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+>   package/python-django/python-django.hash | 4 ++--
+>   package/python-django/python-django.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/wolftpm/wolftpm.hash b/package/wolftpm/wolftpm.hash
-> index b9a9628b68..d24df58eaa 100644
-> --- a/package/wolftpm/wolftpm.hash
-> +++ b/package/wolftpm/wolftpm.hash
-> @@ -1,4 +1,4 @@
-> -# Hash from https://github.com/wolfSSL/wolfTPM/archive/refs/tags/v2.3.1.tar.gz
-> -sha256  f0d7c095491ac2cc9e44aa4ac3c22febf15942ef080431d8b43a9d0312ca6567  wolftpm-2.3.1.tar.gz
-> +# Hash from https://github.com/wolfSSL/wolfTPM/archive/refs/tags/v2.4.0.tar.gz
-> +sha256  31d1a5f5d60af14c4d07e14a9b0667404d4801fed32afd3fc0649749020ad17b  wolftpm-2.4.0.tar.gz
->   # Locally calculated
->   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-> diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
-> index a4a9edce85..c5ebeca18e 100644
-> --- a/package/wolftpm/wolftpm.mk
-> +++ b/package/wolftpm/wolftpm.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+> index 8d9f0aafdb..bfc9219c7e 100644
+> --- a/package/python-django/python-django.hash
+> +++ b/package/python-django/python-django.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/django/json
+> -md5  153fcb5dd7360b7ad219d65cb53e2d57  Django-4.0.4.tar.gz
+> -sha256  4e8177858524417563cc0430f29ea249946d831eacb0068a1455686587df40b5  Django-4.0.4.tar.gz
+> +md5  ad4e850c7110a45a6c7778d5bd01b85e  Django-4.0.6.tar.gz
+> +sha256  a67a793ff6827fd373555537dca0da293a63a316fe34cb7f367f898ccca3c3ae  Django-4.0.6.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+> diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+> index b4d6ec21c9..d49c845d54 100644
+> --- a/package/python-django/python-django.mk
+> +++ b/package/python-django/python-django.mk
+> @@ -4,10 +4,10 @@
 >   #
 >   ################################################################################
 >   
-> -WOLFTPM_VERSION = 2.3.1
-> +WOLFTPM_VERSION = 2.4.0
->   WOLFTPM_SITE = $(call github,wolfSSL,wolfTPM,v$(WOLFTPM_VERSION))
->   WOLFTPM_INSTALL_STAGING = YES
->   WOLFTPM_LICENSE = GPL-2.0+
+> -PYTHON_DJANGO_VERSION = 4.0.4
+> +PYTHON_DJANGO_VERSION = 4.0.6
+>   PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+>   # The official Django site has an unpractical URL
+> -PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/d2/95/93d1f75da95624bf89e373d079fa72debf77f9b10acc31998cc52a5ff3f9
+> +PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/a4/17/b10aa26d7a566a3c19e9d29fac39c8643cbceb6cd7649a378d676839b5db
+>   
+>   PYTHON_DJANGO_LICENSE = BSD-3-Clause
+>   PYTHON_DJANGO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
