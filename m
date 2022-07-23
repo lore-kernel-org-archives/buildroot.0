@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BE95C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 17:16:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B6CAC43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 17:17:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F44460FE0;
-	Sat, 23 Jul 2022 17:16:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F44460FE0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 40BFB40B13;
+	Sat, 23 Jul 2022 17:17:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40BFB40B13
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R33-x-AswI_K; Sat, 23 Jul 2022 17:16:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id odJCZoL34AIi; Sat, 23 Jul 2022 17:17:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7C4360FD7;
-	Sat, 23 Jul 2022 17:16:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7C4360FD7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3428B1BF5DE
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:16:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5F9A24055E;
+	Sat, 23 Jul 2022 17:16:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F9A24055E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 725FD1BF5DE
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:16:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E8AA60F9F
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E8AA60F9F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3404A84C07
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:16:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3404A84C07
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ln2gWeeMyFvH for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 17:16:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E93FA60C00
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 17:16:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E93FA60C00
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id A3FA084958; Sat, 23 Jul 2022 17:02:31 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 19:15:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1e4354d5d0ced7fe0de4c09b78ba5467cc4bcf6
-X-Git-Newrev: 67d87bf7d255cd05f84fab3e3625e073b5bfccf8
-X-Patchwork-Hint: ignore
-Message-Id: <20220723170231.A3FA084958@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libunwind: Upstep to v1.6.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DM_3nKyFLytt for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 17:16:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B81784BA3
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0B81784BA3
+ for <buildroot@busybox.net>; Sat, 23 Jul 2022 17:16:19 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 9F1771C0003;
+ Sat, 23 Jul 2022 17:16:17 +0000 (UTC)
+Date: Sat, 23 Jul 2022 19:16:16 +0200
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20220723191616.21376155@windsurf>
+In-Reply-To: <20220713143400.3131102-1-francois.perrad@gadz.org>
+References: <20220713143400.3131102-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658596578;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=w5s0+nqlRIEz28GEUTpIFJyuh5gXhbzmBY9fvatSpvs=;
+ b=mGkdtN7Baq+tiqIjglcaWXTYF6rhdZTaQnkI9h5avuyXL7NFPLJ+idFEBsqPs2tyi6Wlqy
+ R7tBzMM98TTATRNLUdlZJopbo8CiPngMBKc2XnK014DmFMv2kXS4+dQDZtIQFp9QmvrUMh
+ SbKsJ5iPZduIHkIte2JTBOAPFWLXfojxLO88uQKibZmhF9vVKjoCaQ6WFhAgPdoEglcNmU
+ eK0Pm8s/CmHcVRMz8IhOfw+SaTYWW8voFnQX2y7IrY6ikVzVerl8rGUVQ/UVf7CoIDPiuM
+ XDojwD3LZgZwCXVUMNMOujzmYfEVNf8e531KqXrxJw2liTHtJfh64fdliu6k4Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mGkdtN7B
+Subject: Re: [Buildroot] [PATCH] configs/mx6cubox: bump Linux and U-Boot
+ versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,148 +76,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67d87bf7d255cd05f84fab3e3625e073b5bfccf8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 13 Jul 2022 16:34:00 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-This also removes an old patch to fix atomic_ops for ARM pre-ARMv6.
-atomic_ops support has been replaced with C11 atomics, so the patch
-did not apply anymore, and should be unnecessary.
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  configs/mx6cubox_defconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-This does mean compilation will fail with systems that don't support
-C11 atomics, i.e. GCC versions older than 4.9
+Applied to master, thanks.
 
-Signed-off-by: Frederik Van Bogaert <frederik.vanbogaert@mind.be>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch | 56 ----------------------
- package/libunwind/Config.in                        |  6 ++-
- package/libunwind/libunwind.hash                   |  2 +-
- package/libunwind/libunwind.mk                     |  6 +--
- 4 files changed, 6 insertions(+), 64 deletions(-)
-
-diff --git a/package/libunwind/0001-Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch b/package/libunwind/0001-Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch
-deleted file mode 100644
-index 2a37ed7784..0000000000
---- a/package/libunwind/0001-Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 24484e80b3e329c9edee1995e102f8612eedb79c Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Tue, 13 May 2014 23:32:27 +0200
--Subject: [PATCH] Add AO_REQUIRE_CAS to fix build on ARM < v6
--
--ARM earlier than ARMv6, such as ARMv4 and ARMv5 do not provide
--optimize atomic operations in libatomic_ops. Since libunwind is using
--such operations, it should define AO_REQUIRE_CAS before including
--<atomic_ops.h> so that libatomic_ops knows it should use emulated
--atomic operations instead (even though they are obviously a lot more
--expensive).
--
--Also, while real atomic operations are all inline functions and
--therefore linking against libatomic_ops was not required, the emulated
--atomic operations actually require linking against libatomic_ops, so
--the commented AC_CHECK_LIB test in acinclude.m4 is uncommented to make
--sure we link against libatomic_ops.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- acinclude.m4          | 8 +-------
-- include/libunwind_i.h | 1 +
-- 2 files changed, 2 insertions(+), 7 deletions(-)
--
--diff --git a/acinclude.m4 b/acinclude.m4
--index 497f7c2..9c15af1 100644
----- a/acinclude.m4
--+++ b/acinclude.m4
--@@ -22,11 +22,5 @@ fi])
-- AC_DEFUN([CHECK_ATOMIC_OPS],
-- [dnl Check whether the system has the atomic_ops package installed.
--   AC_CHECK_HEADERS(atomic_ops.h)
---#
---# Don't link against libatomic_ops for now.  We don't want libunwind
---# to depend on libatomic_ops.so.  Fortunately, none of the platforms
---# we care about so far need libatomic_ops.a (everything is done via
---# inline macros).
---#
---#  AC_CHECK_LIB(atomic_ops, main)
--+  AC_CHECK_LIB(atomic_ops, main)
-- ])
--diff --git a/include/libunwind_i.h b/include/libunwind_i.h
--index 23f615e..deabdfd 100644
----- a/include/libunwind_i.h
--+++ b/include/libunwind_i.h
--@@ -95,6 +95,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
-- 	(pthread_mutex_unlock != NULL ? pthread_mutex_unlock (l) : 0)
-- 
-- #ifdef HAVE_ATOMIC_OPS_H
--+# define AO_REQUIRE_CAS
-- # include <atomic_ops.h>
-- static inline int
-- cmpxchg_ptr (void *addr, void *old, void *new)
---- 
--1.9.2
--
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index 5284b5864c..dfd0df30fa 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -23,6 +23,7 @@ config BR2_PACKAGE_LIBUNWIND
- 	bool "libunwind"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11 atomics
- 	# forcefully links against libgcc_s, only available in dynamic
- 	# linking configurations
- 	depends on !BR2_STATIC_LIBS
-@@ -31,6 +32,7 @@ config BR2_PACKAGE_LIBUNWIND
- 
- 	  http://www.nongnu.org/libunwind/index.html
- 
--comment "libunwind needs a toolchain w/ threads, dynamic library"
-+comment "libunwind needs a toolchain w/ threads, dynamic library, gcc >= 4.9"
- 	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libunwind/libunwind.hash b/package/libunwind/libunwind.hash
-index de00c59988..1d532a7830 100644
---- a/package/libunwind/libunwind.hash
-+++ b/package/libunwind/libunwind.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  90337653d92d4a13de590781371c604f9031cdb50520366aa1e3a91e1efb1017  libunwind-1.5.0.tar.gz
-+sha256  4a6aec666991fb45d0889c44aede8ad6eb108071c3554fcdff671f9c94794976  libunwind-1.6.2.tar.gz
- 
- # Hash for license file
- sha256  6a0dbbdaec2b3136b7bf045586f4212bdf74e7af688bf9dfe9154607cf5ec156  COPYING
-diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
-index aaa33464a9..9cd587d0a3 100644
---- a/package/libunwind/libunwind.mk
-+++ b/package/libunwind/libunwind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUNWIND_VERSION = 1.5.0
-+LIBUNWIND_VERSION = 1.6.2
- LIBUNWIND_SITE = http://download.savannah.gnu.org/releases/libunwind
- LIBUNWIND_INSTALL_STAGING = YES
- LIBUNWIND_LICENSE_FILES = COPYING
-@@ -16,8 +16,4 @@ LIBUNWIND_CONF_OPTS = \
- 	--disable-tests \
- 	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cxx-exceptions,--disable-cxx-exceptions)
- 
--ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
--LIBUNWIND_DEPENDENCIES += libatomic_ops
--endif
--
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
