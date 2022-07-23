@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34635C43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 17:50:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4480C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 17:51:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D259341669;
-	Sat, 23 Jul 2022 17:50:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D259341669
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89EB561AFB;
+	Sat, 23 Jul 2022 17:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89EB561AFB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kCckuRikhJaw; Sat, 23 Jul 2022 17:50:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FKJQfHH1J3St; Sat, 23 Jul 2022 17:51:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE4D740515;
-	Sat, 23 Jul 2022 17:50:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE4D740515
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B60A21BF955
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:50:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A59661AF8;
+	Sat, 23 Jul 2022 17:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A59661AF8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 548CC1BF5DE
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:51:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9EF4740515
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:50:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EF4740515
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2FA2584BE7
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:51:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FA2584BE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XxMRM7i33RmN for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 17:50:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D9xYuJa5uMDD for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 17:51:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D614A4049F
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 17:50:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D614A4049F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 77BCF8499E
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 17:51:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77BCF8499E
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 845168227D; Sat, 23 Jul 2022 17:36:46 +0000 (UTC)
+ id 1D76B825E1; Sat, 23 Jul 2022 17:38:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 19:50:15 +0200
+Date: Sat, 23 Jul 2022 19:51:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2c8d95256024c82e788c1cc734fe2b2819d67313
-X-Git-Newrev: 3a79b2f9d40aa082f14bed45db2c3d77a21f66ab
+X-Git-Oldrev: 3a79b2f9d40aa082f14bed45db2c3d77a21f66ab
+X-Git-Newrev: 9ad0000827dbe58d499ff8efc96158600e23edb6
 X-Patchwork-Hint: ignore
-Message-Id: <20220723173646.845168227D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-lark: new package
+Message-Id: <20220723173809.1D76B825E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xdg-dbus-proxy: bump to version
+ 0.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,104 +59,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4318373792803725293=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4318373792803725293==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=3a79b2f9d40aa082f14bed45db2c3d77a21f66ab
+commit: https://git.buildroot.net/buildroot/commit/?id=9ad0000827dbe58d499ff8efc96158600e23edb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com>
+This version includes a few fixes, and a new Meson-based build system.
+For now this only updates to the latest version, the switch to Meson is
+left for a follow-up patch. Release notes can be found at:
+
+  https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.4
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/python-lark/Config.in        |  7 +++++++
- package/python-lark/python-lark.hash |  5 +++++
- package/python-lark/python-lark.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+ package/xdg-dbus-proxy/xdg-dbus-proxy.hash | 4 ++--
+ package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 28d85d7370..62053c4b64 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1556,6 +1556,7 @@ F:	package/alfred/
- F:	package/bmx7/
- F:	package/python-aexpect/
- F:	package/python-alembic/
-+F:	package/python-lark/
- F:	package/softhsm2/
- F:	support/testing/tests/package/sample_python_aexpect.py
- F:	support/testing/tests/package/test_python_aexpect.py
-diff --git a/package/Config.in b/package/Config.in
-index 433b62eae3..75a756ba6f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1081,6 +1081,7 @@ menu "External python modules"
- 	source "package/python-jsonschema/Config.in"
- 	source "package/python-keyring/Config.in"
- 	source "package/python-kiwisolver/Config.in"
-+	source "package/python-lark/Config.in"
- 	source "package/python-libconfig/Config.in"
- 	source "package/python-libusb1/Config.in"
- 	source "package/python-lmdb/Config.in"
-diff --git a/package/python-lark/Config.in b/package/python-lark/Config.in
-new file mode 100644
-index 0000000000..1f45690f8d
---- /dev/null
-+++ b/package/python-lark/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_LARK
-+	bool "python-lark"
-+	help
-+	  Lark is a parsing toolkit for Python, built with a focus
-+	  on ergonomics, performance and modularity.
-+
-+	  https://github.com/lark-parser/lark
-diff --git a/package/python-lark/python-lark.hash b/package/python-lark/python-lark.hash
-new file mode 100644
-index 0000000000..3773c00f7c
---- /dev/null
-+++ b/package/python-lark/python-lark.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/lark/json
-+md5  fd3ca96a8d9d67798508470032921078  lark-1.1.2.tar.gz
-+sha256  7a8d0c07d663da9391d7faee1bf1d7df4998c47ca43a593cbef5c7566acd057a  lark-1.1.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256  6e83ad8e0de51690a53eac02dd2b6188dfd7949053be56fba5b651140d27ee57  LICENSE
-diff --git a/package/python-lark/python-lark.mk b/package/python-lark/python-lark.mk
-new file mode 100644
-index 0000000000..52c249552e
---- /dev/null
-+++ b/package/python-lark/python-lark.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-lark
-+#
-+################################################################################
-+
-+PYTHON_LARK_VERSION = 1.1.2
-+PYTHON_LARK_SOURCE = lark-$(PYTHON_LARK_VERSION).tar.gz
-+PYTHON_LARK_SITE = https://files.pythonhosted.org/packages/a3/c5/11d0a086590b207ad1b6c9ba6e019f8290652f3d703cdb002d72e220dd99
-+PYTHON_LARK_SETUP_TYPE = setuptools
-+PYTHON_LARK_LICENSE = MIT
-+PYTHON_LARK_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
-
---===============4318373792803725293==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+index b7aa9ac701..7bbea72b03 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.3
+-sha256  03b5d28ca879253ddbbce31098909becca1495ea811a6377a492e28f16c09b9b  xdg-dbus-proxy-0.1.3.tar.xz
++# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.4
++sha256  1ec0eab53d1e49966d722352bcfd51ac402dce5190baedc749a8541e761670ab  xdg-dbus-proxy-0.1.4.tar.xz
+ 
+ # Hash for license files:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
+index 9c4449c7bb..b07cf787ed 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDG_DBUS_PROXY_VERSION = 0.1.3
++XDG_DBUS_PROXY_VERSION = 0.1.4
+ XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
+ XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
+ XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4318373792803725293==--
