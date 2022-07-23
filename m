@@ -1,145 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44191C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 21:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE81AC43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 21:29:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B470A416BC;
-	Sat, 23 Jul 2022 21:27:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B470A416BC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DF2D84988;
+	Sat, 23 Jul 2022 21:29:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DF2D84988
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4qdWFKLtict0; Sat, 23 Jul 2022 21:27:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tPiRGnIoK82l; Sat, 23 Jul 2022 21:28:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FD6B416B7;
-	Sat, 23 Jul 2022 21:27:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FD6B416B7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 05BE91BF419
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:27:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A7AB84963;
+	Sat, 23 Jul 2022 21:28:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A7AB84963
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E1C2B1BF419
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:28:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D28EA416B7
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:27:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D28EA416B7
+ by smtp4.osuosl.org (Postfix) with ESMTP id BAA1542493
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 21:28:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAA1542493
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UDFZ7sl_Wdbo for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 21:27:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WWvLwWMDEz9n for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 21:28:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 151324049B
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com
- (mail-bn7nam10on2124.outbound.protection.outlook.com [40.107.92.124])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 151324049B
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 21:27:25 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IHY54c2yLNJt6H7GJgz/TFRHp7On/Y4OHTj0s6XWfY2+d4FjbDaBVEeNuITDCOtle8IhmDs3WmhNZGmLyuyyu4btxEmPMEiSz8kyrM72ItDBsT7r5Th9zKV/TmhfW5sNY1yKZaBJqtijYC4xcK98OM81peGLYmYvFwlj+lFqE8FbKQ6vFLSA0LmPuMdwzlSi8uhbWj9ApW1U1JM35ZCVhc2uZTAEWemNCtWainc10ysO6NMXCTPbvqn9HuHHxIEAO+uO+ADc8mgaWaayxLPolTPSl041fQsOuwCiE4waipQsqcW6FJX/LXw4PUoas6qxlS+a/6JDSsXSkLv0rX/+LQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DB8pt2L2jLS8ApKRILxVkeWRF9MHjspHzOAqCiBh01g=;
- b=nXr1B+hS4jC03NjfRe4WHigmZy0GLG4h0ziueKMMO4CzjYb34k4+y2VmTgF+IqUacd1jU9gq0JwcEPBGJlorSGCeYLI8emT81rzeieYO2iHtgwoKUOJCDTGUeNpN2KclwtkyKWinCsOjPTZF+uU34IzQ64A/0HKg6iE4bZXDCzngYc9xyYs0B/rZOOYSu4wlzqrbbx/VTaNVwcx8MtJHUBNvOF03/oZxFph7Kjt2yvxxHeFDHhmoFAFesHeowmvejC6MfLDvHpqbeQvuXV0VAF1GK9PQZxo9Pjv7SkmWZN2Y4pFohX0s/FLqjagZHLizcb6BgGj9EHytiMCu/tykwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=phobosdpl.com; dmarc=pass action=none
- header.from=phobosdpl.com; dkim=pass header.d=phobosdpl.com; arc=none
-Received: from DM6PR17MB3515.namprd17.prod.outlook.com (2603:10b6:5:1de::16)
- by BY3PR17MB5267.namprd17.prod.outlook.com (2603:10b6:a03:3c2::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.21; Sat, 23 Jul
- 2022 21:27:20 +0000
-Received: from DM6PR17MB3515.namprd17.prod.outlook.com
- ([fe80::74a0:ce3:5577:546f]) by DM6PR17MB3515.namprd17.prod.outlook.com
- ([fe80::74a0:ce3:5577:546f%7]) with mapi id 15.20.5458.020; Sat, 23 Jul 2022
- 21:27:20 +0000
-Message-ID: <06c4eec4-3b5a-6c8a-56c2-b3fef1bb73bb@phobosdpl.com>
-Date: Sat, 23 Jul 2022 16:27:18 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From: Sen Hastings <sen@phobosdpl.com>
-References: <ad1ce428-7b65-b779-27ec-ea13060abb57@phobosdpl.com>
-Content-Language: en-US
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-In-Reply-To: <ad1ce428-7b65-b779-27ec-ea13060abb57@phobosdpl.com>
-X-ClientProxiedBy: SA1P222CA0043.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:2d0::17) To DM6PR17MB3515.namprd17.prod.outlook.com
- (2603:10b6:5:1de::16)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85C8342490
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 85C8342490
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 21:28:53 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id v13so3122898wru.12
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 14:28:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=hN+WJmG1R4ZZmXuP5Gg1blNV7gx+NhV+SFVTC7TfodU=;
+ b=7J0eu5LrOiSsIJUaKw5S6/Pb+nS/QsyUWYlnHwXz4xqv53IQlxmbYlAO8mFteUXkE4
+ X87OkWGyGXSCoyAbjujf+5IP5f85DmM4OJkNEY0lXGYHvoNRbX9ayS4xol/mz5sxGQ6M
+ XTj+giISNdgHe8R2hCoEOdth4iBKqpSdarbDyLTrvrgU8Dw1pky2a87DNT2ZYolR0EN/
+ rKAiUdyIhG/0CD/ViClItmCJ7FwWPylXtUIMG0ffxurS7vMkd7H9N2zVgKejqtpNqd6I
+ Ef+bJCDSJxVvwKZD/bb4g2rLMpmZENhOOpqvGaVXl//fD2DAGXq7v3o2p+xBm+nXquGm
+ 9t1g==
+X-Gm-Message-State: AJIora/wjmsz8Tco8pItIkWM4DYj47T5EIA1kb0R9vzl5A+Z7yTvQ0dI
+ E9qtdZutLFWcomgeEMmcJTfiYQ==
+X-Google-Smtp-Source: AGRyM1vjlL37sKqs75n3vOou7oIguAVTAg++BxxhgA2XZZePXB8nPZhSoIyu2LNuYuUrVkw/ZkX1Hg==
+X-Received: by 2002:a5d:4dc8:0:b0:21e:660f:8dfe with SMTP id
+ f8-20020a5d4dc8000000b0021e660f8dfemr3580704wru.468.1658611731315; 
+ Sat, 23 Jul 2022 14:28:51 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ e1-20020a5d5301000000b0021e5b5a68f8sm7963143wrv.45.2022.07.23.14.28.50
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 23 Jul 2022 14:28:50 -0700 (PDT)
+Message-ID: <8581ea46-4f5f-b56a-c60b-d1f0b6ad95e1@mind.be>
+Date: Sat, 23 Jul 2022 23:28:49 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d6c0727d-7580-474e-c330-08da6cf2200c
-X-MS-TrafficTypeDiagnostic: BY3PR17MB5267:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VVsYG+wNbQm2aQatCGmMky0V65x3g01uxLy0K8DJCVCEjAEgqL25p1+WIKSNPN7NeAGZISZdi6dG7YbpBb/4nhHkstn7sP5InYW+Z40s7C77TljnzqWVpcmHu912bzlmp/S7YfaOxCZjJdLn2iYVyLKMN0iIEe26IPSVK63qLgCWDqCcDD9YGrnPobKRC5s7kLHz6mw9H4IT1Tx/fIXkM9iGdWdxUfm7mEyiBMCWXO6P3ahgYeMHi+Lrh489RBhOPmksBhhG/z+VmPUilvhV2Q5ffWFSvTsIp9n+Fgc6rqE2sYd21bbp3NmRUo4OB4OhlT9PxDc76FcdDBzlQDv4x4JD90WBkJtAPCUmirsntE2ZM/vWzIOAGWK9HxzMFb7NQHblifIjLnQm1oXeLeqKyaEdNQe/9jb3nySOZaGqDJrjjopBly8nSlS9aBMMT4KBGQeAWp+Ym1w5nBPZRU31duzyEeMwSpHzA2MWaGBODeJA/5gRTnduWDLcyCS+Sj2kEhWQ43IWjgp7eTdZNcRkFdSLkOrDcTVVPST3B75QtjoCPwjG/LnVGyDAKUMoVvZem48mGLhFUUw3p8Y+MKZk0ObRiGZFnsHH4aMvyElSFhTrPs1R1HO6ZDe/vub2VBhALGgRCeRwEYUnrr1VIXA/lnf1K+EahbJ+AGCL86B16+bjd52urXxzFNERRIkMCThLIH0MZe5v3ldsmOXikD0zLGp34TNNjY8TvaeXSQnsvVH1q5IhHmDRerHtj//sSiKSpoPvA5csi/sO3jF/EXaWhWd0a4qhREbzTb8BmYoxFTkSNvABnIul8oYyY/+Lzarwm/A/BPPm/IgERHGmIF1j9Fovmmtf1C8eiEeSj9rtq9Tp/V9RfbXPM7tN7Tlt1SdPWhO1iC1xlMNkhHcHiBbndg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DM6PR17MB3515.namprd17.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(136003)(366004)(346002)(39830400003)(376002)(396003)(186003)(2616005)(83380400001)(66946007)(66556008)(66476007)(8676002)(36756003)(31686004)(6512007)(3450700001)(41300700001)(6506007)(52116002)(53546011)(26005)(2906002)(38350700002)(31696002)(86362001)(38100700002)(5660300002)(316002)(8936002)(478600001)(6486002)(966005)(45980500001)(43740500002);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OWc1K0pocUtDdkxoUVJpVythWWNtSVFqOHJlQ3NhVEVneWRHajF1K3NydlpR?=
- =?utf-8?B?UVROS0R1dHZnYkNZeXI5TVhHVmZwaThUdElSVmQxRmhqcEoyZlhwZDJNTDE0?=
- =?utf-8?B?dHNSRE02aVZJT0ExRFJtRklCbVJYTUQ5MUZhRTBTeVJrOVB0Sm5DNHNxZ3gv?=
- =?utf-8?B?NllPWSt5N1BXK0dOWEU1c01mWnNVZGZUMklDT2pZZDF1aWhpd3c0Tms0LzFu?=
- =?utf-8?B?dFZ2WEFtRUpuVjR1WGR6QXFMVHJXby9qempXY3llQ004NU1IWkFBbzRMWSsr?=
- =?utf-8?B?VXIyT2VzbSs2eUoxdlVrTUZIWkF4dXpFNUhHSlE0bVYrVHVhSnZ3QTZqc3FI?=
- =?utf-8?B?bWpib3ZvOXg2TWcyaXhBQWZld2NNRjNHY200Sm1LcW1USzBzSlRCek90NlI3?=
- =?utf-8?B?S2VxRStUQWJRYnRoY3k0cldQU2VGckFKdDFUZ2lpWDFlM1hrc3FLV3pyMGtH?=
- =?utf-8?B?blg0VmFHYnRVUGtmOFF6ZmRiTzNJa0NGRW5DUlc1VGdzQzNZQkdzc3FscHM3?=
- =?utf-8?B?bnJERzlYNmV2SjlqRmErQjljNjJ4VVlFb2pQZ2hPSm11SjNhaXZ6VGUrck5t?=
- =?utf-8?B?OGZWaTMxNUZ2N2pQTU1TbHIzVW5Rb0RGOVdtRTlDRS9kWXJTb1A5anlBYW1w?=
- =?utf-8?B?aTg4SVdNNzJ5eXFrbDlIZEhyWXZyU2xZZFZpMEp5cUhMVElSNmtaaFhGWlhF?=
- =?utf-8?B?dzhxcDJHeGFjZ3BpZ2syQThtS3kxdXJMUTdtV3h1ZGJIYnY0cWFhWWhickZS?=
- =?utf-8?B?OXVYeGR2cWFrSU1YWTJSSjdjZVJrMEhpZWI3L0NuMnFHZUlYYjBPVDk0QWpK?=
- =?utf-8?B?UnZRb041ZTNQb24xL1gwcmNtLzlMR01xTjczWEZaNC9vUi8xYkFLZndKanJz?=
- =?utf-8?B?eXVZaDJISjZMNzJoTnhKNWxYbit5OHV6THZIeUQ5eFR2SGUwUThDUXJBTys4?=
- =?utf-8?B?YzFRUmtTRjBsWE9JVlJneFdpUHVNVG5PYXVXdC9INWtjcWZWem1ocGRTRXR0?=
- =?utf-8?B?VjFGS3dvOU9ZL05DRENPRm1aZFFKQjFRZzh3K3ZESjRzS3RDL2VZVEY4Zlpq?=
- =?utf-8?B?Y3UycGxXOWhONG13T2VNbExIZzZqeWtaUCtWL3FySFhDSFYwNWxndTJXN1lT?=
- =?utf-8?B?d2pnNXB4Y0svNWxxaDVYTGF4dnhDT2EySGYyN280dHRyaVRSVlpUcXJUaWpQ?=
- =?utf-8?B?eVVua2h6b2FnZFNmTkhiQ0swL3h1YWxqMGhnbU4rOHUvU3duY3EwTWY1am1K?=
- =?utf-8?B?cjdrR3VzZHN1VCtKUHhIOGJwTEhGVmh2YW5jT1BRdGtXRHg2S1hydE5YdDJY?=
- =?utf-8?B?eUtzNXNHUVNTSDJKNnozekQ2ZkwrSy9ROTRHQWhYTWJXSWtzWXhwWU9IbkJr?=
- =?utf-8?B?bUJUdVdtSUNMQjJ0TVhiVm5scExacXZ4SURFUHNzZUdqdEMrQ01CRUh5dENC?=
- =?utf-8?B?eXN3a2l0c1ZNRFNNTTJqNm1xQVVTOEdjZE9BSC9WdTFLeFhQdHZiNW5yQ01t?=
- =?utf-8?B?VFUwazBpRkUxQktBMEI5Wk1qdFNKd0pOTDJaQXB0VEJNQUJQWFgvT3I1VTlO?=
- =?utf-8?B?NmNsQk9NUkNVVWlxNnBWSHBpSzRHUStlZkRaZnZRV3hBVTN5QTBCV0JmaThx?=
- =?utf-8?B?dURhM1puL1B2U2hyN3Zrdjl4T3FHcXpubFBMTnR6MmxQOXV0WXYxOXNNRWpT?=
- =?utf-8?B?YnRLd0JRNzRsUXB4b2Y3eXlYdHA1TEtvUHdSbWthalFpSDRvNWhPbFdBaUVy?=
- =?utf-8?B?RG9TR0VDZ0R5NG1FTitYcnBHcG5JWXYzNEdYb2Y5MHA2RVlNa2swekFmUi9J?=
- =?utf-8?B?cmxicnFNYTJBZmVxSFFaNmpIZGhpaXhRQ2N1S2duZ0M4L1VDT29OZk9MY21E?=
- =?utf-8?B?S3crRlY4Sjl4bnlXVU5uSndNZURYek96SGFaYkI2UXIrSGQ4aE4yaW04bDJl?=
- =?utf-8?B?clRxQncrT3FMSVg4eExEYmRtT05HYmZrNlRPRWk0eU1PbkhkWW5OS3VCemwy?=
- =?utf-8?B?Y2lTdDdVd3NnVE5uTHUvYzNPVlNpOHcrakExK0JvcWszQTE3bFZUck5DRlBS?=
- =?utf-8?B?ZlpDTDhHWUxJUVU1NVNhRTJDcWRsMko5elJRaUJSd0ZtdzBuUnJkcDFQVHFk?=
- =?utf-8?Q?8BukdPAB5CRN3GZflNWcyAwiq?=
-X-OriginatorOrg: phobosdpl.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6c0727d-7580-474e-c330-08da6cf2200c
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR17MB3515.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2022 21:27:20.3345 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 07b76dd5-c518-427b-a15a-2e07dfd0130a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LR7ptvBVvFuP37DgwRvKlVywvFLU78JgZa7jt19YN3DxqbN013qsQxKcGNGtMOiOEc+8J65aL8Ch+Xv+y6VyJQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR17MB5267
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: Petr Vorel <petr.vorel@gmail.com>, "Yann E. MORIN"
+ <yann.morin.1998@free.fr>
+References: <20211011220025.7998-1-petr.vorel@gmail.com>
+ <20211011220025.7998-2-petr.vorel@gmail.com> <20211111080014.GR2084998@scaer>
+ <YY7iy2xQUcMBPqsx@pevik>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <YY7iy2xQUcMBPqsx@pevik>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=centc.onmicrosoft.com; 
- s=selector2-centc-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DB8pt2L2jLS8ApKRILxVkeWRF9MHjspHzOAqCiBh01g=;
- b=zvdEFHr0Ssu3TOkBwbJRu/KMw6s2ObGclDSKe7syn7bBxLr83/KIP3Ml+MyPbrjbrKEd+O1dubhbUgDVGJ9xVlLaXNt3Jtjn7V6tkisHPj4ciug6QNh567kNcTwjV+ShMH/M13WSgDk1wNbG8H4GLedItY718NVVSzI+URE3UGI=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=centc.onmicrosoft.com
- header.i=@centc.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-centc-onmicrosoft-com header.b=zvdEFHr0
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=phobosdpl.com;
-Subject: Re: [Buildroot] [git commit] support/scripts/pkg-stats: fix flake8
- errors
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=hN+WJmG1R4ZZmXuP5Gg1blNV7gx+NhV+SFVTC7TfodU=;
+ b=W4f6jYOsT1+GHnx6fQbFOO/I8p4Mzbm0iFbezV+rWix6vxJJog35+7nT7PFOsXUKUW
+ cX5xvBF7AnW7lKLjKqBuiT1hM5bkD36RRIbGCL71dwBmTCIf961M8MQVWFVAAhvPdlYB
+ UML2E1fltsTUjiU0RM7yJNNGYK0J7CBgH4rrzaFK/xLCufqHJta+WGOuZpcHaYScz6dg
+ mFyacT9cwAEG6hGGqcDnbq5JHFjY5zp/ArJ7BuZmgaxMJDFlu6bZvsRpa+VHaRzesPb6
+ n/rIPPV4gSy+5SgFT2L53S/qgRrfXUjix7z4zSg7w/D9MywSIz4Tdo5Tb25/Lwv/DzkM
+ ecjQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=W4f6jYOs
+Subject: Re: [Buildroot] [RFC PATCH 1/3] make: support: use `command -v'
+ instead of `which'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -151,159 +104,381 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: Sen Hastings <sen@phobosdpl.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Markus Mayer <mmayer@broadcom.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 7/23/22 12:47, Arnout Vandecappelle (Essensium/Mind) wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=bf178754efbb8cc32f2aacc94327d34484e1d738
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Commit f1bcb2a45c4ba42d8dea3ba7c3413cb1d0fcab93 introduced a number of
-> flake8 errors. Fix these by:
-> - adding noqa to the multi-line string containing tabs;
-> - replacing other tabs with spaces;
-> - removing space after opening parenthesis;
-> - splitting the long lines.
-> Looks all good from my end.
 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Sen Hastings <sen@phobosdpl.com>
-Tested-by: Sen Hastings <sen@phobosdpl.com>
-> ---
->  support/scripts/pkg-stats | 61 ++++++++++++++++++++++++++++-------------------
->  1 file changed, 37 insertions(+), 24 deletions(-)
+
+On 12/11/2021 22:55, Petr Vorel wrote:
+> Hi Yann,
 > 
-> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index 6dc206d2bc..a4bb5ae599 100755
-> --- a/support/scripts/pkg-stats
-> +++ b/support/scripts/pkg-stats
-> @@ -828,7 +828,7 @@ function sortGrid(sortLabel){
->  <a href=\"#results\">Results</a><br/>
->  
->  <p id=\"sortable_hint\"></p>
-> -"""
-> +"""  # noqa - tabs and spaces
->  
->  
->  html_footer = """
-> @@ -865,8 +865,8 @@ def boolean_str(b):
->  
->  
->  def dump_html_pkg(f, pkg):
-> -    f.write( f'<div id=\"package_{pkg.name}\" \
-> -	class=\"package data {pkg.name}\">{pkg.path}</div>\n')
-> +    f.write(f'<div id=\"package_{pkg.name}\" \
-> +        class=\"package data {pkg.name}\">{pkg.path}</div>\n')
->      # Patch count
->      data_field_id = f'patch_count_{pkg.name}'
->      div_class = ["centered patch_count data"]
-> @@ -877,8 +877,8 @@ def dump_html_pkg(f, pkg):
->          div_class.append("somepatches")
->      else:
->          div_class.append("lotsofpatches")
-> -    f.write( f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> -	\">{str(pkg.patch_count)}</div>\n')
-> +    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> +        \">{str(pkg.patch_count)}</div>\n')
->  
->      # Infrastructure
->      data_field_id = f'infrastructure_{pkg.name}'
-> @@ -889,8 +889,8 @@ def dump_html_pkg(f, pkg):
->          div_class.append("wrong")
->      else:
->          div_class.append("correct")
-> -    f.write( f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> -	\">{infra_str(pkg.infras)}</div>\n')
-> +    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> +        \">{infra_str(pkg.infras)}</div>\n')
->  
->      # License
->      data_field_id = f'license_{pkg.name}'
-> @@ -901,7 +901,7 @@ def dump_html_pkg(f, pkg):
->      else:
->          div_class.append("wrong")
->      f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> -	\">{boolean_str(pkg.is_status_ok("license"))}</div>\n')
-> +        \">{boolean_str(pkg.is_status_ok("license"))}</div>\n')
->  
->      # License files
->      data_field_id = f'license_files_{pkg.name}'
-> @@ -912,7 +912,7 @@ def dump_html_pkg(f, pkg):
->      else:
->          div_class.append("wrong")
->      f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> -	\">{boolean_str(pkg.is_status_ok("license-files"))}</div>\n')
-> +        \">{boolean_str(pkg.is_status_ok("license-files"))}</div>\n')
->  
->      # Hash
->      data_field_id = f'hash_file_{pkg.name}'
-> @@ -923,7 +923,7 @@ def dump_html_pkg(f, pkg):
->      else:
->          div_class.append("wrong")
->      f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> -	\">{boolean_str(pkg.is_status_ok("hash"))}</div>\n')
-> +        \">{boolean_str(pkg.is_status_ok("hash"))}</div>\n')
->  
->      # Current version
->      data_field_id = f'current_version_{pkg.name}'
-> @@ -932,7 +932,7 @@ def dump_html_pkg(f, pkg):
->      else:
->          current_version = pkg.current_version
->      f.write(f'  <div id=\"{data_field_id}\" \
-> -	class=\"centered current_version data {pkg.name}\">{current_version}</div>\n')
-> +        class=\"centered current_version data {pkg.name}\">{current_version}</div>\n')
->  
->      # Latest version
->      data_field_id = f'latest_version_{pkg.name}'
-> @@ -1059,19 +1059,32 @@ def dump_html_pkg(f, pkg):
->  def dump_html_all_pkgs(f, packages):
->      f.write("""
->  <div id=\"package-grid\">
-> -<div style="grid-column: 1;" onclick="sortGrid(this.id)" id=\"package\" class=\"package data label\"><span>Package</span><span></span></div>
-> -<div style="grid-column: 2;" onclick="sortGrid(this.id)" id=\"patch_count\" class=\"centered patch_count data label\"><span>Patch count</span><span></span></div>
-> -<div style="grid-column: 3;" onclick="sortGrid(this.id)" id=\"infrastructure\" class=\"centered infrastructure data label\">Infrastructure<span></span></div>
-> -<div style="grid-column: 4;" onclick="sortGrid(this.id)" id=\"license\" class=\"centered license data label\"><span>License</span><span></span></div>
-> -<div style="grid-column: 5;" onclick="sortGrid(this.id)" id=\"license_files\" class=\"centered license_files data label\"><span>License files</span><span></span></div>
-> -<div style="grid-column: 6;" onclick="sortGrid(this.id)" id=\"hash_file\" class=\"centered hash_file data label\"><span>Hash file</span><span></span></div>
-> -<div style="grid-column: 7;" onclick="sortGrid(this.id)" id=\"current_version\" class=\"centered current_version data label\"><span>Current version</span><span></span></div>
-> -<div style="grid-column: 8;" onclick="sortGrid(this.id)" id=\"latest_version\" class=\"centered latest_version data label\"><span>Latest version</span><span></span></div>
-> -<div style="grid-column: 9;" onclick="sortGrid(this.id)" id=\"warnings\" class=\"centered warnings data label\"><span>Warnings</span><span></span></div>
-> -<div style="grid-column: 10;" onclick="sortGrid(this.id)" id=\"upstream_url\" class=\"centered upstream_url data label\"><span>Upstream URL</span><span></span></div>
-> -<div style="grid-column: 11;" onclick="sortGrid(this.id)" id=\"cves\" class=\"centered cves data label\"><span>CVEs</span><span></span></div>
-> -<div style="grid-column: 12;" onclick="sortGrid(this.id)" id=\"ignored_cves\" class=\"centered ignored_cves data label\"><span>CVEs Ignored</span><span></span></div>
-> -<div style="grid-column: 13;" onclick="sortGrid(this.id)" id=\"cpe_id\" class=\"centered cpe_id data label\"><span>CPE ID</span><span></span></div>
-> +<div style="grid-column: 1;" onclick="sortGrid(this.id)" id=\"package\"
-> +     class=\"package data label\"><span>Package</span><span></span></div>
-> +<div style="grid-column: 2;" onclick="sortGrid(this.id)" id=\"patch_count\"
-> +     class=\"centered patch_count data label\"><span>Patch count</span><span></span></div>
-> +<div style="grid-column: 3;" onclick="sortGrid(this.id)" id=\"infrastructure\"
-> +     class=\"centered infrastructure data label\">Infrastructure<span></span></div>
-> +<div style="grid-column: 4;" onclick="sortGrid(this.id)" id=\"license\"
-> +     class=\"centered license data label\"><span>License</span><span></span></div>
-> +<div style="grid-column: 5;" onclick="sortGrid(this.id)" id=\"license_files\"
-> +     class=\"centered license_files data label\"><span>License files</span><span></span></div>
-> +<div style="grid-column: 6;" onclick="sortGrid(this.id)" id=\"hash_file\"
-> +     class=\"centered hash_file data label\"><span>Hash file</span><span></span></div>
-> +<div style="grid-column: 7;" onclick="sortGrid(this.id)" id=\"current_version\"
-> +     class=\"centered current_version data label\"><span>Current version</span><span></span></div>
-> +<div style="grid-column: 8;" onclick="sortGrid(this.id)" id=\"latest_version\"
-> +     class=\"centered latest_version data label\"><span>Latest version</span><span></span></div>
-> +<div style="grid-column: 9;" onclick="sortGrid(this.id)" id=\"warnings\"
-> +     class=\"centered warnings data label\"><span>Warnings</span><span></span></div>
-> +<div style="grid-column: 10;" onclick="sortGrid(this.id)" id=\"upstream_url\"
-> +     class=\"centered upstream_url data label\"><span>Upstream URL</span><span></span></div>
-> +<div style="grid-column: 11;" onclick="sortGrid(this.id)" id=\"cves\"
-> +     class=\"centered cves data label\"><span>CVEs</span><span></span></div>
-> +<div style="grid-column: 12;" onclick="sortGrid(this.id)" id=\"ignored_cves\"
-> +     class=\"centered ignored_cves data label\"><span>CVEs Ignored</span><span></span></div>
-> +<div style="grid-column: 13;" onclick="sortGrid(this.id)" id=\"cpe_id\"
-> +     class=\"centered cpe_id data label\"><span>CPE ID</span><span></span></div>
->  """)
->      for pkg in sorted(packages):
->          dump_html_pkg(f, pkg)
+>> Petr, All,
+> 
+>> On 2021-10-12 00:00 +0200, Petr Vorel spake thusly:
+>>> `which' has been discontinued after 2.21 release in 2015 due this (git
+>>> repository is empty [1]) and version shipped in Debian produces warning
+>>> [2]:
+> 
+>>> /usr/bin/which: this version of `which' is deprecated; use `command -v' in scripts instead.
+> 
+>> In the meantime, this is supposed to have been overrdien by the
+>> technical committee:
+> 
+>>      https://lwn.net/ml/debian-ctte/handler.994275.D994275.163536015027825.ackdone@bugs.debian.org/
+> Yep, I've noticed this on LWN as well.
+> 
+>> Excerpt:
+> 
+>>   --8<---
+>>   1. The debianutils package must continue to provide the which(1) program
+>>      until a compatible utility is available in a package that is at least
+>>      transitively essential in Debian 12.
+> 
+>>      For the Debian 12 release, we expect which(1) to be in either an
+>>      Essential package or a transitively Essential package (that is, a
+>>      package that is depended on by an Essential package).
+> 
+>>   2. The which(1) program must not print any deprecation warnings.
+>>   --8<---
+> 
+>> As such, the situation is a calmer for now and is less urgent, and we
+>> can address it for after 2021.11 (given that Debian 11 was released only
+>> 3 months ago, we have a bit of time ahead of us before Debian 12 finally
+>> ships! ;-] )
+> 
+> Well, some people use Debian testing :). But sure, it was never urgent,
+> the issue does not break build. This time I'm quite confident it works,
+> but one revert was enough => it can wait till more people find time to test it.
+
+  In the end, it got reverted in debian testing as well, so we can drop this 
+series (for now). I've marked them as Rejected in patchwork.
+
+  Regards,
+  Arnout
+
+> 
+> Kind regards,
+> Petr
+> 
+>> Regards,
+>> Yann E. MORIN.
+> 
+>>> `command is POSIX [3] and supported on all common shells (bash, zsh,
+>>> dash, busybox sh, mksh).
+> 
+>>> NOTE: originally merged as ca6a2907c2, but it had to be reverted due
+>>> errors [4] (originally reported [5]). Problems were:
+> 
+>>> 1) Main problem was that make sometimes expected `command' as a
+>>>     binary/script and run it with execve() (or any other exec*()
+>>>     wrapper), instead of running it through a shell via system() [4]:
+> 
+>>>      $ make defconfig
+>>>      [...]
+>>>      $ make help
+>>>      make[1]: command: Command not found
+>>>      [...]
+> 
+>>>     Fixed by not relying to $(shell command -v ...) but shell with:
+>>>     $(shell $(SHELL) -c "command -v ...").
+> 
+>>> 2) `command -v' handles only first parameter (unlike `which') [4].
+>>>     Hopefully fixed with quoting variables. Quoting variables is also
+>>>     needed, because both `command -v' without args and `type -p' exit 0.
+> 
+>>> Patch tested on both bash and dash as /bin/sh on various distros with
+>>> having different make versions, including these previously affected
+>>> (4.2.1, 4.0, 3.81).
+> 
+>>> [1] https://git.savannah.gnu.org/cgit/which.git
+>>> [2] https://salsa.debian.org/debian/debianutils/-/commit/3a8dd10b4502f7bae8fc6973c13ce23fc9da7efb
+>>> [3] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/command.html
+>>> [4] https://lore.kernel.org/buildroot/20210930200402.GO1504958@scaer/
+>>> [5] https://lore.kernel.org/buildroot/YVTIghzHs82uFBIe@pevik/T/#m95c17eb8374e4e3dd6eee700d397aa12cca0739e
+> 
+>>> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+>>> ---
+>>>   Makefile                                      | 22 +++++++++----------
+>>>   package/Makefile.in                           |  8 +++----
+>>>   support/dependencies/check-host-bison-flex.mk |  4 ++--
+>>>   support/dependencies/check-host-cmake.sh      |  2 +-
+>>>   support/dependencies/check-host-gzip.sh       |  2 +-
+>>>   support/dependencies/check-host-lzip.sh       |  4 ++--
+>>>   support/dependencies/check-host-python3.sh    |  2 +-
+>>>   support/dependencies/check-host-tar.sh        |  4 ++--
+>>>   support/dependencies/check-host-xzcat.sh      |  4 ++--
+>>>   support/dependencies/dependencies.sh          | 16 +++++++-------
+>>>   .../pkg-toolchain-external.mk                 |  2 +-
+>>>   11 files changed, 35 insertions(+), 35 deletions(-)
+> 
+>>> diff --git a/Makefile b/Makefile
+>>> index c960b53a6d..2317655272 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -284,12 +284,12 @@ HOSTAS := as
+>>>   endif
+>>>   ifndef HOSTCC
+>>>   HOSTCC := gcc
+>>> -HOSTCC := $(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
+>>> +HOSTCC := $(shell $(SHELL) -c "command -v '$(HOSTCC)' || type -p '$(HOSTCC)' || echo gcc")
+>>>   endif
+>>>   HOSTCC_NOCCACHE := $(HOSTCC)
+>>>   ifndef HOSTCXX
+>>>   HOSTCXX := g++
+>>> -HOSTCXX := $(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
+>>> +HOSTCXX := $(shell $(SHELL) -c "command -v '$(HOSTCXX)' || type -p '$(HOSTCXX)' || echo g++")
+>>>   endif
+>>>   HOSTCXX_NOCCACHE := $(HOSTCXX)
+>>>   ifndef HOSTCPP
+>>> @@ -310,15 +310,15 @@ endif
+>>>   ifndef HOSTRANLIB
+>>>   HOSTRANLIB := ranlib
+>>>   endif
+>>> -HOSTAR := $(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
+>>> -HOSTAS := $(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
+>>> -HOSTCPP := $(shell which $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
+>>> -HOSTLD := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
+>>> -HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
+>>> -HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
+>>> -HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
+>>> -HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
+>>> -SED := $(shell which sed || type -p sed) -i -e
+>>> +HOSTAR := $(shell '$(SHELL)' -c "command -v '$(HOSTAR)' || type -p '$(HOSTAR)' || echo ar")
+>>> +HOSTAS := $(shell '$(SHELL)' -c "command -v '$(HOSTAS)' || type -p '$(HOSTAS)' || echo as")
+>>> +HOSTCPP := $(shell '$(SHELL)' -c "command -v '$(HOSTCPP)' || type -p '$(HOSTCPP)' || echo cpp")
+>>> +HOSTLD := $(shell '$(SHELL)' -c "command -v '$(HOSTLD)' || type -p '$(HOSTLD)' || echo ld")
+>>> +HOSTLN := $(shell '$(SHELL)' -c "command -v '$(HOSTLN)' || type -p '$(HOSTLN)' || echo ln")
+>>> +HOSTNM := $(shell '$(SHELL)' -c "command -v '$(HOSTNM)' || type -p '$(HOSTNM)' || echo nm")
+>>> +HOSTOBJCOPY := $(shell '$(SHELL)' -c "command -v '$(HOSTOBJCOPY)' || type -p '$(HOSTOBJCOPY)' || echo objcopy")
+>>> +HOSTRANLIB := $(shell '$(SHELL)' -c "command -v '$(HOSTRANLIB)' || type -p '$(HOSTRANLIB)' || echo ranlib")
+>>> +SED := $(shell $(SHELL) -c "command -v sed || type -p sed") -i -e
+> 
+>>>   export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
+>>>   export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+>>> diff --git a/package/Makefile.in b/package/Makefile.in
+>>> index 86db62ba5b..2ba4d8b381 100644
+>>> --- a/package/Makefile.in
+>>> +++ b/package/Makefile.in
+>>> @@ -4,7 +4,7 @@ endif
+>>>   ifndef HOSTMAKE
+>>>   HOSTMAKE = $(MAKE)
+>>>   endif
+>>> -HOSTMAKE := $(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
+>>> +HOSTMAKE := $(shell $(SHELL) -c "command -v '$(HOSTMAKE)' || type -p '$(HOSTMAKE)' || echo make")
+> 
+>>>   # If BR2_JLEVEL is 0, scale the maximum concurrency with the number of
+>>>   # CPUs. An additional job is used in order to keep processors busy
+>>> @@ -222,8 +222,8 @@ else
+>>>   TARGET_STRIP = /bin/true
+>>>   STRIPCMD = $(TARGET_STRIP)
+>>>   endif
+>>> -INSTALL := $(shell which install || type -p install)
+>>> -UNZIP := $(shell which unzip || type -p unzip) -q
+>>> +INSTALL := $(shell $(SHELL) -c "command -v install || type -p install")
+>>> +UNZIP := $(shell $(SHELL) -c "command -v unzip || type -p unzip") -q
+> 
+>>>   APPLY_PATCHES = PATH=$(HOST_DIR)/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
+> 
+>>> @@ -237,7 +237,7 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
+>>>   # the path to the system perl, before a host-perl built by Buildroot
+>>>   # might get installed into $(HOST_DIR)/bin and therefore appears
+>>>   # in our PATH. This system perl will be used as INTLTOOL_PERL.
+>>> -export PERL=$(shell which perl)
+>>> +export PERL=$(shell $(SHELL) -c "command -v perl")
+> 
+>>>   # host-intltool needs libxml-parser-perl, which Buildroot installs in
+>>>   # $(HOST_DIR)/lib/perl, so we must make sure that the system perl
+>>> diff --git a/support/dependencies/check-host-bison-flex.mk b/support/dependencies/check-host-bison-flex.mk
+>>> index 14a232fd44..b6cec369f1 100644
+>>> --- a/support/dependencies/check-host-bison-flex.mk
+>>> +++ b/support/dependencies/check-host-bison-flex.mk
+>>> @@ -5,10 +5,10 @@
+>>>   # that runs on host, e.g. Kconfig. To build code for target use plain
+>>>   # host-{bison,flex}.
+> 
+>>> -ifeq ($(shell which bison 2>/dev/null),)
+>>> +ifeq ($(shell $(SHELL) -c "command -v bison 2>/dev/null"),)
+>>>   BR2_BISON_HOST_DEPENDENCY = host-bison
+>>>   endif
+> 
+>>> -ifeq ($(shell which flex 2>/dev/null),)
+>>> +ifeq ($(shell $(SHELL) -c "command -v flex 2>/dev/null"),)
+>>>   BR2_FLEX_HOST_DEPENDENCY = host-flex
+>>>   endif
+>>> diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+>>> index fadeae9f6b..f202d72a98 100755
+>>> --- a/support/dependencies/check-host-cmake.sh
+>>> +++ b/support/dependencies/check-host-cmake.sh
+>>> @@ -11,7 +11,7 @@ shift
+>>>   for candidate; do
+> 
+>>>       # Try to locate the candidate. Discard it if not located.
+>>> -    cmake=`which "${candidate}" 2>/dev/null`
+>>> +    cmake=`command -v "${candidate}" 2>/dev/null`
+>>>       [ -n "${cmake}" ] || continue
+> 
+>>>       # Extract version X.Y from versions in the form X.Y or X.Y.Z
+>>> diff --git a/support/dependencies/check-host-gzip.sh b/support/dependencies/check-host-gzip.sh
+>>> index 5f344c5f9b..4dbce72676 100755
+>>> --- a/support/dependencies/check-host-gzip.sh
+>>> +++ b/support/dependencies/check-host-gzip.sh
+>>> @@ -2,7 +2,7 @@
+> 
+>>>   candidate="$1" # ignored
+> 
+>>> -gzip="$(which gzip)"
+>>> +gzip="$(command -v gzip)"
+>>>   if [ ! -x "${gzip}" ]; then
+>>>       # echo nothing: no suitable gzip found
+>>>       exit 1
+>>> diff --git a/support/dependencies/check-host-lzip.sh b/support/dependencies/check-host-lzip.sh
+>>> index 4f8a2ba3de..5cdfb8252a 100755
+>>> --- a/support/dependencies/check-host-lzip.sh
+>>> +++ b/support/dependencies/check-host-lzip.sh
+>>> @@ -2,9 +2,9 @@
+> 
+>>>   candidate="$1"
+> 
+>>> -lzip=`which $candidate 2>/dev/null`
+>>> +lzip=`command -v "$candidate" 2>/dev/null`
+>>>   if [ ! -x "$lzip" ]; then
+>>> -	lzip=`which lzip 2>/dev/null`
+>>> +	lzip=`command -v lzip 2>/dev/null`
+>>>   	if [ ! -x "$lzip" ]; then
+>>>   		# echo nothing: no suitable lzip found
+>>>   		exit 1
+>>> diff --git a/support/dependencies/check-host-python3.sh b/support/dependencies/check-host-python3.sh
+>>> index 17cafd2883..ca504da6ac 100755
+>>> --- a/support/dependencies/check-host-python3.sh
+>>> +++ b/support/dependencies/check-host-python3.sh
+>>> @@ -14,7 +14,7 @@ shift
+>>>   # a more recent version.
+> 
+>>>   for candidate in "${@}" ; do
+>>> -	python3=`which $candidate 2>/dev/null`
+>>> +	python3=`command -v "$candidate" 2>/dev/null`
+>>>   	if [ ! -x "$python3" ]; then
+>>>   		continue
+>>>   	fi
+>>> diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+>>> index b7d607a47a..0f0f80038d 100755
+>>> --- a/support/dependencies/check-host-tar.sh
+>>> +++ b/support/dependencies/check-host-tar.sh
+>>> @@ -2,9 +2,9 @@
+> 
+>>>   candidate="$1"
+> 
+>>> -tar=`which $candidate`
+>>> +tar=`command -v "$candidate"`
+>>>   if [ ! -x "$tar" ]; then
+>>> -	tar=`which tar`
+>>> +	tar=`command -v tar`
+>>>   	if [ ! -x "$tar" ]; then
+>>>   		# echo nothing: no suitable tar found
+>>>   		exit 1
+>>> diff --git a/support/dependencies/check-host-xzcat.sh b/support/dependencies/check-host-xzcat.sh
+>>> index 10f1c4562a..a022c64faf 100755
+>>> --- a/support/dependencies/check-host-xzcat.sh
+>>> +++ b/support/dependencies/check-host-xzcat.sh
+>>> @@ -2,9 +2,9 @@
+> 
+>>>   candidate="$1"
+> 
+>>> -xzcat=`which $candidate 2>/dev/null`
+>>> +xzcat=`command -v "$candidate" 2>/dev/null`
+>>>   if [ ! -x "$xzcat" ]; then
+>>> -	xzcat=`which xzcat 2>/dev/null`
+>>> +	xzcat=`command -v xzcat 2>/dev/null`
+>>>   	if [ ! -x "$xzcat" ]; then
+>>>   		# echo nothing: no suitable xzcat found
+>>>   		exit 1
+>>> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+>>> index c604a9efcc..e720e9372e 100755
+>>> --- a/support/dependencies/dependencies.sh
+>>> +++ b/support/dependencies/dependencies.sh
+>>> @@ -58,7 +58,7 @@ fi
+>>>   check_prog_host()
+>>>   {
+>>>   	prog="$1"
+>>> -	if ! which $prog > /dev/null ; then
+>>> +	if ! command -v "$prog" > /dev/null ; then
+>>>   		echo >&2
+>>>   		echo "You must install '$prog' on your build machine" >&2
+>>>   		exit 1
+>>> @@ -75,7 +75,7 @@ check_prog_host "sed"
+>>>   check_prog_host "/usr/bin/file"
+> 
+>>>   # Check make
+>>> -MAKE=$(which make 2> /dev/null)
+>>> +MAKE=$(command -v make 2> /dev/null)
+>>>   if [ -z "$MAKE" ] ; then
+>>>   	echo
+>>>   	echo "You must install 'make' on your build machine";
+>>> @@ -96,9 +96,9 @@ if [ $MAKE_MAJOR -lt 3 ] || [ $MAKE_MAJOR -eq 3 -a $MAKE_MINOR -lt 81 ] ; then
+>>>   fi;
+> 
+>>>   # Check host gcc
+>>> -COMPILER=$(which $HOSTCC_NOCCACHE 2> /dev/null)
+>>> +COMPILER=$(command -v "$HOSTCC_NOCCACHE" 2> /dev/null)
+>>>   if [ -z "$COMPILER" ] ; then
+>>> -	COMPILER=$(which cc 2> /dev/null)
+>>> +	COMPILER=$(command -v cc 2> /dev/null)
+>>>   fi;
+>>>   if [ -z "$COMPILER" ] ; then
+>>>   	echo
+>>> @@ -122,9 +122,9 @@ if [ $COMPILER_MAJOR -lt 4 -o $COMPILER_MAJOR -eq 4 -a $COMPILER_MINOR -lt 8 ] ;
+>>>   fi;
+> 
+>>>   # check for host CXX
+>>> -CXXCOMPILER=$(which $HOSTCXX_NOCCACHE 2> /dev/null)
+>>> +CXXCOMPILER=$(command -v "$HOSTCXX_NOCCACHE" 2> /dev/null)
+>>>   if [ -z "$CXXCOMPILER" ] ; then
+>>> -	CXXCOMPILER=$(which c++ 2> /dev/null)
+>>> +	CXXCOMPILER=$(command -v c++ 2> /dev/null)
+>>>   fi
+> 
+>>>   if [ -z "$CXXCOMPILER" ] ; then
+>>> @@ -164,7 +164,7 @@ fi
+>>>   # Check that a few mandatory programs are installed
+>>>   missing_progs="no"
+>>>   for prog in perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
+>>> -	if ! which $prog > /dev/null ; then
+>>> +	if ! command -v "$prog" > /dev/null ; then
+>>>   		echo "You must install '$prog' on your build machine";
+>>>   		missing_progs="yes"
+>>>   		if test $prog = "svn" ; then
+>>> @@ -198,7 +198,7 @@ if [ "${PATCH_MAJOR}" -lt 2 ] || [ "${PATCH_MAJOR}" -eq 2 -a "${PATCH_MINOR}" -l
+>>>   fi
+> 
+>>>   if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+>>> -	if ! which locale > /dev/null ; then
+>>> +	if ! command -v locale > /dev/null ; then
+>>>   		echo
+>>>   		echo "You need locale support on your build machine to build a toolchain supporting locales"
+>>>   		exit 1 ;
+>>> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+>>> index 68d7a3fe21..2d9d9a5d49 100644
+>>> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+>>> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+>>> @@ -74,7 +74,7 @@ endif
+>>>   ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
+>>>   ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+>>>   # if no path set, figure it out from path
+>>> -TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+>>> +TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell $(SHELL) -c "command -v '$(TOOLCHAIN_EXTERNAL_PREFIX)-gcc)'")
+>>>   endif
+>>>   else
+>>>   TOOLCHAIN_EXTERNAL_REL_BIN_PATH = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_REL_BIN_PATH))
+>>> -- 
+>>> 2.33.0
+> 
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot@buildroot.org
+>>> https://lists.buildroot.org/mailman/listinfo/buildroot
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
