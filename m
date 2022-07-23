@@ -1,95 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E96C2C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 20:40:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AA3EC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 20:48:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85D7861B1E;
-	Sat, 23 Jul 2022 20:40:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85D7861B1E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0391341768;
+	Sat, 23 Jul 2022 20:48:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0391341768
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y5KAIzFALxMC; Sat, 23 Jul 2022 20:40:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DS1GKcw27fDA; Sat, 23 Jul 2022 20:48:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A83CE61B14;
-	Sat, 23 Jul 2022 20:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A83CE61B14
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5D4351BF59C
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 20:40:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89BDE4167F;
+	Sat, 23 Jul 2022 20:48:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89BDE4167F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A2361BF59C
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 20:48:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 45D4C4019C
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 20:40:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45D4C4019C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 249E581D24
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 20:48:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 249E581D24
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1IPg3LjqF7de for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 20:40:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sdUFI1xx7kPs for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 20:48:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C11C40117
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6C11C40117
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 20:40:36 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- c187-20020a1c35c4000000b003a30d88fe8eso7073389wma.2
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 13:40:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 331EC81B6D
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com
+ [209.85.128.46])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 331EC81B6D
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 20:48:41 +0000 (UTC)
+Received: by mail-wm1-f46.google.com with SMTP id n185so4604822wmn.4
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 13:48:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=IK7KtbhoHUuSL3yRgwIgPVqebgmeObI9BZ34peFGeJI=;
- b=NCMgKFdlYEob20mM86XwkdGhNuxQOJiwqRjl9AY841MDK3Fjvs74Wy8cCz7cei0JJC
- WSf6wHwC53FJM6kWcv2yoWK59M4HwdAmgE5xV7Njcx9wbqXU4L6rPuD69Y3+4BhLMySb
- SNfFEvWtxj5iyAngzp29QsR0JAqebVuKqDbkCsqPDe3PSgitYfV524oqh8qf47eTmRW7
- s06r0v9PrGci1LDp+OxGgIugGodfYirh/yaCGdAH1musQd9NjUVA/iUhWJW0kIzBKJOv
- 6ewwZ/CCH8sK0rJ0LYFbYBtafxScG7KKK00Tf2eGawTS720LdWCOuxfdnvNUzidkED1U
- tetA==
-X-Gm-Message-State: AJIora8R8AUFH0RKhxxQTxuPq9oXf6IaPIhRqAq8sHtSCLX+G/aJbpXZ
- btHusxSDButoTAZh9NAPa31LXZB4sVuSCA==
-X-Google-Smtp-Source: AGRyM1ujBEDri7SOXXqV/F8t33K3W44zTUdAEO0/U7uUXKheDLuypgd+TeZyCKHdPUQM+piIgZnaug==
-X-Received: by 2002:a05:600c:1f08:b0:3a3:1b00:c201 with SMTP id
- bd8-20020a05600c1f0800b003a31b00c201mr3808733wmb.171.1658608834284; 
- Sat, 23 Jul 2022 13:40:34 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- e8-20020a05600c218800b003a319bd3278sm12582346wme.40.2022.07.23.13.40.33
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Jul 2022 13:40:33 -0700 (PDT)
-Message-ID: <eb0ed4af-1e3e-806b-a135-79c85dec23df@mind.be>
-Date: Sat, 23 Jul 2022 22:40:32 +0200
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=Eystsogms49rszqANJXrgi0923gQu9gC7Xsn35hlARM=;
+ b=Tk2DtznU96Nvll7WVwc3bmITEn4VxB2r4Z4vImHikC0tRWPTvoGg0AiABUZF0BGLrm
+ 2Hwc1jkER8WcIePdxWJdgQCOXNmUYFfiS3ByZI0PfplhPgPAm0tDLxkyrVBtk2iEhDf7
+ 8W8id6pYP6af+5pb0mXkVrqCI8m00kZEEceJL4qz7Sc7GeN2JZ2Xt0pgYQTvMycF7m85
+ fJUYKWuJW8dki6pXKTDkM7uUQenLvyl2tE6D84m7MQ5ZdXXBr2WhhUE4VHogURIhZ7R2
+ CMwLBc3CYdd7UBzPTUxV8KCpIFinIwNTj2JMOIy8C/87owd53KZMoc8zGsqnyo409rwt
+ VLSQ==
+X-Gm-Message-State: AJIora9dcxaV26jeRZoopkrFtWpnKihWFyifB1Npjg7sig1YWjXVrwas
+ WJK008AQfZB/NYt+TG7k7GdmSnKQtHziBdt8poyg8Q==
+X-Google-Smtp-Source: AGRyM1sGbqS4cMpl9kuB1XfVEypXdZc1oQ5tat8TNu3L5wonaVLEqN7lo5aBzvuRi+1/hixaeS/8Q3S8O/BsAqE3Aro=
+X-Received: by 2002:a05:600c:1548:b0:3a3:2896:6b86 with SMTP id
+ f8-20020a05600c154800b003a328966b86mr15025391wmg.109.1658609320175; Sat, 23
+ Jul 2022 13:48:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: vsvoboda@forkoder.eu, buildroot@buildroot.org
-References: <20220624140742.78223-1-vsvoboda@forkoder.eu>
- <20220624140742.78223-2-vsvoboda@forkoder.eu>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220624140742.78223-2-vsvoboda@forkoder.eu>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=IK7KtbhoHUuSL3yRgwIgPVqebgmeObI9BZ34peFGeJI=;
- b=JwkxM3Rri3eaimZOc79T1mx1+5pDz0NB3iolfkwhFdTbP7CZxio/4mkUHV1jk8yep2
- nJlUZOBOZFxst4TDg1FOSrDDIpJa61iMTL5nir7g+l48wawMc5KnIMas8kpK1RAUxrNJ
- +QymSsesnOO/MaguJZMiphdHncAlYQojyMf62fKlwOYm1TdPZL8Y5NkhNFB797Um0vyr
- 3JFtcS5b0lFJvxHG0TVhyPKAJ2cDXpqoBFvG2Mah8FVLtsKMavtTLb+UlQaFAYsei9jE
- ksvzBDuS59PyduJ7DPPw5plzJG9ltR2izDL+GoNEh14RNcYu+ReAzGivu4cR85Aag6s4
- vSmA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=JwkxM3Rr
-Subject: Re: [Buildroot] [PATCH 2/2] fs/tar: add option for zstd compression
+References: <BYAPR06MB4805F290E2B4224008BC23EAA08D9@BYAPR06MB4805.namprd06.prod.outlook.com>
+ <b7b3bb6f-af5d-1987-0bf0-4da328e1bc77@smile.fr>
+In-Reply-To: <b7b3bb6f-af5d-1987-0bf0-4da328e1bc77@smile.fr>
+From: James Knight <james.d.knight@live.com>
+Date: Sat, 23 Jul 2022 16:48:28 -0400
+Message-ID: <CALAjcgW56=jP5-h048PwsGezdYhFTPcDhH+uPLbUbp0vrhkn=g@mail.gmail.com>
+To: Romain Naour <romain.naour@smile.fr>
+Subject: Re: [Buildroot] [PATCH 1/1] board/qemu/post-image.sh: flexible qemu
+ launch options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,44 +76,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Knight <james.d.knight@live.com>,
+ Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Romain,
 
+On Sat, Jul 23, 2022 at 12:33 PM Romain Naour <romain.naour@smile.fr> wrote:
+>
+> The start-qemu.sh script is actually used by the Buildroot gitlab-ci to test do
+> a runtime test (boot test) for all Qemu defconfigs.
 
-On 24/06/2022 16:07, vsvoboda@forkoder.eu wrote:
-> From: Vladimir Svoboda <vsvoboda@forkoder.eu>
-> 
-> Signed-off-by: Vladimir Svoboda <vsvoboda@forkoder.eu>
+My reasons for presenting changes to this script was under the
+assumption that this was a generic helper for QEMU-supported images.
+Trying to play around with Buildroot again (it has been awhile), I
+just selected the `qemu_x86_defconfig` configuration as an easy way to
+get things started. I noticed the `start-qemu.sh` script in the
+`output/images/` folder and thought "This is a nice script to help me
+test my images with".
 
+If the intent is to only use this script for CI-related work, that's
+fine by me -- and we can drop the patch if desired.
 
-  Applied both to master, thanks.
+> So only this qemu command line command line is supposed to work out of the box.
+> If you let the used customize the qemu command line, it can raise some issue.
 
-  Regards,
-  Arnout
+I can agree, injection custom options will void the warranty. The main
+reason for introducing these changes was to test a QEMU tweaked
+configuration which utilized some display-related changes which
+sometimes required additional modifications. For example, providing an
+environment with more memory (e.g. `-m 1G`) or customizing the
+graphics driver (e.g. `-vga virtio`). I would apply modifications,
+test things which may require a rebuild on a kernel/component, which
+would replace the script and I would have to modify it again.
 
-> ---
->   fs/tar/Config.in | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/fs/tar/Config.in b/fs/tar/Config.in
-> index a4e375c68b..e88a5bb91e 100644
-> --- a/fs/tar/Config.in
-> +++ b/fs/tar/Config.in
-> @@ -46,6 +46,11 @@ config BR2_TARGET_ROOTFS_TAR_XZ
->   	help
->   	  Do compress the tarball with xz.
->   
-> +config BR2_TARGET_ROOTFS_TAR_ZSTD
-> +	bool "zstd"
-> +	help
-> +	  Do compress the tarball with zstd.
-> +
->   endchoice
->   
->   config BR2_TARGET_ROOTFS_TAR_OPTIONS
+> I would throw a warning if $@ is not empty, just to warn the user.
+
+This would be fine for me (to help promote the idea that extra
+arguments are not officially supported).
+
+> Naming stuff is hard, here we want an option to use Qemu installed on the host system, not from host-qemu (--host may be misleading).
+> ...
+> Using Qemu installed on the host may be really old and not able to boot the system.
+
+I can agree that this may be the case for some distributions, but I
+find some distributions (like Arch) provide a fast turnaround time for
+newer versions. The only intention of providing a way to use a
+system's version (if available) was to maybe utilize some options that
+may have not been enabled on the host-qemu package. For example, I was
+trying to utilize the `-display gtk` option that was available on the
+host, but not supported with the built host-qemu package. Having the
+option may also provide flexibility if the system's QEMU is a newer
+version then that of Buildroots (i.e. when dealing with older tags/LTS
+builds).
+
+We could tweak the argument to something like `--use-system-qemu`, to
+be a bit more explicit. And also, generating the same type of warnings
+that using such options is officially unsupported and for advanced
+testing.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
