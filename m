@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7C99C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:57:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5CADC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:58:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 922AE4243D;
-	Sat, 23 Jul 2022 16:57:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 922AE4243D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A0EF84BFD;
+	Sat, 23 Jul 2022 16:58:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A0EF84BFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qs_CFTwGlIYO; Sat, 23 Jul 2022 16:57:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RlMCTvfdbZXU; Sat, 23 Jul 2022 16:57:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 574DD42431;
-	Sat, 23 Jul 2022 16:57:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 574DD42431
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E89521BF31A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD45184BEF;
+	Sat, 23 Jul 2022 16:57:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD45184BEF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C4B71BF31A
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C15F74243A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C15F74243A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65B3D84BF4
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65B3D84BF4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hOninEWh1CZw for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 16:57:22 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71F5142438
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 71F5142438
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:57:22 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7F68160004;
- Sat, 23 Jul 2022 16:57:19 +0000 (UTC)
-Date: Sat, 23 Jul 2022 18:57:19 +0200
-To: Joel Stanley <joel@jms.id.au>
-Message-ID: <20220723185719.17f2b829@windsurf>
-In-Reply-To: <20220606085108.1628288-2-joel@jms.id.au>
-References: <20220606085108.1628288-1-joel@jms.id.au>
- <20220606085108.1628288-2-joel@jms.id.au>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658595440;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=7So6c5SulOxG6otNuzZd/Wctqqwm/mHuU2PSjy+526U=;
- b=cX1XlJczaRQUGLZ1SHTTofcjycvOLb7sUUT3s66IvulsX5hz8gIDyfyOFWzSon3LY4tG7g
- Ks8k4PXHSeJuktsAmRfzXT6JbPMBgnA85sdXJuA28stXvh33HYGA+Sj8IZ70BuuyFtQHPD
- Dzo2QvxFDLGveUCNpTIa5FoiaQwjrngLJYK0maJ8yAuliFb930u0ibONr2Iatct54TSu6E
- xVLg3jqUz8cTTgaAE+u/IRJK+PjPPO8sZuz+M1+mQezFzuwsehV5QGjxJdv5BQRnFyEsKu
- S1S/VeEeBEvoKUjo62DR+/GvJcps295Oz8n2Ee/qf/kqlxunxqaDW5rZXbMHdA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=cX1XlJcz
-Subject: Re: [Buildroot] [PATCH 1/2] package/librtas: Bump to v2.0.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OT6BA3ueRyaY for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 16:57:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABE7E84BEF
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:57:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABE7E84BEF
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 6DAC0847F3; Sat, 23 Jul 2022 16:44:12 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Sat, 23 Jul 2022 18:57:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: da6b2c2df0e8310c5176f39b54e93f43d17fb73e
+X-Git-Newrev: d3186af48ff0f4c41ab00625baaec34f02086eed
+X-Patchwork-Hint: ignore
+Message-Id: <20220723164412.6DAC0847F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openal: bump to version 1.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,41 +56,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0062791139787600080=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  6 Jun 2022 18:21:07 +0930
-Joel Stanley <joel@jms.id.au> wrote:
+--===============0062791139787600080==
+Content-Type: text/plain
 
-> Includes build fixes for musl, so remove the glibc restriction.
-> 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->  package/librtas/Config.in    | 5 -----
->  package/librtas/librtas.hash | 2 +-
->  package/librtas/librtas.mk   | 2 +-
->  3 files changed, 2 insertions(+), 7 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=d3186af48ff0f4c41ab00625baaec34f02086eed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There was a build issue with uClibc toolchains that don't have SSP
-support, which I have fixed by adding a patch, and I reported the issue
-upstream: https://github.com/ibm-power-utilities/librtas/issues/25.
+Signed-off-by: André Zwing <nerv@dawncrow.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/openal/openal.hash | 2 +-
+ package/openal/openal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I updated the commit log to mention explicitly that uClibc builds now
-work fine as well.
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+index 3f1a574e3e..eae78b0582 100644
+--- a/package/openal/openal.hash
++++ b/package/openal/openal.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8ac17e4e3b32c1af3d5508acfffb838640669b4274606b7892aa796ca9d7467f  openal-1.21.1.tar.gz
++sha256  814831a8013d7365dfd1917b27f1fb6e723f3be3fe1c6a7ff4516425d8392f68  openal-1.22.0.tar.gz
+ sha256  d808ce217e5b611854da622b57ec29fe545584c48bc5352fae72a4b6e5074a15  COPYING
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+index a878e4847f..3d624139c2 100644
+--- a/package/openal/openal.mk
++++ b/package/openal/openal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENAL_VERSION = 1.21.1
++OPENAL_VERSION = 1.22.0
+ OPENAL_SITE = $(call github,kcat,openal-soft,$(OPENAL_VERSION))
+ OPENAL_LICENSE = LGPL-2.0+
+ OPENAL_LICENSE_FILES = COPYING
 
-Applied with those changes, thanks!
+--===============0062791139787600080==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0062791139787600080==--
