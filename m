@@ -1,95 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55ACCC43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 13:05:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C59BC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 13:15:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE93240AEA;
-	Sat, 23 Jul 2022 13:05:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE93240AEA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B82341934;
+	Sat, 23 Jul 2022 13:15:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B82341934
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vn53NlB0dFfz; Sat, 23 Jul 2022 13:05:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oMoVx1Mu1RQc; Sat, 23 Jul 2022 13:15:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7664B40B10;
-	Sat, 23 Jul 2022 13:05:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7664B40B10
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7FE791BF31A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:05:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7082141712;
+	Sat, 23 Jul 2022 13:15:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7082141712
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 305E81BF31A
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:15:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67AE160FDE
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:05:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67AE160FDE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1737941712
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 13:15:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1737941712
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9D6gV-wZdlxN for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 13:05:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cWuaJgk9OzOk for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 13:15:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58FED60FD1
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 58FED60FD1
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 13:05:16 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id c22so4210729wmr.2
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 06:05:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD522416FD
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BD522416FD
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 13:15:49 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id c72so5838890edf.8
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 06:15:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=1UuFaGM7wy/SpD/sAssQ+DOtlIyjtFXCNxjlolsqh+w=;
- b=a3GxXkLkFpLHHpgDhxWx672VIpr6khi/UTpM7vIqThf2h4vD9gibok5B7xJYbd0HVN
- S4BXvbuUMD//58xt5IWsTo4TobnD4fsjjcG+Q2G05bLMm0R6DrhXz/80K5MSF+ymEGsa
- y9Deg+FdptGF+P271+HqMiLJoYmAVPgiouo3+aVyoymcsr0HXuvwL+HXBSdj24dCBoVL
- AasAkaG/rpBUNLNjT7C/3nUuTlDsSqbF6iFkTVfpxyjTuOz2z30h6PrHj10RA7OnUZWj
- 38eoKZwBNdNpZqgnxSY9/8e+d9/iVbNxxvSynocmQrpRcVVOeuTQhkXXRQyh5zFYbzoi
- R1xA==
-X-Gm-Message-State: AJIora+7XHvyY/6cWMsoxRe1hO7/Qm8nBKLsvwPe6L+3CvWA6N2RRnKI
- UBhsRzBLzFRp8FQiMBWjqYkE2w==
-X-Google-Smtp-Source: AGRyM1tIouhtj7553WV1ROzvqHUuKqa7974r1+Ptedsl7oeOSJgEn4ItwNZ1HaymP846HFEEcop6jw==
-X-Received: by 2002:a05:600c:a4c:b0:39c:34d0:fd25 with SMTP id
- c12-20020a05600c0a4c00b0039c34d0fd25mr2954135wmq.172.1658581514400; 
- Sat, 23 Jul 2022 06:05:14 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- l37-20020a05600c1d2500b003a33227e49bsm7970883wms.4.2022.07.23.06.05.13
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Jul 2022 06:05:13 -0700 (PDT)
-Message-ID: <22bbdf89-8434-4dde-9232-7b89054c85aa@mind.be>
-Date: Sat, 23 Jul 2022 15:05:05 +0200
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=xGLto/Me3sFw2WfWOUKKfwa38utKNT936N14b6UCTpc=;
+ b=IyJJoUahcwS0PpkdsyQMxNbIZ34eO+QNXPgTGB1vxcBhL9I+L0XcJCullOvd+jsbWP
+ TcMwACVbaYWIZLgbNdAnlHdNUiM4+NA1rlz8LFtVAM3iwt63xdyc+8m8SZm1YOyNxYP9
+ 09vweQjwPC5EJASoVRZNvGNQLezyiy9sQ+oD2Vlf0/RbVywapBTr/VynP9jvDgI+iXRY
+ y6o2DTDTnqqgmlI85t/lvIYw8S10KgBni/Na5NHQLlYoTyva0aazlsNx4EhxbwvH/fOs
+ L8f9uFDkWoPBVMrnAWeAyS0TcajHRl+5FYpirVx1iAZ7oyMFVxCJX9N5ri6NpiSekZ/b
+ Uicw==
+X-Gm-Message-State: AJIora835dxgVLvDD5tjpU8piCx8rT4bRUpktE74Djr4Dqjq61hRzPJM
+ o8UCHu+rvs3l8VLOzaKXGo8O3r5yS0Tja/1d6+k=
+X-Google-Smtp-Source: AGRyM1t2q4Fi5hbofUYZzsOReE7IwXm+Xg8WNbrU6hDoqCTCZDQWHgVyCG0x1p7s9NqmjUL/S2Ssizhf5dPZfcoyEhA=
+X-Received: by 2002:a05:6402:27d2:b0:43b:dffd:684c with SMTP id
+ c18-20020a05640227d200b0043bdffd684cmr2229243ede.328.1658582147766; Sat, 23
+ Jul 2022 06:15:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: Heiko Thiery <heiko.thiery@gmail.com>, buildroot@buildroot.org
-References: <20220723123202.17977-1-heiko.thiery@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220723123202.17977-1-heiko.thiery@gmail.com>
+References: <20220722100920.00132969@windsurf>
+ <CAMo8BfJ+AdrewRkuZzMq+_4w6=A-7SkC16MXneWkTHJ+i_=Crw@mail.gmail.com>
+ <20220722141750.0311355d@windsurf>
+In-Reply-To: <20220722141750.0311355d@windsurf>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sat, 23 Jul 2022 06:15:51 -0700
+Message-ID: <CAMo8BfJvP-Jkz2EWci9cq4ctdQ5p5pLOVOAeEZwj2BLfmyihwQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=1UuFaGM7wy/SpD/sAssQ+DOtlIyjtFXCNxjlolsqh+w=;
- b=aDLGfUFtUMJG0T5x5QBsXz8g+0ZJ12rMvgZClqv0fOhTE3jGSPumqqzOAV+1pnGqZh
- GCuy3u1UZKBJFfqD29UA1MMHujAPw4QygjDzuEg+IDbBQJYZGlhI+yBwqAqYsn7BVrje
- Wspl0VXYCe2yu9cYvnCKcj5/N4N9EonlLTcwZew4iV3KReyVYUCbzvQZZijaISawpp3e
- +rtHICYjLRVsYD9XDkDEGQZgmnTmf9WNuB6Cl3bDuceQWe46VSzcgNx+XqKPSZKEWiUN
- T23vZyGaMRo6mj4xUwc2BFluPWAFypgPiuNkxa49/X+QFw3eWzw9sLVZdUPG6WNKGo53
- 9mQw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=aDLGfUFt
-Subject: Re: [Buildroot] [PATCH] configs/kontron_pitx_imx8m_defconfig: add
- BR2_GLOBAL_PATCH_DIR
+ d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=xGLto/Me3sFw2WfWOUKKfwa38utKNT936N14b6UCTpc=;
+ b=iC7zypm4mNuBWAwrpqJPoWfC6FGrz066Vu+9N9sJFlYX21K4VeDfbY4HoWoILIoYhE
+ 33948WvGX5TnK9mqDr+GxSUkGqKsHCt+s9g9f0IHPAojzXnkiXWxsOiYTVc04Jq8Sf3k
+ hzY9I+bShIxppN+N7bpLt8XkDI0+Hb4nd6sR6/0yETv5vw4HJARBD4kWL4/fIeKFIc8X
+ fu0my3sAGarXvxKTeNkKKivpl3GO+m8V6SarzjS+GlZMPLVEJ/MNqullN8Gf0OeWotCD
+ Gx7E8vHfHiHHc00OsPwvHx+NRHKGiu9p5+TRBijOREL8S1YkRK+gBsdCx6Goe2dPbtxe
+ Z7Tw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=iC7zypm4
+Subject: Re: [Buildroot] uclibc-ng build failures on Xtensa
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,42 +90,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi Thomas,
 
+On Fri, Jul 22, 2022 at 5:17 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> On Fri, 22 Jul 2022 04:24:16 -0700  Max Filippov <jcmvbkbc@gmail.com> wrote:
+>
+> > > And the default is BR2_XTENSA_LITTLE_ENDIAN, while normally for
+> > > BR2_xtensa_fsf, the endianness is BIG.
+> > >
+> > > Which configurations are supported?
+> >
+> > When BR2_XTENSA_CUSTOM is selected BR2_XTENSA_OVERLAY_FILE
+> > must be specified and selected endianness must match the endianness of the
+> > configuration in the overlay file. Empty BR2_XTENSA_OVERLAY_FILE is
+> > equivalent to fsf and it is big endian.
+>
+> Hm, OK. So what should we do from a testing point of view? Disregard
+> any testing of the BR2_XTENSA_CUSTOM case?
+>
+> It's kind of weird to have BR2_XTENSA_LITTLE_ENDIAN be the default if
+> the default is actually big endian (when there is no overlay file).
 
-On 23/07/2022 14:32, Heiko Thiery wrote:
-> Add config option to set the board specific GLOBAL_PATCH_DIR.
-> 
-> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/2750360083
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+I agree.
 
-  Applied to master, thanks.
+> What do you think of:
+>
+> diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+> index 45ad2dc487..a69964f515 100644
+> --- a/arch/Config.in.xtensa
+> +++ b/arch/Config.in.xtensa
+> @@ -31,7 +31,7 @@ config BR2_XTENSA_OVERLAY_FILE
+>  choice
+>         prompt "Target Architecture Endianness"
+>         default BR2_XTENSA_LITTLE_ENDIAN
+> -       depends on BR2_XTENSA_CUSTOM
+> +       depends on BR2_XTENSA_CUSTOM && BR2_XTENSA_OVERLAY_FILE != ""
+>
+>  config BR2_XTENSA_LITTLE_ENDIAN
+>         bool "Little endian"
+> @@ -43,7 +43,9 @@ endchoice
+>
+>  config BR2_ENDIAN
+>         default "LITTLE"        if BR2_XTENSA_LITTLE_ENDIAN
+> -       default "BIG"           if BR2_xtensa_fsf || BR2_XTENSA_BIG_ENDIAN
+> +       default "BIG"           if BR2_xtensa_fsf
+> +       default "BIG"           if BR2_XTENSA_CUSTOM && BR2_XTENSA_OVERLAY_FILE = ""
+> +       default "BIG"           if BR2_XTENSA_BIG_ENDIAN
+>
+>  config BR2_ARCH
+>         default "xtensa"        if BR2_xtensa
+>
+> i.e basically: don't choice the endianness choice when the overlay file
+> is empty, and enforce the fact that the endianess is big when
+> BR2_XTENSA_CUSTOM with an empty overlay file.
 
-  Regards,
-  Arnout
+This looks reasonable, yes.
 
-> ---
->   configs/kontron_pitx_imx8m_defconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/configs/kontron_pitx_imx8m_defconfig b/configs/kontron_pitx_imx8m_defconfig
-> index ac03871682..460f1a97e9 100644
-> --- a/configs/kontron_pitx_imx8m_defconfig
-> +++ b/configs/kontron_pitx_imx8m_defconfig
-> @@ -6,6 +6,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
->   BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/pitx-imx8m/post-build.sh"
->   BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->   BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
-> +BR2_GLOBAL_PATCH_DIR="board/kontron/pitx-imx8m/patches"
->   
->   # Kernel
->   BR2_LINUX_KERNEL=y
+> > > Is there something to fix here, or
+> > > we just need to disallow the usage of little endian?
+> >
+> > Little endian xtensa configurations are well supported, see e.g.
+> > configs/qemu_xtensa_lx60_defconfig that uses the dc233c core.
+>
+> I see there are quite a few overlays at
+> https://github.com/jcmvbkbc/xtensa-toolchain-build/tree/master/overlays
+> for well-known cores. Would it make sense to have explicit support for
+> some of them in Buildroot? At least having support for one of the
+> little endian cores seems useful to increase the testing coverage.
+
+Maybe dc233c then, it's been the standard xtensa core for linux so far.
+
+-- 
+Thanks.
+-- Max
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
