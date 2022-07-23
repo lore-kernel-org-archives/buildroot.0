@@ -4,95 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9924BC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:57:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0499AC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 16:57:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 338534242B;
-	Sat, 23 Jul 2022 16:57:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 338534242B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B6A042438;
+	Sat, 23 Jul 2022 16:57:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B6A042438
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dvRJtRxeZ429; Sat, 23 Jul 2022 16:57:07 +0000 (UTC)
+	with ESMTP id Uo3E5WKM27Z0; Sat, 23 Jul 2022 16:57:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BADAE42427;
-	Sat, 23 Jul 2022 16:57:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BADAE42427
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4332B1BF31A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B4904242A;
+	Sat, 23 Jul 2022 16:57:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B4904242A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B4591BF31A
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2CC1984BED
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CC1984BED
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35B3460F90
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 16:57:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35B3460F90
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z858tbJtq41d for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 16:57:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B5vGY844JOKT for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 16:57:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4996084BDB
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4996084BDB
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:57:02 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- w8-20020a05600c014800b003a32e89bc4eso4040388wmm.5
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 09:57:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BCB060ECE
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3BCB060ECE
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 16:57:19 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ j29-20020a05600c1c1d00b003a2fdafdefbso4048311wms.2
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 09:57:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=8EfwwBR6FnYUlD35WO5bS0jRlJTFC2WY9nVtHu0PeZo=;
- b=GASX765ZeXS/w/vMscOgChXJf/Rk6bmjBtKazPdkdvXHXWjYh1Rgvulwsdrlap6s7j
- 5voIxfj8SvKzXy3/OEhZBXiGIhSMEp3dYFi/TfyedH2OsOJpsohDaIVHEt9WGveY7d9u
- dmAZl+3E/41j7LkYrmwTeZyQPE9siEeRtZI0PlEZwG2sZeTzHMCiSQgHdlNUidfo++KR
- Q8Q1TDftkw+dY5fQ817WGBdhgRKlJyvA48enAQ/zQgddoY+6KdRrn4BJJO2dm6AaSQ4B
- 1jZxv7quAw5rGHHPKY7E3lqRM5z73yv6OzKKR2kyvVgsIy87BnyJY95ZkYo+pT5SeCEz
- eJtw==
-X-Gm-Message-State: AJIora8fa/EjoJzpem2avA+gawr/OSTZaj43emLNnaUsABN1CYfNNN4q
- KizwkqG/lvkIpUdNc5qxsGOXaw==
-X-Google-Smtp-Source: AGRyM1sAT/18/c31OpXd0ArgwTcaQmGHosVdVIWRZ4kMDKspV2cud8+nAhjfa9Lz4Y3k9nGOnR0gnQ==
-X-Received: by 2002:a05:600c:19cc:b0:3a3:10bd:9211 with SMTP id
- u12-20020a05600c19cc00b003a310bd9211mr3374131wmq.106.1658595420410; 
- Sat, 23 Jul 2022 09:57:00 -0700 (PDT)
+ bh=OCUHzDBP5bjx8TzwKxb9WMRtQKtV01+bW5VpDvJ+w0I=;
+ b=DZsSZ42EkKZjmuyx3VVpDWBDI1Decp7hi7CXKfClrUU0mfuiuDkq5+jn3Zgyci/Y7g
+ g10KqhI6u2k3ROYZZO36P6YZfXg8rc0iZj0VlHvBkUYJwV2EfBHkle1+NsNrkPeMJRj3
+ hMn1qfa9JNd/LMkj0dpvT6+VK9tHNpZ97AjVByiLhnWAWxmXpCtLhCqwDoKOac5XS/PC
+ CkBjcAin7mJqRSAXrSKZw7BmxHk8rZZ28UGkThwwkSXayTY8WVDjyopGrATTbSOVaddY
+ +cIvmrldJasIuKrlzk/VLXF3WysF5vIb+/9aRqXK5Cr1M3WgkMDinfzGB6uuWjt11Kcc
+ uN/A==
+X-Gm-Message-State: AJIora9iuenU8/w7AJ7aPUCN3dbiuDmYxg1w0Cf3D8ZdEiYZqIV835RN
+ UL1sjUJR9pRqTCAkCfwAIDAhHxos9UYnzA==
+X-Google-Smtp-Source: AGRyM1s03GoRe+Oy1/3GI5ZJokw2P4nEp0GisCwTUHgWJafgMvb3nP79yEwE0rPJXjiSYD2Z2lqrKA==
+X-Received: by 2002:a05:600c:1083:b0:3a3:1964:fb14 with SMTP id
+ e3-20020a05600c108300b003a31964fb14mr3345020wmd.203.1658595437279; 
+ Sat, 23 Jul 2022 09:57:17 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- z4-20020adfd0c4000000b0021d7b41255esm7317077wrh.98.2022.07.23.09.56.58
+ w10-20020adfde8a000000b0021e50971147sm7309666wrl.44.2022.07.23.09.57.16
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Jul 2022 09:57:00 -0700 (PDT)
-Message-ID: <713caf65-1c3c-f1e0-90c5-a2ee598d5f53@mind.be>
-Date: Sat, 23 Jul 2022 18:56:57 +0200
+ Sat, 23 Jul 2022 09:57:16 -0700 (PDT)
+Message-ID: <6fdbe9b3-58d9-4e70-b7b3-e991569d31d0@mind.be>
+Date: Sat, 23 Jul 2022 18:57:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
- buildroot@buildroot.org
-References: <20220615171218.1032413-1-raphael.melotte@mind.be>
- <20220615171218.1032413-2-raphael.melotte@mind.be>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220615211751.121459-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220615171218.1032413-2-raphael.melotte@mind.be>
+In-Reply-To: <20220615211751.121459-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=8EfwwBR6FnYUlD35WO5bS0jRlJTFC2WY9nVtHu0PeZo=;
- b=PbXFuuz8246lq4RwL/nEcnrBywsD35VVYpyGyHSp0wsFqHW2iykl+Mszf6bl5/RDUK
- yasQiSJo/EPWpZR30ZPsBMMX+mXI36UOdtUaEJWnKsKQhMTxOIpJjbudkjO4Fh44En5E
- LeiuppjfgWMPAxj25sO+nqNadb8rgwjqyJCYK3uYkutlH0mA9VKlJFj6ZiFfHquEEYYT
- kfmehxIBdjFjT8KTesAjXlxOqG7zrEJdRazPqVt6u0iRSv3luxkdhmpw5CafUvxMoSi0
- rjKMqqsyoYw91nmeOHuJGNec//O5/mossIlHldPvFpPUMug933/hHjmGriJNMt9WdEDr
- jx/g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=OCUHzDBP5bjx8TzwKxb9WMRtQKtV01+bW5VpDvJ+w0I=;
+ b=UaXv5Gdwp/Ok9Y0LRkS62bTYTbsgAUGEbaBZnLQLy77rmN0fAGxMPZIyZs8KuiQd9J
+ 65vPMiGlwvdiEFRZ9/R9qC5hysQFGt8j02nUBIZB2BkEPHWs3KAGsI/gdvdC0F9iHqKj
+ vB3oNAuKIfDPBHohtueEv7pDv5BVfH/Ep3xq0/xv54DVcKYRa7YYeXFDmURY09SgpKYW
+ xOPZ0RYyWWtCoMzWZQl3MOuRYllVa5xl1xif1+gqZqAOj6fHZOPkaDhWQNgqPR1Vde8y
+ 1zl1rVtcQdIZJsX5UT4nadaTFZ2J3YHu9gIFdRb6LQAGNbFgguyhCr8q+7ABrEQfU+bo
+ BqGQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=PbXFuuz8
-Subject: Re: [Buildroot] [PATCH 2/2] package/python-botocore: bump to
- version 1.27.8
+ header.a=rsa-sha256 header.s=google header.b=UaXv5Gdw
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-xmltodict: bump to
+ version 0.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,44 +103,60 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Asaf Kahlon <asafka7@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxNS8wNi8yMDIyIDE5OjEyLCBSYXBoYcOrbCBNw6lsb3R0ZSB3cm90ZToKPiBTaWduZWQt
-b2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFlbC5tZWxvdHRlQG1pbmQuYmU+CgogIEFw
-cGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+IC0tLQo+ICAg
-cGFja2FnZS9weXRob24tYm90b2NvcmUvcHl0aG9uLWJvdG9jb3JlLmhhc2ggfCAyICstCj4gICBw
-YWNrYWdlL3B5dGhvbi1ib3RvY29yZS9weXRob24tYm90b2NvcmUubWsgICB8IDQgKystLQo+ICAg
-MiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCj4gCj4gZGlm
-ZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLWJvdG9jb3JlL3B5dGhvbi1ib3RvY29yZS5oYXNoIGIv
-cGFja2FnZS9weXRob24tYm90b2NvcmUvcHl0aG9uLWJvdG9jb3JlLmhhc2gKPiBpbmRleCA5ZDVm
-NzA2ZmVmLi5iYjgwNmZlMjUxIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLWJvdG9jb3Jl
-L3B5dGhvbi1ib3RvY29yZS5oYXNoCj4gKysrIGIvcGFja2FnZS9weXRob24tYm90b2NvcmUvcHl0
-aG9uLWJvdG9jb3JlLmhhc2gKPiBAQCAtMSw0ICsxLDQgQEAKPiAgICMgc2hhMjU2IGZyb20gaHR0
-cHM6Ly9weXBpLm9yZy9weXBpL2JvdG9jb3JlL2pzb24KPiAtc2hhMjU2ICAwMTEzNjBlNzlhNGI4
-NDNhYTY1OTE1NzNjZmE2MWU4ZWRkYzk5YjkxYWRhYjFkZmRiOWEyYjdmMmM4NTExMTkzICBib3Rv
-Y29yZS0xLjIyLjIudGFyLmd6Cj4gK3NoYTI1NiAgZGI2NjY3YjhkZmQxNzVkMTYxODc2NTM5NDJj
-ZDkxZGQxZjBjZjM2YWRjMGVhOWQ3YTA4MDViYTRkMmEzMzIxZiAgYm90b2NvcmUtMS4yNy44LnRh
-ci5nego+ICAgIyBMb2NhbGx5IGNvbXB1dGVkIHNoYTI1NiBjaGVja3N1bXMKPiAgIHNoYTI1NiAg
-MGQ1NDJlMGM4ODA0ZTM5YWE3ZjM3ZWIwMGRhNWE3NjIxNDlkYzY4MmQ3ODI5NDUxMjg3ZTExYjkz
-OGU5NDU5NCAgTElDRU5TRS50eHQKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tYm90b2Nv
-cmUvcHl0aG9uLWJvdG9jb3JlLm1rIGIvcGFja2FnZS9weXRob24tYm90b2NvcmUvcHl0aG9uLWJv
-dG9jb3JlLm1rCj4gaW5kZXggMTYyOGUwNTU2Mi4uNDU5ZWVmZWFiMSAxMDA2NDQKPiAtLS0gYS9w
-YWNrYWdlL3B5dGhvbi1ib3RvY29yZS9weXRob24tYm90b2NvcmUubWsKPiArKysgYi9wYWNrYWdl
-L3B5dGhvbi1ib3RvY29yZS9weXRob24tYm90b2NvcmUubWsKPiBAQCAtNCw5ICs0LDkgQEAKPiAg
-ICMKPiAgICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gICAKPiAtUFlUSE9OX0JPVE9DT1JFX1ZF
-UlNJT04gPSAxLjIyLjIKPiArUFlUSE9OX0JPVE9DT1JFX1ZFUlNJT04gPSAxLjI3LjgKPiAgIFBZ
-VEhPTl9CT1RPQ09SRV9TT1VSQ0UgPSBib3RvY29yZS0kKFBZVEhPTl9CT1RPQ09SRV9WRVJTSU9O
-KS50YXIuZ3oKPiAtUFlUSE9OX0JPVE9DT1JFX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhv
-c3RlZC5vcmcvcGFja2FnZXMvMGQvOTUvZjJlNzRlNGE5MTk5NGQ5ZWJlNDU3NDZmNzVhOGM1Y2Fm
-ZDcyM2E4ODI3MGE5NzcyZDhkNjZlMWE4YmExCj4gK1BZVEhPTl9CT1RPQ09SRV9TSVRFID0gaHR0
-cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2VzL2QxL2IwL2VhOTI3MDNiYmJmODIz
-NTNkNTcxNjM2ZmU2Njk3YjE2MmMzODgxNTc2OTg2ZDY0NzQxMTlkMDNmY2U1Mwo+ICAgUFlUSE9O
-X0JPVE9DT1JFX1NFVFVQX1RZUEUgPSBzZXR1cHRvb2xzCj4gICBQWVRIT05fQk9UT0NPUkVfTElD
-RU5TRSA9IEFwYWNoZS0yLjAKPiAgIFBZVEhPTl9CT1RPQ09SRV9MSUNFTlNFX0ZJTEVTID0gTElD
-RU5TRS50eHQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+
+
+On 15/06/2022 23:17, Fabrice Fontaine wrote:
+> Update indentation in hash file (two spaces)
+> 
+> https://github.com/martinblech/xmltodict/blob/v0.13.0/CHANGELOG.md
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/python-xmltodict/python-xmltodict.hash | 6 +++---
+>   package/python-xmltodict/python-xmltodict.mk   | 4 ++--
+>   2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/python-xmltodict/python-xmltodict.hash b/package/python-xmltodict/python-xmltodict.hash
+> index 16422d78c9..48fb5265f6 100644
+> --- a/package/python-xmltodict/python-xmltodict.hash
+> +++ b/package/python-xmltodict/python-xmltodict.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/xmltodict/json
+> -md5	ddb2bd078cef4f7e3021a578034ad941  xmltodict-0.12.0.tar.gz
+> -sha256	50d8c638ed7ecb88d90561beedbf720c9b4e851a9fa6c47ebd64e99d166d8a21  xmltodict-0.12.0.tar.gz
+> +md5  1ece0a5bbd494bac414058405606475e  xmltodict-0.13.0.tar.gz
+> +sha256  341595a488e3e01a85a9d8911d8912fd922ede5fecc4dce437eb4b6c8d037e56  xmltodict-0.13.0.tar.gz
+>   # Locally computed sha256 checksums
+> -sha256	d66d5eb8f83a0ba21d3dd04318b8817588e8764daabea852d1035e3f07ffda55  LICENSE
+> +sha256  d66d5eb8f83a0ba21d3dd04318b8817588e8764daabea852d1035e3f07ffda55  LICENSE
+> diff --git a/package/python-xmltodict/python-xmltodict.mk b/package/python-xmltodict/python-xmltodict.mk
+> index 05be4b3c6c..9201bc1507 100644
+> --- a/package/python-xmltodict/python-xmltodict.mk
+> +++ b/package/python-xmltodict/python-xmltodict.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_XMLTODICT_VERSION = 0.12.0
+> +PYTHON_XMLTODICT_VERSION = 0.13.0
+>   PYTHON_XMLTODICT_SOURCE = xmltodict-$(PYTHON_XMLTODICT_VERSION).tar.gz
+> -PYTHON_XMLTODICT_SITE = https://files.pythonhosted.org/packages/58/40/0d783e14112e064127063fbf5d1fe1351723e5dfe9d6daad346a305f6c49
+> +PYTHON_XMLTODICT_SITE = https://files.pythonhosted.org/packages/39/0d/40df5be1e684bbaecdb9d1e0e40d5d482465de6b00cbb92b84ee5d243c7f
+>   PYTHON_XMLTODICT_SETUP_TYPE = setuptools
+>   PYTHON_XMLTODICT_LICENSE = MIT
+>   PYTHON_XMLTODICT_LICENSE_FILES = LICENSE
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
