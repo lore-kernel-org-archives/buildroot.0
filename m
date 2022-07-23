@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B807C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 12:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64A69C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 12:50:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1FAA40B00;
-	Sat, 23 Jul 2022 12:50:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1FAA40B00
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1074F849C3;
+	Sat, 23 Jul 2022 12:50:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1074F849C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WKmGPX28VpIi; Sat, 23 Jul 2022 12:50:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 52ZSCuEnRbSQ; Sat, 23 Jul 2022 12:50:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B649B40AED;
-	Sat, 23 Jul 2022 12:50:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B649B40AED
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9D6C11BF36E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 065098499E;
+	Sat, 23 Jul 2022 12:50:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 065098499E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DFEC31BF36E
  for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83C3A401A4
+ by smtp4.osuosl.org (Postfix) with ESMTP id B6B30418BE
  for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:49:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83C3A401A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6B30418BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vkYvrhouObpr for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xkrbVP9-0u7Y for <buildroot@lists.busybox.net>;
  Sat, 23 Jul 2022 12:49:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD0FE40AD1
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5A0F417D1
  for <buildroot@buildroot.org>; Sat, 23 Jul 2022 12:49:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD0FE40AD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5A0F417D1
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id DEC3A8438D; Sat, 23 Jul 2022 12:36:10 +0000 (UTC)
+ id C67368434E; Sat, 23 Jul 2022 12:36:10 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 14:49:24 +0200
+Date: Sat, 23 Jul 2022 14:49:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c998e195e4efac923a95e36b1f274c35b9b3f66b
-X-Git-Newrev: f44feac6bc3e4213f51e6b9ae94c006df8def309
+X-Git-Oldrev: b467aa1cd6a5d341dfc2bbdfb75ecf409ec2493d
+X-Git-Newrev: e19051a1a1573da7f250e00f8a3877606717a34c
 X-Patchwork-Hint: ignore
-Message-Id: <20220723123610.DEC3A8438D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs: qemu_arm_vexpress_tz: bump tf-a
- and u-boot versions
+Message-Id: <20220723123610.C67368434E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mstpd: fix mstpd bridge-stp use of
+ pidof
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f44feac6bc3e4213f51e6b9ae94c006df8def309
+commit: https://git.buildroot.net/buildroot/commit/?id=e19051a1a1573da7f250e00f8a3877606717a34c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bumps TF-A to version v2.7 and U-Boot to version v2022.04 for
-Qemu vexpress/trustzone board config.
+Through mstpd version 0.1.0, the bridge-stp script uses the '-c'
+option to the pidof command. Busybox does not support this option, so
+mstpd does not work.
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+This has been fixed in the main development branch of mstpd, but it is
+unclear when the next release will be. In the meantime, apply the fix
+here so that mstpd will be useable until the next version release.
+
+Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- configs/qemu_arm_vexpress_tz_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...in-support-different-versions-of-pidof-13.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
-index f8956f1c05..576c441154 100644
---- a/configs/qemu_arm_vexpress_tz_defconfig
-+++ b/configs/qemu_arm_vexpress_tz_defconfig
-@@ -29,7 +29,7 @@ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/linux.fragmen
- # TF-A for booting OP-TEE secure and uboot/linux non secure
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.4"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
-@@ -56,7 +56,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="qemu_arm"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/u-boot.config"
- 
+diff --git a/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch b/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch
+new file mode 100644
+index 0000000000..daa591131b
+--- /dev/null
++++ b/package/mstpd/0001-bridge-stp.in-support-different-versions-of-pidof-13.patch
+@@ -0,0 +1,48 @@
++From 181c453fc1a00573e19f14960dcc54ad84beea7c Mon Sep 17 00:00:00 2001
++From: colin-foster-in-advantage <colin.foster@in-advantage.com>
++Date: Tue, 12 Jul 2022 23:01:09 -0700
++Subject: [PATCH] bridge-stp.in: support different versions of pidof (#137)
++
++* bridge-stp.in: support different versions of pidof
++
++Busybox uses a version of pdiof that doesn't support the -c option. As
++such, this renders mstpd non-functional on any Busybox system.
++
++Just use the standard form of pidof to detect any running instances of mstpd.
++
++Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
++---
++ bridge-stp.in | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/bridge-stp.in b/bridge-stp.in
++index 47cbe79..3807873 100755
++--- a/bridge-stp.in
+++++ b/bridge-stp.in
++@@ -139,7 +139,7 @@ case "$action" in
++         fi
++ 
++         # Start mstpd if necessary.
++-        if ! pidof -c -s mstpd >/dev/null; then
+++        if ! pidof -s mstpd >/dev/null; then
++             if [ "$MANAGE_MSTPD" != 'y' ]; then
++                 errmsg 'mstpd is not running'
++                 exit 3
++@@ -212,12 +212,12 @@ case "$action" in
++         done
++ 
++         # Kill mstpd, since no bridges are currently using it.
++-        kill $(pidof -c mstpd)
+++        kill $(pidof mstpd)
++         ;;
++     restart|restart_config)
++         if [ "$action" = 'restart' ]; then
++             # Kill mstpd.
++-            pids="$(pidof -c mstpd)" ; Err=$?
+++            pids="$(pidof mstpd)" ; Err=$?
++             if [ $Err -eq 0 ]; then
++                 echo 'Stopping mstpd ...'
++                 kill $pids
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
