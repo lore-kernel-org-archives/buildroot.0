@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85D18C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 15:04:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5F92C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 15:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2F8E04165F;
-	Sat, 23 Jul 2022 15:04:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F8E04165F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8158661AC5;
+	Sat, 23 Jul 2022 15:04:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8158661AC5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8D_t1HvogY6z; Sat, 23 Jul 2022 15:04:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RBjORG1DiBZr; Sat, 23 Jul 2022 15:04:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2DB234051E;
-	Sat, 23 Jul 2022 15:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DB234051E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4988E1BF859
+	by smtp3.osuosl.org (Postfix) with ESMTP id 814B460FD7;
+	Sat, 23 Jul 2022 15:04:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 814B460FD7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E584B1BF859
  for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:03:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E9FC40889
+ by smtp1.osuosl.org (Postfix) with ESMTP id 11DC981CA7
  for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:03:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E9FC40889
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11DC981CA7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zrHb1FshiZIs for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dqazN8R8eyPf for <buildroot@lists.busybox.net>;
  Sat, 23 Jul 2022 15:03:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2907E40892
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3B89381CE1
  for <buildroot@buildroot.org>; Sat, 23 Jul 2022 15:03:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2907E40892
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B89381CE1
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 17086845D1; Sat, 23 Jul 2022 14:49:51 +0000 (UTC)
+ id 29D7A84629; Sat, 23 Jul 2022 14:49:51 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 23 Jul 2022 17:00:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3e4f6e1b205a8e3ebb3c82ac704627618a8400a3
-X-Git-Newrev: 462f132c7310eebbcbf516846d90738b571259ce
+X-Git-Oldrev: 462f132c7310eebbcbf516846d90738b571259ce
+X-Git-Newrev: cbbd2dae9e8cbe839352730fd407269863dd3d18
 X-Patchwork-Hint: ignore
-Message-Id: <20220723144951.17086845D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-smmap2: bump to version
- 5.0.0
+Message-Id: <20220723144951.29D7A84629@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/protobuf-c: security bump to
+ version 1.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=462f132c7310eebbcbf516846d90738b571259ce
+commit: https://git.buildroot.net/buildroot/commit/?id=cbbd2dae9e8cbe839352730fd407269863dd3d18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+- Fix CVE-2022-33070: Protobuf-c v1.4.0 was discovered to contain an
+  invalid arithmetic shift via the function parse_tag_and_wiretype in
+  protobuf-c/protobuf-c.c. This vulnerability allows attackers to cause
+  a Denial of Service (DoS) via unspecified vectors.
+- Use official tarball (and so drop autoreconf)
+- Update hash of COPYING (year updated with
+  https://github.com/protobuf-c/protobuf-c/commit/471aaa5f6d54406c6c17bf3179d5aea18f15073b)
 
-https://github.com/gitpython-developers/smmap/blob/v5.0.0/doc/source/changes.rst
+https://github.com/protobuf-c/protobuf-c/releases/tag/v1.4.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-smmap2/python-smmap2.hash | 6 +++---
- package/python-smmap2/python-smmap2.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/protobuf-c/protobuf-c.hash | 4 ++--
+ package/protobuf-c/protobuf-c.mk   | 6 ++----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-smmap2/python-smmap2.hash b/package/python-smmap2/python-smmap2.hash
-index 9ae758fc62..424fa58e8c 100644
---- a/package/python-smmap2/python-smmap2.hash
-+++ b/package/python-smmap2/python-smmap2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/smmap/json
--md5	61882572be57023980c36f5493523077  smmap-4.0.0.tar.gz
--sha256	7e65386bd122d45405ddf795637b7f7d2b532e7e401d46bbe3fb49b9986d5182  smmap-4.0.0.tar.gz
-+md5  82b22288dcabfe257d4c1f04c83c7fdd  smmap-5.0.0.tar.gz
-+sha256  c840e62059cd3be204b0c9c9f74be2c09d5648eddd4580d9314c3ecde0b30936  smmap-5.0.0.tar.gz
- # Locally computed sha256 checksums
--sha256	88e9d93f708d110b328a834302dd1d5c6afbda530e7721d15d80b3511d86f235  LICENSE
-+sha256  88e9d93f708d110b328a834302dd1d5c6afbda530e7721d15d80b3511d86f235  LICENSE
-diff --git a/package/python-smmap2/python-smmap2.mk b/package/python-smmap2/python-smmap2.mk
-index bcf20206ce..489cf0f758 100644
---- a/package/python-smmap2/python-smmap2.mk
-+++ b/package/python-smmap2/python-smmap2.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
+index 13e1b474bc..ec00442277 100644
+--- a/package/protobuf-c/protobuf-c.hash
++++ b/package/protobuf-c/protobuf-c.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1068bca1e9870e9492096f97c409cd15f10c5019c183e52ec6d53e8d18630cbf  protobuf-c-1.4.0.tar.gz
+-sha256  20e800cad4550f4b19bb37fc9577dac21de13333ae66497c4c45ae489c35c34a  LICENSE
++sha256  4cc4facd508172f3e0a4d3a8736225d472418aee35b4ad053384b137b220339f  protobuf-c-1.4.1.tar.gz
++sha256  b8999cb392cc5bbe8cd679de59584ad8d2f26033123e76f1d662fa14b9d4f287  LICENSE
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 7dd3b09a6c..0742a33db2 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_SMMAP2_VERSION = 4.0.0
-+PYTHON_SMMAP2_VERSION = 5.0.0
- PYTHON_SMMAP2_SOURCE = smmap-$(PYTHON_SMMAP2_VERSION).tar.gz
--PYTHON_SMMAP2_SITE = https://files.pythonhosted.org/packages/dd/d4/2b4f196171674109f0fbb3951b8beab06cd0453c1b247ec0c4556d06648d
-+PYTHON_SMMAP2_SITE = https://files.pythonhosted.org/packages/21/2d/39c6c57032f786f1965022563eec60623bb3e1409ade6ad834ff703724f3
- PYTHON_SMMAP2_SETUP_TYPE = setuptools
- PYTHON_SMMAP2_LICENSE = BSD-3-Clause
- PYTHON_SMMAP2_LICENSE_FILES = LICENSE
+-PROTOBUF_C_VERSION = 1.4.0
+-PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,v$(PROTOBUF_C_VERSION))
++PROTOBUF_C_VERSION = 1.4.1
++PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+ PROTOBUF_C_MAKE = $(MAKE1)
+@@ -14,8 +14,6 @@ PROTOBUF_C_INSTALL_STAGING = YES
+ PROTOBUF_C_LICENSE = BSD-2-Clause
+ PROTOBUF_C_LICENSE_FILES = LICENSE
+ PROTOBUF_C_CPE_ID_VENDOR = protobuf-c_project
+-PROTOBUF_C_AUTORECONF = YES
+-HOST_PROTOBUF_C_AUTORECONF = YES
+ 
+ # host-protobuf needs c++11 (since 3.6.0)
+ HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
