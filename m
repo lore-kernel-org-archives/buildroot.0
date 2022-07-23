@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3858EC43334
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 17:47:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6650C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 17:47:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2F6960C09;
-	Sat, 23 Jul 2022 17:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2F6960C09
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35E1561AF0;
+	Sat, 23 Jul 2022 17:47:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35E1561AF0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 00wD9vTStgjA; Sat, 23 Jul 2022 17:47:25 +0000 (UTC)
+	with ESMTP id vHSiZ8z3hzkl; Sat, 23 Jul 2022 17:47:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBFF560F71;
-	Sat, 23 Jul 2022 17:47:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBFF560F71
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DFFFD1BF5DE
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:47:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B39961AF7;
+	Sat, 23 Jul 2022 17:47:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B39961AF7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CC3D11BF5DE
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:47:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AFEE640B13
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:47:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFEE640B13
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8E38E60B5B
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 17:47:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E38E60B5B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eyhXgOLEyNBl for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 17:47:07 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DD95C40A59
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 17:47:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD95C40A59
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8D4D681393; Sat, 23 Jul 2022 17:33:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 19:42:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 91b167070c7f773b9d8d7bef7bfeb88b41100c2f
-X-Git-Newrev: 1e88048fab32990cc0d493f1b48af01e337c257d
-X-Patchwork-Hint: ignore
-Message-Id: <20220723173330.8D4D681393@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-gnupg: bump to version 0.4.9
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xk-adamAYb_E for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 17:47:14 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12FF360B59
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 12FF360B59
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 17:47:13 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EDE5324000B;
+ Sat, 23 Jul 2022 17:47:10 +0000 (UTC)
+Date: Sat, 23 Jul 2022 19:47:10 +0200
+To: Angelo Compagnucci <angelo@amarulasolutions.com>
+Message-ID: <20220723194710.2865e29a@windsurf>
+In-Reply-To: <20220621213413.2191964-1-angelo@amarulasolutions.com>
+References: <20220621213413.2191964-1-angelo@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658598431;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Q/ee6KSqPKLJV/bvRYUUZ/ghdZmTd+ZMUF0arxrHtBs=;
+ b=Fgj+NZbrpdPljxLAUxCmai+vYnEIiUeRpSLmFScdtg9MMD1zw94zuXyBxEiELM4V4paQY0
+ ayBX7/BfCwXTSpVC/Poxb1AVk8Im0dcf+2mQVsGeyRX+lAxmsJJm2snDOaeS6Q3APJ8t5U
+ nMb3TA+4vlAthXmgFYA33GgJ3catb3pJXVWy5sHQ0VOm9hzM2n6B33cLr8lUH80armd8FK
+ N8s6pTwx10+Qu4czRin1EIIHXzUpC0a/mg6yk/8ZVX4R+H1LoYzjbfTm1t1uUQqiau6zq7
+ BLSLfiFaonXre/y6isqyA+o/eHFJZxNPXNZY5n8xKlILu0QP0oFcfUoXT03S6A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Fgj+NZbr
+Subject: Re: [Buildroot] [PATCH] package/python-pydal: bump version to
+ 20220609.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,58 +78,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e88048fab32990cc0d493f1b48af01e337c257d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 21 Jun 2022 23:34:13 +0200
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-For change log, see:
-https://github.com/vsajip/python-gnupg/blob/0.4.9/README.rst#049
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  package/python-pydal/python-pydal.hash | 2 +-
+>  package/python-pydal/python-pydal.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-The hash of the license file is changed because:
+Applied to master, thanks.
 
--Copyright (c) 2008-2014 by Vinay Sajip.
-+Copyright (c) 2008-2022 by Vinay Sajip.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-gnupg/python-gnupg.hash | 6 +++---
- package/python-gnupg/python-gnupg.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-gnupg/python-gnupg.hash b/package/python-gnupg/python-gnupg.hash
-index fa0e8ae6e5..f7267308f6 100644
---- a/package/python-gnupg/python-gnupg.hash
-+++ b/package/python-gnupg/python-gnupg.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-gnupg/json
--md5  02c5d77b8db9dfba0741627560d89bd5  python-gnupg-0.4.8.tar.gz
--sha256  b64de1ae5cedf872b437201a566fa2c62ce0c95ea2e30177eb53aee1258507d7  python-gnupg-0.4.8.tar.gz
-+md5  e27cd8c6ce3b5c9197e931b65bbb4c9a  python-gnupg-0.4.9.tar.gz
-+sha256  aaa748795572591aaf127b4ac8985684f3673ff82b39f370c836b006e68fc537  python-gnupg-0.4.9.tar.gz
- # Locally computed sha256 checksums
--sha256  9620da3d3afdfca7dea53c4375c1507ab2d3a4af4e706827023acb49a9ec4a5e  LICENSE.txt
-+sha256  4104ca980dbca7603fc553078378eb14566a76f819d033d7bff89fd6a97e181b  LICENSE.txt
-diff --git a/package/python-gnupg/python-gnupg.mk b/package/python-gnupg/python-gnupg.mk
-index fda264a0ed..582a649f9a 100644
---- a/package/python-gnupg/python-gnupg.mk
-+++ b/package/python-gnupg/python-gnupg.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_GNUPG_VERSION = 0.4.8
--PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/b1/90/75e15ead9693028c05fc7abd25c756c0d1da27bf04a27d6f5c4139d8ee10
-+PYTHON_GNUPG_VERSION = 0.4.9
-+PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/c8/cb/46fb80639cf0dd4251aeb075a1a5e2ebbb8c9656f28ddfe9d8c99b68b6da
- PYTHON_GNUPG_LICENSE = BSD-3-Clause
- PYTHON_GNUPG_LICENSE_FILES = LICENSE.txt
- PYTHON_GNUPG_CPE_ID_VENDOR = python
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
