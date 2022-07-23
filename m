@@ -1,86 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D580C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 12:16:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED29EC43334
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 12:32:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C39AB40AEA;
-	Sat, 23 Jul 2022 12:16:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C39AB40AEA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60F6C60FDD;
+	Sat, 23 Jul 2022 12:32:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60F6C60FDD
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8f9GNN9cjE9K; Sat, 23 Jul 2022 12:32:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E3FD60FE0;
+	Sat, 23 Jul 2022 12:32:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E3FD60FE0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4547E1BF36E
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:32:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 176FA401A4
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:32:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 176FA401A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FhhNtNwUHZlu; Sat, 23 Jul 2022 12:16:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF3B840AE6;
-	Sat, 23 Jul 2022 12:15:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF3B840AE6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7AF531BF36E
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:15:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 51A83848F6
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 12:15:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51A83848F6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id faHMCYNi2xbS for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 12:15:57 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0ZyuKajdnFql for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 12:32:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3459F847EC
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3459F847EC
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 12:15:57 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id sz17so12751126ejc.9
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 05:15:56 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 663CD40155
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 663CD40155
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 12:32:12 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id ss3so12707824ejc.11
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 05:32:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=EiNFcWZ4kp4rPsluw6XjClUoj5dlDx/33rRp6worVLY=;
- b=jmQJZKvzUBPAq+zVGx+KVYN7xs8qnQScIYhh5bf1g8mnTmqujr91ZFoOkRKjQmX10w
- wlA3492cozzuf5StBebEGmlBVlOvFNTMfe4mQ33NrafZEvzJkWjkavr4FIoldxAvSiZx
- OdbwOeuvVHP9AHqI+rqYPJu4Yvj5zTzarHRCMcLaub/VWQXtpeQhPvWP5fM1/hjLIgSw
- BFiCZQM0JI+gbz33p8Od1xFUvbB2mTlNZrYfQT2uFnqxK1GibR/WnodB8SbKT352xUhw
- 1lQwqxGrAAoTiA1MjwjRcNgL4GBydwcGW1KZZmc7FsOrOElNoHZgYi23KGv8XdLL6yTK
- ss1A==
-X-Gm-Message-State: AJIora8vXwr06FgrsPF6kalwEZOvOCEboNqcCAqW4ixwLXS0fQQiIbvM
- ap0uOFYUF3EA7/XfylaEf3/raMltwwlueg==
-X-Google-Smtp-Source: AGRyM1sKFjS+U8N6jpTw6KGLwuiHop2uoYnJnwhU62/Ll+swQq5Wy26igbBvvc382ANpBJC+h7yZPg==
-X-Received: by 2002:a17:906:6a26:b0:72e:cee5:d1b0 with SMTP id
- qw38-20020a1709066a2600b0072ecee5d1b0mr3338205ejc.404.1658578554429; 
- Sat, 23 Jul 2022 05:15:54 -0700 (PDT)
+ bh=M377WcPpgf3s5C5I1418CKES77InZErqR5FPS11sUKI=;
+ b=Ue8hc58IQHKasA2Vlrti1KmRnm4kLVYPbPTlIKYGPeJuZi/5xpsjuCQZbxLM+rl173
+ g8SSNPzMu7N71tS46TevDNb01usLejFxI/m4ejwCIL0UsAuPXYXEvWBaaG823zVKIAHo
+ PHTAPf7FebffYZj4hYZ8HCHu6/SbCEN9fwSyz2MkB7a4U+ppEwE48un0iW1WTlJjCnlF
+ 18vQNrRGdK9krfk2S889f2YnvxX/ULKD7I1bN1vd92DdSpgH+IG9uS9hdSi3DeNi7/fh
+ t3rk5gYo4tmIkTIuuzq82L15uqUpMxgNmj6tesHlUkxrfJcCgV62a/n4xf6VzwgJcPuw
+ bu3A==
+X-Gm-Message-State: AJIora9pn7LRzmj5376TAoj0yE0IQK6gwgxz2Eb8PZPKYuIP4qGplRse
+ aH+nRh1G9wxAjoigP81nNhKqr905hhTejQ==
+X-Google-Smtp-Source: AGRyM1tMQ7afbZOj5C/+qgT21DDRCIpsXaEV86iHkKwYzBiCchunQBrXyZkV4to8eD7aE3E65ypu+g==
+X-Received: by 2002:a17:906:c10:b0:6f4:6c70:b00f with SMTP id
+ s16-20020a1709060c1000b006f46c70b00fmr3341931ejf.660.1658579529730; 
+ Sat, 23 Jul 2022 05:32:09 -0700 (PDT)
 Received: from t450s.mch2022.camp ([151.217.111.208])
  by smtp.gmail.com with ESMTPSA id
- b7-20020aa7c6c7000000b0043a78236cd2sm3995632eds.89.2022.07.23.05.15.53
+ d18-20020a056402079200b0043a253973aasm3938299edy.10.2022.07.23.05.32.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Jul 2022 05:15:53 -0700 (PDT)
+ Sat, 23 Jul 2022 05:32:09 -0700 (PDT)
 From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 14:15:40 +0200
-Message-Id: <20220723121538.14409-1-heiko.thiery@gmail.com>
+Date: Sat, 23 Jul 2022 14:32:03 +0200
+Message-Id: <20220723123202.17977-1-heiko.thiery@gmail.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc;
- bh=EiNFcWZ4kp4rPsluw6XjClUoj5dlDx/33rRp6worVLY=;
- b=iSKoEWcXh0NQBqg/+uKPPOpZMVxiKtz8aLQVBDPRo8tGvj9CNoAf/hV8WgR/sWAwX7
- 937dXuSBbYf/tpxC4XWP+mA8sHMUf6q5F5t5G8vPUXkFTRvq4jVGZ/BXmUws0UylaY07
- bEnGtYLkQpDKRbGuotpBFJVMrRuKGxhGM6USoftyfLvpFD+cxwLnPEuZL8C+wbOqhrM9
- VVvFeKQTW3pPRhWq01lZKw5ybQKZlRZvF0mvte2nZMVMxh2/8tEKQ1HD1YYCnq69CnF/
- /7iKZ1QyPDsxPAClFAxYIZDW0qqPs82Zm6MXRFppfbh7L8MV4lrFeoUl3qwhosNAqCA1
- 34xQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=M377WcPpgf3s5C5I1418CKES77InZErqR5FPS11sUKI=;
+ b=Enf4fCsGb/v29291qFGDjO690lG3laIelMh8sWJdwvODUvTmbOdR0tpZyAK2+IoYK2
+ cymetguSyAArvkM/8yi262udMy18XKobpzWQ0FA+rR3WScn8dA4KArewV61DOuzd+8qD
+ t+Rljp0xcksyNLzcPOax5FXc3SZIKSi+eGZ16mWq2LbmhSNOYxM/4bX6YkSolxIvwDsm
+ b/usofzIqAYXkJQXe5xnO3oBJLUPnMcYtlTjiG5lQ/YyfKaBQhHjjf267eQMBitPl8pO
+ wUq/x5DWJmBn5OHvlrkZg6td185WKrcBf4/jQYBJpqw8LjXFrnVaQsDWqMqOvwk3b601
+ TsPw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=iSKoEWcX
-Subject: [Buildroot] [PATCH] package/nettle: switch _SITE to ftp.gnu.org
+ header.a=rsa-sha256 header.s=20210112 header.b=Enf4fCsG
+Subject: [Buildroot] [PATCH] configs/kontron_pitx_imx8m_defconfig: add
+ BR2_GLOBAL_PATCH_DIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,26 +100,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The former _SITE is not longer accessible with authentication.
+Add config option to set the board specific GLOBAL_PATCH_DIR.
+
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/2750360083
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/nettle/nettle.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/kontron_pitx_imx8m_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index c3d5fcec64..05b8b0bea5 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/configs/kontron_pitx_imx8m_defconfig b/configs/kontron_pitx_imx8m_defconfig
+index ac03871682..460f1a97e9 100644
+--- a/configs/kontron_pitx_imx8m_defconfig
++++ b/configs/kontron_pitx_imx8m_defconfig
+@@ -6,6 +6,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/pitx-imx8m/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
++BR2_GLOBAL_PATCH_DIR="board/kontron/pitx-imx8m/patches"
  
- NETTLE_VERSION = 3.8
--NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
-+NETTLE_SITE = https://ftp.gnu.org/gnu/nettle
- NETTLE_DEPENDENCIES = gmp
- NETTLE_INSTALL_STAGING = YES
- NETTLE_LICENSE = Dual GPL-2.0+/LGPL-3.0+
+ # Kernel
+ BR2_LINUX_KERNEL=y
 -- 
 2.20.1
 
