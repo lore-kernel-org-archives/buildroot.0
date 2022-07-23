@@ -4,90 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 776DEC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 08:49:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81F91C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 08:49:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EA5661AB5;
-	Sat, 23 Jul 2022 08:49:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EA5661AB5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B2A260767;
+	Sat, 23 Jul 2022 08:49:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B2A260767
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9Bpye3cafWhi; Sat, 23 Jul 2022 08:49:30 +0000 (UTC)
+	with ESMTP id WSU4QwSLHW8V; Sat, 23 Jul 2022 08:49:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AF40617BC;
-	Sat, 23 Jul 2022 08:49:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AF40617BC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B3C761ABF;
+	Sat, 23 Jul 2022 08:49:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B3C761ABF
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CA52D1BF2C7
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 08:49:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BE8881BF2C7
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 08:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4ED183EE7
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 08:49:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4ED183EE7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99B1E83F73
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 08:49:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99B1E83F73
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MGTjrhBDkPcz for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 08:49:27 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4DEC83EC8
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C4DEC83EC8
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 08:49:26 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id b26so9357045wrc.2
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 01:49:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=ZWwQisXCcfIkdyNJM2RGcN6qaTTIm95Tbol/UdWAd28=;
- b=GfK+yl2d/TLrlnBNftWVn/SDsTY6HqFlAi/dDaQTLvT+O1laHovkvClVA41oUl/ZBn
- YPzZRZQl3jW3vmVrrSB/wCXSIeY9BXsDiB2866xlWhDljWGvgU/o1XsY7/5IVR3UtA2L
- z1EjGtXfY2O1CKyxBf0zG0hmfcZNth/YILN/jDYrVdn1LDTZn1KHLgayBGx0OasWom1s
- 2O9MxfKsUgqHgzzG42Obkeni+asPnoOWnp+XYNEmYjurJZk0AZZQug1JFA2GZTIUgy93
- UVFljYSau8AT4x+UxQw4p04aDkntci2NDCCQETbd5wEF0y3h7Nl+NiVzWOj5gtxeGXJt
- sHcw==
-X-Gm-Message-State: AJIora8jW9UgJ7fsRV43h6lhkUNMzGGVsM0llhZ2IA4wZMUq6cgrVdOG
- +Lt/yw8am7qCzE3WbKtCTtTPb6OxsvpUX2HF
-X-Google-Smtp-Source: AGRyM1v5L0uk7WpVM1QmTptXUnWVeREPZQiIUTVuqbyJYv6vwqlPmTV8k5AcdT8cwfuNvR/bKFAavg==
-X-Received: by 2002:a5d:47aa:0:b0:216:9eff:342b with SMTP id
- 10-20020a5d47aa000000b002169eff342bmr2396658wrb.356.1658566164721; 
- Sat, 23 Jul 2022 01:49:24 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- q9-20020adfaa49000000b0021e7e050404sm539890wrd.117.2022.07.23.01.49.24
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 23 Jul 2022 01:49:24 -0700 (PDT)
-Message-ID: <9b97da5d-1cec-54e9-eff1-5b99de3e39e8@mind.be>
-Date: Sat, 23 Jul 2022 10:49:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-GB
-To: John Keeping <john@metanate.com>, buildroot@buildroot.org
-References: <20220722130043.4185303-1-john@metanate.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220722130043.4185303-1-john@metanate.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=ZWwQisXCcfIkdyNJM2RGcN6qaTTIm95Tbol/UdWAd28=;
- b=HDmnZeHXBnWxXwa+1wVNouuqnc0ofz4nKCVGN+SlOlHnpTR4R0oF5yGbLJv5IZO2Zo
- 0LI9GHFd4FzYrPryyeJf6gKFo9TNQMNlcfzj3kptI/+E+NawCzaWiSP4UZiXoSOfk4Nn
- ZEz09QBwdK14sREre+ySU7zPd4nQLBt/2IuK5UgIOH0NzJ1MrO0um0xZ8hHCLNsOIVI1
- 77s0P7oovJVH+ZHxedxnmb4bbhf18Mdhw/4vWyXS7QhyJSmdCNH7JUAXUcodtRAIX3+D
- AbN9TRDdJR5OV4EJHhICy+sQ2YWr+CAnGF/qYtsMg+fAbq2ICOE7gByXvBQqPy0CXV0w
- 7Z1Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=HDmnZeHX
-Subject: Re: [Buildroot] [PATCH v2] package/fscryptctl: bump to v1.0.0
+ with ESMTP id g8WECuu5C65z for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 08:49:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EFA1083F65
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 08:49:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFA1083F65
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 78533842C3; Sat, 23 Jul 2022 08:36:12 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Sat, 23 Jul 2022 10:34:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8657046cb1d7389af1f575687c71712ad4f43c99
+X-Git-Newrev: d1179011b851a39663ca3ce845dd853a54f2d9dd
+X-Patchwork-Hint: ignore
+Message-Id: <20220723083612.78533842C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pipewire: bump to version 0.3.56
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,62 +56,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=d1179011b851a39663ca3ce845dd853a54f2d9dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Disable new unsupported avb feature.
 
-On 22/07/2022 15:00, John Keeping wrote:
-> Bump to a tagged release, pulling in about 4 years of development.
-> 
-> Note that v1 encryption policies have been deprecated and removed in
-> this release.  Since the previous version in Buildroot is old enough not
-> to have support for v2 policies, this is an incompatible update.
-> 
-> There are unlikely to be many v1 users and the format has some known
-> vulnerabilities so no compatibility option is included.
-> 
-> Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/pipewire/pipewire.hash | 2 +-
+ package/pipewire/pipewire.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
-> v2:
-> - Use a bare version for compatibility with release-monitoring.org
-> 
->   package/fscryptctl/fscryptctl.hash | 2 +-
->   package/fscryptctl/fscryptctl.mk   | 4 ++--
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/fscryptctl/fscryptctl.hash b/package/fscryptctl/fscryptctl.hash
-> index b06b96c10f..d254af56ec 100644
-> --- a/package/fscryptctl/fscryptctl.hash
-> +++ b/package/fscryptctl/fscryptctl.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256 970a8febbcbf315313711d8a7ee3d954dea593d8087744d3cba65f6cb4bebcc1  fscryptctl-f037dcf4354ce8f25d0f371b58dfe7a7ac27576f.tar.gz
-> +sha256 3828d5ad9b93664b9fec0174fc5d8e96d7b021a7896da74efe18fabe5f01d638  fscryptctl-1.0.0.tar.gz
->   sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-> diff --git a/package/fscryptctl/fscryptctl.mk b/package/fscryptctl/fscryptctl.mk
-> index 4275bf2b83..154af4d29f 100644
-> --- a/package/fscryptctl/fscryptctl.mk
-> +++ b/package/fscryptctl/fscryptctl.mk
-> @@ -4,8 +4,8 @@
->   #
->   ################################################################################
->   
-> -FSCRYPTCTL_VERSION = f037dcf4354ce8f25d0f371b58dfe7a7ac27576f
-> -FSCRYPTCTL_SITE = $(call github,google,fscryptctl,$(FSCRYPTCTL_VERSION))
-> +FSCRYPTCTL_VERSION = 1.0.0
-> +FSCRYPTCTL_SITE = $(call github,google,fscryptctl,v$(FSCRYPTCTL_VERSION))
->   FSCRYPTCTL_LICENSE = Apache-2.0
->   FSCRYPTCTL_LICENSE_FILES = LICENSE
->   
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index a525c1b212..905608c3bf 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  7b47d3a0c3ff2abf9551be6b35cdb4baafbd328290b05dbba2075a6d8cf14b89  pipewire-0.3.54.tar.bz2
++sha256  bb4662ee4f4036586905268354329228d763fc08d99ca8f0e8ec7e002e46b88d  pipewire-0.3.56.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index bdf99e5789..ecfb6c0ae2 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PIPEWIRE_VERSION = 0.3.54
++PIPEWIRE_VERSION = 0.3.56
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+@@ -31,6 +31,7 @@ PIPEWIRE_CONF_OPTS += \
+ 	-Dvolume=enabled \
+ 	-Dsession-managers=[] \
+ 	-Dlegacy-rtkit=false \
++	-Davb=disabled \
+ 	-Dlibcanberra=disabled
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
