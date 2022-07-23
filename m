@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A88CBC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 15:04:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85D18C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 15:04:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CE084181D;
-	Sat, 23 Jul 2022 15:04:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CE084181D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F8E04165F;
+	Sat, 23 Jul 2022 15:04:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F8E04165F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8D_t1HvogY6z; Sat, 23 Jul 2022 15:04:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2DB234051E;
+	Sat, 23 Jul 2022 15:04:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DB234051E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4988E1BF859
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:03:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E9FC40889
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:03:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E9FC40889
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c6JIUsLMvF6K; Sat, 23 Jul 2022 15:04:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2433417B3;
-	Sat, 23 Jul 2022 15:04:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2433417B3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D0BCB1BF859
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:03:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A907F60A6F
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 15:03:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A907F60A6F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dwwhj3M4_Tr8 for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zrHb1FshiZIs for <buildroot@lists.busybox.net>;
  Sat, 23 Jul 2022 15:03:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E6EE360AC0
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 15:03:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6EE360AC0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2907E40892
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 15:03:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2907E40892
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D2E8A845D1; Sat, 23 Jul 2022 14:49:50 +0000 (UTC)
+ id 17086845D1; Sat, 23 Jul 2022 14:49:51 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 17:00:48 +0200
+Date: Sat, 23 Jul 2022 17:00:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1097580de7a9489065a0c53e3fc87f822badd37b
-X-Git-Newrev: a15769bab4cb8b40b758fc6b3a6a409d6c947217
+X-Git-Oldrev: 3e4f6e1b205a8e3ebb3c82ac704627618a8400a3
+X-Git-Newrev: 462f132c7310eebbcbf516846d90738b571259ce
 X-Patchwork-Hint: ignore
-Message-Id: <20220723144950.D2E8A845D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wolftpm: Update version to v2.4.0
+Message-Id: <20220723144951.17086845D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-smmap2: bump to version
+ 5.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a15769bab4cb8b40b758fc6b3a6a409d6c947217
+commit: https://git.buildroot.net/buildroot/commit/?id=462f132c7310eebbcbf516846d90738b571259ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
+Update indentation in hash file (two spaces)
+
+https://github.com/gitpython-developers/smmap/blob/v5.0.0/doc/source/changes.rst
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/wolftpm/wolftpm.hash | 4 ++--
- package/wolftpm/wolftpm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-smmap2/python-smmap2.hash | 6 +++---
+ package/python-smmap2/python-smmap2.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/wolftpm/wolftpm.hash b/package/wolftpm/wolftpm.hash
-index b9a9628b68..d24df58eaa 100644
---- a/package/wolftpm/wolftpm.hash
-+++ b/package/wolftpm/wolftpm.hash
-@@ -1,4 +1,4 @@
--# Hash from https://github.com/wolfSSL/wolfTPM/archive/refs/tags/v2.3.1.tar.gz
--sha256  f0d7c095491ac2cc9e44aa4ac3c22febf15942ef080431d8b43a9d0312ca6567  wolftpm-2.3.1.tar.gz
-+# Hash from https://github.com/wolfSSL/wolfTPM/archive/refs/tags/v2.4.0.tar.gz
-+sha256  31d1a5f5d60af14c4d07e14a9b0667404d4801fed32afd3fc0649749020ad17b  wolftpm-2.4.0.tar.gz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
-index a4a9edce85..c5ebeca18e 100644
---- a/package/wolftpm/wolftpm.mk
-+++ b/package/wolftpm/wolftpm.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-smmap2/python-smmap2.hash b/package/python-smmap2/python-smmap2.hash
+index 9ae758fc62..424fa58e8c 100644
+--- a/package/python-smmap2/python-smmap2.hash
++++ b/package/python-smmap2/python-smmap2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/smmap/json
+-md5	61882572be57023980c36f5493523077  smmap-4.0.0.tar.gz
+-sha256	7e65386bd122d45405ddf795637b7f7d2b532e7e401d46bbe3fb49b9986d5182  smmap-4.0.0.tar.gz
++md5  82b22288dcabfe257d4c1f04c83c7fdd  smmap-5.0.0.tar.gz
++sha256  c840e62059cd3be204b0c9c9f74be2c09d5648eddd4580d9314c3ecde0b30936  smmap-5.0.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	88e9d93f708d110b328a834302dd1d5c6afbda530e7721d15d80b3511d86f235  LICENSE
++sha256  88e9d93f708d110b328a834302dd1d5c6afbda530e7721d15d80b3511d86f235  LICENSE
+diff --git a/package/python-smmap2/python-smmap2.mk b/package/python-smmap2/python-smmap2.mk
+index bcf20206ce..489cf0f758 100644
+--- a/package/python-smmap2/python-smmap2.mk
++++ b/package/python-smmap2/python-smmap2.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--WOLFTPM_VERSION = 2.3.1
-+WOLFTPM_VERSION = 2.4.0
- WOLFTPM_SITE = $(call github,wolfSSL,wolfTPM,v$(WOLFTPM_VERSION))
- WOLFTPM_INSTALL_STAGING = YES
- WOLFTPM_LICENSE = GPL-2.0+
+-PYTHON_SMMAP2_VERSION = 4.0.0
++PYTHON_SMMAP2_VERSION = 5.0.0
+ PYTHON_SMMAP2_SOURCE = smmap-$(PYTHON_SMMAP2_VERSION).tar.gz
+-PYTHON_SMMAP2_SITE = https://files.pythonhosted.org/packages/dd/d4/2b4f196171674109f0fbb3951b8beab06cd0453c1b247ec0c4556d06648d
++PYTHON_SMMAP2_SITE = https://files.pythonhosted.org/packages/21/2d/39c6c57032f786f1965022563eec60623bb3e1409ade6ad834ff703724f3
+ PYTHON_SMMAP2_SETUP_TYPE = setuptools
+ PYTHON_SMMAP2_LICENSE = BSD-3-Clause
+ PYTHON_SMMAP2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
