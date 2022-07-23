@@ -1,49 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0D54C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 09:07:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D911C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Jul 2022 09:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A89D6072A;
-	Sat, 23 Jul 2022 09:07:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A89D6072A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 90B058482A;
+	Sat, 23 Jul 2022 09:55:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90B058482A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CQmbkrImx8pU; Sat, 23 Jul 2022 09:07:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UszOYW8s79n7; Sat, 23 Jul 2022 09:55:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C9BC606FF;
-	Sat, 23 Jul 2022 09:07:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C9BC606FF
+	by smtp1.osuosl.org (Postfix) with ESMTP id ECEF9848B4;
+	Sat, 23 Jul 2022 09:55:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECEF9848B4
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F3B4F1BF38A
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 09:07:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E9A521BF38A
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 09:55:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CDF5D40AB6
- for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 09:07:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDF5D40AB6
+ by smtp2.osuosl.org (Postfix) with ESMTP id D209F4019F
+ for <buildroot@lists.busybox.net>; Sat, 23 Jul 2022 09:55:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D209F4019F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ggyWD90ipjgr for <buildroot@lists.busybox.net>;
- Sat, 23 Jul 2022 09:07:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5DD3840142
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 09:07:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DD3840142
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D3204842E0; Sat, 23 Jul 2022 08:53:33 +0000 (UTC)
+ with ESMTP id 07iaJ5hL6-sn for <buildroot@lists.busybox.net>;
+ Sat, 23 Jul 2022 09:54:59 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 335094010C
+Received: from mxd1.seznam.cz (mxd1.seznam.cz [77.75.78.210])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 335094010C
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 09:54:58 +0000 (UTC)
+Received: from email.seznam.cz
+ by email-smtpc27a.ko.seznam.cz (email-smtpc27a.ko.seznam.cz [10.53.18.38])
+ id 5fc2320ce9e28d575fc58c7b; Sat, 23 Jul 2022 11:54:48 +0200 (CEST)
+Received: from localhost.localdomain (mail.ms-free.net [185.147.46.46])
+ by email-relay19.ko.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
+ Sat, 23 Jul 2022 11:54:43 +0200 (CEST)  
+From: Petr Vorel <pevik@seznam.cz>
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 11:06:56 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b832f6eb9d86920907c50901a99f13b44dd94647
-X-Git-Newrev: 27b8d0ba8c4004819e092fb81c0f64f284b3aa4a
-X-Patchwork-Hint: ignore
-Message-Id: <20220723085333.D3204842E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ntpsec: new package
+Date: Sat, 23 Jul 2022 11:54:36 +0200
+Message-Id: <20220723095436.4467-1-pevik@seznam.cz>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+X-szn-frgn: <17e545a7-0bfd-45fc-ac0d-ad3083c762fe>
+X-szn-frgc: <0>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=seznam.cz; s=beta; 
+ t=1658570088; bh=beL2NXL6KAcvjAEUoDKdV3ka/DOafMe+PJchAfc+4YQ=;
+ h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+ Content-Transfer-Encoding:X-szn-frgn:X-szn-frgc;
+ b=Wwj+LqONCb3qjRwmt0Lm+l6cNPT9Fw1N+U4rY85iWP5bhMiaq1Rr2S5nQzC1fbRgA
+ bW+do6ASRc4DNLR9B+oP0D25FkiVPvQDCJSrgiz9upSYgOoX0ZmEai5OlKvocZO7ki
+ k0mjysZaA75+ILDJ99BTsegwOL5pfIBzt/5a35CA=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=seznam.cz header.i=@seznam.cz
+ header.a=rsa-sha256 header.s=beta header.b=Wwj+LqON
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: Add post release
+ runtime fixes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,496 +73,540 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0644036054785423506=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0644036054785423506==
-Content-Type: text/plain
+From: Petr Vorel <petr.vorel@gmail.com>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27b8d0ba8c4004819e092fb81c0f64f284b3aa4a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Backport various post 20220527 release runtime fixes:
+* The concept of max runtime
+* tst_test.sh: Cleanup getopts usage
+* mountns0[1-3]: wait for umount completed in thread_b
 
-- set 'CC="$(HOSTCC)"' to avoid cross-compile failure (see [1]):
-
-  /bin/sh: line 1: .../build/ntpsec-1_2_0/build/host/ntpd/keyword-gen: cannot execute binary file: Exec format error
-
-  Waf: Leaving directory `.../build/ntpsec-1_2_0/build/host'
-  Build failed
-   -> task in 'ntp_keyword.h' failed with exit status 126 (run with -v to display more information)
-
-- set '-std=gnu99"' to avoid compile failure with old compilers
-
-- explicitly set PYTHON_CONFIG
-
-- add patch 001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch to
-  fix ntptime jfmt5/ofmt5 jfmt6/ofmt6 related compile failure
-
-- add patch 0002-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch to
-  fix host-compile failure in case target libbsd is detected
-
-- add SYSV init file (S49ntp)
-
-- add example ntpd.conf (with legacy option enabled and provide skeleton
-  for NTS configuration)
-
-- add config option for NTS support
-
-- add ntp user/group and run ntpd as restricted user
-
-- add libcap dependency (compile time optional but needed for droproot
-  support)
-
-[1] https://gitlab.com/NTPsec/ntpsec/-/issues/694
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[Thomas: S49ntp -> S49ntpd]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- ...-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch | 90 ++++++++++++++++++++++
- ...ove-checks-for-bsd-string.h-fixes-host-co.patch | 73 ++++++++++++++++++
- package/ntpsec/Config.in                           | 28 +++++++
- package/ntpsec/S49ntpd                             | 58 ++++++++++++++
- package/ntpsec/ntpd.etc.conf                       | 33 ++++++++
- package/ntpsec/ntpsec.hash                         |  4 +
- package/ntpsec/ntpsec.mk                           | 68 ++++++++++++++++
- 9 files changed, 356 insertions(+)
+ ...fs05_make_tree-Restore-5-min-timeout.patch |  31 ++++
+ ...igrate_pages03-restore-runtime-to-5m.patch |  44 +++++
+ ...ait-for-umount-completed-in-thread_b.patch |  63 +++++++
+ ...0007-netstress-Restore-runtime-to-5m.patch |  53 ++++++
+ ...x-usage-of-variables-from-tst_net.sh.patch | 154 ++++++++++++++++++
+ ...-Fix-usage-of-PAGESIZE-from-memcg_li.patch | 121 ++++++++++++++
+ 6 files changed, 466 insertions(+)
+ create mode 100644 package/ltp-testsuite/0004-nfs05_make_tree-Restore-5-min-timeout.patch
+ create mode 100644 package/ltp-testsuite/0005-syscalls-migrate_pages03-restore-runtime-to-5m.patch
+ create mode 100644 package/ltp-testsuite/0006-mountns0-1-3-wait-for-umount-completed-in-thread_b.patch
+ create mode 100644 package/ltp-testsuite/0007-netstress-Restore-runtime-to-5m.patch
+ create mode 100644 package/ltp-testsuite/0008-net_stress-Fix-usage-of-variables-from-tst_net.sh.patch
+ create mode 100644 package/ltp-testsuite/0009-memcg-functional-Fix-usage-of-PAGESIZE-from-memcg_li.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 54eb08c1d6..eb8606559f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2314,6 +2314,7 @@ F:	package/libcamera-apps/
- F:	package/libevdev/
- F:	package/libuev/
- F:	package/log4cplus/
-+F:	package/ntpsec/
- F:	package/postgresql/
- F:	package/python-colorzero/
- F:	package/python-flask-wtf/
-diff --git a/package/Config.in b/package/Config.in
-index 1a55e10f79..433b62eae3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2314,6 +2314,7 @@ endif
- 	source "package/nmap/Config.in"
- 	source "package/noip/Config.in"
- 	source "package/ntp/Config.in"
-+	source "package/ntpsec/Config.in"
- 	source "package/nuttcp/Config.in"
- 	source "package/odhcp6c/Config.in"
- 	source "package/odhcploc/Config.in"
-diff --git a/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch b/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch
+diff --git a/package/ltp-testsuite/0004-nfs05_make_tree-Restore-5-min-timeout.patch b/package/ltp-testsuite/0004-nfs05_make_tree-Restore-5-min-timeout.patch
 new file mode 100644
-index 0000000000..aa3cb183c3
+index 0000000000..c12449d814
 --- /dev/null
-+++ b/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch
-@@ -0,0 +1,90 @@
-+From aa9ed14c7f4d0edbda9370760b44be045638f8a0 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 4 Oct 2021 22:25:58 +0200
-+Subject: [PATCH] ntptime: fix jfmt5/ofmt5 jfmt6/ofmt6 related compile failure
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/ltp-testsuite/0004-nfs05_make_tree-Restore-5-min-timeout.patch
+@@ -0,0 +1,31 @@
++From 463da729537faa6d5ef206912fdec871c1059dac Mon Sep 17 00:00:00 2001
++From: Petr Vorel <pvorel@suse.cz>
++Date: Thu, 16 Jun 2022 16:33:31 +0200
++Subject: [PATCH] nfs05_make_tree: Restore 5 min timeout
 +
-+Use same define guard for definiton as for usage ('HAVE_STRUCT_NTPTIMEVAL_TAI'
-+instead of 'NTP_API && NTP_API > 3').
++nfs05_make_tree is a long running test. The previous default timeout 5
++min was enough after reducing runtime in 05be61cf6.
 +
-+While at it use HAVE_STRUCT_NTPTIMEVAL_TAI define guard for the two remaining
-+places using NTP_API (which is not defined by the uclibc sys/timex.h header).
++But the new default 30 sec introduced in the concept of max runtime is
++definitely not enough. Restore the previous timeout 5 min.
 +
-+Fixes:
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
 +
-+  ../../ntptime/ntptime.c: In function ‘main’:
-+  ../../ntptime/ntptime.c:349:17: error: ‘jfmt5’ undeclared (first use in this function); did you mean ‘jfmt6’?
-+    349 |   printf(json ? jfmt5 : ofmt5, (long)ntv.tai);
-+        |                 ^~~~~
-+        |                 jfmt6
-+  ../../ntptime/ntptime.c:349:17: note: each undeclared identifier is reported only once for each function it appears in
-+  ../../ntptime/ntptime.c:349:25: error: ‘ofmt5’ undeclared (first use in this function); did you mean ‘ofmt6’?
-+    349 |   printf(json ? jfmt5 : ofmt5, (long)ntv.tai);
-+        |                         ^~~~~
-+        |                         ofmt6
-+  ../../ntptime/ntptime.c:321:15: warning: unused variable ‘jfmt6’ [-Wunused-variable]
-+    321 |   const char *jfmt6 = "";
-+        |               ^~~~~
-+  ../../ntptime/ntptime.c:311:15: warning: unused variable ‘ofmt6’ [-Wunused-variable]
-+    311 |   const char *ofmt6 = "\n";
-+        |               ^~~~~
-+
-+[Upstream: https://gitlab.com/NTPsec/ntpsec/-/merge_requests/1245]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++[ upstream status: 463da729537faa6d5ef206912fdec871c1059dac ]
 +---
-+ ntptime/ntptime.c | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
++ testcases/network/nfs/nfs_stress/nfs05_make_tree.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/ntptime/ntptime.c b/ntptime/ntptime.c
-+index ff861cb3b..7fbd09977 100644
-+--- a/ntptime/ntptime.c
-++++ b/ntptime/ntptime.c
-+@@ -138,7 +138,7 @@ main(
-+ 			ntx.modes |= MOD_NANO;
-+ 			break;
-+ #endif
-+-#if defined NTP_API && NTP_API > 3
-++#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)
-+ 		case 'T':
-+ 			ntx.modes = MOD_TAI;
-+ 			ntx.constant = atoi(ntp_optarg);
-+@@ -222,7 +222,7 @@ main(
-+ #else
-+ "",
-+ #endif
-+-#if defined NTP_API && NTP_API > 3
-++#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)
-+ "-T tai_offset	set TAI offset\n",
-+ #else
-+ "",
-+@@ -305,21 +305,21 @@ main(
-+ 		const char *ofmt2 = "  time %s, (.%0*d),\n";
-+ 		const char *ofmt3 = "  maximum error %lu us, estimated error %lu us";
-+ 		const char *ofmt4 = "  ntptime=%x.%x unixtime=%x.%0*d %s";
-+-#if defined NTP_API && NTP_API > 3
-++#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)
-+ 		const char *ofmt5 = ", TAI offset %ld\n";
-+ #else
-+ 		const char *ofmt6 = "\n";
-+-#endif /* NTP_API */
-++#endif /* HAVE_STRUCT_NTPTIMEVAL_TAI */
-+ 		/* JSON formats */
-+ 		const char *jfmt1 = "{\"gettime-code\":%d,\"gettime-status\":\"%s\",";
-+ 		const char *jfmt2 = "\"time\":\"%s\",\"fractional-time\":\".%0*d\",";
-+ 		const char *jfmt3 = "\"maximum-error\":%lu,\"estimated-error\":%lu,";
-+ 		const char *jfmt4 = "\"raw-ntp-time\":\"%x.%x\",\"raw-unix-time\":\"%x.%0*d %s\",";
-+-#if defined NTP_API && NTP_API > 3
-++#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)
-+ 		const char *jfmt5 = "\"TAI-offset\":%d,";
-+ #else
-+ 		const char *jfmt6 = "";
-+-#endif /* NTP_API */
-++#endif /* HAVE_STRUCT_NTPTIMEVAL_TAI */
-+ 		printf(json ? jfmt1 : ofmt1, status, timex_state(status));
-+ 		time_frac = ntv.time.tv_frac_sec;
-+ #ifdef STA_NANO
++diff --git a/testcases/network/nfs/nfs_stress/nfs05_make_tree.c b/testcases/network/nfs/nfs_stress/nfs05_make_tree.c
++index fdc13bd5d..5456c1bf0 100644
++--- a/testcases/network/nfs/nfs_stress/nfs05_make_tree.c
+++++ b/testcases/network/nfs/nfs_stress/nfs05_make_tree.c
++@@ -215,4 +215,5 @@ static struct tst_test test = {
++ 	.options = opts,
++ 	.test_all = do_test,
++ 	.setup = setup,
+++	.max_runtime = 300,
++ };
 +-- 
-+2.34.1
++2.37.1
 +
-diff --git a/package/ntpsec/0002-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch b/package/ntpsec/0002-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch
+diff --git a/package/ltp-testsuite/0005-syscalls-migrate_pages03-restore-runtime-to-5m.patch b/package/ltp-testsuite/0005-syscalls-migrate_pages03-restore-runtime-to-5m.patch
 new file mode 100644
-index 0000000000..d6ac61fc70
+index 0000000000..8229f98d26
 --- /dev/null
-+++ b/package/ntpsec/0002-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch
-@@ -0,0 +1,73 @@
-+From 54fbeaa68a59f536819d1cfb2e9204176fbff54b Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Thu, 16 Dec 2021 23:27:35 +0100
-+Subject: [PATCH] wscript: remove checks for bsd/string.h, fixes host-compile
-+ failure
++++ b/package/ltp-testsuite/0005-syscalls-migrate_pages03-restore-runtime-to-5m.patch
+@@ -0,0 +1,44 @@
++From 9fb28002bb2ce988b99d1756ff7b902f76e3472a Mon Sep 17 00:00:00 2001
++From: Jan Stancek <jstancek@redhat.com>
++Date: Tue, 21 Jun 2022 10:37:17 +0200
++Subject: [PATCH] syscalls/migrate_pages03: restore runtime to 5m
 +
-+Fixes the following host-compile failure while cross-compiling
-+in case target libbsd is found:
++Arches with large pages have trouble completing all loops in 30s,
++restore runtime to 5m. Also check for remaining runtime and
++exit if we run out.
 +
-+  [2/2] Compiling build/host/ntpd/ntp_parser.tab.c
-+  In file included from ../../include/ntp.h:15,
-+                   from .../build/ntpsec-1_2_1/ntpd/ntp_parser.y:16:
-+  ../../include/ntp_stdlib.h:20:10: fatal error: bsd/string.h: No such file or directory
-+     20 | #include <bsd/string.h>
-+        |          ^~~~~~~~~~~~~~
-+  compilation terminated.
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++Signed-off-by: Jan Stancek <jstancek@redhat.com>
++Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
++Signed-off-by: Li Wang <liwang@redhat.com>
++[ upstream status: 9fb28002bb2ce988b99d1756ff7b902f76e3472a ]
 +---
-+ include/ntp_stdlib.h |  4 ----
-+ wscript              | 14 --------------
-+ 2 files changed, 18 deletions(-)
++ testcases/kernel/syscalls/migrate_pages/migrate_pages03.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
 +
-+diff --git a/include/ntp_stdlib.h b/include/ntp_stdlib.h
-+index fe4d78e5c..73d97084f 100644
-+--- a/include/ntp_stdlib.h
-++++ b/include/ntp_stdlib.h
-+@@ -16,10 +16,6 @@
-+ #include "ntp_malloc.h"
-+ #include "ntp_syslog.h"
++diff --git a/testcases/kernel/syscalls/migrate_pages/migrate_pages03.c b/testcases/kernel/syscalls/migrate_pages/migrate_pages03.c
++index c6afb4cce..2866c96e6 100644
++--- a/testcases/kernel/syscalls/migrate_pages/migrate_pages03.c
+++++ b/testcases/kernel/syscalls/migrate_pages/migrate_pages03.c
++@@ -127,6 +127,11 @@ static void migrate_test(void)
++ 			tst_res(TFAIL | TERRNO, "migrate_pages() failed");
++ 			return;
++ 		}
+++
+++		if (!tst_remaining_runtime()) {
+++			tst_res(TINFO, "Out of runtime, exitting...");
+++			break;
+++		}
++ 	}
++ 	SAFE_SETEUID(0);
 + 
-+-#ifdef HAVE_BSD_STRING_H
-+-#include <bsd/string.h>
-+-#endif
-+-
-+ #ifdef __GNUC__
-+ #define NTP_PRINTF(fmt, args) __attribute__((__format__(__printf__, fmt, args)))
-+ #else
-+diff --git a/wscript b/wscript
-+index 641073f00..aa04b1d1c 100644
-+--- a/wscript
-++++ b/wscript
-+@@ -660,19 +660,6 @@ int main(int argc, char **argv) {
-+                        prerequisites=ft[1], use=ft[2],
-+                        mandatory=ft[3])
++@@ -134,6 +139,7 @@ static void migrate_test(void)
++ }
 + 
-+-    # check for BSD versions outside of libc
-+-    if not ctx.get_define("HAVE_STRLCAT"):
-+-        ret = probe_function(ctx, function='strlcat',
-+-                             prerequisites=['bsd/string.h'])
-+-        if ret:
-+-            ctx.define("HAVE_STRLCAT", 1, comment="Using bsd/strlcat")
-+-
-+-    if not ctx.get_define("HAVE_STRLCPY"):
-+-        ret = probe_function(ctx, function='strlcpy',
-+-                             prerequisites=['bsd/string.h'])
-+-        if ret:
-+-            ctx.define("HAVE_STRLCPY", 1, comment="Using bsd/strlcpy")
-+-
-+     # Nobody uses the symbol, but this seems like a good sanity check.
-+     ctx.check_cc(header_name="stdbool.h", mandatory=True,
-+                  comment="Sanity check.")
-+@@ -691,7 +678,6 @@ int main(int argc, char **argv) {
-+     optional_headers = (
-+         "alloca.h",
-+         ("arpa/nameser.h", ["sys/types.h"]),
-+-        "bsd/string.h",     # bsd emulation
-+         ("ifaddrs.h", ["sys/types.h"]),
-+         ("linux/if_addr.h", ["sys/socket.h"]),
-+         ("linux/rtnetlink.h", ["sys/socket.h"]),
++ static struct tst_test test = {
+++	.max_runtime = 300,
++ 	.min_kver = "2.6.32",
++ 	.needs_root = 1,
++ 	.setup = setup,
 +-- 
-+2.34.1
++2.37.1
 +
-diff --git a/package/ntpsec/Config.in b/package/ntpsec/Config.in
+diff --git a/package/ltp-testsuite/0006-mountns0-1-3-wait-for-umount-completed-in-thread_b.patch b/package/ltp-testsuite/0006-mountns0-1-3-wait-for-umount-completed-in-thread_b.patch
 new file mode 100644
-index 0000000000..1e88046420
+index 0000000000..73904806fd
 --- /dev/null
-+++ b/package/ntpsec/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_NTPSEC
-+	bool "ntpsec"
-+	select BR2_PACKAGE_LIBCAP
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_PYTHON3
-+	help
-+	  NTPsec project - a secure, hardened, and improved
-+	  implementation of Network Time Protocol derived
-+	  from NTP Classic, Dave Mills’s original.
++++ b/package/ltp-testsuite/0006-mountns0-1-3-wait-for-umount-completed-in-thread_b.patch
+@@ -0,0 +1,63 @@
++From 6d4c8343d33e7d8fa059246310413f029a9e8573 Mon Sep 17 00:00:00 2001
++From: Li Wang <liwang@redhat.com>
++Date: Thu, 7 Jul 2022 17:38:45 +0800
++Subject: [PATCH] mountns0[1-3]: wait for umount completed in thread_b
 +
-+	  Provides things like ntpd, ntpdate, ntpq, etc...
++To get rid of race condition (occurs with umount_folders):
 +
-+	  https://www.ntpsec.org/
++    mountns01.c:42: TPASS: shared mount in parent passed
++    mountns01.c:83: TPASS: shared mount in child passed
++    tst_device.c:394: TWARN: umount('B') failed with EINVAL
++    mountns.h:39: TWARN: umount(B) failed: EINVAL (22)
 +
-+if BR2_PACKAGE_NTPSEC
++Signed-off-by: Li Wang <liwang@redhat.com>
++Reviewed-by: Yang Xu <xuyang2018.jy@fujitsu.com>
++[ upstream status: 6d4c8343d33e7d8fa059246310413f029a9e8573 ]
++---
++ testcases/kernel/containers/mountns/mountns01.c | 2 ++
++ testcases/kernel/containers/mountns/mountns02.c | 2 ++
++ testcases/kernel/containers/mountns/mountns03.c | 2 ++
++ 3 files changed, 6 insertions(+)
 +
-+config BR2_PACKAGE_NTPSEC_CLASSIC_MODE
-+	bool "classic-mode"
-+	help
-+	  Enable strict configuration and log-format compatibility
-+	  with NTP Classic.
++diff --git a/testcases/kernel/containers/mountns/mountns01.c b/testcases/kernel/containers/mountns/mountns01.c
++index e99134aba..e8f176920 100644
++--- a/testcases/kernel/containers/mountns/mountns01.c
+++++ b/testcases/kernel/containers/mountns/mountns01.c
++@@ -86,6 +86,8 @@ static void run(void)
++ 
++ 	TST_CHECKPOINT_WAKE(0);
++ 
+++	SAFE_WAIT(NULL);
+++
++ 	SAFE_UMOUNT(DIRA);
++ }
++ 
++diff --git a/testcases/kernel/containers/mountns/mountns02.c b/testcases/kernel/containers/mountns/mountns02.c
++index 258b61217..4b85fa79b 100644
++--- a/testcases/kernel/containers/mountns/mountns02.c
+++++ b/testcases/kernel/containers/mountns/mountns02.c
++@@ -87,6 +87,8 @@ static void run(void)
++ 
++ 	TST_CHECKPOINT_WAKE(0);
++ 
+++	SAFE_WAIT(NULL);
+++
++ 	SAFE_UMOUNT(DIRA);
++ }
++ 
++diff --git a/testcases/kernel/containers/mountns/mountns03.c b/testcases/kernel/containers/mountns/mountns03.c
++index f37ae7902..1d26a25d8 100644
++--- a/testcases/kernel/containers/mountns/mountns03.c
+++++ b/testcases/kernel/containers/mountns/mountns03.c
++@@ -97,6 +97,8 @@ static void run(void)
++ 
++ 	TST_CHECKPOINT_WAKE(0);
++ 
+++	SAFE_WAIT(NULL);
+++
++ 	SAFE_UMOUNT(DIRA);
++ }
++ 
++-- 
++2.37.1
 +
-+config BR2_PACKAGE_NTPSEC_NTS
-+	bool "NTS support"
-+	help
-+	  Enable Network Time Security (NTS) support.
-+
-+endif
-diff --git a/package/ntpsec/S49ntpd b/package/ntpsec/S49ntpd
+diff --git a/package/ltp-testsuite/0007-netstress-Restore-runtime-to-5m.patch b/package/ltp-testsuite/0007-netstress-Restore-runtime-to-5m.patch
 new file mode 100644
-index 0000000000..f3db51418e
+index 0000000000..acaccf1e1f
 --- /dev/null
-+++ b/package/ntpsec/S49ntpd
-@@ -0,0 +1,58 @@
-+#!/bin/sh
-+#
-+# Starts Network Time Protocol daemon
-+#
++++ b/package/ltp-testsuite/0007-netstress-Restore-runtime-to-5m.patch
+@@ -0,0 +1,53 @@
++From cc4a27c235d0cf69a55cd8829b232566b0223333 Mon Sep 17 00:00:00 2001
++From: Petr Vorel <pvorel@suse.cz>
++Date: Wed, 13 Jul 2022 09:46:14 +0200
++Subject: [PATCH] netstress: Restore runtime to 5m
 +
-+DAEMON="ntpd"
-+PIDFILE="/var/run/$DAEMON.pid"
++netstress requires the previous default timeout 5m due longer timeout
++for higher message sizes (e.g. 65535):
 +
-+NTPD_ARGS="-g -u ntp:ntp -s /var/run/ntp"
++./sctp_ipsec.sh -6 -p comp -m transport -s 100:1000:65535:R65535
++sctp_ipsec 1 TPASS: netstress passed, median time 5 ms, data: 5 9 6 5 5
++sctp_ipsec 2 TINFO: run server 'netstress -T sctp -S fd00:1:1:1::1 -D ltp_ns_veth1 -R 500000 -B /tmp/LTP_sctp_ipsec.ARZbGkvjPa'
++sctp_ipsec 2 TINFO: run client 'netstress -l -T sctp -H fd00:1:1:1::1 -n 1000 -N 1000 -S fd00:1:1:1::2 -D ltp_ns_veth2 -a 2 -r 100 -d /tmp/LTP_sctp_ipsec.ARZbGkvjPa/tst_netload.res' 5 times
++sctp_ipsec 2 TPASS: netstress passed, median time 6 ms, data: 8 6 6 5 6
++sctp_ipsec 3 TINFO: run server 'netstress -T sctp -S fd00:1:1:1::1 -D ltp_ns_veth1 -R 500000 -B /tmp/LTP_sctp_ipsec.ARZbGkvjPa'
++sctp_ipsec 3 TINFO: run client 'netstress -l -T sctp -H fd00:1:1:1::1 -n 65535 -N 65535 -S fd00:1:1:1::2 -D ltp_ns_veth2 -a 2 -r 100 -d /tmp/LTP_sctp_ipsec.ARZbGkvjPa/tst_netload.res' 5 times
++sctp_ipsec 3 TWARN: netstress failed, ret: 2
++tst_test.c:1526: TINFO: Timeout per run is 0h 00m 30s
++netstress.c:896: TINFO: IP_BIND_ADDRESS_NO_PORT is used
++netstress.c:898: TINFO: connection: addr 'fd00:1:1:1::1', port '55097'
++netstress.c:900: TINFO: client max req: 100
++netstress.c:901: TINFO: clients num: 2
++netstress.c:906: TINFO: client msg size: 65535
++netstress.c:907: TINFO: server msg size: 65535
++netstress.c:979: TINFO: SCTP client
++netstress.c:475: TINFO: Running the test over IPv6
++Test timeouted, sending SIGKILL!
++tst_test.c:1577: TINFO: If you are running on slow machine, try exporting LTP_TIMEOUT_MUL > 1
++tst_test.c:1579: TBROK: Test killed! (timeout?)
 +
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++Converting netstress.c to use TST_NO_DEFAULT_MAIN (i.e. implementing main)
++would require more changes, because it uses .forks_child, .needs_checkpoints,
++cleanup function.
 +
-+mkdir -p /var/run/ntp && chown ntp:ntp /var/run/ntp
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
++[ upstream status: cc4a27c235d0cf69a55cd8829b232566b0223333 ]
++---
++ testcases/network/netstress/netstress.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
-+		-- $NTPD_ARGS -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
++diff --git a/testcases/network/netstress/netstress.c b/testcases/network/netstress/netstress.c
++index 6c9e83112..7c222531d 100644
++--- a/testcases/network/netstress/netstress.c
+++++ b/testcases/network/netstress/netstress.c
++@@ -1028,5 +1028,6 @@ static struct tst_test test = {
++ 		{"B:", &server_bg, "Run in background, arg is the process directory"},
++ 		{}
++ 	},
+++	.max_runtime = 300,
++ 	.needs_checkpoints = 1,
++ };
++-- 
++2.37.1
 +
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		rm -f "$PIDFILE"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	sleep 1
-+	start
-+}
-+
-+case "$1" in
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/ntpsec/ntpd.etc.conf b/package/ntpsec/ntpd.etc.conf
+diff --git a/package/ltp-testsuite/0008-net_stress-Fix-usage-of-variables-from-tst_net.sh.patch b/package/ltp-testsuite/0008-net_stress-Fix-usage-of-variables-from-tst_net.sh.patch
 new file mode 100644
-index 0000000000..e0f45c1438
+index 0000000000..ba187366ff
 --- /dev/null
-+++ b/package/ntpsec/ntpd.etc.conf
-@@ -0,0 +1,33 @@
-+#
-+# legacy NTP configuration
-+#
-+pool 0.pool.ntp.org iburst
-+pool 1.pool.ntp.org iburst
-+pool 2.pool.ntp.org iburst
-+pool 3.pool.ntp.org iburst
++++ b/package/ltp-testsuite/0008-net_stress-Fix-usage-of-variables-from-tst_net.sh.patch
+@@ -0,0 +1,154 @@
++From 33c156e295e35d4839a135d8ba5db485b7712ced Mon Sep 17 00:00:00 2001
++From: Joerg Vehlow <joerg.vehlow@aox.de>
++Date: Mon, 27 Jun 2022 09:27:09 +0200
++Subject: [PATCH] net_stress: Fix usage of variables from tst_net.sh
 +
-+#
-+# NTS configuration
-+#
-+# Notes:
-+#  - uncomment the following lines to enable NTS support (but
-+#    make sure the initial clock is up-to-date (otherwise the
-+#    NTS certificate validation will fail with 'NTSc: certificate invalid:
-+#    9=>certificate is not yet valid' as on boards without RTC support)
-+#    and/or keep at least one line from the legacy NTP lines
-+#  - enable BR2_PACKAGE_CA_CERTIFICATES to gain access to the certificate
-+#    files
-+#
-+# server time.cloudflare.com nts  # Global, anycast
-+# server nts.ntp.se:4443 nts      # Sweden
-+# server ntpmon.dcs1.biz nts      # Singapore
-+# server ntp1.glypnod.com nts     # San Francisco
-+# server ntp2.glypnod.com nts     # London
-+#
-+# ca /usr/share/ca-certificates/mozilla
++These tests use variables (NS_TIMES, IP_TOTAL, ROUTE_TOTAL
++and IF_UPDOWN_TIMES) from tst_net.sh, before sourcing it.
 +
-+# Allow only time queries, at a limited rate, sending KoD when in excess.
-+# Allow all local queries (IPv4, IPv6)
-+restrict default nomodify nopeer noquery limited kod
-+restrict 127.0.0.1
-+restrict [::1]
-diff --git a/package/ntpsec/ntpsec.hash b/package/ntpsec/ntpsec.hash
++Fixes: 04021637f ("tst_test.sh: Cleanup getopts usage")
++
++Reviewed-by: Petr Vorel <pvorel@suse.cz>
++Signed-off-by: Joerg Vehlow <joerg.vehlow@aox.de>
++[ upstream status: 33c156e295e35d4839a135d8ba5db485b7712ced ]
++---
++ testcases/network/stress/interface/if-addr-adddel.sh    | 7 ++++---
++ testcases/network/stress/interface/if-addr-addlarge.sh  | 7 ++++---
++ testcases/network/stress/interface/if-route-adddel.sh   | 5 +++--
++ testcases/network/stress/interface/if-route-addlarge.sh | 5 +++--
++ testcases/network/stress/interface/if-updown.sh         | 5 +++--
++ testcases/network/stress/interface/if4-addr-change.sh   | 4 +++-
++ 6 files changed, 20 insertions(+), 13 deletions(-)
++
++diff --git a/testcases/network/stress/interface/if-addr-adddel.sh b/testcases/network/stress/interface/if-addr-adddel.sh
++index cb453e612..0750501f0 100755
++--- a/testcases/network/stress/interface/if-addr-adddel.sh
+++++ b/testcases/network/stress/interface/if-addr-adddel.sh
++@@ -7,9 +7,6 @@
++ 
++ IF_CMD='ifconfig'
++ 
++-# The interval of the check interface activity
++-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
++-
++ test_body()
++ {
++ 	local cmd="$CMD"
++@@ -89,4 +86,8 @@ test_body()
++ }
++ 
++ . if-lib.sh
+++
+++# The interval of the check interface activity
+++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
+++
++ tst_run
++diff --git a/testcases/network/stress/interface/if-addr-addlarge.sh b/testcases/network/stress/interface/if-addr-addlarge.sh
++index 3c876c17d..d0759c86b 100755
++--- a/testcases/network/stress/interface/if-addr-addlarge.sh
+++++ b/testcases/network/stress/interface/if-addr-addlarge.sh
++@@ -7,9 +7,6 @@
++ 
++ IF_CMD='ifconfig'
++ 
++-# The interval of the check interface activity
++-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($IP_TOTAL / 20))}
++-
++ test_body()
++ {
++ 	local cmd="$CMD"
++@@ -110,4 +107,8 @@ test_body()
++ }
++ 
++ . if-lib.sh
+++
+++# The interval of the check interface activity
+++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($IP_TOTAL / 20))}
+++
++ tst_run
++diff --git a/testcases/network/stress/interface/if-route-adddel.sh b/testcases/network/stress/interface/if-route-adddel.sh
++index b50da268a..51445e4f7 100755
++--- a/testcases/network/stress/interface/if-route-adddel.sh
+++++ b/testcases/network/stress/interface/if-route-adddel.sh
++@@ -7,8 +7,6 @@
++ 
++ IF_CMD='route'
++ 
++-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
++-
++ test_body()
++ {
++ 	local cmd="$CMD"
++@@ -64,4 +62,7 @@ test_body()
++ }
++ 
++ . if-lib.sh
+++
+++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
+++
++ tst_run
++diff --git a/testcases/network/stress/interface/if-route-addlarge.sh b/testcases/network/stress/interface/if-route-addlarge.sh
++index 7d09d1216..355b6b4ab 100755
++--- a/testcases/network/stress/interface/if-route-addlarge.sh
+++++ b/testcases/network/stress/interface/if-route-addlarge.sh
++@@ -7,8 +7,6 @@
++ 
++ IF_CMD='route'
++ 
++-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($ROUTE_TOTAL / 20))}
++-
++ test_body()
++ {
++ 	local cmd="$CMD"
++@@ -76,4 +74,7 @@ test_body()
++ }
++ 
++ . if-lib.sh
+++
+++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($ROUTE_TOTAL / 20))}
+++
++ tst_run
++diff --git a/testcases/network/stress/interface/if-updown.sh b/testcases/network/stress/interface/if-updown.sh
++index 9a5709c85..71c78d785 100755
++--- a/testcases/network/stress/interface/if-updown.sh
+++++ b/testcases/network/stress/interface/if-updown.sh
++@@ -8,8 +8,6 @@
++ IF_CMD='ifconfig'
++ TST_CLEANUP="if_cleanup_restore"
++ 
++-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($IF_UPDOWN_TIMES / 20))}
++-
++ test_body()
++ {
++ 	local cmd="$CMD"
++@@ -47,4 +45,7 @@ test_body()
++ }
++ 
++ . if-lib.sh
+++
+++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($IF_UPDOWN_TIMES / 20))}
+++
++ tst_run
++diff --git a/testcases/network/stress/interface/if4-addr-change.sh b/testcases/network/stress/interface/if4-addr-change.sh
++index b9ece2af9..f162e6a51 100755
++--- a/testcases/network/stress/interface/if4-addr-change.sh
+++++ b/testcases/network/stress/interface/if4-addr-change.sh
++@@ -9,7 +9,6 @@ TST_CLEANUP="do_cleanup"
++ TST_TESTFUNC="test_body"
++ TST_NEEDS_CMDS="ifconfig"
++ 
++-CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
++ # Maximum host portion of the IPv4 address on the local host
++ LHOST_IPV4_HOST_MAX="254"
++ 
++@@ -61,4 +60,7 @@ test_body()
++ }
++ 
++ . tst_net.sh
+++
+++CHECK_INTERVAL=${CHECK_INTERVAL:-$(($NS_TIMES / 20))}
+++
++ tst_run
++-- 
++2.37.1
++
+diff --git a/package/ltp-testsuite/0009-memcg-functional-Fix-usage-of-PAGESIZE-from-memcg_li.patch b/package/ltp-testsuite/0009-memcg-functional-Fix-usage-of-PAGESIZE-from-memcg_li.patch
 new file mode 100644
-index 0000000000..49dc4e4d52
+index 0000000000..6cc36cda79
 --- /dev/null
-+++ b/package/ntpsec/ntpsec.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  71c9f4bde6953bbc048bbaf278da81c451a56cc08d6772542b4ad37c67d72e89  ntpsec-NTPsec_1_2_1.tar.bz2
-+sha256  b4db4de3317c3b0554ed91eb692968800bdfd6ad2c16ffbeee8ce4895ed91da4  LICENSE.adoc
-+sha256  d3b21470adadd9abd9c6d675378f8c371ac5a4ea6dbec91859e02fadca3c0856  docs/copyright.adoc
-diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
-new file mode 100644
-index 0000000000..25ae69ebf6
---- /dev/null
-+++ b/package/ntpsec/ntpsec.mk
-@@ -0,0 +1,68 @@
-+################################################################################
-+#
-+# ntpsec
-+#
-+################################################################################
++++ b/package/ltp-testsuite/0009-memcg-functional-Fix-usage-of-PAGESIZE-from-memcg_li.patch
+@@ -0,0 +1,121 @@
++From bda92ad659a52d38ac810099f69adff626b064c6 Mon Sep 17 00:00:00 2001
++From: Joerg Vehlow <joerg.vehlow@aox.de>
++Date: Mon, 27 Jun 2022 10:44:49 +0200
++Subject: [PATCH] memcg/functional: Fix usage of PAGESIZE from memcg_lib.sh
 +
-+NTPSEC_VERSION_MAJOR = 1
-+NTPSEC_VERSION_MINOR = 2
-+NTPSEC_VERSION_POINT = 1
-+NTPSEC_VERSION = $(NTPSEC_VERSION_MAJOR)_$(NTPSEC_VERSION_MINOR)_$(NTPSEC_VERSION_POINT)
-+NTPSEC_SOURCE = ntpsec-NTPsec_$(NTPSEC_VERSION).tar.bz2
-+NTPSEC_SITE = https://gitlab.com/NTPsec/ntpsec/-/archive/NTPsec_$(NTPSEC_VERSION)
-+NTPSEC_LICENSE = BSD-2-Clause, NTP, BSD-3-Clause, MIT
-+NTPSEC_LICENSE_FILES = LICENSE.adoc docs/copyright.adoc
++$PAGESIZES is set in memcg_lib.sh, which was moved to the bottom of the file.
 +
-+NTPSEC_CPE_ID_VENDOR = ntpsec
-+NTPSEC_CPE_ID_VERSION = $(NTPSEC_VERSION_MAJOR).$(NTPSEC_VERSION_MINOR)
-+NTPSEC_CPE_ID_UPDATE = $(NTPSEC_VERSION_POINT)
++Fixes: 04021637f ("tst_test.sh: Cleanup getopts usage")
 +
-+NTPSEC_DEPENDENCIES = \
-+	host-pkgconf \
-+	python3 \
-+	libcap \
-+	openssl
++Reviewed-by: Petr Vorel <pvorel@suse.cz>
++Signed-off-by: Joerg Vehlow <joerg.vehlow@aox.de>
++[ upstream status: bda92ad659a52d38ac810099f69adff626b064c6 ]
++---
++ .../controllers/memcg/functional/memcg_failcnt.sh      |  7 ++++---
++ .../memcg/functional/memcg_max_usage_in_bytes_test.sh  | 10 +++++-----
++ .../memcg/functional/memcg_subgroup_charge.sh          |  8 ++++----
++ .../memcg/functional/memcg_usage_in_bytes_test.sh      | 10 +++++-----
++ 4 files changed, 18 insertions(+), 17 deletions(-)
 +
-+# CC="$(HOSTCC)" is strange but needed to build some host tools, the
-+# cross-compiler will properly be used to build target code thanks to
-+# --cross-compiler
-+NTPSEC_CONF_OPTS = \
-+	CC="$(HOSTCC)" \
-+	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config" \
-+	--libdir=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/ntp \
-+	--cross-compiler="$(TARGET_CC)" \
-+	--cross-cflags="$(TARGET_CFLAGS) -std=gnu99" \
-+	--cross-ldflags="$(TARGET_LDFLAGS)" \
-+	--notests \
-+	--enable-early-droproot \
-+	--disable-mdns-registration \
-+	--enable-pylib=ffi \
-+	--nopyc \
-+	--nopyo \
-+	--nopycache \
-+	--disable-doc \
-+	--disable-manpage
++diff --git a/testcases/kernel/controllers/memcg/functional/memcg_failcnt.sh b/testcases/kernel/controllers/memcg/functional/memcg_failcnt.sh
++index 1fed01569..1be98a056 100755
++--- a/testcases/kernel/controllers/memcg/functional/memcg_failcnt.sh
+++++ b/testcases/kernel/controllers/memcg/functional/memcg_failcnt.sh
++@@ -12,9 +12,6 @@ MEMCG_TESTFUNC=test
++ MEMCG_SHMMAX=1
++ TST_TEST_DATA="--mmap-anon --mmap-file --shm"
++ 
++-MEMORY_LIMIT=$PAGESIZE
++-MEMORY_TO_ALLOCATE=$((MEMORY_LIMIT * 2))
++-
++ test()
++ {
++ 	ROD echo $MEMORY_LIMIT \> memory.limit_in_bytes
++@@ -36,4 +33,8 @@ test()
++ }
++ 
++ . memcg_lib.sh
+++
+++MEMORY_LIMIT=$PAGESIZE
+++MEMORY_TO_ALLOCATE=$((MEMORY_LIMIT * 2))
+++
++ tst_run
++diff --git a/testcases/kernel/controllers/memcg/functional/memcg_max_usage_in_bytes_test.sh b/testcases/kernel/controllers/memcg/functional/memcg_max_usage_in_bytes_test.sh
++index d1ffbe053..302810513 100755
++--- a/testcases/kernel/controllers/memcg/functional/memcg_max_usage_in_bytes_test.sh
+++++ b/testcases/kernel/controllers/memcg/functional/memcg_max_usage_in_bytes_test.sh
++@@ -9,11 +9,6 @@
++ MEMCG_TESTFUNC=test
++ TST_CNT=4
++ 
++-
++-MEM_TO_ALLOC=$((PAGESIZE * 1024))
++-MEM_EXPECTED_UPPER=$((MEM_TO_ALLOC + MEM_USAGE_RANGE))
++-MEM_LIMIT=$((MEM_TO_ALLOC * 2))
++-
++ # Run test cases which checks memory.[memsw.]max_usage_in_bytes after make
++ # some memory allocation
++ test_max_usage_in_bytes()
++@@ -88,4 +83,9 @@ test4()
++ }
++ 
++ . memcg_lib.sh
+++
+++MEM_TO_ALLOC=$((PAGESIZE * 1024))
+++MEM_EXPECTED_UPPER=$((MEM_TO_ALLOC + MEM_USAGE_RANGE))
+++MEM_LIMIT=$((MEM_TO_ALLOC * 2))
+++
++ tst_run
++diff --git a/testcases/kernel/controllers/memcg/functional/memcg_subgroup_charge.sh b/testcases/kernel/controllers/memcg/functional/memcg_subgroup_charge.sh
++index 08b6697d4..9bcc01258 100755
++--- a/testcases/kernel/controllers/memcg/functional/memcg_subgroup_charge.sh
+++++ b/testcases/kernel/controllers/memcg/functional/memcg_subgroup_charge.sh
++@@ -12,10 +12,6 @@
++ MEMCG_TESTFUNC=test
++ TST_CNT=3
++ 
++-
++-# Allocate memory bigger than per-cpu kernel memory
++-MEM_TO_ALLOC=$((PAGESIZES * 2))
++-
++ # Test the memory charge won't move to subgroup
++ # $1 - memory.limit_in_bytes in sub group
++ test_subgroup()
++@@ -67,4 +63,8 @@ test3()
++ }
++ 
++ . memcg_lib.sh
+++
+++# Allocate memory bigger than per-cpu kernel memory
+++MEM_TO_ALLOC=$((PAGESIZES * 2))
+++
++ tst_run
++diff --git a/testcases/kernel/controllers/memcg/functional/memcg_usage_in_bytes_test.sh b/testcases/kernel/controllers/memcg/functional/memcg_usage_in_bytes_test.sh
++index 6f932124e..125d88e55 100755
++--- a/testcases/kernel/controllers/memcg/functional/memcg_usage_in_bytes_test.sh
+++++ b/testcases/kernel/controllers/memcg/functional/memcg_usage_in_bytes_test.sh
++@@ -9,11 +9,6 @@
++ MEMCG_TESTFUNC=test
++ TST_CNT=2
++ 
++-
++-MEM_TO_ALLOC=$((PAGESIZE * 1024))
++-MEM_EXPECTED_UPPER=$((MEM_TO_ALLOC + MEM_USAGE_RANGE))
++-MEM_LIMIT=$((MEM_TO_ALLOC * 2))
++-
++ test1()
++ {
++ 	tst_res TINFO "Test memory.usage_in_bytes"
++@@ -35,4 +30,9 @@ test2()
++ }
++ 
++ . memcg_lib.sh
+++
+++MEM_TO_ALLOC=$((PAGESIZE * 1024))
+++MEM_EXPECTED_UPPER=$((MEM_TO_ALLOC + MEM_USAGE_RANGE))
+++MEM_LIMIT=$((MEM_TO_ALLOC * 2))
+++
++ tst_run
++-- 
++2.37.1
 +
-+ifeq ($(BR2_PACKAGE_NTPSEC_CLASSIC_MODE),y)
-+NTPSEC_CONF_OPTS += --enable-classic-mode
-+endif
-+
-+# no '--enable-nts' option available
-+ifeq ($(BR2_PACKAGE_NTPSEC_NTS),)
-+NTPSEC_CONF_OPTS += --disable-nts
-+endif
-+
-+define NTPSEC_INSTALL_NTPSEC_CONF
-+	$(INSTALL) -m 644 package/ntpsec/ntpd.etc.conf $(TARGET_DIR)/etc/ntp.conf
-+endef
-+NTPSEC_POST_INSTALL_TARGET_HOOKS += NTPSEC_INSTALL_NTPSEC_CONF
-+
-+define NTPSEC_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/ntpsec/S49ntpd $(TARGET_DIR)/etc/init.d/S49ntpd
-+endef
-+
-+define NTPSEC_USERS
-+	ntp -1 ntp -1 * - - - ntpd user
-+endef
-+
-+$(eval $(waf-package))
-
---===============0644036054785423506==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-- 
+2.36.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0644036054785423506==--
