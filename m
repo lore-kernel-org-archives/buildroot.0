@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BB83C43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:23:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01E20C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:24:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9B9783E17;
-	Sun, 24 Jul 2022 12:23:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9B9783E17
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98DEB84AB4;
+	Sun, 24 Jul 2022 12:24:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98DEB84AB4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vRidBDgHrDzJ; Sun, 24 Jul 2022 12:23:52 +0000 (UTC)
+	with ESMTP id NmBfMAXWvR_e; Sun, 24 Jul 2022 12:24:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A7BF837AC;
-	Sun, 24 Jul 2022 12:23:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A7BF837AC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A33971BF344
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:20:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 992C184133;
+	Sun, 24 Jul 2022 12:24:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 992C184133
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 150DF1BF344
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:20:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6EB5C424CB
+ by smtp1.osuosl.org (Postfix) with ESMTP id B8EF181BB2
  for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:20:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EB5C424CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8EF181BB2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J-km-BenwELT for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 12:20:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hFLMOVaxMbtm for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 12:20:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 770BA424D4
+ by smtp1.osuosl.org (Postfix) with ESMTP id A156B84C54
  for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:20:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 770BA424D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A156B84C54
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5BA4D85C29; Sun, 24 Jul 2022 12:06:47 +0000 (UTC)
+ id 8E0F185C25; Sun, 24 Jul 2022 12:06:47 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 14:19:25 +0200
+Date: Sun, 24 Jul 2022 14:19:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 877b71145c80193dfe7875be3a27f9a6439de611
-X-Git-Newrev: 2ffabc24627c38d1572a0cf702dd6d1e5d47d839
+X-Git-Oldrev: 77b6d48a990f26f705d89381ab0fed0688c91fc5
+X-Git-Newrev: fe920e999630e3de0db519844125dc00afd35eef
 X-Patchwork-Hint: ignore
-Message-Id: <20220724120647.5BA4D85C29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydyf: bump to version 0.2.0
+Message-Id: <20220724120647.8E0F185C25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/janet: bump to version 1.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,48 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ffabc24627c38d1572a0cf702dd6d1e5d47d839
+commit: https://git.buildroot.net/buildroot/commit/?id=fe920e999630e3de0db519844125dc00afd35eef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Migrate from distutils to flit build system.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pydyf/python-pydyf.hash | 4 ++--
- package/python-pydyf/python-pydyf.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/janet/janet.hash | 2 +-
+ package/janet/janet.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pydyf/python-pydyf.hash b/package/python-pydyf/python-pydyf.hash
-index 90774457a1..193f7b8869 100644
---- a/package/python-pydyf/python-pydyf.hash
-+++ b/package/python-pydyf/python-pydyf.hash
+diff --git a/package/janet/janet.hash b/package/janet/janet.hash
+index a93129cfa5..473955e391 100644
+--- a/package/janet/janet.hash
++++ b/package/janet/janet.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydyf/json
--md5  f78ee205b0637c92197f5d584d60cb8e  pydyf-0.1.2.tar.gz
--sha256  1e2f5de48174f505de025a7d1e7cf01bbdd9422ca8ab9451782bf00ee178602c  pydyf-0.1.2.tar.gz
-+md5  fa3584c0c172a53705d7887e2f4c071d  pydyf-0.2.0.tar.gz
-+sha256  06ebc18b4de29fc1450ae49dd142ecd26bd7ba09d0b1919e365fbc3d8af8a622  pydyf-0.2.0.tar.gz
- # Locally computed sha256 checksums
- sha256  75461e438973e1ba0f93a7de9e3fe5b2f49e1ab49251d392878a9cdae8ce7e47  LICENSE
-diff --git a/package/python-pydyf/python-pydyf.mk b/package/python-pydyf/python-pydyf.mk
-index 7cc0df2643..cbe2733b48 100644
---- a/package/python-pydyf/python-pydyf.mk
-+++ b/package/python-pydyf/python-pydyf.mk
-@@ -4,10 +4,10 @@
+ # Locally calculated
+-sha256  7c6969f8e82badc7afa28aa1054555c1c91d2858f9f45c41a82557f5c5ce85bd  janet-1.22.0.tar.gz
++sha256  0b4d5d3632e0d376d9512ea8ea262f31f75c132b488dd7870f472acae709a865  janet-1.23.0.tar.gz
+ 
+ # Locally calculated
+ sha256  e2d2ae8360d95386af751ac7d1a3da36ea8ceb230e5f0eba7eb762547b1c58c9  LICENSE
+diff --git a/package/janet/janet.mk b/package/janet/janet.mk
+index ad09d47c6a..070eae1cf0 100644
+--- a/package/janet/janet.mk
++++ b/package/janet/janet.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYDYF_VERSION = 0.1.2
-+PYTHON_PYDYF_VERSION = 0.2.0
- PYTHON_PYDYF_SOURCE = pydyf-$(PYTHON_PYDYF_VERSION).tar.gz
--PYTHON_PYDYF_SITE = https://files.pythonhosted.org/packages/78/ed/2ccc153d50d21a56916fd5c9d367cad798d4ca8a450cef03e7faa3b920c4
--PYTHON_PYDYF_SETUP_TYPE = distutils
-+PYTHON_PYDYF_SITE = https://files.pythonhosted.org/packages/3a/5e/4d4f5f77c706b0b871652cb4ccb98a52647ce917168a48e2b8cae742da1e
-+PYTHON_PYDYF_SETUP_TYPE = flit
- PYTHON_PYDYF_LICENSE = BSD-3-Clause
- PYTHON_PYDYF_LICENSE_FILES = LICENSE
- 
+-JANET_VERSION = 1.22.0
++JANET_VERSION = 1.23.0
+ JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
+ JANET_LICENSE = MIT
+ JANET_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
