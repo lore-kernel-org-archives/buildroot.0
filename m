@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89DE6C43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 19:55:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DD78C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 19:55:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1FC96104A;
-	Sun, 24 Jul 2022 19:55:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1FC96104A
+	by smtp4.osuosl.org (Postfix) with ESMTP id B33B6417B2;
+	Sun, 24 Jul 2022 19:55:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B33B6417B2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N3dh9DujaxO5; Sun, 24 Jul 2022 19:55:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AC674177F;
+	Sun, 24 Jul 2022 19:55:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AC674177F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E6F6A1BF95E
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB55C60FC8
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB55C60FC8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2ZBNRiSJuC6n; Sun, 24 Jul 2022 19:55:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F265160C0F;
-	Sun, 24 Jul 2022 19:55:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F265160C0F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DCD501BF20B
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B9AE983F1B
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9AE983F1B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LLNoDFy0bzXJ for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fPbVL0h0288w for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 19:55:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B07683EE2
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B07683EE2
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA0B560BE0
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 19:55:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA0B560BE0
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 4BB2985CBF; Sun, 24 Jul 2022 19:41:52 +0000 (UTC)
+ id E1E7085CBF; Sun, 24 Jul 2022 19:41:51 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 21:44:43 +0200
+Date: Sun, 24 Jul 2022 21:44:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d3f2b732f189850e6bd6fd1472f1a6e134e60cad
-X-Git-Newrev: db4b759dfc3a9f404861e112f216e30ff65ba9d9
+X-Git-Oldrev: 71cc3992598a30a8de584853ec1a2332d005cd49
+X-Git-Newrev: 1f3b3e61e9f7f618602003dc4a98660edb94095f
 X-Patchwork-Hint: ignore
-Message-Id: <20220724194152.4BB2985CBF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xev: bump version to
- 1.2.5
+Message-Id: <20220724194151.E1E7085CBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xclipboard: bump
+ version to 1.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db4b759dfc3a9f404861e112f216e30ff65ba9d9
+commit: https://git.buildroot.net/buildroot/commit/?id=1f3b3e61e9f7f618602003dc4a98660edb94095f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/x11r7/xapp_xev/xapp_xev.hash | 6 +++---
- package/x11r7/xapp_xev/xapp_xev.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/xapp_xclipboard/xapp_xclipboard.hash | 5 +++--
+ package/x11r7/xapp_xclipboard/xapp_xclipboard.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xapp_xev/xapp_xev.hash b/package/x11r7/xapp_xev/xapp_xev.hash
-index 8b9a006c46..9449781360 100644
---- a/package/x11r7/xapp_xev/xapp_xev.hash
-+++ b/package/x11r7/xapp_xev/xapp_xev.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2020-July/003048.html
--sha256  d700e08bfe751ed2dbf802baa204b056d0e49348b6eb3c6f9cb035d8ae4885e2  xev-1.2.4.tar.bz2
--sha512  383472ddbfad639ba46a69080ecdd11a514a0578fd32c463fae18da02e0265c944589eebf12a858994f5fd601c02a0d51517e9b3ff61c6afe740d374f02781ca  xev-1.2.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-July/003185.html
-+sha256  c9461a4389714e0f33974f9e75934bdc38d836a0f059b8dc089c7cbf2ce36ec1  xev-1.2.5.tar.xz
-+sha512  9fbfb78c9547974c2256a678948bf4a694a40b1c2bd5c5dec5f365a713e6d938c6039f055a9629f49de27f02f3d7cb912f07c035df129798a4b2ddc20febe66a  xev-1.2.5.tar.xz
+diff --git a/package/x11r7/xapp_xclipboard/xapp_xclipboard.hash b/package/x11r7/xapp_xclipboard/xapp_xclipboard.hash
+index ef45b92891..d848a47342 100644
+--- a/package/x11r7/xapp_xclipboard/xapp_xclipboard.hash
++++ b/package/x11r7/xapp_xclipboard/xapp_xclipboard.hash
+@@ -1,4 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-September/002299.html
+-sha256  9c0e0a1f4f1d49f73c6cf3ccd27b5ca0e18afc63679f1a1ee466b1d82446ebb5  xclipboard-1.1.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-July/003171.html
++sha256  f43d4560d1464e8ff58e850212f6bdb703989b66d599fb61f351b5f9e077f253  xclipboard-1.1.4.tar.xz
++sha512  efa7800e0c4fb0242362c4263d80182d591bded07d1064a36b157b6202b15b0c82f083658ced2b82392eca905fb57c04a537d67e75c1237a1667ed2ce0cb09fe  xclipboard-1.1.4.tar.xz
  # Locally computed
- sha256  9b840f2e1900889124cc999f3158da2b6b07bf6d0d77bdbb01ce65d2e702dc83  COPYING
-diff --git a/package/x11r7/xapp_xev/xapp_xev.mk b/package/x11r7/xapp_xev/xapp_xev.mk
-index 7d5f3cbb82..0f29a731e7 100644
---- a/package/x11r7/xapp_xev/xapp_xev.mk
-+++ b/package/x11r7/xapp_xev/xapp_xev.mk
+ sha256  f0a362fc1b8e788845b1c0ad7ba9ade58fdfb73da750c3b9780db5d70b947657  COPYING
+diff --git a/package/x11r7/xapp_xclipboard/xapp_xclipboard.mk b/package/x11r7/xapp_xclipboard/xapp_xclipboard.mk
+index d77ac98621..c76d5ded3c 100644
+--- a/package/x11r7/xapp_xclipboard/xapp_xclipboard.mk
++++ b/package/x11r7/xapp_xclipboard/xapp_xclipboard.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XEV_VERSION = 1.2.4
--XAPP_XEV_SOURCE = xev-$(XAPP_XEV_VERSION).tar.bz2
--XAPP_XEV_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XEV_VERSION = 1.2.5
-+XAPP_XEV_SOURCE = xev-$(XAPP_XEV_VERSION).tar.xz
-+XAPP_XEV_SITE = https://xorg.freedesktop.org/releases/individual/app
- XAPP_XEV_LICENSE = MIT
- XAPP_XEV_LICENSE_FILES = COPYING
- XAPP_XEV_DEPENDENCIES = xlib_libX11 xlib_libXrandr
+-XAPP_XCLIPBOARD_VERSION = 1.1.3
+-XAPP_XCLIPBOARD_SOURCE = xclipboard-$(XAPP_XCLIPBOARD_VERSION).tar.bz2
+-XAPP_XCLIPBOARD_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XCLIPBOARD_VERSION = 1.1.4
++XAPP_XCLIPBOARD_SOURCE = xclipboard-$(XAPP_XCLIPBOARD_VERSION).tar.xz
++XAPP_XCLIPBOARD_SITE = https://xorg.freedesktop.org/releases/individual/app
+ XAPP_XCLIPBOARD_LICENSE = MIT
+ XAPP_XCLIPBOARD_LICENSE_FILES = COPYING
+ XAPP_XCLIPBOARD_DEPENDENCIES = xlib_libXaw xlib_libXmu xlib_libXt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
