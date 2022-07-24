@@ -1,95 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6445CC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 22:57:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C072C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 23:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01B2483EE5;
-	Sun, 24 Jul 2022 22:57:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01B2483EE5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24AAA41498;
+	Sun, 24 Jul 2022 23:13:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24AAA41498
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5k7bbJCQlELw; Sun, 24 Jul 2022 22:57:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CU-c_zFnqdC0; Sun, 24 Jul 2022 23:13:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7AF3883EDD;
-	Sun, 24 Jul 2022 22:57:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AF3883EDD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B4C740E46;
+	Sun, 24 Jul 2022 23:13:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B4C740E46
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BC39B1BF424
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 22:57:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6EB3A1BF31C
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 23:13:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9510483EDD
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 22:57:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9510483EDD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4143F83E58
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 23:13:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4143F83E58
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a5QBKROQwK9q for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 22:57:45 +0000 (UTC)
+ with ESMTP id 3ypX7_OFO24V for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 23:13:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BE5383EDC
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1BE5383EDC
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 22:57:44 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- f24-20020a1cc918000000b003a30178c022so8332957wmb.3
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 15:57:44 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D29E083E48
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com
+ [IPv6:2607:f8b0:4864:20::b34])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D29E083E48
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 23:13:15 +0000 (UTC)
+Received: by mail-yb1-xb34.google.com with SMTP id 75so17206494ybf.4
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 16:13:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=/ri2LnGGboI/LPLf1GFkKAOdz+oIb11VtMu7a4Nw7As=;
- b=QD9TkkrgTUigEB4mIyQT6J5zJHzxWMVCFIWUpkHcIydctXm4jPr3A/ZyJm7ZMjLbBc
- DIuMtpUD28KPDcsAhX4D2oiPaB8B/s0a2ol+riDlXtoofBXV1C8MDQTMpstNj/fUQeiF
- vUwEGaP51mnKnetrfTfWfQYrprJtOdx7l4sBCsq2ScXVTfgKdlyVUk6e81Jkfqr34iYn
- x3JAbwgpJT44vznCxKS+lHu3piFQllofWpZCKzPRUHAJe4gE1NUsf522FdD2AMHVufA3
- EKhqRnohvce596tyNDPOICOIAI5zMuoj1hsYVhFPh+aSaUNmCqOT2olTHnFw0nG/Wwtc
- hilQ==
-X-Gm-Message-State: AJIora8L2Ff+d0Vu9pr9GAA5Z6iuf2HtHxO6jqSos4jdMeXRy6ikbAPD
- 19OJMHKdTFFKLEDaTig1TnswoA==
-X-Google-Smtp-Source: AGRyM1sAnBSzZ4qepS6F3weWM185RH/r12nEGv7YA8j6qsp+pY0zWeX98+MwzG0Wezhq7AMbIHqiIw==
-X-Received: by 2002:a05:600c:4fcf:b0:3a3:40f6:4c4d with SMTP id
- o15-20020a05600c4fcf00b003a340f64c4dmr8914032wmq.60.1658703462743; 
- Sun, 24 Jul 2022 15:57:42 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- o20-20020a05600c4fd400b003a305c0ab06sm17501449wmq.31.2022.07.24.15.57.42
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 24 Jul 2022 15:57:42 -0700 (PDT)
-Message-ID: <a3ce31c0-1567-fa3e-0eab-c28b080de9e0@mind.be>
-Date: Mon, 25 Jul 2022 00:57:40 +0200
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=VoF8rS9wmeHIkFKnT0+yfp+gvIXdsQGQYDPKmFtDQHA=;
+ b=z8JD6r4JYa6fIC+jHhFJ5nyir9XoO89Wry0CUFXOCpHPPKzDoAe8FaIQrhjUlGOHzS
+ Zb5/F/Tb85uK99B3OSDpvHEnE/AHPFYvKTsnFgcyKxSGug9OLTQp3Q7Nn3H9EIATr+oE
+ MJjmDW61YggmNerKc6iKhIPoLL6cioC3YmT3w5c8OmYIZyWcD8+agA6xb9aT86sCwC2u
+ RG/8cLeHWgp7MtbFiQCo6dmkzClK64rFuDYtCPC2hA2G36ioe4Sy2Us6JY5t925IVahS
+ 4X6njuhQH5zJxBO3Qcq4G+gqIKO01PfhKo1UWi9xe491WB1JamMs9wfSCjyXrIE3Op8T
+ k2mA==
+X-Gm-Message-State: AJIora/gNqxAu7dXJu+y/7Gip/I2ysqIbYdC5keZiZkyeHS04O1rzy7u
+ FoDQsnTs+jW5dAnvvj62Akzv1S8dmJbS3dm3z439lg==
+X-Google-Smtp-Source: AGRyM1smcogDnWjNmMnkaKRtX0mHWNIrymwphjRVBFrKSJJ6xK71yLvgAv+ZJa6hwRjlMENO4DPQdPYl+35VnR6oum4=
+X-Received: by 2002:a25:cac7:0:b0:670:8d4d:7839 with SMTP id
+ a190-20020a25cac7000000b006708d4d7839mr7514611ybg.169.1658704394729; Sun, 24
+ Jul 2022 16:13:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: goran.radni@gmail.com, buildroot@buildroot.org
-References: <20210217160958.18825-1-goranradni@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20210217160958.18825-1-goranradni@gmail.com>
+References: <20220723215448.2532160-1-abel@x-silicon.com>
+ <20220723215448.2532160-2-abel@x-silicon.com>
+ <815628b4-9584-cc91-1b5a-edc1e2a01c57@smile.fr>
+ <02068fad-6ee9-0809-a570-be3efa8f4aea@mind.be>
+ <fa1b6f86-9fd4-75d8-bbad-52854a68f9a4@smile.fr>
+In-Reply-To: <fa1b6f86-9fd4-75d8-bbad-52854a68f9a4@smile.fr>
+From: Abel Bernabeu <abel@x-silicon.com>
+Date: Mon, 25 Jul 2022 01:13:03 +0200
+Message-ID: <CAF2ART9b3Auz47arMfdcUN13XqCiPL9ffb=pPs66VETz+of4Cg@mail.gmail.com>
+To: Romain Naour <romain.naour@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=/ri2LnGGboI/LPLf1GFkKAOdz+oIb11VtMu7a4Nw7As=;
- b=SNrfDpH1ws2X+YSOR58B+6/0gPbDje3M+6MshVOnwxWMjNCE6GvlgGq2tagDj+OOkq
- gQmGTCpj5RznpCaK8l15gLdcQ4g6LmxnRRQSBitp5tGyqNQLGnbTmiYUOOgmq8+TIsuj
- KIqhs9sqSj+aG55ynFG18bhASGkH6esL+CENVIaFpyDrVwo/VeJLazsPFqR9d/Ff8A0t
- 0zPbJkSa7Ei8SvaulGMCqlHMkmrEKg8Q7d3GODN5S5fkJt8wjHFQmrEBQRUbp55+eETC
- izxBD9lSq3wyRt9zVymnVY8O9TgVVPvFIcWlujO8bEw8ynckaFB0Z9zrkU3Rtaho1to9
- rfVw==
+ d=x-silicon.com; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=VoF8rS9wmeHIkFKnT0+yfp+gvIXdsQGQYDPKmFtDQHA=;
+ b=nEdB199F7zEa4+GZr3GZfap8JAktl+LMFz4eFRw5SGup+w3AGJaZyx+RTA5JW7fjEk
+ nxuzwFnqw90BXs5b074nm2cKf31u6juavBvKwE0ljOKg7FRfzcRX/2CSti8tGZ9jZEuu
+ R7RisptNPmcXqcvAlk4Ms9Qp8z6nFPzuIX6Qo=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=SNrfDpH1
-Subject: Re: [Buildroot] [PATCH 1/1] qt5doc: Add package with qt quick demos
+ dkim=pass (1024-bit key) header.d=x-silicon.com header.i=@x-silicon.com
+ header.a=rsa-sha256 header.s=google header.b=nEdB199F
+Subject: Re: [Buildroot] [PATCH 2/2] arch/riscv: Added support for RISC-V
+ vector extension on the architecture menu.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,85 +90,249 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?B?R29yYW4gUmHEkWVub3ZpxIc=?= <gradenovic@ultratronik.de>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Joseph Kogut <joseph.kogut@gmail.com>, Mark Corbin <mark@dibsco.co.uk>,
+ buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
+Content-Type: multipart/mixed; boundary="===============1320080879062367071=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxNy8wMi8yMDIxIDE3OjA5LCBnb3Jhbi5yYWRuaUBnbWFpbC5jb20gd3JvdGU6Cj4gRnJv
-bTogR29yYW4gUmHEkWVub3ZpxIcgPGdyYWRlbm92aWNAdWx0cmF0cm9uaWsuZGU+Cj4gCj4gU2lu
-Y2UgcXQgNS4xMiwgcXVpY2sgZGVtb3MgYXJlIG1vdmVkIGluIHRoZSBxdDVkb2MgcGFja2FnZS4K
-PiBJbiBvcmRlciB0byB1c2UgcXVpY2sgZGVtb3MsIHF0NWRvYyBoYXMgdG8gYmUgYnVpbHQuCj4g
-cXQ1ZG9jIGlzIGEgYml0IG1pc2xlYWRpbmcgbmFtZSBmb3IgdGhlIHBhY2thZ2UsIHdoaWxlIGl0
-J3MKPiBiYXNpYyBjb250ZW50IGFyZSB0aGUgcXVpY2sgZGVtb3MuIHFkb2MgdG9vbCBpdHNlbGYg
-aXMgYSBwYXJ0Cj4gb2YgcXQ1dG9vbHMuCj4gCj4gU2lnbmVkLW9mZi1ieTogR29yYW4gUmHEkWVu
-b3ZpxIcgPGdyYWRlbm92aWNAdWx0cmF0cm9uaWsuZGU+CgogIEFwcGxpZWQgdG8gbWFzdGVyIChm
-aW5hbGx5ISksIHRoYW5rcy4KCiAgSSBkaWRuJ3QgY2hhbmdlIHRoZSBuYW1lIGFmdGVyIGFsbCAt
-IHdlIGdlbmVyYWxseSBwcmVmZXIgdGhlIG5hbWUgdG8gCmNvcnJlc3BvbmQgdG8gdGhlIHVwc3Ry
-ZWFtIG9uZSwgYW5kIHRoZSBmYWN0IHRoYXQgaXQncyBkZW1vcyBhbmQgZXhhbXBsZXMgaXMgCmNs
-ZWFybHkgaW5kaWNhdGVkIGluIHRoZSBiZXR3ZWVuIHBhcmVudGhlc2lzIHBhcnQgb2YgdGhlIG1l
-bnUgcHJvbXB0LgoKICBJIGRpZCBuZWVkIHRvIG1ha2UgYSBudW1iZXIgb2Ygb3RoZXIgY2hhbmdl
-cyBob3dldmVyOgogICAgICAtIGZpeCBjaGVjay1wYWNrYWdlIHdhcm5pbmdzOwogICAgICAtIHVw
-ZGF0ZSB0byBKYW4gMzEgMjAyMiB2ZXJzaW9uIG9mIGtkZS81LjE1IGJyYW5jaDsKICAgICAgLSBh
-ZGQgc2VsZWN0IG9mIEJSMl9QQUNLQUdFX1FUNUJBU0VfRVhBTVBMRVM7CiAgICAgIC0gYWRkIGhh
-c2ggZm9yIGxpY2Vuc2UgZmlsZS4KCiAgUmVnYXJkcywKICBBcm5vdXQKCj4gLS0tCj4gICBwYWNr
-YWdlL3F0NS9Db25maWcuaW4gICAgICAgICAgfCAgMSArCj4gICBwYWNrYWdlL3F0NS9xdDVkb2Mv
-Q29uZmlnLmluICAgfCAxMyArKysrKysrKysrKysrCj4gICBwYWNrYWdlL3F0NS9xdDVkb2MvcXQ1
-ZG9jLmhhc2ggfCAgMiArKwo+ICAgcGFja2FnZS9xdDUvcXQ1ZG9jL3F0NWRvYy5tayAgIHwgMjgg
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+ICAgNCBmaWxlcyBjaGFuZ2VkLCA0NCBpbnNl
-cnRpb25zKCspCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9xdDUvcXQ1ZG9jL0NvbmZp
-Zy5pbgo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcXQ1L3F0NWRvYy9xdDVkb2MuaGFz
-aAo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcXQ1L3F0NWRvYy9xdDVkb2MubWsKPiAK
-PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9xdDUvQ29uZmlnLmluIGIvcGFja2FnZS9xdDUvQ29uZmln
-LmluCj4gaW5kZXggNjcxNGM2MjcxZC4uYTY2YjZhM2UyNCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdl
-L3F0NS9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL3F0NS9Db25maWcuaW4KPiBAQCAtNDMsNiAr
-NDMsNyBAQCBzb3VyY2UgInBhY2thZ2UvcXQ1L3F0NWNoYXJ0cy9Db25maWcuaW4iCj4gICBzb3Vy
-Y2UgInBhY2thZ2UvcXQ1L3F0NWNvYXAvQ29uZmlnLmluIgo+ICAgc291cmNlICJwYWNrYWdlL3F0
-NS9xdDVjb25uZWN0aXZpdHkvQ29uZmlnLmluIgo+ICAgc291cmNlICJwYWNrYWdlL3F0NS9xdDVk
-ZWNsYXJhdGl2ZS9Db25maWcuaW4iCj4gK3NvdXJjZSAicGFja2FnZS9xdDUvcXQ1ZG9jL0NvbmZp
-Zy5pbiIKPiAgIHNvdXJjZSAicGFja2FnZS9xdDUvcXQ1ZW5naW5pby9Db25maWcuaW4iCj4gICBz
-b3VyY2UgInBhY2thZ2UvcXQ1L3F0NWdyYXBoaWNhbGVmZmVjdHMvQ29uZmlnLmluIgo+ICAgc291
-cmNlICJwYWNrYWdlL3F0NS9xdDVpbWFnZWZvcm1hdHMvQ29uZmlnLmluIgo+IGRpZmYgLS1naXQg
-YS9wYWNrYWdlL3F0NS9xdDVkb2MvQ29uZmlnLmluIGIvcGFja2FnZS9xdDUvcXQ1ZG9jL0NvbmZp
-Zy5pbgo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uN2ZmNjhkNTg1
-Ygo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL3F0NS9xdDVkb2MvQ29uZmlnLmluCj4g
-QEAgLTAsMCArMSwxMyBAQAo+ICtjb25maWcgQlIyX1BBQ0tBR0VfUVQ1RE9DCj4gKwlib29sICJx
-dDVkb2MgKGluY2x1ZGVzIHF1aWNrIGRlbW9zKSIKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9RVDVE
-RUNMQVJBVElWRQo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX1FUNURFQ0xBUkFUSVZFX1FVSUNLCj4g
-KwloZWxwCj4gKwkgIFF0IGlzIGEgY3Jvc3MtcGxhdGZvcm0gYXBwbGljYXRpb24gYW5kIFVJIGZy
-YW1ld29yayBmb3IKPiArCSAgZGV2ZWxvcGVycyB1c2luZyBDKysuCj4gKwo+ICsJICBRdGRvYyBj
-b250YWlucyB0aGUgbWFpbiBRdCBSZWZlcmVuY2UgRG9jdW1lbnRhdGlvbiwgd2hpY2ggaW5jbHVk
-ZXMKPiArCSAgb3ZlcnZpZXdzLCBRdCB0b3BpY3MsIGFuZCBleGFtcGxlcyBub3Qgc3BlY2lmaWMg
-dG8gYW55IFF0IG1vZHVsZS5UaGUKPiArCSAgY29uZmlndXJhdGlvbiBmaWxlcyBhcmUgbG9jYXRl
-ZCBpbiBxdGRvYy9kb2MvY29uZmlnIGFuZCB0aGUgYXJ0aWNsZXMgaW4KPiArCSAgcXRkb2MvZG9j
-L3NyYy4gTm90ZSB0aGF0IFFEb2MgaXMgbG9jYXRlZCBpbiBxdGJhc2UuCj4gKwo+IGRpZmYgLS1n
-aXQgYS9wYWNrYWdlL3F0NS9xdDVkb2MvcXQ1ZG9jLmhhc2ggYi9wYWNrYWdlL3F0NS9xdDVkb2Mv
-cXQ1ZG9jLmhhc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmEy
-NmU3ZTM3Y2IKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9xdDUvcXQ1ZG9jL3F0NWRv
-Yy5oYXNoCj4gQEAgLTAsMCArMSwyIEBACj4gKyMgSGFzaCBmcm9tOiBodHRwczovL2Rvd25sb2Fk
-LnF0LmlvL29mZmljaWFsX3JlbGVhc2VzL3F0LzUuMTIvNS4xMi43L3N1Ym1vZHVsZXMvcXRkb2Mt
-ZXZlcnl3aGVyZS1zcmMtNS4xNS4yLnRhci54ego+ICtzaGEyNTYgYTQ3ODA5ZjAwZjFiZDY5MGNh
-NGU2OTljYjMyZmZlNzcxN2Q0M2RhODRlMDE2N2QxZjU2MjIxMGRhNzcxNGNlNCBxdGRvYy1ldmVy
-eXdoZXJlLXNyYy01LjE1LjIudGFyLnh6Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcXQ1L3F0NWRv
-Yy9xdDVkb2MubWsgYi9wYWNrYWdlL3F0NS9xdDVkb2MvcXQ1ZG9jLm1rCj4gbmV3IGZpbGUgbW9k
-ZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4xMDY3MTFlZTU2Cj4gLS0tIC9kZXYvbnVsbAo+
-ICsrKyBiL3BhY2thZ2UvcXQ1L3F0NWRvYy9xdDVkb2MubWsKPiBAQCAtMCwwICsxLDI4IEBACj4g
-KyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKyMKPiArIyBxdDVkb2MKPiArIwo+ICsjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIwo+ICsKPiArUVQ1RE9DX1ZFUlNJT04gPSAkKFFUNV9WRVJTSU9OKQo+
-ICtRVDVET0NfU0lURSA9ICQoUVQ1X1NJVEUpCj4gK1FUNURPQ19TT1VSQ0UgPSBxdGRvYy0kKFFU
-NV9TT1VSQ0VfVEFSQkFMTF9QUkVGSVgpLSQoUVQ1RE9DX1ZFUlNJT04pLnRhci54ego+ICtRVDVE
-T0NfREVQRU5ERU5DSUVTID0gcXQ1ZGVjbGFyYXRpdmUKPiArUVQ1RE9DX0lOU1RBTExfU1RBR0lO
-RyA9IFlFUwo+ICsKPiAraWZlcSAoJChCUjJfUEFDS0FHRV9RVDVRVUlDS0NPTlRST0xTKSx5KQo+
-ICtRVDVET0NfREVQRU5ERU5DSUVTICs9IHF0NXF1aWNrY29udHJvbHMKPiArZW5kaWYKPiArCj4g
-K2lmZXEgKCQoQlIyX1BBQ0tBR0VfUVQ1UVVJQ0tDT05UUk9MUzIpLHkpCj4gK1FUNURPQ19ERVBF
-TkRFTkNJRVMgKz0gcXQ1cXVpY2tjb250cm9sczIKPiArZW5kaWYKPiArCj4gK2lmZXEgKCQoQlIy
-X1BBQ0tBR0VfUVQ1WE1MUEFUVEVSTlMpLHkpCj4gK1FUNURPQ19ERVBFTkRFTkNJRVMgKz0gcXQ1
-eG1scGF0dGVybnMKPiArZW5kaWYKPiArCj4gK1FUNURPQ19MSUNFTlNFID0gR0ZETC0xLjMKPiAr
-UVQ1RE9DX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFLkZETAo+ICsKPiArJChldmFsICQocW1ha2Ut
-cGFja2FnZSkpCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+--===============1320080879062367071==
+Content-Type: multipart/alternative; boundary="0000000000003c510e05e495360d"
+
+--0000000000003c510e05e495360d
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Thanks, will do as suggested (forcing GCC 12 or newer when using the
+option).
+
+On Sun, Jul 24, 2022, 11:52 AM Romain Naour <romain.naour@smile.fr> wrote:
+
+> Le 24/07/2022 =C3=A0 11:25, Arnout Vandecappelle a =C3=A9crit :
+> >
+> >
+> > On 24/07/2022 10:08, Romain Naour wrote:
+> >> Hello Abel,
+> >>
+> >> Le 23/07/2022 =C3=A0 23:54, Abel Bernabeu a =C3=A9crit :
+> >>> This new setting will allow to test new toolchains already available
+> >>> that support the vector extension (more patches coming soon).
+> >>
+> >> It seems that is the same series as v1:
+> >>
+> >>
+> http://patchwork.ozlabs.org/project/buildroot/list/?series=3D307848&state=
+=3D*
+> >>
+> >> See 22.5.5. "Patch revision changelog" section for help.
+> >>
+> >> https://nightly.buildroot.org/manual.html#submitting-patches
+> >>
+> >>>
+> >>> Signed-off-by: Abel Bernabeu <abel@x-silicon.com>
+> >>> ---
+> >>>   arch/Config.in.riscv | 7 +++++++
+> >>>   arch/arch.mk.riscv   | 4 ++++
+> >>>   2 files changed, 11 insertions(+)
+> >>>
+> >>> diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+> >>> index 288ed833eb..e4dc936cf8 100644
+> >>> --- a/arch/Config.in.riscv
+> >>> +++ b/arch/Config.in.riscv
+> >>> @@ -18,6 +18,9 @@ config BR2_RISCV_ISA_RVD
+> >>>   config BR2_RISCV_ISA_RVC
+> >>>       bool
+> >>>   +config BR2_RISCV_ISA_RVV
+> >>> +    bool
+> >>> +
+> >>>   choice
+> >>>       prompt "Target Architecture Variant"
+> >>>       default BR2_riscv_g
+> >>> @@ -63,6 +66,10 @@ config BR2_RISCV_ISA_CUSTOM_RVD
+> >>>   config BR2_RISCV_ISA_CUSTOM_RVC
+> >>>       bool "Compressed Instructions (C)"
+> >>>       select BR2_RISCV_ISA_RVC
+> >>> +
+> >>> +config BR2_RISCV_ISA_CUSTOM_RVV
+> >>
+> >> This option must depends on gcc-12.
+> >
+> >  No, it's the other way round: it should force GCC 12, by selecting
+> > BR2_ARCH_NEEDS_GCC_AT_LEAST_12.
+>
+> Indeed, Thomas commented on this yesterday [1]
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2022-July/646698.html
+>
+> Best regards,
+> Romain
+>
+>
+> >
+> >  Regards,
+> >  Arnout
+> >
+> >>
+> >> Best regards,
+> >> Romain
+> >>
+> >>> +    bool "Vector Instructions (V)"
+> >>> +    select BR2_RISCV_ISA_RVV
+> >>>   endif
+> >>>     choice
+> >>> diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv
+> >>> index f3bf2b3467..07a94aa6a4 100644
+> >>> --- a/arch/arch.mk.riscv
+> >>> +++ b/arch/arch.mk.riscv
+> >>> @@ -26,5 +26,9 @@ endif
+> >>>   ifeq ($(BR2_RISCV_ISA_RVC),y)
+> >>>   GCC_TARGET_ARCH :=3D $(GCC_TARGET_ARCH)c
+> >>>   endif
+> >>> +ifeq ($(BR2_RISCV_ISA_RVV),y)
+> >>> +GCC_TARGET_ARCH :=3D $(GCC_TARGET_ARCH)v
+> >>> +endif
+> >>> +
+> >>>     endif
+> >>
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot@buildroot.org
+> >> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+>
+
+--0000000000003c510e05e495360d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto">Thanks, will do as suggested (forcing GCC 12 or newer whe=
+n using the option).</div><br><div class=3D"gmail_quote"><div dir=3D"ltr" c=
+lass=3D"gmail_attr">On Sun, Jul 24, 2022, 11:52 AM Romain Naour &lt;<a href=
+=3D"mailto:romain.naour@smile.fr">romain.naour@smile.fr</a>&gt; wrote:<br><=
+/div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-le=
+ft:1px #ccc solid;padding-left:1ex">Le 24/07/2022 =C3=A0 11:25, Arnout Vand=
+ecappelle a =C3=A9crit=C2=A0:<br>
+&gt; <br>
+&gt; <br>
+&gt; On 24/07/2022 10:08, Romain Naour wrote:<br>
+&gt;&gt; Hello Abel,<br>
+&gt;&gt;<br>
+&gt;&gt; Le 23/07/2022 =C3=A0 23:54, Abel Bernabeu a =C3=A9crit=C2=A0:<br>
+&gt;&gt;&gt; This new setting will allow to test new toolchains already ava=
+ilable<br>
+&gt;&gt;&gt; that support the vector extension (more patches coming soon).<=
+br>
+&gt;&gt;<br>
+&gt;&gt; It seems that is the same series as v1:<br>
+&gt;&gt;<br>
+&gt;&gt; <a href=3D"http://patchwork.ozlabs.org/project/buildroot/list/?ser=
+ies=3D307848&amp;state=3D*" rel=3D"noreferrer noreferrer" target=3D"_blank"=
+>http://patchwork.ozlabs.org/project/buildroot/list/?series=3D307848&amp;st=
+ate=3D*</a><br>
+&gt;&gt;<br>
+&gt;&gt; See 22.5.5. &quot;Patch revision changelog&quot; section for help.=
+<br>
+&gt;&gt;<br>
+&gt;&gt; <a href=3D"https://nightly.buildroot.org/manual.html#submitting-pa=
+tches" rel=3D"noreferrer noreferrer" target=3D"_blank">https://nightly.buil=
+droot.org/manual.html#submitting-patches</a><br>
+&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; Signed-off-by: Abel Bernabeu &lt;<a href=3D"mailto:abel@x-sili=
+con.com" target=3D"_blank" rel=3D"noreferrer">abel@x-silicon.com</a>&gt;<br=
+>
+&gt;&gt;&gt; ---<br>
+&gt;&gt;&gt; =C2=A0 arch/Config.in.riscv | 7 +++++++<br>
+&gt;&gt;&gt; =C2=A0 arch/arch.mk.riscv=C2=A0=C2=A0 | 4 ++++<br>
+&gt;&gt;&gt; =C2=A0 2 files changed, 11 insertions(+)<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv<br>
+&gt;&gt;&gt; index 288ed833eb..e4dc936cf8 100644<br>
+&gt;&gt;&gt; --- a/arch/Config.in.riscv<br>
+&gt;&gt;&gt; +++ b/arch/Config.in.riscv<br>
+&gt;&gt;&gt; @@ -18,6 +18,9 @@ config BR2_RISCV_ISA_RVD<br>
+&gt;&gt;&gt; =C2=A0 config BR2_RISCV_ISA_RVC<br>
+&gt;&gt;&gt; =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool<br>
+&gt;&gt;&gt; =C2=A0 +config BR2_RISCV_ISA_RVV<br>
+&gt;&gt;&gt; +=C2=A0=C2=A0=C2=A0 bool<br>
+&gt;&gt;&gt; +<br>
+&gt;&gt;&gt; =C2=A0 choice<br>
+&gt;&gt;&gt; =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 prompt &quot;Target Architectur=
+e Variant&quot;<br>
+&gt;&gt;&gt; =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 default BR2_riscv_g<br>
+&gt;&gt;&gt; @@ -63,6 +66,10 @@ config BR2_RISCV_ISA_CUSTOM_RVD<br>
+&gt;&gt;&gt; =C2=A0 config BR2_RISCV_ISA_CUSTOM_RVC<br>
+&gt;&gt;&gt; =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool &quot;Compressed Instructi=
+ons (C)&quot;<br>
+&gt;&gt;&gt; =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select BR2_RISCV_ISA_RVC<br>
+&gt;&gt;&gt; +<br>
+&gt;&gt;&gt; +config BR2_RISCV_ISA_CUSTOM_RVV<br>
+&gt;&gt;<br>
+&gt;&gt; This option must depends on gcc-12.<br>
+&gt; <br>
+&gt; =C2=A0No, it&#39;s the other way round: it should force GCC 12, by sel=
+ecting<br>
+&gt; BR2_ARCH_NEEDS_GCC_AT_LEAST_12.<br>
+<br>
+Indeed, Thomas commented on this yesterday [1]<br>
+<br>
+[1] <a href=3D"http://lists.busybox.net/pipermail/buildroot/2022-July/64669=
+8.html" rel=3D"noreferrer noreferrer" target=3D"_blank">http://lists.busybo=
+x.net/pipermail/buildroot/2022-July/646698.html</a><br>
+<br>
+Best regards,<br>
+Romain<br>
+<br>
+<br>
+&gt; <br>
+&gt; =C2=A0Regards,<br>
+&gt; =C2=A0Arnout<br>
+&gt; <br>
+&gt;&gt;<br>
+&gt;&gt; Best regards,<br>
+&gt;&gt; Romain<br>
+&gt;&gt;<br>
+&gt;&gt;&gt; +=C2=A0=C2=A0=C2=A0 bool &quot;Vector Instructions (V)&quot;<b=
+r>
+&gt;&gt;&gt; +=C2=A0=C2=A0=C2=A0 select BR2_RISCV_ISA_RVV<br>
+&gt;&gt;&gt; =C2=A0 endif<br>
+&gt;&gt;&gt; =C2=A0 =C2=A0 choice<br>
+&gt;&gt;&gt; diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv<br>
+&gt;&gt;&gt; index f3bf2b3467..07a94aa6a4 100644<br>
+&gt;&gt;&gt; --- a/arch/arch.mk.riscv<br>
+&gt;&gt;&gt; +++ b/arch/arch.mk.riscv<br>
+&gt;&gt;&gt; @@ -26,5 +26,9 @@ endif<br>
+&gt;&gt;&gt; =C2=A0 ifeq ($(BR2_RISCV_ISA_RVC),y)<br>
+&gt;&gt;&gt; =C2=A0 GCC_TARGET_ARCH :=3D $(GCC_TARGET_ARCH)c<br>
+&gt;&gt;&gt; =C2=A0 endif<br>
+&gt;&gt;&gt; +ifeq ($(BR2_RISCV_ISA_RVV),y)<br>
+&gt;&gt;&gt; +GCC_TARGET_ARCH :=3D $(GCC_TARGET_ARCH)v<br>
+&gt;&gt;&gt; +endif<br>
+&gt;&gt;&gt; +<br>
+&gt;&gt;&gt; =C2=A0 =C2=A0 endif<br>
+&gt;&gt;<br>
+&gt;&gt; _______________________________________________<br>
+&gt;&gt; buildroot mailing list<br>
+&gt;&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank" rel=
+=3D"noreferrer">buildroot@buildroot.org</a><br>
+&gt;&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot"=
+ rel=3D"noreferrer noreferrer" target=3D"_blank">https://lists.buildroot.or=
+g/mailman/listinfo/buildroot</a><br>
+<br>
+</blockquote></div>
+
+--0000000000003c510e05e495360d--
+
+--===============1320080879062367071==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1320080879062367071==--
