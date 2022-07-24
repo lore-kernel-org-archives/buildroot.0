@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90A41C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:22:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6BD1C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:22:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3B2C14169C;
-	Sun, 24 Jul 2022 12:22:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B2C14169C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 71A9D6119E;
+	Sun, 24 Jul 2022 12:22:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71A9D6119E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sv1NuaWi25hS; Sun, 24 Jul 2022 12:22:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WTcpRoEJjSwS; Sun, 24 Jul 2022 12:22:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3110640B97;
-	Sun, 24 Jul 2022 12:22:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3110640B97
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0BBF21BF964
+	by smtp3.osuosl.org (Postfix) with ESMTP id 887CC61B3E;
+	Sun, 24 Jul 2022 12:22:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 887CC61B3E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 643321BF344
  for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:20:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E7FDB81A9C
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:20:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7FDB81A9C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23B6D424D7
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:20:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23B6D424D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WyRETwxSvydG for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mYQX4PkmymQ6 for <buildroot@lists.busybox.net>;
  Sun, 24 Jul 2022 12:20:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2AA1682438
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B383424CD
  for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:20:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AA1682438
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B383424CD
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 165B485C29; Sun, 24 Jul 2022 12:06:47 +0000 (UTC)
+ id 044FF85C25; Sun, 24 Jul 2022 12:06:47 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sun, 24 Jul 2022 14:19:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e75e76b3091fb6d4027fe154a69ab363e90f82e6
-X-Git-Newrev: 4f245066b32a0207cd180b5cf050f79760e9cac4
+X-Git-Oldrev: 7fccf5f3547509e433c329b17c6e2d4bc60fdeb5
+X-Git-Newrev: 08539c76a81df113e4e9f0e6ab0f91bfd4bfd831
 X-Patchwork-Hint: ignore
-Message-Id: <20220724120647.165B485C29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-fonttools: bump to version
- 4.34.4
+Message-Id: <20220724120647.044FF85C25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cssutils: bump to version
+ 2.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f245066b32a0207cd180b5cf050f79760e9cac4
+commit: https://git.buildroot.net/buildroot/commit/?id=08539c76a81df113e4e9f0e6ab0f91bfd4bfd831
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-fonttools/python-fonttools.hash | 4 ++--
- package/python-fonttools/python-fonttools.mk   | 4 ++--
+ package/python-cssutils/python-cssutils.hash | 4 ++--
+ package/python-cssutils/python-cssutils.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
-index ef75a54ae3..469fea9c19 100644
---- a/package/python-fonttools/python-fonttools.hash
-+++ b/package/python-fonttools/python-fonttools.hash
+diff --git a/package/python-cssutils/python-cssutils.hash b/package/python-cssutils/python-cssutils.hash
+index 065c8ac1f3..a3d2a6be6c 100644
+--- a/package/python-cssutils/python-cssutils.hash
++++ b/package/python-cssutils/python-cssutils.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fonttools/json
--md5  02a4c1216de481ca881f92afba1c80db  fonttools-4.33.3.zip
--sha256  c0fdcfa8ceebd7c1b2021240bd46ef77aa8e7408cf10434be55df52384865f8e  fonttools-4.33.3.zip
-+md5  197ad603c91d4c2909acf9e54c26e85f  fonttools-4.34.4.zip
-+sha256  9a1c52488045cd6c6491fd07711a380f932466e317cb8e016fc4e99dc7eac2f0  fonttools-4.34.4.zip
+ # md5, sha256 from https://pypi.org/pypi/cssutils/json
+-md5  3b9acf80a22c44d2d12eb7e20533934a  cssutils-2.4.2.tar.gz
+-sha256  877818bfa9668cc535773f46e6b6a46de28436191211741b3f7b4aaa64d9afbb  cssutils-2.4.2.tar.gz
++md5  974bf7f07d52f92dd29485b6e7529aac  cssutils-2.5.1.tar.gz
++sha256  b4a4da58e78326ec9f4a9d3555004ddf706f3e99f7a1026c1880f0934362b8b4  cssutils-2.5.1.tar.gz
  # Locally computed sha256 checksums
- sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
-diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
-index 5ee159d551..c35c538cb6 100644
---- a/package/python-fonttools/python-fonttools.mk
-+++ b/package/python-fonttools/python-fonttools.mk
+ sha256  03c570a068086ee577dcd795519ea93462b2ed2fcb6dcc4dfce56a71a2fd6e5a  COPYING.LESSER
+diff --git a/package/python-cssutils/python-cssutils.mk b/package/python-cssutils/python-cssutils.mk
+index beb5f1c8ff..3acf26b3d5 100644
+--- a/package/python-cssutils/python-cssutils.mk
++++ b/package/python-cssutils/python-cssutils.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FONTTOOLS_VERSION = 4.33.3
-+PYTHON_FONTTOOLS_VERSION = 4.34.4
- PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).zip
--PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/de/54/14376a4e5c1e7d2105a5be33ad5584b56e36753dc615506728a1489071cd
-+PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/5a/a4/a97cff4c4af6764a04cc202299e5205b2e101cb1543bcaf9737be29f78ab
- PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
- PYTHON_FONTTOOLS_LICENSE = MIT
- PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
+-PYTHON_CSSUTILS_VERSION = 2.4.2
++PYTHON_CSSUTILS_VERSION = 2.5.1
+ PYTHON_CSSUTILS_SOURCE = cssutils-$(PYTHON_CSSUTILS_VERSION).tar.gz
+-PYTHON_CSSUTILS_SITE = https://files.pythonhosted.org/packages/d4/12/1aba9a6c91d92de011ff97a9320ad37e5565adfe0cc324deee58d5891d7a
++PYTHON_CSSUTILS_SITE = https://files.pythonhosted.org/packages/bd/f0/d3a02af54f292fe9d1f6bb18c7d2f79992b5cbae0db1ee91e5c73a3c7d7c
+ PYTHON_CSSUTILS_LICENSE = LGPL-3.0+
+ PYTHON_CSSUTILS_LICENSE_FILES = COPYING.LESSER
+ PYTHON_CSSUTILS_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
