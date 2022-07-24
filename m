@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27BB6C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 16:27:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B217C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 16:27:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C61AB84970;
-	Sun, 24 Jul 2022 16:27:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C61AB84970
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA7A760BF4;
+	Sun, 24 Jul 2022 16:27:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA7A760BF4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fELufBPQoYSJ; Sun, 24 Jul 2022 16:27:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fGCSjtdv4czK; Sun, 24 Jul 2022 16:27:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D09328496E;
-	Sun, 24 Jul 2022 16:27:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D09328496E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B27060AF2;
+	Sun, 24 Jul 2022 16:27:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B27060AF2
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C42731BF479
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 16:25:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 28CAC1BF479
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 16:25:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2BF118496E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7D75C849BE
  for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 16:25:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BF118496E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D75C849BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tfD5ukut4aGB for <buildroot@lists.busybox.net>;
+ with ESMTP id TyEw7YN-XJH9 for <buildroot@lists.busybox.net>;
  Sun, 24 Jul 2022 16:25:08 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C0388494F
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0C0388494F
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 16:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67C1E8492E
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 67C1E8492E
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 16:25:08 +0000 (UTC)
 Received: from fwd73.dcpf.telekom.de (fwd73.aul.t-online.de [10.223.144.99])
- by mailout01.t-online.de (Postfix) with SMTP id C701A50C
+ by mailout07.t-online.de (Postfix) with SMTP id CD2CB9FF8
  for <buildroot@buildroot.org>; Sun, 24 Jul 2022 18:25:05 +0200 (CEST)
 Received: from fli4l.lan.fli4l ([79.214.202.112]) by fwd73.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1oFePc-0f12IM0; Sun, 24 Jul 2022 18:25:00 +0200
+ esmtp id 1oFePd-0f12IR0; Sun, 24 Jul 2022 18:25:01 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:40906)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1oFePc-0007mb-1s;
- Sun, 24 Jul 2022 18:25:00 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1oFePd-0007mb-17;
+ Sun, 24 Jul 2022 18:25:01 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 18:24:46 +0200
-Message-Id: <20220724162500.2683871-7-bernd.kuhls@t-online.de>
+Date: Sun, 24 Jul 2022 18:24:58 +0200
+Message-Id: <20220724162500.2683871-19-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220724162500.2683871-1-bernd.kuhls@t-online.de>
 References: <20220724162500.2683871-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1658679900-0144F70D-22D26CA0/0/0 CLEAN NORMAL
-X-TOI-MSGID: eb5d397a-45d8-4117-a0bf-9545b2cbe431
-Subject: [Buildroot] [PATCH 06/20] package/x11r7/xapp_xmodmap: bump version
- to 1.0.11
+X-TOI-EXPURGATEID: 150726::1658679901-0144F70D-6E0DCF87/0/0 CLEAN NORMAL
+X-TOI-MSGID: 004a95d0-495a-4e48-9ae1-8b0456e720fd
+Subject: [Buildroot] [PATCH 18/20] package/x11r7/xlib_libxcvt: bump version
+ to 0.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,43 +76,36 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xmodmap/xapp_xmodmap.hash | 10 ++++------
- package/x11r7/xapp_xmodmap/xapp_xmodmap.mk   |  6 +++---
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ package/x11r7/xlib_libxcvt/xlib_libxcvt.hash | 6 +++---
+ package/x11r7/xlib_libxcvt/xlib_libxcvt.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash b/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
-index 4925ec00a3..db3d8f33cd 100644
---- a/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
-+++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-February/002952.html
--md5 51f1d30a525e9903280ffeea2744b1f6  xmodmap-1.0.10.tar.bz2
--sha1 69e041f8a8c501bd1feb68805a0880633a685bc8  xmodmap-1.0.10.tar.bz2
--sha256 473f0941d7439d501bb895ff358832b936ec34c749b9704c37a15e11c318487c  xmodmap-1.0.10.tar.bz2
--sha512 324c7dcef843186088f16b3bc47485eb3c9b4331e56ce43b692deb4bb3d4f4f27512480e91a379cceac8383df920dc5e37cd825246b50b6343291cec48134c04  xmodmap-1.0.10.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-July/003176.html
-+sha256  9a2f8168f7b0bc382828847403902cb6bf175e17658b36189eac87edda877e81  xmodmap-1.0.11.tar.xz
-+sha512  a78f916f048d2017f079733becc99232c087c360ece61ec6c4fa4b5b130b96a1b10c4ce1b64a15bdcab7ea05de3c7f16035503d5be6f8ce1a7612ce71d558510  xmodmap-1.0.11.tar.xz
- # Locally computed
--sha256 c149563cf2cb0ecfb1148b6eb8f604c62bed43452a0d0fbafb97286a97840f5c  COPYING
-+sha256  c149563cf2cb0ecfb1148b6eb8f604c62bed43452a0d0fbafb97286a97840f5c  COPYING
-diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
-index f3a458b7b5..8fcb4716a8 100644
---- a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
-+++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash b/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash
+index 71ae9170ac..f635c90fdc 100644
+--- a/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash
++++ b/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2021-October/003114.html
+-sha256  27ebce180d355f94c1992930bedb40a36f6d7312ee50bf7f0acbcd22f33e8c29  libxcvt-0.1.1.tar.xz
+-sha512  50e9cd0283858823d4cfde75f06e23ffc42983272cb1f75408052fb5b76a4bb6f9de7d42d8ff9ec0dae6e95eefebc6273e03c919a92f237585db55eaf1a57005  libxcvt-0.1.1.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2022-July/003195.html
++sha256  0561690544796e25cfbd71806ba1b0d797ffe464e9796411123e79450f71db38  libxcvt-0.1.2.tar.xz
++sha512  3f6b2baca712a4608780686932f8881255c07bb74b1a788f9b07d4e22975c038d75111cd6b452257882a0b2bad57eebb2002f80a3e435d2e2d16936597f039b0  libxcvt-0.1.2.tar.xz
+ # Locally calculated
+ sha256  4849851554bdeda9a2a85ce93946b786605e009685941b8b907a9a36b02ae068  COPYING
+diff --git a/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk b/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk
+index 33a55dfa20..7f61054dbe 100644
+--- a/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk
++++ b/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XMODMAP_VERSION = 1.0.10
--XAPP_XMODMAP_SOURCE = xmodmap-$(XAPP_XMODMAP_VERSION).tar.bz2
--XAPP_XMODMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XMODMAP_VERSION = 1.0.11
-+XAPP_XMODMAP_SOURCE = xmodmap-$(XAPP_XMODMAP_VERSION).tar.xz
-+XAPP_XMODMAP_SITE = https://xorg.freedesktop.org/releases/individual/app
- XAPP_XMODMAP_LICENSE = MIT
- XAPP_XMODMAP_LICENSE_FILES = COPYING
- XAPP_XMODMAP_DEPENDENCIES = xlib_libX11
+-XLIB_LIBXCVT_VERSION = 0.1.1
++XLIB_LIBXCVT_VERSION = 0.1.2
+ XLIB_LIBXCVT_SOURCE = libxcvt-$(XLIB_LIBXCVT_VERSION).tar.xz
+ XLIB_LIBXCVT_SITE = https://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXCVT_LICENSE = MIT
 -- 
 2.30.2
 
