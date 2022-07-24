@@ -1,51 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60D28C43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC8ADC43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:38:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EED1941864;
-	Sun, 24 Jul 2022 12:32:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EED1941864
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88C7440AD8;
+	Sun, 24 Jul 2022 12:38:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88C7440AD8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5BoCGW6sGCFD; Sun, 24 Jul 2022 12:38:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3747940186;
+	Sun, 24 Jul 2022 12:38:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3747940186
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 675421BF344
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:38:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40ADA402D2
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:38:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40ADA402D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q2DNNDRmSgwN; Sun, 24 Jul 2022 12:32:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A6B3424E7;
-	Sun, 24 Jul 2022 12:32:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A6B3424E7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 114C91BF964
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:31:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F91A84BA2
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:31:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F91A84BA2
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O2AlCccMlmJY for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 12:31:10 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sRSkCn0utlfC for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 12:38:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5471C84C3E
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:31:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5471C84C3E
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3ACC785C51; Sun, 24 Jul 2022 12:17:31 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ by smtp4.osuosl.org (Postfix) with ESMTP id E688C40278
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:38:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E688C40278
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id C0A3685C5A; Sun, 24 Jul 2022 12:24:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 14:22:20 +0200
+Date: Sun, 24 Jul 2022 14:37:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3f748c56f1b1fda2cdbb52c012e12569df7f2618
-X-Git-Newrev: e2511d88e83acae4144be89ce5e258b724067bd5
+X-Git-Oldrev: e2511d88e83acae4144be89ce5e258b724067bd5
+X-Git-Newrev: 8aaa7ecbce1d10cbcd880c3da5e429988f96176a
 X-Patchwork-Hint: ignore
-Message-Id: <20220724121731.3ACC785C51@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/matchbox-keyboard: bump to version
- 0.1.1
+Message-Id: <20220724122437.C0A3685C5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opensc: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,98 +55,206 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============9196105942253607836=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e2511d88e83acae4144be89ce5e258b724067bd5
+--===============9196105942253607836==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8aaa7ecbce1d10cbcd880c3da5e429988f96176a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Switch license to LGPL-2.1 except applet/applet.c:
-  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/commit/?id=267595f2ef18e46c79f76057ad3c6fb40009ca4f
-- Drop expat=yes (not needed since
-  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/commit/?id=4cf2976842612a0a278de4515715e4e4228c2987)
-- xlib_libXrender is a mandatory dependency since
-  https://git.yoctoproject.org/matchbox-keyboard/commit/?id=b38f24036cff3be6c2fbcf9ca9881803e69003ac
-- libgtk3 is an optional dependency since
-  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/commit/?id=e4ab2198a5f9611027cb62e6ff41ee2593f07d4a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/matchbox-keyboard/Config.in              |  1 +
- package/matchbox-keyboard/matchbox-keyboard.hash |  6 +++---
- package/matchbox-keyboard/matchbox-keyboard.mk   | 24 ++++++++++++++++--------
- 3 files changed, 20 insertions(+), 11 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-Fix-maybe-uninitialized-errors.patch      | 82 ++++++++++++++++++++++
+ package/opensc/Config.in                           | 16 +++++
+ package/opensc/opensc.hash                         |  5 ++
+ package/opensc/opensc.mk                           | 15 ++++
+ 6 files changed, 120 insertions(+)
 
-diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
-index b6753f3bec..260a57c6a4 100644
---- a/package/matchbox-keyboard/Config.in
-+++ b/package/matchbox-keyboard/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_MATCHBOX_KEYBOARD
- 	bool "matchbox-keyboard"
- 	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XLIB_LIBXRENDER
- 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_MATCHBOX_FAKEKEY
- 	select BR2_PACKAGE_MATCHBOX_LIB
-diff --git a/package/matchbox-keyboard/matchbox-keyboard.hash b/package/matchbox-keyboard/matchbox-keyboard.hash
-index c65fbecff4..43ace650a4 100644
---- a/package/matchbox-keyboard/matchbox-keyboard.hash
-+++ b/package/matchbox-keyboard/matchbox-keyboard.hash
-@@ -1,4 +1,4 @@
--# From http://downloads.yoctoproject.org/releases/matchbox/matchbox-keyboard/0.1/matchbox-keyboard-0.1.tar.bz2.md5
--md5	50940321d59fee23b38a4941100abf25	matchbox-keyboard-0.1.tar.bz2
- # Locally computed
--sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256  44fc6dc6075090d6f8e43f8667cf8a85bed59b7221a5ee81843454c66e352790  matchbox-keyboard-0.1.1.tar.bz2
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  bba6fd8976fa5c669ddc1378a3d8d49a74263d4d39efb9a90cefb3583a813ecc  applet/applet.c
-diff --git a/package/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
-index 23ab5ad7e5..242c4831d1 100644
---- a/package/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox-keyboard/matchbox-keyboard.mk
-@@ -4,15 +4,16 @@
- #
- ################################################################################
- 
--MATCHBOX_KEYBOARD_VERSION = 0.1
-+MATCHBOX_KEYBOARD_VERSION = 0.1.1
- MATCHBOX_KEYBOARD_SOURCE = matchbox-keyboard-$(MATCHBOX_KEYBOARD_VERSION).tar.bz2
--MATCHBOX_KEYBOARD_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
--MATCHBOX_KEYBOARD_LICENSE = GPL-2.0+
--MATCHBOX_KEYBOARD_LICENSE_FILES = COPYING
--MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expat
--
--# Workaround bug in configure script
--MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
-+MATCHBOX_KEYBOARD_SITE = \
-+	http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/snapshot
-+MATCHBOX_KEYBOARD_LICENSE = LGPL-2.1, GPL-2.0+ (applet.c)
-+MATCHBOX_KEYBOARD_LICENSE_FILES = COPYING applet/applet.c
-+MATCHBOX_KEYBOARD_DEPENDENCIES = \
-+	host-pkgconf matchbox-lib matchbox-fakekey expat xlib_libXrender
-+# From git
-+MATCHBOX_KEYBOARD_AUTORECONF = YES
- 
- define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
- 	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh \
-@@ -29,4 +30,11 @@ MATCHBOX_KEYBOARD_CONF_OPTS += --disable-cairo
- MATCHBOX_KEYBOARD_DEPENDENCIES += xlib_libXft
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+MATCHBOX_KEYBOARD_CONF_OPTS += --enable-gtk3-im
-+MATCHBOX_KEYBOARD_DEPENDENCIES += libgtk3
-+else
-+MATCHBOX_KEYBOARD_CONF_OPTS += --disable-gtk3-im
-+endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6f529d0c46..628b5cf456 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1558,6 +1558,7 @@ F:	support/testing/tests/package/test_zfs.py
+ N:	José Pekkarinen <jose.pekkarinen@unikie.com>
+ F:	package/alfred/
+ F:	package/bmx7/
++F:	package/opensc/
+ F:	package/python-aexpect/
+ F:	package/python-alembic/
+ F:	package/python-lark/
+diff --git a/package/Config.in b/package/Config.in
+index 5e7499c396..3a70fe3f9f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1644,6 +1644,7 @@ menu "Hardware handling"
+ 	source "package/mtdev/Config.in"
+ 	source "package/ne10/Config.in"
+ 	source "package/neardal/Config.in"
++	source "package/opensc/Config.in"
+ 	source "package/owfs/Config.in"
+ 	source "package/pcsc-lite/Config.in"
+ 	source "package/rpi-rgb-led-matrix/Config.in"
+diff --git a/package/opensc/0001-Fix-maybe-uninitialized-errors.patch b/package/opensc/0001-Fix-maybe-uninitialized-errors.patch
+new file mode 100644
+index 0000000000..671d92c150
+--- /dev/null
++++ b/package/opensc/0001-Fix-maybe-uninitialized-errors.patch
+@@ -0,0 +1,82 @@
++From bcb39d6f4d2dee6beb035cb2f3618174ec1cb2b0 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
++Date: Fri, 10 Dec 2021 13:54:26 +0200
++Subject: [PATCH] Fix maybe uninitialized errors
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
- $(eval $(autotools-package))
++Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com>
++Upstream: https://github.com/OpenSC/OpenSC/commit/05ec8c7fe785a2b9aeaac1164adb349df42b7f80
++---
++ src/libopensc/pkcs15-coolkey.c  | 12 ++++++------
++ src/pkcs15init/pkcs15-asepcos.c |  2 +-
++ src/tools/opensc-explorer.c     |  2 +-
++ 3 files changed, 8 insertions(+), 8 deletions(-)
++
++diff --git a/src/libopensc/pkcs15-coolkey.c b/src/libopensc/pkcs15-coolkey.c
++index 586475dd..15684cef 100644
++--- a/src/libopensc/pkcs15-coolkey.c
+++++ b/src/libopensc/pkcs15-coolkey.c
++@@ -147,9 +147,9 @@ coolkey_find_matching_cert(sc_card_t *card, sc_cardctl_coolkey_object_t *in_obj,
++ static int
++ coolkey_get_attribute_ulong(sc_card_t *card, sc_cardctl_coolkey_object_t *obj, CK_ATTRIBUTE_TYPE type, CK_ULONG *value)
++ {
++-	const u8 *val;
++-	size_t val_len;
++-	u8 data_type;
+++	const u8 *val = NULL;
+++	size_t val_len = 0;
+++	u8 data_type = 0;
++ 	int r;
++ 
++ 	r  = coolkey_get_attribute(card, obj, type, &val, &val_len, &data_type);
++@@ -168,8 +168,8 @@ static int
++ coolkey_get_attribute_boolean(sc_card_t *card, sc_cardctl_coolkey_object_t *obj, CK_ATTRIBUTE_TYPE attr_type)
++ {
++ 	int r;
++-	const u8 *val;
++-	size_t val_len;
+++	const u8 *val = NULL;
+++	size_t val_len = 0;
++ 
++ 	r = coolkey_get_attribute(card, obj, attr_type, &val, &val_len, NULL);
++ 	if (r < 0) {
++@@ -186,7 +186,7 @@ static int
++ coolkey_get_attribute_bytes(sc_card_t *card, sc_cardctl_coolkey_object_t *obj, CK_ATTRIBUTE_TYPE type, u8 *data, size_t *data_len, size_t max_data_len)
++ {
++ 	const u8 *val;
++-	size_t val_len;
+++	size_t val_len = 0;
++ 	int r;
++ 
++ 	r = coolkey_get_attribute(card, obj, type, &val, &val_len, NULL);
++diff --git a/src/pkcs15init/pkcs15-asepcos.c b/src/pkcs15init/pkcs15-asepcos.c
++index d7122012..bc0efb5c 100644
++--- a/src/pkcs15init/pkcs15-asepcos.c
+++++ b/src/pkcs15init/pkcs15-asepcos.c
++@@ -221,7 +221,7 @@ static int asepcos_do_store_pin(sc_profile_t *profile, sc_card_t *card,
++ {
++ 	sc_file_t *nfile = NULL;
++ 	u8  buf[64], sbuf[64], *p = buf, *q = sbuf;
++-	int r, akn;
+++	int r, akn = 0;
++ 
++ 	if (auth_info->auth_type != SC_PKCS15_PIN_AUTH_TYPE_PIN)
++ 		return SC_ERROR_OBJECT_NOT_VALID;
++diff --git a/src/tools/opensc-explorer.c b/src/tools/opensc-explorer.c
++index 9ec4daa1..04efdf8f 100644
++--- a/src/tools/opensc-explorer.c
+++++ b/src/tools/opensc-explorer.c
++@@ -2472,7 +2472,7 @@ int main(int argc, char *argv[])
++ 		char *line;
++ 		int cargc;
++ 		char *cargv[260];
++-		int multiple;
+++		int multiple = 0;
++ 		struct command *cmd;
++ 		char prompt[3*SC_MAX_PATH_STRING_SIZE];
++ 
++-- 
++2.25.1
++
+diff --git a/package/opensc/Config.in b/package/opensc/Config.in
+new file mode 100644
+index 0000000000..fe3dd0836e
+--- /dev/null
++++ b/package/opensc/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_OPENSC
++	bool "opensc"
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_PCSC_LITE
++	select BR2_PACKAGE_OPENSSL
++	help
++	  OpenSC provides a set of libraries and utilities to work
++	  with smart cards.
++
++	  https://github.com/OpenSC/OpenSC/wiki
++
++comment "opensc needs a toolchain with dynamic library, threads"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
+new file mode 100644
+index 0000000000..517cfe503a
+--- /dev/null
++++ b/package/opensc/opensc.hash
+@@ -0,0 +1,5 @@
++# Computed locally from https://https://github.com/OpenSC/OpenSC/releases/
++sha256  8d4e5347195ebea332be585df61dcc470331c26969e4b0447c851fb0844c7186  opensc-0.22.0.tar.gz
++
++# Computed locally
++sha256  376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  COPYING
+diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+new file mode 100644
+index 0000000000..538151c12a
+--- /dev/null
++++ b/package/opensc/opensc.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# opensc
++#
++################################################################################
++
++OPENSC_VERSION = 0.22.0
++OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
++OPENSC_LICENSE = LGPL-2.1+
++OPENSC_LICENSE_FILES = COPYING
++OPENSC_DEPENDENCIES = openssl pcsc-lite
++OPENSC_INSTALL_STAGING = YES
++OPENSC_CONF_OPTS = --disable-strict
++
++$(eval $(autotools-package))
+
+--===============9196105942253607836==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9196105942253607836==--
