@@ -1,89 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B43FC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 11:28:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83864C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:14:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE04583434;
-	Sun, 24 Jul 2022 11:28:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE04583434
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE50D40BBB;
+	Sun, 24 Jul 2022 12:14:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE50D40BBB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s_5kAJBDyqDC; Sun, 24 Jul 2022 11:28:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FSP7x5bBEQUe; Sun, 24 Jul 2022 12:14:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3A8083126;
-	Sun, 24 Jul 2022 11:28:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3A8083126
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EC69B1BF48C
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 11:28:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D225B40186;
+	Sun, 24 Jul 2022 12:14:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D225B40186
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D3A41BF344
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:14:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D410261ACB
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 11:28:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D410261ACB
+ by smtp2.osuosl.org (Postfix) with ESMTP id D49E940186
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:14:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D49E940186
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ROHY2ca9qaHQ for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 11:28:43 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBA8961110
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CBA8961110
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 11:28:42 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- b21-20020a05600c4e1500b003a32bc8612fso4796817wmq.3
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 04:28:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=mKJujZo528yl76bGnQ0Td6YvFpB6L8XSczuepVLWrho=;
- b=1EM4A8YFDnzOwHTkvOxwyms+kt3puk96xyT4XR7Pf4QhGK3CsencDc5EAR2Vw5PdBp
- h7cFj4vRJelIT/ozPiIoeRQuSgbARi+tYIq+ljVFKBts92viuCYJvm6286sP1LTlvfT6
- U29bJQwrPFhGyUmYjAYR3IY1Vzblkk1UrcBYo5KPWPu4Ltr7juXhd1tfQDLvwBivriat
- pJX9mop4a/tzwQHHl+sqM0yfsZbdMLixavC5fB4im/CPGG8bRcomo2CeJlGSv2j8Hikl
- 7yylEJ0JJTU48/uWxRsjwpRn6SO7mX4hDRbFZ1ZCOE8rAu810GRvmXyzi5w5JKHupekA
- FGUg==
-X-Gm-Message-State: AJIora/6UhXE796bq4Zk1qF2r5c6QC83UxSJ031zCiLAvRjJIcUFwQHo
- hzY64Gtvnf/I/a3w3YPYTgPktSjWU2M=
-X-Google-Smtp-Source: AGRyM1v0cIJuvwHRU6WCCQBECVkb1w9tvipIdBJDG0BuwSLw5eygJqCJ81GE/pj//x9KYtr/9DS3Mg==
-X-Received: by 2002:a05:600c:3d17:b0:3a3:2bc8:6132 with SMTP id
- bh23-20020a05600c3d1700b003a32bc86132mr5347800wmb.24.1658662120346; 
- Sun, 24 Jul 2022 04:28:40 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- z21-20020a05600c0a1500b0039c454067ddsm11410896wmp.15.2022.07.24.04.28.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Jul 2022 04:28:39 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 13:28:30 +0200
-Message-Id: <20220724112830.1108001-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OCC-wQHNYPku for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 12:13:59 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C6E940025
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1C6E940025
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:13:58 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 32B8C200003;
+ Sun, 24 Jul 2022 12:13:57 +0000 (UTC)
+Date: Sun, 24 Jul 2022 14:13:56 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220724141356.10982eac@windsurf>
+In-Reply-To: <20220415164947.13025-1-fontaine.fabrice@gmail.com>
+References: <20220415164947.13025-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=mKJujZo528yl76bGnQ0Td6YvFpB6L8XSczuepVLWrho=;
- b=f/Vn0vuYexZJ+hOA2OIxxOg6/k2NhdNWIcIenveKk+PYaZ8ULvtZb9nIgIk4p72QqZ
- Z764ZhxXdsPv2nyDEHsHnvN74rCjrxqDlA1VVRErRuhakUHk0JpoqJokXHlonIHDzwkH
- ACPhVCuv6h9IUydcRLuBHr4WuE4GkoG2i7K9o4jKY5HnIZYqkOH+5MC+bzwr2o4myggK
- 6gljkyPlzM/END1BbpzWdspnAtlYWZT7vivMI4javrb9vau2rzwGwF3mrKTCkNiPB0Oa
- FoZtvNVP2+i362o+sEEeaVyIpSwMlxtPn923Ja81G6j4O9iRcJVyvweHhkd+qCdSj9U4
- 4IEQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=f/Vn0vuY
-Subject: [Buildroot] [PATCH 1/1] package/matchbox-keyboard: bump to version
- 0.1.1
+ d=bootlin.com; s=gm1; t=1658664837;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=m5QCWpB1NwtFn5fLguDKhT+6jgGp8XEWlV3NulCfnWY=;
+ b=oKUzZfuuGguLyUIl73pHkEqEN7yiZ90zYUka/JZD2njqvUDAx8t8tQX5VbeK1Jn82zEDLi
+ oCmrP5hcQZsDH2G2p2ChaQRpGi2XULpNZj4KfoOgXqwpSOpXRrQFcnY9NdJ0TR7kzJDcro
+ RJQqWkkc0ArksnQ3B+5/dGYcfbHWe7UEeUtO9QqYsy2GWjOIbyiHHFw1KLHhZ0f4irS07j
+ IFmIMGCh/Sm7Fpr/vcIbCZjeXT8YZm6cxaU21bQGqQ1e/rDNWeao4+2GytaFfNAfJlm0rJ
+ Xhg2NYP6+5WfPKsNOAVCW4BH+6a6TDrKE7/4V2efFCyIxLpXcvDuALrHwngcig==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=oKUzZfuu
+Subject: Re: [Buildroot] [PATCH] package/gnu-efi: fix build on mips64el
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,97 +75,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Switch license to LGPL-2.1 except applet/applet.c:
-  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/commit/?id=267595f2ef18e46c79f76057ad3c6fb40009ca4f
-- Drop expat=yes (not needed since
-  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/commit/?id=4cf2976842612a0a278de4515715e4e4228c2987)
-- xlib_libXrender is a mandatory dependency since
-  https://git.yoctoproject.org/matchbox-keyboard/commit/?id=b38f24036cff3be6c2fbcf9ca9881803e69003ac
-- libgtk3 is an optional dependency since
-  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/commit/?id=e4ab2198a5f9611027cb62e6ff41ee2593f07d4a
+Hello Fabrice,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/matchbox-keyboard/Config.in           |  1 +
- .../matchbox-keyboard/matchbox-keyboard.hash  |  6 ++---
- .../matchbox-keyboard/matchbox-keyboard.mk    | 24 ++++++++++++-------
- 3 files changed, 20 insertions(+), 11 deletions(-)
+On Fri, 15 Apr 2022 18:49:47 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
-index b6753f3bec..260a57c6a4 100644
---- a/package/matchbox-keyboard/Config.in
-+++ b/package/matchbox-keyboard/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_MATCHBOX_KEYBOARD
- 	bool "matchbox-keyboard"
- 	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XLIB_LIBXRENDER
- 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_MATCHBOX_FAKEKEY
- 	select BR2_PACKAGE_MATCHBOX_LIB
-diff --git a/package/matchbox-keyboard/matchbox-keyboard.hash b/package/matchbox-keyboard/matchbox-keyboard.hash
-index c65fbecff4..43ace650a4 100644
---- a/package/matchbox-keyboard/matchbox-keyboard.hash
-+++ b/package/matchbox-keyboard/matchbox-keyboard.hash
-@@ -1,4 +1,4 @@
--# From http://downloads.yoctoproject.org/releases/matchbox/matchbox-keyboard/0.1/matchbox-keyboard-0.1.tar.bz2.md5
--md5	50940321d59fee23b38a4941100abf25	matchbox-keyboard-0.1.tar.bz2
- # Locally computed
--sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256  44fc6dc6075090d6f8e43f8667cf8a85bed59b7221a5ee81843454c66e352790  matchbox-keyboard-0.1.1.tar.bz2
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  bba6fd8976fa5c669ddc1378a3d8d49a74263d4d39efb9a90cefb3583a813ecc  applet/applet.c
-diff --git a/package/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
-index 23ab5ad7e5..242c4831d1 100644
---- a/package/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox-keyboard/matchbox-keyboard.mk
-@@ -4,15 +4,16 @@
- #
- ################################################################################
- 
--MATCHBOX_KEYBOARD_VERSION = 0.1
-+MATCHBOX_KEYBOARD_VERSION = 0.1.1
- MATCHBOX_KEYBOARD_SOURCE = matchbox-keyboard-$(MATCHBOX_KEYBOARD_VERSION).tar.bz2
--MATCHBOX_KEYBOARD_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
--MATCHBOX_KEYBOARD_LICENSE = GPL-2.0+
--MATCHBOX_KEYBOARD_LICENSE_FILES = COPYING
--MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expat
--
--# Workaround bug in configure script
--MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
-+MATCHBOX_KEYBOARD_SITE = \
-+	http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/snapshot
-+MATCHBOX_KEYBOARD_LICENSE = LGPL-2.1, GPL-2.0+ (applet.c)
-+MATCHBOX_KEYBOARD_LICENSE_FILES = COPYING applet/applet.c
-+MATCHBOX_KEYBOARD_DEPENDENCIES = \
-+	host-pkgconf matchbox-lib matchbox-fakekey expat xlib_libXrender
-+# From git
-+MATCHBOX_KEYBOARD_AUTORECONF = YES
- 
- define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
- 	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh \
-@@ -29,4 +30,11 @@ MATCHBOX_KEYBOARD_CONF_OPTS += --disable-cairo
- MATCHBOX_KEYBOARD_DEPENDENCIES += xlib_libXft
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+MATCHBOX_KEYBOARD_CONF_OPTS += --enable-gtk3-im
-+MATCHBOX_KEYBOARD_DEPENDENCIES += libgtk3
-+else
-+MATCHBOX_KEYBOARD_CONF_OPTS += --disable-gtk3-im
-+endif
-+
- $(eval $(autotools-package))
+> Drop -Werror to fix the following build failure on mips64el raised since
+> commit 11b347c03ab0b38389ec11b48f63236a3b4d6547:
+> 
+> /nvmedata/autobuild/instance-9/output-1/build/gnu-efi-3.0.10//lib/dpath.c: In function 'FileDevicePath':
+> /nvmedata/autobuild/instance-9/output-1/build/gnu-efi-3.0.10//lib/../inc/efilink.h:145:46: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
+>   145 | #define EFI_FIELD_OFFSET(TYPE,Field) ((UINTN)(intptr_t)(&(((TYPE *) 0)->Field)))
+>       |                                              ^
+> /nvmedata/autobuild/instance-9/output-1/build/gnu-efi-3.0.10//lib/../inc/efidevp.h:404:38: note: in expansion of macro 'EFI_FIELD_OFFSET'
+>   404 | #define SIZE_OF_FILEPATH_DEVICE_PATH EFI_FIELD_OFFSET(FILEPATH_DEVICE_PATH,PathName)
+>       |                                      ^~~~~~~~~~~~~~~~
+> /nvmedata/autobuild/instance-9/output-1/build/gnu-efi-3.0.10//lib/dpath.c:250:41: note: in expansion of macro 'SIZE_OF_FILEPATH_DEVICE_PATH'
+>   250 |     FilePath = AllocateZeroPool (Size + SIZE_OF_FILEPATH_DEVICE_PATH + sizeof(EFI_DEVICE_PATH));
+>       |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/d19e57004c36f2904c5eea988e0c38fbdb557c7e
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../0002-Make.defaults-drop-Werror.patch      | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 package/gnu-efi/0002-Make.defaults-drop-Werror.patch
+
+For some reason, this issue no longer appeared recently in the
+autobuilders. There was another issue, which got fixed by the bump to
+3.0.14, and gnu-efi no longer appears in the autobuilder failures.
+
+So I've marked this patch as Superseded, we can revisit later if it
+turns out to still be needed.
+
+Thanks!
+
+Thomas
 -- 
-2.35.1
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
