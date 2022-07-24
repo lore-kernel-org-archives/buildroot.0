@@ -1,95 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D036C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 20:00:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C58ADC43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 20:59:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06F5C40C89;
-	Sun, 24 Jul 2022 20:00:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06F5C40C89
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0746A83DF5;
+	Sun, 24 Jul 2022 20:59:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0746A83DF5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id isz_mQgOdHxi; Sun, 24 Jul 2022 20:00:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LxfLzJucy3fv; Sun, 24 Jul 2022 20:59:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 087DC40C86;
-	Sun, 24 Jul 2022 20:00:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 087DC40C86
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10A8A83415;
+	Sun, 24 Jul 2022 20:59:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10A8A83415
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5002C1BF20B
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:56:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3CD781BF20B
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 20:59:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36F8F61192
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:56:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36F8F61192
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B5F2611DD
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 20:59:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B5F2611DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bEc-8L6JMiMc for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 19:56:32 +0000 (UTC)
+ with ESMTP id p4-bJFxdYZ01 for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 20:59:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 298A160C0F
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 298A160C0F
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 19:56:32 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id u5so13326289wrm.4
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:56:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A568A611DA
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A568A611DA
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 20:59:06 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id bn9so2565510wrb.9
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 13:59:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=LV4eCvUxK1vnYFvS140FnPwe8Ag0VefbUbhI/z2wIuE=;
- b=btEXwuNZWtQpwf4yReVwmyqLzMUl5EwPDp/Av1WYukTkoJJIioDl7Xp6VuWACbLrMm
- 3wT/7EXhRI6m+CIJmQac0prAH0fUrtrASjNwSMwYpmTqi0CwkHhmOWw2gnuL8q8sn8v1
- iRzNx5bJUaywFe+pG89Ox2/DcRe4mU8001WsAJjRHHgG36foGyQK0nQOIDFWjLdw8z4F
- wIDjQFLRjQSB+PZGzzC0EIasxfjBTRh/l3ZRP5t0sNghvBkZLz6LaIVZOPYK1aSmMW1R
- lzTvXNkoMxCX2EAUignfiYdVK3CRAQXdP6c2tbEs3F99/1wHKYgmL2h+YL7yitybBQ8T
- 8IeA==
-X-Gm-Message-State: AJIora8L1acYdI5bw87CN0Gq6KcIh5bLWaQIcPMtu5zEnnw+3IBtGHpU
- DD/VWwkq+A1sbytuxLX3RYRbwQ==
-X-Google-Smtp-Source: AGRyM1ssCiKlCrqEL4x6nmlV+ZRuhDfWbHn7OuW5Dlyp7UDB0qfvtCm8/1vuZimqa1Np5hGj/fnslw==
-X-Received: by 2002:a5d:456c:0:b0:21e:40f5:aaef with SMTP id
- a12-20020a5d456c000000b0021e40f5aaefmr5958798wrc.396.1658692589982; 
- Sun, 24 Jul 2022 12:56:29 -0700 (PDT)
+ bh=/ebP9c6Z8EODoB1bgYfM4KGLZHiuRP+eVCqD2vl1aSk=;
+ b=qqqHRkWAQSF4PwzjbN+N7qgB6lN+uOYRRFmwgwI7sOw0KLDuTO0A3V8hz8Yq1m1m2U
+ pg7/PJiv3bg0RGUOCRlCOFD2vQ3tdD5rfLsPz0UvGKqE1iJK0WgUpKRwXLO/tB5CU+SK
+ sy1Z3Z1HZae6mSG2fG/O0lCTf1tsFHPCIc1vdnWdI2m+ee3k7eEwegZerPr2GYxSwUEe
+ SPB1vk/fYf4lvvLWKWBDMDu0/iq/jW0e9R/L2jmSpN4rTnBQwxVnK0lpCeBcwsv+vT6B
+ zwyYWIZvppc4VrLuxsTi94qEUC6yNDrj5CxaY0a4DGU8/R7pOhqnhQdiWUmpaHn5QO49
+ iNDg==
+X-Gm-Message-State: AJIora90LCd/tLBxj1eIqUAKThdt5dHPGsXmnLwEnJzH0FjCnKmSX+nH
+ WUXz6YPfrJH0H61qlr06BEXYgw==
+X-Google-Smtp-Source: AGRyM1uA1mgzzW10rTxdYY8l0HOVv7xbFBCjPVkzkanVYD3nNNSTONgfdIpd6FdpbbBFIQ5y0lw6pg==
+X-Received: by 2002:adf:f452:0:b0:21e:86ac:cd74 with SMTP id
+ f18-20020adff452000000b0021e86accd74mr2195399wrp.194.1658696344384; 
+ Sun, 24 Jul 2022 13:59:04 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- c9-20020adffb49000000b0021d6d18a9f8sm10248978wrs.76.2022.07.24.12.56.29
+ k23-20020a05600c1c9700b003a31b00c216sm13165922wms.0.2022.07.24.13.59.03
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 24 Jul 2022 12:56:29 -0700 (PDT)
-Message-ID: <1ceff6e7-c1a7-b2b9-fb2e-e0a1ce7907b2@mind.be>
-Date: Sun, 24 Jul 2022 21:56:27 +0200
+ Sun, 24 Jul 2022 13:59:03 -0700 (PDT)
+Message-ID: <ebe61366-15fc-6e69-b187-f884312206e2@mind.be>
+Date: Sun, 24 Jul 2022 22:58:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20220724162500.2683871-1-bernd.kuhls@t-online.de>
- <20220724162500.2683871-21-bernd.kuhls@t-online.de>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20220724020144.1012252-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220724162500.2683871-21-bernd.kuhls@t-online.de>
+In-Reply-To: <20220724020144.1012252-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=LV4eCvUxK1vnYFvS140FnPwe8Ag0VefbUbhI/z2wIuE=;
- b=EuRJyuuqhOtYiAQAlu9pm8KIBydWAuWSm3YST0FNINslIajo0P12snAd4XXN8FRKre
- gWz/FkGcw4XNp80OIUUz2ccmPrnWZnbc6AXIpDRUi8Nl864VsdLuPHb2aaxZUmaRNa4T
- z/2SueildnkedzO/V4BbZNv7gXUfeqT+EO1NyFvnAIqaLH6gozxsrfaogyOg8lTqM5Op
- PfqRakCJFZhZPy0VdBuvHH9yXtWZgQ5tvnJCEzwWULcU9kmXPw0tKvBVPqcs1Iszg+qC
- dOJGOjJ+4lGvICWmQ/f7gXfadWRnRcy+TnbHT01nDt/hls3jmV9ClDX2f1C7ejfGZmzv
- 07fg==
+ bh=/ebP9c6Z8EODoB1bgYfM4KGLZHiuRP+eVCqD2vl1aSk=;
+ b=RrtUewV4Hq9pTV5KPjggP7ZhnVNgXvO4o06V8oYOJ+8/prckcRIQANDBERRxU8dNNh
+ pkovNLLJcKsAWOtH77y4tDor/mRXtZnr2DJ27mMvyH2ayOyTarfOlBG0gq1qBc7MC3Dv
+ QKEfyz8wCrqEfS1qSZk5kOzrSkqumj198oweHqyQmRvUbWKqrmMKCMq3HIpIN0ZBQtxD
+ c1xv58/0+GxTE3AoA4B6PhB4rZAQmAlj8wsVb8GoQEmP0VJzD7TIB41ftcZkpFI4k2dc
+ Dt7LTevG3A9n0NiY8o6az0BtjSNyc1/9dCL8NUDDWMeWSsUtED9cvw74jLkJXMJ3qpra
+ 3QjQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=EuRJyuuq
-Subject: Re: [Buildroot] [PATCH 20/20] package/x11r7/xdriver_xf86-video-mga:
- bump version to 2.0.1
+ header.a=rsa-sha256 header.s=google header.b=RrtUewV4
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-cargo: ensure host/target
+ rustflags are properly split
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,60 +107,81 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 24/07/2022 18:25, Bernd Kuhls wrote:
-> Removed patch (and autoreconf) which was commited upstream:
-> https://gitlab.freedesktop.org/xorg/driver/xf86-video-mga/-/commit/f227f2f286123a9ca64b567783825a2c18b87971
+On 24/07/2022 04:01, James Hilliard wrote:
+> Set HOST_LDFLAGS RUSTFLAGS via the host-config feature, see:
+> https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#host-config
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[snip]
-> diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
-> index 218e52e19c..813429789b 100644
-> --- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
-> +++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
-> @@ -1,7 +1,5 @@
-> -# From https://lists.x.org/archives/xorg-announce/2018-December/002933.html
-> -md5 b8fc99b4adea8bfe80156b13df4b6c9c  xf86-video-mga-2.0.0.tar.bz2
-> -sha1 833f2710a1fd7b3f2db3700b2ad055527da5033b  xf86-video-mga-2.0.0.tar.bz2
-> -sha256 268946e1a13e9d80e4f724a0740df9e6e8c8bad37697fcbf456924e9fdbb5d79  xf86-video-mga-2.0.0.tar.bz2
-> -sha512 b92006486aef815ff4399f291d610c65d88c0b32a9dae97658c644715ff62b221b01495b5c7a2311745e26f699c1c1f753b81c7bf54cf75567af9f78ac015540  xf86-video-mga-2.0.0.tar.bz2
-> +# From https://lists.x.org/archives/xorg-announce/2022-July/003184.html
-> +sha256  27a33b70837965bb4a5f27fd260be085ca5bba837a4e62907f093c2f205603ab  xf86-video-mga-2.0.1.tar.xz
-> +sha512  d9a0abedb71f3354788c2f91b770bc00c4118cfa2c99072dea82c28f025bc87bb88ebaf969962a8f0e97e1ff7938aebd9c682b730b0e07d5174dd9e8dc2cdfb6  xf86-video-mga-2.0.1.tar.xz
->   # Locally computed
-> -sha256 6c567575e381478c7616eedff3ea2ae5228a5b54fbdd22d4070ebae312fa085c  COPYING
-> +sha256  f69c2f4fd11ec4de7fcc23146187836eed1755aade3fef28b9204ea1a4adf61b  COPYING
+> We have to enable this nightly feature first using:
+> CARGO_UNSTABLE_HOST_CONFIG="true"
+> 
+> Separately set target RUSTFLAGS for the target triple specific env
+> variable.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>   package/pkg-cargo.mk | 11 ++++++++---
+>   1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+> index f7e3f39503..439d443b0d 100644
+> --- a/package/pkg-cargo.mk
+> +++ b/package/pkg-cargo.mk
+> @@ -32,7 +32,10 @@ PKG_COMMON_CARGO_ENV = \
+>   # using nighly features on stable releases, i.e features that are not
+>   # yet considered stable.
+>   #
+> -# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" "enables the nightly
+> +# CARGO_UNSTABLE_HOST_CONFIG="true" enables the host specific
+> +# configuration feature
+> +#
+> +# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" enables the nightly
+>   # configuration option target-applies-to-host value to be set
+>   #
+>   # CARGO_TARGET_APPLIES_TO_HOST="false" is actually setting the value
+> @@ -41,9 +44,11 @@ PKG_COMMON_CARGO_ENV = \
+>   PKG_CARGO_ENV = \
+>   	$(PKG_COMMON_CARGO_ENV) \
+>   	__CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
+> +	CARGO_UNSTABLE_HOST_CONFIG="true" \
+>   	CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" \
+>   	CARGO_TARGET_APPLIES_TO_HOST="false" \
+>   	CARGO_BUILD_TARGET="$(RUSTC_TARGET_NAME)" \
+> +	CARGO_HOST_RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))" \
+>   	CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_LINKER=$(notdir $(TARGET_CROSS))gcc
+>   
+>   #
+> @@ -51,7 +56,8 @@ PKG_CARGO_ENV = \
+>   # and should be removed when fixed upstream
+>   #
+>   ifeq ($(NORMALIZED_ARCH),arm)
+> -	PKG_CARGO_ENV += RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
+> +	PKG_CARGO_ENV += \
+> +		CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
 
-  As you should know, when the license file hash changes you should record in 
-the commit message why it changed (to prove that there's no actual license change).
+  I don't understand why this is needed. We don't set RUSTFLAGS anywhere else, 
+so it should be fine? Or is it because RUSTFLAGS is also used for native build 
+even if CARGO_HOST_RUSTFLAGS is set?
 
-  In this case it was easy to find out so I did it myself: it's a spelling 
-correction.
+  (Anyway, this hunk can probably be removed, the bug that triggered it is fixed.)
 
-  Applied entire series to master with that fixed, thanks.
+>   endif
+>   
+>   HOST_PKG_CARGO_ENV = \
+> @@ -128,7 +134,6 @@ else # ifeq ($(4),target)
+>   define $(2)_BUILD_CMDS
+>   	cd $$($$(PKG)_SRCDIR) && \
+>   	$$(HOST_MAKE_ENV) \
+> -		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
+
+  Why can this be removed? You added CARGO_HOST_RUSTFLAGS to the target build, 
+but we still want HOST_LDFLAGS in the host package build, no?
 
   Regards,
   Arnout
 
-> diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-> index 24f2da2cce..4841a643bc 100644
-> --- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-> +++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-> @@ -4,12 +4,11 @@
->   #
->   ################################################################################
->   
-> -XDRIVER_XF86_VIDEO_MGA_VERSION = 2.0.0
-> -XDRIVER_XF86_VIDEO_MGA_SOURCE = xf86-video-mga-$(XDRIVER_XF86_VIDEO_MGA_VERSION).tar.bz2
-> -XDRIVER_XF86_VIDEO_MGA_SITE = http://xorg.freedesktop.org/archive/individual/driver
-> +XDRIVER_XF86_VIDEO_MGA_VERSION = 2.0.1
-> +XDRIVER_XF86_VIDEO_MGA_SOURCE = xf86-video-mga-$(XDRIVER_XF86_VIDEO_MGA_VERSION).tar.xz
-> +XDRIVER_XF86_VIDEO_MGA_SITE = https://xorg.freedesktop.org/archive/individual/driver
->   XDRIVER_XF86_VIDEO_MGA_LICENSE = MIT
->   XDRIVER_XF86_VIDEO_MGA_LICENSE_FILES = COPYING
-> -XDRIVER_XF86_VIDEO_MGA_AUTORECONF = YES
->   XDRIVER_XF86_VIDEO_MGA_DEPENDENCIES = xserver_xorg-server libdrm xorgproto
->   
->   ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+>   		$$(HOST_CONFIGURE_OPTS) \
+>   		$$(HOST_PKG_CARGO_ENV) \
+>   		$$($(2)_CARGO_ENV) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
