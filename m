@@ -4,93 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37DC9C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 21:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D0E8C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 21:29:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9065611E2;
-	Sun, 24 Jul 2022 21:26:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9065611E2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92D17611E4;
+	Sun, 24 Jul 2022 21:29:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92D17611E4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CWbJSfieJQFe; Sun, 24 Jul 2022 21:26:51 +0000 (UTC)
+	with ESMTP id ArsDa3Hxgalq; Sun, 24 Jul 2022 21:29:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4CB1611DD;
-	Sun, 24 Jul 2022 21:26:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4CB1611DD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 883C81BF33C
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 21:26:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92001611E1;
+	Sun, 24 Jul 2022 21:29:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92001611E1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BC111BF33C
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 21:29:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 61E5983ECA
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 21:26:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61E5983ECA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 64C00611E1
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 21:29:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64C00611E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id afgEZTGsGgW1 for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 21:26:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3dw4xt5IGayl for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 21:29:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BBA083EC9
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6BBA083EC9
- for <buildroot@busybox.net>; Sun, 24 Jul 2022 21:26:48 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id g2so5447919wru.3
- for <buildroot@busybox.net>; Sun, 24 Jul 2022 14:26:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68EFB611DD
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 68EFB611DD
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 21:29:31 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id q18so3079824wrx.8
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 14:29:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:in-reply-to
  :content-transfer-encoding;
- bh=4ekNp00BvWgcEkCV/RHgT1QlmEaBK1VB1hlqwA1ihpo=;
- b=gxulGwyutvS42tXzRVflXIXHfekwA7KkBs5RVbijvYR0aVpdo4oQu2ewdMXxBBGIt/
- gGawcKlQ0WIr/MZMOFVbp3bw/lZcuzNYy4nA60Opn58pEB3lGPjY35JaTgoy8s0XIQLu
- M6xMcBq1s1ZLh/boCwJZ1nNg2K9rA1k1g7n1R80MPiB0EycN7PNcJSzjp6b0hlaYAt0v
- sd62SbMiC6jur9klVXy5mfGVw1Z03gq0pT9ZT9IESVWYpIBQHgzFgrnLu3JiSiSXJHs6
- IB8mSt3cjU68bBEdk2Qkvb3FiNNgWkd8jvW4OHMx+ObnEJwxlIMQq+msB02T6/1fVoD/
- UmHA==
-X-Gm-Message-State: AJIora+YXEjWV+lrc3TcXI5MlkZJQxSXloimir05rero8bP+SFyCDPyd
- MnOpOeIijpUNLY0Wd6P6yBTxyg==
-X-Google-Smtp-Source: AGRyM1uNy4vKq6i0QTstJH751umIkJvxk7aVFNmKoEPno2WHIRvX+W225qrcWZW0xDSRQhHfsSUEgg==
-X-Received: by 2002:a5d:5742:0:b0:21e:503b:a368 with SMTP id
- q2-20020a5d5742000000b0021e503ba368mr5777835wrw.366.1658698006417; 
- Sun, 24 Jul 2022 14:26:46 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ bh=G85i94ZNMHcryLwhI9831Vb76rfZ2BWBxgs2eSrPnNA=;
+ b=OWpLqJkNz+SHLvavpkNRKGGysbS2QO2kinf9HYj2PJ3ZbzOiE5tn+qxlDp5qHB8d68
+ V/ZvlFNb9YRBsKdC+v1HPw9zQAnvFBVyjrxLWGURSm8iPD2Q3R0goAY8MKtGkooAp3La
+ ttAlXX8T1f3zchQAMFl+wyHafbVkACf4HyHEOfw+6if8NTlzzaBPo+DnxO5bSNUJtK3H
+ CMYGnUDQ6zzAcWIGMUWY+YorBZ1P6LGs1VAtXWZVey5LuJ0iFVqYPp7DMg5SNQUb0/9+
+ WvhwrnDSNZDQ3M4G1x34m8LEzL9Fy2CGf0qJzmo60+2kQ+7ad/6+vjpAMmC3LoEHtzaA
+ FFMw==
+X-Gm-Message-State: AJIora9nPMrLtkFXBo0wSNEaIyKCY1wcwHcQwv4WSAcKc42X8Iz1uZip
+ Q5sZGA9cWDdfkj+B58ysf/IUpj1GxHxLng==
+X-Google-Smtp-Source: AGRyM1vLahS/aje9EZ40VxNswXreEboDeVIgpXl1D18IsKQm/p2tZ+PbqdX7yP/gqUfGoRHHN/VfHg==
+X-Received: by 2002:adf:f90f:0:b0:21e:7e3d:6af6 with SMTP id
+ b15-20020adff90f000000b0021e7e3d6af6mr4056551wrr.183.1658698169453; 
+ Sun, 24 Jul 2022 14:29:29 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:86bb:8231:62d7:1874?
+ ([2a01:cb19:8acf:5600:86bb:8231:62d7:1874])
  by smtp.gmail.com with ESMTPSA id
- 5-20020a05600c248500b003a3279b9037sm15487857wms.16.2022.07.24.14.26.45
+ u8-20020a5d5148000000b0021e74ef5ae8sm4385320wrt.21.2022.07.24.14.29.28
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 24 Jul 2022 14:26:45 -0700 (PDT)
-Message-ID: <b83cb617-6954-cb58-3944-c727803631bf@mind.be>
-Date: Sun, 24 Jul 2022 23:26:44 +0200
+ Sun, 24 Jul 2022 14:29:29 -0700 (PDT)
+Message-ID: <bd3baa17-8a7a-d43c-c8b8-478be35c86e8@smile.fr>
+Date: Sun, 24 Jul 2022 23:29:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: Peter Seiderer <ps.report@gmx.net>, buildroot@busybox.net
-References: <20210314223207.13460-1-ps.report@gmx.net>
- <20210314223207.13460-2-ps.report@gmx.net>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20210314223207.13460-2-ps.report@gmx.net>
+ Thunderbird/91.9.0
+Content-Language: en-US
+To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
+References: <20220723210523.293598-1-romain.naour@smile.fr>
+ <8b554be7-d9c3-74ce-2684-c6ab2d6c9a05@mind.be>
+ <dafab4f2-f861-3646-13c4-b49f0d7493b8@mind.be>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <dafab4f2-f861-3646-13c4-b49f0d7493b8@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=4ekNp00BvWgcEkCV/RHgT1QlmEaBK1VB1hlqwA1ihpo=;
- b=bloEYU6lB8q5sXfcNQ8eLcVkLd80vzVoUHnG+ksuz98mhc8a5yizaM1RsEo839O5oI
- 9P10aXFPZ8651eIpqtRURxVbjG17IVqLcfxTwuLwqyprxcBtE7LxIcP6FCj9/W2S9jYX
- SMs4HVuWvBsiN5AD6Di1L9sTUxGKG8TEGij+5OXt6k93UBurN4fk5CKv6askEvSfXDV7
- BudTkubm8LCwZ52WJopw/xh5oylzWxvx/8ijHom9oclBfM5SRRqA0l2gvePEG9JMKUyb
- rDcYb/Y/3ui69gqcnpFC3HNoPpqkJC5vvs2DhP/LeN6gEjXCa3uM7ponPKX7UrqSn+Zw
- PkbA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=bloEYU6l
-Subject: Re: [Buildroot] [PATCH v1 2/2] package/batman-adv: enable
- B.A.T.M.A.N. V protocol by default
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=G85i94ZNMHcryLwhI9831Vb76rfZ2BWBxgs2eSrPnNA=;
+ b=VkKnX032muAHnxS7CIl4NWS30d7iKDiZKKffOwqIz5mq6hlTg6Fvyw0bA5mcBClvGb
+ iAjOUspKcrDatOOYMP+gWN5DJrs76+HIPtHJqgWaqMv25rCRRe4EABHmKOM5oQ//4A/k
+ x8GFdulRqXb4X22qG+uWbbV/TQhqLbBsqc0+Oq/0737rlrFHM0a2iZrIKV1Ye6191qXc
+ 4tYnkTpIytVzI1HFiKX2PDugC1lBcXAqeNE+I3hAAkwKeQz6O/CFBRosMonW9XMyIsRy
+ 4bnBGovRh44L2PdUDimUafSnL/VN2ExzfyuXpR6iqmiNu6AudAckiVCFBOF/Prz2SrTu
+ r56A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=VkKnX032
+Subject: Re: [Buildroot] [PATCH] package/mender: remove single hyphen
+ command (2)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,52 +102,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Adam Duskett <aduskett@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 14/03/2021 23:32, Peter Seiderer wrote:
-> As upstream enables CONFIG_BATMAN_ADV_BATMAN_V option since
-> 2018.2 by defaullt ([1]) honor this in buildroot and do
-> the same (and remove the leagcy experimental comment accordingly).
-> 
-> [1] https://git.open-mesh.org/batman-adv.git/blob/HEAD:/CHANGELOG.rst#l174
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-  I finally applied to master with just a bit extension of the commit message to 
-indicate that upstream's label of it being experimental is no longer really true.
-
-  Regards,
-  Arnout
-
-> ---
->   package/batman-adv/Config.in | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/batman-adv/Config.in b/package/batman-adv/Config.in
-> index 9d3d7967b9..f3ac974296 100644
-> --- a/package/batman-adv/Config.in
-> +++ b/package/batman-adv/Config.in
-> @@ -25,11 +25,10 @@ config BR2_PACKAGE_BATMAN_ADV_NC
->   	  https://www.open-mesh.org/projects/batman-adv/wiki/NetworkCoding
->   
->   config BR2_PACKAGE_BATMAN_ADV_BATMAN_V
-> -	bool "enable B.A.T.M.A.N. V protocol (experimental)"
-> +	bool "enable B.A.T.M.A.N. V protocol"
-> +	default y
->   	help
->   	  Enables B.A.T.M.A.N. V network protocol.
-> -	  This is the next-gen protocol and is experimental at this
-> -	  time.
->   
->   	  https://www.open-mesh.org/projects/batman-adv/wiki/BATMAN_V
->   
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+TGUgMjQvMDcvMjAyMiDDoCAxNjoxNCwgQXJub3V0IFZhbmRlY2FwcGVsbGUgYSDDqWNyaXTCoDoK
+PiAKPiBPbiAyNC8wNy8yMDIyIDEyOjMxLCBBcm5vdXQgVmFuZGVjYXBwZWxsZSB3cm90ZToKPj4K
+Pj4KPj4gT24gMjMvMDcvMjAyMiAyMzowNSwgUm9tYWluIE5hb3VyIHdyb3RlOgo+Pj4gU2luZ2xl
+IGh5cGhlbiBjb21tYW5kcyBoYXMgYmVlbiByZW1vdmVkIHNpbmNlIE1lbmRlciAzLjAuMCBbMV0K
+Pj4KPj4gwqBJIGp1c3QgYWRkZWQgbWVuZGVyLWNvbm5lY3Qgd2hpY2ggYWxzbyBoYXMgdGhlIGh5
+cGhlbi4gSXMgaXQgd3JvbmcgdGhlcmUgYXMKPj4gd2VsbD8KPj4KPj4+Cj4+PiBUaGUgaHlwaGVu
+IHdhcyBhZGRlZCBiYWNrIHdoaWxlIGZpeGluZyBjaGVjay1wa2cgYW5kIHNoZWxsY2hlY2sgd2Fy
+bmluZ3MgWzJdCj4+Pgo+Pj4gWzFdCj4+PiBodHRwczovL2dpdGh1Yi5jb20vbWVuZGVyc29mdHdh
+cmUvbWVuZGVyL2NvbW1pdC9mZDgzOGVjMWIwOGYzZDQyOWIxZDgxNjA3ZTljMzVhODdhMTA0ZWU2
+Cj4+Pgo+Pj4gWzJdIDBiMzUwY2Y3NTY5MDA1ZDNlZWM2YmI1NWEzYWNkNDY4OGQyZmJkNGUKPj4+
+Cj4+PiBTaWduZWQtb2ZmLWJ5OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcj4K
+Pj4+IENjOiBBZGFtIER1c2tldHQgPGFkdXNrZXR0QGdtYWlsLmNvbT4KPj4KPj4gwqBBcHBsaWVk
+IHRvIG1hc3RlciwgdGhhbmtzLgo+Pgo+Pj4gLS0tCj4+PiBXZSBzdGlsbCBoYXZlIGEgcGF0Y2gg
+YWRkaW5nIGEgc2ltcGxlIE1lbmRlciBydW50aW1lIHRlc3RpbmcgdGhhdCB3b3VsZAo+Pj4gY2F0
+Y2ggc3VjaCBpc3N1ZToKPj4+Cj4+PiBodHRwOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVj
+dC9idWlsZHJvb3QvcGF0Y2gvMjAyMjAxMDYxNDQzMDEuMTAyMjY0NC0xLXJvbWFpbi5uYW91ckBz
+bWlsZS5mci8KPj4+Cj4+Cj4+IMKgSSdsbCBnZXQgYXJvdW5kIHRvIHRoYXQgb25lIC0gZXZlbnR1
+YWxseSA6LSkKPiAKPiDCoEFjdHVhbGx5LCB0aGF0IHBhdGNoIGp1c3QgYWRkcyBhIGRlZmNvbmZp
+Zywgbm90IGEgcnVudGltZSB0ZXN0Li4uIEhvdyB3b3VsZCBpdAo+IGhhdmUgZGV0ZWN0ZWQgdGhl
+IGlzc3VlPwoKWW91J3JlIHJpZ2h0LCBJIHdhcyByZWZlcnJpbmcgdG8gYSBwYXRjaCB0aGF0IGlz
+IGFjdHVhbGx5IG5vdyBtZXJnZWQgOgoKaHR0cHM6Ly9naXQuYnVpbGRyb290Lm5ldC9idWlsZHJv
+b3QvY29tbWl0Lz9pZD1iYzkxZDM1ZGE3YTA0ZDhkMjhiMjBiYTRjYTMyNjcyYTJkZDFjNzM2CgpT
+bywgdGhpcyBpc3N1ZSBzaG91bGQgYmUgaW4gZ2l0bGFiLWNpIHRvby4uLgoKU2VlOiBodHRwczov
+L2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzI3MzMxMjE4NDkKClNv
+cnJ5IGZvciB0aGUgY29uZnVzaW9uLgoKQmVzdCByZWdhcmRzLApSb21haW4KCj4gCj4gCj4gwqBS
+ZWdhcmRzLAo+IMKgQXJub3V0Cj4gCj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
