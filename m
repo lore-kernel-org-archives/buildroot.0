@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01E20C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:24:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F92BC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:24:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98DEB84AB4;
-	Sun, 24 Jul 2022 12:24:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98DEB84AB4
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4FD584B01;
+	Sun, 24 Jul 2022 12:24:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4FD584B01
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NmBfMAXWvR_e; Sun, 24 Jul 2022 12:24:05 +0000 (UTC)
+	with ESMTP id jDSY4f2ZWDg5; Sun, 24 Jul 2022 12:24:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 992C184133;
-	Sun, 24 Jul 2022 12:24:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 992C184133
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 150DF1BF344
+	by smtp1.osuosl.org (Postfix) with ESMTP id CAE7284141;
+	Sun, 24 Jul 2022 12:24:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAE7284141
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 478621BF964
  for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:20:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B8EF181BB2
+ by smtp4.osuosl.org (Postfix) with ESMTP id BAFE1424CD
  for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:20:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8EF181BB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAFE1424CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hFLMOVaxMbtm for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 12:20:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 13DqyD3vDnGP for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 12:20:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A156B84C54
+ by smtp4.osuosl.org (Postfix) with ESMTP id 92DF5424D5
  for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:20:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A156B84C54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92DF5424D5
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8E0F185C25; Sun, 24 Jul 2022 12:06:47 +0000 (UTC)
+ id 6DF1A85C2B; Sun, 24 Jul 2022 12:06:47 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 14:19:26 +0200
+Date: Sun, 24 Jul 2022 14:19:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 77b6d48a990f26f705d89381ab0fed0688c91fc5
-X-Git-Newrev: fe920e999630e3de0db519844125dc00afd35eef
+X-Git-Oldrev: c2a450c3719bc6d5f1469469e28dd163f1a9cc03
+X-Git-Newrev: 11ac56fb042d03b32f5a70bceddcb9aeb1fe9478
 X-Patchwork-Hint: ignore
-Message-Id: <20220724120647.8E0F185C25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/janet: bump to version 1.23.0
+Message-Id: <20220724120647.6DF1A85C2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-typing-extensions: bump to
+ version 4.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe920e999630e3de0db519844125dc00afd35eef
+commit: https://git.buildroot.net/buildroot/commit/?id=11ac56fb042d03b32f5a70bceddcb9aeb1fe9478
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/janet/janet.hash | 2 +-
- package/janet/janet.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-typing-extensions/python-typing-extensions.hash | 4 ++--
+ package/python-typing-extensions/python-typing-extensions.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/janet/janet.hash b/package/janet/janet.hash
-index a93129cfa5..473955e391 100644
---- a/package/janet/janet.hash
-+++ b/package/janet/janet.hash
+diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
+index f37a609adc..2512ed042d 100644
+--- a/package/python-typing-extensions/python-typing-extensions.hash
++++ b/package/python-typing-extensions/python-typing-extensions.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  7c6969f8e82badc7afa28aa1054555c1c91d2858f9f45c41a82557f5c5ce85bd  janet-1.22.0.tar.gz
-+sha256  0b4d5d3632e0d376d9512ea8ea262f31f75c132b488dd7870f472acae709a865  janet-1.23.0.tar.gz
- 
- # Locally calculated
- sha256  e2d2ae8360d95386af751ac7d1a3da36ea8ceb230e5f0eba7eb762547b1c58c9  LICENSE
-diff --git a/package/janet/janet.mk b/package/janet/janet.mk
-index ad09d47c6a..070eae1cf0 100644
---- a/package/janet/janet.mk
-+++ b/package/janet/janet.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/typing_extensions/json
+-md5  197fb153e3720a3f6e0c85bb47f9c2b5  typing_extensions-4.2.0.tar.gz
+-sha256  f1c24655a0da0d1b67f07e17a5e6b2a105894e6824b92096378bb3668ef02376  typing_extensions-4.2.0.tar.gz
++md5  30ff8c89459dd93970a92a90b0386aba  typing_extensions-4.3.0.tar.gz
++sha256  e6d2677a32f47fc7eb2795db1dd15c1f34eff616bcaf2cfb5e997f854fa1c4a6  typing_extensions-4.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  ff17ce94e102024deb68773eb1cc74ca76da4e658f373531f0ac22d68a6bb1ad  LICENSE
+diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
+index a664e5d3e9..2b8c23f354 100644
+--- a/package/python-typing-extensions/python-typing-extensions.mk
++++ b/package/python-typing-extensions/python-typing-extensions.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--JANET_VERSION = 1.22.0
-+JANET_VERSION = 1.23.0
- JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
- JANET_LICENSE = MIT
- JANET_LICENSE_FILES = LICENSE
+-PYTHON_TYPING_EXTENSIONS_VERSION = 4.2.0
++PYTHON_TYPING_EXTENSIONS_VERSION = 4.3.0
+ PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
+-PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/fe/71/1df93bd59163c8084d812d166c907639646e8aac72886d563851b966bf18
++PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/9e/1d/d128169ff58c501059330f1ad96ed62b79114a2eb30b8238af63a2e27f70
+ PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = flit
+ PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
+ PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
