@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC1B0C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 16:27:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27BB6C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 16:27:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8560F61B51;
-	Sun, 24 Jul 2022 16:27:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8560F61B51
+	by smtp1.osuosl.org (Postfix) with ESMTP id C61AB84970;
+	Sun, 24 Jul 2022 16:27:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C61AB84970
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fPUinTWSVwy9; Sun, 24 Jul 2022 16:27:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fELufBPQoYSJ; Sun, 24 Jul 2022 16:27:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 885FA6107D;
-	Sun, 24 Jul 2022 16:27:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 885FA6107D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 826CA1BF964
+	by smtp1.osuosl.org (Postfix) with ESMTP id D09328496E;
+	Sun, 24 Jul 2022 16:27:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D09328496E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C42731BF479
  for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 16:25:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9ECFF4052E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2BF118496E
  for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 16:25:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9ECFF4052E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BF118496E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zorQAKrvhyVd for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tfD5ukut4aGB for <buildroot@lists.busybox.net>;
  Sun, 24 Jul 2022 16:25:08 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAA29404C6
-Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AAA29404C6
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 16:25:08 +0000 (UTC)
-Received: from fwd84.dcpf.telekom.de (fwd84.aul.t-online.de [10.223.144.110])
- by mailout06.t-online.de (Postfix) with SMTP id 6A00C12DF7
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 18:25:04 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.202.112]) by fwd84.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C0388494F
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0C0388494F
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 16:25:07 +0000 (UTC)
+Received: from fwd73.dcpf.telekom.de (fwd73.aul.t-online.de [10.223.144.99])
+ by mailout01.t-online.de (Postfix) with SMTP id C701A50C
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 18:25:05 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.202.112]) by fwd73.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1oFePd-3I375A0; Sun, 24 Jul 2022 18:25:01 +0200
+ esmtp id 1oFePc-0f12IM0; Sun, 24 Jul 2022 18:25:00 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:40906)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1oFePc-0007mb-2i;
+ (envelope-from <bernd.kuhls@t-online.de>) id 1oFePc-0007mb-1s;
  Sun, 24 Jul 2022 18:25:00 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 18:24:50 +0200
-Message-Id: <20220724162500.2683871-11-bernd.kuhls@t-online.de>
+Date: Sun, 24 Jul 2022 18:24:46 +0200
+Message-Id: <20220724162500.2683871-7-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220724162500.2683871-1-bernd.kuhls@t-online.de>
 References: <20220724162500.2683871-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1658679901-0144CFA9-E15C1B45/0/0 CLEAN NORMAL
-X-TOI-MSGID: 3a8e95f5-5efa-49ce-baaa-967b9c45c808
-Subject: [Buildroot] [PATCH 10/20] package/x11r7/xdriver_xf86-video-cirrus:
- bump version to 1.6.0
+X-TOI-EXPURGATEID: 150726::1658679900-0144F70D-22D26CA0/0/0 CLEAN NORMAL
+X-TOI-MSGID: eb5d397a-45d8-4117-a0bf-9545b2cbe431
+Subject: [Buildroot] [PATCH 06/20] package/x11r7/xapp_xmodmap: bump version
+ to 1.0.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,39 +76,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-cirrus.hash                          | 5 +++--
- .../xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk  | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_xmodmap/xapp_xmodmap.hash | 10 ++++------
+ package/x11r7/xapp_xmodmap/xapp_xmodmap.mk   |  6 +++---
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash
-index 0600bce16e..98de98c065 100644
---- a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash
-+++ b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash
-@@ -1,4 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2015-May/002600.html
--sha256  edc87b20a55259126b5239b5c1ef913419eab7ded0ed12ae9ae989460d7351ab  xf86-video-cirrus-1.5.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-July/003182.html
-+sha256  0ef3fa0083de3d9a040f11b3af38598d8405f1165b908fdd6712c30038326401  xf86-video-cirrus-1.6.0.tar.xz
-+sha512  d18260bdc486fbadf619e41a9e9d9ad08bda2434b877ab7504ba13aa1fdeb1f87bb397d9090d5cf0883325ad08799115d5f0ce098b5f75088a06b0a96894ed76  xf86-video-cirrus-1.6.0.tar.xz
- # Locally calculated
- sha256  a113cf02dcfa523593727790a17172080ac87d8de16e766bda4cbbe73dd8dc62  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
-index fa776a24d6..d953b2239d 100644
---- a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
-+++ b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
+diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash b/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
+index 4925ec00a3..db3d8f33cd 100644
+--- a/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
++++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-February/002952.html
+-md5 51f1d30a525e9903280ffeea2744b1f6  xmodmap-1.0.10.tar.bz2
+-sha1 69e041f8a8c501bd1feb68805a0880633a685bc8  xmodmap-1.0.10.tar.bz2
+-sha256 473f0941d7439d501bb895ff358832b936ec34c749b9704c37a15e11c318487c  xmodmap-1.0.10.tar.bz2
+-sha512 324c7dcef843186088f16b3bc47485eb3c9b4331e56ce43b692deb4bb3d4f4f27512480e91a379cceac8383df920dc5e37cd825246b50b6343291cec48134c04  xmodmap-1.0.10.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-July/003176.html
++sha256  9a2f8168f7b0bc382828847403902cb6bf175e17658b36189eac87edda877e81  xmodmap-1.0.11.tar.xz
++sha512  a78f916f048d2017f079733becc99232c087c360ece61ec6c4fa4b5b130b96a1b10c4ce1b64a15bdcab7ea05de3c7f16035503d5be6f8ce1a7612ce71d558510  xmodmap-1.0.11.tar.xz
+ # Locally computed
+-sha256 c149563cf2cb0ecfb1148b6eb8f604c62bed43452a0d0fbafb97286a97840f5c  COPYING
++sha256  c149563cf2cb0ecfb1148b6eb8f604c62bed43452a0d0fbafb97286a97840f5c  COPYING
+diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
+index f3a458b7b5..8fcb4716a8 100644
+--- a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
++++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_CIRRUS_VERSION = 1.5.3
--XDRIVER_XF86_VIDEO_CIRRUS_SOURCE = xf86-video-cirrus-$(XDRIVER_XF86_VIDEO_CIRRUS_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_CIRRUS_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_CIRRUS_VERSION = 1.6.0
-+XDRIVER_XF86_VIDEO_CIRRUS_SOURCE = xf86-video-cirrus-$(XDRIVER_XF86_VIDEO_CIRRUS_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_CIRRUS_SITE = https://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_CIRRUS_LICENSE = MIT
- XDRIVER_XF86_VIDEO_CIRRUS_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_CIRRUS_DEPENDENCIES = xserver_xorg-server xorgproto
+-XAPP_XMODMAP_VERSION = 1.0.10
+-XAPP_XMODMAP_SOURCE = xmodmap-$(XAPP_XMODMAP_VERSION).tar.bz2
+-XAPP_XMODMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XMODMAP_VERSION = 1.0.11
++XAPP_XMODMAP_SOURCE = xmodmap-$(XAPP_XMODMAP_VERSION).tar.xz
++XAPP_XMODMAP_SITE = https://xorg.freedesktop.org/releases/individual/app
+ XAPP_XMODMAP_LICENSE = MIT
+ XAPP_XMODMAP_LICENSE_FILES = COPYING
+ XAPP_XMODMAP_DEPENDENCIES = xlib_libX11
 -- 
 2.30.2
 
