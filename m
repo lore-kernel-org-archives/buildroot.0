@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 111F8C43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 03:18:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F3A6C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 03:22:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8BD3F6107E;
-	Sun, 24 Jul 2022 03:18:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BD3F6107E
+	by smtp2.osuosl.org (Postfix) with ESMTP id EEE9940B36;
+	Sun, 24 Jul 2022 03:22:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEE9940B36
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YohO150Q6Dvr; Sun, 24 Jul 2022 03:22:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3C9D40B40;
+	Sun, 24 Jul 2022 03:22:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3C9D40B40
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8061A1BF332
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 03:22:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5979761075
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 03:22:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5979761075
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jazmSO64kGlY; Sun, 24 Jul 2022 03:18:30 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 866686106A;
-	Sun, 24 Jul 2022 03:18:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 866686106A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1D6981BF332
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 03:18:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC93781419
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 03:18:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC93781419
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wKGdj9yM-70G for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 03:18:27 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id voUO-rcovY8x for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 03:22:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E860A80C80
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com
- [IPv6:2001:4860:4864:20::32])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E860A80C80
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 03:18:26 +0000 (UTC)
-Received: by mail-oa1-x32.google.com with SMTP id
- 586e51a60fabf-10d9213b77aso10843041fac.5
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 20:18:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 767706104C
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
+ [IPv6:2607:f8b0:4864:20::d2b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 767706104C
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 03:22:22 +0000 (UTC)
+Received: by mail-io1-xd2b.google.com with SMTP id x64so6395026iof.1
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 20:22:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=dOoYS1PDzUlnOkEA2D7kWDhcagO31yK/mH/ksAyw+IY=;
- b=yPN/8JNCgq0UKGVFixBx9h9QOv1UH5Wdk7f7dpswKZtMfRUUVHsBvuXaO6wzRpJbpm
- itoL/gHlZrflyLQhyiUuzZLHJBqQN0XI0lGKHZ5smBfzUAefg+h7GHXc0GuCq26kO6RW
- 1tUkvb/8Z2Z59yW6MZmXP0Hp7+VuweDdHlxV3d/ZSEBL7y5jJJc7Ev80na2KA7oUK7lS
- ghCYIRJ2hRpSsdAUs1te1VbW8zvEnQMNfXTLcjdYisSGtganR/WHCx4rJdfsCfREzxT7
- Akv5ukaiFbh8xKqIt78DNHopUCyQgyVQkUG1vQ3iYP1Rvj4if1xcxUsWz9aT1v+cW/FD
- 8I7Q==
-X-Gm-Message-State: AJIora+uPxS7zn8ymrQMRJPkHSpNbwzmM7x4jBBSWerUtuGpxqDTFZnZ
- lXWVVyy0fjgrXlYAk0O4MCdQJKiVz0RJRg==
-X-Google-Smtp-Source: AGRyM1sMGKi4PpMZzLBIn1VTgh6ReBza48SFRR43saZkyoFBJXOOEJiNLEr3BtZQH1sVoupC7m2cbw==
-X-Received: by 2002:a05:6871:b22:b0:10d:c30a:c096 with SMTP id
- fq34-20020a0568710b2200b0010dc30ac096mr4187577oab.75.1658632705825; 
- Sat, 23 Jul 2022 20:18:25 -0700 (PDT)
+ bh=yc+wUlL8QJttoSaLJ2i2c1Ob+KQnDXMOOqi57U2r8sk=;
+ b=5kJhoalMbTXrbRmbEiWf+IjcTGb/8K139GHzVpsEoib2zuYwwx0LUr3Sdbw9yrfwrU
+ H76EBAGs7UPRjjBFKi9rrQn2HFHQS0vHcIaXVURugIYzP8/Gg2JP/01p0BIUcP+XiGpG
+ GtSWPUHHspZezVFx/7gQVbBrx60JZ5lrHC1Wv+I+VyC++n6I/UFC0pjT8jIL/8Aw04AD
+ QFd871a0k8hULpRDZbh97tReZa1NnMAPcev6EmiZWyDpEvZZgrAOZH9yNeFntytVt+NG
+ aXRBnzfMceGhR2fM+6KREK66k/paFV1zVEqiXNY5/2TKOxBAtDOB3vBrZk9eKL6GeYuu
+ xY6w==
+X-Gm-Message-State: AJIora/DwwGOZ96EmKG44ygcDPOW+Ew8xuPt+tvFaEEg49eh2168ZcmX
+ ufoqSzRgP1ETGpso74vTfCc2d5GzcPZeIA==
+X-Google-Smtp-Source: AGRyM1utTN9BH3zaOlPWxh8hJkqlinLSPow5J5JzRG08JH+9ED423e/ONtarPbJP9YMnC4z4Z0cXxQ==
+X-Received: by 2002:a05:6602:486:b0:678:dad9:e56a with SMTP id
+ y6-20020a056602048600b00678dad9e56amr2236607iov.97.1658632941407; 
+ Sat, 23 Jul 2022 20:22:21 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-133-32.hlrn.qwest.net.
  [71.33.133.32]) by smtp.gmail.com with ESMTPSA id
- i22-20020a056870221600b000f325409614sm4132515oaf.13.2022.07.23.20.18.25
+ z13-20020a027a4d000000b0033f4ee78c07sm3824455jad.29.2022.07.23.20.22.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Jul 2022 20:18:25 -0700 (PDT)
+ Sat, 23 Jul 2022 20:22:21 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 21:18:23 -0600
-Message-Id: <20220724031823.1262390-1-james.hilliard1@gmail.com>
+Date: Sat, 23 Jul 2022 21:22:19 -0600
+Message-Id: <20220724032219.1264647-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=dOoYS1PDzUlnOkEA2D7kWDhcagO31yK/mH/ksAyw+IY=;
- b=L4R15r5NXCLi8lAhchOsxXh6e9uxMLadj6kRhDQZdYAp39xe5EkGsg8cZmbfljusX6
- HsdXrPfC0kWcLkRkIsRDeUagvyn7uLeitYnDtyJY1sBzXuISviUmXzxHElULkHqw7hrI
- Ro4kwp0WUUZUPuFL6stRKPXhtpJCdCKT9erUc2TDojF6s+jH2qS1VPlMqofE8oLx6vD7
- 2BZfgCj88+tr3WXc6aAuddGGlOmlKKZnJhMnLklx57YdjPVwTWnImkq1xZICKZdILfdv
- wfdLUJ6mbbzs/JWu1HWa6VwcLxRSKZuJc95ZP7pfDkm4NKaiPaPla+G3QE+56NRK/sNS
- 7lkA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=yc+wUlL8QJttoSaLJ2i2c1Ob+KQnDXMOOqi57U2r8sk=;
+ b=LcIrR3ylcjFl/F/TOwu6Ge7QOdRJdpe1xAY1/vJyaEtchZQmh+KOo5OwrHoWf6nZDT
+ 8qunWb+XuK2/fRfMstWntCkaVuKQ+0fDhUcNmgoX3jmltOsiI61Iu1waODL6NWaJxrJc
+ IDR7B2zvMIHlkxlVplaxuB8oC0oiCiLyAEE7wiNEYxfC3znvbnOzyqIzGgFd6kX8fTze
+ +cHPg4uITluredNAJi7NLIsOCaQH4Tx2ge1EAWc08y5zYe7PA7uVxDMhEH5E6IjFsVTy
+ heQRotn2ZLv4VtZSlVttPom1c0qEwB5C42ddfBByoi0KFK9X6x5ECrCz4A68PnelqEhP
+ 06Pg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=L4R15r5N
-Subject: [Buildroot] [PATCH 1/1] package/python-pycairo: bump to version
- 1.21.0
+ header.a=rsa-sha256 header.s=20210112 header.b=LcIrR3yl
+Subject: [Buildroot] [PATCH 1/1] package/python-pycares: bump to version
+ 4.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,8 +93,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Matt Weber <matthew.weber@collins.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,39 +101,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pycairo/python-pycairo.hash | 4 ++--
- package/python-pycairo/python-pycairo.mk   | 4 ++--
+ package/python-pycares/python-pycares.hash | 4 ++--
+ package/python-pycares/python-pycares.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
-index c617d8b601..f8018e682f 100644
---- a/package/python-pycairo/python-pycairo.hash
-+++ b/package/python-pycairo/python-pycairo.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pycairo/json
--md5  59bc5c5d1debc3af0f6791af9d612551  pycairo-1.19.1.tar.gz
--sha256  2c143183280feb67f5beb4e543fd49990c28e7df427301ede04fc550d3562e84  pycairo-1.19.1.tar.gz
-+md5  682238eaa8bd7032e36a20b6f53824d1  pycairo-1.21.0.tar.gz
-+sha256  251907f18a552df938aa3386657ff4b5a4937dde70e11aa042bc297957f4b74b  pycairo-1.21.0.tar.gz
+diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
+index 85e0848b96..2037c17172 100644
+--- a/package/python-pycares/python-pycares.hash
++++ b/package/python-pycares/python-pycares.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pycares/json
+-md5  9e66aa767a0afd681e2a797b835cad1d  pycares-4.1.2.tar.gz
+-sha256  03490be0e7b51a0c8073f877bec347eff31003f64f57d9518d419d9369452837  pycares-4.1.2.tar.gz
++md5  92fa9622ba42cb895d598910722e80b5  pycares-4.2.1.tar.gz
++sha256  735b4f75fd0f595c4e9184da18cd87737f46bc81a64ea41f4edce2b6b68d46d2  pycares-4.2.1.tar.gz
  # Locally computed sha256 checksums
- sha256  360b9a526d47c51a7cab7f1ec49ca5893050562d639b742d588934ff84823a72  COPYING
- sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
-diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
-index c635498d52..5b231f6b1e 100644
---- a/package/python-pycairo/python-pycairo.mk
-+++ b/package/python-pycairo/python-pycairo.mk
+ sha256  427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
+diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
+index 9be295d900..e2b813b278 100644
+--- a/package/python-pycares/python-pycares.mk
++++ b/package/python-pycares/python-pycares.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCAIRO_VERSION = 1.19.1
-+PYTHON_PYCAIRO_VERSION = 1.21.0
- PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
--PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/e8/9d/c8be300fc6b1298559d37a071c3833b0b251e0fff334d2e4c408d5789162
-+PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/92/a4/506564f574fa74c90b98690e8ecc8dbae1629f31fcfe0be69de45d9e1605
- PYTHON_PYCAIRO_SETUP_TYPE = setuptools
- PYTHON_PYCAIRO_DEPENDENCIES = cairo
- PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
+-PYTHON_PYCARES_VERSION = 4.1.2
++PYTHON_PYCARES_VERSION = 4.2.1
+ PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
+-PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/83/61/17bd0cfb9c4dc8c3738484d604b50d47c78fe4fcfe0ca2c58a61a106f578
++PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/99/da/d3d20bc7bd5baadeea04ee84db16f1f07557138c313bd6200e1cffab5bee
+ PYTHON_PYCARES_SETUP_TYPE = setuptools
+ PYTHON_PYCARES_LICENSE = MIT
+ PYTHON_PYCARES_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
