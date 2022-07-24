@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7787C43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 14:56:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B48F2C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 14:58:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E2A461178;
-	Sun, 24 Jul 2022 14:56:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E2A461178
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F25E40C42;
+	Sun, 24 Jul 2022 14:58:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F25E40C42
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VWwWY75TaCcE; Sun, 24 Jul 2022 14:56:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pFNF6mkPfLZW; Sun, 24 Jul 2022 14:58:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5AD9F60BC7;
-	Sun, 24 Jul 2022 14:56:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AD9F60BC7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D23151BF3D8
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 14:56:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2333040C3D;
+	Sun, 24 Jul 2022 14:58:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2333040C3D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8635C1BF3D8
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 14:58:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ACBE984C3C
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 14:56:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACBE984C3C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E2D340C3D
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 14:58:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E2D340C3D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WDXEp5_hPEvA for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 14:56:36 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3211184971
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3211184971
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 14:56:35 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7002B1BF203;
- Sun, 24 Jul 2022 14:56:32 +0000 (UTC)
-Date: Sun, 24 Jul 2022 16:56:31 +0200
-To: Sen Hastings <sen@phobosdpl.com>
-Message-ID: <20220724165631.708af168@windsurf>
-In-Reply-To: <e7d99988-6353-5cb8-0202-5a045eb57a88@phobosdpl.com>
-References: <394b4fbb-5d72-92ea-ccf3-3cbc47a0c1a9@phobosdpl.com>
- <e7d99988-6353-5cb8-0202-5a045eb57a88@phobosdpl.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eDSJo6KxAr2q for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 14:58:53 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A05E400B9
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5A05E400B9
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 14:58:53 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8acf:5600:88cd:5a50:8d8a:801])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id DDFCD13FA41;
+ Sun, 24 Jul 2022 16:58:46 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 24 Jul 2022 16:58:46 +0200
+Date: Sun, 24 Jul 2022 16:58:46 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: David GOUARIN <dgouarin@gmail.com>
+Message-ID: <20220724145846.GW2641@scaer>
+References: <20220724142615.22630-1-dgouarin@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658674592;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=LSh82K+wF0M697wdO8CFLOL5W8Am5tsnxOmWUivpkk0=;
- b=kwIhVFn42GNqBujb5/yhTZkuv7ki0NG9LERCIORIw1dt/QTTVtgOxusIGJb230J6l7NGpX
- KUn2dac8qgBhO33WzkPdxa3qKRQ7ZUrQuOZgwODBhulYbIHffibzCBczoai48kPb3zPudC
- s69CCq2kWHQSp+6c/cITAGRKU4Qf7j/t9hITIpirfGlSeqVaOt34/Ha/sDjfXrZO5wI1lY
- 6RsBg8bqsz1bUrBeGqk7ddOjDPSTZuOAikR9eKIOPbomPK1HnqA4RX5c3XnDOtncxt6r2/
- EGPIA66OME6iso/pmP6SW8p0Z8OzkGkwufs2xv1Irj7DK0c3+ktILxqK9zHLXg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kwIhVFn4
-Subject: Re: [Buildroot] [PATCH v3] support/scripts/pkg-stats: migrate to
- CSS grid and inline javascript
+Content-Disposition: inline
+In-Reply-To: <20220724142615.22630-1-dgouarin@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1658674731;
+ bh=rjGZzOq/3Loo63OFcl7ZuAhlKwhCdu4frUIUfwNtTgE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=UBBMtLtJCSIQ3B5iE/YxMB3+lkLx5pnua/Wr+cTxfFm2JpJNdNc9sU0pIQTcHsZ1V
+ YofkaIoqR4XS69GFPUFoBWfDQ+ccWi9j90+W8emdHJ4dvWtuJvKhw8hCZNbTj0Hn8T
+ axD+zsGbGjei7xVcPhc9LoAMcJqw+ql2+52KPZ0sQjPNa3Pn7qJg7h4jJ1sluoli4A
+ +Y6xtbx1drcy17zLyyEn1yEzr+IH3Dw1WwEYQSj8yRh+wXe7rx/UZIa0EWhpltwqzh
+ kP7gbVAwp8wdhwQOkK75FfIQj/daPLLEZeXX4Wcbdz6fz6QsrrhqmBuwxuYHKLHT/j
+ yKoQ4HTGjd8Pw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=UBBMtLtJ
+Subject: Re: [Buildroot] [PATCH V3] package/libtallc: bump version to 2.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,81 +76,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: romain.naour@smile.fr, David GOUARIN <david.gouarin@thalesgroup.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sen,
+David, All,
 
-On Sun, 24 Jul 2022 09:36:20 -0500
-Sen Hastings <sen@phobosdpl.com> wrote:
-
-> >  * Sorting is now very slow, to the point that Firefox complains that
-> >    the page is slowing down the web browser. It was instantaneous in
-> >    the old code, but way faster.>  
+On 2022-07-24 16:26 +0200, David GOUARIN spake thusly:
+> Version 2.3.4 of libtalloc needs to define PYTHONHASHSEED, as a check has been added
+> to the configure script, and build will fail if it is not defined.
 > 
-> Wow, dang I see what you mean. I was doing testing with relatively
-> *small* defconfigs. Looks like the bottleneck is actually at the end
-> when calling packageGrid.append(element). I'll dig into it.
+> This is originately a workaround by samba developpers meant to avoid rebuilding talloc
+> with each call to make. Defining PYTHONHASHSEED would not be required in the context
+> of builroot, if not for the check in the configure script.
+> 
+> Signed-off-by: David GOUARIN <david.gouarin@thalesgroup.com>
+> 
+> ---
+> Changes v2 -> v3:
+>   - fix commented lines and commit message. sorry for the mess.
+> 
+> Changes v1 -> v2:
+>   - edit commit message (suggested by Yann E. MORIN)
+> Signed-off-by: David GOUARIN <dgouarin@gmail.com>
+> ---
+>  package/libtalloc/libtalloc.hash | 2 +-
+>  package/libtalloc/libtalloc.mk   | 5 ++++-
+>  2 files changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libtalloc/libtalloc.hash b/package/libtalloc/libtalloc.hash
+> index cbfd11e63b..0bc8edb695 100644
+> --- a/package/libtalloc/libtalloc.hash
+> +++ b/package/libtalloc/libtalloc.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  6be95b2368bd0af1c4cd7a88146eb6ceea18e46c3ffc9330bf6262b40d1d8aaa  talloc-2.3.3.tar.gz
+> +sha256  179f9ebe265e67e4ab2c26cad2b7de4b6a77c6c212f966903382869f06be6505  talloc-2.3.4.tar.gz
+>  sha256  f8340c449dd64a55c6605b02fcad2aec6f473612ac6026739a22995380a8043c  talloc.h
+> diff --git a/package/libtalloc/libtalloc.mk b/package/libtalloc/libtalloc.mk
+> index 8cba699ea1..6a5e1ef4b6 100644
+> --- a/package/libtalloc/libtalloc.mk
+> +++ b/package/libtalloc/libtalloc.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBTALLOC_VERSION = 2.3.3
+> +LIBTALLOC_VERSION = 2.3.4
+>  LIBTALLOC_SOURCE = talloc-$(LIBTALLOC_VERSION).tar.gz
+>  LIBTALLOC_SITE = https://www.samba.org/ftp/talloc
+>  LIBTALLOC_LICENSE = LGPL-3.0+
+> @@ -40,6 +40,9 @@ else
+>  LIBTALLOC_CONF_OPTS += --disable-python
+>  endif
+>  
+> +LIBTALLOC_CONF_ENV += PYTHONHASHSEED=1
+> +LIBTALLOC_MAKE_ENV += PYTHONHASHSEED=1
 
-Thanks:
+I've added a little blurb just above that, moved it earlier in the file,
+(and thus made them simple assignments), fixed the typo in the commit
+log, and applied to master, thanks.
 
-> >  * The "Latest version" cell is no longer with a dark orange/red
-> >    background when the version doesn't match with the "Current
-> >    version", these cells now have a green background, making one think
-> >    that the package is up-to-date in Buildroot.
-> >   
-> Ah, that's a cascade order issue. Fix is to move the
-> ".correct, .nopatches, .good_url..." rule above the
-> ".wrong, .lotsofpatches, .invalid_url..." rule.
+Regards,
+Yann E. MORIN.
 
-OK. I guess you'll send a patch to fix this.
+>  LIBTALLOC_WAF = ./buildtools/bin/waf
+>  
+>  # like samba4, libtalloc uses the waf build system which requires a
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-> >  * When sorting on a column, a small arrow appears indicating that the
-> >    sorting has been done based on this column. But then when you sort
-> >    by another column, the arrow appears on this new column, but doesn't
-> >    disappear on the old one, so you no longer know which column was
-> >    using for the sorting.
-> >   
-> This is *kind of* a feature? sortGrid()'s sorting is cumulative, so they
-> are all *technically* being used for sorting. This means the table is
-> not *reset* to its original state before every sort.
-> For example, sorting by (clicking on) "Infrastructure", then "License"
-> will yield a different sort (row order) than sorting by "License",
-> *then* "Infrastructure". An actual table "reset" is achieved with
-> sorting by "Package" ascending (down arrow). I must admit though, after
-> the table is reset the other arrows are meaningless until clicked on
-> again. That is definitely misleading, so no matter what arrows *should*
-> be reset after a table reset. I guess I didn't realize my sort behaved
-> differently in this regard. Whatever behaviour you think is most
-> appropriate (the original or cumulative), I'll make it do that.
-
-Yeah, Arnout told me the same thing, but I find that not obvious.
-Indeed, you then simply have arrows on two (or more) columns, and then
-don't remember which one you clicked first, and which one you clicked
-afterwards. So basically, if you don't remember in which order you
-clicked, you have no idea based on what sorting rules the current table
-is listed.
-
-> > Do you think you could have a look at those issues?
-> >   
-> Yes. As a clerical note, should I do multiple patches, a patch series or
-> one big one?
-
-Either multiple separate patches sent individually, or grouped as a
-patch series, but not a "big one" :-)
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
