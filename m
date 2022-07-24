@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB5D5C43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 10:33:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F829C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 10:33:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DCEB61ABA;
-	Sun, 24 Jul 2022 10:33:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DCEB61ABA
+	by smtp2.osuosl.org (Postfix) with ESMTP id F11F440BA3;
+	Sun, 24 Jul 2022 10:33:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F11F440BA3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6jMXmu2L-Lfa; Sun, 24 Jul 2022 10:33:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hCDaMrsz8om6; Sun, 24 Jul 2022 10:33:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5685D61B2B;
-	Sun, 24 Jul 2022 10:32:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5685D61B2B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0CBA31BF2E4
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:32:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0EE4C40BBD;
+	Sun, 24 Jul 2022 10:33:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EE4C40BBD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B8CC1BF2E4
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:33:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB0F3617A0
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:32:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB0F3617A0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 281798258A
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:33:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 281798258A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mFST0dwpZZGg for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 10:32:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 257C360BF4
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 10:32:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 257C360BF4
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3AF4285BF9; Sun, 24 Jul 2022 10:18:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 12:31:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 58c9bf5e01f78653d9a45afc7d214900235a2e56
-X-Git-Newrev: bb50b821702841fdc75bf8151555cd401f764f07
-X-Patchwork-Hint: ignore
-Message-Id: <20220724101830.3AF4285BF9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5webkit: backport upstream
- fix for GStreamer 1.19.x compatibility
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WF3cRPwVSuKk for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 10:33:39 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04F3181B0A
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 04F3181B0A
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 10:33:38 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 22A1820003;
+ Sun, 24 Jul 2022 10:33:36 +0000 (UTC)
+Date: Sun, 24 Jul 2022 12:33:35 +0200
+To: Nicolas Carrier <nicolas.carrier@orolia.com>
+Message-ID: <20220724123335.0f64d17c@windsurf>
+In-Reply-To: <20220310124106.2916278-1-nicolas.carrier@orolia.com>
+References: <20220310124106.2916278-1-nicolas.carrier@orolia.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658658817;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Qa1Cgc6XsC24aMHx4OzxvtbMjVuvspxVP1YZwwW2YRY=;
+ b=BJXTBgXSuvZY0KF0djiXGQN8qNKZVgHikm5Te7uytCbwE6v3FMXwSdHFfBmA2+RvBQU5px
+ ZKVWwbJ4aCGfnqTfUtLFjf4MBtNNTbxdDfy1z6rNjPmX/a9S6fpdMdBJEyfUxOUdOuKQOw
+ oSKzYfn0ZCfUJ5ZcIKZI0Hlrz5kcC+laD47asY6Je3bivugbfjnVLtJqTgecpiDgy0J+ck
+ l37iKbQc8QCBIoFhhuRORxrbpVRK6Dou2GfEKCKny4xp3jGdXd6a+JKQHB97nf//h8Wxgr
+ 1QE6S83jbJ6KPSUsa/yT0Mq+V9Gvk9cy5eF+IeFpQfy4tNTaL6wyXs7WVY8XrQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=BJXTBgXS
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt5/qt5webkit: fix compilation
+ with linaro 7.3 / 7.5 toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,97 +78,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6345333754489925942=="
+Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ =?UTF-8?B?R2HDq2w=?= Portay <gael.portay@collabora.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6345333754489925942==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=bb50b821702841fdc75bf8151555cd401f764f07
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-In GStreamer commit 0a657d6db5ba912b13092a907ea507638cd01cf9, merged
-in Gstreamer 1.19.x, the GstAppSinkCallbacks structure was extended
-with another field calle new_event. This requires an update in the
-WebKit code, without which we have a build failure:
-
-    platform/audio/gstreamer/AudioFileReaderGStreamer.cpp:234:5: error: braces around scalar initializer for type ‘gboolean (*)(GstAppSink*, gpointer) {aka int (*)(_GstAppSink*, void*)}’
-
-There are no autobuilder failures, but the issue could be reproduced
-using the following defconfig:
-
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5WEBKIT=y
-
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
-[Thomas: find the actual upstream fix and use that, improve the
-explanation about the issue in the commit message]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...e-to-AppSinkCallbacks-struct-growth-https.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
-
-diff --git a/package/qt5/qt5webkit/0006-Warnings-due-to-AppSinkCallbacks-struct-growth-https.patch b/package/qt5/qt5webkit/0006-Warnings-due-to-AppSinkCallbacks-struct-growth-https.patch
-new file mode 100644
-index 0000000000..610d99e35d
---- /dev/null
-+++ b/package/qt5/qt5webkit/0006-Warnings-due-to-AppSinkCallbacks-struct-growth-https.patch
-@@ -0,0 +1,39 @@
-+From 53d5bbf4d597a2fcb26149fab3185a3db09529af Mon Sep 17 00:00:00 2001
-+From: Philippe Normand <pnormand@igalia.com>
-+Date: Fri, 23 Jul 2021 15:38:29 +0000
-+Subject: [PATCH] Warnings due to AppSinkCallbacks struct growth
-+ https://bugs.webkit.org/show_bug.cgi?id=228229
-+
-+Patch by Philippe Normand <pnormand@igalia.com> on 2021-07-23
-+Reviewed by Xabier Rodriguez-Calvar.
-+
-+A new callback was added, for event notifications.
-+
-+Canonical link: https://commits.webkit.org/239911@main
-+git-svn-id: https://svn.webkit.org/repository/webkit/trunk@280243268f45cc-cd09-0410-ab3c-d52691b4dbfc
-+[Thomas: backported from upstream, only the part touching
-+Source/WebCore/platform/audio/gstreamer/AudioFileReaderGStreamer.cpp
-+as other parts are not relevant]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ .../platform/audio/gstreamer/AudioFileReaderGStreamer.cpp     | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/Source/WebCore/platform/audio/gstreamer/AudioFileReaderGStreamer.cpp b/Source/WebCore/platform/audio/gstreamer/AudioFileReaderGStreamer.cpp
-+index 2f24c0cf5..dd9d91cf3 100644
-+--- a/Source/WebCore/platform/audio/gstreamer/AudioFileReaderGStreamer.cpp
-++++ b/Source/WebCore/platform/audio/gstreamer/AudioFileReaderGStreamer.cpp
-+@@ -230,6 +230,10 @@ void AudioFileReader::handleNewDeinterleavePad(GstPad* pad)
-+         [](GstAppSink* sink, gpointer userData) -> GstFlowReturn {
-+             return static_cast<AudioFileReader*>(userData)->handleSample(sink);
-+         },
-++#if GST_CHECK_VERSION(1, 19, 1)
-++        // new_event
-++        nullptr,
-++#endif
-+         { nullptr }
-+     };
-+     gst_app_sink_set_callbacks(GST_APP_SINK(sink), &callbacks, this, 0);
-+-- 
-+2.37.1
-+
-
---===============6345333754489925942==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6345333754489925942==--
+T24gVGh1LCAxMCBNYXIgMjAyMiAxMzo0MTowNiArMDEwMApOaWNvbGFzIENhcnJpZXIgPG5pY29s
+YXMuY2FycmllckBvcm9saWEuY29tPiB3cm90ZToKCj4gQW4gdW5pdGlhbGl6ZWQgZmllbGQgaW4g
+YSBzdHJ1Y3R1cmUsIGNhdXNlcyB0aGUgZm9sbG93aW5nIGVycm9yOgo+ICAgICBwbGF0Zm9ybS9h
+dWRpby9nc3RyZWFtZXIvQXVkaW9GaWxlUmVhZGVyR1N0cmVhbWVyLmNwcDoyMzQ6NTogZXJyb3I6
+IGJyYWNlcyBhcm91bmQgc2NhbGFyIGluaXRpYWxpemVyIGZvciB0eXBlIOKAmGdib29sZWFuICgq
+KShHc3RBcHBTaW5rKiwgZ3BvaW50ZXIpIHtha2EgaW50ICgqKShfR3N0QXBwU2luayosIHZvaWQq
+KX3igJkKPiAKPiBUaGlzIGNvbW1pdCBhcHBsaWVzIGEgcGF0Y2ggdG8gcXQ1d2Via2l0IHRvIGZp
+eCB0aGUgY29tcGlsYXRpb24gaXNzdWUuCj4gCj4gU2lnbmVkLW9mZi1ieTogTmljb2xhcyBDYXJy
+aWVyIDxuaWNvbGFzLmNhcnJpZXJAb3JvbGlhLmNvbT4KPiAtLS0KPiAgLi4ueC1BdWRpb0ZpbGVS
+ZWFkZXJHU3RyZWFtZXItY29tcGlsYXRpb24ucGF0Y2ggfCAxNyArKysrKysrKysrKysrKysrKwo+
+ICAxIGZpbGUgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
+cGFja2FnZS9xdDUvcXQ1d2Via2l0LzAwMDUtZml4LUF1ZGlvRmlsZVJlYWRlckdTdHJlYW1lci1j
+b21waWxhdGlvbi5wYXRjaAoKVGhhbmtzIGZvciB5b3VyIHBhdGNoLiBJIGxvb2tlZCBpbnRvIHRo
+aXMsIGFuZCB0aGUgcHJvYmxlbSBpcyBub3QKcmVsYXRlZCB0byBMaW5hcm8gdG9vbGNoYWlucywg
+YnV0IGEgY29tcGF0aWJpbGl0eSBpc3N1ZSB3aXRoIEdTdHJlYW1lcgpuZXdlciB0aGFuIDEuMTku
+eCwgd2hpY2ggY2hhbmdlZCB0aGlzIEdzdEFwcFNpbmtDYWxsYmFja3Mgc3RydWN0dXJlLiBJCmlk
+ZW50aWZpZWQgdGhlIHVwc3RyZWFtIGZpeCBmb3IgdGhpcyBwcm9ibGVtLCBiYWNrcG9ydGVkIGl0
+LCBhbmQgYWRkZWQKYW4gZXhwbGFuYXRpb24uCgpTZWUgdGhlIHJlc3VsdGluZyBjb21taXQgYXQ6
+CgogIGh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5vcmcvYnVpbGRyb290L2NvbW1pdC8/aWQ9YmI1MGI4
+MjE3MDI4NDFmZGM3NWJmODE1MTU1NWNkNDAxZjc2NGYwNwoKVGhhbmtzIGEgbG90IQoKVGhvbWFz
+Ci0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtl
+cm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
