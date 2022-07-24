@@ -1,87 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECDD9C43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 04:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72C66C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 05:05:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F43F8497A;
-	Sun, 24 Jul 2022 04:35:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F43F8497A
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9DC46104C;
+	Sun, 24 Jul 2022 05:05:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9DC46104C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eeETv0JY1MdN; Sun, 24 Jul 2022 04:35:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3CkNgfcky8wE; Sun, 24 Jul 2022 05:05:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0513A8493E;
-	Sun, 24 Jul 2022 04:35:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0513A8493E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8E0351BF44A
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 04:35:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD16160F2B;
+	Sun, 24 Jul 2022 05:05:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD16160F2B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B30E1BF59B
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 05:05:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 673C94033F
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 04:35:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 673C94033F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5486960F2B
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 05:05:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5486960F2B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hdWo4I_pCWVq for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 04:35:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bumtMQZ-HrIG for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 05:05:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 754F6400C5
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com
- [IPv6:2001:4860:4864:20::2c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 754F6400C5
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 04:35:42 +0000 (UTC)
-Received: by mail-oa1-x2c.google.com with SMTP id
- 586e51a60fabf-f2a4c51c45so10946208fac.9
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 21:35:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6235560B53
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com
+ [IPv6:2607:f8b0:4864:20::1031])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6235560B53
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 05:05:51 +0000 (UTC)
+Received: by mail-pj1-x1031.google.com with SMTP id ku18so7589241pjb.2
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 22:05:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=NUNvBcvQIgKi/MKzoesu52ek4xxc0lQ9fF3xKN5/HUA=;
- b=GBEH9seUnT43SxtXw7SfcO81WIvAWkv1/qwGBWwkJ8aNAMfM0BSQxYIwg64VnK+kKC
- xsiXvWTglGHUlpbrKkTHt8R38DZ58eEWNEayOjbQxfwuOq7TLMsBFWQ1N0dDcgtgYIDM
- +rjcT+MrgW/lKzKcvS+aa5/xhfkDESOZNtGU3o0dEXq0uCszPEMqgZ+3cyxtRJWYlqsl
- EnPD4d+E9zsCfI2XFRv/5NM17bPQ4PXAss+cWo06w41FmYsDiDiWHt0pjoQ3dsSHWVkK
- B3/Jb33HoSzFGbkLs+wy1OUXjl0f6J2e/uNftxROyM7UDKEiZmtsf1K8ubLbX8DRwMkL
- OzRQ==
-X-Gm-Message-State: AJIora99H8Krz1a1Hzm8lPb6EwNMcPOaF1PkAgDMTQ/b7gsYxI0Y+knh
- 1jaKkDaFTQ0WLyEBAjmjqgThOkceFU8=
-X-Google-Smtp-Source: AGRyM1u9r8pDzmXr7ErmilgPqjAnxCoKNsJM4nBDOm5MreQsUhE1nhmx7rvTfyiv6vVTpvHb5SuiXA==
-X-Received: by 2002:a05:6870:4608:b0:10e:2c6:afa2 with SMTP id
- z8-20020a056870460800b0010e02c6afa2mr752104oao.149.1658637341441; 
- Sat, 23 Jul 2022 21:35:41 -0700 (PDT)
-Received: from localhost.localdomain ([191.187.223.18])
- by smtp.gmail.com with ESMTPSA id
- u189-20020acaabc6000000b003263cf0f282sm3491170oie.26.2022.07.23.21.35.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Jul 2022 21:35:40 -0700 (PDT)
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 01:34:50 -0300
-Message-Id: <20220724043450.2255769-1-ricardo.martincoski@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=y6bZ/78cd7wVip78l8AS937ZFNYzAUyAEEEqdybq9cs=;
+ b=PRpk+Dj8CTN6UHQGWv4FfPSPGuR4J49ql4aRBnsVJjwCA4ZSpfa1kOvZgebNO/V28z
+ YyLoDoKp82grItMUQIIBDrpMrKS7/8awyGMENRt3qpQHfuHI8478lbJQJjK6ZzasVh4s
+ CR0uiY7an7cgcL97ObMTiCiWRTUIK2wZRRDZzuRqq8g5oxOFfK+4LDfJ1fV0VYKxIkxI
+ +mi7LHJYsVc+Ik4NUBy4NacPkecGowc1y+VfS/wuD0WL2yG7WW9GGFyneI8OsDasuXHw
+ CiEoDLV3RuePSnSlNSo6SpFQnW6hxU+Pw+TlsjcJzoXB2FfuCzttOVKMc3Kc0eafDx5K
+ kzLw==
+X-Gm-Message-State: AJIora9xzMJoc2Tci1dLb6iFeVLYTUsoLt5/dX5ku264OjMtxWMNF3ns
+ hApk7M5mLye99L+0Oh994GDQ1II4cCHxXrz++ivXcf952LsVzA==
+X-Google-Smtp-Source: AGRyM1uOS7dDeY2W/BCFmTJAnOXJkudaNksBzQS53C2Rs4GAH78qrySJnQwmuFDvmNsUMuynl6EkcvFnpIdQ1e6b4AI=
+X-Received: by 2002:a17:903:22d0:b0:16d:20f6:b859 with SMTP id
+ y16-20020a17090322d000b0016d20f6b859mr7227440plg.2.1658639150615; Sat, 23 Jul
+ 2022 22:05:50 -0700 (PDT)
 MIME-Version: 1.0
+References: <20211011220025.7998-1-petr.vorel@gmail.com>
+ <20211011220025.7998-2-petr.vorel@gmail.com>
+ <20211111080014.GR2084998@scaer> <YY7iy2xQUcMBPqsx@pevik>
+ <8581ea46-4f5f-b56a-c60b-d1f0b6ad95e1@mind.be>
+In-Reply-To: <8581ea46-4f5f-b56a-c60b-d1f0b6ad95e1@mind.be>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sun, 24 Jul 2022 07:05:39 +0200
+Message-ID: <CAB1t1CxVm1+aj0F_uaFAoSewzC540Amd0RxRr4geY8bP+v9f_g@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=NUNvBcvQIgKi/MKzoesu52ek4xxc0lQ9fF3xKN5/HUA=;
- b=mWNhRvJL+c8AIokzVi5tq3+vDajTXlsaPxI4rl2IDnpvDr19Nx4DHgqVn1wzhVNibY
- 3UxF6HmKkOZzFoV171HHc6eYv2uMYwkRuxdXnDGN5AG90La+PLuYQ1zyNOz5s7S1vgxj
- v/SLV5656N5Lg0SZmFAG9VmwImg/x/nyFo8C8f/LPBUgdryl7MM5fmv/+k438VwKG1gu
- PFBdG1sldG4Fhx8uCHji5n0xLBRVV9d/RfRTu7SQ4YIkJ8Z+R9BdXWyAFLb2WMWS1XkK
- vZPePyDnoOcVkgRq2pJuUULcakMR4GlBpbVEpJMbol7wQgLNV8Mc81AVeSa0mR42e+L8
- oKZw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=y6bZ/78cd7wVip78l8AS937ZFNYzAUyAEEEqdybq9cs=;
+ b=XkwRjMvT9nQTWuKeIpX3TpkmijkwhQZbSf4DWNM+mwJTv5yEHrd7To+fBo5+5Rki8N
+ ixEePn7Zyj2j2VXqt5sKVH6cqm4/vOWbFsw0WgDhxtw7kYVSmC1qS00xjWDTMtlDHqww
+ 1j7wCIReCNA3CBIpv46RIdENPGm1qr9xQ8Hzs6hTw+QOnttzb/Y3kykqu9FNbVpbRahx
+ A3fokOtHhtmvpXgV+GBb5s/TpWrwCW74EGAJCNXrDpLrBtX+FHU4OG+4sclJwlrYK2x+
+ hQeDISU13sCnuIhrgw6I0KRHeJxew/9UvCv1g7VumvRi8/LSsOTk0q+LrCUw3oHVZbn3
+ Zskw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mWNhRvJL
-Subject: [Buildroot] [PATCH] package/thermald: bump to 2.5
+ header.a=rsa-sha256 header.s=20210112 header.b=XkwRjMvT
+Subject: Re: [Buildroot] [RFC PATCH 1/3] make: support: use `command -v'
+ instead of `which'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,54 +92,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Markus Mayer <mmayer@broadcom.com>, buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============4438547537513872207=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
-test-pkg config1:
-BR2_PACKAGE_THERMALD=y
-BR2_INIT_SYSTEMD=y
-https://gitlab.com/RicardoMartincoski/buildroot/-/pipelines/595287515
+--===============4438547537513872207==
+Content-Type: multipart/alternative; boundary="000000000000620f0605e4860537"
 
-test-pkg config2:
-BR2_PACKAGE_THERMALD=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-https://gitlab.com/RicardoMartincoski/buildroot/-/pipelines/595287679
----
- package/thermald/thermald.hash | 2 +-
- package/thermald/thermald.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--000000000000620f0605e4860537
+Content-Type: text/plain; charset="UTF-8"
 
-diff --git a/package/thermald/thermald.hash b/package/thermald/thermald.hash
-index 3a7c0f6952..eceff77d37 100644
---- a/package/thermald/thermald.hash
-+++ b/package/thermald/thermald.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  3e5a5033339c021de41ed4f946dd39e13f79f722fb5bd98d798e83658184c39b  thermald-2.4.8.tar.gz
-+sha256  e6515678ce8ff37978a453e1617a087a40ba3a31809a42c1768b6f816e564cc9  thermald-2.5.tar.gz
- sha256  e98be8bc482e038a14bfbc01caf800bbd0024fff275ef14cd999db6560254a8d  COPYING
-diff --git a/package/thermald/thermald.mk b/package/thermald/thermald.mk
-index 4e43277128..38f6b5a00f 100644
---- a/package/thermald/thermald.mk
-+++ b/package/thermald/thermald.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--THERMALD_VERSION = 2.4.8
-+THERMALD_VERSION = 2.5
- THERMALD_SITE = $(call github,intel,thermal_daemon,v$(THERMALD_VERSION))
- # fetched from Github, with no configure script
- THERMALD_AUTORECONF = YES
--- 
-2.25.1
+Hi all,
+
+
+> > Well, some people use Debian testing :). But sure, it was never urgent,
+> > the issue does not break build. This time I'm quite confident it works,
+> > but one revert was enough => it can wait till more people find time to
+> test it.
+>
+>   In the end, it got reverted in debian testing as well, so we can drop
+> this
+> series (for now). I've marked them as Rejected in patchwork.
+>
+> Thanks, I haven't noticed myself. The revert [1] was released
+in debianutils 5.6 [1].
+
+Kind regards,
+Petr
+
+[1]
+https://salsa.debian.org/debian/debianutils/-/commit/3694cf60572a6c231f2e931f4d075950113599d4
+
+
+>   Regards,
+>   Arnout
+>
+
+--000000000000620f0605e4860537
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div class=3D"gmail_quote"><div>Hi all,</div><div>=C2=A0</=
+div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bor=
+der-left:1px solid rgb(204,204,204);padding-left:1ex">
+&gt; Well, some people use Debian testing :). But sure, it was never urgent=
+,<br>
+&gt; the issue does not break build. This time I&#39;m quite confident it w=
+orks,<br>
+&gt; but one revert was enough =3D&gt; it can wait till more people find ti=
+me to test it.<br>
+<br>
+=C2=A0 In the end, it got reverted in debian testing as well, so we can dro=
+p this <br>
+series (for now). I&#39;ve marked them as Rejected in patchwork.<br>
+<br></blockquote><div>Thanks, I haven&#39;t noticed myself. The revert [1] =
+was released in=C2=A0debianutils 5.6 [1].</div><div><br></div><div>Kind reg=
+ards,<br></div><div>Petr</div><div><br></div><div>[1]=C2=A0<a href=3D"https=
+://salsa.debian.org/debian/debianutils/-/commit/3694cf60572a6c231f2e931f4d0=
+75950113599d4">https://salsa.debian.org/debian/debianutils/-/commit/3694cf6=
+0572a6c231f2e931f4d075950113599d4</a></div><div>=C2=A0</div><blockquote cla=
+ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid =
+rgb(204,204,204);padding-left:1ex">
+=C2=A0 Regards,<br>
+=C2=A0 Arnout<br>
+</blockquote></div></div>
+
+--000000000000620f0605e4860537--
+
+--===============4438547537513872207==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4438547537513872207==--
