@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D30CAC43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 10:16:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CBECC43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 10:17:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6929261142;
-	Sun, 24 Jul 2022 10:16:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6929261142
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0485F40B8A;
+	Sun, 24 Jul 2022 10:17:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0485F40B8A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zv5pVMoMrPp4; Sun, 24 Jul 2022 10:16:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1biLvja1aZNt; Sun, 24 Jul 2022 10:17:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B10EF61004;
-	Sun, 24 Jul 2022 10:16:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B10EF61004
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0CCC71BF85D
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:16:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E91B6403B8;
+	Sun, 24 Jul 2022 10:17:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E91B6403B8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A66241BF85D
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:17:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D92DB42499
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:16:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D92DB42499
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E7D584BB9
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:17:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E7D584BB9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PIpaGJuSNeT1 for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 10:16:16 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6879942462
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6879942462
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 10:16:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QQ-fYiTwaD5g for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 10:17:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4AA584BB0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A4AA584BB0
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 10:17:20 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8acf:5600:88cd:5a50:8d8a:801])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 000C213FA39;
- Sun, 24 Jul 2022 12:15:46 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id C1EB913FA3B;
+ Sun, 24 Jul 2022 12:17:14 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 24 Jul 2022 12:15:46 +0200
-Date: Sun, 24 Jul 2022 12:15:46 +0200
+ Sun, 24 Jul 2022 12:17:14 +0200
+Date: Sun, 24 Jul 2022 12:17:14 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Message-ID: <20220724101546.GQ2641@scaer>
-References: <cover.1658007000.git.yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220724101714.GR2641@scaer>
+References: <20220724083748.1503238-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <cover.1658007000.git.yann.morin.1998@free.fr>
+In-Reply-To: <20220724083748.1503238-1-james.hilliard1@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658657773;
- bh=VodbfPTGg056pP30fQu3j0HJ+Xm8daQQ8jrMcz25uPg=;
+ d=free.fr; s=smtp-20201208; t=1658657838;
+ bh=uu+9POBvivogOm7dEWUmAPAbmL02SJt7YSws7FuSWuQ=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=BLRdLGvslazo7qXB+OkCCJKj1v2K3WoHtytsZNVrzYwKjb2lv3+By9v+xz5brs3CE
- +2YH+N62Sjkmmv8pVYdgJAtpQrQFyrB4CdS+y+epZiiTc+TLyIwyYx0q5roaD4M9QS
- AVq4rk1H+rHibP6aZBlOXdsM+aJXqBnxZWjaqun/0zZYX8vEpflGuMKL3o3xE4maSC
- F8/48AiCkVCA/i44CvLgSjaiih+qdVBKw/DOyMgVSMRLOdcxxZw76P67XoV1dvubs0
- 7y50pa6xlH1rXCY7w6bAPNRAUwCslpHhda8+Iq4ePIirPgE5GWomFQSpHmzHiMvm1Y
- byJg1+8f6Mxww==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=nZup2dzlf1xIZxOrzfOrwRL93vfC1JjnDwxNng81+ySzy5ToeE5oOv1u/9NcrV8r+
+ NdNhHAN6x13qVPPvpHXwJOtS+syD6Au1W7Ny09P4GQzn0LkFowqsnICY4jiY01/ClF
+ cqU5/J8MbpQuhMdurnkhO/5XyyjxBIQuRr/3DTA5l7T7/Os2MSX+/Upg3+pn0FHLmD
+ 4CMfu+jaXOzVkXF2gJ8n9ne3P24PQt40eso11JdmFTXXZcFu5hLuRhbsHCVzy8ODC/
+ 876SYVRc1JobFu4VicpIPBelD/Nvst5PBmCTgq9U5nWWYJl1aeVTlyoC+hRwqFM8zv
+ 0dS3ccYlqt0Dg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BLRdLGvs
-Subject: Re: [Buildroot] [PATCH 0/2] pacakge: drop remnants of
- $(HOST_DIR)/usr (branch yem/no-host-dir-usr)
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=nZup2dzl
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-{maturin,
+ cryptograpy}: fix PYO3_CROSS_LIB_DIR path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,42 +77,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- =?utf-8?B?SGVydsOp?= Codina <herve.codina@bootlin.com>,
- Julien Olivain <ju.o@free.fr>, Antoine Tenart <atenart@kernel.org>,
- =?utf-8?B?Sm9zw6k=?= Luis Salvador Rufo <salvador.joseluis@gmail.com>,
- Anisse Astier <anisse@astier.eu>, Asaf Kahlon <asafka7@gmail.com>,
- Guillaume William Brs <guillaume.bressaix@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Vadim Kochan <vadim4j@gmail.com>,
- Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Julien Boibessot <julien.boibessot@armadeus.com>,
- Matt Weber <matthew.weber@collins.com>
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
+James,
 
-On 2022-07-16 23:30 +0200, Yann E. MORIN spake thusly:
-> Back in 2017.08, we dropped the use of $(HOST_DIR)/usr as a prefix, and
-> just installed with $(HOST_DIR) as a prefix. At least, the migration
-> information was added as c8f51a00d8ec for 2017.08.
-> 5 years ago.
-> And we still had a few packages that installed stuff in there, or used
-> stuff from there.
-> Fix those.
-> In the process of testing the change, we noticed that the conditions for
-> the rustc tier-1 and tier-2 platforms were incorrect, so we fixed them
-> too.
+On 2022-07-24 02:37 -0600, James Hilliard spake thusly:
+> Host paths should not have /usr in them.
 
-Series applied to master, after fixing issues pointed out by Baruch and
-Romain.
+That was fixed in patches I had sent earlier, and that I applied.
 
 Regards,
 Yann E. MORIN.
+
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-cryptography/python-cryptography.mk | 2 +-
+>  package/python-maturin/python-maturin.mk           | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+> index 99eba3eeab..582a7f7891 100644
+> --- a/package/python-cryptography/python-cryptography.mk
+> +++ b/package/python-cryptography/python-cryptography.mk
+> @@ -27,7 +27,7 @@ PYTHON_CRYPTOGRAPHY_ENV = \
+>  	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+>  HOST_PYTHON_CRYPTOGRAPHY_ENV = \
+>  	$(HOST_PKG_CARGO_ENV) \
+> -	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+> +	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)"
+>  # We need to vendor the Cargo crates at download time
+>  PYTHON_CRYPTOGRAPHY_DOWNLOAD_POST_PROCESS = cargo
+>  PYTHON_CRYPTOGRAPHY_DOWNLOAD_DEPENDENCIES = host-rustc
+> diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
+> index 3d5ba70391..9ac11f264b 100644
+> --- a/package/python-maturin/python-maturin.mk
+> +++ b/package/python-maturin/python-maturin.mk
+> @@ -16,7 +16,7 @@ HOST_PYTHON_MATURIN_DEPENDENCIES = \
+>  	host-rustc
+>  HOST_PYTHON_MATURIN_ENV = \
+>  	$(HOST_PKG_CARGO_ENV) \
+> -	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+> +	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)"
+>  # We need to vendor the Cargo crates at download time
+>  PYTHON_MATURIN_DOWNLOAD_POST_PROCESS = cargo
+>  PYTHON_MATURIN_DOWNLOAD_DEPENDENCIES = host-rustc
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
