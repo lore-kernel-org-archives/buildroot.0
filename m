@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5928C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 05:50:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BFCCC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 05:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F23560E9A;
-	Sun, 24 Jul 2022 05:50:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F23560E9A
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB26A41779;
+	Sun, 24 Jul 2022 05:51:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB26A41779
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3lcs8Has7GXF; Sun, 24 Jul 2022 05:50:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b8q56JDBS1bW; Sun, 24 Jul 2022 05:50:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54AFF60AD8;
-	Sun, 24 Jul 2022 05:50:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54AFF60AD8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E39041729;
+	Sun, 24 Jul 2022 05:50:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E39041729
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6B3CF1BF59B
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 05:50:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7B2BE1BF59B
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 05:50:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52C6060AD8
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 05:50:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52C6060AD8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 55C0560669
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 05:50:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55C0560669
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0VPPvftK6nZH for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 05:50:22 +0000 (UTC)
+ with ESMTP id pjbXbJHc1OBx for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 05:50:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 861A360669
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
- [IPv6:2607:f8b0:4864:20::22e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 861A360669
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 05:50:22 +0000 (UTC)
-Received: by mail-oi1-x22e.google.com with SMTP id r13so9587251oie.1
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 22:50:22 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85746606C0
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com
+ [IPv6:2001:4860:4864:20::2d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 85746606C0
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 05:50:25 +0000 (UTC)
+Received: by mail-oa1-x2d.google.com with SMTP id
+ 586e51a60fabf-10d867a8358so11042631fac.10
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 22:50:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=nRYz8ZqURI+5ddgmKJHONCXW5irEwS+9C7Ncs+PaZA0=;
- b=XIoOy8QjlMww6VKSp+W33o0QlLCIG1HEAFwQiPbD8+Oi/lFCPigk/uVij8vPkmVckT
- /OvqwL/85PxO9efP1Lac/WEwF9796ib3dcvS9tp2aKwqE+Vl5w9ztM35OjuAnmHaZ36M
- 9TnBlPosRa3yC9aToZLPmYD0w2Np/N8oiPE6IDrIGUC5zYaBLJE5e/nKLdGKyT/WBeKs
- ZP3he36Ve9sNKhOeWT7s4jYBnayy5PuKyf2/kLdDcmRZefp2GVjyuiXNFuwgw2lrP/ow
- HWKeWjEJL86+tN9RoaN7HqeaZ/nhdHL31TkAaRn9UMQ0M8gUfs/HiLTD10vf33ligvoZ
- /AGA==
-X-Gm-Message-State: AJIora8oLSYREVZUW2ZSyS6U936ZL6x1QzUhZgtwXcN4WUaxtTw0dID/
- r69hIOiiaewTTZn1NmkmoeVWnFNXjsY=
-X-Google-Smtp-Source: AGRyM1vLWvGwmdiYW7YeaUCkFFd0lwYqyXNdBXQFIroVVkXq2/R06r+aUfaFd7d9hoPKNxFC/Xf2pw==
-X-Received: by 2002:a05:6808:1a1e:b0:33a:add2:63f8 with SMTP id
- bk30-20020a0568081a1e00b0033aadd263f8mr6293955oib.268.1658641821566; 
- Sat, 23 Jul 2022 22:50:21 -0700 (PDT)
+ bh=YS0hXVspsKYyFJoe6Zrc064/SV8OzYr7BO7SCV7xExQ=;
+ b=nIxBcEY2XARQSlKq53/wmc3vmAflLuwSY49Pf9eiGPXPJrAi/ei+aS336aNMEBaCcR
+ 20y5bGOJ1LCnjrvR/TFUnz2Si85uuaI9Zj+0aovJdUGL5tQ+nN/RC5y6UYmY2kjDRJ4A
+ 1HL9qnGLX+J+FQTm+Fqp+5Z/cSFdG5rimKEsLblx9kvUFHHOuWCCf6F06nzrlxo1q1GN
+ k9HKHizRsA1F3js7vI2fXD3qQL2E3SyP/laeXiZEliebqsFgafVM6mhKJ6DU7V6adWWU
+ L9+bZO8VKR3hseDm7IUvZrlMbFl81cMaxSSiOHpeKec7XJGl3N+q6kDcA5SKRSmgeKXg
+ 8lCA==
+X-Gm-Message-State: AJIora9PxD9yB5NXs1dR7emyj1KaUhc6cO11Qwl0uwMutHLDB6L6kO7R
+ +gn9o0BRsdTdqxvTDx/f3oaOC6mvoMM=
+X-Google-Smtp-Source: AGRyM1s4X5y5a2d8hs87oqt4iGgEm/3M96wHnic1Hm/KL133AhWWCemvsIUdnP5WmT4ls9dktbN1Yw==
+X-Received: by 2002:a05:6870:6114:b0:10c:6bf:542f with SMTP id
+ s20-20020a056870611400b0010c06bf542fmr11053422oae.188.1658641824536; 
+ Sat, 23 Jul 2022 22:50:24 -0700 (PDT)
 Received: from localhost.localdomain ([191.187.223.18])
  by smtp.gmail.com with ESMTPSA id
- k13-20020a056870818d00b000f5d8d031b6sm4236969oae.49.2022.07.23.22.50.19
+ k13-20020a056870818d00b000f5d8d031b6sm4236969oae.49.2022.07.23.22.50.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Jul 2022 22:50:20 -0700 (PDT)
+ Sat, 23 Jul 2022 22:50:23 -0700 (PDT)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 02:48:57 -0300
-Message-Id: <20220724054912.2354219-2-ricardo.martincoski@gmail.com>
+Date: Sun, 24 Jul 2022 02:48:58 -0300
+Message-Id: <20220724054912.2354219-3-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220724054912.2354219-1-ricardo.martincoski@gmail.com>
 References: <20220724054912.2354219-1-ricardo.martincoski@gmail.com>
@@ -72,18 +73,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=nRYz8ZqURI+5ddgmKJHONCXW5irEwS+9C7Ncs+PaZA0=;
- b=O4zWlJSsGhWQsTlpn1fMqkcIycl/prvk1bGZ7s8SA0wDX4YlkgdeyiHarWAGtpHMUQ
- V7ev6sasC7bItk3aDmD55W5wB+VJm0H2Op4QO3m4IpnNIAxZ2gak1p4xoHpLXFIaOJwu
- tctks7eEdEA3/KywwmemPY9zNOCg0QTouuHy6frk4GYHtICzJCsUI9L172xUE2zw1/6Q
- bvAmyHdjN7Gi1Cv1+4FxWXyrjJMIwclvRCUSvk+MWctGUiqd/eO/IIoyZ8icszLAjCXP
- 6Q4XhBGoADUpusQ04PzmP2dXZUDiqKDhEyywelcmJSYFcrKvhEw+8s+YIuIZ9jwaI4O8
- bayw==
+ bh=YS0hXVspsKYyFJoe6Zrc064/SV8OzYr7BO7SCV7xExQ=;
+ b=FU/DIdhutK6QNtT2P06b3UiobCB9JnrrSIC95bpc5zoyOjpIfDk8kvlQtIFnwS+M9l
+ iY/X83hspCs+BHaMvA6X/6hAvSA2BL6NmvF5VjIzkP70w1thP+sc0mvVjIFv7nWPQB5s
+ 6DZWhP9fyRzdjZDYRtt1ZuVRYR/Tesd8+f12C2eL6ED+OLwC2WVtucCvHOoazqhSmEl3
+ evj2kYDYq+Rx5pbniqmfmuBch7XVvPAiO+EgvZ9p+RcsfdT66ALi6+hf6wkeV8TXxxfF
+ 0Z3A8aswWmjIsicZziacfG94IUIanN+3aCBdPDPnBSuXdmxTyZhvBxjzZuuHzud36Cxf
+ I/Iw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=O4zWlJSs
-Subject: [Buildroot] [PATCH 01/16] DEVELOPERS: update entries for Ricardo
- Martincoski
+ header.a=rsa-sha256 header.s=20210112 header.b=FU/DIdhu
+Subject: [Buildroot] [PATCH 02/16] utils/check-package: improve shellcheck
+ reproducibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,39 +102,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+shellcheck is already in use to check SysV init scripts.
+Currently its results can be affected by the existence of a
+.shellcheckrc file in any parent directory.
+
+For instance, in this example:
+(1) /path/.shellcheckrc
+(2) /path/to/.shellcheckrc
+(3) /path/to/buildroot
+the configs from file (1) are ignored and the configs from file (2)
+override the default values from the shellcheck binary.
+So the config file affects the check-package result for SysV scripts.
+
+Avoid this reproducibility issue by adding an empty config file to the
+buildroot topdir.
+
+It can also eventually contain configs (different from default values
+from sheelcheck) that we want as a standard to all shell scripts tested
+by check-package.
+
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- DEVELOPERS | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ .shellcheckrc | 0
+ DEVELOPERS    | 1 +
+ 2 files changed, 1 insertion(+)
+ create mode 100644 .shellcheckrc
 
+diff --git a/.shellcheckrc b/.shellcheckrc
+new file mode 100644
+index 0000000000..e69de29bb2
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ee836266be..00315ffe6f 100644
+index 00315ffe6f..8b2fdb8f6c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2466,21 +2466,16 @@ N:	Renaud Aubin <root@renaud.io>
- F:	package/libhttpparser/
+@@ -2467,6 +2467,7 @@ F:	package/libhttpparser/
  
  N:	Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-+F:	.flake8
+ F:	.flake8
++F:	.shellcheckrc
  F:	package/atop/
  F:	package/thermald/
--
--N:	Ricardo Martincoski <ricardo.martincoski@gmail.com>
  F:	support/testing/infra/
- F:	support/testing/run-tests
--F:	support/testing/tests/core/test_file_capabilities.py
--F:	support/testing/tests/download/
--F:	support/testing/tests/package/*_python*.py
- F:	support/testing/tests/package/test_atop.py
--F:	support/testing/tests/package/test_syslog_ng.py
--F:	support/testing/tests/package/test_tmux.py
- F:	support/testing/tests/utils/test_check_package.py
- F:	utils/check-package
- F:	utils/checkpackagelib/
-+F:	utils/docker-run
- 
- N:	Richard Braun <rbraun@sceen.net>
- F:	package/curlftpfs/
 -- 
 2.25.1
 
