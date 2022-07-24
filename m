@@ -1,95 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6686EC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:29:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AF05C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:30:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01DC84243B;
-	Sun, 24 Jul 2022 12:29:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01DC84243B
+	by smtp3.osuosl.org (Postfix) with ESMTP id F394861B49;
+	Sun, 24 Jul 2022 12:30:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F394861B49
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F55AAk8k2-OH; Sun, 24 Jul 2022 12:29:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id na5vG3768v8G; Sun, 24 Jul 2022 12:30:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B98F84174C;
-	Sun, 24 Jul 2022 12:29:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B98F84174C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6D1B31BF344
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:29:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DA6061B45;
+	Sun, 24 Jul 2022 12:30:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DA6061B45
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D37DB1BF344
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:30:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55CF040025
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:29:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55CF040025
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE25284BA3
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:30:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE25284BA3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lAt4tJ6Ke2Qy for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 12:29:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jw6g84EqfsfF for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 12:30:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7478140186
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7478140186
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:29:50 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- w8-20020a05600c014800b003a32e89bc4eso4839455wmm.5
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 05:29:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2AFD84BA2
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B2AFD84BA2
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:30:43 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id d13so4667095wrn.10
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 05:30:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=QgaB0pHkJldId28H9YJYJ3wmRhaHtZV3iACy4h6Wn3M=;
- b=0RQEV8geg1Wveb1/AQPJ/oK1knSeAe/Kg0VB4jxozqp0BG269LYbZzOj2ofp7UNdzd
- fYJqK6oFnledYcOBBeBUBWzMYeMupf0YECuCNWHnJclfy28ADBiKiOCZ57vmLjw6V7Jp
- AkssnzZj0w9wmeOCokNmFfUN0LUjiCstcvut43rSTakm+iAiL1Vexe6MxslF0CDvIOjf
- xBL+3FmCsicm3Uc7cSbQ929sbwHgWdv5/eQppNkYH8pyv4WHLzBQyI0DfmYokizGCwwW
- bINc4PFJWIMOU6u8Jlm7cgcShJJzCjtQhXcsFwVqSU2AsBO18GUhEPKkojoqSIc6gdVD
- 8iyA==
-X-Gm-Message-State: AJIora+zjch0Ufe9NZfQLeApwufynKTbMWIlXVzrZdl7oS9AXYSMHVfc
- /G89FOyXDXZps0fJqoNvcYfBPQ==
-X-Google-Smtp-Source: AGRyM1su9cFF632tYS/O1DD93na7f3lY1l7BgmXPSkYrMwVP7JjjSepk2+YQlQ4qk+dix/nUE2Gu4g==
-X-Received: by 2002:a1c:f718:0:b0:3a3:2416:634d with SMTP id
- v24-20020a1cf718000000b003a32416634dmr5595678wmh.83.1658665788500; 
- Sun, 24 Jul 2022 05:29:48 -0700 (PDT)
+ bh=qP48IgOLptzLlDpsu2KpuzQRexU9jn4RJv6yssbyKDg=;
+ b=Y3lgPqmOASybM0RncENZheIYD4QwwIV2M49KTew3PC5yYRa4w6q3QtpBqr3TG8TPQC
+ 4Ima4CmCq6uTykFYBRzllO6zKmlnwYG8+5rD9d38VTHFCw30hKEvWy4il1bAX0t7686A
+ GfH+wo5G+vKtY95ROEZ3i8HVuw15BoaquVYvIUZQ3qq153/hFCLu0KgcPCq+lmn1/8rd
+ Bc4wwcZVwDzU56Sl8iBnmtSdu3uQtOEEpqyg+p4vK+PErh6u0c1AH461cWeoz4QINo9t
+ jP99CZg1JjSBWul7VjtxhJA+EEJxNLUJf1JY7H9veCado4RJSdLjP75vgwzk/QxApBQ5
+ FPbw==
+X-Gm-Message-State: AJIora9I6qp+Czc5vH7gbTo14cE8eX66cJ7jV5osE9X2VLpvb1RcslNj
+ 3JG838ZBhoZmLP96ZY2VFBy4KGtyP1axkA==
+X-Google-Smtp-Source: AGRyM1uz980qFom6kudNPCDwbPnLm1GX0Nq+181h+SUDk7VJXJCx/w3AI57vMzqzACsN/a/1I46SuA==
+X-Received: by 2002:adf:f4d1:0:b0:21e:484e:ac59 with SMTP id
+ h17-20020adff4d1000000b0021e484eac59mr4825164wrp.125.1658665841655; 
+ Sun, 24 Jul 2022 05:30:41 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- f18-20020a7bc8d2000000b003a327b98c0asm10668006wml.22.2022.07.24.05.29.47
+ n11-20020a05600c304b00b003a320b6d5eesm13792307wmh.15.2022.07.24.05.30.37
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 24 Jul 2022 05:29:48 -0700 (PDT)
-Message-ID: <7fc15a6b-3718-90c4-9d87-848bc0fbc3cb@mind.be>
-Date: Sun, 24 Jul 2022 14:29:46 +0200
+ Sun, 24 Jul 2022 05:30:41 -0700 (PDT)
+Message-ID: <5d9492ee-42d5-3657-4e3e-2727d187a1d0@mind.be>
+Date: Sun, 24 Jul 2022 14:30:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220724092934.6041-1-fontaine.fabrice@gmail.com>
+References: <20220724091004.4810-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220724092934.6041-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220724091004.4810-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=QgaB0pHkJldId28H9YJYJ3wmRhaHtZV3iACy4h6Wn3M=;
- b=Szh/bMlPVhwozqX8OoSvYbSFZmJT6FtUPXM07eUvH1z9vcFQgV/8QrY+P8Et8vBvsR
- dDeyq+DkvUikEwJG3gJaGidxfAItzMNFdB/KH6bXhz2BYUzr+dlVZ2xi8cgYlT3Hqo6j
- 635hEszD9Y/oK8g/KmmsQ0s7z4hErsBLHIP+6YaEcNS5BWP7pvioGY/WLcKdj7lAwq57
- v+fxGPHgVQMC3uSp4wi1tg1uzPyq+IDBiM++bIkfy5Igy3dtDWauK9TFMqdYt8fJvp8c
- kV5IS5eG56XSwGN316SHcM04esfoqwbUhzuPUYxGMNZJ+PxT4cbV0Hh8rCs5lSfsfyeZ
- o5xQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=qP48IgOLptzLlDpsu2KpuzQRexU9jn4RJv6yssbyKDg=;
+ b=ZpW3HVbCHIoMQ/AT+iAWsCHJ+WppTQ3xvkrrnX4l6UPtbzR0fXMCJO69PV4QCapZzl
+ xQa1LOxxo+7Y0thLiuh1X1cvMnCzdlIZ5ZoTr1nuQgumEvMz7/1YGvgQZnfTY3jerKS0
+ Hd0DSR72Md7jMI7TlzJa4GddGisMPWgGunkXsrp8Ab8KWZ98BlS30RhAfkkJwyKOE/N6
+ KbEKZRNXBcap0K+KPkiXwIzu4lSi4a5uQ6Js5MEygwk/fB4FMYkgqbiGR0IRjdpfpT99
+ EL//pc2FwTEOqcHW2afUpMrDXqkx49LzmIus58kF0NNFXet57zYq1w6pQ23WdU6EnQrg
+ 8RvQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Szh/bMlP
-Subject: Re: [Buildroot] [PATCH 1/1] package/libiio: drop 'from' in comment
+ header.a=rsa-sha256 header.s=google header.b=ZpW3HVbC
+Subject: Re: [Buildroot] [PATCH 1/1] package/nodejs: security bump to
+ version 16.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,7 +101,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Daniel Price <daniel.price@gmail.com>, Martin Bark <martin@barkynet.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -109,9 +109,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 24/07/2022 11:29, Fabrice Fontaine wrote:
-> Drop 'from' in comment of Config.in which was added by commit
-> 00deb6a7c11440766767cc07800661e8067df474
+On 24/07/2022 11:10, Fabrice Fontaine wrote:
+> Fix CVE-2022-32213, CVE-2022-32214, CVE-2022-32215, CVE-2022-32212,
+> CVE-2022-32223, CVE-2022-32222 and CVE-2022-2097
+> 
+> https://nodejs.org/en/blog/vulnerability/july-2022-security-releases
+> https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V16.md#16.16.0
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -121,22 +124,35 @@ On 24/07/2022 11:29, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/libiio/Config.in | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   package/nodejs/nodejs.hash | 4 ++--
+>   package/nodejs/nodejs.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libiio/Config.in b/package/libiio/Config.in
-> index 98d663e203..21c3a3b439 100644
-> --- a/package/libiio/Config.in
-> +++ b/package/libiio/Config.in
-> @@ -32,7 +32,7 @@ config BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
->   config BR2_PACKAGE_LIBIIO_USB_BACKEND
->   	bool "USB backend"
->   	default y
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # from libusb
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
->   	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
->   	select BR2_PACKAGE_LIBIIO_XML_BACKEND
->   	select BR2_PACKAGE_LIBUSB
+> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+> index 716becccc9..12ae449ab4 100644
+> --- a/package/nodejs/nodejs.hash
+> +++ b/package/nodejs/nodejs.hash
+> @@ -1,5 +1,5 @@
+> -# From https://nodejs.org/dist/v16.15.0/SHASUMS256.txt
+> -sha256  a0f812efc43f78321eca08957960a48f5e6bf97004d5058c8dd3b03c646ea4f7  node-v16.15.0.tar.xz
+> +# From https://nodejs.org/dist/v16.16.0/SHASUMS256.txt
+> +sha256  145151eff3b2aa5ebe73384009c52271a83740ae687a93c98c628cd7d52736eb  node-v16.16.0.tar.xz
+>   
+>   # Hash for license file
+>   sha256  6211cc77f9ceaf365db12faf050775b3a1e6da7a1eff3577ba006c4918103c33  LICENSE
+> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> index cfd9295d4e..3154dcd7ec 100644
+> --- a/package/nodejs/nodejs.mk
+> +++ b/package/nodejs/nodejs.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -NODEJS_VERSION = 16.15.0
+> +NODEJS_VERSION = 16.16.0
+>   NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+>   NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+>   NODEJS_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
