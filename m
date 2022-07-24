@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E31D4C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 19:56:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30FC1C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 19:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 795E483EE8;
-	Sun, 24 Jul 2022 19:56:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 795E483EE8
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5AF383F4F;
+	Sun, 24 Jul 2022 19:57:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5AF383F4F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jvd9tqfZGYeS; Sun, 24 Jul 2022 19:56:55 +0000 (UTC)
+	with ESMTP id B6bUtgghr3JV; Sun, 24 Jul 2022 19:57:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73F4883EB5;
-	Sun, 24 Jul 2022 19:56:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73F4883EB5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 098991BF20B
+	by smtp1.osuosl.org (Postfix) with ESMTP id B623183EB6;
+	Sun, 24 Jul 2022 19:57:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B623183EB6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E3581BF20B
  for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D603A6104A
+ by smtp2.osuosl.org (Postfix) with ESMTP id D607340C65
  for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D603A6104A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D607340C65
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hcnTSjf8DCAS for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VvFtcj7YBzoo for <buildroot@lists.busybox.net>;
  Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0884260C0F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 14CBD404C4
  for <buildroot@buildroot.org>; Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0884260C0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14CBD404C4
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3A02385CC9; Sun, 24 Jul 2022 19:41:52 +0000 (UTC)
+ id 54E1D85CC6; Sun, 24 Jul 2022 19:41:52 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 21:44:38 +0200
+Date: Sun, 24 Jul 2022 21:44:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5b766e6abec4c1368836225fa4cf4ea8663fde96
-X-Git-Newrev: 31c1325a0288cb6fbc330553bed9b264fb016b2a
+X-Git-Oldrev: db4b759dfc3a9f404861e112f216e30ff65ba9d9
+X-Git-Newrev: f88469885fca0353db6387acfbf6405b1cd3cde9
 X-Patchwork-Hint: ignore
-Message-Id: <20220724194152.3A02385CC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- package/x11r7/xdriver_xf86-input-synaptics: bump version to 1.9.2
+Message-Id: <20220724194152.54E1D85CC6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xkbutils: bump version
+ to 1.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31c1325a0288cb6fbc330553bed9b264fb016b2a
+commit: https://git.buildroot.net/buildroot/commit/?id=f88469885fca0353db6387acfbf6405b1cd3cde9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../xdriver_xf86-input-synaptics.hash                          | 10 ++++------
- .../xdriver_xf86-input-synaptics.mk                            |  6 +++---
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ package/x11r7/xapp_xkbutils/xapp_xkbutils.hash | 5 +++--
+ package/x11r7/xapp_xkbutils/xapp_xkbutils.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
-index b482a1db3b..97d55f2e2d 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-May/002899.html
--md5 cfb79d3c975151f9bbf30b727c260cb9  xf86-input-synaptics-1.9.1.tar.bz2
--sha1 07eeef716820105cae959bbc3aa103e2fcfd0084  xf86-input-synaptics-1.9.1.tar.bz2
--sha256 7af83526eff1c76e8b9e1553b34245c203d029028d8044dd9dcf71eef1001576  xf86-input-synaptics-1.9.1.tar.bz2
--sha512 978eddd456aa7361047bc3d72e5127b24b13de29b0dddb6a0acc9f9da93931baa2b22fb5d1e6be164f629a11e5d97d753b835426435396b45b1af5eb8d546c3f  xf86-input-synaptics-1.9.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-July/003181.html
-+sha256  b8fa4aab913fc63754bbd6439e020658c412743a055201ddf212760593962c38  xf86-input-synaptics-1.9.2.tar.xz
-+sha512  6fd46505f22bba79f612fbd48dddd4818f7d874cc29caac71840744de27f1d224c68861e3a18d2a866b78178924d2f093f5260e27b221aa1fb17dbc09d66b649  xf86-input-synaptics-1.9.2.tar.xz
+diff --git a/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash b/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash
+index 2f8dbc7c1e..95287956a8 100644
+--- a/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash
++++ b/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash
+@@ -1,4 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-February/002162.html
+-sha256  d2a18ab90275e8bca028773c44264d2266dab70853db4321bdbc18da75148130  xkbutils-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-July/003186.html
++sha256  f6a4a8e9c54582beb3787b1faa8168caab125c1fee0ca9cfa5b6c9c1df25eea4  xkbutils-1.0.5.tar.xz
++sha512  0d8d460f5e015e9034292688437511068dab61216c2493f2981cfb63aaa012976ac9435c1586a22c0940fbfcb779b48dce9b85832303fe2b854aa945b814ac77  xkbutils-1.0.5.tar.xz
  # Locally computed
--sha256 e14dc9a27158cadaeea8bcc2c70069762f05adb29030a444336bfde268751dc7  COPYING
-+sha256  e14dc9a27158cadaeea8bcc2c70069762f05adb29030a444336bfde268751dc7  COPYING
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-index c8ef98f8e4..888f60b2fb 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+ sha256  3d67b53c085de6d475705b60855b9277afac5d4c4ec531d0ffd1ef0d00571594  COPYING
+diff --git a/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk b/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk
+index 96ca8a4093..90501908e6 100644
+--- a/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk
++++ b/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.9.1
--XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).tar.bz2
--XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.9.2
-+XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).tar.xz
-+XDRIVER_XF86_INPUT_SYNAPTICS_SITE = https://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE = MIT
- XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE_FILES = COPYING
- XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = libevdev xserver_xorg-server xorgproto mtdev
+-XAPP_XKBUTILS_VERSION = 1.0.4
+-XAPP_XKBUTILS_SOURCE = xkbutils-$(XAPP_XKBUTILS_VERSION).tar.bz2
+-XAPP_XKBUTILS_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XKBUTILS_VERSION = 1.0.5
++XAPP_XKBUTILS_SOURCE = xkbutils-$(XAPP_XKBUTILS_VERSION).tar.xz
++XAPP_XKBUTILS_SITE = https://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBUTILS_LICENSE = MIT
+ XAPP_XKBUTILS_LICENSE_FILES = COPYING
+ XAPP_XKBUTILS_DEPENDENCIES = xlib_libXaw xlib_libxkbfile
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
