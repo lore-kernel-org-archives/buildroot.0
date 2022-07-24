@@ -1,95 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAB7DC43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 09:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6502DC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 09:18:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6017E83EBC;
-	Sun, 24 Jul 2022 09:18:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6017E83EBC
+	by smtp2.osuosl.org (Postfix) with ESMTP id D1B114163C;
+	Sun, 24 Jul 2022 09:18:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1B114163C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PX2CLcMlLqsZ; Sun, 24 Jul 2022 09:18:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PXecYJwtAZMh; Sun, 24 Jul 2022 09:18:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 590B783F1A;
-	Sun, 24 Jul 2022 09:18:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 590B783F1A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3D2BB1BF2B9
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 09:18:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC8754031E;
+	Sun, 24 Jul 2022 09:18:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC8754031E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5ABB51BF2B9
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 09:18:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2065460B56
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 09:18:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2065460B56
+ by smtp4.osuosl.org (Postfix) with ESMTP id 33676409A7
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 09:18:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33676409A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xPL4bWhz3TRx for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 09:18:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id edLVyTenf3f4 for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 09:18:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01EF260B10
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 01EF260B10
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 09:18:05 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id d8so11973373wrp.6
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 02:18:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F5574098C
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9F5574098C
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 09:18:19 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id v13so4221379wru.12
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 02:18:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=082Rs5KC5HXL239BlWZXqCM12NxRx6/uDEItrTkqIEo=;
- b=JRAmClPwvnJxe4vwmhbdniB6AlCgEFn7GW/fqad3S1PbGBoD/iu5++tUsfihdOeFei
- A0YTGuwcYlMVdWRuPZIYO5aYvG8ebop54vIYUYxQPfA5v4G2WjmyhUYYxbeT9IHHmSYL
- FqrkCHpzJ1E5gJGyNb+ztlPtn+EzuGvPZ4cohGRdv4LxyEYhVMlb9eOIx57BgfX+y3FH
- DAsuCsjrZ5rAif/yePka5T3+OpjOgx7Sv+nV2Ch7DsTI7H21ihy0OGgSQBKySn0wX48N
- uO5MWZBYoLMJb45YFKgZOyuxT2jssxbt26lEae6Jdoc7SbyjWqYW63gm3ResmzuC4jKc
- PiRg==
-X-Gm-Message-State: AJIora/mvR+AyaXVnpffNkUohd4C5z1j2oRHo5ZEF1nguzBm6Bgt1PPU
- nQwFY19EmpkiYoZwigk+BiLnww==
-X-Google-Smtp-Source: AGRyM1s+EPRGsY2SxiQ4MtiJCcp9vT/sjyZjivAxauB4eEpWKXwOiV2is2zoJtfBBW+7OrAH+F16HA==
-X-Received: by 2002:a05:6000:1f8d:b0:21e:83a6:cf87 with SMTP id
- bw13-20020a0560001f8d00b0021e83a6cf87mr1474718wrb.559.1658654283895; 
- Sun, 24 Jul 2022 02:18:03 -0700 (PDT)
+ bh=KegFrXhSiAlLEzTxFuQjCOd33BU/4EbxjKqoj93OjxU=;
+ b=vOM8jZFzy2i2qeBPXfTbcpdUrSzDgcavoe6o1MqXPdDaQQMKwlivCE1yQ60iw1HHJ7
+ 6rkxHsvg6gUcd1pJTNNOAg+ciwztFqS3Vx028XwVIgoOBdCk25EFsug42BbfS/XOX8fk
+ W/ZOr9dPMapDt0vrnkKaJd9qvwR1vNGliqDdVqZRCEYFRBL/gzO7Xgzgw66HNHL1/9Zb
+ 99SVeQhOANKu4nVn/rM79NXIPtzNVfa9yv/N2dksylowSLQwfmExsCR0B75xrdIDmQnG
+ Z8kPw+PV/qpGwdR8/MiXpixTlsh5psymzkXYSHYLAwjhyJephQNBGFw4SP5JT3zqVoE1
+ lKdQ==
+X-Gm-Message-State: AJIora+8IQorF1AYjO7cx/FDCXxdCrB4AMGMq0ZHjccCfCFxIC19w38f
+ /j7HvU3DhCOmUhHNSCvze6mJrA==
+X-Google-Smtp-Source: AGRyM1syRoPuDyIwnJIyJrnscuSYVe4j7lmvMsiU3xOPRhwNUbyLUj0QEz5Kj6SjQhVCc7FhIcgzuQ==
+X-Received: by 2002:a5d:588d:0:b0:21d:a5cf:c6f with SMTP id
+ n13-20020a5d588d000000b0021da5cf0c6fmr5021039wrf.716.1658654297677; 
+ Sun, 24 Jul 2022 02:18:17 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- e24-20020a05600c219800b003a2cf1535aasm10400476wme.17.2022.07.24.02.18.03
+ g18-20020a05600c001200b003a31169a7f4sm13884232wmc.12.2022.07.24.02.18.17
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 24 Jul 2022 02:18:03 -0700 (PDT)
-Message-ID: <776aea3f-f8be-b02f-b977-022f655c99d6@mind.be>
-Date: Sun, 24 Jul 2022 11:17:59 +0200
+ Sun, 24 Jul 2022 02:18:17 -0700 (PDT)
+Message-ID: <a3c3a760-1c0e-44e8-24e8-ace063cd8dd1@mind.be>
+Date: Sun, 24 Jul 2022 11:18:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220723213746.6015-1-fontaine.fabrice@gmail.com>
+References: <20220723201014.218864-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220723213746.6015-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220723201014.218864-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=082Rs5KC5HXL239BlWZXqCM12NxRx6/uDEItrTkqIEo=;
- b=bFDKwgifdIDZozI/sPjXQ0HJFmYxwPIdiLWXzQ4owoyc2HSFuQUIwgFL5FQRX7UpzD
- VX+893f6vLS3H+m8/Pdj90vG6r1SB4ztNQRRt3JbWTAu3ZvKbOYY1zkoGEUX+XU53THg
- MKYpfV9vTRnWDMQ/q4qIWGfdC6Z+YE02Kv8Yo68CEBR6DKzDmp563uV0zjMcm9wDZMMj
- rQdYIGI41rBqTvGvFrLrW80NBxhtZtonG+rCF2zQ7AroG0vLNUTueCRxj9wYLdxIj7Kf
- n6smTEpU9VCq8RnwztOzIqZOzdStdHeaQmitaUG3S2G90jXBvUA4UBFBXgu5MBZx2JHt
- dDaw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=KegFrXhSiAlLEzTxFuQjCOd33BU/4EbxjKqoj93OjxU=;
+ b=WFlDzeoB0SOCJ70IVBkURWruHJnKgrwuVBsbyaadGE+p2CYIRo3SdwPPTK3C0JO1+K
+ tQJMmJ+eRu7aiQWTZ5kCePxIdVyMhIt4B9netScyZOM0bYbOL/qWP9QSaMDFKhlpOXmA
+ N+Yb7zEJoOfF41GEhzMuwcu4mWQU1hMZq28OpYa8tH+lYeZ5rJl1t9PE/v5dRl1NuUMN
+ BH1HibdqaRNTfPMrI68ZHL78xZCL+1F3x8xqXRMu3VYIOdJ24xqwUUsiqjcaoPLvT5dO
+ Vp/sLVdlYmAOm6nIr9f9fizHBjqSL8SSogx4ZIDknR54QW2jRO/Dn0IPYsWeGzKCSCRk
+ rcyw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=bFDKwgif
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-lxml: security bump to
- version 4.9.1
+ header.a=rsa-sha256 header.s=google header.b=WFlDzeoB
+Subject: Re: [Buildroot] [PATCH 1/1] package/jquery-validation: security
+ bump to version 1.19.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,7 +100,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -109,22 +107,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 23/07/2022 23:37, Fabrice Fontaine wrote:
-> Fix CVE-2022-2309: NULL Pointer Dereference allows attackers to cause a
-> denial of service (or application crash). This only applies when lxml is
-> used together with libxml2 2.9.10 through 2.9.14. libxml2 2.9.9 and
-> earlier are not affected. It allows triggering crashes through forged
-> input data, given a vulnerable code sequence in the application. The
-> vulnerability is caused by the iterwalk function (also used by the
-> canonicalize function). Such code shouldn't be in wide-spread use, given
-> that parsing + iterwalk would usually be replaced with the more
-> efficient iterparse function. However, an XML converter that serialises
-> to C14N would also be vulnerable, for example, and there are legitimate
-> use cases for this code sequence. If untrusted input is received (also
-> remotely) and processed via iterwalk function, a crash can be
-> triggered.
+On 23/07/2022 22:10, Fabrice Fontaine wrote:
+> - Fix CVE-2021-43306: An exponential ReDoS (Regular Expression Denial
+>    of Service) can be triggered in the jquery-validation npm package,
+>    when an attacker is able to supply arbitrary input to the url2 method
+> - Fix CVE-2022-31147: The jQuery Validation Plugin (jquery-validation)
+>    provides drop-in validation for forms. Versions of jquery-validation
+>    prior to 1.19.5 are vulnerable to regular expression denial of service
+>    (ReDoS) when an attacker is able to supply arbitrary input to the url2
+>    method. This is due to an incomplete fix for CVE-2021-43306. Users
+>    should upgrade to version 1.19.5 to receive a patch.
+> - Use LICENSE.md instead of README.md which is available since version
+>    1.14.0 and
+>    https://github.com/jquery-validation/jquery-validation/commit/96b7036eb45375eb4861082d8ca442d94a9c666c
 > 
-> https://github.com/lxml/lxml/blob/lxml-4.9.1/CHANGES.txt
+> https://github.com/jquery-validation/jquery-validation/releases/tag/1.19.4
+> https://github.com/jquery-validation/jquery-validation/releases/tag/1.19.5
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -134,36 +132,38 @@ On 23/07/2022 23:37, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/python-lxml/python-lxml.hash | 2 +-
->   package/python-lxml/python-lxml.mk   | 4 ++--
->   2 files changed, 3 insertions(+), 3 deletions(-)
+>   package/jquery-validation/jquery-validation.hash | 4 ++--
+>   package/jquery-validation/jquery-validation.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-> index 3600d7759a..cd1943b0b4 100644
-> --- a/package/python-lxml/python-lxml.hash
-> +++ b/package/python-lxml/python-lxml.hash
-> @@ -1,5 +1,5 @@
+> diff --git a/package/jquery-validation/jquery-validation.hash b/package/jquery-validation/jquery-validation.hash
+> index 4dbe07e218..31ecd62bcb 100644
+> --- a/package/jquery-validation/jquery-validation.hash
+> +++ b/package/jquery-validation/jquery-validation.hash
+> @@ -1,3 +1,3 @@
 >   # Locally computed
-> -sha256  f63f62fc60e6228a4ca9abae28228f35e1bd3ce675013d1dfb828688d50c6e23  lxml-4.8.0.tar.gz
-> +sha256  fe749b052bb7233fe5d072fcb549221a8cb1a16725c47c37e42b0b9cb3ff2c3f  lxml-4.9.1.tar.gz
->   sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
->   sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
->   sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
-> diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-> index 90935a7ee1..050495c3f3 100644
-> --- a/package/python-lxml/python-lxml.mk
-> +++ b/package/python-lxml/python-lxml.mk
-> @@ -4,8 +4,8 @@
+> -sha256  01ad2ef0a7f9cd413aeb51081651293916da47d20e5c0a59ec62587e58b03564  jquery-validation-1.19.3.zip
+> -sha256  3e5a99460077c16bf75f6821a30cdac9baa339119ebf63b2a6c49f4f50421ca4  README.md
+> +sha256  52381e080f266f8bca1a17acd6a4a68be4c2606a8b16f8a12e597cc69f2c0584  jquery-validation-1.19.5.zip
+> +sha256  f398878cab338b869638bdac1aeae76bf3ac11b2b89da6e0b68bc1a645733440  LICENSE.md
+> diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
+> index 920ed1cece..1ed37ee73b 100644
+> --- a/package/jquery-validation/jquery-validation.mk
+> +++ b/package/jquery-validation/jquery-validation.mk
+> @@ -4,11 +4,11 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_LXML_VERSION = 4.8.0
-> -PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/3b/94/e2b1b3bad91d15526c7e38918795883cee18b93f6785ea8ecf13f8ffa01e
-> +PYTHON_LXML_VERSION = 4.9.1
-> +PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/70/bb/7a2c7b4f8f434aa1ee801704bf08f1e53d7b5feba3d5313ab17003477808
->   PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+> -JQUERY_VALIDATION_VERSION = 1.19.3
+> +JQUERY_VALIDATION_VERSION = 1.19.5
+>   JQUERY_VALIDATION_SITE = https://github.com/jquery-validation/jquery-validation/releases/download/$(JQUERY_VALIDATION_VERSION)
+>   JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
+>   JQUERY_VALIDATION_LICENSE = MIT
+> -JQUERY_VALIDATION_LICENSE_FILES = README.md
+> +JQUERY_VALIDATION_LICENSE_FILES = LICENSE.md
+>   JQUERY_VALIDATION_CPE_ID_VENDOR = jqueryvalidation
+>   JQUERY_VALIDATION_CPE_ID_PRODUCT = jquery_validation
 >   
->   # Not including the GPL, because it is used only for the test scripts.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
