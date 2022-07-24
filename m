@@ -1,51 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0513C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 10:32:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDA4EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 10:32:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39245424DA;
-	Sun, 24 Jul 2022 10:32:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39245424DA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6652161B19;
+	Sun, 24 Jul 2022 10:32:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6652161B19
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5h6GA9ueFxkQ; Sun, 24 Jul 2022 10:32:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id E64I_pcgD3yZ; Sun, 24 Jul 2022 10:32:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CD8A424D4;
-	Sun, 24 Jul 2022 10:32:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CD8A424D4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A71E41BF2E4
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:31:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E05261ABA;
+	Sun, 24 Jul 2022 10:32:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E05261ABA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 67A931BF2E4
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:31:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79A23424C3
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:31:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79A23424C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 413B540B97
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:31:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 413B540B97
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ms4vrFNTbn2K for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 10:31:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D592424C1
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 10:31:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D592424C1
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8184D85BF2; Sun, 24 Jul 2022 10:17:53 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 12:28:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9727b232a5c7e70bcfa74cdbe5b2fb2f67e040b5
-X-Git-Newrev: 58c9bf5e01f78653d9a45afc7d214900235a2e56
-X-Patchwork-Hint: ignore
-Message-Id: <20220724101753.8184D85BF2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 22.1.4
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ume0ZDhPhjIu for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 10:31:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4359D40359
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4359D40359
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 10:31:57 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id z13so12112621wro.13
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 03:31:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=B8pAfOuMuTZ7+AfXlmPGQMgxkZ/da/RcaXt9a5GRIJg=;
+ b=0w+9B0XgBudqNZMu95fLyRf+eqQcWP6H1h1XWCa/BTzIo28MHIxggP3PGOOb5viR3A
+ J6lArk+y1YDOECOD8GSxCMSh+WUuOcwuR+5V9VY0jiZi0FUyjdFDjuNmXNz/jfry792T
+ YYA+OU1VRNYs7q1BNzrkS3nXdYnr+PC7kCuGdiMdT6Sj41e9/vpoAWgjpuMoJYy1dvfK
+ hktjHdtHKWJ9VUNJVWGmMxQ5D8g4LAqvdBwmDm2m4rGKj5ImhzzG31mH2c/M8a2KasV3
+ JCM/TrywYZaSlQrH45zVkSsVGmvdNO3/xZpgiF69YtvvaeGWAWNi8w3us97UF+9g6kIq
+ 3qSw==
+X-Gm-Message-State: AJIora917s/xTK3isLy60hTcTp1gTxyKdAxVgVreofjoM4Xfw6aOn23h
+ iXwcdBQrj8Rq9EzA1wgCA4xYYd5zniEO3A==
+X-Google-Smtp-Source: AGRyM1vkfIrJfu0w9VROS0wELpRc6zkaWW1ZiYGhL8A8F1YBrKKehIYSTD2KqQqUrCUxeRHqAcZIoA==
+X-Received: by 2002:a5d:6848:0:b0:21e:5e37:b2e4 with SMTP id
+ o8-20020a5d6848000000b0021e5e37b2e4mr5068495wrw.530.1658658715385; 
+ Sun, 24 Jul 2022 03:31:55 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ u8-20020a05600c19c800b0039db31f6372sm12540352wmq.2.2022.07.24.03.31.54
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 24 Jul 2022 03:31:54 -0700 (PDT)
+Message-ID: <8b554be7-d9c3-74ce-2684-c6ab2d6c9a05@mind.be>
+Date: Sun, 24 Jul 2022 12:31:51 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+References: <20220723210523.293598-1-romain.naour@smile.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220723210523.293598-1-romain.naour@smile.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=B8pAfOuMuTZ7+AfXlmPGQMgxkZ/da/RcaXt9a5GRIJg=;
+ b=LqvrW0VCIVz/rv6kNLiHKyibY9mbzkns9IXFDe3HrlJI3f0XVjJWACyOgbTxmQDjRB
+ sqcM22vi0OLNHw9AKi89VCcmIiFjqSKMTfHr4uR0SczfCDJoSzMpmJsvv1lktOao6wd2
+ zatg9zdLfYDjB6nQhJWqIj1lwjld4+l8dm6MN/f21CgYn0qi5xKTu8XplHbhpPtp/ORv
+ dI9Ibvy/rY3aX8mdHrC7LTBxJRE3itiJgbIlKP7EH7G6ySYwhvrPaEYxDUvc61ODvqia
+ sVd5yBtx4TLUopQFDHhq7eRlX981slEwW+Nnh3zKeLV8c2BEMZQLgN41rNNXsqaiEsyu
+ Mtng==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=LqvrW0VC
+Subject: Re: [Buildroot] [PATCH] package/mender: remove single hyphen
+ command (2)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,64 +101,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Adam Duskett <aduskett@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58c9bf5e01f78653d9a45afc7d214900235a2e56
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No release announcement available from upstream this time so we had to
-computed the tarball hash ourselves.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 5 ++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 5 deletions(-)
+On 23/07/2022 23:05, Romain Naour wrote:
+> Single hyphen commands has been removed since Mender 3.0.0 [1]
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 6a9810b880..a5cefa254f 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 22.1.3
-+MESA3D_HEADERS_VERSION = 22.1.4
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index bf99539d2e..dfbd207b36 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,4 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2022-June/000682.html
--sha256  b98f32ba7aa2a1ff5725fb36eb999c693079f0ca16f70aa2f103e2b6c3f093e3  mesa-22.1.3.tar.xz
--sha512  e7348839eb37de89c90d21277a7cbb42ee673ad6c656177853f6d35db99556dbac29867712222342d902b4fa67df5687c9d543bad99c81bcd0ecfb7f08f37480  mesa-22.1.3.tar.xz
-+# Locally computed
-+sha256  670d8cbe8b72902a45ea2da68a9da4dc4a5d99c5953a926177adbce1b1640b76  mesa-22.1.4.tar.xz
- # License
- sha256  4bc15d14dcc134b024cbdca3b5330010136ce8a427b6f8353440ce2ad7aab037  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index d012b41c57..96520e2efd 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 22.1.3
-+MESA3D_VERSION = 22.1.4
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+  I just added mender-connect which also has the hyphen. Is it wrong there as well?
+
+> 
+> The hyphen was added back while fixing check-pkg and shellcheck warnings [2]
+> 
+> [1] https://github.com/mendersoftware/mender/commit/fd838ec1b08f3d429b1d81607e9c35a87a104ee6
+> [2] 0b350cf7569005d3eec6bb55a3acd4688d2fbd4e
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Cc: Adam Duskett <aduskett@gmail.com>
+
+  Applied to master, thanks.
+
+> ---
+> We still have a patch adding a simple Mender runtime testing that would
+> catch such issue:
+> 
+> http://patchwork.ozlabs.org/project/buildroot/patch/20220106144301.1022644-1-romain.naour@smile.fr/
+
+  I'll get around to that one - eventually :-)
+
+  Regards,
+  Arnout
+> ---
+>   package/mender/S42mender | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/mender/S42mender b/package/mender/S42mender
+> index 29008beca0..0f2077d089 100644
+> --- a/package/mender/S42mender
+> +++ b/package/mender/S42mender
+> @@ -5,7 +5,7 @@
+>   DAEMON="mender"
+>   DAEMON_PATH="/usr/bin/mender"
+>   PIDFILE="/var/run/${DAEMON}.pid"
+> -DAEMON_ARGS="-daemon"
+> +DAEMON_ARGS="daemon"
+>   
+>   start() {
+>   	# If /var/lib/mender is a symlink to /var/run/mender, and
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
