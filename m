@@ -1,95 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50B5AC43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 10:40:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16539C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 10:54:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D46E342452;
-	Sun, 24 Jul 2022 10:40:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D46E342452
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FBAF40B97;
+	Sun, 24 Jul 2022 10:54:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FBAF40B97
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iOmfKKz8Kluc; Sun, 24 Jul 2022 10:40:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WQFYqh6H99d1; Sun, 24 Jul 2022 10:54:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5568541735;
-	Sun, 24 Jul 2022 10:40:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5568541735
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9F9311BF2E4
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:40:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 82D5640359;
+	Sun, 24 Jul 2022 10:54:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82D5640359
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9AE131BF2E4
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:54:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7469E60FBF
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:40:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7469E60FBF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 75E7083E6C
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 10:54:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75E7083E6C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6XMIoY7V5FT8 for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 10:40:38 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6ABF2607F9
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6ABF2607F9
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 10:40:38 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id u5so12149420wrm.4
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 03:40:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=+Q8c/rZdiZrqZtJ9ug+gcfVLFCV/8KCQM5G4zbaAtUg=;
- b=ae49bRaCrTSquHrff/QNdKte+FsuFDJ59E0HYvLvyxO8bPBQxwovBEqj9IxhzLSRaX
- Z/dWbyCBREPZjEgTkiO3SRT/Rgs+b/1fkFuJ3JElbtE/TQLbGRWIHb4oP9Erz7mSsd81
- C4/i04nC7sHrqW/IGWKjbzApucTGNun2VpJBetouz3mIQqcjSJx6K5zs7v0y3W/fhSFI
- NPGqZ0NcsiPduL2exhqb+jfAKdbsA3lJgx3yhz/3eDKc+RGu9spV5AzgLZJctkWdEw+b
- /IhfLDaeQF3IrwpNJO8ZxAbhLnHwuUxIg8M6bCOmMaor2S7XXtz82SOMgvuF590nedaP
- 7d0g==
-X-Gm-Message-State: AJIora8nDJbjJpXAhjmlOmzXyszk5To4ZTcOYhkCoWxZ7OpvKNDEHl82
- 4b5Hc5nLRJ5/tsdPALLic7XE9jcewsjGRQ==
-X-Google-Smtp-Source: AGRyM1vwZPDML0WGQbfZI4dzMV3XnZtlodj6ybnOS9KBVZtYk6PYij5O+Ln8kaSvIJPryjCxla4KbQ==
-X-Received: by 2002:a5d:6dab:0:b0:21d:9fc8:3029 with SMTP id
- u11-20020a5d6dab000000b0021d9fc83029mr5025453wrs.172.1658659236227; 
- Sun, 24 Jul 2022 03:40:36 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- o8-20020a05600c378800b003a2e7c13a3asm10287919wmr.42.2022.07.24.03.40.35
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 24 Jul 2022 03:40:35 -0700 (PDT)
-Message-ID: <1ae9b631-767d-246a-84b6-36aca07f9dc1@mind.be>
-Date: Sun, 24 Jul 2022 12:40:33 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KZ5GU_PkBm9y for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 10:54:21 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CE1183E69
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7CE1183E69
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 10:54:21 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8acf:5600:88cd:5a50:8d8a:801])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id B421D13F8B3;
+ Sun, 24 Jul 2022 12:54:13 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 24 Jul 2022 12:54:13 +0200
+Date: Sun, 24 Jul 2022 12:54:13 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Romain Naour <romain.naour@smile.fr>
+Message-ID: <20220724105413.GT2641@scaer>
+References: <20220705134402.5914-1-david.gouarin@thalesgroup.com>
+ <20220705134402.5914-2-david.gouarin@thalesgroup.com>
+ <5c4dd777-7209-90e3-ea5d-b0ae57c745a9@smile.fr>
+ <20220724075906.GO2641@scaer>
+ <c85bf232-28ca-8d43-06ca-8e2d78db1581@smile.fr>
+ <20220724084611.GP2641@scaer>
+ <30f9fc02-781b-27ac-ecec-5f03680f8a7d@smile.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: Michael Nosthoff <buildroot@heine.tech>, Julien Olivain <ju.o@free.fr>
-References: <4d-62dd1c80-3-19436700@106240584>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <4d-62dd1c80-3-19436700@106240584>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=+Q8c/rZdiZrqZtJ9ug+gcfVLFCV/8KCQM5G4zbaAtUg=;
- b=GPaf9CQW+57MX4lRlSbL9ETqgOX/TuhXwRZaG/LIHGDmD1iq/FmUrKPcSskSJvlCJr
- LGp1x4E02Wbz1mZX1HOLdzSgUM6PdP3PvMFNuWYTJHJnQMduT3YKiBCn6doQBN6qvNcK
- mBEOkLzAUtpB821r2UtNr/dN0RL2ejOXaMHG3d+MfigCAvl4RJwcnmO6/MZCkG9BUZIi
- O2gLtsscsh/yg1Eko4slcyPh/cHgUp34Ib0nXQjRf41Bk1t6apfHcptkGN9yWO5QnzFH
- p+vzQw2pfKrZlFkVUd/lQTHl+hFN4BbqNG3b/ltuC6Us76QM3Ub/nXa+u77FAPJ9iaT0
- o4DQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=GPaf9CQW
-Subject: Re: [Buildroot] [PATCH] package/{python-}protobuf: bump to version
- 21.3
+Content-Disposition: inline
+In-Reply-To: <30f9fc02-781b-27ac-ecec-5f03680f8a7d@smile.fr>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1658660059;
+ bh=06aeoZasZQBsws0mwoaIZCRSL9yjK5OZ/4ewVfo+8pE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=g8Et8qRDpMkuoXlszzQc4nGN2T18jxfk12gxnrj1uFMHJ8N0wluCsdEJHn+oMajsd
+ NLxy6pTeBhQsAleuU4cwYEh4HdSYc1TVyIIf8AtJIFUjj+fIMVJFleeBmBFBBoMVug
+ 4mx8yESnAsFn2SODqa0WKUNXzCNEve20sWaJw0I+GhQU1iNjJSy2ynOTOxiLyQy5hG
+ xBbk1UaAO3n6qXdbDLw9iO48H34A67uNswFDvoBcSefVfAU8Ns6xX1DiXZx/P30q2Z
+ VlqWx/+Bj1xIWfHTPupW0DR1ExB7K1UEDjCkQk4vlDipG/AhcajN7Wd0Sb/aplq2aO
+ UU7FnAUCR+q6w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=g8Et8qRD
+Subject: Re: [Buildroot] [PATCH 2/2] package/libtalloc: bump version to 2.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,111 +82,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: David GOUARIN <dgouarin@gmail.com>,
+ David GOUARIN <david.gouarin@thalesgroup.com>,
+ Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 24/07/2022 12:17, Michael Nosthoff wrote:
-> Hi Arnoud,
-> hi Julien,
-> 
-> (julien, i added you as the ola maintainer as this patch might break it)
-> 
-> On Saturday, July 23, 2022 00:33 CEST, Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->>
->>
->> On 21/07/2022 12:47, Michael Nosthoff via buildroot wrote:
->>> protobuf changed its versioning scheme [1]. The Release version is now only
->>> the Minor.Patch version of the language specific version.
->>>
->>> C++ stays on version 3, but python got bumped to 4. So the handling in the .mk
->>> files changed to reflect that.
->>
->>    I think that the crazy stuff that was done upstream warrants a bit more
->> consideration on our side...
->>
->>    They are basically trying to encode two separate things in the version number:
->>
->> - the version of protobuf itself (i.e. the protocol definition) - this is 21.3;
->>
->> - the version of the language-specific API - this is 3 for all languages, except
->> for python where it was bumped to 4 because it has breaking changes in the 21.0
->> release.
->>
->>    First remark: due to this breaking change, I expect that an update of ola (our
->> only in-tree consumer of python-protobuf) may be needed as well.
-> 
-> The "breaking changes" according to
-> https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
-> don't actually sound "too breaking" to me.
-> 
-> I tried compiling ola with the bumped version. But it is beyond my knowledge how to test this.
-> @Julien could you check if this version bump of python-protobuf affects ola?
-
-  A runtime test for ola would be nice!
-
-> 
->>
->>    The version of the language-specific API is basically just there to to
->> indicate breaking changes. In the context of Buildroot, I think it's the protoc
->> version which is more relevant.
->>
->>    Then there's release-monitoring. For protobuf, it says 21.3. For
->> python-protobuf, we have a mapping to the same protobuf package [1].
->>
-> I'm not quite sure what you mean here. should we got with
-> PYTHON_PROTOBUF_VERSION = 4.x.x or do the same as with the cpp version and
-> just add -4. to the SOURCE?
-
-  Yes, that's what I meant, prepend the 4. in the SOURCE definition.
-
-> Where do I see the release-monitoring mapping?
-
-  The URL that I referred to before:
-[snip]
->> [1] https://release-monitoring.org/project/3715/
-
-
-  Regards,
-  Arnout
-
->>
->>> -PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
->>> +PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION_MINOR)
->>>    PROTOBUF_LICENSE = BSD-3-Clause
->>>    PROTOBUF_LICENSE_FILES = LICENSE
->>>    PROTOBUF_CPE_ID_VENDOR = google
->>> diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
->>> index ddfa48b491..06ec32c5b5 100644
->>> --- a/package/python-protobuf/python-protobuf.hash
->>> +++ b/package/python-protobuf/python-protobuf.hash
->>> @@ -1,3 +1,3 @@
->>>    # Locally calculated
->>> -sha256  d3449b4df32ca155f8cd71051db916b2bf74cc925760e269c0acf09b48ec1cb8  protobuf-python-3.20.1.tar.gz
->>> +sha256  ab5cda843c1fa2a34c5cdd30b65ae8bd148d8063e7f1b2bfe7daf23e763b0ff2  protobuf-python-4.21.3.tar.gz
->>>    sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
->>> diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
->>> index b91ba49339..8c21779faf 100644
->>> --- a/package/python-protobuf/python-protobuf.mk
->>> +++ b/package/python-protobuf/python-protobuf.mk
->>> @@ -4,7 +4,8 @@
->>>    #
->>>    ################################################################################
->>>    
->>> -PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
->>> +PYTHON_PROTOBUF_VERSION_MAJOR = 4
->>> +PYTHON_PROTOBUF_VERSION = $(PYTHON_PROTOBUF_VERSION_MAJOR).$(PROTOBUF_VERSION_MINOR)
->>>    PYTHON_PROTOBUF_SOURCE = protobuf-python-$(PYTHON_PROTOBUF_VERSION).tar.gz
->>>    PYTHON_PROTOBUF_SITE = $(PROTOBUF_SITE)
->>>    PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
-> 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Um9tYWluLCBBbGwsCgpPbiAyMDIyLTA3LTI0IDEwOjU1ICswMjAwLCBSb21haW4gTmFvdXIgc3Bh
+a2UgdGh1c2x5Ogo+IExlIDI0LzA3LzIwMjIgw6AgMTA6NDYsIFlhbm4gRS4gTU9SSU4gYSDDqWNy
+aXTCoDoKPiA+IE9uIDIwMjItMDctMjQgMTA6MTkgKzAyMDAsIFJvbWFpbiBOYW91ciBzcGFrZSB0
+aHVzbHk6ClstLVNOSVAtLV0KPiA+PiBJIGZvdW5kIGFub3RoZXIgY29tbWl0IGFkZGluZyB0aGUg
+b2ZmZW5kaW5nIHdhZiBjaGVjazoKPiA+PiBodHRwczovL2dpdGxhYi5jb20vc2FtYmEtdGVhbS9z
+YW1iYS8tL2NvbW1pdC80MjBiYmIxZDkyZmQyYTI4NzI1YjUzZjQyNWJhM2QyMTQ4MzFiNjYwCj4g
+Pj4gYmVjYXVzZSBpdCBkb2Vzbid0IHdvcmsgd2l0aG91dCBQWVRIT05IQVNIU0VFRC4KPiA+IEkg
+YW0gbm90IHN1cmUgIml0IGRvZXNuJ3Qgd29yayB3aXRob3V0IFBZVEhPTkhBU0hTRUVEIi4KPiBJ
+IG1lYW4sIEkgdHJpZWQgbG9jYWxseSBiZWNhdXNlIEkgd2FudGVkIHRvIGtub3cgOikKPiBUaGUg
+YnVpbGQgc3RvcCB3aXRoIHRoaXMgZXJyb3IgbWVzc2FnZToKPiAiUFlUSE9OSEFTSFNFRUQ9MSBt
+aXNzaW5nISBEb24ndCB1c2Ugd2FmIGRpcmVjdGx5LCB1c2UgLi9jb25maWd1cmUgYW5kIG1ha2Uh
+IgoKT0ssIEkgd2FzIGxvb2tpbmcgYXQgdGhlIGdpdCByZXBvc2l0b3J5IGZvciB0YWxsb2MsIGFu
+ZCBpdCBkb2VzIG5vdCBoYXZlCnRoYXQgdGVzdCBhdCBhbGwuIEl0IG5ldmVyIGhhZC4gT25seSB0
+aGUgcmVsZWFzZSB0YXJiYWxsIGhhcy4gV2VpcmQuLi4KOi0oCgpNZWguIE11c3QgYmUgZXhvcGxh
+aW5lZCBpbiB0aGUgY29tbWl0IGxvZy4uLgoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCi0tIAou
+LS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0t
+Li0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJl
+ZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIg
+Mzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAg
+ICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBY
+ICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMt
+YS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5
+LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0t
+LS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdAo=
