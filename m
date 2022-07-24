@@ -1,92 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C58ADC43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 20:59:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC185C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 21:06:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0746A83DF5;
-	Sun, 24 Jul 2022 20:59:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0746A83DF5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01AB4416B9;
+	Sun, 24 Jul 2022 21:06:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01AB4416B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LxfLzJucy3fv; Sun, 24 Jul 2022 20:59:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z9wDpkk4z0DV; Sun, 24 Jul 2022 21:06:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10A8A83415;
-	Sun, 24 Jul 2022 20:59:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10A8A83415
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3CD781BF20B
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 20:59:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A41F7415E6;
+	Sun, 24 Jul 2022 21:06:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A41F7415E6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CCE11BF33C
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 21:06:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B5F2611DD
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 20:59:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B5F2611DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id E876740C85
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 21:06:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E876740C85
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p4-bJFxdYZ01 for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 20:59:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jQAeKpmN6GBI for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 21:06:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A568A611DA
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A568A611DA
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 20:59:06 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id bn9so2565510wrb.9
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 13:59:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA3534040D
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com
+ [IPv6:2001:4860:4864:20::36])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DA3534040D
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 21:06:32 +0000 (UTC)
+Received: by mail-oa1-x36.google.com with SMTP id
+ 586e51a60fabf-10d6e8990b9so12566865fac.7
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 14:06:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=/ebP9c6Z8EODoB1bgYfM4KGLZHiuRP+eVCqD2vl1aSk=;
- b=qqqHRkWAQSF4PwzjbN+N7qgB6lN+uOYRRFmwgwI7sOw0KLDuTO0A3V8hz8Yq1m1m2U
- pg7/PJiv3bg0RGUOCRlCOFD2vQ3tdD5rfLsPz0UvGKqE1iJK0WgUpKRwXLO/tB5CU+SK
- sy1Z3Z1HZae6mSG2fG/O0lCTf1tsFHPCIc1vdnWdI2m+ee3k7eEwegZerPr2GYxSwUEe
- SPB1vk/fYf4lvvLWKWBDMDu0/iq/jW0e9R/L2jmSpN4rTnBQwxVnK0lpCeBcwsv+vT6B
- zwyYWIZvppc4VrLuxsTi94qEUC6yNDrj5CxaY0a4DGU8/R7pOhqnhQdiWUmpaHn5QO49
- iNDg==
-X-Gm-Message-State: AJIora90LCd/tLBxj1eIqUAKThdt5dHPGsXmnLwEnJzH0FjCnKmSX+nH
- WUXz6YPfrJH0H61qlr06BEXYgw==
-X-Google-Smtp-Source: AGRyM1uA1mgzzW10rTxdYY8l0HOVv7xbFBCjPVkzkanVYD3nNNSTONgfdIpd6FdpbbBFIQ5y0lw6pg==
-X-Received: by 2002:adf:f452:0:b0:21e:86ac:cd74 with SMTP id
- f18-20020adff452000000b0021e86accd74mr2195399wrp.194.1658696344384; 
- Sun, 24 Jul 2022 13:59:04 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- k23-20020a05600c1c9700b003a31b00c216sm13165922wms.0.2022.07.24.13.59.03
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 24 Jul 2022 13:59:03 -0700 (PDT)
-Message-ID: <ebe61366-15fc-6e69-b187-f884312206e2@mind.be>
-Date: Sun, 24 Jul 2022 22:58:57 +0200
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=++kI9QTcEuH9L4tLFhNfhUjkDSJR9d4xcqSPwfO9qio=;
+ b=ANAj+4DSLjSat8wk+qJnoaQX3i3XBylaS9cxzo9U2PoGhHe8vUucGofk1wxC6EROPS
+ gwoopQ5QiZzePq6pf4LWP7Y4YMgsuQiAXda8S4FDBZ7t2Y+YbxsGJoS7aa3sme8UZE+N
+ Th2goWHtlY9LRhALbBMPMzAWAS9oSLGuHZ7I61DuZk6X2sQkd2utkuvpD/uWWg7l+Lku
+ /WO3ZYKt1IOV0xxXD0r5hVz6x8FzceVclG8Nh1BBe7Iw7mzAL5/0hZf1pc9FyOWfC30W
+ Dd1FlxAieTcTMFimzYYmUjyuUTk+pJhujcHpM/Os69QiSilILMhRcO2MjCY4HTioQBsZ
+ 3Pdg==
+X-Gm-Message-State: AJIora8XyTlMtp7KD3b0bVSOJncfdBjKSg3rwd4fLzX10HexEFBWS41J
+ 9e/8v235Hu+z7fZkY1gzO427hyrU0Dmb5jzFbjL1qINf570BAA==
+X-Google-Smtp-Source: AGRyM1up5Myu7kuV5ZcadgNxAZGEh/G25VbE6FmWM9JwEIrrVslVoJlU3bCgm8uB0N4048RKjUABcobtFhsTdKyffN4=
+X-Received: by 2002:a05:6870:8314:b0:10c:cc1a:57fc with SMTP id
+ p20-20020a056870831400b0010ccc1a57fcmr12825857oae.153.1658696791750; Sun, 24
+ Jul 2022 14:06:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 References: <20220724020144.1012252-1-james.hilliard1@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220724020144.1012252-1-james.hilliard1@gmail.com>
+ <ebe61366-15fc-6e69-b187-f884312206e2@mind.be>
+In-Reply-To: <ebe61366-15fc-6e69-b187-f884312206e2@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 24 Jul 2022 15:06:20 -0600
+Message-ID: <CADvTj4rLQx5-t6iQEKTcc0U4n=T_-7LSWWBkV1wdKCaraT+_Fw@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=/ebP9c6Z8EODoB1bgYfM4KGLZHiuRP+eVCqD2vl1aSk=;
- b=RrtUewV4Hq9pTV5KPjggP7ZhnVNgXvO4o06V8oYOJ+8/prckcRIQANDBERRxU8dNNh
- pkovNLLJcKsAWOtH77y4tDor/mRXtZnr2DJ27mMvyH2ayOyTarfOlBG0gq1qBc7MC3Dv
- QKEfyz8wCrqEfS1qSZk5kOzrSkqumj198oweHqyQmRvUbWKqrmMKCMq3HIpIN0ZBQtxD
- c1xv58/0+GxTE3AoA4B6PhB4rZAQmAlj8wsVb8GoQEmP0VJzD7TIB41ftcZkpFI4k2dc
- Dt7LTevG3A9n0NiY8o6az0BtjSNyc1/9dCL8NUDDWMeWSsUtED9cvw74jLkJXMJ3qpra
- 3QjQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=RrtUewV4
+ d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=++kI9QTcEuH9L4tLFhNfhUjkDSJR9d4xcqSPwfO9qio=;
+ b=j1j9z7Vs/hPJNgcXmeihB/Q6HQaJuKe0G3ky5M56rBdQ8p4hfTzaROJ6wfniG38AAL
+ dv3PfSBDcuMAVuRWGUXprlNMdmmgJHzeoyNza4kiANgd6y+AJUC7jsyB1c9ch1CPvM7R
+ +syUD+Y5McyF05j+jHWTUY/PmZNMLjiReD0RNSYN7FQlIZpJzRYxtCPE4bpooFPaahl1
+ ye9kgNPcxaMPrnuDVScZvN4BSyrirvOQxzg+NlQh+DZdKyUJf6sOVM4x+tYT3ufYDHoY
+ Q7dF4VjcynmSFCOBKU1xKoRVRfURHTr7woCf4WF5BaZDpd68zcqUwz9bbqh/x6qz+mf5
+ 5xVQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=j1j9z7Vs
 Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-cargo: ensure host/target
  rustflags are properly split
 X-BeenThere: buildroot@buildroot.org
@@ -100,88 +91,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Sun, Jul 24, 2022 at 2:59 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 24/07/2022 04:01, James Hilliard wrote:
+> > Set HOST_LDFLAGS RUSTFLAGS via the host-config feature, see:
+> > https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#host-config
+> >
+> > We have to enable this nightly feature first using:
+> > CARGO_UNSTABLE_HOST_CONFIG="true"
+> >
+> > Separately set target RUSTFLAGS for the target triple specific env
+> > variable.
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >   package/pkg-cargo.mk | 11 ++++++++---
+> >   1 file changed, 8 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+> > index f7e3f39503..439d443b0d 100644
+> > --- a/package/pkg-cargo.mk
+> > +++ b/package/pkg-cargo.mk
+> > @@ -32,7 +32,10 @@ PKG_COMMON_CARGO_ENV = \
+> >   # using nighly features on stable releases, i.e features that are not
+> >   # yet considered stable.
+> >   #
+> > -# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" "enables the nightly
+> > +# CARGO_UNSTABLE_HOST_CONFIG="true" enables the host specific
+> > +# configuration feature
+> > +#
+> > +# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" enables the nightly
+> >   # configuration option target-applies-to-host value to be set
+> >   #
+> >   # CARGO_TARGET_APPLIES_TO_HOST="false" is actually setting the value
+> > @@ -41,9 +44,11 @@ PKG_COMMON_CARGO_ENV = \
+> >   PKG_CARGO_ENV = \
+> >       $(PKG_COMMON_CARGO_ENV) \
+> >       __CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
+> > +     CARGO_UNSTABLE_HOST_CONFIG="true" \
+> >       CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" \
+> >       CARGO_TARGET_APPLIES_TO_HOST="false" \
+> >       CARGO_BUILD_TARGET="$(RUSTC_TARGET_NAME)" \
+> > +     CARGO_HOST_RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))" \
+> >       CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_LINKER=$(notdir $(TARGET_CROSS))gcc
+> >
+> >   #
+> > @@ -51,7 +56,8 @@ PKG_CARGO_ENV = \
+> >   # and should be removed when fixed upstream
+> >   #
+> >   ifeq ($(NORMALIZED_ARCH),arm)
+> > -     PKG_CARGO_ENV += RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
+> > +     PKG_CARGO_ENV += \
+> > +             CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
+>
+>   I don't understand why this is needed. We don't set RUSTFLAGS anywhere else,
+> so it should be fine? Or is it because RUSTFLAGS is also used for native build
+> even if CARGO_HOST_RUSTFLAGS is set?
 
+So cargo target builds tend to actually build artifacts for both the
+host and the
+target architecture, since cargo build-scripts are themselves written
+in rust, thus
+passing plain RUSTFLAGS has inconsistent behavior it seems in regards to
+which artifact builds the RUSTFLAGS get applied to(seems to have changed
+across cargo versions as well). Splitting them explicitly should be
+more correct.
 
-On 24/07/2022 04:01, James Hilliard wrote:
-> Set HOST_LDFLAGS RUSTFLAGS via the host-config feature, see:
-> https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#host-config
-> 
-> We have to enable this nightly feature first using:
-> CARGO_UNSTABLE_HOST_CONFIG="true"
-> 
-> Separately set target RUSTFLAGS for the target triple specific env
-> variable.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->   package/pkg-cargo.mk | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-> index f7e3f39503..439d443b0d 100644
-> --- a/package/pkg-cargo.mk
-> +++ b/package/pkg-cargo.mk
-> @@ -32,7 +32,10 @@ PKG_COMMON_CARGO_ENV = \
->   # using nighly features on stable releases, i.e features that are not
->   # yet considered stable.
->   #
-> -# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" "enables the nightly
-> +# CARGO_UNSTABLE_HOST_CONFIG="true" enables the host specific
-> +# configuration feature
-> +#
-> +# CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" enables the nightly
->   # configuration option target-applies-to-host value to be set
->   #
->   # CARGO_TARGET_APPLIES_TO_HOST="false" is actually setting the value
-> @@ -41,9 +44,11 @@ PKG_COMMON_CARGO_ENV = \
->   PKG_CARGO_ENV = \
->   	$(PKG_COMMON_CARGO_ENV) \
->   	__CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
-> +	CARGO_UNSTABLE_HOST_CONFIG="true" \
->   	CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST="true" \
->   	CARGO_TARGET_APPLIES_TO_HOST="false" \
->   	CARGO_BUILD_TARGET="$(RUSTC_TARGET_NAME)" \
-> +	CARGO_HOST_RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))" \
->   	CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_LINKER=$(notdir $(TARGET_CROSS))gcc
->   
->   #
-> @@ -51,7 +56,8 @@ PKG_CARGO_ENV = \
->   # and should be removed when fixed upstream
->   #
->   ifeq ($(NORMALIZED_ARCH),arm)
-> -	PKG_CARGO_ENV += RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
-> +	PKG_CARGO_ENV += \
-> +		CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
+>
+>   (Anyway, this hunk can probably be removed, the bug that triggered it is fixed.)
+>
+> >   endif
+> >
+> >   HOST_PKG_CARGO_ENV = \
+> > @@ -128,7 +134,6 @@ else # ifeq ($(4),target)
+> >   define $(2)_BUILD_CMDS
+> >       cd $$($$(PKG)_SRCDIR) && \
+> >       $$(HOST_MAKE_ENV) \
+> > -             RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
+>
+>   Why can this be removed? You added CARGO_HOST_RUSTFLAGS to the target build,
+> but we still want HOST_LDFLAGS in the host package build, no?
 
-  I don't understand why this is needed. We don't set RUSTFLAGS anywhere else, 
-so it should be fine? Or is it because RUSTFLAGS is also used for native build 
-even if CARGO_HOST_RUSTFLAGS is set?
+I think this works ok since it's not a cross build like the target
+build. Target builds
+generate both native/and target artifacts unlike host builds.
 
-  (Anyway, this hunk can probably be removed, the bug that triggered it is fixed.)
-
->   endif
->   
->   HOST_PKG_CARGO_ENV = \
-> @@ -128,7 +134,6 @@ else # ifeq ($(4),target)
->   define $(2)_BUILD_CMDS
->   	cd $$($$(PKG)_SRCDIR) && \
->   	$$(HOST_MAKE_ENV) \
-> -		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
-
-  Why can this be removed? You added CARGO_HOST_RUSTFLAGS to the target build, 
-but we still want HOST_LDFLAGS in the host package build, no?
-
-  Regards,
-  Arnout
-
->   		$$(HOST_CONFIGURE_OPTS) \
->   		$$(HOST_PKG_CARGO_ENV) \
->   		$$($(2)_CARGO_ENV) \
+>
+>   Regards,
+>   Arnout
+>
+> >               $$(HOST_CONFIGURE_OPTS) \
+> >               $$(HOST_PKG_CARGO_ENV) \
+> >               $$($(2)_CARGO_ENV) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
