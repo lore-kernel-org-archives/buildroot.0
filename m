@@ -1,93 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D805C43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 09:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAB7DC43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 09:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C421E417C4;
-	Sun, 24 Jul 2022 09:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C421E417C4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6017E83EBC;
+	Sun, 24 Jul 2022 09:18:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6017E83EBC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XPiMQsg3NJR9; Sun, 24 Jul 2022 09:12:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PX2CLcMlLqsZ; Sun, 24 Jul 2022 09:18:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B50041752;
-	Sun, 24 Jul 2022 09:12:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B50041752
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5A8611BF2B9
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 09:12:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 590B783F1A;
+	Sun, 24 Jul 2022 09:18:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 590B783F1A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D2BB1BF2B9
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 09:18:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 42C0B4031E
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 09:12:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42C0B4031E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2065460B56
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 09:18:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2065460B56
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mCwgaqf1DVkc for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 09:12:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xPL4bWhz3TRx for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 09:18:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C73040025
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3C73040025
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 09:12:48 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id m17so11702739wrw.7
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 02:12:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01EF260B10
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 01EF260B10
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 09:18:05 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id d8so11973373wrp.6
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 02:18:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=EadkKlhX9F2dHWXisap+9zpvXsTTCCWui/s/H7HeHwM=;
- b=gZOezQJOLmWdiFs3XE/uhJvh4QJX13SG6Z6jhq4c8fnp4ic6b2OajwxqnvSv/kNwPO
- YGyboqj48dxV5tDgzMjFrCUGPCabTD8g0yNO3hwB94alamncAtgsWlHiBL+DpcZFB6PB
- Y4cVmgDieT+GxByA/aQCNeYFpJBKZeRUuFtdcZXY/nXF5IsULpI36BP5nHAvxs4/QIb+
- zRRfnnn0NnzvnfdjQyPQsG2IU17nhlr5XxHfWyv7rLpO22CxVHwtLfb9XbC6A98jB0gs
- btilUjba84w5/ISKTbj4flML8XPz27dJhqWIOM6iF79mmkhvNRdok42GdPofP2fXT2gP
- GT1Q==
-X-Gm-Message-State: AJIora9CD1a4Jgq4/3G9tBBkGSwy28sPorEJU9R5EqCwcwwT5WFwTpKx
- wObrk2JWtRFI2dNw8dP1nzP3yKFfTq9y/g==
-X-Google-Smtp-Source: AGRyM1t1Z0nvHtEsh/XTRNsnmkRvntGOkv6ZwL1sfxjeK88TmlfuELBd3v0MZJVOT97OU/R1ckiLYA==
-X-Received: by 2002:adf:f6c8:0:b0:21e:4fe0:cdfe with SMTP id
- y8-20020adff6c8000000b0021e4fe0cdfemr4595780wrp.158.1658653966060; 
- Sun, 24 Jul 2022 02:12:46 -0700 (PDT)
+ bh=082Rs5KC5HXL239BlWZXqCM12NxRx6/uDEItrTkqIEo=;
+ b=JRAmClPwvnJxe4vwmhbdniB6AlCgEFn7GW/fqad3S1PbGBoD/iu5++tUsfihdOeFei
+ A0YTGuwcYlMVdWRuPZIYO5aYvG8ebop54vIYUYxQPfA5v4G2WjmyhUYYxbeT9IHHmSYL
+ FqrkCHpzJ1E5gJGyNb+ztlPtn+EzuGvPZ4cohGRdv4LxyEYhVMlb9eOIx57BgfX+y3FH
+ DAsuCsjrZ5rAif/yePka5T3+OpjOgx7Sv+nV2Ch7DsTI7H21ihy0OGgSQBKySn0wX48N
+ uO5MWZBYoLMJb45YFKgZOyuxT2jssxbt26lEae6Jdoc7SbyjWqYW63gm3ResmzuC4jKc
+ PiRg==
+X-Gm-Message-State: AJIora/mvR+AyaXVnpffNkUohd4C5z1j2oRHo5ZEF1nguzBm6Bgt1PPU
+ nQwFY19EmpkiYoZwigk+BiLnww==
+X-Google-Smtp-Source: AGRyM1s+EPRGsY2SxiQ4MtiJCcp9vT/sjyZjivAxauB4eEpWKXwOiV2is2zoJtfBBW+7OrAH+F16HA==
+X-Received: by 2002:a05:6000:1f8d:b0:21e:83a6:cf87 with SMTP id
+ bw13-20020a0560001f8d00b0021e83a6cf87mr1474718wrb.559.1658654283895; 
+ Sun, 24 Jul 2022 02:18:03 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- b12-20020a5d550c000000b0021e4fd8e10bsm2505110wrv.11.2022.07.24.02.12.45
+ e24-20020a05600c219800b003a2cf1535aasm10400476wme.17.2022.07.24.02.18.03
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 24 Jul 2022 02:12:45 -0700 (PDT)
-Message-ID: <44a31825-021e-2f79-ffe4-2650cef65f75@mind.be>
-Date: Sun, 24 Jul 2022 11:12:44 +0200
+ Sun, 24 Jul 2022 02:18:03 -0700 (PDT)
+Message-ID: <776aea3f-f8be-b02f-b977-022f655c99d6@mind.be>
+Date: Sun, 24 Jul 2022 11:17:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20220705172239.1272897-1-bernd.kuhls@t-online.de>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220723213746.6015-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220705172239.1272897-1-bernd.kuhls@t-online.de>
+In-Reply-To: <20220723213746.6015-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=EadkKlhX9F2dHWXisap+9zpvXsTTCCWui/s/H7HeHwM=;
- b=cMlISmTPghLolzdZgs4m5eel6Pw3xUCpeMXJocoH3tWMon9AndGnHCzTaDqYy6RlP6
- 5+E9rRxs84dEDv3jDaqS2i+hpR9HPUKX0WRwocPC7dFwGBX1rk6rn7MjaxKU0UpDKZa8
- bdgIY4g3lzP9bJdZA6IJMkQ/LyLsIitKP3oraiPlHZP7VXZ937srv8xpjQHQpDTMrVyV
- 03C7IP6ElFLpK50Ghe+0Kb9qaFgYO6KmJBwTX917SHq4a7ziA285JV0OhFQCBWmwyoqN
- ZenWSUOwqkZmG1Ra4BNYVO0WfackLhtvRGbMlaywk/eK1sSKXjlSY6yJ71SC89f2J2ln
- iQjw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=082Rs5KC5HXL239BlWZXqCM12NxRx6/uDEItrTkqIEo=;
+ b=bFDKwgifdIDZozI/sPjXQ0HJFmYxwPIdiLWXzQ4owoyc2HSFuQUIwgFL5FQRX7UpzD
+ VX+893f6vLS3H+m8/Pdj90vG6r1SB4ztNQRRt3JbWTAu3ZvKbOYY1zkoGEUX+XU53THg
+ MKYpfV9vTRnWDMQ/q4qIWGfdC6Z+YE02Kv8Yo68CEBR6DKzDmp563uV0zjMcm9wDZMMj
+ rQdYIGI41rBqTvGvFrLrW80NBxhtZtonG+rCF2zQ7AroG0vLNUTueCRxj9wYLdxIj7Kf
+ n6smTEpU9VCq8RnwztOzIqZOzdStdHeaQmitaUG3S2G90jXBvUA4UBFBXgu5MBZx2JHt
+ dDaw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=cMlISmTP
-Subject: Re: [Buildroot] [PATCH 1/1] package/bcg729: bump version to 1.1.1
+ header.a=rsa-sha256 header.s=google header.b=bFDKwgif
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-lxml: security bump to
+ version 4.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,6 +101,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -106,17 +109,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/07/2022 19:22, Bernd Kuhls wrote:
-> Changelog:
-> https://github.com/BelledonneCommunications/bcg729/blob/master/CHANGELOG.md
+On 23/07/2022 23:37, Fabrice Fontaine wrote:
+> Fix CVE-2022-2309: NULL Pointer Dereference allows attackers to cause a
+> denial of service (or application crash). This only applies when lxml is
+> used together with libxml2 2.9.10 through 2.9.14. libxml2 2.9.9 and
+> earlier are not affected. It allows triggering crashes through forged
+> input data, given a vulnerable code sequence in the application. The
+> vulnerability is caused by the iterwalk function (also used by the
+> canonicalize function). Such code shouldn't be in wide-spread use, given
+> that parsing + iterwalk would usually be replaced with the more
+> efficient iterparse function. However, an XML converter that serialises
+> to C14N would also be vulnerable, for example, and there are legitimate
+> use cases for this code sequence. If untrusted input is received (also
+> remotely) and processed via iterwalk function, a crash can be
+> triggered.
 > 
-> Updated license to GPL-3.0+:
-> https://github.com/BelledonneCommunications/bcg729/commit/2c3ff1ae1af9b1571e3e8644c067965def39b747
+> https://github.com/lxml/lxml/blob/lxml-4.9.1/CHANGES.txt
 > 
-> License file was changed to LICENSE.txt:
-> https://github.com/BelledonneCommunications/bcg729/commit/089bb3454409d2cd630a6b3890a602b084e7ca89
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
@@ -124,38 +134,36 @@ On 05/07/2022 19:22, Bernd Kuhls wrote:
   Arnout
 
 > ---
->   package/bcg729/bcg729.hash | 4 ++--
->   package/bcg729/bcg729.mk   | 6 +++---
->   2 files changed, 5 insertions(+), 5 deletions(-)
+>   package/python-lxml/python-lxml.hash | 2 +-
+>   package/python-lxml/python-lxml.mk   | 4 ++--
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/bcg729/bcg729.hash b/package/bcg729/bcg729.hash
-> index 4dbfbbbbb2..2eb80a0407 100644
-> --- a/package/bcg729/bcg729.hash
-> +++ b/package/bcg729/bcg729.hash
-> @@ -1,3 +1,3 @@
+> diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+> index 3600d7759a..cd1943b0b4 100644
+> --- a/package/python-lxml/python-lxml.hash
+> +++ b/package/python-lxml/python-lxml.hash
+> @@ -1,5 +1,5 @@
 >   # Locally computed
-> -sha256 94b3542a06cbd96306efc19f959f9febae62806a22599063f82a8c33e989d48b  bcg729-1.0.4.tar.gz
-> -sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-> +sha256  68599a850535d1b182932b3f86558ac8a76d4b899a548183b062956c5fdc916d  bcg729-1.1.1.tar.gz
-> +sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-> diff --git a/package/bcg729/bcg729.mk b/package/bcg729/bcg729.mk
-> index 426cfd90af..f89e535546 100644
-> --- a/package/bcg729/bcg729.mk
-> +++ b/package/bcg729/bcg729.mk
-> @@ -4,10 +4,10 @@
+> -sha256  f63f62fc60e6228a4ca9abae28228f35e1bd3ce675013d1dfb828688d50c6e23  lxml-4.8.0.tar.gz
+> +sha256  fe749b052bb7233fe5d072fcb549221a8cb1a16725c47c37e42b0b9cb3ff2c3f  lxml-4.9.1.tar.gz
+>   sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+>   sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+>   sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+> diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+> index 90935a7ee1..050495c3f3 100644
+> --- a/package/python-lxml/python-lxml.mk
+> +++ b/package/python-lxml/python-lxml.mk
+> @@ -4,8 +4,8 @@
 >   #
 >   ################################################################################
 >   
-> -BCG729_VERSION = 1.0.4
-> +BCG729_VERSION = 1.1.1
->   BCG729_SITE = $(call github,BelledonneCommunications,bcg729,$(BCG729_VERSION))
-> -BCG729_LICENSE = GPL-2.0+
-> -BCG729_LICENSE_FILES = COPYING
-> +BCG729_LICENSE = GPL-3.0+
-> +BCG729_LICENSE_FILES = LICENSE.txt
->   BCG729_INSTALL_STAGING = YES
+> -PYTHON_LXML_VERSION = 4.8.0
+> -PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/3b/94/e2b1b3bad91d15526c7e38918795883cee18b93f6785ea8ecf13f8ffa01e
+> +PYTHON_LXML_VERSION = 4.9.1
+> +PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/70/bb/7a2c7b4f8f434aa1ee801704bf08f1e53d7b5feba3d5313ab17003477808
+>   PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
 >   
->   ifeq ($(BR2_STATIC_LIBS),y)
+>   # Not including the GPL, because it is used only for the test scripts.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
