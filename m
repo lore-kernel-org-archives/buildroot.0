@@ -1,84 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3396AC43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 14:26:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F196C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 14:35:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BD5641728;
-	Sun, 24 Jul 2022 14:26:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BD5641728
+	by smtp2.osuosl.org (Postfix) with ESMTP id 116EE40C3D;
+	Sun, 24 Jul 2022 14:35:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 116EE40C3D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cGnZaJ6yQ5Qk; Sun, 24 Jul 2022 14:35:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1779F40443;
+	Sun, 24 Jul 2022 14:35:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1779F40443
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A46FA1BF3D8
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 14:35:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7CB4E4242B
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 14:35:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CB4E4242B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VGi4LYJmAFWY; Sun, 24 Jul 2022 14:26:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BB98416EA;
-	Sun, 24 Jul 2022 14:26:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BB98416EA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A48571BF3D8
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 14:26:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7F08E84613
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 14:26:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F08E84613
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pvD7e8ozgzwU for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 14:26:22 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2766583E46
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2766583E46
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 14:26:22 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- ay11-20020a05600c1e0b00b003a3013da120so7837827wmb.5
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 07:26:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id;
- bh=2nUuQcQ8szhQao6gSno5q16JDdZq2065dVSwURCgj6E=;
- b=si0ZhjDXDKR9XlsPeHkrqV3ZJrdIm8KkGoy4ow0TUjhbOo/aYoU930lABl475ZU5Jv
- u/AI5EaIrmnQePDLl0b/NXxyv32v2H1UtY9j+z3pNSeivhUHzBG7pMro9w8v3aVAL7hj
- 7hnSPt51SLLge6gQ+p+QBzPkCFNVP7LHIwz5OGXfD5R4cUCdhYw3rnKmv5kYfGcfBegK
- JJgbRAT4BvFqaXPooHMpSnA4/Dy4k427O0QEF58xG2ONOY/m50uXIR8VFCVEEF6vT0eq
- sdBUFqhqdo3ZEtYUkch6Pvq9mS2Ok2+EoZLFxH/kuZeunP4tPaqTBhitIEHW7XDznxCD
- DErg==
-X-Gm-Message-State: AJIora+bdkLTaPzcPvtrb0sqyLgoCTfZU0ZmZjzCo7O1gIVV3oINBIBT
- K+OheoKzSOq5uq5JZ54Pwk67USSxC8Q40w==
-X-Google-Smtp-Source: AGRyM1tUzOB0EQVOgFHADAKeTShbgLQhxgVs9xQ64R38IGtcbvyvMeyRh4X285dwszK3e0hYaFTxMQ==
-X-Received: by 2002:a1c:ed05:0:b0:3a2:ebae:c5e7 with SMTP id
- l5-20020a1ced05000000b003a2ebaec5e7mr5466680wmh.78.1658672779773; 
- Sun, 24 Jul 2022 07:26:19 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:283:d2f0:f8df:54e6:5f1e:2381])
- by smtp.googlemail.com with ESMTPSA id
- z4-20020adfd0c4000000b0021d7b41255esm9424281wrh.98.2022.07.24.07.26.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Jul 2022 07:26:19 -0700 (PDT)
-From: David GOUARIN <dgouarin@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 16:26:15 +0200
-Message-Id: <20220724142615.22630-1-dgouarin@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id;
- bh=2nUuQcQ8szhQao6gSno5q16JDdZq2065dVSwURCgj6E=;
- b=HPsNPmnyVC/Sw2jA2I/DsXuyEPe/5XEj+2+QNsoONQiHu9ZWl92w4QhY0fq/dQzMpl
- zvC3y7omgv75TI4sJVRPrwagh0kqmYDpQtYuIutwFZ0NzfhE3QRnNE78UwO/FVqANMby
- fZJyX/Z/8JG1ggDBGWuEpn6cyHQ4JmSW30O+NWJ/3h80z/5JqC6w8zjq75s5UMapJJYr
- 4jTPTlgqrGaw+NCyyklulT2OHI+mxUqMcr5qHtrT47a3uIWou8nxpQIMIQ46xhfou19+
- hO9eBpuN212qAYroKU9yziGDb05KW3LhJVlq8E7KBnv/zf0qkNOkFZS8Sia5PYe54iMs
- JMdQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=HPsNPmny
-Subject: [Buildroot] [PATCH V3] package/libtallc: bump version to 2.3.4
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dBa_ZbSNrJvH for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 14:35:42 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF0DA42417
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AF0DA42417
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 14:35:41 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8acf:5600:88cd:5a50:8d8a:801])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 21D2513FA36;
+ Sun, 24 Jul 2022 16:35:34 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 24 Jul 2022 16:35:33 +0200
+Date: Sun, 24 Jul 2022 16:35:33 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220724143533.GV2641@scaer>
+References: <20220720152440.1568667-1-sigmaepsilon92@gmail.com>
+ <2569cf83-d180-41ea-ad10-d053528d462d@mind.be>
+ <2b27ec0b-ef6d-9540-062c-04d6f75c2cd3@mind.be>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <2b27ec0b-ef6d-9540-062c-04d6f75c2cd3@mind.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1658673338;
+ bh=TzRpnAL7puPIW2MVQF6n57m9NPR6T+0+oJo1uvpB92Y=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=R7nPA5i6WwRXLx9Qk0NV/lw6U8fJbkhyoggPQ8o1hB+eHkYiTTVMM0+1NxQhBQTvm
+ +rjQSmtItGAUfvQ0CC6lAMLfWRPxM3MQ93dkF4sypAewiSW409Sa1H8YspJ4a4Q6Aj
+ dQLEw+iMOZZcdaUKOKR6IFK7825YlqMjGTpNJLo85rqp2fONH0kiF5IuTskba85P73
+ 2+Vu+x0xblV/6ShNPfp7fXEBJDhymCh7GXpMVifJ5FlgUNCV0bt5keH2F/QUj+Qkry
+ R0uJDGihqOT1ipDqirgmfBwX4cPGL2pqPpSSPwx4En/gpBQLddAvhjtE2lgECNXJ62
+ Rjyx/bNY+XMxA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=R7nPA5i6
+Subject: Re: [Buildroot] [PATCH 1/1] package/zfs: fix cross-compilation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,71 +78,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David GOUARIN <dgouarin@gmail.com>, romain.naour@smile.fr,
- David GOUARIN <david.gouarin@thalesgroup.com>, yann.morin.1998@free.fr
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Michael Zimmermann <sigmaepsilon92@gmail.com>,
+ =?utf-8?B?Sm9zw6k=?= Luis Salvador Rufo <salvador.joseluis@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Version 2.3.4 of libtalloc needs to define PYTHONHASHSEED, as a check has been added
-to the configure script, and build will fail if it is not defined.
-
-This is originately a workaround by samba developpers meant to avoid rebuilding talloc
-with each call to make. Defining PYTHONHASHSEED would not be required in the context
-of builroot, if not for the check in the configure script.
-
-Signed-off-by: David GOUARIN <david.gouarin@thalesgroup.com>
-
----
-Changes v2 -> v3:
-  - fix commented lines and commit message. sorry for the mess.
-
-Changes v1 -> v2:
-  - edit commit message (suggested by Yann E. MORIN)
-Signed-off-by: David GOUARIN <dgouarin@gmail.com>
----
- package/libtalloc/libtalloc.hash | 2 +-
- package/libtalloc/libtalloc.mk   | 5 ++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/package/libtalloc/libtalloc.hash b/package/libtalloc/libtalloc.hash
-index cbfd11e63b..0bc8edb695 100644
---- a/package/libtalloc/libtalloc.hash
-+++ b/package/libtalloc/libtalloc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6be95b2368bd0af1c4cd7a88146eb6ceea18e46c3ffc9330bf6262b40d1d8aaa  talloc-2.3.3.tar.gz
-+sha256  179f9ebe265e67e4ab2c26cad2b7de4b6a77c6c212f966903382869f06be6505  talloc-2.3.4.tar.gz
- sha256  f8340c449dd64a55c6605b02fcad2aec6f473612ac6026739a22995380a8043c  talloc.h
-diff --git a/package/libtalloc/libtalloc.mk b/package/libtalloc/libtalloc.mk
-index 8cba699ea1..6a5e1ef4b6 100644
---- a/package/libtalloc/libtalloc.mk
-+++ b/package/libtalloc/libtalloc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTALLOC_VERSION = 2.3.3
-+LIBTALLOC_VERSION = 2.3.4
- LIBTALLOC_SOURCE = talloc-$(LIBTALLOC_VERSION).tar.gz
- LIBTALLOC_SITE = https://www.samba.org/ftp/talloc
- LIBTALLOC_LICENSE = LGPL-3.0+
-@@ -40,6 +40,9 @@ else
- LIBTALLOC_CONF_OPTS += --disable-python
- endif
- 
-+LIBTALLOC_CONF_ENV += PYTHONHASHSEED=1
-+LIBTALLOC_MAKE_ENV += PYTHONHASHSEED=1
-+
- LIBTALLOC_WAF = ./buildtools/bin/waf
- 
- # like samba4, libtalloc uses the waf build system which requires a
--- 
-2.17.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+TWljaGFlbCwgQWxsLAoKT24gMjAyMi0wNy0yMyAxNTo0MSArMDIwMCwgQXJub3V0IFZhbmRlY2Fw
+cGVsbGUgc3Bha2UgdGh1c2x5Ogo+IE9uIDIzLzA3LzIwMjIgMTQ6NDIsIEFybm91dCBWYW5kZWNh
+cHBlbGxlIHdyb3RlOgo+ID5PbiAyMC8wNy8yMDIyIDE3OjI0LCBNaWNoYWVsIFppbW1lcm1hbm4g
+d3JvdGU6Cj4gPj5DdXJyZW50bHksIHRoZSBrZXJuZWwgbW9kdWxlIGdldHMgYnVpbHQgdXNpbmcg
+dGhlIGhvc3QtY29tcGlsZXIoZnJvbSB0aGUKPiA+PnVzZXIgZGlzdHJvLCBub3QgZnJvbSBidWls
+ZHJvb3QpLgo+IMKgSXQncyBhY3R1YWxseSBlYXN5IHRvIHJlcHJvZHVjZSwganVzdCBjaGFuZ2Ug
+dGhlIGFyY2hpdGVjdHVyZSB0byBhbnl0aGluZwo+IG90aGVyIHRoYW4geDg2Lgo+IAo+IMKgSSd2
+ZSBsb29rZWQgYXJvdW5kIGEgYml0IGFuZCBpdCBzZWVtcyB0byBtZSB0aGF0IHpmcyBhbHJlYWR5
+IGJ1aWxkcyB0aGUKPiBrZXJuZWwgbW9kdWxlIGZyb20gdGhlIGF1dG90b29scyBpbmZyYXN0cnVj
+dHVyZSwgc28gd2UncmUgYWN0dWFsbHkgYnVpbGRpbmcKPiBpdCB0d2ljZS4KCkkgY2hlY2tlZCwg
+YW5kIGl0IGlzIG5vdCBwb3NzaWJsZSB0byB0ZWxsIHRoZSB6ZnMgYnVpbGRzeXN0ZW0gdG8gbm90
+CmJ1aWxkIGl0LgoKPiBJIHRoaW5rIHdlIHNob3VsZCB0aGVyZWZvcmUgcmVtb3ZlIHRoZSBrZXJu
+ZWwtbW9kdWxlIGluZnJhIGZvcgo+IHRoaXMgcGFja2FnZSwgYW5kIGluc3RlYWQgYWRkIGEgZGVw
+ZW5kZW5jeSBvbiBsaW51eCBhbmQgY29weSB0aGlzIHBhcnQ6Cj4gCj4gIyBJZiB0aGUgcGFja2Fn
+ZSBpcyBlbmFibGVkLCBlbnN1cmUgdGhlIGtlcm5lbCB3aWxsIHN1cHBvcnQgbW9kdWxlcwo+IGlm
+ZXEgKCQkKEJSMl9QQUNLQUdFXyQoMikpLHkpCj4gTElOVVhfTkVFRFNfTU9EVUxFUyA9IHkKPiBl
+bmRpZgoKLi4uIGFuZCBhZGQgbGludXggdG8gWkZTX0RFUERFTkRFTkNJRVMKClNvLCBJJ3ZlIG1h
+cmtlZCB0aGUgcGF0Y2ggYXMgY2hhbmdlcyByZXF1ZXN0ZWQgaW4gcGF0Y2h3b3JrLgoKUmVnYXJk
+cywKWWFubiBFLiBNT1JJTi4KCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0t
+LS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUu
+IE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycg
+Y29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwg
+LyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBg
+LS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBu
+byAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1B
+SUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
+bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
