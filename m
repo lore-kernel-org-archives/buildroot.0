@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 825A3C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 02:29:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 670E1C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 02:34:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1020C42451;
-	Sun, 24 Jul 2022 02:29:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1020C42451
+	by smtp1.osuosl.org (Postfix) with ESMTP id EDEFE84672;
+	Sun, 24 Jul 2022 02:34:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDEFE84672
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 99GnDt5HUY5n; Sun, 24 Jul 2022 02:29:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lFp-BvJ5tqYR; Sun, 24 Jul 2022 02:34:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB42442446;
-	Sun, 24 Jul 2022 02:29:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB42442446
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DDC371BF4E7
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 02:29:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F4648466C;
+	Sun, 24 Jul 2022 02:34:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F4648466C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C25E01BF4E7
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 02:33:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B41F561069
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 02:29:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B41F561069
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D1508466C
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 02:33:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D1508466C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Q1lE80bGg0n for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 02:29:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SaPmQnd3VCCC for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 02:33:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3D5061060
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B3D5061060
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 02:29:45 +0000 (UTC)
-Received: by mail-il1-x12c.google.com with SMTP id h14so4052675ilq.12
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 19:29:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0A0883381
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
+ [IPv6:2607:f8b0:4864:20::131])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B0A0883381
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 02:33:57 +0000 (UTC)
+Received: by mail-il1-x131.google.com with SMTP id i1so2642123ilk.3
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 19:33:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=9B+fvM0rsNTT5tYqvOhoBsAv9aB7lCnz3ddEGfY07Oc=;
- b=cB4nHcb2H7EWCVTic7K7Soqm5dN4GE/mgOft5upbPY8JFl4lMfpiNeIOIl96ur1RyF
- nAerIHprELX8v5qhMKdOnd+8Orx8gp3PdJA0cjSCkzOBNMT29os1Db8/k4xTpAmkyUYL
- XxRK5FZWDnlg37Ok6ZtMLFM3s3ie1+/D5UPWr//mMNzZeEcRCNb9RJ+O6dlv0K+bDsVx
- l+DpufwDwIio2/OkZSBb+hjF4kL6I+dY+qCnkFQyi3UO1IqtrIeDSM3+pc8eJ2cLP6N6
- QFTkEAq/PUi2E85xl/MMYWOef7Kt+hiMi9lqvAMHxFpjpY52Emevjz9RihqtCz4M4yNG
- znIw==
-X-Gm-Message-State: AJIora8jBK87zN/tp09txFit7agQelM6c8Wra7M7yeB5jpo0VlEcMZov
- rTDyX3V6WEqKbHx5UreNshZhcYZYV7ezAQ==
-X-Google-Smtp-Source: AGRyM1uVxQtbSCXHtKdF4kEZzsKDmyRNRSN+3cGHk4NSU1QTa71gbPI1UUg7CYwOUl5V3i74P/AKGg==
-X-Received: by 2002:a05:6e02:144a:b0:2dd:16e1:dab3 with SMTP id
- p10-20020a056e02144a00b002dd16e1dab3mr2508838ilo.258.1658629784577; 
- Sat, 23 Jul 2022 19:29:44 -0700 (PDT)
+ bh=UdL2RN9AVs/32exf+xpbkutEwpd44HcnxRYNqI0Fl2M=;
+ b=yu0Y8vFX5z3P0HAVqaucmG4DQhsiALZkI9J7REVuy8k8yQOIcEI+wW8bM828Fp/kan
+ v3o5ruuLC3KjEI0r/ijbWN/2BFgOMpK0pbf6yfkGAjk2XGjDto2evcytR204oBvu6cVV
+ EiOUglB3Loxa6w/bA/R6k4fEmutLg4LTQuqxhb/UecCEf+4aBdV6Oz4TEzln2gNGdiny
+ Etru7GZ87+APGeqYDSOEFXA48Q7WmCtVnu8Pv0C48sdalqh5TVaRv9jvIhR/YuWFnFkz
+ oH1t3jU3TQvQKboyKC7wJ9Yt0s3WfnGEhrQtgscw9ZObFnClMK1pBIsveYE8BrVgqslT
+ gPQg==
+X-Gm-Message-State: AJIora8mu8Dose2AnraoeBBDTeV3ztVJ5Sglx+Lc37pcG3TcvMVkT+cn
+ 9a2w5QoODgVKxn7FBLl1ztAuO6ni55EQkA==
+X-Google-Smtp-Source: AGRyM1tNu3Bfg0sS9rbyMmFOQj38T+uSrehmsWCICSMQGA90bQ+lJZ4TJ8A2dR6ZhifvZJhjnYLrYg==
+X-Received: by 2002:a05:6e02:2149:b0:2dc:7abd:e129 with SMTP id
+ d9-20020a056e02214900b002dc7abde129mr2486245ilv.24.1658630036682; 
+ Sat, 23 Jul 2022 19:33:56 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-133-32.hlrn.qwest.net.
  [71.33.133.32]) by smtp.gmail.com with ESMTPSA id
- k7-20020a056e02156700b002dc7bfe144dsm3199620ilu.84.2022.07.23.19.29.43
+ f11-20020a02a10b000000b0033fbab06b75sm3755376jag.46.2022.07.23.19.33.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Jul 2022 19:29:43 -0700 (PDT)
+ Sat, 23 Jul 2022 19:33:56 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 20:29:42 -0600
-Message-Id: <20220724022942.1022774-1-james.hilliard1@gmail.com>
+Date: Sat, 23 Jul 2022 20:33:54 -0600
+Message-Id: <20220724023354.1025542-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=9B+fvM0rsNTT5tYqvOhoBsAv9aB7lCnz3ddEGfY07Oc=;
- b=kgPZJB8Q5xdaR5cTq7nammwdTOPEDsws5/51rPd8WXwGCzFSuZguJhiL/qMLoQWiln
- AVakIoKXIqORlmieSvVjy3zxXydbe8h3UaKIyvYR+xYKJjpEHRhNdw9GlUnMPvnoIxF3
- 8C7eTJMynIEUAiPZdQZd16WwJ/LO1CSvOch9Xt/maj4w605gwfdB+fmOeWitIsoOJ2Rc
- oxhDwrTGDNwmQ5KunXmTPwaBbWUs9XzdjUp41c0y1Wn+pOMG68V45bpuzZ6k3+r+ONYm
- 0JveMM52YPAmhMQRa1DZo+h+f7SLzUM2XzcedtmG8Hldto7crNOYDLbhiLsMOiKT8I4I
- VyWw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=UdL2RN9AVs/32exf+xpbkutEwpd44HcnxRYNqI0Fl2M=;
+ b=WQg4DG4+pRTwdF9K/Z8rpVYNKObN+n3Aw83H16Tm4XOfWnereia/RdHPHETQd7zsKv
+ BKxRTSawBUDstCuO+wUO761brSV+IwAHBFRMuIN9ezudFDlr+Hco26A/QcC9tyNWFIx+
+ w5Cf4QRfGFKXQRq+4ycYPZgRB+YsepFTHR6ayYR26qXUy4dbu/13h5kiv8KU/BXgTVSl
+ w7iouxZZ9H5lIEfi0u3/nbQuxrq6rRAnvNMcB5iO0dZq1Vumj+un+Hs7fyl+b9GcJO+u
+ f/TZ/rZSZixlkw2lG4x5aBTpDfD/BYdAF7ySb/lwN1ANvhnMCwIEuo+gUzrsq50Iu9xV
+ 9obw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=kgPZJB8Q
-Subject: [Buildroot] [PATCH 1/1] package/python-cryptography: bump to
- version 37.0.4
+ header.a=rsa-sha256 header.s=20210112 header.b=WQg4DG4+
+Subject: [Buildroot] [PATCH 1/1] package/python-cssutils: bump to version
+ 2.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,7 +93,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,37 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-cryptography/python-cryptography.hash | 2 +-
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-cssutils/python-cssutils.hash | 4 ++--
+ package/python-cssutils/python-cssutils.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index b51945a928..66ac9d094a 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
+diff --git a/package/python-cssutils/python-cssutils.hash b/package/python-cssutils/python-cssutils.hash
+index 065c8ac1f3..a3d2a6be6c 100644
+--- a/package/python-cssutils/python-cssutils.hash
++++ b/package/python-cssutils/python-cssutils.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  b8ebc656926a88931d1822e3060001e288ecc7712feaa9fe7e1ddacd675c0a57  cryptography-37.0.2.tar.gz
-+sha256  49692c2a2b7c18f854d20ac5239cd5bbccef033e3efdc7647b3e29fd5970c823  cryptography-37.0.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cssutils/json
+-md5  3b9acf80a22c44d2d12eb7e20533934a  cssutils-2.4.2.tar.gz
+-sha256  877818bfa9668cc535773f46e6b6a46de28436191211741b3f7b4aaa64d9afbb  cssutils-2.4.2.tar.gz
++md5  974bf7f07d52f92dd29485b6e7529aac  cssutils-2.5.1.tar.gz
++sha256  b4a4da58e78326ec9f4a9d3555004ddf706f3e99f7a1026c1880f0934362b8b4  cssutils-2.5.1.tar.gz
  # Locally computed sha256 checksums
- sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
- sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 99eba3eeab..76041470f7 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
+ sha256  03c570a068086ee577dcd795519ea93462b2ed2fcb6dcc4dfce56a71a2fd6e5a  COPYING.LESSER
+diff --git a/package/python-cssutils/python-cssutils.mk b/package/python-cssutils/python-cssutils.mk
+index beb5f1c8ff..3acf26b3d5 100644
+--- a/package/python-cssutils/python-cssutils.mk
++++ b/package/python-cssutils/python-cssutils.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CRYPTOGRAPHY_VERSION = 37.0.2
-+PYTHON_CRYPTOGRAPHY_VERSION = 37.0.4
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/51/05/bb2b681f6a77276fc423d04187c39dafdb65b799c8d87b62ca82659f9ead
-+PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/89/d9/5fcd312d5cce0b4d7ee8b551a0ea99e4ea9db0fdbf6dd455a19042e3370b
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_CSSUTILS_VERSION = 2.4.2
++PYTHON_CSSUTILS_VERSION = 2.5.1
+ PYTHON_CSSUTILS_SOURCE = cssutils-$(PYTHON_CSSUTILS_VERSION).tar.gz
+-PYTHON_CSSUTILS_SITE = https://files.pythonhosted.org/packages/d4/12/1aba9a6c91d92de011ff97a9320ad37e5565adfe0cc324deee58d5891d7a
++PYTHON_CSSUTILS_SITE = https://files.pythonhosted.org/packages/bd/f0/d3a02af54f292fe9d1f6bb18c7d2f79992b5cbae0db1ee91e5c73a3c7d7c
+ PYTHON_CSSUTILS_LICENSE = LGPL-3.0+
+ PYTHON_CSSUTILS_LICENSE_FILES = COPYING.LESSER
+ PYTHON_CSSUTILS_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
