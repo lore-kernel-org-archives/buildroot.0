@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E00AC43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 02:51:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1967C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 02:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE9D040B34;
-	Sun, 24 Jul 2022 02:51:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE9D040B34
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5385F40B34;
+	Sun, 24 Jul 2022 02:55:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5385F40B34
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BLkKJjgvyD0d; Sun, 24 Jul 2022 02:51:42 +0000 (UTC)
+	with ESMTP id o9X201q0YqMp; Sun, 24 Jul 2022 02:55:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 43A6740B30;
-	Sun, 24 Jul 2022 02:51:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43A6740B30
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 409441BF4E7
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 02:51:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 628D440B2C;
+	Sun, 24 Jul 2022 02:55:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 628D440B2C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CE55F1BF4E7
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 02:55:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1992B40B30
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 02:51:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1992B40B30
+ by smtp1.osuosl.org (Postfix) with ESMTP id B72EF83EB5
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 02:55:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B72EF83EB5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p0PyEgKXekVl for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 02:51:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id smLkiaPKMaKy for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 02:55:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3443E40AE4
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3443E40AE4
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 02:51:39 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id 1so4059071ill.11
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 19:51:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD96883EB3
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD96883EB3
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 02:54:59 +0000 (UTC)
+Received: by mail-io1-xd35.google.com with SMTP id c185so688581iof.7
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 19:54:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=fij40SvdJ3ARQ8bCLsHRneFEkf5MPU3HAdq6DmpREaI=;
- b=MNvXgO31eR9cNThqrLRnHrdMYDaMdSTXfucXVxVDCLzWRbGef4aN7PL0bpyERfabqc
- UnNyDayADGFaCDhh6+j1sXni6Dnhlb0EuFCRKEV7BcG/0xGf/C2TzkhvdZYmqzgAmB0n
- xZG6vqYwxrihwpqCJdgIO+jddte0W+acsjqmo7MVp+rQHM7HLcGNJhi/qSYqd3pen+Al
- iWv0cmr4TJspjB8ZRHzcdKL4y3IH5ty5LSg3AhITOj5Sj3G8zbRM6lyA1Pvqua/MSiDI
- RQzDgG2b0KJY+4fLbWdiQMIH5uoiHjPWQA5+W23x0p97g/xN541C2njRZXPNVWM/DYIQ
- eCGQ==
-X-Gm-Message-State: AJIora8XzAcRHd576sHQG0+iAPRqk5wiRiMnyAlHEAp2cZiZ3kn1zEEc
- syn6CG+jyu7JUTGBrCnJ6PYOx3eFNkB1OA==
-X-Google-Smtp-Source: AGRyM1t4wOWS8p1PqC3PTgGHcv4ZNqXfN9hsv3zDItzhc1FaYU3WKSgr2Kci4hwJ5XKfJUtynPcVpA==
-X-Received: by 2002:a92:280e:0:b0:2dd:c13:e559 with SMTP id
- l14-20020a92280e000000b002dd0c13e559mr2321363ilf.55.1658631097990; 
- Sat, 23 Jul 2022 19:51:37 -0700 (PDT)
+ bh=v4ijOLOt29TuOSGa84YC69XLb9gGWSWRXgpDki2SwL0=;
+ b=y+po8oRTFD8B23fdCVtm8oqvfVjR8UdmF9EDc1pSTXZDNuHVIVPFFoY/zaoR5ouDXL
+ zPQzxBUVn/o4CaU1EYE8ovJzkdm7Tt8avJ7YtU917/6SXWEy2OdtghqyUv1yoko0Q8po
+ fHB/pnzt6lEAZL02TyHMENaTGGPfhOkSWeHQGY8Fg/hGWRk2ZJjGHP7zrlbeNNk4+4G4
+ xnXgUDwoosBob0tb4zV87f5hc3KFibgJuWnSQWKiXo5FPqPPHc2pjuI9Ie6F/o1i4xkB
+ 8DUEoKuAuq4AtKX27qt7QL7CexOyOiJjYJ0nKsqhiSMhUQ813OVdr1aGolA7aE62wUxo
+ GjfA==
+X-Gm-Message-State: AJIora/OCYXhwiMvJc9SxbxTdqhpchhhW/SBkgI5itnRxnKyf7n38MDU
+ aPz2b1VYt8tvOlxT71tpUziDZb5+9XBppg==
+X-Google-Smtp-Source: AGRyM1upHVDkFGskklJvN9GA27F3D6+bXau9rs1dhvdx/sZATP9r+tQcmUxTP94Wjx/1K7s3eFucQA==
+X-Received: by 2002:a05:6638:468d:b0:33f:6a1a:8c83 with SMTP id
+ bq13-20020a056638468d00b0033f6a1a8c83mr2640356jab.238.1658631298875; 
+ Sat, 23 Jul 2022 19:54:58 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-133-32.hlrn.qwest.net.
  [71.33.133.32]) by smtp.gmail.com with ESMTPSA id
- c1-20020a929401000000b002dd0d081fcesm3285898ili.0.2022.07.23.19.51.37
+ e98-20020a02866b000000b00339c33df66bsm3865744jai.118.2022.07.23.19.54.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Jul 2022 19:51:37 -0700 (PDT)
+ Sat, 23 Jul 2022 19:54:58 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Jul 2022 20:51:34 -0600
-Message-Id: <20220724025134.1037845-1-james.hilliard1@gmail.com>
+Date: Sat, 23 Jul 2022 20:54:56 -0600
+Message-Id: <20220724025456.1039611-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=fij40SvdJ3ARQ8bCLsHRneFEkf5MPU3HAdq6DmpREaI=;
- b=o+OWKcB5MppEoPJcYQ0MX9pY5ZRJtGs1InHEmqH7Wh0qxu9t4BvrtKfXNqzvl5X37q
- h4yKUQ7RUj++1QAcQnf+Xn4dplE8eiLEonqy8GSsjciXVGz5mrkFSBqH6FJJ5/aNCdkx
- XlzMkAGkWZg/d3Uq1vO4ws9nWjU0dEuUJg80+71vnAEqck2+d7hLExcJ3XA1dqZ++6KP
- RiK9r05BHXmvIbEaET0GNb5cJDkc2KnBgBrZl/P+1XmjSXuwS1DPb7e0zFscUdl4mFBN
- UNyIvwIuyitlRz0JGReZvlOg3ZFsWNKLW0ZsxYPWvQyJ4Wc9gbgpEGF3ASPBXrP0A6OI
- adNQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=v4ijOLOt29TuOSGa84YC69XLb9gGWSWRXgpDki2SwL0=;
+ b=q4doc8vyxQ2yPh8HDeENWrpOhXlb1PQhKtcURZ+LFF3aGsYRGTifDaFJB/5BkPJr+X
+ 2M84iJJ0BUM2Wuyjltwu55VgZw+wI8KxiXgVIDgadzGCd611XVL1nsHw1i6YvI6EP0sg
+ Jr2LoCDQTqF9MVFxpwtBLwNa2Gs8Q2ATWIKDD2XMsUl9mhFkZxD9IfEM7/64fumXN60l
+ JRIlL+mvaiS4Y0qdZ/ZiXVy2NnlKlZ1Fw+nOvuoC9uYmMxXo9nsz0QhvUns87qcUXVSz
+ JsKsuzeGERgsutVoJLnHetKEWoMVZ/lUTez0Aex34kNhEn5CNodOEAqEb5M0sQh2QUcQ
+ Ly7A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=o+OWKcB5
-Subject: [Buildroot] [PATCH 1/1] package/python-setuptools-scm: bump to
- version 7.0.5
+ header.a=rsa-sha256 header.s=20210112 header.b=q4doc8vy
+Subject: [Buildroot] [PATCH 1/1] package/python-msgpack: bump to version
+ 1.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,7 +93,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,38 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-setuptools-scm/python-setuptools-scm.hash | 4 ++--
- package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
+ package/python-msgpack/python-msgpack.hash | 4 ++--
+ package/python-msgpack/python-msgpack.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
-index d8ec915862..8ef125840a 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.hash
-+++ b/package/python-setuptools-scm/python-setuptools-scm.hash
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index 382bada4a7..4d0f510883 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools-scm/json
--md5  86fe71422781939dd492cd73c93cebac  setuptools_scm-7.0.3.tar.gz
--sha256  cf8ab8e235bed840cd4559b658af0d8e8a70896a191bbc510ee914ec5325332d  setuptools_scm-7.0.3.tar.gz
-+md5  0df4e7fd923e4983cd65786efaa0e0d0  setuptools_scm-7.0.5.tar.gz
-+sha256  031e13af771d6f892b941adb6ea04545bbf91ebc5ce68c78aaf3fff6e1fb4844  setuptools_scm-7.0.5.tar.gz
- # sha256 locally computed
- sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSE
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
-index c44f983951..87d5dd290d 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.mk
-+++ b/package/python-setuptools-scm/python-setuptools-scm.mk
+ # md5, sha256 from https://pypi.org/pypi/msgpack/json
+-md5  2dcb4fa618d7890e5a79de6fe44cbb59  msgpack-1.0.3.tar.gz
+-sha256  51fdc7fb93615286428ee7758cecc2f374d5ff363bdd884c7ea622a7a327a81e  msgpack-1.0.3.tar.gz
++md5  1822cdb939e7531f7ad0f7f09b434f22  msgpack-1.0.4.tar.gz
++sha256  f5d869c18f030202eb412f08b28d2afeea553d6613aee89e200d7aca7ef01f5f  msgpack-1.0.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index c50b7157a0..d9304e4def 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_SCM_VERSION = 7.0.3
-+PYTHON_SETUPTOOLS_SCM_VERSION = 7.0.5
- PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/bc/e6/ac8b0c5076321b9b3e4318c32a8911a260d019be6584556a0b83a47dab4b
-+PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/d0/43/f038b5009f93bcd77b1b8da9e6d424b739ab17aec9726f3a99eba23d53ca
- PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
- PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
+-PYTHON_MSGPACK_VERSION = 1.0.3
++PYTHON_MSGPACK_VERSION = 1.0.4
+ PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/61/3c/2206f39880d38ca7ad8ac1b28d2d5ca81632d163b2d68ef90e46409ca057
++PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/22/44/0829b19ac243211d1d2bd759999aa92196c546518b0be91de9cacc98122a
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
