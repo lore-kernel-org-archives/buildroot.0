@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B26EBC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 05:53:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A23D1C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 05:53:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5758660E9A;
-	Sun, 24 Jul 2022 05:53:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5758660E9A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A44960AD8;
+	Sun, 24 Jul 2022 05:53:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A44960AD8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gVlaeLRMRqYy; Sun, 24 Jul 2022 05:53:31 +0000 (UTC)
+	with ESMTP id Da_FMCHmGWqk; Sun, 24 Jul 2022 05:53:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6286E60AD8;
-	Sun, 24 Jul 2022 05:53:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6286E60AD8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3CF081BF964
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 05:50:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8B7661038;
+	Sun, 24 Jul 2022 05:53:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8B7661038
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BBDB71BF59B
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 05:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1644741730
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 05:50:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1644741730
+ by smtp2.osuosl.org (Postfix) with ESMTP id 957CE400EC
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 05:51:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 957CE400EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LdxO6KKQB2Wg for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 05:50:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qcl2jK2p-3LD for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 05:51:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB8E5416ED
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com
- [IPv6:2607:f8b0:4864:20::c33])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AB8E5416ED
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 05:50:57 +0000 (UTC)
-Received: by mail-oo1-xc33.google.com with SMTP id
- n16-20020a4a9550000000b0043568f1343bso1587820ooi.3
- for <buildroot@buildroot.org>; Sat, 23 Jul 2022 22:50:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8721B400AC
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com
+ [IPv6:2001:4860:4864:20::30])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8721B400AC
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 05:51:00 +0000 (UTC)
+Received: by mail-oa1-x30.google.com with SMTP id
+ 586e51a60fabf-10d9213b77aso11049914fac.5
+ for <buildroot@buildroot.org>; Sat, 23 Jul 2022 22:51:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=yJ/t7Xw9CP3HFX4Wrv2IooGK+ivq05QYuGCYaC+UM9Y=;
- b=s9u230xentHRmvWTO7QbGF8jBQMmSBjoXSbKZnIjGWINTl0zfBXar0+grn7fL1PtZv
- bEz/0FHVnw1nCkOnguvl1mJ9HjwYrlGA2INtBwYtpUNiksCw7OspFAwmzcZrBPYvfB4J
- EwXU+i6SvOuIIyQ8zStXYjnQYJEgX8yN9tGUka8kFlJg2B25ZuUSMJNROekSpw7XmVfJ
- zta93B4WVpAPL7iSNkewExiRv2x5n/rwtMtW0ZKAcC1D6M2h/uQ1AankB13DANxOyzXs
- vb4SxiqYklKuNAtzfs/kCQur0BMAiQJxI3HVgSSCfPIO+aNHgv2JKeBkUt4t6XCYqlAm
- zlWQ==
-X-Gm-Message-State: AJIora+anK/BlJaQbhrWpsVO39A5gOXZClez5AyZKLGIhaNostzL/Wu9
- 9E8ZfM6yRch8T8fHzKP+4TIOPQgPdcY=
-X-Google-Smtp-Source: AGRyM1tPPjy3qsVQymlXA3asyuAJlK6YhUrRcqjj8BlyW6fAe3slldjITxuZ9CUaCI1G89wBcdqxFQ==
-X-Received: by 2002:a4a:8e54:0:b0:435:76f2:2ab7 with SMTP id
- z20-20020a4a8e54000000b0043576f22ab7mr2470580ook.60.1658641856645; 
- Sat, 23 Jul 2022 22:50:56 -0700 (PDT)
+ bh=hwDC39PoV8N9BYiahT3VW5vpzcbtO3kF0KSJUZKu5ZI=;
+ b=qCse7ttbOdygJG28ozzBWN8autO1tFoAR77tBLyLFUl75F4ksS7+CwrFnx6AECRa/R
+ vCAxlNV60Fvip78Dgkwwr3LovjhPLxVzNAlLIFe1DjqIEW1rMb0uo3bvomRh4j/Ini+b
+ TN5V0rhw/h6HYoT/NXRuRyu/y8SXSX4WmiR5Tr6LFhURP4s72k7IIo+QAC+T//JHr8ah
+ /8qCgy8Ahw3hC/fLUHI0xbTFwzrulfbC19LnWgqSCyWIRQ5SpslppH+9gH/AYoQbSAxP
+ 3RIIi07lCP+iryX4CAWL88AuHMcIYXJdRDTDoNJu9PAJ14dNA25W9jMYT7tp39qX16nV
+ h7BQ==
+X-Gm-Message-State: AJIora/SWGxDT8fjDARzQUG6V62C9EoXwPdkbbixhZ9+JuUROcHKH2dT
+ XGrZd++tshuZK+ddTxK4hr6Zxx4esZI=
+X-Google-Smtp-Source: AGRyM1s3CY/pDhfWQJ8D7aHYiKOlYVkFkY/vC8Osv2e80PbUEexzh5roY7qKB9+9R1BW1i/uG/Z/sQ==
+X-Received: by 2002:a05:6870:831d:b0:10d:a96f:8bc with SMTP id
+ p29-20020a056870831d00b0010da96f08bcmr6406754oae.143.1658641859569; 
+ Sat, 23 Jul 2022 22:50:59 -0700 (PDT)
 Received: from localhost.localdomain ([191.187.223.18])
  by smtp.gmail.com with ESMTPSA id
- k13-20020a056870818d00b000f5d8d031b6sm4236969oae.49.2022.07.23.22.50.53
+ k13-20020a056870818d00b000f5d8d031b6sm4236969oae.49.2022.07.23.22.50.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Jul 2022 22:50:55 -0700 (PDT)
+ Sat, 23 Jul 2022 22:50:58 -0700 (PDT)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 02:49:09 -0300
-Message-Id: <20220724054912.2354219-14-ricardo.martincoski@gmail.com>
+Date: Sun, 24 Jul 2022 02:49:10 -0300
+Message-Id: <20220724054912.2354219-15-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220724054912.2354219-1-ricardo.martincoski@gmail.com>
 References: <20220724054912.2354219-1-ricardo.martincoski@gmail.com>
@@ -73,18 +73,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=yJ/t7Xw9CP3HFX4Wrv2IooGK+ivq05QYuGCYaC+UM9Y=;
- b=dPmfP1925xEnCHAPqJ3x78CMkp6K5+ZiHBM7q93+3dE2uKrr+haG6uvG3R49MXXAoP
- dO77xWL+TrOr5+zn5SFIWEy2UDr4oyeh6N1yk1DAzoCK9TPNfczkdJGeYvOlbrUUDUj0
- efIMtHKg/EiubyMT6JVGEdSsrHzRhfibogfveBioxUxJCn0sRWHbHtm0QvJucEltkKs+
- 9Mxd5ZyxdXOXceElS0lGce8xjGLSBpLH/YV0qVGPbX0nFxq3pnGm/2FnbCR3Gzrb2CI8
- JI0beTdH0Fk2cN9tjR36eVKXhXIAhvVyE0EGRiJQjf+YCWCgIDT6OGvzCvrqMtM80xeV
- Djow==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=hwDC39PoV8N9BYiahT3VW5vpzcbtO3kF0KSJUZKu5ZI=;
+ b=HGxt9iAqAdKNCwbjK8UvTp/LHFcJC63KT2Cm6jsj/VCWoYMam/XHn3oGhcvcf40Jmp
+ au3yjvBggAoVLl9Ngb5InyYU4fo5ckpqHcTZdljcD+bMV3q33GmDalXCyxOF4rlinnCA
+ Rs/K7PdOGMzq0eUG/NEnrjuxvbg3SZg67CJgor/Q4LaOQQ15tZv6Dq7rfHizD1Mr/+66
+ wQ5oFEetPeZWaoCjpfU29FyVS3gqjyAlR+CbZQGUHtdDBHBGOagn/CQhhJ3x6hrrVD4M
+ I2CQijq65DnXBUi4WrdCty47YmCYPMZ9hd5Hm3fcgf7ICBMWbPInG6yc01k1dOYOaT0a
+ Yhow==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=dPmfP192
-Subject: [Buildroot] [PATCH 13/16] utils/check-package: check files in
- support/
+ header.a=rsa-sha256 header.s=20210112 header.b=HGxt9iAq
+Subject: [Buildroot] [PATCH 14/16] Makefile: merge check-flake8 into
+ check-package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,108 +102,231 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The .mk files inside both support/dependencies and support/misc are not
-package recipes, they are makefiles, so check-package doesn't understand
-them. Therefore ignore such files.
+Teach check-package to detect python files by type and check them using
+flake8.
+Do not use subprocess to call 'python3 -m flake8' in order to avoid too
+many spawned shells, which in its turn would slow down the check for
+multiple files. (make check-package takes twice the time using a shell
+for each flake8 call, when compared of importing the main application)
 
-In the test infra, some br2-externals are used as fixtures to provide
-(sometimes) failure cases, so ignore files in these directories.
+Expand the runtime test and the unit tests for check-package.
 
-Files inside support/kconfig are files copied from linux upstream, so do
-not generate warnings for them.
+Since 'make check-package' always run using the docker image, there is
+no dependency added to the host machine.
 
-support/gnuconfig contains auto-generated config.{guess,sub} files,
-so do not generate shellcheck warnings for them.
+Remove check-flake8 from the makefile and also from the GitLab CI
+because the exact same checks become part of check-package.
 
+Suggested-by:: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
-NOTE to the maintainer applying this patch: please re-generate the list
-of ignored warnings while applying:
-$ ./utils/docker-run
-br-user@...$ ./utils/check-package --failed-only `git ls-tree -r --name-only HEAD` > .checkpackageignore
----
- .checkpackageignore | 43 +++++++++++++++++++++++++++++++++++++++++++
- utils/check-package |  6 ++++++
- 2 files changed, 49 insertions(+)
+ Makefile                                      | 11 ++------
+ support/misc/gitlab-ci.yml.in                 |  4 ---
+ support/scripts/generate-gitlab-ci-yml        |  2 +-
+ .../tests/utils/br2-external/utils/x-python   |  2 ++
+ .../testing/tests/utils/test_check_package.py | 17 +++++++++++
+ utils/check-package                           |  3 ++
+ utils/checkpackagelib/lib_python.py           |  1 +
+ utils/checkpackagelib/test_tool.py            | 28 +++++++++++++++++++
+ utils/checkpackagelib/tool.py                 | 15 ++++++++++
+ 9 files changed, 69 insertions(+), 14 deletions(-)
+ create mode 100644 support/testing/tests/utils/br2-external/utils/x-python
+ create mode 100644 utils/checkpackagelib/lib_python.py
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 58c05416c4..8f9ab48674 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1021,6 +1021,49 @@ package/yad/yad.hash HashSpaces
- package/zip/zip.hash HashSpaces
- package/zmqpp/zmqpp.hash HashSpaces
- package/zxing-cpp/zxing-cpp.hash HashSpaces
-+support/dependencies/check-host-asciidoc.sh Shellcheck
-+support/dependencies/check-host-cmake.sh Shellcheck
-+support/dependencies/check-host-gzip.sh Shellcheck
-+support/dependencies/check-host-lzip.sh Shellcheck
-+support/dependencies/check-host-make.sh Shellcheck
-+support/dependencies/check-host-python3.sh Shellcheck
-+support/dependencies/check-host-tar.sh Shellcheck
-+support/dependencies/check-host-xzcat.sh Shellcheck
-+support/dependencies/dependencies.sh Shellcheck
-+support/download/bzr ConsecutiveEmptyLines Shellcheck
-+support/download/cargo-post-process Shellcheck
-+support/download/check-hash Shellcheck
-+support/download/cvs Shellcheck
-+support/download/dl-wrapper Shellcheck
-+support/download/file Shellcheck
-+support/download/git Shellcheck
-+support/download/go-post-process Shellcheck
-+support/download/hg Shellcheck
-+support/download/scp Shellcheck
-+support/download/sftp Shellcheck
-+support/download/svn Shellcheck
-+support/download/wget Shellcheck
-+support/gnuconfig/update Shellcheck
-+support/legal-info/buildroot.hash HashSpaces
-+support/libtool/buildroot-libtool-v1.5.patch ApplyOrder Sob
-+support/libtool/buildroot-libtool-v2.2.patch ApplyOrder Sob
-+support/libtool/buildroot-libtool-v2.4.4.patch ApplyOrder
-+support/libtool/buildroot-libtool-v2.4.patch ApplyOrder Sob
-+support/misc/relocate-sdk.sh Shellcheck
-+support/scripts/apply-patches.sh Shellcheck
-+support/scripts/br2-external Shellcheck
-+support/scripts/check-bin-arch Shellcheck
-+support/scripts/check-host-rpath Shellcheck
-+support/scripts/eclipse-register-toolchain Shellcheck
-+support/scripts/fix-configure-powerpc64.sh EmptyLastLine
-+support/scripts/fix-rpath Shellcheck
-+support/scripts/generate-gitlab-ci-yml Shellcheck
-+support/scripts/mkmakefile ConsecutiveEmptyLines Shellcheck
-+support/scripts/mkusers Shellcheck
-+support/scripts/setlocalversion Shellcheck
-+support/testing/tests/core/post-build.sh Shellcheck
-+support/testing/tests/package/test_opkg/post-build.sh Shellcheck
-+support/testing/tests/utils/test_get_developers/0001-package-binutils-change-.mk.patch NumberedSubject
- toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash HashSpaces
- toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash HashSpaces
- toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash HashSpaces
+diff --git a/Makefile b/Makefile
+index f42dc3151d..7c7b67a616 100644
+--- a/Makefile
++++ b/Makefile
+@@ -125,7 +125,7 @@ endif
+ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+ 	defconfig %_defconfig allyesconfig allnoconfig alldefconfig syncconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+-	print-version olddefconfig distclean manual manual-% check-package check-flake8
++	print-version olddefconfig distclean manual manual-% check-package
+ 
+ # Some global targets do not trigger a build, but are used to collect
+ # metadata, or do various checks. When such targets are triggered,
+@@ -1240,19 +1240,12 @@ print-version:
+ check_inside_docker := $(shell if [ "`groups`" = 'br-user' ]; then echo y; else echo n; fi)
+ 
+ # List of target that need to run inside docker image to ensure reproducible results
+-inside_docker_targets := check-package check-flake8
++inside_docker_targets := check-package
+ 
+ ifeq ($(check_inside_docker),n)
+ $(inside_docker_targets):
+ 	$(Q)utils/docker-run $(MAKE) V=$(V) $@
+ else
+-check-flake8:
+-	$(Q)git ls-tree -r --name-only HEAD \
+-	| xargs file \
+-	| grep 'Python script' \
+-	| cut -d':' -f1 \
+-	| xargs -- python3 -m flake8 --statistics
+-
+ check-package:
+ 	$(Q)./utils/check-package `git ls-tree -r --name-only HEAD`
+ endif
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index 3ac988a519..2fde904006 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -6,10 +6,6 @@
+     script:
+         - utils/get-developers -v
+ 
+-.check-flake8_base:
+-    script:
+-        - make check-flake8
+-
+ .check-package_base:
+     script:
+         - make check-package
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index aa43aac019..536ae0f042 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -26,7 +26,7 @@ gen_tests() {
+     local do_basics do_defconfigs do_runtime do_testpkg
+     local defconfigs_ext cfg tst
+ 
+-    basics=( check-package DEVELOPERS flake8 package )
++    basics=( check-package DEVELOPERS package )
+ 
+     defconfigs=( $(cd configs; LC_ALL=C ls -1 *_defconfig) )
+ 
+diff --git a/support/testing/tests/utils/br2-external/utils/x-python b/support/testing/tests/utils/br2-external/utils/x-python
+new file mode 100644
+index 0000000000..63f77b6be1
+--- /dev/null
++++ b/support/testing/tests/utils/br2-external/utils/x-python
+@@ -0,0 +1,2 @@
++#!/usr/bin/env python3
++
+diff --git a/support/testing/tests/utils/test_check_package.py b/support/testing/tests/utils/test_check_package.py
+index aeda0857e3..e655bff1ec 100644
+--- a/support/testing/tests/utils/test_check_package.py
++++ b/support/testing/tests/utils/test_check_package.py
+@@ -249,3 +249,20 @@ class TestCheckPackage(unittest.TestCase):
+         self.assert_file_was_processed(m)
+         self.assert_warnings_generated_for_file(m)
+         self.assertIn("{}:0: run 'shellcheck' and fix the warnings".format(abs_file), w)
++
++        # python scripts are tested using flake8
++        rel_file = "utils/x-python"
++        abs_path = infra.filepath("tests/utils/br2-external")
++        abs_file = os.path.join(abs_path, rel_file)
++
++        w, m = call_script(["check-package", "-vvv", "-b", rel_file],
++                           self.WITH_UTILS_IN_PATH, abs_path)
++        self.assert_file_was_processed(m)
++        self.assert_warnings_generated_for_file(m)
++        self.assertIn("{}:0: run 'flake8' and fix the warnings".format(rel_file), w)
++
++        w, m = call_script(["check-package", "-b", abs_file],
++                           self.WITH_UTILS_IN_PATH, infra.basepath())
++        self.assert_file_was_processed(m)
++        self.assert_warnings_generated_for_file(m)
++        self.assertIn("{}:0: run 'flake8' and fix the warnings".format(abs_file), w)
 diff --git a/utils/check-package b/utils/check-package
-index 874f58e0d2..601d899d3d 100755
+index 601d899d3d..beebef0ddb 100755
 --- a/utils/check-package
 +++ b/utils/check-package
-@@ -106,6 +106,7 @@ DO_CHECK_INTREE = re.compile(r"|".join([
-     r"fs/",
-     r"linux/",
-     r"package/",
-+    r"support/",
-     r"system/",
-     r"toolchain/",
-     r"utils/",
-@@ -115,6 +116,11 @@ DO_NOT_CHECK_INTREE = re.compile(r"|".join([
-     r"fs/common\.mk$",
-     r"package/doc-asciidoc\.mk$",
-     r"package/pkg-\S*\.mk$",
-+    r"support/dependencies/[^/]+\.mk$",
-+    r"support/gnuconfig/config\.",
-+    r"support/kconfig/",
-+    r"support/misc/[^/]+\.mk$",
-+    r"support/testing/tests/.*br2-external/",
-     r"toolchain/helpers\.mk$",
-     r"toolchain/toolchain-external/pkg-toolchain-external\.mk$",
-     ]))
+@@ -14,6 +14,7 @@ import checkpackagelib.lib_config
+ import checkpackagelib.lib_hash
+ import checkpackagelib.lib_mk
+ import checkpackagelib.lib_patch
++import checkpackagelib.lib_python
+ import checkpackagelib.lib_shellscript
+ import checkpackagelib.lib_sysv
+ 
+@@ -94,6 +95,8 @@ def get_lib_from_filetype(fname):
+     filetype = magic.from_file(fname, mime=True)
+     if filetype == "text/x-shellscript":
+         return checkpackagelib.lib_shellscript
++    if filetype in ["text/x-python", "text/x-script.python"]:
++        return checkpackagelib.lib_python
+     return None
+ 
+ 
+diff --git a/utils/checkpackagelib/lib_python.py b/utils/checkpackagelib/lib_python.py
+new file mode 100644
+index 0000000000..f8c17ddc10
+--- /dev/null
++++ b/utils/checkpackagelib/lib_python.py
+@@ -0,0 +1 @@
++from checkpackagelib.tool import Flake8                # noqa: F401
+diff --git a/utils/checkpackagelib/test_tool.py b/utils/checkpackagelib/test_tool.py
+index a0bf88001d..cfa826f57c 100644
+--- a/utils/checkpackagelib/test_tool.py
++++ b/utils/checkpackagelib/test_tool.py
+@@ -66,6 +66,34 @@ def test_NotExecutable_hint(testname, hint, filename, permissions, string, expec
+     assert warnings == expected
+ 
+ 
++Flake8 = [
++    ('empty',
++     'empty.py',
++     '',
++     []),
++    ('W391',
++     'blank-line.py',
++     '\n',
++     ["dir/blank-line.py:0: run 'flake8' and fix the warnings",
++      "dir/blank-line.py:1:1: W391 blank line at end of file"]),
++    ('more than one warning',
++     'file',
++     'import os\n'
++     'import re\n'
++     '\n',
++     ["dir/file:0: run 'flake8' and fix the warnings",
++      "dir/file:1:1: F401 'os' imported but unused\n"
++      "dir/file:2:1: F401 're' imported but unused\n"
++      'dir/file:3:1: W391 blank line at end of file']),
++    ]
++
++
++@pytest.mark.parametrize('testname,filename,string,expected', Flake8)
++def test_Flake8(testname, filename, string, expected):
++    warnings = check_file(m.Flake8, filename, string)
++    assert warnings == expected
++
++
+ Shellcheck = [
+     ('missing shebang',
+      'empty.sh',
+diff --git a/utils/checkpackagelib/tool.py b/utils/checkpackagelib/tool.py
+index 632aaa9f9e..907ada704f 100644
+--- a/utils/checkpackagelib/tool.py
++++ b/utils/checkpackagelib/tool.py
+@@ -1,5 +1,7 @@
++import flake8.main.application
+ import os
+ import subprocess
++import tempfile
+ from checkpackagelib.base import _Tool
+ 
+ 
+@@ -14,6 +16,19 @@ class NotExecutable(_Tool):
+             return ["{}:0: This file does not need to be executable{}".format(self.filename, self.hint())]
+ 
+ 
++class Flake8(_Tool):
++    def run(self):
++        with tempfile.NamedTemporaryFile() as output:
++            app = flake8.main.application.Application()
++            app.run(['--output-file={}'.format(output.name), self.filename])
++            stdout = output.readlines()
++            processed_output = [str(line.decode().rstrip()) for line in stdout if line]
++            if len(stdout) == 0:
++                return
++            return ["{}:0: run 'flake8' and fix the warnings".format(self.filename),
++                    '\n'.join(processed_output)]
++
++
+ class Shellcheck(_Tool):
+     def run(self):
+         cmd = ['shellcheck', self.filename]
 -- 
 2.25.1
 
