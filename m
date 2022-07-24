@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30FC1C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 19:57:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 490D2C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 19:57:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5AF383F4F;
-	Sun, 24 Jul 2022 19:57:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5AF383F4F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B6bUtgghr3JV; Sun, 24 Jul 2022 19:57:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B623183EB6;
-	Sun, 24 Jul 2022 19:57:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B623183EB6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8E3581BF20B
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:55:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D607340C65
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D607340C65
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED2ED40C65;
+	Sun, 24 Jul 2022 19:57:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED2ED40C65
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VvFtcj7YBzoo for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LvFrVJtRC_82; Sun, 24 Jul 2022 19:57:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05D2E40441;
+	Sun, 24 Jul 2022 19:57:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05D2E40441
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0099A1BF20B
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:55:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D895383F23
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D895383F23
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RNE3s0P-9B20 for <buildroot@lists.busybox.net>;
  Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14CBD404C4
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 19:55:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14CBD404C4
+ by smtp1.osuosl.org (Postfix) with ESMTP id E326E83EB5
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 19:55:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E326E83EB5
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 54E1D85CC6; Sun, 24 Jul 2022 19:41:52 +0000 (UTC)
+ id 1F4BD85CBF; Sun, 24 Jul 2022 19:41:52 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 21:44:46 +0200
+Date: Sun, 24 Jul 2022 21:44:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: db4b759dfc3a9f404861e112f216e30ff65ba9d9
-X-Git-Newrev: f88469885fca0353db6387acfbf6405b1cd3cde9
+X-Git-Oldrev: dba2095a821ab1fa518f0b8400eda3b38aa7c8d8
+X-Git-Newrev: 62a033a2ad5dbafd002eedbc22b0945140cb2cc9
 X-Patchwork-Hint: ignore
-Message-Id: <20220724194152.54E1D85CC6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xkbutils: bump version
- to 1.0.5
+Message-Id: <20220724194152.1F4BD85CBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xmodmap: bump version
+ to 1.0.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f88469885fca0353db6387acfbf6405b1cd3cde9
+commit: https://git.buildroot.net/buildroot/commit/?id=62a033a2ad5dbafd002eedbc22b0945140cb2cc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/x11r7/xapp_xkbutils/xapp_xkbutils.hash | 5 +++--
- package/x11r7/xapp_xkbutils/xapp_xkbutils.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_xmodmap/xapp_xmodmap.hash | 10 ++++------
+ package/x11r7/xapp_xmodmap/xapp_xmodmap.mk   |  6 +++---
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash b/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash
-index 2f8dbc7c1e..95287956a8 100644
---- a/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash
-+++ b/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash
-@@ -1,4 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2013-February/002162.html
--sha256  d2a18ab90275e8bca028773c44264d2266dab70853db4321bdbc18da75148130  xkbutils-1.0.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-July/003186.html
-+sha256  f6a4a8e9c54582beb3787b1faa8168caab125c1fee0ca9cfa5b6c9c1df25eea4  xkbutils-1.0.5.tar.xz
-+sha512  0d8d460f5e015e9034292688437511068dab61216c2493f2981cfb63aaa012976ac9435c1586a22c0940fbfcb779b48dce9b85832303fe2b854aa945b814ac77  xkbutils-1.0.5.tar.xz
+diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash b/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
+index 4925ec00a3..db3d8f33cd 100644
+--- a/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
++++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-February/002952.html
+-md5 51f1d30a525e9903280ffeea2744b1f6  xmodmap-1.0.10.tar.bz2
+-sha1 69e041f8a8c501bd1feb68805a0880633a685bc8  xmodmap-1.0.10.tar.bz2
+-sha256 473f0941d7439d501bb895ff358832b936ec34c749b9704c37a15e11c318487c  xmodmap-1.0.10.tar.bz2
+-sha512 324c7dcef843186088f16b3bc47485eb3c9b4331e56ce43b692deb4bb3d4f4f27512480e91a379cceac8383df920dc5e37cd825246b50b6343291cec48134c04  xmodmap-1.0.10.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-July/003176.html
++sha256  9a2f8168f7b0bc382828847403902cb6bf175e17658b36189eac87edda877e81  xmodmap-1.0.11.tar.xz
++sha512  a78f916f048d2017f079733becc99232c087c360ece61ec6c4fa4b5b130b96a1b10c4ce1b64a15bdcab7ea05de3c7f16035503d5be6f8ce1a7612ce71d558510  xmodmap-1.0.11.tar.xz
  # Locally computed
- sha256  3d67b53c085de6d475705b60855b9277afac5d4c4ec531d0ffd1ef0d00571594  COPYING
-diff --git a/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk b/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk
-index 96ca8a4093..90501908e6 100644
---- a/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk
-+++ b/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk
+-sha256 c149563cf2cb0ecfb1148b6eb8f604c62bed43452a0d0fbafb97286a97840f5c  COPYING
++sha256  c149563cf2cb0ecfb1148b6eb8f604c62bed43452a0d0fbafb97286a97840f5c  COPYING
+diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
+index f3a458b7b5..8fcb4716a8 100644
+--- a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
++++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XKBUTILS_VERSION = 1.0.4
--XAPP_XKBUTILS_SOURCE = xkbutils-$(XAPP_XKBUTILS_VERSION).tar.bz2
--XAPP_XKBUTILS_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XKBUTILS_VERSION = 1.0.5
-+XAPP_XKBUTILS_SOURCE = xkbutils-$(XAPP_XKBUTILS_VERSION).tar.xz
-+XAPP_XKBUTILS_SITE = https://xorg.freedesktop.org/releases/individual/app
- XAPP_XKBUTILS_LICENSE = MIT
- XAPP_XKBUTILS_LICENSE_FILES = COPYING
- XAPP_XKBUTILS_DEPENDENCIES = xlib_libXaw xlib_libxkbfile
+-XAPP_XMODMAP_VERSION = 1.0.10
+-XAPP_XMODMAP_SOURCE = xmodmap-$(XAPP_XMODMAP_VERSION).tar.bz2
+-XAPP_XMODMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XMODMAP_VERSION = 1.0.11
++XAPP_XMODMAP_SOURCE = xmodmap-$(XAPP_XMODMAP_VERSION).tar.xz
++XAPP_XMODMAP_SITE = https://xorg.freedesktop.org/releases/individual/app
+ XAPP_XMODMAP_LICENSE = MIT
+ XAPP_XMODMAP_LICENSE_FILES = COPYING
+ XAPP_XMODMAP_DEPENDENCIES = xlib_libX11
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
