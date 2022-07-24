@@ -1,87 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4571CC43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 13:12:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB4A8C43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 13:16:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0AF684C60;
-	Sun, 24 Jul 2022 13:12:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0AF684C60
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C582424D4;
+	Sun, 24 Jul 2022 13:16:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C582424D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oRpGgUU44wic; Sun, 24 Jul 2022 13:12:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WycgQuVBfVXw; Sun, 24 Jul 2022 13:16:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B60AD84C41;
-	Sun, 24 Jul 2022 13:12:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B60AD84C41
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7ED2A424D7;
+	Sun, 24 Jul 2022 13:16:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7ED2A424D7
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3F1041BF488
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 13:12:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C83B11BF488
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 13:16:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 21BB084C41
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 13:12:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21BB084C41
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC8DE83F11
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 13:16:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC8DE83F11
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0fzGzupykifJ for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 13:12:06 +0000 (UTC)
+ with ESMTP id jeLe67HKjutC for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 13:16:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEBAB84BCD
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BEBAB84BCD
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 13:12:05 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id l15so8360728wro.11
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 06:12:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C421483EFE
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C421483EFE
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 13:16:44 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id z13so12411283wro.13
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 06:16:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=1cFSbDy5Zz4LWm1zWx+fAg7KSowS7P5jb++/UumZsFw=;
- b=x0buqXTgEEN/4TVSaPjM2HcMpCHsAfLMmg9OXf0JwE/Up3bGfaiX+92SaNdd5uHq1E
- XFJnLS3qYSRVQZfaTUJOZWk5T8s8qx+PRXJDCob087V/QnX+A/yWsA7YBKotWkKSYJIS
- JcoTQazOqf63P8wphzPoiU34mD1pc+EGYx5gNTvq674bGsa/h0OKjiEgpCLIKImv3d5Z
- VW4Iw21ino5aaWsUcuAVNQSyai7F4YCTP5Hd02ru9S+EaDw5NeAxWLgBVGODyyNR+/z6
- rbdPw9ECZHmCDMvEZsy1ySxCWBOck8npEtJ9WbOfeNSy4uboQluZPf4+WWXPWL96+bhU
- 4lUA==
-X-Gm-Message-State: AJIora/3OJCp4LNEWmKN7R8CPOeGhjsGdFlo/8RXhfNr2Fom09i2y2wm
- 6NauyxDHU0fWtYYyDXQe6LTILFX/T/w=
-X-Google-Smtp-Source: AGRyM1vL6BHVnEk2qejTzGyc68AKQ7bM8arwekThS5o1BIFHLNLc6Xc3KzShattrqTf+sm5WaCg5LQ==
-X-Received: by 2002:adf:e193:0:b0:21e:626c:d082 with SMTP id
- az19-20020adfe193000000b0021e626cd082mr5067983wrb.159.1658668323788; 
- Sun, 24 Jul 2022 06:12:03 -0700 (PDT)
-Received: from scaer.home ([2a01:cb19:8acf:5600:88cd:5a50:8d8a:801])
- by smtp.gmail.com with ESMTPSA id
- i13-20020a05600011cd00b0021d6924b777sm9245868wrx.115.2022.07.24.06.12.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Jul 2022 06:12:03 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 15:12:02 +0200
-Message-Id: <20220724131202.1364133-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=1cFSbDy5Zz4LWm1zWx+fAg7KSowS7P5jb++/UumZsFw=;
- b=gCdB+1W0MM1o5CSZeVUIH0Zyiky/zeQuphiA51utJHnq/1Xx0eDDqLFrgjEkl7X8MK
- zuaN53lDIcwEje/JTFlJ3lTy8YFV5XpVKV8gm2vxeDwXvUlWzaPeJgb727s9LZ8P+dpq
- qZb77k/DF5+M2egSVjGHE6zow1CVPlVbqwULAsifJUxqIV6BEe87l3MINMnHXx1STy61
- RKQhnijgrtmckSB8qqanTL3ZpplvW2IFJjFhk/sgPSIkULZiSz5nu5/c6TyYMRFzcTj5
- 9q0dEB5lTjuvX528Yye1fhj0CrbMiWd9M3GaGPWUtoPQTZUQqdbkddWbZoZoSj/gP0df
- AKjQ==
+ bh=KgdmhY4dBYC6P398krYxylMQx6KDn3oeuenLHuf5ii0=;
+ b=x5q7omKpBzeggkdsHCz2u6igLRsdHDtM7M2hKMNVORtYPF2GEpj0MjypTvsOchid2L
+ Er9U+7iMz3S8CsWqtMhLMArTY6H5lklCRAn1tpAlam8rr34z9eNXKQqsRnQd5zdsnntI
+ pZcr0R6tcRU/acds8h5GhfQ7f3LMv8286x4BBZcEKoUZ7dEieSy8aMIMWhtUc5VPsJi5
+ A0LG07XU8Z5kiZ7g8QHZYCnkMkuuKydwvt2bTXD4GfIy8TTmrjn8iaBb+6Uvtqm/lTnG
+ EnWW8AhuiN/a/fhwZwGeiXbOcqUh1owyV33jEcjemnZN1y/ME/9ZN/lq4hRNSnyBgShH
+ El9A==
+X-Gm-Message-State: AJIora+8DlXCTgDiFEN62DlkzHes+V6O+ljNJ4cdkJtYFR1TdFBi48+2
+ 3tWWAGD75pBvFuqL2CzAMiH2Cg==
+X-Google-Smtp-Source: AGRyM1s5bVboMTFbkF5z0xDLBwqW46+wl0pVrDkMTie0fAeWkMu+FkdOVGRrR+AAlW8jNJzQG4MeZQ==
+X-Received: by 2002:adf:fb84:0:b0:21a:10f2:1661 with SMTP id
+ a4-20020adffb84000000b0021a10f21661mr5086166wrr.2.1658668602716; 
+ Sun, 24 Jul 2022 06:16:42 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ bq23-20020a5d5a17000000b0021e57963c4asm2834530wrb.77.2022.07.24.06.16.42
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 24 Jul 2022 06:16:42 -0700 (PDT)
+Message-ID: <1695b85a-b2f7-b4be-72c7-a60c3d6488f5@mind.be>
+Date: Sun, 24 Jul 2022 15:16:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
+References: <20220112132618.2634250-2-aperez@igalia.com>
+ <20220121154235.798255-1-aperez@igalia.com>
+ <20220121154235.798255-3-aperez@igalia.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220121154235.798255-3-aperez@igalia.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=KgdmhY4dBYC6P398krYxylMQx6KDn3oeuenLHuf5ii0=;
+ b=Jdr0TQLE7TlLX5xWYiGX41jyMTJdwRxq3/d4MawECUiIb76jRlLMV/1/uLKR06S50G
+ SoplgMOGuWoVJCyO1sInxmHDPj1ljUcHDTQf2AyaNAJXG1Y2Op9cGR1z4sS2uxaiEJfr
+ 1wyk4f1UHL5lLBt3t1GK2txceZYeEMMx0beVkTz9PtWAq/+t9lRpCAcqW5yvJ1aIDNjO
+ nr5t2SPCiRrQf4conaBMrgmj4Uy3Kqakie7i6ut7SbhFhdD4bdLsFt7fzhYkd5LQdIl5
+ FDHeNuTniCMtTR53HaWQWj6RYrIQsD7WhK6ELVdALokFK8R918WFBnrvXCUnvcENXcz8
+ qlPw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=gCdB+1W0
-Subject: [Buildroot] [PATCH] package/rpi-firmware: add option to use custom
- cmdline.txt
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Jdr0TQLE
+Subject: Re: [Buildroot] [PATCH RFC v2 2/7] package/pkg-cmake.mk: use ninja
+ instead of make
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,87 +103,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Peter Seiderer <ps.report@gmx.net>, Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Pierre Ducroquet <pinaraf@pinaraf.info>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently, the cmdline.txt file is installed in $(BINARIES_DIR) by the
-rpi-firmware package. Overriding files in there can not be done with an
-overlay (which only applies to $(TARGET_DIR)), and thus requires using
-either a post-build or post-image script, which is not always very
-practical when a custom file must be used.
 
-Like was done in 689b9ac439ab (package/rpi-firmware: rework boot/config
-file handling) for config.txt, add an option to allow users to specify
-the path to a custom cmdline.txt.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Seiderer <ps.report@gmx.net>
----
- .../rpi-firmware => board/raspberrypi}/cmdline.txt     |  0
- package/rpi-firmware/Config.in                         |  7 +++++++
- package/rpi-firmware/rpi-firmware.mk                   | 10 +++++++++-
- 3 files changed, 16 insertions(+), 1 deletion(-)
- rename {package/rpi-firmware => board/raspberrypi}/cmdline.txt (100%)
+On 21/01/2022 16:42, Adrian Perez de Castro wrote:
+> Switch to ninja as the build tool for the CMake package infrastructure.
+> Note that the changes make packages which use [host-]cmake-package
+> depend on host-ninja.
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+> Changes v1 -> v2:
+>    - No changes.
+> ---
+>   package/pkg-cmake.mk | 24 ++++++++++++++----------
+>   1 file changed, 14 insertions(+), 10 deletions(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 3b1db35fb6..65f005a914 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -51,11 +51,6 @@ endif
+>   
+>   define inner-cmake-package
+>   
+> -$(2)_MAKE			?= $$(MAKE)
+> -$(2)_INSTALL_OPTS		?= install
+> -$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
+> -$(2)_INSTALL_TARGET_OPTS	?= DESTDIR=$$(TARGET_DIR) install/fast
+> -
+>   $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
+>   
+>   
+> @@ -88,6 +83,7 @@ define $(2)_CONFIGURE_CMDS
+>   	rm -f CMakeCache.txt && \
+>   	PATH=$$(BR_PATH) \
+>   	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+> +		-GNinja \
+>   		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
+>   		-DCMAKE_INSTALL_PREFIX="/usr" \
+>   		-DCMAKE_COLOR_MAKEFILE=OFF \
+> @@ -117,6 +113,7 @@ define $(2)_CONFIGURE_CMDS
+>   	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+>   	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+>   	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+> +		-GNinja \
+>   		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+>   		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+>   		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
+> @@ -154,6 +151,8 @@ endif
+>   # primitives to find {C,LD}FLAGS, add it to the dependency list.
+>   $(2)_DEPENDENCIES += host-pkgconf
+>   
+> +$(2)_DEPENDENCIES += host-ninja
 
-diff --git a/package/rpi-firmware/cmdline.txt b/board/raspberrypi/cmdline.txt
-similarity index 100%
-rename from package/rpi-firmware/cmdline.txt
-rename to board/raspberrypi/cmdline.txt
-diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
-index 8070dc3019..a9aeaed745 100644
---- a/package/rpi-firmware/Config.in
-+++ b/package/rpi-firmware/Config.in
-@@ -69,6 +69,13 @@ config BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE
- 	  Path to a file stored as config.txt in the boot partiton
- 	  of the generated SD card image.
- 
-+config BR2_PACKAGE_RPI_FIRMWARE_CMDLINE_FILE
-+	string "Path to a file stored as boot/cmdline.txt"
-+	default "board/raspberrypi/cmdline.txt"  # legacy
-+	help
-+	  Path to a file stored as cmdline.txt in the boot partiton
-+	  of the generated SD card image.
-+
- config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
- 	bool "Install Device Tree Blobs (DTBs)"
- 	default y
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index d4d1d07b3f..6f5902fd52 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -35,6 +35,14 @@ define RPI_FIRMWARE_INSTALL_CONFIG
- endef
- endif
- 
-+RPI_FIRMWARE_CMDLINE_FILE = $(call qstrip,$(BR2_PACKAGE_RPI_FIRMWARE_CMDLINE_FILE))
-+ifneq ($(RPI_FIRMWARE_CMDLINE_FILE),)
-+define RPI_FIRMWARE_INSTALL_CMDLINE
-+	$(INSTALL) -D -m 0644 $(RPI_FIRMWARE_CMDLINE_FILE) \
-+		$(BINARIES_DIR)/rpi-firmware/cmdline.txt
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
- define RPI_FIRMWARE_INSTALL_DTB
- 	$(foreach dtb,$(wildcard $(@D)/boot/*.dtb), \
-@@ -79,9 +87,9 @@ endef
- endif # INSTALL_VCDBG
- 
- define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
--	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
- 	$(RPI_FIRMWARE_INSTALL_BIN)
- 	$(RPI_FIRMWARE_INSTALL_CONFIG)
-+	$(RPI_FIRMWARE_INSTALL_CMDLINE)
- 	$(RPI_FIRMWARE_INSTALL_DTB)
- 	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
- endef
--- 
-2.25.1
+  Ah, crap, I forgot this one...
 
+  Maybe it's better after all to add
+
+$(2)_CMAKE_GENERATOR ?= Ninja
+ifeq ($($(2)_CMAKE_GENERATOR),Ninja)
+$(2)_DEPENDENCIES += host-ninja
+endif
+
+> +
+>   $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
+>   
+>   #
+> @@ -163,11 +162,13 @@ $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
+>   ifndef $(2)_BUILD_CMDS
+>   ifeq ($(4),target)
+>   define $(2)_BUILD_CMDS
+> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+> +		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_BUILDDIR)
+
+  If cmake is used here instead of ninja directly, it doesn't make sense to have 
+a global <PKG>_CMAKE_OPTS (or whatever) any more, because the options for 
+--build are completely different from those of --install. It does, however, make 
+sense to add <PKG>_BUILD_OPTS, <PKG>_INSTALL_TARGET_OPTS, etc. (which we do have 
+for a couple of other infras already). But that is pretty independent of this 
+series.
+
+  Regards,
+  Arnout
+
+>   endef
+>   else
+>   define $(2)_BUILD_CMDS
+> -	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
+> +	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+> +		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_BUILDDIR)
+>   endef
+>   endif
+>   endif
+> @@ -178,7 +179,8 @@ endif
+>   #
+>   ifndef $(2)_INSTALL_CMDS
+>   define $(2)_INSTALL_CMDS
+> -	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
+> +	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+> +		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR) install
+>   endef
+>   endif
+>   
+> @@ -188,7 +190,8 @@ endif
+>   #
+>   ifndef $(2)_INSTALL_STAGING_CMDS
+>   define $(2)_INSTALL_STAGING_CMDS
+> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(STAGING_DIR) \
+> +		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR) install
+>   endef
+>   endif
+>   
+> @@ -198,7 +201,8 @@ endif
+>   #
+>   ifndef $(2)_INSTALL_TARGET_CMDS
+>   define $(2)_INSTALL_TARGET_CMDS
+> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPTS) -C $$($$(PKG)_BUILDDIR)
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(TARGET_DIR) \
+> +		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR) install
+>   endef
+>   endif
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
