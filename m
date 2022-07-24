@@ -1,73 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0FD9C43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 23:52:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4328EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 23:53:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 654AD83EE5;
-	Sun, 24 Jul 2022 23:52:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 654AD83EE5
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD277611EA;
+	Sun, 24 Jul 2022 23:53:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD277611EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vrVz8lFqJsLl; Sun, 24 Jul 2022 23:52:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T7BARaBAUhjZ; Sun, 24 Jul 2022 23:53:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AED383E32;
-	Sun, 24 Jul 2022 23:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AED383E32
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4FB891BF31C
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 23:52:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D028C60773;
+	Sun, 24 Jul 2022 23:53:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D028C60773
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 317121BF31C
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 23:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 29DF883E32
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 23:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29DF883E32
+ by smtp4.osuosl.org (Postfix) with ESMTP id 17601416EE
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 23:53:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17601416EE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O1pP52UpNJYH for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 23:52:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PiU3Su0G40T7 for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 23:53:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D85783E31
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com
- [209.85.216.53])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8D85783E31
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 23:52:13 +0000 (UTC)
-Received: by mail-pj1-f53.google.com with SMTP id
- x24-20020a17090ab01800b001f21556cf48so12817709pjq.4
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 16:52:13 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9EC1416EA
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
+ [IPv6:2607:f8b0:4864:20::22f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D9EC1416EA
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 23:53:36 +0000 (UTC)
+Received: by mail-oi1-x22f.google.com with SMTP id bb16so11709383oib.11
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 16:53:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=G8Ti5EsjSu5Qw5YQQzxGoRr7hd/avRILZdL+IrTcrGA=;
- b=Nqn6gyOazxURYZIPMiumNDz2Uwi1Lw2xk2NRTIq5nwHhzE1vOlowvRP4LaSZkKGf4p
- tDBrArVzqoaT5g4WIliLmNJj8MuSAhNC9o1TUSnyEd6KzGnDOlJaiLsD0KWd1ZbmdGuu
- DiDCcPT0xg3hDAZBfk191pcTegzrkqTfgHpiKONJkv42w2M+3jNkEGo1VtKR6ZZOntrW
- +Slh/1z3Ikfi74+i0bAnrHhgyXNcRLoSMPgV80a6gqcb0X+aG5aHAkS5KXLRmttj0HRM
- 9nUxkeg2wuejS6EZxRNQ6N+2hAq2ae5VwKn9mf3V9DN6bZgpwgRqhH1WeKNYZsbyZj/q
- UkGA==
-X-Gm-Message-State: AJIora/8HM8VKb1m0bO4x0nX4Urdy3sOfPIy1/W0ephmFTMDf33BvSjw
- 9X3LrDaiLZAivuLw50D/LmqWajsFSetaEg==
-X-Google-Smtp-Source: AGRyM1vDSi8D2S+4Wi/oeQ0C1i3oN8ow7gkFDgFQqX+0Rcxuptal1GOtFFpoqxheaaOiLc0g6ymGgA==
-X-Received: by 2002:a17:902:7b85:b0:16d:2976:42e1 with SMTP id
- w5-20020a1709027b8500b0016d297642e1mr9548598pll.141.1658706732449; 
- Sun, 24 Jul 2022 16:52:12 -0700 (PDT)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- z7-20020a170902ccc700b0016c09a0ef87sm5389131ple.255.2022.07.24.16.52.11
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=JNJeNG3JJIF6Nnr6kqAGhMSWFs95Roxg+d1Et9+pmFY=;
+ b=sz5ZgVVZiYscnxYo9P0q5+HmhF7xZiRmQhefjIpGuztUJr8reK7WGZ11L3SapnvqPx
+ hNqpJx64vlFZZ3nMhTrkcN3xiGZUictRLgT+A/HgbAcviAP2750+pIYZPD3Ro5jh3uXg
+ 5hW/pnIghSnOKg9cY6YQS8ziQDgN47oISpsC4AfpjFrsUq7lI8N1MeDKiLO+KIZe4PT8
+ lgi4qEpuQFGX96UNfzjxYjcVmOf5Rvm2DiOTmak6BFYAY/b0yTgAm9xMb4iRDYwHjrfn
+ +FqIPXZILr55Pym+ZAGGwlndX5KjcR6a7EAiuY8fXkop1GLNfwgCCJoQ6Nc8HvSY8c6G
+ dHug==
+X-Gm-Message-State: AJIora/Y7se/CYMQ3qa89h68kPLaop+PXe17xtgwe0zv/4otQs7cxix7
+ TyvJP6BhGZFDeRmM6o7vi0JYJm2y9ok=
+X-Google-Smtp-Source: AGRyM1uBGj6dM38T3KZeQ+PBxAA1bcyB9B1QDSaNF6nBoGumSOOqXPnqJQ944sz1DZ/BJjKpeZCf0w==
+X-Received: by 2002:aca:5e55:0:b0:33a:e055:38e with SMTP id
+ s82-20020aca5e55000000b0033ae055038emr1263240oib.186.1658706814408; 
+ Sun, 24 Jul 2022 16:53:34 -0700 (PDT)
+Received: from localhost.localdomain ([191.187.223.18])
+ by smtp.gmail.com with ESMTPSA id
+ k23-20020a4ad117000000b004359b581401sm4283268oor.25.2022.07.24.16.53.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Jul 2022 16:52:11 -0700 (PDT)
+ Sun, 24 Jul 2022 16:53:33 -0700 (PDT)
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 16:52:09 -0700
-Message-Id: <20220724235209.678188-1-christian@paral.in>
-X-Mailer: git-send-email 2.35.1
+Date: Sun, 24 Jul 2022 20:52:59 -0300
+Message-Id: <20220724235301.3708271-1-ricardo.martincoski@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/beaglev-secondboot: bump to version
- e17302
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=JNJeNG3JJIF6Nnr6kqAGhMSWFs95Roxg+d1Et9+pmFY=;
+ b=AaD/IJqZuXyMPl8SQV3UCQPP2KCLQJwoLEplTR5tCWkH92g2oFLwKqPiEqY3k0hGqD
+ GOh/lg3r7cr11FVF572acPDfjLd06VOX33k7xEE0v95J8uJdWWy7pELVr9Va72C2SGOD
+ ZS6EC6J1lNAh5WP1E/Pl2m2LjTi3dsFB8u7jlyuIprubEQ+0GjP+yNgMoThSYK1YbIpn
+ u7kj661x+pHjsK+xLADC7G2QhVlEAqgKQaNAQTeu5m2stL3Rb51iVGs4bLF0BH8qT7jH
+ 1+A6M3Rv8RAYnQKvZRn7ylMN5K5nvEYvrhwecauAiO1xpT9WLrYpf5ewXdpxyC9VrtUG
+ 5JBw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=AaD/IJqZ
+Subject: [Buildroot] [PATCH 1/3] support/testing/tests: improve
+ get-developers test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,99 +93,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The filename was changed from bootloader-BEAGLEV to bootloader-JH7100, update
-the documentation for the beaglev board as well.
+Change the test into a characterization test for all warnings and errors
+get-developers can return when parsing the DEVELOPERS files.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+It will be helpful when changing the behavior of get-developers to bail
+out on all syntax checking warnings.
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- board/beaglev/readme.txt                        | 6 +++---
- boot/beaglev-secondboot/beaglev-secondboot.hash | 2 +-
- boot/beaglev-secondboot/beaglev-secondboot.mk   | 8 ++++----
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ .../tests/utils/test_get_developers.py        | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/board/beaglev/readme.txt b/board/beaglev/readme.txt
-index 60678059e1..472d6b1cf1 100644
---- a/board/beaglev/readme.txt
-+++ b/board/beaglev/readme.txt
-@@ -17,7 +17,7 @@ Build results
+diff --git a/support/testing/tests/utils/test_get_developers.py b/support/testing/tests/utils/test_get_developers.py
+index e4420bc6dc..12710fe8d3 100644
+--- a/support/testing/tests/utils/test_get_developers.py
++++ b/support/testing/tests/utils/test_get_developers.py
+@@ -47,31 +47,98 @@ class TestGetDevelopers(unittest.TestCase):
  
- After building, output/images contains:
+         # -v generating error, called from the main dir
+         developers = b'text1\n'
+         out, err, rc = call_get_developers("./utils/get-developers", ["-v"], self.WITH_EMPTY_PATH, topdir, developers)
+         self.assertIn("Syntax error in DEVELOPERS file, line 0: 'text1'", err)
+         self.assertEqual(rc, 1)
+         self.assertEqual(len(out), 0)
++        self.assertEqual(len(err), 1)
  
--+ bootloader-BEAGLEV-buildroot.bin.out
-++ bootloader-JH7100-buildroot.bin.out
- + ddrinit-2133-buildroot.bin.out
- + Image
- + fw_payload.bin
-@@ -30,7 +30,7 @@ After building, output/images contains:
+         # -v generating error, called from path
+         developers = b'text2\n'
+         out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
+         self.assertIn("Syntax error in DEVELOPERS file, line 0: 'text2'", err)
+         self.assertEqual(rc, 1)
+         self.assertEqual(len(out), 0)
++        self.assertEqual(len(err), 1)
++
++        # -v generating error for file entry with no developer entry
++        developers = b'# comment\n' \
++                     b'\n' \
++                     b'F:\tutils/get-developers\n' \
++                     b'\n' \
++                     b'N:\tAuthor2 <email>\n' \
++                     b'F:\tutils/get-developers\n'
++        out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
++        self.assertIn("Syntax error in DEVELOPERS file, line 1", err)
++        self.assertEqual(rc, 0)
++        self.assertEqual(len(out), 0)
++        self.assertEqual(len(err), 1)
++
++        # -v generating error for developer entry with no file entries
++        developers = b'# comment\n' \
++                     b'# comment\n' \
++                     b'\n' \
++                     b'N:\tAuthor1 <email>\n' \
++                     b'N:\tAuthor2 <email>\n' \
++                     b'N:\tAuthor3 <email>\n' \
++                     b'F:\tutils/get-developers\n'
++        out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
++        self.assertIn("Syntax error in DEVELOPERS file, line 1", err)
++        self.assertIn("Syntax error in DEVELOPERS file, line 2", err)
++        self.assertEqual(rc, 0)
++        self.assertEqual(len(out), 0)
++        self.assertEqual(len(err), 2)
++
++        # -v not generating error for developer entry with empty list of file entries
++        developers = b'# comment\n' \
++                     b'# comment\n' \
++                     b'\n' \
++                     b'N:\tAuthor1 <email>\n' \
++                     b'\n' \
++                     b'N:\tAuthor2 <email>\n' \
++                     b'\n' \
++                     b'N:\tAuthor3 <email>\n' \
++                     b'F:\tutils/get-developers\n'
++        out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
++        self.assertEqual(rc, 0)
++        self.assertEqual(len(out), 0)
++        self.assertEqual(len(err), 0)
++
++        # -v generating warning for old file entry
++        developers = b'N:\tAuthor <email>\n' \
++                     b'F:\tpath/that/does/not/exists/1\n' \
++                     b'F:\tpath/that/does/not/exists/2\n'
++        out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
++        self.assertIn("WARNING: 'path/that/does/not/exists/1' doesn't match any file", err)
++        self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file", err)
++        self.assertEqual(rc, 0)
++        self.assertEqual(len(out), 0)
++        self.assertEqual(len(err), 2)
  
- The four important files are:
+         # -c generating warning and printing lots of files with no developer
+         developers = b'N:\tAuthor <email>\n' \
+                      b'F:\tpath/that/does/not/exists/1\n' \
+                      b'F:\tpath/that/does/not/exists/2\n'
+         out, err, rc = call_get_developers("./utils/get-developers", ["-c"], self.WITH_EMPTY_PATH, topdir, developers)
+         self.assertIn("WARNING: 'path/that/does/not/exists/1' doesn't match any file", err)
+         self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file", err)
+         self.assertEqual(rc, 0)
+         self.assertGreater(len(out), 1000)
++        self.assertEqual(len(err), 2)
++
++        # -c printing lots of files with no developer
++        developers = b'# comment\n' \
++                     b'\n' \
++                     b'N:\tAuthor <email>\n' \
++                     b'F:\tutils/get-developers\n'
++        out, err, rc = call_get_developers("./utils/get-developers", ["-c"], self.WITH_EMPTY_PATH, topdir, developers)
++        self.assertEqual(rc, 0)
++        self.assertGreater(len(out), 1000)
++        self.assertEqual(len(err), 0)
  
-- - bootloader-BEAGLEV-buildroot.bin.out, the first stage bootloader
-+ - bootloader-JH7100-buildroot.bin.out, the first stage bootloader
- 
-  - ddrinit-2133-buildroot.bin.out, the DDR initialization firmware
- 
-@@ -109,7 +109,7 @@ You can flash them as follows:
-    "expert" features.
- 
-  - Then, press 0 and send over X-modem the
--   bootloader-BEAGLEV-buildroot.bin.out file.
-+   bootloader-JH7100-buildroot.bin.out file.
- 
-  - Then, press 1 and send over X-modem the
-    ddrinit-2133-buildroot.bin.out.
-diff --git a/boot/beaglev-secondboot/beaglev-secondboot.hash b/boot/beaglev-secondboot/beaglev-secondboot.hash
-index efc93347b1..d35d3a3856 100644
---- a/boot/beaglev-secondboot/beaglev-secondboot.hash
-+++ b/boot/beaglev-secondboot/beaglev-secondboot.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fe4d37f3ff38e7f2da70a08f9cb1668c0b928e85d2e0935bd985f910b3ce30e9  beaglev-secondboot-2d20047960044308126117ad56bc08a1164e82b2.tar.gz
-+sha256  bf152500e9f7e467bb1dee95a2291f9ecfaaebe1d64b93f6d403cfaf50e540e0  beaglev-secondboot-e17302063c9a4b74475b18ff24dd149c27257354.tar.gz
- sha256  284d26192537710910ec1f112ec5f4c981601ae23702391986d6ce0b8ba90813  LICENSE
-diff --git a/boot/beaglev-secondboot/beaglev-secondboot.mk b/boot/beaglev-secondboot/beaglev-secondboot.mk
-index a423c6c6a6..7e5f5681f4 100644
---- a/boot/beaglev-secondboot/beaglev-secondboot.mk
-+++ b/boot/beaglev-secondboot/beaglev-secondboot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Commit on the 'starfive' branch
--BEAGLEV_SECONDBOOT_VERSION = 2d20047960044308126117ad56bc08a1164e82b2
-+BEAGLEV_SECONDBOOT_VERSION = e17302063c9a4b74475b18ff24dd149c27257354
- BEAGLEV_SECONDBOOT_SITE = $(call github,starfive-tech,beagle_secondBoot,$(BEAGLEV_SECONDBOOT_VERSION))
- BEAGLEV_SECONDBOOT_INSTALL_TARGET = NO
- BEAGLEV_SECONDBOOT_INSTALL_IMAGES = YES
-@@ -15,14 +15,14 @@ BEAGLEV_SECONDBOOT_LICENSE_FILES = LICENSE
- 
- define BEAGLEV_SECONDBOOT_BUILD_CMDS
- 	$(MAKE) -C $(@D)/build \
--		CROSSCOMPILE=$(HOST_DIR)/bin/riscv64-unknown-elf- \
-+		CROSS_COMPILE=$(HOST_DIR)/bin/riscv64-unknown-elf- \
- 		SUFFIX=buildroot \
- 		GIT_VERSION=$(BEAGLEV_SECONDBOOT_VERSION)
- endef
- 
- define BEAGLEV_SECONDBOOT_INSTALL_IMAGES_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/build/bootloader-BEAGLEV-buildroot.bin.out \
--		$(BINARIES_DIR)/bootloader-BEAGLEV-buildroot.bin.out
-+	$(INSTALL) -D -m 0644 $(@D)/build/bootloader-JH7100-buildroot.bin.out \
-+		$(BINARIES_DIR)/bootloader-JH7100-buildroot.bin.out
- endef
- 
- $(eval $(generic-package))
+         # -p lists more than one developer
+         developers = b'N:\tdev1\n' \
+                      b'F:\ttoolchain/\n' \
+                      b'\n' \
+                      b'N:\tdev2\n' \
+                      b'F:\ttoolchain/\n'
 -- 
-2.35.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
