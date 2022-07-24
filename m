@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21B75C43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:22:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2013C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C29914169C;
-	Sun, 24 Jul 2022 12:22:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C29914169C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E5BB424D7;
+	Sun, 24 Jul 2022 12:22:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E5BB424D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FzzgmTU8Q9XF; Sun, 24 Jul 2022 12:22:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QcOgO5N-yN20; Sun, 24 Jul 2022 12:22:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B120240186;
-	Sun, 24 Jul 2022 12:22:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B120240186
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 937A91BF964
+	by smtp4.osuosl.org (Postfix) with ESMTP id 042AB424D5;
+	Sun, 24 Jul 2022 12:22:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 042AB424D5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DFE931BF344
  for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:20:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 397BC60FA1
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:20:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 397BC60FA1
+ by smtp2.osuosl.org (Postfix) with ESMTP id B12D24169C
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:20:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B12D24169C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WAgAMCWFopoA for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qyd8x2UNncac for <buildroot@lists.busybox.net>;
  Sun, 24 Jul 2022 12:20:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 693B7606A9
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:20:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 693B7606A9
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0E8440BBD
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:20:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0E8440BBD
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 6494185C25; Sun, 24 Jul 2022 12:06:47 +0000 (UTC)
+ id DB49585C29; Sun, 24 Jul 2022 12:06:46 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 14:19:25 +0200
+Date: Sun, 24 Jul 2022 14:19:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2ffabc24627c38d1572a0cf702dd6d1e5d47d839
-X-Git-Newrev: c2a450c3719bc6d5f1469469e28dd163f1a9cc03
+X-Git-Oldrev: b9553365328a1243e7f91fe8ed844285770fb9fc
+X-Git-Newrev: 3ac51391fe8d8c547d370fe0b41ae3453dd10a8b
 X-Patchwork-Hint: ignore
-Message-Id: <20220724120647.6494185C25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-requests: bump to version
- 2.28.1
+Message-Id: <20220724120646.DB49585C29@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cffi: bump to version 1.15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +62,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2a450c3719bc6d5f1469469e28dd163f1a9cc03
+commit: https://git.buildroot.net/buildroot/commit/?id=3ac51391fe8d8c547d370fe0b41ae3453dd10a8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-requests/python-requests.hash | 4 ++--
- package/python-requests/python-requests.mk   | 4 ++--
+ package/python-cffi/python-cffi.hash | 4 ++--
+ package/python-cffi/python-cffi.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index 1e4cbaff7b..1383e680d5 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
+diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
+index 41565f9a62..ae7f9a477f 100644
+--- a/package/python-cffi/python-cffi.hash
++++ b/package/python-cffi/python-cffi.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/requests/json
--md5  bcc01b73974a305cc7c5b092e7d07004  requests-2.27.1.tar.gz
--sha256  68d7c56fd5a8999887728ef304a6d12edc7be74f1cfa47714fc8b414525c9a61  requests-2.27.1.tar.gz
-+md5  796ea875cdae283529c03b9203d9c454  requests-2.28.1.tar.gz
-+sha256  7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983  requests-2.28.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cffi/json
+-md5  f3a3f26cd3335fc597479c9475da0a0b  cffi-1.15.0.tar.gz
+-sha256  920f0d66a896c2d99f0adbb391f990a84091179542c205fa53ce5787aff87954  cffi-1.15.0.tar.gz
++md5  f493860a6e98cd0c4178149568a6b4f6  cffi-1.15.1.tar.gz
++sha256  d400bfb9a37b1351253cb402671cea7e89bdecc294e8016a707f6d1d8ac934f9  cffi-1.15.1.tar.gz
  # Locally computed sha256 checksums
- sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  LICENSE
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index 9613a2c47c..7a21cca52c 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
+ sha256  04b80f5b077bbed68808cfebadeb5e3523f2a8c9a96495c587bd96df1eac2a33  LICENSE
+diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+index 83a21cb75a..c1fcfda5fe 100644
+--- a/package/python-cffi/python-cffi.mk
++++ b/package/python-cffi/python-cffi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REQUESTS_VERSION = 2.27.1
-+PYTHON_REQUESTS_VERSION = 2.28.1
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/60/f3/26ff3767f099b73e0efa138a9998da67890793bfa475d8278f84a30fec77
-+PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/a5/61/a867851fd5ab77277495a8709ddda0861b28163c4613b011bc00228cc724
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+-PYTHON_CFFI_VERSION = 1.15.0
++PYTHON_CFFI_VERSION = 1.15.1
+ PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
+-PYTHON_CFFI_SITE = https://files.pythonhosted.org/packages/00/9e/92de7e1217ccc3d5f352ba21e52398372525765b2e0c4530e6eb2ba9282a
++PYTHON_CFFI_SITE = https://files.pythonhosted.org/packages/2b/a8/050ab4f0c3d4c1b8aaa805f70e26e84d0e27004907c5b8ecc1d31815f92a
+ PYTHON_CFFI_SETUP_TYPE = setuptools
+ PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
+ PYTHON_CFFI_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
