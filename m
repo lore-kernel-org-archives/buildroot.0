@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC8ADC43334
-	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9756FC43334
+	for <buildroot@archiver.kernel.org>; Sun, 24 Jul 2022 12:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 88C7440AD8;
-	Sun, 24 Jul 2022 12:38:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88C7440AD8
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5BoCGW6sGCFD; Sun, 24 Jul 2022 12:38:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3747940186;
-	Sun, 24 Jul 2022 12:38:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3747940186
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 675421BF344
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:38:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40ADA402D2
- for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:38:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40ADA402D2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E5D641767;
+	Sun, 24 Jul 2022 12:45:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E5D641767
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sRSkCn0utlfC for <buildroot@lists.busybox.net>;
- Sun, 24 Jul 2022 12:38:17 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E688C40278
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:38:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E688C40278
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C0A3685C5A; Sun, 24 Jul 2022 12:24:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 24 Jul 2022 14:37:59 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e2511d88e83acae4144be89ce5e258b724067bd5
-X-Git-Newrev: 8aaa7ecbce1d10cbcd880c3da5e429988f96176a
-X-Patchwork-Hint: ignore
-Message-Id: <20220724122437.C0A3685C5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opensc: new package
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t4MqnNP2jzyQ; Sun, 24 Jul 2022 12:45:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2C6541739;
+	Sun, 24 Jul 2022 12:45:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2C6541739
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D23FD1BF344
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:45:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8AE68610B6
+ for <buildroot@lists.busybox.net>; Sun, 24 Jul 2022 12:45:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AE68610B6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D6k2ElV0WdVq for <buildroot@lists.busybox.net>;
+ Sun, 24 Jul 2022 12:45:47 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03B8E607AA
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 03B8E607AA
+ for <buildroot@buildroot.org>; Sun, 24 Jul 2022 12:45:46 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 354F81BF205;
+ Sun, 24 Jul 2022 12:45:43 +0000 (UTC)
+Date: Sun, 24 Jul 2022 14:45:42 +0200
+To: =?UTF-8?B?Sm9zw6k=?= Pekkarinen <jose.pekkarinen@unikie.com>
+Message-ID: <20220724144542.78639b5d@windsurf>
+In-Reply-To: <20220114070852.481719-1-jose.pekkarinen@unikie.com>
+References: <20220114070852.481719-1-jose.pekkarinen@unikie.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658666743;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=r5J0qZVHZy9kj+IPNjuojMRWNTcQ1m2zB1ctZZ9lt8Q=;
+ b=WYSTsDSiM+w0ZO7CR9bUkuAB60cR9uOzkhsQk55xT9OFAnX7MEUv6cGvkwjcDuvJvyHTMb
+ 7mGX+sA913fhHkH+UJyMgVhDWlACIOoO4AhncJiSCfTaLe6SUeqyYy4HgEVXx+enL3V0CI
+ MYA7F+Usiiza3lW1nKySuBA3iqj140UOL9wrPHuWp9oaXtLkel/QvvKS0V7QqvuEu2nY7B
+ 00//25OjCEEbPhzMCItxJ9NiNEiqYmKJglA5QKS2PeST2uLWvvZE33brNCoNUdBBvXu0kq
+ FKLRNcjmC7dJLmXfJAYoFpGsV9GpNpt3Cnp+lt8K9BnFBgn1+czvBkqhC0TQkg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WYSTsDSi
+Subject: Re: [Buildroot] [PATCH v4] package/opensc: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,204 +77,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9196105942253607836=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9196105942253607836==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=8aaa7ecbce1d10cbcd880c3da5e429988f96176a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../0001-Fix-maybe-uninitialized-errors.patch      | 82 ++++++++++++++++++++++
- package/opensc/Config.in                           | 16 +++++
- package/opensc/opensc.hash                         |  5 ++
- package/opensc/opensc.mk                           | 15 ++++
- 6 files changed, 120 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6f529d0c46..628b5cf456 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1558,6 +1558,7 @@ F:	support/testing/tests/package/test_zfs.py
- N:	José Pekkarinen <jose.pekkarinen@unikie.com>
- F:	package/alfred/
- F:	package/bmx7/
-+F:	package/opensc/
- F:	package/python-aexpect/
- F:	package/python-alembic/
- F:	package/python-lark/
-diff --git a/package/Config.in b/package/Config.in
-index 5e7499c396..3a70fe3f9f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1644,6 +1644,7 @@ menu "Hardware handling"
- 	source "package/mtdev/Config.in"
- 	source "package/ne10/Config.in"
- 	source "package/neardal/Config.in"
-+	source "package/opensc/Config.in"
- 	source "package/owfs/Config.in"
- 	source "package/pcsc-lite/Config.in"
- 	source "package/rpi-rgb-led-matrix/Config.in"
-diff --git a/package/opensc/0001-Fix-maybe-uninitialized-errors.patch b/package/opensc/0001-Fix-maybe-uninitialized-errors.patch
-new file mode 100644
-index 0000000000..671d92c150
---- /dev/null
-+++ b/package/opensc/0001-Fix-maybe-uninitialized-errors.patch
-@@ -0,0 +1,82 @@
-+From bcb39d6f4d2dee6beb035cb2f3618174ec1cb2b0 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
-+Date: Fri, 10 Dec 2021 13:54:26 +0200
-+Subject: [PATCH] Fix maybe uninitialized errors
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com>
-+Upstream: https://github.com/OpenSC/OpenSC/commit/05ec8c7fe785a2b9aeaac1164adb349df42b7f80
-+---
-+ src/libopensc/pkcs15-coolkey.c  | 12 ++++++------
-+ src/pkcs15init/pkcs15-asepcos.c |  2 +-
-+ src/tools/opensc-explorer.c     |  2 +-
-+ 3 files changed, 8 insertions(+), 8 deletions(-)
-+
-+diff --git a/src/libopensc/pkcs15-coolkey.c b/src/libopensc/pkcs15-coolkey.c
-+index 586475dd..15684cef 100644
-+--- a/src/libopensc/pkcs15-coolkey.c
-++++ b/src/libopensc/pkcs15-coolkey.c
-+@@ -147,9 +147,9 @@ coolkey_find_matching_cert(sc_card_t *card, sc_cardctl_coolkey_object_t *in_obj,
-+ static int
-+ coolkey_get_attribute_ulong(sc_card_t *card, sc_cardctl_coolkey_object_t *obj, CK_ATTRIBUTE_TYPE type, CK_ULONG *value)
-+ {
-+-	const u8 *val;
-+-	size_t val_len;
-+-	u8 data_type;
-++	const u8 *val = NULL;
-++	size_t val_len = 0;
-++	u8 data_type = 0;
-+ 	int r;
-+ 
-+ 	r  = coolkey_get_attribute(card, obj, type, &val, &val_len, &data_type);
-+@@ -168,8 +168,8 @@ static int
-+ coolkey_get_attribute_boolean(sc_card_t *card, sc_cardctl_coolkey_object_t *obj, CK_ATTRIBUTE_TYPE attr_type)
-+ {
-+ 	int r;
-+-	const u8 *val;
-+-	size_t val_len;
-++	const u8 *val = NULL;
-++	size_t val_len = 0;
-+ 
-+ 	r = coolkey_get_attribute(card, obj, attr_type, &val, &val_len, NULL);
-+ 	if (r < 0) {
-+@@ -186,7 +186,7 @@ static int
-+ coolkey_get_attribute_bytes(sc_card_t *card, sc_cardctl_coolkey_object_t *obj, CK_ATTRIBUTE_TYPE type, u8 *data, size_t *data_len, size_t max_data_len)
-+ {
-+ 	const u8 *val;
-+-	size_t val_len;
-++	size_t val_len = 0;
-+ 	int r;
-+ 
-+ 	r = coolkey_get_attribute(card, obj, type, &val, &val_len, NULL);
-+diff --git a/src/pkcs15init/pkcs15-asepcos.c b/src/pkcs15init/pkcs15-asepcos.c
-+index d7122012..bc0efb5c 100644
-+--- a/src/pkcs15init/pkcs15-asepcos.c
-++++ b/src/pkcs15init/pkcs15-asepcos.c
-+@@ -221,7 +221,7 @@ static int asepcos_do_store_pin(sc_profile_t *profile, sc_card_t *card,
-+ {
-+ 	sc_file_t *nfile = NULL;
-+ 	u8  buf[64], sbuf[64], *p = buf, *q = sbuf;
-+-	int r, akn;
-++	int r, akn = 0;
-+ 
-+ 	if (auth_info->auth_type != SC_PKCS15_PIN_AUTH_TYPE_PIN)
-+ 		return SC_ERROR_OBJECT_NOT_VALID;
-+diff --git a/src/tools/opensc-explorer.c b/src/tools/opensc-explorer.c
-+index 9ec4daa1..04efdf8f 100644
-+--- a/src/tools/opensc-explorer.c
-++++ b/src/tools/opensc-explorer.c
-+@@ -2472,7 +2472,7 @@ int main(int argc, char *argv[])
-+ 		char *line;
-+ 		int cargc;
-+ 		char *cargv[260];
-+-		int multiple;
-++		int multiple = 0;
-+ 		struct command *cmd;
-+ 		char prompt[3*SC_MAX_PATH_STRING_SIZE];
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/opensc/Config.in b/package/opensc/Config.in
-new file mode 100644
-index 0000000000..fe3dd0836e
---- /dev/null
-+++ b/package/opensc/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_OPENSC
-+	bool "opensc"
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_PCSC_LITE
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  OpenSC provides a set of libraries and utilities to work
-+	  with smart cards.
-+
-+	  https://github.com/OpenSC/OpenSC/wiki
-+
-+comment "opensc needs a toolchain with dynamic library, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
-new file mode 100644
-index 0000000000..517cfe503a
---- /dev/null
-+++ b/package/opensc/opensc.hash
-@@ -0,0 +1,5 @@
-+# Computed locally from https://https://github.com/OpenSC/OpenSC/releases/
-+sha256  8d4e5347195ebea332be585df61dcc470331c26969e4b0447c851fb0844c7186  opensc-0.22.0.tar.gz
-+
-+# Computed locally
-+sha256  376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  COPYING
-diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
-new file mode 100644
-index 0000000000..538151c12a
---- /dev/null
-+++ b/package/opensc/opensc.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# opensc
-+#
-+################################################################################
-+
-+OPENSC_VERSION = 0.22.0
-+OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
-+OPENSC_LICENSE = LGPL-2.1+
-+OPENSC_LICENSE_FILES = COPYING
-+OPENSC_DEPENDENCIES = openssl pcsc-lite
-+OPENSC_INSTALL_STAGING = YES
-+OPENSC_CONF_OPTS = --disable-strict
-+
-+$(eval $(autotools-package))
-
---===============9196105942253607836==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9196105942253607836==--
+SGVsbG8gSm9zw6ksCgpPbiBGcmksIDE0IEphbiAyMDIyIDA5OjA4OjUyICswMjAwCkpvc8OpIFBl
+a2thcmluZW4gPGpvc2UucGVra2FyaW5lbkB1bmlraWUuY29tPiB3cm90ZToKCj4gVGhlIHBhdGNo
+IHdpbGwgYWRkIHBhY2thZ2Ugb3BlbnNjLiBzb3VyY2VyeS1hcm0KPiB0b29sY2hhaW4gdHJpZ2dl
+cnMgc3RyaWN0IGFsaWFzaW5nIHJ1bGVzIHRoYXQgdXBzdHJlYW0KPiBmaW5kcyBubyBlYXN5IHdh
+eSB0byBmaXguIEl0IGlzIGRpc2FibGVkIGZvciBub3cgdW50aWwKPiBhIHByb3BlciBzb2x1dGlv
+biBpcyBmb3VuZCB1cHN0cmVhbS4KClRoaXMgc3RvcnkgYWJvdXQgc291cmNlcnktYXJtIGlzIG5v
+IGxvbmdlciB0cnVlLCB0aGUgcHJvYmxlbSB3YXMgZml4ZWQKdXNpbmcgLS1kaXNhYmxlLXN0cmlj
+dC4KCgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL29wZW5zYy8wMDAxLUZpeC1tYXliZS11bmluaXRp
+YWxpemVkLWVycm9ycy5wYXRjaCBiL3BhY2thZ2Uvb3BlbnNjLzAwMDEtRml4LW1heWJlLXVuaW5p
+dGlhbGl6ZWQtZXJyb3JzLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAw
+MDAwMDAwLi4wMWI3YTM5ODE4Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2Uvb3BlbnNj
+LzAwMDEtRml4LW1heWJlLXVuaW5pdGlhbGl6ZWQtZXJyb3JzLnBhdGNoCj4gQEAgLTAsMCArMSw4
+MyBAQAo+ICtGcm9tIGJjYjM5ZDZmNGQyZGVlNmJlYjAzNWNiMmYzNjE4MTc0ZWMxY2IyYjAgTW9u
+IFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206ID0/VVRGLTg/cT9Kb3M9QzM9QTk9MjBQZWtr
+YXJpbmVuPz0gPGpvc2UucGVra2FyaW5lbkB1bmlraWUuY29tPgo+ICtEYXRlOiBGcmksIDEwIERl
+YyAyMDIxIDEzOjU0OjI2ICswMjAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gRml4IG1heWJlIHVuaW5p
+dGlhbGl6ZWQgZXJyb3JzCj4gK01JTUUtVmVyc2lvbjogMS4wCj4gK0NvbnRlbnQtVHlwZTogdGV4
+dC9wbGFpbjsgY2hhcnNldD1VVEYtOAo+ICtDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0
+Cj4gKwo+ICtQUjogaHR0cHM6Ly9naXRodWIuY29tL09wZW5TQy9PcGVuU0MvcHVsbC8yNDY2CgpJ
+IGhhdmUgdXBkYXRlZCB0aGF0IHRvIHRoZSBsaW5rIG9mIHRoZSBjb21taXQsIHNpbmNlIHlvdXIg
+UFIgaGFzIGJlZW4gbWVyZ2VkLgoKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcGVuc2MvQ29uZmln
+LmluIGIvcGFja2FnZS9vcGVuc2MvQ29uZmlnLmluCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBp
+bmRleCAwMDAwMDAwMDAwLi4xYjFiYTBkMzhlCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2th
+Z2Uvb3BlbnNjL0NvbmZpZy5pbgo+IEBAIC0wLDAgKzEsMTcgQEAKPiArY29uZmlnIEJSMl9QQUNL
+QUdFX09QRU5TQwo+ICsJYm9vbCAib3BlbnNjIgo+ICsJZGVwZW5kcyBvbiAhQlIyX1NUQVRJQ19M
+SUJTCj4gKwlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiArCWRlcGVuZHMg
+b24gQlIyX1VTRV9NTVUgIyBmb3JrKCkKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9QQ1NDX0xJVEUK
+PiArCXNlbGVjdCBCUjJfUEFDS0FHRV9PUEVOU1NMCj4gKwloZWxwCj4gKwkgIE9wZW5TQyBwcm92
+aWRlcyBhIHNldCBvZiBsaWJyYXJpZXMgYW5kIHV0aWxpdGllcyB0byB3b3JrCj4gKwkgIHdpdGgg
+c21hcnQgY2FyZHMuCj4gKwo+ICsJICBodHRwczovL2dpdGh1Yi5jb20vT3BlblNDL09wZW5TQy93
+aWtpCj4gKwo+ICtjb21tZW50ICJvcGVuc2MgbmVlZHMgYSB0b29sY2hhaW4gd2l0aCBkeW5hbWlj
+IGxpYnJhcnkgc3VwcG9ydCBkaXN0aW5jdCBmcm9tIHNvdXJjZXJ5LWFybSIKPiArCWRlcGVuZHMg
+b24gQlIyX1NUQVRJQ19MSUJTCj4gKwlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVB
+RFMKPiArCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUKClRoaXMgd2FzIG5vdCBjb3JyZWN0IGZvciBz
+ZXZlcmFsIHJlYXNvbjoKCiAtIFRoZSBzb3VyY2VyeS1hcm0gaXNzdWUgbm8gbG9uZ2VyIGV4aXN0
+cwoKIC0gVGhlIGNvbW1lbnQgZm9yZ290IGFib3V0IHRoZSB0aHJlYWRzIGRlcGVuZGVuY3kKCiAt
+IFRoZSBjb21tZW50IHNob3VsZCBiZSBzaG93biB3aGVuIHRocmVhZCBzdXBwb3J0IGlzICpub3Qq
+IGF2YWlsYWJsZSwKICAgc28gd2hlbiAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUwoKIC0gVGhl
+IGNvbW1lbnQgc2hvdWxkIGJlIHNlZW4gd2hlbiBlaXRoZXIgc3RhdGljLWxpYnMgaXMgc2V0ICpv
+cioKICAgdGhyZWFkcyBhcmUgbm90IHRoZXJlLgoKQWxsIGluIGFsbCwgdGhlIGNvcnJlY3QgcmVz
+dWx0IGlzOgoKY29tbWVudCAib3BlbnNjIG5lZWRzIGEgdG9vbGNoYWluIHdpdGggZHluYW1pYyBs
+aWJyYXJ5LCB0aHJlYWRzIgogICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9NTVUKICAgICAgICBk
+ZXBlbmRzIG9uIEJSMl9TVEFUSUNfTElCUyB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUwoK
+PiArT1BFTlNDX0NPTkZfT1BUUz0iLS1kaXNhYmxlLXN0cmljdCIKClNwYWNlcyBhcm91bmQgPSBh
+cmUgbmVlZGVkIHRvIGZvbGxvdyB0aGUgQnVpbGRyb290IGNvZGluZy1zdHlsZSwgYW5kCmRvdWJs
+ZSBxdW90ZXMgYXJvdW5kIC0tZGlzYWJsZS1zdHJpY3Qgc2hvdWxkIG5vdCBiZSB0aGVyZS4KCkkn
+dmUgYXBwbGllZCB3aXRoIGFsbCB0aG9zZSBzbWFsbCBmaXhlcy4gVGhhbmtzIGEgbG90IGZvciB5
+b3VyCmNvbnRyaWJ1dGlvbiEKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIg
+YW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFu
+ZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
+aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
