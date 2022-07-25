@@ -1,87 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F930C43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 06:43:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34368C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 07:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ECD10417A9;
-	Mon, 25 Jul 2022 06:43:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECD10417A9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 91CED40CB0;
+	Mon, 25 Jul 2022 07:11:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91CED40CB0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZPbI6jmW8Alw; Mon, 25 Jul 2022 06:43:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nJ_5mNF_nn0z; Mon, 25 Jul 2022 07:11:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8064F41733;
-	Mon, 25 Jul 2022 06:43:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8064F41733
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B2DA01BF38C
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 06:43:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D87440CBA;
+	Mon, 25 Jul 2022 07:11:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D87440CBA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 074C91BF379
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 07:11:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8DB2181468
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 06:43:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DB2181468
+ by smtp2.osuosl.org (Postfix) with ESMTP id CDBE1405AF
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 07:11:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDBE1405AF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GrQ7p2P8vs94 for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 06:43:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pgqye1O1rqVF for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 07:11:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A143D813ED
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A143D813ED
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 06:43:42 +0000 (UTC)
-Received: by mail-il1-x131.google.com with SMTP id v2so1863667ilm.4
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 23:43:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 054F3401C2
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com
+ [209.85.210.175])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 054F3401C2
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 07:11:05 +0000 (UTC)
+Received: by mail-pf1-f175.google.com with SMTP id o12so9621902pfp.5
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 00:11:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=jbmh6L1lyJ4BYgZRrQTQOLseufkuHaxOMvJKkazd2Y8=;
- b=EZS/bvSNzLn13fmyIwWVaI1HGtIFc4cwq1gXavv7RBb9Q/Pcdl48+nt1JfXXCPZbEn
- 8S8uKJseJZpcxUfQjuZShqXBSWHBvdwHVXFN0yP8eklQXEdCCezRp59HN9UKWS7UNaMG
- Mqk4qaSiEVCuaZUB2QeTRp8/gEuvfvvHy0ya108+Kuca0qjqbm+/pJOY7juPhfhIpYzl
- rh+h09nbcPGgusd5fp4jhtAPbqRD0ZG6fVaIppqvhyefrTKALy+txWmiExX6jdHaKxeb
- 2q0JnsPcw95eS7ZxCkfgqsDEXv4Vr6s0lbpzWY/wbAY5ZKaRo+6mmiupsGLq93rI+uAO
- qqYA==
-X-Gm-Message-State: AJIora+jqMqMQWmAQnsYEuwRrLqaVkbPzJ3xh5NPb9V+Z2CoHg/GV6Xa
- FVpkN0qgPRR/fWJHGZVR9sdMzM8m4RkTpg==
-X-Google-Smtp-Source: AGRyM1vqy2laWYyAadH6FSfJJ0ODb5sdrYYsdQM2SnXU8d7MWyJr6868+dRYf0Td6GUsaHpQ3/Dx+Q==
-X-Received: by 2002:a92:c544:0:b0:2dc:f222:9fba with SMTP id
- a4-20020a92c544000000b002dcf2229fbamr4447168ilj.270.1658731420654; 
- Sun, 24 Jul 2022 23:43:40 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-133-32.hlrn.qwest.net.
- [71.33.133.32]) by smtp.gmail.com with ESMTPSA id
- g1-20020a056602072100b0067ba7abc4cesm5520708iox.50.2022.07.24.23.43.40
+ bh=zRZYZrqLv9LRmCVktczzsTE3pl+/O2hTd1mI8RYZ24o=;
+ b=uxmvxIAojKclO9UMapGzYthDbN9OZSu6MoBJhMcbQWVYushhycnydUN9K5yNQn7hUO
+ S9Vc/NJ+U1I0Kp+RJVidvdZNRD6LXQFDnCpj7DLSmGIp0BxKDIzC1RVX1PWlzoH+3TBf
+ GNwAeb5829drGFHRV1vgGNAU0nIUjD+SwWxLUhD8dXdg1Yy5ttLHm3EallMKBxYqOfZu
+ 7HcbNUPRnsgJyEbaAZTY7cljtiIBOmRPzlEtzh338l7ipBpxDX2ZhNNxnEYkw4uBlb+k
+ V60Mf0LM3K5IbLaxIV/+uPxluZDrC5j4P8h1T0FBDXqc8NACBPCtGkn+BDrixOmZQ9Pg
+ X+gQ==
+X-Gm-Message-State: AJIora8ZjQY8mCC+L6B24m6zBc/Jw96ouQS/wjwzby///yloWyo2NHgB
+ LehbZ4NN7mk2mXcFS38yzuk7hgbr4qwWqQ==
+X-Google-Smtp-Source: AGRyM1vZQjcE9aoUrKbY9B6N973/YliA1dWWeEHNnOzolf2AbPVz4sRC2K3nFtiJsOdPHkiEzEdFCg==
+X-Received: by 2002:a63:1220:0:b0:411:f661:f819 with SMTP id
+ h32-20020a631220000000b00411f661f819mr10119967pgl.250.1658733064806; 
+ Mon, 25 Jul 2022 00:11:04 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ x23-20020a1709027c1700b0016c57657977sm8366137pll.41.2022.07.25.00.11.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Jul 2022 23:43:40 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Mon, 25 Jul 2022 00:11:03 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Mon, 25 Jul 2022 00:43:38 -0600
-Message-Id: <20220725064338.1326554-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Mon, 25 Jul 2022 00:10:58 -0700
+Message-Id: <20220725071059.3067736-1-christian@paral.in>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=jbmh6L1lyJ4BYgZRrQTQOLseufkuHaxOMvJKkazd2Y8=;
- b=IBmSG24SdOz/Aaq4H+8a9scvq1FwwfloRFzquMaLPxeqQW8ekkZMe2ikTsD5Z+eHKz
- ft8joRvbyV0Wr+ctNA6x17tHO0lMvKl1TXp+ePZ6y5P1qKQOgKIm8GH0souL1jPFDNk4
- 5jTU4n5nSztcpFb6aj9Qpk+0m62Cxqcd9WTDx/iMSIxc/E1xHGwKvBgn8W4JHfEmXONX
- JqhrbytoHCXjR1IsBBv5mHcLbAkzbrCBt00BOcYYla9mni1jqXwkgELcctgcbzS4A+L5
- CHwyQq1R7Ym+VWlu8D75UiN1QvIeKbMNq+9TXNSFnAn0ia/G44ul5Q2Z1yYyDJAb6xn5
- XHLQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=IBmSG24S
-Subject: [Buildroot] [PATCH 1/1] package/pkg-python: clean conflicting
- pep517 packages before install
+Subject: [Buildroot] [PATCH v2 1/1] package/rtl8812au-aircrack-ng: bump to
+ latest 4ab079
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,130 +78,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The python installer package isn't able to overwrite packages that
-already exist, this causes problems when doing a rebuild or update
-without a full clean.
+Bump to the latest commit hash as of 2022-07-25.
 
-To fix this we can use functionality from importlib to identify and
-remove any conflicting python package files before installation.
+Fixes the build against kernel 5.18.x and GCC 12 and ARM64.
 
-Since we are adding this functionality to our pyinstaller.py script
-we must also use pyinstaller.py for host python packages to avoid
-hitting this issue there as well.
+Signed-off-by: Christian Stewart <christian@paral.in>
 
-Fixes:
-Traceback (most recent call last):
-  File "/home/buildroot/buildroot/support/scripts/pyinstaller.py", line 69, in <module>
-    main()
-  File "/home/buildroot/buildroot/support/scripts/pyinstaller.py", line 61, in main
-    install(
-  File "/home/buildroot/buildroot/output/host/lib/python3.10/site-packages/installer/_core.py", line 109, in install
-    record = destination.write_file(
-  File "/home/buildroot/buildroot/output/host/lib/python3.10/site-packages/installer/destinations.py", line 207, in write_file
-    return self.write_to_fs(scheme, path_, stream, is_executable)
-  File "/home/buildroot/buildroot/output/host/lib/python3.10/site-packages/installer/destinations.py", line 167, in write_to_fs
-    raise FileExistsError(message)
-FileExistsError: File already exists: /home/buildroot/buildroot/output/target/usr/lib/python3.10/site-packages/tinycss2/__init__.py
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/pkg-python.mk          | 12 ++++++++++--
- support/scripts/pyinstaller.py | 23 +++++++++++++++++++++++
- 2 files changed, 33 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 5794e3a195..b147827821 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -139,6 +139,14 @@ PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
- HOST_PKG_PYTHON_PEP517_ENV = \
- 	$(HOST_PKG_PYTHON_ENV)
+v1 -> v2:
+
+ - update to 2022.07.25 version
+ - add some Wno-error to fix build failures with GCC 12
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ .../rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash   |  2 +-
+ package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk | 10 ++++++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
+index 667cf34efc..0e61e95780 100644
+--- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
++++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  749ba2e77d0364381445e40f7f0b7041d861cf9a356dbe53085e3abaef888c1d  rtl8812au-aircrack-ng-37e27f9165300c89607144b646545fac576ec510.tar.gz
++sha256  ad30e61bc3100861b995617672193ab027ec51061dfe1fea9f8625b99cd27995  rtl8812au-aircrack-ng-4ab079f7cb172740c7abc8cbd6e6383bef0f65dc.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
+index 55c118a825..111fd520a4 100644
+--- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
++++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
+@@ -4,15 +4,21 @@
+ #
+ ################################################################################
  
-+HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
-+	--interpreter=/bin/python \
-+	--script-kind=posix \
-+	--purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-+	--headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR) \
-+	--scripts=$(HOST_DIR)/bin \
-+	--data=$(HOST_DIR)
+-RTL8812AU_AIRCRACK_NG_VERSION = 37e27f9165300c89607144b646545fac576ec510
++RTL8812AU_AIRCRACK_NG_VERSION = 4ab079f7cb172740c7abc8cbd6e6383bef0f65dc
+ RTL8812AU_AIRCRACK_NG_SITE = $(call github,aircrack-ng,rtl8812au,$(RTL8812AU_AIRCRACK_NG_VERSION))
+ RTL8812AU_AIRCRACK_NG_LICENSE = GPL-2.0
+ RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
+ 
++RTL8812AU_AIRCRACK_NG_EXTRA_CFLAGS = \
++	-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN \
++	-Wno-error=address \
++	-Wno-error=array-bounds \
++	-Wno-error=cast-function-type
 +
- HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
- 	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+ RTL8812AU_AIRCRACK_NG_MODULE_MAKE_OPTS = \
+ 	CONFIG_88XXAU=m \
+ 	KVER=$(LINUX_VERSION_PROBED) \
+-	USER_EXTRA_CFLAGS="-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN"
++	USER_EXTRA_CFLAGS="$(RTL8812AU_AIRCRACK_NG_EXTRA_CFLAGS)"
  
-@@ -200,7 +208,7 @@ $(2)_BASE_INSTALL_STAGING_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/*
- else
- $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
- $(2)_BASE_BUILD_CMD = -m build -n -w
--$(2)_BASE_INSTALL_CMD = -m installer dist/*
-+$(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
- endif
- else ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
- ifeq ($(4),target)
-@@ -208,7 +216,7 @@ $$(error flit-bootstrap setup type only supported for host packages)
- else
- $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
- $(2)_BASE_BUILD_CMD = -m flit_core.wheel
--$(2)_BASE_INSTALL_CMD ?= -m installer dist/*
-+$(2)_BASE_INSTALL_CMD ?= $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
- endif
- else
- $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
-diff --git a/support/scripts/pyinstaller.py b/support/scripts/pyinstaller.py
-index 6dd9242327..1ab1b83178 100755
---- a/support/scripts/pyinstaller.py
-+++ b/support/scripts/pyinstaller.py
-@@ -2,12 +2,34 @@
- 
- import argparse
- import glob
-+import os
-+import pathlib
-+
-+from importlib.machinery import PathFinder
-+from importlib.metadata import DistributionFinder
- 
- from installer import install
-+from installer._core import _process_WHEEL_file
- from installer.destinations import SchemeDictionaryDestination
- from installer.sources import WheelFile
- 
- 
-+def clean(source, destination):
-+    scheme = _process_WHEEL_file(source)
-+    scheme_path = destination.scheme_dict[scheme]
-+    context = DistributionFinder.Context(
-+        name=source.distribution,
-+        path=[scheme_path],
-+    )
-+    for path in PathFinder.find_distributions(context=context):
-+        if not path.files:
-+            continue
-+        for file in path.files:
-+            file_path = pathlib.Path(file.locate())
-+            if file_path.exists():
-+                file_path.unlink()
-+
-+
- def main():
-     """Entry point for CLI."""
-     ap = argparse.ArgumentParser("python pyinstaller.py")
-@@ -58,6 +80,7 @@ def main():
-     )
- 
-     with WheelFile.open(glob.glob(args.wheel_file)[0]) as source:
-+        clean(source, destination)
-         install(
-             source=source,
-             destination=destination,
+ $(eval $(kernel-module))
+ $(eval $(generic-package))
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
