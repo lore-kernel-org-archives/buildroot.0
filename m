@@ -1,95 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47E08C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 15:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48417C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 15:19:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B381260C0D;
-	Mon, 25 Jul 2022 15:03:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B381260C0D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BFF241B30;
+	Mon, 25 Jul 2022 15:19:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BFF241B30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id plI0H_77TIR2; Mon, 25 Jul 2022 15:03:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y-QOM6DZRfEQ; Mon, 25 Jul 2022 15:19:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 17CA16129A;
-	Mon, 25 Jul 2022 15:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17CA16129A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 616E941A3B;
+	Mon, 25 Jul 2022 15:19:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 616E941A3B
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 38B721BF3AA
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 15:03:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 085E01BF2BD
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 15:19:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F31A61299
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 15:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F31A61299
+ by smtp3.osuosl.org (Postfix) with ESMTP id D617C61298
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 15:19:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D617C61298
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O6hfgxmdFWoo for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 15:03:13 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6B4061298
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B6B4061298
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:03:12 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id u5so16384422wrm.4
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 08:03:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=Ztz1PfjOjhQ6ik5dx3k2wgAr4r/eL/mWdbChkk5dQtA=;
- b=y5y6FTomZtvHqq2U+GEak3mD0VmN4VYxqRmXSd9jw+UA9fDZtvzSz/2c3+0N9qzm2m
- OBZOm/E41zUpMck5hkiEhaoqQPKRvmkydogVjZp9bLbcncvnKX1NtNjdvosbEynytCIw
- jd7XAJEaCLD0H6vO3hDpS5CT0YRKs4IOwf9NKBk0Zh0hGNXZMZz1roFvDTHy/UAzdqwl
- yed1IiJvVUJ2fyHWSNKVlmOzjqDY4RPEFdiyD5iBsOP4uP+LxDBnUbY/dc/iqZNvPjjw
- N8vaMYIXVS9FDB9RdESnBeDFaahdVx8dzd3gF4yyDY2DkrONEzzWHnW7IXqljYVDL2HR
- buZw==
-X-Gm-Message-State: AJIora/6CDH6mLC9Nh7Wma4oLmrseRzGP18OykkfLPU5/PFMaapmTla1
- SwqYclU4D61QpK4av5ANJaYJIg==
-X-Google-Smtp-Source: AGRyM1vVIHDQzWjgcDFNcutr/8Q+FLj9gX2EigK0e21Ir7Hze4Mg8CuWFtI9k4IInAaTuRXctGKmtQ==
-X-Received: by 2002:adf:f5cf:0:b0:21e:2ebc:4126 with SMTP id
- k15-20020adff5cf000000b0021e2ebc4126mr8113572wrp.195.1658761390426; 
- Mon, 25 Jul 2022 08:03:10 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- q9-20020adfaa49000000b0021e7e050404sm7369755wrd.117.2022.07.25.08.03.09
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Jul 2022 08:03:10 -0700 (PDT)
-Message-ID: <1dcaf0d5-b00e-b5cb-0c14-f064a90bedb8@mind.be>
-Date: Mon, 25 Jul 2022 17:03:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- TIAN Yuanhao <tianyuanhao3@163.com>
+ with ESMTP id ewMkTedx7Kz0 for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 15:19:18 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EE9261295
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7EE9261295
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:19:18 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:9102:8e95:18fd:a25a])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 1749B19F742;
+ Mon, 25 Jul 2022 17:19:12 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 25 Jul 2022 17:19:11 +0200
+Date: Mon, 25 Jul 2022 17:19:11 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220725151911.GG3168@scaer>
 References: <20220725120927.348160-1-tianyuanhao3@163.com>
  <20220725142854.GF3168@scaer>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220725142854.GF3168@scaer>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=Ztz1PfjOjhQ6ik5dx3k2wgAr4r/eL/mWdbChkk5dQtA=;
- b=Mtdd50RXbwoawfabd+6/xpQF3pd7TrVnHuPcLK4vsEGF5Nw/kb9h/futGPwJerenNJ
- HxMIwlwqZHQWZypYA7MB+E4/Rgn8+JNx+oqDM9qp8tViLrT5t50oFDze2g9Y5SOacHHc
- UsR9sX8CQLwVjQd17oo6jineL7Fl4A/fmo/aRg2Q/JlVebUdzQb93Y2B1401Yub1PNdw
- 8+F1rO4J7CKbCAz8vLy2iIDai8OJQsN73+iAamEX925TYhCihFc5GumPDXTLwBmekpDj
- xFv9jT4DJeKwNkVHDxjqGiOK/rd97vl4cz4PFEErQLWpVsr18QtQWntiJm143eJxJ8JE
- c06Q==
+ <1dcaf0d5-b00e-b5cb-0c14-f064a90bedb8@mind.be>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <1dcaf0d5-b00e-b5cb-0c14-f064a90bedb8@mind.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1658762355;
+ bh=9pvQImpSk2RPG5EpPihmdG6JKXr47eCAZ3aSzg5StYg=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=HGSEM9lAZZRlPG8YD0YGRH7lDz93Sbaon5kE7PJVrAmb7zLyJlKnelzgAgaDDwWZv
+ FBFcyQ5fOqYXMfDnlLl5PjGUAMVR9jmSHDU32Um5NGPHfpke+hfmwgQnQTiaWhc4ET
+ AFrhd9KCL4BT94JH3aOlz1doz0qRQEGVjcRINwFuV/ZITzfTqXCYiykFu7nU/vtmZC
+ HJtlZvefTfemcXbTorzGr16Pt1j3wy8GtDxYz+Y/pasTo5Wp4NYz070BjHlheOuxhI
+ awFna6nn1EqMS6ExsHPCNjj/xVcUFNfbrhBJHTOKanHoO+JpORQUA8f/XHDAAr2Wae
+ WyLzoPAXpi49w==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Mtdd50RX
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=HGSEM9lA
 Subject: Re: [Buildroot] [PATCH] package/pkg-utils: prevent
  KCONFIG_ENABLE_OPT from changing =m to =y
 X-BeenThere: buildroot@buildroot.org
@@ -103,126 +79,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: TIAN Yuanhao <tianyuanhao3@163.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Arnout, All,
 
+On 2022-07-25 17:03 +0200, Arnout Vandecappelle spake thusly:
+> On 25/07/2022 16:28, Yann E. MORIN wrote:
+> >On 2022-07-25 05:09 -0700, TIAN Yuanhao spake thusly:
+> >>The KCONFIG_ENABLE_OPT is intended to enable a required kernel configuration
+> >>option when a package requires it.
+> >>However, this will often override an existing enabled module with `=m` with `=y`
+> >>which overrides the module to be built-in instead of separate.
+[--SNIP--]
+> >This change should not be needed. We now check that the value is already
+> >set, and if it is, then we do not touch it. So, if we hit this code, it
+> >means we will want to remove any line that has that option.
+>  It's still called from KCONFIG_SET_OPT and KCONFIG_DISABLE_OPT without any
+> condition.
+>  It's true that removing the old line is not strictly needed because the new
+> line is appended and thus takes precedence, but you get an ugly warning.
 
-On 25/07/2022 16:28, Yann E. MORIN wrote:
-> TIAN Yuanhao, All,
-> 
-> On 2022-07-25 05:09 -0700, TIAN Yuanhao spake thusly:
->> The KCONFIG_ENABLE_OPT is intended to enable a required kernel configuration
->> option when a package requires it.
->>
->> However, this will often override an existing enabled module with `=m` with `=y`
->> which overrides the module to be built-in instead of separate.
->>
->> This is undesirable behavior; we often want these as `=m` and not `=y` to reduce
->> the size of the kernel image.
->>
->> This patch changes KCONFIG_MUNGE_DOT_CONFIG to prevent changing `=m` to `=y`.
->>
->> Signed-off-by: Christian Stewart <christian@paral.in>
->> Co-authored-by: TIAN Yuanhao <tianyuanhao3@163.com>
->> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
->> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->>   package/pkg-utils.mk | 9 +++++++--
->>   1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
->> index 7d1aea7710..2edd542ba9 100644
->> --- a/package/pkg-utils.mk
->> +++ b/package/pkg-utils.mk
->> @@ -22,12 +22,17 @@ KCONFIG_DOT_CONFIG = $(strip \
->>   
->>   # KCONFIG_MUNGE_DOT_CONFIG (option, newline [, file])
->>   define KCONFIG_MUNGE_DOT_CONFIG
->> -	$(SED) "/\\<$(strip $(1))\\>/d" $(call KCONFIG_DOT_CONFIG,$(3))
->> +	$(SED) '/^\(# \)\?$(strip $(1))\>/d' $(call KCONFIG_DOT_CONFIG,$(3)) && \
-> 
-> This change should not be needed. We now check that the value is already
-> set, and if it is, then we do not touch it. So, if we hit this code, it
-> means we will want to remove any line that has that option.
+Indeed, my reasoning was that it is not needed to make the =m/=y case
+work as expected. Further cleanup can be done in a separate patch with
+an appropriate justification.
 
-  It's still called from KCONFIG_SET_OPT and KCONFIG_DISABLE_OPT without any 
-condition.
+> >Additionally, since the option is enclosed with \< and \>, then only
+> >full-word will match. I.e. if option if DOO, then none of FOO_BAR,
+> >BAR_FOO, or BAR_FOO_BUZ would match, so we don't need to optionally
+> >match the leading comment symbol.
+>  Didn't you yourself give the example of
+> CONFIG_FOO="foo"
+> CONFIG_BAR="$(CONFIG_FOO)"
+> where the original expression would also match the CONFIG_BAR line?
+> Arguably, however, that's a separate issue from what gets fixed here.
 
-  It's true that removing the old line is not strictly needed because the new 
-line is appended and thus takes precedence, but you get an ugly warning.
+Gah, I forgot about that case.
 
+Yes, it should be fixed with a separate patch.
 
-> Additionally, since the option is enclosed with \< and \>, then only
-> full-word will match. I.e. if option if DOO, then none of FOO_BAR,
-> BAR_FOO, or BAR_FOO_BUZ would match, so we don't need to optionally
-> match the leading comment symbol.
+Yuanhao, do you want to look into that?
 
-  Didn't you yourself give the example of
+> >>  	echo '$(strip $(2))' >> $(call KCONFIG_DOT_CONFIG,$(3))
+> >>  endef
+> >>  # KCONFIG_ENABLE_OPT (option [, file])
+> >>-KCONFIG_ENABLE_OPT  = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2))
+> >>+# If the option is already set to =m or =y, ignore.
+> >>+define KCONFIG_ENABLE_OPT
+> >>+	$(Q)if ! grep -q '^$(strip $(1))=[my]' $(call KCONFIG_DOT_CONFIG,$(2)); then \
+> >>+		$(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2)) || exit 1; \
+> >
+> >The return code of an if statement is the one from the last command in
+> >the list. In this case, KCONFIG_MUNGE_DOT_CONFIG expands to a single
+> >(compound) command, so if it fails, the if statement will fail, and so
+> >the if statement will fail. So, the  "|| exit 1"  here should not be
+> >needed.
+>  Still, it's defensive programming to have it. Otherwise, if someone later
+> adds another line in the condition, they have to remember to add the || exit
+> 1.
 
-CONFIG_FOO="foo"
-CONFIG_BAR="$(CONFIG_FOO)"
+Yes, I was about to leave it for that reason, but reason 2 below... ;-)
 
-where the original expression would also match the CONFIG_BAR line? Arguably, 
-however, that's a separate issue from what gets fixed here.
+> >Additionally, if we ever change KCONFIG_MUNGE_DOT_CONFIG to be multiple
+> >commands, the  "|| exit 1"  would only apply to the last, so that would
+> >not catch all failures either.
+>  That, on the other hand, is a valid argument.
 
-> 
->>   	echo '$(strip $(2))' >> $(call KCONFIG_DOT_CONFIG,$(3))
->>   endef
->>   
->>   # KCONFIG_ENABLE_OPT (option [, file])
->> -KCONFIG_ENABLE_OPT  = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2))
->> +# If the option is already set to =m or =y, ignore.
->> +define KCONFIG_ENABLE_OPT
->> +	$(Q)if ! grep -q '^$(strip $(1))=[my]' $(call KCONFIG_DOT_CONFIG,$(2)); then \
->> +		$(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2)) || exit 1; \
-> 
-> The return code of an if statement is the one from the last command in
-> the list. In this case, KCONFIG_MUNGE_DOT_CONFIG expands to a single
-> (compound) command, so if it fails, the if statement will fail, and so
-> the if statement will fail. So, the  "|| exit 1"  here should not be
-> needed.
+Yes, and in that cae, it becomes more visible that there is an issue,
+and the || exit 1 should be added to each commands that are in
+KCONFIG_MUNGE_DOT_CONFIG, not its callers.
 
-  Still, it's defensive programming to have it. Otherwise, if someone later adds 
-another line in the condition, they have to remember to add the || exit 1.
+Regards,
+Yann E. MORIN.
 
-> Additionally, if we ever change KCONFIG_MUNGE_DOT_CONFIG to be multiple
-> commands, the  "|| exit 1"  would only apply to the last, so that would
-> not catch all failures either.
-
-  That, on the other hand, is a valid argument.
-
-
-  Regards,
-  Arnout
-
-
-> 
-> Applied to master, after:
->    - reverting the SED match
->    - dropping the || exit 1
-> 
-> Thanks!
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> +	fi
->> +endef
->>   # KCONFIG_SET_OPT (option, value [, file])
->>   KCONFIG_SET_OPT     = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=$(2), $(3))
->>   # KCONFIG_DISABLE_OPT  (option [, file])
->> -- 
->> 2.25.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
