@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18F35C43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 22:29:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED8C2C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 22:29:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A87C241B35;
-	Mon, 25 Jul 2022 22:29:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A87C241B35
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b3ZmZVrowP7E; Mon, 25 Jul 2022 22:29:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54C0B41A5C;
-	Mon, 25 Jul 2022 22:29:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54C0B41A5C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E67481BF363
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:29:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD5396115E
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:29:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD5396115E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 991D9610C1;
+	Mon, 25 Jul 2022 22:29:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 991D9610C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i4zBsBGDwXXE for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IHrRwczlCd8h; Mon, 25 Jul 2022 22:29:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDC5560E57;
+	Mon, 25 Jul 2022 22:29:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDC5560E57
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0098D1BF9AC
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:29:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CDB1B833D3
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:29:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDB1B833D3
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aNALiEDt78Tw for <buildroot@lists.busybox.net>;
  Mon, 25 Jul 2022 22:29:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A0DA60E57
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 22:29:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A0DA60E57
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE7CA81CC3
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 22:29:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE7CA81CC3
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id A569C85E6F; Mon, 25 Jul 2022 22:15:20 +0000 (UTC)
+ id 95E8685E6D; Mon, 25 Jul 2022 22:15:20 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 00:11:13 +0200
+Date: Mon, 25 Jul 2022 23:52:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eaa1a43ab7281f70754405441501712a4e2b9981
-X-Git-Newrev: a3ab6e43fc88efb85e6e84e837180513f3584dfa
+X-Git-Oldrev: bfa8494f4b1962e34b5febe13fa394914d03398d
+X-Git-Newrev: eaa1a43ab7281f70754405441501712a4e2b9981
 X-Patchwork-Hint: ignore
-Message-Id: <20220725221520.A569C85E6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/beaglev-secondboot: bump to
- version e17302
+Message-Id: <20220725221520.95E8685E6D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/check-package: improve shellcheck
+ reproducibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,91 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3ab6e43fc88efb85e6e84e837180513f3584dfa
+commit: https://git.buildroot.net/buildroot/commit/?id=eaa1a43ab7281f70754405441501712a4e2b9981
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The filename was changed from bootloader-BEAGLEV to bootloader-JH7100, update
-the documentation for the beaglev board as well.
+shellcheck is already in use to check SysV init scripts.
+Currently its results can be affected by the existence of a
+.shellcheckrc file in any parent directory.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+For instance, in this example:
+(1) /path/.shellcheckrc
+(2) /path/to/.shellcheckrc
+(3) /path/to/buildroot
+the configs from file (1) are ignored and the configs from file (2)
+override the default values from the shellcheck binary.
+So the config file affects the check-package result for SysV scripts.
+
+Avoid this reproducibility issue by adding an empty config file to the
+buildroot topdir.
+
+It can also eventually contain configs (different from default values
+from sheelcheck) that we want as a standard to all shell scripts tested
+by check-package.
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/beaglev/readme.txt                        | 6 +++---
- boot/beaglev-secondboot/beaglev-secondboot.hash | 2 +-
- boot/beaglev-secondboot/beaglev-secondboot.mk   | 8 ++++----
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ .shellcheckrc | 0
+ DEVELOPERS    | 1 +
+ 2 files changed, 1 insertion(+)
 
-diff --git a/board/beaglev/readme.txt b/board/beaglev/readme.txt
-index 60678059e1..472d6b1cf1 100644
---- a/board/beaglev/readme.txt
-+++ b/board/beaglev/readme.txt
-@@ -17,7 +17,7 @@ Build results
+diff --git a/.shellcheckrc b/.shellcheckrc
+new file mode 100644
+index 0000000000..e69de29bb2
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 19f383aef6..504a6bb018 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2474,6 +2474,7 @@ F:	package/libhttpparser/
  
- After building, output/images contains:
- 
--+ bootloader-BEAGLEV-buildroot.bin.out
-++ bootloader-JH7100-buildroot.bin.out
- + ddrinit-2133-buildroot.bin.out
- + Image
- + fw_payload.bin
-@@ -30,7 +30,7 @@ After building, output/images contains:
- 
- The four important files are:
- 
-- - bootloader-BEAGLEV-buildroot.bin.out, the first stage bootloader
-+ - bootloader-JH7100-buildroot.bin.out, the first stage bootloader
- 
-  - ddrinit-2133-buildroot.bin.out, the DDR initialization firmware
- 
-@@ -109,7 +109,7 @@ You can flash them as follows:
-    "expert" features.
- 
-  - Then, press 0 and send over X-modem the
--   bootloader-BEAGLEV-buildroot.bin.out file.
-+   bootloader-JH7100-buildroot.bin.out file.
- 
-  - Then, press 1 and send over X-modem the
-    ddrinit-2133-buildroot.bin.out.
-diff --git a/boot/beaglev-secondboot/beaglev-secondboot.hash b/boot/beaglev-secondboot/beaglev-secondboot.hash
-index efc93347b1..d35d3a3856 100644
---- a/boot/beaglev-secondboot/beaglev-secondboot.hash
-+++ b/boot/beaglev-secondboot/beaglev-secondboot.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fe4d37f3ff38e7f2da70a08f9cb1668c0b928e85d2e0935bd985f910b3ce30e9  beaglev-secondboot-2d20047960044308126117ad56bc08a1164e82b2.tar.gz
-+sha256  bf152500e9f7e467bb1dee95a2291f9ecfaaebe1d64b93f6d403cfaf50e540e0  beaglev-secondboot-e17302063c9a4b74475b18ff24dd149c27257354.tar.gz
- sha256  284d26192537710910ec1f112ec5f4c981601ae23702391986d6ce0b8ba90813  LICENSE
-diff --git a/boot/beaglev-secondboot/beaglev-secondboot.mk b/boot/beaglev-secondboot/beaglev-secondboot.mk
-index a423c6c6a6..7e5f5681f4 100644
---- a/boot/beaglev-secondboot/beaglev-secondboot.mk
-+++ b/boot/beaglev-secondboot/beaglev-secondboot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Commit on the 'starfive' branch
--BEAGLEV_SECONDBOOT_VERSION = 2d20047960044308126117ad56bc08a1164e82b2
-+BEAGLEV_SECONDBOOT_VERSION = e17302063c9a4b74475b18ff24dd149c27257354
- BEAGLEV_SECONDBOOT_SITE = $(call github,starfive-tech,beagle_secondBoot,$(BEAGLEV_SECONDBOOT_VERSION))
- BEAGLEV_SECONDBOOT_INSTALL_TARGET = NO
- BEAGLEV_SECONDBOOT_INSTALL_IMAGES = YES
-@@ -15,14 +15,14 @@ BEAGLEV_SECONDBOOT_LICENSE_FILES = LICENSE
- 
- define BEAGLEV_SECONDBOOT_BUILD_CMDS
- 	$(MAKE) -C $(@D)/build \
--		CROSSCOMPILE=$(HOST_DIR)/bin/riscv64-unknown-elf- \
-+		CROSS_COMPILE=$(HOST_DIR)/bin/riscv64-unknown-elf- \
- 		SUFFIX=buildroot \
- 		GIT_VERSION=$(BEAGLEV_SECONDBOOT_VERSION)
- endef
- 
- define BEAGLEV_SECONDBOOT_INSTALL_IMAGES_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/build/bootloader-BEAGLEV-buildroot.bin.out \
--		$(BINARIES_DIR)/bootloader-BEAGLEV-buildroot.bin.out
-+	$(INSTALL) -D -m 0644 $(@D)/build/bootloader-JH7100-buildroot.bin.out \
-+		$(BINARIES_DIR)/bootloader-JH7100-buildroot.bin.out
- endef
- 
- $(eval $(generic-package))
+ N:	Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+ F:	.flake8
++F:	.shellcheckrc
+ F:	package/atop/
+ F:	package/thermald/
+ F:	support/testing/infra/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
