@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70CD8C43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 12:27:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BFC1C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 12:29:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4C8A61B40;
-	Mon, 25 Jul 2022 12:27:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4C8A61B40
+	by smtp4.osuosl.org (Postfix) with ESMTP id 162F6419A5;
+	Mon, 25 Jul 2022 12:29:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 162F6419A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R8Y3xYoBS0M1; Mon, 25 Jul 2022 12:27:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8Iru_ZDNlIrc; Mon, 25 Jul 2022 12:29:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EAB0A61B86;
-	Mon, 25 Jul 2022 12:27:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAB0A61B86
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6063C1BF215
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 12:27:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D40A341992;
+	Mon, 25 Jul 2022 12:29:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D40A341992
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AE3991BF215
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 12:29:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 48CC982F98
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 12:27:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48CC982F98
+ by smtp2.osuosl.org (Postfix) with ESMTP id 889C040E43
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 12:29:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 889C040E43
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yYSNKxdf0iKP for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 12:27:40 +0000 (UTC)
-X-Greylist: delayed 00:17:08 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D80F582E4C
-Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
- by smtp1.osuosl.org (Postfix) with ESMTP id D80F582E4C
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 12:27:39 +0000 (UTC)
-Received: from localhost.localdomain (unknown [123.185.16.214])
- by smtp7 (Coremail) with SMTP id C8CowAAXVEssiN5iHWJRPw--.59913S2;
- Mon, 25 Jul 2022 20:10:21 +0800 (CST)
-From: TIAN Yuanhao <tianyuanhao3@163.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E79_lDk-RknW for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 12:29:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8490540C0E
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 12:29:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8490540C0E
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 21E7185D50; Mon, 25 Jul 2022 12:15:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 25 Jul 2022 05:09:27 -0700
-Message-Id: <20220725120927.348160-1-tianyuanhao3@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220517103608.3455749-1-christian@paral.in>
-References: <20220517103608.3455749-1-christian@paral.in>
-MIME-Version: 1.0
-X-CM-TRANSID: C8CowAAXVEssiN5iHWJRPw--.59913S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WF4kKFW8AryxXFyDtFy7Jrb_yoW8ur1Upr
- n3X3yFyF1vy34Fg3y7Cr97Kr90qrWDGry7Jw17Xw1UJ3WrCw4jy3y8t3yYgF47uws7X3yx
- XFs5Xr1avr4UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
- 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUjhF7UUUUU=
-X-Originating-IP: [123.185.16.214]
-X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/1tbiGhRJjVaECnIdbwAAsS
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=163.com; 
- s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=7J5/m
- VQHAjYp4Fi5EC6IbKMpnne4xwjbI8xghCgE2GA=; b=DO+alT+bHdkmHoiraOhmV
- qX4qZbrpbbcC3QcmuCYlsx6cXvighVv+ZlSYD+aCNC0VIDsU6tR1sc5LIv4eIi+D
- 7yl0O559joIWMWj7SZi7c805H41COTO4+7gtxOlhe74NEgzRKZrHN5z/Dv/+Vkhj
- 32VQhDRA6epYODY4dcf3SE=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=163.com header.i=@163.com
- header.a=rsa-sha256 header.s=s110527 header.b=DO+alT+b
-Subject: [Buildroot] [PATCH] package/pkg-utils: prevent KCONFIG_ENABLE_OPT
- from changing =m to =y
+Date: Mon, 25 Jul 2022 14:29:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 286d8cc8510c5879392801f6c49ec3278908766f
+X-Git-Newrev: fff68f75b3519cadb2639fde2296b26db919d79d
+X-Patchwork-Hint: ignore
+Message-Id: <20220725121551.21E7185D50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: disable split-stack for
+ non-thread builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,68 +56,147 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: TIAN Yuanhao <tianyuanhao3@163.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The KCONFIG_ENABLE_OPT is intended to enable a required kernel configuration
-option when a package requires it.
+commit: https://git.buildroot.net/buildroot/commit/?id=fff68f75b3519cadb2639fde2296b26db919d79d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-However, this will often override an existing enabled module with `=m` with `=y`
-which overrides the module to be built-in instead of separate.
+Since commit [1], the autobuilder script generates fully random
+configurations that can trigger configurations that were not tested
+before.
 
-This is undesirable behavior; we often want these as `=m` and not `=y` to reduce
-the size of the kernel image.
+Here, the toolchain build with uClibc-ng without threads support
+(BR2_PTHREADS_NONE=y) fails to build due to a missing pthread.h
+header:
 
-This patch changes KCONFIG_MUNGE_DOT_CONFIG to prevent changing `=m` to `=y`.
+../../../libgcc/generic-morestack-thread.c:42:10: fatal error: pthread.h: No such file or directory
+   42 | #include <pthread.h>
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Co-authored-by: TIAN Yuanhao <tianyuanhao3@163.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+This issue was actually fixed by this commit [2] adding a patch for
+gcc 4.8, 4.9, 5.3. But it get lost when gcc 6 was added to Buildroot [3].
 
+Since then the issue was present in Buildroot but has not been noticed.
+
+[1] https://git.buildroot.net/buildroot-test/commit/?id=27b18dcb1686a98ce718b6a816e98f8505957a6c
+[2] 2631219f648f4aa13fa36d06a483e4507cb6f3d7
+[3] 519d83bfa0442439026db4e71e605a5c1347e566
+
+Fixes:
+http://autobuild.buildroot.org/results/5ec/5ec9eefacd27ef4fa73066013188796b43a30428
+https://bugs.busybox.net/show_bug.cgi?id=8766
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
+ ...disable-split-stack-for-non-thread-builds.patch | 26 ++++++++++++++++++++++
+ ...disable-split-stack-for-non-thread-builds.patch | 26 ++++++++++++++++++++++
+ ...disable-split-stack-for-non-thread-builds.patch | 26 ++++++++++++++++++++++
+ 3 files changed, 78 insertions(+)
 
-v1 -> v2:
- - fix indentation spacing: use tab instead of spaces
- - simplify by using $(1) instead of two separate variables
-v2 -> v3:
- - refine KCONFIG_MUNGE_DOT_CONFIG
- - refactor KCONFIG_ENABLE_OPT
----
- package/pkg-utils.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 7d1aea7710..2edd542ba9 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -22,12 +22,17 @@ KCONFIG_DOT_CONFIG = $(strip \
- 
- # KCONFIG_MUNGE_DOT_CONFIG (option, newline [, file])
- define KCONFIG_MUNGE_DOT_CONFIG
--	$(SED) "/\\<$(strip $(1))\\>/d" $(call KCONFIG_DOT_CONFIG,$(3))
-+	$(SED) '/^\(# \)\?$(strip $(1))\>/d' $(call KCONFIG_DOT_CONFIG,$(3)) && \
- 	echo '$(strip $(2))' >> $(call KCONFIG_DOT_CONFIG,$(3))
- endef
- 
- # KCONFIG_ENABLE_OPT (option [, file])
--KCONFIG_ENABLE_OPT  = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2))
-+# If the option is already set to =m or =y, ignore.
-+define KCONFIG_ENABLE_OPT
-+	$(Q)if ! grep -q '^$(strip $(1))=[my]' $(call KCONFIG_DOT_CONFIG,$(2)); then \
-+		$(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2)) || exit 1; \
-+	fi
-+endef
- # KCONFIG_SET_OPT (option, value [, file])
- KCONFIG_SET_OPT     = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=$(2), $(3))
- # KCONFIG_DISABLE_OPT  (option [, file])
--- 
-2.25.1
-
+diff --git a/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch b/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
+new file mode 100644
+index 0000000000..668b1cd9d7
+--- /dev/null
++++ b/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
+@@ -0,0 +1,26 @@
++From cdb76d638e91cc53949585d98fa653d3671b92ac Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 25 Jul 2022 00:29:55 +0200
++Subject: [PATCH] disable split-stack for non-thread builds
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++[Romain: convert to git format]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ libgcc/config/t-stack | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
++index cc0366b4cd8..f3f97e86d60 100644
++--- a/libgcc/config/t-stack
+++++ b/libgcc/config/t-stack
++@@ -1,4 +1,6 @@
++ # Makefile fragment to provide generic support for -fsplit-stack.
++ # This should be used in config.host for any host which supports
++ # -fsplit-stack.
+++ifeq ($(enable_threads),yes)
++ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+++endif
++-- 
++2.34.3
++
+diff --git a/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch b/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch
+new file mode 100644
+index 0000000000..dba2d02d7f
+--- /dev/null
++++ b/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch
+@@ -0,0 +1,26 @@
++From 3b9d7d397fa6dc290eb05bffca80968efb6ec2e5 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 25 Jul 2022 00:29:55 +0200
++Subject: [PATCH] disable split-stack for non-thread builds
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++[Romain: convert to git format]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ libgcc/config/t-stack | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
++index cc0366b4cd8..f3f97e86d60 100644
++--- a/libgcc/config/t-stack
+++++ b/libgcc/config/t-stack
++@@ -1,4 +1,6 @@
++ # Makefile fragment to provide generic support for -fsplit-stack.
++ # This should be used in config.host for any host which supports
++ # -fsplit-stack.
+++ifeq ($(enable_threads),yes)
++ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+++endif
++-- 
++2.34.3
++
+diff --git a/package/gcc/12.1.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/12.1.0/0001-disable-split-stack-for-non-thread-builds.patch
+new file mode 100644
+index 0000000000..e801085dad
+--- /dev/null
++++ b/package/gcc/12.1.0/0001-disable-split-stack-for-non-thread-builds.patch
+@@ -0,0 +1,26 @@
++From 4f67134e0b1404fef4ea72342be8fab4c37ca8c8 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 25 Jul 2022 00:29:55 +0200
++Subject: [PATCH] disable split-stack for non-thread builds
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++[Romain: convert to git format]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ libgcc/config/t-stack | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
++index cc0366b4cd8..f3f97e86d60 100644
++--- a/libgcc/config/t-stack
+++++ b/libgcc/config/t-stack
++@@ -1,4 +1,6 @@
++ # Makefile fragment to provide generic support for -fsplit-stack.
++ # This should be used in config.host for any host which supports
++ # -fsplit-stack.
+++ifeq ($(enable_threads),yes)
++ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+++endif
++-- 
++2.34.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
