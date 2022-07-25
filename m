@@ -1,94 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD56FC43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 22:23:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5138AC43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 22:23:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74F094067B;
-	Mon, 25 Jul 2022 22:23:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74F094067B
+	by smtp1.osuosl.org (Postfix) with ESMTP id D40E283E18;
+	Mon, 25 Jul 2022 22:23:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D40E283E18
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KShOZTdo-FpJ; Mon, 25 Jul 2022 22:22:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zTm7ltqhmi4A; Mon, 25 Jul 2022 22:23:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FDC640545;
-	Mon, 25 Jul 2022 22:22:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FDC640545
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3A4183DB7;
+	Mon, 25 Jul 2022 22:23:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3A4183DB7
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E1F171BF9AC
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:22:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 644E51BF363
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:23:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BBB2640545
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:22:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBB2640545
+ by smtp2.osuosl.org (Postfix) with ESMTP id 242FC41020
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:23:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 242FC41020
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LykXaQ0P7Tyh for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 22:22:55 +0000 (UTC)
+ with ESMTP id Qa3d6RAc7U7C for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 22:23:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C62A4017A
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7C62A4017A
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 22:22:55 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id m17so17556719wrw.7
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:22:55 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2225540545
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2225540545
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 22:23:14 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id v13so10069298wru.12
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:23:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=SWrE89XDGnbeA7H8MYsInyD8RAChiFrlXKuQ1gYZLTU=;
- b=1Ywu6HeboKFBNKGmZWOpeGoupqzaEzUsst2z8jAQFwuY53dNVxh06pcm22oI1dxbTg
- hAJ8Q41EHfuRmk4kJL+L12e+ynYqzq0TtSxCfP5Kf1OdZGLy/wA3QtYpukhIV1vd0bll
- DlOffQ7rzYYR3eU9ULOjcD4/XcngvB0HnOmkvS8p1g8u4jRsB4MECHAVhYdP1ckHgCoy
- vmXslDl8HzWZ3EtY8rA6j3qups4t3GE4ek9rcTpcQdQGIL5iGub9YX+tisbxFjaua84A
- Mb3qHjZbv1VgOdI6+2CCDqJiEhn2yaJFWR8gIb7VXGqQVr11zbsHTGos/PhX75VzpuqI
- shtA==
-X-Gm-Message-State: AJIora9VrsljyHYRMLZRREm+sXJVJ9BT5vk5/3Olgi33ly7JR+aXwXoe
- K9KPsv0lB9ZZ4smDLa4b2imLGDAidPBA0g==
-X-Google-Smtp-Source: AGRyM1vya7cW9ejF/PcK1up0Wihyyd47GCBBnLyMPDVc/FJSPT4fyjsa9n7+W0+gKcx3RilUUF3smA==
-X-Received: by 2002:a05:6000:224:b0:21e:7efc:c506 with SMTP id
- l4-20020a056000022400b0021e7efcc506mr6706768wrz.313.1658787773666; 
- Mon, 25 Jul 2022 15:22:53 -0700 (PDT)
+ bh=hAF84F209mNpuwUK0QfwkF3fOxxO5lZPB/TnwAianxE=;
+ b=ZnAmvAMXIkKgn1LNNaHLKt+5g55mC++QoIsLKh6lSGANKqNU+ZSEnrzCwGOieWaxuo
+ q4t1PAC38m+Trzb8quvxZTUIIxYHtCWjjKZ/aIE2wFzDr8uKWX1NsUoGhLiZHzeYLazi
+ ClpKVj4fZ5d1SwjE6OM6y8hUVlV+zgY8vTD5mQ3g5kUWAVhKh0NgVv8DsDOydVr7k0eY
+ LTGjAAIxKIalSQjLDl0VSyW8r8J7pUAQTHSnNd6ernrkBEVJjWbc2x4V4d6/1OHRWkdW
+ 4dvKnrZR9aUGsje6gAJr9Tf36ceuh3uShp3PjzLidzJHagEJZZgV6o5m0MDiySOdn+95
+ V3VQ==
+X-Gm-Message-State: AJIora99zIduwh3WSReBsKxjl22Ohv4Z7d9JaeSzm26sxWQC1JfZjPQ8
+ eAxtYfJ9rPL1A/5vNepJTaPefikemknEmA==
+X-Google-Smtp-Source: AGRyM1v+NZlrfjAfWTMsaUhAFYhLSedpg4BxHbcmcr4v+AiVjUnyj6akNzGIYB+ddDgHbmDBXNDNvg==
+X-Received: by 2002:adf:fb49:0:b0:21a:3ccc:fb77 with SMTP id
+ c9-20020adffb49000000b0021a3cccfb77mr8466250wrs.280.1658787792143; 
+ Mon, 25 Jul 2022 15:23:12 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- b18-20020adff912000000b0021d65675583sm12704879wrr.52.2022.07.25.15.22.53
+ d16-20020adff2d0000000b0021d4aca9d1esm15319678wrp.99.2022.07.25.15.23.11
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Jul 2022 15:22:53 -0700 (PDT)
-Message-ID: <7f39a4ca-a32a-fe24-95bd-91bc04e37e77@mind.be>
-Date: Tue, 26 Jul 2022 00:22:51 +0200
+ Mon, 25 Jul 2022 15:23:11 -0700 (PDT)
+Message-ID: <9602d7df-cea2-28a6-760d-493c9c1f0924@mind.be>
+Date: Tue, 26 Jul 2022 00:23:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220725124303.3986-1-fontaine.fabrice@gmail.com>
+To: Vincent Fazio <vfazio@xes-inc.com>, buildroot@buildroot.org
+References: <20220620190115.541032-2-vfazio@xes-inc.com>
+ <20220725132552.24631-1-vfazio@xes-inc.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220725124303.3986-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220725132552.24631-1-vfazio@xes-inc.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=SWrE89XDGnbeA7H8MYsInyD8RAChiFrlXKuQ1gYZLTU=;
- b=cIhF8zM6lD31yS+kX4V+Wj2l7pJO8FbADfRQ9/pklmsTngt4OznvkCS4ZXR1dAZuQG
- CGWNW6lw8IL4JPwDzs4Jerp22RsiiftCGgfKMboCrWLa7m4wUfv2i9b1v5DNb7gI0xJZ
- ZRSc+Xbq2QqBVv5wFAM7BMD35Rznyke5EkhDD7b9UGfrTz3Vz8l7zcNHQUwDd3uW/p0c
- y/4RWan6yPtPwv1G2yXmFufYx6ekcIAFpC9l5rJ2G/RMifPMu6IIaWdW9Ni5Ubhe4kwE
- t/xL35YyJMDQxybhnKnBo+I/1WQhS2Uwe7xhM02Pb86QXLNUtDV7UCjINfoC4YIJjWkG
- 6/uA==
+ bh=hAF84F209mNpuwUK0QfwkF3fOxxO5lZPB/TnwAianxE=;
+ b=FwkNYLmcnvUWEgoHF/pwsfcsR/kZgA9ORYZl3QLS+pizjzAhcuDtJT8/kx4ALKfIDH
+ EgV1maCnwy5ef6WaTXZ3exkPWXIiQ1enSh5tCfw+jyB6k4NoksqrxlEczpnVWZD3CeCA
+ BI3HWH7XZ8Y+mRC/odF1zKON+Q1ne4crVm3OF9bjPBikp5ZxO1ljLJCR/ec/1Gkxs5IK
+ XtbCbKvz0nEFdgPEzr70wdRl7MqkBfMYH8lXy3nNbf1O6sC4SlKEQMp/7ix6gDsXhN1t
+ ujYRoC7tDAT/7fRadd91DK5N4UeRx52+VvEXfsqWRbZST/HD0UCm+b8d39f7PGbbCLSX
+ fqpA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=cIhF8zM6
-Subject: Re: [Buildroot] [PATCH 1/1] package/opensc: add OPENSC_CPE_ID_VENDOR
+ header.a=rsa-sha256 header.s=google header.b=FwkNYLmc
+Subject: Re: [Buildroot] [PATCH v2 2/2] package/nvidia-driver: bump version
+ to 390.151
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,7 +102,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?Q?Jos=c3=a9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -108,13 +110,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 25/07/2022 14:43, Fabrice Fontaine wrote:
-> cpe:2.3:a:opensc_project:opensc is a valid CPE identifier for this
-> package:
+On 25/07/2022 15:25, Vincent Fazio wrote:
+> Adds support for Linux kernel 5.17.
 > 
->    https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopensc_project%3Aopensc
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 
   Applied to master, thanks.
 
@@ -122,21 +121,37 @@ On 25/07/2022 14:43, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/opensc/opensc.mk | 1 +
->   1 file changed, 1 insertion(+)
+> Changes v1 -> v2:
+>    - use proper hash for x86 driver package
 > 
-> diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
-> index 538151c12a..e1ad5d61b0 100644
-> --- a/package/opensc/opensc.mk
-> +++ b/package/opensc/opensc.mk
-> @@ -8,6 +8,7 @@ OPENSC_VERSION = 0.22.0
->   OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
->   OPENSC_LICENSE = LGPL-2.1+
->   OPENSC_LICENSE_FILES = COPYING
-> +OPENSC_CPE_ID_VENDOR = opensc_project
->   OPENSC_DEPENDENCIES = openssl pcsc-lite
->   OPENSC_INSTALL_STAGING = YES
->   OPENSC_CONF_OPTS = --disable-strict
+>   package/nvidia-driver/nvidia-driver.hash | 4 ++--
+>   package/nvidia-driver/nvidia-driver.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
+> index 7f2248d0f9..b14e7ae194 100644
+> --- a/package/nvidia-driver/nvidia-driver.hash
+> +++ b/package/nvidia-driver/nvidia-driver.hash
+> @@ -1,4 +1,4 @@
+>   # Locally computed
+> -sha256 51adb28f0ed4548f35a88a93ad6767ebd807fa14f418bf5e51a6d63a3ff7f275  NVIDIA-Linux-x86-390.132.run
+> -sha256 b6b4b8af37e78e026c9ebdf4a5c64ea412dfcb710931dd028c22dac228de659d  NVIDIA-Linux-x86_64-390.132-no-compat32.run
+> +sha256 94e399b459659c12b1344e8c8f4f5eee1ed5915ff459fc8bb831c9e1d44677db  NVIDIA-Linux-x86-390.151.run
+> +sha256 6e4fd2258465f5d5527fe80abd46de925a30348b4a84658498a6d75caf42c47c  NVIDIA-Linux-x86_64-390.151-no-compat32.run
+>   sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  LICENSE
+> diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+> index ec070e3ca6..f1217b00aa 100644
+> --- a/package/nvidia-driver/nvidia-driver.mk
+> +++ b/package/nvidia-driver/nvidia-driver.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -NVIDIA_DRIVER_VERSION = 390.132
+> +NVIDIA_DRIVER_VERSION = 390.151
+>   NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
+>   NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
+>   NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION)$(if $(BR2_x86_64),-no-compat32).run
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
