@@ -1,99 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2573EC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 06:28:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B18FC43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 06:34:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C65B83F23;
-	Mon, 25 Jul 2022 06:28:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C65B83F23
+	by smtp3.osuosl.org (Postfix) with ESMTP id D88AC61016;
+	Mon, 25 Jul 2022 06:34:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D88AC61016
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sK8F1zn_1PGo; Mon, 25 Jul 2022 06:28:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kCIlYfUj_AjR; Mon, 25 Jul 2022 06:34:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC3C883EC9;
-	Mon, 25 Jul 2022 06:28:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC3C883EC9
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6EBC60E21;
+	Mon, 25 Jul 2022 06:34:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6EBC60E21
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9668B1BF38C
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 06:28:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4A83F1BF38C
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 06:34:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7DAD5405D9
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 06:28:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DAD5405D9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 32B1C403EA
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 06:34:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32B1C403EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G5Qcr_OtNrac for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 06:28:04 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F63740239
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9F63740239
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 06:28:03 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id z15so765145edc.7
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 23:28:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=NFAzfsv1fL0prYjRg5S2o7naYwjG685E6Aj2XV+n8K4=;
- b=LuN7TQ5ea05FK9Bl9Pa1atpt7txH67NQL4xvSenDO9Nm7Y1iLaoMdDArtEpZPSogdS
- xMcXZRHphnjjIDMIqQnMiH+nt4LA1QOLcEcI73mfwexOI7QH0Q8I5WYP29eJlixf2+fN
- w6ATc5Q0f6G7cmACCcJSisk67/M/k86x6x1tW98mjkwz0jwrYVsO7D6VEuMo8eDxiWVc
- M3Z1uzsW1dwECUO2uO3PuuSzQU2eqWw6mYM4YKUjDyPNgI9ARb5reSulFbbQjF3ibjM6
- u/SBhP/yvigbnYLmdl62Zhe22njWRZs6X3aYTM8Fb6zhUxUT9UFb8yJ1SkK817Dut2AM
- 3q/g==
-X-Gm-Message-State: AJIora8ouYYGvVrqkqlIHTxeZs5MBu6dW8oEc7sZWdfY3D4h+HT+zJsz
- IohqY/8RQsozXiQrFQPTNfQKCxkt2j9ZlX4G
-X-Google-Smtp-Source: AGRyM1tOs2Qc4XHLDeydiMkzm9BNX1hL2A1hyl9KVDsdbFzqCzBPQ4HltZqvWo+PUBBgnuGbKn/UTg==
-X-Received: by 2002:a05:6402:1914:b0:43a:d59b:5e79 with SMTP id
- e20-20020a056402191400b0043ad59b5e79mr11566102edz.124.1658730481289; 
- Sun, 24 Jul 2022 23:28:01 -0700 (PDT)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com.
- [209.85.208.53]) by smtp.gmail.com with ESMTPSA id
- d18-20020a056402079200b0043a253973aasm6555204edy.10.2022.07.24.23.28.00
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 24 Jul 2022 23:28:00 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id i13so3459657edj.11
- for <buildroot@buildroot.org>; Sun, 24 Jul 2022 23:28:00 -0700 (PDT)
-X-Received: by 2002:a05:6402:4391:b0:43c:1883:8399 with SMTP id
- o17-20020a056402439100b0043c18838399mr1053682edc.233.1658730480114; Sun, 24
- Jul 2022 23:28:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220625224224.1446787-1-christian@paral.in>
- <20220723184104.0032a7dc@windsurf>
- <CA+h8R2og5UzGbLs-NHFKdLYyEus0v20EqgdZMtHnJDQa9dY4Gg@mail.gmail.com>
- <20220723222237.7989b5c6@windsurf>
- <CA+h8R2qUUZ9q9L1Xs4V5GOB1W1iJcKPaMxs_-h0d2dAOKwybGg@mail.gmail.com>
- <20220725082556.33cfb04b@windsurf>
-In-Reply-To: <20220725082556.33cfb04b@windsurf>
-Date: Sun, 24 Jul 2022 23:27:46 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2rcc=sqTDY0HtE4UNUJydVZFd16PWXLXGaHo+wK0aVN6Q@mail.gmail.com>
-Message-ID: <CA+h8R2rcc=sqTDY0HtE4UNUJydVZFd16PWXLXGaHo+wK0aVN6Q@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=paral.in; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=NFAzfsv1fL0prYjRg5S2o7naYwjG685E6Aj2XV+n8K4=;
- b=Y62zA+P65MeLYlxejEssXkWmkOfPcUUm3rqSbcnMPT08g/kQhbisNouKhRJFFSdX6S
- tQYw0utfR1XKPB/fVMRJYEQUGtgZHUILL8GDHkAQH8JSwCHuLUfQG5ywtcGXi29HJrsK
- GjZGvhUeaQ94AbdD9NRvLOXd4j8ThWzsORSSShGPGITpwF0f6LDs1vPZrmwPx7QFUb0w
- zLOMwYSK25Xr+I4yjL5UqQxTMdhy/k8TfKOTHC2TRD4J28V1+rZbw4Uws9eGMMZNWmRW
- 3gyIf//58XGfjhAEW8XUUWW6pNeZPJUSjNPHpoSp98T3psQajg9DlF8oeN9euiWNlPqM
- SP0A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
- header.a=rsa-sha256 header.s=google header.b=Y62zA+P6
-Subject: Re: [Buildroot] [PATCH 1/1] package/gocryptfs: fix build against
- riscv
+ with ESMTP id 5iVaX_wuDH-V for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 06:34:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4FB90401C2
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 06:34:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FB90401C2
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 762CE84AF2; Mon, 25 Jul 2022 06:21:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 25 Jul 2022 08:30:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 44128acc3cfa7a2dd5598f938094addb321161c7
+X-Git-Newrev: 321cec7b9c0b6d5aa43c0f71a52f3ddf83636399
+X-Patchwork-Hint: ignore
+Message-Id: <20220725062104.762CE84AF2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hyperfine: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,41 +55,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Anisse Astier <anisse@astier.eu>, Christian Stewart <christian@paral.in>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Christian Stewart via buildroot <buildroot@buildroot.org>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=321cec7b9c0b6d5aa43c0f71a52f3ddf83636399
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Jul 24, 2022 at 11:26 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Sun, 24 Jul 2022 16:42:30 -0700
-> Christian Stewart <christian@paral.in> wrote:
-> > > So these lines are really removed.
-> >
-> > If you run 'go mod tidy' it removes these lines.
-> >
-> > So, I guess they are unnecessary / not needed after the "replace" is added.
->
-> But that's precisely the part I don't understand: the fork of the
-> crypto lib is supposed to only have a fix to build with RISC-V... so why
-> does the fork has changes on its dependencies?
+hyperfine is a benchmark tool written in Rust. It evaluates
+execution time of a command passed in arguments and make
+a relative comparison if multiple arguments are used at the
+same time.
+It can be convinient for purposes of Rust-written systems as
+it runs in a stable version of Rust.
 
-I don't think it's that the fork changed the deps, rather that the
-newer version of Go (1.18) drops those lines whereas a previous
-version would have kept them.
+The package has been checked with correct formatting and
+without typos:
+./utils/check-package package/hyperfine/*
 
-The dependencies didn't actually change or you would see more changes in vendor/
+A CI test was run on gitlab.com to verify toolchain compatibilities.
 
-Best,
-Christian
+Signed-off-by: Nicolas Tran <nicolas.tran@smile.fr>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                       |  3 +++
+ package/Config.in                |  1 +
+ package/hyperfine/Config.in      | 11 +++++++++++
+ package/hyperfine/hyperfine.hash |  4 ++++
+ package/hyperfine/hyperfine.mk   | 12 ++++++++++++
+ 5 files changed, 31 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 628b5cf456..cd1e0e69a6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2173,6 +2173,9 @@ N:	Nicolas Serafini <nicolas.serafini@ik.me>
+ F:	package/exiv2/
+ F:	package/ofono/
+ 
++N:	Nicolas Tran <nicolas.tran@smile.fr>
++F:	package/hyperfine/
++
+ N:	Niklas Cassel <niklas.cassel@wdc.com>
+ F:	configs/qemu_riscv64_nommu_virt_defconfig
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 3a70fe3f9f..455c69bac9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -106,6 +106,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/fwts/Config.in"
+ 	source "package/gdb/Config.in"
+ 	source "package/google-breakpad/Config.in"
++	source "package/hyperfine/Config.in"
+ 	source "package/iozone/Config.in"
+ 	source "package/kexec/Config.in"
+ 	source "package/kexec-lite/Config.in"
+diff --git a/package/hyperfine/Config.in b/package/hyperfine/Config.in
+new file mode 100644
+index 0000000000..527e978146
+--- /dev/null
++++ b/package/hyperfine/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_HYPERFINE
++	bool "hyperfine"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  hyperfine is a benchmark tool written in Rust. It evaluates
++	  execution time of a command passed in arguments and make a
++	  relative comparison if multiple arguments are used at the
++	  same time.
++
++	  https://github.com/sharkdp/hyperfine
+diff --git a/package/hyperfine/hyperfine.hash b/package/hyperfine/hyperfine.hash
+new file mode 100644
+index 0000000000..50cc7694b3
+--- /dev/null
++++ b/package/hyperfine/hyperfine.hash
+@@ -0,0 +1,4 @@
++# Locally computed
++sha256  28fcd72c556b4ca2150577217a4d7d51907b7e00ff86b764943d068202a92ace  hyperfine-1.14.0.tar.gz
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
++sha256  1dfee18c2ff07ce551de4d6a1d2db158c0380746b488a7f0d08c8e0d3568b7c3  LICENSE-MIT
+diff --git a/package/hyperfine/hyperfine.mk b/package/hyperfine/hyperfine.mk
+new file mode 100644
+index 0000000000..62246f002e
+--- /dev/null
++++ b/package/hyperfine/hyperfine.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# hyperfine
++#
++################################################################################
++
++HYPERFINE_VERSION = 1.14.0
++HYPERFINE_SITE = $(call github,sharkdp,hyperfine,v$(HYPERFINE_VERSION))
++HYPERFINE_LICENSE = Apache-2.0 or MIT
++HYPERFINE_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
++
++$(eval $(cargo-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
