@@ -1,95 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62DEDC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 10:47:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70CD8C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 12:27:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00E8F84889;
-	Mon, 25 Jul 2022 10:47:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00E8F84889
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4C8A61B40;
+	Mon, 25 Jul 2022 12:27:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4C8A61B40
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R8Y3xYoBS0M1; Mon, 25 Jul 2022 12:27:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAB0A61B86;
+	Mon, 25 Jul 2022 12:27:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAB0A61B86
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6063C1BF215
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 12:27:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 48CC982F98
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 12:27:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48CC982F98
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rf0J9coHaZvF; Mon, 25 Jul 2022 10:47:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 299CD846A4;
-	Mon, 25 Jul 2022 10:47:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 299CD846A4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4F9B31BF371
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 10:47:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25E544182C
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 10:47:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25E544182C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wXKgEZ6fTFWs for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 10:47:26 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91B3D417D3
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 91B3D417D3
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 10:47:26 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id u5so15380217wrm.4
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 03:47:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=UkReS5BJ9TY5twRl2IGArUCLbVQMCzGpNzHE8l+wZpM=;
- b=frM3+rQcg/L+dQUFhhtCKlT/CY24cQR76D/foF45Ag3qyp/UUYHiqydwlv84HfJb/Y
- 5Sikh8TcwxQ7CadIO5+15R9SLCNo4gQF91HXQikSDtfSP3Jk2C5qXiIedwS+S4++aQUJ
- qotKx3L313T+NSC+2MnffQ6BFjEKIraATJ+EfM5XvWWm3CtzUOsLF79Q/gyzjzgv8If+
- eFUyha88/yQb3A6bMPFFNv3ySow8NekkXZAMfbX1XSu+LRk6pmFwHLKoUWi526G4Cke9
- y4phV0g8/CVyMtG3PYFVSC3Bn8eG2re4iZfeCMBnqaPru8fDOJD6yNKiTkev+kJPZn1k
- ZZsA==
-X-Gm-Message-State: AJIora+dhMlTcC/9q52L+lYLjNjbiTf8SvbAyEd/l1Ckh2vIH/WD8YSl
- NSlVkrcFG+TYbj4j1MZKd2r64g==
-X-Google-Smtp-Source: AGRyM1uZGLa9wdgYeiTrDugWt87UutbkjDuOtlyj0CS0CCaWH8Gt++8UXh207hh7Exmg5Hr/6ri9BA==
-X-Received: by 2002:a5d:604a:0:b0:21e:6b84:a4d8 with SMTP id
- j10-20020a5d604a000000b0021e6b84a4d8mr7109674wrt.187.1658746044634; 
- Mon, 25 Jul 2022 03:47:24 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- m6-20020a05600c4f4600b003a3442f1229sm10292682wmq.29.2022.07.25.03.47.24
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Jul 2022 03:47:24 -0700 (PDT)
-Message-ID: <c637bd33-711d-f57c-9ba5-e995f6b0acd2@mind.be>
-Date: Mon, 25 Jul 2022 12:47:20 +0200
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yYSNKxdf0iKP for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 12:27:40 +0000 (UTC)
+X-Greylist: delayed 00:17:08 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D80F582E4C
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D80F582E4C
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 12:27:39 +0000 (UTC)
+Received: from localhost.localdomain (unknown [123.185.16.214])
+ by smtp7 (Coremail) with SMTP id C8CowAAXVEssiN5iHWJRPw--.59913S2;
+ Mon, 25 Jul 2022 20:10:21 +0800 (CST)
+From: TIAN Yuanhao <tianyuanhao3@163.com>
+To: buildroot@buildroot.org
+Date: Mon, 25 Jul 2022 05:09:27 -0700
+Message-Id: <20220725120927.348160-1-tianyuanhao3@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220517103608.3455749-1-christian@paral.in>
+References: <20220517103608.3455749-1-christian@paral.in>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: Christian Stewart <christian@paral.in>, buildroot@buildroot.org
-References: <20220724235023.677747-1-christian@paral.in>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220724235023.677747-1-christian@paral.in>
+X-CM-TRANSID: C8CowAAXVEssiN5iHWJRPw--.59913S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WF4kKFW8AryxXFyDtFy7Jrb_yoW8ur1Upr
+ n3X3yFyF1vy34Fg3y7Cr97Kr90qrWDGry7Jw17Xw1UJ3WrCw4jy3y8t3yYgF47uws7X3yx
+ XFs5Xr1avr4UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUjhF7UUUUU=
+X-Originating-IP: [123.185.16.214]
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/1tbiGhRJjVaECnIdbwAAsS
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=UkReS5BJ9TY5twRl2IGArUCLbVQMCzGpNzHE8l+wZpM=;
- b=CXdPDa4VZdt8SvyqQ81WznuOXXfpTf6rHxGEfmDGhuYvD50geEZ69WKrx+L/f31tzi
- UQy7EVIn5pdDP1GOfVXgADqh5w8dZk/5ApqYDTtFFPPm3/VBT8SIBQ7s3L1oveJuFJg2
- HJBzawQdVkuZiijjpmTAwaFpRjwQE+6V1yffchmcX++t9p7/GSVcKoN2nn9iqj9yIxIP
- 0GFqzDwH5m/VstIvJM2y9SN4ZRUThtRQG0jtNYwYTdzzfeQ6Y2lVox5L+B7t7V7U84S6
- laGP1J+et0vu8fzEr3facB3007x2bP9ge70c9c8ceIhkfE4GSj1gM3ldRBHv+fsV6Lra
- NjGg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=CXdPDa4V
-Subject: Re: [Buildroot] [PATCH 1/1] package/brfmcmac_sdio-firmware-rpi:
- support riscv architecture
+ d=163.com; 
+ s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=7J5/m
+ VQHAjYp4Fi5EC6IbKMpnne4xwjbI8xghCgE2GA=; b=DO+alT+bHdkmHoiraOhmV
+ qX4qZbrpbbcC3QcmuCYlsx6cXvighVv+ZlSYD+aCNC0VIDsU6tR1sc5LIv4eIi+D
+ 7yl0O559joIWMWj7SZi7c805H41COTO4+7gtxOlhe74NEgzRKZrHN5z/Dv/+Vkhj
+ 32VQhDRA6epYODY4dcf3SE=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=163.com header.i=@163.com
+ header.a=rsa-sha256 header.s=s110527 header.b=DO+alT+b
+Subject: [Buildroot] [PATCH] package/pkg-utils: prevent KCONFIG_ENABLE_OPT
+ from changing =m to =y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,45 +76,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: TIAN Yuanhao <tianyuanhao3@163.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+The KCONFIG_ENABLE_OPT is intended to enable a required kernel configuration
+option when a package requires it.
 
+However, this will often override an existing enabled module with `=m` with `=y`
+which overrides the module to be built-in instead of separate.
 
-On 25/07/2022 01:50, Christian Stewart via buildroot wrote:
-> These firmware files are also applicable to some Riscv hosts.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->   package/brcmfmac_sdio-firmware-rpi/Config.in | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/brcmfmac_sdio-firmware-rpi/Config.in b/package/brcmfmac_sdio-firmware-rpi/Config.in
-> index 73f400a2b7..a408c19601 100644
-> --- a/package/brcmfmac_sdio-firmware-rpi/Config.in
-> +++ b/package/brcmfmac_sdio-firmware-rpi/Config.in
-> @@ -1,6 +1,6 @@
->   config BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI
->   	bool "brcmfmac-sdio-firmware-rpi"
-> -	depends on BR2_arm || BR2_aarch64
-> +	depends on BR2_arm || BR2_aarch64 || BR2_riscv
+This is undesirable behavior; we often want these as `=m` and not `=y` to reduce
+the size of the kernel image.
 
-  The intention of the condition was to only show this option on RaspberryPi. 
-Since that idea is anyway a bit half-baked, I removed the dependency entirely. 
-There's nothing CPU arch specific in this.
+This patch changes KCONFIG_MUNGE_DOT_CONFIG to prevent changing `=m` to `=y`.
 
-  Applied to master, thanks.
+Signed-off-by: Christian Stewart <christian@paral.in>
+Co-authored-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  Regards,
-  Arnout
+---
 
->   	help
->   	  Raspberry Broadcom Bluetooth and Wifi firmware.
->   
+v1 -> v2:
+ - fix indentation spacing: use tab instead of spaces
+ - simplify by using $(1) instead of two separate variables
+v2 -> v3:
+ - refine KCONFIG_MUNGE_DOT_CONFIG
+ - refactor KCONFIG_ENABLE_OPT
+---
+ package/pkg-utils.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 7d1aea7710..2edd542ba9 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -22,12 +22,17 @@ KCONFIG_DOT_CONFIG = $(strip \
+ 
+ # KCONFIG_MUNGE_DOT_CONFIG (option, newline [, file])
+ define KCONFIG_MUNGE_DOT_CONFIG
+-	$(SED) "/\\<$(strip $(1))\\>/d" $(call KCONFIG_DOT_CONFIG,$(3))
++	$(SED) '/^\(# \)\?$(strip $(1))\>/d' $(call KCONFIG_DOT_CONFIG,$(3)) && \
+ 	echo '$(strip $(2))' >> $(call KCONFIG_DOT_CONFIG,$(3))
+ endef
+ 
+ # KCONFIG_ENABLE_OPT (option [, file])
+-KCONFIG_ENABLE_OPT  = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2))
++# If the option is already set to =m or =y, ignore.
++define KCONFIG_ENABLE_OPT
++	$(Q)if ! grep -q '^$(strip $(1))=[my]' $(call KCONFIG_DOT_CONFIG,$(2)); then \
++		$(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2)) || exit 1; \
++	fi
++endef
+ # KCONFIG_SET_OPT (option, value [, file])
+ KCONFIG_SET_OPT     = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=$(2), $(3))
+ # KCONFIG_DISABLE_OPT  (option [, file])
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
