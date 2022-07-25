@@ -1,69 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE27BC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 06:36:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC862C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 06:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4729F83F0E;
-	Mon, 25 Jul 2022 06:36:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4729F83F0E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 273ED40CB0;
+	Mon, 25 Jul 2022 06:42:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 273ED40CB0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E-lBjGzf2kN4; Mon, 25 Jul 2022 06:36:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5WeRgB_7MTIF; Mon, 25 Jul 2022 06:42:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BED583EBF;
-	Mon, 25 Jul 2022 06:36:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BED583EBF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 20859403EA;
+	Mon, 25 Jul 2022 06:42:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20859403EA
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4A1971BF38C
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 06:36:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B6D201BF38C
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 06:42:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21860417A8
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 06:36:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21860417A8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E8B9417A9
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 06:42:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E8B9417A9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kLipSQb2KiG9 for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 06:36:43 +0000 (UTC)
+ with ESMTP id 2ivt8KDL1riU for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 06:42:29 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AA1C417A4
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6AA1C417A4
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 06:36:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4839D416C1
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4839D416C1
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 06:42:29 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8C0256000C;
- Mon, 25 Jul 2022 06:36:39 +0000 (UTC)
-Date: Mon, 25 Jul 2022 08:36:38 +0200
-To: Nicolas Tran <nicolas.tran@smile.fr>
-Message-ID: <20220725083638.6f14624a@windsurf>
-In-Reply-To: <20220519082800.926607-1-nicolas.tran@smile.fr>
-References: <20220519082800.926607-1-nicolas.tran@smile.fr>
+ by mail.gandi.net (Postfix) with ESMTPSA id EF07320002;
+ Mon, 25 Jul 2022 06:42:26 +0000 (UTC)
+Date: Mon, 25 Jul 2022 08:42:25 +0200
+To: Christian Stewart <christian@paral.in>
+Message-ID: <20220725084225.40a20846@windsurf>
+In-Reply-To: <CA+h8R2rcc=sqTDY0HtE4UNUJydVZFd16PWXLXGaHo+wK0aVN6Q@mail.gmail.com>
+References: <20220625224224.1446787-1-christian@paral.in>
+ <20220723184104.0032a7dc@windsurf>
+ <CA+h8R2og5UzGbLs-NHFKdLYyEus0v20EqgdZMtHnJDQa9dY4Gg@mail.gmail.com>
+ <20220723222237.7989b5c6@windsurf>
+ <CA+h8R2qUUZ9q9L1Xs4V5GOB1W1iJcKPaMxs_-h0d2dAOKwybGg@mail.gmail.com>
+ <20220725082556.33cfb04b@windsurf>
+ <CA+h8R2rcc=sqTDY0HtE4UNUJydVZFd16PWXLXGaHo+wK0aVN6Q@mail.gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658731000;
+ d=bootlin.com; s=gm1; t=1658731347;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=6dhBFFcXm19sxp2tkq1zDl2UUOuuvbfuwVVRxRGqb00=;
- b=L+0FuzSiPXch77Jg+xujoTm8+l71WZdbCQqeadrOiyJodbniLd/6YPVvYm7pd/QCnQSIW/
- thJdVIRusvDoRyp6/heuEKRKFqejxOR0X1W3USBBu+TYV9TW4/ce7jJc7OrKiGCI3DPjHt
- fCccILmCQHjX5ii9T3HednRkT5w+KtcIszxW/kZhKiQetjkJSJyMQNfmgZgXl66C5M4WjJ
- c5lulLmkALMEQiMTsP3pawe5rmUbJoNCX79DmV+MbFLMcn5GN1I16IzMV9Mokoh4Rl3kE1
- MQsNRG6D7JQPA4vG8kyiXrCqYP5QNLqTS7MZTZYB3gEr5beS0KVvSQXtNBEkNw==
+ bh=usiEWvfdn+Q0x6mnlTlkjl4bjsP4B5REAoOdEJfTB/E=;
+ b=cZS1PP3lvFERfoYFcjyYIR8ffhxlB+hqCx1B5kgAE09zTje4kWvDa4fG+yJIODPCB4S42l
+ jrhDhyqnnMKk7TH9R541KYnB7JGi5mapSAt6ea+TQhRg7jKWY91aQAvwZV0BlvJHW6LgTz
+ VSR3/Mu4+Bk/jdW16oYqsx7OH84T326WSZRJPlYPS3fwt/aLXmDHeM3R9lO6cKWulyZ10G
+ shRGfYqVngcEOw+oN1oLZZdVUysxlqdY7V0uj9tsgJeiqad6YmkgNMbIQEilH2UBXGK2mo
+ kUnxyiOyLgOeS47eSaTtM8W9PzlbPDPOs+d31le8LWa4D+fcFhncP5ruvMyaww==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=L+0FuzSi
-Subject: Re: [Buildroot] [PATCH 1/1] package/hyperfine: new package
+ header.s=gm1 header.b=cZS1PP3l
+Subject: Re: [Buildroot] [PATCH 1/1] package/gocryptfs: fix build against
+ riscv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,60 +84,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+Cc: Anisse Astier <anisse@astier.eu>, "Yann E .
+ MORIN" <yann.morin.1998@free.fr>,
+ Christian Stewart via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+On Sun, 24 Jul 2022 23:27:46 -0700
+Christian Stewart <christian@paral.in> wrote:
 
-On Thu, 19 May 2022 10:28:00 +0200
-Nicolas Tran <nicolas.tran@smile.fr> wrote:
+> I don't think it's that the fork changed the deps, rather that the
+> newer version of Go (1.18) drops those lines whereas a previous
+> version would have kept them.
 
-> hyperfine is a benchmark tool written in Rust. It evaluates
-> execution time of a command passed in arguments and make
-> a relative comparison if multiple arguments are used at the
-> same time.
-> It can be convinient for purposes of Rust-written systems as
-> it runs in a stable version of Rust.
-> 
-> The package has been checked with correct formatting and
-> without typos:
-> ./utils/check-package package/hyperfine/*
-> 
-> A CI test was run on gitlab.com to verify toolchain compatibilities.
-> 
-> Signed-off-by: Nicolas Tran <nicolas.tran@smile.fr>
-> ---
-> test-pkg config:
-> BR2_PACKAGE_HYPERFINE=y
-> ---
->  package/Config.in                |  1 +
->  package/hyperfine/Config.in      | 11 +++++++++++
->  package/hyperfine/hyperfine.hash |  4 ++++
->  package/hyperfine/hyperfine.mk   | 12 ++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/hyperfine/Config.in
->  create mode 100644 package/hyperfine/hyperfine.hash
->  create mode 100644 package/hyperfine/hyperfine.mk
-
-Thanks a lot, I've applied your patch, after fixing two minor issues:
-
- - An entry in the DEVELOPERS file was missing, so I've added it
-
- - There were some trailing white space in Config.in, which were
-   reported by check-package, so I was surprised to read in your commit
-   log that you had no check-package warning. Anyway, I fixed this up
-   as well.
-
-Thanks for your contribution!
+Ah, ok, makes more sense to me, thanks for the explanation.
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
