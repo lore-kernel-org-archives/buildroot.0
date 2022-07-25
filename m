@@ -1,70 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2DCFC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 08:39:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 512EEC43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 08:43:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69A73610CC;
-	Mon, 25 Jul 2022 08:39:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69A73610CC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X3KYysv1Q7x7; Mon, 25 Jul 2022 08:39:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3AC6A60B7D;
-	Mon, 25 Jul 2022 08:39:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AC6A60B7D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9D2711BF2F6
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 08:39:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 83DE8415B3
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 08:39:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83DE8415B3
+	by smtp4.osuosl.org (Postfix) with ESMTP id D357440904;
+	Mon, 25 Jul 2022 08:43:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D357440904
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vx1j15BfYYLZ for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 08:39:03 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C422F415A9
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C422F415A9
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 08:39:02 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:9102:8e95:18fd:a25a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 6209719F734;
- Mon, 25 Jul 2022 10:38:55 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 25 Jul 2022 10:38:55 +0200
-Date: Mon, 25 Jul 2022 10:38:55 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Christian Stewart <christian@paral.in>
-Message-ID: <20220725083855.GA3168@scaer>
-References: <20220725002414.704892-1-christian@paral.in>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220725002414.704892-1-christian@paral.in>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658738339;
- bh=sUDW2S4VYNGeirsj0MAJboW5P5NUWwwDz9zJrE25TIQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=YKC/JTAfNwFljSwudYCq+Fqp6iYgnLPKXk0jdv3E9Vrxp92XJ10r5DYhX71qcMbbC
- oJIbt4Qzu0TShCJpES4YCQDe0D2JHkqccXgV8QP+13EmBKHSwM+dVSTGuFihYuZTHc
- A1WiNiZprzXuc/gbaZ1GRrBKPTC4htHtIrgZEW1KKdh2E3xeVMRxgjKHoD4Ego5Wcu
- iFTSm/P5WiuejgGXYRMnWB3ja7yz88leIs79Yi6Q3MquR5OyYqq14J0jLHDWZDSbwG
- CCdQAWA8eLuzNz8sDqGcvZCpVdNME+JhGkdrcaEHrp+bwW5X8dVJsEyIOsgsG2SbQD
- 2YRnIa/LDcydw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YKC/JTAf
-Subject: Re: [Buildroot] [PATCH v4 1/1] package/runc: add host package
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B6wb2RHmz9sk; Mon, 25 Jul 2022 08:43:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65C2640897;
+	Mon, 25 Jul 2022 08:43:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65C2640897
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 476D61BF9AC
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 08:43:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30C28404A8
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 08:43:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30C28404A8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PhHahtLrDMRi for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 08:43:29 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 60B1A401F1
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 08:43:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60B1A401F1
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 55E7A85D2D; Mon, 25 Jul 2022 08:29:48 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 25 Jul 2022 10:38:31 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 257881e6e99b766f2a9466c7713e48cbcb96161c
+X-Git-Newrev: 94d8764ef938936aa5432f1f13bd1b2d8b62a159
+X-Patchwork-Hint: ignore
+Message-Id: <20220725082948.55E7A85D2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hawktracer: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,96 +55,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Christian, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=94d8764ef938936aa5432f1f13bd1b2d8b62a159
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-07-24 17:24 -0700, Christian Stewart spake thusly:
-> Adds support for building runc as a host package.
-> 
-> The bin name and gomod have to be specified as the pkg-golang infrastructure
-> assumes the bin name will be "host-runc" on default.
+HawkTracer is a highly portable, low-overhead, configurable profiling
+tool
 
-Is that still true, even after 8539378771f (package/pkg-golang: default
-to rawname to install binaries) ?
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/hawktracer/Config.in       | 25 ++++++++++++++++++++++
+ package/hawktracer/hawktracer.hash |  3 +++
+ package/hawktracer/hawktracer.mk   | 44 ++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 74 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> 
-> ---
-> 
-> changes v3 -> v4:
-> 
->  - drop unnecessary GOMOD line
->  - remove seccomp and apparmor tags for host package
->  - thanks Thomas for the review.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/Config.in.host      | 1 +
->  package/runc/Config.in.host | 8 ++++++++
->  package/runc/runc.mk        | 6 ++++++
->  3 files changed, 15 insertions(+)
->  create mode 100644 package/runc/Config.in.host
-> 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 71f2a9311c..8078a8304d 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -82,6 +82,7 @@ menu "Host utilities"
->  	source "package/raspberrypi-usbboot/Config.in.host"
->  	source "package/rauc/Config.in.host"
->  	source "package/riscv-isa-sim/Config.in.host"
-> +	source "package/runc/Config.in.host"
->  	source "package/rustc/Config.in.host"
->  	source "package/s6-rc/Config.in.host"
->  	source "package/sam-ba/Config.in.host"
-> diff --git a/package/runc/Config.in.host b/package/runc/Config.in.host
-> new file mode 100644
-> index 0000000000..ce0dd518a6
-> --- /dev/null
-> +++ b/package/runc/Config.in.host
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_HOST_RUNC
-> +	bool "host runc"
-> +	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-> +	help
-> +	  runC is a CLI tool for spawning and running containers
-> +	  according to the OCP specification.
-> +
-> +	  https://github.com/opencontainers/runc
-> diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-> index 5faa8b683d..8ccff13a3e 100644
-> --- a/package/runc/runc.mk
-> +++ b/package/runc/runc.mk
-> @@ -23,4 +23,10 @@ RUNC_TAGS += seccomp
->  RUNC_DEPENDENCIES += libseccomp host-pkgconf
->  endif
->  
-> +HOST_RUNC_BIN_NAME = runc
-> +HOST_RUNC_LDFLAGS = $(RUNC_LDFLAGS)
-> +HOST_RUNC_TAGS = cgo static_build
-> +HOST_RUNC_INSTALL_BINS = $(HOST_RUNC_BIN_NAME)
-> +
->  $(eval $(golang-package))
-> +$(eval $(host-golang-package))
-> -- 
-> 2.35.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cd1e0e69a6..2a07ae100b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1094,6 +1094,7 @@ F:	configs/friendlyarm_nanopi_r2s_defconfig
+ F:	package/cctz/
+ F:	package/faad2/
+ F:	package/fdk-aac/
++F:	package/hawktracer/
+ F:	package/httping/
+ F:	package/iozone/
+ F:	package/leptonica/
+diff --git a/package/Config.in b/package/Config.in
+index 455c69bac9..bd3d167487 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1734,6 +1734,7 @@ endmenu
+ 
+ menu "Logging"
+ 	source "package/glog/Config.in"
++	source "package/hawktracer/Config.in"
+ 	source "package/liblog4c-localtime/Config.in"
+ 	source "package/liblogging/Config.in"
+ 	source "package/log4cplus/Config.in"
+diff --git a/package/hawktracer/Config.in b/package/hawktracer/Config.in
+new file mode 100644
+index 0000000000..7648707404
+--- /dev/null
++++ b/package/hawktracer/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_HAWKTRACER
++	bool "hawktracer"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	help
++	  HawkTracer is a highly portable, low-overhead, configurable
++	  profiling tool built in Amazon Video for getting performance
++	  metrics from low-end devices.
++
++	  https://www.hawktracer.org/
++
++if BR2_PACKAGE_HAWKTRACER
++
++config BR2_PACKAGE_HAWKTRACER_TCP_LISTENER
++	bool "TCP listener"
++	default y
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++
++comment "TCP listener needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++endif
++
++comment "hawktracer needs a toolchain w/ C++, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/hawktracer/hawktracer.hash b/package/hawktracer/hawktracer.hash
+new file mode 100644
+index 0000000000..87aa67c4b6
+--- /dev/null
++++ b/package/hawktracer/hawktracer.hash
+@@ -0,0 +1,3 @@
++# Computed locally
++sha256  b6c7fdfbe8178bc7ba49ef840ec18a92d1488ad73ac9f64d2a09042410ad3ef4  hawktracer-e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8.tar.gz
++sha256  2f377333e64ad08ad3afec8ed6c2c96ced2a6d7d67443eb2784a931bb7b3fd59  LICENSE
+diff --git a/package/hawktracer/hawktracer.mk b/package/hawktracer/hawktracer.mk
+new file mode 100644
+index 0000000000..f4654b2274
+--- /dev/null
++++ b/package/hawktracer/hawktracer.mk
+@@ -0,0 +1,44 @@
++################################################################################
++#
++# hawktracer
++#
++################################################################################
++
++HAWKTRACER_VERSION = e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8
++HAWKTRACER_SITE = $(call github,amzn,hawktracer,$(HAWKTRACER_VERSION))
++HAWKTRACER_LICENSE = MIT
++HAWKTRACER_LICENSE_FILES = LICENSE
++HAWKTRACER_INSTALL_STAGING = YES
++
++HAWKTRACER_CONF_OPTS = \
++	-DENABLE_ASAN=OFF \
++	-DENABLE_TESTS=OFF \
++	-DENABLE_CODE_COVERAGE=OFF \
++	-DENABLE_BENCHMARKS=OFF \
++	-DENABLE_DOC=OFF \
++	-DENABLE_PYTHON_BINDINGS=OFF \
++	-DENABLE_MAINTAINER_MODE=OFF \
++	-DENABLE_RELEASE_MODE=OFF \
++	-DENABLE_CLIENT=OFF \
++	-DENABLE_EXAMPLES=OFF
++
++ifeq ($(BR2_STATIC_LIBS),y)
++HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=ON
++else
++HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_HAWKTRACER_TCP_LISTENER),y)
++HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=ON
++else
++HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=OFF
++endif
++
++# Enable threads support if supported by toolchain
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=ON
++else
++HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=OFF
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
