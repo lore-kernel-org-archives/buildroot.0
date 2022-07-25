@@ -1,95 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B6D2C43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 10:10:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69096C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 10:11:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF5DA405FC;
-	Mon, 25 Jul 2022 10:10:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF5DA405FC
+	by smtp4.osuosl.org (Postfix) with ESMTP id D302F418E8;
+	Mon, 25 Jul 2022 10:11:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D302F418E8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N6S149GHpSzm; Mon, 25 Jul 2022 10:10:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fRgUwSUI74Up; Mon, 25 Jul 2022 10:11:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E3D7640407;
-	Mon, 25 Jul 2022 10:10:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3D7640407
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A48291BF371
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 10:10:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31CDF416F3;
+	Mon, 25 Jul 2022 10:11:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31CDF416F3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 117C81BF371
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 10:11:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E5CC40407
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 10:10:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E5CC40407
+ by smtp1.osuosl.org (Postfix) with ESMTP id DD6E284B81
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 10:11:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD6E284B81
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pPJgNvCyQtrw for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 10:10:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FZa_gYPhjcqL for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 10:11:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4109E400C7
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4109E400C7
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 10:10:42 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id bn9so4359272wrb.9
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 03:10:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD72A847C1
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CD72A847C1
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 10:11:11 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ f24-20020a1cc918000000b003a30178c022so9043782wmb.3
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 03:11:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:from:to:cc:references:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=n4OVhu+XzR4A+ZaK3R/aen7QS6VIIPT3az4yYZv9vNg=;
- b=dtrzyW9Z1y58txmP261IoUPVU4CKZxGw+2KFxGcJUWp3CWqEk4OoSMPq924qNfOmIC
- fBdfHep5vJ6BqdlT8otKxjU3EAUXmdNDuEwHzHkJqx2R/Oa1+eggwNSrqWBTUx3bc+Bl
- U1vuovk468wd0sjWImIOZBURsMeKEtvNpnBFMBF8reQFAVxBWk2q1xcqF8SXmGv0B7Dv
- NLmBQFp6jq+yoteH4IW0D2PCaPMyHN1IQCRCI3DEs/bwP6XsHz1Br+41QhOQPlZu0WDO
- A4Q3gmbM1axsq4j1RQQX9qWQ2Is4wPqBJrLfsOR4OLZooT/YzVFjDSKQNLFEQRcg7MqV
- GI/g==
-X-Gm-Message-State: AJIora8K8wFH6k7hLaZFNgm5x8RftdrOLSk9HRr1ERvttz55ggr2vp/r
- 3ccDrrklhkFVd9gmFOqpeou1Iw==
-X-Google-Smtp-Source: AGRyM1tHmpb44MdCVDIaB0dTxQpWOp8niaMuGyD4WT+sdEWcihKKrc9gSaytr/HgrEpRedGEq0e1sQ==
-X-Received: by 2002:a05:6000:184d:b0:21e:8653:a0e7 with SMTP id
- c13-20020a056000184d00b0021e8653a0e7mr3592141wri.702.1658743840274; 
- Mon, 25 Jul 2022 03:10:40 -0700 (PDT)
+ bh=bts7rek9WrkJahLIz+LmVlQuQGvBBD866bGTX9dcE+g=;
+ b=dggB1i3u/mc+t/S4dFwF1fE5mMJH9wWDgEX91y3JEDYYMUEnO6Ro6upL6RH8z+l2Kk
+ A/Fa3XTIxOv3LeVjC3KDw+Gh/wXMdmVeH4WLWMBGcnPMfJSZ8EJgdnEHfUJTp2/AJp9e
+ 4YaVikXIt0FB2rmyxqV7Z8bmqbpalkrMFfHjjqV3QSpjqVb/2KNTmX39jzy4F3AMOlhV
+ HgPJfSdCqdTHQZFxEVtlCeqQQ58eRxoFU2begAF/+TFPhCcMNm5Q5BLsFlYeTFGFjP2z
+ d/HCMnBwLYUFj0o3/woBqvCCt73/Pxh/Afw7e5jFae3WmydBtVaiq5ej0K+SABcmO8nB
+ 9iEw==
+X-Gm-Message-State: AJIora9PpNY+we6gcMx+sNaaNf/LK8vkodgcHP6K5FCL0Y/9BUyTm84b
+ mktsWlg2zl2e+yfj30jf6huTJAGH7QsWgg==
+X-Google-Smtp-Source: AGRyM1u4aUT0nyhFeEAErXcX/h0RgMMcYbrzXxmgetZzpDjKenXCE/f2KW+5Oowz2keHTL4qYS2UWg==
+X-Received: by 2002:a1c:7401:0:b0:3a3:182f:7be9 with SMTP id
+ p1-20020a1c7401000000b003a3182f7be9mr20223309wmc.189.1658743870005; 
+ Mon, 25 Jul 2022 03:11:10 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- f12-20020a5d568c000000b0021e5cc26dd0sm9825660wrv.62.2022.07.25.03.10.39
+ p7-20020a5d68c7000000b0021e084d9133sm14088237wrw.27.2022.07.25.03.11.09
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Jul 2022 03:10:39 -0700 (PDT)
-Message-ID: <26e6821b-a676-a8d6-df3a-83791f097ada@mind.be>
-Date: Mon, 25 Jul 2022 12:10:37 +0200
+ Mon, 25 Jul 2022 03:11:09 -0700 (PDT)
+Message-ID: <c864e12c-fd3e-1d08-f379-96af711d619e@mind.be>
+Date: Mon, 25 Jul 2022 12:11:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-From: Arnout Vandecappelle <arnout@mind.be>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220612200904.2783767-1-fontaine.fabrice@gmail.com>
- <06b59095-245e-e92e-d6e8-73fcef93437a@mind.be>
+References: <20220607172526.910675-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <06b59095-245e-e92e-d6e8-73fcef93437a@mind.be>
+In-Reply-To: <20220607172526.910675-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language
- :from:to:cc:references:organization:in-reply-to
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=n4OVhu+XzR4A+ZaK3R/aen7QS6VIIPT3az4yYZv9vNg=;
- b=Bxx++ILtYmSx2uo0cK696AkgVtTN1s39QPDPIXi8Hba9uKZ1yKgThQSHnjoYPRFvp0
- 1YyLO6QtvtlAx92jFe8z5fLesWwYyeqglyXKxNDtPkQA/i1DN40zWElg+0hwWuQpEqWW
- +JxQo3/BEWu7ojZ/mamFRI/inTUFY0YPuyzXLzwHZTNVlUpaUCdRDUBgSbihLAlx3YE8
- +cGLOaDOvMp5HnUjnPAkOyjM0iKvYIc44gGv+2qdYyTtc1+/9iw5AWI8c1zBueeLQLn+
- VQM1Wk2O4MUqjhPYtZvOAFxVoK3JTrkr1a1EosrquABULZYghbF0UeMK4ZHgRiw7k9S7
- d/Ow==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=bts7rek9WrkJahLIz+LmVlQuQGvBBD866bGTX9dcE+g=;
+ b=YuB2jiBUrQZ+/g+9J9NJSjYMA/uan6OJgpwyCwyyskaNW5ydhFyrWKEklch800Y8PX
+ LFkdPR1BIKARIjcYNCCwQltUeMWWg/r6ly0WIvGhWxPqcFgGitzL0Z95hKdB/0LXOYd0
+ aV8EC4gJHf89DlMw+gmi/dkiJN5iTh0rW89dLAgTnO5s3Hd4GcEp6oQgL7rd5yU2pJ3C
+ x+pTF55dyUS+l316Kig07rfJW9xesNbSo3AkDCq0cjiiQKPtb96dZasZ9PwtOMiclZUA
+ GLBJXQuTifTu0Eslxjx0HTIr3D/La3cB6Deu/hklQHmIkiNSuCPULBRrpbXait9HmcVq
+ ISOw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Bxx++ILt
-Subject: Re: [Buildroot] [PATCH 1/1] package/zstd: pass _GNU_SOURCE in CFLAGS
+ header.a=rsa-sha256 header.s=google header.b=YuB2jiBU
+Subject: Re: [Buildroot] [PATCH 1/1] package/dieharder: pass _GNU_SOURCE in
+ CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,51 +102,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Julien Viard de Galbert <julien@vdg.name>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Ck9uIDE0LzA2LzIwMjIgMjE6MTIsIEFybm91dCBWYW5kZWNhcHBlbGxlIHdyb3RlOgo+Cj4KPiBP
-biAxMi8wNi8yMDIyIDIyOjA5LCBGYWJyaWNlIEZvbnRhaW5lIHdyb3RlOgo+PiBGaXggdGhlIGZv
-bGxvd2luZyBidWlsZCBmYWlsdXJlOgo+Pgo+PiB1dGlsLmM6IEluIGZ1bmN0aW9uICdVVElMX3V0
-aW1lJzoKPj4gdXRpbC5jOjE3MzoyNzogZXJyb3I6ICdzdGF0X3QnIHtha2EgJ2NvbnN0IHN0cnVj
-dCBzdGF0J30gaGFzIG5vIG1lbWJlciBuYW1lZCAKPj4gJ3N0X210aW0nOyBkaWQgeW91IG1lYW4g
-J3N0X210aW1lJz8KPj4gwqDCoCAxNzMgfMKgwqDCoMKgIHRpbWVidWZbMV0gPSBzdGF0YnVmLT5z
-dF9tdGltOwo+PiDCoMKgwqDCoMKgwqAgfMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgXn5+fn5+fgo+PiDCoMKgwqDCoMKgwqAgfMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RfbXRpbWUKPj4KPj4g
-Rml4ZXM6Cj4+IMKgIC0gCj4+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRz
-L2RkOTQ0YTNiZDRhYzBjOTRiMmJlYzhhYzIwOTEwMGRhYWY0MzkwM2QKPj4KPj4gU2lnbmVkLW9m
-Zi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4+IC0t
-LQo+PiDCoCBwYWNrYWdlL3pzdGQvenN0ZC5tayB8IDIgKy0KPj4gwqAgMSBmaWxlIGNoYW5nZWQs
-IDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4+Cj4+IGRpZmYgLS1naXQgYS9wYWNrYWdl
-L3pzdGQvenN0ZC5tayBiL3BhY2thZ2UvenN0ZC96c3RkLm1rCj4+IGluZGV4IGU4ZjYzMTUyMjIu
-Ljc1ZWI2ZWNjMDcgMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2UvenN0ZC96c3RkLm1rCj4+ICsrKyBi
-L3BhY2thZ2UvenN0ZC96c3RkLm1rCj4+IEBAIC0zNiw3ICszNiw3IEBAIFpTVERfT1BUUyArPSBI
-QVZFX0xaND0wCj4+IMKgIGVuZGlmCj4+IMKgIMKgICMgenN0ZCB3aWxsIGFwcGVuZCAtTzMgYWZ0
-ZXIgJChDRkxBR1MpLCB1c2UgTU9SRUZMQUdTIHRvIG92ZXJyaWRlIGFnYWluCj4+IC1aU1REX09Q
-VFMgKz0gTU9SRUZMQUdTPSIkKFRBUkdFVF9PUFRJTUlaQVRJT04pIgo+PiArWlNURF9PUFRTICs9
-IE1PUkVGTEFHUz0iJChUQVJHRVRfT1BUSU1JWkFUSU9OKSAtRF9HTlVfU09VUkNFIgo+Cj4gwqBB
-bHRob3VnaCB0aGlzIHdvcmthcm91bmQgc2VlbXMgcXVpdGUgaW5ub2N1b3VzLCBpdCBkb2Vzbid0
-IGZlZWwgbGlrZSB0aGUgCj4gcmlnaHQgdGhpbmcgdG8gZG8uIEluZGVlZCwgdGhlIGNvZGUgYXJv
-dW5kIHRoZSB1c2Ugb2Ygc3RfbXRpbSBhbHJlYWR5IGRvZXMgCj4gZXZlcnkgZWZmb3J0IG9mIG1h
-a2luZyBzdXJlIHRoYXQgdGhlIHRvb2xjaGFpbiByZWFsbHkgc3VwcG9ydHMgc3RfbXRpbS4KPgo+
-IMKgQWN0dWFsbHksIGl0IGZlZWxzIGxpa2UgYSBidWcgaW4gZ2xpYmMuIFBPU0lYIHJlcXVpcmUg
-c3RfbXRpbSB0byBleGlzdCwgc28gCj4gcmVxdWlyaW5nIF9HTlVfU09VUkNFIGZvciBpdCBpcyBq
-dXN0IHBsYWluIHdyb25nLiBJbmRlZWQsIGluIAo+IHN5c2RlcHMvdW5peC9zeXN2L2xpbnV4L21p
-Y3JvYmxhemUvYml0cy9zdHJ1Y3Rfc3RhdC5oLCB0aGUgbGFyZ2VmaWxlIAo+IGRlZmluaXRpb24g
-b2Ygc3RfbXRpbSBpcyBwcm90ZWN0ZWQgYnkgdGhlIF9fVVNFX01JU0MgbWFjcm8sIHdoaWxlIHRo
-ZSAKPiBub24tbGFyZ2VmaWxlIGRlZmluaXRpb24gaXMgcHJvdGVjdGVkIGJ5IHRoZSBfX1VTRV9Y
-T1BFTjJLOCBtYWNybyAod2hpY2ggaXMgCj4gdGhlIGNvcnJlY3Qgb25lKS4gU28gSSdkIHJhdGhl
-ciBwYXRjaCBnbGliYy4KCiDCoFNvIHRoYXQncyBleGFjdGx5IHdoYXQgSSBkaWQgWzFdLiBNYXJr
-ZWQgYXMgc3VwZXJzZWRlZC4KCgogwqBSZWdhcmRzLAogwqBBcm5vdXQKClsxXSAKaHR0cHM6Ly9w
-YXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDIyMDcyNTEwMDc0
-NS4yODc4ODk2LTEtYXJub3V0QG1pbmQuYmUvCgoKCj4KPiDCoEFwcGFyZW50bHksIERlYmlhbiBo
-YXMgYSBzaW1pbGFyIHByb2JsZW0gb24gQWxwaGEgWzFdLgo+Cj4gWzFdIGh0dHBzOi8vZ2l0aHVi
-LmNvbS9mYWNlYm9vay96c3RkL3B1bGwvMjk4Ngo+Cj4+IMKgIMKgIFpTVERfQlVJTERfTElCU19C
-QVNFTkFNRVMgPSBsaWJ6c3RkLnBjCj4+IMKgIGlmZXEgKCQoQlIyX1NUQVRJQ19MSUJTKSx5KQpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+
+
+On 07/06/2022 19:25, Fabrice Fontaine wrote:
+> Drop third patch and pass _GNU_SOURCE in CFLAGS to avoid the following
+> build failure:
+> 
+> In file included from /nvmedata/autobuild/instance-18/output-1/host/microblazeel-buildroot-linux-gnu/sysroot/usr/include/bits/stat.h:25,
+>                   from /nvmedata/autobuild/instance-18/output-1/host/microblazeel-buildroot-linux-gnu/sysroot/usr/include/sys/stat.h:101,
+>                   from ../include/dieharder/libdieharder.h:23,
+>                   from bits.c:7:
+> /nvmedata/autobuild/instance-18/output-1/host/microblazeel-buildroot-linux-gnu/sysroot/usr/include/bits/struct_stat.h:99:33: error: field 'st_atim' has incomplete type
+>     99 |         struct timespec         st_atim;      /* Time of last access.  */
+>        |                                 ^~~~~~~
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/4609c8e2af24d9536eb33397a4659ad740aca742
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+  Superseded by [1].
+
+  Regards,
+  Arnout
+
+[1] 
+https://patchwork.ozlabs.org/project/buildroot/patch/20220725100745.2878896-1-arnout@mind.be/
+
+
+> ---
+>   ...RCE-for-uint-and-M_PI-with-musl-libc.patch | 28 -------------------
+>   ...0003-Add-static-to-inline-functions.patch} |  0
+>   ...ch => 0004-Remove-defunct-rgb_operm.patch} |  0
+>   package/dieharder/dieharder.mk                |  6 +++-
+>   4 files changed, 5 insertions(+), 29 deletions(-)
+>   delete mode 100644 package/dieharder/0003-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch
+>   rename package/dieharder/{0004-Add-static-to-inline-functions.patch => 0003-Add-static-to-inline-functions.patch} (100%)
+>   rename package/dieharder/{0005-Remove-defunct-rgb_operm.patch => 0004-Remove-defunct-rgb_operm.patch} (100%)
+> 
+> diff --git a/package/dieharder/0003-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch b/package/dieharder/0003-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch
+> deleted file mode 100644
+> index d71cd57445..0000000000
+> --- a/package/dieharder/0003-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch
+> +++ /dev/null
+> @@ -1,28 +0,0 @@
+> -From 526510a27ef47a16699dd34a2373ad9b6bb5e8f3 Mon Sep 17 00:00:00 2001
+> -From: Julien Viard de Galbert <julien@vdg.name>
+> -Date: Sat, 14 Jan 2017 14:19:47 +0100
+> -Subject: [PATCH] Add _GNU_SOURCE for uint and M_PI with musl libc
+> -
+> -When building with musl libc _GNU_SOURCE need to be defined
+> -to provide uint type and M_PI macro
+> -
+> -Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+> ----
+> - include/dieharder/libdieharder.h | 1 +
+> - 1 file changed, 1 insertion(+)
+> -
+> -diff --git a/include/dieharder/libdieharder.h b/include/dieharder/libdieharder.h
+> -index d98b758..c1a5023 100644
+> ---- a/include/dieharder/libdieharder.h
+> -+++ b/include/dieharder/libdieharder.h
+> -@@ -17,6 +17,7 @@
+> -
+> - /* This turns on uint macro in c99 */
+> - #define __USE_MISC 1
+> -+#define _GNU_SOURCE 1
+> - #include <stdint.h>
+> - #include <sys/types.h>
+> - #include <sys/stat.h>
+> ---
+> -2.1.4
+> -
+> diff --git a/package/dieharder/0004-Add-static-to-inline-functions.patch b/package/dieharder/0003-Add-static-to-inline-functions.patch
+> similarity index 100%
+> rename from package/dieharder/0004-Add-static-to-inline-functions.patch
+> rename to package/dieharder/0003-Add-static-to-inline-functions.patch
+> diff --git a/package/dieharder/0005-Remove-defunct-rgb_operm.patch b/package/dieharder/0004-Remove-defunct-rgb_operm.patch
+> similarity index 100%
+> rename from package/dieharder/0005-Remove-defunct-rgb_operm.patch
+> rename to package/dieharder/0004-Remove-defunct-rgb_operm.patch
+> diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
+> index cbf28922fd..e15bac6bbe 100644
+> --- a/package/dieharder/dieharder.mk
+> +++ b/package/dieharder/dieharder.mk
+> @@ -36,9 +36,13 @@ endif
+>   # parallel build fail, disable it
+>   DIEHARDER_MAKE = $(MAKE1)
+>   
+> +DIEHARDER_CFLAGS = $(TARGET_CFLAGS) -D_GNU_SOURCE
+> +
+>   # Too many fixes needed to build with -fno-common which is default since gcc 10
+>   ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_10),y)
+> -DIEHARDER_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fcommon"
+> +DIEHARDER_CFLAGS += -fcommon
+>   endif
+>   
+> +DIEHARDER_CONF_ENV += CFLAGS="$(DIEHARDER_CFLAGS)"
+> +
+>   $(eval $(autotools-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
