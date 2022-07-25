@@ -4,65 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8482AC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 09:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 747C1C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 09:45:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1979A61148;
-	Mon, 25 Jul 2022 09:38:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1979A61148
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0E69611FF;
+	Mon, 25 Jul 2022 09:45:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0E69611FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sjVzgwvVa-Mz; Mon, 25 Jul 2022 09:38:37 +0000 (UTC)
+	with ESMTP id KOgdJd4oFetX; Mon, 25 Jul 2022 09:45:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0643D610D9;
-	Mon, 25 Jul 2022 09:38:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0643D610D9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 80DA01BF9AC
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 09:38:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F1E161116;
+	Mon, 25 Jul 2022 09:45:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F1E161116
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 60AB31BF3FD
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 09:45:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5AFC740A62
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 09:38:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AFC740A62
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4582E84613
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 09:45:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4582E84613
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gvTS7J9vbgAR for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 09:38:33 +0000 (UTC)
-X-Greylist: delayed 00:10:00 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D285C40597
-Received: from mail.h6t.eu (unknown [IPv6:2a01:4f8:1c1e:8216::1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D285C40597
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 09:38:32 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 9B329214312; Mon, 25 Jul 2022 11:20:19 +0200 (CEST)
-Message-ID: <5d89a113-d2f0-fd06-9f09-2c8ac4eb23bb@h6t.eu>
-Date: Mon, 25 Jul 2022 11:20:17 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9gDl3SDuTw8Z for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 09:45:03 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AE4E84188
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9AE4E84188
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 09:45:02 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id v13so7369493wru.12
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 02:45:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eOvQhUe9N0e3mnlggQ0azKXKBsUvtkx9/Ozu0RUmcBU=;
+ b=HAvf1kNMXZ1Jp9aXl4zpKb0jDOCQqlNVIYoVeIaRT43t/jj6JQzFUFDMH0oYSF8Z8i
+ cqLG1Gxk5DmXIo25pGl5JZXdP1SHN0DF+Aj2QKJgMnk93d8DfcdDFVgrStjJ4IwSjyB7
+ IQTlnaRUoEY6ahUUyorFh+TvgkNuOiSWuPHIp2fDqXrK8Amh4+tsn723xEJzaMkaWSAS
+ +TYcVAzEIaPEoOm4FhSFAXuMw5ro42W6y2ONL1vjggn+8BYDzMUyLOkvWXyW/fVZscA+
+ ZrUbIsSfHzEurs55FaDj2IYwEVgTA8WDVBQtFY+BNmRGpAkhC8qe9KiZXSI0Kh6cr13L
+ COeg==
+X-Gm-Message-State: AJIora9eqd9d2H+soUb0Y/QbGo8EtCv0T7apkoF1bCQFxcXyvXUb1wYg
+ e5ZzSbtHpM8azARi9Mj+nqxR128nxBcE6Q==
+X-Google-Smtp-Source: AGRyM1v5GmJjCvC9cVMuMteK8CUFm/EaiSYeW4LsreCkR0oLmM4ZfQweeuCGTo2Y+atfcHEJ+bgL6w==
+X-Received: by 2002:a5d:430d:0:b0:210:2ce0:e2a9 with SMTP id
+ h13-20020a5d430d000000b002102ce0e2a9mr7224005wrq.627.1658742300225; 
+ Mon, 25 Jul 2022 02:45:00 -0700 (PDT)
+Received: from P-NTS-Evian.home ([2a01:cb19:8acf:5600:86bb:8231:62d7:1874])
+ by smtp.gmail.com with ESMTPSA id
+ r17-20020adfe691000000b0020d07d90b71sm11631155wrm.66.2022.07.25.02.44.59
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 25 Jul 2022 02:44:59 -0700 (PDT)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Mon, 25 Jul 2022 11:44:56 +0200
+Message-Id: <20220725094456.15051-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220217230638.98748-1-moritz@h6t.eu>
- <20220724160833.GA2641@scaer>
-In-Reply-To: <20220724160833.GA2641@scaer>
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=h6t.eu; s=dkim; 
- t=1658740819; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=V1Jfm9IAXSA+RsMefX8ibvV8rj2k9aPvXiYiBXlSgMY=;
- b=dVAPA9Y43FTXDO9e81K8aVMuE44IyCWhcYvsrNWNSascYqZt5upg320+gGCmwCEAjfAyB2
- Z2CY2aRmJBcAxhOtmBfHfJtjNsLJ+eUdfKhlkG3pTGP7Msm2ApglRZaTXvhAdWQT0bPXxa
- rCRsaDPvmVKXWfFW39oIEU/kW9Cd80101tPRvTIKvPlHZbOgnKfTGg490QkxLPdUfqhY0V
- 1IXv7ZzAv2PpGWFdOwAVVajpnyO3k6k4Jp5VLzsKuOGHVNTjsA4UEGzEowesp1hp/JY0AN
- nGjWmG6mUMCMVNREL7bv/Z4UW4RsWlXwzKCIAj0v0gt7HoenOzc5XnctDC4NCg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=h6t.eu header.i=@h6t.eu header.a=rsa-sha256
- header.s=dkim header.b=dVAPA9Y4
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-cargo.mk: fix building
- cargo packages on 32bit arm
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eOvQhUe9N0e3mnlggQ0azKXKBsUvtkx9/Ozu0RUmcBU=;
+ b=d2F7CNExmqHZOtbyBf9VHxOrJx98bqBOrP1b9gag5SCfRfWdN61vwIpxRARi6UFQDE
+ d4b804YllhtqM7OBeDO1AY+b0OgYoeveNlZAQT2Gj17lKfWdw0J8LJkyGqgWvxFLy/px
+ B4ToKKRubgsrzfBtXTYp84hGU3Oa8dTM90VyPezd0kFYOooiSiVA9lLWrvbBJaxHlTu1
+ VXj1l2UMcbfKBfZROd3rYhZ/KAzT8v2sqPnE3hcslZmRR6RlCbPCm8mEHFkh6KvBpIOS
+ 5L+U6lR/LP2ApZINWVWqVvr+UGIOPfQ0/bsT9wqB2yV6JswWMDmCyciR2C/B0mm5uwru
+ qvtA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=d2F7CNEx
+Subject: [Buildroot] [PATCH] package/gcc: disable split-stack for non-thread
+ builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,92 +94,159 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Moritz Bitsch via buildroot <buildroot@buildroot.org>
-Reply-To: Moritz Bitsch <moritz@h6t.eu>
-Cc: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@smile.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yann, All,
+Since commit [1], the autobuilder script generate fully random
+configurations that can triggers configuration that was not tested
+before.
 
+Here, the toolchain build with uClibc-ng without threads support
+(BR2_PTHREADS_NONE=y) fail to build due to missing pthread.h header.
 
-it seems that the original autobuild error still requires the workaround 
-with rust 1.62.0. I think we should keep the workaround in place.
+../../../libgcc/generic-morestack-thread.c:42:10: fatal error: pthread.h: No such file or directory
+   42 | #include <pthread.h>
 
-If I get some time Ill have a look at what is going on, as the mentioned 
-github issues are fixed.
+This issue was actually fixed by this commit [2] adding a patch for
+gcc 4.8, 4.9, 5.3. But it get lost when gcc 6 was added to Buildroot [3].
 
+Since then the issue was present in Buildroot but has not been noticed.
 
-Regards,
+[1] https://git.buildroot.net/buildroot-test/commit/?id=27b18dcb1686a98ce718b6a816e98f8505957a6c
+[2] 2631219f648f4aa13fa36d06a483e4507cb6f3d7
+[3] 519d83bfa0442439026db4e71e605a5c1347e566
 
-Moritz Bitsch
+Fixes:
+http://autobuild.buildroot.org/results/5ec/5ec9eefacd27ef4fa73066013188796b43a30428
+https://bugs.busybox.net/show_bug.cgi?id=8766
 
-Am 24.07.22 um 18:08 schrieb Yann E. MORIN:
-> Moritz, All,
->
-> On 2022-02-18 00:06 +0100, Moritz Bitsch via buildroot spake thusly:
->> From: Moritz Bitsch <moritz@h6t.eu>
->>
->> there are duplicated symbols between rustc and gcc. Specifying
->> --allow-multiple-definition to the linker as workaround until
->> rustc is fixed.
->>
->> rust-lang issue: https://github.com/rust-lang/compiler-builtins/issues/420
-> This is supposedly fixed upstream:
->      https://github.com/rust-lang/compiler-builtins/issues/420
->
-> which leads to:
->      https://github.com/rust-lang/compiler-builtins/issues/412
->
-> which leads to:
->      https://github.com/rust-lang/compiler-builtins/pull/452
->
-> and:
->      https://github.com/rust-lang/rust/pull/93696
->
-> which is now merged.
->
-> We recently bumped to using rust 1.62.0.
->
-> Do you think that this workaround can now be dropped?
->
-> Regards,
-> Yann E. MORIN.
->
->> Fixes: http://autobuild.buildroot.net/results/53f/53f5598b8e520caaa135fb4923c09da382dab329
->> Signed-off-by: Moritz Bitsch <moritz@h6t.eu>
->> ---
->>   package/pkg-cargo.mk | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
->> index e74a8358bc..71d695d926 100644
->> --- a/package/pkg-cargo.mk
->> +++ b/package/pkg-cargo.mk
->> @@ -46,6 +46,14 @@ PKG_CARGO_ENV = \
->>   	CARGO_BUILD_TARGET="$(RUSTC_TARGET_NAME)" \
->>   	CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_LINKER=$(notdir $(TARGET_CROSS))gcc
->>   
->> +#
->> +# This is a workaround for https://github.com/rust-lang/compiler-builtins/issues/420
->> +# and should be removed when fixed upstream
->> +#
->> +ifeq ($(NORMALIZED_ARCH),arm)
->> +	PKG_CARGO_ENV += RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
->> +endif
->> +
->>   HOST_PKG_CARGO_ENV = \
->>   	$(PKG_COMMON_CARGO_ENV)
->>   
->> -- 
->> 2.35.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+
+From Peter's comments (2016):
+"I also doubt the no-thread option gets used very much.
+Perhaps the way forward is to deprecate it and then make
+threads always available, similar to how we did for
+largefile/IPv6?"
+
+https://bugs.busybox.net/show_bug.cgi?id=8766#c4
+
+We are now in 2022, do we still want to support the no-thread
+option?
+---
+ ...le-split-stack-for-non-thread-builds.patch | 26 +++++++++++++++++++
+ ...le-split-stack-for-non-thread-builds.patch | 26 +++++++++++++++++++
+ ...le-split-stack-for-non-thread-builds.patch | 26 +++++++++++++++++++
+ 3 files changed, 78 insertions(+)
+ create mode 100644 package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
+ create mode 100644 package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch
+ create mode 100644 package/gcc/12.1.0/0001-disable-split-stack-for-non-thread-builds.patch
+
+diff --git a/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch b/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
+new file mode 100644
+index 0000000000..668b1cd9d7
+--- /dev/null
++++ b/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
+@@ -0,0 +1,26 @@
++From cdb76d638e91cc53949585d98fa653d3671b92ac Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 25 Jul 2022 00:29:55 +0200
++Subject: [PATCH] disable split-stack for non-thread builds
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++[Romain: convert to git format]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ libgcc/config/t-stack | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
++index cc0366b4cd8..f3f97e86d60 100644
++--- a/libgcc/config/t-stack
+++++ b/libgcc/config/t-stack
++@@ -1,4 +1,6 @@
++ # Makefile fragment to provide generic support for -fsplit-stack.
++ # This should be used in config.host for any host which supports
++ # -fsplit-stack.
+++ifeq ($(enable_threads),yes)
++ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+++endif
++-- 
++2.34.3
++
+diff --git a/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch b/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch
+new file mode 100644
+index 0000000000..dba2d02d7f
+--- /dev/null
++++ b/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch
+@@ -0,0 +1,26 @@
++From 3b9d7d397fa6dc290eb05bffca80968efb6ec2e5 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 25 Jul 2022 00:29:55 +0200
++Subject: [PATCH] disable split-stack for non-thread builds
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++[Romain: convert to git format]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ libgcc/config/t-stack | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
++index cc0366b4cd8..f3f97e86d60 100644
++--- a/libgcc/config/t-stack
+++++ b/libgcc/config/t-stack
++@@ -1,4 +1,6 @@
++ # Makefile fragment to provide generic support for -fsplit-stack.
++ # This should be used in config.host for any host which supports
++ # -fsplit-stack.
+++ifeq ($(enable_threads),yes)
++ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+++endif
++-- 
++2.34.3
++
+diff --git a/package/gcc/12.1.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/12.1.0/0001-disable-split-stack-for-non-thread-builds.patch
+new file mode 100644
+index 0000000000..e801085dad
+--- /dev/null
++++ b/package/gcc/12.1.0/0001-disable-split-stack-for-non-thread-builds.patch
+@@ -0,0 +1,26 @@
++From 4f67134e0b1404fef4ea72342be8fab4c37ca8c8 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 25 Jul 2022 00:29:55 +0200
++Subject: [PATCH] disable split-stack for non-thread builds
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++[Romain: convert to git format]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ libgcc/config/t-stack | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
++index cc0366b4cd8..f3f97e86d60 100644
++--- a/libgcc/config/t-stack
+++++ b/libgcc/config/t-stack
++@@ -1,4 +1,6 @@
++ # Makefile fragment to provide generic support for -fsplit-stack.
++ # This should be used in config.host for any host which supports
++ # -fsplit-stack.
+++ifeq ($(enable_threads),yes)
++ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+++endif
++-- 
++2.34.3
++
+-- 
+2.34.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
