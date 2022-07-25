@@ -4,69 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34368C43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 07:11:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CA7EC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 07:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 91CED40CB0;
-	Mon, 25 Jul 2022 07:11:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91CED40CB0
+	by smtp2.osuosl.org (Postfix) with ESMTP id ECE4D40CD9;
+	Mon, 25 Jul 2022 07:34:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECE4D40CD9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nJ_5mNF_nn0z; Mon, 25 Jul 2022 07:11:10 +0000 (UTC)
+	with ESMTP id qZNzd8lR1sfd; Mon, 25 Jul 2022 07:34:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D87440CBA;
-	Mon, 25 Jul 2022 07:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D87440CBA
+	by smtp2.osuosl.org (Postfix) with ESMTP id EBA9840CDA;
+	Mon, 25 Jul 2022 07:34:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBA9840CDA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 074C91BF379
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 07:11:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C57AB1BF379
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 07:34:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CDBE1405AF
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 07:11:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDBE1405AF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9FAFB40CD6
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 07:34:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FAFB40CD6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pgqye1O1rqVF for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 07:11:06 +0000 (UTC)
+ with ESMTP id CgeNoGHLO2Am for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 07:34:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 054F3401C2
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com
- [209.85.210.175])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 054F3401C2
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 07:11:05 +0000 (UTC)
-Received: by mail-pf1-f175.google.com with SMTP id o12so9621902pfp.5
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 00:11:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC4DF40CD5
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BC4DF40CD5
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 07:34:01 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id m8so12726924edd.9
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 00:34:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zRZYZrqLv9LRmCVktczzsTE3pl+/O2hTd1mI8RYZ24o=;
- b=uxmvxIAojKclO9UMapGzYthDbN9OZSu6MoBJhMcbQWVYushhycnydUN9K5yNQn7hUO
- S9Vc/NJ+U1I0Kp+RJVidvdZNRD6LXQFDnCpj7DLSmGIp0BxKDIzC1RVX1PWlzoH+3TBf
- GNwAeb5829drGFHRV1vgGNAU0nIUjD+SwWxLUhD8dXdg1Yy5ttLHm3EallMKBxYqOfZu
- 7HcbNUPRnsgJyEbaAZTY7cljtiIBOmRPzlEtzh338l7ipBpxDX2ZhNNxnEYkw4uBlb+k
- V60Mf0LM3K5IbLaxIV/+uPxluZDrC5j4P8h1T0FBDXqc8NACBPCtGkn+BDrixOmZQ9Pg
- X+gQ==
-X-Gm-Message-State: AJIora8ZjQY8mCC+L6B24m6zBc/Jw96ouQS/wjwzby///yloWyo2NHgB
- LehbZ4NN7mk2mXcFS38yzuk7hgbr4qwWqQ==
-X-Google-Smtp-Source: AGRyM1vZQjcE9aoUrKbY9B6N973/YliA1dWWeEHNnOzolf2AbPVz4sRC2K3nFtiJsOdPHkiEzEdFCg==
-X-Received: by 2002:a63:1220:0:b0:411:f661:f819 with SMTP id
- h32-20020a631220000000b00411f661f819mr10119967pgl.250.1658733064806; 
- Mon, 25 Jul 2022 00:11:04 -0700 (PDT)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- x23-20020a1709027c1700b0016c57657977sm8366137pll.41.2022.07.25.00.11.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 25 Jul 2022 00:11:03 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Mon, 25 Jul 2022 00:10:58 -0700
-Message-Id: <20220725071059.3067736-1-christian@paral.in>
-X-Mailer: git-send-email 2.35.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=6drdw6q+ukCcx+QN9i59OCwqG1BaarhHHlMX0gU/a4o=;
+ b=ez+e/pUFWZYZbO6F4V9yiiC10MfxR12mI4lgxnCdIlT6sZPKjNV771RC/f4nPJ1ekQ
+ SEFqfnyEAw7ZiaUd/juiN/9ly+t6RUwr1WdFWnGKhDMOZ9O8YE03/N2h+bOynG4qHto6
+ 3viM04kDmoB1GVpWhLsYJNmWT1eFXW0Tkuz3CTJjm3y53lEYKgHLwbB6PaPuM6vrLm1O
+ eR8Yx8bzBu7qJ24+eEuTVuk00bJPz/DnXtpy31bY+uD4fuoWUdG8FuvSmT3All0GMlJh
+ BnbOFAhQuejzW9tTVrda58jiDQytg2JPD3j+gDS6YFov4U4LAiT50nliVC9CUZhxQJnr
+ M4QQ==
+X-Gm-Message-State: AJIora+XDyxIU58jnjaONT48gXk9gc68q/gzwlOCYfG1UNTG5q1y3rbI
+ 73nAMwLCt2RYtJjSqdCtZ64t5x8LgRP68ey8
+X-Google-Smtp-Source: AGRyM1uHWY/5SUR9Bo9Lpq53Q5IZvJEFOJlzJqZlQ4bE6ogtsQP47S/3kSvw/DKMUAkfsHlyPLMfEQ==
+X-Received: by 2002:a05:6402:520a:b0:43c:4ec:e809 with SMTP id
+ s10-20020a056402520a00b0043c04ece809mr3185282edd.198.1658734439753; 
+ Mon, 25 Jul 2022 00:33:59 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com.
+ [209.85.208.45]) by smtp.gmail.com with ESMTPSA id
+ da24-20020a056402177800b0043bbea24595sm6631680edb.31.2022.07.25.00.33.59
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 25 Jul 2022 00:33:59 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id c72so9860187edf.8
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 00:33:59 -0700 (PDT)
+X-Received: by 2002:aa7:d943:0:b0:43b:9010:9d86 with SMTP id
+ l3-20020aa7d943000000b0043b90109d86mr11801139eds.34.1658734438850; Mon, 25
+ Jul 2022 00:33:58 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] package/rtl8812au-aircrack-ng: bump to
- latest 4ab079
+References: <20220725002414.704892-1-christian@paral.in>
+In-Reply-To: <20220725002414.704892-1-christian@paral.in>
+Date: Mon, 25 Jul 2022 00:33:47 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2qq+F0oKAEHi1Oe31MiurY99cTJdOAHiCmOtyhBTotF1g@mail.gmail.com>
+Message-ID: <CA+h8R2qq+F0oKAEHi1Oe31MiurY99cTJdOAHiCmOtyhBTotF1g@mail.gmail.com>
+To: Christian Stewart <christian@paral.in>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=paral.in; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=6drdw6q+ukCcx+QN9i59OCwqG1BaarhHHlMX0gU/a4o=;
+ b=dxc7pRDt8Ksmt6wsMnYdfa3PKMCyyYM0UbDL1LH3MLXsO5NeykG4qfJ2QLdXPlunFX
+ NNYStmqb1bAuI2VYypzGTsvvDHHBRrgyOoai0Svxn9fcMaHQyxwI3exXJ5qhbhTP2RaY
+ NTudU6yXdi2gJC2Kvsp2L5m0HkTQ0JE0dQGFk2fN5eoEqtGn0TgwQUeq24Ht4s6hFhsE
+ /HqWtgH49dOut3r7T1d9dDdmp+uTaUZkSUb7BCLhgz+7fndMVsh7uQz+L2o1N49kMioK
+ hFWBnncZo1WWbhqWbwaFtbUT4hyZyBQQxpB420+JWg+5MiVQFT7fs/6+e5MFf5R0gtyI
+ xxnA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
+ header.a=rsa-sha256 header.s=google header.b=dxc7pRDt
+Subject: Re: [Buildroot] [PATCH v4 1/1] package/runc: add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,73 +101,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Christian Stewart via buildroot <buildroot@buildroot.org>
 Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump to the latest commit hash as of 2022-07-25.
+Hi all,
 
-Fixes the build against kernel 5.18.x and GCC 12 and ARM64.
+On Sun, Jul 24, 2022 at 5:24 PM Christian Stewart <christian@paral.in> wrote:
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Minor typo:
 
----
+> +       help
+> +         runC is a CLI tool for spawning and running containers
+> +         according to the OCP specification.
 
-v1 -> v2:
+Replace OCP w/ OCI.
 
- - update to 2022.07.25 version
- - add some Wno-error to fix build failures with GCC 12
+Similar patch was submitted to fix it in the existing Config.in as well.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- .../rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash   |  2 +-
- package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk | 10 ++++++++--
- 2 files changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-index 667cf34efc..0e61e95780 100644
---- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  749ba2e77d0364381445e40f7f0b7041d861cf9a356dbe53085e3abaef888c1d  rtl8812au-aircrack-ng-37e27f9165300c89607144b646545fac576ec510.tar.gz
-+sha256  ad30e61bc3100861b995617672193ab027ec51061dfe1fea9f8625b99cd27995  rtl8812au-aircrack-ng-4ab079f7cb172740c7abc8cbd6e6383bef0f65dc.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-index 55c118a825..111fd520a4 100644
---- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-@@ -4,15 +4,21 @@
- #
- ################################################################################
- 
--RTL8812AU_AIRCRACK_NG_VERSION = 37e27f9165300c89607144b646545fac576ec510
-+RTL8812AU_AIRCRACK_NG_VERSION = 4ab079f7cb172740c7abc8cbd6e6383bef0f65dc
- RTL8812AU_AIRCRACK_NG_SITE = $(call github,aircrack-ng,rtl8812au,$(RTL8812AU_AIRCRACK_NG_VERSION))
- RTL8812AU_AIRCRACK_NG_LICENSE = GPL-2.0
- RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
- 
-+RTL8812AU_AIRCRACK_NG_EXTRA_CFLAGS = \
-+	-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN \
-+	-Wno-error=address \
-+	-Wno-error=array-bounds \
-+	-Wno-error=cast-function-type
-+
- RTL8812AU_AIRCRACK_NG_MODULE_MAKE_OPTS = \
- 	CONFIG_88XXAU=m \
- 	KVER=$(LINUX_VERSION_PROBED) \
--	USER_EXTRA_CFLAGS="-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN"
-+	USER_EXTRA_CFLAGS="$(RTL8812AU_AIRCRACK_NG_EXTRA_CFLAGS)"
- 
- $(eval $(kernel-module))
- $(eval $(generic-package))
--- 
-2.35.1
-
+Thanks & best,
+Christian Stewart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
