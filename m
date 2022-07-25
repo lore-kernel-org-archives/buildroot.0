@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD13EC43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 15:26:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C002C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 15:26:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6838461B40;
-	Mon, 25 Jul 2022 15:26:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6838461B40
+	by smtp3.osuosl.org (Postfix) with ESMTP id 499AA61B88;
+	Mon, 25 Jul 2022 15:26:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 499AA61B88
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7JWf6JORpYpx; Mon, 25 Jul 2022 15:26:29 +0000 (UTC)
+	with ESMTP id eZwEN9PbubNF; Mon, 25 Jul 2022 15:26:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A76216116F;
-	Mon, 25 Jul 2022 15:26:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A76216116F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E67AA1BF2BD
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 15:25:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4927C61B8C;
+	Mon, 25 Jul 2022 15:26:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4927C61B8C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F6AE1BF982
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 15:25:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B2D6C83E88
+ by smtp3.osuosl.org (Postfix) with ESMTP id EDA6A60C0D
  for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 15:25:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2D6C83E88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDA6A60C0D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NyeVOlkLY41T for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 15:25:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1E9183E54
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F1E9183E54
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:25:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oyPtkDgA6G0I for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 15:25:36 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1582460B0B
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1582460B0B
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:25:35 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id B077E240002;
- Mon, 25 Jul 2022 15:25:32 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id 0D16F24000D;
+ Mon, 25 Jul 2022 15:25:33 +0000 (UTC)
 To: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>,
  "Yann E. MORIN" <yann.morin.1998@free.fr>,
  Peter Seiderer <ps.report@gmx.net>,
  Buildroot List <buildroot@buildroot.org>
-Date: Mon, 25 Jul 2022 17:25:20 +0200
-Message-Id: <20220725152522.1579992-5-thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Jul 2022 17:25:21 +0200
+Message-Id: <20220725152522.1579992-6-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220725152522.1579992-1-thomas.petazzoni@bootlin.com>
 References: <20220725152522.1579992-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658762733;
+ d=bootlin.com; s=gm1; t=1658762734;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=5LGKTONVAx3LqZD3ZLp7aVze+T2mIpwXFXuOqIbxBTM=;
- b=iR1d8h/PjRU31JYgjghIJsL2L8AewipO0vI6l/PSCN7qksLZ8Ij2YIAi4Ukz/HSKfTvjby
- IOz+ushnwW3gufbaERi/ruLeqMsVOJC5dVGlE2QLtc7qpVERzHACferTGC7clJAZm7eePp
- Rz0AexlwTiw0sUi79dDJFz+8JqpRWNAp9nCo1Sg7J/SoKVLPOydAS2VkozTtVXTlecX+Un
- ewA25h/OIkByOCy3dGqa8qV1Tbc2bnLGpKNsJzrZfld1Wxx+a4fXYYtSK7MFR4nsaKSGSp
- 0J8jGaksDfFvHM+9iVVFSrVl7Y6P8Fh21zQHlhG84VQmrWsC1H+kRCbOhDPEJg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=aCUgm3a1LWHh/y7Mkmxh+FMhhf7UlTJXeoBkgjSSiCY=;
+ b=DVWnhrMOyMckrvHkm4Ar+m/Mg8mtO9hRHPJuoPXb3x6BYHwFa+ESwaMWYGsc4G881HuyQw
+ 58UIW3eNTVsyS3qktOnMgiQeXF5EPr97E8vCZpP5hbiniO9gPV+60O0VBaLlrB1eGEtcBr
+ jZappTNKQ0Eu6QAC1kAnwN+ANKXuAswCJasT0rogEpN+4boWvsA7H+6y1pwFQtgGwlMQEH
+ LiNXbyY44nlJITaWhoT662cxzbXunkNrcb3XS9ah4Y+B04thA4QCIkPhJRC3ZVHOIOQi5T
+ q074tQh4CWGlOa8jDtBsiWZxMzHv8YIQhwclG+MnwInGdkSjBkRmjK7DJWk6Gw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=iR1d8h/P
-Subject: [Buildroot] [PATCH 4/5] package/qt6/qt6base: new package
+ header.s=gm1 header.b=DVWnhrMO
+Subject: [Buildroot] [PATCH 5/5] support/misc/toolchainfile.cmake.in: add
+ definitions needed by Qt6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,320 +86,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit proposes a very minimal package for qt6base. It only
-supports building QtCore, so it *really* is minimal. But that's a
-starting point, on top of which we can progressively build on top. It
-was based on initial work from Peter Seiderer.
-
-This minimal QtCore build is however sufficient to build and run
-simple non-graphical Qt applications.
-
-A number of comments:
-
- - Even though there's only qt6base for now, many other qt6 modules
-   will come later on, which is why we're using the same structure as
-   for qt5, with a subdir for package/qt6/
-
- - Qt6 is mutually exclusive with Qt5. Even though the library names
-   on the target and the location of the header files are distinct,
-   the host tools (qmake, moc and al.) have the same name, so at least
-   for now, we make them mutually exclusive.
-
- - We've chosen to use non-bundled libraries for zlib, bb2,
-   double-conversion and pcre2, for both the target and the host
-   qt6base packages.
-
- - Contrary to qt5 where the target package was building the host
-   tools, now we have a host qt6base package building the host tools,
-   and which is needed as a dependency for the target qt6base package.
-
- - qt6base is using CMake. However, it strongly recommends to use
-   Ninja as a backend instead of make, a recommandation that we follow
-   in this commit. Since we don't have support for Ninja in the
-   cmake-package infrastructure (yet), we do this manually in
-   qt6base.mk itself, by passing -Gninja to CMake at configure time,
-   and then by using CMake --build at build time and CMake --install
-   at install time, using explicitly provided build and install
-   commands. Hopefully these can go away once we have support for
-   Ninja directly in cmake-package.
-
- - We disable a number of features or external libraries using FEATURE
-   options. However, because there are over 400 FEATURE options in
-   qt6base, we did go all the way to explicitly disabling *all* of
-   them (which would be needed for both the host and target
-   packages). We expect that this list of explicit FEATURE options
-   disabling will need to grow based on the feedback of users and
-   issues encountered.
+When compiling Qt6 applications for the target, CMake needs to have
+two variables defined to find the host installation of Qt. These two
+variables are unconditionally defined, regardless of whether Qt6 is
+enabled in the configuration or not, as they do no harm when Qt6 is
+not present/used.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/qt6/Config.in                         | 43 ++++++++++
- package/qt6/qt6.mk                            | 12 +++
- ...al-qsimd_p.h-fix-build-on-ARM-v7-due.patch | 49 ++++++++++++
- package/qt6/qt6base/Config.in                 | 16 ++++
- package/qt6/qt6base/qt6base.mk                | 79 +++++++++++++++++++
- 7 files changed, 201 insertions(+)
- create mode 100644 package/qt6/Config.in
- create mode 100644 package/qt6/qt6.mk
- create mode 100644 package/qt6/qt6base/0001-src-corelib-global-qsimd_p.h-fix-build-on-ARM-v7-due.patch
- create mode 100644 package/qt6/qt6base/Config.in
- create mode 100644 package/qt6/qt6base/qt6base.mk
+ support/misc/toolchainfile.cmake.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 197fb24f8e..1a83b0794f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2874,6 +2874,7 @@ F:	package/python-git/
- F:	package/python-serial/
- F:	package/python-unittest-xml-reporting/
- F:	package/qextserialport/
-+F:	package/qt6/
- F:	package/riscv64-elf-toolchain/
- F:	package/rpcbind/
- F:	package/rt-tests/
-diff --git a/package/Config.in b/package/Config.in
-index ce0169a308..c365f5454e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -362,6 +362,7 @@ comment "Graphic libraries"
- 
- comment "Other GUIs"
- 	source "package/qt5/Config.in"
-+	source "package/qt6/Config.in"
- if BR2_PACKAGE_QT5
- comment "QT libraries and helper libraries"
- 	source "package/cutelyst/Config.in"
-diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-new file mode 100644
-index 0000000000..86394f49ba
---- /dev/null
-+++ b/package/qt6/Config.in
-@@ -0,0 +1,43 @@
-+# based on src/corelib/global/qprocessordetection.h
-+config BR2_PACKAGE_QT6_ARCH_SUPPORTS
-+	bool
-+	# no support for ARMv4
-+	default y if BR2_ARM_CPU_ARMV5 || BR2_ARM_CPU_ARMV6 || BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
-+	default y if BR2_i386
-+	default y if BR2_x86_64
-+	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-+	# sparc 32-bit is supposedly supported, but has issues due to
-+	# the need of libatomic
-+	default y if BR2_sparc64
-+	depends on BR2_USE_MMU
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 30c0e63bf2..5d2b8695b4 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -125,3 +125,12 @@ if(@@TOOLCHAIN_HAS_FORTRAN@@)
+     set(CMAKE_Fortran_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_FC@@")
+   endif()
+ endif()
 +
-+comment "qt6 needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8, host gcc >= 8"
-+	depends on !BR2_PACKAGE_QT5
-+	depends on BR2_PACKAGE_QT6_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
-+		!BR2_HOST_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS || !BR2_USE_WCHAR
++# For Qt6
++if(NOT DEFINED QT_HOST_PATH)
++  set(QT_HOST_PATH "${RELOCATED_HOST_DIR}")
++endif()
 +
-+menuconfig BR2_PACKAGE_QT6
-+	bool "Qt6"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+	depends on BR2_HOST_GCC_AT_LEAST_8
-+	depends on BR2_PACKAGE_QT6_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_WCHAR
-+	depends on !BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT6BASE
-+	help
-+	  This option enables the Qt6 framework. Sub-options allow to
-+	  select which modules should be built.
-+
-+	  http://qt.io
-+
-+if BR2_PACKAGE_QT6
-+
-+source "package/qt6/qt6base/Config.in"
-+
-+endif
-diff --git a/package/qt6/qt6.mk b/package/qt6/qt6.mk
-new file mode 100644
-index 0000000000..03e87d0574
---- /dev/null
-+++ b/package/qt6/qt6.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# qt6
-+#
-+################################################################################
-+
-+QT6_VERSION_MAJOR = 6.3
-+QT6_VERSION = $(QT6_VERSION_MAJOR).1
-+QT6_SOURCE_TARBALL_PREFIX = everywhere-src
-+QT6_SITE = https://download.qt.io/archive/qt/$(QT6_VERSION_MAJOR)/$(QT6_VERSION)/submodules
-+
-+include $(sort $(wildcard package/qt6/*/*.mk))
-diff --git a/package/qt6/qt6base/0001-src-corelib-global-qsimd_p.h-fix-build-on-ARM-v7-due.patch b/package/qt6/qt6base/0001-src-corelib-global-qsimd_p.h-fix-build-on-ARM-v7-due.patch
-new file mode 100644
-index 0000000000..1097a79922
---- /dev/null
-+++ b/package/qt6/qt6base/0001-src-corelib-global-qsimd_p.h-fix-build-on-ARM-v7-due.patch
-@@ -0,0 +1,49 @@
-+From d69db2ba3ce47f6eded0a8843c413a67d26e6375 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 24 Jul 2022 20:37:51 +0200
-+Subject: [PATCH] src/corelib/global/qsimd_p.h: fix build on ARM < v7 due to
-+ yield instruction
-+
-+On ARM < v7 with gcc, the build fails with:
-+
-+/tmp/ccRlrCQi.s: Assembler messages:
-+/tmp/ccRlrCQi.s:3858: Error: selected processor does not support `yield' in ARM mode
-+/tmp/ccRlrCQi.s:3875: Error: selected processor does not support `yield' in ARM mode
-+/tmp/ccRlrCQi.s:4606: Error: selected processor does not support `yield' in ARM mode
-+/tmp/ccRlrCQi.s:4853: Error: selected processor does not support `yield' in ARM mode
-+/tmp/ccRlrCQi.s:5268: Error: selected processor does not support `yield' in ARM mode
-+
-+while building src/corelib/thread/qfutureinterface.cpp.
-+
-+This is due to the fact that the qYieldCpu() macro on ARM, assumes
-+that if the compiler is gcc, we can do asm volatile("yield"). However,
-+this instruction is only guaranteed to exist on ARMv7+ cores. It
-+doesn't exist on ARMv5, and only some (but not all) ARMv6 cores have
-+it. If it's not available, we just fallback to the default behavior of
-+qYieldCpu(), which is to do nothing.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream bug: https://bugreports.qt.io/browse/QTBUG-105162
-+---
-+ src/corelib/global/qsimd_p.h | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/corelib/global/qsimd_p.h b/src/corelib/global/qsimd_p.h
-+index d270d09f2f..b84b257e54 100644
-+--- a/src/corelib/global/qsimd_p.h
-++++ b/src/corelib/global/qsimd_p.h
-+@@ -428,7 +428,10 @@ static inline void qYieldCpu()
-+          https://stackoverflow.com/a/70076751/134841
-+          https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105416
-+     */
-+-    asm volatile("yield"); /* this works everywhere */
-++#    if defined(Q_PROCESSOR_ARM_V7)
-++    /* The yield instruction appeared in ARMv7 */
-++    asm volatile("yield");
-++#    endif
-+ #  else
-+     __yield(); /* this is what should work everywhere */
-+ #  endif
-+-- 
-+2.37.1
-+
-diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-new file mode 100644
-index 0000000000..a489ce39fc
---- /dev/null
-+++ b/package/qt6/qt6base/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_QT6BASE
-+	bool "qt6base"
-+	select BR2_PACKAGE_DOUBLE_CONVERSION
-+	select BR2_PACKAGE_LIBB2
-+	select BR2_PACKAGE_PCRE2
-+	select BR2_PACKAGE_PCRE2_16
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt6base module, which
-+	  contains the base Qt libraries: QtCore, QtNetwork, QtGui,
-+	  QtWidgets, etc.
-+
-+	  http://qt.io
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-new file mode 100644
-index 0000000000..c67d94e193
---- /dev/null
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -0,0 +1,79 @@
-+################################################################################
-+#
-+# qt6base
-+#
-+################################################################################
-+
-+QT6BASE_VERSION = $(QT6_VERSION)
-+QT6BASE_SITE = $(QT6_SITE)
-+QT6BASE_SOURCE = qtbase-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6BASE_VERSION).tar.xz
-+QT6BASE_DEPENDENCIES = \
-+	host-ninja \
-+	host-qt6base \
-+	double-conversion \
-+	libb2 \
-+	pcre2 \
-+	zlib
-+QT6BASE_INSTALL_STAGING = YES
-+
-+QT6BASE_CONF_OPTS = \
-+	-GNinja \
-+	-DQT_HOST_PATH=$(HOST_DIR) \
-+	-DFEATURE_gui=OFF \
-+	-DFEATURE_concurrent=OFF \
-+	-DFEATURE_xml=OFF \
-+	-DFEATURE_sql=OFF \
-+	-DFEATURE_testlib=OFF \
-+	-DFEATURE_network=OFF \
-+	-DFEATURE_dbus=OFF \
-+	-DFEATURE_icu=OFF \
-+	-DFEATURE_glib=OFF \
-+	-DFEATURE_system_doubleconversion=ON \
-+	-DFEATURE_system_pcre2=ON \
-+	-DFEATURE_system_zlib=ON \
-+	-DFEATURE_system_libb2=ON
-+
-+define QT6BASE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6BASE_BUILDDIR)
-+endef
-+
-+define QT6BASE_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6BASE_BUILDDIR) --prefix $(STAGING_DIR)/usr
-+endef
-+
-+define QT6BASE_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6BASE_BUILDDIR) --prefix $(TARGET_DIR)/usr
-+endef
-+
-+HOST_QT6BASE_DEPENDENCIES = \
-+	host-ninja \
-+	host-double-conversion \
-+	host-libb2 \
-+	host-pcre2 \
-+	host-zlib
-+HOST_QT6BASE_CONF_OPTS = \
-+	-GNinja \
-+	-DFEATURE_gui=OFF \
-+	-DFEATURE_concurrent=OFF \
-+	-DFEATURE_xml=ON \
-+	-DFEATURE_sql=OFF \
-+	-DFEATURE_testlib=OFF \
-+	-DFEATURE_network=OFF \
-+	-DFEATURE_dbus=OFF \
-+	-DFEATURE_icu=OFF \
-+	-DFEATURE_glib=OFF \
-+	-DFEATURE_system_doubleconversion=ON \
-+	-DFEATURE_system_libb2=ON \
-+	-DFEATURE_system_pcre2=ON \
-+	-DFEATURE_system_zlib=ON
-+
-+define HOST_QT6BASE_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(BR2_CMAKE) --build $(HOST_QT6BASE_BUILDDIR)
-+endef
-+
-+define HOST_QT6BASE_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(BR2_CMAKE) --install $(HOST_QT6BASE_BUILDDIR)
-+endef
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
++if(NOT DEFINED QT_HOST_PATH_CMAKE_DIR)
++  set(QT_HOST_PATH_CMAKE_DIR "${RELOCATED_HOST_DIR}/lib/cmake")
++endif()
 -- 
 2.37.1
 
