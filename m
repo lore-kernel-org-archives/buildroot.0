@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BD55C43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 19:19:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 753C7C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 19:20:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BAA67418E5;
-	Mon, 25 Jul 2022 19:19:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAA67418E5
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qap4MKIv10Je; Mon, 25 Jul 2022 19:19:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28B17414CA;
-	Mon, 25 Jul 2022 19:19:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28B17414CA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 562BD1BF2A1
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 19:19:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FF9E82A28
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 19:19:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FF9E82A28
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB0E18331B;
+	Mon, 25 Jul 2022 19:20:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB0E18331B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kLZoQaDcYl8S for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 19:19:14 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dO4Ny0TksCwE; Mon, 25 Jul 2022 19:20:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C35AC832C2;
+	Mon, 25 Jul 2022 19:20:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C35AC832C2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 959551BF2A1
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 19:20:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6EF2B4015E
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 19:20:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EF2B4015E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0n5oy8xwWB-3 for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 19:20:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96AD782A0B
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 96AD782A0B
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 19:19:13 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id v13so9582847wru.12
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 12:19:13 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F73E4012B
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3F73E4012B
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 19:20:42 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ v67-20020a1cac46000000b003a1888b9d36so10055434wme.0
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 12:20:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=S/ANiNeFA1yqKd/TRW3ioOpeDtOTctD8OhlF2JUkL78=;
- b=jXvkSqyfzTdOcA8KOx2Is/GMCccOHLaKxC2S26Q3DvRx33MO7JOcOFxmbAPiufrDeP
- SjZOpVafhs8Xmzcr96bErx9cK9q67XyJqD+gULEKVUzQfsolOs/RoYu8yuHmsi9ZULuA
- uPcvLTajvcxYlemb+kGMl6ufKZFIo6Vcs+osfDJCLtpmq5LhQsOZrLEqLxnxfvV7Wfa4
- vMD9nqguGcFlTeqeS/ynrjq+CXwNr8A9OHx5QfN91N8Se+9Bll0Pdvp8Pq/ifvqZ86dX
- 71C0TLKnuenU+NOjV8FJSg1LmyKtt3352x3lsLqkdpgw0WxqowiJJTiLOqm4qQULN8TL
- DmpA==
-X-Gm-Message-State: AJIora8F8tokxu6QzIpb86gtMPD85RBkHSFyDq6K2tUhdtdqpCaKR2DP
- utKGz4dyU/M7IQCeJEa5KQqOlTNTX2M=
-X-Google-Smtp-Source: AGRyM1vyNQ1VFkep2pMdYC4xbM/nIgAXZvyvy/KVt/wiKkg5jiIM97u68pWScf6FA3F+LsZohPa/Aw==
-X-Received: by 2002:a05:6000:15c1:b0:21e:8048:1b1a with SMTP id
- y1-20020a05600015c100b0021e80481b1amr6421165wry.370.1658776751414; 
- Mon, 25 Jul 2022 12:19:11 -0700 (PDT)
+ bh=OPnkQET3EBf9HEfvRYjh1406CvQl/SV6GMclELFj2Uw=;
+ b=jZULSAtLdR3OhLYbRylB1+CB4ikJhsGLm4RS9NRsXlYsQuAks1BjujkW2Fv6ltdMjR
+ o480dbA3wzQklflxZUVZ9cFF8AG9whE0cSJwaNAYY6JHnOqpa+qQy1QxmUugbplanyE+
+ zvfHM2fbfzte2JKj+0NfxpQYIvuGX+KRfqdR8qabKbSu6EQ2kA6zO5xptIdVvcq2n8RI
+ LfZqho8Rr654UuLL2ptdXvJMG5kel6aPt4uUOGlMgSOaSF5uq8vMw41jZToHfgmxb3dZ
+ MbB0tmbl0x83OPI/CLGUzZISgF1RHjmpTHv8FoeQ7xDvwqdAJYSOE4E7G12qBv/5e+D7
+ 9NdQ==
+X-Gm-Message-State: AJIora8MOR+ubaUmfi02/jkU4CR5D/Q0LfUvZHI3QQimqpv69phURTlR
+ Vxdy2HuiLnrMxihBRTUrq6Lm3SimTjM=
+X-Google-Smtp-Source: AGRyM1uAHMkf+s+kHjC3IRksdD0B6CvpfaC8Ym1NJVBD3U5pKBYx9cyauVDuEKEqY/MttygKjtYV4w==
+X-Received: by 2002:a7b:c8da:0:b0:3a2:ffd2:8059 with SMTP id
+ f26-20020a7bc8da000000b003a2ffd28059mr9527181wml.169.1658776839677; 
+ Mon, 25 Jul 2022 12:20:39 -0700 (PDT)
 Received: from kali.home (2a01cb0120169d0bf78f966f9fb21656.ipv6.abo.wanadoo.fr.
  [2a01:cb01:2016:9d0b:f78f:966f:9fb2:1656])
  by smtp.gmail.com with ESMTPSA id
- d5-20020adff845000000b0021dd08ad8d7sm12998814wrq.46.2022.07.25.12.19.10
+ f9-20020adfb609000000b0021e519eba9bsm12535712wre.42.2022.07.25.12.20.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 25 Jul 2022 12:19:11 -0700 (PDT)
+ Mon, 25 Jul 2022 12:20:39 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Jul 2022 21:19:08 +0200
-Message-Id: <20220725191908.27040-1-fontaine.fabrice@gmail.com>
+Date: Mon, 25 Jul 2022 21:20:35 +0200
+Message-Id: <20220725192035.27119-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=S/ANiNeFA1yqKd/TRW3ioOpeDtOTctD8OhlF2JUkL78=;
- b=Z5eTVzeGijGA4up7wDF4ZfChFh0x4up6yS0GqcGmj4VUOmqO2Xhl8+Jwbdjy07I+hi
- /JzZ3D82P6Kp2Mv96kYcHVfrFVNrAYRlaP249r1YBXloAtUeu9rSJiS1lDiSYwWYn4ch
- +OuJ7EEd2ntljAlAx4wQYkwFep5EdQrI5H6hNiH+o85FWDi4G/k5jX5U9YiPbOhQzfOd
- Ve0eIoWO5HEVa+pQdYvHo9aCMCQ4B31qb4gvCRwXh9S/OtgOoo6VX7AX633Y6DzMghX3
- OMA06dvE731aKj/1fR6Nr+OC1fNYHbrME/I1FuV5mw9Qrvz/3OkkMZg8DAgjwtUg3FGY
- Kw0A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=OPnkQET3EBf9HEfvRYjh1406CvQl/SV6GMclELFj2Uw=;
+ b=Eup5hhh+8zY/gbK+Owthb6T7OLvyGd33hLh7iNsMAYAy+EFHK1mPD2wITvePNSdYTJ
+ oMCXnQ/QFoKPx1qlB08/l+KgPdgfoCCuCndm3/LMwNWI7Rea5WsHuaA9bWSLqvV1xxRA
+ UXH8U4T6uzvNioiBoa+zhuHc3RhMpaGYqZsvfwUp5yHRsaAEZvAma3aH+CSkRIcIO8X9
+ dOR6mzRcZjB+rdb0SOCES8a6MiDBsWqlMUcqi6UKkGjnhsSbxPzR2vRDh0tx6jdMTQoX
+ xOatEzR4KCRw9TwbxLBYqkYyIPQr/zXNpQYu0F2taHqTmB7BHMIgdyDDwcbh7yl14OCr
+ otyA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Z5eTVzeG
-Subject: [Buildroot] [PATCH 2/2] package/dump1090: bump to version 7.2
+ header.a=rsa-sha256 header.s=20210112 header.b=Eup5hhh+
+Subject: [Buildroot] [PATCH v2,1/1] package/dump1090: bump to version 7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -115,6 +116,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix patch number
+
  ...001-dump1090.h-fix-build-with-gcc-10.patch | 72 -------------------
  package/dump1090/Config.in                    | 10 +--
  package/dump1090/dump1090.hash                |  6 +-
