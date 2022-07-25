@@ -1,95 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C807AC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 22:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88034CCA48A
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 22:22:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F4ED41A58;
-	Mon, 25 Jul 2022 22:22:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F4ED41A58
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C06661225;
+	Mon, 25 Jul 2022 22:22:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C06661225
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kYZBpubUYVZw; Mon, 25 Jul 2022 22:22:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DnGe5DCU81U0; Mon, 25 Jul 2022 22:22:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6A9E41A51;
-	Mon, 25 Jul 2022 22:22:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6A9E41A51
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3ABBF60E57;
+	Mon, 25 Jul 2022 22:22:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ABBF60E57
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 96F8B1BF363
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:22:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C55F01BF363
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D37441A4F
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D37441A4F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B73741A52
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:22:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B73741A52
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7vMXuDTWv_y7 for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 22:22:13 +0000 (UTC)
+ with ESMTP id 0gpqbSC84EWv for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 22:22:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A55341A4C
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5A55341A4C
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 22:22:13 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id b26so17860652wrc.2
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:22:13 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3465F41A4C
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3465F41A4C
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 22:22:35 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id n185so7679938wmn.4
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:22:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=xx7XFaAr54ReRv8flR8715ah9ZY7GIZ8h/fiEwQjLR4=;
- b=ZcYgp/KYM5nkHLwkee6AbgQDE49wJAo/t+oIbo46wu7E8tFLzhoowmxpR8wncVhxfx
- VqwPdRGdYxcX8CXOklhWJ5hvve77BFXcs5sBi9CJN/9uoiFkCjYtDUuyb8+D6I2FZigS
- yLlzTBSxME2BDlORw39Z0Nq55uI1wzUwF0+ns6IBhnicogo0SKzxBUWr08P+Rj2yAUkt
- ElJ+QRho/hKhQsQId/xFhBDB8PotXxPEPHtwukLAplk0oSwS27pGMZOfkXbRPseSmebU
- J9J7KNpb9oak0xjreeJV6AuDfe3gxx4zpclb8cJOG/NAdgiV+XjEPfcbWst3dDWghaY0
- wTfw==
-X-Gm-Message-State: AJIora/LKil32CTpK8wpfF3V4/jZq4HVgEB2E94g3wGTdPqxR5muBQNm
- av0yzDPwlfcGf6LK4KvXiQAb4Q==
-X-Google-Smtp-Source: AGRyM1sx6pnaHKEdoUD58Az128U/isJr3ek5aOrtaW4D1Fk2TwEzpmKg38j1e1oLKGWqfDK+lqJ7tQ==
-X-Received: by 2002:adf:e193:0:b0:21e:626c:d082 with SMTP id
- az19-20020adfe193000000b0021e626cd082mr8632608wrb.159.1658787731559; 
- Mon, 25 Jul 2022 15:22:11 -0700 (PDT)
+ bh=knNzIHZ7RES+O8tX89Y2G9irA+4FyxS7NLCPats08fU=;
+ b=veUhtXg7Qqn3Lg90O4ou34COUhB1NtLiLv+vwdxKYE/2+zQPX4rF4R38srobzFeuRx
+ JV0FaxR8TpIaXYYs/9wFsmekmyLPw4D/ZXSbqvDyetv6fprIiFYPrFlVDf+S46CTKwdT
+ kmjMkr4Gm9OEtBHHBA6SemRC1eRzz0URJ/QXAhxzx9/dmNcmJEUaFDn3cQgiKHn90Y2X
+ z+jYNgTlSETkPuD7Pzo7C8Se6dd8pt9PMnomcaIuX/ZkyL9TD6woaTfDYyr2Yd+v+R7A
+ OgkNK091lINn1b+Fi1Dvkitc5E9zk0vpDkjZPLPnagdKOLoB1LY0GQJHKKp74f3vADEd
+ +vww==
+X-Gm-Message-State: AJIora/WAQ07mWgKZC/C46tCbCHzOxABDNJlcMa00xlj67VxieZ5hzqY
+ rX+IEfcKkas5qOrft0S6Lq9yvQ==
+X-Google-Smtp-Source: AGRyM1s6NvnDdjHLLIQZhzda03bHL0+LOYVamHYcRpVfZVVnWd1R6EucMvAztPfrEVBtSR8TBgqLTg==
+X-Received: by 2002:a05:600c:3845:b0:3a3:227d:c1c6 with SMTP id
+ s5-20020a05600c384500b003a3227dc1c6mr22922497wmr.9.1658787753341; 
+ Mon, 25 Jul 2022 15:22:33 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- r17-20020a5d52d1000000b0021d68a504cbsm12749694wrv.94.2022.07.25.15.22.10
+ p20-20020a1c5454000000b003a30c3d0c9csm19979813wmi.8.2022.07.25.15.22.32
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Jul 2022 15:22:11 -0700 (PDT)
-Message-ID: <eb0fce57-fcf7-c470-0f97-f249c88d6f29@mind.be>
-Date: Tue, 26 Jul 2022 00:22:09 +0200
+ Mon, 25 Jul 2022 15:22:32 -0700 (PDT)
+Message-ID: <31854085-b1d5-19b6-4c5d-218bd2c74684@mind.be>
+Date: Tue, 26 Jul 2022 00:22:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-To: Christian Stewart <christian@paral.in>, buildroot@buildroot.org
-References: <20220725071059.3067736-1-christian@paral.in>
+To: Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
+References: <a4133389-1182-11aa-9edc-215ffd82eb48@smile.fr>
+ <20220725123002.2967-1-br015@umbiko.net>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220725071059.3067736-1-christian@paral.in>
+In-Reply-To: <20220725123002.2967-1-br015@umbiko.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=xx7XFaAr54ReRv8flR8715ah9ZY7GIZ8h/fiEwQjLR4=;
- b=e6jlNCsLRu1ueYbG/7X/u2CsOG49PUSDQQkADNQadgiYA7uh4LPsdv6VsITSvtooO6
- /nCYwA+I/zy2tScp9Ko0DrkJxcDvFmSNNvofSYGw8a5/XgExQYzfHYEfoysK7H0jGiai
- ZRV7VX5wyJLIjm+25VGudd5zfS9N7W7I02I5pq9uDp3dcb393iYgFbzX+tj87DHyqaUy
- q14GYFsJ2wu6Q+qiXsOlpK5xtXNuJhsepbB21E7I67JNM+w0ggFRvYuIpSIMjSAd4b4c
- nf0yfipblT7Bd1O7NJT8erVWpszpZ+YhKbdC/gp988fM3l/za1OnFUX+VT/HDQIiC3pt
- hHMA==
+ bh=knNzIHZ7RES+O8tX89Y2G9irA+4FyxS7NLCPats08fU=;
+ b=henknC9vb9icF/hdiycZqOHVoF1nYYkEqY7haBazHeYwGhtPJk1jkqDzZ/cC/WMztU
+ aWSV4avSYbUtBsFOGWAZvUZBiIG80VRd+PCeQQrPm65FHIdOFRkZJZ9gpq9rVM5c5oRO
+ Qmul4vwUoAV3LA8PTGwKDZt+sJLR89jrAzkfkXfTJatRAM82yDSUvKRA0x4S1rodAxO4
+ u7iC66aakeEnfclTzKErVANAnStwrlAsaxXWO8H8tj+xVzC3c3ITmEVHITcZP6chbAZd
+ +jZyGDTUu7U2gxQMthcXNmspMbWJsbGGOQ7HIGv1vtsZUn9EVRx4P6zu4qoPY/IeIAii
+ I7gg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=e6jlNCsL
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/rtl8812au-aircrack-ng: bump
- to latest 4ab079
+ header.a=rsa-sha256 header.s=google header.b=henknC9v
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/mpd: add io_uring optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,8 +102,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@smile.fr>,
+ =?UTF-8?Q?J=c3=b6rg_Krause?= <joerg.krause@embedded.rocks>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -110,69 +111,71 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 25/07/2022 09:10, Christian Stewart via buildroot wrote:
-> Bump to the latest commit hash as of 2022-07-25.
+On 25/07/2022 14:30, Andreas Ziegler wrote:
+> Since version 0.22 mpd provides an option to use the io_uring kernel interface
+> for asynchronous access to local files. Buildroot has the necessary library
+> (package/liburing) since commit 03ca6f4e39874583060317e7e15e9e360220877e.
 > 
-> Fixes the build against kernel 5.18.x and GCC 12 and ARM64.
+> Add an optional dependency on liburing to enable asynchronous file access using
+> the kernel io_uring interface.
 > 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+> Reviewed-by: Romain Naour <romain.naour@smile.fr>
 
   Applied to master, thanks.
 
   Regards,
   Arnout
 
-> 
 > ---
+> Changes v1 -> v2:
+>    Commit message (Romain Naour)
+>    Dependency comment (Romain Naour)
+>    Modify patch description to match commit message
 > 
-> v1 -> v2:
+>   package/mpd/Config.in | 10 ++++++++++
+>   package/mpd/mpd.mk    |  7 +++++++
+>   2 files changed, 17 insertions(+)
 > 
->   - update to 2022.07.25 version
->   - add some Wno-error to fix build failures with GCC 12
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->   .../rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash   |  2 +-
->   package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk | 10 ++++++++--
->   2 files changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-> index 667cf34efc..0e61e95780 100644
-> --- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-> +++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  749ba2e77d0364381445e40f7f0b7041d861cf9a356dbe53085e3abaef888c1d  rtl8812au-aircrack-ng-37e27f9165300c89607144b646545fac576ec510.tar.gz
-> +sha256  ad30e61bc3100861b995617672193ab027ec51061dfe1fea9f8625b99cd27995  rtl8812au-aircrack-ng-4ab079f7cb172740c7abc8cbd6e6383bef0f65dc.tar.gz
->   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-> diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-> index 55c118a825..111fd520a4 100644
-> --- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-> +++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-> @@ -4,15 +4,21 @@
->   #
->   ################################################################################
+> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+> index fc0f409448..8f0af7b2d3 100644
+> --- a/package/mpd/Config.in
+> +++ b/package/mpd/Config.in
+> @@ -347,6 +347,16 @@ config BR2_PACKAGE_MPD_AVAHI_SUPPORT
+>   comment "avahi support needs a toolchain w/ dynamic library"
+>   	depends on BR2_STATIC_LIBS
 >   
-> -RTL8812AU_AIRCRACK_NG_VERSION = 37e27f9165300c89607144b646545fac576ec510
-> +RTL8812AU_AIRCRACK_NG_VERSION = 4ab079f7cb172740c7abc8cbd6e6383bef0f65dc
->   RTL8812AU_AIRCRACK_NG_SITE = $(call github,aircrack-ng,rtl8812au,$(RTL8812AU_AIRCRACK_NG_VERSION))
->   RTL8812AU_AIRCRACK_NG_LICENSE = GPL-2.0
->   RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
->   
-> +RTL8812AU_AIRCRACK_NG_EXTRA_CFLAGS = \
-> +	-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN \
-> +	-Wno-error=address \
-> +	-Wno-error=array-bounds \
-> +	-Wno-error=cast-function-type
+> +config BR2_PACKAGE_MPD_IO_URING
+> +	bool "io_uring"
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+> +	select BR2_PACKAGE_LIBURING
+> +	help
+> +	  Asynchronous I/O using kernel io_uring subsystem
 > +
->   RTL8812AU_AIRCRACK_NG_MODULE_MAKE_OPTS = \
->   	CONFIG_88XXAU=m \
->   	KVER=$(LINUX_VERSION_PROBED) \
-> -	USER_EXTRA_CFLAGS="-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN"
-> +	USER_EXTRA_CFLAGS="$(RTL8812AU_AIRCRACK_NG_EXTRA_CFLAGS)"
+> +comment "io_uring support needs a toolchain w/ headers >= 5.1"
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+> +
+>   config BR2_PACKAGE_MPD_LIBMPDCLIENT
+>   	bool "libmpdclient"
+>   	select BR2_PACKAGE_LIBMPDCLIENT
+> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+> index e265a9fc4f..c21426b873 100644
+> --- a/package/mpd/mpd.mk
+> +++ b/package/mpd/mpd.mk
+> @@ -119,6 +119,13 @@ else
+>   MPD_CONF_OPTS += -Did3tag=disabled
+>   endif
 >   
->   $(eval $(kernel-module))
->   $(eval $(generic-package))
+> +ifeq ($(BR2_PACKAGE_MPD_IO_URING),y)
+> +MPD_DEPENDENCIES += liburing
+> +MPD_CONF_OPTS += -Dio_uring=enabled
+> +else
+> +MPD_CONF_OPTS += -Dio_uring=disabled
+> +endif
+> +
+>   ifeq ($(BR2_PACKAGE_MPD_JACK2),y)
+>   MPD_DEPENDENCIES += jack2
+>   MPD_CONF_OPTS += -Djack=enabled
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
