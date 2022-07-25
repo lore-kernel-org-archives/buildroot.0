@@ -4,94 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EA78C43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 12:37:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83F71C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 12:43:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B983340AED;
-	Mon, 25 Jul 2022 12:37:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B983340AED
+	by smtp2.osuosl.org (Postfix) with ESMTP id E871040C0E;
+	Mon, 25 Jul 2022 12:43:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E871040C0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YFUAYd5AL6yQ; Mon, 25 Jul 2022 12:37:28 +0000 (UTC)
+	with ESMTP id sCmpEI__8Vih; Mon, 25 Jul 2022 12:43:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71F47404C9;
-	Mon, 25 Jul 2022 12:37:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71F47404C9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8BA121BF215
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 12:37:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EC9CD4064C;
+	Mon, 25 Jul 2022 12:43:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC9CD4064C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 73BC11BF215
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 12:43:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 64C7C404C9
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 12:37:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64C7C404C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4BC70408E8
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 12:43:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BC70408E8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pug3F8oRgqV2 for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 12:37:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p_zLnDTnQItc for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 12:43:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17A63404C2
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 17A63404C2
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 12:37:23 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id v5so6729476wmj.0
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 05:37:23 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F19F8408DD
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F19F8408DD
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 12:43:12 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id k11so15329334wrx.5
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 05:43:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=u1sCtWexgZi30odqIcjspkFaUuEoLnpeAELrkWUxB4s=;
- b=tHYWBYNr/ZrYSSiYkEfLfZe3462Z017PPlQVvi7fXVTVavS15/0mwF2ay4ldwYlXdQ
- OcrWYf1Q19GQebYkvVXnDZORAt7sWLoMCVhLAqkBAPHR5ms69FlzrK/3tDgcr6mz2wB6
- YVB681GT9dUfjV4oGYX8qcRJbUkZ5aYX8lHX/ZnMQHkGBxgxfh96U/WytzlS9bjTNfbJ
- 99GBjQ7+swTRXXCSWHQCyzV0fCdrqghZP/kYEBxWEuJWlKR11kZuXTWnN1ZrUYtE6ged
- tEm0kHs2+m4xl4K0GamuyA2kGouCZPDpv5Pjd4cNTAK7gKT91Wom/b89hTMNYxFJZr2C
- jyPA==
-X-Gm-Message-State: AJIora+sIjU/oeBgoQBD47GfjQP8kn1H8keRPGGVLPFPKT3C469cX8Te
- NcAXOOKdzil3fvtRDiWWQG2CjXVfWyFHgA==
-X-Google-Smtp-Source: AGRyM1tqro5jpfeZuVYFSbjMbh2Vo+yNrCU8yqeA5kq3whJDgiGCP5RxVoKta6SwTU803KSDs9QG3A==
-X-Received: by 2002:a7b:c415:0:b0:3a3:1d20:a4d with SMTP id
- k21-20020a7bc415000000b003a31d200a4dmr21957936wmi.137.1658752641992; 
- Mon, 25 Jul 2022 05:37:21 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ bh=OqqhL97QTC+yTqmi6O+tlKVbkGJ5hdz0azz688xkiLk=;
+ b=ACwq4TS4SYHcV67ljYcJF8OqHKo/NTy7kFt/vWGOiFC8sQ/HUPi6HUjQWNmEUvPBjd
+ MpAkvMDhTuMCdeC9zo6jP9QABj+wCqPGXWwFFCBPJxielZ1UZyuoIQp6WqgMJUJuzu7a
+ IaLjAk6nZ29yvP1rPjtpMhXdmY0vPkFslwxJy6ZKVJjcXAnb2hnTDUo6CovUGb8vN0Hy
+ M2mndjjJmbXyYMXU+RoDa0bVXIKm0zaUgjZplYVC78X7yN+NujDH/9JGaOp07F6EpeUT
+ xCQRI0HSEB0h72yjr4dRYwZ5lGcSkIyI/iQz4hcMDPAAlOdfaaM2lLQjvgjqERJ40Jyf
+ vsaQ==
+X-Gm-Message-State: AJIora+LCsuPJilyU2YGubOr/ptW2lVgdfZZIozhThAXQyxTvqoch0ob
+ tbU7zgXxfHif8mgxc2UKe4HaF1v0kKc=
+X-Google-Smtp-Source: AGRyM1sjdJAzirM03BQ+YdnD3bHmtTqBp3T0c7c8ouuPXe8v4vriK/E1W/U8EpwJfuhVGs/rp06rAg==
+X-Received: by 2002:a5d:4f85:0:b0:21e:8234:3636 with SMTP id
+ d5-20020a5d4f85000000b0021e82343636mr4738297wru.175.1658752990914; 
+ Mon, 25 Jul 2022 05:43:10 -0700 (PDT)
+Received: from kali.home (2a01cb0120169d0bf78f966f9fb21656.ipv6.abo.wanadoo.fr.
+ [2a01:cb01:2016:9d0b:f78f:966f:9fb2:1656])
  by smtp.gmail.com with ESMTPSA id
- e8-20020a05600c218800b003a319bd3278sm17701974wme.40.2022.07.25.05.37.20
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Jul 2022 05:37:21 -0700 (PDT)
-Message-ID: <1b81c8e0-22a4-65bd-7fbd-cc420965b9fd@mind.be>
-Date: Mon, 25 Jul 2022 14:37:19 +0200
+ x10-20020adfec0a000000b0021d6c7a9f50sm12066452wrn.41.2022.07.25.05.43.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 25 Jul 2022 05:43:10 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 25 Jul 2022 14:43:03 +0200
+Message-Id: <20220725124303.3986-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Hanspeter Portner <dev@open-music-kontrollers.ch>
-References: <20210917131851.31717-1-dev@open-music-kontrollers.ch>
- <20210918073333.GE1053080@scaer>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20210918073333.GE1053080@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=u1sCtWexgZi30odqIcjspkFaUuEoLnpeAELrkWUxB4s=;
- b=eBsbB+wsxzIyYPszym31zUhubHKaKw5T7nISU/xXEx0kpoURm/IGwxeFNnMXHkK3mE
- h9ZifgTKiHrDoOGqPq3WR4H9Mi/cXZvexAwNBJSi8WZk3U/h/l6ROTboxXmbJuMaNgJI
- HBAY9C7dmygTsRNb0napVS6Dvmwm1doPFHCGc6SwLTP2tgHVDOyy2cne5i1PF/XsVAyE
- ILi7SikAZMka5TWl5PKEp2Tr2yk+fb8sAs3TH/facToYNPex1YlgiGwPI1Vyr6BhS1Er
- BnRtj6FFLM8H0cim+ARtQ29Ax1lNKRJKqZACsswKodLLsEHyMzTQSfGB1nSdWpeSSbox
- K3Ng==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=eBsbB+ws
-Subject: Re: [Buildroot] [PATCH 1/1] linux: add compressions for appended
- initramfs
+ bh=OqqhL97QTC+yTqmi6O+tlKVbkGJ5hdz0azz688xkiLk=;
+ b=H9Mx4QeHbbJJkJ7v+7gXjdCfuHM/geO6blvW6jCQeRg3dO68oAKoFTTiqjbRkq+f50
+ uLvUZfHWgqVebfTYCtp+qPYN2qCbk1i2atZ0q9sVSqCRTXATQYTCaKHTvtfYvHSc1SET
+ GdkxthEEvTQA2BVLGPDKyGnKXRFaIxxPcSmYqlQP3feawe4kmuikqTHi7nyfVyAVGUQb
+ 63U7BCIU6YfxjQ5zOO3tmMVYErLpgq+D30QL+Q6RAyX8X+ZL6YBpJymbRWlkGNxYmSrD
+ tQiVy2WRlmcw5H23/jQ4XLGJXxK1AEUeDIWK+BdAcQ68IO3ipUiGfp9IHxS9FCs+KQ52
+ CEyQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=H9Mx4QeH
+Subject: [Buildroot] [PATCH 1/1] package/opensc: add OPENSC_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,156 +93,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+cpe:2.3:a:opensc_project:opensc is a valid CPE identifier for this
+package:
 
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopensc_project%3Aopensc
 
-On 18/09/2021 09:33, Yann E. MORIN wrote:
-> Hanspeter, All,
-> 
-> On 2021-09-17 15:18 +0200, Hanspeter Portner spake thusly:
->> This changes take effect in the case of BR2_TARGET_ROOTFS_INITRAMFS=y
->> and one of BR2_LINUX_KERNEL_{GZIP,LZ4,LZMA,LZO,XZ}=y.
->>
->> Instead of using the kernel's default compression (gzip) for appended initramfs,
->> this changes set initramfs compression explicitely to the same compression as
->> the kernel itself, which seems a sensible thing to do, imho.
-> 
-> Hmmm... But isn't the initranfs compressed as part of the kernel
-> already? See help for CONFIG_INITRAMFS_COMPRESSION_NONE:
-> 
->      Do not compress the built-in initramfs at all. This may sound
->      wasteful in space, but, you should be aware that the built-in
->      initramfs will be compressed at a later stage anyways along
->      with the rest of the kernel, on those architectures that support
->      this. However, not compressing the initramfs may lead to slightly
->      higher memory consumption during a short time at boot, while both
->      the cpio image and the unpacked filesystem image will be present
->      in memory simultaneously
-> 
-> Additionally, compressing the initramfs separately, means that it will
-> be copmopressed twice at build time, thus increasing the build time (but
-> who cares? ;-) ), but also means it will be decompressed twice, thus
-> increasing the boot time, every time the device boots.
-> 
-> So, forcibly setting the compression to that of the kernel seems totally
-> superfluous, _as kernel image size matters_; indeed, simply disabling
-> initramfs compression (actually, cpio compression) would seem like the
-> only correct thing to do.
-> 
-> The only reason when we would want to actually compress the initramfs,
-> as hinted in the help text I quoted above, is for machines that are
-> tight on RAM, so tight indeed that they can't easily fit the whole
-> uncompressed cpio and the extracted initramfs at the same time at boot
-> (the uncompressed cpio is eventually garbage-collected once the
-> initramfs is fully populated).
-> 
-> Nowadays, that probably means machine with less than a very few MiB of
-> RAM, something around 4MiB. Those kind of machines do exist, but they
-> are often better served without using an initramfs (i.e. a root on a
-> flash or something), or are going to require a very tiny initramfs
-> anyway.
-> 
-> So, I wonder if we should not simply disable compression of the
-> initramfs altogether...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/opensc/opensc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-  The current situation allows the user to choose through the kernel config, so 
-sounds like the optimal approach. Unfortunately, the kernel apparently does 
-default to gzip instead of uncompressed, so there's something to be said for 
-forcing it to uncompressed...
+diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+index 538151c12a..e1ad5d61b0 100644
+--- a/package/opensc/opensc.mk
++++ b/package/opensc/opensc.mk
+@@ -8,6 +8,7 @@ OPENSC_VERSION = 0.22.0
+ OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
+ OPENSC_LICENSE = LGPL-2.1+
+ OPENSC_LICENSE_FILES = COPYING
++OPENSC_CPE_ID_VENDOR = opensc_project
+ OPENSC_DEPENDENCIES = openssl pcsc-lite
+ OPENSC_INSTALL_STAGING = YES
+ OPENSC_CONF_OPTS = --disable-strict
+-- 
+2.35.1
 
-  Anyway, setting it to the same as the kernel compression is useless I think. 
-Therefore, I marked this patch as Rejected.
-
-  Regards,
-  Arnout
-
-> 
-> Could look into that, and look at actual numbers for the resulting
-> kernel image when the initramfs is compressed or not?
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> Apart from these kernel config parameters ...
->>
->> * CONFIG_KERNEL_GZIP
->> * CONFIG_KERNEL_LZ4
->> * CONFIG_KERNEL_LZMA
->> * CONFIG_KERNEL_LZO
->> * CONFIG_KERNEL_XZ
->> * CONFIG_KERNEL_ZSTD
->> * CONFIG_KERNEL_UNCOMPRESSED
->>
->> ... we now also set these new kernel config parameters, as without those,
->> the appended initramfs seems to always be compressed with gzip:
->>
->> * CONFIG_INITRAMFS_COMPRESSION_GZIP
->> * CONFIG_INITRAMFS_COMPRESSION_LZ4
->> * CONFIG_INITRAMFS_COMPRESSION_LZMA
->> * CONFIG_INITRAMFS_COMPRESSION_LZO
->> * CONFIG_INITRAMFS_COMPRESSION_XZ
->> * CONFIG_INITRAMFS_COMPRESSION_NONE
->>
->> The former are automatically set depending on whether one of the
->> following buildroot config parameters is set analogously to how it is done
->> for CONFIG_KERNEL_{GZIP,LZ4,LZMA,LZO,XZ,ZSTD,UNCOMPRESSED}:
->>
->> * BR2_LINUX_KERNEL_GZIP
->> * BR2_LINUX_KERNEL_LZ4
->> * BR2_LINUX_KERNEL_LZMA
->> * BR2_LINUX_KERNEL_LZO
->> * BR2_LINUX_KERNEL_XZ
->> * BR2_LINUX_KERNEL_UNCOMPRESSED
->>
->> Signed-off-by: Hanspeter Portner <dev@open-music-kontrollers.ch>
->> ---
->>   linux/linux.mk | 13 +++++++++++++
->>   1 file changed, 13 insertions(+)
->>
->> diff --git a/linux/linux.mk b/linux/linux.mk
->> index 61fdc0c76c..f192341a32 100644
->> --- a/linux/linux.mk
->> +++ b/linux/linux.mk
->> @@ -106,6 +106,15 @@ LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_XZ) += CONFIG_KERNEL_XZ
->>   LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_ZSTD) += CONFIG_KERNEL_ZSTD
->>   LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_UNCOMPRESSED) += CONFIG_KERNEL_UNCOMPRESSED
->>   
->> +INITRAMFS_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_GZIP) += CONFIG_INITRAMFS_COMPRESSION_GZIP
->> +INITRAMFS_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZ4) += CONFIG_INITRAMFS_COMPRESSION_LZ4
->> +INITRAMFS_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZMA) += CONFIG_INITRAMFS_COMPRESSION_LZMA
->> +INITRAMFS_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZO) += CONFIG_INITRAMFS_COMPRESSION_LZO
->> +INITRAMFS_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_XZ) += CONFIG_INITRAMFS_COMPRESSION_XZ
->> +# zstd compression seems not supported, yet
->> +#INITRAMFS_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_ZSTD) += CONFIG_INITRAMFS_COMPRESSION_ZSTD
->> +INITRAMFS_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_UNCOMPRESSED) += CONFIG_INITRAMFS_COMPRESSION_NONE
->> +
->>   ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL),y)
->>   LINUX_DEPENDENCIES += host-openssl
->>   endif
->> @@ -352,6 +361,10 @@ define LINUX_KCONFIG_FIXUP_CMDS
->>   		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio")
->>   		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0)
->>   		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0))
->> +		$(call KCONFIG_ENABLE_OPT,$(strip $(INITRAMFS_COMPRESSION_OPT_y)))
->> +		$(foreach opt, $(INITRAMFS_COMPRESSION_OPT_),
->> +			$(call KCONFIG_DISABLE_OPT,$(opt))
->> +		)
->>   	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
->>   		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS)
->>   		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT))
->> -- 
->> 2.33.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@lists.buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
