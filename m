@@ -4,90 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CA7EC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 07:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2C78C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 07:57:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ECE4D40CD9;
-	Mon, 25 Jul 2022 07:34:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECE4D40CD9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 571FE405D6;
+	Mon, 25 Jul 2022 07:57:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 571FE405D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qZNzd8lR1sfd; Mon, 25 Jul 2022 07:34:06 +0000 (UTC)
+	with ESMTP id Qs3z1J4fkmeO; Mon, 25 Jul 2022 07:57:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EBA9840CDA;
-	Mon, 25 Jul 2022 07:34:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBA9840CDA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C57AB1BF379
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 07:34:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 53F12405A6;
+	Mon, 25 Jul 2022 07:57:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53F12405A6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 213721BF85D
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 07:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9FAFB40CD6
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 07:34:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FAFB40CD6
+ by smtp3.osuosl.org (Postfix) with ESMTP id E7D77611ED
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 07:57:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7D77611ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CgeNoGHLO2Am for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 07:34:02 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC4DF40CD5
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BC4DF40CD5
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 07:34:01 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id m8so12726924edd.9
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 00:34:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=6drdw6q+ukCcx+QN9i59OCwqG1BaarhHHlMX0gU/a4o=;
- b=ez+e/pUFWZYZbO6F4V9yiiC10MfxR12mI4lgxnCdIlT6sZPKjNV771RC/f4nPJ1ekQ
- SEFqfnyEAw7ZiaUd/juiN/9ly+t6RUwr1WdFWnGKhDMOZ9O8YE03/N2h+bOynG4qHto6
- 3viM04kDmoB1GVpWhLsYJNmWT1eFXW0Tkuz3CTJjm3y53lEYKgHLwbB6PaPuM6vrLm1O
- eR8Yx8bzBu7qJ24+eEuTVuk00bJPz/DnXtpy31bY+uD4fuoWUdG8FuvSmT3All0GMlJh
- BnbOFAhQuejzW9tTVrda58jiDQytg2JPD3j+gDS6YFov4U4LAiT50nliVC9CUZhxQJnr
- M4QQ==
-X-Gm-Message-State: AJIora+XDyxIU58jnjaONT48gXk9gc68q/gzwlOCYfG1UNTG5q1y3rbI
- 73nAMwLCt2RYtJjSqdCtZ64t5x8LgRP68ey8
-X-Google-Smtp-Source: AGRyM1uHWY/5SUR9Bo9Lpq53Q5IZvJEFOJlzJqZlQ4bE6ogtsQP47S/3kSvw/DKMUAkfsHlyPLMfEQ==
-X-Received: by 2002:a05:6402:520a:b0:43c:4ec:e809 with SMTP id
- s10-20020a056402520a00b0043c04ece809mr3185282edd.198.1658734439753; 
- Mon, 25 Jul 2022 00:33:59 -0700 (PDT)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com.
- [209.85.208.45]) by smtp.gmail.com with ESMTPSA id
- da24-20020a056402177800b0043bbea24595sm6631680edb.31.2022.07.25.00.33.59
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Jul 2022 00:33:59 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id c72so9860187edf.8
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 00:33:59 -0700 (PDT)
-X-Received: by 2002:aa7:d943:0:b0:43b:9010:9d86 with SMTP id
- l3-20020aa7d943000000b0043b90109d86mr11801139eds.34.1658734438850; Mon, 25
- Jul 2022 00:33:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220725002414.704892-1-christian@paral.in>
-In-Reply-To: <20220725002414.704892-1-christian@paral.in>
-Date: Mon, 25 Jul 2022 00:33:47 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2qq+F0oKAEHi1Oe31MiurY99cTJdOAHiCmOtyhBTotF1g@mail.gmail.com>
-Message-ID: <CA+h8R2qq+F0oKAEHi1Oe31MiurY99cTJdOAHiCmOtyhBTotF1g@mail.gmail.com>
-To: Christian Stewart <christian@paral.in>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=paral.in; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=6drdw6q+ukCcx+QN9i59OCwqG1BaarhHHlMX0gU/a4o=;
- b=dxc7pRDt8Ksmt6wsMnYdfa3PKMCyyYM0UbDL1LH3MLXsO5NeykG4qfJ2QLdXPlunFX
- NNYStmqb1bAuI2VYypzGTsvvDHHBRrgyOoai0Svxn9fcMaHQyxwI3exXJ5qhbhTP2RaY
- NTudU6yXdi2gJC2Kvsp2L5m0HkTQ0JE0dQGFk2fN5eoEqtGn0TgwQUeq24Ht4s6hFhsE
- /HqWtgH49dOut3r7T1d9dDdmp+uTaUZkSUb7BCLhgz+7fndMVsh7uQz+L2o1N49kMioK
- hFWBnncZo1WWbhqWbwaFtbUT4hyZyBQQxpB420+JWg+5MiVQFT7fs/6+e5MFf5R0gtyI
- xxnA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
- header.a=rsa-sha256 header.s=google header.b=dxc7pRDt
-Subject: Re: [Buildroot] [PATCH v4 1/1] package/runc: add host package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KGjPg_hG2wTI for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 07:57:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E102611DC
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 07:57:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E102611DC
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 652478402B; Mon, 25 Jul 2022 07:43:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 25 Jul 2022 09:53:59 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 321cec7b9c0b6d5aa43c0f71a52f3ddf83636399
+X-Git-Newrev: c6e99c0bc6cd045cd451a1c186bae0bdd5c4a903
+X-Patchwork-Hint: ignore
+Message-Id: <20220725074325.652478402B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gstreamer1/gstd: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,32 +55,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+commit: https://git.buildroot.net/buildroot/commit/?id=c6e99c0bc6cd045cd451a1c186bae0bdd5c4a903
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Jul 24, 2022 at 5:24 PM Christian Stewart <christian@paral.in> wrote:
+Fix the following static build failure raised since the addition of the
+package in commit 02ea01ea22e94ef353a638bf16f62f6e3ed1208e:
 
-Minor typo:
+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/i586-buildroot-linux-musl/sysroot/usr/lib/libreadline.a(display.o): in function `_rl_move_cursor_relative':
+display.c:(.text+0xbb5): undefined reference to `tputs'
 
-> +       help
-> +         runC is a CLI tool for spawning and running containers
-> +         according to the OCP specification.
+Fixes:
+ - http://autobuild.buildroot.org/results/77c/77c10947ddc749c54c7c233e3143f5cdf1edc73d/build-end.log
 
-Replace OCP w/ OCI.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...uild-use-dependency-function-for-readline.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-Similar patch was submitted to fix it in the existing Config.in as well.
-
-Thanks & best,
-Christian Stewart
+diff --git a/package/gstreamer1/gstd/0005-meson.build-use-dependency-function-for-readline.patch b/package/gstreamer1/gstd/0005-meson.build-use-dependency-function-for-readline.patch
+new file mode 100644
+index 0000000000..51422e56d6
+--- /dev/null
++++ b/package/gstreamer1/gstd/0005-meson.build-use-dependency-function-for-readline.patch
+@@ -0,0 +1,51 @@
++From 3ef45c41105e61efe84c9be3a9a22988dfe10db8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 22 Oct 2021 07:33:04 +0200
++Subject: [PATCH] meson.build: use dependency function for readline
++
++Use meson dependency function to find readline instead of
++cc.find_library. This function will retrieve readline pkg-config file
++which is available since version 7 (released 5 years ago) and
++https://git.savannah.gnu.org/cgit/readline.git/commit/readline.pc.in?id=d49a9082c0e15bba8cd3d8cc0a994409cf823cac.
++readline.pc sets tinfo in Requires.Private which will avoid the
++following static build failure:
++
++/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/i586-buildroot-linux-musl/sysroot/usr/lib/libreadline.a(display.o): in function `_rl_move_cursor_relative':
++display.c:(.text+0xbb5): undefined reference to `tputs'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/77c10947ddc749c54c7c233e3143f5cdf1edc73d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/RidgeRun/gstd-1.x/pull/261]
++---
++ meson.build | 6 ++----
++ 1 file changed, 2 insertions(+), 4 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 7a8690a..44ed5c2 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -32,8 +32,8 @@ systemd_required = get_option('enable-systemd').enabled()
++ systemd_dep = dependency('systemd', required : systemd_required, version : '>=232')
++ 
++ cc = meson.get_compiler('c')
++-readline = cc.find_library('readline', required: true)
++-if readline.found()
+++readline_dep = dependency('readline')
+++if readline_dep.found()
++   add_project_arguments('-DHAVE_LIBREADLINE', language: 'c')
++   add_project_arguments('-DHAVE_READLINE_HISTORY', language: 'c')
++   # Add arguments to the compiler command line. 
++@@ -48,8 +48,6 @@ if readline.found()
++   else
++     add_project_arguments('-DHAVE_HISTORY_H', language: 'c')
++   endif
++-  
++-  readline_dep = readline
++ endif
++ 
++ ## Dependencies
++-- 
++2.37.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
