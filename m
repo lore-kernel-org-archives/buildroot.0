@@ -4,67 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF44DC43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 09:37:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8482AC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 09:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B14161171;
-	Mon, 25 Jul 2022 09:37:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B14161171
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1979A61148;
+	Mon, 25 Jul 2022 09:38:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1979A61148
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YMS1O_PmWdXq; Mon, 25 Jul 2022 09:37:56 +0000 (UTC)
+	with ESMTP id sjVzgwvVa-Mz; Mon, 25 Jul 2022 09:38:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 884DD610EE;
-	Mon, 25 Jul 2022 09:37:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 884DD610EE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B0AD31BF3FD
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 09:37:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0643D610D9;
+	Mon, 25 Jul 2022 09:38:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0643D610D9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 80DA01BF9AC
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 09:38:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A7DE610EE
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 09:37:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A7DE610EE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5AFC740A62
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 09:38:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AFC740A62
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 780Y1R4ZbzQr for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 09:37:53 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7ECF96105B
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7ECF96105B
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 09:37:53 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:9102:8e95:18fd:a25a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 13FE419F74B;
- Mon, 25 Jul 2022 11:37:47 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 25 Jul 2022 11:37:46 +0200
-Date: Mon, 25 Jul 2022 11:37:46 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Christian Stewart <christian@paral.in>
-Message-ID: <20220725093746.GC3168@scaer>
-References: <20220725002414.704892-1-christian@paral.in>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gvTS7J9vbgAR for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 09:38:33 +0000 (UTC)
+X-Greylist: delayed 00:10:00 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D285C40597
+Received: from mail.h6t.eu (unknown [IPv6:2a01:4f8:1c1e:8216::1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D285C40597
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 09:38:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 9B329214312; Mon, 25 Jul 2022 11:20:19 +0200 (CEST)
+Message-ID: <5d89a113-d2f0-fd06-9f09-2c8ac4eb23bb@h6t.eu>
+Date: Mon, 25 Jul 2022 11:20:17 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220725002414.704892-1-christian@paral.in>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658741870;
- bh=+kbwZxKfH/5cuTg1/HaKGQU3KR5DkJwoIyEVultb04E=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=LPctm0BU6JHqStJLLl8bS92kQXU6EtNbMBJSuZEmWFd7TGLQFas6bA4AyM19RqXlE
- jPRXpwbofuF76c7N+ZuaWC3X599wZbOjbck11ewab5WCSi7ZDLJGgQlChjFlkR3fwy
- 2laL8L9iU/KdZew6XOy6mgoiENRQCO7qLwaD8UhsJ6QesqxMD21Z4LjleejRAwj2Al
- Bft68tLFnVxzCJl7LfiTlhPMNyaaSW2hUup0x/LrWsLB0i/OjfJbVyw4LTLgkxKI0P
- JpOlFmTzS+2P57wf+9U9uKrdAcWf3y7vhM26nIJS5t9nqH+qkDel3ZPC9JenVOVEpg
- EPjWau85HNhUQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=LPctm0BU
-Subject: Re: [Buildroot] [PATCH v4 1/1] package/runc: add host package
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220217230638.98748-1-moritz@h6t.eu>
+ <20220724160833.GA2641@scaer>
+In-Reply-To: <20220724160833.GA2641@scaer>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=h6t.eu; s=dkim; 
+ t=1658740819; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=V1Jfm9IAXSA+RsMefX8ibvV8rj2k9aPvXiYiBXlSgMY=;
+ b=dVAPA9Y43FTXDO9e81K8aVMuE44IyCWhcYvsrNWNSascYqZt5upg320+gGCmwCEAjfAyB2
+ Z2CY2aRmJBcAxhOtmBfHfJtjNsLJ+eUdfKhlkG3pTGP7Msm2ApglRZaTXvhAdWQT0bPXxa
+ rCRsaDPvmVKXWfFW39oIEU/kW9Cd80101tPRvTIKvPlHZbOgnKfTGg490QkxLPdUfqhY0V
+ 1IXv7ZzAv2PpGWFdOwAVVajpnyO3k6k4Jp5VLzsKuOGHVNTjsA4UEGzEowesp1hp/JY0AN
+ nGjWmG6mUMCMVNREL7bv/Z4UW4RsWlXwzKCIAj0v0gt7HoenOzc5XnctDC4NCg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=h6t.eu header.i=@h6t.eu header.a=rsa-sha256
+ header.s=dkim header.b=dVAPA9Y4
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-cargo.mk: fix building
+ cargo packages on 32bit arm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,102 +74,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+From: Moritz Bitsch via buildroot <buildroot@buildroot.org>
+Reply-To: Moritz Bitsch <moritz@h6t.eu>
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Christian, All,
+Hello Yann, All,
 
-On 2022-07-24 17:24 -0700, Christian Stewart via buildroot spake thusly:
-> Adds support for building runc as a host package.
-> 
-> The bin name and gomod have to be specified as the pkg-golang infrastructure
-> assumes the bin name will be "host-runc" on default.
 
-After a test build here, _BIN_NAME and _INSTALL_BINS really do not seem
-needed, so I dropped them.
+it seems that the original autobuild error still requires the workaround 
+with rust 1.62.0. I think we should keep the workaround in place.
 
-Applied to master, thanks.
+If I get some time Ill have a look at what is going on, as the mentioned 
+github issues are fixed.
+
 
 Regards,
-Yann E. MORIN.
 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> 
-> ---
-> 
-> changes v3 -> v4:
-> 
->  - drop unnecessary GOMOD line
->  - remove seccomp and apparmor tags for host package
->  - thanks Thomas for the review.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/Config.in.host      | 1 +
->  package/runc/Config.in.host | 8 ++++++++
->  package/runc/runc.mk        | 6 ++++++
->  3 files changed, 15 insertions(+)
->  create mode 100644 package/runc/Config.in.host
-> 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 71f2a9311c..8078a8304d 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -82,6 +82,7 @@ menu "Host utilities"
->  	source "package/raspberrypi-usbboot/Config.in.host"
->  	source "package/rauc/Config.in.host"
->  	source "package/riscv-isa-sim/Config.in.host"
-> +	source "package/runc/Config.in.host"
->  	source "package/rustc/Config.in.host"
->  	source "package/s6-rc/Config.in.host"
->  	source "package/sam-ba/Config.in.host"
-> diff --git a/package/runc/Config.in.host b/package/runc/Config.in.host
-> new file mode 100644
-> index 0000000000..ce0dd518a6
-> --- /dev/null
-> +++ b/package/runc/Config.in.host
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_HOST_RUNC
-> +	bool "host runc"
-> +	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-> +	help
-> +	  runC is a CLI tool for spawning and running containers
-> +	  according to the OCP specification.
-> +
-> +	  https://github.com/opencontainers/runc
-> diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-> index 5faa8b683d..8ccff13a3e 100644
-> --- a/package/runc/runc.mk
-> +++ b/package/runc/runc.mk
-> @@ -23,4 +23,10 @@ RUNC_TAGS += seccomp
->  RUNC_DEPENDENCIES += libseccomp host-pkgconf
->  endif
->  
-> +HOST_RUNC_BIN_NAME = runc
-> +HOST_RUNC_LDFLAGS = $(RUNC_LDFLAGS)
-> +HOST_RUNC_TAGS = cgo static_build
-> +HOST_RUNC_INSTALL_BINS = $(HOST_RUNC_BIN_NAME)
-> +
->  $(eval $(golang-package))
-> +$(eval $(host-golang-package))
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Moritz Bitsch
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Am 24.07.22 um 18:08 schrieb Yann E. MORIN:
+> Moritz, All,
+>
+> On 2022-02-18 00:06 +0100, Moritz Bitsch via buildroot spake thusly:
+>> From: Moritz Bitsch <moritz@h6t.eu>
+>>
+>> there are duplicated symbols between rustc and gcc. Specifying
+>> --allow-multiple-definition to the linker as workaround until
+>> rustc is fixed.
+>>
+>> rust-lang issue: https://github.com/rust-lang/compiler-builtins/issues/420
+> This is supposedly fixed upstream:
+>      https://github.com/rust-lang/compiler-builtins/issues/420
+>
+> which leads to:
+>      https://github.com/rust-lang/compiler-builtins/issues/412
+>
+> which leads to:
+>      https://github.com/rust-lang/compiler-builtins/pull/452
+>
+> and:
+>      https://github.com/rust-lang/rust/pull/93696
+>
+> which is now merged.
+>
+> We recently bumped to using rust 1.62.0.
+>
+> Do you think that this workaround can now be dropped?
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> Fixes: http://autobuild.buildroot.net/results/53f/53f5598b8e520caaa135fb4923c09da382dab329
+>> Signed-off-by: Moritz Bitsch <moritz@h6t.eu>
+>> ---
+>>   package/pkg-cargo.mk | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+>> index e74a8358bc..71d695d926 100644
+>> --- a/package/pkg-cargo.mk
+>> +++ b/package/pkg-cargo.mk
+>> @@ -46,6 +46,14 @@ PKG_CARGO_ENV = \
+>>   	CARGO_BUILD_TARGET="$(RUSTC_TARGET_NAME)" \
+>>   	CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_LINKER=$(notdir $(TARGET_CROSS))gcc
+>>   
+>> +#
+>> +# This is a workaround for https://github.com/rust-lang/compiler-builtins/issues/420
+>> +# and should be removed when fixed upstream
+>> +#
+>> +ifeq ($(NORMALIZED_ARCH),arm)
+>> +	PKG_CARGO_ENV += RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
+>> +endif
+>> +
+>>   HOST_PKG_CARGO_ENV = \
+>>   	$(PKG_COMMON_CARGO_ENV)
+>>   
+>> -- 
+>> 2.35.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
