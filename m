@@ -1,96 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88034CCA48A
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 22:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD56FC43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 22:23:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C06661225;
-	Mon, 25 Jul 2022 22:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C06661225
+	by smtp2.osuosl.org (Postfix) with ESMTP id 74F094067B;
+	Mon, 25 Jul 2022 22:23:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74F094067B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DnGe5DCU81U0; Mon, 25 Jul 2022 22:22:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KShOZTdo-FpJ; Mon, 25 Jul 2022 22:22:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3ABBF60E57;
-	Mon, 25 Jul 2022 22:22:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ABBF60E57
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C55F01BF363
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:22:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7FDC640545;
+	Mon, 25 Jul 2022 22:22:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FDC640545
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E1F171BF9AC
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:22:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B73741A52
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:22:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B73741A52
+ by smtp2.osuosl.org (Postfix) with ESMTP id BBB2640545
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:22:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBB2640545
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0gpqbSC84EWv for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 22:22:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LykXaQ0P7Tyh for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 22:22:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3465F41A4C
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3465F41A4C
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 22:22:35 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id n185so7679938wmn.4
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:22:34 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C62A4017A
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7C62A4017A
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 22:22:55 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id m17so17556719wrw.7
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:22:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=knNzIHZ7RES+O8tX89Y2G9irA+4FyxS7NLCPats08fU=;
- b=veUhtXg7Qqn3Lg90O4ou34COUhB1NtLiLv+vwdxKYE/2+zQPX4rF4R38srobzFeuRx
- JV0FaxR8TpIaXYYs/9wFsmekmyLPw4D/ZXSbqvDyetv6fprIiFYPrFlVDf+S46CTKwdT
- kmjMkr4Gm9OEtBHHBA6SemRC1eRzz0URJ/QXAhxzx9/dmNcmJEUaFDn3cQgiKHn90Y2X
- z+jYNgTlSETkPuD7Pzo7C8Se6dd8pt9PMnomcaIuX/ZkyL9TD6woaTfDYyr2Yd+v+R7A
- OgkNK091lINn1b+Fi1Dvkitc5E9zk0vpDkjZPLPnagdKOLoB1LY0GQJHKKp74f3vADEd
- +vww==
-X-Gm-Message-State: AJIora/WAQ07mWgKZC/C46tCbCHzOxABDNJlcMa00xlj67VxieZ5hzqY
- rX+IEfcKkas5qOrft0S6Lq9yvQ==
-X-Google-Smtp-Source: AGRyM1s6NvnDdjHLLIQZhzda03bHL0+LOYVamHYcRpVfZVVnWd1R6EucMvAztPfrEVBtSR8TBgqLTg==
-X-Received: by 2002:a05:600c:3845:b0:3a3:227d:c1c6 with SMTP id
- s5-20020a05600c384500b003a3227dc1c6mr22922497wmr.9.1658787753341; 
- Mon, 25 Jul 2022 15:22:33 -0700 (PDT)
+ bh=SWrE89XDGnbeA7H8MYsInyD8RAChiFrlXKuQ1gYZLTU=;
+ b=1Ywu6HeboKFBNKGmZWOpeGoupqzaEzUsst2z8jAQFwuY53dNVxh06pcm22oI1dxbTg
+ hAJ8Q41EHfuRmk4kJL+L12e+ynYqzq0TtSxCfP5Kf1OdZGLy/wA3QtYpukhIV1vd0bll
+ DlOffQ7rzYYR3eU9ULOjcD4/XcngvB0HnOmkvS8p1g8u4jRsB4MECHAVhYdP1ckHgCoy
+ vmXslDl8HzWZ3EtY8rA6j3qups4t3GE4ek9rcTpcQdQGIL5iGub9YX+tisbxFjaua84A
+ Mb3qHjZbv1VgOdI6+2CCDqJiEhn2yaJFWR8gIb7VXGqQVr11zbsHTGos/PhX75VzpuqI
+ shtA==
+X-Gm-Message-State: AJIora9VrsljyHYRMLZRREm+sXJVJ9BT5vk5/3Olgi33ly7JR+aXwXoe
+ K9KPsv0lB9ZZ4smDLa4b2imLGDAidPBA0g==
+X-Google-Smtp-Source: AGRyM1vya7cW9ejF/PcK1up0Wihyyd47GCBBnLyMPDVc/FJSPT4fyjsa9n7+W0+gKcx3RilUUF3smA==
+X-Received: by 2002:a05:6000:224:b0:21e:7efc:c506 with SMTP id
+ l4-20020a056000022400b0021e7efcc506mr6706768wrz.313.1658787773666; 
+ Mon, 25 Jul 2022 15:22:53 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- p20-20020a1c5454000000b003a30c3d0c9csm19979813wmi.8.2022.07.25.15.22.32
+ b18-20020adff912000000b0021d65675583sm12704879wrr.52.2022.07.25.15.22.53
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Jul 2022 15:22:32 -0700 (PDT)
-Message-ID: <31854085-b1d5-19b6-4c5d-218bd2c74684@mind.be>
-Date: Tue, 26 Jul 2022 00:22:31 +0200
+ Mon, 25 Jul 2022 15:22:53 -0700 (PDT)
+Message-ID: <7f39a4ca-a32a-fe24-95bd-91bc04e37e77@mind.be>
+Date: Tue, 26 Jul 2022 00:22:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-To: Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
-References: <a4133389-1182-11aa-9edc-215ffd82eb48@smile.fr>
- <20220725123002.2967-1-br015@umbiko.net>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220725124303.3986-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220725123002.2967-1-br015@umbiko.net>
+In-Reply-To: <20220725124303.3986-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=knNzIHZ7RES+O8tX89Y2G9irA+4FyxS7NLCPats08fU=;
- b=henknC9vb9icF/hdiycZqOHVoF1nYYkEqY7haBazHeYwGhtPJk1jkqDzZ/cC/WMztU
- aWSV4avSYbUtBsFOGWAZvUZBiIG80VRd+PCeQQrPm65FHIdOFRkZJZ9gpq9rVM5c5oRO
- Qmul4vwUoAV3LA8PTGwKDZt+sJLR89jrAzkfkXfTJatRAM82yDSUvKRA0x4S1rodAxO4
- u7iC66aakeEnfclTzKErVANAnStwrlAsaxXWO8H8tj+xVzC3c3ITmEVHITcZP6chbAZd
- +jZyGDTUu7U2gxQMthcXNmspMbWJsbGGOQ7HIGv1vtsZUn9EVRx4P6zu4qoPY/IeIAii
- I7gg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=SWrE89XDGnbeA7H8MYsInyD8RAChiFrlXKuQ1gYZLTU=;
+ b=cIhF8zM6lD31yS+kX4V+Wj2l7pJO8FbADfRQ9/pklmsTngt4OznvkCS4ZXR1dAZuQG
+ CGWNW6lw8IL4JPwDzs4Jerp22RsiiftCGgfKMboCrWLa7m4wUfv2i9b1v5DNb7gI0xJZ
+ ZRSc+Xbq2QqBVv5wFAM7BMD35Rznyke5EkhDD7b9UGfrTz3Vz8l7zcNHQUwDd3uW/p0c
+ y/4RWan6yPtPwv1G2yXmFufYx6ekcIAFpC9l5rJ2G/RMifPMu6IIaWdW9Ni5Ubhe4kwE
+ t/xL35YyJMDQxybhnKnBo+I/1WQhS2Uwe7xhM02Pb86QXLNUtDV7UCjINfoC4YIJjWkG
+ 6/uA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=henknC9v
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/mpd: add io_uring optional
- dependency
+ header.a=rsa-sha256 header.s=google header.b=cIhF8zM6
+Subject: Re: [Buildroot] [PATCH 1/1] package/opensc: add OPENSC_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,8 +100,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- =?UTF-8?Q?J=c3=b6rg_Krause?= <joerg.krause@embedded.rocks>
+Cc: =?UTF-8?Q?Jos=c3=a9_Pekkarinen?= <jose.pekkarinen@unikie.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -111,16 +108,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 25/07/2022 14:30, Andreas Ziegler wrote:
-> Since version 0.22 mpd provides an option to use the io_uring kernel interface
-> for asynchronous access to local files. Buildroot has the necessary library
-> (package/liburing) since commit 03ca6f4e39874583060317e7e15e9e360220877e.
+On 25/07/2022 14:43, Fabrice Fontaine wrote:
+> cpe:2.3:a:opensc_project:opensc is a valid CPE identifier for this
+> package:
 > 
-> Add an optional dependency on liburing to enable asynchronous file access using
-> the kernel io_uring interface.
+>    https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopensc_project%3Aopensc
 > 
-> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-> Reviewed-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
@@ -128,54 +122,21 @@ On 25/07/2022 14:30, Andreas Ziegler wrote:
   Arnout
 
 > ---
-> Changes v1 -> v2:
->    Commit message (Romain Naour)
->    Dependency comment (Romain Naour)
->    Modify patch description to match commit message
+>   package/opensc/opensc.mk | 1 +
+>   1 file changed, 1 insertion(+)
 > 
->   package/mpd/Config.in | 10 ++++++++++
->   package/mpd/mpd.mk    |  7 +++++++
->   2 files changed, 17 insertions(+)
-> 
-> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> index fc0f409448..8f0af7b2d3 100644
-> --- a/package/mpd/Config.in
-> +++ b/package/mpd/Config.in
-> @@ -347,6 +347,16 @@ config BR2_PACKAGE_MPD_AVAHI_SUPPORT
->   comment "avahi support needs a toolchain w/ dynamic library"
->   	depends on BR2_STATIC_LIBS
->   
-> +config BR2_PACKAGE_MPD_IO_URING
-> +	bool "io_uring"
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
-> +	select BR2_PACKAGE_LIBURING
-> +	help
-> +	  Asynchronous I/O using kernel io_uring subsystem
-> +
-> +comment "io_uring support needs a toolchain w/ headers >= 5.1"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
-> +
->   config BR2_PACKAGE_MPD_LIBMPDCLIENT
->   	bool "libmpdclient"
->   	select BR2_PACKAGE_LIBMPDCLIENT
-> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-> index e265a9fc4f..c21426b873 100644
-> --- a/package/mpd/mpd.mk
-> +++ b/package/mpd/mpd.mk
-> @@ -119,6 +119,13 @@ else
->   MPD_CONF_OPTS += -Did3tag=disabled
->   endif
->   
-> +ifeq ($(BR2_PACKAGE_MPD_IO_URING),y)
-> +MPD_DEPENDENCIES += liburing
-> +MPD_CONF_OPTS += -Dio_uring=enabled
-> +else
-> +MPD_CONF_OPTS += -Dio_uring=disabled
-> +endif
-> +
->   ifeq ($(BR2_PACKAGE_MPD_JACK2),y)
->   MPD_DEPENDENCIES += jack2
->   MPD_CONF_OPTS += -Djack=enabled
+> diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+> index 538151c12a..e1ad5d61b0 100644
+> --- a/package/opensc/opensc.mk
+> +++ b/package/opensc/opensc.mk
+> @@ -8,6 +8,7 @@ OPENSC_VERSION = 0.22.0
+>   OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
+>   OPENSC_LICENSE = LGPL-2.1+
+>   OPENSC_LICENSE_FILES = COPYING
+> +OPENSC_CPE_ID_VENDOR = opensc_project
+>   OPENSC_DEPENDENCIES = openssl pcsc-lite
+>   OPENSC_INSTALL_STAGING = YES
+>   OPENSC_CONF_OPTS = --disable-strict
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
