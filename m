@@ -1,97 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B20D0C43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 15:27:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 704C9C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 15:31:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44FB3419F5;
-	Mon, 25 Jul 2022 15:27:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44FB3419F5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A40340C29;
+	Mon, 25 Jul 2022 15:31:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A40340C29
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1kn-JcB5rRTP; Mon, 25 Jul 2022 15:27:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mxHAodWjSdUa; Mon, 25 Jul 2022 15:31:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CFF86410E4;
-	Mon, 25 Jul 2022 15:27:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFF86410E4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8F2461BF2BD
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 15:27:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4AE54408BC;
+	Mon, 25 Jul 2022 15:31:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AE54408BC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 223881BF2BD
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 15:31:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 66DC3410A7
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 15:27:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66DC3410A7
+ by smtp2.osuosl.org (Postfix) with ESMTP id EFF9C408BC
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 15:31:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFF9C408BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fDbFs8rjh7MZ for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 15:27:07 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E55EE41A04
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E55EE41A04
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:27:06 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- f24-20020a1cc918000000b003a30178c022so9636701wmb.3
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 08:27:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=cz3c2x8uOnz6IHuvZqfxEs725pNHyvEaRiX+AcDgKRk=;
- b=gXUge/vLjr/dDAwHmtN3ejC3hgRssFxBLOcFfJgFzm7ffX+/9+grWUlqPxtRY8aso/
- Yfj8uegkg1F8Y9Cu/Ub1sc7S3YjdvyKpLLwi6J3ZXcP1vjW9PGvytxKxmAFtFJMipNZg
- hl+05Pqft7f8eRvjIjzee3lvfwRg5Yi2rCQgH5ocC/BA5LgqyznF++hjJnQaJDllUDG9
- hXkAnNJs+Bhp9QLLDKhtzfOsaAlJ5ikWL11PYeG2OwEgwOVd3YcDoUYTUpTU0nPkW+YD
- 6L5R5jLntswdtopNl4uSk2pYBaFBodn3X5iOc/j2S1ydR5PKGlavW5JgHHchxxGTLvbc
- +YGQ==
-X-Gm-Message-State: AJIora+AYRXJ3SKK8izZJL0HigZeUy05iqT2JrxQTf0cDT2QPV/3ih7F
- DLTzpmJ/IbsqGt4yTKY9Qzf2dQ==
-X-Google-Smtp-Source: AGRyM1sYQriqvTtx5AzBJTTFOxmTrAU0CjPNwzxlw9f5mTinVJll/cq67SRoLcnaM2PCg43MzUhabw==
-X-Received: by 2002:a7b:c7d1:0:b0:3a3:1890:3495 with SMTP id
- z17-20020a7bc7d1000000b003a318903495mr21484186wmk.18.1658762824935; 
- Mon, 25 Jul 2022 08:27:04 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- k22-20020a5d5256000000b0021e2fccea97sm12518886wrc.64.2022.07.25.08.27.04
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Jul 2022 08:27:04 -0700 (PDT)
-Message-ID: <cf125f40-5b4e-6f22-876f-6f786a7ae79b@mind.be>
-Date: Mon, 25 Jul 2022 17:27:02 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TH7LiLsSx9Y9 for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 15:31:38 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71850400AB
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 71850400AB
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 15:31:38 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6F13F6000F;
+ Mon, 25 Jul 2022 15:31:36 +0000 (UTC)
+Date: Mon, 25 Jul 2022 17:31:35 +0200
+To: Hanspeter Portner <dev@open-music-kontrollers.ch>
+Message-ID: <20220725173135.54be590b@windsurf>
+In-Reply-To: <20210610105739.488491-1-dev@open-music-kontrollers.ch>
+References: <20210610105739.488491-1-dev@open-music-kontrollers.ch>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: Peter Seiderer <ps.report@gmx.net>, Gleb Mazovetskiy <glex.spb@gmail.com>
-References: <20210418183658.1675843-1-glex.spb@gmail.com>
- <20210418235913.142664da@gmx.net>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20210418235913.142664da@gmx.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=cz3c2x8uOnz6IHuvZqfxEs725pNHyvEaRiX+AcDgKRk=;
- b=XF28BI5Wj07NOiMZbtLtiJMHIGOA0bavBy5DkckRknQmJGc0+BSpgzgDP5qU0JDhLX
- KeJcmvEXb5pw4IXy1Q7Me3HoYn6YpIUCvdVFJSfxOkpeed1C8m/7Koo2XPtr4uoOQMj8
- t98MgmvLBUn8bD/RuCoYYs4tgXE3y19NLUULqf2tttuEDrnghiuTe6BjKPc5D17GY0cX
- uZvs+to98XKSikmlqoASKF0XiHOAofpHDYeINfdxagS9HZuZZUqiSUNoD3s8Ueun7afm
- YlIM9bDujh4dbCE2rLYzWstpePX0capfMf1ppGVT2MwAzimu5qOcZIXq8gxrKcT8afQs
- grCQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=XF28BI5W
-Subject: Re: [Buildroot] [PATCH 1/1] package/valgrind: Add a setting for LTO
- build
+ d=bootlin.com; s=gm1; t=1658763096;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=nhGCg/EhUuPDgZ8hP+X2P6gl9QJMA69PsKMfYYoJWzc=;
+ b=nXzOeuP7+FoiAUSBBuhkiptIfem8RKHN07EPE8imht7Nrzb7y2N9XjN7J84nn0elXogBT7
+ VmTf5uQAhTr5ucrQ5dzRPql5JxEMVdEN9HK6m6dkLsxRW54ikHRnQ2b9vCq+uMYeDzruqu
+ yl2ANzDWjTqj24YelE5Zk/KVaQYt9ZccDDFFFWPJhcCjo9y0WVtnkCuMsKmvcdp9I9sF6n
+ Z2bcKVe3tRUmGF2BVaeMir6KxaebDjDLANet+qeXkZtEQcFrKcWbrTv4CFutZB5jIPz1R+
+ +KJfCudl9glqKj9op4nNuhvjATk/X4CSXi1WFOz95G0DwE7FELx9mhN1iWBGXA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=nXzOeuP7
+Subject: Re: [Buildroot] [PATCH 1/1] configs/toradex_colibri_imx6: initial
+ commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,111 +76,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hello Hanspeter,
 
+On Thu, 10 Jun 2021 12:57:39 +0200
+Hanspeter Portner <dev@open-music-kontrollers.ch> wrote:
 
-On 18/04/2021 23:59, Peter Seiderer wrote:
-> Hello Gleb,
-> On Sun, 18 Apr 2021 19:36:58 +0100, Gleb Mazovetskiy <glex.spb@gmail.com> wrote:
+> Based on configs/toradex_apalis_imx6 with Toradex' mainline linux/uboot
+> branches.
 > 
->> Valgrind LTO build takes over an hour on my Ryzen 3950x.
->>
+> Tested on:
+>   Module:    'Toradex Col IMX6DL 512MB V1.0A'
+>   Evalboard: 'Toradex Col Evaluation V3.2A'
 > 
-> Can confirm a build time increase (AMD Ryzen 7 1800X):
-> 
-> - without LTO:
-> 
-> real	0m54,741s
-> user	3m29,941s
-> sys	0m10,949s
-> 
-> - with LTO:
-> 
-> real	5m48,009s
-> user	6m23,040s
-> sys	0m13,197s
-> 
->> This is not always worth it for the ~10% size reduction and a small
->> performance improvement it offers (see https://www.valgrind.org/docs/manual/dist.news.html)
->>
->> Adds a new `BR2_VALGRIND_ENABLE_LTO` setting to control LTO enablement
->> for Valgrind separately from the global BR2_GCC_ENABLE_LTO setting.
+> Signed-off-by: Hanspeter Portner <dev@open-music-kontrollers.ch>
+> ---
+>  board/toradex/colibri-imx6/genimage.cfg  | 15 +++++++
+>  board/toradex/colibri-imx6/post-image.sh | 20 +++++++++
+>  board/toradex/colibri-imx6/readme.txt    | 53 ++++++++++++++++++++++++
+>  board/toradex/colibri-imx6/uEnv.txt      |  7 ++++
+>  configs/toradex_colibri_imx6_defconfig   | 25 +++++++++++
+>  5 files changed, 120 insertions(+)
+>  create mode 100644 board/toradex/colibri-imx6/genimage.cfg
+>  create mode 100755 board/toradex/colibri-imx6/post-image.sh
+>  create mode 100644 board/toradex/colibri-imx6/readme.txt
+>  create mode 100644 board/toradex/colibri-imx6/uEnv.txt
+>  create mode 100644 configs/toradex_colibri_imx6_defconfig
 
-  Adding per-package options to enable debug and optimisation features is really 
-not the way to go.
+Thanks for your contribution. However, you got some feedback in January
+2022, which requested some changes/improvements, but unless we missed
+it, we did not receive an updated version of your patch.
 
-  Instead what I've done is to create a series [1] that turns the LTO option in 
-a global option, that clearly explains in the help text that it may have a big 
-impact on build time. I've removed the BR2_GCC_ENABLE_LTO option entirely 
-because it was not actually doing what it advertises.
+I will now mark your patch as "Changes Requested" in our patch tracking
+system.
 
-  Let me know what you think.
+Best regards,
 
-  I've marked this patch as Rejected.
-
-  Regards,
-  Arnout
-
-[1] https://patchwork.ozlabs.org/project/buildroot/list/?series=311175
-
->>
->> Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
->> ---
->>   package/valgrind/Config.in   | 10 ++++++++++
->>   package/valgrind/valgrind.mk |  2 +-
->>   2 files changed, 11 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
->> index 56e4af21fa..eff54e7949 100644
->> --- a/package/valgrind/Config.in
->> +++ b/package/valgrind/Config.in
->> @@ -84,4 +84,14 @@ config BR2_PACKAGE_VALGRIND_NULGRIND
->>   	help
->>   	  This option allows to install the Nulgrind tool
->>
->> +if BR2_GCC_ENABLE_LTO
->> +
->> +config BR2_VALGRIND_ENABLE_LTO
->> +	bool "Build Valgrind with link-time optimization"
->> +	help
->> +	  This produces a faster / smaller valgrind (up to 10%) at the cost
->> +	  of massively increased build time (can be over an hour).
-> 
-> Be careful with absolute times, depends strongly on the used hardware...
-> (out of interest, what is your baseline compile time?)...
-> 
-> Would move this section up-to/before the tools selection section...
-> 
-> Regards,
-> Peter
-> 
->> +
->> +endif
->> +
->>   endif
->> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
->> index b87e1e518f..07fb1f7d42 100644
->> --- a/package/valgrind/valgrind.mk
->> +++ b/package/valgrind/valgrind.mk
->> @@ -50,7 +50,7 @@ VALGRIND_CONF_OPTS += \
->>   	--host=$(patsubst arm-%,armv7-%,$(GNU_TARGET_NAME))
->>   endif
->>
->> -ifeq ($(BR2_GCC_ENABLE_LTO),y)
->> +ifeq ($(BR2_VALGRIND_ENABLE_LTO),y)
->>   VALGRIND_CONF_OPTS += --enable-lto
->>   else
->>   VALGRIND_CONF_OPTS += --disable-lto
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
