@@ -1,88 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6141C43334
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 10:07:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B6D2C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 10:10:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50FFC84C34;
-	Mon, 25 Jul 2022 10:07:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50FFC84C34
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF5DA405FC;
+	Mon, 25 Jul 2022 10:10:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF5DA405FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tS6wEtQ5Fwqg; Mon, 25 Jul 2022 10:07:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N6S149GHpSzm; Mon, 25 Jul 2022 10:10:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2448684BC0;
-	Mon, 25 Jul 2022 10:07:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2448684BC0
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3D7640407;
+	Mon, 25 Jul 2022 10:10:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3D7640407
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B0A211BF371
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 10:07:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A48291BF371
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 10:10:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 990F640407
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 10:07:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 990F640407
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E5CC40407
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 10:10:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E5CC40407
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wTgRI-eAzSMR for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 10:07:49 +0000 (UTC)
+ with ESMTP id pPJgNvCyQtrw for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 10:10:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 458B7400C7
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 458B7400C7
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 10:07:49 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- r1-20020a05600c35c100b003a326685e7cso6955958wmq.1
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 03:07:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4109E400C7
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4109E400C7
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 10:10:42 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id bn9so4359272wrb.9
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 03:10:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:from:to:cc:references:organization:in-reply-to
  :content-transfer-encoding;
- bh=HKanz+ClaDhgYrsuTjiD5V3Epxj4HjbEEhKFZEIkTvA=;
- b=NhT2/aL00FtJU9Hy26R0P3X+Eg9hD1E8q+YpSwI5V2/NMmP8TeUKxF/eyQrfYRbykY
- DtX7HS6sMyH7NuV+MKmy7pXGQAT3YRSF1athox4W8v0HFj2+nawKtnhKW//BSIvQpNB6
- /xaErfg6mRamkm27jBz0/AhcByukcMnvfKDgfLQeMy/zgij3g6gAIYSZ5ZVZgd+MXhG3
- kc8SR1GJvuJ5mOWPn91mSE+7RI5Xjj59p6LTd+TwytkbGNOmDYuyXNoToyjKPvOGYcJB
- UBgHU0ESwZS7Bom8VA0BGyh0fxpFaVxqZ5obABqsCHuNq7fJ/poidvNdPRAqzKJbae5V
- NZVg==
-X-Gm-Message-State: AJIora/LhRCM5fA5EK56IgV/QXdN1VLiFAK9DeXvyuoKOTSY/+E1Uj8n
- SaI2dJ9J3i8aon4SvFli8Kn+KmPuloXeKg==
-X-Google-Smtp-Source: AGRyM1sSO3CX1dDpP4CNowwtqComlP1dnphE3yyfrJudCphP4xTg7Fzu/PocL3BOTv5VazC/dXDQJQ==
-X-Received: by 2002:a1c:7407:0:b0:3a3:1d8:5c12 with SMTP id
- p7-20020a1c7407000000b003a301d85c12mr20465797wmc.191.1658743667094; 
- Mon, 25 Jul 2022 03:07:47 -0700 (PDT)
-Received: from arnoutx1.home ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ bh=n4OVhu+XzR4A+ZaK3R/aen7QS6VIIPT3az4yYZv9vNg=;
+ b=dtrzyW9Z1y58txmP261IoUPVU4CKZxGw+2KFxGcJUWp3CWqEk4OoSMPq924qNfOmIC
+ fBdfHep5vJ6BqdlT8otKxjU3EAUXmdNDuEwHzHkJqx2R/Oa1+eggwNSrqWBTUx3bc+Bl
+ U1vuovk468wd0sjWImIOZBURsMeKEtvNpnBFMBF8reQFAVxBWk2q1xcqF8SXmGv0B7Dv
+ NLmBQFp6jq+yoteH4IW0D2PCaPMyHN1IQCRCI3DEs/bwP6XsHz1Br+41QhOQPlZu0WDO
+ A4Q3gmbM1axsq4j1RQQX9qWQ2Is4wPqBJrLfsOR4OLZooT/YzVFjDSKQNLFEQRcg7MqV
+ GI/g==
+X-Gm-Message-State: AJIora8K8wFH6k7hLaZFNgm5x8RftdrOLSk9HRr1ERvttz55ggr2vp/r
+ 3ccDrrklhkFVd9gmFOqpeou1Iw==
+X-Google-Smtp-Source: AGRyM1tHmpb44MdCVDIaB0dTxQpWOp8niaMuGyD4WT+sdEWcihKKrc9gSaytr/HgrEpRedGEq0e1sQ==
+X-Received: by 2002:a05:6000:184d:b0:21e:8653:a0e7 with SMTP id
+ c13-20020a056000184d00b0021e8653a0e7mr3592141wri.702.1658743840274; 
+ Mon, 25 Jul 2022 03:10:40 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- i24-20020a1c5418000000b003a3187a2d4csm17633007wmb.22.2022.07.25.03.07.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 25 Jul 2022 03:07:46 -0700 (PDT)
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Mon, 25 Jul 2022 12:07:45 +0200
-Message-Id: <20220725100745.2878896-1-arnout@mind.be>
-X-Mailer: git-send-email 2.35.3
+ f12-20020a5d568c000000b0021e5cc26dd0sm9825660wrv.62.2022.07.25.03.10.39
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 25 Jul 2022 03:10:39 -0700 (PDT)
+Message-ID: <26e6821b-a676-a8d6-df3a-83791f097ada@mind.be>
+Date: Mon, 25 Jul 2022 12:10:37 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+From: Arnout Vandecappelle <arnout@mind.be>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220612200904.2783767-1-fontaine.fabrice@gmail.com>
+ <06b59095-245e-e92e-d6e8-73fcef93437a@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <06b59095-245e-e92e-d6e8-73fcef93437a@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
+ h=message-id:date:mime-version:user-agent:subject:content-language
+ :from:to:cc:references:organization:in-reply-to
  :content-transfer-encoding;
- bh=HKanz+ClaDhgYrsuTjiD5V3Epxj4HjbEEhKFZEIkTvA=;
- b=bKNeBJs1SyTQZMeRkzWvuq5QFOR3Qa5SCLm2oeDjVSQIjyE9zodr9l9QnMCsPqHHJM
- QnwPEtKTPTnZS8fp/nU/MVwTnil2doiVNR+66+8TaYMfWFzevUHJdvF6LOEsUGCiN9WL
- BE/SNatR9qcxwhy3l2BNgJJFiZcrPayCfBCwftIO3U1+74V7TbKpRa5v3IK2KBJo8pIM
- YwNvt5w+tK+RuXo1sP1kq3hEmHykZaggT2vollh2Y9gl9xy8ULrnI5MRvsSiVAV5X1+A
- 6EU1XGq3DQH2gxg7YCIoDBpgmG0lqnfocBschdvp7YmFPhD8VvklhMoeF3NO1e+DeZHH
- pNeA==
+ bh=n4OVhu+XzR4A+ZaK3R/aen7QS6VIIPT3az4yYZv9vNg=;
+ b=Bxx++ILtYmSx2uo0cK696AkgVtTN1s39QPDPIXi8Hba9uKZ1yKgThQSHnjoYPRFvp0
+ 1YyLO6QtvtlAx92jFe8z5fLesWwYyeqglyXKxNDtPkQA/i1DN40zWElg+0hwWuQpEqWW
+ +JxQo3/BEWu7ojZ/mamFRI/inTUFY0YPuyzXLzwHZTNVlUpaUCdRDUBgSbihLAlx3YE8
+ +cGLOaDOvMp5HnUjnPAkOyjM0iKvYIc44gGv+2qdYyTtc1+/9iw5AWI8c1zBueeLQLn+
+ VQM1Wk2O4MUqjhPYtZvOAFxVoK3JTrkr1a1EosrquABULZYghbF0UeMK4ZHgRiw7k9S7
+ d/Ow==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=bKNeBJs1
-Subject: [Buildroot] [PATCH] package/glibc: fix struct stat for microblaze
- with largefile
+ header.a=rsa-sha256 header.s=google header.b=Bxx++ILt
+Subject: Re: [Buildroot] [PATCH 1/1] package/zstd: pass _GNU_SOURCE in CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,82 +101,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On microblaze, there is a separate version of struct stat for largefile
-and for non-largefile. When the struct was updated to include the
-st_mtim, st_atim and st_ctim members for POSIX, the largefile version
-was forgotten. Since we only use largefile in Buildroot, that means that
-microblaze didn't have these members in struct stat. This breaks the
-build of some packages.
-
-Change the define around st_mtim etc. to __USE_XOPEN2K8 to enable it in
-posix context (i.e. by default).
-
-Fixes:
- - http://autobuild.buildroot.org/results/dd944a3bd4ac0c94b2bec8ac209100daaf43903d (zstd)
- - http://autobuild.buildroot.org/results/4609c8e2af24d9536eb33397a4659ad740aca742 (dieharder)
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Romain Naour <romain.naour@gmail.com>
----
- ...ot-posix-conformant-on-microblaze-wi.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/glibc/0002-struct-stat-is-not-posix-conformant-on-microblaze-wi.patch
-
-diff --git a/package/glibc/0002-struct-stat-is-not-posix-conformant-on-microblaze-wi.patch b/package/glibc/0002-struct-stat-is-not-posix-conformant-on-microblaze-wi.patch
-new file mode 100644
-index 0000000000..9797f3a935
---- /dev/null
-+++ b/package/glibc/0002-struct-stat-is-not-posix-conformant-on-microblaze-wi.patch
-@@ -0,0 +1,37 @@
-+From 87d415cc133ff493ccd02464c061cb171d11ef2f Mon Sep 17 00:00:00 2001
-+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-+Date: Mon, 25 Jul 2022 11:25:15 +0200
-+Subject: [PATCH] struct stat is not posix conformant on microblaze with
-+ __USE_FILE_OFFSET64
-+
-+Commit a06b40cdf5ba0d2ab4f9b4c77d21e45ff284fac7 updated stat.h to use
-+__USE_XOPEN2K8 instead of __USE_MISC to add the st_atim, st_mtim and
-+st_ctim members to struct stat. However, for microblaze, there are two
-+definitions of struct stat, depending on the __USE_FILE_OFFSET64 macro.
-+The second one was not updated.
-+
-+Change __USE_MISC to __USE_XOPEN2K8 in the __USE_FILE_OFFSET64 version
-+of struct stat for microblaze.
-+
-+Upstream: https://sourceware.org/bugzilla/show_bug.cgi?id=29403
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ sysdeps/unix/sysv/linux/microblaze/bits/struct_stat.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/sysdeps/unix/sysv/linux/microblaze/bits/struct_stat.h b/sysdeps/unix/sysv/linux/microblaze/bits/struct_stat.h
-+index a2787e88343..850697f4fa6 100644
-+--- a/sysdeps/unix/sysv/linux/microblaze/bits/struct_stat.h
-++++ b/sysdeps/unix/sysv/linux/microblaze/bits/struct_stat.h
-+@@ -89,7 +89,7 @@ struct stat
-+         __blksize_t             st_blksize; /* Optimal block size for I/O.  */
-+         int                     __pad3;
-+         __blkcnt64_t            st_blocks;  /* Number 512-byte blocks allocated.  */
-+-# ifdef __USE_MISC
-++# ifdef __USE_XOPEN2K8
-+         /* Nanosecond resolution timestamps are stored in a format
-+          * equivalent to 'struct timespec'. This is the type used
-+          * whenever possible but the Unix namespace rules do not allow the
-+-- 
-+2.35.3
-+
--- 
-2.35.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Ck9uIDE0LzA2LzIwMjIgMjE6MTIsIEFybm91dCBWYW5kZWNhcHBlbGxlIHdyb3RlOgo+Cj4KPiBP
+biAxMi8wNi8yMDIyIDIyOjA5LCBGYWJyaWNlIEZvbnRhaW5lIHdyb3RlOgo+PiBGaXggdGhlIGZv
+bGxvd2luZyBidWlsZCBmYWlsdXJlOgo+Pgo+PiB1dGlsLmM6IEluIGZ1bmN0aW9uICdVVElMX3V0
+aW1lJzoKPj4gdXRpbC5jOjE3MzoyNzogZXJyb3I6ICdzdGF0X3QnIHtha2EgJ2NvbnN0IHN0cnVj
+dCBzdGF0J30gaGFzIG5vIG1lbWJlciBuYW1lZCAKPj4gJ3N0X210aW0nOyBkaWQgeW91IG1lYW4g
+J3N0X210aW1lJz8KPj4gwqDCoCAxNzMgfMKgwqDCoMKgIHRpbWVidWZbMV0gPSBzdGF0YnVmLT5z
+dF9tdGltOwo+PiDCoMKgwqDCoMKgwqAgfMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgXn5+fn5+fgo+PiDCoMKgwqDCoMKgwqAgfMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RfbXRpbWUKPj4KPj4g
+Rml4ZXM6Cj4+IMKgIC0gCj4+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRz
+L2RkOTQ0YTNiZDRhYzBjOTRiMmJlYzhhYzIwOTEwMGRhYWY0MzkwM2QKPj4KPj4gU2lnbmVkLW9m
+Zi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4+IC0t
+LQo+PiDCoCBwYWNrYWdlL3pzdGQvenN0ZC5tayB8IDIgKy0KPj4gwqAgMSBmaWxlIGNoYW5nZWQs
+IDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4+Cj4+IGRpZmYgLS1naXQgYS9wYWNrYWdl
+L3pzdGQvenN0ZC5tayBiL3BhY2thZ2UvenN0ZC96c3RkLm1rCj4+IGluZGV4IGU4ZjYzMTUyMjIu
+Ljc1ZWI2ZWNjMDcgMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2UvenN0ZC96c3RkLm1rCj4+ICsrKyBi
+L3BhY2thZ2UvenN0ZC96c3RkLm1rCj4+IEBAIC0zNiw3ICszNiw3IEBAIFpTVERfT1BUUyArPSBI
+QVZFX0xaND0wCj4+IMKgIGVuZGlmCj4+IMKgIMKgICMgenN0ZCB3aWxsIGFwcGVuZCAtTzMgYWZ0
+ZXIgJChDRkxBR1MpLCB1c2UgTU9SRUZMQUdTIHRvIG92ZXJyaWRlIGFnYWluCj4+IC1aU1REX09Q
+VFMgKz0gTU9SRUZMQUdTPSIkKFRBUkdFVF9PUFRJTUlaQVRJT04pIgo+PiArWlNURF9PUFRTICs9
+IE1PUkVGTEFHUz0iJChUQVJHRVRfT1BUSU1JWkFUSU9OKSAtRF9HTlVfU09VUkNFIgo+Cj4gwqBB
+bHRob3VnaCB0aGlzIHdvcmthcm91bmQgc2VlbXMgcXVpdGUgaW5ub2N1b3VzLCBpdCBkb2Vzbid0
+IGZlZWwgbGlrZSB0aGUgCj4gcmlnaHQgdGhpbmcgdG8gZG8uIEluZGVlZCwgdGhlIGNvZGUgYXJv
+dW5kIHRoZSB1c2Ugb2Ygc3RfbXRpbSBhbHJlYWR5IGRvZXMgCj4gZXZlcnkgZWZmb3J0IG9mIG1h
+a2luZyBzdXJlIHRoYXQgdGhlIHRvb2xjaGFpbiByZWFsbHkgc3VwcG9ydHMgc3RfbXRpbS4KPgo+
+IMKgQWN0dWFsbHksIGl0IGZlZWxzIGxpa2UgYSBidWcgaW4gZ2xpYmMuIFBPU0lYIHJlcXVpcmUg
+c3RfbXRpbSB0byBleGlzdCwgc28gCj4gcmVxdWlyaW5nIF9HTlVfU09VUkNFIGZvciBpdCBpcyBq
+dXN0IHBsYWluIHdyb25nLiBJbmRlZWQsIGluIAo+IHN5c2RlcHMvdW5peC9zeXN2L2xpbnV4L21p
+Y3JvYmxhemUvYml0cy9zdHJ1Y3Rfc3RhdC5oLCB0aGUgbGFyZ2VmaWxlIAo+IGRlZmluaXRpb24g
+b2Ygc3RfbXRpbSBpcyBwcm90ZWN0ZWQgYnkgdGhlIF9fVVNFX01JU0MgbWFjcm8sIHdoaWxlIHRo
+ZSAKPiBub24tbGFyZ2VmaWxlIGRlZmluaXRpb24gaXMgcHJvdGVjdGVkIGJ5IHRoZSBfX1VTRV9Y
+T1BFTjJLOCBtYWNybyAod2hpY2ggaXMgCj4gdGhlIGNvcnJlY3Qgb25lKS4gU28gSSdkIHJhdGhl
+ciBwYXRjaCBnbGliYy4KCiDCoFNvIHRoYXQncyBleGFjdGx5IHdoYXQgSSBkaWQgWzFdLiBNYXJr
+ZWQgYXMgc3VwZXJzZWRlZC4KCgogwqBSZWdhcmRzLAogwqBBcm5vdXQKClsxXSAKaHR0cHM6Ly9w
+YXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDIyMDcyNTEwMDc0
+NS4yODc4ODk2LTEtYXJub3V0QG1pbmQuYmUvCgoKCj4KPiDCoEFwcGFyZW50bHksIERlYmlhbiBo
+YXMgYSBzaW1pbGFyIHByb2JsZW0gb24gQWxwaGEgWzFdLgo+Cj4gWzFdIGh0dHBzOi8vZ2l0aHVi
+LmNvbS9mYWNlYm9vay96c3RkL3B1bGwvMjk4Ngo+Cj4+IMKgIMKgIFpTVERfQlVJTERfTElCU19C
+QVNFTkFNRVMgPSBsaWJ6c3RkLnBjCj4+IMKgIGlmZXEgKCQoQlIyX1NUQVRJQ19MSUJTKSx5KQpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
