@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE7BBC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 14:29:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 779D6C43334
+	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 14:44:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B5D883DF2;
-	Mon, 25 Jul 2022 14:29:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B5D883DF2
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC0C461289;
+	Mon, 25 Jul 2022 14:44:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC0C461289
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wTcvjfyVXR4A; Mon, 25 Jul 2022 14:29:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m78XHG60FX7h; Mon, 25 Jul 2022 14:44:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7343F83380;
-	Mon, 25 Jul 2022 14:29:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7343F83380
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6CB661033;
+	Mon, 25 Jul 2022 14:44:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6CB661033
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1FCB91BF3AA
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 14:29:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A0F711BF3DA
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 14:44:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED66E61288
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 14:29:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED66E61288
+ by smtp3.osuosl.org (Postfix) with ESMTP id 886F161033
+ for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 14:44:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 886F161033
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d7S09UKryy-W for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 14:28:59 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A805160E11
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A805160E11
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 14:28:59 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:9102:8e95:18fd:a25a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 84A0C19F5B2;
- Mon, 25 Jul 2022 16:28:54 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 25 Jul 2022 16:28:54 +0200
-Date: Mon, 25 Jul 2022 16:28:54 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: TIAN Yuanhao <tianyuanhao3@163.com>
-Message-ID: <20220725142854.GF3168@scaer>
-References: <20220725120927.348160-1-tianyuanhao3@163.com>
+ with ESMTP id kpSw-289tUSf for <buildroot@lists.busybox.net>;
+ Mon, 25 Jul 2022 14:44:31 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7070D60E38
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7070D60E38
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 14:44:30 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 161C56000D;
+ Mon, 25 Jul 2022 14:44:25 +0000 (UTC)
+Date: Mon, 25 Jul 2022 16:44:25 +0200
+To: Damien Le Moal via buildroot <buildroot@buildroot.org>
+Message-ID: <20220725164425.7316b2e3@windsurf>
+In-Reply-To: <20220530033836.474926-3-damien.lemoal@opensource.wdc.com>
+References: <20220530033836.474926-1-damien.lemoal@opensource.wdc.com>
+ <20220530033836.474926-3-damien.lemoal@opensource.wdc.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220725120927.348160-1-tianyuanhao3@163.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658759336;
- bh=tLwGksj5+kUEdpLFZkCZ4Qnb3MrYcTelyqm+saN2IlQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=UqmMEkujvwiez/tNEM5zK2II2D9sk7fYO8m15vE8TEBvu7qT7mqlY1MV9N84ctut5
- zhGVTY/rhLGFKhA8WE36JwtQZqX3tOKFXFG3tEo/J0gYHSmbuTKxWKVKzhmuzlWFiN
- +F8vlVSApMEwK3YCKcucqNIKM8mYd37TprV78coljVL5nrlGBPmJ/TGGPYdn9n9H/g
- RgOhwkb+NKcZvQTxin79I6YkNzNY2wSZUa7QNEGz9w2pCi9Ysh8X9hE9/tESlfrEjG
- YQaVLkMI2t9gAH6I6xGofXxrbE7P9xekcT+ECtCpm3lzYM7uQSfIA1rrEL84UhWrp7
- txZwlxb8GYlng==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658760267;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=fe4Q9oceW5EPkWoLoKbalYIf2Wc15bzdwe0UyqEfQMI=;
+ b=LAhx4FJ4cwdHNtefjut/vndVBf0TTBJRw1o5Hj5WXG86zkQRnelUeHVBVo2Br68zjh1Rij
+ gS2EMw7/jvWcUMvo0bNGyIIfETfauj0Lc7ox7q5iKK7vgM3j2PIEfiSginaNWFnLNrLZ4g
+ 749lUm2botdMhJWSIVlQ/ppYau9PwAnkNCiB3CFe7XtSSrCgLOCmAvrVJh4Z2VKn8kVR9N
+ XK9ki8wErwwHIeHJJxysZPQQxGV0AUf45OKZ72OU/yKQHDUMYbJVpXBGHZMkd8jI2kBlur
+ PSLLPhMosZGl2gcZniA7gp8T92hjmNoB3gExPwhVvkC5p/eXVUomRKl6N9oM/w==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=UqmMEkuj
-Subject: Re: [Buildroot] [PATCH] package/pkg-utils: prevent
- KCONFIG_ENABLE_OPT from changing =m to =y
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LAhx4FJ4
+Subject: Re: [Buildroot] [PATCH v2 02/11] package: elf2flt: Update RISC-V
+ 64-bits support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,103 +77,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Niklas Cassel <Niklas.Cassel@wdc.com>,
+ Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+ Alistair Francis <alistair@alistair23.me>, "Yann E
+ . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TIAN Yuanhao, All,
+Hello Damien, Hello Niklas,
 
-On 2022-07-25 05:09 -0700, TIAN Yuanhao spake thusly:
-> The KCONFIG_ENABLE_OPT is intended to enable a required kernel configuration
-> option when a package requires it.
+On Mon, 30 May 2022 12:38:27 +0900
+Damien Le Moal via buildroot <buildroot@buildroot.org> wrote:
+
+> From: Damien Le Moal <damien.lemoal@wdc.com>
 > 
-> However, this will often override an existing enabled module with `=m` with `=y`
-> which overrides the module to be built-in instead of separate.
+> Remove the old elf2flt 0002-elf2flt-add-riscv-64-bits-support.patch
+> patch file for riscv64 architecture and replace it with 3 patches:
 > 
-> This is undesirable behavior; we often want these as `=m` and not `=y` to reduce
-> the size of the kernel image.
+> (1) The first patch fixes the data section alignment
+> (2) The second patch fixes a bug with the handling of the eh_frame
+>     section causing text and data section overlap problems.
+> (3) The third patch adds a simpler riscv64 flat bin relocation support.
 > 
-> This patch changes KCONFIG_MUNGE_DOT_CONFIG to prevent changing `=m` to `=y`.
+> These 3 patches are submitted to the upstream elf2flt project as pull
+> request #22:
 > 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> Co-authored-by: TIAN Yuanhao <tianyuanhao3@163.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/pkg-utils.mk | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 7d1aea7710..2edd542ba9 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -22,12 +22,17 @@ KCONFIG_DOT_CONFIG = $(strip \
->  
->  # KCONFIG_MUNGE_DOT_CONFIG (option, newline [, file])
->  define KCONFIG_MUNGE_DOT_CONFIG
-> -	$(SED) "/\\<$(strip $(1))\\>/d" $(call KCONFIG_DOT_CONFIG,$(3))
-> +	$(SED) '/^\(# \)\?$(strip $(1))\>/d' $(call KCONFIG_DOT_CONFIG,$(3)) && \
+> https://github.com/uclinux-dev/elf2flt/pull/22
 
-This change should not be needed. We now check that the value is already
-set, and if it is, then we do not touch it. So, if we hit this code, it
-means we will want to remove any line that has that option.
+We are seeing an issue with this patch applied: it segfaults when
+linking binaries on the m68k architecture.
 
-Additionally, since the option is enclosed with \< and \>, then only
-full-word will match. I.e. if option if DOO, then none of FOO_BAR,
-BAR_FOO, or BAR_FOO_BUZ would match, so we don't need to optionally
-match the leading comment symbol.
+To be fully clear, when we use the current version of elf2flt in
+Buildroot (2021.02) + patch 0001-elf2flt-handle-binutils-2.34.patch +
+patch 0002-elf2flt.ld-reinstate-32-byte-alignment-for-.data-sec.patch,
+we have the following failure:
 
->  	echo '$(strip $(2))' >> $(call KCONFIG_DOT_CONFIG,$(3))
->  endef
->  
->  # KCONFIG_ENABLE_OPT (option [, file])
-> -KCONFIG_ENABLE_OPT  = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2))
-> +# If the option is already set to =m or =y, ignore.
-> +define KCONFIG_ENABLE_OPT
-> +	$(Q)if ! grep -q '^$(strip $(1))=[my]' $(call KCONFIG_DOT_CONFIG,$(2)); then \
-> +		$(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2)) || exit 1; \
+  /home/thomas/buildroot/outputs/m68k/host/m68k-buildroot-uclinux-uclibc/bin/elf2flt: ERROR: text=0x7db78 overlaps data=0x6b940 ?
 
-The return code of an if statement is the one from the last command in
-the list. In this case, KCONFIG_MUNGE_DOT_CONFIG expands to a single
-(compound) command, so if it fails, the if statement will fail, and so
-the if statement will fail. So, the  "|| exit 1"  here should not be
-needed.
+which already existed *prior* to applying your patch.
 
-Additionally, if we ever change KCONFIG_MUNGE_DOT_CONFIG to be multiple
-commands, the  "|| exit 1"  would only apply to the last, so that would
-not catch all failures either.
+However, as soon as we add
+0003-elf2flt-fix-.eh_frame-section-handling.patch into the patch series
+applied to elf2flt, we get:
 
-Applied to master, after:
-  - reverting the SED match
-  - dropping the || exit 1
+  ld (ld-elf2flt): /home/thomas/buildroot/outputs/m68k/host/m68k-buildroot-uclinux-uclibc/bin/elf2flt terminated with signal 11 [Segmentation fault], core dumped
 
-Thanks!
+Our friend gdb gives us some hint on where the segfault occurs:
 
-Regards,
-Yann E. MORIN.
+#0  0x000055ebfc7524e0 in add_com_to_bss (bss_len=19112, number_of_symbols=3869, symbol_table=0x55ebfd601d50) at elf2flt.c:273
+273         if (strcmp("*COM*", symbol_table[i]->section->name) == 0) {
 
-> +	fi
-> +endef
->  # KCONFIG_SET_OPT (option, value [, file])
->  KCONFIG_SET_OPT     = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=$(2), $(3))
->  # KCONFIG_DISABLE_OPT  (option [, file])
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Of course, we're not sure if the error "ERROR: text=0x7db78 overlaps
+data=0x6b940 ?" is fixed by your patch and a later problem causes the
+segfault, or if your patch causes the segfault in the first place.
 
+Please note that if we revert both
+32f93b0ef2c602dfa1f5b243ba865d5b16e2fa33 and
+65d78dcfeb8b2eafaebe2d0c3c8c42e7e85f46ac in Buildroot, we have a
+working elf2flt for m68k.
+
+Do you have any idea?
+
+Thanks a lot!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
