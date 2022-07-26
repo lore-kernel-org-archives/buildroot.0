@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AA50C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 13:14:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE8C9CCA47E
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 13:14:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0406A84745;
-	Tue, 26 Jul 2022 13:14:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0406A84745
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pwah9YPnrHuq; Tue, 26 Jul 2022 13:14:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB33A8420B;
-	Tue, 26 Jul 2022 13:14:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB33A8420B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D76601BF2B4
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:14:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B06A6419C9
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:14:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B06A6419C9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5867541484;
+	Tue, 26 Jul 2022 13:14:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5867541484
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6mFz6iHS0Jr6 for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 13:14:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 321B740288
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:14:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 321B740288
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6351185ECF; Tue, 26 Jul 2022 13:00:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 15:13:59 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 934788d162596d5ed634c5fb2914d76a6bf554ec
-X-Git-Newrev: 7451295826865fc08eb067ad226a11fd1c2b4512
-X-Patchwork-Hint: ignore
-Message-Id: <20220726130027.6351185ECF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/kontron_bl_imx8mm_defconfig: bump
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SM8_w2APhZLA; Tue, 26 Jul 2022 13:14:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 450C14099F;
+	Tue, 26 Jul 2022 13:14:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 450C14099F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 44E121BF2B4
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:14:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1ED1C8474F
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:14:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1ED1C8474F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QekIa6uWNlHy for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 13:14:26 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A747484066
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A747484066
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:14:25 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E5B4D1BF20A;
+ Tue, 26 Jul 2022 13:14:21 +0000 (UTC)
+Date: Tue, 26 Jul 2022 15:14:21 +0200
+To: Fabio Estevam <festevam@gmail.com>
+Message-ID: <20220726151421.451706e1@windsurf>
+In-Reply-To: <20220421215611.1362150-1-festevam@gmail.com>
+References: <20220421215611.1362150-1-festevam@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658841262;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=9ZKIZG0bdKaGYM4pIcN1T4/kLgKIIRQOgTBhkJ+5ymA=;
+ b=CSqxpaVUqYw9hghyLHERtv+gtnidxHCCoiPA4R2TapOdPRxlYb19ESI26q2zVpwzEKPMOq
+ aukOXU8GnsOGS7kNg/TytjDrqcsBh0BV3TpyAjPMsHJVdVdeeeL44gnm3lnryPAUdSurQM
+ V9SGI6cbAtCZAfA598hWkoRgoMxR4g84gImN6LZhVmRG0VZZeB7h3mKBsd65B/u5rWg29I
+ QYARNysBr9SJsP9lQVkKy9rO4GxwOeUjstRSuf5rFwSfmLhnIc+TlYXf45gQwNQv+ORjsh
+ uiqWevfDeYqEZqZc6qZt9/HhkKXpK2cxeNWG/booijaPaGpc7NJgnTIW1BaBZw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CSqxpaVU
+Subject: Re: [Buildroot] [PATCH] configs/kontron_bl_imx8mm_defconfig: Bump
  U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,397 +78,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: heiko.thiery@gmail.com, frieder.schrempf@kontron.de,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7451295826865fc08eb067ad226a11fd1c2b4512
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 21 Apr 2022 18:56:11 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-Bump U-Boot to version 2022.04 and remove the two patches
-that have already been upstreamed.
+> Bump U-Boot to version 2022.04 and remove the two patches
+> that have already been upstreamed.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+> Hi Heiko,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Acked-By: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...imx8mm-kontron-n801x-s-convert-options-to.patch |  31 ---
- ...imx8mm-kontron-n801x-s-add-common-board-u.patch | 305 ---------------------
- configs/kontron_bl_imx8mm_defconfig                |   4 +-
- 3 files changed, 1 insertion(+), 339 deletions(-)
+Applied to master, thanks.
 
-diff --git a/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch b/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch
-deleted file mode 100644
-index 6d76282def..0000000000
---- a/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 95a311af81cd47c44d3d6e3f717f06a06d8f3dfd Mon Sep 17 00:00:00 2001
--From: Heiko Thiery <heiko.thiery@gmail.com>
--Date: Mon, 10 Jan 2022 14:13:02 +0100
--Subject: [PATCH 1/2] imx: imx8mm: imx8mm-kontron-n801x-s: convert options to Kconfig
--
--CONFIG_SPL_MMC and CONFIG_SPL_SERIAL
--
--Patch submitted upstream:
--https://patchwork.ozlabs.org/project/uboot/patch/20220112085755.7396-1-heiko.thiery@gmail.com/
--
--Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-----
-- configs/kontron-sl-mx8mm_defconfig | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/configs/kontron-sl-mx8mm_defconfig b/configs/kontron-sl-mx8mm_defconfig
--index 35d12fca32..940bf07a92 100644
----- a/configs/kontron-sl-mx8mm_defconfig
--+++ b/configs/kontron-sl-mx8mm_defconfig
--@@ -15,6 +15,8 @@ CONFIG_SPL_DM_SPI=y
-- CONFIG_DEFAULT_DEVICE_TREE="imx8mm-kontron-n801x-s"
-- CONFIG_SPL_TEXT_BASE=0x7E1000
-- CONFIG_TARGET_KONTRON_MX8MM=y
--+CONFIG_SPL_MMC=y
--+CONFIG_SPL_SERIAL=y
-- CONFIG_BOOTCOUNT_BOOTLIMIT=3
-- CONFIG_SPL=y
-- CONFIG_DISTRO_DEFAULTS=y
---- 
--2.30.2
--
-diff --git a/board/kontron/bl-imx8mm/patches/uboot/0002-imx-imx8mm-imx8mm-kontron-n801x-s-add-common-board-u.patch b/board/kontron/bl-imx8mm/patches/uboot/0002-imx-imx8mm-imx8mm-kontron-n801x-s-add-common-board-u.patch
-deleted file mode 100644
-index a88d7aba87..0000000000
---- a/board/kontron/bl-imx8mm/patches/uboot/0002-imx-imx8mm-imx8mm-kontron-n801x-s-add-common-board-u.patch
-+++ /dev/null
-@@ -1,305 +0,0 @@
--From ef694c19c074333fd16589ec6ffef3e7ca895186 Mon Sep 17 00:00:00 2001
--From: Heiko Thiery <heiko.thiery@gmail.com>
--Date: Wed, 12 Jan 2022 08:44:36 +0100
--Subject: [PATCH 2/2] imx: imx8mm: imx8mm-kontron-n801x-s: add common board
-- u-boot.dtsi
--
--When using a board variant that selects the lvds specific dtb the
--*.u-boot.dtsi file will not be included. To have a lvds dtb specific
--u-boot.dtsi file move this part to a common board u-boot.dtsi file and
--include this in the board base u-boot.dtsi and create an additional one
--for the lvds variant.
--
--Patch submitted upstream:
--https://patchwork.ozlabs.org/project/uboot/patch/20220112085755.7396-2-heiko.thiery@gmail.com/
--
--Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-----
-- .../imx8mm-kontron-n801x-s-lvds-u-boot.dtsi   |   6 +
-- .../dts/imx8mm-kontron-n801x-s-u-boot.dtsi    | 124 +----------------
-- arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi | 128 ++++++++++++++++++
-- 3 files changed, 135 insertions(+), 123 deletions(-)
-- create mode 100644 arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi
-- create mode 100644 arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi
--
--diff --git a/arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi b/arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi
--new file mode 100644
--index 0000000000..4bf75722bf
----- /dev/null
--+++ b/arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi
--@@ -0,0 +1,6 @@
--+// SPDX-License-Identifier: GPL-2.0+
--+/*
--+ * Copyright (C) 2019 Kontron Electronics GmbH
--+ */
--+
--+#include "imx8mm-kontron-n801x-u-boot.dtsi"
--diff --git a/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi b/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi
--index 22d18e6f1c..4bf75722bf 100644
----- a/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi
--+++ b/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi
--@@ -3,126 +3,4 @@
--  * Copyright (C) 2019 Kontron Electronics GmbH
--  */
-- 
---#include "imx8mm-u-boot.dtsi"
---
---/ {
---	aliases {
---		usb0 = &usbotg1;
---		usb1 = &usbotg2;
---	};
---
---	wdt-reboot {
---		compatible = "wdt-reboot";
---		wdt = <&wdog1>;
---		u-boot,dm-spl;
---	};
---
---	firmware {
---		optee {
---			compatible = "linaro,optee-tz";
---			method = "smc";
---		};
---	};
---};
---
---&fec1 {
---	phy-mode = "rgmii-rxid";
---};
---
---&i2c1 {
---	u-boot,dm-spl;
---	u-boot,dm-pre-reloc;
---};
---
---&i2c2 {
---	status = "okay";
---	u-boot,dm-spl;
---	u-boot,dm-pre-reloc;
---};
---
---&pinctrl_ecspi1 {
---	u-boot,dm-spl;
---};
---
---&pinctrl_i2c1 {
---	u-boot,dm-spl;
---};
---
---&pinctrl_pmic {
---	u-boot,dm-spl;
---	fsl,pins = <
---		MX8MM_IOMUXC_GPIO1_IO00_GPIO1_IO0		0x141
---		/* Disable Pullup for SD_VSEL */
---		MX8MM_IOMUXC_GPIO1_IO04_GPIO1_IO4		0x41
---	>;
---};
---
---&pinctrl_uart3 {
---	u-boot,dm-spl;
---	u-boot,dm-pre-reloc;
---};
---
---&pinctrl_usdhc1 {
---	u-boot,dm-spl;
---};
---
---&pinctrl_usdhc1_100mhz {
---	u-boot,dm-spl;
---};
---
---&pinctrl_usdhc1_200mhz {
---	u-boot,dm-spl;
---};
---
---&pinctrl_usdhc2 {
---	u-boot,dm-spl;
---};
---
---&pca9450 {
---	u-boot,dm-spl;
---};
---
---&{/soc@0/bus@30800000/i2c@30a20000/pmic@25/regulators} {
---	u-boot,dm-spl;
---};
---
---&ecspi1 {
---	u-boot,dm-spl;
---};
---
---&gpio1 {
---	u-boot,dm-spl;
---};
---
---&gpio2 {
---	u-boot,dm-spl;
---};
---
---&gpio3 {
---	u-boot,dm-spl;
---};
---
---&gpio4 {
---	u-boot,dm-spl;
---};
---
---&gpio5 {
---	u-boot,dm-spl;
---};
---
---&uart3 {
---	u-boot,dm-spl;
---	u-boot,dm-pre-reloc;
---};
---
---&usdhc1 {
---	u-boot,dm-spl;
---};
---
---&usdhc2 {
---	u-boot,dm-spl;
---};
---
---&wdog1 {
---	u-boot,dm-spl;
---};
--+#include "imx8mm-kontron-n801x-u-boot.dtsi"
--diff --git a/arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi b/arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi
--new file mode 100644
--index 0000000000..22d18e6f1c
----- /dev/null
--+++ b/arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi
--@@ -0,0 +1,128 @@
--+// SPDX-License-Identifier: GPL-2.0+
--+/*
--+ * Copyright (C) 2019 Kontron Electronics GmbH
--+ */
--+
--+#include "imx8mm-u-boot.dtsi"
--+
--+/ {
--+	aliases {
--+		usb0 = &usbotg1;
--+		usb1 = &usbotg2;
--+	};
--+
--+	wdt-reboot {
--+		compatible = "wdt-reboot";
--+		wdt = <&wdog1>;
--+		u-boot,dm-spl;
--+	};
--+
--+	firmware {
--+		optee {
--+			compatible = "linaro,optee-tz";
--+			method = "smc";
--+		};
--+	};
--+};
--+
--+&fec1 {
--+	phy-mode = "rgmii-rxid";
--+};
--+
--+&i2c1 {
--+	u-boot,dm-spl;
--+	u-boot,dm-pre-reloc;
--+};
--+
--+&i2c2 {
--+	status = "okay";
--+	u-boot,dm-spl;
--+	u-boot,dm-pre-reloc;
--+};
--+
--+&pinctrl_ecspi1 {
--+	u-boot,dm-spl;
--+};
--+
--+&pinctrl_i2c1 {
--+	u-boot,dm-spl;
--+};
--+
--+&pinctrl_pmic {
--+	u-boot,dm-spl;
--+	fsl,pins = <
--+		MX8MM_IOMUXC_GPIO1_IO00_GPIO1_IO0		0x141
--+		/* Disable Pullup for SD_VSEL */
--+		MX8MM_IOMUXC_GPIO1_IO04_GPIO1_IO4		0x41
--+	>;
--+};
--+
--+&pinctrl_uart3 {
--+	u-boot,dm-spl;
--+	u-boot,dm-pre-reloc;
--+};
--+
--+&pinctrl_usdhc1 {
--+	u-boot,dm-spl;
--+};
--+
--+&pinctrl_usdhc1_100mhz {
--+	u-boot,dm-spl;
--+};
--+
--+&pinctrl_usdhc1_200mhz {
--+	u-boot,dm-spl;
--+};
--+
--+&pinctrl_usdhc2 {
--+	u-boot,dm-spl;
--+};
--+
--+&pca9450 {
--+	u-boot,dm-spl;
--+};
--+
--+&{/soc@0/bus@30800000/i2c@30a20000/pmic@25/regulators} {
--+	u-boot,dm-spl;
--+};
--+
--+&ecspi1 {
--+	u-boot,dm-spl;
--+};
--+
--+&gpio1 {
--+	u-boot,dm-spl;
--+};
--+
--+&gpio2 {
--+	u-boot,dm-spl;
--+};
--+
--+&gpio3 {
--+	u-boot,dm-spl;
--+};
--+
--+&gpio4 {
--+	u-boot,dm-spl;
--+};
--+
--+&gpio5 {
--+	u-boot,dm-spl;
--+};
--+
--+&uart3 {
--+	u-boot,dm-spl;
--+	u-boot,dm-pre-reloc;
--+};
--+
--+&usdhc1 {
--+	u-boot,dm-spl;
--+};
--+
--+&usdhc2 {
--+	u-boot,dm-spl;
--+};
--+
--+&wdog1 {
--+	u-boot,dm-spl;
--+};
---- 
--2.30.2
--
-diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
-index 2b7e121e25..705222df28 100644
---- a/configs/kontron_bl_imx8mm_defconfig
-+++ b/configs/kontron_bl_imx8mm_defconfig
-@@ -3,8 +3,6 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV3=y
- 
--BR2_GLOBAL_PATCH_DIR="board/kontron/bl-imx8mm/patches"
--
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
- 
-@@ -40,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
