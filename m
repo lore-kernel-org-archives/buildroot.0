@@ -1,69 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2791C00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 16:40:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCC1FC00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 16:40:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 394AF610FD;
-	Tue, 26 Jul 2022 16:40:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 394AF610FD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xs4_2FvDj1tY; Tue, 26 Jul 2022 16:40:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2295460EB4;
-	Tue, 26 Jul 2022 16:40:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2295460EB4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C71A01BF3D9
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:40:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ADDAE40621
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:40:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADDAE40621
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75A6E4174C;
+	Tue, 26 Jul 2022 16:40:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75A6E4174C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SolDfbXwWkEj for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 16:40:02 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QY83bbiyw74k; Tue, 26 Jul 2022 16:40:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83ED241751;
+	Tue, 26 Jul 2022 16:40:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83ED241751
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 837471BF3D9
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:40:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 490C241BE3
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:40:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 490C241BE3
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ThTWSYiFgPW2 for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 16:40:01 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9181B4014B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2FBF4221B
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9181B4014B
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 16:40:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C2FBF4221B
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 16:40:00 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id D31871BF20A;
- Tue, 26 Jul 2022 16:39:59 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id 9F27C1BF206;
+ Tue, 26 Jul 2022 16:39:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 18:39:50 +0200
-Message-Id: <20220726163951.2111731-3-thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Jul 2022 18:39:48 +0200
+Message-Id: <20220726163951.2111731-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220726163951.2111731-1-thomas.petazzoni@bootlin.com>
-References: <20220726163951.2111731-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658853600;
+ d=bootlin.com; s=gm1; t=1658853597;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=yNqdXOdzknt7Al6HprqB/Yn7g+GNVheBlyWWYNlJP18=;
- b=jnx7QPyp5Z9DAVVeftFTkgnA6C5f4Yp6SRUqDoS1ljed86CZLgr/ktomaqui6JZOZvtXjR
- hXKscgtL8myvYSxd8VBKA6UaLGzToyVeIxbTyBXA/OcaQuHtMqT9RpiC6iyGxXyiIqFKRO
- NcvMci3jvLUi70WpFwE1f5o2t+awwq86SlrhZuu+j9ifxhSD9w/olFCr3S9S3Nhez+9a5L
- gyWpCqHFcqCp7xIowaD1dmOpta0P8RucWmxYpywdI4prvjyWa5frWiiFgpRzrcydHi4lUW
- lUoSskiix3JVPxy/wXXDh61zXK3j96FIcCtgWV6rpuUgSFtko09GB+GSpV4qMw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding;
+ bh=4QGXF+lCEouYig22Sh8Dj/4fPovl0qldzYW0iIgxHCk=;
+ b=koINTriXP9C43WlxG3GGDfxs3XGjH7DKOWjCvkwrm92Gj8x+8Yx72VT4GVXso1hB6BN8Cv
+ XdUR4NNySg8eZn1FtYjTaMtsM1y9alhaByas3LLOgCdBmMS9VhpJowv7T5krgdML2N969p
+ RkzpqJ5SQcCx90i7+I9AouEoqNIC9FArZOPZ/f8n+UVaIz61chPVofI24Eyok+zdZvqcTp
+ 2oD3thGDKZ0Mt5/BMMJYNB5q+38YJZn1zXxcodHoZasCVGNFf+K6Ix0X3fTPHMU6MGuYDV
+ uU303MEYmgSWnDb94XjazKKZ1qYKa4Pu0JinlRFnwxKwgQJ5Ghq202bNXb94mA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jnx7QPyp
-Subject: [Buildroot] [PATCH v2 3/4] arch/Config.in: move the binary format
- selection further down
+ header.s=gm1 header.b=koINTriX
+Subject: [Buildroot] [PATCH v2 1/4] arch/Config.in.riscv: lp64f ABI is only
+ supported if MMU is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,147 +74,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Mark Corbin <mark@dibsco.co.uk>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Right now the "Target options" menu looks like this:
+Even though that seems weird, the LP64F ABI is only supported when MMU
+support is enabled. Indeed, as per commit
+9a51381cedc16e6d70cb85e1144f6e0fa89af69a ("package/uclibc: prevent
+config with unsupported RISC-V float ABI"), uClibc does not support
+LP64F. But uClibc is the only C library that support RISC-V 64-bit
+noMMU.
 
- Target architecture (....)
- ... options related to the binary format selection ...
- ... options related to the architecture variant selection ...
+So the selection of LP64F and !MMU is impossible. Right now this
+selection causes a build failure as no C library is enabled.
 
-This doesn't make much sense: the architecture variant selection
-should be just below the target architecture selection. With this
-commit, things will now be presented this way:
+This commit fixes this by ensuring we cannot use LP64F when MMU
+support is not available.
 
- Target architecture (....)
- ... options related to the architecture variant selection ...
- ... options related to the binary format selection ...
+Fixes:
+
+  http://autobuild.buildroot.net/results/6320dcc655f1871eb8bf6a9689bddde7447385f5/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in | 100 ++++++++++++++++++++++++-------------------------
- 1 file changed, 50 insertions(+), 50 deletions(-)
+ arch/Config.in.riscv | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 9135df9def..095036f1aa 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -371,56 +371,6 @@ config BR2_BINFMT_SUPPORTS_SHARED
- config BR2_READELF_ARCH_NAME
- 	string
- 
--# Set up target binary format
--choice
--	prompt "Target Binary Format"
--	default BR2_BINFMT_ELF if BR2_USE_MMU
--	default BR2_BINFMT_FLAT
--
--config BR2_BINFMT_ELF
--	bool "ELF"
--	depends on BR2_USE_MMU
--	select BR2_BINFMT_SUPPORTS_SHARED
--	help
--	  ELF (Executable and Linkable Format) is a format for libraries
--	  and executables used across different architectures and
--	  operating systems.
--
--config BR2_BINFMT_FLAT
--	bool "FLAT"
--	depends on !BR2_USE_MMU
--	help
--	  FLAT binary is a relatively simple and lightweight executable
--	  format based on the original a.out format. It is widely used
--	  in environment where no MMU is available.
--
--endchoice
--
--# Set up flat binary type
--choice
--	prompt "FLAT Binary type"
--	default BR2_BINFMT_FLAT_ONE
--	depends on BR2_BINFMT_FLAT
--
--config BR2_BINFMT_FLAT_ONE
--	bool "One memory region"
--	help
--	  All segments are linked into one memory region.
--
--config BR2_BINFMT_FLAT_SHARED
--	bool "Shared binary"
--	depends on BR2_m68k
--	# Even though this really generates shared binaries, there is no libdl
--	# and dlopen() cannot be used. So packages that require shared
--	# libraries cannot be built. Therefore, we don't select
--	# BR2_BINFMT_SUPPORTS_SHARED and therefore force BR2_STATIC_LIBS.
--	# Although this adds -static to the compilation, that's not a problem
--	# because the -mid-shared-library option overrides it.
--	help
--	  Allow to load and link indiviual FLAT binaries at run time.
--
--endchoice
--
- if BR2_arcle || BR2_arceb
- source "arch/Config.in.arc"
- endif
-@@ -481,4 +431,54 @@ if BR2_xtensa
- source "arch/Config.in.xtensa"
- endif
- 
-+# Set up target binary format
-+choice
-+	prompt "Target Binary Format"
-+	default BR2_BINFMT_ELF if BR2_USE_MMU
-+	default BR2_BINFMT_FLAT
-+
-+config BR2_BINFMT_ELF
-+	bool "ELF"
+diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+index 288ed833eb..30bdcaa80b 100644
+--- a/arch/Config.in.riscv
++++ b/arch/Config.in.riscv
+@@ -108,6 +108,7 @@ config BR2_RISCV_ABI_LP64
+ config BR2_RISCV_ABI_LP64F
+ 	bool "lp64f"
+ 	depends on BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVF
 +	depends on BR2_USE_MMU
-+	select BR2_BINFMT_SUPPORTS_SHARED
-+	help
-+	  ELF (Executable and Linkable Format) is a format for libraries
-+	  and executables used across different architectures and
-+	  operating systems.
-+
-+config BR2_BINFMT_FLAT
-+	bool "FLAT"
-+	depends on !BR2_USE_MMU
-+	help
-+	  FLAT binary is a relatively simple and lightweight executable
-+	  format based on the original a.out format. It is widely used
-+	  in environment where no MMU is available.
-+
-+endchoice
-+
-+# Set up flat binary type
-+choice
-+	prompt "FLAT Binary type"
-+	default BR2_BINFMT_FLAT_ONE
-+	depends on BR2_BINFMT_FLAT
-+
-+config BR2_BINFMT_FLAT_ONE
-+	bool "One memory region"
-+	help
-+	  All segments are linked into one memory region.
-+
-+config BR2_BINFMT_FLAT_SHARED
-+	bool "Shared binary"
-+	depends on BR2_m68k
-+	# Even though this really generates shared binaries, there is no libdl
-+	# and dlopen() cannot be used. So packages that require shared
-+	# libraries cannot be built. Therefore, we don't select
-+	# BR2_BINFMT_SUPPORTS_SHARED and therefore force BR2_STATIC_LIBS.
-+	# Although this adds -static to the compilation, that's not a problem
-+	# because the -mid-shared-library option overrides it.
-+	help
-+	  Allow to load and link indiviual FLAT binaries at run time.
-+
-+endchoice
-+
- endmenu # Target options
+ 
+ config BR2_RISCV_ABI_LP64D
+ 	bool "lp64d"
 -- 
 2.37.1
 
