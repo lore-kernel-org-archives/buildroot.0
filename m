@@ -1,49 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C94DC43334
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 08:56:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19B60C43334
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 08:58:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E9DC83FC7;
-	Tue, 26 Jul 2022 08:56:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E9DC83FC7
+	by smtp2.osuosl.org (Postfix) with ESMTP id B5EDD41055;
+	Tue, 26 Jul 2022 08:58:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5EDD41055
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DPPiF6-Unert; Tue, 26 Jul 2022 08:58:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D151940519;
+	Tue, 26 Jul 2022 08:57:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D151940519
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 385C51BF239
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 08:57:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1295083FC5
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 08:57:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1295083FC5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t6PeeG-Sm7df; Tue, 26 Jul 2022 08:56:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9BD1283FC4;
-	Tue, 26 Jul 2022 08:56:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BD1283FC4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 54DB71BF9B5
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 08:55:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2DCFB418EE
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 08:55:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DCFB418EE
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Qdn2udcn6MG for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 08:55:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 458A6418E5
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 08:55:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 458A6418E5
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id DD68D85EC5; Tue, 26 Jul 2022 08:42:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 10:55:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a40a516c8ae2e8c11549115e10aa74d98a4fab5d
-X-Git-Newrev: 506ec804c94136d030a9843e6d99106e78dbb8dd
-X-Patchwork-Hint: ignore
-Message-Id: <20220726084209.DD68D85EC5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zeek: add ZEEK_CPE_ID_VENDOR
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5kSaGfJ3U59P for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 08:57:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B34F83FC4
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6B34F83FC4
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 08:57:55 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1BAA51C0011;
+ Tue, 26 Jul 2022 08:57:52 +0000 (UTC)
+Date: Tue, 26 Jul 2022 10:57:52 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220726105752.2bd8e399@windsurf>
+In-Reply-To: <20220726065959.1185364-1-fontaine.fabrice@gmail.com>
+References: <20220726065959.1185364-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658825873;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=U4a95D382Melh50UmecxufOE+Yo9TNdTLeyvNiGGYqk=;
+ b=mtDcedbMCp02aaoI4TBv7lgcoYtAjMLAzWsnrZXPP5iuEo7a1ziNjvZY22VjPld9A4ebBa
+ kSB3Za0MEus/HbYiQuF363c9GYs7+lil/dssrV+Fhy+XwdrRN332avIIPnJOKpPx6mmk5e
+ qaEWr+smiohEGYFnGpqnul+rM13rL8p49uQmimxEBCC78aqYiqmimfxb9cFYTOTiEKzyai
+ 6IJYIcmJaot+zEl3HqEMAsVp3Lgn2SuByZOhBLAfC09YpTDSKMN1Rty8umMSZxEQ8VOt6V
+ 0kmTDRs04n/GTrfYEhSP5g3Eh96JPDxfNCQqyqIfzT2l/rCO1O9TCHyrI7+L4Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mtDcedbM
+Subject: Re: [Buildroot] [PATCH 1/1] package/pulseaudio: fix build without
+ C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,37 +78,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=506ec804c94136d030a9843e6d99106e78dbb8dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 26 Jul 2022 08:59:59 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-cpe:2.3:a:zeek:zeek is a valid CPE identifier for this package:
+> Fix the following build failure without C++ raised since bump to version
+> 16.1 in commit 6f3131296484767f037d3535ab69f328e94351db:
+> 
+> ../output-1/build/pulseaudio-16.1/meson.build:1:0: ERROR: Unknown compiler(s): [['/home/autobuild/autobuild/instance-1/output-1/per-package/pulseaudio/host/bin/powerpc64-buildroot-linux-gnu-g++']]
+> The following exception(s) were encountered:
+> Running "/home/autobuild/autobuild/instance-1/output-1/per-package/pulseaudio/host/bin/powerpc64-buildroot-linux-gnu-g++ --version" gave "[Errno 2] No such file or directory: '/home/autobuild/autobuild/instance-1/output-1/per-package/pulseaudio/host/bin/powerpc64-buildroot-linux-gnu-g++'"
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/6526a21bd4da3b8458188f27c1ec04c381e4b673
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...0004-meson.build-fix-build-without-C.patch | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/pulseaudio/0004-meson.build-fix-build-without-C.patch
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Azeek%3Azeek
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/zeek/zeek.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/zeek/zeek.mk b/package/zeek/zeek.mk
-index 6c8fa06875..584bfb0778 100644
---- a/package/zeek/zeek.mk
-+++ b/package/zeek/zeek.mk
-@@ -17,6 +17,7 @@ ZEEK_LICENSE = \
- 	Apache-2.0 (highwayhash, folly), \
- 	MPL-2.0 (mozilla-ca-list.zeek)
- ZEEK_LICENSE_FILES = COPYING COPYING.3rdparty
-+ZEEK_CPE_ID_VENDOR = zeek
- ZEEK_SUPPORTS_IN_SOURCE_BUILD = NO
- ZEEK_DEPENDENCIES = \
- 	host-bison \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
