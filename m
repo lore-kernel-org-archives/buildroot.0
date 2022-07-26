@@ -1,64 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 975EDC00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 17:54:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C55A0C00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 17:55:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46F1860D55;
-	Tue, 26 Jul 2022 17:54:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46F1860D55
+	by smtp4.osuosl.org (Postfix) with ESMTP id 414AF422B9;
+	Tue, 26 Jul 2022 17:55:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 414AF422B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bRdnFETkBiY9; Tue, 26 Jul 2022 17:54:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JbhtIj8t5WKQ; Tue, 26 Jul 2022 17:55:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DE0960A88;
-	Tue, 26 Jul 2022 17:54:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DE0960A88
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA1C2422AF;
+	Tue, 26 Jul 2022 17:55:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA1C2422AF
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2E7341BF957
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 17:54:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 812E81BF957
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 17:55:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07744401C5
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 17:54:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07744401C5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5A607401C5
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 17:55:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A607401C5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nc3K4ipa62Xn for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 17:54:06 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AB66400FB
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9AB66400FB
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 17:54:06 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.173.143.56])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id C3D20B004B6;
- Tue, 26 Jul 2022 19:54:01 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 19:53:44 +0200
-Message-Id: <20220726175344.7126-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.37.1
+ with ESMTP id MB3Oz3ZgcHvS for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 17:55:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32978400FB
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 32978400FB
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 17:55:46 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id k11so20739160wrx.5
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 10:55:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=SoQ7wH8nx3tphrseXzLZTh72qonKvdoelgmsKXwMqMU=;
+ b=ZhXsA/h7rDCf2CEYJOE3aLBumMKFaOeZVlaaIh6suj0pGDGTv5oBf6oMF6k8CK9Kf8
+ WM1IsA/nR1bF2tKDe/JG/IAkn+hJ38pi8wHNaEXFu+VCYEV8YxRYJbdETBB9h4WTcpkg
+ iqSCObRcJe9VGUbsIicWaWhv0x0btoqiTHhdYRaviX0kbI3HSfDIkZ2at4T2fp8hnqB3
+ m0ovzKfYKFqdpLyM6LqqWH2ywfSzyR9d6rlGhW1pUqEarIWz4JssNj0ItOQaxzs+YlXQ
+ f72PWV2W2PAHPPsOcqWBb0ovDFQbw9EsZPUxXMpZnp9I2ewWIAFZAuMYbuz7NggJFTGx
+ DtLQ==
+X-Gm-Message-State: AJIora/wM4wmbxRMsa9yefdG+jT47JFvYOjVFbiyZazOZvn9Sy7SKlIs
+ j0/XvqBen/epA+kyKLufIUtQ1Q==
+X-Google-Smtp-Source: AGRyM1t0pHLFjmDXmI4CoYRqq5rPot1QQB5mWz2FgwEcc4jcZjjRLqTao7txZ19OOdakwOXIYKI23Q==
+X-Received: by 2002:adf:e492:0:b0:21e:45af:5070 with SMTP id
+ i18-20020adfe492000000b0021e45af5070mr11555150wrm.483.1658858143658; 
+ Tue, 26 Jul 2022 10:55:43 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ l7-20020a05600c4f0700b003a310fe1d75sm24781450wmq.38.2022.07.26.10.55.42
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 26 Jul 2022 10:55:42 -0700 (PDT)
+Message-ID: <f15e5b88-a42d-26aa-28ed-cf7acdf63e60@mind.be>
+Date: Tue, 26 Jul 2022 19:55:41 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658858043;
- bh=Aso2L7fVaKG9rQHq4DwqyvkyFOcG/iTmWhwZYEXLVwY=;
- h=From:To:Cc:Subject:Date:From;
- b=KzGd5RTwmt2vVVXInnuGOqgE9P/jdJ6EYIsPNItXHU0nwsVUtc0H5AzxJSlq2Zuwk
- dN61mPZ3phcrGeFIuxuVjZI7oADoPqEY6SD2ygIxKaBxQWUds/wx8mbBb57wUz/VzU
- jF6xWCFk+SLl+tEytEtBJ129Iu79HsWTE3HT6rBhjnrj6TnA6iWXbLKZzlhR/UQZJS
- SZN8Nagq/N0Nw2WucukmpE+onbMe4d8MilNo8Z1T4vpRxFtZdlW3kpFxdwG80OiIB2
- g9nU+o5pKZ5jG+YawNmfaLsSJblz9jeJ4XArZ6MExsr4pjAdY5X6LrGVx9UEVLNDLQ
- FQWgtwwK4yl0g==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: Matthew Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+References: <20220104215541.23003-1-matthew.weber@collins.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220104215541.23003-1-matthew.weber@collins.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=SoQ7wH8nx3tphrseXzLZTh72qonKvdoelgmsKXwMqMU=;
+ b=MdrIKTN7wuuxJqIOK+16a27TDj92J0upkzIdVLQbQJ8XA7tP9knCZA8X4XKVAJ2d5N
+ mTVyrs7skcDtED2Xjvl8A8dJ0PKE3RjeMxltZ/Oj1JK4s/TLOgcyfZ92MsxbUaDy7buD
+ +Fi62nadg/WbLhBtxlymtQrWA08AQRtyKOoZdBVyg4dWR/llOtc2dqHAJXq8+8eTB7Fm
+ QcVA0zneHr+doWS87M+ZhopDzNhy8F3/kS4McjEYHqIctP5SO1t0AEUPqOYq2XWJYz9R
+ EHrrn8hwAiH40UkbZb7C2CRRz+wKqAMsrRVnZfv4f/hZZwHmd+QkpUBHsanEbl+G99p9
+ IAbA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=KzGd5RTw
-Subject: [Buildroot] [PATCH 1/1] support/testing: add test for ola
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=MdrIKTN7
+Subject: Re: [Buildroot] [PATCH v9] package/freeradius-server: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,193 +100,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+Cc: David GOUARIN <dgouarin@gmail.com>,
+ Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This test relies on the OLA Dummy plugin presenting a test device
-and port.  It starts the daemon, performs few configuration commands,
-covers the Python bindings and also test the OLA web interface.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-This OLA test was suggested in:
-https://lists.buildroot.org/pipermail/buildroot/2022-July/647089.html
 
-This patch was tested with:
+On 04/01/2022 22:55, Matthew Weber via buildroot wrote:
+> From: David GOUARIN <dgouarin@gmail.com>
+> 
+> FreeRADIUS is an open source server which implements
+> a protocol for remote user Authorization, Authentication
+> and Accounting.
+> 
+> Signed-off-by: David GOUARIN <dgouarin@gmail.com>
+> Signed-off-by: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
+> Signed-off-by: Matt Weber <matthew.weber@collins.com>
 
-    make check-package
-    ...
-    0 warnings generated
+  Finally applied to master, thanks. I still made a large number of changes.
 
-    python3 -m flake8 \
-        support/testing/tests/package/test_ola.py \
-        support/testing/tests/package/test_ola/rootfs-overlay/usr/bin/sample_ola_rdm_discovery.py
-    [no-output]
+      - remove second patch, superseded by other patches;
+      - add upstream links to patches;
+      - add 3 more patches to avoid looking in host directories;
+      - explicitly add dependency on !static inherited from talloc (redundant
+        with glibc, but future-safe);
+      - simplify Config.in comment;
+      - check hash with PGP signature;
+      - add conf opts for runtime paths;
+      - add conf opts to disable unsupported modules;
+      - add more optional dependencies;
+      - enable/disable all modules that use a dependency;
+      - search defaults file in /etc/default, not /etc/sysconfig.
 
-    support/testing/run-tests \
-        -d dl \
-        -o output_folder \
-        tests.package.test_ola.TestOla
-    ...
-    OK
----
- DEVELOPERS                                    |  2 +
- support/testing/tests/package/test_ola.py     | 95 +++++++++++++++++++
- .../usr/bin/sample_ola_rdm_discovery.py       | 24 +++++
- 3 files changed, 121 insertions(+)
- create mode 100644 support/testing/tests/package/test_ola.py
- create mode 100755 support/testing/tests/package/test_ola/rootfs-overlay/usr/bin/sample_ola_rdm_discovery.py
+  I also created an upstream pull request for all the patches that are not yet 
+upstream.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1dede4b83b..eb5bc5d985 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1657,6 +1657,8 @@ F:	package/zynaddsubfx/
- F:	support/testing/tests/package/sample_python_distro.py
- F:	support/testing/tests/package/sample_python_gnupg.py
- F:	support/testing/tests/package/test_octave.py
-+F:	support/testing/tests/package/test_ola.py
-+F:	support/testing/tests/package/test_ola/
- F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_gnupg.py
- 
-diff --git a/support/testing/tests/package/test_ola.py b/support/testing/tests/package/test_ola.py
-new file mode 100644
-index 0000000000..017d6f7e3b
---- /dev/null
-+++ b/support/testing/tests/package/test_ola.py
-@@ -0,0 +1,95 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestOla(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_OLA=y
-+        BR2_PACKAGE_OLA_EXAMPLES=y
-+        BR2_PACKAGE_OLA_PLUGIN_DUMMY=y
-+        BR2_PACKAGE_OLA_PYTHON_BINDINGS=y
-+        BR2_PACKAGE_OLA_WEB=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_ROOTFS_OVERLAY="{}"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(
-+           # overlay to add a script to test ola python bindings
-+           infra.filepath("tests/package/test_ola/rootfs-overlay"))
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # Check program executes
-+        cmd = "olad --version"
-+        self.assertRunOk(cmd)
-+
-+        # Start the daemon and wait a bit for it to settle
-+        cmd = "olad --daemon && sleep 2"
-+        self.assertRunOk(cmd)
-+
-+        # Check dummy plugin is loaded
-+        cmd = "ola_plugin_info | grep -Fi dummy"
-+        self.assertRunOk(cmd)
-+
-+        # Check dummy device and port are listed
-+        cmd = "ola_dev_info"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("Device 1: Dummy Device", output[0])
-+        self.assertIn("port 0, OUT Dummy Port", output[1])
-+
-+        # Create Universe 0
-+        cmd = "ola_patch --device 1 --port 0 --universe 0"
-+        self.assertRunOk(cmd)
-+
-+        # Check Universe 0 is created
-+        cmd = "ola_dev_info"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("patched to universe 0", output[1])
-+
-+        # Discover Dummy device RDM UID
-+        cmd = "ola_rdm_discover --universe 0 | head -1"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        rdm_uid = output[0]
-+
-+        # Get RDM manufacturer_label PID
-+        cmd = "ola_rdm_get --universe 0 --uid {} manufacturer_label".format(rdm_uid)
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "Open Lighting Project")
-+
-+        # Get RDM dmx_start_address PID, checks default value is 1
-+        cmd = "ola_rdm_get --universe 0 --uid {} dmx_start_address".format(rdm_uid)
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "DMX Address: 1")
-+
-+        # Set RDM dmx_start_address PID to 2
-+        cmd = "ola_rdm_set --universe 0 --uid {} dmx_start_address 2".format(rdm_uid)
-+        self.assertRunOk(cmd)
-+
-+        # Get the new RDM dmx_start_address PID, checks value is now 2
-+        cmd = "ola_rdm_get --universe 0 --uid {} dmx_start_address".format(rdm_uid)
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "DMX Address: 2")
-+
-+        # Perform a full RDM discovery using python bindings. The test
-+        # expect to find the same UID detected with the C client.
-+        cmd = "sample_ola_rdm_discovery.py | head -1"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], rdm_uid)
-+
-+        # Test olad web interface
-+        cmd = "wget -q -O - http://127.0.0.1:9090/ola.html | grep -F '<title>OLA Admin</title>'"
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/package/test_ola/rootfs-overlay/usr/bin/sample_ola_rdm_discovery.py b/support/testing/tests/package/test_ola/rootfs-overlay/usr/bin/sample_ola_rdm_discovery.py
-new file mode 100755
-index 0000000000..c2aa0733bb
---- /dev/null
-+++ b/support/testing/tests/package/test_ola/rootfs-overlay/usr/bin/sample_ola_rdm_discovery.py
-@@ -0,0 +1,24 @@
-+#! /usr/bin/env python3
-+
-+import sys
-+
-+from ola.ClientWrapper import ClientWrapper
-+
-+
-+def show_uids(state, uids):
-+    if state.Succeeded():
-+        for uid in uids:
-+            print(str(uid))
-+    else:
-+        print('Error: %s' % state.message, file=sys.stderr)
-+    wrapper.Stop()
-+
-+
-+wrapper = ClientWrapper()
-+client = wrapper.Client()
-+universe = 0
-+full_discovery = True
-+
-+client.RunRDMDiscovery(universe, full_discovery, show_uids)
-+
-+wrapper.Run()
--- 
-2.37.1
+  Regards,
+  Arnout
 
+> ---
+> Changes
+> v8 -> v9:
+>   - A systemd unit is installed if systemd is enabled. The default provided
+>     by `freeradius-server/redhat/radiusd.service` was not used because of
+>     extra options not compatible with Buildroot. The unit is instead based
+>     on a simplified version of that upstream file.
+> 
+> v7 -> v8:
+>    - added dependencies to include libpcap
+>    - version bump to 3.0.25
+> 
+> v6 -> v7
+>    - resolve rlm_sql module compilation error (Newer GCC)
+>      (remove mysql_version.h as mysql.h is included)
+> 
+> v5 -> v6:
+>    - cleaned up patches to all be git formatted
+>    - added depends on BR2_USE_MMU
+>    - rebased on master
+>    - added CPE info
+> 
+> v4 -> v5:
+>    - better package patches formatting
+> 
+> v3 -> v4:
+>    Taken in account Thomas review
+>    - fix build with BR2_COMPILER_PARANOID_UNSAFE_PATH
+>    - import patches inside package directory instead of downloading them
+>    - remove config.cache file, pass the answers on the command line instead
+>    - add comments for weird TARGET_DIR and R directives
+>    - remove broken python optional feature. Managed to get it to build
+>      with python 2.7, not 3.0 and it still fails basic testing
+> 
+> v2 -> v3:
+>    - As suggested by Matt, merge with pending upstream patch. Included most of it,
+>      including patches based on Yocto work :
+>      http://cgit.openembedded.org/meta-openembedded/tree/meta-networking/recipes-connectivity/freeradius/files
+>      Didn't kept all the --without directive, as they do not seem useful, nor
+>      the custom INSTALL_TARGET_CMDS.
+> 
+> v1 -> v2:
+>     - fix invalid characters in Config.in
+[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
