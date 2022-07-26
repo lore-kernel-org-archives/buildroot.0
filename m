@@ -1,60 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A5E2C00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 15:15:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF9EDC00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 15:29:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2347161B9E;
-	Tue, 26 Jul 2022 15:15:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2347161B9E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61B05422F0;
+	Tue, 26 Jul 2022 15:29:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61B05422F0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vKoM_WDIZw0x; Tue, 26 Jul 2022 15:29:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 306EB422F5;
+	Tue, 26 Jul 2022 15:29:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 306EB422F5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D1FAF1BF5A2
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 15:29:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AAADE61176
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 15:29:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAADE61176
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9QG25xJXOx4c; Tue, 26 Jul 2022 15:15:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 326E461B9A;
-	Tue, 26 Jul 2022 15:15:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 326E461B9A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B517E1BF5A2
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 15:15:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8E28883FAE
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 15:15:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E28883FAE
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CsMXXanlm-ub for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 15:15:44 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 565A58406E
-Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 565A58406E
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 15:15:44 +0000 (UTC)
-Received: from vfazio2.xes-mad.com (vfazio2.xes-mad.com [10.52.16.113])
- by mail.xes-mad.com (Postfix) with ESMTP id 181A3202B0;
- Tue, 26 Jul 2022 10:15:43 -0500 (CDT)
-From: Vincent Fazio <vfazio@xes-inc.com>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FAAqFL2xMNOC for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 15:29:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 489DF60FD3
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 489DF60FD3
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 15:29:24 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ v67-20020a1cac46000000b003a1888b9d36so11579568wme.0
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 08:29:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=MJHqSWiZysaSHYEUY1Go7ybQBjynVJQqkK52W5PDUN4=;
+ b=tvr6y+Hy1shxJ/ri6JwHm0q5/VIdFdgch0rTiPPu/NYeFAFcc3ENC4JImOi/bjDtTt
+ z/bALH8KkWirnXQ7Msm2LwAvtlphB5LmR9BXbbe4G30U28OYORD/Vyf07AGHynj23gsU
+ 6g7ywNRLvA+/MJQtUJUWTzP54DDFbiDDTjOzIseytvaAVlAIihBQKJMVCL5TT6AcrcFI
+ hcXdtK0GqkLXM9nVhNCb1kc3RpeEMFQyVBrzHPHrES/GLoRbEDj0sgRQdzx2dqkoWwCX
+ +fFfYU3hat27O9Yq1q+oPDzpthDY7e8r6OWosipE3VpskVoCH4x039ALXnogZc9Ah/EP
+ dFEg==
+X-Gm-Message-State: AJIora9oC3EeRn7VEc/7S2PHeSH7BNHFgzbuv1fRMh9wlxlX/WiAbyvZ
+ cQVq7uS7mO+/GUZ2oiK1z3xQbWmxLzhG4A==
+X-Google-Smtp-Source: AGRyM1tp7kCxG4deU1GfRsDglezuC9cSFa43f25GkfomlKJY6/IPeNBrzK+9/kKBd/m45vjgryV4ag==
+X-Received: by 2002:a05:600c:1f16:b0:3a3:214c:a85e with SMTP id
+ bd22-20020a05600c1f1600b003a3214ca85emr12590893wmb.95.1658849362225; 
+ Tue, 26 Jul 2022 08:29:22 -0700 (PDT)
+Received: from nitra.nantes.intranet
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ e3-20020a5d5303000000b0021e5e5cd3a8sm1071616wrv.87.2022.07.26.08.29.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 26 Jul 2022 08:29:21 -0700 (PDT)
+From: Nicolas Tran <nicolas.tran@smile.fr>
 To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 10:15:36 -0500
-Message-Id: <20220726151536.2937333-1-vfazio@xes-inc.com>
-X-Mailer: git-send-email 2.25.1
+Date: Tue, 26 Jul 2022 17:29:07 +0200
+Message-Id: <20220726152907.1993521-1-nicolas.tran@smile.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=xes-inc.com; s=mail; 
- t=1658848543; bh=Vk6ZvufkHJhgOADjveTdkspiPXGWyV3+c0ZkQwpL1C4=;
- h=From:To:Cc:Subject:Date:From;
- b=NLdXuREaFS8zSWhijVDXgo8pAX4ohxus2j3ufkoN26QuJdq5ezf4vR2BqQnIYdTYx
- H/pjhRvjg9nDrirFBZRSf35ksBOPQ969i1iT6ba5wKCSQ+5gILEkNqzyKc4V9saRNJ
- DiU/un0GIoNrRBZZY+YrHVfKSf4hLmP6p7im8ZSo=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=xes-inc.com header.i=@xes-inc.com
- header.a=rsa-sha256 header.s=mail header.b=NLdXuREa
-Subject: [Buildroot] [PATCH] package/mesa3d-headers: fix install of dri.pc
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=MJHqSWiZysaSHYEUY1Go7ybQBjynVJQqkK52W5PDUN4=;
+ b=ahbx9Zoyev+xHEgbl357BuBjFIcn7h9tDG8Ep2DFAZoadxc0grn9jfFIuEYcNz/pRZ
+ ji8jBlWta2qw9kDkkactZz8ol9RFsJt3KjTbBKguXzascltD9JrgR5qziy2GTaPWkZ8t
+ rYoPEFTJGqE8YfeCfpwPS1MU0sPYO7Gg+nJC/LWUZ9dkPZpmKutp8tTiIfEdV73/xxmg
+ 3WqJtlJLZlPsQIpH/QaOTt2K9XLJNnfjSWGNTy0eLB+cumZ61GS9oHRHc3xlfsfzS4bD
+ vuOuG27KPWbf1xBY6crq7i/2/g1cBDwmdj0Z3tSTz7bPyZhvPM5OWXL7A5LS6OdEpDnv
+ I5Gw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=ahbx9Zoy
+Subject: [Buildroot] [PATCH 1/1] new package: package/dust
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,57 +95,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, Vincent Fazio <vfazio@xes-inc.com>
+Cc: Nicolas Tran <nicolas.tran@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With the version bump to 22.x, the dri.pc file was no longer deployed as
-it was believed to not be provided.
+dust is an alternative of the command du from the Linux kernel,
+written in Rust. It aims to be more intuitive and visual in order
+to give the user a better view of his system's storage capacity.
 
-While it was temporarily missing from upstream as part of deprecating
-the classic driver, it was reintroduced prior to the 22.0 release via:
-  https://gitlab.freedesktop.org/mesa/mesa/-/commit/3ae3569d822c2546c4c748090f8a6c8016f763ea
-
-This file is still necessary to build Xorg server. See previous commits:
-  9014c21cac
-  7468b60e7c
-
-Fixes: 6c25d1099 ("package/{mesa3d, mesa3d-headers}: bump version to 22.1.3")
-
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+The package has been checked with correct formatting and
+without typos:
+$ ./utils/check-package package/dust/*
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index a5cefa254f..8eca2934de 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -33,9 +33,19 @@ MESA3D_HEADERS_DIRS += GL
+Tests have been run using test-pkg:
+$ ./utils/test-pkg -c dust.config -p dust
+
+test-pkg config:
+To run the test, the file dust.config contains the following line
+BR2_PACKAGE_DUST=y
+
+Results:
+     bootlin-armv5-uclibc [1/6]: SKIPPED
+      bootlin-armv7-glibc [2/6]: OK
+    bootlin-armv7m-uclibc [3/6]: SKIPPED
+      bootlin-x86-64-musl [4/6]: OK
+       br-arm-full-static [5/6]: SKIPPED
+             sourcery-arm [6/6]: OK
+
+Signed-off-by: Nicolas Tran <nicolas.tran@smile.fr>
+---
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/dust/Config.in | 11 +++++++++++
+ package/dust/dust.hash |  3 +++
+ package/dust/dust.mk   | 12 ++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/dust/Config.in
+ create mode 100644 package/dust/dust.hash
+ create mode 100644 package/dust/dust.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1dede4b83b..fdd2582614 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2179,6 +2179,7 @@ F:	package/exiv2/
+ F:	package/ofono/
  
- ifeq ($(BR2_PACKAGE_XORG7),y)
+ N:	Nicolas Tran <nicolas.tran@smile.fr>
++F:	package/dust/
+ F:	package/hyperfine/
  
-+# Not using $(SED) because we do not want to work in-place, and $(SED)
-+# contains -i.
-+define MESA3D_HEADERS_BUILD_DRI_PC
-+       sed -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
-+           $(MESA3D_HEADERS_PKGDIR)/dri.pc \
-+           >$(@D)/src/gallium/frontends/dri/dri.pc
-+endef
+ N:	Niklas Cassel <niklas.cassel@wdc.com>
+diff --git a/package/Config.in b/package/Config.in
+index d264449b30..a283fadc41 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -210,6 +210,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/curlftpfs/Config.in"
+ 	source "package/davfs2/Config.in"
+ 	source "package/dosfstools/Config.in"
++	source "package/dust/Config.in"
+ 	source "package/e2fsprogs/Config.in"
+ 	source "package/e2tools/Config.in"
+ 	source "package/ecryptfs-utils/Config.in"
+diff --git a/package/dust/Config.in b/package/dust/Config.in
+new file mode 100644
+index 0000000000..7b6e9304bc
+--- /dev/null
++++ b/package/dust/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_DUST
++	bool "dust"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  dust is an alternative written in Rust of the command "du"
++	  from the Linux kernel. It aims to be more intuitive and visual
++	  in order to give the user a better view of his system's
++	  current storage capacity.
 +
- define MESA3D_HEADERS_INSTALL_DRI_PC
- 	$(INSTALL) -D -m 0644 $(@D)/include/GL/internal/dri_interface.h \
- 		$(STAGING_DIR)/usr/include/GL/internal/dri_interface.h
-+        $(INSTALL) -D -m 0644 $(@D)/src/gallium/frontends/dri/dri.pc \
-+                $(STAGING_DIR)/usr/lib/pkgconfig/dri.pc
- endef
- 
- endif # Xorg
++	  https://github.com/bootandy/dust.git
+diff --git a/package/dust/dust.hash b/package/dust/dust.hash
+new file mode 100644
+index 0000000000..82043b497d
+--- /dev/null
++++ b/package/dust/dust.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  8231d045a0cca286355e89a41758b05f43238d52721bfc78e0b9bc19789bebde  dust-0.8.1.tar.gz
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/dust/dust.mk b/package/dust/dust.mk
+new file mode 100644
+index 0000000000..2cffc336a9
+--- /dev/null
++++ b/package/dust/dust.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# dust
++#
++################################################################################
++
++DUST_VERSION = 0.8.1
++DUST_SITE = $(call github,bootandy,dust,v$(DUST_VERSION))
++DUST_LICENSE = APACHE-2.0
++DUST_LICENSE_FILES = LICENSE
++
++$(eval $(cargo-package))
 -- 
-2.25.1
+2.32.0
 
 _______________________________________________
 buildroot mailing list
