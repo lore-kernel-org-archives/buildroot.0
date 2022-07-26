@@ -1,70 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64630C00144
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 20:53:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D43DC00144
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 20:55:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14DEA40167;
-	Tue, 26 Jul 2022 20:53:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14DEA40167
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2DDA440350;
+	Tue, 26 Jul 2022 20:55:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DDA440350
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V0EJ4xbc3qKi; Tue, 26 Jul 2022 20:53:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jVhidZD3AYbc; Tue, 26 Jul 2022 20:55:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 231954013F;
-	Tue, 26 Jul 2022 20:53:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 231954013F
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD4E3408E5;
+	Tue, 26 Jul 2022 20:55:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD4E3408E5
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9AF581BF3EF
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:53:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D4AC21BF3EF
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 759FE80BA4
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:53:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 759FE80BA4
+ by smtp1.osuosl.org (Postfix) with ESMTP id AEEB08176B
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:55:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEEB08176B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JR4WYId8dAPt for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 20:53:45 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D13D80B9F
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9D13D80B9F
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 20:53:44 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 606BC1C0002;
- Tue, 26 Jul 2022 20:53:41 +0000 (UTC)
-Date: Tue, 26 Jul 2022 22:53:40 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220726225340.53ea9dd0@windsurf>
-In-Reply-To: <20220726173235.24338-1-fontaine.fabrice@gmail.com>
-References: <20220726173235.24338-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658868821;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=X38pSYe508uA8KOUUUOcjRgaUaLNGPsITil8RixlTGM=;
- b=iWhOoCFH8yBLdZTbys1R4ycLUWc7kFaJ/fcurNr6Y9htao0BD9vT4yolH77MLzSuqdyKA0
- S3ebqAHhPZwxs53/je8Cq2unNuwzklE5h9GGig77Dl7FNBGj/nnAMsC1snTCXPCH2vSOFz
- c558nlJdS12w2UpxrnAWfEaZf7nppZ2uvQZ9LRdf+LEtZWpi0OigxFKui9fgOd/yz8d/Zn
- QcDcf2+IgPEMwYkwuplUSQ2KBmNpWyj4xq9gVP1H9O43NFcSBisx8w9Wi9ANpYfFsTemJ/
- /LciKZmIlAuDcSkYadACnm9tBkczlx3O7akTj6XwR6s9HPoGmoj9qnognMIxnQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=iWhOoCFH
-Subject: Re: [Buildroot] [PATCH 1/1] package/janus-gateway: bump to version
- 1.0.3
+ with ESMTP id bTxsAS8Unfmv for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 20:55:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16BE181765
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 20:55:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16BE181765
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 8994B86028; Tue, 26 Jul 2022 20:41:26 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Tue, 26 Jul 2022 22:54:37 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2156c6d216dea9f45cae9374e8f7d475fe2f1f54
+X-Git-Newrev: fbb8eb0be2229d21c8e265047a43158e806c8f51
+X-Patchwork-Hint: ignore
+Message-Id: <20220726204126.8994B86028@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pcre2: add pcre2-16 to the host
+ variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,45 +57,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Gregory Dymarek <gregd72002@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 26 Jul 2022 19:32:35 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fbb8eb0be2229d21c8e265047a43158e806c8f51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Rebased second patch
-> - Drop third and fourth patches (already in version)
-> - duktape is an optional dependency since version 1.0.0 and
->   https://github.com/meetecho/janus-gateway/commit/fab4215b7826638660eba2147bb772dd57fed10c
-> - gengetopt is not a dependency since version 1.0.1 and
->   https://github.com/meetecho/janus-gateway/commit/c21500c02e93e4b08c5242d0f0066d26ffc9f1a9
-> 
-> https://github.com/meetecho/janus-gateway/blob/v1.0.1/CHANGELOG.md
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...dd-test-for-Wunused-but-set-variable.patch |  8 +++---
->  .../0003-Fixed-missing-XSS-mitigation.patch   | 25 -------------------
->  .../0004-Fix-build-with-libressl-3.5.0.patch  | 25 -------------------
->  package/janus-gateway/Config.in               |  8 ++++++
->  package/janus-gateway/janus-gateway.hash      |  2 +-
->  package/janus-gateway/janus-gateway.mk        | 14 +++++++----
->  6 files changed, 23 insertions(+), 59 deletions(-)
->  delete mode 100644 package/janus-gateway/0003-Fixed-missing-XSS-mitigation.patch
->  delete mode 100644 package/janus-gateway/0004-Fix-build-with-libressl-3.5.0.patch
+This will be needed by qt6base, and it is not worth creating a hidden
+host package option for this.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/pcre2/pcre2.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+index 043f6d866f..06a0afc9b8 100644
+--- a/package/pcre2/pcre2.mk
++++ b/package/pcre2/pcre2.mk
+@@ -28,5 +28,8 @@ ifeq ($(BR2_USE_MMU),)
+ PCRE2_CONF_OPTS += --disable-pcre2grep-callout
+ endif
+ 
++# needed for qt6base
++HOST_PCRE2_CONF_OPTS = --enable-pcre2-16
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
