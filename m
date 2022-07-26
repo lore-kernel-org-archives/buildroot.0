@@ -1,94 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C062C43334
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 09:51:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C76E5C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 13:01:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C82241BA2;
-	Tue, 26 Jul 2022 09:51:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C82241BA2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E7CC60D71;
+	Tue, 26 Jul 2022 13:01:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E7CC60D71
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oKAnI2yqR7Yt; Tue, 26 Jul 2022 09:51:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UOTiE0wmQ9fA; Tue, 26 Jul 2022 13:01:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBBD041B97;
-	Tue, 26 Jul 2022 09:51:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBBD041B97
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 062171BF5AE
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 09:51:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBBC860B44;
+	Tue, 26 Jul 2022 13:01:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBBC860B44
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C6B001BF41B
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:01:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D376C84000
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 09:51:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D376C84000
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9EE7141719
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:01:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EE7141719
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wXwIi9vpwVK2 for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 09:51:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kZ7bw-uFAS2h for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 13:01:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4430583FBF
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4430583FBF
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 09:51:34 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id k11so18938217wrx.5
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 02:51:34 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5467141089
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5467141089
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:01:29 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id ez10so25867971ejc.13
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 06:01:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
- :content-transfer-encoding;
- bh=TsmuniHgjsyTwmyCPq7BW1BqlWwOBFYF3FfVWf109Os=;
- b=hL9lPmsqbnFdK6neVV6Pdo3cBqA2CwXKu9D84cVeUUifP8A31OKWZYhGkf+uWYIXQt
- JWb6su3eHugTP2hRTUFq+LZRquUbaCVUmUZVugZPIAfgYULkaQP6eGOjJKQeDJgcZCLV
- RFR/rxXWH+3ztUAi1siSpc0Aj09WFDp1SXPLaz5uC4hqC7D/SoWL6X7EIRA6Gjq0TqSK
- UzIUUR6BlPhpTdIBixEcsaV62bDKrNl4yHbs6mZbqXjC6UiUm2iQTna0FpFqhmidWice
- 0FODw17V1cCuH8fmely8L5zNo9rZgXIuPIq093+hq7vtBxpvmaTiC7kaCr7L+OqyxAau
- YijA==
-X-Gm-Message-State: AJIora/Lsb5/e4vmS/dyOXvsGjJFeBpkG5TZ3dGyuketLh7ioUf9Lkln
- GWix1DYgqx+Huc3GNyUGXWisQA==
-X-Google-Smtp-Source: AGRyM1utWr9vVNm1bBzF4BSrXobCGiyBcCRBnZ2wUQVJQPzzCWgqE0s/46x4nRadtuoPTZsIXkr7Ew==
-X-Received: by 2002:a05:6000:16c3:b0:21e:90e3:dc14 with SMTP id
- h3-20020a05600016c300b0021e90e3dc14mr4220993wrf.192.1658829092191; 
- Tue, 26 Jul 2022 02:51:32 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:86bb:8231:62d7:1874?
- ([2a01:cb19:8acf:5600:86bb:8231:62d7:1874])
- by smtp.gmail.com with ESMTPSA id
- ck15-20020a5d5e8f000000b0021e91d5bb1esm3822804wrb.8.2022.07.26.02.51.31
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 26 Jul 2022 02:51:31 -0700 (PDT)
-Message-ID: <55f7a566-a92a-3423-0a20-f62708fd4a25@smile.fr>
-Date: Tue, 26 Jul 2022 11:51:31 +0200
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=CRJJTusKftgKAMMRrQ6QsDq45uwtIRpGcmefgCgz5zs=;
+ b=VQUC3vP8W0QdQ++bcQb0M5tMoxj2HawFteRA8KJmKE5b/QWf7xDy/3DDlzN5MVoOlX
+ 83WN/W7atnCxrqAKko8TgqjCyPmasY7BRGEw9lCEW7Jnt0phmNX36mbcXcmCmEW0ESw5
+ ZsinYwIfrOSZkvG+rUmJMNT/rgV6fccwlStJA9ieJvaTjY5P5nkJRJd//BrSOf8/Wy9U
+ hrv8Z2gAJ/LuSpCd56nC8vcGdu6dcEEwT+UmPj8Iz/sM+mDyu1G+hVNI8vy6519auLXP
+ pyKFOwAZ1YdRRibNWMICoNc3BIg1QvMNUkPY9ju9ZzLm22VeVAmqs45+DJ6Mg60MqFjE
+ ejng==
+X-Gm-Message-State: AJIora8FRnGSj+va8YqYDQLWVDmnT73fT6rvGAFMPdIlj7fmBTtXE9jw
+ xrfZ5qxhs7AyIrPE1IL7hLkLP7tmN4bGpC+IUDYSi5jUmM5Tbg==
+X-Google-Smtp-Source: AGRyM1ta9xpcvl+cqwgwPW0st2IpiO5gZh8GtJYsEJfVdxkjzSRvQ4PkDGy2zllx/Pt+WpvczmYlOgLGEREC2YmXTMM=
+X-Received: by 2002:a17:906:9b0a:b0:72e:e524:180a with SMTP id
+ eo10-20020a1709069b0a00b0072ee524180amr14102081ejc.131.1658840486421; Tue, 26
+ Jul 2022 06:01:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20220725153601.25254-1-romain.naour@smile.fr>
- <CADvTj4oNN67-EOvYdTzCA9UnxVbpNL6Q7LGA8X4ea1RnghXZzg@mail.gmail.com>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <CADvTj4oNN67-EOvYdTzCA9UnxVbpNL6Q7LGA8X4ea1RnghXZzg@mail.gmail.com>
+From: bob mcgrath <bobwmcgrath@gmail.com>
+Date: Tue, 26 Jul 2022 08:00:00 -0500
+Message-ID: <CABPiF0=6w4ZGfZidXFuaikLw=M_MkoSou=8tFmrP80WWGWHDSA@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=TsmuniHgjsyTwmyCPq7BW1BqlWwOBFYF3FfVWf109Os=;
- b=UmL7nGAjPpM1n8lZhI3BmnEFvO7JxjKOPfmNG9lPJ48YIG3mjdvDMSNrGFl0IpiXnH
- pAsEaBZeUPDr1ceoQPhYHA3U09Bu4hBxBCVydTB9PHcgDWWwqF4A0ot6mT5wHpn1Zt6Y
- 7+iDQEBNWP0xGSbFoznZcVmCXDLyqTO81CyYlaO1RhtjzK9IdeYIQgH2jnN/qTpRL0gl
- 7p8joLCeAE1JOzPDtfrZKHlNwi/dYHP5LDh2pa/s2Q9z8a7qKYfgga3QG/+R0BeuspA3
- JSbcKW8phMOYLkyh+9sSXPlDCJqP+N7DYwDSjFDvX27axOp4mX52G1pMhS0eYaIvoA02
- p4IQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
- header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=UmL7nGAj
-Subject: Re: [Buildroot] [PATCH] package/rustc: needs C++
+ d=gmail.com; s=20210112;
+ h=mime-version:from:date:message-id:subject:to;
+ bh=CRJJTusKftgKAMMRrQ6QsDq45uwtIRpGcmefgCgz5zs=;
+ b=MGraEysxX8sZVG5j/HOH+ASpc/nalLf0/Y0uwxDHFcCnAiuctZ5oVnBeTBHuXos2XB
+ 0J31ybFHZgfORiIuBBRjivsnaECxJpKkxb8BvRnhuLyUgSC2J0FO79LI3PJLiSOb2vSF
+ Dgt4t3i286KIsoVOYZv0GWY39iAKM3eyM84UFtEUo3pQ0z2t93ulA+g7cl8zuN3HSnbn
+ xcyCE3Eb94AieG6EbXiKJ+A/eXXGx0Mvj+T0FKBb3iqqwtM7OyQug3nQLsb6C67gJglw
+ q+cxtt6JzHGMSJoE2pXN00rsD9OUQ7RmRc84O73RS/wvlqayNWuWjvhtMwlcxW7BbqUw
+ o8LQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=MGraEysx
+Subject: [Buildroot] google coral devboard defconfig.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,168 +84,207 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0029929142989155998=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSmFtZXMsCgpMZSAyNS8wNy8yMDIyIMOgIDIwOjQxLCBKYW1lcyBIaWxsaWFyZCBhIMOp
-Y3JpdMKgOgo+IE9uIE1vbiwgSnVsIDI1LCAyMDIyIGF0IDk6MzYgQU0gUm9tYWluIE5hb3VyIDxy
-b21haW4ubmFvdXJAc21pbGUuZnI+IHdyb3RlOgo+Pgo+PiBXaGlsZSBidWlsZGluZyBob3N0LXJ1
-c3Qgd2l0aCBhIG11c2wgYmFzZWQgdG9vbGNoYWluIHdpdGhvdXQgQysrIGNvbXBpbGVyLAo+PiB0
-aGUgYnVpbGQgZmFpbCBzaW5jZSBsaWJ1bndpbmQgYnVuZGxlZCBpbiBydXN0IHNvdXJjZXMgbmVl
-ZHMgYSBDKysgY29tcGlsZXIuCj4+Cj4+IGNhcmdvOndhcm5pbmc9aTY4Ni1idWlsZHJvb3QtbGlu
-dXgtbXVzbC1nY2MuYnJfcmVhbDogZXJyb3I6IFsuLi5dL2hvc3QtcnVzdC0xLjYyLjAvc3JjL2xs
-dm0tcHJvamVjdC9saWJ1bndpbmQvc3JjL1Vud2luZC1FSEFCSS5jcHA6IEMrKyBjb21waWxlciBu
-b3QgaW5zdGFsbGVkIG9uIHRoaXMgc3lzdGVtCj4+Cj4+IE5vdGU6IHRoZSBpc3N1ZXMgY2FuJ3Qg
-YmUgcmVwcm9kdWNlZCB3aXRoIGEgZ2xpYmMgYmFzZWQgdG9vbGNoYWluIHdpdGhvdXQKPj4gQysr
-IHByb2JhbHkgZHVlIHRvIGV4dHJhIHN0ZXBzIHJlcXVpcmVkIHRvIHN1cHBvcnQgbXVzbCBsaWJj
-Lgo+IAo+IElzIHRoaXMgYmVjYXVzZSBnbGliYyBwcm92aWRlcyBsaWJ1bndpbmQgc28gaXQncyBu
-b3QgcmVxdWlyZWQgdGhlcmU/Cj4gCj4+Cj4+IEFjdHVhbGx5LCBydXN0IGNvbXBpbGVyIGlzIGJh
-c2VkIG9uIExMVk0gc28gaXQgbGlrZWx5IGRlcGVuZHMgb24gdGhlIHNhbWUKPj4gZGVwZW5kZW5j
-aWVzIGFzIGhvc3QtbGx2bSBwYWNrYWdlLgo+IAo+IFRoaXMgZG9lc24ndCByZWFsbHkgbG9vayBj
-b3JyZWN0LCBJIG1lYW4gd2UgYWx3YXlzIGFzc3VtZSB0aGUgYnVpbGQgaG9zdCBoYXMKPiBDKysg
-c3VwcG9ydCByaWdodD8gVGhpcyBwYXRjaCBhZGRzIGEgdGFyZ2V0IEMrKyBkZXBlbmRlbmN5IG5v
-dCBhIGhvc3QgQysrCj4gYnVpbGQgZGVwZW5kZW5jeS4KCkFjdHVhbGx5IEJSMl9JTlNUQUxMX0xJ
-QlNURENQUCBpcyBwcm9iYWJseSBvbmUgb2YgdGhlIG9sZGVzdCBCdWlsZHJvb3Qgb3B0aW9uCihh
-ZGRlZCBieSBbMV0pIHRoYXQgbWVhbnMgIkJ1aWxkL2luc3RhbGwgYysrIGNvbXBpbGVyIGFuZCBs
-aWJzdGRjKysiLgoKU28geW91J3JlIHJpZ2h0IHdoZW4geW91IHNheSBpdCBhZGQgYSB0YXJnZXQg
-QysrIGRlcGVuZGVuY3kgYnV0IHRoZSBvcHRpb24gYWxzbwptZWFucyBoYXZpbmcgYSBDKysgY29t
-cGlsZXIgb24gdGhlIGhvc3QuCgpJbiB0aGlzIHBhdGNoIHdlIHdhbnQgdG8gbWFrZSBzdXJlIHRv
-IGhhdmUgYSB0b29sY2hhaW4gd2l0aCBDKysgc3VwcG9ydCB0byBidWlsZApob3N0LXJ1c3QgcGFj
-a2FnZS4gQWRkaW5nIEMrKyBkZXBlbmRlbmN5IGdsb2JhbGx5IChldmVuIGlmIG9ubHkgbXVzbCBp
-cwphZmZlY3RlZCkgd291bGQgYXZvaWQgaGFuZGx5IG11c2wgY2FzZSB3aXRoIHJ1c3QgYmFzZWQg
-cGFja2FnZXMuCgpCdXQgYWRkaW5nIEMrKyByZXZlcnNlIGRlcGVuZGVuY3kgaXMgbm90IG5pY2Ug
-ZWl0aGVyLi4uCgpJbnN0ZWFkIHdlIGNvdWxkIGFkZCB0aGUgQysrIGRlcGVuZGVuY3kgZGlyZWN0
-bHkgb24KQlIyX1BBQ0tBR0VfSE9TVF9SVVNUQ19UQVJHRVRfQVJDSF9TVVBQT1JUUy4KCiMgQWxs
-IHRhcmdldCBydXN0IHBhY2thZ2VzIHNob3VsZCBkZXBlbmQgb24gdGhpcyBvcHRpb24KY29uZmln
-IEJSMl9QQUNLQUdFX0hPU1RfUlVTVENfVEFSR0VUX0FSQ0hfU1VQUE9SVFMKCWJvb2wKCWRlZmF1
-bHQgeSBpZiBCUjJfUEFDS0FHRV9IT1NUX1JVU1RDX1RBUkdFVF9USUVSMV9QTEFURk9STVMgJiYg
-XAoJCShCUjJfSU5TVEFMTF9MSUJTVERDUFAgfHwgIUJSMl9UT09MQ0hBSU5fVVNFU19NVVNMKQoJ
-ZGVmYXVsdCB5IGlmIEJSMl9QQUNLQUdFX0hPU1RfUlVTVENfVEFSR0VUX1RJRVIyX0hPU1RfVE9P
-TFNfUExBVEZPUk1TICYmIFwKCQkoQlIyX0lOU1RBTExfTElCU1REQ1BQIHx8ICFCUjJfVE9PTENI
-QUlOX1VTRVNfTVVTTCkKCWRlZmF1bHQgeSBpZiBCUjJfUEFDS0FHRV9IT1NUX1JVU1RDX1RBUkdF
-VF9USUVSMl9QTEFURk9STVMgJiYgXAoJCShCUjJfSU5TVEFMTF9MSUJTVERDUFAgfHwgIUJSMl9U
-T09MQ0hBSU5fVVNFU19NVVNMKQoJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NUX1JVU1RDX0FS
-Q0hfU1VQUE9SVFMKClVzdWFsbHkgd2Ugc2hvdWxkIG5vdCBhZGQgdG9vbGNoYWluIGRlcGVuZGVu
-Y2llcyBpbiBhIF9BUkNIX1NVUFBPUlRTIG9wdGlvbiBidXQKQlIyX1BBQ0tBR0VfSE9TVF9SVVNU
-Q19UQVJHRVRfVElFUi4uLiBvcHRpb25zIGNvbnRhaW5zIGFscmVhZHkgc29tZQpCUjJfVE9PTENI
-QUlOX1VTRVNfR0xJQkMgb3IgQlIyX1RPT0xDSEFJTl9VU0VTX01VU0wuCgpEb2luZyBzbyB3b3Vs
-ZCBhdm9pZCB0aGUgQysrIHJldmVyc2UgZGVwZW5kZW5jaWVzIGFuZCBkaXNhYmxlIHJ1c3RjIGZv
-ciBtdXNsCnRvb2xjaGFpbiB3aXRob3V0IGEgQysrIGNvbXBpbGVyLgoKSSdsbCBzZW5kIGEgdjIu
-CgpbMV0KaHR0cHM6Ly9naXQuYnVpbGRyb290Lm5ldC9idWlsZHJvb3QvY29tbWl0Lz9pZD0yZDUy
-M2MyMzE3NWI4ZTg3NzJjMmUyMjNkOTI1MTNmODM2Y2RlOGE2CgpbMl0KaHR0cHM6Ly9naXQuYnVp
-bGRyb290Lm5ldC9idWlsZHJvb3QvdHJlZS9wYWNrYWdlL3J1c3RjL0NvbmZpZy5pbi5ob3N0P2g9
-MjAyMi4wNS4xI24xMTMKCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiAKPj4KPj4gQWRkIEMrKyBk
-ZXBlbmRlbmN5IHRvIHJ1c3RjIHZpcnR1YWwgcGFja2FnZSBhbmQgaXRzIHJldmVyc2UgZGVwZW5k
-ZW5jaWVzLgo+Pgo+PiBGaXhlczoKPj4gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jl
-c3VsdHMvNjM2LzYzNmZiMzljOGYxYjhjMDVlNGNhNDUxYWM1MDZjZDYzYzcxNjZkODIKPj4KPj4g
-U2lnbmVkLW9mZi1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+Cj4+IC0t
-LQo+PiAgcGFja2FnZS9iYXQvQ29uZmlnLmluICAgICAgICAgICAgIHwgNCArKysrCj4+ICBwYWNr
-YWdlL2h5cGVyZmluZS9Db25maWcuaW4gICAgICAgfCA0ICsrKysKPj4gIHBhY2thZ2UvbGlicnN2
-Zy9Db25maWcuaW4gICAgICAgICB8IDIgKy0KPj4gIHBhY2thZ2UvcmlwZ3JlcC9Db25maWcuaW4g
-ICAgICAgICB8IDQgKysrKwo+PiAgcGFja2FnZS9ydXN0Yy9Db25maWcuaW4uaG9zdCAgICAgIHwg
-NCArKysrCj4+ICBwYWNrYWdlL3NlbnRyeS1jbGkvQ29uZmlnLmluLmhvc3QgfCA0ICsrKysKPj4g
-IHBhY2thZ2Uvc3VyaWNhdGEvQ29uZmlnLmluICAgICAgICB8IDUgKysrLS0KPj4gIDcgZmlsZXMg
-Y2hhbmdlZCwgMjQgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKPj4KPj4gZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvYmF0L0NvbmZpZy5pbiBiL3BhY2thZ2UvYmF0L0NvbmZpZy5pbgo+PiBpbmRl
-eCA1MTVlYWY1OTFhLi44Yjk1ZjI1M2FkIDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL2JhdC9Db25m
-aWcuaW4KPj4gKysrIGIvcGFja2FnZS9iYXQvQ29uZmlnLmluCj4+IEBAIC0xLDYgKzEsNyBAQAo+
-PiAgY29uZmlnIEJSMl9QQUNLQUdFX0JBVAo+PiAgICAgICAgIGJvb2wgImJhdCIKPj4gICAgICAg
-ICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0hPU1RfUlVTVENfVEFSR0VUX0FSQ0hfU1VQUE9SVFMK
-Pj4gKyAgICAgICBkZXBlbmRzIG9uIEJSMl9JTlNUQUxMX0xJQlNURENQUCAjIGhvc3QtcnVzdGMK
-Pj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfSE9TVF9SVVNUQwo+PiAgICAgICAgICMgd2Ug
-bmVlZCBhIGZ1bGwgdmVyc2lvbiBvZiBsZXNzCj4+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdF
-X0JVU1lCT1hfU0hPV19PVEhFUlMKPj4gQEAgLTksMyArMTAsNiBAQCBjb25maWcgQlIyX1BBQ0tB
-R0VfQkFUCj4+ICAgICAgICAgICBBIGNhdCgxKSBjbG9uZSB3aXRoIHN5bnRheCBoaWdobGlnaHRp
-bmcgYW5kIEdpdCBpbnRlZ3JhdGlvbi4KPj4KPj4gICAgICAgICAgIGh0dHBzOi8vZ2l0aHViLmNv
-bS9zaGFya2RwL2JhdAo+PiArCj4+ICtjb21tZW50ICJiYXQgbmVlZHMgYSB0b29sY2hhaW4gdy8g
-QysrIgo+PiArICAgICAgIGRlcGVuZHMgb24gIUJSMl9JTlNUQUxMX0xJQlNURENQUAo+PiBkaWZm
-IC0tZ2l0IGEvcGFja2FnZS9oeXBlcmZpbmUvQ29uZmlnLmluIGIvcGFja2FnZS9oeXBlcmZpbmUv
-Q29uZmlnLmluCj4+IGluZGV4IDUyN2U5NzgxNDYuLmMwNTJiYTgyNDIgMTAwNjQ0Cj4+IC0tLSBh
-L3BhY2thZ2UvaHlwZXJmaW5lL0NvbmZpZy5pbgo+PiArKysgYi9wYWNrYWdlL2h5cGVyZmluZS9D
-b25maWcuaW4KPj4gQEAgLTEsNiArMSw3IEBACj4+ICBjb25maWcgQlIyX1BBQ0tBR0VfSFlQRVJG
-SU5FCj4+ICAgICAgICAgYm9vbCAiaHlwZXJmaW5lIgo+PiAgICAgICAgIGRlcGVuZHMgb24gQlIy
-X1BBQ0tBR0VfSE9TVF9SVVNUQ19UQVJHRVRfQVJDSF9TVVBQT1JUUwo+PiArICAgICAgIGRlcGVu
-ZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQICMgaG9zdC1ydXN0Ywo+PiAgICAgICAgIHNlbGVj
-dCBCUjJfUEFDS0FHRV9IT1NUX1JVU1RDCj4+ICAgICAgICAgaGVscAo+PiAgICAgICAgICAgaHlw
-ZXJmaW5lIGlzIGEgYmVuY2htYXJrIHRvb2wgd3JpdHRlbiBpbiBSdXN0LiBJdCBldmFsdWF0ZXMK
-Pj4gQEAgLTksMyArMTAsNiBAQCBjb25maWcgQlIyX1BBQ0tBR0VfSFlQRVJGSU5FCj4+ICAgICAg
-ICAgICBzYW1lIHRpbWUuCj4+Cj4+ICAgICAgICAgICBodHRwczovL2dpdGh1Yi5jb20vc2hhcmtk
-cC9oeXBlcmZpbmUKPj4gKwo+PiArY29tbWVudCAiaHlwZXJmaW5lIG5lZWRzIGEgdG9vbGNoYWlu
-IHcvIEMrKyIKPj4gKyAgICAgICBkZXBlbmRzIG9uICFCUjJfSU5TVEFMTF9MSUJTVERDUFAKPj4g
-ZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlicnN2Zy9Db25maWcuaW4gYi9wYWNrYWdlL2xpYnJzdmcv
-Q29uZmlnLmluCj4+IGluZGV4IDI3MGI1MjRiMzcuLjkxYThkNGZlOTUgMTAwNjQ0Cj4+IC0tLSBh
-L3BhY2thZ2UvbGlicnN2Zy9Db25maWcuaW4KPj4gKysrIGIvcGFja2FnZS9saWJyc3ZnL0NvbmZp
-Zy5pbgo+PiBAQCAtNCw3ICs0LDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0xJQlJTVkcKPj4gICAg
-ICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyBnbGliMgo+PiAgICAgICAgIGRlcGVuZHMg
-b24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyAjIGdsaWIyCj4+ICAgICAgICAgZGVwZW5kcyBv
-biBCUjJfVVNFX01NVSAjIGdsaWIyCj4+IC0gICAgICAgZGVwZW5kcyBvbiBCUjJfSU5TVEFMTF9M
-SUJTVERDUFAgIyBwYW5nbwo+PiArICAgICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1RE
-Q1BQICMgcGFuZ28sIGhvc3QtcnVzdGMKPj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hB
-SU5fSEFTX1NZTkNfNCAjIHBhbmdvIC0+IGhhcmZidXp6Cj4+ICAgICAgICAgZGVwZW5kcyBvbiBC
-UjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzkgIyBwYW5nbyAtPiBoYXJmYnV6ego+PiAgICAg
-ICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9DQUlSTwo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9yaXBn
-cmVwL0NvbmZpZy5pbiBiL3BhY2thZ2UvcmlwZ3JlcC9Db25maWcuaW4KPj4gaW5kZXggMGVhMjkw
-MmIzNC4uMzUyZjM4YTlhNCAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9yaXBncmVwL0NvbmZpZy5p
-bgo+PiArKysgYi9wYWNrYWdlL3JpcGdyZXAvQ29uZmlnLmluCj4+IEBAIC0xLDYgKzEsNyBAQAo+
-PiAgY29uZmlnIEJSMl9QQUNLQUdFX1JJUEdSRVAKPj4gICAgICAgICBib29sICJyaXBncmVwIgo+
-PiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSE9TVF9SVVNUQ19UQVJHRVRfQVJDSF9T
-VVBQT1JUUwo+PiArICAgICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQICMgaG9z
-dC1ydXN0Ywo+PiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9IT1NUX1JVU1RDCj4+ICAgICAg
-ICAgaGVscAo+PiAgICAgICAgICAgcmlwZ3JlcCBpcyBhIGxpbmUtb3JpZW50ZWQgc2VhcmNoIHRv
-b2wgdGhhdAo+PiBAQCAtMTIsMyArMTMsNiBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUklQR1JFUAo+
-PiAgICAgICAgICAgVGhlIFNpbHZlciBTZWFyY2hlciwgYWNrIGFuZCBncmVwLgo+Pgo+PiAgICAg
-ICAgICAgaHR0cHM6Ly9naXRodWIuY29tL0J1cm50U3VzaGkvcmlwZ3JlcAo+PiArCj4+ICtjb21t
-ZW50ICJyaXBncmVwIG5lZWRzIGEgdG9vbGNoYWluIHcvIEMrKyIKPj4gKyAgICAgICBkZXBlbmRz
-IG9uICFCUjJfSU5TVEFMTF9MSUJTVERDUFAKPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcnVzdGMv
-Q29uZmlnLmluLmhvc3QgYi9wYWNrYWdlL3J1c3RjL0NvbmZpZy5pbi5ob3N0Cj4+IGluZGV4IGZl
-Yzg3MjZhZWUuLjFhYTU0MDVhYmYgMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2UvcnVzdGMvQ29uZmln
-LmluLmhvc3QKPj4gKysrIGIvcGFja2FnZS9ydXN0Yy9Db25maWcuaW4uaG9zdAo+PiBAQCAtMTM1
-LDExICsxMzUsMTUgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0hPU1RfUlVTVENfQUJJCj4+ICBjb25m
-aWcgQlIyX1BBQ0tBR0VfSE9TVF9SVVNUQwo+PiAgICAgICAgIGJvb2wgImhvc3QgcnVzdGMiCj4+
-ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NUX1JVU1RDX0FSQ0hfU1VQUE9SVFMK
-Pj4gKyAgICAgICBkZXBlbmRzIG9uIEJSMl9JTlNUQUxMX0xJQlNURENQUCAjIGxsdm0KPj4gICAg
-ICAgICBoZWxwCj4+ICAgICAgICAgICBDb21waWxlciBmb3IgdGhlIFJ1c3QgbGFuZ3VhZ2UKPj4K
-Pj4gICAgICAgICAgIGh0dHA6Ly93d3cucnVzdC1sYW5nLm9yZwo+Pgo+PiArY29tbWVudCAiaG9z
-dC1ydXN0YyBuZWVkcyBhIHRvb2xjaGFpbiB3LyBDKysiCj4+ICsgICAgICAgZGVwZW5kcyBvbiAh
-QlIyX0lOU1RBTExfTElCU1REQ1BQCj4+ICsKPj4gIGlmIEJSMl9QQUNLQUdFX0hPU1RfUlVTVEMK
-Pj4KPj4gIGNob2ljZQo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zZW50cnktY2xpL0NvbmZpZy5p
-bi5ob3N0IGIvcGFja2FnZS9zZW50cnktY2xpL0NvbmZpZy5pbi5ob3N0Cj4+IGluZGV4IDMxMjQw
-MTUzNjcuLmQzMmM5NjIzMzggMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2Uvc2VudHJ5LWNsaS9Db25m
-aWcuaW4uaG9zdAo+PiArKysgYi9wYWNrYWdlL3NlbnRyeS1jbGkvQ29uZmlnLmluLmhvc3QKPj4g
-QEAgLTEsNiArMSw3IEBACj4+ICBjb25maWcgQlIyX1BBQ0tBR0VfSE9TVF9TRU5UUllfQ0xJCj4+
-ICAgICAgICAgYm9vbCAiaG9zdCBzZW50cnktY2xpIgo+PiAgICAgICAgIGRlcGVuZHMgb24gQlIy
-X1BBQ0tBR0VfSE9TVF9SVVNUQ19BUkNIX1NVUFBPUlRTCj4+ICsgICAgICAgZGVwZW5kcyBvbiBC
-UjJfSU5TVEFMTF9MSUJTVERDUFAgIyBob3N0LXJ1c3RjCj4+ICAgICAgICAgc2VsZWN0IEJSMl9Q
-QUNLQUdFX0hPU1RfUlVTVEMKPj4gICAgICAgICBoZWxwCj4+ICAgICAgICAgICBPZmZpY2lhbCBT
-ZW50cnkgY29tbWFuZCBsaW5lIGludGVyZmFjZQo+PiBAQCAtOCwzICs5LDYgQEAgY29uZmlnIEJS
-Ml9QQUNLQUdFX0hPU1RfU0VOVFJZX0NMSQo+PiAgICAgICAgICAgRm9yIG1hbmFnaW5nIGRlYnVn
-IGluZm9ybWF0aW9uIGZpbGVzIGFuZCBzb3VyY2UgbWFwcy4KPj4KPj4gICAgICAgICAgIGh0dHBz
-Oi8vZG9jcy5zZW50cnkuaW8vY2xpLwo+PiArCj4+ICtjb21tZW50ICJob3N0IHNlbnRyeS1jbGkg
-bmVlZHMgYSB0b29sY2hhaW4gdy8gQysrIgo+PiArICAgICAgIGRlcGVuZHMgb24gIUJSMl9JTlNU
-QUxMX0xJQlNURENQUAo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zdXJpY2F0YS9Db25maWcuaW4g
-Yi9wYWNrYWdlL3N1cmljYXRhL0NvbmZpZy5pbgo+PiBpbmRleCA1ZjdlYjIxZGEwLi5jZGViYTNm
-MTAzIDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL3N1cmljYXRhL0NvbmZpZy5pbgo+PiArKysgYi9w
-YWNrYWdlL3N1cmljYXRhL0NvbmZpZy5pbgo+PiBAQCAtNCw2ICs0LDcgQEAgY29uZmlnIEJSMl9Q
-QUNLQUdFX1NVUklDQVRBCj4+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGZvcmso
-KQo+PiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUgo+PiAgICAgICAgIGRlcGVuZHMg
-b24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUwo+PiArICAgICAgIGRlcGVuZHMgb24gQlIyX0lO
-U1RBTExfTElCU1REQ1BQICMgaG9zdC1ydXN0Ywo+PiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FH
-RV9IT1NUX1JVU1RDCj4+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0pBTlNTT04KPj4gICAg
-ICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfTElCSFRQCj4+IEBAIC0yMCw3ICsyMSw3IEBAIGNvbmZp
-ZyBCUjJfUEFDS0FHRV9TVVJJQ0FUQQo+Pgo+PiAgICAgICAgICAgaHR0cHM6Ly9zdXJpY2F0YS1p
-ZHMub3JnCj4+Cj4+IC1jb21tZW50ICJzdXJpY2F0YSBuZWVkcyBhIHRvb2xjaGFpbiB3LyB3Y2hh
-ciwgdGhyZWFkcyIKPj4gK2NvbW1lbnQgInN1cmljYXRhIG5lZWRzIGEgdG9vbGNoYWluIHcvIEMr
-Kywgd2NoYXIsIHRocmVhZHMiCj4+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NU
-X1JVU1RDX1RBUkdFVF9BUkNIX1NVUFBPUlRTCj4+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNF
-X01NVQo+PiAtICAgICAgIGRlcGVuZHMgb24gIUJSMl9VU0VfV0NIQVIgfHwgIUJSMl9UT09MQ0hB
-SU5fSEFTX1RIUkVBRFMKPj4gKyAgICAgICBkZXBlbmRzIG9uICFCUjJfVVNFX1dDSEFSIHx8ICFC
-UjJfVE9PTENIQUlOX0hBU19USFJFQURTIHx8ICFCUjJfSU5TVEFMTF9MSUJTVERDUFAKPj4gLS0K
-Pj4gMi4zNC4zCj4+Cj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCj4+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPj4gYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKPj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============0029929142989155998==
+Content-Type: multipart/alternative; boundary="000000000000eea91905e4b4e51c"
+
+--000000000000eea91905e4b4e51c
+Content-Type: text/plain; charset="UTF-8"
+
+I am trying to get a google coral devboard to boot with buildroot.
+Starting with the freescale_imx8qmmek_defconfig I have been able to get an
+error from uboot over the serial port.
+
+U-Boot SPL 2020.04 (Jul 25 2022 - 03:14:51 -0500)
+Can't find PMIC:PFUZE100
+DDRINFO: start DRAM init
+DDRINFO: DRAM rate 3200MTS
+Training FAILED
+
+Since it looks like an error with the uboot DTS, I decided to change to the
+uboot repo that mendel OS uses which contains fsl-imx8mq-phanbell.dtb.  Now
+my system does not appear to boot at all.  I'm not sure where to go about
+debugging from here.  My defconfig currently looks like this:
+
+BR2_aarch64=y
+BR2_ARM_FPU_VFPV4=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh
+board/freescale/common/imx/post-image.sh"
+BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8mq-phanbell.dtb"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_GIT=y
+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="
+https://source.codeaurora.org/external/imx/linux-imx"
+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
+BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-phanbell"
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_PACKAGE_FREESCALE_IMX=y
+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y
+BR2_PACKAGE_FIRMWARE_IMX=y
+BR2_PACKAGE_IMX_SC_FIRMWARE=y
+BR2_PACKAGE_IMX_SECO=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+#BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="
+https://source.codeaurora.org/external/imx/imx-atf"
+#BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="
+https://coral.googlesource.com/imx-atf"
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="release-chef"
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qm"
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+BR2_TARGET_UBOOT_CUSTOM_GIT=y
+#BR2_TARGET_UBOOT_CUSTOM_REPO_URL="
+https://source.codeaurora.org/external/imx/uboot-imx"
+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://coral.googlesource.com/uboot-imx"
+#BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="release-chef"
+#output_imx8mq/build/uboot-release-chef/configs/mx8mq_phanbell_defconfig
+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx8mq_phanbell"
+BR2_TARGET_UBOOT_NEEDS_DTC=y
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_IMX_MKIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+
+--000000000000eea91905e4b4e51c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><font color=3D"#000000" style=3D"background-color:rgb(255,=
+255,255)">I am trying to get a google coral devboard=C2=A0to boot with buil=
+droot.=C2=A0 Starting with the=C2=A0freescale_imx8qmmek_defconfig I have be=
+en able to get an error from uboot over the serial port.=C2=A0=C2=A0<br><br=
+>U-Boot SPL 2020.04 (Jul 25 2022 - 03:14:51 -0500)<br>Can&#39;t find PMIC:P=
+FUZE100<br>DDRINFO: start DRAM init<br>DDRINFO: DRAM rate 3200MTS<br>Traini=
+ng FAILED<br><br>Since it looks like an error with the uboot DTS, I decided=
+ to change to the uboot repo that mendel OS uses which contains=C2=A0<span =
+style=3D"font-family:Consolas,&quot;Courier New&quot;,monospace;font-size:1=
+4px;white-space:pre">fsl-imx8mq-phanbell.dtb</span>.=C2=A0 Now my system do=
+es not appear=C2=A0to boot at all.=C2=A0 I&#39;m not sure where to go about=
+ debugging from here.=C2=A0 My defconfig currently looks like this:<br><br>=
+</font><div style=3D"font-family:Consolas,&quot;Courier New&quot;,monospace=
+;font-size:14px;line-height:19px;white-space:pre-wrap"><div style=3D""><fon=
+t color=3D"#000000" style=3D"background-color:rgb(255,255,255)">BR2_aarch64=
+=3Dy</font></div><div style=3D""><font color=3D"#000000" style=3D"backgroun=
+d-color:rgb(255,255,255)">BR2_ARM_FPU_VFPV4=3Dy</font></div><div style=3D""=
+><font color=3D"#000000" style=3D"background-color:rgb(255,255,255)">BR2_PA=
+CKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=3Dy</font></div><div style=3D""><font =
+color=3D"#000000" style=3D"background-color:rgb(255,255,255)">BR2_ROOTFS_PO=
+ST_IMAGE_SCRIPT=3D&quot;board/freescale/common/imx/imx8-bootloader-prepare.=
+sh board/freescale/common/imx/post-image.sh&quot;</font></div><div style=3D=
+""><font color=3D"#000000" style=3D"background-color:rgb(255,255,255)">BR2_=
+ROOTFS_POST_SCRIPT_ARGS=3D&quot;${UBOOT_DIR}/arch/arm/dts/fsl-imx8mq-phanbe=
+ll.dtb&quot;</font></div><div style=3D""><font color=3D"#000000" style=3D"b=
+ackground-color:rgb(255,255,255)">BR2_LINUX_KERNEL=3Dy</font></div><div sty=
+le=3D""><font color=3D"#000000" style=3D"background-color:rgb(255,255,255)"=
+>BR2_LINUX_KERNEL_CUSTOM_GIT=3Dy</font></div><div style=3D""><font color=3D=
+"#000000" style=3D"background-color:rgb(255,255,255)">BR2_LINUX_KERNEL_CUST=
+OM_REPO_URL=3D&quot;<a href=3D"https://source.codeaurora.org/external/imx/l=
+inux-imx" target=3D"_blank">https://source.codeaurora.org/external/imx/linu=
+x-imx</a>&quot;</font></div><div style=3D""><font color=3D"#000000" style=
+=3D"background-color:rgb(255,255,255)">BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION=
+=3D&quot;lf-5.10.y-1.0.0&quot;</font></div><div style=3D""><font color=3D"#=
+000000" style=3D"background-color:rgb(255,255,255)">BR2_LINUX_KERNEL_DEFCON=
+FIG=3D&quot;imx_v8&quot;</font></div><div style=3D""><font color=3D"#000000=
+" style=3D"background-color:rgb(255,255,255)">BR2_LINUX_KERNEL_DTS_SUPPORT=
+=3Dy</font></div><div style=3D""><font color=3D"#000000" style=3D"backgroun=
+d-color:rgb(255,255,255)">BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D&quot;freescal=
+e/imx8mq-phanbell&quot;</font></div><div style=3D""><font color=3D"#000000"=
+ style=3D"background-color:rgb(255,255,255)">BR2_LINUX_KERNEL_NEEDS_HOST_OP=
+ENSSL=3Dy</font></div><div style=3D""><font color=3D"#000000" style=3D"back=
+ground-color:rgb(255,255,255)">BR2_PACKAGE_FREESCALE_IMX=3Dy</font></div><d=
+iv style=3D""><font color=3D"#000000" style=3D"background-color:rgb(255,255=
+,255)">BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=3Dy</font></div><div style=
+=3D""><font color=3D"#000000" style=3D"background-color:rgb(255,255,255)">B=
+R2_PACKAGE_FIRMWARE_IMX=3Dy</font></div><div style=3D""><font color=3D"#000=
+000" style=3D"background-color:rgb(255,255,255)">BR2_PACKAGE_IMX_SC_FIRMWAR=
+E=3Dy</font></div><div style=3D""><font color=3D"#000000" style=3D"backgrou=
+nd-color:rgb(255,255,255)">BR2_PACKAGE_IMX_SECO=3Dy</font></div><div style=
+=3D""><font color=3D"#000000" style=3D"background-color:rgb(255,255,255)">B=
+R2_TARGET_ROOTFS_EXT2=3Dy</font></div><div style=3D""><font color=3D"#00000=
+0" style=3D"background-color:rgb(255,255,255)">BR2_TARGET_ROOTFS_EXT2_4=3Dy=
+</font></div><div style=3D""><font color=3D"#000000" style=3D"background-co=
+lor:rgb(255,255,255)">BR2_TARGET_ROOTFS_EXT2_SIZE=3D&quot;120M&quot;</font>=
+</div><div style=3D""><font color=3D"#000000" style=3D"background-color:rgb=
+(255,255,255)">BR2_TARGET_ARM_TRUSTED_FIRMWARE=3Dy</font></div><div style=
+=3D""><font color=3D"#000000" style=3D"background-color:rgb(255,255,255)">B=
+R2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=3Dy</font></div><div style=3D""><=
+font color=3D"#000000" style=3D"background-color:rgb(255,255,255)">#BR2_TAR=
+GET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL=3D&quot;<a href=3D"https://source.=
+codeaurora.org/external/imx/imx-atf" target=3D"_blank">https://source.codea=
+urora.org/external/imx/imx-atf</a>&quot;</font></div><div style=3D""><font =
+color=3D"#000000" style=3D"background-color:rgb(255,255,255)">#BR2_TARGET_A=
+RM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION=3D&quot;lf-5.10.y-1.0.0&quot;</font=
+></div><div style=3D""><font color=3D"#000000" style=3D"background-color:rg=
+b(255,255,255)">BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL=3D&quot;<a =
+href=3D"https://coral.googlesource.com/imx-atf" target=3D"_blank">https://c=
+oral.googlesource.com/imx-atf</a>&quot;</font></div><div style=3D""><font c=
+olor=3D"#000000" style=3D"background-color:rgb(255,255,255)">BR2_TARGET_ARM=
+_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION=3D&quot;release-chef&quot;</font></di=
+v><div style=3D""><font color=3D"#000000" style=3D"background-color:rgb(255=
+,255,255)">BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM=3D&quot;imx8qm&quot;</f=
+ont></div><div style=3D""><font color=3D"#000000" style=3D"background-color=
+:rgb(255,255,255)">BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=3Dy</font></div><di=
+v style=3D""><font color=3D"#000000" style=3D"background-color:rgb(255,255,=
+255)">BR2_TARGET_UBOOT=3Dy</font></div><div style=3D""><font color=3D"#0000=
+00" style=3D"background-color:rgb(255,255,255)">BR2_TARGET_UBOOT_BUILD_SYST=
+EM_KCONFIG=3Dy</font></div><div style=3D""><font color=3D"#000000" style=3D=
+"background-color:rgb(255,255,255)">BR2_TARGET_UBOOT_CUSTOM_GIT=3Dy</font><=
+/div><div style=3D""><font color=3D"#000000" style=3D"background-color:rgb(=
+255,255,255)">#BR2_TARGET_UBOOT_CUSTOM_REPO_URL=3D&quot;<a href=3D"https://=
+source.codeaurora.org/external/imx/uboot-imx" target=3D"_blank">https://sou=
+rce.codeaurora.org/external/imx/uboot-imx</a>&quot;</font></div><div style=
+=3D""><font color=3D"#000000" style=3D"background-color:rgb(255,255,255)">B=
+R2_TARGET_UBOOT_CUSTOM_REPO_URL=3D&quot;<a href=3D"https://coral.googlesour=
+ce.com/uboot-imx" target=3D"_blank">https://coral.googlesource.com/uboot-im=
+x</a>&quot;</font></div><div style=3D""><font color=3D"#000000" style=3D"ba=
+ckground-color:rgb(255,255,255)">#BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION=3D&q=
+uot;lf-5.10.y-1.0.0&quot;</font></div><div style=3D""><font color=3D"#00000=
+0" style=3D"background-color:rgb(255,255,255)">BR2_TARGET_UBOOT_CUSTOM_REPO=
+_VERSION=3D&quot;release-chef&quot;</font></div><div style=3D""><font color=
+=3D"#000000" style=3D"background-color:rgb(255,255,255)">#output_imx8mq/bui=
+ld/uboot-release-chef/configs/mx8mq_phanbell_defconfig</font></div><div sty=
+le=3D""><font color=3D"#000000" style=3D"background-color:rgb(255,255,255)"=
+>BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D&quot;mx8mq_phanbell&quot;</font></div>=
+<div style=3D""><font color=3D"#000000" style=3D"background-color:rgb(255,2=
+55,255)">BR2_TARGET_UBOOT_NEEDS_DTC=3Dy</font></div><div style=3D""><font c=
+olor=3D"#000000" style=3D"background-color:rgb(255,255,255)">BR2_PACKAGE_HO=
+ST_DOSFSTOOLS=3Dy</font></div><div style=3D""><font color=3D"#000000" style=
+=3D"background-color:rgb(255,255,255)">BR2_PACKAGE_HOST_GENIMAGE=3Dy</font>=
+</div><div style=3D""><font color=3D"#000000" style=3D"background-color:rgb=
+(255,255,255)">BR2_PACKAGE_HOST_IMX_MKIMAGE=3Dy</font></div><div style=3D""=
+><font color=3D"#000000" style=3D"background-color:rgb(255,255,255)">BR2_PA=
+CKAGE_HOST_MTOOLS=3Dy</font></div><div style=3D""><font color=3D"#000000" s=
+tyle=3D"background-color:rgb(255,255,255)">BR2_PACKAGE_HOST_UBOOT_TOOLS=3Dy=
+</font></div><div style=3D""><font color=3D"#000000" style=3D"background-co=
+lor:rgb(255,255,255)">BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=3Dy</font></=
+div><br></div></div>
+
+--000000000000eea91905e4b4e51c--
+
+--===============0029929142989155998==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0029929142989155998==--
