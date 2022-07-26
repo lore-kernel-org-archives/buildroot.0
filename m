@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F6D0C00144
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 21:33:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A37DEC00144
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 21:37:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04DF140191;
-	Tue, 26 Jul 2022 21:33:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04DF140191
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2AE88401D1;
+	Tue, 26 Jul 2022 21:37:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AE88401D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UfQ-tSvCHMzr; Tue, 26 Jul 2022 21:33:14 +0000 (UTC)
+	with ESMTP id 3CPHYFiqCeSC; Tue, 26 Jul 2022 21:37:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B5F624017F;
-	Tue, 26 Jul 2022 21:33:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5F624017F
+	by smtp4.osuosl.org (Postfix) with ESMTP id C869D4019A;
+	Tue, 26 Jul 2022 21:37:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C869D4019A
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 07E8A1BF59F
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 21:33:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 256F21BF59F
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 21:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E46014013F
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 21:33:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E46014013F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0DB5E400E5
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 21:37:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DB5E400E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c1L0r_8gHtn9 for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 21:33:10 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8228340012
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8228340012
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 21:33:09 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5EB8B240008;
- Tue, 26 Jul 2022 21:33:06 +0000 (UTC)
-Date: Tue, 26 Jul 2022 23:33:05 +0200
-To: Jared Bents <jared.bents@rockwellcollins.com>
-Message-ID: <20220726233305.053568a3@windsurf>
-In-Reply-To: <20220511143316.58942-1-jared.bents@rockwellcollins.com>
-References: <20220511143316.58942-1-jared.bents@rockwellcollins.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658871186;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=i6ctbk4iBYg9F1uVxKXZKKiY0MpeLNNpgEJpduohTzM=;
- b=DJ4FkbyWodsUIgpr7wQRW+6E0U85yd4Vs4NhMlmIziEg+H3W5GG2A8wL9pXPHsTud6oQey
- RB3S06B6Ib/cnGnpfux45lXpu9mC4ZiX/IVcylLN9yGC3iwwFE/Sw2F+tuSdlYGhGIuPxQ
- itriW2N1H0sX4ect+VZYkTJcZAWwDNRk+24Rs2xhWvOmD1M10jOaW/GsPghEpRdfVDpkpx
- 9MQIXO4H30ujZFeROTdEvVi7QdW2znXoG0mOe7PHZLm8BJQjFZ/9EzEN6qeZyLP+ydkbLE
- 0gWdNdJTQP07H26XYyN6z3RNDiSxDqpq5rHWyqK+o8QZdwqbK7hJb4Xbv7IRhg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DJ4FkbyW
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/rsyslog: update to fix
- service permissions
+ with ESMTP id 8Nz9K8k095hk for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 21:37:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 408D240012
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 21:37:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 408D240012
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id A21E38633F; Tue, 26 Jul 2022 21:23:33 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 26 Jul 2022 23:37:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d51d4378ba7fd92b7374b029efd9f6e4cfefd4c9
+X-Git-Newrev: aa61d29b84be8e32022a68c3c4055300a97d581b
+X-Patchwork-Hint: ignore
+Message-Id: <20220726212333.A21E38633F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/v4l2loopback: add
+ V4L2LOOPBACK_LINUX_CONFIG_FIXUPS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,31 +58,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 11 May 2022 09:33:16 -0500
-Jared Bents <jared.bents@rockwellcollins.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=aa61d29b84be8e32022a68c3c4055300a97d581b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Update to fix the permissions being set when installing the
-> rsyslog service. The service should be installed with 644
-> permissions and not 755 permissions.
-> 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> ---
->  package/rsyslog/rsyslog.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Fix the following build failure:
 
-Applied to master, thanks.
+ERROR: modpost: "video_ioctl2" [/nvmedata/autobuild/instance-10/output-1/build/v4l2loopback-0.12.5/./v4l2loopback.ko] undefined!
+ERROR: modpost: "__video_register_device" [/nvmedata/autobuild/instance-10/output-1/build/v4l2loopback-0.12.5/./v4l2loopback.ko] undefined!
+ERROR: modpost: "v4l2_ctrl_new_custom" [/nvmedata/autobuild/instance-10/output-1/build/v4l2loopback-0.12.5/./v4l2loopback.ko] undefined!
+ERROR: modpost: "v4l2_ctrl_handler_init_class" [/nvmedata/autobuild/instance-10/output-1/build/v4l2loopback-0.12.5/./v4l2loopback.ko] undefined!
+ERROR: modpost: "video_device_alloc" [/nvmedata/autobuild/instance-10/output-1/build/v4l2loopback-0.12.5/./v4l2loopback.ko] undefined!
+ERROR: modpost: "v4l2_device_register" [/nvmedata/autobuild/instance-10/output-1/build/v4l2loopback-0.12.5/./v4l2loopback.ko] undefined!
+ERROR: modpost: "video_device_release" [/nvmedata/autobuild/instance-10/output-1/build/v4l2loopback-0.12.5/./v4l2loopback.ko] undefined!
+ERROR: modpost: "v4l2_ctrl_handler_free" [/nvmedata/autobuild/instance-10/output-1/build/v4l2loopback-0.12.5/./v4l2loopback.ko] undefined!
+ERROR: modpost: "v4l2_device_unregister" [/nvmedata/autobuild/instance-10/output-1/build/v4l2loopback-0.12.5/./v4l2loopback.ko] undefined!
+ERROR: modpost: "video_unregister_device" [/nvmedata/autobuild/instance-10/output-1/build/v4l2loopback-0.12.5/./v4l2loopback.ko] undefined!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/640f8f61c7f433ffe5e9a6759eecc9a03f735569
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/v4l2loopback/v4l2loopback.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
+index 7701bc3a30..d9f065a49d 100644
+--- a/package/v4l2loopback/v4l2loopback.mk
++++ b/package/v4l2loopback/v4l2loopback.mk
+@@ -15,5 +15,15 @@ define V4L2LOOPBACK_INSTALL_TARGET_CMDS
+ endef
+ endif
+ 
++# CONFIG_MEDIA_SUPPORT depends on CONFIG_HAS_IOMEM, which is only
++# available when CONFIG_PCI=y on S390. CONFIG_VIDEO_DEV needs
++# CONFIG_I2C since Linux 5.18.
++define V4L2LOOPBACK_LINUX_CONFIG_FIXUPS
++	$(if $(BR2_s390x),$(call KCONFIG_ENABLE_OPT,CONFIG_PCI))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MEDIA_SUPPORT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_I2C)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_VIDEO_DEV)
++endef
++
+ $(eval $(kernel-module))
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
